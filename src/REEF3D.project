@@ -1568,7 +1568,6 @@
           <File Name="particle_particlex.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Seed">
-          <File Name="particle_setup.cpp"/>
           <File Name="particle_initialize.cpp"/>
           <File Name="particle_seed.cpp"/>
           <File Name="particle_allocate.cpp"/>

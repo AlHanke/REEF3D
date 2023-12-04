@@ -39,7 +39,7 @@ public:
 	virtual ~particle_f();
 	virtual void start(lexer*,fdm*,ghostcell*,ioflow*);
     virtual void ini(lexer*,fdm*,ghostcell*,ioflow*);
-	virtual void setup(lexer*,fdm*,ghostcell*);
+	//virtual void setup(lexer*,fdm*,ghostcell*);
     
 	void advect(lexer*,fdm*,ghostcell*,double**,int*,int);
     
