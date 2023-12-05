@@ -1,5 +1,6 @@
 src/Makefile*
 **/.codelite
+/build
 .codelite/.tern-port
 .codelite/REEF3D.tags
 .codelite/refactoring.db
