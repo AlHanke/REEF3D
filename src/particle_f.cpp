@@ -86,18 +86,17 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 
     gposactive = pgc->globalisum(posactive);
     gpcount = pgc->globalisum(pcount);
-    gcorrected = pgc->globalisum(corrected);
+    //gcorrected = pgc->globalisum(corrected);
     gremoved = pgc->globalisum(removed);
-    greseeded = pgc->globalisum(reseeded);
-    gxchange = pgc->globalisum(xchange);
-	gposbalance = pgc->globalisum(posbalance);
+    //greseeded = pgc->globalisum(reseeded);
+    //gxchange = pgc->globalisum(xchange);
+	//gposbalance = pgc->globalisum(posbalance);
 	
 	p->plstime=pgc->timer()-starttime;
 
     if(p->mpirank==0 && (p->count%p->P12==0))
 	{
-    cout<<"PLS. pos: "<<gposactive<<" p: "<<gpcount<<" pbal: "<<gposbalance<<endl;
-	cout<<"CORR: *"<<gcorrected<<"* rem: "<<gremoved<<" res: "<<greseeded<<" X: "<<gxchange<<" | plstime: "<<p->plstime<<endl;
+    cout<<"Particle: pos: "<<gposactive<<" p: "<<gpcount<<" rem: "<<gremoved<<"| plstime: "<<p->plstime<<endl;
 	}
 }
 
