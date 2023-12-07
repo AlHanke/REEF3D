@@ -67,7 +67,7 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 
 	starttime=pgc->timer();
 	
-	posactive_old=posactive;
+	//posactive_old=posactive;
 
 	if (p->count>=p->Q43)
     	advect(p,a,pgc,pos,posflag,posactive);
@@ -82,7 +82,7 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 
     pgc->start4(p,a->phi,gcval_phi);
 
-	posbalance = posactive - posactive_old;
+	//posbalance = posactive - posactive_old;
 
 	gparticle_active = pgc->globalisum(particle_active); // having this changes the behavior
 
@@ -91,14 +91,14 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
     //gcorrected = pgc->globalisum(corrected);
     gremoved = pgc->globalisum(removed);
     //greseeded = pgc->globalisum(reseeded);
-    //gxchange = pgc->globalisum(xchange);
+    gxchange = pgc->globalisum(xchange);
 	//gposbalance = pgc->globalisum(posbalance);
 	
 	p->plstime=pgc->timer()-starttime;
 
     if(p->mpirank==0 && (p->count%p->P12==0))
 	{
-    cout<<"Particles: active: "<<gparticle_active<<" memory: "<<gpcount<<":"<<" rem: "<<gremoved<<" | plstime: "<<p->plstime<<endl;
+    cout<<"Particles: active: "<<gparticle_active<<" memory: "<<gpcount<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | plstime: "<<p->plstime<<endl;
 	}
 }
 

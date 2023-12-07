@@ -37,10 +37,10 @@ void particle_f::ini(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
     
     // print
     print_vtu(p,a,pgc,pos,posflag,posactive,1);
-    gposactive = pgc->globalisum(posactive);
+    gparticle_active = pgc->globalisum(posactive);
     gpcount = pgc->globalisum(pcount);
     if(p->mpirank==0)
 	{
-    cout<<"Particles: active: "<<gposactive<<" memory: "<<gpcount<<endl;
+    cout<<"Particles: active: "<<gparticle_active<<" memory: "<<gpcount<<endl;
     }
 } 

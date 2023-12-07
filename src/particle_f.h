@@ -97,9 +97,7 @@ public:
     double di,dj,dk,dnorm;
     double uvel,vvel,wvel;
     int posactive,maxparticle;
-	int posactive_old, posbalance;
-	int gposactive_old, gposbalance;
-    int corrected,removed,xchange,reseeded;
+    int removed,xchange;
     double val1,val2;
     
     // new parameters
@@ -123,10 +121,8 @@ public:
 
     double di0,di1,a0,a1,a2,a3,df;
     int i0,j0,k0,i3,j3,k3;
-    int gnegactive,gposactive,gpcount,gncount,gcorrected,gremoved,greseeded,gxchange,gpartnum;
+    int gpcount,gremoved,gxchange,gpartnum;
     
-
-	double H,Hval,nvec[3],phival,lambda,value,cosinus;
 	const double epsi,dx,dy,dz,rmin,rmax;
 	//int pnum;
 	// const int ipolval;
@@ -150,7 +146,7 @@ public:
     int iin,offset[100];
     float ffn;
     int gcval_phi;
-    double printtime,printtime2;
+    double printtime;
     int printcount;
 };
 
