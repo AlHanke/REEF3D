@@ -35,7 +35,7 @@
     <Extensions>
       <![CDATA[*.cpp;*.c;*.h;*.hpp;*.xrc;*.wxcp;*.fbp]]>
     </Extensions>
-    <Topleveldir>/Users/tobias/REEF3D/Code/REEF3D/src</Topleveldir>
+    <Topleveldir>$(WorkspacePath)</Topleveldir>
   </Reconciliation>
   <Description/>
   <Dependencies/>
@@ -3058,15 +3058,15 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="yes">
-        <Target Name="cmake">/usr/local/bin/cmake ../build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1</Target>
+        <Target Name="cmake">/usr/local/bin/cmake ..</Target>
         <RebuildCommand>make clean &amp;&amp; make -j12</RebuildCommand>
         <CleanCommand>make clean</CleanCommand>
-        <BuildCommand>/usr/local/bin/cmake ../build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 &amp;&amp; make -j12</BuildCommand>
+        <BuildCommand>/usr/local/bin/cmake .. &amp;&amp; make -j12</BuildCommand>
         <PreprocessFileCommand/>
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
         <ThirdPartyToolName>None</ThirdPartyToolName>
-        <WorkingDirectory/>
+        <WorkingDirectory>../build</WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
         <CustomPostBuild/>

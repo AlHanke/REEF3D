@@ -12,6 +12,9 @@ MACRO(HEADER_DIRECTORIES return_list)
     SET(${return_list} ${dir_list})
 ENDMACRO()
 
+set(MPIEXEC_EXECUTABLE "/usr/local/openmpi/bin/mpicxx")
+find_package(MPI REQUIRED)
+include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 # Set the C++ compiler to mpicxx
 find_program(MPI_CXX_COMPILER mpicxx)
 if(NOT MPI_CXX_COMPILER)
@@ -43,10 +46,6 @@ execute_process(
 )
 set(Eigen3_DIR ${Eigen3_BUILD_DIR})
 find_package(Eigen3 3.3 REQUIRED)
-
-
-find_package(MPI REQUIRED)
-include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 
 # Globbing source files in src directory
 file(GLOB_RECURSE SOURCE_FILES "src/src/*.cpp")
