@@ -26,6 +26,7 @@ Author: Hans Bihs
 #include"field4.h"
 #define PC posmem[pcount]
 #define PARTLOOP for(n=maxparticle-1;n>=pcount;--n)
+#define RADIUS 3
 
 using namespace std;
 

@@ -141,7 +141,7 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag
 	for(n=0;n<active;++n)
     if(flag[n]>0)
 	{
-	ffn=float(f[n][4]);
+	ffn=float(f[n][RADIUS]);
 	result.write((char*)&ffn, sizeof (float));
 	}
 

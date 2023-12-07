@@ -69,7 +69,7 @@ void particle_f::posseed(lexer* p, fdm* a, ghostcell* pgc)
     srand(p->Q29);
 
     if(p->Q29==0)
-    srand((unsigned)time(0));
+    srand((unsigned)time(0)*p->mpirank==0?1:p->mpirank);
 	
     LOOP
     if(active(i,j,k)>0.0)
@@ -81,7 +81,7 @@ void particle_f::posseed(lexer* p, fdm* a, ghostcell* pgc)
                 pos[pactive][0] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                 pos[pactive][1] = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                 pos[pactive][2] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
-                pos[pactive][3] = 0.0;
+                pos[pactive][RADIUS] = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
                 posflag[pactive]=1;
                 ++pactive;
             }
