@@ -1,5 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
-project(REEF3D CXX VERSION 23.11)
+project(REEF3D LANGUAGES CXX VERSION 23.11)
+
+MACRO(HEADER_DIRECTORIES return_list)
+    FILE(GLOB_RECURSE new_list src/include/*.h)
+    SET(dir_list "")
+    FOREACH(file_path ${new_list})
+        GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)
+        SET(dir_list ${dir_list} ${dir_path})
+    ENDFOREACH()
+    LIST(REMOVE_DUPLICATES dir_list)
+    SET(${return_list} ${dir_list})
+ENDMACRO()
 
 # Set the C++ compiler to mpicxx
 find_program(MPI_CXX_COMPILER mpicxx)
@@ -30,21 +41,28 @@ execute_process(
     COMMAND cmake ${CMAKE_SOURCE_DIR}/${Eigen3_BUILD_DIR}
     WORKING_DIRECTORY ${Eigen3_BUILD_DIR}
 )
+set(Eigen3_DIR ${Eigen3_BUILD_DIR})
 find_package(Eigen3 3.3 REQUIRED)
-set(Eigen3_DIR T${Eigen3_BUILD_DIR})
+
 
 find_package(MPI REQUIRED)
 include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 
 # Globbing source files in src directory
-file(GLOB SOURCE_FILES "src/*.cpp")
+file(GLOB_RECURSE SOURCE_FILES "src/src/*.cpp")
 
 # Add executable target
 add_executable(REEF3D ${SOURCE_FILES})
 
+HEADER_DIRECTORIES(header_dir_list)
+
+list(LENGTH header_dir_list header_dir_list_count)
+message(STATUS "[INFO] Found ${header_dir_list_count} header directories.")
+
 # Include directories
 target_include_directories(REEF3D PRIVATE
     include
+    ${header_dir_list} # Recursive
     ${HYPRE_DIR}/include  # Add your HYPRE include directory
     ${EIGEN_DIR}          # Add your Eigen include directory
 )
