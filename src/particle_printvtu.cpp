@@ -66,21 +66,21 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag
 	offset[n]=0;
 	++n;
 	
-	offset[n]=offset[n-1]+4*(numpt)+4;
-	++n;
-	offset[n]=offset[n-1]+4*(numpt)+4;
+	//offset[n]=offset[n-1]+4*(numpt)+4; //lsv?
+	//++n;
+	offset[n]=offset[n-1]+4*(numpt)+4; //radius?
 	++n;	
-	offset[n]=offset[n-1]+4*(numpt)+4;
-	++n;	
+	//offset[n]=offset[n-1]+4*(numpt)+4; //correction?
+	//++n;	
 	
 	// end scalars
-    offset[n]=offset[n-1]+4*(numpt)*3+4;
+    offset[n]=offset[n-1]+4*(numpt)*3+4; //xyz
     ++n;
-    offset[n]=offset[n-1]+4*(numpt)*2+4;
+    offset[n]=offset[n-1]+4*(numpt)*2+4; //connectivitey
     ++n;
-	offset[n]=offset[n-1]+4*(numpt)+4;
+	offset[n]=offset[n-1]+4*(numpt)+4; //offset connectivity
     ++n;
-	offset[n]=offset[n-1]+4*(numpt)+4;
+	offset[n]=offset[n-1]+4*(numpt)+4; //cell type
     ++n;
 
 	//---------------------------------------------
@@ -92,12 +92,12 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag
 	
 	
 	result<<"<PointData >"<<endl;
-	result<<"<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    ++n;
+	//result<<"<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    //++n;
     result<<"<DataArray type=\"Float32\" Name=\"radius\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-	result<<"<DataArray type=\"Float32\" Name=\"correction\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    ++n;
+	//result<<"<DataArray type=\"Float32\" Name=\"correction\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    //++n;
 	result<<"</PointData>"<<endl;
 	
 	
@@ -126,14 +126,14 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag
 	
 
 //  lsv
-    iin=4*(numpt);
-    result.write((char*)&iin, sizeof (int));
-	for(n=0;n<active;++n)
-    if(flag[n]>0)
-	{
-	ffn=float(f[n][3]);
-	result.write((char*)&ffn, sizeof (float));
-	}
+    // iin=4*(numpt);
+    // result.write((char*)&iin, sizeof (int));
+	// for(n=0;n<active;++n)
+    // if(flag[n]>0)
+	// {
+	// ffn=float(f[n][3]);
+	// result.write((char*)&ffn, sizeof (float));
+	// }
 	
 //  radius
     iin=4*(numpt);
@@ -146,31 +146,31 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag
 	}
 
 //  correction
-    iin=4*(numpt);
-    result.write((char*)&iin, sizeof (int));
-	for(n=0;n<active;++n)
-    if(flag[n]>0)
-	{
-		if(sign==1)
-		{
-		if(f[n][3]<=-f[n][4])
-		ffn=float(1.0);
+    // iin=4*(numpt);
+    // result.write((char*)&iin, sizeof (int));
+	// for(n=0;n<active;++n)
+    // if(flag[n]>0)
+	// {
+	// 	if(sign==1)
+	// 	{
+	// 	if(f[n][3]<=-f[n][4])
+	// 	ffn=float(1.0);
 		
-		if(f[n][3]>-f[n][4])
-		ffn=float(0.0);
-		}
+	// 	if(f[n][3]>-f[n][4])
+	// 	ffn=float(0.0);
+	// 	}
 		
-		if(sign==2)
-		{
-		if(f[n][3]>=f[n][4])
-		ffn=float(1.0);
+	// 	if(sign==2)
+	// 	{
+	// 	if(f[n][3]>=f[n][4])
+	// 	ffn=float(1.0);
 		
-		if(f[n][3]<f[n][4])
-		ffn=float(0.0);
-		}
+	// 	if(f[n][3]<f[n][4])
+	// 	ffn=float(0.0);
+	// 	}
 		
-	result.write((char*)&ffn, sizeof (float));
-	}
+	// result.write((char*)&ffn, sizeof (float));
+	// }
 
 //  XYZ
 	iin=4*(numpt)*3;
