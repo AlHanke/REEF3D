@@ -3045,8 +3045,8 @@
         <Library Value="HYPRE"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="./Release/REEF3D" IntermediateDirectory="./obj" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="/Users/hansbihs/Dropbox/Codelite/REEF3D" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
-      <BuildSystem Name="Default"/>
+      <General OutputFile="" IntermediateDirectory="" Command="$(WorkspacePath)/cmake-build-$(WorkspaceConfiguration)/output/$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(WorkspacePath)/cmake-build-$(WorkspaceConfiguration)/output" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <BuildSystem Name="CMake"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
@@ -3057,10 +3057,11 @@
       </Debugger>
       <PreBuild/>
       <PostBuild/>
-      <CustomBuild Enabled="no">
-        <RebuildCommand/>
-        <CleanCommand/>
-        <BuildCommand/>
+      <CustomBuild Enabled="yes">
+        <Target Name="cmake">/usr/local/bin/cmake ../build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1</Target>
+        <RebuildCommand>make clean &amp;&amp; make -j12</RebuildCommand>
+        <CleanCommand>make clean</CleanCommand>
+        <BuildCommand>/usr/local/bin/cmake ../build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 &amp;&amp; make -j12</BuildCommand>
         <PreprocessFileCommand/>
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
