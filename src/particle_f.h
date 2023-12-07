@@ -105,6 +105,7 @@ public:
     // new parameters
     int partnum;
     int ppcell;
+	int particle_active, gparticle_active;
 
     // old parameters
     double phix,phiy,phiz;

@@ -41,6 +41,6 @@ void particle_f::ini(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
     gpcount = pgc->globalisum(pcount);
     if(p->mpirank==0)
 	{
-    cout<<"Particle: pos: "<<gposactive<<" p: "<<gpcount<<endl;
+    cout<<"Particles: active: "<<gposactive<<" memory: "<<gpcount<<endl;
     }
 } 

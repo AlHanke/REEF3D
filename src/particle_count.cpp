@@ -34,14 +34,15 @@ void particle_f::parcount(lexer* p, fdm* a, ghostcell* pgc)
 	pgc->start4(p,posnum,1);
 		
 	// POS
+    particle_active=0;
     for(n=0;n<posactive;++n)
     if(posflag[n]>0)
     {
         i = p->posc_i(pos[n][0]);
         j = p->posc_j(pos[n][1]);
         k = p->posc_k(pos[n][2]);
-
-    posnum(i,j,k)+=1.0;
+        posnum(i,j,k)+=1.0;
+        particle_active++;
     }
 
 

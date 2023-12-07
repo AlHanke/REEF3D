@@ -84,7 +84,9 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 
 	posbalance = posactive - posactive_old;
 
-    gposactive = pgc->globalisum(posactive);
+	gparticle_active = pgc->globalisum(particle_active); // having this changes the behavior
+
+    //gposactive = pgc->globalisum(posactive);
     gpcount = pgc->globalisum(pcount);
     //gcorrected = pgc->globalisum(corrected);
     gremoved = pgc->globalisum(removed);
@@ -96,7 +98,7 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 
     if(p->mpirank==0 && (p->count%p->P12==0))
 	{
-    cout<<"Particle: pos: "<<gposactive<<" p: "<<gpcount<<" rem: "<<gremoved<<"| plstime: "<<p->plstime<<endl;
+    cout<<"Particles: active: "<<gparticle_active<<" memory: "<<gpcount<<":"<<" rem: "<<gremoved<<" | plstime: "<<p->plstime<<endl;
 	}
 }
 
