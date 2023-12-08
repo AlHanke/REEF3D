@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(REEF3D LANGUAGES CXX VERSION 23.11)
 
 MACRO(HEADER_DIRECTORIES return_list)
-    FILE(GLOB_RECURSE new_list src/include/*.h)
+    FILE(GLOB_RECURSE new_list src/*.h)
     SET(dir_list "")
     FOREACH(file_path ${new_list})
         GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)
@@ -48,7 +48,7 @@ set(Eigen3_DIR ${Eigen3_BUILD_DIR})
 find_package(Eigen3 3.3 REQUIRED)
 
 # Globbing source files in src directory
-file(GLOB_RECURSE SOURCE_FILES "src/src/*.cpp")
+file(GLOB_RECURSE SOURCE_FILES "src/*.cpp")
 
 # Add executable target
 add_executable(REEF3D ${SOURCE_FILES})
