@@ -30,7 +30,10 @@ void particle_f::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
 {
     // ini
     LOOP
-    active(i,j,k) = 0.0;
+    {
+        active_box(i,j,k) = 0.0;
+        active_topo(i,j,k) = 0.0;
+    }
     
     ppcell = 0;
     
@@ -42,9 +45,20 @@ void particle_f::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
 	&& p->YN[JP]>=p->Q110_ys[qn] && p->YN[JP]<p->Q110_ye[qn]
 	&& p->ZN[KP]>=p->Q110_zs[qn] && p->ZN[KP]<p->Q110_ze[qn])
 	{
-	active(i,j,k) = 1.0;
+	active_box(i,j,k) = 1.0;
     ++cellcount;
 	}
+
+    // Topo
+    //int cellcounttopo=0;
+    LOOP
+    if(a->topo(i,j,k)<p->DZN[KP]) // why is topo for k=1 0.0015 and for k=2 0.03 when topo is located at 0 and k=1 starts at 0 and dz=0.02
+    {
+        active_topo(i,j,k) = 1.0;
+        if(1!=active_box(i,j,k))
+        cellcount++;
+    }
+    //cout<<"Topo cells of part "<<p->mpirank<<": "<<cellcounttopo<<endl;
     
     // guess particle demand
     if(p->Q24>0)
@@ -57,13 +71,14 @@ void particle_f::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
 void particle_f::seed(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->Q110>0)
-    posseed(p,a,pgc);
-		
+        posseed_box(p,a,pgc);
+	if(p->Q101>0)
+        posseed_topo(p,a,pgc);
 
 }
 
 
-void particle_f::posseed(lexer* p, fdm* a, ghostcell* pgc)
+void particle_f::posseed_box(lexer* p, fdm* a, ghostcell* pgc)
 {
 	if(p->Q29>0)
     srand(p->Q29);
@@ -72,7 +87,7 @@ void particle_f::posseed(lexer* p, fdm* a, ghostcell* pgc)
     srand((unsigned)time(0)*p->mpirank==0?1:p->mpirank);
 	
     LOOP
-    if(active(i,j,k)>0.0)
+    if(active_box(i,j,k)>0.0)
     {
         
             for(qn=0;qn<ppcell;++qn)
@@ -93,7 +108,52 @@ void particle_f::posseed(lexer* p, fdm* a, ghostcell* pgc)
 
 void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
 {
+    if(p->Q29>0)
+    srand(p->Q29);
 
+    if(p->Q29==0)
+    srand((unsigned)time(0)*p->mpirank==0?1:p->mpirank);
+
+    double radius;
+    int *tempPosFlag;
+    double **tempPos;
+    int tempActive=0;
+    LOOP
+    if(active_topo(i,j,k)>0.0)
+    {
+        
+        for(qn=0;qn<ppcell;++qn)
+        if(tempActive<maxparticle)
+        {
+            radius = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
+            tempPos[tempActive][0] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
+            tempPos[tempActive][1] = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
+            tempPos[tempActive][2] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
+            tempPos[tempActive][RADIUS] = radius;
+            // verteilen durch ganze zell und alles unter level set weg schmeissen
+            // und dann entlang des normalen vectors zur level set ziehen
+            // pls_posseed
+            // if below flag=0
+            if (tempPos[tempActive][2] < p->ZN[KP] + a->topo(i,j,k))
+                tempPosFlag[tempActive]=0;
+            else
+                tempPosFlag[tempActive]=1;
+            ++tempActive;
+        }
+    }
+    for (int i=0;i<=tempActive;i++)
+        if(1==tempPosFlag[i])
+        {
+            pos[pactive][0] = tempPos[tempActive][0];
+            pos[pactive][1] = tempPos[tempActive][1];
+            pos[pactive][2] = tempPos[tempActive][2];
+            pos[pactive][RADIUS] = tempPos[tempActive][RADIUS];
+            posflag[pactive]=1;
+            ++pactive;
+        }
+
+    posactive=pactive;
+    pcount=pactive;
         // // POS
         //     if(pcount>0)
         //     {

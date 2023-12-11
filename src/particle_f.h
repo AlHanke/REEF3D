@@ -46,7 +46,7 @@ public:
     
     void seed_ini(lexer*,fdm*,ghostcell*);
 	void seed(lexer*,fdm*,ghostcell*);
-    void posseed(lexer*,fdm*,ghostcell*);
+    void posseed_box(lexer*,fdm*,ghostcell*);
     void posseed_topo(lexer*,fdm*,ghostcell*);
     
 	void remove(lexer*,fdm*,ghostcell*);
@@ -79,7 +79,8 @@ public:
 	
 	
 	
-	field4 active;
+	field4 active_box;
+	field4 active_topo;
 	field4 posnum;
 	
 	double **pos;
