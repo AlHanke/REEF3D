@@ -31,7 +31,7 @@ void particle_f::allocate(lexer* p,fdm* a,ghostcell* pgc)
      pcount = maxparticle;
      pactive = 0;
 	 
-	 p->Darray(pos,maxparticle,5);
+	 p->Darray(pos,maxparticle,PARTICLE_INFORMATIONS);
 	 
 	 p->Iarray(posflag,maxparticle);
 
