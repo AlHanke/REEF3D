@@ -35,13 +35,13 @@ void particle_f::particlex(lexer* p, fdm* a, ghostcell* pgc)
     pxr[n]=0;
     }
 
-    for(n=0;n<posactive;++n)
-    if(posflag[n]==1)
-    {
-        // POS
-        i = p->posc_i(pos[n][0]);
-        j = p->posc_j(pos[n][1]);
-        k = p->posc_k(pos[n][2]);
+    PARTLOOP
+        if(posflag[n]==1)
+        {
+            // POS
+            i = p->posc_i(pos[n][0]);
+            j = p->posc_j(pos[n][1]);
+            k = p->posc_k(pos[n][2]);
 
 
         if(p->flag5[IJK]<0 && p->flag5[IJK]>-10)

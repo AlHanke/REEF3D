@@ -39,9 +39,9 @@ void particle_f::print_ascii(lexer* p, fdm* a, ghostcell* pgc)
         ofstream result;
         result.open(name);
 
-        for(n=0;n<posactive;++n)
-        if(posflag[n]>0)
-        result<<setprecision(5)<<pos[n][0]+p->originx<<",\t "<<pos[n][1]+p->originy<<",\t "<<pos[n][2]+p->originz<<endl;//",\t "<<pos[n][3]<<",\t "<<pos[n][4]<<endl;//
+        PARTLOOP
+            if(posflag[n]>0)
+                result<<setprecision(5)<<pos[n][0]+p->originx<<",\t "<<pos[n][1]+p->originy<<",\t "<<pos[n][2]+p->originz<<endl;//",\t "<<pos[n][3]<<",\t "<<pos[n][4]<<endl;//
 
         result.close();
     }

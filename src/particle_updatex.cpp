@@ -30,7 +30,7 @@ void particle_f::xupdate(lexer* p, fdm* a, ghostcell* pgc)
 {
     removed = 0;
 
-    for(n=0;n<posactive;++n)
+    PARTLOOP
     {
         // POS
         if(posflag[n]>0)
