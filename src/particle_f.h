@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"boundarycheck.h"
 #include"field4.h"
 #define PC posmem[pcount]
-#define PARTLOOP for(n=maxparticle-1;n>=pcount;--n)
+#define PARTLOOP for(n=0;n<posactive;++n)
 #define PARTICLE_INFORMATIONS (3+1)
 #define RADIUS 3
 
@@ -94,7 +94,7 @@ public:
     
 	int pcount,cellcount;
     int pactive;
-	int n,nn,q,qq,qn,count,check;
+	int n,nn,q,qq,qn,count;
     double wa,wb,wc;
     double wx,wy,wz;
     double di,dj,dk,dnorm;
