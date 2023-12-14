@@ -65,7 +65,6 @@ void particle_f::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
         ppcell = 0;
     
     partnum = cellcount * ppcell;
-    
 }
 
 void particle_f::seed(lexer* p, fdm* a, ghostcell* pgc)
@@ -74,33 +73,30 @@ void particle_f::seed(lexer* p, fdm* a, ghostcell* pgc)
         posseed_box(p,a,pgc);
 	if(p->Q101>0)
         posseed_topo(p,a,pgc);
-
 }
 
 
 void particle_f::posseed_box(lexer* p, fdm* a, ghostcell* pgc)
 {
-	if(p->Q29>0)
-    srand(p->Q29);
+    if(p->Q29>0)
+        srand(p->Q29);
 
     if(p->Q29==0)
-    srand((unsigned)time(0)*p->mpirank==0?1:p->mpirank);
+        srand((unsigned)time(0)*(0==p->mpirank?1:p->mpirank));
 	
     LOOP
-    if(active_box(i,j,k)>0.0)
-    {
-        
+        if(active_box(i,j,k)>0.0)
             for(qn=0;qn<ppcell;++qn)
-            if(pactive<maxparticle)
-            {
-                pos[pactive][0] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
-                pos[pactive][1] = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
-                pos[pactive][2] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
-                pos[pactive][RADIUS] = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
-                posflag[pactive]=1;
-                ++pactive;
-            }
-    }
+                if(pactive<maxparticle)
+                {
+                    pos[pactive][0] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
+                    pos[pactive][1] = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
+                    pos[pactive][2] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
+                    pos[pactive][RADIUS] = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
+                    posflag[pactive]=1;
+                    ++pactive;
+                }
+    
     posactive=pactive;
     pcount=pactive;
 }
