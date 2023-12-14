@@ -35,8 +35,6 @@ void particle_f::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
         active_topo(i,j,k) = 0.0;
     }
     
-    ppcell = 0;
-    
     // Box
     cellcount=0;
     for(qn=0;qn<p->Q110;++qn)
@@ -62,7 +60,9 @@ void particle_f::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     
     // guess particle demand
     if(p->Q24>0)
-    ppcell = p->Q24;
+        ppcell = p->Q24;
+    else
+        ppcell = 0;
     
     partnum = cellcount * ppcell;
     
