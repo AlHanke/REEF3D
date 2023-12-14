@@ -37,21 +37,9 @@ particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : norm_vec(p), active_b
     
     if(p->I40==0)
     {
-	printcount=0;
-    p->partprinttime=0.0;
+		printcount=0;
+		p->partprinttime=0.0;
     }
-    
-    // if(p->F50==1)
-	// gcval_phi=51;
-
-	// if(p->F50==2)
-	// gcval_phi=52;
-
-	// if(p->F50==3)
-	// gcval_phi=53;
-
-	// if(p->F50==4)
-	// gcval_phi=54;
 	
 	// Create Folder
 	if(p->mpirank==0 && p->P14==1)
@@ -64,11 +52,8 @@ particle_f::~particle_f()
 
 void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 { 
-
 	starttime=pgc->timer();
 	
-	//posactive_old=posactive;
-
 	if (p->count>=p->Q43)
     	advect(p,a,pgc,pos,posflag,posactive);
 	particlex(p,a,pgc);
@@ -76,32 +61,17 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 	
 	print_particles(p,a,pgc);
 	
-    
 	xupdate(p,a,pgc);
+
 	parcount(p,a,pgc); 
-
-    pgc->start4(p,a->phi,gcval_phi);
-
-	//posbalance = posactive - posactive_old;
-
-	gparticle_active = pgc->globalisum(particle_active); // having this changes the behavior
-
-    //gposactive = pgc->globalisum(posactive);
+	gparticle_active = pgc->globalisum(particle_active);
     gpcount = pgc->globalisum(pcount);
-    //gcorrected = pgc->globalisum(corrected);
     gremoved = pgc->globalisum(removed);
-    //greseeded = pgc->globalisum(reseeded);
     gxchange = pgc->globalisum(xchange);
-	//gposbalance = pgc->globalisum(posbalance);
-	
 	p->plstime=pgc->timer()-starttime;
 
     if(p->mpirank==0 && (p->count%p->P12==0))
-	{
-    cout<<"Particles: active: "<<gparticle_active<<" memory: "<<gpcount<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | plstime: "<<p->plstime<<endl;
-		}
-	//LOOP
-	//cout<<p->mpirank<<":"<<i<<":"<<j<<":"<<k<<":"<<p->DZN[KP]<<endl;
+    	cout<<"Particles: active: "<<gparticle_active<<" memory: "<<gpcount<<" | xch: "<<gxchange<<" rem: "<<gremoved-gxchange<<" | particletime: "<<p->plstime<<endl;
 }
 
 
