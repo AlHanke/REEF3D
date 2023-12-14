@@ -28,12 +28,10 @@ Author: Hans Bihs
 void particle_f::parcount(lexer* p, fdm* a, ghostcell* pgc)
 {		
 	LOOP
-	posnum(i,j,k)=0.0;
+	    posnum(i,j,k)=0.0;
 
-	
 	pgc->start4(p,posnum,1);
-		
-	// POS
+	
     particle_active=0;
     PARTLOOP
         if(posflag[n]>0)
@@ -44,6 +42,4 @@ void particle_f::parcount(lexer* p, fdm* a, ghostcell* pgc)
             posnum(i,j,k)+=1.0;
             particle_active++;
         }
-
-
 }
