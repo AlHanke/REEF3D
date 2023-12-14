@@ -30,7 +30,6 @@ FetchContent_Declare(
     GIT_TAG        v2.30.0
     SOURCE_SUBDIR src
     BINARY_DIR src/cmbuild
-    CMAKE_ARGS --prefix=/usr/local/hypre
 )
 
 # MPI
@@ -52,21 +51,33 @@ set(HYPRE_DIR /usr/local/hypre)
 if (NOT EXISTS ${HYPRE_DIR}/lib/libHYPRE.a)
     message(FATAL " hypre not found - installing")
     FetchContent_MakeAvailable(hypre)
-    set(cmake_arg "../")
-    set(cmake_arg2 "--install")
-    set(cmake_arg3 ".")
-    set(cmake_arg4 "--prefix=/usr/local/hypre")
-    set(hypre_BUILD_dir /build/_deps/hypre-src/src/cmbuild)
-    execute_process(COMMAND ${CMAKE_COMMAND} ${cmake_arg}
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/${hypre_BUILD_dir}
-    RESULT_VARIABLE hypre_result
-    OUTPUT_VARIABLE hypre_ver)
-    if (NOT ${hypre_ver})
-        execute_process(COMMAND ${CMAKE_COMMAND} ${cmake_arg2} ${cmake_arg3}
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/${hypre_BUILD_dir}
-        RESULT_VARIABLE hypre_result2
-        OUTPUT_VARIABLE hypre_ver2)
-        message(STATUS "${hypre_ver2}")
+    set(cmake_arg_config ../ -DHYPRE_INSTALL_PREFIX=${HYPRE_DIR})
+    set(cmake_arg_build --build .)
+    set(cmake_arg_install --install .)
+    set(cmake_sudo sudo ${CMAKE_COMMAND})
+    set(hypre_BUILD_dir build/_deps/hypre-src/src/cmbuild)
+    execute_process(COMMAND ${CMAKE_COMMAND} ${cmake_arg_config}
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/${hypre_BUILD_dir}
+                    RESULT_VARIABLE hypre_result
+                    OUTPUT_VARIABLE hypre_ver)
+    if (${hypre_result}==1)
+        message("${hypre_ver}")
+    endif()
+    execute_process(COMMAND ${CMAKE_COMMAND} ${cmake_arg_build}
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/${hypre_BUILD_dir}
+                    RESULT_VARIABLE hypre_result
+                    OUTPUT_VARIABLE hypre_ver)
+    if (${hypre_result}==1)
+        message("${hypre_ver}")
+    endif()
+    execute_process(COMMAND ${cmake_sudo} ${cmake_arg_install}
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/${hypre_BUILD_dir}
+                    RESULT_VARIABLE hypre_result
+                    OUTPUT_VARIABLE hypre_ver)
+    if (${hypre_result}==1)
+        message("${hypre_ver}")
+    else()
+        message("Hypre has been installed.")
     endif()
 else()
     message(STATUS "Found hypre.")
