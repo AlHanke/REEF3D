@@ -5,6 +5,7 @@ project(REEF3D LANGUAGES CXX VERSION 23.11)
 # Set the C++ standard
 set(CMAKE_CXX_STANDARD 11)
 
+
 # Definitions
 MACRO(HEADER_DIRECTORIES return_list)
     FILE(GLOB_RECURSE new_list src/*.h)
@@ -16,26 +17,63 @@ MACRO(HEADER_DIRECTORIES return_list)
     LIST(REMOVE_DUPLICATES dir_list)
     SET(${return_list} ${dir_list})
 ENDMACRO()
-
-FetchContent_Declare(
-  openmpi
-  GIT_REPOSITORY https://github.com/open-mpi/ompi.git
-  GIT_TAG        v5.0.0
-  CONFIGURE_COMMAND ./configure
-  #FIND_PACKAGE_ARGS NAMES MPI
-)
 FetchContent_Declare(
     hypre
     GIT_REPOSITORY https://github.com/hypre-space/hypre.git
     GIT_TAG        v2.30.0
     SOURCE_SUBDIR src
-    BINARY_DIR src/cmbuild
+    BINARY_DIR cmbuild
 )
+
 
 # MPI
 find_package(MPI QUIET)
 if(NOT ${MPI_FOUND})
-    FetchContent_MakeAvailable(openmpi)
+    # Install openMPI
+    message(FATAL " MPI not found - installing openMPI")
+    set(OPENMPI_VERSION_MAJOR  "5")
+    set(OPENMPI_VERSION_MINOR  "0")
+    set(OPENMPI_VERSION_PATCH  "0")
+    set(OPENMPI_DIR _deps/openmpi-${OPENMPI_VERSION_MAJOR}.${OPENMPI_VERSION_MINOR}.${OPENMPI_VERSION_PATCH})
+    if (NOT EXISTS ${OPENMPI_DIR})
+        # Download openMPI
+        file(DOWNLOAD
+            https://download.open-mpi.org/release/open-mpi/v${OPENMPI_VERSION_MAJOR}.${OPENMPI_VERSION_MINOR}/openmpi-${OPENMPI_VERSION_MAJOR}.${OPENMPI_VERSION_MINOR}.${OPENMPI_VERSION_PATCH}.tar.bz2
+            ${PROJECT_BINARY_DIR}/_deps/openmpi-${OPENMPI_VERSION_MAJOR}.${OPENMPI_VERSION_MINOR}.${OPENMPI_VERSION_PATCH}.tar.bz2
+            EXPECTED_MD5 5c4fae19e1d853abeb1bdadd10a59466
+        )
+        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf openmpi-${OPENMPI_VERSION_MAJOR}.${OPENMPI_VERSION_MINOR}.${OPENMPI_VERSION_PATCH}.tar.bz2
+                        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/_deps
+                        RESULT_VARIABLE ompi_result
+                        OUTPUT_VARIABLE ompi_ver)
+        if (${ompi_result}==1)
+            message("${ompi_ver}")
+        endif()
+        file(REMOVE ${PROJECT_BINARY_DIR}/_deps/openmpi-${OPENMPI_VERSION_MAJOR}.${OPENMPI_VERSION_MINOR}.${OPENMPI_VERSION_PATCH}.tar.bz2)
+    endif()
+    execute_process(COMMAND ./configure --prefix=/usr/local/openmpi
+                    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/${OPENMPI_DIR}
+                    RESULT_VARIABLE ompi_result
+                    OUTPUT_VARIABLE ompi_ver)
+    if (${ompi_result}==1)
+        message("${ompi_ver}")
+    endif()
+    cmake_host_system_information(RESULT N
+    QUERY NUMBER_OF_PHYSICAL_CORES)
+    execute_process(COMMAND make -j ${N} all -w
+                    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/${OPENMPI_DIR}
+                    RESULT_VARIABLE ompi_result
+                    OUTPUT_VARIABLE ompi_ver)
+    if (${ompi_result}==1)
+        message("${ompi_ver}")
+    endif()
+    execute_process(COMMAND sudo make install
+                    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/${OPENMPI_DIR}
+                    RESULT_VARIABLE ompi_result
+                    OUTPUT_VARIABLE ompi_ver)
+    if (${hypre_result}==1)
+        message("${hypre_ver}")
+    endif()
 endif()
 set(MPIEXEC_EXECUTABLE "/usr/local/openmpi/bin/mpicxx")
 find_package(MPI REQUIRED)
@@ -46,6 +84,7 @@ if(NOT MPI_CXX_COMPILER)
     message(FATAL_ERROR "mpicxx compiler not found.")
 endif()
 
+
 # hypre
 set(HYPRE_DIR /usr/local/hypre)
 if (NOT EXISTS ${HYPRE_DIR}/lib/libHYPRE.a)
@@ -55,33 +94,35 @@ if (NOT EXISTS ${HYPRE_DIR}/lib/libHYPRE.a)
     set(cmake_arg_build --build .)
     set(cmake_arg_install --install .)
     set(cmake_sudo sudo ${CMAKE_COMMAND})
-    set(hypre_BUILD_dir build/_deps/hypre-src/src/cmbuild)
+    set(hypre_BUILD_dir _deps/hypre-src/src/cmbuild)
     execute_process(COMMAND ${CMAKE_COMMAND} ${cmake_arg_config}
-                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/${hypre_BUILD_dir}
+                    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/${hypre_BUILD_dir}
                     RESULT_VARIABLE hypre_result
                     OUTPUT_VARIABLE hypre_ver)
     if (${hypre_result}==1)
         message("${hypre_ver}")
     endif()
     execute_process(COMMAND ${CMAKE_COMMAND} ${cmake_arg_build}
-                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/${hypre_BUILD_dir}
+                    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/${hypre_BUILD_dir}
                     RESULT_VARIABLE hypre_result
                     OUTPUT_VARIABLE hypre_ver)
     if (${hypre_result}==1)
         message("${hypre_ver}")
     endif()
     execute_process(COMMAND ${cmake_sudo} ${cmake_arg_install}
-                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/${hypre_BUILD_dir}
+                    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/${hypre_BUILD_dir}
                     RESULT_VARIABLE hypre_result
                     OUTPUT_VARIABLE hypre_ver)
     if (${hypre_result}==1)
-        message("${hypre_ver}")
+        message(FATAL_ERROR "${hypre_ver}")
     else()
         message("Hypre has been installed.")
+        file(REMOVE_RECURSE build/_deps/hypre-src)
     endif()
 else()
     message(STATUS "Found hypre.")
 endif()
+
 
 # Eigen
 set(Eigen_DIR ThirdParty/eigen-3.3.8)
@@ -104,10 +145,6 @@ else()
     message(STATUS "Found Eigen3.")
 endif()
 find_package(Eigen3 REQUIRED)
-
-
-
-
 
 
 # Compiler flags
