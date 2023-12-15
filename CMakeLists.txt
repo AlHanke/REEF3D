@@ -77,6 +77,7 @@ if(NOT ${MPI_FOUND})
     endif()
 endif()
 find_package(MPI REQUIRED)
+message(STATUS "Found MPI.")
 include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 # Set the C++ compiler to mpicxx
 find_program(MPI_CXX_COMPILER mpicxx)
