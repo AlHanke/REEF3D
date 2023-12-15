@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 # Definitions
 MACRO(HEADER_DIRECTORIES return_list)
-    FILE(GLOB_RECURSE new_list src/*.h)
+    FILE(GLOB_RECURSE new_list src/include/*.h)
     SET(dir_list "")
     FOREACH(file_path ${new_list})
         GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)
@@ -27,6 +27,7 @@ FetchContent_Declare(
 
 
 # MPI
+set(MPIEXEC_EXECUTABLE "/usr/local/openmpi/bin/mpicxx")
 find_package(MPI QUIET)
 if(NOT ${MPI_FOUND})
     # Install openMPI
@@ -75,7 +76,6 @@ if(NOT ${MPI_FOUND})
         message("${hypre_ver}")
     endif()
 endif()
-set(MPIEXEC_EXECUTABLE "/usr/local/openmpi/bin/mpicxx")
 find_package(MPI REQUIRED)
 include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 # Set the C++ compiler to mpicxx
@@ -157,7 +157,7 @@ target_compile_options(REEF3D_compiler_flags INTERFACE
 )
 
 # Globbing source files in src directory
-file(GLOB_RECURSE SOURCE_FILES "src/*.cpp")
+file(GLOB_RECURSE SOURCE_FILES "src/src/*.cpp")
 
 # Add executable target
 add_executable(REEF3D ${SOURCE_FILES})
