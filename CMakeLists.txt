@@ -31,7 +31,7 @@ set(MPIEXEC_EXECUTABLE "/usr/local/openmpi/bin/mpicxx")
 find_package(MPI QUIET)
 if(NOT ${MPI_FOUND})
     # Install openMPI
-    message(FATAL " MPI not found - installing openMPI")
+    message(FATAL " MPI not found - installing OpenMPI")
     set(OPENMPI_VERSION_MAJOR  "5")
     set(OPENMPI_VERSION_MINOR  "0")
     set(OPENMPI_VERSION_PATCH  "0")
