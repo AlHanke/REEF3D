@@ -82,6 +82,7 @@ public:
 	
 	field4 active_box;
 	field4 active_topo;
+	field4 posnum;
 	
 	double **pos;
 	double **posxs;
