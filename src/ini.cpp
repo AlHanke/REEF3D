@@ -72,12 +72,12 @@ void lexer::ini_default()
     A342=0.0;           // double coastline damping absolute distance
     A343=1;             // int turn on wetting-drying
     A344=1;             // int absolute wetting criterion
-    A344_val=0.00005;   // double absolute wetting criterion value
+    A344_val=0.001;   // double absolute wetting criterion value
     A345=0;             // int dx-based relative wetting citerion
-    A345_val=0.001;     // double dx-based relative wetting citerion value
-    A346=0.0;           // double viscosity damping within the coastline
-    A347=1;             // int coastline relaxation for Fi and eta
-    A348=1;             // int beach relaxation for Fi and eta
+    A345_val=0.01;     // double dx-based relative wetting citerion value
+    A346=1.86;           // double viscosity damping within the coastline
+    A347=2;             // int coastline relaxation for Fi and eta
+    A348=2;             // int beach relaxation for Fi and eta
     A350=0;             // int turn on breaking (which method)
     A351=0;             // int type of breaking detection (deep / shallow)
     A352=1;             // int additional filtering to viscosity based breaking
@@ -91,8 +91,6 @@ void lexer::ini_default()
     A363=1;             // int breaking filter width
     A365=1.86;          // double viscosity breaking wave
     A368=0;             // int breaking waves in numerical beach
-    A369=1.86;          // double viscosity relaxation breaking wave
-
 
     A410=1;             // int scheme eta
     A440=1.6;           // double epsi for depth integration
@@ -142,7 +140,6 @@ void lexer::ini_default()
 	B56=-1.0;		    // double global wall roughness ks
 	B60=0;              // int ioflow discharge
 	B61=2;              // int plain or logarithmic inflow profile
-	B70=0;              // double distance for use relaxation method for fixed water level
 	B71=0;              // double distance for use relaxation method for fixed water level ini
 	B75=1;		        // int type of outflow boundary conditions
     B76=1;              // int type of pressure inlet boundary condition
@@ -205,9 +202,6 @@ void lexer::ini_default()
     B136=1;             // int double summation method frequency vector
     B138=0;             // int seed number multidir waves
     B139=0;             // int seed number wave spectrum
-	B140_1=0.0;         // doube x1 numerical beach
-	B140_2=0.0;         // doube x2 numerical beach
-	B140_3=0.0;         // doube beta numerical beach
     B160=5;             // int number of vertical layers for 2D wave generation
     B170=1024;          // int number of Fourier modes for the generation of steady surface gravity waves
 	B180=0;             // int gravity waves
@@ -302,13 +296,12 @@ void lexer::ini_default()
 	D21=0;			    // int print out implicit diffusion time and iterations
 	D30=1;			    // int pressure scheme
     D31=0;			    // int normalize pressure to free surface
-    D32=1;			    // int boundary treatment Poisson equation
     D33=0;			    // int corner cells sigma grid Poisson matrix
     D37=0;              // int type of FSFBC for single fluid flow
 
     // Free Surface
 	F10=2;			    // int free surface scheme
-	F30=0;			    // int level set scheme
+	F30=3;			    // int level set scheme
 	F31=0;              // particle level set
 	F32=64;			    // number of particles per cell
 	F33=0.5;		    // factor for pls vec allocation
@@ -316,7 +309,7 @@ void lexer::ini_default()
 	F35=5;			    // int convection scheme for fsf
 	F36=1;				// int RK3 scheme
 	F39=0.5;			// double reini constraint relaxation factor
-	F40=0;			    // int reini scheme
+	F40=3;			    // int reini scheme
 	F42=-1.0;		    // double maxlength
 	F43=0.55;		    // double factor for reini timestep
 	F44=3;		        // int number reini time step

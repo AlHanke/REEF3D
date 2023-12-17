@@ -53,7 +53,7 @@ void ioflow_f::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
 
         if(a->phi(i-1,j,k)>=0.0 && a->phi(i-1,j,k+1)<0.0)
         {
-        zval+=-(a->phi(i-1,j,k)*p->DXM)/(a->phi(i-1,j,k+1)-a->phi(i-1,j,k)) + p->pos_z();
+        zval+=-(a->phi(i-1,j,k)*p->DZP[KP])/(a->phi(i-1,j,k+1)-a->phi(i-1,j,k)) + p->pos_z();
         ++count;
         }
     }
@@ -89,9 +89,9 @@ void ioflow_f::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
     j=p->gcout[n][1];
     k=p->gcout[n][2];
 
-        if(a->phi(i+1,j,k)>=0.0 && a->phi(i+1,j,k+1)<0.0)
+        if(a->phi(i,j,k)>=0.0 && a->phi(i,j,k+1)<0.0)
         {
-        zval+=-(a->phi(i+1,j,k)*p->DXM)/(a->phi(i+1,j,k+1)-a->phi(i+1,j,k)) + p->pos_z();
+        zval+= -(a->phi(i,j,k)*p->DZP[KP])/(a->phi(i,j,k+1)-a->phi(i,j,k)) + p->pos_z();
         ++count;
         }
     }
@@ -111,7 +111,7 @@ void ioflow_f::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
 
 void ioflow_f::fsfrkout(lexer *p, fdm *a, ghostcell *pgc, field& f)
 {
-        for(n=0;n<p->gcout_count;++n)
+        /*for(n=0;n<p->gcout_count;++n)
         {
         i=p->gcout[n][0];
         j=p->gcout[n][1];
@@ -120,7 +120,7 @@ void ioflow_f::fsfrkout(lexer *p, fdm *a, ghostcell *pgc, field& f)
         f(i+1,j,k)=a->phi(i+1,j,k);
         f(i+2,j,k)=a->phi(i+2,j,k);
         f(i+3,j,k)=a->phi(i+3,j,k);
-        }
+        }*/
 }
 
 void ioflow_f::fsfrkin(lexer *p, fdm *a, ghostcell *pgc, field& f)

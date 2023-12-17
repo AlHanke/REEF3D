@@ -165,9 +165,9 @@ private:
 	double distcalc(lexer*,double, double, double);
 	double r1(lexer*, double, double);
 
-	double *tan_betaB70,*tan_betaB71;
-	double *betaB70,*betaB71;
-	double *dist_B70,*dist_B71;
+	double *tan_betaB71;
+	double *betaB71;
+	double *dist_B71;
 	
 	double **hydro_in,**hydro_out;
     int hydro_in_count,hydro_out_count;
@@ -176,7 +176,7 @@ private:
     
     double Apor,Bpor,porval,partval;
     
-    double epsi1,epsi2;
+    double epsi1,epsi2;    int iter0;
     
     patchBC_interface *pBC;
 };

@@ -270,7 +270,7 @@ public:
     int A310,A311,A312,A313,A320,A321,A322,A323,A329,A343,A344,A345,A347,A348;
     double A340,A341,A342,A344_val,A345_val,A346;
     int A350,A351,A352,A353,A357,A361,A362,A363,A368;
-    double A354,A355,A356,A365,A369; 
+    double A354,A355,A356,A365; 
     
     // NSEWAVE
     int A410;
@@ -289,12 +289,11 @@ public:
 	int B10,B20,B23;
     int B30,B32,B33;
     double B31,B32_x,B32_y,B32_z;    
-    int B60,B61,B70,B71,B75,B76,B77,B84,B85,B81,B82,B86,B87,B89,B90,B91,B92,B93,B94,B98,B99,B101,B105,B106,B107;
+    int B60,B61,B71,B75,B76,B77,B84,B85,B81,B82,B86,B87,B89,B90,B91,B92,B93,B94,B98,B99,B101,B105,B106,B107;
 	int B136,B138,B138_1,B138_2,B139;
     int B180,B191,B192,B240,B241,B242,B243;
 	double B29,B50,B51,B52,B53,B54,B55,B56,B81_1,B81_2,B81_3,B83,B117,B87_1,B87_2,B88;
 	double B91_1,B91_2,B93_1,B93_2,B94_wdt,B96_1,B96_2,B102,B105_1,B105_2,B105_3;
-	double *B70_val,*B70_dist,*B70_b,*B70_x,*B70_y;
 	double *B71_val,*B71_dist,*B71_b,*B71_x,*B71_y;
 	double *B106_b,*B106_x,*B106_y;
     double *B107_xs,*B107_xe,*B107_ys, *B107_ye, *B107_d;
@@ -306,7 +305,6 @@ public:
     double B112_zs,B112_z2,B112_ze;
     int B115,B116,B125,B127;
     double B120,B122,B123,B125_y;
-	double B140_1,B140_2,B140_3;
     int B130,B133;
     double B131,B132_s,B132_e;
     double B134,B135;
@@ -378,7 +376,7 @@ public:
 	double *C75_x,*C75_z,*C75_a,*C75_s,*C75_l,*C75_v;
 
 	// discretization
-	int D10,D11,D20,D21,D30,D31,D32,D33,D37;
+	int D10,D11,D20,D21,D30,D31,D33,D37;
 
 	// Free Surface
 	int F10,F30,F31,F32,F34,F35,F36,F40,F44,F46,F47,F49,F50,F150,F151;
@@ -659,6 +657,8 @@ public:
 	double lsmtime,heattime,concentrationtime;
 	double printouttime;
 	double phimean,phiout,phiin;
+    double fsfin,fsfout;
+    double fsfinval,fsfoutval;
 	double pcnorm,ucnorm,vcnorm,wcnorm;
     double alpha;
     double pressgage;

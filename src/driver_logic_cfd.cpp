@@ -469,10 +469,7 @@ void driver::logic_cfd()
     if(p->D30==1 && p->W30==0 && p->F10==1 && p->Z10==0 && p->X10==0)
 	ppress = new pjm_nse(p,a,pheat,pconc);
 
-    if(p->D30==2  && p->Z10==0 && p->X10==0)
-	ppress = new pjm_fsm(p,a,pheat,pconc);
-
-    if((p->D30==3 || p->X10==1 || p->Z10!=0 || p->G3==1))
+    if((p->D30==2 || p->D30==3 || p->X10==1 || p->Z10!=0 || p->G3==1))
 	ppress = new pjm_corr(p,a,pheat,pconc);
 
     if(p->D30==10)
@@ -480,11 +477,11 @@ void driver::logic_cfd()
 
 
 //poisson scheme for pressure
-	if(p->D30<5 && p->F10==2)
+	if(p->D30<=2 && p->F10==2)
 	ppois = new poisson_f(p,pheat,pconc);
-
-    if(p->D30==5 && p->F10==2)
-	ppois = new poisson_f(p,pheat,pconc);
+    
+    if((p->D30==2 || p->D30==3 || p->X10==1 || p->Z10!=0 || p->G3==1))
+	ppois = new poisson_pcorr(p,pheat,pconc);
 
     if(p->D30<9 && p->F10==1)
 	ppois = new poisson_nse(p,pheat,pconc);
@@ -634,7 +631,7 @@ void driver::logic_cfd()
     ppart = new particle_f(p,a,pgc);
 
 // Velocities
-	if(p->N40==0 || p->Z10!=0 || p->X10==1 || p->G3==1)
+	if(p->N40==0 || p->Z10!=0 || p->X10==1)
 	pmom = new momentum_void();
 
     if(p->N40==1)
@@ -667,7 +664,10 @@ void driver::logic_cfd()
     if(p->N40==33)
 	pmom = new momentum_FCC3(p,a,pgc,pconvec,pfsfdisc,pdiff,ppress,ppois,pturb,psolv,ppoissonsolv,pflow,pheat,pconc,preini,pfsi);
     
-    if(p->G3==1 && p->N40==4)
+    if(p->G3==1 && (p->N40==3))
+    pmom = new momentum_RK3(p,a,pconvec,pdiff,ppress,ppois,pturb,poneph,psolv,ppoissonsolv,pflow,pfsi);
+    
+    if(p->G3==1 && (p->N40==4))
     pmom_sf = new momentum_RKLS3_sf(p,a,pgc,pconvec,pdiff,ppress,ppois,pturb,psolv,ppoissonsolv,pflow); 
     
     if((p->X10==1 || p->Z10>0)  && (p->N40==3 || p->N40==4))
