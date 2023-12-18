@@ -111,6 +111,7 @@ void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
     int *tempPosFlag;
     double **tempPos;
     int tempActive=0;
+    double tolerance = 5e-18;
     p->Darray(tempPos,maxparticle,PARTICLE_INFORMATIONS);
     p->Iarray(tempPosFlag,maxparticle);
 
@@ -124,7 +125,8 @@ void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
                     tempPos[tempActive][2] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
                     tempPos[tempActive][RADIUS] = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
                     double ipolTopo = p->ccipol4_b(a->topo,tempPos[tempActive][0],tempPos[tempActive][1],tempPos[tempActive][2]);
-                    if (ipolTopo>5e-18||ipolTopo<-p->Q102*p->DZN[KP])
+                    double ipolSolid = p->ccipol4_b(a->solid,tempPos[tempActive][0],tempPos[tempActive][1],tempPos[tempActive][2]);
+                    if (ipolTopo>tolerance||ipolTopo<-p->Q102*p->DZN[KP]||ipolSolid<0)
                         tempPosFlag[tempActive]=0;
                     else
                         tempPosFlag[tempActive]=1;
