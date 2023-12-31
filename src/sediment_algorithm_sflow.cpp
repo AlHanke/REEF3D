@@ -59,7 +59,7 @@ void sediment_f::sediment_algorithm_sflow(lexer *p, fdm2D *b, ghostcell *pgc, io
     pbed->start(p,pgc,s);
 	
     // relax *******
-	prelax->start(p,pgc,s);
+	relax(p,pgc);
     
     // Exner *******
     ptopo->start(p,pgc,s);
@@ -68,7 +68,7 @@ void sediment_f::sediment_algorithm_sflow(lexer *p, fdm2D *b, ghostcell *pgc, io
     pslide->start(p,pgc,s);
     
     // relax *******
-	prelax->start(p,pgc,s);
+	relax(p,pgc);
 	
     // filter bedzh *******
 	if(p->S100>0)

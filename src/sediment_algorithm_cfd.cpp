@@ -67,7 +67,7 @@ void sediment_f::sediment_algorithm_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow
     pcbed->start(p,pgc,s);
     
     // relax  *******
-	prelax->start(p,pgc,s);
+	relax(p,pgc);
     
     for(int qqn=0;qqn<p->S27;++qqn)
     {
@@ -81,7 +81,7 @@ void sediment_f::sediment_algorithm_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow
     }
     
     // relax  *******
-	prelax->start(p,pgc,s);
+	relax(p,pgc);
 	
     // filter bedzh *******
 	if(p->S100>0)

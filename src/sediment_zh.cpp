@@ -59,7 +59,7 @@ void sediment_f::relax(lexer *p, ghostcell *pgc)
 void sediment_f::topo_zh_update(lexer *p, fdm *a,ghostcell *pgc, sediment_fdm *s)
 {
     for(int qn=0;qn<3;++qn)
-    prelax->start(p,pgc,s);
+    relax(p,pgc);
     
 	pgc->gcsl_start4(p,s->bedzh,1);
 	
