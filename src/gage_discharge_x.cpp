@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
 REEF3D
-Copyright 2008-2023 Hans Bihs
+Copyright 2008-2024 Hans Bihs
 
 This file is part of REEF3D.
 
@@ -83,7 +83,7 @@ void gage_discharge_x::start(lexer *p, fdm *a, ghostcell *pgc)
 
     i=iloc[n];
 		
-        /*
+        
         if(flag[n]==1)
         JLOOP
         KLOOP
@@ -103,8 +103,8 @@ void gage_discharge_x::start(lexer *p, fdm *a, ghostcell *pgc)
 
             q[n]+=area*0.5*(a->u(i,j,k) + a->u(i-1,j,k));
 			}
-        }*/
-        
+        }
+        /*
         if(flag[n]==1)
         JLOOP
         KLOOP
@@ -125,7 +125,7 @@ void gage_discharge_x::start(lexer *p, fdm *a, ghostcell *pgc)
 
             q[n]+=area*0.5*(a->u(i,j,k) + a->u(i-1,j,k));
 			
-        }
+        }*/
 	
     }
 	

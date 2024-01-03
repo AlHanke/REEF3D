@@ -1615,6 +1615,7 @@
         <File Name="benchmark_convection.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Sediment">
+        <File Name="sediment_algorithm_nhflow.cpp"/>
         <File Name="sediment_algorithm_sflow.cpp"/>
         <File Name="sediment_algorithm_cfd.cpp"/>
         <VirtualDirectory Name="Sediment FDM">
@@ -2146,6 +2147,7 @@
     </VirtualDirectory>
     <VirtualDirectory Name="Ghostcell">
       <VirtualDirectory Name="Forcing">
+        <File Name="gc_solid_forcing_topo_update.cpp"/>
         <File Name="gcdf_update.cpp"/>
         <File Name="gc_solid_forcing_interface.cpp"/>
         <File Name="gc_solid_forcing_ini.cpp"/>

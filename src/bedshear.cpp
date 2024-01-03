@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
 REEF3D
-Copyright 2008-2023 Hans Bihs
+Copyright 2008-2024 Hans Bihs
 
 This file is part of REEF3D.
 
@@ -191,8 +191,6 @@ void bedshear::taubed(lexer *p, fdm * a, ghostcell *pgc, sediment_fdm *s)
     
     if(p->S33==2)
     tau=density*pturb->ccipol_a_kinval(p,pgc,xip,yip,zval)*0.3;
-    
-    //tau=density*pturb->kinval(i,j,k)*0.3;
     }
     
 	

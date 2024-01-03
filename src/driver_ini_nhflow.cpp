@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
 REEF3D
-Copyright 2008-2023 Hans Bihs
+Copyright 2008-2024 Hans Bihs
 
 This file is part of REEF3D.
 
@@ -59,7 +59,7 @@ void driver::driver_ini_nhflow()
     if(p->mpirank==0)
     cout<<"starting driver_ini_NHFLOW"<<endl;
     
-    
+
     // sigma ini
     pnhfmom->inidisc(p,d,pgc,pnhfsf);
     

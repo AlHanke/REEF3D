@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
 REEF3D
-Copyright 2008-2023 Hans Bihs
+Copyright 2008-2024 Hans Bihs
 
 This file is part of REEF3D.
 
@@ -117,7 +117,12 @@ void wave_lib_hdc::wave_prestep(lexer *p, ghostcell *pgc)
     // only at startup
     if(startup==0)
     {
+        //if(p->mpirank==0)
+        //cout<<"simtim: "<<simtime[0]<<" "<<simtime[1]<<" "<<simtime[2]<<" "<<simtime[3]<<endl;
+        
         deltaT = simtime[1]-simtime[0];
+        
+        deltaT = deltaT>0.0?deltaT:1.0e20;
         
         t1 = (simtime[1]-(p->simtime+p->I241))/deltaT;
         t2 = ((p->simtime+p->I241)-simtime[0])/deltaT;

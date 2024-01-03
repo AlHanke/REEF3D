@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
 REEF3D
-Copyright 2008-2023 Hans Bihs
+Copyright 2008-2024 Hans Bihs
 
 This file is part of REEF3D.
 
@@ -252,7 +252,7 @@ void potential_f::laplace(lexer *p, fdm *a, ghostcell *pgc, field &phi)
            || (p->G3==1 && p->flagsf4[Im1JK]<0))
 		{
         //a->test(i,j,k) = a->M.p[n];
-		//a->M.p[n] += a->M.s[n];
+		a->M.p[n] += a->M.s[n];
 		a->M.s[n] = 0.0;
         
 		}

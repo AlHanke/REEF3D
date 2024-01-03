@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
 REEF3D
-Copyright 2008-2023 Hans Bihs
+Copyright 2008-2024 Hans Bihs
 
 This file is part of REEF3D.
 
@@ -85,7 +85,6 @@ void lexer::flagini()
 
 void lexer::gridini_patchBC()
 {
-
 }
 
 int lexer::conv(double a)
@@ -104,7 +103,6 @@ int lexer::conv(double a)
 
 	if(diff<=-0.5)
 	b=c-1;
-
 
 	return b;
 }
@@ -137,7 +135,5 @@ void lexer::sigma_coord_ini()
     ZN0temp = ZN[0+marge];
     
     for(k=-marge;k<knoz+marge;++k)
-    {
     ZN[KP] = (ZN[KP]-ZN0temp)/L;
-    }
 }
