@@ -35,7 +35,7 @@ void ioflow_f::inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, fiel
     {
         if(p->B61==1)
         {
-        inflow_plain(p,a,pgc,u,v,w);
+            inflow_plain(p,a,pgc,u,v,w);
 
             if((p->count==0&&p->I11==1)||p->B60==3||p->B60==4)
             outflow_log(p,a,pgc,u,v,w);
@@ -43,7 +43,7 @@ void ioflow_f::inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, fiel
 
         if(p->B61==2 || p->B61==4 || p->B61==5)
         {
-        inflow_log(p,a,pgc,u,v,w);
+            inflow_log(p,a,pgc,u,v,w);
 
             if((p->count==0&&p->I11==1)||p->B60==3||p->B60==4)
             outflow_log(p,a,pgc,u,v,w);
@@ -51,7 +51,7 @@ void ioflow_f::inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, fiel
 
         if(p->B61==3)
         {
-        inflow_water(p,a,pgc,u,v,w);
+            inflow_water(p,a,pgc,u,v,w);
 
             if(p->B60==3||p->B60==4)
             outflow_water(p,a,pgc,u,v,w);
