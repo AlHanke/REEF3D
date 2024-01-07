@@ -29,26 +29,27 @@ size_t overflow when adding something to an object at capacity
 */
 
 
-particles_obj::particles_obj(size_t size_ini, size_t capacity_ini, double scale_factor_ini): scale_factor(scale_factor_ini)
+particles_obj::particles_obj(size_t size, double d50, double density, double porosity, size_t capacity, double scale_factor):
+                d50(d50), density(density), porosity(porosity), scale_factor(scale_factor)
 {	
-    if(size_ini>0)
+    if(size>0)
     {
-        if(size_ini>capacity_ini)
-            capacity_ini=size_ini;
-        if(capacity_ini>0)
+        if(size>capacity)
+            capacity=size;
+        if(capacity>0)
         {
-            X = new double[capacity_ini];
-            Y = new double[capacity_ini];
-            Z = new double[capacity_ini];
+            X = new double[capacity];
+            Y = new double[capacity];
+            Z = new double[capacity];
 
-            Flag = new int[capacity_ini];
+            Flag = new int[capacity];
 
-            Empty=new size_t[capacity_ini];
-            capacity=capacity_ini;
+            Empty=new size_t[capacity];
+            this->capacity=capacity;
 
-            size=0;
-            empty_itr=0;
-            fill(size_ini);
+            this->size=0;
+            this->empty_itr=0;
+            fill(size);
         }
         
     }

@@ -40,7 +40,7 @@ Thread safe
 class particles_obj
 {
 public:
-    particles_obj(size_t size_ini, size_t=0, double=1.25);
+    particles_obj(size_t, double, double, double, size_t=0, double=1.25);
     ~particles_obj();
 
     void erase(size_t);
@@ -60,6 +60,9 @@ public:
 
     //particle data
     //general
+    double d50;
+    const double density;
+    const double porosity;
 
     //individual
     double* X;
