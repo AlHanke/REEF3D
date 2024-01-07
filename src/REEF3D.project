@@ -418,7 +418,7 @@
     <VirtualDirectory Name="Extensions">
       <VirtualDirectory Name="Particle">
         <File Name="particle.h"/>
-        <File Name="particle2.h"/>
+        <File Name="particles_obj.h"/>
         <File Name="particle_v.h"/>
         <File Name="particle_f.h"/>
       </VirtualDirectory>
@@ -1576,7 +1576,7 @@
           <File Name="particle_allocate.cpp"/>
         </VirtualDirectory>
         <File Name="particle_f.cpp"/>
-        <File Name="particle2.cpp"/>
+        <File Name="particles_obj.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Multiphase">
         <VirtualDirectory Name="Fluid Update">

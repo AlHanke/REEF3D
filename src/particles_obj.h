@@ -20,18 +20,58 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-using namespace std;
+#ifndef PARTICLESOBJ_H_
+#define PARTICLESOBJ_H_
 
-#ifndef PARTICLEBASE2_H_
-#define PARTICLEBASE2_H_
+#include <stdio.h>
+#include <math.h>
 
-class particle_base2
+/*
+Philosophy: performance, memory usage, ease of use
+
+All data should be stored as at max a 1D array
+Internal data access should be via iterator
+No external access to iterator
+
+Out of bounds safe
+Thread safe
+*/
+
+class particles_obj
 {
 public:
-    particle_base2();
-    ~particle_base2();
-private:
+    particles_obj(size_t size_ini, size_t=0, double=1.25);
+    ~particles_obj();
 
+    void erase(size_t);
+    void reserve(size_t);
+    void add(double,double,double,int);
+    bool check_state(bool=true);
+private:
+    void fill(size_t,bool=true);
+    void fill_empty();
+    void fix_state();
+    void debug();
+    void clear();
+public:
+    // state data
+    size_t size;
+    size_t capacity;
+
+    //particle data
+    //general
+
+    //individual
+    double* X;
+    double* Y;
+    double* Z;
+
+    int* Flag;
+
+private:
+    size_t empty_itr;
+    size_t* Empty;
+    const double scale_factor;
 };
 
 #endif
