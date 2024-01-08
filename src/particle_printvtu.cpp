@@ -47,7 +47,7 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag
 	int count;
 	
 	for(n=0;n<active;++n)
-    // if(flag[n]>0)
+    if(flag[n]>0)
 	++numpt;
 	
     cout<<"PACTIVE-"<<p->mpirank<<": "<<numpt<<" "<<active<<endl;
@@ -144,11 +144,6 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag
 	ffn=float(f[n][RADIUS]);
 	result.write((char*)&ffn, sizeof (float));
 	}
-	else
-	{
-	ffn=float(-0.001);
-	result.write((char*)&ffn, sizeof (float));	
-	}
 
 //  correction
     // iin=4*(numpt);
@@ -181,7 +176,7 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag
 	iin=4*(numpt)*3;
 	result.write((char*)&iin, sizeof (int));
     for(n=0;n<active;++n)
-    // if(flag[n]>0)
+    if(flag[n]>0)
 	{
 	ffn=float(f[n][0]);
 	result.write((char*)&ffn, sizeof (float));
@@ -198,7 +193,7 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag
     iin=4*(numpt)*2;
     result.write((char*)&iin, sizeof (int));
 	for(n=0;n<active;++n)
-	// if(flag[n]>0)
+	if(flag[n]>0)
 	{
 	iin=int(0);
 	result.write((char*)&iin, sizeof (int));
@@ -213,7 +208,7 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
 	for(n=0;n<active;++n)
-    // if(flag[n]>0)
+    if(flag[n]>0)
 	{
 	iin=(count+1)*2;
 	result.write((char*)&iin, sizeof (int));
@@ -225,7 +220,7 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
 	for(n=0;n<active;++n)
-    // if(flag[n]>0)
+    if(flag[n]>0)
 	{
 	iin=1;
 	result.write((char*)&iin, sizeof (int));

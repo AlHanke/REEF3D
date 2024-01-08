@@ -33,7 +33,6 @@ void particle_f::remove(lexer* p, fdm* a, ghostcell* pgc)
     PARTLOOP
         if(posflag[n]>0)
         {
-            // particles too close to boarder get i=-1
             i = p->posc_i(pos[n][0]);
             j = p->posc_j(pos[n][1]);
             k = p->posc_k(pos[n][2]);
@@ -49,7 +48,6 @@ void particle_f::remove(lexer* p, fdm* a, ghostcell* pgc)
                 posflag[n]=0;
                 posmem[pcount]=n;
                 removed++;
-                // cout<<"Particle "<<n<<" removed because it was out of bounds.\nIts location was "<<pos[n][0]<<":"<<pos[n][1]<<":"<<pos[n][2]<<"\nIt was located in cell: "<<i<<":"<<j<<":"<<k<<"\nx bounds are here: "<<p->XN[0+marge]<<":"<<p->XN[0]<<endl;
             }
         }
 }

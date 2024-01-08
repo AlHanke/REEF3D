@@ -40,7 +40,6 @@ void particle_f::xupdate(lexer* p, fdm* a, ghostcell* pgc)
                 pcount++;
                 posflag[n]=0;
                 posmem[pcount]=n;
-                cout<<"Particle "<<n<<" removed because it was transfered."<<endl;
                 removed++;
                 break;
             }
