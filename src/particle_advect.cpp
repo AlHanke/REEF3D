@@ -27,6 +27,7 @@ Author: Hans Bihs
 
 void particle_f::advect(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag,int active)
 {
+    double coord1, coord2, coord3, u1, u2, u3, v1, v2, v3, w1, w2, w3;
     for(n=0;n<active;++n)
     if(flag[n]>0)
     {
