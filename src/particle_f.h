@@ -72,7 +72,7 @@ public:
     
 	int pcount,cellcount;
     int pactive;
-	int n,nn,q,qq,qn,count;
+	int n,i,j,k;
     int posactive,maxparticle;
     int removed,xchange;
     

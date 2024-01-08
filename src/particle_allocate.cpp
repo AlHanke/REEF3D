@@ -27,21 +27,21 @@ Author: Hans Bihs
 
 void particle_f::allocate(lexer* p,fdm* a,ghostcell* pgc)
 {
-     maxparticle = int(p->Q25*double(gpartnum));
-     pcount = maxparticle;
-     pactive = 0;
-	 
-	 p->Darray(pos,maxparticle,PARTICLE_INFORMATIONS);
-	 
-	 p->Iarray(posflag,maxparticle);
+	maxparticle = int(p->Q25*double(gpartnum));
+	pcount = maxparticle;
+	pactive = 0;
+	
+	p->Darray(pos,maxparticle,PARTICLE_INFORMATIONS);
+	
+	p->Iarray(posflag,maxparticle);
 
-	 p->Iarray(posmem,maxparticle);
+	p->Iarray(posmem,maxparticle);
 
-     for(n=0;n<maxparticle;++n)
-     {
-         posflag[n] = 0;
-         posmem[n] = n;
-     }
+	for(n=0;n<maxparticle;++n)
+	{
+		posflag[n] = 0;
+		posmem[n] = n;
+	}
 
     // parallel
 	p->Iarray(pxs,6);
@@ -53,36 +53,36 @@ void particle_f::allocate(lexer* p,fdm* a,ghostcell* pgc)
 
     for(n=0;n<6;++n)
 	{	
-	if(p->gcpara1_count>0)
-	posxs[0] = new double[PARTICLE_INFORMATIONS*p->gcpara1_count*ppcell*fac];
-	if(p->gcpara2_count>0)
-    posxs[1] = new double[PARTICLE_INFORMATIONS*p->gcpara2_count*ppcell*fac];
-	if(p->gcpara3_count>0)
-	posxs[2] = new double[PARTICLE_INFORMATIONS*p->gcpara3_count*ppcell*fac];
-	if(p->gcpara4_count>0)
-    posxs[3] = new double[PARTICLE_INFORMATIONS*p->gcpara4_count*ppcell*fac];
-	if(p->gcpara5_count>0)
-    posxs[4] = new double[PARTICLE_INFORMATIONS*p->gcpara5_count*ppcell*fac];
-	if(p->gcpara6_count>0)
-    posxs[5] = new double[PARTICLE_INFORMATIONS*p->gcpara6_count*ppcell*fac];
+		if(p->gcpara1_count>0)
+			posxs[0] = new double[PARTICLE_INFORMATIONS*p->gcpara1_count*ppcell*fac];
+		if(p->gcpara2_count>0)
+			posxs[1] = new double[PARTICLE_INFORMATIONS*p->gcpara2_count*ppcell*fac];
+		if(p->gcpara3_count>0)
+			posxs[2] = new double[PARTICLE_INFORMATIONS*p->gcpara3_count*ppcell*fac];
+		if(p->gcpara4_count>0)
+			posxs[3] = new double[PARTICLE_INFORMATIONS*p->gcpara4_count*ppcell*fac];
+		if(p->gcpara5_count>0)
+			posxs[4] = new double[PARTICLE_INFORMATIONS*p->gcpara5_count*ppcell*fac];
+		if(p->gcpara6_count>0)
+			posxs[5] = new double[PARTICLE_INFORMATIONS*p->gcpara6_count*ppcell*fac];
     }
 
     posxr= new double*[6];
 
     for(n=0;n<6;++n)
     {
-	if(p->gcpara1_count>0)
-	posxr[0] = new double[PARTICLE_INFORMATIONS*p->gcpara1_count*ppcell*fac];
-	if(p->gcpara2_count>0)
-    posxr[1] = new double[PARTICLE_INFORMATIONS*p->gcpara2_count*ppcell*fac];
-	if(p->gcpara3_count>0)
-    posxr[2] = new double[PARTICLE_INFORMATIONS*p->gcpara3_count*ppcell*fac];
-	if(p->gcpara4_count>0)
-	posxr[3] = new double[PARTICLE_INFORMATIONS*p->gcpara4_count*ppcell*fac];
-	if(p->gcpara5_count>0)
-	posxr[4] = new double[PARTICLE_INFORMATIONS*p->gcpara5_count*ppcell*fac];
-	if(p->gcpara6_count>0)
-	posxr[5] = new double[PARTICLE_INFORMATIONS*p->gcpara6_count*ppcell*fac];
+		if(p->gcpara1_count>0)
+			posxr[0] = new double[PARTICLE_INFORMATIONS*p->gcpara1_count*ppcell*fac];
+		if(p->gcpara2_count>0)
+			posxr[1] = new double[PARTICLE_INFORMATIONS*p->gcpara2_count*ppcell*fac];
+		if(p->gcpara3_count>0)
+			posxr[2] = new double[PARTICLE_INFORMATIONS*p->gcpara3_count*ppcell*fac];
+		if(p->gcpara4_count>0)
+			posxr[3] = new double[PARTICLE_INFORMATIONS*p->gcpara4_count*ppcell*fac];
+		if(p->gcpara5_count>0)
+			posxr[4] = new double[PARTICLE_INFORMATIONS*p->gcpara5_count*ppcell*fac];
+		if(p->gcpara6_count>0)
+			posxr[5] = new double[PARTICLE_INFORMATIONS*p->gcpara6_count*ppcell*fac];
     }
 
 }
