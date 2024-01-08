@@ -49,6 +49,7 @@ particles_obj::particles_obj(size_t capacity, double d50, double density, double
 
         this->size=0;
         this->empty_itr=0;
+        this->loopindex=0;
         fill(size);
         
     }
@@ -63,7 +64,9 @@ particles_obj::~particles_obj()
 
 void particles_obj::debug()
 {
+    std::cout<<"particle_obj::debug"<<std::endl;
     // insert code for debugging here //
+    
 }
 
 void particles_obj::erase(size_t index)
@@ -87,7 +90,9 @@ void particles_obj::add(double x, double y, double z, int flag)
     Flag[Empty[empty_itr]]=flag;
 
     Empty[empty_itr--]=-1;
-    ++size;
+    loopindex++;
+    size++;
+
 }
 
 void particles_obj::reserve(size_t capacity_desired)
@@ -154,6 +159,7 @@ void particles_obj::fill(size_t index, bool do_empty)
         Flag[n]=-1;
     }
     size=index;
+    loopindex=index;
     if(do_empty)
     fill_empty();
 }
@@ -210,4 +216,22 @@ void particles_obj::fix_state()
             if(X[n]==NULL&&Y[n]==NULL&&Z[n]==NULL&&Flag[n]==-1)
                 Empty[empty_itr++]=n;
     }
+}
+
+void particles_obj::optimize()
+{
+    // Could be optimized to look ahead if a large section is empty to only do one move operation
+    size_t loopchange=0;
+    for(int n=empty_itr; n>=0;--n)
+        if(Empty[n]<loopindex)
+        {
+            std::memmove(&X[Empty[n]],&X[Empty[n]+1],sizeof(double)*(loopindex-Empty[n]+1));
+            std::memmove(&Y[Empty[n]],&Y[Empty[n]+1],sizeof(double)*(loopindex-Empty[n]+1));
+            std::memmove(&Z[Empty[n]],&Z[Empty[n]+1],sizeof(double)*(loopindex-Empty[n]+1));
+
+            std::memmove(&Flag[Empty[n]],&Flag[Empty[n]+1],sizeof(int)*(loopindex-Empty[n]+1));
+
+            loopchange++;
+        }
+    loopindex -= loopchange;
 }
