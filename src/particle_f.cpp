@@ -54,14 +54,15 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 	
 	if (p->count>=p->Q43)
     	advect(p,a,pgc,pos,posflag,posactive);
+	
 	particlex(p,a,pgc);
-    remove(p,a,pgc);
-	
-	print_particles(p,a,pgc);
-	
 	xupdate(p,a,pgc);
+	remove(p,a,pgc);
 
-	parcount(p,a,pgc); 
+	parcount(p,a,pgc);
+
+	print_particles(p,a,pgc);
+
 	gparticle_active = pgc->globalisum(particle_active);
     gpcount = pgc->globalisum(pcount);
     gremoved = pgc->globalisum(removed);

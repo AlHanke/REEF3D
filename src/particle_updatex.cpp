@@ -28,39 +28,28 @@ Author: Hans Bihs
 
 void particle_f::xupdate(lexer* p, fdm* a, ghostcell* pgc)
 {
-    bool inBounds=false;
+    // bool inBounds=false;
+    removed = 0;
 
     PARTLOOP
     {
-        if(posflag[n]>0)
+        switch (posflag[n])
         {
-            i = p->posc_i(pos[n][0]);
-            j = p->posc_j(pos[n][1]);
-            k = p->posc_k(pos[n][2]);
-
-            inBounds=minboundcheck(p,i,j,k,1);
-            if (inBounds)
-                inBounds=maxboundcheck(p,i,j,k,1);
-			
-			// remove particles, which have been sent off
-			if(inBounds)
-                if(posflag[n]==2)
-                {
-                    pcount++;
-                    posflag[n]=0;
-                    posmem[pcount]=n;
-                    removed++;
-                }
-			
-            inBounds=false;
-			inBounds=minboundcheck(p,i,j,k,0);
-            if (inBounds)
-                inBounds=maxboundcheck(p,i,j,k,0);
-			
-			// reinstate received particles, after they have left the para zone
-			if(inBounds)
-                if(posflag[n]==3)
-                    posflag[n]=1;
+            case 2:
+            {
+                pcount++;
+                posflag[n]=0;
+                posmem[pcount]=n;
+                cout<<"Particle "<<n<<" removed because it was transfered."<<endl;
+                removed++;
+                break;
+            }
+            case 3:
+            {
+                posflag[n]=1;
+                break;
+            }
+            default:
         }
     }
 
