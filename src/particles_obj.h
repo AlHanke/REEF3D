@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #ifndef PARTICLESOBJ_H_
@@ -40,19 +40,21 @@ Thread safe
 class particles_obj
 {
 public:
-    particles_obj(size_t, double, double, double, size_t=0, double=1.25);
+    particles_obj(size_t, double=0.001, double=2650.0, double=0.4, size_t=0, double=1.25);
     ~particles_obj();
 
     void erase(size_t);
     void reserve(size_t);
     void add(double,double,double,int);
     bool check_state(bool=true);
+
 private:
     void fill(size_t,bool=true);
     void fill_empty();
     void fix_state();
     void debug();
     void clear();
+
 public:
     // state data
     size_t size;

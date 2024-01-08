@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"particles_obj.h"
@@ -29,28 +29,26 @@ size_t overflow when adding something to an object at capacity
 */
 
 
-particles_obj::particles_obj(size_t size, double d50, double density, double porosity, size_t capacity, double scale_factor):
+particles_obj::particles_obj(size_t capacity, double d50, double density, double porosity, size_t size, double scale_factor):
                 d50(d50), density(density), porosity(porosity), scale_factor(scale_factor)
 {	
-    if(size>0)
+    if(capacity>0)
     {
         if(size>capacity)
             capacity=size;
-        if(capacity>0)
-        {
-            X = new double[capacity];
-            Y = new double[capacity];
-            Z = new double[capacity];
 
-            Flag = new int[capacity];
+        X=new double[capacity]; // default value: NULL
+        Y=new double[capacity]; // default value: NULL
+        Z=new double[capacity]; // default value: NULL
 
-            Empty=new size_t[capacity];
-            this->capacity=capacity;
+        Flag=new int[capacity]; // default value: -1
 
-            this->size=0;
-            this->empty_itr=0;
-            fill(size);
-        }
+        Empty=new size_t[capacity]; // default value: -1
+        this->capacity=capacity;
+
+        this->size=0;
+        this->empty_itr=0;
+        fill(size);
         
     }
 }
@@ -73,7 +71,7 @@ void particles_obj::erase(size_t index)
     Y[index]=NULL;
     Z[index]=NULL;
 
-    Flag[index]=NULL;
+    Flag[index]=-1;
 
     Empty[++empty_itr]=index;
     --size;
@@ -87,7 +85,7 @@ void particles_obj::add(double x, double y, double z, int flag)
 
     Flag[Empty[empty_itr]]=flag;
 
-    Empty[empty_itr--]=NULL;
+    Empty[empty_itr--]=-1;
     ++size;
 }
 
@@ -98,33 +96,33 @@ void particles_obj::reserve(size_t capacity_desired)
         if (capacity_desired>SIZE_T_MAX)
             std::__throw_length_error("particles_obj - max capacity reached");
 
-        double* newX = new double[capacity_desired];
+        double* newX=new double[capacity_desired];
         memcpy( newX, X, size * sizeof(double) );
         delete [] X;
-        X = newX;
+        X=newX;
 
-        double* newY = new double[capacity_desired];
+        double* newY=new double[capacity_desired];
         memcpy( newY, Y, size * sizeof(double) );
         delete [] Y;
-        Y = newY;
+        Y=newY;
 
-        double* newZ = new double[capacity_desired];
+        double* newZ=new double[capacity_desired];
         memcpy( newZ, Z, size * sizeof(double) );
         delete [] Z;
-        Z = newZ;
+        Z=newZ;
 
 
-        int* newFlag = new int[capacity_desired];
+        int* newFlag=new int[capacity_desired];
         memcpy( newFlag, Flag, size * sizeof(int) );
         delete [] Flag;
-        Flag = newFlag;
+        Flag=newFlag;
 
-        size_t* newEmpty = new size_t[capacity_desired];
+        size_t* newEmpty=new size_t[capacity_desired];
         memcpy( newEmpty, Empty, size * sizeof(int) );
         delete [] Empty;
-        Empty = newEmpty;
+        Empty=newEmpty;
 
-        capacity = capacity_desired;
+        capacity=capacity_desired;
         fill_empty();
     }
 }
@@ -150,7 +148,7 @@ void particles_obj::fill(size_t index, bool do_empty)
         Y[n]=NULL;
         Z[n]=NULL;
 
-        Flag[n]=NULL;
+        Flag[n]=-1;
     }
     size=index;
     if(do_empty)
@@ -182,25 +180,31 @@ bool particles_obj::check_state(bool first)
 
 void particles_obj::fix_state()
 {
-    if(size>capacity) // WIP
+    if(this->size>this->capacity)
     {
         size_t real_size=capacity;
         size_t old_size=size;
-        reserve(ceil(scale_factor*size));
-        size=real_size;
+        reserve(ceil(this->scale_factor*size));
+        this->size=real_size;
         fill(old_size,false);
 
-        empty_itr=0;
+        this->empty_itr=0;
         size_t temp_Empty[capacity];
-        for(size_t n=0;n<capacity;n++)
+        for(size_t n=0;n<real_size;n++)
             if(Empty[n]!=NULL)
                 temp_Empty[empty_itr++]=n;
         delete [] Empty;
-        Empty = temp_Empty;
+        this->Empty=temp_Empty;
         fill_empty();
     }
-    else // WIP
+    else
     {
-
+        this->empty_itr=0;
+        size_t temp_Empty[capacity];
+        delete [] Empty;
+        this->Empty=temp_Empty;
+        for(size_t n=capacity-1; n>0;--n)
+            if(X[n]==NULL&&Y[n]==NULL&&Z[n]==NULL&&Flag[n]==-1)
+                Empty[empty_itr++]=n;
     }
 }
