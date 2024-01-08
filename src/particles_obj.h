@@ -44,7 +44,7 @@ public:
     ~particles_obj();
 
     void erase(size_t);
-    void reserve(size_t);
+    void reserve(size_t=0);
     void add(double,double,double,int);
     bool check_state(bool=true);
 
@@ -59,6 +59,7 @@ public:
     // state data
     size_t size;
     size_t capacity;
+    const size_t entries;
 
     //particle data
     //general

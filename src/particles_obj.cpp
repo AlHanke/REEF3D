@@ -30,7 +30,8 @@ size_t overflow when adding something to an object at capacity
 
 
 particles_obj::particles_obj(size_t capacity, double d50, double density, double porosity, size_t size, double scale_factor):
-                d50(d50), density(density), porosity(porosity), scale_factor(scale_factor)
+                d50(d50), density(density), porosity(porosity), scale_factor(scale_factor),
+                entries(3) // update when adding more data
 {	
     if(capacity>0)
     {
@@ -91,6 +92,8 @@ void particles_obj::add(double x, double y, double z, int flag)
 
 void particles_obj::reserve(size_t capacity_desired)
 {
+    if(0==capacity_desired)
+        capacity_desired=ceil(scale_factor*capacity);
     if (capacity_desired>capacity)
     {
         if (capacity_desired>SIZE_T_MAX)
