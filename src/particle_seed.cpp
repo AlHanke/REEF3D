@@ -37,15 +37,15 @@ void particle_f::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     
     // Box
     cellcount=0;
-    for(qn=0;qn<p->Q110;++qn)
-    LOOP
-	if(p->XN[IP]>=p->Q110_xs[qn] && p->XN[IP]<p->Q110_xe[qn]
-	&& p->YN[JP]>=p->Q110_ys[qn] && p->YN[JP]<p->Q110_ye[qn]
-	&& p->ZN[KP]>=p->Q110_zs[qn] && p->ZN[KP]<p->Q110_ze[qn])
-	{
-	active_box(i,j,k) = 1.0;
-    ++cellcount;
-	}
+    for(int qn=0;qn<p->Q110;++qn)
+        LOOP
+            if(p->XN[IP]>=p->Q110_xs[qn] && p->XN[IP]<p->Q110_xe[qn]
+            && p->YN[JP]>=p->Q110_ys[qn] && p->YN[JP]<p->Q110_ye[qn]
+            && p->ZN[KP]>=p->Q110_zs[qn] && p->ZN[KP]<p->Q110_ze[qn])
+            {
+                active_box(i,j,k) = 1.0;
+                ++cellcount;
+            }
 
     // Topo
     PLAINLOOP
@@ -84,7 +84,7 @@ void particle_f::posseed_box(lexer* p, fdm* a, ghostcell* pgc)
 	
     LOOP
         if(active_box(i,j,k)>0.0)
-            for(qn=0;qn<ppcell;++qn)
+            for(int qn=0;qn<ppcell;++qn)
                 if(pactive<maxparticle)
                 {
                     pos[pactive][0] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
@@ -117,7 +117,7 @@ void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
 
     PLAINLOOP
         if(active_topo(i,j,k)>0.0)
-            for(qn=0;qn<ppcell;++qn)
+            for(int qn=0;qn<ppcell;++qn)
                 if(tempActive<maxparticle)
                 {
                     tempPos[tempActive][0] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
