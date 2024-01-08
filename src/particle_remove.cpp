@@ -28,7 +28,6 @@ Author: Hans Bihs
 
 void particle_f::remove(lexer* p, fdm* a, ghostcell* pgc)
 {
-    removed = 0;
     bool inBounds=false;
 
     PARTLOOP

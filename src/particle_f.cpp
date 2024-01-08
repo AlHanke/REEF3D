@@ -28,9 +28,7 @@ Author: Hans Bihs
 #include<sys/stat.h>
 #include<sys/types.h>
 
-particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : norm_vec(p), active_box(p),posnum(p), active_topo(p),
-                                epsi(1.5*p->DXM), dx(p->DXM), dy(p->DXM), dz(p->DXM),rmin(0.1*p->DXM),
-								rmax(0.5*p->DXM), irand(100000), drand(irand)
+particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : norm_vec(p), active_box(p), posnum(p), active_topo(p), irand(100000), drand(irand)
 {
     pcount=0;
     posactive=0;
@@ -56,14 +54,15 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 	
 	if (p->count>=p->Q43)
     	advect(p,a,pgc,pos,posflag,posactive);
+	
 	particlex(p,a,pgc);
-    remove(p,a,pgc);
-	
-	print_particles(p,a,pgc);
-	
 	xupdate(p,a,pgc);
+	remove(p,a,pgc);
 
-	parcount(p,a,pgc); 
+	parcount(p,a,pgc);
+
+	print_particles(p,a,pgc);
+
 	gparticle_active = pgc->globalisum(particle_active);
     gpcount = pgc->globalisum(pcount);
     gremoved = pgc->globalisum(removed);

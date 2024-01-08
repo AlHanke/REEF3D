@@ -54,17 +54,17 @@ void particle_f::allocate(lexer* p,fdm* a,ghostcell* pgc)
     for(n=0;n<6;++n)
 	{	
 	if(p->gcpara1_count>0)
-	posxs[0] = new double[5*p->gcpara1_count*ppcell*fac];
+	posxs[0] = new double[PARTICLE_INFORMATIONS*p->gcpara1_count*ppcell*fac];
 	if(p->gcpara2_count>0)
-    posxs[1] = new double[5*p->gcpara2_count*ppcell*fac];
+    posxs[1] = new double[PARTICLE_INFORMATIONS*p->gcpara2_count*ppcell*fac];
 	if(p->gcpara3_count>0)
-	posxs[2] = new double[5*p->gcpara3_count*ppcell*fac];
+	posxs[2] = new double[PARTICLE_INFORMATIONS*p->gcpara3_count*ppcell*fac];
 	if(p->gcpara4_count>0)
-    posxs[3] = new double[5*p->gcpara4_count*ppcell*fac];
+    posxs[3] = new double[PARTICLE_INFORMATIONS*p->gcpara4_count*ppcell*fac];
 	if(p->gcpara5_count>0)
-    posxs[4] = new double[5*p->gcpara5_count*ppcell*fac];
+    posxs[4] = new double[PARTICLE_INFORMATIONS*p->gcpara5_count*ppcell*fac];
 	if(p->gcpara6_count>0)
-    posxs[5] = new double[5*p->gcpara6_count*ppcell*fac];
+    posxs[5] = new double[PARTICLE_INFORMATIONS*p->gcpara6_count*ppcell*fac];
     }
 
     posxr= new double*[6];
@@ -72,17 +72,17 @@ void particle_f::allocate(lexer* p,fdm* a,ghostcell* pgc)
     for(n=0;n<6;++n)
     {
 	if(p->gcpara1_count>0)
-	posxr[0] = new double[5*p->gcpara1_count*ppcell*fac];
+	posxr[0] = new double[PARTICLE_INFORMATIONS*p->gcpara1_count*ppcell*fac];
 	if(p->gcpara2_count>0)
-    posxr[1] = new double[5*p->gcpara2_count*ppcell*fac];
+    posxr[1] = new double[PARTICLE_INFORMATIONS*p->gcpara2_count*ppcell*fac];
 	if(p->gcpara3_count>0)
-    posxr[2] = new double[5*p->gcpara3_count*ppcell*fac];
+    posxr[2] = new double[PARTICLE_INFORMATIONS*p->gcpara3_count*ppcell*fac];
 	if(p->gcpara4_count>0)
-	posxr[3] = new double[5*p->gcpara4_count*ppcell*fac];
+	posxr[3] = new double[PARTICLE_INFORMATIONS*p->gcpara4_count*ppcell*fac];
 	if(p->gcpara5_count>0)
-	posxr[4] = new double[5*p->gcpara5_count*ppcell*fac];
+	posxr[4] = new double[PARTICLE_INFORMATIONS*p->gcpara5_count*ppcell*fac];
 	if(p->gcpara6_count>0)
-	posxr[5] = new double[5*p->gcpara6_count*ppcell*fac];
+	posxr[5] = new double[PARTICLE_INFORMATIONS*p->gcpara6_count*ppcell*fac];
     }
 
 }
