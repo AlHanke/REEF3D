@@ -37,104 +37,89 @@ void particle_f::particlex(lexer* p, fdm* a, ghostcell* pgc)
     }
 
     PARTLOOP
-        if(posflag[n]==1)
+        if(PP.Flag[n]==1)
         {
-            i = p->posc_i(pos[n][0]);
-            j = p->posc_j(pos[n][1]);
-            k = p->posc_k(pos[n][2]);
+            i = p->posc_i(PP.X[n]);
+            j = p->posc_j(PP.Y[n]);
+            k = p->posc_k(PP.Z[n]);
 
 
             if(p->flag5[IJK]<0 && p->flag5[IJK]>-10)
             {
-                ++xchange;
-                posflag[n]=2;
-
                 switch (p->flag5[IJK])
                 {
                     case -1:
                     {
-                        posxs[0][pxs[0]+0]=pos[n][0];
-                        posxs[0][pxs[0]+1]=pos[n][1];
-                        posxs[0][pxs[0]+2]=pos[n][2];
-                        posxs[0][pxs[0]+3]=pos[n][3];
-                        pxs[0]+=PARTICLE_INFORMATIONS;
+                        posxs[0][pxs[0]+0]=PP.X[n];
+                        posxs[0][pxs[0]+1]=PP.Y[n];
+                        posxs[0][pxs[0]+2]=PP.Z[n];
+                        pxs[0]+=PP.entries;
                         break;
                     }
 
                     case -2:
                     {
-                        posxs[1][pxs[1]+0]=pos[n][0];
-                        posxs[1][pxs[1]+1]=pos[n][1];
-                        posxs[1][pxs[1]+2]=pos[n][2];
-                        posxs[1][pxs[1]+3]=pos[n][3];
-                        pxs[1]+=PARTICLE_INFORMATIONS;
+                        posxs[1][pxs[1]+0]=PP.X[n];
+                        posxs[1][pxs[1]+1]=PP.Y[n];
+                        posxs[1][pxs[1]+2]=PP.Z[n];
+                        pxs[1]+=PP.entries;
                         break;
                     }
 
                     case -3:
                     {
-                        posxs[2][pxs[2]+0]=pos[n][0];
-                        posxs[2][pxs[2]+1]=pos[n][1];
-                        posxs[2][pxs[2]+2]=pos[n][2];
-                        posxs[2][pxs[2]+3]=pos[n][3];
-                        pxs[2]+=PARTICLE_INFORMATIONS;
+                        posxs[2][pxs[2]+0]=PP.X[n];
+                        posxs[2][pxs[2]+1]=PP.Y[n];
+                        posxs[2][pxs[2]+2]=PP.Z[n];
+                        pxs[2]+=PP.entries;
                         break;
                     }
 
                     case -4:
                     {
-                        posxs[3][pxs[3]+0]=pos[n][0];
-                        posxs[3][pxs[3]+1]=pos[n][1];
-                        posxs[3][pxs[3]+2]=pos[n][2];
-                        posxs[3][pxs[3]+3]=pos[n][3];
-                        pxs[3]+=PARTICLE_INFORMATIONS;
+                        posxs[3][pxs[3]+0]=PP.X[n];
+                        posxs[3][pxs[3]+1]=PP.Y[n];
+                        posxs[3][pxs[3]+2]=PP.Z[n];
+                        pxs[3]+=PP.entries;
                         break;
                     }
 
                     case -5:
                     {
-                        posxs[4][pxs[4]+0]=pos[n][0];
-                        posxs[4][pxs[4]+1]=pos[n][1];
-                        posxs[4][pxs[4]+2]=pos[n][2];
-                        posxs[4][pxs[4]+3]=pos[n][3];
-                        pxs[4]+=PARTICLE_INFORMATIONS;
+                        posxs[4][pxs[4]+0]=PP.X[n];
+                        posxs[4][pxs[4]+1]=PP.Y[n];
+                        posxs[4][pxs[4]+2]=PP.Z[n];
+                        pxs[4]+=PP.entries;
                         break;
                     }
 
                     case -6:
                     {
-                        posxs[5][pxs[5]+0]=pos[n][0];
-                        posxs[5][pxs[5]+1]=pos[n][1];
-                        posxs[5][pxs[5]+2]=pos[n][2];
-                        posxs[5][pxs[5]+3]=pos[n][3];
-                        pxs[5]+=PARTICLE_INFORMATIONS;
+                        posxs[5][pxs[5]+0]=PP.X[n];
+                        posxs[5][pxs[5]+1]=PP.Y[n];
+                        posxs[5][pxs[5]+2]=PP.Z[n];
+                        pxs[5]+=PP.entries;
                         break;
                     }
                 }
+                PP.erase(n);
+                ++xchange;
             }
         }
 
     pgc->parapls(p,posxs,posxr,pxs,pxr);
 
     q=0;
-    while(posactive<maxparticle)
+    while(q<6)
     {
         if(pxr[q]>0)
         {
-            pos[posactive][0]=posxr[q][pxr[q]-4];
-            pos[posactive][1]=posxr[q][pxr[q]-3];
-            pos[posactive][2]=posxr[q][pxr[q]-2];
-            pos[posactive][3]=posxr[q][pxr[q]-1];
-            posflag[posactive]=3;
-            pxr[q]-=4;
-            ++posactive;
+            PP.add(posxr[q][pxr[q]-(PP.entries-0)],posxr[q][pxr[q]-(PP.entries-1)],posxr[q][pxr[q]-(PP.entries-2)],1);
+            pxr[q]-=PP.entries;
         }
 
         if(pxr[q]<=0)
             ++q;
-
-        if(q>=6)
-            break;
     }
 }
 

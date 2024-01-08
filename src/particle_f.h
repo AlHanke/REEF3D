@@ -24,10 +24,9 @@ Author: Hans Bihs
 #include"norm_vec.h"
 #include"boundarycheck.h"
 #include"field4.h"
-#define PC posmem[pcount]
-#define PARTLOOP for(n=0;n<posactive;++n)
-#define PARTICLE_INFORMATIONS (3+1)
-#define RADIUS 3
+#include "particles_obj.h"
+
+#define PARTLOOP for(n=0;n<PP.loopindex;++n)
 
 using namespace std;
 
@@ -42,7 +41,7 @@ public:
 	virtual void start(lexer*,fdm*,ghostcell*,ioflow*);
     virtual void ini(lexer*,fdm*,ghostcell*,ioflow*);
     
-	void advect(lexer*,fdm*,ghostcell*,double**,int*,int);
+	void advect(lexer*,fdm*,ghostcell*);
     
     void seed_ini(lexer*,fdm*,ghostcell*);
 	void seed(lexer*,fdm*,ghostcell*);
@@ -60,34 +59,29 @@ public:
 	
 	field4 active_box;
 	field4 active_topo;
-	field4 posnum;
+
+	particles_obj PP;
 	
-	double **pos;
 	double **posxs;
 	double **posxr;
 	int *pxs;
 	int *pxr;
-	int *posflag;
-	int *posmem;
     
-	int pcount,cellcount;
-    int pactive;
 	int n,i,j,k;
-    int posactive,maxparticle;
     int removed,xchange;
     
-    int partnum;
+    int partnum, gpartnum;
     int ppcell;
-	int particle_active, gparticle_active;
+	int gparticle_active;
 
-    int gpcount,gremoved,gxchange,gpartnum;
+    int gremoved,gxchange;
     
 	const int irand;
 	const double drand;
 	double starttime;
 	
 	// PRINTVTU
-	void print_vtu(lexer*,fdm*,ghostcell*,double**,int*,int,int);
+	void print_vtu(lexer*,fdm*,ghostcell*);
 	
 	void pvtu_pos(fdm*,lexer*,ghostcell*);
     void header_pos(fdm*,lexer*,ghostcell*);

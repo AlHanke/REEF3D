@@ -29,13 +29,14 @@ Author: Hans Bihs
 void particle_f::remove(lexer* p, fdm* a, ghostcell* pgc)
 {
     bool inBounds=false;
+    removed=0;
 
     PARTLOOP
-        if(posflag[n]>0)
+        if(PP.Flag[n]>0)
         {
-            i = p->posc_i(pos[n][0]);
-            j = p->posc_j(pos[n][1]);
-            k = p->posc_k(pos[n][2]);
+            i = p->posc_i(PP.X[n]);
+            j = p->posc_j(PP.Y[n]);
+            k = p->posc_k(PP.Z[n]);
 
             inBounds=minboundcheck(p,i,j,k,1);
             if (inBounds)
@@ -44,9 +45,7 @@ void particle_f::remove(lexer* p, fdm* a, ghostcell* pgc)
 			// remove out of bounds particles
             if(!inBounds)
             {
-                pcount++;
-                posflag[n]=0;
-                posmem[pcount]=n;
+                PP.erase(n);
                 removed++;
             }
         }

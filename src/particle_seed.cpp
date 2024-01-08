@@ -36,7 +36,7 @@ void particle_f::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     }
     
     // Box
-    cellcount=0;
+    size_t cellcount=0;
     for(int qn=0;qn<p->Q110;++qn)
         LOOP
             if(p->XN[IP]>=p->Q110_xs[qn] && p->XN[IP]<p->Q110_xe[qn]
@@ -82,21 +82,24 @@ void particle_f::posseed_box(lexer* p, fdm* a, ghostcell* pgc)
     if(p->Q29==0)
         srand((unsigned)time(0)*(0==p->mpirank?1:p->mpirank));
 	
+    double x,y,z;
+    int flag;
+
     LOOP
         if(active_box(i,j,k)>0.0)
             for(int qn=0;qn<ppcell;++qn)
-                if(pactive<maxparticle)
                 {
-                    pos[pactive][0] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
-                    pos[pactive][1] = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
-                    pos[pactive][2] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
-                    pos[pactive][RADIUS] = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
-                    posflag[pactive]=1;
-                    ++pactive;
+                    if(PP.size+1>0.9*PP.capacity)
+                        PP.reserve();
+                    
+                    x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
+                    y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
+                    z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
+
+                    // pos[pactive][RADIUS] = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
+
+                    PP.add(x,y,z,1);
                 }
-    
-    posactive=pactive;
-    pcount=pactive;
 }
 
 
@@ -108,47 +111,29 @@ void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
     if(p->Q29==0)
         srand((unsigned)time(0)*p->mpirank==0?1:p->mpirank);
 
-    int *tempPosFlag;
-    double **tempPos;
-    int tempActive=0;
     double tolerance = 5e-18;
-    p->Darray(tempPos,maxparticle,PARTICLE_INFORMATIONS);
-    p->Iarray(tempPosFlag,maxparticle);
+    double x,y,z,ipolTopo,ipolSolid;
+    int flag;
 
     PLAINLOOP
         if(active_topo(i,j,k)>0.0)
             for(int qn=0;qn<ppcell;++qn)
-                if(tempActive<maxparticle)
                 {
-                    tempPos[tempActive][0] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
-                    tempPos[tempActive][1] = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
-                    tempPos[tempActive][2] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
-                    tempPos[tempActive][RADIUS] = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
-                    double ipolTopo = p->ccipol4_b(a->topo,tempPos[tempActive][0],tempPos[tempActive][1],tempPos[tempActive][2]);
-                    double ipolSolid = p->ccipol4_b(a->solid,tempPos[tempActive][0],tempPos[tempActive][1],tempPos[tempActive][2]);
-                    if (ipolTopo>tolerance||ipolTopo<-p->Q102*p->DZN[KP]||ipolSolid<0)
-                        tempPosFlag[tempActive]=0;
-                    else
-                        tempPosFlag[tempActive]=1;
-                    ++tempActive;
+                    if(PP.size+1>0.9*PP.capacity)
+                        PP.reserve();
+
+                    x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
+                    y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
+                    z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
+
+                    // tempPos[tempActive][RADIUS] = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
+
+                    ipolTopo = p->ccipol4_b(a->topo,x,y,z);
+                    ipolSolid = p->ccipol4_b(a->solid,x,y,z);
+
+                    if (!(ipolTopo>tolerance||ipolTopo<-p->Q102*p->DZN[KP]||ipolSolid<0))
+                        PP.add(x,y,z,1);
                 }
-
-    for (int i=0;i<tempActive;i++)
-        if(1==tempPosFlag[i])
-        {
-            pos[pactive][0] = tempPos[i][0];
-            pos[pactive][1] = tempPos[i][1];
-            pos[pactive][2] = tempPos[i][2];
-            pos[pactive][RADIUS] = tempPos[i][RADIUS];
-            posflag[pactive]=1;
-            ++pactive;
-        }
-    
-    posactive=pactive;
-    pcount=pactive;
-
-    p->del_Darray(tempPos,maxparticle,PARTICLE_INFORMATIONS);
-    p->del_Iarray(tempPosFlag,maxparticle);
 }
 
 

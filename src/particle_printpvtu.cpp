@@ -86,11 +86,11 @@ void particle_f::pvtu_pos(fdm* a, lexer* p, ghostcell* pgc)
 	result<<"<VTKFile type=\"PUnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
 	result<<"<PUnstructuredGrid GhostLevel=\"0\">"<<endl;
 
-	result<<"<PPointData>"<<endl;
-	//result<<"<PDataArray type=\"Float32\" Name=\"phi\"/>"<<endl;
-	result<<"<PDataArray type=\"Float32\" Name=\"radius\"/>"<<endl;
-	//result<<"<PDataArray type=\"Float32\" Name=\"correction\"/>"<<endl;
-	result<<"</PPointData>"<<endl;
+	// result<<"<PPointData>"<<endl;
+	// //result<<"<PDataArray type=\"Float32\" Name=\"phi\"/>"<<endl;
+	// // result<<"<PDataArray type=\"Float32\" Name=\"radius\"/>"<<endl;
+	// //result<<"<PDataArray type=\"Float32\" Name=\"correction\"/>"<<endl;
+	// result<<"</PPointData>"<<endl;
 
 	result<<"<PPoints>"<<endl;
 	result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>"<<endl;

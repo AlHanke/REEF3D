@@ -25,41 +25,38 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-void particle_f::advect(lexer* p, fdm* a, ghostcell* pgc,double** f,int *flag,int active)
+void particle_f::advect(lexer* p, fdm* a, ghostcell* pgc)
 {
     double coord1, coord2, coord3, u1, u2, u3, v1, v2, v3, w1, w2, w3;
-    for(n=0;n<active;++n)
-    if(flag[n]>0)
-    {
-    u1=p->dt*p->ccipol1(a->u,f[n][0],f[n][1],f[n][2]);
-    coord1=f[n][0]+u1;
-	
-	v1=p->dt*p->ccipol2(a->v,f[n][0],f[n][1],f[n][2]);
-    coord2=f[n][1]+v1;
-	
-	w1=p->dt*p->ccipol3(a->w,f[n][0],f[n][1],f[n][2]);
-    coord3=f[n][2]+w1;
-	
-	
-	u2=0.25*u1 + 0.25*p->dt*p->ccipol1(a->u,coord1,coord2,coord3);
-    coord1=f[n][0]+u2;
-	
-	v2=0.25*v1 + 0.25*p->dt*p->ccipol2(a->v,coord1,coord2,coord3);
-    coord2=f[n][1]+v2;
-	
-	w2=0.25*w1 + 0.25*p->dt*p->ccipol3(a->w,coord1,coord2,coord3);
-	coord3=f[n][2]+w2;
-	
-	
-	f[n][0] = f[n][0] + (2.0/3.0)*u2 + (2.0/3.0)*p->dt*p->ccipol1(a->u,coord1,coord2,coord3);
+    PARTLOOP
+        if(PP.Flag[n]>0)
+        {
+            u1=p->dt*p->ccipol1(a->u,PP.X[n],PP.Y[n],PP.Z[n]);
+            coord1=PP.X[n]+u1;
+            
+            v1=p->dt*p->ccipol2(a->v,PP.X[n],PP.Y[n],PP.Z[n]);
+            coord2=PP.Y[n]+v1;
+            
+            w1=p->dt*p->ccipol3(a->w,PP.X[n],PP.Y[n],PP.Z[n]);
+            coord3=PP.Z[n]+w1;
+            
+            
+            u2=0.25*u1 + 0.25*p->dt*p->ccipol1(a->u,coord1,coord2,coord3);
+            coord1=PP.X[n]+u2;
+            
+            v2=0.25*v1 + 0.25*p->dt*p->ccipol2(a->v,coord1,coord2,coord3);
+            coord2=PP.Y[n]+v2;
+            
+            w2=0.25*w1 + 0.25*p->dt*p->ccipol3(a->w,coord1,coord2,coord3);
+            coord3=PP.Z[n]+w2;
+            
+            
+            PP.X[n] += (2.0/3.0)*u2 + (2.0/3.0)*p->dt*p->ccipol1(a->u,coord1,coord2,coord3);
 
-    f[n][1] = f[n][1] + (2.0/3.0)*v2 + (2.0/3.0)*p->dt*p->ccipol2(a->v,coord1,coord2,coord3);
-	
-	f[n][2] = f[n][2] + (2.0/3.0)*w2 + (2.0/3.0)*p->dt*p->ccipol3(a->w,coord1,coord2,coord3);
-
-
-    //f[n][3]=phipol(p,a,f[n][0],f[n][1],f[n][2]);
-    }
+            PP.Y[n] += (2.0/3.0)*v2 + (2.0/3.0)*p->dt*p->ccipol2(a->v,coord1,coord2,coord3);
+            
+            PP.Z[n] += (2.0/3.0)*w2 + (2.0/3.0)*p->dt*p->ccipol3(a->w,coord1,coord2,coord3);
+        }
 }
 
 

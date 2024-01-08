@@ -29,27 +29,27 @@ Author: Hans Bihs
 void particle_f::xupdate(lexer* p, fdm* a, ghostcell* pgc)
 {
     // bool inBounds=false;
-    removed = 0;
+    // removed = 0;
 
-    PARTLOOP
-    {
-        switch (posflag[n])
-        {
-            case 2:
-            {
-                pcount++;
-                posflag[n]=0;
-                posmem[pcount]=n;
-                removed++;
-                break;
-            }
-            case 3:
-            {
-                posflag[n]=1;
-                break;
-            }
-            default:
-        }
-    }
+    // PARTLOOP
+    // {
+    //     switch (posflag[n])
+    //     {
+    //         case 2:
+    //         {
+    //             pcount++;
+    //             posflag[n]=0;
+    //             posmem[pcount]=n;
+    //             removed++;
+    //             break;
+    //         }
+    //         case 3:
+    //         {
+    //             posflag[n]=1;
+    //             break;
+    //         }
+    //         default:
+    //     }
+    // }
 
 }

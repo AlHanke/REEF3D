@@ -28,10 +28,8 @@ Author: Hans Bihs
 #include<sys/stat.h>
 #include<sys/types.h>
 
-particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : norm_vec(p), active_box(p), posnum(p), active_topo(p), irand(100000), drand(irand)
+particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : norm_vec(p), active_box(p), active_topo(p), irand(100000), drand(irand), PP(10)
 {
-    pcount=0;
-    posactive=0;
     
     if(p->I40==0)
     {
@@ -53,24 +51,24 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 	starttime=pgc->timer();
 	
 	if (p->count>=p->Q43)
-    	advect(p,a,pgc,pos,posflag,posactive);
+    	advect(p,a,pgc);
 	
 	particlex(p,a,pgc);
-	xupdate(p,a,pgc);
+	// xupdate(p,a,pgc);
 	remove(p,a,pgc);
 
-	parcount(p,a,pgc);
+	// parcount(p,a,pgc);
 
 	print_particles(p,a,pgc);
 
-	gparticle_active = pgc->globalisum(particle_active);
-    gpcount = pgc->globalisum(pcount);
+	gparticle_active = pgc->globalisum(PP.size);
+    // gpcount = pgc->globalisum(pcount);
     gremoved = pgc->globalisum(removed);
     gxchange = pgc->globalisum(xchange);
 	p->plstime=pgc->timer()-starttime;
 
     if(p->mpirank==0 && (p->count%p->P12==0))
-    	cout<<"Particles: active: "<<gparticle_active<<" memory: "<<gpcount<<" | xch: "<<gxchange<<" rem: "<<gremoved-gxchange<<" | particletime: "<<p->plstime<<endl;
+    	cout<<"Particles: active: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | particletime: "<<p->plstime<<endl;
 }
 
 
