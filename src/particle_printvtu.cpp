@@ -43,7 +43,7 @@ void particle_f::print_particles(lexer* p, fdm* a, ghostcell* pgc)
 
 void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 {
-    cout<<"PACTIVE-"<<p->mpirank<<": "<<PP.size<<"|"<<PP.capacity<<endl;
+    cout<<"PACTIVE-"<<p->mpirank<<": "<<PP.size<<endl;
 
 	int numpt=PP.size;
 	int count;
@@ -226,5 +226,5 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     result<<"</VTKFile>"<<endl;
 
 	result.close();
-}
+	}
 
