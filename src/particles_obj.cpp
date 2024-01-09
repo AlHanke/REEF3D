@@ -30,7 +30,7 @@ size_t overflow when adding something to an object at capacity
 
 
 particles_obj::particles_obj(size_t capacity, double d50, double density, double porosity, size_t size, double scale_factor):
-                d50(d50), density(density), porosity(porosity), scale_factor(scale_factor),
+                d50(d50), density(density), porosity(porosity), scale_factor(scale_factor), tracers_obj(capacity,size,scale_factor),
                 entries(3) // update when adding more data
 {	
     if(capacity>0)
@@ -38,19 +38,7 @@ particles_obj::particles_obj(size_t capacity, double d50, double density, double
         if(size>capacity)
             capacity=size;
 
-        X=new double[capacity]; // default value: NULL
-        Y=new double[capacity]; // default value: NULL
-        Z=new double[capacity]; // default value: NULL
-
-        Flag=new int[capacity]; // default value: -1
-
-        Empty=new size_t[capacity]; // default value: -1
-        this->capacity=capacity;
-
-        this->size=0;
-        this->empty_itr=0;
-        this->loopindex=0;
-        fill(size);
+        // Add new individual data here:
         
     }
 }
@@ -71,28 +59,12 @@ void particles_obj::debug()
 
 void particles_obj::erase(size_t index)
 {
-    X[index]=NULL;
-    Y[index]=NULL;
-    Z[index]=NULL;
-
-    Flag[index]=-1;
-
-    Empty[++empty_itr]=index;
-    --size;
+    tracers_obj::erase(index);
 }
 
 void particles_obj::add(double x, double y, double z, int flag)
 {
-    X[Empty[empty_itr]]=x;
-    Y[Empty[empty_itr]]=y;
-    Z[Empty[empty_itr]]=z;
-
-    Flag[Empty[empty_itr]]=flag;
-
-    Empty[empty_itr--]=-1;
-    loopindex++;
-    size++;
-
+    tracers_obj::add(x,y,z,flag);
 }
 
 void particles_obj::reserve(size_t capacity_desired)
@@ -104,34 +76,7 @@ void particles_obj::reserve(size_t capacity_desired)
         if (capacity_desired>SIZE_T_MAX)
             std::__throw_length_error("particles_obj - max capacity reached");
 
-        double* newX=new double[capacity_desired];
-        memcpy( newX, X, size * sizeof(double) );
-        delete [] X;
-        X=newX;
-
-        double* newY=new double[capacity_desired];
-        memcpy( newY, Y, size * sizeof(double) );
-        delete [] Y;
-        Y=newY;
-
-        double* newZ=new double[capacity_desired];
-        memcpy( newZ, Z, size * sizeof(double) );
-        delete [] Z;
-        Z=newZ;
-
-
-        int* newFlag=new int[capacity_desired];
-        memcpy( newFlag, Flag, size * sizeof(int) );
-        delete [] Flag;
-        Flag=newFlag;
-
-        size_t* newEmpty=new size_t[capacity_desired];
-        memcpy( newEmpty, Empty, size * sizeof(int) );
-        delete [] Empty;
-        Empty=newEmpty;
-
-        capacity=capacity_desired;
-        fill_empty();
+        tracers_obj::reserve(capacity_desired);
     }
 }
 
@@ -139,12 +84,7 @@ void particles_obj::clear()
 {
 	if(capacity>0)
 	{
-        delete[] X;
-        delete[] Y;
-        delete[] Z;
-
-        delete[] Flag;
-        delete[] Empty;
+        tracers_obj::clear();
     }
 }
 
@@ -152,23 +92,9 @@ void particles_obj::fill(size_t index, bool do_empty)
 {
     for(size_t n=size; n<index;++n)
     {
-        X[n]=NULL;
-        Y[n]=NULL;
-        Z[n]=NULL;
-
-        Flag[n]=-1;
+        
     }
-    size=index;
-    loopindex=index;
-    if(do_empty)
-    fill_empty();
-}
-
-void particles_obj::fill_empty()
-{
-    for(size_t n=empty_itr;n<=capacity-size;n++)
-        Empty[n]=capacity-n;
-    empty_itr=capacity-size;
+    tracers_obj::fill(index,do_empty);
 }
 
 bool particles_obj::check_state(bool first)
@@ -225,12 +151,8 @@ void particles_obj::optimize()
     for(int n=empty_itr; n>=0;--n)
         if(Empty[n]<loopindex)
         {
-            std::memmove(&X[Empty[n]],&X[Empty[n]+1],sizeof(double)*(loopindex-Empty[n]+1));
-            std::memmove(&Y[Empty[n]],&Y[Empty[n]+1],sizeof(double)*(loopindex-Empty[n]+1));
-            std::memmove(&Z[Empty[n]],&Z[Empty[n]+1],sizeof(double)*(loopindex-Empty[n]+1));
-
-            std::memmove(&Flag[Empty[n]],&Flag[Empty[n]+1],sizeof(int)*(loopindex-Empty[n]+1));
-
+            tracers_obj::memorymove(Empty[n],Empty[n]+1,sizeof(double)*(loopindex-Empty[n]+1));
+            
             loopchange++;
         }
     loopindex -= loopchange;

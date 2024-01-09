@@ -419,6 +419,7 @@
       <VirtualDirectory Name="Particle">
         <File Name="particle.h"/>
         <File Name="particles_obj.h"/>
+        <File Name="tracers_obj.h"/>
         <File Name="particle_v.h"/>
         <File Name="particle_f.h"/>
       </VirtualDirectory>
@@ -1577,6 +1578,7 @@
         </VirtualDirectory>
         <File Name="particle_f.cpp"/>
         <File Name="particles_obj.cpp"/>
+        <File Name="tracers_obj.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Multiphase">
         <VirtualDirectory Name="Fluid Update">

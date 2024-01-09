@@ -20,10 +20,11 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
-#ifndef PARTICLESOBJ_H_
-#define PARTICLESOBJ_H_
+#ifndef TRACERSOBJ_H_
+#define TRACERSOBJ_H_
 
-#include "tracers_obj.h"
+#include <stdio.h>
+#include <math.h>
 
 /*
 Philosophy: performance, memory usage, ease of use
@@ -36,11 +37,11 @@ Out of bounds safe
 Thread safe
 */
 
-class particles_obj : public tracers_obj
+class tracers_obj
 {
 public:
-    particles_obj(size_t, double=0.001, double=2650.0, double=0.4, size_t=0, double=1.25);
-    ~particles_obj();
+    tracers_obj(size_t, size_t=0, double=1.25);
+    ~tracers_obj();
 
     void erase(size_t);
     void reserve(size_t=0);
@@ -49,25 +50,30 @@ public:
     void optimize();
     void debug();
 
-private:
+protected:
     void fill(size_t,bool=true);
+    void fill_empty();
     void fix_state();
     void clear();
+    void memorymove(size_t, size_t, size_t);
 
 public:
     // state data
+    size_t size;
+    size_t loopindex;
+    size_t capacity;
     const size_t entries;
 
-    //particle data
-    //general
-    double d50;
-    const double density;
-    const double porosity;
+    // tracer data
+    double* X;
+    double* Y;
+    double* Z;
 
-    //individual
+    int* Flag;
 
-
-private:
+protected:
+    size_t empty_itr;
+    size_t* Empty;
     const double scale_factor;
 };
 
