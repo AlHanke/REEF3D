@@ -31,7 +31,7 @@ size_t overflow when adding something to an object at capacity
 
 particles_obj::particles_obj(size_t capacity, double d50, double density, double porosity, size_t size, double scale_factor):
                 d50(d50), density(density), porosity(porosity), scale_factor(scale_factor), tracers_obj(capacity,size,scale_factor),
-                entries(3) // update when adding more data
+                entries(tracers_obj::entries+0) // update when adding more data
 {	
     if(capacity>0)
     {
@@ -84,16 +84,18 @@ void particles_obj::clear()
 {
 	if(capacity>0)
 	{
-        tracers_obj::clear();
+
     }
+    tracers_obj::clear();
 }
 
 void particles_obj::fill(size_t index, bool do_empty)
 {
-    for(size_t n=size; n<index;++n)
-    {
-        
-    }
+    if(entries>tracers_obj::entries)
+        for(size_t n=size; n<index;++n)
+        {
+            
+        }
     tracers_obj::fill(index,do_empty);
 }
 
@@ -152,7 +154,7 @@ void particles_obj::optimize()
         if(Empty[n]<loopindex)
         {
             tracers_obj::memorymove(Empty[n],Empty[n]+1,sizeof(double)*(loopindex-Empty[n]+1));
-            
+
             loopchange++;
         }
     loopindex -= loopchange;
