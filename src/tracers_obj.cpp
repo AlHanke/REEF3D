@@ -88,9 +88,8 @@ void tracers_obj::add(double x, double y, double z, int flag)
     Flag[Empty[empty_itr]]=flag;
 
     Empty[empty_itr--]=-1;
-    loopindex++;
-    size++;
-
+    if(!(loopindex>size++))
+        loopindex++;
 }
 
 void tracers_obj::reserve(size_t capacity_desired)
