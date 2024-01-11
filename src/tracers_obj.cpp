@@ -236,3 +236,13 @@ void tracers_obj::memorymove(size_t des, size_t src, size_t len)
 
     std::memmove(&Flag[des],&Flag[src],len);
 }
+
+void tracers_obj::add_obj(tracers_obj obj)
+{
+    if(obj.loopindex>ceil(scale_factor*obj.size))
+        obj.optimize();
+    if(size+obj.size>capacity)
+        reserve(size+obj.size);
+    for(size_t n=0;n<obj.loopindex;n++)
+        add(obj.X[n],obj.Y[n],obj.Z[n],obj.Flag[n]);
+}

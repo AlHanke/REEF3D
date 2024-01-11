@@ -65,6 +65,8 @@ void particles_obj::erase(size_t index)
 void particles_obj::add(double x, double y, double z, int flag)
 {
     tracers_obj::add(x,y,z,flag);
+    if(entries>tracers_obj::entries)
+        add_data();
 }
 
 void particles_obj::reserve(size_t capacity_desired)
@@ -158,4 +160,17 @@ void particles_obj::optimize()
             loopchange++;
         }
     loopindex -= loopchange;
+}
+void particles_obj::add_obj(particles_obj obj)
+{
+    if(size+obj.size>capacity)
+        reserve(size+obj.size);
+    tracers_obj::add_obj(obj);
+    if(entries>tracers_obj::entries)
+        for(size_t n=0;n<obj.loopindex;n++)
+            add_data();
+}
+void particles_obj::add_data()
+{
+
 }

@@ -41,7 +41,7 @@ class tracers_obj
 {
 public:
     tracers_obj(size_t, size_t=0, double=1.25);
-    ~tracers_obj();
+    virtual ~tracers_obj();
 
     void erase(size_t);
     void reserve(size_t=0);
@@ -49,6 +49,7 @@ public:
     bool check_state(bool=true);
     void optimize();
     void debug();
+    void add_obj(tracers_obj);
 
 protected:
     void fill(size_t,bool=true);
