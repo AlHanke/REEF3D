@@ -107,7 +107,7 @@ void particle_f::particlex(lexer* p, fdm* a, ghostcell* pgc)
             }
         }
 
-    pgc->parapls(p,posxs,posxr,pxs,pxr);
+    pgc->paratracersobj(p,posxs,posxr,pxs,pxr);
 
     q=0;
     while(q<6)
