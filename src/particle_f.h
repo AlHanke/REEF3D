@@ -47,6 +47,7 @@ public:
 	void seed(lexer*,fdm*,ghostcell*);
     void posseed_box(lexer*,fdm*,ghostcell*);
     void posseed_topo(lexer*,fdm*,ghostcell*);
+	void posseed_suspended(lexer*,fdm*,ghostcell*);
     
 	void remove(lexer*,fdm*,ghostcell*);
 	void particlex(lexer*, fdm*, ghostcell*);

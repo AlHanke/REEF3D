@@ -80,7 +80,7 @@ void particle_f::posseed_box(lexer* p, fdm* a, ghostcell* pgc)
         srand(p->Q29);
 
     if(p->Q29==0)
-        srand((unsigned)time(0)*(0==p->mpirank?1:p->mpirank));
+        srand((unsigned)time(0)*(p->mpirank+1));
 	
     double x,y,z;
     int flag;
@@ -109,7 +109,7 @@ void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
         srand(p->Q29);
 
     if(p->Q29==0)
-        srand((unsigned)time(0)*p->mpirank==0?1:p->mpirank);
+        srand((unsigned)time(0)*(p->mpirank+1));
 
     double tolerance = 5e-18;
     double x,y,z,ipolTopo,ipolSolid;
@@ -117,10 +117,11 @@ void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
 
     PLAINLOOP
         if(active_topo(i,j,k)>0.0)
-            for(int qn=0;qn<ppcell;++qn)
+            {
+                if(PP.size+ppcell>0.9*PP.capacity)
+                    PP.reserve();
+                for(int qn=0;qn<ppcell;++qn)
                 {
-                    if(PP.size+1>0.9*PP.capacity)
-                        PP.reserve();
 
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
@@ -134,6 +135,35 @@ void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
                     if (!(ipolTopo>tolerance||ipolTopo<-p->Q102*p->DZN[KP]||ipolSolid<0))
                         PP.add(x,y,z,1);
                 }
+            }
 }
 
+void particle_f::posseed_suspended(lexer* p, fdm* a, ghostcell* pgc)
+{
+    if(p->Q29>0)
+        srand(p->Q29);
 
+    if(p->Q29==0)
+        srand((unsigned)time(0)*(p->mpirank+1));
+    
+    double x,y,z;
+    for(int n=0;n<p->gcin_count;n++)
+        if(p->gcin[n][3]>0)
+        {
+            i=p->gcin[n][0];
+            j=p->gcin[n][1];
+            k=p->gcin[n][2];
+            if(a->topo(i,j,k)>=0.0)
+            {
+                if(PP.size+ppcell>0.9*PP.capacity)
+                    PP.reserve();
+                for(int qn=0;qn<ppcell;++qn)
+                {
+                    x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
+                    y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
+                    z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
+                    PP.add(x,y,z,1);
+                }
+            }
+        }
+}
