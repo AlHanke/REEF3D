@@ -25,6 +25,7 @@ Author: Alexander Hanke
 
 #include <stdio.h>
 #include <math.h>
+#include <cstring>
 
 /*
 Philosophy: performance, memory usage, ease of use

@@ -98,7 +98,7 @@ void tracers_obj::reserve(size_t capacity_desired)
         capacity_desired=ceil(scale_factor*capacity);
     if (capacity_desired>capacity)
     {
-        if (capacity_desired>SIZE_T_MAX)
+        if (capacity_desired>SIZE_MAX)
             std::__throw_length_error("tracers_obj - max capacity reached");
 
         double* newX=new double[capacity_desired];
@@ -163,14 +163,19 @@ void tracers_obj::fill(size_t index, bool do_empty)
 
 void tracers_obj::fill_empty()
 {
-    for(size_t n=empty_itr;n<=capacity-size;n++)
-        Empty[n]=capacity-n;
-    empty_itr=capacity-size;
+    for(size_t n=empty_itr;n<capacity-size;n++)
+    {
+        Empty[n]=capacity-n-1;
+    }
+    if(capacity==size)
+        empty_itr=capacity;
+    else
+        empty_itr=capacity-size-1;
 }
 
 bool tracers_obj::check_state(bool first)
 {
-    if(capacity-size!=empty_itr||size>capacity)
+    if(empty_itr>capacity||-size!=empty_itr||size>capacity)
     {
         if(first)
         {

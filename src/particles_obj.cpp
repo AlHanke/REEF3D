@@ -75,7 +75,7 @@ void particles_obj::reserve(size_t capacity_desired)
         capacity_desired=ceil(scale_factor*capacity);
     if (capacity_desired>capacity)
     {
-        if (capacity_desired>SIZE_T_MAX)
+        if (capacity_desired>SIZE_MAX)
             std::__throw_length_error("particles_obj - max capacity reached");
 
         tracers_obj::reserve(capacity_desired);
