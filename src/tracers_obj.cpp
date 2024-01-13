@@ -29,7 +29,7 @@ size_t overflow when adding something to an object at capacity
 */
 
 
-tracers_obj::tracers_obj(size_t capacity, size_t size, double scale_factor): scale_factor(scale_factor), entries(3)
+tracers_obj::tracers_obj(size_t capacity, size_t size, double scale_factor): scale_factor(scale_factor), flag_no_data(-1), entries(3)
 {	
     if(capacity>0)
     {
@@ -42,7 +42,7 @@ tracers_obj::tracers_obj(size_t capacity, size_t size, double scale_factor): sca
 
         Flag=new int[capacity]; // default value: -1
 
-        Empty=new size_t[capacity]; // default value: -1
+        Empty=new size_t[capacity]; // default value: size_t_max-1
         this->capacity=capacity;
 
         this->size=0;
@@ -73,7 +73,7 @@ void tracers_obj::erase(size_t index)
     Y[index]=NULL;
     Z[index]=NULL;
 
-    Flag[index]=-1;
+    Flag[index]=flag_no_data;
 
     Empty[++empty_itr]=index;
     --size;
@@ -153,7 +153,7 @@ void tracers_obj::fill(size_t index, bool do_empty)
         Y[n]=NULL;
         Z[n]=NULL;
 
-        Flag[n]=-1;
+        Flag[n]=flag_no_data;
     }
     size=index;
     loopindex=index;

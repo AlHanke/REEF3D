@@ -65,6 +65,7 @@ public:
     size_t loopindex;
     size_t capacity;
     const size_t entries;
+    const int flag_no_data;
 
     // tracer data
     double* X;

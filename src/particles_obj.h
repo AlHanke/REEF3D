@@ -59,6 +59,10 @@ private:
 public:
     // state data
     const size_t entries;
+    const int flag_inactive;
+    const int flag_bed;
+    const int flag_bed_load;
+    const int flag_suspended_load;
 
     //particle data
     //general
