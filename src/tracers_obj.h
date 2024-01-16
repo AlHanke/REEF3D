@@ -50,7 +50,7 @@ public:
     bool check_state(bool=true);
     void optimize();
     void debug();
-    void add_obj(tracers_obj);
+    void add_obj(tracers_obj*);
 
 protected:
     void fill(size_t,bool=true);

@@ -40,17 +40,6 @@ particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : norm_vec(p), active_b
 	// Create Folder
 	if(p->mpirank==0 && p->P14==1)
 	mkdir("./REEF3D_CFD_Particle",0777);
-
-	if(0==p->mpirank)
-	{
-		// tracers_obj test1(5,2);
-		//particles_obj test2(1,1,1,1,1);
-		// cout<<"test1.size:"<<test1.size<<"test2.size:"<<test2.size<<endl;
-		// test1.add_obj(test2);
-		// cout<<"test1.size"<<test1.size<<endl; // bug with clear
-		// delete &test1; // memory problem
-		//delete &test2;
-	}
 }
 
 particle_f::~particle_f()
