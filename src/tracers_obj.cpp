@@ -82,18 +82,19 @@ void tracers_obj::erase(size_t index)
 
 void tracers_obj::erase_all()
 {
-    for(size_t n=loopindex-1;n>=0;n--)
-    {
-        X[n]=NULL;
-        Y[n]=NULL;
-        Z[n]=NULL;
+    clear();
+    X=new double[capacity];
+    Y=new double[capacity];
+    Z=new double[capacity];
 
-        Flag[n]=-1;
+    Flag=new int[capacity];
 
-        Empty[++empty_itr]=n;
-    }
-    loopindex=0;
-    size=0;
+    Empty=new size_t[capacity];
+
+    this->size=0;
+    this->empty_itr=0;
+    this->loopindex=0;
+    fill_empty();
 }
 
 void tracers_obj::add(double x, double y, double z, int flag)
