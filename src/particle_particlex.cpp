@@ -117,7 +117,7 @@ void particle_f::particlex(lexer* p, fdm* a, ghostcell* pgc)
                 ++xchange;
             }
         }
-    cout<<p->mpirank<<"|"<<xchange<<endl;
+    cout<<p->mpirank<<"|"<<xchange<<":"<<PP.size<<endl;
     pgc->paratracersobj(p,posxs,posxr,pxs,pxr);
     pgc->paratracersobj2(p,Send,Recv);
     cout<<"done transfer:"<<p->mpirank<<endl;
@@ -126,9 +126,11 @@ void particle_f::particlex(lexer* p, fdm* a, ghostcell* pgc)
     {
         for(int m=0;m<Recv[n].loopindex;m++)
             cout<<p->mpirank<<"|"<<n<<":"<<m<<"|"<<Recv[n].X[m]<<endl;
-        PP.add_obj(p,Recv[n]);
+        PP.add_obj(&Recv[n]);
+        Send[n].erase_all();
+        Recv[n].erase_all();
     }
-    cout<<"done:"<<p->mpirank<<endl;
+    cout<<"done:"<<p->mpirank<<":"<<PP.size<<endl;
 
     // q=0;
     // while(q<6)

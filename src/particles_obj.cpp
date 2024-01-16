@@ -174,10 +174,10 @@ void particles_obj::add_obj(particles_obj* obj)
                 add_data();
     }
 }
-void particles_obj::add_obj(lexer* p, tracers_obj obj)
+void particles_obj::add_obj(tracers_obj* obj)
 {
     // std::cout<<"particles_obj::add_obj"<<std::endl;
-    tracers_obj::add_obj(p,obj);
+    tracers_obj::add_obj(obj);
 }
 void particles_obj::add_data()
 {

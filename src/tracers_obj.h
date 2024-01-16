@@ -46,6 +46,7 @@ public:
     virtual ~tracers_obj();
 
     void erase(size_t);
+    void erase_all();
     void reserve(size_t=0);
     void add(double,double,double,int);
     bool check_state(bool=true);

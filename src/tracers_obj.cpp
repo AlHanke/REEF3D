@@ -80,6 +80,22 @@ void tracers_obj::erase(size_t index)
     --size;
 }
 
+void tracers_obj::erase_all()
+{
+    for(size_t n=loopindex-1;n>=0;n--)
+    {
+        X[n]=NULL;
+        Y[n]=NULL;
+        Z[n]=NULL;
+
+        Flag[n]=-1;
+
+        Empty[++empty_itr]=n;
+    }
+    loopindex=0;
+    size=0;
+}
+
 void tracers_obj::add(double x, double y, double z, int flag)
 {
     X[Empty[empty_itr]]=x;
@@ -245,19 +261,14 @@ void tracers_obj::memorymove(size_t des, size_t src, size_t len)
 
 void tracers_obj::add_obj(tracers_obj* obj)
 {
-    // std::cout<<"tracers_obj::add_obj"<<std::endl;
     if(obj->size>0)
     {
         if(obj->loopindex>ceil(scale_factor*obj->size))
             obj->optimize();
         if(size+obj->size>capacity)
             reserve(size+obj->size);
-        std::cout<<"tracers_obj::add_obj::addition"<<p->mpirank<<std::endl;
-    for(size_t n=0;n<obj->loopindex;n++)
-        {
-        std::cout<<p->mpirank<<":"<<n<<"|"<<obj.X[n]<<","<<obj.Y[n]<<","<<obj.Z[n]<<","<<obj.Flag[n]<<std::endl;
-        // add(obj->X[n],obj->Y[n],obj->Z[n],obj->Flag[n]);
-    }
+        for(size_t n=0;n<obj->loopindex;n++)
+            add(obj->X[n],obj->Y[n],obj->Z[n],obj->Flag[n]);
     }
 }
 
