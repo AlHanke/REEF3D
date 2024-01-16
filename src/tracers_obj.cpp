@@ -243,18 +243,21 @@ void tracers_obj::memorymove(size_t des, size_t src, size_t len)
     std::memmove(&Flag[des],&Flag[src],len);
 }
 
-void tracers_obj::add_obj(lexer* p, tracers_obj obj)
+void tracers_obj::add_obj(tracers_obj* obj)
 {
     // std::cout<<"tracers_obj::add_obj"<<std::endl;
-    if(obj.loopindex>ceil(scale_factor*obj.size))
-        obj.optimize();
-    if(size+obj.size>capacity)
-        reserve(size+obj.size);
-    std::cout<<"tracers_obj::add_obj::addition"<<p->mpirank<<std::endl;
-    for(size_t n=0;n<obj.loopindex;n++)
+    if(obj->size>0)
     {
+        if(obj->loopindex>ceil(scale_factor*obj->size))
+            obj->optimize();
+        if(size+obj->size>capacity)
+            reserve(size+obj->size);
+        std::cout<<"tracers_obj::add_obj::addition"<<p->mpirank<<std::endl;
+    for(size_t n=0;n<obj->loopindex;n++)
+        {
         std::cout<<p->mpirank<<":"<<n<<"|"<<obj.X[n]<<","<<obj.Y[n]<<","<<obj.Z[n]<<","<<obj.Flag[n]<<std::endl;
-        // add(obj.X[n],obj.Y[n],obj.Z[n],obj.Flag[n]);
+        // add(obj->X[n],obj->Y[n],obj->Z[n],obj->Flag[n]);
+    }
     }
 }
 

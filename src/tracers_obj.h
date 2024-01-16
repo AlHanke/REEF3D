@@ -51,10 +51,10 @@ public:
     bool check_state(bool=true);
     void optimize();
     void debug();
-    void add_obj(lexer*,tracers_obj);
+    void add_obj(tracers_obj*);
     void fill(size_t,bool=true,int=-1);
     void print(size_t);
-    // bool operator == (tracers_obj);
+    // bool operator == (tracers_obj*);
 
 protected:
     void fill_empty();

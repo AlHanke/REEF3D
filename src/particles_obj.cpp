@@ -90,7 +90,6 @@ void particles_obj::clear()
 	{
 
     }
-    tracers_obj::clear();
 }
 
 void particles_obj::fill(size_t index, bool do_empty)
@@ -163,14 +162,17 @@ void particles_obj::optimize()
         }
     loopindex -= loopchange;
 }
-void particles_obj::add_obj(lexer* p, particles_obj obj)
+void particles_obj::add_obj(particles_obj* obj)
 {
-    if(size+obj.size>capacity)
-        reserve(size+obj.size);
-    tracers_obj::add_obj(p,obj);
-    if(entries>tracers_obj::entries)
-        for(size_t n=0;n<obj.loopindex;n++)
-            add_data();
+    if(obj->size>0)
+    {
+        if(size+obj->size>capacity)
+            reserve(size+obj->size);
+        tracers_obj::add_obj(obj);
+        if(entries>tracers_obj::entries)
+            for(size_t n=0;n<obj->loopindex;n++)
+                add_data();
+    }
 }
 void particles_obj::add_obj(lexer* p, tracers_obj obj)
 {
