@@ -21,6 +21,7 @@ Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"tracers_obj.h"
+#include"lexer.h"
 #include<iostream>
 
 /*
@@ -29,7 +30,7 @@ size_t overflow when adding something to an object at capacity
 */
 
 
-tracers_obj::tracers_obj(size_t capacity, size_t size, double scale_factor): scale_factor(scale_factor), flag_no_data(-1), entries(3)
+tracers_obj::tracers_obj(size_t capacity, size_t size, double scale_factor): scale_factor(scale_factor), entries(3)
 {	
     if(capacity>0)
     {
@@ -73,7 +74,7 @@ void tracers_obj::erase(size_t index)
     Y[index]=NULL;
     Z[index]=NULL;
 
-    Flag[index]=flag_no_data;
+    Flag[index]=-1;
 
     Empty[++empty_itr]=index;
     --size;
@@ -145,7 +146,7 @@ void tracers_obj::clear()
     }
 }
 
-void tracers_obj::fill(size_t index, bool do_empty)
+void tracers_obj::fill(size_t index, bool do_empty, int flag)
 {
     for(size_t n=size; n<index;++n)
     {
@@ -153,7 +154,7 @@ void tracers_obj::fill(size_t index, bool do_empty)
         Y[n]=NULL;
         Z[n]=NULL;
 
-        Flag[n]=flag_no_data;
+        Flag[n]=flag;
     }
     size=index;
     loopindex=index;
@@ -242,12 +243,46 @@ void tracers_obj::memorymove(size_t des, size_t src, size_t len)
     std::memmove(&Flag[des],&Flag[src],len);
 }
 
-void tracers_obj::add_obj(tracers_obj obj)
+void tracers_obj::add_obj(lexer* p, tracers_obj obj)
 {
+    // std::cout<<"tracers_obj::add_obj"<<std::endl;
     if(obj.loopindex>ceil(scale_factor*obj.size))
         obj.optimize();
     if(size+obj.size>capacity)
         reserve(size+obj.size);
+    std::cout<<"tracers_obj::add_obj::addition"<<p->mpirank<<std::endl;
     for(size_t n=0;n<obj.loopindex;n++)
-        add(obj.X[n],obj.Y[n],obj.Z[n],obj.Flag[n]);
+    {
+        std::cout<<p->mpirank<<":"<<n<<"|"<<obj.X[n]<<","<<obj.Y[n]<<","<<obj.Z[n]<<","<<obj.Flag[n]<<std::endl;
+        // add(obj.X[n],obj.Y[n],obj.Z[n],obj.Flag[n]);
+    }
 }
+
+void tracers_obj::print(size_t index)
+{
+    std::cout<<"Tracer_obj["<<index<<"]=("<<X[index]<<","<<Y[index]<<","<<Z[index]<<")"<<std::endl;
+}
+
+// bool tracers_obj::operator==(tracers_obj obj)
+// {
+//     if(obj.size!=size)
+//         return false;
+//     if(obj.capacity!=capacity)
+//         return false;
+//     if(obj.loopindex!=loopindex)
+//         return false;
+//     for(size_t n=0;n<loopindex;n++)
+//     {
+//         if(obj.X[n]!=X[n])
+//             return false;
+//         if(obj.Y[n]!=Y[n])
+//             return false;
+//         if(obj.Z[n]!=Z[n])
+//             return false;
+
+//         if(obj.Flag[n]!=Flag[n])
+//             return false;
+//     }
+
+//     return true;
+// }

@@ -37,6 +37,7 @@ No external access to iterator
 Out of bounds safe
 Thread safe
 */
+class lexer;
 
 class tracers_obj
 {
@@ -50,14 +51,16 @@ public:
     bool check_state(bool=true);
     void optimize();
     void debug();
-    void add_obj(tracers_obj);
+    void add_obj(lexer*,tracers_obj);
+    void fill(size_t,bool=true,int=-1);
+    void print(size_t);
+    // bool operator == (tracers_obj);
 
 protected:
-    void fill(size_t,bool=true);
     void fill_empty();
     void fix_state();
     void clear();
-    void memorymove(size_t, size_t, size_t);
+    void memorymove(size_t,size_t,size_t);
 
 public:
     // state data
@@ -65,7 +68,6 @@ public:
     size_t loopindex;
     size_t capacity;
     const size_t entries;
-    const int flag_no_data;
 
     // tracer data
     double* X;

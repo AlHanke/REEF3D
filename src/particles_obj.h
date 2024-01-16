@@ -35,6 +35,7 @@ No external access to iterator
 Out of bounds safe
 Thread safe
 */
+class lexer;
 
 class particles_obj : public tracers_obj
 {
@@ -45,7 +46,8 @@ public:
     void erase(size_t);
     void reserve(size_t=0);
     void add(double,double,double,int); // expand when adding additional data
-    void add_obj(particles_obj);
+    void add_obj(lexer*,particles_obj);
+    void add_obj(lexer*,tracers_obj);
     bool check_state(bool=true);
     void optimize();
     void debug();

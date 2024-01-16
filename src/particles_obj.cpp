@@ -21,6 +21,7 @@ Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"particles_obj.h"
+#include"lexer.h"
 #include<iostream>
 
 /*
@@ -162,14 +163,19 @@ void particles_obj::optimize()
         }
     loopindex -= loopchange;
 }
-void particles_obj::add_obj(particles_obj obj)
+void particles_obj::add_obj(lexer* p, particles_obj obj)
 {
     if(size+obj.size>capacity)
         reserve(size+obj.size);
-    tracers_obj::add_obj(obj);
+    tracers_obj::add_obj(p,obj);
     if(entries>tracers_obj::entries)
         for(size_t n=0;n<obj.loopindex;n++)
             add_data();
+}
+void particles_obj::add_obj(lexer* p, tracers_obj obj)
+{
+    // std::cout<<"particles_obj::add_obj"<<std::endl;
+    tracers_obj::add_obj(p,obj);
 }
 void particles_obj::add_data()
 {
