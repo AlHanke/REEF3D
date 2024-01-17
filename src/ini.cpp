@@ -765,6 +765,8 @@ void lexer::ini_default()
     Q112_y=0.0;         // double ini particle y-dir
     Q113=0;             // int ini particle z-dir
     Q113_z=0.0;         // double ini particle z-dir
+    Q120=0;             // int seed particles in suspension
+    Q121=1;           // double iterations between pariticle seeding in suspension           
     Q180=0;             // int print vtu
     Q181=-10;           // int print vtu iter interval
     Q182=-1.0;          // double print vtu time interval

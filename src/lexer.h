@@ -497,6 +497,9 @@ public:
     int Q111,Q112,Q113;
     double Q111_x,Q112_y,Q113_z;
     
+    int Q120;
+    int Q121;
+
     int Q180,Q181;
     double Q182;
     
