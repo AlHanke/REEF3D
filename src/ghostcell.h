@@ -101,8 +101,7 @@ public:
     void dgcslpol2(lexer*, slice&);
     void dgcslpol4(lexer*, slice&);
 	void parapls(lexer*,double**,double**,int*,int*);
-    void paratracersobj(lexer*,double**,double**,int*,int*);
-    void paratracersobj2(lexer*,tracers_obj*,tracers_obj*);
+    void para_tracersobj(lexer*,tracers_obj*,tracers_obj*);
 
 //  Update
 	void facenbx(lexer*, fieldint&, int*);

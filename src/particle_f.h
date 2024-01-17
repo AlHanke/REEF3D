@@ -60,11 +60,6 @@ public:
 	field4 active_topo;
 
 	particles_obj PP;
-	
-	double **posxs;
-	double **posxr;
-	int *pxs;
-	int *pxr;
     
 	int n,i,j,k;
     int removed,xchange;
