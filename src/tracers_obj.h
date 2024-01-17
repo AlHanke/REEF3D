@@ -42,7 +42,7 @@ class lexer;
 class tracers_obj
 {
 public:
-    tracers_obj(size_t, size_t=0, double=1.25);
+    tracers_obj(size_t=10, size_t=0, double=1.25);
     virtual ~tracers_obj();
 
     void erase(size_t);
@@ -60,7 +60,6 @@ public:
 protected:
     void fill_empty();
     void fix_state();
-    void clear();
     void memorymove(size_t,size_t,size_t);
 
 public:

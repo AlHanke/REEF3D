@@ -56,7 +56,6 @@ tracers_obj::tracers_obj(size_t capacity, size_t size, double scale_factor): sca
 
 tracers_obj::~tracers_obj()
 {
-    clear();
 }
 
 
@@ -82,7 +81,6 @@ void tracers_obj::erase(size_t index)
 
 void tracers_obj::erase_all()
 {
-    clear();
     X=new double[capacity];
     Y=new double[capacity];
     Z=new double[capacity];
@@ -147,19 +145,6 @@ void tracers_obj::reserve(size_t capacity_desired)
 
         capacity=capacity_desired;
         fill_empty();
-    }
-}
-
-void tracers_obj::clear()
-{
-	if(capacity>0)
-	{
-        delete[] X;
-        delete[] Y;
-        delete[] Z;
-
-        delete[] Flag;
-        delete[] Empty;
     }
 }
 
