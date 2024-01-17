@@ -52,7 +52,7 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 
 	if (p->count>=p->Q43)
 	{
-		if(p->count%100==0)
+		if(p->Q120==1&&p->count%p->Q121==0)
 			posseed_suspended(p,a,pgc);
 		advect(p,a,pgc);
 		particlex(p,a,pgc);
