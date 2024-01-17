@@ -54,9 +54,9 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 	{
 		if(p->Q120==1&&p->count%p->Q121==0)
 			posseed_suspended(p,a,pgc);
-		advect(p,a,pgc);
-		particlex(p,a,pgc);
-		remove(p,a,pgc);
+		advect(p,a,&PP,0);
+		transfer(p,pgc,&PP,maxparticle);
+		remove(p,&PP);
 	}
 
 	print_particles(p,a,pgc);

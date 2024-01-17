@@ -25,6 +25,7 @@ Author: Hans Bihs
 #include"boundarycheck.h"
 #include"field4.h"
 #include "particles_obj.h"
+#include "particle_func.h"
 
 #define PARTLOOP for(n=0;n<PP.loopindex;++n)
 
@@ -33,7 +34,7 @@ using namespace std;
 #ifndef PARTICLE_F_H_
 #define PARTICLE_F_H_
 
-class particle_f : public particle_base, public norm_vec, public boundarycheck
+class particle_f : public particle_base, public norm_vec, public boundarycheck, private particle_func
 {
 public:
 	particle_f(lexer*, fdm*, ghostcell*);
@@ -41,7 +42,7 @@ public:
 	virtual void start(lexer*,fdm*,ghostcell*,ioflow*);
     virtual void ini(lexer*,fdm*,ghostcell*,ioflow*);
     
-	void advect(lexer*,fdm*,ghostcell*);
+	// void advect(lexer*,fdm*,ghostcell*);
     
     void seed_ini(lexer*,fdm*,ghostcell*);
 	void seed(lexer*,fdm*,ghostcell*);
@@ -49,8 +50,8 @@ public:
     void posseed_topo(lexer*,fdm*,ghostcell*);
 	void posseed_suspended(lexer*,fdm*,ghostcell*);
     
-	void remove(lexer*,fdm*,ghostcell*);
-	void particlex(lexer*, fdm*, ghostcell*);
+	// void remove(lexer*,fdm*,ghostcell*);
+	// void particlex(lexer*, fdm*, ghostcell*);
     
     void allocate(lexer*,fdm*,ghostcell*);
 	void print_particles(lexer*,fdm*,ghostcell*);
@@ -60,6 +61,7 @@ public:
 	field4 active_topo;
 
 	particles_obj PP;
+	size_t maxparticle;
     
 	int n,i,j,k;
     int removed,xchange;

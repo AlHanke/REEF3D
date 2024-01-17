@@ -1643,15 +1643,8 @@
           <File Name="particle_printpvtu.cpp"/>
           <File Name="particle_printascii.cpp"/>
         </VirtualDirectory>
-        <VirtualDirectory Name="Transport">
-          <File Name="particle_advect.cpp"/>
-        </VirtualDirectory>
         <VirtualDirectory Name="Util">
-          <File Name="particle_remove.cpp"/>
           <File Name="particle_func.cpp"/>
-        </VirtualDirectory>
-        <VirtualDirectory Name="Parallel">
-          <File Name="particle_particlex.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Seed">
           <File Name="particle_initialize.cpp"/>

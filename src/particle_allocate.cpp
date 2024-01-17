@@ -27,7 +27,7 @@ Author: Hans Bihs
 
 void particle_f::allocate(lexer* p,fdm* a,ghostcell* pgc)
 {
-	size_t maxparticle = ceil(p->Q25*double(gpartnum));
+	maxparticle = ceil(p->Q25*double(gpartnum));
 	
 	PP.reserve(maxparticle);
 
