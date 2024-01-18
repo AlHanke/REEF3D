@@ -66,7 +66,13 @@ void sediment_f::topo_zh_update(lexer *p, fdm *a,ghostcell *pgc, sediment_fdm *s
     ALOOP
     {
     if(p->pos_x()>p->S77_xs && p->pos_x()<p->S77_xe)
-    a->topo(i,j,k)=-s->bedzh(i,j)+p->pos_z();
+        if(a->topo(i,j,k)!=-s->bedzh(i,j)+p->pos_z())
+        {
+            a->topo(i,j,k)=-s->bedzh(i,j)+p->pos_z();
+            p->flag_topo_changed[IJK]=1;
+        }
+        else
+            p->flag_topo_changed[IJK]=0;
     }
     
     SLICELOOP4
