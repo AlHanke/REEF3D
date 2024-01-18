@@ -1641,7 +1641,6 @@
         <VirtualDirectory Name="Print">
           <File Name="particle_printvtu.cpp"/>
           <File Name="particle_printpvtu.cpp"/>
-          <File Name="particle_printascii.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Util">
           <File Name="particle_func.cpp"/>

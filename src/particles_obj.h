@@ -41,7 +41,7 @@ class particles_obj : public tracers_obj
 {
 public:
     particles_obj(size_t, double=0.001, double=2650.0, double=0.4, size_t=0, double=1.25);
-    ~particles_obj();
+    virtual ~particles_obj();
 
     void erase(size_t);
     void reserve(size_t=0);

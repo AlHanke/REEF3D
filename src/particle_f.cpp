@@ -28,7 +28,7 @@ Author: Hans Bihs
 #include<sys/stat.h>
 #include<sys/types.h>
 
-particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : norm_vec(p), active_box(p), active_topo(p), irand(100000), drand(irand), PP(10,p->S20,p->S22,p->S24)
+particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : active_box(p), active_topo(p), irand(100000), drand(irand), PP(10,p->S20,p->S22,p->S24)
 {
     
     if(p->I40==0)
@@ -49,14 +49,16 @@ particle_f::~particle_f()
 void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 { 
 	starttime=pgc->timer();
+	xchange=0;
+	removed=0;
 
 	if (p->count>=p->Q43)
 	{
 		if(p->Q120==1&&p->count%p->Q121==0)
 			posseed_suspended(p,a,pgc);
 		advect(p,a,&PP,0);
-		transfer(p,pgc,&PP,maxparticle);
-		remove(p,&PP);
+		xchange=transfer(p,pgc,&PP,maxparticle);
+		removed=remove(p,&PP);
 	}
 
 	print_particles(p,a,pgc);

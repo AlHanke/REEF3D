@@ -21,7 +21,6 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"particle.h"
-#include"norm_vec.h"
 #include"boundarycheck.h"
 #include"field4.h"
 #include "particles_obj.h"
@@ -34,28 +33,21 @@ using namespace std;
 #ifndef PARTICLE_F_H_
 #define PARTICLE_F_H_
 
-class particle_f : public particle_base, public norm_vec, public boundarycheck, private particle_func
+class particle_f : public particle_base, public boundarycheck, private particle_func
 {
 public:
 	particle_f(lexer*, fdm*, ghostcell*);
 	virtual ~particle_f();
 	virtual void start(lexer*,fdm*,ghostcell*,ioflow*);
     virtual void ini(lexer*,fdm*,ghostcell*,ioflow*);
-    
-	// void advect(lexer*,fdm*,ghostcell*);
+
+    void allocate(lexer*,fdm*,ghostcell*);
     
     void seed_ini(lexer*,fdm*,ghostcell*);
 	void seed(lexer*,fdm*,ghostcell*);
     void posseed_box(lexer*,fdm*,ghostcell*);
     void posseed_topo(lexer*,fdm*,ghostcell*);
 	void posseed_suspended(lexer*,fdm*,ghostcell*);
-    
-	// void remove(lexer*,fdm*,ghostcell*);
-	// void particlex(lexer*, fdm*, ghostcell*);
-    
-    void allocate(lexer*,fdm*,ghostcell*);
-	void print_particles(lexer*,fdm*,ghostcell*);
-	void print_ascii(lexer*,fdm*,ghostcell*);
 	
 	field4 active_box;
 	field4 active_topo;
@@ -76,7 +68,8 @@ public:
 	const double drand;
 	double starttime;
 	
-	// PRINTVTU
+	// PRINT
+	void print_particles(lexer*,fdm*,ghostcell*);
 	void print_vtu(lexer*,fdm*,ghostcell*);
 	
 	void pvtu_pos(fdm*,lexer*,ghostcell*);
