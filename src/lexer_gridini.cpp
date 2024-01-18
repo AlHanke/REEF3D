@@ -38,26 +38,28 @@ void lexer::flagini()
     control_calc();
 	gridsize();
 	
-    
+    const int dim=imax*jmax*kmax;
     //cout<<mpirank<<" imax: "<<imax<<" jmax: "<<jmax<<" kmax: "<<kmax<<endl;
 	
-	Iarray(flag1,imax*jmax*kmax);
-	Iarray(flag2,imax*jmax*kmax);
-	Iarray(flag3,imax*jmax*kmax);
-    Iarray(flag5,imax*jmax*kmax);
-    Iarray(flag,imax*jmax*kmax);
+	Iarray(flag1,dim);
+	Iarray(flag2,dim);
+	Iarray(flag3,dim);
+    Iarray(flag5,dim);
+    Iarray(flag,dim);
     
     //cout<<mpirank<<" flagini: "<<imax*jmax*kmax<<endl;
 	
-    Iarray(flagsf1,imax*jmax*kmax);
-	Iarray(flagsf2,imax*jmax*kmax);
-	Iarray(flagsf3,imax*jmax*kmax);
-	Iarray(flagsf4,imax*jmax*kmax);
+    Iarray(flagsf1,dim);
+	Iarray(flagsf2,dim);
+	Iarray(flagsf3,dim);
+	Iarray(flagsf4,dim);
     
-    Iarray(BC,imax*jmax*kmax);
+    Iarray(BC,dim);
     
-	Iarray(tpflag,imax*jmax*kmax);
-    Iarray(ndbaseflag,imax*jmax*kmax);
+	Iarray(tpflag,dim);
+    Iarray(ndbaseflag,dim);
+
+	Iarray(flag_topo_changed,dim);
 
 
 	makeflag(flag1);
