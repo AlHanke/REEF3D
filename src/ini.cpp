@@ -770,6 +770,7 @@ void lexer::ini_default()
     Q180=0;             // int print vtu
     Q181=-10;           // int print vtu iter interval
     Q182=-1.0;          // double print vtu time interval
+    Q183=0;             // int flag above to print
 
 	// Sediment Transport
 	S10=0;              // int sediment transport module

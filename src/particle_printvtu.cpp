@@ -45,7 +45,14 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 {
     cout<<"PACTIVE-"<<p->mpirank<<": "<<PP.size<<endl;
 
-	int numpt=PP.size;
+	int numpt=0;
+	const int print_flag=p->Q183;
+	if(print_flag==0)
+		numpt=PP.size;
+	else
+		PARTLOOP
+			if(PP.Flag[n]>print_flag)
+				numpt++;
 	int count;
 	
 	if(p->mpirank==0)
@@ -172,7 +179,7 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	iin=4*(numpt)*3;
 	result.write((char*)&iin, sizeof (int));
     PARTLOOP
-    if(PP.Flag[n]>0)
+    if(PP.Flag[n]>print_flag)
 	{
 	ffn=float(PP.X[n]);
 	result.write((char*)&ffn, sizeof (float));
@@ -189,7 +196,7 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     iin=4*(numpt)*2;
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
-	if(PP.Flag[n]>0)
+	if(PP.Flag[n]>print_flag)
 	{
 	iin=int(0);
 	result.write((char*)&iin, sizeof (int));
@@ -204,7 +211,7 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
-    if(PP.Flag[n]>0)
+    if(PP.Flag[n]>print_flag)
 	{
 	iin=(count+1)*2;
 	result.write((char*)&iin, sizeof (int));
@@ -216,7 +223,7 @@ void particle_f::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
-    if(PP.Flag[n]>0)
+    if(PP.Flag[n]>print_flag)
 	{
 	iin=1;
 	result.write((char*)&iin, sizeof (int));
