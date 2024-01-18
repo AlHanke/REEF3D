@@ -28,7 +28,6 @@ void ghostcell::flagfield(lexer *p)
     for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
     {
         p->flag[i]=1;
-        p->flag_topo_changed[i]=0;
         if(p->flag4[i]==1)
             p->flag4[i]=WATER;
 
