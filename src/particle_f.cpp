@@ -59,6 +59,7 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 		advect(p,a,&PP,0);
 		xchange=transfer(p,pgc,&PP,maxparticle);
 		removed=remove(p,&PP);
+		make_stationary(p,a,&PP);
 	}
 
 	print_particles(p,a,pgc);

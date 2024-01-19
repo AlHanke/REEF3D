@@ -34,6 +34,7 @@ void particle_f::ini(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
     gpartnum=pgc->globalisum(partnum);
     allocate(p,a,pgc);
     seed(p,a,pgc);
+    make_stationary(p,a,&PP);
     
     // print
     print_vtu(p,a,pgc);
