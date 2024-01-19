@@ -28,17 +28,26 @@ class fdm;
 class ghostcell;
 
 class tracers_obj;
+class particles_obj;
 
 /// Particle function class
 /** A class containing all basic function to manipulate the position of tracers_objs. */
 class particle_func
 {
 public:
+
+protected:
     particle_func();
     virtual ~particle_func(); 
-    void advect(lexer*,fdm*,tracers_obj*,int);
+    void advect(lexer*,fdm*,tracers_obj*,int,double=0,double=0,double=0);
     int remove(lexer*,tracers_obj*);
     int transfer(lexer*,ghostcell*,tracers_obj*,int);
+    double reynolds(lexer*,fdm*,particles_obj*,int);
+    double settling_vel(lexer*,fdm*,particles_obj*,int);
+    double drag_coefficient(lexer*,fdm*,particles_obj*,int);
+    void make_stationary(lexer*,fdm*,tracers_obj*);
+    void make_stationary(lexer*,fdm*,particles_obj*);
+    double volume(particles_obj*,int);
 private:
 
 };

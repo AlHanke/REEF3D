@@ -25,6 +25,7 @@ Author: Alexander Hanke
 #include"fdm.h"
 #include"ghostcell.h"
 #include"tracers_obj.h"
+#include"particles_obj.h"
 #include"boundarycheck.h"
 
 particle_func::particle_func()
@@ -34,12 +35,12 @@ particle_func::~particle_func()
 {
 }
 
-/// @brief Applies simple advection to positions of particles in @param PP
+/// @brief Applies advection to positions of particles in @param PP
 /// @param p partition object
 /// @param a fdm object contains flow field
 /// @param PP tracers_obj contains tracer information
 /// @param minflag PP.Flag[n] needs to be bigger than minflag for PP[n] to be affected by avection
-void particle_func::advect(lexer* p, fdm* a, tracers_obj* PP, int minflag)
+void particle_func::advect(lexer* p, fdm* a, tracers_obj* PP, int minflag, double source_u, double source_v, double source_w)
 {
     double coord1, coord2, coord3, u1, u2, v1, v2, w1, w2;
     for(size_t n=0;n<PP->loopindex;n++)
@@ -191,4 +192,93 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, tracers_obj* PP, int maxco
         // Recv[n].erase_all();
     }
     return xchange;
+}
+
+/// @brief Particle Reynolds number
+/// Calculates particle reynolds number for particle[index]
+/// @param p
+/// @param a
+/// @param PP 
+/// @param index
+/// @return Local particle Reynolds number
+double particle_func::reynolds(lexer* p,fdm* a, particles_obj* PP, int index)
+{
+    const double u=p->ccipol1(a->u,PP->X[index],PP->Y[index],PP->Z[index]);
+    const double v=p->ccipol2(a->v,PP->X[index],PP->Y[index],PP->Z[index]);
+    const double w=p->ccipol3(a->w,PP->X[index],PP->Y[index],PP->Z[index]);
+
+    const double mean_vel=sqrt(u*u+v*v+w*w);
+
+    const double Re=mean_vel*PP->d50/p->W2;
+    // Change to particle diameter once implemented
+
+    return Re;
+}
+
+/// @brief Settling velocity
+/// Calculates settling velocity using drag coefficent
+/// g is assumed to act only in negative z direction
+/// @param p 
+/// @param PP 
+/// @return 
+double particle_func::settling_vel(lexer* p,fdm* a, particles_obj* PP, int index)
+{
+    return sqrt(4.0/3.0*(PP->density/p->W2-1.0)*fabs(p->W22)*PP->d50/drag_coefficient(p,a,PP,index));
+}
+
+/// @brief Drag coefficent Cd
+/// Calculates drag coefficent from particle Reynolds number based on emperical 
+/// @return 
+double particle_func::drag_coefficient(lexer* p,fdm* a, particles_obj* PP, int index)
+{
+    const double Re=reynolds(p,a,PP,index);
+    if(Re<0.5)
+        return 24.0/Re;
+    if(Re<1000)
+        return 18.5*pow(Re,-0.6);
+    if(Re<200000)
+        return 0.44;
+    return NAN;
+}
+
+/// @brief 
+/// @param p 
+/// @param PP 
+void particle_func::make_stationary(lexer* p, fdm* a, tracers_obj* PP)
+{
+    int i,j;
+    for(size_t n=0;n<PP->loopindex;n++)
+        if (p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<0)
+            PP->Flag[n]=0;
+}
+
+/// @brief 
+/// @param p 
+/// @param PP 
+void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP)
+{
+    int i,j;
+    for(size_t n=0;n<PP->loopindex;n++)
+        if(PP->Flag[n]>0)
+        if (p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<0)
+        {
+            PP->Flag[n]=0;
+            if(p->count!=0)
+            {
+                i=p->posc_i(PP->X[n]);
+                j=p->posc_i(PP->Y[n]);
+                p->flag_topo_changed[IJ]=1;
+                p->topo_change[IJ]+=volume(PP,n);
+                cout<<"Topo increased by particles in cell("<<i<<","<<j<<")"<<endl;
+            }
+        }
+}
+
+/// @brief 
+/// @param PP 
+/// @param index 
+/// @return 
+double particle_func::volume(particles_obj* PP, int index)
+{
+    return PI*PP->d50*PP->d50*PP->d50/6;
 }
