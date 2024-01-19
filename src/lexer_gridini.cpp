@@ -60,8 +60,8 @@ void lexer::flagini()
 	Iarray(tpflag,dim_ijk);
     Iarray(ndbaseflag,dim_ijk);
 
-	Iarray(flag_topo_changed,dim_ijk);
-	Darray(flag_topo_change,dim_ij);
+	Iarray(flag_topo_changed,dim_ij);
+	Darray(topo_change,dim_ij);
 
 
 	makeflag(flag1);

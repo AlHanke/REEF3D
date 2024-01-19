@@ -29,7 +29,7 @@ void vrans_f::sed_update(lexer *p, fdm *a, ghostcell *pgc)
 {
 	bool changed=false;
     ALOOP
-		if(p->count==0||p->flag_topo_changed[IJK]==1)
+		if(p->count==0||p->flag_topo_changed[IJ]==1)
 		{	
 			if(a->topo(i,j,k)<0.0) // Topo
 			{
