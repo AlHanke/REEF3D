@@ -71,7 +71,7 @@ void particles_obj::add(double x, double y, double z, int flag)
         add_data();
 }
 
-void particles_obj::reserve(size_t capacity_desired)
+size_t particles_obj::reserve(size_t capacity_desired)
 {
     if(0==capacity_desired)
         capacity_desired=ceil(scale_factor*capacity);
@@ -82,6 +82,7 @@ void particles_obj::reserve(size_t capacity_desired)
 
         tracers_obj::reserve(capacity_desired);
     }
+    return this->capacity;
 }
 
 void particles_obj::clear()

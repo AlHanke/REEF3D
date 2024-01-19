@@ -108,7 +108,7 @@ void tracers_obj::add(double x, double y, double z, int flag)
         loopindex++;
 }
 
-void tracers_obj::reserve(size_t capacity_desired)
+size_t tracers_obj::reserve(size_t capacity_desired)
 {
     if(0==capacity_desired)
         capacity_desired=ceil(scale_factor*capacity);
@@ -146,6 +146,7 @@ void tracers_obj::reserve(size_t capacity_desired)
         capacity=capacity_desired;
         fill_empty();
     }
+    return this->capacity;
 }
 
 void tracers_obj::fill(size_t index, bool do_empty, int flag)

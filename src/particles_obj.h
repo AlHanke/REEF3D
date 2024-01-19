@@ -44,7 +44,7 @@ public:
     virtual ~particles_obj();
 
     void erase(size_t);
-    void reserve(size_t=0);
+    size_t reserve(size_t=0);
     void add(double,double,double,int); // expand when adding additional data
     void add_obj(particles_obj*);
     void add_obj(tracers_obj*);
