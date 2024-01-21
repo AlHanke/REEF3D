@@ -266,10 +266,10 @@ void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP)
             if(p->count!=0)
             {
                 i=p->posc_i(PP->X[n]);
-                j=p->posc_i(PP->Y[n]);
+                j=p->posc_j(PP->Y[n]);
                 p->flag_topo_changed[IJ]=1;
                 p->topo_change[IJ]+=volume(PP,n);
-                cout<<"Topo increased by particles in cell("<<i<<","<<j<<")"<<endl;
+                cout<<"Topo increased by particles in cell("<<i<<","<<j<<")"<<IJ<<endl;
             }
         }
 }
