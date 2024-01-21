@@ -103,12 +103,17 @@ void driver::driver_ini_cfd()
     // Sediment
 	if(p->S10>0)
     {
-    psed->ini_cfd(p,a,pgc);
-    for(int qn=0;qn<5;++qn)
-    psed->relax(p,pgc);
-    preto->start(p,a,pgc,a->topo);
-    psed->update_cfd(p,a,pgc,pflow,preto);
-    pgc->start4a(p,a->topo,150);
+        if(p->Q10==2)
+            psed->ini_cfd(p,a,pgc);
+        else
+        {
+            psed->ini_cfd(p,a,pgc);
+            for(int qn=0;qn<5;++qn)
+                psed->relax(p,pgc);
+            preto->start(p,a,pgc,a->topo);
+            psed->update_cfd(p,a,pgc,pflow,preto);
+            pgc->start4a(p,a->topo,150);
+        }
     
         // Solid Forcing
         if(p->G3==1)
@@ -185,11 +190,11 @@ void driver::driver_ini_cfd()
 	pini->droplet_ini(p,a,pgc);
 
 	pflow->pressure_io(p,a,pgc);
-    
+
     poneph->update(p,a,pgc,pflow);
     
     ppress->ini(p,a,pgc);
-    
+
     ppart->ini(p,a,pgc,pflow);
 
 	pgc->start1(p,a->u,10);

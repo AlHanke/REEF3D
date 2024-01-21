@@ -17,19 +17,24 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Hans Bihs & Alexander Hanke
 --------------------------------------------------------------------*/
 
-#include"sediment_f.h"
-#include"sediment_void.h"
+#include"sedpart.h"
+#include"lexer.h"
+#include"fdm.h"
+#include"ghostcell.h"
 
-#include"sediment_exner.h"
+void sedpart::allocate(lexer* p, fdm* a, ghostcell* pgc)
+{
+	maxparticle = ceil(p->Q25*double(gpartnum));
+	
+	PP.reserve(maxparticle);
 
-#include"reinitopo_AB2.h"
-#include"reinitopo_RK3.h"
-#include"reinitopo_void.h"
+    // parallel
+		/*	ToDo
+		*	Remove need for new allocation in particlex by makeing objects global
+		*/
 
-#include"particle_v.h"
-#include"particle_f.h"
 
-#include "sedpart.h"
+}

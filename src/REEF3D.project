@@ -559,6 +559,9 @@
         <File Name="sediment.h"/>
         <File Name="sediment_f.h"/>
         <File Name="sediment_void.h"/>
+        <VirtualDirectory Name="Particle">
+          <File Name="sedpart.h"/>
+        </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="Heat Transfer">
         <VirtualDirectory Name="BC">
@@ -1770,6 +1773,13 @@
           <File Name="sediment_ini.cpp"/>
           <File Name="sediment_filter.cpp"/>
           <File Name="sediment_io.cpp"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="Particle">
+          <File Name="sedpart_allocate.cpp"/>
+          <File Name="sedpart_printpvtu.cpp"/>
+          <File Name="sedpart_printvtu.cpp"/>
+          <File Name="sedpart_seed.cpp"/>
+          <File Name="sedpart.cpp"/>
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="Heat Transfer">
