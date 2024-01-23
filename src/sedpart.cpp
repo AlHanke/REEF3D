@@ -114,12 +114,12 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
 {
     int i,j,k;
     JILOOP
-        if(p->flag_topo_changed[IJ]==1) // how is 0>0 true
+        if(p->flag_topo_changed[IJ]==1)
         {
-            double dh=p->topo_change[IJ]/p->DXN[IP]/p->DYN[JP];
+            double dh=p->topo_change[IJ]/p->DXN[IP]/p->DYN[JP]*100;
             cout<<"dh["<<p->mpirank<<"]("<<i<<","<<j<<")="<<dh<<"|"<<IJ<<endl;
-            // KLOOP
-            //     a->topo(i,j,k) += dh;
+            KLOOP
+                a->topo(i,j,k) -= dh;
             p->flag_topo_changed[IJ]=0;
             p->topo_change[IJ]=0;
         }
@@ -135,7 +135,7 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
         cout<<"Topo: update grid..."<<endl;
     
     // pgc->topo_update(p,a);
-    // pvrans->sed_update(p,a,pgc);
+    pvrans->sed_update(p,a,pgc);
     pflow->gcio_update(p,a,pgc);
 }
 
