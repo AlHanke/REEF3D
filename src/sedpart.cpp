@@ -157,7 +157,7 @@ void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
             x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
             y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
             z = p->ZN[KP] + p->DZN[KP]*0.5;
-            z+=p->ccipol4_b(a->topo,x,y,z);
+            z-=p->ccipol4_b(a->topo,x,y,z);
             PP.add(x,y,z,1);
         }
     }
