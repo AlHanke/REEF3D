@@ -39,7 +39,7 @@ public:
 protected:
     particle_func();
     virtual ~particle_func(); 
-    void advect(lexer*,fdm*,tracers_obj*,int,double=0,double=0,double=0);
+    void advect(lexer*,fdm*,tracers_obj*,int=0,double=0,double=0,double=0);
     int remove(lexer*,tracers_obj*);
     int transfer(lexer*,ghostcell*,tracers_obj*,int);
     double reynolds(lexer*,fdm*,particles_obj*,int);

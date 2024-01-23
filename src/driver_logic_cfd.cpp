@@ -590,7 +590,7 @@ void driver::logic_cfd()
     if(p->S10>0)
     {
 		if(p->Q10==2)
-			psed = new sedpart(p,pgc);
+			psed = new sedpart(p,pgc,pturb);
 		else
 			psed = new sediment_f(p,a,pgc,pturb,pBC);
 	}

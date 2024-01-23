@@ -62,7 +62,7 @@ void lexer::flagini()
 
 	Iarray(flag_topo_changed,dim_ij);
 	Darray(topo_change,dim_ij);
-
+	
 
 	makeflag(flag1);
 	makeflag(flag2);

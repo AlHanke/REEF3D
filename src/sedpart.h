@@ -41,12 +41,14 @@ class fdm2D;
 class slice;
 class ofstrem;
 class vrans;
+class turbulence;
+class bedshear;
 
 
 class sedpart : public sediment, private particle_func, private increment
 {
 public:
-    sedpart(lexer*,ghostcell*);
+    sedpart(lexer*,ghostcell*,turbulence*);
     virtual ~sedpart();
 
     void start_cfd(lexer*, fdm*, ghostcell*, ioflow*, reinitopo*, solver*) override;
@@ -58,6 +60,8 @@ public:
     void ini_sflow(lexer*, fdm2D*, ghostcell*) override;
     void update_sflow(lexer*,fdm2D*,ghostcell*,ioflow*) override;
     
+    // ---
+    void erode(lexer*,fdm*,ghostcell*);
     // ---
 	
     void relax(lexer*,ghostcell*) override;
@@ -137,8 +141,11 @@ private:
     double printtime;
     int printcount;
     int num;
+    int* changed;
+    double* change;
 
-    vrans *pvrans;
+    vrans* pvrans;
+    bedshear* pbedshear;
 };
 
 #endif

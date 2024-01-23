@@ -28,12 +28,17 @@ Author: Alexander Hanke
 #include "fdm.h"
 #include "reinitopo.h"
 #include "vrans_f.h"
+#include "ioflow.h"
+#include "turbulence.h"
+#include "bedshear.h"
 
 #include <sys/stat.h>
 
-sedpart::sedpart(lexer* p, ghostcell* pgc) : PP(10,p->S20,p->S22,p->S24), active_box(p), active_topo(p), irand(10000), drand(irand)
+sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : PP(10,p->S20,p->S22,p->S24), active_box(p), active_topo(p), irand(10000), drand(irand)
 {
     pvrans = new vrans_f(p,pgc);
+    pbedshear  = new bedshear(p,pturb);
+
     // Create Folder
 	if(p->mpirank==0 && p->P14==1 && p->Q180>0)
 	    mkdir("./REEF3D_CFD_SedPart",0777);
@@ -52,12 +57,12 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 
 	if (p->count>=p->Q43)
 	{
-        int i,j;
-        JILOOP
-        {
-            p->flag_topo_changed[IJ]=0;
-            p->topo_change[IJ]=0;
-        }
+        // int i,j;
+        // JILOOP
+        // {
+        //     p->flag_topo_changed[IJ]=0;
+        //     p->topo_change[IJ]=0;
+        // }
 
 		if(p->Q120==1&&p->count%p->Q121==0)
 			posseed_suspended(p,a,pgc);
@@ -109,20 +114,53 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
 {
     int i,j,k;
     JILOOP
-        if(p->flag_topo_changed[IJ]==1);
+        if(p->flag_topo_changed[IJ]==1) // how is 0>0 true
         {
             double dh=p->topo_change[IJ]/p->DXN[IP]/p->DYN[JP];
-            cout<<"dh("<<i<<","<<j<<")"<<dh<<"|"<<IJ<<endl;
-            KLOOP
-                a->topo(i,j,k) += dh;
+            cout<<"dh["<<p->mpirank<<"]("<<i<<","<<j<<")="<<dh<<"|"<<IJ<<endl;
+            // KLOOP
+            //     a->topo(i,j,k) += dh;
+            p->flag_topo_changed[IJ]=0;
+            p->topo_change[IJ]=0;
         }
+
     pgc->start4a(p,a->topo,150);
-    pvrans->sed_update(p,a,pgc);
     preto->start(p,a,pgc,a->topo);
+
+    // pgc->start1(p,a->u,10);
+	// pgc->start2(p,a->v,11);
+	// pgc->start3(p,a->w,12);
+    
+    if(p->mpirank==0)
+        cout<<"Topo: update grid..."<<endl;
+    
+    // pgc->topo_update(p,a);
+    // pvrans->sed_update(p,a,pgc);
+    pflow->gcio_update(p,a,pgc);
 }
 
 void sedpart::update_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow)
 {
+}
+
+void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
+{
+    int i,j,k;
+    double x,y,z;
+    bool erosion;
+    // pbedshear->taueff_loc
+    SLICEBASELOOP
+    {
+        // test for erosion
+        if(erosion)
+        {
+            x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
+            y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
+            z = p->ZN[KP] + p->DZN[KP]*0.5;
+            z+=p->ccipol4_b(a->topo,x,y,z);
+            PP.add(x,y,z,1);
+        }
+    }
 }
 
 void sedpart::relax(lexer *p,ghostcell *pgc)
