@@ -38,15 +38,21 @@ public:
 
 protected:
     particle_func();
-    virtual ~particle_func(); 
-    void advect(lexer*,fdm*,tracers_obj*,int=0,double=0,double=0,double=0);
+    virtual ~particle_func();
+    
+    // para
     int remove(lexer*,tracers_obj*);
     int transfer(lexer*,ghostcell*,tracers_obj*,int);
+
+    // mov
+    void advect(lexer*,fdm*,tracers_obj*,int=0,double=0,double=0,double=0);
+    void make_stationary(lexer*,fdm*,tracers_obj*);
+    void make_stationary(lexer*,fdm*,particles_obj*);
+
+    // util
     double reynolds(lexer*,fdm*,particles_obj*,int);
     double settling_vel(lexer*,fdm*,particles_obj*,int);
     double drag_coefficient(lexer*,fdm*,particles_obj*,int);
-    void make_stationary(lexer*,fdm*,tracers_obj*);
-    void make_stationary(lexer*,fdm*,particles_obj*);
     double volume(particles_obj*,int);
 private:
 
