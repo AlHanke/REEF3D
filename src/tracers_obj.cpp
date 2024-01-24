@@ -95,8 +95,9 @@ void tracers_obj::erase_all()
     fill_empty();
 }
 
-void tracers_obj::add(double x, double y, double z, int flag)
+size_t tracers_obj::add(double x, double y, double z, int flag)
 {
+    size_t index=Empty[empty_itr];
     X[Empty[empty_itr]]=x;
     Y[Empty[empty_itr]]=y;
     Z[Empty[empty_itr]]=z;
@@ -106,6 +107,7 @@ void tracers_obj::add(double x, double y, double z, int flag)
     Empty[empty_itr--]=-1;
     if(!(loopindex>size++))
         loopindex++;
+    return index;
 }
 
 size_t tracers_obj::reserve(size_t capacity_desired)

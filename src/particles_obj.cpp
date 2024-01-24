@@ -64,11 +64,12 @@ void particles_obj::erase(size_t index)
     tracers_obj::erase(index);
 }
 
-void particles_obj::add(double x, double y, double z, int flag)
+size_t particles_obj::add(double x, double y, double z, int flag)
 {
-    tracers_obj::add(x,y,z,flag);
+    size_t index=tracers_obj::add(x,y,z,flag);
     if(entries>tracers_obj::entries)
         add_data();
+    return index;
 }
 
 size_t particles_obj::reserve(size_t capacity_desired)

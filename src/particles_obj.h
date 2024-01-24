@@ -45,7 +45,7 @@ public:
 
     void erase(size_t);
     size_t reserve(size_t=0);
-    void add(double,double,double,int); // expand when adding additional data
+    size_t add(double,double,double,int); // expand when adding additional data
     void add_obj(particles_obj*);
     void add_obj(tracers_obj*);
     bool check_state(bool=true);

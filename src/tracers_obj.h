@@ -48,7 +48,7 @@ public:
     void erase(size_t);
     void erase_all();
     size_t reserve(size_t=0);
-    void add(double,double,double,int);
+    size_t add(double,double,double,int);
     bool check_state(bool=true);
     void optimize();
     void debug();
