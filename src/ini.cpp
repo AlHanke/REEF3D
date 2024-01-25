@@ -747,6 +747,9 @@ void lexer::ini_default()
     
     // Particles
     Q10=0;              // int particle algorithm
+    Q11=0;              // int bedload
+    Q12=0;              // int susp load
+    Q13=0;              // int topo deformation
     Q21=1.0;            // double particle density
     Q22=1.0;            // double absolute spacing
     Q23=1.0;            // double relative spacing in terms of diameter
@@ -766,7 +769,8 @@ void lexer::ini_default()
     Q113=0;             // int ini particle z-dir
     Q113_z=0.0;         // double ini particle z-dir
     Q120=0;             // int seed particles in suspension
-    Q121=1;           // double iterations between pariticle seeding in suspension           
+    Q121=1;             // int iterations between pariticle seeding in suspension
+    Q122=2;             // int particles per cell in susp seeding      
     Q180=0;             // int print vtu
     Q181=-10;           // int print vtu iter interval
     Q182=-1.0;          // double print vtu time interval

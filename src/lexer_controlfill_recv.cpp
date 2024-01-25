@@ -1108,6 +1108,12 @@ void lexer::ctrlrecv()
 
     Q10 = ictrl[ii];
 	ii++;
+    Q11 = ictrl[ii];
+	ii++;
+    Q12 = ictrl[ii];
+	ii++;
+    Q13 = ictrl[ii];
+	ii++;
     Q21 = dctrl[dd];
 	dd++;
     Q22 = dctrl[dd];
@@ -1147,6 +1153,8 @@ void lexer::ctrlrecv()
     Q120 = ictrl[ii];
     ii++;
     Q121 = ictrl[ii];
+    ii++;
+    Q122 = ictrl[ii];
     ii++;
     Q180 = ictrl[ii];
     ii++;
