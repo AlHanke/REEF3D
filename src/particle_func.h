@@ -46,6 +46,7 @@ protected:
 
     // mov
     void advect(lexer*,fdm*,tracers_obj*,int=0,double=0,double=0,double=0);
+    void advect(lexer*,fdm*,particles_obj*,int=0,double=0,double=0,double=0);
     void make_stationary(lexer*,fdm*,tracers_obj*);
     void make_stationary(lexer*,fdm*,particles_obj*);
 

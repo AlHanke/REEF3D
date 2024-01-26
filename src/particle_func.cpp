@@ -46,31 +46,71 @@ void particle_func::advect(lexer* p, fdm* a, tracers_obj* PP, int minflag, doubl
     for(size_t n=0;n<PP->loopindex;n++)
         if(PP->Flag[n]>minflag)
         {
-            u1=p->dt*p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n]);
+            u1=p->dt*(p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n])+source_u);
             coord1=PP->X[n]+u1;
             
-            v1=p->dt*p->ccipol2(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
+            v1=p->dt*(p->ccipol2(a->v,PP->X[n],PP->Y[n],PP->Z[n])+source_v);
             coord2=PP->Y[n]+v1;
             
-            w1=p->dt*p->ccipol3(a->w,PP->X[n],PP->Y[n],PP->Z[n]);
+            w1=p->dt*(p->ccipol3(a->w,PP->X[n],PP->Y[n],PP->Z[n])+source_w);
             coord3=PP->Z[n]+w1;
             
             
-            u2=0.25*u1 + 0.25*p->dt*p->ccipol1(a->u,coord1,coord2,coord3);
+            u2=0.25*u1 + 0.25*p->dt*(p->ccipol1(a->u,coord1,coord2,coord3)+source_u);
             coord1=PP->X[n]+u2;
             
-            v2=0.25*v1 + 0.25*p->dt*p->ccipol2(a->v,coord1,coord2,coord3);
+            v2=0.25*v1 + 0.25*p->dt*(p->ccipol2(a->v,coord1,coord2,coord3)+source_v);
             coord2=PP->Y[n]+v2;
             
-            w2=0.25*w1 + 0.25*p->dt*p->ccipol3(a->w,coord1,coord2,coord3);
+            w2=0.25*w1 + 0.25*p->dt*(p->ccipol3(a->w,coord1,coord2,coord3)+source_w);
             coord3=PP->Z[n]+w2;
             
             
-            PP->X[n] += (2.0/3.0)*u2 + (2.0/3.0)*p->dt*p->ccipol1(a->u,coord1,coord2,coord3);
+            PP->X[n] += (2.0/3.0)*u2 + (2.0/3.0)*p->dt*(p->ccipol1(a->u,coord1,coord2,coord3)+source_u);
 
-            PP->Y[n] += (2.0/3.0)*v2 + (2.0/3.0)*p->dt*p->ccipol2(a->v,coord1,coord2,coord3);
+            PP->Y[n] += (2.0/3.0)*v2 + (2.0/3.0)*p->dt*(p->ccipol2(a->v,coord1,coord2,coord3)+source_v);
             
-            PP->Z[n] += (2.0/3.0)*w2 + (2.0/3.0)*p->dt*p->ccipol3(a->w,coord1,coord2,coord3);
+            PP->Z[n] += (2.0/3.0)*w2 + (2.0/3.0)*p->dt*(p->ccipol3(a->w,coord1,coord2,coord3)+source_w);
+        }
+}
+
+/// @brief Applies advection to positions of particles in @param PP
+/// @param p partition object
+/// @param a fdm object contains flow field
+/// @param PP tracers_obj contains tracer information
+/// @param minflag PP.Flag[n] needs to be bigger than minflag for PP[n] to be affected by avection
+void particle_func::advect(lexer* p, fdm* a, particles_obj* PP, int minflag, double source_u, double source_v, double source_w)
+{
+    double coord1, coord2, coord3, u1, u2, v1, v2, w1, w2;
+    for(size_t n=0;n<PP->loopindex;n++)
+        if(PP->Flag[n]>minflag)
+        {
+            // source_w +=settling_vel(p,a,PP,n);
+            u1=p->dt*(p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n])+source_u);
+            coord1=PP->X[n]+u1;
+            
+            v1=p->dt*(p->ccipol2(a->v,PP->X[n],PP->Y[n],PP->Z[n])+source_v);
+            coord2=PP->Y[n]+v1;
+            
+            w1=p->dt*(p->ccipol3(a->w,PP->X[n],PP->Y[n],PP->Z[n])+source_w);
+            coord3=PP->Z[n]+w1;
+            
+            
+            u2=0.25*u1 + 0.25*p->dt*(p->ccipol1(a->u,coord1,coord2,coord3)+source_u);
+            coord1=PP->X[n]+u2;
+            
+            v2=0.25*v1 + 0.25*p->dt*(p->ccipol2(a->v,coord1,coord2,coord3)+source_v);
+            coord2=PP->Y[n]+v2;
+            
+            w2=0.25*w1 + 0.25*p->dt*(p->ccipol3(a->w,coord1,coord2,coord3)+source_w);
+            coord3=PP->Z[n]+w2;
+            
+            
+            PP->X[n] += (2.0/3.0)*u2 + (2.0/3.0)*p->dt*(p->ccipol1(a->u,coord1,coord2,coord3)+source_u);
+
+            PP->Y[n] += (2.0/3.0)*v2 + (2.0/3.0)*p->dt*(p->ccipol2(a->v,coord1,coord2,coord3)+source_v);
+            
+            PP->Z[n] += (2.0/3.0)*w2 + (2.0/3.0)*p->dt*(p->ccipol3(a->w,coord1,coord2,coord3)+source_w);
         }
 }
 
