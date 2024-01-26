@@ -156,9 +156,9 @@ void sedpart::posseed_suspended(lexer* p, fdm* a, ghostcell* pgc)
             k=p->gcin[n][2];
             if(a->topo(i,j,k)>=0.0)
             {
-                if(PP.size+ppcell>0.9*PP.capacity)
-                    maxparticle=PP.reserve(PP.size+ppcell);
-                for(int qn=0;qn<ppcell;++qn)
+                if(PP.size+p->Q122>0.9*PP.capacity)
+                    maxparticle=PP.reserve(PP.size+p->Q122);
+                for(int qn=0;qn<p->Q122;++qn)
                 {
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;

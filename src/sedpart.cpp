@@ -64,8 +64,8 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 		xchange=transfer(p,pgc,&PP,maxparticle);
 		removed=remove(p,&PP);
 		make_stationary(p,a,&PP);
-
-        update_cfd(p,a,pgc,pflow,preto);
+        if(p->Q13==1)
+            update_cfd(p,a,pgc,pflow,preto);
 	}
 
 	print_particles(p,a,pgc);
