@@ -85,7 +85,7 @@ void particle_func::advect(lexer* p, fdm* a, particles_obj* PP, int minflag, dou
     for(size_t n=0;n<PP->loopindex;n++)
         if(PP->Flag[n]>minflag)
         {
-            source_w +=settling_vel(p,a,PP,n);
+            source_w -=settling_vel(p,a,PP,n);
             u1=p->dt*(p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n])+source_u);
             coord1=PP->X[n]+u1;
             
@@ -309,7 +309,6 @@ void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP)
                 j=p->posc_j(PP->Y[n]);
                 p->flag_topo_changed[IJ]=1;
                 p->topo_change[IJ]+=volume(PP,n);
-                cout<<"Topo increased by particles in cell("<<i<<","<<j<<")"<<IJ<<endl;
             }
         }
 }

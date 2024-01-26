@@ -114,6 +114,7 @@ size_t tracers_obj::reserve(size_t capacity_desired)
 {
     if(0==capacity_desired)
         capacity_desired=ceil(scale_factor*capacity);
+    capacity_desired=ceil(scale_factor*capacity_desired);
     if (capacity_desired>capacity)
     {
         if (capacity_desired>SIZE_MAX)
@@ -121,30 +122,30 @@ size_t tracers_obj::reserve(size_t capacity_desired)
 
         double* newX=new double[capacity_desired];
         memcpy( newX, X, size * sizeof(double) );
-        delete [] X;
+        delete[] X;
         X=newX;
 
         double* newY=new double[capacity_desired];
         memcpy( newY, Y, size * sizeof(double) );
-        delete [] Y;
+        delete[] Y;
         Y=newY;
 
         double* newZ=new double[capacity_desired];
         memcpy( newZ, Z, size * sizeof(double) );
-        delete [] Z;
+        delete[] Z;
         Z=newZ;
 
 
         int* newFlag=new int[capacity_desired];
         memcpy( newFlag, Flag, size * sizeof(int) );
-        delete [] Flag;
+        delete[] Flag;
         Flag=newFlag;
 
         size_t* newEmpty=new size_t[capacity_desired];
-        memcpy( newEmpty, Empty, size * sizeof(int) );
-        delete [] Empty;
+        memcpy( newEmpty, Empty, size * sizeof(size_t) );
+        delete[] Empty;
         Empty=newEmpty;
-
+        
         capacity=capacity_desired;
         fill_empty();
     }
