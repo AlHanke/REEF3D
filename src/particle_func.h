@@ -23,6 +23,8 @@ Author: Alexander Hanke
 #ifndef PARTICLEFUNC_H_
 #define PARTICLEFUNC_H_
 
+#include"increment.h"
+
 class lexer;
 class fdm;
 class ghostcell;
@@ -32,7 +34,7 @@ class particles_obj;
 
 /// Particle function class
 /** A class containing all basic function to manipulate the position of tracers_objs. */
-class particle_func
+class particle_func: private increment
 {
 public:
 
@@ -55,6 +57,9 @@ protected:
     double settling_vel(lexer*,fdm*,particles_obj*,int);
     double drag_coefficient(lexer*,fdm*,particles_obj*,int);
     double volume(particles_obj*,int);
+
+    // memory management
+    void cleanup(lexer*,fdm*,particles_obj*,int);
 private:
 
 };

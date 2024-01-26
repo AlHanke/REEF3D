@@ -28,6 +28,8 @@ Author: Alexander Hanke
 #include"particles_obj.h"
 #include"boundarycheck.h"
 
+#define PARTICLELOOP for(size_t n=0;n<PP->loopindex;n++)
+
 particle_func::particle_func()
 {
 }
@@ -43,7 +45,7 @@ particle_func::~particle_func()
 void particle_func::advect(lexer* p, fdm* a, tracers_obj* PP, int minflag, double source_u, double source_v, double source_w)
 {
     double coord1, coord2, coord3, u1, u2, v1, v2, w1, w2;
-    for(size_t n=0;n<PP->loopindex;n++)
+    PARTICLELOOP
         if(PP->Flag[n]>minflag)
         {
             u1=p->dt*(p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n])+source_u);
@@ -82,7 +84,7 @@ void particle_func::advect(lexer* p, fdm* a, tracers_obj* PP, int minflag, doubl
 void particle_func::advect(lexer* p, fdm* a, particles_obj* PP, int minflag, double source_u, double source_v, double source_w)
 {
     double coord1, coord2, coord3, u1, u2, v1, v2, w1, w2;
-    for(size_t n=0;n<PP->loopindex;n++)
+    PARTICLELOOP
         if(PP->Flag[n]>minflag)
         {
             source_w -=settling_vel(p,a,PP,n);
@@ -125,7 +127,7 @@ int particle_func::remove(lexer* p,tracers_obj* PP)
     int i,j,k;
     boundarycheck bounderies;
 
-    for(size_t n=0;n<PP->loopindex;n++)
+    PARTICLELOOP
         if(PP->Flag[n]>0)
         {
             i = p->posc_i(PP->X[n]);
@@ -163,7 +165,7 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, tracers_obj* PP, int maxco
 
     int i,j,k;
 
-    for(size_t n=0;n<PP->loopindex;n++)
+    PARTICLELOOP
         if(PP->Flag[n]==1)
         {
             i = p->posc_i(PP->X[n]);
@@ -287,7 +289,7 @@ double particle_func::drag_coefficient(lexer* p,fdm* a, particles_obj* PP, int i
 void particle_func::make_stationary(lexer* p, fdm* a, tracers_obj* PP)
 {
     int i,j;
-    for(size_t n=0;n<PP->loopindex;n++)
+    PARTICLELOOP
         if (p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<0)
             PP->Flag[n]=0;
 }
@@ -298,7 +300,7 @@ void particle_func::make_stationary(lexer* p, fdm* a, tracers_obj* PP)
 void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP)
 {
     int i,j;
-    for(size_t n=0;n<PP->loopindex;n++)
+    PARTICLELOOP
         if(PP->Flag[n]>0)
         if (p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<0)
         {
@@ -320,4 +322,23 @@ void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP)
 double particle_func::volume(particles_obj* PP, int index)
 {
     return PI*PP->d50*PP->d50*PP->d50/6;
+}
+
+void particle_func::cleanup(lexer* p, fdm* a, particles_obj* PP, int max)
+{
+    int* numPartijk;
+    p->Iarray(numPartijk,p->knox*p->knoy*p->knoz);
+    PARTICLELOOP
+        if(PP->Flag[n]==0)
+        {
+            i=p->posc_i(PP->X[n]);
+            j=p->posc_j(PP->Y[n]);
+            k=p->posc_k(PP->Z[n]);
+            if(a->topo(i,j,k)<p->DZN[KP])
+                if(numPartijk[IJK]<max)
+                    numPartijk[IJK]++;
+                else
+                    PP->erase(n);
+        }
+    p->del_Iarray(numPartijk,p->knox*p->knoy*p->knoz);
 }
