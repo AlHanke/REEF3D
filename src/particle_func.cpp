@@ -85,7 +85,7 @@ void particle_func::advect(lexer* p, fdm* a, particles_obj* PP, int minflag, dou
     for(size_t n=0;n<PP->loopindex;n++)
         if(PP->Flag[n]>minflag)
         {
-            // source_w +=settling_vel(p,a,PP,n);
+            source_w +=settling_vel(p,a,PP,n);
             u1=p->dt*(p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n])+source_u);
             coord1=PP->X[n]+u1;
             
@@ -263,7 +263,7 @@ double particle_func::reynolds(lexer* p,fdm* a, particles_obj* PP, int index)
 /// @return 
 double particle_func::settling_vel(lexer* p,fdm* a, particles_obj* PP, int index)
 {
-    return sqrt(4.0/3.0*(PP->density/p->W2-1.0)*fabs(p->W22)*PP->d50/drag_coefficient(p,a,PP,index));
+    return sqrt(4.0/3.0*(PP->density/p->W1-1.0)*fabs(p->W22)*PP->d50/drag_coefficient(p,a,PP,index));
 }
 
 /// @brief Drag coefficent Cd
@@ -274,9 +274,9 @@ double particle_func::drag_coefficient(lexer* p,fdm* a, particles_obj* PP, int i
     const double Re=reynolds(p,a,PP,index);
     if(Re<0.5)
         return 24.0/Re;
-    if(Re<1000)
+    if(Re<1000.0)
         return 18.5*pow(Re,-0.6);
-    if(Re<200000)
+    if(Re<200000.0)
         return 0.44;
     return NAN;
 }
