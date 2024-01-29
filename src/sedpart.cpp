@@ -48,6 +48,14 @@ sedpart::~sedpart()
 
 }
 
+/// @brief 
+///
+/// @param p 
+/// @param a 
+/// @param pgc 
+/// @param pflow 
+/// @param preto 
+/// @param psolv 
 void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
                                     reinitopo* preto, solver* psolv)
 {
