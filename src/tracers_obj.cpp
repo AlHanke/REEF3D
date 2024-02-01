@@ -20,9 +20,12 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
-#include"tracers_obj.h"
-#include"lexer.h"
-#include<iostream>
+#include "tracers_obj.h"
+
+#include <stdio.h>
+#include <math.h>
+#include <cstring>
+#include <iostream>
 
 /*
 Dangers when using:
@@ -81,12 +84,17 @@ void tracers_obj::erase(size_t index)
 
 void tracers_obj::erase_all()
 {
+    delete[] X;
+    delete[] Y;
+    delete[] Z;
     X=new double[capacity];
     Y=new double[capacity];
     Z=new double[capacity];
 
+    delete[] Flag;
     Flag=new int[capacity];
 
+    delete[] Empty;
     Empty=new size_t[capacity];
 
     this->size=0;

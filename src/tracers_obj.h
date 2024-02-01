@@ -23,10 +23,6 @@ Author: Alexander Hanke
 #ifndef TRACERSOBJ_H_
 #define TRACERSOBJ_H_
 
-#include <stdio.h>
-#include <math.h>
-#include <cstring>
-
 /*
 Philosophy: performance, memory usage, ease of use
 
@@ -37,7 +33,6 @@ No external access to iterator
 Out of bounds safe
 Thread safe
 */
-class lexer;
 
 class tracers_obj
 {
