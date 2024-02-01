@@ -44,8 +44,9 @@ public:
     virtual ~particles_obj();
 
     void erase(size_t);
+    void erase_all();
     size_t reserve(size_t=0);
-    size_t add(double,double,double,int,double,double,double,double); // expand when adding additional data
+    size_t add(double,double,double,int,double=0,double=0,double=0,double=1); // expand when adding additional data
     void add_obj(particles_obj*);
     void add_obj(tracers_obj*);
     bool check_state(bool=true);
@@ -55,8 +56,7 @@ public:
 private:
     void fill(size_t,bool=true);
     void fix_state();
-    void clear();
-    void add_data(size_t,double=0,double=0,double=0,double=1); // expand when adding additional data
+    void add_data(size_t,double,double,double,double); // expand when adding additional data
 
 public:
     // state data

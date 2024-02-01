@@ -46,6 +46,7 @@ particles_obj::particles_obj(size_t capacity, double d50, double density, bool i
             U = new double[capacity];
             V = new double[capacity];
             W = new double[capacity];
+            
             PackingFactor = new double[capacity];
         }
     }
@@ -53,11 +54,10 @@ particles_obj::particles_obj(size_t capacity, double d50, double density, bool i
 
 particles_obj::~particles_obj()
 {
-    clear();
 }
 
 
-
+/// @brief Contains debugging code
 void particles_obj::debug()
 {
     std::cout<<"particle_obj::debug"<<std::endl;
@@ -65,9 +65,33 @@ void particles_obj::debug()
     
 }
 
+/// @brief Removes index
+/// @param index 
 void particles_obj::erase(size_t index)
 {
     tracers_obj::erase(index);
+
+    U[index]=0;
+    V[index]=0;
+    W[index]=0;
+
+    PackingFactor[index]=1;
+}
+
+/// @brief Clears all data
+void particles_obj::erase_all()
+{
+    tracers_obj::erase_all();
+
+    delete[] U;
+    delete[] V;
+    delete[] W;
+    U = new double[capacity];
+    V = new double[capacity];
+    W = new double[capacity];
+
+    delete[] PackingFactor;
+    PackingFactor = new double[capacity];
 }
 
 size_t particles_obj::add(double x, double y, double z, int flag, double u, double v, double w, double packingFactor)
@@ -92,24 +116,26 @@ size_t particles_obj::reserve(size_t capacity_desired)
     return this->capacity;
 }
 
-void particles_obj::clear()
-{
-	if(capacity>0)
-	{
-
-    }
-}
-
+/// @brief 
+/// @param index 
+/// @param do_empty 
 void particles_obj::fill(size_t index, bool do_empty)
 {
     if(entries>tracers_obj::entries)
         for(size_t n=size; n<index;++n)
         {
-            
+            U[n]=0;
+            V[n]=0;
+            W[n]=0;
+
+            PackingFactor[n]=1;
         }
     tracers_obj::fill(index,do_empty);
 }
 
+/// @brief 
+/// @param first 
+/// @return Valid state
 bool particles_obj::check_state(bool first)
 {
     if(capacity-size!=empty_itr||size>capacity)
@@ -126,7 +152,8 @@ bool particles_obj::check_state(bool first)
         return true;
 }
 
-void particles_obj::fix_state()
+/// @brief Truncate to capcity if size is over capacity or fix Empty entires
+void particles_obj::fix_state() // ToDo - update
 {
     if(this->size>this->capacity)
     {
@@ -157,7 +184,8 @@ void particles_obj::fix_state()
     }
 }
 
-void particles_obj::optimize()
+/// @brief Removes intermediate empties
+void particles_obj::optimize() // ToDo - update
 {
     // Could be optimized to look ahead if a large section is empty to only do one move operation
     size_t loopchange=0;
@@ -170,6 +198,9 @@ void particles_obj::optimize()
         }
     loopindex -= loopchange;
 }
+
+/// @brief 
+/// @param obj 
 void particles_obj::add_obj(particles_obj* obj)
 {
     if(obj->size>0)
@@ -177,16 +208,25 @@ void particles_obj::add_obj(particles_obj* obj)
         if(size+obj->size>capacity)
             reserve(size+obj->size);
         tracers_obj::add_obj(obj);
-        if(entries>tracers_obj::entries)
+        if(obj->entries>tracers_obj::entries && this->entries>tracers_obj::entries)
             for(size_t n=0;n<obj->loopindex;n++)
-                add_data();
+                add_data(n,obj->U[n],obj->V[n],obj->W[n],obj->PackingFactor[n]);
     }
 }
+
+/// @brief 
+/// @param obj 
 void particles_obj::add_obj(tracers_obj* obj)
 {
-    // std::cout<<"particles_obj::add_obj"<<std::endl;
     tracers_obj::add_obj(obj);
 }
+
+/// @brief Additional data input
+/// @param index 
+/// @param u 
+/// @param v 
+/// @param w 
+/// @param packingFactor 
 void particles_obj::add_data(size_t index, double u, double v, double w, double packingFactor)
 {
     U[index]=u;
