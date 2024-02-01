@@ -281,6 +281,13 @@ double particle_func::drag_coefficient(lexer* p,fdm* a, particles_obj* PP, int i
     if(Re<200000.0)
         return 0.44;
     return NAN;
+
+
+    /// Andrews and O’Rourke (1996)
+    const double Rep=0;
+    const double theta_s=0;// vol sol/vol cell
+    const double theta_f=1-theta_s;
+    return 24.0*(pow(theta_f,-2.65)+pow(Rep,2.0/3.0)*pow(theta_f,-1.78)/6.0)/Rep;
 }
 
 /// @brief 
@@ -321,12 +328,14 @@ void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP)
 /// @return 
 double particle_func::volume(particles_obj* PP, int index)
 {
-    return PI*PP->d50*PP->d50*PP->d50/6;
+    return PI*pow(PP->d50,3.0)/6.0;
 }
 
 void particle_func::cleanup(lexer* p, fdm* a, particles_obj* PP, int max)
 {
     int* numPartijk;
+    int i,j,k;
+
     p->Iarray(numPartijk,p->knox*p->knoy*p->knoz);
     PARTICLELOOP
         if(PP->Flag[n]==0)
@@ -341,4 +350,18 @@ void particle_func::cleanup(lexer* p, fdm* a, particles_obj* PP, int max)
                     PP->erase(n);
         }
     p->del_Iarray(numPartijk,p->knox*p->knoy*p->knoz);
+}
+
+/// @brief Topo volume in cell div. by particle volume
+/// Uses i,j&k from increment to pass cell identifier
+/// @param d50 Sauter diameter of particles
+/// @return Ceil of number of particles in cell IJK
+int particle_func::maxParticlesPerCell(lexer* p, fdm* a, double d50)
+{   
+    return ceil(p->DXN[IP]*p->DYN[JP]*(a->topo(i,j,k)<p->DZN[KP]?a->topo(i,j,k):p->DZN[KP])*(1-p->S24)*6.0/(PI*pow(d50,3.0)));
+}
+
+int particle_func::maxParticlesPerXY(lexer* p, fdm* a, double d50)
+{
+    return ceil(p->DXN[IP]*p->DYN[JP]*(1-p->S24)*6.0/(PI*pow(d50,2.0)));
 }

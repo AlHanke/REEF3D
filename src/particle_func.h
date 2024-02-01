@@ -57,6 +57,8 @@ protected:
     double settling_vel(lexer*,fdm*,particles_obj*,int);
     double drag_coefficient(lexer*,fdm*,particles_obj*,int);
     double volume(particles_obj*,int);
+    int maxParticlesPerCell(lexer*,fdm*,double);
+    int maxParticlesPerXY(lexer*,fdm*,double);
 
     // memory management
     void cleanup(lexer*,fdm*,particles_obj*,int);
