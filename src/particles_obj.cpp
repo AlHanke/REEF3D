@@ -40,7 +40,6 @@ particles_obj::particles_obj(size_t capacity, double d50, double density, bool i
         if(size>capacity)
             capacity=size;
 
-        // Add new individual data here:
         if(individuals)
         {
             U = new double[capacity];
@@ -56,8 +55,7 @@ particles_obj::~particles_obj()
 {
 }
 
-
-/// @brief Contains debugging code
+/// \copydoc tracers_obj::debug
 void particles_obj::debug()
 {
     std::cout<<"particle_obj::debug"<<std::endl;
@@ -65,8 +63,7 @@ void particles_obj::debug()
     
 }
 
-/// @brief Removes index
-/// @param index 
+/// \copydoc tracers_obj::erase
 void particles_obj::erase(size_t index)
 {
     tracers_obj::erase(index);
@@ -78,7 +75,7 @@ void particles_obj::erase(size_t index)
     PackingFactor[index]=1;
 }
 
-/// @brief Clears all data
+/// \copydoc tracers_obj::erase_all
 void particles_obj::erase_all()
 {
     tracers_obj::erase_all();
@@ -94,6 +91,16 @@ void particles_obj::erase_all()
     PackingFactor = new double[capacity];
 }
 
+/// @brief
+/// @param x 
+/// @param y 
+/// @param z 
+/// @param flag 
+/// @param u vel
+/// @param v 
+/// @param w 
+/// @param packingFactor Number of particles in parcel
+/// @return 
 size_t particles_obj::add(double x, double y, double z, int flag, double u, double v, double w, double packingFactor)
 {
     size_t index=tracers_obj::add(x,y,z,flag);
@@ -102,6 +109,7 @@ size_t particles_obj::add(double x, double y, double z, int flag, double u, doub
     return index;
 }
 
+/// \copydoc tracers_obj::reserve
 size_t particles_obj::reserve(size_t capacity_desired)
 {
     if(0==capacity_desired)
@@ -116,10 +124,8 @@ size_t particles_obj::reserve(size_t capacity_desired)
     return this->capacity;
 }
 
-/// @brief 
-/// @param index 
-/// @param do_empty 
-void particles_obj::fill(size_t index, bool do_empty)
+/// \copydoc tracers_obj::fill
+void particles_obj::fill(size_t index, bool do_empty, int flag)
 {
     if(entries>tracers_obj::entries)
         for(size_t n=size; n<index;++n)
@@ -130,12 +136,10 @@ void particles_obj::fill(size_t index, bool do_empty)
 
             PackingFactor[n]=1;
         }
-    tracers_obj::fill(index,do_empty);
+    tracers_obj::fill(index,do_empty,flag);
 }
 
-/// @brief 
-/// @param first 
-/// @return Valid state
+/// \copydoc tracers_obj::check_state
 bool particles_obj::check_state(bool first)
 {
     if(capacity-size!=empty_itr||size>capacity)
@@ -152,7 +156,7 @@ bool particles_obj::check_state(bool first)
         return true;
 }
 
-/// @brief Truncate to capcity if size is over capacity or fix Empty entires
+/// \copydoc tracers_obj::fix_state
 void particles_obj::fix_state() // ToDo - update
 {
     if(this->size>this->capacity)
@@ -184,7 +188,7 @@ void particles_obj::fix_state() // ToDo - update
     }
 }
 
-/// @brief Removes intermediate empties
+/// \copydoc tracers_obj::optimize
 void particles_obj::optimize() // ToDo - update
 {
     // Could be optimized to look ahead if a large section is empty to only do one move operation
@@ -192,11 +196,23 @@ void particles_obj::optimize() // ToDo - update
     for(int n=empty_itr; n>=0;--n)
         if(Empty[n]<loopindex)
         {
-            tracers_obj::memorymove(Empty[n],Empty[n]+1,sizeof(double)*(loopindex-Empty[n]+1));
+            memorymove(Empty[n],Empty[n]+1,(loopindex-Empty[n]+1));
 
             loopchange++;
         }
     loopindex -= loopchange;
+}
+
+/// \copydoc tracers::memorymove
+void particles_obj::memorymove(size_t des, size_t src, size_t len)
+{
+    tracers_obj::memorymove(des,src,len);
+
+    std::memmove(&U[des],&U[src],sizeof(double)*len);
+    std::memmove(&V[des],&V[src],sizeof(double)*len);
+    std::memmove(&W[des],&W[src],sizeof(double)*len);
+
+    std::memmove(&PackingFactor[des],&PackingFactor[src],sizeof(double)*len);
 }
 
 /// @brief 
@@ -214,8 +230,7 @@ void particles_obj::add_obj(particles_obj* obj)
     }
 }
 
-/// @brief 
-/// @param obj 
+/// \copydoc tracers_obj::add_obj
 void particles_obj::add_obj(tracers_obj* obj)
 {
     tracers_obj::add_obj(obj);

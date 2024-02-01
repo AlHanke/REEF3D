@@ -175,6 +175,10 @@ size_t tracers_obj::reserve(size_t capacity_desired)
     return this->capacity;
 }
 
+/// @brief Fills with default
+/// @param index to which to fill
+/// @param do_empty toggle for ::fill_empty
+/// @param flag provide if diffent from default
 void tracers_obj::fill(size_t index, bool do_empty, int flag)
 {
     for(size_t n=size; n<index;++n)
@@ -188,7 +192,7 @@ void tracers_obj::fill(size_t index, bool do_empty, int flag)
     size=index;
     loopindex=index;
     if(do_empty)
-    fill_empty();
+        fill_empty();
 }
 
 /// @brief Fills ::Empty with empty spaces\n
@@ -223,6 +227,7 @@ bool tracers_obj::check_state(bool first)
         return true;
 }
 
+/// @brief Truncate to capcity if size is over capacity or fix Empty entires
 void tracers_obj::fix_state()
 {
     if(this->size>this->capacity)
@@ -262,19 +267,23 @@ void tracers_obj::optimize()
     for(int n=empty_itr; n>=0;--n)
         if(Empty[n]<loopindex)
         {
-            memorymove(Empty[n],Empty[n]+1,sizeof(double)*(loopindex-Empty[n]+1));
+            memorymove(Empty[n],Empty[n]+1,loopindex-Empty[n]+1);
             loopchange++;
         }
     loopindex -= loopchange;
 }
 
+/// @brief Moves section of data memory
+/// @param des Index of desitnation
+/// @param src Index of source
+/// @param len Number elements to move
 void tracers_obj::memorymove(size_t des, size_t src, size_t len)
 {
-    std::memmove(&X[des],&X[src],len);
-    std::memmove(&Y[des],&Y[src],len);
-    std::memmove(&Z[des],&Z[src],len);
+    std::memmove(&X[des],&X[src],sizeof(double)*len);
+    std::memmove(&Y[des],&Y[src],sizeof(double)*len);
+    std::memmove(&Z[des],&Z[src],sizeof(double)*len);
 
-    std::memmove(&Flag[des],&Flag[src],len);
+    std::memmove(&Flag[des],&Flag[src],sizeof(int)*len);
 }
 
 /// @brief Adds contens of object of type tracers_obj

@@ -54,8 +54,9 @@ public:
     void debug();
 
 private:
-    void fill(size_t,bool=true);
+    void fill(size_t,bool=true,int=-1);
     void fix_state();
+    void memorymove(size_t des, size_t src, size_t len);
     void add_data(size_t,double,double,double,double); // expand when adding additional data
 
 public:
