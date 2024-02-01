@@ -52,36 +52,33 @@ void driver::loop_nsewave(fdm* a)
 
         if(p->mpirank==0 && (p->count%p->P12==0))
         {
-        cout<<"------------------------------------"<<endl;
-        cout<<p->count<<endl;
-        
-        cout<<"simtime: "<<setprecision(3)<<p->simtime<<endl;
-		cout<<"timestep: "<<p->dt<<endl;
-        
-		if(p->B90>0 && p->B92<=11)
-		cout<<"t/T: "<<p->simtime/p->wT<<endl;
-        
-        if(p->B90>0 && p->B92>11)
-		cout<<"t/T: "<<p->simtime/p->wTp<<endl;
+            cout<<"------------------------------------"<<endl;
+            cout<<p->count<<endl;
+            
+            cout<<"simtime: "<<setprecision(3)<<p->simtime<<endl;
+            cout<<"timestep: "<<p->dt<<endl;
+            
+            if(p->B90>0 && p->B92<=11)
+                cout<<"t/T: "<<p->simtime/p->wT<<endl;
+            
+            if(p->B90>0 && p->B92>11)
+                cout<<"t/T: "<<p->simtime/p->wTp<<endl;
         }
         
         pflow->flowfile(p,a,pgc,pturb);
         
         pflow->wavegen_precalc(p,pgc);
 
-
-			fill_vel(p,a,pgc);
+        fill_vel(p,a,pgc);
         
         // Wave Models
         pnse->start(p,a,pgc,pmom,pdiff,pturb,pconvec,ppress,ppois,ppoissonsolv,psolv,pflow,pvrans,p6dof_df,pnet);
         poneph->update(p,a,pgc,pflow);
 			
-            pturb->start(a,p,pturbdisc,pturbdiff,psolv,pgc,pflow,pvrans);
-            pheat->start(a,p,pconvec,pdiff,psolv,pgc,pflow);
-            pconc->start(a,p,pconcdisc,pconcdiff,pturb,psolv,pgc,pflow);
-            pconc->start(a,p,pconcdisc,pconcdiff,pturb,psolv,pgc,pflow);
-            
-            
+        pturb->start(a,p,pturbdisc,pturbdiff,psolv,pgc,pflow,pvrans);
+        pheat->start(a,p,pconvec,pdiff,psolv,pgc,pflow);
+        pconc->start(a,p,pconcdisc,pconcdiff,pturb,psolv,pgc,pflow);
+        pconc->start(a,p,pconcdisc,pconcdiff,pturb,psolv,pgc,pflow);
         
 		// Sediment Computation
         psed->start_cfd(p,a,pgc,pflow,preto,psolv);
@@ -102,59 +99,58 @@ void driver::loop_nsewave(fdm* a)
         p->simtime+=p->dt;
         ptstep->start(a,p,pgc,pturb);
         
-        
         // printer
         pprint->start(a,p,pgc,pturb,pheat,pflow,psolv,pdata,pconc,pmp,psed);
 
         // Shell-Printout
         if(p->mpirank==0)
         {
-        endtime=pgc->timer();
-        
-		p->itertime=endtime-starttime;
-		p->totaltime+=p->itertime;
-		p->gctotaltime+=p->gctime;
-		p->Xtotaltime+=p->xtime;
-		p->meantime=(p->totaltime/double(p->count));
-		p->gcmeantime=(p->gctotaltime/double(p->count));
-		p->Xmeantime=(p->Xtotaltime/double(p->count));
-		
-		if(p->B90>0)
-        if(p->count%p->P12==0)
-        {
-		cout<<"wavegentime: "<<setprecision(3)<<p->wavetime<<endl;
-		
-		cout<<"reinitime: "<<setprecision(3)<<p->reinitime<<endl;
-        cout<<"gctime: "<<setprecision(3)<<p->gctime<<"\t average gctime: "<<setprecision(3)<<p->gcmeantime<<endl;
-        cout<<"Xtime: "<<setprecision(3)<<p->xtime<<"\t average Xtime: "<<setprecision(3)<<p->Xmeantime<<endl;		
-		cout<<"total time: "<<setprecision(6)<<p->totaltime<<"   average time: "<<setprecision(3)<<p->meantime<<endl;
-        cout<<"timer per step: "<<setprecision(3)<<p->itertime<<endl;
-        }
+            endtime=pgc->timer();
+            
+            p->itertime=endtime-starttime;
+            p->totaltime+=p->itertime;
+            p->gctotaltime+=p->gctime;
+            p->Xtotaltime+=p->xtime;
+            p->meantime=(p->totaltime/double(p->count));
+            p->gcmeantime=(p->gctotaltime/double(p->count));
+            p->Xmeantime=(p->Xtotaltime/double(p->count));
+            
+            if(p->B90>0)
+                if(p->count%p->P12==0)
+                {
+                    cout<<"wavegentime: "<<setprecision(3)<<p->wavetime<<endl;
+                    
+                    cout<<"reinitime: "<<setprecision(3)<<p->reinitime<<endl;
+                    cout<<"gctime: "<<setprecision(3)<<p->gctime<<"\t average gctime: "<<setprecision(3)<<p->gcmeantime<<endl;
+                    cout<<"Xtime: "<<setprecision(3)<<p->xtime<<"\t average Xtime: "<<setprecision(3)<<p->Xmeantime<<endl;		
+                    cout<<"total time: "<<setprecision(6)<<p->totaltime<<"   average time: "<<setprecision(3)<<p->meantime<<endl;
+                    cout<<"timer per step: "<<setprecision(3)<<p->itertime<<endl;
+                }
 
-        // Write log files
-        mainlog(p);
-        maxlog(p);
-        solverlog(p);
+            // Write log files
+            mainlog(p);
+            maxlog(p);
+            solverlog(p);
         }
-    p->gctime=0.0;
-    p->xtime=0.0;
-	p->reinitime=0.0;
-	p->wavetime=0.0;
-	p->field4time=0.0;
-	
-    stop(p,a,pgc);
+        p->gctime=0.0;
+        p->xtime=0.0;
+        p->reinitime=0.0;
+        p->wavetime=0.0;
+        p->field4time=0.0;
+        
+        stop(p,a,pgc);
 	}
 
 	if(p->mpirank==0)
 	{
-	cout<<endl<<"******************************"<<endl<<endl;
+        cout<<endl<<"******************************"<<endl<<endl;
 
-	cout<<"modelled time: "<<p->simtime<<endl;
-	cout<<endl;
+        cout<<"modelled time: "<<p->simtime<<endl;
+        cout<<endl;
 
-    mainlogout.close();
-    maxlogout.close();
-    solvlogout.close();
+        mainlogout.close();
+        maxlogout.close();
+        solvlogout.close();
 	}
 
     pgc->final();

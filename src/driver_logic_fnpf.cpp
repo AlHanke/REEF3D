@@ -41,7 +41,7 @@ Author: Hans Bihs
 void driver::logic_fnpf()
 {    
     if(p->mpirank==0)
-    cout<<"creating objects"<<endl;
+		cout<<"creating objects"<<endl;
     
     p->phimean = p->F60;
 
@@ -53,25 +53,25 @@ void driver::logic_fnpf()
     
 //IOFlow
 	if(p->B60==0 && p->B90==0 && p->B180==0 )
-	pflow = new ioflow_v(p,pgc,pBC);
+		pflow = new ioflow_v(p,pgc,pBC);
 
 	if(p->B90>=1)
-	pflow= new iowave(p,pgc,pBC);
+		pflow= new iowave(p,pgc,pBC);
     
 // Geodat
     if(p->G1==0)
-    preto = new reinitopo_void();
+		preto = new reinitopo_void();
 
     if(p->G1==1)
     {
-    if(p->G40==0)
-    preto = new reinitopo_void();
-    
-    if(p->G40==1)
-    preto = new reinitopo_AB2(p);
-    
-    if(p->G40==3)
-    preto = new reinitopo_RK3(p);
+		if(p->G40==0)
+			preto = new reinitopo_void();
+		
+		if(p->G40==1)
+			preto = new reinitopo_AB2(p);
+		
+		if(p->G40==3)
+			preto = new reinitopo_RK3(p);
     }
     
 //  Free Surface
@@ -80,24 +80,24 @@ void driver::logic_fnpf()
     
 //  Laplace Solver	
 	if(p->N10==0)
-	plapsolv = new solver_void(p,a,pgc);
+		plapsolv = new solver_void(p,a,pgc);
 
 	if(p->N10==1)
-	plapsolv = new bicgstab_ijk(p,a,pgc);
+		plapsolv = new bicgstab_ijk(p,a,pgc);
 	
 	#ifdef HYPRE_COMPILATION
-	if(p->N10>=10 && p->N10<20)
-    plapsolv = new hypre_struct(p,pgc,p->N10,p->N11);
+		if(p->N10>=10 && p->N10<20)
+			plapsolv = new hypre_struct(p,pgc,p->N10,p->N11);
     #endif
     
     #ifdef HYPRE_COMPILATION
-	if(p->N10>=20 && p->N10<30)
-	plapsolv = new hypre_aij(p,a,pgc);
+		if(p->N10>=20 && p->N10<30)
+			plapsolv = new hypre_aij(p,a,pgc);
 	#endif
     
     #ifdef HYPRE_COMPILATION
-	if(p->N10>=30 && p->N10<40)
-	plapsolv = new hypre_sstruct(p,a,pgc);
+		if(p->N10>=30 && p->N10<40)
+			plapsolv = new hypre_sstruct(p,a,pgc);
 	#endif
     
 //  Voids
@@ -118,12 +118,12 @@ void driver::logic_fnpf()
 //  Wave Models
     
     if(p->A310==2)
-    ppfsg = new fnpf_RK2(p,c,pgc);
+		ppfsg = new fnpf_RK2(p,c,pgc);
     
     if(p->A310==3)
-    ppfsg = new fnpf_RK3(p,c,pgc);
+		ppfsg = new fnpf_RK3(p,c,pgc);
         
     if(p->A310==4)
-    ppfsg = new fnpf_RK4(p,c,pgc);
+		ppfsg = new fnpf_RK4(p,c,pgc);
     
 }
