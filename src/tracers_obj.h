@@ -23,6 +23,8 @@ Author: Alexander Hanke
 #ifndef TRACERSOBJ_H_
 #define TRACERSOBJ_H_
 
+#include <stdio.h>
+
 /*
 Philosophy: performance, memory usage, ease of use
 
@@ -50,7 +52,6 @@ public:
     void add_obj(tracers_obj*);
     void fill(size_t,bool=true,int=-1);
     void print(size_t);
-    // bool operator == (tracers_obj*);
 
 protected:
     void fill_empty();
@@ -58,22 +59,36 @@ protected:
     void memorymove(size_t,size_t,size_t);
 
 public:
-    // state data
+    // --- state data ---
+
+    /// @brief Number of stored particles
     size_t size;
+    /// @brief Index for looping\n
+    /// ::size is not sufficent if data is sparse
     size_t loopindex;
+    /// @brief Currentl capacity to store particles
     size_t capacity;
+    /// @brief Number of different data values per particle
     const size_t entries;
 
-    // tracer data
+    // --- tracer data ---
+
+    /// @brief x-position array
     double* X;
+    /// @brief y-position array
     double* Y;
+    /// @brief z-position array
     double* Z;
 
+    /// @brief Flags of particles
     int* Flag;
 
 protected:
+    /// @brief Current index in ::Empty
     size_t empty_itr;
+    /// @brief All empty positions in main data
     size_t* Empty;
+    /// @brief Default factor for ::reserve
     const double scale_factor;
 };
 

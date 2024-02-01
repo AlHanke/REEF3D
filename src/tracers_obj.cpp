@@ -22,7 +22,6 @@ Author: Alexander Hanke
 
 #include "tracers_obj.h"
 
-#include <stdio.h>
 #include <math.h>
 #include <cstring>
 #include <iostream>
@@ -32,7 +31,11 @@ Dangers when using:
 size_t overflow when adding something to an object at capacity
 */
 
-
+/// @brief Tracer style particles\n
+/// Contains and manages massless particles used as tracers in the flow field
+/// @param capacity Desired initial capacity
+/// @param size Desired number of tracers at default position (0,0,0|-1)
+/// @param scale_factor Sets ::scale_factor for ::reserve
 tracers_obj::tracers_obj(size_t capacity, size_t size, double scale_factor): scale_factor(scale_factor), entries(3)
 {	
     if(capacity>0)
@@ -61,8 +64,7 @@ tracers_obj::~tracers_obj()
 {
 }
 
-
-
+/// @brief Contains debugging code
 void tracers_obj::debug()
 {
     std::cout<<"tracers_obj::debug"<<std::endl;
@@ -70,6 +72,8 @@ void tracers_obj::debug()
     
 }
 
+/// @brief Removes \p index
+/// @param index 
 void tracers_obj::erase(size_t index)
 {
     X[index]=NULL;
@@ -82,6 +86,7 @@ void tracers_obj::erase(size_t index)
     --size;
 }
 
+/// @brief Clears all data
 void tracers_obj::erase_all()
 {
     delete[] X;
@@ -99,10 +104,17 @@ void tracers_obj::erase_all()
 
     this->size=0;
     this->empty_itr=0;
+    this->Empty[empty_itr]=0;
     this->loopindex=0;
     fill_empty();
 }
 
+/// @brief Addes new particle with prescribed position and state
+/// @param x Position in x-dir
+/// @param y Position in y-dir
+/// @param z Position in z-dir
+/// @param flag State - stationary, moving, etc.
+/// @return Index of added particle
 size_t tracers_obj::add(double x, double y, double z, int flag)
 {
     size_t index=Empty[empty_itr];
@@ -118,6 +130,9 @@ size_t tracers_obj::add(double x, double y, double z, int flag)
     return index;
 }
 
+/// @brief Reserves memory for new capacity
+/// @param capacity_desired Requested capacity
+/// @return Actual new capacity
 size_t tracers_obj::reserve(size_t capacity_desired)
 {
     if(0==capacity_desired)
@@ -176,6 +191,8 @@ void tracers_obj::fill(size_t index, bool do_empty, int flag)
     fill_empty();
 }
 
+/// @brief Fills ::Empty with empty spaces\n
+/// Inserts in reverse order into ::Empty
 void tracers_obj::fill_empty()
 {
     for(size_t n=empty_itr;n<capacity-size;n++)
@@ -188,9 +205,11 @@ void tracers_obj::fill_empty()
         empty_itr=capacity-size-1;
 }
 
+/// @brief Checks ::size vs ::capacity vs ::empty_itr
+/// @return Safe state
 bool tracers_obj::check_state(bool first)
 {
-    if(empty_itr>capacity||-size!=empty_itr||size>capacity)
+    if(empty_itr>capacity||capacity-size!=empty_itr||size>capacity)
     {
         if(first)
         {
@@ -235,6 +254,7 @@ void tracers_obj::fix_state()
     }
 }
 
+/// @brief Removes intermediate empties
 void tracers_obj::optimize()
 {
     // Could be optimized to look ahead if a large section is empty to only do one move operation
@@ -257,6 +277,8 @@ void tracers_obj::memorymove(size_t des, size_t src, size_t len)
     std::memmove(&Flag[des],&Flag[src],len);
 }
 
+/// @brief Adds contens of object of type tracers_obj
+/// @param obj Inputed data
 void tracers_obj::add_obj(tracers_obj* obj)
 {
     if(obj->size>0)
@@ -274,27 +296,3 @@ void tracers_obj::print(size_t index)
 {
     std::cout<<"Tracer_obj["<<index<<"]=("<<X[index]<<","<<Y[index]<<","<<Z[index]<<")"<<std::endl;
 }
-
-// bool tracers_obj::operator==(tracers_obj obj)
-// {
-//     if(obj.size!=size)
-//         return false;
-//     if(obj.capacity!=capacity)
-//         return false;
-//     if(obj.loopindex!=loopindex)
-//         return false;
-//     for(size_t n=0;n<loopindex;n++)
-//     {
-//         if(obj.X[n]!=X[n])
-//             return false;
-//         if(obj.Y[n]!=Y[n])
-//             return false;
-//         if(obj.Z[n]!=Z[n])
-//             return false;
-
-//         if(obj.Flag[n]!=Flag[n])
-//             return false;
-//     }
-
-//     return true;
-// }
