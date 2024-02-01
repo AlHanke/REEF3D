@@ -40,12 +40,12 @@ class lexer;
 class particles_obj : public tracers_obj
 {
 public:
-    particles_obj(size_t, double=0.001, double=2650.0, double=0.4, size_t=0, double=1.25);
+    particles_obj(size_t, double=0.001, double=2650.0, bool=false, size_t=0, double=1.25);
     virtual ~particles_obj();
 
     void erase(size_t);
     size_t reserve(size_t=0);
-    size_t add(double,double,double,int); // expand when adding additional data
+    size_t add(double,double,double,int,double,double,double,double); // expand when adding additional data
     void add_obj(particles_obj*);
     void add_obj(tracers_obj*);
     bool check_state(bool=true);
@@ -56,7 +56,7 @@ private:
     void fill(size_t,bool=true);
     void fix_state();
     void clear();
-    void add_data(); // expand when adding additional data
+    void add_data(size_t,double=0,double=0,double=0,double=1); // expand when adding additional data
 
 public:
     // state data
@@ -70,10 +70,12 @@ public:
     //general
     double d50;
     const double density;
-    const double porosity;
 
     //individual
-
+    double* U;
+    double* V;
+    double* W;
+    double* PackingFactor;
 
 private:
     const double scale_factor;

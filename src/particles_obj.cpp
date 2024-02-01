@@ -30,10 +30,10 @@ size_t overflow when adding something to an object at capacity
 */
 
 
-particles_obj::particles_obj(size_t capacity, double d50, double density, double porosity, size_t size, double scale_factor):
-                d50(d50), density(density), porosity(porosity), scale_factor(scale_factor), tracers_obj(capacity,size,scale_factor),
+particles_obj::particles_obj(size_t capacity, double d50, double density, bool individuals, size_t size, double scale_factor):
+                d50(d50), density(density), scale_factor(scale_factor), tracers_obj(capacity,size,scale_factor),
                 flag_inactive(0), flag_bed(1), flag_bed_load(2), flag_suspended_load(3),
-                entries(tracers_obj::entries+0) // update when adding more data
+                entries(tracers_obj::entries+individuals?4:0) // update when adding more data
 {	
     if(capacity>0)
     {
@@ -41,7 +41,13 @@ particles_obj::particles_obj(size_t capacity, double d50, double density, double
             capacity=size;
 
         // Add new individual data here:
-        
+        if(individuals)
+        {
+            U = new double[capacity];
+            V = new double[capacity];
+            W = new double[capacity];
+            PackingFactor = new double[capacity];
+        }
     }
 }
 
@@ -64,11 +70,11 @@ void particles_obj::erase(size_t index)
     tracers_obj::erase(index);
 }
 
-size_t particles_obj::add(double x, double y, double z, int flag)
+size_t particles_obj::add(double x, double y, double z, int flag, double u, double v, double w, double packingFactor)
 {
     size_t index=tracers_obj::add(x,y,z,flag);
     if(entries>tracers_obj::entries)
-        add_data();
+        add_data(index,u,v,w,packingFactor);
     return index;
 }
 
@@ -181,7 +187,10 @@ void particles_obj::add_obj(tracers_obj* obj)
     // std::cout<<"particles_obj::add_obj"<<std::endl;
     tracers_obj::add_obj(obj);
 }
-void particles_obj::add_data()
+void particles_obj::add_data(size_t index, double u, double v, double w, double packingFactor)
 {
-
+    U[index]=u;
+    V[index]=v;
+    W[index]=w;
+    PackingFactor[index]=packingFactor;
 }
