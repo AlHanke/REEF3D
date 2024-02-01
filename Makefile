@@ -32,7 +32,7 @@ build:
 	@mkdir -p $(APP_DIR)
 	@mkdir -p $(OBJ_DIR)
 
-debug: CXXFLAGS = -O0 -w -g -g3
+debug: CXXFLAGS = -O0 -Wall -g -g3
 debug: all
 
 clean:
