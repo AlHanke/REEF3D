@@ -1,24 +1,28 @@
-src/Makefile*
+# Codelite
 **/.codelite
 .codelite/.tern-port
 .codelite/REEF3D.tags
 .codelite/refactoring.db
+*.workspace.session
+*.session
+*.tags
+tags
+# Output folders
 Release
 Debug
 bin
+doc
 obj
-*.session
+src/Makefile*
+# Temporary files
 *.db
-*.tags
 *.d
 *.o
 *.pyc
 *.json
+*.tmp
+# Other
 src/*.txt
-*.workspace.session
 *.mk
 *.batch_build
 .DS_Store
-tags
-doxydoc*
-*.tmp
