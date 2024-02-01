@@ -26,12 +26,12 @@ class ghostcell;
 
 #include<fstream>
 
-#ifndef DATA_H_
-#define DATA_H_
+#ifndef DATA_B_H_
+#define DATA_B_H_
 
 using namespace std;
 
-class data
+class data_b
 {
 
 public:

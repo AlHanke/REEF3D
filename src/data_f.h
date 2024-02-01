@@ -20,7 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"data.h"
+#include"data_b.h"
 #include"increment.h"
 #include"field4.h"
 
@@ -33,7 +33,7 @@ using namespace std;
 #ifndef DATA_F_H_
 #define DATA_F_H_
 
-class data_f : public data, public increment
+class data_f : public data_b, public increment
 {
 public:
 	data_f(lexer*, fdm*, ghostcell*);

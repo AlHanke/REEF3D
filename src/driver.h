@@ -53,7 +53,7 @@ class sixdof;
 class fsi;
 class vrans;
 class net;
-class data;
+class data_b;
 class concentration;
 class ptf;
 class fnpf;
@@ -192,7 +192,7 @@ public:
 	fsi* pfsi;
 	vrans* pvrans;
     vector<net*> pnet;
-	data *pdata;
+	data_b *pdata;
 	concentration *pconc;
     fnpf *ppfsg;
     ptf *pptf;
