@@ -36,7 +36,7 @@ Author: Hans Bihs
 #define IREVLOOP	for(i=p->knox-1; i>=0; --i)
 #define JREVLOOP	for(j=p->knoy-1; j>=0; --j)
 #define KREVLOOP 	for(k=p->knoz-1; k>=0; --k)
-#define PCHECK  if(p->flag4[IJK]>0)
+// #define PCHECK  if(p->flag4[IJK]>0)
 #define LOOP ILOOP JLOOP KLOOP PCHECK
 
 #define FSCHECK  if(p->flag7[FIJK]<=0)
