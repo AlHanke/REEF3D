@@ -30,7 +30,7 @@ void sixdof_sflow::ray_cast_x(lexer *p, ghostcell *pgc, int ts, int te)
 	double ys,ye,zs,ze;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Rx;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
@@ -40,10 +40,8 @@ void sixdof_sflow::ray_cast_x(lexer *p, ghostcell *pgc, int ts, int te)
 	double PCx,PCy,PCz;
 	double Mx,My,Mz;
 	int js,je,ks,ke;
-	int ir;
 	double u,v,w;
-	double denom;	
-	int insidecheck;
+	double denom;
 	double psi = 1.0e-8*p->DXM;
 
 	for(int n=ts; n<te; ++n)
@@ -138,7 +136,7 @@ void sixdof_sflow::ray_cast_x(lexer *p, ghostcell *pgc, int ts, int te)
 			if(u==0.0 && v==0.0 && w==0.0)
 				check = 0;
 		
-			if((u>=0.0 && v>=0.0 && w>=0.0) || (u<0.0 && v<0.0 && w<0.0) && check==1)
+			if((u>=0.0 && v>=0.0 && w>=0.0) || ((u<0.0 && v<0.0 && w<0.0) && check==1))
 			{
 				denom = 1.0/(u+v+w);
 				u *= denom;

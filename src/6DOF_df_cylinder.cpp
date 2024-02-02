@@ -30,10 +30,10 @@ void sixdof_df_object::cylinder_x(lexer *p, fdm *a, ghostcell *pgc, int id)
 	double U,ds,phi;
 	double xm,ym,zm,x1,x2,r;
 	int snum;
-	int vertice_mem, center1_num,center2_num;
-	double Ax,Ay,Az;
-	double Bx,By,Bz;
-	double Nx,Ny,Nz,norm;
+	// int vertice_mem, center1_num,center2_num;
+	// double Ax,Ay,Az;
+	// double Bx,By,Bz;
+	// double Nx,Ny,Nz,norm;
 	
 
 	xm=p->X131_xc;
@@ -133,10 +133,10 @@ void sixdof_df_object::cylinder_y(lexer *p, fdm *a, ghostcell *pgc, int id)
 	double U,ds,phi;
 	double xm,ym,zm,y1,y2,r;
 	int snum;
-	int vertice_mem, center1_num,center2_num;
-	double Ax,Ay,Az;
-	double Bx,By,Bz;
-	double Nx,Ny,Nz,norm;
+	// int vertice_mem, center1_num,center2_num;
+	// double Ax,Ay,Az;
+	// double Bx,By,Bz;
+	// double Nx,Ny,Nz,norm;
 	
 	
 
@@ -236,10 +236,10 @@ void sixdof_df_object::cylinder_z(lexer *p, fdm *a, ghostcell *pgc, int id)
 	double U,ds,phi;
 	double xm,ym,zm,z1,z2,r;
 	int snum;
-	int vertice_mem, center1_num,center2_num;
-	double Ax,Ay,Az;
-	double Bx,By,Bz;
-	double Nx,Ny,Nz,norm;
+	// int vertice_mem, center1_num,center2_num;
+	// double Ax,Ay,Az;
+	// double Bx,By,Bz;
+	// double Nx,Ny,Nz,norm;
 	
 
 	xm=p->X133_xc;

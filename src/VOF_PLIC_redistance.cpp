@@ -126,7 +126,7 @@ void VOF_PLIC::calcSegmentPoint
 	
 	double xoff = max(fabs(xp - xi) - 0.5*p->DXM, 0.0);
 	double yoff = max(fabs(yp - yi) - 0.5*p->DXM, 0.0);
-	double zoff = max(fabs(zp - zi) - 0.5*p->DXM, 0.0);
+	// double zoff = max(fabs(zp - zi) - 0.5*p->DXM, 0.0);
                                     
 	double xfc = xi + SIGN(xp - xi)*0.5*p->DXM;
 	double yfc = yi + SIGN(yp - yi)*0.5*p->DXM;

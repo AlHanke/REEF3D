@@ -33,21 +33,21 @@ void driver::driver_ini_nsewave()
     // depth
     if(p->F60>-1.0e20)
     {
-    p->phimean=p->F60;
-    p->phiout=p->F60;
-    p->wd=p->F60;
+        p->phimean=p->F60;
+        p->phiout=p->F60;
+        p->wd=p->F60;
     }
 
     // eta plain
     SLICELOOP4
-    a->eta(i,j)=0.0;
+        a->eta(i,j)=0.0;
 
     // eta slope
     if(p->A251==1)
-    SLICELOOP4
-    {
-    a->eta(i,j)= -p->A251_val*(p->XP[IP]-p->global_xmin);
-    }
+        SLICELOOP4
+        {
+            a->eta(i,j)= -p->A251_val*(p->XP[IP]-p->global_xmin);
+        }
 
     // eta box area
     for(int qn=0;qn<p->F72;++qn)
@@ -59,27 +59,27 @@ void driver::driver_ini_nsewave()
         jend = p->posc_j(p->F72_ye[qn]);
 
         SLICELOOP4
-        if(i>=istart && i<iend && j>=jstart && j<jend)
-        a->eta(i,j) = p->F72_h[qn]-p->wd;
+            if(i>=istart && i<iend && j>=jstart && j<jend)
+                a->eta(i,j) = p->F72_h[qn]-p->wd;
 	}
 
     
     int gcval_phi;
     
     if(p->F50==1)
-	gcval_phi=51;
+	    gcval_phi=51;
 
 	if(p->F50==2)
-	gcval_phi=52;
+	    gcval_phi=52;
 
 	if(p->F50==3)
-	gcval_phi=53;
+	    gcval_phi=53;
 
 	if(p->F50==4)
-	gcval_phi=54;
+	    gcval_phi=54;
     
     LOOP
-    a->phi(i,j,k) = a->eta(i,j) + p->phimean - p->pos_z();
+        a->phi(i,j,k) = a->eta(i,j) + p->phimean - p->pos_z();
     
     pgc->start4(p,a->phi,gcval_phi);
 

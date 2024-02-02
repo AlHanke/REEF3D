@@ -29,13 +29,13 @@ class ioflow;
 class poisson;
 class solver;
 
-#ifndef NHFLOW_POISSO: virtual public increment
+#ifndef NHFLOW_POISSON_H_
 #define NHFLOW_POISSON_H_
 
 using namespace std;
 
 
-class nhflow_poisson : public increment
+class nhflow_poisson : virtual public increment
 {
 
 public:

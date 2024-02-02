@@ -148,7 +148,7 @@ void sixdof_df_object::ray_cast_io_ycorr(lexer *p, fdm *a, ghostcell *pgc, int t
 		if(u==0.0 && v==0.0 && w==0.0)
 		check = 0;
 		
-			if((u>=0.0 && v>=0.0 && w>=0.0) || (u<0.0 && v<0.0 && w<0.0) && check==1)
+			if((u>=0.0 && v>=0.0 && w>=0.0) || ((u<0.0 && v<0.0 && w<0.0) && check==1))
 			{
 			denom = 1.0/(u+v+w);
 			u *= denom;

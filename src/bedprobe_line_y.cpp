@@ -205,17 +205,17 @@ void bedprobe_line_y::start(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
     if(p->mpirank==0)
     {
 		for(n=0;n<sumknox;++n)
-		rowflag[n]=0;
+		    rowflag[n]=0;
 		
 		for(n=0;n<sumknox;++n)
         {
 			check=0;
 		    for(q=0;q<p->P124;++q)
-			if(flag_all[q][n]>0 && yloc_all[q][n]<1.0e20)
-			check=1;
+                if(flag_all[q][n]>0 && yloc_all[q][n]<1.0e20)
+                    check=1;
 			
 			if(check==1)
-			rowflag[n]=1;
+			    rowflag[n]=1;
 		}
 
         for(n=0;n<sumknox;++n)
@@ -225,25 +225,21 @@ void bedprobe_line_y::start(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 			{
 				if(flag_all[q][n]>0 && yloc_all[q][n]<1.0e20)
 				{
-				wsfout<<setprecision(5)<<yloc_all[q][n]<<" \t ";
-				wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
-				
-				
-					
-				check=1;
+                    wsfout<<setprecision(5)<<yloc_all[q][n]<<" \t ";
+                    wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
+                     
+                    check=1;
 				}
 				
 				if((flag_all[q][n]<0 || yloc_all[q][n]>=1.0e20) && rowflag[n]==1)
 				{
 					wsfout<<setprecision(5)<<" \t ";
 					wsfout<<setprecision(5)<<" \t ";
-					
 				}
 			}
-
             
 			if(check==1)
-            wsfout<<endl;
+                wsfout<<endl;
         }
 
     wsfout.close();

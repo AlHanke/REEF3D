@@ -27,10 +27,10 @@ Author: Hans Bihs
 
 void sixdof_sflow::ray_cast_y(lexer *p, ghostcell *pgc, int ts, int te)
 {
-	double ys,ye,zs,ze;
+	double zs,ze;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Ry;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
@@ -39,8 +39,7 @@ void sixdof_sflow::ray_cast_y(lexer *p, ghostcell *pgc, int ts, int te)
 	double PBx,PBy,PBz;
 	double PCx,PCy,PCz;
 	double Mx,My,Mz;
-	int is,ie,js,je,ks,ke;
-	int ir,insidecheck;
+	int is,ie,ks,ke;
 	double u,v,w;
 	double denom;
 	double psi = 1.0e-8*p->DXM;	

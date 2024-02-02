@@ -1,4 +1,5 @@
-/*--------------------------------------------------------------------
+
+/*--------------------------------------------------------------------
 REEF3D
 Copyright 2018-2021 Tobias Martin
 
@@ -57,8 +58,8 @@ void beam::resetSolver()
 
 
 	// n, the dimension of the system
-	if (n_dim == UINT_MAX) {
-		cout << "System too big, max. n_dim = " << UINT_MAX - 1 << endl;
+	if (n_dim == INT_MAX) {
+		cout << "System too big, max. n_dim = " << INT_MAX - 1 << endl;
 		throw -1;
 	}
 	
