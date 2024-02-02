@@ -38,8 +38,8 @@ using namespace std;
 
 #ifndef HYPRE_SSTRUCT_H_
 #define HYPRE_SSTRUCT_H_
-, virtual public increment
-class hypre_sstruct : public solver, public increment
+
+class hypre_sstruct : public solver, virtual public increment
 {
 public:
 
