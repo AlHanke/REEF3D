@@ -207,11 +207,11 @@ void fnpf_print_wsfline_y::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *
         {
 			check=0;
 		    for(q=0;q<p->P56;++q)
-			if(flag_all[q][n]>0 && yloc_all[q][n]<1.0e20)
-			check=1;
+                if(flag_all[q][n]>0 && yloc_all[q][n]<1.0e20)
+                    check=1;
 			
 			if(check==1)
-			rowflag[n]=1;
+			    rowflag[n]=1;
 		}
         
 
@@ -222,14 +222,14 @@ void fnpf_print_wsfline_y::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *
 			{
 				if(flag_all[q][n]>0 && yloc_all[q][n]<1.0e20)
 				{
-				wsfout<<setprecision(5)<<yloc_all[q][n]<<" \t ";
-				wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
+                    wsfout<<setprecision(5)<<yloc_all[q][n]<<" \t ";
+                    wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
 				
 				
 					if(p->P53==1)
-					wsfout<<pflow->wave_fsf(p,pgc,yloc_all[q][n])<<" \t  ";
+					    wsfout<<pflow->wave_fsf(p,pgc,yloc_all[q][n])<<" \t  ";
 					
-				check=1;
+				    check=1;
 				}
 				
 				if((flag_all[q][n]<0 || yloc_all[q][n]>=1.0e20) && rowflag[n]==1)
@@ -242,7 +242,7 @@ void fnpf_print_wsfline_y::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *
 
             
 			if(check==1)
-            wsfout<<endl;
+                wsfout<<endl;
         }
 
     wsfout.close();

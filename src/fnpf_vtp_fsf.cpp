@@ -225,27 +225,27 @@ void fnpf_vtp_fsf::print2D(lexer *p, fdm_fnpf *c, ghostcell* pgc)
 	result.write((char*)&iin, sizeof (int));
     TPSLICELOOP
 	{
-    k = p->knoz-1;
-	
-	ffn=float(c->U[FIJKp1]);
-    
-    if(k==-1 && j==-1)
-	ffn=float(c->U[FIJp1Kp1]);
-	result.write((char*)&ffn, sizeof (float));
+		k = p->knoz-1;
+		
+		ffn=float(c->U[FIJKp1]);
+		
+		if(k==-1 && j==-1)
+			ffn=float(c->U[FIJp1Kp1]);
+		result.write((char*)&ffn, sizeof (float));
 
 
-	ffn=float(c->V[FIJKp1]);
-    
-    if(k==-1 && j==-1)
-	ffn=float(c->V[FIJp1Kp1]);
-	result.write((char*)&ffn, sizeof (float));
+		ffn=float(c->V[FIJKp1]);
+		
+		if(k==-1 && j==-1)
+			ffn=float(c->V[FIJp1Kp1]);
+		result.write((char*)&ffn, sizeof (float));
 
 
-	ffn=float(c->W[FIJKp1]);
-    
-    if(k==-1 && j==-1)
-	ffn=float(c->W[FIJp1Kp1]);
-	result.write((char*)&ffn, sizeof (float));
+		ffn=float(c->W[FIJKp1]);
+		
+		if(k==-1 && j==-1)
+			ffn=float(c->W[FIJp1Kp1]);
+		result.write((char*)&ffn, sizeof (float));
 	}
     
     //  Fifsf

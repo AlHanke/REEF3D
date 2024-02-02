@@ -37,7 +37,7 @@ double force_ale::dndt(lexer *p, fdm_fnpf *c, ghostcell *pgc) // to calculate dn
 double force_ale::dudsig(lexer *p, fdm_fnpf *c, ghostcell *pgc) 	// getting dudsig for ax2 and 3
 {
     double dudsig_ = 0;
-	double dudsig2_ = 0;
+	// double dudsig2_ = 0;
     
     if(k<p->knoz)
     {

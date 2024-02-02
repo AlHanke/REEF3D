@@ -80,7 +80,7 @@ void fnpf_print_wsfline::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pf
 {
 	
     char name[250];
-    double zval=0.0;
+    // double zval=0.0;
     int num,check;
 	
     num = p->count;
@@ -205,8 +205,8 @@ void fnpf_print_wsfline::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pf
         {
 			check=0;
 		    for(q=0;q<p->P52;++q)
-			if(flag_all[q][n]>0 && xloc_all[q][n]<1.0e20)
-			check=1;
+			    if(flag_all[q][n]>0 && xloc_all[q][n]<1.0e20)
+			        check=1;
 			
 			if(check==1)
 			rowflag[n]=1;

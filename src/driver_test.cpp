@@ -192,10 +192,10 @@ void driver::vec_test(lexer *p, fdm *a, ghostcell *pgc, field &f)
 
 void driver::func_test(lexer *p, fdm *a, ghostcell *pgc, field &f)
 {	
-	int qn,n;
+	int qn;
 	double t1,t2;
 	
-	double val;
+	// double val;
 	nom=9.0;
 	
 
