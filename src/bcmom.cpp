@@ -92,8 +92,8 @@ void bcmom::wall_law_u(fdm* a,lexer* p, turbulence *pturb,field& b,int ii,int jj
     if(cs==2 || cs==3)
     	dist=0.5*p->DYN[JP];
     
-    if(cs==5 || cs==6)
-    	dist=0.5*p->DZN[KP];
+    if(cs==5 || cs==6){
+    	dist=0.5*p->DZN[KP];}
 	
 	
 	ks=ks_val(p,a,ii,jj,kk,cs,bc);
