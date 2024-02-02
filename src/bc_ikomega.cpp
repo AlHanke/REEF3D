@@ -66,6 +66,7 @@ void bc_ikomega::bckomega_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
 void bc_ikomega::wall_law_kin(fdm* a,lexer* p,field& kin,field& eps,int ii,int jj,int kk,int cs,int bc, int id, double dist)
 {
     double uvel,vvel,wvel;
+    double zval;
     
 	i=ii;
 	j=jj;
@@ -130,28 +131,27 @@ void bc_ikomega::wall_law_omega(fdm* a,lexer* p,field& kin,field& eps,int ii,int
 void bc_ikomega::wall_law_kin_df(fdm* a,lexer* p,field& kin,field& eps)
 {
     double uvel,vvel,wvel;
-    double zval;
     double dirac, psi;
     
     n=0;
     LOOP
     {
-    if (p->j_dir==0)
-    psi = 1.1*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]); 
-    
-    if(p->j_dir==1)
-    psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-    
-    if(p->j_dir==0)
-	dist = p->X41*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-    
-    if(p->j_dir==1)
-    dist = p->X41*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
-    
-    //dist = MAX(0.1*dist, fabs(MIN(a->solid(i,j,k),a->topo(i,j,k))));
-    
-	//ks=ks_val(p,a,i,j,k,cs,bc);
-    ks=p->B50;
+        if (p->j_dir==0)
+        psi = 1.1*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]); 
+        
+        if(p->j_dir==1)
+        psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
+        
+        if(p->j_dir==0)
+        dist = p->X41*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
+        
+        if(p->j_dir==1)
+        dist = p->X41*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
+        
+        //dist = MAX(0.1*dist, fabs(MIN(a->solid(i,j,k),a->topo(i,j,k))));
+        
+        //ks=ks_val(p,a,i,j,k,cs,bc);
+        ks=p->B50;
 
         uvel=0.5*(a->u(i,j,k)+a->u(i-1,j,k));
         vvel=0.5*(a->v(i,j,k)+a->v(i,j-1,k));
@@ -167,29 +167,29 @@ void bc_ikomega::wall_law_kin_df(fdm* a,lexer* p,field& kin,field& eps)
 
         ks=p->S21*p->S20;
         }*/
-        
+            
         if((a->topo(i-1,j,k)<0.0 || a->topo(i+1,j,k-1)<0.0 || a->topo(i,j-1,k)<0.0 || a->topo(i,j+1,k)<0.0 || a->topo(i,j,k-1)<0.0) && p->S10>0 && p->S16==4)
-        ks=p->S21*p->S20;
-        
+            ks=p->S21*p->S20;
+            
         u_abs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
 
-		if(30.0*dist<ks)
-		dist=ks/30.0;
-		
+        if(30.0*dist<ks)
+            dist=ks/30.0;
+            
         uplus = (1.0/kappa)*MAX(0.01,log(30.0*(dist/ks)));
 
-	tau=(u_abs*u_abs)/pow((uplus>0.0?uplus:(1.0e20)),2.0);
-    
-    dirac = 0.0;
-    if(fabs(MIN(a->solid(i,j,k),a->topo(i,j,k)))<psi)
-    dirac = (0.5/psi)*(1.0 + cos((PI*(MIN(a->solid(i,j,k),a->topo(i,j,k))))/psi));
+        tau=(u_abs*u_abs)/pow((uplus>0.0?uplus:(1.0e20)),2.0);
         
-    a->M.p[n]      += dirac*(pow(p->cmu,0.75)*pow(fabs(kin(i,j,k)),0.5)*uplus)/dist;
-    a->rhsvec.V[n] += dirac*(tau*u_abs)/dist;
-    a->test(i,j,k) = dirac;
-    
-    //kin(i,j,k) = dirac*tau*tau/pow(p->cmu,2.0);
-    ++n;
+        dirac = 0.0;
+        if(fabs(MIN(a->solid(i,j,k),a->topo(i,j,k)))<psi)
+            dirac = (0.5/psi)*(1.0 + cos((PI*(MIN(a->solid(i,j,k),a->topo(i,j,k))))/psi));
+            
+        a->M.p[n]      += dirac*(pow(p->cmu,0.75)*pow(fabs(kin(i,j,k)),0.5)*uplus)/dist;
+        a->rhsvec.V[n] += dirac*(tau*u_abs)/dist;
+        a->test(i,j,k) = dirac;
+        
+        //kin(i,j,k) = dirac*tau*tau/pow(p->cmu,2.0);
+        ++n;
     }
 }
 
