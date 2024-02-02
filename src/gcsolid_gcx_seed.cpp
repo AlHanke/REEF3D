@@ -102,8 +102,8 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
 	//cout<<p->mpirank<<" GXCFB_COUNT_"<<q+1<<"  "<<count[q]<<endl;
     
  //--   
-    for(q=0;q<6;++q)
-	count[q]=0;
+  for(q=0;q<6;++q)
+	  count[q]=0;
 	
 	for(n=0;n<p->gcpara1_count;++n)
   {

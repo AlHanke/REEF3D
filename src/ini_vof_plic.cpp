@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"initialize.h"
+
+#include"initialize.h"
 #include"fdm.h"
 #include"lexer.h"
 #include"ghostcell.h"
@@ -28,8 +29,8 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
 {
 
     double dx=p->DXM;
-    double r;
-    double vofdiff, xdiff;
+    // double r;
+    // double vofdiff, xdiff;
     
     p->phimean=p->F56;
 

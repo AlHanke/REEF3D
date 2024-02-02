@@ -33,8 +33,8 @@ void mgc4::make_ggc(lexer* p)
 
 void mgc4::fill_ggc(lexer* p)
 {
-	int q,qq,n,nn,a;
-	int check;
+	int q,qq,n,a;
+	// int check;
 	
 	p->Iarray(cart4::ggcmem,kmax*jmax*imax);
 

@@ -36,8 +36,8 @@ void ggccart::startggc(lexer* p)
 
 void ggccart::fill_ggc(lexer* p, int gcb_count, int **gcb, int ggccount, int **ggc)
 {
-	int q,qq,n,nn,a;
-	int check;
+	int q,qq,n,a;
+	// int check;
 	
 	p->Iarray(ggcmem,kmax*jmax*imax);
 

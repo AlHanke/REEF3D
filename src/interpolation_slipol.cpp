@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"interpolation.h"
+
+#include"interpolation.h"
 #include"field.h"
 #include"lexer.h"
 #include"fdm.h"
@@ -107,7 +108,7 @@ double interpolation::sl_ipol4(slice &f)
 
 double interpolation::sl_ipol1eta(int *wet,slice &f, slice &bed)
 {
-    double bedvalue;
+    // double bedvalue;
     double wd_criterion=0.00005;
     int jj;
     
@@ -134,7 +135,7 @@ double interpolation::sl_ipol1eta(int *wet,slice &f, slice &bed)
 
     v2=bed(i+1,j);
 
-    bedvalue = 0.5*(v1+v2);
+    // bedvalue = 0.5*(v1+v2);
     
     j=jj;
     }
@@ -183,7 +184,7 @@ double interpolation::sl_ipol1eta(int *wet,slice &f, slice &bed)
     v4=bed(i+1,j+1);
     pip=0;
 
-    bedvalue = 0.25*(v1+v2+v3+v4);
+    // bedvalue = 0.25*(v1+v2+v3+v4);
     }
     
     
@@ -197,7 +198,7 @@ double interpolation::sl_ipol1eta(int *wet,slice &f, slice &bed)
 
 double interpolation::sl_ipol2eta(int *wet,slice &f, slice &bed)
 {
-    double bedvalue;
+    // double bedvalue;
     double wd_criterion=0.00005;
     int jj;
     
@@ -232,7 +233,7 @@ double interpolation::sl_ipol2eta(int *wet,slice &f, slice &bed)
 
     pip=0;
 
-    bedvalue = 0.5*(v1+v2);
+    // bedvalue = 0.5*(v1+v2);
     
     j=jj;
     }
@@ -280,7 +281,7 @@ double interpolation::sl_ipol2eta(int *wet,slice &f, slice &bed)
     v4=bed(i+1,j+1);
     pip=0;
 
-    bedvalue = 0.25*(v1+v2+v3+v4);
+    // bedvalue = 0.25*(v1+v2+v3+v4);
     }
     
     return value;

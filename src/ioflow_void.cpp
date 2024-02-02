@@ -586,9 +586,10 @@ void ioflow_v::turbulence_io(lexer *p, fdm* a, ghostcell* pgc)
 
 void ioflow_v::u_relax(lexer *p, fdm *a, ghostcell *pgc, field &uvel)
 {
-	double epsi,H,fbval;
+	double epsi,H;
     double dist;
-    double cosb,sinb;
+    double cosb;
+    // double fbval,sinb;
 
     for(int qn=0; qn<p->W41; ++qn)
     {
@@ -618,9 +619,10 @@ void ioflow_v::u_relax(lexer *p, fdm *a, ghostcell *pgc, field &uvel)
 
 void ioflow_v::v_relax(lexer *p, fdm *a, ghostcell *pgc, field &vvel)
 {
-	double epsi,H,fbval;
+	double epsi,H;
     double dist;
-    double cosb,sinb;
+    double sinb;
+    // double fbval,cosb;
     
     for(int qn=0; qn<p->W41; ++qn)
     {
@@ -833,16 +835,16 @@ void ioflow_v::jsource2D(lexer *p, fdm2D* b, ghostcell* pgc)
 void ioflow_v::ini(lexer *p, fdm* a, ghostcell* pgc)
 {
     if(p->B269==0)
-	pvrans = new vrans_v(p,pgc);
+	    pvrans = new vrans_v(p,pgc);
 	
 	if(p->B269==1 || p->S10==2)
-	pvrans = new vrans_f(p,pgc);
+	    pvrans = new vrans_f(p,pgc);
     
     if(p->W90==0)
-    prheo = new rheology_v(p,a);
+        prheo = new rheology_v(p,a);
     
     if(p->W90==1)
-    prheo = new rheology_f(p,a);
+        prheo = new rheology_f(p,a);
 }
 
 void ioflow_v::full_initialize2D(lexer *p, fdm2D *b, ghostcell *pgc)

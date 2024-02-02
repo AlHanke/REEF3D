@@ -225,14 +225,14 @@ void ghostcell::gcini(lexer* p)
     
     if(p->B75==3)
     {
-    gclabel_u_out=0;
-    gclabel_v_out=6;
-    gclabel_w_out=6;
+        gclabel_u_out=0;
+        gclabel_v_out=6;
+        gclabel_w_out=6;
     }
 	
 	gclabel_outflow=1;
 	if(p->B60==3||p->B60==4)
-	gclabel_outflow=0;
+	    gclabel_outflow=0;
     
     gclabel_u_in=1;
     gclabel_v_in=1;
@@ -241,18 +241,18 @@ void ghostcell::gcini(lexer* p)
     
     if(p->I230>0 || p->B98>=3 || p->B60>0)
     {
-    gclabel_u_in=0;
-    gclabel_v_in=0;
-    gclabel_w_in=0;
-    gclabel_lsm_in=0;
+        gclabel_u_in=0;
+        gclabel_v_in=0;
+        gclabel_w_in=0;
+        gclabel_lsm_in=0;
     }
     
     if(p->B98>=3)
     {
-    gclabel_u_in=0;
-    gclabel_v_in=0;
-    gclabel_w_in=0;
-    gclabel_lsm_in=0;
+        gclabel_u_in=0;
+        gclabel_v_in=0;
+        gclabel_w_in=0;
+        gclabel_lsm_in=0;
     }
     
     // pressure bc labels
@@ -260,30 +260,30 @@ void ghostcell::gcini(lexer* p)
     gclabel_press_in=gclabel_press;
     
     if(p->B76==2 || p->B76==3)
-	gclabel_press_in=0;
+	    gclabel_press_in=0;
     
     // pressure inflow
     pressin_lable=0;
 	if(p->B76!=1)
-	pressin_lable=1;
+	    pressin_lable=1;
     
     // pressure outflow
     pressout_lable=0;
 	if(p->B77==1 || p->B77==2)
-	pressout_lable=1;
+	    pressout_lable=1;
     
     
     // sflow slip/no-slip
     if(p->A217==1 && p->A10==2)
     {
-    gclabel_u=4;
-    gclabel_v=4;
+        gclabel_u=4;
+        gclabel_v=4;
     }
 
     if(p->A217==2 && p->A10==2)
     {
-    gclabel_u=5;
-    gclabel_v=5;
+        gclabel_u=5;
+        gclabel_v=5;
     }
     
     
@@ -328,25 +328,25 @@ void ghostcell::gcini(lexer* p)
     p->Iarray(gcxsd_count,6);
 	
 	for(n=0;n<6;++n)
-	gcbfb_count[n]=1;
+	    gcbfb_count[n]=1;
 	
 	p->Iarray(gcbfb,6,gcbfb_count,6);
 	
 	
 	for(n=0;n<6;++n)
-	gcxfb_count[n]=1;
+	    gcxfb_count[n]=1;
 	
 	p->Iarray(gcxfb,6,gcxfb_count,6);
     
     
     for(n=0;n<6;++n)
-	gcxsd_count[n]=1;
+	    gcxsd_count[n]=1;
 	
 	p->Iarray(gcxsd,6,gcxsd_count,6);
     
     
     for(n=0;n<6;++n)
-	gcbsd_count[n]=1;
+	    gcbsd_count[n]=1;
 	
 	p->Iarray(gcbsd,6,gcbsd_count,6);
 	

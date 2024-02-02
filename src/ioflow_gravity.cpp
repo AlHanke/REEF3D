@@ -86,7 +86,7 @@ void ioflow_gravity::discharge(lexer *p, fdm* a, ghostcell* pgc)
 
 void ioflow_gravity::inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
 {
-    double omega;
+    // double omega;
     a->gi = p->W20;
     a->gj = p->W21;
     a->gk = p->W22;
