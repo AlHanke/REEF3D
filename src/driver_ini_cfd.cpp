@@ -55,9 +55,9 @@ void driver::driver_ini_cfd()
     p->pointnumtot=pgc->globalisum(p->pointnum);
 
     if(p->mpirank==0)
-        cout<<"number of cells: "<<p->cellnumtot<<endl;
+    cout<<"number of cells: "<<p->cellnumtot<<endl;
 
-        log_ini();
+    log_ini();
 
     if(p->mpirank==0)
         cout<<"starting driver_ini"<<endl;
