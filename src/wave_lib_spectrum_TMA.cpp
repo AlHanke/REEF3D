@@ -27,30 +27,30 @@ Author: Hans Bihs
 double wave_lib_spectrum::TMA(lexer *p, double w)
 {
   if(w<=p->wwp)
-	sigma=0.07;
+	  sigma=0.07;
 
 	if(w>p->wwp)
-	sigma=0.09;
+	  sigma=0.09;
 
-    // PM
-    Sval = (5.0/16.0)*pow(p->wHs,2.0)*pow(p->wwp,4.0)*pow(w,-5.0)*exp(-(5.0/4.0)*pow(w/p->wwp,-4.0));
+  // PM
+  Sval = (5.0/16.0)*pow(p->wHs,2.0)*pow(p->wwp,4.0)*pow(w,-5.0)*exp(-(5.0/4.0)*pow(w/p->wwp,-4.0));
 
-    // JONSWAP
-    Sval *= (1.0-0.287*log(p->B88))*pow(p->B88,exp(-0.5*pow(((w-p->wwp)/(sigma*p->wwp)),2.0)));
+  // JONSWAP
+  Sval *= (1.0-0.287*log(p->B88))*pow(p->B88,exp(-0.5*pow(((w-p->wwp)/(sigma*p->wwp)),2.0)));
 
-    // TMA
+  // TMA
 
-    double phi_tma;
-    if(w*sqrt(p->F60/9.81)<1)
+  double phi_tma;
+  if(w*sqrt(p->F60/9.81)<1)
     phi_tma=0.5*pow(w*sqrt(p->F60/9.81),2);
 
-    if(w*sqrt(p->F60/9.81)>=1 && w*sqrt(p->F60/9.81)<2)
+  if(w*sqrt(p->F60/9.81)>=1 && w*sqrt(p->F60/9.81)<2)
     phi_tma=(1-0.5*pow(2-w*sqrt(p->F60/9.81),2));
 
-    if(w*sqrt(p->F60/9.81)>=2)
+  if(w*sqrt(p->F60/9.81)>=2)
     phi_tma=1.0;
 
-    Sval *= phi_tma;
+  Sval *= phi_tma;
 
-    return Sval;
+  return Sval;
 }

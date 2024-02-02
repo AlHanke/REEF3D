@@ -27,10 +27,10 @@ Author: Hans Bihs
 void wave_lib_spectrum::recon_parameters(lexer *p, ghostcell *pgc)
 {
     if(p->B94==0)
-	wD=p->phimean;
+		wD=p->phimean;
 	
 	if(p->B94==1)
-	wD=p->B94_wdt;
+		wD=p->B94_wdt;
     
     double wL0;
     
@@ -50,31 +50,31 @@ void wave_lib_spectrum::recon_parameters(lexer *p, ghostcell *pgc)
     
     for(int n=0;n<p->wN;++n)
     {
-    beta[n]=0.0;
-    sinbeta[n]=0.0;
-    cosbeta[n]=1.0;
+		beta[n]=0.0;
+		sinbeta[n]=0.0;
+		cosbeta[n]=1.0;
     }
     
     
     // fillvalues for Ai, wi, Li, ki and ei
     for(int n=0;n<p->wN;++n)
 	{
-    // fill 
-    Ai[n]=recon[n][0];
-	wi[n]=recon[n][1];
-    ei[n]=recon[n][2];
-    
-    
-	// ki
-	wL0 = (2.0*PI*9.81)/pow(wi[n],2.0);
-	k0 = (2.0*PI)/wL0;
-	S0 = sqrt(k0*wD) * (1.0 + (k0*wD)/6.0 + (k0*k0*wD*wD)/30.0); 
-	Li[n] = wL0*tanh(S0);
-        
-    for(int qn=0; qn<100; ++qn)
-    Li[n] = wL0*tanh(2.0*PI*wD/Li[n]);
-    
-	ki[n] = 2.0*PI/Li[n];
+		// fill 
+		Ai[n]=recon[n][0];
+		wi[n]=recon[n][1];
+		ei[n]=recon[n][2];
+		
+		
+		// ki
+		wL0 = (2.0*PI*9.81)/pow(wi[n],2.0);
+		k0 = (2.0*PI)/wL0;
+		S0 = sqrt(k0*wD) * (1.0 + (k0*wD)/6.0 + (k0*k0*wD*wD)/30.0); 
+		Li[n] = wL0*tanh(S0);
+			
+		for(int qn=0; qn<100; ++qn)
+			Li[n] = wL0*tanh(2.0*PI*wD/Li[n]);
+		
+		ki[n] = 2.0*PI/Li[n];
 	}
     
 }
@@ -82,7 +82,7 @@ void wave_lib_spectrum::recon_parameters(lexer *p, ghostcell *pgc)
 void wave_lib_spectrum::recon_read(lexer *p, ghostcell* pgc)
 {
 	char name[100];
-	double val,val0,val1,val2,val0n,val1n,val2n;
+	double val0,val1,val2,val0n,val1n,val2n;
 	int count;
 	
 	sprintf(name,"waverecon.dat");

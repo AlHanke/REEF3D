@@ -243,14 +243,14 @@ double wave_interface::wave_eta(lexer *p, ghostcell *pgc, double x, double y)
 
 double wave_interface::wave_um(lexer *p, ghostcell *pgc, double x, double y)
 {
-    double um;
+    double um=0.0;
     
     return um;
 }
 
 double wave_interface::wave_vm(lexer *p, ghostcell *pgc, double x, double y)
 {
-    double vm;
+    double vm=0.0;
     
     return vm;
 }

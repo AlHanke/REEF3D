@@ -72,38 +72,39 @@ void wave_lib_spectrum::irregular_parameters(lexer *p)
 	spectrum_file_read(p);
 
 
-  double maxS=-1.0;
-	double S,w,sigma;
-	int check_s,check_e;
-  int n;
+    double maxS=-1.0;
+    double S,w;
+    // double sigma;
+    int check_s,check_e;
+    int n;
 
-  p->wN = p->B86;
+    p->wN = p->B86;
 
 	w=0.0;
 	wp=0.0;
 
 	// Find spectrum peak
 	do{
-	w+=0.01;
+        w+=0.01;
 
-	if(w<=p->wwp)
-    {
-        sigma=0.07;
-    }
+        if(w<=p->wwp)
+        {
+            sigma=0.07;
+        }
 
-	if(w>p->wwp)
-    {
-        sigma=0.09;
-    }
+        if(w>p->wwp)
+        {
+            sigma=0.09;
+        }
 
-	 S = wave_spectrum(p,w);
+        S = wave_spectrum(p,w);
 
-	 if(S>maxS)
-     {
-        wp=w;
-     }
+        if(S>maxS)
+        {
+            wp=w;
+        }
 
-	 maxS = MAX(S,maxS);
+        maxS = MAX(S,maxS);
 
 	}while(w<100.0);
 
@@ -165,9 +166,9 @@ void wave_lib_spectrum::irregular_parameters(lexer *p)
     }
 
     p->Darray(Si,numcomp);
-		p->Darray(Sn,numcomp);
-		p->Darray(Di,numcomp);
-		p->Darray(Di_n,numcomp);
+    p->Darray(Sn,numcomp);
+    p->Darray(Di,numcomp);
+    p->Darray(Di_n,numcomp);
     p->Darray(wi,numcomp);
     p->Darray(dw,numcomp);
     p->Darray(Ai,numcomp);
@@ -176,7 +177,7 @@ void wave_lib_spectrum::irregular_parameters(lexer *p)
     p->Darray(Ti,numcomp);
     p->Darray(ei,numcomp);
     p->Darray(beta,numcomp);
-		p->Darray(beta_n,numcomp);
+    p->Darray(beta_n,numcomp);
     p->Darray(cosbeta,numcomp);
     p->Darray(sinbeta,numcomp);
 
@@ -193,10 +194,11 @@ void wave_lib_spectrum::irregular_parameters(lexer *p)
         }
 
         // find dw and maintain wp
-        double ds,de,dd;
+        double ds,de;
+        // double dd;
         int wNs,wNe;
 
-        dd=(we-ws)/double(p->wN);
+        // dd=(we-ws)/double(p->wN);
         ds = wp-ws;
         de = we-wp;
 
@@ -473,32 +475,33 @@ void wave_lib_spectrum::amplitudes_focused(lexer *p)
     // Amplitudes
 	if(p->B82==1 || p->B82==11)
 	{
-    Sw_sum=0.0;
+        Sw_sum=0.0;
 
-	for(n=0;n<p->wN;++n)
-	Sw_sum+=Si[n]*dw[n];
+        for(n=0;n<p->wN;++n)
+            Sw_sum+=Si[n]*dw[n];
 
-	for(n=0;n<p->wN;++n)
-	Ai[n] = (p->wAs*Si[n]*dw[n])/Sw_sum;
+        for(n=0;n<p->wN;++n)
+            Ai[n] = (p->wAs*Si[n]*dw[n])/Sw_sum;
 	}
 
-  if(p->B82==2 || p->B82==12)
-	for(n=0;n<p->wN;++n)
-	Ai[n] = sqrt(2.0*Si[n]*dw[n]);
+    if(p->B82==2 || p->B82==12)
+	    for(n=0;n<p->wN;++n)
+	        Ai[n] = sqrt(2.0*Si[n]*dw[n]);
 
-	if(p->B82==3 || p->B82==13)
+    if(p->B82==3 || p->B82==13)
     {
         for(n=0;n<p->wN;++n)
         {
             Ai[n] = p->B83/(ki[n]);
 
-            if (p->mpirank == 0) cout<<Ai[n]<<" "<<ki[n]<<" "<<wi[n]<<endl;
+            if (p->mpirank == 0)
+                cout<<Ai[n]<<" "<<ki[n]<<" "<<wi[n]<<endl;
         }
     }
 
 	if(p->B82==4 || p->B82==14)
-	for(n=0;n<p->wN;++n)
-	Ai[n] = p->wAs;
+	    for(n=0;n<p->wN;++n)
+	        Ai[n] = p->wAs;
 
 }
 

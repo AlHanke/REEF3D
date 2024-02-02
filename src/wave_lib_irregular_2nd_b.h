@@ -31,7 +31,7 @@ Author: Hans Bihs
 using namespace std;
 
 class wave_lib_irregular_2nd_b : public wave_lib_precalc, public wave_lib_parameters, public wave_lib_spectrum,
-                               public increment
+                               virtual public increment
 {
 public:
     wave_lib_irregular_2nd_b(lexer*, ghostcell*);

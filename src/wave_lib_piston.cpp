@@ -127,7 +127,7 @@ void wave_lib_piston::parameters(lexer *p, ghostcell *pgc)
 void wave_lib_piston::read(lexer *p, ghostcell* pgc)
 {
 	char name[100];
-	double val,val0,val1;
+	double val0,val1;
 	int count;
 	
 	sprintf(name,"wavemaker.dat");

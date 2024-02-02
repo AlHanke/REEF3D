@@ -175,7 +175,8 @@ void wave_lib_spectrum::directional_spreading(lexer* p) // modified
         if(p->B84==2 && p->B136==4)
         {
             double DD, ddb, w, ddw, sum, Dcdf_s, Dcdf_e;
-            double cdf_s, cdf_e, d_s, d_e, d_low, d_high, cdf_low, cdf_high;
+            // double cdf_s, cdf_e, d_s, d_e;
+            double d_low, d_high, cdf_low, cdf_high;
             int m, NR, ND;
 
             ddb=0.01;
@@ -226,15 +227,15 @@ void wave_lib_spectrum::directional_spreading(lexer* p) // modified
                 }
             }
 
-            if(d_low==d_high)
-            {
-                d_s=d_low;
-            }
+            // if(d_low==d_high)
+            // {
+            //     d_s=d_low;
+            // }
 
-            if(d_low!=d_high)
-            {
-                d_s=(Dcdf_s-cdf_low)*(d_high-d_low)/(cdf_high-cdf_low)+d_low;
-            }
+            // if(d_low!=d_high)
+            // {
+            //     d_s=(Dcdf_s-cdf_low)*(d_high-d_low)/(cdf_high-cdf_low)+d_low;
+            // }
 
             for(m=0;m<ND;++m)
             {
@@ -254,15 +255,15 @@ void wave_lib_spectrum::directional_spreading(lexer* p) // modified
                 }
             }
 
-            if(d_low==d_high)
-            {
-                d_e=d_high;
-            }
+            // if(d_low==d_high)
+            // {
+            //     d_e=d_high;
+            // }
 
-            if(d_low!=d_high)
-            {
-                d_e=(Dcdf_e-cdf_low)*(d_high-d_low)/(cdf_high-cdf_low)+d_low;
-            }
+            // if(d_low!=d_high)
+            // {
+            //     d_e=(Dcdf_e-cdf_low)*(d_high-d_low)/(cdf_high-cdf_low)+d_low;
+            // }
 
             // Create equal energy bins cdf_s:(cdf_e-cdf_s)/double (p->B133-1):cdf_e
             for(n=0;n<p->B133;++n)

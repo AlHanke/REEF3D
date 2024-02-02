@@ -315,7 +315,7 @@ int wave_lib_hdc::pos_k(lexer *p, double zs, int i, int k)
 int wave_lib_hdc::ihalf(int a, int b)
 {
     int c;
-    double d,diff;
+    double d;
 
     c = b-a;
     

@@ -65,15 +65,15 @@ double wave_lib_flap_eta::wave_v(lexer *p, double x, double y, double z)
 
 double wave_lib_flap_eta::wave_horzvel(lexer *p, double x, double y, double z)
 {
-    double vel,zcoor,fac;
+    double vel,fac;
     
-    zcoor=p->pos_z();
+    // double zcoor=p->pos_z();
 
     if(p->simtime<ts || p->simtime>te || timecount>=ptnum-1)
-	return 0.0;
+		return 0.0;
 	
 	if(p->simtime>eta[timecount+1][0])
-	++timecount;
+		++timecount;
     
     fac = 2.0*(z-p->B111_zs)/(p->B111_ze-p->B111_zs);
 	
@@ -106,7 +106,7 @@ double wave_lib_flap_eta::wave_eta(lexer *p, double x, double y)
 
 double wave_lib_flap_eta::wave_fi(lexer *p, double x, double y, double z)
 {
-    double fi;
+    double fi=0.0;
     
     return fi;
 }
@@ -119,7 +119,7 @@ void wave_lib_flap_eta::parameters(lexer *p, ghostcell *pgc)
 void wave_lib_flap_eta::read(lexer *p, ghostcell* pgc)
 {
 	char name[100];
-	double val,val0,val1;
+	double val0,val1;
 	int count;
 	
 	sprintf(name,"wavemaker_eta.dat");

@@ -234,27 +234,27 @@ double wave_lib_irregular_2nd_b::wave_fi(lexer *p, double x, double y, double z)
     double fi=0.0;
     
     for(n=0;n<p->wN;++n)
-	Ti[n] = ki[n]*(cosbeta[n]*x + sinbeta[n]*y) - wi[n]*(p->simtime) - ei[n];
+	    Ti[n] = ki[n]*(cosbeta[n]*x + sinbeta[n]*y) - wi[n]*(p->simtime) - ei[n];
 	
 	// 1st-order
 	for(n=0;n<p->wN;++n)
-    fi +=  ((wi[n]*Ai[n])/ki[n])*(cosh(ki[n]*(wdt+z))/sinhkd[n] ) * sin(Ti[n]);
+        fi +=  ((wi[n]*Ai[n])/ki[n])*(cosh(ki[n]*(wdt+z))/sinhkd[n] ) * sin(Ti[n]);
     
     
     // 2nd-order
     for(n=0;n<p->wN-1;++n)
-    for(m=n+1;m<p->wN;++m)
-    {
-    fi += Ai[n]*Ai[m]*((Aplus[n][m]*cosh((ki[n]+ki[m])*(z+wdt))))*sin(Ti[n]+Ti[m])*(sinbeta[n]*cosbeta[m] + cosbeta[n]*sinbeta[m])
-        + Ai[n]*Ai[m]*((Aminus[n][m]*cosh((ki[n]-ki[m])*(z+wdt))))*sin(Ti[n]-Ti[m])*(sinbeta[n]*cosbeta[m] - cosbeta[n]*sinbeta[m]);
-    }
+        for(m=n+1;m<p->wN;++m)
+        {
+            fi += Ai[n]*Ai[m]*((Aplus[n][m]*cosh((ki[n]+ki[m])*(z+wdt))))*sin(Ti[n]+Ti[m])*(sinbeta[n]*cosbeta[m] + cosbeta[n]*sinbeta[m])
+                + Ai[n]*Ai[m]*((Aminus[n][m]*cosh((ki[n]-ki[m])*(z+wdt))))*sin(Ti[n]-Ti[m])*(sinbeta[n]*cosbeta[m] - cosbeta[n]*sinbeta[m]);
+        }
     
     for(n=0;n<p->wN;++n)
     {
-     denom3 = pow(sinh(ki[n]*wdt),4.0); 
-     denom3 = fabs(denom3)>1.0e-20?denom3:1.0e20;
-     
-     fi += (3.0/8.0)*wi[n]*Ai[n]*Ai[n]*((cosh(2.0*ki[n]*(z+wdt)))/denom3)*sin(2.0*Ti[n]);
+        denom3 = pow(sinh(ki[n]*wdt),4.0); 
+        denom3 = fabs(denom3)>1.0e-20?denom3:1.0e20;
+        
+        fi += (3.0/8.0)*wi[n]*Ai[n]*Ai[n]*((cosh(2.0*ki[n]*(z+wdt)))/denom3)*sin(2.0*Ti[n]);
     }
     
     return fi;
@@ -296,13 +296,13 @@ void wave_lib_irregular_2nd_b::parameters(lexer *p, ghostcell *pgc)
     p->Darray(cosh_2k,p->wN*p->wN);
     p->Darray(sinh_4kh,p->wN*p->wN);
     
-    int count=0;
-    for(n=0;n<p->wN-1;++n)
-    for(m=n+1;m<p->wN;++m)
-    {
+    // int count=0;
+    // for(n=0;n<p->wN-1;++n)
+    // for(m=n+1;m<p->wN;++m)
+    // {
         
-        +count;
-    }
+    //     +count;
+    // }
 }
 
 double wave_lib_irregular_2nd_b::wave_A_plus(double w1, double w2, double k1, double k2)

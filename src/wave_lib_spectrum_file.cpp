@@ -42,12 +42,13 @@ double wave_lib_spectrum::spectrum_file(lexer *p, double w)
 
 void wave_lib_spectrum::spectrum_file_read(lexer *p)
 {
-  char name[100];
-	double val,val0,val1,Sval;
+	char name[100];
+	double val0,val1;
+	// double val, Sval;
 	int count;
 
 
-	double ts,te;
+	// double ts,te;
 	int timecount;
 
 	sprintf(name,"spectrum-file.dat");
@@ -90,7 +91,7 @@ void wave_lib_spectrum::spectrum_file_read(lexer *p)
 
 	}
 
-	ts = spectrum[0][0];
-	te = spectrum[ptnum-1][0];
+	// ts = spectrum[0][0];
+	// te = spectrum[ptnum-1][0];
 
 }

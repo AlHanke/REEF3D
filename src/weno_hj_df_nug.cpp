@@ -105,74 +105,74 @@ double weno_hj_df_nug::fx(lexer *p,fdm *a, field& b, field& uvel, int ipol, doub
 
 	if(advec>0.0)
 	{
-    if(p->X45==0)
-	iqmin_0(p,a,b,uvel,ipol);
+        if(p->X45==0)
+        iqmin_0(p,a,b,uvel,ipol);
+        
+        if(p->X45==1)
+        iqmin_1(p,a,b,uvel,ipol);
+        
+        if(p->X45==2)
+        iqmin_2(p,a,b,uvel,ipol);
+        
+        if(p->X45==3)
+        iqmin_3(p,a,b,uvel,ipol);
+        
+        if(p->X45==4)
+        iqmin_4(p,a,b,uvel,ipol);
+        
+        if(p->X45==5)
+        iqmin_5(p,a,b,uvel,ipol);
+        
+        is_min_x();
+        weight_min_x();
+        
+        
+        is();
+        alpha();
+        weight();
+        
+        double a1,a2,a3;
+                
     
-    if(p->X45==1)
-	iqmin_1(p,a,b,uvel,ipol);
-    
-    if(p->X45==2)
-	iqmin_2(p,a,b,uvel,ipol);
-    
-    if(p->X45==3)
-	iqmin_3(p,a,b,uvel,ipol);
-    
-    if(p->X45==4)
-	iqmin_4(p,a,b,uvel,ipol);
-    
-    if(p->X45==5)
-	iqmin_5(p,a,b,uvel,ipol);
-    
-	is_min_x();
-	weight_min_x();
-    
-    
-    is();
-    alpha();
-	weight();
-    
-    double a1,a2,a3;
+                a1 = cfx[IP][uf][0]/pow(is1x+psi,2.0);
+                a2 = cfx[IP][uf][1]/pow(is2x+psi,2.0); 
+                a3 = cfx[IP][uf][2]/pow(is3x+psi,2.0); 
+        
+        grad = w1x*(q4 + qfx[IP][uf][0][0]*(q3-q4) - qfx[IP][uf][0][1]*(q5-q4))
+        
+            + w2x*(q3 + qfx[IP][uf][1][0]*(q4-q3) - qfx[IP][uf][1][1]*(q2-q3))
             
- 
-            a1 = cfx[IP][uf][0]/pow(is1x+psi,2.0);
-            a2 = cfx[IP][uf][1]/pow(is2x+psi,2.0); 
-            a3 = cfx[IP][uf][2]/pow(is3x+psi,2.0); 
-    
-	grad = w1x*(q4 + qfx[IP][uf][0][0]*(q3-q4) - qfx[IP][uf][0][1]*(q5-q4))
-    
-         + w2x*(q3 + qfx[IP][uf][1][0]*(q4-q3) - qfx[IP][uf][1][1]*(q2-q3))
-          
-         + w3x*(q2 + qfx[IP][uf][2][0]*(q1-q2) + qfx[IP][uf][2][1]*(q3-q2));
+            + w3x*(q2 + qfx[IP][uf][2][0]*(q1-q2) + qfx[IP][uf][2][1]*(q3-q2));
 	}
 
 	if(advec<0.0)
 	{
-    if(p->X45==0)
-	iqmax_0(p,a,b,uvel,ipol);
-    
-    if(p->X45==1)
-	iqmax_1(p,a,b,uvel,ipol);
-    
-    if(p->X45==2)
-	iqmax_2(p,a,b,uvel,ipol);
-    
-    if(p->X45==3)
-	iqmax_3(p,a,b,uvel,ipol);
-    
-    if(p->X45==4)
-	iqmax_4(p,a,b,uvel,ipol);
-    
-    if(p->X45==5)
-	iqmax_5(p,a,b,uvel,ipol);
-    
-	is_max_x();
-	weight_max_x();
-    
-	grad = w1x*(q4 + qfx[IP][uf][3][0]*(q3-q4) + qfx[IP][uf][3][1]*(q5-q4))
-    
-         + w2x*(q3 + qfx[IP][uf][4][0]*(q2-q3) - qfx[IP][uf][4][1]*(q4-q3))
-          
-         + w3x*(q2 + qfx[IP][uf][5][0]*(q3-q2) - qfx[IP][uf][5][1]*(q1-q2));
+        if(p->X45==0)
+        iqmax_0(p,a,b,uvel,ipol);
+        
+        if(p->X45==1)
+        iqmax_1(p,a,b,uvel,ipol);
+        
+        if(p->X45==2)
+        iqmax_2(p,a,b,uvel,ipol);
+        
+        if(p->X45==3)
+        iqmax_3(p,a,b,uvel,ipol);
+        
+        if(p->X45==4)
+        iqmax_4(p,a,b,uvel,ipol);
+        
+        if(p->X45==5)
+        iqmax_5(p,a,b,uvel,ipol);
+        
+        is_max_x();
+        weight_max_x();
+        
+        grad = w1x*(q4 + qfx[IP][uf][3][0]*(q3-q4) + qfx[IP][uf][3][1]*(q5-q4))
+        
+            + w2x*(q3 + qfx[IP][uf][4][0]*(q2-q3) - qfx[IP][uf][4][1]*(q4-q3))
+            
+            + w3x*(q2 + qfx[IP][uf][5][0]*(q3-q2) - qfx[IP][uf][5][1]*(q1-q2));
 	}
     
 	return grad;
@@ -184,62 +184,62 @@ double weno_hj_df_nug::fy(lexer *p,fdm *a, field& b, field& vvel, int ipol, doub
 
 	if(advec>0.0)
 	{
-    if(p->X45==0)
-	jqmin_0(p,a,b,vvel,ipol);
-    
-    if(p->X45==1)
-	jqmin_1(p,a,b,vvel,ipol);
-    
-    if(p->X45==2)
-	jqmin_2(p,a,b,vvel,ipol);
-    
-    if(p->X45==3)
-	jqmin_3(p,a,b,vvel,ipol);
-    
-    if(p->X45==4)
-	jqmin_4(p,a,b,vvel,ipol);
-    
-    if(p->X45==5)
-	jqmin_5(p,a,b,vvel,ipol);
-    
-	is_min_y();
-	weight_min_y();
-	
-	grad = w1y*(q4 + qfy[JP][vf][0][0]*(q3-q4) - qfy[JP][vf][0][1]*(q5-q4))
-    
-         + w2y*(q3 + qfy[JP][vf][1][0]*(q4-q3) - qfy[JP][vf][1][1]*(q2-q3))
-          
-         + w3y*(q2 + qfy[JP][vf][2][0]*(q1-q2) + qfy[JP][vf][2][1]*(q3-q2));
+        if(p->X45==0)
+        jqmin_0(p,a,b,vvel,ipol);
+        
+        if(p->X45==1)
+        jqmin_1(p,a,b,vvel,ipol);
+        
+        if(p->X45==2)
+        jqmin_2(p,a,b,vvel,ipol);
+        
+        if(p->X45==3)
+        jqmin_3(p,a,b,vvel,ipol);
+        
+        if(p->X45==4)
+        jqmin_4(p,a,b,vvel,ipol);
+        
+        if(p->X45==5)
+        jqmin_5(p,a,b,vvel,ipol);
+        
+        is_min_y();
+        weight_min_y();
+        
+        grad = w1y*(q4 + qfy[JP][vf][0][0]*(q3-q4) - qfy[JP][vf][0][1]*(q5-q4))
+        
+            + w2y*(q3 + qfy[JP][vf][1][0]*(q4-q3) - qfy[JP][vf][1][1]*(q2-q3))
+            
+            + w3y*(q2 + qfy[JP][vf][2][0]*(q1-q2) + qfy[JP][vf][2][1]*(q3-q2));
 	}
 
 	if(advec<0.0)
 	{
-    if(p->X45==0)
-	jqmax_0(p,a,b,vvel,ipol);
-    
-    if(p->X45==1)
-	jqmax_1(p,a,b,vvel,ipol);
-    
-    if(p->X45==2)
-	jqmax_2(p,a,b,vvel,ipol);
-    
-    if(p->X45==3)
-	jqmax_3(p,a,b,vvel,ipol);
-    
-    if(p->X45==4)
-	jqmax_4(p,a,b,vvel,ipol);
-    
-    if(p->X45==5)
-	jqmax_5(p,a,b,vvel,ipol);
-    
-	is_max_y();
-	weight_max_y();
-	
-	grad = w1y*(q4 + qfy[JP][vf][3][0]*(q3-q4) + qfy[JP][vf][3][1]*(q5-q4))
-    
-         + w2y*(q3 + qfy[JP][vf][4][0]*(q2-q3) - qfy[JP][vf][4][1]*(q4-q3))
-          
-         + w3y*(q2 + qfy[JP][vf][5][0]*(q3-q2) - qfy[JP][vf][5][1]*(q1-q2));
+        if(p->X45==0)
+        jqmax_0(p,a,b,vvel,ipol);
+        
+        if(p->X45==1)
+        jqmax_1(p,a,b,vvel,ipol);
+        
+        if(p->X45==2)
+        jqmax_2(p,a,b,vvel,ipol);
+        
+        if(p->X45==3)
+        jqmax_3(p,a,b,vvel,ipol);
+        
+        if(p->X45==4)
+        jqmax_4(p,a,b,vvel,ipol);
+        
+        if(p->X45==5)
+        jqmax_5(p,a,b,vvel,ipol);
+        
+        is_max_y();
+        weight_max_y();
+        
+        grad = w1y*(q4 + qfy[JP][vf][3][0]*(q3-q4) + qfy[JP][vf][3][1]*(q5-q4))
+        
+            + w2y*(q3 + qfy[JP][vf][4][0]*(q2-q3) - qfy[JP][vf][4][1]*(q4-q3))
+            
+            + w3y*(q2 + qfy[JP][vf][5][0]*(q3-q2) - qfy[JP][vf][5][1]*(q1-q2));
 	}
 	
 	return grad;
@@ -251,32 +251,32 @@ double weno_hj_df_nug::fz(lexer *p,fdm *a, field& b, field& wvel, int ipol, doub
 
 	if(advec>0.0)
 	{
-    if(p->X45==0)
-	kqmin_0(p,a,b,wvel,ipol);
-    
-    if(p->X45==1)
-	kqmin_1(p,a,b,wvel,ipol);
-    
-    if(p->X45==2)
-	kqmin_2(p,a,b,wvel,ipol);
-    
-    if(p->X45==3)
-	kqmin_3(p,a,b,wvel,ipol);
-    
-    if(p->X45==4)
-	kqmin_4(p,a,b,wvel,ipol);
-    
-    if(p->X45==5)
-	kqmin_5(p,a,b,wvel,ipol);
-    
-	is_min_z();
-	weight_min_z();
-	
-	grad = w1z*(q4 + qfz[KP][wf][0][0]*(q3-q4) - qfz[KP][wf][0][1]*(q5-q4))
-    
-         + w2z*(q3 + qfz[KP][wf][1][0]*(q4-q3) - qfz[KP][wf][1][1]*(q2-q3))
-          
-         + w3z*(q2 + qfz[KP][wf][2][0]*(q1-q2) + qfz[KP][wf][2][1]*(q3-q2));
+        if(p->X45==0)
+        kqmin_0(p,a,b,wvel,ipol);
+        
+        if(p->X45==1)
+        kqmin_1(p,a,b,wvel,ipol);
+        
+        if(p->X45==2)
+        kqmin_2(p,a,b,wvel,ipol);
+        
+        if(p->X45==3)
+        kqmin_3(p,a,b,wvel,ipol);
+        
+        if(p->X45==4)
+        kqmin_4(p,a,b,wvel,ipol);
+        
+        if(p->X45==5)
+            kqmin_5(p,a,b,wvel,ipol);
+        
+        is_min_z();
+        weight_min_z();
+        
+        grad = w1z*(q4 + qfz[KP][wf][0][0]*(q3-q4) - qfz[KP][wf][0][1]*(q5-q4))
+        
+            + w2z*(q3 + qfz[KP][wf][1][0]*(q4-q3) - qfz[KP][wf][1][1]*(q2-q3))
+            
+            + w3z*(q2 + qfz[KP][wf][2][0]*(q1-q2) + qfz[KP][wf][2][1]*(q3-q2));
 	}
 
 	if(advec<0.0)

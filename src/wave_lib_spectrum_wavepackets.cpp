@@ -108,12 +108,12 @@ void wave_lib_spectrum::wavepackets_parameters(lexer *p)
     
     // Amplitudes Gaussian Wavepackets
     if(p->B85==6)
-	for(int n=0;n<p->wN;++n)
-	{
-	w = dw[n]*double(n) + ws;
-	
-	Ai[n] = (1.0/p->B83*sqrt(2.0*PI))*exp(-pow(w-p->wwp,2.0)/(2.0*p->B83*p->B83));
-	}
+		for(int n=0;n<p->wN;++n)
+		{
+			w = dw[n]*double(n) + ws;
+			
+			Ai[n] = (1.0/p->B83*sqrt(2.0*PI))*exp(-pow(w-p->wwp,2.0)/(2.0*p->B83*p->B83));
+		}
 	
 	// Scale Amplitudes
 	Asum=0.0;
@@ -131,19 +131,19 @@ void wave_lib_spectrum::wavepackets_parameters(lexer *p)
 	w=ws;
 	for(int n=0;n<p->wN;++n)
 	{
-	wL0 = (2.0*PI*9.81)/pow(w,2.0);
-	k0 = (2.0*PI)/wL0;
-	S0 = sqrt(k0*wD) * (1.0 + (k0*wD)/6.0 + (k0*k0*wD*wD)/30.0); 
-	Li[n] = wL0*tanh(S0);
-        
-    for(int qn=0; qn<100; ++qn)
-    Li[n] = wL0*tanh(2.0*PI*wD/Li[n]);
+		wL0 = (2.0*PI*9.81)/pow(w,2.0);
+		k0 = (2.0*PI)/wL0;
+		S0 = sqrt(k0*wD) * (1.0 + (k0*wD)/6.0 + (k0*k0*wD*wD)/30.0); 
+		Li[n] = wL0*tanh(S0);
+			
+		for(int qn=0; qn<100; ++qn)
+		Li[n] = wL0*tanh(2.0*PI*wD/Li[n]);
 
-	ki[n] = 2.0*PI/Li[n];
-	
-	wi[n]=w;
-	w+=dw[n];
-	}
+		ki[n] = 2.0*PI/Li[n];
+		
+		wi[n]=w;
+		w+=dw[n];
+		}
 	
 	// Focused Phases
     for(int n=0;n<p->wN;++n)
