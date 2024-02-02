@@ -59,7 +59,7 @@ void directreini::addpoint(lexer *p, fdm *a, int q1, int q2)
 {
 	// p. 917
 	
-    double dist,xd,dnom;
+    double xd,dnom;
 
     //dist = sqrt(pow(pt[q2][0]-pt[q1][0], 2.0) + pow(pt[q2][1]-pt[q1][1], 2.0) + pow(pt[q2][2]-pt[q1][2], 2.0));
 

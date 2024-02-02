@@ -38,15 +38,12 @@ class ddweno : virtual public increment
 {
 public:
 
-	 ddweno(lexer*);
-	 ~ddweno();
+	ddweno(lexer*);
+	~ddweno();
 
-	 double ddwenox(fdm*, vec&, double, cpt&);
-	 double ddwenoy(fdm*, vec&, double, cpt&);
-	 double ddwenoz(fdm*, vec&, double, cpt&);
-	 
-
-	 const double dx;
+	double ddwenox(fdm*, vec&, double, cpt&);
+	double ddwenoy(fdm*, vec&, double, cpt&);
+	double ddwenoz(fdm*, vec&, double, cpt&);
 
 	double grad;
 
@@ -61,6 +58,7 @@ public:
 	const double tttw,fourth,third,sevsix,elvsix,sixth,fivsix,tenth;
 	const double sixten,treten;
 	const double epsilon,smallnum;
+	const double dx;
 	double is1,is2,is3;
 	double alpha1,alpha2,alpha3;
 	double w1,w2,w3;

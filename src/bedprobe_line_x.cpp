@@ -80,7 +80,6 @@ void bedprobe_line_x::start(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 {
 	
     char name[250];
-    double zval=0.0;
     int num,check;
 	
     num = p->count;
@@ -212,11 +211,11 @@ void bedprobe_line_x::start(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
         {
 			check=0;
 		    for(q=0;q<p->P123;++q)
-			if(flag_all[q][n]>0 && xloc_all[q][n]<1.0e20)
-			check=1;
+                if(flag_all[q][n]>0 && xloc_all[q][n]<1.0e20)
+                    check=1;
 			
 			if(check==1)
-			rowflag[n]=1;
+			    rowflag[n]=1;
 		}
 
         for(n=0;n<sumknox;++n)

@@ -86,15 +86,15 @@ private:
    
 	//- Sweep tracker for alternating starting point
 	int sSweep;
+
+	//- Plane distance coefficient
+    field4 alpha;
    
     //- Interface normal vector
     field4 nx;
     field4 ny;
     field4 nz;
 	double ****nxCoeff, ****nyCoeff, ****nzCoeff;
-    
-    //- Plane distance coefficient
-    field4 alpha;
     
     //- Volume fractions in the cell and its neighbours
     field4 vof1;

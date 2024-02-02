@@ -30,7 +30,7 @@ void sixdof_sflow::ray_cast_io_x(lexer* p, ghostcell* pgc,int ts,int te)
 	double ys,ye,zs,ze;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Rx;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
@@ -41,11 +41,10 @@ void sixdof_sflow::ray_cast_io_x(lexer* p, ghostcell* pgc,int ts,int te)
 	double Mx,My,Mz;
 	int js,je,ks,ke;
 	double u,v,w;
-	double denom;	
-	int insidecheck;
+	double denom;
 	double psi = 1.0e-8*p->DXM;
     
-    SLICELOOP4
+  SLICELOOP4
 	{
         cutl(i,j) = 0;
         cutr(i,j) = 0;
@@ -139,7 +138,7 @@ void sixdof_sflow::ray_cast_io_x(lexer* p, ghostcell* pgc,int ts,int te)
             if(u==0.0 && v==0.0 && w==0.0)
             check = 0;
             
-                if((u>=0.0 && v>=0.0 && w>=0.0) || (u<0.0 && v<0.0 && w<0.0) && check==1)
+                if((u>=0.0 && v>=0.0 && w>=0.0) || ((u<0.0 && v<0.0 && w<0.0) && check==1))
                 {
                 denom = 1.0/(u+v+w);
                 u *= denom;
@@ -160,8 +159,8 @@ void sixdof_sflow::ray_cast_io_x(lexer* p, ghostcell* pgc,int ts,int te)
         }
     }
     
-    SLICELOOP4
-	if((cutl(i,j)+1)%2==0  && (cutr(i,j)+1)%2==0)
-	fbio(i,j)=-1;
+  SLICELOOP4
+	  if((cutl(i,j)+1)%2==0  && (cutr(i,j)+1)%2==0)
+	  fbio(i,j)=-1;
 
 }

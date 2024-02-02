@@ -45,8 +45,6 @@ double ddweno_nug_sf::ddwenox(fdm* a, vec& b, double uw, int ipol, cpt &C)
     DZ = p->DZP;
     uf=0;
     
-    int check=0;
-    
 	grad=0.0;
 
 	if(uw>0.0)

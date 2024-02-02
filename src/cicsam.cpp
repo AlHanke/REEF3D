@@ -130,7 +130,7 @@ double cicsam::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
 {
 	double cj,cj_,cj_s,cj_ss;
 	double cc,cc_,cu,cd;
-    double umax,Co,theta,costheta,gamma,beta;
+    double umax,Co,theta,gamma,beta;
 	double gradx,grady,gradz;
 	
 	

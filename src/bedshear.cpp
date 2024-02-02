@@ -45,7 +45,7 @@ bedshear::~bedshear()
 void bedshear::taubed(lexer *p, fdm * a, ghostcell *pgc, sediment_fdm *s)
 {
 	int count;
-	double zval,fac,topoval,taukin,tauvel,density;
+	double zval,taukin,tauvel,density;
     
     SLICELOOP4
     {
@@ -217,7 +217,6 @@ void bedshear::taubed(lexer *p, fdm * a, ghostcell *pgc, sediment_fdm *s)
     if(p->S16==6)
     {
         double Cval,wh;
-        double bedlevel,waterlevel;
         count=0;
         uvel=vvel=wh=0.0;
         KLOOP
@@ -271,7 +270,7 @@ void bedshear::taubed(lexer *p, fdm * a, ghostcell *pgc, sediment_fdm *s)
 
 void bedshear::taucritbed(lexer *p, fdm * a, ghostcell *pgc, sediment_fdm *s)
 {
-	double r,density;
+	double density;
     
     SLICELOOP4
     {
@@ -351,7 +350,6 @@ void bedshear::taubed(lexer *p, fdm2D *b, ghostcell *pgc, sediment_fdm *s)
 
 void bedshear::taucritbed(lexer *p, fdm2D *b, ghostcell *pgc, sediment_fdm *s)
 {
-	double r;
     
     SLICELOOP4
     {

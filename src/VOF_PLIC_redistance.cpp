@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Tobias Martin
 --------------------------------------------------------------------*/
-#include"VOF_PLIC.h"
+
+#include"VOF_PLIC.h"
 #include"gradient.h"
 #include"lexer.h"
 #include"fdm.h"
@@ -58,11 +59,11 @@ void VOF_PLIC::redistance
     LOOP
     {
 		reconstructPlane(a, p);
-		
-        if (a->vof(i, j, k) < 0.999 && a->vof(i, j, k) > 0.001)
-        {
-	//		cout<<"\nCell ID: "<<i<<" "<<k<<" "<<p->pos_x()<<" "<<p->pos_z()<<" "<<a->vof(i, j, k)<<endl;
-			
+
+		if (a->vof(i, j, k) < 0.999 && a->vof(i, j, k) > 0.001)
+		{
+			//cout<<"\nCell ID: "<<i<<" "<<k<<" "<<p->pos_x()<<" "<<p->pos_z()<<" "<<a->vof(i, j, k)<<endl;
+
 			for (int ii = -bandWidth; ii < (bandWidth + 1); ii++)
 			{
 				for (int jj = -bandWidth; jj < (bandWidth + 1); jj++)
@@ -72,49 +73,34 @@ void VOF_PLIC::redistance
 						ip = i + ii;
 						jp = j + jj;
 						kp = k + kk;
-  
-						if 
-						(
-							ip >= 0 && jp >= 0 && kp >= 0 && 
-							ip < p->knox && jp < p->knoy && kp < p->knoz
-						)  
+
+						if (ip >= 0 && jp >= 0 && kp >= 0 && ip < p->knox && jp < p->knoy && kp < p->knoz)  
 						{ 
-//cout<<"Cell considered: "<<ip<<" "<<kp<<endl;	
+							//cout<<"Cell considered: "<<ip<<" "<<kp<<endl;	
 
 							//- Calculate closest point on cell boundary
 							if (i != ip || j != jp || k != kp)
-							{
 								flag = calcBoundaryPoint(a, p, ip, jp, kp, changedFlag);
-							}
 							else
-							{
 								flag = 1;
-							}
-							
+
 							if (flag == 1)
 							{ 
 								//- Calculate projection point
-								flag = 
-									calcProjectionPoint
-									(
-										a, p, xp, yp, zp, ip, jp, kp, changedFlag
-									);
-								
-                              if (flag == 2)
+								flag = calcProjectionPoint(a, p, xp, yp, zp, ip, jp, kp, changedFlag);
+
+								if (flag == 2)
 								{ 
 									//- Calculate closest point on boundary of 
 									//- interface segment
-									//calcSegmentPoint
-									(
-										a, p, xp, yp, zp, ip, jp, kp, changedFlag
-									);
+									calcSegmentPoint(a, p, xp, yp, zp, ip, jp, kp, changedFlag);
 								}                               
-                            }
-                        }
-                    }
-                }
-            }   
-        }
+							}
+						}
+					}
+				}
+			}   
+		}
     }
 }
 
