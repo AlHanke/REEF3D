@@ -36,12 +36,12 @@ void sixdof_df_object::ray_cast_io_ycorr(lexer *p, fdm *a, ghostcell *pgc, int t
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
 	double PQx,PQy,PQz;
-	double PAx,PAy,PAz;
-	double PBx,PBy,PBz;
-	double PCx,PCy,PCz;
+	// double PAx,PAy,PAz;
+	// double PBx,PBy,PBz;
+	// double PCx,PCy,PCz;
 	double Mx,My,Mz;
 	int is,ie,js,je,ks,ke;
-	int ir,insidecheck;
+	// int ir,insidecheck;
 	double u,v,w;
 	double denom;
 	double psi = 1.0e-8*p->DXM;
@@ -116,17 +116,17 @@ void sixdof_df_object::ray_cast_io_ycorr(lexer *p, fdm *a, ghostcell *pgc, int t
 		PQy = Qy-Py;
 		PQz = Qz-Pz;
 		
-		PAx = Ax-Px;
-		PAy = Ay-Py;
-		PAz = Az-Pz;
+		// PAx = Ax-Px;
+		// PAy = Ay-Py;
+		// PAz = Az-Pz;
 		
-		PBx = Bx-Px;
-		PBy = By-Py;
-		PBz = Bz-Pz;
+		// PBx = Bx-Px;
+		// PBy = By-Py;
+		// PBz = Bz-Pz;
 		
-		PCx = Cx-Px;
-		PCy = Cy-Py;
-		PCz = Cz-Pz;
+		// PCx = Cx-Px;
+		// PCy = Cy-Py;
+		// PCz = Cz-Pz;
 		
 		// uvw
 		Mx = PQy*Pz - PQz*Py;

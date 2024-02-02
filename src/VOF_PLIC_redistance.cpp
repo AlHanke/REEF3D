@@ -277,10 +277,10 @@ int VOF_PLIC::calcBoundaryPoint
 			return 0;
 		}    
 	}
-	else
-	{
+	// else
+	// {
 		return 1;
-	}
+	// }
 }
 
 

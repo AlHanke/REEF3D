@@ -29,7 +29,7 @@ void directreini::reini(lexer *p,fdm* a, ghostcell *pgc, field& b, fieldint& nod
 {
     double xp[2],yp[2],zp[2];
     double nx,ny,nz;
-    double nl;
+    // double nl;
     double d,t0,dist;
     double x0,y0,z0;
     double det0,det1,det2,det3,det4;
@@ -66,7 +66,7 @@ void directreini::reini(lexer *p,fdm* a, ghostcell *pgc, field& b, fieldint& nod
     ny=zp[0]*xp[1] - xp[0]*zp[1];
     nz=xp[0]*yp[1] - yp[0]*xp[1];
 	
-	nl = sqrt(nx*nx + ny*ny + nz*nz);
+	// nl = sqrt(nx*nx + ny*ny + nz*nz);
 
 
     d = nx*ccpt[facet[confac[n]][0]][0] + ny*ccpt[facet[confac[n]][0]][1] + nz*ccpt[facet[confac[n]][0]][2];

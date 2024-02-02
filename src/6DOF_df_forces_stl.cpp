@@ -37,10 +37,12 @@ void sixdof_df_object::forces_stl
 	double at,bt,ct,st;
 	double nx,ny,nz,norm;
 	double A_triang,A;
-	double p_int,rho_int,nu_int,enu_int,u_int,v_int,w_int;
-	double du,dv,dw, dudx, dudy, dudz, dvdx, dvdy, dvdz, dwdx, dwdy, dwdz;
-	double dudxf, dudyf, dudzf, dvdxf, dvdyf, dvdzf, dwdxf, dwdyf, dwdzf;
-	double dudxb, dudyb, dudzb, dvdxb, dvdyb, dvdzb, dwdxb, dwdyb, dwdzb;
+	double p_int,rho_int,nu_int,enu_int;
+    // double u_int,v_int,w_int;
+	// double du,dv,dw;
+    double dudx, dudy, dudz, dvdx, dvdy, dvdz, dwdx, dwdy, dwdz;
+	// double dudxf, dudyf, dudzf, dvdxf, dvdyf, dvdzf, dwdxf, dwdyf, dwdzf;
+	// double dudxb, dudyb, dudzb, dvdxb, dvdyb, dvdzb, dwdxb, dwdyb, dwdzb;
 	double xlocvel,ylocvel,zlocvel,xlocp,ylocp,zlocp;
 	double Fx,Fy,Fz,Fp_x,Fp_y,Fp_z,Fv_x,Fv_y,Fv_z;
     double Xe_p,Ye_p,Ze_p,Xe_v,Ye_v,Ze_v;
@@ -142,12 +144,15 @@ void sixdof_df_object::forces_stl
 		   
     // Add viscous stress contributions
         
-            double ustar, uplus, dist, value;
-            double vstar,vplus,wstar,wplus;
+            // double ustar, dist, value;
+            double dist;
+            // double vstar, wstar;
+            double uplus, vplus, wplus;
             double uval, vval, wval;
             double kappa = 0.4;
-            double xip, yip, zip, zval;
-            double u_abs, tau, density;
+            // double xip, yip, zip, zval;
+            double u_abs, density;
+            // double tau;
             double ks;
             double dir;
 
@@ -314,7 +319,7 @@ void sixdof_df_object::forces_stl
 
             u_abs = sqrt(uval*uval + vval*vval + wval*wval);
             
-            tau=density*(nu_int + enu_int)*(u_abs/delta);
+            // tau=density*(nu_int + enu_int)*(u_abs/delta);
             
             Fv_x = -rho_int*(nu_int + enu_int)*A_triang*(2.0*dudx*nx + (dudy + dvdx)*ny + (dudz + dwdx)*nz);
             Fv_y = -rho_int*(nu_int + enu_int)*A_triang*((dudy + dvdx)*nx + 2.0*dvdy*ny + (dvdz + dwdy)*nz);

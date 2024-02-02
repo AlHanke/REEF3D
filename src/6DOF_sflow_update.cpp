@@ -155,12 +155,13 @@ void sixdof_sflow::updateForcing_box(lexer *p, ghostcell *pgc)
 void sixdof_sflow::updateForcing_ship(lexer *p, ghostcell *pgc)
 {
     // Calculate ship-like pressure field
-    double H, press0, xpos, ypos, as, cl, cb;
+    double H;
+    // double press0, xpos, ypos, as, cl, cb;
 
-    press0 = p->X401_p0;
-    as = p->X401_a; 
-    cl = p->X401_cl;
-    cb = p->X401_cb;
+    // press0 = p->X401_p0;
+    // as = p->X401_a; 
+    // cl = p->X401_cl;
+    // cb = p->X401_cb;
 
 	SLICELOOP4
     {

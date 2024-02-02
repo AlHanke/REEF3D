@@ -71,7 +71,7 @@ bedprobe_point::~bedprobe_point()
 
 void bedprobe_point::bed_gauge(lexer *p, fdm *a, ghostcell *pgc)
 {
-    double zval=0.0;
+    // double zval=0.0;
 
     for(n=0;n<p->P121;++n)
     wsf[n]=-1.0e20;
@@ -80,7 +80,7 @@ void bedprobe_point::bed_gauge(lexer *p, fdm *a, ghostcell *pgc)
     for(n=0;n<p->P121;++n)
     if(flag[n]>0)
     {
-    zval=0.0;
+    // zval=0.0;
 
     i=iloc[n];
     j=jloc[n];

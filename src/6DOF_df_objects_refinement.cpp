@@ -89,7 +89,7 @@ void sixdof_df_object::geometry_refinement(lexer *p, ghostcell *pgc)
 	
 	double critL = p->DXM*p->X184;
 	
-	for (int n = 0; n < tri_x_r.size(); n++)
+	for (unsigned int n = 0; n < tri_x_r.size(); n++)
 	{
 		x0 = tri_x_r[n][0];
 		x1 = tri_x_r[n][1];

@@ -73,7 +73,7 @@ bedshear_probe::~bedshear_probe()
 
 void bedshear_probe::bedshear_gauge(lexer *p, fdm *a, ghostcell *pgc, sediment *psed)
 {
-    double zval=0.0;
+    // double zval=0.0;
 
     for(n=0;n<p->P125;++n)
     bsg[n]=-1.0e20;
@@ -82,7 +82,7 @@ void bedshear_probe::bedshear_gauge(lexer *p, fdm *a, ghostcell *pgc, sediment *
     for(n=0;n<p->P125;++n)
     if(flag[n]>0)
     {
-    zval=0.0;
+    // zval=0.0;
 
     i=iloc[n];
     j=jloc[n];

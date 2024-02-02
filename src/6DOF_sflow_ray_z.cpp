@@ -36,9 +36,9 @@ void sixdof_sflow::ray_cast_z(lexer *p, ghostcell *pgc, int ts, int te)
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
 	double PQx,PQy,PQz;
-	double PAx,PAy,PAz;
-	double PBx,PBy,PBz;
-	double PCx,PCy,PCz;
+	// double PAx,PAy,PAz;
+	// double PBx,PBy,PBz;
+	// double PCx,PCy,PCz;
 	double Mx,My,Mz;
 	int is,ie,js,je;
 	double u,v,w;
@@ -110,17 +110,17 @@ void sixdof_sflow::ray_cast_z(lexer *p, ghostcell *pgc, int ts, int te)
 		PQy = Qy-Py;
 		PQz = Qz-Pz;
 		
-		PAx = Ax-Px;
-		PAy = Ay-Py;
-		PAz = Az-Pz;
+		// PAx = Ax-Px;
+		// PAy = Ay-Py;
+		// PAz = Az-Pz;
 		
-		PBx = Bx-Px;
-		PBy = By-Py;
-		PBz = Bz-Pz;
+		// PBx = Bx-Px;
+		// PBy = By-Py;
+		// PBz = Bz-Pz;
 		
-		PCx = Cx-Px;
-		PCy = Cy-Py;
-		PCz = Cz-Pz;
+		// PCx = Cx-Px;
+		// PCy = Cy-Py;
+		// PCz = Cz-Pz;
 		
 		// uvw
 		Mx = PQy*Pz - PQz*Py;
@@ -143,32 +143,32 @@ void sixdof_sflow::ray_cast_z(lexer *p, ghostcell *pgc, int ts, int te)
 
 			if((u>0.0 && v>0.0 && w>0.0) || (u<0.0 && v<0.0 && w<0.0) )//&& check==1)
 			{
-			denom = 1.0/(u+v+w);
-			u *= denom;
-			v *= denom;
-			w *= denom;
-			
-			Rz = u*Az + v*Bz + w*Cz;
+				denom = 1.0/(u+v+w);
+				u *= denom;
+				v *= denom;
+				w *= denom;
+				
+				Rz = u*Az + v*Bz + w*Cz;
 
-            
-            k = p->posf_k(Rz);
+				
+				k = p->posf_k(Rz);
 
-			
-            int distcheck=1;
-  
-            
-            if(Rz<p->ZP[KP])
-            if(k>=0 && k<p->knoz)
-            if(fbio(i,j)<0)
-            distcheck=0;
-            
-            if(Rz>=p->ZP[KP])
-            if(k>=0 && k<p->knoz)
-            if(fbio(i,j)<0)
-            distcheck=0;
+				
+				int distcheck=1;
+	
+				
+				if(Rz<p->ZP[KP])
+				if(k>=0 && k<p->knoz)
+				if(fbio(i,j)<0)
+				distcheck=0;
+				
+				if(Rz>=p->ZP[KP])
+				if(k>=0 && k<p->knoz)
+				if(fbio(i,j)<0)
+				distcheck=0;
 
-            if(p->wd-Rz>0.0)
-            draft(i,j)=MAX(p->wd-Rz,draft(i,j));
+				if(p->wd-Rz>0.0)
+				draft(i,j)=MAX(p->wd-Rz,draft(i,j));
 			}
 		
 		}

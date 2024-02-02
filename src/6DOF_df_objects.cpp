@@ -107,7 +107,7 @@ void sixdof_df_object::objects_create(lexer *p, fdm *a, ghostcell *pgc)
 
 void sixdof_df_object::objects_allocate(lexer *p, fdm *a, ghostcell *pgc)
 {
-    double U,ds,phi,r,snum,trisum;
+    double U,ds,r,snum,trisum;
     
     entity_sum = p->X110 + p->X131 + p->X132 + p->X133 + p->X153 + p->X163 + p->X164;
 	tricount=0;

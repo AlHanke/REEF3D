@@ -206,7 +206,7 @@ void sixdof_sflow::geometry_refinement(lexer *p)
 	
 	double critL = p->DXM*0.7;
 	
-	for (int n = 0; n < tri_x_r.size(); n++)
+	for (unsigned int n = 0; n < tri_x_r.size(); n++)
 	{
 		x0 = tri_x_r[n][0];
 		x1 = tri_x_r[n][1];

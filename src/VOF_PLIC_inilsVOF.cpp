@@ -238,7 +238,8 @@ void VOF_PLIC::iniphi_box(lexer* p, fdm *a, ghostcell* pgc)
 
 void VOF_PLIC::iniphi_surfarea(lexer* p, fdm *a, ghostcell* pgc)
 {
-	double dx,dy,dz,dnorm,dirac;
+	// double dx,dy,dz;
+    double dnorm,dirac;
 	double area=0.0;
 	double epsi = 1.6*p->DXM;
 	
@@ -246,9 +247,9 @@ void VOF_PLIC::iniphi_surfarea(lexer* p, fdm *a, ghostcell* pgc)
 	{
         epsi = (1.6/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
             
-        dx = (a->phi(i+1,j,k)-a->phi(i-1,j,k))/(p->DXP[IM1]+p->DXP[IP]);
-        dy = (a->phi(i,j+1,k)-a->phi(i,j-1,k))/(p->DYP[JM1]+p->DYP[JP]);
-        dz = (a->phi(i,j,k+1)-a->phi(i,j,k-1))/(p->DZP[KM1]+p->DZP[KP]);
+        // dx = (a->phi(i+1,j,k)-a->phi(i-1,j,k))/(p->DXP[IM1]+p->DXP[IP]);
+        // dy = (a->phi(i,j+1,k)-a->phi(i,j-1,k))/(p->DYP[JM1]+p->DYP[JP]);
+        // dz = (a->phi(i,j,k+1)-a->phi(i,j,k-1))/(p->DZP[KM1]+p->DZP[KP]);
         
         dnorm = sqrt(p->DXN[IP]*p->DXN[IP] + p->DYN[JP]*p->DYN[JP] + p->DZN[KP]*p->DZN[KP]);
         
