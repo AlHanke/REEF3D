@@ -27,9 +27,9 @@ Author: Tobias Martin
 #include"ghostcell.h"
 #include"vrans.h"
    
-sixdof_sflow::sixdof_sflow(lexer *p, ghostcell *pgc):press(p),ddweno_f_nug(p),frk1(p),frk2(p),L(p),dt(p),
-                                                              fb(p),fbio(p),cutr(p),cutl(p),Ls(p),Bs(p),
-                                                              Rxmin(p),Rxmax(p),Rymin(p),Rymax(p),draft(p),epsi(1.6*p->DXM)
+sixdof_sflow::sixdof_sflow(lexer *p, ghostcell *pgc): ddweno_f_nug(p), press(p),frk1(p),frk2(p),L(p),dt(p),
+                                                              fb(p),Ls(p),Bs(p),Rxmin(p),Rxmax(p),Rymin(p),Rymax(p),
+                                                              draft(p),cutl(p),cutr(p),fbio(p),epsi(1.6*p->DXM)
 {
     trisum=1;
     p->Darray(tri_xn,trisum,3);

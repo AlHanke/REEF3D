@@ -1880,7 +1880,7 @@ int beam::SolutionOutput()
 		if ((xold <= xd) && (x >= xd)) {
 			cout << "Step " << naccpt << ": t = " << setw(5) <<
 				setprecision(2) << xd << "  y = ";
-			for (unsigned i = 0; i < n_dim; i++)
+			for (int i = 0; i < n_dim; i++)
 				cout << setw(10) << setprecision(8) <<
 					ContinuousOutput(i) << "  ";
 			cout << endl;

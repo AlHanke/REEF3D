@@ -168,7 +168,7 @@ void driver::cfd_driver()
 void driver::nsewave_driver()
 {
     if(p->mpirank==0)
-	cout<<"initialize fdm"<<endl;
+	    cout<<"initialize fdm"<<endl;
 
 	a=new fdm(p);
 

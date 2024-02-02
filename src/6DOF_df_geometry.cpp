@@ -341,9 +341,9 @@ void sixdof_df_object::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
 	cout<<"Center of Gravity   xg: "<<c_(0)<<" yg: "<<c_(1)<<" zg: "<<c_(2)<<endl;
 
 
-	double xgn = c_(0);
-	double ygn = c_(1);
-	double zgn = c_(2);
+	// double xgn = c_(0);
+	// double ygn = c_(1);
+	// double zgn = c_(2);
 
 
 // Moments of Inertia

@@ -554,7 +554,7 @@ Eigen::VectorXd net_barDyn::timeWeight(lexer* p)
     // 3rd-order finite difference weights for first derivative and varying time step
     
 	double c2, c3, c5;
-	int mn;	
+	// int mn;	
 
 	int nd = 4;    
     double c1 = 1.0;

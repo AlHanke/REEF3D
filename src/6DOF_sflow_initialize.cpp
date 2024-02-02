@@ -181,7 +181,8 @@ void sixdof_sflow::geometry_refinement(lexer *p)
 {
 	double x0,x1,x2,y0,y1,y2,z0,z1,z2;
 	double x01,x02,x12,y01,y02,y12,z01,z02,z12;
-	double at,bt,ct,st;
+	double at,bt,ct;
+	// ,st;
 	double nx_old,ny_old,nz_old;	
 	
 	tri_x_r.reserve(3*tricount);
@@ -300,7 +301,8 @@ void sixdof_sflow::create_triangle
 	const double& nx_old, const double& ny_old, const double& nz_old
 )
 {
-	double nx,ny,nz,temp;
+	double nx,ny,nz;
+	// ,temp;
 	
 	vector<double> tri_x_new(3,0.0);
 	vector<double> tri_y_new(3,0.0);

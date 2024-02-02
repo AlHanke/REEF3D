@@ -34,15 +34,15 @@ void concentration_io::ini(lexer* p, fdm *a, ghostcell* pgc,concentration *pconc
 	int qn;
 
     LOOP
-	C(i,j,k)=p->C50_2;
+		C(i,j,k)=p->C50_2;
 
 	LOOP
-	if(p->XN[IP]>=p->C51 && p->XN[IP]<p->C54
-	&& p->YN[JP]>=p->C52 && p->YN[JP]<p->C55
-	&& p->ZN[KP]>=p->C53 && p->ZN[KP]<p->C56)
-	{
-	C(i,j,k)=p->C50_1;
-	}
+		if(p->XN[IP]>=p->C51 && p->XN[IP]<p->C54
+		&& p->YN[JP]>=p->C52 && p->YN[JP]<p->C55
+		&& p->ZN[KP]>=p->C53 && p->ZN[KP]<p->C56)
+		{
+			C(i,j,k)=p->C50_1;
+		}
 
 
 

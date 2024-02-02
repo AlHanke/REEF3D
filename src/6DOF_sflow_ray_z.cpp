@@ -137,9 +137,9 @@ void sixdof_sflow::ray_cast_z(lexer *p, ghostcell *pgc, int ts, int te)
 		w = PQx*(By*Az - Bz*Ay) + PQy*(Bz*Ax - Bx*Az) + PQz*(Bx*Ay - By*Ax)
 		  + Mx*(Bx-Ax) + My*(By-Ay) + Mz*(Bz-Az);
         
-        int check=1;
-		if(u==0.0 && v==0.0 && w==0.0)
-		check = 0;
+        // int check=1;
+		// if(u==0.0 && v==0.0 && w==0.0)
+		// check = 0;
 
 			if((u>0.0 && v>0.0 && w>0.0) || (u<0.0 && v<0.0 && w<0.0) )//&& check==1)
 			{
@@ -154,18 +154,18 @@ void sixdof_sflow::ray_cast_z(lexer *p, ghostcell *pgc, int ts, int te)
 				k = p->posf_k(Rz);
 
 				
-				int distcheck=1;
+				// int distcheck=1;
 	
 				
-				if(Rz<p->ZP[KP])
-				if(k>=0 && k<p->knoz)
-				if(fbio(i,j)<0)
-				distcheck=0;
+				// if(Rz<p->ZP[KP])
+				// if(k>=0 && k<p->knoz)
+				// if(fbio(i,j)<0)
+				// distcheck=0;
 				
-				if(Rz>=p->ZP[KP])
-				if(k>=0 && k<p->knoz)
-				if(fbio(i,j)<0)
-				distcheck=0;
+				// if(Rz>=p->ZP[KP])
+				// if(k>=0 && k<p->knoz)
+				// if(fbio(i,j)<0)
+				// distcheck=0;
 
 				if(p->wd-Rz>0.0)
 				draft(i,j)=MAX(p->wd-Rz,draft(i,j));

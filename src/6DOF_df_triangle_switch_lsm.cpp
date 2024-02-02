@@ -29,7 +29,7 @@ void sixdof_df_object::triangle_switch_lsm(lexer *p, fdm *a, ghostcell *pgc)
 {
     double x0,x1,x2,y0,y1,y2,z0,z1,z2;
 	double xc,yc,zc;
-	double at,bt,ct,st;
+	// double at,bt,ct,st;
 	double nx,ny,nz,norm;
     double n0,n1,n2;
     double fbval;
@@ -176,7 +176,7 @@ void sixdof_df_object::triangle_switch_lsm(lexer *p, fdm *a, ghostcell *pgc)
 			n1 /= norm > 1.0e-20 ? norm : 1.0e20;
 			n2 /= norm > 1.0e-20 ? norm : 1.0e20;
 
-            if((n0>0.0 && nx<0.0 || n0<0.0 && nx>0.0) || (n2>0.0 && nz<0.0 || n2<0.0 && nz>0.0))
+            if((n0>0.0 && nx<0.0) || (n0<0.0 && nx>0.0) || (n2>0.0 && nz<0.0) || (n2<0.0 && nz>0.0))
             fbval=-1.0;
         
         

@@ -151,7 +151,7 @@ void sixdof_df_object::forces_stl
             double uval, vval, wval;
             double kappa = 0.4;
             // double xip, yip, zip, zval;
-            double u_abs, density;
+            // double u_abs, density;
             // double tau;
             double ks;
             double dir;
@@ -234,7 +234,7 @@ void sixdof_df_object::forces_stl
             dwdy = (wval)/delta;
             dwdz = (wval)/delta;
             
-            u_abs = sqrt(uval*uval + vval*vval + wval*wval);
+            // u_abs = sqrt(uval*uval + vval*vval + wval*wval);
 
             Fv_x = -rho_int*(nu_int + enu_int)*A_triang*(2.0*dudx*nx + (dudy + dvdx)*ny + (dudz + dwdx)*nz);
             Fv_y = -rho_int*(nu_int + enu_int)*A_triang*((dudy + dvdx)*nx + 2.0*dvdy*ny + (dvdz + dwdy)*nz);
@@ -309,7 +309,7 @@ void sixdof_df_object::forces_stl
             j = p->posc_j(ylocvel);
             k = p->posc_k(zlocvel);
             
-            double delta = sqrt(pow(xc-xlocvel,2.0) + pow(yc-ylocvel,2.0) + pow(zc-zlocvel,2.0));
+            // double delta = sqrt(pow(xc-xlocvel,2.0) + pow(yc-ylocvel,2.0) + pow(zc-zlocvel,2.0));
             
                 
             nu_int  = p->ccipol4_a(a->visc,xlocvel,ylocvel,zlocvel);
@@ -317,7 +317,7 @@ void sixdof_df_object::forces_stl
             rho_int = p->ccipol4_a(a->ro,xlocvel,ylocvel,zlocvel);
 
 
-            u_abs = sqrt(uval*uval + vval*vval + wval*wval);
+            // u_abs = sqrt(uval*uval + vval*vval + wval*wval);
             
             // tau=density*(nu_int + enu_int)*(u_abs/delta);
             

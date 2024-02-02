@@ -31,7 +31,7 @@ void sixdof_df_object::ray_cast_io_zcorr(lexer *p, fdm *a, ghostcell *pgc, int t
 	// double ys,ye,zs,ze;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Rz;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;

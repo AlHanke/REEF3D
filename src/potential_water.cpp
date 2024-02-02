@@ -251,22 +251,22 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
     LOOP
     {
         if(p->flag4[Im1JK]<0)
-		bc(i-1,j,k)=0;
+		    bc(i-1,j,k)=0;
 		
 		if(p->flag4[Ip1JK]<0)
-		bc(i+1,j,k)=0;
+		    bc(i+1,j,k)=0;
 		
 		if(p->flag4[IJm1K]<0)
-		bc(i,j-1,k)=0;
+		    bc(i,j-1,k)=0;
 		
 		if(p->flag4[IJp1K]<0)
-		bc(i,j+1,k)=0;
+		    bc(i,j+1,k)=0;
 		
 		if(p->flag4[IJKm1]<0)
-		bc(i,j,k-1)=0;
+		    bc(i,j,k-1)=0;
 		
 		if(p->flag4[IJKp1]<0)
-		bc(i,j,k+1)=0;
+		    bc(i,j,k+1)=0;
     }
     
 
@@ -279,16 +279,16 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
             k=p->gcb4[n][2];  
        
             if(p->gcb4[n][3]==1)
-            bc(i-1,j,k)=1;
+                bc(i-1,j,k)=1;
             
             if(p->gcb4[n][3]==3)
-            bc(i,j-1,k)=1;
+                bc(i,j-1,k)=1;
             
             if(p->gcb4[n][3]==2)
-            bc(i,j+1,k)=1;
+                bc(i,j+1,k)=1;
             
             if(p->gcb4[n][3]==4)
-            bc(i+1,j,k)=1;
+                bc(i+1,j,k)=1;
  
         }
         
@@ -299,16 +299,16 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
             k=p->gcb4[n][2];  
        
             if(p->gcb4[n][3]==1)
-            bc(i-1,j,k)=2;
+                bc(i-1,j,k)=2;
             
             if(p->gcb4[n][3]==3)
-            bc(i,j-1,k)=2;
+                bc(i,j-1,k)=2;
             
             if(p->gcb4[n][3]==2)
-            bc(i,j+1,k)=2;
+                bc(i,j+1,k)=2;
             
             if(p->gcb4[n][3]==4)
-            bc(i+1,j,k)=2;
+                bc(i+1,j,k)=2;
  
         }
     }

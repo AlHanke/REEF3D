@@ -31,19 +31,19 @@ void sixdof_df_object::ray_cast_io_x(lexer *p, fdm *a, ghostcell *pgc, int ts, i
 	double ys,ye,zs,ze;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Rx;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
 	double PQx,PQy,PQz;
-	double PAx,PAy,PAz;
-	double PBx,PBy,PBz;
-	double PCx,PCy,PCz;
+	// double PAx,PAy,PAz;
+	// double PBx,PBy,PBz;
+	// double PCx,PCy,PCz;
 	double Mx,My,Mz;
 	int js,je,ks,ke;
 	double u,v,w;
 	double denom;	
-	int insidecheck;
+	// int insidecheck;
 	double psi = 1.0e-8*p->DXM;
     
     ALOOP
@@ -116,17 +116,17 @@ void sixdof_df_object::ray_cast_io_x(lexer *p, fdm *a, ghostcell *pgc, int ts, i
 		PQy = Qy-Py;
 		PQz = Qz-Pz;
 		
-		PAx = Ax-Px;
-		PAy = Ay-Py;
-		PAz = Az-Pz;
+		// PAx = Ax-Px;
+		// PAy = Ay-Py;
+		// PAz = Az-Pz;
 		
-		PBx = Bx-Px;
-		PBy = By-Py;
-		PBz = Bz-Pz;
+		// PBx = Bx-Px;
+		// PBy = By-Py;
+		// PBz = Bz-Pz;
 		
-		PCx = Cx-Px;
-		PCy = Cy-Py;
-		PCz = Cz-Pz;
+		// PCx = Cx-Px;
+		// PCy = Cy-Py;
+		// PCz = Cz-Pz;
 		
 		// uvw
 		Mx = PQy*Pz - PQz*Py;
@@ -148,7 +148,7 @@ void sixdof_df_object::ray_cast_io_x(lexer *p, fdm *a, ghostcell *pgc, int ts, i
 		if(u==0.0 && v==0.0 && w==0.0)
 		check = 0;
 		
-			if((u>=0.0 && v>=0.0 && w>=0.0) || (u<0.0 && v<0.0 && w<0.0) && check==1)
+			if((u>=0.0 && v>=0.0 && w>=0.0) || ((u<0.0 && v<0.0 && w<0.0) && check==1))
 			{
 			denom = 1.0/(u+v+w);
 			u *= denom;

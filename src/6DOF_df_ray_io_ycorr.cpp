@@ -28,10 +28,10 @@ Author: Hans Bihs
 
 void sixdof_df_object::ray_cast_io_ycorr(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 {
-	double ys,ye,zs,ze;
+	double zs,ze;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Ry;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
@@ -40,7 +40,7 @@ void sixdof_df_object::ray_cast_io_ycorr(lexer *p, fdm *a, ghostcell *pgc, int t
 	// double PBx,PBy,PBz;
 	// double PCx,PCy,PCz;
 	double Mx,My,Mz;
-	int is,ie,js,je,ks,ke;
+	int is,ie,ks,ke;
 	// int ir,insidecheck;
 	double u,v,w;
 	double denom;

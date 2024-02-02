@@ -45,13 +45,13 @@ potentialfile_out::~potentialfile_out()
 
 void potentialfile_out::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, turbulence *pturb)
 {
-	int num;
+	// int num;
 	
-	if(p->P15==1)
-    num = filecount;
+	// if(p->P15==1)
+    // num = filecount;
 
-    if(p->P15==2)
-    num = p->count;
+    // if(p->P15==2)
+    // num = p->count;
 
 
 	for(n=0;n<p->P230;++n)

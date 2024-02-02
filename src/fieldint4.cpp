@@ -44,11 +44,11 @@ fieldint4::~fieldint4()
 	int a,b;
     
     for(a=0;a<gcfeldsize;++a)
-    for(b=0;b<6;++b)
-	delete [ ] gcfeld[a][b];
+		for(b=0;b<6;++b)
+			delete [ ] gcfeld[a][b];
     
 	for(a=0;a<gcfeldsize;++a)
-	delete [ ] gcfeld[a];
+		delete [ ] gcfeld[a];
 
 	delete [ ] gcfeld;
 
@@ -79,7 +79,7 @@ void fieldint4::resize(lexer* p)
 int & fieldint4::operator()(int ii, int jj, int kk)
 {			
 	if(pp->mgc4[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin]<2)
-	return V[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin];
+		return V[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin];
 	
 	
 	iter=(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin;
