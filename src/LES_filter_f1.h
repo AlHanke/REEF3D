@@ -47,11 +47,17 @@ public:
 
 
 private:
-    field1 ubar,etta_u1,etta_u2;
-    field2 vbar,etta_v1,etta_v2;
-    field3 wbar,etta_w1,etta_w2;
+    field1 ubar;
+    field2 vbar;
+    field3 wbar;
 
+    field1 etta_u1;
+    field2 etta_v1;
+    field3 etta_w1;
 
+    field1 etta_u2;
+    field2 etta_v2;
+    field3 etta_w2;
 };
 
 #endif

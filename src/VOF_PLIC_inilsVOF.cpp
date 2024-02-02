@@ -27,8 +27,6 @@ Author: Tobias Martin
 
 void VOF_PLIC::iniphi(fdm*a, lexer* p, ghostcell* pgc)
 {
-
-    double dx=p->DXM;
     double r;
     double phidiff, xdiff;
     p->phimean=p->F56;
@@ -79,8 +77,8 @@ void VOF_PLIC::iniphi(fdm*a, lexer* p, ghostcell* pgc)
 
     if(p->F60>-1.0e20)
     {
-        LOOP
-            a->phi(i,j,k)=p->F60-p->pos_z();
+        LOOP{
+            a->phi(i,j,k)=p->F60-p->pos_z();}
 
 	    p->phimean=p->F60;
 	
@@ -240,7 +238,7 @@ void VOF_PLIC::iniphi_box(lexer* p, fdm *a, ghostcell* pgc)
 
 void VOF_PLIC::iniphi_surfarea(lexer* p, fdm *a, ghostcell* pgc)
 {
-	double dx,dy,dz,dnorm,dirac;
+	double dnorm,dirac;
 	double area=0.0;
 	double epsi = 1.6*p->DXM;
 	
