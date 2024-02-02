@@ -135,12 +135,12 @@ void VOF_PLIC::iniphi(fdm*a, lexer* p, ghostcell* pgc)
         p->phiin=p->F62;
 	
 	
-	if(p->F64==1)
-        LOOP
-        {
+	// if(p->F64==1)
+    //     LOOP
+    //     {
         
-            //a->phi(i,j,k) = p->F61-p->pos_z()
-        }
+    //         //a->phi(i,j,k) = p->F61-p->pos_z()
+    //     }
 	
 	
 	pgc->start4(p,a->phi,50);
