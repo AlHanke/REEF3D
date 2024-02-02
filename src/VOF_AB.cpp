@@ -37,16 +37,16 @@ Author: Hans Bihs
 VOF_AB::VOF_AB(lexer* p, fdm *a, ghostcell* pgc, heat *pheat):gradient(p),uc(p),vc(p),wc(p),F(p),lab(p)
 {
     if(p->F50==1)
-	gcval_frac=71;
+	    gcval_frac=71;
 
 	if(p->F50==2)
-	gcval_frac=72;
+	    gcval_frac=72;
 
 	if(p->F50==3)
-	gcval_frac=73;
+	    gcval_frac=73;
 
 	if(p->F50==4)
-	gcval_frac=74;
+	    gcval_frac=74;
 
 	pupdate = new fluid_update_vof(p,a,pgc);
 	
@@ -69,19 +69,19 @@ void VOF_AB::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcell
     starttime=pgc->timer();
 
     LOOP
-	a->L(i,j,k)=0.0;
+	    a->L(i,j,k)=0.0;
 
 	pconvec->start(p,a,a->phi,4,a->u,a->v,a->w);
 
 	if(p->count==1)
-	LOOP
-	lab(i,j,k)=a->L(i,j,k);
+        LOOP
+            lab(i,j,k)=a->L(i,j,k);
 
 	LOOP
 	{
-	a->phi(i,j,k)+=p->dt*0.5*(((p->dt+2.0*p->dt_old)/p->dt_old)*a->L(i,j,k)
-								-(p->dt/p->dt_old)*lab(i,j,k));
-	lab(i,j,k)=a->L(i,j,k);
+        a->phi(i,j,k)+=p->dt*0.5*(((p->dt+2.0*p->dt_old)/p->dt_old)*a->L(i,j,k)
+                                    -(p->dt/p->dt_old)*lab(i,j,k));
+        lab(i,j,k)=a->L(i,j,k);
 	}
 
     //compression(p,a,pgc,pconvec,a->phi,0.5);
@@ -96,7 +96,7 @@ void VOF_AB::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcell
 	p->lsmtime=pgc->timer()-starttime;
 	
 	if(p->mpirank==0)
-	cout<<"voftime: "<<setprecision(3)<<p->lsmtime<<endl;
+	    cout<<"voftime: "<<setprecision(3)<<p->lsmtime<<endl;
 
 }
 
@@ -114,20 +114,20 @@ void VOF_AB::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec, 
     int iter;
 
     LOOP
-    F(i,j,k)=f(i,j,k)*(1.0-f(i,j,k));
+        F(i,j,k)=f(i,j,k)*(1.0-f(i,j,k));
 
     pgc->start4(p,F,gcval_frac);
 
 // x
 	ULOOP
 	{
-	di = xdx(a,a->phi);
-	dj = xdy(a,a->phi);
-	dk = xdz(a,a->phi);
-	
-	dnorm=sqrt(di*di + dj*dj + dk*dk);
+        di = xdx(a,a->phi);
+        dj = xdy(a,a->phi);
+        dk = xdz(a,a->phi);
+        
+        dnorm=sqrt(di*di + dj*dj + dk*dk);
 
-    nx=di/(dnorm>1.0e-15?dnorm:1.0e20);
+        nx=di/(dnorm>1.0e-15?dnorm:1.0e20);
 	
 	
 		pip=1;
@@ -142,21 +142,21 @@ void VOF_AB::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec, 
         wvel=0.25*(a->w(i,j,k) + a->w(i+1,j,k) + a->w(i+1,j,k-1) + a->w(i,j,k-1));
         pip=0;
 		
-	uabs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
-	
-	uc(i,j,k) = p->F84*uabs * nx;
+        uabs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
+        
+        uc(i,j,k) = p->F84*uabs * nx;
 
 	}
 	
 	VLOOP
 	{
-	di = ydx(a,a->phi);
-	dj = ydy(a,a->phi);
-	dk = ydz(a,a->phi);
-	
-	dnorm=sqrt(di*di + dj*dj + dk*dk);
+        di = ydx(a,a->phi);
+        dj = ydy(a,a->phi);
+        dk = ydz(a,a->phi);
+        
+        dnorm=sqrt(di*di + dj*dj + dk*dk);
 
-    ny=dj/(dnorm>1.0e-15?dnorm:1.0e20);
+        ny=dj/(dnorm>1.0e-15?dnorm:1.0e20);
 	
 	
 		pip=1;
@@ -171,22 +171,22 @@ void VOF_AB::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec, 
         wvel=0.25*(a->w(i,j,k) + a->w(i+1,j,k) + a->w(i+1,j,k-1) + a->w(i,j,k-1));
         pip=0;
 		
-	uabs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
-	
-	vc(i,j,k) = p->F84*uabs * ny;
+        uabs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
+        
+        vc(i,j,k) = p->F84*uabs * ny;
 
 	}
 	
 	
 	WLOOP
 	{
-	di = zdx(a,a->phi);
-	dj = zdy(a,a->phi);
-	dk = zdz(a,a->phi);
-	
-	dnorm=sqrt(di*di + dj*dj + dk*dk);
+        di = zdx(a,a->phi);
+        dj = zdy(a,a->phi);
+        dk = zdz(a,a->phi);
+        
+        dnorm=sqrt(di*di + dj*dj + dk*dk);
 
-    nz=dk/(dnorm>1.0e-15?dnorm:1.0e20);
+        nz=dk/(dnorm>1.0e-15?dnorm:1.0e20);
 	
 	
 		pip=1;
@@ -201,9 +201,9 @@ void VOF_AB::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec, 
         wvel=a->w(i,j,k);
         pip=0;
 		
-	uabs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
-	
-	wc(i,j,k) = p->F84*uabs * nz;
+        uabs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
+        
+        wc(i,j,k) = p->F84*uabs * nz;
 
 	}
 	
@@ -215,13 +215,13 @@ void VOF_AB::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec, 
     umax=vmax=wmax=0.0;
 
 	ULOOP
-    umax=MAX(umax,fabs(uc(i,j,k)));
+        umax=MAX(umax,fabs(uc(i,j,k)));
 	
 	VLOOP
-    vmax=MAX(vmax,fabs(vc(i,j,k)));
+        vmax=MAX(vmax,fabs(vc(i,j,k)));
 	
 	WLOOP
-    wmax=MAX(wmax,fabs(wc(i,j,k)));
+        wmax=MAX(wmax,fabs(wc(i,j,k)));
     
 
     timestep = (0.5*MAX(umax,MAX(vmax,wmax)))/p->DXM;
@@ -229,29 +229,29 @@ void VOF_AB::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec, 
     timestep = pgc->globalmax(timestep);
 
     if(timestep>=alpha*p->dt)
-    iter=1;
+        iter=1;
 
     if(timestep<alpha*p->dt)
     {
-    iter=int((alpha*p->dt)/timestep);
+        iter=int((alpha*p->dt)/timestep);
 
-    timestep = (alpha*p->dt)/(double(iter)+1.0);
-    ++iter;
+        timestep = (alpha*p->dt)/(double(iter)+1.0);
+        ++iter;
     }
 
     if(p->mpirank==0)
-    cout<<"VOF  dt:"<<timestep<<"  iter: "<<iter<<endl;
+        cout<<"VOF  dt:"<<timestep<<"  iter: "<<iter<<endl;
 
     for(int qn=0; qn<iter; ++qn)
     {
-    LOOP
-	a->L(i,j,k)=0.0;
+        LOOP
+            a->L(i,j,k)=0.0;
 
-    ppconvec->start(p,a,F,5,uc,vc,wc);
+        ppconvec->start(p,a,F,5,uc,vc,wc);
 
 
-    LOOP
-    f(i,j,k)+=p->dt*a->L(i,j,k);
+        LOOP
+            f(i,j,k)+=p->dt*a->L(i,j,k);
     }
 
 }

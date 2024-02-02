@@ -39,7 +39,7 @@ void sixdof_sflow::read_stl(lexer *p, ghostcell *pgc)
 	
 	// read and count number of triangles
     if(p->mpirank==0)
-	cout<<"reading 6DOF STL "<<endl;
+		cout<<"reading 6DOF STL "<<endl;
     
 	ifstream stl("floating.stl", ios_base::in);
     
@@ -53,10 +53,10 @@ void sixdof_sflow::read_stl(lexer *p, ghostcell *pgc)
 		stl>>word;
 		
 		if(word=="facet")
-		++count;
+			++count;
 
         if(word=="solid")
-        chk=1;
+        	chk=1;
 
 	}
 	
@@ -65,14 +65,14 @@ void sixdof_sflow::read_stl(lexer *p, ghostcell *pgc)
 	
     if(chk==0)
 	{
-	cout<<"Please convert STL file to ASCII format!"<<endl<<endl;
-	cout<<"See User's Guide for more information!"<<endl<<endl<<endl;
-    pgc->final();
-	exit(0);
+		cout<<"Please convert STL file to ASCII format!"<<endl<<endl;
+		cout<<"See User's Guide for more information!"<<endl<<endl<<endl;
+		pgc->final();
+		exit(0);
 	}
     
     if(p->mpirank==0)
-	cout<<"6DOF STL trisum: "<<count<<endl;
+		cout<<"6DOF STL trisum: "<<count<<endl;
 	++count;
 	// create vecs
 	p->Dresize(tri_x,trisum,count,3,3);
@@ -86,7 +86,7 @@ void sixdof_sflow::read_stl(lexer *p, ghostcell *pgc)
 	trisum=count;
     
     if(p->mpirank==0)
-	cout<<"re-reading 6DOF STL "<<endl;
+		cout<<"re-reading 6DOF STL "<<endl;
 	
 	// reopen and read triangles
 	stl.open("floating.stl", ios_base::in);
@@ -99,17 +99,17 @@ void sixdof_sflow::read_stl(lexer *p, ghostcell *pgc)
 		
 		if(word=="facet")
 		{
-		++count;
-		vert_count=0;
+			++count;
+			vert_count=0;
 		}
 		
 		if(word=="normal")
-		stl>>trivec_x>>trivec_y>>trivec_z;
+			stl>>trivec_x>>trivec_y>>trivec_z;
 		
 		if(word=="vertex")
 		{
-		stl>>tri_x[count][vert_count]>>tri_y[count][vert_count]>>tri_z[count][vert_count];
-		++vert_count;
+			stl>>tri_x[count][vert_count]>>tri_y[count][vert_count]>>tri_z[count][vert_count];
+			++vert_count;
 		}
     //if(p->mpirank==0)
 	//cout<<"6DOF STL count "<<count<<endl;
@@ -118,30 +118,30 @@ void sixdof_sflow::read_stl(lexer *p, ghostcell *pgc)
 	stl.close();
     
     if(p->mpirank==0)
-	cout<<"6DOF STL closed "<<endl;
+		cout<<"6DOF STL closed "<<endl;
 	
 	tricount = count + 1;
     //tend[entity_count] = tricount;
 	
 	// scale STL model
 	if (p->X181 == 1)
-	for(n=0; n<tricount; ++n)
-	for(int q=0; q<3; ++q)
-	{
-        tri_x[n][q] *= p->X181_x;
-		tri_y[n][q] *= p->X181_y;
-		tri_z[n][q] *= p->X181_z;
-	}
+		for(n=0; n<tricount; ++n)
+			for(int q=0; q<3; ++q)
+			{
+				tri_x[n][q] *= p->X181_x;
+				tri_y[n][q] *= p->X181_y;
+				tri_z[n][q] *= p->X181_z;
+			}
 	
     // change orgin
 	if(p->X182==1)
-	for(n=0; n<tricount; ++n)
-	for(q=0; q<3; ++q)
-	{
-		tri_x[n][q]+=p->X182_x;
-		tri_y[n][q]+=p->X182_y;
-		tri_z[n][q]+=p->X182_z;
-	}
+		for(n=0; n<tricount; ++n)
+			for(q=0; q<3; ++q)
+			{
+				tri_x[n][q]+=p->X182_x;
+				tri_y[n][q]+=p->X182_y;
+				tri_z[n][q]+=p->X182_z;
+			}
 
 
     // rotate STL model
@@ -165,14 +165,14 @@ void sixdof_sflow::read_stl(lexer *p, ghostcell *pgc)
     STL_ymax=-1.0e10;
     
 	for(n=0; n<tricount; ++n)
-	for(q=0; q<3; ++q)
-	{
-		STL_xmin = MIN(STL_xmin,tri_x[n][q]);
-        STL_xmax = MAX(STL_xmax,tri_x[n][q]);
-        
-        STL_ymin = MIN(STL_ymin,tri_y[n][q]);
-        STL_ymax = MAX(STL_ymax,tri_y[n][q]);
-	}
+		for(q=0; q<3; ++q)
+		{
+			STL_xmin = MIN(STL_xmin,tri_x[n][q]);
+			STL_xmax = MAX(STL_xmax,tri_x[n][q]);
+			
+			STL_ymin = MIN(STL_ymin,tri_y[n][q]);
+			STL_ymax = MAX(STL_ymax,tri_y[n][q]);
+		}
     
     p->xg = STL_xmin + 0.5*(STL_xmax-STL_xmin);
     p->yg = STL_ymin + 0.5*(STL_ymax-STL_ymin);

@@ -373,49 +373,49 @@ void driver::logic_cfd()
 		poneph = new onephase_v(p,a,pgc);
 
     if(p->F30==0 && p->F80==0)
-	pfsf = new levelset_void(p,a,pgc,pheat,pconc);
+		pfsf = new levelset_void(p,a,pgc,pheat,pconc);
 
 	if(p->F30==1)
-	pfsf = new levelset_AB2(p,a,pgc,pheat,pconc);
+		pfsf = new levelset_AB2(p,a,pgc,pheat,pconc);
 
 	if(p->F30==2)
-	pfsf = new levelset_RK2(p,a,pgc,pheat,pconc);
+		pfsf = new levelset_RK2(p,a,pgc,pheat,pconc);
 
 	if(p->F30==3 && p->N40!=23)
-	pfsf = new levelset_RK3(p,a,pgc,pheat,pconc);
+		pfsf = new levelset_RK3(p,a,pgc,pheat,pconc);
 
     if(p->N40==22 || p->N40==23 || p->N40==33)
-	pfsf = new levelset_void(p,a,pgc,pheat,pconc);
+		pfsf = new levelset_void(p,a,pgc,pheat,pconc);
 
 
 	if(p->F40==0)
-	preini = new reini_void(p);
+		preini = new reini_void(p);
 
     if(p->F40==3)
-    preini = new reinifluid_RK3(p,1);
+    	preini = new reinifluid_RK3(p,1);
 
 	if(p->F40==23)
-	preini = new reini_RK3(p,1);
+		preini = new reini_RK3(p,1);
 
 	if(p->F40==11)
-	preini = new directreini(p,a);
+		preini = new directreini(p,a);
 
 
 	if(p->F31==0)
-	ppls = new particle_pls_void();
+		ppls = new particle_pls_void();
 
 	if(p->F31==1 || p->F31==2)
-	ppls = new particle_pls(p,a,pgc);
+		ppls = new particle_pls(p,a,pgc);
 
 
 	if(p->F80==1)
-	pfsf = new VOF_AB(p,a,pgc,pheat);
+		pfsf = new VOF_AB(p,a,pgc,pheat);
 
 	if(p->F80==3)
-	pfsf = new VOF_RK3(p,a,pgc,pheat);
+		pfsf = new VOF_RK3(p,a,pgc,pheat);
 
 	if(p->F80==4)
-	pfsf = new VOF_PLIC(p,a,pgc,pheat);
+		pfsf = new VOF_PLIC(p,a,pgc,pheat);
 
 
     //  Convection VOF
