@@ -40,7 +40,8 @@ idiff2_FS_2D::~idiff2_FS_2D()
 void idiff2_FS_2D::diff_u(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &u, field &v, field &w, double alpha)
 {
 	starttime=pgc->timer();
-	double visc_ddy_p,visc_ddy_m,visc_ddz_p,visc_ddz_m;
+	// double visc_ddy_p,visc_ddy_m;
+	double visc_ddz_p,visc_ddz_m;
     
 	count=0;
     if(p->i_dir==1)
@@ -126,7 +127,8 @@ void idiff2_FS_2D::diff_u(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field
 void idiff2_FS_2D::diff_u(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &diff, field &u_in, field &u, field &v, field &w, double alpha)
 {
 	starttime=pgc->timer();
-	double visc_ddy_p,visc_ddy_m,visc_ddz_p,visc_ddz_m;
+	// double visc_ddy_p,visc_ddy_m;
+	double visc_ddz_p,visc_ddz_m;
     
     ULOOP
     diff(i,j,k) = u_in(i,j,k);

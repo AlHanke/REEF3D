@@ -154,7 +154,7 @@ void ikomega::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
     {
     double sgs_val;
     double c_sgs=0.2;
-    double factor=1.0;
+    // double factor=1.0;
     
         LOOP
         {
@@ -204,7 +204,7 @@ void ikomega::kinsource(lexer *p, fdm* a, vrans* pvrans)
 void ikomega::epssource(lexer *p, fdm* a, vrans* pvrans, field &kin)
 {
     count=0;
-    double dirac;
+    // double dirac;
 
         LOOP
         {

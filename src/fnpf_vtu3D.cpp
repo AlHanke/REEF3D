@@ -62,7 +62,7 @@ fnpf_vtu3D::fnpf_vtu3D(lexer* p, fdm_fnpf *c, ghostcell *pgc)
 	printfsftime_wT[qn]=p->P185_ts[qn];
 
     for(int qn=0; qn<p->P184; ++qn)
-	printfsfiter_wI[qn]=p->P184_its[qn];
+		{printfsfiter_wI[qn]=p->P184_its[qn];}
 
 
 	printcount=0;
@@ -389,25 +389,25 @@ void fnpf_vtu3D::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
 	result.write((char*)&iin, sizeof (int));
     TPLOOP
 	{
-	ffn=float(c->U[FIJKp1]);
+		ffn=float(c->U[FIJKp1]);
 
-    if(k==-1 && j==-1)
-	ffn=float(c->U[FIJp1Kp1]);
-	result.write((char*)&ffn, sizeof (float));
-
-
-	ffn=float(c->V[FIJKp1]);
-
-    if(k==-1 && j==-1)
-	ffn=float(c->V[FIJp1Kp1]);
-	result.write((char*)&ffn, sizeof (float));
+		if(k==-1 && j==-1)
+			ffn=float(c->U[FIJp1Kp1]);
+		result.write((char*)&ffn, sizeof (float));
 
 
-	ffn=float(c->W[FIJKp1]);
+		ffn=float(c->V[FIJKp1]);
 
-    if(k==-1 && j==-1)
-	ffn=float(c->W[FIJp1Kp1]);
-	result.write((char*)&ffn, sizeof (float));
+		if(k==-1 && j==-1)
+			ffn=float(c->V[FIJp1Kp1]);
+		result.write((char*)&ffn, sizeof (float));
+
+
+		ffn=float(c->W[FIJKp1]);
+
+		if(k==-1 && j==-1)
+			ffn=float(c->W[FIJp1Kp1]);
+		result.write((char*)&ffn, sizeof (float));
 	}
 
 

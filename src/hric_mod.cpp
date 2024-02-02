@@ -101,37 +101,38 @@ double hric_mod::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel
 		
 
 
-        fx1 = cface(p,a,b,1,-1,ivel1);
-        fx2 = cface(p,a,b,1,0,ivel2);
+	fx1 = cface(p,a,b,1,-1,ivel1);
+	fx2 = cface(p,a,b,1,0,ivel2);
 
-		dx= (ivel2*fx2 - ivel1*fx1)/(p->DXM);
-		
-		
+	dx= (ivel2*fx2 - ivel1*fx1)/(p->DXM);
+	
+	
 
-		
-		fy1 = cface(p,a,b,2,-1,jvel1);
-	    fy2 = cface(p,a,b,2,0,jvel2);
+	
+	fy1 = cface(p,a,b,2,-1,jvel1);
+	fy2 = cface(p,a,b,2,0,jvel2);
 
-		dy= (jvel2*fy2 - jvel1*fy1)/(p->DXM);
-		
-		
-		
-		fz1 = cface(p,a,b,3,-1,kvel1);
-	    fz2 = cface(p,a,b,3,0,kvel2);
+	dy= (jvel2*fy2 - jvel1*fy1)/(p->DXM);
+	
+	
+	
+	fz1 = cface(p,a,b,3,-1,kvel1);
+	fz2 = cface(p,a,b,3,0,kvel2);
 
-		dz= (kvel2*fz2 - kvel1*fz1)/(p->DXM);
+	dz= (kvel2*fz2 - kvel1*fz1)/(p->DXM);
 
-		
-		L = -dx-dy-dz;
+	
+	L = -dx-dy-dz;
 
-		return L;
+	return L;
 }
 
 double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
 {
 	double cj,cj_,cj_s,cj_ss;
 	double cc,cc_,cu,cd;
-    double umax,Co,costheta,gamma;
+    double umax,costheta;
+	// double Co, gamma;
 	double gradx,grady,gradz;
 	
 	
@@ -150,13 +151,13 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
         
         if(uwind<0.0)
 		{
-		cc = b(i+1+pos,j,k);
-		
-		cu = b(i+2+pos,j,k);
-		
-		cd = b(i-0+pos,j,k);
-        
-        umax = 0.5*(a->u(i+1-pos,j,k)+a->u(i-0-pos,j,k));
+			cc = b(i+1+pos,j,k);
+			
+			cu = b(i+2+pos,j,k);
+			
+			cd = b(i-0+pos,j,k);
+			
+			umax = 0.5*(a->u(i+1-pos,j,k)+a->u(i-0-pos,j,k));
 		}
 	}
 	
@@ -229,7 +230,7 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
     cj_ = cc_;
     
     
-    Co = fabs(umax*p->dt/p->DXM);
+    // Co = fabs(umax*p->dt/p->DXM);
     
     
 

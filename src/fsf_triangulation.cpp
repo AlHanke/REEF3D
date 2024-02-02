@@ -27,7 +27,7 @@ Author: Hans Bihs
 
 void fsf_vtp::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f) 
 {
-	int negcount, poscount;
+	// int negcount, poscount;
 	nodefill4(p,a,pgc,f,eta);
 
 	

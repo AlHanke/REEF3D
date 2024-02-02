@@ -392,7 +392,7 @@ void driver::logic_cfd()
 		preini = new reini_void(p);
 
     if(p->F40==3)
-	preini = new reinifluid_RK3(p,1);
+		{preini = new reinifluid_RK3(p,1);}
 
 	if(p->F40==23)
 		preini = new reini_RK3(p,1);

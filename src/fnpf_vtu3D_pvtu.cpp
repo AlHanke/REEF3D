@@ -38,44 +38,44 @@ void fnpf_vtu3D::pvtu(lexer *p, ghostcell* pgc)
 	
 	if(p->P14==0)
 	{
-    if(num<10)
-	sprintf(name,"REEF3D-FNPF-00000%i.pvtu",num);
+		if(num<10)
+		sprintf(name,"REEF3D-FNPF-00000%i.pvtu",num);
 
-	if(num<100&&num>9)
-	sprintf(name,"REEF3D-FNPF-0000%i.pvtu",num);
+		if(num<100&&num>9)
+		sprintf(name,"REEF3D-FNPF-0000%i.pvtu",num);
 
-	if(num<1000&&num>99)
-	sprintf(name,"REEF3D-FNPF-000%i.pvtu",num);
+		if(num<1000&&num>99)
+		sprintf(name,"REEF3D-FNPF-000%i.pvtu",num);
 
-	if(num<10000&&num>999)
-	sprintf(name,"REEF3D-FNPF-00%i.pvtu",num);
+		if(num<10000&&num>999)
+		sprintf(name,"REEF3D-FNPF-00%i.pvtu",num);
 
-	if(num<100000&&num>9999)
-	sprintf(name,"REEF3D-FNPF-0%i.pvtu",num);
+		if(num<100000&&num>9999)
+		sprintf(name,"REEF3D-FNPF-0%i.pvtu",num);
 
-	if(num>99999)
-	sprintf(name,"REEF3D-FNPF-%i.pvtu",num);
+		if(num>99999)
+		sprintf(name,"REEF3D-FNPF-%i.pvtu",num);
 	}
 
 	if(p->P14==1)
 	{
-    if(num<10)
-	sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-00000%i.pvtu",num);
+		if(num<10)
+		sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-00000%i.pvtu",num);
 
-	if(num<100&&num>9)
-	sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-0000%i.pvtu",num);
+		if(num<100&&num>9)
+		sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-0000%i.pvtu",num);
 
-	if(num<1000&&num>99)
-	sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-000%i.pvtu",num);
+		if(num<1000&&num>99)
+		sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-000%i.pvtu",num);
 
-	if(num<10000&&num>999)
-	sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-00%i.pvtu",num);
+		if(num<10000&&num>999)
+		sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-00%i.pvtu",num);
 
-	if(num<100000&&num>9999)
-	sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-0%i.pvtu",num);
+		if(num<100000&&num>9999)
+		sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-0%i.pvtu",num);
 
-	if(num>99999)
-	sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-%i.pvtu",num);
+		if(num>99999)
+		sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-%i.pvtu",num);
 	}
 
 	ofstream result;
@@ -96,7 +96,7 @@ void fnpf_vtu3D::pvtu(lexer *p, ghostcell* pgc)
     if(p->P110==1)
 	result<<"<PDataArray type=\"Float32\" Name=\"Hs\"/>"<<endl;
     if(p->P25==1)
-        result<<"<PDataArray type=\"Float32\" Name=\"solid\"/>"<<endl;
+        {result<<"<PDataArray type=\"Float32\" Name=\"solid\"/>"<<endl;}
 	result<<"</PPointData>"<<endl;
 	
     result<<"<PPoints>"<<endl;

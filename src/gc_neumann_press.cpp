@@ -191,29 +191,29 @@ void ghostcell::neumann_press(lexer *p,field& f,double dist,int gcv, int bc, int
 
     if(ys==0)
     {
-    if(cs==1)
-	for(q=0;q<margin;++q)
-	f(i-q-1,j,k)=f(i,j,k);
+		if(cs==1)
+		for(q=0;q<margin;++q)
+		f(i-q-1,j,k)=f(i,j,k);
 
-	if(cs==2)
-	for(q=0;q<margin;++q)
-	f(i,j+q+1,k)=f(i,j,k);
+		if(cs==2)
+		for(q=0;q<margin;++q)
+		f(i,j+q+1,k)=f(i,j,k);
 
-	if(cs==3)
-	for(q=0;q<margin;++q)
-	f(i,j-q-1,k)=f(i,j,k);
+		if(cs==3)
+		for(q=0;q<margin;++q)
+		f(i,j-q-1,k)=f(i,j,k);
 
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j,k)=f(i,j,k);
+		if(cs==4)
+		for(q=0;q<margin;++q)
+		f(i+q+1,j,k)=f(i,j,k);
 
-	if(cs==5)
-	for(q=0;q<margin;++q)
-	f(i,j,k-q-1)=f(i,j,k) - double(q+1)*dx*wallvalue;
+		if(cs==5)
+		for(q=0;q<margin;++q)
+		f(i,j,k-q-1)=f(i,j,k) - double(q+1)*dx*wallvalue;
 
-	if(cs==6)
-	for(q=0;q<margin;++q)
-	f(i,j,k+q+1)=f(i,j,k) + double(q+1)*dx*wallvalue;
+		if(cs==6)
+		for(q=0;q<margin;++q)
+		f(i,j,k+q+1)=f(i,j,k) + double(q+1)*dx*wallvalue;
     }
 }
 

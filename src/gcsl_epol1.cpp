@@ -106,22 +106,22 @@ void ghostcell::gcsldistro1(lexer *p, slice &f, int ii, int jj, int nn, double d
 	bc_label=gcsleval1(p,gcv,bc,cs);
 
 	if(bc_label==4)
-	gcsl_neumann(f,gcv,bc,cs);
+		gcsl_neumann(f,gcv,bc,cs);
     
     if(bc_label==41)
-	gcsl_neumann_hx(f,gcv,bc,cs);
+		gcsl_neumann_hx(f,gcv,bc,cs);
 	
 	if(bc_label==5)
-	gcsl_noslip(f,gcv,bc,cs);
+		gcsl_noslip(f,gcv,bc,cs);
     
     if(bc_label==7)
-	gcsl_outflow(p,f,gcv,bc,cs);
+		gcsl_outflow(p,f,gcv,bc,cs);
     
     if(bc_label==8)
-	gcsl_sommerfeld(p,f,gcv,bc,cs);
+		gcsl_sommerfeld(p,f,gcv,bc,cs);
     
     if(bc_label==9)
-	gcsl_outflow_fsf(p,f,gcv,bc,cs);
+		gcsl_outflow_fsf(p,f,gcv,bc,cs);
     
 }
 

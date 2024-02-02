@@ -31,32 +31,32 @@ void ghostcell::velcell_update(lexer *p, fdm *a, int **cellmem, int cellcount,do
 	
 	// solid->fluid
     for(nn=0;nn<cellcount;++nn)
-    if(cellmem[nn][3]==1)
-    {
-    i=cellmem[nn][0];
-    j=cellmem[nn][1];
-    k=cellmem[nn][2];
+		if(cellmem[nn][3]==1)
+		{
+			i=cellmem[nn][0];
+			j=cellmem[nn][1];
+			k=cellmem[nn][2];
 
-    if(dir==1)
-	a->u(i,j,k)=0.95*a->u(i,j,k+1);
+			if(dir==1)
+			a->u(i,j,k)=0.95*a->u(i,j,k+1);
 
-	if(dir==2)
-	a->v(i,j,k)=0.95*a->v(i,j,k+1);
+			if(dir==2)
+			a->v(i,j,k)=0.95*a->v(i,j,k+1);
 
-	if(dir==3)
-	a->w(i,j,k)=0.0;
-    }
+			if(dir==3)
+			a->w(i,j,k)=0.0;
+		}
 	
 	// fluid->solid
 	for(nn=0;nn<cellcount;++nn)
-    if(cellmem[nn][3]==2)
-    {
-    i=cellmem[nn][0];
-    j=cellmem[nn][1];
-    k=cellmem[nn][2];
+		if(cellmem[nn][3]==2)
+		{
+			i=cellmem[nn][0];
+			j=cellmem[nn][1];
+			k=cellmem[nn][2];
 
 			if(dir==1)
-			{			
+			{
 			if(p->flag1[IJKp1]>0) 
 			a->u(i,j,k+1)=0.5*a->u(i,j,k+1);
 			}
@@ -72,17 +72,17 @@ void ghostcell::velcell_update(lexer *p, fdm *a, int **cellmem, int cellcount,do
 			if(p->flag3[IJKp1]>0) 
 			a->w(i,j,k+1)=0.5*a->w(i,j,k+1);
 			}
-    }
+		}
     
 }
 
 void ghostcell::gctopo_scalarupdate(lexer *p, fdm *a, int **cellmem, int cellcount, field &f)
 {
     int nn;
-	double nx,ny,nz,norm;
-	double posx,posy,posz;
-	double locx,locy,locz;
-	double topoval,fval;
+	// double nx,ny,nz,norm;
+	// double posx,posy,posz;
+	// double locx,locy,locz;
+	// double topoval,fval;
 
 	// solid->fluid
     for(nn=0;nn<cellcount;++nn)
@@ -111,10 +111,10 @@ void ghostcell::gctopo_scalarupdate(lexer *p, fdm *a, int **cellmem, int cellcou
 void ghostcell::gctopo_pressureupdate(lexer *p, fdm *a, int **cellmem, int cellcount, field &f)
 {
     int nn;
-	double nx,ny,nz,norm;
-	double posx,posy,posz;
-	double locx,locy,locz;
-	double topoval,fval;
+	// double nx,ny,nz,norm;
+	// double posx,posy,posz;
+	// double locx,locy,locz;
+	// double topoval,fval;
 
     // solid->fluid
     for(nn=0;nn<cellcount;++nn)

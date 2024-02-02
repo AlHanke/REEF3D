@@ -153,7 +153,7 @@ void ghostcell::gcb_buildflag(lexer *p, fdm *a, int **cellmem, int& cellcount)
 
 void ghostcell::gcb_velflag1(lexer *p, fdm *a, int **cellmem, int& cellcount)
 {
-    int nn,cache;
+    int cache;
     
     count=0;
     SOLIDLOOP
@@ -203,7 +203,7 @@ void ghostcell::gcb_velflag1(lexer *p, fdm *a, int **cellmem, int& cellcount)
 
 void ghostcell::gcb_velflag2(lexer *p, fdm *a, int **cellmem, int& cellcount)
 {
-   int nn,cache;
+   int cache;
 
     count=0;
     SOLIDLOOP
@@ -251,7 +251,7 @@ void ghostcell::gcb_velflag2(lexer *p, fdm *a, int **cellmem, int& cellcount)
 
 void ghostcell::gcb_velflag3(lexer *p, fdm *a, int **cellmem, int& cellcount)
 {
-     int nn,cache;
+     int cache;
 
     count=0;
     SOLIDLOOP

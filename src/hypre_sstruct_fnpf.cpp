@@ -30,9 +30,9 @@ Author: Hans Bihs
 
 hypre_sstruct_fnpf::hypre_sstruct_fnpf(lexer* p,ghostcell *pgc, int solve_input, int precon_input) : solve_type(solve_input), precon_type(precon_input)
 {	
-    int vecsize=p->knox*p->knoy*p->knoz; 
+    // int vecsize=p->knox*p->knoy*p->knoz; 
     
-    vecsize=p->knox*p->knoy*(p->knoz+1); 
+    // vecsize=p->knox*p->knoy*(p->knoz+1); 
     
     p->Iarray(ilower,3);
     p->Iarray(iupper,3);

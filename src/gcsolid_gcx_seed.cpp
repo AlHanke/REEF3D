@@ -106,56 +106,56 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
 	count[q]=0;
 	
 	for(n=0;n<p->gcpara1_count;++n)
-    {
+  {
     i=p->gcpara1[n][0];
     j=p->gcpara1[n][1];
     k=p->gcpara1[n][2];
 		
 		if(p->flag4[(i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
-        {
-			 gcxsd[0][count[0]][0]=i;
-            gcxsd[0][count[0]][1]=j;
-            gcxsd[0][count[0]][2]=k;
-			++count[0];
+    {
+      gcxsd[0][count[0]][0]=i;
+      gcxsd[0][count[0]][1]=j;
+      gcxsd[0][count[0]][2]=k;
+      ++count[0];
 		}
-    }
+  }
 
     for(n=0;n<p->gcpara2_count;++n)
     {
-    i=p->gcpara2[n][0];
-    j=p->gcpara2[n][1];
-    k=p->gcpara2[n][2];
+      i=p->gcpara2[n][0];
+      j=p->gcpara2[n][1];
+      k=p->gcpara2[n][2];
 
-    
-		if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
-		{
-			 gcxsd[1][count[1]][0]=i;
-            gcxsd[1][count[1]][1]=j;
-            gcxsd[1][count[1]][2]=k;
-			++count[1];
-		}
+      
+      if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
+      {
+        gcxsd[1][count[1]][0]=i;
+        gcxsd[1][count[1]][1]=j;
+        gcxsd[1][count[1]][2]=k;
+        ++count[1];
+      }
     }
 
     for(n=0;n<p->gcpara3_count;++n)
     {
-    i=p->gcpara3[n][0];
-    j=p->gcpara3[n][1];
-    k=p->gcpara3[n][2];
+      i=p->gcpara3[n][0];
+      j=p->gcpara3[n][1];
+      k=p->gcpara3[n][2];
 
-		if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
-		{
-			 gcxsd[2][count[2]][0]=i;
-            gcxsd[2][count[2]][1]=j;
-            gcxsd[2][count[2]][2]=k;
-			++count[2];
-		}
+      if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
+      {
+        gcxsd[2][count[2]][0]=i;
+        gcxsd[2][count[2]][1]=j;
+        gcxsd[2][count[2]][2]=k;
+        ++count[2];
+      }
     }
 
     for(n=0;n<p->gcpara4_count;++n)
     {
-    i=p->gcpara4[n][0];
-    j=p->gcpara4[n][1];
-    k=p->gcpara4[n][2];
+      i=p->gcpara4[n][0];
+      j=p->gcpara4[n][1];
+      k=p->gcpara4[n][2];
 
 		if(p->flag4[(i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
 		{

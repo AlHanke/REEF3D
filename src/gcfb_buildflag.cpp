@@ -96,7 +96,7 @@ void ghostcell::gcfb_buildflag(lexer *p, fdm *a, int **cellmem, int& cellcount)
 
 void ghostcell::gcfb_velflag1(lexer *p, fdm *a, int **cellmem, int& cellcount)
 {
-    int nn,cache;
+    int cache;
 
     count=0;
     UBASELOOP // U-grid loop over i,j,k: flag1 = -17 and cellmem[3] = 2 if solid, flag1 = 10 and cellmem[3] = 1 if fluid
@@ -141,7 +141,7 @@ void ghostcell::gcfb_velflag1(lexer *p, fdm *a, int **cellmem, int& cellcount)
 
 void ghostcell::gcfb_velflag2(lexer *p, fdm *a, int **cellmem, int& cellcount)
 {
-	int nn,cache;
+	int cache;
 
     count=0;
     VBASELOOP
@@ -186,7 +186,7 @@ void ghostcell::gcfb_velflag2(lexer *p, fdm *a, int **cellmem, int& cellcount)
 
 void ghostcell::gcfb_velflag3(lexer *p, fdm *a, int **cellmem, int& cellcount)
 {
-     int nn,cache;
+     int cache;
 
     count=0;
     WBASELOOP

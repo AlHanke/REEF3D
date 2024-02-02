@@ -26,95 +26,95 @@ Author: Hans Bihs
 
 void ghostcell::nse4(lexer *p, fdm *a, field &f, int gcv)
 {
-    double nx,ny,nz,dnorm;
-    double xp, yp, zp;
-    double lsv,val;
+    // double nx,ny,nz,dnorm;
+    // double xp, yp, zp;
+    // double lsv,val;
     
     if(gcv>=40 && gcv<=45)
     {
-    AIRLOOP
-    f(i,j,k)=0.0; 
-    /*
-    AIRLOOP
-    {
-    lsv = a->phi(i,j,k);
-    
-        if(lsv>-3.1*(1.0/3.0)*(p->DXP[IP] + p->DYP[JP] + p->DZP[KP]))
+        AIRLOOP
+        f(i,j,k)=0.0; 
+        /*
+        AIRLOOP
         {
-         nx = (a->phi(i+1,j,k)-a->phi(i-1,j,k))/(p->DXP[IM1]+p->DXP[IP]);
-         ny = (a->phi(i,j+1,k)-a->phi(i,j-1,k))/(p->DYP[JM1]+p->DYP[JP]);
-         nz = (a->phi(i,j,k+1)-a->phi(i,j,k-1))/(p->DZP[KM1]+p->DZP[KP]);  
+        lsv = a->phi(i,j,k);
+        
+            if(lsv>-3.1*(1.0/3.0)*(p->DXP[IP] + p->DYP[JP] + p->DZP[KP]))
+            {
+            nx = (a->phi(i+1,j,k)-a->phi(i-1,j,k))/(p->DXP[IM1]+p->DXP[IP]);
+            ny = (a->phi(i,j+1,k)-a->phi(i,j-1,k))/(p->DYP[JM1]+p->DYP[JP]);
+            nz = (a->phi(i,j,k+1)-a->phi(i,j,k-1))/(p->DZP[KM1]+p->DZP[KP]);  
 
-        dnorm = sqrt(nx*nx + ny*ny + nz*nz);
-        
-        nx/=dnorm;
-        ny/=dnorm;
-        nz/=dnorm;
-        
-        xp = p->pos_x() + nx*(1.0*fabs(lsv)+0.5*p->DXM);
-        yp = p->pos_y() + ny*(1.0*fabs(lsv)+0.5*p->DXM);
-        zp = p->pos_z() + nz*(1.0*fabs(lsv)+0.5*p->DXM);
+            dnorm = sqrt(nx*nx + ny*ny + nz*nz);
+            
+            nx/=dnorm;
+            ny/=dnorm;
+            nz/=dnorm;
+            
+            xp = p->pos_x() + nx*(1.0*fabs(lsv)+0.5*p->DXM);
+            yp = p->pos_y() + ny*(1.0*fabs(lsv)+0.5*p->DXM);
+            zp = p->pos_z() + nz*(1.0*fabs(lsv)+0.5*p->DXM);
 
+            
+            val = 0.0;p->ccipol4(f, xp, yp, zp);
+            
+            f(i,j,k) =  -val;
+            }
+        }*/
         
-        val = 0.0;p->ccipol4(f, xp, yp, zp);
-        
-        f(i,j,k) =  -val;
-        }
-    }*/
-    
-    
-    /*
-    AIRLOOP
-    {
-    val = 0.0;//(a->eta(i,j))*9.81;
-     
-    if(p->flag4[Im1JK]>0)
-    f(i,j,k) =  val*(1.0-fabs(a->phi(i,j,k))/p->DXM) - f(i-1,j,k)*fabs(a->phi(i,j,k))/p->DXM;
-    
-    if(p->flag4[Ip1JK]>0)
-    f(i,j,k) =  val*(1.0-fabs(a->phi(i,j,k))/p->DXM) - f(i+1,j,k)*fabs(a->phi(i,j,k))/p->DXM;
-    
-    if(p->flag4[IJKm1]>0)
-    f(i,j,k) =  val*(1.0-fabs(a->phi(i,j,k))/p->DXM) - f(i,j,k-1)*fabs(a->phi(i,j,k))/p->DXM;
-    
-    if(p->flag4[IJKp1]>0)
-    f(i,j,k) =  val*(1.0-fabs(a->phi(i,j,k))/p->DXM) - f(i,j,k+1)*fabs(a->phi(i,j,k))/p->DXM;
-    }*/
         
         /*
-    AIRLOOP
-    {
-    if(p->flag4[Im1JK]>0)
-    f(i,j,k) =  f(i-1,j,k);
-    
-    if(p->flag4[Ip1JK]>0)
-    f(i,j,k) =  f(i+1,j,k);
-    
-    if(p->flag4[IJKm1]>0)
-    f(i,j,k) =  f(i,j,k-1);
-    
-    if(p->flag4[IJKp1]>0)
-    f(i,j,k) =  f(i,j,k+1);
-    }*/
-    
-    /*
-    AIRLOOP
-    {
-    double val = (a->eta(i,j))*fabs(p->W22);
-    
-    if(p->flag4[Im1JK]>0)
-    f(i,j,k) =  val;
-    
-    if(p->flag4[Ip1JK]>0)
-    f(i,j,k) =  val;
-    
-    if(p->flag4[IJKm1]>0)
-    f(i,j,k) =  val;
-    
-    if(p->flag4[IJKp1]>0)
-    f(i,j,k) =  val;
-    }
-    */
+        AIRLOOP
+        {
+        val = 0.0;//(a->eta(i,j))*9.81;
+        
+        if(p->flag4[Im1JK]>0)
+        f(i,j,k) =  val*(1.0-fabs(a->phi(i,j,k))/p->DXM) - f(i-1,j,k)*fabs(a->phi(i,j,k))/p->DXM;
+        
+        if(p->flag4[Ip1JK]>0)
+        f(i,j,k) =  val*(1.0-fabs(a->phi(i,j,k))/p->DXM) - f(i+1,j,k)*fabs(a->phi(i,j,k))/p->DXM;
+        
+        if(p->flag4[IJKm1]>0)
+        f(i,j,k) =  val*(1.0-fabs(a->phi(i,j,k))/p->DXM) - f(i,j,k-1)*fabs(a->phi(i,j,k))/p->DXM;
+        
+        if(p->flag4[IJKp1]>0)
+        f(i,j,k) =  val*(1.0-fabs(a->phi(i,j,k))/p->DXM) - f(i,j,k+1)*fabs(a->phi(i,j,k))/p->DXM;
+        }*/
+            
+            /*
+        AIRLOOP
+        {
+        if(p->flag4[Im1JK]>0)
+        f(i,j,k) =  f(i-1,j,k);
+        
+        if(p->flag4[Ip1JK]>0)
+        f(i,j,k) =  f(i+1,j,k);
+        
+        if(p->flag4[IJKm1]>0)
+        f(i,j,k) =  f(i,j,k-1);
+        
+        if(p->flag4[IJKp1]>0)
+        f(i,j,k) =  f(i,j,k+1);
+        }*/
+        
+        /*
+        AIRLOOP
+        {
+        double val = (a->eta(i,j))*fabs(p->W22);
+        
+        if(p->flag4[Im1JK]>0)
+        f(i,j,k) =  val;
+        
+        if(p->flag4[Ip1JK]>0)
+        f(i,j,k) =  val;
+        
+        if(p->flag4[IJKm1]>0)
+        f(i,j,k) =  val;
+        
+        if(p->flag4[IJKp1]>0)
+        f(i,j,k) =  val;
+        }
+        */
 
     }
 }

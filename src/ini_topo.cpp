@@ -27,7 +27,7 @@ Author: Hans Bihs
 
 void initialize::topoini(lexer *p, fdm *a, ghostcell *pgc)
 {
-    double dx=p->DXM;
+    // double dx=p->DXM;
 
     ALOOP
 	a->topo(i,j,k)=1.0;

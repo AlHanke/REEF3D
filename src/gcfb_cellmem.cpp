@@ -146,9 +146,9 @@ void ghostcell::gcfb_scalarupdate(lexer *p, fdm *a, int **cellmem, int cellcount
     int nn;
 	double nx,ny,nz,norm;
 	double posx,posy,posz;
-	double locx,locy,locz;
+	// double locx,locy,locz;
 	double fbval,fval;
-	double ui,vi,wi,un,vn,wn;
+	// double ui,vi,wi,un,vn,wn;
 
 
     for(nn=0;nn<cellcount;++nn)
@@ -178,13 +178,13 @@ void ghostcell::gcfb_scalarupdate(lexer *p, fdm *a, int **cellmem, int cellcount
 		
 		fval = p->ccipol4_a(f,posx,posy,posz);
 		
-		ui = p->ufbi + (p->pos_z()-p->zg)*p->qfbi - (p->pos_y()-p->yg)*p->rfbi;
-		vi = p->vfbi + (p->pos_x()-p->xg)*p->rfbi - (p->pos_z()-p->zg)*p->pfbi;
-		wi = p->wfbi + (p->pos_y()-p->yg)*p->pfbi - (p->pos_x()-p->xg)*p->qfbi;
+		// ui = p->ufbi + (p->pos_z()-p->zg)*p->qfbi - (p->pos_y()-p->yg)*p->rfbi;
+		// vi = p->vfbi + (p->pos_x()-p->xg)*p->rfbi - (p->pos_z()-p->zg)*p->pfbi;
+		// wi = p->wfbi + (p->pos_y()-p->yg)*p->pfbi - (p->pos_x()-p->xg)*p->qfbi;
 		
-		un = p->ufbn + (p->pos_z()-p->zg)*p->qfbn - (p->pos_y()-p->yg)*p->rfbn;
-		vn = p->vfbn + (p->pos_x()-p->xg)*p->rfbn - (p->pos_z()-p->zg)*p->pfbn;
-		wn = p->wfbn + (p->pos_y()-p->yg)*p->pfbn - (p->pos_x()-p->xg)*p->qfbn;
+		// un = p->ufbn + (p->pos_z()-p->zg)*p->qfbn - (p->pos_y()-p->yg)*p->rfbn;
+		// vn = p->vfbn + (p->pos_x()-p->xg)*p->rfbn - (p->pos_z()-p->zg)*p->pfbn;
+		// wn = p->wfbn + (p->pos_y()-p->yg)*p->pfbn - (p->pos_x()-p->xg)*p->qfbn;
 
 		f(i,j,k)=fval;//nx*(ui-un)/p->dt + ny*(vi-vn)/p->dt + nz*(wi-wn)/p->dt;
 		}

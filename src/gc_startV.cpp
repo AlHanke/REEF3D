@@ -185,17 +185,17 @@ void ghostcell::start2V(lexer *p, double *f, int gcv)
     gcparacoxV1(p, f, gcv);
     p->xtime+=timer()-starttime;
     
-    int inflow=0;
-    int outflow=0;
+    // int inflow=0;
+    // int outflow=0;
     
-    if(p->B98>=3 || p->B60==1)
-    inflow=1;
+    // if(p->B98>=3 || p->B60==1)
+    // inflow=1;
     
-    if(p->B99>=3)
-    outflow=1;
+    // if(p->B99>=3)
+    // outflow=1;
     
-    if(p->B60==1)
-    outflow=1;
+    // if(p->B60==1)
+    // outflow=1;
     
     starttime=timer();
     VLOOP
@@ -268,17 +268,17 @@ void ghostcell::start3V(lexer *p, double *f, int gcv)
     gcparacoxV1(p, f, gcv);
     p->xtime+=timer()-starttime;
     
-    int inflow=0;
-    int outflow=0;
+    // int inflow=0;
+    // int outflow=0;
     
-    if(p->B98>=3 || p->B60==1)
-    inflow=1;
+    // if(p->B98>=3 || p->B60==1)
+    // inflow=1;
     
-    if(p->B99>=3)
-    outflow=1;
+    // if(p->B99>=3)
+    // outflow=1;
     
-    if(p->B60==1)
-    outflow=1;
+    // if(p->B60==1)
+    // outflow=1;
 
     starttime=timer();
     WLOOP
