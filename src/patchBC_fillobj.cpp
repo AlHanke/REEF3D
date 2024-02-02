@@ -203,7 +203,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
     patch[qq]->counter=0;
     
     // line
-    int count=0;
+    // int count=0;
     for(qn=0;qn<p->B440;++qn)
     {
         

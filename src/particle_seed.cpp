@@ -68,10 +68,10 @@ void particle_f::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
 void particle_f::seed(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->Q110>0)
-        posseed_box(p,a,pgc);
+        {posseed_box(p,a,pgc);}
     
 	if(p->Q101>0)
-        posseed_topo(p,a,pgc);
+        {posseed_topo(p,a,pgc);}
 }
 
 

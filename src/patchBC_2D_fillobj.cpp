@@ -215,7 +215,7 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
     patch[qq]->counter=0;
     
     // line
-    int count=0;
+    // int count=0;
     for(qn=0;qn<p->B440;++qn)
     {
         
@@ -252,8 +252,8 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
             // 1
             for(n=0;n<p->gcbsl1_count;++n)
             {
-            i=p->gcbsl1[n][0];
-            j=p->gcbsl1[n][1];
+                i=p->gcbsl1[n][0];
+                j=p->gcbsl1[n][1];
             
                 if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl1[n][3]==p->B440_face[qn] && (p->gcbsl1[n][4]==21||p->gcbsl1[n][4]==22))
                 {

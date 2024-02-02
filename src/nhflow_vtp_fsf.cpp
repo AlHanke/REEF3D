@@ -231,48 +231,48 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc)
 	result.write((char*)&iin, sizeof (int));
     TPSLICELOOP
 	{
-    k = p->knoz-1;
-    
-	if(p->j_dir==0)
-    {
-	jj=j;
-    j=0;
-	ffn=float(d->U[IJK]);
-    j=jj;
-    }
-    
-    if(p->j_dir==1)
-	ffn=float(0.5*(d->U[IJK]+d->U[IJp1K]));
-    
-	result.write((char*)&ffn, sizeof (float));
+		k = p->knoz-1;
+		
+		if(p->j_dir==0)
+		{
+			jj=j;
+			j=0;
+			ffn=float(d->U[IJK]);
+			j=jj;
+		}
+		
+		if(p->j_dir==1)
+			ffn=float(0.5*(d->U[IJK]+d->U[IJp1K]));
+		
+		result.write((char*)&ffn, sizeof (float));
 
 
-	if(p->j_dir==0)
-    {
-	jj=j;
-    j=0;
-	ffn=float(d->UH[IJK]);
-    j=jj;
-    }
-    
-    if(p->j_dir==1)
-	ffn=float(0.5*(d->V[IJK]+d->V[IJp1K]));
-    
-	result.write((char*)&ffn, sizeof (float));
+		if(p->j_dir==0)
+		{
+			jj=j;
+			j=0;
+			ffn=float(d->UH[IJK]);
+			j=jj;
+		}
+		
+		if(p->j_dir==1)
+			ffn=float(0.5*(d->V[IJK]+d->V[IJp1K]));
+		
+		result.write((char*)&ffn, sizeof (float));
 
 
-	if(p->j_dir==0)
-    {
-	jj=j;
-    j=0;
-	ffn=float(d->W[IJK]);
-    j=jj;
-    }
-    
-    if(p->j_dir==1)
-	ffn=float(0.5*(d->W[IJK]+d->W[IJp1K]));
-    
-	result.write((char*)&ffn, sizeof (float));
+		if(p->j_dir==0)
+		{
+			jj=j;
+			j=0;
+			ffn=float(d->W[IJK]);
+			j=jj;
+		}
+		
+		if(p->j_dir==1)
+			ffn=float(0.5*(d->W[IJK]+d->W[IJp1K]));
+		
+		result.write((char*)&ffn, sizeof (float));
 	}
     
     //  Eta

@@ -32,9 +32,9 @@ size_t overflow when adding something to an object at capacity
 
 particles_obj::particles_obj(size_t capacity, double d50, double density, bool individuals, size_t size, double scale_factor):
                 tracers_obj(capacity,size,scale_factor),
+                entries(tracers_obj::entries+individuals?4:0), // update when adding more data
                 flag_inactive(0), flag_bed(1), flag_bed_load(2), flag_suspended_load(3),
                 d50(d50), density(density),
-                entries(tracers_obj::entries+individuals?4:0), // update when adding more data
                 scale_factor(scale_factor)
 {	
     if(capacity>0)

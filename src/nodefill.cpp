@@ -42,7 +42,7 @@ void nodefill::nodefill4(lexer *p, fdm *a, ghostcell *pgc, field &f, field &eta)
 	eta(i,j,k)=0.0;
 
 	double val,factor,denom;
-	int q;
+	// int q;
 
 	FLUIDLOOP
 	{

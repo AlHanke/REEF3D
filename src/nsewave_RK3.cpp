@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"nsewave_RK3.h"
+
+#include"nsewave_RK3.h"
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -40,9 +41,10 @@ Author: Hans Bihs
 #include"convection.h"
 #include"diffusion.h"
 
-nsewave_RK3::nsewave_RK3(lexer *p, fdm *a, ghostcell *pgc, heat *&pheat, concentration *&pconc) : eta(p),
-                etark1(p),etark2(p),L(p),P(p),Q(p),epsi(1.6*p->DXM),bcmom(p),
-                urk1(p),urk2(p),vrk1(p),vrk2(p),wrk1(p),wrk2(p)
+nsewave_RK3::nsewave_RK3(lexer *p, fdm *a, ghostcell *pgc, heat *&pheat, concentration *&pconc) : bcmom(p),
+				urk1(p),urk2(p),vrk1(p),vrk2(p),wrk1(p),wrk2(p),epsi(1.6*p->DXM),
+                P(p),Q(p),eta(p),etark1(p),etark2(p),L(p)
+                
 {
     gcval_u=10;
 	gcval_v=11;

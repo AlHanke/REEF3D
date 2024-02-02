@@ -39,44 +39,44 @@ void particle_f::pvtu_pos(fdm* a, lexer* p, ghostcell* pgc)
 
 	if(p->P14==0)
 	{
-    if(num<10)
-	sprintf(name,"REEF3D-Particle-00000%i.pvtu",num);
+		if(num<10)
+		sprintf(name,"REEF3D-Particle-00000%i.pvtu",num);
 
-	if(num<100&&num>9)
-	sprintf(name,"REEF3D-Particle-0000%i.pvtu",num);
+		if(num<100&&num>9)
+		sprintf(name,"REEF3D-Particle-0000%i.pvtu",num);
 
-	if(num<1000&&num>99)
-	sprintf(name,"REEF3D-Particle-000%i.pvtu",num);
+		if(num<1000&&num>99)
+		sprintf(name,"REEF3D-Particle-000%i.pvtu",num);
 
-	if(num<10000&&num>999)
-	sprintf(name,"REEF3D-Particle-00%i.pvtu",num);
+		if(num<10000&&num>999)
+		sprintf(name,"REEF3D-Particle-00%i.pvtu",num);
 
-	if(num<100000&&num>9999)
-	sprintf(name,"REEF3D-Particle-0%i.pvtu",num);
+		if(num<100000&&num>9999)
+		sprintf(name,"REEF3D-Particle-0%i.pvtu",num);
 
-	if(num>99999)
-	sprintf(name,"REEF3D-Particle-%i.pvtu",num);
+		if(num>99999)
+		sprintf(name,"REEF3D-Particle-%i.pvtu",num);
 	}
 	
 	if(p->P14==1)
 	{
-	if(num<10)
-	sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-00000%i.pvtu",num);
+		if(num<10)
+		sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-00000%i.pvtu",num);
 
-	if(num<100&&num>9)
-	sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-0000%i.pvtu",num);
+		if(num<100&&num>9)
+		sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-0000%i.pvtu",num);
 
-	if(num<1000&&num>99)
-	sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-000%i.pvtu",num);
+		if(num<1000&&num>99)
+		sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-000%i.pvtu",num);
 
-	if(num<10000&&num>999)
-	sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-00%i.pvtu",num);
+		if(num<10000&&num>999)
+		sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-00%i.pvtu",num);
 
-	if(num<100000&&num>9999)
-	sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-0%i.pvtu",num);
+		if(num<100000&&num>9999)
+		sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-0%i.pvtu",num);
 
-	if(num>99999)
-	sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-%i.pvtu",num);
+		if(num>99999)
+		sprintf(name,"./REEF3D_CFD_Particle/REEF3D-Particle-%i.pvtu",num);
 	}
 
 	ofstream result;
