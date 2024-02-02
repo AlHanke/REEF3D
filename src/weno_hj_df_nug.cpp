@@ -281,32 +281,32 @@ double weno_hj_df_nug::fz(lexer *p,fdm *a, field& b, field& wvel, int ipol, doub
 
 	if(advec<0.0)
 	{
-    if(p->X45==0)
-	kqmax_0(p,a,b,wvel,ipol);
-    
-    if(p->X45==1)
-	kqmax_1(p,a,b,wvel,ipol);
-    
-    if(p->X45==2)
-	kqmax_2(p,a,b,wvel,ipol);
-    
-    if(p->X45==3)
-	kqmax_3(p,a,b,wvel,ipol);
-    
-    if(p->X45==4)
-	kqmax_4(p,a,b,wvel,ipol);
-    
-    if(p->X45==5)
-	kqmax_5(p,a,b,wvel,ipol);
-    
-	is_max_z();
-	weight_max_z();
-	
-	grad = w1z*(q4 + qfz[KP][wf][3][0]*(q3-q4) + qfz[KP][wf][3][1]*(q5-q4))
-    
-         + w2z*(q3 + qfz[KP][wf][4][0]*(q2-q3) - qfz[KP][wf][4][1]*(q4-q3))
-          
-         + w3z*(q2 + qfz[KP][wf][5][0]*(q3-q2) - qfz[KP][wf][5][1]*(q1-q2));
+        if(p->X45==0)
+        kqmax_0(p,a,b,wvel,ipol);
+        
+        if(p->X45==1)
+        kqmax_1(p,a,b,wvel,ipol);
+        
+        if(p->X45==2)
+        kqmax_2(p,a,b,wvel,ipol);
+        
+        if(p->X45==3)
+        kqmax_3(p,a,b,wvel,ipol);
+        
+        if(p->X45==4)
+        kqmax_4(p,a,b,wvel,ipol);
+        
+        if(p->X45==5)
+        kqmax_5(p,a,b,wvel,ipol);
+        
+        is_max_z();
+        weight_max_z();
+        
+        grad = w1z*(q4 + qfz[KP][wf][3][0]*(q3-q4) + qfz[KP][wf][3][1]*(q5-q4))
+        
+            + w2z*(q3 + qfz[KP][wf][4][0]*(q2-q3) - qfz[KP][wf][4][1]*(q4-q3))
+            
+            + w3z*(q2 + qfz[KP][wf][5][0]*(q3-q2) - qfz[KP][wf][5][1]*(q1-q2));
 	}
 
 	return grad;
