@@ -30,7 +30,7 @@ using namespace std;
 #ifndef PFTIMESTEP_H_
 #define PFTIMESTEP_H_
 
-class pftimestep : public timestep, public increment
+class pftimestep : public timestep, virtual public increment
 {
 public:
 	pftimestep(lexer*);

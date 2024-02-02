@@ -21,25 +21,36 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"suspended.h"
-#include"increment.h"#include"field3.h"
+#include"increment.h"
+#include"field3.h"
 
 using namespace std;
 
 #ifndef SUSPENDED_RK3_H_
 #define SUSPENDED_RK3_H_
-
+, virtual public increment
 class suspended_RK3 : public suspended, public increment
 {
 public:
 	suspended_RK3(lexer *, fdm*);
 	virtual ~suspended_RK3();
 	virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, sediment_fdm*);
-	virtual void ctimesave(lexer*, fdm*);    void suspsource(lexer*,fdm*,field&,sediment_fdm*);    void bcsusp_start(lexer*,fdm*,ghostcell*,sediment_fdm*,field&);	void sedfsf(lexer*,fdm*,field&);	void clearrhs(lexer*,fdm*);    void fillconc(lexer*,fdm*,sediment_fdm*);
+	virtual void ctimesave(lexer*, fdm*);
+
+    void suspsource(lexer*,fdm*,field&,sediment_fdm*);
+    void bcsusp_start(lexer*,fdm*,ghostcell*,sediment_fdm*,field&);
+	void sedfsf(lexer*,fdm*,field&);
+	void clearrhs(lexer*,fdm*);
+    void fillconc(lexer*,fdm*,sediment_fdm*);
 
 	int gcval_susp;
 
 private:
-    double starttime;    void fill_wvel(lexer*,fdm*,ghostcell*,sediment_fdm*);     field3 wvel;    int count,q;
+    double starttime;
+    void fill_wvel(lexer*,fdm*,ghostcell*,sediment_fdm*); 
+    field3 wvel;
+
+    int count,q;
 
 };
 

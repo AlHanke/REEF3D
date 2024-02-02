@@ -29,7 +29,7 @@ Author: Hans Bihs
 
 using namespace std;
 
-class sflow_rheology_v : public sflow_rheology, public increment
+class sflow_rheology_v : public sflow_rheology, virtual public increment
 {
 
 public:

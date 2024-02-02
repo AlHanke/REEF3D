@@ -34,7 +34,7 @@ using namespace std;
 #ifndef GEOTOPO_H_
 #define GEOTOPO_H_
 
-class geotopo : public increment
+class geotopo : virtual public increment
 {
 public:
 	geotopo(lexer*, fdm*, ghostcell*);

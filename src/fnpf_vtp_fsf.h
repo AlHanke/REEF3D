@@ -32,7 +32,7 @@ using namespace std;
 #ifndef FNPF_VTP_FSF_H_
 #define FNPF_VTP_FSF_H_
 
-class fnpf_vtp_fsf : public increment
+class fnpf_vtp_fsf : virtual public increment
 {
 public:
 	fnpf_vtp_fsf(lexer*,fdm_fnpf*,ghostcell*);

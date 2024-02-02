@@ -31,7 +31,7 @@ class lexer;
 
 using namespace std;
 
-class nodefill : public increment
+class nodefill : virtual public increment
 {
 
 public:

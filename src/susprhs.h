@@ -31,7 +31,7 @@ class field;
 
 using namespace std;
 
-class susprhs : public increment
+class susprhs : virtual public increment
 {
 public:
 	susprhs(lexer*);

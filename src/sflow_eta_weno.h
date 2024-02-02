@@ -30,7 +30,7 @@ class sflow_flux;
 
 using namespace std;
 
-class sflow_eta_weno : public sflow_eta_disc, public increment
+class sflow_eta_weno : public sflow_eta_disc, virtual public increment
 {
 public:
 	sflow_eta_weno(lexer*);

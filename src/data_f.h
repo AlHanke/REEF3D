@@ -33,7 +33,7 @@ using namespace std;
 #ifndef DATA_F_H_
 #define DATA_F_H_
 
-class data_f : public data_b, public increment
+class data_f : public data_b, virtual public increment
 {
 public:
 	data_f(lexer*, fdm*, ghostcell*);

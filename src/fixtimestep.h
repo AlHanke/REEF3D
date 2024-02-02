@@ -30,7 +30,7 @@ using namespace std;
 #ifndef FIXTIMESTEP_H_
 #define FIXTIMESTEP_H_
 
-class fixtimestep : public timestep, public increment
+class fixtimestep : public timestep, virtual public increment
 {
 public:
 	fixtimestep(lexer*);

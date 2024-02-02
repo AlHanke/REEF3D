@@ -30,7 +30,7 @@ class flux;
 
 using namespace std;
 
-class weno_flux : public convection, public increment
+class weno_flux : public convection, virtual public increment
 {
 public:
 	weno_flux(lexer*);

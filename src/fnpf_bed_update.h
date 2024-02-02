@@ -37,7 +37,7 @@ using namespace std;
 #ifndef FNPF_BED_UPDATE_H_
 #define FNPF_BED_UPDATE_H_
 
-class fnpf_bed_update : public increment
+class fnpf_bed_update : virtual public increment
 {
 public:
     fnpf_bed_update(lexer*);

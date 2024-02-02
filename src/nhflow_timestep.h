@@ -32,7 +32,7 @@ using namespace std;
 #ifndef NHFLOW_TIMESTEP_H_
 #define NHFLOW_TIMESTEP_H_
 
-class nhflow_timestep : public increment
+class nhflow_timestep : virtual public increment
 {
 public:
 	nhflow_timestep(lexer*);

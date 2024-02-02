@@ -35,7 +35,7 @@ using namespace std;
 #ifndef FNPF_PRINT_HS_H_
 #define FNPF_PRINT_HS_H_
 
-class fnpf_print_Hs : public increment
+class fnpf_print_Hs : virtual public increment
 {
 public:
     fnpf_print_Hs(lexer*,slice&);

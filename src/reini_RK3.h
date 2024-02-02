@@ -33,7 +33,7 @@ using namespace std;
 #ifndef REINI_RK3_H_
 #define REINI_RK3_H_
 
-class reini_RK3 : public reini, public increment
+class reini_RK3 : public reini, virtual public increment
 {
 public:
 	reini_RK3(lexer* p,int);

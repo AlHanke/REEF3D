@@ -39,7 +39,7 @@ class fsi;
 
 using namespace std;
 
-class momentum_forcing : public increment
+class momentum_forcing : virtual public increment
 {
 public:
 	momentum_forcing(lexer*);

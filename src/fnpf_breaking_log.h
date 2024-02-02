@@ -32,7 +32,7 @@ using namespace std;
 #ifndef FNPF_BREAKING_LOG_H_
 #define FNPF_BREAKING_LOG_H_
 
-class fnpf_breaking_log : public increment
+class fnpf_breaking_log : virtual public increment
 {
 
 public:

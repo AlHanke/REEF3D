@@ -37,7 +37,7 @@ using namespace std;
 #ifndef HYPRE_AIJ_H_
 #define HYPRE_AIJ_H_
 
-class hypre_aij : public solver, public increment
+class hypre_aij : public solver, virtual public increment
 {
 public:
 

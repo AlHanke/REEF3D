@@ -34,7 +34,7 @@ using namespace std;
 #ifndef FNPF_PRINT_WSF_H_
 #define FNPF_PRINT_WSF_H_
 
-class fnpf_print_wsf : public increment
+class fnpf_print_wsf : virtual public increment
 {
 public:
     fnpf_print_wsf(lexer*,fdm_fnpf*);

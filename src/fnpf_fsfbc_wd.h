@@ -36,7 +36,7 @@ using namespace std;
 #ifndef FNPF_FSFBC_WD_H_
 #define FNPF_FSFBC_WD_H_
 
-class fnpf_fsfbc_wd : public fnpf_fsf, public increment 
+class fnpf_fsfbc_wd : public fnpf_fsf, virtual public increment 
 {
 public:
 	fnpf_fsfbc_wd(lexer*, fdm_fnpf*, ghostcell*);

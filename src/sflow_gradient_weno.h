@@ -28,7 +28,7 @@ using namespace std;
 #ifndef SFLOW_GRADIENT_WENO_H_
 #define SFLOW_GRADIENT_WENO_H_
 
-class sflow_gradient_weno : public sflow_gradient, public increment
+class sflow_gradient_weno : public sflow_gradient, virtual public increment
 {
 public:
     sflow_gradient_weno(lexer*);

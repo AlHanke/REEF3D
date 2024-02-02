@@ -41,7 +41,7 @@ class lexer;
 
 using namespace std;
 
-class fdm_fnpf : public increment
+class fdm_fnpf : virtual public increment
 {
 public:
 

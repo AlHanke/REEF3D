@@ -32,7 +32,7 @@ using namespace std;
 #ifndef FNPF_TIMESTEP_H_
 #define FNPF_TIMESTEP_H_
 
-class fnpf_timestep : public increment
+class fnpf_timestep : virtual public increment
 {
 public:
 	fnpf_timestep(lexer*);

@@ -32,7 +32,7 @@ using namespace std;
 #ifndef PJM_HYDROSTATIC_H_
 #define PJM_HYDROSTATIC_H_
 
-class pjm_hydrostatic : public pressure, public increment
+class pjm_hydrostatic : public pressure, virtual public increment
 {
 
 public:

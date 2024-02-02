@@ -29,7 +29,7 @@ using namespace std;
 #define BICGSTAB_IJK_2D_H_
 
 
-class bicgstab_ijk_2D : public solver, public increment
+class bicgstab_ijk_2D : public solver, virtual public increment
 {
 public:
 	bicgstab_ijk_2D(lexer*,fdm*,ghostcell*);

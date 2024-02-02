@@ -34,7 +34,7 @@ using namespace std;
 #ifndef CFD_STATE_H_
 #define CFD_STATE_H_
 
-class cfd_state : public increment
+class cfd_state : virtual public increment
 {
 
 public:

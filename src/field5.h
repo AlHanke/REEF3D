@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 using namespace std;
 
-class field5 :   public field, public increment
+class field5 :   public field, virtual public increment
 {
 public:
 

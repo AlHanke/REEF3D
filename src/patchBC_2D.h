@@ -27,7 +27,7 @@ using namespace std;
 #ifndef PATCHBC_2D_H_
 #define PATCHBC_2D_H_
 
-class patchBC_2D : public patchBC_interface, public increment
+class patchBC_2D : public patchBC_interface, virtual public increment
 {
 public:
 	patchBC_2D(lexer*,ghostcell*);

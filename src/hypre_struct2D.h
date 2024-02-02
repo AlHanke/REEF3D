@@ -34,7 +34,7 @@ using namespace std;
 #ifndef HYPRE_STRUCT2D_H_
 #define HYPRE_STRUCT2D_H_
 
-class hypre_struct2D : public solver2D, public increment
+class hypre_struct2D : public solver2D, virtual public increment
 {
 public:
 

@@ -28,7 +28,7 @@ using namespace std;
 #ifndef SFLOW_BICGSTAB_H_
 #define SFLOW_BICGSTAB_H_
 
-class sflow_bicgstab : public solver2D, public increment
+class sflow_bicgstab : public solver2D, virtual public increment
 {
 public:
 

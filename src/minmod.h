@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 using namespace std;
 
-class minmod : public fluxlim, public increment
+class minmod : public fluxlim, virtual public increment
 {
 
 public:

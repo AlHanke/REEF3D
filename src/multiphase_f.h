@@ -44,7 +44,7 @@ using namespace std;
 #ifndef MULTIPHASE_F_H_
 #define MULTIPHASE_F_H_
 
-class multiphase_f : public multiphase, public increment
+class multiphase_f : public multiphase, virtual public increment
 {
 public:
 	multiphase_f(lexer*, fdm*, ghostcell*);

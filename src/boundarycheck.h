@@ -30,7 +30,7 @@ using namespace std;
 #ifndef BOUNDARYCHECK_H_
 #define BOUNDARYCHECK_H_
 
-class boundarycheck : public increment
+class boundarycheck : virtual public increment
 {
 public:
     boundarycheck();

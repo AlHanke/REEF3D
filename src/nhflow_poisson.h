@@ -21,9 +21,15 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"increment.h"
-class lexer;class fdm_nhf;class ghostcell;class ioflow;class poisson;class solver;
 
-#ifndef NHFLOW_POISSON_H_
+class lexer;
+class fdm_nhf;
+class ghostcell;
+class ioflow;
+class poisson;
+class solver;
+
+#ifndef NHFLOW_POISSO: virtual public increment
 #define NHFLOW_POISSON_H_
 
 using namespace std;

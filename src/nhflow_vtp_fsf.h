@@ -32,7 +32,7 @@ using namespace std;
 #ifndef NHFLOW_VTP_FSF_H_
 #define NHFLOW_VTP_FSF_H_
 
-class nhflow_vtp_fsf : public increment
+class nhflow_vtp_fsf : virtual public increment
 {
 public:
 	nhflow_vtp_fsf(lexer*,fdm_nhf*,ghostcell*);

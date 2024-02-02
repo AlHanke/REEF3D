@@ -32,7 +32,7 @@ class ghostcell;
 
 using namespace std;
 
-class bcheat : public increment
+class bcheat : virtual public increment
 {
 public:
 	bcheat(lexer*);

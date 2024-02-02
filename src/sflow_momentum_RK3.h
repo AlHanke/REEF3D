@@ -37,7 +37,7 @@ using namespace std;
 #ifndef SFLOW_MOMENTUM_RK3_H_
 #define SFLOW_MOMENTUM_RK3_H_
 
-class sflow_momentum_RK3 : public sflow_momentum, public increment
+class sflow_momentum_RK3 : public sflow_momentum, virtual public increment
 {
 public:
 	sflow_momentum_RK3(lexer*, fdm2D*, sflow_convection*, sflow_diffusion*, sflow_pressure*, 

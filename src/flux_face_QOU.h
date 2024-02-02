@@ -30,7 +30,7 @@ class lexer;
 
 using namespace std;
 
-class flux_face_QOU : public flux, public increment
+class flux_face_QOU : public flux, virtual public increment
 {
 public:
 

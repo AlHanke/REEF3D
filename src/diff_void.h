@@ -30,7 +30,7 @@ using namespace std;
 #define DIFF_VOID_H_
 
 
-class diff_void : public diffusion, public increment
+class diff_void : public diffusion, virtual public increment
 {
 
 public:

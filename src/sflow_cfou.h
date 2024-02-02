@@ -31,7 +31,7 @@ using namespace std;
 #ifndef SFLOW_CFOU_H_
 #define SFLOW_CFOU_H_
 
-class sflow_cfou : public sflow_convection, public increment
+class sflow_cfou : public sflow_convection, virtual public increment
 {
 public:
 	sflow_cfou(lexer*,fdm2D*);

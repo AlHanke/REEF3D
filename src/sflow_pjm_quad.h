@@ -34,7 +34,7 @@ using namespace std;
 #ifndef SFLOW_PJM_QUAD_H_
 #define SFLOW_PJM_QUAD_H_
 
-class sflow_pjm_quad : public sflow_pressure, public increment
+class sflow_pjm_quad : public sflow_pressure, virtual public increment
 {
 public:
     sflow_pjm_quad(lexer*, fdm2D*,patchBC_interface*);

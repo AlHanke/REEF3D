@@ -31,7 +31,7 @@ using namespace std;
 #define IOFLOW_GRAVITY_H_
 
 
-class ioflow_gravity : public ioflow, public increment
+class ioflow_gravity : public ioflow, virtual public increment
 {
 
 public:

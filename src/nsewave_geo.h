@@ -38,7 +38,7 @@ using namespace std;
 #ifndef NSEWAVE_GEO_H_
 #define NSEWAVE_GEO_H_
 
-class nsewave_geo : public nsewave, public increment
+class nsewave_geo : public nsewave, virtual public increment
 {
 public:
     nsewave_geo(lexer*, fdm*, ghostcell*,heat*&,concentration*&);

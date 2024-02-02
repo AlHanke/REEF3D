@@ -34,7 +34,7 @@ using namespace std;
 #ifndef NHFLOW_PRINT_WSF_H_
 #define NHFLOW_PRINT_WSF_H_
 
-class nhflow_print_wsf : public increment
+class nhflow_print_wsf : virtual public increment
 {
 public:
     nhflow_print_wsf(lexer*,fdm_nhf*);

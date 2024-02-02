@@ -20,7 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#define HYPRE_COMPILATION
+
+#define HYPRE_COMPILATION
 
 #ifdef HYPRE_COMPILATION
 
@@ -34,7 +35,7 @@ using namespace std;
 
 #ifndef HYPRE_STRUCT_H_
 #define HYPRE_STRUCT_H_
-
+, virtual public increment
 class hypre_struct : public solver, public increment
 {
 public:

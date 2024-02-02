@@ -30,7 +30,7 @@ using namespace std;
 #ifndef SFLOW_ETA_WENO_HJ_H_
 #define SFLOW_ETA_WENO_HJ_H_
 
-class sflow_eta_weno_hj : public sflow_eta_disc, public increment
+class sflow_eta_weno_hj : public sflow_eta_disc, virtual public increment
 {
 public:
 	sflow_eta_weno_hj(lexer*);

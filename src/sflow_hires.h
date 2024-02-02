@@ -31,7 +31,7 @@ class sflow_fluxlim;
 
 using namespace std;
 
-class sflow_hires : public sflow_convection, public increment
+class sflow_hires : public sflow_convection, virtual public increment
 {
 
 public:

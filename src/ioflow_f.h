@@ -34,7 +34,7 @@ using namespace std;
 #define IOFLOW_F_H_
 
 
-class ioflow_f : public ioflow, private resize_class, public increment
+class ioflow_f : public ioflow, private resize_class, virtual public increment
 {
 
 public:
@@ -131,7 +131,8 @@ public:
     virtual void rkinflow_nhflow(lexer*,fdm_nhf*,ghostcell*,double*,double*,double*,double*,double*,double*);
     virtual void isource_nhflow(lexer*,fdm_nhf*,ghostcell*,vrans*);
     virtual void jsource_nhflow(lexer*,fdm_nhf*,ghostcell*,vrans*);
-    virtual void ksource_nhflow(lexer*,fdm_nhf*,ghostcell*,vrans*);    virtual void fsfinflow_nhflow(lexer*,fdm_nhf*,ghostcell*,slice&);
+    virtual void ksource_nhflow(lexer*,fdm_nhf*,ghostcell*,vrans*);
+    virtual void fsfinflow_nhflow(lexer*,fdm_nhf*,ghostcell*,slice&);
     
     
     virtual void vrans_sed_update(lexer*,fdm*,ghostcell*,vrans*);
@@ -176,7 +177,9 @@ private:
     
     double Apor,Bpor,porval,partval;
     
-    double epsi1,epsi2;    int iter0;
+    double epsi1,epsi2;
+
+    int iter0;
     
     patchBC_interface *pBC;
 };

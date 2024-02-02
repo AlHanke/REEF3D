@@ -41,7 +41,7 @@ using namespace std;
 #ifndef SIXDOF_SFLOW_H_
 #define SIXDOF_SFLOW_H_
 
-class sixdof_sflow : public sixdof, public increment, public ddweno_f_nug
+class sixdof_sflow : public sixdof, virtual public increment, public ddweno_f_nug
 {
 public:
 	

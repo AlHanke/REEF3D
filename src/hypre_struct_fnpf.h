@@ -36,7 +36,7 @@ using namespace std;
 #ifndef HYPRE_STRUCT_FNPF_H_
 #define HYPRE_STRUCT_FNPF_H_
 
-class hypre_struct_fnpf : public solver_fnpf, public increment
+class hypre_struct_fnpf : public solver_fnpf, virtual public increment
 {
 public:
 

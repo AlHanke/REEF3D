@@ -28,7 +28,7 @@ using namespace std;
 #ifndef KEPSILON_VOID_H_
 #define KEPSILON_VOID_H_
 
-class kepsilon_void : public turbulence, public increment
+class kepsilon_void : public turbulence, virtual public increment
 {
 
 public:

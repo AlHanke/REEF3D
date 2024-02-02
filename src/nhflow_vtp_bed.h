@@ -32,7 +32,7 @@ using namespace std;
 #ifndef NHFLOW_VTP_BED_H_
 #define NFHLOW_VTP_BED_H_
 
-class nhflow_vtp_bed : public increment
+class nhflow_vtp_bed : virtual public increment
 {
 public:
 	nhflow_vtp_bed(lexer*,fdm_nhf*,ghostcell*);

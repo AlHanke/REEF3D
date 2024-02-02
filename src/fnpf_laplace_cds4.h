@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 using namespace std;
 
-class fnpf_laplace_cds4 : public fnpf_laplace, public increment
+class fnpf_laplace_cds4 : public fnpf_laplace, virtual public increment
 {
 public:
     fnpf_laplace_cds4 (lexer*);

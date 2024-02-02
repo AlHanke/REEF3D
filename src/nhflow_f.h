@@ -28,7 +28,7 @@ using namespace std;
 #ifndef NHFLOW_F_H_
 #define NHFLOW_F_H_
 
-class nhflow_f : public nhflow, public increment
+class nhflow_f : public nhflow, virtual public increment
 {
 public:    
     nhflow_f(lexer*, fdm_nhf*, ghostcell*);

@@ -39,7 +39,7 @@ using namespace std;
 #ifndef FNPF_INI_H_
 #define FNPF_INI_H_
 
-class fnpf_ini : public fnpf, public increment, public fnpf_fsf_update, public fnpf_bed_update
+class fnpf_ini : public fnpf, virtual public increment, public fnpf_fsf_update, public fnpf_bed_update
 {
 public:
 	fnpf_ini(lexer*, fdm_fnpf*, ghostcell*);

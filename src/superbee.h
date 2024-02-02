@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 using namespace std;
 
-class superbee : public fluxlim, public increment
+class superbee : public fluxlim, virtual public increment
 {
 public:
 	superbee (lexer *);

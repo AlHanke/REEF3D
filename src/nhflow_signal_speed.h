@@ -34,7 +34,7 @@ class patchBC_interface;
 
 using namespace std;
 
-class nhflow_signal_speed : public increment
+class nhflow_signal_speed : virtual public increment
 {
 public:
 	nhflow_signal_speed(lexer*);

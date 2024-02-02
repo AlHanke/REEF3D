@@ -28,7 +28,7 @@ using namespace std;
 #ifndef BEDLOAD_EF_H_
 #define BEDLOAD_EF_H_
 
-class bedload_EF : public bedload, public increment
+class bedload_EF : public bedload, virtual public increment
 {
 public:
 

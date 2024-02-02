@@ -36,7 +36,7 @@ using namespace std;
 #ifndef FNPF_BREAKING_H_
 #define FNPF_BREAKING_H_
 
-class fnpf_breaking : public fnpf_fsf, public increment 
+class fnpf_breaking : public fnpf_fsf, virtual public increment 
 {
 public:
 	fnpf_breaking(lexer*, fdm_fnpf*, ghostcell*);

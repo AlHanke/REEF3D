@@ -31,7 +31,7 @@ class ghostcell;
 
 using namespace std;
 
-class bedconc : public increment
+class bedconc : virtual public increment
 {
 public:
 	bedconc(lexer*);

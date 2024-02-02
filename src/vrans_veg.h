@@ -32,7 +32,7 @@ using namespace std;
 #ifndef VRANS_VEG_H_
 #define VRANS_VEG_H_
 
-class vrans_veg : public vrans, public increment
+class vrans_veg : public vrans, virtual public increment
 {
 public:
 	vrans_veg(lexer*, ghostcell*);

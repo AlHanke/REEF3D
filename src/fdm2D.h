@@ -42,7 +42,7 @@ class lexer;
 
 using namespace std;
 
-class fdm2D : public increment
+class fdm2D : virtual public increment
 {
 public:
 

@@ -38,7 +38,7 @@ class sliceint;
 
 using namespace std;
 
-class sflow_filter : public increment
+class sflow_filter : virtual public increment
 {
 public:
 	sflow_filter(lexer*);

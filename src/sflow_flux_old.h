@@ -31,7 +31,7 @@ class slice;
 
 using namespace std;
 
-class sflow_flux : public increment
+class sflow_flux : virtual public increment
 {
 public:
 

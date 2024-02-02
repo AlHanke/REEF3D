@@ -33,7 +33,7 @@ using namespace std;
 #ifndef NHFLOW_PJM_CORR_H_
 #define NHFLOW_PJM_CORR_H_
 
-class nhflow_pjm_corr : public nhflow_pressure, public increment
+class nhflow_pjm_corr : public nhflow_pressure, virtual public increment
 {
 
 public:

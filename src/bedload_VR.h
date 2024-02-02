@@ -19,14 +19,15 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"bedload.h"
+
+#include"bedload.h"
 #include"increment.h"
 
 using namespace std;
 
 #ifndef BEDLOAD_VR_H_
 #define BEDLOAD_VR_H_
-
+, virtual public increment
 class bedload_VR : public bedload, public increment
 {
 public:

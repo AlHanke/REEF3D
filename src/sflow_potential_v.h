@@ -31,7 +31,7 @@ using namespace std;
 #ifndef SFLOW_POTENTIAL_V_H_
 #define SFLOW_POTENTIAL_V_H_
 
-class sflow_potential_v : public sflow_potential, public increment
+class sflow_potential_v : public sflow_potential, virtual public increment
 {
 
 public:

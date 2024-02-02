@@ -32,7 +32,7 @@ using namespace std;
 #ifndef PJM_NSE_H_
 #define PJM_NSE_H_
 
-class pjm_nse : public pressure, public increment
+class pjm_nse : public pressure, virtual public increment
 {
 
 public:

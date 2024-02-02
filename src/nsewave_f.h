@@ -38,7 +38,7 @@ using namespace std;
 #ifndef NSEWAVE_F_H_
 #define NSEWAVE_F_H_
 
-class nsewave_f : public nsewave, public increment
+class nsewave_f : public nsewave, virtual public increment
 {
 public:
     nsewave_f(lexer*, fdm*, ghostcell*,heat*&,concentration*&);

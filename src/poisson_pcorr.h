@@ -32,7 +32,7 @@ class density;
 
 using namespace std;
 
-class poisson_pcorr : public poisson, public increment
+class poisson_pcorr : public poisson, virtual public increment
 {
 
 public:

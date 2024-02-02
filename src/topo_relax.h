@@ -33,7 +33,7 @@ using namespace std;
 #ifndef TOPO_RELAX_H_
 #define TOPO_RELAX_H_
 
-class topo_relax : public increment
+class topo_relax : virtual public increment
 {
 public:
     topo_relax(lexer*);

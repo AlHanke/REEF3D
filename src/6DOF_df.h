@@ -33,7 +33,7 @@ using namespace std;
 #ifndef SIXDOF_DF_H_
 #define SIXDOF_DF_H_
 
-class sixdof_df : public sixdof_df_base, public increment
+class sixdof_df : public sixdof_df_base, virtual public increment
 {
 public:
 	sixdof_df(lexer*, fdm*, ghostcell*);
