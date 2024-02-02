@@ -23,7 +23,7 @@ Author: Alexander Hanke
 #ifndef TRACERSOBJ_H_
 #define TRACERSOBJ_H_
 
-#include <stdio.h>
+#include <cstddef>
 
 /*
 Philosophy: performance, memory usage, ease of use
