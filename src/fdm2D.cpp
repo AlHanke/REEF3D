@@ -35,12 +35,12 @@ fdm2D::fdm2D(lexer *p)
             bed(p),bed0(p),depth(p),
             solidbed(p),topobed(p),
             bednode(p),
-			xvec(p),rhsvec(p),M(p),
             breaking(p),breaking_print(p),
             wet1(p),wet2(p),
 			nodeval(p),
 			cmu(0.09),
-            ks(p)
+            ks(p),
+			xvec(p),rhsvec(p),M(p)
 {
 
 	inverse=1.0/p->DXM;

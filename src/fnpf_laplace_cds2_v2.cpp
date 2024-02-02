@@ -63,7 +63,7 @@ void fnpf_laplace_cds2_v2::laplace2D(lexer* p, fdm_fnpf *c, ghostcell *pgc, solv
 {
     double sigxyz2;
     double ab,denom;
-    double fbxm,fbxp,fbym,fbyp;
+    // double fbxm,fbxp,fbym,fbyp;
     p->poissoniter=0;
     p->poissontime=0.0;
     
@@ -372,7 +372,7 @@ void fnpf_laplace_cds2_v2::laplace3D(lexer* p, fdm_fnpf *c, ghostcell *pgc, solv
 {
     double sigxyz2;
     double ab,denom;
-    double fbxm,fbxp,fbym,fbyp;
+    // double fbxm,fbxp,fbym,fbyp;
     p->poissoniter=0;
     p->poissontime=0.0;
 

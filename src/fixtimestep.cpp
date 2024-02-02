@@ -63,19 +63,20 @@ void fixtimestep::start(fdm* a, lexer* p,ghostcell* pgc, turbulence *pturb)
 
     if(p->mpirank==0 && (p->count%p->P12==0))
     {
-	cout<<"umax: "<<setprecision(3)<<p->umax<<endl;
-	cout<<"vmax: "<<setprecision(3)<<p->vmax<<endl;
-	cout<<"wmax: "<<setprecision(3)<<p->wmax<<endl;
+		cout<<"umax: "<<setprecision(3)<<p->umax<<endl;
+		cout<<"vmax: "<<setprecision(3)<<p->vmax<<endl;
+		cout<<"wmax: "<<setprecision(3)<<p->wmax<<endl;
     }
 
-// maximum viscosity
+	// maximum viscosity
 	LOOP
 	p->viscmax=MAX(p->viscmax, a->visc(i,j,k)+a->eddyv(i,j,k));
 
 	p->viscmax=pgc->globalmax(p->viscmax);
 
     if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"viscmax: "<<p->viscmax<<endl;
+		cout<<"viscmax: "<<p->viscmax<<endl;
+	
 	//----kin
 	LOOP
 	p->kinmax=MAX(p->kinmax,pturb->kinval(i,j,k));

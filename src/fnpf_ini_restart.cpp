@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"fnpf_ini.h"
+
+#include"fnpf_ini.h"
 #include"lexer.h"
 #include"fdm_fnpf.h"
 #include"ghostcell.h"
@@ -65,16 +66,16 @@ void fnpf_ini::fnpf_restart(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     
     // ----------------------
     // finish: ghostell update
-	int gcval,gcval_u,gcval_v,gcval_w;
+	// int gcval,gcval_u,gcval_v,gcval_w;
     int gcval_eta,gcval_fifsf;
     
-    gcval=250;
-    if(p->j_dir==0)
-    gcval=150;
+    // gcval=250;
+    // if(p->j_dir==0)
+    // gcval=150;
    
-    gcval_u=10;
-	gcval_v=11;
-	gcval_w=12;
+    // gcval_u=10;
+	// gcval_v=11;
+	// gcval_w=12;
     
     // 3D
     gcval_eta = 55;
@@ -83,8 +84,8 @@ void fnpf_ini::fnpf_restart(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     // 2D
     if(p->j_dir==0)
     {
-    gcval_eta = 155;
-    gcval_fifsf = 160;
+        gcval_eta = 155;
+        gcval_fifsf = 160;
     }
 	
     

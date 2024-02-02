@@ -26,16 +26,16 @@ Author: Hans Bihs
 fdm_fnpf::fdm_fnpf(lexer *p) : press(p),test(p),nodeval(p),eta(p),eta_n(p),
                               WL(p),bed(p),depth(p),
                               Fifsf(p),Fibed(p),
+                              Fz(p),K(p),
                               etaloc(p),
                               wet_n(p),breaking(p),breaklog(p),bc(p),
-                              Fz(p),K(p),
                               Fx(p),Fy(p),
                               Ex(p),Ey(p),Exx(p),Eyy(p),
                               Bx(p),By(p),Bxx(p),Byy(p),
                               Hx(p),Hy(p),
                               coastline(p),vb(p),test2D(p),Hs(p),
                               nodeval2D(p),breaking_print(p),
-                              rhsvec(p),rvec(p),xvec(p),N(p),M(p)
+                              rhsvec(p),xvec(p),rvec(p),N(p),M(p)
 {   
     p->Darray(p->sig,p->imax*p->jmax*(p->kmax+2));
     p->Darray(p->sigx,p->imax*p->jmax*(p->kmax+2));

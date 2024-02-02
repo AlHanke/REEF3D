@@ -1,4 +1,5 @@
-/*--------------------------------------------------------------------
+
+/*--------------------------------------------------------------------
 REEF3D
 Copyright 2008-2024 Hans Bihs
 
@@ -19,7 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"fnpf_laplace_cds4.h"
+
+#include"fnpf_laplace_cds4.h"
 #include"lexer.h"
 #include"fdm_fnpf.h"
 #include"solver.h"
@@ -50,7 +52,7 @@ void fnpf_laplace_cds4::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver *pso
     // see p. 1130-1132
     double sigxyz2;
     double ab,abb,abbb,denom;
-    double fbxm,fbxp,fbym,fbyp;
+    // double fbxm,fbxp,fbym,fbyp;
     double distfac,dist;
     double xdelta,ydelta;    
     

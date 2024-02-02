@@ -20,7 +20,8 @@ along with this program; if not, see <http://www.gnu.org/liceonephases/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"fnpf_fsf_update.h"#include"lexer.h"
+#include"fnpf_fsf_update.h"
+#include"lexer.h"
 #include"fdm_fnpf.h"
 #include"ghostcell.h"
 #include"ioflow.h"
@@ -162,12 +163,12 @@ void fnpf_fsf_update::velcalc_sig(lexer *p, fdm_fnpf *c, ghostcell *pgc, double 
     
     
     // test: kfsfbc
-    double val;
+    // double val;
     
     
     SLICELOOP4
     {
-    c->eta_n(i,j) = c->eta(i,j);
+        c->eta_n(i,j) = c->eta(i,j);
     }
     pgc->gcsl_start4(p,c->eta_n,1);   
     

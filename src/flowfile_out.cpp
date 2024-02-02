@@ -46,13 +46,13 @@ flowfile_out::~flowfile_out()
 
 void flowfile_out::start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
 {
-	int num;
+	// int num;
 	
-	if(p->P15==1)
-    num = filecount;
+	// if(p->P15==1)
+    // num = filecount;
 
-    if(p->P15==2)
-    num = p->count;
+    // if(p->P15==2)
+    // num = p->count;
     
     for(n=0;n<p->P230;++n)
     if(p->mpirank==0)

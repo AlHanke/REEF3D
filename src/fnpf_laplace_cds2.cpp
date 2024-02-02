@@ -40,7 +40,7 @@ void fnpf_laplace_cds2::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver *pso
 {
     double sigxyz2;
     double ab,denom;
-    double fbxm,fbxp,fbym,fbyp;
+    // double fbxm,fbxp,fbym,fbyp;
     p->poissoniter=0;
     p->poissontime=0.0;
 

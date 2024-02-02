@@ -46,7 +46,7 @@ class bedshear;
 
 /// @brief Class handling sediment on particle basis
 /// This class used particles on a lagrangien framework and a VRANS sediment domain to simulate the influence of flow on the sediment
-class sedpart : public sediment, private particle_func, private increment
+class sedpart : public sediment, private particle_func, virtual private increment
 {
 public:
     sedpart(lexer*,ghostcell*,turbulence*);

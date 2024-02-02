@@ -188,7 +188,7 @@ void driver::nsewave_driver()
 void driver::nhflow_driver()
 {
     if(p->mpirank==0)
-	cout<<"initialize fdm"<<endl;
+	    cout<<"initialize fdm"<<endl;
 
 	d=new fdm_nhf(p);
 
@@ -207,7 +207,7 @@ void driver::nhflow_driver()
 void driver::fnpf_driver()
 {
     if(p->mpirank==0)
-	cout<<"initialize fdm"<<endl;
+	    cout<<"initialize fdm"<<endl;
 
     p->grid2Dsize();
 
@@ -228,7 +228,7 @@ void driver::fnpf_driver()
 void driver::ptf_driver()
 {
     if(p->mpirank==0)
-	cout<<"initialize fdm"<<endl;
+	    cout<<"initialize fdm"<<endl;
 
     a=new fdm(p);
 
@@ -246,7 +246,7 @@ void driver::ptf_driver()
 void driver::sflow_driver()
 {
     if(p->mpirank==0)
-	cout<<"initialize fdm"<<endl;
+	    cout<<"initialize fdm"<<endl;
 
     b=new fdm2D(p);
     bb=b;

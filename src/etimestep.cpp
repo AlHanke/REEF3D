@@ -87,9 +87,9 @@ void etimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
 
     if(p->mpirank==0 && (p->count%p->P12==0))
     {
-	cout<<"umax: "<<setprecision(3)<<p->umax<<" \t utime: "<<p->utime<<endl;
-	cout<<"vmax: "<<setprecision(3)<<p->vmax<<" \t vtime: "<<p->vtime<<endl;
-	cout<<"wmax: "<<setprecision(3)<<p->wmax<<" \t wtime: "<<p->wtime<<endl;
+		cout<<"umax: "<<setprecision(3)<<p->umax<<" \t utime: "<<p->utime<<endl;
+		cout<<"vmax: "<<setprecision(3)<<p->vmax<<" \t vtime: "<<p->vtime<<endl;
+		cout<<"wmax: "<<setprecision(3)<<p->wmax<<" \t wtime: "<<p->wtime<<endl;
     }
 	
 	p->umax=MAX(p->umax,p->ufbmax);
@@ -103,14 +103,15 @@ void etimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
     a->maxG=pgc->globalmax(a->maxG);
     a->maxH=pgc->globalmax(a->maxH);
 
-// maximum viscosity
+	// maximum viscosity
 	LOOP
 	p->viscmax=MAX(p->viscmax, a->visc(i,j,k)+a->eddyv(i,j,k));
 
 	p->viscmax=pgc->globalmax(p->viscmax);
 
     if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"viscmax: "<<p->viscmax<<endl;
+		cout<<"viscmax: "<<p->viscmax<<endl;
+	
 	//----kin
 	LOOP
 	p->kinmax=MAX(p->kinmax,pturb->kinval(i,j,k));

@@ -32,10 +32,10 @@ void flowfile_out::initialize(lexer *p, fdm *a, ghostcell *pgc)
     filecount=0;
     
     if(p->mpirank==0 && p->P14==1)
-	mkdir("./REEF3D_FlowFile",0777);
+	    mkdir("./REEF3D_FlowFile",0777);
 	
 	if(p->mpirank==0 && p->P230>0)
-	cout<<"FlowFile: "<<probenum<<endl;
+	    cout<<"FlowFile: "<<probenum<<endl;
 
 	fileout = new ofstream[p->P230];
     headerout = new ofstream[p->P230];
@@ -62,7 +62,7 @@ void flowfile_out::initialize(lexer *p, fdm *a, ghostcell *pgc)
     p->Iarray(iloc,p->P230);
     
     for(n=0;n<p->P230;++n)
-    iloc[n] = p->posf_i(p->P230_x[n]);
+        iloc[n] = p->posf_i(p->P230_x[n]);
     
 }
 
@@ -71,18 +71,18 @@ void flowfile_out::ini_location(lexer *p, fdm *a, ghostcell *pgc)
 
 	
 	for(n=0;n<p->P230;++n)
-	for(k=0;k<p->knoz;++k)
-	flag[n][k]=0;
+        for(k=0;k<p->knoz;++k)
+            flag[n][k]=0;
     
     i=0;
     j=0;
     for(n=0;n<p->P230;++n)
     {
-    i=iloc[n];
+        i=iloc[n];
    
         for(k=0;k<p->knoz;++k)
-        PCHECK
-        flag[n][k]=1;
+            PCHECK
+                flag[n][k]=1;
     }
 }
 

@@ -34,7 +34,7 @@ class particles_obj;
 
 /// Particle function class
 /** A class containing all basic function to manipulate the position of tracers_objs. */
-class particle_func: private increment
+class particle_func: virtual private increment
 {
 public:
 

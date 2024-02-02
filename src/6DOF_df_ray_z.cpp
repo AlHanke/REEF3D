@@ -28,19 +28,19 @@ Author: Hans Bihs
 
 void sixdof_df_object::ray_cast_z(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 {
-	double ys,ye,zs,ze;
+	double ys,ye;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Rz;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
 	double PQx,PQy,PQz;
-	double PAx,PAy,PAz;
-	double PBx,PBy,PBz;
-	double PCx,PCy,PCz;
+	// double PAx,PAy,PAz;
+	// double PBx,PBy,PBz;
+	// double PCx,PCy,PCz;
 	double Mx,My,Mz;
-	int is,ie,js,je,ks,ke;
+	int is,ie,js,je;
 	double u,v,w;
 	double denom;
 	double psi = 1.0e-8*p->DXM;
@@ -110,17 +110,17 @@ void sixdof_df_object::ray_cast_z(lexer *p, fdm *a, ghostcell *pgc, int ts, int 
 		PQy = Qy-Py;
 		PQz = Qz-Pz;
 		
-		PAx = Ax-Px;
-		PAy = Ay-Py;
-		PAz = Az-Pz;
+		// PAx = Ax-Px;
+		// PAy = Ay-Py;
+		// PAz = Az-Pz;
 		
-		PBx = Bx-Px;
-		PBy = By-Py;
-		PBz = Bz-Pz;
+		// PBx = Bx-Px;
+		// PBy = By-Py;
+		// PBz = Bz-Pz;
 		
-		PCx = Cx-Px;
-		PCy = Cy-Py;
-		PCz = Cz-Pz;
+		// PCx = Cx-Px;
+		// PCy = Cy-Py;
+		// PCz = Cz-Pz;
 		
 		// uvw
 		Mx = PQy*Pz - PQz*Py;
@@ -137,9 +137,9 @@ void sixdof_df_object::ray_cast_z(lexer *p, fdm *a, ghostcell *pgc, int ts, int 
 		w = PQx*(By*Az - Bz*Ay) + PQy*(Bz*Ax - Bx*Az) + PQz*(Bx*Ay - By*Ax)
 		  + Mx*(Bx-Ax) + My*(By-Ay) + Mz*(Bz-Az);
         
-        int check=1;
-		if(u==0.0 && v==0.0 && w==0.0)
-		check = 0;
+        // int check=1;
+		// if(u==0.0 && v==0.0 && w==0.0)
+		// check = 0;
 
 			if((u>0.0 && v>0.0 && w>0.0) || (u<0.0 && v<0.0 && w<0.0) )//&& check==1)
 			{
@@ -154,18 +154,18 @@ void sixdof_df_object::ray_cast_z(lexer *p, fdm *a, ghostcell *pgc, int ts, int 
             k = p->posf_k(Rz);
 
 			
-            int distcheck=1;
+            // int distcheck=1;
   
             
-            if(Rz<p->ZP[KP])
-            if(k>=0 && k<p->knoz)
-            if(fbio(i,j,k)<0 && fbio(i,j,k-1)<0)
-            distcheck=0;
+            // if(Rz<p->ZP[KP])
+            // if(k>=0 && k<p->knoz)
+            // if(fbio(i,j,k)<0 && fbio(i,j,k-1)<0)
+            // distcheck=0;
             
-            if(Rz>=p->ZP[KP])
-            if(k>=0 && k<p->knoz)
-            if(fbio(i,j,k)<0 && fbio(i,j,k+1)<0)
-            distcheck=0;
+            // if(Rz>=p->ZP[KP])
+            // if(k>=0 && k<p->knoz)
+            // if(fbio(i,j,k)<0 && fbio(i,j,k+1)<0)
+            // distcheck=0;
 
             //f(distcheck==1)
 			for(k=0;k<p->knoz;++k)

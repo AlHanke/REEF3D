@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include<iomanip>
+
+#include<iomanip>
 #include"fnpf_print_wsfline_y.h"
 #include"lexer.h"
 #include"fdm_fnpf.h"
@@ -79,7 +80,7 @@ void fnpf_print_wsfline_y::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *
 {
 	
     char name[250];
-    double zval=0.0;
+    // double zval=0.0;
     int num,check;
 	
     num = p->count;
@@ -250,7 +251,7 @@ void fnpf_print_wsfline_y::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *
 
 void fnpf_print_wsfline_y::ini_location(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
-    int check,count;
+    int count;
     
     
     for(q=0;q<p->P56;++q)
