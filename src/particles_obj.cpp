@@ -31,9 +31,11 @@ size_t overflow when adding something to an object at capacity
 
 
 particles_obj::particles_obj(size_t capacity, double d50, double density, bool individuals, size_t size, double scale_factor):
-                d50(d50), density(density), scale_factor(scale_factor), tracers_obj(capacity,size,scale_factor),
+                tracers_obj(capacity,size,scale_factor),
                 flag_inactive(0), flag_bed(1), flag_bed_load(2), flag_suspended_load(3),
-                entries(tracers_obj::entries+individuals?4:0) // update when adding more data
+                d50(d50), density(density),
+                entries(tracers_obj::entries+individuals?4:0), // update when adding more data
+                scale_factor(scale_factor)
 {	
     if(capacity>0)
     {
@@ -170,7 +172,7 @@ void particles_obj::fix_state() // ToDo - update
         this->empty_itr=0;
         size_t temp_Empty[capacity];
         for(size_t n=0;n<real_size;n++)
-            if(Empty[n]!=NULL)
+            if(Empty[n]!=0)
                 temp_Empty[empty_itr++]=n;
         delete [] Empty;
         this->Empty=temp_Empty;
@@ -183,7 +185,7 @@ void particles_obj::fix_state() // ToDo - update
         delete [] Empty;
         this->Empty=temp_Empty;
         for(size_t n=capacity-1; n>0;--n)
-            if(X[n]==NULL&&Y[n]==NULL&&Z[n]==NULL&&Flag[n]==-1)
+            if(X[n]==0&&Y[n]==0&&Z[n]==0&&Flag[n]==-1)
                 Empty[empty_itr++]=n;
     }
 }

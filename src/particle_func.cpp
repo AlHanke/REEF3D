@@ -295,7 +295,6 @@ double particle_func::drag_coefficient(lexer* p,fdm* a, particles_obj* PP, int i
 /// @param PP 
 void particle_func::make_stationary(lexer* p, fdm* a, tracers_obj* PP)
 {
-    int i,j;
     PARTICLELOOP
         if (p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<0)
             PP->Flag[n]=0;
@@ -344,10 +343,12 @@ void particle_func::cleanup(lexer* p, fdm* a, particles_obj* PP, int max)
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
             if(a->topo(i,j,k)<p->DZN[KP])
+            {
                 if(numPartijk[IJK]<max)
                     numPartijk[IJK]++;
                 else
                     PP->erase(n);
+            }
         }
     p->del_Iarray(numPartijk,p->knox*p->knoy*p->knoz);
 }

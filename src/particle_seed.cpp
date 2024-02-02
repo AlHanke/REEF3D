@@ -69,6 +69,7 @@ void particle_f::seed(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->Q110>0)
         posseed_box(p,a,pgc);
+    
 	if(p->Q101>0)
         posseed_topo(p,a,pgc);
 }
@@ -83,7 +84,7 @@ void particle_f::posseed_box(lexer* p, fdm* a, ghostcell* pgc)
         srand((unsigned)time(0)*(p->mpirank+1));
 	
     double x,y,z;
-    int flag;
+    // int flag;
 
     LOOP
         if(active_box(i,j,k)>0.0)
@@ -113,7 +114,7 @@ void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
 
     double tolerance = 5e-18;
     double x,y,z,ipolTopo,ipolSolid;
-    int flag;
+    // int flag;
 
     PLAINLOOP
         if(active_topo(i,j,k)>0.0)
