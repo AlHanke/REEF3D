@@ -79,28 +79,28 @@ void fixtimestep::start(fdm* a, lexer* p,ghostcell* pgc, turbulence *pturb)
 	
 	//----kin
 	LOOP
-	p->kinmax=MAX(p->kinmax,pturb->kinval(i,j,k));
+		p->kinmax=MAX(p->kinmax,pturb->kinval(i,j,k));
 
 	p->kinmax=pgc->globalmax(p->kinmax);
 
     if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"kinmax: "<<p->kinmax<<endl;
+		cout<<"kinmax: "<<p->kinmax<<endl;
 
 	//---eps
     LOOP
-	p->epsmax=MAX(p->epsmax,pturb->epsval(i,j,k));
+		p->epsmax=MAX(p->epsmax,pturb->epsval(i,j,k));
 
 	p->epsmax=pgc->globalmax(p->epsmax);
 
     if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"epsmax: "<<p->epsmax<<endl;
+		cout<<"epsmax: "<<p->epsmax<<endl;
 
 
 	//---press
     LOOP
     {
-	p->pressmax=MAX(p->pressmax,a->press(i,j,k));
-	p->pressmin=MIN(p->pressmin,a->press(i,j,k));
+		p->pressmax=MAX(p->pressmax,a->press(i,j,k));
+		p->pressmin=MIN(p->pressmin,a->press(i,j,k));
     }
 
 	p->pressmax=pgc->globalmax(p->pressmax);

@@ -46,11 +46,11 @@ field1::~field1()
     int a,b;
     
     for(a=0;a<gcfeldsize;++a)
-    for(b=0;b<6;++b)
-	delete [ ] gcfeld[a][b];
+    	for(b=0;b<6;++b)
+			delete [ ] gcfeld[a][b];
     
 	for(a=0;a<gcfeldsize;++a)
-	delete [ ] gcfeld[a];
+		delete [ ] gcfeld[a];
 
 	delete [ ] gcfeld;
 
@@ -76,11 +76,11 @@ void field1::dealloc(lexer* p)
     int a,b;
     
     for(a=0;a<gcfeldsize;++a)
-    for(b=0;b<6;++b)
-	delete [ ] gcfeld[a][b];
+    	for(b=0;b<6;++b)
+			delete [ ] gcfeld[a][b];
     
 	for(a=0;a<gcfeldsize;++a)
-	delete [ ] gcfeld[a];
+		delete [ ] gcfeld[a];
 
 	delete [ ] gcfeld;
 

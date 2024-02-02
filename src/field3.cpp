@@ -45,11 +45,11 @@ field3::~field3()
     int a,b;
     
     for(a=0;a<gcfeldsize;++a)
-    for(b=0;b<6;++b)
-	delete [ ] gcfeld[a][b];
+		for(b=0;b<6;++b)
+			delete [ ] gcfeld[a][b];
     
 	for(a=0;a<gcfeldsize;++a)
-	delete [ ] gcfeld[a];
+		delete [ ] gcfeld[a];
 
 	delete [ ] gcfeld;
 
@@ -67,11 +67,11 @@ void field3::dealloc(lexer* p)
     int a,b;
     
     for(a=0;a<gcfeldsize;++a)
-    for(b=0;b<6;++b)
-	delete [ ] gcfeld[a][b];
+		for(b=0;b<6;++b)
+			delete [ ] gcfeld[a][b];
     
 	for(a=0;a<gcfeldsize;++a)
-	delete [ ] gcfeld[a];
+		delete [ ] gcfeld[a];
 
 	delete [ ] gcfeld;
 
@@ -104,14 +104,14 @@ double & field3::operator[](int n)
 double & field3::operator()(int ii, int jj, int kk)
 {	
     if(pp->mgc3[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin]<2)
-	return V[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin];
+		return V[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin];
 	
 	
 	iter=(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin;
 	
-		di=ii-i;
-		dj=jj-j;
-		dk=kk-k;
+	di=ii-i;
+	dj=jj-j;
+	dk=kk-k;
 	
 		if(pip==4)
 		return V[iter];

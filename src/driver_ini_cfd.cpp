@@ -55,29 +55,29 @@ void driver::driver_ini_cfd()
     p->pointnumtot=pgc->globalisum(p->pointnum);
 
     if(p->mpirank==0)
-    cout<<"number of cells: "<<p->cellnumtot<<endl;
+        cout<<"number of cells: "<<p->cellnumtot<<endl;
 
         log_ini();
 
     if(p->mpirank==0)
-    cout<<"starting driver_ini"<<endl;
+        cout<<"starting driver_ini"<<endl;
     
     // 6DOF_df and FSI
     if(p->X10==1)
-    p6dof_df->initialize(p, a, pgc, pnet);
+        p6dof_df->initialize(p, a, pgc, pnet);
      
     if(p->mpirank==0)
-    if(p->X10==1 || p->Z10>0)
-    cout<<"driver FSI initialize"<<endl;
+        if(p->X10==1 || p->Z10>0)
+            cout<<"driver FSI initialize"<<endl;
     
     if(p->Z10>0)
-    pfsi->initialize(p,a,pgc);
+        pfsi->initialize(p,a,pgc);
     
 	// Solid
     if(p->solidread==1)
     {
-    solid solid_object(p,a,pgc);
-    solid_object.start(p,a,pgc,pflow,pconvec,preso);
+        solid solid_object(p,a,pgc);
+        solid_object.start(p,a,pgc,pflow,pconvec,preso);
     }
     
     // VRANS ini
@@ -86,17 +86,17 @@ void driver::driver_ini_cfd()
     // Geotopo
     if(p->toporead>0)
     {
-    geotopo gtopo(p,a,pgc);
-    gtopo.start(p,a,pgc,pflow,preto,pvrans);
+        geotopo gtopo(p,a,pgc);
+        gtopo.start(p,a,pgc,pflow,preto,pvrans);
     }
     
     // Solid Forcing
     if(p->G3==1)
     {
-    if(p->mpirank==0)
-    cout<<"driver solid forcing initialize"<<endl;
-    
-    pgc->solid_forcing_ini(p,a);
+        if(p->mpirank==0)
+            cout<<"driver solid forcing initialize"<<endl;
+        
+        pgc->solid_forcing_ini(p,a);
     }
     
 
@@ -118,10 +118,10 @@ void driver::driver_ini_cfd()
         // Solid Forcing
         if(p->G3==1)
         {
-        if(p->mpirank==0)
-        cout<<"driver solid forcing initialize"<<endl;
+            if(p->mpirank==0)
+                cout<<"driver solid forcing initialize"<<endl;
         
-        pgc->solid_forcing_ini(p,a);
+            pgc->solid_forcing_ini(p,a);
         }
     }
     
@@ -135,14 +135,14 @@ void driver::driver_ini_cfd()
     
 	starttime=pgc->timer();
     if(p->B60>0 || p->T36==2)
-	pgc->walldistance(p,a,pgc,pconvec,preini,pflow,a->walld);
+	    pgc->walldistance(p,a,pgc,pconvec,preini,pflow,a->walld);
 	
 	pflow->inflow_walldist(p,a,pgc,pconvec,preini,pflow);
 	
 	double walltime=pgc->timer()-starttime;
 	
 	if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"Walldist time: "<<setprecision(4)<<walltime<<endl;
+	    cout<<"Walldist time: "<<setprecision(4)<<walltime<<endl;
 	
 	pdata->start(p,a,pgc);
     
@@ -158,17 +158,18 @@ void driver::driver_ini_cfd()
 	pflow->gcio_update(p,a,pgc);
 	pflow->pressure_io(p,a,pgc);
     if (p->F80>0)
-    pflow->vof_relax(p,pgc,a->vof);
-
+        pflow->vof_relax(p,pgc,a->vof);
     else
-    if(p->F30>0 || p->F40>0)
     {
-        pini->inipsi(p,a,pgc);
-        for(int qn=0;qn<20;++qn)
-        pflow->phi_relax(p,pgc,a->phi);
-        preini->start(a,p, a->phi, pgc, pflow);
-        pfsf->update(p,a,pgc,a->phi);        
-        pini->iniphi_surfarea(p,a,pgc);
+        if(p->F30>0 || p->F40>0)
+        {
+            pini->inipsi(p,a,pgc);
+            for(int qn=0;qn<20;++qn)
+                pflow->phi_relax(p,pgc,a->phi);
+            preini->start(a,p, a->phi, pgc, pflow);
+            pfsf->update(p,a,pgc,a->phi);        
+            pini->iniphi_surfarea(p,a,pgc);
+        }
     }
 
 	ppls->setup(p,a,pgc);
@@ -178,16 +179,16 @@ void driver::driver_ini_cfd()
 	potflow->start(p,a,ppoissonsolv,pgc);
     pflow->wavegen_precalc(p,pgc);
 	if(p->I12>=1)
-	pini->hydrostatic(p,a,pgc);
+	    pini->hydrostatic(p,a,pgc);
     
     if(p->X10==0)
-    ptstep->start(a,p,pgc,pturb);
+        ptstep->start(a,p,pgc,pturb);
     
     if(p->I13==1)
-    pturb->ini(p,a,pgc);
+        pturb->ini(p,a,pgc);
 	
     if(p->I58_2>0.0)
-	pini->droplet_ini(p,a,pgc);
+	    pini->droplet_ini(p,a,pgc);
 
 	pflow->pressure_io(p,a,pgc);
 
@@ -205,10 +206,10 @@ void driver::driver_ini_cfd()
 
 	if(p->I40==1)
     {
-	pini->stateini(p,a,pgc,pturb,psed);
-    
-    if(p->S10==1)
-    psed->ini_cfd(p,a,pgc);
+        pini->stateini(p,a,pgc,pturb,psed);
+        
+        if(p->S10==1)
+            psed->ini_cfd(p,a,pgc);
     }
 
 	pgc->start4(p,a->press,40);

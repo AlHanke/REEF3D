@@ -31,9 +31,9 @@ Author: Hans Bihs
 
 void driver::vec_test(lexer *p, fdm *a, ghostcell *pgc, field &f)
 {	
-	int qn,n;
+	int qn;
 	double t1,t2,t3,t4,t5,t6,t7;
-	double val;
+	// double val;
 	
 	vec vec(p);
 	

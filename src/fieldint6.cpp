@@ -44,11 +44,11 @@ fieldint6::~fieldint6()
 	int a,b;
     
     for(a=0;a<gcfeldsize;++a)
-    for(b=0;b<6;++b)
-	delete [ ] gcfeld[a][b];
+		for(b=0;b<6;++b)
+			delete [ ] gcfeld[a][b];
     
 	for(a=0;a<gcfeldsize;++a)
-	delete [ ] gcfeld[a];
+		delete [ ] gcfeld[a];
 
 	delete [ ] gcfeld;
 
@@ -79,163 +79,163 @@ void fieldint6::resize(lexer* p)
 int & fieldint6::operator()(int ii, int jj, int kk)
 {			
 	if(pp->mgc6[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin]<2)
-	return V[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin];
+		return V[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin];
 	
 	
 	iter=(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin;
 	
-		di=ii-i;
-		dj=jj-j;
-		dk=kk-k;
+	di=ii-i;
+	dj=jj-j;
+	dk=kk-k;
 	
 
-		if(pip==4)
+	if(pip==4)
 		return V[iter];
 		
-		if(di==0 && dj==0 && dk==0)
+	if(di==0 && dj==0 && dk==0)
 		return V[iter];
 	  
-//1
-		if(di<0 && ((dj==0 && dk==0) || pip==1))
+	//1
+	if(di<0 && ((dj==0 && dk==0) || pip==1))
+	{
+		if(pp->gcorig6[pp->mgc6[iter]-10][0][-di]==0)
 		{
-			if(pp->gcorig6[pp->mgc6[iter]-10][0][-di]==0)
-            {
-            if(di<-2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][0][-di-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][0][-di-1];
-            
-            if(di<-2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][0][-di-2]==1)
-			return gcfeld[pp->mgc6[iter]-10][0][-di-2];
-            
-            if(di<-1)
-            if(pp->gcorig6[pp->mgc6[iter]-10][0][-di-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][0][-di-1];
-            
-            return V[iter];
-            }
+			if(di<-2)
+				if(pp->gcorig6[pp->mgc6[iter]-10][0][-di-1]==1)
+					return gcfeld[pp->mgc6[iter]-10][0][-di-1];
 			
-			if(pp->gcorig6[pp->mgc6[iter]-10][0][-di]==1)
+			if(di<-2)
+				if(pp->gcorig6[pp->mgc6[iter]-10][0][-di-2]==1)
+					return gcfeld[pp->mgc6[iter]-10][0][-di-2];
+			
+			if(di<-1)
+				if(pp->gcorig6[pp->mgc6[iter]-10][0][-di-1]==1)
+					return gcfeld[pp->mgc6[iter]-10][0][-di-1];
+			
+			return V[iter];
+		}
+		
+		if(pp->gcorig6[pp->mgc6[iter]-10][0][-di]==1)
 			return gcfeld[pp->mgc6[iter]-10][0][-di];
-		}
-//4
-		if(di>0 && ((dj==0 && dk==0) || pip==1))
+	}
+	//4
+	if(di>0 && ((dj==0 && dk==0) || pip==1))
+	{
+		if(pp->gcorig6[pp->mgc6[iter]-10][3][di]==0)
 		{
-            if(pp->gcorig6[pp->mgc6[iter]-10][3][di]==0)
-            {
-            if(di>2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][3][di-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][3][di-1];
-            
-            if(di>2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][3][di-2]==1)
-			return gcfeld[pp->mgc6[iter]-10][3][di-2];
-            
-            if(di>1)
-            if(pp->gcorig6[pp->mgc6[iter]-10][3][di-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][3][di-1];
-            
-            return V[iter];
-            }
+			if(di>2)
+				if(pp->gcorig6[pp->mgc6[iter]-10][3][di-1]==1)
+					return gcfeld[pp->mgc6[iter]-10][3][di-1];
 			
-			if(pp->gcorig6[pp->mgc6[iter]-10][3][di]==1)
+			if(di>2)
+				if(pp->gcorig6[pp->mgc6[iter]-10][3][di-2]==1)
+					return gcfeld[pp->mgc6[iter]-10][3][di-2];
+			
+			if(di>1)
+				if(pp->gcorig6[pp->mgc6[iter]-10][3][di-1]==1)
+					return gcfeld[pp->mgc6[iter]-10][3][di-1];
+			
+			return V[iter];
+		}
+		
+		if(pp->gcorig6[pp->mgc6[iter]-10][3][di]==1)
 			return gcfeld[pp->mgc6[iter]-10][3][di];
-		}
+	}
 
-//3
-		if(dj<0 && ((di==0 && dk==0) || pip==2))
+	//3
+	if(dj<0 && ((di==0 && dk==0) || pip==2))
+	{
+		if(pp->gcorig6[pp->mgc6[iter]-10][2][-dj]==0)
 		{
-            if(pp->gcorig6[pp->mgc6[iter]-10][2][-dj]==0)
-            {
-            if(dj<-2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][2][-dj-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][2][-dj-1];
-            
-            if(dj<-2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][2][-dj-2]==1) 
-			return gcfeld[pp->mgc6[iter]-10][2][-dj-2];
-            
-            if(dj<-1)
-            if(pp->gcorig6[pp->mgc6[iter]-10][2][-dj-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][2][-dj-1];
-            
-            return V[iter];
-            }
-			
-			if(pp->gcorig6[pp->mgc6[iter]-10][2][-dj]==1)
-			return gcfeld[pp->mgc6[iter]-10][2][-dj];
+		if(dj<-2)
+		if(pp->gcorig6[pp->mgc6[iter]-10][2][-dj-1]==1)
+		return gcfeld[pp->mgc6[iter]-10][2][-dj-1];
+		
+		if(dj<-2)
+		if(pp->gcorig6[pp->mgc6[iter]-10][2][-dj-2]==1) 
+		return gcfeld[pp->mgc6[iter]-10][2][-dj-2];
+		
+		if(dj<-1)
+		if(pp->gcorig6[pp->mgc6[iter]-10][2][-dj-1]==1)
+		return gcfeld[pp->mgc6[iter]-10][2][-dj-1];
+		
+		return V[iter];
 		}
-//2
-		if(dj>0 && ((di==0 && dk==0) || pip==2))
+		
+		if(pp->gcorig6[pp->mgc6[iter]-10][2][-dj]==1)
+		return gcfeld[pp->mgc6[iter]-10][2][-dj];
+	}
+	//2
+	if(dj>0 && ((di==0 && dk==0) || pip==2))
+	{
+		if(pp->gcorig6[pp->mgc6[iter]-10][1][dj]==0)
 		{
-            if(pp->gcorig6[pp->mgc6[iter]-10][1][dj]==0)
-            {
-            if(dj>2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][1][dj-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][1][dj-1];
-            
-            if(dj>2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][1][dj-2]==1) 
-			return gcfeld[pp->mgc6[iter]-10][1][dj-2];
-            
-            if(dj>1)
-            if(pp->gcorig6[pp->mgc6[iter]-10][1][dj-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][1][dj-1];
-            
-            return V[iter];
-            }
+			if(dj>2)
+				if(pp->gcorig6[pp->mgc6[iter]-10][1][dj-1]==1)
+					return gcfeld[pp->mgc6[iter]-10][1][dj-1];
 			
-			if(pp->gcorig6[pp->mgc6[iter]-10][1][dj]==1)
+			if(dj>2)
+				if(pp->gcorig6[pp->mgc6[iter]-10][1][dj-2]==1) 
+					return gcfeld[pp->mgc6[iter]-10][1][dj-2];
+			
+			if(dj>1)
+				if(pp->gcorig6[pp->mgc6[iter]-10][1][dj-1]==1)
+					return gcfeld[pp->mgc6[iter]-10][1][dj-1];
+			
+			return V[iter];
+		}
+		
+		if(pp->gcorig6[pp->mgc6[iter]-10][1][dj]==1)
 			return gcfeld[pp->mgc6[iter]-10][1][dj];
-		}
+	}
 
-//5
-		if(dk<0 && ((di==0 && dj==0) || pip==3))
+	//5
+	if(dk<0 && ((di==0 && dj==0) || pip==3))
+	{
+		if(pp->gcorig6[pp->mgc6[iter]-10][4][-dk]==0)
 		{
-            if(pp->gcorig6[pp->mgc6[iter]-10][4][-dk]==0)
-            {
-            if(dk<-2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][4][-dk-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][4][-dk-1];
-            
-            if(dk<-2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][4][-dk-2]==1) 
-			return gcfeld[pp->mgc6[iter]-10][4][-dk-2];
-            
-            if(dk<-1)
-            if(pp->gcorig6[pp->mgc6[iter]-10][4][-dk-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][4][-dk-1];
-            
-            return V[iter];
-            }
+			if(dk<-2)
+				if(pp->gcorig6[pp->mgc6[iter]-10][4][-dk-1]==1)
+					return gcfeld[pp->mgc6[iter]-10][4][-dk-1];
 			
-			if(pp->gcorig6[pp->mgc6[iter]-10][4][-dk]==1)
+			if(dk<-2)
+				if(pp->gcorig6[pp->mgc6[iter]-10][4][-dk-2]==1) 
+					return gcfeld[pp->mgc6[iter]-10][4][-dk-2];
+			
+			if(dk<-1)
+				if(pp->gcorig6[pp->mgc6[iter]-10][4][-dk-1]==1)
+					return gcfeld[pp->mgc6[iter]-10][4][-dk-1];
+			
+			return V[iter];
+		}
+		
+		if(pp->gcorig6[pp->mgc6[iter]-10][4][-dk]==1)
 			return gcfeld[pp->mgc6[iter]-10][4][-dk];
-		}
+	}
 
-//6
-		if(dk>0 && ((di==0 && dj==0) || pip==3))
+	//6
+	if(dk>0 && ((di==0 && dj==0) || pip==3))
+	{
+		if(pp->gcorig6[pp->mgc6[iter]-10][5][dk]==0)
 		{
-            if(pp->gcorig6[pp->mgc6[iter]-10][5][dk]==0)
-            {
-            if(dk>2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][5][dk-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][5][dk-1];
-            
-            if(dk>2)
-            if(pp->gcorig6[pp->mgc6[iter]-10][5][dk-2]==1)
-			return gcfeld[pp->mgc6[iter]-10][5][dk-2];
-            
-            if(dk>1)
-            if(pp->gcorig6[pp->mgc6[iter]-10][5][dk-1]==1)
-			return gcfeld[pp->mgc6[iter]-10][5][dk-1];
-            
-            return V[iter];
-            }
+			if(dk>2)
+				if(pp->gcorig6[pp->mgc6[iter]-10][5][dk-1]==1)
+					return gcfeld[pp->mgc6[iter]-10][5][dk-1];
 			
-			if(pp->gcorig6[pp->mgc6[iter]-10][5][dk]==1)
-			return gcfeld[pp->mgc6[iter]-10][5][dk];
+			if(dk>2)
+				if(pp->gcorig6[pp->mgc6[iter]-10][5][dk-2]==1)
+					return gcfeld[pp->mgc6[iter]-10][5][dk-2];
+			
+			if(dk>1)
+				if(pp->gcorig6[pp->mgc6[iter]-10][5][dk-1]==1)
+					return gcfeld[pp->mgc6[iter]-10][5][dk-1];
+		
+			return V[iter];
 		}
+		
+		if(pp->gcorig6[pp->mgc6[iter]-10][5][dk]==1)
+			return gcfeld[pp->mgc6[iter]-10][5][dk];
+	}
 	
 	return V[iter];
 	
