@@ -114,7 +114,8 @@ void ghostcell::gctopo_pressureupdate(lexer *p, fdm *a, int **cellmem, int cellc
 	// double nx,ny,nz,norm;
 	// double posx,posy,posz;
 	// double locx,locy,locz;
-	// double topoval,fval;
+	// double topoval;
+	double fval;
 
     // solid->fluid
     for(nn=0;nn<cellcount;++nn)
