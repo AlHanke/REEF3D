@@ -238,7 +238,7 @@ void VOF_PLIC::iniphi_box(lexer* p, fdm *a, ghostcell* pgc)
 
 void VOF_PLIC::iniphi_surfarea(lexer* p, fdm *a, ghostcell* pgc)
 {
-	double dnorm,dirac;
+	double dx,dy,dz,dnorm,dirac;
 	double area=0.0;
 	double epsi = 1.6*p->DXM;
 	
