@@ -23,7 +23,6 @@ Author: Alexander Hanke
 #include "tracers_obj.h"
 
 #include <math.h>
-#include <cstdint>
 #include <iostream>
 
 /*

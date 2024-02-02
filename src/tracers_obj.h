@@ -24,6 +24,8 @@ Author: Alexander Hanke
 #define TRACERSOBJ_H_
 
 #include <cstddef>
+#include <cstdint>
+#include <cstring>
 
 /*
 Philosophy: performance, memory usage, ease of use

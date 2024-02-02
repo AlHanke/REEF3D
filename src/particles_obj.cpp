@@ -20,10 +20,11 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
-#include"particles_obj.h"
-#include"lexer.h"
-#include<cstdint>
-#include<iostream>
+#include "particles_obj.h"
+#include "lexer.h"
+#include <cstdint>
+#include <cstring>
+#include <iostream>
 
 /*
 Dangers when using:
