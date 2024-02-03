@@ -25,6 +25,8 @@ Author: Alexander Hanke
 
 #include"increment.h"
 
+#define PARTLOOP for(size_t n=0;n<PP.loopindex;++n)
+
 class lexer;
 class fdm;
 class ghostcell;

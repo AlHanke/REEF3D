@@ -31,51 +31,39 @@ void sedpart::pvtu_pos(lexer* p, fdm* a, ghostcell* pgc)
 {
 
     if(p->P15==1)
-    num = printcount;
-
-    if(p->P15==2)
-    num = p->count;
+    	num = printcount;
+    else if(p->P15==2)
+    	num = p->count;
 
 	if(p->P14==0)
 	{
-    if(num<10)
-	sprintf(name,"REEF3D-SedPart-00000%i.pvtu",num);
-
-	if(num<100&&num>9)
-	sprintf(name,"REEF3D-SedPart-0000%i.pvtu",num);
-
-	if(num<1000&&num>99)
-	sprintf(name,"REEF3D-SedPart-000%i.pvtu",num);
-
-	if(num<10000&&num>999)
-	sprintf(name,"REEF3D-SedPart-00%i.pvtu",num);
-
-	if(num<100000&&num>9999)
-	sprintf(name,"REEF3D-SedPart-0%i.pvtu",num);
-
-	if(num>99999)
-	sprintf(name,"REEF3D-SedPart-%i.pvtu",num);
+		if(num>99999)
+			sprintf(name,"REEF3D-SedPart-%i.pvtu",num);
+		else if(num>9999)
+			sprintf(name,"REEF3D-SedPart-0%i.pvtu",num);
+		else if(num>999)
+			sprintf(name,"REEF3D-SedPart-00%i.pvtu",num);
+		else if(num>99)
+			sprintf(name,"REEF3D-SedPart-000%i.pvtu",num);
+		else if(num>9)
+			sprintf(name,"REEF3D-SedPart-0000%i.pvtu",num);
+		else
+			sprintf(name,"REEF3D-SedPart-00000%i.pvtu",num);
 	}
-	
-	if(p->P14==1)
+	else if(p->P14==1)
 	{
-	if(num<10)
-	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i.pvtu",num);
-
-	if(num<100&&num>9)
-	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i.pvtu",num);
-
-	if(num<1000&&num>99)
-	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i.pvtu",num);
-
-	if(num<10000&&num>999)
-	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i.pvtu",num);
-
-	if(num<100000&&num>9999)
-	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i.pvtu",num);
-
-	if(num>99999)
-	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i.pvtu",num);
+		if(num>99999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i.pvtu",num);
+		else if(num>9999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i.pvtu",num);
+		else if(num>999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i.pvtu",num);
+		else if(num>99)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i.pvtu",num);
+		else if(num>9)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i.pvtu",num);
+		else
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i.pvtu",num);
 	}
 
 	ofstream result;
@@ -97,8 +85,8 @@ void sedpart::pvtu_pos(lexer* p, fdm* a, ghostcell* pgc)
 
 	for(int n=0; n<p->M10; ++n)
 	{
-    piecename_pos(p,a,pgc,n);
-    result<<"<Piece Source=\""<<pname<<"\"/>"<<endl;
+		piecename_pos(p,a,pgc,n);
+		result<<"<Piece Source=\""<<pname<<"\"/>"<<endl;
 	}
 
 	result<<"</PUnstructuredGrid>"<<endl;

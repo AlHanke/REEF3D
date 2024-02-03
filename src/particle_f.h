@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include "particles_obj.h"
 #include "particle_func.h"
 
-#define PARTLOOP for(size_t n=0;n<PP.loopindex;++n)
+// #define PARTLOOP for(size_t n=0;n<PP.loopindex;++n)
 
 using namespace std;
 
