@@ -166,13 +166,13 @@ void wave_lib_hdc::filename_continuous(lexer *p, ghostcell *pgc)
 {
     if(p->mpirank<9)
     	sprintf(name,"./REEF3D_CFD_HDC_Input/REEF3D-HDC-Input-0000%i.r3d",p->mpirank+1);
-	else if(p->mpirank<99&&p->mpirank>8)
+	if(p->mpirank<99&&p->mpirank>8)
 		sprintf(name,"./REEF3D_CFD_HDC_Input/REEF3D-HDC-Input-000%i.r3d",p->mpirank+1);
-	else if(p->mpirank<999&&p->mpirank>98)
+	if(p->mpirank<999&&p->mpirank>98)
 		sprintf(name,"./REEF3D_CFD_HDC_Input/REEF3D-HDC-Input-00%i.r3d",p->mpirank+1);
-	else if(p->mpirank<9999&&p->mpirank>998)
+	if(p->mpirank<9999&&p->mpirank>998)
 		sprintf(name,"./REEF3D_CFD_HDC_Input/REEF3D-HDC-Input-0%i.r3d",p->mpirank+1);
-	else if(p->mpirank>9998)
+	if(p->mpirank>9998)
 		sprintf(name,"./REEF3D_CFD_HDC_Input/REEF3D-HDC-Input-%i.r3d",p->mpirank+1);
  
 }
@@ -182,13 +182,13 @@ void wave_lib_hdc::filename_header(lexer *p, ghostcell *pgc)
 
     if(p->mpirank<9)
 		sprintf(name,"./REEF3D_CFD_HDC_Input/REEF3D-HDC-Input-Header-0000%i.r3d",p->mpirank+1);
-	else if(p->mpirank<99&&p->mpirank>8)
+	if(p->mpirank<99&&p->mpirank>8)
 		sprintf(name,"./REEF3D_CFD_HDC_Input/REEF3D-HDC-Input-Header-000%i.r3d",p->mpirank+1);
-	else if(p->mpirank<999&&p->mpirank>98)
+	if(p->mpirank<999&&p->mpirank>98)
 		sprintf(name,"./REEF3D_CFD_HDC_Input/REEF3D-HDC-Input-Header-00%i.r3d",p->mpirank+1);
-	else if(p->mpirank<9999&&p->mpirank>998)
+	if(p->mpirank<9999&&p->mpirank>998)
 		sprintf(name,"./REEF3D_CFD_HDC_Input/REEF3D-HDC-Input-Header-0%i.r3d",p->mpirank+1);
-	else if(p->mpirank>9998)
+	if(p->mpirank>9998)
 		sprintf(name,"./REEF3D_CFD_HDC_Input/REEF3D-HDC-Input-Header-%i.r3d",p->mpirank+1);   
 	
 }
