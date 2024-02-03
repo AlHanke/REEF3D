@@ -63,13 +63,13 @@ void wave_lib_spectrum::irregular_parameters(lexer *p)
 {
 
     if(p->B94==0)
-	wD=p->phimean;
+	    wD=p->phimean;
     
 	if(p->B94==1)
-	wD=p->B94_wdt;
+	    wD=p->B94_wdt;
 
 	if(p->B85==10)
-	spectrum_file_read(p);
+	    spectrum_file_read(p);
 
 
     double maxS=-1.0;

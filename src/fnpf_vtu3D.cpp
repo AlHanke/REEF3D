@@ -416,11 +416,11 @@ void fnpf_vtu3D::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
     result.write((char*)&iin, sizeof (int));
 	TPLOOP
 	{
-    ffn=float(c->Fi[FIJKp1]);
+		ffn=float(c->Fi[FIJKp1]);
 
-    if(k==-1 && j==-1)
-	ffn=float(c->Fi[FIJp1Kp1]);
-	result.write((char*)&ffn, sizeof (float));
+			if(k==-1 && j==-1)
+			ffn=float(c->Fi[FIJp1Kp1]);
+		result.write((char*)&ffn, sizeof (float));
 	}
 
 //  elevation

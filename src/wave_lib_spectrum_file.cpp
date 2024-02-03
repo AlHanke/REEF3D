@@ -49,7 +49,7 @@ void wave_lib_spectrum::spectrum_file_read(lexer *p)
 
 
 	// double ts,te;
-	int timecount;
+	// int timecount;
 
 	sprintf(name,"spectrum-file.dat");
 

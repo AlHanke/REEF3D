@@ -126,7 +126,7 @@ double wave_lib_flap::wave_eta(lexer *p, double x, double y)
 
 double wave_lib_flap::wave_fi(lexer *p, double x, double y, double z)
 {
-    double fi;
+    double fi=0.0;
 
     fi = (x-p->global_xmin)*wave_horzvel(p,x,y,z);
     
@@ -141,7 +141,7 @@ void wave_lib_flap::parameters(lexer *p, ghostcell *pgc)
 void wave_lib_flap::read(lexer *p, ghostcell* pgc)
 {
 	char name[100];
-	double val,val0,val1;
+	double val0,val1;
     double sign,beta,s;
 	int count;
 	

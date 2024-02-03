@@ -35,10 +35,10 @@ void wave_lib_spectrum::wavepackets_parameters(lexer *p)
     double cmin,cmax;
     
     if(p->B94==0)
-	wD=p->phimean;
+		wD=p->phimean;
     
 	if(p->B94==1)
-	wD=p->B94_wdt;
+		wD=p->B94_wdt;
 	
 	p->wN=p->B86;
 	
