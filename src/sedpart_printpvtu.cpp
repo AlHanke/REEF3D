@@ -30,10 +30,9 @@ Author: Hans Bihs
 void sedpart::pvtu_pos(lexer* p, fdm* a, ghostcell* pgc)
 {
 
-    if(p->P15==1)
-    	num = printcount;
-    else if(p->P15==2)
-    	num = p->count;
+    if(p->P15==1) num = printcount;
+    else if(p->P15==2) num = p->count;
+	
 
 	if(p->P14==0)
 	{
