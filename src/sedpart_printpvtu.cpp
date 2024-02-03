@@ -30,39 +30,27 @@ Author: Hans Bihs
 void sedpart::pvtu_pos(lexer* p, fdm* a, ghostcell* pgc)
 {
 
-    if(p->P15==1) num = printcount;
-    else if(p->P15==2) num = p->count;
+    if(p->P15==1)		num = printcount;
+    else if(p->P15==2)	num = p->count;
 	
 
 	if(p->P14==0)
 	{
-		if(num>99999)
-			sprintf(name,"REEF3D-SedPart-%i.pvtu",num);
-		else if(num>9999)
-			sprintf(name,"REEF3D-SedPart-0%i.pvtu",num);
-		else if(num>999)
-			sprintf(name,"REEF3D-SedPart-00%i.pvtu",num);
-		else if(num>99)
-			sprintf(name,"REEF3D-SedPart-000%i.pvtu",num);
-		else if(num>9)
-			sprintf(name,"REEF3D-SedPart-0000%i.pvtu",num);
-		else
-			sprintf(name,"REEF3D-SedPart-00000%i.pvtu",num);
+		if(num>99999)		sprintf(name,"REEF3D-SedPart-%i.pvtu",num);
+		else if(num>9999)	sprintf(name,"REEF3D-SedPart-0%i.pvtu",num);
+		else if(num>999)	sprintf(name,"REEF3D-SedPart-00%i.pvtu",num);
+		else if(num>99)		sprintf(name,"REEF3D-SedPart-000%i.pvtu",num);
+		else if(num>9)		sprintf(name,"REEF3D-SedPart-0000%i.pvtu",num);
+		else				sprintf(name,"REEF3D-SedPart-00000%i.pvtu",num);
 	}
 	else if(p->P14==1)
 	{
-		if(num>99999)
-			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i.pvtu",num);
-		else if(num>9999)
-			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i.pvtu",num);
-		else if(num>999)
-			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i.pvtu",num);
-		else if(num>99)
-			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i.pvtu",num);
-		else if(num>9)
-			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i.pvtu",num);
-		else
-			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i.pvtu",num);
+		if(num>99999)		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i.pvtu",num);
+		else if(num>9999)	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i.pvtu",num);
+		else if(num>999)	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i.pvtu",num);
+		else if(num>99)		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i.pvtu",num);
+		else if(num>9)		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i.pvtu",num);
+		else				sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i.pvtu",num);
 	}
 
 	ofstream result;
