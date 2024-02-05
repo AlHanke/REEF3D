@@ -143,7 +143,7 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
             double uval, vval, wval;
             double kappa = 0.4;
             double xip, yip, zip, zval;
-            double u_abs, tau, density;
+            double u_abs, tau, density=p->W1;
             double ks;
             double dir;
 

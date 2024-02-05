@@ -27,7 +27,7 @@ Author: Hans Bihs
 
 void iowave::active_beach_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, double *Fi, double *Uin, slice &Fifsf, slice &eta)
 {
-        double eta_R,Uc,Un,Vc,Wc,eta_T,eta_M,wsf;
+        double eta_R,Uc,Un,Vc,Wc,eta_T,eta_M,wsf=0.25;
 		double posx,posy,posz,uvel,vvel,uabs,fx,fy,pval,fp;
         double fxdir,fydir;
 		double x=0.0;
