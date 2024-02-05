@@ -394,6 +394,12 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
         I_(0,2) = 0.0;
         I_(1,2) = 0.0;      		
 	}
+	else
+	{
+		Ix = 0.0;
+		Iy = 0.0;
+		Iz = 0.0;
+	}
 	
     I_(0,0) = Ix;
     I_(1,0) = I_(0,1);
