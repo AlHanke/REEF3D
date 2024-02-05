@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"ghostcell.h"
+
+#include"ghostcell.h"
 #include"lexer.h"
 #include"fdm.h"
 
@@ -50,16 +51,16 @@ void ghostcell::gcsolid_gcb_seed(lexer *p, fdm *a)
     
     if(p->flag4[IJK]<0)
     p->gcb4[n][3]=-fabs(p->gcb4[n][3]);
-    }
-	
-    // then check gcb4 around topo
-	count=p->gcb_fix;
-	LOOP
+       }
+    
+       // then check gcb4 around topo
+    count=p->gcb_fix;
+    LOOP
     {   
         // Solid
         if(p->flag4[Im1JK]==SOLID)
-        ++count;
-	
+           ++count;
+    
         if(p->flag4[IJp1K]==SOLID)
         ++count;
 
@@ -74,14 +75,14 @@ void ghostcell::gcsolid_gcb_seed(lexer *p, fdm *a)
 
         if(p->flag4[IJKp1]==SOLID)
         ++count;
-    }
-	
-	p->Iresize(p->gcb4,p->gcb4_count, count, 6, 6); 
-	p->Dresize(p->gcd4,p->gcb4_count, count); 
-	
-	count=p->gcb_fix;
-	
-	LOOP
+       }
+    
+    p->Iresize(p->gcb4,p->gcb4_count, count, 6, 6); 
+    p->Dresize(p->gcd4,p->gcb4_count, count); 
+    
+    count=p->gcb_fix;
+    
+    LOOP
     {
         // Solid
         if(p->flag4[Im1JK]==SOLID)
@@ -144,8 +145,8 @@ void ghostcell::gcsolid_gcb_seed(lexer *p, fdm *a)
         ++count;
         }
     }
-    p->gcb4_count=p->gcb_solid=p->gcb_topo=count;
-	
+       p->gcb4_count=p->gcb_solid=p->gcb_topo=count;
+    
 }
 
 

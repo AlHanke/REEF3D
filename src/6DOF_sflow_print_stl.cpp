@@ -30,48 +30,48 @@ Author: Hans Bihs
 
 void sixdof_sflow::print_ini_stl(lexer *p, ghostcell *pgc)
 {
-	if(p->mpirank==0 && p->P14==1)
+    if(p->mpirank==0 && p->P14==1)
     {
         mkdir("./REEF3D_SFLOW_6DOF_STL", 0777);
         mkdir("./REEF3D_SFLOW_6DOF", 0777);
     }
-	
+    
     ofstream print;
     char str[1000];
 
-	if(p->P14==0)
+    if(p->P14==0)
     sprintf(str,"REEF3D_6DOF_position_%i.dat",n6DOF);
-	if(p->P14==1)
+    if(p->P14==1)
     sprintf(str,"./REEF3D_SFLOW_6DOF/REEF3D_6DOF_position_%i.dat",n6DOF);
-	
-    print.open(str);
-	print<<"time \t XG \t YG \t ZG \t Phi \t Theta \t Psi"<<endl;
-	print.close();
     
-	
-	if(p->P14==0)
-    sprintf(str,"REEF3D_6DOF_velocity_%i.dat",n6DOF);
-	if(p->P14==1)
-    sprintf(str,"./REEF3D_SFLOW_6DOF/REEF3D_6DOF_velocity_%i.dat",n6DOF);
-	
     print.open(str);
-	print<<"time \t Ue [m/s] \t Ve [m/s] \t We [m/s] \t Pe [rad/s] \t Qe [rad/s] \t Re [rad/s]"<<endl;
+    print<<"time \t XG \t YG \t ZG \t Phi \t Theta \t Psi"<<endl;
+    print.close();
+    
+    
+    if(p->P14==0)
+    sprintf(str,"REEF3D_6DOF_velocity_%i.dat",n6DOF);
+    if(p->P14==1)
+    sprintf(str,"./REEF3D_SFLOW_6DOF/REEF3D_6DOF_velocity_%i.dat",n6DOF);
+    
+    print.open(str);
+    print<<"time \t Ue [m/s] \t Ve [m/s] \t We [m/s] \t Pe [rad/s] \t Qe [rad/s] \t Re [rad/s]"<<endl;
     print.close();
 }
 
 
 void sixdof_sflow::print_stl(lexer *p, ghostcell *pgc)
 {
-	int num=0;
-	
-	if(p->P15==1)
+    int num=0;
+    
+    if(p->P15==1)
     num = p->printcount_sixdof;
 
     if(p->P15==2)
     num = p->count;
-	
-	if(num<0)
-	num=0;
+    
+    if(num<0)
+    num=0;
 
     
     if(p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)  || (p->simtime>printtime && p->P30>0.0)   || p->count==0))
@@ -125,13 +125,13 @@ void sixdof_sflow::print_stl(lexer *p, ghostcell *pgc)
 
         result.close();
 
-        ++p->printcount_sixdof;	
+        ++p->printcount_sixdof;    
     }
 }
 
 void sixdof_sflow::print_parameter(lexer *p, ghostcell *pgc)
 {
-	if(p->mpirank == 0 && p->count%p->X19==0)
+    if(p->mpirank == 0 && p->count%p->X19==0)
     {
         ofstream print;
         char str[1000];

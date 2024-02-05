@@ -39,40 +39,40 @@ class ddweno_nug_sf : public weno_nug_func
 {
 public:
 
-	 ddweno_nug_sf(lexer*);
-	 ~ddweno_nug_sf();
+     ddweno_nug_sf(lexer*);
+     ~ddweno_nug_sf();
 
-	 double ddwenox(fdm*, vec&, double, int, cpt&);
-	 double ddwenoy(fdm*, vec&, double, int, cpt&);
-	 double ddwenoz(fdm*, vec&, double, int, cpt&);
+     double ddwenox(fdm*, vec&, double, int, cpt&);
+     double ddwenoy(fdm*, vec&, double, int, cpt&);
+     double ddwenoz(fdm*, vec&, double, int, cpt&);
 
-	void iqmin0(fdm*, vec&, cpt&);
-	void jqmin0(fdm*, vec&, cpt&);
-	void kqmin0(fdm*, vec&, cpt&);
-	void iqmax0(fdm*, vec&, cpt&);
-	void jqmax0(fdm*, vec&, cpt&);
-	void kqmax0(fdm*, vec&, cpt&);
+    void iqmin0(fdm*, vec&, cpt&);
+    void jqmin0(fdm*, vec&, cpt&);
+    void kqmin0(fdm*, vec&, cpt&);
+    void iqmax0(fdm*, vec&, cpt&);
+    void jqmax0(fdm*, vec&, cpt&);
+    void kqmax0(fdm*, vec&, cpt&);
     
     void iqmin1(fdm*, vec&, cpt&);
-	void jqmin1(fdm*, vec&, cpt&);
-	void kqmin1(fdm*, vec&, cpt&);
-	void iqmax1(fdm*, vec&, cpt&);
-	void jqmax1(fdm*, vec&, cpt&);
-	void kqmax1(fdm*, vec&, cpt&);
+    void jqmin1(fdm*, vec&, cpt&);
+    void kqmin1(fdm*, vec&, cpt&);
+    void iqmax1(fdm*, vec&, cpt&);
+    void jqmax1(fdm*, vec&, cpt&);
+    void kqmax1(fdm*, vec&, cpt&);
     
     void iqmin2(fdm*, vec&, cpt&);
-	void jqmin2(fdm*, vec&, cpt&);
-	void kqmin2(fdm*, vec&, cpt&);
-	void iqmax2(fdm*, vec&, cpt&);
-	void jqmax2(fdm*, vec&, cpt&);
-	void kqmax2(fdm*, vec&, cpt&);
+    void jqmin2(fdm*, vec&, cpt&);
+    void kqmin2(fdm*, vec&, cpt&);
+    void iqmax2(fdm*, vec&, cpt&);
+    void jqmax2(fdm*, vec&, cpt&);
+    void kqmax2(fdm*, vec&, cpt&);
     
     void iqmin3(fdm*, vec&, cpt&);
-	void jqmin3(fdm*, vec&, cpt&);
-	void kqmin3(fdm*, vec&, cpt&);
-	void iqmax3(fdm*, vec&, cpt&);
-	void jqmax3(fdm*, vec&, cpt&);
-	void kqmax3(fdm*, vec&, cpt&);
+    void jqmin3(fdm*, vec&, cpt&);
+    void kqmin3(fdm*, vec&, cpt&);
+    void iqmax3(fdm*, vec&, cpt&);
+    void jqmax3(fdm*, vec&, cpt&);
+    void kqmax3(fdm*, vec&, cpt&);
     
     void weight_min_sfcheck_x(fdm*);
     void weight_max_sfcheck_x(fdm*);

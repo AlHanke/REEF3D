@@ -26,89 +26,89 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void fnpf_vtp_bed::pvtu(lexer *p, fdm_fnpf *c, ghostcell* pgc)
-{	
-	int num=0;
+{    
+    int num=0;
 
     if(p->P15==1)
     num = printcount;
 
     if(p->P15==2)
     num = p->count;
-	
-	if(p->P14==0)
-	{
+    
+    if(p->P14==0)
+    {
     if(num<10)
-	sprintf(name,"REEF3D-FNPF-BED-00000%i.pvtp",num);
+    sprintf(name,"REEF3D-FNPF-BED-00000%i.pvtp",num);
 
-	if(num<100&&num>9)
-	sprintf(name,"REEF3D-FNPF-BED-0000%i.pvtp",num);
+    if(num<100&&num>9)
+    sprintf(name,"REEF3D-FNPF-BED-0000%i.pvtp",num);
 
-	if(num<1000&&num>99)
-	sprintf(name,"REEF3D-FNPF-BED-000%i.pvtp",num);
+    if(num<1000&&num>99)
+    sprintf(name,"REEF3D-FNPF-BED-000%i.pvtp",num);
 
-	if(num<10000&&num>999)
-	sprintf(name,"REEF3D-FNPF-BED-00%i.pvtp",num);
+    if(num<10000&&num>999)
+    sprintf(name,"REEF3D-FNPF-BED-00%i.pvtp",num);
 
-	if(num<100000&&num>9999)
-	sprintf(name,"REEF3D-FNPF-BED-0%i.pvtp",num);
+    if(num<100000&&num>9999)
+    sprintf(name,"REEF3D-FNPF-BED-0%i.pvtp",num);
 
-	if(num>99999)
-	sprintf(name,"REEF3D-FNPF-BED-%i.pvtp",num);
-	}
+    if(num>99999)
+    sprintf(name,"REEF3D-FNPF-BED-%i.pvtp",num);
+    }
 
-	if(p->P14==1)
-	{
+    if(p->P14==1)
+    {
     if(num<10)
-	sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-00000%i.pvtp",num);
+    sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-00000%i.pvtp",num);
 
-	if(num<100&&num>9)
-	sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-0000%i.pvtp",num);
+    if(num<100&&num>9)
+    sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-0000%i.pvtp",num);
 
-	if(num<1000&&num>99)
-	sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-000%i.pvtp",num);
+    if(num<1000&&num>99)
+    sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-000%i.pvtp",num);
 
-	if(num<10000&&num>999)
-	sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-00%i.pvtp",num);
+    if(num<10000&&num>999)
+    sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-00%i.pvtp",num);
 
-	if(num<100000&&num>9999)
-	sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-0%i.pvtp",num);
+    if(num<100000&&num>9999)
+    sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-0%i.pvtp",num);
 
-	if(num>99999)
-	sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-%i.pvtp",num);
-	}
+    if(num>99999)
+    sprintf(name,"./REEF3D_FNPF_VTP_BED/REEF3D-FNPF-BED-%i.pvtp",num);
+    }
 
-	ofstream result;
-	result.open(name);
+    ofstream result;
+    result.open(name);
 
-	result<<"<?xml version=\"1.0\"?>"<<endl;
-	result<<"<VTKFile type=\"PPolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
-	result<<"<PPolyData  GhostLevel=\"0\">"<<endl;
-	
-	result<<"<PPoints>"<<endl;
-	result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>"<<endl;
-	result<<"</PPoints>"<<endl;
-	
-	result<<"<PPointData>"<<endl;
-	result<<"<PDataArray type=\"Float32\" Name=\"elevation\"/>"<<endl;
-	result<<"<PDataArray type=\"Float32\" Name=\"depth\"/>"<<endl;
-	result<<"</PPointData>"<<endl;
-	
-	result<<"<Polys>"<<endl;
+    result<<"<?xml version=\"1.0\"?>"<<endl;
+    result<<"<VTKFile type=\"PPolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
+    result<<"<PPolyData  GhostLevel=\"0\">"<<endl;
+    
+    result<<"<PPoints>"<<endl;
+    result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>"<<endl;
+    result<<"</PPoints>"<<endl;
+    
+    result<<"<PPointData>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"elevation\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"depth\"/>"<<endl;
+    result<<"</PPointData>"<<endl;
+    
+    result<<"<Polys>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"/>"<<endl;
-	result<<"<DataArray type=\"Int32\"  Name=\"offsets\" />"<<endl;
+    result<<"<DataArray type=\"Int32\"  Name=\"offsets\" />"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"types\" />"<<endl;
-	result<<"</Polys>"<<endl;
+    result<<"</Polys>"<<endl;
 
-	for(n=0; n<p->M10; ++n)
-	{
+    for(n=0; n<p->M10; ++n)
+    {
     piecename(p,c,pgc,n);
     result<<"<Piece Source=\""<<pname<<"\"/>"<<endl;
-	}
+    }
 
-	result<<"</PPolyData>"<<endl;
-	result<<"</VTKFile>"<<endl;
+    result<<"</PPolyData>"<<endl;
+    result<<"</VTKFile>"<<endl;
 
-	result.close();
+    result.close();
 
 }
 
@@ -123,109 +123,109 @@ void fnpf_vtp_bed::piecename(lexer *p, fdm_fnpf *c, ghostcell *pgc, int n)
     if(p->P15==2)
     num = p->count;
 
-	if(n<9)
-	{
-		if(num<10)
-		sprintf(pname,"REEF3D-FNPF-BED-00000%i-0000%i.vtp",num,n+1);
+    if(n<9)
+    {
+        if(num<10)
+        sprintf(pname,"REEF3D-FNPF-BED-00000%i-0000%i.vtp",num,n+1);
 
-		if(num<100&&num>9)
-		sprintf(pname,"REEF3D-FNPF-BED-0000%i-0000%i.vtp",num,n+1);
+        if(num<100&&num>9)
+        sprintf(pname,"REEF3D-FNPF-BED-0000%i-0000%i.vtp",num,n+1);
 
-		if(num<1000&&num>99)
-		sprintf(pname,"REEF3D-FNPF-BED-000%i-0000%i.vtp",num,n+1);
+        if(num<1000&&num>99)
+        sprintf(pname,"REEF3D-FNPF-BED-000%i-0000%i.vtp",num,n+1);
 
-		if(num<10000&&num>999)
-		sprintf(pname,"REEF3D-FNPF-BED-00%i-0000%i.vtp",num,n+1);
+        if(num<10000&&num>999)
+        sprintf(pname,"REEF3D-FNPF-BED-00%i-0000%i.vtp",num,n+1);
 
-		if(num<100000&&num>9999)
-		sprintf(pname,"REEF3D-FNPF-BED-0%i-0000%i.vtp",num,n+1);
+        if(num<100000&&num>9999)
+        sprintf(pname,"REEF3D-FNPF-BED-0%i-0000%i.vtp",num,n+1);
 
-		if(num>99999)
-		sprintf(pname,"REEF3D-FNPF-BED-%i-0000%i.vtp",num,n+1);
-	}
+        if(num>99999)
+        sprintf(pname,"REEF3D-FNPF-BED-%i-0000%i.vtp",num,n+1);
+    }
 
-	if(n<99&&n>8)
-	{
-		if(num<10)
-		sprintf(pname,"REEF3D-FNPF-BED-00000%i-000%i.vtp",num,n+1);
+    if(n<99&&n>8)
+    {
+        if(num<10)
+        sprintf(pname,"REEF3D-FNPF-BED-00000%i-000%i.vtp",num,n+1);
 
-		if(num<100&&num>9)
-		sprintf(pname,"REEF3D-FNPF-BED-0000%i-000%i.vtp",num,n+1);
+        if(num<100&&num>9)
+        sprintf(pname,"REEF3D-FNPF-BED-0000%i-000%i.vtp",num,n+1);
 
-		if(num<1000&&num>99)
-		sprintf(pname,"REEF3D-FNPF-BED-000%i-000%i.vtp",num,n+1);
+        if(num<1000&&num>99)
+        sprintf(pname,"REEF3D-FNPF-BED-000%i-000%i.vtp",num,n+1);
 
-		if(num<10000&&num>999)
-		sprintf(pname,"REEF3D-FNPF-BED-00%i-000%i.vtp",num,n+1);
+        if(num<10000&&num>999)
+        sprintf(pname,"REEF3D-FNPF-BED-00%i-000%i.vtp",num,n+1);
 
-		if(num<100000&&num>9999)
-		sprintf(pname,"REEF3D-FNPF-BED-0%i-000%i.vtp",num,n+1);
+        if(num<100000&&num>9999)
+        sprintf(pname,"REEF3D-FNPF-BED-0%i-000%i.vtp",num,n+1);
 
-		if(num>99999)
-		sprintf(pname,"REEF3D-FNPF-BED-%i-000%i.vtp",num,n+1);
-	}
-	if(n<999&&n>98)
-	{
-		if(num<10)
-		sprintf(pname,"REEF3D-FNPF-BED-00000%i-00%i.vtp",num,n+1);
+        if(num>99999)
+        sprintf(pname,"REEF3D-FNPF-BED-%i-000%i.vtp",num,n+1);
+    }
+    if(n<999&&n>98)
+    {
+        if(num<10)
+        sprintf(pname,"REEF3D-FNPF-BED-00000%i-00%i.vtp",num,n+1);
 
-		if(num<100&&num>9)
-		sprintf(pname,"REEF3D-FNPF-BED-0000%i-00%i.vtp",num,n+1);
+        if(num<100&&num>9)
+        sprintf(pname,"REEF3D-FNPF-BED-0000%i-00%i.vtp",num,n+1);
 
-		if(num<1000&&num>99)
-		sprintf(pname,"REEF3D-FNPF-BED-000%i-00%i.vtp",num,n+1);
+        if(num<1000&&num>99)
+        sprintf(pname,"REEF3D-FNPF-BED-000%i-00%i.vtp",num,n+1);
 
-		if(num<10000&&num>999)
-		sprintf(pname,"REEF3D-FNPF-BED-00%i-00%i.vtp",num,n+1);
+        if(num<10000&&num>999)
+        sprintf(pname,"REEF3D-FNPF-BED-00%i-00%i.vtp",num,n+1);
 
-		if(num<100000&&num>9999)
-		sprintf(pname,"REEF3D-FNPF-BED-0%i-00%i.vtp",num,n+1);
+        if(num<100000&&num>9999)
+        sprintf(pname,"REEF3D-FNPF-BED-0%i-00%i.vtp",num,n+1);
 
-		if(num>99999)
-		sprintf(pname,"REEF3D-FNPF-BED-%i-00%i.vtp",num,n+1);
-	}
+        if(num>99999)
+        sprintf(pname,"REEF3D-FNPF-BED-%i-00%i.vtp",num,n+1);
+    }
 
-	if(n<9999&&n>998)
-	{
-		if(num<10)
-		sprintf(pname,"REEF3D-FNPF-BED-00000%i-0%i.vtp",num,n+1);
+    if(n<9999&&n>998)
+    {
+        if(num<10)
+        sprintf(pname,"REEF3D-FNPF-BED-00000%i-0%i.vtp",num,n+1);
 
-		if(num<100&&num>9)
-		sprintf(pname,"REEF3D-FNPF-BED-0000%i-0%i.vtp",num,n+1);
+        if(num<100&&num>9)
+        sprintf(pname,"REEF3D-FNPF-BED-0000%i-0%i.vtp",num,n+1);
 
-		if(num<1000&&num>99)
-		sprintf(pname,"REEF3D-FNPF-BED-000%i-0%i.vtp",num,n+1);
+        if(num<1000&&num>99)
+        sprintf(pname,"REEF3D-FNPF-BED-000%i-0%i.vtp",num,n+1);
 
-		if(num<10000&&num>999)
-		sprintf(pname,"REEF3D-FNPF-BED-00%i-0%i.vtp",num,n+1);
+        if(num<10000&&num>999)
+        sprintf(pname,"REEF3D-FNPF-BED-00%i-0%i.vtp",num,n+1);
 
-		if(num<100000&&num>9999)
-		sprintf(pname,"REEF3D-FNPF-BED-0%i-0%i.vtp",num,n+1);
+        if(num<100000&&num>9999)
+        sprintf(pname,"REEF3D-FNPF-BED-0%i-0%i.vtp",num,n+1);
 
-		if(num>99999)
-		sprintf(pname,"REEF3D-FNPF-BED-%i-0%i.vtp",num,n+1);
-	}
+        if(num>99999)
+        sprintf(pname,"REEF3D-FNPF-BED-%i-0%i.vtp",num,n+1);
+    }
 
-	if(n>9998)
-	{
-		if(num<10)
-		sprintf(pname,"REEF3D-FNPF-BED-00000%i-%i.vtp",num,n+1);
+    if(n>9998)
+    {
+        if(num<10)
+        sprintf(pname,"REEF3D-FNPF-BED-00000%i-%i.vtp",num,n+1);
 
-		if(num<100&&num>9)
-		sprintf(pname,"REEF3D-FNPF-BED-0000%i-%i.vtp",num,n+1);
+        if(num<100&&num>9)
+        sprintf(pname,"REEF3D-FNPF-BED-0000%i-%i.vtp",num,n+1);
 
-		if(num<1000&&num>99)
-		sprintf(pname,"REEF3D-FNPF-BED-000%i-%i.vtp",num,n+1);
+        if(num<1000&&num>99)
+        sprintf(pname,"REEF3D-FNPF-BED-000%i-%i.vtp",num,n+1);
 
-		if(num<10000&&num>999)
-		sprintf(pname,"REEF3D-FNPF-BED-00%i-%i.vtp",num,n+1);
+        if(num<10000&&num>999)
+        sprintf(pname,"REEF3D-FNPF-BED-00%i-%i.vtp",num,n+1);
 
-		if(num<100000&&num>9999)
-		sprintf(pname,"REEF3D-FNPF-BED-0%i-%i.vtp",num,n+1);
+        if(num<100000&&num>9999)
+        sprintf(pname,"REEF3D-FNPF-BED-0%i-%i.vtp",num,n+1);
 
-		if(num>99999)
-		sprintf(pname,"REEF3D-FNPF-BED-%i-%i.vtp",num,n+1);
-	}
+        if(num>99999)
+        sprintf(pname,"REEF3D-FNPF-BED-%i-%i.vtp",num,n+1);
+    }
 
 
 }

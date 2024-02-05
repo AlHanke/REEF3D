@@ -36,28 +36,28 @@ nhflow_bc_ikomega::~nhflow_bc_ikomega()
 void nhflow_bc_ikomega::bckomega_start(lexer *p, fdm_nhf *d, double *KIN, double *EPS, int gcval)
 {
     /*
-	int q;
+    int q;
 
-	if(gcval==20)
-	{
-		QGC4LOOP
-		if(p->gcb4[q][4]==5 || p->gcb4[q][4]==21 || p->gcb4[q][4]==22 || p->gcb4[q][4]==41 || p->gcb4[q][4]==42 || p->gcb4[q][4]==43)
-		wall_law_kin(a,p,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
+    if(gcval==20)
+    {
+        QGC4LOOP
+        if(p->gcb4[q][4]==5 || p->gcb4[q][4]==21 || p->gcb4[q][4]==22 || p->gcb4[q][4]==41 || p->gcb4[q][4]==42 || p->gcb4[q][4]==43)
+        wall_law_kin(a,p,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
         
         QGCDF4LOOP
-		wall_law_kin(a,p,kin,eps,p->gcdf4[q][0], p->gcdf4[q][1], p->gcdf4[q][2], p->gcdf4[q][3], p->gcdf4[q][4], p->gcdf4[q][5],  0.5*p->DXM);
-	}
+        wall_law_kin(a,p,kin,eps,p->gcdf4[q][0], p->gcdf4[q][1], p->gcdf4[q][2], p->gcdf4[q][3], p->gcdf4[q][4], p->gcdf4[q][5],  0.5*p->DXM);
+    }
 
 // ----------------- 
-	if(gcval==30)
-	{
-		QGC4LOOP
-		if(p->gcb4[q][4]==5 || p->gcb4[q][4]==21 || p->gcb4[q][4]==22 || p->gcb4[q][4]==41 || p->gcb4[q][4]==42 || p->gcb4[q][4]==43) 
-		wall_law_omega(a,p,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
+    if(gcval==30)
+    {
+        QGC4LOOP
+        if(p->gcb4[q][4]==5 || p->gcb4[q][4]==21 || p->gcb4[q][4]==22 || p->gcb4[q][4]==41 || p->gcb4[q][4]==42 || p->gcb4[q][4]==43) 
+        wall_law_omega(a,p,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
         
         QGCDF4LOOP
-		wall_law_omega(a,p,kin,eps,p->gcdf4[q][0], p->gcdf4[q][1], p->gcdf4[q][2], p->gcdf4[q][3], p->gcdf4[q][4], p->gcdf4[q][5],  0.5*p->DXM);
-	}*/
+        wall_law_omega(a,p,kin,eps,p->gcdf4[q][0], p->gcdf4[q][1], p->gcdf4[q][2], p->gcdf4[q][3], p->gcdf4[q][4], p->gcdf4[q][5],  0.5*p->DXM);
+    }*/
 }
 
 void nhflow_bc_ikomega::wall_law_kin(lexer *p, fdm_nhf *d, double *KIN, double *EPS,
@@ -66,7 +66,7 @@ void nhflow_bc_ikomega::wall_law_kin(lexer *p, fdm_nhf *d, double *KIN, double *
     /*
     double uvel,vvel,wvel;
     double zval;
-	dist=0.5*p->DXM;
+    dist=0.5*p->DXM;
     
     if(p->j_dir==0)        
     dist = 0.5*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
@@ -74,11 +74,11 @@ void nhflow_bc_ikomega::wall_law_kin(lexer *p, fdm_nhf *d, double *KIN, double *
     if(p->j_dir==1)
     dist = 0.5*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
 
-	i=ii;
-	j=jj;
-	k=kk;
-	
-	ks=ks_val(p,a,ii,jj,kk,cs,bc);
+    i=ii;
+    j=jj;
+    k=kk;
+    
+    ks=ks_val(p,a,ii,jj,kk,cs,bc);
 
 
         uvel=0.5*(a->u(i,j,k)+a->u(i-1,j,k));
@@ -96,26 +96,26 @@ void nhflow_bc_ikomega::wall_law_kin(lexer *p, fdm_nhf *d, double *KIN, double *
         
         u_abs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
 
-		if(30.0*dist<ks)
-		dist=ks/30.0;
-		
+        if(30.0*dist<ks)
+        dist=ks/30.0;
+        
         uplus = (1.0/kappa)*MAX(0.01,log(30.0*(dist/ks)));
 
-	tau=(u_abs*u_abs)/pow((uplus>0.0?uplus:(1.0e20)),2.0);
-	
-	a->M.p[id] += (pow(p->cmu,0.75)*pow(fabs(kin(i,j,k)),0.5)*uplus)/dist;
-	a->rhsvec.V[id] += (tau*u_abs)/dist;*/
+    tau=(u_abs*u_abs)/pow((uplus>0.0?uplus:(1.0e20)),2.0);
+    
+    a->M.p[id] += (pow(p->cmu,0.75)*pow(fabs(kin(i,j,k)),0.5)*uplus)/dist;
+    a->rhsvec.V[id] += (tau*u_abs)/dist;*/
 }
 
 void nhflow_bc_ikomega::wall_law_omega(lexer *p, fdm_nhf *d, double *KIN, double *EPS,
                                         int ii,int jj,int kk,int cs, int bc, int id, double dist)
 {
     /*
-	i=ii;
-	j=jj;
-	k=kk;
+    i=ii;
+    j=jj;
+    k=kk;
     
-	dist=0.5*p->DXM;
+    dist=0.5*p->DXM;
     
     if(p->j_dir==0)        
     dist = 0.5*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
@@ -123,15 +123,15 @@ void nhflow_bc_ikomega::wall_law_omega(lexer *p, fdm_nhf *d, double *KIN, double
     if(p->j_dir==1)
     dist = 0.5*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
 
-	eps_star = pow((kin(i,j,k)>(0.0)?(kin(i,j,k)):(0.0)),0.5) / (0.4*dist*pow(p->cmu, 0.25));
+    eps_star = pow((kin(i,j,k)>(0.0)?(kin(i,j,k)):(0.0)),0.5) / (0.4*dist*pow(p->cmu, 0.25));
 
-	eps(i,j,k) = eps_star;*/
+    eps(i,j,k) = eps_star;*/
 }
 
 void nhflow_bc_ikomega::bckin_matrix(lexer *p, fdm_nhf *d, double *KIN, double *EPS)
 {
     /*
-	int q;
+    int q;
     
     // set to zero inside direct forcing body
     if(p->X10==1)
@@ -226,7 +226,7 @@ void nhflow_bc_ikomega::bckin_matrix(lexer *p, fdm_nhf *d, double *KIN, double *
 void nhflow_bc_ikomega::bcomega_matrix(lexer *p, fdm_nhf *d, double *KIN, double *EPS)
 {
     /*
-	int q;
+    int q;
     
     // set to zero inside direct forcing body
     if(p->X10==1)

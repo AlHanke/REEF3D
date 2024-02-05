@@ -27,7 +27,7 @@ Author: Hans Bihs
 
 vrans_f::vrans_f(lexer *p, ghostcell *pgc) : Cval(p->B264), porpart(p), alpha(p), beta(p)
 {
-	//initialize(p,a,pgc);
+    //initialize(p,a,pgc);
     
     
 }

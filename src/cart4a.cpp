@@ -30,8 +30,8 @@ cart4a::cart4a(lexer *p)
 
 cart4a::~cart4a()
 {
-	delete [] ggc;
-	delete [] ggcmem;
+    delete [] ggc;
+    delete [] ggcmem;
 }
 
 //-----------------------------------------------------------------------------

@@ -36,15 +36,15 @@ sflow_hxy_hires::sflow_hxy_hires (lexer* p, patchBC_interface *ppBC, int limiter
 {
     pBC = ppBC;
     
-	if(limiter==6)
-	plim = new sflow_fluxlim_minmod(p);
+    if(limiter==6)
+    plim = new sflow_fluxlim_minmod(p);
     
     if(limiter==7)
-	plim = new sflow_fluxlim_vanleer(p);
+    plim = new sflow_fluxlim_vanleer(p);
     
     if(limiter==8)
-	plim = new sflow_fluxlim_smart(p);
-	
+    plim = new sflow_fluxlim_smart(p);
+    
     if(p->A216==1)
     pflux = new sflow_flux_face_FOU(p);
         
@@ -62,15 +62,15 @@ sflow_hxy_hires::~sflow_hxy_hires()
 }
 
 void sflow_hxy_hires::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet, slice& eta, slice& uvel, slice& vvel)
-{ 	
+{     
     double eps=1.0e-7;
 
-	SLICELOOP1
-	{
-	pflux->u_flux(4,uvel,ivel1,ivel2);
+    SLICELOOP1
+    {
+    pflux->u_flux(4,uvel,ivel1,ivel2);
 
     hx(i,j) = fx(p,eta,1,ivel1) + MIN(depth(i,j), depth(i+1,j));
-	}
+    }
     
     
     if(p->F50==1 || p->F50==4)
@@ -120,12 +120,12 @@ void sflow_hxy_hires::start(lexer* p, slice& hx, slice& hy, slice& depth, int *w
         hx(i,j) = MAX(eta(i,j),eta(i+1,j)) + MIN(depth(i,j), depth(i+1,j));
         }
     }
-	
-	SLICELOOP2
-	{
-	pflux->v_flux(4,vvel,jvel1,jvel2);
+    
+    SLICELOOP2
+    {
+    pflux->v_flux(4,vvel,jvel1,jvel2);
 
-	hy(i,j) = fy(p,eta,2,jvel1) + MIN(depth(i,j), depth(i,j+1));    
+    hy(i,j) = fy(p,eta,2,jvel1) + MIN(depth(i,j), depth(i,j+1));    
     }
 
     for(qq=0;qq<pBC->obj_count;++qq)
@@ -143,7 +143,7 @@ void sflow_hxy_hires::start(lexer* p, slice& hx, slice& hy, slice& depth, int *w
         if(wet[IJ]==1)
         {
         pflux->v_flux(4,vvel,jvel1,jvel2);
-	
+    
         if(jvel1>eps)
         hy(i,j) = eta(i,j) + depth(i,j);
         
@@ -162,12 +162,12 @@ double sflow_hxy_hires::fx(lexer *p, slice& f, int ipol, double advec)
         ul=ur=0.0;
         
         if(ivel1>=0.0)
-		ul=1.0;
+        ul=1.0;
 
-		if(ivel2>=0.0)
-		ur=1.0;
+        if(ivel2>=0.0)
+        ur=1.0;
 
-		dx =  ur*(f(i,j) + 0.5*plim->iphi(f,0,-1,1,0)*(f(i+1,j)-f(i,j)))
+        dx =  ur*(f(i,j) + 0.5*plim->iphi(f,0,-1,1,0)*(f(i+1,j)-f(i,j)))
              +(1.0-ur)*(f(i+1,j) - 0.5*plim->iphi(f,1,0,2,1)*(f(i+2,j)-f(i+1,j)));
              
         return dx;
@@ -178,12 +178,12 @@ double sflow_hxy_hires::fy(lexer *p, slice& f, int ipol, double advec)
         vl=vr=0.0;
         
         if(jvel1>=0.0)
-		vl=1.0;
+        vl=1.0;
 
-		if(jvel2>=0.0)
-		vr=1.0;
+        if(jvel2>=0.0)
+        vr=1.0;
 
-		dy =  vr*(f(i,j) + 0.5*plim->jphi(f,0,-1,1,0)*(f(i,j+1)-f(i,j)))
+        dy =  vr*(f(i,j) + 0.5*plim->jphi(f,0,-1,1,0)*(f(i,j+1)-f(i,j)))
              +(1.0-vr)*(f(i,j+1) - 0.5*plim->jphi(f,1,0,2,1)*(f(i,j+2)-f(i,j+1)));
              
         return dy; 

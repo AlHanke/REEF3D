@@ -145,13 +145,13 @@ void ioflow_f::fsfrkoutV(lexer *p, fdm *a, ghostcell *pgc, vec& f)
         j=p->gcout[q][1];
         k=p->gcout[q][2];
         n=p->gcout[q][5];
-		
-		PCHECK
-		{
+        
+        PCHECK
+        {
         f.V[Ip1_J_K_4]=a->phi(i+1,j,k);
         f.V[Ip2_J_K_4]=a->phi(i+2,j,k);
         f.V[Ip3_J_K_4]=a->phi(i+3,j,k);
-		}
+        }
         }
 }
 
@@ -163,13 +163,13 @@ void ioflow_f::fsfrkinV(lexer *p, fdm *a, ghostcell *pgc, vec& f)
         j=p->gcin[q][1];
         k=p->gcin[q][2];
         n=p->gcin[q][5];
-		
-		PCHECK
-		{
+        
+        PCHECK
+        {
         f.V[Im1_J_K_4]=a->phi(i+1,j,k);
         f.V[Im2_J_K_4]=a->phi(i+2,j,k);
         f.V[Im3_J_K_4]=a->phi(i+3,j,k);
-		}
+        }
         }
 }
 
@@ -197,7 +197,7 @@ void ioflow_f::fsfrkoutVa(lexer *p, fdm *a, ghostcell *pgc, vec& f)
         j=p->gcout4a[q][1];
         k=p->gcout4a[q][2];
         n=p->gcout4a[q][5];
-		
+        
         f.V[Ip1_J_K_4a]=a->phi(i+1,j,k);
         f.V[Ip2_J_K_4a]=a->phi(i+2,j,k);
         f.V[Ip3_J_K_4a]=a->phi(i+3,j,k);

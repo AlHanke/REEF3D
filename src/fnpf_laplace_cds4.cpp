@@ -1,4 +1,5 @@
-/*--------------------------------------------------------------------
+
+/*--------------------------------------------------------------------
 REEF3D
 Copyright 2008-2024 Hans Bihs
 
@@ -19,7 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"fnpf_laplace_cds4.h"
+
+#include"fnpf_laplace_cds4.h"
 #include"lexer.h"
 #include"fdm_fnpf.h"
 #include"solver.h"
@@ -53,9 +55,9 @@ void fnpf_laplace_cds4::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver *pso
     double fbxm,fbxp,fbym,fbyp;
     double distfac,dist;
     double xdelta,ydelta;    
-    
+       
     // 4th-order
-	n=0;
+    n=0;
     LOOP
     {
         sigxyz2 = pow(p->sigx[FIJK],2.0) + pow(p->sigy[FIJK],2.0) + pow(p->sigz[IJ],2.0);
@@ -92,11 +94,11 @@ void fnpf_laplace_cds4::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver *pso
                 
         ++n;
         }
-    
+       
     n=0;
-	LOOP
+    LOOP
     if(p->flag7[FIJK]>0)
-	{
+    {
             
             // south
             if(p->flag7[FIm1JK]<0 && p->wet[Im1J]==1 && c->bc(i-1,j)==0)
@@ -338,10 +340,10 @@ void fnpf_laplace_cds4::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver *pso
             c->M.t[n] += 3.0*ab;
             c->M.tt[n]+= -0.5*ab;
             c->M.b[n] = 0.0;
-            }
-        }
-	++n;
-	}
+               }
+           }
+    ++n;
+    }
     
 
 
@@ -350,8 +352,8 @@ void fnpf_laplace_cds4::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver *pso
     double endtime=pgc->timer();
     
     p->poissoniter=p->solveriter;
-    p->poissontime=endtime-starttime;
-    
-	if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"Fi_iter: "<<p->poissoniter<<" Final_residual: "<<p->final_res<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
+       p->poissontime=endtime-starttime;
+       
+    if(p->mpirank==0 && (p->count%p->P12==0))
+    cout<<"Fi_iter: "<<p->poissoniter<<" Final_residual: "<<p->final_res<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
 }

@@ -28,8 +28,8 @@ cart4::cart4(lexer *p)
 
 cart4::~cart4()
 {
-	delete [] ggc;
-	delete [] ggcmem;
+    delete [] ggc;
+    delete [] ggcmem;
 }
 
 //-----------------------------------------------------------------------------

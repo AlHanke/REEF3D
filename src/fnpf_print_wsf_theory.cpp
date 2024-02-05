@@ -30,29 +30,29 @@ Author: Hans Bihs
 
 fnpf_print_wsf_theory::fnpf_print_wsf_theory(lexer *p, fdm_fnpf* c, ghostcell *pgc)
 {
-	gauge_num = p->P50;
-	x = p->P50_x;
-	y = p->P50_y;
+    gauge_num = p->P50;
+    x = p->P50_x;
+    y = p->P50_y;
 
     if(p->P50>0)
-	{
-	gauge_num = p->P50;
-	x = p->P50_x;
-	y = p->P50_y;
-	}
+    {
+    gauge_num = p->P50;
+    x = p->P50_x;
+    y = p->P50_y;
+    }
 
-	// Create Folder
-	if(p->mpirank==0 && p->P14==1)
-	mkdir("./REEF3D_FNPF_WSF",0777);
+    // Create Folder
+    if(p->mpirank==0 && p->P14==1)
+    mkdir("./REEF3D_FNPF_WSF",0777);
 
     if(p->mpirank==0 && p->P50>0)
     {
     // open file
-	if(p->P14==0)
+    if(p->P14==0)
     wsfout.open("REEF3D-FNPF-WSF-HG-THEORY.dat");
 
-	if(p->P14==1)
-	  wsfout.open("./REEF3D_FNPF_WSF/REEF3D-FNPF-WSF-HG-THEORY.dat");
+    if(p->P14==1)
+      wsfout.open("./REEF3D_FNPF_WSF/REEF3D-FNPF-WSF-HG-THEORY.dat");
 
     wsfout<<"number of gauges:  "<<gauge_num<<endl<<endl;
     wsfout<<"x_coord     y_coord"<<endl;

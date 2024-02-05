@@ -40,21 +40,21 @@ void particle_f::xupdate(lexer* p, fdm* a, ghostcell* pgc)
             k = p->posc_k(pos[n][2]);
 
             check=boundcheck(p,a,i,j,k,1);
-			
-			// remove particle_fs, which have been sent off
-			if(check==1)
+            
+            // remove particle_fs, which have been sent off
+            if(check==1)
             if(posflag[n]==2)
             {
-			pcount++;
+            pcount++;
             posflag[n]=0;
             posmem[pcount]=n;
             removed++;
             }
-			
-			check=boundcheck(p,a,i,j,k,0);
-			
-			// reinstate received particle_fs, after they have left the para zone
-			if(check==1)
+            
+            check=boundcheck(p,a,i,j,k,0);
+            
+            // reinstate received particle_fs, after they have left the para zone
+            if(check==1)
             if(posflag[n]==3)
             posflag[n]=1;
         }

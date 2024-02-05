@@ -28,16 +28,16 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 void net_barDyn::print(lexer *p)
 {
-	int num=0;
-	
-	if(p->P15==1)
+    int num=0;
+    
+    if(p->P15==1)
     num = p->printcount_sixdof;
 
     if(p->P15==2)
     num = p->count;
-	
-	if(num<0)
-	num=0;
+    
+    if(num<0)
+    num=0;
  
     // Print tension forces
     if (p->mpirank==0)
@@ -47,7 +47,7 @@ void net_barDyn::print(lexer *p)
         sprintf(str,"./REEF3D_CFD_6DOF/REEF3D_6DOF_Net_Forces_%i.dat",nNet);
         ofstream header_out;
         header_out.open(str, std::ofstream::out | std::ofstream::app);
-		header_out<<p->simtime<<" \t "<<Tne<<" "<<Fx<<" "<<Fy<<" "<<Fz<<endl;
+        header_out<<p->simtime<<" \t "<<Tne<<" "<<Fx<<" "<<Fy<<" "<<Fz<<endl;
         header_out.close();
     }  
   
@@ -65,44 +65,44 @@ void net_barDyn::print(lexer *p)
         }
     }  
     
-	
+    
     if
-	(
-		p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)  
-		|| (p->simtime>printtime && p->P30>0.0)   
-		|| p->count==0)
-	)
-	{
-		printtime += p->P30;
+    (
+        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)  
+        || (p->simtime>printtime && p->P30>0.0)   
+        || p->count==0)
+    )
+    {
+        printtime += p->P30;
 
-		if(p->P14==1)
-		{
-			if(num<10)
-			sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-00000%i.vtk",nNet,num);
+        if(p->P14==1)
+        {
+            if(num<10)
+            sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-00000%i.vtk",nNet,num);
 
-			if(num<100&&num>9)
-			sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-0000%i.vtk",nNet,num);
+            if(num<100&&num>9)
+            sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-0000%i.vtk",nNet,num);
 
-			if(num<1000&&num>99)
-			sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-000%i.vtk",nNet,num);
+            if(num<1000&&num>99)
+            sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-000%i.vtk",nNet,num);
 
-			if(num<10000&&num>999)
-			sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-00%i.vtk",nNet,num);
+            if(num<10000&&num>999)
+            sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-00%i.vtk",nNet,num);
 
-			if(num<100000&&num>9999)
-			sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-0%i.vtk",nNet,num);
+            if(num<100000&&num>9999)
+            sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-0%i.vtk",nNet,num);
 
-			if(num>99999)
-			sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-%i.vtk",nNet,num);
-		}	
+            if(num>99999)
+            sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%i-%i.vtk",nNet,num);
+        }    
 
         /*
         char str[1000];
         sprintf(str,"./REEF3D_CFD_6DOF_Net/REEF3D_6DOF_Net_Tension_%i_%i.dat",nNet,num);
         ofstream header_out;
         header_out.open(str, std::ofstream::out | std::ofstream::app);
-		
-        for (int j = 0; j < nf; j++)	
+        
+        for (int j = 0; j < nf; j++)    
         {    
             header_out<<T_(j)<<" "<<(0.5*(x_.row(Pi[j])+x_.row(Ni[j])))<<endl;
         }
@@ -111,76 +111,76 @@ void net_barDyn::print(lexer *p)
         */
 
 
-		ofstream result;
-		result.open(name, ios::binary);
-		
-        result << "# vtk DataFile Version 2.0" << endl;
-		result << "Net " << nNet << endl;
-		result << "ASCII \nDATASET UNSTRUCTURED_GRID" << endl;
-		result << "POINTS " << nK << " float" <<endl;
-		
-		for(int n=0; n<nK; ++n)
-		{
-			result<<x_(n,0)<<" "<<x_(n,1)<<" "<<x_(n,2)<<endl;
-		}     
+        ofstream result;
+        result.open(name, ios::binary);
         
-		result << "\nCELLS " << nf+nbK << " " << (nf+nbK)*3 <<endl;
-		
-		for (int i = 0; i < nf; i++)
-		{
-			result<<"2 "<< Pi[i] << " " << Ni[i] <<endl;
-		}
+        result << "# vtk DataFile Version 2.0" << endl;
+        result << "Net " << nNet << endl;
+        result << "ASCII \nDATASET UNSTRUCTURED_GRID" << endl;
+        result << "POINTS " << nK << " float" <<endl;
+        
+        for(int n=0; n<nK; ++n)
+        {
+            result<<x_(n,0)<<" "<<x_(n,1)<<" "<<x_(n,2)<<endl;
+        }     
+        
+        result << "\nCELLS " << nf+nbK << " " << (nf+nbK)*3 <<endl;
+        
+        for (int i = 0; i < nf; i++)
+        {
+            result<<"2 "<< Pi[i] << " " << Ni[i] <<endl;
+        }
 
-		for (int i = 0; i < nbK; i++)
-		{
-			result<<"2 "<< Pb[i] << " " << Nb[i] <<endl;
-		}
+        for (int i = 0; i < nbK; i++)
+        {
+            result<<"2 "<< Pb[i] << " " << Nb[i] <<endl;
+        }
 
-		result << "\nCELL_TYPES " << nf+nbK << endl;	
-		
-		for (int i = 0; i < nf+nbK; i++)
-		{
-			result<<"3"<<endl;
-		}		
+        result << "\nCELL_TYPES " << nf+nbK << endl;    
+        
+        for (int i = 0; i < nf+nbK; i++)
+        {
+            result<<"3"<<endl;
+        }        
 
-		result<<"\nPOINT_DATA " << nK <<endl;
-		result<<"SCALARS Tension float 1 \nLOOKUP_TABLE default"<<endl;
-		
-		double output;
+        result<<"\nPOINT_DATA " << nK <<endl;
+        result<<"SCALARS Tension float 1 \nLOOKUP_TABLE default"<<endl;
+        
+        double output;
         int index;
         
-		for (int n = 0; n < nK; ++n)
-		{
-			output = 0.0;
+        for (int n = 0; n < nK; ++n)
+        {
+            output = 0.0;
             index = 0;
             
-			for (int i = 0; i < nf; ++i)
-			{
-				if (Pi[i] == n || Ni[i] == n)
-				{
-					output += T_(i);
-					index++;
-				}
-			}
+            for (int i = 0; i < nf; ++i)
+            {
+                if (Pi[i] == n || Ni[i] == n)
+                {
+                    output += T_(i);
+                    index++;
+                }
+            }
             
             output = index > 0 ? output/index : 0.0;
             result<<output<<endl;
-		}
+        }
 
-		result<<"VECTORS Velocity float"<<endl;
-		for (int i = 0; i < nK; i++)
-		{
-		    result<<xdot_.row(i)<<endl;
-		}
+        result<<"VECTORS Velocity float"<<endl;
+        for (int i = 0; i < nK; i++)
+        {
+            result<<xdot_.row(i)<<endl;
+        }
 
-		result<<"VECTORS Acceleration float"<<endl;
-		for (int i = 0; i < nK; i++)
-		{
-		    result<<xdotdot_.row(i)<<endl;
-		}
+        result<<"VECTORS Acceleration float"<<endl;
+        for (int i = 0; i < nK; i++)
+        {
+            result<<xdotdot_.row(i)<<endl;
+        }
 
-		result.close();
-	}
+        result.close();
+    }
 }
 
 

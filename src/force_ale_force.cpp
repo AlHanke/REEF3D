@@ -30,34 +30,34 @@ double force_ale::dndt(lexer *p, fdm_fnpf *c, ghostcell *pgc) // to calculate dn
 {
     double dndt = (c->eta(i,j) - etan)/ p->dt;
     //double dndt= (3*c->eta(i,j) - 4*etan + eta2n)/(p->dt+dtn);
-		 
+         
     return dndt;
 }
 
-double force_ale::dudsig(lexer *p, fdm_fnpf *c, ghostcell *pgc) 	// getting dudsig for ax2 and 3
+double force_ale::dudsig(lexer *p, fdm_fnpf *c, ghostcell *pgc)     // getting dudsig for ax2 and 3
 {
     double dudsig_ = 0;
-	double dudsig2_ = 0;
+    double dudsig2_ = 0;
     
     if(k<p->knoz)
     {
         dudsig_ =  (c->U[FIJKp1] - c->U[FIJKm1])/(p->DZN[KP1] + p->DZN[KM1]);
-	// dudsig2_ =  (c->U[FIp1JK] - c->U[FIm1JK])/(p->DZN[KP] + p->DZN[KM1]);
+    // dudsig2_ =  (c->U[FIp1JK] - c->U[FIm1JK])/(p->DZN[KP] + p->DZN[KM1]);
     }
 
     if(k==p->knoz)
     { 
         dudsig_ = (c->U[FIJK] - c->U[FIJKm1])/(p->DZN[KM1]);
-	//  dudsig2_ = (c->U[FIJK] - c->U[FIm1JK])/(p->DZN[KP]);
+    //  dudsig2_ = (c->U[FIJK] - c->U[FIm1JK])/(p->DZN[KP]);
     }
 
     // cout<<"ddsig: "<<dudsig_<<" ddsig2: "<<dudsig2_<<endl;
-	return dudsig_;        
+    return dudsig_;        
 }
 
-double force_ale::dvdsig(lexer *p, fdm_fnpf *c, ghostcell *pgc) 	// getting dvdsig for ax2 and 3
+double force_ale::dvdsig(lexer *p, fdm_fnpf *c, ghostcell *pgc)     // getting dvdsig for ax2 and 3
 {
-	double dvdsig_ = 0;
+    double dvdsig_ = 0;
 
     if(k<p->knoz)
     { 
@@ -69,28 +69,28 @@ double force_ale::dvdsig(lexer *p, fdm_fnpf *c, ghostcell *pgc) 	// getting dvds
         dvdsig_ = (c->V[FIJK] - c->V[FIJKm1])/(p->DZN[KM1]);
     }
 
-	return dvdsig_;        
+    return dvdsig_;        
 }
 
 
-double force_ale::dudxi(lexer *p, fdm_fnpf *c, ghostcell *pgc) 	// getting dudxi
+double force_ale::dudxi(lexer *p, fdm_fnpf *c, ghostcell *pgc)     // getting dudxi
 {
     return (c->U[FIp1JK] - c->U[FIm1JK])/(p->DXN[IP1] + p->DXN[IM1]); 
 }
 
-double force_ale::dvdxi(lexer *p, fdm_fnpf *c, ghostcell *pgc) 	// getting dvdxi
+double force_ale::dvdxi(lexer *p, fdm_fnpf *c, ghostcell *pgc)     // getting dvdxi
 {
     return (c->V[FIJp1K] - c->V[FIJm1K])/(p->DYN[JP1] + p->DYN[JM1]); 
 }
 
 void force_ale::force_ale_force(lexer* p, fdm_fnpf *c, ghostcell *pgc)
-{	
+{    
     double ztot=0; // check for strip total
 
-	Fx=Fy=0;
-	
+    Fx=Fy=0;
+    
     for(k=0; k<p->knoz; ++k)
-	{
+    {
         dudsig_= dudsig(p, c, pgc); 
      // double dudsig2_= dudsig(p, c, pgc); // cleanup alt ddsig. diff values, no change to force
         dvdsig_= dvdsig(p, c, pgc); 
@@ -126,16 +126,16 @@ void force_ale::force_ale_force(lexer* p, fdm_fnpf *c, ghostcell *pgc)
         //u2n[k]= un[k];
         un[k] = c->U[FIJK]; 
         vn[k] = c->V[FIJK];
-	 
+     
         // cout<< "ax1: "<<ax1<<" ax2: " <<ax2<<" ax3: " <<ax3<< endl;
-	    // cout<<"km1: "<<p->ZN[KM1]<<" Dkm1: "<<p->DZN[KM1]<<" kp: "<<p->ZN[KP]<<" sig: "<<p->sig[FIJK]<<"  uvel: "<<c->U[FIJK]<<"  ax: "<<ax<<endl;
-	}
-	
-	//cout<<"ztot: "<<ztot<<endl;
-	
-	// store current eta value for gradient in next step
-	//eta2n=etan;
-	etan=c->eta(i,j);
+        // cout<<"km1: "<<p->ZN[KM1]<<" Dkm1: "<<p->DZN[KM1]<<" kp: "<<p->ZN[KP]<<" sig: "<<p->sig[FIJK]<<"  uvel: "<<c->U[FIJK]<<"  ax: "<<ax<<endl;
+    }
+    
+    //cout<<"ztot: "<<ztot<<endl;
+    
+    // store current eta value for gradient in next step
+    //eta2n=etan;
+    etan=c->eta(i,j);
 }
 
 

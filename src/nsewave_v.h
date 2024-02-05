@@ -32,7 +32,7 @@ class nsewave_v : public nsewave
 {
 public:
     nsewave_v(lexer*, fdm*, ghostcell*,heat*&,concentration*&);
-	virtual ~nsewave_v();
+    virtual ~nsewave_v();
     
     virtual void start(lexer*, fdm*, ghostcell*, momentum*, diffusion*, turbulence*, convection*, 
                         pressure*, poisson*, solver*, solver*, ioflow*, vrans*, sixdof*, vector<net*>&);

@@ -24,21 +24,21 @@ Author: Hans Bihs
 #include"lexer.h"
 
 fdm::fdm(lexer *p)
-			:u(p),F(p),
-			v(p),G(p),
-			w(p),H(p),
-			press(p),
+            :u(p),F(p),
+            v(p),G(p),
+            w(p),H(p),
+            press(p),
             Fi(p),
-			eddyv(p),
-			L(p),
-			ro(p),visc(p),
-			phi(p),vof(p),
-			conc(p),
+            eddyv(p),
+            L(p),
+            ro(p),visc(p),
+            phi(p),vof(p),
+            conc(p),
             topo(p),solid(p),
             test(p),
-			fb(p),fbh1(p),fbh2(p),fbh3(p),fbh4(p),fbh5(p),porosity(p),
-			walld(p),
-			nodeval(p),nodeval2D(p),etaloc(p),
+            fb(p),fbh1(p),fbh2(p),fbh3(p),fbh4(p),fbh5(p),porosity(p),
+            walld(p),
+            nodeval(p),nodeval2D(p),etaloc(p),
             eta(p),eta_n(p),depth(p),
             Fifsf(p),K(p),
             P(p),Q(p),bed(p),
@@ -46,13 +46,13 @@ fdm::fdm(lexer *p)
             
 {
     
-	maxF=0.0;
-	maxG=0.0; 
-	maxH=0.0;
+    maxF=0.0;
+    maxG=0.0; 
+    maxH=0.0;
     
-	gi=p->W20;
-	gj=p->W21;
-	gk=p->W22;
+    gi=p->W20;
+    gj=p->W21;
+    gk=p->W22;
     
     C4.allocate(p);
     C4a.allocate(p);

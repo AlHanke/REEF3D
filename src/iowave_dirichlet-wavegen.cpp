@@ -28,53 +28,53 @@ Author: Hans Bihs
 void iowave::dirichlet_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
 {
         count=0;
-		for(n=0;n<p->gcin_count;n++)
-		{
-		i=p->gcin[n][0];
-		j=p->gcin[n][1];
-		k=p->gcin[n][2];		
+        for(n=0;n<p->gcin_count;n++)
+        {
+        i=p->gcin[n][0];
+        j=p->gcin[n][1];
+        k=p->gcin[n][2];        
 
         uvel=uval[count]*ramp(p);
         vvel=vval[count]*ramp(p);
         wvel=wval[count]*ramp(p);
             
-			if(a->phi(i-1,j,k)>=0.0)
-			{
-			u(i-1,j,k)=uvel+p->Ui;
-			u(i-2,j,k)=uvel+p->Ui;
-			u(i-3,j,k)=uvel+p->Ui;
+            if(a->phi(i-1,j,k)>=0.0)
+            {
+            u(i-1,j,k)=uvel+p->Ui;
+            u(i-2,j,k)=uvel+p->Ui;
+            u(i-3,j,k)=uvel+p->Ui;
             
             v(i-1,j,k)=vvel;
-			v(i-2,j,k)=vvel;
-			v(i-3,j,k)=vvel;
-			
-			w(i-1,j,k)=wvel;
-			w(i-2,j,k)=wvel;
-			w(i-3,j,k)=wvel;
-			}
-
-			if(a->phi(i-1,j,k)<0.0 && a->phi(i-1,j,k)>=-p->F45*p->DZP[KP])
-			{
-			fac= p->B122*(1.0 - fabs(a->phi(i-1,j,k))/(p->F45*p->DZP[KP]));
+            v(i-2,j,k)=vvel;
+            v(i-3,j,k)=vvel;
             
-			u(i-1,j,k)=uvel*fac + p->Ui;
-			u(i-2,j,k)=uvel*fac + p->Ui;
-			u(i-3,j,k)=uvel*fac + p->Ui;
+            w(i-1,j,k)=wvel;
+            w(i-2,j,k)=wvel;
+            w(i-3,j,k)=wvel;
+            }
+
+            if(a->phi(i-1,j,k)<0.0 && a->phi(i-1,j,k)>=-p->F45*p->DZP[KP])
+            {
+            fac= p->B122*(1.0 - fabs(a->phi(i-1,j,k))/(p->F45*p->DZP[KP]));
+            
+            u(i-1,j,k)=uvel*fac + p->Ui;
+            u(i-2,j,k)=uvel*fac + p->Ui;
+            u(i-3,j,k)=uvel*fac + p->Ui;
             
             v(i-1,j,k)=vvel*fac;
-			v(i-2,j,k)=vvel*fac;
-			v(i-3,j,k)=vvel*fac;
+            v(i-2,j,k)=vvel*fac;
+            v(i-3,j,k)=vvel*fac;
             
-			w(i-1,j,k)=wvel*fac;
-			w(i-2,j,k)=wvel*fac;
-			w(i-3,j,k)=wvel*fac;
-			}
+            w(i-1,j,k)=wvel*fac;
+            w(i-2,j,k)=wvel*fac;
+            w(i-3,j,k)=wvel*fac;
+            }
 
-			if(a->phi(i-1,j,k)<-p->F45*p->DXM)
-			{
-			u(i-1,j,k)=0.0 + p->Ui;
-			u(i-2,j,k)=0.0 + p->Ui;
-			u(i-3,j,k)=0.0 + p->Ui;
+            if(a->phi(i-1,j,k)<-p->F45*p->DXM)
+            {
+            u(i-1,j,k)=0.0 + p->Ui;
+            u(i-2,j,k)=0.0 + p->Ui;
+            u(i-3,j,k)=0.0 + p->Ui;
             
             if(p->W50_air==1)
             {
@@ -84,31 +84,31 @@ void iowave::dirichlet_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field
             }
             
             v(i-1,j,k)=0.0;
-			v(i-2,j,k)=0.0;
-			v(i-3,j,k)=0.0;
+            v(i-2,j,k)=0.0;
+            v(i-3,j,k)=0.0;
 
-			w(i-1,j,k)=0.0;
-			w(i-2,j,k)=0.0;
-			w(i-3,j,k)=0.0;
-			}
+            w(i-1,j,k)=0.0;
+            w(i-2,j,k)=0.0;
+            w(i-3,j,k)=0.0;
+            }
         ++count;
-		}
+        }
         
         
         if(p->B98==3||p->B98==4||p->B99==3||p->B99==4||p->B99==5)
-		{
-		for(int q=0;q<4;++q)
-		for(n=0;n<p->gcin_count;++n)
-		{
-		i=p->gcin[n][0]+q;
-		j=p->gcin[n][1];
-		k=p->gcin[n][2];
+        {
+        for(int q=0;q<4;++q)
+        for(n=0;n<p->gcin_count;++n)
+        {
+        i=p->gcin[n][0]+q;
+        j=p->gcin[n][1];
+        k=p->gcin[n][2];
 
-		if(a->phi(i,j,k)<0.0)
-		a->eddyv(i,j,k)=MIN(a->eddyv(i,j,k),1.0e-4);
-		}
-		pgc->start4(p,a->eddyv,24);
-		}
+        if(a->phi(i,j,k)<0.0)
+        a->eddyv(i,j,k)=MIN(a->eddyv(i,j,k),1.0e-4);
+        }
+        pgc->start4(p,a->eddyv,24);
+        }
         
     // PTF
     /*if(p->A10==4)
@@ -130,9 +130,9 @@ void iowave::dirichlet_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field
     if(p->A10==55)
     {
         for(n=0;n<gcgen4_count;++n)
-		{
-		i=gcgen4[n][0];
-		j=gcgen4[n][1];
+        {
+        i=gcgen4[n][0];
+        j=gcgen4[n][1];
         
         x=xgen(p);
         y=ygen(p);
@@ -149,9 +149,9 @@ void iowave::dirichlet_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field
         
 
         for(n=0;n<gcgen1_count;++n)
-		{
-		i=gcgen1[n][0];
-		j=gcgen1[n][1];
+        {
+        i=gcgen1[n][0];
+        j=gcgen1[n][1];
             
             a->P(i-1,j)=0.0;
             double d=0.0;

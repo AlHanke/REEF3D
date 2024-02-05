@@ -25,37 +25,37 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 void sixdof_sflow::cylinder(lexer *p, ghostcell *pgc)
 {
-	double U,ds,angle;
-	double xm,ym,zm,z1,z2,r;
-	int snum, trisum;
-	
-	xm = p->X133_xc;
-	ym = p->X133_yc;
+    double U,ds,angle;
+    double xm,ym,zm,z1,z2,r;
+    int snum, trisum;
+    
+    xm = p->X133_xc;
+    ym = p->X133_yc;
     zm = p->X133_zc;
-	z1 = zm - 0.5*p->X133_h;
-	z2 = zm + 0.5*p->X133_h;
+    z1 = zm - 0.5*p->X133_h;
+    z2 = zm + 0.5*p->X133_h;
     r = p->X133_rad;
 
     // Prepare fields
     U = 2.0 * PI * r;
-	ds = p->DXM;
-	snum = int(U/ds);
+    ds = p->DXM;
+    snum = int(U/ds);
     trisum=5*(snum+1);
     p->Darray(tri_x,trisum,3);
-	p->Darray(tri_y,trisum,3);
-	p->Darray(tri_z,trisum,3);
+    p->Darray(tri_y,trisum,3);
+    p->Darray(tri_z,trisum,3);
     p->Darray(tri_x0,trisum,3);
-	p->Darray(tri_y0,trisum,3);
-	p->Darray(tri_z0,trisum,3);    	
+    p->Darray(tri_y0,trisum,3);
+    p->Darray(tri_z0,trisum,3);        
 
-    // Vertices	
-	ds = (2.0*PI)/double(snum);
-	angle=0.0;
+    // Vertices    
+    ds = (2.0*PI)/double(snum);
+    angle=0.0;
     tricount = 0;
 
-	for(int n=0; n<snum; ++n)
-	{
-        //bottom circle	
+    for(int n=0; n<snum; ++n)
+    {
+        //bottom circle    
         tri_x[tricount][0] = xm;
         tri_y[tricount][0] = ym;
         tri_z[tricount][0] = z1;
@@ -83,7 +83,7 @@ void sixdof_sflow::cylinder(lexer *p, ghostcell *pgc)
         tri_z[tricount][2] = z2;
         ++tricount;
         
-        //side		
+        //side        
         // 1st triangle
         tri_x[tricount][0] = xm + r*cos(angle);
         tri_y[tricount][0] = ym + r*sin(angle);
@@ -113,6 +113,6 @@ void sixdof_sflow::cylinder(lexer *p, ghostcell *pgc)
         ++tricount;
             
         angle+=ds;
-	}
+    }
 }
 

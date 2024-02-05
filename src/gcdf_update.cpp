@@ -166,11 +166,11 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     count=0;
 
     FLUIDLOOP
-	{
+    {
     cval(i,j,k)=count;
     
     ++count;
-	}
+    }
     
 
     GCDF4LOOP
@@ -178,8 +178,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     i=p->gcdf4[n][0];
     j=p->gcdf4[n][1];
     k=p->gcdf4[n][2];
-	p->gcdf4[n][5]=cval(i,j,k);
-	}
+    p->gcdf4[n][5]=cval(i,j,k);
+    }
     
     //cout<<p->mpirank<<" p->gcdf4_count: "<<p->gcdf4_count<<endl;
     

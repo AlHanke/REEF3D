@@ -28,12 +28,12 @@ Author: Hans Bihs
 
 void sixdof_obj::ray_cast(lexer *p, fdm *a, ghostcell *pgc)
 {
-	ALOOP
-	{
+    ALOOP
+    {
     fbio(i,j,k)=1;
-	a->fb(i,j,k)=1.0e9;
-	}
-	
+    a->fb(i,j,k)=1.0e9;
+    }
+    
     for(rayiter=0; rayiter<2; ++rayiter)
     {
 
@@ -67,17 +67,17 @@ void sixdof_obj::ray_cast(lexer *p, fdm *a, ghostcell *pgc)
         a->fb(i,j,k)=fabs(a->fb(i,j,k));
     }
     
-	
-	ALOOP
-	{
-		if(a->fb(i,j,k)>10.0*p->DXM)
-		a->fb(i,j,k)=10.0*p->DXM;
-		
-		if(a->fb(i,j,k)<-10.0*p->DXM)
-		a->fb(i,j,k)=-10.0*p->DXM;
-	}
     
-	pgc->start4a(p,a->fb,50);
+    ALOOP
+    {
+        if(a->fb(i,j,k)>10.0*p->DXM)
+        a->fb(i,j,k)=10.0*p->DXM;
+        
+        if(a->fb(i,j,k)<-10.0*p->DXM)
+        a->fb(i,j,k)=-10.0*p->DXM;
+    }
+    
+    pgc->start4a(p,a->fb,50);
 
 }
 

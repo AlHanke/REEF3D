@@ -30,15 +30,15 @@ using namespace std;
 class nhflow_komega_IM1 : public nhflow_ikomega
 {
 public:
-	nhflow_komega_IM1(lexer *, fdm_nhf*, ghostcell*);
-	virtual ~nhflow_komega_IM1();
-	virtual void start(fdm_nhf*, lexer*, nhflow_convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*);
-	virtual void ktimesave(lexer*, fdm_nhf*, ghostcell*);
-	virtual void etimesave(lexer*, fdm_nhf*, ghostcell*);
-	void timesource(lexer*,fdm_nhf*,double*);
-	void clearrhs(lexer*,fdm_nhf*);
+    nhflow_komega_IM1(lexer *, fdm_nhf*, ghostcell*);
+    virtual ~nhflow_komega_IM1();
+    virtual void start(fdm_nhf*, lexer*, nhflow_convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*);
+    virtual void ktimesave(lexer*, fdm_nhf*, ghostcell*);
+    virtual void etimesave(lexer*, fdm_nhf*, ghostcell*);
+    void timesource(lexer*,fdm_nhf*,double*);
+    void clearrhs(lexer*,fdm_nhf*);
 
-	double  *KN,*EN;
+    double  *KN,*EN;
 
 
 private:

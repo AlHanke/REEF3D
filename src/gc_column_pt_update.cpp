@@ -28,8 +28,8 @@ Author: Hans Bihs
 void ghostcell::column_pt4_update(lexer* p, fdm* a)
 {
     fieldint4 cval4(p);
-    cval_update4(p,a,cval4);	
-	column_pt4(p,a,cval4);
+    cval_update4(p,a,cval4);    
+    column_pt4(p,a,cval4);
     cval_gcb4(p,a,cval4);
     cval_gcpara4(p,a,cval4);
 }
@@ -37,8 +37,8 @@ void ghostcell::column_pt4_update(lexer* p, fdm* a)
 void ghostcell::column_pt4a_update(lexer* p, fdm* a)
 {
     fieldint4a cval4a(p);
-    cval_update4a(p,a,cval4a);	
-	column_pt4a(p,a,cval4a);
+    cval_update4a(p,a,cval4a);    
+    column_pt4a(p,a,cval4a);
     cval_gcb4a(p,a,cval4a);
     cval_gcpara4a(p,a,cval4a);
 }
@@ -46,14 +46,14 @@ void ghostcell::column_pt4a_update(lexer* p, fdm* a)
 void ghostcell::column_pt6_update(lexer* p, fdm* a)
 {
     fieldint6 cval6(p);
-    cval_update6(p,a,cval6);	
-	column_pt6(p,a,cval6);
+    cval_update6(p,a,cval6);    
+    column_pt6(p,a,cval6);
     cval_gcb6(p,a,cval6);
     cval_gcpara6(p,a,cval6);
 }
 
 void ghostcell::column_pt9_update(lexer* p, fdm* a)
 {
-	//column_pt6(p,a);
+    //column_pt6(p,a);
     //cval_gcpara6(p,a,cval6);
 }

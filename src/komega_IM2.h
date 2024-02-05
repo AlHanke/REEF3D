@@ -32,15 +32,15 @@ using namespace std;
 class komega_IM2 : public ikomega
 {
 public:
-	komega_IM2(lexer *, fdm*, ghostcell*);
-	virtual ~komega_IM2();
-	virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*);
-	virtual void ktimesave(lexer*, fdm*, ghostcell*);
-	virtual void etimesave(lexer*, fdm*, ghostcell*);
-	void timesource(lexer*,fdm*,field&,field&);
-	void clearrhs(lexer*,fdm*);
+    komega_IM2(lexer *, fdm*, ghostcell*);
+    virtual ~komega_IM2();
+    virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*);
+    virtual void ktimesave(lexer*, fdm*, ghostcell*);
+    virtual void etimesave(lexer*, fdm*, ghostcell*);
+    void timesource(lexer*,fdm*,field&,field&);
+    void clearrhs(lexer*,fdm*);
 
-	field4 kn,knn,en,enn;
+    field4 kn,knn,en,enn;
 
 private:
     int gcval_kin, gcval_eps;

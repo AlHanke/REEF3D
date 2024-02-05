@@ -32,22 +32,22 @@ class slicegen : public slice, increment
 {
 public:
 
-	slicegen (lexer*);
-	virtual ~slicegen();
+    slicegen (lexer*);
+    virtual ~slicegen();
 
     virtual double& operator()(int, int);
-	double& operator[](int);
+    double& operator[](int);
     virtual void ggcpol(lexer*);
     virtual void resize(lexer*);
     virtual void dealloc(lexer*);
     
-	int imin,imax,jmax,jmin;
+    int imin,imax,jmax,jmin;
 
 private:
 
-	void fieldalloc(lexer *);
-	
-	lexer *pp;
+    void fieldalloc(lexer *);
+    
+    lexer *pp;
 };
 
 #endif

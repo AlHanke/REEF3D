@@ -39,36 +39,36 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 nhflow_vtu3D::nhflow_vtu3D(lexer* p, fdm_nhf *d, ghostcell *pgc)
-{	
+{    
     if(p->I40==0)
     {
-	p->printtime=0.0;
-	p->sedprinttime=0.0;
-	p->fsfprinttime=0.0;
-	p->probeprinttime=0.0;
-	p->stateprinttime=0.0;
+    p->printtime=0.0;
+    p->sedprinttime=0.0;
+    p->fsfprinttime=0.0;
+    p->probeprinttime=0.0;
+    p->stateprinttime=0.0;
     p->exportprinttime=0.0;
     }
 
-	p->Darray(printtime_wT,p->P35);
+    p->Darray(printtime_wT,p->P35);
     p->Iarray(printfsfiter_wI,p->P184);
     p->Darray(printfsftime_wT,p->P185);
 
-	for(int qn=0; qn<p->P35; ++qn)
-	printtime_wT[qn]=p->P35_ts[qn];
+    for(int qn=0; qn<p->P35; ++qn)
+    printtime_wT[qn]=p->P35_ts[qn];
 
     for(int qn=0; qn<p->P185; ++qn)
-	printfsftime_wT[qn]=p->P185_ts[qn];
+    printfsftime_wT[qn]=p->P185_ts[qn];
 
     for(int qn=0; qn<p->P184; ++qn)
-	printfsfiter_wI[qn]=p->P184_its[qn];
+    printfsfiter_wI[qn]=p->P184_its[qn];
 
 
-	printcount=0;
+    printcount=0;
 
-	// Create Folder
-	if(p->mpirank==0 && p->P14==1)
-	mkdir("./REEF3D_NHFLOW_VTU",0777);
+    // Create Folder
+    if(p->mpirank==0 && p->P14==1)
+    mkdir("./REEF3D_NHFLOW_VTU",0777);
     
     pwsf=new nhflow_print_wsf(p,d);
 
@@ -82,19 +82,19 @@ nhflow_vtu3D::nhflow_vtu3D(lexer* p, fdm_nhf *d, ghostcell *pgc)
     ppotentialfile = new potentialfile_out(p,d,pgc);
 
     if(p->P40>0)
-	pstate=new nhflow_state(p,d,pgc);
+    pstate=new nhflow_state(p,d,pgc);
 
     if(p->P59==1)
     pbreaklog=new nhflow_breaking_log(p,d,pgc);
-	
-	if(p->P85>0)
-	pforce_ale = new force_ale*[p->P85];
-	
-	for(n=0;n<p->P85;++n)
-	pforce_ale[n]=new force_ale(p,d,pgc,n);*/
+    
+    if(p->P85>0)
+    pforce_ale = new force_ale*[p->P85];
+    
+    for(n=0;n<p->P85;++n)
+    pforce_ale[n]=new force_ale(p,d,pgc,n);*/
     
     if(p->P180==1)
-	pfsf = new nhflow_vtp_fsf(p,d,pgc);
+    pfsf = new nhflow_vtp_fsf(p,d,pgc);
 
     pbed = new nhflow_vtp_bed(p,d,pgc);
 
@@ -107,19 +107,19 @@ nhflow_vtu3D::~nhflow_vtu3D()
 void nhflow_vtu3D::start(lexer* p, fdm_nhf* d, ghostcell* pgc, ioflow *pflow)
 {
     // Gages
-	if(p->P51>0)
-	pwsf->height_gauge(p,d,pgc,d->eta);
+    if(p->P51>0)
+    pwsf->height_gauge(p,d,pgc,d->eta);
 
     if(p->P50>0)
     pwsf_theory->height_gauge(p,d,pgc,pflow);
 
-		// Print out based on iteration
+        // Print out based on iteration
         if(p->count%p->P20==0 && p->P30<0.0 && p->P34<0.0 && p->P10==1 && p->P20>0)
-		{
+        {
         print_vtu(p,d,pgc);
-		}
+        }
 
-		// Print out based on time
+        // Print out based on time
         if((p->simtime>p->printtime && p->P30>0.0 && p->P34<0.0 && p->P10==1) || (p->count==0 &&  p->P30>0.0))
         {
         print_vtu(p,d,pgc);
@@ -127,48 +127,48 @@ void nhflow_vtu3D::start(lexer* p, fdm_nhf* d, ghostcell* pgc, ioflow *pflow)
         p->printtime+=p->P30;
         }
 
-		// Print out based on time interval
-		if(p->P10==1 && p->P35>0)
-		for(int qn=0; qn<p->P35; ++qn)
-		if(p->simtime>printtime_wT[qn] && p->simtime>=p->P35_ts[qn] && p->simtime<=(p->P35_te[qn]+0.5*p->P35_dt[qn]))
-		{
-		print_vtu(p,d,pgc);
+        // Print out based on time interval
+        if(p->P10==1 && p->P35>0)
+        for(int qn=0; qn<p->P35; ++qn)
+        if(p->simtime>printtime_wT[qn] && p->simtime>=p->P35_ts[qn] && p->simtime<=(p->P35_te[qn]+0.5*p->P35_dt[qn]))
+        {
+        print_vtu(p,d,pgc);
 
-		printtime_wT[qn]+=p->P35_dt[qn];
-		}
+        printtime_wT[qn]+=p->P35_dt[qn];
+        }
 
         // Print FSF
-		if(((p->count%p->P181==0 && p->P182<0.0 && p->P180==1 )|| (p->count==0 &&  p->P182<0.0 && p->P180==1)) && p->P181>0)
+        if(((p->count%p->P181==0 && p->P182<0.0 && p->P180==1 )|| (p->count==0 &&  p->P182<0.0 && p->P180==1)) && p->P181>0)
         {
-		pfsf->start(p,d,pgc);
+        pfsf->start(p,d,pgc);
         }
 
 
-		if((p->simtime>p->fsfprinttime && p->P182>0.0 && p->P180==1) || (p->count==0 &&  p->P182>0.0))
+        if((p->simtime>p->fsfprinttime && p->P182>0.0 && p->P180==1) || (p->count==0 &&  p->P182>0.0))
         {
         pfsf->start(p,d,pgc);
         p->fsfprinttime+=p->P182;
         }
 
         if(p->P180==1 && p->P184>0)
-		for(int qn=0; qn<p->P184; ++qn)
-		if(p->count%p->P184_dit[qn]==0 && p->count>=p->P184_its[qn] && p->count<=(p->P184_ite[qn]))
-		{
-		pfsf->start(p,d,pgc);
-		}
+        for(int qn=0; qn<p->P184; ++qn)
+        if(p->count%p->P184_dit[qn]==0 && p->count>=p->P184_its[qn] && p->count<=(p->P184_ite[qn]))
+        {
+        pfsf->start(p,d,pgc);
+        }
 
          if(p->P180==1 && p->P185>0)
-		for(int qn=0; qn<p->P185; ++qn)
-		if(p->simtime>printfsftime_wT[qn] && p->simtime>=p->P185_ts[qn] && p->simtime<=(p->P185_te[qn]+0.5*p->P185_dt[qn]))
-		{
-		pfsf->start(p,d,pgc);
+        for(int qn=0; qn<p->P185; ++qn)
+        if(p->simtime>printfsftime_wT[qn] && p->simtime>=p->P185_ts[qn] && p->simtime<=(p->P185_te[qn]+0.5*p->P185_dt[qn]))
+        {
+        pfsf->start(p,d,pgc);
 
-		printfsftime_wT[qn]+=p->P185_dt[qn];
-		}
+        printfsftime_wT[qn]+=p->P185_dt[qn];
+        }
 
         // Print BED
         if(p->count==0)
-		pbed->start(p,d,pgc);
+        pbed->start(p,d,pgc);
 
 
     // Gages
@@ -198,18 +198,18 @@ void nhflow_vtu3D::start(lexer* p, fdm_nhf* d, ghostcell* pgc, ioflow *pflow)
 
     if(p->P59==1)
     pbreaklog->write(p,d,pgc);
-	
-	// ALE force
-	  if((p->count==0 || p->count==p->count_statestart) && p->P85>0)
-	  {
-		for(n=0;n<p->P85;++n)
+    
+    // ALE force
+      if((p->count==0 || p->count==p->count_statestart) && p->P85>0)
+      {
+        for(n=0;n<p->P85;++n)
         pforce_ale[n]->ini(p,d,pgc);
-	  }
+      }
         if(p->count>0 && p->P85>0)
-		{
+        {
         for(n=0;n<p->P85;++n)
         pforce_ale[n]->start(p,d,pgc);
-		}
+        }
         */
 }
 
@@ -268,58 +268,58 @@ void nhflow_vtu3D::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc)
 
     name_iter(p,pgc);
 
-	// Open File
-	ofstream result;
-	result.open(name, ios::binary);
+    // Open File
+    ofstream result;
+    result.open(name, ios::binary);
 
     n=0;
 
-	offset[n]=0;
-	++n;
+    offset[n]=0;
+    ++n;
 
-	// velocity
-	offset[n]=offset[n-1]+4*(p->pointnum)*3+4;
-	++n;
-
-	// scalars
-
-    // P
-	offset[n]=offset[n-1]+4*(p->pointnum)+4;
-	++n;
-    
-    // omega_sig
-	offset[n]=offset[n-1]+4*(p->pointnum)+4;
-	++n;
-
-
-    // elevation
-	offset[n]=offset[n-1]+4*(p->pointnum)+4;
-	++n;
-    
-    // test
-    if(p->P23==1)
-	{
-	offset[n]=offset[n-1]+4*(p->pointnum)+4;
-	++n;
-	}
-
-	// Points
+    // velocity
     offset[n]=offset[n-1]+4*(p->pointnum)*3+4;
     ++n;
 
-	// Cells
+    // scalars
+
+    // P
+    offset[n]=offset[n-1]+4*(p->pointnum)+4;
+    ++n;
+    
+    // omega_sig
+    offset[n]=offset[n-1]+4*(p->pointnum)+4;
+    ++n;
+
+
+    // elevation
+    offset[n]=offset[n-1]+4*(p->pointnum)+4;
+    ++n;
+    
+    // test
+    if(p->P23==1)
+    {
+    offset[n]=offset[n-1]+4*(p->pointnum)+4;
+    ++n;
+    }
+
+    // Points
+    offset[n]=offset[n-1]+4*(p->pointnum)*3+4;
+    ++n;
+
+    // Cells
     offset[n]=offset[n-1] + 4*p->tpcellnum*8  + 4;
     ++n;
     offset[n]=offset[n-1] + 4*(p->tpcellnum)+4;
     ++n;
-	offset[n]=offset[n-1] + 4*(p->tpcellnum)+4;
+    offset[n]=offset[n-1] + 4*(p->tpcellnum)+4;
     ++n;
-	//---------------------------------------------
+    //---------------------------------------------
 
-	result<<"<?xml version=\"1.0\"?>"<<endl;
-	result<<"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
-	result<<"<UnstructuredGrid>"<<endl;
-	result<<"<Piece NumberOfPoints=\""<<p->pointnum<<"\" NumberOfCells=\""<<p->tpcellnum<<"\">"<<endl;
+    result<<"<?xml version=\"1.0\"?>"<<endl;
+    result<<"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
+    result<<"<UnstructuredGrid>"<<endl;
+    result<<"<Piece NumberOfPoints=\""<<p->pointnum<<"\" NumberOfCells=\""<<p->tpcellnum<<"\">"<<endl;
 
     n=0;
     result<<"<PointData >"<<endl;
@@ -338,12 +338,12 @@ void nhflow_vtu3D::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc)
     ++n;
     
     if(p->P23==1)
-	{
+    {
     result<<"<DataArray type=\"Float32\" Name=\"test\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-	}
-	
-	result<<"</PointData>"<<endl;
+    }
+    
+    result<<"</PointData>"<<endl;
 
 
     result<<"<Points>"<<endl;
@@ -354,11 +354,11 @@ void nhflow_vtu3D::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc)
     result<<"<Cells>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-	result<<"<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-	++n;
+    result<<"<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    ++n;
     result<<"<DataArray type=\"Int32\"  Name=\"types\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-	result<<"</Cells>"<<endl;
+    result<<"</Cells>"<<endl;
 
     result<<"</Piece>"<<endl;
     result<<"</UnstructuredGrid>"<<endl;
@@ -368,57 +368,57 @@ void nhflow_vtu3D::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc)
 
 //  Velocities
     iin=3*4*(p->pointnum);
-	result.write((char*)&iin, sizeof (int));
+    result.write((char*)&iin, sizeof (int));
     TPLOOP
-	{
+    {
     if(p->j_dir==0)
     {
     jj=j;
     j=0;
-	ffn=float(0.5*(d->U[IJK]+d->U[IJKp1]));
+    ffn=float(0.5*(d->U[IJK]+d->U[IJKp1]));
     j=jj;
     }
     
     
     if(p->j_dir==1)
-	ffn=float(0.25*(d->U[IJK]+d->U[IJKp1]+d->U[IJp1K]+d->U[IJp1Kp1]));
+    ffn=float(0.25*(d->U[IJK]+d->U[IJKp1]+d->U[IJp1K]+d->U[IJp1Kp1]));
     
-	result.write((char*)&ffn, sizeof (float));
+    result.write((char*)&ffn, sizeof (float));
 
 
-	if(p->j_dir==0)
+    if(p->j_dir==0)
     {
     jj=j;
     j=0;
-	ffn=float(0.5*(d->V[IJK]+d->V[IJKp1]));
+    ffn=float(0.5*(d->V[IJK]+d->V[IJKp1]));
     j=jj;
     }
 
     if(p->j_dir==1)
-	ffn=float(0.25*(d->V[IJK]+d->V[IJKp1]+d->V[IJp1K]+d->V[IJp1Kp1]));
+    ffn=float(0.25*(d->V[IJK]+d->V[IJKp1]+d->V[IJp1K]+d->V[IJp1Kp1]));
     
-	result.write((char*)&ffn, sizeof (float));
+    result.write((char*)&ffn, sizeof (float));
 
 
-	if(p->j_dir==0)
+    if(p->j_dir==0)
     {
     jj=j;
     j=0;
-	ffn=float(0.5*(d->W[IJK]+d->W[Im1JK]));
+    ffn=float(0.5*(d->W[IJK]+d->W[Im1JK]));
     j=jj;
     }
 
     if(p->j_dir==1)
-	ffn=float(0.25*(d->W[IJK]+d->W[Im1JK]+d->W[IJK]+d->W[IJm1K]));
+    ffn=float(0.25*(d->W[IJK]+d->W[Im1JK]+d->W[IJK]+d->W[IJm1K]));
     
-	result.write((char*)&ffn, sizeof (float));
-	}
+    result.write((char*)&ffn, sizeof (float));
+    }
 
 //  P
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
-	{
+    TPLOOP
+    {
         
     if(p->A520<10)
     {
@@ -448,64 +448,64 @@ void nhflow_vtu3D::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc)
         ffn=float(0.25*(d->P[IJK]+d->P[IJKp1]+d->P[IJp1K]+d->P[IJp1Kp1]));
     }
     
-	result.write((char*)&ffn, sizeof (float));
-	}
+    result.write((char*)&ffn, sizeof (float));
+    }
     
 //  Omega_sig
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
-	{
+    TPLOOP
+    {
     if(p->j_dir==0)
     {
     jj=j;
     j=0;
-	ffn=float((d->omegaF[FIJKp1]));
+    ffn=float((d->omegaF[FIJKp1]));
     j=jj;
     }
 
     if(p->j_dir==1)
-	ffn=float(0.5*(d->omegaF[FIJKp1]+d->omegaF[FIJp1Kp1]));
+    ffn=float(0.5*(d->omegaF[FIJKp1]+d->omegaF[FIJp1Kp1]));
     
-	result.write((char*)&ffn, sizeof (float));
-	}
+    result.write((char*)&ffn, sizeof (float));
+    }
 
 //  elevation
-	iin=4*(p->pointnum)*3;
-	result.write((char*)&iin, sizeof (int));
+    iin=4*(p->pointnum)*3;
+    result.write((char*)&iin, sizeof (int));
     TPLOOP
-	{
-	ffn=float(p->ZN[KP1]*d->WL(i,j) + d->bed(i,j));
-	result.write((char*)&ffn, sizeof (float));
-	}
+    {
+    ffn=float(p->ZN[KP1]*d->WL(i,j) + d->bed(i,j));
+    result.write((char*)&ffn, sizeof (float));
+    }
 
 //  test
     if(p->P23==1)
-	{
+    {
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
-	{
-	if(p->j_dir==0)
+    TPLOOP
+    {
+    if(p->j_dir==0)
     {
     jj=j;
     j=0;
-	ffn=float(0.5*(d->test[IJK]+d->test[IJKp1]));
+    ffn=float(0.5*(d->test[IJK]+d->test[IJKp1]));
     j=jj;
     }
     
     if(p->j_dir==1)
-	ffn=float(0.25*(d->test[IJK]+d->test[IJKp1]+d->test[IJp1K]+d->test[IJp1Kp1]));
+    ffn=float(0.25*(d->test[IJK]+d->test[IJKp1]+d->test[IJp1K]+d->test[IJp1Kp1]));
     
-	result.write((char*)&ffn, sizeof (float));
-	}
-	}
+    result.write((char*)&ffn, sizeof (float));
+    }
+    }
 
 //  XYZ
-	iin=4*(p->pointnum)*3;
-	result.write((char*)&iin, sizeof (int));
+    iin=4*(p->pointnum)*3;
+    result.write((char*)&iin, sizeof (int));
     TPLOOP
-	{
+    {
     zcoor = p->ZN[KP1]*p->sl_ipol4(d->WL) + p->sl_ipol4(d->bed);
 
     if(p->wet[IJ]==0)
@@ -516,69 +516,69 @@ void nhflow_vtu3D::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc)
 
     // -- 
     ffn=float(p->XN[IP1]);
-	result.write((char*)&ffn, sizeof (float));
+    result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(p->YN[JP1]);
-	result.write((char*)&ffn, sizeof (float));
+    ffn=float(p->YN[JP1]);
+    result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(zcoor);
-	result.write((char*)&ffn, sizeof (float));
-	}
+    ffn=float(zcoor);
+    result.write((char*)&ffn, sizeof (float));
+    }
     
 //  Connectivity
     iin=4*(p->tpcellnum)*8;
     result.write((char*)&iin, sizeof (int));
     BASELOOP
     if(p->flag5[IJK]!=-20 && p->flag5[IJK]!=-30)
-	{
+    {
     iin=int(d->NODEVAL[Im1Jm1Km1])-1;
-	result.write((char*)&iin, sizeof (int));
+    result.write((char*)&iin, sizeof (int));
 
     iin=int(d->NODEVAL[IJm1Km1])-1;
-	result.write((char*)&iin, sizeof (int));
+    result.write((char*)&iin, sizeof (int));
 
     iin= int(d->NODEVAL[IJKm1])-1;
-	result.write((char*)&iin, sizeof (int));
+    result.write((char*)&iin, sizeof (int));
 
-	iin=int(d->NODEVAL[Im1JKm1])-1;
-	result.write((char*)&iin, sizeof (int));
+    iin=int(d->NODEVAL[Im1JKm1])-1;
+    result.write((char*)&iin, sizeof (int));
 
-	iin=int(d->NODEVAL[Im1Jm1K])-1;
-	result.write((char*)&iin, sizeof (int));
+    iin=int(d->NODEVAL[Im1Jm1K])-1;
+    result.write((char*)&iin, sizeof (int));
 
-	iin=int(d->NODEVAL[IJm1K])-1;
-	result.write((char*)&iin, sizeof (int));
+    iin=int(d->NODEVAL[IJm1K])-1;
+    result.write((char*)&iin, sizeof (int));
 
-	iin=int(d->NODEVAL[IJK])-1;
-	result.write((char*)&iin, sizeof (int));
+    iin=int(d->NODEVAL[IJK])-1;
+    result.write((char*)&iin, sizeof (int));
 
-	iin=int(d->NODEVAL[Im1JK])-1;
-	result.write((char*)&iin, sizeof (int));
-	}
+    iin=int(d->NODEVAL[Im1JK])-1;
+    result.write((char*)&iin, sizeof (int));
+    }
     
 //  Offset of Connectivity
     iin=4*(p->tpcellnum);
     result.write((char*)&iin, sizeof (int));
-	for(n=0;n<p->tpcellnum;++n)
-	{
-	iin=(n+1)*8;
-	result.write((char*)&iin, sizeof (int));
-	}
+    for(n=0;n<p->tpcellnum;++n)
+    {
+    iin=(n+1)*8;
+    result.write((char*)&iin, sizeof (int));
+    }
 
 //  Cell types
     iin=4*(p->tpcellnum);
     result.write((char*)&iin, sizeof (int));
-	for(n=0;n<p->tpcellnum;++n)
-	{
-	iin=12;
-	result.write((char*)&iin, sizeof (int));
-	}
+    for(n=0;n<p->tpcellnum;++n)
+    {
+    iin=12;
+    result.write((char*)&iin, sizeof (int));
+    }
 
-	result<<endl<<"</AppendedData>"<<endl;
+    result<<endl<<"</AppendedData>"<<endl;
     result<<"</VTKFile>"<<endl;
 
-	result.close();
+    result.close();
 
-	++printcount;
+    ++printcount;
 
 }

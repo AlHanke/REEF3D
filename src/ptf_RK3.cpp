@@ -40,16 +40,16 @@ ptf_RK3::ptf_RK3(lexer *p, fdm *a, ghostcell *pgc) : ptf_fsfbc(p,a,pgc),erk1(p),
     gcval=250;
     
     if(p->F50==1)
-	gcval_eta = 51;
+    gcval_eta = 51;
     
     if(p->F50==2)
-	gcval_eta = 52;
+    gcval_eta = 52;
     
     if(p->F50==3)
-	gcval_eta = 53;
+    gcval_eta = 53;
     
     if(p->F50==4)
-	gcval_eta = 54;
+    gcval_eta = 54;
     
     // 3D
     gcval_eta = 55;
@@ -78,7 +78,7 @@ ptf_RK3::~ptf_RK3()
 }
 
 void ptf_RK3::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection *pconvec, ioflow *pflow, reini *preini, onephase* poneph)
-{	
+{    
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
     
 // Step 1
@@ -87,7 +87,7 @@ void ptf_RK3::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection 
     kfsfbc(p,a,pgc);
 
     SLICELOOP4
-	erk1(i,j) = a->eta(i,j) + p->dt*a->K(i,j);
+    erk1(i,j) = a->eta(i,j) + p->dt*a->K(i,j);
     
     pgc->gcsl_start4(p,erk1,gcval_eta);
 
@@ -95,7 +95,7 @@ void ptf_RK3::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection 
     dfsfbc(p,a,pgc,a->eta);
 
     SLICELOOP4
-	frk1(i,j) = a->Fifsf(i,j) + p->dt*a->K(i,j);
+    frk1(i,j) = a->Fifsf(i,j) + p->dt*a->K(i,j);
     
     pgc->gcsl_start4(p,frk1,gcval_fifsf);
 
@@ -125,7 +125,7 @@ void ptf_RK3::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection 
     kfsfbc(p,a,pgc);
     
     SLICELOOP4
-	erk2(i,j) = 0.75*a->eta(i,j) + 0.25*erk1(i,j) + 0.25*p->dt*a->K(i,j);
+    erk2(i,j) = 0.75*a->eta(i,j) + 0.25*erk1(i,j) + 0.25*p->dt*a->K(i,j);
     
     pgc->gcsl_start4(p,erk2,gcval_eta);
     
@@ -133,7 +133,7 @@ void ptf_RK3::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection 
     dfsfbc(p,a,pgc,erk1);
     
     SLICELOOP4
-	frk2(i,j) = 0.75*a->Fifsf(i,j) + 0.25*frk1(i,j) + 0.25*p->dt*a->K(i,j);
+    frk2(i,j) = 0.75*a->Fifsf(i,j) + 0.25*frk1(i,j) + 0.25*p->dt*a->K(i,j);
     
     pgc->gcsl_start4(p,frk2,gcval_fifsf);
     
@@ -163,7 +163,7 @@ void ptf_RK3::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection 
     kfsfbc(p,a,pgc);
     
     SLICELOOP4
-	a->eta(i,j) = (1.0/3.0)*a->eta(i,j) + (2.0/3.0)*erk2(i,j) + (2.0/3.0)*p->dt*a->K(i,j);
+    a->eta(i,j) = (1.0/3.0)*a->eta(i,j) + (2.0/3.0)*erk2(i,j) + (2.0/3.0)*p->dt*a->K(i,j);
     
     pgc->gcsl_start4(p,a->eta,gcval_eta);
     
@@ -171,7 +171,7 @@ void ptf_RK3::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection 
     dfsfbc(p,a,pgc,erk2);
     
     SLICELOOP4
-	a->Fifsf(i,j) = (1.0/3.0)*a->Fifsf(i,j) + (2.0/3.0)*frk2(i,j) + (2.0/3.0)*p->dt*a->K(i,j);
+    a->Fifsf(i,j) = (1.0/3.0)*a->Fifsf(i,j) + (2.0/3.0)*frk2(i,j) + (2.0/3.0)*p->dt*a->K(i,j);
     
     pgc->gcsl_start4(p,a->Fifsf,gcval_fifsf);
     
@@ -209,7 +209,7 @@ void ptf_RK3::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection 
 }
 
 void ptf_RK3::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reini *preini, onephase *poneph)
-{	
+{    
     pfsfupdate->fsfupdate(p,a,pgc,pflow,poneph,a->eta);
     pfsfupdate->etaloc(p,a,pgc);
     
@@ -235,5 +235,5 @@ void ptf_RK3::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reini *preini
 }
 
 void ptf_RK3::inidisc(lexer *p, fdm *a, ghostcell *pgc)
-{	
+{    
 }

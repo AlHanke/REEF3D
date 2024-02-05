@@ -30,21 +30,21 @@ Author: Hans Bihs
 
 void sediment_exner::topovel(lexer* p, ghostcell *pgc, sediment_fdm *s, double& vx, double& vy, double& vz)
 {
-	double uvel,vvel,u_abs;
-	double signx,signy;
-	double dqx,dqy;
+    double uvel,vvel,u_abs;
+    double signx,signy;
+    double dqx,dqy;
     double qx1,qx2,q1x,qy2;
     
     double ux1,vx1,ux2,vx2,uy1,vy1,uy2,vy2;
     double sgx1,sgx2,sgy1,sgy2;
     double ux1_abs,ux2_abs,uy1_abs,uy2_abs;
-	
-	vx=0.0;
-	vy=0.0;
-	vz=0.0;
-	 
-	if(p->pos_x()>=p->S71 && p->pos_x()<=p->S72)
-	{						
+    
+    vx=0.0;
+    vy=0.0;
+    vz=0.0;
+     
+    if(p->pos_x()>=p->S71 && p->pos_x()<=p->S72)
+    {                        
         pip=1;
         uvel=0.5*(s->P(i,j)+s->P(i-1,j));
         pip=0;
@@ -52,10 +52,10 @@ void sediment_exner::topovel(lexer* p, ghostcell *pgc, sediment_fdm *s, double& 
         pip=2;
         vvel=0.5*(s->Q(i,j)+s->Q(i,j-1));
         pip=0;
-		
-		u_abs = sqrt(uvel*uvel + vvel*vvel);
-		signx=fabs(u_abs)>1.0e-10?uvel/fabs(u_abs):0.0;
-		signy=fabs(u_abs)>1.0e-10?vvel/fabs(u_abs):0.0;
+        
+        u_abs = sqrt(uvel*uvel + vvel*vvel);
+        signx=fabs(u_abs)>1.0e-10?uvel/fabs(u_abs):0.0;
+        signy=fabs(u_abs)>1.0e-10?vvel/fabs(u_abs):0.0;
 
     
         ux1=s->P(i-1,j);
@@ -100,7 +100,7 @@ void sediment_exner::topovel(lexer* p, ghostcell *pgc, sediment_fdm *s, double& 
         
         vx=dqx;
         vy=dqy;
-		
+        
     // Exner equations
         // eq
         if(p->S17==0)
@@ -114,7 +114,7 @@ void sediment_exner::topovel(lexer* p, ghostcell *pgc, sediment_fdm *s, double& 
         
         vz =  s->guard(i,j)*prelax->rf(p,pgc)*(1.0/(1.0-p->S24))*(1.0/(Ls>1.0e-10?Ls:1.0e10))*(s->qb(i,j)-s->qbe(i,j));// + ws*(s->conc(i,j,k) - pcb->cbed(p,pgc,s)); 
         }
-	}
+    }
     
     /*
     if(p->mpirank==7)

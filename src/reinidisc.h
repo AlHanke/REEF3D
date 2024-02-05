@@ -32,7 +32,7 @@ using namespace std;
 class reinidisc
 {
 public:
-	virtual void start(lexer*, fdm*, ghostcell*, vec&, vec&,int)=0;
+    virtual void start(lexer*, fdm*, ghostcell*, vec&, vec&,int)=0;
 };
 
 #endif

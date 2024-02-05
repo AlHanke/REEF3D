@@ -30,10 +30,10 @@ void sixdof_obj::objects_create(lexer *p, fdm *a, ghostcell *pgc)
     int qn;
 
     objects_allocate(p,a,pgc);
-	
+    
     entity_count=0;
-	
-	for(qn=0;qn<p->X110;++qn)
+    
+    for(qn=0;qn<p->X110;++qn)
     {
         box(p,a,pgc,qn);
         ++entity_count;
@@ -44,20 +44,20 @@ void sixdof_obj::objects_create(lexer *p, fdm *a, ghostcell *pgc)
         cylinder_x(p,a,pgc,qn);
         ++entity_count;
     }
-	
-	for(qn=0;qn<p->X132;++qn)
+    
+    for(qn=0;qn<p->X132;++qn)
     {
         cylinder_y(p,a,pgc,qn);
         ++entity_count;
     }
-	
-	for(qn=0;qn<p->X133;++qn)
+    
+    for(qn=0;qn<p->X133;++qn)
     {
         cylinder_z(p,a,pgc,qn);
         ++entity_count;
     }
-	
-	for(qn=0;qn<p->X153;++qn)
+    
+    for(qn=0;qn<p->X153;++qn)
     {
         wedge_sym(p,a,pgc,qn);
         ++entity_count;
@@ -78,31 +78,31 @@ void sixdof_obj::objects_create(lexer *p, fdm *a, ghostcell *pgc)
     if(p->X180==1)
     {
         read_stl(p,a,pgc);
-		++entity_count;
+        ++entity_count;
     }
 
 
-	if (entity_count > 1)
-	{
-		cout<<"Multiple floating bodies are not fully supported yet."<<endl<<endl;
-		//pgc->final();
-		//exit(0);
-	}
+    if (entity_count > 1)
+    {
+        cout<<"Multiple floating bodies are not fully supported yet."<<endl<<endl;
+        //pgc->final();
+        //exit(0);
+    }
 
     if(p->mpirank==0)
-	cout<<"Surface triangles: "<<tricount<<endl;
+    cout<<"Surface triangles: "<<tricount<<endl;
     
     // Initialise STL geometric parameters
-	geometry_stl(p,a,pgc);
+    geometry_stl(p,a,pgc);
     
     // Order Triangles for correct inside/outside orientation
     triangle_switch_ray(p,a,pgc);
-	
-	// Refine triangles
-	geometry_refinement(p,pgc);	
+    
+    // Refine triangles
+    geometry_refinement(p,pgc);    
 
     if(p->mpirank==0)
-	cout<<"Refined surface triangles: "<<tricount<<endl;
+    cout<<"Refined surface triangles: "<<tricount<<endl;
 }
 
 void sixdof_obj::objects_allocate(lexer *p, fdm *a, ghostcell *pgc)
@@ -110,7 +110,7 @@ void sixdof_obj::objects_allocate(lexer *p, fdm *a, ghostcell *pgc)
     double U,ds,phi,r,snum,trisum;
     
     entity_sum = p->X110 + p->X131 + p->X132 + p->X133 + p->X153 + p->X163 + p->X164;
-	tricount=0;
+    tricount=0;
     trisum=0;
     
     // box
@@ -118,23 +118,23 @@ void sixdof_obj::objects_allocate(lexer *p, fdm *a, ghostcell *pgc)
     
     // cylinder_x   
     r=p->X131_rad;
-	U = 2.0 * PI * r;
-	ds = 0.75*(U*p->dx);
-	snum = int(U/ds);
-	trisum+=5*(snum+1)*p->X131;
+    U = 2.0 * PI * r;
+    ds = 0.75*(U*p->dx);
+    snum = int(U/ds);
+    trisum+=5*(snum+1)*p->X131;
     
     // cylinder_y
     r=p->X132_rad;
-	U = 2.0 * PI * r;
-	ds = 0.75*(U*p->dx);
-	snum = int(U/ds);
-	trisum+=5*(snum+1)*p->X132;
+    U = 2.0 * PI * r;
+    ds = 0.75*(U*p->dx);
+    snum = int(U/ds);
+    trisum+=5*(snum+1)*p->X132;
     
     // cylinder_y
     r=p->X133_rad;
-	U = 2.0 * PI * r;
-	ds = 0.75*(U*p->dx);
-	snum = int(U/ds);
+    U = 2.0 * PI * r;
+    ds = 0.75*(U*p->dx);
+    snum = int(U/ds);
     trisum+=5*(snum+1)*p->X133;
     
     // wedge sym
@@ -152,12 +152,12 @@ void sixdof_obj::objects_allocate(lexer *p, fdm *a, ghostcell *pgc)
 
     
     p->Darray(tri_x,trisum,3);
-	p->Darray(tri_y,trisum,3);
-	p->Darray(tri_z,trisum,3);
+    p->Darray(tri_y,trisum,3);
+    p->Darray(tri_z,trisum,3);
     p->Darray(tri_x0,trisum,3);
-	p->Darray(tri_y0,trisum,3);
-	p->Darray(tri_z0,trisum,3);    	
+    p->Darray(tri_y0,trisum,3);
+    p->Darray(tri_z0,trisum,3);        
     
-	p->Iarray(tstart,entity_sum);
-	p->Iarray(tend,entity_sum);
+    p->Iarray(tstart,entity_sum);
+    p->Iarray(tend,entity_sum);
 }

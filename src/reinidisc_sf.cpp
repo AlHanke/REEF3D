@@ -35,8 +35,8 @@ reinidisc_sf::~reinidisc_sf()
 }
 
 void reinidisc_sf::start(lexer *p, fdm *a, ghostcell *pgc, vec &b, vec &L, int ipol)
-{	
-	if(ipol==4)
+{    
+    if(ipol==4)
     {
         NLOOP4
         L.V[n] = 0.0;
@@ -48,8 +48,8 @@ void reinidisc_sf::start(lexer *p, fdm *a, ghostcell *pgc, vec &b, vec &L, int i
         ++n;
         }
     }
-	
-	if(ipol==5)
+    
+    if(ipol==5)
     {
         NLOOP4A
         L.V[n] = 0.0;
@@ -80,63 +80,63 @@ void reinidisc_sf::start(lexer *p, fdm *a, ghostcell *pgc, vec &b, vec &L, int i
 
 void reinidisc_sf::disc(lexer *p, fdm *a, ghostcell *pgc, vec &b, vec &L, int *sizeM, int ipol, cpt &C)
 {
-	
-	dx=0.0;
-	dy=0.0;
-	dz=0.0;
-	lsv=b.V[I_J_K];
+    
+    dx=0.0;
+    dy=0.0;
+    dz=0.0;
+    lsv=b.V[I_J_K];
     lsSig=lsv/sqrt(lsv*lsv);
 
     if(fabs(lsv)<1.0e-8)
     lsSig=1.0;
 
-// x	
-	xmin=(lsv-b.V[Im1_J_K])/p->DXP[IM1];
-	xplus=(b.V[Ip1_J_K]-lsv)/p->DXP[IP];
-	
-	if(xmin*lsSig>0.0 && xplus*lsSig>-xmin*lsSig)
-	dx=ddwenox(a,b,1.0,ipol,C);
+// x    
+    xmin=(lsv-b.V[Im1_J_K])/p->DXP[IM1];
+    xplus=(b.V[Ip1_J_K]-lsv)/p->DXP[IP];
+    
+    if(xmin*lsSig>0.0 && xplus*lsSig>-xmin*lsSig)
+    dx=ddwenox(a,b,1.0,ipol,C);
 
-	if(xplus*lsSig<0.0 && xmin*lsSig<-xplus*lsSig)
-	dx=ddwenox(a,b,-1.0,ipol,C);
+    if(xplus*lsSig<0.0 && xmin*lsSig<-xplus*lsSig)
+    dx=ddwenox(a,b,-1.0,ipol,C);
 
-	if(xplus*lsSig>0.0 && xmin*lsSig<0.0)
-	dx=0.0;
+    if(xplus*lsSig>0.0 && xmin*lsSig<0.0)
+    dx=0.0;
 
 // y
     if(p->j_dir==1)
     {
-	ymin=(lsv-b.V[I_Jm1_K])/p->DYP[JM1];
-	yplus=(b.V[I_Jp1_K]-lsv)/p->DYP[JP];
-	
-	if(ymin*lsSig>0.0 && yplus*lsSig>-ymin*lsSig)
-	dy=ddwenoy(a,b,1.0,ipol,C);
+    ymin=(lsv-b.V[I_Jm1_K])/p->DYP[JM1];
+    yplus=(b.V[I_Jp1_K]-lsv)/p->DYP[JP];
+    
+    if(ymin*lsSig>0.0 && yplus*lsSig>-ymin*lsSig)
+    dy=ddwenoy(a,b,1.0,ipol,C);
 
-	if(yplus*lsSig<0.0 && ymin*lsSig<-yplus*lsSig)
-	dy=ddwenoy(a,b,-1.0,ipol,C);
+    if(yplus*lsSig<0.0 && ymin*lsSig<-yplus*lsSig)
+    dy=ddwenoy(a,b,-1.0,ipol,C);
 
-	if(yplus*lsSig>0.0 && ymin*lsSig<0.0)
-	dy=0.0;
+    if(yplus*lsSig>0.0 && ymin*lsSig<0.0)
+    dy=0.0;
     }
 
 // z
-	zmin=(lsv-b.V[I_J_Km1])/p->DZP[KM1];
-	zplus=(b.V[I_J_Kp1]-lsv)/p->DZP[KP];
-	
-	if(zmin*lsSig>0.0 && zplus*lsSig>-zmin*lsSig)
-	dz=ddwenoz(a,b,1.0,ipol,C);
+    zmin=(lsv-b.V[I_J_Km1])/p->DZP[KM1];
+    zplus=(b.V[I_J_Kp1]-lsv)/p->DZP[KP];
+    
+    if(zmin*lsSig>0.0 && zplus*lsSig>-zmin*lsSig)
+    dz=ddwenoz(a,b,1.0,ipol,C);
 
-	if(zplus*lsSig<0.0 && zmin*lsSig<-zplus*lsSig)
-	dz=ddwenoz(a,b,-1.0,ipol,C);
+    if(zplus*lsSig<0.0 && zmin*lsSig<-zplus*lsSig)
+    dz=ddwenoz(a,b,-1.0,ipol,C);
 
-	if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
-	dz=0.0;	
+    if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
+    dz=0.0;    
 
-	dnorm=sqrt(dx*dx + dy*dy + dz*dz);
-	
+    dnorm=sqrt(dx*dx + dy*dy + dz*dz);
+    
     if(p->j_dir==0)
     deltax = (1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-	
+    
     if(p->j_dir==1)
     deltax = (1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
     
@@ -156,5 +156,5 @@ void reinidisc_sf::disc(lexer *p, fdm *a, ghostcell *pgc, vec &b, vec &L, int *s
 
     }
 
-	L.V[n] = -(sign*dnorm - sign) + diffterm;
+    L.V[n] = -(sign*dnorm - sign) + diffterm;
 }

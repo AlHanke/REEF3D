@@ -45,9 +45,9 @@ class nhflow_vtu3D : public increment
 {
 
 public:
-	nhflow_vtu3D(lexer*,fdm_nhf*,ghostcell*);
-	virtual ~nhflow_vtu3D();
-	virtual void start(lexer*,fdm_nhf*,ghostcell*,ioflow*);
+    nhflow_vtu3D(lexer*,fdm_nhf*,ghostcell*);
+    virtual ~nhflow_vtu3D();
+    virtual void start(lexer*,fdm_nhf*,ghostcell*,ioflow*);
     virtual void print_vtu(lexer*,fdm_nhf*,ghostcell*);
     virtual void print_stop(lexer*,fdm_nhf*,ghostcell*,ioflow*);
     
@@ -62,7 +62,7 @@ private:
     float ffn;
     int jj;
     int gcval_phi,gcval_phiext;
-	double *printtime_wT;
+    double *printtime_wT;
     double *printfsftime_wT;
     int *printfsfiter_wI;
     double phase;
@@ -79,7 +79,7 @@ private:
     nhflow_vtp_bed *pbed;
     nhflow_state *pstate;
     nhflow_breaking_log *pbreaklog;
-	force_ale **pforce_ale;
+    force_ale **pforce_ale;
 };
 
 #endif

@@ -37,10 +37,10 @@ void iowave::fnpf_precalc_relax(lexer *p, ghostcell *pgc)
     {
         xg = xgen(p);
         yg = ygen(p);
-		dg = distgen(p);
-		db = distbeach(p);
-		
-		// Wave Generation
+        dg = distgen(p);
+        db = distbeach(p);
+        
+        // Wave Generation
         if(p->B98==2)
         {
             // Zone 1
@@ -50,7 +50,7 @@ void iowave::fnpf_precalc_relax(lexer *p, ghostcell *pgc)
             etaval[count] = eta(i,j);
             ++count;
             }
-		}
+        }
     }
     pgc->gcsl_start4(p,eta,50);
     
@@ -65,7 +65,7 @@ void iowave::fnpf_precalc_relax(lexer *p, ghostcell *pgc)
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
-		db = distbeach(p);
+        db = distbeach(p);
         
         FKLOOP 
         FPCHECK
@@ -102,16 +102,16 @@ void iowave::fnpf_precalc_relax(lexer *p, ghostcell *pgc)
     count=0;
     SLICELOOP4
     {
-		
+        
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
-		db = distbeach(p);
+        db = distbeach(p);
         
         z = eta(i,j);
-		
-		// Wave Generation
-		if(p->B98==2 && f_switch==1)
+        
+        // Wave Generation
+        if(p->B98==2 && f_switch==1)
         {
             // Zone 1
             if(dg<1.0e19)
@@ -120,7 +120,7 @@ void iowave::fnpf_precalc_relax(lexer *p, ghostcell *pgc)
             
             ++count;
             }
-		}
+        }
     }
     
 }

@@ -34,23 +34,23 @@ class mgccart :  public increment
 {
 public:
 
-	mgccart (lexer *);
-	virtual ~mgccart();
+    mgccart (lexer *);
+    virtual ~mgccart();
 
     //mgc
-	void startmgc(lexer*);
-	void makemgc(lexer*,int*);
-	void mgcsetup(lexer*,int*);
-	void gcdirfill(lexer*,int,int**,int*);
-	void fillmgc(lexer*,int,int**,int*);
-	
-	void gcsidefill(lexer*);
+    void startmgc(lexer*);
+    void makemgc(lexer*,int*);
+    void mgcsetup(lexer*,int*);
+    void gcdirfill(lexer*,int,int**,int*);
+    void fillmgc(lexer*,int,int**,int*);
+    
+    void gcsidefill(lexer*);
 
-	
-	int imin,imax,jmax,jmin,kmin,kmax;
-	int gcdirsize;
-	
-	
+    
+    int imin,imax,jmax,jmin,kmin,kmax;
+    int gcdirsize;
+    
+    
 };
 
 #endif

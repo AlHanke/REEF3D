@@ -32,22 +32,22 @@ class fieldgen : public field, increment
 {
 public:
 
-	fieldgen (lexer*);
-	virtual ~fieldgen();
+    fieldgen (lexer*);
+    virtual ~fieldgen();
 
     double& operator()(int, int , int);
-	double& operator[](int);
+    double& operator[](int);
     virtual void ggcpol(lexer*);
     virtual void resize(lexer*);
     virtual void dealloc(lexer*);
     
-	int imin,imax,jmax,jmin,kmin,kmax;
+    int imin,imax,jmax,jmin,kmin,kmax;
 
 private:
 
-	void fieldalloc(lexer *);
+    void fieldalloc(lexer *);
 
-	lexer *pp;
+    lexer *pp;
 
 };
 

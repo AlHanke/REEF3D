@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"initialize.h"
+
+#include"initialize.h"
 #include"fdm.h"
 #include"lexer.h"
 #include"ghostcell.h"
@@ -33,14 +34,14 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
     
     p->phimean=p->F56;
 
+       LOOP
+    a->vof(i,j,k)=0.0;
+       
     LOOP
-	a->vof(i,j,k)=0.0;
-    
-	LOOP
-	if 
+    if 
     (
-        double(i)*dx + p->originx >= p->F51 && double(i)*dx + p->originx < p->F54
-	 && double(j)*dx + p->originy >= p->F52 && double(j)*dx + p->originy < p->F55
+           double(i)*dx + p->originx >= p->F51 && double(i)*dx + p->originx < p->F54
+     && double(j)*dx + p->originy >= p->F52 && double(j)*dx + p->originy < p->F55
     )
     {
         double value;    
@@ -134,22 +135,22 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
         if (p->pos_x() > p->F63)
         a->vof(i,j,k) = (vofdiff/xdiff)*(p->pos_x()-p->F63) + p->phimean - p->pos_z();
     }
-*/
-	double H=0.0;
-
-	LOOP
-	{
-		H = a->vof(i,j,k);
-
-		H = MAX(H, 0.0);
-		H = MIN(H, 1.0);
-
-		a->ro(i,j,k) = p->W1*H + p->W3*(1.0 - H);
-		a->visc(i,j,k) = p->W2*H + p->W4*(1.0 - H);
-	}
-	pgc->start4(p,a->vof,50);
-	pgc->start4(p,a->ro,1);
-	pgc->start4(p,a->visc,1);
+    /
+    double H=0.0;
+    
+    LOOP
+        
+        H = a->vof(i,j,k);
+        
+        H = MAX(H, 0.0);
+        H = MIN(H, 1.0);
+        
+        a->ro(i,j,k) = p->W1*H + p->W3*(1.0 - H);
+        a->visc(i,j,k) = p->W2*H + p->W4*(1.0 - H);
+    }
+    pgc->start4(p,a->vof,50);
+    pgc->start4(p,a->ro,1);
+    pgc->start4(p,a->visc,1);
     
     
 
@@ -165,10 +166,10 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
     {
         iniphi(a, p, pgc);
     } */
-/*
-	LOOP
-	{
-		a->test(i,j,k) = a->vof(i,j,k);
-	} 
-	pgc->start4(p,a->test,50);*/
+    *
+    LOOP
+        
+        a->test(i,j,k) = a->vof(i,j,k);
+    } 
+    pgc->start4(p,a->test,50);*/
 }

@@ -32,7 +32,7 @@ class sflow_eta_disc
 {
 public:
 
-	virtual void start(lexer*,slice&,int,slice&,slice&,slice&,slice&)=0;
+    virtual void start(lexer*,slice&,int,slice&,slice&,slice&,slice&)=0;
 };
 
 #endif

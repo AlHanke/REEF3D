@@ -29,43 +29,43 @@ Author: Hans Bihs
 
 print_wsf::print_wsf(lexer *p, fdm* a, ghostcell *pgc, int num)
 {
-	gauge_num = p->P51;
-	x = p->P51_x;
-	y = p->P51_y;
-	
+    gauge_num = p->P51;
+    x = p->P51_x;
+    y = p->P51_y;
+    
     if(p->P51>0 && num==0)
-	{
-	gauge_num = p->P51;
-	x = p->P51_x;
-	y = p->P51_y;
-	}
-	
-	if(p->P351>0 && num==1)
-	{
-	gauge_num = p->P351;
-	x = p->P351_x;
-	y = p->P351_y;
-	}
-	
-	if(p->P352>0 && num==2)
-	{
-	gauge_num = p->P352;
-	x = p->P352_x;
-	y = p->P352_y;
-	}
-	
-	// Create Folder
-	if(p->mpirank==0 && p->P14==1)
-	mkdir("./REEF3D_CFD_WSF",0777);
-	
+    {
+    gauge_num = p->P51;
+    x = p->P51_x;
+    y = p->P51_y;
+    }
+    
+    if(p->P351>0 && num==1)
+    {
+    gauge_num = p->P351;
+    x = p->P351_x;
+    y = p->P351_y;
+    }
+    
+    if(p->P352>0 && num==2)
+    {
+    gauge_num = p->P352;
+    x = p->P352_x;
+    y = p->P352_y;
+    }
+    
+    // Create Folder
+    if(p->mpirank==0 && p->P14==1)
+    mkdir("./REEF3D_CFD_WSF",0777);
+    
     if(p->mpirank==0 && p->P51>0 && num==0)
     {
     // open file
-	if(p->P14==0)
+    if(p->P14==0)
     wsfout.open("REEF3D-CFD-WSF-HG.dat");
-	
-	if(p->P14==1)
-	wsfout.open("./REEF3D_CFD_WSF/REEF3D-CFD-WSF-HG.dat");
+    
+    if(p->P14==1)
+    wsfout.open("./REEF3D_CFD_WSF/REEF3D-CFD-WSF-HG.dat");
 
     wsfout<<"number of gauges:  "<<gauge_num<<endl<<endl;
     wsfout<<"x_coord     y_coord"<<endl;
@@ -80,17 +80,17 @@ print_wsf::print_wsf(lexer *p, fdm* a, ghostcell *pgc, int num)
 
     wsfout<<endl<<endl;
     }
-	
-	//-------------------
-	
-	if(p->mpirank==0 && p->P351>0 && num==1)
+    
+    //-------------------
+    
+    if(p->mpirank==0 && p->P351>0 && num==1)
     {
     // open file
-	if(p->P14==0)
+    if(p->P14==0)
     wsfout.open("REEF3D-CFD-WSF-HG-1.dat");
-	
-	if(p->P14==1)
-	wsfout.open("./REEF3D_CFD_WSF/REEF3D-CFD-WSF-HG-1.dat");
+    
+    if(p->P14==1)
+    wsfout.open("./REEF3D_CFD_WSF/REEF3D-CFD-WSF-HG-1.dat");
 
     wsfout<<"number of gauges:  "<<gauge_num<<endl<<endl;
     wsfout<<"x_coord     y_coord"<<endl;
@@ -105,17 +105,17 @@ print_wsf::print_wsf(lexer *p, fdm* a, ghostcell *pgc, int num)
 
     wsfout<<endl<<endl;
     }
-	
-	//-------------------
-	
-	if(p->mpirank==0 && p->P352>0 && num==2)
+    
+    //-------------------
+    
+    if(p->mpirank==0 && p->P352>0 && num==2)
     {
     // open file
-	if(p->P14==0)
+    if(p->P14==0)
     wsfout.open("REEF3D-CFD-WSF-HG-2.dat");
-	
-	if(p->P14==1)
-	wsfout.open("./REEF3D_CFD_WSF/REEF3D-CFD-WSF-HG-2.dat");
+    
+    if(p->P14==1)
+    wsfout.open("./REEF3D_CFD_WSF/REEF3D-CFD-WSF-HG-2.dat");
 
     wsfout<<"number of gauges:  "<<gauge_num<<endl<<endl;
     wsfout<<"x_coord     y_coord"<<endl;
@@ -130,11 +130,11 @@ print_wsf::print_wsf(lexer *p, fdm* a, ghostcell *pgc, int num)
 
     wsfout<<endl<<endl;
     }
-	
-	p->Iarray(iloc,gauge_num);
-	p->Iarray(jloc,gauge_num);
-	p->Iarray(flag,gauge_num);
-	p->Darray(wsf,gauge_num);
+    
+    p->Iarray(iloc,gauge_num);
+    p->Iarray(jloc,gauge_num);
+    p->Iarray(flag,gauge_num);
+    p->Darray(wsf,gauge_num);
 
     ini_location(p,a,pgc);
 }
@@ -151,7 +151,7 @@ void print_wsf::height_gauge(lexer *p, fdm *a, ghostcell *pgc, field &f)
     for(n=0;n<gauge_num;++n)
     wsf[n]=-1.0e20;
 
-	if(p->A10==6)
+    if(p->A10==6)
     for(n=0;n<gauge_num;++n)
     if(flag[n]>0)
     {
@@ -159,7 +159,7 @@ void print_wsf::height_gauge(lexer *p, fdm *a, ghostcell *pgc, field &f)
 
     i=iloc[n];
     j=jloc[n];
-	
+    
         KLOOP
         PCHECK
         {
@@ -176,11 +176,11 @@ void print_wsf::height_gauge(lexer *p, fdm *a, ghostcell *pgc, field &f)
 
     i=iloc[n];
     j=jloc[n];
-	
-			wsf[n] = a->eta(i,j);
+    
+            wsf[n] = a->eta(i,j);
 
     }
-	
+    
     for(n=0;n<gauge_num;++n)
     wsf[n]=pgc->globalmax(wsf[n]);
 

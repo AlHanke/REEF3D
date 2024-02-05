@@ -37,9 +37,9 @@ class onephase_f : public onephase, public ddweno_f_nug
 {
 public:
     onephase_f(lexer*, fdm*, ghostcell*);
-	virtual ~onephase_f();
+    virtual ~onephase_f();
     
-	virtual void update(lexer*, fdm*, ghostcell*, ioflow*);
+    virtual void update(lexer*, fdm*, ghostcell*, ioflow*);
     virtual void ini(lexer*, fdm*, ghostcell*, ioflow*);
     
     virtual void uvel(lexer*, fdm*, ghostcell*, field&);
@@ -59,7 +59,7 @@ private:
     int gcval_u, gcval_v, gcval_w;
     
     double dx, dy, dz, dnorm, sign,deltax;
-	double sx,sy,sz,snorm,op;
+    double sx,sy,sz,snorm,op;
     double dt;
     double lsv,lsSig;
     double xmin,xplus,ymin,yplus,zmin,zplus;

@@ -40,13 +40,13 @@ using namespace std;
 class sixdof_void : public sixdof
 {
 public:
-	sixdof_void(lexer*,ghostcell*);
-	virtual ~sixdof_void();
+    sixdof_void(lexer*,ghostcell*);
+    virtual ~sixdof_void();
     
     virtual void start_twoway(lexer*,fdm*,ghostcell*,vrans*,vector<net*>&,int,field&,field&,field&,field&,field&,field&,bool);
     virtual void start_oneway(lexer*,ghostcell*);
     
-	virtual void ini(lexer*,ghostcell*);
+    virtual void ini(lexer*,ghostcell*);
     virtual void initialize(lexer*, fdm*, ghostcell*, vector<net*>&);
 
     
@@ -66,8 +66,8 @@ private:
 
     vector<mooring*> pmooring;
 
-	vector<double> Xme, Yme, Zme, Kme, Mme, Nme;    
-	vector<double> Xne, Yne, Zne, Kne, Mne, Nne;    
+    vector<double> Xme, Yme, Zme, Kme, Mme, Nme;    
+    vector<double> Xne, Yne, Zne, Kne, Mne, Nne;    
 };
 
 #endif

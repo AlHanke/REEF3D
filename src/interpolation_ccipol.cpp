@@ -104,7 +104,7 @@ double interpolation::ccipol2(field& f, double xp, double yp, double zp)
     i = p->posc_i(xp);
     j = p->posf_j(yp)-1;
     k = p->posc_k(zp);
-		
+        
     // wa
     wa = (p->XP[IP1]-xp)/p->DXN[IP];
     
@@ -174,7 +174,7 @@ double interpolation::ccipol3(field& f, double xp, double yp, double zp)
     i = p->posc_i(xp);
     j = p->posc_j(yp);
     k = p->posf_k(zp)-1;
-		
+        
     // wa
     wa = (p->XP[IP1]-xp)/p->DXN[IP];
     
@@ -244,7 +244,7 @@ double interpolation::ccipol4(field& f, double xp, double yp, double zp)
     i = p->posc_i(xp);
     j = p->posc_j(yp);
     k = p->posc_k(zp);
-		
+        
     // wa
     wa = (p->XP[IP1]-xp)/p->DXN[IP];
     
@@ -314,7 +314,7 @@ double interpolation::ccipol4phi(fdm *a,field& f, double xp, double yp, double z
     i = p->posc_i(xp);
     j = p->posc_j(yp);
     k = p->posc_k(zp);
-		
+        
     // wa
     wa = (p->XP[IP1]-xp)/p->DXN[IP];
     
@@ -384,8 +384,8 @@ double interpolation::ccipol4press(fdm *a,field& f, double xp, double yp, double
     i = p->posc_i(xp);
     j = p->posc_j(yp);
     k = p->posc_k(zp);
-	
-    /*	
+    
+    /*    
     if(p->mpirank==0)
     {
     cout<<"i: "<<i<<" j: "<<j<<" k: "<<k<<endl;
@@ -462,7 +462,7 @@ double interpolation::ccipol1_a(field& f, double xp, double yp, double zp)
     i = p->posf_i(xp)-1;
     j = p->posc_j(yp);
     k = p->posc_k(zp);
-		
+        
         
     // wa
     wa = (p->XN[IP2]-xp)/p->DXP[IP1];
@@ -511,7 +511,7 @@ double interpolation::ccipol2_a(field& f, double xp, double yp, double zp)
     i = p->posc_i(xp);
     j = p->posf_j(yp)-1;
     k = p->posc_k(zp);
-		
+        
     // wa
     wa = (p->XP[IP1]-xp)/p->DXN[IP];
     
@@ -559,7 +559,7 @@ double interpolation::ccipol3_a(field& f, double xp, double yp, double zp)
     i = p->posc_i(xp);
     j = p->posc_j(yp);
     k = p->posf_k(zp)-1;
-		
+        
     // wa
     wa = (p->XP[IP1]-xp)/p->DXN[IP];
     
@@ -607,7 +607,7 @@ double interpolation::ccipol4_a(field& f, double xp, double yp, double zp)
     i = p->posc_i(xp);
     j = p->posc_j(yp);
     k = p->posc_k(zp);
-	
+    
     // wa
     wa = (p->XP[IP1]-xp)/p->DXN[IP];
     
@@ -678,7 +678,7 @@ double interpolation::ccipol4_b(field& f, double xp, double yp, double zp)
     i = p->posc_i(xp);
     j = p->posc_j(yp);
     k = p->posc_k(zp);
-	
+    
     // wa
     wa = (p->XP[IP1]-xp)/p->DXN[IP];
     
@@ -745,7 +745,7 @@ double interpolation::ccipol4_kin(field& f, double xp, double yp, double zp)
     i = p->posc_i(xp);
     j = p->posc_j(yp);
     k = p->posc_k(zp);
-	
+    
     // wa
     wa = (p->XP[IP1]-xp)/p->DXN[IP];
     

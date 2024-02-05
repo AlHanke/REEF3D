@@ -29,22 +29,22 @@ Author: Hans Bihs
 
 gage_discharge_window_x::gage_discharge_window_x(lexer *p, fdm* a, ghostcell *pgc)
 {
-	p->Iarray(iloc,p->P68);
-	p->Iarray(flag,p->P68);
-	p->Darray(q,p->P68);
-	
-	// Create Folder
-	if(p->mpirank==0 && p->P14==1)
-	mkdir("./REEF3D_Log",0777);
-	
+    p->Iarray(iloc,p->P68);
+    p->Iarray(flag,p->P68);
+    p->Darray(q,p->P68);
+    
+    // Create Folder
+    if(p->mpirank==0 && p->P14==1)
+    mkdir("./REEF3D_Log",0777);
+    
     if(p->mpirank==0 && p->P68>0)
     {
     // open file
-	if(p->P14==0)
+    if(p->P14==0)
     qout.open("REEF3D-discharge_window_x.dat");
-	
-	if(p->P14==1)
-	qout.open("./REEF3D_Log/REEF3D-discharge_window_x.dat");
+    
+    if(p->P14==1)
+    qout.open("./REEF3D_Log/REEF3D-discharge_window_x.dat");
 
     qout<<"number of x-discharge window gages:  "<<p->P68<<endl<<endl;
     qout<<"x_coord   zs   ze"<<endl;
@@ -59,8 +59,8 @@ gage_discharge_window_x::gage_discharge_window_x(lexer *p, fdm* a, ghostcell *pg
 
     qout<<endl<<endl;
     }
-	
-	ini_location(p,a,pgc);
+    
+    ini_location(p,a,pgc);
 }
 
 gage_discharge_window_x::~gage_discharge_window_x()
@@ -75,34 +75,34 @@ void gage_discharge_window_x::start(lexer *p, fdm *a, ghostcell *pgc)
     for(n=0;n<p->P68;++n)
     q[n]=0.0;
 
-	
+    
     for(n=0;n<p->P68;++n)
     {
-	area=0.0;
-	Ai=0.0;
+    area=0.0;
+    Ai=0.0;
 
     i=iloc[n];
-		
+        
         /*
         if(flag[n]==1)
         JLOOP
         KLOOP
         PCHECK
         {
-			area=0.0;
+            area=0.0;
             if(a->phi(i,j,k)>-0.5*p->DZN[KP]-1.0e-20 && a->topo(i,j,k)>0.0)
-			{
+            {
             if(a->phi(i,j,k)>=0.5*p->DZN[KP])
             area=p->DYN[JP]*p->DZN[KP];
 
             if(a->phi(i,j,k)<0.5*p->DZN[KP] && a->phi(i,j,k)>0.0)
             area=p->DYN[JP]*(p->DZN[KP]*0.5 + a->phi(i,j,k));
-			
-			if(a->phi(i,j,k)>=-0.5*p->DZN[KP] -1.0e-20 && a->phi(i,j,k)<=0.0*p->DZN[KP])
+            
+            if(a->phi(i,j,k)>=-0.5*p->DZN[KP] -1.0e-20 && a->phi(i,j,k)<=0.0*p->DZN[KP])
             area=p->DYN[JP]*(p->DZN[KP]*0.5 - fabs(a->phi(i,j,k)));
 
             q[n]+=area*0.5*(a->u(i,j,k) + a->u(i-1,j,k));
-			}
+            }
         }*/
         
         if(flag[n]==1)
@@ -125,18 +125,18 @@ void gage_discharge_window_x::start(lexer *p, fdm *a, ghostcell *pgc)
             area=H*p->DYN[JP]*p->DZN[KP];
 
             q[n]+=area*0.5*(a->u(i,j,k) + a->u(i-1,j,k));
-			
+            
         }
-	
+    
     }
-	
-	
+    
+    
     for(n=0;n<p->P68;++n)
     q[n]=pgc->globalsum(q[n]);
-	
-	if(p->mpirank==0 && p->P66==1)
-	for(n=0;n<p->P68;++n)
-	cout<<n+1<<setprecision(6)<<" Qi: "<<q[n]<<endl;  
+    
+    if(p->mpirank==0 && p->P66==1)
+    for(n=0;n<p->P68;++n)
+    cout<<n+1<<setprecision(6)<<" Qi: "<<q[n]<<endl;  
 
     // write to file
     if(p->mpirank==0)
@@ -150,16 +150,16 @@ void gage_discharge_window_x::start(lexer *p, fdm *a, ghostcell *pgc)
 
 void gage_discharge_window_x::ini_location(lexer *p, fdm *a, ghostcell *pgc)
 {
-	
-	for(n=0;n<p->P68;++n)
-	flag[n]=0;
+    
+    for(n=0;n<p->P68;++n)
+    flag[n]=0;
 
     for(n=0;n<p->P68;++n)
     {
     iloc[n] = p->posc_i(p->P68_x[n]);
-	
-	if(iloc[n]>=0 && iloc[n]<p->knox)
-	flag[n]=1;
-	}
+    
+    if(iloc[n]>=0 && iloc[n]<p->knox)
+    flag[n]=1;
+    }
 }
 

@@ -34,16 +34,16 @@ using namespace std;
 class sflow_csfou : public sflow_convection, public increment
 {
 public:
-	sflow_csfou(lexer*,fdm2D*);
-	virtual ~sflow_csfou();
+    sflow_csfou(lexer*,fdm2D*);
+    virtual ~sflow_csfou();
 
-	virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
+    virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
 
 private:
     double aij(lexer*, fdm2D*, slice&, int, slice&, slice&);
-	
-	double dx,dy,L;
-	double ul,ur,vl,vr;
+    
+    double dx,dy,L;
+    double ul,ur,vl,vr;
     
     sflow_flux *pflux;
     

@@ -26,37 +26,37 @@ Author: Hans Bihs
 void mgc1::fillgcb(lexer *p)
 {
     int q,n;
-	
-	p->Iarray(p->fgc,imax*jmax*kmax,6);
+    
+    p->Iarray(p->fgc,imax*jmax*kmax,6);
 
 
-	if(p->gcb1_count!=p->gcb4_count)
-	{
-	p->Iresize(p->gcb1,p->gcb1_count, p->gcb4_count, 6, 6); 	
-	p->Dresize(p->gcd1,p->gcb1_count, p->gcb4_count); 
-	
-	p->gcb1_count=p->gcb4_count;
-	}
-	
-	
-	QGCB4
-	{
-	for(n=0;n<5;++n)
-	p->gcb1[q][n]=p->gcb4[q][n];
+    if(p->gcb1_count!=p->gcb4_count)
+    {
+    p->Iresize(p->gcb1,p->gcb1_count, p->gcb4_count, 6, 6);     
+    p->Dresize(p->gcd1,p->gcb1_count, p->gcb4_count); 
+    
+    p->gcb1_count=p->gcb4_count;
+    }
+    
+    
+    QGCB4
+    {
+    for(n=0;n<5;++n)
+    p->gcb1[q][n]=p->gcb4[q][n];
 
     if(p->gcb1[q][3]==1 || p->gcb1[q][3]==4)
-	p->gcd1[q]=p->gcd4[q];
+    p->gcd1[q]=p->gcd4[q];
 
-	if(p->gcb1[q][3]!=1 && p->gcb1[q][3]!=4)
-	p->gcd1[q]=p->gcd4[q];
-	}
-	
+    if(p->gcb1[q][3]!=1 && p->gcb1[q][3]!=4)
+    p->gcd1[q]=p->gcd4[q];
+    }
+    
 
     QGC1LOOP
-	{
-	    i=p->gcb1[q][0];
-		j=p->gcb1[q][1];
-		k=p->gcb1[q][2];
+    {
+        i=p->gcb1[q][0];
+        j=p->gcb1[q][1];
+        k=p->gcb1[q][2];
         
         if(p->gcb1[q][3]==1 || p->gcb1[q][3]==4)
         {
@@ -64,62 +64,62 @@ void mgc1::fillgcb(lexer *p)
         
         }
 
-		p->fgc[IJK][p->gcb1[q][3]-1]=1;
-	}
+        p->fgc[IJK][p->gcb1[q][3]-1]=1;
+    }
 
 
-	QGC1LOOP
-	{
-	    i=p->gcb1[q][0];
-		j=p->gcb1[q][1];
-		k=p->gcb1[q][2];
+    QGC1LOOP
+    {
+        i=p->gcb1[q][0];
+        j=p->gcb1[q][1];
+        k=p->gcb1[q][2];
 
             if(p->gcb1[q][3]==4 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
             p->gcb1[q][0]-=1;
-		
-	}
+        
+    }
     
     QGC1LOOP
-	{
-	    i=p->gcb1[q][0];
-		j=p->gcb1[q][1];
-		k=p->gcb1[q][2];
+    {
+        i=p->gcb1[q][0];
+        j=p->gcb1[q][1];
+        k=p->gcb1[q][2];
 
             if(p->gcb1[q][3]!=4 && p->fgc[IJK][3]==1 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
             p->gcb1[q][3]=-fabs(p->gcb1[q][3]);
-		
-	}
+        
+    }
 }
 
 void mgc1::extragcb(lexer *p)
-{	
+{    
     int count;
     int q,n,l;
 
-	for(n=0;n<imax*jmax*kmax;++n)
-	for(q=0;q<6;++q)
-	p->fgc[n][q]=0;
+    for(n=0;n<imax*jmax*kmax;++n)
+    for(q=0;q<6;++q)
+    p->fgc[n][q]=0;
 
     QGC1LOOP
-	{
-	    i=p->gcb1[q][0];
-		j=p->gcb1[q][1];
-		k=p->gcb1[q][2];
+    {
+        i=p->gcb1[q][0];
+        j=p->gcb1[q][1];
+        k=p->gcb1[q][2];
 
-		p->fgc[IJK][p->gcb1[q][3]-1]=1;
-	}
-	
+        p->fgc[IJK][p->gcb1[q][3]-1]=1;
+    }
+    
     count=p->gcb1_count;
-	
+    
 // Find number of extragcb
 
-	ULOOP
+    ULOOP
     {
         if(p->flag1[Im1JK]<0)
         if(p->fgc[IJK][0]==0)
         ++count;
-		
-		if(p->flag1[IJp1K]<0)
+        
+        if(p->flag1[IJp1K]<0)
         if(p->fgc[IJK][1]==0)
         ++count;
 
@@ -161,59 +161,59 @@ void mgc1::extragcb(lexer *p)
         ++count;
     }
 
-	for(q=0;q<p->gcpara5_count;++q)
-	{
+    for(q=0;q<p->gcpara5_count;++q)
+    {
     i=p->gcpara5[q][0];
     j=p->gcpara5[q][1];
     k=p->gcpara5[q][2];
         
         if(p->flag1[IJK]==0 && p->flag1[IJKm1]==1)
         ++count;
-	}
+    }
 
-	for(q=0;q<p->gcpara4_count;++q)
-	{
+    for(q=0;q<p->gcpara4_count;++q)
+    {
     i=p->gcpara4[q][0]+1;
     j=p->gcpara4[q][1];
     k=p->gcpara4[q][2];
         
         if(p->flag1[IJK]==0 && p->flag1[Ip1JK]==1)
         ++count;
-	}
+    }
 
-	for(q=0;q<p->gcpara2_count;++q)
-	{
+    for(q=0;q<p->gcpara2_count;++q)
+    {
     i=p->gcpara2[q][0];
     j=p->gcpara2[q][1]+1;
     k=p->gcpara2[q][2];
         
         if(p->flag1[IJK]==0 && p->flag1[IJp1K]==1)
         ++count;
-	}
+    }
 
-	for(q=0;q<p->gcpara6_count;++q)
-	{
-	i=p->gcpara6[q][0];
+    for(q=0;q<p->gcpara6_count;++q)
+    {
+    i=p->gcpara6[q][0];
     j=p->gcpara6[q][1];
     k=p->gcpara6[q][2]+1;
         
         if(p->flag1[IJK]==0 && p->flag1[IJKp1]==1)
         ++count;
-	}
-	//cout<<p->mpirank<<" old gcb1: "<<p->gcb1_count<<" new gcb1: "<<count<<endl;
-	
-	if(p->gcb1_count!=count)
-	{
-	p->Iresize(p->gcb1,p->gcb1_count, count, 6, 6); 
-	p->Dresize(p->gcd1,p->gcb1_count, count); 
-	}
+    }
+    //cout<<p->mpirank<<" old gcb1: "<<p->gcb1_count<<" new gcb1: "<<count<<endl;
+    
+    if(p->gcb1_count!=count)
+    {
+    p->Iresize(p->gcb1,p->gcb1_count, count, 6, 6); 
+    p->Dresize(p->gcd1,p->gcb1_count, count); 
+    }
 
 // Store extragcb in gcb vec
-	
-	count=p->gcb1_count;
-	
+    
+    count=p->gcb1_count;
+    
     ULOOP
-    {	
+    {    
         if(p->flag1[Im1JK]<0)
         if(p->fgc[IJK][0]==0)
         {
@@ -230,13 +230,13 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[Im1JK]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[Im1JK]==FLT)
+        
+        if(p->flag1[Im1JK]==FLT)
         p->gcb1[count][4]=41;
         ++count;
         }
-		
-		if(p->flag1[IJp1K]<0)
+        
+        if(p->flag1[IJp1K]<0)
         if(p->fgc[IJK][1]==0)
         {
         p->gcb1[count][0]=i;
@@ -252,8 +252,8 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[IJp1K]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[IJp1K]==FLT)
+        
+        if(p->flag1[IJp1K]==FLT)
         p->gcb1[count][4]=41;
         ++count;
         }
@@ -274,8 +274,8 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[IJm1K]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[IJm1K]==FLT)
+        
+        if(p->flag1[IJm1K]==FLT)
         p->gcb1[count][4]=41;
         ++count;
         }
@@ -296,8 +296,8 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[Ip1JK]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[Ip1JK]==FLT)
+        
+        if(p->flag1[Ip1JK]==FLT)
         p->gcb1[count][4]=41;
         ++count;
         }
@@ -318,8 +318,8 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[IJKm1]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[IJKm1]==FLT)
+        
+        if(p->flag1[IJKm1]==FLT)
         p->gcb1[count][4]=41;
 
         ++count;
@@ -341,8 +341,8 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[IJKp1]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[IJKp1]==FLT)
+        
+        if(p->flag1[IJKp1]==FLT)
         p->gcb1[count][4]=41;
         ++count;
         }
@@ -371,8 +371,8 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[IJK]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[IJK]==FLT)
+        
+        if(p->flag1[IJK]==FLT)
         p->gcb1[count][4]=41;
         ++count;
         }
@@ -399,15 +399,15 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[IJK]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[IJK]==FLT)
+        
+        if(p->flag1[IJK]==FLT)
         p->gcb1[count][4]=41;
         ++count;
         }
     }
 
-	for(q=0;q<p->gcpara5_count;++q)
-	{
+    for(q=0;q<p->gcpara5_count;++q)
+    {
     i=p->gcpara5[q][0];
     j=p->gcpara5[q][1];
     k=p->gcpara5[q][2];
@@ -427,15 +427,15 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[IJK]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[IJK]==FLT)
+        
+        if(p->flag1[IJK]==FLT)
         p->gcb1[count][4]=41;
         ++count;
         }
-	}
+    }
 
-	for(q=0;q<p->gcpara4_count;++q)
-	{
+    for(q=0;q<p->gcpara4_count;++q)
+    {
     i=p->gcpara4[q][0]+1;
     j=p->gcpara4[q][1];
     k=p->gcpara4[q][2];
@@ -455,15 +455,15 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[IJK]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[IJK]==FLT)
+        
+        if(p->flag1[IJK]==FLT)
         p->gcb1[count][4]=41;
         ++count;
         }
-	}
+    }
 
-	for(q=0;q<p->gcpara2_count;++q)
-	{
+    for(q=0;q<p->gcpara2_count;++q)
+    {
     i=p->gcpara2[q][0];
     j=p->gcpara2[q][1]+1;
     k=p->gcpara2[q][2];
@@ -483,16 +483,16 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[IJK]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[IJK]==FLT)
+        
+        if(p->flag1[IJK]==FLT)
         p->gcb1[count][4]=41;
         ++count;
         }
-	}
+    }
 
-	for(q=0;q<p->gcpara6_count;++q)
-	{
-	i=p->gcpara6[q][0];
+    for(q=0;q<p->gcpara6_count;++q)
+    {
+    i=p->gcpara6[q][0];
     j=p->gcpara6[q][1];
     k=p->gcpara6[q][2]+1;
         
@@ -511,38 +511,38 @@ void mgc1::extragcb(lexer *p)
         
         if(p->flag1[IJK]==SOLID)
         p->gcb1[count][4]=22;
-		
-		if(p->flag1[IJK]==FLT)
+        
+        if(p->flag1[IJK]==FLT)
         p->gcb1[count][4]=41;
         ++count;
         }
-	}
-	
+    }
+    
 
     for(q=p->gcb1_count;q<count;++q)
     {
-		if(p->gcb1[q][3]==1 || p->gcb1[q][3]==4)
-		p->gcd1[q]=0.5*p->DXM;
+        if(p->gcb1[q][3]==1 || p->gcb1[q][3]==4)
+        p->gcd1[q]=0.5*p->DXM;
 
-		if(p->gcb1[q][3]!=1 && p->gcb1[q][3]!=4)
-		p->gcd1[q]=p->DXM;
+        if(p->gcb1[q][3]!=1 && p->gcb1[q][3]!=4)
+        p->gcd1[q]=p->DXM;
     }
-	
+    
     p->gcb1_count=count;
-	
+    
    
     // remove unactive gcb
-	QGC1LOOP
-	{
-	    i=p->gcb1[q][0];
-		j=p->gcb1[q][1];
-		k=p->gcb1[q][2];
+    QGC1LOOP
+    {
+        i=p->gcb1[q][0];
+        j=p->gcb1[q][1];
+        k=p->gcb1[q][2];
         if(p->flag1[IJK]<0)
         p->gcb1[q][3]=-fabs(p->gcb1[q][3]);
-	}
+    }
     
-	p->del_Iarray(p->fgc,imax*jmax*kmax,6);
-	
+    p->del_Iarray(p->fgc,imax*jmax*kmax,6);
+    
 }
 
 

@@ -30,23 +30,23 @@ Author: Hans Bihs
 sflow_print_bed::sflow_print_bed(lexer *p, fdm2D* b)
 {
 
-	gauge_num = p->P121;
-	x = p->P121_x;
-	y = p->P121_y;
+    gauge_num = p->P121;
+    x = p->P121_x;
+    y = p->P121_y;
 
-	
-	// Create Folder
-	if(p->mpirank==0 && p->P14==1)
-	mkdir("./REEF3D_SFLOW_BED",0777);
-	
+    
+    // Create Folder
+    if(p->mpirank==0 && p->P14==1)
+    mkdir("./REEF3D_SFLOW_BED",0777);
+    
     if(p->mpirank==0 && p->P121>0)
     {
     // open file
-	if(p->P14==0)
+    if(p->P14==0)
     bedout.open("REEF3D-SFLOW-BED-HG.dat");
-	
-	if(p->P14==1)
-	bedout.open("./REEF3D_SFLOW_BED/REEF3D-SFLOW-BED-HG.dat");
+    
+    if(p->P14==1)
+    bedout.open("./REEF3D_SFLOW_BED/REEF3D-SFLOW-BED-HG.dat");
 
     bedout<<"number of gauges:  "<<gauge_num<<endl<<endl;
     bedout<<"x_coord     y_coord"<<endl;
@@ -61,14 +61,14 @@ sflow_print_bed::sflow_print_bed(lexer *p, fdm2D* b)
 
     bedout<<endl<<endl;
     }
-	
-	//-------------------
-	
-	
-	p->Iarray(iloc,gauge_num);
-	p->Iarray(jloc,gauge_num);
-	p->Iarray(flag,gauge_num);
-	p->Darray(bed,gauge_num);
+    
+    //-------------------
+    
+    
+    p->Iarray(iloc,gauge_num);
+    p->Iarray(jloc,gauge_num);
+    p->Iarray(flag,gauge_num);
+    p->Darray(bed,gauge_num);
 
     ini_location(p,b);
 }
@@ -85,7 +85,7 @@ void sflow_print_bed::height_gauge(lexer *p, fdm2D *b, ghostcell *pgc, slice &f)
     for(n=0;n<gauge_num;++n)
     bed[n]=-1.0e20;
 
-	
+    
     for(n=0;n<gauge_num;++n)
     if(flag[n]>0)
     {
@@ -93,11 +93,11 @@ void sflow_print_bed::height_gauge(lexer *p, fdm2D *b, ghostcell *pgc, slice &f)
 
     i=iloc[n];
     j=jloc[n];
-	
-			bed[n] = f(i,j);
+    
+            bed[n] = f(i,j);
 
     }
-	
+    
     for(n=0;n<gauge_num;++n)
     bed[n]=pgc->globalmax(bed[n]);
 

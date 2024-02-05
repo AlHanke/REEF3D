@@ -31,9 +31,9 @@ class onephase_v : public onephase
 {
 public:
     onephase_v(lexer*, fdm*, ghostcell*);
-	virtual ~onephase_v();
+    virtual ~onephase_v();
     
-	virtual void update(lexer*, fdm*, ghostcell*, ioflow*);
+    virtual void update(lexer*, fdm*, ghostcell*, ioflow*);
     virtual void ini(lexer*, fdm*, ghostcell*, ioflow*);
     
     virtual void uvel(lexer*, fdm*, ghostcell*, field&);

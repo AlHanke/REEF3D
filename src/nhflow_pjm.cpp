@@ -37,7 +37,7 @@ nhflow_pjm::nhflow_pjm(lexer* p, fdm_nhf *d, ghostcell *pgc, patchBC_interface *
 {
     pBC = ppBC;
     
-	pd = new density_f(p);
+    pd = new density_f(p);
 
     ppois = new nhflow_poisson(p);
 
@@ -80,26 +80,26 @@ void nhflow_pjm::start(lexer *p, fdm_nhf *d, solver* psolv, ghostcell* pgc, iofl
 
         endtime=pgc->timer();
 
-	pgc->start7P(p,d->P,gcval_press);
+    pgc->start7P(p,d->P,gcval_press);
 
-	ucorr(p,d,WL,UH,d->P,alpha);
-	vcorr(p,d,WL,VH,d->P,alpha);
-	wcorr(p,d,WL,WH,d->P,alpha);
+    ucorr(p,d,WL,UH,d->P,alpha);
+    vcorr(p,d,WL,VH,d->P,alpha);
+    wcorr(p,d,WL,WH,d->P,alpha);
 
     p->poissoniter=p->solveriter;
 
-	p->poissontime=endtime-starttime;
+    p->poissontime=endtime-starttime;
 
-	if(p->mpirank==0 && p->count%p->P12==0)
-	cout<<"piter: "<<p->solveriter<<"  ptime: "<<setprecision(3)<<p->poissontime<<endl;
+    if(p->mpirank==0 && p->count%p->P12==0)
+    cout<<"piter: "<<p->solveriter<<"  ptime: "<<setprecision(3)<<p->poissontime<<endl;
 }
 
 void nhflow_pjm::ucorr(lexer* p, fdm_nhf *d, slice &WL, double *UH, double *P, double alpha)
 {
-	LOOP
+    LOOP
     WETDRYDEEP
     if(d->breaking(i,j)==0 && d->breaking(i-1,j)==0 && d->breaking(i+1,j)==0)
-	UH[IJK] -= alpha*p->dt*CPORNH*PORVALNH*WL(i,j)*(1.0/p->W1)*
+    UH[IJK] -= alpha*p->dt*CPORNH*PORVALNH*WL(i,j)*(1.0/p->W1)*
     
                 (((0.5*(d->P[FIp1JKp1]+d->P[FIp1JK])-0.5*(d->P[FIm1JKp1]+d->P[FIm1JK]))/(p->DXP[IP]+p->DXP[IM1]))
                 
@@ -124,7 +124,7 @@ void nhflow_pjm::wcorr(lexer* p, fdm_nhf *d, slice &WL, double *WH, double *P, d
     LOOP
     WETDRYDEEP
     if(d->breaking(i,j)==0 && d->breaking(i-1,j)==0 && d->breaking(i+1,j)==0 && d->breaking(i,j-1)==0 && d->breaking(i,j+1)==0)
-	WH[IJK] -= wfac*alpha*p->dt*CPORNH*PORVALNH*(1.0/p->W1)*((d->P[FIJKp1]-d->P[FIJK])/(p->DZN[KP]));
+    WH[IJK] -= wfac*alpha*p->dt*CPORNH*PORVALNH*(1.0/p->W1)*((d->P[FIJKp1]-d->P[FIJK])/(p->DZN[KP]));
 }
 
 void nhflow_pjm::rhs(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U, double *V, double *W, double alpha)
@@ -141,7 +141,7 @@ void nhflow_pjm::rhs(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U, double *V,
     n=0;
     FLOOP
     {
-	d->rhsvec.V[n]=0.0;
+    d->rhsvec.V[n]=0.0;
     ++n;
     }
 
@@ -252,7 +252,7 @@ void nhflow_pjm::vpgrad(lexer*p,fdm_nhf *d, slice &WL)
 {
     LOOP
     //WETDRY
-	d->G[IJK] += PORVALNH*0.5*(d->ETAe(i,j)+d->ETAw(i,j-1))*fabs(p->W22)*
+    d->G[IJK] += PORVALNH*0.5*(d->ETAe(i,j)+d->ETAw(i,j-1))*fabs(p->W22)*
                  (d->dfy(i,j) - d->dfy(i,j-1))/(p->DYN[JP]);
 }
 

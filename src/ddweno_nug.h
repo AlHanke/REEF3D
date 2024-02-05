@@ -39,20 +39,20 @@ class ddweno_nug : public weno_nug_func
 {
 public:
 
-	 ddweno_nug(lexer*);
-	 ~ddweno_nug();
+     ddweno_nug(lexer*);
+     ~ddweno_nug();
 
-	 double ddwenox(fdm*, vec&, double, int, cpt&);
-	 double ddwenoy(fdm*, vec&, double, int, cpt&);
-	 double ddwenoz(fdm*, vec&, double, int, cpt&);
+     double ddwenox(fdm*, vec&, double, int, cpt&);
+     double ddwenoy(fdm*, vec&, double, int, cpt&);
+     double ddwenoz(fdm*, vec&, double, int, cpt&);
 
 
-	void iqmin(vec&, cpt&);
-	void jqmin(vec&, cpt&);
-	void kqmin(vec&, cpt&);
-	void iqmax(vec&, cpt&);
-	void jqmax(vec&, cpt&);
-	void kqmax(vec&, cpt&);
+    void iqmin(vec&, cpt&);
+    void jqmin(vec&, cpt&);
+    void kqmin(vec&, cpt&);
+    void iqmax(vec&, cpt&);
+    void jqmax(vec&, cpt&);
+    void kqmax(vec&, cpt&);
 
     double grad;
     double *DX,*DY,*DZ;

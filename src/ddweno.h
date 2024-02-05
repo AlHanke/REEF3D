@@ -38,37 +38,37 @@ class ddweno : virtual public increment
 {
 public:
 
-	 ddweno(lexer*);
-	 ~ddweno();
+     ddweno(lexer*);
+     ~ddweno();
 
-	 double ddwenox(fdm*, vec&, double, cpt&);
-	 double ddwenoy(fdm*, vec&, double, cpt&);
-	 double ddwenoz(fdm*, vec&, double, cpt&);
-	 
+     double ddwenox(fdm*, vec&, double, cpt&);
+     double ddwenoy(fdm*, vec&, double, cpt&);
+     double ddwenoz(fdm*, vec&, double, cpt&);
+     
 
-	 const double dx;
+     const double dx;
 
-	double grad;
+    double grad;
 
 
-	void iqmin(vec&, double, cpt&);
-	void jqmin(vec&, double, cpt&);
-	void kqmin(vec&, double, cpt&);
-	void iqmax(vec&, double, cpt&);
-	void jqmax(vec&, double, cpt&);
-	void kqmax(vec&, double, cpt&);
+    void iqmin(vec&, double, cpt&);
+    void jqmin(vec&, double, cpt&);
+    void kqmin(vec&, double, cpt&);
+    void iqmax(vec&, double, cpt&);
+    void jqmax(vec&, double, cpt&);
+    void kqmax(vec&, double, cpt&);
 
-	const double tttw,fourth,third,sevsix,elvsix,sixth,fivsix,tenth;
-	const double sixten,treten;
-	const double epsilon,smallnum;
-	double is1,is2,is3;
-	double alpha1,alpha2,alpha3;
-	double w1,w2,w3;
-	double q1,q2,q3,q4,q5;
+    const double tttw,fourth,third,sevsix,elvsix,sixth,fivsix,tenth;
+    const double sixten,treten;
+    const double epsilon,smallnum;
+    double is1,is2,is3;
+    double alpha1,alpha2,alpha3;
+    double w1,w2,w3;
+    double q1,q2,q3,q4,q5;
 
-	void is();
-	void alpha();
-	void weight();
+    void is();
+    void alpha();
+    void weight();
 };
 
 #endif

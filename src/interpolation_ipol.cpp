@@ -268,9 +268,9 @@ double interpolation::ipol4press( field& b)
 
 double interpolation::ipol4ro(fdm *a, field& b)
 {
-	double phival,H,roval;
-	double epsi=1.6*p->DXM;
-	
+    double phival,H,roval;
+    double epsi=1.6*p->DXM;
+    
     v1=v2=v3=v4=v5=v6=v7=v8=0.0;
 
     pip=4;
@@ -293,18 +293,18 @@ double interpolation::ipol4ro(fdm *a, field& b)
     pip=0;
 
     phival=0.125*(v1+v2+v3+v4+v5+v6+v7+v8);
-	
-	if(phival>epsi)
-	H=1.0;
+    
+    if(phival>epsi)
+    H=1.0;
 
-	if(phival<-epsi)
-	H=0.0;
+    if(phival<-epsi)
+    H=0.0;
 
-	if(fabs(phival)<=epsi)
-	H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
-		
-	roval = p->W1*H + p->W3*(1.0-H);
-	
+    if(fabs(phival)<=epsi)
+    H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
+        
+    roval = p->W1*H + p->W3*(1.0-H);
+    
     return roval;
 }
 
@@ -312,10 +312,10 @@ double interpolation::ipol4ro(fdm *a, field& b)
 double interpolation::ipol4phi(fdm *a, field& b)
 {
     double epphi=1.6*p->DXM;
-	double epphi2=0.6*p->DXM;
+    double epphi2=0.6*p->DXM;
     v1=v2=v3=v4=v5=v6=v7=v8 = p->phimean-p->pos_z()-0.5*p->DXM;
 
-	pip=4;
+    pip=4;
     if(a->topo(i,j,k)>-epphi)// && a->fb(i,j,k)>-epphi2)
     v1=b(i,j,k);
     if(a->topo(i,j+1,k)>-epphi)// && a->fb(i,j+1,k)>-epphi2)
@@ -333,11 +333,11 @@ double interpolation::ipol4phi(fdm *a, field& b)
     if(a->topo(i+1,j+1,k+1)>-epphi)// && a->fb(i+1,j+1,k+1)>-epphi2)
     v8=b(i+1,j+1,k+1);
     pip=0;
-	
-	 value=0.125*(v1+v2+v3+v4+v5+v6+v7+v8);
-	 
-	 return value;
-	
+    
+     value=0.125*(v1+v2+v3+v4+v5+v6+v7+v8);
+     
+     return value;
+    
 }
 
 double interpolation::ipol4_a( field& b)
@@ -357,7 +357,7 @@ double interpolation::ipol4topo(fdm *a, field& b)
 
     v1=v2=v3=v4=v5=v6=v7=v8 = p->S57-p->pos_z()-0.5*p->DXM;
 
-	pip=4;
+    pip=4;
     if(a->solid(i,j,k)>-epphi)
     v1=b(i,j,k);
     if(a->solid(i,j+1,k)>-epphi)
@@ -375,11 +375,11 @@ double interpolation::ipol4topo(fdm *a, field& b)
     if(a->solid(i+1,j+1,k+1)>-epphi)
     v8=b(i+1,j+1,k+1);
     pip=0;
-	
+    
     value=0.125*(v1+v2+v3+v4+v5+v6+v7+v8);
-	 
+     
     return value;
-	
+    
 }
 
 

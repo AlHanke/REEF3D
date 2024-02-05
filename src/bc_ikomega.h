@@ -34,22 +34,22 @@ using namespace std;
 class bc_ikomega : public roughness
 {
 public:
-	bc_ikomega(lexer*);
-	virtual ~bc_ikomega();
-	void bckomega_start(fdm*,lexer*,field&,field&, int);
+    bc_ikomega(lexer*);
+    virtual ~bc_ikomega();
+    void bckomega_start(fdm*,lexer*,field&,field&, int);
     void bckin_matrix(fdm*,lexer*,field&,field&);
     void bcomega_matrix(fdm*,lexer*,field&,field&);
-	void wall_law_kin(fdm*,lexer*,field&,field&,int,int,int,int,int,int,double);
-	void wall_law_omega(fdm*,lexer*,field&,field&,int,int,int,int,int,int,double);
+    void wall_law_kin(fdm*,lexer*,field&,field&,int,int,int,int,int,int,double);
+    void wall_law_omega(fdm*,lexer*,field&,field&,int,int,int,int,int,int,double);
     void wall_law_kin_df(fdm*,lexer*,field&,field&);
     void wall_law_omega_df(fdm*,lexer*,field&,field&);
 
 private:
-	double uplus,ks_plus,dist,ks,ustar,u_abs,eps_star,tau;
-	int ii,jj,kk;
-	int count,q;
-	double fac,value;
-	double kappa;
+    double uplus,ks_plus,dist,ks,ustar,u_abs,eps_star,tau;
+    int ii,jj,kk;
+    int count,q;
+    double fac,value;
+    double kappa;
 
 };
 #endif

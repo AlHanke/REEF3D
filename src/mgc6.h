@@ -34,36 +34,36 @@ class mgc6 :  public increment
 {
 public:
 
-	mgc6 (lexer *);
-	virtual ~mgc6();
+    mgc6 (lexer *);
+    virtual ~mgc6();
 
     //mgc6
-	void makemgc(lexer*);
-	void resizegcb(lexer*,int);
-	void mgcsetup(lexer*);
-	void gcdirfill(lexer*);
-	void fillmgc(lexer*);
-	void gcsidefill(lexer*);
-	void check_gcb_nbx(lexer*,ghostcell*);
+    void makemgc(lexer*);
+    void resizegcb(lexer*,int);
+    void mgcsetup(lexer*);
+    void gcdirfill(lexer*);
+    void fillmgc(lexer*);
+    void gcsidefill(lexer*);
+    void check_gcb_nbx(lexer*,ghostcell*);
     
     // ggc
-	void make_ggc(lexer*);
-	void fill_ggc(lexer*);
+    void make_ggc(lexer*);
+    void fill_ggc(lexer*);
     
     // dgc
     void make_dgc(lexer*);
     void fill_dgc(lexer*);
-	
-	int imin,imax,jmax,jmin,kmin,kmax;
-	int gcdirsize;
-	int ggcsize;
-	
+    
+    int imin,imax,jmax,jmin,kmin,kmax;
+    int gcdirsize;
+    int ggcsize;
+    
 private:
-	int di,dj,dk;
-	int qn;
+    int di,dj,dk;
+    int qn;
     
     int *hgc;
-	
+    
 };
 
 #endif

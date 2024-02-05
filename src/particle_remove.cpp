@@ -40,21 +40,21 @@ void particle_f::remove(lexer* p, fdm* a, ghostcell* pgc)
             k = p->posc_k(pos[n][2]);
 
             check=boundcheck(p,a,i,j,k,1);
-			
-			// remove particle_fs too far away from ls
+            
+            // remove particle_fs too far away from ls
             if(check==1)
             if(p->flag5[IJK]>0  || fabs(pos[n][3])>epsi)
             {
-			pcount++;
+            pcount++;
             posflag[n]=0;
             posmem[pcount]=n;
             removed++;
             }
-			
-			// remove out of bounds particle_fs
+            
+            // remove out of bounds particle_fs
             if(check==0)
             {
-			pcount++;
+            pcount++;
             posflag[n]=0;
             posmem[pcount]=n;
             removed++;

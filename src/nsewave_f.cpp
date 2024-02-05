@@ -44,22 +44,22 @@ Author: Hans Bihs
 nsewave_f::nsewave_f(lexer *p, fdm *a, ghostcell *pgc, heat *&pheat, concentration *&pconc) : 
                 depth(p),bed(p),L(p),hp(p),hx(p),hy(p)
 {
-	// bed ini
-	SLICELOOP4
-	bed(i,j) = p->bed[IJ];
-	pgc->gcsl_start4(p,bed,50);
-	
+    // bed ini
+    SLICELOOP4
+    bed(i,j) = p->bed[IJ];
+    pgc->gcsl_start4(p,bed,50);
+    
     if(p->F50==1)
-	gcval_phi=51;
+    gcval_phi=51;
 
-	if(p->F50==2)
-	gcval_phi=52;
+    if(p->F50==2)
+    gcval_phi=52;
 
-	if(p->F50==3)
-	gcval_phi=53;
+    if(p->F50==3)
+    gcval_phi=53;
 
-	if(p->F50==4)
-	gcval_phi=54;
+    if(p->F50==4)
+    gcval_phi=54;
 
     pupdate = new fluid_update_fsf(p,a,pgc);
     
@@ -94,10 +94,10 @@ void nsewave_f::start(lexer* p, fdm* a, ghostcell* pgc, momentum *pmom, diffusio
     
     // fill eta_n
     SLICELOOP4
-	{
+    {
     a->eta_n(i,j) = a->eta(i,j);
-	L(i,j)=0.0;
-	}
+    L(i,j)=0.0;
+    }
     pgc->gcsl_start4(p,a->eta_n,gcval_phi);
     
     
@@ -108,56 +108,56 @@ void nsewave_f::start(lexer* p, fdm* a, ghostcell* pgc, momentum *pmom, diffusio
     SLICELOOP2
     a->Q(i,j)=0.0;
 
-	
+    
     IULOOP
-	JULOOP
+    JULOOP
     {
-		KULOOP
+        KULOOP
         UFLUIDCHECK
-		{
-		phival = 0.5*(a->phi(i,j,k)+a->phi(i+1,j,k));
+        {
+        phival = 0.5*(a->phi(i,j,k)+a->phi(i+1,j,k));
         
-		
-			if(phival>epsi)
-			H=1.0;
+        
+            if(phival>epsi)
+            H=1.0;
 
-			if(phival<-epsi)
-			H=0.0;
+            if(phival<-epsi)
+            H=0.0;
 
-			if(fabs(phival)<=epsi)
-			H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
-			
-			a->P(i,j) += a->u(i,j,k)*p->DZN[KP]*H;
-		}
+            if(fabs(phival)<=epsi)
+            H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
+            
+            a->P(i,j) += a->u(i,j,k)*p->DZN[KP]*H;
+        }
     }
     
     IVLOOP
-	JVLOOP
-	{	
-			KVLOOP
+    JVLOOP
+    {    
+            KVLOOP
             VFLUIDCHECK
-			{
-			 phival = 0.5*(a->phi(i,j,k)+a->phi(i,j+1,k));
-			
-				if(phival>epsi)
-				H=1.0;
+            {
+             phival = 0.5*(a->phi(i,j,k)+a->phi(i,j+1,k));
+            
+                if(phival>epsi)
+                H=1.0;
 
-				if(phival<-epsi)
-				H=0.0;
+                if(phival<-epsi)
+                H=0.0;
 
-				if(fabs(phival)<=epsi)
-				H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
-				
-				a->Q(i,j) += a->v(i,j,k)*p->DZN[KP]*H;
+                if(fabs(phival)<=epsi)
+                H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
+                
+                a->Q(i,j) += a->v(i,j,k)*p->DZN[KP]*H;
 
-			}
+            }
     }
-	pgc->gcsl_start1(p,a->P,10);
+    pgc->gcsl_start1(p,a->P,10);
     pgc->gcsl_start2(p,a->Q,11);
-	
+    
 
     SLICELOOP4
-    a->eta(i,j) -= p->dt*((a->P(i,j)-a->P(i-1,j))/p->DXN[IP] + (a->Q(i,j)-a->Q(i,j-1))/p->DYN[JP]);	  
+    a->eta(i,j) -= p->dt*((a->P(i,j)-a->P(i-1,j))/p->DXN[IP] + (a->Q(i,j)-a->Q(i,j-1))/p->DYN[JP]);      
 
     
     pflow->eta_relax(p,pgc,a->eta);

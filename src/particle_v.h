@@ -31,11 +31,11 @@ class particle_v : public particle_base
 {
 public:
     particle_v();
-	virtual ~particle_v();
+    virtual ~particle_v();
 
     virtual void start(lexer*,fdm*,ghostcell*,ioflow*);
     virtual void ini(lexer*,fdm*,ghostcell*,ioflow*);
-	virtual void setup(lexer*,fdm*,ghostcell*);
+    virtual void setup(lexer*,fdm*,ghostcell*);
 };
 
 #endif

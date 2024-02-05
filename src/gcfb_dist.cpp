@@ -61,9 +61,9 @@ void ghostcell::gcfb_dist(lexer *p, fdm *a)
 
         if(p->gcb4[n][3]==6)
         p->gcd4[n]=fabs(a->fb(i,j,k))/(fabs(nz)>1.0e-15?fabs(nz):1.0e-15);
-		
-		p->gcd4[n] = MIN(p->gcd4[n],p->DXM);
-		p->gcd4[n] = MAX(p->gcd4[n],0.1*p->DXM);
+        
+        p->gcd4[n] = MIN(p->gcd4[n],p->DXM);
+        p->gcd4[n] = MAX(p->gcd4[n],0.1*p->DXM);
     }
 }
 

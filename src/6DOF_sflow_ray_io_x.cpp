@@ -27,32 +27,32 @@ Author: Hans Bihs
 
 void sixdof_sflow::ray_cast_io_x(lexer* p, ghostcell* pgc,int ts,int te)
 {
-	double ys,ye,zs,ze;
-	double Px,Py,Pz;
-	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
-	double Ax,Ay,Az;
-	double Bx,By,Bz;
-	double Cx,Cy,Cz;
-	double PQx,PQy,PQz;
-	double PAx,PAy,PAz;
-	double PBx,PBy,PBz;
-	double PCx,PCy,PCz;
-	double Mx,My,Mz;
-	int js,je,ks,ke;
-	double u,v,w;
-	double denom;	
-	int insidecheck;
-	double psi = 1.0e-8*p->DXM;
+    double ys,ye,zs,ze;
+    double Px,Py,Pz;
+    double Qx,Qy,Qz;
+    double Rx,Ry,Rz;
+    double Ax,Ay,Az;
+    double Bx,By,Bz;
+    double Cx,Cy,Cz;
+    double PQx,PQy,PQz;
+    double PAx,PAy,PAz;
+    double PBx,PBy,PBz;
+    double PCx,PCy,PCz;
+    double Mx,My,Mz;
+    int js,je,ks,ke;
+    double u,v,w;
+    double denom;    
+    int insidecheck;
+    double psi = 1.0e-8*p->DXM;
     
     SLICELOOP4
-	{
+    {
         cutl(i,j) = 0;
         cutr(i,j) = 0;
-	}
+    }
 
-	for(int n=ts; n<te; ++n)
-	{
+    for(int n=ts; n<te; ++n)
+    {
         Ax = tri_x[n][0];
         Ay = tri_y[n][0];
         Az = tri_z[n][0];
@@ -64,7 +64,7 @@ void sixdof_sflow::ray_cast_io_x(lexer* p, ghostcell* pgc,int ts,int te)
         Cx = tri_x[n][2];
         Cy = tri_y[n][2];
         Cz = tri_z[n][2];
-	
+    
         ys = MIN3(Ay,By,Cy);
         ye = MAX3(Ay,By,Cy);
         
@@ -75,8 +75,8 @@ void sixdof_sflow::ray_cast_io_x(lexer* p, ghostcell* pgc,int ts,int te)
         je = p->posf_j(ye);
         
         ks = p->posf_k(zs);
-        ke = p->posf_k(ze);	
-	
+        ke = p->posf_k(ze);    
+    
         ys = MIN3(Ay,By,Cy) - epsi*p->DYP[js + marge];
         ye = MAX3(Ay,By,Cy) + epsi*p->DYP[je + marge];
         
@@ -87,16 +87,16 @@ void sixdof_sflow::ray_cast_io_x(lexer* p, ghostcell* pgc,int ts,int te)
         je = p->posf_j(ye);
         
         ks = p->posf_k(zs);
-        ke = p->posf_k(ze);	
+        ke = p->posf_k(ze);    
         
         js = MAX(js,0);
         je = MIN(je,p->knoy);
         
         ks = MAX(ks,0);
-        ke = MIN(ke,p->knoz);			
+        ke = MIN(ke,p->knoz);            
     
-		for(j=js;j<je;j++)
-		{
+        for(j=js;j<je;j++)
+        {
             Px = p->global_xmin-10.0*p->DXM;
             Py = p->YP[JP]+psi;
             Pz = p->wd+psi;
@@ -104,7 +104,7 @@ void sixdof_sflow::ray_cast_io_x(lexer* p, ghostcell* pgc,int ts,int te)
             Qx = p->global_xmax+10.0*p->DXM;
             Qy = p->YP[JP]+psi;
             Qz = p->wd+psi;
-		
+        
             PQx = Qx-Px;
             PQy = Qy-Py;
             PQz = Qz-Pz;
@@ -134,7 +134,7 @@ void sixdof_sflow::ray_cast_io_x(lexer* p, ghostcell* pgc,int ts,int te)
               
             w = PQx*(By*Az - Bz*Ay) + PQy*(Bz*Ax - Bx*Az) + PQz*(Bx*Ay - By*Ax)
               + Mx*(Bx-Ax) + My*(By-Ay) + Mz*(Bz-Az);
-		
+        
             int check=1;
             if(u==0.0 && v==0.0 && w==0.0)
             check = 0;
@@ -161,7 +161,7 @@ void sixdof_sflow::ray_cast_io_x(lexer* p, ghostcell* pgc,int ts,int te)
     }
     
     SLICELOOP4
-	if((cutl(i,j)+1)%2==0  && (cutr(i,j)+1)%2==0)
-	fbio(i,j)=-1;
+    if((cutl(i,j)+1)%2==0  && (cutr(i,j)+1)%2==0)
+    fbio(i,j)=-1;
 
 }

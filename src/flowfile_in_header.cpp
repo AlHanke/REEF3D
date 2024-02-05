@@ -32,15 +32,15 @@ Author: Hans Bihs
 void flowfile_in::header_read(lexer *p, ghostcell *pgc)
 {
     // Open File
-	if(p->P14==0)
+    if(p->P14==0)
     sprintf(name,"REEF3D-flowheader-%i.r3d",p->I230);
-			
+            
     if(p->P14==1)
     sprintf(name,"./REEF3D_FlowFile/REEF3D-flowheader-%i.r3d",p->I230);
-	
+    
     
     // count entries
-	headerfile.open(name, ios::binary);
+    headerfile.open(name, ios::binary);
     
     entrycount=0;
     
@@ -56,7 +56,7 @@ void flowfile_in::header_read(lexer *p, ghostcell *pgc)
     headerfile.read((char*)&iin, sizeof (int));
 
     while(!headerfile.eof())
-	{
+    {
     headerfile.read((char*)&iin, sizeof (int));
     headerfile.read((char*)&ddn, sizeof (double));
     ++entrycount;
@@ -96,7 +96,7 @@ void flowfile_in::header_read(lexer *p, ghostcell *pgc)
 //cout<<p->mpirank<<" Ni: "<<Ni<<" Nj: "<<Nj<<" Nk: "<<Nk<<endl;
 
     while(!headerfile.eof())
-	{
+    {
     headerfile.read((char*)&iin, sizeof (int));
     iter[q] = iin;
     
@@ -135,18 +135,18 @@ void flowfile_in::header_read(lexer *p, ghostcell *pgc)
     q1 = iter[1];
     
     // Open File 0
-	if(p->P14==0)
+    if(p->P14==0)
     sprintf(name0,"REEF3D-flowfile-%i-%i.r3d",p->I230,q0);
-			
+            
     if(p->P14==1)
     sprintf(name0,"./REEF3D_FlowFile/REEF3D-flowfile-%i-%i.r3d",p->I230,q0);
     
     flowfile0.open(name0, ios::binary);
 
     // Open File 1
-	if(p->P14==0)
+    if(p->P14==0)
     sprintf(name1,"REEF3D-flowfile-%i-%i.r3d",p->I230,q1);
-			
+            
     if(p->P14==1)
     sprintf(name1,"./REEF3D_FlowFile/REEF3D-flowfile-%i-%i.r3d",p->I230,q1);
     

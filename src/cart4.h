@@ -31,18 +31,18 @@ class cart4
 {
 public:
 
-	cart4 (lexer *);
-	virtual ~cart4();
+    cart4 (lexer *);
+    virtual ~cart4();
 
     //mgc4
 
-	int di,dj,dk;
+    int di,dj,dk;
 
 //
-	static int** ggc;
+    static int** ggc;
     static int* ggcmem;
-	static int ggccount;
-	static int ggcsize;
+    static int ggccount;
+    static int ggcsize;
 };
 
 #endif

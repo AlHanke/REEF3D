@@ -39,15 +39,15 @@ void ghostcell::gcfb_update(lexer *p, fdm *a)
     cellcount1=cellcount2=cellcount3=cellcount4=0;
     int cellmemsize=p->cellnum;
 
-	mgc1 m1(p);
-	mgc2 m2(p);
-	mgc3 m3(p);
-	mgc4 m4(p);
+    mgc1 m1(p);
+    mgc2 m2(p);
+    mgc3 m3(p);
+    mgc4 m4(p);
 
-	p->Iarray(cellmem1,cellmemsize,8);
-	p->Iarray(cellmem2,cellmemsize,8);
-	p->Iarray(cellmem3,cellmemsize,8);
-	p->Iarray(cellmem4,cellmemsize,8);
+    p->Iarray(cellmem1,cellmemsize,8);
+    p->Iarray(cellmem2,cellmemsize,8);
+    p->Iarray(cellmem3,cellmemsize,8);
+    p->Iarray(cellmem4,cellmemsize,8);
 
     gcfb_buildflag(p,a,cellmem4,cellcount4);
 
@@ -59,11 +59,11 @@ void ghostcell::gcfb_update(lexer *p, fdm *a)
     gcfb_velflag1(p,a,cellmem1,cellcount1);
     gcfb_velflag2(p,a,cellmem2,cellcount2);
     gcfb_velflag3(p,a,cellmem3,cellcount3);
-	
+    
     flagx(p,p->flag1);
     flagx(p,p->flag2);
     flagx(p,p->flag3);
-	
+    
     gcxupdate(p);
 
     m1.fillgcb(p);
@@ -78,7 +78,7 @@ void ghostcell::gcfb_update(lexer *p, fdm *a)
     m2.fillmgc(p);
     m2.gcdirfill(p);
 
-	m3.fillgcb(p);
+    m3.fillgcb(p);
     m3.extragcb(p);
     m3.mgcsetup(p);
     m3.fillmgc(p);
@@ -87,14 +87,14 @@ void ghostcell::gcfb_update(lexer *p, fdm *a)
     m4.mgcsetup(p);
     m4.fillmgc(p);
     m4.gcdirfill(p);
-	m4.gcsidefill(p);
+    m4.gcsidefill(p);
 
     m1.fill_ggc(p);
     m2.fill_ggc(p);
     m3.fill_ggc(p);
     m4.fill_ggc(p);
-	
-	ndflag_update(p);
+    
+    ndflag_update(p);
     
 //
     sizeM_update(p,a);
@@ -117,33 +117,33 @@ void ghostcell::gcfb_update(lexer *p, fdm *a)
     gcfb_velupdate(p,a,cellmem1,cellcount1,0.0,0.0,0.5*p->DXM,1);
     gcfb_velupdate(p,a,cellmem2,cellcount2,0.0,0.5*p->DXM,0.0,2);
     gcfb_velupdate(p,a,cellmem3,cellcount3,0.5*p->DXM,0.0,0.0,3);
-	//gcfb_scalarupdate(p,a,cellmem4,cellcount4,a->press);
-	
+    //gcfb_scalarupdate(p,a,cellmem4,cellcount4,a->press);
+    
 //-------------------
-	
+    
 
     start1(p,a->u,10);
     start2(p,a->v,11);
     start3(p,a->w,12);
-	
-	int gcval_press; 
+    
+    int gcval_press; 
 
     gcval_press=40;  
 
     start4(p,a->press,gcval_press);
 
     p->del_Iarray(cellmem1,cellmemsize,8);
-	p->del_Iarray(cellmem2,cellmemsize,8);
-	p->del_Iarray(cellmem3,cellmemsize,8);
-	p->del_Iarray(cellmem4,cellmemsize,8);
-	
-	
+    p->del_Iarray(cellmem2,cellmemsize,8);
+    p->del_Iarray(cellmem3,cellmemsize,8);
+    p->del_Iarray(cellmem4,cellmemsize,8);
+    
+    
     //gcparax_test(a,p,4);
     
-	count=0;
-	LOOP
-	++count;
-	
-	count=globalisum(count);
-	
+    count=0;
+    LOOP
+    ++count;
+    
+    count=globalisum(count);
+    
 }

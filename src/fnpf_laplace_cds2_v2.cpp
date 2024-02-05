@@ -80,9 +80,9 @@ nb 7
 nt 8
 */
 
-	n=0;
+    n=0;
     KJILOOP
-	{
+    {
         if(p->flag7[FIJK]>0 && p->wet[IJ]==1)
         {
         sigxyz2 = pow(p->sigx[FIJK],2.0) + pow(p->sigy[FIJK],2.0) + pow(p->sigz[IJ],2.0);
@@ -127,12 +127,12 @@ nt 8
         rhs[n] =  0.0;
         }
         
-	++n;
-	}
+    ++n;
+    }
     
     n=0;
-	KJILOOP
-	{
+    KJILOOP
+    {
             if(p->flag7[FIJK]>0 && p->wet[IJ]==1)
             {
             // south
@@ -314,8 +314,8 @@ nt 8
 
             }
             }
-	++n;
-	}
+    ++n;
+    }
 
     double starttime=pgc->timer();
     psolv->startF(p,pgc,x,rhs,M,8);
@@ -324,9 +324,9 @@ nt 8
         n=0;
         KJILOOP
         {
-		 FPWDCHECK
+         FPWDCHECK
         f[FIJK]=x[n];
-		
+        
         ++n;
         }
     
@@ -334,8 +334,8 @@ nt 8
     p->poissontime+=endtime-starttime;
     
     
-	if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"Fi_iter: "<<p->poissoniter<<" Final_residual: "<<p->final_res<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
+    if(p->mpirank==0 && (p->count%p->P12==0))
+    cout<<"Fi_iter: "<<p->poissoniter<<" Final_residual: "<<p->final_res<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
 }
 /*
  * {{0,0}, {-1,0}, {1,0},  {0,-1}, {0,1}, {-1,-1},{-1,1},{1,-1},{1,1}};
@@ -376,9 +376,9 @@ void fnpf_laplace_cds2_v2::laplace3D(lexer* p, fdm_fnpf *c, ghostcell *pgc, solv
     p->poissoniter=0;
     p->poissontime=0.0;
 
-	n=0;
+    n=0;
     KJILOOP
-	{
+    {
         if(p->wet[IJ]==1 && p->flag7[FIJK]>0)
         {
         sigxyz2 = pow(p->sigx[FIJK],2.0) + pow(p->sigy[FIJK],2.0) + pow(p->sigz[IJ],2.0);
@@ -440,12 +440,12 @@ void fnpf_laplace_cds2_v2::laplace3D(lexer* p, fdm_fnpf *c, ghostcell *pgc, solv
         rhs[n] =  0.0;
         }   
         
-	++n;
-	}
+    ++n;
+    }
     
     n=0;
-	KJILOOP
-	{
+    KJILOOP
+    {
             if(p->wet[IJ]==1 && p->flag7[FIJK]>0)
             {
             // south
@@ -687,8 +687,8 @@ wt 14
 
             }
             }
-	++n;
-	}
+    ++n;
+    }
 
     double starttime=pgc->timer();
     psolv->startF(p,pgc,x,rhs,M,8);
@@ -697,9 +697,9 @@ wt 14
         n=0;
         KJILOOP
         {
-		 FPWDCHECK
+         FPWDCHECK
         f[FIJK]=x[n];
-		
+        
         ++n;
         }
     
@@ -707,6 +707,6 @@ wt 14
     p->poissontime+=endtime-starttime;
     
     
-	if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"Fi_iter: "<<p->poissoniter<<" Final_residual: "<<p->final_res<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
+    if(p->mpirank==0 && (p->count%p->P12==0))
+    cout<<"Fi_iter: "<<p->poissoniter<<" Final_residual: "<<p->final_res<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
 }

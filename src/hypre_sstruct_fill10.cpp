@@ -49,77 +49,77 @@ void hypre_sstruct::fill_matrix10(lexer* p, ghostcell* pgc, double *f, vec &rhs,
     {
         
         PFLUIDCHECK
-		{
-		n=cval4(i,j,k);
+        {
+        n=cval4(i,j,k);
         
-		values[count]=M.p[n];
-		++count;
-		
-		values[count]=M.s[n];
-		++count;
-		
-		values[count]=M.n[n];
-		++count;
-		
-		values[count]=M.e[n];
-		++count;
-		
-		values[count]=M.w[n];
-		++count;
-		
-		values[count]=M.b[n];
-		++count;
-		
-		values[count]=M.t[n];
-		++count; 
+        values[count]=M.p[n];
+        ++count;
+        
+        values[count]=M.s[n];
+        ++count;
+        
+        values[count]=M.n[n];
+        ++count;
+        
+        values[count]=M.e[n];
+        ++count;
+        
+        values[count]=M.w[n];
+        ++count;
+        
+        values[count]=M.b[n];
+        ++count;
+        
+        values[count]=M.t[n];
+        ++count; 
         
         values[count]=M.ss[n];
-		++count;
-		
-		values[count]=M.nn[n];
-		++count;
-		
-		values[count]=M.ee[n];
-		++count;
-		
-		values[count]=M.ww[n];
-		++count;
-		
-		values[count]=M.bb[n];
-		++count;
-		
-		values[count]=M.tt[n];
-		++count;
-		}    
-		
-		FSCHECK
-		{
-		values[count]=1.0;
-		++count;
-		
+        ++count;
+        
+        values[count]=M.nn[n];
+        ++count;
+        
+        values[count]=M.ee[n];
+        ++count;
+        
+        values[count]=M.ww[n];
+        ++count;
+        
+        values[count]=M.bb[n];
+        ++count;
+        
+        values[count]=M.tt[n];
+        ++count;
+        }    
+        
+        FSCHECK
+        {
+        values[count]=1.0;
+        ++count;
+        
         for(int qn=0; qn<12;++qn)
         {
-		values[count]=0.0;
-		++count;
+        values[count]=0.0;
+        ++count;
         }
-		
-		}    
+        
+        }    
     }
-	
+    
     HYPRE_SStructMatrixSetBoxValues(A, part, ilower, iupper, variable, nentries, stencil_indices, values);
     HYPRE_SStructMatrixAssemble(A);
     
     
     // vec
     count=0;
-	KJILOOP
-	{
-		FPCHECK
-		values[count] = f[FIJK];
-		
-		FSCHECK
-		values[count] = 0.0;
-	
+    KJILOOP
+    {
+        FPCHECK
+        values[count] = f[FIJK];
+        
+        FSCHECK
+        values[count] = 0.0;
+    
     ++count;
     }
 
@@ -128,16 +128,16 @@ void hypre_sstruct::fill_matrix10(lexer* p, ghostcell* pgc, double *f, vec &rhs,
     
     
     count=0; 
-	KJILOOP
-	{
-		FPCHECK
-		{
-		n=cval4(i,j,k);
-		values[count] = rhs.V[n];
-		}
-		
-		FSCHECK
-		values[count] = 0.0;
+    KJILOOP
+    {
+        FPCHECK
+        {
+        n=cval4(i,j,k);
+        values[count] = rhs.V[n];
+        }
+        
+        FSCHECK
+        values[count] = 0.0;
 
     ++count;
     }
@@ -149,14 +149,14 @@ void hypre_sstruct::fill_matrix10(lexer* p, ghostcell* pgc, double *f, vec &rhs,
 
 void hypre_sstruct::fillbackvec10(lexer *p, double *f, int var)
 {
-	HYPRE_SStructVectorGetBoxValues(x, part, ilower, iupper, variable, values);
-	
+    HYPRE_SStructVectorGetBoxValues(x, part, ilower, iupper, variable, values);
+    
         count=0;
         KJILOOP
         {
-		 FPCHECK
+         FPCHECK
         f[FIJK]=values[count];
-		
+        
         ++count;
         }
 }

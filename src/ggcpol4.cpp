@@ -29,11 +29,11 @@ void field4::ggcpol(lexer* p)
     double val=0.0;
     int a,n,q,count;
 
-	 for(n=0;n<cart4::ggccount;n++)
-	 {
-		 i=cart4::ggc[n][0];
-		 j=cart4::ggc[n][1];
-		 k=cart4::ggc[n][2];
+     for(n=0;n<cart4::ggccount;n++)
+     {
+         i=cart4::ggc[n][0];
+         j=cart4::ggc[n][1];
+         k=cart4::ggc[n][2];
 
         iter=(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin;
         val=0.0;
@@ -87,14 +87,14 @@ void field4::ggcpol(lexer* p)
         ++count;
         }
 
-		 
+         
         if(count>0)
         val/=double(count);
     
 
         V[iter]=val; 
         
-	 }
+     }
 }
 
 

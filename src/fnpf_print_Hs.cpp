@@ -70,8 +70,8 @@ void fnpf_print_Hs::start(lexer *p, ghostcell *pgc, slice &eta, slice &Hs)
     
     SLICELOOP4
     {
-	 // Here we do the wave-averaging NB: c->eta(i,j) is the FS
-	 // variance equation with etamean initially unknown
+     // Here we do the wave-averaging NB: c->eta(i,j) is the FS
+     // variance equation with etamean initially unknown
       
     ETAsum(i,j)      += eta(i,j)*p->dt;
     ETAmean(i,j)      = ETAsum(i,j)/T_sum;
@@ -81,12 +81,12 @@ void fnpf_print_Hs::start(lexer *p, ghostcell *pgc, slice &eta, slice &Hs)
     //cin.get();  
     
     //if(T_sum>=T_INTV_mean)
-	  //{ 
-	    ETAvar(i,j)        = (1.0/double(NumDT1-1))*ETA2sum(i,j)-ETAmean(i,j)*ETAmean(i,j)*(double(NumDT1)/double(NumDT1-1));
-	    Hs(i,j)         = 4.0*sqrt(ETAvar(i,j));
+      //{ 
+        ETAvar(i,j)        = (1.0/double(NumDT1-1))*ETA2sum(i,j)-ETAmean(i,j)*ETAmean(i,j)*(double(NumDT1)/double(NumDT1-1));
+        Hs(i,j)         = 4.0*sqrt(ETAvar(i,j));
     //}
-	  
-    } //end slice4loop	
+      
+    } //end slice4loop    
     
    }
    

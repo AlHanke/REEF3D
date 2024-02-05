@@ -32,15 +32,15 @@ void iowave::inflow_nhflow(lexer *p, fdm_nhf *d, ghostcell* pgc, double *U, doub
     if(p->B98==0)
     nhflow_inflow_plain(p,d,pgc,U,V,W,UH,VH,WH);
     
-	if(p->B98==3)
-	nhflow_dirichlet_wavegen(p,d,pgc,U,V,W,UH,VH,WH);
-	
-	if(p->B98==4)
-	nhflow_active_wavegen(p,d,pgc,U,V,W,UH,VH,WH);
-	}
+    if(p->B98==3)
+    nhflow_dirichlet_wavegen(p,d,pgc,U,V,W,UH,VH,WH);
     
-	if(p->B99==3||p->B99==4||p->B99==5)
-	nhflow_active_beach(p,d,pgc,U,V,W,UH,VH,WH);
+    if(p->B98==4)
+    nhflow_active_wavegen(p,d,pgc,U,V,W,UH,VH,WH);
+    }
+    
+    if(p->B99==3||p->B99==4||p->B99==5)
+    nhflow_active_beach(p,d,pgc,U,V,W,UH,VH,WH);
     
     //if(p->I230>0)
     //ff_inflow(p,d,pgc,U,V,W);
@@ -80,11 +80,11 @@ void iowave::nhflow_inflow_plain(lexer *p, fdm_nhf *d, ghostcell* pgc, double *U
         U[Im1JK]=p->Ui;
         U[Im2JK]=p->Ui;
         U[Im3JK]=p->Ui;
-		
+        
         V[Im1JK]=0.0;
         V[Im2JK]=0.0;
         V[Im3JK]=0.0;
-		
+        
         W[Im1JK]=0.0;
         W[Im2JK]=0.0;
         W[Im3JK]=0.0;
@@ -92,11 +92,11 @@ void iowave::nhflow_inflow_plain(lexer *p, fdm_nhf *d, ghostcell* pgc, double *U
         UH[Im1JK]=(d->eta(i,j)+d->depth(i,j))*p->Ui;
         UH[Im2JK]=(d->eta(i,j)+d->depth(i,j))*p->Ui;
         UH[Im3JK]=(d->eta(i,j)+d->depth(i,j))*p->Ui;
-		
+        
         VH[Im1JK]=0.0;
         VH[Im2JK]=0.0;
         VH[Im3JK]=0.0;
-		
+        
         WH[Im1JK]=0.0;
         WH[Im2JK]=0.0;
         WH[Im3JK]=0.0;

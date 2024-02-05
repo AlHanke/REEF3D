@@ -35,24 +35,24 @@ using namespace std;
 class reinidisc_f2 : public reinidisc, public ddweno
 {
 public:
-	reinidisc_f2(lexer* p);
-	virtual ~reinidisc_f2();
-	virtual void start(lexer*, fdm*, ghostcell*, vec&, vec&,int);
-	
+    reinidisc_f2(lexer* p);
+    virtual ~reinidisc_f2();
+    virtual void start(lexer*, fdm*, ghostcell*, vec&, vec&,int);
+    
 private:
-	void disc(lexer*, fdm*, ghostcell*, vec&, vec&, int*, cpt&);
-	
-	double xgrad,ygrad,zgrad;
+    void disc(lexer*, fdm*, ghostcell*, vec&, vec&, int*, cpt&);
+    
+    double xgrad,ygrad,zgrad;
     double xmin,xplus,ymin,yplus,zmin,zplus;
-	double dxmin,dxplus,dymin,dyplus,dzmin,dzplus;
-	double ux,uy,uz,ddt;
-	double lsv,dv,S0;
-	
-	double dx, dy, dz, dnorm, lnorm, sign;
-	double sx,sy,sz,snorm,op;
+    double dxmin,dxplus,dymin,dyplus,dzmin,dzplus;
+    double ux,uy,uz,ddt;
+    double lsv,dv,S0;
+    
+    double dx, dy, dz, dnorm, lnorm, sign;
+    double sx,sy,sz,snorm,op;
     double lsSig;
-	
-	double deltax,denom;
+    
+    double deltax,denom;
 };
 
 #endif

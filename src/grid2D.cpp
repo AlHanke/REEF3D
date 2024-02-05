@@ -36,6 +36,6 @@ grid2D::~grid2D()
 void grid2D::makegrid(lexer *p, fdm *a, ghostcell *pgc)
 {
     
-	
+    
 }
 

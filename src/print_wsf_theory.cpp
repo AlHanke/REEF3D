@@ -30,29 +30,29 @@ Author: Hans Bihs
 
 print_wsf_theory::print_wsf_theory(lexer *p, fdm* a, ghostcell *pgc, int num)
 {
-	gauge_num = p->P50;
-	x = p->P50_x;
-	y = p->P50_y;
-	
+    gauge_num = p->P50;
+    x = p->P50_x;
+    y = p->P50_y;
+    
     if(p->P50>0 && num==0)
-	{
-	gauge_num = p->P50;
-	x = p->P50_x;
-	y = p->P50_y;
-	}
-	
-	// Create Folder
-	if(p->mpirank==0 && p->P14==1)
-	mkdir("./REEF3D_CFD_WSF",0777);
-	
+    {
+    gauge_num = p->P50;
+    x = p->P50_x;
+    y = p->P50_y;
+    }
+    
+    // Create Folder
+    if(p->mpirank==0 && p->P14==1)
+    mkdir("./REEF3D_CFD_WSF",0777);
+    
     if(p->mpirank==0 && p->P50>0 && num==0)
     {
     // open file
-	if(p->P14==0)
+    if(p->P14==0)
     wsfout.open("REEF3D-CFD-WSF-HG-THEORY.dat");
-	
-	if(p->P14==1)
-	wsfout.open("./REEF3D_CFD_WSF/REEF3D-CFD-WSF-HG-THEORY.dat");
+    
+    if(p->P14==1)
+    wsfout.open("./REEF3D_CFD_WSF/REEF3D-CFD-WSF-HG-THEORY.dat");
 
     wsfout<<"number of gauges:  "<<gauge_num<<endl<<endl;
     wsfout<<"x_coord     y_coord"<<endl;
@@ -67,8 +67,8 @@ print_wsf_theory::print_wsf_theory(lexer *p, fdm* a, ghostcell *pgc, int num)
 
     wsfout<<endl<<endl;
     }
-	
-	
+    
+    
 }
 
 print_wsf_theory::~print_wsf_theory()
@@ -78,7 +78,7 @@ print_wsf_theory::~print_wsf_theory()
 
 void print_wsf_theory::height_gauge(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, field &f)
 {
-	
+    
     // write to file
     if(p->mpirank==0)
     {

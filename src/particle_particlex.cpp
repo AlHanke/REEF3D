@@ -119,7 +119,7 @@ void particle_f::particlex(lexer* p, fdm* a, ghostcell* pgc)
 // FILL
 // ---------------------------------------------------
 
-	//pos
+    //pos
     // q=0;
     // while(pcount>0)
     // {
@@ -130,7 +130,7 @@ void particle_f::particlex(lexer* p, fdm* a, ghostcell* pgc)
     //     pos[posmem[pcount]][2]=posxr[q][pxr[q]-3];
     //     pos[posmem[pcount]][3]=posxr[q][pxr[q]-2];
     //     pos[posmem[pcount]][4]=posxr[q][pxr[q]-1];
-	// 	--pcount;
+    //     --pcount;
     //     posflag[posmem[pcount]]=3;
     //     pxr[q]-=5;
     //     }

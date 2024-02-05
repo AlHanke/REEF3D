@@ -29,48 +29,48 @@ Author: Hans Bihs
 
 void sixdof_sflow::print_ini_vtp(lexer *p, ghostcell *pgc)
 {
-	if(p->mpirank==0 && p->P14==1)
+    if(p->mpirank==0 && p->P14==1)
     {
         mkdir("./REEF3D_SFLOW_6DOF_VTP", 0777);
         mkdir("./REEF3D_SFLOW_6DOF", 0777);
     }
-	
+    
     ofstream print;
     char str[1000];
 
-	if(p->P14==0)
+    if(p->P14==0)
     sprintf(str,"REEF3D_6DOF_position_%i.dat",n6DOF);
-	if(p->P14==1)
+    if(p->P14==1)
     sprintf(str,"./REEF3D_SFLOW_6DOF/REEF3D_6DOF_position_%i.dat",n6DOF);
-	
-    print.open(str);
-	print<<"time \t XG \t YG \t ZG \t Phi \t Theta \t Psi"<<endl;
-	print.close();
     
-	
-	if(p->P14==0)
-    sprintf(str,"REEF3D_6DOF_velocity_%i.dat",n6DOF);
-	if(p->P14==1)
-    sprintf(str,"./REEF3D_SFLOW_6DOF/REEF3D_6DOF_velocity_%i.dat",n6DOF);
-	
     print.open(str);
-	print<<"time \t Ue [m/s] \t Ve [m/s] \t We [m/s] \t Pe [rad/s] \t Qe [rad/s] \t Re [rad/s]"<<endl;
+    print<<"time \t XG \t YG \t ZG \t Phi \t Theta \t Psi"<<endl;
+    print.close();
+    
+    
+    if(p->P14==0)
+    sprintf(str,"REEF3D_6DOF_velocity_%i.dat",n6DOF);
+    if(p->P14==1)
+    sprintf(str,"./REEF3D_SFLOW_6DOF/REEF3D_6DOF_velocity_%i.dat",n6DOF);
+    
+    print.open(str);
+    print<<"time \t Ue [m/s] \t Ve [m/s] \t We [m/s] \t Pe [rad/s] \t Qe [rad/s] \t Re [rad/s]"<<endl;
     print.close();
 }
 
 
 void sixdof_sflow::print_vtp(lexer *p, ghostcell *pgc)
 {
-	int num=0;
+    int num=0;
 
-	if(p->P15==1)
+    if(p->P15==1)
     num = p->printcount_sixdof;
 
     if(p->P15==2)
     num = p->count;
-	
-	if(num<0)
-	num=0;
+    
+    if(num<0)
+    num=0;
 
     
     if(p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)  || (p->simtime>printtime && p->P30>0.0)   || p->count==0))
@@ -108,8 +108,8 @@ void sixdof_sflow::print_vtp(lexer *p, ghostcell *pgc)
     // ---------------------------------------------------
     n=0;
 
-	offset[n]=0;
-	++n;
+    offset[n]=0;
+    ++n;
 
     offset[n]=offset[n-1]+4*tricount*3*3 + 4;
     ++n;
@@ -117,12 +117,12 @@ void sixdof_sflow::print_vtp(lexer *p, ghostcell *pgc)
     ++n;
     offset[n]=offset[n-1]+4*tricount*3 + 4;
     ++n;
-	//---------------------------------------------
+    //---------------------------------------------
 
-	result<<"<?xml version=\"1.0\"?>"<<endl;
-	result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
-	result<<"<PolyData>"<<endl;
-	result<<"<Piece NumberOfPoints=\""<<tricount*3<<"\" NumberOfPolys=\""<<tricount<<"\">"<<endl;
+    result<<"<?xml version=\"1.0\"?>"<<endl;
+    result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
+    result<<"<PolyData>"<<endl;
+    result<<"<Piece NumberOfPoints=\""<<tricount*3<<"\" NumberOfPolys=\""<<tricount<<"\">"<<endl;
 
     n=0;
     result<<"<Points>"<<endl;
@@ -133,11 +133,11 @@ void sixdof_sflow::print_vtp(lexer *p, ghostcell *pgc)
     result<<"<Polys>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-	result<<"<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-	++n;
+    result<<"<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    ++n;
     result<<"<DataArray type=\"Int32\"  Name=\"types\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
 
-	result<<"</Polys>"<<endl;
+    result<<"</Polys>"<<endl;
 
     result<<"</Piece>"<<endl;
     result<<"</PolyData>"<<endl;
@@ -147,58 +147,58 @@ void sixdof_sflow::print_vtp(lexer *p, ghostcell *pgc)
 
 
 //  XYZ
-	iin=4*tricount*3*3;
-	result.write((char*)&iin, sizeof (int));
+    iin=4*tricount*3*3;
+    result.write((char*)&iin, sizeof (int));
     for(n=0;n<tricount;++n)
-	for(q=0;q<3;++q)
-	{
-	ffn=tri_x[n][q];
-	result.write((char*)&ffn, sizeof (float));
+    for(q=0;q<3;++q)
+    {
+    ffn=tri_x[n][q];
+    result.write((char*)&ffn, sizeof (float));
 
-	ffn=tri_y[n][q];
-	result.write((char*)&ffn, sizeof (float));
+    ffn=tri_y[n][q];
+    result.write((char*)&ffn, sizeof (float));
 
-	ffn=tri_z[n][q];
-	result.write((char*)&ffn, sizeof (float));
-	}
+    ffn=tri_z[n][q];
+    result.write((char*)&ffn, sizeof (float));
+    }
     
 //  Connectivity POLYGON
-	int count=0;
+    int count=0;
     iin=4*tricount*3;
     result.write((char*)&iin, sizeof (int));
     for(n=0;n<tricount;++n)
-	for(q=0;q<3;++q)
-	{
-	iin=count;
-	result.write((char*)&iin, sizeof (int));
-	++count;
-	}
+    for(q=0;q<3;++q)
+    {
+    iin=count;
+    result.write((char*)&iin, sizeof (int));
+    ++count;
+    }
 
 //  Offset of Connectivity
     iin=4*tricount;
     result.write((char*)&iin, sizeof (int));
-	iin=0;
-	for(n=0;n<tricount;++n)
-	{
-	iin+= 3;//a->polygon_offset[n];
-	result.write((char*)&iin, sizeof (int));
-	}
+    iin=0;
+    for(n=0;n<tricount;++n)
+    {
+    iin+= 3;//a->polygon_offset[n];
+    result.write((char*)&iin, sizeof (int));
+    }
 
 //  Cell types
     iin=4*tricount;
     result.write((char*)&iin, sizeof (int));
-	for(n=0;n<tricount;++n)
-	{
-	iin=7;
-	result.write((char*)&iin, sizeof (int));
-	}
+    for(n=0;n<tricount;++n)
+    {
+    iin=7;
+    result.write((char*)&iin, sizeof (int));
+    }
 
-	result<<endl<<"</AppendedData>"<<endl;
+    result<<endl<<"</AppendedData>"<<endl;
     result<<"</VTKFile>"<<endl;
 
-	result.close();	
+    result.close();    
 
-        ++p->printcount_sixdof;	
+        ++p->printcount_sixdof;    
     }
 }
 

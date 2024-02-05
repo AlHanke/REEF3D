@@ -42,22 +42,22 @@ Author: Hans Bihs
 pjm_comp::pjm_comp(lexer* p, fdm *a, ghostcell *pgc, heat *&pheat, concentration *&pconc) : ro_n(p)
 {
     if((p->F80==0||p->A10==55) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==0)
-	pd = new density_f(p);
+    pd = new density_f(p);
     
     if((p->F80==0||p->A10==55) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==1)  
-	pd = new density_df(p);
+    pd = new density_df(p);
     
-	if(p->F80==0 && p->H10==0 && p->W30==1  && p->F300==0 && p->W90==0)
-	pd = new density_comp(p);
-	
-	if(p->F80==0 && p->H10>0 && p->F300==0 && p->W90==0)
-	pd = new density_heat(p,pheat);
-	
-	if(p->F80==0 && p->C10>0 && p->F300==0 && p->W90==0)
-	pd = new density_conc(p,pconc);
+    if(p->F80==0 && p->H10==0 && p->W30==1  && p->F300==0 && p->W90==0)
+    pd = new density_comp(p);
+    
+    if(p->F80==0 && p->H10>0 && p->F300==0 && p->W90==0)
+    pd = new density_heat(p,pheat);
+    
+    if(p->F80==0 && p->C10>0 && p->F300==0 && p->W90==0)
+    pd = new density_conc(p,pconc);
     
     if(p->F80>0 && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0)
-	pd = new density_vof(p);
+    pd = new density_vof(p);
     
     if(p->F30>0 && p->H10==0 && p->W30==0  && p->F300==0 && p->W90>0)
     pd = new density_rheo(p);
@@ -67,10 +67,10 @@ pjm_comp::pjm_comp(lexer* p, fdm *a, ghostcell *pgc, heat *&pheat, concentration
     
     
     gcval_press=40;  
-	
-	gcval_u=7;
-	gcval_v=8;
-	gcval_w=9;
+    
+    gcval_u=7;
+    gcval_v=8;
+    gcval_w=9;
     
     pupdate = new fluid_update_fsf_comp(p,a,pgc);
 }
@@ -83,61 +83,61 @@ void pjm_comp::start(fdm* a,lexer*p, poisson* ppois,solver* psolv, ghostcell* pg
 {
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<".";
-			
-	vel_setup(p,a,pgc,uvel,vvel,wvel,alpha);
-    density_ini(p,a,pgc);	
+            
+    vel_setup(p,a,pgc,uvel,vvel,wvel,alpha);
+    density_ini(p,a,pgc);    
     rhs(p,a,pgc,uvel,vvel,wvel,alpha);
-	
+    
     ppois->start(p,a,a->press);
-	
+    
         starttime=pgc->timer();
 
-	psolv->start(p,a,pgc,a->press,a->rhsvec,5);
-	
+    psolv->start(p,a,pgc,a->press,a->rhsvec,5);
+    
         endtime=pgc->timer();
 
-	pgc->start4(p,a->press,gcval_press);
-	
-	ucorr(p,a,uvel,alpha);
-	vcorr(p,a,vvel,alpha);
-	wcorr(p,a,wvel,alpha);
+    pgc->start4(p,a->press,gcval_press);
+    
+    ucorr(p,a,uvel,alpha);
+    vcorr(p,a,vvel,alpha);
+    wcorr(p,a,wvel,alpha);
     
     pupdate->start(p,a,pgc);
     ptimesave(p,a,pgc);
 
     p->poissoniter=p->solveriter;
 
-	p->poissontime=endtime-starttime;
+    p->poissontime=endtime-starttime;
 
-	if(p->mpirank==0 && (p->count%p->P12==0))
-	{
-	cout<<"piter: "<<p->solveriter<<"  ptime: "<<setprecision(3)<<p->poissontime;
-	
-	if(p->N10>10)
-	cout<<"   preconiter: "<<p->preconiter;
-	cout<<endl;
+    if(p->mpirank==0 && (p->count%p->P12==0))
+    {
+    cout<<"piter: "<<p->solveriter<<"  ptime: "<<setprecision(3)<<p->poissontime;
+    
+    if(p->N10>10)
+    cout<<"   preconiter: "<<p->preconiter;
+    cout<<endl;
     }
 }
 
 void pjm_comp::ucorr(lexer* p, fdm* a, field& uvel,double alpha)
-{	
-	ULOOP
-	uvel(i,j,k) -= alpha*p->dt*((a->press(i+1,j,k)-a->press(i,j,k))
-	/(p->DXP[IP]*pd->roface(p,a,1,0,0)));
+{    
+    ULOOP
+    uvel(i,j,k) -= alpha*p->dt*((a->press(i+1,j,k)-a->press(i,j,k))
+    /(p->DXP[IP]*pd->roface(p,a,1,0,0)));
 }
 
 void pjm_comp::vcorr(lexer* p, fdm* a, field& vvel,double alpha)
-{	
-	VLOOP
-	vvel(i,j,k) -= alpha*p->dt*((a->press(i,j+1,k)-a->press(i,j,k))
-	/(p->DYP[JP]*pd->roface(p,a,0,1,0)));
+{    
+    VLOOP
+    vvel(i,j,k) -= alpha*p->dt*((a->press(i,j+1,k)-a->press(i,j,k))
+    /(p->DYP[JP]*pd->roface(p,a,0,1,0)));
 }
 
 void pjm_comp::wcorr(lexer* p, fdm* a, field& wvel,double alpha)
-{	
-	WLOOP
-	wvel(i,j,k) -= alpha*p->dt*((a->press(i,j,k+1)-a->press(i,j,k))
-	/(p->DZP[KP]*pd->roface(p,a,0,0,1)));
+{    
+    WLOOP
+    wvel(i,j,k) -= alpha*p->dt*((a->press(i,j,k+1)-a->press(i,j,k))
+    /(p->DZP[KP]*pd->roface(p,a,0,0,1)));
 }
 
 void pjm_comp::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w,double alpha)
@@ -146,24 +146,24 @@ void pjm_comp::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &
     double epsi=-0.6*p->DXM;
     
     count=0;
-	
+    
     pip=p->Y50;
     LOOP
     {
         if(a->phi(i,j,k)>epsi)
-		H=0.0;
+        H=0.0;
 
-		if(a->phi(i,j,k)<epsi)
-		H=1.0;
+        if(a->phi(i,j,k)<epsi)
+        H=1.0;
 
-		//if(fabs(a->phi(i,j,k))<=epsi)
-		//H=0.5*(1.0 - a->phi(i,j,k)/epsi + (1.0/PI)*sin((PI*(-a->phi(i,j,k)))/epsi));
+        //if(fabs(a->phi(i,j,k))<=epsi)
+        //H=0.5*(1.0 - a->phi(i,j,k)/epsi + (1.0/PI)*sin((PI*(-a->phi(i,j,k)))/epsi));
         
     a->rhsvec.V[count] = -((u(i,j,k)-u(i-1,j,k))
-						  +(v(i,j,k)-v(i,j-1,k))
-						  +(w(i,j,k)-w(i,j,k-1)) 
+                          +(v(i,j,k)-v(i,j-1,k))
+                          +(w(i,j,k)-w(i,j,k-1)) 
                          ) /(alpha*p->dt*p->DXM)
-						 
+                         
 
                          
                          - (H*(a->ro(i,j,k)-ro_n(i,j,k)))/(a->ro(i,j,k)*alpha*p->dt)
@@ -178,9 +178,9 @@ void pjm_comp::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &
 
 void pjm_comp::vel_setup(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w,double alpha)
 {
-	pgc->start1(p,u,gcval_u);
-	pgc->start2(p,v,gcval_v);
-	pgc->start3(p,w,gcval_w);
+    pgc->start1(p,u,gcval_u);
+    pgc->start2(p,v,gcval_v);
+    pgc->start3(p,w,gcval_w);
 }
 
 void pjm_comp::density_ini(lexer*p,fdm* a, ghostcell *pgc)
@@ -208,7 +208,7 @@ void pjm_comp::wpgrad(lexer*p,fdm* a, slice &eta, slice &eta_n)
 
 void pjm_comp::ptimesave(lexer *p, fdm *a, ghostcell *pgc)
 {
-	LOOP
+    LOOP
     ro_n(i,j,k)=a->ro(i,j,k);
     
     pgc->start4(p,ro_n,1);

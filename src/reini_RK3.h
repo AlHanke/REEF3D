@@ -36,28 +36,28 @@ using namespace std;
 class reini_RK3 : public reini, public increment
 {
 public:
-	reini_RK3(lexer* p,int);
-	virtual ~reini_RK3();
-	virtual void start(fdm*,lexer*,field&,ghostcell*,ioflow*);
+    reini_RK3(lexer* p,int);
+    virtual ~reini_RK3();
+    virtual void start(fdm*,lexer*,field&,ghostcell*,ioflow*);
     virtual void startV(fdm*,lexer*,vec&,ghostcell*,ioflow*);
 
-	int *sizeM;
-	vec f,frk1,frk2,L,dt;
+    int *sizeM;
+    vec f,frk1,frk2,L,dt;
 
 private:
     picard *ppicard;
-	reinidisc *prdisc;
+    reinidisc *prdisc;
 
     void fsfrkioV(lexer*, fdm*, ghostcell*,vec&);
-	void step(lexer*, fdm*);
+    void step(lexer*, fdm*);
     void time_preproc(lexer*);
-	void inisolid(lexer*, fdm*);
+    void inisolid(lexer*, fdm*);
 
-	
-	double starttime,endtime;
+    
+    double starttime,endtime;
 
-	int gcval_phi,gcval_ro,gcval_iniphi,reiniter,n;
-	const double epsi;
+    int gcval_phi,gcval_ro,gcval_iniphi,reiniter,n;
+    const double epsi;
 };
 
 #endif

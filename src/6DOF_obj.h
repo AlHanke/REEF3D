@@ -51,32 +51,32 @@ class sixdof_obj : public gradient
 public:
     
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
-	
-    sixdof_obj(lexer*, ghostcell*, int);
-	virtual ~sixdof_obj();
-	
-	virtual void solve_eqmotion(lexer*,fdm*,ghostcell*,int,vrans*,vector<net*>&);
-	virtual void initialize(lexer*,fdm*,ghostcell*,vector<net*>&);
     
-	// Additional functions
+    sixdof_obj(lexer*, ghostcell*, int);
+    virtual ~sixdof_obj();
+    
+    virtual void solve_eqmotion(lexer*,fdm*,ghostcell*,int,vrans*,vector<net*>&);
+    virtual void initialize(lexer*,fdm*,ghostcell*,vector<net*>&);
+    
+    // Additional functions
     void transform(lexer*, fdm*, ghostcell*, bool);
     void updateForcing(lexer*, fdm*, ghostcell*,field&,field&,field&,field&,field&,field&,int);
-	void forces_stl(lexer*, fdm*, ghostcell*,field&,field&,field&,int);
+    void forces_stl(lexer*, fdm*, ghostcell*,field&,field&,field&,int);
     
     void saveTimeStep(lexer*,int);
     void print_parameter(lexer*,fdm*,ghostcell*);
     void print_ini_vtp(lexer*,fdm*,ghostcell*);
-	void print_vtp(lexer*,fdm*,ghostcell*);
+    void print_vtp(lexer*,fdm*,ghostcell*);
     void print_normals_vtp(lexer*,fdm*,ghostcell*);
     void print_ini_stl(lexer*,fdm*,ghostcell*);
-	void print_stl(lexer*,fdm*,ghostcell*);
-	void interface(lexer*, bool);
+    void print_stl(lexer*,fdm*,ghostcell*);
+    void interface(lexer*, bool);
     
     double Mass_fb, Vfb, Rfb;
 
 private:
 
-	void ini_parameter_stl(lexer*, fdm*, ghostcell*);
+    void ini_parameter_stl(lexer*, fdm*, ghostcell*);
     void ini_fbvel(lexer*, fdm*, ghostcell*);
     void maxvel(lexer*, fdm*, ghostcell*);
     
@@ -89,13 +89,13 @@ private:
     
     void objects_create(lexer*, fdm*, ghostcell*);
     void objects_allocate(lexer*, fdm*, ghostcell*);
-	void geometry_refinement(lexer*,ghostcell*);
-	void create_triangle(double&,double&,double&,double&,double&,double&,double&,double&,double&,const double&,const double&,const double&);
-	void box(lexer*, fdm*, ghostcell*,int);
-	void cylinder_x(lexer*, fdm*, ghostcell*,int);
-	void cylinder_y(lexer*, fdm*, ghostcell*,int);
-	void cylinder_z(lexer*, fdm*, ghostcell*,int);
-	void wedge_sym(lexer*, fdm*, ghostcell*,int);
+    void geometry_refinement(lexer*,ghostcell*);
+    void create_triangle(double&,double&,double&,double&,double&,double&,double&,double&,double&,const double&,const double&,const double&);
+    void box(lexer*, fdm*, ghostcell*,int);
+    void cylinder_x(lexer*, fdm*, ghostcell*,int);
+    void cylinder_y(lexer*, fdm*, ghostcell*,int);
+    void cylinder_z(lexer*, fdm*, ghostcell*,int);
+    void wedge_sym(lexer*, fdm*, ghostcell*,int);
     void wedge(lexer*, fdm*, ghostcell*,int);
     void hexahedron(lexer*, fdm*, ghostcell*,int);
     void read_stl(lexer*, fdm*, ghostcell*);
@@ -105,11 +105,11 @@ private:
     void ini_parallel(lexer*, fdm*, ghostcell*);
     
     double Hsolidface(lexer*, fdm*, int,int,int);
-	double Hsolidface_t(lexer*, fdm*, int,int,int);
-	
-	void geometry(lexer*, fdm*, ghostcell*);
+    double Hsolidface_t(lexer*, fdm*, int,int,int);
+    
+    void geometry(lexer*, fdm*, ghostcell*);
     void geometry_stl(lexer*, fdm*, ghostcell*);
-	void geometry_f(double&,double&,double&,double&,double&,double&,double&,double&,double&);
+    void geometry_f(double&,double&,double&,double&,double&,double&,double&,double&,double&);
     void geometry_ls(lexer*, fdm*, ghostcell*);
     
     void iniPosition_RBM(lexer*, fdm*, ghostcell*);
@@ -130,12 +130,12 @@ private:
     void rotation_tri(lexer*,double,double,double,double&,double&,double&, const double&, const double&, const double&);
    
     void ray_cast(lexer*, fdm*, ghostcell*);
-	void ray_cast_io_x(lexer*, fdm*, ghostcell*,int,int);
-	void ray_cast_io_ycorr(lexer*, fdm*, ghostcell*,int,int);
-	void ray_cast_io_zcorr(lexer*, fdm*, ghostcell*,int,int);
+    void ray_cast_io_x(lexer*, fdm*, ghostcell*,int,int);
+    void ray_cast_io_ycorr(lexer*, fdm*, ghostcell*,int,int);
+    void ray_cast_io_zcorr(lexer*, fdm*, ghostcell*,int,int);
     void ray_cast_x(lexer*, fdm*, ghostcell*,int,int);
-	void ray_cast_y(lexer*, fdm*, ghostcell*,int,int);
-	void ray_cast_z(lexer*, fdm*, ghostcell*,int,int);
+    void ray_cast_y(lexer*, fdm*, ghostcell*,int,int);
+    void ray_cast_z(lexer*, fdm*, ghostcell*,int,int);
     void reini_AB2(lexer*, fdm*, ghostcell*, field&);
     void reini_RK2(lexer*, fdm*, ghostcell*, field&);
     
@@ -174,21 +174,21 @@ private:
     int *tri_switch,*tri_switch_id,*tri_switch_local,*tri_switch_local_id;
     int tricount_local,*tricount_local_list,*tricount_local_displ;
     int tricount_switch_total;
-	vector<vector<double> > tri_x_r;
-	vector<vector<double> > tri_y_r;
-	vector<vector<double> > tri_z_r;
+    vector<vector<double> > tri_x_r;
+    vector<vector<double> > tri_y_r;
+    vector<vector<double> > tri_z_r;
     double xs,xe,ys,ye,zs,ze;
     int entity_sum, count, rayiter;
     int *tstart,*tend;
     double epsifb;
     const double epsi; 
     
-	// Parallel	
-	double *xstart, *xend, *ystart, *yend, *zstart, *zend;
-	
+    // Parallel    
+    double *xstart, *xend, *ystart, *yend, *zstart, *zend;
+    
     // Reini
     reinidisc *prdisc;
-	vec f, frk1, L, dt; 
+    vec f, frk1, L, dt; 
     int reiniter;
    
     double kernel(const double&);
@@ -210,9 +210,9 @@ private:
 
 
     // Mooring
-	vector<double> X311_xen, X311_yen, X311_zen;
-	vector<mooring*> pmooring;
-	vector<double> Xme, Yme, Zme, Kme, Mme, Nme;    
+    vector<double> X311_xen, X311_yen, X311_zen;
+    vector<mooring*> pmooring;
+    vector<double> Xme, Yme, Zme, Kme, Mme, Nme;    
     
     // Net
     vector<double> Xne, Yne, Zne, Kne, Mne, Nne;   

@@ -35,7 +35,7 @@ class nsewave_wetdry_v : public nsewave_wetdry
 {
 public:
     nsewave_wetdry_v(lexer*, fdm*, ghostcell*);
-	virtual ~nsewave_wetdry_v();
+    virtual ~nsewave_wetdry_v();
     
     virtual void start(lexer*, fdm*, ghostcell*);
     virtual void ini(lexer*, fdm*, ghostcell*);

@@ -37,27 +37,27 @@ using namespace std;
 class sflow_momentum_AB2 : public sflow_momentum, public increment
 {
 public:
-	sflow_momentum_AB2(lexer*, fdm2D*, sflow_convection*, sflow_diffusion*, sflow_pressure*, solver2D*, solver2D*, ioflow*, sflow_fsf*, sixdof*);
-	virtual ~sflow_momentum_AB2();
-	virtual void start(lexer*, fdm2D*, ghostcell*);
+    sflow_momentum_AB2(lexer*, fdm2D*, sflow_convection*, sflow_diffusion*, sflow_pressure*, solver2D*, solver2D*, ioflow*, sflow_fsf*, sixdof*);
+    virtual ~sflow_momentum_AB2();
+    virtual void start(lexer*, fdm2D*, ghostcell*);
 
     slice1 Pab;
-	slice2 Qab;
+    slice2 Qab;
 
 private:
-	void irhs(lexer*,fdm2D*,ghostcell*,slice&,double);
-	void jrhs(lexer*,fdm2D*,ghostcell*,slice&,double);
-	
-	int gcval_u, gcval_v;
-	double starttime;
+    void irhs(lexer*,fdm2D*,ghostcell*,slice&,double);
+    void jrhs(lexer*,fdm2D*,ghostcell*,slice&,double);
+    
+    int gcval_u, gcval_v;
+    double starttime;
 
-	sflow_convection *pconvec;
-	sflow_diffusion *pdiff;
-	sflow_pressure *ppress;
-	solver2D *psolv;
+    sflow_convection *pconvec;
+    sflow_diffusion *pdiff;
+    sflow_pressure *ppress;
+    solver2D *psolv;
     solver2D *ppoissonsolv;
-	ioflow *pflow;
-	sflow_fsf *pfsf;
+    ioflow *pflow;
+    sflow_fsf *pfsf;
 };
 
 #endif

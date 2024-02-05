@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"sflow_ediff.h"
+
+#include"sflow_ediff.h"
 #include"lexer.h"
 #include"fdm2D.h"
 
@@ -34,10 +35,10 @@ sflow_ediff::~sflow_ediff()
 void sflow_ediff::diff_u(lexer* p, fdm2D *b, ghostcell *pgc, solver2D *psolv, slice &u, slice &v, double alpha)
 {
     double visc=p->W2;
-    
-	SLICELOOP1
-    {
-	b->F(i,j) +=  ((visc+0.5*(b->eddyv(i,j) + b->eddyv(i+1,j)))/(p->DXM*p->DXM))*
+       
+    SLICELOOP1
+       {
+    b->F(i,j) +=  ((visc+0.5*(b->eddyv(i,j) + b->eddyv(i+1,j)))/(p->DXM*p->DXM))*
     
                 (2.0*(u(i+1,j) - 2.0*u(i,j) + u(i-1,j))
                     +(u(i,j+1) - 2.0*u(i,j) + u(i,j-1))
@@ -51,10 +52,10 @@ void sflow_ediff::diff_u(lexer* p, fdm2D *b, ghostcell *pgc, solver2D *psolv, sl
 void sflow_ediff::diff_v(lexer* p, fdm2D *b, ghostcell *pgc, solver2D *psolv, slice &u, slice &v, double alpha)
 {
     double visc=p->W2;
-    
-	SLICELOOP2
-    {
-	b->G(i,j) +=  ((visc+0.5*(b->eddyv(i,j) + b->eddyv(i,j+1)))/(p->DXM*p->DXM))*
+       
+    SLICELOOP2
+       {
+    b->G(i,j) +=  ((visc+0.5*(b->eddyv(i,j) + b->eddyv(i,j+1)))/(p->DXM*p->DXM))*
     
                 (     (v(i+1,j) - 2.0*v(i,j) + v(i-1,j))
                 + 2.0*(v(i,j+1) - 2.0*v(i,j) + v(i,j-1))
@@ -66,10 +67,10 @@ void sflow_ediff::diff_v(lexer* p, fdm2D *b, ghostcell *pgc, solver2D *psolv, sl
 void sflow_ediff::diff_w(lexer* p, fdm2D *b, ghostcell *pgc, solver2D *psolv, slice &u, slice &v, slice &w, double alpha)
 {
     double visc=p->W2;
-    
-	SLICELOOP4
-    {
-	b->L(i,j) +=  ((visc+0.5*(b->eddyv(i,j) + b->eddyv(i,j+1)))/(p->DXM*p->DXM))*
+       
+    SLICELOOP4
+       {
+    b->L(i,j) +=  ((visc+0.5*(b->eddyv(i,j) + b->eddyv(i,j+1)))/(p->DXM*p->DXM))*
     
                 (     (v(i+1,j) - 2.0*v(i,j) + v(i-1,j))
                 + 2.0*(v(i,j+1) - 2.0*v(i,j) + v(i,j-1))

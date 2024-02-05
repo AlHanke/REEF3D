@@ -45,12 +45,12 @@ nhflow_poisson::~nhflow_poisson()
 }
 
 void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
-{	
+{    
     double sigxyz2;
    
-	n=0;
+    n=0;
     LOOP
-	{
+    {
         if(p->wet[IJ]==1 && d->breaking(i,j)==0)
         {
             sigxyz2 = pow(p->sigx[FIJK],2.0) + pow(p->sigy[FIJK],2.0) + pow(p->sigz[IJ],2.0);
@@ -116,13 +116,13 @@ void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
         
         d->rhsvec.V[n] =  0.0;
         }
-	
-	++n;
-	}
+    
+    ++n;
+    }
     
     n=0;
-	LOOP
-	{
+    LOOP
+    {
         if(p->wet[IJ]==1 && d->breaking(i,j)==0)
         {
             if(p->flag7[FIm1JK]<0)
@@ -221,8 +221,8 @@ void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
             }
   
         }
-	++n;
-	}
+    ++n;
+    }
 }
 
 /*

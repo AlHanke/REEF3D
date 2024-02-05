@@ -36,17 +36,17 @@ Author: Hans Bihs
 
 sediment_exner::sediment_exner(lexer* p, ghostcell* pgc) : q0(p),dqx0(p),dqy0(p), xvec(p),rhsvec(p),M(p)
 {
-	if(p->S50==1)
-	gcval_topo=151;
+    if(p->S50==1)
+    gcval_topo=151;
 
-	if(p->S50==2)
-	gcval_topo=152;
+    if(p->S50==2)
+    gcval_topo=152;
 
-	if(p->S50==3)
-	gcval_topo=153;
-	
-	if(p->S50==4)
-	gcval_topo=154;
+    if(p->S50==3)
+    gcval_topo=153;
+    
+    if(p->S50==4)
+    gcval_topo=154;
     
     
     rhosed=p->S22;
@@ -89,25 +89,25 @@ void sediment_exner::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
    
     SLICELOOP4
     {
-		topovel(p,pgc,s,vx,vy,vz);
+        topovel(p,pgc,s,vx,vy,vz);
         dqx0(i,j) = vx;
         dqy0(i,j) = vy;
-		s->vz(i,j) = vz;
-	}
+        s->vz(i,j) = vz;
+    }
     
-	pgc->gcsl_start4(p,s->vz,1);
-	
+    pgc->gcsl_start4(p,s->vz,1);
+    
     timestep(p,pgc,s);
     
     
-	
-	SLICELOOP4
+    
+    SLICELOOP4
     {
     if(s->active(i,j)==1 || s->vz(i,j)>0.0)
     s->bedzh(i,j) += p->dtsed*s->vz(i,j);
     }
 
-	pgc->gcsl_start4(p,s->bedzh,1);
+    pgc->gcsl_start4(p,s->bedzh,1);
 }
 
 

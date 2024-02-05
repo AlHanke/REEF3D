@@ -33,29 +33,29 @@ class mgc4a :  public increment
 {
 public:
 
-	mgc4a (lexer *);
-	virtual ~mgc4a();
+    mgc4a (lexer *);
+    virtual ~mgc4a();
 
     //mgc4
-	void makemgc(lexer*);
-	void mgcsetup(lexer*);
-	void gcdirfill(lexer*);
-	void fillmgc(lexer*);
+    void makemgc(lexer*);
+    void mgcsetup(lexer*);
+    void gcdirfill(lexer*);
+    void fillmgc(lexer*);
     void fillgcb(lexer*);
 
-	// ggc
-	void make_ggc(lexer*);
-	void fill_ggc(lexer*);
+    // ggc
+    void make_ggc(lexer*);
+    void fill_ggc(lexer*);
     
     // dgc
     void make_dgc(lexer*);
     void fill_dgc(lexer*);
 
-	int imin,imax,jmax,jmin,kmin,kmax;
+    int imin,imax,jmax,jmin,kmin,kmax;
     
 private:
-	int di,dj,dk;
-	int qn;
+    int di,dj,dk;
+    int qn;
     
     int *hgc;
 };

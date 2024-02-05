@@ -26,11 +26,11 @@ Author: Hans Bihs
 
 int ghostcell::column_pt4_count(lexer* p, fdm* a)
 {
-	n=0;
+    n=0;
     LOOP
-	++n;
+    ++n;
 
-	GGC4LOOP
+    GGC4LOOP
     {
     i=p->gcb4[g][0];
     j=p->gcb4[g][1];
@@ -39,83 +39,83 @@ int ghostcell::column_pt4_count(lexer* p, fdm* a)
         for(q=0;q<margin;++q)
         ++n;
     }
-	
-	for(g=0;g<p->gcpara1_count;++g)
+    
+    for(g=0;g<p->gcpara1_count;++g)
     {
     i=p->gcpara1[g][0];
     j=p->gcpara1[g][1];
     k=p->gcpara1[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara1[g][3]==1)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara2_count;++g)
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara1[g][3]==1)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara2_count;++g)
     {
     i=p->gcpara2[g][0];
     j=p->gcpara2[g][1];
     k=p->gcpara2[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara2[g][3]==1)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara3_count;++g)
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara2[g][3]==1)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara3_count;++g)
     {
     i=p->gcpara3[g][0];
     j=p->gcpara3[g][1];
     k=p->gcpara3[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara3[g][3]==1)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara4_count;++g)
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara3[g][3]==1)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara4_count;++g)
     {
     i=p->gcpara4[g][0];
     j=p->gcpara4[g][1];
     k=p->gcpara4[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara4[g][3]==1)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara5_count;++g)
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara4[g][3]==1)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara5_count;++g)
     {
     i=p->gcpara5[g][0];
     j=p->gcpara5[g][1];
     k=p->gcpara5[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara5[g][3]==1)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara6_count;++g)
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara5[g][3]==1)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara6_count;++g)
     {
     i=p->gcpara6[g][0];
     j=p->gcpara6[g][1];
     k=p->gcpara6[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara6[g][3]==1)
-		++n;
-	}
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara6[g][3]==1)
+        ++n;
+    }
     
     return n;
 }
 
 int ghostcell::column_pt4a_count(lexer* p, fdm* a)
 {
-	n=0;
+    n=0;
     ALOOP
-	++n;
-	
-	GGC4ALOOP
+    ++n;
+    
+    GGC4ALOOP
     {
     i=p->gcb4[g][0];
     j=p->gcb4[g][1];
@@ -124,77 +124,77 @@ int ghostcell::column_pt4a_count(lexer* p, fdm* a)
         for(q=0;q<margin;++q)
         ++n;
     }
-	
-	for(g=0;g<p->gcpara1_count;++g)
+    
+    for(g=0;g<p->gcpara1_count;++g)
     {
     i=p->gcpara1[g][0];
     j=p->gcpara1[g][1];
     k=p->gcpara1[g][2];
-	
-		for(q=0;q<margin;++q)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara2_count;++g)
+    
+        for(q=0;q<margin;++q)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara2_count;++g)
     {
     i=p->gcpara2[g][0];
     j=p->gcpara2[g][1];
     k=p->gcpara2[g][2];
-	
-		for(q=0;q<margin;++q)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara3_count;++g)
+    
+        for(q=0;q<margin;++q)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara3_count;++g)
     {
     i=p->gcpara3[g][0];
     j=p->gcpara3[g][1];
     k=p->gcpara3[g][2];
-	
-		for(q=0;q<margin;++q)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara4_count;++g)
+    
+        for(q=0;q<margin;++q)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara4_count;++g)
     {
     i=p->gcpara4[g][0];
     j=p->gcpara4[g][1];
     k=p->gcpara4[g][2];
-	
-		for(q=0;q<margin;++q)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara5_count;++g)
+    
+        for(q=0;q<margin;++q)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara5_count;++g)
     {
     i=p->gcpara5[g][0];
     j=p->gcpara5[g][1];
     k=p->gcpara5[g][2];
-	
-		for(q=0;q<margin;++q)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara6_count;++g)
+    
+        for(q=0;q<margin;++q)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara6_count;++g)
     {
     i=p->gcpara6[g][0];
     j=p->gcpara6[g][1];
     k=p->gcpara6[g][2];
-	
-		for(q=0;q<margin;++q)
-		++n;
-	}
+    
+        for(q=0;q<margin;++q)
+        ++n;
+    }
     
     return n;
 }
 
 int ghostcell::column_pt6_count(lexer* p, fdm* a)
 {
-	n=0;
+    n=0;
     BASELOOP
-	++n;
+    ++n;
 
-	GGC6LOOP
+    GGC6LOOP
     {
     i=p->gcb4[g][0];
     j=p->gcb4[g][1];
@@ -204,71 +204,71 @@ int ghostcell::column_pt6_count(lexer* p, fdm* a)
         ++n;
     }
 
-	for(g=0;g<p->gcpara1_count;++g)
+    for(g=0;g<p->gcpara1_count;++g)
     {
     i=p->gcpara1[g][0];
     j=p->gcpara1[g][1];
     k=p->gcpara1[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara1[g][8]==1)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara2_count;++g)
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara1[g][8]==1)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara2_count;++g)
     {
     i=p->gcpara2[g][0];
     j=p->gcpara2[g][1];
     k=p->gcpara2[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara2[g][8]==1)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara3_count;++g)
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara2[g][8]==1)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara3_count;++g)
     {
     i=p->gcpara3[g][0];
     j=p->gcpara3[g][1];
     k=p->gcpara3[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara3[g][8]==1)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara4_count;++g)
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara3[g][8]==1)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara4_count;++g)
     {
     i=p->gcpara4[g][0];
     j=p->gcpara4[g][1];
     k=p->gcpara4[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara4[g][8]==1)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara5_count;++g)
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara4[g][8]==1)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara5_count;++g)
     {
     i=p->gcpara5[g][0];
     j=p->gcpara5[g][1];
     k=p->gcpara5[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara5[g][8]==1)
-		++n;
-	}
-	
-	for(g=0;g<p->gcpara6_count;++g)
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara5[g][8]==1)
+        ++n;
+    }
+    
+    for(g=0;g<p->gcpara6_count;++g)
     {
     i=p->gcpara6[g][0];
     j=p->gcpara6[g][1];
     k=p->gcpara6[g][2];
-	
-		for(q=0;q<margin;++q)
-		if(p->gcpara6[g][8]==1)
-		++n;
-	}
+    
+        for(q=0;q<margin;++q)
+        if(p->gcpara6[g][8]==1)
+        ++n;
+    }
     
     return n;
 }

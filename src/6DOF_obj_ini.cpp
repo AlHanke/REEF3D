@@ -45,7 +45,7 @@ void sixdof_obj::initialize(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& pnet
     
     // Initialise folder structure
     if(p->X50==1)
-	print_ini_vtp(p,a,pgc);
+    print_ini_vtp(p,a,pgc);
     
     if(p->X50==2)
     print_ini_stl(p,a,pgc);
@@ -54,30 +54,30 @@ void sixdof_obj::initialize(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& pnet
     ini_parallel(p,a,pgc);
     
     // Initialise objects
-	objects_create(p,a,pgc);
+    objects_create(p,a,pgc);
     
     // Initialise fbvel
-	ini_fbvel(p,a,pgc);
+    ini_fbvel(p,a,pgc);
     
     // Level Set for floating body
     ray_cast(p,a,pgc);
-	reini_RK2(p,a,pgc,a->fb);
+    reini_RK2(p,a,pgc,a->fb);
     pgc->start4a(p,a->fb,50);
     
     // Calculate geometrical properties
-	geometry(p,a,pgc);
+    geometry(p,a,pgc);
     
     // Initialise position of bodies
     iniPosition_RBM(p,a,pgc);
-	
-	// Recalculate distances
-	ray_cast(p,a,pgc);
-	reini_RK2(p,a,pgc,a->fb);
+    
+    // Recalculate distances
+    ray_cast(p,a,pgc);
+    reini_RK2(p,a,pgc,a->fb);
     pgc->start4a(p,a->fb,50);
     
     // Initialise global variables
-	interface(p,true);
-	maxvel(p,a,pgc);
+    interface(p,true);
+    maxvel(p,a,pgc);
    
     // Initialise floating fields
      ULOOP
@@ -104,59 +104,59 @@ void sixdof_obj::initialize(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& pnet
     if(p->X50==2)
     print_stl(p,a,pgc);
 
-	// Mooring
-	if(p->X310==0)
-	{
-		pmooring.push_back(new mooring_void());
-	}
+    // Mooring
+    if(p->X310==0)
+    {
+        pmooring.push_back(new mooring_void());
+    }
     
-	else
-	{
-		MPI_Bcast(&p->mooring_count,1,MPI_DOUBLE,0,pgc->mpi_comm);	
+    else
+    {
+        MPI_Bcast(&p->mooring_count,1,MPI_DOUBLE,0,pgc->mpi_comm);    
 
-		Xme.resize(p->mooring_count);
-		Yme.resize(p->mooring_count);
-		Zme.resize(p->mooring_count);
-		Kme.resize(p->mooring_count);
-		Mme.resize(p->mooring_count);
-		Nme.resize(p->mooring_count);
+        Xme.resize(p->mooring_count);
+        Yme.resize(p->mooring_count);
+        Zme.resize(p->mooring_count);
+        Kme.resize(p->mooring_count);
+        Mme.resize(p->mooring_count);
+        Nme.resize(p->mooring_count);
 
-		if(p->mpirank==0 && p->P14==1)
-		{
-			mkdir("./REEF3D_CFD_6DOF_Mooring",0777);	
-		}		
+        if(p->mpirank==0 && p->P14==1)
+        {
+            mkdir("./REEF3D_CFD_6DOF_Mooring",0777);    
+        }        
 
-		pmooring.reserve(p->mooring_count);
-		X311_xen.resize(p->mooring_count,0.0);
-		X311_yen.resize(p->mooring_count,0.0);
-		X311_zen.resize(p->mooring_count,0.0);
-			
-		for (int i=0; i < p->mooring_count; i++)
-		{
-			if(p->X310==1)
-			{
-				pmooring.push_back(new mooring_Catenary(i));
-			}	
-			else if(p->X310==2)
-			{
-				pmooring.push_back(new mooring_barQuasiStatic(i)); 
-			}	
-			else if(p->X310==3)
-			{
+        pmooring.reserve(p->mooring_count);
+        X311_xen.resize(p->mooring_count,0.0);
+        X311_yen.resize(p->mooring_count,0.0);
+        X311_zen.resize(p->mooring_count,0.0);
+            
+        for (int i=0; i < p->mooring_count; i++)
+        {
+            if(p->X310==1)
+            {
+                pmooring.push_back(new mooring_Catenary(i));
+            }    
+            else if(p->X310==2)
+            {
+                pmooring.push_back(new mooring_barQuasiStatic(i)); 
+            }    
+            else if(p->X310==3)
+            {
                 pmooring.push_back(new mooring_dynamic(i));
-			}
-			else if(p->X310==4)
-			{
-				pmooring.push_back(new mooring_Spring(i));
-			}
-		
-			X311_xen[i] = p->X311_xe[i] - p->xg;
-			X311_yen[i] = p->X311_ye[i] - p->yg;
-			X311_zen[i] = p->X311_ze[i] - p->zg;
-		
-			pmooring[i]->initialize(p,pgc);
-		}
-	}	
+            }
+            else if(p->X310==4)
+            {
+                pmooring.push_back(new mooring_Spring(i));
+            }
+        
+            X311_xen[i] = p->X311_xe[i] - p->xg;
+            X311_yen[i] = p->X311_ye[i] - p->yg;
+            X311_zen[i] = p->X311_ze[i] - p->zg;
+        
+            pmooring[i]->initialize(p,pgc);
+        }
+    }    
 
 
     // Net
@@ -166,37 +166,37 @@ void sixdof_obj::initialize(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& pnet
     }
     else
     {
-		MPI_Bcast(&p->net_count,1,MPI_DOUBLE,0,pgc->mpi_comm);
+        MPI_Bcast(&p->net_count,1,MPI_DOUBLE,0,pgc->mpi_comm);
         
         Xne.resize(p->net_count);
-		Yne.resize(p->net_count);
-		Zne.resize(p->net_count);
-		Kne.resize(p->net_count);
-		Mne.resize(p->net_count);
-		Nne.resize(p->net_count);
+        Yne.resize(p->net_count);
+        Zne.resize(p->net_count);
+        Kne.resize(p->net_count);
+        Mne.resize(p->net_count);
+        Nne.resize(p->net_count);
 
         if(p->mpirank==0)
         {
             if(p->P14==1)
             {
-                mkdir("./REEF3D_CFD_6DOF_Net",0777);	
+                mkdir("./REEF3D_CFD_6DOF_Net",0777);    
             }
         }
         else
         {
             p->X320_type = new int[p->net_count];
         }
-		
-        pnet.reserve(p->net_count);	
+        
+        pnet.reserve(p->net_count);    
   
-		for (int ii=0; ii < p->net_count; ii++)
-		{
+        for (int ii=0; ii < p->net_count; ii++)
+        {
             MPI_Bcast(&p->X320_type[ii],1,MPI_INT,0,pgc->mpi_comm);
-			
+            
             if(p->X320_type[ii] > 10)
-			{
-				pnet.push_back(new net_barDyn(ii,p));
-			}
+            {
+                pnet.push_back(new net_barDyn(ii,p));
+            }
             else if (p->X320_type[ii] < 4)
             {
                 pnet.push_back(new net_barQuasiStatic(ii,p));
@@ -205,9 +205,9 @@ void sixdof_obj::initialize(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& pnet
             {
                  pnet.push_back(new net_sheet(ii,p));
             }
-			
+            
             pnet[ii]->initialize(p,a,pgc);
-		}
+        }
     }
     
     // ghostcell update

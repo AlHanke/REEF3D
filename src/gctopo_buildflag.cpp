@@ -26,14 +26,14 @@ Author: Hans Bihs
 
 void ghostcell::gcb_buildflag(lexer *p, fdm *a, int **cellmem, int& cellcount)
 {
-	int cache;
+    int cache;
     
     //
     BASELOOP
     {
         if(a->solid(i,j,k)<0.0 || a->topo(i,j,k)<0.0)
         p->flag[IJK]=-1;
-			
+            
 
         if(a->solid(i,j,k)>=0.0 && a->topo(i,j,k)>=0.0)
         p->flag[IJK]=1;
@@ -46,31 +46,31 @@ void ghostcell::gcb_buildflag(lexer *p, fdm *a, int **cellmem, int& cellcount)
     cache = p->flag4[IJK];
 
         if(a->topo(i,j,k)<0.0)
-		{
+        {
         p->flag4[IJK]=TOPO;
-			
-			if(cache>0)
-			{
+            
+            if(cache>0)
+            {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=2;
             ++count;
-			}
-		}
+            }
+        }
 
         if(a->topo(i,j,k)>=0.0)
         {
         p->flag4[IJK]=WATER;
-		
-			if(cache==TOPO)
-			{
+        
+            if(cache==TOPO)
+            {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=1;
             ++count;
-			}
+            }
         }
     }
 
@@ -79,7 +79,7 @@ void ghostcell::gcb_buildflag(lexer *p, fdm *a, int **cellmem, int& cellcount)
     flagx(p,p->flag);
     flagx(p,p->flag4);
     
-	if(p->Y60==1)
+    if(p->Y60==1)
     for(int qn=0; qn<100;++qn)
     {
         count=0;
@@ -158,41 +158,41 @@ void ghostcell::gcb_velflag1(lexer *p, fdm *a, int **cellmem, int& cellcount)
     count=0;
     SOLIDLOOP
     {
-	cache = p->flag1[IJK];
-		
+    cache = p->flag1[IJK];
+        
     if(p->flag4[IJK]<0 
-	||(p->flag4[IJK]>0 && p->flag4[Ip1JK]<0))
-	{
+    ||(p->flag4[IJK]>0 && p->flag4[Ip1JK]<0))
+    {
        if(p->flag4[IJK]<0) 
        p->flag1[IJK]=p->flag4[IJK];
        
        if(p->flag4[IJK]>0 && p->flag4[Ip1JK]<0)
        p->flag1[IJK]=p->flag4[Ip1JK];
-	   
        
-		if(cache>0 && p->flag1[IJK]==TOPO)
-		{
+       
+        if(cache>0 && p->flag1[IJK]==TOPO)
+        {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=2;
             ++count;
-		}
-	}
-	   
+        }
+    }
+       
 
     if(p->flag4[IJK]>0 && p->flag4[Ip1JK]>0)
     {
-		p->flag1[IJK]=WATER;
-		
-			if(cache==TOPO)
-			{
+        p->flag1[IJK]=WATER;
+        
+            if(cache==TOPO)
+            {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=1;
             ++count;
-			}
+            }
     }
 
     }
@@ -208,40 +208,40 @@ void ghostcell::gcb_velflag2(lexer *p, fdm *a, int **cellmem, int& cellcount)
     count=0;
     SOLIDLOOP
     {
-	cache = p->flag2[IJK];
-		
+    cache = p->flag2[IJK];
+        
     if(p->flag4[IJK]<0 
-	|| (p->flag4[IJK]>0 && p->flag4[IJp1K]<0))
-	{
+    || (p->flag4[IJK]>0 && p->flag4[IJp1K]<0))
+    {
        if(p->flag4[IJK]<0) 
        p->flag2[IJK]=p->flag4[IJK];
        
        if(p->flag4[IJK]>0 && p->flag4[IJp1K]<0) 
        p->flag2[IJK]=p->flag4[IJp1K];
-	   
-		if(cache>0 && p->flag2[IJK]==TOPO)
-		{
+       
+        if(cache>0 && p->flag2[IJK]==TOPO)
+        {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=2;
             ++count;
-		}
-	}
-	   
+        }
+    }
+       
 
     if(p->flag4[IJK]>0 && p->flag4[IJp1K]>0)
     {
-		p->flag2[IJK]=WATER;
-		
-			if(cache==TOPO)
-			{
+        p->flag2[IJK]=WATER;
+        
+            if(cache==TOPO)
+            {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=1;
             ++count;
-			}
+            }
     }
 
     }
@@ -256,39 +256,39 @@ void ghostcell::gcb_velflag3(lexer *p, fdm *a, int **cellmem, int& cellcount)
     count=0;
     SOLIDLOOP
     {
-	cache = p->flag3[IJK];
-		
+    cache = p->flag3[IJK];
+        
     if(p->flag4[IJK]<0 
-	|| (p->flag4[IJK]>0 && p->flag4[IJKp1]<0))
-	{
+    || (p->flag4[IJK]>0 && p->flag4[IJKp1]<0))
+    {
        if(p->flag4[IJK]<0) 
        p->flag3[IJK]=p->flag4[IJK];
        
        if(p->flag4[IJK]>0 && p->flag4[IJKp1]<0) 
        p->flag3[IJK]=p->flag4[IJKp1];
-	   
-		if(cache>0 && p->flag3[IJK]==TOPO)
-		{
+       
+        if(cache>0 && p->flag3[IJK]==TOPO)
+        {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=2;
             ++count;
-		}
-	}
-	   
+        }
+    }
+       
     if(p->flag4[IJK]>0 && p->flag4[IJKp1]>0)
     {
-		p->flag3[IJK]=WATER;
-		
-			if(cache==TOPO)
-			{
+        p->flag3[IJK]=WATER;
+        
+            if(cache==TOPO)
+            {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=1;
             ++count;
-			}
+            }
     }
 
     }

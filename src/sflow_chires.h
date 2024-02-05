@@ -37,20 +37,20 @@ class sflow_chires : public sflow_convection, public increment
 
 public:
 
-	sflow_chires (lexer*,fdm2D*,int);
-	virtual ~sflow_chires();
+    sflow_chires (lexer*,fdm2D*,int);
+    virtual ~sflow_chires();
 
-	virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
-	
+    virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
+    
 private:
     double aij(lexer*, fdm2D*, slice&, int, slice&, slice&);
-	
-	double ul,ur,vl,vr,wl,wr;
+    
+    double ul,ur,vl,vr,wl,wr;
 
-	double dx,dy,dz;
-	double L;
-	
-	sflow_fluxlim *plim;
+    double dx,dy,dz;
+    double L;
+    
+    sflow_fluxlim *plim;
     sflow_flux *pflux;
     
     double ivel1,ivel2,jvel1,jvel2;

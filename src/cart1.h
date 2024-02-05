@@ -31,15 +31,15 @@ class cart1
 {
 public:
 
-	cart1 (lexer *);
-	virtual ~cart1();
+    cart1 (lexer *);
+    virtual ~cart1();
 
-	int di,dj,dk;
-	
-	static int** ggc;
+    int di,dj,dk;
+    
+    static int** ggc;
     static int* ggcmem;
-	static int ggccount;
-	static int ggcsize;
+    static int ggccount;
+    static int ggcsize;
 };
 
 #endif

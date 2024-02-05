@@ -25,29 +25,29 @@ Author: Hans Bihs
 
 matrix_diag::matrix_diag(lexer *pp)
 {
-	pp->Darray(n,pp->veclength);
-	pp->Darray(s,pp->veclength);
-	pp->Darray(e,pp->veclength);
-	pp->Darray(w,pp->veclength);
-	pp->Darray(t,pp->veclength);
-	pp->Darray(b,pp->veclength);
-	pp->Darray(p,pp->veclength);
+    pp->Darray(n,pp->veclength);
+    pp->Darray(s,pp->veclength);
+    pp->Darray(e,pp->veclength);
+    pp->Darray(w,pp->veclength);
+    pp->Darray(t,pp->veclength);
+    pp->Darray(b,pp->veclength);
+    pp->Darray(p,pp->veclength);
     
     if(pp->A320>=2)
     {
     pp->Darray(nn,pp->veclength);
     pp->Darray(ss,pp->veclength);
-	pp->Darray(ee,pp->veclength);
-	pp->Darray(ww,pp->veclength);
-	pp->Darray(tt,pp->veclength);
-	pp->Darray(bb,pp->veclength);
+    pp->Darray(ee,pp->veclength);
+    pp->Darray(ww,pp->veclength);
+    pp->Darray(tt,pp->veclength);
+    pp->Darray(bb,pp->veclength);
     
     /*pp->Darray(nnn,pp->veclength);
     pp->Darray(sss,pp->veclength);
-	pp->Darray(eee,pp->veclength);
-	pp->Darray(www,pp->veclength);
-	pp->Darray(ttt,pp->veclength);
-	pp->Darray(bbb,pp->veclength);*/
+    pp->Darray(eee,pp->veclength);
+    pp->Darray(www,pp->veclength);
+    pp->Darray(ttt,pp->veclength);
+    pp->Darray(bbb,pp->veclength);*/
     }
     
     if(pp->D33==1)
@@ -67,12 +67,12 @@ matrix_diag::matrix_diag(lexer *pp)
 matrix_diag::~matrix_diag()
 {
     delete [] n;
-	delete [] s;
-	delete [] w;
-	delete [] e;
-	delete [] t;
-	delete [] b;
-	delete [] p;
+    delete [] s;
+    delete [] w;
+    delete [] e;
+    delete [] t;
+    delete [] b;
+    delete [] p;
 }
 
 void matrix_diag::resize(lexer *pp, int size_old, int size_new)

@@ -19,14 +19,15 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"fnpf_vtp_fsf.h"
+
+#include"fnpf_vtp_fsf.h"
 #include"lexer.h"
 #include"fdm_fnpf.h"
 #include"ghostcell.h"
 #include<string>
 
-void fnpf_vtp_fsf::name_iter(lexer *p, fdm_fnpf *c, ghostcell* pgc)
-{	
+v    id fnpf_vtp_fsf::name_iter(lexer *p, fdm_fnpf *c, ghostcell* pgc)
+{    
     int num=0;
 
     if(p->P15==1)
@@ -36,217 +37,217 @@ void fnpf_vtp_fsf::name_iter(lexer *p, fdm_fnpf *c, ghostcell* pgc)
     num = p->count;
 
 if(p->P14==0)
-{
-	if(p->mpirank<9)
-	{
-		if(num<10)
-		sprintf(name,"REEF3D-FNPF-FSF-00000%i-0000%i.vtp",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"REEF3D-FNPF-FSF-0000%i-0000%i.vtp",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"REEF3D-FNPF-FSF-000%i-0000%i.vtp",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"REEF3D-FNPF-FSF-00%i-0000%i.vtp",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"REEF3D-FNPF-FSF-0%i-0000%i.vtp",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"REEF3D-FNPF-FSF-%i-0000%i.vtp",num,p->mpirank+1);
-	}
-
-	if(p->mpirank<99&&p->mpirank>8)
-	{
-		if(num<10)
-		sprintf(name,"REEF3D-FNPF-FSF-00000%i-000%i.vtp",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"REEF3D-FNPF-FSF-0000%i-000%i.vtp",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"REEF3D-FNPF-FSF-000%i-000%i.vtp",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"REEF3D-FNPF-FSF-00%i-000%i.vtp",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"REEF3D-FNPF-FSF-0%i-000%i.vtp",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"REEF3D-FNPF-FSF-%i-000%i.vtp",num,p->mpirank+1);
-	}
-	if(p->mpirank<999&&p->mpirank>98)
-	{
-		if(num<10)
-		sprintf(name,"REEF3D-FNPF-FSF-00000%i-00%i.vtp",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"REEF3D-FNPF-FSF-0000%i-00%i.vtp",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"REEF3D-FNPF-FSF-000%i-00%i.vtp",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"REEF3D-FNPF-FSF-00%i-00%i.vtp",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"REEF3D-FNPF-FSF-0%i-00%i.vtp",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"REEF3D-FNPF-FSF-%i-00%i.vtp",num,p->mpirank+1);
-	}
-
-	if(p->mpirank<9999&&p->mpirank>998)
-	{
-		if(num<10)
-		sprintf(name,"REEF3D-FNPF-FSF-00000%i-0%i.vtp",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"REEF3D-FNPF-FSF-0000%i-0%i.vtp",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"REEF3D-FNPF-FSF-000%i-0%i.vtp",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"REEF3D-FNPF-FSF-00%i-0%i.vtp",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"REEF3D-FNPF-FSF-0%i-0%i.vtp",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"REEF3D-FNPF-FSF-%i-0%i.vtp",num,p->mpirank+1);
-	}
-
-	if(p->mpirank>9998)
-	{
-		if(num<10)
-		sprintf(name,"REEF3D-FNPF-FSF-00000%i-%i.vtp",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"REEF3D-FNPF-FSF-0000%i-%i.vtp",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"REEF3D-FNPF-FSF-000%i-%i.vtp",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"REEF3D-FNPF-FSF-00%i-%i.vtp",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"REEF3D-FNPF-FSF-0%i-%i.vtp",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"REEF3D-FNPF-FSF-%i-%i.vtp",num,p->mpirank+1);
-	}
+    
+    if(p->mpirank<9)
+        
+        if(num<10)
+        sprintf(name,"REEF3D-FNPF-FSF-00000%i-0000%i.vtp",num,p->mpirank+1);
+        
+        if(num<100&&num>9)
+        sprintf(name,"REEF3D-FNPF-FSF-0000%i-0000%i.vtp",num,p->mpirank+1);
+        
+        if(num<1000&&num>99)
+        sprintf(name,"REEF3D-FNPF-FSF-000%i-0000%i.vtp",num,p->mpirank+1);
+        
+        if(num<10000&&num>999)
+        sprintf(name,"REEF3D-FNPF-FSF-00%i-0000%i.vtp",num,p->mpirank+1);
+        
+        if(num<100000&&num>9999)
+        sprintf(name,"REEF3D-FNPF-FSF-0%i-0000%i.vtp",num,p->mpirank+1);
+        
+        if(num>99999)
+        sprintf(name,"REEF3D-FNPF-FSF-%i-0000%i.vtp",num,p->mpirank+1);
+    }
+    
+    if(p->mpirank<99&&p->mpirank>8)
+        
+        if(num<10)
+        sprintf(name,"REEF3D-FNPF-FSF-00000%i-000%i.vtp",num,p->mpirank+1);
+        
+        if(num<100&&num>9)
+        sprintf(name,"REEF3D-FNPF-FSF-0000%i-000%i.vtp",num,p->mpirank+1);
+        
+        if(num<1000&&num>99)
+        sprintf(name,"REEF3D-FNPF-FSF-000%i-000%i.vtp",num,p->mpirank+1);
+        
+        if(num<10000&&num>999)
+        sprintf(name,"REEF3D-FNPF-FSF-00%i-000%i.vtp",num,p->mpirank+1);
+        
+        if(num<100000&&num>9999)
+        sprintf(name,"REEF3D-FNPF-FSF-0%i-000%i.vtp",num,p->mpirank+1);
+        
+        if(num>99999)
+        sprintf(name,"REEF3D-FNPF-FSF-%i-000%i.vtp",num,p->mpirank+1);
+    }
+    if(p->mpirank<999&&p->mpirank>98)
+        
+        if(num<10)
+        sprintf(name,"REEF3D-FNPF-FSF-00000%i-00%i.vtp",num,p->mpirank+1);
+        
+        if(num<100&&num>9)
+        sprintf(name,"REEF3D-FNPF-FSF-0000%i-00%i.vtp",num,p->mpirank+1);
+        
+        if(num<1000&&num>99)
+        sprintf(name,"REEF3D-FNPF-FSF-000%i-00%i.vtp",num,p->mpirank+1);
+        
+        if(num<10000&&num>999)
+        sprintf(name,"REEF3D-FNPF-FSF-00%i-00%i.vtp",num,p->mpirank+1);
+        
+        if(num<100000&&num>9999)
+        sprintf(name,"REEF3D-FNPF-FSF-0%i-00%i.vtp",num,p->mpirank+1);
+        
+        if(num>99999)
+        sprintf(name,"REEF3D-FNPF-FSF-%i-00%i.vtp",num,p->mpirank+1);
+    }
+    
+    if(p->mpirank<9999&&p->mpirank>998)
+        
+        if(num<10)
+        sprintf(name,"REEF3D-FNPF-FSF-00000%i-0%i.vtp",num,p->mpirank+1);
+        
+        if(num<100&&num>9)
+        sprintf(name,"REEF3D-FNPF-FSF-0000%i-0%i.vtp",num,p->mpirank+1);
+        
+        if(num<1000&&num>99)
+        sprintf(name,"REEF3D-FNPF-FSF-000%i-0%i.vtp",num,p->mpirank+1);
+        
+        if(num<10000&&num>999)
+        sprintf(name,"REEF3D-FNPF-FSF-00%i-0%i.vtp",num,p->mpirank+1);
+        
+        if(num<100000&&num>9999)
+        sprintf(name,"REEF3D-FNPF-FSF-0%i-0%i.vtp",num,p->mpirank+1);
+        
+        if(num>99999)
+        sprintf(name,"REEF3D-FNPF-FSF-%i-0%i.vtp",num,p->mpirank+1);
+    }
+    
+    if(p->mpirank>9998)
+        
+        if(num<10)
+        sprintf(name,"REEF3D-FNPF-FSF-00000%i-%i.vtp",num,p->mpirank+1);
+        
+        if(num<100&&num>9)
+        sprintf(name,"REEF3D-FNPF-FSF-0000%i-%i.vtp",num,p->mpirank+1);
+        
+        if(num<1000&&num>99)
+        sprintf(name,"REEF3D-FNPF-FSF-000%i-%i.vtp",num,p->mpirank+1);
+        
+        if(num<10000&&num>999)
+        sprintf(name,"REEF3D-FNPF-FSF-00%i-%i.vtp",num,p->mpirank+1);
+        
+        if(num<100000&&num>9999)
+        sprintf(name,"REEF3D-FNPF-FSF-0%i-%i.vtp",num,p->mpirank+1);
+        
+        if(num>99999)
+        sprintf(name,"REEF3D-FNPF-FSF-%i-%i.vtp",num,p->mpirank+1);
+    }
 }
 
 if(p->P14==1)
-{
-	if(p->mpirank<9)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00000%i-0000%i.vtp",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0000%i-0000%i.vtp",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-000%i-0000%i.vtp",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00%i-0000%i.vtp",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0%i-0000%i.vtp",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-%i-0000%i.vtp",num,p->mpirank+1);
-	}
-
-	if(p->mpirank<99&&p->mpirank>8)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00000%i-000%i.vtp",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0000%i-000%i.vtp",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-000%i-000%i.vtp",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00%i-000%i.vtp",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0%i-000%i.vtp",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-%i-000%i.vtp",num,p->mpirank+1);
-	}
-	if(p->mpirank<999&&p->mpirank>98)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00000%i-00%i.vtp",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0000%i-00%i.vtp",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-000%i-00%i.vtp",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00%i-00%i.vtp",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0%i-00%i.vtp",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-%i-00%i.vtp",num,p->mpirank+1);
-	}
-
-	if(p->mpirank<9999&&p->mpirank>998)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00000%i-0%i.vtp",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0000%i-0%i.vtp",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-000%i-0%i.vtp",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00%i-0%i.vtp",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0%i-0%i.vtp",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-%i-0%i.vtp",num,p->mpirank+1);
-	}
-
-	if(p->mpirank>9998)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00000%i-%i.vtp",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0000%i-%i.vtp",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-000%i-%i.vtp",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00%i-%i.vtp",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0%i-%i.vtp",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-%i-%i.vtp",num,p->mpirank+1);
-	}
+    
+    if(p->mpirank<9)
+        
+        if(num<10)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00000%i-0000%i.vtp",num,p->mpirank+1);
+        
+        if(num<100&&num>9)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0000%i-0000%i.vtp",num,p->mpirank+1);
+        
+        if(num<1000&&num>99)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-000%i-0000%i.vtp",num,p->mpirank+1);
+        
+        if(num<10000&&num>999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00%i-0000%i.vtp",num,p->mpirank+1);
+        
+        if(num<100000&&num>9999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0%i-0000%i.vtp",num,p->mpirank+1);
+        
+        if(num>99999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-%i-0000%i.vtp",num,p->mpirank+1);
+    }
+    
+    if(p->mpirank<99&&p->mpirank>8)
+        
+        if(num<10)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00000%i-000%i.vtp",num,p->mpirank+1);
+        
+        if(num<100&&num>9)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0000%i-000%i.vtp",num,p->mpirank+1);
+        
+        if(num<1000&&num>99)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-000%i-000%i.vtp",num,p->mpirank+1);
+        
+        if(num<10000&&num>999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00%i-000%i.vtp",num,p->mpirank+1);
+        
+        if(num<100000&&num>9999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0%i-000%i.vtp",num,p->mpirank+1);
+        
+        if(num>99999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-%i-000%i.vtp",num,p->mpirank+1);
+    }
+    if(p->mpirank<999&&p->mpirank>98)
+        
+        if(num<10)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00000%i-00%i.vtp",num,p->mpirank+1);
+        
+        if(num<100&&num>9)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0000%i-00%i.vtp",num,p->mpirank+1);
+        
+        if(num<1000&&num>99)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-000%i-00%i.vtp",num,p->mpirank+1);
+        
+        if(num<10000&&num>999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00%i-00%i.vtp",num,p->mpirank+1);
+        
+        if(num<100000&&num>9999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0%i-00%i.vtp",num,p->mpirank+1);
+        
+        if(num>99999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-%i-00%i.vtp",num,p->mpirank+1);
+    }
+    
+    if(p->mpirank<9999&&p->mpirank>998)
+        
+        if(num<10)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00000%i-0%i.vtp",num,p->mpirank+1);
+        
+        if(num<100&&num>9)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0000%i-0%i.vtp",num,p->mpirank+1);
+        
+        if(num<1000&&num>99)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-000%i-0%i.vtp",num,p->mpirank+1);
+        
+        if(num<10000&&num>999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00%i-0%i.vtp",num,p->mpirank+1);
+        
+        if(num<100000&&num>9999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0%i-0%i.vtp",num,p->mpirank+1);
+        
+        if(num>99999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-%i-0%i.vtp",num,p->mpirank+1);
+    }
+    
+    if(p->mpirank>9998)
+        
+        if(num<10)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00000%i-%i.vtp",num,p->mpirank+1);
+        
+        if(num<100&&num>9)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0000%i-%i.vtp",num,p->mpirank+1);
+        
+        if(num<1000&&num>99)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-000%i-%i.vtp",num,p->mpirank+1);
+        
+        if(num<10000&&num>999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-00%i-%i.vtp",num,p->mpirank+1);
+        
+        if(num<100000&&num>9999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-0%i-%i.vtp",num,p->mpirank+1);
+        
+        if(num>99999)
+        sprintf(name,"./REEF3D_FNPF_VTP_FSF/REEF3D-FNPF-FSF-%i-%i.vtp",num,p->mpirank+1);
+    }
 }
 
 }

@@ -83,9 +83,9 @@ void ghostcell::gcsolid_gcb_dist(lexer *p, fdm *a)
         if(p->gcb4[n][3]==6)
         p->gcd4[n]=fabs(a->solid(i,j,k));
         }
-		
-		p->gcd4[n] = MIN(p->gcd4[n],p->DXM);
-		p->gcd4[n] = MAX(p->gcd4[n],0.1*p->DXM);
+        
+        p->gcd4[n] = MIN(p->gcd4[n],p->DXM);
+        p->gcd4[n] = MAX(p->gcd4[n],0.1*p->DXM);
     }
 }
 

@@ -36,8 +36,8 @@ using namespace std;
 class sixdof_cfd : public sixdof, public increment
 {
 public:
-	sixdof_cfd(lexer*, fdm*, ghostcell*);
-	virtual ~sixdof_cfd();
+    sixdof_cfd(lexer*, fdm*, ghostcell*);
+    virtual ~sixdof_cfd();
 
     void start_twoway(lexer*,fdm*,ghostcell*,vrans*,vector<net*>&,int,field&,field&,field&,field&,field&,field&,bool);
     virtual void start_oneway(lexer*,ghostcell*);

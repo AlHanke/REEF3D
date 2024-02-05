@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"potentialfile_out.h"
+
+#include"potentialfile_out.h"
 #include"lexer.h"
 #include"fdm_fnpf.h"
 #include"ghostcell.h"
@@ -30,13 +31,13 @@ void potentialfile_out::initialize(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
     filecount=0;
     
-    if(p->mpirank==0 && p->P14==1)
-	mkdir("./REEF3D_PotentialFile",0777);
-	
-	if(p->mpirank==0 && p->P240>0)
-	cout<<"PotentialFile: "<<probenum<<endl;
-
-	fileout = new ofstream[p->P240];
+       if(p->mpirank==0 && p->P14==1)
+    mkdir("./REEF3D_PotentialFile",0777);
+    
+    if(p->mpirank==0 && p->P240>0)
+    cout<<"PotentialFile: "<<probenum<<endl;
+    
+    fileout = new ofstream[p->P240];
     
     p->Iarray(iloc,p->P240);
     
@@ -53,8 +54,8 @@ void potentialfile_out::initialize(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     j=0;
     
     for(n=0;n<p->P240;++n)
-    if(p->P240_x[n]>=p->originx && p->P240_x[n]<p->endx)
-	{
+       if(p->P240_x[n]>=p->originx && p->P240_x[n]<p->endx)
+    {
 
         ffn = float(c->bed(i,j));
         fileout[n].write((char*)&ffn, sizeof (float));

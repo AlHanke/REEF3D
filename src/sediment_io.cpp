@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"sediment_f.h"
+
+#include"sediment_f.h"
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -28,10 +29,10 @@ Author: Hans Bihs
 #include"suspended.h"
 
 double sediment_f::bedshear_point(lexer *p, fdm *a,ghostcell *pgc)
-{
-	double tau_eff = s->tau_eff(i,j);
     
-	return tau_eff;
+    double tau_eff = s->tau_eff(i,j);
+       
+    return tau_eff;
 }
 
 void sediment_f::fill_bedk(lexer *p, fdm *a,ghostcell *pgc)
@@ -54,8 +55,8 @@ void sediment_f::fill_PQ_cfd(lexer *p, fdm *a,ghostcell *pgc)
     {
     k=s->bedk(i,j);
     
-    xip= p->XN[IP1];
-	yip= p->YP[JP];
+       xip= p->XN[IP1];
+    yip= p->YP[JP];
     zval = 0.5*(s->bedzh(i,j)+s->bedzh(i+1,j)) + 1.6*p->DZN[k];
     
     s->P(i,j) = a->P(i,j) = p->ccipol1_a(a->u,xip,yip,zval);
@@ -65,18 +66,18 @@ void sediment_f::fill_PQ_cfd(lexer *p, fdm *a,ghostcell *pgc)
     {
     k=s->bedk(i,j);
     
-    xip= p->XP[IP];
-	yip= p->YN[JP1];
+       xip= p->XP[IP];
+    yip= p->YN[JP1];
     zval = 0.5*(s->bedzh(i,j)+s->bedzh(i,j+1)) + 1.6*p->DZN[k];
     
     s->Q(i,j) = a->Q(i,j)  = p->ccipol2_a(a->v,xip,yip,zval);
     }
     
-    pgc->gcsl_start1(p,s->P,10);
-	pgc->gcsl_start2(p,s->Q,11);
+       pgc->gcsl_start1(p,s->P,10);
+    pgc->gcsl_start2(p,s->Q,11);
     
-    pgc->gcsl_start1(p,a->P,10);
-	pgc->gcsl_start2(p,a->Q,11);
+       pgc->gcsl_start1(p,a->P,10);
+    pgc->gcsl_start2(p,a->Q,11);
 }
 
 void sediment_f::fill_PQ_sflow(lexer *p, fdm2D *b,ghostcell *pgc,slice &P, slice &Q)
@@ -87,8 +88,8 @@ void sediment_f::fill_PQ_sflow(lexer *p, fdm2D *b,ghostcell *pgc,slice &P, slice
     SLICELOOP2
     s->Q(i,j) = Q(i,j);
     
-    pgc->gcsl_start1(p,s->P,10);
-	pgc->gcsl_start2(p,s->Q,11);
+       pgc->gcsl_start1(p,s->P,10);
+    pgc->gcsl_start2(p,s->Q,11);
 }
 
 double sediment_f::qbeval(int ii, int jj)

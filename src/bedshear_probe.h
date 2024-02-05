@@ -40,9 +40,9 @@ class bedshear_probe : public boundarycheck
 {
 public:
     bedshear_probe(lexer*,fdm*,ghostcell*);
-	virtual ~bedshear_probe();
+    virtual ~bedshear_probe();
 
-	void bedshear_gauge(lexer*, fdm*, ghostcell*, sediment*);
+    void bedshear_gauge(lexer*, fdm*, ghostcell*, sediment*);
 
 
 private:

@@ -36,8 +36,8 @@ void iowave::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
 
 void iowave::fsfrkout(lexer *p, fdm *a, ghostcell *pgc, field& f)
 {
-	for(n=0;n<p->gcout_count;++n)
-	{
+    for(n=0;n<p->gcout_count;++n)
+    {
         i=p->gcout[n][0];
         j=p->gcout[n][1];
         k=p->gcout[n][2];
@@ -45,17 +45,17 @@ void iowave::fsfrkout(lexer *p, fdm *a, ghostcell *pgc, field& f)
         f(i+1,j,k)=a->phi(i+1,j,k);
         f(i+2,j,k)=a->phi(i+2,j,k);
         f(i+3,j,k)=a->phi(i+3,j,k);
-	}
+    }
 }
 
 void iowave::fsfrkin(lexer *p, fdm *a, ghostcell *pgc, field& f)
 {
-	for(n=0;n<p->gcin_count;++n)
-	{
+    for(n=0;n<p->gcin_count;++n)
+    {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
         k=p->gcin[n][2];
-		
+        
         f(i-1,j,k)=a->phi(i-1,j,k);
         f(i-2,j,k)=a->phi(i-2,j,k);
         f(i-3,j,k)=a->phi(i-3,j,k);
@@ -70,13 +70,13 @@ void iowave::fsfrkoutV(lexer *p, fdm *a, ghostcell *pgc, vec& f)
         j=p->gcout[q][1];
         k=p->gcout[q][2];
         n=p->gcout[q][5];
-		
-		PCHECK
-		{
+        
+        PCHECK
+        {
         f.V[Ip1_J_K_4]=a->phi(i+1,j,k);
         f.V[Ip2_J_K_4]=a->phi(i+2,j,k);
         f.V[Ip3_J_K_4]=a->phi(i+3,j,k);
-		}
+        }
         }
 }
 
@@ -88,13 +88,13 @@ void iowave::fsfrkinV(lexer *p, fdm *a, ghostcell *pgc, vec& f)
         j=p->gcin[q][1];
         k=p->gcin[q][2];
         n=p->gcin[q][5];
-		
-		PCHECK
-		{
+        
+        PCHECK
+        {
         f.V[Im1_J_K_4]=a->phi(i-1,j,k);
         f.V[Im2_J_K_4]=a->phi(i-2,j,k);
         f.V[Im3_J_K_4]=a->phi(i-3,j,k);
-		}
+        }
         }
 }
 
@@ -122,7 +122,7 @@ void iowave::fsfrkoutVa(lexer *p, fdm *a, ghostcell *pgc, vec& f)
         j=p->gcout4a[q][1];
         k=p->gcout4a[q][2];
         n=p->gcout4a[q][5];
-		
+        
         f.V[Ip1_J_K_4a]=a->phi(i+1,j,k);
         f.V[Ip2_J_K_4a]=a->phi(i+2,j,k);
         f.V[Ip3_J_K_4a]=a->phi(i+3,j,k);

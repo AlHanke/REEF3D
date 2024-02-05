@@ -26,62 +26,62 @@ Author: Hans Bihs
 
 void grid::cval_gcb1(lexer* p, fieldint &cval)
 {
-	GC1LOOP
+    GC1LOOP
     {
     i=p->gcb1[n][0];
     j=p->gcb1[n][1];
     k=p->gcb1[n][2];
-	
-	p->gcb1[n][5]=cval(i,j,k);
-	}
+    
+    p->gcb1[n][5]=cval(i,j,k);
+    }
 }
 
 void grid::cval_gcb2(lexer* p, fieldint &cval)
 {
-	GC2LOOP
+    GC2LOOP
     {
     i=p->gcb2[n][0];
     j=p->gcb2[n][1];
     k=p->gcb2[n][2];
-	
-	p->gcb2[n][5]=cval(i,j,k);
-	}
+    
+    p->gcb2[n][5]=cval(i,j,k);
+    }
 }
 
 void grid::cval_gcb3(lexer* p, fieldint &cval)
 {
-	GC3LOOP
+    GC3LOOP
     {
     i=p->gcb3[n][0];
     j=p->gcb3[n][1];
     k=p->gcb3[n][2];
-	
-	p->gcb3[n][5]=cval(i,j,k);
-	}
+    
+    p->gcb3[n][5]=cval(i,j,k);
+    }
 }
 
 void grid::cval_gcb4(lexer* p, fieldint &cval)
 {
-	GC4LOOP
+    GC4LOOP
     {
     i=p->gcb4[n][0];
     j=p->gcb4[n][1];
     k=p->gcb4[n][2];
-	
-	p->gcb4[n][5]=cval(i,j,k);
-	}
+    
+    p->gcb4[n][5]=cval(i,j,k);
+    }
 }
 
 void grid::cval_gcb4a(lexer* p, fieldint &cval)
 {
-	GC4ALOOP
+    GC4ALOOP
     {
     i=p->gcb4a[n][0];
     j=p->gcb4a[n][1];
     k=p->gcb4a[n][2];
-	
-	p->gcb4a[n][5]=cval(i,j,k);
-	}
+    
+    p->gcb4a[n][5]=cval(i,j,k);
+    }
 }
 
 void grid::cval_gcb6(lexer* p, fieldint &cval)
@@ -89,13 +89,13 @@ void grid::cval_gcb6(lexer* p, fieldint &cval)
     int count1,count2;
     count1=count2=0;
     
-	GC6LOOP
+    GC6LOOP
     {
     i=p->gcb4[n][0];
     j=p->gcb4[n][1];
     k=p->gcb4[n][2];
-	
-	p->gcb6[n]=cval(i,j,k);
+    
+    p->gcb6[n]=cval(i,j,k);
     
         if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
         {
@@ -108,6 +108,6 @@ void grid::cval_gcb6(lexer* p, fieldint &cval)
         p->gcout6[count2][3] = p->gcb6[n];
         ++count2;
         }
-	}
+    }
 }
 

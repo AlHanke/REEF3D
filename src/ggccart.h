@@ -34,21 +34,21 @@ class ggccart :  public increment
 {
 public:
 
-	ggccart (lexer *);
-	virtual ~ggccart();
+    ggccart (lexer *);
+    virtual ~ggccart();
 
-	
-	void startggc(lexer*);
-	void make_ggc(lexer*,int,int**);
-	void fill_ggc(lexer*,int,int**,int,int**);
+    
+    void startggc(lexer*);
+    void make_ggc(lexer*,int,int**);
+    void fill_ggc(lexer*,int,int**,int,int**);
 
 
-	int *ggcmem;
-	int imin,imax,jmax,jmin,kmin,kmax;
-	int gcdirsize;
-	int ggcsize;
-	
-	
+    int *ggcmem;
+    int imin,imax,jmax,jmin,kmin,kmax;
+    int gcdirsize;
+    int ggcsize;
+    
+    
 };
 
 #endif

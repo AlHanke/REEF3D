@@ -31,11 +31,11 @@ void iowave::nhflow_active_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, double 
     
         // wavegen
         count=0;
-		for(n=0;n<p->gcin_count;n++)
-		{
-		i=p->gcin[n][0];
-		j=p->gcin[n][1];
-		k=p->gcin[n][2];		
+        for(n=0;n<p->gcin_count;n++)
+        {
+        i=p->gcin[n][0];
+        j=p->gcin[n][1];
+        k=p->gcin[n][2];        
 
         uvel=uval[count]*ramp(p);
         vvel=vval[count]*ramp(p);
@@ -74,7 +74,7 @@ void iowave::nhflow_active_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, double 
                 eta_T = wave_eta(p,pgc,x,0.0);
                 eta_M = d->eta(i,j); 
                 eta_R = eta_T-eta_M;
-				
+                
                 if(p->B98==4)
                 Uc=eta_R*sqrt(9.81/p->wd);
                 
@@ -87,11 +87,11 @@ void iowave::nhflow_active_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, double 
                 UH[Im3JK] += (d->eta(i,j)+d->depth(i,j))*Uc;
  
         ++count;
-		}
+        }
         
         
          if(p->B98==3||p->B98==4||p->B99==3||p->B99==4||p->B99==5)
-		{
+        {
             for(int q=0;q<4;++q)
             for(n=0;n<p->gcin_count;++n)
             {
@@ -102,6 +102,6 @@ void iowave::nhflow_active_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, double 
             d->EV[IJK]=MIN(d->EV[IJK],1.0e-4);
             }
          pgc->start4V(p,d->EV,24);
-		}
+        }
         
 }

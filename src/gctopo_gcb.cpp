@@ -52,15 +52,15 @@ void ghostcell::gcb_seed(lexer *p, fdm *a)
     if(p->flag4[IJK]<0)
     p->gcb4[n][3]=-fabs(p->gcb4[n][3]);
     }
-	
+    
     // then check gcb4 around topo
-	count=p->gcb_solid;
-	LOOP
+    count=p->gcb_solid;
+    LOOP
     {   
         // Topo
         if(p->flag4[Im1JK]==TOPO)
         ++count;
-	
+    
         if(p->flag4[IJp1K]==TOPO)
         ++count;
 
@@ -76,14 +76,14 @@ void ghostcell::gcb_seed(lexer *p, fdm *a)
         if(p->flag4[IJKp1]==TOPO)
         ++count;
     }
-	
-	p->Iresize(p->gcb4,p->gcb4_count, count, 6, 6); 
-	p->Dresize(p->gcd4,p->gcb4_count, count); 
-	
-	
-	count=p->gcb_solid;
-	
-	LOOP
+    
+    p->Iresize(p->gcb4,p->gcb4_count, count, 6, 6); 
+    p->Dresize(p->gcd4,p->gcb4_count, count); 
+    
+    
+    count=p->gcb_solid;
+    
+    LOOP
     {
         // Topo
         if(p->flag4[Im1JK]==TOPO)
@@ -147,8 +147,8 @@ void ghostcell::gcb_seed(lexer *p, fdm *a)
         }
     }
     p->gcb4_count=p->gcb_topo=count;
-	
-	//cout<<p->mpirank<<" GCB4: "<<count<<endl;
+    
+    //cout<<p->mpirank<<" GCB4: "<<count<<endl;
 }
 
 

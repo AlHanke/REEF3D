@@ -32,35 +32,35 @@ class field4 : public field, increment
 {
 public:
 
-	field4 (lexer*);
-	virtual ~field4();
+    field4 (lexer*);
+    virtual ~field4();
 
     double& operator()(int, int , int);
-	double& operator[](int);
+    double& operator[](int);
     virtual void ggcpol(lexer*);
     virtual void resize(lexer*);
     virtual void dealloc(lexer*);
     
-	int di,dj,dk;
-	int imin,imax,jmax,jmin,kmin,kmax;
+    int di,dj,dk;
+    int imin,imax,jmax,jmin,kmin,kmax;
 
-	//double *V;
-	double ***gcfeld;
+    //double *V;
+    double ***gcfeld;
 
 private:
 
-	void fieldalloc(lexer *);
-	void fieldgcalloc(lexer*);
-	void fieldlength(lexer *);
+    void fieldalloc(lexer *);
+    void fieldgcalloc(lexer*);
+    void fieldlength(lexer *);
 
     int iter;
-	int gcfeldsize,feldsize;
-	
-	int rank, gcextra;
-	
-	double starttime;
-	
-	lexer *pp;
+    int gcfeldsize,feldsize;
+    
+    int rank, gcextra;
+    
+    double starttime;
+    
+    lexer *pp;
 
 };
 

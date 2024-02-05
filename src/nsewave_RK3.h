@@ -43,7 +43,7 @@ class nsewave_RK3 : public nsewave, public bcmom
 {
 public:
     nsewave_RK3(lexer*, fdm*, ghostcell*,heat*&,concentration*&);
-	virtual ~nsewave_RK3();
+    virtual ~nsewave_RK3();
     
     virtual void start(lexer*, fdm*, ghostcell*, momentum*, diffusion*, turbulence*, convection*, pressure*, 
                         poisson*, solver*, solver*, ioflow*, vrans*, sixdof*, vector<net*>&);
@@ -54,18 +54,18 @@ private:
 
     void eta_disc(lexer*,fdm*,ghostcell*,field&,field&);
     void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
+    void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
+    void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     
     field1 urk1,urk2;
-	field2 vrk1,vrk2;
-	field3 wrk1,wrk2;
+    field2 vrk1,vrk2;
+    field3 wrk1,wrk2;
     
     fluid_update *pupdate;
     picard *ppicard;
     
     int gcval_phi;
-	double starttime;
+    double starttime;
     double phival,H;
     const double epsi;
     int gcval_u, gcval_v, gcval_w;

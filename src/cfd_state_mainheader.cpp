@@ -34,11 +34,11 @@ void cfd_state::ini_mainheader(lexer *p, fdm *a, ghostcell *pgc)
     ofstream mainout;
     
     // open file
-	if(p->P14==0)
+    if(p->P14==0)
     mainout.open("REEF3D-CFD_State_Mainheader.r3d", ios::binary);
 
-	if(p->P14==1)
-	mainout.open("./REEF3D_CFD_STATE/REEF3D-CFD_State_Mainheader.r3d", ios::binary);
+    if(p->P14==1)
+    mainout.open("./REEF3D_CFD_STATE/REEF3D-CFD_State_Mainheader.r3d", ios::binary);
 
 
     // ini write
@@ -78,16 +78,16 @@ void cfd_state::write_mainheader(lexer *p, fdm *a, ghostcell *pgc)
     ofstream mainout;
     
     // open file
-	if(p->P14==0)
+    if(p->P14==0)
     mainout.open("REEF3D-CFD_State_Mainheader.r3d", ios::binary | ios::app);
 
-	if(p->P14==1)
-	mainout.open("./REEF3D_CFD_STATE/REEF3D-CFD_State_Mainheader.r3d", ios::binary | ios::app);
+    if(p->P14==1)
+    mainout.open("./REEF3D_CFD_STATE/REEF3D-CFD_State_Mainheader.r3d", ios::binary | ios::app);
 
     iin=p->count;
     mainout.write((char*)&iin, sizeof (int));
 
-	ddn=p->simtime;
+    ddn=p->simtime;
     mainout.write((char*)&ddn, sizeof (double));
 
     mainout.close();

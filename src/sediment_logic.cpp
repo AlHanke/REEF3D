@@ -77,8 +77,8 @@ void sediment_f::sediment_logic(lexer *p, fdm *a,ghostcell *pgc, turbulence *ptu
 
     if(p->S11==2)
     pbed = new bedload_MPM(p);
-	
-	if(p->S11==3)
+    
+    if(p->S11==3)
     pbed = new bedload_EF(p);
     
     if(p->S11==4)
@@ -103,10 +103,10 @@ void sediment_f::sediment_logic(lexer *p, fdm *a,ghostcell *pgc, turbulence *ptu
     pslide=new sandslide_pde(p);
     
     if(p->S10!=2 && p->A10==6)
-	pvrans = new vrans_v(p,pgc);
-	
-	if(p->S10==2 && p->A10==6)
-	pvrans = new vrans_f(p,pgc);
+    pvrans = new vrans_v(p,pgc);
+    
+    if(p->S10==2 && p->A10==6)
+    pvrans = new vrans_f(p,pgc);
     
     
     if(p->S80==0)
@@ -120,39 +120,39 @@ void sediment_f::sediment_logic(lexer *p, fdm *a,ghostcell *pgc, turbulence *ptu
 
     if(p->S80==3)
     preduce=new reduction_deyana(p);
-	
-	if(p->S80==4)
+    
+    if(p->S80==4)
     preduce=new reduction_FD(p);
     
     ptopo = new sediment_exner(p,pgc);
     
     // susepended diff
     if(p->S60==0 || p->A10!=6)
-	psuspdiff=new diff_void();
+    psuspdiff=new diff_void();
     
     if(p->S60==0 || p->A10!=6)
     psusp = new suspended_void();
     
     if(p->S60==0 || p->A10!=6)
-	psuspdisc=new convection_void(p);
+    psuspdisc=new convection_void(p);
     
     if(p->A10==6)
     {    
     if(p->S60<11 && p->S60>0 && p->j_dir==0)
-	psuspdiff=new idiff2_FS_2D(p);
+    psuspdiff=new idiff2_FS_2D(p);
     
     if(p->S60<11 && p->S60>0 && p->j_dir==1)
-	psuspdiff=new idiff2_FS(p);
-	
-	if(p->S60>10)
-	psuspdiff=new idiff2(p);
-    
-    // suspended conv
-	if(p->S60<11 && p->S60>0)
-	psuspdisc=new weno_hj_nug(p);
+    psuspdiff=new idiff2_FS(p);
     
     if(p->S60>10)
-	psuspdisc=new iweno_hj_nug(p);
+    psuspdiff=new idiff2(p);
+    
+    // suspended conv
+    if(p->S60<11 && p->S60>0)
+    psuspdisc=new weno_hj_nug(p);
+    
+    if(p->S60>10)
+    psuspdisc=new iweno_hj_nug(p);
     
 
     if(p->S60==2)
@@ -168,14 +168,14 @@ void sediment_f::sediment_logic(lexer *p, fdm *a,ghostcell *pgc, turbulence *ptu
     psusp = new suspended_IM2(p,a);
     }
     
-	
-	p->gcin4a_count=p->gcin_count;
-	p->gcout4a_count=p->gcout_count;
-	
+    
+    p->gcin4a_count=p->gcin_count;
+    p->gcout4a_count=p->gcout_count;
+    
     
     prelax = new topo_relax(p);
-	
-	pbedshear  = new bedshear(p,pturb);
+    
+    pbedshear  = new bedshear(p,pturb);
     
     volume_token=0;
     

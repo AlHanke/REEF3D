@@ -33,15 +33,15 @@ Author: Hans Bihs
 
 sflow_hires::sflow_hires (lexer *p, int limiter)
 {
-	if(limiter==6)
-	plim = new sflow_fluxlim_minmod(p);
+    if(limiter==6)
+    plim = new sflow_fluxlim_minmod(p);
     
     if(limiter==7)
-	plim = new sflow_fluxlim_vanleer(p);
+    plim = new sflow_fluxlim_vanleer(p);
     
     if(limiter==8)
-	plim = new sflow_fluxlim_smart(p);
-	
+    plim = new sflow_fluxlim_smart(p);
+    
     if(p->A216==1)
     pflux = new sflow_flux_face_FOU(p);
         
@@ -59,7 +59,7 @@ sflow_hires::~sflow_hires()
 }
 
 void sflow_hires::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice& vvel)
-{ 	
+{     
     if(ipol==1)
     SLICELOOP1
     b->F(i,j)+=aij(p,b,f,1,uvel,vvel);
@@ -82,18 +82,18 @@ double sflow_hires::aij(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel, slice&
 {
 
     ul=ur=vl=vr=wl=wr=dx=dy=dz=0.0;
-		
-		pflux->u_flux(ipol,uvel,ivel1,ivel2);
+        
+        pflux->u_flux(ipol,uvel,ivel1,ivel2);
         pflux->v_flux(ipol,vvel,jvel1,jvel2);
         
         
-		if(ivel1>=0.0)
-		ul=1.0;
+        if(ivel1>=0.0)
+        ul=1.0;
 
-		if(ivel2>=0.0)
-		ur=1.0;
+        if(ivel2>=0.0)
+        ur=1.0;
 
-		dx = (ivel2*(ur*(f(i,j) + 0.5*plim->iphi(f,0,-1,1,0)*(f(i+1,j)-f(i,j)))
+        dx = (ivel2*(ur*(f(i,j) + 0.5*plim->iphi(f,0,-1,1,0)*(f(i+1,j)-f(i,j)))
              +(1.0-ur)*(f(i+1,j) - 0.5*plim->iphi(f,1,0,2,1)*(f(i+2,j)-f(i+1,j))))
 
           -  ivel1*(ul*(f(i-1,j) + 0.5*plim->iphi(f,-1,-2,0,-1)*(f(i,j)-f(i-1,j)))
@@ -101,21 +101,21 @@ double sflow_hires::aij(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel, slice&
 
 
 
-		if(jvel1>=0.0)
-		vl=1.0;
+        if(jvel1>=0.0)
+        vl=1.0;
 
-		if(jvel2>=0.0)
-		vr=1.0;
+        if(jvel2>=0.0)
+        vr=1.0;
 
-		dy = (jvel2*(vr*(f(i,j) + 0.5*plim->jphi(f,0,-1,1,0)*(f(i,j+1)-f(i,j)))
+        dy = (jvel2*(vr*(f(i,j) + 0.5*plim->jphi(f,0,-1,1,0)*(f(i,j+1)-f(i,j)))
              +(1.0-vr)*(f(i,j+1) - 0.5*plim->jphi(f,1,0,2,1)*(f(i,j+2)-f(i,j+1))))
 
           -  jvel1*(vl*(f(i,j-1) + 0.5*plim->jphi(f,-1,-2,0,-1)*(f(i,j)-f(i,j-1)))
              +(1.0-vl)*(f(i,j) - 0.5*plim->jphi(f,0,-1,1,0)*(f(i,j)-f(i+1,j)))))/(p->DXM);
 
 
-		
-		L = -dx-dy;
+        
+        L = -dx-dy;
 
-		return L;
+        return L;
 }

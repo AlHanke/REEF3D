@@ -26,18 +26,18 @@ Author: Hans Bihs
 
 void ghostcell::gcxsd_seed(lexer *p, fdm *a)
 {
-	int count[6];
-	
-	for(q=0;q<6;++q)
-	count[q]=0;
-	
-	for(n=0;n<p->gcpara1_count;++n)
+    int count[6];
+    
+    for(q=0;q<6;++q)
+    count[q]=0;
+    
+    for(n=0;n<p->gcpara1_count;++n)
     {
     i=p->gcpara1[n][0];
     j=p->gcpara1[n][1];
     k=p->gcpara1[n][2];
-		
-		if(p->flag4[(i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
+        
+        if(p->flag4[(i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
         ++count[0];
     }
 
@@ -48,8 +48,8 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
     k=p->gcpara2[n][2];
 
     
-		if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
-		++count[1];
+        if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
+        ++count[1];
     }
 
     for(n=0;n<p->gcpara3_count;++n)
@@ -58,8 +58,8 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
     j=p->gcpara3[n][1];
     k=p->gcpara3[n][2];
 
-		if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
-		++count[2];
+        if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
+        ++count[2];
     }
 
     for(n=0;n<p->gcpara4_count;++n)
@@ -68,8 +68,8 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
     j=p->gcpara4[n][1];
     k=p->gcpara4[n][2];
 
-		if(p->flag4[(i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
-		++count[3];
+        if(p->flag4[(i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
+        ++count[3];
 
     }
 
@@ -78,9 +78,9 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
     i=p->gcpara5[n][0];
     j=p->gcpara5[n][1];
     k=p->gcpara5[n][2];
-		
-		if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1]==SOLID || p->flag4[IJK]==SOLID)
-		++count[4];
+        
+        if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1]==SOLID || p->flag4[IJK]==SOLID)
+        ++count[4];
     }
 
     for(n=0;n<p->gcpara6_count;++n)
@@ -89,35 +89,35 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
     j=p->gcpara6[n][1];
     k=p->gcpara6[n][2];
 
-		if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1]==SOLID || p->flag4[IJK]==SOLID)
-		++count[5];
+        if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1]==SOLID || p->flag4[IJK]==SOLID)
+        ++count[5];
     }
     
     p->Iresize(gcxsd,6,6,gcxsd_count,count,6,6); 
-	
-	for(q=0;q<6;++q)
-	gcxsd_count[q]=count[q];
-	
-	//for(q=0;q<6;++q)
-	//cout<<p->mpirank<<" GXCFB_COUNT_"<<q+1<<"  "<<count[q]<<endl;
+    
+    for(q=0;q<6;++q)
+    gcxsd_count[q]=count[q];
+    
+    //for(q=0;q<6;++q)
+    //cout<<p->mpirank<<" GXCFB_COUNT_"<<q+1<<"  "<<count[q]<<endl;
     
  //--   
     for(q=0;q<6;++q)
-	count[q]=0;
-	
-	for(n=0;n<p->gcpara1_count;++n)
+    count[q]=0;
+    
+    for(n=0;n<p->gcpara1_count;++n)
     {
     i=p->gcpara1[n][0];
     j=p->gcpara1[n][1];
     k=p->gcpara1[n][2];
-		
-		if(p->flag4[(i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
+        
+        if(p->flag4[(i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
         {
-			 gcxsd[0][count[0]][0]=i;
+             gcxsd[0][count[0]][0]=i;
             gcxsd[0][count[0]][1]=j;
             gcxsd[0][count[0]][2]=k;
-			++count[0];
-		}
+            ++count[0];
+        }
     }
 
     for(n=0;n<p->gcpara2_count;++n)
@@ -127,13 +127,13 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
     k=p->gcpara2[n][2];
 
     
-		if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
-		{
-			 gcxsd[1][count[1]][0]=i;
+        if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
+        {
+             gcxsd[1][count[1]][0]=i;
             gcxsd[1][count[1]][1]=j;
             gcxsd[1][count[1]][2]=k;
-			++count[1];
-		}
+            ++count[1];
+        }
     }
 
     for(n=0;n<p->gcpara3_count;++n)
@@ -142,13 +142,13 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
     j=p->gcpara3[n][1];
     k=p->gcpara3[n][2];
 
-		if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
-		{
-			 gcxsd[2][count[2]][0]=i;
+        if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
+        {
+             gcxsd[2][count[2]][0]=i;
             gcxsd[2][count[2]][1]=j;
             gcxsd[2][count[2]][2]=k;
-			++count[2];
-		}
+            ++count[2];
+        }
     }
 
     for(n=0;n<p->gcpara4_count;++n)
@@ -157,13 +157,13 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
     j=p->gcpara4[n][1];
     k=p->gcpara4[n][2];
 
-		if(p->flag4[(i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
-		{
-			 gcxsd[3][count[3]][0]=i;
+        if(p->flag4[(i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]==SOLID || p->flag4[IJK]==SOLID)
+        {
+             gcxsd[3][count[3]][0]=i;
             gcxsd[3][count[3]][1]=j;
             gcxsd[3][count[3]][2]=k;
-			++count[3];
-		}
+            ++count[3];
+        }
     }
 
     for(n=0;n<p->gcpara5_count;++n)
@@ -171,14 +171,14 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
     i=p->gcpara5[n][0];
     j=p->gcpara5[n][1];
     k=p->gcpara5[n][2];
-		
-		if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1]==SOLID || p->flag4[IJK]==SOLID)
-		{
-			 gcxsd[4][count[4]][0]=i;
+        
+        if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1]==SOLID || p->flag4[IJK]==SOLID)
+        {
+             gcxsd[4][count[4]][0]=i;
             gcxsd[4][count[4]][1]=j;
             gcxsd[4][count[4]][2]=k;
-			++count[4];
-		}
+            ++count[4];
+        }
     }
 
     for(n=0;n<p->gcpara6_count;++n)
@@ -187,13 +187,13 @@ void ghostcell::gcxsd_seed(lexer *p, fdm *a)
     j=p->gcpara6[n][1];
     k=p->gcpara6[n][2];
 
-		if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1]==SOLID || p->flag4[IJK]==SOLID)
-		{
-			 gcxsd[5][count[5]][0]=i;
+        if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1]==SOLID || p->flag4[IJK]==SOLID)
+        {
+             gcxsd[5][count[5]][0]=i;
             gcxsd[5][count[5]][1]=j;
             gcxsd[5][count[5]][2]=k;
-			++count[5];
-		}
+            ++count[5];
+        }
     }
-	
+    
 }

@@ -39,8 +39,8 @@ void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
     // see p. 1130-1132
     n=0;
     LOOP
-	{
-	a->M.p[n]  =  1.0/(p->DXP[IP]*p->DXN[IP])*p->x_dir 
+    {
+    a->M.p[n]  =  1.0/(p->DXP[IP]*p->DXN[IP])*p->x_dir 
                 + 1.0/(p->DXP[IM1]*p->DXN[IP])*p->x_dir 
                 
                 + 1.0/(p->DYP[JP]*p->DYN[JP])*p->y_dir 
@@ -49,24 +49,24 @@ void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
                 + 1.0/(p->DZP[KP]*p->DZN[KP])*p->z_dir
                 + 1.0/(p->DZP[KM1]*p->DZN[KP])*p->z_dir;
 
-   	a->M.n[n] = -1.0/(p->DXP[IP]*p->DXN[IP])*p->x_dir;
-	a->M.s[n] = -1.0/(p->DXP[IM1]*p->DXN[IP])*p->x_dir;
+       a->M.n[n] = -1.0/(p->DXP[IP]*p->DXN[IP])*p->x_dir;
+    a->M.s[n] = -1.0/(p->DXP[IM1]*p->DXN[IP])*p->x_dir;
 
-	a->M.w[n] = -1.0/(p->DYP[JP]*p->DYN[JP])*p->y_dir;
-	a->M.e[n] = -1.0/(p->DYP[JM1]*p->DYN[JP])*p->y_dir;
+    a->M.w[n] = -1.0/(p->DYP[JP]*p->DYN[JP])*p->y_dir;
+    a->M.e[n] = -1.0/(p->DYP[JM1]*p->DYN[JP])*p->y_dir;
 
-	a->M.t[n] = -1.0/(p->DZP[KP]*p->DZN[KP])*p->z_dir;
-	a->M.b[n] = -1.0/(p->DZP[KM1]*p->DZN[KP])*p->z_dir;
+    a->M.t[n] = -1.0/(p->DZP[KP]*p->DZN[KP])*p->z_dir;
+    a->M.b[n] = -1.0/(p->DZP[KM1]*p->DZN[KP])*p->z_dir;
 
-	a->rhsvec.V[n] = 0.0;
-	
-	++n;
-	}
+    a->rhsvec.V[n] = 0.0;
+    
+    ++n;
+    }
     
     
     n=0;
-	LOOP
-	{
+    LOOP
+    {
         if(p->flag4[IJK]>0)
         {
     
@@ -107,16 +107,16 @@ void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
             }
         }
 
-	++n;
-	}
+    ++n;
+    }
     psolv->start(p,a,pgc,a->Fi,a->rhsvec,5);
     pgc->start4(p,a->Fi,250);
     
     
     // 4th-order
-	n=0;
+    n=0;
     LOOP
-	{
+    {
     X0 = -0.5*p->XP[IP2] + 13.0*p->XP[IP1] - 13.0*p->XP[IM1] + 0.5*p->XP[IM2];
     X1 = (-p->XP[IP3] + 27.0*p->XP[IP2] -27.0*p->XP[IP1] + p->XP[IP])*X0;
     X2 = (-p->XP[IP2] + 27.0*p->XP[IP1] -27.0*p->XP[IP] + p->XP[IM1])*X0;
@@ -136,19 +136,19 @@ void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
     Z4 = (-p->ZP[KP] + 27.0*p->ZP[KM1] -27.0*p->ZP[KM2] + p->ZP[KM3])*Z0;
     
 
-	a->M.p[n] = (1.0/X1 + 729.0/X2 + 729.0/X3 + 1.0/X4)*p->x_dir 
+    a->M.p[n] = (1.0/X1 + 729.0/X2 + 729.0/X3 + 1.0/X4)*p->x_dir 
              + (1.0/Y1 + 729.0/Y2 + 729.0/Y3 + 1.0/Y4)*p->y_dir 
              + (1.0/Z1 + 729.0/Z2 + 729.0/Z3 + 1.0/Z4)*p->z_dir;
     
     
-   	a->M.n[n] = -(27.0/X1 + 729.0/X2 + 27.0/X3)*p->x_dir;
-	a->M.s[n] = -(27.0/X2 + 729.0/X3 + 27.0/X4)*p->x_dir;
+       a->M.n[n] = -(27.0/X1 + 729.0/X2 + 27.0/X3)*p->x_dir;
+    a->M.s[n] = -(27.0/X2 + 729.0/X3 + 27.0/X4)*p->x_dir;
 
-	a->M.w[n] = -(27.0/Y1 + 729.0/Y2 + 27.0/Y3)*p->y_dir;
-	a->M.e[n] = -(27.0/Y2 + 729.0/Y3 + 27.0/Y4)*p->y_dir;
+    a->M.w[n] = -(27.0/Y1 + 729.0/Y2 + 27.0/Y3)*p->y_dir;
+    a->M.e[n] = -(27.0/Y2 + 729.0/Y3 + 27.0/Y4)*p->y_dir;
 
-	a->M.t[n] = -(27.0/Z1 + 729.0/Z2 + 27.0/Z3)*p->z_dir;
-	a->M.b[n] = -(27.0/Z2 + 729.0/Z3 + 27.0/Z4)*p->z_dir;
+    a->M.t[n] = -(27.0/Z1 + 729.0/Z2 + 27.0/Z3)*p->z_dir;
+    a->M.b[n] = -(27.0/Z2 + 729.0/Z3 + 27.0/Z4)*p->z_dir;
     
     
     a->M.nn[n] = (27.0/X1 + 27.0/X2)*p->x_dir; 
@@ -172,7 +172,7 @@ void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
     
 
 //cout<<a->M.p[n]<<" "<<a->M.n[n]<<" "<<a->M.s[n]<<" "<<a->M.t[n]<<" "<<a->M.b[n]<<endl;
-	a->rhsvec.V[n] = 0.0;//((f(i+2,j,k)*(-27.0/X1 - 27.0/X2) + f(i-2,j,k)*(-27.0/X3 - 27.0/X4))*p->x_dir
+    a->rhsvec.V[n] = 0.0;//((f(i+2,j,k)*(-27.0/X1 - 27.0/X2) + f(i-2,j,k)*(-27.0/X3 - 27.0/X4))*p->x_dir
                  // +  (f(i,j+2,k)*(-27.0/Y1 - 27.0/Y2) + f(i,j-2,k)*(-27.0/Y3 - 27.0/Y4))*p->y_dir
                  // +  (f(i,j,k+2)*(-27.0/Z1 - 27.0/Z2) + f(i,j,k-2)*(-27.0/Z3 - 27.0/Z4))*p->z_dir
                   
@@ -180,12 +180,12 @@ void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
       //              +  (f(i,j+3,k)*(1.0/Y1) + f(i,j-3,k)*(1.0/Y4))*p->y_dir
         //            +  (f(i,j,k+3)*(1.0/Z1) + f(i,j,k-3)*(1.0/Z4))*p->z_dir;
 
-	++n;
-	}
+    ++n;
+    }
     
     n=0;
-	LOOP
-	{
+    LOOP
+    {
         if(p->flag4[IJK]>0)
         {
     
@@ -302,8 +302,8 @@ void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
             }
         }
 
-	++n;
-	}
+    ++n;
+    }
     
     
     double starttime=pgc->timer();
@@ -313,8 +313,8 @@ void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
     
     p->poissoniter=p->solveriter;
     p->poissontime=endtime-starttime;
-	if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"Fi_iter: "<<p->solveriter<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
+    if(p->mpirank==0 && (p->count%p->P12==0))
+    cout<<"Fi_iter: "<<p->solveriter<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
 }
 
 
@@ -325,45 +325,45 @@ void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
     
     // + (i+2) - 16(i+1) + 30(i) - 16(i-1) + (i-2) / 12dx^2
     
-	n=0;
+    n=0;
     LOOP
-	{
+    {
     ddx = -2.0*pow(p->DXP[IP1],2.0) + 8.0*pow(p->DXP[IP],2.0) + 8.0*pow(p->DXP[IM1],2.0) - 2.0*pow(p->DXP[IM2],2.0);
     ddy = -2.0*pow(p->DYP[JP1],2.0) + 8.0*pow(p->DYP[JP],2.0) + 8.0*pow(p->DYP[JM1],2.0) - 2.0*pow(p->DYP[JM2],2.0);
     ddz = -2.0*pow(p->DZP[KP1],2.0) + 8.0*pow(p->DZP[KP],2.0) + 8.0*pow(p->DZP[KM1],2.0) - 2.0*pow(p->DZP[KM2],2.0);
     
     //cout<<ddx<<" "<<ddy<<" "<<ddz<<endl;
-	a->M.p[n] =  30.0/ddx*p->x_dir + 30.0/ddy*p->y_dir + 30.0/ddz*p->z_dir;
+    a->M.p[n] =  30.0/ddx*p->x_dir + 30.0/ddy*p->y_dir + 30.0/ddz*p->z_dir;
 
-   	a->M.n[n] = -16.0/ddx*p->x_dir;
-	a->M.s[n] = -16.0/ddx*p->x_dir;
+       a->M.n[n] = -16.0/ddx*p->x_dir;
+    a->M.s[n] = -16.0/ddx*p->x_dir;
 
-	a->M.w[n] = -16.0/ddy*p->y_dir;
-	a->M.e[n] = -16.0/ddy*p->y_dir;
+    a->M.w[n] = -16.0/ddy*p->y_dir;
+    a->M.e[n] = -16.0/ddy*p->y_dir;
 
-	a->M.t[n] = -16.0/ddz*p->z_dir;
-	a->M.b[n] = -16.0/ddz*p->z_dir;
+    a->M.t[n] = -16.0/ddz*p->z_dir;
+    a->M.b[n] = -16.0/ddz*p->z_dir;
     
     a->M.nn[n] = 1.0/ddx*p->x_dir;
-	a->M.ss[n] = 1.0/ddx*p->x_dir;
+    a->M.ss[n] = 1.0/ddx*p->x_dir;
 
-	a->M.ww[n] = 1.0/ddy*p->y_dir;
-	a->M.ee[n] = 1.0/ddy*p->y_dir;
+    a->M.ww[n] = 1.0/ddy*p->y_dir;
+    a->M.ee[n] = 1.0/ddy*p->y_dir;
 
-	a->M.tt[n] = 1.0/ddz*p->z_dir;
-	a->M.bb[n] = 1.0/ddz*p->z_dir;
+    a->M.tt[n] = 1.0/ddz*p->z_dir;
+    a->M.bb[n] = 1.0/ddz*p->z_dir;
     
     //cout<<a->M.p[n]<<" "<<a->M.n[n]<<" "<<a->M.s[n]<<" "<<a->M.t[n]<<" "<<a->M.b[n]<<endl;
-	
-	a->rhsvec.V[n] = 0.0;//(f(i+2,j,k)/ddx*p->x_dir + f(i-2,j,k)/ddx*p->x_dir
+    
+    a->rhsvec.V[n] = 0.0;//(f(i+2,j,k)/ddx*p->x_dir + f(i-2,j,k)/ddx*p->x_dir
                   //+   f(i,j+2,k)/ddy*p->y_dir + f(i,j-2,k)/ddy*p->y_dir
                   //+   f(i,j,k+2)/ddz*p->z_dir + f(i,j,k-2)/ddz*p->z_dir);
-	++n;
-	}
+    ++n;
+    }
     
     n=0;
-	LOOP
-	{
+    LOOP
+    {
         if(p->flag4[IJK]>0)
         {
     
@@ -442,8 +442,8 @@ void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
             }
         }
 
-	++n;
-	}
+    ++n;
+    }
     
     
     
@@ -454,7 +454,7 @@ void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
     
     p->poissoniter=p->solveriter;
     p->poissontime=endtime-starttime;
-	if(p->mpirank==0 && innercounter==p->N50-1 && (p->count%p->P12==0))
-	cout<<"Fi_iter: "<<p->solveriter<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
+    if(p->mpirank==0 && innercounter==p->N50-1 && (p->count%p->P12==0))
+    cout<<"Fi_iter: "<<p->solveriter<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
 }*/
 

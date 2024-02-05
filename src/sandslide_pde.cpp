@@ -19,28 +19,29 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"sandslide_pde.h"
+
+#include"sandslide_pde.h"
 #include"sediment_fdm.h"
 #include"lexer.h"
 #include"ghostcell.h"
 
 sandslide_pde::sandslide_pde(lexer *p) : norm_vec(p), bedslope(p), fh(p), ci(p)
 {
-    if(p->S50==1)
-	gcval_topo=151;
-
-	if(p->S50==2)
-	gcval_topo=152;
-
-	if(p->S50==3)
-	gcval_topo=153;
-	
-	if(p->S50==4)
-	gcval_topo=154;
-
-	dxs=sqrt(2.0*p->DXM*p->DXM);
-	fac1 = (1.0/6.0);
-	fac2 = (1.0/12.0);
+       if(p->S50==1)
+    gcval_topo=151;
+    
+    if(p->S50==2)
+    gcval_topo=152;
+    
+    if(p->S50==3)
+    gcval_topo=153;
+    
+    if(p->S50==4)
+    gcval_topo=154;
+    
+    dxs=sqrt(2.0*p->DXM*p->DXM);
+    fac1 = (1.0/6.0);
+    fac2 = (1.0/12.0);
 }
 
 sandslide_pde::~sandslide_pde()

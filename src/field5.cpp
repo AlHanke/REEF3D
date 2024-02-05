@@ -32,7 +32,7 @@ field5::field5(lexer *p):fip(4)
     kmin=p->kmin;
     kmax=p->kmax;
 
-	fieldalloc(p);
+    fieldalloc(p);
 }
 
 field5::~field5()
@@ -42,8 +42,8 @@ field5::~field5()
 
 void field5::fieldalloc(lexer* p)
 {
-	int gridsize = imax*jmax*kmax;
-	p->Darray(feld,gridsize);
+    int gridsize = imax*jmax*kmax;
+    p->Darray(feld,gridsize);
 }
 
 void field5::resize(lexer* p)
@@ -52,7 +52,7 @@ void field5::resize(lexer* p)
 
 void field5::dealloc(lexer* p)
 {
-	delete [] V;
+    delete [] V;
     
     gcfeldsize=feldsize=0;
 }
@@ -63,13 +63,13 @@ void field5::ggcpol(lexer* p)
 
 double & field5::operator[](int n)
 {
-	return feld[n];
+    return feld[n];
 }
 
 double & field5::operator()(int ii, int jj, int kk)
 {
     iter=(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin;
-	return feld[iter];
+    return feld[iter];
 
 }
 

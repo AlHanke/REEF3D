@@ -36,20 +36,20 @@ class sflow_hires : public sflow_convection, public increment
 
 public:
 
-	sflow_hires (lexer*,int);
-	virtual ~sflow_hires();
+    sflow_hires (lexer*,int);
+    virtual ~sflow_hires();
 
-	virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
-	
+    virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
+    
 private:
     double aij(lexer*, fdm2D*, slice&, int, slice&, slice&);
-	
-	double ul,ur,vl,vr,wl,wr;
+    
+    double ul,ur,vl,vr,wl,wr;
 
-	double dx,dy,dz;
-	double L;
-	
-	sflow_fluxlim *plim;
+    double dx,dy,dz;
+    double L;
+    
+    sflow_fluxlim *plim;
     sflow_flux *pflux;
     
     double ivel1,ivel2,jvel1,jvel2;

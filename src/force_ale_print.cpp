@@ -38,9 +38,9 @@ void force_ale::print_force_ale(lexer* p, fdm_fnpf *c, ghostcell *pgc)
 void force_ale::print_ini(lexer* p, fdm_fnpf *c, ghostcell *pgc)
 {
     // Create Folder
-	if(p->mpirank==0 && p->P14==1)
-	mkdir("./REEF3D_FNPF_Force_ALE",0777);
-	
+    if(p->mpirank==0 && p->P14==1)
+    mkdir("./REEF3D_FNPF_Force_ALE",0777);
+    
     if(p->mpirank==0)
     {
         // open force_ale file
@@ -60,5 +60,5 @@ void force_ale::print_ini(lexer* p, fdm_fnpf *c, ghostcell *pgc)
         fout<<"it \t time \t Fx \t Fy ";
 
         fout<<endl;
-	}
+    }
 }

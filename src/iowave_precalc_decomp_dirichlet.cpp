@@ -31,10 +31,10 @@ double fsfloc;
 int qn;
 
         count=0;
-		for(n=0;n<p->gcin_count;n++)
-		{
-		i=p->gcin[n][0];
-		j=p->gcin[n][1];
+        for(n=0;n<p->gcin_count;n++)
+        {
+        i=p->gcin[n][0];
+        j=p->gcin[n][1];
         
         x=xgen(p);
         y=ygen(p);
@@ -54,11 +54,11 @@ int qn;
         }
     
         count=0;
-		for(n=0;n<p->gcin_count;n++)
-		{
-		i=p->gcin[n][0];
-		j=p->gcin[n][1];
-		k=p->gcin[n][2];
+        for(n=0;n<p->gcin_count;n++)
+        {
+        i=p->gcin[n][0];
+        j=p->gcin[n][1];
+        k=p->gcin[n][2];
         
         x=xgen(p);
         y=ygen(p);
@@ -77,8 +77,8 @@ int qn;
         {
         if(zloc3<=p->phimean)
         z3 = -(fabs(p->phimean-zloc3));
-		
-		if(zloc3>p->phimean)
+        
+        if(zloc3>p->phimean)
         z3 = (fabs(p->phimean-zloc3));
         }
         
@@ -90,8 +90,8 @@ int qn;
         {
         if(zloc4<=p->phimean)
         z=-(fabs(p->phimean-zloc4));
-		
-		if(zloc4>p->phimean)
+        
+        if(zloc4>p->phimean)
         z=(fabs(p->phimean-zloc4));
         }
         

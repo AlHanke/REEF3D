@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"fnpf_RK4.h"
+
+#include"fnpf_RK4.h"
 #include"lexer.h"
 #include"fdm_fnpf.h"
 #include"ghostcell.h"
@@ -43,9 +44,9 @@ fnpf_RK4::fnpf_RK4(lexer *p, fdm_fnpf *c, ghostcell *pgc) : fnpf_ini(p,c,pgc),fn
     if(p->j_dir==0)
     gcval=150;
    
-    gcval_u=10;
-	gcval_v=11;
-	gcval_w=12;
+       gcval_u=10;
+    gcval_v=11;
+    gcval_w=12;
     
     // 3D
     gcval_eta = 55;
@@ -82,8 +83,8 @@ fnpf_RK4::~fnpf_RK4()
 {
 }
 
-void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, convection *pconvec, ioflow *pflow, reini *preini, onephase* poneph)
-{	
+v    id fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, convection *pconvec, ioflow *pflow, reini *preini, onephase* poneph)
+{    
     
 // Step 1
     // fsf eta
@@ -91,18 +92,18 @@ void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, conve
     pf->damping(p,c,pgc,c->eta,gcval_eta,0.5);
 
     SLICELOOP4
-    {
-	erk1(i,j) = c->K(i,j);
+       {
+    erk1(i,j) = c->K(i,j);
     erk(i,j) = c->eta(i,j) + 0.5*p->dt*c->K(i,j);
     }
     
     // fsf Fi
     pf->dfsfbc(p,c,pgc,c->eta);
     pf->damping(p,c,pgc,c->Fifsf,gcval_fifsf,0.5);
-
-	SLICELOOP4
-    {
-	frk1(i,j) = c->K(i,j);
+    
+    SLICELOOP4
+       {
+    frk1(i,j) = c->K(i,j);
     frk(i,j)  = c->Fifsf(i,j) + 0.5*p->dt*c->K(i,j);
     }
     
@@ -141,8 +142,8 @@ void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, conve
     pf->damping(p,c,pgc,erk,gcval_eta,0.5);
     
     SLICELOOP4
-    {
-	erk2(i,j) = c->K(i,j);
+       {
+    erk2(i,j) = c->K(i,j);
     erk(i,j)  = c->eta(i,j) + 0.5*p->dt*c->K(i,j);
     }
     
@@ -151,8 +152,8 @@ void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, conve
     pf->damping(p,c,pgc,frk,gcval_fifsf,0.5);
     
     SLICELOOP4
-    {
-	frk2(i,j) = c->K(i,j);
+       {
+    frk2(i,j) = c->K(i,j);
     frk(i,j)  = c->Fifsf(i,j) + 0.5*p->dt*c->K(i,j);
     }
     
@@ -191,8 +192,8 @@ void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, conve
     pf->damping(p,c,pgc,erk,gcval_eta,1.0);
     
     SLICELOOP4
-    {
-	erk3(i,j) = c->K(i,j);
+       {
+    erk3(i,j) = c->K(i,j);
     erk(i,j)  = c->eta(i,j) + p->dt*c->K(i,j);
     }
     
@@ -201,8 +202,8 @@ void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, conve
     pf->damping(p,c,pgc,frk,gcval_fifsf,1.0);
     
     SLICELOOP4
-    {
-	frk3(i,j) = c->K(i,j);
+       {
+    frk3(i,j) = c->K(i,j);
     frk(i,j)  = c->Fifsf(i,j) + p->dt*c->K(i,j);
     }
     
@@ -247,8 +248,8 @@ void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, conve
     pf->dfsfbc(p,c,pgc,en);
     pf->damping(p,c,pgc,frk,gcval_fifsf,1.0);
     
-    SLICELOOP4
-	c->Fifsf(i,j) = c->Fifsf(i,j) + p->dt*(1.0/6.0)*(frk1(i,j) + 2.0*frk2(i,j) + 2.0*frk3(i,j) + c->K(i,j));
+       SLICELOOP4
+    c->Fifsf(i,j) = c->Fifsf(i,j) + p->dt*(1.0/6.0)*(frk1(i,j) + 2.0*frk2(i,j) + 2.0*frk3(i,j) + c->K(i,j));
     
     pflow->eta_relax(p,pgc,c->eta);
     pgc->gcsl_start4(p,c->eta,gcval_eta);
@@ -281,8 +282,8 @@ void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, conve
     velcalc_sig(p,c,pgc,c->Fi);
 }
 
-void fnpf_RK4::inidisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pflow, solver *psolv)
-{	
+v    id fnpf_RK4::inidisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pflow, solver *psolv)
+{    
     pgc->gcsl_start4(p,c->eta,gcval_eta);
     pgc->start7V(p,c->Fi,c->bc,gcval);
     etaloc_sig(p,c,pgc);
@@ -335,8 +336,8 @@ void fnpf_RK4::inidisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pflow, sol
     }
 }
 
-void fnpf_RK4::ini_wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc)
-{	
+v    id fnpf_RK4::ini_wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc)
+{    
     pf->wetdry(p,c,pgc,c->eta,c->Fifsf);   // coastline ini
 
     pf->coastline_eta(p,c,pgc,c->eta);

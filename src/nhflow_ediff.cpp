@@ -28,13 +28,13 @@ Author: Hans Bihs
 
 nhflow_ediff::nhflow_ediff(lexer* p)
 {
-	gcval_u=10;
-	gcval_v=11;
-	gcval_w=12;
+    gcval_u=10;
+    gcval_v=11;
+    gcval_w=12;
     
     gcval_uh=20;
-	gcval_vh=21;
-	gcval_wh=22;
+    gcval_vh=21;
+    gcval_wh=22;
 }
 
 nhflow_ediff::~nhflow_ediff()
@@ -44,7 +44,7 @@ nhflow_ediff::~nhflow_ediff()
 void nhflow_ediff::diff_u(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *psolv, double *UHdiff, double *UHin, double *UH, double *VH, double *WH, double alpha)
 {
     /*
-	starttime=pgc->timer();
+    starttime=pgc->timer();
     
     LOOP
     UHdiff[IJK] = UHin[IJK];
@@ -52,7 +52,7 @@ void nhflow_ediff::diff_u(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *psolv, d
     pgc->start4V(p,UHdiff,gcval_uh);
     
     LOOP
-	{
+    {
     visc = d->VISC[IJK];
     
     d->F(i,j,k) += 2.0*visc*((UH[Im1JK] - 2.0*UH[IJK] + UH[Ip1JK])/(p->XP[IM1] - 2.0*p->XP[IP] + p->XP[IP1]))
@@ -65,8 +65,8 @@ void nhflow_ediff::diff_u(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *psolv, d
         + visc*(VH[Ip1Jp1K]-VH[Im1Jp1K] - VH[Ip1Jm1K]+VH[Im1Jm1K])/(2.0*p->DXP[IP]*p->DYN[JP])
         
         + visc*(WH[Ip1JKp1]-WH[Im1JKp1] - WH[Ip1JKm1]+WH[Im1JKm1])/(2.0*p->DXP[IP]*p->DZN[JP]);
-		
-	}
+        
+    }
 
     
 
@@ -74,7 +74,7 @@ void nhflow_ediff::diff_u(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *psolv, d
 
     n=0;
     LOOP
-	{
+    {
         if(p->wet[IJ]==1  && d->breaking(i,j)==0)
         {
             visc = d->VISC[IJK];
@@ -106,9 +106,9 @@ void nhflow_ediff::diff_u(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *psolv, d
             
             
             d->rhsvec.V[n] = visc*((VH[Ip1Jp1K]-VH[Im1Jp1K]) - (VH[Ip1Jm1K]-VH[Im1Jm1K]))/((p->DXP[IP]+p->DXP[IM1])*(p->DYN[JP]+p->DYN[JM1]))
-						 +  visc*((WH[Ip1JKp1]-WH[Im1JKp1]) - (WH[Ip1JKm1]-WH[Im1JKm1]))/((p->DXP[IP]+p->DXP[IM1])*(p->DZN[KP]+p->DZN[KM1]))
+                         +  visc*((WH[Ip1JKp1]-WH[Im1JKp1]) - (WH[Ip1JKm1]-WH[Im1JKm1]))/((p->DXP[IP]+p->DXP[IM1])*(p->DZN[KP]+p->DZN[KM1]))
 
-						 + (CPORNH*UHin[IJK])/(alpha*p->dt)
+                         + (CPORNH*UHin[IJK])/(alpha*p->dt)
                             
                             
                             + visc*2.0*0.5*(p->sigx[FIJK]+p->sigx[FIJKp1])*(UH[Ip1JKp1] - UH[Im1JKp1] - UH[Ip1JKm1] + UH[Im1JKm1])

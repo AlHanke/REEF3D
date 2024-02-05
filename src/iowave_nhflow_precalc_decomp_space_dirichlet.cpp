@@ -37,10 +37,10 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
     
         xg = xgen(p);
         yg = ygen(p);
-		dg = distgen(p);
-		db = distbeach(p);
-		
-		// Wave Generation
+        dg = distgen(p);
+        db = distbeach(p);
+        
+        // Wave Generation
         if(p->B98==3 && h_switch==1)
         {
             // Zone 1
@@ -53,7 +53,7 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
                 }
             ++count;
             }
-		}
+        }
     }
     
     
@@ -73,8 +73,8 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
         {        
         z=p->ZSP[IJK]-p->phimean;
 
-		// Wave Generation
-		if(p->B98>=3 && u_switch==1)
+        // Wave Generation
+        if(p->B98>=3 && u_switch==1)
         {
                 for(qn=0;qn<wave_comp;++qn)
                 {
@@ -82,7 +82,7 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
                 uval_S_cos[count][qn] = wave_u_space_cos(p,pgc,xg,yg,z,qn);
                 }
             ++count;
-		}
+        }
         }
     }
 
@@ -101,8 +101,8 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
         {
         z=p->ZSP[IJK]-p->phimean;
         
-		// Wave Generation		
-		if(p->B98>=3 && v_switch==1)
+        // Wave Generation        
+        if(p->B98>=3 && v_switch==1)
         {
                 for(qn=0;qn<wave_comp;++qn)
                 {
@@ -110,7 +110,7 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
                 vval_S_cos[count][qn] = wave_v_space_cos(p,pgc,xg,yg,z,qn);
                 }
             ++count;
-		}
+        }
         }
     }
 
@@ -130,8 +130,8 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
         {
         z=p->ZSP[IJK]-p->phimean;
         
-		// Wave Generation
-		if(p->B98>=3 && w_switch==1)
+        // Wave Generation
+        if(p->B98>=3 && w_switch==1)
         {
                 for(qn=0;qn<wave_comp;++qn)
                 {
@@ -139,8 +139,8 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
                 wval_S_cos[count][qn] = wave_w_space_cos(p,pgc,xg,yg,z,qn);
                 }
             ++count;
-		}
         }
-    }	
+        }
+    }    
 
 }

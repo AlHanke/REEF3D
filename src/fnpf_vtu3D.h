@@ -46,9 +46,9 @@ class fnpf_vtu3D : public increment
 {
 
 public:
-	fnpf_vtu3D(lexer*,fdm_fnpf*,ghostcell*);
-	virtual ~fnpf_vtu3D();
-	virtual void start(lexer*,fdm_fnpf*,ghostcell*,ioflow*);
+    fnpf_vtu3D(lexer*,fdm_fnpf*,ghostcell*);
+    virtual ~fnpf_vtu3D();
+    virtual void start(lexer*,fdm_fnpf*,ghostcell*,ioflow*);
     virtual void print_stop(lexer*,fdm_fnpf*,ghostcell*);
     virtual void print_vtu(lexer*,fdm_fnpf*,ghostcell*);
     
@@ -62,7 +62,7 @@ private:
     int n,iin,offset[200];
     float ffn;
     int gcval_phi,gcval_phiext;
-	double *printtime_wT;
+    double *printtime_wT;
     double *printfsftime_wT;
     int *printfsfiter_wI;
     double phase;
@@ -79,7 +79,7 @@ private:
     fnpf_vtp_bed *pbed;
     fnpf_state *pstate;
     fnpf_breaking_log *pbreaklog;
-	force_ale **pforce_ale;
+    force_ale **pforce_ale;
     fnpf_print_Hs *phs;
 };
 

@@ -18,7 +18,9 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
---------------------------------------------------------------------*/#include"bedshear_reduction.h"
+--------------------------------------------------------------------*/
+
+#include"bedshear_reduction.h"
 #include"bedslope.h"
 
 class lexer;
@@ -34,9 +36,9 @@ class reduction_FD :  public bedshear_reduction, public bedslope
 {
 public:
     reduction_FD(lexer*);
-    virtual ~reduction_FD();
+       virtual ~reduction_FD();
 
-	virtual void start(lexer*,ghostcell*,sediment_fdm*);
+    virtual void start(lexer*,ghostcell*,sediment_fdm*);
 
 private:
     double u_abs,u_plus,dist;

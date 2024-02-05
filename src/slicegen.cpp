@@ -31,24 +31,24 @@ slicegen::slicegen(lexer *p)
     jmin=p->jmin;
     jmax=p->jmax;
     
-	fieldalloc(p);
-	
-	pp=p;
+    fieldalloc(p);
+    
+    pp=p;
 }
 
 slicegen::~slicegen()
 {
-	delete [ ] V;
+    delete [ ] V;
 }
 
 void slicegen::fieldalloc(lexer* p)
 {
-	p->Darray(V,imax*jmax);
+    p->Darray(V,imax*jmax);
 }
 
 void slicegen::dealloc(lexer* p)
 {
-	delete [ ] V;
+    delete [ ] V;
 }
 
 void slicegen::resize(lexer* p)
@@ -57,12 +57,12 @@ void slicegen::resize(lexer* p)
 
 double & slicegen::operator[](int n)
 {
-	return V[n];
+    return V[n];
 }
 
 double & slicegen::operator()(int ii, int jj)
-{			
-	return V[(ii-imin)*jmax + (jj-jmin)];
+{            
+    return V[(ii-imin)*jmax + (jj-jmin)];
 }
 
 void slicegen::ggcpol(lexer* p)

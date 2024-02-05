@@ -33,46 +33,46 @@ void ghostcell::gcfb_buildflag(lexer *p, fdm *a, int **cellmem, int& cellcount)
     {
     cache = p->flag4[IJK];
 
-	
+    
 
         if(a->fb(i,j,k)<0.0)
-		{
+        {
         p->flag4[IJK]=FLT;
-			
-			if(cache>0)
-			{
+            
+            if(cache>0)
+            {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=2;
-			
+            
             ++count;
-			}
-		}
+            }
+        }
 
         if(a->fb(i,j,k)>=0.0)
         {
         p->flag4[IJK]=WATER;
-		
-			if(cache==FLT)
-			{
+        
+            if(cache==FLT)
+            {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=1;
             ++count;
-			}
+            }
            
         }
-		
-		if(a->fb(i,j,k)>=0.0)
+        
+        if(a->fb(i,j,k)>=0.0)
         p->flag4[IJK]=WATER;
     }
     cellcount=count;
     
     flagx(p,p->flag4);
     
-	if(p->Y60==1)
+    if(p->Y60==1)
     LOOP
     {
         if(p->flag4[(i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]==FLT
@@ -101,36 +101,36 @@ void ghostcell::gcfb_velflag1(lexer *p, fdm *a, int **cellmem, int& cellcount)
     count=0;
     UBASELOOP // U-grid loop over i,j,k: flag1 = -17 and cellmem[3] = 2 if solid, flag1 = 10 and cellmem[3] = 1 if fluid
     {
-	cache = p->flag1[IJK];
-		
+    cache = p->flag1[IJK];
+        
     if(p->flag4[IJK]<0 
-	|| (p->flag4[IJK]>0 && p->flag4[(i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]<0))
-	{
+    || (p->flag4[IJK]>0 && p->flag4[(i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]<0))
+    {
        p->flag1[IJK]=FLT;
-	   
-		if(cache>0)
-		{
+       
+        if(cache>0)
+        {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=2;
             ++count;
-		}
-	}
-	   
+        }
+    }
+       
 
     if(p->flag4[IJK]>0 && p->flag4[(i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]>0)
     {
-		p->flag1[IJK]=WATER;
-		
-			if(cache==FLT)
-			{
+        p->flag1[IJK]=WATER;
+        
+            if(cache==FLT)
+            {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=1;
             ++count;
-			}
+            }
     }
 
     }
@@ -141,41 +141,41 @@ void ghostcell::gcfb_velflag1(lexer *p, fdm *a, int **cellmem, int& cellcount)
 
 void ghostcell::gcfb_velflag2(lexer *p, fdm *a, int **cellmem, int& cellcount)
 {
-	int nn,cache;
+    int nn,cache;
 
     count=0;
     VBASELOOP
     {
-	cache = p->flag2[IJK];
-		
+    cache = p->flag2[IJK];
+        
     if(p->flag4[IJK]<0 
-	|| (p->flag4[IJK]>0 && p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin]<0))
-	{
+    || (p->flag4[IJK]>0 && p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin]<0))
+    {
        p->flag2[IJK]=FLT;
-	   
-		if(cache>0)
-		{
+       
+        if(cache>0)
+        {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=2;
             ++count;
-		}
-	}
-	   
+        }
+    }
+       
 
     if(p->flag4[IJK]>0 && p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin]>0)
     {
-		p->flag2[IJK]=10;
-		
-			if(cache==FLT)
-			{
+        p->flag2[IJK]=10;
+        
+            if(cache==FLT)
+            {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=1;
             ++count;
-			}
+            }
     }
 
     }
@@ -191,36 +191,36 @@ void ghostcell::gcfb_velflag3(lexer *p, fdm *a, int **cellmem, int& cellcount)
     count=0;
     WBASELOOP
     {
-	cache = p->flag3[IJK];
-		
+    cache = p->flag3[IJK];
+        
     if(p->flag4[IJK]<0 
-	|| (p->flag4[IJK]>0 && p->flag4[IJKp1]<0))
-	{
+    || (p->flag4[IJK]>0 && p->flag4[IJKp1]<0))
+    {
        p->flag3[IJK]=FLT;
-	   
-		if(cache>0)
-		{
+       
+        if(cache>0)
+        {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=2;
             ++count;
-		}
-	}
-	   
+        }
+    }
+       
 
     if(p->flag4[IJK]>0 && p->flag4[IJKp1]>0)
     {
-		p->flag3[IJK]=10;
-		
-			if(cache==FLT)
-			{
+        p->flag3[IJK]=10;
+        
+            if(cache==FLT)
+            {
             cellmem[count][0]=i;
             cellmem[count][1]=j;
             cellmem[count][2]=k;
             cellmem[count][3]=1;
             ++count;
-			}
+            }
     }
 
     }

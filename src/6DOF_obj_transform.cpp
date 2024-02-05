@@ -47,8 +47,8 @@ void sixdof_obj::get_trans(lexer *p, ghostcell *pgc, Eigen::Vector3d& dp, Eigen:
     dp = Ffb_; 
     dc = pp/Mass_fb;
 
-	// Prescribed motions
-	prescribedMotion_trans(p,pgc,dp,dc);
+    // Prescribed motions
+    prescribedMotion_trans(p,pgc,dp,dc);
 } 
 
 void sixdof_obj::get_rot(Eigen::Vector3d& dh, Eigen::Vector4d& de, Eigen::Vector3d& h, Eigen::Vector4d& e)

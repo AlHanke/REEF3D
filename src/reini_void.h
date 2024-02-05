@@ -31,11 +31,11 @@ using namespace std;
 class reini_void : public reini
 {
 public:
-	reini_void(lexer* p);
-	virtual ~reini_void();
-	virtual void start(fdm*,lexer*,field&,ghostcell*,ioflow*);
+    reini_void(lexer* p);
+    virtual ~reini_void();
+    virtual void start(fdm*,lexer*,field&,ghostcell*,ioflow*);
     virtual void startV(fdm*,lexer*,vec&,ghostcell*,ioflow*);
-	virtual void update(fdm*, lexer*,ghostcell*);
+    virtual void update(fdm*, lexer*,ghostcell*);
 };
 
 #endif

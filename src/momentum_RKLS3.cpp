@@ -55,18 +55,18 @@ momentum_RKLS3::momentum_RKLS3
     fsi *ppfsi
 ):momentum_forcing(p),bcmom(p),urk(p),vrk(p),wrk(p),Cu(p),Cv(p),Cw(p),Du(p),Dv(p),Dw(p),fx(p),fy(p),fz(p)
 {
-	gcval_u=10;
-	gcval_v=11;
-	gcval_w=12;
-	
-	pconvec=pconvection;
-	pdiff=pdiffusion;
-	ppress=ppressure;
-	ppois=ppoisson;
-	pturb=pturbulence;
-	psolv=psolver;
+    gcval_u=10;
+    gcval_v=11;
+    gcval_w=12;
+    
+    pconvec=pconvection;
+    pdiff=pdiffusion;
+    ppress=ppressure;
+    ppois=ppoisson;
+    pturb=pturbulence;
+    psolv=psolver;
     ppoissonsolv=ppoissonsolver;
-	pflow=pioflow;
+    pflow=pioflow;
     pfsi=ppfsi;
 
     alpha << 4.0/15.0, 1.0/15.0, 1.0/6.0;
@@ -78,15 +78,15 @@ momentum_RKLS3::~momentum_RKLS3(){}
 
 
 void momentum_RKLS3::start(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, sixdof *p6dof, vector<net*>& pnet)
-{	
+{    
     // Set inflow 
     double udisctime=0.0;
     double udiscstart=0.0;
     
     pflow->discharge(p,a,pgc);
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
-	//pflow->rkinflow(p,a,pgc,urk,vrk,wrk);
-		
+    //pflow->rkinflow(p,a,pgc,urk,vrk,wrk);
+        
     bool final = false;
 
     for (int loop=0; loop<3; loop++)
@@ -243,8 +243,8 @@ void momentum_RKLS3::start(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, sixd
 
 void momentum_RKLS3::irhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uvel, field &vvel, field &wvel, double alpha)
 {
-	n=0;
-	if(p->D20<3)
+    n=0;
+    if(p->D20<3)
     {
         ULOOP
         {
@@ -254,9 +254,9 @@ void momentum_RKLS3::irhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uve
             ++n;
         }
     }
-	
-	n=0;
-	if(p->D20==3)
+    
+    n=0;
+    if(p->D20==3)
     {
         ULOOP
         {
@@ -268,8 +268,8 @@ void momentum_RKLS3::irhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uve
 
 void momentum_RKLS3::jrhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uvel, field &vvel, field &wvel, double alpha)
 {
-	n=0;
-	if(p->D20<3)
+    n=0;
+    if(p->D20<3)
     {
         VLOOP
         {
@@ -279,9 +279,9 @@ void momentum_RKLS3::jrhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uve
             ++n;
         }
     }
-	
-	n=0;
-	if(p->D20==3)
+    
+    n=0;
+    if(p->D20==3)
     {
         VLOOP
         {
@@ -293,8 +293,8 @@ void momentum_RKLS3::jrhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uve
 
 void momentum_RKLS3::krhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uvel, field &vvel, field &wvel, double alpha)
 {
-	n=0;
-	if(p->D20<3)
+    n=0;
+    if(p->D20<3)
     {
         WLOOP
         {
@@ -304,9 +304,9 @@ void momentum_RKLS3::krhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uve
             ++n;
         }
     }
-	
-	n=0;
-	if(p->D20==3)
+    
+    n=0;
+    if(p->D20==3)
     {
         WLOOP
         {

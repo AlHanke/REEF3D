@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"sflow_hxy_fou.h"
+
+#include"sflow_hxy_fou.h"
 #include"lexer.h"
 #include"fdm2D.h"
 #include"slice.h"
@@ -45,22 +46,22 @@ sflow_hxy_fou::~sflow_hxy_fou()
 }
 
 void sflow_hxy_fou::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet, slice& eta, slice& uvel, slice& vvel)
-{
-	double eps=1.0e-7;
-	
-    SLICELOOP1
-	{
-	pflux->u_flux(4,uvel,ivel1,ivel2);
-
-	if(ivel1>eps)
-    hx(i,j) = eta(i,j) + 0.5*(depth(i,j)+depth(i+1,j));
-	
-	if(ivel1<-eps)
-    hx(i,j) = eta(i+1,j) + 0.5*(depth(i,j)+depth(i+1,j));
-	
-	if(fabs(ivel1)<=eps)
-    hx(i,j) = MAX(eta(i,j),eta(i+1,j)) + MIN(depth(i,j), depth(i+1,j));
-	}
+    
+    double eps=1.0e-7;
+    
+       SLICELOOP1
+    {
+    pflux->u_flux(4,uvel,ivel1,ivel2);
+    
+    if(ivel1>eps)
+       hx(i,j) = eta(i,j) + 0.5*(depth(i,j)+depth(i+1,j));
+    
+    if(ivel1<-eps)
+       hx(i,j) = eta(i+1,j) + 0.5*(depth(i,j)+depth(i+1,j));
+    
+    if(fabs(ivel1)<=eps)
+       hx(i,j) = MAX(eta(i,j),eta(i+1,j)) + MIN(depth(i,j), depth(i+1,j));
+    }
     
     
     if(p->F50==1 || p->F50==4)
@@ -109,21 +110,21 @@ void sflow_hxy_fou::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet
         if(fabs(ivel1)<=eps)
         hx(i,j) = MAX(eta(i,j),eta(i+1,j)) + MIN(depth(i,j), depth(i+1,j));
         }
+       }
+    
+    SLICELOOP2
+    {
+    pflux->v_flux(4,vvel,jvel1,jvel2);
+    
+    if(jvel1>eps)
+       hy(i,j) = eta(i,j) + 0.5*(depth(i,j)+depth(i,j+1));
+    
+    if(jvel1<-eps)
+       hy(i,j) = eta(i,j+1) + 0.5*(depth(i,j)+depth(i,j+1));
+    
+    if(fabs(jvel1)<=eps)
+       hy(i,j) = MAX(eta(i,j),eta(i,j+1)) + MIN(depth(i,j), depth(i,j+1));
     }
-	
-	SLICELOOP2
-	{
-	pflux->v_flux(4,vvel,jvel1,jvel2);
-	
-	if(jvel1>eps)
-    hy(i,j) = eta(i,j) + 0.5*(depth(i,j)+depth(i,j+1));
-	
-	if(jvel1<-eps)
-    hy(i,j) = eta(i,j+1) + 0.5*(depth(i,j)+depth(i,j+1));
-	
-	if(fabs(jvel1)<=eps)
-    hy(i,j) = MAX(eta(i,j),eta(i,j+1)) + MIN(depth(i,j), depth(i,j+1));
-	}
       
     for(qq=0;qq<pBC->obj_count;++qq)
     if(pBC->patch[qq]->waterlevel_flag==0)
@@ -139,8 +140,8 @@ void sflow_hxy_fou::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet
         
         if(wet[IJ]==1)
         {
-        pflux->v_flux(4,vvel,jvel1,jvel2);
-	
+           pflux->v_flux(4,vvel,jvel1,jvel2);
+    
         if(jvel1>eps)
         hy(i,j) = eta(i,j) + depth(i,j);
         
@@ -150,8 +151,8 @@ void sflow_hxy_fou::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet
         if(fabs(jvel1)<=eps)
         hy(i,j) = MAX(eta(i,j),eta(i,j+1)) + MIN(depth(i,j), depth(i,j+1));
         }
-    }
-	
+       }
+    
 }
 
 

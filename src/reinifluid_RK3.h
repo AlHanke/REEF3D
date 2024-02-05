@@ -40,29 +40,29 @@ class reinifluid_RK3 : public reini, public increment
 public:
     reinifluid_RK3(lexer* p,int);
 
-	virtual ~reinifluid_RK3();
+    virtual ~reinifluid_RK3();
     virtual void start(fdm*,lexer*,field&,ghostcell*,ioflow*);
     virtual void startV(fdm*,lexer*,vec&,ghostcell*,ioflow*);
 
-	int *sizeM;
-	vec f,frk1,frk2,L,dt;
+    int *sizeM;
+    vec f,frk1,frk2,L,dt;
 
 
 private:
     picard *ppicard;
-	reinidisc *prdisc;
+    reinidisc *prdisc;
 
 
-	void step(fdm*, lexer*);
+    void step(fdm*, lexer*);
     void time_preproc(lexer*);
 
 
-	double starttime,endtime;
+    double starttime,endtime;
 
 
-	int gcval_phi,gcval_ro,gcval_iniphi,reiniter,n;
+    int gcval_phi,gcval_ro,gcval_iniphi,reiniter,n;
 
-	const double epsi;
+    const double epsi;
 
 };
 

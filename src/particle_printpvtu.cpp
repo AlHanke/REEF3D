@@ -37,75 +37,75 @@ void particle_f::pvtu_pos(fdm* a, lexer* p, ghostcell* pgc)
     if(p->P15==2)
     num = p->count;
 
-	if(p->P14==0)
-	{
+    if(p->P14==0)
+    {
     if(num<10)
-	sprintf(name,"XPLS-POS-00000%i.pvtu",num);
+    sprintf(name,"XPLS-POS-00000%i.pvtu",num);
 
-	if(num<100&&num>9)
-	sprintf(name,"XPLS-POS-0000%i.pvtu",num);
+    if(num<100&&num>9)
+    sprintf(name,"XPLS-POS-0000%i.pvtu",num);
 
-	if(num<1000&&num>99)
-	sprintf(name,"XPLS-POS-000%i.pvtu",num);
+    if(num<1000&&num>99)
+    sprintf(name,"XPLS-POS-000%i.pvtu",num);
 
-	if(num<10000&&num>999)
-	sprintf(name,"XPLS-POS-00%i.pvtu",num);
+    if(num<10000&&num>999)
+    sprintf(name,"XPLS-POS-00%i.pvtu",num);
 
-	if(num<100000&&num>9999)
-	sprintf(name,"XPLS-POS-0%i.pvtu",num);
+    if(num<100000&&num>9999)
+    sprintf(name,"XPLS-POS-0%i.pvtu",num);
 
-	if(num>99999)
-	sprintf(name,"XPLS-POS-%i.pvtu",num);
-	}
-	
-	if(p->P14==1)
-	{
-	if(num<10)
-	sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i.pvtu",num);
+    if(num>99999)
+    sprintf(name,"XPLS-POS-%i.pvtu",num);
+    }
+    
+    if(p->P14==1)
+    {
+    if(num<10)
+    sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i.pvtu",num);
 
-	if(num<100&&num>9)
-	sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i.pvtu",num);
+    if(num<100&&num>9)
+    sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i.pvtu",num);
 
-	if(num<1000&&num>99)
-	sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i.pvtu",num);
+    if(num<1000&&num>99)
+    sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i.pvtu",num);
 
-	if(num<10000&&num>999)
-	sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i.pvtu",num);
+    if(num<10000&&num>999)
+    sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i.pvtu",num);
 
-	if(num<100000&&num>9999)
-	sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i.pvtu",num);
+    if(num<100000&&num>9999)
+    sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i.pvtu",num);
 
-	if(num>99999)
-	sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i.pvtu",num);
-	}
+    if(num>99999)
+    sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i.pvtu",num);
+    }
 
-	ofstream result;
-	result.open(name);
+    ofstream result;
+    result.open(name);
 
-	result<<"<?xml version=\"1.0\"?>"<<endl;
-	result<<"<VTKFile type=\"PUnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
-	result<<"<PUnstructuredGrid GhostLevel=\"0\">"<<endl;
+    result<<"<?xml version=\"1.0\"?>"<<endl;
+    result<<"<VTKFile type=\"PUnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
+    result<<"<PUnstructuredGrid GhostLevel=\"0\">"<<endl;
 
-	result<<"<PPointData>"<<endl;
-	result<<"<PDataArray type=\"Float32\" Name=\"phi\"/>"<<endl;
-	result<<"<PDataArray type=\"Float32\" Name=\"radius\"/>"<<endl;
-	result<<"<PDataArray type=\"Float32\" Name=\"correction\"/>"<<endl;
-	result<<"</PPointData>"<<endl;
+    result<<"<PPointData>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"phi\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"radius\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"correction\"/>"<<endl;
+    result<<"</PPointData>"<<endl;
 
-	result<<"<PPoints>"<<endl;
-	result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>"<<endl;
-	result<<"</PPoints>"<<endl;
+    result<<"<PPoints>"<<endl;
+    result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>"<<endl;
+    result<<"</PPoints>"<<endl;
 
-	for(n=0; n<p->M10; ++n)
-	{
+    for(n=0; n<p->M10; ++n)
+    {
     piecename_pos(a,p,pgc,n);
     result<<"<Piece Source=\""<<pname<<"\"/>"<<endl;
-	}
+    }
 
-	result<<"</PUnstructuredGrid>"<<endl;
-	result<<"</VTKFile>"<<endl;
+    result<<"</PUnstructuredGrid>"<<endl;
+    result<<"</VTKFile>"<<endl;
 
-	result.close();
+    result.close();
 }
 
 
@@ -121,109 +121,109 @@ void particle_f::piecename_pos(fdm* a, lexer* p, ghostcell* pgc, int n)
     num = p->count;
 
 
-	if(n<9)
-	{
-		if(num<10)
-		sprintf(pname,"XPLS-POS-00000%i-0000%i.vtu",num,n+1);
+    if(n<9)
+    {
+        if(num<10)
+        sprintf(pname,"XPLS-POS-00000%i-0000%i.vtu",num,n+1);
 
-		if(num<100&&num>9)
-		sprintf(pname,"XPLS-POS-0000%i-0000%i.vtu",num,n+1);
+        if(num<100&&num>9)
+        sprintf(pname,"XPLS-POS-0000%i-0000%i.vtu",num,n+1);
 
-		if(num<1000&&num>99)
-		sprintf(pname,"XPLS-POS-000%i-0000%i.vtu",num,n+1);
+        if(num<1000&&num>99)
+        sprintf(pname,"XPLS-POS-000%i-0000%i.vtu",num,n+1);
 
-		if(num<10000&&num>999)
-		sprintf(pname,"XPLS-POS-00%i-0000%i.vtu",num,n+1);
+        if(num<10000&&num>999)
+        sprintf(pname,"XPLS-POS-00%i-0000%i.vtu",num,n+1);
 
-		if(num<100000&&num>9999)
-		sprintf(pname,"XPLS-POS-0%i-0000%i.vtu",num,n+1);
+        if(num<100000&&num>9999)
+        sprintf(pname,"XPLS-POS-0%i-0000%i.vtu",num,n+1);
 
-		if(num>99999)
-		sprintf(pname,"XPLS-POS-%i-0000%i.vtu",num,n+1);
-	}
+        if(num>99999)
+        sprintf(pname,"XPLS-POS-%i-0000%i.vtu",num,n+1);
+    }
 
-	if(n<99&&n>8)
-	{
-		if(num<10)
-		sprintf(pname,"XPLS-POS-00000%i-000%i.vtu",num,n+1);
+    if(n<99&&n>8)
+    {
+        if(num<10)
+        sprintf(pname,"XPLS-POS-00000%i-000%i.vtu",num,n+1);
 
-		if(num<100&&num>9)
-		sprintf(pname,"XPLS-POS-0000%i-000%i.vtu",num,n+1);
+        if(num<100&&num>9)
+        sprintf(pname,"XPLS-POS-0000%i-000%i.vtu",num,n+1);
 
-		if(num<1000&&num>99)
-		sprintf(pname,"XPLS-POS-000%i-000%i.vtu",num,n+1);
+        if(num<1000&&num>99)
+        sprintf(pname,"XPLS-POS-000%i-000%i.vtu",num,n+1);
 
-		if(num<10000&&num>999)
-		sprintf(pname,"XPLS-POS-00%i-000%i.vtu",num,n+1);
+        if(num<10000&&num>999)
+        sprintf(pname,"XPLS-POS-00%i-000%i.vtu",num,n+1);
 
-		if(num<100000&&num>9999)
-		sprintf(pname,"XPLS-POS-0%i-000%i.vtu",num,n+1);
+        if(num<100000&&num>9999)
+        sprintf(pname,"XPLS-POS-0%i-000%i.vtu",num,n+1);
 
-		if(num>99999)
-		sprintf(pname,"XPLS-POS-%i-000%i.vtu",num,n+1);
-	}
-	if(n<999&&n>98)
-	{
-		if(num<10)
-		sprintf(pname,"XPLS-POS-00000%i-00%i.vtu",num,n+1);
+        if(num>99999)
+        sprintf(pname,"XPLS-POS-%i-000%i.vtu",num,n+1);
+    }
+    if(n<999&&n>98)
+    {
+        if(num<10)
+        sprintf(pname,"XPLS-POS-00000%i-00%i.vtu",num,n+1);
 
-		if(num<100&&num>9)
-		sprintf(pname,"XPLS-POS-0000%i-00%i.vtu",num,n+1);
+        if(num<100&&num>9)
+        sprintf(pname,"XPLS-POS-0000%i-00%i.vtu",num,n+1);
 
-		if(num<1000&&num>99)
-		sprintf(pname,"XPLS-POS-000%i-00%i.vtu",num,n+1);
+        if(num<1000&&num>99)
+        sprintf(pname,"XPLS-POS-000%i-00%i.vtu",num,n+1);
 
-		if(num<10000&&num>999)
-		sprintf(pname,"XPLS-POS-00%i-00%i.vtu",num,n+1);
+        if(num<10000&&num>999)
+        sprintf(pname,"XPLS-POS-00%i-00%i.vtu",num,n+1);
 
-		if(num<100000&&num>9999)
-		sprintf(pname,"XPLS-POS-0%i-00%i.vtu",num,n+1);
+        if(num<100000&&num>9999)
+        sprintf(pname,"XPLS-POS-0%i-00%i.vtu",num,n+1);
 
-		if(num>99999)
-		sprintf(pname,"XPLS-POS-%i-00%i.vtu",num,n+1);
-	}
+        if(num>99999)
+        sprintf(pname,"XPLS-POS-%i-00%i.vtu",num,n+1);
+    }
 
-	if(n<9999&&n>998)
-	{
-		if(num<10)
-		sprintf(pname,"XPLS-POS-00000%i-0%i.vtu",num,n+1);
+    if(n<9999&&n>998)
+    {
+        if(num<10)
+        sprintf(pname,"XPLS-POS-00000%i-0%i.vtu",num,n+1);
 
-		if(num<100&&num>9)
-		sprintf(pname,"XPLS-POS-0000%i-0%i.vtu",num,n+1);
+        if(num<100&&num>9)
+        sprintf(pname,"XPLS-POS-0000%i-0%i.vtu",num,n+1);
 
-		if(num<1000&&num>99)
-		sprintf(pname,"XPLS-POS-000%i-0%i.vtu",num,n+1);
+        if(num<1000&&num>99)
+        sprintf(pname,"XPLS-POS-000%i-0%i.vtu",num,n+1);
 
-		if(num<10000&&num>999)
-		sprintf(pname,"XPLS-POS-00%i-0%i.vtu",num,n+1);
+        if(num<10000&&num>999)
+        sprintf(pname,"XPLS-POS-00%i-0%i.vtu",num,n+1);
 
-		if(num<100000&&num>9999)
-		sprintf(pname,"XPLS-POS-0%i-0%i.vtu",num,n+1);
+        if(num<100000&&num>9999)
+        sprintf(pname,"XPLS-POS-0%i-0%i.vtu",num,n+1);
 
-		if(num>99999)
-		sprintf(pname,"XPLS-POS-%i-0%i.vtu",num,n+1);
-	}
+        if(num>99999)
+        sprintf(pname,"XPLS-POS-%i-0%i.vtu",num,n+1);
+    }
 
-	if(n>9998)
-	{
-		if(num<10)
-		sprintf(pname,"XPLS-POS-00000%i-%i.vtu",num,n+1);
+    if(n>9998)
+    {
+        if(num<10)
+        sprintf(pname,"XPLS-POS-00000%i-%i.vtu",num,n+1);
 
-		if(num<100&&num>9)
-		sprintf(pname,"XPLS-POS-0000%i-%i.vtu",num,n+1);
+        if(num<100&&num>9)
+        sprintf(pname,"XPLS-POS-0000%i-%i.vtu",num,n+1);
 
-		if(num<1000&&num>99)
-		sprintf(pname,"XPLS-POS-000%i-%i.vtu",num,n+1);
+        if(num<1000&&num>99)
+        sprintf(pname,"XPLS-POS-000%i-%i.vtu",num,n+1);
 
-		if(num<10000&&num>999)
-		sprintf(pname,"XPLS-POS-00%i-%i.vtu",num,n+1);
+        if(num<10000&&num>999)
+        sprintf(pname,"XPLS-POS-00%i-%i.vtu",num,n+1);
 
-		if(num<100000&&num>9999)
-		sprintf(pname,"XPLS-POS-0%i-%i.vtu",num,n+1);
+        if(num<100000&&num>9999)
+        sprintf(pname,"XPLS-POS-0%i-%i.vtu",num,n+1);
 
-		if(num>99999)
-		sprintf(pname,"XPLS-POS-%i-%i.vtu",num,n+1);
-	}
+        if(num>99999)
+        sprintf(pname,"XPLS-POS-%i-%i.vtu",num,n+1);
+    }
 
 }
 
@@ -240,217 +240,217 @@ void particle_f::header_pos(fdm* a,lexer* p,ghostcell* pgc)
 
 if(p->P14==0)
 {
-	if(p->mpirank<9)
-	{
-		if(num<10)
-		sprintf(name,"XPLS-POS-00000%i-0000%i.vtu",num,p->mpirank+1);
+    if(p->mpirank<9)
+    {
+        if(num<10)
+        sprintf(name,"XPLS-POS-00000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"XPLS-POS-0000%i-0000%i.vtu",num,p->mpirank+1);
+        if(num<100&&num>9)
+        sprintf(name,"XPLS-POS-0000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"XPLS-POS-000%i-0000%i.vtu",num,p->mpirank+1);
+        if(num<1000&&num>99)
+        sprintf(name,"XPLS-POS-000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"XPLS-POS-00%i-0000%i.vtu",num,p->mpirank+1);
+        if(num<10000&&num>999)
+        sprintf(name,"XPLS-POS-00%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"XPLS-POS-0%i-0000%i.vtu",num,p->mpirank+1);
+        if(num<100000&&num>9999)
+        sprintf(name,"XPLS-POS-0%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"XPLS-POS-%i-0000%i.vtu",num,p->mpirank+1);
-	}
+        if(num>99999)
+        sprintf(name,"XPLS-POS-%i-0000%i.vtu",num,p->mpirank+1);
+    }
 
-	if(p->mpirank<99&&p->mpirank>8)
-	{
-		if(num<10)
-		sprintf(name,"XPLS-POS-00000%i-000%i.vtu",num,p->mpirank+1);
+    if(p->mpirank<99&&p->mpirank>8)
+    {
+        if(num<10)
+        sprintf(name,"XPLS-POS-00000%i-000%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"XPLS-POS-0000%i-000%i.vtu",num,p->mpirank+1);
+        if(num<100&&num>9)
+        sprintf(name,"XPLS-POS-0000%i-000%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"XPLS-POS-000%i-000%i.vtu",num,p->mpirank+1);
+        if(num<1000&&num>99)
+        sprintf(name,"XPLS-POS-000%i-000%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"XPLS-POS-00%i-000%i.vtu",num,p->mpirank+1);
+        if(num<10000&&num>999)
+        sprintf(name,"XPLS-POS-00%i-000%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"XPLS-POS-0%i-000%i.vtu",num,p->mpirank+1);
+        if(num<100000&&num>9999)
+        sprintf(name,"XPLS-POS-0%i-000%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"XPLS-POS-%i-000%i.vtu",num,p->mpirank+1);
-	}
-	if(p->mpirank<999&&p->mpirank>98)
-	{
-		if(num<10)
-		sprintf(name,"XPLS-POS-00000%i-00%i.vtu",num,p->mpirank+1);
+        if(num>99999)
+        sprintf(name,"XPLS-POS-%i-000%i.vtu",num,p->mpirank+1);
+    }
+    if(p->mpirank<999&&p->mpirank>98)
+    {
+        if(num<10)
+        sprintf(name,"XPLS-POS-00000%i-00%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"XPLS-POS-0000%i-00%i.vtu",num,p->mpirank+1);
+        if(num<100&&num>9)
+        sprintf(name,"XPLS-POS-0000%i-00%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"XPLS-POS-000%i-00%i.vtu",num,p->mpirank+1);
+        if(num<1000&&num>99)
+        sprintf(name,"XPLS-POS-000%i-00%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"XPLS-POS-00%i-00%i.vtu",num,p->mpirank+1);
+        if(num<10000&&num>999)
+        sprintf(name,"XPLS-POS-00%i-00%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"XPLS-POS-0%i-00%i.vtu",num,p->mpirank+1);
+        if(num<100000&&num>9999)
+        sprintf(name,"XPLS-POS-0%i-00%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"XPLS-POS-%i-00%i.vtu",num,p->mpirank+1);
-	}
+        if(num>99999)
+        sprintf(name,"XPLS-POS-%i-00%i.vtu",num,p->mpirank+1);
+    }
 
-	if(p->mpirank<9999&&p->mpirank>998)
-	{
-		if(num<10)
-		sprintf(name,"XPLS-POS-00000%i-0%i.vtu",num,p->mpirank+1);
+    if(p->mpirank<9999&&p->mpirank>998)
+    {
+        if(num<10)
+        sprintf(name,"XPLS-POS-00000%i-0%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"XPLS-POS-0000%i-0%i.vtu",num,p->mpirank+1);
+        if(num<100&&num>9)
+        sprintf(name,"XPLS-POS-0000%i-0%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"XPLS-POS-000%i-0%i.vtu",num,p->mpirank+1);
+        if(num<1000&&num>99)
+        sprintf(name,"XPLS-POS-000%i-0%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"XPLS-POS-00%i-0%i.vtu",num,p->mpirank+1);
+        if(num<10000&&num>999)
+        sprintf(name,"XPLS-POS-00%i-0%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"XPLS-POS-0%i-0%i.vtu",num,p->mpirank+1);
+        if(num<100000&&num>9999)
+        sprintf(name,"XPLS-POS-0%i-0%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"XPLS-POS-%i-0%i.vtu",num,p->mpirank+1);
-	}
+        if(num>99999)
+        sprintf(name,"XPLS-POS-%i-0%i.vtu",num,p->mpirank+1);
+    }
 
-	if(p->mpirank>9998)
-	{
-		if(num<10)
-		sprintf(name,"XPLS-POS-00000%i-%i.vtu",num,p->mpirank+1);
+    if(p->mpirank>9998)
+    {
+        if(num<10)
+        sprintf(name,"XPLS-POS-00000%i-%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"XPLS-POS-0000%i-%i.vtu",num,p->mpirank+1);
+        if(num<100&&num>9)
+        sprintf(name,"XPLS-POS-0000%i-%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"XPLS-POS-000%i-%i.vtu",num,p->mpirank+1);
+        if(num<1000&&num>99)
+        sprintf(name,"XPLS-POS-000%i-%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"XPLS-POS-00%i-%i.vtu",num,p->mpirank+1);
+        if(num<10000&&num>999)
+        sprintf(name,"XPLS-POS-00%i-%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"XPLS-POS-0%i-%i.vtu",num,p->mpirank+1);
+        if(num<100000&&num>9999)
+        sprintf(name,"XPLS-POS-0%i-%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"XPLS-POS-%i-%i.vtu",num,p->mpirank+1);
-	}
+        if(num>99999)
+        sprintf(name,"XPLS-POS-%i-%i.vtu",num,p->mpirank+1);
+    }
 }
 
 
 if(p->P14==1)
 {
-	if(p->mpirank<9)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i-0000%i.vtu",num,p->mpirank+1);
+    if(p->mpirank<9)
+    {
+        if(num<10)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i-0000%i.vtu",num,p->mpirank+1);
+        if(num<100&&num>9)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i-0000%i.vtu",num,p->mpirank+1);
+        if(num<1000&&num>99)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i-0000%i.vtu",num,p->mpirank+1);
+        if(num<10000&&num>999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i-0000%i.vtu",num,p->mpirank+1);
+        if(num<100000&&num>9999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i-0000%i.vtu",num,p->mpirank+1);
-	}
+        if(num>99999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i-0000%i.vtu",num,p->mpirank+1);
+    }
 
-	if(p->mpirank<99&&p->mpirank>8)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i-000%i.vtu",num,p->mpirank+1);
+    if(p->mpirank<99&&p->mpirank>8)
+    {
+        if(num<10)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i-000%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i-000%i.vtu",num,p->mpirank+1);
+        if(num<100&&num>9)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i-000%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i-000%i.vtu",num,p->mpirank+1);
+        if(num<1000&&num>99)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i-000%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i-000%i.vtu",num,p->mpirank+1);
+        if(num<10000&&num>999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i-000%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i-000%i.vtu",num,p->mpirank+1);
+        if(num<100000&&num>9999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i-000%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i-000%i.vtu",num,p->mpirank+1);
-	}
-	if(p->mpirank<999&&p->mpirank>98)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i-00%i.vtu",num,p->mpirank+1);
+        if(num>99999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i-000%i.vtu",num,p->mpirank+1);
+    }
+    if(p->mpirank<999&&p->mpirank>98)
+    {
+        if(num<10)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i-00%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i-00%i.vtu",num,p->mpirank+1);
+        if(num<100&&num>9)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i-00%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i-00%i.vtu",num,p->mpirank+1);
+        if(num<1000&&num>99)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i-00%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i-00%i.vtu",num,p->mpirank+1);
+        if(num<10000&&num>999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i-00%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i-00%i.vtu",num,p->mpirank+1);
+        if(num<100000&&num>9999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i-00%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i-00%i.vtu",num,p->mpirank+1);
-	}
+        if(num>99999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i-00%i.vtu",num,p->mpirank+1);
+    }
 
-	if(p->mpirank<9999&&p->mpirank>998)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i-0%i.vtu",num,p->mpirank+1);
+    if(p->mpirank<9999&&p->mpirank>998)
+    {
+        if(num<10)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i-0%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i-0%i.vtu",num,p->mpirank+1);
+        if(num<100&&num>9)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i-0%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i-0%i.vtu",num,p->mpirank+1);
+        if(num<1000&&num>99)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i-0%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i-0%i.vtu",num,p->mpirank+1);
+        if(num<10000&&num>999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i-0%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i-0%i.vtu",num,p->mpirank+1);
+        if(num<100000&&num>9999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i-0%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i-0%i.vtu",num,p->mpirank+1);
-	}
+        if(num>99999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i-0%i.vtu",num,p->mpirank+1);
+    }
 
-	if(p->mpirank>9998)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i-%i.vtu",num,p->mpirank+1);
+    if(p->mpirank>9998)
+    {
+        if(num<10)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00000%i-%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i-%i.vtu",num,p->mpirank+1);
+        if(num<100&&num>9)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0000%i-%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i-%i.vtu",num,p->mpirank+1);
+        if(num<1000&&num>99)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-000%i-%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i-%i.vtu",num,p->mpirank+1);
+        if(num<10000&&num>999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-00%i-%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i-%i.vtu",num,p->mpirank+1);
+        if(num<100000&&num>9999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-0%i-%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i-%i.vtu",num,p->mpirank+1);
-	}
+        if(num>99999)
+        sprintf(name,"./REEF3D_CFD_Particle/XPLS-POS-%i-%i.vtu",num,p->mpirank+1);
+    }
 }
 
 }

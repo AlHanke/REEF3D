@@ -32,15 +32,15 @@ void iowave::full_initialize_fnpf(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     cout<<"full NWT initialize"<<endl;
     
     // eta
-	SLICELOOP4
+    SLICELOOP4
     if(p->wet[IJ]==1)
     {
         xg = xgen(p);
         yg = ygen(p);
-		dg = distgen(p);
-		db = distbeach(p);
+        dg = distgen(p);
+        db = distbeach(p);
 
-		c->eta(i,j) = wave_eta(p,pgc,xg,yg);
+        c->eta(i,j) = wave_eta(p,pgc,xg,yg);
 
     }
     
@@ -50,12 +50,12 @@ void iowave::full_initialize_fnpf(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     {
         xg = xgen(p);
         yg = ygen(p);
-		dg = distgen(p);
-		db = distbeach(p);
+        dg = distgen(p);
+        db = distbeach(p);
         
         z = c->eta(i,j);
 
-		c->Fifsf(i,j) = wave_fi(p,pgc,xg,yg,z);
+        c->Fifsf(i,j) = wave_fi(p,pgc,xg,yg,z);
     }
 
     
@@ -66,7 +66,7 @@ void iowave::full_initialize_fnpf(lexer *p, fdm_fnpf *c, ghostcell *pgc)
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
-		db = distbeach(p);
+        db = distbeach(p);
         
         z=p->ZSN[FIJK]-p->phimean;
         

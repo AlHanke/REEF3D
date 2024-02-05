@@ -30,14 +30,14 @@ Author: Hans Bihs
 
 void ghostcell::cval_gcb4(lexer* p, fdm* a, fieldint &cval)
 {
-	GC4LOOP
+    GC4LOOP
     {
     i=p->gcb4[n][0];
     j=p->gcb4[n][1];
     k=p->gcb4[n][2];
-	
-	p->gcb4[n][5]=cval(i,j,k);
-	}
+    
+    p->gcb4[n][5]=cval(i,j,k);
+    }
     
     
     if(p->periodic1==1)
@@ -118,14 +118,14 @@ void ghostcell::cval_gcb4(lexer* p, fdm* a, fieldint &cval)
 
 void ghostcell::cval_gcb4a(lexer* p, fdm* a, fieldint &cval)
 {
-	GC4ALOOP
+    GC4ALOOP
     {
     i=p->gcb4a[n][0];
     j=p->gcb4a[n][1];
     k=p->gcb4a[n][2];
-	
-	p->gcb4a[n][5]=cval(i,j,k);
-	}
+    
+    p->gcb4a[n][5]=cval(i,j,k);
+    }
     
     
     if(p->periodic1==1)
@@ -209,13 +209,13 @@ void ghostcell::cval_gcb6(lexer* p, fdm* a, fieldint &cval)
     int count1,count2;
     count1=count2=0;
     
-	GC6LOOP
+    GC6LOOP
     {
     i=p->gcb4[n][0];
     j=p->gcb4[n][1];
     k=p->gcb4[n][2];
-	
-	p->gcb6[n]=cval(i,j,k);
+    
+    p->gcb6[n]=cval(i,j,k);
     
         if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
         {
@@ -228,6 +228,6 @@ void ghostcell::cval_gcb6(lexer* p, fdm* a, fieldint &cval)
         p->gcout6[count2][3] = p->gcb6[n];
         ++count2;
         }
-	}
+    }
 }
 

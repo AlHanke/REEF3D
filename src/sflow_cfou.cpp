@@ -81,20 +81,20 @@ void sflow_cfou::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slic
 double sflow_cfou::aij(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel, slice& vvel)
 {
     
-	ul=ur=vl=vr=dx=dy=0.0;
-		
+    ul=ur=vl=vr=dx=dy=0.0;
+        
     pflux->u_flux(ipol,uvel,ivel1,ivel2);
     pflux->v_flux(ipol,vvel,jvel1,jvel2);
     
         // X-dir
-		if(ivel1>=0.0)
-		ul=1.0;
+        if(ivel1>=0.0)
+        ul=1.0;
 
-		if(ivel2>=0.0)
-		ur=1.0;
+        if(ivel2>=0.0)
+        ur=1.0;
 
-		dx= (ivel2*(ur*f(i,j) +  (1.0-ur)*f(i+1,j))  -  ivel1*(ul*f(i-1,j) +  (1.0-ul)*f(i,j)))/(p->DXM);
-		
+        dx= (ivel2*(ur*f(i,j) +  (1.0-ur)*f(i+1,j))  -  ivel1*(ul*f(i-1,j) +  (1.0-ul)*f(i,j)))/(p->DXM);
+        
         dx -= f(i,j)*(ivel2-ivel1)/p->DXM;
         
             if(ipol==1)
@@ -105,16 +105,16 @@ double sflow_cfou::aij(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel, slice& 
             
             if(ipol==4)
             dx/=HP;
-		
+        
         
         // Y-dir      
-		if(jvel1>=0.0)
-		vl=1.0;
+        if(jvel1>=0.0)
+        vl=1.0;
 
-		if(jvel2>=0.0)
-		vr=1.0;
+        if(jvel2>=0.0)
+        vr=1.0;
 
-		dy= (jvel2*(vr*f(i,j) +  (1.0-vr)*f(i,j+1))  -  jvel1*(vl*f(i,j-1) +  (1.0-vl)*f(i,j)))/(p->DXM);
+        dy= (jvel2*(vr*f(i,j) +  (1.0-vr)*f(i,j+1))  -  jvel1*(vl*f(i,j-1) +  (1.0-vl)*f(i,j)))/(p->DXM);
         
         dy -= f(i,j)*(jvel2-jvel1)/p->DXM;
         
@@ -128,8 +128,8 @@ double sflow_cfou::aij(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel, slice& 
             dy/=HP;
     
         
-		L = -dx-dy;
+        L = -dx-dy;
 
-		return L;
+        return L;
 }
 

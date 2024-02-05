@@ -71,13 +71,13 @@ public:
     slice4 breaking_print;
     
     cpt2D C4;
-	
+    
     vec rhsvec;
     vec2D xvec,rvec;
     double *Fi,*Uin,*Uout,*U,*V,*W;
 
     matrix2D N;
-	matrix_diag M;    
+    matrix_diag M;    
     
     double gi,gj,gk;
     double wd_criterion;

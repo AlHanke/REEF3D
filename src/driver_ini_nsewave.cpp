@@ -52,7 +52,7 @@ void driver::driver_ini_nsewave()
     // eta box area
     for(int qn=0;qn<p->F72;++qn)
     {
-		istart = p->posc_i(p->F72_xs[qn]);
+        istart = p->posc_i(p->F72_xs[qn]);
         iend = p->posc_i(p->F72_xe[qn]);
 
         jstart = p->posc_j(p->F72_ys[qn]);
@@ -61,22 +61,22 @@ void driver::driver_ini_nsewave()
         SLICELOOP4
         if(i>=istart && i<iend && j>=jstart && j<jend)
         a->eta(i,j) = p->F72_h[qn]-p->wd;
-	}
+    }
 
     
     int gcval_phi;
     
     if(p->F50==1)
-	gcval_phi=51;
+    gcval_phi=51;
 
-	if(p->F50==2)
-	gcval_phi=52;
+    if(p->F50==2)
+    gcval_phi=52;
 
-	if(p->F50==3)
-	gcval_phi=53;
+    if(p->F50==3)
+    gcval_phi=53;
 
-	if(p->F50==4)
-	gcval_phi=54;
+    if(p->F50==4)
+    gcval_phi=54;
     
     LOOP
     a->phi(i,j,k) = a->eta(i,j) + p->phimean - p->pos_z();

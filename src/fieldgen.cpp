@@ -34,24 +34,24 @@ fieldgen::fieldgen(lexer *p)
     kmin=p->kmin;
     kmax=p->kmax;
 
-	fieldalloc(p);
-	
-	pp=p;
+    fieldalloc(p);
+    
+    pp=p;
 }
 
 fieldgen::~fieldgen()
 {
-	delete [ ] V;
+    delete [ ] V;
 }
 
 void fieldgen::fieldalloc(lexer* p)
 {
-	p->Darray(V,imax*jmax*kmax);
+    p->Darray(V,imax*jmax*kmax);
 }
 
 void fieldgen::dealloc(lexer* p)
 {
-	delete [ ] V;
+    delete [ ] V;
 }
 
 void fieldgen::resize(lexer* p)
@@ -60,12 +60,12 @@ void fieldgen::resize(lexer* p)
 
 double & fieldgen::operator[](int n)
 {
-	return V[n];
+    return V[n];
 }
 
 double & fieldgen::operator()(int ii, int jj, int kk)
-{		
-	return V[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin];
+{        
+    return V[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin];
 }
 
 void fieldgen::ggcpol(lexer* p)

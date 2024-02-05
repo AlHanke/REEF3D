@@ -27,23 +27,23 @@ Author: Hans Bihs
 
 void particle_f::setup(lexer* p, fdm* a, ghostcell* pgc)
 {
-	LOOP
-	{
-		posnum(i,j,k)=0.0;
-	}
-	
-	pgc->start4(p,posnum,1);
-	
+    LOOP
+    {
+        posnum(i,j,k)=0.0;
+    }
+    
+    pgc->start4(p,posnum,1);
+    
     allocate(p,a,pgc);
     seed(p,a,pgc);
     // setradius(p,a);
     remove(p,a,pgc);
     
-	if((p->count%p->F34==0 || p->count==0 )&& p->F34>0)
-	{
+    if((p->count%p->F34==0 || p->count==0 )&& p->F34>0)
+    {
     print_vtu(p,a,pgc,pos,posflag,posactive,1);
-	++printcount;
-	}
+    ++printcount;
+    }
 }
 
 

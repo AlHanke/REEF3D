@@ -46,7 +46,7 @@ using namespace std;
 class sixdof_sflow : public sixdof, public increment, public ddweno_f_nug
 {
 public:
-	
+    
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
     
     sixdof_sflow(lexer*, ghostcell*);
@@ -55,9 +55,9 @@ public:
     virtual void start_oneway(lexer*,ghostcell*);
     virtual void start_twoway(lexer*,fdm*,ghostcell*,vrans*,vector<net*>&,int,field&,field&,field&,field&,field&,field&,bool);
     
-	virtual void ini(lexer*,ghostcell*);
+    virtual void ini(lexer*,ghostcell*);
     virtual void initialize(lexer*, fdm*, ghostcell*, vector<net*>&);
-	
+    
     
     virtual void isource(lexer*,fdm*,ghostcell*);
     virtual void jsource(lexer*,fdm*,ghostcell*);
@@ -71,11 +71,11 @@ public:
     virtual void jsource2D(lexer*,fdm2D*,ghostcell*);
     
 private:
-	
+    
     void cylinder(lexer*,ghostcell*);
     void box(lexer*,ghostcell*);
-	void geometry_refinement(lexer*);
-	void create_triangle(double&,double&,double&,double&,double&,double&,double&,double&,double&,const double&,const double&,const double&);
+    void geometry_refinement(lexer*);
+    void create_triangle(double&,double&,double&,double&,double&,double&,double&,double&,double&,const double&,const double&,const double&);
     void ini_parameter(lexer*, ghostcell*);
     void print_ini_stl(lexer*, ghostcell*);
     void print_parameter(lexer*,ghostcell*);
@@ -92,10 +92,10 @@ private:
     void quat_matrices(const Eigen::Vector4d&);
    
     void ray_cast(lexer*, ghostcell*);
-	void ray_cast_io_x(lexer*, ghostcell*,int,int);
-	void ray_cast_io_ycorr(lexer*, ghostcell*,int,int);
+    void ray_cast_io_x(lexer*, ghostcell*,int,int);
+    void ray_cast_io_ycorr(lexer*, ghostcell*,int,int);
     void ray_cast_x(lexer*, ghostcell*,int,int);
-	void ray_cast_y(lexer*, ghostcell*,int,int);
+    void ray_cast_y(lexer*, ghostcell*,int,int);
     void ray_cast_z(lexer*, ghostcell*,int,int);
     void reini(lexer*,ghostcell*,slice&);
     void disc(lexer*,ghostcell*,slice&);
@@ -135,9 +135,9 @@ private:
     sliceint5 cutl,cutr,fbio;
     double **tri_x,**tri_y,**tri_z,**tri_x0,**tri_y0,**tri_z0;
     double **tri_xn,**tri_yn,**tri_zn;
-	vector<vector<double> > tri_x_r;
-	vector<vector<double> > tri_y_r;
-	vector<vector<double> > tri_z_r;
+    vector<vector<double> > tri_x_r;
+    vector<vector<double> > tri_y_r;
+    vector<vector<double> > tri_z_r;
     double xs,xe,ys,ye,zs,ze;
     int entity_sum,entity_count, count, rayiter;
     int *tstart,*tend;

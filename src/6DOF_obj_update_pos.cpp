@@ -27,57 +27,57 @@ Author: Tobias Martin
 
 void sixdof_obj::update_Position(lexer *p, fdm *a, ghostcell *pgc, bool finalise)
 {
-	// Calculate Euler angles from quaternion
-	
-	// around z-axis
-	psi = atan2(2.0*(e_(1)*e_(2) + e_(3)*e_(0)), 1.0 - 2.0*(e_(2)*e_(2) + e_(3)*e_(3))); 
-	
-	// around new y-axis
-	double arg = 2.0*(e_(0)*e_(2) - e_(1)*e_(3));
-	
-	if (fabs(arg) >= 1.0)
-	theta = SIGN(arg)*PI/2.0;
+    // Calculate Euler angles from quaternion
     
-	else
-	theta = asin(arg);														
-	
-		
-	// around new x-axis
-	phi = atan2(2.0*(e_(2)*e_(3) + e_(1)*e_(0)), 1.0 - 2.0*(e_(1)*e_(1) + e_(2)*e_(2)));
+    // around z-axis
+    psi = atan2(2.0*(e_(1)*e_(2) + e_(3)*e_(0)), 1.0 - 2.0*(e_(2)*e_(2) + e_(3)*e_(3))); 
+    
+    // around new y-axis
+    double arg = 2.0*(e_(0)*e_(2) - e_(1)*e_(3));
+    
+    if (fabs(arg) >= 1.0)
+    theta = SIGN(arg)*PI/2.0;
+    
+    else
+    theta = asin(arg);                                                        
+    
+        
+    // around new x-axis
+    phi = atan2(2.0*(e_(2)*e_(3) + e_(1)*e_(0)), 1.0 - 2.0*(e_(1)*e_(1) + e_(2)*e_(2)));
 
-	if(p->mpirank==0 && finalise == true)
+    if(p->mpirank==0 && finalise == true)
     {
         cout<<"XG: "<<c_(0)<<" YG: "<<c_(1)<<" ZG: "<<c_(2)<<" phi: "<<phi*(180.0/PI)<<" theta: "<<theta*(180.0/PI)<<" psi: "<<psi*(180.0/PI)<<endl;
         cout<<"Ue: "<<p_(0)/Mass_fb<<" Ve: "<<p_(1)/Mass_fb<<" We: "<<p_(2)/Mass_fb<<" Pe: "<<omega_I(0)<<" Qe: "<<omega_I(1)<<" Re: "<<omega_I(2)<<endl;
     }
 
-	// Update position of triangles 
-	for(n=0; n<tricount; ++n)
-	{
+    // Update position of triangles 
+    for(n=0; n<tricount; ++n)
+    {
         for(int q=0; q<3; q++)
         {
             // Update coordinates of triangles 
             // (tri_x0 is vector between tri_x and xg)
   
             Eigen::Vector3d point(tri_x0[n][q], tri_y0[n][q], tri_z0[n][q]);
-					
+                    
             point = R_*point;
         
             tri_x[n][q] = point(0) + c_(0);
             tri_y[n][q] = point(1) + c_(1);
             tri_z[n][q] = point(2) + c_(2);
 
-			// 2D
-			if(p->X11_v != 1 && p->X11_p != 1 && p->X11_r != 1) 
-			{
-				tri_y[n][q] = tri_y0[n][q] + c_(1);	
-			}
+            // 2D
+            if(p->X11_v != 1 && p->X11_p != 1 && p->X11_r != 1) 
+            {
+                tri_y[n][q] = tri_y0[n][q] + c_(1);    
+            }
         }
-	}
-	
+    }
+    
     // Update floating level set function
-	ray_cast(p,a,pgc);
-	reini_RK2(p,a,pgc,a->fb);
+    ray_cast(p,a,pgc);
+    reini_RK2(p,a,pgc,a->fb);
     pgc->start4a(p,a->fb,50);   
     
 }

@@ -30,12 +30,12 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 fnpf_state::fnpf_state(lexer *p, fdm_fnpf *c, ghostcell *pgc)
-{	
-	// Create Folder
-	if(p->mpirank==0 && p->P14==1)
-	mkdir("./REEF3D_FNPF_STATE",0777);
-	
-	printcount=0;
+{    
+    // Create Folder
+    if(p->mpirank==0 && p->P14==1)
+    mkdir("./REEF3D_FNPF_STATE",0777);
+    
+    printcount=0;
     
     file_version=4;
     
@@ -178,8 +178,8 @@ fnpf_state::fnpf_state(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     if(p->P45==2)
     {
     filename_continuous(p,c,pgc);
-	 
-	result.open(name, ios::binary);
+     
+    result.open(name, ios::binary);
     }
     
 

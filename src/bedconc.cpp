@@ -52,7 +52,7 @@ void bedconc::start(lexer* p, ghostcell *pgc, sediment_fdm *s)
     // cb* van Rijn
     SLICELOOP4
     {
-	
+    
     Ti=MAX((s->tau_eff(i,j)-s->tau_crit(i,j))/s->tau_crit(i,j),0.0);
 
 

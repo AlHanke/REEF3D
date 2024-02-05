@@ -20,7 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#define HYPRE_COMPILATION
+
+#define HYPRE_COMPILATION
 
 #ifdef HYPRE_COMPILATION
 
@@ -41,11 +42,11 @@ using namespace std;
 class hypre_sstruct : public solver, public increment
 {
 public:
-
-	hypre_sstruct(lexer*,fdm*,ghostcell*);
-	virtual ~hypre_sstruct();
     
-	virtual void start(lexer*,fdm*, ghostcell*, field&, vec&, int);
+    hypre_sstruct(lexer*,fdm*,ghostcell*);
+    virtual ~hypre_sstruct();
+       
+    virtual void start(lexer*,fdm*, ghostcell*, field&, vec&, int);
     virtual void startf(lexer*, ghostcell*, field&, vec&, matrix_diag&, int);
     virtual void startF(lexer*, ghostcell*, double*, vec&, matrix_diag&, int);
     virtual void startV(lexer*, ghostcell*, double*, vec&, matrix_diag&, int);
@@ -60,8 +61,8 @@ public:
     
     void solve(lexer*);
     void solve1234(lexer*);
-    
-	void fillxvec1(lexer*,fdm*,field&);
+       
+    void fillxvec1(lexer*,fdm*,field&);
     void fillxvec2(lexer*,fdm*,field&);
     void fillxvec3(lexer*,fdm*,field&);
     void fillxvec4(lexer*,fdm*,field&);
@@ -93,9 +94,9 @@ public:
     
     void fillbackvecM(lexer*,double*);
     
+       
     
-	
-	void create_solver1234(lexer*,ghostcell*);
+    void create_solver1234(lexer*,ghostcell*);
     void delete_solver1234(lexer*,ghostcell*);
 
     void create_solver5(lexer*,ghostcell*);
@@ -128,15 +129,15 @@ private:
     int numvar;
     int object_type;
    
-
-	int *ilower,*iupper;
+    
+    int *ilower,*iupper;
     double *values;
     int num_iterations;
-    double final_res_norm;
-	int stencil_indices[13];
-	int nentries;
-   
-	int numiter,count,q;
+       double final_res_norm;
+    int stencil_indices[13];
+    int nentries;
+      
+    int numiter,count,q;
 
 };
 

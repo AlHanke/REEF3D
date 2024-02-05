@@ -26,54 +26,54 @@ Author: Tobias Martin
 
 void sixdof_sflow::updatePosition(lexer *p, ghostcell *pgc)
 {
-	// Calculate Euler angles from quaternion
-	
-	// around z-axis
-	psi = atan2(2.0*(e_(1)*e_(2) + e_(3)*e_(0)), 1.0 - 2.0*(e_(2)*e_(2) + e_(3)*e_(3))); 
-	
-	// around new y-axis
-	double arg = 2.0*(e_(0)*e_(2) - e_(1)*e_(3));
-	
-	if (fabs(arg) >= 1.0)
-	{
-		theta = SIGN(arg)*PI/2.0;
-	}
-	else
-	{
-		theta = asin(arg);														
-	}	
-		
-	// around new x-axis
-	phi = atan2(2.0*(e_(2)*e_(3) + e_(1)*e_(0)), 1.0 - 2.0*(e_(1)*e_(1) + e_(2)*e_(2)));
+    // Calculate Euler angles from quaternion
+    
+    // around z-axis
+    psi = atan2(2.0*(e_(1)*e_(2) + e_(3)*e_(0)), 1.0 - 2.0*(e_(2)*e_(2) + e_(3)*e_(3))); 
+    
+    // around new y-axis
+    double arg = 2.0*(e_(0)*e_(2) - e_(1)*e_(3));
+    
+    if (fabs(arg) >= 1.0)
+    {
+        theta = SIGN(arg)*PI/2.0;
+    }
+    else
+    {
+        theta = asin(arg);                                                        
+    }    
+        
+    // around new x-axis
+    phi = atan2(2.0*(e_(2)*e_(3) + e_(1)*e_(0)), 1.0 - 2.0*(e_(1)*e_(1) + e_(2)*e_(2)));
 
-	if(p->mpirank==0)
+    if(p->mpirank==0)
     {
         cout<<"XG: "<<p->xg<<" YG: "<<p->yg<<" ZG: "<<p->zg<<" phi: "<<phi*(180.0/PI)<<" theta: "<<theta*(180.0/PI)<<" psi: "<<psi*(180.0/PI)<<endl;
 
-		//cout<<"Ue: "<<p_(0)/Mass_fb<<" Ve: "<<p_(1)/Mass_fb<<" We: "<<p_(2)/Mass_fb<<" Pe: "<<omega_I(0)<<" Qe: "<<omega_I(1)<<" Re: "<<omega_I(2)<<endl;
+        //cout<<"Ue: "<<p_(0)/Mass_fb<<" Ve: "<<p_(1)/Mass_fb<<" We: "<<p_(2)/Mass_fb<<" Pe: "<<omega_I(0)<<" Qe: "<<omega_I(1)<<" Re: "<<omega_I(2)<<endl;
     }
 
-	// Update position of triangles 
-	for(n=0; n<tricount; ++n)
-	{
+    // Update position of triangles 
+    for(n=0; n<tricount; ++n)
+    {
         for(int q=0; q<3; q++)
         {
             // Update coordinates of triangles 
             // (tri_x0 is vector between tri_x and xg)
   
             Eigen::Vector3d point(tri_x0[n][q], tri_y0[n][q], tri_z0[n][q]);
-					
+                    
             point = R_*point;
 
             tri_x[n][q] = point(0) + p->xg;
             tri_y[n][q] = point(1) + p->yg;
             tri_z[n][q] = point(2) + p->zg;
         }
-	}
-	
+    }
+    
     // Update floating level set function
-	ray_cast(p,pgc);
-	reini(p,pgc,fb);
+    ray_cast(p,pgc);
+    reini(p,pgc,fb);
 }
 
 void sixdof_sflow::updateForcing_hemisphere(lexer *p, ghostcell *pgc)
@@ -118,7 +118,7 @@ void sixdof_sflow::updateForcing_box(lexer *p, ghostcell *pgc)
     Ls = p->X110_xe[0] - p->X110_xs[0];
     Bs = p->X110_ye[0] - p->X110_ys[0];
 
-	SLICELOOP4
+    SLICELOOP4
     {
         xpos = p->pos_x() - p->xg;
         ypos = p->pos_y() - p->yg;
@@ -147,7 +147,7 @@ void sixdof_sflow::updateForcing_stl(lexer *p, ghostcell *pgc)
     cl = p->X401_cl;
     cb = p->X401_cb;
 
-	SLICELOOP4
+    SLICELOOP4
     {
         H = Hsolidface(p,0,0);
 
@@ -165,7 +165,7 @@ void sixdof_sflow::updateForcing_oned(lexer *p, ghostcell *pgc)
     press0 = p->X401_p0;
     as = p->X401_a; 
 
-	SLICELOOP4
+    SLICELOOP4
     {
         xpos = p->pos_x() - p->xg;
    

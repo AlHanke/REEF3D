@@ -33,10 +33,10 @@ using namespace std;
 class nhflow_momentum_RK2 : public nhflow_momentum, public bcmom, public nhflow_sigma
 {
 public:
-	nhflow_momentum_RK2(lexer*, fdm_nhf*, ghostcell*, sixdof*);
-	virtual ~nhflow_momentum_RK2();
+    nhflow_momentum_RK2(lexer*, fdm_nhf*, ghostcell*, sixdof*);
+    virtual ~nhflow_momentum_RK2();
     
-	virtual void start(lexer*, fdm_nhf*, ghostcell*, ioflow*, nhflow_signal_speed*, nhflow_reconstruct*, nhflow_convection*, nhflow_diffusion*, nhflow_pressure*, solver*, solver*, nhflow*, nhflow_fsf*, nhflow_turbulence*,  vrans*);
+    virtual void start(lexer*, fdm_nhf*, ghostcell*, ioflow*, nhflow_signal_speed*, nhflow_reconstruct*, nhflow_convection*, nhflow_diffusion*, nhflow_pressure*, solver*, solver*, nhflow*, nhflow_fsf*, nhflow_turbulence*,  vrans*);
     virtual void inidisc(lexer*, fdm_nhf*, ghostcell*, nhflow_fsf*);
 
     double *UHDIFF;
@@ -49,17 +49,20 @@ public:
     slice4 WLRK1;
 
 private:
-    void reconstruct(lexer*, fdm_nhf*, ghostcell*, nhflow_fsf*, nhflow_signal_speed*, nhflow_reconstruct*,slice&,double*,double*,double*,double*,double*,double*);    void velcalc(lexer*,fdm_nhf*,ghostcell*,double*,double*,double*,slice&);
+    void reconstruct(lexer*, fdm_nhf*, ghostcell*, nhflow_fsf*, nhflow_signal_speed*, nhflow_reconstruct*,slice&,double*,double*,double*,double*,double*,double*);
+    void velcalc(lexer*,fdm_nhf*,ghostcell*,double*,double*,double*,slice&);
+       
+    void irhs(lexer*,fdm_nhf*,ghostcell*);
+    void jrhs(lexer*,fdm_nhf*,ghostcell*);
+    void krhs(lexer*,fdm_nhf*,ghostcell*);
+       void clearrhs(lexer*,fdm_nhf*,ghostcell*);
     
-	void irhs(lexer*,fdm_nhf*,ghostcell*);
-	void jrhs(lexer*,fdm_nhf*,ghostcell*);
-	void krhs(lexer*,fdm_nhf*,ghostcell*);
-    void clearrhs(lexer*,fdm_nhf*,ghostcell*);
-	
-	int gcval_u, gcval_v, gcval_w;    int gcval_uh, gcval_vh, gcval_wh;
-	double starttime;
+    int gcval_u, gcval_v, gcval_w;
+    int gcval_uh, gcval_vh, gcval_wh;
+    double starttime;
     
-    nhflow_convection *pweno;    sixdof *p6dof;
+    nhflow_convection *pweno;
+    sixdof *p6dof;
 };
 
 #endif

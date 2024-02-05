@@ -39,20 +39,20 @@ void nhflow_komega_void::start(fdm_nhf* d, lexer* p, nhflow_convection* pconvec,
 }
 void nhflow_komega_void::isource(lexer* p, fdm_nhf* d)
 {
-	LOOP
-	d->F[IJK]=0.0;
+    LOOP
+    d->F[IJK]=0.0;
 }
 
 void nhflow_komega_void::jsource(lexer *p,fdm_nhf* d)
 {
-	LOOP
-	d->G[IJK]=0.0;
+    LOOP
+    d->G[IJK]=0.0;
 }
 
 void nhflow_komega_void::ksource(lexer *p,fdm_nhf* d)
 {
-	LOOP
-	d->H[IJK]=0.0;
+    LOOP
+    d->H[IJK]=0.0;
 }
 
 void nhflow_komega_void::ktimesave(lexer *p, fdm_nhf* d, ghostcell *pgc)

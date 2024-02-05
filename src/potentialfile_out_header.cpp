@@ -35,10 +35,10 @@ void potentialfile_out::header_file_ini(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     // open file
     if(p->P14==0)
     sprintf(headername,"REEF3D-potentialheader.r3d");
-			
+            
     if(p->P14==1)
     sprintf(headername,"./REEF3D_FlowFile/REEF3D-potentialheader.r3d");
-		
+        
     // openfile
     headerout.open(headername, ios::binary);
     }

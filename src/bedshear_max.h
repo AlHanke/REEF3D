@@ -40,9 +40,9 @@ class bedshear_max : public boundarycheck
 {
 public:
     bedshear_max(lexer*,fdm*,ghostcell*);
-	virtual ~bedshear_max();
+    virtual ~bedshear_max();
 
-	void bedshear_maxval(lexer*, fdm*, ghostcell*, sediment*);
+    void bedshear_maxval(lexer*, fdm*, ghostcell*, sediment*);
 
 
 private:

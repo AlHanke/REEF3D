@@ -37,8 +37,8 @@ void pjm::debug(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w, 
     w(i,j,k) = 0.0;
     
     pgc->start1(p,u,999);
-	pgc->start2(p,v,999);
-	pgc->start3(p,w,999);
+    pgc->start2(p,v,999);
+    pgc->start3(p,w,999);
     
     
     pip=p->Y50;
@@ -88,14 +88,14 @@ void pjm::debug(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w, 
     LOOP
     {
         if(p->flag4[Im1JK]==SOLID)
-		{
+        {
         if(a->press(i-1,j,k) != a->press(i,j,k))
         cout<<p->mpirank<<" P_i: "<<a->press(i,j,k)<<" P_i-1: "<<a->press(i-1,j,k)<<" P_i-2: "<<a->press(i-2,j,k)<<" | x: "<<p->pos_x()<<" y: "<<p->pos_y()<<" z: "<<p->pos_z()<<endl;
-		}
-		
-		if(p->flag4[Ip1JK]==SOLID)
-		{
-		if(a->press(i+1,j,k) != a->press(i,j,k))
+        }
+        
+        if(p->flag4[Ip1JK]==SOLID)
+        {
+        if(a->press(i+1,j,k) != a->press(i,j,k))
         {
         cout<<p->mpirank<<" P_i: "<<a->press(i,j,k)<<" P_i+1: "<<a->press(i+1,j,k)<<" P_i+2: "<<a->press(i+2,j,k)
         <<" | x: "<<p->pos_x()<<" y: "<<p->pos_y()<<" z: "<<p->pos_z();
@@ -103,31 +103,31 @@ void pjm::debug(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w, 
         cout<<" | "<<" | "<<p->flag4[Im3JK]<<" "<<p->flag4[Im2JK]<<" "<<p->flag4[Im1JK]<<" |"<<p->flag4[IJK]<<"| "<<" "
         <<p->flag4[Ip1JK]<<" "<<p->flag4[Ip2JK]<<" "<<p->flag4[Ip3JK]<<endl;
         }
-		}
-		
-		if(p->flag4[IJm1K]==SOLID)
-		{
-		if(a->press(i,j-1,k) != a->press(i,j,k))
+        }
+        
+        if(p->flag4[IJm1K]==SOLID)
+        {
+        if(a->press(i,j-1,k) != a->press(i,j,k))
         cout<<p->mpirank<<" P_j: "<<a->press(i,j,k)<<" P_j-1: "<<a->press(i,j-1,k)<<" P_j-2: "<<a->press(i,j-2,k)<<" | x: "<<p->pos_x()<<" y: "<<p->pos_y()<<" z: "<<p->pos_z()<<endl;
-		}
-		
-		if(p->flag4[IJp1K]==SOLID)
-		{
-		if(a->press(i,j+1,k) != a->press(i,j,k))
+        }
+        
+        if(p->flag4[IJp1K]==SOLID)
+        {
+        if(a->press(i,j+1,k) != a->press(i,j,k))
         cout<<p->mpirank<<" P_j: "<<a->press(i,j,k)<<" P_j+1: "<<a->press(i,j+1,k)<<" P_j+2: "<<a->press(i,j+2,k)<<" | x: "<<p->pos_x()<<" y: "<<p->pos_y()<<" z: "<<p->pos_z()<<endl;
-		}
-		
-		if(p->flag4[IJKm1]==SOLID)
-		{
-		if(a->press(i,j,k-1) != a->press(i,j,k))
+        }
+        
+        if(p->flag4[IJKm1]==SOLID)
+        {
+        if(a->press(i,j,k-1) != a->press(i,j,k))
         cout<<p->mpirank<<" P_k: "<<a->press(i,j,k)<<" P_k-1: "<<a->press(i,j,k-1)<<" P_k-2: "<<a->press(i,j,k-2)<<" | x: "<<p->pos_x()<<" y: "<<p->pos_y()<<" z: "<<p->pos_z()<<endl;
-		}
-		
-		if(p->flag4[IJKp1]==SOLID)
-		{
-		if(a->press(i,j,k+1) != a->press(i,j,k))
+        }
+        
+        if(p->flag4[IJKp1]==SOLID)
+        {
+        if(a->press(i,j,k+1) != a->press(i,j,k))
         cout<<p->mpirank<<" P_k: "<<a->press(i,j,k)<<" P_k+1: "<<a->press(i,j,k+1)<<" P_k+2: "<<a->press(i,j,k+2)<<" | x: "<<p->pos_x()<<" y: "<<p->pos_y()<<" z: "<<p->pos_z()<<endl;
-		}
+        }
     }
 
     

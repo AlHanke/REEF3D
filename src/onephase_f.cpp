@@ -29,15 +29,15 @@ Author: Hans Bihs
 onephase_f::onephase_f(lexer *p, fdm *a, ghostcell *pgc) : ddweno_f_nug(p),uf(p),vf(p),wf(p),urk1(p),vrk1(p),wrk1(p),xphi(p),yphi(p),zphi(p)
 {
     gcval_u=10;
-	gcval_v=11;
-	gcval_w=12;
+    gcval_v=11;
+    gcval_w=12;
     
     
     dt=1.0e8;
-	FLUIDLOOP
-	{
-	dt = MIN(dt,0.5*MIN3(p->DXP[IP],p->DYP[JP],p->DZP[KP]));
-	}
+    FLUIDLOOP
+    {
+    dt = MIN(dt,0.5*MIN3(p->DXP[IP],p->DYP[JP],p->DZP[KP]));
+    }
     
     dt=pgc->timesync(dt);
 }
@@ -61,7 +61,7 @@ void onephase_f::update(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
     
     activenum=0;
     LOOP
-	++activenum;
+    ++activenum;
     
     activenum=pgc->globalisum(activenum);
     
@@ -69,14 +69,14 @@ void onephase_f::update(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
     cout<<"active number of cells: "<<activenum<<endl;
     
     FLUIDLOOP
-	{
-	p->flag1[IJK]=p->flag4[IJK];
-	p->flag2[IJK]=p->flag4[IJK];
-	p->flag3[IJK]=p->flag4[IJK];
-	}
+    {
+    p->flag1[IJK]=p->flag4[IJK];
+    p->flag2[IJK]=p->flag4[IJK];
+    p->flag3[IJK]=p->flag4[IJK];
+    }
     
     FLUIDLOOP
-	{
+    {
     if(p->flag4[IJK]==WATER && p->flag4[Ip1JK]==AIR)
     p->flag1[IJK]=AIR;
     
@@ -85,7 +85,7 @@ void onephase_f::update(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
     
     if(p->flag4[IJK]==WATER && p->flag4[IJKp1]==AIR)
     p->flag3[IJK]=AIR;
-	}
+    }
     
     pgc->flagx(p,p->flag1);
     pgc->flagx(p,p->flag2);

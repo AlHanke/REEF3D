@@ -45,7 +45,7 @@ double sediment_cds::sx(lexer *p, slice &f, double ivel1, double ivel2)
 double sediment_cds::sy(lexer *p, slice &f, double jvel1, double jvel2)
 {
     grad = (f(i,j+1)*jvel2-f(i,j-1)*jvel1)/(p->DYP[JP]+p->DYP[JM1]);
-			  
+              
     return grad;  
 }
 

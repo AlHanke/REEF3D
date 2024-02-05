@@ -21,27 +21,33 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"increment.h"
-class lexer;class fdm_nhf;class ghostcell;class ioflow;class poisson;class solver;
+
+class lexer;
+class fdm_nhf;
+class ghostcell;
+class ioflow;
+class poisson;
+class solver;
 
 #ifndef NHFLOW_POISSON_H_
 #define NHFLOW_POISSON_H_
 
 using namespace std;
 
-
-class nhflow_poisson : public increment
+    
+    lass nhflow_poisson : public increment
 {
-
+    
 public:
 
-	nhflow_poisson (lexer *);
-	virtual ~nhflow_poisson();
+    nhflow_poisson (lexer *);
+    virtual ~nhflow_poisson();
 
-	virtual void start(lexer *,fdm_nhf*,double*);
+    virtual void start(lexer *,fdm_nhf*,double*);
 
 private:
 
-	int count,n,q;
+    int count,n,q;
     double KB_fac;
     
 };

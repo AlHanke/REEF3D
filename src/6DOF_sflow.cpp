@@ -33,8 +33,8 @@ sixdof_sflow::sixdof_sflow(lexer *p, ghostcell *pgc):press(p),ddweno_f_nug(p),fr
 {
     trisum=1;
     p->Darray(tri_xn,trisum,3);
-	p->Darray(tri_yn,trisum,3);
-	p->Darray(tri_zn,trisum,3);
+    p->Darray(tri_yn,trisum,3);
+    p->Darray(tri_zn,trisum,3);
     /*
     if(p->mpirank==0)
     cout<<"6DOF startup ..."<<endl;

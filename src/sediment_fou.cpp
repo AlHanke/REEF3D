@@ -68,7 +68,7 @@ double sediment_fou::sy(lexer *p, slice &f, double jvel1, double jvel2)
     fv2 = f(i,j+1);
     
     grad = ((fv2*jvel2-fv1*jvel1)/p->DYN[JP]);
-			  
+              
     return grad;  
 }
 

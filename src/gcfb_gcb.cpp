@@ -41,12 +41,12 @@ void ghostcell::gcfb_seed(lexer *p, fdm *a)
     }
     
     // then check gcb4 around fb
-	count=p->gcb_topo;
-	LOOP
+    count=p->gcb_topo;
+    LOOP
     {
         if(p->flag4[Im1JK]==FLT)
         ++count;
-	
+    
         if(p->flag4[IJm1K]==FLT)
         ++count;
 
@@ -62,18 +62,18 @@ void ghostcell::gcfb_seed(lexer *p, fdm *a)
         if(p->flag4[IJKp1]==FLT)
         ++count;
     }
-	
+    
     //if(p->gcb4_count!=count)
-	//cout<<p->mpirank<<" old gcb4: "<<p->gcb4_count<<" new gcb4: "<<count<<endl;
-	
-	p->Iresize(p->gcb4,p->gcb4_count, count, 6, 6); 
-	p->Dresize(p->gcd4,p->gcb4_count, count); 
-	
-	p->gcb4_count=p->gcb_fb=count;
-	
-	
-	count=p->gcb_topo;
-	LOOP
+    //cout<<p->mpirank<<" old gcb4: "<<p->gcb4_count<<" new gcb4: "<<count<<endl;
+    
+    p->Iresize(p->gcb4,p->gcb4_count, count, 6, 6); 
+    p->Dresize(p->gcd4,p->gcb4_count, count); 
+    
+    p->gcb4_count=p->gcb_fb=count;
+    
+    
+    count=p->gcb_topo;
+    LOOP
     {
         if(p->flag4[Im1JK]==FLT)
         {
@@ -138,7 +138,7 @@ void ghostcell::gcfb_seed(lexer *p, fdm *a)
     
     
     //if(p->mpirank==0)
-	//cout<<p->mpirank<<" 2. old gcb4: "<<p->gcb4_count<<" new gcb4: "<<count<<endl;
+    //cout<<p->mpirank<<" 2. old gcb4: "<<p->gcb4_count<<" new gcb4: "<<count<<endl;
 }
     
 

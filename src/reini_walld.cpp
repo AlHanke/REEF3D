@@ -31,7 +31,7 @@ Author: Hans Bihs
 
 reini_walld::reini_walld(lexer* p, fdm *a):gradient(p),f(p),dab(p),L(p)
 {
-	prdisc = new reinidisc_f(p);
+    prdisc = new reinidisc_f(p);
 }
 
 reini_walld::~reini_walld()
@@ -40,21 +40,21 @@ reini_walld::~reini_walld()
 
 void reini_walld::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
 {
-	starttime=pgc->timer();
-	
-	sizeM=p->sizeM4;
-	
-	n=0;
-	LOOP
-	{
-	f.V[n]=b(i,j,k);
-	++n;
-	}
+    starttime=pgc->timer();
+    
+    sizeM=p->sizeM4;
+    
+    n=0;
+    LOOP
+    {
+    f.V[n]=b(i,j,k);
+    ++n;
+    }
 
-	pgc->start4vec(p,f,50);
+    pgc->start4vec(p,f,50);
     
     int qq;
-	QQGC4LOOP
+    QQGC4LOOP
     if(p->gcb4[qq][4]==5|| p->gcb4[qq][4]==21|| p->gcb4[qq][4]==22)
     {
         i=p->gcb4[qq][0];
@@ -170,26 +170,26 @@ void reini_walld::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
     
     reiniter = pgc->globalimax(reiniter);
   
-	pgc->gcparaxvec(p,f,4);
+    pgc->gcparaxvec(p,f,4);
     
-	for(int q=0;q<reiniter;++q)
-	{
+    for(int q=0;q<reiniter;++q)
+    {
 
-		prdisc->start(p,a,pgc,f,L,4);
+        prdisc->start(p,a,pgc,f,L,4);
 
-		if(q==0)
-		NLOOP
-		dab.V[n]=L.V[n];
+        if(q==0)
+        NLOOP
+        dab.V[n]=L.V[n];
 
 
-		NLOOP
-		{
-		f.V[n] += dt*0.5*(3.0*L.V[n] - dab.V[n]);
+        NLOOP
+        {
+        f.V[n] += dt*0.5*(3.0*L.V[n] - dab.V[n]);
 
-		dab.V[n]=L.V[n];
-		}
+        dab.V[n]=L.V[n];
+        }
         
-	QQGC4LOOP
+    QQGC4LOOP
     if(p->gcb4[qq][4]==5|| p->gcb4[qq][4]==21|| p->gcb4[qq][4]==22)
     {
     i=p->gcb4[qq][0];
@@ -205,18 +205,18 @@ void reini_walld::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
         
         if(p->gcb4[qq][3]==5 || p->gcb4[qq][3]==6)
         f.V[I_J_K_4] = 0.5*p->DZN[KP];  
-	}
-	
-	pgc->gcparaxvec(p,f,4);
-	}
+    }
+    
+    pgc->gcparaxvec(p,f,4);
+    }
 
     // backfill
-	n=0;
-	LOOP
-	{
-	b(i,j,k)=f.V[n];
-	++n;
-	}
+    n=0;
+    LOOP
+    {
+    b(i,j,k)=f.V[n];
+    ++n;
+    }
 }
 
 void reini_walld::startV(fdm* a,lexer* p,vec &f, ghostcell* pgc,ioflow* pflow)
@@ -226,7 +226,7 @@ void reini_walld::startV(fdm* a,lexer* p,vec &f, ghostcell* pgc,ioflow* pflow)
 
 void reini_walld::step(fdm* a, lexer *p)
 {
-	
+    
 
 }
 

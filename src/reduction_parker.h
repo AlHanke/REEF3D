@@ -20,7 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"bedshear_reduction.h"
+
+#include"bedshear_reduction.h"
 #include"bedslope.h"
 
 class lexer;
@@ -37,16 +38,16 @@ class reduction_parker :  public bedshear_reduction, public bedslope
 public:
     reduction_parker(lexer*);
     virtual ~reduction_parker();
-
-	virtual void start(lexer*,ghostcell*,sediment_fdm*);
+    
+    virtual void start(lexer*,ghostcell*,sediment_fdm*);
 
 private:
 
     double u_abs,u_plus,dist;
     double uvel, vvel;
     double tetaval, alphaval, phival, tanphi, beta;
-    double mu,qval,pval,d,eta;
-	double r1,r2;
+       double mu,qval,pval,d,eta;
+    double r1,r2;
 };
 
 #endif

@@ -20,7 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"sliceint.h"
+
+#include"sliceint.h"
 #include"increment.h"
 
 #ifndef SLICEINT1_H_
@@ -31,34 +32,34 @@ using namespace std;
 class sliceint1 : public sliceint, increment
 {
 public:
-
-	sliceint1 (lexer*);
-	virtual ~sliceint1();
+    
+    sliceint1 (lexer*);
+    virtual ~sliceint1();
 
     virtual int& operator()(int, int);
 
     virtual void resize(lexer*);
     virtual void dealloc(lexer*);
+       
+    int di,dj;
+    int imin,imax,jmax,jmin;
     
-	int di,dj;
-	int imin,imax,jmax,jmin;
-
-	int ***gcfeld;
+    int ***gcfeld;
 
 private:
+    
+    void fieldalloc(lexer *);
+    void fieldgcalloc(lexer*);
+    void fieldlength(lexer *);
 
-	void fieldalloc(lexer *);
-	void fieldgcalloc(lexer*);
-	void fieldlength(lexer *);
-
-    int iter;
-	int gcfeldsize,feldsize;
-	
-	int rank, gcsl_extra;
-	
-	double starttime;
-	
-	lexer *pp;
+       int iter;
+    int gcfeldsize,feldsize;
+    
+    int rank, gcsl_extra;
+    
+    double starttime;
+    
+    lexer *pp;
 
 };
 

@@ -34,7 +34,7 @@ using namespace std;
 class onephase
 {
 public:
-	virtual void update(lexer*, fdm*, ghostcell*, ioflow*)=0;
+    virtual void update(lexer*, fdm*, ghostcell*, ioflow*)=0;
     virtual void ini(lexer*, fdm*, ghostcell*, ioflow*)=0;
     virtual void uvel(lexer*, fdm*, ghostcell*, field&)=0;
     virtual void vvel(lexer*, fdm*, ghostcell*, field&)=0;

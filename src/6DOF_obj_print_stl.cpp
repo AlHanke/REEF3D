@@ -30,17 +30,17 @@ Author: Hans Bihs
 
 void sixdof_obj::print_stl(lexer *p, fdm *a, ghostcell *pgc)
 {
-	int num=0;
+    int num=0;
     int printflag=0;
-	
-	if(p->P15==1)
+    
+    if(p->P15==1)
     num = p->printcount_sixdof;
 
     if(p->P15==2)
     num = p->count;
-	
-	if(num<0)
-	num=0;
+    
+    if(num<0)
+    num=0;
 
     if(((p->count%p->P20==0) && p->P30<0.0)  || (p->simtime>printtime && p->P30>0.0)   || (p->count==0 && p->P35==0))
     printflag=1;
@@ -105,14 +105,14 @@ void sixdof_obj::print_stl(lexer *p, fdm *a, ghostcell *pgc)
 
         result.close();
 
-        ++p->printcount_sixdof;	
+        ++p->printcount_sixdof;    
     }
 }
 
 
 void sixdof_obj::print_parameter(lexer *p, fdm *a, ghostcell *pgc)
 {
-	if(p->mpirank == 0 && p->count%p->X19==0)
+    if(p->mpirank == 0 && p->count%p->X19==0)
     {
         ofstream print;
         char str[1000];

@@ -38,13 +38,13 @@ void particle_f::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     cellcount=0;
     for(qn=0;qn<p->Q110;++qn)
     LOOP
-	if(p->XN[IP]>=p->Q110_xs[qn] && p->XN[IP]<p->Q110_xe[qn]
-	&& p->YN[JP]>=p->Q110_ys[qn] && p->YN[JP]<p->Q110_ye[qn]
-	&& p->ZN[KP]>=p->Q110_zs[qn] && p->ZN[KP]<p->Q110_ze[qn])
-	{
-	active(i,j,k) = 1.0;
+    if(p->XN[IP]>=p->Q110_xs[qn] && p->XN[IP]<p->Q110_xe[qn]
+    && p->YN[JP]>=p->Q110_ys[qn] && p->YN[JP]<p->Q110_ye[qn]
+    && p->ZN[KP]>=p->Q110_zs[qn] && p->ZN[KP]<p->Q110_ze[qn])
+    {
+    active(i,j,k) = 1.0;
     ++cellcount;
-	}
+    }
     
     // guess particle demand
     if(p->Q24>0)
@@ -58,19 +58,19 @@ void particle_f::seed(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->Q110>0)
     posseed(p,a,pgc);
-		
+        
 
 }
 
 
 void particle_f::posseed(lexer* p, fdm* a, ghostcell* pgc)
 {
-	if(p->Q29>0)
+    if(p->Q29>0)
     srand(p->Q29);
 
     if(p->Q29==0)
     srand((unsigned)time(0));
-	
+    
     LOOP
     if(active(i,j,k)>0.0)
     {
@@ -130,8 +130,8 @@ void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
         //         lambda/=2.0;
         //         ++qq;
         //         }while((pos[PC][3]>epsi || pos[PC][3]<rmin)&& qq<15);
-				
-		// 		//posradius(p,a,PC);
+                
+        //         //posradius(p,a,PC);
 
         //         if((pos[PC][3]>epsi || pos[PC][3]<rmin) || check==0)
         //         {
@@ -140,9 +140,9 @@ void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
         //         reseeded--;
         //         }
         //     }
-			
+            
         //     if(pcount==0 && posactive<maxparticle)
-        //     {	
+        //     {    
         //         pos[posactive][0] = (double(i)  + (rand()%(irand))/drand)*dx;
         //         pos[posactive][1] = (double(j)  + (rand()%(irand))/drand)*dx;
         //         pos[posactive][2] = (double(k)  + (rand()%(irand))/drand)*dx;
@@ -176,12 +176,12 @@ void particle_f::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
 
         //         if(pos[posactive][3]<=epsi && pos[posactive][3]>=rmin && check==1)
         //         {
-		// 		//posradius(p,a,posactive);
+        //         //posradius(p,a,posactive);
         //         posactive++;
         //         reseeded++;
         //         }
         //     }
-			
+            
 
 
 }

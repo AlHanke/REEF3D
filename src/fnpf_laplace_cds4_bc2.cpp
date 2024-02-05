@@ -61,7 +61,7 @@ void fnpf_laplace_cds4_bc2::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver 
 
     
     // 4th-order
-	n=0;
+    n=0;
     LOOP
     {
         // fluid
@@ -150,9 +150,9 @@ void fnpf_laplace_cds4_bc2::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver 
     }
     
     n=0;
-	LOOP
+    LOOP
     if(p->flag7[FIJK]>0)
-	{
+    {
             
             // south
             if(p->flag7[FIm1JK]<0 && p->wet[Im1J]==1 && c->bc(i-1,j)==0)
@@ -382,8 +382,8 @@ void fnpf_laplace_cds4_bc2::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver 
             c->M.p[n] += abb;
             c->M.bb[n] = 0.0;
             }
-	++n;
-	}
+    ++n;
+    }
     
 
 
@@ -394,6 +394,6 @@ void fnpf_laplace_cds4_bc2::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver 
     p->poissoniter=p->solveriter;
     p->poissontime=endtime-starttime;
     
-	if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"Fi_iter: "<<p->poissoniter<<" Final_residual: "<<p->final_res<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
+    if(p->mpirank==0 && (p->count%p->P12==0))
+    cout<<"Fi_iter: "<<p->poissoniter<<" Final_residual: "<<p->final_res<<"  Fi_time: "<<setprecision(3)<<p->poissontime<<endl;
 }

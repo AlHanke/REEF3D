@@ -32,36 +32,36 @@ class field5 :   public field, public increment
 {
 public:
 
-	field5 (lexer *);
-	virtual ~field5();
+    field5 (lexer *);
+    virtual ~field5();
 
     double& operator()(int, int , int);
-	double& operator[](int);
+    double& operator[](int);
     void ggcpol(lexer*);
     virtual void resize(lexer*);
     virtual void dealloc(lexer*);
 
     //mgc1
-	static void makemgc(lexer*);
-	static void fillmgc(lexer*);
+    static void makemgc(lexer*);
+    static void fillmgc(lexer*);
 
-	const int fip;
+    const int fip;
 
 private:
 
-	static int a,b,c;
-	int di,dj,dk;
-	void fieldalloc(lexer *);
-	void fieldlength(lexer *);
+    static int a,b,c;
+    int di,dj,dk;
+    void fieldalloc(lexer *);
+    void fieldlength(lexer *);
 
-	double* feld;
-	double** gcfeld;
-	int iter;
-	int gcfeldsize,feldsize;
+    double* feld;
+    double** gcfeld;
+    int iter;
+    int gcfeldsize,feldsize;
 
-	int imin,imax,jmax,jmin,kmin,kmax;
-	
-	lexer *pp;
+    int imin,imax,jmax,jmin,kmin,kmax;
+    
+    lexer *pp;
 };
 
 #endif

@@ -33,23 +33,23 @@ using namespace std;
 class ikomega : public rans_io, public bc_ikomega
 {
 public:
-	ikomega(lexer *, fdm*, ghostcell*);
-	virtual ~ikomega();
-	virtual void isource(lexer*,fdm*);
-	virtual void jsource(lexer*,fdm*);
-	virtual void ksource(lexer*,fdm*);
-	virtual void kinsource(lexer*,fdm*,vrans*);
-	virtual void epssource(lexer*,fdm*,vrans*,field&);
-	virtual void epsfsf(lexer*,fdm*,ghostcell*);
-	virtual void eddyvisc(lexer*,fdm*,ghostcell*,vrans*);
-	virtual void clearfield(lexer*,fdm*,field&);
+    ikomega(lexer *, fdm*, ghostcell*);
+    virtual ~ikomega();
+    virtual void isource(lexer*,fdm*);
+    virtual void jsource(lexer*,fdm*);
+    virtual void ksource(lexer*,fdm*);
+    virtual void kinsource(lexer*,fdm*,vrans*);
+    virtual void epssource(lexer*,fdm*,vrans*,field&);
+    virtual void epsfsf(lexer*,fdm*,ghostcell*);
+    virtual void eddyvisc(lexer*,fdm*,ghostcell*,vrans*);
+    virtual void clearfield(lexer*,fdm*,field&);
 
-	int count,q;
-	double starttime;
+    int count,q;
+    double starttime;
     
 private:
     double epsi;
-	double dirac;
+    double dirac;
 };
 
 #endif

@@ -37,15 +37,15 @@ using namespace std;
 class fsi_strip : public beam, public increment
 {
 public:
-	
+    
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
     
     typedef Eigen::Matrix<double,3,Eigen::Dynamic> Matrix3Xd;
-	
+    
     fsi_strip(int);
-	virtual ~fsi_strip();
-	virtual void start(lexer*,fdm*,ghostcell*,double);
-	virtual void initialize(lexer*,fdm*,ghostcell*);
+    virtual ~fsi_strip();
+    virtual void start(lexer*,fdm*,ghostcell*,double);
+    virtual void initialize(lexer*,fdm*,ghostcell*);
     
     void interpolate_vel(lexer*,fdm*,ghostcell*,field&,field&,field&);
     void update_points();
@@ -71,7 +71,7 @@ private:
 
     // Parallelisation
     int nstrip;
-	double *xstart, *xend, *ystart, *yend, *zstart, *zend;
+    double *xstart, *xend, *ystart, *yend, *zstart, *zend;
 
     // Strip
     int Ne;
@@ -85,7 +85,7 @@ private:
 
     // Print
     int printcount_fsi;
-	double printtime;
+    double printtime;
     Matrix3Xd tri_x, tri_y, tri_z;
     
     double starttime, endtime;

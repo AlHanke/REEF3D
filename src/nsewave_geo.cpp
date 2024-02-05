@@ -44,22 +44,22 @@ Author: Hans Bihs
 nsewave_geo::nsewave_geo(lexer *p, fdm *a, ghostcell *pgc, heat *&pheat, concentration *&pconc) : 
                 epsi(1.6*p->DXM),depth(p),bed(p),L(p),hp(p),hx(p),hy(p)
 {
-	// bed ini
-	SLICELOOP4
-	bed(i,j) = p->bed[IJ];
-	pgc->gcsl_start4(p,bed,50);
-	
+    // bed ini
+    SLICELOOP4
+    bed(i,j) = p->bed[IJ];
+    pgc->gcsl_start4(p,bed,50);
+    
     if(p->F50==1)
-	gcval_phi=51;
+    gcval_phi=51;
 
-	if(p->F50==2)
-	gcval_phi=52;
+    if(p->F50==2)
+    gcval_phi=52;
 
-	if(p->F50==3)
-	gcval_phi=53;
+    if(p->F50==3)
+    gcval_phi=53;
 
-	if(p->F50==4)
-	gcval_phi=54;
+    if(p->F50==4)
+    gcval_phi=54;
 
     pupdate = new fluid_update_fsf(p,a,pgc);
     
@@ -88,10 +88,10 @@ void nsewave_geo::start(lexer* p, fdm* a, ghostcell* pgc, momentum *pmom, diffus
     
     // fill eta_n
     SLICELOOP4
-	{
+    {
     a->eta_n(i,j) = a->eta(i,j);
-	L(i,j)=0.0;
-	}
+    L(i,j)=0.0;
+    }
     pgc->gcsl_start4(p,a->eta_n,gcval_phi);
     
     
@@ -102,43 +102,43 @@ void nsewave_geo::start(lexer* p, fdm* a, ghostcell* pgc, momentum *pmom, diffus
     SLICELOOP2
     a->Q(i,j)=0.0;
 
-	
+    
     IULOOP
-	JULOOP
+    JULOOP
     {
-		d=0.0;
-		KULOOP
+        d=0.0;
+        KULOOP
         UFLUIDCHECK
-		{
-		phival = 0.5*(a->phi(i,j,k)+a->phi(i+1,j,k));
+        {
+        phival = 0.5*(a->phi(i,j,k)+a->phi(i+1,j,k));
         //phival = (1.0/16.0)*(-a->phi(i-1,j,k) + 9.0*a->phi(i,j,k) + 9.0*a->phi(i+1,j,k) - a->phi(i+2,j,k));
-		
-			if(phival>=0.5*p->DZP[KP])
-			H=p->DZP[KP];
+        
+            if(phival>=0.5*p->DZP[KP])
+            H=p->DZP[KP];
 
-			if(phival<-0.5*p->DZP[KP])
-			H=0.0;
+            if(phival<-0.5*p->DZP[KP])
+            H=0.0;
 
-			if(fabs(phival)<=0.5*p->DZP[KP])
- 			H=phival+0.5*p->DZP[KP];
-			
-			a->P(i,j) += a->u(i,j,k)*H;
-			d+=p->DZP[KP]*H;
-		}
+            if(fabs(phival)<=0.5*p->DZP[KP])
+             H=phival+0.5*p->DZP[KP];
+            
+            a->P(i,j) += a->u(i,j,k)*H;
+            d+=p->DZP[KP]*H;
+        }
     }
     
     IVLOOP
-	JVLOOP
-	{	
-			d=0.0;
-			KVLOOP
+    JVLOOP
+    {    
+            d=0.0;
+            KVLOOP
             VFLUIDCHECK
-			{
+            {
     
-			phival = 0.5*(a->phi(i,j,k)+a->phi(i,j+1,k));
+            phival = 0.5*(a->phi(i,j,k)+a->phi(i,j+1,k));
             //phival = (1.0/16.0)*(-a->phi(i,j-1,k) + 9.0*a->phi(i,j,k) + 9.0*a->phi(i,j+1,k) - a->phi(i,j+2,k));
-			
-				if(phival>=0.5*p->DZP[KP])
+            
+                if(phival>=0.5*p->DZP[KP])
                 H=p->DZP[KP];
 
                 if(phival<-0.5*p->DZP[KP])
@@ -146,18 +146,18 @@ void nsewave_geo::start(lexer* p, fdm* a, ghostcell* pgc, momentum *pmom, diffus
 
                 if(fabs(phival)<=0.5*p->DZP[KP])
                 H=phival+0.5*p->DZP[KP];
-				
-				a->Q(i,j) += a->v(i,j,k)*H;
-				d+=p->DZP[KP]*H;
-			}
+                
+                a->Q(i,j) += a->v(i,j,k)*H;
+                d+=p->DZP[KP]*H;
+            }
     }
-	pgc->gcsl_start1(p,a->P,10);
+    pgc->gcsl_start1(p,a->P,10);
     pgc->gcsl_start2(p,a->Q,11);
-	
+    
 
     SLICELOOP4
-    a->eta(i,j) -= p->dt*((a->P(i,j)-a->P(i-1,j))/p->DXN[IP] + (a->Q(i,j)-a->Q(i,j-1))/p->DYN[JP]);	
-	
+    a->eta(i,j) -= p->dt*((a->P(i,j)-a->P(i-1,j))/p->DXN[IP] + (a->Q(i,j)-a->Q(i,j-1))/p->DYN[JP]);    
+    
     
     pflow->eta_relax(p,pgc,a->eta);
     

@@ -37,57 +37,57 @@ sflow_flux_face_C_CDS::~sflow_flux_face_C_CDS()
 
 void sflow_flux_face_C_CDS::u_flux(int ipol, slice& uvel, double &uflux1, double &uflux2)
 {
-	if(ipol==1)
-	{
+    if(ipol==1)
+    {
     pip=1;
-	uflux1= 0.5*(uvel(i,j) + uvel(i-1,j))*b->hp(i-1,j);
-	uflux2= 0.5*(uvel(i,j) + uvel(i+1,j))*b->hp(i,j);
-	pip=0;
-	}
+    uflux1= 0.5*(uvel(i,j) + uvel(i-1,j))*b->hp(i-1,j);
+    uflux2= 0.5*(uvel(i,j) + uvel(i+1,j))*b->hp(i,j);
+    pip=0;
+    }
 
-	if(ipol==2)
-	{
-	pip=1;
-	uflux1= 0.5*(uvel(i-1,j) + uvel(i-1,j+1))*0.25*(b->hp(i-1,j)+b->hp(i-1,j+1)+b->hp(i,j)+b->hp(i,j+1));
-	uflux2= 0.5*(uvel(i,j) + uvel(i,j+1))*0.25*(b->hp(i,j)+b->hp(i,j+1)+b->hp(i+1,j)+b->hp(i+1,j+1));
-	pip=0;
-	}
+    if(ipol==2)
+    {
+    pip=1;
+    uflux1= 0.5*(uvel(i-1,j) + uvel(i-1,j+1))*0.25*(b->hp(i-1,j)+b->hp(i-1,j+1)+b->hp(i,j)+b->hp(i,j+1));
+    uflux2= 0.5*(uvel(i,j) + uvel(i,j+1))*0.25*(b->hp(i,j)+b->hp(i,j+1)+b->hp(i+1,j)+b->hp(i+1,j+1));
+    pip=0;
+    }
 
-	if(ipol==4)
-	{
-	pip=1;
-	uflux1= uvel(i-1,j)*0.5*(b->hp(i,j)+b->hp(i-1,j));
-	uflux2= uvel(i,j)*0.5*(b->hp(i+1,j)+b->hp(i,j));
-	pip=0;
-	}
+    if(ipol==4)
+    {
+    pip=1;
+    uflux1= uvel(i-1,j)*0.5*(b->hp(i,j)+b->hp(i-1,j));
+    uflux2= uvel(i,j)*0.5*(b->hp(i+1,j)+b->hp(i,j));
+    pip=0;
+    }
 }
 
 void sflow_flux_face_C_CDS::v_flux(int ipol, slice& vvel, double &vflux1, double &vflux2)
 {
-	if(ipol==1)
-	{
-	pip=2;
-	vflux1= 0.5*(vvel(i,j-1) + vvel(i+1,j-1))*0.25*(b->hp(i,j-1)+b->hp(i+1,j-1)+b->hp(i,j)+b->hp(i+1,j));
-	vflux2= 0.5*(vvel(i,j) + vvel(i+1,j))*0.25*(b->hp(i,j)+b->hp(i+1,j)+b->hp(i,j+1)+b->hp(i+1,j+1));
-	pip=0;
-	}
-
-	if(ipol==2)
-	{
+    if(ipol==1)
+    {
     pip=2;
-	vflux1= 0.5*(vvel(i,j)+vvel(i,j-1))*b->hp(i,j-1);
-	vflux2= 0.5*(vvel(i,j)+vvel(i,j+1))*b->hp(i,j);
-	pip=0;
-	}
+    vflux1= 0.5*(vvel(i,j-1) + vvel(i+1,j-1))*0.25*(b->hp(i,j-1)+b->hp(i+1,j-1)+b->hp(i,j)+b->hp(i+1,j));
+    vflux2= 0.5*(vvel(i,j) + vvel(i+1,j))*0.25*(b->hp(i,j)+b->hp(i+1,j)+b->hp(i,j+1)+b->hp(i+1,j+1));
+    pip=0;
+    }
+
+    if(ipol==2)
+    {
+    pip=2;
+    vflux1= 0.5*(vvel(i,j)+vvel(i,j-1))*b->hp(i,j-1);
+    vflux2= 0.5*(vvel(i,j)+vvel(i,j+1))*b->hp(i,j);
+    pip=0;
+    }
 
 
-	if(ipol==4)
-	{
-	pip=2;
-	vflux1= vvel(i,j-1)*0.5*(b->hp(i,j)+b->hp(i,j-1));
-	vflux2= vvel(i,j)*0.5*(b->hp(i,j)+b->hp(i,j+1));
-	pip=0;
-	}
+    if(ipol==4)
+    {
+    pip=2;
+    vflux1= vvel(i,j-1)*0.5*(b->hp(i,j)+b->hp(i,j-1));
+    vflux2= vvel(i,j)*0.5*(b->hp(i,j)+b->hp(i,j+1));
+    pip=0;
+    }
 }
 
 
@@ -95,56 +95,56 @@ void sflow_flux_face_C_CDS::v_flux(int ipol, slice& vvel, double &vflux1, double
 
 void sflow_flux_face_C_CDS::u_flux(int ipol, slice& uvel, double &uflux1, double &uflux2)
 {
-	if(ipol==1)
-	{
+    if(ipol==1)
+    {
     pip=1;
-	uflux1= 0.25*(uvel(i,j) + uvel(i-1,j))*(b->hx(i,j) + b->hx(i-1,j));
-	uflux2= 0.25*(uvel(i,j) + uvel(i+1,j))*(b->hx(i,j) + b->hx(i+1,j));
-	pip=0;
-	}
+    uflux1= 0.25*(uvel(i,j) + uvel(i-1,j))*(b->hx(i,j) + b->hx(i-1,j));
+    uflux2= 0.25*(uvel(i,j) + uvel(i+1,j))*(b->hx(i,j) + b->hx(i+1,j));
+    pip=0;
+    }
 
-	if(ipol==2)
-	{
-	pip=1;
-	uflux1= 0.25*(uvel(i-1,j) + uvel(i-1,j+1))*(b->hx(i-1,j) + b->hx(i-1,j+1));
-	uflux2= 0.25*(uvel(i,j) + uvel(i,j+1))*(b->hx(i,j) + b->hx(i,j+1));
-	pip=0;
-	}
+    if(ipol==2)
+    {
+    pip=1;
+    uflux1= 0.25*(uvel(i-1,j) + uvel(i-1,j+1))*(b->hx(i-1,j) + b->hx(i-1,j+1));
+    uflux2= 0.25*(uvel(i,j) + uvel(i,j+1))*(b->hx(i,j) + b->hx(i,j+1));
+    pip=0;
+    }
 
-	if(ipol==4)
-	{
-	pip=1;
-	uflux1= uvel(i-1,j)*b->hx(i-1,j);
-	uflux2= uvel(i,j)*b->hx(i,j);
-	pip=0;
-	}
+    if(ipol==4)
+    {
+    pip=1;
+    uflux1= uvel(i-1,j)*b->hx(i-1,j);
+    uflux2= uvel(i,j)*b->hx(i,j);
+    pip=0;
+    }
 }
 
 void sflow_flux_face_C_CDS::v_flux(int ipol, slice& vvel, double &vflux1, double &vflux2)
 {
-	if(ipol==1)
-	{
-	pip=2;
-	vflux1= 0.25*(vvel(i,j-1) + vvel(i+1,j-1))*(b->hy(i,j-1) + b->hy(i+1,j-1));
-	vflux2= 0.25*(vvel(i,j) + vvel(i+1,j))*(b->hy(i,j) + b->hy(i+1,j));
-	pip=0;
-	}
-
-	if(ipol==2)
-	{
+    if(ipol==1)
+    {
     pip=2;
-	vflux1= 0.25*(vvel(i,j)+vvel(i,j-1))*(b->hy(i,j)+b->hy(i,j-1));
-	vflux2= 0.25*(vvel(i,j)+vvel(i,j+1))*(b->hy(i,j)+b->hy(i,j+1));
-	pip=0;
-	}
+    vflux1= 0.25*(vvel(i,j-1) + vvel(i+1,j-1))*(b->hy(i,j-1) + b->hy(i+1,j-1));
+    vflux2= 0.25*(vvel(i,j) + vvel(i+1,j))*(b->hy(i,j) + b->hy(i+1,j));
+    pip=0;
+    }
+
+    if(ipol==2)
+    {
+    pip=2;
+    vflux1= 0.25*(vvel(i,j)+vvel(i,j-1))*(b->hy(i,j)+b->hy(i,j-1));
+    vflux2= 0.25*(vvel(i,j)+vvel(i,j+1))*(b->hy(i,j)+b->hy(i,j+1));
+    pip=0;
+    }
 
 
-	if(ipol==4)
-	{
-	pip=2;
-	vflux1= vvel(i,j-1)*b->hy(i,j-1);
-	vflux2= vvel(i,j)*b->hy(i,j);
-	pip=0;
-	}
+    if(ipol==4)
+    {
+    pip=2;
+    vflux1= vvel(i,j-1)*b->hy(i,j-1);
+    vflux2= vvel(i,j)*b->hy(i,j);
+    pip=0;
+    }
 }
 */

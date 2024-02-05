@@ -35,9 +35,9 @@ class nodefill : public increment
 {
 
 public:
-	nodefill(lexer*);
-	virtual ~nodefill();
-	virtual void nodefill4(lexer*,fdm*,ghostcell*,field&,field&);
+    nodefill(lexer*);
+    virtual ~nodefill();
+    virtual void nodefill4(lexer*,fdm*,ghostcell*,field&,field&);
     virtual void nodefill4a(lexer*,fdm*,ghostcell*,field&,field&);
 
 private:

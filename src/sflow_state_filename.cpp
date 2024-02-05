@@ -52,12 +52,12 @@ void sflow_state::filename_header(lexer *p, fdm2D *b, ghostcell *pgc)
 {
     if(p->P14==0)
     {
-	sprintf(name,"REEF3D-SFLOW-State-Header-%05d.r3d",p->mpirank+1);
+    sprintf(name,"REEF3D-SFLOW-State-Header-%05d.r3d",p->mpirank+1);
     }
     
     if(p->P14==1)
     {
-	sprintf(name,"./REEF3D_SFLOW_STATE/REEF3D-SFLOW-State-Header-%05d.r3d",p->mpirank+1);
+    sprintf(name,"./REEF3D_SFLOW_STATE/REEF3D-SFLOW-State-Header-%05d.r3d",p->mpirank+1);
     }
 }
 

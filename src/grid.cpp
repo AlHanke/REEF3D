@@ -35,15 +35,15 @@ grid::~grid()
 
 void grid::makegrid(lexer *p, ghostcell *pgc)
 {
-	
+    
 }
 
 void grid::update_topo_grid(lexer *p, ghostcell *pgc)
 {
-	
+    
 }
 
 void grid::update_sixdof_grid(lexer *p, ghostcell *pgc)
 {
-	
+    
 }

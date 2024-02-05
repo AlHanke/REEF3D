@@ -35,10 +35,10 @@ class grid2D :  public increment
 {
 public:
 
-	grid2D (lexer *);
-	virtual ~grid2D();
-	
-	void makegrid(lexer*,fdm*,ghostcell*);
+    grid2D (lexer *);
+    virtual ~grid2D();
+    
+    void makegrid(lexer*,fdm*,ghostcell*);
 
 };
 

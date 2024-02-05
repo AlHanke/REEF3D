@@ -35,12 +35,12 @@ void ghostcell::gcfb_update_extra_gcb(lexer *p, fdm *a, field &f)
 
 void ghostcell::gcfb_b_paraseed(lexer *p, fdm *a)
 {
-	int count[6];
-	
-	for(q=0;q<6;++q)
-	count[q]=0;
-	
-	for(q=0;q<p->gcpara1_count;++q)
+    int count[6];
+    
+    for(q=0;q<6;++q)
+    count[q]=0;
+    
+    for(q=0;q<p->gcpara1_count;++q)
     {
     i=p->gcpara1[q][0];
     j=p->gcpara1[q][1];
@@ -105,19 +105,19 @@ void ghostcell::gcfb_b_paraseed(lexer *p, fdm *a)
         if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1]>0)
         ++count[4];
     }
-	
-	
-	p->Iresize(gcbfb,6,6,gcbfb_count,count,6,6); 
-	
-	for(q=0;q<6;++q)
-	gcbfb_count[q]=count[q];
-	
-	//for(q=0;q<6;++q)
-	//cout<<p->mpirank<<" GCBFB_COUNT_"<<q+1<<"  "<<count[q]<<endl;
-	
-	
-	for(q=0;q<6;++q)
-	count[q]=0;
+    
+    
+    p->Iresize(gcbfb,6,6,gcbfb_count,count,6,6); 
+    
+    for(q=0;q<6;++q)
+    gcbfb_count[q]=count[q];
+    
+    //for(q=0;q<6;++q)
+    //cout<<p->mpirank<<" GCBFB_COUNT_"<<q+1<<"  "<<count[q]<<endl;
+    
+    
+    for(q=0;q<6;++q)
+    count[q]=0;
 
     for(q=0;q<p->gcpara1_count;++q)
     {
@@ -128,11 +128,11 @@ void ghostcell::gcfb_b_paraseed(lexer *p, fdm *a)
         if(p->flag4[IJK]==FLT)
         if(p->flag4[(i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]>0)
         {
-		gcbfb[3][count[3]][0]=i-1;
-		gcbfb[3][count[3]][1]=j;
-		gcbfb[3][count[3]][2]=k;
-		gcbfb[3][count[3]][3]=41;
-		++count[3];
+        gcbfb[3][count[3]][0]=i-1;
+        gcbfb[3][count[3]][1]=j;
+        gcbfb[3][count[3]][2]=k;
+        gcbfb[3][count[3]][3]=41;
+        ++count[3];
         }
     }
     
@@ -146,10 +146,10 @@ void ghostcell::gcfb_b_paraseed(lexer *p, fdm *a)
         if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin]>0)
         {
         gcbfb[2][count[2]][0]=j;
-		gcbfb[2][count[2]][1]=j+1;
-		gcbfb[2][count[2]][2]=k;
-		gcbfb[2][count[2]][3]=41;
-		++count[2];
+        gcbfb[2][count[2]][1]=j+1;
+        gcbfb[2][count[2]][2]=k;
+        gcbfb[2][count[2]][3]=41;
+        ++count[2];
         }
     }
     
@@ -163,10 +163,10 @@ void ghostcell::gcfb_b_paraseed(lexer *p, fdm *a)
         if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin]>0)
         {
         gcbfb[1][count[1]][0]=i;
-		gcbfb[1][count[1]][1]=j-1;
-		gcbfb[1][count[1]][2]=k;
-		gcbfb[1][count[1]][3]=41;
-		++count[1];
+        gcbfb[1][count[1]][1]=j-1;
+        gcbfb[1][count[1]][2]=k;
+        gcbfb[1][count[1]][3]=41;
+        ++count[1];
         }
     }
     
@@ -180,10 +180,10 @@ void ghostcell::gcfb_b_paraseed(lexer *p, fdm *a)
         if(p->flag4[(i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]>0)
         {
         gcbfb[0][count[0]][0]=i+1;
-		gcbfb[0][count[0]][1]=j;
-		gcbfb[0][count[0]][2]=k;
-		gcbfb[0][count[0]][3]=41;
-		++count[0];
+        gcbfb[0][count[0]][1]=j;
+        gcbfb[0][count[0]][2]=k;
+        gcbfb[0][count[0]][3]=41;
+        ++count[0];
         }
     }
     
@@ -197,10 +197,10 @@ void ghostcell::gcfb_b_paraseed(lexer *p, fdm *a)
         if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1]>0)
         {
         gcbfb[5][count[5]][0]=i;
-		gcbfb[5][count[5]][1]=j;
-		gcbfb[5][count[5]][2]=k-1;
-		gcbfb[5][count[5]][3]=41;
-		++count[5];
+        gcbfb[5][count[5]][1]=j;
+        gcbfb[5][count[5]][2]=k-1;
+        gcbfb[5][count[5]][3]=41;
+        ++count[5];
         }
     }
     
@@ -214,10 +214,10 @@ void ghostcell::gcfb_b_paraseed(lexer *p, fdm *a)
         if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1]>0)
         {
         gcbfb[4][count[4]][0]=i;
-		gcbfb[4][count[4]][1]=j;
-		gcbfb[4][count[4]][2]=k+1;
-		gcbfb[4][count[4]][3]=41;
-		++count[4];
+        gcbfb[4][count[4]][1]=j;
+        gcbfb[4][count[4]][2]=k+1;
+        gcbfb[4][count[4]][3]=41;
+        ++count[4];
         }
     }
 }

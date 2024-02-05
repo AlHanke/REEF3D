@@ -33,20 +33,20 @@ using namespace std;
 class nhflow_bc_ikomega : public roughness
 {
 public:
-	nhflow_bc_ikomega(lexer*);
-	virtual ~nhflow_bc_ikomega();
-	void bckomega_start(lexer*,fdm_nhf*,double*,double*, int);
+    nhflow_bc_ikomega(lexer*);
+    virtual ~nhflow_bc_ikomega();
+    void bckomega_start(lexer*,fdm_nhf*,double*,double*, int);
     void bckin_matrix(lexer*,fdm_nhf*,double*,double*);
     void bcomega_matrix(lexer*,fdm_nhf*,double*,double*);
-	void wall_law_kin(lexer*,fdm_nhf*,double*,double*,int,int,int,int,int,int,double);
-	void wall_law_omega(lexer*,fdm_nhf*,double*,double*,int,int,int,int,int,int,double);
+    void wall_law_kin(lexer*,fdm_nhf*,double*,double*,int,int,int,int,int,int,double);
+    void wall_law_omega(lexer*,fdm_nhf*,double*,double*,int,int,int,int,int,int,double);
 
 private:
-	double uplus,ks_plus,dist,ks,ustar,u_abs,eps_star,tau;
-	int ii,jj,kk;
-	int count,q;
-	double fac,value;
-	double kappa;
+    double uplus,ks_plus,dist,ks,ustar,u_abs,eps_star,tau;
+    int ii,jj,kk;
+    int count,q;
+    double fac,value;
+    double kappa;
 
 };
 #endif

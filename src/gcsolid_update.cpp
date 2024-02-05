@@ -35,11 +35,11 @@ void ghostcell::solid_update(lexer *p, fdm *a)
     cout<<"Solid: update grid..."<<endl;
     
     int cellcount1,cellcount2,cellcount3,cellcount4;
-	
-	mgc1 m1(p);
-	mgc2 m2(p);
-	mgc3 m3(p);
-	mgc4 m4(p);
+    
+    mgc1 m1(p);
+    mgc2 m2(p);
+    mgc3 m3(p);
+    mgc4 m4(p);
     mgc4a m4a(p);
 
     gcsolid_buildflag(p,a,cellcount4);
@@ -50,7 +50,7 @@ void ghostcell::solid_update(lexer *p, fdm *a)
     gcsolid_gcb_seed(p,a);
     gcsolid_gcb_dist(p,a);
     
-    p->gridini_patchBC();	
+    p->gridini_patchBC();    
 
     gcsolid_velflag1(p,a,cellcount1);
     gcsolid_velflag2(p,a,cellcount2);
@@ -74,7 +74,7 @@ void ghostcell::solid_update(lexer *p, fdm *a)
     m2.fillmgc(p);
     m2.gcdirfill(p);
 
-	m3.fillgcb(p);
+    m3.fillgcb(p);
     m3.extragcb(p);
     m3.mgcsetup(p);
     m3.fillmgc(p);
@@ -83,7 +83,7 @@ void ghostcell::solid_update(lexer *p, fdm *a)
     m4.mgcsetup(p);
     m4.fillmgc(p);
     m4.gcdirfill(p);
-	m4.gcsidefill(p);
+    m4.gcsidefill(p);
     
     m4a.fillgcb(p);
     m4a.mgcsetup(p);
@@ -95,13 +95,13 @@ void ghostcell::solid_update(lexer *p, fdm *a)
     m3.fill_ggc(p);
     m4.fill_ggc(p);
     m4a.fill_ggc(p);
-	
-	ndflag_update(p);
+    
+    ndflag_update(p);
     
 
     sizeM_update(p,a);
-	
-	m1.make_dgc(p);
+    
+    m1.make_dgc(p);
     m2.make_dgc(p);
     m3.make_dgc(p);
     m4.make_dgc(p);
@@ -116,14 +116,14 @@ void ghostcell::solid_update(lexer *p, fdm *a)
     column_pt4a_update(p,a);
 
 
-	count=0;
-	LOOP
-	++count;
+    count=0;
+    LOOP
+    ++count;
 
-	count=globalisum(count);
-	
-	if(p->mpirank==0)
-	cout<<"Solid: active number of cells: "<<count<<endl;
+    count=globalisum(count);
+    
+    if(p->mpirank==0)
+    cout<<"Solid: active number of cells: "<<count<<endl;
     
     
     //cout<<p->mpirank<<" p->gcb4_count_solid: "<<p->gcb4_count<<endl;

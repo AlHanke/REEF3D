@@ -42,7 +42,7 @@ class nsewave_f : public nsewave, public increment
 {
 public:
     nsewave_f(lexer*, fdm*, ghostcell*,heat*&,concentration*&);
-	virtual ~nsewave_f();
+    virtual ~nsewave_f();
     
     virtual void start(lexer*, fdm*, ghostcell*, momentum*, diffusion*, turbulence*, convection*, 
                         pressure*, poisson*, solver*, solver*, ioflow*, vrans*, sixdof*, vector<net*>&);
@@ -54,17 +54,17 @@ private:
     picard *ppicard;
     
     int gcval_phi;
-	double starttime;
+    double starttime;
     double phival,H;
     double epsi;
-	double d;
-	
-	sflow_eta_disc *peta;
-	sflow_hxy_disc *phxy;
-	
-	slice4 depth,bed,L,hp;
-	slice1 hx;
-	slice2 hy;
+    double d;
+    
+    sflow_eta_disc *peta;
+    sflow_hxy_disc *phxy;
+    
+    slice4 depth,bed,L,hp;
+    slice1 hx;
+    slice2 hy;
 
 };
 

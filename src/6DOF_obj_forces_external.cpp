@@ -33,27 +33,27 @@ void sixdof_obj::externalForces(lexer *p,fdm* a, ghostcell *pgc, double alpha, v
     Xext = Yext = Zext = Kext = Mext = Next = 0.0;
 
     // Mooring forces
-	if (p->X310 > 0)
-	{
-		mooringForces(p,pgc,alpha);
-	} 
-	
+    if (p->X310 > 0)
+    {
+        mooringForces(p,pgc,alpha);
+    } 
+    
     // Net forces
-	if (p->X320 > 0)
-	{
-		netForces(p,a,pgc,alpha,pvrans,pnet);
-	}
+    if (p->X320 > 0)
+    {
+        netForces(p,a,pgc,alpha,pvrans,pnet);
+    }
 }
 
 void sixdof_obj::mooringForces(lexer *p, ghostcell *pgc, double alpha)
 {
-	for (int ii=0; ii<p->mooring_count; ii++)
-	{
-		// Update coordinates of end point
+    for (int ii=0; ii<p->mooring_count; ii++)
+    {
+        // Update coordinates of end point
         Eigen::Vector3d point(X311_xen[ii], X311_yen[ii], X311_zen[ii]);
-					
+                    
         point = R_*point;
-					
+                    
         p->X311_xe[ii] = point(0) + c_(0);
         p->X311_ye[ii] = point(1) + c_(1);
         p->X311_ze[ii] = point(2) + c_(2);
@@ -73,7 +73,7 @@ void sixdof_obj::mooringForces(lexer *p, ghostcell *pgc, double alpha)
         if( p->mpirank == 0)
         {
             cout<<"Xme"<< ii <<" : "<<Xme[ii]<<" Yme"<< ii <<" : "<<Yme[ii]<<" Zme"<< ii <<" : "<<Zme[ii]
-            <<" Kme"<< ii <<" : "<<Kme[ii]<<" Mme"<< ii <<" : "<<Mme[ii]<<" Nme"<< ii <<" : "<<Nme[ii]<<endl;		
+            <<" Kme"<< ii <<" : "<<Kme[ii]<<" Mme"<< ii <<" : "<<Mme[ii]<<" Nme"<< ii <<" : "<<Nme[ii]<<endl;        
         }*/
             
         // Distribute forces and moments to all processors
@@ -82,7 +82,7 @@ void sixdof_obj::mooringForces(lexer *p, ghostcell *pgc, double alpha)
         MPI_Bcast(&Zme[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);
         MPI_Bcast(&Kme[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);
         MPI_Bcast(&Mme[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);
-        MPI_Bcast(&Nme[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);	
+        MPI_Bcast(&Nme[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);    
         
         // Add to external forces
         Xext += Xme[ii];
@@ -109,7 +109,7 @@ void sixdof_obj::netForces(lexer *p, fdm* a, ghostcell *pgc, double alpha, vrans
         if( p->mpirank == 0)
         {
             cout<<"Xne"<< ii <<" : "<<Xne[ii]<<" Yne"<< ii <<" : "<<Yne[ii]<<" Zne"<< ii <<" : "<<Zne[ii]
-            <<" Kne"<< ii <<" : "<<Kne[ii]<<" Mne"<< ii <<" : "<<Mne[ii]<<" Nne"<< ii <<" : "<<Nne[ii]<<endl;		
+            <<" Kne"<< ii <<" : "<<Kne[ii]<<" Mne"<< ii <<" : "<<Mne[ii]<<" Nne"<< ii <<" : "<<Nne[ii]<<endl;        
         }*/
         
         // Distribute forces and moments to all processors
@@ -118,7 +118,7 @@ void sixdof_obj::netForces(lexer *p, fdm* a, ghostcell *pgc, double alpha, vrans
         MPI_Bcast(&Zne[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);
         MPI_Bcast(&Kne[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);
         MPI_Bcast(&Mne[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);
-        MPI_Bcast(&Nne[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);	
+        MPI_Bcast(&Nne[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);    
         
         // Add to external forces
         Xext += Xne[ii];
@@ -128,5 +128,5 @@ void sixdof_obj::netForces(lexer *p, fdm* a, ghostcell *pgc, double alpha, vrans
         Mext += Mne[ii];
         Next += Nne[ii];
     }
-}	
+}    
 

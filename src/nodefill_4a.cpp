@@ -29,676 +29,676 @@ Author: Hans Bihs
 void nodefill::nodefill4a(lexer *p, fdm *a, ghostcell *pgc, field &f, field &eta) 
 {
     pip=5;
-	TPLOOP
-	eta(i,j,k)=0.0;
+    TPLOOP
+    eta(i,j,k)=0.0;
 
-	double val,factor,denom;
-	int q;
+    double val,factor,denom;
+    int q;
 
-	ALOOP
-	{
-		val = f(i,j,k);
-		
-		eta(i,j,k) += 0.125*val;
-		eta(i,j-1,k) += 0.125*val;
-		eta(i,j,k-1) += 0.125*val;
-		eta(i,j-1,k-1) += 0.125*val;
-		eta(i-1,j,k) += 0.125*val;
-		eta(i-1,j-1,k) += 0.125*val;
-		eta(i-1,j,k-1) += 0.125*val;
-		eta(i-1,j-1,k-1) += 0.125*val;
-	}
+    ALOOP
+    {
+        val = f(i,j,k);
+        
+        eta(i,j,k) += 0.125*val;
+        eta(i,j-1,k) += 0.125*val;
+        eta(i,j,k-1) += 0.125*val;
+        eta(i,j-1,k-1) += 0.125*val;
+        eta(i-1,j,k) += 0.125*val;
+        eta(i-1,j-1,k) += 0.125*val;
+        eta(i-1,j,k-1) += 0.125*val;
+        eta(i-1,j-1,k-1) += 0.125*val;
+    }
 
-	
-	GC4ALOOP
-	{
-		i=p->gcb4a[n][0];
-		j=p->gcb4a[n][1];
-		k=p->gcb4a[n][2];
-		
-		if(p->gcb4a[n][3]==1)
-		{
-		val = f(i-1,j,k);
-		
-		eta(i-1,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i-1,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i-1,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i-1,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		}
-			
-		if(p->gcb4a[n][3]==4)
-		{
-		val = f(i+1,j,k);
-		
-		eta(i,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		}
-		
-		
-		if(p->gcb4a[n][3]==3)
-		{
-		val = f(i,j-1,k);
-		
-		eta(i,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i-1,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i-1,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		}
-			
-		if(p->gcb4a[n][3]==2)
-		{
-		val = f(i,j+1,k);
-		
-		eta(i,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i-1,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i-1,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		}
-		
-		
-		if(p->gcb4a[n][3]==5)
-		{
-		val = f(i,j,k-1);
-		
-		eta(i,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i-1,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i-1,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
-		}
-			
-		if(p->gcb4a[n][3]==6)
-		{
-		val = f(i,j,k+1);
-		
-		eta(i,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i-1,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		eta(i-1,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
-		}
-	}
-	
-	// Para
-	for(n=0;n<p->gcpara1_count;++n)
+    
+    GC4ALOOP
+    {
+        i=p->gcb4a[n][0];
+        j=p->gcb4a[n][1];
+        k=p->gcb4a[n][2];
+        
+        if(p->gcb4a[n][3]==1)
+        {
+        val = f(i-1,j,k);
+        
+        eta(i-1,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i-1,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i-1,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i-1,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        }
+            
+        if(p->gcb4a[n][3]==4)
+        {
+        val = f(i+1,j,k);
+        
+        eta(i,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        }
+        
+        
+        if(p->gcb4a[n][3]==3)
+        {
+        val = f(i,j-1,k);
+        
+        eta(i,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i-1,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i-1,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        }
+            
+        if(p->gcb4a[n][3]==2)
+        {
+        val = f(i,j+1,k);
+        
+        eta(i,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i-1,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i-1,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        }
+        
+        
+        if(p->gcb4a[n][3]==5)
+        {
+        val = f(i,j,k-1);
+        
+        eta(i,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i-1,j,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i-1,j-1,k-1) += 0.125*val * (1.0/double(p->gcside4[n]));
+        }
+            
+        if(p->gcb4a[n][3]==6)
+        {
+        val = f(i,j,k+1);
+        
+        eta(i,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i-1,j,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        eta(i-1,j-1,k) += 0.125*val * (1.0/double(p->gcside4[n]));
+        }
+    }
+    
+    // Para
+    for(n=0;n<p->gcpara1_count;++n)
     {
     i=p->gcpara1[n][0];
     j=p->gcpara1[n][1];
     k=p->gcpara1[n][2];
-	
-		val = f(i-1,j,k);
-		
-		eta(i-1,j,k) += 0.125*val;
-		eta(i-1,j-1,k) += 0.125*val;
-		eta(i-1,j,k-1) += 0.125*val;
-		eta(i-1,j-1,k-1) += 0.125*val;
+    
+        val = f(i-1,j,k);
+        
+        eta(i-1,j,k) += 0.125*val;
+        eta(i-1,j-1,k) += 0.125*val;
+        eta(i-1,j,k-1) += 0.125*val;
+        eta(i-1,j-1,k-1) += 0.125*val;
     }
-	
-	for(n=0;n<p->gcpara4_count;++n)
+    
+    for(n=0;n<p->gcpara4_count;++n)
     {
     i=p->gcpara4[n][0];
     j=p->gcpara4[n][1];
     k=p->gcpara4[n][2];
-	
-		val = f(i+1,j,k);
-		
-		eta(i,j,k) += 0.125*val;
-		eta(i,j-1,k) += 0.125*val;
-		eta(i,j,k-1) += 0.125*val;
-		eta(i,j-1,k-1) += 0.125*val;
+    
+        val = f(i+1,j,k);
+        
+        eta(i,j,k) += 0.125*val;
+        eta(i,j-1,k) += 0.125*val;
+        eta(i,j,k-1) += 0.125*val;
+        eta(i,j-1,k-1) += 0.125*val;
     }
-	
-	for(n=0;n<p->gcpara3_count;++n)
+    
+    for(n=0;n<p->gcpara3_count;++n)
     {
     i=p->gcpara3[n][0];
     j=p->gcpara3[n][1];
     k=p->gcpara3[n][2];
-	
-		val = f(i,j-1,k);
-		
-		eta(i,j-1,k) += 0.125*val;
-		eta(i-1,j-1,k) += 0.125*val;
-		eta(i,j-1,k-1) += 0.125*val;
-		eta(i-1,j-1,k-1) += 0.125*val;
+    
+        val = f(i,j-1,k);
+        
+        eta(i,j-1,k) += 0.125*val;
+        eta(i-1,j-1,k) += 0.125*val;
+        eta(i,j-1,k-1) += 0.125*val;
+        eta(i-1,j-1,k-1) += 0.125*val;
     }
-	
-	for(n=0;n<p->gcpara2_count;++n)
+    
+    for(n=0;n<p->gcpara2_count;++n)
     {
     i=p->gcpara2[n][0];
     j=p->gcpara2[n][1];
     k=p->gcpara2[n][2];
-	
-		val = f(i,j+1,k);
-		
-		eta(i,j,k) += 0.125*val;
-		eta(i-1,j,k) += 0.125*val;
-		eta(i,j,k-1) += 0.125*val;
-		eta(i-1,j,k-1) += 0.125*val;
+    
+        val = f(i,j+1,k);
+        
+        eta(i,j,k) += 0.125*val;
+        eta(i-1,j,k) += 0.125*val;
+        eta(i,j,k-1) += 0.125*val;
+        eta(i-1,j,k-1) += 0.125*val;
     }
-	
-	for(n=0;n<p->gcpara5_count;++n)
+    
+    for(n=0;n<p->gcpara5_count;++n)
     {
     i=p->gcpara5[n][0];
     j=p->gcpara5[n][1];
     k=p->gcpara5[n][2];
-	
-		val = f(i,j,k-1);
-		
-		eta(i,j,k-1) += 0.125*val;
-		eta(i-1,j,k-1) += 0.125*val;
-		eta(i,j-1,k-1) += 0.125*val;
-		eta(i-1,j-1,k-1) += 0.125*val;
+    
+        val = f(i,j,k-1);
+        
+        eta(i,j,k-1) += 0.125*val;
+        eta(i-1,j,k-1) += 0.125*val;
+        eta(i,j-1,k-1) += 0.125*val;
+        eta(i-1,j-1,k-1) += 0.125*val;
     }
-	
-	for(n=0;n<p->gcpara6_count;++n)
+    
+    for(n=0;n<p->gcpara6_count;++n)
     {
     i=p->gcpara6[n][0];
     j=p->gcpara6[n][1];
     k=p->gcpara6[n][2];
-	
-		val = f(i,j,k+1);
-		
-		eta(i,j,k) += 0.125*val;
-		eta(i-1,j,k) += 0.125*val;
-		eta(i,j-1,k) += 0.125*val;
-		eta(i-1,j-1,k) += 0.125*val;
+    
+        val = f(i,j,k+1);
+        
+        eta(i,j,k) += 0.125*val;
+        eta(i-1,j,k) += 0.125*val;
+        eta(i,j-1,k) += 0.125*val;
+        eta(i-1,j-1,k) += 0.125*val;
     }
-	
-	
+    
+    
 // Paraco
-	int sidesum=0;
-	int aa,bb,cc;
-	
-	// 1
-	for(n=0;n<p->gcparaco1_count;++n)
+    int sidesum=0;
+    int aa,bb,cc;
+    
+    // 1
+    for(n=0;n<p->gcparaco1_count;++n)
     {
     i=p->gcparaco1[n][0];
     j=p->gcparaco1[n][1];
     k=p->gcparaco1[n][2];
-	
-	aa=bb=cc=0;
-	
-	if(p->gcparaco1[n][3]==3 || p->gcparaco1[n][4]==3)
-	bb=-1;
-	
-	if(p->gcparaco1[n][3]==2 || p->gcparaco1[n][4]==2)
-	bb=1;
-	
-	if(p->gcparaco1[n][3]==5 || p->gcparaco1[n][4]==5)
-	cc=-1;
-	
-	if(p->gcparaco1[n][3]==6 || p->gcparaco1[n][4]==6)
-	cc=1;
-	
-	sidesum= fabs(aa) + fabs(bb) + fabs(cc);
-		
-		val = f(i-1,j,k);
-		factor = 1.0/double(p->gcparaco1[n][5]);
+    
+    aa=bb=cc=0;
+    
+    if(p->gcparaco1[n][3]==3 || p->gcparaco1[n][4]==3)
+    bb=-1;
+    
+    if(p->gcparaco1[n][3]==2 || p->gcparaco1[n][4]==2)
+    bb=1;
+    
+    if(p->gcparaco1[n][3]==5 || p->gcparaco1[n][4]==5)
+    cc=-1;
+    
+    if(p->gcparaco1[n][3]==6 || p->gcparaco1[n][4]==6)
+    cc=1;
+    
+    sidesum= fabs(aa) + fabs(bb) + fabs(cc);
+        
+        val = f(i-1,j,k);
+        factor = 1.0/double(p->gcparaco1[n][5]);
         
         denom = 1.0e20;
-		
-		if(double(p->gcparaco1[n][5])==1)
-		denom = 1.0;
-		
-		if(double(p->gcparaco1[n][5])==2)
-		denom = 2.0;
-		
-		if(double(p->gcparaco1[n][5])==3)
-		denom = 3.0;
-		
-		if(sidesum==1)
-		{
-			if(bb==-1)
-			{
-			eta(i-1,j,k-1) += 0.125*factor*val;
-			eta(i-1,j,k)   += 0.125*factor*val;
-			}
-			
-			if(bb==1)
-			{
-			eta(i-1,j-1,k-1) += 0.125*factor*val;
-			eta(i-1,j-1,k)   += 0.125*factor*val;
-			}
-			
-			if(cc==-1)
-			{
-			eta(i-1,j,k) 	+= 0.125*factor*val;
-			eta(i-1,j-1,k)   += 0.125*factor*val;
-			}
-			
-			if(cc==1)
-			{
-			eta(i-1,j,k-1) += 0.125*factor*val;
-			eta(i-1,j-1,k-1) += 0.125*factor*val;
-			}
-		}
-		
-		if(sidesum==2)
-		{
-			if(bb==-1 && cc==-1)
-			eta(i-1,j,k) += 0.125*val/denom;
-			
-			if(bb==-1 && cc==1)
-			eta(i-1,j,k-1) += 0.125*val/denom;
-			
-			if(bb==1 && cc==-1)
-			eta(i-1,j-1,k) += 0.125*val/denom;
-			
-			if(bb==1 && cc==1)
-			eta(i-1,j-1,k-1) += 0.125*val/denom;
-		}
+        
+        if(double(p->gcparaco1[n][5])==1)
+        denom = 1.0;
+        
+        if(double(p->gcparaco1[n][5])==2)
+        denom = 2.0;
+        
+        if(double(p->gcparaco1[n][5])==3)
+        denom = 3.0;
+        
+        if(sidesum==1)
+        {
+            if(bb==-1)
+            {
+            eta(i-1,j,k-1) += 0.125*factor*val;
+            eta(i-1,j,k)   += 0.125*factor*val;
+            }
+            
+            if(bb==1)
+            {
+            eta(i-1,j-1,k-1) += 0.125*factor*val;
+            eta(i-1,j-1,k)   += 0.125*factor*val;
+            }
+            
+            if(cc==-1)
+            {
+            eta(i-1,j,k)     += 0.125*factor*val;
+            eta(i-1,j-1,k)   += 0.125*factor*val;
+            }
+            
+            if(cc==1)
+            {
+            eta(i-1,j,k-1) += 0.125*factor*val;
+            eta(i-1,j-1,k-1) += 0.125*factor*val;
+            }
+        }
+        
+        if(sidesum==2)
+        {
+            if(bb==-1 && cc==-1)
+            eta(i-1,j,k) += 0.125*val/denom;
+            
+            if(bb==-1 && cc==1)
+            eta(i-1,j,k-1) += 0.125*val/denom;
+            
+            if(bb==1 && cc==-1)
+            eta(i-1,j-1,k) += 0.125*val/denom;
+            
+            if(bb==1 && cc==1)
+            eta(i-1,j-1,k-1) += 0.125*val/denom;
+        }
     }
-	
-	// 4
-	for(n=0;n<p->gcparaco4_count;++n)
+    
+    // 4
+    for(n=0;n<p->gcparaco4_count;++n)
     {
     i=p->gcparaco4[n][0];
     j=p->gcparaco4[n][1];
     k=p->gcparaco4[n][2];
-	
-	aa=bb=cc=0;
-	
-	if(p->gcparaco4[n][3]==3 || p->gcparaco4[n][4]==3)
-	bb=-1;
-	
-	if(p->gcparaco4[n][3]==2 || p->gcparaco4[n][4]==2)
-	bb=1;
-	
-	if(p->gcparaco4[n][3]==5 || p->gcparaco4[n][4]==5)
-	cc=-1;
-	
-	if(p->gcparaco4[n][3]==6 || p->gcparaco4[n][4]==6)
-	cc=1;
-	
-	sidesum= fabs(aa) + fabs(bb) + fabs(cc);
-	
-		val = f(i+1,j,k);
-		factor = 1.0/double(p->gcparaco4[n][5]);
-		
+    
+    aa=bb=cc=0;
+    
+    if(p->gcparaco4[n][3]==3 || p->gcparaco4[n][4]==3)
+    bb=-1;
+    
+    if(p->gcparaco4[n][3]==2 || p->gcparaco4[n][4]==2)
+    bb=1;
+    
+    if(p->gcparaco4[n][3]==5 || p->gcparaco4[n][4]==5)
+    cc=-1;
+    
+    if(p->gcparaco4[n][3]==6 || p->gcparaco4[n][4]==6)
+    cc=1;
+    
+    sidesum= fabs(aa) + fabs(bb) + fabs(cc);
+    
+        val = f(i+1,j,k);
+        factor = 1.0/double(p->gcparaco4[n][5]);
+        
         denom = 1.0e20;
         
-		if(double(p->gcparaco4[n][5])==1)
-		denom = 1.0;
-		
-		if(double(p->gcparaco4[n][5])==2)
-		denom = 2.0;
-		
-		if(double(p->gcparaco4[n][5])==3)
-		denom = 3.0;
-		
-		
-		if(sidesum==1)
-		{
-			if(bb==-1)
-			{
-			eta(i,j,k-1) += 0.125*factor*val;
-			eta(i,j,k)   += 0.125*factor*val;
-			}
-			
-			if(bb==1)
-			{
-			eta(i,j-1,k-1) += 0.125*factor*val;
-			eta(i,j-1,k)   += 0.125*factor*val;
-			}
-			
-			if(cc==-1)
-			{
-			eta(i,j,k) 		+= 0.125*factor*val;
-			eta(i,j-1,k)    += 0.125*factor*val;
-			}
-			
-			if(cc==1)
-			{
-			eta(i,j,k-1) 	+= 0.125*factor*val;
-			eta(i,j-1,k-1)  += 0.125*factor*val;
-			}
-		}
-		
-		if(sidesum==2)
-		{
-			if(bb==-1 && cc==-1)
-			eta(i,j,k) += 0.125*val/denom;
-			
-			if(bb==-1 && cc==1)
-			eta(i,j,k-1) += 0.125*val/denom;
-			
-			if(bb==1 && cc==-1)
-			eta(i,j-1,k) += 0.125*val/denom;
-			
-			if(bb==1 && cc==1)
-			eta(i,j-1,k-1) += 0.125*val/denom;
-		}
+        if(double(p->gcparaco4[n][5])==1)
+        denom = 1.0;
+        
+        if(double(p->gcparaco4[n][5])==2)
+        denom = 2.0;
+        
+        if(double(p->gcparaco4[n][5])==3)
+        denom = 3.0;
+        
+        
+        if(sidesum==1)
+        {
+            if(bb==-1)
+            {
+            eta(i,j,k-1) += 0.125*factor*val;
+            eta(i,j,k)   += 0.125*factor*val;
+            }
+            
+            if(bb==1)
+            {
+            eta(i,j-1,k-1) += 0.125*factor*val;
+            eta(i,j-1,k)   += 0.125*factor*val;
+            }
+            
+            if(cc==-1)
+            {
+            eta(i,j,k)         += 0.125*factor*val;
+            eta(i,j-1,k)    += 0.125*factor*val;
+            }
+            
+            if(cc==1)
+            {
+            eta(i,j,k-1)     += 0.125*factor*val;
+            eta(i,j-1,k-1)  += 0.125*factor*val;
+            }
+        }
+        
+        if(sidesum==2)
+        {
+            if(bb==-1 && cc==-1)
+            eta(i,j,k) += 0.125*val/denom;
+            
+            if(bb==-1 && cc==1)
+            eta(i,j,k-1) += 0.125*val/denom;
+            
+            if(bb==1 && cc==-1)
+            eta(i,j-1,k) += 0.125*val/denom;
+            
+            if(bb==1 && cc==1)
+            eta(i,j-1,k-1) += 0.125*val/denom;
+        }
     }
-	
-	
-	// 3
-	for(n=0;n<p->gcparaco3_count;++n)
+    
+    
+    // 3
+    for(n=0;n<p->gcparaco3_count;++n)
     {
     i=p->gcparaco3[n][0];
     j=p->gcparaco3[n][1];
     k=p->gcparaco3[n][2];
-	
-	aa=bb=cc=0;
-	
-	if(p->gcparaco3[n][3]==1 || p->gcparaco3[n][4]==1)
-	aa=-1;
-	
-	if(p->gcparaco3[n][3]==4 || p->gcparaco3[n][4]==4)
-	aa=1;
-	
-	if(p->gcparaco3[n][3]==5 || p->gcparaco3[n][4]==5)
-	cc=-1;
-	
-	if(p->gcparaco3[n][3]==6 || p->gcparaco3[n][4]==6)
-	cc=1;
-	
-	sidesum= fabs(aa) + fabs(bb) + fabs(cc);
-	
-		val = f(i,j-1,k);
-		factor = 1.0/double(p->gcparaco3[n][5]);
-		
+    
+    aa=bb=cc=0;
+    
+    if(p->gcparaco3[n][3]==1 || p->gcparaco3[n][4]==1)
+    aa=-1;
+    
+    if(p->gcparaco3[n][3]==4 || p->gcparaco3[n][4]==4)
+    aa=1;
+    
+    if(p->gcparaco3[n][3]==5 || p->gcparaco3[n][4]==5)
+    cc=-1;
+    
+    if(p->gcparaco3[n][3]==6 || p->gcparaco3[n][4]==6)
+    cc=1;
+    
+    sidesum= fabs(aa) + fabs(bb) + fabs(cc);
+    
+        val = f(i,j-1,k);
+        factor = 1.0/double(p->gcparaco3[n][5]);
+        
         denom = 1.0e20;
         
-		if(double(p->gcparaco3[n][5])==1)
-		denom = 1.0;
-		
-		if(double(p->gcparaco3[n][5])==2)
-		denom = 2.0;
-		
-		if(double(p->gcparaco3[n][5])==3)
-		denom = 3.0;
-		
-		if(sidesum==1)
-		{
-			if(aa==-1)
-			{
-			eta(i,j-1,k-1) += 0.125*factor*val;
-			eta(i,j-1,k)   += 0.125*factor*val;
-			}
-			
-			if(aa==1)
-			{
-			eta(i-1,j-1,k-1) += 0.125*factor*val;
-			eta(i-1,j-1,k)   += 0.125*factor*val;
-			}
-			
-			if(cc==-1)
-			{
-			eta(i,j-1,k) 	+= 0.125*factor*val;
-			eta(i-1,j-1,k)   += 0.125*factor*val;
-			}
-			
-			if(cc==1)
-			{
-			eta(i,j-1,k-1) += 0.125*factor*val;
-			eta(i-1,j-1,k-1) += 0.125*factor*val;
-			}
-		}
-		
-		if(sidesum==2)
-		{
-			if(aa==-1 && cc==-1)
-			eta(i,j-1,k) += 0.125*val/denom;
-			
-			if(aa==-1 && cc==1)
-			eta(i,j-1,k-1) += 0.125*val/denom;
-			
-			if(aa==1 && cc==-1)
-			eta(i-1,j-1,k) += 0.125*val/denom;
-			
-			if(aa==1 && cc==1)
-			eta(i-1,j-1,k-1) += 0.125*val/denom;
-		}
+        if(double(p->gcparaco3[n][5])==1)
+        denom = 1.0;
+        
+        if(double(p->gcparaco3[n][5])==2)
+        denom = 2.0;
+        
+        if(double(p->gcparaco3[n][5])==3)
+        denom = 3.0;
+        
+        if(sidesum==1)
+        {
+            if(aa==-1)
+            {
+            eta(i,j-1,k-1) += 0.125*factor*val;
+            eta(i,j-1,k)   += 0.125*factor*val;
+            }
+            
+            if(aa==1)
+            {
+            eta(i-1,j-1,k-1) += 0.125*factor*val;
+            eta(i-1,j-1,k)   += 0.125*factor*val;
+            }
+            
+            if(cc==-1)
+            {
+            eta(i,j-1,k)     += 0.125*factor*val;
+            eta(i-1,j-1,k)   += 0.125*factor*val;
+            }
+            
+            if(cc==1)
+            {
+            eta(i,j-1,k-1) += 0.125*factor*val;
+            eta(i-1,j-1,k-1) += 0.125*factor*val;
+            }
+        }
+        
+        if(sidesum==2)
+        {
+            if(aa==-1 && cc==-1)
+            eta(i,j-1,k) += 0.125*val/denom;
+            
+            if(aa==-1 && cc==1)
+            eta(i,j-1,k-1) += 0.125*val/denom;
+            
+            if(aa==1 && cc==-1)
+            eta(i-1,j-1,k) += 0.125*val/denom;
+            
+            if(aa==1 && cc==1)
+            eta(i-1,j-1,k-1) += 0.125*val/denom;
+        }
     }
-	
-	// 2
-	for(n=0;n<p->gcparaco2_count;++n)
+    
+    // 2
+    for(n=0;n<p->gcparaco2_count;++n)
     {
     i=p->gcparaco2[n][0];
     j=p->gcparaco2[n][1];
     k=p->gcparaco2[n][2];
-	
-	aa=bb=cc=0;
-	
-	if(p->gcparaco2[n][3]==1 || p->gcparaco2[n][4]==1)
-	aa=-1;
-	
-	if(p->gcparaco2[n][3]==4 || p->gcparaco2[n][4]==4)
-	aa=1;
-	
-	if(p->gcparaco2[n][3]==5 || p->gcparaco2[n][4]==5)
-	cc=-1;
-	
-	if(p->gcparaco2[n][3]==6 || p->gcparaco2[n][4]==6)
-	cc=1;
-	
-	sidesum= fabs(aa) + fabs(bb) + fabs(cc);
-	
-		val = f(i,j+1,k);
-		factor = 1.0/double(p->gcparaco2[n][5]);
-		
+    
+    aa=bb=cc=0;
+    
+    if(p->gcparaco2[n][3]==1 || p->gcparaco2[n][4]==1)
+    aa=-1;
+    
+    if(p->gcparaco2[n][3]==4 || p->gcparaco2[n][4]==4)
+    aa=1;
+    
+    if(p->gcparaco2[n][3]==5 || p->gcparaco2[n][4]==5)
+    cc=-1;
+    
+    if(p->gcparaco2[n][3]==6 || p->gcparaco2[n][4]==6)
+    cc=1;
+    
+    sidesum= fabs(aa) + fabs(bb) + fabs(cc);
+    
+        val = f(i,j+1,k);
+        factor = 1.0/double(p->gcparaco2[n][5]);
+        
         denom = 1.0e20;
         
-		if(double(p->gcparaco2[n][5])==1)
-		denom = 1.0;
-		
-		if(double(p->gcparaco2[n][5])==2)
-		denom = 2.0;
-		
-		if(double(p->gcparaco2[n][5])==3)
-		denom = 3.0;
-		
-		
-		if(sidesum==1)
-		{
-			if(aa==-1)
-			{
-			eta(i,j,k-1) += 0.125*factor*val;
-			eta(i,j,k)   += 0.125*factor*val;
-			}
-			
-			if(aa==1)
-			{
-			eta(i-1,j,k-1) += 0.125*factor*val;
-			eta(i-1,j,k)   += 0.125*factor*val;
-			}
-			
-			if(cc==-1)
-			{
-			eta(i,j,k) 		+= 0.125*factor*val;
-			eta(i-1,j,k)    += 0.125*factor*val;
-			}
-			
-			if(cc==1)
-			{
-			eta(i,j,k-1) += 0.125*factor*val;
-			eta(i-1,j,k-1) += 0.125*factor*val;
-			}
-		}
-		
-		if(sidesum==2)
-		{
-			if(aa==-1 && cc==-1)
-			eta(i,j,k) += 0.125*val/denom;
-			
-			if(aa==-1 && cc==1)
-			eta(i,j,k-1) += 0.125*val/denom;
-			
-			if(aa==1 && cc==-1)
-			eta(i-1,j,k) += 0.125*val/denom;
-			
-			if(aa==1 && cc==1)
-			eta(i-1,j,k-1) += 0.125*val/denom;
-		}
+        if(double(p->gcparaco2[n][5])==1)
+        denom = 1.0;
+        
+        if(double(p->gcparaco2[n][5])==2)
+        denom = 2.0;
+        
+        if(double(p->gcparaco2[n][5])==3)
+        denom = 3.0;
+        
+        
+        if(sidesum==1)
+        {
+            if(aa==-1)
+            {
+            eta(i,j,k-1) += 0.125*factor*val;
+            eta(i,j,k)   += 0.125*factor*val;
+            }
+            
+            if(aa==1)
+            {
+            eta(i-1,j,k-1) += 0.125*factor*val;
+            eta(i-1,j,k)   += 0.125*factor*val;
+            }
+            
+            if(cc==-1)
+            {
+            eta(i,j,k)         += 0.125*factor*val;
+            eta(i-1,j,k)    += 0.125*factor*val;
+            }
+            
+            if(cc==1)
+            {
+            eta(i,j,k-1) += 0.125*factor*val;
+            eta(i-1,j,k-1) += 0.125*factor*val;
+            }
+        }
+        
+        if(sidesum==2)
+        {
+            if(aa==-1 && cc==-1)
+            eta(i,j,k) += 0.125*val/denom;
+            
+            if(aa==-1 && cc==1)
+            eta(i,j,k-1) += 0.125*val/denom;
+            
+            if(aa==1 && cc==-1)
+            eta(i-1,j,k) += 0.125*val/denom;
+            
+            if(aa==1 && cc==1)
+            eta(i-1,j,k-1) += 0.125*val/denom;
+        }
     }
-	
-	
-	// 5
-	for(n=0;n<p->gcparaco5_count;++n)
+    
+    
+    // 5
+    for(n=0;n<p->gcparaco5_count;++n)
     {
     i=p->gcparaco5[n][0];
     j=p->gcparaco5[n][1];
     k=p->gcparaco5[n][2];
-	
-	aa=bb=cc=0;
-	
-	if(p->gcparaco5[n][3]==1 || p->gcparaco5[n][4]==1)
-	aa=-1;
-	
-	if(p->gcparaco5[n][3]==4 || p->gcparaco5[n][4]==4)
-	aa=1;
-	
-	if(p->gcparaco5[n][3]==3 || p->gcparaco5[n][4]==3)
-	bb=-1;
-	
-	if(p->gcparaco5[n][3]==2 || p->gcparaco5[n][4]==2)
-	bb=1;
-	
-	sidesum= fabs(aa) + fabs(bb) + fabs(cc);
-	
-		val = f(i,j,k-1);
-		factor = 1.0/double(p->gcparaco5[n][5]);
-		
+    
+    aa=bb=cc=0;
+    
+    if(p->gcparaco5[n][3]==1 || p->gcparaco5[n][4]==1)
+    aa=-1;
+    
+    if(p->gcparaco5[n][3]==4 || p->gcparaco5[n][4]==4)
+    aa=1;
+    
+    if(p->gcparaco5[n][3]==3 || p->gcparaco5[n][4]==3)
+    bb=-1;
+    
+    if(p->gcparaco5[n][3]==2 || p->gcparaco5[n][4]==2)
+    bb=1;
+    
+    sidesum= fabs(aa) + fabs(bb) + fabs(cc);
+    
+        val = f(i,j,k-1);
+        factor = 1.0/double(p->gcparaco5[n][5]);
+        
         denom = 1.0e20;
         
-		if(double(p->gcparaco5[n][5])==1)
-		denom = 1.0;
-		
-		if(double(p->gcparaco5[n][5])==2)
-		denom = 2.0;
-		
-		if(double(p->gcparaco5[n][5])==3)
-		denom = 3.0;
-		
-		if(sidesum==1)
-		{
-			if(aa==-1)
-			{
-			eta(i,j-1,k-1) 	+= 0.125*factor*val;
-			eta(i,j,k-1)   += 0.125*factor*val;
-			}
-			
-			if(aa==1)
-			{
-			eta(i-1,j-1,k-1) += 0.125*factor*val;
-			eta(i-1,j,k-1)   += 0.125*factor*val;
-			}
-			
-			if(bb==-1)
-			{
-			eta(i,j,k-1) 	+= 0.125*factor*val;
-			eta(i-1,j,k-1)   += 0.125*factor*val;
-			}
-			
-			if(bb==1)
-			{
-			eta(i,j-1,k-1) += 0.125*factor*val;
-			eta(i-1,j-1,k-1) += 0.125*factor*val;
-			}
-			
-		}
-		
-		if(sidesum==2)
-		{
-			if(aa==-1 && bb==-1)
-			eta(i,j,k-1) += 0.125*val/denom;
-			
-			if(aa==-1 && bb==1)
-			eta(i,j-1,k-1) += 0.125*val/denom;
-			
-			if(aa==1 && bb==-1)
-			eta(i-1,j,k-1) += 0.125*val/denom;
-			
-			if(aa==1 && bb==1)
-			eta(i-1,j-1,k-1) += 0.125*val/denom;
-		}
+        if(double(p->gcparaco5[n][5])==1)
+        denom = 1.0;
+        
+        if(double(p->gcparaco5[n][5])==2)
+        denom = 2.0;
+        
+        if(double(p->gcparaco5[n][5])==3)
+        denom = 3.0;
+        
+        if(sidesum==1)
+        {
+            if(aa==-1)
+            {
+            eta(i,j-1,k-1)     += 0.125*factor*val;
+            eta(i,j,k-1)   += 0.125*factor*val;
+            }
+            
+            if(aa==1)
+            {
+            eta(i-1,j-1,k-1) += 0.125*factor*val;
+            eta(i-1,j,k-1)   += 0.125*factor*val;
+            }
+            
+            if(bb==-1)
+            {
+            eta(i,j,k-1)     += 0.125*factor*val;
+            eta(i-1,j,k-1)   += 0.125*factor*val;
+            }
+            
+            if(bb==1)
+            {
+            eta(i,j-1,k-1) += 0.125*factor*val;
+            eta(i-1,j-1,k-1) += 0.125*factor*val;
+            }
+            
+        }
+        
+        if(sidesum==2)
+        {
+            if(aa==-1 && bb==-1)
+            eta(i,j,k-1) += 0.125*val/denom;
+            
+            if(aa==-1 && bb==1)
+            eta(i,j-1,k-1) += 0.125*val/denom;
+            
+            if(aa==1 && bb==-1)
+            eta(i-1,j,k-1) += 0.125*val/denom;
+            
+            if(aa==1 && bb==1)
+            eta(i-1,j-1,k-1) += 0.125*val/denom;
+        }
     }
-	
-	// 6
-	for(n=0;n<p->gcparaco6_count;++n)
+    
+    // 6
+    for(n=0;n<p->gcparaco6_count;++n)
     {
     i=p->gcparaco6[n][0];
     j=p->gcparaco6[n][1];
     k=p->gcparaco6[n][2];
-	
-	aa=bb=cc=0;
-	
-	if(p->gcparaco6[n][3]==1 || p->gcparaco6[n][4]==1)
-	aa=-1;
-	
-	if(p->gcparaco6[n][3]==4 || p->gcparaco6[n][4]==4)
-	aa=1;
-	
-	if(p->gcparaco6[n][3]==3 || p->gcparaco6[n][4]==3)
-	bb=-1;
-	
-	if(p->gcparaco6[n][3]==2 || p->gcparaco6[n][4]==2)
-	bb=1;
-	
-	sidesum= fabs(aa) + fabs(bb) + fabs(cc);
-		
-		val = f(i,j,k+1);
-		
-		
-		factor = 1.0/double(p->gcparaco6[n][5]);
-		
+    
+    aa=bb=cc=0;
+    
+    if(p->gcparaco6[n][3]==1 || p->gcparaco6[n][4]==1)
+    aa=-1;
+    
+    if(p->gcparaco6[n][3]==4 || p->gcparaco6[n][4]==4)
+    aa=1;
+    
+    if(p->gcparaco6[n][3]==3 || p->gcparaco6[n][4]==3)
+    bb=-1;
+    
+    if(p->gcparaco6[n][3]==2 || p->gcparaco6[n][4]==2)
+    bb=1;
+    
+    sidesum= fabs(aa) + fabs(bb) + fabs(cc);
+        
+        val = f(i,j,k+1);
+        
+        
+        factor = 1.0/double(p->gcparaco6[n][5]);
+        
         denom = 1.0e20;
         
-		if(double(p->gcparaco6[n][5])==1)
-		denom = 1.0;
-		
-		if(double(p->gcparaco6[n][5])==2)
-		denom = 2.0;
-		
-		if(double(p->gcparaco6[n][5])==3)
-		denom = 3.0;
-		
-		if(sidesum==1)
-		{
-			if(aa==-1)
-			{
-			eta(i,j-1,k) += 0.125*factor*val;
-			eta(i,j,k)   += 0.125*factor*val;
-			}
-			
-			if(aa==1)
-			{
-			eta(i-1,j-1,k) += 0.125*factor*val;
-			eta(i-1,j,k)   += 0.125*factor*val;
-			}
-			
-			if(bb==-1)
-			{
-			eta(i,j,k) 	   += 0.125*factor*val;
-			eta(i-1,j,k)   += 0.125*factor*val;
-			}
-			
-			if(bb==1)
-			{
-			eta(i,j-1,k) += 0.125*factor*val;
-			eta(i-1,j-1,k) += 0.125*factor*val;
-			}
-		}
-		
-		if(sidesum==2)
-		{
-			if(aa==-1 && bb==-1)
-			eta(i,j,k) += 0.125*val/denom;
-			
-			if(aa==-1 && bb==1)
-			eta(i,j-1,k) += 0.125*val/denom;
-			
-			if(aa==1 && bb==-1)
-			eta(i-1,j,k) += 0.125*val/denom;
-			
-			if(aa==1 && bb==1)
-			eta(i-1,j-1,k) += 0.125*val/denom;
-		}
+        if(double(p->gcparaco6[n][5])==1)
+        denom = 1.0;
+        
+        if(double(p->gcparaco6[n][5])==2)
+        denom = 2.0;
+        
+        if(double(p->gcparaco6[n][5])==3)
+        denom = 3.0;
+        
+        if(sidesum==1)
+        {
+            if(aa==-1)
+            {
+            eta(i,j-1,k) += 0.125*factor*val;
+            eta(i,j,k)   += 0.125*factor*val;
+            }
+            
+            if(aa==1)
+            {
+            eta(i-1,j-1,k) += 0.125*factor*val;
+            eta(i-1,j,k)   += 0.125*factor*val;
+            }
+            
+            if(bb==-1)
+            {
+            eta(i,j,k)        += 0.125*factor*val;
+            eta(i-1,j,k)   += 0.125*factor*val;
+            }
+            
+            if(bb==1)
+            {
+            eta(i,j-1,k) += 0.125*factor*val;
+            eta(i-1,j-1,k) += 0.125*factor*val;
+            }
+        }
+        
+        if(sidesum==2)
+        {
+            if(aa==-1 && bb==-1)
+            eta(i,j,k) += 0.125*val/denom;
+            
+            if(aa==-1 && bb==1)
+            eta(i,j-1,k) += 0.125*val/denom;
+            
+            if(aa==1 && bb==-1)
+            eta(i-1,j,k) += 0.125*val/denom;
+            
+            if(aa==1 && bb==1)
+            eta(i-1,j-1,k) += 0.125*val/denom;
+        }
     }
-	
-	
-	//----------------------------------------------------------------
-	// DGC
+    
+    
+    //----------------------------------------------------------------
+    // DGC
     int di,dj,dk;
     int dii,djj,dkk;
 

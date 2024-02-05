@@ -37,23 +37,23 @@ Author: Hans Bihs
 #include"cart4a.h"
 
 void driver::makegrid(lexer *p, ghostcell *pgc)
-{	
-	mgc1 m1(p);
-	mgc2 m2(p);
-	mgc3 m3(p);
-	mgc4 m4(p);
-	mgc4a m4a(p);
+{    
+    mgc1 m1(p);
+    mgc2 m2(p);
+    mgc3 m3(p);
+    mgc4 m4(p);
+    mgc4a m4a(p);
     mgc6 m6(p);
     
-	pgc->flagx(p,p->flag1);
+    pgc->flagx(p,p->flag1);
     pgc->flagx(p,p->flag2);
     pgc->flagx(p,p->flag3);
     pgc->flagx(p,p->flag4);
     pgc->flagx(p,p->flag);
-	pgc->gcxupdate(p);
+    pgc->gcxupdate(p);
     
 
-	m1.makemgc(p);
+    m1.makemgc(p);
     m1.fillgcb(p);
     m1.extragcb(p);
     m1.mgcsetup(p);
@@ -78,7 +78,7 @@ void driver::makegrid(lexer *p, ghostcell *pgc)
     m4.mgcsetup(p);
     m4.fillmgc(p);
     m4.gcdirfill(p);
-	m4.gcsidefill(p);
+    m4.gcsidefill(p);
     
     m4a.makemgc(p);
     m4a.fillgcb(p);
@@ -91,11 +91,11 @@ void driver::makegrid(lexer *p, ghostcell *pgc)
     m6.fillmgc(p);
     m6.gcdirfill(p);
     
-	m1.make_ggc(p);
+    m1.make_ggc(p);
     m1.fill_ggc(p);
-	m2.make_ggc(p);
+    m2.make_ggc(p);
     m2.fill_ggc(p);
-	m3.make_ggc(p);
+    m3.make_ggc(p);
     m3.fill_ggc(p);
     m4.make_ggc(p);
     m4.fill_ggc(p);
@@ -114,13 +114,13 @@ void driver::makegrid(lexer *p, ghostcell *pgc)
     
     p->vecsize(pgc);
 }
-	
+    
 void driver::makegrid_cds()
-{	
-	pgc->sizeM_update(p,a);
+{    
+    pgc->sizeM_update(p,a);
     
     pgc->column_pt4_update(p,a);
     pgc->column_pt4a_update(p,a);
     pgc->column_pt6_update(p,a);
 }
-	
+    
