@@ -31,7 +31,7 @@ using namespace std;
 #ifndef DATA_VOID_H_
 #define DATA_VOID_H_
 
-class data_void : public data
+class data_void : public data_b
 {
 public:
 	data_void(lexer*, fdm*, ghostcell*);

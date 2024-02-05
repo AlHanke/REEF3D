@@ -31,7 +31,7 @@ class ghostcell;
 
 using namespace std;
 
-class data
+class data_b
 {
 
 public:
