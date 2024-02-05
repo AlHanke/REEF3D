@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Tobias Martin
 --------------------------------------------------------------------*/
-#include"VOF_PLIC.h"
+
+#include"VOF_PLIC.h"
 #include"gradient.h"
 #include"lexer.h"
 #include"fdm.h"
@@ -104,7 +105,7 @@ void VOF_PLIC::redistance
 								{ 
 									//- Calculate closest point on boundary of 
 									//- interface segment
-									//calcSegmentPoint
+									calcSegmentPoint
 									(
 										a, p, xp, yp, zp, ip, jp, kp, changedFlag
 									);
@@ -289,7 +290,8 @@ int VOF_PLIC::calcBoundaryPoint
 			changedFlag(ip,jp,kp) = 1; 
 			
 			return 0;
-		}    
+		}
+		return 1;  
 	}
 	else
 	{

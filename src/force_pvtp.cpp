@@ -165,7 +165,7 @@ void force::piecename(lexer* p, fdm* a,  ghostcell* pgc, int n)
 		sprintf(pname,"REEF3D-SOLID-0%i-%i-000%i.vtp",num,ID,n+1);
 
 		if(num>99999)
-		sprintf(pname,"REEF3D-SOLID-%i-000%i.vtp",num,ID,n+1);
+		sprintf(pname,"REEF3D-SOLID-%i-%i-000%i.vtp",num,ID,n+1);
 	}
 	if(n<999&&n>98)
 	{
@@ -212,22 +212,22 @@ void force::piecename(lexer* p, fdm* a,  ghostcell* pgc, int n)
 	if(n>9998)
 	{
 		if(num<10)
-		sprintf(pname,"REEF3D-SOLID-00000%i-%i.vtp",num,ID,n+1);
+		sprintf(pname,"REEF3D-SOLID-00000%i-%i-%i.vtp",num,ID,n+1);
 
 		if(num<100&&num>9)
-		sprintf(pname,"REEF3D-SOLID-0000%i-%i.vtp",num,ID,n+1);
+		sprintf(pname,"REEF3D-SOLID-0000%i-%i-%i.vtp",num,ID,n+1);
 
 		if(num<1000&&num>99)
-		sprintf(pname,"REEF3D-SOLID-000%i-%i.vtp",num,ID,n+1);
+		sprintf(pname,"REEF3D-SOLID-000%i-%i-%i.vtp",num,ID,n+1);
 
 		if(num<10000&&num>999)
-		sprintf(pname,"REEF3D-SOLID-00%i-%i.vtp",num,ID,n+1);
+		sprintf(pname,"REEF3D-SOLID-00%i-%i-%i.vtp",num,ID,n+1);
 
 		if(num<100000&&num>9999)
-		sprintf(pname,"REEF3D-SOLID-0%i-%i.vtp",num,ID,n+1);
+		sprintf(pname,"REEF3D-SOLID-0%i-%i-%i.vtp",num,ID,n+1);
 
 		if(num>99999)
-		sprintf(pname,"REEF3D-SOLID-%i-%i.vtp",num,ID,n+1);
+		sprintf(pname,"REEF3D-SOLID-%i-%i-%i.vtp",num,ID,n+1);
 	}
 
 

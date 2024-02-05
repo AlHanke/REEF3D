@@ -40,7 +40,7 @@ Author: Hans Bihs
 momentum_RK3::momentum_RK3(lexer *p, fdm *a, convection *pconvection, diffusion *pdiffusion, pressure* ppressure, poisson* ppoisson,
                                                     turbulence *pturbulence, onephase *pponeph, solver *psolver, solver *ppoissonsolver, 
                                                     ioflow *pioflow, fsi *ppfsi)
-                                                    momentum_forcing(p),bcmom(p),udiff(p),urk1(p),fx(p)
+                                                    :momentum_forcing(p),bcmom(p),udiff(p),urk1(p),fx(p)
 													,vdiff(p),vrk1(p),fy(p)
 													,wdiff(p),wrk1(p),fz(p)
 {
