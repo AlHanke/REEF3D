@@ -24,7 +24,7 @@ Author: Hans Bihs
 #define ILOOP	for(i=0; i<p->knox; ++i)
 #define JLOOP	for(j=0; j<p->knoy; ++j)
 #define KLOOP 	for(k=0; k<p->knoz; ++k)
-#define PCHECK  if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]>0)
+// #define PCHECK  if(p->flag4[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]>0)
 #define LOOP ILOOP JLOOP KLOOP PCHECK
 
 
