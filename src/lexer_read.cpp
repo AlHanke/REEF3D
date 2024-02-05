@@ -34,13 +34,13 @@ void lexer::lexer_read(ghostcell *pgc)
     Iarray(ictrl,ctrlsize);
     Darray(dctrl,ctrlsize);
     
-		if(mpirank==0)
-		ctrlsend();
+	if(mpirank==0)
+	ctrlsend();
 		
-		pgc->globalctrl(this);
+	pgc->globalctrl(this);
 		
-		if(mpirank>0)
-		ctrlrecv();
+	if(mpirank>0)
+	ctrlrecv();
     
     del_Iarray(ictrl,ctrlsize);
     del_Darray(dctrl,ctrlsize);

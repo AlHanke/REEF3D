@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"net.h"
 
 vrans_net::vrans_net(lexer *p, ghostcell *pgc) 
-: Fx_net(p), Fy_net(p), Fz_net(p),kernel_x(p), kernel_y(p), kernel_z(p)
+: Fx_net(p), kernel_x(p), Fy_net(p), kernel_y(p), Fz_net(p), kernel_z(p)
 {
     //initialize(p,a,pgc);
 }
@@ -74,7 +74,7 @@ void vrans_net::start(lexer *p, fdm *a, ghostcell *pgc, net *&ppnet, int nNet)
     }
     
 
-    for (int pI = 0; pI < lagrangePoints.size(); pI++)
+    for (unsigned int pI = 0; pI < lagrangePoints.size(); pI++)
     {
         const Eigen::Vector3d& forcesI = lagrangeForces[pI];
         
@@ -188,7 +188,7 @@ void vrans_net::distributeNetForces_x(lexer *p, fdm *a, ghostcell *pgc, net *&pp
     }
 
 
-    for (int pI = 0; pI < lagrangePoints.size(); pI++)
+    for (unsigned int pI = 0; pI < lagrangePoints.size(); pI++)
     {
         const Eigen::Vector3d& forcesI = lagrangeForces[pI];
         const Eigen::Vector3d& coordI = lagrangePoints[pI];
@@ -248,7 +248,7 @@ void vrans_net::distributeNetForces_y(lexer *p, fdm *a, ghostcell *pgc, net *&pp
         }        
     }
     
-    for (int pI = 0; pI < lagrangePoints.size(); pI++)
+    for (unsigned int pI = 0; pI < lagrangePoints.size(); pI++)
     {
         const Eigen::Vector3d& forcesI = lagrangeForces[pI];
         const Eigen::Vector3d& coordI = lagrangePoints[pI];
@@ -307,7 +307,7 @@ void vrans_net::distributeNetForces_z(lexer *p, fdm *a, ghostcell *pgc, net *&pp
         }        
     }
     
-    for (int pI = 0; pI < lagrangePoints.size(); pI++)
+    for (unsigned int pI = 0; pI < lagrangePoints.size(); pI++)
     {
         const Eigen::Vector3d& forcesI = lagrangeForces[pI];
         const Eigen::Vector3d& coordI = lagrangePoints[pI];
