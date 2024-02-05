@@ -35,7 +35,7 @@ class solver;
 using namespace std;
 
 
-class nhflow_poisson : virutal public increment
+class nhflow_poisson : virtual public increment
 {
 
 public:
