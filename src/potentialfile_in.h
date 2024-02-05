@@ -35,7 +35,7 @@ using namespace std;
 #ifndef POTENTIALFILE_IN_H_
 #define POTENTIALFILE_IN_H_
 
-class potentialfile_in : public increment
+class potentialfile_in : virtual public increment
 {
 
 public:

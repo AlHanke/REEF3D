@@ -91,7 +91,7 @@ class particle_base;
 
 using namespace std;
 
-class driver : public increment
+class driver : virtual public increment
 {
 public:
 

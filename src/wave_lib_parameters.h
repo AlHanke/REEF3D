@@ -31,7 +31,7 @@ class ghostcell;
 
 using namespace std;
 
-class wave_lib_parameters : public increment
+class wave_lib_parameters : virtual public increment
 {
 public:
     wave_lib_parameters(lexer*, ghostcell*);

@@ -32,7 +32,7 @@ using namespace std;
 #ifndef PTF_FSFBC_H_
 #define PTF_FSFBC_H_
 
-class ptf_fsfbc : public increment
+class ptf_fsfbc : virtual public increment
 {
 public:
 	ptf_fsfbc(lexer*, fdm*, ghostcell*);

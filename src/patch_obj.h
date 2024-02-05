@@ -32,7 +32,7 @@ using namespace std;
 #ifndef PATCH_OBJ_H_
 #define PATCH_OBJ_H_
 
-class patch_obj : public increment
+class patch_obj : virtual public increment
 {
 public:
 	patch_obj(lexer*,int);

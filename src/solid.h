@@ -34,7 +34,7 @@ using namespace std;
 #ifndef SOLID_H_
 #define SOLID_H_
 
-class solid : public increment
+class solid : virtual public increment
 {
 public:
 	solid(lexer*, fdm*, ghostcell*);

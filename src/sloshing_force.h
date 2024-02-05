@@ -34,7 +34,7 @@ using namespace std;
 #ifndef SLOSHING_FORCE_H_
 #define SLOSHING_FORCE_H_
 
-class sloshing_force : public increment
+class sloshing_force : virtual public increment
 {
 public:
     sloshing_force(lexer*,fdm*,ghostcell*);

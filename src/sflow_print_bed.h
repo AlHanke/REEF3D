@@ -34,7 +34,7 @@ using namespace std;
 #ifndef SFLOW_PRINT_BED_H_
 #define SFLOW_PRINT_BED_H_
 
-class sflow_print_bed : public increment
+class sflow_print_bed : virtual public increment
 {
 public:
     sflow_print_bed(lexer*,fdm2D*);

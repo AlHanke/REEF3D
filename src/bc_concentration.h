@@ -32,7 +32,7 @@ class ghostcell;
 
 using namespace std;
 
-class bc_concentration : public increment
+class bc_concentration : virtual public increment
 {
 public:
 	bc_concentration(lexer*);

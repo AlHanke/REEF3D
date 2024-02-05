@@ -31,7 +31,7 @@ class field;
 
 using namespace std;
 
-class bc_ikepsilon : public increment, public roughness
+class bc_ikepsilon : virtual public increment, public roughness
 {
 public:
 	bc_ikepsilon(lexer*);

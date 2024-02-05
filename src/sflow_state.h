@@ -32,7 +32,7 @@ using namespace std;
 #ifndef SFLOW_STATE_H_
 #define SFLOW_STATE_H_
 
-class sflow_state : public increment
+class sflow_state : virtual public increment
 {
 
 public:

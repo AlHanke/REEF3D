@@ -32,7 +32,7 @@ using namespace std;
 #ifndef PTF_BED_UPDATE_H_
 #define PTF_BED_UPDATE_H_
 
-class ptf_bed_update : public increment
+class ptf_bed_update : virtual public increment
 {
 public:
     ptf_bed_update(lexer*, fdm*, ghostcell*);

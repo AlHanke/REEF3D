@@ -35,7 +35,7 @@ using namespace std;
 #ifndef FLOWFILE_IN_H_
 #define FLOWFILE_IN_H_
 
-class flowfile_in : public increment
+class flowfile_in : virtual public increment
 {
 
 public:

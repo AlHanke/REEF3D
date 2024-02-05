@@ -34,7 +34,7 @@ class ghostcell;
 
 using namespace std;
 
-class benchmark_TaylorGreen : public benchmark, public increment, public gradient
+class benchmark_TaylorGreen : public benchmark, virtual public increment, public gradient
 {
 
 public:

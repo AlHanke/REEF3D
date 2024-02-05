@@ -34,7 +34,7 @@ using namespace std;
 #ifndef FNPF_SIGMA_H_
 #define FNPF_SIGMA_H_
 
-class fnpf_sigma : public increment
+class fnpf_sigma : virtual public increment
 {
 public:
 	fnpf_sigma(lexer*, fdm_fnpf*, ghostcell*);

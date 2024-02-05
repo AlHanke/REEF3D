@@ -34,7 +34,7 @@ Author: Hans Bihs
 
 using namespace std;
 
-class fnpf_discrete_weights : public increment
+class fnpf_discrete_weights : virtual public increment
 {
 public:
 	fnpf_discrete_weights(lexer*);

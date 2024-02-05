@@ -44,7 +44,7 @@ using namespace std;
 #ifndef SFLOW_VTP_FSF_H_
 #define SFLOW_VTP_FSF_H_
 
-class sflow_vtp_fsf : public increment
+class sflow_vtp_fsf : virtual public increment
 {
 public:
 	sflow_vtp_fsf(lexer*,fdm2D*,ghostcell*);

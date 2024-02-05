@@ -36,7 +36,7 @@ using namespace std;
 #ifndef PTF_FSF_UPDATE_H_
 #define PTF_FSF_UPDATE_H_
 
-class ptf_fsf_update : public increment
+class ptf_fsf_update : virtual public increment
 {
 public:
     ptf_fsf_update(lexer*, fdm*, ghostcell*);

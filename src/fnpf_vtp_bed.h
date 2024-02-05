@@ -32,7 +32,7 @@ using namespace std;
 #ifndef FNPF_VTP_BED_H_
 #define FNPF_VTP_BED_H_
 
-class fnpf_vtp_bed : public increment
+class fnpf_vtp_bed : virtual public increment
 {
 public:
 	fnpf_vtp_bed(lexer*,fdm_fnpf*,ghostcell*);

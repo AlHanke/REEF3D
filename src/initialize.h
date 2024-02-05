@@ -34,7 +34,7 @@ class sediment;
 
 using namespace std;
 
-class initialize : public increment, private resize_class
+class initialize : virtual public increment, private resize_class
 {
 
 public:

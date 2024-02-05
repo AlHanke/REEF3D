@@ -39,7 +39,7 @@ class lexer;
 
 using namespace std;
 
-class fdm_nhf : public increment
+class fdm_nhf : virtual public increment
 {
 public:
 

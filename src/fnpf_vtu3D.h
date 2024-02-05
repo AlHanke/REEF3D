@@ -42,7 +42,7 @@ class ioflow;
 
 using namespace std;
 
-class fnpf_vtu3D : public increment
+class fnpf_vtu3D : virtual public increment
 {
 
 public:

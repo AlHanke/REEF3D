@@ -32,7 +32,7 @@ using namespace std;
 #ifndef FNPF_STATE_H_
 #define FNPF_STATE_H_
 
-class fnpf_state : public increment
+class fnpf_state : virtual public increment
 {
 
 public:

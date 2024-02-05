@@ -41,7 +41,7 @@ class ioflow;
 
 using namespace std;
 
-class nhflow_vtu3D : public increment
+class nhflow_vtu3D : virtual public increment
 {
 
 public:

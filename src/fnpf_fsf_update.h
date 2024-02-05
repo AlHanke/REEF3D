@@ -36,7 +36,7 @@ using namespace std;
 #ifndef FNPF_FSF_UPDATE_H_
 #define FNPF_FSF_UPDATE_H_
 
-class fnpf_fsf_update : public increment
+class fnpf_fsf_update : virtual public increment
 {
 public:
     fnpf_fsf_update(lexer*, fdm_fnpf*, ghostcell*);

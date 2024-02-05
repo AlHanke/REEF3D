@@ -33,7 +33,7 @@ using namespace std;
 #ifndef SFLOW_VTP_BED_H_
 #define SFLOW_VTP_BED_H_
 
-class sflow_vtp_bed : public increment
+class sflow_vtp_bed : virtual public increment
 {
 public:
 	sflow_vtp_bed(lexer*,fdm2D*);
