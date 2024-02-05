@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 
-lexer::lexer() : cmu(0.09), position(this), interpolation(this)
+lexer::lexer() : position(this), interpolation(this), cmu(0.09)
 {
     sigT=0.9;
     

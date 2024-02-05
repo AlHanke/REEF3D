@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"rheology_f.h"
 
 multiphase_fluid_update_rheology::multiphase_fluid_update_rheology(lexer *p, fdm* a, ghostcell* pgc) : dx(p->dx),
-												visc3(p->W7),visc2(p->W4),visc1(p->W2),ro3(p->W6),ro2(p->W3),ro1(p->W1)
+												visc3(p->W7),visc2(p->W4),ro1(p->W1),ro2(p->W3),ro3(p->W6),visc1(p->W2)
 {
     gcval_ro=1;
 	gcval_visc=1;

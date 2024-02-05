@@ -26,7 +26,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include"reinidisc_fsf.h"	
 #include"vrans.h"
 
-net_barQuasiStatic::net_barQuasiStatic(int number, lexer *p):nNet(number),f_(p),dt(p),frk1(p),frk2(p),L_(p), cutl(p), cutr(p){}
+net_barQuasiStatic::net_barQuasiStatic(int number, lexer *p):nNet(number),cutl(p), cutr(p),f_(p),frk1(p),frk2(p),L_(p),dt(p) {}
 
 net_barQuasiStatic::~net_barQuasiStatic(){}
 

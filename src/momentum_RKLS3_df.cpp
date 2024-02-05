@@ -52,7 +52,7 @@ momentum_RKLS3_df::momentum_RKLS3_df
     solver *psolver, 
     solver *ppoissonsolver, 
     ioflow *pioflow
-):bcmom(p),urk(p),vrk(p),wrk(p),Cu(p),Cv(p),Cw(p),Du(p),Dv(p),Dw(p),fx(p),fy(p),fz(p)
+):bcmom(p),urk(p),Cu(p),Du(p),fx(p),vrk(p),Cv(p),Dv(p),fy(p),wrk(p),Cw(p),Dw(p),fz(p)
 {
 	gcval_u=10;
 	gcval_v=11;

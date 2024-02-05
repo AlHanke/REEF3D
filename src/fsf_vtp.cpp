@@ -28,7 +28,7 @@ Author: Hans Bihs
 #include<sys/stat.h>
 #include<sys/types.h>
 
-fsf_vtp::fsf_vtp(lexer* p, fdm *a, ghostcell *pgc):nodefill(p),vertice(p),nodeflag(p),eta(p),interfac(1.6),zero(0.0)
+fsf_vtp::fsf_vtp(lexer* p, fdm *a, ghostcell *pgc):nodefill(p),zero(0.0),interfac(1.6),vertice(p),nodeflag(p),eta(p)
 {
 	// Create Folder
 	if(p->mpirank==0 && p->P14==1)

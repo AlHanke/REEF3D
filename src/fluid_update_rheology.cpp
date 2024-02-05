@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"rheology_f.h"
 
 fluid_update_rheology::fluid_update_rheology(lexer *p, fdm* a) : dx(p->DXM),
-												visc2(p->W4),ro2(p->W3),ro1(p->W1)
+												ro1(p->W1),visc2(p->W4),ro2(p->W3)
 {
     gcval_ro=1;
 	gcval_visc=1;

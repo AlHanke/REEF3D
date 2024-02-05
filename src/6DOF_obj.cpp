@@ -26,10 +26,10 @@ Author: Tobias Martin
 #include"ghostcell.h"
 #include"reinidisc_fsf.h"
 
-sixdof_obj::sixdof_obj(lexer *p, ghostcell *pgc,int number) : gradient(p), dt(p), L(p), 
-                                                                                f(p), frk1(p), cutl(p), cutr(p), 
-                                                                                fbio(p),n6DOF(number),
-                                                                                epsifb(1.6*p->DXM), epsi(1.6)
+sixdof_obj::sixdof_obj(lexer *p, ghostcell *pgc,int number) : gradient(p), cutl(p), cutr(p),
+                                                              fbio(p),epsifb(1.6*p->DXM), epsi(1.6),
+                                                              f(p), frk1(p), L(p), dt(p),
+                                                              n6DOF(number)
 {
     prdisc = new reinidisc_fsf(p);
     

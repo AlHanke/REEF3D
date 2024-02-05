@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include"solver.h"
 #include"fluid_update_fsf_heat.h"
 
-heat_AB::heat_AB(lexer* p, fdm* a, ghostcell *pgc, heat *&pheat) : bcheat(p), heat_print(p,a), tab(p), thermdiff(p)
+heat_AB::heat_AB(lexer* p, fdm* a, ghostcell *pgc, heat *&pheat) : bcheat(p), heat_print(p,a), thermdiff(p), tab(p)
 {
 	gcval_heat=80;
 }

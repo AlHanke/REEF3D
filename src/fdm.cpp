@@ -34,13 +34,15 @@ fdm::fdm(lexer *p)
 			ro(p),visc(p),
 			phi(p),vof(p),
 			conc(p),
+			test(p),
             topo(p),solid(p),
-            test(p),
-			fb(p),fbh1(p),fbh2(p),fbh3(p),fbh4(p),fbh5(p),porosity(p),
-			walld(p),
-			nodeval(p),nodeval2D(p),etaloc(p),
+			fb(p),
+			porosity(p),walld(p),
+			nodeval(p),nodeval2D(p),
+			fbh1(p),fbh2(p),fbh3(p),fbh4(p),fbh5(p),
+			
             eta(p),eta_n(p),depth(p),
-            Fifsf(p),K(p),
+            Fifsf(p),K(p),etaloc(p),
             P(p),Q(p),bed(p),
             rhsvec(p),M(p)
             

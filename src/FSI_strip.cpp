@@ -24,7 +24,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include"fdm.h"
 #include"ghostcell.h"
 
-fsi_strip::fsi_strip(int num):nstrip(num),beam(num){}
+fsi_strip::fsi_strip(int num):beam(num),nstrip(num){}
     
 fsi_strip::~fsi_strip(){}
 

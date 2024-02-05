@@ -25,22 +25,20 @@ Author: Hans Bihs
 
 fdm2D::fdm2D(lexer *p)
 			:eta(p),eta_n(p),
-            P(p),Pn(p),Q(p),Qn(p),
-            F(p),G(p),L(p),
+            P(p),Pn(p),F(p),
+            Q(p),Qn(p),G(p),L(p),
             ws(p),
             press(p),
             eddyv(p),kin(p),eps(p),
+            hx(p),hy(p),hp(p),
+            dpx(p),dpy(p),test(p),Hs(p),
             bed(p),bed0(p),depth(p),
             solidbed(p),topobed(p),
-            bednode(p),
-			 hx(p),hy(p),hp(p),
-			 xvec(p),rhsvec(p),M(p),
-            dpx(p),dpy(p),test(p),Hs(p),
-            breaking(p),breaking_print(p),
-            wet1(p),wet2(p),
-			 nodeval(p),
-			 cmu(0.09),
-            ks(p)
+            bednode(p),nodeval(p),
+			breaking(p),breaking_print(p),
+			wet1(p),wet2(p),ks(p),
+			xvec(p),rhsvec(p),M(p),
+			cmu(0.09)
 {
 
 	inverse=1.0/p->DXM;
