@@ -30,7 +30,7 @@ using namespace std;
 #ifndef PARTICLE_PLS_H_
 #define PARTICLE_PLS_H_
 
-class particle_pls : public particle_corr, public norm_vec, public boundarycheck
+class particle_pls : public particle_corr, virtual public norm_vec, public boundarycheck
 {
 public:
 	particle_pls(lexer*, fdm*, ghostcell*);

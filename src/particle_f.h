@@ -32,7 +32,7 @@ using namespace std;
 #ifndef PARTICLE_F_H_
 #define PARTICLE_F_H_
 
-class particle_f : public particle_base, public norm_vec, public boundarycheck
+class particle_f : public particle_base, virtual public norm_vec, public boundarycheck
 {
 public:
 	particle_f(lexer*, fdm*, ghostcell*);
