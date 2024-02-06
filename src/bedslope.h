@@ -33,7 +33,7 @@ using namespace std;
 #ifndef BEDSLOPE_H_
 #define BEDSLOPE_H_
 
-class bedslope : virtual public norm_vec
+class bedslope : public norm_vec
 {
 public:
     bedslope(lexer*);
