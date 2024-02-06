@@ -2858,7 +2858,7 @@ void lexer::ctrlsend()
             dd++;
         }
     }
-    if (X315 > 0)
+    if (X315 > 0)//Error pot
     {
         for(n=0;n<X311;++n)
         {
@@ -2899,7 +2899,7 @@ void lexer::ctrlsend()
     dd++;
     dctrl[dd] = X322_L[n];
     dd++;
-    dctrl[dd] = X322_x0[n];
+    dctrl[dd] = X322_x0[n]; // err pot
     dd++;
     dctrl[dd] = X322_y0[n];
     dd++;
@@ -2909,7 +2909,7 @@ void lexer::ctrlsend()
     dd++;
     dctrl[dd] = X322_theta[n];
     dd++;
-    dctrl[dd] = X322_psi[n];
+    dctrl[dd] = X322_psi[n]; // err pot
     dd++;
     }      
 	

@@ -2756,11 +2756,11 @@ void lexer::read_control()
 		Darray(X321_nl,X321);
 
         Darray(X322_D,X321);
-        Darray(X322_L,X321);
-        Darray(X322_x0,X321);
-        Darray(X322_y0,X321);
+        Darray(X322_L,X321); // err
+        Darray(X322_x0,X321); //err
+        Darray(X322_y0,X321); //err
         Darray(X322_z0,X321);
-        Darray(X322_phi,X321);
+        Darray(X322_phi,X321); // err
         Darray(X322_theta,X321);
         Darray(X322_psi,X321);
 

@@ -35,7 +35,7 @@ void resize_class::Darray(double *& field, int numi)
 {
     int n;
 	
-	if(numi>0)
+	if(numi>0) //err
 	field = new double[numi];
 
 	for(n=0; n<numi;++n)
