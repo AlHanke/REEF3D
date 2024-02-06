@@ -30,8 +30,8 @@ class sflow_flux;
 #define SFLOW_HXY_FOU_H_
 
 using namespace std;
-, virtual public increment
-class sflow_hxy_fou : public sflow_hxy_disc, public increment
+
+class sflow_hxy_fou : public sflow_hxy_disc, virtual public increment
 {
 public:
 	sflow_hxy_fou(lexer*,patchBC_interface*);

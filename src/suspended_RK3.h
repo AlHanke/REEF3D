@@ -28,8 +28,8 @@ using namespace std;
 
 #ifndef SUSPENDED_RK3_H_
 #define SUSPENDED_RK3_H_
-, virtual public increment
-class suspended_RK3 : public suspended, public increment
+
+class suspended_RK3 : public suspended, virtual public increment
 {
 public:
 	suspended_RK3(lexer *, fdm*);
