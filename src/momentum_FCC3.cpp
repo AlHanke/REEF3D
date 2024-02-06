@@ -59,9 +59,10 @@ momentum_FCC3::momentum_FCC3(lexer *p, fdm *a, ghostcell *pgc, convection *pconv
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver, ioflow *pioflow,
                                                     heat *&pheat, concentration *&pconc, reini *ppreini,
                                                     fsi *ppfsi)
-													:momentum_forcing(p),bcmom(p),udiff(p),urk1(p),urk2(p),fx(p)
-													,vdiff(p),vrk1(p),vrk2(p),fy(p)
-													,wdiff(p),wrk1(p),wrk2(p),fz(p)
+													:momentum_forcing(p),bcmom(p)
+													,ur(p),udiff(p),urk1(p),urk2(p),fx(p)
+													,vr(p),vdiff(p),vrk1(p),vrk2(p),fy(p)
+													,wr(p),wdiff(p),wrk1(p),wrk2(p),fz(p)
 													,Mx(p),rox(p),My(p),roy(p),Mz(p),roz(p)                                                   
                                                     ,Mx_rk1(p),Mx_rk2(p),My_rk1(p),My_rk2(p),Mz_rk1(p),Mz_rk2(p)
                                                     ,rox_rk1(p),rox_rk2(p),roy_rk1(p),roy_rk2(p),roz_rk1(p),roz_rk2(p)
