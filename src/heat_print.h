@@ -35,7 +35,7 @@ using namespace std;
 #ifndef HEAT_PRINT_H_
 #define HEAT_PRINT_H_
 
-class heat_print : public heat, increment
+class heat_print : public heat, virtual public increment
 {
 public:
     heat_print(lexer*,fdm*);
