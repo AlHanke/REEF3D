@@ -30,7 +30,7 @@ using namespace std;
 #ifndef SFLOW_FOU_H_
 #define SFLOW_FOU_H_
 
-class sflow_fou : public sflow_convection, public increment
+class sflow_fou : public sflow_convection, virtual public increment
 {
 public:
 	sflow_fou(lexer*);

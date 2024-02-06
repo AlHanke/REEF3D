@@ -30,7 +30,7 @@ using namespace std;
 #ifndef SUSPENDED_IM1_H_
 #define SUSPENDED_IM1_H_
 
-class suspended_IM1 : public suspended, public increment
+class suspended_IM1 : public suspended, virtual public increment
 {
 public:
 	suspended_IM1(lexer *, fdm*);

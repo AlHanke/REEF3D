@@ -31,7 +31,7 @@ using namespace std;
 #ifndef POTENTIAL_WATER_H_
 #define POTENTIAL_WATER_H_
 
-class potential_water : public potential, public increment
+class potential_water : public potential, virtual public increment
 {
 
 public:

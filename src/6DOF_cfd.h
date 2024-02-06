@@ -33,7 +33,7 @@ using namespace std;
 #ifndef SIXDOF_CFD_H_
 #define SIXDOF_CFD_H_
 
-class sixdof_cfd : public sixdof, public increment
+class sixdof_cfd : public sixdof, virtual public increment
 {
 public:
 	sixdof_cfd(lexer*, fdm*, ghostcell*);

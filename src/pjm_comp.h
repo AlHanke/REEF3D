@@ -34,7 +34,7 @@ using namespace std;
 #ifndef PJM_COMP_H_
 #define PJM_COMP_H_
 
-class pjm_comp : public pressure, public increment
+class pjm_comp : public pressure, virtual public increment
 {
 
 public:

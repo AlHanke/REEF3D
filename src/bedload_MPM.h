@@ -30,7 +30,7 @@ using namespace std;
 #ifndef BEDLOAD_MPM_H_
 #define BEDLOAD_MPM_H_
 
-class bedload_MPM : public bedload, public increment
+class bedload_MPM : public bedload, virtual public increment
 {
 public:
 

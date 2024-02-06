@@ -34,7 +34,7 @@ using namespace std;
 #ifndef VRANS_NET_H_
 #define VRANS_NET_H_
 
-class vrans_net : public vrans, public increment
+class vrans_net : public vrans, virtual public increment
 {
 public:
 

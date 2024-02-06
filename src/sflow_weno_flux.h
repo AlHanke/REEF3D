@@ -30,7 +30,7 @@ using namespace std;
 #ifndef SFLOW_WENO_FLUX_H_
 #define SFLOW_WENO_FLUX_H_
 
-class sflow_weno_flux : public sflow_convection, public increment
+class sflow_weno_flux : public sflow_convection, virtual public increment
 {
 public:
 	sflow_weno_flux(lexer*);

@@ -34,7 +34,7 @@ using namespace std;
 #ifndef FSI_STRIP_H_
 #define FSI_STRIP_H_
 
-class fsi_strip : public beam, public increment
+class fsi_strip : public beam, virtual public increment
 {
 public:
 	

@@ -28,7 +28,7 @@ using namespace std;
 #ifndef POTENTIAL_V_H_
 #define POTENTIAL_V_H_
 
-class potential_v : public potential, public increment
+class potential_v : public potential, virtual public increment
 {
 public:
     potential_v();

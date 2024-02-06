@@ -36,7 +36,7 @@ using namespace std;
 #ifndef SEDIMENT_EXNER_H_
 #define SEDIMENT_EXNER_H_
 
-class sediment_exner : public topo, public increment
+class sediment_exner : public topo, virtual public increment
 {
 public:
 	sediment_exner(lexer*, ghostcell*);

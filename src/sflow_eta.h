@@ -33,7 +33,7 @@ using namespace std;
 #ifndef SFLOW_ETA_H_
 #define SFLOW_ETA_H_
 
-class sflow_eta : public sflow_fsf, public increment
+class sflow_eta : public sflow_fsf, virtual public increment
 {
 public:    
 	sflow_eta(lexer*, fdm2D*, ghostcell*,patchBC_interface*);

@@ -33,7 +33,7 @@ using namespace std;
 #ifndef PRINT_AVERAGING_F_H_
 #define PRINT_AVERAGING_F_H_
 
-class print_averaging_f : public print_averaging, public increment
+class print_averaging_f : public print_averaging, virtual public increment
 {
 public:
     print_averaging_f(lexer*,fdm*,ghostcell*);

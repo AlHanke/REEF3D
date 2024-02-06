@@ -29,7 +29,7 @@ using namespace std;
 #ifndef SFLOW_HYDROSTATIC_H_
 #define SFLOW_HYDROSTATIC_H_
 
-class sflow_hydrostatic : public sflow_pressure, public increment
+class sflow_hydrostatic : public sflow_pressure, virtual public increment
 {
 public:
     sflow_hydrostatic(lexer*, fdm2D*,patchBC_interface*);

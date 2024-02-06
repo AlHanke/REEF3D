@@ -30,7 +30,7 @@ using namespace std;
 #ifndef SFLOW_PJM_SW_H_
 #define SFLOW_PJM_SW_H_
 
-class sflow_pjm_sw : public sflow_pressure, public increment
+class sflow_pjm_sw : public sflow_pressure, virtual public increment
 {
 public:
     sflow_pjm_sw(lexer*, fdm2D*,patchBC_interface*);

@@ -31,7 +31,7 @@ using namespace std;
 #ifndef SFLOW_VOIDCONV_H_
 #define SFLOW_VOIDCONV_H_
 
-class sflow_voidconv : public sflow_convection, public increment
+class sflow_voidconv : public sflow_convection, virtual public increment
 {
 public:
 	sflow_voidconv(lexer*);

@@ -30,7 +30,7 @@ class solver_fnpf;
 
 using namespace std;
 
-class fnpf_laplace_cds2_v2 : public fnpf_laplace, public increment
+class fnpf_laplace_cds2_v2 : public fnpf_laplace, virtual public increment
 {
 public:
     fnpf_laplace_cds2_v2 (lexer*,ghostcell*);

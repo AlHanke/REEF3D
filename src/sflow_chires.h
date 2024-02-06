@@ -32,7 +32,7 @@ class fdm2D;
 
 using namespace std;
 
-class sflow_chires : public sflow_convection, public increment
+class sflow_chires : public sflow_convection, virtual public increment
 {
 
 public:

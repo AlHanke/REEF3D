@@ -31,7 +31,7 @@ class cpt;
 
 using namespace std;
 
-class weno_hj : public convection, public increment
+class weno_hj : public convection, virtual public increment
 {
 public:
 	weno_hj(lexer*);

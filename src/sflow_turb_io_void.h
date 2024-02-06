@@ -34,7 +34,7 @@ class ghostcell;
 
 using namespace std;
 
-class sflow_turb_io_void : public sflow_turbulence, public increment
+class sflow_turb_io_void : public sflow_turbulence, virtual public increment
 {
 
 public:

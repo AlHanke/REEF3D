@@ -29,7 +29,7 @@ using namespace std;
 #define PRESSURE_VOID_H_
 
 
-class pressure_void : public pressure, public increment
+class pressure_void : public pressure, virtual public increment
 {
 
 public:

@@ -30,7 +30,7 @@ using namespace std;
 #ifndef BEDLOAD_EINSTEIN_H_
 #define BEDLOAD_EINSTEIN_H_
 
-class bedload_einstein : public bedload, public increment
+class bedload_einstein : public bedload, virtual public increment
 {
 public:
 

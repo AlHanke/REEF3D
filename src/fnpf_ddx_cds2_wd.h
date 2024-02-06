@@ -30,7 +30,7 @@ using namespace std;
 #ifndef FNPF_DDX_CDS2_WD_H_
 #define FNPF_DDX_CDS2_WD_H_
 
-class fnpf_ddx_cds2_wd : public fnpf_ddx, public increment
+class fnpf_ddx_cds2_wd : public fnpf_ddx, virtual public increment
 {
 public:
     fnpf_ddx_cds2_wd(lexer*,fdm_fnpf*);

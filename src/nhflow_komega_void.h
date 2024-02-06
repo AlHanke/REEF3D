@@ -28,7 +28,7 @@ using namespace std;
 #ifndef NHFLOW_KOMEGA_VOID_H_
 #define NHFLOW_KOMEGA_VOID_H_
 
-class nhflow_komega_void : public nhflow_turbulence, public increment
+class nhflow_komega_void : public nhflow_turbulence, virtual public increment
 {
 
 public:

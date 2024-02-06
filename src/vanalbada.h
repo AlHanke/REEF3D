@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 using namespace std;
 
-class vanalbada : public fluxlim, public increment
+class vanalbada : public fluxlim, virtual public increment
 {
 public:
 	vanalbada (lexer *);

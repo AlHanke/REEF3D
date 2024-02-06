@@ -28,7 +28,7 @@ using namespace std;
 #ifndef SFLOW_ETIMESTEP_H_
 #define SFLOW_ETIMESTEP_H_
 
-class sflow_etimestep : public sflow_timestep, public increment
+class sflow_etimestep : public sflow_timestep, virtual public increment
 {
 public:
 	sflow_etimestep(lexer*,fdm2D*);

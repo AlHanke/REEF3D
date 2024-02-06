@@ -31,7 +31,7 @@ using namespace std;
 #ifndef POTENTIAL_F_H_
 #define POTENTIAL_F_H_
 
-class potential_f : public potential, public increment
+class potential_f : public potential, virtual public increment
 {
 
 public:

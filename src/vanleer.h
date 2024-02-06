@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 using namespace std;
 
-class vanleer : public fluxlim, public increment
+class vanleer : public fluxlim, virtual public increment
 {
 public:
 	vanleer (lexer *);

@@ -33,7 +33,7 @@ using namespace std;
 #ifndef NHFLOW_FSF_F_H_
 #define NHFLOW_FSF_F_H_
 
-class nhflow_fsf_f : public nhflow_fsf, public increment
+class nhflow_fsf_f : public nhflow_fsf, virtual public increment
 {
 public:
     nhflow_fsf_f(lexer*, fdm_nhf*, ghostcell*,ioflow*,patchBC_interface*);

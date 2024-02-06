@@ -30,7 +30,7 @@ using namespace std;
 #ifndef IETIMESTEP_H_
 #define IETIMESTEP_H_
 
-class ietimestep : public timestep, public increment
+class ietimestep : public timestep, virtual public increment
 {
 public:
 	ietimestep(lexer*);

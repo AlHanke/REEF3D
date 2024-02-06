@@ -52,7 +52,7 @@ using namespace std;
 #ifndef SFLOW_F_H_
 #define SFLOW_F_H_
 
-class sflow_f : public sflow, public increment
+class sflow_f : public sflow, virtual public increment
 {
 public:
 	sflow_f(lexer*, fdm2D*,ghostcell*,patchBC_interface*);

@@ -33,7 +33,7 @@ class density;
 using namespace std;
 
 
-class poisson_nse : public poisson, public increment
+class poisson_nse : public poisson, virtual public increment
 {
 
 public:

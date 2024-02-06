@@ -20,7 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"sflow_hxy_disc.h"
+
+#include"sflow_hxy_disc.h"
 #include"increment.h"
 
 class sflow_flux;  
@@ -29,7 +30,7 @@ class sflow_flux;
 #define SFLOW_HXY_FOU_H_
 
 using namespace std;
-
+, virtual public increment
 class sflow_hxy_fou : public sflow_hxy_disc, public increment
 {
 public:

@@ -29,7 +29,7 @@ using namespace std;
 #ifndef VRANS_F_H_
 #define VRANS_F_H_
 
-class vrans_f : public vrans, public increment
+class vrans_f : public vrans, virtual public increment
 {
 public:
 	vrans_f(lexer*, ghostcell*);

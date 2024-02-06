@@ -31,7 +31,7 @@ using namespace std;
 #define IDIFF2_FS_2D_H_
 
 
-class idiff2_FS_2D : public diffusion, public increment
+class idiff2_FS_2D : public diffusion, virtual public increment
 {
 
 public:

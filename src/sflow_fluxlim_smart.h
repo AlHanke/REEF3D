@@ -32,7 +32,7 @@ class lexer;
 
 using namespace std;
 
-class sflow_fluxlim_smart : public sflow_fluxlim, public increment 
+class sflow_fluxlim_smart : public sflow_fluxlim, virtual public increment 
 {
 public:
     sflow_fluxlim_smart (lexer *);

@@ -34,7 +34,7 @@ using namespace std;
 #define REINIFLUID_RK3_H_
 
 
-class reinifluid_RK3 : public reini, public increment
+class reinifluid_RK3 : public reini, virtual public increment
 {
 
 public:

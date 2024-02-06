@@ -28,7 +28,7 @@ using namespace std;
 #ifndef FNPF_DDX_CDS2_H_
 #define FNPF_DDX_CDS2_H_
 
-class fnpf_ddx_cds2 : public fnpf_ddx, public increment
+class fnpf_ddx_cds2 : public fnpf_ddx, virtual public increment
 {
 public:
     fnpf_ddx_cds2(lexer*);
