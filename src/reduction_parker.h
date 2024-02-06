@@ -32,8 +32,8 @@ using namespace std;
 
 #ifndef REDUCTION_PARKER_H_
 #define REDUCTION_PARKER_H_
-, virtual public bedslope
-class reduction_parker :  public bedshear_reduction, public bedslope
+
+class reduction_parker :  public bedshear_reduction, virtual public bedslope
 {
 public:
     reduction_parker(lexer*);
