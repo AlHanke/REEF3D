@@ -40,12 +40,12 @@ class suspended;
 class diffusion;
 class convection;
 class patchBC_interface;
-using namespace std;, virtual public bedslope
+using namespace std;
 
 #ifndef SEDIMENT_F_H_
 #define SEDIMENT_F_H_
 
-class sediment_f : public sediment, public bedslope
+class sediment_f : public sediment, virtual public bedslope
 {
 public:
     sediment_f(lexer*,fdm*,ghostcell*,turbulence*, patchBC_interface*);
