@@ -30,7 +30,7 @@ class flux;
 
 using namespace std;
 
-class cds4 : public convection,  public increment
+class cds4 : public convection, virtual public increment
 {
 
 public:

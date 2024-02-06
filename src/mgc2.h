@@ -29,7 +29,7 @@ class lexer;
 
 using namespace std;
 
-class mgc2 :  public increment
+class mgc2 :  virtual public increment
 {
 public:
 

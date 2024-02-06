@@ -30,7 +30,7 @@ class flux;
 
 using namespace std;
 
-class hric_mod : public convection,  public increment
+class hric_mod : public convection, virtual public increment
 {
 
 public:

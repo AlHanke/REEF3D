@@ -33,7 +33,7 @@ class cpt;
 
 using namespace std;
 
-class grid :  public increment
+class grid :  virtual public increment
 {
 public:
 

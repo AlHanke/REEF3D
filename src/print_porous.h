@@ -31,7 +31,7 @@ class ghostcell;
 
 using namespace std;
 
-class print_porous :  public increment
+class print_porous :  virtual public increment
 {
 
 public:

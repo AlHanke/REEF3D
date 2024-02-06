@@ -30,7 +30,7 @@ class ghostcell;
 
 using namespace std;
 
-class mgccart :  public increment
+class mgccart :  virtual public increment
 {
 public:
 

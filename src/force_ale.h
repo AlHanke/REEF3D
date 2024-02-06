@@ -35,7 +35,7 @@ class ghostcell;
 
 using namespace std;
 
-class force_ale :  public increment
+class force_ale :  virtual public increment
 {
 
 public:

@@ -31,7 +31,7 @@ Author: Hans Bihs
 using namespace std;
 
 class wave_lib_cnoidal_shallow : public wave_lib_precalc, public wave_lib_parameters, public wave_lib_elliptic,
-                                 public increment
+                                 virtual public increment
 {
 public:
     wave_lib_cnoidal_shallow(lexer*, ghostcell*);

@@ -34,7 +34,7 @@ class sediment;
 
 using namespace std;
 
-class topo_vtp :  public increment
+class topo_vtp :  virtual public increment
 {
 
 public:

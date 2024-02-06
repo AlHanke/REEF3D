@@ -31,7 +31,7 @@ class ghostcell;
 
 using namespace std;
 
-class grid2D :  public increment
+class grid2D :  virtual public increment
 {
 public:
 
