@@ -32,7 +32,7 @@ using namespace std;
 #ifndef REDUCTION_DEYEMP_H_
 #define REDUCTION_DEYEMP_H_
 
-class reduction_deyemp :  public bedshear_reduction, public bedslope
+class reduction_deyemp :  public bedshear_reduction, virtual public bedslope
 {
 public:
     reduction_deyemp(lexer*);

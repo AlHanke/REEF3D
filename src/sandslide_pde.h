@@ -30,7 +30,7 @@ using namespace std;
 #ifndef SANDSLIDE_PDE_H_
 #define SANDSLIDE_PDE_H_
 
-class sandslide_pde :  public sandslide, virtual public norm_vec, public bedslope
+class sandslide_pde :  public sandslide, virtual public norm_vec, virtual public bedslope
 {
 public:
     sandslide_pde(lexer*);

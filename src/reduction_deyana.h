@@ -32,7 +32,7 @@ using namespace std;
 #ifndef REDUCTION_DEYANA_H_
 #define REDUCTION_DEYANA_H_
 
-class reduction_deyana :  public bedshear_reduction, public bedslope
+class reduction_deyana :  public bedshear_reduction, virtual public bedslope
 {
 public:
     reduction_deyana(lexer*);
