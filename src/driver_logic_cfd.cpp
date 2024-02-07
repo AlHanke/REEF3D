@@ -382,7 +382,7 @@ void driver::logic_cfd()
 	pfsf = new levelset_RK2(p,a,pgc,pheat,pconc);
 
 	if(p->F30==3 && p->N40!=23)
-	pfsf = new levelset_RK3(p,a,pgc,pheat,pconc);
+	pfsf = new levelset_RK3(p,a,pgc,pheat,pconc); // 858,624 (392 direct, 858,232 indirect) bytes in 1 blocks are definitely lost in loss record 1,078 of 1,084
 
     if(p->N40==22 || p->N40==23 || p->N40==33)
 	pfsf = new levelset_void(p,a,pgc,pheat,pconc);
@@ -392,7 +392,7 @@ void driver::logic_cfd()
 	preini = new reini_void(p);
 
     if(p->F40==3)
-    preini = new reinifluid_RK3(p,1);
+    preini = new reinifluid_RK3(p,1); // 1,209,784 (168 direct, 1,209,616 indirect) bytes in 1 blocks are definitely lost in loss record 1,083 of 1,084
 
 	if(p->F40==23)
 	preini = new reini_RK3(p,1);
@@ -575,7 +575,7 @@ void driver::logic_cfd()
     pbench = new benchmark_convection(p,a);
 
 // Printer
-	pprint = new vtu3D(p,a,pgc);
+	pprint = new vtu3D(p,a,pgc); // 260,664 (2,208 direct, 258,456 indirect) bytes in 1 blocks are definitely lost in loss record 1,076 of 1,084
 
     if(p->P150==0)
 	pdata = new data_void(p,a,pgc);
@@ -600,14 +600,14 @@ void driver::logic_cfd()
     preto = new reinitopo_AB2(p);
 
     if(p->G40==3)
-    preto = new reinitopo_RK3(p);
+    preto = new reinitopo_RK3(p); //1,209,768 (160 direct, 1,209,608 indirect) bytes in 1 blocks are definitely lost in loss record 1,081 of 1,084
     }
 
     if(p->solidread==0 || p->G40==0)
     preso = new reinitopo_void();
 
     if(p->solidread==1 && p->G40>0)
-    preso = new reinisolid_RK3(p);
+    preso = new reinisolid_RK3(p); // 1,209,768 (160 direct, 1,209,608 indirect) bytes in 1 blocks are definitely lost in loss record 1,082 of 1,084
     
 // 6DOF
     if(p->X10==0)
@@ -641,7 +641,7 @@ void driver::logic_cfd()
 	pmom = new momentum_RK2(p,a,pconvec,pdiff,ppress,ppois,pturb,psolv,ppoissonsolv,pflow,pfsi);
 
 	if(p->N40==3 && p->X10==0 && p->Z10==0 && p->G3==0)
-	pmom = new momentum_RK3(p,a,pconvec,pdiff,ppress,ppois,pturb,poneph,psolv,ppoissonsolv,pflow,pfsi);
+	pmom = new momentum_RK3(p,a,pconvec,pdiff,ppress,ppois,pturb,poneph,psolv,ppoissonsolv,pflow,pfsi); // 10,387,520 (1,720 direct, 10,385,800 indirect) bytes in 1 blocks are definitely lost in loss record 1,084 of 1,084
     
     if(p->N40==4 && p->X10==0 && p->Z10==0 && p->G3==0)
 	pmom = new momentum_RKLS3(p,a,pgc,pconvec,pdiff,ppress,ppois,pturb,psolv,ppoissonsolv,pflow,pfsi);

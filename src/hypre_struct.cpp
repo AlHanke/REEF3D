@@ -42,7 +42,7 @@ hypre_struct::hypre_struct(lexer* p,ghostcell *pgc, int solve_input, int precon_
     p->Iarray(iupper,3);
     
     if(p->D33==0)
-    p->Darray(values,vecsize*7);
+    p->Darray(values,vecsize*7); //896,000 bytes in 1 blocks are indirectly lost in loss record 1,079 of 1,084
     
     if(p->D33==1)
     p->Darray(values,vecsize*15);

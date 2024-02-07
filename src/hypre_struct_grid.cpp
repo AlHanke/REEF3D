@@ -70,7 +70,7 @@ void hypre_struct::make_grid(lexer* p, ghostcell* pgc)
     
     // matrix
     HYPRE_StructMatrixCreate(pgc->mpi_comm, grid, stencil, &A);
-    HYPRE_StructMatrixInitialize(A);
+    HYPRE_StructMatrixInitialize(A); //1,138,368 bytes in 1 blocks are indirectly lost in loss record 1,080 of 1,084
     
     // vec
     HYPRE_StructVectorCreate(pgc->mpi_comm, grid, &b);

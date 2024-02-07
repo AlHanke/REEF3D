@@ -57,7 +57,7 @@ void lexer::lexer_gridspacing(ghostcell *pgc)
     Darray(DDSDDYP,knoy+1+4*marge);
     Darray(DDTDDZP,knoz+1+4*marge);
     
-    Darray(ZSN,imax*jmax*(kmax+1));
+    Darray(ZSN,imax*jmax*(kmax+1)); // 258,336 bytes in 1 blocks are still reachable in loss record 1,075 of 1,084
     Darray(ZSP,imax*jmax*kmax);
 
     // XP,YP,ZP
