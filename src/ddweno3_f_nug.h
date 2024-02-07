@@ -40,15 +40,15 @@ class ddweno3_f_nug : public weno3_nug_func
 {
 public:
 
-	 ddweno3_f_nug(lexer*);
-	 ~ddweno3_f_nug();
+	ddweno3_f_nug(lexer*);
+	virtual ~ddweno3_f_nug();
 
-	 double ddwenox(field&, double);
-	 double ddwenoy(field&, double);
-	 double ddwenoz(field&, double);
-     
-     double dswenox(slice&, double);
-	 double dswenoy(slice&, double);
+	double ddwenox(field&, double);
+	double ddwenoy(field&, double);
+	double ddwenoz(field&, double);
+	
+	double dswenox(slice&, double);
+	double dswenoy(slice&, double);
 
 
 	void iqmin(lexer*, field&);

@@ -39,12 +39,12 @@ class ddweno_nug_sf : public weno_nug_func
 {
 public:
 
-	 ddweno_nug_sf(lexer*);
-	 ~ddweno_nug_sf();
+	ddweno_nug_sf(lexer*);
+	virtual ~ddweno_nug_sf();
 
-	 double ddwenox(fdm*, vec&, double, int, cpt&);
-	 double ddwenoy(fdm*, vec&, double, int, cpt&);
-	 double ddwenoz(fdm*, vec&, double, int, cpt&);
+	double ddwenox(fdm*, vec&, double, int, cpt&);
+	double ddwenoy(fdm*, vec&, double, int, cpt&);
+	double ddwenoz(fdm*, vec&, double, int, cpt&);
 
 	void iqmin0(fdm*, vec&, cpt&);
 	void jqmin0(fdm*, vec&, cpt&);

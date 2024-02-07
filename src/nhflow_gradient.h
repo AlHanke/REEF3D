@@ -36,7 +36,7 @@ class nhflow_gradient : virtual public increment
 public:
 
 	nhflow_gradient(lexer*);
-	 ~nhflow_gradient();
+	virtual ~nhflow_gradient();
 
     double sx(slice&);
     double sy(slice&);
