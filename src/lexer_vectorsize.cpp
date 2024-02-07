@@ -42,6 +42,8 @@ void lexer::vecsize(ghostcell *pgc)
     
     gcb_floating_est=0;
     
+    //cout<<mpirank<<" solid_gcb_est_max: "<<solid_gcb_est_max<<" topo_gcb_est_max: "<<topo_gcb_est_max<<endl;
+    
     
 // gcbextra
     gcbextra=gcextra_max*margin;

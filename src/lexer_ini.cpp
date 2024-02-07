@@ -64,6 +64,7 @@ void lexer::lexer_ini()
     wH=0.0;
     wL=0.0;
     wd=0.0;
+    wC=0.0;
 	
 	velcorr=1;
 	

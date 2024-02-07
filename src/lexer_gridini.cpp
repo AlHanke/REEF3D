@@ -40,7 +40,7 @@ void lexer::flagini()
 	
 	const int dim_ij=imax*jmax;
     const int dim_ijk=dim_ij*kmax;
-    //cout<<mpirank<<" imax: "<<imax<<" jmax: "<<jmax<<" kmax: "<<kmax<<endl;
+    //cout<<mpirank<<" imax: "<<imax<<" jmax: "<<jmax<<" kmax: "<<kmax<<" imax*jmax*kmax: "<<imax*jmax*kmax<<endl;
 	
 	Iarray(flag1,dim_ijk);
 	Iarray(flag2,dim_ijk);

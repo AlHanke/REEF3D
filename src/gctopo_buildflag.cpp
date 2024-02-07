@@ -308,7 +308,7 @@ void ghostcell::gcb_velflagio(lexer *p, fdm *a)
         
         p->flag1[Im1JK] = INFLOW;
         p->flag1[Im2JK] = INFLOW;
-        p->flag1[Im2JK] = INFLOW; // why not Im3JK?
+        p->flag1[Im3JK] = INFLOW;
         }
         
         if(p->gcb1[n][4]==2)
@@ -319,7 +319,7 @@ void ghostcell::gcb_velflagio(lexer *p, fdm *a)
 
         p->flag1[Ip1JK] = OUTFLOW;
         p->flag1[Ip2JK] = OUTFLOW;
-        p->flag1[Ip2JK] = OUTFLOW;
+        p->flag1[Ip3JK] = OUTFLOW;
         }    
     }
     
@@ -334,7 +334,7 @@ void ghostcell::gcb_velflagio(lexer *p, fdm *a)
         
         p->flag2[Im1JK] = INFLOW;
         p->flag2[Im2JK] = INFLOW;
-        p->flag2[Im2JK] = INFLOW;
+        p->flag2[Im3JK] = INFLOW;
         }
         
         if(p->gcb2[n][4]==2)
@@ -345,7 +345,7 @@ void ghostcell::gcb_velflagio(lexer *p, fdm *a)
         
         p->flag2[Ip1JK] = OUTFLOW;
         p->flag2[Ip2JK] = OUTFLOW;
-        p->flag2[Ip2JK] = OUTFLOW;
+        p->flag2[Ip3JK] = OUTFLOW;
         }    
     }
     
@@ -361,7 +361,7 @@ void ghostcell::gcb_velflagio(lexer *p, fdm *a)
         
         p->flag3[Im1JK] = INFLOW;
         p->flag3[Im2JK] = INFLOW;
-        p->flag3[Im2JK] = INFLOW;
+        p->flag3[Im3JK] = INFLOW;
         }
         
         if(p->gcb3[n][4]==2)
@@ -372,7 +372,7 @@ void ghostcell::gcb_velflagio(lexer *p, fdm *a)
         
         p->flag3[Ip1JK] = OUTFLOW;
         p->flag3[Ip2JK] = OUTFLOW;
-        p->flag3[Ip2JK] = OUTFLOW;
+        p->flag3[Ip3JK] = OUTFLOW;
         }    
     }
 }

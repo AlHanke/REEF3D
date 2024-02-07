@@ -144,7 +144,7 @@ void lexer::ini_default()
     A518=2;             // int NHFLOW bed BC
     
     A520=2;		        // int NFHLOW non-hydrostatic pressure scheme
-    A521=0;		        // int NFHLOW fsf ucorr
+    A521=1;		        // int NFHLOW KB scheme
     A522=4.0;           // double p_alpha
     A523=1.0;           // double p_gamma
     A531=3.0;           // double Fround number limiter
@@ -686,6 +686,8 @@ void lexer::ini_default()
     P43=0;              // int state print out selected area
     P44=0;              // int print out 3D potential for FNPF
     P45=1;              // int print into single or continous state file
+    P46=0;             // int print state iteration window
+    P47=0;             // int print state time window
     P50=0;				// int wave theory wave gages
 	P51=0;              // int print out wsf
 	P52=0;              // int print out wsfline in x-dir
@@ -700,6 +702,7 @@ void lexer::ini_default()
 	P62=0;			    // int print line probes
     P63=0;			    // int print depth averaged point probe
     P64=0;			    // int print pressure probes
+    P65=0;			  // int print velocity probes
 	P66=0;			    // int print discharge to terminal
 	P67=0;			    // int discharge gages in x-direction
     P68=0;			    // int discharge gages in x-direction
@@ -727,6 +730,10 @@ void lexer::ini_default()
 	P124=0;             // int topoline in y-direction
 	P125=0;             // int bed shear stress gages
 	P126=0;             // int bed shear stress maxval
+    P131=0;             // int max wetdry in vtp
+    P132=0;             // int max wetdry as file
+    P133=0;             // int runup gage x-crossection
+    P134=0;             // int runup gage y-crossection
 	P150=0;			    // int number of data points to read from grid file
 	P151=1;			    // int type of data
 	P152=4;			    // int type of boundary condition for data
