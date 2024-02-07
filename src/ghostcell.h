@@ -41,6 +41,7 @@ class reini;
 class convection;
 class ioflow;
 class tracers_obj;
+class particles_obj;
 
 #ifndef GHOSTCELL_H_
 #define GHOSTCELL_H_
@@ -102,6 +103,7 @@ public:
     void dgcslpol4(lexer*, slice&);
 	void parapls(lexer*,double**,double**,int*,int*);
     void para_tracersobj(lexer*,tracers_obj*,tracers_obj*);
+    void para_tracersobj(lexer*,particles_obj*,particles_obj*);
 
 //  Update
 	void facenbx(lexer*, fieldint&, int*);
