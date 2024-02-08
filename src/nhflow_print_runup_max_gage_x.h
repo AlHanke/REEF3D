@@ -34,14 +34,14 @@ class slice;
 
 using namespace std;
 
-#ifndef NHFLOW_PRINT_RUNUP_GAGE_X_H_
-#define NHFLOW_PRINT_RUNUP_GAGE_X_H_
+#ifndef NHFLOW_PRINT_RUNUP_MAX_GAGE_X_H_
+#define NHFLOW_PRINT_RUNUP_MAX_GAGE_X_H_
 
-class nhflow_print_runup_gage_x : public increment
+class nhflow_print_runup_max_gage_x : public increment
 {
 public:
-    nhflow_print_runup_gage_x(lexer*,fdm_nhf*,ghostcell*);
-	virtual ~nhflow_print_runup_gage_x();
+    nhflow_print_runup_max_gage_x(lexer*,fdm_nhf*,ghostcell*);
+	virtual ~nhflow_print_runup_max_gage_x();
 
 	void start(lexer*, fdm_nhf*, ghostcell*,ioflow*,slice &f);
 
@@ -59,6 +59,7 @@ private:
     char name[250];
 
     double xcoor;
+    double T;
 	
 	wave_theory *pwave;
 
@@ -67,4 +68,3 @@ private:
 };
 
 #endif
-

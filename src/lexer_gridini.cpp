@@ -38,6 +38,8 @@ void lexer::flagini()
     control_calc();
 	gridsize();
 	
+    
+    //cout<<mpirank<<" imax: "<<imax<<" jmax: "<<jmax<<" kmax: "<<kmax<<" imax*jmax*kmax: "<<imax*jmax*kmax<<endl;
 	const int dim_ij=imax*jmax;
     const int dim_ijk=dim_ij*kmax;
     //cout<<mpirank<<" imax: "<<imax<<" jmax: "<<jmax<<" kmax: "<<kmax<<" imax*jmax*kmax: "<<imax*jmax*kmax<<endl;

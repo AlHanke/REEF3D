@@ -317,6 +317,7 @@
         </VirtualDirectory>
         <VirtualDirectory Name="Printer">
           <VirtualDirectory Name="Runup">
+            <File Name="nhflow_print_runup_max_gage_x.h"/>
             <File Name="nhflow_print_runup_gage_x.h"/>
             <File Name="nhflow_print_runup.h"/>
           </VirtualDirectory>
@@ -1422,8 +1423,9 @@
         </VirtualDirectory>
         <VirtualDirectory Name="Printer">
           <VirtualDirectory Name="Runup">
+            <File Name="nhflow_print_runup_max_gage_x.cpp"/>
+            <File Name="nhflow_print_runup_gage_x.cpp"/>
             <File Name="nhflow_print_runup.cpp"/>
-            <File Name="nhflow_print_runup-gage_x.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="VTP BED">
             <File Name="nhflow_vtp_bed_pvtp.cpp"/>
