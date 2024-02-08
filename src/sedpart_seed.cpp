@@ -100,6 +100,7 @@ void sedpart::posseed_box(lexer* p, fdm* a, ghostcell* pgc)
                     // pos[pactive][RADIUS] = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
 
                     PP.add(x,y,z,1);
+                    PP.cellSum[IJK]++;
                 }
 }
 
@@ -134,7 +135,10 @@ void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
                     ipolSolid = p->ccipol4_b(a->solid,x,y,z);
 
                     if (!(ipolTopo>tolerance||ipolTopo<-p->Q102*p->DZN[KP]||ipolSolid<0))
-                        PP.add(x,y,z,1);
+                    { 
+                       PP.add(x,y,z,1);
+                       PP.cellSum[IJK]++;
+                    }
                 }
             }
 }
@@ -164,6 +168,7 @@ void sedpart::posseed_suspended(lexer* p, fdm* a, ghostcell* pgc)
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
                     PP.add(x,y,z,1);
+                    PP.cellSum[IJK]++;
                 }
             }
         }

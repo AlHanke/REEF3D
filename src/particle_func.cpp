@@ -48,6 +48,11 @@ void particle_func::advect(lexer* p, fdm* a, tracers_obj* PP, int minflag, doubl
     PARTICLELOOP
         if(PP->Flag[n]>minflag)
         {
+            i=p->posc_i(PP->X[n]);
+            j=p->posc_j(PP->Y[n]);
+            k=p->posc_k(PP->Z[n]);
+            PP->cellSum[IJK]--;
+
             u1=p->dt*(p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n])+source_u);
             coord1=PP->X[n]+u1;
             
@@ -73,6 +78,11 @@ void particle_func::advect(lexer* p, fdm* a, tracers_obj* PP, int minflag, doubl
             PP->Y[n] += (2.0/3.0)*v2 + (2.0/3.0)*p->dt*(p->ccipol2(a->v,coord1,coord2,coord3)+source_v);
             
             PP->Z[n] += (2.0/3.0)*w2 + (2.0/3.0)*p->dt*(p->ccipol3(a->w,coord1,coord2,coord3)+source_w);
+
+            i=p->posc_i(PP->X[n]);
+            j=p->posc_j(PP->Y[n]);
+            k=p->posc_k(PP->Z[n]);
+            PP->cellSum[IJK]++;
         }
 }
 
@@ -87,6 +97,11 @@ void particle_func::advect(lexer* p, fdm* a, particles_obj* PP, int minflag, dou
     PARTICLELOOP
         if(PP->Flag[n]>minflag)
         {
+            i=p->posc_i(PP->X[n]);
+            j=p->posc_j(PP->Y[n]);
+            k=p->posc_k(PP->Z[n]);
+            PP->cellSum[IJK]--;
+
             source_w -=settling_vel(p,a,PP,n);
             u1=p->dt*(p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n])+source_u);
             coord1=PP->X[n]+u1;
@@ -113,6 +128,68 @@ void particle_func::advect(lexer* p, fdm* a, particles_obj* PP, int minflag, dou
             PP->Y[n] += (2.0/3.0)*v2 + (2.0/3.0)*p->dt*(p->ccipol2(a->v,coord1,coord2,coord3)+source_v);
             
             PP->Z[n] += (2.0/3.0)*w2 + (2.0/3.0)*p->dt*(p->ccipol3(a->w,coord1,coord2,coord3)+source_w);
+
+            i=p->posc_i(PP->X[n]);
+            j=p->posc_j(PP->Y[n]);
+            k=p->posc_k(PP->Z[n]);
+            PP->cellSum[IJK]++;
+        }
+}
+
+
+void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int minflag)
+{
+    double coord1, coord2, coord3;
+    double du1, u2, v1, v2, w1, w2;
+    double dx1, dx2, dy1, dy2, dz1, dz2;
+    double du, dv, dw, drho=p->W1/p->W2;
+    double Dp, Cd, Rep, thetaf;
+    double stressPart=0, pressurePart=0;
+
+    PARTICLELOOP
+        if(PP->Flag[n]>minflag)
+        {
+            i=p->posc_i(PP->X[n]);
+            j=p->posc_j(PP->Y[n]);
+            k=p->posc_k(PP->Z[n]);
+            PP->cellSum[IJK]--;
+
+            du=p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n])-PP->U[n];
+            Rep=du*PP->d50*drho;
+            thetaf=0;
+            Cd=24.0*(pow(thetaf,-2.65)+pow(Rep,2.0/3.0)*pow(thetaf,-1.78)/6.0)/Rep;
+            Dp=Cd*3.0*drho*du/PP->d50/4;
+            du1=Dp*du+(1.0-p->W1/p->S22)*p->W20-stressPart-pressurePart;
+            dx1=p->dt*du1;
+            coord1=PP->X[n]+dx1;
+            
+            v1=p->dt*(p->ccipol2(a->v,PP->X[n],PP->Y[n],PP->Z[n]));
+            coord2=PP->Y[n]+v1;
+            
+            w1=p->dt*(p->ccipol3(a->w,PP->X[n],PP->Y[n],PP->Z[n]));
+            coord3=PP->Z[n]+w1;
+            
+            
+            u2=0.25*dx1 + 0.25*p->dt*(p->ccipol1(a->u,coord1,coord2,coord3));
+            coord1=PP->X[n]+u2;
+            
+            v2=0.25*v1 + 0.25*p->dt*(p->ccipol2(a->v,coord1,coord2,coord3));
+            coord2=PP->Y[n]+v2;
+            
+            w2=0.25*w1 + 0.25*p->dt*(p->ccipol3(a->w,coord1,coord2,coord3));
+            coord3=PP->Z[n]+w2;
+            
+            
+            PP->X[n] += (2.0/3.0)*u2 + (2.0/3.0)*p->dt*(p->ccipol1(a->u,coord1,coord2,coord3));
+
+            PP->Y[n] += (2.0/3.0)*v2 + (2.0/3.0)*p->dt*(p->ccipol2(a->v,coord1,coord2,coord3));
+            
+            PP->Z[n] += (2.0/3.0)*w2 + (2.0/3.0)*p->dt*(p->ccipol3(a->w,coord1,coord2,coord3));
+
+            i=p->posc_i(PP->X[n]);
+            j=p->posc_j(PP->Y[n]);
+            k=p->posc_k(PP->Z[n]);
+            PP->cellSum[IJK]++;
         }
 }
 
@@ -142,6 +219,7 @@ int particle_func::remove(lexer* p,tracers_obj* PP)
             if(!inBounds)
             {
                 PP->erase(n);
+                PP->cellSum[IJK]--;
                 removed++;
             }
         }
@@ -214,6 +292,97 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, tracers_obj* PP, int maxco
                     }
                 }
                 PP->erase(n);
+                PP->cellSum[IJK]--;
+                ++xchange;
+            }
+        }
+
+    pgc->para_tracersobj(p,Send,Recv);
+
+
+    size_t sum=PP->size;
+    for(int n=0;n<6;n++)
+        sum += Recv[n].size;
+    if(sum>PP->capacity)
+        PP->reserve(sum);
+
+    for(int n=0;n<6;n++)
+    {
+        PP->add_obj(&Recv[n]);
+        // Send[n].erase_all();
+        // Recv[n].erase_all();
+    }
+    return xchange;
+}
+
+
+/// @brief Transfer function
+/** Is responsible to transfer particles to one of the surrounding partitions*/
+/// @param p partition object
+/// @param pgc ghostcell object
+/// @param PP particles_obj contains particle information
+/// @param maxcount maximum number of particles which could be transfered
+/// @return number of send of particles
+int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int maxcount)
+{
+    int xchange=0;
+
+    particles_obj seedling1(maxcount),seedling2(maxcount),seedling3(maxcount),seedling4(maxcount),seedling5(maxcount),seedling6(maxcount);
+    particles_obj Send[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
+    particles_obj Recv[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
+
+    int i,j,k;
+
+    PARTICLELOOP
+        if(PP->Flag[n]==1)
+        {
+            i = p->posc_i(PP->X[n]);
+            j = p->posc_j(PP->Y[n]);
+            k = p->posc_k(PP->Z[n]);
+
+
+            if(p->flag5[IJK]<0 && p->flag5[IJK]>-10)
+            {
+                switch (p->flag5[IJK])
+                {
+                    case -1:
+                    {
+                        Send[0].add(PP->X[n],PP->Y[n],PP->Z[n],1,PP->U[n],PP->V[n],PP->W[n],PP->PackingFactor[n]);
+                        break;
+                    }
+
+                    case -2:
+                    {
+                        Send[1].add(PP->X[n],PP->Y[n],PP->Z[n],1,PP->U[n],PP->V[n],PP->W[n],PP->PackingFactor[n]);
+                        break;
+                    }
+
+                    case -3:
+                    {
+                        Send[2].add(PP->X[n],PP->Y[n],PP->Z[n],1,PP->U[n],PP->V[n],PP->W[n],PP->PackingFactor[n]);
+                        break;
+                    }
+
+                    case -4:
+                    {
+                        Send[3].add(PP->X[n],PP->Y[n],PP->Z[n],1,PP->U[n],PP->V[n],PP->W[n],PP->PackingFactor[n]);
+                        break;
+                    }
+
+                    case -5:
+                    {
+                        Send[4].add(PP->X[n],PP->Y[n],PP->Z[n],1,PP->U[n],PP->V[n],PP->W[n],PP->PackingFactor[n]);
+                        break;
+                    }
+
+                    case -6:
+                    {
+                        Send[5].add(PP->X[n],PP->Y[n],PP->Z[n],1,PP->U[n],PP->V[n],PP->W[n],PP->PackingFactor[n]);
+                        break;
+                    }
+                }
+                PP->erase(n);
+                PP->cellSum[IJK]--;
                 ++xchange;
             }
         }
@@ -364,4 +533,15 @@ int particle_func::maxParticlesPerCell(lexer* p, fdm* a, double d50)
 int particle_func::maxParticlesPerXY(lexer* p, fdm* a, double d50)
 {
     return ceil(p->DXN[IP]*p->DYN[JP]*(1-p->S24)*6.0/(PI*pow(d50,2.0)));
+}
+
+void particle_func::particlesPerCell(lexer* p, particles_obj* PP)
+{
+    PARTICLELOOP
+    {
+        i=p->posc_i(PP->X[n]);
+        j=p->posc_j(PP->Y[n]);
+        k=p->posc_k(PP->Z[n]);
+        PP->cellSum[IJK]++;
+    }
 }

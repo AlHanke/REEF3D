@@ -45,10 +45,12 @@ protected:
     // para
     int remove(lexer*,tracers_obj*);
     int transfer(lexer*,ghostcell*,tracers_obj*,int);
+    int transfer(lexer*,ghostcell*,particles_obj*,int);
 
     // mov
     void advect(lexer*,fdm*,tracers_obj*,int=0,double=0,double=0,double=0);
     void advect(lexer*,fdm*,particles_obj*,int=0,double=0,double=0,double=0);
+    void transport(lexer*,fdm*,particles_obj*,int=0);
     void make_stationary(lexer*,fdm*,tracers_obj*);
     void make_stationary(lexer*,fdm*,particles_obj*);
 
@@ -59,6 +61,7 @@ protected:
     double volume(particles_obj*,int);
     int maxParticlesPerCell(lexer*,fdm*,double);
     int maxParticlesPerXY(lexer*,fdm*,double);
+    void particlesPerCell(lexer*,particles_obj*);
 
     // memory management
     void cleanup(lexer*,fdm*,particles_obj*,int);
