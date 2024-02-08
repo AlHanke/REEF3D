@@ -69,7 +69,8 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 		if(p->Q120==1&&p->count%p->Q121==0)
 			posseed_suspended(p,a,pgc);
         // erode(p,a,pgc);
-		advect(p,a,&PP,0,0,0,0);
+		// advect(p,a,&PP,0,0,0,0);
+        transport(p,a,&PP);
 		xchange=transfer(p,pgc,&PP,maxparticle);
 		removed=remove(p,&PP);
 		make_stationary(p,a,&PP);

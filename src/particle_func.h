@@ -39,7 +39,7 @@ class particle_func: private increment
 public:
 
 protected:
-    particle_func();
+    particle_func(lexer*);
     virtual ~particle_func();
     
     // para
@@ -62,6 +62,9 @@ protected:
     int maxParticlesPerCell(lexer*,fdm*,double);
     int maxParticlesPerXY(lexer*,fdm*,double);
     void particlesPerCell(lexer*,particles_obj*);
+    void particleStressTensor(lexer*,particles_obj*);
+    void particleStressTensorUpdateIJK(lexer*,particles_obj*);
+    double drag_model(lexer*,double,double,double,double,double) const;
 
     // memory management
     void cleanup(lexer*,fdm*,particles_obj*,int);

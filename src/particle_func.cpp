@@ -32,6 +32,7 @@ Author: Alexander Hanke
 
 particle_func::particle_func(lexer* p) : kinVis(p->W1/p->W2), drho(p->W1/p->S22)
 {
+    p->Darray(stressTensor,p->imax*p->jmax*p->kmax);
 }
 particle_func::~particle_func()
 {
@@ -139,53 +140,83 @@ void particle_func::advect(lexer* p, fdm* a, particles_obj* PP, int minflag, dou
 
 void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int minflag)
 {
-    double coord1, coord2, coord3;
-    double du1, u2, v1, v2, w1, w2;
-    double dx1, dx2, dy1, dy2, dz1, dz2;
-    double du, dv, dw, drho=p->W1/p->W2;
-    double Dp, Cd, Rep, thetaf;
-    double stressPart=0, pressurePart=0;
+    double RKu,RKv,RKw;
+    double u,v,w;
+    double du1, du2, du3, dv1, dv2, dv3, dw1, dw2, dw3;
+    /// @brief Difference between flowfield and particle velocity
+    double du, dv, dw;
+    double Dp, thetas;
+    double pressureDiv=0, stressDiv=0;
 
     PARTICLELOOP
         if(PP->Flag[n]>minflag)
         {
+            // Prep
             i=p->posc_i(PP->X[n]);
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
+
+            thetas=(PI*pow(PP->d50,3.0)*PP->cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]));
+            u=p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n]);
+            v=p->ccipol1(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
+            w=p->ccipol1(a->w,PP->X[n],PP->Y[n],PP->Z[n]);
+
+            // RK3 step 1
+            du=u-PP->U[n];
+            dv=v-PP->V[n];
+            dw=w-PP->W[n];
+
+            Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
+
+            du1=Dp*du+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+            dv1=Dp*dv+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+            dw1=Dp*dw+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+
+            RKu=PP->U[n]+du1*p->dt;
+            RKv=PP->V[n]+dv1*p->dt;
+            RKw=PP->W[n]+dw1*p->dt;
+            
+            // RK step 2
+            du=u-RKu;
+            dv=v-RKv;
+            dw=w-RKw;
+
+            Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
+
+            du2=Dp*du+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+            dv2=Dp*dv+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+            dw2=Dp*dw+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+
+            du2=0.25*du2+0.25*du1;
+            dv2=0.25*dv2+0.25*dv1;
+            dw2=0.25*dw2+0.25*dw1;
+
+            RKu=PP->U[n]+du2*p->dt;
+            RKv=PP->V[n]+dv2*p->dt;
+            RKw=PP->W[n]+dw2*p->dt;
+            
+            // RK step 3
+            du=u-RKu;
+            dv=v-RKv;
+            dw=w-RKw;
+
+            Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
+
+            du3=Dp*du+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+            dv3=Dp*dv+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+            dw3=Dp*dw+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+
+            PP->U[n] += ((2.0/3.0)*du2 + (2.0/3.0)*du3)*p->dt;
+            PP->V[n] += ((2.0/3.0)*dv2 + (2.0/3.0)*dv3)*p->dt;
+            PP->W[n] += ((2.0/3.0)*dw2 + (2.0/3.0)*dw3)*p->dt;
+
+            // Pos update
+            PP->X[n] += PP->U[n]*p->dt;
+            PP->Y[n] += PP->V[n]*p->dt;
+            PP->Z[n] += PP->W[n]*p->dt;
+
+            // Sum update
             PP->cellSum[IJK]--;
-
-            du=p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n])-PP->U[n];
-            Rep=du*PP->d50*drho;
-            thetaf=0;
-            Cd=24.0*(pow(thetaf,-2.65)+pow(Rep,2.0/3.0)*pow(thetaf,-1.78)/6.0)/Rep;
-            Dp=Cd*3.0*drho*du/PP->d50/4;
-            du1=Dp*du+(1.0-p->W1/p->S22)*p->W20-stressPart-pressurePart;
-            dx1=p->dt*du1;
-            coord1=PP->X[n]+dx1;
-            
-            v1=p->dt*(p->ccipol2(a->v,PP->X[n],PP->Y[n],PP->Z[n]));
-            coord2=PP->Y[n]+v1;
-            
-            w1=p->dt*(p->ccipol3(a->w,PP->X[n],PP->Y[n],PP->Z[n]));
-            coord3=PP->Z[n]+w1;
-            
-            
-            u2=0.25*dx1 + 0.25*p->dt*(p->ccipol1(a->u,coord1,coord2,coord3));
-            coord1=PP->X[n]+u2;
-            
-            v2=0.25*v1 + 0.25*p->dt*(p->ccipol2(a->v,coord1,coord2,coord3));
-            coord2=PP->Y[n]+v2;
-            
-            w2=0.25*w1 + 0.25*p->dt*(p->ccipol3(a->w,coord1,coord2,coord3));
-            coord3=PP->Z[n]+w2;
-            
-            
-            PP->X[n] += (2.0/3.0)*u2 + (2.0/3.0)*p->dt*(p->ccipol1(a->u,coord1,coord2,coord3));
-
-            PP->Y[n] += (2.0/3.0)*v2 + (2.0/3.0)*p->dt*(p->ccipol2(a->v,coord1,coord2,coord3));
-            
-            PP->Z[n] += (2.0/3.0)*w2 + (2.0/3.0)*p->dt*(p->ccipol3(a->w,coord1,coord2,coord3));
-
             i=p->posc_i(PP->X[n]);
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
@@ -223,6 +254,7 @@ int particle_func::remove(lexer* p,tracers_obj* PP)
                 removed++;
             }
         }
+    
     return removed;
 }
 
@@ -307,11 +339,8 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, tracers_obj* PP, int maxco
         PP->reserve(sum);
 
     for(int n=0;n<6;n++)
-    {
         PP->add_obj(&Recv[n]);
-        // Send[n].erase_all();
-        // Recv[n].erase_all();
-    }
+    
     return xchange;
 }
 
@@ -397,11 +426,8 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
         PP->reserve(sum);
 
     for(int n=0;n<6;n++)
-    {
         PP->add_obj(&Recv[n]);
-        // Send[n].erase_all();
-        // Recv[n].erase_all();
-    }
+    
     return xchange;
 }
 
@@ -544,4 +570,48 @@ void particle_func::particlesPerCell(lexer* p, particles_obj* PP)
         k=p->posc_k(PP->Z[n]);
         PP->cellSum[IJK]++;
     }
+}
+
+void particle_func::particleStressTensor(lexer* p, particles_obj* PP)
+{
+    double theta;
+    int i,j,k;
+
+    PLAINLOOP
+    {
+        theta = PI*pow(PP->d50,3.0)*PP->cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]);
+        stressTensor[IJK]=Ps*pow(theta,beta)/max(theta_crit-theta,epsilon*(1-theta));
+    }
+}
+
+void particle_func::particleStressTensorUpdateIJK(lexer* p, particles_obj* PP)
+{
+    double theta;
+    int i,j,k;
+
+    for (int n=-2; n<3; n++)
+        for (int m=-2; m<3; m++)
+            for (int l=-2; l<3; l++)
+            {
+                i=increment::i+n;
+                j=increment::j+m;
+                k=increment::k+l;
+
+                theta = PI*pow(PP->d50,3.0)*PP->cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]);
+                stressTensor[IJK]=Ps*pow(theta,beta)/max(theta_crit-theta,epsilon*(1-theta));
+            }
+}
+
+double particle_func::drag_model(lexer* p, double d, double du, double dv, double dw, double thetas) const
+{
+    const double thetaf = 1.0-thetas;
+
+    const double dU=sqrt(du*du+dv*dv+dw*dw);
+
+    const double Rep=dU*d*kinVis;
+
+    const double Cd=24.0*(pow(thetaf,-2.65)+pow(Rep,2.0/3.0)*pow(thetaf,-1.78)/6.0)/Rep;
+    const double Dp=Cd*3.0*drho*dU/d/4.0;
+
+    return Dp;
 }

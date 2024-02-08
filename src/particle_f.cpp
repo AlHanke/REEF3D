@@ -28,7 +28,7 @@ Author: Hans Bihs
 #include<sys/stat.h>
 #include<sys/types.h>
 
-particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : active_box(p), active_topo(p), irand(100000), drand(irand), PP(10,p->S20,p->S22,p->S24)
+particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : particle_func(p), active_box(p), active_topo(p), irand(100000), drand(irand), PP(10,p->S20,p->S22,p->S24)
 {
     
     if(p->I40==0)
