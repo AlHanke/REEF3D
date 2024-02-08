@@ -95,77 +95,77 @@ nhflow_print_runup_gage_x::~nhflow_print_runup_gage_x()
 
 void nhflow_print_runup_gage_x::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, slice &f)
 {
-    double zval=0.0;
-    int check;
+    // double zval=0.0;
+    // int check;
 
-    //-------------------
+    // //-------------------
 
-    for(q=0;q<p->P133;++q)
-    {
-    xloc[q] = -1.0e20;
-    zloc[q] = -1.0e20;
-    flag[q] = 0;
-    }
+    // for(q=0;q<p->P133;++q)
+    // {
+    // xloc[q] = -1.0e20;
+    // zloc[q] = -1.0e20;
+    // flag[q] = 0;
+    // }
     
-    for(q=0;q<p->P133;++q)
-    for(n=0;n<p->M10;++n)
-    {
-    xloc_all[q][n]=0.0;
-    zloc_all[q][n]=0.0;
-    }
+    // for(q=0;q<p->P133;++q)
+    // for(n=0;n<p->M10;++n)
+    // {
+    // xloc_all[q][n]=0.0;
+    // zloc_all[q][n]=0.0;
+    // }
 
-    for(q=0;q<p->P133;++q)
-    {
-        j=jloc[q];
+    // for(q=0;q<p->P133;++q)
+    // {
+    //     j=jloc[q];
         
-        ILOOP
-        if(p->wet[IJ]==1 && p->wet[Ip1J]==0)
-        {
-            if(p->XN[IP1]>xloc[q])
-            {
-            xloc[q] = p->XN[IP1];
-            zloc[q] = 0.5*(f(i,j)+f(i+1,j))+p->phimean;
-            flag[q] = 1;
-            //cout<<p->mpirank<<" xloc[q]: "<<xloc[q]<<" zloc[q]: "<<zloc[q]<<endl;
-            }
-        }
-    }
+    //     ILOOP
+    //     if(p->wet[IJ]==1 && p->wet[Ip1J]==0)
+    //     {
+    //         if(p->XN[IP1]>xloc[q])
+    //         {
+    //         xloc[q] = p->XN[IP1];
+    //         zloc[q] = 0.5*(f(i,j)+f(i+1,j))+p->phimean;
+    //         flag[q] = 1;
+    //         //cout<<p->mpirank<<" xloc[q]: "<<xloc[q]<<" zloc[q]: "<<zloc[q]<<endl;
+    //         }
+    //     }
+    // }
 	
 	
-    // gather
-    for(q=0;q<p->P133;++q)
-    {
-    pgc->gather_double(&xloc[q],1,xloc_all[q],1);
-    pgc->gather_double(&zloc[q],1,zloc_all[q],1);
-	pgc->gather_int(&flag[q],1,flag_all[q],1);
-    }
+    // // gather
+    // for(q=0;q<p->P133;++q)
+    // {
+    // pgc->gather_double(&xloc[q],1,xloc_all[q],1);
+    // pgc->gather_double(&zloc[q],1,zloc_all[q],1);
+	// pgc->gather_int(&flag[q],1,flag_all[q],1);
+    // }
     
-    if(p->mpirank==0)
-    {
-        for(q=0;q<p->P133;++q)
-        for(n=0;n<p->M10;++n)
-        {
-        //cout<<p->mpirank<<" xloc_all[q]: "<<xloc_all[q][n]<<endl;
+    // if(p->mpirank==0)
+    // {
+    //     for(q=0;q<p->P133;++q)
+    //     for(n=0;n<p->M10;++n)
+    //     {
+    //     //cout<<p->mpirank<<" xloc_all[q]: "<<xloc_all[q][n]<<endl;
 
-        if(xloc_all[q][n]>xloc[q])
-        {
-        xloc[q] = xloc_all[q][n];
-        zloc[q] = zloc_all[q][n];
-        }
-        }
+    //     if(xloc_all[q][n]>xloc[q])
+    //     {
+    //     xloc[q] = xloc_all[q][n];
+    //     zloc[q] = zloc_all[q][n];
+    //     }
+    //     }
         
-    }
+    // }
     
     
 	
-    // write to file
-    if(p->mpirank==0)
-    {
-    wsfout<<setprecision(9)<<p->simtime<<"\t";
-    for(q=0;q<p->P133;++q)
-    wsfout<<setprecision(9)<<xloc[q]<<"  \t  "<<zloc[q];
-    wsfout<<endl;
-    }
+    // // write to file
+    // if(p->mpirank==0)
+    // {
+    // wsfout<<setprecision(9)<<p->simtime<<"\t";
+    // for(q=0;q<p->P133;++q)
+    // wsfout<<setprecision(9)<<xloc[q]<<"  \t  "<<zloc[q];
+    // wsfout<<endl;
+    // }
 }
 
 void nhflow_print_runup_gage_x::ini_location(lexer *p, fdm_nhf *d, ghostcell *pgc)
