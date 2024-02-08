@@ -30,7 +30,7 @@ Author: Alexander Hanke
 
 #define PARTICLELOOP for(size_t n=0;n<PP->loopindex;n++)
 
-particle_func::particle_func()
+particle_func::particle_func(lexer* p) : kinVis(p->W1/p->W2), drho(p->W1/p->S22)
 {
 }
 particle_func::~particle_func()

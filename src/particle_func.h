@@ -66,7 +66,13 @@ protected:
     // memory management
     void cleanup(lexer*,fdm*,particles_obj*,int);
 private:
-
+    const double kinVis;
+    const double drho;
+    double* stressTensor;
+    double Ps=1; // in pressure unit
+    double beta = 3.5; // 2<=beta<=5
+    double epsilon = 10e-7;
+    double theta_crit = 0.6; // 0.6-0.65
 };
 
 #endif
