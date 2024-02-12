@@ -137,7 +137,13 @@ void particle_func::advect(lexer* p, fdm* a, particles_obj* PP, int minflag, dou
         }
 }
 
-
+/// @brief Particle transport equation following (Tavouktsoglou 2021)
+/// @param p 
+/// @param a 
+/// @param PP 
+/// @param minflag Particles need to have a larger flag
+/// Uses Runge Kutta 3 to calculate the change in particle velocity 
+/// The particle velocity is then used to transport the particle
 void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int minflag)
 {
     double RKu,RKv,RKw;
@@ -156,7 +162,7 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int minflag)
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
 
-            thetas=(PI*pow(PP->d50,3.0)*PP->cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]));
+            thetas=0;//(PI*pow(PP->d50,3.0)*PP->cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]));
             u=p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n]);
             v=p->ccipol1(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
             w=p->ccipol1(a->w,PP->X[n],PP->Y[n],PP->Z[n]);
@@ -346,7 +352,7 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, tracers_obj* PP, int maxco
 
 
 /// @brief Transfer function
-/** Is responsible to transfer particles to one of the surrounding partitions*/
+/// Is responsible to transfer particles to one of the surrounding partitions
 /// @param p partition object
 /// @param pgc ghostcell object
 /// @param PP particles_obj contains particle information
@@ -356,7 +362,7 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
 {
     int xchange=0;
 
-    particles_obj seedling1(maxcount),seedling2(maxcount),seedling3(maxcount),seedling4(maxcount),seedling5(maxcount),seedling6(maxcount);
+    particles_obj seedling1(maxcount,PP->d50,PP->density,true),seedling2(maxcount,PP->d50,PP->density,true),seedling3(maxcount,PP->d50,PP->density,true),seedling4(maxcount,PP->d50,PP->density,true),seedling5(maxcount,PP->d50,PP->density,true),seedling6(maxcount,PP->d50,PP->density,true);
     particles_obj Send[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
     particles_obj Recv[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
 
@@ -427,7 +433,7 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
 
     for(int n=0;n<6;n++)
         PP->add_obj(&Recv[n]);
-    
+
     return xchange;
 }
 
@@ -488,25 +494,25 @@ double particle_func::drag_coefficient(lexer* p,fdm* a, particles_obj* PP, int i
 /// @brief 
 /// @param p 
 /// @param PP 
-void particle_func::make_stationary(lexer* p, fdm* a, tracers_obj* PP)
+void particle_func::make_stationary(lexer* p, fdm* a, tracers_obj* PP, int minflag)
 {
     int i,j;
     PARTICLELOOP
         if (p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<0)
-            PP->Flag[n]=0;
+            PP->Flag[n]=minflag;
 }
 
 /// @brief 
 /// @param p 
 /// @param PP 
-void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP)
+void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP, int minflag)
 {
     int i,j;
     PARTICLELOOP
         if(PP->Flag[n]>0)
         if (p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<0)
         {
-            PP->Flag[n]=0;
+            PP->Flag[n]=minflag;
             if(p->count!=0)
             {
                 i=p->posc_i(PP->X[n]);
