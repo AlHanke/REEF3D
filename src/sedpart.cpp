@@ -76,6 +76,12 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 		make_stationary(p,a,&PP);
         if(p->Q13==1)
             update_cfd(p,a,pgc,pflow,preto);
+        if(p->count%p->Q20==0)
+        {
+            if(PP.size == 0)
+                PP.erase_all();
+            // cleanup();
+        }
 	}
 
 	print_particles(p,a,pgc);
