@@ -120,11 +120,11 @@ void tracers_obj::erase_all()
 size_t tracers_obj::add(double x, double y, double z, int flag)
 {
     size_t index=Empty[empty_itr];
-    X[Empty[empty_itr]]=x;
-    Y[Empty[empty_itr]]=y;
-    Z[Empty[empty_itr]]=z;
+    X[index]=x;
+    Y[index]=y;
+    Z[index]=z;
 
-    Flag[Empty[empty_itr]]=flag;
+    Flag[index]=flag;
 
     Empty[empty_itr--]=-1;
     if(!(loopindex>size++))
