@@ -33,7 +33,7 @@ size_t overflow when adding something to an object at capacity
 particles_obj::particles_obj(size_t capacity, double d50, double density, bool individuals, size_t size, double scale_factor):
                 d50(d50), density(density), scale_factor(scale_factor), tracers_obj(capacity,size,scale_factor),
                 flag_inactive(0), flag_bed(1), flag_bed_load(2), flag_suspended_load(3),
-                entries(tracers_obj::entries+individuals?4:0) // update when adding more data
+                entries(tracers_obj::entries+(individuals?4:0)) // update when adding more data
 {	
     if(capacity>0)
     {
@@ -68,11 +68,14 @@ void particles_obj::erase(size_t index)
 {
     tracers_obj::erase(index);
 
-    U[index]=0;
-    V[index]=0;
-    W[index]=0;
+    if(entries>tracers_obj::entries)
+    {
+        U[index]=0;
+        V[index]=0;
+        W[index]=0;
 
-    PackingFactor[index]=1;
+        PackingFactor[index]=0;
+    }
 }
 
 /// \copydoc tracers_obj::erase_all
@@ -80,15 +83,18 @@ void particles_obj::erase_all()
 {
     tracers_obj::erase_all();
 
-    delete[] U;
-    delete[] V;
-    delete[] W;
-    U = new double[capacity];
-    V = new double[capacity];
-    W = new double[capacity];
+    if(entries>tracers_obj::entries)
+    {
+        delete[] U;
+        delete[] V;
+        delete[] W;
+        U = new double[capacity];
+        V = new double[capacity];
+        W = new double[capacity];
 
-    delete[] PackingFactor;
-    PackingFactor = new double[capacity];
+        delete[] PackingFactor;
+        PackingFactor = new double[capacity];
+    }
 }
 
 /// @brief
@@ -208,11 +214,14 @@ void particles_obj::memorymove(size_t des, size_t src, size_t len)
 {
     tracers_obj::memorymove(des,src,len);
 
-    std::memmove(&U[des],&U[src],sizeof(double)*len);
-    std::memmove(&V[des],&V[src],sizeof(double)*len);
-    std::memmove(&W[des],&W[src],sizeof(double)*len);
+    if(entries>tracers_obj::entries)
+    {
+        std::memmove(&U[des],&U[src],sizeof(double)*len);
+        std::memmove(&V[des],&V[src],sizeof(double)*len);
+        std::memmove(&W[des],&W[src],sizeof(double)*len);
 
-    std::memmove(&PackingFactor[des],&PackingFactor[src],sizeof(double)*len);
+        std::memmove(&PackingFactor[des],&PackingFactor[src],sizeof(double)*len);
+    }
 }
 
 /// @brief 
@@ -223,10 +232,12 @@ void particles_obj::add_obj(particles_obj* obj)
     {
         if(size+obj->size>capacity)
             reserve(size+obj->size);
-        tracers_obj::add_obj(obj);
-        if(obj->entries>tracers_obj::entries && this->entries>tracers_obj::entries)
+        
+        if(obj->entries>obj->tracers_obj::entries && this->entries>this->tracers_obj::entries)
             for(size_t n=0;n<obj->loopindex;n++)
-                add_data(n,obj->U[n],obj->V[n],obj->W[n],obj->PackingFactor[n]);
+                add(obj->X[n],obj->Y[n],obj->Z[n],obj->Flag[n],obj->U[n],obj->V[n],obj->W[n],obj->PackingFactor[n]);
+        else
+            tracers_obj::add_obj(obj);
     }
 }
 
