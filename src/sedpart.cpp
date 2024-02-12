@@ -34,7 +34,7 @@ Author: Alexander Hanke
 
 #include <sys/stat.h>
 
-sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p), PP(10,p->S20,p->S22,p->S24), active_box(p), active_topo(p), irand(10000), drand(irand)
+sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p), PP(10,p->S20,p->S22,true), active_box(p), active_topo(p), irand(10000), drand(irand)
 {
     pvrans = new vrans_f(p,pgc);
     pbedshear  = new bedshear(p,pturb);

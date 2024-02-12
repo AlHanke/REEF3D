@@ -36,6 +36,7 @@ particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : particle_func(p), act
 		printcount=0;
 		p->partprinttime=0.0;
     }
+	PP.ini_cellSum(p->imax*p->jmax*p->kmax);
 	
 	// Create Folder
 	if(p->mpirank==0 && p->P14==1)
