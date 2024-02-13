@@ -142,7 +142,7 @@ size_t particles_obj::reserve(size_t capacity_desired)
 }
 
 /// \copydoc tracers_obj::fill
-void particles_obj::fill(size_t index, bool do_empty, int flag, bool do_tracers)
+void particles_obj::fill(size_t index, bool do_empty, int flag)
 {
     if(entries>tracers_obj::entries)
         for(size_t n=size; n<index;++n)
@@ -153,7 +153,6 @@ void particles_obj::fill(size_t index, bool do_empty, int flag, bool do_tracers)
 
             PackingFactor[n]=0;
         }
-    if(do_tracers)
     tracers_obj::fill(index,do_empty,flag);
 }
 
