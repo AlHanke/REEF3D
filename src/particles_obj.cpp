@@ -46,13 +46,8 @@ particles_obj::particles_obj(size_t capacity, double d50, double density, bool i
         this->W = new double[capacity];
         
         this->PackingFactor = new double[capacity];
-        for(size_t n=0;n<size;n++)
-        {
-            this->U[n]=0;
-            this->V[n]=0;
-            this->W[n]=0;
-            this->PackingFactor[n]=0;
-        }
+
+        fill_data(0,this->size);
     }
 }
 
@@ -267,4 +262,15 @@ void particles_obj::add_data(size_t index, double u, double v, double w, double 
     this->V[index] = v;
     this->W[index] = w;
     this->PackingFactor[index] = packingFactor;
+}
+
+void particles_obj::fill_data(size_t start, size_t end)
+{
+    for(size_t n=start;n<end;n++)
+    {
+        this->U[n]=0;
+        this->V[n]=0;
+        this->W[n]=0;
+        this->PackingFactor[n]=0;
+    }
 }

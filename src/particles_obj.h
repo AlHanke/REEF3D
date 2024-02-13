@@ -53,6 +53,7 @@ public:
     void optimize();
     void debug();
     void fill(size_t,bool=true,int=-1);
+    void fill_data(size_t,size_t);
 private:
     void fix_state();
     void memorymove(size_t des, size_t src, size_t len);
