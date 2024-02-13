@@ -118,6 +118,7 @@ void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
     double x,y,z,ipolTopo,ipolSolid;
     int flag;
 
+    cout<<"Adress: "<<&(PP.U)<<"|"<<PP.U[0]<<endl;
     PLAINLOOP
         if(active_topo(i,j,k)>0.0)
             {
@@ -142,6 +143,7 @@ void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
                     }
                 }
             }
+    cout<<"Adress: "<<&(PP.U[PP.size-1])<<"|"<<PP.U[PP.size-1]<<endl;
 }
 
 void sedpart::posseed_suspended(lexer* p, fdm* a, ghostcell* pgc)
