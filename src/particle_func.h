@@ -53,6 +53,7 @@ protected:
     void transport(lexer*,fdm*,particles_obj*,int=0);
     void make_stationary(lexer*,fdm*,tracers_obj*,int=0);
     void make_stationary(lexer*,fdm*,particles_obj*,int=0);
+    void make_moving(lexer*,fdm*,particles_obj*);
 
     // util
     double reynolds(lexer*,fdm*,particles_obj*,int);
