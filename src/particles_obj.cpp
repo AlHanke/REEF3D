@@ -128,6 +128,26 @@ size_t particles_obj::reserve(size_t capacity_desired)
             std::__throw_length_error("particles_obj - max capacity reached");
 
         tracers_obj::reserve(capacity_desired);
+
+        double* newU=new double[capacity_desired];
+        memcpy( newU, U, size * sizeof(double) );
+        delete[] U;
+        U=newU;
+
+        double* newV=new double[capacity_desired];
+        memcpy( newV, V, size * sizeof(double) );
+        delete[] V;
+        V=newV;
+
+        double* newW=new double[capacity_desired];
+        memcpy( newW, W, size * sizeof(double) );
+        delete[] W;
+        W=newW;
+
+        double* newPackingFactor=new double[capacity_desired];
+        memcpy( newPackingFactor, PackingFactor, size * sizeof(double) );
+        delete[] U;
+        PackingFactor=newPackingFactor;
     }
     return this->capacity;
 }
