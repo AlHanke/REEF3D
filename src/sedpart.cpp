@@ -68,7 +68,7 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 	{
 		if(p->Q120==1&&p->count%p->Q121==0)
 			posseed_suspended(p,a,pgc);
-        // erode(p,a,pgc);
+        erode(p,a,pgc);
 		// advect(p,a,&PP,0,0,0,0);
         transport(p,a,&PP);
 		xchange=transfer(p,pgc,&PP,maxparticle);
@@ -148,35 +148,41 @@ void sedpart::update_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow)
 
 void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
 {
-    int i,j,k;
-    double x,y,z;
-    double eroded=0.0;
-    size_t index=0;
-    // pbedshear->taueff_loc
-    cout<<"eroding..."<<endl;
-    if(p->count%p->Q121==0)
-        SLICEBASELOOP
-        {
-            // test for erosion
-            if (i%2==0&&j%3==0)
-                eroded +=volume(&PP,0);
+    if(p->Q101>0)
+    {
+        make_moving(p,a,&PP);
+    }
+    
+    
+    // int i,j,k;
+    // double x,y,z;
+    // double eroded=0.0;
+    // size_t index=0;
+    // // pbedshear->taueff_loc
+    // cout<<"eroding..."<<endl;
+    // if(p->count%p->Q121==0)
+    //     SLICEBASELOOP
+    //     {
+    //         // test for erosion
+    //         if (i%2==0&&j%3==0)
+    //             eroded +=volume(&PP,0);
 
-            // Change amount accoding to eroded volume?
-            // Rerun eroded column until no more erosion?
+    //         // Change amount accoding to eroded volume?
+    //         // Rerun eroded column until no more erosion?
 
-            while (eroded>0)
-            {
-                x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
-                y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
-                z = p->ZN[KP] + p->DZN[KP]*0.5;
-                z-=p->ccipol4_b(a->topo,x,y,z);
-                cout<<PP.size<<"|";
-                index=PP.add(x,y,z,1);
-                cout<<PP.size<<endl;
-                eroded -= volume(&PP,index);
-            }
-            eroded=0;
-        }
+    //         while (eroded>0)
+    //         {
+    //             x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
+    //             y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
+    //             z = p->ZN[KP] + p->DZN[KP]*0.5;
+    //             z-=p->ccipol4_b(a->topo,x,y,z);
+    //             cout<<PP.size<<"|";
+    //             index=PP.add(x,y,z,1);
+    //             cout<<PP.size<<endl;
+    //             eroded -= volume(&PP,index);
+    //         }
+    //         eroded=0;
+    //     }
 }
 
 void sedpart::relax(lexer *p,ghostcell *pgc)
