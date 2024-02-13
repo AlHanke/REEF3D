@@ -520,6 +520,12 @@ void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP, int min
                 p->flag_topo_changed[IJ]=1;
                 p->topo_change[IJ]+=volume(PP,n);
             }
+            if(PP->entries>PP->tracers_obj::entries)
+            {
+                PP->U[n]=0;
+                PP->V[n]=0;
+                PP->W[n]=0;
+            }
         }
 }
 
