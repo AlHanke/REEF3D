@@ -23,6 +23,7 @@ Author: Alexander Hanke
 #include"particles_obj.h"
 #include"lexer.h"
 #include <cstdint>
+#include <cstring>
 #include<iostream>
 
 /*
