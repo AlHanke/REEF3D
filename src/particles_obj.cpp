@@ -33,22 +33,25 @@ size_t overflow when adding something to an object at capacity
 
 
 particles_obj::particles_obj(size_t capacity, double d50, double density, bool individuals, size_t size, double scale_factor):
-                d50(d50), density(density), scale_factor(scale_factor), tracers_obj(capacity,size,scale_factor),
+                tracers_obj(capacity,size,scale_factor),
+                entries(tracers_obj::entries+(individuals?4:0)), // update when adding more data
                 flag_inactive(0), flag_bed(1), flag_bed_load(2), flag_suspended_load(3),
-                entries(tracers_obj::entries+(individuals?4:0)) // update when adding more data
+                d50(d50), density(density), scale_factor(scale_factor)
+                
 {	
-    if(capacity>0)
+    if(this->capacity>0 && entries>tracers_obj::entries)
     {
-        if(size>capacity)
-            capacity=size;
-
-        if(individuals)
+        this->U = new double[capacity];
+        this->V = new double[capacity];
+        this->W = new double[capacity];
+        
+        this->PackingFactor = new double[capacity];
+        for(size_t n=0;n<size;n++)
         {
-            this->U = new double[capacity];
-            this->V = new double[capacity];
-            this->W = new double[capacity];
-            
-            this->PackingFactor = new double[capacity];
+            this->U[n]=0;
+            this->V[n]=0;
+            this->W[n]=0;
+            this->PackingFactor[n]=0;
         }
     }
 }
