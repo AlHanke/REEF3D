@@ -24,6 +24,7 @@ Author: Alexander Hanke
 
 #include <math.h>
 #include <cstdint>
+#include <cstring>
 #include <iostream>
 
 /*
