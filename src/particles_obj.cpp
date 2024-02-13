@@ -111,7 +111,9 @@ void particles_obj::erase_all()
 /// @return 
 size_t particles_obj::add(double x, double y, double z, int flag, double u, double v, double w, double packingFactor)
 {
+    std::cout<<size<<"|"<<capacity<<"|"<<loopindex<<"|"<<Empty[empty_itr]<<std::endl;
     size_t index=tracers_obj::add(x,y,z,flag);
+    std::cout<<size<<"|"<<capacity<<"|"<<loopindex<<"|"<<index<<std::endl;
     if(entries>tracers_obj::entries)
         add_data(index,u,v,w,packingFactor);
     return index;
