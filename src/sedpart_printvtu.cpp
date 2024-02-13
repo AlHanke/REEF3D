@@ -53,7 +53,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 			if(PP.Flag[n]>print_flag)
 				numpt++;
 
-	cout<<"PSedACTIVE-"<<p->mpirank<<": "<<numpt<<endl;
+	cout<<"PSedACTIVE-"<<p->mpirank<<": "<<numpt<<"|"<<PP.capacity<<endl;
 
 	int count;
 	int n=0;
