@@ -260,8 +260,8 @@ void particles_obj::add_obj(tracers_obj* obj)
 void particles_obj::add_data(size_t index, double u, double v, double w, double packingFactor)
 {
     std::cout<<size<<"|"<<capacity<<"|"<<loopindex<<"|"<<index<<std::endl;
-    // U[index]=u;
-    // V[index]=v;
-    // W[index]=w;
+    U[index]=u;
+    V[index]=v;
+    W[index]=w;
     // PackingFactor[index]=packingFactor;
 }
