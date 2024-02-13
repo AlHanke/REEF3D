@@ -49,6 +49,13 @@ particles_obj::particles_obj(size_t capacity, double d50, double density, bool i
             this->W = new double[capacity];
             
             this->PackingFactor = new double[capacity];
+            for(size_t n=0;n<capacity;n++)
+            {
+                this->U[n]=0;
+                this->V[n]=0;
+                this->W[n]=0;
+                this->PackingFactor[n]=0;
+            }
         }
     }
 }
@@ -135,7 +142,7 @@ size_t particles_obj::reserve(size_t capacity_desired)
 }
 
 /// \copydoc tracers_obj::fill
-void particles_obj::fill(size_t index, bool do_empty, int flag)
+void particles_obj::fill(size_t index, bool do_empty, int flag, bool do_tracers)
 {
     if(entries>tracers_obj::entries)
         for(size_t n=size; n<index;++n)
@@ -144,8 +151,9 @@ void particles_obj::fill(size_t index, bool do_empty, int flag)
             V[n]=0;
             W[n]=0;
 
-            PackingFactor[n]=1;
+            PackingFactor[n]=0;
         }
+    if(do_tracers)
     tracers_obj::fill(index,do_empty,flag);
 }
 
@@ -259,9 +267,9 @@ void particles_obj::add_obj(tracers_obj* obj)
 /// @param packingFactor 
 void particles_obj::add_data(size_t index, double u, double v, double w, double packingFactor)
 {
-    std::cout<<size<<"|"<<capacity<<"|"<<loopindex<<"|"<<index<<std::endl;
+    // std::cout<<size<<"|"<<capacity<<"|"<<loopindex<<"|"<<index<<std::endl;
     U[index]=u;
     V[index]=v;
     W[index]=w;
-    // PackingFactor[index]=packingFactor;
+    PackingFactor[index]=packingFactor;
 }
