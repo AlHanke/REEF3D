@@ -37,7 +37,7 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     }
     
     // Box
-    size_t cellcount=0;
+    size_t cellcountBox=0;
     for(int qn=0;qn<p->Q110;++qn)
         LOOP
             if(p->XN[IP]>=p->Q110_xs[qn] && p->XN[IP]<p->Q110_xe[qn]
@@ -45,16 +45,17 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
             && p->ZN[KP]>=p->Q110_zs[qn] && p->ZN[KP]<p->Q110_ze[qn])
             {
                 active_box(i,j,k) = 1.0;
-                ++cellcount;
+                ++cellcountBox;
             }
 
     // Topo
+    size_t cellcountTopo=0;
     PLAINLOOP
         if((abs(a->topo(i,j,k))<(p->DZN[KP]*ceil(p->Q102)))&&(a->topo(i,j,k)<=0.25*p->DZN[KP])) //find better comparison to fix numerical drifts
         {
             active_topo(i,j,k) = 1.0;
             if(1!=active_box(i,j,k))
-                cellcount++;
+                cellcountTopo++;
         }
 
     // guess particle demand
@@ -63,7 +64,7 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     else
         ppcell = 0;
     
-    partnum = cellcount * ppcell;
+    partnum = cellcountBox * ppcell + p->Q102 * cellcountTopo * ppcell;
 }
 
 void sedpart::seed(lexer* p, fdm* a, ghostcell* pgc)
@@ -120,9 +121,9 @@ void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
     PLAINLOOP
         if(active_topo(i,j,k)>0.0)
             {
-                if(PP.size+ppcell>0.9*PP.capacity)
+                if(PP.size+ppcell*p->Q102>0.9*PP.capacity)
                     PP.reserve();
-                for(int qn=0;qn<ppcell;++qn)
+                for(int qn=0;qn<ppcell*p->Q102;++qn)
                 {
 
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
