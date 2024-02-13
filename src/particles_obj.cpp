@@ -113,7 +113,7 @@ size_t particles_obj::add(double x, double y, double z, int flag, double u, doub
 {
     std::cout<<size<<"|"<<capacity<<"|"<<loopindex<<"|"<<Empty[empty_itr]<<std::endl;
     size_t index=tracers_obj::add(x,y,z,flag);
-    std::cout<<size<<"|"<<capacity<<"|"<<loopindex<<"|"<<index<<std::endl;
+    // std::cout<<size<<"|"<<capacity<<"|"<<loopindex<<"|"<<index<<std::endl;
     if(entries>tracers_obj::entries)
         add_data(index,u,v,w,packingFactor);
     return index;
@@ -259,8 +259,9 @@ void particles_obj::add_obj(tracers_obj* obj)
 /// @param packingFactor 
 void particles_obj::add_data(size_t index, double u, double v, double w, double packingFactor)
 {
-    U[index]=u;
-    V[index]=v;
-    W[index]=w;
-    PackingFactor[index]=packingFactor;
+    std::cout<<size<<"|"<<capacity<<"|"<<loopindex<<"|"<<index<<std::endl;
+    // U[index]=u;
+    // V[index]=v;
+    // W[index]=w;
+    // PackingFactor[index]=packingFactor;
 }
