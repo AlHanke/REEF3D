@@ -44,13 +44,13 @@ tracers_obj::tracers_obj(size_t capacity, size_t size, double scale_factor): sca
         if(size>capacity)
             capacity=size;
 
-        X=new double[capacity]; // default value: NULL
-        Y=new double[capacity]; // default value: NULL
-        Z=new double[capacity]; // default value: NULL
+        this->X = new double[capacity]; // default value: NULL
+        this->Y = new double[capacity]; // default value: NULL
+        this->Z = new double[capacity]; // default value: NULL
 
-        Flag=new int[capacity]; // default value: -1
+        this->Flag = new int[capacity]; // default value: -1
 
-        Empty=new size_t[capacity]; // default value: size_t_max-1
+        this->Empty = new size_t[capacity]; // default value: size_t_max-1
         this->capacity=capacity;
 
         this->size=0;

@@ -44,12 +44,11 @@ particles_obj::particles_obj(size_t capacity, double d50, double density, bool i
 
         if(individuals)
         {
-            std::cout<<"init indiv"<<std::endl;
-            U = new double[capacity];
-            V = new double[capacity];
-            W = new double[capacity];
+            this->U = new double[capacity];
+            this->V = new double[capacity];
+            this->W = new double[capacity];
             
-            PackingFactor = new double[capacity];
+            this->PackingFactor = new double[capacity];
         }
     }
 }
