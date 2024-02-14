@@ -218,15 +218,20 @@ void particles_obj::fix_state() // ToDo - update
 void particles_obj::optimize() // ToDo - update
 {
     // Could be optimized to look ahead if a large section is empty to only do one move operation
-    size_t loopchange=0;
-    for(int n=empty_itr; n>=0;--n)
-        if(Empty[n]<loopindex)
-        {
-            memorymove(Empty[n],Empty[n]+1,(loopindex-Empty[n]+1));
+    if(loopindex>(1.0+overhead)*size)
+    {
+        size_t loopchange=0;
+        for(int n=empty_itr; n>=0;--n)
+            if(Empty[n]<loopindex)
+            {
+                memorymove(Empty[n],Empty[n]+1,(loopindex-Empty[n]+1));
 
-            loopchange++;
-        }
-    loopindex -= loopchange;
+                loopchange++;
+            }
+        loopindex -= loopchange;
+        if(loopindex>0)
+        reset_Empty();
+    }
 }
 
 /// \copydoc tracers::memorymove

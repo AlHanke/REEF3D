@@ -66,6 +66,7 @@ public:
     const int flag_bed;
     const int flag_bed_load;
     const int flag_suspended_load;
+    const double overhead = 0.25; 
 
     //particle data
     //general
