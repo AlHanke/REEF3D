@@ -58,6 +58,7 @@ protected:
     void fill_empty();
     void fix_state();
     void memorymove(size_t,size_t,size_t);
+    void reset_Empty();
 
 public:
     // --- state data ---

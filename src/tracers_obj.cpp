@@ -274,6 +274,8 @@ void tracers_obj::optimize()
             loopchange++;
         }
     loopindex -= loopchange;
+    if(loopchange>0)
+    reset_Empty();
 }
 
 /// @brief Moves section of data memory
@@ -324,4 +326,12 @@ void tracers_obj::ini_cellSum(int dim)
         cellSumIniState = false;
         ini_cellSum(dim);
     }
+}
+
+void tracers_obj::reset_Empty()
+{
+    delete[] Empty;
+    Empty=new size_t[capacity];
+    empty_itr=0;
+    fill_empty();
 }
