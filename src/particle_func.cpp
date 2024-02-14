@@ -583,7 +583,7 @@ void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP, int min
 /// @return 
 double particle_func::volume(particles_obj* PP, int index)
 {
-    return PI*pow(PP->d50,3.0)/6.0;
+    return PI*pow(PP->d50,3.0)*PP->PackingFactor[index]/6.0;
 }
 
 void particle_func::cleanup(lexer* p, fdm* a, particles_obj* PP, int max)
