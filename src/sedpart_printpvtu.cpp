@@ -111,7 +111,7 @@ void sedpart::pvtu_pos(lexer* p, fdm* a, ghostcell* pgc)
 void sedpart::piecename_pos(lexer* p,fdm* a, ghostcell* pgc, int n)
 {
 
-    if(p->P15==1)
+    // if(p->P15==1)
     num = printcount;
 
     if(p->P15==2)
@@ -228,226 +228,226 @@ void sedpart::piecename_pos(lexer* p,fdm* a, ghostcell* pgc, int n)
 void sedpart::header_pos(lexer* p, fdm* a, ghostcell* pgc)
 {
 
-    if(p->P15==1)
+    // if(p->P15==1)
     num = printcount;
 
     if(p->P15==2)
     num = p->count;
 
-if(p->P14==0)
-{
-	if(p->mpirank<9)
+	if(p->P14==0)
 	{
-		if(num<10)
-		sprintf(name,"REEF3D-SedPart-00000%i-0000%i.vtu",num,p->mpirank+1);
+		if(p->mpirank<9)
+		{
+			if(num<10)
+			sprintf(name,"REEF3D-SedPart-00000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"REEF3D-SedPart-0000%i-0000%i.vtu",num,p->mpirank+1);
+			if(num<100&&num>9)
+			sprintf(name,"REEF3D-SedPart-0000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"REEF3D-SedPart-000%i-0000%i.vtu",num,p->mpirank+1);
+			if(num<1000&&num>99)
+			sprintf(name,"REEF3D-SedPart-000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"REEF3D-SedPart-00%i-0000%i.vtu",num,p->mpirank+1);
+			if(num<10000&&num>999)
+			sprintf(name,"REEF3D-SedPart-00%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"REEF3D-SedPart-0%i-0000%i.vtu",num,p->mpirank+1);
+			if(num<100000&&num>9999)
+			sprintf(name,"REEF3D-SedPart-0%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"REEF3D-SedPart-%i-0000%i.vtu",num,p->mpirank+1);
+			if(num>99999)
+			sprintf(name,"REEF3D-SedPart-%i-0000%i.vtu",num,p->mpirank+1);
+		}
+
+		if(p->mpirank<99&&p->mpirank>8)
+		{
+			if(num<10)
+			sprintf(name,"REEF3D-SedPart-00000%i-000%i.vtu",num,p->mpirank+1);
+
+			if(num<100&&num>9)
+			sprintf(name,"REEF3D-SedPart-0000%i-000%i.vtu",num,p->mpirank+1);
+
+			if(num<1000&&num>99)
+			sprintf(name,"REEF3D-SedPart-000%i-000%i.vtu",num,p->mpirank+1);
+
+			if(num<10000&&num>999)
+			sprintf(name,"REEF3D-SedPart-00%i-000%i.vtu",num,p->mpirank+1);
+
+			if(num<100000&&num>9999)
+			sprintf(name,"REEF3D-SedPart-0%i-000%i.vtu",num,p->mpirank+1);
+
+			if(num>99999)
+			sprintf(name,"REEF3D-SedPart-%i-000%i.vtu",num,p->mpirank+1);
+		}
+		if(p->mpirank<999&&p->mpirank>98)
+		{
+			if(num<10)
+			sprintf(name,"REEF3D-SedPart-00000%i-00%i.vtu",num,p->mpirank+1);
+
+			if(num<100&&num>9)
+			sprintf(name,"REEF3D-SedPart-0000%i-00%i.vtu",num,p->mpirank+1);
+
+			if(num<1000&&num>99)
+			sprintf(name,"REEF3D-SedPart-000%i-00%i.vtu",num,p->mpirank+1);
+
+			if(num<10000&&num>999)
+			sprintf(name,"REEF3D-SedPart-00%i-00%i.vtu",num,p->mpirank+1);
+
+			if(num<100000&&num>9999)
+			sprintf(name,"REEF3D-SedPart-0%i-00%i.vtu",num,p->mpirank+1);
+
+			if(num>99999)
+			sprintf(name,"REEF3D-SedPart-%i-00%i.vtu",num,p->mpirank+1);
+		}
+
+		if(p->mpirank<9999&&p->mpirank>998)
+		{
+			if(num<10)
+			sprintf(name,"REEF3D-SedPart-00000%i-0%i.vtu",num,p->mpirank+1);
+
+			if(num<100&&num>9)
+			sprintf(name,"REEF3D-SedPart-0000%i-0%i.vtu",num,p->mpirank+1);
+
+			if(num<1000&&num>99)
+			sprintf(name,"REEF3D-SedPart-000%i-0%i.vtu",num,p->mpirank+1);
+
+			if(num<10000&&num>999)
+			sprintf(name,"REEF3D-SedPart-00%i-0%i.vtu",num,p->mpirank+1);
+
+			if(num<100000&&num>9999)
+			sprintf(name,"REEF3D-SedPart-0%i-0%i.vtu",num,p->mpirank+1);
+
+			if(num>99999)
+			sprintf(name,"REEF3D-SedPart-%i-0%i.vtu",num,p->mpirank+1);
+		}
+
+		if(p->mpirank>9998)
+		{
+			if(num<10)
+			sprintf(name,"REEF3D-SedPart-00000%i-%i.vtu",num,p->mpirank+1);
+
+			if(num<100&&num>9)
+			sprintf(name,"REEF3D-SedPart-0000%i-%i.vtu",num,p->mpirank+1);
+
+			if(num<1000&&num>99)
+			sprintf(name,"REEF3D-SedPart-000%i-%i.vtu",num,p->mpirank+1);
+
+			if(num<10000&&num>999)
+			sprintf(name,"REEF3D-SedPart-00%i-%i.vtu",num,p->mpirank+1);
+
+			if(num<100000&&num>9999)
+			sprintf(name,"REEF3D-SedPart-0%i-%i.vtu",num,p->mpirank+1);
+
+			if(num>99999)
+			sprintf(name,"REEF3D-SedPart-%i-%i.vtu",num,p->mpirank+1);
+		}
 	}
 
-	if(p->mpirank<99&&p->mpirank>8)
+
+	if(p->P14==1)
 	{
-		if(num<10)
-		sprintf(name,"REEF3D-SedPart-00000%i-000%i.vtu",num,p->mpirank+1);
+		if(p->mpirank<9)
+		{
+			if(num<10)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<100&&num>9)
-		sprintf(name,"REEF3D-SedPart-0000%i-000%i.vtu",num,p->mpirank+1);
+			if(num<100&&num>9)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<1000&&num>99)
-		sprintf(name,"REEF3D-SedPart-000%i-000%i.vtu",num,p->mpirank+1);
+			if(num<1000&&num>99)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<10000&&num>999)
-		sprintf(name,"REEF3D-SedPart-00%i-000%i.vtu",num,p->mpirank+1);
+			if(num<10000&&num>999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num<100000&&num>9999)
-		sprintf(name,"REEF3D-SedPart-0%i-000%i.vtu",num,p->mpirank+1);
+			if(num<100000&&num>9999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i-0000%i.vtu",num,p->mpirank+1);
 
-		if(num>99999)
-		sprintf(name,"REEF3D-SedPart-%i-000%i.vtu",num,p->mpirank+1);
+			if(num>99999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i-0000%i.vtu",num,p->mpirank+1);
+		}
+
+		if(p->mpirank<99&&p->mpirank>8)
+		{
+			if(num<10)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i-000%i.vtu",num,p->mpirank+1);
+
+			if(num<100&&num>9)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i-000%i.vtu",num,p->mpirank+1);
+
+			if(num<1000&&num>99)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i-000%i.vtu",num,p->mpirank+1);
+
+			if(num<10000&&num>999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i-000%i.vtu",num,p->mpirank+1);
+
+			if(num<100000&&num>9999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i-000%i.vtu",num,p->mpirank+1);
+
+			if(num>99999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i-000%i.vtu",num,p->mpirank+1);
+		}
+		if(p->mpirank<999&&p->mpirank>98)
+		{
+			if(num<10)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i-00%i.vtu",num,p->mpirank+1);
+
+			if(num<100&&num>9)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i-00%i.vtu",num,p->mpirank+1);
+
+			if(num<1000&&num>99)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i-00%i.vtu",num,p->mpirank+1);
+
+			if(num<10000&&num>999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i-00%i.vtu",num,p->mpirank+1);
+
+			if(num<100000&&num>9999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i-00%i.vtu",num,p->mpirank+1);
+
+			if(num>99999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i-00%i.vtu",num,p->mpirank+1);
+		}
+
+		if(p->mpirank<9999&&p->mpirank>998)
+		{
+			if(num<10)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i-0%i.vtu",num,p->mpirank+1);
+
+			if(num<100&&num>9)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i-0%i.vtu",num,p->mpirank+1);
+
+			if(num<1000&&num>99)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i-0%i.vtu",num,p->mpirank+1);
+
+			if(num<10000&&num>999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i-0%i.vtu",num,p->mpirank+1);
+
+			if(num<100000&&num>9999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i-0%i.vtu",num,p->mpirank+1);
+
+			if(num>99999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i-0%i.vtu",num,p->mpirank+1);
+		}
+
+		if(p->mpirank>9998)
+		{
+			if(num<10)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i-%i.vtu",num,p->mpirank+1);
+
+			if(num<100&&num>9)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i-%i.vtu",num,p->mpirank+1);
+
+			if(num<1000&&num>99)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i-%i.vtu",num,p->mpirank+1);
+
+			if(num<10000&&num>999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i-%i.vtu",num,p->mpirank+1);
+
+			if(num<100000&&num>9999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i-%i.vtu",num,p->mpirank+1);
+
+			if(num>99999)
+			sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i-%i.vtu",num,p->mpirank+1);
+		}
 	}
-	if(p->mpirank<999&&p->mpirank>98)
-	{
-		if(num<10)
-		sprintf(name,"REEF3D-SedPart-00000%i-00%i.vtu",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"REEF3D-SedPart-0000%i-00%i.vtu",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"REEF3D-SedPart-000%i-00%i.vtu",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"REEF3D-SedPart-00%i-00%i.vtu",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"REEF3D-SedPart-0%i-00%i.vtu",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"REEF3D-SedPart-%i-00%i.vtu",num,p->mpirank+1);
-	}
-
-	if(p->mpirank<9999&&p->mpirank>998)
-	{
-		if(num<10)
-		sprintf(name,"REEF3D-SedPart-00000%i-0%i.vtu",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"REEF3D-SedPart-0000%i-0%i.vtu",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"REEF3D-SedPart-000%i-0%i.vtu",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"REEF3D-SedPart-00%i-0%i.vtu",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"REEF3D-SedPart-0%i-0%i.vtu",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"REEF3D-SedPart-%i-0%i.vtu",num,p->mpirank+1);
-	}
-
-	if(p->mpirank>9998)
-	{
-		if(num<10)
-		sprintf(name,"REEF3D-SedPart-00000%i-%i.vtu",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"REEF3D-SedPart-0000%i-%i.vtu",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"REEF3D-SedPart-000%i-%i.vtu",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"REEF3D-SedPart-00%i-%i.vtu",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"REEF3D-SedPart-0%i-%i.vtu",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"REEF3D-SedPart-%i-%i.vtu",num,p->mpirank+1);
-	}
-}
-
-
-if(p->P14==1)
-{
-	if(p->mpirank<9)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i-0000%i.vtu",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i-0000%i.vtu",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i-0000%i.vtu",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i-0000%i.vtu",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i-0000%i.vtu",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i-0000%i.vtu",num,p->mpirank+1);
-	}
-
-	if(p->mpirank<99&&p->mpirank>8)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i-000%i.vtu",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i-000%i.vtu",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i-000%i.vtu",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i-000%i.vtu",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i-000%i.vtu",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i-000%i.vtu",num,p->mpirank+1);
-	}
-	if(p->mpirank<999&&p->mpirank>98)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i-00%i.vtu",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i-00%i.vtu",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i-00%i.vtu",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i-00%i.vtu",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i-00%i.vtu",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i-00%i.vtu",num,p->mpirank+1);
-	}
-
-	if(p->mpirank<9999&&p->mpirank>998)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i-0%i.vtu",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i-0%i.vtu",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i-0%i.vtu",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i-0%i.vtu",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i-0%i.vtu",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i-0%i.vtu",num,p->mpirank+1);
-	}
-
-	if(p->mpirank>9998)
-	{
-		if(num<10)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00000%i-%i.vtu",num,p->mpirank+1);
-
-		if(num<100&&num>9)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0000%i-%i.vtu",num,p->mpirank+1);
-
-		if(num<1000&&num>99)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-000%i-%i.vtu",num,p->mpirank+1);
-
-		if(num<10000&&num>999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-00%i-%i.vtu",num,p->mpirank+1);
-
-		if(num<100000&&num>9999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-0%i-%i.vtu",num,p->mpirank+1);
-
-		if(num>99999)
-		sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%i-%i.vtu",num,p->mpirank+1);
-	}
-}
 
 }
 
