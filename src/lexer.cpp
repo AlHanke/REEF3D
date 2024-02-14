@@ -30,6 +30,7 @@ lexer::lexer() : cmu(0.09), position(this), interpolation(this)
     
 	ini_default();
     mpirank=0;
+    tpcellnum=0;
 }
 
 lexer::~lexer()
