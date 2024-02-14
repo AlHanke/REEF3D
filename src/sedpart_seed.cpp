@@ -98,8 +98,6 @@ void sedpart::posseed_box(lexer* p, fdm* a, ghostcell* pgc)
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
 
-                    // pos[pactive][RADIUS] = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
-
                     PP.add(x,y,z,1);
                     PP.cellSum[IJK]++;
                 }
@@ -118,7 +116,6 @@ void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
     double x,y,z,ipolTopo,ipolSolid;
     int flag;
 
-    cout<<"Adress: "<<&(PP.U)<<"|"<<PP.U[0]<<endl;
     PLAINLOOP
         if(active_topo(i,j,k)>0.0)
             {
@@ -126,12 +123,9 @@ void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
                     PP.reserve();
                 for(int qn=0;qn<ppcell*p->Q102;++qn)
                 {
-
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
-
-                    // tempPos[tempActive][RADIUS] = p->Q31/2*double(rand() % int(drand/2) + int(drand/2))/drand;
 
                     ipolTopo = p->ccipol4_b(a->topo,x,y,z);
                     ipolSolid = p->ccipol4_b(a->solid,x,y,z);
@@ -143,7 +137,6 @@ void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
                     }
                 }
             }
-    cout<<"Adress: "<<&(PP.U[PP.size-1])<<"|"<<PP.U[PP.size-1]<<endl;
 }
 
 void sedpart::posseed_suspended(lexer* p, fdm* a, ghostcell* pgc)
