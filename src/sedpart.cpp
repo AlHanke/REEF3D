@@ -70,7 +70,6 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 		if(p->Q120==1&&p->count%p->Q121==0)
 			posseed_suspended(p,a,pgc);
         erode(p,a,pgc);
-		// advect(p,a,&PP,0,0,0,0);
         transport(p,a,&PP);
 		xchange=transfer(p,pgc,&PP,maxparticle);
 		removed=remove(p,&PP);
@@ -127,8 +126,8 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
     JILOOP
         if(p->flag_topo_changed[IJ]==1)
         {
-            double dh=p->topo_change[IJ]/p->DXN[IP]/p->DYN[JP]*100;
-            cout<<"dh["<<p->mpirank<<"]("<<i<<","<<j<<")="<<dh<<"|"<<IJ<<endl;
+            double dh=p->topo_change[IJ]/p->DXN[IP]/p->DYN[JP];
+            // cout<<"dh["<<p->mpirank<<"]("<<i<<","<<j<<")="<<dh<<"|"<<IJ<<endl;
             KLOOP
                 a->topo(i,j,k) -= dh;
             p->flag_topo_changed[IJ]=0;
