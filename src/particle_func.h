@@ -44,6 +44,7 @@ protected:
     
     // para
     int remove(lexer*,tracers_obj*);
+    int remove(lexer*,particles_obj*);
     int transfer(lexer*,ghostcell*,tracers_obj*,int);
     int transfer(lexer*,ghostcell*,particles_obj*,int);
 
