@@ -80,6 +80,7 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
         {
             if(PP.size == 0)
                 PP.erase_all();
+            // PP.optimize();
             // cleanup();
         }
 	}
