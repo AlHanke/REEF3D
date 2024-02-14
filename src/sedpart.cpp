@@ -39,6 +39,7 @@ sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p)
     pvrans = new vrans_f(p,pgc);
     pbedshear  = new bedshear(p,pturb);
     PP.ini_cellSum(p->imax*p->jmax*p->kmax);
+    printcount = 0;
 
     // Create Folder
 	if(p->mpirank==0 && p->P14==1 && p->Q180>0)
