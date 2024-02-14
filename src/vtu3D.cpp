@@ -583,7 +583,8 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 	result<<"<?xml version=\"1.0\"?>"<<endl;
 	result<<"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
 	result<<"<UnstructuredGrid>"<<endl;
-	result<<"<Piece NumberOfPoints=\""<<p->pointnum<<"\" NumberOfCells=\""<<p->tpcellnum<<"\">"<<endl;
+	result<<"<Piece NumberOfPoints=\""<<p->pointnum;
+	result<<"\" NumberOfCells=\""<<p->tpcellnum<<"\">"<<endl;
 
     n=0;
     result<<"<PointData >"<<endl;
