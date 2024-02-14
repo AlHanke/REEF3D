@@ -30,7 +30,7 @@ Author: Hans Bihs
 void sedpart::pvtu_pos(lexer* p, fdm* a, ghostcell* pgc)
 {
 
-    if(p->P15==1)
+    // if(p->P15==1)
     num = printcount;
 
     if(p->P15==2)
