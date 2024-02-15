@@ -405,6 +405,11 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
     particles_obj Send[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
     particles_obj Recv[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
 
+    // size_t cellSum1[p->jmax*p->kmax],cellSum2[p->imax*p->kmax],cellSum3[p->imax*p->kmax],cellSum4[p->jmax*p->kmax],cellSum5[p->imax*p->jmax],cellSum6[p->imax*p->jmax];
+    // memset(cellSum1, 0, sizeof(cellSum1));
+    // size_t* cellSumSend[6]={cellSum1,cellSum2,cellSum3,cellSum4,cellSum5,cellSum6};
+    // size_t* cellSumRecv[6]={cellSum1,cellSum2,cellSum3,cellSum4,cellSum5,cellSum6};
+
     int i,j,k;
 
     PARTICLELOOP
