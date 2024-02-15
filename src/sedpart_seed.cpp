@@ -148,6 +148,7 @@ void sedpart::posseed_suspended(lexer* p, fdm* a, ghostcell* pgc)
         srand((unsigned)time(0)*(p->mpirank+1));
     
     double x,y,z;
+    size_t index;
     for(int n=0;n<p->gcin_count;n++)
         if(p->gcin[n][3]>0)
         {
@@ -163,8 +164,8 @@ void sedpart::posseed_suspended(lexer* p, fdm* a, ghostcell* pgc)
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
-                    PP.add(x,y,z,1);
-                    PP.cellSum[IJK]++;
+                    index=PP.add(x,y,z,1);
+                    PP.cellSum[IJK]+=PP.PackingFactor[index];
                 }
             }
         }
