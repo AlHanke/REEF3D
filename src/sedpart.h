@@ -108,12 +108,14 @@ protected:
 private:
     int maxparticle;
     int gparticle_active;
+    int gparticle_passiv;
     int gremoved;
     int gxchange;
 
-    particles_obj PP;
+    particles_obj PP_stationary;
+    particles_obj PP_moving;
     
-    #define PARTLOOP for(int n=0;n<PP.loopindex;++n)
+    #define PARTLOOP for(int n=0;n<PP_moving.loopindex;++n)
     void seed_ini(lexer*,fdm*,ghostcell*);
     void seed(lexer*,fdm*,ghostcell*);
     void posseed_box(lexer*,fdm*,ghostcell*);
@@ -147,6 +149,8 @@ private:
 
     vrans* pvrans;
     bedshear* pbedshear;
+
+    size_t* cellSum;
 };
 
 #endif

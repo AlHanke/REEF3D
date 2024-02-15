@@ -24,6 +24,7 @@ Author: Alexander Hanke
 #define TRACERSOBJ_H_
 
 #include <stdio.h>
+#include <stddef.h>
 
 /*
 Philosophy: performance, memory usage, ease of use
@@ -73,7 +74,7 @@ public:
     /// @brief Number of different data values per particle
     const size_t entries;
     /// @brief Number of tracers per cell
-    size_t* cellSum;
+    // size_t* cellSum;
 
     // --- tracer data ---
 

@@ -47,13 +47,13 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	const int print_flag=p->Q183;
 
 	if(print_flag==0)
-		numpt=PP.size;
+		numpt=PP_moving.size;
 	else
 		PARTLOOP
-			if(PP.Flag[n]>print_flag)
+			if(PP_moving.Flag[n]>print_flag)
 				numpt++;
 
-	cout<<"PSedACTIVE-"<<p->mpirank<<": "<<numpt<<"|"<<PP.capacity<<endl;
+	cout<<"PSedACTIVE-"<<p->mpirank<<": "<<numpt<<"|"<<PP_moving.capacity<<endl;
 
 	int count;
 	int n=0;
@@ -138,7 +138,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     // iin=4*(numpt);
     // result.write((char*)&iin, sizeof (int));
 	// PARTLOOP
-    // if(PP.Flag[n]>0)
+    // if(PP_moving.Flag[n]>0)
 	// {
 	// ffn=float(f[n][3]);
 	// result.write((char*)&ffn, sizeof (float));
@@ -148,7 +148,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     // iin=4*(numpt);
     // result.write((char*)&iin, sizeof (int));
 	// PARTLOOP
-	// 	if(PP.Flag[n]>0)
+	// 	if(PP_moving.Flag[n]>0)
 	// 	{
 	// 		ffn=float(1);
 	// 		result.write((char*)&ffn, sizeof (float));
@@ -158,7 +158,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     // iin=4*(numpt);
     // result.write((char*)&iin, sizeof (int));
 	// PARTLOOP
-    // if(PP.Flag[n]>0)
+    // if(PP_moving.Flag[n]>0)
 	// {
 	// 	if(sign==1)
 	// 	{
@@ -185,15 +185,15 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	iin=4*(numpt)*3;
 	result.write((char*)&iin, sizeof (int));
     PARTLOOP
-    if(PP.Flag[n]>print_flag)
+    if(PP_moving.Flag[n]>print_flag)
 	{
-	ffn=float(PP.X[n]);
+	ffn=float(PP_moving.X[n]);
 	result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(PP.Y[n]);
+	ffn=float(PP_moving.Y[n]);
 	result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(PP.Z[n]);
+	ffn=float(PP_moving.Z[n]);
 	result.write((char*)&ffn, sizeof (float));
 	}
 	
@@ -202,7 +202,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     iin=4*(numpt)*2;
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
-	if(PP.Flag[n]>print_flag)
+	if(PP_moving.Flag[n]>print_flag)
 	{
 	iin=int(0);
 	result.write((char*)&iin, sizeof (int));
@@ -217,7 +217,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
-    if(PP.Flag[n]>print_flag)
+    if(PP_moving.Flag[n]>print_flag)
 	{
 	iin=(count+1)*2;
 	result.write((char*)&iin, sizeof (int));
@@ -229,7 +229,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
-    if(PP.Flag[n]>print_flag)
+    if(PP_moving.Flag[n]>print_flag)
 	{
 	iin=1;
 	result.write((char*)&iin, sizeof (int));

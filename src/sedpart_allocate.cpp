@@ -29,7 +29,8 @@ void sedpart::allocate(lexer* p, fdm* a, ghostcell* pgc)
 {
 	maxparticle = ceil(p->Q25*double(gpartnum));
 	
-	PP.reserve(maxparticle);
+	PP_moving.reserve(maxparticle);
+	PP_stationary.reserve(maxparticle);
 
     // parallel
 		/*	ToDo

@@ -34,11 +34,13 @@ Author: Alexander Hanke
 
 #include <sys/stat.h>
 
-sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p), PP(10,p->S20,p->S22,true), active_box(p), active_topo(p), irand(10000), drand(irand)
+sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p), PP_stationary(10,p->S20,p->S22), PP_moving(10,p->S20,p->S22,true), active_box(p), active_topo(p), irand(10000), drand(irand)
 {
     pvrans = new vrans_f(p,pgc);
     pbedshear  = new bedshear(p,pturb);
-    PP.ini_cellSum(p->imax*p->jmax*p->kmax);
+    cellSum = new size_t[p->imax*p->jmax*p->kmax];
+    for(size_t n=0;n<p->imax*p->jmax*p->kmax;n++)
+    cellSum[n]=0;
     printcount = 0;
 
     // Create Folder
@@ -70,16 +72,16 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 		if(p->Q120==1&&p->count%p->Q121==0)
 			posseed_suspended(p,a,pgc);
         erode(p,a,pgc);
-        transport(p,a,&PP);
-		xchange=transfer(p,pgc,&PP,maxparticle);
-		removed=remove(p,&PP);
-		make_stationary(p,a,&PP);
+        transport(p,a,&PP_moving,&cellSum);
+		xchange=transfer(p,pgc,&PP_moving,&cellSum,maxparticle);
+		removed=remove(p,&PP_moving,&cellSum);
+		make_stationary(p,a,&PP_moving,&PP_stationary);
         if(p->Q13==1)
             update_cfd(p,a,pgc,pflow,preto);
         if(p->count%p->Q20==0)
         {
-            if(PP.size == 0)
-                PP.erase_all();
+            // if(PP.size == 0)
+            //     PP.erase_all();
             // PP.optimize();
             // cleanup();
         }
@@ -87,13 +89,14 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 
 	print_particles(p,a,pgc);
 
-	gparticle_active = pgc->globalisum(PP.size);
+	gparticle_active = pgc->globalisum(PP_moving.size);
+    gparticle_passiv = pgc->globalisum(PP_stationary.size);
     gremoved = pgc->globalisum(removed);
     gxchange = pgc->globalisum(xchange);
 	p->sedsimtime=pgc->timer()-starttime;
 
     if(p->mpirank==0 && (p->count%p->P12==0))
-    	cout<<"Sediment particles: active: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sed. part. sim. time: "<<p->sedsimtime<<endl;
+    	cout<<"Sediment particles: active: "<<gparticle_active<<" passive: "<<gparticle_passiv<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sed. part. sim. time: "<<p->sedsimtime<<endl;
 }
 
 void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
@@ -103,14 +106,15 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     gpartnum=pgc->globalisum(partnum);
     allocate(p,a,pgc);
     seed(p,a,pgc);
-    make_stationary(p,a,&PP);
+    make_stationary(p,a,&PP_moving,&PP_stationary);
     
     // print
     print_vtu(p,a,pgc);
     printcount++;
-    gparticle_active = pgc->globalisum(PP.size);
+    gparticle_active = pgc->globalisum(PP_moving.size);
+    gparticle_passiv = pgc->globalisum(PP_stationary.size);
     if(p->mpirank==0)
-        cout<<"Sediment particles: active: "<<gparticle_active<<endl;
+        cout<<"Sediment particles: active: "<<gparticle_active<<" passive: "<<gparticle_passiv<<endl;
 }
 
 void sedpart::start_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow*, slice &P, slice &Q)
@@ -151,7 +155,7 @@ void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->Q101>0)
     {
-        make_moving(p,a,&PP);
+        make_moving(p,a,&PP_moving,&PP_stationary,&cellSum);
     }
     
     

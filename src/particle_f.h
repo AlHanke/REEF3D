@@ -82,6 +82,7 @@ public:
     int gcval_phi;
     double printtime;
     int printcount;
+	size_t* cellSum;
 };
 
 #endif

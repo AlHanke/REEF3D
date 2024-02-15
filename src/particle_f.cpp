@@ -36,7 +36,7 @@ particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : particle_func(p), act
 		printcount=0;
 		p->partprinttime=0.0;
     }
-	PP.ini_cellSum(p->imax*p->jmax*p->kmax);
+	cellSum = new size_t[p->imax*p->jmax*p->kmax];
 	
 	// Create Folder
 	if(p->mpirank==0 && p->P14==1)
@@ -58,8 +58,8 @@ void particle_f::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 		if(p->Q120==1&&p->count%p->Q121==0)
 			posseed_suspended(p,a,pgc);
 		advect(p,a,&PP,0);
-		xchange=transfer(p,pgc,&PP,maxparticle);
-		removed=remove(p,&PP);
+		xchange=transfer(p,pgc,&PP,&cellSum,maxparticle);
+		removed=remove(p,&PP,&cellSum);
 		make_stationary(p,a,&PP);
 	}
 

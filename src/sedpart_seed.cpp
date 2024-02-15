@@ -91,15 +91,15 @@ void sedpart::posseed_box(lexer* p, fdm* a, ghostcell* pgc)
         if(active_box(i,j,k)>0.0)
             for(int qn=0;qn<ppcell;++qn)
                 {
-                    if(PP.size+1>0.9*PP.capacity)
-                        PP.reserve();
+                    if(PP_moving.size+1>0.9*PP_moving.capacity)
+                        PP_moving.reserve();
                     
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
 
-                    PP.add(x,y,z,1);
-                    PP.cellSum[IJK]++;
+                    PP_moving.add(x,y,z,1);
+                    cellSum[IJK]++;
                 }
 }
 
@@ -119,8 +119,8 @@ void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
     PLAINLOOP
         if(active_topo(i,j,k)>0.0)
             {
-                if(PP.size+ppcell*p->Q102>0.9*PP.capacity)
-                    PP.reserve();
+                if(PP_stationary.size+ppcell*p->Q102>0.9*PP_stationary.capacity)
+                    PP_stationary.reserve();
                 for(int qn=0;qn<ppcell*p->Q102;++qn)
                 {
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
@@ -132,8 +132,8 @@ void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
 
                     if (!(ipolTopo>tolerance||ipolTopo<-p->Q102*p->DZN[KP]||ipolSolid<0))
                     { 
-                       PP.add(x,y,z,1);
-                       PP.cellSum[IJK]++;
+                       PP_stationary.add(x,y,z,1);
+                       cellSum[IJK]++;
                     }
                 }
             }
@@ -157,15 +157,15 @@ void sedpart::posseed_suspended(lexer* p, fdm* a, ghostcell* pgc)
             k=p->gcin[n][2];
             if(a->topo(i,j,k)>=0.0)
             {
-                if(PP.size+p->Q122>0.9*PP.capacity)
-                    maxparticle=PP.reserve(PP.size+p->Q122);
+                if(PP_moving.size+p->Q122>0.9*PP_moving.capacity)
+                    maxparticle=PP_moving.reserve(PP_moving.size+p->Q122);
                 for(int qn=0;qn<p->Q122;++qn)
                 {
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
-                    index=PP.add(x,y,z,1);
-                    PP.cellSum[IJK]+=PP.PackingFactor[index];
+                    index=PP_moving.add(x,y,z,1);
+                    cellSum[IJK]+=PP_moving.PackingFactor[index];
                 }
             }
         }

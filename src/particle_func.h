@@ -24,6 +24,7 @@ Author: Alexander Hanke
 #define PARTICLEFUNC_H_
 
 #include"increment.h"
+#include <stddef.h>
 
 class lexer;
 class fdm;
@@ -43,18 +44,18 @@ protected:
     virtual ~particle_func();
     
     // para
-    int remove(lexer*,tracers_obj*);
-    int remove(lexer*,particles_obj*);
-    int transfer(lexer*,ghostcell*,tracers_obj*,int);
-    int transfer(lexer*,ghostcell*,particles_obj*,int);
+    int remove(lexer*,tracers_obj*,size_t**);
+    int remove(lexer*,particles_obj*,size_t**);
+    int transfer(lexer*,ghostcell*,tracers_obj*,size_t**,int);
+    int transfer(lexer*,ghostcell*,particles_obj*,size_t**,int);
 
     // mov
-    void advect(lexer*,fdm*,tracers_obj*,int=0,double=0,double=0,double=0);
-    void advect(lexer*,fdm*,particles_obj*,int=0,double=0,double=0,double=0);
-    void transport(lexer*,fdm*,particles_obj*,int=0);
+    void advect(lexer*,fdm*,tracers_obj*,size_t**,int=0,double=0,double=0,double=0);
+    void advect(lexer*,fdm*,particles_obj*,size_t**,int=0,double=0,double=0,double=0);
+    void transport(lexer*,fdm*,particles_obj*,size_t**,int=0);
     void make_stationary(lexer*,fdm*,tracers_obj*,int=0);
-    void make_stationary(lexer*,fdm*,particles_obj*,int=0);
-    void make_moving(lexer*,fdm*,particles_obj*);
+    void make_stationary(lexer*,fdm*,particles_obj*,particles_obj*,int=0);
+    void make_moving(lexer*,fdm*,particles_obj*,particles_obj*,size_t**);
 
     // util
     double reynolds(lexer*,fdm*,particles_obj*,int);
@@ -63,9 +64,9 @@ protected:
     double volume(particles_obj*,int);
     int maxParticlesPerCell(lexer*,fdm*,double);
     int maxParticlesPerXY(lexer*,fdm*,double);
-    void particlesPerCell(lexer*,particles_obj*);
-    void particleStressTensor(lexer*,particles_obj*);
-    void particleStressTensorUpdateIJK(lexer*,particles_obj*);
+    void particlesPerCell(lexer*,particles_obj*,size_t**);
+    void particleStressTensor(lexer*,particles_obj*,size_t**);
+    void particleStressTensorUpdateIJK(lexer*,particles_obj*,size_t**);
     double drag_model(lexer*,double,double,double,double,double) const;
 
     // memory management
