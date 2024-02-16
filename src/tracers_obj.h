@@ -50,6 +50,7 @@ public:
     void optimize();
     void debug();
     void add_obj(tracers_obj*);
+    size_t add_entry(tracers_obj*,size_t);
     void fill(size_t,bool=true,int=-1);
     void print(size_t);
     void ini_cellSum(int dim);

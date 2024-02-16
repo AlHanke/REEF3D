@@ -133,6 +133,22 @@ size_t tracers_obj::add(double x, double y, double z, int flag)
     return index;
 }
 
+
+size_t tracers_obj::add_entry(tracers_obj* obj, size_t entry)
+{
+    size_t index=Empty[empty_itr];
+    X[index]=obj->X[entry];
+    Y[index]=obj->Y[entry];
+    Z[index]=obj->Z[entry];
+
+    Flag[index]=obj->Flag[entry];
+
+    Empty[empty_itr--]=-1;
+    if(!(loopindex>size++))
+        loopindex++;
+    return index;
+}
+
 /// @brief Reserves memory for new capacity
 /// @param capacity_desired Requested capacity
 /// @return Actual new capacity
@@ -335,3 +351,4 @@ void tracers_obj::reset_Empty()
     empty_itr=0;
     fill_empty();
 }
+
