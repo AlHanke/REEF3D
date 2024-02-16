@@ -46,14 +46,11 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	int numpt=0;
 	const int print_flag=p->Q183;
 
-	if(print_flag==0)
-		numpt=PP.size;
-	else
-		PARTLOOP
-			if(PP.Flag[n]>print_flag)
-				numpt++;
+	PARTLOOP
+		if(PP.Flag[n]>print_flag)
+			numpt++;
 
-	cout<<"PSedACTIVE-"<<p->mpirank<<": "<<numpt<<"|"<<PP.capacity<<endl;
+	cout<<"PSed-"<<p->mpirank<<"| moving: "<<numpt<<" stationary: "<<PP.size-numpt<<"|"<<PP.capacity<<endl;
 
 	int count;
 	int n=0;
