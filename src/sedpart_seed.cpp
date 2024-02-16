@@ -164,7 +164,7 @@ void sedpart::posseed_suspended(lexer* p, fdm* a, ghostcell* pgc)
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
-                    index=PP.add(x,y,z,1);
+                    index=PP.add(x,y,z,1,a->u(i-1,j,k),a->v(i-1,j,k),a->w(i-1,j,k),50);
                     PP.cellSum[IJK]+=PP.PackingFactor[index];
                 }
             }
