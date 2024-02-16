@@ -147,28 +147,28 @@ size_t tracers_obj::reserve(size_t capacity_desired)
             std::__throw_length_error("tracers_obj - max capacity reached");
 
         double* newX=new double[capacity_desired];
-        memcpy( newX, X, size * sizeof(double) );
+        std::memcpy( newX, X, loopindex * sizeof(double) );
         delete[] X;
         X=newX;
 
         double* newY=new double[capacity_desired];
-        memcpy( newY, Y, size * sizeof(double) );
+        std::memcpy( newY, Y, loopindex * sizeof(double) );
         delete[] Y;
         Y=newY;
 
         double* newZ=new double[capacity_desired];
-        memcpy( newZ, Z, size * sizeof(double) );
+        std::memcpy( newZ, Z, loopindex * sizeof(double) );
         delete[] Z;
         Z=newZ;
 
 
         int* newFlag=new int[capacity_desired];
-        memcpy( newFlag, Flag, size * sizeof(int) );
+        std::memcpy( newFlag, Flag, loopindex * sizeof(int) );
         delete[] Flag;
         Flag=newFlag;
 
         size_t* newEmpty=new size_t[capacity_desired];
-        memcpy( newEmpty, Empty, size * sizeof(size_t) );
+        std::memcpy( newEmpty, Empty, loopindex * sizeof(size_t) );
         delete[] Empty;
         Empty=newEmpty;
         

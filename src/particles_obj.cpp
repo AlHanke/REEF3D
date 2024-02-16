@@ -128,22 +128,22 @@ size_t particles_obj::reserve(size_t capacity_desired)
         tracers_obj::reserve(capacity_desired);
 
         double* newU=new double[capacity_desired];
-        memcpy( newU, this->U, size * sizeof(double) );
+        std::memcpy( newU, this->U, size * sizeof(double) );
         delete[] this->U;
         this->U=newU;
 
         double* newV=new double[capacity_desired];
-        memcpy( newV, this->V, size * sizeof(double) );
+        std::memcpy( newV, this->V, size * sizeof(double) );
         delete[] this->V;
         this->V=newV;
 
         double* newW=new double[capacity_desired];
-        memcpy( newW, this->W, size * sizeof(double) );
+        std::memcpy( newW, this->W, size * sizeof(double) );
         delete[] this->W;
         this->W=newW;
 
         double* newPackingFactor=new double[capacity_desired];
-        memcpy( newPackingFactor, this->PackingFactor, size * sizeof(double) );
+        std::memcpy( newPackingFactor, this->PackingFactor, size * sizeof(double) );
         delete[] this->PackingFactor;
         this->PackingFactor=newPackingFactor;
     }
