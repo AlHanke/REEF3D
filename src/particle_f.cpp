@@ -39,7 +39,7 @@ particle_f::particle_f(lexer* p, fdm *a, ghostcell* pgc) : particle_func(p), act
 	PP.ini_cellSum(p->imax*p->jmax*p->kmax);
 	
 	// Create Folder
-	if(p->mpirank==0 && p->P14==1)
+	if(p->mpirank==0)
 	mkdir("./REEF3D_CFD_Particle",0777);
 }
 

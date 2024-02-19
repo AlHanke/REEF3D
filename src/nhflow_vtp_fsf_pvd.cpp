@@ -20,27 +20,44 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"nsewave_wetdry_v.h"
+#include"nhflow_vtp_fsf.h"
 #include"lexer.h"
-#include"fdm.h"
+#include"fdm_nhf.h"
 #include"ghostcell.h"
 
-nsewave_wetdry_v::nsewave_wetdry_v(lexer *p, fdm *a, ghostcell *pgc)
-{
 
-}
+void nhflow_vtp_fsf::pvd(lexer *p, fdm_nhf *d, ghostcell* pgc)
+{	
+    int num=0;
+    if(p->P15==1)
+    num = printcount;
 
-nsewave_wetdry_v::~nsewave_wetdry_v()
-{
-}
-
-void nsewave_wetdry_v::start(lexer* p, fdm* a, ghostcell* pgc)
-{
+    if(p->P15==2)
+    num = p->count;
     
+    
+    if(p->count==0)
+    {
+	sprintf(name,"./REEF3D_NHFLOW_VTP_FSF/REEF3D-NHFLOW-FSF.pvd",num);
+
+	pvdout.open(name);
+
+	pvdout<<"<?xml version=\"1.0\"?>"<<endl;
+	pvdout<<"<VTKFile type=\"Collection\" version=\"1.0\" byte_order=\"LittleEndian\" header_type=\"UInt64\">"<<endl;
+	}
+	
+    // timestep="0.000800035" part="0" file="pvdoutput/pvdoutput_0_8.pvtu"/>
+    sprintf(name,"./REEF3D_NHFLOW_VTP_FSF/REEF3D-NHFLOW-FSF-%08i.pvtp",num);
+    
+	pvdout<<"<timestep=\""<<p->simtime<<"\" part=\"0\" file="<<name<<"\"/>"<<endl;
+
+
+/*
+	pvdout<<"</Collection>"<<endl;
+	pvdout<<"</VTKFile>"<<endl;
+
+    
+	pvdout.close();*/
+
 }
 
-void nsewave_wetdry_v::ini(lexer* p, fdm* a, ghostcell* pgc)
-{
-    
-}
-    

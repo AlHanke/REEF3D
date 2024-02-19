@@ -10,7 +10,7 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ANY WARRANTY; without even the implied warranty of MERCHANTIBILITY or
 FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 for more details.
 
@@ -20,27 +20,28 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"nsewave_wetdry_f.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
+class lexer;
+class fdm;
+class fdm_nhf;
+class fdm2D;
+class ghostcell;
+class vrans;
+class net;
+class field;
+#include <Eigen/Dense>
 
-nsewave_wetdry_f::nsewave_wetdry_f(lexer *p, fdm *a, ghostcell *pgc)
+using namespace std;
+
+#ifndef SIXDOF_MOTIONEXT_H_
+#define SIXDOF_MOTIONEXT_H_
+
+class sixdof_motionext
 {
+public:
+    virtual void motionext_trans(lexer*, ghostcell*, Eigen::Vector3d&, Eigen::Vector3d&)=0;
+    virtual void motionext_rot(lexer*, Eigen::Vector3d&, Eigen::Vector3d&, Eigen::Vector4d&, Eigen::Matrix<double, 3, 4>&,  Eigen::Matrix3d&)=0;
 
-}
+    virtual void ini(lexer*,ghostcell*)=0;
+};
 
-nsewave_wetdry_f::~nsewave_wetdry_f()
-{
-}
-
-void nsewave_wetdry_f::start(lexer* p, fdm* a, ghostcell* pgc)
-{
-    
-}
-
-void nsewave_wetdry_f::ini(lexer* p, fdm* a, ghostcell* pgc)
-{
-    
-}
-    
+#endif

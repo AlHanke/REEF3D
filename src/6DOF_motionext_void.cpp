@@ -10,52 +10,41 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ANY WARRANTY; without even the implied warranty of MERCHANTIBILITY or
 FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Authors: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include<vector>
+#include"6DOF_motionext_void.h"
+#include"lexer.h"
+#include"fdm.h"
+#include"ghostcell.h"
 
-class convection;
-class pressure;
-class solver;
-class fdm;
-class lexer;
-class ghostcell;
-class fluid_update;
-class heat;
-class concentration;
-class ioflow;
-class slice;
-class momentum;
-class diffusion;
-class poisson;
-class vrans;
-class turbulence;
-class net;
-class sixdof;
-
-using namespace std;
-
-#ifndef NSEWAVE_H_
-#define NSEWAVE_H_
-
-class nsewave 
+sixdof_motionext_void::sixdof_motionext_void(lexer *p, ghostcell *pgc)
 {
-public:    
-    virtual void start(lexer*, fdm*, ghostcell*, momentum*, diffusion*, turbulence*, convection*, pressure*, 
-                       poisson*, solver*, solver*, ioflow*, vrans*, sixdof*, vector<net*>&)=0;
+}
     
-    virtual void ini(lexer*, fdm*, ghostcell*, ioflow*)=0;
+sixdof_motionext_void::~sixdof_motionext_void()
+{
+}
 
-        
+void sixdof_motionext_void::ini(lexer *p, ghostcell *pgc)
+{
+}
 
-};
+void sixdof_motionext_void::motionext_trans(lexer *p, ghostcell *pgc, Eigen::Vector3d& dp, Eigen::Vector3d& dc)
+{
+    
 
-#endif
+}
+
+void sixdof_motionext_void::motionext_rot(lexer *p, Eigen::Vector3d& dh, Eigen::Vector3d& h, Eigen::Vector4d& de, Eigen::Matrix<double, 3, 4>&G_,  Eigen::Matrix3d&I_)
+{
+
+}
+

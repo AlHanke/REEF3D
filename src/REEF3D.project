@@ -70,6 +70,7 @@
           </VirtualDirectory>
         </VirtualDirectory>
         <VirtualDirectory Name="FDM">
+          <File Name="fdm_ngx.h"/>
           <VirtualDirectory Name="Timestep"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Diffusion"/>
@@ -89,11 +90,6 @@
             <File Name="ngx_reconstruct.h"/>
           </VirtualDirectory>
         </VirtualDirectory>
-      </VirtualDirectory>
-      <VirtualDirectory Name="PIC">
-        <File Name="pic_f.h"/>
-        <File Name="pic_v.h"/>
-        <File Name="pic.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="PTF">
         <VirtualDirectory Name="Update">
@@ -259,20 +255,6 @@
               <File Name="sflow_fluxlim.h"/>
             </VirtualDirectory>
           </VirtualDirectory>
-        </VirtualDirectory>
-      </VirtualDirectory>
-      <VirtualDirectory Name="NSEWAVE">
-        <VirtualDirectory Name="Wetdry">
-          <File Name="nsewave_wetdry_v.h"/>
-          <File Name="nsewave_wetdry_f.h"/>
-          <File Name="nsewave_wetdry.h"/>
-        </VirtualDirectory>
-        <VirtualDirectory Name="Free Surface">
-          <File Name="nsewave_v.h"/>
-          <File Name="nsewave_RK3.h"/>
-          <File Name="nsewave_geo.h"/>
-          <File Name="nsewave_f.h"/>
-          <File Name="nsewave.h"/>
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="NHFLOW">
@@ -593,12 +575,16 @@
         <File Name="benchmark_convection.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="6DOF">
+        <VirtualDirectory Name="External Motion">
+          <File Name="6DOF_motionext_void.h"/>
+          <File Name="6DOF_motionext_file.h"/>
+          <File Name="6DOF_motionext_fixed.h"/>
+          <File Name="6DOF_motionext_coupling.h"/>
+          <File Name="6DOF_motionext.h"/>
+        </VirtualDirectory>
         <File Name="6DOF_obj.h"/>
         <File Name="6DOF_nhflow.h"/>
         <File Name="6DOF_cfd.h"/>
-        <VirtualDirectory Name="Common">
-          <File Name="6DOF_motion-file.h"/>
-        </VirtualDirectory>
         <File Name="6DOF_sflow.h"/>
         <VirtualDirectory Name="Mooring">
           <File Name="mooring_dynamic.h"/>
@@ -1182,7 +1168,7 @@
           <VirtualDirectory Name="Level Set"/>
         </VirtualDirectory>
         <VirtualDirectory Name="FDM">
-          <File Name="ngx_fdm.cpp"/>
+          <File Name="fdm_ngx.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Diffusion"/>
         <VirtualDirectory Name="Convect">
@@ -1193,10 +1179,6 @@
             <File Name="ngx_reconstruct_FOU.cpp"/>
           </VirtualDirectory>
         </VirtualDirectory>
-      </VirtualDirectory>
-      <VirtualDirectory Name="PIC">
-        <File Name="pic_v.cpp"/>
-        <File Name="pic_f.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="PTF">
         <VirtualDirectory Name="Breaking"/>
@@ -1269,7 +1251,7 @@
             <File Name="sflow_vtp_bed.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="VTP FSF">
-            <File Name="sflow_vtp_fsf_pvtu.cpp"/>
+            <File Name="sflow_vtp_fsf_pvtp.cpp"/>
             <File Name="sflow_vtp_fsf_header.cpp"/>
             <File Name="sflow_vtp_fsf.cpp"/>
           </VirtualDirectory>
@@ -1373,18 +1355,6 @@
           </VirtualDirectory>
         </VirtualDirectory>
       </VirtualDirectory>
-      <VirtualDirectory Name="NSEWAVE">
-        <VirtualDirectory Name="Wetdry">
-          <File Name="nsewave_wetdry_v.cpp"/>
-          <File Name="nsewave_wetdry_f.cpp"/>
-        </VirtualDirectory>
-        <VirtualDirectory Name="Free Surface">
-          <File Name="nsewave_v.cpp"/>
-          <File Name="nsewave_RK3.cpp"/>
-          <File Name="nsewave_geo.cpp"/>
-          <File Name="nsewave_f.cpp"/>
-        </VirtualDirectory>
-      </VirtualDirectory>
       <VirtualDirectory Name="NHFLOW">
         <VirtualDirectory Name="Turbulence">
           <VirtualDirectory Name="Strain">
@@ -1433,6 +1403,7 @@
             <File Name="nhflow_vtp_bed.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="VTP FSF">
+            <File Name="nhflow_vtp_fsf_pvd.cpp"/>
             <File Name="nhflow_vtp_fsf_pvtp.cpp"/>
             <File Name="nhflow_vtp_fsf_header.cpp"/>
             <File Name="nhflow_vtp_fsf.cpp"/>
@@ -1809,6 +1780,17 @@
         <File Name="heat_void.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="6DOF">
+        <VirtualDirectory Name="External Motion">
+          <VirtualDirectory Name="Motion Fixed">
+            <File Name="6DOF_motionext_fixed.cpp"/>
+            <File Name="6DOF_motionext_void.cpp"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="Motion File">
+            <File Name="6DOF_obj_motion-file_read.cpp"/>
+            <File Name="6DOF_obj_motion-file_ipol.cpp"/>
+            <File Name="6DOF_obj_motion-file.cpp"/>
+          </VirtualDirectory>
+        </VirtualDirectory>
         <VirtualDirectory Name="Interface NHFLOW">
           <File Name="6DOF_nhflow.cpp"/>
         </VirtualDirectory>
@@ -1849,17 +1831,11 @@
         <VirtualDirectory Name="6DOF Object">
           <File Name="6DOF_obj.cpp"/>
           <File Name="6DOF_obj_update_pos.cpp"/>
-          <File Name="6DOF_obj_prescribed-motion.cpp"/>
           <File Name="6DOF_obj_transform.cpp"/>
           <File Name="6DOF_obj_solve.cpp"/>
           <File Name="6DOF_obj_rotation.cpp"/>
           <File Name="6DOF_obj_interface.cpp"/>
           <File Name="6DOF_obj_forcing.cpp"/>
-          <VirtualDirectory Name="Motion File">
-            <File Name="6DOF_obj_motion-file_read.cpp"/>
-            <File Name="6DOF_obj_motion-file_ipol.cpp"/>
-            <File Name="6DOF_obj_motion-file.cpp"/>
-          </VirtualDirectory>
           <VirtualDirectory Name="Initialize">
             <File Name="6DOF_obj_ini_position.cpp"/>
             <File Name="6DOF_obj_ini_parameters.cpp"/>
@@ -2411,7 +2387,6 @@
       <VirtualDirectory Name="Ini">
         <File Name="driver_ini_sflow.cpp"/>
         <File Name="driver_ini_ptf.cpp"/>
-        <File Name="driver_ini_nsewave.cpp"/>
         <File Name="driver_ini_nhflow.cpp"/>
         <File Name="driver_ini_fnpf.cpp"/>
         <File Name="driver_ini_cfd.cpp"/>
@@ -2677,14 +2652,13 @@
         <File Name="driver_logic_cfd.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Mainloop">
+        <File Name="driver_loop_ptf.cpp"/>
         <File Name="driver_loop_ngx.cpp"/>
         <File Name="driver_loop_cfd_sf.cpp"/>
         <File Name="driver_loop_fnpf.cpp"/>
         <File Name="driver_loop_cfd_df.cpp"/>
-        <File Name="driver_loop_ptf.cpp"/>
         <File Name="driver_loop_nhflow.cpp"/>
         <File Name="driver_loop_cfd.cpp"/>
-        <File Name="driver_loop_nsewave.cpp"/>
       </VirtualDirectory>
       <File Name="ini.cpp"/>
     </VirtualDirectory>

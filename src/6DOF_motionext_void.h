@@ -10,7 +10,7 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ANY WARRANTY; without even the implied warranty of MERCHANTIBILITY or
 FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 for more details.
 
@@ -20,26 +20,36 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"nsewave_wetdry.h"
+#include"6DOF_motionext.h"
+#include <Eigen/Dense>
 
 class lexer;
 class fdm;
+class fdm_nhf;
+class fdm2D;
 class ghostcell;
+class vrans;
+class net;
+class field;
 
 using namespace std;
 
-#ifndef NSEWAVE_WETDRY_V_H_
-#define NSEWAVE_WETDRY_V_H_
+#ifndef SIXDOF_MOTIONEXT_VOID_H_
+#define SIXDOF_MOTIONEXT_VOID_H_
 
-class nsewave_wetdry_v : public nsewave_wetdry
+class sixdof_motionext_void : public sixdof_motionext
 {
 public:
-    nsewave_wetdry_v(lexer*, fdm*, ghostcell*);
-	virtual ~nsewave_wetdry_v();
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
     
-    virtual void start(lexer*, fdm*, ghostcell*);
-    virtual void ini(lexer*, fdm*, ghostcell*);
+    virtual void motionext_trans(lexer*, ghostcell*, Eigen::Vector3d&, Eigen::Vector3d&);
+    virtual void motionext_rot(lexer*, Eigen::Vector3d&, Eigen::Vector3d&, Eigen::Vector4d&, Eigen::Matrix<double, 3, 4>&,  Eigen::Matrix3d&);
 
+    virtual void ini(lexer*,ghostcell*);
+    
+    sixdof_motionext_void(lexer*, ghostcell*);
+	virtual ~sixdof_motionext_void();
+    
 };
 
 #endif
