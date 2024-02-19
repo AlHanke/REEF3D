@@ -42,7 +42,7 @@ sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p)
     printcount = 0;
 
     // Create Folder
-	if(p->mpirank==0 && p->P14==1 && p->Q180>0)
+	if(p->mpirank==0 && p->Q180>0)
 	    mkdir("./REEF3D_CFD_SedPart",0777);
 }
 sedpart::~sedpart()
