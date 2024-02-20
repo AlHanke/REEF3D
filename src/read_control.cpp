@@ -3263,6 +3263,7 @@ void lexer::read_control()
 					case 61: control>>Q61_x[countQ61]>>Q61_y[countQ61]>>Q61_z[countQ61]>>Q61_i[countQ61];
                         ++countQ61;
 						clear(c,numint);
+						break;
                 	case 110: control>>Q110_xs[countQ110]>>Q110_xe[countQ110]>>Q110_ys[countQ110]>>Q110_ye[countQ110]>>Q110_zs[countQ110]>>Q110_ze[countQ110];
                         ++countQ110;
 						clear(c,numint);
