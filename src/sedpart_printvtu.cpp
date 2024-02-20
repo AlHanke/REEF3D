@@ -47,10 +47,10 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	const int print_flag=p->Q183;
 
 	PARTLOOP
-		if(PP.Flag[n]>print_flag)
+		if(PP.Flag[n]>=print_flag)
 			numpt++;
 
-	cout<<"PSed-"<<p->mpirank<<"| moving: "<<numpt<<" stationary: "<<PP.size-numpt<<"|"<<PP.capacity<<endl;
+	cout<<"PSed-"<<p->mpirank<<"| printed: "<<numpt<<" not printed: "<<PP.size-numpt<<" | capcaity: "<<PP.capacity<<endl;
 
 	int count;
 	int n=0;
@@ -72,12 +72,12 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	offset[n]=0;
 	++n;
 	
-	//offset[n]=offset[n-1]+4*(numpt)+4; //lsv
-	//++n;
+	// offset[n]=offset[n-1]+4*(numpt)+4; //flag
+	// ++n;
 	// offset[n]=offset[n-1]+4*(numpt)+4; //radius
 	// ++n;
-	//offset[n]=offset[n-1]+4*(numpt)+4; //correction
-	//++n;	
+	// offset[n]=offset[n-1]+4*(numpt)+4; //correction
+	// ++n;	
 	
 	// end scalars
     offset[n]=offset[n-1]+4*(numpt)*3+4; //xyz
@@ -98,12 +98,12 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	
 	
 	// result<<"<PointData >"<<endl;
-	// //result<<"<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    // //++n;
-    // // result<<"<DataArray type=\"Float32\" Name=\"radius\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    // // ++n;
-	// //result<<"<DataArray type=\"Float32\" Name=\"correction\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    // //++n;
+	// result<<"<DataArray type=\"Float32\" Name=\"Flag\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    // ++n;
+    // result<<"<DataArray type=\"Float32\" Name=\"radius\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    // ++n;
+	// result<<"<DataArray type=\"Float32\" Name=\"correction\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    // ++n;
 	// result<<"</PointData>"<<endl;
 	
 	
@@ -141,13 +141,13 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	// result.write((char*)&ffn, sizeof (float));
 	// }
 	
-//  radius
+	//  flag
     // iin=4*(numpt);
     // result.write((char*)&iin, sizeof (int));
 	// PARTLOOP
-	// 	if(PP.Flag[n]>0)
+	// 	if(PP.Flag[n]>=print_flag)
 	// 	{
-	// 		ffn=float(1);
+	// 		ffn=float(PP.Flag[n]);
 	// 		result.write((char*)&ffn, sizeof (float));
 	// 	}
 
@@ -182,7 +182,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	iin=4*(numpt)*3;
 	result.write((char*)&iin, sizeof (int));
     PARTLOOP
-    if(PP.Flag[n]>print_flag)
+    if(PP.Flag[n]>=print_flag)
 	{
 	ffn=float(PP.X[n]);
 	result.write((char*)&ffn, sizeof (float));
@@ -199,7 +199,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     iin=4*(numpt)*2;
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
-	if(PP.Flag[n]>print_flag)
+	if(PP.Flag[n]>=print_flag)
 	{
 	iin=int(0);
 	result.write((char*)&iin, sizeof (int));
@@ -214,7 +214,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
-    if(PP.Flag[n]>print_flag)
+    if(PP.Flag[n]>=print_flag)
 	{
 	iin=(count+1)*2;
 	result.write((char*)&iin, sizeof (int));
@@ -226,7 +226,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
-    if(PP.Flag[n]>print_flag)
+    if(PP.Flag[n]>=print_flag)
 	{
 	iin=1;
 	result.write((char*)&iin, sizeof (int));
