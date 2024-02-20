@@ -1160,6 +1160,8 @@ void lexer::ctrlsend()
 	dd++;
     ictrl[ii] = Q43;
     ii++;
+    ictrl[ii] = Q61;
+    ii++;
     ictrl[ii] = Q101;
     ii++;
     dctrl[dd] = Q102;
@@ -2685,6 +2687,18 @@ void lexer::ctrlsend()
 	dd++;
     dctrl[dd] = P352_y[n];
 	dd++;
+    }
+
+    for(n=0;n<Q61;++n)
+    {
+    dctrl[dd] = Q61_x[n];
+	dd++;
+    dctrl[dd] = Q61_y[n];
+	dd++;
+	dctrl[dd] = Q61_z[n];
+	dd++;
+    ictrl[ii] = Q61_i[n];
+	ii++;
     }
     
     for(n=0;n<Q110;++n)

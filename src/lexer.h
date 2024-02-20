@@ -498,6 +498,8 @@ public:
     double Q21,Q22,Q23,Q25;
     double Q31;
     double Q41;
+    int Q61,*Q61_i;
+    double *Q61_x,*Q61_y,*Q61_z;
     
     int Q101,Q110;
     double Q102;
