@@ -25,7 +25,7 @@ Author: Hans Bihs & Alexander Hanke
 #include"fdm.h"
 #include"ghostcell.h"
 
-void sedpart::allocate(lexer* p, fdm* a, ghostcell* pgc)
+void sedpart::allocate(lexer* p)
 {
 	maxparticle = ceil(p->Q25*double(gpartnum));
 	

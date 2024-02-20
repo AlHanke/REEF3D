@@ -114,12 +114,13 @@ private:
     particles_obj PP;
     
     #define PARTLOOP for(int n=0;n<PP.loopindex;++n)
-    void seed_ini(lexer*,fdm*,ghostcell*);
-    void seed(lexer*,fdm*,ghostcell*);
-    void posseed_box(lexer*,fdm*,ghostcell*);
-    void posseed_topo(lexer*,fdm*,ghostcell*);
-    void posseed_suspended(lexer*,fdm*,ghostcell*);
-    void allocate(lexer*,fdm*,ghostcell*);
+    void seed_ini(lexer*,fdm*);
+    void seed(lexer*,fdm*);
+    void posseed_box(lexer*,fdm*);
+    void posseed_topo(lexer*,fdm*);
+    void posseed_suspended(lexer*,fdm*);
+    void point_source(lexer*,fdm*);
+    void allocate(lexer*);
 
     field4 active_box;
 	field4 active_topo;

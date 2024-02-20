@@ -42,7 +42,7 @@ sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p)
     printcount = 0;
 
     // Create Folder
-	if(p->mpirank==0 && p->Q180>0)
+	if(p->mpirank==0 && (p->Q180>0||p->Q182>0))
 	    mkdir("./REEF3D_CFD_SedPart",0777);
 }
 sedpart::~sedpart()
@@ -67,15 +67,25 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 
 	if (p->count>=p->Q43)
 	{
+        /// runtime seeding
 		if(p->Q120==1&&p->count%p->Q121==0)
-			posseed_suspended(p,a,pgc);
+			posseed_suspended(p,a);
+        point_source(p,a);
         erode(p,a,pgc);
+
+        /// transport
         transport(p,a,&PP);
 		xchange=transfer(p,pgc,&PP,maxparticle);
 		removed=remove(p,&PP);
+
+        /// topo update
 		make_stationary(p,a,&PP);
+        if(p->Q101>0)
+        posseed_topo(p,a);
         if(p->Q13==1)
             update_cfd(p,a,pgc,pflow,preto);
+
+        /// cleanup
         if(p->count%p->Q20==0)
         {
             if(PP.size == 0)
@@ -85,6 +95,7 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
         }
 	}
 
+    /// print out
 	print_particles(p,a,pgc);
 
 	gparticle_active = pgc->globalisum(PP.size);
@@ -94,15 +105,19 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 
     if(p->mpirank==0 && (p->count%p->P12==0))
     	cout<<"Sediment particles: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sed. part. sim. time: "<<p->sedsimtime<<endl;
+
+    /// testing
+    PLAINLOOP
+    a->test(i,j,k)=PP.cellSum[IJK];
 }
 
 void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
     // seed
-    seed_ini(p,a,pgc);
+    seed_ini(p,a);
     gpartnum=pgc->globalisum(partnum);
-    allocate(p,a,pgc);
-    seed(p,a,pgc);
+    allocate(p);
+    seed(p,a);
     make_stationary(p,a,&PP);
     
     // print
@@ -150,9 +165,7 @@ void sedpart::update_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow)
 void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->Q101>0)
-    {
         make_moving(p,a,&PP);
-    }
     
     
     // int i,j,k;

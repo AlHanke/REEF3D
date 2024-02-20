@@ -26,7 +26,7 @@ Author: Hans Bihs & Alexander Hanke
 #include"ghostcell.h"
 #include<math.h>
 
-void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
+void sedpart::seed_ini(lexer* p, fdm* a)
 {
     // ini
     int i,j,k;
@@ -67,16 +67,16 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     partnum = cellcountBox * ppcell + p->Q102 * cellcountTopo * ppcell;
 }
 
-void sedpart::seed(lexer* p, fdm* a, ghostcell* pgc)
+void sedpart::seed(lexer* p, fdm* a)
 {
     if(p->Q110>0)
-        posseed_box(p,a,pgc);
+        posseed_box(p,a);
 	if(p->Q101>0)
-        posseed_topo(p,a,pgc);
+        posseed_topo(p,a);
 }
 
 
-void sedpart::posseed_box(lexer* p, fdm* a, ghostcell* pgc)
+void sedpart::posseed_box(lexer* p, fdm* a)
 {
     if(p->Q29>0)
         srand(p->Q29);
@@ -104,7 +104,7 @@ void sedpart::posseed_box(lexer* p, fdm* a, ghostcell* pgc)
 }
 
 
-void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
+void sedpart::posseed_topo(lexer* p, fdm* a)
 {
     if(p->Q29>0)
         srand(p->Q29);
@@ -119,10 +119,12 @@ void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
     PLAINLOOP
         if(active_topo(i,j,k)>0.0)
             {
-                if(PP.size+ppcell*p->Q102>0.9*PP.capacity)
+                if(PP.size+p->Q102*ppcell>0.9*PP.capacity)
                     PP.reserve();
-                for(int qn=0;qn<ppcell*p->Q102;++qn)
+                for(int qn=0;qn<p->Q102*ppcell;++qn)
                 {
+                    if(PP.cellSum[IJK]>p->Q102*ppcell)
+                    break;
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
@@ -139,7 +141,7 @@ void sedpart::posseed_topo(lexer* p, fdm* a, ghostcell* pgc)
             }
 }
 
-void sedpart::posseed_suspended(lexer* p, fdm* a, ghostcell* pgc)
+void sedpart::posseed_suspended(lexer* p, fdm* a)
 {
     if(p->Q29>0)
         srand(p->Q29);
@@ -168,5 +170,15 @@ void sedpart::posseed_suspended(lexer* p, fdm* a, ghostcell* pgc)
                     PP.cellSum[IJK]+=PP.PackingFactor[index];
                 }
             }
+        }
+}
+
+void sedpart::point_source(lexer* p, fdm* a)
+{
+    for(size_t n=0;n<p->Q61;n++)
+        if(p->count%p->Q61_i[n]==0)
+        {
+            size_t index = PP.add(p->Q61_x[n],p->Q61_y[n],p->Q61_z[n],1,a->u(i,j,k),a->v(i,j,k),a->w(i,j,k),50);
+            PP.cellSum[IJK]+=PP.PackingFactor[index];
         }
 }
