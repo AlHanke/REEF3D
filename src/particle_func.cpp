@@ -162,7 +162,7 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int minflag)
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
 
-            thetas=(PI*pow(PP->d50,3.0)*PP->cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]));
+            thetas=0;//(PI*pow(PP->d50,3.0)*PP->cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]));
             u=p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n]);
             v=p->ccipol1(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
             w=p->ccipol1(a->w,PP->X[n],PP->Y[n],PP->Z[n]);
