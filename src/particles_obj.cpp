@@ -266,11 +266,11 @@ void particles_obj::add_obj(particles_obj* obj)
     }
 }
 
-/// \copydoc tracers_obj::add_obj
-void particles_obj::add_obj(tracers_obj* obj)
-{
-    tracers_obj::add_obj(obj);
-}
+// /// \copydoc tracers_obj::add_obj
+// void particles_obj::add_obj(tracers_obj* obj)
+// {
+//     tracers_obj::add_obj(obj);
+// }
 
 /// @brief Additional data input
 /// @param index 
