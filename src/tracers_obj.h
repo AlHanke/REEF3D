@@ -24,6 +24,7 @@ Author: Alexander Hanke
 #define TRACERSOBJ_H_
 
 #include <stdio.h>
+#include <cstdint>
 
 /*
 Philosophy: performance, memory usage, ease of use
@@ -51,7 +52,7 @@ public:
     void debug();
     void add_obj(tracers_obj*);
     size_t add_entry(tracers_obj*,size_t);
-    void fill(size_t,bool=true,int=-1);
+    void fill(size_t,bool=true,int=INT32_MIN);
     void print(size_t);
     void ini_cellSum(int dim);
 

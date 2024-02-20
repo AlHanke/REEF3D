@@ -23,7 +23,6 @@ Author: Alexander Hanke
 #include "tracers_obj.h"
 
 #include <math.h>
-#include <cstdint>
 #include <cstring>
 #include <iostream>
 
@@ -83,7 +82,7 @@ void tracers_obj::erase(size_t index)
     Y[index]=NULL;
     Z[index]=NULL;
 
-    Flag[index]=-1;
+    Flag[index]=INT32_MIN;
 
     Empty[++empty_itr]=index;
     --size;
