@@ -143,16 +143,17 @@ void lexer::ini_default()
     A517=3;             // int NHFLOW omega_sig scheme
     A518=2;             // int NHFLOW bed BC
     
-    A520=2;		        // int NFHLOW non-hydrostatic pressure scheme
-    A521=1;		        // int NFHLOW KB scheme
-    A522=4.0;           // double p_alpha
-    A523=1.0;           // double p_gamma
-    A531=3.0;           // double Fround number limiter
-    A540=1;             // int NFHLOW fsf scheme
-    A541=0.0;           // double coastline damping distance factor for dxm
-    A542=0.0;           // double coastline damping absolute distance
-    A543=1;		        // int NHFLOW wetting & drying or coastline
-    A544=0.001;         // double wetting & drying criterion
+    A520=2;		// int NFHLOW non-hydrostatic pressure scheme
+    A521=1;		// int NFHLOW KB scheme
+    A522=4.0;    // double p_alpha
+    A523=1.0;    // double p_gamma
+    A531=3.0;    // double Fround number limiter
+    A540=1;      // int NFHLOW fsf scheme
+    A541=0.0;    // double coastline damping distance factor for dxm
+    A542=0.0;    // double coastline damping absolute distance
+    A543=1;		// int NHFLOW wetting & drying or coastline
+    A544=0.001;  // double wetting & drying criterion
+    A545=10.0;   // double deep criterion
     
     A550=0;             // int turn on breaking (which method)
     A551=0;             // int type of breaking detection (deep / shallow)
@@ -974,26 +975,31 @@ void lexer::ini_default()
     X182_x=X182_y=X182_z=0.0;  // double translation of stl geometry
     X183=0;
     X183_x=X183_y=X183_z=X183_phi=X183_theta=X183_psi=0.0;
-    X184=0.7;           // double refinement factor
-    X205=1;             // type of ramp up function
-    X206=0;             // int ramp up velocity
-    X206_ts=0.0;        // double ramp start
-    X206_ts=0.0;        // double ramp start
-    X207=0;             // int ramp up draft
-    X207_ts=0.0;        // double ramp start
-    X207_ts=0.0;        // double ramp start
-	X210=0;		        // int give fixed linear velocity
-    X210_u=0.0;         // double fixed u vel
-    X210_v=0.0;         // double fixed v vel
-    X210_w=0.0;         // double fixed w vel
-	X211=0;		        // int give fixed angular velocity
-    X221=0;             // int read vec based motion file
-    X311=0;             // int number of simple taut mooring lines
-    X312=0;             // int number of springs
-    X313=0;             // int initial rotation of mooring end points with 6DOF body
-    X314=0;             // int breaking mooring lines due to tension
-    X315=0;             // int breaking mooring lines due to time
-    X321=0;             // int number of nets
+    X184=0.7;   // double refinement factor
+    X205=1;     // type of ramp up function
+    X206=0;     // int ramp up velocity
+    X206_ts=0.0;   // double ramp start
+    X206_ts=0.0;   // double ramp start
+    X207=0;     // int ramp up draft
+    X207_ts=0.0;   // double ramp start
+    X207_ts=0.0;   // double ramp start
+	X210=0;		// int give fixed linear velocity
+    X210_u=0.0; // double fixed u vel
+    X210_v=0.0; // double fixed v vel
+    X210_w=0.0; // double fixed w vel
+	X211=0;		// int give fixed angular velocity
+    X240=0;     // int read 6DOF motion file
+    X241=0.0;     // double delta t for motion file
+    X242_x=0.0;     // double delta x for motion file
+    X242_y=0.0;     // double delta x for motion file
+    X242_z=0.0;     // double delta x for motion file
+    X243=0.0;     // double delta CoG for motion file
+    X311=0;     // int number of simple taut mooring lines
+    X312=0;     // int number of springs
+    X313=0;     // int initial rotation of mooring end points with 6DOF body
+    X314=0;     // int breaking mooring lines due to tension
+    X315=0;     // int breaking mooring lines due to time
+    X321=0;     // int number of nets
     X323_m=X323_d=X323_l=0.0;   // double dynamic net sinker properties
     X325_dt=0.001;      // double dynamic net time step
 	X325_relX=X325_relY=X325_relZ=0.01; // double dynamic net relaxation factors

@@ -284,7 +284,7 @@ public:
     double A522,A523;
     double A531;
     int A540,A543;
-    double A541,A542,A544;
+    double A541,A542,A544,A545;
     int A550,A551,A552,A553;
     
 	// boundary conditions
@@ -549,8 +549,6 @@ public:
 	double pfb,qfb,rfb;
 	double ufbi,vfbi,wfbi;
 	double pfbi,qfbi,rfbi;
-	double ufbn,vfbn,wfbn;
-	double pfbn,qfbn,rfbn;
 	double xg,yg,zg;
 	double xgn,ygn,zgn;
 	double phi_fb,theta_fb,psi_fb;
@@ -602,8 +600,8 @@ public:
     double X206_ts,X206_te,X207_ts,X207_te;
 	double X210_u,X210_v,X210_w;
 	double X211_p,X211_q,X211_r;
-    int X221;
-    double X221_xs,X221_xe,X221_ys,X221_ye,X221_zs,X221_ze;
+    int X240;
+    double X241,X242_x,X242_y,X242_z,X243;
     double *X311_xs,*X311_xe,*X311_ys,*X311_ye,*X311_zs,*X311_ze;
     double *X311_w,*X311_rho_c,*X311_EA,*X311_d,*X311_l,*X311_H,*X311_P,*X311_facT;
     double *X312_k,*X312_T0;
