@@ -26,7 +26,7 @@ Author: Alexander Hanke
 #include"ghostcell.h"
 #include"tracers_obj.h"
 #include"particles_obj.h"
-// #include"boundarycheck.h"
+#include"boundarycheck.h"
 
 #define PARTICLELOOP for(size_t n=0;n<PP->loopindex;n++)
 
@@ -266,27 +266,24 @@ int particle_func::remove(lexer* p, tracers_obj* PP)
 
 int particle_func::remove(lexer* p, particles_obj* PP)
 {
-    bool inBounds=true;
+    bool inBounds=false;
     int removed=0;
-    // int i,j,k;
-    // boundarycheck bounderies;
+    int i,j,k;
+    boundarycheck bounderies;
 
     PARTICLELOOP
         if(PP->Flag[n]>0)
         {
-            // i = p->posc_i(PP->X[n]);
-            // j = p->posc_j(PP->Y[n]);
-            // k = p->posc_k(PP->Z[n]);
+            i = p->posc_i(PP->X[n]);
+            j = p->posc_j(PP->Y[n]);
+            k = p->posc_k(PP->Z[n]);
 
-            if(PP->X[n] > p->xcoormax || PP->X[n] < p->xcoormin || PP->Y[n] > p->ycoormax || PP->Y[n] < p->ycoormin || PP->Z[n] > p->zcoormax || PP->Z[n] < p->zcoormin)
-                // inBounds=false;
-
-            // inBounds=bounderies.minboundcheck(p,i,j,k,1);
-            // if (inBounds)
-            //     inBounds=bounderies.maxboundcheck(p,i,j,k,1);
+            inBounds=bounderies.minboundcheck(p,i,j,k,1);
+            if (inBounds)
+                inBounds=bounderies.maxboundcheck(p,i,j,k,1);
 
 			// remove out of bounds particles
-            // if(!inBounds)
+            if(!inBounds)
             {
                 PP->cellSum[IJK]-=PP->PackingFactor[n];
                 PP->erase(n);
