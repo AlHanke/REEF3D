@@ -107,8 +107,9 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
     	cout<<"Sediment particles: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sed. part. sim. time: "<<p->sedsimtime<<endl;
 
     /// testing
-    PLAINLOOP
-    a->test(i,j,k)=PP.cellSum[IJK];
+    // PLAINLOOP
+    // a->test(i,j,k)=PP.cellSum[IJK];
+    // cout<<p->mpirank<<"-Porosity("<<i<<","<<j<<","<<k<<"): "<<a->porosity(i,j,k)<<endl;
 }
 
 void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
@@ -126,6 +127,9 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     gparticle_active = pgc->globalisum(PP.size);
     if(p->mpirank==0)
         cout<<"Sediment particles: active: "<<gparticle_active<<endl;
+    
+    // vrans
+    pvrans->sed_update(p,a,pgc);
 }
 
 void sedpart::start_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow*, slice &P, slice &Q)

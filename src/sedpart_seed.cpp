@@ -134,7 +134,7 @@ void sedpart::posseed_topo(lexer* p, fdm* a)
 
                     if (!(ipolTopo>tolerance||ipolTopo<-p->Q102*p->DZN[KP]||ipolSolid<0))
                     { 
-                       PP.add(x,y,z,1);
+                       PP.add(x,y,z,1,0,0,0,50);
                        PP.cellSum[IJK]++;
                     }
                 }
