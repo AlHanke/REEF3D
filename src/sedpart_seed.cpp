@@ -98,7 +98,7 @@ void sedpart::posseed_box(lexer* p, fdm* a)
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
 
-                    PP.add(x,y,z,1,a->u(i,j,k),a->v(i,j,k),a->w(i,j,k));
+                    PP.add(x,y,z,1,a->u(i,j,k),a->v(i,j,k),a->w(i,j,k),p->Q41);
                     PP.cellSum[IJK]++;
                 }
 }
@@ -134,7 +134,7 @@ void sedpart::posseed_topo(lexer* p, fdm* a)
 
                     if (!(ipolTopo>tolerance||ipolTopo<-p->Q102*p->DZN[KP]||ipolSolid<0))
                     { 
-                       PP.add(x,y,z,1,0,0,0,50);
+                       PP.add(x,y,z,1,0,0,0,p->Q41);
                        PP.cellSum[IJK]++;
                     }
                 }
@@ -166,7 +166,7 @@ void sedpart::posseed_suspended(lexer* p, fdm* a)
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
-                    index=PP.add(x,y,z,1,a->u(i-1,j,k),a->v(i-1,j,k),a->w(i-1,j,k),50);
+                    index=PP.add(x,y,z,1,a->u(i-1,j,k),a->v(i-1,j,k),a->w(i-1,j,k),p->Q41);
                     PP.cellSum[IJK]+=PP.PackingFactor[index];
                 }
             }
@@ -178,7 +178,7 @@ void sedpart::point_source(lexer* p, fdm* a)
     for(size_t n=0;n<p->Q61;n++)
         if(p->count%p->Q61_i[n]==0)
         {
-            size_t index = PP.add(p->Q61_x[n],p->Q61_y[n],p->Q61_z[n],1,a->u(i,j,k),a->v(i,j,k),a->w(i,j,k),50);
+            size_t index = PP.add(p->Q61_x[n],p->Q61_y[n],p->Q61_z[n],1,a->u(i,j,k),a->v(i,j,k),a->w(i,j,k),p->Q41);
             PP.cellSum[IJK]+=PP.PackingFactor[index];
         }
 }
