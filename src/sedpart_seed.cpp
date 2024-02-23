@@ -50,7 +50,7 @@ void sedpart::seed_ini(lexer* p, fdm* a)
 
     // Topo
     size_t cellcountTopo=0;
-    PLAINLOOP
+    BASELOOP
         if((abs(a->topo(i,j,k))<(p->DZN[KP]*ceil(p->Q102)))&&(a->topo(i,j,k)<=0.25*p->DZN[KP])) //find better comparison to fix numerical drifts
         {
             active_topo(i,j,k) = 1.0;
@@ -121,7 +121,7 @@ void sedpart::posseed_topo(lexer* p, fdm* a)
             {
                 if(PP.size+p->Q102*ppcell>0.9*PP.capacity)
                     PP.reserve();
-                for(int qn=0;qn<p->Q102*ppcell;++qn)
+                for(int qn=0;qn<p->Q102*ppcell*1000;++qn)
                 {
                     if(PP.cellSum[IJK]>p->Q102*ppcell)
                     break;
