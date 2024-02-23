@@ -152,7 +152,8 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int flag)
     /// @brief Difference between flowfield and particle velocity
     double du, dv, dw;
     double Dp, thetas;
-    double pressureDiv=0, stressDiv=0;
+    double pressureDivX=0, pressureDivY=0, pressureDivZ=0;
+    double stressDivX=0, stressDivY=0, stressDivZ=0;
 
     PARTICLELOOP
         if(PP->Flag[n]>flag)
@@ -174,9 +175,9 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int flag)
 
             Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
 
-            du1=Dp*du+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
-            dv1=Dp*dv+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
-            dw1=Dp*dw+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+            du1=Dp*du+(1.0-drho)*p->W20-(pressureDivX/p->S22+stressDivX/((1-thetas)*p->S22));
+            dv1=Dp*dv+(1.0-drho)*p->W20-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
+            dw1=Dp*dw+(1.0-drho)*p->W20-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
 
             RKu=PP->U[n]+du1*p->dt;
             RKv=PP->V[n]+dv1*p->dt;
@@ -189,9 +190,9 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int flag)
 
             Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
 
-            du2=Dp*du+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
-            dv2=Dp*dv+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
-            dw2=Dp*dw+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+            du2=Dp*du+(1.0-drho)*p->W20-(pressureDivX/p->S22+stressDivX/((1-thetas)*p->S22));
+            dv2=Dp*dv+(1.0-drho)*p->W20-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
+            dw2=Dp*dw+(1.0-drho)*p->W20-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
 
             du2=0.25*du2+0.25*du1;
             dv2=0.25*dv2+0.25*dv1;
@@ -208,9 +209,9 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int flag)
 
             Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
 
-            du3=Dp*du+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
-            dv3=Dp*dv+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
-            dw3=Dp*dw+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+            du3=Dp*du+(1.0-drho)*p->W20-(pressureDivX/p->S22+stressDivX/((1-thetas)*p->S22));
+            dv3=Dp*dv+(1.0-drho)*p->W20-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
+            dw3=Dp*dw+(1.0-drho)*p->W20-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
 
             PP->U[n] += ((2.0/3.0)*du2 + (2.0/3.0)*du3)*p->dt;
             PP->V[n] += ((2.0/3.0)*dv2 + (2.0/3.0)*dv3)*p->dt;
@@ -689,7 +690,8 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
     /// @brief Difference between flowfield and particle velocity
     double du, dv, dw;
     double Dp, thetas;
-    double pressureDiv=0, stressDiv=0;
+    double pressureDivX=0, pressureDivY=0, pressureDivZ=0;
+    double stressDivX=0,stressDivY=0,stressDivZ=0;
 
     PARTICLELOOP
     if(PP->Flag[n]==0)
@@ -710,9 +712,9 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
 
         Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
 
-        du1=Dp*du+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
-        dv1=Dp*dv+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
-        dw1=Dp*dw+(1.0-drho)*p->W20-(pressureDiv/p->S22+stressDiv/((1-thetas)*p->S22));
+        du1=Dp*du+(1.0-drho)*p->W20-(pressureDivX/p->S22+stressDivX/((1-thetas)*p->S22));
+        dv1=Dp*dv+(1.0-drho)*p->W20-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
+        dw1=Dp*dw+(1.0-drho)*p->W20-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
 
         if (fabs(du1)>0||fabs(dv1)>0||dw1>0)
         {
