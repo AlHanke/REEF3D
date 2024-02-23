@@ -765,7 +765,7 @@ void lexer::ini_default()
     Q25=1.25;           // double safety factor particle allocate
     Q29=0;              // int seed number for random particle placement
     Q31=0.001;          // double particle diameter
-    Q41=50;            // double default packing factor
+    Q41=0;            // double default packing factor
     Q43=0;              // int number of water iteration, before particle transport starts
     Q61=0;              // point source x,y,z, iterations between particles
     Q101=0;             // int ini particle as topo
