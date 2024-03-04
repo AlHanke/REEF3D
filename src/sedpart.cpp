@@ -39,6 +39,7 @@ sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p)
     pvrans = new vrans_f(p,pgc);
     pbedshear  = new bedshear(p,pturb);
     PP.ini_cellSum(p->imax*p->jmax*p->kmax);
+    cellSum= new double[p->imax*p->jmax*p->kmax];
     printcount = 0;
 
     // Create Folder
@@ -71,10 +72,12 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 		if(p->Q120==1&&p->count%p->Q121==0)
 			posseed_suspended(p,a);
         point_source(p,a);
-        erode(p,a,pgc);
 
         /// transport
-        transport(p,a,&PP);
+        particleStressTensor(p,&PP,cellSum);
+        // pgc->gcparaxijk(p,cellSum,1); ghostcell exchange needed
+        erode(p,a,pgc);
+        transport(p,a,&PP,cellSum);
 		xchange=transfer(p,pgc,&PP,maxparticle);
 		removed=remove(p,&PP);
 
@@ -104,11 +107,10 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 	p->sedsimtime=pgc->timer()-starttime;
 
     if(p->mpirank==0 && (p->count%p->P12==0))
-    	cout<<"Sediment particles: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sed. part. sim. time: "<<p->sedsimtime<<endl;
+    	cout<<"Sediment particles: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sed. part. sim. time: "<<p->sedsimtime<<"\nTotal bed volume change: "<<std::setprecision(9)<<volumeChangeTotal<<endl;
 
     /// testing
-    // PLAINLOOP
-    // a->test(i,j,k)=PP.cellSum[IJK];
+    particlesPerCell(p,&PP,cellSum);
     // cout<<p->mpirank<<"-Porosity("<<i<<","<<j<<","<<k<<"): "<<a->porosity(i,j,k)<<endl;
 }
 
@@ -120,6 +122,7 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     allocate(p);
     seed(p,a);
     make_stationary(p,a,&PP);
+    // std::cout<<"Seeded "<<PP.size<<" partices in partion "<<p->mpirank<<endl;
     
     // print
     print_vtu(p,a,pgc);
@@ -130,6 +133,10 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     
     // vrans
     pvrans->sed_update(p,a,pgc);
+
+    // testing
+    particlesPerCell(p,&PP,cellSum);
+    volumeChangeTotal=0;
 }
 
 void sedpart::start_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow*, slice &P, slice &Q)
@@ -151,6 +158,7 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
             KLOOP
                 a->topo(i,j,k) -= dh;
             p->flag_topo_changed[IJ]=0;
+            volumeChangeTotal += p->topo_change[IJ];
             p->topo_change[IJ]=0;
         }
 
@@ -169,7 +177,7 @@ void sedpart::update_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow)
 void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->Q101>0)
-        make_moving(p,a,&PP);
+        make_moving(p,a,&PP,cellSum);
     
     
     // int i,j,k;

@@ -51,10 +51,10 @@ protected:
     // mov
     void advect(lexer*,fdm*,tracers_obj*,int=0,double=0,double=0,double=0);
     void advect(lexer*,fdm*,particles_obj*,int=0,double=0,double=0,double=0);
-    void transport(lexer*,fdm*,particles_obj*,int=0);
+    void transport(lexer*,fdm*,particles_obj*,double*,int=0);
     void make_stationary(lexer*,fdm*,tracers_obj*,int=0);
     void make_stationary(lexer*,fdm*,particles_obj*,int=0);
-    void make_moving(lexer*,fdm*,particles_obj*);
+    void make_moving(lexer*,fdm*,particles_obj*,double*);
 
     // util
     double reynolds(lexer*,fdm*,particles_obj*,int);
@@ -63,9 +63,9 @@ protected:
     double volume(particles_obj*,int);
     int maxParticlesPerCell(lexer*,fdm*,double);
     int maxParticlesPerXY(lexer*,fdm*,double);
-    void particlesPerCell(lexer*,particles_obj*);
-    void particleStressTensor(lexer*,particles_obj*);
-    void particleStressTensorUpdateIJK(lexer*,particles_obj*);
+    void particlesPerCell(lexer*,particles_obj*,double*);
+    void particleStressTensor(lexer*,particles_obj*,double*);
+    void particleStressTensorUpdateIJK(lexer*,particles_obj*,double*);
     double drag_model(lexer*,double,double,double,double,double) const;
 
     // memory management

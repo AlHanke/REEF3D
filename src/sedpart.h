@@ -148,6 +148,8 @@ private:
 
     vrans* pvrans;
     bedshear* pbedshear;
+    double* cellSum;
+    double volumeChangeTotal;
 };
 
 #endif
