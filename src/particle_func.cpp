@@ -171,6 +171,14 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
             v=p->ccipol1(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
             w=p->ccipol1(a->w,PP->X[n],PP->Y[n],PP->Z[n]);
 
+            stressDivX = (cellSum[Ip1JK] - cellSum[IJK])/(p->DXM);
+            stressDivY = (0.5*(cellSum[IJp1K]+cellSum[Ip1Jp1K]) - 0.5*(cellSum[IJm1K]+cellSum[Ip1Jm1K]))/(2.0*p->DXM);
+            stressDivZ = (0.5*(cellSum[IJKp1]+cellSum[Ip1JKp1]) - 0.5*(cellSum[IJKm1]+cellSum[Ip1JKm1]))/(2.0*p->DXM);
+
+            pressureDivX = (a->press(i+1,j,k) - a->press(i,j,k))/(p->DXM);
+            pressureDivY = (0.5*(a->press(i,j+1,k)+a->press(i+1,j+1,k)) - 0.5*(a->press(i,j-1,k)+a->press(i+1,j-1,k)))/(2.0*p->DXM);
+            pressureDivZ = (0.5*(a->press(i,j,k+1)+a->press(i+1,j,k+1)) - 0.5*(a->press(i,j,k-1)+a->press(i+1,j,k-1)))/(2.0*p->DXM);
+
             // RK3 step 1
             du=u-PP->U[n];
             dv=v-PP->V[n];
@@ -685,7 +693,7 @@ double particle_func::drag_model(lexer* p, double d, double du, double dv, doubl
     return Dp;
 }
 
-void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
+void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP, double* cellSum)
 {
     double RKu,RKv,RKw;
     double u,v,w;
@@ -707,6 +715,14 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
         u=p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n]);
         v=p->ccipol1(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
         w=p->ccipol1(a->w,PP->X[n],PP->Y[n],PP->Z[n]);
+
+        stressDivX = (cellSum[Ip1JK] - cellSum[IJK])/(p->DXM);
+        stressDivY = (0.5*(cellSum[IJp1K]+cellSum[Ip1Jp1K]) - 0.5*(cellSum[IJm1K]+cellSum[Ip1Jm1K]))/(2.0*p->DXM);
+        stressDivZ = (0.5*(cellSum[IJKp1]+cellSum[Ip1JKp1]) - 0.5*(cellSum[IJKm1]+cellSum[Ip1JKm1]))/(2.0*p->DXM);
+
+        pressureDivX = (a->press(i+1,j,k) - a->press(i,j,k))/(p->DXM);
+        pressureDivY = (0.5*(a->press(i,j+1,k)+a->press(i+1,j+1,k)) - 0.5*(a->press(i,j-1,k)+a->press(i+1,j-1,k)))/(2.0*p->DXM);
+        pressureDivZ = (0.5*(a->press(i,j,k+1)+a->press(i+1,j,k+1)) - 0.5*(a->press(i,j,k-1)+a->press(i+1,j,k-1)))/(2.0*p->DXM);
 
         // RK3 step 1
         du=u-PP->U[n];
