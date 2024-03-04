@@ -34,6 +34,12 @@ Author: Alexander Hanke
 
 #include <sys/stat.h>
 
+/// @brief Sediment model on particle basis
+/// Class handling the sediment when using the options for Lagrangian particles and VRANS.\n
+/// Does all the initialization of the topography with particles, modification of topo values and print out.
+/// @param p 
+/// @param pgc 
+/// @param pturb 
 sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p), PP(10,p->S20,p->S22,true), active_box(p), active_topo(p), irand(10000), drand(irand)
 {
     pvrans = new vrans_f(p,pgc);
