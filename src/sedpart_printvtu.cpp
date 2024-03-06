@@ -47,8 +47,8 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	const int print_flag=p->Q183;
 
 	PARTLOOP
-		if(PP.Flag[n]>=print_flag)
-			numpt++;
+	if(PP.Flag[n]>=print_flag)
+	numpt++;
 
 	cout<<"PSed-"<<p->mpirank<<"| printed: "<<numpt<<" not printed: "<<PP.size-numpt<<" | capcaity: "<<PP.capacity<<endl;
 
@@ -61,25 +61,23 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	if(p->mpirank==0)
 	pvtu_pos(p,a,pgc);
 
-
     header_pos(p,a,pgc);
 
 	ofstream result;
 	result.open(name, ios::binary);
 
-    
 
 	offset[n]=0;
 	++n;
 	
-	// offset[n]=offset[n-1]+4*(numpt)+4; //flag
-	// ++n;
+	offset[n]=offset[n-1]+4*(numpt)+4; //flag
+	++n;
+	offset[n]=offset[n-1]+4*(numpt)*3+4; //velocity
+	++n;
 	// offset[n]=offset[n-1]+4*(numpt)+4; //radius
 	// ++n;
-	// offset[n]=offset[n-1]+4*(numpt)+4; //correction
-	// ++n;	
 	
-	// end scalars
+
     offset[n]=offset[n-1]+4*(numpt)*3+4; //xyz
     ++n;
     offset[n]=offset[n-1]+4*(numpt)*2+4; //connectivitey
@@ -97,22 +95,20 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	result<<"<Piece NumberOfPoints=\""<<numpt<<"\" NumberOfCells=\""<<numpt<<"\">"<<endl;
 	
 	
-	// result<<"<PointData >"<<endl;
-	// result<<"<DataArray type=\"Float32\" Name=\"Flag\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    // ++n;
+	result<<"<PointData >"<<endl;
+	result<<"<DataArray type=\"Float32\" Name=\"Flag\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    ++n;
+	result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+	++n;
     // result<<"<DataArray type=\"Float32\" Name=\"radius\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     // ++n;
-	// result<<"<DataArray type=\"Float32\" Name=\"correction\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    // ++n;
-	// result<<"</PointData>"<<endl;
-	
+	result<<"</PointData>"<<endl;
 	
 
     result<<"<Points>"<<endl;
     result<<"<DataArray type=\"Float32\"  NumberOfComponents=\"3\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     result<<"</Points>"<<endl;
-	
 	
 
     result<<"<Cells>"<<endl;
@@ -127,58 +123,37 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     result<<"</Piece>"<<endl;
     result<<"</UnstructuredGrid>"<<endl;
 
-//----------------------------------------------------------------------------
+	//----------------------------------------------------------------------------
     result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
 	
+	// flag
+    iin=4*(numpt);
+    result.write((char*)&iin, sizeof (int));
+	PARTLOOP
+	if(PP.Flag[n]>=print_flag)
+	{
+		ffn=float(PP.Flag[n]);
+		result.write((char*)&ffn, sizeof (float));
+	}
 
-//  lsv
-    // iin=4*(numpt);
-    // result.write((char*)&iin, sizeof (int));
-	// PARTLOOP
-    // if(PP.Flag[n]>0)
-	// {
-	// ffn=float(f[n][3]);
-	// result.write((char*)&ffn, sizeof (float));
-	// }
+	// velocities
+	iin=4*(numpt)*3;
+	result.write((char*)&iin, sizeof (int));
+    PARTLOOP
+    if(PP.Flag[n]>=print_flag)
+	{
+	ffn=float(PP.U[n]);
+	result.write((char*)&ffn, sizeof (float));
+
+	ffn=float(PP.V[n]);
+	result.write((char*)&ffn, sizeof (float));
+
+	ffn=float(PP.W[n]);
+	result.write((char*)&ffn, sizeof (float));
+	}
 	
-	//  flag
-    // iin=4*(numpt);
-    // result.write((char*)&iin, sizeof (int));
-	// PARTLOOP
-	// 	if(PP.Flag[n]>=print_flag)
-	// 	{
-	// 		ffn=float(PP.Flag[n]);
-	// 		result.write((char*)&ffn, sizeof (float));
-	// 	}
 
-//  correction
-    // iin=4*(numpt);
-    // result.write((char*)&iin, sizeof (int));
-	// PARTLOOP
-    // if(PP.Flag[n]>0)
-	// {
-	// 	if(sign==1)
-	// 	{
-	// 	if(f[n][3]<=-f[n][4])
-	// 	ffn=float(1.0);
-		
-	// 	if(f[n][3]>-f[n][4])
-	// 	ffn=float(0.0);
-	// 	}
-		
-	// 	if(sign==2)
-	// 	{
-	// 	if(f[n][3]>=f[n][4])
-	// 	ffn=float(1.0);
-		
-	// 	if(f[n][3]<f[n][4])
-	// 	ffn=float(0.0);
-	// 	}
-		
-	// result.write((char*)&ffn, sizeof (float));
-	// }
-
-//  XYZ
+	//  XYZ
 	iin=4*(numpt)*3;
 	result.write((char*)&iin, sizeof (int));
     PARTLOOP
@@ -194,7 +169,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	result.write((char*)&ffn, sizeof (float));
 	}
 	
-//  Connectivity
+	//  Connectivity
 	count=0;
     iin=4*(numpt)*2;
     result.write((char*)&iin, sizeof (int));
@@ -209,7 +184,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	++count;
 	}
 
-//  Offset of Connectivity
+	//  Offset of Connectivity
 	count=0;
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
@@ -221,8 +196,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	++count;
 	}
 
-
-//  Cell types
+	//  Cell types
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
