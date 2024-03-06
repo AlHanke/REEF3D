@@ -32,27 +32,32 @@ size_t overflow when adding something to an object at capacity
 */
 
 
-particles_obj::particles_obj(size_t capacity, double d50, double density, bool individuals, size_t size, double scale_factor):
-                tracers_obj(capacity,size,scale_factor),
+particles_obj::particles_obj(size_t _capacity, double _d50, double _density, bool individuals, size_t _size, double _scale_factor):
+                tracers_obj(_capacity,_size,_scale_factor),
                 entries(tracers_obj::entries+(individuals?4:0)), // update when adding more data
                 flag_inactive(0), flag_bed(1), flag_bed_load(2), flag_suspended_load(3),
-                d50(d50), density(density), scale_factor(scale_factor)
+                d50(_d50), density(_density), scale_factor(_scale_factor)
                 
 {	
-    if(this->capacity>0 && entries>tracers_obj::entries)
+    if(_capacity>0 && entries>tracers_obj::entries)
     {
-        this->U = new double[capacity];
-        this->V = new double[capacity];
-        this->W = new double[capacity];
+        U = new double[_capacity];
+        V = new double[_capacity];
+        W = new double[_capacity];
         
-        this->PackingFactor = new double[capacity];
+        PackingFactor = new double[_capacity];
 
-        fill_data(0,this->size);
+        fill_data(0,_size);
     }
 }
 
 particles_obj::~particles_obj()
 {
+    // delete[] U;
+    // delete[] V;
+    // delete[] W;
+
+    // delete[] PackingFactor;
 }
 
 /// \copydoc tracers_obj::debug
@@ -128,26 +133,26 @@ size_t particles_obj::reserve(size_t capacity_desired)
         tracers_obj::reserve(capacity_desired);
 
         double* newU=new double[capacity_desired];
-        std::memcpy( newU, this->U, size * sizeof(double) );
-        delete[] this->U;
-        this->U=newU;
+        std::memcpy( newU, U, size * sizeof(double) );
+        delete[] U;
+        U=newU;
 
         double* newV=new double[capacity_desired];
-        std::memcpy( newV, this->V, size * sizeof(double) );
-        delete[] this->V;
-        this->V=newV;
+        std::memcpy( newV, V, size * sizeof(double) );
+        delete[] V;
+        V=newV;
 
         double* newW=new double[capacity_desired];
-        std::memcpy( newW, this->W, size * sizeof(double) );
-        delete[] this->W;
-        this->W=newW;
+        std::memcpy( newW, W, size * sizeof(double) );
+        delete[] W;
+        W=newW;
 
         double* newPackingFactor=new double[capacity_desired];
-        std::memcpy( newPackingFactor, this->PackingFactor, size * sizeof(double) );
-        delete[] this->PackingFactor;
-        this->PackingFactor=newPackingFactor;
+        std::memcpy( newPackingFactor, PackingFactor, size * sizeof(double) );
+        delete[] PackingFactor;
+        PackingFactor=newPackingFactor;
     }
-    return this->capacity;
+    return capacity;
 }
 
 /// \copydoc tracers_obj::fill
@@ -185,29 +190,29 @@ bool particles_obj::check_state(bool first)
 /// \copydoc tracers_obj::fix_state
 void particles_obj::fix_state() // ToDo - update
 {
-    if(this->size>this->capacity)
+    if(size>capacity)
     {
         size_t real_size=capacity;
         size_t old_size=size;
-        reserve(ceil(this->scale_factor*size));
-        this->size=real_size;
+        reserve(ceil(scale_factor*size));
+        size=real_size;
         fill(old_size,false);
 
-        this->empty_itr=0;
+        empty_itr=0;
         size_t temp_Empty[capacity];
         for(size_t n=0;n<real_size;n++)
             if(Empty[n]!=NULL)
                 temp_Empty[empty_itr++]=n;
         delete [] Empty;
-        this->Empty=temp_Empty;
+        Empty=temp_Empty;
         fill_empty();
     }
     else
     {
-        this->empty_itr=0;
+        empty_itr=0;
         size_t temp_Empty[capacity];
         delete [] Empty;
-        this->Empty=temp_Empty;
+        Empty=temp_Empty;
         for(size_t n=capacity-1; n>0;--n)
             if(X[n]==NULL&&Y[n]==NULL&&Z[n]==NULL&&Flag[n]==-1)
                 Empty[empty_itr++]=n;
@@ -258,7 +263,7 @@ void particles_obj::add_obj(particles_obj* obj)
         if(size+obj->size>capacity)
             reserve(size+obj->size);
         
-        if(obj->entries>obj->tracers_obj::entries && this->entries>this->tracers_obj::entries)
+        if(obj->entries>obj->tracers_obj::entries && entries>tracers_obj::entries)
             for(size_t n=0;n<obj->loopindex;n++)
                 add(obj->X[n],obj->Y[n],obj->Z[n],obj->Flag[n],obj->U[n],obj->V[n],obj->W[n],obj->PackingFactor[n]);
         else
@@ -280,19 +285,19 @@ void particles_obj::add_obj(particles_obj* obj)
 /// @param packingFactor 
 void particles_obj::add_data(size_t index, double u, double v, double w, double packingFactor)
 {
-    this->U[index] = u;
-    this->V[index] = v;
-    this->W[index] = w;
-    this->PackingFactor[index] = packingFactor;
+    U[index] = u;
+    V[index] = v;
+    W[index] = w;
+    PackingFactor[index] = packingFactor;
 }
 
 void particles_obj::fill_data(size_t start, size_t end)
 {
     for(size_t n=start;n<end;n++)
     {
-        this->U[n]=0;
-        this->V[n]=0;
-        this->W[n]=0;
-        this->PackingFactor[n]=0;
+        U[n]=0;
+        V[n]=0;
+        W[n]=0;
+        PackingFactor[n]=0;
     }
 }

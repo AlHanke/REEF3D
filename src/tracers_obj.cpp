@@ -36,26 +36,26 @@ size_t overflow when adding something to an object at capacity
 /// @param capacity Desired initial capacity
 /// @param size Desired number of tracers at default position (0,0,0|-1)
 /// @param scale_factor Sets ::scale_factor for ::reserve
-tracers_obj::tracers_obj(size_t capacity, size_t size, double scale_factor): scale_factor(scale_factor), entries(3)
+tracers_obj::tracers_obj(size_t _capacity, size_t _size, double _scale_factor): scale_factor(_scale_factor), entries(3)
 {	
-    if(capacity>0)
+    if(_capacity>0)
     {
-        if(size>capacity)
-            capacity=size;
+        if(_size>_capacity)
+            _capacity=_size;
 
-        this->X = new double[capacity]; // default value: NULL
-        this->Y = new double[capacity]; // default value: NULL
-        this->Z = new double[capacity]; // default value: NULL
+        X = new double[_capacity]; // default value: NULL
+        Y = new double[_capacity]; // default value: NULL
+        Z = new double[_capacity]; // default value: NULL
 
-        this->Flag = new int[capacity]; // default value: -1
+        Flag = new int[_capacity]; // default value: -1
 
-        this->Empty = new size_t[capacity]; // default value: size_t_max-1
-        this->capacity=capacity;
+        Empty = new size_t[_capacity]; // default value: size_t_max-1
+        capacity=_capacity;
 
-        this->size=0;
-        this->empty_itr=0;
-        this->loopindex=0;
-        fill(size);
+        size=0;
+        empty_itr=0;
+        loopindex=0;
+        fill(_size);
 
         cellSumIniState=false;
         
@@ -64,6 +64,11 @@ tracers_obj::tracers_obj(size_t capacity, size_t size, double scale_factor): sca
 
 tracers_obj::~tracers_obj()
 {
+    // delete[] X;
+    // delete[] Y;
+    // delete[] Z;
+
+    // delete[] Flag;
 }
 
 /// @brief Contains debugging code
@@ -104,10 +109,10 @@ void tracers_obj::erase_all()
     delete[] Empty;
     Empty=new size_t[capacity];
 
-    this->size=0;
-    this->empty_itr=0;
-    this->Empty[empty_itr]=0;
-    this->loopindex=0;
+    size=0;
+    empty_itr=0;
+    Empty[empty_itr]=0;
+    loopindex=0;
     fill_empty();
 }
 
@@ -190,7 +195,7 @@ size_t tracers_obj::reserve(size_t capacity_desired)
         capacity=capacity_desired;
         fill_empty();
     }
-    return this->capacity;
+    return capacity;
 }
 
 /// @brief Fills with default
@@ -248,29 +253,29 @@ bool tracers_obj::check_state(bool first)
 /// @brief Truncate to capcity if size is over capacity or fix Empty entires
 void tracers_obj::fix_state()
 {
-    if(this->size>this->capacity)
+    if(size>capacity)
     {
         size_t real_size=capacity;
         size_t old_size=size;
-        reserve(ceil(this->scale_factor*size));
-        this->size=real_size;
+        reserve(ceil(scale_factor*size));
+        size=real_size;
         fill(old_size,false);
 
-        this->empty_itr=0;
+        empty_itr=0;
         size_t temp_Empty[capacity];
         for(size_t n=0;n<real_size;n++)
             if(Empty[n]!=NULL)
                 temp_Empty[empty_itr++]=n;
         delete [] Empty;
-        this->Empty=temp_Empty;
+        Empty=temp_Empty;
         fill_empty();
     }
     else
     {
-        this->empty_itr=0;
+        empty_itr=0;
         size_t temp_Empty[capacity];
         delete [] Empty;
-        this->Empty=temp_Empty;
+        Empty=temp_Empty;
         for(size_t n=capacity-1; n>0;--n)
             if(X[n]==NULL&&Y[n]==NULL&&Z[n]==NULL&&Flag[n]==-1)
                 Empty[empty_itr++]=n;
