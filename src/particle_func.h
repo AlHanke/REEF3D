@@ -24,13 +24,14 @@ Author: Alexander Hanke
 #define PARTICLEFUNC_H_
 
 #include"increment.h"
+#include"particles_obj.h"
 
 class lexer;
 class fdm;
 class ghostcell;
 
 class tracers_obj;
-class particles_obj;
+//class particles_obj;
 
 /// Particle function class
 /** A class containing all basic function to manipulate the position of tracers_objs. */
@@ -39,7 +40,7 @@ class particle_func: private increment
 public:
 
 protected:
-    particle_func(lexer*);
+    particle_func(lexer*,int=10,double=0.001,double=2700);
     virtual ~particle_func();
     
     // para
@@ -78,6 +79,7 @@ private:
     double beta = 3.5; // 2<=beta<=5
     double epsilon = 10e-7;
     double theta_crit = 0.6; // 0.6-0.65
+    particles_obj seedling1,seedling2,seedling3,seedling4,seedling5,seedling6;
 };
 
 #endif

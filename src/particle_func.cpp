@@ -25,12 +25,12 @@ Author: Alexander Hanke
 #include"fdm.h"
 #include"ghostcell.h"
 #include"tracers_obj.h"
-#include"particles_obj.h"
 #include"boundarycheck.h"
 
 #define PARTICLELOOP for(size_t n=0;n<PP->loopindex;n++)
 
-particle_func::particle_func(lexer* p) : kinVis(p->W1/p->W2), drho(p->W1/p->S22)
+particle_func::particle_func(lexer* p, int maxcount, double d50, double density) : kinVis(p->W1/p->W2), drho(p->W1/p->S22),
+                            seedling1(maxcount,d50,density,true),seedling2(maxcount,d50,density,true),seedling3(maxcount,d50,density,true),seedling4(maxcount,d50,density,true),seedling5(maxcount,d50,density,true),seedling6(maxcount,d50,density,true)
 {
     p->Darray(stressTensor,p->imax*p->jmax*p->kmax);
 }
@@ -224,10 +224,23 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
             dv3=Dp*dv+(1.0-drho)*p->W20-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
             dw3=Dp*dw+(1.0-drho)*p->W20-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
 
-            PP->U[n] += ((2.0/3.0)*du2 + (2.0/3.0)*du3)*p->dt;
-            PP->V[n] += ((2.0/3.0)*dv2 + (2.0/3.0)*dv3)*p->dt;
-            PP->W[n] += ((2.0/3.0)*dw2 + (2.0/3.0)*dw3)*p->dt;
 
+            if(du2!=du2||du3!=du3)
+                // cout<<"NaN detected in u."<<endl
+                int temp=0;
+            else
+                PP->U[n] += ((2.0/3.0)*du2 + (2.0/3.0)*du3)*p->dt;
+            if(dv2!=dv2||dv3!=dv3)
+                //cout<<"NaN detected in v."<<endl
+                int temp=0;
+            else
+                PP->V[n] += ((2.0/3.0)*dv2 + (2.0/3.0)*dv3)*p->dt;
+            if(dw2!=dw2||dw3!=dw3)
+                // cout<<"NaN detected in w."<<endl
+                int temp=0;
+            else
+                PP->W[n] += ((2.0/3.0)*dw2 + (2.0/3.0)*dw3)*p->dt;
+            
             // Pos update
             PP->X[n] += PP->U[n]*p->dt;
             PP->Y[n] += PP->V[n]*p->dt;
@@ -413,7 +426,12 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
 {
     int xchange=0;
 
-    particles_obj seedling1(maxcount,PP->d50,PP->density,true),seedling2(maxcount,PP->d50,PP->density,true),seedling3(maxcount,PP->d50,PP->density,true),seedling4(maxcount,PP->d50,PP->density,true),seedling5(maxcount,PP->d50,PP->density,true),seedling6(maxcount,PP->d50,PP->density,true);
+    seedling1.reserve(maxcount);
+    seedling2.reserve(maxcount);
+    seedling3.reserve(maxcount);
+    seedling4.reserve(maxcount);
+    seedling5.reserve(maxcount);
+    seedling6.reserve(maxcount);
     particles_obj Send[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
     particles_obj Recv[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
 
@@ -575,7 +593,7 @@ void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP, int min
     int i,j;
     PARTICLELOOP
         if(PP->Flag[n]>0)
-        if (p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<0)
+        if (p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<=0)
         {
             PP->Flag[n]=minflag;
             if(p->count!=0)
@@ -605,23 +623,27 @@ double particle_func::volume(particles_obj* PP, int index)
 
 void particle_func::cleanup(lexer* p, fdm* a, particles_obj* PP, int max)
 {
-    int* numPartijk;
-    int i,j,k;
+    // int* numPartijk;
+    // int i,j,k;
 
-    p->Iarray(numPartijk,p->knox*p->knoy*p->knoz);
-    PARTICLELOOP
-        if(PP->Flag[n]==0)
-        {
-            i=p->posc_i(PP->X[n]);
-            j=p->posc_j(PP->Y[n]);
-            k=p->posc_k(PP->Z[n]);
-            if(a->topo(i,j,k)<p->DZN[KP])
-                if(numPartijk[IJK]<max)
-                    numPartijk[IJK]++;
-                else
-                    PP->erase(n);
-        }
-    p->del_Iarray(numPartijk,p->knox*p->knoy*p->knoz);
+    // p->Iarray(numPartijk,p->knox*p->knoy*p->knoz);
+    // PARTICLELOOP
+    //     if(PP->Flag[n]==0)
+    //     {
+    //         i=p->posc_i(PP->X[n]);
+    //         j=p->posc_j(PP->Y[n]);
+    //         k=p->posc_k(PP->Z[n]);
+    //         if(a->topo(i,j,k)<p->DZN[KP])
+    //             if(numPartijk[IJK]<max)
+    //                 numPartijk[IJK]++;
+    //             else
+    //                 PP->erase(n);
+    //     }
+    // p->del_Iarray(numPartijk,p->knox*p->knoy*p->knoz);
+
+    // PARTICLELOOP
+    // if(p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<-p->Q102*p->DZN[KP]||PP->Flag[n]==0)
+    // PP->erase(n);
 }
 
 /// @brief Topo volume in cell div. by particle volume
@@ -640,6 +662,8 @@ int particle_func::maxParticlesPerXY(lexer* p, fdm* a, double d50)
 
 void particle_func::particlesPerCell(lexer* p, particles_obj* PP, double* cellSum)
 {
+    PLAINLOOP
+    cellSum[IJK]=0;
     PARTICLELOOP
     {
         i=p->posc_i(PP->X[n]);
@@ -711,7 +735,7 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP, double* cel
         j=p->posc_j(PP->Y[n]);
         k=p->posc_k(PP->Z[n]);
 
-        thetas=theta_crit*0.95;//(PI*pow(PP->d50,3.0)*cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]));
+        thetas=(PI*pow(PP->d50,3.0)*cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]));//theta_crit*0.95;
         u=p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n]);
         v=p->ccipol1(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
         w=p->ccipol1(a->w,PP->X[n],PP->Y[n],PP->Z[n]);
@@ -735,7 +759,8 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP, double* cel
         dv1=Dp*dv+(1.0-drho)*p->W20-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
         dw1=Dp*dw+(1.0-drho)*p->W20-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
 
-        if (fabs(du1)>0||fabs(dv1)>0||dw1>0)
+        double tolerance=0.0;
+        if (fabs(du1)>tolerance||fabs(dv1)>tolerance||dw1>tolerance)
         {
             PP->Flag[n]=1;
             if(p->count!=0)
