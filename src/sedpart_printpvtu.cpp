@@ -49,7 +49,7 @@ void sedpart::pvtu_pos(lexer* p, fdm* a, ghostcell* pgc)
 	result<<"<PPointData>"<<endl;
 	result<<"<PDataArray type=\"Float32\" Name=\"Flag\"/>"<<endl;
 	result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>"<<endl;
-	// // result<<"<PDataArray type=\"Float32\" Name=\"radius\"/>"<<endl;
+	result<<"<PDataArray type=\"Float32\" Name=\"radius\"/>"<<endl;
 	result<<"</PPointData>"<<endl;
 
 	result<<"<PPoints>"<<endl;

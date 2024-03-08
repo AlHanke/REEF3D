@@ -74,8 +74,8 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	++n;
 	offset[n]=offset[n-1]+4*(numpt)*3+4; //velocity
 	++n;
-	// offset[n]=offset[n-1]+4*(numpt)+4; //radius
-	// ++n;
+	offset[n]=offset[n-1]+4*(numpt)+4; //radius
+	++n;
 	
 
     offset[n]=offset[n-1]+4*(numpt)*3+4; //xyz
@@ -100,8 +100,8 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     ++n;
 	result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
 	++n;
-    // result<<"<DataArray type=\"Float32\" Name=\"radius\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    // ++n;
+    result<<"<DataArray type=\"Float32\" Name=\"radius\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    ++n;
 	result<<"</PointData>"<<endl;
 	
 
@@ -150,6 +150,16 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 
 	ffn=float(PP.W[n]);
 	result.write((char*)&ffn, sizeof (float));
+	}
+
+	// radius
+    iin=4*(numpt);
+    result.write((char*)&iin, sizeof (int));
+	PARTLOOP
+	if(PP.Flag[n]>=print_flag)
+	{
+		ffn=float(PP.d50/2);
+		result.write((char*)&ffn, sizeof (float));
 	}
 	
 
