@@ -64,15 +64,17 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
         ppcell = p->Q24;
     else
         ppcell = 0;
-    if(ppcell>floorf(minPPC))
+    int gfminPPC=pgc->globalmin(floorf(minPPC));
+    if(ppcell>gfminPPC)
     {
-        ppcell=pgc->globalmin(floorf(minPPC));
+        ppcell=gfminPPC;
         if(0==p->mpirank)
         cout<<"Reduced particles per cell to "<<ppcell<<" as min particles per cell is lower."<<endl;
     }
-    if(ppcell!=0&&p->Q41*ppcell>minPPC)
+    double gQ41=pgc->globalmin(minPPC/ppcell);
+    if(ppcell!=0&&p->Q41*ppcell>gfminPPC)
     {
-        p->Q41=pgc->globalmin(minPPC/ppcell);
+        p->Q41=gQ41;
         if(0==p->mpirank)
         cout<<"Reduced packing factor to "<<p->Q41<<" to stay within max real particles per cell."<<endl;
     }
