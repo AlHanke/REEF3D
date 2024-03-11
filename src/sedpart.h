@@ -114,7 +114,7 @@ private:
     particles_obj PP;
     
     #define PARTLOOP for(int n=0;n<PP.loopindex;++n)
-    void seed_ini(lexer*,fdm*);
+    void seed_ini(lexer*,fdm*,ghostcell*);
     void seed(lexer*,fdm*);
     void posseed_box(lexer*,fdm*);
     void posseed_topo(lexer*,fdm*);

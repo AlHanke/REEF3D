@@ -26,15 +26,15 @@ Author: Hans Bihs & Alexander Hanke
 #include"ghostcell.h"
 #include<math.h>
 
-void sedpart::seed_ini(lexer* p, fdm* a)
+void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
 {
     // ini
-    int i,j,k;
     LOOP
     {
         active_box(i,j,k) = 0.0;
         active_topo(i,j,k) = 0.0;
     }
+    double minPPC=INT64_MAX;
     
     // Box
     size_t cellcountBox=0;
@@ -56,6 +56,7 @@ void sedpart::seed_ini(lexer* p, fdm* a)
             active_topo(i,j,k) = 1.0;
             if(1!=active_box(i,j,k))
                 cellcountTopo++;
+            minPPC=min(minPPC, maxParticlesPerCell(p,a,PP.d50));
         }
 
     // guess particle demand
@@ -63,8 +64,20 @@ void sedpart::seed_ini(lexer* p, fdm* a)
         ppcell = p->Q24;
     else
         ppcell = 0;
+    if(ppcell>floorf(minPPC))
+    {
+        ppcell=pgc->globalmin(floorf(minPPC));
+        if(0==p->mpirank)
+        cout<<"Reduced particles per cell to "<<ppcell<<" as min particles per cell is lower."<<endl;
+    }
+    if(ppcell!=0&&p->Q41*ppcell>minPPC)
+    {
+        p->Q41=pgc->globalmin(minPPC/ppcell);
+        if(0==p->mpirank)
+        cout<<"Reduced packing factor to "<<p->Q41<<" to stay within max real particles per cell."<<endl;
+    }
     
-    partnum = cellcountBox * ppcell + p->Q102 * cellcountTopo * ppcell;
+    partnum = cellcountBox * ppcell + p->Q102 * cellcountTopo * ppcell;    
 }
 
 void sedpart::seed(lexer* p, fdm* a)
@@ -90,17 +103,17 @@ void sedpart::posseed_box(lexer* p, fdm* a)
     LOOP
         if(active_box(i,j,k)>0.0)
             for(int qn=0;qn<ppcell;++qn)
-                {
-                    if(PP.size+1>0.9*PP.capacity)
-                        PP.reserve();
-                    
-                    x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
-                    y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
-                    z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
+            {
+                if(PP.size+1>0.9*PP.capacity)
+                    PP.reserve();
+                
+                x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
+                y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
+                z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
 
-                    PP.add(x,y,z,1,a->u(i,j,k),a->v(i,j,k),a->w(i,j,k),p->Q41);
-                    PP.cellSum[IJK]++;
-                }
+                PP.add(x,y,z,1,a->u(i,j,k),a->v(i,j,k),a->w(i,j,k),p->Q41);
+                PP.cellSum[IJK]++;
+            }
 }
 
 
@@ -123,8 +136,8 @@ void sedpart::posseed_topo(lexer* p, fdm* a)
                     PP.reserve();
                 for(int qn=0;qn<p->Q102*ppcell*1000;++qn)
                 {
-                    if(PP.cellSum[IJK]>p->Q102*ppcell)
-                    break;
+                    if(PP.cellSum[IJK]>=p->Q102*ppcell)
+                        break;
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
@@ -134,7 +147,7 @@ void sedpart::posseed_topo(lexer* p, fdm* a)
 
                     if (!(ipolTopo>tolerance||ipolTopo<-p->Q102*p->DZN[KP]||ipolSolid<0))
                     { 
-                       PP.add(x,y,z,1,0,0,0,p->Q41);
+                       PP.add(x,y,z,0,0,0,0,p->Q41);
                        PP.cellSum[IJK]++;
                     }
                 }
