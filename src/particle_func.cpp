@@ -154,6 +154,8 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
     double Dp, thetas;
     double pressureDivX=0, pressureDivY=0, pressureDivZ=0;
     double stressDivX=0, stressDivY=0, stressDivZ=0;
+    bool print=true;
+    double netBuoyX=(1.0-drho)*p->W20,netBuoyY=(1.0-drho)*p->W21,netBuoyZ=(1.0-drho)*p->W22;
 
     PARTICLELOOP
         if(PP->Flag[n]>flag)
@@ -163,7 +165,7 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
 
-            thetas=(PI*pow(PP->d50,3.0)*cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]));
+            thetas=theta_s(p,a,PP,cellSum,i,j,k);
             if(thetas!=thetas)
             cout<<"NaN detected in thetas."<<endl;
 
@@ -171,13 +173,13 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
             v=p->ccipol1(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
             w=p->ccipol1(a->w,PP->X[n],PP->Y[n],PP->Z[n]);
 
-            stressDivX = (cellSum[Ip1JK] - cellSum[IJK])/(p->DXM);
-            stressDivY = (0.5*(cellSum[IJp1K]+cellSum[Ip1Jp1K]) - 0.5*(cellSum[IJm1K]+cellSum[Ip1Jm1K]))/(2.0*p->DXM);
-            stressDivZ = (0.5*(cellSum[IJKp1]+cellSum[Ip1JKp1]) - 0.5*(cellSum[IJKm1]+cellSum[Ip1JKm1]))/(2.0*p->DXM);
+            // stressDivX = (stressTensor[Ip1JK] - stressTensor[IJK])/(p->DXN[IP]);
+            // stressDivY = (0.5*(stressTensor[IJp1K]+stressTensor[Ip1Jp1K]) - 0.5*(stressTensor[IJm1K]+stressTensor[Ip1Jm1K]))/(p->DYN[JM1]+p->DYN[JP]);
+            // stressDivZ = (0.5*(stressTensor[IJKp1]+stressTensor[Ip1JKp1]) - 0.5*(stressTensor[IJKm1]+stressTensor[Ip1JKm1]))/(p->DYN[KM1]+p->DYN[KP]);
 
-            pressureDivX = (a->press(i+1,j,k) - a->press(i,j,k))/(p->DXM);
-            pressureDivY = (0.5*(a->press(i,j+1,k)+a->press(i+1,j+1,k)) - 0.5*(a->press(i,j-1,k)+a->press(i+1,j-1,k)))/(2.0*p->DXM);
-            pressureDivZ = (0.5*(a->press(i,j,k+1)+a->press(i+1,j,k+1)) - 0.5*(a->press(i,j,k-1)+a->press(i+1,j,k-1)))/(2.0*p->DXM);
+            pressureDivX = (a->press(i+1,j,k) - a->press(i,j,k))/(p->DXN[IP]);
+            pressureDivY = (0.5*(a->press(i,j+1,k)+a->press(i+1,j+1,k)) - 0.5*(a->press(i,j-1,k)+a->press(i+1,j-1,k)))/(p->DYN[JM1]+p->DYN[JP]);
+            pressureDivZ = (0.5*(a->press(i,j,k+1)+a->press(i+1,j,k+1)) - 0.5*(a->press(i,j,k-1)+a->press(i+1,j,k-1)))/(p->DYN[KM1]+p->DYN[KP]);
 
             // RK3 step 1
             du=u-PP->U[n];
@@ -186,9 +188,15 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
 
             Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
 
-            du1=Dp*du+(1.0-drho)*p->W20-(pressureDivX/p->S22+stressDivX/((1-thetas)*p->S22));
-            dv1=Dp*dv+(1.0-drho)*p->W20-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
-            dw1=Dp*dw+(1.0-drho)*p->W20-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
+            du1=Dp*du+netBuoyX-pressureDivX/p->S22-stressDivX/((1-thetas)*p->S22);
+            dv1=Dp*dv+netBuoyY-pressureDivY/p->S22-stressDivY/((1-thetas)*p->S22);
+            dw1=Dp*dw+netBuoyZ-pressureDivZ/p->S22-stressDivZ/((1-thetas)*p->S22);
+
+            if(print)
+            {
+                cout<<"Dp:"<<Dp*dw<<" drho:"<<netBuoyZ<<" press:"<<-pressureDivZ/p->S22<<" stress:"<<-stressDivZ/((1-thetas)*p->S22)<<endl;
+                print=false;
+            }
 
             RKu=PP->U[n]+du1*p->dt;
             RKv=PP->V[n]+dv1*p->dt;
@@ -201,9 +209,9 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
 
             Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
 
-            du2=Dp*du+(1.0-drho)*p->W20-(pressureDivX/p->S22+stressDivX/((1-thetas)*p->S22));
-            dv2=Dp*dv+(1.0-drho)*p->W20-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
-            dw2=Dp*dw+(1.0-drho)*p->W20-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
+            du2=Dp*du+netBuoyX-(pressureDivX/p->S22+stressDivX/((1-thetas)*p->S22));
+            dv2=Dp*dv+netBuoyY-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
+            dw2=Dp*dw+netBuoyZ-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
 
             du2=0.25*du2+0.25*du1;
             dv2=0.25*dv2+0.25*dv1;
@@ -220,9 +228,9 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
 
             Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
 
-            du3=Dp*du+(1.0-drho)*p->W20-(pressureDivX/p->S22+stressDivX/((1-thetas)*p->S22));
-            dv3=Dp*dv+(1.0-drho)*p->W20-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
-            dw3=Dp*dw+(1.0-drho)*p->W20-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
+            du3=Dp*du+netBuoyX-(pressureDivX/p->S22+stressDivX/((1-thetas)*p->S22));
+            dv3=Dp*dv+netBuoyY-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
+            dw3=Dp*dw+netBuoyZ-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
 
 
             if(du2!=du2||du3!=du3)
@@ -248,10 +256,16 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
 
             // Sum update
             cellSum[IJK]-=PP->PackingFactor[n];
+            if(cellSum[IJK]<0) // Mass conservation
+                cellSum[IJK]=0;
+            particleStressTensorUpdateIJK(p,a,PP,cellSum);
             i=p->posc_i(PP->X[n]);
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
             cellSum[IJK]+=PP->PackingFactor[n];
+            if(cellSum[IJK]<0)
+                cellSum[IJK]=0;
+            particleStressTensorUpdateIJK(p,a,PP,cellSum);
         }
 }
 
@@ -650,9 +664,9 @@ void particle_func::cleanup(lexer* p, fdm* a, particles_obj* PP, int max)
 /// Uses i,j&k from increment to pass cell identifier
 /// @param d50 Sauter diameter of particles
 /// @return Ceil of number of particles in cell IJK
-int particle_func::maxParticlesPerCell(lexer* p, fdm* a, double d50)
+double particle_func::maxParticlesPerCell(lexer* p, fdm* a, double d50)
 {   
-    return ceil(p->DXN[IP]*p->DYN[JP]*(a->topo(i,j,k)<p->DZN[KP]?a->topo(i,j,k):p->DZN[KP])*(1-p->S24)*6.0/(PI*pow(d50,3.0)));
+    return 6.0*p->DXN[IP]*p->DYN[JP]*(p->DZN[KP]-(0.5*p->DZN[KP]+a->topo(i,j,k)))/((PI*pow(d50,3.0)));
 }
 
 int particle_func::maxParticlesPerXY(lexer* p, fdm* a, double d50)
@@ -673,19 +687,18 @@ void particle_func::particlesPerCell(lexer* p, particles_obj* PP, double* cellSu
     }
 }
 
-void particle_func::particleStressTensor(lexer* p, particles_obj* PP, double* cellSum)
+void particle_func::particleStressTensor(lexer* p, fdm* a, particles_obj* PP, double* cellSum)
 {
     double theta;
     int i,j,k;
 
     PLAINLOOP
     {
-        theta = PI*pow(PP->d50,3.0)*cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]);
-        stressTensor[IJK]=Ps*pow(theta,beta)/max(theta_crit-theta,epsilon*(1-theta));
+        updateParticleStressTensor(p,a,PP,cellSum,i,j,k);
     }
 }
 
-void particle_func::particleStressTensorUpdateIJK(lexer* p, particles_obj* PP, double* cellSum)
+void particle_func::particleStressTensorUpdateIJK(lexer* p, fdm* a, particles_obj* PP, double* cellSum)
 {
     double theta;
     int i,j,k;
@@ -698,10 +711,30 @@ void particle_func::particleStressTensorUpdateIJK(lexer* p, particles_obj* PP, d
                 j=increment::j+m;
                 k=increment::k+l;
 
-                theta = PI*pow(PP->d50,3.0)*cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]);
-                stressTensor[IJK]=Ps*pow(theta,beta)/max(theta_crit-theta,epsilon*(1-theta));
+                updateParticleStressTensor(p,a,PP,cellSum,i,j,k);
             }
 }
+
+void particle_func::updateParticleStressTensor(lexer* p, fdm* a, particles_obj* PP, double* cellSum, int i, int j, int k)
+{
+    double theta=theta_s(p,a,PP,cellSum,i,j,k);
+    stressTensor[IJK]=Ps*pow(theta,beta)/max(theta_crit-theta,epsilon*(1.0-theta));
+}
+
+double particle_func::theta_s(lexer* p, fdm* a, particles_obj* PP, double* cellSum, int i, int j, int k)
+{
+    double theta;
+    if(a->topo(i,j,k)<=0.5*p->DZN[KP]&&a->topo(i,j,k)>=0.5*p->DZN[KP]) // PLIC stuff
+    {
+        double ratio=(0.5*p->DZN[KP]+a->topo(i,j,k))/p->DZN[KP];
+        theta = (1.0-ratio)*(PI*pow(PP->d50,3.0)*cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]))+ratio*theta_crit;
+    }
+    else if(a->topo(i,j,k)<0.5*p->DZN[KP])
+        theta = theta_crit;
+    else
+        theta = PI*pow(PP->d50,3.0)*cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]);
+    return theta;
+}    
 
 double particle_func::drag_model(lexer* p, double d, double du, double dv, double dw, double thetas) const
 {
@@ -756,8 +789,8 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP, double* cel
         Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
 
         du1=Dp*du+(1.0-drho)*p->W20-(pressureDivX/p->S22+stressDivX/((1-thetas)*p->S22));
-        dv1=Dp*dv+(1.0-drho)*p->W20-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
-        dw1=Dp*dw+(1.0-drho)*p->W20-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
+        dv1=Dp*dv+(1.0-drho)*p->W21-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
+        dw1=Dp*dw+(1.0-drho)*p->W22-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
 
         double tolerance=0.0;
         if (fabs(du1)>tolerance||fabs(dv1)>tolerance||dw1>tolerance)
@@ -770,4 +803,10 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP, double* cel
             }
         }
     }
+}
+
+void particle_func::debug(lexer* p, fdm* a, ghostcell* pgc, particles_obj* PP, double* cellSum)
+{
+    PLAINLOOP
+    a->test(i,j,k)=stressTensor[IJK];
 }

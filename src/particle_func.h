@@ -62,12 +62,15 @@ protected:
     double settling_vel(lexer*,fdm*,particles_obj*,int);
     double drag_coefficient(lexer*,fdm*,particles_obj*,int);
     double volume(particles_obj*,int);
-    int maxParticlesPerCell(lexer*,fdm*,double);
+    double maxParticlesPerCell(lexer*,fdm*,double);
     int maxParticlesPerXY(lexer*,fdm*,double);
     void particlesPerCell(lexer*,particles_obj*,double*);
-    void particleStressTensor(lexer*,particles_obj*,double*);
-    void particleStressTensorUpdateIJK(lexer*,particles_obj*,double*);
+    void particleStressTensor(lexer*,fdm*,particles_obj*,double*);
+    void particleStressTensorUpdateIJK(lexer*,fdm*,particles_obj*,double*);
+    void updateParticleStressTensor(lexer*,fdm*,particles_obj*,double*,int,int,int);
+    double theta_s(lexer*,fdm*,particles_obj*,double*,int,int,int);
     double drag_model(lexer*,double,double,double,double,double) const;
+    void debug(lexer*,fdm*,ghostcell*,particles_obj*,double*);
 
     // memory management
     void cleanup(lexer*,fdm*,particles_obj*,int);
