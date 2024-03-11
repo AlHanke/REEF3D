@@ -33,6 +33,7 @@ Author: Alexander Hanke
 #include "bedshear.h"
 
 #include <sys/stat.h>
+#include <string>
 
 /// @brief Sediment model on particle basis
 /// Class handling the sediment when using the options for Lagrangian particles and VRANS.\n
@@ -51,6 +52,26 @@ sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p)
     // Create Folder
 	if(p->mpirank==0 && (p->Q180>0||p->Q182>0))
 	    mkdir("./REEF3D_CFD_SedPart",0777);
+
+    // Output configuration to console
+    if(p->mpirank==0)
+    {
+        string buff;
+        buff.append("\nSedPart configuration\nParticles and VRANS active\n");
+        buff.append("General configuration:\n\tTopo deformation: ");
+        p->Q13>0?buff.append("True\n"):buff.append("False\n");
+        buff.append("\tBox seeding: ");
+        p->Q110>0?buff.append("True\n"):buff.append("False\n");
+        buff.append("\tPoint seeding: ");
+        p->Q61>0?buff.append("True\n"):buff.append("False\n");
+        buff.append("\tTopo seeding: ");
+        p->Q101>0?buff.append("True\n"):buff.append("False\n");
+        buff.append("\tSuspension seeding: ");
+        p->Q120>0?buff.append("True\n"):buff.append("False\n");
+        buff.append("Particle properties:\n\td50: "+std::to_string(p->S20)+" m\n\tDensity: "+std::to_string(p->S22)+" kg/m/m/m\n\tPorosity: "+std::to_string(p->S24)+"\n");
+        buff.append("Seeding properties:\n\tSeed: "+(p->Q29>0?std::to_string(p->Q29):"time dep.")+"\n\tParticles per cell: "+std::to_string(p->Q24)+"\n\tParticles represened by one: "+std::to_string(p->Q41)+"\n");
+        cout<<buff<<endl;
+    }
 }
 sedpart::~sedpart()
 {
@@ -80,7 +101,6 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
         point_source(p,a);
 
         /// transport
-        particleStressTensor(p,&PP,cellSum);
         // pgc->gcparaxijk(p,cellSum,1); ghostcell exchange needed
         erode(p,a,pgc);
         transport(p,a,&PP,cellSum);
@@ -89,18 +109,18 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 
         /// topo update
 		make_stationary(p,a,&PP);
-        if(p->Q101>0)
-        posseed_topo(p,a);
+        particlesPerCell(p,&PP,cellSum);
         if(p->Q13==1)
-            update_cfd(p,a,pgc,pflow,preto);
-
+        update_cfd(p,a,pgc,pflow,preto);
+        // if(p->Q101>0)
+        // posseed_topo(p,a);
         /// cleanup
         if(p->count%p->Q20==0)
         {
             if(PP.size == 0)
                 PP.erase_all();
             // PP.optimize();
-            // cleanup();
+            cleanup(p,a,&PP,0);
         }
 	}
 
@@ -116,18 +136,20 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
     	cout<<"Sediment particles: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sed. part. sim. time: "<<p->sedsimtime<<"\nTotal bed volume change: "<<std::setprecision(9)<<volumeChangeTotal<<endl;
 
     /// testing
-    particlesPerCell(p,&PP,cellSum);
+    debug(p,a,pgc,&PP,cellSum);
     // cout<<p->mpirank<<"-Porosity("<<i<<","<<j<<","<<k<<"): "<<a->porosity(i,j,k)<<endl;
 }
 
 void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
     // seed
-    seed_ini(p,a);
+    seed_ini(p,a,pgc);
     gpartnum=pgc->globalisum(partnum);
     allocate(p);
     seed(p,a);
     make_stationary(p,a,&PP);
+    particlesPerCell(p,&PP,cellSum);
+    particleStressTensor(p,a,&PP,cellSum);
     // std::cout<<"Seeded "<<PP.size<<" partices in partion "<<p->mpirank<<endl;
     
     // print
@@ -141,8 +163,29 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     pvrans->sed_update(p,a,pgc);
 
     // testing
-    particlesPerCell(p,&PP,cellSum);
+    
+    debug(p,a,pgc,&PP,cellSum);
+    // PLAINLOOP
+    // a->test(i,j,k)=active_topo(i,j,k);
+    // a->test(i,j,k)=cellSum[IJK];
     volumeChangeTotal=0;
+    if(0==p->mpirank)
+    {
+    //     k=19;
+    //     field& b=a->topo;
+    //     ILOOP
+    //     JLOOP
+    //     {
+    //         cout<<i<<"|"<<j<<endl;
+    //         cout<<std::setprecision(20)<<a->topo(i,j,k)<<endl;
+    //         cout<<std::setprecision(20)<<(0.125*(b(i,j,k)+b(i,j+1,k)+b(i+1,j,k)+b(i+1,j+1,k) +
+    //              b(i,j,k+1)+b(i,j+1,k+1)+b(i+1,j,k+1)+b(i+1,j+1,k+1)))<<endl;
+    //         cout<<std::setprecision(20)<<a->topo(i,j,k+1)<<endl;
+    //     }
+        i=0;j=0;
+        // KLOOP
+        // cout<<k<<"|"<<p->DZN[KP]<<"|"<<a->topo(i,j,k)<<endl;
+    }
 }
 
 void sedpart::start_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow*, slice &P, slice &Q)
@@ -156,19 +199,31 @@ void sedpart::ini_sflow(lexer *p, fdm2D *b, ghostcell *pgc)
 void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinitopo* preto)
 {
     int i,j,k;
-    JILOOP
-        if(p->flag_topo_changed[IJ]==1)
+    ILOOP
+    JLOOP
+    if(p->flag_topo_changed[IJ]==1)
+    {
+        double dh=p->topo_change[IJ]/p->DXN[IP]/p->DYN[JP];
+        a->bed(i,j)+=dh;
+        KLOOP
         {
-            double dh=p->topo_change[IJ]/p->DXN[IP]/p->DYN[JP];
-            // cout<<"dh["<<p->mpirank<<"]("<<i<<","<<j<<")="<<dh<<"|"<<IJ<<endl;
-            KLOOP
-                a->topo(i,j,k) -= dh;
-            p->flag_topo_changed[IJ]=0;
-            volumeChangeTotal += p->topo_change[IJ];
-            p->topo_change[IJ]=0;
+            a->topo(i,j,k) -= dh;
+            // a->test(i,j,k) = a->bed(i,j);
+            // Seeding update
+            if((abs(a->topo(i,j,k))<(p->DZN[KP]*ceil(p->Q102)))&&(a->topo(i,j,k)<=0.25*p->DZN[KP]))
+                active_topo(i,j,k) = 1.0;
+            else
+                active_topo(i,j,k) = 0.0;
         }
+        volumeChangeTotal += p->topo_change[IJ];
+
+        // Reset
+        p->flag_topo_changed[IJ]=0;
+        p->topo_change[IJ]=0;
+    }
 
     pgc->start4a(p,a->topo,150);
+    pgc->gcsl_start4(p,a->bed,50);
     preto->start(p,a,pgc,a->topo);
     if(p->mpirank==0)
         cout<<"Topo: update grid..."<<endl;
