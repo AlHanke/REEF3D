@@ -78,10 +78,10 @@ private:
     const double kinVis;
     const double drho;
     double* stressTensor;
-    double Ps=1; // in pressure unit
-    double beta = 3.5; // 2<=beta<=5
-    double epsilon = 10e-7;
-    double theta_crit = 0.6; // 0.6-0.65
+    const double Ps; // in pressure unit
+    const double beta; // 2<=beta<=5
+    const double epsilon;
+    const double theta_crit; // 0.6-0.65
     particles_obj seedling1,seedling2,seedling3,seedling4,seedling5,seedling6;
 };
 

@@ -30,7 +30,9 @@ Author: Alexander Hanke
 #define PARTICLELOOP for(size_t n=0;n<PP->loopindex;n++)
 
 particle_func::particle_func(lexer* p, int maxcount, double d50, double density) : kinVis(p->W1/p->W2), drho(p->W1/p->S22),
-                            seedling1(maxcount,d50,density,true),seedling2(maxcount,d50,density,true),seedling3(maxcount,d50,density,true),seedling4(maxcount,d50,density,true),seedling5(maxcount,d50,density,true),seedling6(maxcount,d50,density,true)
+                            Ps(p->Q14),beta(p->Q15),epsilon(p->Q16),theta_crit(p->Q17),
+                            seedling1(maxcount,d50,density,true),seedling2(maxcount,d50,density,true),seedling3(maxcount,d50,density,true),
+                            seedling4(maxcount,d50,density,true),seedling5(maxcount,d50,density,true),seedling6(maxcount,d50,density,true)
 {
     p->Darray(stressTensor,p->imax*p->jmax*p->kmax);
 }
