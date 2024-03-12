@@ -36,15 +36,15 @@ void sedpart::pvtu_pos(lexer* p, fdm* a, ghostcell* pgc)
     if(p->P15==2)
     num = p->count;
 	
-	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%08i.pvtu",num);
+	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%08i.pvtp",num);
 	
 
 	ofstream result;
 	result.open(name);
 
 	result<<"<?xml version=\"1.0\"?>"<<endl;
-	result<<"<VTKFile type=\"PUnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
-	result<<"<PUnstructuredGrid GhostLevel=\"0\">"<<endl;
+	result<<"<VTKFile type=\"PPolyData\" version=\"1.0\" byte_order=\"LittleEndian\">"<<endl;
+	result<<"<PPolyData GhostLevel=\"0\">"<<endl;
 
 	result<<"<PPointData>"<<endl;
 	result<<"<PDataArray type=\"Float32\" Name=\"Flag\"/>"<<endl;
@@ -62,7 +62,7 @@ void sedpart::pvtu_pos(lexer* p, fdm* a, ghostcell* pgc)
     result<<"<Piece Source=\""<<pname<<"\"/>"<<endl;
 	}
 
-	result<<"</PUnstructuredGrid>"<<endl;
+	result<<"</PPolyData>"<<endl;
 	result<<"</VTKFile>"<<endl;
 
 	result.close();
@@ -78,7 +78,7 @@ void sedpart::piecename_pos(lexer* p,fdm* a, ghostcell* pgc, int n)
     if(p->P15==2)
     num = p->count;
 
-	sprintf(pname,"REEF3D-SedPart-%08i-%06i.vtu",num,n+1);
+	sprintf(pname,"REEF3D-SedPart-%08i-%06i.vtp",num,n+1);
 
 }
 
@@ -92,7 +92,7 @@ void sedpart::header_pos(lexer* p, fdm* a, ghostcell* pgc)
     if(p->P15==2)
     num = p->count;
 
-	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%08i-%06i.vtu",num,p->mpirank+1);
+	sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%08i-%06i.vtp",num,p->mpirank+1);
 	
 }
 

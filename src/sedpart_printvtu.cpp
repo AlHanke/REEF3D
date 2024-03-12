@@ -80,19 +80,17 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 
     offset[n]=offset[n-1]+4*(numpt)*3+4; //xyz
     ++n;
-    offset[n]=offset[n-1]+4*(numpt)*2+4; //connectivitey
+    offset[n]=offset[n-1]+4*(numpt)+4; //connectivitey
     ++n;
 	offset[n]=offset[n-1]+4*(numpt)+4; //offset connectivity
-    ++n;
-	offset[n]=offset[n-1]+4*(numpt)+4; //cell type
     ++n;
 
 	//---------------------------------------------
 	n=0;
 	result<<"<?xml version=\"1.0\"?>"<<endl;
-	result<<"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
-	result<<"<UnstructuredGrid>"<<endl;
-	result<<"<Piece NumberOfPoints=\""<<numpt<<"\" NumberOfCells=\""<<numpt<<"\">"<<endl;
+	result<<"<VTKFile type=\"PolyData\" version=\"1.0\" byte_order=\"LittleEndian\">"<<endl;
+	result<<"<PolyData>"<<endl;
+	result<<"<Piece NumberOfPoints=\""<<numpt<<"\" NumberOfVerts=\""<<numpt<<"\" NumberOfLines=\"0\" NumberOfStrips=\"0\" NumberOfPolys=\"0\">"<<endl;
 	
 	
 	result<<"<PointData >"<<endl;
@@ -111,17 +109,15 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
     result<<"</Points>"<<endl;
 	
 
-    result<<"<Cells>"<<endl;
+    result<<"<Verts>"<<endl;
 	result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
 	result<<"<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
 	++n;
-    result<<"<DataArray type=\"Int32\"  Name=\"types\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    ++n;
-	result<<"</Cells>"<<endl;
+	result<<"</Verts>"<<endl;
 
     result<<"</Piece>"<<endl;
-    result<<"</UnstructuredGrid>"<<endl;
+    result<<"</PolyData>"<<endl;
 
 	//----------------------------------------------------------------------------
     result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
@@ -181,39 +177,26 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	
 	//  Connectivity
 	count=0;
-    iin=4*(numpt)*2;
+    iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
 	if(PP.Flag[n]>=print_flag)
 	{
-	iin=int(0);
-	result.write((char*)&iin, sizeof (int));
-
 	iin=int(count);
 	result.write((char*)&iin, sizeof (int));
 	++count;
 	}
 
 	//  Offset of Connectivity
-	count=0;
+	count=1;
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
 	PARTLOOP
     if(PP.Flag[n]>=print_flag)
 	{
-	iin=(count+1)*2;
+	iin=int(count);
 	result.write((char*)&iin, sizeof (int));
 	++count;
-	}
-
-	//  Cell types
-    iin=4*(numpt);
-    result.write((char*)&iin, sizeof (int));
-	PARTLOOP
-    if(PP.Flag[n]>=print_flag)
-	{
-	iin=1;
-	result.write((char*)&iin, sizeof (int));
 	}
 
 	result<<endl<<"</AppendedData>"<<endl;
