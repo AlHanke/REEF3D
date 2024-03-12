@@ -495,6 +495,7 @@ public:
     
     // Particles
     int Q10,Q11,Q12,Q13,Q20,Q24,Q29,Q43;
+    double Q14,Q15,Q16,Q17;
     double Q21,Q22,Q23,Q25;
     double Q31;
     double Q41;

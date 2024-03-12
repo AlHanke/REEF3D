@@ -1550,6 +1550,18 @@ void lexer::read_control()
 				case 13: control>>Q13;
 						 clear(c,numint);
 						 break;
+				case 14: control>>Q14;
+						 clear(c,numint);
+						 break;
+				case 15: control>>Q15;
+						 clear(c,numint);
+						 break;
+				case 16: control>>Q16;
+						 clear(c,numint);
+						 break;
+				case 17: control>>Q17;
+						 clear(c,numint);
+						 break;
 				case 20: control>>Q20;
 						 clear(c,numint);
 						 break;
