@@ -39,25 +39,27 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     // Box
     size_t cellcountBox=0;
     for(int qn=0;qn<p->Q110;++qn)
-        LOOP
-            if(p->XN[IP]>=p->Q110_xs[qn] && p->XN[IP]<p->Q110_xe[qn]
-            && p->YN[JP]>=p->Q110_ys[qn] && p->YN[JP]<p->Q110_ye[qn]
-            && p->ZN[KP]>=p->Q110_zs[qn] && p->ZN[KP]<p->Q110_ze[qn])
-            {
-                active_box(i,j,k) = 1.0;
-                ++cellcountBox;
-            }
+    LOOP
+    if(p->XN[IP]>=p->Q110_xs[qn] && p->XN[IP]<=p->Q110_xe[qn]
+    && p->YN[JP]>=p->Q110_ys[qn] && p->YN[JP]<=p->Q110_ye[qn]
+    && p->ZN[KP]>=p->Q110_zs[qn] && p->ZN[KP]<=p->Q110_ze[qn])
+    {
+        active_box(i,j,k) = 1.0;
+        ++cellcountBox;
+        // minPPC=min(minPPC, maxParticlesPerCell(p,a,PP.d50,false));
+    }
 
     // Topo
     size_t cellcountTopo=0;
     BASELOOP
-        if((abs(a->topo(i,j,k))<(p->DZN[KP]*ceil(p->Q102)))&&(a->topo(i,j,k)<=0.25*p->DZN[KP])) //find better comparison to fix numerical drifts
-        {
-            active_topo(i,j,k) = 1.0;
-            if(1!=active_box(i,j,k))
-                cellcountTopo++;
-            minPPC=min(minPPC, maxParticlesPerCell(p,a,PP.d50));
-        }
+    if((abs(a->topo(i,j,k))<(p->DZN[KP]*ceil(p->Q102)))&&(a->topo(i,j,k)<=0.25*p->DZN[KP])&&(a->solid(i,j,k)>0)) //find better comparison to fix numerical drifts
+    {
+        active_topo(i,j,k) = 1.0;
+        cellcountTopo++;
+        minPPC=min(minPPC, maxParticlesPerCell(p,a,PP.d50));
+    }
+
+    // Make box to topo if inside topo?
 
     // guess particle demand
     if(p->Q24>0)
@@ -65,6 +67,7 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     else
         ppcell = 0;
     int gfminPPC=pgc->globalmin(floorf(minPPC));
+    if (gfminPPC<0) gfminPPC=0;
     if(ppcell>gfminPPC)
     {
         ppcell=gfminPPC;
