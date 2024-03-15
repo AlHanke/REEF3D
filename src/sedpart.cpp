@@ -131,11 +131,9 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 	p->sedsimtime=pgc->timer()-starttime;
 
     if(p->mpirank==0 && (p->count%p->P12==0))
-    	cout<<"Sediment particles: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sed. part. sim. time: "<<p->sedsimtime<<"\nTotal bed volume change: "<<std::setprecision(9)<<volumeChangeTotal<<endl;
+    	cout<<"Sediment particles: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sim. time: "<<p->sedsimtime<<"\nTotal bed volume change: "<<std::setprecision(9)<<volumeChangeTotal<<endl;
 
-    /// testing
-    debug(p,a,pgc,&PP,cellSum);
-    // cout<<p->mpirank<<"-Porosity("<<i<<","<<j<<","<<k<<"): "<<a->porosity(i,j,k)<<endl;
+    // testing
 }
 
 void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
@@ -148,7 +146,6 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     make_stationary(p,a,&PP);
     particlesPerCell(p,pgc,&PP);
     particleStressTensor(p,a,pgc,&PP);
-    // std::cout<<"Seeded "<<PP.size<<" partices in partion "<<p->mpirank<<endl;
     
     // print
     print_vtu(p,a,pgc);
@@ -161,28 +158,12 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     pvrans->sed_update(p,a,pgc);
 
     // testing
-    
-    debug(p,a,pgc,&PP,cellSum);
-    // PLAINLOOP
-    // a->test(i,j,k)=active_topo(i,j,k);
-    // a->test(i,j,k)=cellSum[IJK];
+    PLAINLOOP
+    a->test(i,j,k)=active_box(i,j,k);
     volumeChangeTotal=0;
     if(0==p->mpirank)
     {
-    //     k=19;
-    //     field& b=a->topo;
-    //     ILOOP
-    //     JLOOP
-    //     {
-    //         cout<<i<<"|"<<j<<endl;
-    //         cout<<std::setprecision(20)<<a->topo(i,j,k)<<endl;
-    //         cout<<std::setprecision(20)<<(0.125*(b(i,j,k)+b(i,j+1,k)+b(i+1,j,k)+b(i+1,j+1,k) +
-    //              b(i,j,k+1)+b(i,j+1,k+1)+b(i+1,j,k+1)+b(i+1,j+1,k+1)))<<endl;
-    //         cout<<std::setprecision(20)<<a->topo(i,j,k+1)<<endl;
-    //     }
-        i=0;j=0;
-        // KLOOP
-        // cout<<k<<"|"<<p->DZN[KP]<<"|"<<a->topo(i,j,k)<<endl;
+
     }
 }
 
@@ -206,7 +187,6 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
         KLOOP
         {
             a->topo(i,j,k) -= dh;
-            // a->test(i,j,k) = a->bed(i,j);
             // Seeding update
             if((abs(a->topo(i,j,k))<(p->DZN[KP]*ceil(p->Q102)))&&(a->topo(i,j,k)<=0.25*p->DZN[KP]))
                 active_topo(i,j,k) = 1.0;
@@ -227,6 +207,11 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
         cout<<"Topo: update grid..."<<endl;
     pvrans->sed_update(p,a,pgc);
     pflow->gcio_update(p,a,pgc);
+
+    // fixPos
+    // fixPos(p,a,&PP);
+    // if(p->Q101>0)
+    // posseed_topo(p,a);
 }
 
 void sedpart::update_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow)
