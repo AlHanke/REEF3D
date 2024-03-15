@@ -26,23 +26,20 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"solver.h"
 
-void nhflow_idiff::diff_v(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *psolv, double *VHdiff, double *VHin, double *UH, double *VH, double *WH, double alpha)
+void nhflow_idiff::diff_v(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *psolv, double *VHdiff, double *VHin, double *UH, double *VH, double *WH, slice &WL, double alpha)
 {
-    /*
-if(p->j_dir==1)
-{
-	starttime=pgc->timer();
-
+    starttime=pgc->timer();
     
     LOOP
     VHdiff[IJK] = VHin[IJK];
     
-    pgc->start4V(p,VHdiff,gcval_uh);
-
+    pgc->start4V(p,VHdiff,gcval_vh);
+    
+    
     n=0;
     LOOP
 	{
-        if(p->wet[IJ]==1 && p->deep[IJ]==1 && d->breaking(i,j)==0)
+        if(p->wet[IJ]==1 && d->breaking(i,j)==0)
         {
             visc = d->VISC[IJK];
             
@@ -56,7 +53,9 @@ if(p->j_dir==1)
                         + 2.0*visc/(p->DYP[JM1]*p->DYN[JP])*p->y_dir
                         
                         + (visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KP])
-                        + (visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KM1]);
+                        + (visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KM1])
+                        
+                        + CPORNH/(alpha*p->dt);
 
 
             d->M.n[n] = -visc/(p->DXP[IP]*p->DXN[IP]);
@@ -66,10 +65,10 @@ if(p->j_dir==1)
             d->M.e[n] = -2.0*visc/(p->DYP[JM1]*p->DYN[JP])*p->y_dir;
 
             d->M.t[n] = -(visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KP])     
-                        - p->sigxx[FIJK]/((p->DZN[KP]+p->DZN[KM1]));
+                        - 0.0*p->sigxx[FIJK]/((p->DZN[KP]+p->DZN[KM1]));
                         
             d->M.b[n] = -(visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KM1]) 
-                        + p->sigxx[FIJK]/((p->DZN[KP]+p->DZN[KM1]));
+                        + 0.0*p->sigxx[FIJK]/((p->DZN[KP]+p->DZN[KM1]));
             
             
             d->rhsvec.V[n] = visc*((UH[Ip1Jp1K]-UH[Ip1Jm1K]) - (UH[Im1Jp1K]-UH[Im1Jm1K]))/((p->DYN[JP]+p->DYN[JM1])*(p->DXP[IP]+p->DXP[IM1]))
@@ -85,7 +84,7 @@ if(p->j_dir==1)
                             /((p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1]))*p->y_dir;
         }
         
-        if(p->wet[IJ]==0 || p->deep[IJ]==0 || p->flag4[IJK]<0 || d->breaking(i,j)==1)
+        if(p->wet[IJ]==0 || p->flag4[IJK]<0 || d->breaking(i,j)==1)
         {
         d->M.p[n]  =  1.0;
 
@@ -161,7 +160,5 @@ if(p->j_dir==1)
 	time=pgc->timer()-starttime;
 	p->viter=p->solveriter;
 	if(p->mpirank==0 && p->D21==1 && (p->count%p->P12==0))
-	cout<<"vdiffiter: "<<p->viter<<"  vdifftime: "<<setprecision(3)<<time<<endl;
-    
-}*/
+	cout<<"vdiffiter: "<<p->viter<<"  vdifftime: "<<setprecision(4)<<time<<endl;
 }

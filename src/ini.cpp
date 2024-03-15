@@ -144,7 +144,7 @@ void lexer::ini_default()
     A518=2;             // int NHFLOW bed BC
     
     A520=2;		// int NFHLOW non-hydrostatic pressure scheme
-    A521=1;		// int NFHLOW KB scheme
+    A521=1;		// int
     A522=4.0;    // double p_alpha
     A523=1.0;    // double p_gamma
     A531=3.0;    // double Fround number limiter
@@ -950,8 +950,9 @@ void lexer::ini_default()
     X47=0;              // int reini diffusion inside fb
     X48=0;
     X49=0;
-    X50=1;              // int type of print out format for 6DOF structure
-	X100=0;		        // int delta x,y,z
+    X50=1;      // int type of print out format for 6DOF structure
+    X60=1;      // int type of print of force calculation
+	X100=0;		// int delta x,y,z
 	X100_x=X100_y=X100_z=0.0;
 	X101=0;		        // int ini Euler angles
 	X101_phi=X101_theta=X101_psi=0.0;
@@ -979,7 +980,8 @@ void lexer::ini_default()
     X182_x=X182_y=X182_z=0.0;  // double translation of stl geometry
     X183=0;
     X183_x=X183_y=X183_z=X183_phi=X183_theta=X183_psi=0.0;
-    X184=0.7;   // double refinement factor
+    X185=1;     // int stl refinement
+    X186=0.7;   // double refinement factor
     X205=1;     // type of ramp up function
     X206=0;     // int ramp up velocity
     X206_ts=0.0;   // double ramp start

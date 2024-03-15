@@ -40,7 +40,9 @@ Author: Hans Bihs
 #include"nhflow_convection_void.h"
 
 #include"nhflow_diff_void.h"
+#include"nhflow_ediff.h"
 #include"nhflow_idiff.h"
+#include"nhflow_idiff_2D.h"
 
 #include"nhflow_momentum_RK2.h"
 #include"nhflow_momentum_RK3.h"

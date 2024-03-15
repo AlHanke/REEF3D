@@ -55,6 +55,7 @@ public:
 	virtual ~ghostcell();
 
 	void gcini(lexer* p);
+    void mpi_check(lexer* p);
 
 	void start1(lexer*,field&, int);
 	void start2(lexer*,field&, int);
@@ -209,6 +210,7 @@ public:
     void flagfield(lexer*);
     void flagfield_topo(lexer*);
     void tpflagfield(lexer*);
+    void tpflagfield_sigma(lexer*);
 	void ndflag_update(lexer*);
     void flagbase(lexer*,fdm*);
 

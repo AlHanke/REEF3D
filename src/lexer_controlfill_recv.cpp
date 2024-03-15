@@ -1542,7 +1542,7 @@ void lexer::ctrlrecv()
     X49 = ictrl[ii];
 	ii++;
     X50 = ictrl[ii];
-	ii++;
+	ii++;    X60 = ictrl[ii];	ii++;
 	X100 = ictrl[ii];
 	ii++;
 	X100_x = dctrl[dd];
@@ -1672,8 +1672,8 @@ void lexer::ctrlrecv()
     X183_theta = dctrl[dd];
 	dd++;
     X183_psi = dctrl[dd];
-	dd++;
-    X184 = dctrl[dd];
+	dd++;    X185 = ictrl[ii];	ii++;
+    X186 = dctrl[dd];
 	dd++;
     X205 = ictrl[ii];
 	ii++;

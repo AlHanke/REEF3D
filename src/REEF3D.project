@@ -258,6 +258,9 @@
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="NHFLOW">
+        <VirtualDirectory Name="Forcing">
+          <File Name="nhflow_forcing.h"/>
+        </VirtualDirectory>
         <VirtualDirectory Name="Turbulence">
           <VirtualDirectory Name="Strain">
             <File Name="nhflow_strain.h"/>
@@ -1355,6 +1358,9 @@
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="NHFLOW">
+        <VirtualDirectory Name="Forcing">
+          <File Name="nhflow_forcing.cpp"/>
+        </VirtualDirectory>
         <VirtualDirectory Name="Turbulence">
           <VirtualDirectory Name="Strain">
             <File Name="nhflow_strain.cpp"/>
@@ -1473,6 +1479,7 @@
           </VirtualDirectory>
         </VirtualDirectory>
         <VirtualDirectory Name="Diffusion">
+          <File Name="nhflow_idiff_scalar_2D.cpp"/>
           <File Name="nhflow_ediff.cpp"/>
           <File Name="nhflow_diff_void.cpp"/>
           <File Name="nhflow_idiff_scalar.cpp"/>
@@ -1846,6 +1853,13 @@
             <File Name="6DOF_obj_print_ini.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="Forces">
+            <File Name="6DOF_obj_forces_lsm_triangulation.cpp"/>
+            <VirtualDirectory Name="VTP">
+              <File Name="6DOF_obj_forces_lsm_pvtp.cpp"/>
+              <File Name="6DOF_obj_forces_lsm_vtp.cpp"/>
+            </VirtualDirectory>
+            <File Name="6DOF_obj_forces_lsm_reconstruction.cpp"/>
+            <File Name="6DOF_obj_forces_lsm.cpp"/>
             <File Name="6DOF_obj_forces_stl.cpp"/>
             <File Name="6DOF_obj_forces_external.cpp"/>
             <File Name="6DOF_obj_forces.cpp"/>
