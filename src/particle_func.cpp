@@ -434,11 +434,17 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
 {
     int xchange=0;
 
+    if(seedling1.capacity<maxcount)
     seedling1.reserve(maxcount);
+    if(seedling2.capacity<maxcount)
     seedling2.reserve(maxcount);
+    if(seedling3.capacity<maxcount)
     seedling3.reserve(maxcount);
+    if(seedling4.capacity<maxcount)
     seedling4.reserve(maxcount);
+    if(seedling5.capacity<maxcount)
     seedling5.reserve(maxcount);
+    if(seedling6.capacity<maxcount)
     seedling6.reserve(maxcount);
     particles_obj Send[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
     particles_obj Recv[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
@@ -524,6 +530,12 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
         }
         PP->add_obj(&Recv[n]);
     }
+    seedling1.erase_all();
+    seedling2.erase_all();
+    seedling3.erase_all();
+    seedling4.erase_all();
+    seedling5.erase_all();
+    seedling6.erase_all();
 
     return xchange;
 }
@@ -658,9 +670,9 @@ void particle_func::cleanup(lexer* p, fdm* a, particles_obj* PP, int max)
 /// Uses i,j&k from increment to pass cell identifier
 /// @param d50 Sauter diameter of particles
 /// @return Ceil of number of particles in cell IJK
-double particle_func::maxParticlesPerCell(lexer* p, fdm* a, double d50)
+double particle_func::maxParticlesPerCell(lexer* p, fdm* a, double d50, bool topo)
 {   
-    return 6.0*p->DXN[IP]*p->DYN[JP]*(p->DZN[KP]-(0.5*p->DZN[KP]+a->topo(i,j,k)))/((PI*pow(d50,3.0)));
+    return 6.0*p->DXN[IP]*p->DYN[JP]*(p->DZN[KP]-(topo?(0.5*p->DZN[KP]+a->topo(i,j,k)):0.0))/((PI*pow(d50,3.0)));
 }
 
 int particle_func::maxParticlesPerXY(lexer* p, fdm* a, double d50)
@@ -679,6 +691,7 @@ void particle_func::particlesPerCell(lexer* p, ghostcell* pgc, particles_obj* PP
         k=p->posc_k(PP->Z[n]);
         cellSum[IJK]++;
     }
+    pgc->start4V(p,cellSum,10);
 }
 
 void particle_func::particleStressTensor(lexer* p, fdm* a, ghostcell* pgc, particles_obj* PP)
@@ -690,6 +703,7 @@ void particle_func::particleStressTensor(lexer* p, fdm* a, ghostcell* pgc, parti
     {
         updateParticleStressTensor(p,a,PP,i,j,k);
     }
+    pgc->start4V(p,stressTensor,10);
 }
 
 void particle_func::particleStressTensorUpdateIJK(lexer* p, fdm* a, particles_obj* PP)
@@ -801,8 +815,16 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
     }
 }
 
-void particle_func::debug(lexer* p, fdm* a, ghostcell* pgc, particles_obj* PP, double* cellSum)
+void particle_func::debug(lexer* p, fdm* a, ghostcell* pgc, particles_obj* PP)
 {
     PLAINLOOP
     a->test(i,j,k)=stressTensor[IJK];
+}
+
+void particle_func::fixPos(lexer* p, fdm* a, particles_obj* PP)
+{
+    PARTICLELOOP
+    if(PP->Flag[n]=0)
+    if(p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])>0)
+    PP->erase(n);
 }
