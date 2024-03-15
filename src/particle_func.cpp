@@ -35,6 +35,7 @@ particle_func::particle_func(lexer* p, int maxcount, double d50, double density)
                             seedling4(maxcount,d50,density,true),seedling5(maxcount,d50,density,true),seedling6(maxcount,d50,density,true)
 {
     p->Darray(stressTensor,p->imax*p->jmax*p->kmax);
+    p->Darray(cellSum,p->imax*p->jmax*p->kmax);
 }
 particle_func::~particle_func()
 {
@@ -167,9 +168,7 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
 
-            thetas=theta_s(p,a,PP,cellSum,i,j,k);
-            if(thetas!=thetas)
-            cout<<"NaN detected in thetas."<<endl;
+            thetas=theta_s(p,a,PP,i,j,k);
 
             u=p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n]);
             v=p->ccipol1(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
@@ -260,14 +259,14 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
             cellSum[IJK]-=PP->PackingFactor[n];
             if(cellSum[IJK]<0) // Mass conservation
                 cellSum[IJK]=0;
-            particleStressTensorUpdateIJK(p,a,PP,cellSum);
+            particleStressTensorUpdateIJK(p,a,PP);
             i=p->posc_i(PP->X[n]);
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
             cellSum[IJK]+=PP->PackingFactor[n];
             if(cellSum[IJK]<0)
                 cellSum[IJK]=0;
-            particleStressTensorUpdateIJK(p,a,PP,cellSum);
+            particleStressTensorUpdateIJK(p,a,PP);
         }
 }
 
@@ -676,7 +675,7 @@ int particle_func::maxParticlesPerXY(lexer* p, fdm* a, double d50)
     return ceil(p->DXN[IP]*p->DYN[JP]*(1-p->S24)*6.0/(PI*pow(d50,2.0)));
 }
 
-void particle_func::particlesPerCell(lexer* p, particles_obj* PP, double* cellSum)
+void particle_func::particlesPerCell(lexer* p, ghostcell* pgc, particles_obj* PP)
 {
     PLAINLOOP
     cellSum[IJK]=0;
@@ -689,18 +688,18 @@ void particle_func::particlesPerCell(lexer* p, particles_obj* PP, double* cellSu
     }
 }
 
-void particle_func::particleStressTensor(lexer* p, fdm* a, particles_obj* PP, double* cellSum)
+void particle_func::particleStressTensor(lexer* p, fdm* a, ghostcell* pgc, particles_obj* PP)
 {
     double theta;
     int i,j,k;
 
     PLAINLOOP
     {
-        updateParticleStressTensor(p,a,PP,cellSum,i,j,k);
+        updateParticleStressTensor(p,a,PP,i,j,k);
     }
 }
 
-void particle_func::particleStressTensorUpdateIJK(lexer* p, fdm* a, particles_obj* PP, double* cellSum)
+void particle_func::particleStressTensorUpdateIJK(lexer* p, fdm* a, particles_obj* PP)
 {
     double theta;
     int i,j,k;
@@ -713,17 +712,17 @@ void particle_func::particleStressTensorUpdateIJK(lexer* p, fdm* a, particles_ob
                 j=increment::j+m;
                 k=increment::k+l;
 
-                updateParticleStressTensor(p,a,PP,cellSum,i,j,k);
+                updateParticleStressTensor(p,a,PP,i,j,k);
             }
 }
 
-void particle_func::updateParticleStressTensor(lexer* p, fdm* a, particles_obj* PP, double* cellSum, int i, int j, int k)
+void particle_func::updateParticleStressTensor(lexer* p, fdm* a, particles_obj* PP, int i, int j, int k)
 {
-    double theta=theta_s(p,a,PP,cellSum,i,j,k);
+    double theta=theta_s(p,a,PP,i,j,k);
     stressTensor[IJK]=Ps*pow(theta,beta)/max(theta_crit-theta,epsilon*(1.0-theta));
 }
 
-double particle_func::theta_s(lexer* p, fdm* a, particles_obj* PP, double* cellSum, int i, int j, int k)
+double particle_func::theta_s(lexer* p, fdm* a, particles_obj* PP, int i, int j, int k)
 {
     double theta;
     if(a->topo(i,j,k)<=0.5*p->DZN[KP]&&a->topo(i,j,k)>=0.5*p->DZN[KP]) // PLIC stuff
@@ -752,7 +751,7 @@ double particle_func::drag_model(lexer* p, double d, double du, double dv, doubl
     return Dp;
 }
 
-void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP, double* cellSum)
+void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
 {
     double RKu,RKv,RKw;
     double u,v,w;
@@ -770,7 +769,8 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP, double* cel
         j=p->posc_j(PP->Y[n]);
         k=p->posc_k(PP->Z[n]);
 
-        thetas=(PI*pow(PP->d50,3.0)*cellSum[IJK]/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]));//theta_crit*0.95;
+        thetas=theta_s(p,a,PP,i,j,k);
+
         u=p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n]);
         v=p->ccipol1(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
         w=p->ccipol1(a->w,PP->X[n],PP->Y[n],PP->Z[n]);

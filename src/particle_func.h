@@ -52,25 +52,26 @@ protected:
     // mov
     void advect(lexer*,fdm*,tracers_obj*,int=0,double=0,double=0,double=0);
     void advect(lexer*,fdm*,particles_obj*,int=0,double=0,double=0,double=0);
-    void transport(lexer*,fdm*,particles_obj*,double*,int=0);
+    void transport(lexer*,fdm*,particles_obj*,int=0);
     void make_stationary(lexer*,fdm*,tracers_obj*,int=0);
     void make_stationary(lexer*,fdm*,particles_obj*,int=0);
-    void make_moving(lexer*,fdm*,particles_obj*,double*);
+    void make_moving(lexer*,fdm*,particles_obj*);
 
     // util
     double reynolds(lexer*,fdm*,particles_obj*,int);
     double settling_vel(lexer*,fdm*,particles_obj*,int);
     double drag_coefficient(lexer*,fdm*,particles_obj*,int);
     double volume(particles_obj*,int);
-    double maxParticlesPerCell(lexer*,fdm*,double);
+    double maxParticlesPerCell(lexer*,fdm*,double,bool=true);
     int maxParticlesPerXY(lexer*,fdm*,double);
-    void particlesPerCell(lexer*,particles_obj*,double*);
-    void particleStressTensor(lexer*,fdm*,particles_obj*,double*);
-    void particleStressTensorUpdateIJK(lexer*,fdm*,particles_obj*,double*);
-    void updateParticleStressTensor(lexer*,fdm*,particles_obj*,double*,int,int,int);
-    double theta_s(lexer*,fdm*,particles_obj*,double*,int,int,int);
+    void particlesPerCell(lexer*,ghostcell*,particles_obj*);
+    void particleStressTensor(lexer*,fdm*,ghostcell*,particles_obj*);
+    void particleStressTensorUpdateIJK(lexer*,fdm*,particles_obj*);
+    void updateParticleStressTensor(lexer*,fdm*,particles_obj*,int,int,int);
+    double theta_s(lexer*,fdm*,particles_obj*,int,int,int);
     double drag_model(lexer*,double,double,double,double,double) const;
-    void debug(lexer*,fdm*,ghostcell*,particles_obj*,double*);
+    void debug(lexer*,fdm*,ghostcell*,particles_obj*);
+    void fixPos(lexer*,fdm*,particles_obj*);
 
     // memory management
     void cleanup(lexer*,fdm*,particles_obj*,int);
@@ -78,6 +79,7 @@ private:
     const double kinVis;
     const double drho;
     double* stressTensor;
+    double* cellSum;
     const double Ps; // in pressure unit
     const double beta; // 2<=beta<=5
     const double epsilon;

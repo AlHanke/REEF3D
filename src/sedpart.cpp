@@ -46,7 +46,6 @@ sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p)
     pvrans = new vrans_f(p,pgc);
     pbedshear  = new bedshear(p,pturb);
     PP.ini_cellSum(p->imax*p->jmax*p->kmax);
-    p->Darray(cellSum,p->imax*p->jmax*p->kmax);
     printcount = 0;
 
     // Create Folder
@@ -103,17 +102,16 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
         /// transport
         // pgc->gcparaxijk(p,cellSum,1); ghostcell exchange needed
         erode(p,a,pgc);
-        transport(p,a,&PP,cellSum);
+        transport(p,a,&PP);
 		xchange=transfer(p,pgc,&PP,maxparticle);
 		removed=remove(p,&PP);
 
         /// topo update
 		make_stationary(p,a,&PP);
-        particlesPerCell(p,&PP,cellSum);
+        particlesPerCell(p,pgc,&PP);
         if(p->Q13==1)
         update_cfd(p,a,pgc,pflow,preto);
-        // if(p->Q101>0)
-        // posseed_topo(p,a);
+        particleStressTensor(p,a,pgc,&PP);
         /// cleanup
         if(p->count%p->Q20==0)
         {
@@ -148,8 +146,8 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     allocate(p);
     seed(p,a);
     make_stationary(p,a,&PP);
-    particlesPerCell(p,&PP,cellSum);
-    particleStressTensor(p,a,&PP,cellSum);
+    particlesPerCell(p,pgc,&PP);
+    particleStressTensor(p,a,pgc,&PP);
     // std::cout<<"Seeded "<<PP.size<<" partices in partion "<<p->mpirank<<endl;
     
     // print
@@ -238,7 +236,7 @@ void sedpart::update_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow)
 void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->Q101>0)
-        make_moving(p,a,&PP,cellSum);
+        make_moving(p,a,&PP);
     
     
     // int i,j,k;
