@@ -147,7 +147,7 @@ void particle_func::advect(lexer* p, fdm* a, particles_obj* PP, int minflag, dou
 /// @param flag Particles need to have a larger flag than this
 /// Uses Runge Kutta 3 to calculate the change in particle velocity 
 /// The particle velocity is then used to transport the particle
-void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellSum, int flag)
+void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int flag)
 {
     double RKu,RKv,RKw;
     double u,v,w;
@@ -157,8 +157,7 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
     double Dp, thetas;
     double pressureDivX=0, pressureDivY=0, pressureDivZ=0;
     double stressDivX=0, stressDivY=0, stressDivZ=0;
-    bool print=true;
-    double netBuoyX=(1.0-drho)*p->W20,netBuoyY=(1.0-drho)*p->W21,netBuoyZ=(1.0-drho)*p->W22;
+    double netBuoyX=(1.0-drho)*p->W20, netBuoyY=(1.0-drho)*p->W21, netBuoyZ=(1.0-drho)*p->W22;
 
     PARTICLELOOP
         if(PP->Flag[n]>flag)
@@ -174,9 +173,9 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
             v=p->ccipol1(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
             w=p->ccipol1(a->w,PP->X[n],PP->Y[n],PP->Z[n]);
 
-            // stressDivX = (stressTensor[Ip1JK] - stressTensor[IJK])/(p->DXN[IP]);
-            // stressDivY = (0.5*(stressTensor[IJp1K]+stressTensor[Ip1Jp1K]) - 0.5*(stressTensor[IJm1K]+stressTensor[Ip1Jm1K]))/(p->DYN[JM1]+p->DYN[JP]);
-            // stressDivZ = (0.5*(stressTensor[IJKp1]+stressTensor[Ip1JKp1]) - 0.5*(stressTensor[IJKm1]+stressTensor[Ip1JKm1]))/(p->DYN[KM1]+p->DYN[KP]);
+            stressDivX = (stressTensor[Ip1JK] - stressTensor[IJK])/(p->DXN[IP]);
+            stressDivY = (0.5*(stressTensor[IJp1K]+stressTensor[Ip1Jp1K]) - 0.5*(stressTensor[IJm1K]+stressTensor[Ip1Jm1K]))/(p->DYN[JM1]+p->DYN[JP]);
+            stressDivZ = (0.5*(stressTensor[IJKp1]+stressTensor[Ip1JKp1]) - 0.5*(stressTensor[IJKm1]+stressTensor[Ip1JKm1]))/(p->DYN[KM1]+p->DYN[KP]);
 
             pressureDivX = (a->press(i+1,j,k) - a->press(i,j,k))/(p->DXN[IP]);
             pressureDivY = (0.5*(a->press(i,j+1,k)+a->press(i+1,j+1,k)) - 0.5*(a->press(i,j-1,k)+a->press(i+1,j-1,k)))/(p->DYN[JM1]+p->DYN[JP]);
@@ -192,12 +191,6 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, double* cellS
             du1=Dp*du+netBuoyX-pressureDivX/p->S22-stressDivX/((1-thetas)*p->S22);
             dv1=Dp*dv+netBuoyY-pressureDivY/p->S22-stressDivY/((1-thetas)*p->S22);
             dw1=Dp*dw+netBuoyZ-pressureDivZ/p->S22-stressDivZ/((1-thetas)*p->S22);
-
-            if(print)
-            {
-                cout<<"Dp:"<<Dp*dw<<" drho:"<<netBuoyZ<<" press:"<<-pressureDivZ/p->S22<<" stress:"<<-stressDivZ/((1-thetas)*p->S22)<<endl;
-                print=false;
-            }
 
             RKu=PP->U[n]+du1*p->dt;
             RKv=PP->V[n]+dv1*p->dt;
@@ -755,12 +748,13 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
 {
     double RKu,RKv,RKw;
     double u,v,w;
-    double du1, du2, du3, dv1, dv2, dv3, dw1, dw2, dw3;
+    double du1, dv1, dw1;
     /// @brief Difference between flowfield and particle velocity
     double du, dv, dw;
     double Dp, thetas;
     double pressureDivX=0, pressureDivY=0, pressureDivZ=0;
     double stressDivX=0,stressDivY=0,stressDivZ=0;
+    double netBuoyX=(1.0-drho)*p->W20, netBuoyY=(1.0-drho)*p->W21, netBuoyZ=(1.0-drho)*p->W22;
 
     PARTICLELOOP
     if(PP->Flag[n]==0)
@@ -775,13 +769,13 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
         v=p->ccipol1(a->v,PP->X[n],PP->Y[n],PP->Z[n]);
         w=p->ccipol1(a->w,PP->X[n],PP->Y[n],PP->Z[n]);
 
-        stressDivX = (cellSum[Ip1JK] - cellSum[IJK])/(p->DXM);
-        stressDivY = (0.5*(cellSum[IJp1K]+cellSum[Ip1Jp1K]) - 0.5*(cellSum[IJm1K]+cellSum[Ip1Jm1K]))/(2.0*p->DXM);
-        stressDivZ = (0.5*(cellSum[IJKp1]+cellSum[Ip1JKp1]) - 0.5*(cellSum[IJKm1]+cellSum[Ip1JKm1]))/(2.0*p->DXM);
+        stressDivX = (stressTensor[Ip1JK] - stressTensor[IJK])/(p->DXN[IP]);
+        stressDivY = (0.5*(stressTensor[IJp1K]+stressTensor[Ip1Jp1K]) - 0.5*(stressTensor[IJm1K]+stressTensor[Ip1Jm1K]))/(p->DYN[JM1]+p->DYN[JP]);
+        stressDivZ = (0.5*(stressTensor[IJKp1]+stressTensor[Ip1JKp1]) - 0.5*(stressTensor[IJKm1]+stressTensor[Ip1JKm1]))/(p->DYN[KM1]+p->DYN[KP]);
 
-        pressureDivX = (a->press(i+1,j,k) - a->press(i,j,k))/(p->DXM);
-        pressureDivY = (0.5*(a->press(i,j+1,k)+a->press(i+1,j+1,k)) - 0.5*(a->press(i,j-1,k)+a->press(i+1,j-1,k)))/(2.0*p->DXM);
-        pressureDivZ = (0.5*(a->press(i,j,k+1)+a->press(i+1,j,k+1)) - 0.5*(a->press(i,j,k-1)+a->press(i+1,j,k-1)))/(2.0*p->DXM);
+        pressureDivX = (a->press(i+1,j,k) - a->press(i,j,k))/(p->DXN[IP]);
+        pressureDivY = (0.5*(a->press(i,j+1,k)+a->press(i+1,j+1,k)) - 0.5*(a->press(i,j-1,k)+a->press(i+1,j-1,k)))/(p->DYN[JM1]+p->DYN[JP]);
+        pressureDivZ = (0.5*(a->press(i,j,k+1)+a->press(i+1,j,k+1)) - 0.5*(a->press(i,j,k-1)+a->press(i+1,j,k-1)))/(p->DYN[KM1]+p->DYN[KP]);
 
         // RK3 step 1
         du=u-PP->U[n];
@@ -790,9 +784,9 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
 
         Dp=drag_model(p,PP->d50,du,dv,dw,thetas);
 
-        du1=Dp*du+(1.0-drho)*p->W20-(pressureDivX/p->S22+stressDivX/((1-thetas)*p->S22));
-        dv1=Dp*dv+(1.0-drho)*p->W21-(pressureDivY/p->S22+stressDivY/((1-thetas)*p->S22));
-        dw1=Dp*dw+(1.0-drho)*p->W22-(pressureDivZ/p->S22+stressDivZ/((1-thetas)*p->S22));
+        du1=Dp*du+netBuoyX-pressureDivX/p->S22-stressDivX/((1-thetas)*p->S22);
+        dv1=Dp*dv+netBuoyY-pressureDivY/p->S22-stressDivY/((1-thetas)*p->S22);
+        dw1=Dp*dw+netBuoyZ-pressureDivZ/p->S22-stressDivZ/((1-thetas)*p->S22);
 
         double tolerance=0.0;
         if (fabs(du1)>tolerance||fabs(dv1)>tolerance||dw1>tolerance)
