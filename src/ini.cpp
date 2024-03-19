@@ -495,10 +495,6 @@ void lexer::ini_default()
 	F40=3;			    // int reini scheme
 	F42=-1.0;		    // double maxlength
 	F43=0.55;		    // double factor for reini timestep
-	F39=0.5;			    // double reini constraint relaxation factor
-	F40=3;			    // int reini scheme
-	F42=-1.0;		// double maxlength
-	F43=0.55;		// double factor for reini timestep
 	F44=3;		        // int number reini time step
 	F45=2.1;            // factor for calculation of epsi
 	F46=0;              // int picard iteration for lsm or reini
