@@ -53,11 +53,14 @@ particles_obj::particles_obj(size_t _capacity, double _d50, double _density, boo
 
 particles_obj::~particles_obj()
 {
-    // delete[] U;
-    // delete[] V;
-    // delete[] W;
+    if(entries>tracers_obj::entries)
+    {
+        delete[] U;
+        delete[] V;
+        delete[] W;
 
-    // delete[] PackingFactor;
+        delete[] PackingFactor;
+    }
 }
 
 /// \copydoc tracers_obj::debug
