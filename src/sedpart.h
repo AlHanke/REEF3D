@@ -121,6 +121,9 @@ private:
     void posseed_suspended(lexer*,fdm*);
     void point_source(lexer*,fdm*);
     void allocate(lexer*);
+    void topo_influx(lexer*,fdm*);
+    void seed_srand(lexer*);
+    void seed_topo(lexer*,fdm*);
 
     field4 active_box;
 	field4 active_topo;

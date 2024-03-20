@@ -75,11 +75,13 @@ protected:
 
     // memory management
     void cleanup(lexer*,fdm*,particles_obj*,int);
+protected:
+    double* stressTensor;
+    double* cellSum;
 private:
     const double kinVis;
     const double drho;
-    double* stressTensor;
-    double* cellSum;
+
     const double Ps; // in pressure unit
     const double beta; // 2<=beta<=5
     const double epsilon;

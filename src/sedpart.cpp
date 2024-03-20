@@ -159,11 +159,25 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
 
     // testing
     PLAINLOOP
-    a->test(i,j,k)=active_box(i,j,k);
+    a->test(i,j,k)=active_topo(i,j,k);
     volumeChangeTotal=0;
     if(0==p->mpirank)
     {
+    }
+    // ILOOP
+    // if(p->XN[IP]==0.2525)
+    // cout<<p->mpirank<<endl;
 
+    if(p->mpirank==2)
+    {
+        // ILOOP
+        // for(int q=0;q<p->margin;++q)
+        // cout<<"Topo after ini("<<i<<"): "<<a->topo(i,-q,19)<<"|"<<a->topo(i,-q,20)<<endl;
+        // int qq;
+        // QQGC4A
+        // if(p->gcb4a[qq][0]==32&&p->gcb4a[qq][1]==0&&p->gcb4a[qq][2]==20)
+        for(int n=0;n<6;n++)
+        cout<<a->topo(31+n,0,20)<<endl;
     }
 }
 
