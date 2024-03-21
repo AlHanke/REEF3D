@@ -73,7 +73,8 @@ sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p)
 }
 sedpart::~sedpart()
 {
-
+    delete pvrans;
+    delete pbedshear;
 }
 
 /// @brief 
@@ -97,9 +98,10 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 		if(p->Q120==1&&p->count%p->Q121==0)
 			posseed_suspended(p,a);
         point_source(p,a);
+        if(p->Q101>0)
+            topo_influx(p,a);
 
         /// transport
-        // pgc->gcparaxijk(p,cellSum,1); ghostcell exchange needed
         erode(p,a,pgc);
         transport(p,a,&PP);
 		xchange=transfer(p,pgc,&PP,maxparticle);
@@ -109,8 +111,9 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 		make_stationary(p,a,&PP);
         particlesPerCell(p,pgc,&PP);
         if(p->Q13==1)
-        update_cfd(p,a,pgc,pflow,preto);
+            update_cfd(p,a,pgc,pflow,preto);
         particleStressTensor(p,a,pgc,&PP);
+
         /// cleanup
         if(p->count%p->Q20==0)
         {
@@ -157,27 +160,27 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     pvrans->sed_update(p,a,pgc);
 
     // testing
-    PLAINLOOP
-    a->test(i,j,k)=active_topo(i,j,k);
-    volumeChangeTotal=0;
-    if(0==p->mpirank)
-    {
-    }
+    // PLAINLOOP
+    // a->test(i,j,k)=active_topo(i,j,k);
+    // volumeChangeTotal=0;
+    // if(0==p->mpirank)
+    // {
+    // }
     // ILOOP
     // if(p->XN[IP]==0.2525)
     // cout<<p->mpirank<<endl;
 
-    if(p->mpirank==2)
-    {
+    // if(p->mpirank==2)
+    // {
         // ILOOP
         // for(int q=0;q<p->margin;++q)
         // cout<<"Topo after ini("<<i<<"): "<<a->topo(i,-q,19)<<"|"<<a->topo(i,-q,20)<<endl;
         // int qq;
         // QQGC4A
         // if(p->gcb4a[qq][0]==32&&p->gcb4a[qq][1]==0&&p->gcb4a[qq][2]==20)
-        for(int n=0;n<6;n++)
-        cout<<a->topo(31+n,0,20)<<endl;
-    }
+        // for(int n=0;n<6;n++)
+        // cout<<a->topo(31+n,0,20)<<endl;
+    // }
 }
 
 void sedpart::start_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow*, slice &P, slice &Q)
@@ -193,9 +196,9 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
     int i,j,k;
     ILOOP
     JLOOP
-    if(p->flag_topo_changed[IJ]==1)
+    if(topoVolumeChange[IJ]>0)
     {
-        double dh=p->topo_change[IJ]/p->DXN[IP]/p->DYN[JP];
+        double dh=topoVolumeChange[IJ]/p->DXN[IP]/p->DYN[JP];
         a->bed(i,j)+=dh;
         KLOOP
         {
@@ -206,11 +209,10 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
             else
                 active_topo(i,j,k) = 0.0;
         }
-        volumeChangeTotal += p->topo_change[IJ];
+        volumeChangeTotal += topoVolumeChange[IJ];
 
         // Reset
-        p->flag_topo_changed[IJ]=0;
-        p->topo_change[IJ]=0;
+        topoVolumeChange[IJ]=0;
     }
 
     pgc->start4a(p,a->topo,150);

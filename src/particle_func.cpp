@@ -34,11 +34,13 @@ particle_func::particle_func(lexer* p, int maxcount, double d50, double density)
 {
     p->Darray(stressTensor,p->imax*p->jmax*p->kmax);
     p->Darray(cellSum,p->imax*p->jmax*p->kmax);
+    p->Darray(topoVolumeChange,p->imax*p->jmax);
 }
 particle_func::~particle_func()
 {
     delete[] stressTensor;
     delete[] cellSum;
+    delete[] topoVolumeChange;
 }
 
 /// @brief Applies advection to positions of particles in @param PP
@@ -598,8 +600,7 @@ void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP, int min
             {
                 i=p->posc_i(PP->X[n]);
                 j=p->posc_j(PP->Y[n]);
-                p->flag_topo_changed[IJ]=1;
-                p->topo_change[IJ]+=volume(PP,n);
+                topoVolumeChange[IJ]+=volume(PP,n);
             }
             if(PP->entries>PP->tracers_obj::entries)
             {
@@ -786,8 +787,7 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
             PP->Flag[n]=1;
             if(p->count!=0)
             {
-                p->flag_topo_changed[IJ]=1;
-                p->topo_change[IJ]-=volume(PP,n);
+                topoVolumeChange[IJ]-=volume(PP,n);
             }
         }
     }

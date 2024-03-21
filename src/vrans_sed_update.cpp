@@ -29,24 +29,23 @@ void vrans_f::sed_update(lexer *p, fdm *a, ghostcell *pgc)
 {
 	bool changed=false;
     ALOOP
-		if(p->count==0||p->flag_topo_changed[IJ]==1)
-		{	
-			if(a->topo(i,j,k)<0.0) // Topo
-			{
-				a->porosity(i,j,k) = p->S24; //porosity
-				porpart(i,j,k) = p->S20;  //d50
-				alpha(i,j,k) = p->S26_a;  //alpha
-				beta(i,j,k) = p->S26_b;    //beta
-			}
-			else // Not topo
-			{
-				a->porosity(i,j,k)=1.0;
-				porpart(i,j,k)=0.01;
-				alpha(i,j,k)=0.0;
-				beta(i,j,k)=0.0;
-			}
-			changed=true;
+	{
+		if(a->topo(i,j,k)<0.0) // Topo
+		{
+			a->porosity(i,j,k) = p->S24; //porosity
+			porpart(i,j,k) = p->S20;  //d50
+			alpha(i,j,k) = p->S26_a;  //alpha
+			beta(i,j,k) = p->S26_b;    //beta
 		}
+		else // Not topo
+		{
+			a->porosity(i,j,k)=1.0;
+			porpart(i,j,k)=0.01;
+			alpha(i,j,k)=0.0;
+			beta(i,j,k)=0.0;
+		}
+		changed=true;
+	}
 	
     if(changed)
     {

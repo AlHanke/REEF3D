@@ -106,8 +106,6 @@ public:
 	int surf_tot;
 	int *flag1,*flag2,*flag3,*flag4,*flag5,*flag7,*flag;
     int *flagsf1,*flagsf2,*flagsf3,*flagsf4;
-    int *flag_topo_changed;
-    double *topo_change;
     int *BC;
 	int*mgflag;
     double *flag_solid,*flag_topo;
