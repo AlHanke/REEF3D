@@ -55,10 +55,7 @@ tracers_obj::tracers_obj(size_t _capacity, size_t _size, double _scale_factor): 
         size=0;
         empty_itr=0;
         loopindex=0;
-        fill(_size);
-
-        cellSumIniState=false;
-        
+        fill(_size);        
     }
 }
 
@@ -336,23 +333,6 @@ void tracers_obj::add_obj(tracers_obj* obj)
 void tracers_obj::print(size_t index)
 {
     std::cout<<"Tracer_obj["<<index<<"]=("<<X[index]<<","<<Y[index]<<","<<Z[index]<<")"<<std::endl;
-}
-
-void tracers_obj::ini_cellSum(int dim)
-{
-    if (!cellSumIniState)
-    {
-        cellSum = new size_t[dim];
-        for (int n = 0; n < dim; n++)
-        cellSum[n] = 0;
-        cellSumIniState = true;
-    }
-    else
-    {
-        delete[] cellSum;
-        cellSumIniState = false;
-        ini_cellSum(dim);
-    }
 }
 
 void tracers_obj::reset_Empty()

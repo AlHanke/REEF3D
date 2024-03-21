@@ -54,7 +54,6 @@ public:
     size_t add_entry(tracers_obj*,size_t);
     void fill(size_t,bool=true,int=INT32_MIN);
     void print(size_t);
-    void ini_cellSum(int dim);
 
 protected:
     void fill_empty();
@@ -74,8 +73,6 @@ public:
     size_t capacity;
     /// @brief Number of different data values per particle
     const size_t entries;
-    /// @brief Number of tracers per cell
-    size_t* cellSum;
 
     // --- tracer data ---
 
@@ -96,8 +93,6 @@ protected:
     size_t* Empty;
     /// @brief Default factor for ::reserve
     const double scale_factor;
-private:
-    bool cellSumIniState;
 };
 
 #endif

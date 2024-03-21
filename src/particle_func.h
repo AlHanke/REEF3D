@@ -78,6 +78,9 @@ protected:
 protected:
     double* stressTensor;
     double* cellSum;
+    double* topoVolumeChange;
+    double totalSolidVolumeChange;
+    double totalTopoVolumeChange;
 private:
     const double kinVis;
     const double drho;

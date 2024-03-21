@@ -55,7 +55,7 @@ void particle_func::advect(lexer* p, fdm* a, tracers_obj* PP, int minflag, doubl
             i=p->posc_i(PP->X[n]);
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
-            PP->cellSum[IJK]--;
+            cellSum[IJK]--;
 
             u1=p->dt*(p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n])+source_u);
             coord1=PP->X[n]+u1;
@@ -86,7 +86,7 @@ void particle_func::advect(lexer* p, fdm* a, tracers_obj* PP, int minflag, doubl
             i=p->posc_i(PP->X[n]);
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
-            PP->cellSum[IJK]++;
+            cellSum[IJK]++;
         }
 }
 
@@ -104,7 +104,7 @@ void particle_func::advect(lexer* p, fdm* a, particles_obj* PP, int minflag, dou
             i=p->posc_i(PP->X[n]);
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
-            PP->cellSum[IJK]-=PP->PackingFactor[n];
+            cellSum[IJK]-=PP->PackingFactor[n];
 
             source_w -=settling_vel(p,a,PP,n);
             u1=p->dt*(p->ccipol1(a->u,PP->X[n],PP->Y[n],PP->Z[n])+source_u);
@@ -136,7 +136,7 @@ void particle_func::advect(lexer* p, fdm* a, particles_obj* PP, int minflag, dou
             i=p->posc_i(PP->X[n]);
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
-            PP->cellSum[IJK]+=PP->PackingFactor[n];
+            cellSum[IJK]+=PP->PackingFactor[n];
         }
 }
 
@@ -288,7 +288,7 @@ int particle_func::remove(lexer* p, tracers_obj* PP)
 			// remove out of bounds particles
             if(!inBounds)
             {
-                PP->cellSum[IJK]--;
+                cellSum[IJK]--;
                 PP->erase(n);
                 removed++;
             }
@@ -318,7 +318,7 @@ int particle_func::remove(lexer* p, particles_obj* PP)
 			// remove out of bounds particles
             if(!inBounds)
             {
-                PP->cellSum[IJK]-=PP->PackingFactor[n];
+                cellSum[IJK]-=PP->PackingFactor[n];
                 PP->erase(n);
                 removed++;
             }
@@ -392,7 +392,7 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, tracers_obj* PP, int maxco
                     }
                 }
                 PP->erase(n);
-                PP->cellSum[IJK]--;
+                cellSum[IJK]--;
                 ++xchange;
             }
         }
@@ -413,7 +413,7 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, tracers_obj* PP, int maxco
             i = p->posc_i(Recv[n].X[n]);
             j = p->posc_j(Recv[n].Y[n]);
             k = p->posc_k(Recv[n].Z[n]);
-            PP->cellSum[IJK]++;
+            cellSum[IJK]++;
         }
         PP->add_obj(&Recv[n]);
     }
@@ -488,7 +488,7 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
                         break;
                     }
                 }
-                PP->cellSum[IJK]-=PP->PackingFactor[n];
+                cellSum[IJK]-=PP->PackingFactor[n];
                 PP->erase(n);
                 ++xchange;
             }
@@ -510,7 +510,7 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
             i = p->posc_i(Recv[n].X[n]);
             j = p->posc_j(Recv[n].Y[n]);
             k = p->posc_k(Recv[n].Z[n]);
-            PP->cellSum[IJK]+=Recv[n].PackingFactor[n];
+            cellSum[IJK]+=Recv[n].PackingFactor[n];
         }
         PP->add_obj(&Recv[n]);
     }
