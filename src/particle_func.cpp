@@ -30,15 +30,15 @@ Author: Alexander Hanke
 #define PARTICLELOOP for(size_t n=0;n<PP->loopindex;n++)
 
 particle_func::particle_func(lexer* p, int maxcount, double d50, double density) : kinVis(p->W1/p->W2), drho(p->W1/p->S22),
-                            Ps(p->Q14),beta(p->Q15),epsilon(p->Q16),theta_crit(p->Q17),
-                            seedling1(maxcount,d50,density,true),seedling2(maxcount,d50,density,true),seedling3(maxcount,d50,density,true),
-                            seedling4(maxcount,d50,density,true),seedling5(maxcount,d50,density,true),seedling6(maxcount,d50,density,true)
+                            Ps(p->Q14),beta(p->Q15),epsilon(p->Q16),theta_crit(p->Q17)
 {
     p->Darray(stressTensor,p->imax*p->jmax*p->kmax);
     p->Darray(cellSum,p->imax*p->jmax*p->kmax);
 }
 particle_func::~particle_func()
 {
+    delete[] stressTensor;
+    delete[] cellSum;
 }
 
 /// @brief Applies advection to positions of particles in @param PP
@@ -338,9 +338,8 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, tracers_obj* PP, int maxco
 {
     int xchange=0;
 
-    tracers_obj seedling1(maxcount),seedling2(maxcount),seedling3(maxcount),seedling4(maxcount),seedling5(maxcount),seedling6(maxcount);
-    tracers_obj Send[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
-    tracers_obj Recv[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
+    tracers_obj Send[6]={tracers_obj(maxcount),tracers_obj(maxcount),tracers_obj(maxcount),tracers_obj(maxcount),tracers_obj(maxcount),tracers_obj(maxcount)};
+    tracers_obj Recv[6]={tracers_obj(maxcount),tracers_obj(maxcount),tracers_obj(maxcount),tracers_obj(maxcount),tracers_obj(maxcount),tracers_obj(maxcount)};
 
     int i,j,k;
 
@@ -434,25 +433,10 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
 {
     int xchange=0;
 
-    if(seedling1.capacity<maxcount)
-    seedling1.reserve(maxcount);
-    if(seedling2.capacity<maxcount)
-    seedling2.reserve(maxcount);
-    if(seedling3.capacity<maxcount)
-    seedling3.reserve(maxcount);
-    if(seedling4.capacity<maxcount)
-    seedling4.reserve(maxcount);
-    if(seedling5.capacity<maxcount)
-    seedling5.reserve(maxcount);
-    if(seedling6.capacity<maxcount)
-    seedling6.reserve(maxcount);
-    particles_obj Send[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
-    particles_obj Recv[6]={seedling1,seedling2,seedling3,seedling4,seedling5,seedling6};
-
-    // size_t cellSum1[p->jmax*p->kmax],cellSum2[p->imax*p->kmax],cellSum3[p->imax*p->kmax],cellSum4[p->jmax*p->kmax],cellSum5[p->imax*p->jmax],cellSum6[p->imax*p->jmax];
-    // memset(cellSum1, 0, sizeof(cellSum1));
-    // size_t* cellSumSend[6]={cellSum1,cellSum2,cellSum3,cellSum4,cellSum5,cellSum6};
-    // size_t* cellSumRecv[6]={cellSum1,cellSum2,cellSum3,cellSum4,cellSum5,cellSum6};
+    particles_obj Send[6]={particles_obj(maxcount,PP->d50,PP->density,1),particles_obj(maxcount,PP->d50,PP->density,1),particles_obj(maxcount,PP->d50,PP->density,1),
+    particles_obj(maxcount,PP->d50,PP->density,1),particles_obj(maxcount,PP->d50,PP->density,1),particles_obj(maxcount,PP->d50,PP->density,1)};
+    particles_obj Recv[6]={particles_obj(maxcount,PP->d50,PP->density,1),particles_obj(maxcount,PP->d50,PP->density,1),particles_obj(maxcount,PP->d50,PP->density,1),
+    particles_obj(maxcount,PP->d50,PP->density,1),particles_obj(maxcount,PP->d50,PP->density,1),particles_obj(maxcount,PP->d50,PP->density,1)};;
 
     int i,j,k;
 
@@ -530,12 +514,6 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
         }
         PP->add_obj(&Recv[n]);
     }
-    seedling1.erase_all();
-    seedling2.erase_all();
-    seedling3.erase_all();
-    seedling4.erase_all();
-    seedling5.erase_all();
-    seedling6.erase_all();
 
     return xchange;
 }

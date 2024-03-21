@@ -86,7 +86,6 @@ private:
     const double beta; // 2<=beta<=5
     const double epsilon;
     const double theta_crit; // 0.6-0.65
-    particles_obj seedling1,seedling2,seedling3,seedling4,seedling5,seedling6;
 };
 
 #endif
