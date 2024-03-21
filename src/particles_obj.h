@@ -40,7 +40,7 @@ class lexer;
 class particles_obj : public tracers_obj
 {
 public:
-    particles_obj(size_t, double=0.001, double=2650.0, bool=false, size_t=0, double=1.25);
+    particles_obj(size_t=10, double=0.001, double=2650.0, bool=false, size_t=0, double=1.25);
     ~particles_obj();
 
     void erase(size_t);

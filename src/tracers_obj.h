@@ -41,7 +41,7 @@ class tracers_obj
 {
 public:
     tracers_obj(size_t=10, size_t=0, double=1.25);
-    ~tracers_obj();
+    virtual ~tracers_obj();
 
     void erase(size_t);
     void erase_all();

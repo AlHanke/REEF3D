@@ -65,11 +65,17 @@ tracers_obj::tracers_obj(size_t _capacity, size_t _size, double _scale_factor): 
 tracers_obj::~tracers_obj()
 {
     delete[] X;
+    X=0;
     delete[] Y;
+    Y=0;
     delete[] Z;
+    Z=0;
 
     delete[] Flag;
+    Flag=0;
+    
     delete[] Empty;
+    Empty=0;
 }
 
 /// @brief Contains debugging code
