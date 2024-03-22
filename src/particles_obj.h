@@ -45,42 +45,48 @@ public:
 
     void erase(size_t);
     void erase_all();
+
     size_t reserve(size_t=0);
+    void optimize();
+
     size_t add(double,double,double,int,double=0,double=0,double=0,double=1); // expand when adding additional data
     void add_obj(particles_obj*);
-    // void add_obj(tracers_obj*);
-    bool check_state(bool=true);
-    void optimize();
-    void debug();
+    
     void fill(size_t,bool=true,int=-1);
     void fill_data(size_t,size_t);
+
+    bool check_state(bool=true);
+    void debug();
 private:
     void fix_state();
     void memorymove(size_t des, size_t src, size_t len);
     void add_data(size_t,double,double,double,double); // expand when adding additional data
 
 public:
-    // state data
+    // --- state data ---
+
+    /// \copydoc tracers_obj::entries
     const size_t entries;
-    const int flag_inactive;
-    const int flag_bed;
-    const int flag_bed_load;
-    const int flag_suspended_load;
     const double overhead = 0.25; 
 
-    //particle data
-    //general
+    // --- particle data ---
+    // ---    general    ---
+
+    /// @brief d50 of particle set
     double d50;
+    /// @brief Average density of particle set
     const double density;
+    
+    // ---   individual  ---
 
-    //individual
+    /// @brief Velocity in x-dir
     double* U;
+    /// @brief Velocity in y-dir
     double* V;
+    /// @brief Velocity in z-dir
     double* W;
+    /// @brief Number of real particles represented by the element
     double* PackingFactor;
-
-private:
-    const double scale_factor;
 };
 
 #endif
