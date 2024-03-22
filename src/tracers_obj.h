@@ -32,9 +32,6 @@ Philosophy: performance, memory usage, ease of use
 All data should be stored as at max a 1D array
 Internal data access should be via iterator
 No external access to iterator
-
-Out of bounds safe
-Thread safe
 */
 
 class tracers_obj

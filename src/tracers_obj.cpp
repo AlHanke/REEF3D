@@ -26,15 +26,10 @@ Author: Alexander Hanke
 #include <cstring>
 #include <iostream>
 
-/*
-Dangers when using:
-size_t overflow when adding something to an object at capacity
-*/
-
 /// @brief Tracer style particles\n
 /// Contains and manages massless particles used as tracers in the flow field
 /// @param capacity Desired initial capacity
-/// @param size Desired number of tracers at default position (0,0,0|-1)
+/// @param size Desired number of tracers at default position (0,0,0|INT32_MIN)
 /// @param scale_factor Sets ::scale_factor for ::reserve
 tracers_obj::tracers_obj(size_t _capacity, size_t _size, double _scale_factor): scale_factor(_scale_factor), entries(3)
 {	
@@ -47,9 +42,9 @@ tracers_obj::tracers_obj(size_t _capacity, size_t _size, double _scale_factor): 
         Y = new double[_capacity]; // default value: NULL
         Z = new double[_capacity]; // default value: NULL
 
-        Flag = new int[_capacity]; // default value: -1
+        Flag = new int[_capacity]; // default value: INT32_MIN
 
-        Empty = new size_t[_capacity]; // default value: size_t_max-1
+        Empty = new size_t[_capacity];
         capacity=_capacity;
 
         size=0;
@@ -59,6 +54,7 @@ tracers_obj::tracers_obj(size_t _capacity, size_t _size, double _scale_factor): 
     }
 }
 
+/// @brief Deletes the constructed arrays.
 tracers_obj::~tracers_obj()
 {
     delete[] X;
@@ -141,7 +137,10 @@ size_t tracers_obj::add(double x, double y, double z, int flag)
     return index;
 }
 
-
+/// @brief Addes new element based on index of another tracers_obj
+/// @param obj Container
+/// @param entry ID of tracer to add
+/// @return Index of newly added element
 size_t tracers_obj::add_entry(tracers_obj* obj, size_t entry)
 {
     size_t index=Empty[empty_itr];
@@ -330,11 +329,14 @@ void tracers_obj::add_obj(tracers_obj* obj)
     }
 }
 
+/// @brief Prints position of element to cout
+/// @param index Element to print
 void tracers_obj::print(size_t index)
 {
     std::cout<<"Tracer_obj["<<index<<"]=("<<X[index]<<","<<Y[index]<<","<<Z[index]<<")"<<std::endl;
 }
 
+/// @brief Recreates Empty array
 void tracers_obj::reset_Empty()
 {
     delete[] Empty;
