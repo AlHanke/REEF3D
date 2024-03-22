@@ -27,7 +27,7 @@ Author: Alexander Hanke
 #include"tracers_obj.h"
 #include"boundarycheck.h"
 
-#define PARTICLELOOP for(size_t n=0;n<PP->loopindex;n++)
+#define PARTICLELOOP for(size_t n=0;n<PP->loopindex;n++) if(PP->Flag[n]>INT32_MIN)
 
 particle_func::particle_func(lexer* p, int maxcount, double d50, double density) : kinVis(p->W1/p->W2), drho(p->W1/p->S22),
                             Ps(p->Q14),beta(p->Q15),epsilon(p->Q16),theta_crit(p->Q17)
@@ -230,18 +230,24 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int flag)
 
 
             if(du2!=du2||du3!=du3)
-                // cout<<"NaN detected in u."<<endl
-                int temp=0;
+            {
+                cout<<"Particle velocity component w resulted in NaN."<<endl;
+                exit(1);
+            }
             else
                 PP->U[n] += ((2.0/3.0)*du2 + (2.0/3.0)*du3)*p->dt;
             if(dv2!=dv2||dv3!=dv3)
-                //cout<<"NaN detected in v."<<endl
-                int temp=0;
+            {
+                cout<<"Particle velocity component w resulted in NaN."<<endl;
+                exit(1);
+            }
             else
                 PP->V[n] += ((2.0/3.0)*dv2 + (2.0/3.0)*dv3)*p->dt;
             if(dw2!=dw2||dw3!=dw3)
-                // cout<<"NaN detected in w."<<endl
-                int temp=0;
+            {
+                cout<<"Particle velocity component w resulted in NaN."<<endl;
+                exit(1);
+            }
             else
                 PP->W[n] += ((2.0/3.0)*dw2 + (2.0/3.0)*dw3)*p->dt;
             
@@ -252,8 +258,11 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int flag)
 
             // Sum update
             cellSum[IJK]-=PP->PackingFactor[n];
-            if(cellSum[IJK]<0) // Mass conservation
-                cellSum[IJK]=0;
+            if(cellSum[IJK]<0)
+            {
+                cout<<"cellSum is below zero."<<endl;
+                exit(1);
+            }
             particleStressTensorUpdateIJK(p,a,PP);
             i=p->posc_i(PP->X[n]);
             j=p->posc_j(PP->Y[n]);
@@ -622,27 +631,7 @@ double particle_func::volume(particles_obj* PP, int index)
 
 void particle_func::cleanup(lexer* p, fdm* a, particles_obj* PP, int max)
 {
-    // int* numPartijk;
-    // int i,j,k;
 
-    // p->Iarray(numPartijk,p->knox*p->knoy*p->knoz);
-    // PARTICLELOOP
-    //     if(PP->Flag[n]==0)
-    //     {
-    //         i=p->posc_i(PP->X[n]);
-    //         j=p->posc_j(PP->Y[n]);
-    //         k=p->posc_k(PP->Z[n]);
-    //         if(a->topo(i,j,k)<p->DZN[KP])
-    //             if(numPartijk[IJK]<max)
-    //                 numPartijk[IJK]++;
-    //             else
-    //                 PP->erase(n);
-    //     }
-    // p->del_Iarray(numPartijk,p->knox*p->knoy*p->knoz);
-
-    // PARTICLELOOP
-    // if(p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<-p->Q102*p->DZN[KP]||PP->Flag[n]==0)
-    // PP->erase(n);
 }
 
 /// @brief Topo volume in cell div. by particle volume
@@ -668,7 +657,7 @@ void particle_func::particlesPerCell(lexer* p, ghostcell* pgc, particles_obj* PP
         i=p->posc_i(PP->X[n]);
         j=p->posc_j(PP->Y[n]);
         k=p->posc_k(PP->Z[n]);
-        cellSum[IJK]++;
+        cellSum[IJK]+=PP->PackingFactor[n];
     }
     pgc->start4V(p,cellSum,10);
 }
@@ -795,8 +784,7 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
 
 void particle_func::debug(lexer* p, fdm* a, ghostcell* pgc, particles_obj* PP)
 {
-    PLAINLOOP
-    a->test(i,j,k)=stressTensor[IJK];
+    
 }
 
 void particle_func::fixPos(lexer* p, fdm* a, particles_obj* PP)
