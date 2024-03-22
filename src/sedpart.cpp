@@ -133,9 +133,7 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 	p->sedsimtime=pgc->timer()-starttime;
 
     if(p->mpirank==0 && (p->count%p->P12==0))
-    	cout<<"Sediment particles: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sim. time: "<<p->sedsimtime<<"\nTotal bed volume change: "<<std::setprecision(9)<<volumeChangeTotal<<endl;
-
-    // testing
+    	cout<<"Sediment particles: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sim. time: "<<p->sedsimtime<<" relative: "<<p->sedsimtime/double(gparticle_active)*(10^3)<<" ms\nTotal bed volume change: "<<std::setprecision(9)<<volumeChangeTotal<<endl;
 }
 
 void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
@@ -158,29 +156,6 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     
     // vrans
     pvrans->sed_update(p,a,pgc);
-
-    // testing
-    // PLAINLOOP
-    // a->test(i,j,k)=active_topo(i,j,k);
-    // volumeChangeTotal=0;
-    // if(0==p->mpirank)
-    // {
-    // }
-    // ILOOP
-    // if(p->XN[IP]==0.2525)
-    // cout<<p->mpirank<<endl;
-
-    // if(p->mpirank==2)
-    // {
-        // ILOOP
-        // for(int q=0;q<p->margin;++q)
-        // cout<<"Topo after ini("<<i<<"): "<<a->topo(i,-q,19)<<"|"<<a->topo(i,-q,20)<<endl;
-        // int qq;
-        // QQGC4A
-        // if(p->gcb4a[qq][0]==32&&p->gcb4a[qq][1]==0&&p->gcb4a[qq][2]==20)
-        // for(int n=0;n<6;n++)
-        // cout<<a->topo(31+n,0,20)<<endl;
-    // }
 }
 
 void sedpart::start_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow*, slice &P, slice &Q)
@@ -193,7 +168,6 @@ void sedpart::ini_sflow(lexer *p, fdm2D *b, ghostcell *pgc)
     
 void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinitopo* preto)
 {
-    int i,j,k;
     ILOOP
     JLOOP
     if(topoVolumeChange[IJ]>0)
@@ -202,7 +176,9 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
         a->bed(i,j)+=dh;
         KLOOP
         {
+            // Topo update
             a->topo(i,j,k) -= dh;
+
             // Seeding update
             if((abs(a->topo(i,j,k))<(p->DZN[KP]*ceil(p->Q102)))&&(a->topo(i,j,k)<=0.25*p->DZN[KP]))
                 active_topo(i,j,k) = 1.0;
@@ -222,11 +198,6 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
         cout<<"Topo: update grid..."<<endl;
     pvrans->sed_update(p,a,pgc);
     pflow->gcio_update(p,a,pgc);
-
-    // fixPos
-    // fixPos(p,a,&PP);
-    // if(p->Q101>0)
-    // posseed_topo(p,a);
 }
 
 void sedpart::update_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow)
@@ -237,37 +208,6 @@ void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->Q101>0)
         make_moving(p,a,&PP);
-    
-    
-    // int i,j,k;
-    // double x,y,z;
-    // double eroded=0.0;
-    // size_t index=0;
-    // // pbedshear->taueff_loc
-    // cout<<"eroding..."<<endl;
-    // if(p->count%p->Q121==0)
-    //     SLICEBASELOOP
-    //     {
-    //         // test for erosion
-    //         if (i%2==0&&j%3==0)
-    //             eroded +=volume(&PP,0);
-
-    //         // Change amount accoding to eroded volume?
-    //         // Rerun eroded column until no more erosion?
-
-    //         while (eroded>0)
-    //         {
-    //             x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
-    //             y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
-    //             z = p->ZN[KP] + p->DZN[KP]*0.5;
-    //             z-=p->ccipol4_b(a->topo,x,y,z);
-    //             cout<<PP.size<<"|";
-    //             index=PP.add(x,y,z,1);
-    //             cout<<PP.size<<endl;
-    //             eroded -= volume(&PP,index);
-    //         }
-    //         eroded=0;
-    //     }
 }
 
 void sedpart::relax(lexer *p,ghostcell *pgc)
@@ -276,9 +216,7 @@ void sedpart::relax(lexer *p,ghostcell *pgc)
 
 double sedpart::qbeval(int ii, int jj)
 {
-    double val=0.0;
-
-    return val;
+    return 0.0;
 }
 
 void sedpart::qbeget(int ii, int jj, double val)
@@ -287,9 +225,7 @@ void sedpart::qbeget(int ii, int jj, double val)
 
 double sedpart::bedzhval(int ii, int jj)
 {
-    double val=0.0;
-
-    return val;
+    return 0.0;
 }
 
 void sedpart::print_2D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
