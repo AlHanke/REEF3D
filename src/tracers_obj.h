@@ -37,25 +37,25 @@ No external access to iterator
 class tracers_obj
 {
 public:
-    tracers_obj(size_t=10, size_t=0, double=1.25);
+    tracers_obj(size_t _capacity=10, size_t _size=0, double _scale_factor=1.25);
     virtual ~tracers_obj();
 
-    void erase(size_t);
+    void erase(size_t _index);
     void erase_all();
-    size_t reserve(size_t=0);
-    size_t add(double,double,double,int);
-    bool check_state(bool=true);
+    size_t reserve(size_t capacity_desired=0);
+    size_t add(double x, double y, double z, int flag);
+    bool check_state(bool first=true);
     void optimize();
     void debug();
-    void add_obj(tracers_obj*);
-    size_t add_entry(tracers_obj*,size_t);
-    void fill(size_t,bool=true,int=INT32_MIN);
-    void print(size_t);
+    void add_obj(tracers_obj* obj);
+    size_t add_entry(tracers_obj* obj, size_t _index);
+    void fill(size_t _index, bool do_empty=true, int flag=INT32_MIN);
+    void print(size_t _index);
 
 protected:
     void fill_empty();
     void fix_state();
-    void memorymove(size_t,size_t,size_t);
+    void memorymove(size_t des, size_t src, size_t len);
     void reset_Empty();
 
 public:

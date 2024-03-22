@@ -79,17 +79,16 @@ void tracers_obj::debug()
     
 }
 
-/// @brief Removes \p index
-/// @param index 
-void tracers_obj::erase(size_t index)
+/// @brief Removes \p _index
+void tracers_obj::erase(size_t _index)
 {
-    X[index]=NULL;
-    Y[index]=NULL;
-    Z[index]=NULL;
+    X[_index]=NULL;
+    Y[_index]=NULL;
+    Z[_index]=NULL;
 
-    Flag[index]=INT32_MIN;
+    Flag[_index]=INT32_MIN;
 
-    Empty[++empty_itr]=index;
+    Empty[++empty_itr]=_index;
     --size;
 }
 
@@ -137,18 +136,16 @@ size_t tracers_obj::add(double x, double y, double z, int flag)
     return index;
 }
 
-/// @brief Addes new element based on index of another tracers_obj
-/// @param obj Container
-/// @param entry ID of tracer to add
+/// @brief Addes new element based on \p _index of \p obj
 /// @return Index of newly added element
-size_t tracers_obj::add_entry(tracers_obj* obj, size_t entry)
+size_t tracers_obj::add_entry(tracers_obj* obj, size_t _index)
 {
     size_t index=Empty[empty_itr];
-    X[index]=obj->X[entry];
-    Y[index]=obj->Y[entry];
-    Z[index]=obj->Z[entry];
+    X[index]=obj->X[_index];
+    Y[index]=obj->Y[_index];
+    Z[index]=obj->Z[_index];
 
-    Flag[index]=obj->Flag[entry];
+    Flag[index]=obj->Flag[_index];
 
     Empty[empty_itr--]=-1;
     if(!(loopindex>size++))
@@ -156,8 +153,7 @@ size_t tracers_obj::add_entry(tracers_obj* obj, size_t entry)
     return index;
 }
 
-/// @brief Reserves memory for new capacity
-/// @param capacity_desired Requested capacity
+/// @brief Reserves memory for new capacity \p capacity_desired
 /// @return Actual new capacity
 size_t tracers_obj::reserve(size_t capacity_desired)
 {
@@ -202,12 +198,12 @@ size_t tracers_obj::reserve(size_t capacity_desired)
 }
 
 /// @brief Fills with default
-/// @param index to which to fill
+/// @param _index to which to fill
 /// @param do_empty toggle for ::fill_empty
 /// @param flag provide if diffent from default
-void tracers_obj::fill(size_t index, bool do_empty, int flag)
+void tracers_obj::fill(size_t _index, bool do_empty, int flag)
 {
-    for(size_t n=size; n<index;++n)
+    for(size_t n=size; n<_index;++n)
     {
         X[n]=NULL;
         Y[n]=NULL;
@@ -215,8 +211,8 @@ void tracers_obj::fill(size_t index, bool do_empty, int flag)
 
         Flag[n]=flag;
     }
-    size=index;
-    loopindex=index;
+    size=_index;
+    loopindex=_index;
     if(do_empty)
         fill_empty();
 }
@@ -330,10 +326,10 @@ void tracers_obj::add_obj(tracers_obj* obj)
 }
 
 /// @brief Prints position of element to cout
-/// @param index Element to print
-void tracers_obj::print(size_t index)
+/// @param _index Element to print
+void tracers_obj::print(size_t _index)
 {
-    std::cout<<"Tracer_obj["<<index<<"]=("<<X[index]<<","<<Y[index]<<","<<Z[index]<<")"<<std::endl;
+    std::cout<<"Tracer_obj["<<_index<<"]=("<<X[_index]<<","<<Y[_index]<<","<<Z[_index]<<")"<<std::endl;
 }
 
 /// @brief Recreates Empty array
