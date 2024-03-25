@@ -44,12 +44,12 @@ class vrans;
 class turbulence;
 class bedshear;
 
-/// @brief Class handling sediment on particle basis
-/// This class used particles on a lagrangien framework and a VRANS sediment domain to simulate the influence of flow on the sediment
+/// This class used particles on a Lagrangien framework and a VRANS sediment domain to simulate the influence of flow on the sediment
 class sedpart : public sediment, private particle_func, private increment
 {
 public:
-    sedpart(lexer*,ghostcell*,turbulence*);
+
+    sedpart(lexer* p,ghostcell* pgc ,turbulence* pturb);
     virtual ~sedpart();
 
     void start_cfd(lexer*, fdm*, ghostcell*, ioflow*, reinitopo*, solver*) override;
@@ -106,14 +106,7 @@ public:
 protected:
 
 private:
-    int maxparticle;
-    int gparticle_active;
-    int gremoved;
-    int gxchange;
 
-    particles_obj PP;
-    
-    #define PARTLOOP for(int n=0;n<PP.loopindex;++n)
     void seed_ini(lexer*,fdm*,ghostcell*);
     void seed(lexer*,fdm*);
     void posseed_box(lexer*,fdm*);
@@ -125,14 +118,6 @@ private:
     void seed_srand(lexer*);
     void seed_topo(lexer*,fdm*);
 
-    field4 active_box;
-	field4 active_topo;
-    int ppcell;
-    int partnum;
-    int gpartnum;
-    const int irand;
-	const double drand;
-
     // PRINT
 	void print_particles(lexer*,fdm*,ghostcell*);
 	void print_vtu(lexer*,fdm*,ghostcell*);
@@ -140,18 +125,57 @@ private:
 	void pvtu_pos(lexer*,fdm*,ghostcell*);
     void header_pos(lexer*,fdm*,ghostcell*);
     void piecename_pos(lexer*,fdm*,ghostcell*,int);
-	
+
+public:
+
+protected:
+
+private:
+
+    /// @brief Current capacity for particles
+    int maxparticle;
+    /// @brief Desired particles per cell
+    int ppcell;
+    /// @brief Number of particles over all partitions
+    int gparticle_active;
+    /// @brief Particles removed over all partitions
+    int gremoved;
+    /// @brief Particles exchanged between all partitions
+    int gxchange;
+
+    double volumeChangeTotal;
+
+    /// @brief integer rand() scaler
+    const int irand;
+	/// @brief double rand() normalizer
+	const double drand;
+
+    /// @brief Particle object
+    particles_obj PP;
+    /// @brief VRANS object
+    vrans* pvrans;
+    // bedshear* pbedshear;
+    
+    
+    /// @brief Marker for cells which should be seeded for a box
+    field4 active_box;
+    /// @brief Marker for cells which should be seeded with topography
+	field4 active_topo;
+
+
+	/// Printing
+
+	/// @brief Output file name
 	char name[100];
+    /// @brief Name of individual output files
     char pname[100];
     double printtime;
+    /// @brief Number of print iterations
     int printcount;
+    /// @brief File numer
     int num;
-    int* changed;
-    double* change;
 
-    vrans* pvrans;
-    bedshear* pbedshear;
-    double volumeChangeTotal;
+    #define PARTLOOP for(int n=0;n<PP.loopindex;++n)
 };
 
 #endif

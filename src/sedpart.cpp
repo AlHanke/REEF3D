@@ -35,16 +35,15 @@ Author: Alexander Hanke
 #include <sys/stat.h>
 #include <string>
 
-/// @brief Sediment model on particle basis
-/// Class handling the sediment when using the options for Lagrangian particles and VRANS.\n
-/// Does all the initialization of the topography with particles, modification of topo values and print out.
-/// @param p 
-/// @param pgc 
-/// @param pturb 
+/// This class is enabled when using the options for Lagrangian particles and VRANS.\n
+/// Initialization of the topography with particles, modification of topo values and print out.
+/// @param p control object
+/// @param pgc ghostcell object
+/// @param pturb turbulance object
 sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p), PP(10,p->S20,p->S22,true), active_box(p), active_topo(p), irand(10000), drand(irand)
 {
     pvrans = new vrans_f(p,pgc);
-    pbedshear  = new bedshear(p,pturb);
+    // pbedshear  = new bedshear(p,pturb);
     printcount = 0;
 
     // Create Folder
@@ -74,7 +73,7 @@ sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p)
 sedpart::~sedpart()
 {
     delete pvrans;
-    delete pbedshear;
+    // delete pbedshear;
 }
 
 /// @brief 
@@ -136,11 +135,19 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
     	cout<<"Sediment particles: "<<gparticle_active<<" | xch: "<<gxchange<<" rem: "<<gremoved<<" | sim. time: "<<p->sedsimtime<<" relative: "<<p->sedsimtime/double(gparticle_active)*(10^3)<<" ms\nTotal bed volume change: "<<std::setprecision(9)<<volumeChangeTotal<<endl;
 }
 
+/// @brief Initializes everything in the sediment for the CFD solver
+/// Determines cell which should be filled with particles
+/// Allocates memory for the particles
+/// Seeds the particles
+/// Prepares particles and particle related variables for simulation
+/// Initializes VRANS
+/// @param p 
+/// @param a 
+/// @param pgc 
 void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
     // seed
     seed_ini(p,a,pgc);
-    gpartnum=pgc->globalisum(partnum);
     allocate(p);
     seed(p,a);
     make_stationary(p,a,&PP);
@@ -165,7 +172,13 @@ void sedpart::start_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow*, slice &P,
 void sedpart::ini_sflow(lexer *p, fdm2D *b, ghostcell *pgc)
 {
 }
-    
+
+/// @brief Updates the topography for the CFD solver
+/// @param p 
+/// @param a 
+/// @param pgc 
+/// @param pflow 
+/// @param preto 
 void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinitopo* preto)
 {
     ILOOP
@@ -204,6 +217,10 @@ void sedpart::update_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow)
 {
 }
 
+/// @brief 
+/// @param p 
+/// @param a 
+/// @param pgc 
 void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->Q101>0)

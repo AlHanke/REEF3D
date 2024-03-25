@@ -89,7 +89,8 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
         cout<<"Reduced packing factor to "<<p->Q41<<" to stay within max real particles per cell."<<endl;
     }
     
-    partnum = cellcountBox * ppcell + p->Q102 * cellcountTopo * ppcell;    
+    int partnum = cellcountBox * ppcell + p->Q102 * cellcountTopo * ppcell;
+    maxparticle = ceil(p->Q25*double(pgc->globalisum(partnum)));
 }
 
 void sedpart::seed(lexer* p, fdm* a)
