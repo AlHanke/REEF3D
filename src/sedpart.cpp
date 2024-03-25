@@ -148,14 +148,14 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
     // seed
     seed_ini(p,a,pgc);
-    allocate(p);
+    PP.reserve(maxparticle);
     seed(p,a);
     make_stationary(p,a,&PP);
     particlesPerCell(p,pgc,&PP);
     particleStressTensor(p,a,pgc,&PP);
     
     // print
-    print_vtu(p,a,pgc);
+    print_vtp(p,a,pgc);
     printcount++;
     gparticle_active = pgc->globalisum(PP.size);
     if(p->mpirank==0)
@@ -217,7 +217,7 @@ void sedpart::update_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow)
 {
 }
 
-/// @brief 
+/// @brief Enables erosion of particles
 /// @param p 
 /// @param a 
 /// @param pgc 
@@ -227,130 +227,69 @@ void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
         make_moving(p,a,&PP);
 }
 
-void sedpart::relax(lexer *p,ghostcell *pgc)
+/// @brief Write out particle data to state file
+/// @param result statefile
+void sedpart::write_state_particles(ofstream& result)
 {
+    size_t ffs=PP.capacity;
+    result.write((char*)&ffs, sizeof (size_t));
+    ffs=0;
+    PARTICLELOOP
+    ffs++;
+    result.write((char*)&ffs, sizeof (size_t));
+    float ffn;
+    PARTICLELOOP
+    {
+        ffn=PP.X[n];
+        result.write((char*)&ffn, sizeof (float));
+        ffn=PP.Y[n];
+        result.write((char*)&ffn, sizeof (float));
+        ffn=PP.Z[n];
+        result.write((char*)&ffn, sizeof (float));
+        ffn=PP.Flag[n];
+        result.write((char*)&ffn, sizeof (float));
+        ffn=PP.U[n];
+        result.write((char*)&ffn, sizeof (float));
+        ffn=PP.V[n];
+        result.write((char*)&ffn, sizeof (float));
+        ffn=PP.W[n];
+        result.write((char*)&ffn, sizeof (float));
+        ffn=PP.PackingFactor[n];
+        result.write((char*)&ffn, sizeof (float));
+    }
 }
 
-double sedpart::qbeval(int ii, int jj)
+/// @brief Read in particle data from state file
+/// @param result statefile
+void sedpart::read_state_particles(ifstream& result)
 {
-    return 0.0;
-}
-
-void sedpart::qbeget(int ii, int jj, double val)
-{
-}
-
-double sedpart::bedzhval(int ii, int jj)
-{
-    return 0.0;
-}
-
-void sedpart::print_2D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
-{	
-}
-
-void sedpart::print_3D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
-{	
-}
-
-void sedpart::name_pvtu_bedload(lexer *p, ghostcell *pgc, ofstream &result)
-{
-}
-
-void sedpart::name_vtu_bedload(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-void sedpart::offset_vtp_bedload(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-void sedpart::offset_vtu_bedload(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-void sedpart::print_2D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
-{	
-}
-
-void sedpart::print_3D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
-{	
-}
-
-void sedpart::name_pvtu_bedshear(lexer *p, ghostcell *pgc, ofstream &result)
-{
-}
-
-void sedpart::name_vtu_bedshear(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-void sedpart::offset_vtp_bedshear(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-void sedpart::offset_vtu_bedshear(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-void sedpart::print_2D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
-{	
-}
-
-void sedpart::print_3D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
-{	
-}
-
-void sedpart::name_pvtu_parameter1(lexer *p, ghostcell *pgc, ofstream &result)
-{
-}
-
-void sedpart::name_vtu_parameter1(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-void sedpart::offset_vtp_parameter1(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-void sedpart::offset_vtu_parameter1(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-void sedpart::print_2D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
-{	
-}
-
-void sedpart::print_3D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
-{	
-}
-
-void sedpart::name_pvtu_parameter2(lexer *p, ghostcell *pgc, ofstream &result)
-{
-}
-
-void sedpart::name_vtu_parameter2(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-void sedpart::offset_vtp_parameter2(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-void sedpart::offset_vtu_parameter2(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
-{
-}
-
-double sedpart::bedshear_point(lexer *p, fdm *a,ghostcell *pgc)
-{
-	return 0.0;
-}
-
-void sedpart::start_susp(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, solver *psolv)
-{
-}
-
-void sedpart::ctimesave(lexer *p, fdm* a)
-{
-
+    PP.erase_all();
+    size_t ffs;
+    result.read((char*)&ffs, sizeof (size_t));
+    cout<<ffs<<endl;
+    PP.reserve(size_t(ffs));
+    result.read((char*)&ffs, sizeof (size_t));
+    PP.loopindex=size_t(ffs);
+    float ffn;
+    double x,y,z,flag,u,v,w,packing;
+    PARTLOOP
+    {
+        result.read((char*)&ffn, sizeof (float));
+        x=double(ffn);
+        result.read((char*)&ffn, sizeof (float));
+        y=double(ffn);
+        result.read((char*)&ffn, sizeof (float));
+        z=double(ffn);
+        result.read((char*)&ffn, sizeof (float));
+        flag=int(ffn);
+        result.read((char*)&ffn, sizeof (float));
+        u=double(ffn);
+        result.read((char*)&ffn, sizeof (float));
+        v=double(ffn);
+        result.read((char*)&ffn, sizeof (float));
+        w=double(ffn);
+        result.read((char*)&ffn, sizeof (float));
+        packing=double(ffn);
+        PP.add(x,y,z,flag,u,v,w,packing);
+    } 
 }
