@@ -39,7 +39,7 @@ Author: Alexander Hanke
 /// Initialization of the topography with particles, modification of topo values and print out.
 /// @param p control object
 /// @param pgc ghostcell object
-/// @param pturb turbulance object
+/// @param pturb turbulence object
 sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p), PP(10,p->S20,p->S22,true), active_box(p), active_topo(p), irand(10000), drand(irand)
 {
     pvrans = new vrans_f(p,pgc);
@@ -70,20 +70,16 @@ sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p)
         cout<<buff<<endl;
     }
 }
+
 sedpart::~sedpart()
 {
     delete pvrans;
-    // delete pbedshear;
 }
 
-/// @brief 
-///
-/// @param p 
-/// @param a 
-/// @param pgc 
-/// @param pflow 
-/// @param preto 
-/// @param psolv 
+/// @brief CFD calculation function
+/// @param a fdm object
+/// @param pflow IO-flow object
+/// @param preto topography reinitialization object
 void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
                                     reinitopo* preto, solver* psolv)
 {
@@ -141,9 +137,6 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 /// Seeds the particles
 /// Prepares particles and particle related variables for simulation
 /// Initializes VRANS
-/// @param p 
-/// @param a 
-/// @param pgc 
 void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
     // seed
@@ -174,11 +167,6 @@ void sedpart::ini_sflow(lexer *p, fdm2D *b, ghostcell *pgc)
 }
 
 /// @brief Updates the topography for the CFD solver
-/// @param p 
-/// @param a 
-/// @param pgc 
-/// @param pflow 
-/// @param preto 
 void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinitopo* preto)
 {
     ILOOP
@@ -218,9 +206,6 @@ void sedpart::update_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow)
 }
 
 /// @brief Enables erosion of particles
-/// @param p 
-/// @param a 
-/// @param pgc 
 void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->Q101>0)

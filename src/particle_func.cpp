@@ -29,7 +29,8 @@ Author: Alexander Hanke
 
 #define PARTICLELOOP for(size_t n=0;n<PP->loopindex;n++) if(PP->Flag[n]>INT32_MIN)
 
-particle_func::particle_func(lexer* p, int maxcount, double d50, double density) : kinVis(p->W1/p->W2), drho(p->W1/p->S22),
+/// @brief Functions to manipulate particle containing objects
+particle_func::particle_func(lexer* p) : kinVis(p->W1/p->W2), drho(p->W1/p->S22),
                             Ps(p->Q14),beta(p->Q15),epsilon(p->Q16),theta_crit(p->Q17)
 {
     p->Darray(stressTensor,p->imax*p->jmax*p->kmax);
@@ -500,11 +501,7 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, int max
 }
 
 /// @brief Particle Reynolds number
-/// Calculates particle reynolds number for particle[index]
-/// @param p
-/// @param a
-/// @param PP 
-/// @param index
+/// Calculates particle reynolds number for particle[ \p index ]
 /// @return Local particle Reynolds number
 double particle_func::reynolds(lexer* p,fdm* a, particles_obj* PP, int index)
 {
@@ -523,9 +520,7 @@ double particle_func::reynolds(lexer* p,fdm* a, particles_obj* PP, int index)
 /// @brief Settling velocity
 /// Calculates settling velocity using drag coefficent
 /// g is assumed to act only in negative z direction
-/// @param p 
-/// @param PP 
-/// @return 
+/// @return settling velocity of particle \p index
 double particle_func::settling_vel(lexer* p,fdm* a, particles_obj* PP, int index)
 {
     return sqrt(4.0/3.0*(PP->density/p->W1-1.0)*fabs(p->W22)*PP->d50/drag_coefficient(p,a,PP,index));
@@ -533,7 +528,7 @@ double particle_func::settling_vel(lexer* p,fdm* a, particles_obj* PP, int index
 
 /// @brief Drag coefficent Cd
 /// Calculates drag coefficent from particle Reynolds number based on emperical 
-/// @return 
+/// @return Cd
 double particle_func::drag_coefficient(lexer* p,fdm* a, particles_obj* PP, int index)
 {
     const double Re=reynolds(p,a,PP,index);
@@ -553,9 +548,7 @@ double particle_func::drag_coefficient(lexer* p,fdm* a, particles_obj* PP, int i
     return 24.0*(pow(theta_f,-2.65)+pow(Rep,2.0/3.0)*pow(theta_f,-1.78)/6.0)/Rep;
 }
 
-/// @brief 
-/// @param p 
-/// @param PP 
+/// @brief Set flag of particle to \p minflag aka stationary
 void particle_func::make_stationary(lexer* p, fdm* a, tracers_obj* PP, int minflag)
 {
     int i,j;
@@ -564,9 +557,7 @@ void particle_func::make_stationary(lexer* p, fdm* a, tracers_obj* PP, int minfl
             PP->Flag[n]=minflag;
 }
 
-/// @brief 
-/// @param p 
-/// @param PP 
+/// @brief Set flag of particle to \p minflag aka stationary and remove velocities
 void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP, int minflag)
 {
     int i,j;
@@ -597,6 +588,7 @@ double particle_func::volume(particles_obj* PP, int index)
     return PI*pow(PP->d50,3.0)*PP->PackingFactor[index]/6.0;
 }
 
+/// @brief Cleanup container \note To implement
 void particle_func::cleanup(lexer* p, fdm* a, tracers_obj* PP, int max)
 {
 
@@ -611,11 +603,13 @@ double particle_func::maxParticlesPerCell(lexer* p, fdm* a, double d50, bool top
     return 6.0*p->DXN[IP]*p->DYN[JP]*(p->DZN[KP]-(topo?(0.5*p->DZN[KP]+a->topo(i,j,k)):0.0))/((PI*pow(d50,3.0)));
 }
 
+/// @brief Max particles in plane
 int particle_func::maxParticlesPerXY(lexer* p, fdm* a, double d50)
 {
     return ceil(p->DXN[IP]*p->DYN[JP]*(1-p->S24)*6.0/(PI*pow(d50,2.0)));
 }
 
+/// @brief Count particles in cell
 void particle_func::particlesPerCell(lexer* p, ghostcell* pgc, particles_obj* PP)
 {
     PLAINLOOP
@@ -630,6 +624,7 @@ void particle_func::particlesPerCell(lexer* p, ghostcell* pgc, particles_obj* PP
     pgc->start4V(p,cellSum,10);
 }
 
+/// @brief Calculate complete intra-particle stress trensor
 void particle_func::particleStressTensor(lexer* p, fdm* a, ghostcell* pgc, particles_obj* PP)
 {
     double theta;
@@ -642,6 +637,7 @@ void particle_func::particleStressTensor(lexer* p, fdm* a, ghostcell* pgc, parti
     pgc->start4V(p,stressTensor,10);
 }
 
+/// @brief Calculate intra-particle stress trensor for cells around (`increment::i`,`increment::j`,`increment::k`)
 void particle_func::particleStressTensorUpdateIJK(lexer* p, fdm* a, particles_obj* PP)
 {
     double theta;
@@ -659,12 +655,14 @@ void particle_func::particleStressTensorUpdateIJK(lexer* p, fdm* a, particles_ob
             }
 }
 
+/// @brief Calculate intra-particle stress trensor for cell ( \p i , \p j , \p k )
 void particle_func::updateParticleStressTensor(lexer* p, fdm* a, particles_obj* PP, int i, int j, int k)
 {
     double theta=theta_s(p,a,PP,i,j,k);
     stressTensor[IJK]=Ps*pow(theta,beta)/max(theta_crit-theta,epsilon*(1.0-theta));
 }
 
+/// @brief Calculate solid volume fraction for cell ( \p i , \p j , \p k )
 double particle_func::theta_s(lexer* p, fdm* a, particles_obj* PP, int i, int j, int k)
 {
     double theta;
@@ -680,6 +678,7 @@ double particle_func::theta_s(lexer* p, fdm* a, particles_obj* PP, int i, int j,
     return theta;
 }    
 
+/// @brief Calculate drag force parameter
 double particle_func::drag_model(lexer* p, double d, double du, double dv, double dw, double thetas) const
 {
     const double thetaf = 1.0-thetas;
@@ -694,6 +693,7 @@ double particle_func::drag_model(lexer* p, double d, double du, double dv, doubl
     return Dp;
 }
 
+/// @brief Determine wether or not a particle would move and set its flag accordingly
 void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
 {
     double RKu,RKv,RKw;
@@ -750,11 +750,13 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
     }
 }
 
+/// @brief All debug code
 void particle_func::debug(lexer* p, fdm* a, ghostcell* pgc, tracers_obj* PP)
 {
     
 }
 
+/// @brief Remove stationary particles outside of `fdm::topo`
 void particle_func::fixPos(lexer* p, fdm* a, tracers_obj* PP)
 {
     PARTICLELOOP

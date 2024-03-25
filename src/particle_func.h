@@ -40,40 +40,40 @@ class particle_func: private increment
 public:
 
 protected:
-    particle_func(lexer*,int=10,double=0.001,double=2700);
+    particle_func(lexer* p);
     virtual ~particle_func();
     
     // Parallelization
-    int remove(lexer*,tracers_obj*);
-    int transfer(lexer*,ghostcell*,tracers_obj*,int);
-    int transfer(lexer*,ghostcell*,particles_obj*,int);
+    int remove(lexer* p,tracers_obj* PP);
+    int transfer(lexer* p,ghostcell* pgc, tracers_obj* PP,int);
+    int transfer(lexer* p,ghostcell* pgc, particles_obj* PP,int);
 
     // Movement
-    void advect(lexer*,fdm*,tracers_obj*,int=0,double=0,double=0,double=0);
-    void advect(lexer*,fdm*,particles_obj*,int=0,double=0,double=0,double=0);
-    void transport(lexer*,fdm*,particles_obj*,int=0);
-    void make_stationary(lexer*,fdm*,tracers_obj*,int=0);
-    void make_stationary(lexer*,fdm*,particles_obj*,int=0);
-    void make_moving(lexer*,fdm*,particles_obj*);
+    void advect(lexer* p, fdm* a, tracers_obj* PP,int=0,double=0,double=0,double=0);
+    void advect(lexer* p, fdm* a, particles_obj* PP,int=0,double=0,double=0,double=0);
+    void transport(lexer* p, fdm* a, particles_obj* PP,int=0);
+    void make_stationary(lexer* p, fdm* a, tracers_obj* PP,int=0);
+    void make_stationary(lexer* p, fdm* a, particles_obj* PP,int=0);
+    void make_moving(lexer* p, fdm* a, particles_obj* PP);
 
     // Utility
-    double reynolds(lexer*,fdm*,particles_obj*,int);
-    double settling_vel(lexer*,fdm*,particles_obj*,int);
-    double drag_coefficient(lexer*,fdm*,particles_obj*,int);
-    double volume(particles_obj*,int);
-    double maxParticlesPerCell(lexer*,fdm*,double,bool=true);
-    int maxParticlesPerXY(lexer*,fdm*,double);
-    void particlesPerCell(lexer*,ghostcell*,particles_obj*);
-    void particleStressTensor(lexer*,fdm*,ghostcell*,particles_obj*);
-    void particleStressTensorUpdateIJK(lexer*,fdm*,particles_obj*);
-    void updateParticleStressTensor(lexer*,fdm*,particles_obj*,int,int,int);
-    double theta_s(lexer*,fdm*,particles_obj*,int,int,int);
-    double drag_model(lexer*,double,double,double,double,double) const;
-    void debug(lexer*,fdm*,ghostcell*,tracers_obj*);
-    void fixPos(lexer*,fdm*,tracers_obj*);
+    double reynolds(lexer* p, fdm* a, particles_obj* PP,int);
+    double settling_vel(lexer* p, fdm* a, particles_obj* PP,int);
+    double drag_coefficient(lexer* p, fdm* a, particles_obj* PP,int);
+    double volume(particles_obj* PP,int);
+    double maxParticlesPerCell(lexer* p, fdm* a, double,bool=true);
+    int maxParticlesPerXY(lexer* p, fdm* a, double);
+    void particlesPerCell(lexer* p, ghostcell* pgc, particles_obj* PP);
+    void particleStressTensor(lexer* p, fdm* a, ghostcell* pgc, particles_obj* PP);
+    void particleStressTensorUpdateIJK(lexer* p, fdm* a, particles_obj* PP);
+    void updateParticleStressTensor(lexer* p, fdm* a, particles_obj* PP,int,int,int);
+    double theta_s(lexer* p, fdm* a, particles_obj* PP,int,int,int);
+    double drag_model(lexer* p, double,double,double,double,double) const;
+    void debug(lexer* p, fdm* a, ghostcell* pgc, tracers_obj*);
+    void fixPos(lexer* p, fdm* a, tracers_obj* PP);
 
     // memory management
-    void cleanup(lexer*,fdm*,tracers_obj*,int);
+    void cleanup(lexer* p, fdm* a, tracers_obj* PP,int);
 protected:
     /// @brief Inter-particle stresses per cell
     double* stressTensor;

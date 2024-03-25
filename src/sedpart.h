@@ -105,6 +105,7 @@ private:
     /// @brief Particles exchanged between all partitions
     int gxchange;
 
+    /// @brief Total volume change in cubic meter
     double volumeChangeTotal;
 
     /// @brief integer rand() scaler
@@ -125,12 +126,13 @@ private:
 	field4 active_topo;
 
 
-	/// Printing
+	// PRINT
 
 	/// @brief Output file name
 	char name[100];
     /// @brief Name of individual output files
     char pname[100];
+    /// @brief Latest printed time
     double printtime;
     /// @brief Number of print iterations
     int printcount;
