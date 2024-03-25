@@ -26,24 +26,24 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 /// @brief Printing contol function
-void sedpart::print_particles(lexer* p, fdm* a, ghostcell* pgc)
+void sedpart::print_particles(lexer* p)
 {
-    if(((p->count%p->Q181==0 && p->Q182<0.0 && p->Q180==1 )|| (p->count==0 &&  p->Q182<0.0 && p->Q180==1)) && p->Q181>0)
+    if((p->count%p->Q181==0 || p->count==0) && (p->Q180==1 && p->Q181>0 && p->Q182<0.0))
 	{
-    print_vtp(p,a,pgc);
+    print_vtp(p);
 	++printcount;
 	}
     
-    if((p->simtime>p->fsfprinttime && p->Q182>0.0 && p->Q180==1) || (p->count==0 &&  p->Q182>0.0))
+    if((p->simtime>p->partprinttime || p->count==0) && (p->Q180==1 && p->Q181<0 && p->Q182>0.0))
     {
-    print_vtp(p,a,pgc);
+    print_vtp(p);
     p->partprinttime+=p->Q182;
     }
     
 }
 
 /// @brief Printing particle as vtp
-void sedpart::print_vtp(lexer* p, fdm* a, ghostcell* pgc)
+void sedpart::print_vtp(lexer* p)
 {
 	int numpt=0;
 	const int print_flag=p->Q183;
@@ -61,9 +61,9 @@ void sedpart::print_vtp(lexer* p, fdm* a, ghostcell* pgc)
 	float ffn;
 	
 	if(p->mpirank==0)
-	pvtp_pos(p,a,pgc);
+	pvtp_pos(p);
 
-    header_pos(p,a,pgc);
+    header_pos(p);
 
 	ofstream result;
 	result.open(name, ios::binary);

@@ -43,8 +43,11 @@ Author: Alexander Hanke
 sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p), PP(10,p->S20,p->S22,true), active_box(p), active_topo(p), irand(10000), drand(irand)
 {
     pvrans = new vrans_f(p,pgc);
-    // pbedshear  = new bedshear(p,pturb);
-    printcount = 0;
+    if(p->I40!=1)
+    {
+        printcount = 0;
+        p->partprinttime=0.0;
+    }
 
     // Create Folder
 	if(p->mpirank==0 && (p->Q180>0||p->Q182>0))
@@ -120,7 +123,7 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 	}
 
     /// print out
-	print_particles(p,a,pgc);
+	print_particles(p);
 
 	gparticle_active = pgc->globalisum(PP.size);
     gremoved = pgc->globalisum(removed);
@@ -148,8 +151,7 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     particleStressTensor(p,a,pgc,&PP);
     
     // print
-    print_vtp(p,a,pgc);
-    printcount++;
+    print_particles(p);
     gparticle_active = pgc->globalisum(PP.size);
     if(p->mpirank==0)
         cout<<"Sediment particles: active: "<<gparticle_active<<endl;
@@ -158,12 +160,16 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     pvrans->sed_update(p,a,pgc);
 }
 
-void sedpart::start_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow*, slice &P, slice &Q)
+/// @brief SFLOW calculation function
+void sedpart::start_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow* pflow, slice &P, slice &Q)
 {
+
 }
 
+/// @brief SFLOW initialization function
 void sedpart::ini_sflow(lexer *p, fdm2D *b, ghostcell *pgc)
 {
+
 }
 
 /// @brief Updates the topography for the CFD solver
@@ -201,6 +207,7 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
     pflow->gcio_update(p,a,pgc);
 }
 
+/// @brief Updates the topography for the SFLOW solver
 void sedpart::update_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow)
 {
 }

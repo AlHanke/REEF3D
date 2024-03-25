@@ -28,7 +28,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 /// @brief Printing partion wrapping pvtp file
-void sedpart::pvtp_pos(lexer* p, fdm* a, ghostcell* pgc)
+void sedpart::pvtp_pos(lexer* p)
 {
 
     // if(p->P15==1)
@@ -59,7 +59,7 @@ void sedpart::pvtp_pos(lexer* p, fdm* a, ghostcell* pgc)
 
 	for(int n=0; n<p->M10; ++n)
 	{
-    piecename_pos(p,a,pgc,n);
+    piecename_pos(p,n);
     result<<"<Piece Source=\""<<pname<<"\"/>"<<endl;
 	}
 
@@ -70,7 +70,7 @@ void sedpart::pvtp_pos(lexer* p, fdm* a, ghostcell* pgc)
 }
 
 /// @brief Setting name of indivdual vtp file for pvtp file
-void sedpart::piecename_pos(lexer* p,fdm* a, ghostcell* pgc, int n)
+void sedpart::piecename_pos(lexer* p, int n)
 {
 
     // if(p->P15==1)
@@ -84,7 +84,7 @@ void sedpart::piecename_pos(lexer* p,fdm* a, ghostcell* pgc, int n)
 }
 
 /// @brief Setting name of indivdual vtp file
-void sedpart::header_pos(lexer* p, fdm* a, ghostcell* pgc)
+void sedpart::header_pos(lexer* p)
 {
 
     // if(p->P15==1)

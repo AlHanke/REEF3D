@@ -81,12 +81,12 @@ private:
     void seed_topo(lexer*,fdm*);
 
     // PRINT
-	void print_particles(lexer*,fdm*,ghostcell*);
-	void print_vtp(lexer*,fdm*,ghostcell*);
+	void print_particles(lexer*);
+	void print_vtp(lexer*);
 	
-	void pvtp_pos(lexer*,fdm*,ghostcell*);
-    void header_pos(lexer*,fdm*,ghostcell*);
-    void piecename_pos(lexer*,fdm*,ghostcell*,int);
+	void pvtp_pos(lexer*);
+    void header_pos(lexer*);
+    void piecename_pos(lexer*,int);
 
 public:
 
