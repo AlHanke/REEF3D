@@ -40,7 +40,7 @@ public:
     tracers_obj(size_t _capacity=10, size_t _size=0, double _scale_factor=1.25);
     virtual ~tracers_obj();
 
-    void erase(size_t _index);
+    virtual void erase(size_t _index);
     void erase_all();
     size_t reserve(size_t capacity_desired=0);
     size_t add(double x, double y, double z, int flag);

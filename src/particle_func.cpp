@@ -308,36 +308,6 @@ int particle_func::remove(lexer* p, tracers_obj* PP)
     return removed;
 }
 
-int particle_func::remove(lexer* p, particles_obj* PP)
-{
-    bool inBounds=false;
-    int removed=0;
-    int i,j,k;
-    boundarycheck bounderies;
-
-    PARTICLELOOP
-        if(PP->Flag[n]>0)
-        {
-            i = p->posc_i(PP->X[n]);
-            j = p->posc_j(PP->Y[n]);
-            k = p->posc_k(PP->Z[n]);
-
-            inBounds=bounderies.minboundcheck(p,i,j,k,1);
-            if (inBounds)
-                inBounds=bounderies.maxboundcheck(p,i,j,k,1);
-
-			// remove out of bounds particles
-            if(!inBounds)
-            {
-                cellSum[IJK]-=PP->PackingFactor[n];
-                PP->erase(n);
-                removed++;
-            }
-        }
-    
-    return removed;
-}
-
 /// @brief Transfer function
 /** Is responsible to transfer tracers to one of the surrounding partitions*/
 /// @param p partition object
@@ -620,16 +590,14 @@ void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP, int min
         }
 }
 
-/// @brief 
-/// @param PP 
-/// @param index 
-/// @return 
+/// @brief Calculates volume of particles
+/// @return Volume of partice with \p index
 double particle_func::volume(particles_obj* PP, int index)
 {
     return PI*pow(PP->d50,3.0)*PP->PackingFactor[index]/6.0;
 }
 
-void particle_func::cleanup(lexer* p, fdm* a, particles_obj* PP, int max)
+void particle_func::cleanup(lexer* p, fdm* a, tracers_obj* PP, int max)
 {
 
 }
@@ -782,12 +750,12 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
     }
 }
 
-void particle_func::debug(lexer* p, fdm* a, ghostcell* pgc, particles_obj* PP)
+void particle_func::debug(lexer* p, fdm* a, ghostcell* pgc, tracers_obj* PP)
 {
     
 }
 
-void particle_func::fixPos(lexer* p, fdm* a, particles_obj* PP)
+void particle_func::fixPos(lexer* p, fdm* a, tracers_obj* PP)
 {
     PARTICLELOOP
     if(PP->Flag[n]=0)

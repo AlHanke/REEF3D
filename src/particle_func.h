@@ -43,13 +43,12 @@ protected:
     particle_func(lexer*,int=10,double=0.001,double=2700);
     virtual ~particle_func();
     
-    // para
+    // Parallelization
     int remove(lexer*,tracers_obj*);
-    int remove(lexer*,particles_obj*);
     int transfer(lexer*,ghostcell*,tracers_obj*,int);
     int transfer(lexer*,ghostcell*,particles_obj*,int);
 
-    // mov
+    // Movement
     void advect(lexer*,fdm*,tracers_obj*,int=0,double=0,double=0,double=0);
     void advect(lexer*,fdm*,particles_obj*,int=0,double=0,double=0,double=0);
     void transport(lexer*,fdm*,particles_obj*,int=0);
@@ -57,7 +56,7 @@ protected:
     void make_stationary(lexer*,fdm*,particles_obj*,int=0);
     void make_moving(lexer*,fdm*,particles_obj*);
 
-    // util
+    // Utility
     double reynolds(lexer*,fdm*,particles_obj*,int);
     double settling_vel(lexer*,fdm*,particles_obj*,int);
     double drag_coefficient(lexer*,fdm*,particles_obj*,int);
@@ -70,25 +69,32 @@ protected:
     void updateParticleStressTensor(lexer*,fdm*,particles_obj*,int,int,int);
     double theta_s(lexer*,fdm*,particles_obj*,int,int,int);
     double drag_model(lexer*,double,double,double,double,double) const;
-    void debug(lexer*,fdm*,ghostcell*,particles_obj*);
-    void fixPos(lexer*,fdm*,particles_obj*);
+    void debug(lexer*,fdm*,ghostcell*,tracers_obj*);
+    void fixPos(lexer*,fdm*,tracers_obj*);
 
     // memory management
-    void cleanup(lexer*,fdm*,particles_obj*,int);
+    void cleanup(lexer*,fdm*,tracers_obj*,int);
 protected:
+    /// @brief Inter-particle stresses per cell
     double* stressTensor;
+    /// @brief Number of particles in a cell
     double* cellSum;
+    /// @brief Volume change per column
     double* topoVolumeChange;
-    double totalSolidVolumeChange;
-    double totalTopoVolumeChange;
-private:
-    const double kinVis;
-    const double drho;
 
-    const double Ps; // in pressure unit
-    const double beta; // 2<=beta<=5
+private:
+    /// @brief Kinetic viscory of fluid\n Initialized using `lexer::W1` and `lexer::W2`
+    const double kinVis;
+    /// @brief Ratio of fluid and solid densities\n Initialized using `lexer::W1` and `lexer::S22`
+    const double drho;
+    /// @brief Constant for stress trensor calculation\n Initialized using `lexer::Q14` and given in Pascal
+    const double Ps;
+    /// @brief Constant for stress trensor calculation\n Initialized using `lexer::Q15` and should be in range of \f$2\leq\beta\leq5\f$
+    const double beta;
+    /// @brief Dampener for stress trensor calculation\n Used to dampen out sudden acceleration resulting from high packing densities, initialized using `lexer::Q16`
     const double epsilon;
-    const double theta_crit; // 0.6-0.65
+    /// @brief Maximum solid volume fraction of a fully packed bed\n Usually between 60% and 65%
+    const double theta_crit;
 };
 
 #endif
