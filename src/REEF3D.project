@@ -1764,9 +1764,8 @@
           <File Name="sediment_io.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Particle">
-          <File Name="sedpart_allocate.cpp"/>
-          <File Name="sedpart_printpvtu.cpp"/>
-          <File Name="sedpart_printvtu.cpp"/>
+          <File Name="sedpart_printpvtp.cpp"/>
+          <File Name="sedpart_printvtp.cpp"/>
           <File Name="sedpart_seed.cpp"/>
           <File Name="sedpart.cpp"/>
         </VirtualDirectory>

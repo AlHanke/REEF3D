@@ -25,23 +25,25 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
+/// @brief Printing contol function
 void sedpart::print_particles(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(((p->count%p->Q181==0 && p->Q182<0.0 && p->Q180==1 )|| (p->count==0 &&  p->Q182<0.0 && p->Q180==1)) && p->Q181>0)
 	{
-    print_vtu(p,a,pgc);
+    print_vtp(p,a,pgc);
 	++printcount;
 	}
     
     if((p->simtime>p->fsfprinttime && p->Q182>0.0 && p->Q180==1) || (p->count==0 &&  p->Q182>0.0))
     {
-    print_vtu(p,a,pgc);
+    print_vtp(p,a,pgc);
     p->partprinttime+=p->Q182;
     }
     
 }
 
-void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
+/// @brief Printing particle as vtp
+void sedpart::print_vtp(lexer* p, fdm* a, ghostcell* pgc)
 {
 	int numpt=0;
 	const int print_flag=p->Q183;
@@ -59,7 +61,7 @@ void sedpart::print_vtu(lexer* p, fdm* a, ghostcell* pgc)
 	float ffn;
 	
 	if(p->mpirank==0)
-	pvtu_pos(p,a,pgc);
+	pvtp_pos(p,a,pgc);
 
     header_pos(p,a,pgc);
 

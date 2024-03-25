@@ -55,7 +55,6 @@ public:
     void start_cfd(lexer*, fdm*, ghostcell*, ioflow*, reinitopo*, solver*) override;
     void ini_cfd(lexer*,fdm*,ghostcell*) override;
     void update_cfd(lexer*,fdm*,ghostcell*,ioflow*,reinitopo*) override;
-    void start_susp(lexer*, fdm*, ghostcell*, ioflow*, solver*) override;
     
     void start_sflow(lexer*, fdm2D*, ghostcell*, ioflow*, slice&, slice&) override;
     void ini_sflow(lexer*, fdm2D*, ghostcell*) override;
@@ -63,45 +62,9 @@ public:
     
     // ---
     void erode(lexer*,fdm*,ghostcell*);
-    // ---
-	
-    void relax(lexer*,ghostcell*) override;
-	double bedshear_point(lexer*,fdm*,ghostcell*) override;
-    
-    double qbeval(int,int) override;
-    void qbeget(int,int,double) override;
-    
-    double bedzhval(int,int) override;
-    
-    void ctimesave(lexer*, fdm*) override;
-    
-    void print_2D_bedload(lexer*, ghostcell*,ofstream&) override;
-    void print_3D_bedload(lexer*, ghostcell*,ofstream&) override;
-	void name_pvtu_bedload(lexer*, ghostcell*,ofstream&) override;
-    void name_vtu_bedload(lexer*, ghostcell*,ofstream&, int*, int &) override;
-    void offset_vtp_bedload(lexer*, ghostcell*,ofstream&, int*, int &) override;
-    void offset_vtu_bedload(lexer*, ghostcell*,ofstream&, int*, int &) override;
-    
-	void print_2D_bedshear(lexer*, ghostcell*,ofstream&) override;
-    void print_3D_bedshear(lexer*, ghostcell*,ofstream&) override;
-	void name_pvtu_bedshear(lexer*, ghostcell*,ofstream&) override;
-    void name_vtu_bedshear(lexer*, ghostcell*,ofstream&, int*, int &) override;
-    void offset_vtp_bedshear(lexer*, ghostcell*,ofstream&, int*, int &) override;
-    void offset_vtu_bedshear(lexer*, ghostcell*,ofstream&, int*, int &) override;
-    
-    void print_2D_parameter1(lexer*, ghostcell*,ofstream&) override;
-    void print_3D_parameter1(lexer*, ghostcell*,ofstream&) override;
-	void name_pvtu_parameter1(lexer*, ghostcell*,ofstream&) override;
-    void name_vtu_parameter1(lexer*, ghostcell*,ofstream&, int*, int &) override;
-    void offset_vtp_parameter1(lexer*, ghostcell*,ofstream&, int*, int &) override;
-    void offset_vtu_parameter1(lexer*, ghostcell*,ofstream&, int*, int &) override;
-    
-    void print_2D_parameter2(lexer*, ghostcell*,ofstream&) override;
-    void print_3D_parameter2(lexer*, ghostcell*,ofstream&) override;
-	void name_pvtu_parameter2(lexer*, ghostcell*,ofstream&) override;
-    void name_vtu_parameter2(lexer*, ghostcell*,ofstream&, int*, int &) override;
-    void offset_vtp_parameter2(lexer*, ghostcell*,ofstream&, int*, int &) override;
-    void offset_vtu_parameter2(lexer*, ghostcell*,ofstream&, int*, int &) override;
+
+    void write_state_particles(ofstream&);
+    void read_state_particles(ifstream&);
 
 protected:
 
@@ -113,16 +76,15 @@ private:
     void posseed_topo(lexer*,fdm*);
     void posseed_suspended(lexer*,fdm*);
     void point_source(lexer*,fdm*);
-    void allocate(lexer*);
     void topo_influx(lexer*,fdm*);
     void seed_srand(lexer*);
     void seed_topo(lexer*,fdm*);
 
     // PRINT
 	void print_particles(lexer*,fdm*,ghostcell*);
-	void print_vtu(lexer*,fdm*,ghostcell*);
+	void print_vtp(lexer*,fdm*,ghostcell*);
 	
-	void pvtu_pos(lexer*,fdm*,ghostcell*);
+	void pvtp_pos(lexer*,fdm*,ghostcell*);
     void header_pos(lexer*,fdm*,ghostcell*);
     void piecename_pos(lexer*,fdm*,ghostcell*,int);
 
@@ -175,7 +137,8 @@ private:
     /// @brief File numer
     int num;
 
-    #define PARTLOOP for(int n=0;n<PP.loopindex;++n)
+    #define PARTLOOP for(size_t n=0;n<PP.loopindex;n++)
+    #define PARTICLELOOP for(size_t n=0;n<PP.loopindex;n++) if(PP.Flag[n]>INT32_MIN)
 };
 
 #endif
