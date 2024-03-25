@@ -33,7 +33,7 @@ void particle_f::print_particles(lexer* p, fdm* a, ghostcell* pgc)
 	++printcount;
 	}
     
-    if((p->simtime>p->fsfprinttime && p->Q182>0.0 && p->Q180==1) || (p->count==0 &&  p->Q182>0.0))
+    if((p->simtime>p->partprinttime && p->Q182>0.0 && p->Q180==1) || (p->count==0 &&  p->Q182>0.0))
     {
     print_vtu(p,a,pgc);
     p->partprinttime+=p->Q182;
