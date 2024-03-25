@@ -771,12 +771,12 @@ void lexer::ini_default()
     Q101=0;             // int ini particle as topo
     Q102=0.9;           // double max distance from topo = Q102*dz
     Q110=0;             // int ini particle as box
-    Q111=0;             // int ini particle x-dir
-    Q111_x=0.0;         // double ini particle x-dir
-    Q112=0;             // int ini particle y-dir
-    Q112_y=0.0;         // double ini particle y-dir
-    Q113=0;             // int ini particle z-dir
-    Q113_z=0.0;         // double ini particle z-dir
+    Q111=0;             // int ini particle x-dir  - not used
+    Q111_x=0.0;         // double ini particle x-dir  - not used
+    Q112=0;             // int ini particle y-dir  - not used
+    Q112_y=0.0;         // double ini particle y-dir  - not used
+    Q113=0;             // int ini particle z-dir  - not used
+    Q113_z=0.0;         // double ini particle z-dir  - not used
     Q120=0;             // int seed particles in suspension
     Q121=1;             // int iterations between pariticle seeding in suspension
     Q122=2;             // int particles per cell in susp seeding      

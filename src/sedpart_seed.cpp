@@ -29,7 +29,7 @@ Author: Hans Bihs & Alexander Hanke
 using std::cout;
 using std::endl;
 
-
+/// @brief Determines cell to be seeded with particles and maximum number of particles
 void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
 {
     // ini
@@ -93,6 +93,7 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     maxparticle = ceil(p->Q25*double(pgc->globalisum(partnum)));
 }
 
+/// @brief Calls seeding functions
 void sedpart::seed(lexer* p, fdm* a)
 {
     if(p->Q110>0)
@@ -101,7 +102,7 @@ void sedpart::seed(lexer* p, fdm* a)
         posseed_topo(p,a);
 }
 
-
+/// @brief Seeds particle into boxes defined using `lexer::Q110`
 void sedpart::posseed_box(lexer* p, fdm* a)
 {
     seed_srand(p);
@@ -125,7 +126,7 @@ void sedpart::posseed_box(lexer* p, fdm* a)
             }
 }
 
-
+/// @brief Seeds particle in active topo cells
 void sedpart::posseed_topo(lexer* p, fdm* a)
 {
     seed_srand(p);
@@ -137,6 +138,7 @@ void sedpart::posseed_topo(lexer* p, fdm* a)
     }
 }
 
+/// @brief Seeds particle into suspension at inlet boundary
 void sedpart::posseed_suspended(lexer* p, fdm* a)
 {
     seed_srand(p);
@@ -165,6 +167,7 @@ void sedpart::posseed_suspended(lexer* p, fdm* a)
         }
 }
 
+/// @brief Seeds particle at points defined using `lexer::Q61`
 void sedpart::point_source(lexer* p, fdm* a)
 {
     for(size_t n=0;n<p->Q61;n++)
@@ -175,6 +178,7 @@ void sedpart::point_source(lexer* p, fdm* a)
         }
 }
 
+/// @brief Seeds particles into active topo cells at inlet boundary
 void sedpart::topo_influx(lexer* p, fdm* a)
 {
     seed_srand(p);
@@ -189,7 +193,7 @@ void sedpart::topo_influx(lexer* p, fdm* a)
         }
     }
 }
-
+/// @brief Seeds `rand()` function
 void sedpart::seed_srand(lexer* p)
 {
     if(p->Q29>0)
@@ -199,6 +203,7 @@ void sedpart::seed_srand(lexer* p)
         srand((unsigned)time(0)*(p->mpirank+1));
 }
 
+/// @brief Seeds particle in relation to `fdm::topo`
 void sedpart::seed_topo(lexer* p, fdm* a)
 {
     double tolerance = 5e-18;
