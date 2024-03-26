@@ -44,7 +44,7 @@ void sixdof_obj::ray_cast_x(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 	int ir;
 	double u,v,w;
 	double denom;	
-	int insidecheck;
+	int checkin;
 	double psi = 1.0e-8*p->DXM;
 
 	for(n=ts; n<te; ++n)
@@ -61,6 +61,25 @@ void sixdof_obj::ray_cast_x(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 	Cy = tri_y[n][2];
 	Cz = tri_z[n][2];
 	
+    checkin = 0;
+    
+	if(Ax>=p->global_xmin && Ax<=p->global_xmax 
+    && Ay>=p->global_ymin && Ay<=p->global_ymax
+    && Az>=p->global_zmin && Az<=p->global_zmax)
+    checkin=1;
+    
+    if(Bx>=p->global_xmin && Bx<=p->global_xmax 
+    && By>=p->global_ymin && By<=p->global_ymax
+    && Bz>=p->global_zmin && Bz<=p->global_zmax)
+    checkin=1;
+    
+    if(Cx>=p->global_xmin && Cx<=p->global_xmax 
+    && Cy>=p->global_ymin && Cy<=p->global_ymax
+    && Cz>=p->global_zmin && Cz<=p->global_zmax)
+    checkin=1;
+        
+    if(checkin==1)
+    {
 	
 	ys = MIN3(Ay,By,Cy);
 	ye = MAX3(Ay,By,Cy);
@@ -68,11 +87,11 @@ void sixdof_obj::ray_cast_x(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 	zs = MIN3(Az,Bz,Cz);
 	ze = MAX3(Az,Bz,Cz);
 	
-	js = p->posf_j(ys);
-	je = p->posf_j(ye);
+	js = p->posc_j(ys);
+	je = p->posc_j(ye);
 	
-	ks = p->posf_k(zs);
-	ke = p->posf_k(ze);	
+	ks = p->posc_k(zs);
+	ke = p->posc_k(ze);	
 	
 	ys = MIN3(Ay,By,Cy) - epsi*p->DYP[js + marge];
 	ye = MAX3(Ay,By,Cy) + epsi*p->DYP[je + marge];
@@ -80,11 +99,11 @@ void sixdof_obj::ray_cast_x(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 	zs = MIN3(Az,Bz,Cz) - epsi*p->DZP[ks + marge];
 	ze = MAX3(Az,Bz,Cz) + epsi*p->DZP[ke + marge];
 
-	js = p->posf_j(ys);
-	je = p->posf_j(ye);
+	js = p->posc_j(ys);
+	je = p->posc_j(ye);
 	
-	ks = p->posf_k(zs);
-	ke = p->posf_k(ze);	
+	ks = p->posc_k(zs);
+	ke = p->posc_k(ze);	
 
 	
 	js = MAX(js,0);
@@ -150,9 +169,9 @@ void sixdof_obj::ray_cast_x(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 			
 			Rx = u*Ax + v*Bx + w*Cx;
 			
-            i = p->posf_i(Rx);
+             i = p->posc_i(Rx);
             
-            int distcheck=1;
+             int distcheck=1;
   
             
             if(Rx<p->XP[IP])
@@ -171,5 +190,6 @@ void sixdof_obj::ray_cast_x(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 			}
 		}
 	}
+    }
 	
 }

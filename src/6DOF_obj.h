@@ -35,6 +35,7 @@ Author: Tobias Martin
 
 class lexer;
 class fdm;
+class fdm2D;
 class ghostcell;
 class reinidisc;
 class mooring;
@@ -57,7 +58,10 @@ public:
 	virtual ~sixdof_obj();
 	
 	virtual void solve_eqmotion(lexer*,fdm*,ghostcell*,int,vrans*,vector<net*>&);
-	virtual void initialize(lexer*,fdm*,ghostcell*,vector<net*>&);
+    
+	void initialize_cfd(lexer*,fdm*,ghostcell*,vector<net*>&);
+    
+    void initialize_sflow(lexer*,ghostcell*);
     
 	// Additional functions
     void transform(lexer*, fdm*, ghostcell*, bool);
@@ -114,7 +118,7 @@ private:
     double Hsolidface(lexer*, fdm*, int,int,int);
 	double Hsolidface_t(lexer*, fdm*, int,int,int);
 	
-	void geometry(lexer*, fdm*, ghostcell*);
+	void geometry_parameters(lexer*, fdm*, ghostcell*);
     void geometry_stl(lexer*, fdm*, ghostcell*);
 	void geometry_f(double&,double&,double&,double&,double&,double&,double&,double&,double&);
     void geometry_ls(lexer*, fdm*, ghostcell*);
@@ -162,9 +166,9 @@ private:
     void ray_cast_x(lexer*, fdm*, ghostcell*,int,int);
 	void ray_cast_y(lexer*, fdm*, ghostcell*,int,int);
 	void ray_cast_z(lexer*, fdm*, ghostcell*,int,int);
+    void ray_cast_direct(lexer*, fdm*, ghostcell*,int,int);
     void reini_AB2(lexer*, fdm*, ghostcell*, field&);
     void reini_RK2(lexer*, fdm*, ghostcell*, field&);
-    
     
     /* Rigid body motion
         - e: quaternions

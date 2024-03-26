@@ -46,7 +46,7 @@ void lexer::read_control()
 	{
 		control>>c;
 
-	if (c == '/')
+	if (c=='/')
 	{
 	control.ignore(1000, '\n');
 	}
@@ -2126,6 +2126,9 @@ void lexer::read_control()
                 case  186: control>>X186;
 						 clear(c,numint);
 						 break;
+                case  188: control>>X188;
+						 clear(c,numint);
+						 break;
                 case  205: control>>X205;
 						 clear(c,numint);
 						 break;
@@ -2965,7 +2968,7 @@ void lexer::read_control()
 	while(!control.eof())
 	{
 		control>>c;
-		if (c == '/')
+		if (c=='/')
 			control.ignore(1000, '\n');
 		else
 		{

@@ -78,18 +78,24 @@ void sixdof_obj::rk3(lexer *p, ghostcell *pgc, int iter)
     
     if(iter==1)
     {
-        p_ = 0.75*pk_ + 0.25*p_ + 0.25*p->dt*dp_;
-        c_ = 0.75*ck_ + 0.25*c_ + 0.25*p->dt*dc_;
-        h_ = 0.75*hk_ + 0.25*h_ + 0.25*p->dt*dh_;
-        e_ = 0.75*ek_ + 0.25*e_ + 0.25*p->dt*de_;    
+        get_trans(p,pgc, dp_, dc_, p_, c_);    
+        get_rot(dh_, de_, h_, e_);
+    
+        p_ = 0.75*pk_ + 0.25*p_ + 0.25*p->dt*dpn1_;
+        c_ = 0.75*ck_ + 0.25*c_ + 0.25*p->dt*dcn1_;
+        h_ = 0.75*hk_ + 0.25*h_ + 0.25*p->dt*dhn1_;
+        e_ = 0.75*ek_ + 0.25*e_ + 0.25*p->dt*den1_;    
     }  
     
-    if(iter==2)
+    else
     {
-        p_ = (1.0/3.0)*pk_ + (2.0/3.0)*p_ + (2.0/3.0)*p->dt*dp_;
-        c_ = (1.0/3.0)*ck_ + (2.0/3.0)*c_ + (2.0/3.0)*p->dt*dc_;
-        h_ = (1.0/3.0)*hk_ + (2.0/3.0)*h_ + (2.0/3.0)*p->dt*dh_;
-        e_ = (1.0/3.0)*ek_ + (2.0/3.0)*e_ + (2.0/3.0)*p->dt*de_;         
+        get_trans(p,pgc, dp_, dc_, p_, c_);    
+        get_rot(dh_, de_, h_, e_);
+        
+        p_ = (1.0/3.0)*pk_ + (2.0/3.0)*p_ + (2.0/3.0)*p->dt*dpn1_;
+        c_ = (1.0/3.0)*ck_ + (2.0/3.0)*c_ + (2.0/3.0)*p->dt*dcn1_;
+        h_ = (1.0/3.0)*hk_ + (2.0/3.0)*h_ + (2.0/3.0)*p->dt*dhn1_;
+        e_ = (1.0/3.0)*ek_ + (2.0/3.0)*e_ + (2.0/3.0)*p->dt*den1_;         
     }
 }
 
@@ -113,10 +119,10 @@ void sixdof_obj::rk2(lexer *p, ghostcell *pgc, int iter)
     
     else
     {  
-        p_ = 0.5*pk_ + 0.5*p_ + 0.5*p->dt*dp_;
-        c_ = 0.5*ck_ + 0.5*c_ + 0.5*p->dt*dc_;
-        h_ = 0.5*hk_ + 0.5*h_ + 0.5*p->dt*dh_;
-        e_ = 0.5*ek_ + 0.5*e_ + 0.5*p->dt*de_;         
+        p_ = 0.5*pk_ + 0.5*p_ + 0.5*p->dt*dpn1_;
+        c_ = 0.5*ck_ + 0.5*c_ + 0.5*p->dt*dcn1_;
+        h_ = 0.5*hk_ + 0.5*h_ + 0.5*p->dt*dhn1_;
+        e_ = 0.5*ek_ + 0.5*e_ + 0.5*p->dt*den1_;         
     }
 }
 

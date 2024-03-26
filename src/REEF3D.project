@@ -1841,9 +1841,10 @@
           <File Name="6DOF_obj_rotation.cpp"/>
           <File Name="6DOF_obj_forcing.cpp"/>
           <VirtualDirectory Name="Initialize">
+            <File Name="6DOF_obj_ini_sflow.cpp"/>
+            <File Name="6DOF_obj_ini_cfd.cpp"/>
             <File Name="6DOF_obj_ini_position.cpp"/>
             <File Name="6DOF_obj_ini_parameters.cpp"/>
-            <File Name="6DOF_obj_ini.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="Print">
             <File Name="6DOF_obj_print_vtp.cpp"/>
@@ -1869,6 +1870,7 @@
               <File Name="6DOF_obj_reini_AB2.cpp"/>
             </VirtualDirectory>
             <VirtualDirectory Name="Ray Cast 3D">
+              <File Name="6DOF_obj_ray3D_direct.cpp"/>
               <File Name="6DOF_obj_ray3D_z.cpp"/>
               <File Name="6DOF_obj_ray3D_y.cpp"/>
               <File Name="6DOF_obj_ray3D_x.cpp"/>
