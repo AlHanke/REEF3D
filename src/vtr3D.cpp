@@ -712,7 +712,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 //  Velocities
     iin=3*4*(p->pointnum);
 	result.write((char*)&iin, sizeof (int));
-    TPLOOP
+    TPREVLOOP
 	{
 	ffn=float(p->ipol1(a->u));
 	result.write((char*)&ffn, sizeof (float));
@@ -730,7 +730,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 //  Pressure
 	iin=4*(p->pointnum);
 	result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4press(a->press)-p->pressgage);
 	result.write((char*)&ffn, sizeof (float));
@@ -742,7 +742,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 //  eddyv
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4_a(a->eddyv));
 	result.write((char*)&ffn, sizeof (float));
@@ -752,7 +752,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 	nodefill4(p,a,pgc,a->phi,eta);
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	if(p->P18==1)
 	ffn=float(p->ipol4phi(a,a->phi));
@@ -781,7 +781,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 	{
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4_a(a->ro));
 	result.write((char*)&ffn, sizeof (float));
@@ -793,7 +793,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 	{
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4(a->visc));
 	result.write((char*)&ffn, sizeof (float));
@@ -805,7 +805,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 	{
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4(a->vof));
 	result.write((char*)&ffn, sizeof (float));
@@ -817,7 +817,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 	{
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4press(a->Fi));
 	result.write((char*)&ffn, sizeof (float));
@@ -830,7 +830,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 //  conc
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4(a->conc));
 	result.write((char*)&ffn, sizeof (float));
@@ -842,7 +842,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 //  topo
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
     ffn=float(p->ipol4_a(a->topo));
     //ffn = float(-a->bed(i,j)+p->ZN[KP1]);
@@ -871,7 +871,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 	{
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4_a(a->test));
 	result.write((char*)&ffn, sizeof (float));
@@ -881,7 +881,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 //  elevation
 	iin=4*(p->pointnum)*3;
 	result.write((char*)&iin, sizeof (int));
-    TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->pos_z()+0.5*p->DZN[KP]);
 	result.write((char*)&ffn, sizeof (float));
@@ -892,7 +892,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 //  solid
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4_a(a->solid));
 	result.write((char*)&ffn, sizeof (float));
@@ -904,7 +904,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 //  floating
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4_a(a->fb));
 	result.write((char*)&ffn, sizeof (float));
@@ -916,7 +916,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 //  walldist
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4_a(a->walld));
 	result.write((char*)&ffn, sizeof (float));
