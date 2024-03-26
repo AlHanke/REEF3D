@@ -75,7 +75,7 @@ public:
 
 private:
     void print3D(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
-    void pvtu(fdm*,lexer*,ghostcell*,turbulence*,heat*,data*,concentration*,multiphase*,sediment*);
+    void pvtr(fdm*,lexer*,ghostcell*,turbulence*,heat*,data*,concentration*,multiphase*,sediment*);
     void header(fdm*,lexer*,ghostcell*);
     void name_iter(fdm*,lexer*,ghostcell*);
     void name_time(fdm*,lexer*,ghostcell*);

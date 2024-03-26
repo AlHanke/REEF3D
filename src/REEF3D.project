@@ -2594,7 +2594,7 @@
         </VirtualDirectory>
         <VirtualDirectory Name="VTR">
           <File Name="vtr3D_header.cpp"/>
-          <File Name="vtr3D_pvtu.cpp"/>
+          <File Name="vtr3D_pvtr.cpp"/>
         </VirtualDirectory>
         <File Name="vtu3D.cpp"/>
         <File Name="vtr3D.cpp"/>
