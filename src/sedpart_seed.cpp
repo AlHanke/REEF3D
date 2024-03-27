@@ -44,9 +44,9 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     size_t cellcountBox=0;
     for(int qn=0;qn<p->Q110;++qn)
     LOOP
-    if(p->XN[IP]>=p->Q110_xs[qn] && p->XN[IP]<=p->Q110_xe[qn]
-    && p->YN[JP]>=p->Q110_ys[qn] && p->YN[JP]<=p->Q110_ye[qn]
-    && p->ZN[KP]>=p->Q110_zs[qn] && p->ZN[KP]<=p->Q110_ze[qn])
+    if(p->XN[IP]>=p->Q110_xs[qn] && p->XN[IP1]<=p->Q110_xe[qn]
+    && p->YN[JP]>=p->Q110_ys[qn] && p->YN[JP1]<=p->Q110_ye[qn]
+    && p->ZN[KP1]>=p->Q110_zs[qn] && p->ZN[KP1]<=p->Q110_ze[qn])
     {
         active_box(i,j,k) = 1.0;
         ++cellcountBox;
@@ -58,7 +58,7 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     size_t cellcountTopo=0;
     BASELOOP
     {
-        if((a->topo(i,j,k)<0.5*p->DZN[KP]-tolerance)&&a->topo(i,j,k)>-p->DZN[KP]*ceil(p->Q102)-tolerance&&a->solid(i,j,k)>=0)
+        if( (a->topo(i,j,k)<0.5*p->DZN[KP]-tolerance) && (a->topo(i,j,k)>-p->DZN[KP]*ceil(p->Q102)-tolerance) && (a->solid(i,j,k)>-p->DXM))
         {
             active_topo(i,j,k) = 1.0;
             cellcountTopo++;
