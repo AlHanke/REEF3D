@@ -440,7 +440,7 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     pgc->gather_int(iextent,6,piextent,6);
 
     if(p->mpirank==0)
-    pvtu(a,p,pgc,pturb,pheat,pdata,pconc,pmp,psed);
+    pvtr(a,p,pgc,pturb,pheat,pdata,pconc,pmp,psed);
 
 
     name_iter(a,p,pgc);
