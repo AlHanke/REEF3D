@@ -142,11 +142,21 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 /// Initializes VRANS
 void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
-    // seed
-    seed_ini(p,a,pgc);
-    PP.reserve(maxparticle);
-    seed(p,a);
-    make_stationary(p,a,&PP);
+    if(p->I40!=1)
+    {
+        // seed
+        seed_ini(p,a,pgc);
+        PP.reserve(maxparticle);
+        seed(p,a);
+        make_stationary(p,a,&PP);
+    }
+    else
+    {
+    // state file
+    if(p->mpirank==0)
+    cout<<"Loaded particles from state file."<<endl;
+    }
+
     particlesPerCell(p,pgc,&PP);
     particleStressTensor(p,a,pgc,&PP);
     
@@ -225,9 +235,7 @@ void sedpart::write_state_particles(ofstream& result)
 {
     size_t ffs=PP.capacity;
     result.write((char*)&ffs, sizeof (size_t));
-    ffs=0;
-    PARTICLELOOP
-    ffs++;
+    ffs=PP.size;
     result.write((char*)&ffs, sizeof (size_t));
     float ffn;
     PARTICLELOOP
@@ -258,13 +266,11 @@ void sedpart::read_state_particles(ifstream& result)
     PP.erase_all();
     size_t ffs;
     result.read((char*)&ffs, sizeof (size_t));
-    cout<<ffs<<endl;
     PP.reserve(size_t(ffs));
     result.read((char*)&ffs, sizeof (size_t));
-    PP.loopindex=size_t(ffs);
     float ffn;
     double x,y,z,flag,u,v,w,packing;
-    PARTLOOP
+    for(size_t n=0; n<ffs;n++)
     {
         result.read((char*)&ffn, sizeof (float));
         x=double(ffn);

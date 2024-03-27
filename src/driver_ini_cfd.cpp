@@ -205,7 +205,7 @@ void driver::driver_ini_cfd()
     {
 	pini->stateini(p,a,pgc,pturb,psed);
     
-    if(p->S10==1)
+    if(p->S10==1||(p->Q10==2&&p->S10==2))
     psed->ini_cfd(p,a,pgc);
     }
 
