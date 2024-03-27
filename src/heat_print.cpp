@@ -39,7 +39,7 @@ void heat_print::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4_a(T));
 	result.write((char*)&ffn, sizeof (float));

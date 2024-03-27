@@ -40,7 +40,7 @@ void multiphase_f::print_3D(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 
-    TPLOOP
+    TPREVLOOP
 	{
 	ffn=float(p->ipol4(ls1));
 	result.write((char*)&ffn, sizeof (float));
@@ -50,7 +50,7 @@ void multiphase_f::print_3D(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4(ls2));
 	result.write((char*)&ffn, sizeof (float));
@@ -60,7 +60,7 @@ void multiphase_f::print_3D(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4_a(a->ro));
 	result.write((char*)&ffn, sizeof (float));

@@ -39,7 +39,7 @@ void concentration_io::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &resu
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4(C));
 	result.write((char*)&ffn, sizeof (float));
@@ -48,7 +48,7 @@ void concentration_io::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &resu
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 
-	TPLOOP
+	TPREVLOOP
 	{
 	ffn=float(p->ipol4(a->ro));
 	result.write((char*)&ffn, sizeof (float));
