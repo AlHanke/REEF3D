@@ -38,6 +38,7 @@ void sedpart::print_particles(lexer* p)
     {
     print_vtp(p);
     p->partprinttime+=p->Q182;
+	++printcount;
     }
     
 }
