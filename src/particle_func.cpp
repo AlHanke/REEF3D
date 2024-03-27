@@ -253,24 +253,28 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int flag)
                 PP->W[n] += ((2.0/3.0)*dw2 + (2.0/3.0)*dw3)*p->dt;
             
             // Pos update
-            PP->X[n] += PP->U[n]*p->dt;
-            PP->Y[n] += PP->V[n]*p->dt;
-            PP->Z[n] += PP->W[n]*p->dt;
+            // Solid check
+            double scaler=1.0;
+            double solid_old = p->ccipol4_b(a->solid,PP->X[n],PP->Y[n],PP->Z[n]);
+            double solid_new = p->ccipol4_b(a->solid,PP->X[n]+PP->U[n]*p->dt,PP->Y[n]+PP->V[n]*p->dt,PP->Z[n]+PP->W[n]*p->dt);
+            if(solid_new<0)
+            scaler=solid_old/(solid_old-solid_new);
+            PP->X[n] += PP->U[n]*p->dt*scaler;
+            PP->Y[n] += PP->V[n]*p->dt*scaler;
+            PP->Z[n] += PP->W[n]*p->dt*scaler;
 
             // Sum update
             cellSum[IJK]-=PP->PackingFactor[n];
             if(cellSum[IJK]<0)
             {
-                cout<<"cellSum is below zero."<<endl;
-                exit(1);
+                cout<<"cellSum is below zero in cell ("<<p->XN[IP]<<","<<p->YN[JP]<<","<<p->ZN[KP]<<") of partition "<<p->mpirank<<" for particle "<<n<<" at ("<<PP->X[n]<<","<<PP->Y[n]<<","<<PP->Z[n]<<")."<<endl;
+                cellSum[IJK]=0;
             }
             particleStressTensorUpdateIJK(p,a,PP);
             i=p->posc_i(PP->X[n]);
             j=p->posc_j(PP->Y[n]);
             k=p->posc_k(PP->Z[n]);
             cellSum[IJK]+=PP->PackingFactor[n];
-            if(cellSum[IJK]<0)
-                cellSum[IJK]=0;
             particleStressTensorUpdateIJK(p,a,PP);
         }
 }
@@ -563,7 +567,7 @@ void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP, int min
     int i,j;
     PARTICLELOOP
         if(PP->Flag[n]>0)
-        if (p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<=0)
+        if (p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])<=0||p->ccipol4_b(a->solid,PP->X[n],PP->Y[n],PP->Z[n])<=0)
         {
             PP->Flag[n]=minflag;
             if(p->count!=0)
@@ -753,14 +757,15 @@ void particle_func::make_moving(lexer* p, fdm* a, particles_obj* PP)
 /// @brief All debug code
 void particle_func::debug(lexer* p, fdm* a, ghostcell* pgc, tracers_obj* PP)
 {
-    
+    PLAINLOOP
+    a->test(i,j,k)=cellSum[IJK];
 }
 
-/// @brief Remove stationary particles outside of `fdm::topo`
+/// @brief Moves stuck stationary particles out of `fdm::solid`
 void particle_func::fixPos(lexer* p, fdm* a, tracers_obj* PP)
 {
-    PARTICLELOOP
-    if(PP->Flag[n]=0)
-    if(p->ccipol4_b(a->topo,PP->X[n],PP->Y[n],PP->Z[n])>0)
-    PP->erase(n);
+    // PARTICLELOOP
+    // if(PP->Flag[n]=0)
+    // if(p->ccipol4_b(a->solid,PP->X[n],PP->Y[n],PP->Z[n])>0)
+    // PP->erase(n);
 }
