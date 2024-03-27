@@ -780,9 +780,9 @@ void lexer::ini_default()
     Q120=0;             // int seed particles in suspension
     Q121=1;             // int iterations between pariticle seeding in suspension
     Q122=2;             // int particles per cell in susp seeding      
-    Q180=0;             // int print vtu
-    Q181=-10;           // int print vtu iter interval
-    Q182=-1.0;          // double print vtu time interval
+    Q180=0;             // int print vtp
+    Q181=-10;           // int print vtp iter interval
+    Q182=-1.0;          // double print vtp time interval
     Q183=0;             // int flag and above to print
 
 	// Sediment Transport
