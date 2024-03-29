@@ -60,7 +60,7 @@ void sixdof_obj::rkls3(lexer *p, ghostcell *pgc, int iter)
 void sixdof_obj::rk3(lexer *p, ghostcell *pgc, int iter)
 {   
     get_trans(p,pgc, dp_, dc_, p_, c_);    
-    get_rot(dh_, de_, h_, e_);
+    get_rot(p, dh_, de_, h_, e_);
         
         
     if(iter==0)
