@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Tobias Martin
+Author: Tobias Martin, Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"6DOF.h"
@@ -52,7 +52,7 @@ public:
     sixdof_sflow(lexer*, ghostcell*);
     virtual ~sixdof_sflow();
     
-    virtual void start_oneway(lexer*,ghostcell*);
+    virtual void start_oneway(lexer*,ghostcell*,slice&);
     virtual void start_twoway(lexer*,fdm*,ghostcell*,vrans*,vector<net*>&,int,field&,field&,field&,field&,field&,field&,bool);
     
 	virtual void ini(lexer*,ghostcell*);
@@ -63,9 +63,9 @@ public:
     virtual void jsource(lexer*,fdm*,ghostcell*);
     virtual void ksource(lexer*,fdm*,ghostcell*);
     
-    virtual void isource(lexer*,fdm_nhf*,ghostcell*);
-    virtual void jsource(lexer*,fdm_nhf*,ghostcell*);
-    virtual void ksource(lexer*,fdm_nhf*,ghostcell*);
+    virtual void isource(lexer*,fdm_nhf*,ghostcell*,slice&);
+    virtual void jsource(lexer*,fdm_nhf*,ghostcell*,slice&);
+    virtual void ksource(lexer*,fdm_nhf*,ghostcell*,slice&);
     
     virtual void isource2D(lexer*,fdm2D*,ghostcell*);
     virtual void jsource2D(lexer*,fdm2D*,ghostcell*);
@@ -91,21 +91,8 @@ private:
     void rotation_tri(lexer*,double,double,double,double&,double&,double&, const double&, const double&, const double&);
     void quat_matrices(const Eigen::Vector4d&);
    
-    void ray_cast(lexer*, ghostcell*);
-	void ray_cast_io_x(lexer*, ghostcell*,int,int);
-	void ray_cast_io_ycorr(lexer*, ghostcell*,int,int);
-    void ray_cast_x(lexer*, ghostcell*,int,int);
-	void ray_cast_y(lexer*, ghostcell*,int,int);
-    void ray_cast_z(lexer*, ghostcell*,int,int);
-    void reini(lexer*,ghostcell*,slice&);
-    void disc(lexer*,ghostcell*,slice&);
-    void time_preproc(lexer*);
 
-    double Hsolidface(lexer*, int,int);
-    void updatePosition(lexer*, ghostcell*);
-    void updateForcing_box(lexer*, ghostcell*);
-    void updateForcing_stl(lexer*, ghostcell*);
-    void updateForcing_oned(lexer*, ghostcell*);
+    void time_preproc(lexer*);
     
     // hires gradient
     double limiter(double v1, double v2);

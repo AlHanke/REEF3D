@@ -116,12 +116,12 @@ void sixdof_obj::ray_cast_x(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 		for(k=ks;k<ke;k++)
 		{
 		Px = p->global_xmin-10.0*p->DXM;
-		Py = p->YP[JP]+psi;
+		Py = p->YP[JP]-psi;
 		Pz = p->ZP[KP]+psi;
 		
 		Qx = p->global_xmax+10.0*p->DXM;
 		Qy = p->YP[JP]+psi;
-		Qz = p->ZP[KP]+psi;
+		Qz = p->ZP[KP]-psi;
 		
 		
 		PQx = Qx-Px;
@@ -157,12 +157,13 @@ void sixdof_obj::ray_cast_x(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 		
 		
 		int check=1;
-		if(u==0.0 && v==0.0 && w==0.0)
+		if(fabs(u)<=1.0e-20 && fabs(v)<=1.0e-20 && fabs(w)<=1.0e-20)
 		check = 0;
-		
-			if((u>=0.0 && v>=0.0 && w>=0.0) || (u<0.0 && v<0.0 && w<0.0) && check==1)
+
+			if(((u>1.0e-20 && v>1.0e-20 && w>1.0e-20) || (u<-1.0e-20 && v<-1.0e-20 && w<-1.0e-20)) && check==1)
 			{
 			denom = 1.0/(u+v+w);
+            
 			u *= denom;
 			v *= denom;
 			w *= denom;

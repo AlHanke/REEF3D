@@ -27,7 +27,6 @@ Author: Tobias Martin
 #include"ghostcell.h"
 #include"ddweno_f_nug.h"
 
-
 sixdof_cfd::sixdof_cfd(lexer *p, fdm *a, ghostcell *pgc)
 {
     if(p->mpirank==0)
@@ -61,11 +60,12 @@ void sixdof_cfd::start_twoway(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, v
         // Update position and trimesh
         fb_obj[nb]->update_position_3D(p,a,pgc,finalise);  //----> main time consumer
         
+        // Save
+        fb_obj[nb]->update_fbvel(p,pgc);
+        
         // Update forcing terms
         fb_obj[nb]->update_forcing(p,a,pgc,uvel,vvel,wvel,fx,fy,fz,iter);
         
-        // Save
-        fb_obj[nb]->update_fbvel(p);
         
         // Print
         if(finalise==true)

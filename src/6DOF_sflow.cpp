@@ -50,7 +50,7 @@ sixdof_sflow::~sixdof_sflow()
 {
 }
 
-void sixdof_sflow::start_oneway(lexer *p, ghostcell *pgc)
+void sixdof_sflow::start_oneway(lexer *p, ghostcell *pgc, slice &fsglobal)
 {
     
     for (int nb=0; nb<number6DOF;++nb)
@@ -58,70 +58,38 @@ void sixdof_sflow::start_oneway(lexer *p, ghostcell *pgc)
         // Advance body in time
         fb_obj[nb]->solve_eqmotion_oneway(p,pgc);
         
-        // Update position and fb level set
-        //fb_obj[nb]->transform(p,a,pgc,finalise);  //----> main time consumer
+        // Update transformation matrices
+        fb_obj[nb]->quat_matrices();
+        
+        // Update position and trimesh
+        fb_obj[nb]->update_position_2D(p,pgc,fsglobal);  
+        
+        // Save
+        fb_obj[nb]->update_fbvel(p,pgc);
         
         // Update forcing terms
         //fb_obj[nb]->updateForcing(p,a,pgc,uvel,vvel,wvel,fx,fy,fz,iter);
 
-        // Save
-        fb_obj[nb]->update_fbvel(p);
+        if (p->X400==2)
+        fb_obj[nb]->updateForcing_box(p,pgc,press);
+        
+        else if (p->X400==3)
+        fb_obj[nb]->updateForcing_oned(p,pgc,press);
+        
+        else if (p->X400==10)
+        fb_obj[nb]->updateForcing_stl(p,pgc,press);
         
         // Print
-        /*if(finalise==true)
-        {
-            fb_obj[nb]->saveTimeStep(p,iter);
             
             if(p->X50==1)
-            fb_obj[nb]->print_vtp(p,a,pgc);
+            fb_obj[nb]->print_vtp(p,pgc);
             
             if(p->X50==2)
-            fb_obj[nb]->print_stl(p,a,pgc);
+            fb_obj[nb]->print_stl(p,pgc);
             
-            fb_obj[nb]->print_parameter(p, a, pgc);
-        }*/
+            fb_obj[nb]->print_parameter(p,pgc);
+        
     }
     
-
-
-// FB/Ship location
-
-    // Move body  -> obj_transform
-    p->xg += ramp_vel(p)*Uext*p->dt;
-    p->yg += ramp_vel(p)*Vext*p->dt;
     
-    // Update position
-   // Update transformation matrix (Shivarama PhD thesis, p. 19)  -> obj
-    quat_matrices(e_);
-
-    // Calculate new position -> obj
-    updatePosition(p,pgc);
-    
-// --------------------------
-// Forcing ->sflow
-    // Update pressure field
-    if (p->X400==2)
-    {
-        updateForcing_box(p,pgc);
-    }
-    
-    else if (p->X400==3)
-    {
-        updateForcing_oned(p,pgc);
-    }
-    
-    else if (p->X400==10)
-    {
-        updateForcing_stl(p,pgc);
-    }
-
-// ->obj 
-    // Print
-    print_parameter(p,pgc);
-    
-    if(p->X50==1)
-    print_vtp(p,pgc);
-    
-    if(p->X50==2)
-    print_stl(p,pgc);
 }

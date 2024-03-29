@@ -20,14 +20,13 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"6DOF_sflow.h"
+#include"6DOF_obj.h"
 #include"lexer.h"
 #include"fdm2D.h"
 #include"ghostcell.h"
 #include"slice.h"
 
-
-void sixdof_sflow::reini(lexer *p, ghostcell *pgc, slice &f)
+void sixdof_obj::reini_2D(lexer *p, ghostcell *pgc, slice &f)
 {
 	if(p->count==0)
 	{
@@ -43,28 +42,28 @@ void sixdof_sflow::reini(lexer *p, ghostcell *pgc, slice &f)
     for(int q=0;q<reiniter;++q)
     {
 	// Step 1
-    disc(p,pgc,f);
+    disc_2D(p,pgc,f);
     
 	SLICELOOP4
-	frk1(i,j) = f(i,j) + dt(i,j)*L(i,j);
+	lrk1(i,j) = f(i,j) + dts(i,j)*K(i,j);
 
-	pgc->gcsl_start4(p,frk1,50);
+	pgc->gcsl_start4(p,lrk1,50);
     
 
     // Step 2
-    disc(p,pgc,frk1);
+    disc_2D(p,pgc,lrk1);
     
 	SLICELOOP4
-	frk2(i,j)=  0.75*f(i,j) + 0.25*frk1(i,j) + 0.25*dt(i,j)*L(i,j);
+	lrk2(i,j)=  0.75*f(i,j) + 0.25*lrk1(i,j) + 0.25*dts(i,j)*K(i,j);
 
-	pgc->gcsl_start4(p,frk2,50);
+	pgc->gcsl_start4(p,lrk2,50);
 
 
     // Step 3
-    disc(p,pgc,frk2);
+    disc_2D(p,pgc,lrk2);
     
 	SLICELOOP4
-	f(i,j) = (1.0/3.0)*f(i,j) + (2.0/3.0)*frk2(i,j) + (2.0/3.0)*dt(i,j)*L(i,j);
+	f(i,j) = (1.0/3.0)*f(i,j) + (2.0/3.0)*lrk2(i,j) + (2.0/3.0)*dts(i,j)*K(i,j);
 
 	pgc->gcsl_start4(p,f,50);
 	}
@@ -73,7 +72,7 @@ void sixdof_sflow::reini(lexer *p, ghostcell *pgc, slice &f)
 }
 
 
-void sixdof_sflow::disc(lexer *p, ghostcell *pgc, slice &f)
+void sixdof_obj::disc_2D(lexer *p, ghostcell *pgc, slice &f)
 {
     double dx,dy,xmin,xplus,ymin,yplus;
     double lsv,lsSig;
@@ -126,17 +125,17 @@ void sixdof_sflow::disc(lexer *p, ghostcell *pgc, slice &f)
     
 	sign=lsv/sqrt(lsv*lsv+ dnorm*dnorm*deltax*deltax);
 
-	L(i,j) = -(sign*dnorm - sign);
+	K(i,j) = -(sign*dnorm - sign);
     }
 }
 
 
-void sixdof_sflow::time_preproc(lexer* p)
+void sixdof_obj::time_preproc_2D(lexer* p)
 {	
     n=0;
 	SLICELOOP4
 	{
-	dt(i,j) = p->F43*MIN(p->DXP[IP],p->DYP[JP]);
+	dts(i,j) = p->F43*MIN(p->DXP[IP],p->DYP[JP]);
 	++n;
 	}
 }

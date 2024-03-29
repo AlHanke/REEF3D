@@ -49,7 +49,7 @@ void sixdof_void::start_twoway(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, 
 {
 }
 
-void sixdof_void::start_oneway(lexer *p, ghostcell *pgc)
+void sixdof_void::start_oneway(lexer *p, ghostcell *pgc, slice &fsglobal)
 {
 }
 
@@ -73,15 +73,15 @@ void sixdof_void::ksource(lexer *p, fdm *a, ghostcell *pgc)
 {
 }
 
-void sixdof_void::isource(lexer *p, fdm_nhf *d, ghostcell *pgc)
+void sixdof_void::isource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
 {
 }
 
-void sixdof_void::jsource(lexer *p, fdm_nhf *d, ghostcell *pgc)
+void sixdof_void::jsource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
 {
 }
 
-void sixdof_void::ksource(lexer *p, fdm_nhf *d, ghostcell *pgc)
+void sixdof_void::ksource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
 {
 }
 
