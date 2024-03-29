@@ -164,7 +164,7 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     print_particles(p);
     gparticle_active = pgc->globalisum(PP.size);
     if(p->mpirank==0)
-        cout<<"Sediment particles: active: "<<gparticle_active<<endl;
+        cout<<"Sediment particles: "<<gparticle_active<<endl;
     
     // vrans
     pvrans->sed_update(p,a,pgc);
