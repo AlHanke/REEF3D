@@ -47,6 +47,11 @@ void sedpart::pvtp_pos(lexer* p)
 	result<<"<VTKFile type=\"PPolyData\" version=\"1.0\" byte_order=\"LittleEndian\">"<<endl;
 	result<<"<PPolyData GhostLevel=\"0\">"<<endl;
 
+	result<<"<FieldData>"<<endl;
+	result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime<<endl;
+    result<<"</DataArray>"<<endl;
+	result<<"</FieldData>"<<endl;
+
 	result<<"<PPointData>"<<endl;
 	result<<"<PDataArray type=\"Float32\" Name=\"Flag\"/>"<<endl;
 	result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>"<<endl;

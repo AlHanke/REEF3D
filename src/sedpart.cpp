@@ -50,7 +50,7 @@ sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p)
     }
 
     // Create Folder
-	if(p->mpirank==0 && (p->Q180>0||p->Q182>0))
+	if(p->mpirank==0 && p->Q180>0 && (p->Q181>0||p->Q182>0))
 	    mkdir("./REEF3D_CFD_SedPart",0777);
 
     // Output configuration to console

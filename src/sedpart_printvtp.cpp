@@ -95,6 +95,10 @@ void sedpart::print_vtp(lexer* p)
 	result<<"<PolyData>"<<endl;
 	result<<"<Piece NumberOfPoints=\""<<numpt<<"\" NumberOfVerts=\""<<numpt<<"\" NumberOfLines=\"0\" NumberOfStrips=\"0\" NumberOfPolys=\"0\">"<<endl;
 	
+	result<<"<FieldData>"<<endl;
+	result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime<<endl;
+    result<<"</DataArray>"<<endl;
+	result<<"</FieldData>"<<endl;
 	
 	result<<"<PointData >"<<endl;
 	result<<"<DataArray type=\"Float32\" Name=\"Flag\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
