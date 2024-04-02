@@ -233,6 +233,7 @@ void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
 /// @param result statefile
 void sedpart::write_state_particles(ofstream& result)
 {
+    result.write((char*)&num, sizeof (int));
     size_t ffs=PP.capacity;
     result.write((char*)&ffs, sizeof (size_t));
     ffs=PP.size;
@@ -263,6 +264,9 @@ void sedpart::write_state_particles(ofstream& result)
 /// @param result statefile
 void sedpart::read_state_particles(ifstream& result)
 {
+    int ffi;
+    result.read((char*)&ffi, sizeof (int));
+    printcount=num;
     PP.erase_all();
     size_t ffs;
     result.read((char*)&ffs, sizeof (size_t));
