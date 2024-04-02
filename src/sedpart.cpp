@@ -72,6 +72,7 @@ sedpart::sedpart(lexer* p, ghostcell* pgc, turbulence *pturb) : particle_func(p)
         buff.append("Seeding properties:\n\tSeed: "+(p->Q29>0?std::to_string(p->Q29):"time dep.")+"\n\tParticles per cell: "+std::to_string(p->Q24)+"\n\tParticles represened by one: "+std::to_string(p->Q41)+"\n");
         cout<<buff<<endl;
     }
+    inicount=0;
 }
 
 sedpart::~sedpart()
@@ -150,24 +151,28 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
         seed(p,a);
         make_stationary(p,a,&PP);
     }
-    else
-    {
-    // state file
-    if(p->mpirank==0)
-    cout<<"Loaded particles from state file."<<endl;
-    }
+    
+    gparticle_active = pgc->globalisum(PP.size);
 
-    particlesPerCell(p,pgc,&PP);
-    particleStressTensor(p,a,pgc,&PP);
+    if(gparticle_active>0)
+    {
+        particlesPerCell(p,pgc,&PP);
+        particleStressTensor(p,a,pgc,&PP);
+    }
     
     // print
+    if((p->I40!=1)||(p->I40==1&&inicount>0))
     print_particles(p);
-    gparticle_active = pgc->globalisum(PP.size);
+    
     if(p->mpirank==0)
-        cout<<"Sediment particles: "<<gparticle_active<<endl;
+        if(p->I40!=1)
+            cout<<"Sediment particles: "<<gparticle_active<<endl;
+        else if (inicount>0)
+            cout<<"Loaded particles "<<gparticle_active<<" from state file."<<endl;
     
     // vrans
     pvrans->sed_update(p,a,pgc);
+    ++inicount;
 }
 
 /// @brief SFLOW calculation function
@@ -233,12 +238,14 @@ void sedpart::erode(lexer* p, fdm* a, ghostcell* pgc)
 /// @param result statefile
 void sedpart::write_state_particles(ofstream& result)
 {
-    result.write((char*)&num, sizeof (int));
+    float ffn=num;
+    result.write((char*)&ffn, sizeof (float));
+    ffn=volumeChangeTotal;
+    result.write((char*)&ffn, sizeof (float));
     size_t ffs=PP.capacity;
     result.write((char*)&ffs, sizeof (size_t));
     ffs=PP.size;
     result.write((char*)&ffs, sizeof (size_t));
-    float ffn;
     PARTICLELOOP
     {
         ffn=PP.X[n];
@@ -264,15 +271,17 @@ void sedpart::write_state_particles(ofstream& result)
 /// @param result statefile
 void sedpart::read_state_particles(ifstream& result)
 {
-    int ffi;
-    result.read((char*)&ffi, sizeof (int));
-    printcount=num;
+    float ffn;
+    result.read((char*)&ffn, sizeof (float));
+    printcount=ffn;
+    result.read((char*)&ffn, sizeof (float));
+    volumeChangeTotal=ffn;
     PP.erase_all();
     size_t ffs;
     result.read((char*)&ffs, sizeof (size_t));
-    PP.reserve(size_t(ffs));
+    maxparticle=size_t(ffs);
+    PP.reserve(maxparticle);
     result.read((char*)&ffs, sizeof (size_t));
-    float ffn;
     double x,y,z,flag,u,v,w,packing;
     for(size_t n=0; n<ffs;n++)
     {

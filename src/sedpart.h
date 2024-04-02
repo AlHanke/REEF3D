@@ -125,6 +125,8 @@ private:
     /// @brief Marker for cells which should be seeded with topography
 	field4 active_topo;
 
+    int inicount;
+
 
 	// PRINT
 
