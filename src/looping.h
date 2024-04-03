@@ -179,7 +179,7 @@ Author: Hans Bihs
 #define JTPLOOP for(j=-1; j<p->knoy; ++j)
 #define KTPLOOP for(k=-1; k<p->knoz; ++k)
 #define TPCHECK  if(p->tpflag[IJK]>0)
-#define TPLOOP ITPLOOP JTPLOOP KTPLOOP TPCHECK
+#define TPLOOP KTPLOOP JTPLOOP ITPLOOP TPCHECK
 
 #define NDBASECHECK  if(p->ndbaseflag[IJK]>OBJ)
 #define NDBASELOOP ITPLOOP JTPLOOP KTPLOOP NDBASECHECK
