@@ -202,13 +202,13 @@ void vtr3D::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat
         pmean->averaging(p,a,pgc,pheat);
 
 		// Print out based on iteration
-        if(p->count%p->P20==0 && p->P30<0.0 && p->P34<0.0 && p->P10==1 && p->P20>0)
+        if(p->count%p->P20==0 && p->P30<0.0 && p->P34<0.0 && p->P10==2 && p->P20>0)
 		{
         print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 		}
 
 		// Print out based on time
-        if((p->simtime>p->printtime && p->P30>0.0 && p->P34<0.0 && p->P10==1) || (p->count==0 &&  p->P30>0.0))
+        if((p->simtime>p->printtime && p->P30>0.0 && p->P34<0.0 && p->P10==2) || (p->count==0 &&  p->P30>0.0))
         {
         print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 
@@ -216,7 +216,7 @@ void vtr3D::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat
         }
 
 		// Print out based on sediment time
-        if((p->sedtime>p->sedprinttime && p->P34>0.0 && p->P30<0.0 && p->P10==1) || (p->count==0 &&  p->P34>0.0))
+        if((p->sedtime>p->sedprinttime && p->P34>0.0 && p->P30<0.0 && p->P10==2) || (p->count==0 &&  p->P34>0.0))
         {
         print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 
@@ -224,7 +224,7 @@ void vtr3D::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat
         }
 
 		// Print out based on time interval
-		if(p->P10==1 && p->P35>0)
+		if(p->P10==2 && p->P35>0)
 		for(int qn=0; qn<p->P35; ++qn)
 		if(p->simtime>printtime_wT[qn] && p->simtime>=p->P35_ts[qn] && p->simtime<=(p->P35_te[qn]+0.5*p->P35_dt[qn]))
 		{
