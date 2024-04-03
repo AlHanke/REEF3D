@@ -98,20 +98,24 @@ void sedpart::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 			posseed_suspended(p,a);
         point_source(p,a);
         if(p->Q101>0)
+        {
             topo_influx(p,a);
+            solid_influx(p,a);
+        }
+        particlesPerCell(p,pgc,&PP);
+        particleStressTensor(p,a,pgc,&PP);
 
         /// transport
         erode(p,a,pgc);
         transport(p,a,&PP);
+        fixPos(p,a,&PP);
 		xchange=transfer(p,pgc,&PP,maxparticle);
 		removed=remove(p,&PP);
+        make_stationary(p,a,&PP);
 
         /// topo update
-		make_stationary(p,a,&PP);
-        particlesPerCell(p,pgc,&PP);
         if(p->Q13==1)
             update_cfd(p,a,pgc,pflow,preto);
-        particleStressTensor(p,a,pgc,&PP);
 
         /// cleanup
         if(p->count%p->Q20==0)
@@ -173,6 +177,13 @@ void sedpart::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     // vrans
     pvrans->sed_update(p,a,pgc);
     ++inicount;
+    // if(p->mpirank==1)
+    // {
+    // i=8;j=12;
+    // KLOOP
+    // if(active_topo(i,j,k)>0)
+    // cout<<k<<","<<p->ZN[KP]<<endl;
+    // }
 }
 
 /// @brief SFLOW calculation function
@@ -190,6 +201,7 @@ void sedpart::ini_sflow(lexer *p, fdm2D *b, ghostcell *pgc)
 /// @brief Updates the topography for the CFD solver
 void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinitopo* preto)
 {
+    const double tolerance=5e-10;
     ILOOP
     JLOOP
     if(topoVolumeChange[IJ]>0)
@@ -202,10 +214,13 @@ void sedpart::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinit
             a->topo(i,j,k) -= dh;
 
             // Seeding update
-            if((abs(a->topo(i,j,k))<(p->DZN[KP]*ceil(p->Q102)))&&(a->topo(i,j,k)<=0.25*p->DZN[KP]))
-                active_topo(i,j,k) = 1.0;
-            else
-                active_topo(i,j,k) = 0.0;
+            active_topo(i,j,k) = 0.0;
+            if( (a->topo(i,j,k)<0.5*p->DZN[KP]-tolerance) && (a->topo(i,j,k)>-p->DZN[KP]*ceil(p->Q102)-tolerance) && (a->solid(i,j,k)>=-p->DXM))
+            {
+            active_topo(i,j,k) = 1.0;
+            if(p->flag1[Im1JK]==SOLID&&p->flag1[IJK]==WATER)
+            active_topo(i,j,k) = 10.0;
+            }
         }
         volumeChangeTotal += topoVolumeChange[IJ];
 
