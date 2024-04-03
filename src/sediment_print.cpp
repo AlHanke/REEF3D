@@ -82,7 +82,7 @@ void sediment_f::print_3D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->qbe));
 	result.write((char*)&ffn, sizeof (float));
@@ -94,7 +94,7 @@ void sediment_f::print_3D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->qb));
 	result.write((char*)&ffn, sizeof (float));
@@ -106,7 +106,7 @@ void sediment_f::print_3D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->cbe));
 	result.write((char*)&ffn, sizeof (float));
@@ -118,7 +118,7 @@ void sediment_f::print_3D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->cb));
 	result.write((char*)&ffn, sizeof (float));
@@ -342,7 +342,7 @@ void sediment_f::print_3D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->tau_eff));
 	result.write((char*)&ffn, sizeof (float));
@@ -354,7 +354,7 @@ void sediment_f::print_3D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->tau_crit));
 	result.write((char*)&ffn, sizeof (float));
@@ -370,7 +370,7 @@ void sediment_f::print_3D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->shearvel_eff));
 	result.write((char*)&ffn, sizeof (float));
@@ -382,7 +382,7 @@ void sediment_f::print_3D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->shearvel_crit));
 	result.write((char*)&ffn, sizeof (float));
@@ -398,7 +398,7 @@ void sediment_f::print_3D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->shields_eff));
 	result.write((char*)&ffn, sizeof (float));
@@ -410,7 +410,7 @@ void sediment_f::print_3D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->shields_crit));
 	result.write((char*)&ffn, sizeof (float));
@@ -502,7 +502,7 @@ void sediment_f::print_3D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->alpha));
     ffn*=(180.0/PI);
@@ -516,7 +516,7 @@ void sediment_f::print_3D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->teta));
     ffn*=(180.0/PI);
@@ -529,7 +529,7 @@ void sediment_f::print_3D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->gamma));
     ffn*=(180.0/PI);
@@ -542,7 +542,7 @@ void sediment_f::print_3D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->beta));
     ffn*=(180.0/PI);
@@ -555,7 +555,7 @@ void sediment_f::print_3D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->phi));
     ffn*=(180.0/PI);
@@ -701,7 +701,7 @@ void sediment_f::print_3D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->dtsed*p->sl_ipol4(s->vz));
 	result.write((char*)&ffn, sizeof (float));
@@ -713,7 +713,7 @@ void sediment_f::print_3D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->dtsed*p->sl_ipol4(s->bedch));
 	result.write((char*)&ffn, sizeof (float));
@@ -725,7 +725,7 @@ void sediment_f::print_3D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->reduce));
 	result.write((char*)&ffn, sizeof (float));
@@ -735,7 +735,7 @@ void sediment_f::print_3D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=0.0;
     
@@ -750,7 +750,7 @@ void sediment_f::print_3D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 	iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 	
-	TPREVLOOP
+	TPLOOP
 	{
     ffn=float(p->sl_ipol4(s->slideflag));
 	result.write((char*)&ffn, sizeof (float));

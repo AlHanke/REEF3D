@@ -54,7 +54,7 @@ void vorticity_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 
-    TPREVLOOP
+    TPLOOP
 	{
     ffn=float(p->ipol4(omega1));
 
@@ -65,7 +65,7 @@ void vorticity_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 
-    TPREVLOOP
+    TPLOOP
 	{
     ffn=float(p->ipol4(omega2));
 
@@ -76,7 +76,7 @@ void vorticity_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 
-    TPREVLOOP
+    TPLOOP
 	{
     ffn=float(p->ipol4(omega3));
 

@@ -133,7 +133,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     {
     iin=3*4*(p->pointnum);
 	result.write((char*)&iin, sizeof (int));
-    TPREVLOOP
+    TPLOOP
 	{
 	ffn=0.0;
 	result.write((char*)&ffn, sizeof (float));
@@ -148,7 +148,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     //  Pressure
 	iin=4*(p->pointnum);
 	result.write((char*)&iin, sizeof (int));
-	TPREVLOOP
+	TPLOOP
 	{
 	ffn=0.0;
 	result.write((char*)&ffn, sizeof (float));
@@ -159,7 +159,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     {
 	iin=4*(p->pointnum);
 	result.write((char*)&iin, sizeof (int));
-	TPREVLOOP
+	TPLOOP
 	{
 	ffn=0.0;
 	result.write((char*)&ffn, sizeof (float));
@@ -172,7 +172,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     {
     iin=3*4*(p->pointnum);
 	result.write((char*)&iin, sizeof (int));
-    TPREVLOOP
+    TPLOOP
 	{
 	ffn=float(p->ipol1(um)/(p->simtime-stime));
 	result.write((char*)&ffn, sizeof (float));
@@ -187,7 +187,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     //  Pressure
 	iin=4*(p->pointnum);
 	result.write((char*)&iin, sizeof (int));
-	TPREVLOOP
+	TPLOOP
 	{
 	ffn=float(p->ipol4press(pm)/(p->simtime-stime));
 	result.write((char*)&ffn, sizeof (float));
@@ -198,7 +198,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     {
 	iin=4*(p->pointnum);
 	result.write((char*)&iin, sizeof (int));
-	TPREVLOOP
+	TPLOOP
 	{
 	ffn=float(p->ipol4(Tm)/(p->simtime-stime));
 	result.write((char*)&ffn, sizeof (float));
