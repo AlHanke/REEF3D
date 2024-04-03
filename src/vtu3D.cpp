@@ -953,7 +953,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 //  Connectivity
     iin=4*(p->tpcellnum)*8;
     result.write((char*)&iin, sizeof (int));
-    BASELOOP
+    BASEREVLOOP
     if(p->flag5[IJK]!=-20 && p->flag5[IJK]!=-30)
 	{
 	iin=int(a->nodeval(i-1,j-1,k-1)-1);
