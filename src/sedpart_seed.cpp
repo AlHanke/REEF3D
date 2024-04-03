@@ -58,9 +58,11 @@ void sedpart::seed_ini(lexer* p, fdm* a, ghostcell* pgc)
     size_t cellcountTopo=0;
     BASELOOP
     {
-        if( (a->topo(i,j,k)<0.5*p->DZN[KP]-tolerance) && (a->topo(i,j,k)>-p->DZN[KP]*ceil(p->Q102)-tolerance) && (a->solid(i,j,k)>-p->DXM))
+        if( (a->topo(i,j,k)<0.5*p->DZN[KP]-tolerance) && (a->topo(i,j,k)>-p->DZN[KP]*ceil(p->Q102)-tolerance) && (a->solid(i,j,k)>=-p->DXM))
         {
             active_topo(i,j,k) = 1.0;
+            if(p->flag1[Im1JK]==SOLID&&p->flag1[IJK]==WATER)
+            active_topo(i,j,k) = 10.0;
             cellcountTopo++;
             minPPC=min(minPPC, maxParticlesPerCell(p,a,PP.d50));
         }
@@ -230,5 +232,15 @@ void sedpart::seed_topo(lexer* p, fdm* a)
             PP.add(x,y,z,flag,0,0,0,p->Q41);
             cellSum[IJK]++;
         }
+    }
+}
+
+void sedpart::solid_influx(lexer* p, fdm* a)
+{
+    seed_srand(p);
+    PLAINLOOP
+    if(active_box(i,j,k)>1.0)
+    {
+        seed_topo(p,a);
     }
 }

@@ -79,6 +79,7 @@ private:
     void topo_influx(lexer*,fdm*);
     void seed_srand(lexer*);
     void seed_topo(lexer*,fdm*);
+    void solid_influx(lexer*,fdm*);
 
     // PRINT
 	void print_particles(lexer*);
