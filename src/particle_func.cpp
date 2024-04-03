@@ -762,10 +762,30 @@ void particle_func::debug(lexer* p, fdm* a, ghostcell* pgc, tracers_obj* PP)
 }
 
 /// @brief Moves stuck stationary particles out of `fdm::solid`
-void particle_func::fixPos(lexer* p, fdm* a, tracers_obj* PP)
+void particle_func::fixPos(lexer* p, fdm* a, particles_obj* PP)
 {
-    // PARTICLELOOP
-    // if(PP->Flag[n]=0)
-    // if(p->ccipol4_b(a->solid,PP->X[n],PP->Y[n],PP->Z[n])>0)
-    // PP->erase(n);
+    double solid;
+    PARTICLELOOP
+    if(PP->Flag[n]==1&&p->ccipol4_b(a->solid,PP->X[n],PP->Y[n],PP->Z[n])<0)
+    {
+        i=p->posc_i(PP->X[n]);
+        j=p->posc_j(PP->Y[n]);
+        k=p->posc_k(PP->Z[n]);
+        cellSum[IJK]-=PP->PackingFactor[n];
+
+        if(p->flag1[Ip1JK]==SOLID&&p->flag1[IJK]==WATER)
+        {
+            while(!(p->flag1[Im1JK]==SOLID&&p->flag1[IJK]==WATER))
+            i++;
+            solid=p->ccipol4_b(a->solid,p->XN[IP],PP->Y[n],PP->Z[n]);
+            PP->X[n]=p->XN[IP]-solid;
+        }
+        else
+        {
+            solid=p->ccipol4_b(a->solid,PP->X[n],PP->Y[n],PP->Z[n]);
+            PP->X[n]-=solid;
+        }
+        i=p->posc_i(PP->X[n]);
+        cellSum[IJK]+=PP->PackingFactor[n];
+    }
 }

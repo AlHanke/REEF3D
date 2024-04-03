@@ -70,7 +70,7 @@ protected:
     double theta_s(lexer* p, fdm* a, particles_obj* PP,int,int,int);
     double drag_model(lexer* p, double,double,double,double,double) const;
     void debug(lexer* p, fdm* a, ghostcell* pgc, tracers_obj*);
-    void fixPos(lexer* p, fdm* a, tracers_obj* PP);
+    void fixPos(lexer* p, fdm* a, particles_obj* PP);
 
     // memory management
     void cleanup(lexer* p, fdm* a, tracers_obj* PP,int);
