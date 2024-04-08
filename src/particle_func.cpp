@@ -257,11 +257,16 @@ void particle_func::transport(lexer* p, fdm* a, particles_obj* PP, int flag)
             double scaler=1.0;
             double solid_old = p->ccipol4_b(a->solid,PP->X[n],PP->Y[n],PP->Z[n]);
             double solid_new = p->ccipol4_b(a->solid,PP->X[n]+PP->U[n]*p->dt,PP->Y[n]+PP->V[n]*p->dt,PP->Z[n]+PP->W[n]*p->dt);
-            if(solid_new<0)
+            
+            if(solid_new<=0)
             scaler=solid_old/(solid_old-solid_new);
-            PP->X[n] += PP->U[n]*p->dt*scaler;
-            PP->Y[n] += PP->V[n]*p->dt*scaler;
-            PP->Z[n] += PP->W[n]*p->dt*scaler;
+            PP->U[n]*=scaler;
+            PP->V[n]*=scaler;
+            PP->W[n]*=scaler;
+
+            PP->X[n] += PP->U[n]*p->dt;
+            PP->Y[n] += PP->V[n]*p->dt;
+            PP->Z[n] += PP->W[n]*p->dt;
 
             // Sum update
             cellSum[IJK]-=PP->PackingFactor[n];
@@ -581,6 +586,11 @@ void particle_func::make_stationary(lexer* p, fdm* a, particles_obj* PP, int min
                 PP->U[n]=0;
                 PP->V[n]=0;
                 PP->W[n]=0;
+            }
+            if(p->ccipol4_b(a->solid,PP->X[n],PP->Y[n],PP->Z[n])<=0)
+            {
+                cout<<"solid stoping"<<endl;
+                PP->Flag[n]=minflag-1;
             }
         }
 }
