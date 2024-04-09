@@ -189,7 +189,7 @@ void sedpart::topo_influx(lexer* p, fdm* a)
         i=p->gcin[n][0];
         j=p->gcin[n][1];
         k=p->gcin[n][2];
-        if(active_box(i,j,k)>0.0)
+        if(active_topo(i,j,k)>0.0)
         {
             seed_topo(p,a);
         }
