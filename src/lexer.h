@@ -425,9 +425,17 @@ public:
     double *F399_xc, *F399_yc,*F399_zc, *F399_r;
     
 	// Grid Options
-    int G1,G2,G3;
-	int G10,G11,G12,G20,G21,G22,G30;
-	int G40;
+    int G1; //xmargin inflow
+    int G2; //sigma grid
+    int G3; //solid forcing
+    int G10; //xmargin inflow
+    int G11; //ymargin righ
+    int G12; //zmargin bottom
+    int G20; //xmargin outflow
+    int G21; //ymargin lef
+    int G22; //zmargin top
+    int G30; //extrapolated ghost cells
+    int G40; //reini scheme for topo
 
 	// Heat Options
     double H1; //thermal diffusivity water
