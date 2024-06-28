@@ -455,51 +455,188 @@ public:
 	int M10;
 
 	// Print options
-	int P10,P11,P12,P15,P16,P18,P20,P21,P23,P24,P25,P26,P27,P28,P29,P35,P40,P41,P43,P44,P45,P50,P51,P52,P53,P54,P56,P57,P58,P59;
-	int P61,P62,P63,P64,P65,P66,P71,P72,P73,P74,P75,P76,P77,P78,P79,P81,P82,P85,P92,P101,P120,P121,P122,P123,P124,P125,P126;
-	int P140,P150,P151,P152,P166,P167,P168,P180,P181,P184,P185,P190,P191,P194,P195,P351,P352;
-	double P22,P30,P34,P42;
-	double *P35_ts,*P35_te,*P35_dt;
-    double P43_xs,P43_xe,P43_ys,P43_ye;
-    int P46,P46_is,P46_ie;
-    int P47,P47_ts,P47_te;
-	double *P50_x,*P50_y;
-	double *P51_x,*P51_y;
-	double *P52_y,*P56_x;
-	double P55;
-    double *P58_x,*P58_y,*P58_T;   
-	double *P61_x,*P61_y,*P61_z;
-	double *P62_xs,*P62_ys,*P62_zs,*P62_xe,*P62_ye,*P62_ze;
-    double *P63_x,*P63_y;
-    double *P64_x,*P64_y,*P64_z;
-    double *P65_x,*P65_y,*P65_z;
-    double *P66_x,*P66_y,*P66_z;
-	double *P81_xs,*P81_xe,*P81_ys,*P81_ye,*P81_zs,*P81_ze;
-	double *P85_x,*P85_y,*P85_r,*P85_cd,*P85_cm;
-	double P91;
-	double P101_xm,P101_ym,P101_zs,P101_ze,P101_r1,P101_r2;
-    int P110;
-    double P111;
-	double *P121_x,*P121_y;
-	double *P123_y,*P124_x;
-	double *P125_x,*P125_y;
-    int P131,P132,P133,P134;
+    int P10; //print file type
+    int P11; //log print frequency
+    int P12; //terminal print frequency
+    int P15; //print file numbering
+    int P16; //add timestamp to paraview files
+    int P18; //option for phi print ou
+    int P20; //h iteration file printed
+    int P21; //time averaged vtk file print ou
+    int P23; //print test to vtk file
+    int P24; //print density to vtk file
+    int P25; //print solid to vtk file
+    int P26; //print cbed and conc to vtk file
+    int P27; //print topo to vtk file
+    int P28; //print fb to vtk file
+    int P29; //print walldist to vtk file
+    int P35; //print for interval
+    int P40; //print state file
+    int P41; //print state file each ith iteratio
+    int P43; //state print out selected area
+    int P44; //print out 3D potential for FNPF
+    int P45; //print into single or continous state file
+    int P50; //wave theory wave gages
+    int P51; //print out wsf
+    int P52; //print out wsfline in x-dir
+    int P53; //print out wsfline for wave theory
+    int P54; //ith iteration wsfline file  print ou
+    int P56; //print out wsf line in y-dir
+    int P57; //add aditional info to WSF gage in FNPF
+    int P58; //print wave time series
+    int P59; //print breaking wave log FNPF
+    int P61; //print point probes
+    int P62; //print line probes
+    int P63; //print depth averaged point probe
+    int P64; //print pressure probes
+    int P65; //print velocity probes
+    int P66; //print velocity probes from wave theory
+    int P71; //print viscosity to vtk file
+    int P72; //print vof functio
+    int P73; //print hx and hy for sflow vtp
+    int P74; //unused
+    int P75; //print out vorticity vec
+    int P76; //print out bedload
+    int P77; //print out sediment parameters: 1
+    int P78; //print out sediment parameters: 2
+    int P79; //print out bed shear stress when running sediment transpor
+    int P81; //force print ou
+    int P82; //add eddyv to viscous force
+    int P85; //ALE force print out for FNPF
+    int P92; //force from water or from water+air
+    int P101; //print sloshing forces
+    int P120; //sediment log print ou
+    int P121; //bed level gages
+    int P122; //max bed level gages
+    int P123; //topoline in x-directio
+    int P124; //topoline in y-directio
+    int P125; //bed shear stress gages
+    int P126; //bed shear stress maxval
+    int P140; //runup gage cylinder
+    int P150; //number of data points to read from grid file
+    int P151; //type of data
+    int P152; //type of boundary condition for data
+    int P166; //print discharge to terminal
+    int P167; //discharge gages in x-directio
+    int P168; //discharge gages in x-directio
+    int P180; //print fsf
+    int P181; //ith iteration fsf printed
+    int P184; //time between file printout in iterations
+    int P185; //time between file printout in seconds
+    int P190; //print topo
+    int P191; //ith iteration topo printed
+    int P194; //time between file printout in iterations
+    int P195; //time between file printout in seconds
+    int P351; //print out wsf lsm1
+    int P352; //print out wsf lsm2
+    double P22; //start averging after transients
+    double P30; //time between file printout in seconds
+    double P34; //time between file printout in seconds for sediment
+    double P42; //print state file each ith sec
+    double *P35_ts;
+    double *P35_te;
+    double *P35_dt;
+    double P43_xs;
+    double P43_xe;
+    double P43_ys;
+    double P43_ye;
+    int P46; //print state iteration window
+    int P46_is;
+    int P46_ie;
+    int P47; //print state time window
+    int P47_ts;
+    int P47_te;
+    double *P50_x;
+    double *P50_y;
+    double *P51_x;
+    double *P51_y;
+    double *P52_y;
+    double *P56_x;
+    double P55; //ith second wsfline files print out
+    double *P58_x;
+    double *P58_y;
+    double *P58_T;
+    double *P61_x;
+    double *P61_y;
+    double *P61_z;
+    double *P62_xs;
+    double *P62_ys;
+    double *P62_zs;
+    double *P62_xe;
+    double *P62_ye;
+    double *P62_ze;
+    double *P63_x;
+    double *P63_y;
+    double *P64_x;
+    double *P64_y;
+    double *P64_z;
+    double *P65_x;
+    double *P65_y;
+    double *P65_z;
+    double *P66_x;
+    double *P66_y;
+    double *P66_z;
+    double *P81_xs;
+    double *P81_xe;
+    double *P81_ys;
+    double *P81_ye;
+    double *P81_zs;
+    double *P81_ze;
+    double *P85_x;
+    double *P85_y;
+    double *P85_r;
+    double *P85_cd;
+    double *P85_cm;
+    double P91; //factor used in force calculation algorithm
+    double P101_xm;
+    double P101_ym;
+    double P101_zs;
+    double P101_ze;
+    double P101_r1;
+    double P101_r2;
+    int P110; //print significant wave heigh
+    double P111; //start averging after transients
+    double *P121_x;
+    double *P121_y;
+    double *P123_y;
+    double *P124_x;
+    double *P125_x;
+    double *P125_y;
+    int P131; //max wetdry in vtp
+    int P132; //max wetdry as file
+    int P133; //runup gage x-crossectio
+    int P134; //runup gage y-crossectio
     double *P133_y;
     double *P134_y;
-    double *P140_x,*P140_y;
+    double *P140_x;
+    double *P140_y;
     double *P167_x;
-    double P141;
-    double *P168_x,*P168_zs,*P168_ze;
-	double P182;
-    int *P184_its,*P184_ite,*P184_dit;
-    double *P185_ts,*P185_te,*P185_dt;
-    double P192;
-    int *P194_its,*P194_ite,*P194_dit;
-    double *P195_ts,*P195_te,*P195_dt;
-    int P230,P240;
-    double *P230_x,*P240_x;
-	double *P351_x,*P351_y;
-	double *P352_x,*P352_y;
+    double P141; //int runup cylinder radius
+    double *P168_x;
+    double *P168_zs;
+    double *P168_ze;
+    double P182; //time between fsf file printout in seconds
+    int *P184_its;
+    int *P184_ite;
+    int *P184_dit;
+    double *P185_ts;
+    double *P185_te;
+    double *P185_dt;
+    double P192; //time between topo file printout in seconds
+    int *P194_its;
+    int *P194_ite;
+    int *P194_dit;
+    double *P195_ts;
+    double *P195_te;
+    double *P195_dt;
+    int P230; //print flowfile
+    int P240; //print potentialfile
+    double *P230_x;
+    double *P240_x;
+    double *P351_x;
+    double *P351_y;
+    double *P352_x;
+    double *P352_y;
     
     // Particles
     int Q10,Q24,Q29,Q43;
