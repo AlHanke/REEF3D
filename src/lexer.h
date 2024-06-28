@@ -517,10 +517,64 @@ public:
     
 
 	// Sediment Transport
-	int S10,S11,S12,S15,S16,S17,S25,S27,S32,S33,S34,S37,S41,S42,S43,S44,S50,S60,S73,S77,S78,S79,S80,S83,S84,S90,S91,S100,S101;
-	double S13,S14,S19,S20,S21,S22,S23,S24,S26_a,S26_b,S30,S45,S46,S47,S48,S57,S71,S72,S81,S82,S92,S93;
-	double *S73_val,*S73_dist,*S73_b,*S73_x,*S73_y;
-    double S77_xs,S77_xe;
+    int S10; //sediment transport module
+    int S11; //bedload formula
+    int S12; //Suspended Sediment, formula for boundary condition
+    int S15;
+    int S16;
+    int S17;
+    int S25;
+    int S27;
+    int S32;
+    int S33;
+    int S34;
+    int S37;
+    int S41;
+    int S42;
+    int S43;
+    int S44;
+    int S50;
+    int S60;
+    int S73;
+    int S77;
+    int S78;
+    int S79;
+    int S80;
+    int S83;
+    int S84;
+    int S90;
+    int S91;
+    int S100;
+    int S101;
+    double S13;
+    double S14;
+    double S19;
+    double S20;
+    double S21;
+    double S22;
+    double S23;
+    double S24;
+    double S26_a;
+    double S26_b;
+    double S30;
+    double S45;
+    double S46;
+    double S47;
+    double S48;
+    double S57;
+    double S71;
+    double S72;
+    double S81;
+    double S82;
+    double S92;
+    double S93;
+    double *S73_val;
+    double *S73_dist;
+    double *S73_b;
+    double *S73_x;
+    double *S73_y;
+    double S77_xs;
+    double S77_xe;
 
 	// Turbulence
 	int T10,T12,T21,T33,T36,T39,T41,T44;
