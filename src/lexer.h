@@ -386,43 +386,162 @@ public:
 	int D10,D11,D20,D21,D30,D31,D33,D37;
 
 	// Free Surface
-	int F10,F30,F31,F32,F34,F35,F36,F40,F44,F46,F47,F49,F50,F150,F151;
-	double F33,F39,F42,F43,F45;
-	double F51,F52,F53,F54,F55,F56;
-    int F50_flag;
-	double F57_1,F57_2,F57_3,F57_4;
-	double F58_1,F58_2,F58_3,F58_4;
-    double F59_xm, F59_ym, F59_zs, F59_ze, F59_r;
-	double F60,F61,F62,F63;
-	int F64;
-	double F64_xs,F64_ys,F64_zs,F64_alpha;
-	int F70;
-	double *F70_xs, *F70_xe, *F70_ys, *F70_ye, *F70_zs, *F70_ze;
-	int F71;
-	double *F71_xs, *F71_xe, *F71_ys, *F71_ye, *F71_zs, *F71_ze;
-	int F72;
-	double *F72_xs, *F72_xe, *F72_ys, *F72_ye, *F72_h;
-	int F80,F85;
-	double F84;
-    
-    int F300,F305,F310,F350;
-	double F321,F322,F323,F360,F361,F362;
-	int F369,F370,F371,F374,F375,F378,F379;
-    double *F369_x,*F369_z,*F369_a,*F369_s,*F369_l,*F369_v;
-	double *F370_xs, *F370_xe, *F370_ys, *F370_ye, *F370_zs, *F370_ze;
-	double *F371_xs, *F371_xe, *F371_ys, *F371_ye, *F371_zs, *F371_ze;
-	double *F374_xc, *F374_zc, *F374_r;
-    double *F375_xc, *F375_zc, *F375_r;
-    double *F378_xc, *F378_yc,*F378_zc, *F378_r;
-    double *F379_xc, *F379_yc,*F379_zc, *F379_r;
-	double F380,F381,F382;
-	int F390,F391,F394,F395,F398,F399;
-	double *F390_xs, *F390_xe, *F390_ys, *F390_ye, *F390_zs, *F390_ze;
-	double *F391_xs, *F391_xe, *F391_ys, *F391_ye, *F391_zs, *F391_ze;
-    double *F394_xc, *F394_zc, *F394_r;
-    double *F395_xc, *F395_zc, *F395_r;
-    double *F398_xc, *F398_yc,*F398_zc, *F398_r;
-    double *F399_xc, *F399_yc,*F399_zc, *F399_r;
+    int F10; //free surface scheme
+    int F30; //level set scheme
+    int F31; //particle level se
+    int F32; //number of particles per cell
+    int F34; //printout iteration for pls
+    int F35; //convection scheme for fsf
+    int F36; //RK3 scheme
+    int F40; //reini scheme
+    int F44; //number reini time step
+    int F46; //picard iteration for lsm or re
+    int F47; //number of picard iterations
+    int F49; //no reinitialization for interface nodes
+    int F50; //bc phi, 1: inflow or 2: outflow
+    int F150; //benchmark
+    int F151; //benchmark inverse sign of level se
+    double F33; //factor for pls vec allocation
+    double F39; //reini constraint relaxation factor
+    double F42; //maxlength
+    double F43; //factor for reini timestep
+    double F45; //factor for calculation of epsi
+    double F51; //i-dir zero level set start
+    double F52; //j-dir zero level set start
+    double F53; //k-dir zero level set start
+    double F54; //i-dir zero level set en
+    double F55; //j-dir zero level set en
+    double F56; //k-dir zero level set en
+    int F50_flag; //flag for lsm descriptio
+    double F57_1; //a, plan
+    double F57_2; //b
+    double F57_3; //c
+    double F57_4; //d
+    double F58_1; //x0, spher
+    double F58_2; //y0
+    double F58_3; //z0
+    double F58_4; //r
+    double F59_xm; //xm, cylinder
+    double F59_ym; //ym
+    double F59_zs; //zs
+    double F59_ze; //z
+    double F59_r; //r
+    double F60; //ini z-dir
+    double F61; //inflow  ini
+    double F62; //outflow  ini
+    double F63; //xstart phi interpolate with outflow h
+    int F64; //fsf plane with angle on/off
+    double F64_xs; //xs
+    double F64_ys; //xs
+    double F64_zs; //xs
+    double F64_alpha; //alpha
+    int F70; //number of phi 1 ini boxes
+    double *F70_xs;
+    double *F70_xe;
+    double *F70_ys;
+    double *F70_ye;
+    double *F70_zs;
+    double *F70_ze;
+    int F71; //number of phi 2 ini boxes
+    double *F71_xs;
+    double *F71_xe;
+    double *F71_ys;
+    double *F71_ye;
+    double *F71_zs;
+    double *F71_ze;
+    int F72; //number of phi 1 ini regions
+    double *F72_xs;
+    double *F72_xe;
+    double *F72_ys;
+    double *F72_ye;
+    double *F72_h;
+    int F80; //time scheme VOF
+    int F85; //convection scheme VOF
+    double F84; //cgamma for vof compression
+    int F300; //multiphase flow level se
+    int F305; //multiphase flow lsm convectio
+    int F310; //multiphase flow re
+    int F350; //multiphase flow fix level set inflow/outflow
+    double F321; //epsi12
+    double F322; //epsi13
+    double F323; //epsi23
+    double F360; //ini x-dir ls1
+    double F361; //ini y-dir ls1
+    double F362; //ini z-dir ls1
+    int F369; //number of phi 1 ini tiltboxes ls1
+    int F370; //number of phi 1 ini boxes ls1
+    int F371; //number of phi 2 ini boxes ls1
+    int F374; //number of pos ls1 ycyl
+    int F375; //number of neg ls1 ycyl
+    int F378; //number of pos ls1 sphere
+    int F379; //number of neg ls1 sphere
+    double *F369_x;
+    double *F369_z;
+    double *F369_a;
+    double *F369_s;
+    double *F369_l;
+    double *F369_v;
+    double *F370_xs;
+    double *F370_xe;
+    double *F370_ys;
+    double *F370_ye;
+    double *F370_zs;
+    double *F370_ze;
+    double *F371_xs;
+    double *F371_xe;
+    double *F371_ys;
+    double *F371_ye;
+    double *F371_zs;
+    double *F371_ze;
+    double *F374_xc;
+    double *F374_zc;
+    double *F374_r;
+    double *F375_xc;
+    double *F375_zc;
+    double *F375_r;
+    double *F378_xc;
+    double *F378_yc;
+    double *F378_zc;
+    double *F378_r;
+    double *F379_xc;
+    double *F379_yc;
+    double *F379_zc;
+    double *F379_r;
+    double F380; //ini x-dir ls2
+    double F381; //ini y-dir ls2
+    double F382; //ini z-dir ls2
+    int F390; //number of phi 1 ini boxes ls2
+    int F391; //number of phi 2 ini boxes ls2
+    int F394; //number of pos ls2 ycyl
+    int F395; //number of neg ls2 ycyl
+    int F398; //number of pos ls2 sphere
+    int F399; //number of neg ls2 sphere
+    double *F390_xs;
+    double *F390_xe;
+    double *F390_ys;
+    double *F390_ye;
+    double *F390_zs;
+    double *F390_ze;
+    double *F391_xs;
+    double *F391_xe;
+    double *F391_ys;
+    double *F391_ye;
+    double *F391_zs;
+    double *F391_ze;
+    double *F394_xc;
+    double *F394_zc;
+    double *F394_r;
+    double *F395_xc;
+    double *F395_zc;
+    double *F395_r;
+    double *F398_xc;
+    double *F398_yc;
+    double *F398_zc;
+    double *F398_r;
+    double *F399_xc;
+    double *F399_yc;
+    double *F399_zc;
+    double *F399_r;
     
 	// Grid Options
     int G1; //xmargin inflow
