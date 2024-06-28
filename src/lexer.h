@@ -520,61 +520,61 @@ public:
     int S10; //sediment transport module
     int S11; //bedload formula
     int S12; //Suspended Sediment, formula for boundary condition
-    int S15;
-    int S16;
-    int S17;
-    int S25;
-    int S27;
-    int S32;
-    int S33;
-    int S34;
-    int S37;
-    int S41;
-    int S42;
-    int S43;
-    int S44;
-    int S50;
-    int S60;
-    int S73;
-    int S77;
-    int S78;
-    int S79;
-    int S80;
-    int S83;
-    int S84;
-    int S90;
-    int S91;
-    int S100;
-    int S101;
-    double S13;
-    double S14;
-    double S19;
-    double S20;
-    double S21;
-    double S22;
-    double S23;
-    double S24;
-    double S26_a;
-    double S26_b;
-    double S30;
-    double S45;
-    double S46;
-    double S47;
-    double S48;
-    double S57;
-    double S71;
-    double S72;
-    double S81;
-    double S82;
-    double S92;
-    double S93;
+    int S15; //synchronize sediment time step with main solver
+    int S16; //bed shear stress formulatio
+    int S17; //non-equillibrium bedload 
+    int S25; //automatic sediment fall velocity
+    int S27; //number of inner iterations
+    int S32; //exner discretizatio
+    int S33; //type of near bead velocity interpolatio
+    int S34; //type of suspedned load D and E calculatio
+    int S37; //number reini time step
+    int S41; //type of sediment start criterio
+    int S42; //type of sediment interval criterio
+    int S43; //number of water iteration, before sediment transport starts
+    int S44; //number of water timesteps between bed calculatio
+    int S50; //bc phi, 1: inflow fix or 2: outflow fix, 3: both fix
+    int S60; //time stepping for suspended sediments
+    int S73; //distance for use relaxation method for the sediment bed
+    int S77; //active sediment domain in x-directio
+    int S78; //inflow guard
+    int S79; //outflow guard
+    int S80; //type of slope reductio
+    int S83; //type of bedslope calc
+    int S84; //type of critical bed shear stress reduction limiters
+    int S90; //sandslide on/off
+    int S91; //number of sandslide iterations
+    int S100; //number of bed filter outer iterations
+    int S101; //number of bed filter inner iterations
+    double S13; //timestep for sediment transport
+    double S14; //relaxation timestep size for sediment transport
+    double S19; //total time sediment
+    double S20; //sediment d50
+    double S21; //factor for d50 for calculation of ks in bedshear routin
+    double S22; //sediment density
+    double S23; //sediment fall velocity
+    double S24; //porosity of sediment layer
+    double S26_a; //alpha for VRANS sediment
+    double S26_b; //beta for VRANS sediment
+    double S30; //Shields parameter
+    double S45; //flow simulation time, before sediment transport starts
+    double S46; //flow simulation time between bed calculation
+    double S47; //t/T, before sediment transport starts
+    double S48; //int nt/T between bed calculation
+    double S57; //ini z-dir
+    double S71; //int x start of erosion
+    double S72; //int x end of erosion
+    double S81; //midphi for slope reduction
+    double S82; //delta phi for slope reduction
+    double S92; //sandslide correction factor
+    double S93; //delta phi for sandlide correciton
     double *S73_val;
     double *S73_dist;
     double *S73_b;
     double *S73_x;
     double *S73_y;
-    double S77_xs;
-    double S77_xe;
+    double S77_xs; //active sediment domain x_start
+    double S77_xe; //active sediment domain x_en
 
 	// Turbulence
 	int T10,T12,T21,T33,T36,T39,T41,T44;
