@@ -594,22 +594,69 @@ public:
     double T43; //komega wall BC velocity factor
 
 	// Waterflow
-	double W1,W2,W3,W4,W5,W6,W7,W10,W_fb;
-    int W11,W12,W13,W14,W15,W16;
-    double W11_u,W11_v,W11_w,W12_u,W12_v,W12_w,W13_u,W13_v,W13_w,W14_u,W14_v,W14_w,W15_u,W15_v,W15_w,W16_u,W16_v,W16_w;
-    double W20,W21,W22,W31,W29_x,W29_y,W29_z;
-	int W30;
-    int W41;
-    double *W41_xc,*W41_yc,*W41_zs,*W41_ze,*W41_vel,*W41_beta;
-    double W50;
-    int W50_air;
-    int W90;
-    double W95,W96,W97,W98;
-    int W101;
-    double W102_c,W102_phi;
-    double W103,W104;
-    int W110,W111;
-    double W112;
+    double W1; //density water
+    double W2; //viscosity water
+    double W3; //density air
+    double W4; //viscosity air
+    double W5; //surface tension between phase 1 and phase 2
+    double W6; //density oi
+    double W7; //viscosity oi
+    double W10; //discharg
+    double W_fb; //density of floating body
+    int W11; //velocity inlet face 1
+    int W12; //velocity inlet face 2
+    int W13; //velocity inlet face 3
+    int W14; //velocity inlet face 4
+    int W15; //velocity inlet face 5
+    int W16; //velocity inlet face 6
+    double W11_u; //u-velocity inlet face 1
+    double W11_v; //v-velocity inlet face 1
+    double W11_w; //w-velocity inlet face 1
+    double W12_u; //u-velocity inlet face 2
+    double W12_v; //v-velocity inlet face 2
+    double W12_w; //w-velocity inlet face 2
+    double W13_u; //u-velocity inlet face 3
+    double W13_v; //v-velocity inlet face 3
+    double W13_w; //w-velocity inlet face 3
+    double W14_u; //u-velocity inlet face 4
+    double W14_v; //v-velocity inlet face 4
+    double W14_w; //w-velocity inlet face 4
+    double W15_u; //u-velocity inlet face 5
+    double W15_v; //v-velocity inlet face 5
+    double W15_w; //w-velocity inlet face 5
+    double W16_u; //u-velocity inlet face 6
+    double W16_v; //v-velocity inlet face 6
+    double W16_w; //w-velocity inlet face 6
+    double W20; //gi
+    double W21; //gj
+    double W22; //gk
+    double W31; //temperature for air compressibility in celsius
+    double W29_x; //pressure gradient x-direction
+    double W29_y; //pressure gradient y-direction
+    double W29_z; //pressure gradient z-direction
+    int W30; //air compressibility on/off
+    int W41; //velocity source phase 1
+    double *W41_xc;
+    double *W41_yc;
+    double *W41_zs;
+    double *W41_ze;
+    double *W41_vel;
+    double *W41_beta;
+    double W50; //air inflow
+    int W50_air; //air inflow switch
+    int W90; //non-newtownian flow
+    double W95; //nu_0
+    double W96; //tau_0
+    double W97; //K
+    double W98; //int
+    int W101; //turn on Mohr-Coloumb
+    double W102_c; //c factor
+    double W102_phi; //angle of repos
+    double W103; //MC transition factor
+    double W104; //shear rate dependent excess pore pressure factor
+    int W110; //add rheology as source term or viscosity
+    int W111; //which pressure for MC
+    double W112; //threshold factor for pressure blening in W111 3
     
     // 6DOF
 	double ufb,vfb,wfb;
@@ -620,7 +667,6 @@ public:
 	double xgn,ygn,zgn;
 	double phi_fb,theta_fb,psi_fb;
 	double ufbmax, vfbmax, wfbmax;
-	//Eigen::Matrix3d quatRotMat;	
     int X10,X12,X14,X15,X19,X11_u,X11_v,X11_w,X11_p,X11_q,X11_r,X21,X22,X23,X24,X31,X32,X33,X34,X38;
     int X39,X40,X45,X46,X47,X48,X49,X50,X60,X110,X120,X131,X132,X133;
 	int X100,X101,X102,X103,X141,X142,X143,X153,X180,X181,X182,X183,X210,X211;
