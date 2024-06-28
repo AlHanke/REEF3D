@@ -1591,9 +1591,28 @@ public:
     double X401_a; //sflow external pressure term a
 
     // FSI
-    int Z10,Z11,FSI_count;
-    double *Z11_x,*Z11_y,*Z11_z,*Z11_l,*Z11_w,*Z11_t,*Z11_rho,*Z11_e,*Z11_ix,*Z11_iy,*Z11_iz,*Z11_nu,*Z11_n;
-    double Z12_ckx,Z12_cky,Z12_ckz,Z12_cdx,Z12_cdy,Z12_cdz;
+    int Z10; //turn FSI o
+    int Z11;
+    int FSI_count;
+    double *Z11_x;
+    double *Z11_y;
+    double *Z11_z;
+    double *Z11_l;
+    double *Z11_w;
+    double *Z11_t;
+    double *Z11_rho;
+    double *Z11_e;
+    double *Z11_ix;
+    double *Z11_iy;
+    double *Z11_iz;
+    double *Z11_nu;
+    double *Z11_n;
+    double Z12_ckx; //fsi beam structural damping coefficients
+    double Z12_cky; //fsi beam structural damping coefficients
+    double Z12_ckz; //fsi beam structural damping coefficients
+    double Z12_cdx; //fsi beam structural damping coefficients
+    double Z12_cdy; //fsi beam structural damping coefficients
+    double Z12_cdz; //fsi beam structural damping coefficients
 	
 	// Grid
 	int Y40,Y50,Y60,Y71,Y72,Y73,Y74;
