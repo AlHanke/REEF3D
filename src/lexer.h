@@ -95,7 +95,7 @@ public:
 	int pointnum,cellnum,tpcellnum;
 	int cellnum1,cellnum2,cellnum3;
     int pointnumtot,cellnumtot;
-    int N4,N4_row,N4_col;
+    int N4,N4_row,N4_col; //time scheme
     int N7,N7_row,N7_col;
 	double originx,originy,originz;
     double endx,endy,endz;
@@ -448,11 +448,23 @@ public:
     double I241;
 
 	// Numerical Options
-	int N10,N11,N40,N45,N46,N48,N60;
-	double N41,N43,N44,N47,N49,N50,N61;
+    int N10; //linear poisson solver
+    int N11; //precondioner
+    int N40; //time scheme
+    int N45; //max outer iter
+    int N46; //max number of solver iterations
+    int N48; //adaptive timestepping
+    int N60; //maximum iteration of pjm correctio
+    double N41; //total tim
+    double N43; //stopping criteria convection-diffusion
+    double N44; //stopping criteria pressur
+    double N47; //relaxation factor for time stepping
+    double N49; //max timestep or fixed timesteps
+    double N50; //int adaptive timestepping meth
+    double N61; //stopping criteria velocities
 
 	// MPI Options
-	int M10;
+	int M10; //number of MPI processes
 
 	// Print options
     int P10; //print file type
