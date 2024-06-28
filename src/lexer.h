@@ -430,14 +430,43 @@ public:
 	int G40;
 
 	// Heat Options
-	double H1,H2;
-	int H3,H4,H9,H10,H15;
-	double H4_beta1,H4_beta2,H50_1,H50_2;
-	double H51,H52,H53,H54,H55,H56;
-	double H57_1,H57_2,H57_3,H57_4;
-	double H58_1,H58_2,H58_3,H58_4;
-    int H61,H62,H63,H64,H65,H66;
-    double H61_T,H62_T,H63_T,H64_T,H65_T,H66_T;
+    double H1; //thermal diffusivity water
+    double H2; //thermal diffusivity air
+    int H3; //ype of density calculatio
+    int H4; //use beta coeff
+    int H9; //air-water assignme
+    int H10; //heat transfer on/off
+    int H15; //convection for heat transfer
+    double H4_beta1; //beta1
+    double H4_beta2; //beta2
+    double H50_1; //temperature 1
+    double H50_2; //temperature 2
+    double H51; //i-dir zero level set start
+    double H52; //j-dir zero level set start
+    double H53; //k-dir zero level set start
+    double H54; //i-dir zero level set en
+    double H55; //j-dir zero level set en
+    double H56; //k-dir zero level set en
+    double H57_1; //a, plan
+    double H57_2; //
+    double H57_3; //c
+    double H57_4; //
+    double H58_1; //x0, spher
+    double H58_2; //y0
+    double H58_3; //z0
+    double H58_4; //r
+    int H61; //heat bc
+    int H62; //heat bc
+    int H63; //heat bc
+    int H64; //heat bc
+    int H65; //heat bc
+    int H66; //heat bc
+    double H61_T; //heat bc
+    double H62_T; //heat bc
+    double H63_T; //heat bc
+    double H64_T; //heat bc
+    double H65_T; //heat bc
+    double H66_T; //heat bc
 	
 	// Initialize Options
     int I10; //initialize all
