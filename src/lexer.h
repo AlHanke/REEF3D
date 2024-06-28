@@ -373,17 +373,48 @@ public:
     double *B322_xs, *B322_xe, *B322_ys, *B322_ye, *B322_zs, *B322_ze, *B322_N, *B322_D, *B322_Cd;
 	
     // Concentration Options
-	double C1,C2,C3,C4,C5;
-	int C9,C10,C15,C20;
-	double C50_1,C50_2;
-	double C51,C52,C53,C54,C55,C56;
-	double C57_1,C57_2,C57_3,C57_4;
-	double C58_1,C58_2,C58_3,C58_4;
-	int C75;
-	double *C75_x,*C75_z,*C75_a,*C75_s,*C75_l,*C75_v;
+    double C1; //density concentration in water
+    double C2; //viscosity water + concentration
+    double C3; //density concentration in air
+    double C4; //viscosity air + concentration
+    double C5; //Schmidt number
+    int C9; //only phase 1 concentratio
+    int C10; //concentration transfer on/off
+    int C15; //concentration convectio
+    int C20; //concentration diffusio
+    double C50_1; //fill ration concentration area 1
+    double C50_2; //fill ration concentration area 2
+    double C51; //i-dir zero level set start
+    double C52; //j-dir zero level set start
+    double C53; //k-dir zero level set start
+    double C54; //i-dir zero level set en
+    double C55; //j-dir zero level set en
+    double C56; //k-dir zero level set en
+    double C57_1; //a, plan
+    double C57_2; //b
+    double C57_3; //c
+    double C57_4; //d
+    double C58_1; //x0, spher
+    double C58_2; //y0
+    double C58_3; //z0
+    double C58_4; //r
+    int C75; //number of tiltboxes
+    double *C75_x;
+    double *C75_z;
+    double *C75_a;
+    double *C75_s;
+    double *C75_l;
+    double *C75_v;
 
 	// discretization
-	int D10,D11,D20,D21,D30,D31,D33,D37;
+    int D10; //convection scheme
+    int D11; //convection velocity scheme
+    int D20; //diffusion scheme
+    int D21; //print out implicit diffusion time and iterations
+    int D30; //pressure scheme
+    int D31; //normalize pressure to free surface
+    int D33; //corner cells sigma grid Poisson matrix
+    int D37; //type of FSFBC for single fluid flow
 
 	// Free Surface
     int F10; //free surface scheme
