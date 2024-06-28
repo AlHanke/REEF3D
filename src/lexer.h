@@ -577,8 +577,21 @@ public:
     double S77_xe; //active sediment domain x_en
 
 	// Turbulence
-	int T10,T12,T21,T33,T36,T39,T41,T44;
-	double T31,T32,T35,T37,T38,T42,T43;
+    int T10; //turbulence model
+    int T12; //convection scheme
+    int T21; //type of LES filter
+    int T33; //kin source
+    int T36; //explciti free surface dampong through dissipatio
+    int T39; //blend fsf eddyv with sgs-eddyv
+    int T41; //RANS stabilizatio
+    int T44; //buouncy term
+    double T31; //factor for limiter for eddy limiter in phase 1
+    double T32; //factor for limiter for eddy limiter in phase 2
+    double T35; //factor for limiter for eddy limiter near wa
+    double T37; //int damping coefficient for T36
+    double T38; //epsi fsf turbulence damping
+    double T42; //lambda1 factor
+    double T43; //komega wall BC velocity factor
 
 	// Waterflow
 	double W1,W2,W3,W4,W5,W6,W7,W10,W_fb;
