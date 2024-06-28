@@ -440,12 +440,26 @@ public:
     double H61_T,H62_T,H63_T,H64_T,H65_T,H66_T;
 	
 	// Initialize Options
-	int I10,I11,I12,I13,I30,I40,I41,I44,I56;
-	double I21,I50,I55,I58_1,I58_2;
-    int I230;
-    double I231,I232,I233;
-    int I240;
-    double I241;
+    int I10; //initialize all
+    int I11; //initialize velocities with potential flow
+    int I12; //initialize pressure
+    int I13; //initialize turbulence
+    int I30; //Fully intialize NWT
+    int I40; //ini from state file
+    int I41; //ID of state file
+    int I44; //FNPF state with F
+    int I56; //pressure above F56 set to zero
+    double I21; //int set phase 2 velocities to zero after potential flow solver
+    double I50; //simtime ini
+    double I55; //reference pressur
+    double I58_1; //vertical velocity for sphere initialization
+    double I58_2; //radius for sphere initialization
+    int I230; //read 2D flowfile
+    double I231; //starting x for flowfi
+    double I232; //starting y for flowfi
+    double I233; //starting z for flowfi
+    int I240; //read flowfile
+    double I241; //delta t for flowfi
 
 	// Numerical Options
     int N10; //linear poisson solver
