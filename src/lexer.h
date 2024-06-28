@@ -266,7 +266,7 @@ public:
     int A211; //convection scheme for SLOW velocities
     int A212; //diffusion treatment for SLOW velocities
     int A214; //convection for vertical velocity
-    int A215; //conservative discretizatio
+    int A215; //conservative discretization
     int A216; //convection velocity
     int A217; //slip or no-slip boundary conditions
     int A218; //turn on roughness
@@ -279,7 +279,7 @@ public:
     int A242; //hydostatic pressure for shallow areas
     int A243; //turn on wetting-drying
     int A244; //double absolute wetting criterion value
-    int A245; //dx-based relative wetting citerio
+    int A245; //dx-based relative wetting citerion
     int A246; //turn on breaking
     int A248; //turn on breaking persistence
     int A251; //double fsf-slope in x-dir
@@ -299,14 +299,14 @@ public:
     int A311; //convection scheme for FNPF velocities
     int A312; //discretization for second-order gradie
     int A313; //discretization for bed bc
-    int A320; //order of Laplace equatio
-    int A321; //boundary condition order for 4th-order Laplace equatio
-    int A322; //maxiter for 4th-order Laplace after 2nd-order solutio
-    int A323; //PTF FSF extrapolatio
+    int A320; //order of Laplace equation
+    int A321; //boundary condition order for 4th-order Laplace equation
+    int A322; //maxiter for 4th-order Laplace after 2nd-order solution
+    int A323; //PTF FSF extrapolation
     int A329; //wave maker BC order
     int A343; //turn on wetting-drying
-    int A344; //absolute wetting criterio
-    int A345; //dx-based relative wetting citerio
+    int A344; //absolute wetting criterion
+    int A345; //dx-based relative wetting citerion
     int A347; //coastline relaxation for Fi and eta
     int A348; //beach relaxation for Fi and eta
     double A340; //minimum water depth
@@ -320,7 +320,7 @@ public:
     int A352; //additional filtering to viscosity based breaking
     int A353; //breaking wave identification algorithm
     int A357; //breaking for Fi and eta
-    int A358; //breaking algorithm versio
+    int A358; //breaking algorithm version
     int A361; //breaking filter outer iter
     int A362; //breaking filter inner iter
     int A363; //breaking filter width
@@ -338,7 +338,7 @@ public:
     int A501; //nhf mode
     int A510; //NFHLOW time scheme
     int A511; //NHFLOW HLL scheme
-    int A512; //NHFLOW diffusio
+    int A512; //NHFLOW diffusion
     int A514; //NHFLOW reconstruction 
     int A515; //NHFLOW KFSFBC scheme
     int A516; //NFHLOW KFSFBED scheme
@@ -383,7 +383,7 @@ public:
     int B20; //slip or no-slip boundary condition for velocity
     int B23; //ghostcell extrapolation or refective
     int B30; //type of pressure reference po
-    int B32; //pressure reference locatio
+    int B32; //pressure reference location
     int B33; //pressure gage virtual or inline
     double B31; //pressure reference va
     double B32_x; //pressure reference location
@@ -393,23 +393,23 @@ public:
     int B61; //plain or logarithmic inflow profile
     int B71; //double distance for use relaxation method for fixed water level 
     int B75; //type of outflow boundary conditions
-    int B76; //type of pressure inlet boundary conditio
+    int B76; //type of pressure inlet boundary condition
     int B77; //outflow pressure controlled or free stream
     int B84; //Peak enhance method
     int B85; //PM or JONSWAP spectrum for irregular waves
     int B81; //focussed wave parameter
-    int B82; //type of focus point and time calculatio
-    int B86; //number of regular waves for irregular wave generatio
-    int B87; //give ws and we for irregular wave generatio
-    int B89; //wave generation optimizatio
+    int B82; //type of focus point and time calculation
+    int B86; //number of regular waves for irregular wave generation
+    int B87; //give ws and we for irregular wave generation
+    int B89; //wave generation optimization
     int B90; //iowave
     int B91; //wave parameter wL
     int B92; //wave type
     int B93; //wave parameter wT
     int B94; //set water depth for wave theory
-    int B98; //type of wave generatio
+    int B98; //type of wave generation
     int B99; //type of numerical beach
-    int B101; //ramp function wave geneartio
+    int B101; //ramp function wave geneartion
     int B105; //wave generation origin changed
     int B106; //read wave generation orig
     int B107; //read numerical beach orig
@@ -422,9 +422,9 @@ public:
     int B191; //rotation around x-axis
     int B192; //rotation around y-axis
     int B240; //porous media
-    int B241; //porous media in x-directio
-    int B242; //porous media in y-directio
-    int B243; //porous media in z-directio
+    int B241; //porous media in x-direction
+    int B242; //porous media in y-direction
+    int B243; //porous media in z-direction
     double B29; //gamma for gc image point
     double B50; //global wall roughness ks
     double B51; //global wall roughness ks
@@ -488,17 +488,17 @@ public:
     double B123; //flap AWA hinge location
     double B125_y; //2D slice y-coor input for HDC
     int B130; //directional spreading for irregular waves
-    int B133; //number of direction intervals for spreading functio
+    int B133; //number of direction intervals for spreading function
     double B131; //main direction for multidirectional irregular waves
     double B132_s; //start directional spreading
     double B132_e; //end directional spreading
     double B134; //shape parameter for spreading function
     double B135; //peak va
-    int B160; //number of vertical layers for 2D wave generatio
+    int B160; //number of vertical layers for 2D wave generation
     int B170; //number of Fourier modes for the generation of steady surface gravity waves
-    int B181; //x-dir motio
-    int B182; //y-dir motio
-    int B183; //z-dir motio
+    int B181; //x-dir motion
+    int B182; //y-dir motion
+    int B183; //z-dir motion
     double B181_1; //x-acceleration amplit
     double B181_2; //x-acceleration frequency
     double B181_3; //wave phase chang
@@ -525,7 +525,7 @@ public:
     int B415; //patchBC velocity components
     int B416; //patchBC horizontal inflow angle
     int B417; //patchBC inflow normals
-    int B418; //patchBC outflow pressure conditio
+    int B418; //patchBC outflow pressure condition
     int B421; //patchBC hydrograph discharge
     int B422; //patchBC hydrograph waterlevel
     int *B411_ID;
@@ -586,7 +586,7 @@ public:
     double B260; //C coefficient for VRANS
     double B264; //KC number for VRANS
     double B267; //d50 for VRANS
-    int B269; //VRANS on/off -> assigned as 1 for VRANS Structure, 2 for Vegetation, 3 for Net interactio
+    int B269; //VRANS on/off -> assigned as 1 for VRANS Structure, 2 for Vegetation, 3 for Net interaction
     int B270; //VRANS porous media box
     double *B270_xs;
     double *B270_xe;
@@ -604,7 +604,11 @@ public:
     double *B274_zs;
     double *B274_ze;
     double *B274_r;
-    int B281; //VRANS porous media wedge in x-directio
+    double *B274_n;
+    double *B274_d50;
+    double *B274_alpha;
+    double *B274_beta;
+    int B281; //VRANS porous media wedge in x-direction
     double *B281_xs;
     double *B281_xe;
     double *B281_ys;
@@ -615,7 +619,7 @@ public:
     double *B281_d50;
     double *B281_alpha;
     double *B281_beta;
-    int B282; //VRANS porous media wedge in y-directio
+    int B282; //VRANS porous media wedge in y-direction
     double *B282_xs;
     double *B282_xe;
     double *B282_ys;
@@ -626,7 +630,7 @@ public:
     double *B282_d50;
     double *B282_alpha;
     double *B282_beta;
-    int B291; //VRANS porous media plate in x-directio
+    int B291; //VRANS porous media plate in x-direction
     double *B291_xs;
     double *B291_xe;
     double *B291_ys;
@@ -639,7 +643,7 @@ public:
     double *B291_alpha;
     double *B291_beta;
     int B295;
-    int B308; //porosity effects on fluid acceleration for vegetatio
+    int B308; //porosity effects on fluid acceleration for vegetation
     int B310; //VRANS vegetation box
     int B311;
     double B309; //Cm for vegetation
@@ -660,7 +664,7 @@ public:
     double *B311_N;
     double *B311_D;
     double *B311_Cd;
-    int B321; //VRANS vegetation wedge in x-directio
+    int B321; //VRANS vegetation wedge in x-direction
     double *B321_xs;
     double *B321_xe;
     double *B321_ys;
@@ -670,7 +674,7 @@ public:
     double *B321_N;
     double *B321_D;
     double *B321_Cd;
-    int B322; //VRANS vegetation wedge in y-directio
+    int B322; //VRANS vegetation wedge in y-direction
     double *B322_xs;
     double *B322_xe;
     double *B322_ys;
@@ -687,10 +691,10 @@ public:
     double C3; //density concentration in air
     double C4; //viscosity air + concentration
     double C5; //Schmidt number
-    int C9; //only phase 1 concentratio
+    int C9; //only phase 1 concentration
     int C10; //concentration transfer on/off
-    int C15; //concentration convectio
-    int C20; //concentration diffusio
+    int C15; //concentration convection
+    int C20; //concentration diffusion
     double C50_1; //fill ration concentration area 1
     double C50_2; //fill ration concentration area 2
     double C51; //i-dir zero level set start
@@ -752,7 +756,7 @@ public:
     double F54; //i-dir zero level set en
     double F55; //j-dir zero level set en
     double F56; //k-dir zero level set en
-    int F50_flag; //flag for lsm descriptio
+    int F50_flag; //flag for lsm description
     double F57_1; //a, plan
     double F57_2; //b
     double F57_3; //c
@@ -799,7 +803,7 @@ public:
     int F85; //convection scheme VOF
     double F84; //cgamma for vof compression
     int F300; //multiphase flow level se
-    int F305; //multiphase flow lsm convectio
+    int F305; //multiphase flow lsm convection
     int F310; //multiphase flow re
     int F350; //multiphase flow fix level set inflow/outflow
     double F321; //epsi12
@@ -899,7 +903,7 @@ public:
 	// Heat Options
     double H1; //thermal diffusivity water
     double H2; //thermal diffusivity air
-    int H3; //ype of density calculatio
+    int H3; //ype of density calculation
     int H4; //use beta coeff
     int H9; //air-water assignme
     int H10; //heat transfer on/off
@@ -964,8 +968,8 @@ public:
     int N45; //max outer iter
     int N46; //max number of solver iterations
     int N48; //adaptive timestepping
-    int N60; //maximum iteration of pjm correctio
-    double N41; //total tim
+    int N60; //maximum iteration of pjm correction
+    double N41; //total time
     double N43; //stopping criteria convection-diffusion
     double N44; //stopping criteria pressur
     double N47; //relaxation factor for time stepping
@@ -982,9 +986,9 @@ public:
     int P12; //terminal print frequency
     int P15; //print file numbering
     int P16; //add timestamp to paraview files
-    int P18; //option for phi print ou
+    int P18; //option for phi print out
     int P20; //h iteration file printed
-    int P21; //time averaged vtk file print ou
+    int P21; //time averaged vtk file print out
     int P23; //print test to vtk file
     int P24; //print density to vtk file
     int P25; //print solid to vtk file
@@ -994,7 +998,7 @@ public:
     int P29; //print walldist to vtk file
     int P35; //print for interval
     int P40; //print state file
-    int P41; //print state file each ith iteratio
+    int P41; //print state file each ith iteration
     int P43; //state print out selected area
     int P44; //print out 3D potential for FNPF
     int P45; //print into single or continous state file
@@ -1002,7 +1006,7 @@ public:
     int P51; //print out wsf
     int P52; //print out wsfline in x-dir
     int P53; //print out wsfline for wave theory
-    int P54; //ith iteration wsfline file  print ou
+    int P54; //ith iteration wsfline file  print out
     int P56; //print out wsf line in y-dir
     int P57; //add aditional info to WSF gage in FNPF
     int P58; //print wave time series
@@ -1014,24 +1018,24 @@ public:
     int P65; //print velocity probes
     int P66; //print velocity probes from wave theory
     int P71; //print viscosity to vtk file
-    int P72; //print vof functio
+    int P72; //print vof function
     int P73; //print hx and hy for sflow vtp
     int P74; //unused
     int P75; //print out vorticity vec
     int P76; //print out bedload
     int P77; //print out sediment parameters: 1
     int P78; //print out sediment parameters: 2
-    int P79; //print out bed shear stress when running sediment transpor
-    int P81; //force print ou
+    int P79; //print out bed shear stress when running sediment transport
+    int P81; //force print out
     int P82; //add eddyv to viscous force
     int P85; //ALE force print out for FNPF
     int P92; //force from water or from water+air
     int P101; //print sloshing forces
-    int P120; //sediment log print ou
+    int P120; //sediment log print out
     int P121; //bed level gages
     int P122; //max bed level gages
-    int P123; //topoline in x-directio
-    int P124; //topoline in y-directio
+    int P123; //topoline in x-direction
+    int P124; //topoline in y-direction
     int P125; //bed shear stress gages
     int P126; //bed shear stress maxval
     int P140; //runup gage cylinder
@@ -1039,8 +1043,8 @@ public:
     int P151; //type of data
     int P152; //type of boundary condition for data
     int P166; //print discharge to terminal
-    int P167; //discharge gages in x-directio
-    int P168; //discharge gages in x-directio
+    int P167; //discharge gages in x-direction
+    int P168; //discharge gages in x-direction
     int P180; //print fsf
     int P181; //ith iteration fsf printed
     int P184; //time between file printout in iterations
@@ -1126,8 +1130,8 @@ public:
     double *P125_y;
     int P131; //max wetdry in vtp
     int P132; //max wetdry as file
-    int P133; //runup gage x-crossectio
-    int P134; //runup gage y-crossectio
+    int P133; //runup gage x-crossection
+    int P134; //runup gage y-crossection
     double *P133_y;
     double *P134_y;
     double *P140_x;
@@ -1180,25 +1184,25 @@ public:
     int S11; //bedload formula
     int S12; //Suspended Sediment, formula for boundary condition
     int S15; //synchronize sediment time step with main solver
-    int S16; //bed shear stress formulatio
+    int S16; //bed shear stress formulation
     int S17; //non-equillibrium bedload 
     int S25; //automatic sediment fall velocity
     int S27; //number of inner iterations
-    int S32; //exner discretizatio
-    int S33; //type of near bead velocity interpolatio
-    int S34; //type of suspedned load D and E calculatio
+    int S32; //exner discretization
+    int S33; //type of near bead velocity interpolation
+    int S34; //type of suspedned load D and E calculation
     int S37; //number reini time step
-    int S41; //type of sediment start criterio
-    int S42; //type of sediment interval criterio
+    int S41; //type of sediment start criterion
+    int S42; //type of sediment interval criterion
     int S43; //number of water iteration, before sediment transport starts
-    int S44; //number of water timesteps between bed calculatio
+    int S44; //number of water timesteps between bed calculation
     int S50; //bc phi, 1: inflow fix or 2: outflow fix, 3: both fix
     int S60; //time stepping for suspended sediments
     int S73; //distance for use relaxation method for the sediment bed
-    int S77; //active sediment domain in x-directio
+    int S77; //active sediment domain in x-direction
     int S78; //inflow guard
     int S79; //outflow guard
-    int S80; //type of slope reductio
+    int S80; //type of slope reduction
     int S83; //type of bedslope calc
     int S84; //type of critical bed shear stress reduction limiters
     int S90; //sandslide on/off
@@ -1240,9 +1244,9 @@ public:
     int T12; //convection scheme
     int T21; //type of LES filter
     int T33; //kin source
-    int T36; //explciti free surface dampong through dissipatio
+    int T36; //explciti free surface dampong through dissipation
     int T39; //blend fsf eddyv with sgs-eddyv
-    int T41; //RANS stabilizatio
+    int T41; //RANS stabilization
     int T44; //buouncy term
     double T31; //factor for limiter for eddy limiter in phase 1
     double T32; //factor for limiter for eddy limiter in phase 2
@@ -1362,15 +1366,15 @@ public:
     int X33; //boundary conditions for pressure on floating body
     int X34; //boundary treatment for new solid velocity cells
     int X38;
-    int X39; //type of viscous force calculatio
-    int X40; //type of force calculatio
+    int X39; //type of viscous force calculation
+    int X40; //type of force calculation
     int X45; //type of lsm convection disc at fb
     int X46; //density smoothing inside fb
     int X47; //reini diffusion inside fb
     int X48;
     int X49;
     int X50; //type of print out format for 6DOF structure
-    int X60; //type of print of force calculatio
+    int X60; //type of print of force calculation
     int X110; //rectangular box floating body
     int X120; //sphere floating bod
     int X131; //cylinder floating bod
@@ -1394,7 +1398,7 @@ public:
     int X311; //number of simple taut mooring lines
     int X312; //number of springs
     int X313; //initial rotation of mooring end points with 6DOF body
-    int X314; //breaking mooring lines due to tensio
+    int X314; //breaking mooring lines due to tension
     int X315; //breaking mooring lines due to time
     int X320;
     int X321; //number of nets
@@ -1430,12 +1434,12 @@ public:
     double X103_p;
     double X103_q;
     double X103_r;
-    double X110_xs;
-    double X110_xe;
-    double X110_ys;
-    double X110_ye;
-    double X110_zs;
-    double X110_ze;
+    double *X110_xs;
+    double *X110_xe;
+    double *X110_ys;
+    double *X110_ye;
+    double *X110_zs;
+    double *X110_ze;
     double X120_rad;
     double X120_xc;
     double X120_yc;
@@ -1462,49 +1466,49 @@ public:
     double X153_zs;
     double X153_ze;
     int X163; //wedge
-    double X163_x1;
-    double X163_y1;
-    double X163_z1;
-    double X163_x2;
-    double X163_y2;
-    double X163_z2;
-    double X163_x3;
-    double X163_y3;
-    double X163_z3;
-    double X163_x4;
-    double X163_y4;
-    double X163_z4;
-    double X163_x5;
-    double X163_y5;
-    double X163_z5;
-    double X163_x6;
-    double X163_y6;
-    double X163_z6;
+    double *X163_x1;
+    double *X163_y1;
+    double *X163_z1;
+    double *X163_x2;
+    double *X163_y2;
+    double *X163_z2;
+    double *X163_x3;
+    double *X163_y3;
+    double *X163_z3;
+    double *X163_x4;
+    double *X163_y4;
+    double *X163_z4;
+    double *X163_x5;
+    double *X163_y5;
+    double *X163_z5;
+    double *X163_x6;
+    double *X163_y6;
+    double *X163_z6;
     int X164; //hexahedro
-    double X164_x1;
-    double X164_y1;
-    double X164_z1;
-    double X164_x2;
-    double X164_y2;
-    double X164_z2;
-    double X164_x3;
-    double X164_y3;
-    double X164_z3;
-    double X164_x4;
-    double X164_y4;
-    double X164_z4;
-    double X164_x5;
-    double X164_y5;
-    double X164_z5;
-    double X164_x6;
-    double X164_y6;
-    double X164_z6;
-    double X164_x7;
-    double X164_y7;
-    double X164_z7;
-    double X164_x8;
-    double X164_y8;
-    double X164_z8;
+    double *X164_x1;
+    double *X164_y1;
+    double *X164_z1;
+    double *X164_x2;
+    double *X164_y2;
+    double *X164_z2;
+    double *X164_x3;
+    double *X164_y3;
+    double *X164_z3;
+    double *X164_x4;
+    double *X164_y4;
+    double *X164_z4;
+    double *X164_x5;
+    double *X164_y5;
+    double *X164_z5;
+    double *X164_x6;
+    double *X164_y6;
+    double *X164_z6;
+    double *X164_x7;
+    double *X164_y7;
+    double *X164_z7;
+    double *X164_x8;
+    double *X164_y8;
+    double *X164_z8;
     double X181_x; //scaling of stl geometry
     double X181_y; //scaling of stl geometry
     double X181_z; //scaling of stl geometry
@@ -1520,7 +1524,7 @@ public:
     int X185; //stl refineme
     int X188; //ray cast algorithm
     double X186; //refinement factor
-    int X205; //ype of ramp up functio
+    int X205; //ype of ramp up function
     int X206; //ramp up velocity
     int X207; //ramp up draf
     double X206_ts; //ramp start
@@ -1539,40 +1543,40 @@ public:
     double X242_y; //delta x for motion fi
     double X242_z; //delta x for motion fi
     double X243; //delta CoG for motion fi
-    double X311_xs;
-    double X311_xe;
-    double X311_ys;
-    double X311_ye;
-    double X311_zs;
-    double X311_ze;
-    double X311_w;
-    double X311_rho_c;
-    double X311_EA;
-    double X311_d;
-    double X311_l;
-    double X311_H;
-    double X311_P;
-    double X311_facT;
-    double X312_k;
-    double X312_T0;
-    double X314_T;
-    double X315_t;
+    double *X311_xs;
+    double *X311_xe;
+    double *X311_ys;
+    double *X311_ye;
+    double *X311_zs;
+    double *X311_ze;
+    double *X311_w;
+    double *X311_rho_c;
+    double *X311_EA;
+    double *X311_d;
+    double *X311_l;
+    double *X311_H;
+    double *X311_P;
+    double *X311_facT;
+    double *X312_k;
+    double *X312_T0;
+    double *X314_T;
+    double *X315_t;
     int *X320_type;
-    double X321_Sn;
-    double X321_d;
-    double X321_lambda;
-    double X321_dk;
-    double X321_rho;
-    double X321_nd;
-    double X321_nl;
-    double X322_D;
-    double X322_L;
-    double X322_x0;
-    double X322_y0;
-    double X322_z0;
-    double X322_phi;
-    double X322_theta;
-    double X322_psi;
+    double *X321_Sn;
+    double *X321_d;
+    double *X321_lambda;
+    double *X321_dk;
+    double *X321_rho;
+    double *X321_nd;
+    double *X321_nl;
+    double *X322_D;
+    double *X322_L;
+    double *X322_x0;
+    double *X322_y0;
+    double *X322_z0;
+    double *X322_phi;
+    double *X322_theta;
+    double *X322_psi;
     int X324;
     double X323_m; //dynamic net sinker properties
     double X323_d; //dynamic net sinker properties
