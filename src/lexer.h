@@ -258,39 +258,125 @@ public:
     double deltax,sigT,Ui,Ua,Uo;
 
     // Hydrodynamics Models
-    int A10;
+    int A10; //turn on wave models
     
     // SFLOW
-	int A209,A210,A211,A212,A214,A215,A216,A217,A218,A219,A220,A221,A230,A240,A241,A242,A243,A244,A245,A246,A248;
-    int A251,A260;
-    double A261,A262;
-    double A223,A244_val,A245_val,A247,A249,A251_val;
-    double A250;
+    int A209; //interpolation sweeps for bed
+    int A210; //time scheme for SFLOW velocities
+    int A211; //convection scheme for SLOW velocities
+    int A212; //diffusion treatment for SLOW velocities
+    int A214; //convection for vertical velocity
+    int A215; //conservative discretizatio
+    int A216; //convection velocity
+    int A217; //slip or no-slip boundary conditions
+    int A218; //turn on roughness
+    int A219; //additional courant number constra
+    int A220; //non-hydrostatic pressure scheme for SFLOW
+    int A221; //hydrostatic pressure scheme for SFLOW
+    int A230; //turn on Boussinesq wave model
+    int A240; //FSF algorithm SFLOW
+    int A241; //discretization of water level SFLOW
+    int A242; //hydostatic pressure for shallow areas
+    int A243; //turn on wetting-drying
+    int A244; //double absolute wetting criterion value
+    int A245; //dx-based relative wetting citerio
+    int A246; //turn on breaking
+    int A248; //turn on breaking persistence
+    int A251; //double fsf-slope in x-dir
+    int A260; //turbulence model
+    double A261; //length scale factor
+    double A262; //parabolic turbulence model factor
+    double A223; //blending factor hydrostatic pressure gradient
+    double A244_val; //absolute wetting criterion va
+    double A245_val; //dx-based relative wetting citerion va
+    double A247; //breaking parameter alpha
+    double A249; //breaking persistence parameter beta
+    double A251_val;
+    double A250; //viscosity breaking wav
     
     // FNPF
-    int A310,A311,A312,A313,A320,A321,A322,A323,A329,A343,A344,A345,A347,A348;
-    double A340,A341,A342,A344_val,A345_val,A346;
-    int A350,A351,A352,A353,A357,A358,A361,A362,A363,A368;
-    double A354,A355,A356,A365; 
+    int A310; //time scheme for FNPF velocities
+    int A311; //convection scheme for FNPF velocities
+    int A312; //discretization for second-order gradie
+    int A313; //discretization for bed bc
+    int A320; //order of Laplace equatio
+    int A321; //boundary condition order for 4th-order Laplace equatio
+    int A322; //maxiter for 4th-order Laplace after 2nd-order solutio
+    int A323; //PTF FSF extrapolatio
+    int A329; //wave maker BC order
+    int A343; //turn on wetting-drying
+    int A344; //absolute wetting criterio
+    int A345; //dx-based relative wetting citerio
+    int A347; //coastline relaxation for Fi and eta
+    int A348; //beach relaxation for Fi and eta
+    double A340; //minimum water depth
+    double A341; //coastline damping distance factor for dxm
+    double A342; //coastline damping absolute distanc
+    double A344_val; //absolute wetting criterion va
+    double A345_val; //dx-based relative wetting citerion va
+    double A346; //viscosity damping within the coastlin
+    int A350; //turn on breaking (which method)
+    int A351; //type of breaking detection (deep / shallow)
+    int A352; //additional filtering to viscosity based breaking
+    int A353; //breaking wave identification algorithm
+    int A357; //breaking for Fi and eta
+    int A358; //breaking algorithm versio
+    int A361; //breaking filter outer iter
+    int A362; //breaking filter inner iter
+    int A363; //breaking filter width
+    int A368; //breaking waves in numerical beach
+    double A354; //breaking parameter alpha
+    double A355; //breaking parameter slope alpha
+    double A356; //breaking parameter slope beta
+    double A365; //viscosity breaking wav
     
     // NSEWAVE
-    int A410;
-    double A440;
+    int A410; //scheme eta
+    double A440; //epsi for depth integration
     
     // NHFLOW
-    int A501,A510,A511,A512,A514,A515,A516,A517,A518;
-    int A520,A521;
-    double A522,A523;
-    double A531;
-    int A540,A543;
-    double A541,A542,A544,A545;
-    int A550,A551,A552,A553;
-    int A560;
-    double A560_xs,A560_xe,A560_ys,A560_ye;
-    int A561;
-    double *A561_xs,*A561_xe,*A561_ys,*A561_ye,*A561_zs,*A561_ze;
-    int A564;
-    double *A564_xc,*A564_yc,*A564_zs,*A564_ze,*A564_r;
+    int A501; //nhf mode
+    int A510; //NFHLOW time scheme
+    int A511; //NHFLOW HLL scheme
+    int A512; //NHFLOW diffusio
+    int A514; //NHFLOW reconstruction 
+    int A515; //NHFLOW KFSFBC scheme
+    int A516; //NFHLOW KFSFBED scheme
+    int A517; //NHFLOW omega_sig scheme
+    int A518; //NHFLOW bed BC
+    int A520; //NFHLOW non-hydrostatic pressure scheme
+    int A521; //unused
+    double A522; //p_alpha
+    double A523; //p_gamma
+    double A531; //Froude number limiter
+    int A540; //NFHLOW fsf scheme
+    int A543; //NHFLOW wetting & drying or coastline
+    double A541; //coastline damping distance factor for dxm
+    double A542; //coastline damping absolute distanc
+    double A544; //wetting & drying criterion
+    double A545; //deep criterion
+    int A550; //turn on breaking (which method)
+    int A551; //type of breaking detection (deep / shallow)
+    int A552; //additional filtering to viscosity based breaking
+    int A553; //breaking in very shallow regions turned onf
+    int A560; //block eta
+    double A560_xs;
+    double A560_xe;
+    double A560_ys;
+    double A560_ye;
+    int A561; //solid box
+    double *A561_xs;
+    double *A561_xe;
+    double *A561_ys;
+    double *A561_ye;
+    double *A561_zs;
+    double *A561_ze;
+    int A564; //solid vertical cylinder
+    double *A564_xc;
+    double *A564_yc;
+    double *A564_zs;
+    double *A564_ze;
+    double *A564_r;
     
 	// boundary conditions
     int B10; //wall laws velocities on/off
