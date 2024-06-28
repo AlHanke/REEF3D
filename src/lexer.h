@@ -1615,10 +1615,20 @@ public:
     double Z12_cdz; //fsi beam structural damping coefficients
 	
 	// Grid
-	int Y40,Y50,Y60,Y71,Y72,Y73,Y74;
+    int Y40;
+    int Y50;
+    int Y60; //require
+    int Y71; //turn on/off solid gcparax
+    int Y72; //turn on/off solid gcparax
+    int Y73; //turn on/off solid gcparax
+    int Y74; //turn on/off solid gcparax
 
     // Test options
-    int Y1,Y2,Y3,Y4,Y5;
+    int Y1; //turn on/off experimental screen force model
+    int Y2; //turn external moments on/off
+    int Y3;
+    int Y4;
+    int Y5;
 
 	// time + iterations
 	int inneriter,count,solveriter,preconiter,count_statestart;
