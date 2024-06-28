@@ -194,7 +194,7 @@ public:
 	int* ictrl;
 	double* dctrl;
 	int ctrlsize;
-	int stencil;	
+	int stencil;
 
 	// Solver
 	int *colnum;
@@ -1318,76 +1318,277 @@ public:
     double W112; //threshold factor for pressure blening in W111 3
     
     // 6DOF
-	double ufb,vfb,wfb;
-	double pfb,qfb,rfb;
-	double ufbi,vfbi,wfbi;
-	double pfbi,qfbi,rfbi;
-	double xg,yg,zg;
-	double xgn,ygn,zgn;
-	double phi_fb,theta_fb,psi_fb;
-	double ufbmax, vfbmax, wfbmax;
-    int X10,X12,X14,X15,X19,X11_u,X11_v,X11_w,X11_p,X11_q,X11_r,X21,X22,X23,X24,X31,X32,X33,X34,X38;
-    int X39,X40,X45,X46,X47,X48,X49,X50,X60,X110,X120,X131,X132,X133;
-	int X100,X101,X102,X103,X141,X142,X143,X153,X180,X181,X182,X183,X210,X211;
-	int X310, X311, X312, X313, X314, X315, X320, X321, mooring_count, net_count;
-	double X21_d,X22_m;
-	double X23_x,X23_y,X23_z;
-	double X24_Ix,X24_Iy,X24_Iz;	
-	double X25_Cp,X25_Cq,X25_Cr;	
-    double X26_Cu,X26_Cv,X26_Cw;	
-	double X41,X42,X43,X44;
-	double X100_x,X100_y,X100_z;
-	double X101_phi, X101_theta, X101_psi;
-	double X102_u, X102_v, X102_w;
-	double X103_p, X103_q, X103_r;
-	double *X110_xs,*X110_xe,*X110_ys,*X110_ye,*X110_zs,*X110_ze;
-	double X120_rad,X120_xc,X120_yc,X120_zc;
-	double X131_rad,X131_h,X131_xc,X131_yc,X131_zc;
-	double X132_rad,X132_h,X132_xc,X132_yc,X132_zc;
-	double X133_rad,X133_h,X133_xc,X133_yc,X133_zc;
-	double X153_xs,X153_xe,X153_ys,X153_ye,X153_zs,X153_ze;
-    int X163;
-    double *X163_x1,*X163_y1,*X163_z1;
-    double *X163_x2,*X163_y2,*X163_z2;
-    double *X163_x3,*X163_y3,*X163_z3;
-    double *X163_x4,*X163_y4,*X163_z4;
-    double *X163_x5,*X163_y5,*X163_z5;
-    double *X163_x6,*X163_y6,*X163_z6;
-    int X164;
-    double *X164_x1,*X164_y1,*X164_z1;
-    double *X164_x2,*X164_y2,*X164_z2;
-    double *X164_x3,*X164_y3,*X164_z3;
-    double *X164_x4,*X164_y4,*X164_z4;
-    double *X164_x5,*X164_y5,*X164_z5;
-    double *X164_x6,*X164_y6,*X164_z6;
-    double *X164_x7,*X164_y7,*X164_z7;
-    double *X164_x8,*X164_y8,*X164_z8;
-    double X181_x,X181_y,X181_z;
-    double X182_x,X182_y,X182_z;
-    double X183_x,X183_y,X183_z,X183_phi,X183_theta,X183_psi;
-    int X185,X188;
-    double X186;
-    
-    int X205;
-    int X206,X207;
-    double X206_ts,X206_te,X207_ts,X207_te;
-	double X210_u,X210_v,X210_w;
-	double X211_p,X211_q,X211_r;
-    int X240;
-    double X241,X242_x,X242_y,X242_z,X243;
-    double *X311_xs,*X311_xe,*X311_ys,*X311_ye,*X311_zs,*X311_ze;
-    double *X311_w,*X311_rho_c,*X311_EA,*X311_d,*X311_l,*X311_H,*X311_P,*X311_facT;
-    double *X312_k,*X312_T0;
-    double *X314_T, *X315_t;
+    double ufb;
+    double vfb;
+    double wfb;
+    double pfb;
+    double qfb;
+    double rfb;
+    double ufbi;
+    double vfbi;
+    double wfbi;
+    double pfbi;
+    double qfbi;
+    double rfbi;
+    double xg;
+    double yg;
+    double zg;
+    double xgn;
+    double ygn;
+    double zgn;
+    double phi_fb;
+    double theta_fb;
+    double psi_fb;
+    double ufbmax;
+    double vfbmax;
+    double wfbmax;
+    int X10; //turn 6DOF o
+    int X12; //turn force calculation o
+    int X14; //tangential velocity 
+    int X15; //density treatment for direct forcing
+    int X19; //print out interval 6DOF log files
+    int X11_u; //turn on degrees of freedom
+    int X11_v; //turn on degrees of freedom
+    int X11_w; //turn on degrees of freedom
+    int X11_p; //turn on degrees of freedom
+    int X11_q; //turn on degrees of freedom
+    int X11_r; //turn on degrees of freedom
+    int X21; //presribe homogeneous density floating body
+    int X22; //prescribe mass floating body
+    int X23; //prescribe center of gravity
+    int X24; //prescribe moments of inertia
+    int X31; //boundary conditions for parallel velocity on floating body
+    int X32; //boundary conditions for orthogonal velocity on floating body
+    int X33; //boundary conditions for pressure on floating body
+    int X34; //boundary treatment for new solid velocity cells
+    int X38;
+    int X39; //type of viscous force calculatio
+    int X40; //type of force calculatio
+    int X45; //type of lsm convection disc at fb
+    int X46; //density smoothing inside fb
+    int X47; //reini diffusion inside fb
+    int X48;
+    int X49;
+    int X50; //type of print out format for 6DOF structure
+    int X60; //type of print of force calculatio
+    int X110; //rectangular box floating body
+    int X120; //sphere floating bod
+    int X131; //cylinder floating bod
+    int X132; //cylinder floating bod
+    int X133; //cylinder floating bod
+    int X100; //delta x,y,z
+    int X101; //ini Euler angles
+    int X102; //ini linear velocity
+    int X103; //ini angular velocity
+    int X141;
+    int X142;
+    int X143;
+    int X153; //symmetric wedge
+    int X180; //read .stl file for floating body geometry
+    int X181; //double scale .stl geometry
+    int X182; //translation on/off
+    int X183;
+    int X210; //give fixed linear velocity
+    int X211; //give fixed angular velocity
+    int X310;
+    int X311; //number of simple taut mooring lines
+    int X312; //number of springs
+    int X313; //initial rotation of mooring end points with 6DOF body
+    int X314; //breaking mooring lines due to tensio
+    int X315; //breaking mooring lines due to time
+    int X320;
+    int X321; //number of nets
+    int mooring_count;
+    int net_count;
+    double X21_d; //presribe homogeneous density floating body
+    double X22_m; //prescribe mass floating body
+    double X23_x;
+    double X23_y;
+    double X23_z;
+    double X24_Ix;
+    double X24_Iy;
+    double X24_Iz;
+    double X25_Cp; //damping rotation
+    double X25_Cq; //damping rotation
+    double X25_Cr; //damping rotation
+    double X26_Cu; //damping translationa
+    double X26_Cv; //damping translationa
+    double X26_Cw; //damping translationa
+    double X41; //eps for continuous forcing heavisi
+    double X42; //distance for pressure force evaluation
+    double X43; //distance for shear stress evaluation
+    double X44; //viscosity in body
+    double X100_x;
+    double X100_y;
+    double X100_z;
+    double X101_phi;
+    double X101_theta;
+    double X101_psi;
+    double X102_u;
+    double X102_v;
+    double X102_w;
+    double X103_p;
+    double X103_q;
+    double X103_r;
+    double X110_xs;
+    double X110_xe;
+    double X110_ys;
+    double X110_ye;
+    double X110_zs;
+    double X110_ze;
+    double X120_rad;
+    double X120_xc;
+    double X120_yc;
+    double X120_zc;
+    double X131_rad;
+    double X131_h;
+    double X131_xc;
+    double X131_yc;
+    double X131_zc;
+    double X132_rad;
+    double X132_h;
+    double X132_xc;
+    double X132_yc;
+    double X132_zc;
+    double X133_rad;
+    double X133_h;
+    double X133_xc;
+    double X133_yc;
+    double X133_zc;
+    double X153_xs;
+    double X153_xe;
+    double X153_ys;
+    double X153_ye;
+    double X153_zs;
+    double X153_ze;
+    int X163; //wedge
+    double X163_x1;
+    double X163_y1;
+    double X163_z1;
+    double X163_x2;
+    double X163_y2;
+    double X163_z2;
+    double X163_x3;
+    double X163_y3;
+    double X163_z3;
+    double X163_x4;
+    double X163_y4;
+    double X163_z4;
+    double X163_x5;
+    double X163_y5;
+    double X163_z5;
+    double X163_x6;
+    double X163_y6;
+    double X163_z6;
+    int X164; //hexahedro
+    double X164_x1;
+    double X164_y1;
+    double X164_z1;
+    double X164_x2;
+    double X164_y2;
+    double X164_z2;
+    double X164_x3;
+    double X164_y3;
+    double X164_z3;
+    double X164_x4;
+    double X164_y4;
+    double X164_z4;
+    double X164_x5;
+    double X164_y5;
+    double X164_z5;
+    double X164_x6;
+    double X164_y6;
+    double X164_z6;
+    double X164_x7;
+    double X164_y7;
+    double X164_z7;
+    double X164_x8;
+    double X164_y8;
+    double X164_z8;
+    double X181_x; //scaling of stl geometry
+    double X181_y; //scaling of stl geometry
+    double X181_z; //scaling of stl geometry
+    double X182_x; //translation of stl geometry
+    double X182_y; //translation of stl geometry
+    double X182_z; //translation of stl geometry
+    double X183_x;
+    double X183_y;
+    double X183_z;
+    double X183_phi;
+    double X183_theta;
+    double X183_psi;
+    int X185; //stl refineme
+    int X188; //ray cast algorithm
+    double X186; //refinement factor
+    int X205; //ype of ramp up functio
+    int X206; //ramp up velocity
+    int X207; //ramp up draf
+    double X206_ts; //ramp start
+    double X206_te;
+    double X207_ts; //ramp start
+    double X207_te;
+    double X210_u; //fixed u v
+    double X210_v; //fixed v v
+    double X210_w; //fixed w v
+    double X211_p;
+    double X211_q;
+    double X211_r;
+    int X240; //read 6DOF motion file
+    double X241; //delta t for motion fi
+    double X242_x; //delta x for motion fi
+    double X242_y; //delta x for motion fi
+    double X242_z; //delta x for motion fi
+    double X243; //delta CoG for motion fi
+    double X311_xs;
+    double X311_xe;
+    double X311_ys;
+    double X311_ye;
+    double X311_zs;
+    double X311_ze;
+    double X311_w;
+    double X311_rho_c;
+    double X311_EA;
+    double X311_d;
+    double X311_l;
+    double X311_H;
+    double X311_P;
+    double X311_facT;
+    double X312_k;
+    double X312_T0;
+    double X314_T;
+    double X315_t;
     int *X320_type;
-	double *X321_Sn,*X321_d,*X321_lambda,*X321_dk,*X321_rho,*X321_nd,*X321_nl;
-    double *X322_D,*X322_L,*X322_x0,*X322_y0,*X322_z0,*X322_phi,*X322_theta,*X322_psi;
+    double X321_Sn;
+    double X321_d;
+    double X321_lambda;
+    double X321_dk;
+    double X321_rho;
+    double X321_nd;
+    double X321_nl;
+    double X322_D;
+    double X322_L;
+    double X322_x0;
+    double X322_y0;
+    double X322_z0;
+    double X322_phi;
+    double X322_theta;
+    double X322_psi;
     int X324;
-    double X323_m,X323_d,X323_l;
-    double *X324_x,*X324_y,*X324_z;
-    double X325_dt,X325_relX,X325_relY,X325_relZ;
-    int X400;
-    double X401_p0,X401_cl,X401_cb,X401_a;
+    double X323_m; //dynamic net sinker properties
+    double X323_d; //dynamic net sinker properties
+    double X323_l; //dynamic net sinker properties
+    double *X324_x;
+    double *X324_y;
+    double *X324_z;
+    double X325_dt; //dynamic net time step
+    double X325_relX; //dynamic net relaxation factors
+    double X325_relY; //dynamic net relaxation factors
+    double X325_relZ; //dynamic net relaxation factors
+    int X400; //sflow external pressure term
+    double X401_p0; //sflow external pressure term p0
+    double X401_cl; //sflow external pressure term c
+    double X401_cb; //sflow external pressure term c
+    double X401_a; //sflow external pressure term a
 
     // FSI
     int Z10,Z11,FSI_count;
