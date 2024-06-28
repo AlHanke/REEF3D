@@ -293,35 +293,155 @@ public:
     double *A564_xc,*A564_yc,*A564_zs,*A564_ze,*A564_r;
     
 	// boundary conditions
-	int B10,B20,B23;
-    int B30,B32,B33;
-    double B31,B32_x,B32_y,B32_z;    
-    int B60,B61,B71,B75,B76,B77,B84,B85,B81,B82,B86,B87,B89,B90,B91,B92,B93,B94,B98,B99,B101,B105,B106,B107;
-	int B136,B138,B138_1,B138_2,B139;
-    int B180,B191,B192,B240,B241,B242,B243;
-	double B29,B50,B51,B52,B53,B54,B55,B56,B81_1,B81_2,B81_3,B83,B117,B87_1,B87_2,B88;
-	double B91_1,B91_2,B93_1,B93_2,B94_wdt,B96_1,B96_2,B102,B105_1,B105_2,B105_3;
-	double *B71_val,*B71_dist,*B71_b,*B71_x,*B71_y;
-	double *B106_b,*B106_x,*B106_y;
-    double *B107_xs,*B107_xe,*B107_ys, *B107_ye, *B107_d;
-    int B108;
-    double *B108_xs,*B108_xe,*B108_ys, *B108_ye, *B108_d;
-    int B110;
-    double B110_zs,B110_ze;
-	double B111_zs,B111_ze;
-    double B112_zs,B112_z2,B112_ze;
-    int B115,B116,B125,B127;
-    double B120,B122,B123,B125_y;
-    int B130,B133;
-    double B131,B132_s,B132_e;
-    double B134,B135;
-    int B160, B170;
-    int B181,B182,B183;
-	double B181_1,B181_2,B181_3,B182_1,B182_2,B182_3,B183_1,B183_2,B183_3;
-	double B191_1,B191_2,B191_3,B191_4,B192_1,B192_2,B192_3,B192_4;
-	double B194_s,B194_e;
-    
-    int B411,B412,B413,B414,B415,B416,B417,B418,B421,B422;
+    int B10; //wall laws velocities on/off
+    int B20; //slip or no-slip boundary condition for velocity
+    int B23; //ghostcell extrapolation or refective
+    int B30; //type of pressure reference po
+    int B32; //pressure reference locatio
+    int B33; //pressure gage virtual or inline
+    double B31; //pressure reference va
+    double B32_x; //pressure reference location
+    double B32_y; //pressure reference location
+    double B32_z; //pressure reference location
+    int B60; //ioflow discharge
+    int B61; //plain or logarithmic inflow profile
+    int B71; //double distance for use relaxation method for fixed water level 
+    int B75; //type of outflow boundary conditions
+    int B76; //type of pressure inlet boundary conditio
+    int B77; //outflow pressure controlled or free stream
+    int B84; //Peak enhance method
+    int B85; //PM or JONSWAP spectrum for irregular waves
+    int B81; //focussed wave parameter
+    int B82; //type of focus point and time calculatio
+    int B86; //number of regular waves for irregular wave generatio
+    int B87; //give ws and we for irregular wave generatio
+    int B89; //wave generation optimizatio
+    int B90; //iowave
+    int B91; //wave parameter wL
+    int B92; //wave type
+    int B93; //wave parameter wT
+    int B94; //set water depth for wave theory
+    int B98; //type of wave generatio
+    int B99; //type of numerical beach
+    int B101; //ramp function wave geneartio
+    int B105; //wave generation origin changed
+    int B106; //read wave generation orig
+    int B107; //read numerical beach orig
+    int B136; //double summation method frequency vector
+    int B138; //seed number multidir waves
+    int B138_1;
+    int B138_2;
+    int B139; //seed number wave spectrum
+    int B180; //gravity waves
+    int B191; //rotation around x-axis
+    int B192; //rotation around y-axis
+    int B240; //porous media
+    int B241; //porous media in x-directio
+    int B242; //porous media in y-directio
+    int B243; //porous media in z-directio
+    double B29; //gamma for gc image point
+    double B50; //global wall roughness ks
+    double B51; //global wall roughness ks
+    double B52; //global wall roughness ks
+    double B53; //global wall roughness ks
+    double B54; //global wall roughness ks
+    double B55; //global wall roughness ks
+    double B56; //global wall roughness ks
+    double B81_1;
+    double B81_2;
+    double B81_3; //unidirectional focused wave y is condisered 0
+    double B83; //wave steepness parameter for focused breaking waves
+    double B117; //starting time shift for timeseries input
+    double B87_1;
+    double B87_2;
+    double B88; //gamma for JONSWAP spectrum
+    double B91_1; //wave amplit
+    double B91_2; //wave length
+    double B93_1; //wave amplit
+    double B93_2; //wave peri
+    double B94_wdt; //water depth for wave theory
+    double B96_1; //dist1 for wave relax
+    double B96_2; //dist2 for wave relax
+    double B102; //factor ramp function wave generation
+    double B105_1; //wave generation direction and line origin in Cartesian coordianate system
+    double B105_2; //wave generation line x origin
+    double B105_3; //wave generation line y origin
+    double *B71_val;
+    double *B71_dist;
+    double *B71_b;
+    double *B71_x;
+    double *B71_y;
+    double *B106_b;
+    double *B106_x;
+    double *B106_y;
+    double *B107_xs;
+    double *B107_xe;
+    double *B107_ys;
+    double *B107_ye;
+    double *B107_d;
+    int B108; //read wave generation  orig
+    double *B108_xs;
+    double *B108_xe;
+    double *B108_ys;
+    double *B108_ye;
+    double *B108_d;
+    int B110; //read wave generation  orig
+    double B110_zs;
+    double B110_ze;
+    double B111_zs; //flap start
+    double B111_ze; //flap en
+    double B112_zs; //flap start
+    double B112_z2; //flap2 end/flap2 start
+    double B112_ze; //flag en
+    int B115; //activate vertical velocity component for flap wavemaker theory
+    int B116; //x or beta input for flap wavemaker theories
+    int B125; //take 2D slice input for HDC
+    int B127; //turn of y-dir velociteis for HDC 
+    double B120; //delta t for wave generation
+    double B122; //int air velocity on/off for active wave generation
+    double B123; //flap AWA hinge location
+    double B125_y; //2D slice y-coor input for HDC
+    int B130; //directional spreading for irregular waves
+    int B133; //number of direction intervals for spreading functio
+    double B131; //main direction for multidirectional irregular waves
+    double B132_s; //start directional spreading
+    double B132_e; //end directional spreading
+    double B134; //shape parameter for spreading function
+    double B135; //peak va
+    int B160; //number of vertical layers for 2D wave generatio
+    int B170; //number of Fourier modes for the generation of steady surface gravity waves
+    int B181; //x-dir motio
+    int B182; //y-dir motio
+    int B183; //z-dir motio
+    double B181_1; //x-acceleration amplit
+    double B181_2; //x-acceleration frequency
+    double B181_3; //wave phase chang
+    double B182_1; //y-acceleration amplit
+    double B182_2; //y-acceleration frequency
+    double B182_3; //wave phase chang
+    double B183_1; //z-acceleration amplit
+    double B183_2; //z-acceleration frequency
+    double B183_3; //wave phase chang
+    double B191_1; //angle for rotation around x-axis
+    double B191_2; //frequency for rotation around x-axis
+    double B191_3; //y-coordinate for rotation around x-axis
+    double B191_4; //z-coordinate for rotation around x-axis
+    double B192_1; //angle for rotation around y-axis
+    double B192_2; //frequency forrotation around y-axis
+    double B192_3; //x-coordinate for rotation around y-axis
+    double B192_4; //z-coordinate for rotation around y-axis
+    double B194_s; //start rotation
+    double B194_e; //end rotation
+    int B411; //patchBC discharge
+    int B412; //patchBC pressure BC
+    int B413; //patchBC waterlevel
+    int B414; //patchBC perpendicular velocity
+    int B415; //patchBC velocity components
+    int B416; //patchBC horizontal inflow angle
+    int B417; //patchBC inflow normals
+    int B418; //patchBC outflow pressure conditio
+    int B421; //patchBC hydrograph discharge
+    int B422; //patchBC hydrograph waterlevel
     int *B411_ID;
     double *B411_Q;
     int *B412_ID;
@@ -331,46 +451,149 @@ public:
     int *B414_ID;
     double *B414_Uio;
     int *B415_ID;
-    double *B415_U,*B415_V,*B415_W;
+    double *B415_U;
+    double *B415_V;
+    double *B415_W;
     int *B416_ID;
     double *B416_alpha;
     int *B417_ID;
-    double *B417_Nx,*B417_Ny,*B417_Nz;
+    double *B417_Nx;
+    double *B417_Ny;
+    double *B417_Nz;
     int *B418_ID;
     int *B418_pio;
-    int *B421_ID,*B421_Q;
-    int *B422_ID,*B422_FSF;
-    int B440;
-    int *B440_ID,*B440_face;
-    double *B440_xs,*B440_xe,*B440_ys,*B440_ye;
-    int B441;
-    int *B441_ID,*B441_face;
-    double *B441_xs,*B441_xe,*B441_ys,*B441_ye,*B441_zs,*B441_ze;
-    int B442;
-    int *B442_ID,*B442_face;
-    double *B442_xm,*B442_ym,*B442_zm,*B442_r;
-    
-	double *B240_D, *B240_C, *B240_xs, *B240_xe, *B240_ys, *B240_ye, *B240_zs, *B240_ze;
-    double B260,B264,B267;
-    int B269,B270;
-    double *B270_xs, *B270_xe, *B270_ys, *B270_ye, *B270_zs, *B270_ze, *B270_n, *B270_d50, *B270_alpha, *B270_beta;
-    int B274;
-    double *B274_xc,*B274_yc,*B274_zs,*B274_ze,*B274_r, *B274_n, *B274_d50, *B274_alpha, *B274_beta;
-    int B281;
-    double *B281_xs, *B281_xe, *B281_ys, *B281_ye, *B281_zs, *B281_ze, *B281_n, *B281_d50, *B281_alpha, *B281_beta;
-    int B282;
-    double *B282_xs, *B282_xe, *B282_ys, *B282_ye, *B282_zs, *B282_ze, *B282_n, *B282_d50, *B282_alpha, *B282_beta;
-	int B291;
-    double *B291_xs, *B291_xe, *B291_ys, *B291_ye, *B291_zs, *B291_ze, *B291_d, *B291_n, *B291_d50, *B291_alpha, *B291_beta;
+    int *B421_ID;
+    int *B421_Q;
+    int *B422_ID;
+    int *B422_FSF;
+    int B440; //patch BC inflow line
+    int *B440_ID;
+    int *B440_face;
+    double *B440_xs;
+    double *B440_xe;
+    double *B440_ys;
+    double *B440_ye;
+    int B441; //rectangular inflow patch BC
+    int *B441_ID;
+    int *B441_face;
+    double *B441_xs;
+    double *B441_xe;
+    double *B441_ys;
+    double *B441_ye;
+    double *B441_zs;
+    double *B441_ze;
+    int B442; //circular inflow patch BC
+    int *B442_ID;
+    int *B442_face;
+    double *B442_xm;
+    double *B442_ym;
+    double *B442_zm;
+    double *B442_r;
+    double *B240_D;
+    double *B240_C;
+    double *B240_xs;
+    double *B240_xe;
+    double *B240_ys;
+    double *B240_ye;
+    double *B240_zs;
+    double *B240_ze;
+    double B260; //C coefficient for VRANS
+    double B264; //KC number for VRANS
+    double B267; //d50 for VRANS
+    int B269; //VRANS on/off -> assigned as 1 for VRANS Structure, 2 for Vegetation, 3 for Net interactio
+    int B270; //VRANS porous media box
+    double *B270_xs;
+    double *B270_xe;
+    double *B270_ys;
+    double *B270_ye;
+    double *B270_zs;
+    double *B270_ze;
+    double *B270_n;
+    double *B270_d50;
+    double *B270_alpha;
+    double *B270_beta;
+    int B274; //VRANS porous media vertical cylinder
+    double *B274_xc;
+    double *B274_yc;
+    double *B274_zs;
+    double *B274_ze;
+    double *B274_r;
+    int B281; //VRANS porous media wedge in x-directio
+    double *B281_xs;
+    double *B281_xe;
+    double *B281_ys;
+    double *B281_ye;
+    double *B281_zs;
+    double *B281_ze;
+    double *B281_n;
+    double *B281_d50;
+    double *B281_alpha;
+    double *B281_beta;
+    int B282; //VRANS porous media wedge in y-directio
+    double *B282_xs;
+    double *B282_xe;
+    double *B282_ys;
+    double *B282_ye;
+    double *B282_zs;
+    double *B282_ze;
+    double *B282_n;
+    double *B282_d50;
+    double *B282_alpha;
+    double *B282_beta;
+    int B291; //VRANS porous media plate in x-directio
+    double *B291_xs;
+    double *B291_xe;
+    double *B291_ys;
+    double *B291_ye;
+    double *B291_zs;
+    double *B291_ze;
+    double *B291_d;
+    double *B291_n;
+    double *B291_d50;
+    double *B291_alpha;
+    double *B291_beta;
     int B295;
-    int B308,B310,B311;
-    double B309;
-    double *B310_xs, *B310_xe, *B310_ys, *B310_ye, *B310_zs, *B310_ze, *B310_N, *B310_D, *B310_Cd;
-    double *B311_xm, *B311_ym, *B311_r, *B311_zs, *B311ze, *B311_N, *B311_D, *B311_Cd;
-    int B321;
-    double *B321_xs, *B321_xe, *B321_ys, *B321_ye, *B321_zs, *B321_ze, *B321_N, *B321_D, *B321_Cd;
-    int B322;
-    double *B322_xs, *B322_xe, *B322_ys, *B322_ye, *B322_zs, *B322_ze, *B322_N, *B322_D, *B322_Cd;
+    int B308; //porosity effects on fluid acceleration for vegetatio
+    int B310; //VRANS vegetation box
+    int B311;
+    double B309; //Cm for vegetation
+    double *B310_xs;
+    double *B310_xe;
+    double *B310_ys;
+    double *B310_ye;
+    double *B310_zs;
+    double *B310_ze;
+    double *B310_N;
+    double *B310_D;
+    double *B310_Cd;
+    double *B311_xm;
+    double *B311_ym;
+    double *B311_r;
+    double *B311_zs;
+    double *B311ze;
+    double *B311_N;
+    double *B311_D;
+    double *B311_Cd;
+    int B321; //VRANS vegetation wedge in x-directio
+    double *B321_xs;
+    double *B321_xe;
+    double *B321_ys;
+    double *B321_ye;
+    double *B321_zs;
+    double *B321_ze;
+    double *B321_N;
+    double *B321_D;
+    double *B321_Cd;
+    int B322; //VRANS vegetation wedge in y-directio
+    double *B322_xs;
+    double *B322_xe;
+    double *B322_ys;
+    double *B322_ye;
+    double *B322_zs;
+    double *B322_ze;
+    double *B322_N;
+    double *B322_D;
+    double *B322_Cd;
 	
     // Concentration Options
     double C1; //density concentration in water
