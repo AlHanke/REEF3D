@@ -36,34 +36,48 @@ class sediment_fdm
 {
 public:
     sediment_fdm(lexer*);
-	virtual ~sediment_fdm();
+    virtual ~sediment_fdm();
     
-    slice1 P;
-    slice2 Q;
+    slice1 P; ///< u vel on bed
+    slice2 Q; ///< v vel on bed
     
-    slice4 bedzh,bedzh0,bedch,bedsole;
-    slice4 vz,dh,reduce;
-    slice4 ks;
+    slice4 bedzh; ///< bed elevation
+    slice4 bedzh0; ///< bed elevation, initial
+    slice4 bedch; ///< bed elevation, change
+    slice4 bedsole; ///< unused
+    slice4 vz; ///< bed change vel
+    slice4 dh; ///< bed change vel
+    slice4 reduce; ///< critical hear stress reduction factor
+    slice4 ks; ///< bed roughnes
     
-    slice4 tau_eff,tau_crit;
-    slice4 shearvel_eff,shearvel_crit;
-    slice4 shields_eff, shields_crit;
+    slice4 tau_eff; ///< effective shear stress
+    slice4 tau_crit; ///< critical shear stress
+    slice4 shearvel_eff; ///< effective shear velocity
+    slice4 shearvel_crit; ///< critical shear velocity
+    slice4 shields_eff; ///< effective shields number
+    slice4 shields_crit; ///< critical shields number
     
-    slice4 alpha,teta,gamma,beta,phi;
-    slice4 active;
+    slice4 alpha; ///< bed angle
+    slice4 teta; ///< bed angle
+    slice4 gamma; ///< bed angle
+    slice4 beta; ///< bed angle
+    slice4 phi; ///< bed angle
+    slice4 active; ///< flag for active bed
     
+    sliceint4 bedk; ///< k index of cell containing bed
+    slice4 slideflag; ///< flag for bed slide
     
-    sliceint4 bedk;
-    slice4 slideflag;
+    slice4 qb; ///< bed load - exner
+    slice4 qbe; ///< bed load - bedload forumla
+    slice4 cbe; ///< bedconc ?
+    slice4 cb; ///< bedconc ?
+    slice4 cbn; ///< bedconc ?
+    slice4 conc; ///< bedconc ?
     
-    slice4 qb,qbe;
-    slice4 cbe,cb,cbn,conc;
+    slice4 waterlevel;  ///< waterdepth - unused
+    slice4 guard; ///< ?
     
-    slice4 waterlevel;
-    slice4 guard;
-    
-    double ws;
-
-};
+    double ws; ///< single particle sedimenation velocity
+};;
 
 #endif
