@@ -56,58 +56,75 @@ using namespace std;
 class fdm : public increment
 {
 public:
-
     fdm(lexer*);
 
-	double gi,gj,gk;
+    double gi;
+    double gj;
+    double gk;
 
-	field1 u,F;
-	field2 v,G;
-	field3 w,H;
-	field4 press;
-    field4 Fi;
-	field4 eddyv;
-	field4 L;
-	field4 ro,dro,visc;
-	field4 phi,vof;
-	field4 conc;
-    field4 test;
-	field4a topo,solid;
-	field4a fb;
-	field4a porosity;
-	field5 walld;
-	 
-	fieldint5 nodeval;
+    field1 u; ///< velocity in x-direction
+    field1 F; ///< 
+    field2 v; ///< velocity in y-direction
+    field2 G; ///< 
+    field3 w; ///< velocity in z-direction
+    field3 H; ///< 
+    field4 press; ///< pressure
+    field4 Fi; ///< 
+    field4 eddyv; ///< eddy viscosity
+    field4 L;
+    field4 ro; ///< density
+    field4 dro;
+    field4 visc; ///< viscosity
+    field4 phi; ///< free surface level-set
+    field4 vof; ///< volume of fluid
+    field4 conc;
+    field4 test; ///< test field
+    field4a topo; ///< topography level-set
+    field4a solid; ///< solid level-set
+    field4a fb; ///< floating body level-set
+    field4a porosity; ///< porosity
+    field5 walld; ///< wall distance
+
+    fieldint5 nodeval;
     sliceint5 nodeval2D;
-   
+
     // 6DOF
     field1 fbh1;
     field2 fbh2;
     field3 fbh3;
     field4 fbh4;
     field4 fbh5;
-    
-    
+
     // PTF
-    slice4 eta,eta_n,depth;
+    slice4 eta;
+    slice4 eta_n;
+    slice4 depth;
     slice4 Fifsf;
     slice4 K;
     sliceint4 etaloc;
-    
+
     slice1 P;
     slice2 Q;
-    
+
     slice4 bed;
-    
-	vec rhsvec;
 
-	matrix_diag M;
-	cpt C4,C4a,C6;
+    vec rhsvec;
 
-    double maxF,maxG,maxH;
+    matrix_diag M;
+    cpt C4;
+    cpt C4a;
+    cpt C6;
+
+    double maxF;
+    double maxG;
+    double maxH;
     double wd_criterion;
-	
-	double t1,t2,t3,t4,t5;
-};
+
+    double t1;
+    double t2;
+    double t3;
+    double t4;
+    double t5;
+};;
 
 #endif
