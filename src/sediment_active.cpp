@@ -47,6 +47,7 @@ void sediment_f::active_cfd(lexer *p, fdm *a,ghostcell *pgc)
     }
 }
 
+/// @brief Sets bed cells as active
 void sediment_f::active_ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
     SLICELOOP4
