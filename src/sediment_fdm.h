@@ -62,7 +62,7 @@ public:
     slice4 gamma; ///< bed angle
     slice4 beta; ///< bed angle
     slice4 phi; ///< bed angle
-    slice4 active; ///< flag for active bed
+    sliceint4 active; ///< flag for active bed
     
     sliceint4 bedk; ///< k index of cell containing bed
     slice4 slideflag; ///< flag for bed slide
