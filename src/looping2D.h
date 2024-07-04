@@ -23,7 +23,8 @@ Author: Hans Bihs
 #ifndef LOOPING2D_H_
 #define LOOPING2D_H_
 
-// LOOP
+/// @file looping2D.h
+/// @brief Contains looping macros for 3D arrays
 
 #define PSLICECHECK1  if(p->flagslice1[IJ]>0)
 #define SLICELOOP1 IULOOP JULOOP  PSLICECHECK1
