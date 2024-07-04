@@ -23,6 +23,9 @@ Author: Hans Bihs
 #ifndef ITERATORS_H_
 #define ITERATORS_H_
 
+/// @file iterators.h
+/// @brief Iterators for arrays
+
 #define NLOOP1 for(n=p->sizeM1[0]; n<p->sizeM1[1]; ++n)
 #define NLOOP2 for(n=p->sizeM2[0]; n<p->sizeM2[1]; ++n)
 #define NLOOP3 for(n=p->sizeM3[0]; n<p->sizeM3[1]; ++n)
@@ -219,84 +222,84 @@ Author: Hans Bihs
 
 //-----------------------------------------------------------
 
-#define IJK  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin
+#define IJK  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin ///< Index for i,j,k cell in arrays accomodating boundaries
 
 
 
-#define Im1JK  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin
-#define Ip1JK  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin
-#define IJm1K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin
-#define IJp1K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin
-#define IJKm1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1
-#define IJKp1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1
+#define Im1JK  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin ///< Index for i-1,j,k cell in arrays accomodating boundaries
+#define Ip1JK  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin ///< Index for i+1,j,k cell in arrays accomodating boundaries
+#define IJm1K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin ///< Index for i,j-1,k cell in arrays accomodating boundaries
+#define IJp1K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin ///< Index for i,j+1,k cell in arrays accomodating boundaries
+#define IJKm1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1 ///< Index for i,j,k-1 cell in arrays accomodating boundaries
+#define IJKp1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1 ///< Index for i,j,k+1 cell in arrays accomodating boundaries
 
-#define Ip1Jp1K  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin
+#define Ip1Jp1K  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin ///< Index for i+1,j+1,k cell in arrays accomodating boundaries
 
-#define Ip1JKp1  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1
-#define Ip1JKm1  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1
-#define Im1JKp1  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1
-#define Im1JKm1  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1
+#define Ip1JKp1  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1 ///< Index for i+1,j,k+1 cell in arrays accomodating boundaries
+#define Ip1JKm1  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1 ///< Index for i+1,j,k-1 cell in arrays accomodating boundaries
+#define Im1JKp1  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1 ///< Index for i-1,j,k+1 cell in arrays accomodating boundaries
+#define Im1JKm1  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1 ///< Index for i-1,j,k-1 cell in arrays accomodating boundaries
 
-#define IJp1Kp1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+1
-#define IJp1Km1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin-1
-#define IJm1Kp1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin+1
-#define IJm1Km1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin-1
+#define IJp1Kp1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+1 ///< Index for i,j+1,k+1 cell in arrays accomodating boundaries
+#define IJp1Km1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin-1 ///< Index for i,j+1,k-1 cell in arrays accomodating boundaries
+#define IJm1Kp1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin+1 ///< Index for i,j-1,k+1 cell in arrays accomodating boundaries
+#define IJm1Km1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin-1 ///< Index for i,j-1,k-1 cell in arrays accomodating boundaries
 
-#define IJp1Kp1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+1
-#define IJp1Kp1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+1
+#define IJp1Kp1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+1 ///< Index for i,j+1,k+1 cell in arrays accomodating boundaries
+#define IJp1Kp1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+1 ///< Index for i,j+1,k+1 cell in arrays accomodating boundaries
 
-#define Im1Jm1Km1 (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin-1
-#define Ip1Jm1Km1 (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin-1
-#define Ip1Jp1Km1 (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin-1
-#define Im1Jp1Km1 (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin-1
+#define Im1Jm1Km1 (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin-1 ///< Index for i-1,j-1,k-1 cell in arrays accomodating boundaries
+#define Ip1Jm1Km1 (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin-1 ///< Index for i+1,j-1,k-1 cell in arrays accomodating boundaries
+#define Ip1Jp1Km1 (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin-1 ///< Index for i+1,j+1,k-1 cell in arrays accomodating boundaries
+#define Im1Jp1Km1 (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin-1 ///< Index for i-1,j+1,k-1 cell in arrays accomodating boundaries
 
-#define Im1Jm1Kp1 (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin+1
-#define Ip1Jm1Kp1 (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin+1
-#define Ip1Jp1Kp1 (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+1
-#define Im1Jp1Kp1 (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+1
+#define Im1Jm1Kp1 (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin+1 ///< Index for i-1,j-1,k+1 cell in arrays accomodating boundaries
+#define Ip1Jm1Kp1 (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin+1 ///< Index for i+1,j-1,k+1 cell in arrays accomodating boundaries
+#define Ip1Jp1Kp1 (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+1 ///< Index for i+1,j+1,k+1 cell in arrays accomodating boundaries
+#define Im1Jp1Kp1 (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+1 ///< Index for i-1,j+1,k+1 cell in arrays accomodating boundaries
 
-#define Ip1Jp2K  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin+2)*p->kmax + k-p->kmin
+#define Ip1Jp2K  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin+2)*p->kmax + k-p->kmin ///< Index for i+1,j+2,k cell in arrays accomodating boundaries
 
-#define Im1JKp2  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+2
-#define Ip1JKp2  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+2
+#define Im1JKp2  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+2 ///< Index for i-1,j,k+2 cell in arrays accomodating boundaries
+#define Ip1JKp2  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+2 ///< Index for i+1,j,k+2 cell in arrays accomodating boundaries
 
-#define IJm1Kp2  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin+2
-#define IJp1Kp2  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+2
-
-
-#define Im2JK  (i-p->imin-2)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin
-#define Ip2JK  (i-p->imin+2)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin
-#define IJm2K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-2)*p->kmax + k-p->kmin
-#define IJp2K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+2)*p->kmax + k-p->kmin
-#define IJKm2  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-2
-#define IJKp2  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+2
-
-#define Im3JK  (i-p->imin-3)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin
-#define Ip3JK  (i-p->imin+3)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin
-#define IJm3K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-3)*p->kmax + k-p->kmin
-#define IJp3K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+3)*p->kmax + k-p->kmin
-#define IJKm3  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-3
-#define IJKp3  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+3
-
-#define Im4JK  (i-p->imin-4)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin
-#define Ip4JK  (i-p->imin+4)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin
-#define IJKm4  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-4
-#define IJKm5  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-5
-
-#define Im5JK  (i-p->imin-5)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin
-#define Ip5JK  (i-p->imin+5)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin
-
-#define Im1Jm1K  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin
-#define Im1Jp1K  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin
-#define Ip1Jm1K  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin
-#define Ip1Jp1K  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin
+#define IJm1Kp2  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin+2 ///< Index for i,j-1,k+2 cell in arrays accomodating boundaries
+#define IJp1Kp2  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin+2 ///< Index for i,j+1,k+2 cell in arrays accomodating boundaries
 
 
-#define Im1JKm1  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1
-#define IJm1Km1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin-1
-#define Im1Jm1Km1  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin-1
+#define Im2JK  (i-p->imin-2)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin ///< Index for i-2,j,k cell in arrays accomodating boundaries
+#define Ip2JK  (i-p->imin+2)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin ///< Index for i+2,j,k cell in arrays accomodating boundaries
+#define IJm2K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-2)*p->kmax + k-p->kmin ///< Index for i,j-2,k cell in arrays accomodating boundaries
+#define IJp2K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+2)*p->kmax + k-p->kmin ///< Index for i,j+2,k cell in arrays accomodating boundaries
+#define IJKm2  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-2 ///< Index for i,j,k-2 cell in arrays accomodating boundaries
+#define IJKp2  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+2 ///< Index for i,j,k+2 cell in arrays accomodating boundaries
 
-#define IJK6 (i-p->imin)*p->jmax6*p->kmax6 + (j-p->jmin)*p->kmax6 + k-p->kmin
+#define Im3JK  (i-p->imin-3)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin ///< Index for i-3,j,k cell in arrays accomodating boundaries
+#define Ip3JK  (i-p->imin+3)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin ///< Index for i+3,j,k cell in arrays accomodating boundaries
+#define IJm3K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-3)*p->kmax + k-p->kmin ///< Index for i,j-3,k cell in arrays accomodating boundaries
+#define IJp3K  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin+3)*p->kmax + k-p->kmin ///< Index for i,j+3,k cell in arrays accomodating boundaries
+#define IJKm3  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-3 ///< Index for i,j,k-3 cell in arrays accomodating boundaries
+#define IJKp3  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+3 ///< Index for i,j,k+3 cell in arrays accomodating boundaries
+
+#define Im4JK  (i-p->imin-4)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin ///< Index for i-4,j,k cell in arrays accomodating boundaries
+#define Ip4JK  (i-p->imin+4)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin ///< Index for i+4,j,k cell in arrays accomodating boundaries
+#define IJKm4  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-4 ///< Index for i,j,k-4 cell in arrays accomodating boundaries
+#define IJKm5  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-5 ///< Index for i,j,k-5 cell in arrays accomodating boundaries
+
+#define Im5JK  (i-p->imin-5)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin ///< Index for i-5,j,k cell in arrays accomodating boundaries
+#define Ip5JK  (i-p->imin+5)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin ///< Index for i+5,j,k cell in arrays accomodating boundaries
+
+#define Im1Jm1K  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin ///< Index for i-1,j-1,k cell in arrays accomodating boundaries
+#define Im1Jp1K  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin ///< Index for i-1,j+1,k cell in arrays accomodating boundaries
+#define Ip1Jm1K  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin ///< Index for i+1,j-1,k cell in arrays accomodating boundaries
+#define Ip1Jp1K  (i-p->imin+1)*p->jmax*p->kmax + (j-p->jmin+1)*p->kmax + k-p->kmin ///< Index for i+1,j+1,k cell in arrays accomodating boundaries
+
+
+#define Im1JKm1  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1 ///< Index for i-1,j,k-1 cell in arrays accomodating boundaries
+#define IJm1Km1  (i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin-1 ///< Index for i,j-1,k-1 cell in arrays accomodating boundaries
+#define Im1Jm1Km1  (i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin-1)*p->kmax + k-p->kmin-1 ///< Index for i-1,j-1,k-1 cell in arrays accomodating boundaries
+
+#define IJK6 (i-p->imin)*p->jmax6*p->kmax6 + (j-p->jmin)*p->kmax6 + k-p->kmin 
 
 #define Im1JK6 (i-p->imin-1)*p->jmax6*p->kmax6 + (j-p->jmin)*p->kmax6 + k-p->kmin
 #define Ip1JK6 (i-p->imin+1)*p->jmax6*p->kmax6 + (j-p->jmin)*p->kmax6 + k-p->kmin
