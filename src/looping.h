@@ -30,17 +30,20 @@ Author: Hans Bihs
 #include"iterators2D.h"
 #include"iterators1D.h"
 
-#define PI 3.14159265359
-#define EE 2.71828182846
+#define PI 3.14159265359 ///< Pi
+#define EE 2.71828182846 ///< Euler's number
 
-#define ILOOP	for(i=0; i<p->knox; ++i)
-#define JLOOP	for(j=0; j<p->knoy; ++j)
-#define KLOOP 	for(k=0; k<p->knoz; ++k)
-#define IREVLOOP	for(i=p->knox-1; i>=0; --i)
-#define JREVLOOP	for(j=p->knoy-1; j>=0; --j)
-#define KREVLOOP 	for(k=p->knoz-1; k>=0; --k)
+/// @file looping.h
+/// @brief Contains looping macros for 3D arrays
+
+#define ILOOP	for(i=0; i<p->knox; ++i) ///< Loop over cells in x-direction
+#define JLOOP	for(j=0; j<p->knoy; ++j) ///< Loop over cells in y-direction
+#define KLOOP 	for(k=0; k<p->knoz; ++k) ///< Loop over cells in z-direction
+#define IREVLOOP	for(i=p->knox-1; i>=0; --i) ///< Loop over cells in x-direction in reverse
+#define JREVLOOP	for(j=p->knoy-1; j>=0; --j) ///< Loop over cells in y-direction in reverse
+#define KREVLOOP 	for(k=p->knoz-1; k>=0; --k) ///< Loop over cells in z-direction in reverse
 #define PCHECK  if(p->flag4[IJK]>0)
-#define LOOP ILOOP JLOOP KLOOP PCHECK
+#define LOOP ILOOP JLOOP KLOOP PCHECK ///< Loop over all cells with check for flag4>0
 
 #define FSCHECK  if(p->flag7[FIJK]<=0)
 #define FPCHECK  if(p->flag7[FIJK]>0)
@@ -50,7 +53,7 @@ Author: Hans Bihs
 #define VSCHECK  if(p->flag2[IJK]<0)
 #define WSCHECK  if(p->flag3[IJK]<0)
 
-#define KJILOOP KLOOP JLOOP ILOOP
+#define KJILOOP KLOOP JLOOP ILOOP ///< Loop over cells in z, y, x direction
 #define UKJILOOP KLOOP JLOOP IULOOP
 #define VKJILOOP KLOOP JVLOOP ILOOP
 #define WKJILOOP KWLOOP JLOOP ILOOP
@@ -61,7 +64,7 @@ Author: Hans Bihs
 #define WETDRYCHK if(p->wet[IJ]>0)
 #define FILOOPWD ILOOP JLOOP KLOOP WETDRYCHK PCHECK
 
-#define PLAINLOOP ILOOP JLOOP KLOOP
+#define PLAINLOOP ILOOP JLOOP KLOOP ///< Loop over all cells
 
 #define IMALOOP	for(i=-p->margin; i<p->knox+p->margin; ++i)
 #define JMALOOP	for(j=-p->margin; j<p->knoy+p->margin; ++j)
@@ -74,20 +77,20 @@ Author: Hans Bihs
 #define PCHECK  if(p->flag4[IJK]>0)
 #define LOOP ILOOP JLOOP KLOOP PCHECK
 
-#define IBLOOP	for(i=-1; i<p->knox+1; ++i)
-#define JBLOOP	for(j=-1; j<p->knoy+1; ++j)
-#define KBLOOP for(k=-1; k<p->knoz+1; ++k)
-#define BLOOP IBLOOP JBLOOP KBLOOP
+#define IBLOOP	for(i=-1; i<p->knox+1; ++i) ///< Loop over cells in x-direction with boundary cells
+#define JBLOOP	for(j=-1; j<p->knoy+1; ++j) ///< Loop over cells in y-direction with boundary cells
+#define KBLOOP for(k=-1; k<p->knoz+1; ++k) ///< Loop over cells in z-direction with boundary cells
+#define BLOOP IBLOOP JBLOOP KBLOOP ///< Loop over all cells with boundary cells
 
 #define IBLOOP	for(i=-1; i<p->knox+1; ++i)
 #define JBLOOP	for(j=-1; j<p->knoy+1; ++j)
 #define KBLOOP for(k=-1; k<p->knoz+1; ++k)
-#define BBASELOOP IBLOOP JBLOOP KBLOOP PBASECHECK
+#define BBASELOOP IBLOOP JBLOOP KBLOOP PBASECHECK ///< Loop over all cells with boundary cells and check for flag4>OBJ_FLAG
 
-#define ITLOOP for(i=0; i<p->knox+1; ++i)
-#define JTLOOP for(j=0; j<p->knoy+1; ++j)
-#define KTLOOP for(k=0; k<p->knoz+1; ++k)
-#define TCHECK if(p->flag4[IJK]>OBJ_FLAG)
+#define ITLOOP for(i=0; i<p->knox+1; ++i) ///< Loop over cells in x-direction including max boundary
+#define JTLOOP for(j=0; j<p->knoy+1; ++j) ///< Loop over cells in y-direction including max boundary
+#define KTLOOP for(k=0; k<p->knoz+1; ++k) ///< Loop over cells in z-direction including max boundary
+#define TCHECK if(p->flag4[IJK]>OBJ_FLAG) ///< Check for flag4>OBJ_FLAG
 #define TLOOP ITLOOP JTLOOP KTLOOP
 
 #define IFLEXLOOP	for(i=0; i<p->knox-ulast; ++i)
@@ -100,24 +103,24 @@ Author: Hans Bihs
 #define JULOOP	for(j=0; j<p->knoy; ++j)
 #define KULOOP	for(k=0; k<p->knoz; ++k)
 #define UCHECK  if(p->flag1[IJK]>0)
-#define ULOOP IULOOP JULOOP KULOOP UCHECK
+#define ULOOP IULOOP JULOOP KULOOP UCHECK ///< Loop for u-velocity
 
 #define IVLOOP	for(i=0; i<p->knox; ++i)
 #define JVLOOP	for(j=0; j<p->knoy-p->vlast; ++j)
 #define KVLOOP	for(k=0; k<p->knoz; ++k)
 #define VCHECK  if(p->flag2[IJK]>0)
-#define VLOOP IVLOOP JVLOOP KVLOOP VCHECK
+#define VLOOP IVLOOP JVLOOP KVLOOP VCHECK ///< Loop for v-velocity
 
 #define IWLOOP	for(i=0; i<p->knox; ++i)
 #define JWLOOP	for(j=0; j<p->knoy; ++j)
 #define KWLOOP	for(k=0; k<p->knoz-p->wlast; ++k)
 #define WCHECK  if(p->flag3[IJK]>0)
-#define WLOOP IWLOOP JWLOOP KWLOOP WCHECK
+#define WLOOP IWLOOP JWLOOP KWLOOP WCHECK ///< Loop for w-velocity
 
-#define UBASECHECK  if(p->flag1[IJK]>OBJ_FLAG)
-#define VBASECHECK  if(p->flag2[IJK]>OBJ_FLAG)
-#define WBASECHECK  if(p->flag3[IJK]>OBJ_FLAG)
-#define PBASECHECK  if(p->flag4[IJK]>OBJ_FLAG)
+#define UBASECHECK  if(p->flag1[IJK]>OBJ_FLAG) ///< Check for flag1>OBJ_FLAG
+#define VBASECHECK  if(p->flag2[IJK]>OBJ_FLAG) ///< Check for flag2>OBJ_FLAG
+#define WBASECHECK  if(p->flag3[IJK]>OBJ_FLAG) ///< Check for flag3>OBJ_FLAG
+#define PBASECHECK  if(p->flag4[IJK]>OBJ_FLAG) ///< Check for flag4>OBJ_FLAG
 
 #define UBASELOOP IULOOP JULOOP KULOOP UBASECHECK
 #define VBASELOOP IVLOOP JVLOOP KVLOOP VBASECHECK
@@ -137,30 +140,30 @@ Author: Hans Bihs
 
 #define ALOOP ILOOP JLOOP KLOOP PSOLIDCHECK
 
-#define USOLIDCHECK  if(p->flag1[IJK]>SOLID_FLAG)
-#define VSOLIDCHECK  if(p->flag2[IJK]>SOLID_FLAG)
-#define WSOLIDCHECK  if(p->flag3[IJK]>SOLID_FLAG)
-#define PSOLIDCHECK  if(p->flag4[IJK]>SOLID_FLAG)
+#define USOLIDCHECK  if(p->flag1[IJK]>SOLID_FLAG) ///< Check for flag1>SOLID_FLAG
+#define VSOLIDCHECK  if(p->flag2[IJK]>SOLID_FLAG) ///< Check for flag2>SOLID_FLAG
+#define WSOLIDCHECK  if(p->flag3[IJK]>SOLID_FLAG) ///< Check for flag3>SOLID_FLAG
+#define PSOLIDCHECK  if(p->flag4[IJK]>SOLID_FLAG) ///< Check for flag4>SOLID_FLAG
 
 #define USOLIDLOOP IULOOP JULOOP KULOOP USOLIDCHECK
 #define VSOLIDLOOP IVLOOP JVLOOP KVLOOP VSOLIDCHECK
 #define WSOLIDLOOP IWLOOP JWLOOP KWLOOP WSOLIDCHECK
 #define SOLIDLOOP ILOOP JLOOP KLOOP PSOLIDCHECK    
 
-#define UAIR_FLAGCHECK  if(p->flag1[IJK]==AIR_FLAG)
-#define VAIR_FLAGCHECK  if(p->flag2[IJK]==AIR_FLAG)
-#define WAIR_FLAGCHECK  if(p->flag3[IJK]==AIR_FLAG)
-#define PAIR_FLAGCHECK  if(p->flag4[IJK]==AIR_FLAG)
+#define UAIR_FLAGCHECK  if(p->flag1[IJK]==AIR_FLAG) ///< Check for flag1=AIR_FLAG
+#define VAIR_FLAGCHECK  if(p->flag2[IJK]==AIR_FLAG) ///< Check for flag2=AIR_FLAG
+#define WAIR_FLAGCHECK  if(p->flag3[IJK]==AIR_FLAG) ///< Check for flag3=AIR_FLAG
+#define PAIR_FLAGCHECK  if(p->flag4[IJK]==AIR_FLAG) ///< Check for flag4=AIR_FLAG
 
 #define UAIRLOOP IULOOP JULOOP KULOOP UAIR_FLAGCHECK
 #define VAIRLOOP IVLOOP JVLOOP KVLOOP VAIR_FLAGCHECK
 #define WAIRLOOP IWLOOP JWLOOP KWLOOP WAIR_FLAGCHECK
-#define AIRLOOP ILOOP JLOOP KLOOP PAIR_FLAGCHECK    
+#define AIRLOOP ILOOP JLOOP KLOOP PAIR_FLAGCHECK ///< Loop over all air cells
 
-#define UFLUIDCHECK  if(p->flag1[IJK]>=AIR_FLAG)
-#define VFLUIDCHECK  if(p->flag2[IJK]>=AIR_FLAG)
-#define WFLUIDCHECK  if(p->flag3[IJK]>=AIR_FLAG)
-#define PFLUIDCHECK  if(p->flag4[IJK]>=AIR_FLAG)
+#define UFLUIDCHECK  if(p->flag1[IJK]>=AIR_FLAG) ///< Check if flag1 is fluid
+#define VFLUIDCHECK  if(p->flag2[IJK]>=AIR_FLAG) ///< Check if flag2 is fluid
+#define WFLUIDCHECK  if(p->flag3[IJK]>=AIR_FLAG) ///< Check if flag3 is fluid
+#define PFLUIDCHECK  if(p->flag4[IJK]>=AIR_FLAG) ///< Check if flag4 is fluid
     
 #define PWDFLUIDCHECK  if(p->flag4[IJK]>=AIR_FLAG && p->wet[IJ]>0)
 #define FSWDCHECK  if(p->flag7[FIJK]<=0 || p->wet[IJ]==0)
@@ -169,7 +172,7 @@ Author: Hans Bihs
 #define UFLUIDLOOP IULOOP JULOOP KULOOP UFLUIDCHECK
 #define VFLUIDLOOP IVLOOP JVLOOP KVLOOP VFLUIDCHECK
 #define WFLUIDLOOP IWLOOP JWLOOP KWLOOP WFLUIDCHECK
-#define FLUIDLOOP ILOOP JLOOP KLOOP PFLUIDCHECK  
+#define FLUIDLOOP ILOOP JLOOP KLOOP PFLUIDCHECK ///< Loop over all fluid cells
 
 #define FILOOP	for(i=0; i<p->knox; ++i)
 #define FJLOOP	for(j=0; j<p->knoy; ++j)
@@ -185,9 +188,9 @@ Author: Hans Bihs
 #define FFILOOP4 ILOOP JLOOP FETALOC FPCHECK
 
 
-#define ITPLOOP for(i=-1; i<p->knox; ++i)
-#define JTPLOOP for(j=-1; j<p->knoy; ++j)
-#define KTPLOOP for(k=-1; k<p->knoz; ++k)
+#define ITPLOOP for(i=-1; i<p->knox; ++i) ///< Loop over cells in x-direction with min boundary
+#define JTPLOOP for(j=-1; j<p->knoy; ++j) ///< Loop over cells in y-direction with min boundary
+#define KTPLOOP for(k=-1; k<p->knoz; ++k) ///< Loop over cells in z-direction with min boundary
 #define TPCHECK  if(p->tpflag[IJK]>0)
 #define TPLOOP KTPLOOP JTPLOOP ITPLOOP TPCHECK
 
@@ -313,7 +316,7 @@ Author: Hans Bihs
 #define GGC6LOOP  for(g=0;g<p->gcb_fix;++g)
 
 
-#define DT p->dt
-#define NDT p->dt_old
+#define DT p->dt ///< Time step
+#define NDT p->dt_old ///< Old time step
 
 #endif
