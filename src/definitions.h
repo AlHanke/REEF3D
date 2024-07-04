@@ -23,6 +23,9 @@ Author: Hans Bihs
 #ifndef DEFINITIONS_H_
 #define DEFINITIONS_H_
 
+/// @file definitions.h
+/// @brief Flag definitions
+
 #define WATER_FLAG      10
 #define AIR_FLAG       -1
 #define INFLOW_FLAG    -3
