@@ -42,6 +42,7 @@ bedshear::~bedshear()
 {
 }
 
+/// @brief Calculates bed shear stress
 void bedshear::taubed(lexer *p, fdm * a, ghostcell *pgc, sediment_fdm *s)
 {
 	int count;
@@ -288,6 +289,7 @@ void bedshear::taubed(lexer *p, fdm * a, ghostcell *pgc, sediment_fdm *s)
     }
 }
 
+/// @brief Calculates critical bed shear stress
 void bedshear::taucritbed(lexer *p, fdm * a, ghostcell *pgc, sediment_fdm *s)
 {
 	double r,density;

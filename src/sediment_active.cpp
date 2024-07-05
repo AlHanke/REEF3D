@@ -27,6 +27,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"sediment_fdm.h"
 
+/// @brief Sets active sediment cells for CFD
 void sediment_f::active_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
     

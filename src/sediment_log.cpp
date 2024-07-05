@@ -38,6 +38,7 @@ void sediment_f::log_ini(lexer *p)
     
 }
 
+/// @brief Writes sediment log to file
 void sediment_f::sedimentlog(lexer *p)
 {
     if(p->mpirank==0)

@@ -30,6 +30,13 @@ Author: Hans Bihs
 #include"reinitopo.h"
 #include"vrans.h"
 
+/// @brief Updates sediment
+/// Updates sediment bed level
+/// Updates sediment bed level change
+/// Updates topography
+/// Updates VRANS
+/// Outputs min. and max. bed level
+/// Updates active sediment cells
 void sediment_f::update_cfd(lexer *p, fdm *a,ghostcell *pgc, ioflow *pflow, reinitopo *preto)
 {
     topo_zh_update(p,a,pgc,s);

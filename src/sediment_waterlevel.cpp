@@ -30,6 +30,7 @@ Author: Hans Bihs
 #include"vrans_v.h"
 #include"vrans_f.h"
 
+/// @brief Updates the water depth
 void sediment_f::waterlevel(lexer *p, fdm *a, ghostcell *pgc)
 {
     double zval=0.0;

@@ -31,9 +31,6 @@ Author: Hans Bihs
 /// @brief Initializes the sediment model
 /// Determines intitial bed height using topo level set
 /// Calls further initialization functions
-/// @param p 
-/// @param a 
-/// @param pgc 
 void sediment_f::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
 	double h,h1;

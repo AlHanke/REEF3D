@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"sediment_f.h"
+
+#include"sediment_f.h"
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -34,6 +35,7 @@ double sediment_f::bedshear_point(lexer *p, fdm *a,ghostcell *pgc)
 	return tau_eff;
 }
 
+/// @brief Determines vertical cell coordinate of bed
 void sediment_f::fill_bedk(lexer *p, fdm *a,ghostcell *pgc)
 {
     SLICELOOP4
@@ -46,6 +48,7 @@ void sediment_f::fill_bedk(lexer *p, fdm *a,ghostcell *pgc)
     s->bedk(i,j)=k+1;
 }
 
+/// @brief Determines u and v near bed
 void sediment_f::fill_PQ_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
     double zval,xip,yip;

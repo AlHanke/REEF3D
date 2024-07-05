@@ -44,7 +44,7 @@ using namespace std;
 class sediment
 {
 public:
-
+	/// @brief Starts sediment calculation for CFD
 	virtual void start_cfd(lexer*, fdm*, ghostcell*, ioflow*, reinitopo*, solver*)=0;
     virtual void ini_cfd(lexer*,fdm*,ghostcell*)=0;
     virtual void update_cfd(lexer*,fdm*,ghostcell*,ioflow*,reinitopo*)=0;

@@ -147,6 +147,7 @@ void bedslope::slope_weno(lexer *p, ghostcell *pgc, sediment_fdm *s, field &topo
     }
 }
 
+/// @brief Calculates the bed slope using central difference
 void bedslope::slope_cds(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double uvel,vvel;

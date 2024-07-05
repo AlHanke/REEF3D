@@ -65,6 +65,7 @@ Author: Hans Bihs
 #include"suspended_RK3.h"
 #include"suspended_IM1.h"
 
+/// @brief Assignes objects depending on the chosen sediment models
 void sediment_f::sediment_logic(lexer *p, fdm *a,ghostcell *pgc, turbulence *pturb)
 {
     s = new sediment_fdm(p);

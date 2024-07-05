@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"sediment_f.h"
+
+#include"sediment_f.h"
 #include"sediment_fdm.h"
 #include"lexer.h"
 #include"fdm.h"
@@ -48,6 +49,7 @@ sediment_f::~sediment_f()
 {
 }
 
+/// @copydoc sediment::start_cfd
 void sediment_f::start_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinitopo *preto, solver *psolv)
 {
     // bedshear stress

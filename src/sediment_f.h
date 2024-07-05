@@ -45,6 +45,7 @@ class convection;
 class patchBC_interface;
 using namespace std;
 
+/// @brief Eulerian sediment class
 class sediment_f : public sediment, public bedslope
 {
 public:

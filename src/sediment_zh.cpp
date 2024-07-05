@@ -30,6 +30,7 @@ Author: Hans Bihs
 #include"vrans_v.h"
 #include"vrans_f.h"
 
+/// @brief Calculates minimum and maximum bed level
 void sediment_f::bedlevel(lexer *p, fdm *a, ghostcell *pgc)
 {
     p->bedmin=1.0e15;
@@ -56,6 +57,7 @@ void sediment_f::relax(lexer *p, ghostcell *pgc)
     prelax->start(p,pgc,s);
 }
 
+/// @brief Updates the sediment bed level
 void sediment_f::topo_zh_update(lexer *p, fdm *a,ghostcell *pgc, sediment_fdm *s)
 {
     for(int qn=0;qn<3;++qn)
@@ -77,6 +79,7 @@ void sediment_f::topo_zh_update(lexer *p, fdm *a,ghostcell *pgc, sediment_fdm *s
     pgc->gcsl_start4(p,a->bed,50);
 }
 
+/// @brief Updates the sediment bed level change
 void sediment_f::bedchange_update(lexer *p, ghostcell *pgc)
 {
     SLICELOOP4
@@ -85,6 +88,7 @@ void sediment_f::bedchange_update(lexer *p, ghostcell *pgc)
     pgc->gcsl_start4(p,s->bedch,50);
 }
 
+/// @brief Calculates the sediment volume and volume change
 void sediment_f::volume_calc(lexer *p, fdm *a,ghostcell *pgc)
 {
     double H=0.0;
