@@ -53,6 +53,7 @@ public:
 	virtual ~sediment_f();
     
     // CFD interface
+    
     virtual void start_cfd(lexer*, fdm*, ghostcell*, ioflow*, reinitopo*, solver*);
     virtual void ini_cfd(lexer*,fdm*,ghostcell*);
     virtual void start_susp(lexer*, fdm*, ghostcell*, ioflow*, solver*);
@@ -68,6 +69,7 @@ public:
     void bedchange_update(lexer*, ghostcell*);
     
     // SFLOW interface
+
     virtual void start_sflow(lexer*, fdm2D*, ghostcell*, ioflow*, slice&, slice&);
     virtual void ini_sflow(lexer*, fdm2D*, ghostcell*);
     void sediment_algorithm_sflow(lexer*, fdm2D*, ghostcell*, ioflow*, slice&, slice&);
@@ -101,6 +103,7 @@ public:
 	void filter(lexer*,ghostcell*,slice&,int,int);
     
     // print
+
     virtual void print_2D_bedload(lexer*, ghostcell*,ofstream&);
     virtual void print_3D_bedload(lexer*, ghostcell*,ofstream&);
 	virtual void name_pvtk_bedload(lexer*, ghostcell*,ofstream&);
@@ -150,10 +153,11 @@ private:
 
     ofstream sedlogout;
     
-    double starttime;
+    double starttime; ///< Calculation step start time
     
-    int volume_token,sedcalc;
-    double volume0;
+    int volume_token; ///< Initial volume set flag
+    int sedcalc; ///< Sediment calculation flag
+    double volume0; ///< Initial volume
 	
 };
 

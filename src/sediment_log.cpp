@@ -26,6 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"sediment_fdm.h"
 
+/// @brief Writes sediment log file heading
 void sediment_f::log_ini(lexer *p)
 {
     if(p->mpirank==0)

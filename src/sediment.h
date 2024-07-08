@@ -50,7 +50,8 @@ public:
     virtual void update_cfd(lexer*,fdm*,ghostcell*,ioflow*,reinitopo*)=0;
     
     virtual void start_susp(lexer*, fdm*, ghostcell*, ioflow*, solver*)=0;
-    
+
+    /// @brief Starts sediment calculation for SFLOW
     virtual void start_sflow(lexer*, fdm2D*, ghostcell*, ioflow*, slice&, slice&)=0;
     virtual void ini_sflow(lexer*, fdm2D*, ghostcell*)=0;
     virtual void update_sflow(lexer*,fdm2D*,ghostcell*,ioflow*)=0;

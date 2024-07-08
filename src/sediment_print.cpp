@@ -27,6 +27,8 @@ Author: Hans Bihs
 #include"sediment_fdm.h"
 #include"bedshear.h"
 
+/// @brief Writes bedload related variable names into pvtk file
+/// ????\nqbe: bedload entrainment rate\nqb: bedload transport rate\ncbe: bedload concentration entrainment rate\ncb: bedload concentration transport rate
 void sediment_f::name_pvtk_bedload(lexer *p, ghostcell *pgc, ofstream &result)
 {
     result<<"<PDataArray type=\"Float32\" Name=\"ST_qbe\"/>"<<endl;
@@ -35,6 +37,7 @@ void sediment_f::name_pvtk_bedload(lexer *p, ghostcell *pgc, ofstream &result)
     result<<"<PDataArray type=\"Float32\" Name=\"ST_cb\"/>"<<endl;
 }
 
+/// @brief Writes bedload related variable names into heading of vtk file
 void sediment_f::name_vtk_bedload(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"ST_qbe\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
@@ -47,6 +50,7 @@ void sediment_f::name_vtk_bedload(lexer *p, ghostcell *pgc, ofstream &result, in
     ++n;
 }
 
+/// @brief Sets 2D bedload related variable offsets for vtp file
 void sediment_f::offset_vtp_bedload(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
@@ -59,6 +63,7 @@ void sediment_f::offset_vtp_bedload(lexer *p, ghostcell *pgc, ofstream &result, 
 	++n;
 }
 
+/// @brief Sets 3D bedload related variable offsets for vtk file
 void sediment_f::offset_vtk_bedload(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
@@ -71,6 +76,7 @@ void sediment_f::offset_vtk_bedload(lexer *p, ghostcell *pgc, ofstream &result, 
 	++n;
 }
 
+/// @brief Writes 3D bedload related values into vtk file
 void sediment_f::print_3D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
 {	
 	float ffn;
@@ -126,6 +132,7 @@ void sediment_f::print_3D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
     
 }
 
+/// @brief Writes 2D bedload related values into vtk file
 void sediment_f::print_2D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
 {	
 	float ffn;
@@ -169,6 +176,7 @@ void sediment_f::print_2D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
     
 }
 
+/// @brief Writes bedshear related variable names into pvtk file
 void sediment_f::name_pvtk_bedshear(lexer *p, ghostcell *pgc, ofstream &result)
 {
     if(p->P79==1)
@@ -190,6 +198,7 @@ void sediment_f::name_pvtk_bedshear(lexer *p, ghostcell *pgc, ofstream &result)
     }
 }
 
+/// @brief Writes bedshear related variable names into heading of vtk file
 void sediment_f::name_vtk_bedshear(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     if(p->P79==1)
@@ -217,6 +226,7 @@ void sediment_f::name_vtk_bedshear(lexer *p, ghostcell *pgc, ofstream &result, i
     }
 }
 
+/// @brief Sets 2D bedshear related variable offsets for vtp file
 void sediment_f::offset_vtp_bedshear(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
@@ -225,6 +235,7 @@ void sediment_f::offset_vtp_bedshear(lexer *p, ghostcell *pgc, ofstream &result,
 	++n;
 }
 
+/// @brief Sets 3D bedshear related variable offsets for vtk file
 void sediment_f::offset_vtk_bedshear(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
@@ -233,6 +244,7 @@ void sediment_f::offset_vtk_bedshear(lexer *p, ghostcell *pgc, ofstream &result,
 	++n;
 }
 
+/// @brief Writes 2D bedshear related values into vtk file
 void sediment_f::print_2D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
 {	
 	float ffn;
@@ -326,6 +338,7 @@ void sediment_f::print_2D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
     }
 }
 
+/// @brief Writes 3D bedshear related values into vtk file
 void sediment_f::print_3D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
 {	
 	float ffn;
@@ -419,6 +432,7 @@ void sediment_f::print_3D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
     }
 }
 
+/// @brief Writes 2D bedangle related values into vtk file
 void sediment_f::print_2D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
 {	
 	float ffn;
@@ -491,6 +505,7 @@ void sediment_f::print_2D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
 	}
 }
 
+/// @brief Writes 3D bedangle related values into vtk file
 void sediment_f::print_3D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
 {	
 	float ffn;
@@ -563,6 +578,7 @@ void sediment_f::print_3D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
 	}
 }
 
+/// @brief Writes bedangle related variable names into pvtk file
 void sediment_f::name_pvtk_parameter1(lexer *p, ghostcell *pgc, ofstream &result)
 {
     result<<"<PDataArray type=\"Float32\" Name=\"ST_alpha\"/>"<<endl;
@@ -576,6 +592,7 @@ void sediment_f::name_pvtk_parameter1(lexer *p, ghostcell *pgc, ofstream &result
     result<<"<PDataArray type=\"Float32\" Name=\"ST_phi\"/>"<<endl;
 }
 
+/// @brief Writes bedangle related variable names into heading of vtk file
 void sediment_f::name_vtk_parameter1(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"ST_alpha\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
@@ -590,6 +607,7 @@ void sediment_f::name_vtk_parameter1(lexer *p, ghostcell *pgc, ofstream &result,
     ++n;
 }
 
+/// @brief Sets 2D bedangle related variable offsets for vtp file
 void sediment_f::offset_vtp_parameter1(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
@@ -604,6 +622,7 @@ void sediment_f::offset_vtp_parameter1(lexer *p, ghostcell *pgc, ofstream &resul
 	++n;
 }
 
+/// @brief Sets 3D bedangle related variable offsets for vtp file
 void sediment_f::offset_vtk_parameter1(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
@@ -618,7 +637,8 @@ void sediment_f::offset_vtk_parameter1(lexer *p, ghostcell *pgc, ofstream &resul
 	++n;
 }
 
-
+/// @brief Writes other 2D bed related values into vtk file
+/// dh,bedch,reduce,threshold,slideflag
 void sediment_f::print_2D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 {	
 	float ffn;
@@ -688,6 +708,8 @@ void sediment_f::print_2D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 	}
 }
 
+/// @brief Writes other 3D bed related values into vtk file
+/// dh,bedch,reduce,threshold,slideflag
 void sediment_f::print_3D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 {	
 	float ffn;
@@ -757,6 +779,7 @@ void sediment_f::print_3D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 	}
 }
 
+/// @brief Writes other bed related variable names into pvtk file
 void sediment_f::name_pvtk_parameter2(lexer *p, ghostcell *pgc, ofstream &result)
 {
     result<<"<PDataArray type=\"Float32\" Name=\"ST_dh\"/>"<<endl;
@@ -770,6 +793,7 @@ void sediment_f::name_pvtk_parameter2(lexer *p, ghostcell *pgc, ofstream &result
     result<<"<PDataArray type=\"Float32\" Name=\"ST_slideflag\"/>"<<endl;
 }
 
+/// @brief Writes other bed related variable names into heading of vtk file
 void sediment_f::name_vtk_parameter2(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"ST_dh\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
@@ -784,6 +808,7 @@ void sediment_f::name_vtk_parameter2(lexer *p, ghostcell *pgc, ofstream &result,
     ++n;
 }
 
+/// @brief Sets other 2D bed related variable offsets for vtp file
 void sediment_f::offset_vtp_parameter2(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
@@ -798,6 +823,7 @@ void sediment_f::offset_vtp_parameter2(lexer *p, ghostcell *pgc, ofstream &resul
 	++n;
 }
 
+/// @brief Sets other 3D bed related variable offsets for vtk file
 void sediment_f::offset_vtk_parameter2(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
