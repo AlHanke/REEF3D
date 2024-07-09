@@ -29,8 +29,8 @@ Author: Hans Bihs
 #include"patchBC_interface.h"
 
 /// @brief Initializes the sediment model
-/// Determines intitial bed height using topo level set
-/// Calls further initialization functions
+/// * Determines intitial bed height using topo level set
+/// * Calls further initialization functions
 void sediment_f::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
 	double h,h1;

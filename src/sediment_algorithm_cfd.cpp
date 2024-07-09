@@ -37,18 +37,18 @@ Author: Hans Bihs
 #include"bedshear_reduction.h"
 
 /// @brief Main CFD sediment algorithm
-/// Prepares for calculation of sediment transport
-/// Determines bed slope
-/// Reduces bed slope
-/// Determines bed shear stress
-/// Calculates bedload
-/// Calculates suspended load
-/// Relaxes bed elevation ???
-/// Iterates over Exner equation
-/// Calculates sand slide
-/// Filter ???
-/// Updates CFD
-/// Writes log to file
+/// * Prepares for calculation of sediment transport
+/// * Determines bed slope
+/// * Reduces bed slope
+/// * Determines bed shear stress
+/// * Calculates bedload
+/// * Calculates suspended load
+/// * Relaxes bed elevation ???
+/// * Iterates over Exner equation
+/// * Calculates sand slide
+/// * Filter ???
+/// * Updates CFD
+/// * Writes log to file
 void sediment_f::sediment_algorithm_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinitopo *preto, solver *psolv)
 {
     starttime=pgc->timer();

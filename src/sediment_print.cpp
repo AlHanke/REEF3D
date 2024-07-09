@@ -28,7 +28,12 @@ Author: Hans Bihs
 #include"bedshear.h"
 
 /// @brief Writes bedload related variable names into pvtk file
-/// ????\nqbe: bedload entrainment rate\nqb: bedload transport rate\ncbe: bedload concentration entrainment rate\ncb: bedload concentration transport rate
+///
+/// ????
+/// * qbe: bedload entrainment rate
+/// * qb: bedload transport rate
+/// * cbe: bedload concentration entrainment rate
+/// * cb: bedload concentration transport rate
 void sediment_f::name_pvtk_bedload(lexer *p, ghostcell *pgc, ofstream &result)
 {
     result<<"<PDataArray type=\"Float32\" Name=\"ST_qbe\"/>"<<endl;
@@ -638,7 +643,11 @@ void sediment_f::offset_vtk_parameter1(lexer *p, ghostcell *pgc, ofstream &resul
 }
 
 /// @brief Writes other 2D bed related values into vtk file
-/// dh,bedch,reduce,threshold,slideflag
+/// * dh
+/// * bedch
+/// * reduce
+/// * threshold
+/// * slideflag
 void sediment_f::print_2D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 {	
 	float ffn;

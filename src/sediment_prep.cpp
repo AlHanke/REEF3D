@@ -28,7 +28,11 @@ Author: Hans Bihs
 #include"sediment_fdm.h"
 
 /// @brief Prepares for CFD calculations
-/// Determines vertical bed position, u and v near bed, and water depth
+///
+/// Determines:
+/// * vertical bed position
+/// * u and v near bed
+/// * water depth
 void sediment_f::prep_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {    
     
