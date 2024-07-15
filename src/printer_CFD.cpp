@@ -500,6 +500,233 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
 
         pgc->gcperiodicx(p,a->press,4);
 
+        double XN[p->gknox+2];
+        double YN[p->gknoy+2];
+        double ZN[p->gknoz+2];
+
+        double eddyv[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        double press[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        double phi[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        
+        int recvcounts[p->mpi_size],displs[p->mpi_size];
+        int recvcount = p->knox+1;
+        pgc->gather_int(&recvcount,1,recvcounts,1);
+        int disp = p->origin_i+1;
+        pgc->gather_int(&disp,1,displs,1);
+        pgc->gatherv_double(p->XN+marge,p->knox+1, XN,recvcounts,displs);
+
+        recvcount = p->knoy+1;
+        pgc->gather_int(&recvcount,1,recvcounts,1);
+        disp = p->origin_j+1;
+        pgc->gather_int(&disp,1,displs,1);
+        pgc->gatherv_double(p->YN+marge,p->knoy+1, YN,recvcounts,displs);
+
+        recvcount = p->knoz+1;
+        pgc->gather_int(&recvcount,1,recvcounts,1);
+        disp = p->origin_k+1;
+        pgc->gather_int(&disp,1,displs,1);
+        pgc->gatherv_double(p->ZN+marge,p->knoz+1, ZN,recvcounts,displs);
+
+        pgc->gather_int(&p->cellnum,1,recvcounts,1);
+        disp = 0;
+        for(int i=0;i<p->mpirank;++i)
+        disp += recvcounts[i];
+        pgc->gather_int(&disp,1,displs,1);
+        pgc->gatherv_double(a->press.V,p->cellnum,press,recvcounts,displs);
+
+        int localSendCount=(p->knox+2)*(p->knoy+2)*(p->knoz+2);
+        int globalSendCount[p->mpi_size];
+        pgc->gather_int(&localSendCount,1,globalSendCount,1);
+
+        if(p->mpirank==0)
+        {
+            double* pressLocal[localSendCount];
+            {
+                cout<<a->press(-1,-1,-1)<<":"<<&(a->press(-1,-1,-1))<<endl;
+                int n=0;
+                for(int k=-1;k<p->knoz+1;++k)
+                for(int j=-1;j<p->knoy+1;++j)
+                for(int i=-1;i<p->knox+1;++i)
+                {
+                    pressLocal[n]=&(a->press(i,j,k));
+                    ++n;
+                }
+                cout<<*pressLocal[0]<<":"<<pressLocal[0]<<endl;
+                cout<<n<<":"<<localSendCount<<endl;
+            }
+
+            // double* pressGlobal[p->mpi_size];
+            // for(int i=0;i<p->mpi_size;++i)
+            // pressGlobal[i]=new double[globalSendCount[i]];
+
+        
+            i=j=k=-1;
+            XN[0]=p->XN[IP];
+            YN[0]=p->YN[JP];
+            ZN[0]=p->ZN[KP];
+            // for(int i=0;i<p->gknox+1;i++)
+            // for(int i=0;i<p->gknoy+1;i++)
+            // for(int i=0;i<p->gknoz+1;i++)
+            // cout<<press[i]<<",";
+            i=j=-1;
+            cout<<endl<<p->imax*p->jmax*p->kmax<<":"<<p->cellnum<<":"<<(p->knox+2)*(p->knoy+2)*(p->knoz+2)<<":"<<p->knox<<":"<<p->knoy<<":"<<p->knoz<<endl;
+            for(k=-1; k<p->knoz+1; ++k)
+            cout<<a->press(i,j,k)<<",";
+            cout<<endl<<endl;
+            for(int i=0;i<p->imax*p->jmax*p->kmax;i++)
+            cout<<a->press.V[i]<<",";
+            cout<<endl;
+            
+
+            int cellNum=(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2);
+
+            int pointNum=(p->gknox+1)*(p->gknoy+1)*(p->gknoz+1);
+            int testOffset[300];
+            int m=0;
+            testOffset[m]=0;
+            ++m;
+            testOffset[m]=testOffset[m-1]+4+3*4*(pointNum);
+            ++m;
+            testOffset[m]=testOffset[m-1]+4+4*(pointNum);
+            ++m;
+            testOffset[m]=testOffset[m-1]+4+4*(pointNum);
+            ++m;
+            testOffset[m]=testOffset[m-1]+4+4*(pointNum);
+            ++m;
+            testOffset[m]=testOffset[m-1]+4+4*(pointNum);
+            ++m;
+
+            //x
+            testOffset[m]=testOffset[m-1]+4+4*(p->gknox+1);
+            cout<<testOffset[m]<<","<<testOffset[m-1]<<","<<m<<endl;
+            ++m;
+            //y
+            testOffset[m]=testOffset[m-1]+4+4*(p->gknoy+1); 
+            ++m;
+            //z
+            testOffset[m]=testOffset[m-1]+4+4*(p->gknoz+1);
+
+            m=0;
+            ofstream testFile;
+            testFile.open("testFile.vtr",ios::binary);
+            if(testFile.is_open())
+            {
+                testFile<<"<?xml version=\"1.0\"?>\n"
+                <<"<VTKFile type=\"RectilinearGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n"
+                <<"<RectilinearGrid WholeExtent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\" GhostLevel=\"0\" Origin=\"0 0 0\" Spacing=\"1 1 1\">\n"
+                <<"<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n"
+                <<"<PointData>\n"
+                <<"\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                ++m;
+                testFile<<"\t<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                ++m;
+                testFile<<"\t<DataArray type=\"Float32\" Name=\"eddyv\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                ++m;
+                testFile<<"\t<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                ++m;
+                testFile<<"\t<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                ++m;
+                testFile<<"</PointData>\n"
+                <<"<Coordinates>\n"
+                <<"\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<testOffset[m]<<"\"/>\n";
+                m++;
+                testFile<<"\t<DataArray type=\"Float32\" Name=\"Y\" format=\"appended\" offset=\""<<testOffset[m]<<"\"/>\n";
+                m++;
+                testFile<<"\t<DataArray type=\"Float32\" Name=\"Z\" format=\"appended\" offset=\""<<testOffset[m]<<"\"/>\n";
+                m++;
+                testFile<<"</Coordinates>\n"
+                <<"</Piece>\n"
+                <<"</RectilinearGrid>\n"
+                <<"<AppendedData encoding=\"raw\">\n_";
+                //  Velocities
+                iin=3*4*(pointNum);
+                testFile.write((char*)&iin, sizeof (int));
+                for(k=0; k<p->gknoz+1; ++k)
+                for(j=0; j<p->gknoy+1; ++j)
+                for(i=0; i<p->gknox+1; ++i)
+                {
+                ffn=float(0);//u
+                testFile.write((char*)&ffn, sizeof (float));
+
+                ffn=float(0);//v
+                testFile.write((char*)&ffn, sizeof (float));
+
+                ffn=float(0);//w
+                testFile.write((char*)&ffn, sizeof (float));
+                }
+                //  Pressure
+                iin=4*(pointNum);
+                testFile.write((char*)&iin, sizeof (int));
+                for(k=0; k<p->gknoz+1; ++k)
+                for(j=0; j<p->gknoy+1; ++j)
+                for(i=0; i<p->gknox+1; ++i)
+                {
+                ffn=float(p->ipol4_b(press));//pressure
+                testFile.write((char*)&ffn, sizeof (float));
+                }
+                //  EddyV
+                iin=4*(pointNum);
+                testFile.write((char*)&iin, sizeof (int));
+                for(k=0; k<p->gknoz+1; ++k)
+                for(j=0; j<p->gknoy+1; ++j)
+                for(i=0; i<p->gknox+1; ++i)
+                {
+                ffn=float(p->ipol4_b(eddyv));//EddyV
+                testFile.write((char*)&ffn, sizeof (float));
+                }
+                //  Phi
+                iin=4*(pointNum);
+                testFile.write((char*)&iin, sizeof (int));
+                for(k=0; k<p->gknoz+1; ++k)
+                for(j=0; j<p->gknoy+1; ++j)
+                for(i=0; i<p->gknox+1; ++i)
+                {
+                ffn=float(p->ipol4_b(phi));//phi
+                testFile.write((char*)&ffn, sizeof (float));
+                }
+                //  Elevation
+                iin=4*(pointNum);
+                testFile.write((char*)&iin, sizeof (int));
+                for(k=0; k<p->gknoz+1; ++k)
+                for(j=0; j<p->gknoy+1; ++j)
+                for(i=0; i<p->gknox+1; ++i)
+                {
+                ffn=float(ZN[k]+(ZN[k+1]-ZN[k]));//elevation
+                testFile.write((char*)&ffn, sizeof (float));
+                }
+
+                // x
+                iin=4*(p->gknox+1);
+                testFile.write((char*)&iin, sizeof (int));
+                for(i=1; i<p->gknox+2; ++i)
+                {
+                    ffn=float(XN[i]);
+                    testFile.write((char*)&ffn, sizeof (float));
+                }
+                // y
+                iin=4*(p->gknoy+1);
+                testFile.write((char*)&iin, sizeof (int));
+                for(j=1; j<p->gknoy+2; ++j)
+                {
+                    ffn=float(YN[j]);
+                    testFile.write((char*)&ffn, sizeof (float));
+                }
+                // zle
+                iin=4*(p->gknoz+1);
+                testFile.write((char*)&iin, sizeof (int));
+                for(k=1; k<p->gknoz+2; ++k)
+                {
+                    ffn=float(ZN[k]);
+                    testFile.write((char*)&ffn, sizeof (float));
+                }
+
+                testFile<<"\n</AppendedData>\n"
+                <<"</VTKFile>"<<flush;
+
+                testFile.close();
+            }
+        }
+
         outputFormat->extent(p,pgc);
         if(p->mpirank==0)
         parallelData(a,p,pgc,pturb,pheat,pdata,pconc,pmp,psed);
