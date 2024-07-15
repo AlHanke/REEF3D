@@ -423,7 +423,7 @@ public:
 
 private:
     const int size;
-    const int tag1,tag2,tag3,tag4,tag5,tag6;
+    const int tag1,tag2,tag3,tag4,tag5,tag6; ///< MPI neighbor tags, direction based
 	int margin, paramargin;
 	double  y[15],dP[15], x[15],pos[15];
 	double val[10];
@@ -435,7 +435,7 @@ private:
 	int close;
 	double dist;
     int count,check;
-    double starttime,endtime;
+    double starttime,endtime; ///< Ghostcell runtime timer values
     const double eps;
     int offset,ys;
     int gcval_topodist;
@@ -446,9 +446,9 @@ private:
     int gclabel_u_in,gclabel_v_in,gclabel_w_in,gclabel_press_in,gclabel_lsm_in;
 	int gclabel_u_out, gclabel_v_out, gclabel_w_out;
 	int gclabel_vel;
-	int rank;
-	int nb[6];
-    int stag[6],rtag[6];
+	int rank; ///< Local MPI rank
+	int nb[6]; ///< MPI neighbor destinations, direction based
+    int stag[6],rtag[6]; ///< MPI neighbor tags, direction based
 	int **isend,**irecv;
 	double **dsend,**drecv;
 	double *trecv;
@@ -460,24 +460,23 @@ private:
 // PARALLEL
 
 
-	MPI_Request sreq1,sreq2,sreq3,sreq4,sreq5,sreq6;
-	MPI_Request rreq1,rreq2,rreq3,rreq4,rreq5,rreq6;
+	MPI_Request sreq1,sreq2,sreq3,sreq4,sreq5,sreq6; ///< MPI send requests, direction based
+	MPI_Request rreq1,rreq2,rreq3,rreq4,rreq5,rreq6; ///< MPI receive requests, direction based
 
-	MPI_Request sreq[6],rreq[6];
+	MPI_Request sreq[6],rreq[6]; ///< MPI send and receive requests
 
-
-	MPI_Status status;
+	MPI_Status status; ///< MPI status
 
 
 	int tag;
-	double **send,**recv;
-	double *send1,*send2,*send3,*send4,*send5,*send6;
-	double *recv1,*recv2,*recv3,*recv4,*recv5,*recv6;
-	int *isend1,*isend2,*isend3,*isend4,*isend5,*isend6;
-	int *irecv1,*irecv2,*irecv3,*irecv4,*irecv5,*irecv6;
+	double **send,**recv; ///< MPI send and receive buffers
+	double *send1,*send2,*send3,*send4,*send5,*send6; ///< MPI send buffers, direction based
+	double *recv1,*recv2,*recv3,*recv4,*recv5,*recv6; ///< MPI receive buffers, direction based
+	int *isend1,*isend2,*isend3,*isend4,*isend5,*isend6; ///< MPI send buffers, direction based
+	int *irecv1,*irecv2,*irecv3,*irecv4,*irecv5,*irecv6; ///< MPI receive buffers, direction based
 	int precv[6];
-	double recvsum,recvmin,recvmax;
-	int recvisum,recvimin,recvimax;
+	double recvsum,recvmin,recvmax; ///< MPI receive values for global operations
+	int recvisum,recvimin,recvimax; ///< MPI receive values for global operations
 	int awa_lable,pressout_lable,pressin_lable;
 	const int gcx;
 	int gcx_count[6];
