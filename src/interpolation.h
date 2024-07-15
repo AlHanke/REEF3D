@@ -68,6 +68,7 @@ public:
     double ipol4topo(fdm*,field&);
     double ipol4press(field&);
     double ipol4_a(field&);
+    double ipol4_b(double*);
 
     
     double lint(field&,int&,int&,int&,double,double,double);

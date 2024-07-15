@@ -485,6 +485,14 @@ pip=0;
 
     return value;
 }
+double interpolation::ipol4_b(double *b)
+{
+    // (i)*(p->gknoy+1)*(p->gknoz+1) + (j)*(p->gknoz+1) + (k)
+    value=0.125*(b[i*(p->gknoy+1)*(p->gknoz+1) + j*(p->gknoz+1) + k]+b[(i)*(p->gknoy+1)*(p->gknoz+1) + (j+1)*(p->gknoz+1) + k]+b[(i+1)*(p->gknoy+1)*(p->gknoz+1) + (j)*(p->gknoz+1) + (k)]+b[(i+1)*(p->gknoy+1)*(p->gknoz+1) + (j+1)*(p->gknoz+1) + (k)] +
+                 b[(i)*(p->gknoy+1)*(p->gknoz+1) + (j)*(p->gknoz+1) + (k+1)]+b[(i)*(p->gknoy+1)*(p->gknoz+1) + (j+1)*(p->gknoz+1) + (k+1)]+b[(i+1)*(p->gknoy+1)*(p->gknoz+1) + (j)*(p->gknoz+1) + (k+1)]+b[(i+1)*(p->gknoy+1)*(p->gknoz+1) + (j+1)*(p->gknoz+1) + (k+1)]);
+
+    return value;
+}
 
 double interpolation::ipol4topo(fdm *a, field& b)
 {
