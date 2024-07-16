@@ -505,7 +505,6 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         double ZN[p->gknoz+2];
 
         double eddyv[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-        double press[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         double phi[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         
         int recvcounts[p->mpi_size],displs[p->mpi_size];
@@ -527,64 +526,119 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         pgc->gather_int(&disp,1,displs,1);
         pgc->gatherv_double(p->ZN+marge,p->knoz+1, ZN,recvcounts,displs);
 
-        pgc->gather_int(&p->cellnum,1,recvcounts,1);
-        disp = 0;
-        for(int i=0;i<p->mpirank;++i)
-        disp += recvcounts[i];
-        pgc->gather_int(&disp,1,displs,1);
-        pgc->gatherv_double(a->press.V,p->cellnum,press,recvcounts,displs);
 
-        int localSendCount=(p->knox+2)*(p->knoy+2)*(p->knoz+2);
-        int globalSendCount[p->mpi_size];
-        pgc->gather_int(&localSendCount,1,globalSendCount,1);
+        int neibours[6];
+        neibours[0]=p->nb1;
+        neibours[1]=p->nb2;
+        neibours[2]=p->nb3;
+        neibours[3]=p->nb4;
+        neibours[4]=p->nb5;
+        neibours[5]=p->nb6;
+        int* gneibours;
+        if(p->mpirank==0)
+            gneibours = (int *)malloc(p->mpi_size*6*sizeof(int));
+        pgc->gather_int(neibours,6,gneibours,6);
+
+        int iextent[6];
+        iextent[0]=p->origin_i;
+        iextent[1]=p->origin_i+p->knox;
+        iextent[2]=p->origin_j;
+        iextent[3]=p->origin_j+p->knoy;
+        iextent[4]=p->origin_k;
+        iextent[5]=p->origin_k+p->knoz;
+
+        int* piextent;
+        if ( p->mpirank == 0)
+        piextent = (int *)malloc(p->mpi_size*6*sizeof(int));
+        pgc->gather_int(iextent,6,piextent,6);
+
+        int localSendCount=0;
+        localSendCount=(p->knox+2*p->margin)*(p->knoy+2*p->margin)*(p->knoz+2*p->margin);
+        int globalSendCounts[p->mpi_size];
+        pgc->gather_int(&localSendCount,1,globalSendCounts,1);
+
+        double* pressGlobal;
+        int counter;
+        if(p->mpirank==0)
+        {
+            counter = globalSendCounts[0];
+            displs[0]=0;
+            for(int i=1;i<p->mpi_size;++i)
+            {
+                displs[i] = displs[i-1] + globalSendCounts[i-1];
+                counter += globalSendCounts[i];
+            }
+            pressGlobal = (double *)malloc(counter*sizeof(double));
+        }
+        pgc->gatherv_double(a->press.V,localSendCount,pressGlobal,globalSendCounts,displs);
 
         if(p->mpirank==0)
         {
-            double* pressLocal[localSendCount];
+            double* press[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+            int indexL,indexLG;
+            int kbegin,kend;
+            int jbegin,jend;
+            int ibegin,iend;
+            for(int n=0;n<p->mpi_size;n++)
             {
-                cout<<a->press(-1,-1,-1)<<":"<<&(a->press(-1,-1,-1))<<endl;
-                int n=0;
-                for(int k=-1;k<p->knoz+1;++k)
-                for(int j=-1;j<p->knoy+1;++j)
-                for(int i=-1;i<p->knox+1;++i)
+                kbegin=-1;
+                if(gneibours[4+6*n]>-2)
+                kbegin=0;
+                kend=piextent[5+6*n]-piextent[4+6*n]+1;
+                if(gneibours[5+6*n]>-2)
+                kend=piextent[5+6*n]-piextent[4+6*n];
+
+                jbegin=-1;
+                if(gneibours[2+6*n]>-2)
+                jbegin=0;
+                jend=piextent[3+6*n]-piextent[2+6*n]+1;
+                if(gneibours[1+6*n]>-2)
+                jend=piextent[3+6*n]-piextent[2+6*n];
+                
+                ibegin=-1;
+                if(gneibours[0+6*n]>-2)
+                ibegin=0;
+                iend=piextent[1+6*n]-piextent[0+6*n]+1;
+                if(gneibours[3+6*n]>-2)
+                iend=piextent[1+6*n]-piextent[0+6*n];
+
+                for(int k=kbegin;k<kend;++k)
                 {
-                    pressLocal[n]=&(a->press(i,j,k));
-                    ++n;
+                    for(int j=jbegin;j<jend;++j)
+                    {
+                        for(int i=ibegin;i<iend;++i)
+                        {
+                            indexL = (i+p->margin)*(piextent[3+6*n]-piextent[2+6*n]+2*p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + (j+p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + k+p->margin;
+                            indexL += displs[n];
+                            indexLG = (k+1+piextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+piextent[2+6*n])*(p->gknox+2)+(i+1+piextent[0+6*n]);
+                            press[indexLG]=&pressGlobal[indexL];
+                        }
+                    }
                 }
-                cout<<*pressLocal[0]<<":"<<pressLocal[0]<<endl;
-                cout<<n<<":"<<localSendCount<<endl;
+            }
+            int indexG;
+            i=j=k=0;
+            for(k=-1; k<1; ++k)
+            for(j=-1; j<1; ++j)
+            for(i=-1; i<1; ++i)
+            {
+                indexG = (k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1);
+                cout<<"("<<i<<","<<j<<","<<k<<")"<<a->press(i,j,k)<<":"<<*press[indexG]<<endl;
             }
 
-            // double* pressGlobal[p->mpi_size];
-            // for(int i=0;i<p->mpi_size;++i)
-            // pressGlobal[i]=new double[globalSendCount[i]];
-
-        
             i=j=k=-1;
             XN[0]=p->XN[IP];
             YN[0]=p->YN[JP];
-            ZN[0]=p->ZN[KP];
-            // for(int i=0;i<p->gknox+1;i++)
-            // for(int i=0;i<p->gknoy+1;i++)
-            // for(int i=0;i<p->gknoz+1;i++)
-            // cout<<press[i]<<",";
-            i=j=-1;
-            cout<<endl<<p->imax*p->jmax*p->kmax<<":"<<p->cellnum<<":"<<(p->knox+2)*(p->knoy+2)*(p->knoz+2)<<":"<<p->knox<<":"<<p->knoy<<":"<<p->knoz<<endl;
-            for(k=-1; k<p->knoz+1; ++k)
-            cout<<a->press(i,j,k)<<",";
-            cout<<endl<<endl;
-            for(int i=0;i<p->imax*p->jmax*p->kmax;i++)
-            cout<<a->press.V[i]<<",";
-            cout<<endl;
-            
+            ZN[0]=p->ZN[KP];            
 
-            int cellNum=(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2);
-
+            int cellNum=(p->gknox)*(p->gknoy)*(p->gknoz);
             int pointNum=(p->gknox+1)*(p->gknoy+1)*(p->gknoz+1);
+
             int testOffset[300];
             int m=0;
             testOffset[m]=0;
             ++m;
+
             testOffset[m]=testOffset[m-1]+4+3*4*(pointNum);
             ++m;
             testOffset[m]=testOffset[m-1]+4+4*(pointNum);
@@ -595,10 +649,11 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
             ++m;
             testOffset[m]=testOffset[m-1]+4+4*(pointNum);
             ++m;
+            testOffset[m]=testOffset[m-1]+4+4*(cellNum);
+            ++m;
 
             //x
             testOffset[m]=testOffset[m-1]+4+4*(p->gknox+1);
-            cout<<testOffset[m]<<","<<testOffset[m-1]<<","<<m<<endl;
             ++m;
             //y
             testOffset[m]=testOffset[m-1]+4+4*(p->gknoy+1); 
@@ -627,6 +682,10 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 testFile<<"\t<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
                 ++m;
                 testFile<<"</PointData>\n"
+                <<"<CellData>\n"
+                <<"\t<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                ++m;
+                testFile<<"</CellData>\n"
                 <<"<Coordinates>\n"
                 <<"\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<testOffset[m]<<"\"/>\n";
                 m++;
@@ -657,11 +716,11 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 //  Pressure
                 iin=4*(pointNum);
                 testFile.write((char*)&iin, sizeof (int));
-                for(k=0; k<p->gknoz+1; ++k)
-                for(j=0; j<p->gknoy+1; ++j)
-                for(i=0; i<p->gknox+1; ++i)
+                for(i=-1; i<p->gknox; ++i)
+                for(j=-1; j<p->gknoy; ++j)
+                for(k=-1; k<p->gknoz; ++k)
                 {
-                ffn=float(p->ipol4_b(press));//pressure
+                ffn=float(p->ipol4_b(*press)-p->pressgage);//pressure
                 testFile.write((char*)&ffn, sizeof (float));
                 }
                 //  EddyV
@@ -693,6 +752,18 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 {
                 ffn=float(ZN[k]+(ZN[k+1]-ZN[k]));//elevation
                 testFile.write((char*)&ffn, sizeof (float));
+                }
+
+                //  Pressure
+                iin=4*(cellNum);
+                testFile.write((char*)&iin, sizeof (int));
+                for(k=0; k<p->gknoz; ++k)
+                for(j=0; j<p->gknoy; ++j)
+                for(i=0; i<p->gknox; ++i)
+                {
+                    indexG = (k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1);
+                    ffn=float(*press[indexG]-p->pressgage);//pressure
+                    testFile.write((char*)&ffn, sizeof (float));
                 }
 
                 // x

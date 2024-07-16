@@ -487,9 +487,24 @@ pip=0;
 }
 double interpolation::ipol4_b(double *b)
 {
-    // (i)*(p->gknoy+1)*(p->gknoz+1) + (j)*(p->gknoz+1) + (k)
-    value=0.125*(b[i*(p->gknoy+1)*(p->gknoz+1) + j*(p->gknoz+1) + k]+b[(i)*(p->gknoy+1)*(p->gknoz+1) + (j+1)*(p->gknoz+1) + k]+b[(i+1)*(p->gknoy+1)*(p->gknoz+1) + (j)*(p->gknoz+1) + (k)]+b[(i+1)*(p->gknoy+1)*(p->gknoz+1) + (j+1)*(p->gknoz+1) + (k)] +
-                 b[(i)*(p->gknoy+1)*(p->gknoz+1) + (j)*(p->gknoz+1) + (k+1)]+b[(i)*(p->gknoy+1)*(p->gknoz+1) + (j+1)*(p->gknoz+1) + (k+1)]+b[(i+1)*(p->gknoy+1)*(p->gknoz+1) + (j)*(p->gknoz+1) + (k+1)]+b[(i+1)*(p->gknoy+1)*(p->gknoz+1) + (j+1)*(p->gknoz+1) + (k+1)]);
+    int indexG;
+    value=0;
+    for(kk=0; kk<2; ++kk)
+    for(jj=0; jj<2; ++jj)
+    for(ii=0; ii<2; ++ii)
+    {
+        indexG = (k+kk+1)*(p->gknox+2)*(p->gknoy+2)+(j+jj+1)*(p->gknox+2)+(i+ii+1);
+        value += b[indexG];
+    }
+    // value=0.125*(  b[(k+1+0)*(p->gknox+2)*(p->gknoy+2)+(j+1+0)*(p->gknox+2)+(i+1+0)]
+    //               +b[(k+1+0)*(p->gknox+2)*(p->gknoy+2)+(j+1+1)*(p->gknox+2)+(i+1+0)]
+    //               +b[(k+1+0)*(p->gknox+2)*(p->gknoy+2)+(j+1+0)*(p->gknox+2)+(i+1+1)]
+    //               +b[(k+1+0)*(p->gknox+2)*(p->gknoy+2)+(j+1+1)*(p->gknox+2)+(i+1+1)]
+    //               +b[(k+1+1)*(p->gknox+2)*(p->gknoy+2)+(j+1+0)*(p->gknox+2)+(i+1+0)]
+    //               +b[(k+1+1)*(p->gknox+2)*(p->gknoy+2)+(j+1+1)*(p->gknox+2)+(i+1+0)]
+    //               +b[(k+1+1)*(p->gknox+2)*(p->gknoy+2)+(j+1+0)*(p->gknox+2)+(i+1+1)]
+    //               +b[(k+1+1)*(p->gknox+2)*(p->gknoy+2)+(j+1+1)*(p->gknox+2)+(i+1+1)]);
+    value /= 8.0;
 
     return value;
 }
