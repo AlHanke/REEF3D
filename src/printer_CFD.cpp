@@ -558,6 +558,11 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         pgc->gather_int(&localSendCount,1,globalSendCounts,1);
 
         double* pressGlobal;
+        double* uvelGlobal;
+        double* vvelGlobal;
+        double* wvelGlobal;
+        double* topoGlobal;
+        double* phiGlobal;
         int counter;
         if(p->mpirank==0)
         {
@@ -569,12 +574,27 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 counter += globalSendCounts[i];
             }
             pressGlobal = (double *)malloc(counter*sizeof(double));
+            uvelGlobal = (double *)malloc(counter*sizeof(double));
+            vvelGlobal = (double *)malloc(counter*sizeof(double));
+            wvelGlobal = (double *)malloc(counter*sizeof(double));
+            topoGlobal = (double *)malloc(counter*sizeof(double));
+            phiGlobal = (double *)malloc(counter*sizeof(double));
         }
         pgc->gatherv_double(a->press.V,localSendCount,pressGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->u.V,localSendCount,uvelGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->v.V,localSendCount,vvelGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->w.V,localSendCount,wvelGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->topo.V,localSendCount,topoGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->phi.V,localSendCount,phiGlobal,globalSendCounts,displs);
 
         if(p->mpirank==0)
         {
             double* press[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+            double* uvel[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+            double* vvel[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+            double* wvel[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+            double* topo[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+            double* phi[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
             int indexL,indexLG;
             int kbegin,kend;
             int jbegin,jend;
@@ -612,6 +632,11 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                             indexL += displs[n];
                             indexLG = (k+1+piextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+piextent[2+6*n])*(p->gknox+2)+(i+1+piextent[0+6*n]);
                             press[indexLG]=&pressGlobal[indexL];
+                            uvel[indexLG]=&uvelGlobal[indexL];
+                            vvel[indexLG]=&vvelGlobal[indexL];
+                            wvel[indexLG]=&wvelGlobal[indexL];
+                            topo[indexLG]=&topoGlobal[indexL];
+                            phi[indexLG]=&phiGlobal[indexL];
                         }
                     }
                 }
@@ -649,7 +674,7 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
             ++m;
             testOffset[m]=testOffset[m-1]+4+4*(pointNum);
             ++m;
-            testOffset[m]=testOffset[m-1]+4+4*(cellNum);
+            testOffset[m]=testOffset[m-1]+4+3*4*(cellNum);
             ++m;
 
             //x
@@ -683,7 +708,7 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 ++m;
                 testFile<<"</PointData>\n"
                 <<"<CellData>\n"
-                <<"\t<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                <<"\t<DataArray type=\"Float32\" Name=\"Debug\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
                 ++m;
                 testFile<<"</CellData>\n"
                 <<"<Coordinates>\n"
@@ -704,24 +729,24 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 for(j=0; j<p->gknoy+1; ++j)
                 for(i=0; i<p->gknox+1; ++i)
                 {
-                ffn=float(0);//u
-                testFile.write((char*)&ffn, sizeof (float));
+                    ffn=float(p->ipol4press(uvel));//u
+                    testFile.write((char*)&ffn, sizeof (float));
 
-                ffn=float(0);//v
-                testFile.write((char*)&ffn, sizeof (float));
+                    ffn=float(p->ipol4press(vvel));//v
+                    testFile.write((char*)&ffn, sizeof (float));
 
-                ffn=float(0);//w
-                testFile.write((char*)&ffn, sizeof (float));
+                    ffn=float(p->ipol4press(wvel));//w
+                    testFile.write((char*)&ffn, sizeof (float));
                 }
                 //  Pressure
                 iin=4*(pointNum);
                 testFile.write((char*)&iin, sizeof (int));
-                for(i=-1; i<p->gknox; ++i)
-                for(j=-1; j<p->gknoy; ++j)
                 for(k=-1; k<p->gknoz; ++k)
+                for(j=-1; j<p->gknoy; ++j)
+                for(i=-1; i<p->gknox; ++i)
                 {
-                ffn=float(p->ipol4_b(*press)-p->pressgage);//pressure
-                testFile.write((char*)&ffn, sizeof (float));
+                    ffn=float(p->ipol4press(press));
+                    testFile.write((char*)&ffn, sizeof (float));
                 }
                 //  EddyV
                 iin=4*(pointNum);
@@ -736,12 +761,12 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 //  Phi
                 iin=4*(pointNum);
                 testFile.write((char*)&iin, sizeof (int));
-                for(k=0; k<p->gknoz+1; ++k)
-                for(j=0; j<p->gknoy+1; ++j)
-                for(i=0; i<p->gknox+1; ++i)
+                for(k=-1; k<p->gknoz; ++k)
+                for(j=-1; j<p->gknoy; ++j)
+                for(i=-1; i<p->gknox; ++i)
                 {
-                ffn=float(p->ipol4_b(phi));//phi
-                testFile.write((char*)&ffn, sizeof (float));
+                    ffn=float(p->ipol4phi(topo,phi));
+                    testFile.write((char*)&ffn, sizeof (float));
                 }
                 //  Elevation
                 iin=4*(pointNum);
@@ -750,19 +775,22 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 for(j=0; j<p->gknoy+1; ++j)
                 for(i=0; i<p->gknox+1; ++i)
                 {
-                ffn=float(ZN[k]+(ZN[k+1]-ZN[k]));//elevation
-                testFile.write((char*)&ffn, sizeof (float));
+                    ffn=float(ZN[k]+(ZN[k+1]-ZN[k]));
+                    testFile.write((char*)&ffn, sizeof (float));
                 }
 
-                //  Pressure
-                iin=4*(cellNum);
+                //  Debug
+                iin=3*4*(cellNum);
                 testFile.write((char*)&iin, sizeof (int));
                 for(k=0; k<p->gknoz; ++k)
                 for(j=0; j<p->gknoy; ++j)
                 for(i=0; i<p->gknox; ++i)
                 {
-                    indexG = (k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1);
-                    ffn=float(*press[indexG]-p->pressgage);//pressure
+                    ffn=float(*uvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
+                    testFile.write((char*)&ffn, sizeof (float));
+                    ffn=float(*vvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
+                    testFile.write((char*)&ffn, sizeof (float));
+                    ffn=float(*wvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
                     testFile.write((char*)&ffn, sizeof (float));
                 }
 
