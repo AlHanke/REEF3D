@@ -508,7 +508,7 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         int *recvcounts;
         int *displs;
         int *gneibours;
-        int *piextent;
+        int *gextent;
         int *globalSendCounts;
         if(p->mpirank==0)
         {
@@ -517,7 +517,7 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
             ZN = (double *)malloc((p->gknoz+2)*sizeof(double));
 
             gneibours = (int *)malloc(p->mpi_size*6*sizeof(int));
-            piextent = (int *)malloc(p->mpi_size*6*sizeof(int));
+            gextent = (int *)malloc(p->mpi_size*6*sizeof(int));
 
             globalSendCounts = (int *)malloc(p->mpi_size*sizeof(int));
             recvcounts = (int *)malloc(p->mpi_size*sizeof(int));
@@ -530,7 +530,7 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
             ZN = nullptr;
 
             gneibours = nullptr;
-            piextent = nullptr;
+            gextent = nullptr;
 
             globalSendCounts = nullptr;
             recvcounts = nullptr;
@@ -566,14 +566,14 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         
         pgc->gather_int(neibours,6,gneibours,6);
 
-        int iextent[6];
-        iextent[0]=p->origin_i;
-        iextent[1]=p->origin_i+p->knox;
-        iextent[2]=p->origin_j;
-        iextent[3]=p->origin_j+p->knoy;
-        iextent[4]=p->origin_k;
-        iextent[5]=p->origin_k+p->knoz;
-        pgc->gather_int(iextent,6,piextent,6);
+        int extent[6];
+        extent[0]=p->origin_i;
+        extent[1]=p->origin_i+p->knox;
+        extent[2]=p->origin_j;
+        extent[3]=p->origin_j+p->knoy;
+        extent[4]=p->origin_k;
+        extent[5]=p->origin_k+p->knoz;
+        pgc->gather_int(extent,6,gextent,6);
 
         int localSendCount=0;
         if(p->mpirank!=0)
@@ -641,23 +641,23 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 kbegin=-1;
                 if(gneibours[4+6*n]>-2)
                 kbegin=0;
-                kend=piextent[5+6*n]-piextent[4+6*n]+1;
+                kend=gextent[5+6*n]-gextent[4+6*n]+1;
                 if(gneibours[5+6*n]>-2)
-                kend=piextent[5+6*n]-piextent[4+6*n];
+                kend=gextent[5+6*n]-gextent[4+6*n];
 
                 jbegin=-1;
                 if(gneibours[2+6*n]>-2)
                 jbegin=0;
-                jend=piextent[3+6*n]-piextent[2+6*n]+1;
+                jend=gextent[3+6*n]-gextent[2+6*n]+1;
                 if(gneibours[1+6*n]>-2)
-                jend=piextent[3+6*n]-piextent[2+6*n];
+                jend=gextent[3+6*n]-gextent[2+6*n];
                 
                 ibegin=-1;
                 if(gneibours[0+6*n]>-2)
                 ibegin=0;
-                iend=piextent[1+6*n]-piextent[0+6*n]+1;
+                iend=gextent[1+6*n]-gextent[0+6*n]+1;
                 if(gneibours[3+6*n]>-2)
-                iend=piextent[1+6*n]-piextent[0+6*n];
+                iend=gextent[1+6*n]-gextent[0+6*n];
 
                 if(n!=0)
                     for(int k=kbegin;k<kend;++k)
@@ -666,9 +666,9 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                         {
                             for(int i=ibegin;i<iend;++i)
                             {
-                                indexL = (i+p->margin)*(piextent[3+6*n]-piextent[2+6*n]+2*p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + (j+p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + k+p->margin;
+                                indexL = (i+p->margin)*(gextent[3+6*n]-gextent[2+6*n]+2*p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + (j+p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + k+p->margin;
                                 indexL += displs[n];
-                                indexLG = (k+1+piextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+piextent[2+6*n])*(p->gknox+2)+(i+1+piextent[0+6*n]);
+                                indexLG = (k+1+gextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+gextent[2+6*n])*(p->gknox+2)+(i+1+gextent[0+6*n]);
                                 press[indexLG]=&pressGlobal[indexL];
                                 uvel[indexLG]=&uvelGlobal[indexL];
                                 vvel[indexLG]=&vvelGlobal[indexL];
@@ -688,8 +688,8 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                         {
                             for(int i=ibegin;i<iend;++i)
                             {
-                                indexL = (i+p->margin)*(piextent[3+6*n]-piextent[2+6*n]+2*p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + (j+p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + k+p->margin;
-                                indexLG = (k+1+piextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+piextent[2+6*n])*(p->gknox+2)+(i+1+piextent[0+6*n]);
+                                indexL = (i+p->margin)*(gextent[3+6*n]-gextent[2+6*n]+2*p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + (j+p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + k+p->margin;
+                                indexLG = (k+1+gextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+gextent[2+6*n])*(p->gknox+2)+(i+1+gextent[0+6*n]);
                                 press[indexLG]=&a->press.V[indexL];
                                 uvel[indexLG]=&a->u.V[indexL];
                                 vvel[indexLG]=&a->v.V[indexL];
