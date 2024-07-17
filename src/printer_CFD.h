@@ -80,6 +80,38 @@ private:
     void print3D(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
     void parallelData(fdm*,lexer*,ghostcell*,turbulence*,heat*,data*,concentration*,multiphase*,sediment*);
 
+    void setupCompactPrint(lexer*,fdm*,ghostcell*);
+    void print3D2(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
+    double **press;
+    double **uvel;
+    double **vvel;
+    double **wvel;
+    double **topo;
+    double **phi;
+    double **eddyv;
+    int **flag;
+    int **flag5;
+    double *XN;
+    double *YN;
+    double *ZN;
+    int *recvcounts;
+    int *displs;
+    int *gneibours;
+    int *gextent;
+    int *globalSendCounts;
+    double* pressGlobal;
+    double* uvelGlobal;
+    double* vvelGlobal;
+    double* wvelGlobal;
+    double* topoGlobal;
+    double* phiGlobal;
+    double* eddyvGlobal;
+    int* flagGlobal;
+    int* flag5Global;
+    int localSendCount;
+    int cellNum;
+    int pointNum;
+
     char name[200];
     int n,iin,offset[300];
     float ffn;

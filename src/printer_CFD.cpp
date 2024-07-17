@@ -214,6 +214,8 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc) : nodefill(p), eta(p)
     {
         outputFormat->folder("CFD");
     }
+
+    setupCompactPrint(p,a,pgc);
 }
 
 printer_CFD::~printer_CFD()
@@ -264,12 +266,14 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
 	if(p->count%p->P20==0 && p->P30<0.0 && p->P34<0.0 && p->P20>0)
 	{
 	print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+    // print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 	}
 
 	// Print out based on time
 	if((p->simtime>p->printtime && p->P30>0.0 && p->P34<0.0) || (p->count==0 &&  p->P30>0.0))
 	{
 	print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+    // print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 
 	p->printtime+=p->P30;
 	}
@@ -278,6 +282,7 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
 	if((p->sedtime>p->sedprinttime && p->P34>0.0 && p->P30<0.0) || (p->count==0 &&  p->P34>0.0))
 	{
 	print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+    // print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 
 	p->sedprinttime+=p->P34;
 	}
@@ -288,6 +293,7 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
 	if(p->simtime>printtime_wT[qn] && p->simtime>=p->P35_ts[qn] && p->simtime<=(p->P35_te[qn]+0.5*p->P35_dt[qn]))
 	{
 	print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+    // print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 
 	printtime_wT[qn]+=p->P35_dt[qn];
 	}
@@ -452,164 +458,227 @@ void printer_CFD::print_vtk(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, h
 	pfsf->start(p,a,pgc);
     
     print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+    print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 }
 
-void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
+void printer_CFD::setupCompactPrint(lexer *p, fdm *a, ghostcell * pgc)
+{
+    if(p->mpirank==0)
+    {
+        XN = (double *)malloc((p->gknox+2)*sizeof(double));
+        YN = (double *)malloc((p->gknoy+2)*sizeof(double));
+        ZN = (double *)malloc((p->gknoz+2)*sizeof(double));
+
+        gneibours = (int *)malloc(p->mpi_size*6*sizeof(int));
+        gextent = (int *)malloc(p->mpi_size*6*sizeof(int));
+
+        globalSendCounts = (int *)malloc(p->mpi_size*sizeof(int));
+        recvcounts = (int *)malloc(p->mpi_size*sizeof(int));
+        displs = (int *)malloc(p->mpi_size*sizeof(int));
+
+        press = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        uvel = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        vvel = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        wvel = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        topo = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        phi = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        eddyv = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        flag = (int **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(int*));
+        flag5 = (int **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(int*));
+
+        cellNum=(p->gknox)*(p->gknoy)*(p->gknoz);
+        pointNum=(p->gknox+1)*(p->gknoy+1)*(p->gknoz+1);
+    }
+    else
+    {
+        XN = nullptr;
+        YN = nullptr;
+        ZN = nullptr;
+
+        gneibours = nullptr;
+        gextent = nullptr;
+
+        globalSendCounts = nullptr;
+        recvcounts = nullptr;
+        displs = nullptr;
+
+        press = nullptr;
+        uvel = nullptr;
+        vvel = nullptr;
+        wvel = nullptr;
+        topo = nullptr;
+        phi = nullptr;
+        eddyv = nullptr;
+        flag = nullptr;
+        flag5 = nullptr;
+
+        cellNum=0;
+        pointNum=0;
+    }
+
+    int recvcount = p->knox+1;
+    pgc->gather_int(&recvcount,1,recvcounts,1);
+    int disp = p->origin_i+1;
+    pgc->gather_int(&disp,1,displs,1);
+    pgc->gatherv_double(p->XN+marge,p->knox+1, XN,recvcounts,displs);
+
+    recvcount = p->knoy+1;
+    pgc->gather_int(&recvcount,1,recvcounts,1);
+    disp = p->origin_j+1;
+    pgc->gather_int(&disp,1,displs,1);
+    pgc->gatherv_double(p->YN+marge,p->knoy+1, YN,recvcounts,displs);
+
+    recvcount = p->knoz+1;
+    pgc->gather_int(&recvcount,1,recvcounts,1);
+    disp = p->origin_k+1;
+    pgc->gather_int(&disp,1,displs,1);
+    pgc->gatherv_double(p->ZN+marge,p->knoz+1, ZN,recvcounts,displs);
+
+    if(p->mpirank==0)
+    {
+        i=j=k=-1;
+        XN[0]=p->XN[IP];
+        YN[0]=p->YN[JP];
+        ZN[0]=p->ZN[KP]; 
+    }
+
+
+    int neibours[6];
+    neibours[0]=p->nb1;
+    neibours[1]=p->nb2;
+    neibours[2]=p->nb3;
+    neibours[3]=p->nb4;
+    neibours[4]=p->nb5;
+    neibours[5]=p->nb6;
+    pgc->gather_int(neibours,6,gneibours,6);
+
+    int extent[6];
+    extent[0]=p->origin_i;
+    extent[1]=p->origin_i+p->knox;
+    extent[2]=p->origin_j;
+    extent[3]=p->origin_j+p->knoy;
+    extent[4]=p->origin_k;
+    extent[5]=p->origin_k+p->knoz;
+    pgc->gather_int(extent,6,gextent,6);
+
+    if(p->mpirank==0)
+        localSendCount=0;
+    else
+        localSendCount=(p->knox+2*p->margin)*(p->knoy+2*p->margin)*(p->knoz+2*p->margin);
+    pgc->gather_int(&localSendCount,1,globalSendCounts,1);
+
+    if(p->mpirank==0)
+    {
+        int counter = globalSendCounts[0];
+        displs[0]=0;
+        for(int i=1;i<p->mpi_size;++i)
+        {
+            displs[i] = displs[i-1] + globalSendCounts[i-1];
+            counter += globalSendCounts[i];
+        }
+        pressGlobal = (double *)malloc(counter*sizeof(double));
+        uvelGlobal = (double *)malloc(counter*sizeof(double));
+        vvelGlobal = (double *)malloc(counter*sizeof(double));
+        wvelGlobal = (double *)malloc(counter*sizeof(double));
+        topoGlobal = (double *)malloc(counter*sizeof(double));
+        phiGlobal = (double *)malloc(counter*sizeof(double));
+        eddyvGlobal = (double *)malloc(counter*sizeof(double));
+        flagGlobal = (int *)malloc(counter*sizeof(int));
+        flag5Global = (int *)malloc(counter*sizeof(int));
+    }
+    else
+    {
+        pressGlobal = nullptr;
+        uvelGlobal = nullptr;
+        vvelGlobal = nullptr;
+        wvelGlobal = nullptr;
+        topoGlobal = nullptr;
+        phiGlobal = nullptr;
+        eddyvGlobal = nullptr;
+        flagGlobal = nullptr;
+        flag5Global = nullptr;
+    }
+
+    if(p->mpirank==0)
+    {
+        int indexL,indexLG;
+        int kbegin,kend;
+        int jbegin,jend;
+        int ibegin,iend;
+        for(int n=0;n<p->mpi_size;n++)
+        {
+            kbegin=-1;
+            if(gneibours[4+6*n]>-2)
+            kbegin=0;
+            kend=gextent[5+6*n]-gextent[4+6*n]+1;
+            if(gneibours[5+6*n]>-2)
+            kend=gextent[5+6*n]-gextent[4+6*n];
+
+            jbegin=-1;
+            if(gneibours[2+6*n]>-2)
+            jbegin=0;
+            jend=gextent[3+6*n]-gextent[2+6*n]+1;
+            if(gneibours[1+6*n]>-2)
+            jend=gextent[3+6*n]-gextent[2+6*n];
+            
+            ibegin=-1;
+            if(gneibours[0+6*n]>-2)
+            ibegin=0;
+            iend=gextent[1+6*n]-gextent[0+6*n]+1;
+            if(gneibours[3+6*n]>-2)
+            iend=gextent[1+6*n]-gextent[0+6*n];
+
+            if(n!=0)
+                for(int k=kbegin;k<kend;++k)
+                {
+                    for(int j=jbegin;j<jend;++j)
+                    {
+                        for(int i=ibegin;i<iend;++i)
+                        {
+                            indexL = (i+p->margin)*(gextent[3+6*n]-gextent[2+6*n]+2*p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + (j+p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + k+p->margin;
+                            indexL += displs[n];
+                            indexLG = (k+1+gextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+gextent[2+6*n])*(p->gknox+2)+(i+1+gextent[0+6*n]);
+                            press[indexLG]=&pressGlobal[indexL];
+                            uvel[indexLG]=&uvelGlobal[indexL];
+                            vvel[indexLG]=&vvelGlobal[indexL];
+                            wvel[indexLG]=&wvelGlobal[indexL];
+                            topo[indexLG]=&topoGlobal[indexL];
+                            phi[indexLG]=&phiGlobal[indexL];
+                            eddyv[indexLG]=&eddyvGlobal[indexL];
+                            flag[indexLG]=&flagGlobal[indexL];
+                            flag5[indexLG]=&flag5Global[indexL];
+                        }
+                    }
+                }
+            else
+                for(int k=kbegin;k<kend;++k)
+                {
+                    for(int j=jbegin;j<jend;++j)
+                    {
+                        for(int i=ibegin;i<iend;++i)
+                        {
+                            indexL = (i+p->margin)*(gextent[3+6*n]-gextent[2+6*n]+2*p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + (j+p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + k+p->margin;
+                            indexLG = (k+1+gextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+gextent[2+6*n])*(p->gknox+2)+(i+1+gextent[0+6*n]);
+                            press[indexLG]=&a->press.V[indexL];
+                            uvel[indexLG]=&a->u.V[indexL];
+                            vvel[indexLG]=&a->v.V[indexL];
+                            wvel[indexLG]=&a->w.V[indexL];
+                            topo[indexLG]=&a->topo.V[indexL];
+                            phi[indexLG]=&a->phi.V[indexL];
+                            eddyv[indexLG]=&a->eddyv.V[indexL];
+                            flag[indexLG]=&p->flag[indexL];
+                            flag5[indexLG]=&p->flag5[indexL];
+                        }
+                    }
+                }
+        }
+    }
+}
+
+void printer_CFD::print3D2(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
 {
     if(p->P10!=0)
     {
-        pgc->start4a(p,a->test,1);
-        pgc->start1(p,a->u,110);
-        pgc->start2(p,a->v,111);
-        pgc->start3(p,a->w,112);
-
-
-        pgc->dgcpol(p,a->u,p->dgc1,p->dgc1_count,11);
-        pgc->dgcpol(p,a->v,p->dgc2,p->dgc2_count,12);
-        pgc->dgcpol(p,a->w,p->dgc3,p->dgc3_count,13);
-        pgc->dgcpol(p,a->press,p->dgc4,p->dgc4_count,14);
-        pgc->dgcpol(p,a->eddyv,p->dgc4,p->dgc4_count,14);
-        pgc->dgcpol4(p,a->phi,14);
-        pgc->dgcpol(p,a->ro,p->dgc4,p->dgc4_count,14);
-        pgc->dgcpol(p,a->visc,p->dgc4,p->dgc4_count,14);
-        pgc->dgcpol(p,a->conc,p->dgc4,p->dgc4_count,14);
-        //pgc->dgcpol(p,a->test,p->dgc4,p->dgc4_count,14);
-
-        a->u.ggcpol(p);
-        a->v.ggcpol(p);
-        a->w.ggcpol(p);
-        a->press.ggcpol(p);
-        a->eddyv.ggcpol(p);
-        a->phi.ggcpol(p);
-        a->conc.ggcpol(p);
-        a->ro.ggcpol(p);
-        a->visc.ggcpol(p);
-        a->phi.ggcpol(p);
-        a->fb.ggcpol(p);
-        a->fbh4.ggcpol(p);
-        //a->test.ggcpol(p);
-        
-
-        pgc->gcparacox(p,a->phi,50);
-        pgc->gcparacox(p,a->phi,50);
-
-        pgc->gcparacox(p,a->topo,150);
-        pgc->gcparacox(p,a->topo,150);
-        
-        //pgc->start4a(p,a->topo,159);
-
-        pgc->gcperiodicx(p,a->press,4);
-
-// ------------------------------------------------------------------------        
-
-        double *XN;
-        double *YN;
-        double *ZN;
-        int *recvcounts;
-        int *displs;
-        int *gneibours;
-        int *gextent;
-        int *globalSendCounts;
-        if(p->mpirank==0)
-        {
-            XN = (double *)malloc((p->gknox+2)*sizeof(double));
-            YN = (double *)malloc((p->gknoy+2)*sizeof(double));
-            ZN = (double *)malloc((p->gknoz+2)*sizeof(double));
-
-            gneibours = (int *)malloc(p->mpi_size*6*sizeof(int));
-            gextent = (int *)malloc(p->mpi_size*6*sizeof(int));
-
-            globalSendCounts = (int *)malloc(p->mpi_size*sizeof(int));
-            recvcounts = (int *)malloc(p->mpi_size*sizeof(int));
-            displs = (int *)malloc(p->mpi_size*sizeof(int));
-        }
-        else
-        {
-            XN = nullptr;
-            YN = nullptr;
-            ZN = nullptr;
-
-            gneibours = nullptr;
-            gextent = nullptr;
-
-            globalSendCounts = nullptr;
-            recvcounts = nullptr;
-            displs = nullptr;
-        }
-
-        int recvcount = p->knox+1;
-        pgc->gather_int(&recvcount,1,recvcounts,1);
-        int disp = p->origin_i+1;
-        pgc->gather_int(&disp,1,displs,1);
-        pgc->gatherv_double(p->XN+marge,p->knox+1, XN,recvcounts,displs);
-
-        recvcount = p->knoy+1;
-        pgc->gather_int(&recvcount,1,recvcounts,1);
-        disp = p->origin_j+1;
-        pgc->gather_int(&disp,1,displs,1);
-        pgc->gatherv_double(p->YN+marge,p->knoy+1, YN,recvcounts,displs);
-
-        recvcount = p->knoz+1;
-        pgc->gather_int(&recvcount,1,recvcounts,1);
-        disp = p->origin_k+1;
-        pgc->gather_int(&disp,1,displs,1);
-        pgc->gatherv_double(p->ZN+marge,p->knoz+1, ZN,recvcounts,displs);
-
-
-        int neibours[6];
-        neibours[0]=p->nb1;
-        neibours[1]=p->nb2;
-        neibours[2]=p->nb3;
-        neibours[3]=p->nb4;
-        neibours[4]=p->nb5;
-        neibours[5]=p->nb6;
-        
-        pgc->gather_int(neibours,6,gneibours,6);
-
-        int extent[6];
-        extent[0]=p->origin_i;
-        extent[1]=p->origin_i+p->knox;
-        extent[2]=p->origin_j;
-        extent[3]=p->origin_j+p->knoy;
-        extent[4]=p->origin_k;
-        extent[5]=p->origin_k+p->knoz;
-        pgc->gather_int(extent,6,gextent,6);
-
-        int localSendCount=0;
-        if(p->mpirank!=0)
-        localSendCount=(p->knox+2*p->margin)*(p->knoy+2*p->margin)*(p->knoz+2*p->margin);
-        
-        pgc->gather_int(&localSendCount,1,globalSendCounts,1);
-
-        double* pressGlobal;
-        double* uvelGlobal;
-        double* vvelGlobal;
-        double* wvelGlobal;
-        double* topoGlobal;
-        double* phiGlobal;
-        double* eddyvGlobal;
-        int* flagGlobal;
-        int* flag5Global;
-        if(p->mpirank==0)
-        {
-
-            int counter = globalSendCounts[0];
-            displs[0]=0;
-            for(int i=1;i<p->mpi_size;++i)
-            {
-                displs[i] = displs[i-1] + globalSendCounts[i-1];
-                counter += globalSendCounts[i];
-            }
-            pressGlobal = (double *)malloc(counter*sizeof(double));
-            uvelGlobal = (double *)malloc(counter*sizeof(double));
-            vvelGlobal = (double *)malloc(counter*sizeof(double));
-            wvelGlobal = (double *)malloc(counter*sizeof(double));
-            topoGlobal = (double *)malloc(counter*sizeof(double));
-            phiGlobal = (double *)malloc(counter*sizeof(double));
-            eddyvGlobal = (double *)malloc(counter*sizeof(double));
-            flagGlobal = (int *)malloc(counter*sizeof(int));
-            flag5Global = (int *)malloc(counter*sizeof(int));
-        }
         pgc->gatherv_double(a->press.V,localSendCount,pressGlobal,globalSendCounts,displs);
         pgc->gatherv_double(a->u.V,localSendCount,uvelGlobal,globalSendCounts,displs);
         pgc->gatherv_double(a->v.V,localSendCount,vvelGlobal,globalSendCounts,displs);
@@ -622,105 +691,6 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
 
         if(p->mpirank==0)
         {
-
-            double* press[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-            double* uvel[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-            double* vvel[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-            double* wvel[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-            double* topo[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-            double* phi[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-            double* eddyv[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-            int* flag[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-            int* flag5[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-            int indexL,indexLG;
-            int kbegin,kend;
-            int jbegin,jend;
-            int ibegin,iend;
-            for(int n=0;n<p->mpi_size;n++)
-            {
-                kbegin=-1;
-                if(gneibours[4+6*n]>-2)
-                kbegin=0;
-                kend=gextent[5+6*n]-gextent[4+6*n]+1;
-                if(gneibours[5+6*n]>-2)
-                kend=gextent[5+6*n]-gextent[4+6*n];
-
-                jbegin=-1;
-                if(gneibours[2+6*n]>-2)
-                jbegin=0;
-                jend=gextent[3+6*n]-gextent[2+6*n]+1;
-                if(gneibours[1+6*n]>-2)
-                jend=gextent[3+6*n]-gextent[2+6*n];
-                
-                ibegin=-1;
-                if(gneibours[0+6*n]>-2)
-                ibegin=0;
-                iend=gextent[1+6*n]-gextent[0+6*n]+1;
-                if(gneibours[3+6*n]>-2)
-                iend=gextent[1+6*n]-gextent[0+6*n];
-
-                if(n!=0)
-                    for(int k=kbegin;k<kend;++k)
-                    {
-                        for(int j=jbegin;j<jend;++j)
-                        {
-                            for(int i=ibegin;i<iend;++i)
-                            {
-                                indexL = (i+p->margin)*(gextent[3+6*n]-gextent[2+6*n]+2*p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + (j+p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + k+p->margin;
-                                indexL += displs[n];
-                                indexLG = (k+1+gextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+gextent[2+6*n])*(p->gknox+2)+(i+1+gextent[0+6*n]);
-                                press[indexLG]=&pressGlobal[indexL];
-                                uvel[indexLG]=&uvelGlobal[indexL];
-                                vvel[indexLG]=&vvelGlobal[indexL];
-                                wvel[indexLG]=&wvelGlobal[indexL];
-                                topo[indexLG]=&topoGlobal[indexL];
-                                phi[indexLG]=&phiGlobal[indexL];
-                                eddyv[indexLG]=&eddyvGlobal[indexL];
-                                flag[indexLG]=&flagGlobal[indexL];
-                                flag5[indexLG]=&flag5Global[indexL];
-                            }
-                        }
-                    }
-                else
-                    for(int k=kbegin;k<kend;++k)
-                    {
-                        for(int j=jbegin;j<jend;++j)
-                        {
-                            for(int i=ibegin;i<iend;++i)
-                            {
-                                indexL = (i+p->margin)*(gextent[3+6*n]-gextent[2+6*n]+2*p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + (j+p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + k+p->margin;
-                                indexLG = (k+1+gextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+gextent[2+6*n])*(p->gknox+2)+(i+1+gextent[0+6*n]);
-                                press[indexLG]=&a->press.V[indexL];
-                                uvel[indexLG]=&a->u.V[indexL];
-                                vvel[indexLG]=&a->v.V[indexL];
-                                wvel[indexLG]=&a->w.V[indexL];
-                                topo[indexLG]=&a->topo.V[indexL];
-                                phi[indexLG]=&a->phi.V[indexL];
-                                eddyv[indexLG]=&a->eddyv.V[indexL];
-                                flag[indexLG]=&p->flag[indexL];
-                                flag5[indexLG]=&p->flag5[indexL];
-                            }
-                        }
-                    }
-            }
-            int indexG;
-            i=j=k=0;
-            for(k=-1; k<1; ++k)
-            for(j=-1; j<1; ++j)
-            for(i=-1; i<1; ++i)
-            {
-                indexG = (k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1);
-                cout<<"("<<i<<","<<j<<","<<k<<")"<<a->press(i,j,k)<<":"<<*press[indexG]<<endl;
-            }
-
-            i=j=k=-1;
-            XN[0]=p->XN[IP];
-            YN[0]=p->YN[JP];
-            ZN[0]=p->ZN[KP];            
-
-            int cellNum=(p->gknox)*(p->gknoy)*(p->gknoz);
-            int pointNum=(p->gknox+1)*(p->gknoy+1)*(p->gknoz+1);
-
             int testOffset[300];
             int m=0;
             testOffset[m]=0;
@@ -887,6 +857,54 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 testFile.close();
             }
         }
+    }
+}
+
+void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
+{
+    if(p->P10!=0)
+    {
+        pgc->start4a(p,a->test,1);
+        pgc->start1(p,a->u,110);
+        pgc->start2(p,a->v,111);
+        pgc->start3(p,a->w,112);
+
+
+        pgc->dgcpol(p,a->u,p->dgc1,p->dgc1_count,11);
+        pgc->dgcpol(p,a->v,p->dgc2,p->dgc2_count,12);
+        pgc->dgcpol(p,a->w,p->dgc3,p->dgc3_count,13);
+        pgc->dgcpol(p,a->press,p->dgc4,p->dgc4_count,14);
+        pgc->dgcpol(p,a->eddyv,p->dgc4,p->dgc4_count,14);
+        pgc->dgcpol4(p,a->phi,14);
+        pgc->dgcpol(p,a->ro,p->dgc4,p->dgc4_count,14);
+        pgc->dgcpol(p,a->visc,p->dgc4,p->dgc4_count,14);
+        pgc->dgcpol(p,a->conc,p->dgc4,p->dgc4_count,14);
+        //pgc->dgcpol(p,a->test,p->dgc4,p->dgc4_count,14);
+
+        a->u.ggcpol(p);
+        a->v.ggcpol(p);
+        a->w.ggcpol(p);
+        a->press.ggcpol(p);
+        a->eddyv.ggcpol(p);
+        a->phi.ggcpol(p);
+        a->conc.ggcpol(p);
+        a->ro.ggcpol(p);
+        a->visc.ggcpol(p);
+        a->phi.ggcpol(p);
+        a->fb.ggcpol(p);
+        a->fbh4.ggcpol(p);
+        //a->test.ggcpol(p);
+        
+
+        pgc->gcparacox(p,a->phi,50);
+        pgc->gcparacox(p,a->phi,50);
+
+        pgc->gcparacox(p,a->topo,150);
+        pgc->gcparacox(p,a->topo,150);
+        
+        //pgc->start4a(p,a->topo,159);
+
+        pgc->gcperiodicx(p,a->press,4);
 
         outputFormat->extent(p,pgc);
         if(p->mpirank==0)
