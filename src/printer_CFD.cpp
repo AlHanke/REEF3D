@@ -62,6 +62,7 @@ Author: Hans Bihs
 #include"print_averaging_v.h"
 #include<sys/stat.h>
 #include<sys/types.h>
+#include<chrono>
 
 #include "vtks.h"
 
@@ -272,8 +273,25 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
 	// Print out based on time
 	if((p->simtime>p->printtime && p->P30>0.0 && p->P34<0.0) || (p->count==0 &&  p->P30>0.0))
 	{
-	print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-    // print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+	std::chrono::system_clock::time_point start,end;
+    if(p->mpirank==0)
+    start = std::chrono::system_clock::now();
+    print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+    if(p->mpirank==0)
+    {
+    end = std::chrono::system_clock::now();
+    auto elapsed = end - start;
+    std::cout << "normal print time: "<<elapsed.count() << '\n';
+    }
+    if(p->mpirank==0)
+    start = std::chrono::system_clock::now();
+    print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+    if(p->mpirank==0)
+    {
+    end = std::chrono::system_clock::now();
+    auto elapsed = end - start;
+    std::cout << "combined print time: "<<elapsed.count() << std::endl;
+    }
 
 	p->printtime+=p->P30;
 	}
@@ -458,7 +476,6 @@ void printer_CFD::print_vtk(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, h
 	pfsf->start(p,a,pgc);
     
     print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-    print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 }
 
 void printer_CFD::setupCompactPrint(lexer *p, fdm *a, ghostcell * pgc)
@@ -706,8 +723,8 @@ void printer_CFD::print3D2(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, he
             ++m;
             testOffset[m]=testOffset[m-1]+4+4*(pointNum);
             ++m;
-            testOffset[m]=testOffset[m-1]+4+3*4*(cellNum);
-            ++m;
+            // testOffset[m]=testOffset[m-1]+4+3*4*(cellNum);
+            // ++m;
 
             //x
             testOffset[m]=testOffset[m-1]+4+4*(p->gknox+1);
@@ -739,10 +756,10 @@ void printer_CFD::print3D2(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, he
                 testFile<<"\t<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
                 ++m;
                 testFile<<"</PointData>\n"
-                <<"<CellData>\n"
-                <<"\t<DataArray type=\"Float32\" Name=\"Debug\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
-                ++m;
-                testFile<<"</CellData>\n"
+                // <<"<CellData>\n"
+                // <<"\t<DataArray type=\"Float32\" Name=\"Debug\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                // ++m;
+                // testFile<<"</CellData>\n"
                 <<"<Coordinates>\n"
                 <<"\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<testOffset[m]<<"\"/>\n";
                 m++;
@@ -811,20 +828,20 @@ void printer_CFD::print3D2(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, he
                     testFile.write((char*)&ffn, sizeof (float));
                 }
 
-                //  Debug
-                iin=3*4*(cellNum);
-                testFile.write((char*)&iin, sizeof (int));
-                for(k=0; k<p->gknoz; ++k)
-                for(j=0; j<p->gknoy; ++j)
-                for(i=0; i<p->gknox; ++i)
-                {
-                    ffn=float(*uvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
-                    testFile.write((char*)&ffn, sizeof (float));
-                    ffn=float(*vvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
-                    testFile.write((char*)&ffn, sizeof (float));
-                    ffn=float(*wvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
-                    testFile.write((char*)&ffn, sizeof (float));
-                }
+                // //  Debug
+                // iin=3*4*(cellNum);
+                // testFile.write((char*)&iin, sizeof (int));
+                // for(k=0; k<p->gknoz; ++k)
+                // for(j=0; j<p->gknoy; ++j)
+                // for(i=0; i<p->gknox; ++i)
+                // {
+                //     ffn=float(*uvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
+                //     testFile.write((char*)&ffn, sizeof (float));
+                //     ffn=float(*vvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
+                //     testFile.write((char*)&ffn, sizeof (float));
+                //     ffn=float(*wvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
+                //     testFile.write((char*)&ffn, sizeof (float));
+                // }
 
                 // x
                 iin=4*(p->gknox+1);
