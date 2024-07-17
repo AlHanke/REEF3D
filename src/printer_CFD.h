@@ -111,6 +111,7 @@ private:
     int localSendCount;
     int cellNum;
     int pointNum;
+    int m,compactOffset[300];
 
     char name[200];
     int n,iin,offset[300];

@@ -478,6 +478,8 @@ void printer_CFD::setupCompactPrint(lexer *p, fdm *a, ghostcell * pgc)
 {
     if(p->mpirank==0)
     {
+	    mkdir("./REEF3D_CFD_VTRC",0777);
+
         XN = (double *)malloc((p->gknox+2)*sizeof(double));
         YN = (double *)malloc((p->gknoy+2)*sizeof(double));
         ZN = (double *)malloc((p->gknoz+2)*sizeof(double));
@@ -489,18 +491,56 @@ void printer_CFD::setupCompactPrint(lexer *p, fdm *a, ghostcell * pgc)
         recvcounts = (int *)malloc(p->mpi_size*sizeof(int));
         displs = (int *)malloc(p->mpi_size*sizeof(int));
 
-        press = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
-        uvel = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
-        vvel = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
-        wvel = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
-        topo = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
-        phi = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
-        eddyv = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        cellNum=(p->gknox)*(p->gknoy)*(p->gknoz);
+        pointNum=(p->gknox+1)*(p->gknoy+1)*(p->gknoz+1);
+
         flag = (int **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(int*));
         flag5 = (int **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(int*));
 
-        cellNum=(p->gknox)*(p->gknoy)*(p->gknoz);
-        pointNum=(p->gknox+1)*(p->gknoy+1)*(p->gknoz+1);
+        // ---------------------------------------------------------
+        // Allocate memory for data to be printed
+        // ---------------------------------------------------------
+        
+        uvel = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        vvel = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        wvel = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        press = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        eddyv = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        phi = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+        topo = (double **)malloc(((p->gknox+2)*(p->gknoy+2)*(p->gknoz+2))*sizeof(double*));
+
+        // ---------------------------------------------------------
+        // Pre-calulate offsets
+        // ---------------------------------------------------------
+
+        m=0;
+        compactOffset[m]=0;
+        ++m;
+
+        //velocities
+        compactOffset[m]=compactOffset[m-1]+4+3*4*(pointNum);
+        ++m;
+        //pressure
+        compactOffset[m]=compactOffset[m-1]+4+4*(pointNum);
+        ++m;
+        //eddyv
+        compactOffset[m]=compactOffset[m-1]+4+4*(pointNum);
+        ++m;
+        //phi
+        compactOffset[m]=compactOffset[m-1]+4+4*(pointNum);
+        ++m;
+        //elevation
+        compactOffset[m]=compactOffset[m-1]+4+4*(pointNum);
+        ++m;
+
+        //x
+        compactOffset[m]=compactOffset[m-1]+4+4*(p->gknox+1);
+        ++m;
+        //y
+        compactOffset[m]=compactOffset[m-1]+4+4*(p->gknoy+1); 
+        ++m;
+        //z
+        compactOffset[m]=compactOffset[m-1]+4+4*(p->gknoz+1);
     }
     else
     {
@@ -690,7 +730,7 @@ void printer_CFD::setupCompactPrint(lexer *p, fdm *a, ghostcell * pgc)
 
 void printer_CFD::print3Dcompact(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
 {
-    if(p->P10!=0)
+    if(p->P10==2)
     {
         pgc->gatherv_double(a->press.V,localSendCount,pressGlobal,globalSendCounts,displs);
         pgc->gatherv_double(a->u.V,localSendCount,uvelGlobal,globalSendCounts,displs);
@@ -704,170 +744,149 @@ void printer_CFD::print3Dcompact(fdm* a,lexer* p,ghostcell* pgc, turbulence *ptu
 
         if(p->mpirank==0)
         {
-            int testOffset[300];
-            int m=0;
-            testOffset[m]=0;
-            ++m;
-
-            testOffset[m]=testOffset[m-1]+4+3*4*(pointNum);
-            ++m;
-            testOffset[m]=testOffset[m-1]+4+4*(pointNum);
-            ++m;
-            testOffset[m]=testOffset[m-1]+4+4*(pointNum);
-            ++m;
-            testOffset[m]=testOffset[m-1]+4+4*(pointNum);
-            ++m;
-            testOffset[m]=testOffset[m-1]+4+4*(pointNum);
-            ++m;
-            // testOffset[m]=testOffset[m-1]+4+3*4*(cellNum);
-            // ++m;
-
-            //x
-            testOffset[m]=testOffset[m-1]+4+4*(p->gknox+1);
-            ++m;
-            //y
-            testOffset[m]=testOffset[m-1]+4+4*(p->gknoy+1); 
-            ++m;
-            //z
-            testOffset[m]=testOffset[m-1]+4+4*(p->gknoz+1);
-
+            int num=0;
+            if(p->P15==1)
+                num = p->printcount-1; // temporary fix
+            if(p->P15==2)
+                num = p->count;
+            sprintf(name,"./REEF3D_CFD_VTRC/REEF3D-CFD-%08i.vtr",num);
             m=0;
-            ofstream testFile;
-            testFile.open("testFile.vtr",ios::binary);
-            if(testFile.is_open())
+            ofstream result;
+            result.open(name,ios::binary);
+            if(result.is_open())
             {
-                testFile<<"<?xml version=\"1.0\"?>\n"
+                result<<"<?xml version=\"1.0\"?>\n"
                 <<"<VTKFile type=\"RectilinearGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n"
                 <<"<RectilinearGrid WholeExtent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\" GhostLevel=\"0\" Origin=\"0 0 0\" Spacing=\"1 1 1\">\n"
                 <<"<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n"
                 <<"<PointData>\n"
-                <<"\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                <<"\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<compactOffset[m]<<"\" />\n";
                 ++m;
-                testFile<<"\t<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                result<<"\t<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<compactOffset[m]<<"\" />\n";
                 ++m;
-                testFile<<"\t<DataArray type=\"Float32\" Name=\"eddyv\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                result<<"\t<DataArray type=\"Float32\" Name=\"eddyv\"  format=\"appended\" offset=\""<<compactOffset[m]<<"\" />\n";
                 ++m;
-                testFile<<"\t<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                result<<"\t<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<compactOffset[m]<<"\" />\n";
                 ++m;
-                testFile<<"\t<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                result<<"\t<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<compactOffset[m]<<"\" />\n";
                 ++m;
-                testFile<<"</PointData>\n"
+                result<<"</PointData>\n"
                 // <<"<CellData>\n"
-                // <<"\t<DataArray type=\"Float32\" Name=\"Debug\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<testOffset[m]<<"\" />\n";
+                // <<"\t<DataArray type=\"Float32\" Name=\"Debug\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<compactOffset[m]<<"\" />\n";
                 // ++m;
-                // testFile<<"</CellData>\n"
+                // result<<"</CellData>\n"
                 <<"<Coordinates>\n"
-                <<"\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<testOffset[m]<<"\"/>\n";
+                <<"\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<compactOffset[m]<<"\"/>\n";
                 m++;
-                testFile<<"\t<DataArray type=\"Float32\" Name=\"Y\" format=\"appended\" offset=\""<<testOffset[m]<<"\"/>\n";
+                result<<"\t<DataArray type=\"Float32\" Name=\"Y\" format=\"appended\" offset=\""<<compactOffset[m]<<"\"/>\n";
                 m++;
-                testFile<<"\t<DataArray type=\"Float32\" Name=\"Z\" format=\"appended\" offset=\""<<testOffset[m]<<"\"/>\n";
+                result<<"\t<DataArray type=\"Float32\" Name=\"Z\" format=\"appended\" offset=\""<<compactOffset[m]<<"\"/>\n";
                 m++;
-                testFile<<"</Coordinates>\n"
+                result<<"</Coordinates>\n"
                 <<"</Piece>\n"
                 <<"</RectilinearGrid>\n"
                 <<"<AppendedData encoding=\"raw\">\n_";
                 //  Velocities
                 iin=3*4*(pointNum);
-                testFile.write((char*)&iin, sizeof (int));
+                result.write((char*)&iin, sizeof (int));
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol1(uvel,flag,flag5));//u
-                            testFile.write((char*)&ffn, sizeof (float));
+                            result.write((char*)&ffn, sizeof (float));
 
                             ffn=float(p->ipol2(vvel,flag,flag5));//v
-                            testFile.write((char*)&ffn, sizeof (float));
+                            result.write((char*)&ffn, sizeof (float));
 
                             ffn=float(p->ipol3(wvel,flag,flag5));//w
-                            testFile.write((char*)&ffn, sizeof (float));
+                            result.write((char*)&ffn, sizeof (float));
                         }
                 //  Pressure
                 iin=4*(pointNum);
-                testFile.write((char*)&iin, sizeof (int));
+                result.write((char*)&iin, sizeof (int));
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4press(press));
-                            testFile.write((char*)&ffn, sizeof (float));
+                            result.write((char*)&ffn, sizeof (float));
                         }
                 //  EddyV
                 iin=4*(pointNum);
-                testFile.write((char*)&iin, sizeof (int));
+                result.write((char*)&iin, sizeof (int));
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4_a(eddyv));//EddyV
-                            testFile.write((char*)&ffn, sizeof (float));
+                            result.write((char*)&ffn, sizeof (float));
                         }
                 //  Phi
                 iin=4*(pointNum);
-                testFile.write((char*)&iin, sizeof (int));
+                result.write((char*)&iin, sizeof (int));
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4phi(topo,phi));
-                            testFile.write((char*)&ffn, sizeof (float));
+                            result.write((char*)&ffn, sizeof (float));
                         }
                 //  Elevation
                 iin=4*(pointNum);
-                testFile.write((char*)&iin, sizeof (int));
+                result.write((char*)&iin, sizeof (int));
                 for(k=0; k<p->gknoz+1; ++k)
                     for(j=0; j<p->gknoy+1; ++j)
                         for(i=0; i<p->gknox+1; ++i)
                         {
                             ffn=float(ZN[k]+(ZN[k+1]-ZN[k]));
-                            testFile.write((char*)&ffn, sizeof (float));
+                            result.write((char*)&ffn, sizeof (float));
                         }
 
                 // //  Debug
                 // iin=3*4*(cellNum);
-                // testFile.write((char*)&iin, sizeof (int));
+                // result.write((char*)&iin, sizeof (int));
                 // for(k=0; k<p->gknoz; ++k)
                 // for(j=0; j<p->gknoy; ++j)
                 // for(i=0; i<p->gknox; ++i)
                 // {
                 //     ffn=float(*uvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
-                //     testFile.write((char*)&ffn, sizeof (float));
+                //     result.write((char*)&ffn, sizeof (float));
                 //     ffn=float(*vvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
-                //     testFile.write((char*)&ffn, sizeof (float));
+                //     result.write((char*)&ffn, sizeof (float));
                 //     ffn=float(*wvel[(k+1)*(p->gknox+2)*(p->gknoy+2)+(j+1)*(p->gknox+2)+(i+1)]);
-                //     testFile.write((char*)&ffn, sizeof (float));
+                //     result.write((char*)&ffn, sizeof (float));
                 // }
 
                 // x
                 iin=4*(p->gknox+1);
-                testFile.write((char*)&iin, sizeof (int));
+                result.write((char*)&iin, sizeof (int));
                 for(i=1; i<p->gknox+2; ++i)
                 {
                     ffn=float(XN[i]);
-                    testFile.write((char*)&ffn, sizeof (float));
+                    result.write((char*)&ffn, sizeof (float));
                 }
                 // y
                 iin=4*(p->gknoy+1);
-                testFile.write((char*)&iin, sizeof (int));
+                result.write((char*)&iin, sizeof (int));
                 for(j=1; j<p->gknoy+2; ++j)
                 {
                     ffn=float(YN[j]);
-                    testFile.write((char*)&ffn, sizeof (float));
+                    result.write((char*)&ffn, sizeof (float));
                 }
                 // zle
                 iin=4*(p->gknoz+1);
-                testFile.write((char*)&iin, sizeof (int));
+                result.write((char*)&iin, sizeof (int));
                 for(k=1; k<p->gknoz+2; ++k)
                 {
                     ffn=float(ZN[k]);
-                    testFile.write((char*)&ffn, sizeof (float));
+                    result.write((char*)&ffn, sizeof (float));
                 }
 
-                testFile<<"\n</AppendedData>\n"
+                result<<"\n</AppendedData>\n"
                 <<"</VTKFile>"<<flush;
 
-                testFile.close();
+                result.close();
             }
         }
     }
