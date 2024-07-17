@@ -59,11 +59,11 @@ public:
 	double tricubic4a(lexer*,fdm*,field&,int&,int&,int&,double,double,double);
     
     double ipol1(field&);
-    double ipol1(double**);
+    double ipol1(double**,int**,int**);
     double ipol2(field&);
-    double ipol2(double**);
+    double ipol2(double**,int**,int**);
     double ipol3(field&);
-    double ipol3(double**);
+    double ipol3(double**,int**,int**);
     double ipol4(field&);    
 
 	double ipol4ro(fdm*,field&);
@@ -73,7 +73,7 @@ public:
     double ipol4press(field&);
     double ipol4press(double**);
     double ipol4_a(field&);
-    double ipol4_b(double*);
+    double ipol4_a(double**);
 
     
     double lint(field&,int&,int&,int&,double,double,double);
