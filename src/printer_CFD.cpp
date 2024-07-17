@@ -267,7 +267,7 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
 	if(p->count%p->P20==0 && p->P30<0.0 && p->P34<0.0 && p->P20>0)
 	{
         print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-        print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+        print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 	}
 
 	// Print out based on time
@@ -286,7 +286,7 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
 
         if(p->mpirank==0)
             start = std::chrono::system_clock::now();
-        print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+        print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
         if(p->mpirank==0)
         {
             end = std::chrono::system_clock::now();
@@ -301,7 +301,7 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
 	if((p->sedtime>p->sedprinttime && p->P34>0.0 && p->P30<0.0) || (p->count==0 &&  p->P34>0.0))
 	{
         print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-        print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+        print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 
         p->sedprinttime+=p->P34;
 	}
@@ -312,7 +312,7 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
             if(p->simtime>printtime_wT[qn] && p->simtime>=p->P35_ts[qn] && p->simtime<=(p->P35_te[qn]+0.5*p->P35_dt[qn]))
             {
                 print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-                print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+                print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 
                 printtime_wT[qn]+=p->P35_dt[qn];
             }
@@ -471,7 +471,7 @@ void printer_CFD::print_vtk(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, h
 	    pfsf->start(p,a,pgc);
     
     print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-    print3D2(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+    print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 }
 
 void printer_CFD::setupCompactPrint(lexer *p, fdm *a, ghostcell * pgc)
@@ -688,7 +688,7 @@ void printer_CFD::setupCompactPrint(lexer *p, fdm *a, ghostcell * pgc)
     }
 }
 
-void printer_CFD::print3D2(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
+void printer_CFD::print3Dcompact(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
 {
     if(p->P10!=0)
     {

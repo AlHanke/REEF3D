@@ -81,7 +81,7 @@ private:
     void parallelData(fdm*,lexer*,ghostcell*,turbulence*,heat*,data*,concentration*,multiphase*,sediment*);
 
     void setupCompactPrint(lexer*,fdm*,ghostcell*);
-    void print3D2(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
+    void print3Dcompact(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
     double **press;
     double **uvel;
     double **vvel;
