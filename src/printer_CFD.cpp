@@ -503,9 +503,6 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         double XN[p->gknox+2];
         double YN[p->gknoy+2];
         double ZN[p->gknoz+2];
-
-        double eddyv[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-        double phi[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         
         int recvcounts[p->mpi_size],displs[p->mpi_size];
         int recvcount = p->knox+1;
@@ -553,6 +550,7 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         pgc->gather_int(iextent,6,piextent,6);
 
         int localSendCount=0;
+        if(p->mpirank!=0)
         localSendCount=(p->knox+2*p->margin)*(p->knoy+2*p->margin)*(p->knoz+2*p->margin);
         int globalSendCounts[p->mpi_size];
         pgc->gather_int(&localSendCount,1,globalSendCounts,1);
@@ -563,6 +561,9 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         double* wvelGlobal;
         double* topoGlobal;
         double* phiGlobal;
+        double* eddyvGlobal;
+        int* flagGlobal;
+        int* flag5Global;
         int counter;
         if(p->mpirank==0)
         {
@@ -579,6 +580,9 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
             wvelGlobal = (double *)malloc(counter*sizeof(double));
             topoGlobal = (double *)malloc(counter*sizeof(double));
             phiGlobal = (double *)malloc(counter*sizeof(double));
+            eddyvGlobal = (double *)malloc(counter*sizeof(double));
+            flagGlobal = (int *)malloc(counter*sizeof(int));
+            flag5Global = (int *)malloc(counter*sizeof(int));
         }
         pgc->gatherv_double(a->press.V,localSendCount,pressGlobal,globalSendCounts,displs);
         pgc->gatherv_double(a->u.V,localSendCount,uvelGlobal,globalSendCounts,displs);
@@ -586,15 +590,22 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         pgc->gatherv_double(a->w.V,localSendCount,wvelGlobal,globalSendCounts,displs);
         pgc->gatherv_double(a->topo.V,localSendCount,topoGlobal,globalSendCounts,displs);
         pgc->gatherv_double(a->phi.V,localSendCount,phiGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->eddyv.V,localSendCount,eddyvGlobal,globalSendCounts,displs);
+        pgc->gatherv_int(p->flag,localSendCount,flagGlobal,globalSendCounts,displs);
+        pgc->gatherv_int(p->flag5,localSendCount,flag5Global,globalSendCounts,displs);
 
         if(p->mpirank==0)
         {
+
             double* press[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
             double* uvel[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
             double* vvel[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
             double* wvel[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
             double* topo[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
             double* phi[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+            double* eddyv[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+            int* flag[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+            int* flag5[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
             int indexL,indexLG;
             int kbegin,kend;
             int jbegin,jend;
@@ -622,24 +633,49 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 if(gneibours[3+6*n]>-2)
                 iend=piextent[1+6*n]-piextent[0+6*n];
 
-                for(int k=kbegin;k<kend;++k)
-                {
-                    for(int j=jbegin;j<jend;++j)
+                if(n!=0)
+                    for(int k=kbegin;k<kend;++k)
                     {
-                        for(int i=ibegin;i<iend;++i)
+                        for(int j=jbegin;j<jend;++j)
                         {
-                            indexL = (i+p->margin)*(piextent[3+6*n]-piextent[2+6*n]+2*p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + (j+p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + k+p->margin;
-                            indexL += displs[n];
-                            indexLG = (k+1+piextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+piextent[2+6*n])*(p->gknox+2)+(i+1+piextent[0+6*n]);
-                            press[indexLG]=&pressGlobal[indexL];
-                            uvel[indexLG]=&uvelGlobal[indexL];
-                            vvel[indexLG]=&vvelGlobal[indexL];
-                            wvel[indexLG]=&wvelGlobal[indexL];
-                            topo[indexLG]=&topoGlobal[indexL];
-                            phi[indexLG]=&phiGlobal[indexL];
+                            for(int i=ibegin;i<iend;++i)
+                            {
+                                indexL = (i+p->margin)*(piextent[3+6*n]-piextent[2+6*n]+2*p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + (j+p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + k+p->margin;
+                                indexL += displs[n];
+                                indexLG = (k+1+piextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+piextent[2+6*n])*(p->gknox+2)+(i+1+piextent[0+6*n]);
+                                press[indexLG]=&pressGlobal[indexL];
+                                uvel[indexLG]=&uvelGlobal[indexL];
+                                vvel[indexLG]=&vvelGlobal[indexL];
+                                wvel[indexLG]=&wvelGlobal[indexL];
+                                topo[indexLG]=&topoGlobal[indexL];
+                                phi[indexLG]=&phiGlobal[indexL];
+                                eddyv[indexLG]=&eddyvGlobal[indexL];
+                                flag[indexLG]=&flagGlobal[indexL];
+                                flag5[indexLG]=&flag5Global[indexL];
+                            }
                         }
                     }
-                }
+                else
+                    for(int k=kbegin;k<kend;++k)
+                    {
+                        for(int j=jbegin;j<jend;++j)
+                        {
+                            for(int i=ibegin;i<iend;++i)
+                            {
+                                indexL = (i+p->margin)*(piextent[3+6*n]-piextent[2+6*n]+2*p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + (j+p->margin)*(piextent[5+6*n]-piextent[4+6*n]+2*p->margin) + k+p->margin;
+                                indexLG = (k+1+piextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+piextent[2+6*n])*(p->gknox+2)+(i+1+piextent[0+6*n]);
+                                press[indexLG]=&a->press.V[indexL];
+                                uvel[indexLG]=&a->u.V[indexL];
+                                vvel[indexLG]=&a->v.V[indexL];
+                                wvel[indexLG]=&a->w.V[indexL];
+                                topo[indexLG]=&a->topo.V[indexL];
+                                phi[indexLG]=&a->phi.V[indexL];
+                                eddyv[indexLG]=&a->eddyv.V[indexL];
+                                flag[indexLG]=&p->flag[indexL];
+                                flag5[indexLG]=&p->flag5[indexL];
+                            }
+                        }
+                    }
             }
             int indexG;
             i=j=k=0;
@@ -725,17 +761,17 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 //  Velocities
                 iin=3*4*(pointNum);
                 testFile.write((char*)&iin, sizeof (int));
-                for(k=0; k<p->gknoz+1; ++k)
-                for(j=0; j<p->gknoy+1; ++j)
-                for(i=0; i<p->gknox+1; ++i)
+                for(k=-1; k<p->gknoz; ++k)
+                for(j=-1; j<p->gknoy; ++j)
+                for(i=-1; i<p->gknox; ++i)
                 {
-                    ffn=float(p->ipol4press(uvel));//u
+                    ffn=float(p->ipol1(uvel,flag,flag5));//u
                     testFile.write((char*)&ffn, sizeof (float));
 
-                    ffn=float(p->ipol4press(vvel));//v
+                    ffn=float(p->ipol2(vvel,flag,flag5));//v
                     testFile.write((char*)&ffn, sizeof (float));
 
-                    ffn=float(p->ipol4press(wvel));//w
+                    ffn=float(p->ipol3(wvel,flag,flag5));//w
                     testFile.write((char*)&ffn, sizeof (float));
                 }
                 //  Pressure
@@ -751,11 +787,11 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
                 //  EddyV
                 iin=4*(pointNum);
                 testFile.write((char*)&iin, sizeof (int));
-                for(k=0; k<p->gknoz+1; ++k)
-                for(j=0; j<p->gknoy+1; ++j)
-                for(i=0; i<p->gknox+1; ++i)
+                for(k=-1; k<p->gknoz; ++k)
+                for(j=-1; j<p->gknoy; ++j)
+                for(i=-1; i<p->gknox; ++i)
                 {
-                ffn=float(p->ipol4_b(eddyv));//EddyV
+                ffn=float(p->ipol4_a(eddyv));//EddyV
                 testFile.write((char*)&ffn, sizeof (float));
                 }
                 //  Phi
