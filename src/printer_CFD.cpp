@@ -500,11 +500,43 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
 
         pgc->gcperiodicx(p,a->press,4);
 
-        double XN[p->gknox+2];
-        double YN[p->gknoy+2];
-        double ZN[p->gknoz+2];
-        
-        int recvcounts[p->mpi_size],displs[p->mpi_size];
+// ------------------------------------------------------------------------        
+
+        double *XN;
+        double *YN;
+        double *ZN;
+        int *recvcounts;
+        int *displs;
+        int *gneibours;
+        int *piextent;
+        int *globalSendCounts;
+        if(p->mpirank==0)
+        {
+            XN = (double *)malloc((p->gknox+2)*sizeof(double));
+            YN = (double *)malloc((p->gknoy+2)*sizeof(double));
+            ZN = (double *)malloc((p->gknoz+2)*sizeof(double));
+
+            gneibours = (int *)malloc(p->mpi_size*6*sizeof(int));
+            piextent = (int *)malloc(p->mpi_size*6*sizeof(int));
+
+            globalSendCounts = (int *)malloc(p->mpi_size*sizeof(int));
+            recvcounts = (int *)malloc(p->mpi_size*sizeof(int));
+            displs = (int *)malloc(p->mpi_size*sizeof(int));
+        }
+        else
+        {
+            XN = nullptr;
+            YN = nullptr;
+            ZN = nullptr;
+
+            gneibours = nullptr;
+            piextent = nullptr;
+
+            globalSendCounts = nullptr;
+            recvcounts = nullptr;
+            displs = nullptr;
+        }
+
         int recvcount = p->knox+1;
         pgc->gather_int(&recvcount,1,recvcounts,1);
         int disp = p->origin_i+1;
@@ -531,9 +563,7 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         neibours[3]=p->nb4;
         neibours[4]=p->nb5;
         neibours[5]=p->nb6;
-        int* gneibours;
-        if(p->mpirank==0)
-            gneibours = (int *)malloc(p->mpi_size*6*sizeof(int));
+        
         pgc->gather_int(neibours,6,gneibours,6);
 
         int iextent[6];
@@ -543,16 +573,12 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         iextent[3]=p->origin_j+p->knoy;
         iextent[4]=p->origin_k;
         iextent[5]=p->origin_k+p->knoz;
-
-        int* piextent;
-        if ( p->mpirank == 0)
-        piextent = (int *)malloc(p->mpi_size*6*sizeof(int));
         pgc->gather_int(iextent,6,piextent,6);
 
         int localSendCount=0;
         if(p->mpirank!=0)
         localSendCount=(p->knox+2*p->margin)*(p->knoy+2*p->margin)*(p->knoz+2*p->margin);
-        int globalSendCounts[p->mpi_size];
+        
         pgc->gather_int(&localSendCount,1,globalSendCounts,1);
 
         double* pressGlobal;
@@ -564,10 +590,10 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         double* eddyvGlobal;
         int* flagGlobal;
         int* flag5Global;
-        int counter;
         if(p->mpirank==0)
         {
-            counter = globalSendCounts[0];
+
+            int counter = globalSendCounts[0];
             displs[0]=0;
             for(int i=1;i<p->mpi_size;++i)
             {
