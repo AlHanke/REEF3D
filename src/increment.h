@@ -35,10 +35,10 @@ class increment
 	public:
 	increment();
 	virtual ~increment();
-	static int i,j,k,n,h;
+	static int i,j,k,n,h; ///< Main directional indices and counter variables
 	static int innercounter;
-	static int pip;
-    static int marge;
+	static int pip; ///< Main direction when accessing ghostcells with two/three offsets
+    static int marge; ///< 1D iterator offset
 	static fdm *aa;
     static fdm2D *bb;
 };
