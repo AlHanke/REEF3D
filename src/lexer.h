@@ -1266,7 +1266,7 @@ public:
     double W5; ///< surface tension between phase 1 and phase 2
     double W6; ///< density oi
     double W7; ///< viscosity oi
-    double W10; ///< discharg
+    double W10; ///< discharge
     double W_fb; ///< density of floating body
     int W11; ///< velocity inlet face 1
     int W12; ///< velocity inlet face 2
