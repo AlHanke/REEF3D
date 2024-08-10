@@ -20,8 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#ifndef CART4a_H_
-#define CART4a_H_
+#ifndef CART4A_H_
+#define CART4A_H_
 
 class lexer;
 
