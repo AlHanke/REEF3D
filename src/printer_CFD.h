@@ -104,6 +104,7 @@ private:
     /// MPIC
     void setupCompactMPIPrint(lexer*,fdm*,ghostcell*);
     void print3DcompactMPI(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
+    void offsetCMPIPoints(lexer*,int*,int*,int);
     size_t headerSize=0;
     int endIndex=0;
     std::vector<MPI_Offset> offsetCMPI;
