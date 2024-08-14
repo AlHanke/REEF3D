@@ -29,6 +29,8 @@ Author: Hans Bihs
 
 #include "vtk3D.h"
 
+#include<sstream>
+
 #include <mpi.h>
 
 class turbulence;
@@ -82,9 +84,11 @@ private:
     void print3D(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
     void parallelData(fdm*,lexer*,ghostcell*,turbulence*,heat*,data*,concentration*,multiphase*,sediment*);
 
+    /// Compact
     void setupCompactPrint(lexer*,fdm*,ghostcell*);
     void print3Dcompact(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
 
+    /// MPI
     void prepMPIprint(lexer*,fdm*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*, sediment*);
     void offsetsComp(lexer*,fdm*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*, sediment*);
     void print3DMPI(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
@@ -96,6 +100,21 @@ private:
     MPI_Offset *offsetMPI=nullptr;
     // bool initialMPIprint=true;
     // int offsetMPI[300];
+
+    /// MPIC
+    void setupCompactMPIPrint(lexer*,fdm*,ghostcell*);
+    void print3DcompactMPI(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
+    size_t headerSize=0;
+    int endIndex=0;
+    std::vector<MPI_Offset> offsetCMPI;
+    std::vector<int> offsetCMPIitr;
+    std::stringstream header;
+    std::stringstream footer;
+    int kbeginPoint,kendPoint;
+    int jbeginPoint,jendPoint;
+    int ibeginPoint,iendPoint;
+    int *gbeginEndPoint=nullptr;
+    int compactMPIPOffset[300];
 
     double **press;
     double **uvel;

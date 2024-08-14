@@ -420,6 +420,14 @@ public:
     
     void neumannV(double*,int,int,int);
 
+    // MPI printing
+    int Bcast(void *, int, MPI_Datatype);
+    int File_open_createWriteOnly(MPI_File *, const char *);
+    int File_write_at_char(MPI_File, MPI_Offset, const void *, int);
+    int File_write_at_all_float(MPI_File, MPI_Offset, const void *, int);
+    int File_write_at_all_char(MPI_File, MPI_Offset, const void *, int);
+    int File_close(MPI_File *);
+    int File_set_size(MPI_File, MPI_Offset);
 
 private:
     const int size;

@@ -80,3 +80,31 @@ double ghostcell::timer()
 }
 
 
+int ghostcell::Bcast(void *buffer, int count, MPI_Datatype datatype)
+{
+    return MPI_Bcast(buffer,count,datatype,0,mpi_comm);;
+}
+int ghostcell::File_open_createWriteOnly(MPI_File *fh, const char *filename)
+{
+    return MPI_File_open(MPI_COMM_WORLD, filename, MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, fh);
+}
+int ghostcell::File_set_size(MPI_File fh, MPI_Offset size)
+{
+    return MPI_File_set_size(fh, size);
+}
+int ghostcell::File_write_at_char(MPI_File fh, MPI_Offset offset, const void *buf, int count)
+{
+    return MPI_File_write_at(fh, offset, buf, count, MPI_CHAR, MPI_STATUS_IGNORE);
+}
+int ghostcell::File_write_at_all_float(MPI_File fh, MPI_Offset offset, const void *buf, int count)
+{
+    return MPI_File_write_at_all(fh, offset, buf, count, MPI_FLOAT, MPI_STATUS_IGNORE);
+}
+int ghostcell::File_write_at_all_char(MPI_File fh, MPI_Offset offset, const void *buf, int count)
+{
+    return MPI_File_write_at_all(fh, offset, buf, count, MPI_CHAR, MPI_STATUS_IGNORE);
+}
+int ghostcell::File_close(MPI_File *fh)
+{
+    return MPI_File_close(fh);
+}
