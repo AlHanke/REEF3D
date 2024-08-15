@@ -2051,7 +2051,6 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
 {
     int *gorigins=nullptr;
     int *gbeginEndPoint = nullptr;
-    int offsetsCMPIsize=0;
 
     double *XN = nullptr;
     double *YN = nullptr;
@@ -2093,9 +2092,9 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
         //velocities
         compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+3*sizeof(float)*(pointNum);
         ++m;
-        // //pressure
-        // compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
-        // ++m;
+        //pressure
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
+        ++m;
         // //eddyv
         // compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
         // ++m;
@@ -2190,10 +2189,10 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
             m++;
             offsetCMPIPoints(p,gorigins,gbeginEndPoint,3);
 
-            // //pressure
-            // offsetCMPI.push_back(compactMPIPOffset[m]);
-            // m++;
-            // offsetCMPIPoints(p,gorigins,gbeginEndPoint,1);
+            //pressure
+            offsetCMPI.push_back(compactMPIPOffset[m]);
+            m++;
+            offsetCMPIPoints(p,gorigins,gbeginEndPoint,1);
 
             // //eddyv
             // offsetCMPI.push_back(compactMPIPOffset[m]);
@@ -2221,8 +2220,8 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
             header<<"<PointData>\n";
             header<<"\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
             ++m;
-            // header<<"\t<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
-            // ++m;
+            header<<"\t<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            ++m;
             // header<<"\t<DataArray type=\"Float32\" Name=\"eddyv\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
             // ++m;
             // header<<"\t<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
@@ -2279,21 +2278,20 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
         }
     }
     
+    int size=0;
     if(p->mpirank==0)
-        offsetsCMPIsize = offsetCMPI.size();
-    pgc->Bcast(&offsetsCMPIsize,1,MPI_INT);
+        size = offsetCMPI.size();
+    pgc->Bcast(&size,1,MPI_INT);
     if(p->mpirank!=0)
-        offsetCMPI.resize(offsetsCMPIsize);
-    pgc->Bcast(offsetCMPI.data(),offsetsCMPIsize,MPI_OFFSET);
+        offsetCMPI.resize(size);
+    pgc->Bcast(offsetCMPI.data(),size,MPI_OFFSET);
 
     if(p->mpirank==0)
-        offsetsCMPIsize = offsetCMPIitr.size();
-    pgc->Bcast(&offsetsCMPIsize,1,MPI_INT);
+        size = offsetCMPIitr.size();
+    pgc->Bcast(&size,1,MPI_INT);
     if(p->mpirank!=0)
-        offsetCMPIitr.resize(offsetsCMPIsize);
-    pgc->Bcast(offsetCMPIitr.data(),offsetsCMPIsize,MPI_INT);
-
-    // pgc->Bcast(&headerSize,1,MPI_INT);
+        offsetCMPIitr.resize(size);
+    pgc->Bcast(offsetCMPIitr.data(),size,MPI_INT);
 }
 
 void printer_CFD::offsetCMPIPoints(lexer *p, int *gorigins, int *gbeginEndPoint, int numberOfTuples)
@@ -2429,29 +2427,29 @@ void printer_CFD::print3DcompactMPI(fdm* a,lexer* p,ghostcell* pgc, turbulence *
                 ++m;
             }
 
-            // //  Pressure
-            // {
-            //     if(p->mpirank==0)
-            //     {
-            //         iin=sizeof(float)*(pointNum);
-            //         result.write((char*)&iin, sizeof (int));
-            //     }
-            //     int n=0;
-            //     for(int k=kbeginPoint;k<kendPoint;++k)
-            //         for(int j=jbeginPoint;j<jendPoint;++j)
-            //         {
-            //             for(int i=ibeginPoint;i<iendPoint;++i)
-            //             {
-            //                 ffn=float(p->ipol4press(press));
-            //                 result.write((char*)&ffn, sizeof (float));
-            //             }
-            //             pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
-            //             result.str(std::string());
-            //             result.clear();
-            //             ++n;
-            //         }
-            //     ++m;
-            // }
+            //  Pressure
+            {
+                if(p->mpirank==0)
+                {
+                    iin=3*sizeof(float)*(pointNum);
+                    result.write((char*)&iin, sizeof (int));
+                }
+                int n=0;
+                for(k=kbeginPoint;k<kendPoint;++k)
+                    for(j=jbeginPoint;j<jendPoint;++j)
+                    {
+                        for(i=ibeginPoint;i<iendPoint;++i)
+                        {
+                            ffn=float(p->ipol4press(a->press)-p->pressgage);
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+                        pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
+                        result.str(std::string());
+                        result.clear();
+                        ++n;
+                    }
+                ++m;
+            }
 
             // //  EddyV
             // {
@@ -2466,7 +2464,7 @@ void printer_CFD::print3DcompactMPI(fdm* a,lexer* p,ghostcell* pgc, turbulence *
             //         {
             //             for(int i=ibeginPoint;i<iendPoint;++i)
             //             {
-            //                 ffn=float(p->ipol4_a(eddyv));//EddyV
+            //                 ffn=float(p->ipol4_a(a->eddyv));
             //                 result.write((char*)&ffn, sizeof (float));
             //             }
             //             pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
@@ -2485,12 +2483,16 @@ void printer_CFD::print3DcompactMPI(fdm* a,lexer* p,ghostcell* pgc, turbulence *
             //         result.write((char*)&iin, sizeof (int));
             //     }
             //     int n=0;
+            //     nodefill4(p,a,pgc,a->phi,eta);
             //     for(int k=kbeginPoint;k<kendPoint;++k)
             //         for(int j=jbeginPoint;j<jendPoint;++j)
             //         {
             //             for(int i=ibeginPoint;i<iendPoint;++i)
             //             {
-            //                 ffn=float(p->ipol4phi(topo,phi));
+            //                 if(p->P18==1)
+            //                     ffn=float(p->ipol4phi(a,a->phi));
+            //                 if(p->P18==2)
+            //                     ffn = float(eta(i,j,k));
             //                 result.write((char*)&ffn, sizeof (float));
             //             }
             //             pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
@@ -2514,7 +2516,7 @@ void printer_CFD::print3DcompactMPI(fdm* a,lexer* p,ghostcell* pgc, turbulence *
             //         {
             //             for(int i=ibeginPoint;i<iendPoint;++i)
             //             {
-            //                 ffn=float(ZN[k]+(ZN[k+1]-ZN[k]));
+            //                 ffn=float(p->pos_z()+0.5*p->DZN[KP]);
             //                 result.write((char*)&ffn, sizeof (float));
             //             }
             //             pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
@@ -2527,7 +2529,9 @@ void printer_CFD::print3DcompactMPI(fdm* a,lexer* p,ghostcell* pgc, turbulence *
 
             // footer
             if(p->mpirank==0)
+            {
                 pgc->File_write_at_char(file, headerSize + compactOffset[m], footer.str().c_str(), footer.str().size());
+            }
         }
         pgc->File_close(&file);
     }
