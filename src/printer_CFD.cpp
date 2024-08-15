@@ -2095,15 +2095,15 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
         //pressure
         compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
         ++m;
-        // //eddyv
-        // compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
-        // ++m;
-        // //phi
-        // compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
-        // ++m;
-        // //elevation
-        // compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
-        // ++m;
+        //eddyv
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
+        ++m;
+        //phi
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
+        ++m;
+        //elevation
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
+        ++m;
 
         //x
         compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(p->gknox+1);
@@ -2185,29 +2185,19 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
             // m++;
 
             //velocities
-            offsetCMPI.push_back(compactMPIPOffset[m]);
-            m++;
             offsetCMPIPoints(p,gorigins,gbeginEndPoint,3);
 
             //pressure
-            offsetCMPI.push_back(compactMPIPOffset[m]);
-            m++;
             offsetCMPIPoints(p,gorigins,gbeginEndPoint,1);
 
-            // //eddyv
-            // offsetCMPI.push_back(compactMPIPOffset[m]);
-            // m++;
-            // offsetCMPIPoints(p,gorigins,gbeginEndPoint,1);
+            //eddyv
+            offsetCMPIPoints(p,gorigins,gbeginEndPoint,1);
 
-            // //phi
-            // offsetCMPI.push_back(compactMPIPOffset[m]);
-            // m++;
-            // offsetCMPIPoints(p,gorigins,gbeginEndPoint,1);
+            //phi
+            offsetCMPIPoints(p,gorigins,gbeginEndPoint,1);
 
-            // //elevation
-            // offsetCMPI.push_back(compactMPIPOffset[m]);
-            // m++;
-            // offsetCMPIPoints(p,gorigins,gbeginEndPoint,1);
+            //elevation
+            offsetCMPIPoints(p,gorigins,gbeginEndPoint,1);
         }
 
         // header
@@ -2222,12 +2212,12 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
             ++m;
             header<<"\t<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
             ++m;
-            // header<<"\t<DataArray type=\"Float32\" Name=\"eddyv\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
-            // ++m;
-            // header<<"\t<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
-            // ++m;
-            // header<<"\t<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
-            // ++m;
+            header<<"\t<DataArray type=\"Float32\" Name=\"eddyv\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            ++m;
+            header<<"\t<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            ++m;
+            header<<"\t<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            ++m;
             header<<"</PointData>\n";
             endIndex=m;
             header<<"<Coordinates>\n"
@@ -2296,20 +2286,21 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
 
 void printer_CFD::offsetCMPIPoints(lexer *p, int *gorigins, int *gbeginEndPoint, int numberOfTuples)
 {
+    offsetCMPI.push_back(compactMPIPOffset[m]);
     for(int n=0;n<p->mpi_size;++n)
     {
         offsetCMPIitr.push_back(offsetCMPI.size()-1);
         if(n>0)
         {
             offsetCMPI.pop_back();
-            offsetCMPI.push_back((gorigins[0+3*n]+gorigins[1+3*n]*(p->gknox+1)+gorigins[2+3*n]*(p->gknox+1)*(p->gknoy+1))*numberOfTuples*sizeof(float)+sizeof(int));
+            offsetCMPI.push_back(compactMPIPOffset[m]+(gorigins[0+3*n]+gorigins[1+3*n]*(p->gknox+1)+gorigins[2+3*n]*(p->gknox+1)*(p->gknoy+1))*numberOfTuples*sizeof(float)+sizeof(int));
         }
         for(int k=0;k<(gbeginEndPoint[5+6*n]-gbeginEndPoint[4+6*n]);k++)
         {
             if(k>0)
             {
                 offsetCMPI.pop_back();
-                offsetCMPI.push_back((gorigins[0+3*n]+gorigins[1+3*n]*(p->gknox+1)+(gorigins[2+3*n]+k)*(p->gknox+1)*(p->gknoy+1))*numberOfTuples*sizeof(float)+sizeof(int));
+                offsetCMPI.push_back(compactMPIPOffset[m]+(gorigins[0+3*n]+gorigins[1+3*n]*(p->gknox+1)+(gorigins[2+3*n]+k)*(p->gknox+1)*(p->gknoy+1))*numberOfTuples*sizeof(float)+sizeof(int));
             }
             for(int j=0;j<(gbeginEndPoint[3+6*n]-gbeginEndPoint[2+6*n]);j++)
             {
@@ -2320,6 +2311,7 @@ void printer_CFD::offsetCMPIPoints(lexer *p, int *gorigins, int *gbeginEndPoint,
         }
     }
     offsetCMPI.pop_back();
+    m++;
 }
 
 void printer_CFD::print3DcompactMPI(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
@@ -2451,81 +2443,81 @@ void printer_CFD::print3DcompactMPI(fdm* a,lexer* p,ghostcell* pgc, turbulence *
                 ++m;
             }
 
-            // //  EddyV
-            // {
-            //     if(p->mpirank==0)
-            //     {
-            //         iin=sizeof(float)*(pointNum);
-            //         result.write((char*)&iin, sizeof (int));
-            //     }
-            //     int n=0;
-            //     for(int k=kbeginPoint;k<kendPoint;++k)
-            //         for(int j=jbeginPoint;j<jendPoint;++j)
-            //         {
-            //             for(int i=ibeginPoint;i<iendPoint;++i)
-            //             {
-            //                 ffn=float(p->ipol4_a(a->eddyv));
-            //                 result.write((char*)&ffn, sizeof (float));
-            //             }
-            //             pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
-            //             result.str(std::string());
-            //             result.clear();
-            //             ++n;
-            //         }
-            //     ++m;
-            // }
+            //  EddyV
+            {
+                if(p->mpirank==0)
+                {
+                    iin=sizeof(float)*(pointNum);
+                    result.write((char*)&iin, sizeof (int));
+                }
+                int n=0;
+                for(k=kbeginPoint;k<kendPoint;++k)
+                    for(j=jbeginPoint;j<jendPoint;++j)
+                    {
+                        for(i=ibeginPoint;i<iendPoint;++i)
+                        {
+                            ffn=float(p->ipol4_a(a->eddyv));
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+                        pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
+                        result.str(std::string());
+                        result.clear();
+                        ++n;
+                    }
+                ++m;
+            }
 
-            // //  Phi
-            // {
-            //     if(p->mpirank==0)
-            //     {
-            //         iin=sizeof(float)*(pointNum);
-            //         result.write((char*)&iin, sizeof (int));
-            //     }
-            //     int n=0;
-            //     nodefill4(p,a,pgc,a->phi,eta);
-            //     for(int k=kbeginPoint;k<kendPoint;++k)
-            //         for(int j=jbeginPoint;j<jendPoint;++j)
-            //         {
-            //             for(int i=ibeginPoint;i<iendPoint;++i)
-            //             {
-            //                 if(p->P18==1)
-            //                     ffn=float(p->ipol4phi(a,a->phi));
-            //                 if(p->P18==2)
-            //                     ffn = float(eta(i,j,k));
-            //                 result.write((char*)&ffn, sizeof (float));
-            //             }
-            //             pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
-            //             result.str(std::string());
-            //             result.clear();
-            //             ++n;
-            //         }
-            //     ++m;
-            // }
+            //  Phi
+            {
+                if(p->mpirank==0)
+                {
+                    iin=sizeof(float)*(pointNum);
+                    result.write((char*)&iin, sizeof (int));
+                }
+                int n=0;
+                nodefill4(p,a,pgc,a->phi,eta);
+                for(k=kbeginPoint;k<kendPoint;++k)
+                    for(j=jbeginPoint;j<jendPoint;++j)
+                    {
+                        for(i=ibeginPoint;i<iendPoint;++i)
+                        {
+                            if(p->P18==1)
+                                ffn=float(p->ipol4phi(a,a->phi));
+                            if(p->P18==2)
+                                ffn = float(eta(i,j,k));
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+                        pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
+                        result.str(std::string());
+                        result.clear();
+                        ++n;
+                    }
+                ++m;
+            }
 
-            // //  Elevation
-            // {
-            //     if(p->mpirank==0)
-            //     {
-            //         iin=sizeof(float)*(pointNum);
-            //         result.write((char*)&iin, sizeof (int));
-            //     }
-            //     int n=0;
-            //     for(int k=kbeginPoint;k<kendPoint;++k)
-            //         for(int j=jbeginPoint;j<jendPoint;++j)
-            //         {
-            //             for(int i=ibeginPoint;i<iendPoint;++i)
-            //             {
-            //                 ffn=float(p->pos_z()+0.5*p->DZN[KP]);
-            //                 result.write((char*)&ffn, sizeof (float));
-            //             }
-            //             pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
-            //             result.str(std::string());
-            //             result.clear();
-            //             ++n;
-            //         }
-            //     ++m;
-            // }
+            //  Elevation
+            {
+                if(p->mpirank==0)
+                {
+                    iin=sizeof(float)*(pointNum);
+                    result.write((char*)&iin, sizeof (int));
+                }
+                int n=0;
+                for(k=kbeginPoint;k<kendPoint;++k)
+                    for(j=jbeginPoint;j<jendPoint;++j)
+                    {
+                        for(i=ibeginPoint;i<iendPoint;++i)
+                        {
+                            ffn=float(p->pos_z()+0.5*p->DZN[KP]);
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+                        pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
+                        result.str(std::string());
+                        result.clear();
+                        ++n;
+                    }
+                ++m;
+            }
 
             // footer
             if(p->mpirank==0)
