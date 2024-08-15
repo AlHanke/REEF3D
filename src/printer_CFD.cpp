@@ -269,7 +269,7 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
 	{
         print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
         print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-        print3DMPI(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+        // print3DMPI(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 	}
 
 	// Print out based on time
@@ -296,20 +296,20 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
             std::cout << "combined print time: "<<elapsed.count() << std::endl;
         }
 
-        start = std::chrono::system_clock::now();
-        print3DMPI(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-        end = std::chrono::system_clock::now();
-        auto elapsed = end - start;
-        int elapsed_time = elapsed.count();
-        elapsed_time = pgc->globalimax(elapsed_time);
-        if(p->mpirank==0)
-            std::cout << "MPI print time: "<<elapsed_time << std::endl;
+        // start = std::chrono::system_clock::now();
+        // print3DMPI(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+        // end = std::chrono::system_clock::now();
+        // auto elapsed = end - start;
+        // int elapsed_time = elapsed.count();
+        // elapsed_time = pgc->globalimax(elapsed_time);
+        // if(p->mpirank==0)
+        //     std::cout << "MPI print time: "<<elapsed_time << std::endl;
 
         start = std::chrono::system_clock::now();
         print3DcompactMPI(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
         end = std::chrono::system_clock::now();
-        elapsed = end - start;
-        elapsed_time = elapsed.count();
+        auto elapsed = end - start;
+        auto elapsed_time = elapsed.count();
         elapsed_time = pgc->globalimax(elapsed_time);
         if(p->mpirank==0)
             std::cout << "CMPI print time: "<<elapsed_time << std::endl;
@@ -483,7 +483,6 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
 void printer_CFD::print_stop(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, ioflow *pflow, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
 {
     print_vtk(a,p,pgc,pturb,pheat,pflow,psolv,pdata,pconc,pmp,psed);
-    
 }
 
 void printer_CFD::print_vtk(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, ioflow *pflow, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
