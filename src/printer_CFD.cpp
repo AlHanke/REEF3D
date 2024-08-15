@@ -776,7 +776,7 @@ void printer_CFD::print3Dcompact(fdm* a,lexer* p,ghostcell* pgc, turbulence *ptu
             if(result.is_open())
             {
                 result<<"<?xml version=\"1.0\"?>\n"
-                <<"<VTKFile type=\"RectilinearGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n"
+                <<"<VTKFile type=\"RectilinearGrid\" version=\"1.0\" byte_order=\"LittleEndian\">\n"
                 <<"<RectilinearGrid WholeExtent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\" GhostLevel=\"0\" Origin=\"0 0 0\" Spacing=\"1 1 1\">\n"
                 <<"<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n"
                 <<"<PointData>\n"
@@ -2202,32 +2202,32 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
         // header
         {
             header<<"<?xml version=\"1.0\"?>\n"
-            <<"<VTKFile type=\"RectilinearGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n"
+            <<"<VTKFile type=\"RectilinearGrid\" version=\"1.0\" byte_order=\"LittleEndian\">\n"
             <<"<RectilinearGrid WholeExtent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\" GhostLevel=\"0\" Origin=\"0 0 0\" Spacing=\"1 1 1\">\n"
-            <<"<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n";
+            <<"\t<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n";
             m=0;
-            header<<"<PointData>\n";
-            header<<"\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            header<<"\t\t<PointData>\n";
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
             ++m;
-            header<<"\t<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
             ++m;
-            header<<"\t<DataArray type=\"Float32\" Name=\"eddyv\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
             ++m;
-            header<<"\t<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"phi\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
             ++m;
-            header<<"\t<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"elevation\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
             ++m;
-            header<<"</PointData>\n";
+            header<<"\t\t</PointData>\n";
             endIndex=m;
-            header<<"<Coordinates>\n"
-            <<"\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
+            header<<"\t\t<Coordinates>\n";
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
             m++;
-            header<<"\t<DataArray type=\"Float32\" Name=\"Y\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"Y\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
             m++;
-            header<<"\t<DataArray type=\"Float32\" Name=\"Z\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"Z\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
             m++;
-            header<<"</Coordinates>\n"
-            <<"</Piece>\n"
+            header<<"\t\t</Coordinates>\n"
+            <<"\t</Piece>\n"
             <<"</RectilinearGrid>\n"
             <<"<AppendedData encoding=\"raw\">\n_";
             headerSize=header.str().size();
