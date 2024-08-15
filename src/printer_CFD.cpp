@@ -2085,7 +2085,7 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
         ++m;
 
         // // time
-        // compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(double);
+        // compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(double);
         // ++m;
 
         //velocities
@@ -2206,6 +2206,12 @@ void printer_CFD::setupCompactMPIPrint(lexer *p, fdm *a, ghostcell * pgc)
             <<"<RectilinearGrid WholeExtent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\" GhostLevel=\"0\" Origin=\"0 0 0\" Spacing=\"1 1 1\">\n"
             <<"\t<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n";
             m=0;
+            // {
+            //     header<<"\t\t<FieldData>\n";
+            //     header<<"\t\t\t<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            //     ++m;
+            //     header<<"\t\t</FieldData>\n";
+            // }
             header<<"\t\t<PointData>\n";
             header<<"\t\t\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
             ++m;
@@ -2385,8 +2391,20 @@ void printer_CFD::print3DcompactMPI(fdm* a,lexer* p,ghostcell* pgc, turbulence *
             std::stringstream result;
             m=0;
 
-            // Time
-            // ++m;
+            // // Time
+            // {
+            //     if(p->mpirank==0)
+            //     {
+            //         iin=sizeof(double);
+            //         result.write((char*)&iin, sizeof (int));
+            //         double ddn = p->simtime;
+            //         result.write((char*)&ddn, sizeof(double));
+            //         pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m]], result.str().c_str(), result.str().size());
+            //         result.str(std::string());
+            //         result.clear();
+            //     }
+            //     ++m;
+            // }
 
             //  Velocities
             {
