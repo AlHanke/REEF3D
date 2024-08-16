@@ -28,6 +28,7 @@ Author: Hans Bihs
 #include"field5.h"
 
 #include "vtk3D.h"
+#include "printMethod.h"
 
 #include<sstream>
 
@@ -174,7 +175,8 @@ private:
     probe_vel *pvel;
     probe_vel_theory *pveltheo;
 
-    vtk3D *outputFormat;
+    vtk3D *outputFormat=nullptr;
+    printMethod *outputMethod=nullptr;
 };
 
 #endif

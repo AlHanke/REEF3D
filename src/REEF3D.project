@@ -970,6 +970,13 @@
           <File Name="vtr3D.h"/>
           <File Name="vts3D.h"/>
         </VirtualDirectory>
+        <VirtualDirectory Name="PrintMethod">
+          <File Name="printMethods.h"/>
+          <File Name="printMethod.h"/>
+          <File Name="printMethodSeparated.h"/>
+          <File Name="printMethodCompact.h"/>
+          <File Name="printMethodCompactMPI.h"/>
+        </VirtualDirectory>
         <VirtualDirectory Name="Force">
           <File Name="force.h"/>
         </VirtualDirectory>
@@ -2605,9 +2612,14 @@
           <File Name="vorticity_void.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="ParaView">
-        <File Name="vtu3D.cpp"/>
-        <File Name="vtr3D.cpp"/>
-        <File Name="vts3D.cpp"/>
+          <File Name="vtu3D.cpp"/>
+          <File Name="vtr3D.cpp"/>
+          <File Name="vts3D.cpp"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="PrintMethod">
+          <File Name="PrintMethodSeparated.cpp"/>
+          <File Name="PrintMethodCompact.cpp"/>
+          <File Name="PrintMethodCompactMPI.cpp"/>
         </VirtualDirectory>
         <File Name="printer_CFD.cpp"/>
         <File Name="printer_CFD_parallel.cpp"/>
