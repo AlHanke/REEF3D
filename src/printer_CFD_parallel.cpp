@@ -56,7 +56,7 @@ void printer_CFD::parallelData(fdm* a, lexer* p, ghostcell* pgc, turbulence *ptu
 		if(p->P16==1)
 		{
 		result<<"<FieldData>"<<endl;
-		result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime<<endl;
+		result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<std::setprecision(7)<<p->simtime<<endl;
 		result<<"</DataArray>"<<endl;
 		result<<"</FieldData>"<<endl;
 		}

@@ -62,7 +62,7 @@ void vtr3D::beginning(lexer *p, std::ofstream &result)
     if(p->P16==1)
     {
         result<<"<FieldData>\n";
-        result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime<<"\n";
+        result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<std::setprecision(7)<<p->simtime<<"\n";
         result<<"</DataArray>\n";
         result<<"</FieldData>\n";
     }

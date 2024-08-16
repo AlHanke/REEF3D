@@ -771,7 +771,7 @@ void printer_CFD::print3Dcompact(fdm* a,lexer* p,ghostcell* pgc, turbulence *ptu
                 if(p->P16==1)
                 {
                 result<<"<FieldData>"<<endl;
-                result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime<<"</DataArray>"<<endl;
+                result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<std::setprecision(7)<<p->simtime<<"</DataArray>"<<endl;
                 result<<"</FieldData>"<<endl;
                 }
                 result<<"<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n";
@@ -1804,7 +1804,10 @@ void printer_CFD::print3DcompactMPI(fdm* a,lexer* p,ghostcell* pgc, turbulence *
                 {
                     iin=sizeof(double);
                     result.write((char*)&iin, sizeof (int));
-                    result.write((char*)&p->simtime, sizeof(double));
+                    std::stringstream time;
+                    time<<std::setprecision(7)<<p->simtime;
+                    double t = std::stod(time.str());
+                    result.write((char*)&t, sizeof(double));
                     pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m]], result.str().c_str(), result.str().size());
                     result.str(std::string());
                     result.clear();
