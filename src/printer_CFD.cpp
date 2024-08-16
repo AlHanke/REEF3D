@@ -85,9 +85,9 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc) : nodefill(p), eta(p)
             break;
     }
 
-    // outputMethod = new printMethodSeparated(p);
+    outputMethod = new printMethodSeparated(p);
 
-    outputMethod = new printMethodCompact(p);
+    // outputMethod = new printMethodCompact(p);
 
     // outputMethod = new printMethodCompactMPI(p);
 

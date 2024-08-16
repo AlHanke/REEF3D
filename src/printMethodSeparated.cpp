@@ -574,14 +574,6 @@ void printMethodSeparated::parallelData(lexer* p, fdm* a, ghostcell* pgc, print_
 	if(result.is_open())
 	{
 		outputFormat->beginningParallel(p,result);
-		
-		if(p->P16==1)
-		{
-		result<<"<FieldData>"<<endl;
-		result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<std::setprecision(7)<<p->simtime<<endl;
-		result<<"</DataArray>"<<endl;
-		result<<"</FieldData>"<<endl;
-		}
 
 		result<<"<PPointData>"<<endl;
 		result<<"\t<PDataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>"<<endl;
