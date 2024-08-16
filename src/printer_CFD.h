@@ -88,19 +88,6 @@ private:
     void setupCompactPrint(lexer*,fdm*,ghostcell*);
     void print3Dcompact(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
 
-    /// MPI
-    void prepMPIprint(lexer*,fdm*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*, sediment*);
-    void offsetsComp(lexer*,fdm*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*, sediment*);
-    void print3DMPI(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
-    void writeHeader(lexer*,fdm*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*, sediment*, MPI_File &file, int *piextent);
-    void pointData(lexer*,fdm*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*, std::ofstream &result, int *offset);
-    void writeData(lexer*,fdm*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*, sediment*, MPI_File &);
-    bool MPIinitialPrint=true;
-    int *offsets=nullptr;
-    MPI_Offset *offsetMPI=nullptr;
-    // bool initialMPIprint=true;
-    // int offsetMPI[300];
-
     /// MPIC
     void setupCompactMPIPrint(lexer*,fdm*,ghostcell*);
     void print3DcompactMPI(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
