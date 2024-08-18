@@ -89,7 +89,7 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc) : nodefill(p), eta(p)
 
     // outputMethod = new printMethodCompact(p);
 
-    // outputMethod = new printMethodCompactMPI(p);
+    // outputMethod = new printMethodCompactMPI(p); // not fully fixed
 
     outputMethod->setup(p,a,pgc);
 
@@ -226,7 +226,7 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc) : nodefill(p), eta(p)
     }
 
     // setupCompactPrint(p,a,pgc);
-    setupCompactMPIPrint(p,a,pgc);
+    // setupCompactMPIPrint(p,a,pgc);
 }
 
 printer_CFD::~printer_CFD()
@@ -304,14 +304,14 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
         //     std::cout << "combined print time: "<<elapsed.count() << std::endl;
         // }
 
-        start = std::chrono::system_clock::now();
-        print3DcompactMPI(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-        end = std::chrono::system_clock::now();
-        auto elapsed = end - start;
-        auto elapsed_time = elapsed.count();
-        elapsed_time = pgc->globalimax(elapsed_time);
-        if(p->mpirank==0)
-            std::cout << "CMPI print time: "<<elapsed_time << std::endl;
+        // start = std::chrono::system_clock::now();
+        // print3DcompactMPI(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+        // end = std::chrono::system_clock::now();
+        // auto elapsed = end - start;
+        // auto elapsed_time = elapsed.count();
+        // elapsed_time = pgc->globalimax(elapsed_time);
+        // if(p->mpirank==0)
+        //     std::cout << "CMPI print time: "<<elapsed_time << std::endl;
         
 
 	    p->printtime+=p->P30;
@@ -321,7 +321,7 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
 	if((p->sedtime>p->sedprinttime && p->P34>0.0 && p->P30<0.0) || (p->count==0 &&  p->P34>0.0))
 	{
         print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-        print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+        // print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 
         p->sedprinttime+=p->P34;
 	}
@@ -332,7 +332,7 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
             if(p->simtime>printtime_wT[qn] && p->simtime>=p->P35_ts[qn] && p->simtime<=(p->P35_te[qn]+0.5*p->P35_dt[qn]))
             {
                 print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-                print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+                // print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 
                 printtime_wT[qn]+=p->P35_dt[qn];
             }

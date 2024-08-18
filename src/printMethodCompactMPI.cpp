@@ -392,7 +392,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
     {
         int num=0;
         if(p->P15==1)
-            num = p->printcount-1;
+            num = p->printcount;
         if(p->P15==2)
             num = p->count;
         snprintf(name,200,"./REEF3D_CFD_VTRCMPI/REEF3D-CFD-%08i.vtr",num);
@@ -437,7 +437,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                 iin=3*sizeof(float)*(pointNum);
                 result.write((char*)&iin, sizeof (int));
             }
-            int n=0;
+            int m=0;
             for(k=kbeginPoint;k<kendPoint;++k)
                 for(j=jbeginPoint;j<jendPoint;++j)
                 {
@@ -452,10 +452,10 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                         ffn=float(p->ipol3(a->w));
                         result.write((char*)&ffn, sizeof (float));
                     }
-                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
+                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+m], result.str().c_str(), result.str().size());
                     result.str(std::string());
                     result.clear();
-                    ++n;
+                    ++m;
                 }
             ++n;
         }
@@ -467,7 +467,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                 iin=3*sizeof(float)*(pointNum);
                 result.write((char*)&iin, sizeof (int));
             }
-            int n=0;
+            int m=0;
             for(k=kbeginPoint;k<kendPoint;++k)
                 for(j=jbeginPoint;j<jendPoint;++j)
                 {
@@ -476,10 +476,10 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                         ffn=float(p->ipol4press(a->press)-p->pressgage);
                         result.write((char*)&ffn, sizeof (float));
                     }
-                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
+                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+m], result.str().c_str(), result.str().size());
                     result.str(std::string());
                     result.clear();
-                    ++n;
+                    ++m;
                 }
             ++n;
         }
@@ -491,7 +491,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                 iin=sizeof(float)*(pointNum);
                 result.write((char*)&iin, sizeof (int));
             }
-            int n=0;
+            int m=0;
             for(k=kbeginPoint;k<kendPoint;++k)
                 for(j=jbeginPoint;j<jendPoint;++j)
                 {
@@ -500,10 +500,10 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                         ffn=float(p->ipol4_a(a->eddyv));
                         result.write((char*)&ffn, sizeof (float));
                     }
-                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
+                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+m], result.str().c_str(), result.str().size());
                     result.str(std::string());
                     result.clear();
-                    ++n;
+                    ++m;
                 }
             ++n;
         }
@@ -515,7 +515,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                 iin=sizeof(float)*(pointNum);
                 result.write((char*)&iin, sizeof (int));
             }
-            int n=0;
+            int m=0;
             node.nodefill4(p,a,pgc,a->phi,eta);
             for(k=kbeginPoint;k<kendPoint;++k)
                 for(j=jbeginPoint;j<jendPoint;++j)
@@ -528,10 +528,10 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                             ffn = float(eta(i,j,k));
                         result.write((char*)&ffn, sizeof (float));
                     }
-                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
+                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+m], result.str().c_str(), result.str().size());
                     result.str(std::string());
                     result.clear();
-                    ++n;
+                    ++m;
                 }
             ++n;
         }
@@ -543,7 +543,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                 iin=sizeof(float)*(pointNum);
                 result.write((char*)&iin, sizeof (int));
             }
-            int n=0;
+            int m=0;
             for(k=kbeginPoint;k<kendPoint;++k)
                 for(j=jbeginPoint;j<jendPoint;++j)
                 {
@@ -552,10 +552,10 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                         ffn=float(p->pos_z()+0.5*p->DZN[KP]);
                         result.write((char*)&ffn, sizeof (float));
                     }
-                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
+                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+m], result.str().c_str(), result.str().size());
                     result.str(std::string());
                     result.clear();
-                    ++n;
+                    ++m;
                 }
             ++n;
         }
