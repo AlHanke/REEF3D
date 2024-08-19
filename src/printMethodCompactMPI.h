@@ -57,6 +57,8 @@ class printMethodCompactMPI : public printMethod
 
         field5 eta;
         nodefill node;
+
+        int m;
 };
 
 #endif

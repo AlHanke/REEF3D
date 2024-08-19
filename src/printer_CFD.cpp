@@ -85,11 +85,18 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc) : nodefill(p), eta(p)
             break;
     }
 
-    outputMethod = new printMethodSeparated(p);
-
-    // outputMethod = new printMethodCompact(p);
-
-    // outputMethod = new printMethodCompactMPI(p); // not fully fixed
+    switch (0)
+    {
+        case 0: default:
+            outputMethod = new printMethodSeparated(p);
+            break;
+        case 1: 
+            outputMethod = new printMethodCompact(p);
+            break;
+        case 2:
+            outputMethod = new printMethodCompactMPI(p);
+            break;
+    }
 
     outputMethod->setup(p,a,pgc);
 
@@ -291,7 +298,7 @@ void printer_CFD::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat 
         {
             end = std::chrono::system_clock::now();
             auto elapsed = end - start;
-            std::cout << "normal print time: "<<elapsed.count() << '\n';
+            std::cout << "Print time: "<<elapsed.count() << '\n';
         }
 
         // if(p->mpirank==0)
@@ -490,7 +497,7 @@ void printer_CFD::print_vtk(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, h
 	    pfsf->start(p,a,pgc);
     
     print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
-    print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
+    // print3Dcompact(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 }
 
 void printer_CFD::setupCompactPrint(lexer *p, fdm *a, ghostcell * pgc)

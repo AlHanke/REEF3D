@@ -77,42 +77,42 @@ void printMethodCompactMPI::setup(lexer *p, fdm *a, ghostcell *pgc)
         // Pre-calulate offsets
         // ---------------------------------------------------------
 
-        n=0;
-        vtkOffsets[n]=0;
-        ++n;
+        m=0;
+        compactMPIPOffset[m]=0;
+        ++m;
 
         // time
         if(p->P16==1)
         {
-            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(double);
-            ++n;
+            compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(double);
+            ++m;
         }
 
         //velocities
-        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+3*sizeof(float)*(pointNum);
-        ++n;
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+3*sizeof(float)*(pointNum);
+        ++m;
         //pressure
-        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
-        ++n;
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
+        ++m;
         //eddyv
-        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
-        ++n;
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
+        ++m;
         //phi
-        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
-        ++n;
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
+        ++m;
         //elevation
-        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
-        ++n;
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
+        ++m;
 
         //x
-        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(p->gknox+1);
-        ++n;
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(p->gknox+1);
+        ++m;
         //y
-        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(p->gknoy+1); 
-        ++n;
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(p->gknoy+1); 
+        ++m;
         //z
-        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(p->gknoz+1);
-        ++n;
+        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(p->gknoz+1);
+        ++m;
     }
 
 
@@ -178,19 +178,19 @@ void printMethodCompactMPI::setup(lexer *p, fdm *a, ghostcell *pgc)
         // Data MPI offsets
         // ---------------------------------------------------------
         {
-            n=0;
+            m=0;
 
             //time
             if(p->P16==1)
             {
-                offsetCMPI.push_back(vtkOffsets[n]);
+                offsetCMPI.push_back(compactMPIPOffset[m]);
                 for(int n=0;n<p->mpi_size;++n)
                 {
                     offsetCMPIitr.push_back(offsetCMPI.size()-1);
-                    offsetCMPI.push_back(vtkOffsets[n]);
+                    offsetCMPI.push_back(compactMPIPOffset[m]);
                 }
                 offsetCMPI.pop_back();
-                ++n;
+                m++;
             }
 
             //velocities
@@ -214,35 +214,35 @@ void printMethodCompactMPI::setup(lexer *p, fdm *a, ghostcell *pgc)
             header<<"<?xml version=\"1.0\"?>\n"
             <<"<VTKFile type=\"RectilinearGrid\" version=\"1.0\" byte_order=\"LittleEndian\">\n"
             <<"<RectilinearGrid WholeExtent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\" GhostLevel=\"0\" Origin=\"0 0 0\" Spacing=\"1 1 1\">\n";
-            n=0;
+            m=0;
             if(p->P16==1)
             {
                 header<<"\t<FieldData>\n";
-                header<<"\t\t<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-                ++n;
+                header<<"\t\t<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
+                ++m;
                 header<<"\t</FieldData>\n";
             }
             header<<"\t<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n";
             header<<"\t\t<PointData>\n";
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
-            ++n;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
-            ++n;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
-            ++n;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"phi\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
-            ++n;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"elevation\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
-            ++n;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            ++m;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            ++m;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            ++m;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"phi\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            ++m;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"elevation\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
+            ++m;
             header<<"\t\t</PointData>\n";
-            endIndex=n;
+            endIndex=m;
             header<<"\t\t<Coordinates>\n";
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-            ++n;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"Y\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-            ++n;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"Z\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-            ++n;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
+            m++;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"Y\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
+            m++;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"Z\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
+            m++;
             header<<"\t\t</Coordinates>\n"
             <<"\t</Piece>\n"
             <<"</RectilinearGrid>\n"
@@ -314,21 +314,21 @@ void printMethodCompactMPI::setup(lexer *p, fdm *a, ghostcell *pgc)
 
 void printMethodCompactMPI::offsetCMPIPoints(lexer *p, int *gorigins, int *gbeginEndPoint, int numberOfTuples)
 {
-    offsetCMPI.push_back(vtkOffsets[n]);
+    offsetCMPI.push_back(compactMPIPOffset[m]);
     for(int n=0;n<p->mpi_size;++n)
     {
         offsetCMPIitr.push_back(offsetCMPI.size()-1);
         if(n>0)
         {
             offsetCMPI.pop_back();
-            offsetCMPI.push_back(vtkOffsets[n]+(gorigins[0+3*n]+gorigins[1+3*n]*(p->gknox+1)+gorigins[2+3*n]*(p->gknox+1)*(p->gknoy+1))*numberOfTuples*sizeof(float)+sizeof(int));
+            offsetCMPI.push_back(compactMPIPOffset[m]+(gorigins[0+3*n]+gorigins[1+3*n]*(p->gknox+1)+gorigins[2+3*n]*(p->gknox+1)*(p->gknoy+1))*numberOfTuples*sizeof(float)+sizeof(int));
         }
         for(int k=0;k<(gbeginEndPoint[5+6*n]-gbeginEndPoint[4+6*n]);k++)
         {
             if(k>0)
             {
                 offsetCMPI.pop_back();
-                offsetCMPI.push_back(vtkOffsets[n]+(gorigins[0+3*n]+gorigins[1+3*n]*(p->gknox+1)+(gorigins[2+3*n]+k)*(p->gknox+1)*(p->gknoy+1))*numberOfTuples*sizeof(float)+sizeof(int));
+                offsetCMPI.push_back(compactMPIPOffset[m]+(gorigins[0+3*n]+gorigins[1+3*n]*(p->gknox+1)+(gorigins[2+3*n]+k)*(p->gknox+1)*(p->gknoy+1))*numberOfTuples*sizeof(float)+sizeof(int));
             }
             for(int j=0;j<(gbeginEndPoint[3+6*n]-gbeginEndPoint[2+6*n]);j++)
             {
@@ -339,7 +339,7 @@ void printMethodCompactMPI::offsetCMPIPoints(lexer *p, int *gorigins, int *gbegi
         }
     }
     offsetCMPI.pop_back();
-    ++n;
+    m++;
 }
 
 int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging *pmean, turbulence *pturb, heat *pheat, multiphase *pmp, vorticity *pvort, data *pdata, concentration *pconc, sediment *psed)
@@ -410,7 +410,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
     // data + footer
     {
         std::stringstream result;
-        n=0;
+        m=0;
 
         // Time
         if(p->P16==1)
@@ -423,11 +423,11 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                 time<<std::setprecision(7)<<p->simtime;
                 double t = std::stod(time.str());
                 result.write((char*)&t, sizeof(double));
-                pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n]], result.str().c_str(), result.str().size());
+                pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m]], result.str().c_str(), result.str().size());
                 result.str(std::string());
                 result.clear();
             }
-            ++n;
+            ++m;
         }
 
         //  Velocities
@@ -437,7 +437,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                 iin=3*sizeof(float)*(pointNum);
                 result.write((char*)&iin, sizeof (int));
             }
-            int m=0;
+            int n=0;
             for(k=kbeginPoint;k<kendPoint;++k)
                 for(j=jbeginPoint;j<jendPoint;++j)
                 {
@@ -452,12 +452,12 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                         ffn=float(p->ipol3(a->w));
                         result.write((char*)&ffn, sizeof (float));
                     }
-                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+m], result.str().c_str(), result.str().size());
+                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
                     result.str(std::string());
                     result.clear();
-                    ++m;
+                    ++n;
                 }
-            ++n;
+            ++m;
         }
 
         //  Pressure
@@ -467,7 +467,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                 iin=3*sizeof(float)*(pointNum);
                 result.write((char*)&iin, sizeof (int));
             }
-            int m=0;
+            int n=0;
             for(k=kbeginPoint;k<kendPoint;++k)
                 for(j=jbeginPoint;j<jendPoint;++j)
                 {
@@ -476,12 +476,12 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                         ffn=float(p->ipol4press(a->press)-p->pressgage);
                         result.write((char*)&ffn, sizeof (float));
                     }
-                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+m], result.str().c_str(), result.str().size());
+                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
                     result.str(std::string());
                     result.clear();
-                    ++m;
+                    ++n;
                 }
-            ++n;
+            ++m;
         }
 
         //  EddyV
@@ -491,7 +491,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                 iin=sizeof(float)*(pointNum);
                 result.write((char*)&iin, sizeof (int));
             }
-            int m=0;
+            int n=0;
             for(k=kbeginPoint;k<kendPoint;++k)
                 for(j=jbeginPoint;j<jendPoint;++j)
                 {
@@ -500,12 +500,12 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                         ffn=float(p->ipol4_a(a->eddyv));
                         result.write((char*)&ffn, sizeof (float));
                     }
-                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+m], result.str().c_str(), result.str().size());
+                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
                     result.str(std::string());
                     result.clear();
-                    ++m;
+                    ++n;
                 }
-            ++n;
+            ++m;
         }
 
         //  Phi
@@ -515,7 +515,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                 iin=sizeof(float)*(pointNum);
                 result.write((char*)&iin, sizeof (int));
             }
-            int m=0;
+            int n=0;
             node.nodefill4(p,a,pgc,a->phi,eta);
             for(k=kbeginPoint;k<kendPoint;++k)
                 for(j=jbeginPoint;j<jendPoint;++j)
@@ -528,12 +528,12 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                             ffn = float(eta(i,j,k));
                         result.write((char*)&ffn, sizeof (float));
                     }
-                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+m], result.str().c_str(), result.str().size());
+                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
                     result.str(std::string());
                     result.clear();
-                    ++m;
+                    ++n;
                 }
-            ++n;
+            ++m;
         }
 
         //  Elevation
@@ -543,7 +543,7 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                 iin=sizeof(float)*(pointNum);
                 result.write((char*)&iin, sizeof (int));
             }
-            int m=0;
+            int n=0;
             for(k=kbeginPoint;k<kendPoint;++k)
                 for(j=jbeginPoint;j<jendPoint;++j)
                 {
@@ -552,18 +552,18 @@ int printMethodCompactMPI::print(lexer* p, fdm* a, ghostcell* pgc, print_averagi
                         ffn=float(p->pos_z()+0.5*p->DZN[KP]);
                         result.write((char*)&ffn, sizeof (float));
                     }
-                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[n*p->mpi_size+p->mpirank]+m], result.str().c_str(), result.str().size());
+                    pgc->File_write_at_char(file, offsetCMPI[offsetCMPIitr[m*p->mpi_size+p->mpirank]+n], result.str().c_str(), result.str().size());
                     result.str(std::string());
                     result.clear();
-                    ++m;
+                    ++n;
                 }
-            ++n;
+            ++m;
         }
 
         // footer
         if(p->mpirank==0)
         {
-            pgc->File_write_at_char(file, headerSize + vtkOffsets[n], footer.str().c_str(), footer.str().size());
+            pgc->File_write_at_char(file, headerSize + compactMPIPOffset[m], footer.str().c_str(), footer.str().size());
         }
     }
     pgc->File_close(&file);
