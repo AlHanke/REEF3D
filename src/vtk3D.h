@@ -24,6 +24,7 @@ Author: Hans Bihs
 #define vtk3D_H_
 
 #include <fstream>
+#include <iomanip>
 
 class lexer;
 class fdm;

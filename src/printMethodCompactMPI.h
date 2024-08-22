@@ -31,6 +31,7 @@ Author: Hans Bihs
 #include <mpi.h>
 
 #include <sstream>
+#include <vector>
 
 class printMethodCompactMPI : public printMethod
 {
