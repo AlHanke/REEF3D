@@ -48,6 +48,8 @@ class printMethod : protected virtual increment
         virtual ~printMethod();
         virtual void setup(lexer*,fdm*,ghostcell*) = 0;
         virtual int print(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*) = 0;
+    protected:
+        void calcVTKOffsets(lexer*,const int,const int,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*);
     
     protected:
         vtk3D *outputFormat=nullptr;
