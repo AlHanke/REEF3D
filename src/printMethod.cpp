@@ -64,6 +64,8 @@ printMethod::~printMethod()
 
 void printMethod::calcVTKOffsets(lexer *p, const int numberOfPoints, const int numberOfCells, print_averaging *pmean, turbulence *pturb, heat *pheat, multiphase *pmp, vorticity *pvort, data *pdata, concentration *pconc, sediment *psed)
 {
+    // Potentail problem with the idea to combine all offsets in one function without passing the objects as arguments:
+    // When different types output a different amount of data.
     n=0;
 
     vtkOffsets[n]=0;
