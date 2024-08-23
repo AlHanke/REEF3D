@@ -88,6 +88,8 @@ void printMethodCompactMPI::setup(lexer* p, fdm* a, ghostcell* pgc, print_averag
             ++m;
         }
 
+        // calcVTKOffsets(p,a,pgc,pmean,pturb,pheat,pmp,pvort,pdata,pconc,psed,p->pointnum,p->cellnum);
+
         //velocities
         compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+3*sizeof(float)*(pointNum);
         ++m;

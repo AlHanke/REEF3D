@@ -120,6 +120,9 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
         vtkOffsets[n]=0;
         ++n;
 
+        // calcVTKOffsets(p,a,pgc,pmean,pturb,pheat,pmp,pvort,pdata,pconc,psed,pointNum,cellNum);
+        // Nothing besdides to following is implemented for printing
+
         //velocities
         vtkOffsets[n]=vtkOffsets[n-1]+4+3*4*(pointNum);
         ++n;

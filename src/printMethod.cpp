@@ -62,129 +62,116 @@ printMethod::~printMethod()
     delete outputFormat;
 }
 
-void printMethod::calcVTKOffsets(lexer *p, const int numberOfPoints, const int numberOfCells, print_averaging *pmean, turbulence *pturb, heat *pheat, multiphase *pmp, vorticity *pvort, data *pdata, concentration *pconc, sediment *psed)
+void printMethod::calcVTKOffsets(lexer *p, fdm *a, ghostcell *pgc, print_averaging *pmean, turbulence *pturb, heat *pheat, multiphase *pmp, vorticity *pvort, data *pdata, concentration *pconc, sediment *psed, const int numberOfPoints, const int numberOfCells)
 {
-    // Potentail problem with the idea to combine all offsets in one function without passing the objects as arguments:
-    // When different types output a different amount of data.
-    n=0;
-
-    vtkOffsets[n]=0;
-    ++n;
-
-    // // time
-    // if(p->P16==1)
-    // {
-    //     vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(double);
-    //     ++n;
-    // }
-
+    std::ofstream result;
     // velocity
     vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints*3+sizeof(int);
     ++n;
 
-    // pmean->offset_vtk(p,vtkOffsets,n);
+    pmean->offset_vtk(p,a,pgc,result,vtkOffsets,n);
 
-    // // scalars
-    // {
-    //     // pressure
-    //     vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //     ++n;
-    //     // k and eps
-    //     pturb->offset_vtk(p,vtkOffsets,n);
-    //     // eddyv
-    //     vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //     ++n;
-    //     // phi
-    //     vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //     ++n;
-    //     // T
-    //     pheat->offset_vtk(p,vtkOffsets,n);
-    //     // Multiphase
-    //     pmp->offset_vtk(p,vtkOffsets,n);
-    //     // vorticity
-    //     pvort->offset_vtk(p,vtkOffsets,n);
-    //     // data
-    //     pdata->offset_vtk(p,vtkOffsets,n);
-    //     // concentration
-    //     pconc->offset_vtk(p,vtkOffsets,n);
-    //     // rho
-    //     if(p->P24==1 && p->F300==0)
-    //     {
-    //         vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //         ++n;
-    //     }
-    //     // viscosity
-    //     if(p->P71==1)
-    //     {
-    //         vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //         ++n;
-    //     }
-    //     // VOF
-    //     if(p->P72==1)
-    //     {
-    //         vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //         ++n;
-    //     }
-    //     // Fi
-    //     if(p->A10==4)
-    //     {
-    //         vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //         ++n;
-    //     }
-    //     // conc
-    //     if(p->P26==1)
-    //     { 
-    //         vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //         ++n;
-    //     }
-    //     // topo
-    //     if(p->P27==1)
-    //     {
-    //         vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //         ++n;
-    //     }
-    //     // sediment bedlaod
-    //     if(p->P76==1)
-    //         psed->offset_vtk_bedload(p,vtkOffsets,n);
+    // scalars
+    {
+        // pressure
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+        ++n;
+        // k and eps
+        pturb->offset_vtk(p,a,pgc,result,vtkOffsets,n);
+        // eddyv
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+        ++n;
+        // phi
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+        ++n;
+        // T
+        pheat->offset_vtk(p,a,pgc,result,vtkOffsets,n);
+        // Multiphase
+        pmp->offset_vtk(p,a,pgc,result,vtkOffsets,n);
+        // vorticity
+        pvort->offset_vtk(p,a,pgc,result,vtkOffsets,n);
+        // data
+        pdata->offset_vtk(p,a,pgc,result,vtkOffsets,n);
+        // concentration
+        pconc->offset_vtk(p,a,pgc,result,vtkOffsets,n);
+        // rho
+        if(p->P24==1 && p->F300==0)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+            ++n;
+        }
+        // viscosity
+        if(p->P71==1)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+            ++n;
+        }
+        // VOF
+        if(p->P72==1)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+            ++n;
+        }
+        // Fi
+        if(p->A10==4)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+            ++n;
+        }
+        // conc
+        if(p->P26==1)
+        { 
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+            ++n;
+        }
+        // topo
+        if(p->P27==1)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+            ++n;
+        }
+        // sediment bedlaod
+        if(p->P76==1)
+            psed->offset_vtk_bedload(p,pgc,result,vtkOffsets,n);
 
-    //     // sediment parameters 1
-    //     if(p->P77==1)
-    //         psed->offset_vtk_parameter1(p,vtkOffsets,n);
+        // sediment parameters 1
+        if(p->P77==1)
+            psed->offset_vtk_parameter1(p,pgc,result,vtkOffsets,n);
 
-    //     // sediment parameters 2
-    //     if(p->P78==1)
-    //         psed->offset_vtk_parameter2(p,vtkOffsets,n);
+        // sediment parameters 2
+        if(p->P78==1)
+            psed->offset_vtk_parameter2(p,pgc,result,vtkOffsets,n);
 
-    //     // bed shear stress
-    //     if(p->P79>=1)
-    //         psed->offset_vtk_bedshear(p,vtkOffsets,n);
+        // bed shear stress
+        if(p->P79>=1)
+            psed->offset_vtk_bedshear(p,pgc,result,vtkOffsets,n);
 
-    //     // test
-    //     if(p->P23==1)
-    //     {
-    //         vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //         ++n;
-    //     }
-    //     // elevation
-    //     vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //     ++n;
-    //     // solid
-    //     if(p->P25==1)
-    //     { 
-    //         vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //         ++n;
-    //     }
-    //     // floating
-    //     if(p->P28==1)
-    //     {
-    //         vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //         ++n;
-    //     }
-    //     // walldist
-    //     if(p->P29==1)
-    //     {   
-    //         vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
-    //         ++n;
-    //     }
-    // }
+        // test
+        if(p->P23==1)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+            ++n;
+        }
+        // elevation
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+        ++n;
+        // solid
+        if(p->P25==1)
+        { 
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+            ++n;
+        }
+        // floating
+        if(p->P28==1)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+            ++n;
+        }
+        // walldist
+        if(p->P29==1)
+        {   
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(float)*numberOfPoints+sizeof(int);
+            ++n;
+        }
+    }
 }

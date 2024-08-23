@@ -49,7 +49,7 @@ class printMethod : protected virtual increment
         virtual void setup(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*) = 0;
         virtual int print(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*) = 0;
     protected:
-        void calcVTKOffsets(lexer*,const int,const int,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*);
+        void calcVTKOffsets(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*,const int,const int);
     
     protected:
         vtk3D *outputFormat=nullptr;

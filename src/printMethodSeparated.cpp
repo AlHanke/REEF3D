@@ -42,6 +42,14 @@ printMethodSeparated::printMethodSeparated(lexer *p) : printMethod(p), node(p), 
 
 void printMethodSeparated::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging *pmean, turbulence *pturb, heat *pheat, multiphase *pmp, vorticity *pvort, data *pdata, concentration *pconc, sediment *psed)
 {
+    n=0;
+
+    vtkOffsets[n]=0;
+    ++n;
+
+    calcVTKOffsets(p,a,pgc,pmean,pturb,pheat,pmp,pvort,pdata,pconc,psed,p->pointnum,p->cellnum);
+
+    outputFormat->offset(p,vtkOffsets,n);
 }
 
 int printMethodSeparated::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging *pmean, turbulence *pturb, heat *pheat, multiphase *pmp, vorticity *pvort, data *pdata, concentration *pconc, sediment *psed)
@@ -104,124 +112,6 @@ int printMethodSeparated::print(lexer* p, fdm* a, ghostcell* pgc, print_averagin
     result.open(name, ios::binary);
     if(result.is_open())
     {
-        n=0;
-
-        vtkOffsets[n]=0;
-        ++n;
-
-        // velocity
-        vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)*3+4;
-        ++n;
-        
-        pmean->offset_vtk(p,a,pgc,result,vtkOffsets,n);
-
-        // scalars
-        {
-            // pressure
-            vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-            ++n;
-            // k and eps
-            pturb->offset_vtk(p,a,pgc,result,vtkOffsets,n);
-            // eddyv
-            vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-            ++n;
-            // phi
-            vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-            ++n;
-            // T
-            pheat->offset_vtk(p,a,pgc,result,vtkOffsets,n);
-            // Multiphase
-            pmp->offset_vtk(p,a,pgc,result,vtkOffsets,n);
-            // vorticity
-            pvort->offset_vtk(p,a,pgc,result,vtkOffsets,n);
-            // data
-            pdata->offset_vtk(p,a,pgc,result,vtkOffsets,n);
-            // concentration
-            pconc->offset_vtk(p,a,pgc,result,vtkOffsets,n);
-            // rho
-            if(p->P24==1 && p->F300==0)
-            {
-                vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-                ++n;
-            }
-            // viscosity
-            if(p->P71==1)
-            {
-                vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-                ++n;
-            }
-            // VOF
-            if(p->P72==1)
-            {
-                vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-                ++n;
-            }
-            // Fi
-            if(p->A10==4)
-            {
-                vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-                ++n;
-            }
-            // conc
-            if(p->P26==1)
-            { 
-                vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-                ++n;
-            }
-            // topo
-            if(p->P27==1)
-            {
-                vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-                ++n;
-            }
-            // sediment bedlaod
-            if(p->P76==1)
-                psed->offset_vtk_bedload(p,pgc,result,vtkOffsets,n);
-
-            // sediment parameters 1
-            if(p->P77==1)
-                psed->offset_vtk_parameter1(p,pgc,result,vtkOffsets,n);
-
-            // sediment parameters 2
-            if(p->P78==1)
-                psed->offset_vtk_parameter2(p,pgc,result,vtkOffsets,n);
-
-            // bed shear stress
-            if(p->P79>=1)
-                psed->offset_vtk_bedshear(p,pgc,result,vtkOffsets,n);
-
-            // test
-            if(p->P23==1)
-            {
-                vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-                ++n;
-            }
-            // elevation
-            vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-            ++n;
-            // solid
-            if(p->P25==1)
-            { 
-                vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-                ++n;
-            }
-            // floating
-            if(p->P28==1)
-            {
-                vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-                ++n;
-            }
-            // walldist
-            if(p->P29==1)
-            {   
-                vtkOffsets[n]=vtkOffsets[n-1]+4*(p->pointnum)+4;
-                ++n;
-            }
-        }
-        // end scalars
-        outputFormat->offset(p,vtkOffsets,n);
-        //---------------------------------------------
-
         outputFormat->beginning(p,result);
         
         n=0;
