@@ -74,7 +74,7 @@ printMethodCompact::~printMethodCompact()
 
 }
 
-void printMethodCompact::setup(lexer *p, fdm *a, ghostcell *pgc)
+void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging *pmean, turbulence *pturb, heat *pheat, multiphase *pmp, vorticity *pvort, data *pdata, concentration *pconc, sediment *psed)
 {
     int *recvcounts=nullptr;
     int *gneibours=nullptr;

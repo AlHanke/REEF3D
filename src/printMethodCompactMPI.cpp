@@ -43,7 +43,7 @@ printMethodCompactMPI::printMethodCompactMPI(lexer *p) : printMethod(p), eta(p),
         mkdir("./REEF3D_CFD_VTRCMPI",0777);
 }
 
-void printMethodCompactMPI::setup(lexer *p, fdm *a, ghostcell *pgc)
+void printMethodCompactMPI::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging *pmean, turbulence *pturb, heat *pheat, multiphase *pmp, vorticity *pvort, data *pdata, concentration *pconc, sediment *psed)
 {
     int *gorigins=nullptr;
     int *gbeginEndPoint = nullptr;

@@ -98,8 +98,6 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc) : nodefill(p), eta(p)
             break;
     }
 
-    outputMethod->setup(p,a,pgc);
-
     // if(p->F50==1)
 	// gcval_phi=51;
 
@@ -895,6 +893,12 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
 {
     if(p->P10!=0)
     {
+        if(!printerMethodInitialized)
+        {
+            outputMethod->setup(p,a,pgc,pmean,pturb,pheat,pmp,pvort,pdata,pconc,psed);
+            printerMethodInitialized = true;
+        }
+
         std::chrono::system_clock::time_point start,end;
         if(p->mpirank==0)
             start = std::chrono::system_clock::now();

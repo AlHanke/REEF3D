@@ -38,7 +38,7 @@ class printMethodCompactMPI : public printMethod
     public:
         printMethodCompactMPI(lexer*);
         ~printMethodCompactMPI()=default;
-        void setup(lexer*,fdm*,ghostcell*);
+        void setup(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*);
         int print(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*);
     private:
         void offsetCMPIPoints(lexer*,int*,int*,int);

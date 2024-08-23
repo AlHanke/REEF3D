@@ -40,7 +40,7 @@ printMethodSeparated::printMethodSeparated(lexer *p) : printMethod(p), node(p), 
 {
 }
 
-void printMethodSeparated::setup(lexer *, fdm *, ghostcell *)
+void printMethodSeparated::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging *pmean, turbulence *pturb, heat *pheat, multiphase *pmp, vorticity *pvort, data *pdata, concentration *pconc, sediment *psed)
 {
 }
 

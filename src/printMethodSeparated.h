@@ -33,7 +33,7 @@ class printMethodSeparated : public printMethod
     public:
         printMethodSeparated(lexer*);
         ~printMethodSeparated()=default;
-        void setup(lexer*,fdm*,ghostcell*);
+        void setup(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*);
         int print(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*);
     private:
         void parallelData(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*);
