@@ -43,13 +43,26 @@ void vtr3D::folder(const char* A10)
 void vtr3D::offset(lexer *p, int *offset, int &n)
 {
 	//x
-    offset[n]=offset[n-1]+4+4*(p->knox+1); 
+    offset[n]=offset[n-1]+sizeof(int)+sizeof(float)*(p->knox+1); 
     ++n;
 	//y
-	offset[n]=offset[n-1]+4+4*(p->knoy+1); 
+	offset[n]=offset[n-1]+sizeof(int)+sizeof(float)*(p->knoy+1); 
     ++n;
 	//z
-	offset[n]=offset[n-1]+4+4*(p->knoz+1); 
+	offset[n]=offset[n-1]+sizeof(int)+sizeof(float)*(p->knoz+1); 
+    ++n;
+}
+
+void vtr3D::offsetCompact(lexer *p, int *offset, int &n)
+{
+	//x
+    offset[n]=offset[n-1]+sizeof(int)+sizeof(float)*(p->gknox+1); 
+    ++n;
+	//y
+	offset[n]=offset[n-1]+sizeof(int)+sizeof(float)*(p->gknoy+1); 
+    ++n;
+	//z
+	offset[n]=offset[n-1]+sizeof(int)+sizeof(float)*(p->gknoz+1); 
     ++n;
 }
 

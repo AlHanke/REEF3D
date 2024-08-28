@@ -34,6 +34,7 @@ class vtr3D : public vtk3D , increment
     public:
         void folder(const char*);
         void offset(lexer*, int*, int&);
+        void offsetCompact(lexer*, int*, int&);
         void structureWrite(lexer*, fdm*, std::ofstream&);
         void extent(lexer* ,ghostcell*);
         

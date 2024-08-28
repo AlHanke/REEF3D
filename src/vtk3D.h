@@ -37,6 +37,7 @@ class vtk3D
     public:
         virtual void folder(const char*){};
         virtual void offset(lexer*,int*,int&){};
+        virtual void offsetCompact(lexer*,int*,int&){};
         virtual void structureWrite(lexer*, fdm*, std::ofstream&){};
         virtual void structureWrite(lexer*, fdm_fnpf*, std::ofstream&){};
         virtual void structureWrite(lexer*, fdm_nhf*, std::ofstream&){};

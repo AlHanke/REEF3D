@@ -77,44 +77,25 @@ void printMethodCompactMPI::setup(lexer* p, fdm* a, ghostcell* pgc, print_averag
         // Pre-calulate offsets
         // ---------------------------------------------------------
 
-        m=0;
-        compactMPIPOffset[m]=0;
-        ++m;
+        n=0;
+        vtkOffsets[n]=0;
+        ++n;
 
         // time
         if(p->P16==1)
         {
-            compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(double);
-            ++m;
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(double);
+            ++n;
         }
 
-        // calcVTKOffsets(p,a,pgc,pmean,pturb,pheat,pmp,pvort,pdata,pconc,psed,p->pointnum,p->cellnum);
+        // only velocity, pressure, eddyv, phi, elevation are implemented
+        calcVTKOffsets(p,a,pgc,pmean,pturb,pheat,pmp,pvort,pdata,pconc,psed,pointNum,cellNum);
 
-        //velocities
-        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+3*sizeof(float)*(pointNum);
-        ++m;
-        //pressure
-        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
-        ++m;
-        //eddyv
-        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
-        ++m;
-        //phi
-        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
-        ++m;
-        //elevation
-        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(pointNum);
-        ++m;
+        // only vtr is implemented
+        outputFormat->offsetCompact(p,vtkOffsets,n);
 
-        //x
-        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(p->gknox+1);
-        ++m;
-        //y
-        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(p->gknoy+1); 
-        ++m;
-        //z
-        compactMPIPOffset[m]=compactMPIPOffset[m-1]+sizeof(int)+sizeof(float)*(p->gknoz+1);
-        ++m;
+        for(int q=0;q<n;q++)
+            compactMPIPOffset[q]=vtkOffsets[q];
     }
 
 
@@ -216,35 +197,35 @@ void printMethodCompactMPI::setup(lexer* p, fdm* a, ghostcell* pgc, print_averag
             header<<"<?xml version=\"1.0\"?>\n"
             <<"<VTKFile type=\"RectilinearGrid\" version=\"1.0\" byte_order=\"LittleEndian\">\n"
             <<"<RectilinearGrid WholeExtent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\" GhostLevel=\"0\" Origin=\"0 0 0\" Spacing=\"1 1 1\">\n";
-            m=0;
+            n=0;
             if(p->P16==1)
             {
                 header<<"\t<FieldData>\n";
-                header<<"\t\t<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
-                ++m;
+                header<<"\t\t<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+                ++n;
                 header<<"\t</FieldData>\n";
             }
             header<<"\t<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n";
             header<<"\t\t<PointData>\n";
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
-            ++m;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
-            ++m;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
-            ++m;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"phi\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
-            ++m;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"elevation\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\" />\n";
-            ++m;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
+            ++n;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
+            ++n;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
+            ++n;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"phi\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
+            ++n;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"elevation\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
+            ++n;
             header<<"\t\t</PointData>\n";
             endIndex=m;
             header<<"\t\t<Coordinates>\n";
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
-            m++;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"Y\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
-            m++;
-            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"Z\" format=\"appended\" offset=\""<<compactMPIPOffset[m]<<"\"/>\n";
-            m++;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+            ++n;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"Y\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+            ++n;
+            header<<"\t\t\t<DataArray type=\"Float32\" Name=\"Z\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+            ++n;
             header<<"\t\t</Coordinates>\n"
             <<"\t</Piece>\n"
             <<"</RectilinearGrid>\n"
