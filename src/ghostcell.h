@@ -424,6 +424,12 @@ public:
     
     void neumannV(double*,int,int,int);
 
+private:
+
+// Particles
+    void setup_MPI_particle_dataTypes(lexer*);
+    void free_MPI_particle_dataTypes();
+
 
 private:
     const int size;
@@ -497,6 +503,9 @@ private:
 // Solid pressure
     int ***gcbsd,*gcbsd_count;
     int ***gcxsd,*gcxsd_count;
+// Particles
+    MPI_Datatype MPI_TRACER;
+    MPI_Datatype MPI_PARTICLE;
 
     fdm *a;
     lexer *p;

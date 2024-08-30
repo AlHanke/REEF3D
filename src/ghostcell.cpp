@@ -382,6 +382,7 @@ void ghostcell::gcini(lexer* p)
 	p->colnum = new int[p->M10+1];
 	
 	pdens = new density_f(p);
+    setup_MPI_particle_dataTypes(p);
 }
 
 void ghostcell::fdm_update(fdm *aa)
@@ -401,5 +402,6 @@ void ghostcell::fdm_nhf_update(fdm_nhf *dd)
 
 void ghostcell::final()
 {
-       MPI_Finalize();
+    free_MPI_particle_dataTypes();
+    MPI_Finalize();
 }
