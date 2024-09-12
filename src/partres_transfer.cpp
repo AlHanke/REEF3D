@@ -108,6 +108,7 @@ void partres::addParticleForTransfer(lexer *p, particles_obj2 &PP, size_t n, par
                 break;
             }
         }
+        // PP.print(_particle);
         //remove(p,PP,n);
         PP.erase(n);
         ++xchanged;

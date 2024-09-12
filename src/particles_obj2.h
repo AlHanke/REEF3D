@@ -61,6 +61,8 @@ public:
     size_t add_entry(particle);
     void add_obj(particles_obj2*);
 
+    void print(particle);
+
 public:
     // --- particle data ---
     // ---    general    ---

@@ -45,21 +45,27 @@ void ghostcell::setup_MPI_particle_dataTypes(lexer* p)
     }
 
     {
-        const int number_of_blocks = 11;
-        int blocklengths[number_of_blocks] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        MPI_Datatype types[number_of_blocks] = {MPI_TRACER, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE};
+        const int number_of_blocks = 17;
+        int blocklengths[number_of_blocks] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+        MPI_Datatype types[number_of_blocks] = {MPI_TRACER, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE};
         MPI_Aint offsets[number_of_blocks];
         offsets[0] = 0;
         offsets[1] = offsetof(particles_obj2::particle, u);
         offsets[2] = offsetof(particles_obj2::particle, v);
         offsets[3] = offsetof(particles_obj2::particle, w);
         offsets[4] = offsetof(particles_obj2::particle, parcelFactor);
-        offsets[5] = offsetof(particles_obj2::particle, uf);
-        offsets[6] = offsetof(particles_obj2::particle, vf);
-        offsets[7] = offsetof(particles_obj2::particle, wf);
-        offsets[8] = offsetof(particles_obj2::particle, shear_eff);
-        offsets[9] = offsetof(particles_obj2::particle, shear_crit);
-        offsets[10] = offsetof(particles_obj2::particle, drag);
+        offsets[5] = offsetof(particles_obj2::particle, xrk1);
+        offsets[6] = offsetof(particles_obj2::particle, yrk1);
+        offsets[7] = offsetof(particles_obj2::particle, zrk1);
+        offsets[8] = offsetof(particles_obj2::particle, urk1);
+        offsets[9] = offsetof(particles_obj2::particle, vrk1);
+        offsets[10] = offsetof(particles_obj2::particle, wrk1);
+        offsets[11] = offsetof(particles_obj2::particle, uf);
+        offsets[12] = offsetof(particles_obj2::particle, vf);
+        offsets[13] = offsetof(particles_obj2::particle, wf);
+        offsets[14] = offsetof(particles_obj2::particle, shear_eff);
+        offsets[15] = offsetof(particles_obj2::particle, shear_crit);
+        offsets[16] = offsetof(particles_obj2::particle, drag);
         
         MPI_Type_create_struct(number_of_blocks, blocklengths, offsets, types, &MPI_PARTICLE);
         MPI_Type_commit(&MPI_PARTICLE);

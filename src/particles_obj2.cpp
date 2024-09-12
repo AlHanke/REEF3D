@@ -68,6 +68,16 @@ void particles_obj2::add_obj(particles_obj2* obj)
         std::cerr<<"particles_obj::add_obj - density mismatch"<<std::endl;
     if(obj->d50!=d50)
         std::cerr<<"particles_obj::add_obj - d50 mismatch"<<std::endl;
+    // for (auto particle : obj->particles)
+    //     std::cout<<particle.x<<" "<<particle.y<<" "<<particle.z<<std::endl;
     
     particles.insert(particles.end(),obj->particles.begin(),obj->particles.end());
+}
+
+void particles_obj2::print(particle _particle)
+{
+    std::cout<<"Sending\n"<<_particle.x<<" "<<_particle.y<<" "<<_particle.z<<"\n"
+    <<_particle.xrk1<<" "<<_particle.yrk1<<" "<<_particle.zrk1<<"\n"
+    <<_particle.u<<" "<<_particle.v<<" "<<_particle.w<<"\n"
+    <<_particle.urk1<<" "<<_particle.vrk1<<" "<<_particle.wrk1<<"\n"<<std::endl;
 }
