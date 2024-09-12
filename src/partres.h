@@ -55,7 +55,7 @@ public:
         partres(lexer *);
         ~partres();
 
-        void setup(lexer *, fdm &, double &);
+        void setup(lexer *, fdm &, double);
         seedReturn seeding(lexer *, particles_obj2::particle &, double, bool=false);
         
         void move_RK2(lexer *, fdm &, ghostcell&, particles_obj2 &, sediment_fdm &, turbulence &);

@@ -39,7 +39,7 @@ Author: Alexander Hanke
      * @param diameter The diameter value.
      */
 
-void partres::setup(lexer *p, fdm &a, double &diameter)
+void partres::setup(lexer *p, fdm &a, double diameter)
 {
         BLOOP
         {
