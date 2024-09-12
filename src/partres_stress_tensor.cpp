@@ -27,7 +27,7 @@ Author: Alexander Hanke
 #include"ghostcell.h"
 
     /// @brief Calculate complete intra-particle stress trensor
-void partres::particleStressTensor(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP)
+void partres::particleStressTensor(lexer *p, fdm &a, ghostcell &pgc, particles_obj2 &PP)
 {
         double theta;
         int i,j,k;
@@ -40,7 +40,7 @@ void partres::particleStressTensor(lexer *p, fdm &a, ghostcell &pgc, particles_o
 }
 
     /// @brief Calculate intra-particle stress trensor for cells around (`increment::i`,`increment::j`,`increment::k`)
-void partres::particleStressTensorUpdateIJK(lexer *p, fdm &a, particles_obj &PP)
+void partres::particleStressTensorUpdateIJK(lexer *p, fdm &a, particles_obj2 &PP)
 {
         double theta;
         int i,j,k;
@@ -58,7 +58,7 @@ void partres::particleStressTensorUpdateIJK(lexer *p, fdm &a, particles_obj &PP)
 }
 
     /// @brief Calculate intra-particle stress trensor for cell ( \p i , \p j , \p k )
-void partres::updateParticleStressTensor(lexer *p, fdm &a, particles_obj &PP, int i, int j, int k)
+void partres::updateParticleStressTensor(lexer *p, fdm &a, particles_obj2 &PP, int i, int j, int k)
 {
         double theta=theta_s(p,a,PP,i,j,k);
         stressTensor[IJK]=Ps*pow(theta,beta)/max(theta_crit-theta,epsilon*(1.0-theta));

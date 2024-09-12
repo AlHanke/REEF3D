@@ -29,7 +29,7 @@ Author: Alexander Hanke
 #include"sediment_fdm.h"
 #include"turbulence.h"
 
-void partres::debug(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP, sediment_fdm &s)
+void partres::debug(lexer *p, fdm &a, ghostcell &pgc, particles_obj2 &PP, sediment_fdm &s)
 {
     /*
         PLAINLOOP

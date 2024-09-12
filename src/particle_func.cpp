@@ -136,7 +136,7 @@ int particle_func::remove(lexer* p, particles_obj* PP, partres* pst)
             if(!inBounds)
             {
                 cellSum[IJK]-=PP->ParcelFactor[n];
-                pst->remove(p,*PP,n);
+                // pst->remove(p,*PP,n);
                 PP->erase(n);
                 removed++;
             }
@@ -301,7 +301,7 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, partres
 
                 }
                 cellSum[IJK]-=PP->ParcelFactor[n];
-                pst->remove(p,*PP,n);
+                // pst->remove(p,*PP,n);
                 PP->erase(n);
                 ++xchange;
             }
@@ -323,7 +323,7 @@ int particle_func::transfer(lexer* p, ghostcell* pgc, particles_obj* PP, partres
             i = p->posc_i(Recv[n].X[m]);
             j = p->posc_j(Recv[n].Y[m]);
             k = p->posc_k(Recv[n].Z[m]);
-            pst->transfer(p,Recv[n],m);
+            // pst->transfer(p,Recv[n],m);
             cellSum[IJK]+=Recv[n].ParcelFactor[n];
         }
         PP->add_obj(&Recv[n]);

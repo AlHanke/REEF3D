@@ -28,12 +28,12 @@ Authors: Alexander Hanke, Hans Bihs
 #include"ghostcell.h"
 #include<math.h>
 
-void partres::move_RK2_step1(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP, sediment_fdm &s, turbulence &pturb, int &xchanged, int &removed)
+void partres::move_RK2_step1(lexer *p, fdm &a, ghostcell &pgc, particles_obj2 &PP, sediment_fdm &s, turbulence &pturb, int &xchanged, int &removed)
 {
-    particles_obj Send[4]={particles_obj(maxcount,PP.d50,PP.density,1),particles_obj(maxcount,PP.d50,PP.density,1),particles_obj(maxcount,PP.d50,PP.density,1),
-    particles_obj(maxcount,PP.d50,PP.density,1)};
-    particles_obj Recv[4]={particles_obj(maxcount,PP.d50,PP.density,1),particles_obj(maxcount,PP.d50,PP.density,1),particles_obj(maxcount,PP.d50,PP.density,1),
-    particles_obj(maxcount,PP.d50,PP.density,1)};
+    particles_obj2 Send[6]={particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),
+    particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density)};
+    particles_obj2 Recv[6]={particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),
+    particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density)};
     
     particlePerCell(p,pgc,PP);
     particleStressTensor(p,a,pgc,PP);
@@ -42,40 +42,40 @@ void partres::move_RK2_step1(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP
     Umax=-1.0e10;
     
     // RK step 1 
-    for(size_t n=0;n<PP.loopindex;n++)
-    if(PP.Flag[n]>=0)
+    for(auto &particle : PP.particles)
+    if(particle.flag>=0)
     {
         if(p->Q11==1)
-        advec_plain(p, a, PP, n, s, pturb, 
-                        PP.X, PP.Y, PP.Z, PP.U, PP.V, PP.W,
+        advec_plain(p, a, particle, PP.d50, s, pturb, 
+                        particle.x, particle.y, particle.z, particle.u, particle.v, particle.w,
                         F, G, H, 1.0);
         
-        if(p->Q11==2)
-        advec_pic(p, a, PP, n, s, pturb, 
-                        PP.X, PP.Y, PP.Z, PP.U, PP.V, PP.W,
-                        F, G, H, 1.0);
+        // if(p->Q11==2)
+        // advec_pic(p, a, PP, n, s, pturb, 
+        //                 particle.X, particle.Y, particle.Z, particle.U, particle.V, particle.W,
+        //                 F, G, H, 1.0);
                                          
         // Velocity update
-        PP.URK1[n] = PP.U[n] + p->dtsed*F;
-        PP.VRK1[n] = PP.V[n] + p->dtsed*G;
-        PP.WRK1[n] = 0.0; //PP.W[n] + p->dtsed*H;
+        particle.urk1 = particle.u + p->dtsed*F;
+        particle.vrk1 = particle.v + p->dtsed*G;
+        particle.wrk1 = 0.0; //particle.w + p->dtsed*H;
         
         // Position update
-        PP.XRK1[n] = PP.X[n] + p->dtsed*PP.URK1[n];
-        PP.YRK1[n] = PP.Y[n] + p->dtsed*PP.VRK1[n];
-        PP.ZRK1[n] = PP.Z[n] + p->dtsed*PP.WRK1[n];
+        particle.xrk1 = particle.x + p->dtsed*particle.urk1;
+        particle.yrk1 = particle.y + p->dtsed*particle.vrk1;
+        particle.zrk1 = particle.z + p->dtsed*particle.wrk1;
         
-        //if(PP.Flag[n]==1)
-        //PP.ZRK1[n] = p->ccslipol4(s.bedzh,PP.XRK1[n],PP.YRK1[n]);
+        //if(particle.Flag[n]==1)
+        //particle.zrk1 = p->ccslipol4(s.bedzh,particle.xrk1,particle.yrk1);
 
         // Particel sum update
-        cellSum[IJK]-=PP.ParcelFactor[n];
-        bedChange[IJ]-=PP.ParcelFactor[n];
-        i=p->posc_i(PP.XRK1[n]);
-        j=p->posc_j(PP.YRK1[n]);
-        k=p->posc_k(PP.ZRK1[n]);
-        cellSum[IJK]+=PP.ParcelFactor[n];
-        bedChange[IJ]+=PP.ParcelFactor[n];
+        cellSum[IJK]-=particle.parcelFactor;
+        bedChange[IJ]-=particle.parcelFactor;
+        i=p->posc_i(particle.xrk1);
+        j=p->posc_j(particle.yrk1);
+        k=p->posc_k(particle.zrk1);
+        cellSum[IJK]+=particle.parcelFactor;
+        bedChange[IJ]+=particle.parcelFactor;
         particleStressTensorUpdateIJK(p,a,PP);
 
         addParticleForTransfer(p,PP,n,Send,xchanged);
@@ -84,10 +84,10 @@ void partres::move_RK2_step1(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP
     // vertical coordinate
     Umax = pgc.globalmax(Umax);
     
-    for(size_t n=0;n<PP.loopindex;n++)
-    if(PP.Flag[n]>=0)
+    for(auto &particle : PP.particles)
+    if(particle.flag>=0)
     {
-        Uabs=sqrt(PP.URK1[n]*PP.URK1[n]+PP.VRK1[n]*PP.VRK1[n]);
+        Uabs=sqrt(particle.urk1*particle.urk1+particle.vrk1*particle.vrk1);
         
         fac = Uabs/(Umax>1.0e-10?Umax:1.0e10);
         
@@ -95,30 +95,24 @@ void partres::move_RK2_step1(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP
         
         if(Uabs>=0.1*Umax && Uabs>0.01)
         {
-        k=p->posc_k(PP.ZRK1[n]);
-        PP.ZRK1[n] =   s.bedzh(i,j) + 0.5*p->DZN[KP]*double(rand() % irand)/drand;
+        k=p->posc_k(particle.zrk1);
+        particle.zrk1 =   s.bedzh(i,j) + 0.5*p->DZN[KP]*double(rand() % irand)/drand;
             
         }
     }
 
     // recv
     {
-        pgc.para_tracersobj(p,Send,Recv);
-
-        size_t sum=PP.size;
-        for(int n=0;n<4;n++)
-            sum += Recv[n].size;
-        if(sum>PP.capacity)
-            PP.reserve(sum);
+        pgc.para_particles_obj2(p,Send,Recv);
 
         for(int n=0;n<4;n++)
         {
-            for(size_t m=0;m<Recv[n].loopindex;m++)
+            for(auto &particle : Recv[n].particles)
             {
-                i = p->posc_i(Recv[n].XRK1[m]);
-                j = p->posc_j(Recv[n].YRK1[m]);
-                k = p->posc_k(Recv[n].ZRK1[m]);
-                transfer(p,Recv[n],m);
+                i = p->posc_i(particle.xrk1);
+                j = p->posc_j(particle.yrk1);
+                k = p->posc_k(particle.zrk1);
+                transfer(p,particle);
             }
             PP.add_obj(&Recv[n]);
         }
@@ -130,12 +124,12 @@ void partres::move_RK2_step1(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP
         int i,j,k;
         boundarycheck bounderies;
 
-        for(size_t n=0;n<PP.loopindex;n++)
-            if(PP.Flag[n]>=0)
+        for(auto &particle : PP.particles)
+            if(particle.flag>=0)
             {
-                i = p->posc_i(PP.XRK1[n]);
-                j = p->posc_j(PP.YRK1[n]);
-                k = p->posc_k(PP.ZRK1[n]);
+                i = p->posc_i(particle.xrk1);
+                j = p->posc_j(particle.yrk1);
+                k = p->posc_k(particle.zrk1);
 
                 inBounds=bounderies.globalminboundcheck(p,i,j,k);
                 if (inBounds)
@@ -154,50 +148,50 @@ void partres::move_RK2_step1(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP
     particleStressTensor(p,a,pgc,PP);
 }
     
-void partres::move_RK2_step2(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP, sediment_fdm &s, turbulence &pturb, int &xchanged, int &removed)
+void partres::move_RK2_step2(lexer *p, fdm &a, ghostcell &pgc, particles_obj2 &PP, sediment_fdm &s, turbulence &pturb, int &xchanged, int &removed)
 {
-    particles_obj Send[4]={particles_obj(maxcount,PP.d50,PP.density,1),particles_obj(maxcount,PP.d50,PP.density,1),particles_obj(maxcount,PP.d50,PP.density,1),
-    particles_obj(maxcount,PP.d50,PP.density,1)};
-    particles_obj Recv[4]={particles_obj(maxcount,PP.d50,PP.density,1),particles_obj(maxcount,PP.d50,PP.density,1),particles_obj(maxcount,PP.d50,PP.density,1),
-    particles_obj(maxcount,PP.d50,PP.density,1)};
+    particles_obj2 Send[6]={particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),
+    particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density)};
+    particles_obj2 Recv[6]={particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),
+    particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density)};
     
     Umax=-1.0e10;
     
     // RK step 2
-    for(size_t n=0;n<PP.loopindex;n++)
-    if(PP.Flag[n]>=0)
+    for(auto &particle : PP.particles)
+    if(particle.flag>=0)
     {
         if(p->Q11==1)
-        advec_plain(p, a, PP, n, s, pturb, 
-                        PP.XRK1, PP.YRK1, PP.ZRK1, PP.URK1, PP.VRK1, PP.WRK1,
-                        F, G, H, 0.5);
+        advec_plain(p, a, particle, PP.d50, s, pturb, 
+            particle.xrk1, particle.yrk1, particle.zrk1, particle.urk1, particle.vrk1, particle.wrk1,
+            F, G, H, 0.5);
                         
-        if(p->Q11==2)
-        advec_pic(p, a, PP, n, s, pturb, 
-                        PP.XRK1, PP.YRK1, PP.ZRK1, PP.URK1, PP.VRK1, PP.WRK1,
-                        F, G, H, 0.5);
+        // if(p->Q11==2)
+        // advec_pic(p, a, PP, n, s, pturb, 
+        //                 particle.XRK1, particle.YRK1, particle.ZRK1, particle.URK1, particle.VRK1, particle.WRK1,
+        //                 F, G, H, 0.5);
                         
         // Velocity update
-        PP.U[n] = 0.5*PP.U[n] + 0.5*PP.URK1[n] + 0.5*p->dtsed*F;
-        PP.V[n] = 0.5*PP.V[n] + 0.5*PP.VRK1[n] + 0.5*p->dtsed*G;
-        PP.W[n] = 0.0;//0.5*PP.W[n] + 0.5*PP.URK1[n] + 0.5*p->dtsed*H;
+        particle.u = 0.5*particle.u + 0.5*particle.urk1 + 0.5*p->dtsed*F;
+        particle.v = 0.5*particle.v + 0.5*particle.vrk1 + 0.5*p->dtsed*G;
+        particle.w = 0.0;//0.5*particle.w + 0.5*particle.urk1 + 0.5*p->dtsed*H;
         
         // Position update
-        PP.X[n] = 0.5*PP.X[n] + 0.5*PP.XRK1[n] + 0.5*p->dtsed*PP.U[n];
-        PP.Y[n] = 0.5*PP.Y[n] + 0.5*PP.YRK1[n] + 0.5*p->dtsed*PP.V[n];
-        PP.Z[n] = 0.5*PP.Z[n] + 0.5*PP.ZRK1[n] + 0.5*p->dtsed*PP.W[n];
+        particle.x = 0.5*particle.x + 0.5*particle.xrk1 + 0.5*p->dtsed*particle.u;
+        particle.y = 0.5*particle.y + 0.5*particle.yrk1 + 0.5*p->dtsed*particle.v;
+        particle.z = 0.5*particle.z + 0.5*particle.zrk1 + 0.5*p->dtsed*particle.w;
         
-        //if(PP.Flag[n]==1)
-        //PP.Z[n] = p->ccslipol4(s.bedzh,PP.X[n],PP.Y[n]);
+        //if(particle.Flag[n]==1)
+        //particle.z = p->ccslipol4(s.bedzh,particle.x,particle.y);
 
         // Particel sum update
-        cellSum[IJK]-=PP.ParcelFactor[n];
-        bedChange[IJ]-=PP.ParcelFactor[n];
-        i=p->posc_i(PP.X[n]);
-        j=p->posc_j(PP.Y[n]);
-        k=p->posc_k(PP.Z[n]);
-        cellSum[IJK]+=PP.ParcelFactor[n];
-        bedChange[IJ]+=PP.ParcelFactor[n];
+        cellSum[IJK]-=particle.parcelFactor;
+        bedChange[IJ]-=particle.parcelFactor;
+        i=p->posc_i(particle.x);
+        j=p->posc_j(particle.y);
+        k=p->posc_k(particle.z);
+        cellSum[IJK]+=particle.parcelFactor;
+        bedChange[IJ]+=particle.parcelFactor;
         particleStressTensorUpdateIJK(p,a,PP);
 
         addParticleForTransfer(p,PP,n,Send,xchanged);
@@ -208,39 +202,33 @@ void partres::move_RK2_step2(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP
     
     cout<<"Umax Particle: "<<Umax<<endl;
     
-    for(size_t n=0;n<PP.loopindex;n++)
-    if(PP.Flag[n]>=0)
+    for(auto &particle : PP.particles)
+    if(particle.flag>=0)
     {
-        Uabs=sqrt(PP.U[n]*PP.U[n]+PP.V[n]*PP.V[n]);
+        Uabs=sqrt(particle.u*particle.u+particle.v*particle.v);
         
         fac = Uabs/(Umax>1.0e-10?Umax:1.0e10);
     
         if(Uabs>=0.1*Umax && Uabs>0.01)
         {
-        k=p->posc_k(PP.Z[n]);
-        PP.Z[n] =   s.bedzh(i,j) + 0.5*p->DZN[KP]*double(rand() % irand)/drand;
+        k=p->posc_k(particle.z);
+        particle.z =   s.bedzh(i,j) + 0.5*p->DZN[KP]*double(rand() % irand)/drand;
             
         }
     }
     
     
     {
-        pgc.para_tracersobj(p,Send,Recv);
-
-        size_t sum=PP.size;
-        for(int n=0;n<4;n++)
-            sum += Recv[n].size;
-        if(sum>PP.capacity)
-            PP.reserve(sum);
+        pgc.para_particles_obj2(p,Send,Recv);
 
         for(int n=0;n<4;n++)
         {
-            for(size_t m=0;m<Recv[n].loopindex;m++)
+            for(auto &particle : Recv[n].particles)
             {
-                i = p->posc_i(Recv[n].X[m]);
-                j = p->posc_j(Recv[n].Y[m]);
-                k = p->posc_k(Recv[n].Z[m]);
-                transfer(p,Recv[n],m);
+                i = p->posc_i(particle.x);
+                j = p->posc_j(particle.y);
+                k = p->posc_k(particle.z);
+                transfer(p,particle);
             }
             PP.add_obj(&Recv[n]);
         }
@@ -253,12 +241,12 @@ void partres::move_RK2_step2(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP
         int i,j,k;
         boundarycheck bounderies;
 
-        for(size_t n=0;n<PP.loopindex;n++)
-            if(PP.Flag[n]>=0)
+        for(auto &particle : PP.particles)
+            if(particle.flag>=0)
             {
-                i = p->posc_i(PP.X[n]);
-                j = p->posc_j(PP.Y[n]);
-                k = p->posc_k(PP.Z[n]);
+                i = p->posc_i(particle.x);
+                j = p->posc_j(particle.y);
+                k = p->posc_k(particle.z);
 
                 inBounds=bounderies.globalminboundcheck(p,i,j,k);
                 if (inBounds)
@@ -281,89 +269,89 @@ void partres::move_RK2_step2(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP
     }
 }
 
-void partres::move_RK2(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP, sediment_fdm &s, turbulence &pturb)
+void partres::move_RK2(lexer *p, fdm &a, ghostcell &pgc, particles_obj2 &PP, sediment_fdm &s, turbulence &pturb)
 {
-    particlePerCell(p,pgc,PP);
-    particleStressTensor(p,a,pgc,PP);
-    timestep(p,pgc,PP);
+    // particlePerCell(p,pgc,PP);
+    // particleStressTensor(p,a,pgc,PP);
+    // timestep(p,pgc,PP);
     
-    // RK step 1 
-    for(size_t n=0;n<PP.loopindex;n++)
-    if(PP.Flag[n]>=0)
-    {
-        if(p->Q11==1)
-        advec_plain(p, a, PP, n, s, pturb, 
-                        PP.X, PP.Y, PP.Z, PP.U, PP.V, PP.W,
-                        F, G, H, 1.0);
+    // // RK step 1 
+    // for(size_t n=0;n<particle.loopindex;n++)
+    // if(particle.Flag[n]>=0)
+    // {
+    //     if(p->Q11==1)
+    //     advec_plain(p, a, PP, n, s, pturb, 
+    //                     particle.X, particle.Y, particle.Z, particle.U, particle.V, particle.W,
+    //                     F, G, H, 1.0);
         
-        if(p->Q11==2)
-        advec_pic(p, a, PP, n, s, pturb, 
-                        PP.X, PP.Y, PP.Z, PP.U, PP.V, PP.W,
-                        F, G, H, 1.0);
+    //     if(p->Q11==2)
+    //     advec_pic(p, a, PP, n, s, pturb, 
+    //                     particle.X, particle.Y, particle.Z, particle.U, particle.V, particle.W,
+    //                     F, G, H, 1.0);
                                          
-        // Velocity update
-        PP.URK1[n] = PP.U[n] + p->dtsed*F;
-        PP.VRK1[n] = PP.V[n] + p->dtsed*G;
-        PP.WRK1[n] = 0.0; //PP.W[n] + p->dtsed*H;
+    //     // Velocity update
+    //     particle.urk1 = particle.u + p->dtsed*F;
+    //     particle.vrk1 = particle.v + p->dtsed*G;
+    //     particle.wrk1 = 0.0; //particle.w + p->dtsed*H;
         
-        // Position update
-        PP.XRK1[n] = PP.X[n] + p->dtsed*PP.URK1[n];
-        PP.YRK1[n] = PP.Y[n] + p->dtsed*PP.VRK1[n];
-        PP.ZRK1[n] = PP.Z[n] + p->dtsed*PP.WRK1[n];
+    //     // Position update
+    //     particle.xrk1 = particle.x + p->dtsed*particle.urk1;
+    //     particle.yrk1 = particle.y + p->dtsed*particle.vrk1;
+    //     particle.zrk1 = particle.z + p->dtsed*particle.wrk1;
 
-        // Particel sum update
-        cellSum[IJK]-=PP.ParcelFactor[n];
-        bedChange[IJ]-=PP.ParcelFactor[n];
-        i=p->posc_i(PP.XRK1[n]);
-        j=p->posc_j(PP.YRK1[n]);
-        k=p->posc_k(PP.ZRK1[n]);
-        cellSum[IJK]+=PP.ParcelFactor[n];
-        bedChange[IJ]+=PP.ParcelFactor[n];
-        particleStressTensorUpdateIJK(p,a,PP);
-    }
+    //     // Particel sum update
+    //     cellSum[IJK]-=particle.parcelFactor;
+    //     bedChange[IJ]-=particle.parcelFactor;
+    //     i=p->posc_i(particle.xrk1);
+    //     j=p->posc_j(particle.yrk1);
+    //     k=p->posc_k(particle.zrk1);
+    //     cellSum[IJK]+=particle.parcelFactor;
+    //     bedChange[IJ]+=particle.parcelFactor;
+    //     particleStressTensorUpdateIJK(p,a,PP);
+    // }
     
-    particleStressTensor(p,a,pgc,PP);
+    // particleStressTensor(p,a,pgc,PP);
     
     
-    // RK step 2
-    for(size_t n=0;n<PP.loopindex;n++)
-    if(PP.Flag[n]>=0)
-    {
-        if(p->Q11==1)
-        advec_plain(p, a, PP, n, s, pturb, 
-                        PP.XRK1, PP.YRK1, PP.ZRK1, PP.URK1, PP.VRK1, PP.WRK1,
-                        F, G, H, 0.5);
+    // // RK step 2
+    // for(size_t n=0;n<particle.loopindex;n++)
+    // if(particle.Flag[n]>=0)
+    // {
+    //     if(p->Q11==1)
+    //     advec_plain(p, a, PP, n, s, pturb, 
+    //                     particle.XRK1, particle.YRK1, particle.ZRK1, particle.URK1, particle.VRK1, particle.WRK1,
+    //                     F, G, H, 0.5);
                         
-        if(p->Q11==2)
-        advec_pic(p, a, PP, n, s, pturb, 
-                        PP.XRK1, PP.YRK1, PP.ZRK1, PP.URK1, PP.VRK1, PP.WRK1,
-                        F, G, H, 0.5);
+    //     if(p->Q11==2)
+    //     advec_pic(p, a, PP, n, s, pturb, 
+    //                     particle.XRK1, particle.YRK1, particle.ZRK1, particle.URK1, particle.VRK1, particle.WRK1,
+    //                     F, G, H, 0.5);
                         
-        // Velocity update
-        PP.U[n] = 0.5*PP.U[n] + 0.5*PP.URK1[n] + 0.5*p->dtsed*F;
-        PP.V[n] = 0.5*PP.V[n] + 0.5*PP.VRK1[n] + 0.5*p->dtsed*G;
-        PP.W[n] = 0.0;//0.5*PP.W[n] + 0.5*PP.URK1[n] + 0.5*p->dtsed*H;
+    //     // Velocity update
+    //     particle.u = 0.5*particle.u + 0.5*particle.urk1 + 0.5*p->dtsed*F;
+    //     particle.v = 0.5*particle.v + 0.5*particle.vrk1 + 0.5*p->dtsed*G;
+    //     particle.w = 0.0;//0.5*particle.w + 0.5*particle.urk1 + 0.5*p->dtsed*H;
         
-        // Position update
-        PP.X[n] = 0.5*PP.X[n] + 0.5*PP.XRK1[n] + 0.5*p->dtsed*PP.U[n];
-        PP.Y[n] = 0.5*PP.Y[n] + 0.5*PP.YRK1[n] + 0.5*p->dtsed*PP.V[n];
-        PP.Z[n] = 0.5*PP.Z[n] + 0.5*PP.ZRK1[n] + 0.5*p->dtsed*PP.W[n];
+    //     // Position update
+    //     particle.x = 0.5*particle.x + 0.5*particle.xrk1 + 0.5*p->dtsed*particle.u;
+    //     particle.y = 0.5*particle.y + 0.5*particle.yrk1 + 0.5*p->dtsed*particle.v;
+    //     particle.z = 0.5*particle.z + 0.5*particle.zrk1 + 0.5*p->dtsed*particle.w;
 
-        // Particel sum update
-        cellSum[IJK]-=PP.ParcelFactor[n];
-        bedChange[IJ]-=PP.ParcelFactor[n];
-        i=p->posc_i(PP.X[n]);
-        j=p->posc_j(PP.Y[n]);
-        k=p->posc_k(PP.Z[n]);
-        cellSum[IJK]+=PP.ParcelFactor[n];
-        bedChange[IJ]+=PP.ParcelFactor[n];
-        particleStressTensorUpdateIJK(p,a,PP);
-    }
+    //     // Particel sum update
+    //     cellSum[IJK]-=particle.parcelFactor;
+    //     bedChange[IJ]-=particle.parcelFactor;
+    //     i=p->posc_i(particle.x);
+    //     j=p->posc_j(particle.y);
+    //     k=p->posc_k(particle.z);
+    //     cellSum[IJK]+=particle.parcelFactor;
+    //     bedChange[IJ]+=particle.parcelFactor;
+    //     particleStressTensorUpdateIJK(p,a,PP);
+    // }
 
-    if(p->mpirank==0)
-    {
-        p->sedtime += p->dtsed;
-        cout<<"Sediment time: "<<p->sedtime<<" time step: "<<p->dtsed<<endl;
-    }
+    // if(p->mpirank==0)
+    // {
+    //     p->sedtime += p->dtsed;
+    //     cout<<"Sediment time: "<<p->sedtime<<" time step: "<<p->dtsed<<endl;
+    // }
     
 }

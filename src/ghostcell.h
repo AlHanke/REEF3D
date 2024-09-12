@@ -42,6 +42,7 @@ class convection;
 class ioflow;
 class tracers_obj;
 class particles_obj;
+class particles_obj2;
 
 #ifndef GHOSTCELL_H_
 #define GHOSTCELL_H_
@@ -423,6 +424,8 @@ public:
     void gcV_neumann_6V(vec&, int,int,int,int);
     
     void neumannV(double*,int,int,int);
+
+    void para_particles_obj2(lexer *, particles_obj2 [6], particles_obj2 [6]);
 
 private:
 

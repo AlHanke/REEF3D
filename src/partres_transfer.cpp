@@ -21,7 +21,6 @@ Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"partres.h"
-#include"particles_obj.h"
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -40,10 +39,10 @@ Author: Alexander Hanke
      * @param PP A reference to the particles_obj object.
      * @param index The index of the particle.
      */
-void partres::transfer(lexer *p, particles_obj &PP, size_t &index)
+void partres::transfer(lexer *p, particles_obj2::particle &_particle)
 {
-        cellSum[IJK] += PP.ParcelFactor[index];
-        bedChange[IJ] += PP.ParcelFactor[index];
+        cellSum[IJK] += _particle.parcelFactor;
+        bedChange[IJ] += _particle.parcelFactor;
 }
 
     /**
@@ -56,54 +55,55 @@ void partres::transfer(lexer *p, particles_obj &PP, size_t &index)
      * @param PP A reference to the particles_obj object.
      * @param index The index of the particle.
      */
-void partres::remove(lexer *p, particles_obj &PP, size_t &index)
+void partres::remove(lexer *p, particles_obj2::particle &_particle)
 {
-        cellSum[IJK] -= PP.ParcelFactor[index];
-        bedChange[IJ] -= PP.ParcelFactor[index];
+        cellSum[IJK] -= _particle.parcelFactor;
+        bedChange[IJ] -= _particle.parcelFactor;
 }
 
-void partres::addParticleForTransfer(lexer *p, particles_obj &PP, size_t n, particles_obj Send[6], int &xchanged)
+void partres::addParticleForTransfer(lexer *p, particles_obj2 &PP, size_t n, particles_obj2 Send[6], int &xchanged)
 {
     if(p->flag5[IJK]<0 && p->flag5[IJK]>-10)
     {
+        auto _particle = PP.particles[n];
         switch (p->flag5[IJK])
         {
             case -1:
             {
-                Send[0].add(PP.X[n],PP.Y[n],PP.Z[n],PP.Flag[n],PP.U[n],PP.V[n],PP.W[n],PP.ParcelFactor[n],PP.XRK1[n],PP.YRK1[n],PP.ZRK1[n],PP.URK1[n],PP.VRK1[n],PP.WRK1[n],PP.Uf[n],PP.Vf[n],PP.Wf[n],PP.shear_eff[n],PP.shear_crit[n],PP.drag[n]);
+                Send[0].add_entry(_particle);
                 
-                cellSum[IJK] -= PP.ParcelFactor[n];
-                bedChange[IJ] -= PP.ParcelFactor[n];
+                cellSum[IJK] -= _particle.parcelFactor;
+                bedChange[IJ] -= _particle.parcelFactor;
                 
                 break;
             }
 
             case -2:
             {
-                Send[1].add(PP.X[n],PP.Y[n],PP.Z[n],PP.Flag[n],PP.U[n],PP.V[n],PP.W[n],PP.ParcelFactor[n],PP.XRK1[n],PP.YRK1[n],PP.ZRK1[n],PP.URK1[n],PP.VRK1[n],PP.WRK1[n],PP.Uf[n],PP.Vf[n],PP.Wf[n],PP.shear_eff[n],PP.shear_crit[n],PP.drag[n]);
+                Send[1].add_entry(_particle);
                 
-                cellSum[IJK] -= PP.ParcelFactor[n];
-                bedChange[IJ] -= PP.ParcelFactor[n];
+                cellSum[IJK] -= _particle.parcelFactor;
+                bedChange[IJ] -= _particle.parcelFactor;
         
                 break;
             }
 
             case -3:
             {
-                Send[2].add(PP.X[n],PP.Y[n],PP.Z[n],PP.Flag[n],PP.U[n],PP.V[n],PP.W[n],PP.ParcelFactor[n],PP.XRK1[n],PP.YRK1[n],PP.ZRK1[n],PP.URK1[n],PP.VRK1[n],PP.WRK1[n],PP.Uf[n],PP.Vf[n],PP.Wf[n],PP.shear_eff[n],PP.shear_crit[n],PP.drag[n]);
+                Send[2].add_entry(_particle);
                 
-                cellSum[IJK] -= PP.ParcelFactor[n];
-                bedChange[IJ] -= PP.ParcelFactor[n];
+                cellSum[IJK] -= _particle.parcelFactor;
+                bedChange[IJ] -= _particle.parcelFactor;
                 
                 break;
             }
 
             case -4:
             {
-                Send[3].add(PP.X[n],PP.Y[n],PP.Z[n],PP.Flag[n],PP.U[n],PP.V[n],PP.W[n],PP.ParcelFactor[n],PP.XRK1[n],PP.YRK1[n],PP.ZRK1[n],PP.URK1[n],PP.VRK1[n],PP.WRK1[n],PP.Uf[n],PP.Vf[n],PP.Wf[n],PP.shear_eff[n],PP.shear_crit[n],PP.drag[n]);
+                Send[3].add_entry(_particle);
                 
-                cellSum[IJK] -= PP.ParcelFactor[n];
-                bedChange[IJ] -= PP.ParcelFactor[n];
+                cellSum[IJK] -= _particle.parcelFactor;
+                bedChange[IJ] -= _particle.parcelFactor;
                 
                 break;
             }

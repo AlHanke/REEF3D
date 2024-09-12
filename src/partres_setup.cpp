@@ -21,7 +21,6 @@ Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"partres.h"
-#include"particles_obj.h"
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -49,7 +48,7 @@ void partres::setup(lexer *p, fdm &a, double &diameter)
         }
 }
 
-void partres::setupState(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP)
+void partres::setupState(lexer *p, fdm &a, ghostcell &pgc, particles_obj2 &PP)
 {
         // particlePerCell(p,pgc,PP);
         // PLAINLOOP

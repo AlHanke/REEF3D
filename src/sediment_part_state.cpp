@@ -27,34 +27,34 @@ Author: Alexander Hanke
 /// @param result statefile
 void sediment_part::write_state_particles(lexer *p, ofstream &result)
 {
-    float ffn=num;
-    result.write((char*)&ffn, sizeof (float));
-    ffn=volume0;
-    result.write((char*)&ffn, sizeof (float));
-    size_t ffs=PP.capacity;
-    result.write((char*)&ffs, sizeof (size_t));
-    ffs=PP.size;
-    result.write((char*)&ffs, sizeof (size_t));
-    PARTICLELOOP
-    {
-        ffn=PP.X[n];
-        result.write((char*)&ffn, sizeof (float));
-        ffn=PP.Y[n];
-        result.write((char*)&ffn, sizeof (float));
-        ffn=PP.Z[n];
-        result.write((char*)&ffn, sizeof (float));
-        ffn=PP.Flag[n];
-        result.write((char*)&ffn, sizeof (float));
-        ffn=PP.U[n];
-        result.write((char*)&ffn, sizeof (float));
-        ffn=PP.V[n];
-        result.write((char*)&ffn, sizeof (float));
-        ffn=PP.W[n];
-        result.write((char*)&ffn, sizeof (float));
-        ffn=PP.ParcelFactor[n];
-        result.write((char*)&ffn, sizeof (float));
-    }
-    pst->writeState(p,result);
+    // float ffn=num;
+    // result.write((char*)&ffn, sizeof (float));
+    // ffn=volume0;
+    // result.write((char*)&ffn, sizeof (float));
+    // size_t ffs=PP.capacity;
+    // result.write((char*)&ffs, sizeof (size_t));
+    // ffs=PP.size;
+    // result.write((char*)&ffs, sizeof (size_t));
+    // PARTICLELOOP
+    // {
+    //     ffn=PP.X[n];
+    //     result.write((char*)&ffn, sizeof (float));
+    //     ffn=PP.Y[n];
+    //     result.write((char*)&ffn, sizeof (float));
+    //     ffn=PP.Z[n];
+    //     result.write((char*)&ffn, sizeof (float));
+    //     ffn=PP.Flag[n];
+    //     result.write((char*)&ffn, sizeof (float));
+    //     ffn=PP.U[n];
+    //     result.write((char*)&ffn, sizeof (float));
+    //     ffn=PP.V[n];
+    //     result.write((char*)&ffn, sizeof (float));
+    //     ffn=PP.W[n];
+    //     result.write((char*)&ffn, sizeof (float));
+    //     ffn=PP.ParcelFactor[n];
+    //     result.write((char*)&ffn, sizeof (float));
+    // }
+    // pst->writeState(p,result);
 }
 
 /// @brief Read in particle data from state file
@@ -70,7 +70,7 @@ void sediment_part::read_state_particles(lexer *p, ifstream& result)
     size_t ffs;
     result.read((char*)&ffs, sizeof (size_t));
     maxparticle=size_t(ffs);
-    PP.reserve(maxparticle);
+    PP.particles.reserve(maxparticle);
     result.read((char*)&ffs, sizeof (size_t));
     double x,y,z,flag,u,v,w,packing;
     for(size_t n=0; n<ffs;n++)
@@ -91,7 +91,7 @@ void sediment_part::read_state_particles(lexer *p, ifstream& result)
         w=double(ffn);
         result.read((char*)&ffn, sizeof (float));
         packing=double(ffn);
-        PP.add(x,y,z,flag,u,v,w,packing);
+        // PP.add(x,y,z,flag,u,v,w,packing);
     }
     pst->readState(p,result);
 }

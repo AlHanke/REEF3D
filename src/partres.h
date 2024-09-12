@@ -29,6 +29,8 @@ Author: Alexander Hanke
 #include <stdio.h>
 #include <fstream>
 
+#include "particles_obj2.h"
+
 class lexer;
 class fdm;
 class ghostcell;
@@ -37,7 +39,6 @@ class sediment_fdm;
 class turbulence;
 
 class sediment_part;
-class particles_obj;
 
 enum seedReturn:int
 {
@@ -55,48 +56,47 @@ public:
         ~partres();
 
         void setup(lexer *, fdm &, double &);
-        seedReturn seeding(lexer *, particles_obj &, size_t &, double, bool=false);
+        seedReturn seeding(lexer *, particles_obj2::particle &, double, bool=false);
         
-        void move_RK2(lexer *, fdm &, ghostcell&, particles_obj &, sediment_fdm &, turbulence &);
-        void move_RK2_step1(lexer *, fdm &, ghostcell&, particles_obj &, sediment_fdm &, turbulence &, int &, int &);
-        void move_RK2_step2(lexer *, fdm &, ghostcell&, particles_obj &, sediment_fdm &, turbulence &, int &, int &);
-        void move_RK3(lexer *, fdm &, ghostcell&, particles_obj &, sediment_fdm &, turbulence &);
+        void move_RK2(lexer *, fdm &, ghostcell&, particles_obj2 &, sediment_fdm &, turbulence &);
+        void move_RK2_step1(lexer *, fdm &, ghostcell&, particles_obj2 &, sediment_fdm &, turbulence &, int &, int &);
+        void move_RK2_step2(lexer *, fdm &, ghostcell&, particles_obj2 &, sediment_fdm &, turbulence &, int &, int &);
+        void move_RK3(lexer *, fdm &, ghostcell&, particles_obj2 &, sediment_fdm &, turbulence &);
         
-        void advec_plain(lexer *, fdm &, particles_obj &, size_t, sediment_fdm &, turbulence&, 
-                        double*, double*, double*, double*, double*, double*, 
+        void advec_plain(lexer *, fdm &, particles_obj2::particle &, double, sediment_fdm &, turbulence&, 
+                        double, double, double, double, double, double, 
                         double&, double&, double&, double);
-        void advec_pic(lexer *, fdm &, particles_obj &, size_t, sediment_fdm &, turbulence&, 
+        void advec_pic(lexer *, fdm &, particles_obj2 &, size_t, sediment_fdm &, turbulence&, 
                         double*, double*, double*, double*, double*, double*, 
                         double&, double&, double&, double);
                         
-        void sandslide(lexer *, fdm &, ghostcell&, particles_obj &, sediment_fdm &, turbulence &);
+        void sandslide(lexer *, fdm &, ghostcell&, particles_obj2 &, sediment_fdm &, turbulence &);
         
-        void transfer(lexer *, particles_obj &, size_t &);
-        void remove(lexer *, particles_obj &, size_t &);
-        void make_moving(lexer *, fdm &, particles_obj &);
-        void erosion(lexer *, fdm &, particles_obj &, sediment_fdm &);
-        void deposition(lexer *, fdm &, particles_obj &, sediment_fdm &);
-        void update(lexer *, fdm &, ghostcell &, particles_obj &);
-        void debug(lexer *, fdm &, ghostcell &, particles_obj &, sediment_fdm &);
-        double volume(lexer *, fdm &, particles_obj &);
+        void transfer(lexer *, particles_obj2::particle &);
+        void remove(lexer *, particles_obj2::particle &);
+        void erosion(lexer *, fdm &, particles_obj2 &, sediment_fdm &);
+        void deposition(lexer *, fdm &, particles_obj2 &, sediment_fdm &);
+        void update(lexer *, fdm &, ghostcell &, particles_obj2 &);
+        void debug(lexer *, fdm &, ghostcell &, particles_obj2 &, sediment_fdm &);
+        double volume(lexer *, fdm &, particles_obj2 &);
         void writeState(lexer *, ofstream &);
         void readState(lexer *, ifstream &);
-        void setupState(lexer *, fdm &, ghostcell &, particles_obj &);
+        void setupState(lexer *, fdm &, ghostcell &, particles_obj2 &);
         void setParticleMax(double);
 private:
         double maxParticlesPerCell(lexer *, fdm &, double,bool=true,bool=false);
-        void particleStressTensor(lexer *, fdm &, ghostcell &, particles_obj &);
-        void particleStressTensorUpdateIJK(lexer *, fdm &, particles_obj &);
-        void updateParticleStressTensor(lexer *, fdm &, particles_obj &, int, int, int);
-        double theta_s(lexer *, fdm &, particles_obj &, int, int, int) const;
+        void particleStressTensor(lexer *, fdm &, ghostcell &, particles_obj2 &);
+        void particleStressTensorUpdateIJK(lexer *, fdm &, particles_obj2 &);
+        void updateParticleStressTensor(lexer *, fdm &, particles_obj2 &, int, int, int);
+        double theta_s(lexer *, fdm &, particles_obj2 &, int, int, int) const;
         double drag_model(lexer *, double, double, double, double, double) const;
         double settling_velocity(lexer *, double, double, double, double, double) const;
-        void particlePerCell(lexer *, ghostcell &, particles_obj &);
-        void timestep(lexer *, ghostcell &, particles_obj &);
-        int activateNew(lexer *, fdm &, particles_obj &);
-        void relative_velocity(lexer *, fdm &, particles_obj &, size_t, double &, double &, double &);
+        void particlePerCell(lexer *, ghostcell &, particles_obj2 &);
+        void timestep(lexer *, ghostcell &, particles_obj2 &);
+        int activateNew(lexer *, fdm &, particles_obj2 &);
+        void relative_velocity(lexer *, fdm &, particles_obj2::particle, double &, double &, double &);
         double drag_coefficient(double) const;
-        void addParticleForTransfer(lexer *, particles_obj &, size_t , particles_obj [6], int &);
+        void addParticleForTransfer(lexer *, particles_obj2 &, size_t , particles_obj2 [6], int &);
         
     // relax
     void relax_ini(lexer*);

@@ -21,10 +21,7 @@ Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include "particles_obj2.h"
-#include"lexer.h"
-#include <cstdint>
-#include <cstring>
-#include<iostream>
+#include <iostream>
 
 /*
 Dangers when using:
@@ -38,30 +35,11 @@ size_t overflow when adding something to an object at capacity
 /// @param individuals Whether particles are allowed to have individual data besides position
 /// @param _size Desired number of partices at default position (0,0,0|INT32_MIN) with individual data (0,0,0|0)
 /// @param _scale_factor Sets ::scale_factor for ::reserve
-particles_obj2::particles_obj2(size_t _capacity, double _d50, double _density, size_t _size):
+particles_obj2::particles_obj2(size_t _capacity, double _d50, double _density):
                 d50(_d50), density(_density)
                 
 {	
     particles.reserve(_capacity);
-    for(size_t n=0;n<_size;n++)
-    {
-        particle temp;
-        temp.x=0;
-        temp.y=0;
-        temp.z=0;
-        temp.flag=INT32_MIN;
-        temp.u=0;
-        temp.v=0;
-        temp.w=0;
-        temp.packingFactor=1;
-        temp.uf=0;
-        temp.vf=0;
-        temp.wf=0;
-        temp.shear_eff=0;
-        temp.shear_crit=0;
-        temp.drag=0;
-        particles.push_back(temp);
-    }
 }
 
 /// \copydoc tracers_obj::erase
@@ -76,43 +54,10 @@ void particles_obj2::erase_all()
     particles.clear();
 }
 
-/// @brief Addes new particle with prescribed position and state
-/// @param x Position in x-dir
-/// @param y Position in y-dir
-/// @param z Position in z-dir
-/// @param flag State - stationary, moving, etc.
-/// @param u Velocity in x-dir
-/// @param v Velocity in y-dir
-/// @param w Velocity in z-dir
-/// @param packingFactor Number of real particles represented by the element
-/// @return Index of added particle
-size_t particles_obj2::add(const double x, const double y, const double z, const int flag, const double u, const double v, const double w, const double packingFactor, const double uF, const double vF, const double wF, const double shearEff, const double shearCrit, const double _drag)
-{
-    // particles.push_back({x,y,z,flag,u,v,w,packingFactor,uF,vF,wF,shearEff,shearCrit,_drag});
-    // particles.push_back({{x, y, z, flag}, u, v, w, packingFactor, uF, vF, wF, shearEff, shearCrit, _drag});
-    particle temp;
-    temp.x=x;
-    temp.y=y;
-    temp.z=z;
-    temp.flag=flag;
-    temp.u=u;
-    temp.v=v;
-    temp.w=w;
-    temp.packingFactor=packingFactor;
-    temp.uf=uF;
-    temp.vf=vF;
-    temp.wf=wF;
-    temp.shear_eff=shearEff;
-    temp.shear_crit=shearCrit;
-    temp.drag=_drag;
-    particles.push_back(temp);
-    return particles.size()-1;
-}
-
 /// \copydoc tracers_obj::add_entry
-size_t particles_obj2::add_entry(particles_obj2* obj, size_t _index)
+size_t particles_obj2::add_entry(particle _particle)
 {
-    particles.push_back(obj->particles[_index]);
+    particles.push_back(_particle);
     return particles.size()-1;
 }
 

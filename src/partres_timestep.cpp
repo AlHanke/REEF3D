@@ -26,16 +26,16 @@ Author: Alexander Hanke
 #include"fdm.h"
 #include"ghostcell.h"
 
-void partres::timestep(lexer *p, ghostcell &pgc, particles_obj &PP)
+void partres::timestep(lexer *p, ghostcell &pgc, particles_obj2 &PP)
 {
         double maxVelU=0,maxVelV=0,maxVelW=0;
-        for(size_t n=0;n<PP.loopindex;n++)
+        for(auto &particle : PP.particles)
         {
-            if(PP.Flag[n]>0)
+            if(particle.flag>0)
             {
-                maxVelU=max(maxVelU,fabs(PP.U[n]));
-                maxVelV=max(maxVelV,fabs(PP.V[n]));
-                maxVelW=max(maxVelW,fabs(PP.W[n]));
+                maxVelU=max(maxVelU,fabs(particle.u));
+                maxVelV=max(maxVelV,fabs(particle.v));
+                maxVelW=max(maxVelW,fabs(particle.w));
             }
         }
 

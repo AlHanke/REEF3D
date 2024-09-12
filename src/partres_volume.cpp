@@ -21,12 +21,12 @@ Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"partres.h"
-#include"particles_obj.h"
+#include"particles_obj2.h"
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
 
-double partres::volume(lexer *p, fdm &a, particles_obj &PP)
+double partres::volume(lexer *p, fdm &a, particles_obj2 &PP)
 {
         double sum=0;
         ILOOP
@@ -37,7 +37,7 @@ double partres::volume(lexer *p, fdm &a, particles_obj &PP)
 }
 
     /// @brief Calculate solid volume fraction for cell ( \p i , \p j , \p k )
-double partres::theta_s(lexer *p, fdm &a, particles_obj &PP, int i, int j, int k) const
+double partres::theta_s(lexer *p, fdm &a, particles_obj2 &PP, int i, int j, int k) const
 {   
         double theta = PI*pow(PP.d50,3.0)*(cellSum[IJK]+cellSumTopo[IJK])/(6.0*p->DXN[IP]*p->DYN[JP]*p->DYN[KP]);
         if(theta>1)
@@ -49,18 +49,18 @@ double partres::theta_s(lexer *p, fdm &a, particles_obj &PP, int i, int j, int k
 
 
     /// @brief Calculate number of particles in cell ( \p i , \p j , \p k )
-void partres::particlePerCell(lexer *p, ghostcell &pgc, particles_obj &PP)
+void partres::particlePerCell(lexer *p, ghostcell &pgc, particles_obj2 &PP)
 {
         PLAINLOOP
         cellSum[IJK]=0;
 
-        for(size_t n=0;n<PP.loopindex;n++)
-            if(PP.Flag[n]>INT32_MIN)
+        for(auto &particle : PP.particles)
+            if(particle.flag>INT32_MIN)
             {
-                i=p->posc_i(PP.X[n]);
-                j=p->posc_j(PP.Y[n]);
-                k=p->posc_k(PP.Z[n]);
-                cellSum[IJK] += PP.ParcelFactor[n];
+                i=p->posc_i(particle.x);
+                j=p->posc_j(particle.y);
+                k=p->posc_k(particle.z);
+                cellSum[IJK] += particle.parcelFactor;
             }
         
         pgc.start4V_par(p,cellSum,11);

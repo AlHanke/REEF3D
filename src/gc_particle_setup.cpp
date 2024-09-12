@@ -53,7 +53,7 @@ void ghostcell::setup_MPI_particle_dataTypes(lexer* p)
         offsets[1] = offsetof(particles_obj2::particle, u);
         offsets[2] = offsetof(particles_obj2::particle, v);
         offsets[3] = offsetof(particles_obj2::particle, w);
-        offsets[4] = offsetof(particles_obj2::particle, packingFactor);
+        offsets[4] = offsetof(particles_obj2::particle, parcelFactor);
         offsets[5] = offsetof(particles_obj2::particle, uf);
         offsets[6] = offsetof(particles_obj2::particle, vf);
         offsets[7] = offsetof(particles_obj2::particle, wf);
@@ -61,7 +61,7 @@ void ghostcell::setup_MPI_particle_dataTypes(lexer* p)
         offsets[9] = offsetof(particles_obj2::particle, shear_crit);
         offsets[10] = offsetof(particles_obj2::particle, drag);
         
-        MPI_Type_create_struct(number_of_blocks, blocklengths, offsets, types, &MPI_TRACER);
+        MPI_Type_create_struct(number_of_blocks, blocklengths, offsets, types, &MPI_PARTICLE);
         MPI_Type_commit(&MPI_PARTICLE);
     }
     

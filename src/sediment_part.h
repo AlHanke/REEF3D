@@ -27,7 +27,7 @@ Author: Alexander Hanke
 #include"particle_func.h"
 #include"increment.h"
 
-#include"particles_obj.h"
+#include"particles_obj2.h"
 #include"field4.h"
 #include"bedshear_reduction.h"
 #include"sediment_fdm.h"
@@ -120,9 +120,9 @@ private:
     void header_pos(lexer*);
     void piecename_pos(lexer*,int);
 
-    void seedDummy(lexer*,fdm*,particles_obj&);
-    void seedDummyCell(lexer*,fdm*,particles_obj&);
-    void printDummyVTP(lexer*,particles_obj&);
+    void seedDummy(lexer*,fdm*,particles_obj2&);
+    void seedDummyCell(lexer*,fdm*,particles_obj2&);
+    void printDummyVTP(lexer*,particles_obj2&);
     void printDummyPVTP(lexer*);
 
 public:
@@ -164,8 +164,8 @@ private:
     // SEDIMENT OBJECTS
 
     /// @brief Particle object
-    particles_obj PP;
-    particles_obj PP2;
+    particles_obj2 PP;
+    particles_obj2 PP2;
     /// @brief VRANS object
     vrans* pvrans;
     /// @brief FDM object for sediment

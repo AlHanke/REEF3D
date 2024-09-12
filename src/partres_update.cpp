@@ -37,7 +37,7 @@ Author: Alexander Hanke
      * @param topo A reference to the field4a object.
      * @param d50 The diameter value.
      */
-void partres::update(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP)
+void partres::update(lexer *p, fdm &a, ghostcell &pgc, particles_obj2 &PP)
 {
     int count=0;
     ILOOP

@@ -27,7 +27,7 @@ Authors: Alexander Hanke, Hans Bihs
 #include"sediment_fdm.h"
 #include"ghostcell.h"
 
-void partres::sandslide(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP, sediment_fdm &s, turbulence &pturb)
+void partres::sandslide(lexer *p, fdm &a, ghostcell &pgc, particles_obj2 &PP, sediment_fdm &s, turbulence &pturb)
 {
 
     

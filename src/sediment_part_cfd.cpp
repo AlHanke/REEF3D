@@ -76,20 +76,12 @@ void sediment_part::start_cfd(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow,
 
         /// topo update
         update_cfd(p,a,pgc,pflow,preto);
-
-        /// cleanup
-        if(p->Q20>=0 && p->count%p->Q20==0)
-        {
-            if(PP.size == 0)
-                PP.erase_all();
-            PP.optimize();
-        }
 	}
 
     /// print out
 	print_particles(p);
 
-	gparticle_active = pgc->globalisum(PP.size);
+	gparticle_active = pgc->globalisum(PP.particles.size());
     gremoved = pgc->globalisum(removed);
     gxchange = pgc->globalisum(xchanged);
 

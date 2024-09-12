@@ -39,8 +39,8 @@ Authors: Alexander Hanke, Hans Bihs
      * @param PP A reference to the particles_obj object.
      */
      
-void partres::advec_plain(lexer *p, fdm &a, particles_obj &PP, size_t n, sediment_fdm &s, turbulence &pturb, 
-                        double *PX, double *PY, double *PZ, double *PU, double *PV, double *PW,
+void partres::advec_plain(lexer *p, fdm &a, particles_obj2::particle &_particle, double d50, sediment_fdm &s, turbulence &pturb, 
+                        double PX, double PY, double PZ, double PU, double PV, double PW,
                         double &du, double &dv, double &dw, double alpha)
 {
     double RKu,RKv,RKw;
@@ -64,28 +64,28 @@ void partres::advec_plain(lexer *p, fdm &a, particles_obj &PP, size_t n, sedimen
     double DragCoeff=0;
     double Uabs_rel=0.0;
 
-    i=p->posc_i(PX[n]);
-    j=p->posc_j(PY[n]);
-    k=p->posc_k(PZ[n]);
+    i=p->posc_i(PX);
+    j=p->posc_j(PY);
+    k=p->posc_k(PZ);
         
 
     velDist=0.6;
     
-    u=p->ccipol1(a.u,PX[n],PY[n],PZ[n]+velDist*p->DZP[KP]);
-    v=p->ccipol2(a.v,PX[n],PY[n],PZ[n]+velDist*p->DZP[KP]);
+    u=p->ccipol1(a.u,PX,PY,PZ+velDist*p->DZP[KP]);
+    v=p->ccipol2(a.v,PX,PY,PZ+velDist*p->DZP[KP]);
 
 
     // relative velocity
-    Urel=u-PU[n];
-    Vrel=v-PV[n];
+    Urel=u-PU;
+    Vrel=v-PV;
 
-    PP.Uf[n]=Urel;
-    PP.Vf[n]=Urel;
+    _particle.uf=Urel;
+    _particle.vf=Urel;
     
     // particle force
     if(p->Q202==1)
     {
-    DragCoeff=drag_model(p,PP.d50,Urel,Vrel,Wrel,thetas);
+    DragCoeff=drag_model(p,d50,Urel,Vrel,Wrel,thetas);
     
     du=DragCoeff*Urel;
     dv=DragCoeff*Vrel;
@@ -95,17 +95,17 @@ void partres::advec_plain(lexer *p, fdm &a, particles_obj &PP, size_t n, sedimen
     {
     //relative_velocity(p,a,PP,n,Urel,Vrel,Wrel);
     Uabs_rel=sqrt(Urel*Urel + Vrel*Vrel);
-    Re_p = Uabs_rel*PP.d50/(p->W2/p->W1);
+    Re_p = Uabs_rel*d50/(p->W2/p->W1);
     DragCoeff = drag_coefficient(Re_p);
          
     // acceleration
-    Fd = p->W1 * DragCoeff * PI/8.0 * pow(PP.d50,2)  * pow(Uabs_rel,2.0);
+    Fd = p->W1 * DragCoeff * PI/8.0 * pow(d50,2)  * pow(Uabs_rel,2.0);
     
     // relax
-    Fd *= rf(p,PX[n],PY[n]);
+    Fd *= rf(p,PX,PY);
     
     // resistance force
-    Fs = p->Q30*(p->S22-p->W1)*fabs(p->W22)*PI*pow(PP.d50, 3.0)/6.0;
+    Fs = p->Q30*(p->S22-p->W1)*fabs(p->W22)*PI*pow(d50, 3.0)/6.0;
      
     F_tot = Fd-Fs;//*s.reduce(i,j);
     
@@ -113,38 +113,38 @@ void partres::advec_plain(lexer *p, fdm &a, particles_obj &PP, size_t n, sedimen
     
     //cout<<"Fd: "<<Fd<<" Fs: "<<Fs<<" F_tot: "<<F_tot<<" "<<PP.d50<<" "<<DragCoeff<<endl;
 
-    du = F_tot /(p->S22*PI*pow(PP.d50,3.0)/6.0) * Urel/(fabs(Uabs_rel)>1.0e-10?fabs(Uabs_rel):1.0e20);
-    dv = F_tot /(p->S22*PI*pow(PP.d50,3.0)/6.0) * Vrel/(fabs(Uabs_rel)>1.0e-10?fabs(Uabs_rel):1.0e20);
+    du = F_tot /(p->S22*PI*pow(d50,3.0)/6.0) * Urel/(fabs(Uabs_rel)>1.0e-10?fabs(Uabs_rel):1.0e20);
+    dv = F_tot /(p->S22*PI*pow(d50,3.0)/6.0) * Vrel/(fabs(Uabs_rel)>1.0e-10?fabs(Uabs_rel):1.0e20);
     
-    PP.shear_eff[n]=Fd;
-    PP.shear_crit[n]=Fs;
+    _particle.shear_eff=Fd;
+    _particle.shear_crit=Fs;
     }
 
-    PP.drag[n]=DragCoeff;
+    _particle.drag=DragCoeff;
     
 
     // solid forcing
     double fx,fy,fz;
     /*
-    fx = p->ccipol1c(a.fbh1,PX[n],PY[n],PZ[n])*(0.0-PU[n])/(alpha*p->dtsed); 
-    fy = p->ccipol2c(a.fbh2,PX[n],PY[n],PZ[n])*(0.0-PV[n])/(alpha*p->dtsed); 
-    fz = p->ccipol3c(a.fbh3,PX[n],PY[n],PZ[n])*(0.0-PW[n])/(alpha*p->dtsed); 
+    fx = p->ccipol1c(a.fbh1,PX,PY,PZ)*(0.0-PU)/(alpha*p->dtsed); 
+    fy = p->ccipol2c(a.fbh2,PX,PY,PZ)*(0.0-PV)/(alpha*p->dtsed); 
+    fz = p->ccipol3c(a.fbh3,PX,PY,PZ)*(0.0-PW)/(alpha*p->dtsed); 
     
     du += fx;
     dv += fy;
     dw += fz;*/
     
     // relax
-    du *= rf(p,PX[n],PY[n]);
-    dv *= rf(p,PX[n],PY[n]);
-    dw *= rf(p,PX[n],PY[n]);
+    du *= rf(p,PX,PY);
+    dv *= rf(p,PX,PY);
+    dw *= rf(p,PX,PY);
     
     dw=0.0;
     
-    Umax = MAX(Umax,sqrt(PU[n]*PU[n] + PV[n]*PV[n]));
+    Umax = MAX(Umax,sqrt(PU*PU + PV*PV));
     
     
-    if(PU[n]!=PU[n] || PV[n]!=PV[n] || PW[n]!=PW[n])
+    if(PU!=PU || PV!=PV || PW!=PW)
     {
     cout<<"NaN detected.\nUrel: "<<Urel<<" Vrel: "<<Vrel<<" Wrel: "<<Wrel<<"\nDrag: "<<DragCoeff<<endl;
     exit(1);

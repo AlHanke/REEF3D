@@ -21,7 +21,6 @@ Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"partres.h"
-#include"particles_obj.h"
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -40,26 +39,26 @@ Author: Alexander Hanke
      * @param diameter The diameter value.
      */
 
-seedReturn partres::seeding(lexer *p, particles_obj &PP, size_t &index, double max, bool free)
+seedReturn partres::seeding(lexer *p, particles_obj2::particle &_particle, double max, bool free)
 {
         if(free)
         {
-            cellSum[IJK] += PP.ParcelFactor[index];
+            cellSum[IJK] += _particle.parcelFactor;
         }
         else
         {
-            if(cellSumTopo[IJK]>=PP.ParcelFactor[index])
-                cellSumTopo[IJK] -= PP.ParcelFactor[index];
+            if(cellSumTopo[IJK]>=_particle.parcelFactor)
+                cellSumTopo[IJK] -= _particle.parcelFactor;
             else if (cellSumTopo[IJK]>0)
             {
-                PP.ParcelFactor[index] = cellSumTopo[IJK];
-                cellSumTopo[IJK] -= PP.ParcelFactor[index];
+                _particle.parcelFactor = cellSumTopo[IJK];
+                cellSumTopo[IJK] -= _particle.parcelFactor;
             }
             else
             {
                 return seedReturn::REMOVE;
             }
-            cellSum[IJK] += PP.ParcelFactor[index];
+            cellSum[IJK] += _particle.parcelFactor;
             
         }
 

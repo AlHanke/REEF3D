@@ -55,11 +55,11 @@ void sediment_part::print_vtp(lexer* p)
 	int numpt=0;
 	const int print_flag=p->Q183;
 
-	PARTLOOP
-	if(PP.Flag[n]>=print_flag)
+	for(auto &particle : PP.particles)
+	if(particle.flag>=print_flag)
 	numpt++;
 
-	cout<<"PSed-"<<p->mpirank<<"| printed: "<<numpt<<" not printed: "<<PP.size-numpt<<" | capcacity: "<<PP.capacity<<endl;
+	cout<<"PSed-"<<p->mpirank<<"| printed: "<<numpt<<" not printed: "<<PP.particles.size()-numpt<<" | capcacity: "<<PP.particles.capacity()<<endl;
 
 	int count;
 	int n=0;
@@ -157,34 +157,34 @@ void sediment_part::print_vtp(lexer* p)
 	// flag
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
-	PARTLOOP
-	if(PP.Flag[n]>=print_flag)
+	for(auto &particle : PP.particles)
+	if(particle.flag>=print_flag)
 	{
-		ffn=float(PP.Flag[n]);
+		ffn=float(particle.flag);
 		result.write((char*)&ffn, sizeof (float));
 	}
 
 	// velocities
 	iin=4*(numpt)*3;
 	result.write((char*)&iin, sizeof (int));
-    PARTLOOP
-    if(PP.Flag[n]>=print_flag)
+    for(auto &particle : PP.particles)
+    if(particle.flag>=print_flag)
 	{
-	ffn=float(PP.U[n]);
+	ffn=float(particle.u);
 	result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(PP.V[n]);
+	ffn=float(particle.v);
 	result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(PP.W[n]);
+	ffn=float(particle.w);
 	result.write((char*)&ffn, sizeof (float));
 	}
 
 	// radius
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
-	PARTLOOP
-	if(PP.Flag[n]>=print_flag)
+	for(auto &particle : PP.particles)
+	if(particle.flag>=print_flag)
 	{
 		ffn=float(PP.d50/2);
 		result.write((char*)&ffn, sizeof (float));
@@ -193,66 +193,66 @@ void sediment_part::print_vtp(lexer* p)
     // fluid velocities
 	iin=4*(numpt)*3;
 	result.write((char*)&iin, sizeof (int));
-    PARTLOOP
-    if(PP.Flag[n]>=print_flag)
+    for(auto &particle : PP.particles)
+    if(particle.flag>=print_flag)
 	{
-	ffn=float(PP.Uf[n]);
+	ffn=float(particle.uf);
 	result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(PP.Vf[n]);
+	ffn=float(particle.vf);
 	result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(PP.Wf[n]);
+	ffn=float(particle.wf);
 	result.write((char*)&ffn, sizeof (float));
 	}
 
     // shear
 	iin=4*(numpt)*2;
 	result.write((char*)&iin, sizeof (int));
-    PARTLOOP
-    if(PP.Flag[n]>=print_flag)
+    for(auto &particle : PP.particles)
+    if(particle.flag>=print_flag)
 	{
-	ffn=float(PP.shear_eff[n]);
+	ffn=float(particle.shear_eff);
 	result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(PP.shear_crit[n]);
+	ffn=float(particle.shear_crit);
 	result.write((char*)&ffn, sizeof (float));
 	}
 
 	// drag
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
-	PARTLOOP
-	if(PP.Flag[n]>=print_flag)
+	for(auto &particle : PP.particles)
+	if(particle.flag>=print_flag)
 	{
-		ffn=float(PP.drag[n]);
+		ffn=float(particle.drag);
 		result.write((char*)&ffn, sizeof (float));
 	}
 
 	// bedChange
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
-	PARTLOOP
-	if(PP.Flag[n]>=print_flag)
+	for(auto &particle : PP.particles)
+	if(particle.flag>=print_flag)
 	{
-		//ffn=float(p->ccslipol4(s.bedch,PP.X[n],PP.Y[n]));
-         ffn=float(p->ccslipol4(s.bedzh,PP.X[n],PP.Y[n])-p->ccslipol4(s.bedzh0,PP.X[n],PP.Y[n]));
+		//ffn=float(p->ccslipol4(s.bedch,particle.x,particle.y));
+         ffn=float(p->ccslipol4(s.bedzh,particle.x,particle.y)-p->ccslipol4(s.bedzh0,particle.x,particle.y));
 		result.write((char*)&ffn, sizeof (float));
 	}
 
 	//  XYZ
 	iin=4*(numpt)*3;
 	result.write((char*)&iin, sizeof (int));
-    PARTLOOP
-    if(PP.Flag[n]>=print_flag)
+    for(auto &particle : PP.particles)
+    if(particle.flag>=print_flag)
 	{
-	ffn=float(PP.X[n]);
+	ffn=float(particle.x);
 	result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(PP.Y[n]);
+	ffn=float(particle.y);
 	result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(PP.Z[n]);
+	ffn=float(particle.z);
 	result.write((char*)&ffn, sizeof (float));
 	}
 	
@@ -260,8 +260,8 @@ void sediment_part::print_vtp(lexer* p)
 	count=0;
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
-	PARTLOOP
-	if(PP.Flag[n]>=print_flag)
+	for(auto &particle : PP.particles)
+	if(particle.flag>=print_flag)
 	{
 	iin=int(count);
 	result.write((char*)&iin, sizeof (int));
@@ -272,8 +272,8 @@ void sediment_part::print_vtp(lexer* p)
 	count=1;
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
-	PARTLOOP
-    if(PP.Flag[n]>=print_flag)
+	for(auto &particle : PP.particles)
+    if(particle.flag>=print_flag)
 	{
 	iin=int(count);
 	result.write((char*)&iin, sizeof (int));
@@ -286,13 +286,13 @@ void sediment_part::print_vtp(lexer* p)
 	result.close();
 	}
 
-void sediment_part::printDummyVTP(lexer *p, particles_obj &PP)
+void sediment_part::printDummyVTP(lexer *p, particles_obj2 &PP)
 {
     int numpt=0;
 	const int print_flag=p->Q183;
 
-	PARTLOOP
-	if(PP.Flag[n]>=print_flag)
+	for(auto &particle : PP.particles)
+	if(particle.flag>=print_flag)
 	numpt++;
 
     int count;
@@ -355,26 +355,26 @@ void sediment_part::printDummyVTP(lexer *p, particles_obj &PP)
     // bedChange
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
-	PARTLOOP
-	if(PP.Flag[n]>=print_flag)
+	for(auto &particle : PP.particles)
+	if(particle.flag>=print_flag)
 	{
-		ffn=float(p->ccslipol4(s.bedzh,PP.X[n],PP.Y[n])-p->ccslipol4(s.bedzh0,PP.X[n],PP.Y[n]));
+		ffn=float(p->ccslipol4(s.bedzh,particle.x,particle.y)-p->ccslipol4(s.bedzh0,particle.x,particle.y));
 		result.write((char*)&ffn, sizeof (float));
 	}
 
     //  XYZ
 	iin=4*(numpt)*3;
 	result.write((char*)&iin, sizeof (int));
-    PARTLOOP
-    if(PP.Flag[n]>=print_flag)
+    for(auto &particle : PP.particles)
+    if(particle.flag>=print_flag)
 	{
-	ffn=float(PP.X[n]);
+	ffn=float(particle.x);
 	result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(PP.Y[n]);
+	ffn=float(particle.y);
 	result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(PP.Z[n]);
+	ffn=float(particle.z);
 	result.write((char*)&ffn, sizeof (float));
 	}
 	
@@ -382,8 +382,8 @@ void sediment_part::printDummyVTP(lexer *p, particles_obj &PP)
 	count=0;
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
-	PARTLOOP
-	if(PP.Flag[n]>=print_flag)
+	for(auto &particle : PP.particles)
+	if(particle.flag>=print_flag)
 	{
 	iin=int(count);
 	result.write((char*)&iin, sizeof (int));
@@ -394,8 +394,8 @@ void sediment_part::printDummyVTP(lexer *p, particles_obj &PP)
 	count=1;
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
-	PARTLOOP
-    if(PP.Flag[n]>=print_flag)
+	for(auto &particle : PP.particles)
+    if(particle.flag>=print_flag)
 	{
 	iin=int(count);
 	result.write((char*)&iin, sizeof (int));

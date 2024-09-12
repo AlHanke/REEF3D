@@ -26,7 +26,7 @@ Author: Alexander Hanke
 #include"fdm.h"
 #include"ghostcell.h"
 
-void partres::move_RK3(lexer *p, fdm &a, ghostcell &pgc, particles_obj &PP, sediment_fdm &s, turbulence &pturb)
+void partres::move_RK3(lexer *p, fdm &a, ghostcell &pgc, particles_obj2 &PP, sediment_fdm &s, turbulence &pturb)
 {
     
     

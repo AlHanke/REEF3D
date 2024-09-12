@@ -100,7 +100,6 @@ void sediment_part::seed_ini(lexer *p, fdm *a, ghostcell* pgc)
     
     int partnum = (cellCountBox + cellCountTopo) * ppcell;
     maxparticle = ceil(p->Q25*double(pgc->globalisum(partnum)));
-    PP2.reserve(ceil(p->Q25*double(cellCountBoxDummy*ppcell)));
 }
 
 /// @brief Calls seeding functions
@@ -115,9 +114,8 @@ void sediment_part::seed(lexer *p, fdm *a)
     if(p->Q111>0)
     {
         posseed_box_dummy(p,a);
+        particles_obj2 PP2;
         printDummyVTP(p,PP2);
-        PP2.capacity=1;
-        PP2.erase_all();
     }
 }
 
@@ -129,20 +127,33 @@ void sediment_part::posseed_box(lexer *p, fdm *a)
     double x,y,z;
     int flag=1;
     size_t index;
+    particles_obj2::particle _particle;
 
     LOOP
         if(active_box(i,j,k)>0.0)
             for(int qn=0;qn<ppcell;++qn)
             {
-                if(PP.size+1>0.9*PP.capacity)
-                    PP.reserve();
                 
                 x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                 y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                 z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
 
-                index = PP.add(x,y,z,flag,a->u(i,j,k),a->v(i,j,k),a->w(i,j,k),p->Q41);
-                pst->seeding(p, PP, index, ppcell);
+                _particle.x = p->Q61_x[n];
+                _particle.y = p->Q61_y[n];
+                _particle.z = p->Q61_z[n];
+                _particle.flag = flag;
+                _particle.u = a->u(i,j,k);
+                _particle.v = a->v(i,j,k);
+                _particle.w = a->w(i,j,k);
+                _particle.parcelFactor = p->Q41;
+                _particle.uf = a->u(i,j,k);
+                _particle.vf = a->v(i,j,k);
+                _particle.wf = a->w(i,j,k);
+                _particle.shear_eff = 0;
+                _particle.shear_crit = 0;
+                _particle.drag = 0;
+                index = PP.add_entry(_particle);
+                pst->seeding(p, _particle, ppcell);
             }
 }
 
@@ -154,19 +165,32 @@ void sediment_part::posseed_box_dummy(lexer *p, fdm *a)
     double x,y,z;
     int flag=1;
     size_t index;
+    particles_obj2::particle _particle;
 
     LOOP
         if(active_box_dummy(i,j,k)>0.0)
             for(int qn=0;qn<ppcell;++qn)
             {
-                if(PP2.size+1>0.9*PP2.capacity)
-                    PP2.reserve();
                 
                 x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                 y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                 z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
 
-                index = PP2.add(x,y,z,flag,a->u(i,j,k),a->v(i,j,k),a->w(i,j,k),p->Q41);
+                _particle.x = p->Q61_x[n];
+                _particle.y = p->Q61_y[n];
+                _particle.z = p->Q61_z[n];
+                _particle.flag = flag;
+                _particle.u = a->u(i,j,k);
+                _particle.v = a->v(i,j,k);
+                _particle.w = a->w(i,j,k);
+                _particle.parcelFactor = p->Q41;
+                _particle.uf = a->u(i,j,k);
+                _particle.vf = a->v(i,j,k);
+                _particle.wf = a->w(i,j,k);
+                _particle.shear_eff = 0;
+                _particle.shear_crit = 0;
+                _particle.drag = 0;
+                index = PP2.add_entry(_particle);
             }
 }
 
@@ -189,6 +213,7 @@ void sediment_part::posseed_suspended(lexer *p, fdm *a)
     
     double x,y,z;
     size_t index;
+    particles_obj2::particle _particle;
     for(int n=0;n<p->gcin_count;n++)
         if(p->gcin[n][3]>0)
         {
@@ -197,15 +222,27 @@ void sediment_part::posseed_suspended(lexer *p, fdm *a)
             k=p->gcin[n][2];
             if(a->topo(i,j,k)>=0.0)
             {
-                if(PP.size+p->Q122>0.9*PP.capacity)
-                    maxparticle=PP.reserve(PP.size+p->Q122);
                 for(int qn=0;qn<p->Q122;++qn)
                 {
                     x = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
                     y = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
                     z = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
-                    index=PP.add(x,y,z,1,a->u(i-1,j,k),a->v(i-1,j,k),a->w(i-1,j,k),p->Q41);
-                    pst->seeding(p, PP, index, ppcell);
+                    _particle.x = p->Q61_x[n];
+                    _particle.y = p->Q61_y[n];
+                    _particle.z = p->Q61_z[n];
+                    _particle.flag = 1;
+                    _particle.u = a->u(i,j,k);
+                    _particle.v = a->v(i,j,k);
+                    _particle.w = a->w(i,j,k);
+                    _particle.parcelFactor = p->Q41;
+                    _particle.uf = a->u(i,j,k);
+                    _particle.vf = a->v(i,j,k);
+                    _particle.wf = a->w(i,j,k);
+                    _particle.shear_eff = 0;
+                    _particle.shear_crit = 0;
+                    _particle.drag = 0;
+                    index = PP.add_entry(_particle);
+                    pst->seeding(p, _particle, ppcell);
                 }
             }
         }
@@ -215,11 +252,26 @@ void sediment_part::posseed_suspended(lexer *p, fdm *a)
 void sediment_part::point_source(lexer *p, fdm *a)
 {
     size_t index;
+    particles_obj2::particle _particle;
     for(size_t n=0;n<p->Q61;n++)
         if(p->count%p->Q61_i[n]==0)
         {
-            index = PP.add(p->Q61_x[n],p->Q61_y[n],p->Q61_z[n],1,a->u(i,j,k),a->v(i,j,k),a->w(i,j,k),p->Q41);
-            pst->seeding(p, PP, index, ppcell);
+            _particle.x = p->Q61_x[n];
+            _particle.y = p->Q61_y[n];
+            _particle.z = p->Q61_z[n];
+            _particle.flag = 1;
+            _particle.u = a->u(i,j,k);
+            _particle.v = a->v(i,j,k);
+            _particle.w = a->w(i,j,k);
+            _particle.parcelFactor = p->Q41;
+            _particle.uf = a->u(i,j,k);
+            _particle.vf = a->v(i,j,k);
+            _particle.wf = a->w(i,j,k);
+            _particle.shear_eff = 0;
+            _particle.shear_crit = 0;
+            _particle.drag = 0;
+            index = PP.add_entry(_particle);
+            pst->seeding(p, _particle, ppcell);
         }
 }
 
@@ -258,9 +310,18 @@ void sediment_part::seed_topo(lexer *p, fdm *a)
     double x,y,z,ipolTopo,ipolSolid;
     int flag=0;
     size_t index;
-
-    if(PP.size+ppcell>0.9*PP.capacity)
-        PP.reserve();
+    particles_obj2::particle _particle;
+    _particle.flag = flag;
+    _particle.u = 0;
+    _particle.v = 0;
+    _particle.w = 0;
+    _particle.parcelFactor = p->Q41;
+    _particle.uf = 0;
+    _particle.vf = 0;
+    _particle.wf = 0;
+    _particle.shear_eff = 0;
+    _particle.shear_crit = 0;
+    _particle.drag = 0;
 
     for(int qn=0;qn<ppcell*1000;++qn)
     {   
@@ -275,10 +336,13 @@ void sediment_part::seed_topo(lexer *p, fdm *a)
 
         if (!(ipolTopo>tolerance||ipolTopo<-p->Q102*p->DZN[KP]||ipolSolid<0))
         {
-            index=PP.add(x,y,z,flag,0,0,0,p->Q41);
+            _particle.x = x;
+            _particle.y = y;
+            _particle.z = z;
+            index = PP.add_entry(_particle);
             //PP.shear_crit[index]=p->mpirank;
             //PP.shear_eff[index]=PP.size;
-            auto result = pst->seeding(p, PP, index, p->Q41*ppcell);
+            auto result = pst->seeding(p, _particle, p->Q41*ppcell);
             if(result==seedReturn::STOP)
                 break;
             if(result==seedReturn::REMOVE)
@@ -318,11 +382,10 @@ size_t sediment_part::set_active_topo(lexer *p, fdm *a)
     return cellCountTopo;
 }
 
-void sediment_part::seedDummy(lexer *p, fdm *a, particles_obj &PP)
+void sediment_part::seedDummy(lexer *p, fdm *a, particles_obj2 &PP)
 {
     if(p->origin_i==0)
     {
-        PP.reserve(PP.size+ppcell*p->knoy*p->knoz);
         i=0;
         JLOOP
         for(k=1; k<p->knoz; ++k)
@@ -330,7 +393,6 @@ void sediment_part::seedDummy(lexer *p, fdm *a, particles_obj &PP)
     }
     if(p->origin_i+p->knox == p->gknox)
     {
-        PP.reserve(PP.size+ppcell*p->knoy*p->knoz);
         i = p->gknox;
         JLOOP
         for(k=1; k<p->knoz; ++k)
@@ -338,7 +400,6 @@ void sediment_part::seedDummy(lexer *p, fdm *a, particles_obj &PP)
     }
     if(p->origin_j==0)
     {
-        PP.reserve(PP.size+ppcell*p->knox*p->knoz);
         j=0;
         ILOOP
         for(k=1; k<p->knoz; ++k)
@@ -346,7 +407,6 @@ void sediment_part::seedDummy(lexer *p, fdm *a, particles_obj &PP)
     }
     if(p->origin_j+p->knoy == p->gknoy)
     {
-        PP.reserve(PP.size+ppcell*p->knox*p->knoz);
         j = p->gknoy;
         ILOOP
         for(k=1; k<p->knoz; ++k)
@@ -354,16 +414,15 @@ void sediment_part::seedDummy(lexer *p, fdm *a, particles_obj &PP)
     }
     if(p->origin_k==0)
     {
-        PP.reserve(PP.size+ppcell*p->knoy*p->knox);
         k=0;
         ILOOP
         JLOOP
         seedDummyCell(p,a,PP);
     }
-    cout<<"Dummy seeding done on "<<p->mpirank<<".\nSeeded "<<PP.size<<" particles."<<endl;
+    cout<<"Dummy seeding done on "<<p->mpirank<<".\nSeeded "<<PP.particles.size()<<" particles."<<endl;
 }
 
-void sediment_part::seedDummyCell(lexer *p, fdm *a, particles_obj &PP)
+void sediment_part::seedDummyCell(lexer *p, fdm *a, particles_obj2 &PP)
 {
     double tolerance = 5e-18;
     double x,y,z,ipolSolid;

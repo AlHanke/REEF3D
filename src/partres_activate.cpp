@@ -26,7 +26,7 @@ Author: Alexander Hanke
 #include"fdm.h"
 #include"ghostcell.h"
 
-int partres::activateNew(lexer *p, fdm &a, particles_obj &PP)
+int partres::activateNew(lexer *p, fdm &a, particles_obj2 &PP)
 {
         double tolerance = 5e-18;
         double x,y,z,ipolTopo,ipolSolid;
@@ -38,9 +38,7 @@ int partres::activateNew(lexer *p, fdm &a, particles_obj &PP)
         int tries=0;
         int count=0;
         int k_offset = 0;
-
-        if(PP.size-bedChange[IJ]>0.9*PP.capacity)
-            PP.reserve();
+        particles_obj2::particle _particle;
 
         while(counter<-bedChange[IJ] && tries<maxTries)
         {   
@@ -56,16 +54,44 @@ int partres::activateNew(lexer *p, fdm &a, particles_obj &PP)
             if (!(ipolTopo>tolerance||ipolTopo<-p->Q102*p->DZN[KP]||ipolSolid<0))
                 if(cellSumTopo[IJK]>=p->Q41)
                 {
-                    index = PP.add(x,y,z,flag,0,0,0,p->Q41);
-                    counter += PP.ParcelFactor[index];
-                    cellSumTopo[IJK] -= PP.ParcelFactor[index];
+                    _particle.x = x;
+                    _particle.y = y;
+                    _particle.z = z;
+                    _particle.flag = flag;
+                    _particle.u = 0;
+                    _particle.v = 0;
+                    _particle.w = 0;
+                    _particle.parcelFactor = p->Q41;
+                    _particle.uf = 0;
+                    _particle.vf = 0;
+                    _particle.wf = 0;
+                    _particle.shear_eff = 0;
+                    _particle.shear_crit = 0;
+                    _particle.drag = 0;
+                    index = PP.add_entry(_particle);
+                    counter += _particle.parcelFactor;
+                    cellSumTopo[IJK] -= _particle.parcelFactor;
                     ++count;
                 }
                 else if (cellSumTopo[IJK]+cellSumTopo[IJKm1]>=p->Q41)
                 {
-                    index = PP.add(x,y,z,flag,0,0,0,p->Q41);
-                    counter += PP.ParcelFactor[index];
-                    cellSumTopo[IJK] -= PP.ParcelFactor[index];
+                    _particle.x = x;
+                    _particle.y = y;
+                    _particle.z = z;
+                    _particle.flag = flag;
+                    _particle.u = 0;
+                    _particle.v = 0;
+                    _particle.w = 0;
+                    _particle.parcelFactor = p->Q41;
+                    _particle.uf = 0;
+                    _particle.vf = 0;
+                    _particle.wf = 0;
+                    _particle.shear_eff = 0;
+                    _particle.shear_crit = 0;
+                    _particle.drag = 0;
+                    index = PP.add_entry(_particle);
+                    counter += _particle.parcelFactor;
+                    cellSumTopo[IJK] -= _particle.parcelFactor;
                     cellSumTopo[IJKm1] += cellSumTopo[IJK];
                     cellSumTopo[IJK] = 0;
 

@@ -81,13 +81,13 @@ void sediment_part::ini_cfd(lexer *p, fdm *a, ghostcell *pgc)
     {
         // seed
         seed_ini(p,a,pgc);
-        PP.reserve(maxparticle);
+        PP.particles.reserve(maxparticle);
         pst->setParticleMax(maxparticle);
         seed(p,a);
         // make_stationary(p,a,&PP);
     }
 
-    gparticle_active = pgc->globalisum(PP.size);
+    gparticle_active = pgc->globalisum(PP.particles.size());
 
     fill_PQ_cfd(p,a,pgc);
     // pstmove(p,*a,*pgc,PP,s,*pturb);

@@ -30,14 +30,35 @@ class lexer;
 class particles_obj2 : public tracers_obj2
 {
 public:
-    particles_obj2(size_t=10, double=0.001, double=2650.0, size_t=0);
+
+    struct particle : tracers_obj2::tracer
+    {
+        double u;
+        double v;
+        double w;
+        double parcelFactor=1;
+        double xrk1=0;
+        double yrk1=0;
+        double zrk1=0;
+        double urk1=0;
+        double vrk1=0;
+        double wrk1=0;
+        double uf=0;
+        double vf=0;
+        double wf=0;
+        double shear_eff=0;
+        double shear_crit=0;
+        double drag=0;
+    };
+
+public:
+    particles_obj2(size_t=10, double=0.001, double=2650.0);
     virtual ~particles_obj2()=default;
 
     void erase(size_t);
     void erase_all();
 
-    size_t add(double,double,double,int,double=0,double=0,double=0,double=1,double=0,double=0,double=0,double=0,double=0,double=0); // expand when adding additional data
-    size_t add_entry(particles_obj2*,size_t);
+    size_t add_entry(particle);
     void add_obj(particles_obj2*);
 
 public:
@@ -49,19 +70,6 @@ public:
     /// @brief Average density of particle set
     const double density;
 
-    struct particle : tracers_obj2::tracer
-    {
-        double u;
-        double v;
-        double w;
-        double packingFactor;
-        double uf;
-        double vf;
-        double wf;
-        double shear_eff;
-        double shear_crit;
-        double drag;
-    };
     std::vector<particle> particles;
 };
 
