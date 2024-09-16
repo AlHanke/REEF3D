@@ -81,38 +81,38 @@ void ghostcell::para_particles_obj2(lexer* p, particles_obj2 s[6], particles_obj
     // Transfer data
     if(p->nb1>=0)
     {
-        MPI_Isend(s[0].particles.data(),send[0],MPI_INT,p->nb1,tag1,mpi_comm,&sreq1);
-        MPI_Irecv(r[0].particles.data(),recv[0],MPI_INT,p->nb1,tag4,mpi_comm,&rreq1);
+        MPI_Isend(s[0].particles.data(),send[0],MPI_PARTICLE,p->nb1,tag1,mpi_comm,&sreq1);
+        MPI_Irecv(r[0].particles.data(),recv[0],MPI_PARTICLE,p->nb1,tag4,mpi_comm,&rreq1);
 	}
 
     if(p->nb2>=0)
     {
-        MPI_Isend(s[1].particles.data(),send[1],MPI_INT,p->nb2,tag2,mpi_comm,&sreq2);
-        MPI_Irecv(r[1].particles.data(),recv[1],MPI_INT,p->nb2,tag3,mpi_comm,&rreq2);
+        MPI_Isend(s[1].particles.data(),send[1],MPI_PARTICLE,p->nb2,tag2,mpi_comm,&sreq2);
+        MPI_Irecv(r[1].particles.data(),recv[1],MPI_PARTICLE,p->nb2,tag3,mpi_comm,&rreq2);
 	}
 
     if(p->nb3>=0)
     {
-        MPI_Isend(s[2].particles.data(),send[2],MPI_INT,p->nb3,tag3,mpi_comm,&sreq3);
-        MPI_Irecv(r[2].particles.data(),recv[2],MPI_INT,p->nb3,tag2,mpi_comm,&rreq3);
+        MPI_Isend(s[2].particles.data(),send[2],MPI_PARTICLE,p->nb3,tag3,mpi_comm,&sreq3);
+        MPI_Irecv(r[2].particles.data(),recv[2],MPI_PARTICLE,p->nb3,tag2,mpi_comm,&rreq3);
 	}
 
     if(p->nb4>=0)
     {
-        MPI_Isend(s[3].particles.data(),send[3],MPI_INT,p->nb4,tag4,mpi_comm,&sreq4);
-        MPI_Irecv(r[3].particles.data(),recv[3],MPI_INT,p->nb4,tag1,mpi_comm,&rreq4);
+        MPI_Isend(s[3].particles.data(),send[3],MPI_PARTICLE,p->nb4,tag4,mpi_comm,&sreq4);
+        MPI_Irecv(r[3].particles.data(),recv[3],MPI_PARTICLE,p->nb4,tag1,mpi_comm,&rreq4);
 	}
 
     if(p->nb5>=0)
     {
-        MPI_Isend(s[4].particles.data(),send[4],MPI_INT,p->nb5,tag5,mpi_comm,&sreq5);
-        MPI_Irecv(r[4].particles.data(),recv[4],MPI_INT,p->nb5,tag6,mpi_comm,&rreq5);
+        MPI_Isend(s[4].particles.data(),send[4],MPI_PARTICLE,p->nb5,tag5,mpi_comm,&sreq5);
+        MPI_Irecv(r[4].particles.data(),recv[4],MPI_PARTICLE,p->nb5,tag6,mpi_comm,&rreq5);
 	}
 
     if(p->nb6>=0)
     {
-        MPI_Isend(s[5].particles.data(),send[5],MPI_INT,p->nb6,tag6,mpi_comm,&sreq6);
-        MPI_Irecv(r[5].particles.data(),recv[5],MPI_INT,p->nb6,tag5,mpi_comm,&rreq6);
+        MPI_Isend(s[5].particles.data(),send[5],MPI_PARTICLE,p->nb6,tag6,mpi_comm,&sreq6);
+        MPI_Irecv(r[5].particles.data(),recv[5],MPI_PARTICLE,p->nb6,tag5,mpi_comm,&rreq6);
 	}
 
     gcwait(p);
