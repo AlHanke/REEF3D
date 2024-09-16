@@ -76,7 +76,7 @@ void particles_obj2::add_obj(particles_obj2* obj)
 
 void particles_obj2::print(particle _particle)
 {
-    std::cout<<"Sending\n"<<_particle.x<<" "<<_particle.y<<" "<<_particle.z<<"\n"
+    std::cout<<"Particle info\n"<<_particle.x<<" "<<_particle.y<<" "<<_particle.z<<"\n"
     <<_particle.xrk1<<" "<<_particle.yrk1<<" "<<_particle.zrk1<<"\n"
     <<_particle.u<<" "<<_particle.v<<" "<<_particle.w<<"\n"
     <<_particle.urk1<<" "<<_particle.vrk1<<" "<<_particle.wrk1<<"\n"<<std::endl;

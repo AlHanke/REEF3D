@@ -31,37 +31,44 @@ Author: Alexander Hanke
 
 void partres::debug(lexer *p, fdm &a, ghostcell &pgc, particles_obj2 &PP, sediment_fdm &s)
 {
-    /*
-        PLAINLOOP
-        {
-            a.test(i,j,k) = cellSumTopo[IJK];
-            a.vof(i,j,k) = (s.tau_eff[IJ]>s.tau_crit[IJ]?-1:1);
-        }
-        double topoDist=0;
-        double u=0,v=0;
-        for(size_t n=0;n<PP.loopindex;n++)
-            if(PP.Flag[n]>INT32_MIN)
-            {
-                if(PP.Flag[n]==0)
-                {
-                    // PP.shear_eff[n]=p->ccslipol4(s.tau_eff,PP.X[n],PP.Y[n]);
-                    // PP.shear_crit[n]=p->ccslipol4(s.tau_crit,PP.X[n],PP.Y[n]);
-                }
 
-                topoDist=p->ccipol4_a(a.topo,PP.X[n],PP.Y[n],PP.Z[n]);
+    particles_obj2 Send[6]={particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),
+    particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density)};
+    particles_obj2 Recv[6]={particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),
+    particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density),particles_obj2(10,PP.d50,PP.density)};
 
-                if(topoDist<velDist*p->DZP[KP])
-                {
-                    u=p->ccipol1c(a.u,PP.X[n],PP.Y[n],PP.Z[n]+velDist*p->DZP[KP]-topoDist);
-                    v=p->ccipol2c(a.v,PP.X[n],PP.Y[n],PP.Z[n]+velDist*p->DZP[KP]-topoDist);
-                }
-                else
-                {
-                    u=p->ccipol1c(a.u,PP.X[n],PP.Y[n],PP.Z[n]);
-                    v=p->ccipol2c(a.v,PP.X[n],PP.Y[n],PP.Z[n]);
-                }
+    if(p->mpirank==0)
+    cout<<"Sending:"<<endl;
+    pgc.gcsync();
 
-                PP.Uf[n]=u;
-                PP.Vf[n]=v;
-            }*/
+    int scaler = p->mpirank+1;
+    PP.particles[0].xrk1=scaler;
+    PP.particles[0].yrk1=scaler+0.1;
+    PP.particles[0].zrk1=scaler+0.2;
+    PP.particles[0].u=scaler+0.3;
+    PP.particles[0].v=scaler+0.4;
+    PP.particles[0].w=scaler+0.5;
+    PP.particles[0].urk1=scaler+0.6;
+    PP.particles[0].vrk1=scaler+0.7;
+    PP.particles[0].wrk1=scaler+0.8;
+
+    Send[3].add_entry(PP.particles[0]);
+    cout<<p->mpirank+1<<"\n";
+    // PP.print(PP.particles[0]);
+    Send[3].print(Send[3].particles[0]);
+    cout<<flush;
+
+    pgc.gcsync();
+
+    pgc.para_particles_obj2(p,Send,Recv);
+
+    pgc.gcsync();
+    if(p->mpirank==0)
+    cout<<"Reciving:"<<endl;
+    pgc.gcsync();
+
+    cout<<"\n"<<p->mpirank+1<<"\n";
+    // for (int n=0;n<6;n++)
+    Recv[0].print(Recv[0].particles[0]);
+    cout<<flush;
 }
