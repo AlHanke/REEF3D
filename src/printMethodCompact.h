@@ -37,25 +37,53 @@ class printMethodCompact : public printMethod
         double *YN=nullptr;
         double *ZN=nullptr;
 
-        double* pressGlobal=nullptr;
-        double* uvelGlobal=nullptr;
-        double* vvelGlobal=nullptr;
-        double* wvelGlobal=nullptr;
-        double* topoGlobal=nullptr;
-        double* phiGlobal=nullptr;
-        double* eddyvGlobal=nullptr;
-        int* flagGlobal=nullptr;
-        int* flag5Global=nullptr;
+        double *  uvelGlobal=nullptr;
+        double ** uvel=nullptr;
+        double *  vvelGlobal=nullptr;
+        double ** vvel=nullptr;
+        double *  wvelGlobal=nullptr;
+        double ** wvel=nullptr;
 
-        double **press=nullptr;
-        double **uvel=nullptr;
-        double **vvel=nullptr;
-        double **wvel=nullptr;
-        double **topo=nullptr;
-        double **phi=nullptr;
-        double **eddyv=nullptr;
-        int **flag=nullptr;
-        int **flag5=nullptr;
+        double *  pressGlobal=nullptr;
+        double ** press=nullptr;
+        
+        double *  eddyvGlobal=nullptr;
+        double ** eddyv=nullptr;
+        
+        double *  phiGlobal=nullptr;
+        double ** phi=nullptr;
+
+        double *  rhoGlobal=nullptr;
+        double ** rho=nullptr;
+
+        double *  viscGlobal=nullptr;
+        double ** visc=nullptr;
+
+        double *  VOFGlobal=nullptr;
+        double ** VOF=nullptr;
+
+        double *  topoGlobal=nullptr;
+        double ** topo=nullptr;
+
+        double *  testGlobal=nullptr;
+        double ** test=nullptr;
+
+        double *  solidGlobal=nullptr;
+        double ** solid=nullptr;
+
+        double *  fbGlobal=nullptr;
+        double ** fb=nullptr;
+
+        double *  walldGlobal=nullptr;
+        double ** walld=nullptr;
+
+        
+        int *  flagGlobal=nullptr;
+        int ** flag=nullptr;
+        
+        int *  flag5Global=nullptr;
+        int ** flag5=nullptr;
+        
         
         int *globalSendCounts=nullptr;
         int *displs=nullptr;

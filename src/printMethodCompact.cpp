@@ -110,7 +110,22 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
         press = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         eddyv = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         phi = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-        topo = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        if(p->P24==1 && p->F300==0)
+            rho = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        if(p->P71==1)
+            visc = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        if(p->P72==1)
+            VOF = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        if(p->P27==1)
+            topo = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        if(p->P23==1)
+            test = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        if(p->P25==1)
+            solid = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        if(p->P28==1)
+            fb = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        if(p->P29==1)
+            walld = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
 
         // ---------------------------------------------------------
         // Pre-calulate offsets
@@ -124,29 +139,77 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
         // Nothing besdides to following is implemented for printing
 
         //velocities
-        vtkOffsets[n]=vtkOffsets[n-1]+4+3*4*(pointNum);
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*3*(pointNum);
         ++n;
         //pressure
-        vtkOffsets[n]=vtkOffsets[n-1]+4+4*(pointNum);
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
         ++n;
         //eddyv
-        vtkOffsets[n]=vtkOffsets[n-1]+4+4*(pointNum);
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
         ++n;
         //phi
-        vtkOffsets[n]=vtkOffsets[n-1]+4+4*(pointNum);
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
         ++n;
+        // rho
+        if(p->P24==1 && p->F300==0)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
+            ++n;
+        }
+        // viscosity
+        if(p->P71==1)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
+            ++n;
+        }
+        // VOF
+        if(p->P72==1)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
+            ++n;
+        }
+        // topo
+        if(p->P27==1)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
+            ++n;
+        }
+        // test
+        if(p->P23==1)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
+            ++n;
+        }
         //elevation
-        vtkOffsets[n]=vtkOffsets[n-1]+4+4*(pointNum);
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
         ++n;
+        // solid
+        if(p->P25==1)
+        { 
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
+            ++n;
+        }
+        // floating
+        if(p->P28==1)
+        {
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
+            ++n;
+        }
+        // walldist
+        if(p->P29==1)
+        {   
+            vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(pointNum);
+            ++n;
+        }
 
         //x
-        vtkOffsets[n]=vtkOffsets[n-1]+4+4*(p->gknox+1);
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(p->gknox+1);
         ++n;
         //y
-        vtkOffsets[n]=vtkOffsets[n-1]+4+4*(p->gknoy+1); 
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(p->gknoy+1); 
         ++n;
         //z
-        vtkOffsets[n]=vtkOffsets[n-1]+4+4*(p->gknoz+1);
+        vtkOffsets[n]=vtkOffsets[n-1]+sizeof(int)+sizeof(float)*(p->gknoz+1);
     }
 
     int recvcount = p->knox+1;
@@ -208,13 +271,30 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
             displs[i] = displs[i-1] + globalSendCounts[i-1];
             counter += globalSendCounts[i];
         }
-        pressGlobal = new double[counter];
         uvelGlobal = new double[counter];
         vvelGlobal = new double[counter];
         wvelGlobal = new double[counter];
-        topoGlobal = new double[counter];
-        phiGlobal = new double[counter];
+        pressGlobal = new double[counter];
         eddyvGlobal = new double[counter];
+        phiGlobal = new double[counter];
+
+        if(p->P24==1 && p->F300==0)
+            rhoGlobal = new double[counter];
+        if(p->P71==1)
+            viscGlobal = new double[counter];
+        if(p->P72==1)
+            VOFGlobal = new double[counter];
+        if(p->P27==1)
+            topoGlobal = new double[counter];
+        if(p->P23==1)
+            testGlobal = new double[counter];
+        if(p->P25==1)
+            solidGlobal = new double[counter];
+        if(p->P28==1)
+            fbGlobal = new double[counter];
+        if(p->P29==1)
+            walldGlobal = new double[counter];
+        
         flagGlobal = new int[counter];
         flag5Global = new int[counter];
     }
@@ -258,15 +338,34 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
                             indexL = (i+p->margin)*(gextent[3+6*n]-gextent[2+6*n]+2*p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + (j+p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + k+p->margin;
                             indexL += displs[n];
                             indexLG = (k+1+gextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+gextent[2+6*n])*(p->gknox+2)+(i+1+gextent[0+6*n]);
-                            press[indexLG]=&pressGlobal[indexL];
-                            uvel[indexLG]=&uvelGlobal[indexL];
-                            vvel[indexLG]=&vvelGlobal[indexL];
-                            wvel[indexLG]=&wvelGlobal[indexL];
-                            topo[indexLG]=&topoGlobal[indexL];
-                            phi[indexLG]=&phiGlobal[indexL];
-                            eddyv[indexLG]=&eddyvGlobal[indexL];
-                            flag[indexLG]=&flagGlobal[indexL];
-                            flag5[indexLG]=&flag5Global[indexL];
+                            
+                            uvel[indexLG] = &uvelGlobal[indexL];
+                            vvel[indexLG] = &vvelGlobal[indexL];
+                            wvel[indexLG] = &wvelGlobal[indexL];
+
+                            press[indexLG] = &pressGlobal[indexL];
+                            eddyv[indexLG] = &eddyvGlobal[indexL];
+                            phi[indexLG] = &phiGlobal[indexL];
+
+                            if(p->P24==1 && p->F300==0)
+                                rho[indexLG] = &rhoGlobal[indexL];
+                            if(p->P71==1)
+                                visc[indexLG] = &viscGlobal[indexL];
+                            if(p->P72==1)
+                                VOF[indexLG] = &VOFGlobal[indexL];
+                            if(p->P27==1)
+                                topo[indexLG] = &topoGlobal[indexL];
+                            if(p->P23==1)
+                                test[indexLG] = &testGlobal[indexL];
+                            if(p->P25==1)
+                                solid[indexLG] = &solidGlobal[indexL];
+                            if(p->P28==1)
+                                fb[indexLG] = &fbGlobal[indexL];
+                            if(p->P29==1)
+                                walld[indexLG] = &walldGlobal[indexL];
+
+                            flag[indexLG] = &flagGlobal[indexL];
+                            flag5[indexLG] = &flag5Global[indexL];
                         }
                     }
                 }
@@ -279,13 +378,32 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
                         {
                             indexL = (i+p->margin)*(gextent[3+6*n]-gextent[2+6*n]+2*p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + (j+p->margin)*(gextent[5+6*n]-gextent[4+6*n]+2*p->margin) + k+p->margin;
                             indexLG = (k+1+gextent[4+6*n])*(p->gknox+2)*(p->gknoy+2)+(j+1+gextent[2+6*n])*(p->gknox+2)+(i+1+gextent[0+6*n]);
-                            press[indexLG]=&a->press.V[indexL];
-                            uvel[indexLG]=&a->u.V[indexL];
-                            vvel[indexLG]=&a->v.V[indexL];
-                            wvel[indexLG]=&a->w.V[indexL];
-                            topo[indexLG]=&a->topo.V[indexL];
-                            phi[indexLG]=&a->phi.V[indexL];
-                            eddyv[indexLG]=&a->eddyv.V[indexL];
+                            
+                            uvel[indexLG] = &a->u.V[indexL];
+                            vvel[indexLG] = &a->v.V[indexL];
+                            wvel[indexLG] = &a->w.V[indexL];
+                            
+                            press[indexLG] = &a->press.V[indexL];
+                            eddyv[indexLG] = &a->eddyv.V[indexL];
+                            phi[indexLG] = &a->phi.V[indexL];
+
+                            if(p->P24==1 && p->F300==0)
+                                rho[indexLG] = &a->ro.V[indexL];
+                            if(p->P71==1)
+                                visc[indexLG] = &a->visc.V[indexL];
+                            if(p->P72==1)
+                                VOF[indexLG] = &a->vof.V[indexL];
+                            if(p->P27==1)
+                                topo[indexLG]=&a->topo.V[indexL];
+                            if(p->P23==1)
+                                test[indexLG]=&a->test.V[indexL];
+                            if(p->P25==1)
+                                solid[indexLG]=&a->solid.V[indexL];
+                            if(p->P28==1)
+                                fb[indexLG]=&a->fb.V[indexL];
+                            if(p->P29==1)
+                                walld[indexLG]=&a->walld.V[indexL];
+                            
                             flag[indexLG]=&p->flag[indexL];
                             flag5[indexLG]=&p->flag5[indexL];
                         }
@@ -304,13 +422,31 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
 
 int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging *pmean, turbulence *pturb, heat *pheat, multiphase *pmp, vorticity *pvort, data *pdata, concentration *pconc, sediment *psed)
 {
-    pgc->gatherv_double(a->press.V,localSendCount,pressGlobal,globalSendCounts,displs);
     pgc->gatherv_double(a->u.V,localSendCount,uvelGlobal,globalSendCounts,displs);
     pgc->gatherv_double(a->v.V,localSendCount,vvelGlobal,globalSendCounts,displs);
     pgc->gatherv_double(a->w.V,localSendCount,wvelGlobal,globalSendCounts,displs);
-    pgc->gatherv_double(a->topo.V,localSendCount,topoGlobal,globalSendCounts,displs);
-    pgc->gatherv_double(a->phi.V,localSendCount,phiGlobal,globalSendCounts,displs);
+
+    pgc->gatherv_double(a->press.V,localSendCount,pressGlobal,globalSendCounts,displs);
     pgc->gatherv_double(a->eddyv.V,localSendCount,eddyvGlobal,globalSendCounts,displs);
+    pgc->gatherv_double(a->phi.V,localSendCount,phiGlobal,globalSendCounts,displs);
+
+    if(p->P24==1 && p->F300==0)
+        pgc->gatherv_double(a->ro.V,localSendCount,topoGlobal,globalSendCounts,displs);
+    if(p->P71==1)
+        pgc->gatherv_double(a->visc.V,localSendCount,topoGlobal,globalSendCounts,displs);
+    if(p->P72==1)
+        pgc->gatherv_double(a->vof.V,localSendCount,topoGlobal,globalSendCounts,displs);
+    if(p->P27==1)
+        pgc->gatherv_double(a->topo.V,localSendCount,topoGlobal,globalSendCounts,displs);
+    if(p->P23==1)
+        pgc->gatherv_double(a->test.V,localSendCount,topoGlobal,globalSendCounts,displs);
+    if(p->P25==1)
+        pgc->gatherv_double(a->solid.V,localSendCount,topoGlobal,globalSendCounts,displs);
+    if(p->P28==1)
+        pgc->gatherv_double(a->fb.V,localSendCount,topoGlobal,globalSendCounts,displs);
+    if(p->P29==1)
+        pgc->gatherv_double(a->walld.V,localSendCount,topoGlobal,globalSendCounts,displs);
+    
     pgc->gatherv_int(p->flag,localSendCount,flagGlobal,globalSendCounts,displs);
     pgc->gatherv_int(p->flag5,localSendCount,flag5Global,globalSendCounts,displs);
 
@@ -339,21 +475,57 @@ int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging 
             }
             result<<"<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n";
             result<<"<PointData>\n";
-            result<<"\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
+            result<<"\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
-            result<<"\t<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
+            result<<"\t<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
-            result<<"\t<DataArray type=\"Float32\" Name=\"eddyv\"  format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
+            result<<"\t<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
-            result<<"\t<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
+            result<<"\t<DataArray type=\"Float32\" Name=\"phi\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
-            result<<"\t<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
+            if(p->P24==1 && p->F300==0)
+            {
+                result<<"\t<DataArray type=\"Float32\" Name=\"rho\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+                ++n;
+            }
+            if(p->P71==1)
+            {
+                result<<"\t<DataArray type=\"Float32\" Name=\"viscosity\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+                ++n;
+            }
+            if(p->P72==1)
+            {
+                result<<"\t<DataArray type=\"Float32\" Name=\"VOF\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+                ++n;
+            }
+            if(p->P27==1)
+            {
+                result<<"\t<DataArray type=\"Float32\" Name=\"topo\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+                ++n;
+            }
+            if(p->P23==1)
+            {
+                result<<"\t<DataArray type=\"Float32\" Name=\"test\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+                ++n;
+            }
+            result<<"\t<DataArray type=\"Float32\" Name=\"elevation\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
+            if(p->P25==1)
+            { 
+                result<<"\t<DataArray type=\"Float32\" Name=\"solid\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+                ++n;
+            }
+            if(p->P28==1)
+            {
+                result<<"\t<DataArray type=\"Float32\" Name=\"floating\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+                ++n;
+            }
+            if(p->P29==1)
+            {   
+                result<<"\t<DataArray type=\"Float32\" Name=\"walldist\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+                ++n;
+            }
             result<<"</PointData>\n";
-            //  result<<"<CellData>\n";
-            // <<"\t<DataArray type=\"Float32\" Name=\"Debug\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\" />\n";
-            // ++n;
-            // result<<"</CellData>\n";
             result<<"<Coordinates>\n";
             result<<"\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
@@ -411,6 +583,71 @@ int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging 
                         ffn=float(p->ipol4phi(topo,phi));
                         result.write((char*)&ffn, sizeof (float));
                     }
+            // rho
+            if(p->P24==1 && p->F300==0)
+            {
+                iin=4*(pointNum);
+                result.write((char*)&iin, sizeof (int));
+                for(k=-1; k<p->gknoz; ++k)
+                    for(j=-1; j<p->gknoy; ++j)
+                        for(i=-1; i<p->gknox; ++i)
+                        {
+                            ffn=float(p->ipol4_a(rho));
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+            }
+            // viscosity
+            if(p->P71==1)
+            {
+                iin=4*(pointNum);
+                result.write((char*)&iin, sizeof (int));
+                for(k=-1; k<p->gknoz; ++k)
+                    for(j=-1; j<p->gknoy; ++j)
+                        for(i=-1; i<p->gknox; ++i)
+                        {
+                            ffn=float(p->ipol4_a(visc));
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+            }
+            // VOF
+            if(p->P72==1)
+            {
+                iin=4*(pointNum);
+                result.write((char*)&iin, sizeof (int));
+                for(k=-1; k<p->gknoz; ++k)
+                    for(j=-1; j<p->gknoy; ++j)
+                        for(i=-1; i<p->gknox; ++i)
+                        {
+                            ffn=float(p->ipol4_a(VOF));
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+            }
+            // topo
+            if(p->P27==1)
+            {
+                iin=4*(pointNum);
+                result.write((char*)&iin, sizeof (int));
+                for(k=-1; k<p->gknoz; ++k)
+                    for(j=-1; j<p->gknoy; ++j)
+                        for(i=-1; i<p->gknox; ++i)
+                        {
+                            ffn=float(p->ipol4_a(topo));
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+            }
+            // test
+            if(p->P23==1)
+            {
+                iin=4*(pointNum);
+                result.write((char*)&iin, sizeof (int));
+                for(k=-1; k<p->gknoz; ++k)
+                    for(j=-1; j<p->gknoy; ++j)
+                        for(i=-1; i<p->gknox; ++i)
+                        {
+                            ffn=float(p->ipol4_a(test));
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+            }
             //  Elevation
             iin=4*(pointNum);
             result.write((char*)&iin, sizeof (int));
@@ -421,6 +658,45 @@ int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging 
                         ffn=float(ZN[k]+(ZN[k+1]-ZN[k]));
                         result.write((char*)&ffn, sizeof (float));
                     }
+            // solid
+            if(p->P25==1)
+            {
+                iin=4*(pointNum);
+                result.write((char*)&iin, sizeof (int));
+                for(k=-1; k<p->gknoz; ++k)
+                    for(j=-1; j<p->gknoy; ++j)
+                        for(i=-1; i<p->gknox; ++i)
+                        {
+                            ffn=float(p->ipol4_a(solid));
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+            }
+            // floating
+            if(p->P28==1)
+            {
+                iin=4*(pointNum);
+                result.write((char*)&iin, sizeof (int));
+                for(k=-1; k<p->gknoz; ++k)
+                    for(j=-1; j<p->gknoy; ++j)
+                        for(i=-1; i<p->gknox; ++i)
+                        {
+                            ffn=float(p->ipol4_a(fb));
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+            }
+            // walldist
+            if(p->P29==1)
+            {
+                iin=4*(pointNum);
+                result.write((char*)&iin, sizeof (int));
+                for(k=-1; k<p->gknoz; ++k)
+                    for(j=-1; j<p->gknoy; ++j)
+                        for(i=-1; i<p->gknox; ++i)
+                        {
+                            ffn=float(p->ipol4_a(walld));
+                            result.write((char*)&ffn, sizeof (float));
+                        }
+            }
 
             // x
             iin=4*(p->gknox+1);
