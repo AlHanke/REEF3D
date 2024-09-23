@@ -64,7 +64,8 @@ public:
     double ipol2(double**,int**,int**);
     double ipol3(field&);
     double ipol3(double**,int**,int**);
-    double ipol4(field&);    
+    double ipol4(field&);
+    double ipol4(double**,int**); 
 
 	double ipol4ro(fdm*,field&);
     double ipol4phi(fdm*,field&);

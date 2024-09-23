@@ -540,6 +540,48 @@ double interpolation::ipol4( field& b)
 
     return value;
 }
+double interpolation::ipol4(double **b, int** flag4)
+{
+    v1=v2=v3=v4=v5=v6=v7=v8=0.0;
+    int indexG;
+    value=0;
+    
+    if(p->j_dir==0)
+    {
+    jj=j;
+    j=0;
+    pip=4;
+    for(kk=0; kk<2; ++kk)
+    for(ii=0; ii<2; ++ii)
+    {
+        indexG = (k+kk+1)*(p->gknox+2)*(p->gknoy+2)+(j+jj+1)*(p->gknox+2)+(i+ii+1);
+        if(*flag4[indexG]>0)
+        value += *b[indexG];
+    }
+    pip=0;
+    j=jj;
+    
+    value=0.25*(v1+v2+v3+v4);
+    }
+    
+    if(p->j_dir==1)
+    {
+    pip=4;
+    for(kk=0; kk<2; ++kk)
+    for(jj=0; jj<2; ++jj)
+    for(ii=0; ii<2; ++ii)
+    {
+        indexG = (k+kk+1)*(p->gknox+2)*(p->gknoy+2)+(j+jj+1)*(p->gknox+2)+(i+ii+1);
+        if(*flag4[indexG]>0)
+        value += *b[indexG];
+    }
+    pip=0;
+
+    value=0.125*(v1+v2+v3+v4+v5+v6+v7+v8);
+    }
+
+    return value;
+}
 
 double interpolation::ipol4press( field& b)
 {
