@@ -80,6 +80,9 @@ class printMethodCompact : public printMethod
         
         int *  flagGlobal=nullptr;
         int ** flag=nullptr;
+
+        int *  flag4Global=nullptr;
+        int ** flag4=nullptr;
         
         int *  flag5Global=nullptr;
         int ** flag5=nullptr;

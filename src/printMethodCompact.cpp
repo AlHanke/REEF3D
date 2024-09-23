@@ -60,6 +60,7 @@ printMethodCompact::~printMethodCompact()
     delete [] phi;
     delete [] topo;
     delete [] flag;
+    delete [] flag4;
     delete [] flag5;
 
     delete [] pressGlobal;
@@ -98,6 +99,7 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
         pointNum = (p->gknox+1)*(p->gknoy+1)*(p->gknoz+1);
 
         flag = new int*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        flag4 = new int*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         flag5 = new int*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
 
         // ---------------------------------------------------------
@@ -110,14 +112,13 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
         press = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         eddyv = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         phi = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
+        topo = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         if(p->P24==1 && p->F300==0)
             rho = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         if(p->P71==1)
             visc = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         if(p->P72==1)
             VOF = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
-        if(p->P27==1)
-            topo = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         if(p->P23==1)
             test = new double*[(p->gknox+2)*(p->gknoy+2)*(p->gknoz+2)];
         if(p->P25==1)
@@ -277,6 +278,7 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
         pressGlobal = new double[counter];
         eddyvGlobal = new double[counter];
         phiGlobal = new double[counter];
+        topoGlobal = new double[counter];
 
         if(p->P24==1 && p->F300==0)
             rhoGlobal = new double[counter];
@@ -284,8 +286,6 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
             viscGlobal = new double[counter];
         if(p->P72==1)
             VOFGlobal = new double[counter];
-        if(p->P27==1)
-            topoGlobal = new double[counter];
         if(p->P23==1)
             testGlobal = new double[counter];
         if(p->P25==1)
@@ -296,6 +296,7 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
             walldGlobal = new double[counter];
         
         flagGlobal = new int[counter];
+        flag4Global = new int[counter];
         flag5Global = new int[counter];
     }
 
@@ -346,15 +347,14 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
                             press[indexLG] = &pressGlobal[indexL];
                             eddyv[indexLG] = &eddyvGlobal[indexL];
                             phi[indexLG] = &phiGlobal[indexL];
+                            topo[indexLG] = &topoGlobal[indexL];
 
                             if(p->P24==1 && p->F300==0)
                                 rho[indexLG] = &rhoGlobal[indexL];
                             if(p->P71==1)
                                 visc[indexLG] = &viscGlobal[indexL];
                             if(p->P72==1)
-                                VOF[indexLG] = &VOFGlobal[indexL];
-                            if(p->P27==1)
-                                topo[indexLG] = &topoGlobal[indexL];
+                                VOF[indexLG] = &VOFGlobal[indexL];                                
                             if(p->P23==1)
                                 test[indexLG] = &testGlobal[indexL];
                             if(p->P25==1)
@@ -365,6 +365,7 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
                                 walld[indexLG] = &walldGlobal[indexL];
 
                             flag[indexLG] = &flagGlobal[indexL];
+                            flag4[indexLG] = &flag4Global[indexL];
                             flag5[indexLG] = &flag5Global[indexL];
                         }
                     }
@@ -386,6 +387,7 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
                             press[indexLG] = &a->press.V[indexL];
                             eddyv[indexLG] = &a->eddyv.V[indexL];
                             phi[indexLG] = &a->phi.V[indexL];
+                            topo[indexLG]=&a->topo.V[indexL];
 
                             if(p->P24==1 && p->F300==0)
                                 rho[indexLG] = &a->ro.V[indexL];
@@ -393,8 +395,6 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
                                 visc[indexLG] = &a->visc.V[indexL];
                             if(p->P72==1)
                                 VOF[indexLG] = &a->vof.V[indexL];
-                            if(p->P27==1)
-                                topo[indexLG]=&a->topo.V[indexL];
                             if(p->P23==1)
                                 test[indexLG]=&a->test.V[indexL];
                             if(p->P25==1)
@@ -405,6 +405,7 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
                                 walld[indexLG]=&a->walld.V[indexL];
                             
                             flag[indexLG]=&p->flag[indexL];
+                            flag4[indexLG]=&p->flag4[indexL];
                             flag5[indexLG]=&p->flag5[indexL];
                         }
                     }
@@ -430,24 +431,25 @@ int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging 
     pgc->gatherv_double(a->eddyv.V,localSendCount,eddyvGlobal,globalSendCounts,displs);
     pgc->gatherv_double(a->phi.V,localSendCount,phiGlobal,globalSendCounts,displs);
 
+    pgc->gatherv_double(a->topo.V,localSendCount,topoGlobal,globalSendCounts,displs);
+
     if(p->P24==1 && p->F300==0)
-        pgc->gatherv_double(a->ro.V,localSendCount,topoGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->ro.V,localSendCount,rhoGlobal,globalSendCounts,displs);
     if(p->P71==1)
-        pgc->gatherv_double(a->visc.V,localSendCount,topoGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->visc.V,localSendCount,viscGlobal,globalSendCounts,displs);
     if(p->P72==1)
-        pgc->gatherv_double(a->vof.V,localSendCount,topoGlobal,globalSendCounts,displs);
-    if(p->P27==1)
-        pgc->gatherv_double(a->topo.V,localSendCount,topoGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->vof.V,localSendCount,VOFGlobal,globalSendCounts,displs);
     if(p->P23==1)
-        pgc->gatherv_double(a->test.V,localSendCount,topoGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->test.V,localSendCount,testGlobal,globalSendCounts,displs);
     if(p->P25==1)
-        pgc->gatherv_double(a->solid.V,localSendCount,topoGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->solid.V,localSendCount,solidGlobal,globalSendCounts,displs);
     if(p->P28==1)
-        pgc->gatherv_double(a->fb.V,localSendCount,topoGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->fb.V,localSendCount,fbGlobal,globalSendCounts,displs);
     if(p->P29==1)
-        pgc->gatherv_double(a->walld.V,localSendCount,topoGlobal,globalSendCounts,displs);
+        pgc->gatherv_double(a->walld.V,localSendCount,walldGlobal,globalSendCounts,displs);
     
     pgc->gatherv_int(p->flag,localSendCount,flagGlobal,globalSendCounts,displs);
+    pgc->gatherv_int(p->flag4,localSendCount,flag4Global,globalSendCounts,displs);
     pgc->gatherv_int(p->flag5,localSendCount,flag5Global,globalSendCounts,displs);
 
     int returnValue = 0;
@@ -605,7 +607,7 @@ int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging 
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
-                            ffn=float(p->ipol4_a(visc));
+                            ffn=float(p->ipol4(visc,flag4));
                             result.write((char*)&ffn, sizeof (float));
                         }
             }
@@ -618,7 +620,7 @@ int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging 
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
-                            ffn=float(p->ipol4_a(VOF));
+                            ffn=float(p->ipol4(VOF,flag4));
                             result.write((char*)&ffn, sizeof (float));
                         }
             }
