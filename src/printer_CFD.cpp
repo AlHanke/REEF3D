@@ -1415,9 +1415,9 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         pgc->start2(p,a->v,115);
         pgc->start3(p,a->w,116);
 
-        pgc->dgcpol(p,a->u,p->dgc1,p->dgc1_count,11);
-        pgc->dgcpol(p,a->v,p->dgc2,p->dgc2_count,12);
-        pgc->dgcpol(p,a->w,p->dgc3,p->dgc3_count,13);
+        // pgc->dgcpol(p,a->u,p->dgc1,p->dgc1_count,11);
+        // pgc->dgcpol(p,a->v,p->dgc2,p->dgc2_count,12);
+        // pgc->dgcpol(p,a->w,p->dgc3,p->dgc3_count,13);
         pgc->start4a(p,a->topo,150);
 
         a->u.ggcpol(p);
