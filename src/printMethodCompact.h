@@ -74,8 +74,8 @@ class printMethodCompact : public printMethod
         double *  fbGlobal=nullptr;
         double ** fb=nullptr;
 
-        double *  walldGlobal=nullptr;
-        double ** walld=nullptr;
+        // double *  walldGlobal=nullptr;
+        // double ** walld=nullptr;
 
         
         int *  flagGlobal=nullptr;
