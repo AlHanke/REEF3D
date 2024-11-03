@@ -36,6 +36,7 @@ Author: Hans Bihs
 #include "sediment.h"
 
 #include <sys/stat.h>
+#include <chrono>
 
 printMethodCompact::printMethodCompact(lexer *p) : printMethod(p)
 {
@@ -423,6 +424,9 @@ void printMethodCompact::setup(lexer* p, fdm* a, ghostcell* pgc, print_averaging
 
 int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging *pmean, turbulence *pturb, heat *pheat, multiphase *pmp, vorticity *pvort, data *pdata, concentration *pconc, sediment *psed)
 {
+    std::chrono::system_clock::time_point start,end;
+    if(p->mpirank==0)
+        start = std::chrono::system_clock::now();
     pgc->gatherv_double(a->u.V,localSendCount,uvelGlobal,globalSendCounts,displs);
     pgc->gatherv_double(a->v.V,localSendCount,vvelGlobal,globalSendCounts,displs);
     pgc->gatherv_double(a->w.V,localSendCount,wvelGlobal,globalSendCounts,displs);
@@ -452,6 +456,13 @@ int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging 
     pgc->gatherv_int(p->flag4,localSendCount,flag4Global,globalSendCounts,displs);
     pgc->gatherv_int(p->flag5,localSendCount,flag5Global,globalSendCounts,displs);
 
+    if(p->mpirank==0)
+    {
+        end = std::chrono::system_clock::now();
+        auto elapsed = end - start;
+        std::cout << "Communication time: "<<elapsed.count() << '\n';
+    }
+
     int returnValue = 0;
     if(p->mpirank==0)
     {
@@ -463,6 +474,7 @@ int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging 
         sprintf(name,"./REEF3D_CFD_VTRC/REEF3D-CFD-%08i.vtr",num);
         n=0;
         ofstream result;
+        start = std::chrono::system_clock::now();
         result.open(name,ios::binary);
         if(result.is_open())
         {
@@ -729,6 +741,9 @@ int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging 
             <<"</VTKFile>"<<flush;
 
             result.close();
+            end = std::chrono::system_clock::now();
+            auto elapsed = end - start;
+            std::cout << "File print time time: "<<elapsed.count() << std::endl;
         }
         else
             returnValue = 1;
