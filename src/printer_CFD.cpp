@@ -883,6 +883,7 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
             outputMethod->setup(p,a,pgc,pmean,pturb,pheat,pmp,pvort,pdata,pconc,psed);
             printerMethodInitialized = true;
         }
+        pgc->gcsync();
 
         std::chrono::system_clock::time_point start,end;
         if(p->mpirank==0)
