@@ -38,6 +38,9 @@ Author: Hans Bihs
 #include <sys/stat.h>
 #include <chrono>
 
+#include <cstring>
+#include <sstream>
+
 printMethodCompact::printMethodCompact(lexer *p) : printMethod(p)
 {
     if(p->mpirank==0)
@@ -466,287 +469,326 @@ int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging 
     int returnValue = 0;
     if(p->mpirank==0)
     {
-        int num=0;
-        if(p->P15==1)
-            num = p->printcount;
-        if(p->P15==2)
-            num = p->count;
-        sprintf(name,"./REEF3D_CFD_VTRC/REEF3D-CFD-%08i.vtr",num);
-        n=0;
-        ofstream result;
+        std::vector<char> buffer;
         start = std::chrono::system_clock::now();
-        result.open(name,ios::binary);
-        if(result.is_open())
+        std::stringstream result;
+        n=0;
+        result<<"<?xml version=\"1.0\"?>\n"
+        <<"<VTKFile type=\"RectilinearGrid\" version=\"1.0\" byte_order=\"LittleEndian\">\n"
+        <<"<RectilinearGrid WholeExtent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\" GhostLevel=\"0\" Origin=\"0 0 0\" Spacing=\"1 1 1\">\n";
+        if(p->P16==1)
         {
-            result<<"<?xml version=\"1.0\"?>\n"
-            <<"<VTKFile type=\"RectilinearGrid\" version=\"1.0\" byte_order=\"LittleEndian\">\n"
-            <<"<RectilinearGrid WholeExtent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\" GhostLevel=\"0\" Origin=\"0 0 0\" Spacing=\"1 1 1\">\n";
-            if(p->P16==1)
-            {
-            result<<"<FieldData>\n";
-            result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<std::setprecision(7)<<p->simtime<<"</DataArray>\n";
-            result<<"</FieldData>\n";
-            }
-            result<<"<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n";
-            result<<"<PointData>\n";
-            result<<"\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        result<<"<FieldData>\n";
+        result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<std::setprecision(7)<<p->simtime<<"</DataArray>\n";
+        result<<"</FieldData>\n";
+        }
+        result<<"<Piece Extent=\"0 "<<p->gknox<<" 0 "<<p->gknoy<<" 0 "<<p->gknoz<<"\">\n";
+        result<<"<PointData>\n";
+        result<<"\t<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        ++n;
+        result<<"\t<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        ++n;
+        result<<"\t<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        ++n;
+        result<<"\t<DataArray type=\"Float32\" Name=\"phi\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        ++n;
+        if(p->P24==1 && p->F300==0)
+        {
+            result<<"\t<DataArray type=\"Float32\" Name=\"rho\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
-            result<<"\t<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        }
+        if(p->P71==1)
+        {
+            result<<"\t<DataArray type=\"Float32\" Name=\"viscosity\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
-            result<<"\t<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        }
+        if(p->P72==1)
+        {
+            result<<"\t<DataArray type=\"Float32\" Name=\"VOF\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
-            result<<"\t<DataArray type=\"Float32\" Name=\"phi\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        }
+        if(p->P27==1)
+        {
+            result<<"\t<DataArray type=\"Float32\" Name=\"topo\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
-            if(p->P24==1 && p->F300==0)
-            {
-                result<<"\t<DataArray type=\"Float32\" Name=\"rho\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-                ++n;
-            }
-            if(p->P71==1)
-            {
-                result<<"\t<DataArray type=\"Float32\" Name=\"viscosity\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-                ++n;
-            }
-            if(p->P72==1)
-            {
-                result<<"\t<DataArray type=\"Float32\" Name=\"VOF\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-                ++n;
-            }
-            if(p->P27==1)
-            {
-                result<<"\t<DataArray type=\"Float32\" Name=\"topo\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-                ++n;
-            }
-            if(p->P23==1)
-            {
-                result<<"\t<DataArray type=\"Float32\" Name=\"test\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-                ++n;
-            }
-            result<<"\t<DataArray type=\"Float32\" Name=\"elevation\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        }
+        if(p->P23==1)
+        {
+            result<<"\t<DataArray type=\"Float32\" Name=\"test\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
-            if(p->P25==1)
-            { 
-                result<<"\t<DataArray type=\"Float32\" Name=\"solid\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-                ++n;
-            }
-            if(p->P28==1)
-            {
-                result<<"\t<DataArray type=\"Float32\" Name=\"floating\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-                ++n;
-            }
-            // if(p->P29==1)
-            // {   
-            //     result<<"\t<DataArray type=\"Float32\" Name=\"walldist\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-            //     ++n;
-            // }
-            result<<"</PointData>\n";
-            result<<"<Coordinates>\n";
-            result<<"\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        }
+        result<<"\t<DataArray type=\"Float32\" Name=\"elevation\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        ++n;
+        if(p->P25==1)
+        { 
+            result<<"\t<DataArray type=\"Float32\" Name=\"solid\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
-            result<<"\t<DataArray type=\"Float32\" Name=\"Y\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        }
+        if(p->P28==1)
+        {
+            result<<"\t<DataArray type=\"Float32\" Name=\"floating\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
             ++n;
-            result<<"\t<DataArray type=\"Float32\" Name=\"Z\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
-            ++n;
-            result<<"</Coordinates>\n"
-            <<"</Piece>\n"
-            <<"</RectilinearGrid>\n"
-            <<"<AppendedData encoding=\"raw\">\n_";
+        }
+        // if(p->P29==1)
+        // {   
+        //     result<<"\t<DataArray type=\"Float32\" Name=\"walldist\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        //     ++n;
+        // }
+        result<<"</PointData>\n";
+        result<<"<Coordinates>\n";
+        result<<"\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        ++n;
+        result<<"\t<DataArray type=\"Float32\" Name=\"Y\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        ++n;
+        result<<"\t<DataArray type=\"Float32\" Name=\"Z\" format=\"appended\" offset=\""<<vtkOffsets[n]<<"\"/>\n";
+        ++n;
+        result<<"</Coordinates>\n"
+        <<"</Piece>\n"
+        <<"</RectilinearGrid>\n"
+        <<"<AppendedData encoding=\"raw\">\n_";
+
+        int m=result.str().length();
+        buffer.resize(m+vtkOffsets[n]+27);
+        std::memcpy(&buffer[0],result.str().data(),m);
+        
+
             //  Velocities
             iin=3*4*(pointNum);
-            result.write((char*)&iin, sizeof (int));
+            std::memcpy(&buffer[m],&iin,sizeof(int));
+            m+=sizeof(int);
             for(k=-1; k<p->gknoz; ++k)
                 for(j=-1; j<p->gknoy; ++j)
                     for(i=-1; i<p->gknox; ++i)
                     {
                         ffn=float(p->ipol1(uvel,flag,flag5));//u
-                        result.write((char*)&ffn, sizeof (float));
+                        std::memcpy(&buffer[m],&ffn,sizeof(float));
+                        m+=sizeof(float);
 
                         ffn=float(p->ipol2(vvel,flag,flag5));//v
-                        result.write((char*)&ffn, sizeof (float));
+                        std::memcpy(&buffer[m],&ffn,sizeof(float));
+                        m+=sizeof(float);
 
                         ffn=float(p->ipol3(wvel,flag,flag5));//w
-                        result.write((char*)&ffn, sizeof (float));
+                        std::memcpy(&buffer[m],&ffn,sizeof(float));
+                        m+=sizeof(float);
                     }
             //  Pressure
             iin=4*(pointNum);
-            result.write((char*)&iin, sizeof (int));
+            std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
             for(k=-1; k<p->gknoz; ++k)
                 for(j=-1; j<p->gknoy; ++j)
                     for(i=-1; i<p->gknox; ++i)
                     {
                         ffn=float(p->ipol4press(press));
-                        result.write((char*)&ffn, sizeof (float));
+                        std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
                     }
             //  EddyV
             iin=4*(pointNum);
-            result.write((char*)&iin, sizeof (int));
+            std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
             for(k=-1; k<p->gknoz; ++k)
                 for(j=-1; j<p->gknoy; ++j)
                     for(i=-1; i<p->gknox; ++i)
                     {
                         ffn=float(p->ipol4_a(eddyv));
-                        result.write((char*)&ffn, sizeof (float));
+                        std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
                     }
             //  Phi
             iin=4*(pointNum);
-            result.write((char*)&iin, sizeof (int));
+            std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
             for(k=-1; k<p->gknoz; ++k)
                 for(j=-1; j<p->gknoy; ++j)
                     for(i=-1; i<p->gknox; ++i)
                     {
                         ffn=float(p->ipol4phi(topo,phi));
-                        result.write((char*)&ffn, sizeof (float));
+                        std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
                     }
             // rho
             if(p->P24==1 && p->F300==0)
             {
                 iin=4*(pointNum);
-                result.write((char*)&iin, sizeof (int));
+                std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4_a(rho));
-                            result.write((char*)&ffn, sizeof (float));
+                            std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
                         }
             }
             // viscosity
             if(p->P71==1)
             {
                 iin=4*(pointNum);
-                result.write((char*)&iin, sizeof (int));
+                std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4(visc,flag4));
-                            result.write((char*)&ffn, sizeof (float));
+                            std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
                         }
             }
             // VOF
             if(p->P72==1)
             {
                 iin=4*(pointNum);
-                result.write((char*)&iin, sizeof (int));
+                std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4(VOF,flag4));
-                            result.write((char*)&ffn, sizeof (float));
+                            std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
                         }
             }
             // topo
             if(p->P27==1)
             {
                 iin=4*(pointNum);
-                result.write((char*)&iin, sizeof (int));
+                std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4_a(topo));
-                            result.write((char*)&ffn, sizeof (float));
+                            std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
                         }
             }
             // test
             if(p->P23==1)
             {
                 iin=4*(pointNum);
-                result.write((char*)&iin, sizeof (int));
+                std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4_a(test));
-                            result.write((char*)&ffn, sizeof (float));
+                            std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
                         }
             }
             //  Elevation
             iin=4*(pointNum);
-            result.write((char*)&iin, sizeof (int));
+            std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
             for(k=0; k<p->gknoz+1; ++k)
                 for(j=0; j<p->gknoy+1; ++j)
                     for(i=0; i<p->gknox+1; ++i)
                     {
                         ffn=float(ZN[k]+(ZN[k+1]-ZN[k]));
-                        result.write((char*)&ffn, sizeof (float));
+                        std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
                     }
             // solid
             if(p->P25==1)
             {
                 iin=4*(pointNum);
-                result.write((char*)&iin, sizeof (int));
+                std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4_a(solid));
-                            result.write((char*)&ffn, sizeof (float));
+                            std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
                         }
             }
             // floating
             if(p->P28==1)
             {
                 iin=4*(pointNum);
-                result.write((char*)&iin, sizeof (int));
+                std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4_a(fb));
-                            result.write((char*)&ffn, sizeof (float));
+                            std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
                         }
             }
             // walldist
             // if(p->P29==1)
             // {
             //     iin=4*(pointNum);
-            //     result.write((char*)&iin, sizeof (int));
+            //     std::memcpy(&buffer[m],&iin,sizeof(int));
+// m+=sizeof(int);
             //     for(k=-1; k<p->gknoz; ++k)
             //         for(j=-1; j<p->gknoy; ++j)
             //             for(i=-1; i<p->gknox; ++i)
             //             {
             //                 ffn=float(p->ipol4_a(walld));
-            //                 result.write((char*)&ffn, sizeof (float));
+            //                 std::memcpy(&buffer[m],&ffn,sizeof(float));
+// m+=sizeof(float);
             //             }
             // }
 
             // x
             iin=4*(p->gknox+1);
-            result.write((char*)&iin, sizeof (int));
+            std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
             for(i=1; i<p->gknox+2; ++i)
             {
                 ffn=float(XN[i]);
-                result.write((char*)&ffn, sizeof (float));
+                std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
             }
             // y
             iin=4*(p->gknoy+1);
-            result.write((char*)&iin, sizeof (int));
+            std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
             for(j=1; j<p->gknoy+2; ++j)
             {
                 ffn=float(YN[j]);
-                result.write((char*)&ffn, sizeof (float));
+                std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
             }
             // z
             iin=4*(p->gknoz+1);
-            result.write((char*)&iin, sizeof (int));
+            std::memcpy(&buffer[m],&iin,sizeof(int));
+m+=sizeof(int);
             for(k=1; k<p->gknoz+2; ++k)
             {
                 ffn=float(ZN[k]);
-                result.write((char*)&ffn, sizeof (float));
+                std::memcpy(&buffer[m],&ffn,sizeof(float));
+m+=sizeof(float);
             }
-
-            result<<"\n</AppendedData>\n"
-            <<"</VTKFile>"<<flush;
-
-            result.close();
+            std::memcpy(&buffer[m],&"\n</AppendedData>\n</VTKFile>",28);
             end = std::chrono::system_clock::now();
             auto elapsed = end - start;
-            std::cout << "File print time time: "<<elapsed.count() << std::endl;
-        }
-        else
-            returnValue = 1;
+            std::cout << "Content time: "<<elapsed.count() << std::endl;
+
+            int num=0;
+            if(p->P15==1)
+                num = p->printcount;
+            if(p->P15==2)
+                num = p->count;
+            sprintf(name,"./REEF3D_CFD_VTRC/REEF3D-CFD-%08i.vtr",num);
+            start = std::chrono::system_clock::now();
+            FILE* file = fopen(name, "w");
+            fwrite(buffer.data(), buffer.size(), 1, file);
+            fclose(file);
+            end = std::chrono::system_clock::now();
+            elapsed = end - start;
+            std::cout << "File print time: "<<elapsed.count() << std::endl;
     }
     pgc->bcast_int(&returnValue,1);
     return returnValue;
