@@ -575,52 +575,52 @@ int printMethodCompact::print(lexer* p, fdm* a, ghostcell* pgc, print_averaging 
             //  Pressure
             iin=4*(pointNum);
             std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+            m+=sizeof(int);
             for(k=-1; k<p->gknoz; ++k)
                 for(j=-1; j<p->gknoy; ++j)
                     for(i=-1; i<p->gknox; ++i)
                     {
                         ffn=float(p->ipol4press(press));
                         std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                        m+=sizeof(float);
                     }
             //  EddyV
             iin=4*(pointNum);
             std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+            m+=sizeof(int);
             for(k=-1; k<p->gknoz; ++k)
                 for(j=-1; j<p->gknoy; ++j)
                     for(i=-1; i<p->gknox; ++i)
                     {
                         ffn=float(p->ipol4_a(eddyv));
                         std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                        m+=sizeof(float);
                     }
             //  Phi
             iin=4*(pointNum);
             std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+            m+=sizeof(int);
             for(k=-1; k<p->gknoz; ++k)
                 for(j=-1; j<p->gknoy; ++j)
                     for(i=-1; i<p->gknox; ++i)
                     {
                         ffn=float(p->ipol4phi(topo,phi));
                         std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                        m+=sizeof(float);
                     }
             // rho
             if(p->P24==1 && p->F300==0)
             {
                 iin=4*(pointNum);
                 std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+                m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4_a(rho));
                             std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                            m+=sizeof(float);
                         }
             }
             // viscosity
@@ -628,14 +628,14 @@ m+=sizeof(float);
             {
                 iin=4*(pointNum);
                 std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+                m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4(visc,flag4));
                             std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                            m+=sizeof(float);
                         }
             }
             // VOF
@@ -643,14 +643,14 @@ m+=sizeof(float);
             {
                 iin=4*(pointNum);
                 std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+                m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4(VOF,flag4));
                             std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                            m+=sizeof(float);
                         }
             }
             // topo
@@ -658,14 +658,14 @@ m+=sizeof(float);
             {
                 iin=4*(pointNum);
                 std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+                m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4_a(topo));
                             std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                            m+=sizeof(float);
                         }
             }
             // test
@@ -673,41 +673,41 @@ m+=sizeof(float);
             {
                 iin=4*(pointNum);
                 std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+                m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4_a(test));
                             std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                            m+=sizeof(float);
                         }
             }
             //  Elevation
             iin=4*(pointNum);
             std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+            m+=sizeof(int);
             for(k=0; k<p->gknoz+1; ++k)
                 for(j=0; j<p->gknoy+1; ++j)
                     for(i=0; i<p->gknox+1; ++i)
                     {
                         ffn=float(ZN[k]+(ZN[k+1]-ZN[k]));
                         std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                        m+=sizeof(float);
                     }
             // solid
             if(p->P25==1)
             {
                 iin=4*(pointNum);
                 std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+                m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4_a(solid));
                             std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                            m+=sizeof(float);
                         }
             }
             // floating
@@ -715,14 +715,14 @@ m+=sizeof(float);
             {
                 iin=4*(pointNum);
                 std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+                m+=sizeof(int);
                 for(k=-1; k<p->gknoz; ++k)
                     for(j=-1; j<p->gknoy; ++j)
                         for(i=-1; i<p->gknox; ++i)
                         {
                             ffn=float(p->ipol4_a(fb));
                             std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                            m+=sizeof(float);
                         }
             }
             // walldist
@@ -730,46 +730,46 @@ m+=sizeof(float);
             // {
             //     iin=4*(pointNum);
             //     std::memcpy(&buffer[m],&iin,sizeof(int));
-// m+=sizeof(int);
+            //     m+=sizeof(int);
             //     for(k=-1; k<p->gknoz; ++k)
             //         for(j=-1; j<p->gknoy; ++j)
             //             for(i=-1; i<p->gknox; ++i)
             //             {
             //                 ffn=float(p->ipol4_a(walld));
             //                 std::memcpy(&buffer[m],&ffn,sizeof(float));
-// m+=sizeof(float);
+            //                 m+=sizeof(float);
             //             }
             // }
 
             // x
             iin=4*(p->gknox+1);
             std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+            m+=sizeof(int);
             for(i=1; i<p->gknox+2; ++i)
             {
                 ffn=float(XN[i]);
                 std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                m+=sizeof(float);
             }
             // y
             iin=4*(p->gknoy+1);
             std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+            m+=sizeof(int);
             for(j=1; j<p->gknoy+2; ++j)
             {
                 ffn=float(YN[j]);
                 std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                m+=sizeof(float);
             }
             // z
             iin=4*(p->gknoz+1);
             std::memcpy(&buffer[m],&iin,sizeof(int));
-m+=sizeof(int);
+            m+=sizeof(int);
             for(k=1; k<p->gknoz+2; ++k)
             {
                 ffn=float(ZN[k]);
                 std::memcpy(&buffer[m],&ffn,sizeof(float));
-m+=sizeof(float);
+                m+=sizeof(float);
             }
             std::memcpy(&buffer[m],&"\n</AppendedData>\n</VTKFile>",28);
             end = std::chrono::system_clock::now();
