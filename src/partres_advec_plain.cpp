@@ -66,7 +66,7 @@ void partres::advec_plain(lexer *p, fdm *a, part &P, sediment_fdm *s, turbulence
      
     F_tot = Fd-Fs;//*s.reduce(i,j);
     
-    F_tot = MAX(F_tot,0.0);
+    F_tot = max(F_tot,0.0);
     
     //cout<<"Fd: "<<Fd<<" Fs: "<<Fs<<" F_tot: "<<F_tot<<" "<<P.d50<<" "<<DragCoeff<<endl;
 
@@ -97,7 +97,7 @@ void partres::advec_plain(lexer *p, fdm *a, part &P, sediment_fdm *s, turbulence
     if(PX[n]<1.9)
     F=G=H=0.0;
     
-    Umax = MAX(Umax,sqrt(PU[n]*PU[n] + PV[n]*PV[n]));
+    Umax = max(Umax,sqrt(PU[n]*PU[n] + PV[n]*PV[n]));
     
     // error call
     if(PU[n]!=PU[n] || PV[n]!=PV[n] || PW[n]!=PW[n])

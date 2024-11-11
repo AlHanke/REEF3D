@@ -86,7 +86,7 @@ double partres::r1(lexer *p, double x, double threshold)
     double r=0.0;
 
     x=(threshold-fabs(x))/(fabs(threshold)>1.0e-10?threshold:1.0e20);
-    x=MAX(x,0.0);
+    x=max(x,0.0);
     
 
     r = 1.0 - (exp(pow(x,3.5))-1.0)/(exp(1.0)-1.0);
