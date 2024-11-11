@@ -34,15 +34,15 @@ void partres::timestep(lexer *p, ghostcell *pgc)
     {
         if(P.Flag[n]>=0)
         {
-                maxVelU = max(maxVelU,fabs(P.U[n]));
-                maxVelV = max(maxVelV,fabs(P.V[n]));
-                maxVelW = max(maxVelW,fabs(P.W[n]));
+                maxVelU = MAX(maxVelU,fabs(P.U[n]));
+                maxVelV = MAX(maxVelV,fabs(P.V[n]));
+                maxVelW = MAX(maxVelW,fabs(P.W[n]));
         }
     }
     
     
-    maxvz = max(maxVelU,maxVelV);
-    maxvz = max(maxvz,maxVelV);
+    maxvz = MAX(maxVelU,maxVelV);
+    maxvz = MAX(maxvz,maxVelV);
     
     maxvz = pgc->globalmax(maxvz);
     
@@ -58,10 +58,10 @@ void partres::timestep(lexer *p, ghostcell *pgc)
     
     
     if(p->S15==0)
-    p->dtsed=min(p->S13, (p->S14*p->DXM)/(fabs(maxvz)>1.0e-15?maxvz:1.0e-15));
+    p->dtsed=MIN(p->S13, (p->S14*p->DXM)/(fabs(maxvz)>1.0e-15?maxvz:1.0e-15));
 
     if(p->S15==1)
-    p->dtsed=min(p->dt, (p->S14*p->DXM)/(fabs(maxvz)>1.0e-15?maxvz:1.0e-15));
+    p->dtsed=MIN(p->dt, (p->S14*p->DXM)/(fabs(maxvz)>1.0e-15?maxvz:1.0e-15));
     
     if(p->S15==2)
     p->dtsed=p->S13;

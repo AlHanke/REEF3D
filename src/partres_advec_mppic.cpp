@@ -97,7 +97,7 @@ void partres::advec_mppic(lexer *p, fdm *a, part &P, sediment_fdm *s, turbulence
     
     P.Test[n] = dTz_val/P.RO[n];
     
-    Umax = max(Umax,sqrt(PU[n]*PU[n] + PV[n]*PV[n]));
+    Umax = MAX(Umax,sqrt(PU[n]*PU[n] + PV[n]*PV[n]));
     
     // error call
     if(PU[n]!=PU[n] || PV[n]!=PV[n] || PW[n]!=PW[n])
