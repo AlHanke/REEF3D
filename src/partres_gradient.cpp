@@ -44,13 +44,17 @@ void partres::pressure_gradient(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *
 {
     ALOOP
     {
-    dPx(i,j,k) = (a->press(i+1,j,k) - a->press(i-1,j,k))/(p->DXP[IM1]+p->DXP[IP]);
-    dPy(i,j,k) = (a->press(i,j+1,k) - a->press(i,j-1,k))/(p->DYP[JM1]+p->DYP[JP]);
-    dPz(i,j,k) = (a->press(i,j,k+1) - a->press(i,j,k-1))/(p->DZP[KM1]+p->DZP[KP]);
+        dPx(i,j,k) = (a->press(i+1,j,k) - a->press(i-1,j,k))/(p->DXP[IM1]+p->DXP[IP]);
+        dPy(i,j,k) = (a->press(i,j+1,k) - a->press(i,j-1,k))/(p->DYP[JM1]+p->DYP[JP]);
+        if(k!=0)
+            dPz(i,j,k) = (a->press(i,j,k+1) - a->press(i,j,k-1))/(p->DZP[KM1]+p->DZP[KP]);
+        else
+        {
+            dPz(i,j,k) = (a->press(i,j,2) - a->press(i,j,0))/(p->DZP[KM1]+p->DZP[KP]);
+        }
     }
     
     pgc->start4a(p,dPx,1);
     pgc->start4a(p,dPy,1);
     pgc->start4a(p,dPz,1);
 }
-
