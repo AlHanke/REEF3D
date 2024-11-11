@@ -32,6 +32,7 @@ Author: Hans Bihs
 #include"patchBC_interface.h"
 #include"bedslope.h"
 #include <sys/stat.h>
+#include "partres.h"
 
 sediment_part::sediment_part(lexer *p, fdm *a, ghostcell *pgc, turbulence *ppturb, patchBC_interface *ppBC) : por(p), d50(p)
 {
@@ -78,6 +79,7 @@ void sediment_part::start_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, r
     
     sedcalc=1;
 	}
+    pst->print_particles(p,s);
     
     if(sedcalc==0)
     {
