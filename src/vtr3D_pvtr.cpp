@@ -131,9 +131,11 @@ void vtr3D::pvtr(fdm* a, lexer* p, ghostcell* pgc, turbulence *pturb, heat *phea
 
 	result<<"</PPointData>"<<endl;
 	result<<"<PCellData>"<<endl;
-    result<<"<PDataArray type=\"Float32\" Name=\"topoSum\"/>"<<endl;
-    result<<"<PDataArray type=\"Float32\" Name=\"bedChange\"/>"<<endl;
-	result<<"<PDataArray type=\"Float32\" Name=\"erosion/depositionion\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"test\"/>"<<endl;
+	result<<"<PDataArray type=\"Float32\" Name=\"test2\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"test3\"/>"<<endl;
+	result<<"<PDataArray type=\"Float32\" Name=\"test4\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"test5\"/>"<<endl;
 	result<<"</PCellData>"<<endl;
 
 	result<<"<PCoordinates>"<<endl;
