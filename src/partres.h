@@ -68,6 +68,7 @@ public:
     void pressure_gradient(lexer*, fdm*, ghostcell*, sediment_fdm*);
     void cellSum_update(lexer*, ghostcell*, sediment_fdm*, int);
     void cellSum_full_update(lexer*, ghostcell*, int);
+    void cellSum_gradient_redistirbution(lexer*, ghostcell*, int);
     
     void bedchange(lexer*, fdm*, ghostcell*, sediment_fdm*,int);
     void bedchange_update(lexer*, ghostcell*, sediment_fdm*,int);
