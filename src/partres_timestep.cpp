@@ -67,12 +67,14 @@ void partres::timestep(lexer *p, ghostcell *pgc)
     p->dtsed=p->S13;
 
     p->dtsed=pgc->timesync(p->dtsed);
+    p->sedtime+=p->dtsed;
+    p->sedtime=pgc->timesync(p->sedtime);
     
     //
 	
 	if(p->mpirank==0)
     {
-	cout<<p->mpirank<<" maxvz: "<<setprecision(4)<<maxvz<<" dtsed: "<<setprecision(4)<<p->dtsed<<endl;
+	cout<<"tsed: "<<setprecision(4)<<p->sedtime<<" dtsed: "<<setprecision(4)<<p->dtsed<<endl;
     cout<<"Up_max: "<<maxVelU<<endl;
     cout<<"Vp_max: "<<maxVelV<<endl;
     cout<<"Wp_max: "<<maxVelW<<endl;
