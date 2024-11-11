@@ -72,7 +72,7 @@ void partres::cellSum_update(lexer *p, ghostcell *pgc, sediment_fdm *s, int mode
     pgc->gcsl_start4(p,bedch,1);
 }
 
-void partres::cellSum_full_update(lexer *p, ghostcell *pgc, sediment_fdm *s, int mode)
+void partres::cellSum_full_update(lexer *p, ghostcell *pgc, int mode)
 {
     ALOOP
     cellSum(i,j,k) = 0.0;
@@ -111,6 +111,27 @@ void partres::cellSum_full_update(lexer *p, ghostcell *pgc, sediment_fdm *s, int
         cellSum(i+1,j,k+1) += P.ParcelFactor * (1.0-Sx)*Sy*(1.0-Sz);
         cellSum(i+1,j+1,k+1) += P.ParcelFactor * (1.0-Sx)*(1.0-Sy)*(1.0-Sz);
         cellSum(i,j+1,k+1) += P.ParcelFactor * Sx*(1.0-Sy)*(1.0-Sz);
+    }
+    if(p->nb5==-2)
+    {
+        k=0;
+        ILOOP
+        JLOOP
+        cellSum(i,j,k) *= 2;
+    }
+    if(p->nb1==-2)
+    {
+        i=0;
+        KLOOP
+        JLOOP
+        cellSum(i,j,k) *= 2;
+    }
+    if(p->nb3==-2)
+    {
+        j=0;
+        ILOOP
+        KLOOP
+        cellSum(i,j,k) *= 2;
     }
     
     pgc->start4a_sum(p,cellSum,1);

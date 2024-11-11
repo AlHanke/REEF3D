@@ -69,7 +69,7 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
     
     
     // cellSum update
-    cellSum_full_update(p,pgc,s,1);
+    cellSum_full_update(p,pgc,1);
     
     boundcheck(p,a,pgc,s,1);
     bedchange_update(p,pgc,s,1);
@@ -109,7 +109,7 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
     
     
     // cellSum update
-    cellSum_full_update(p,pgc,s,2);
+    cellSum_full_update(p,pgc,2);
     
     boundcheck(p,a,pgc,s,2);
     bedchange_update(p,pgc,s,2);

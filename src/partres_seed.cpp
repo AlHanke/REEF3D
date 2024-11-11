@@ -75,5 +75,5 @@ void partres::seed_topo(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
     P.remove(n);    
     }
     
-    cellSum_full_update(p,pgc,s,2);
+    cellSum_full_update(p,pgc,2);
 }
