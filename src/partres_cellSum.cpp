@@ -112,6 +112,7 @@ void partres::cellSum_full_update(lexer *p, ghostcell *pgc, int mode)
         cellSum(i+1,j+1,k+1) += P.ParcelFactor * (1.0-Sx)*(1.0-Sy)*(1.0-Sz);
         cellSum(i,j+1,k+1) += P.ParcelFactor * Sx*(1.0-Sy)*(1.0-Sz);
     }
+    pgc->start4a_sum(p,cellSum,1);
     if(p->nb5==-2)
     {
         k=0;
@@ -133,8 +134,12 @@ void partres::cellSum_full_update(lexer *p, ghostcell *pgc, int mode)
         KLOOP
         cellSum(i,j,k) *= 2;
     }
-    
-    pgc->start4a_sum(p,cellSum,1);
+    if(p->nb1!=-2 && p->nb3!=-2)
+    {
+        if(p->nb5==-2)
+            cellSum(0,0,0) *= 4.0/3.0;
+    }
+    pgc->start4a(p,cellSum,1);
 }
 
 
