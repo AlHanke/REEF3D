@@ -35,6 +35,12 @@ partres::partres(lexer *p, ghostcell *pgc) : P(p,pgc), bedch(p), Tau(p), Ts(p), 
 	p->Darray(tan_betaQ73,p->Q73);
 	p->Darray(dist_Q73,p->Q73);
 
+    Ps = 10.0;
+    beta = 3.0;
+    epsilon = 0.05;
+    Tc = p->S24 + 0.3;
+    Tc = 0.65;
+
 
 	for(n=0;n<p->Q73;++n)
 	betaQ73[n] = (p->Q73_b[n]+90.0)*(PI/180.0);
