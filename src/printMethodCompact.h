@@ -24,6 +24,7 @@ Author: Hans Bihs
 #define PRINT_METHOD_COMPACT_H_
 
 #include "printMethod.h"
+#include <vector>
 
 class printMethodCompact : public printMethod
 {
