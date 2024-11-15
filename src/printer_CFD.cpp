@@ -891,6 +891,7 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
             start = std::chrono::system_clock::now();
         if(outputMethod->print(p,a,pgc,pmean,pturb,pheat,pmp,pvort,pdata,pconc,psed)!=0)
             cout<<"Print out failed."<<endl;
+        pgc->gcsync();
         if(p->mpirank==0)
         {
             end = std::chrono::system_clock::now();
