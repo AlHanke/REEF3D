@@ -85,7 +85,7 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc) : nodefill(p), eta(p)
     //         break;
     // }
 
-    switch (0)
+    switch (1)
     {
         case 0: default:
             outputMethod = new printMethodSeparated(p);
@@ -882,6 +882,7 @@ void printer_CFD::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, hea
         {
             outputMethod->setup(p,a,pgc,pmean,pturb,pheat,pmp,pvort,pdata,pconc,psed);
             printerMethodInitialized = true;
+            // exit(1);
         }
         pgc->gcsync();
 

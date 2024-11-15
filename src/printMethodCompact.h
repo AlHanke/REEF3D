@@ -33,9 +33,19 @@ class printMethodCompact : public printMethod
         void setup(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*);
         int print(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*);
     private:
-        double *XN=nullptr;
-        double *YN=nullptr;
-        double *ZN=nullptr;
+        void fillContainers(lexer*,fdm*,ghostcell*,print_averaging*,turbulence*,heat*,multiphase*,vorticity*,data*,concentration*,sediment*);
+
+        double *  XN=nullptr;
+        double *  YN=nullptr;
+        double *  ZN=nullptr;
+
+        double *  allFieldsGlobal=nullptr;
+        double *  allFieldsLocal=nullptr;
+        double ** allFields=nullptr;
+
+        int *  allFlagsGlobal=nullptr;
+        int *  allFlagsLocal=nullptr;
+        int ** allFlags=nullptr;
 
         double *  uvelGlobal=nullptr;
         double ** uvel=nullptr;
@@ -88,12 +98,25 @@ class printMethodCompact : public printMethod
         int ** flag5=nullptr;
         
         
-        int *globalSendCounts=nullptr;
+        int *globalSendCountsField=nullptr;
+        int *globalSendCountsFlag=nullptr;
         int *displs=nullptr;
+        int *displsFlag=nullptr;
+        int *displsField=nullptr;
+        int * domainSizes=nullptr;
         
-        int localSendCount=0;
+        int localSendCountField=0,localSendCountFlag=0;
         int cellNum=0;
         int pointNum=0;
+        int numberOfFields=0;
+        int numberOfFlags=0;
+        int domainSize=0;
+        int kbegin,kend;
+        int jbegin,jend;
+        int ibegin,iend;
+
+        int m = 0;
+        std::vector<char> buffer;
 };
 
 #endif
