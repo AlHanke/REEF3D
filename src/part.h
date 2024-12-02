@@ -23,10 +23,7 @@ Authors: Hans Bihs, Alexander Hanke
 #ifndef PART_H_
 #define PART_H_
 
-#define EMPTY  -1
-#define PASSIVE 1
-#define ACTIVE 10
-#define MOVING 20
+enum {EMPTY=-1,PASSIVE=1,ACTIVE=10,MOVING=20};
 
 
 #include"increment.h"
