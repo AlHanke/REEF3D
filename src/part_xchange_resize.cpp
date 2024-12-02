@@ -31,8 +31,8 @@ void part::xchange_resize(lexer *p, ghostcell *pgc)
     
     for(q=0;q<6;++q)
     {
-    maxnum = MAX(maxnum,sendnum[q]);
-    maxnum = MAX(maxnum,recvnum[q]);
+    maxnum = std::max(maxnum,sendnum[q]);
+    maxnum = std::max(maxnum,recvnum[q]);
     }
     
     if(maxnum>capacity_para)

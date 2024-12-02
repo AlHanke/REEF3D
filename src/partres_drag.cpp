@@ -37,8 +37,8 @@ double partres::drag_model(lexer *p, double d50, double rhoS, double vel, double
 
         Cd = (24.0/Rep)*(pow(Tf,-2.65) + (1.0/6.0)*pow(Rep,2.0/3.0)*pow(Tf,-1.78));
         
-        Cd = MIN(Cd,10.0);
-        Cd = MAX(Cd,0.0);
+        Cd = std::min(Cd,10.0);
+        Cd = std::max(Cd,0.0);
         
         Dp = Cd*(3.0/8.0)*(p->W1/rhoS)*(vel/(0.5*d50));
         

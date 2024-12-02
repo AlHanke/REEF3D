@@ -97,7 +97,7 @@ void partres::advec_plain(lexer *p, fdm *a, part &P, sediment_fdm *s, turbulence
     if(PX[n]<1.9)
     F=G=H=0.0;
     
-    Umax = MAX(Umax,sqrt(PU[n]*PU[n] + PV[n]*PV[n]));
+    Umax = std::max(Umax,sqrt(PU[n]*PU[n] + PV[n]*PV[n]));
     
     // error call
     if(PU[n]!=PU[n] || PV[n]!=PV[n] || PW[n]!=PW[n])
