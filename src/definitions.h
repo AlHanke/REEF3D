@@ -32,4 +32,7 @@ Author: Hans Bihs
 #define SOLID_FLAG     -19
 #define OBJ_FLAG       -20
 
+#define PI 3.14159265359
+#define EE 2.71828182846
+
 #endif
