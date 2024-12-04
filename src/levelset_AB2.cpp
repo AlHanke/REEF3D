@@ -94,7 +94,7 @@ levelset_AB2::~levelset_AB2()
 {
 }
 
-void levelset_AB2::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcell* pgc,ioflow* pflow, reini* preini, particle_corr* ppls, field &ls)
+void levelset_AB2::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppls, field &ls)
 {
 
     pflow->fsfinflow(p,a,pgc);
@@ -125,7 +125,7 @@ void levelset_AB2::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
 	
 	p->lsmtime=pgc->timer()-starttime;
 
-	preini->start(a,p,ls,pgc,pflow);
+	preini->start(p,a,pgc,ls,pflow);
 
 	ppicard->correct_ls(p,a,pgc,ls);
 	ppls->picardmove(p,a,pgc);

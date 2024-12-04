@@ -113,7 +113,7 @@ void nhflow_momentum_FS2::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
 
 	pnhfturb->isource(p,d);
 	pflow->isource_nhflow(p,d,pgc,pvrans); 
-	//bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
+	//bcmom_start(p,a,pgc,pturb,a->u,gcval_u);
 	ppress->upgrad(p,d,WLRK1);
     p6dof->isource(p,d,pgc,WLRK1);
 	irhs(p,d,pgc);
@@ -133,7 +133,7 @@ void nhflow_momentum_FS2::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
 
 	pnhfturb->jsource(p,d);
 	pflow->jsource_nhflow(p,d,pgc,pvrans); 
-	//bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+	//bcmom_start(p,a,pgc,pturb,a->v,gcval_v);
     ppress->vpgrad(p,d,WLRK1);
     p6dof->jsource(p,d,pgc,WLRK1);
 	jrhs(p,d,pgc);
@@ -153,7 +153,7 @@ void nhflow_momentum_FS2::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
 
 	pnhfturb->ksource(p,d);
 	//pflow->ksource_nhflow(p,d,pgc,pvrans); 
-	//bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
+	//bcmom_start(p,a,pgc,pturb,a->w,gcval_w);
 	ppress->wpgrad(p,d,WLRK1);
 	krhs(p,d,pgc);
 	pconvec->start(p,d,3,WLRK1);
@@ -210,7 +210,7 @@ void nhflow_momentum_FS2::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
 
 	pnhfturb->isource(p,d);
 	//pflow->isource(p,a,pgc,pvrans);
-	//bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
+	//bcmom_start(p,a,pgc,pturb,a->u,gcval_u);
 	ppress->upgrad(p,d,d->WL);
     p6dof->isource(p,d,pgc,d->WL);
 	irhs(p,d,pgc);
@@ -230,7 +230,7 @@ void nhflow_momentum_FS2::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
 
 	pnhfturb->jsource(p,d);
 	//pflow->jsource(p,a,pgc,pvrans);
-	//bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+	//bcmom_start(p,a,pgc,pturb,a->v,gcval_v);
 	ppress->vpgrad(p,d,d->WL);
     p6dof->jsource(p,d,pgc,d->WL);
 	jrhs(p,d,pgc);
@@ -250,7 +250,7 @@ void nhflow_momentum_FS2::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
 
 	pnhfturb->ksource(p,d);
 	//pflow->ksource(p,a,pgc,pvrans);
-	//bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
+	//bcmom_start(p,a,pgc,pturb,a->w,gcval_w);
 	ppress->wpgrad(p,d,d->WL);
 	krhs(p,d,pgc);
 	pconvec->start(p,d,3,d->WL);

@@ -67,7 +67,7 @@ public:
 	double const sst_alpha1, sst_alpha2, sst_beta1, sst_beta2, sst_sigma_k1, sst_sigma_k2, sst_sigma_w1, sst_sigma_w2;
 
 private:
-    void tau_calc(fdm*, lexer*, double);
+    void tau_calc(lexer*, fdm*, double);
     void kepsini_default(lexer*,fdm*,ghostcell*);
 
 	float ffn;

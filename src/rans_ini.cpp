@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"ghostcell.h"
 
-void rans_io::ini(lexer* p, fdm*a, ghostcell* pgc)
+void rans_io::ini(lexer* p, fdm* a, ghostcell* pgc)
 {
 	gcval_kin=20;
 	gcval_eps=30;
@@ -59,7 +59,7 @@ void rans_io::ini(lexer* p, fdm*a, ghostcell* pgc)
 }
 
 
-void rans_io::plain_wallfunc(lexer* p, fdm*a, ghostcell* pgc)
+void rans_io::plain_wallfunc(lexer* p, fdm* a, ghostcell* pgc)
 {
     double hmax=-1.0e20;
     double hmin=+1.0e20;
@@ -77,7 +77,7 @@ void rans_io::plain_wallfunc(lexer* p, fdm*a, ghostcell* pgc)
 
     depth=hmax-hmin;
 
-	tau_calc(a,p,hmax);
+	tau_calc(p,a,hmax);
 
 
 	LOOP
@@ -165,7 +165,7 @@ void rans_io::inflow(lexer* p, fdm*a, ghostcell* pgc)
         }
 }
 
-void rans_io::tau_calc(fdm* a, lexer* p, double maxwdist)
+void rans_io::tau_calc(lexer* p, fdm* a, double maxwdist)
 {
 	ks=p->B50;	
 	

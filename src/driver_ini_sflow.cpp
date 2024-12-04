@@ -68,8 +68,8 @@ cout<<"starting driver_ini_PFLOW"<<endl;
     gtopo.start(p,a,pgc,pflow,preto,pvrans);
     }
 	
-    ptstep->ini(a,p,pgc);
-    preini->start(a,p,a->phi, pgc, pflow);
+    ptstep->ini(p,a,pgc);
+    preini->start(p,a,pgc,a->phi,pflow);
     pflow->gcio_update(p,a,pgc);
     //ppf->ini(p,a,pgc,pflow,preini,pfsfdisc);
     pflow->fi_relax(p,pgc,a->Fi,a->phi);

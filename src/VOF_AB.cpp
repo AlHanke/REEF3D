@@ -57,7 +57,7 @@ VOF_AB::~VOF_AB()
 {
 }
 
-void VOF_AB::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcell* pgc,ioflow* pflow, reini* preini, particle_corr* ppls, field &ls)
+void VOF_AB::start(lexer* p, fdm* a,ghostcell* pgc, convection* pconvec,solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppls, field &ls)
 {
     pflow->fsfinflow(p,a,pgc);
 	

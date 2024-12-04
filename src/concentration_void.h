@@ -34,7 +34,7 @@ public:
     concentration_void(lexer *, fdm*, ghostcell*);
 	virtual ~concentration_void();
 
-	virtual void start(fdm*, lexer*, convection*, diffusion*, turbulence*, solver*, ghostcell*, ioflow*);
+	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, turbulence*, solver*, ioflow*);
 	virtual void ini(lexer*, fdm*, ghostcell*, concentration *pconcentration);
 	virtual void ttimesave(lexer*, fdm*);
 

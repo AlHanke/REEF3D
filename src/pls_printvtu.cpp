@@ -42,17 +42,17 @@ void particle_pls::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *fl
 	if(p->mpirank==0)
 	{
 		if(sign==1)
-		pvtu_pos(a,p,pgc);
+		pvtu_pos(p,a,pgc);
 		
 		if(sign==2)
-		pvtu_neg(a,p,pgc);	
+		pvtu_neg(p,a,pgc);	
 	}
 	
 	if(sign==1)
-    header_pos(a,p,pgc);
+    header_pos(p,a,pgc);
 	
 	if(sign==2)
-    header_neg(a,p,pgc);
+    header_neg(p,a,pgc);
 
 
 	ofstream result;

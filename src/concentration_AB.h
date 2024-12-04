@@ -37,7 +37,7 @@ public:
     concentration_AB(lexer *, fdm*, ghostcell*);
 	virtual ~concentration_AB();
 
-	virtual void start(fdm*, lexer*, convection*, diffusion*, turbulence*, solver*, ghostcell*, ioflow*);
+	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, turbulence*, solver*, ioflow*);
 	virtual void ttimesave(lexer*, fdm*);
 
 private:

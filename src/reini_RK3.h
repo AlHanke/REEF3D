@@ -35,7 +35,7 @@ class reini_RK3 : public reini, public increment
 public:
 	reini_RK3(lexer* p,int);
 	virtual ~reini_RK3();
-	virtual void start(fdm*,lexer*,field&,ghostcell*,ioflow*);
+	virtual void start(lexer*,fdm*,ghostcell*,field&,ioflow*);
 
 	int *sizeM;
 	field4 frk1,frk2,dt;

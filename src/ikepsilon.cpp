@@ -73,7 +73,7 @@ void ikepsilon::ksource(lexer *p, fdm* a)
 	a->H(i,j,k) = (2.0/3.0)*(kin(i,j,k+1)-kin(i,j,k))/p->DZP[KP];
 }
 
-void  ikepsilon::eddyvisc(fdm* a, lexer* p, ghostcell* pgc, vrans* pvrans)
+void  ikepsilon::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
 {
 	double H;
 	double factor,epsi;

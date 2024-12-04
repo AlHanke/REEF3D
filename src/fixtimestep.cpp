@@ -35,7 +35,7 @@ fixtimestep::~fixtimestep()
 {
 }
 
-void fixtimestep::start(fdm* a, lexer* p,ghostcell* pgc, turbulence *pturb)
+void fixtimestep::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb)
 {
    	p->dt=p->N49;
 
@@ -107,7 +107,7 @@ void fixtimestep::start(fdm* a, lexer* p,ghostcell* pgc, turbulence *pturb)
 
 }
 
-void fixtimestep::ini(fdm* a, lexer* p,ghostcell* pgc)
+void fixtimestep::ini(lexer* p, fdm* a, ghostcell* pgc)
 {
     p->dt=p->N49;
 

@@ -34,9 +34,9 @@ class bc_ikepsilon : virtual public increment, public roughness
 public:
 	bc_ikepsilon(lexer*);
 	virtual ~bc_ikepsilon();
-	void bckeps_start(fdm*,lexer*,field&,field&, int);
-	void wall_law_kin(fdm*,lexer*,field&,field&,int,int,int,int,int,int,double);
-	void wall_law_eps(fdm*,lexer*,field&,field&,int,int,int,int,int,int,double);
+	void bckeps_start(lexer*,fdm*,field&,field&, int);
+	void wall_law_kin(lexer*,fdm*,field&,field&,int,int,int,int,int,int,double);
+	void wall_law_eps(lexer*,fdm*,field&,field&,int,int,int,int,int,int,double);
 
 private:
 	double uplus,ks_plus,dist,ks,ustar,u_abs,eps_star,tau;

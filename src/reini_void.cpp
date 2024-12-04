@@ -30,6 +30,6 @@ reini_void::~reini_void()
 {
 }
 
-void reini_void::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
+void reini_void::start(lexer* p, fdm* a, ghostcell* pgc, field& b, ioflow* pflow)
 {
 }

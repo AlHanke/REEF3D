@@ -214,7 +214,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, ghostcell *pgc, convection *pdisc
 	
 	reini_walld reini(p,a);
 	
-	reini.start(a,p,walldist,pgc,pflow);
+	reini.start(p,a,pgc,walldist,pflow);
 
 	pgc->gcparax(p,walldist,4);
 	gcparacox(p,walldist,4);

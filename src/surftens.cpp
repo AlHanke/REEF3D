@@ -33,7 +33,7 @@ surftens::~surftens()
 {
 }
 
-void surftens::surface_tension(fdm* a,lexer*p,field& surf,int gcval)
+void surftens::surface_tension(lexer*p,fdm* a,field& surf,int gcval)
 {
 	n=0;
 	

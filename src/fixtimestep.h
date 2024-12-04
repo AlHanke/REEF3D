@@ -33,8 +33,8 @@ class fixtimestep : public timestep, public increment
 public:
 	fixtimestep(lexer*);
 	virtual ~fixtimestep();
-	virtual void start(fdm*,lexer*,ghostcell*,turbulence*);
-	virtual void ini(fdm*,lexer*,ghostcell*);
+	virtual void start(lexer*,fdm*,ghostcell*,turbulence*);
+	virtual void ini(lexer*,fdm*,ghostcell*);
 
 
 };

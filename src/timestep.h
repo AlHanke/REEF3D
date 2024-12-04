@@ -31,8 +31,8 @@ class turbulence;
 class timestep
 {
 public:
-    virtual void start(fdm*, lexer*,ghostcell*,turbulence*)=0;
-	virtual void ini(fdm*,lexer*,ghostcell*)=0;
+    virtual void start(lexer*,fdm*,ghostcell*,turbulence*)=0;
+	virtual void ini(lexer*,fdm*,ghostcell*)=0;
 
 
 

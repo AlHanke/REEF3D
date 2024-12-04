@@ -41,7 +41,7 @@ class concentration
 {
 public:
 
-	virtual void start(fdm*, lexer*, convection*, diffusion*, turbulence*, solver*, ghostcell*, ioflow*)=0;
+	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, turbulence*, solver*, ioflow*)=0;
 	virtual void ini(lexer*, fdm*, ghostcell*, concentration *pconcentration)=0;
 	virtual void ttimesave(lexer*, fdm*)=0;
 

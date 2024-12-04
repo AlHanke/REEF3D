@@ -35,7 +35,7 @@ etimestep::~etimestep()
 {
 }
 
-void etimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
+void etimestep::start(lexer* p, fdm*a, ghostcell* pgc, turbulence* pturb)
 {
     p->umax=p->vmax=p->wmax=p->viscmax=irsm=jrsm=krsm=0.0;
     p->epsmax=p->kinmax=p->pressmax=0.0;
@@ -203,7 +203,7 @@ void etimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
 	a->maxH=0.0;
 }
 
-void etimestep::ini(fdm* a, lexer* p,ghostcell* pgc)
+void etimestep::ini(lexer* p, fdm* a, ghostcell* pgc)
 {
 
 	p->umax=p->vmax=p->wmax=p->viscmax=-1e19;

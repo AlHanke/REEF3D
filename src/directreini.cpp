@@ -75,7 +75,7 @@ directreini::~directreini()
 {
 }
 
-void directreini::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
+void directreini::start(lexer* p, fdm* a, ghostcell* pgc, field& b, ioflow* pflow)
 {
     starttime=pgc->timer();
 	
@@ -98,7 +98,7 @@ void directreini::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
 	//correction(p,a,pgc,b);
     }
 	
-	ppreini->start(a,p,b,pgc,pflow);
+	ppreini->start(p,a,pgc,b,pflow);
     //debug(p,a);
 
     if(p->count>0)
@@ -109,10 +109,3 @@ void directreini::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
 
 	p->reinitime=pgc->timer()-starttime;
 }
-
-void directreini::startV(fdm* a,lexer* p,vec &f, ghostcell* pgc,ioflow* pflow)
-{ 
-    
-}
-
-

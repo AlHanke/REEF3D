@@ -79,17 +79,17 @@ void driver::loop_cfd_sf(fdm* a)
         // Benchmark cases
         pbench->start(p,a,pgc,pconvec);
 
-        pfsf->start(a,p, pfsfdisc,psolv,pgc,pflow,preini,ppls,a->phi);
+        pfsf->start(p,a,pgc,pfsfdisc,psolv,pflow,preini,ppls,a->phi);
         poneph->update(p,a,pgc,pflow);
 
         // Turbulence computation
-        pturb->start(a,p,pturbdisc,pturbdiff,psolv,pgc,pflow,pvrans);
+        pturb->start(p,a,pgc,pturbdisc,pturbdiff,psolv,pflow,pvrans);
         
         // Heat computation
-        pheat->start(a,p,pconvec,pdiff,psolv,pgc,pflow);
+        pheat->start(p,a,pgc,pconvec,pdiff,psolv,pflow);
         
         // Concentration computation
-        pconc->start(a,p,pconcdisc,pconcdiff,pturb,psolv,pgc,pflow);
+        pconc->start(p,a,pgc,pconcdisc,pconcdiff,pturb,psolv,pflow);
         
         // Sediment computation
         psed->start_cfd(p,a,pgc,pflow,preto,psolv);
@@ -112,7 +112,7 @@ void driver::loop_cfd_sf(fdm* a)
 
         //timestep control
         p->simtime+=p->dt;
-        ptstep->start(a,p,pgc,pturb);
+        ptstep->start(p,a,pgc,pturb);
 
         // printer
         pprint->start(p,a,pgc,pturb,pheat,pflow,pdata,pconc,pmp,psed);

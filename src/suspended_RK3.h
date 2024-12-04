@@ -32,7 +32,7 @@ class suspended_RK3 : public suspended, public increment
 public:
 	suspended_RK3(lexer *, fdm*);
 	virtual ~suspended_RK3();
-	virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, sediment_fdm*);
+	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*, sediment_fdm*);
 	virtual void ctimesave(lexer*, fdm*);
 
     void suspsource(lexer*,fdm*,field&,sediment_fdm*);

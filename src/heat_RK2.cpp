@@ -40,7 +40,7 @@ heat_RK2::~heat_RK2()
 {
 }
 
-void heat_RK2::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, solver* psolv, ghostcell* pgc, ioflow* pflow)
+void heat_RK2::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow)
 {
     field4 ark1(p);
     

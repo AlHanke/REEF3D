@@ -39,7 +39,7 @@ heat_RK3CN::~heat_RK3CN()
 {
 }
 
-void heat_RK3CN::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, solver* psolv, ghostcell* pgc, ioflow* pflow)
+void heat_RK3CN::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow)
 {
 
 // Step 1

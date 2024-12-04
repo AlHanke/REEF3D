@@ -37,7 +37,7 @@ kepsilon_void::~kepsilon_void()
 {
 }
 
-void kepsilon_void::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff,solver* psolv, ghostcell* pgc, ioflow* pflow, vrans* pvrans)
+void kepsilon_void::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff,solver* psolv, ioflow* pflow, vrans* pvrans)
 {
 }
 void kepsilon_void::isource(lexer* p, fdm* a)

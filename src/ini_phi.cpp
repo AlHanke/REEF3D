@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"ghostcell.h"
 
-void initialize::iniphi(fdm*a, lexer* p, ghostcell* pgc)
+void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)
 {
     double dx=p->DXM;
     double r;
@@ -152,7 +152,7 @@ void initialize::iniphi(fdm*a, lexer* p, ghostcell* pgc)
 	pgc->start4(p,a->phi,50);
 }
 
-void initialize::iniphi_io(fdm*a, lexer* p, ghostcell* pgc)
+void initialize::iniphi_io(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->F61>-1.0e20)
     GC4LOOP

@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"ghostcell.h"
 
-void initialize::inivof(fdm*a, lexer* p, ghostcell* pgc)
+void initialize::inivof(lexer* p, fdm*a, ghostcell* pgc)
 {
 
 double dx=p->DXM;
@@ -106,7 +106,7 @@ p->phimean=p->F60;
 	pgc->start4(p,a->visc,1);
 }
 
-void initialize::inivof_io(fdm*a, lexer* p, ghostcell* pgc)
+void initialize::inivof_io(lexer* p, fdm* a, ghostcell* pgc)
 {
 
     if(p->F61>-1.0e20)

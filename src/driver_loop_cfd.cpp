@@ -75,14 +75,14 @@ void driver::loop_cfd(fdm* a)
         pflow->wavegen_precalc(p,pgc);
 
             
-			fill_vel(p,a,pgc);
-			
-            pfsf->start(a,p, pfsfdisc,psolv,pgc,pflow,preini,ppls,a->phi);
-            poneph->update(p,a,pgc,pflow);
-            pturb->start(a,p,pturbdisc,pturbdiff,psolv,pgc,pflow,pvrans);
-            pheat->start(a,p,pheatdisc,pdiff,psolv,pgc,pflow);
-            pconc->start(a,p,pconcdisc,pconcdiff,pturb,psolv,pgc,pflow);
-            pmp->start(p,a,pgc,pmpconvec,psolv,pflow,preini,ppls);
+        fill_vel(p,a,pgc);
+        
+        pfsf->start(p,a,pgc,pfsfdisc,psolv,pflow,preini,ppls,a->phi);
+        poneph->update(p,a,pgc,pflow);
+        pturb->start(p,a,pgc,pturbdisc,pturbdiff,psolv,pflow,pvrans);
+        pheat->start(p,a,pgc,pheatdisc,pdiff,psolv,pflow);
+        pconc->start(p,a,pgc,pconcdisc,pconcdiff,pturb,psolv,pflow);
+        pmp->start(p,a,pgc,pmpconvec,psolv,pflow,preini,ppls);
         
         psed->start_susp(p,a,pgc,pflow,psolv);
         psed->start_cfd(p,a,pgc,pflow,preto,psolv);
@@ -101,7 +101,7 @@ void driver::loop_cfd(fdm* a)
 
         //timestep control
         p->simtime+=p->dt;
-        ptstep->start(a,p,pgc,pturb);
+        ptstep->start(p,a,pgc,pturb);
         
         // printer
         pprint->start(p,a,pgc,pturb,pheat,pflow,pdata,pconc,pmp,psed);

@@ -40,7 +40,7 @@ public:
 	virtual void kinsource(lexer*,fdm*,vrans*);
 	virtual void epssource(lexer*,fdm*,vrans*);
 	virtual void epsfsf(lexer*,fdm*,ghostcell*);
-	virtual void eddyvisc(fdm*,lexer*,ghostcell*,vrans*);
+	virtual void eddyvisc(lexer*,fdm*,ghostcell*,vrans*);
 	virtual void clearfield(lexer*,fdm*,field&);
 
 	int count,q;

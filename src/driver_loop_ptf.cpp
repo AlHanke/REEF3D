@@ -72,7 +72,7 @@ void driver::loop_ptf(fdm* a)
     
         //timestep control
         p->simtime+=p->dt;
-        ptstep->start(a,p,pgc,pturb);
+        ptstep->start(p,a,pgc,pturb);
         
         
         // printer

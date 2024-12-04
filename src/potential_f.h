@@ -36,7 +36,7 @@ public:
 	potential_f(lexer*);
 	virtual ~potential_f();
 
-	virtual void start(lexer*,fdm*, solver*, ghostcell*);
+	virtual void start(lexer*,fdm*,ghostcell*,solver*);
 
 
 private:

@@ -73,11 +73,11 @@ VOF_PLIC::~VOF_PLIC()
 
 void VOF_PLIC::start
 (
-    fdm* a,
     lexer* p,
+    fdm* a,
+    ghostcell* pgc,
     convection* pconvec,
     solver* psolv,
-    ghostcell* pgc,
     ioflow* pflow,
     reini* preini,
     particle_corr* ppls,

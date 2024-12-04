@@ -36,7 +36,7 @@ public:
     heat_RK3CN(lexer *, fdm*, ghostcell*,heat*&);
 	virtual ~heat_RK3CN();
     
-	virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*);
+	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*);
 	virtual void ttimesave(lexer*, fdm*);
     virtual void diff_update(lexer*, fdm*, ghostcell*);
     

@@ -38,7 +38,7 @@ reini_walld::~reini_walld()
 {
 }
 
-void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
+void reini_walld::start(lexer* p, fdm* a, ghostcell* pgc, field &f, ioflow* pflow)
 {
 	starttime=pgc->timer();
 

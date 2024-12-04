@@ -151,7 +151,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pgc->start4(p,a->phi,gcval_phi);
     
     p->F44=2;
-    preini->start(a,p,a->phi, pgc, pflow);
+    preini->start(p,a,pgc,a->phi,pflow);
     ppicard->correct_ls(p,a,pgc,frk1);
     
     pupdate->start(p,a,pgc);
@@ -161,7 +161,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 
 	pturb->isource(p,a);
 	pflow->isource(p,a,pgc,pvrans); 
-	bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
+	bcmom_start(p,a,pgc,pturb,a->u,gcval_u);
 	ppress->upgrad(p,a,a->eta,a->eta_n);
 	irhs(p,a,pgc,a->u,a->u,a->v,a->w,1.0);
 	pconvec->start(p,a,a->u,1,a->u,a->v,a->w);
@@ -178,7 +178,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 
 	pturb->jsource(p,a);
 	pflow->jsource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+	bcmom_start(p,a,pgc,pturb,a->v,gcval_v);
 	ppress->vpgrad(p,a,a->eta,a->eta_n);
 	jrhs(p,a,pgc,a->v,a->u,a->v,a->w,1.0);
 	pconvec->start(p,a,a->v,2,a->u,a->v,a->w);
@@ -195,7 +195,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 
 	pturb->ksource(p,a);
 	pflow->ksource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
+	bcmom_start(p,a,pgc,pturb,a->w,gcval_w);
 	ppress->wpgrad(p,a,a->eta,a->eta_n);
 	krhs(p,a,pgc,a->w,a->u,a->v,a->w,1.0);
 	pconvec->start(p,a,a->w,3,a->u,a->v,a->w);
@@ -215,7 +215,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
                            urk1, vrk1, wrk1, fx, fy, fz, 0, 1.0, false);
     
     pflow->pressure_io(p,a,pgc);
-	ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk1, vrk1, wrk1, 1.0);
+	ppress->start(p,a,pgc,ppois,ppoissonsolv,pflow, urk1, vrk1, wrk1, 1.0);
 	
 	pflow->u_relax(p,a,pgc,urk1);
 	pflow->v_relax(p,a,pgc,vrk1);
@@ -252,7 +252,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pgc->start4(p,a->phi,gcval_phi);
     
     p->F44=3;
-    preini->start(a,p,a->phi, pgc, pflow);
+    preini->start(p,a,pgc,a->phi,pflow);
     ppicard->correct_ls(p,a,pgc,a->phi);
 
     pupdate->start(p,a,pgc);
@@ -263,7 +263,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 
 	pturb->isource(p,a);
 	pflow->isource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
+	bcmom_start(p,a,pgc,pturb,a->u,gcval_u);
 	ppress->upgrad(p,a,a->eta,a->eta_n);
 	irhs(p,a,pgc,urk1,urk1,vrk1,wrk1,0.5);
 	pconvec->start(p,a,urk1,1,urk1,vrk1,wrk1);
@@ -280,7 +280,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 
 	pturb->jsource(p,a);
 	pflow->jsource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+	bcmom_start(p,a,pgc,pturb,a->v,gcval_v);
 	ppress->vpgrad(p,a,a->eta,a->eta_n);
 	jrhs(p,a,pgc,vrk1,urk1,vrk1,wrk1,0.5);
 	pconvec->start(p,a,vrk1,2,urk1,vrk1,wrk1);
@@ -297,7 +297,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 
 	pturb->ksource(p,a);
 	pflow->ksource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
+	bcmom_start(p,a,pgc,pturb,a->w,gcval_w);
 	ppress->wpgrad(p,a,a->eta,a->eta_n);
 	krhs(p,a,pgc,wrk1,urk1,vrk1,wrk1,0.5);
 	pconvec->start(p,a,wrk1,3,urk1,vrk1,wrk1);
@@ -317,7 +317,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
                            a->u, a->v, a->w, fx, fy, fz, 1, 0.5, true);
 
 	pflow->pressure_io(p,a,pgc);
-	ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, a->u, a->v,a->w,0.5);
+	ppress->start(p,a,pgc,ppois,ppoissonsolv,pflow, a->u, a->v,a->w,0.5);
 	
 	pflow->u_relax(p,a,pgc,a->u);
 	pflow->v_relax(p,a,pgc,a->v);

@@ -35,10 +35,10 @@ class pjm_nse : public pressure, public increment
 
 public:
 
-	pjm_nse(lexer* p, fdm *a, heat*&, concentration*&);
+	pjm_nse(lexer* , fdm*, heat*&, concentration*&);
 	virtual ~pjm_nse();
 
-	virtual void start(fdm*,lexer* p, poisson*, solver*, ghostcell*,ioflow*, field&, field&, field&,double);
+	virtual void start(lexer*,fdm*,ghostcell*,poisson*, solver*, ioflow*, field&, field&, field&,double);
     virtual void ini(lexer*,fdm*,ghostcell*);
 	virtual void rhs(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
 	virtual void vel_setup(lexer*,fdm*,ghostcell*,field&,field&,field&,double);

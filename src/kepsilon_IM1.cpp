@@ -40,7 +40,7 @@ kepsilon_IM1::~kepsilon_IM1()
 {
 }
 
-void kepsilon_IM1::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff,solver* psolv, ghostcell* pgc, ioflow* pflow, vrans *pvrans)
+void kepsilon_IM1::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff,solver* psolv, ioflow* pflow, vrans *pvrans)
 {
 	wallf_update(p,a,pgc,wallf);
 
@@ -51,7 +51,7 @@ void kepsilon_IM1::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff
 	pdiff->idiff_scalar(p,a,pgc,psolv,kin,a->eddyv,ke_sigma_k,1.0);
 	kinsource(p,a,pvrans);
 	timesource(p,a,kn);
-    bckeps_start(a,p,kin,eps,gcval_kin);
+    bckeps_start(p,a,kin,eps,gcval_kin);
 	psolv->start(p,a,pgc,kin,a->rhsvec,4);
 	pgc->start4(p,kin,gcval_kin);
 	p->kintime=pgc->timer()-starttime;
@@ -68,14 +68,14 @@ void kepsilon_IM1::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff
 	timesource(p,a,en);
 	psolv->start(p,a,pgc,eps,a->rhsvec,4);
 	epsfsf(p,a,pgc);
-	bckeps_start(a,p,kin,eps,gcval_eps);
+	bckeps_start(p,a,kin,eps,gcval_eps);
 	pgc->start4(p,eps,gcval_eps);
 	p->epstime=pgc->timer()-starttime;
 	p->epsiter=p->solveriter;
 	if(p->mpirank==0 && (p->count%p->P12==0))
 	cout<<"epsiter: "<<p->epsiter<<"  epstime: "<<setprecision(3)<<p->epstime<<endl;
 
-	eddyvisc(a,p,pgc,pvrans);
+	eddyvisc(p,a,pgc,pvrans);
 	pgc->start4(p,a->eddyv,24);
 }
 

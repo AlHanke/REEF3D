@@ -103,7 +103,7 @@ void sediment_f::sediment_algorithm_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow
 
 void sediment_f::start_susp(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, solver *psolv)
 {
-    psusp->start(a,p,psuspdisc,psuspdiff,psolv,pgc,pflow,s);
+    psusp->start(p,a,pgc,psuspdisc,psuspdiff,psolv,pflow,s);
 }
 
 

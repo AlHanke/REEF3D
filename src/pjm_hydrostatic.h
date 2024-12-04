@@ -35,10 +35,10 @@ class pjm_hydrostatic : public pressure, public increment
 
 public:
 
-	pjm_hydrostatic(lexer* p, fdm *a, heat*&, concentration*&);
+	pjm_hydrostatic(lexer* , fdm*, heat*&, concentration*&);
 	virtual ~pjm_hydrostatic();
 
-	virtual void start(fdm*,lexer*, poisson*, solver*, ghostcell*, ioflow*, field&, field&, field&,double);
+	virtual void start(lexer*, fdm*, ghostcell*, poisson*, solver*, ioflow*, field&, field&, field&,double);
     virtual void ini(lexer*,fdm*,ghostcell*);
 	virtual void rhs(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
 	virtual void vel_setup(lexer*,fdm*,ghostcell*,field&,field&,field&,double);

@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"heat_RK3.h"
+
+#include"heat_RK3.h"
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -39,7 +40,7 @@ heat_RK3::~heat_RK3()
 {
 }
 
-void heat_RK3::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, solver* psolv, ghostcell* pgc, ioflow* pflow)
+void heat_RK3::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow)
 {
 
 // Step 1

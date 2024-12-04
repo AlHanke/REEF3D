@@ -30,7 +30,7 @@ potential_v::~potential_v()
 {
 }
 
-void potential_v::start(lexer*p,fdm* a,solver* psolv, ghostcell* pgc)
+void potential_v::start(lexer*p, fdm* a, ghostcell* pgc, solver* psolv)
 {
 }
 

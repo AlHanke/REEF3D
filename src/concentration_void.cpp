@@ -38,7 +38,7 @@ concentration_void::~concentration_void()
 {
 }
 
-void concentration_void::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, turbulence *pturb, solver* psolv, ghostcell* pgc, ioflow* pflow)
+void concentration_void::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, turbulence *pturb, solver* psolv, ioflow* pflow)
 {
 }
 

@@ -36,7 +36,7 @@ public:
     concentration_RK3(lexer *, fdm*, ghostcell*);
 	virtual ~concentration_RK3();
 
-	virtual void start(fdm*, lexer*, convection*, diffusion*, turbulence*, solver*, ghostcell*, ioflow*);
+	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, turbulence*, solver*, ioflow*);
 	virtual void ttimesave(lexer*, fdm*);
 
 private:

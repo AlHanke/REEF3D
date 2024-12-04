@@ -33,10 +33,10 @@ class potential_water : public potential, public increment
 {
 
 public:
-	potential_water(lexer* p);
+	potential_water(lexer*);
 	virtual ~potential_water();
 
-	virtual void start(lexer*,fdm*, solver*, ghostcell* pgc);
+	virtual void start(lexer*,fdm*,ghostcell*,solver*);
 
 
 private:

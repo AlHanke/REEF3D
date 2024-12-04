@@ -31,7 +31,7 @@ bc_ikepsilon::~bc_ikepsilon()
 {
 }
 
-void bc_ikepsilon::bckeps_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
+void bc_ikepsilon::bckeps_start(lexer* p, fdm* a, field& kin, field& eps,int gcval)
 {
 	int q;
 
@@ -39,7 +39,7 @@ void bc_ikepsilon::bckeps_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
 	{
 		QGC4LOOP
 		if(p->gcb4[q][4]==5 || p->gcb4[q][4]==21  || p->gcb4[q][4]==22 || p->gcb4[q][4]==41 || p->gcb4[q][4]==42 || p->gcb4[q][4]==43)
-		wall_law_kin(a,p,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
+		wall_law_kin(p,a,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
         
     n=0;
 	LOOP
@@ -88,7 +88,7 @@ void bc_ikepsilon::bckeps_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
 	{
 		QGC4LOOP
 		if(p->gcb4[q][4]==5 || p->gcb4[q][4]==21 || p->gcb4[q][4]==22 || p->gcb4[q][4]==41 || p->gcb4[q][4]==42 || p->gcb4[q][4]==43  || (p->gcb4[q][4]==3 && p->gcb4[q][4]==6))
-		wall_law_eps(a,p,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
+		wall_law_eps(p,a,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
         
     n=0;
 	LOOP
@@ -138,7 +138,7 @@ void bc_ikepsilon::bckeps_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
 // ****************************
 // WALL KIN
 // ****************************
-void bc_ikepsilon::wall_law_kin(fdm* a,lexer* p,field& kin,field& eps,int ii,int jj,int kk,int cs,int bc, int id, double dist)
+void bc_ikepsilon::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii, int jj, int kk, int cs, int bc, int id, double dist)
 {
     double uvel,vvel,wvel;
     double zval;
@@ -150,28 +150,25 @@ void bc_ikepsilon::wall_law_kin(fdm* a,lexer* p,field& kin,field& eps,int ii,int
 	
 	ks=ks_val(p,a,ii,jj,kk,cs,bc);
 
-        uvel=0.5*(a->u(i,j,k)+a->u(i-1,j,k));
-        vvel=0.5*(a->v(i,j,k)+a->v(i,j-1,k));
-        wvel=0.5*(a->w(i,j,k)+a->w(i,j,k-1));
+    uvel=0.5*(a->u(i,j,k)+a->u(i-1,j,k));
+    vvel=0.5*(a->v(i,j,k)+a->v(i,j-1,k));
+    wvel=0.5*(a->w(i,j,k)+a->w(i,j,k-1));
 
-        u_abs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
+    u_abs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
 
-		if(30.0*dist<ks)
-		dist=ks/30.0;
+    if(30.0*dist<ks)
+    dist=ks/30.0;
 
-		uplus = (1.0/kappa)*log(30.0*(dist/ks));
+    uplus = (1.0/kappa)*log(30.0*(dist/ks));
 
 	tau=(u_abs*u_abs)/pow((uplus>0.0?uplus:(1.0e20)),2.0);
     
-    
-
-
 	a->M.p[id] += (pow(p->cmu,0.75)*pow(fabs(kin(i,j,k)),0.5)*uplus)/dist;
 	a->rhsvec.V[id] += (tau*u_abs)/dist;
 
 }
 
-void bc_ikepsilon::wall_law_eps(fdm* a,lexer* p,field& kin,field& eps,int ii,int jj,int kk,int cs,int bc, int id, double dist)
+void bc_ikepsilon::wall_law_eps(lexer* p, fdm* a, field& kin, field& eps, int ii, int jj, int kk, int cs, int bc, int id, double dist)
 {
 	i=ii;
 	j=jj;

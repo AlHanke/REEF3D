@@ -33,7 +33,7 @@ class komega_IM1 : public komega_func
 public:
 	komega_IM1(lexer *, fdm*, ghostcell*);
 	virtual ~komega_IM1();
-	virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*);
+	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*, vrans*);
 	virtual void ktimesave(lexer*, fdm*, ghostcell*);
 	virtual void etimesave(lexer*, fdm*, ghostcell*);
 	void timesource(lexer*,fdm*,field&);

@@ -40,7 +40,7 @@ heat_AB::~heat_AB()
 {
 }
 
-void heat_AB::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, solver* psolv, ghostcell* pgc, ioflow* pflow)
+void heat_AB::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow)
 {
 
     starttime=pgc->timer();

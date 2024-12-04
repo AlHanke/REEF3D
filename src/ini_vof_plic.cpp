@@ -19,12 +19,13 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"initialize.h"
+
+#include"initialize.h"
 #include"fdm.h"
 #include"lexer.h"
 #include"ghostcell.h"
 
-void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
+void initialize::inivofPLIC(lexer* p, fdm* a, ghostcell* pgc)
 {
 
     double dx=p->DXM;

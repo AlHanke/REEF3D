@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"ietimestep.h"
+
+#include"ietimestep.h"
 #include<iomanip>
 #include"lexer.h"
 #include"fdm.h"
@@ -34,7 +35,7 @@ ietimestep::~ietimestep()
 {
 }
 
-void ietimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
+void ietimestep::start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
 {
     p->umax=p->vmax=p->wmax=p->viscmax=irsm=jrsm=krsm=0.0;
     p->epsmax=p->kinmax=p->pressmax=0.0;
@@ -205,7 +206,7 @@ void ietimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
     
 }
 
-void ietimestep::ini(fdm* a, lexer* p,ghostcell* pgc)
+void ietimestep::ini(lexer* p, fdm* a, ghostcell* pgc)
 {  
     dx = p->DXM;
     

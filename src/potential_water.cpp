@@ -36,7 +36,7 @@ potential_water::~potential_water()
 {
 }
 
-void potential_water::start(lexer*p,fdm* a,solver* psolv, ghostcell* pgc)
+void potential_water::start(lexer*p, fdm* a, ghostcell* pgc, solver* psolv)
 {
     if(p->mpirank==0 )
 	cout<<"starting potential_water flow solver..."<<endl<<endl;

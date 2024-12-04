@@ -40,7 +40,7 @@ komega_IM1::~komega_IM1()
 {
 }
 
-void komega_IM1::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff,solver* psolv, ghostcell* pgc, ioflow* pflow, vrans *pvrans)
+void komega_IM1::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow, vrans *pvrans)
 {
 	wallf_update(p,a,pgc,wallf);
 
@@ -51,8 +51,8 @@ void komega_IM1::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff,s
 	pdiff->idiff_scalar(p,a,pgc,psolv,kin,eddyv0,kw_sigma_k,1.0);
 	kinsource(p,a,pvrans);
 	timesource(p,a,kin);
-    bckomega_start(a,p,kin,eps,gcval_kin);
-    bckin_matrix(a,p,kin,eps);
+    bckomega_start(p,a,kin,eps,gcval_kin);
+    bckin_matrix(p,a,kin,eps);
 	psolv->start(p,a,pgc,kin,a->rhsvec,4);
 	pgc->start4(p,kin,gcval_kin);
     pgc->solid_forcing_lsm(p,a,kin);
@@ -68,8 +68,8 @@ void komega_IM1::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff,s
 	pdiff->idiff_scalar(p,a,pgc,psolv,eps,eddyv0,kw_sigma_w,1.0);
 	epssource(p,a,pvrans,kin);
 	timesource(p,a,eps);
-    bckomega_start(a,p,kin,eps,gcval_eps);
-    bcomega_matrix(a,p,kin,eps);
+    bckomega_start(p,a,kin,eps,gcval_eps);
+    bcomega_matrix(p,a,kin,eps);
 	psolv->start(p,a,pgc,eps,a->rhsvec,4);
 	epsfsf(p,a,pgc);
 	pgc->start4(p,eps,gcval_eps);

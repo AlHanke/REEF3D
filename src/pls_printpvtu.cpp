@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include<sys/stat.h>
 #include<sys/types.h>
 
-void particle_pls::pvtu_pos(fdm* a, lexer* p, ghostcell* pgc)
+void particle_pls::pvtu_pos(lexer* p, fdm* a, ghostcell* pgc)
 {
     int num=0;
 
@@ -59,7 +59,7 @@ void particle_pls::pvtu_pos(fdm* a, lexer* p, ghostcell* pgc)
 
 	for(n=0; n<p->M10; ++n)
 	{
-    piecename_pos(a,p,pgc,n);
+    piecename_pos(p,a,pgc,n);
     result<<"<Piece Source=\""<<pname<<"\"/>\n";
 	}
 
@@ -70,7 +70,7 @@ void particle_pls::pvtu_pos(fdm* a, lexer* p, ghostcell* pgc)
 }
 
 
-void particle_pls::pvtu_neg(fdm* a, lexer* p, ghostcell* pgc)
+void particle_pls::pvtu_neg(lexer* p, fdm* a, ghostcell* pgc)
 {
     int num=0;
 
@@ -101,7 +101,7 @@ void particle_pls::pvtu_neg(fdm* a, lexer* p, ghostcell* pgc)
 
 	for(n=0; n<p->M10; ++n)
 	{
-    piecename_neg(a,p,pgc,n);
+    piecename_neg(p,a,pgc,n);
     result<<"<Piece Source=\""<<pname<<"\"/>\n";
 	}
 
@@ -111,7 +111,7 @@ void particle_pls::pvtu_neg(fdm* a, lexer* p, ghostcell* pgc)
 	result.close();
 }
 
-void particle_pls::piecename_pos(fdm* a, lexer* p, ghostcell* pgc, int n)
+void particle_pls::piecename_pos(lexer* p, fdm* a, ghostcell* pgc, int n)
 {
     int num=0;
 
@@ -127,7 +127,7 @@ void particle_pls::piecename_pos(fdm* a, lexer* p, ghostcell* pgc, int n)
 
 }
 
-void particle_pls::piecename_neg(fdm* a, lexer* p, ghostcell* pgc, int n)
+void particle_pls::piecename_neg(lexer* p, fdm* a, ghostcell* pgc, int n)
 {
     int num=0;
 
@@ -141,7 +141,7 @@ void particle_pls::piecename_neg(fdm* a, lexer* p, ghostcell* pgc, int n)
 	snprintf(pname,sizeof(pname),"XPLS-NEG-%08i-%08i.vtu",num,n+1);
 }
 
-void particle_pls::header_pos(fdm* a,lexer* p,ghostcell* pgc)
+void particle_pls::header_pos(lexer* p, fdm* a, ghostcell* pgc)
 {
     int num=0;
 
@@ -156,7 +156,7 @@ void particle_pls::header_pos(fdm* a,lexer* p,ghostcell* pgc)
 
 }
 
-void particle_pls::header_neg(fdm* a,lexer* p,ghostcell* pgc)
+void particle_pls::header_neg(lexer* p, fdm* a, ghostcell* pgc)
 {
     int num=0;
 

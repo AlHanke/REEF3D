@@ -52,7 +52,7 @@ void driver::driver_ini_cfd()
     if(p->mpirank==0)
     cout<<"number of cells: "<<p->cellnumtot<<endl;
 
-        log_ini();
+    log_ini();
 
     if(p->mpirank==0)
     cout<<"starting driver_ini"<<endl;
@@ -146,8 +146,8 @@ void driver::driver_ini_cfd()
     pmp->ini(p,a,pgc,pflow,pconvec,psolv);
 	pconc->ini(p,a,pgc,pconc);
 
-    ptstep->ini(a,p,pgc);
-    pini->iniphi_io(a,p,pgc);
+    ptstep->ini(p,a,pgc);
+    pini->iniphi_io(p,a,pgc);
 	pflow->gcio_update(p,a,pgc);
 	pflow->pressure_io(p,a,pgc);
     if (p->F80>0)
@@ -159,22 +159,22 @@ void driver::driver_ini_cfd()
         pini->inipsi(p,a,pgc);
         for(int qn=0;qn<20;++qn)
         pflow->phi_relax(p,pgc,a->phi);
-        preini->start(a,p, a->phi, pgc, pflow);
+        preini->start(p,a,pgc,a->phi,pflow);
         pfsf->update(p,a,pgc,a->phi);        
         pini->iniphi_surfarea(p,a,pgc);
     }
 
 	ppls->setup(p,a,pgc);
-	pini->iniphi_io(a,p,pgc);
+	pini->iniphi_io(p,a,pgc);
 	pflow->discharge(p,a,pgc);
 	pflow->inflow(p,a,pgc,a->u,a->v,a->w);
-	potflow->start(p,a,ppoissonsolv,pgc);
+	potflow->start(p,a,pgc,ppoissonsolv);
     pflow->wavegen_precalc(p,pgc);
 	if(p->I12>=1)
 	pini->hydrostatic(p,a,pgc);
     
     if(p->X10==0)
-    ptstep->start(a,p,pgc,pturb);
+    ptstep->start(p,a,pgc,pturb);
     
     if(p->I13==1)
     pturb->ini(p,a,pgc);

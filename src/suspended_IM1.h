@@ -33,7 +33,7 @@ class suspended_IM1 : public suspended, public increment
 public:
 	suspended_IM1(lexer *, fdm*);
 	virtual ~suspended_IM1();
-	virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, sediment_fdm*);
+	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*, sediment_fdm*);
 	virtual void ctimesave(lexer*, fdm*);
     
     void suspsource(lexer*,fdm*,field&,sediment_fdm*);

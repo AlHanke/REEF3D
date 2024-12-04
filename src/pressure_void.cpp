@@ -39,7 +39,7 @@ pressure_void::~pressure_void()
 {
 }
 
-void pressure_void::start(fdm* a,lexer*p, poisson* ppois,solver* psolv, ghostcell* pgc, ioflow *pflow, field& uvel, field& vvel, field& wvel, double alpha)
+void pressure_void::start(lexer*p, fdm* a, ghostcell* pgc, poisson* ppois,solver* psolv, ioflow *pflow, field& uvel, field& vvel, field& wvel, double alpha)
 {
 }
 

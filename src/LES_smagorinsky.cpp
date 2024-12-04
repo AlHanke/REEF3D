@@ -56,7 +56,7 @@ LES_smagorinsky::~LES_smagorinsky()
 {
 }
 
-void LES_smagorinsky::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff,solver* psolv, ghostcell* pgc, ioflow* pflow, vrans* pvrans)
+void LES_smagorinsky::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff,solver* psolv, ioflow* pflow, vrans* pvrans)
 {
     pfilter->start(p,a,pgc,uprime,vprime,wprime,gcval_u1);
     pfilter->start(p,a,pgc,uprime,vprime,wprime,gcval_v1);

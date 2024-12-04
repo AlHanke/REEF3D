@@ -129,14 +129,14 @@ public:
 	// PRINTVTU
 	void print_vtu(lexer*,fdm*,ghostcell*,double**,int*,int,int);
 	
-	void pvtu_pos(fdm*,lexer*,ghostcell*);
-	void pvtu_neg(fdm*,lexer*,ghostcell*);
+	void pvtu_pos(lexer*,fdm*,ghostcell*);
+	void pvtu_neg(lexer*,fdm*,ghostcell*);
 
-    void header_pos(fdm*,lexer*,ghostcell*);
-	void header_neg(fdm*,lexer*,ghostcell*);
+    void header_pos(lexer*,fdm*,ghostcell*);
+	void header_neg(lexer*,fdm*,ghostcell*);
 
-    void piecename_pos(fdm*,lexer*,ghostcell*, int);
-	void piecename_neg(fdm*,lexer*,ghostcell*, int);
+    void piecename_pos(lexer*,fdm*,ghostcell*, int);
+	void piecename_neg(lexer*,fdm*,ghostcell*, int);
 	
 	char name[100],pname[100],epsvar[100];
     int iin,offset[100];

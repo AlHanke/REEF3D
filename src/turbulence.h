@@ -42,7 +42,7 @@ class turbulence
 {
 
 public:
-	virtual void start(fdm*,lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*)=0;
+	virtual void start(lexer*,fdm*,ghostcell*, convection*, diffusion*, solver*, ioflow*, vrans*)=0;
 	virtual void ktimesave(lexer*, fdm*, ghostcell*)=0;
 	virtual void etimesave(lexer*, fdm*, ghostcell*)=0;
 	virtual void isource(lexer*, fdm*)=0;

@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"levelset_RK3.h"
+
+#include"levelset_RK3.h"
 #include"gradient.h"
 #include"lexer.h"
 #include"fdm.h"
@@ -99,7 +100,7 @@ levelset_RK3::~levelset_RK3()
 {
 }
 
-void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcell* pgc,ioflow* pflow, reini* preini, particle_corr* ppart, field &ls)
+void levelset_RK3::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec,solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppart, field &ls)
 {
     pflow->fsfinflow(p,a,pgc);
     pflow->fsfrkin(p,a,pgc,ark1);
@@ -164,7 +165,7 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
 	
 	p->lsmtime=pgc->timer()-starttime;
     
-	preini->start(a,p,ls,pgc,pflow);
+	preini->start(p,a,pgc,ls,pflow);
     
 
     ppicard->correct_ls(p,a,pgc,ls);

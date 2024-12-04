@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"suspended_void.h"
+
+#include"suspended_void.h"
 
 suspended_void::suspended_void()
 {
@@ -29,7 +30,7 @@ suspended_void::~suspended_void()
 {
 }
 
-void suspended_void::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, solver* psolv, ghostcell* pgc, ioflow* pflow, sediment_fdm*)
+void suspended_void::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow, sediment_fdm*)
 {
 }
 

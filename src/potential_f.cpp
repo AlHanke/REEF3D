@@ -36,7 +36,7 @@ potential_f::~potential_f()
 {
 }
 
-void potential_f::start(lexer*p, fdm* a, solver* psolv, ghostcell* pgc)
+void potential_f::start(lexer*p, fdm* a, ghostcell* pgc, solver* psolv)
 {
     int itermem;
     field4 psi(p);

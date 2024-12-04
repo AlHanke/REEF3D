@@ -41,7 +41,7 @@ class VOF_PLIC : public freesurface, gradient, norm_vec
 public:
 	VOF_PLIC(lexer*, fdm*, ghostcell*,heat*);
 	virtual ~VOF_PLIC();
-	virtual void start(fdm*,lexer*, convection*, solver*, ghostcell*,ioflow*, reini*, particle_corr*,field&);
+	virtual void start(lexer*,fdm*,ghostcell*, convection*, solver*, ioflow*, reini*, particle_corr*,field&);
 	virtual void update(lexer*,fdm*,ghostcell*,field&);
 	
 private:	

@@ -316,8 +316,8 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, convecti
 	pgc->start4(p,ls1,50);
 	pgc->start4(p,ls2,50);
 	
-	preini->start(a,p,ls1, pgc, pflow);
-	preini->start(a,p,ls2, pgc, pflow);
+	preini->start(p,a,pgc,ls1,pflow);
+	preini->start(p,a,pgc,ls2,pflow);
 	
 	update(p,a,pgc);
 }

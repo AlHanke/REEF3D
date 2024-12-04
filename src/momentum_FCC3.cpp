@@ -196,7 +196,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     pgc->start4(p,a->phi,gcval_phi);
     
     p->F44=2;
-    preini->start(a,p,a->phi, pgc, pflow);
+    preini->start(p,a,pgc,a->phi,pflow);
     ppicard->correct_ls(p,a,pgc,frk1);
     
     pupdate->start(p,a,pgc);
@@ -300,7 +300,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
 
 	pturb->isource(p,a);
 	pflow->isource(p,a,pgc,pvrans); 
-	bcmom_start(a,p,pgc,pturb,ur,gcval_u);
+	bcmom_start(p,a,pgc,pturb,ur,gcval_u);
 	ppress->upgrad(p,a,a->eta,a->eta_n);
 	irhs(p,a,pgc,ur,a->u,a->v,a->w,1.0);
 	pdiff->diff_u(p,a,pgc,psolv,udiff,ur,a->u,a->v,a->w,1.0);
@@ -317,7 +317,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
 
 	pturb->jsource(p,a);
 	pflow->jsource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+	bcmom_start(p,a,pgc,pturb,a->v,gcval_v);
 	ppress->vpgrad(p,a,a->eta,a->eta_n);
 	jrhs(p,a,pgc,a->v,a->u,a->v,a->w,1.0);
 	pdiff->diff_v(p,a,pgc,psolv,vdiff,vr,a->u,a->v,a->w,1.0);
@@ -334,7 +334,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
 
 	pturb->ksource(p,a);
 	pflow->ksource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
+	bcmom_start(p,a,pgc,pturb,a->w,gcval_w);
 	ppress->wpgrad(p,a,a->eta,a->eta_n);
 	krhs(p,a,pgc,a->w,a->u,a->v,a->w,1.0);
 	pdiff->diff_w(p,a,pgc,psolv,wdiff,wr,a->u,a->v,a->w,1.0);
@@ -353,7 +353,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
                            urk1, vrk1, wrk1, fx, fy, fz, 0, 1.0, false);
     
     pflow->pressure_io(p,a,pgc);
-	ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk1, vrk1, wrk1, 1.0);
+	ppress->start(p,a,pgc,ppois,ppoissonsolv,pflow, urk1, vrk1, wrk1, 1.0);
 	
 	pflow->u_relax(p,a,pgc,urk1);
 	pflow->v_relax(p,a,pgc,vrk1);
@@ -392,7 +392,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     pgc->start4(p,a->phi,gcval_phi);
     
     p->F44=2;
-    preini->start(a,p,a->phi, pgc, pflow);
+    preini->start(p,a,pgc,a->phi,pflow);
     ppicard->correct_ls(p,a,pgc,frk2);
     
     pupdate->start(p,a,pgc);
@@ -495,7 +495,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
 
 	pturb->isource(p,a);
 	pflow->isource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
+	bcmom_start(p,a,pgc,pturb,a->u,gcval_u);
 	ppress->upgrad(p,a,a->eta,a->eta_n);
 	irhs(p,a,pgc,urk1,urk1,vrk1,wrk1,0.25);
 	pdiff->diff_u(p,a,pgc,psolv,udiff,ur,urk1,vrk1,wrk1,1.0);
@@ -512,7 +512,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
 
 	pturb->jsource(p,a);
 	pflow->jsource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+	bcmom_start(p,a,pgc,pturb,a->v,gcval_v);
 	ppress->vpgrad(p,a,a->eta,a->eta_n);
 	jrhs(p,a,pgc,vrk1,urk1,vrk1,wrk1,0.25);
 	pdiff->diff_v(p,a,pgc,psolv,vdiff,vr,urk1,vrk1,wrk1,1.0);
@@ -529,7 +529,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
 
 	pturb->ksource(p,a);
 	pflow->ksource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
+	bcmom_start(p,a,pgc,pturb,a->w,gcval_w);
 	ppress->wpgrad(p,a,a->eta,a->eta_n);
 	krhs(p,a,pgc,wrk1,urk1,vrk1,wrk1,0.25);
 	pdiff->diff_w(p,a,pgc,psolv,wdiff,wr,urk1,vrk1,wrk1,1.0);
@@ -548,7 +548,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
                            urk2, vrk2, wrk2, fx, fy, fz, 1, 0.25, false);
 
     pflow->pressure_io(p,a,pgc);
-	ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk2, vrk2, wrk2, 0.25);
+	ppress->start(p,a,pgc,ppois,ppoissonsolv,pflow, urk2, vrk2, wrk2, 0.25);
 	
 	pflow->u_relax(p,a,pgc,urk2);
 	pflow->v_relax(p,a,pgc,vrk2);
@@ -586,7 +586,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     pgc->start4(p,a->phi,gcval_phi);
     
     p->F44=3;
-    preini->start(a,p,a->phi, pgc, pflow);
+    preini->start(p,a,pgc,a->phi,pflow);
     ppicard->correct_ls(p,a,pgc,a->phi);
 
     pupdate->start(p,a,pgc);
@@ -689,7 +689,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
 
 	pturb->isource(p,a);
 	pflow->isource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
+	bcmom_start(p,a,pgc,pturb,a->u,gcval_u);
 	ppress->upgrad(p,a,a->eta,a->eta_n);
 	irhs(p,a,pgc,urk2,urk2,vrk2,wrk2,2.0/3.0);
 	pdiff->diff_u(p,a,pgc,psolv,udiff,ur,urk2,vrk2,wrk2,1.0);
@@ -706,7 +706,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
 
 	pturb->jsource(p,a);
 	pflow->jsource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+	bcmom_start(p,a,pgc,pturb,a->v,gcval_v);
 	ppress->vpgrad(p,a,a->eta,a->eta_n);
 	jrhs(p,a,pgc,vrk2,urk2,vrk2,wrk2,2.0/3.0);
 	pdiff->diff_v(p,a,pgc,psolv,vdiff,vr,urk2,vrk2,wrk2,1.0);
@@ -723,7 +723,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
 
 	pturb->ksource(p,a);
 	pflow->ksource(p,a,pgc,pvrans);
-	bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
+	bcmom_start(p,a,pgc,pturb,a->w,gcval_w);
 	ppress->wpgrad(p,a,a->eta,a->eta_n);
 	krhs(p,a,pgc,wrk2,urk2,vrk2,wrk2,2.0/3.0);
 	pdiff->diff_w(p,a,pgc,psolv,wdiff,wr,urk2,vrk2,wrk2,1.0);
@@ -742,7 +742,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
                            a->u, a->v, a->w, fx, fy, fz, 2, 2.0/3.0, true);
 
 	pflow->pressure_io(p,a,pgc);
-	ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, a->u, a->v,a->w,2.0/3.0);
+	ppress->start(p,a,pgc,ppois,ppoissonsolv,pflow, a->u, a->v,a->w,2.0/3.0);
 	
 	pflow->u_relax(p,a,pgc,a->u);
 	pflow->v_relax(p,a,pgc,a->v);

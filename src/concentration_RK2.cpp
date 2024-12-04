@@ -40,7 +40,7 @@ concentration_RK2::~concentration_RK2()
 {
 }
 
-void concentration_RK2::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, turbulence *pturb, solver* psolv, ghostcell* pgc, ioflow* pflow)
+void concentration_RK2::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, turbulence *pturb, solver* psolv, ioflow* pflow)
 {
     field4 ark1(p);
     

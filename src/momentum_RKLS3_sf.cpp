@@ -108,7 +108,7 @@ void momentum_RKLS3_sf::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, 
         // Fill F
         pturb->isource(p,a);
         pflow->isource(p,a,pgc,pvrans); 
-        bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
+        bcmom_start(p,a,pgc,pturb,a->u,gcval_u);
         ppress->upgrad(p,a,a->eta,a->eta_n);
         irhs(p,a,pgc,a->u,a->u,a->v,a->w,2.0*alpha(loop));
         pdiff->diff_u(p,a,pgc,psolv,urk,a->u,a->u,a->v,a->w,2.0*alpha(loop));
@@ -139,7 +139,7 @@ void momentum_RKLS3_sf::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, 
         // Add source
         pturb->jsource(p,a);
         pflow->jsource(p,a,pgc,pvrans);
-        bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+        bcmom_start(p,a,pgc,pturb,a->v,gcval_v);
         ppress->vpgrad(p,a,a->eta,a->eta_n);
         jrhs(p,a,pgc,a->v,a->u,a->v,a->w,2.0*alpha(loop));
         pdiff->diff_v(p,a,pgc,psolv,vrk,a->v,a->v,a->v,a->w,2.0*alpha(loop));
@@ -168,7 +168,7 @@ void momentum_RKLS3_sf::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, 
         // Add source
         pturb->ksource(p,a);
         pflow->ksource(p,a,pgc,pvrans);
-        bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
+        bcmom_start(p,a,pgc,pturb,a->w,gcval_w);
         ppress->wpgrad(p,a,a->eta,a->eta_n);
         krhs(p,a,pgc,a->w,a->u,a->v,a->w,2.0*alpha(loop));
         pdiff->diff_w(p,a,pgc,psolv,wrk,a->w,a->u,a->v,a->w,2.0*alpha(loop));
@@ -246,7 +246,7 @@ void momentum_RKLS3_sf::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, 
 
         // Pressure
         pflow->pressure_io(p,a,pgc);
-        ppress->start(a,p,ppois,ppoissonsolv,pgc, pflow, a->u, a->v, a->w, 2.0*alpha(loop));
+        ppress->start(p,a,pgc,ppois,ppoissonsolv, pflow, a->u, a->v, a->w, 2.0*alpha(loop));
         
         pflow->u_relax(p,a,pgc,a->u);
         pflow->v_relax(p,a,pgc,a->v);

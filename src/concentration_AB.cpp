@@ -40,7 +40,7 @@ concentration_AB::~concentration_AB()
 {
 }
 
-void concentration_AB::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, turbulence *pturb, solver* psolv, ghostcell* pgc, ioflow* pflow)
+void concentration_AB::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, turbulence *pturb, solver* psolv, ioflow* pflow)
 {
 
     starttime=pgc->timer();
