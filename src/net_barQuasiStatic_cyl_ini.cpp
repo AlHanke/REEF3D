@@ -497,7 +497,7 @@ void net_barQuasiStatic::cyl_ini(lexer *p, fdm *a, ghostcell *pgc)
     }
 
     // Geometrical constraints for inner meshes, positiv clockwise
-    for (int i = nd; i < meshID.size(); i++)
+    for (size_t i = nd; i < meshID.size(); i++)
     {
         for (int j = 0; j < nf; j++)
         {

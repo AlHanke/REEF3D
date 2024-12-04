@@ -103,7 +103,7 @@ void nhflow_forcing::geometry_refinement(lexer *p, ghostcell *pgc)
     
         
     
-	for (int n = 0; n < tri_x_r.size(); n++)
+	for (size_t n = 0; n < tri_x_r.size(); n++)
 	{        
 		x0 = tri_x_r[n][0];
 		x1 = tri_x_r[n][1];

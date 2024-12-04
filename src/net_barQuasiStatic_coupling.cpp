@@ -177,7 +177,7 @@ void net_barQuasiStatic::triangulation(lexer *p, fdm *a, ghostcell *pgc)
     
     tri_vel.resize(meshID.size()*2, vec3);
 
-    for (int i = 0; i < meshID.size(); i++)
+    for (size_t i = 0; i < meshID.size(); i++)
     {
         // Tri 1
         tri_x[index][0] = K_[meshID[i][0]][0];

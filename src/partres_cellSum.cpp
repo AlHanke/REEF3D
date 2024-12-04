@@ -78,7 +78,7 @@ void partres::cellSum_full_update(lexer *p, ghostcell *pgc, sediment_fdm *s, int
     cellSum(i,j,k) = 0.0;
     pgc->start4a(p,cellSum,1);
     
-    for(size_t n=0;n<P.index;n++)
+    for(n=0;n<P.index;n++)
     if(P.Flag[n]==ACTIVE)
     {
         if(mode==1)

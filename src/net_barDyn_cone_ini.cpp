@@ -425,7 +425,7 @@ void net_barDyn::cone_ini(lexer *p, fdm *a, ghostcell *pgc)
     Vector3d p1, p2, p3, p4;
     double at,bt,ct,st,x0,x1,x2,y0,y1,y2,z0,z1,z2;
 
-    for (int id = 0; id < meshID.size(); id++)
+    for (size_t id = 0; id < meshID.size(); id++)
     {
         p1 << x_(meshID[id][0], 0), x_(meshID[id][0], 1), x_(meshID[id][0], 2);
         p2 << x_(meshID[id][1], 0), x_(meshID[id][1], 1), x_(meshID[id][1], 2);
@@ -467,7 +467,7 @@ void net_barDyn::cone_ini(lexer *p, fdm *a, ghostcell *pgc)
         l_solid = 0.0;
         
         // Lookup adjoint meshes and sum up area
-        for (int id = 0; id < meshID.size(); id++)
+        for (size_t id = 0; id < meshID.size(); id++)
         {
             for (int k = 0; k < 4; k++)
             {

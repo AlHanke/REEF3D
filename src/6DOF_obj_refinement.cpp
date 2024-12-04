@@ -103,7 +103,7 @@ void sixdof_obj::geometry_refinement(lexer *p, ghostcell *pgc)
     
         
     
-	for (int n = 0; n < tri_x_r.size(); n++)
+	for (size_t n = 0; n < tri_x_r.size(); n++)
 	{
     //cout<<"n: "<<n<<" tri_x_r.size()"<<tri_x_r.size()<<endl;
         

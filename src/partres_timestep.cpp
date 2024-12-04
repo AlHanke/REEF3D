@@ -30,7 +30,7 @@ void partres::timestep(lexer *p, ghostcell *pgc)
     double maxVelU=.00,maxVelV=0.0,maxVelW=0.0;
     double maxvz=0.0;
     
-    for(size_t n=0;n<P.index;n++)
+    for(int n=0;n<P.index;n++)
     {
         if(P.Flag[n]>=0)
         {

@@ -1,4 +1,5 @@
-/*--------------------------------------------------------------------
+
+/*--------------------------------------------------------------------
 REEF3D
 Copyright 2018-2021 Tobias Martin
 
@@ -16,7 +17,9 @@ for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
---------------------------------------------------------------------Author: Tobias Martin--------------------------------------------------------------------*/
+--------------------------------------------------------------------
+Author: Tobias Martin
+--------------------------------------------------------------------*/
 
 #include"beam.h"
 #include<iomanip>
@@ -56,8 +59,8 @@ void beam::resetSolver()
 
 
 	// n, the dimension of the system
-	if (n_dim == UINT_MAX) {
-		cout << "System too big, max. n_dim = " << UINT_MAX - 1 << endl;
+	if (n_dim == INT_MAX) {
+		cout << "System too big, max. n_dim = " << INT_MAX - 1 << endl;
 		throw -1;
 	}
 	
@@ -1878,7 +1881,7 @@ int beam::SolutionOutput()
 		if ((xold <= xd) && (x >= xd)) {
 			cout << "Step " << naccpt << ": t = " << setw(5) <<
 				setprecision(2) << xd << "  y = ";
-			for (unsigned i = 0; i < n_dim; i++)
+			for (int i = 0; i < n_dim; i++)
 				cout << setw(10) << setprecision(8) <<
 					ContinuousOutput(i) << "  ";
 			cout << endl;

@@ -385,7 +385,7 @@ void wave_lib_ssgw::writeResult(const std::string folderName)
     fft.fwd(dummy_hat,Ys);
     dummy_real = dummy_hat.array().abs();
     myFile << std::setw(16) << "xs," << std::setw(16) << "eta," << std::setw(16) << "fi," << std::setw(7) << "i," << std::setw(15) << "S(k)" << std::endl;
-    for (int i = 0;i<xs.size();i++)
+    for (size_t i = 0;i<xs.size();i++)
     {
         myFile << std::scientific;
         myFile <<std::setw(15) << xs[i] << "," << std::setw(15) << ys[i] << "," << std::setw(15) << phis[i] << "," << std::setw(6) << i << "," << std::setw(15) << dummy_real(i) << std::endl;
@@ -414,7 +414,7 @@ void wave_lib_ssgw::computePotentialField(std::vector<double>& x, std::vector<do
     Eigen::VectorXcd DDnominator = (0.5*(kzs.array()+kdi)).sin();
     Eigen::VectorXcd EEnominator = (0.5*(kzsconj.array()-kdi)).sin();
     
-    for (int j=0;j<phi.size();j++)
+    for (size_t j=0;j<phi.size();j++)
     {
         std::complex<double> kz   = ParameterValue.waveNumber*(x[j] + i1*y[j]);
         Eigen::VectorXcd DD = (DDnominator.array()/(0.5*(kzs.array()-kz)).sin()).log();
@@ -446,7 +446,7 @@ void wave_lib_ssgw::computeVelocityField(std::vector<double>& x, std::vector<dou
     Eigen::RowVectorXcd BB     = dzs.array()-1.0;
     Eigen::RowVectorXcd BBconj = BB.array().conjugate();
     
-    for (int j=0;j<u.size();j++)
+    for (size_t j=0;j<u.size();j++)
     {
         std::complex<double> kz = ParameterValue.waveNumber*(x[j] + i1*y[j]);
         Eigen::VectorXcd AA = 1.0/(0.5*(kzs.array()-kz)).tan();

@@ -74,7 +74,7 @@ void vrans_net::start(lexer *p, fdm *a, ghostcell *pgc, net *&ppnet, int nNet)
     }
     
 
-    for (int pI = 0; pI < lagrangePoints.size(); pI++)
+    for (size_t pI = 0; pI < lagrangePoints.size(); pI++)
     {
         const Eigen::Vector3d& forcesI = lagrangeForces[pI];
         
@@ -188,7 +188,7 @@ void vrans_net::distributeNetForces_x(lexer *p, fdm *a, ghostcell *pgc, net *&pp
     }
 
 
-    for (int pI = 0; pI < lagrangePoints.size(); pI++)
+    for (size_t pI = 0; pI < lagrangePoints.size(); pI++)
     {
         const Eigen::Vector3d& forcesI = lagrangeForces[pI];
         const Eigen::Vector3d& coordI = lagrangePoints[pI];
@@ -248,7 +248,7 @@ void vrans_net::distributeNetForces_y(lexer *p, fdm *a, ghostcell *pgc, net *&pp
         }        
     }
     
-    for (int pI = 0; pI < lagrangePoints.size(); pI++)
+    for (size_t pI = 0; pI < lagrangePoints.size(); pI++)
     {
         const Eigen::Vector3d& forcesI = lagrangeForces[pI];
         const Eigen::Vector3d& coordI = lagrangePoints[pI];
@@ -307,7 +307,7 @@ void vrans_net::distributeNetForces_z(lexer *p, fdm *a, ghostcell *pgc, net *&pp
         }        
     }
     
-    for (int pI = 0; pI < lagrangePoints.size(); pI++)
+    for (size_t pI = 0; pI < lagrangePoints.size(); pI++)
     {
         const Eigen::Vector3d& forcesI = lagrangeForces[pI];
         const Eigen::Vector3d& coordI = lagrangePoints[pI];
@@ -353,7 +353,7 @@ void vrans_net::distributeCollarForces(lexer *p, fdm *a, ghostcell *pgc, net *&p
     const EigenMat& collarPoints = ppnet->getCollarPoints();
     Eigen::MatrixXd U_l = Eigen::MatrixXd::Zero(collarPoints.size(),3);
     
-    for (int pI = 0; pI < collarPoints.size(); pI++)
+    for (size_t pI = 0; pI < collarPoints.size(); pI++)
     {
         const Eigen::Vector3d& coordI = collarPoints[pI];
          
@@ -432,7 +432,7 @@ void vrans_net::distributeCollarForces(lexer *p, fdm *a, ghostcell *pgc, net *&p
     const EigenMat& collarVel = ppnet->getCollarVel();
     Eigen::MatrixXd forcing_l = Eigen::MatrixXd::Zero(collarPoints.size(),3); 
   
-    for (int pI = 0; pI < collarPoints.size(); pI++)
+    for (size_t pI = 0; pI < collarPoints.size(); pI++)
     {
         forcing_l(pI,0) = (collarVel[pI](0) - U_l(pI,0))/p->dt;
         forcing_l(pI,1) = (collarVel[pI](1) - U_l(pI,1))/p->dt;
@@ -443,7 +443,7 @@ void vrans_net::distributeCollarForces(lexer *p, fdm *a, ghostcell *pgc, net *&p
     double delta_net = p->X322_D[nNet]*sin(PI/p->X321_nd[nNet]);
     double dV;
 
-    for (int pI = 0; pI < collarPoints.size(); pI++)
+    for (size_t pI = 0; pI < collarPoints.size(); pI++)
     {
         const Eigen::Vector3d& coordI = collarPoints[pI];
         const Eigen::Vector3d& forcesI = forcing_l.row(pI);
