@@ -68,9 +68,9 @@ class printer_CFD : public printer, public increment
 {
 
 public:
-	printer_CFD(lexer*,fdm*,ghostcell*);
-	virtual ~printer_CFD();
-	void start(lexer*,fdm*,ghostcell*,turbulence*,heat*,ioflow*,data*,concentration*,multiphase*,sediment*);
+    printer_CFD(lexer*,fdm*,ghostcell*);
+    virtual ~printer_CFD();
+    void start(lexer*,fdm*,ghostcell*,turbulence*,heat*,ioflow*,data*,concentration*,multiphase*,sediment*);
     void print_stop(lexer*,fdm*,ghostcell*,turbulence*,heat*,ioflow*,data*,concentration*,multiphase*,sediment*);
 
 private:
@@ -82,31 +82,31 @@ private:
     char name[200];
     int n,iin,offset[300];
     float ffn;
-	double *printtime_wT;
+    double *printtime_wT;
     double *printfsftime_wT;
 
     print_wsf *pwsf;
-	print_wsf_theory *pwsf_theory;
+    print_wsf_theory *pwsf_theory;
     print_wsfline_x *pwsfline_x;
-	print_wsfline_y *pwsfline_y;
+    print_wsfline_y *pwsfline_y;
     force **pforce;
     vorticity *pvort;
-	probe_point *pprobe;
+    probe_point *pprobe;
     probe_pressure *ppressprobe;
-	probe_line *pline;
-	bedprobe_point *pbedpt;
-	bedprobe_line_x *pbedlinex;
-	bedprobe_line_y *pbedliney;
-	bedprobe_max *pbedmax;
-	bedshear_probe *pbedshear;
-	bedshear_max *pbedshearmax;
-	gage_discharge_x *pq;
+    probe_line *pline;
+    bedprobe_point *pbedpt;
+    bedprobe_line_x *pbedlinex;
+    bedprobe_line_y *pbedliney;
+    bedprobe_max *pbedmax;
+    bedshear_probe *pbedshear;
+    bedshear_max *pbedshearmax;
+    gage_discharge_x *pq;
     gage_discharge_window_x *pqw;
-	fsf_vtp *pfsf;
+    fsf_vtp *pfsf;
     topo_vtp *ptopo;
-	cfd_state *pstate;
+    cfd_state *pstate;
     sloshing_force *pslosh;
-	print_porous *ppor;
+    print_porous *ppor;
     flowfile_out *pflowfile;
     print_averaging *pmean;
     probe_vel *pvel;
