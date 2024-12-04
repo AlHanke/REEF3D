@@ -39,9 +39,6 @@ public:
     ~part();
     
 // functions
-    // ini
-    void ini_storage(lexer*,ghostcell*);
-    
     // add
     void add(lexer*,ghostcell*,double,double,double,double,double);
     
@@ -49,18 +46,9 @@ public:
 
     // remove
     void remove(int);
-    void erase_all();
     
     // parallel
     void xchange(lexer*, ghostcell*,slice&,int);
-    void xchange_count(lexer*, ghostcell*,int);
-    void xchange_sendid(lexer*, ghostcell*,int);
-    void xchange_fill(lexer*, ghostcell*, int, double*);
-    void xchange_fill_flag(lexer*, ghostcell*,int);
-    void xchange_fillback(lexer*, ghostcell*, double*);
-    void xchange_fillback_flag(lexer*, ghostcell*,slice&,int);
-    void xchange_resize(lexer*, ghostcell*);
-    
     
 // data arrays
     double *U,*V,*W;
@@ -82,19 +70,30 @@ public:
     
 // iterators
     int index; // replace loopindex
-    int index_empty,index_empty0; //
-    int numactive,numempty;   // number of active particles
-    int capacity; // length of allocated array
-    int capacity_para,maxnum;
+    int index_empty; //
     
     int n,q;
     
 private:
-    int sendnum[6],recvnum[6];
-    int sendcount[6],recvcount[6];
-    int **sendid;
-    double **send,**recv;
-    
+    void xchange_count(lexer*, ghostcell*,int);
+    void xchange_sendid(lexer*, ghostcell*,int);
+    void xchange_fill(lexer*, ghostcell*, int, double*);
+    void xchange_fill_flag(lexer*, ghostcell*,int);
+    void xchange_fillback(lexer*, ghostcell*, double*);
+    void xchange_fillback_flag(lexer*, ghostcell*,slice&,int);
+    void xchange_resize(lexer*, ghostcell*);
+
+    int sendnum[6];
+    int recvnum[6];
+    int sendcount[6];
+    int recvcount[6];
+    int** sendid;
+    double** send;
+    double** recv;
+    int capacity_para;
+    int maxnum;
+    int index_empty0;
+    int capacity; // length of allocated array
 };
 
 #endif

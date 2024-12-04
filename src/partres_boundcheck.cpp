@@ -53,12 +53,7 @@ void partres::boundcheck(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, int 
 
         // remove out of bounds particles
         if(inBounds==0)
-        {
-            //remove(p,PP,n);
-            P.Flag[n]=EMPTY;
-            P.Empty[P.index_empty]=n;
-            ++P.index_empty;
-        }
+            P.remove(n);
     }
     
 }

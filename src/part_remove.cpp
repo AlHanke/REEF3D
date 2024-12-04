@@ -21,18 +21,10 @@ Author: Hans Bihs, Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"part.h"
-#include"lexer.h"
 
 void part::remove(int n)
 {
     Flag[n] = EMPTY;
     
-    Empty[index_empty] = n;
-    ++index_empty;
-
-}
-
-void part::erase_all()
-{
-
+    Empty[index_empty++] = n;
 }
