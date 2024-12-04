@@ -73,12 +73,12 @@ void data_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
 
 void data_f::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 {
-    result<<"<PDataArray type=\"Float32\" Name=\"data\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"data\"/>\n";
 }
 
 void data_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
-    result<<"<DataArray type=\"Float32\" Name=\"data\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"data\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
 }
 

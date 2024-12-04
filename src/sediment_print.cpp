@@ -29,21 +29,21 @@ Author: Hans Bihs
 
 void sediment_f::name_pvtu_bedload(lexer *p, ghostcell *pgc, ofstream &result)
 {
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_qbe\"/>"<<endl;
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_qb\"/>"<<endl;
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_cbe\"/>"<<endl;
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_cb\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_qbe\"/>\n";
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_qb\"/>\n";
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_cbe\"/>\n";
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_cb\"/>\n";
 }
 
 void sediment_f::name_vtu_bedload(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
-    result<<"<DataArray type=\"Float32\" Name=\"ST_qbe\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_qbe\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_qb\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_qb\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_cbe\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_cbe\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_cb\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_cb\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
 }
 
@@ -185,20 +185,20 @@ void sediment_f::name_pvtu_bedshear(lexer *p, ghostcell *pgc, ofstream &result)
 {
     if(p->P79==1)
     {
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_tau_eff\"/>"<<endl;
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_tau_crit\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_tau_eff\"/>\n";
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_tau_crit\"/>\n";
     }
     
     if(p->P79==2)
     {
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_shearvel_eff\"/>"<<endl;
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_shearvel_crit\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_shearvel_eff\"/>\n";
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_shearvel_crit\"/>\n";
     }
     
     if(p->P79==3)
     {
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_shields_eff\"/>"<<endl;
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_shields_crit\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_shields_eff\"/>\n";
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_shields_crit\"/>\n";
     }
 }
 
@@ -206,25 +206,25 @@ void sediment_f::name_vtu_bedshear(lexer *p, ghostcell *pgc, ofstream &result, i
 {
     if(p->P79==1)
     {
-    result<<"<DataArray type=\"Float32\" Name=\"ST_tau_eff\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_tau_eff\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_tau_crit\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_tau_crit\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
     }
     
     if(p->P79==2)
     {
-    result<<"<DataArray type=\"Float32\" Name=\"ST_shearvel_eff\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_shearvel_eff\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_shearvel_crit\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_shearvel_crit\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
     }
     
     if(p->P79==3)
     {
-    result<<"<DataArray type=\"Float32\" Name=\"ST_shields_eff\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_shields_eff\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_shields_crit\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_shields_crit\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
     }
 }
@@ -577,28 +577,28 @@ void sediment_f::print_3D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
 
 void sediment_f::name_pvtu_parameter1(lexer *p, ghostcell *pgc, ofstream &result)
 {
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_alpha\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_alpha\"/>\n";
     
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_teta\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_teta\"/>\n";
     
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_gamma\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_gamma\"/>\n";
     
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_beta\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_beta\"/>\n";
     
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_phi\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_phi\"/>\n";
 }
 
 void sediment_f::name_vtu_parameter1(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
-    result<<"<DataArray type=\"Float32\" Name=\"ST_alpha\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_alpha\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_teta\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_teta\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_gamma\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_gamma\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_beta\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_beta\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_phi\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_phi\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
 }
 
@@ -771,28 +771,28 @@ void sediment_f::print_3D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 
 void sediment_f::name_pvtu_parameter2(lexer *p, ghostcell *pgc, ofstream &result)
 {
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_dh\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_dh\"/>\n";
     
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_bedch\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_bedch\"/>\n";
     
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_reduce\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_reduce\"/>\n";
     
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_threshold\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_threshold\"/>\n";
     
-    result<<"<PDataArray type=\"Float32\" Name=\"ST_slideflag\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"ST_slideflag\"/>\n";
 }
 
 void sediment_f::name_vtu_parameter2(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
-    result<<"<DataArray type=\"Float32\" Name=\"ST_dh\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_dh\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_bedch\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_bedch\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_reduce\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_reduce\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_threshold\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_threshold\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ST_slideflag\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ST_slideflag\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
 }
 
