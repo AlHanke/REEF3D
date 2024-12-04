@@ -218,20 +218,6 @@ double wave_interface::wave_eta(lexer *p, ghostcell *pgc, double x, double y)
     return eta;
 }
 
-double wave_interface::wave_um(lexer *p, ghostcell *pgc, double x, double y)
-{
-    double um;
-    
-    return um;
-}
-
-double wave_interface::wave_vm(lexer *p, ghostcell *pgc, double x, double y)
-{
-    double vm;
-    
-    return vm;
-}
-
 void wave_interface::wave_prestep(lexer *p, ghostcell *pgc)
 {
     pwave->wave_prestep(p,pgc);

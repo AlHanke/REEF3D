@@ -203,9 +203,7 @@ double wave_lib_irregular_2nd_a::wave_eta(lexer *p, double x, double y)
 
 double wave_lib_irregular_2nd_a::wave_fi(lexer *p, double x, double y, double z)
 {
-    double fi;
-    
-    return fi;
+    return 0.0;
 }
 
 void wave_lib_irregular_2nd_a::parameters(lexer *p, ghostcell *pgc)

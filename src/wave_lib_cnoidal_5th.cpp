@@ -182,9 +182,7 @@ double wave_lib_cnoidal_5th::wave_eta(lexer *p, double x, double y)
 
 double wave_lib_cnoidal_5th::wave_fi(lexer *p, double x, double y, double z)
 {
-    double fi;
-    
-    return fi;
+    return 0.0;
 }
 
 void wave_lib_cnoidal_5th::parameters(lexer *p, ghostcell *pgc)

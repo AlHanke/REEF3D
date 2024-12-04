@@ -97,9 +97,7 @@ double wave_lib_shallow::wave_eta(lexer *p, double x, double y)
 
 double wave_lib_shallow::wave_fi(lexer *p, double x, double y, double z)
 {
-    double fi;
-    
-    return fi;
+    return 0.0;
 }
 
 void wave_lib_shallow::parameters(lexer *p, ghostcell *pgc)

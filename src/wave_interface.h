@@ -42,9 +42,6 @@ public:
     double wave_h(lexer*,ghostcell*,double,double,double);
     double wave_fi(lexer*,ghostcell*,double,double,double);
     double wave_eta(lexer*,ghostcell*,double,double);
-    double wave_um(lexer*,ghostcell*,double,double);
-    double wave_vm(lexer*,ghostcell*,double,double);
-    
     
     // decomp
     double wave_u_space_sin(lexer*,ghostcell*,double,double,double,int);
