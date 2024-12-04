@@ -71,13 +71,13 @@ class printer_CFD : public printer, public increment
 public:
 	printer_CFD(lexer*,fdm*,ghostcell*);
 	virtual ~printer_CFD();
-	void start(fdm*,lexer*,ghostcell*,turbulence*,heat*,ioflow*,solver*,data*,concentration*,multiphase*,sediment*);
-    void print_stop(fdm*,lexer*,ghostcell*,turbulence*,heat*,ioflow*,solver*,data*,concentration*,multiphase*,sediment*);
+	void start(lexer*,fdm*,ghostcell*,turbulence*,heat*,ioflow*,data*,concentration*,multiphase*,sediment*);
+    void print_stop(lexer*,fdm*,ghostcell*,turbulence*,heat*,ioflow*,data*,concentration*,multiphase*,sediment*);
 	void ini(lexer*,fdm*,ghostcell*);
 
 private:
-    void print3D(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,multiphase*,sediment*);
-    void parallel(fdm*,lexer*,ghostcell*,turbulence*,heat*,data*,concentration*,multiphase*,sediment*);
+    void print3D(lexer*,fdm*,ghostcell*,turbulence*,heat*,data*,concentration*,multiphase*,sediment*);
+    void parallel(lexer*,fdm*,ghostcell*,turbulence*,heat*,data*,concentration*,multiphase*,sediment*);
 
     vtk3D *outputFormat;
 
