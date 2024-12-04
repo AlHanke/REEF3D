@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"ioflow.h"
 
-onephase_f::onephase_f(lexer *p, fdm *a, ghostcell *pgc) : ddweno_f_nug(p),uf(p),vf(p),wf(p),urk1(p),vrk1(p),wrk1(p),xphi(p),yphi(p),zphi(p)
+onephase_f::onephase_f(lexer *p, fdm *a, ghostcell *pgc) : ddweno_f_nug(p),uf(p),urk1(p),vf(p),vrk1(p),wf(p),wrk1(p),xphi(p),yphi(p),zphi(p)
 {
     gcval_u=10;
 	gcval_v=11;

@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include"reinidisc_f.h"
 #include"reinidisc_fsf.h"
 
-reini_RK3::reini_RK3(lexer* p, int type) : epsi(p->F45*p->DXM),frk1(p),frk2(p),dt(p)
+reini_RK3::reini_RK3(lexer* p, int type) : frk1(p),frk2(p),dt(p),epsi(p->F45*p->DXM)
 {
 	if(p->F50==1)
 	gcval_phi=51;

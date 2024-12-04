@@ -33,14 +33,16 @@ Author: Tobias Martin, Hans Bihs
 #include"6DOF_motionext_wavemaker.h"
 #include"6DOF_motionext_void.h"
 
-sixdof_obj::sixdof_obj(lexer *p, ghostcell *pgc, int number) : ddweno_f_nug(p), dt(p), L(p), 
-                                                                                f(p), frk1(p), cutl(p), cutr(p), 
-                                                                                fbio(p),n6DOF(number),
-                                                                                epsifb(1.6*p->DXM), epsi(1.6),vertice(p),
-                                                                                nodeflag(p),interfac(1.6),zero(0.0),eta(p),
-                                                                                lrk1(p),lrk2(p),K(p),dts(p),
-                                                                                fs(p),fsio(p),cr(p),cl(p),Ls(p),Bs(p),
-                                                                                Rxmin(p),Rxmax(p),Rymin(p),Rymax(p),draft(p),press(p)
+sixdof_obj::sixdof_obj(lexer *p, ghostcell *pgc, int number) : ddweno_f_nug(p), cutl(p),cutr(p),fbio(p),
+                                                                                epsifb(1.6*p->DXM),epsi(1.6),
+                                                                                f(p),frk1(p),L(p),dt(p),
+                                                                                press(p),lrk1(p),lrk2(p),K(p),dts(p),
+                                                                                fs(p),Ls(p),Bs(p),
+                                                                                Rxmin(p),Rxmax(p),Rymin(p),Rymax(p),
+                                                                                draft(p),cl(p),cr(p),fsio(p),
+                                                                                zero(0.0),interfac(1.6),
+                                                                                vertice(p),nodeflag(p),
+                                                                                eta(p),n6DOF(number)
 {
     prdisc = new reinidisc_fsf(p);
     

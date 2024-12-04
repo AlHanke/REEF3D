@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"6DOF.h"
 #include"nhflow_reinidisc_fsf.h"
 
-nhflow_forcing::nhflow_forcing(lexer *p) : epsi(1.6), fe(p)
+nhflow_forcing::nhflow_forcing(lexer *p) : fe(p),epsi(1.6)
 {
     forcing_flag=0;
     solid_flag=0;

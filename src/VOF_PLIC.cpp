@@ -43,7 +43,7 @@ VOF_PLIC::VOF_PLIC
     fdm *a,
     ghostcell* pgc,
     heat *pheat
-):gradient(p),norm_vec(p),alpha(p),nx(p),ny(p),nz(p),vof1(p),vof2(p),vof3(p)
+):gradient(p),norm_vec(p),nx(p),ny(p),nz(p),alpha(p),vof1(p),vof2(p),vof3(p)
 {
     if(p->F50==1)
     gcval_frac=71;

@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-vrans_veg::vrans_veg(lexer *p, ghostcell *pgc) : Cval(p->B264), N(p), D(p), Cd(p), un(p), unn(p), vn(p), vnn(p), wn(p), wnn(p)
+vrans_veg::vrans_veg(lexer *p, ghostcell *pgc) : N(p), D(p), Cd(p), un(p), unn(p), vn(p), vnn(p), wn(p), wnn(p), Cval(p->B264)
 {
 	//initialize(p,a,pgc);
 }

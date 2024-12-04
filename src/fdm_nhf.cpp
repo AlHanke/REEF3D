@@ -23,12 +23,13 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"lexer.h"
 
-fdm_nhf::fdm_nhf(lexer *p) :  eta(p),etaloc(p),
-                              wet_n(p),breaking(p),breaklog(p),bc(p),
-                              nodeval2D(p),eta_n(p),WL(p),
+fdm_nhf::fdm_nhf(lexer *p) :  eta(p),eta_n(p),WL(p),
                               detadt(p),detadt_n(p),
-                              bed(p),depth(p),K(p),
+                              bed(p),depth(p),
                               solidbed(p),topobed(p),
+                              K(p),etaloc(p),
+                              wet_n(p),breaking(p),breaklog(p),bc(p),
+                              nodeval2D(p),
                               Ex(p),Ey(p),Exx(p),Eyy(p),
                               Bx(p),By(p),Bxx(p),Byy(p),
                               hx(p),hy(p),
@@ -36,9 +37,10 @@ fdm_nhf::fdm_nhf(lexer *p) :  eta(p),etaloc(p),
                               coastline(p),vb(p),
                               test2D(p),fs(p),
                               breaking_print(p),Hs(p),
-                              rhsvec(p),rvec(p),xvec(p),N(p),M(p),
+                              rhsvec(p),xvec(p),rvec(p),
                               ETAs(p),ETAn(p),ETAe(p),ETAw(p),
-                              Ds(p),Dn(p),De(p),Dw(p),dfx(p),dfy(p)
+                              Ds(p),Dn(p),De(p),Dw(p),dfx(p),dfy(p),
+                              N(p),M(p)
 {    
     p->Darray(p->sig, p->imax*p->jmax*(p->kmax+2));
     p->Darray(p->sigx,p->imax*p->jmax*(p->kmax+2));

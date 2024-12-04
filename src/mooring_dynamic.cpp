@@ -23,7 +23,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include"lexer.h"
 #include"ghostcell.h"
 
-mooring_dynamic::mooring_dynamic(int number):line(number),beam(number)
+mooring_dynamic::mooring_dynamic(int number):beam(number),line(number)
 {}
 
 mooring_dynamic::~mooring_dynamic(){}

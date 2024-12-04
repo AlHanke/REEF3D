@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"sflow_pjm_quad.h"
+
+#include"sflow_pjm_quad.h"
 #include"lexer.h"
 #include"fdm2D.h" 
 #include"ghostcell.h"
@@ -54,7 +55,7 @@ Author: Hans Bihs
 #define HPXM (0.5*(HP + HPIM))
 #define HPYM (0.5*(HP + HPJM))
  
-sflow_pjm_quad::sflow_pjm_quad(lexer* p, fdm2D *b, patchBC_interface *ppBC) : press_n(p),phi4(p), Ps(p), Qs(p)
+sflow_pjm_quad::sflow_pjm_quad(lexer* p, fdm2D *b, patchBC_interface *ppBC) : phi4(p), press_n(p), Ps(p), Qs(p)
 {
     pBC = ppBC;
     

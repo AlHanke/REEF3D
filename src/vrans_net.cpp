@@ -27,7 +27,7 @@ Author: Tobias Martin
 #include"net.h"
 
 vrans_net::vrans_net(lexer *p, ghostcell *pgc) 
-: Fx_net(p), Fy_net(p), Fz_net(p),kernel_x(p), kernel_y(p), kernel_z(p)
+: Fx_net(p), kernel_x(p), Fy_net(p), kernel_y(p), Fz_net(p), kernel_z(p)
 {
     //initialize(p,a,pgc);
 }

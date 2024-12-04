@@ -29,7 +29,7 @@ Author: Hans Bihs
 #include<sys/stat.h>
 #include<sys/types.h>
 
-nhflow_force::nhflow_force(lexer* p, fdm_nhf *d, ghostcell *pgc, int qn) : interfac(1.6),zero(0.0),ID(qn)
+nhflow_force::nhflow_force(lexer* p, fdm_nhf *d, ghostcell *pgc, int qn) : zero(0.0),interfac(1.6),ID(qn)
 {
 	// Create Folder
 	if(p->mpirank==0)

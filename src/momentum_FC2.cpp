@@ -52,8 +52,8 @@ momentum_FC2::momentum_FC2(lexer *p, fdm *a, ghostcell *pgc, convection *pconvec
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver, ioflow *pioflow,
                                                     heat *&pheat, concentration *&pconc, reini *ppreini,
                                                     fsi *ppfsi)
-                                                    :momentum_forcing(p),bcmom(p),udiff(p),vdiff(p),wdiff(p),urk1(p),vrk1(p),wrk1(p),
-                                                    ls(p),frk1(p),fx(p),fy(p),fz(p)
+                                                    :momentum_forcing(p),bcmom(p),udiff(p),urk1(p),fx(p),vdiff(p),vrk1(p),fy(p),wdiff(p),wrk1(p),fz(p),
+                                                    ls(p),frk1(p)
 {
 	gcval_u=10;
 	gcval_v=11;

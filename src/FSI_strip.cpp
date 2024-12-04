@@ -26,7 +26,7 @@ Authors: Tobias Martin, Hans Bihs
 #include"ghostcell.h"
 #include"field.h"
 
-fsi_strip::fsi_strip(lexer *p, int num) : nstrip(num),beam(num),eps0(p)
+fsi_strip::fsi_strip(lexer *p, int num) : beam(num),nstrip(num),eps0(p)
 {    
 }
     

@@ -34,7 +34,7 @@ Author: Hans Bihs
 #include"reinidisc_fsf.h"
 #include"reinidisc_fsf_rig.h"
 
-reinitopo_RK3::reinitopo_RK3(lexer* p) : epsi(p->F45*p->DXM),f(p),frk1(p),frk2(p),L(p),dt(p)
+reinitopo_RK3::reinitopo_RK3(lexer* p) : f(p),frk1(p),frk2(p),L(p),dt(p),epsi(p->F45*p->DXM)
 {
 
 	if(p->S50==1)
