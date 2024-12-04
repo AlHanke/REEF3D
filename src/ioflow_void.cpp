@@ -570,7 +570,7 @@ void ioflow_v::turbulence_io(lexer *p, fdm* a, ghostcell* pgc)
 
 void ioflow_v::u_relax(lexer *p, fdm *a, ghostcell *pgc, field &uvel)
 {
-	double epsi,H,fbval;
+	double epsi= 1.6*p->DXM,H,fbval;
     double dist;
     double cosb,sinb;
 
@@ -602,7 +602,7 @@ void ioflow_v::u_relax(lexer *p, fdm *a, ghostcell *pgc, field &uvel)
 
 void ioflow_v::v_relax(lexer *p, fdm *a, ghostcell *pgc, field &vvel)
 {
-	double epsi,H,fbval;
+	double epsi= 1.6*p->DXM,H,fbval;
     double dist;
     double cosb,sinb;
     

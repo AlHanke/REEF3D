@@ -140,7 +140,7 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     for(qn=0;qn<p->B291;++qn)
     {
 		zmin=MIN(p->B291_zs[qn],p->B291_ze[qn]);
-        zmin=MAX(p->B291_zs[qn],p->B291_ze[qn]);
+        zmax=MAX(p->B291_zs[qn],p->B291_ze[qn]);
         
             if(p->B291_xs[qn]<=p->B291_xe[qn])
             {

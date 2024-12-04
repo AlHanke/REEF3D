@@ -84,7 +84,7 @@ void idiff2_CN::diff_v(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &u
 	viscterme = -2.0*(visc_ijk+ev_ijk)/(p->DYN[JP]*p->DYP[JP]);
 	visctermw = -2.0*(visc_i_jp_k+ev_i_jp_k)/(p->DYN[JP1]*p->DYP[JP]);
 	visctermb = -visc_ddz_m/(p->DZP[KM1]*p->DZN[KP]);
-	visctermw = -visc_ddz_p/(p->DZP[KP]*p->DZN[KP]);
+	visctermt = -visc_ddz_p/(p->DZP[KP]*p->DZN[KP]);
 
         a->M.s[count] = alphaCN*viscterms;
         a->M.n[count] = alphaCN*visctermn;
