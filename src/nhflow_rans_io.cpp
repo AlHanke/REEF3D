@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm_nhf.h"
 #include"ghostcell.h"
+#include<cstring>
 
 nhflow_rans_io::nhflow_rans_io(lexer *p, fdm_nhf *d) : nhflow_strain(p,d),
 									 ke_c_1e(1.44), ke_c_2e(1.92),ke_sigma_k(1.0),ke_sigma_e(1.3),
@@ -41,12 +42,13 @@ nhflow_rans_io::~nhflow_rans_io()
 {
 }
 
-void nhflow_rans_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, ofstream &result)
+void nhflow_rans_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
     
     // eddyv
     iin=4*(p->pointnum);
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 
     TPLOOP
 	{
@@ -62,12 +64,14 @@ void nhflow_rans_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, ofstream &re
 	ffn=float(0.25*(d->EV[IJK]+d->EV[IJKp1]+d->EV[IJp1K]+d->EV[IJp1Kp1]));
         
         
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     // kin
     iin=4*(p->pointnum);
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 
     TPLOOP
 	{
@@ -83,12 +87,14 @@ void nhflow_rans_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, ofstream &re
 	ffn=float(0.25*(KIN[IJK]+KIN[IJKp1]+KIN[IJp1K]+KIN[IJp1Kp1]));
         
         
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     // eps
 	iin=4*(p->pointnum);
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 
 	TPLOOP
 	{
@@ -103,7 +109,8 @@ void nhflow_rans_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, ofstream &re
     if(p->j_dir==1)
 	ffn=float(0.25*(EPS[IJK]+EPS[IJKp1]+EPS[IJp1K]+EPS[IJp1Kp1]));
     
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
 
 }
@@ -198,7 +205,7 @@ void nhflow_rans_io::name_pvtu(lexer *p, fdm_nhf *d, ghostcell *pgc, ofstream &r
     result<<"<PDataArray type=\"Float32\" Name=\"omega\"/>\n";
 }
 
-void nhflow_rans_io::name_vtu(lexer *p, fdm_nhf *d, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void nhflow_rans_io::name_vtu(lexer *p, fdm_nhf *d, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;

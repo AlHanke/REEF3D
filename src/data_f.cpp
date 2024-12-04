@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
+#include<cstring>
 
 data_f::data_f(lexer* p, fdm *a, ghostcell* pgc) : data(p)
 {
@@ -58,17 +59,18 @@ void data_f::start(lexer* p, fdm* a, ghostcell* pgc)
 	pgc->start4(p,data,1);
 }
 
-
-void data_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
+void data_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
     iin=4*(p->pointnum);
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 
     TPLOOP
-	{
-	ffn=float(p->ipol4(data));
-	result.write((char*)&ffn, sizeof (float));
-	}
+    {
+    ffn=float(p->ipol4(data));
+    std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
+    }
 }
 
 void data_f::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
@@ -76,7 +78,7 @@ void data_f::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
     result<<"<PDataArray type=\"Float32\" Name=\"data\"/>\n";
 }
 
-void data_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void data_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"data\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;

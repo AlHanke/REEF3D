@@ -32,6 +32,8 @@ class field;
 class particle_corr;
 
 #include<fstream>
+#include<vector>
+#include<sstream>
 
 using namespace std;
 
@@ -46,7 +48,7 @@ public:
 	virtual void ini(lexer*,fdm*,ghostcell*,ioflow*,printer*,convection*,solver*)=0;
 	virtual void update(lexer*,fdm*,ghostcell*)=0;
 	
-	virtual void print_3D(lexer*, fdm*, ghostcell*,ofstream&)=0;
+    virtual void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&)=0;
 	virtual void print_file(lexer*, fdm*, ghostcell*)=0;
     virtual double ls1val(int,int,int)=0;
     virtual double ls2val(int,int,int)=0;
@@ -56,7 +58,7 @@ public:
     virtual void ls2get(int,int,int,double)=0;
 
     virtual void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&)=0;
-    virtual void name_vtu(lexer*, fdm*, ghostcell*,ofstream&, int*, int &)=0;
+    virtual void name_vtu(lexer*, fdm*, ghostcell*, stringstream&, int*, int &)=0;
     virtual void offset_vtu(lexer*, int*, int &)=0;
 };
 

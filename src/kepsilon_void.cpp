@@ -26,6 +26,8 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"strain.h"
 #include"convection.h"
+#include<sstream>
+#include<vector>
 
 kepsilon_void::kepsilon_void(lexer* p, fdm* a, ghostcell *pgc)
 {
@@ -64,7 +66,7 @@ void kepsilon_void::etimesave(lexer *p, fdm* a, ghostcell *pgc)
 {
 }
 
-void kepsilon_void::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
+void kepsilon_void::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
 
 }
@@ -141,7 +143,7 @@ void kepsilon_void::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result
 {
 }
 
-void kepsilon_void::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void kepsilon_void::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
 }
 

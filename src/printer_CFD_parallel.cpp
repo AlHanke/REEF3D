@@ -65,7 +65,7 @@ void printer_CFD::parallel(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, 
 
 	pheat->name_pvtu(p,a,pgc,result);
     
-    pmp->name_vtu(p,a,pgc,result,offset,n);
+    pmp->name_pvtu(p,a,pgc,result);
 
     pvort->name_pvtu(p,a,pgc,result);
 

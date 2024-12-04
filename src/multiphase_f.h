@@ -53,7 +53,7 @@ public:
 	virtual void ini(lexer*,fdm*,ghostcell*,ioflow*,printer*,convection*,solver*);
 	virtual void update(lexer*,fdm*,ghostcell*);
 	
-	virtual void print_3D(lexer*, fdm*, ghostcell*,ofstream&);
+    void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&);
 	virtual void print_file(lexer*, fdm*, ghostcell*);
     virtual double ls1val(int,int,int);
     virtual double ls2val(int,int,int);
@@ -62,9 +62,9 @@ public:
     virtual void ls1get(int,int,int,double);
     virtual void ls2get(int,int,int,double);
 
-    virtual void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
-    virtual void name_vtu(lexer*, fdm*, ghostcell*,ofstream&, int*, int &);
-    virtual void offset_vtu(lexer*, int*, int &);
+    void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
+    void name_vtu(lexer*, fdm*, ghostcell*, stringstream&, int*, int &);
+    void offset_vtu(lexer*, int*, int &);
 	
 	void logic(lexer*,fdm*,ghostcell*);
 	

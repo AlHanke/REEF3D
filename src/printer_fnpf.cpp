@@ -42,6 +42,9 @@ Author: Hans Bihs
 #include"fnpf_print_kinematics.h"
 #include<sys/stat.h>
 #include<sys/types.h>
+#include<sstream>
+#include<cstdio>
+#include<cstring>
 
 printer_fnpf::printer_fnpf(lexer* p, fdm_fnpf *c, ghostcell *pgc)
 {
@@ -326,53 +329,54 @@ void printer_fnpf::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
         int rank = p->mpirank+1;
         outputFormat->fileName(name,"FNPF",num,rank);
 
-        // Open File
-        ofstream result;
-        result.open(name, ios::binary);
-
-        n=0;
-
-        offset[n]=0;
-        ++n;
-
-        // velocity
-        offset[n]=offset[n-1]+4*(p->pointnum)*3+4;
-        ++n;
-
-        // scalars
-
-        // Fi
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-
-        // elevation
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-        
-        // test
-        if(p->P23==1)
+        if(initial_print)
         {
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-        }
-        
-        // Hs
-        if(p->P110==1)
-        {
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-        }
-        
-        // solid
-        if(p->P25==1)
-        {
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-        }
+            initial_print = false;
+            n=0;
 
-        outputFormat->offset(p,offset,n);
+            offset[n]=0;
+            ++n;
+
+            // velocity
+            offset[n]=offset[n-1]+4*(p->pointnum)*3+4;
+            ++n;
+
+            // scalars
+
+            // Fi
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+
+            // elevation
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+            
+            // test
+            if(p->P23==1)
+            {
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+            }
+            
+            // Hs
+            if(p->P110==1)
+            {
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+            }
+            
+            // solid
+            if(p->P25==1)
+            {
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+            }
+
+            outputFormat->offset(p,offset,n);
+        }
         //---------------------------------------------
 
+        stringstream result;
         outputFormat->beginning(p,result);
 
         n=0;
@@ -411,41 +415,51 @@ void printer_fnpf::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
 
 
         outputFormat->ending(result,offset,n);
+        result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
+
+        m=result.str().length();
+        buffer.resize(m+offset[n]+27);
+        std::memcpy(&buffer[0],result.str().data(),m);
 
     //----------------------------------------------------------------------------
-        result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
+        
 
 
     //  Velocities
         iin=3*4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         ffn=float(c->U[FIJKp1]);
 
         if(k==-1 && j==-1)
         ffn=float(c->U[FIJp1Kp1]);
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
 
 
         ffn=float(c->V[FIJKp1]);
 
         if(k==-1 && j==-1)
         ffn=float(c->V[FIJp1Kp1]);
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
 
 
         ffn=float(c->W[FIJKp1]);
 
         if(k==-1 && j==-1)
         ffn=float(c->W[FIJp1Kp1]);
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
 
 
     //  Fi
         iin=4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         if(p->j_dir==1)
         TPLOOP
         {
@@ -453,7 +467,8 @@ void printer_fnpf::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
 
         if(k==-1 && j==-1)
         ffn=float(c->Fi[FIJp1Kp1]);
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
         
         if(p->j_dir==0)
@@ -467,27 +482,32 @@ void printer_fnpf::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
 
         if(k==-1 && j==-1)
         ffn=float(c->Fi[FIJp1Kp1]);
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
 
     //  elevation
         iin=4*(p->pointnum)*3;
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         ffn=float(p->ZN[KP1]*c->WL(i,j) + c->bed(i,j));
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
 
     //  test
         if(p->P23==1)
         {
         iin=4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         ffn=float(p->ipol4_a(c->test));
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
         }
         
@@ -495,11 +515,13 @@ void printer_fnpf::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
         if(p->P110==1)
         {
         iin=4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         ffn=float(p->sl_ipol4(c->Hs));
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
         }
 
@@ -507,17 +529,22 @@ void printer_fnpf::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
         if(p->P25==1)
         {
         iin=4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         ffn=float(1.0);
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
         }
 
-        outputFormat->structureWrite(p,c,result);
+        outputFormat->structureWrite(p,c,buffer,m);
 
-        result.close();
+        // Open File
+        FILE* file = fopen(name, "w");
+        fwrite(buffer.data(), buffer.size(), 1, file);
+        fclose(file);
 
         ++printcount;
     }

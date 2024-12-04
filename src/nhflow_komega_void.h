@@ -43,7 +43,7 @@ public:
 	virtual void jsource(lexer*, fdm_nhf*);
 	virtual void ksource(lexer*, fdm_nhf*);
 
-	virtual void print_3D(lexer*, fdm_nhf*, ghostcell*,ofstream&);
+	virtual void print_3D(lexer*, fdm_nhf*, ghostcell*, std::vector<char>&, int&);
     virtual void ini(lexer*, fdm_nhf*, ghostcell*);
     virtual double kinval(int,int,int);
     virtual double epsval(int,int,int);
@@ -56,7 +56,7 @@ public:
 	virtual void gcupdate(lexer*, fdm_nhf*, ghostcell*);
 	
     virtual void name_pvtu(lexer*, fdm_nhf*, ghostcell*,ofstream&);
-    virtual void name_vtu(lexer*, fdm_nhf*, ghostcell*,ofstream&, int*, int &);
+    virtual void name_vtu(lexer*, fdm_nhf*, ghostcell*, stringstream&, int*, int &);
     virtual void offset_vtu(lexer*, int*, int &);
 };
 
