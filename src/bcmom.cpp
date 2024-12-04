@@ -42,7 +42,7 @@ bcmom::bcmom(lexer* p):surftens(p),roughness(p),kappa(0.4)
 
 
     bckin=0;
-	if(p->T10>0 || p->T10<20)
+	if(p->T10>0 && p->T10<20)
 	bckin=1;
 }
 
