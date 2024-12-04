@@ -27,7 +27,7 @@ Author: Hans Bihs
 
 void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    double fsfloc;
+    // double fsfloc;
     
     p->wavetime = p->simtime;
     
@@ -108,7 +108,7 @@ void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
 		db = distbeach(p);
         
         zloc3 = p->pos3_z();
-        fsfloc = eta(i,j) + p->phimean;
+        // fsfloc = eta(i,j) + p->phimean;
 
         z=p->ZSP[IJK]-p->phimean;
 

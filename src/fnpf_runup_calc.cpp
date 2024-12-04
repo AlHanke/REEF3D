@@ -70,12 +70,12 @@ void fnpf_runup::fnpf_runup_calc(lexer* p, fdm_fnpf *c, ghostcell *pgc)
     {
         ru_mLA = -66.667 * ru_s0p + 5.33; //Green water Run-up (Thick layer)
         ru_mLB = -93.333 * ru_s0p + 7.47; //Thin layer of water an air mixture
-        ru_mLC = -200 * ru_s0p + 16; //Maximum spray
+        // ru_mLC = -200 * ru_s0p + 16; //Maximum spray
     }
     else{
         ru_mLA = 3;
         ru_mLB = 4.2;
-        ru_mLC = 9;
+        // ru_mLC = 9;
     }
     
     ru_m = ru_mLB; //Consider Run-up height up to the thin layer

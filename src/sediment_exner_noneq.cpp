@@ -38,7 +38,7 @@ void sediment_exner::non_equillibrium_solve(lexer* p, ghostcell *pgc, sediment_f
     double ks=p->S21*d50;
     double Rstar=(rhosed-rhowat)/rhowat;
     double Ds= d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
-    double Ti;
+    // double Ti;
     double time,starttime;
     
     double dqx,dqy;
@@ -91,7 +91,7 @@ void sediment_exner::non_equillibrium_solve(lexer* p, ghostcell *pgc, sediment_f
         dqx = pdx->sx(p,q0,sgx1,sgx2);
         dqy = pdx->sy(p,q0,sgy1,sgy2);
         
-    Ti=MAX((s->shearvel_eff(i,j)*s->shearvel_eff(i,j)-s->shearvel_crit(i,j)*s->shearvel_crit(i,j))/(s->shearvel_crit(i,j)*s->shearvel_crit(i,j)),0.0);
+    // Ti=MAX((s->shearvel_eff(i,j)*s->shearvel_eff(i,j)-s->shearvel_crit(i,j)*s->shearvel_crit(i,j))/(s->shearvel_crit(i,j)*s->shearvel_crit(i,j)),0.0);
         
     //Ls = 3.0*d50*pow(Ds,0.6)*pow(Ti,0.9);
     

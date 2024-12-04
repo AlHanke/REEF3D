@@ -27,7 +27,6 @@ Author: Hans Bihs
 
 void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
 {
-	int polygon_num3,polygon_sum3;
 	if(p->mpirank==0)
     pvtp(p,a,pgc);
 	
@@ -42,14 +41,6 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
 	polygon_sum=0;
 	for(n=0;n<polygon_num;++n)
 	polygon_sum+=numpt[n];
-	
-	polygon_sum3=polygon_num3=0;
-	for(n=0;n<polygon_num;++n)
-	if(numpt[n]==4)
-	{
-	polygon_sum3+=numpt[n];
-	++polygon_num3;
-	}  
 	
 	vertice_num = ccptcount;
 	

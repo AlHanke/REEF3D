@@ -19,7 +19,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"reduction_parker.h"
+
+
+#include"reduction_parker.h"
 #include"lexer.h"
 #include"ghostcell.h"
 #include"sediment_fdm.h"
@@ -37,7 +39,7 @@ reduction_parker::~reduction_parker()
 void reduction_parker::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double r=1.0;
-	double r1,r2;
+	// double r1;
     
     SLICELOOP4
     {
@@ -55,7 +57,7 @@ void reduction_parker::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 
 	qval = ((1.0+d)/(1.0-d))*(1.0/(1.0 + tan(alphaval)*tan(alphaval) + tan(tetaval)*tan(tetaval)))*(-1.0 + ((tan(alphaval)*tan(alphaval) + tan(tetaval)*tan(tetaval))/mu));
 
-	r1 = -0.5*pval - sqrt(pval*pval*0.25 - qval);
+	// r1 = -0.5*pval - sqrt(pval*pval*0.25 - qval);
 	
 	r = -0.5*pval + sqrt(pval*pval*0.25 - qval);
 

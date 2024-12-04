@@ -203,7 +203,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
     patch[qq]->counter=0;
     
     // line
-    int count=0;
+    // int count=0;
     for(qn=0;qn<p->B440;++qn)
     {
         
@@ -242,7 +242,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
     
     
     // box
-    count=0;
+    // count=0;
     for(qn=0;qn<p->B441;++qn)
     {
         
@@ -290,7 +290,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
     
     for(qn=0;qn<p->B442;++qn)
     {
-        int count=0;
+        // int count=0;
         {            
             
             for(n=0;n<p->gcb4_count;++n)
@@ -367,11 +367,11 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
             }
         }
         
-        for(qq=0;qq<obj_count;++qq)
-        {
-        if(patch[qq]->ID==p->B442_ID[qn])
-        patch[qq]->gcb_count += count;
-        }
+        // for(qq=0;qq<obj_count;++qq)
+        // {
+        // if(patch[qq]->ID==p->B442_ID[qn])
+        // patch[qq]->gcb_count += count;
+        // }
     
     }
     

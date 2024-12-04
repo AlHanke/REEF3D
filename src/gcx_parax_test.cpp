@@ -261,7 +261,7 @@ void ghostcell::gcparax_test(lexer* p,int gcv)
         }
 	}
     
-    int coin=0;
+    // int coin=0;
     count=0;
     
     for(q=0;q<p->gcpara4_count;++q)
@@ -275,8 +275,8 @@ void ghostcell::gcparax_test(lexer* p,int gcv)
          if(isend4[count]!=f(i+1,j,k) || isend4[count+1]!=f(i+2,j,k)) 
          cout<<p->mpirank<<" PARAX: send: "<<isend4[count]<<" "<<isend4[count+1]<<" recv: "<<irecv4[count]<<" "<<irecv4[count+1]<<" f: "<<f(i+1,j,k)<<" "<<f(i+2,j,k)<<endl;
         
-        if(isend4[count]==irecv4[count] && isend4[count+1]==irecv4[count+1])
-        ++coin;
+        // if(isend4[count]==irecv4[count] && isend4[count+1]==irecv4[count+1])
+        // ++coin;
         
          count+=2;
          }

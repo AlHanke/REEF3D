@@ -33,7 +33,7 @@ void iowave::active_beach_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, double *Fi
 		double x=0.0;
 		double z=0.0;
 		double fac1,fac,multiplier;
-		int aa,bb;
+		// int aa,bb;
 
 		// U / FI
 		for(n=0;n<p->gcslout_count;++n)
@@ -45,50 +45,50 @@ void iowave::active_beach_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, double *Fi
 		eta_M = eta(i,j); 
 		eta_R = eta_M-eta_T;
 
-        aa=bb=0;
-		if(p->gcslout[n][3]==1)
-		aa=-1;
+        // aa=bb=0;
+		// if(p->gcslout[n][3]==1)
+		// aa=-1;
 		
-		if(p->gcslout[n][3]==4)
-		aa=1;
+		// if(p->gcslout[n][3]==4)
+		// aa=1;
 		
-		if(p->gcslout[n][3]==3)
-		bb=-1;
+		// if(p->gcslout[n][3]==3)
+		// bb=-1;
 		
-		if(p->gcslout[n][3]==2)
-		bb=1;
+		// if(p->gcslout[n][3]==2)
+		// bb=1;
 
         fx=1.0;
         Uc=eta_R*sqrt(9.81/p->wd);
         
         
             
-			FKLOOP 
-			{
-				z=p->ZSN[FIJK]-p->phimean;
-				
-				if(p->B99==3)
-				Uc=eta_R*sqrt(9.81/c->depth(i,j));
-				
-				if(p->B99==4)
-				Uc=eta_R*p->ww*(cosh(p->wk*(p->wd+z))/sinh(c->depth(i,j)*c->depth(i,j)));
+        FKLOOP 
+        {
+            z=p->ZSN[FIJK]-p->phimean;
+            
+            if(p->B99==3)
+            Uc=eta_R*sqrt(9.81/c->depth(i,j));
+            
+            if(p->B99==4)
+            Uc=eta_R*p->ww*(cosh(p->wk*(p->wd+z))/sinh(c->depth(i,j)*c->depth(i,j)));
+            
+            if(p->B99==5)
+            {
+                if(p->pos_z()>p->B123)
+                {
+                fac = (p->pos_z()-p->B123)/(wsf-p->B123);
+                multiplier = 2.0*((wsf)/(wsf-p->B123));
+                Uc =   multiplier*fac*eta_R*sqrt(9.81/c->depth(i,j));
+                }
                 
-               if(p->B99==5)
-               {
-                   if(p->pos_z()>p->B123)
-                   {
-                   fac = (p->pos_z()-p->B123)/(wsf-p->B123);
-                   multiplier = 2.0*((wsf)/(wsf-p->B123));
-                   Uc =   multiplier*fac*eta_R*sqrt(9.81/c->depth(i,j));
-                   }
-                   
-                   if(p->pos_z()<=p->B123)
-                   Uc=0.0;
-               }
-                   
+                if(p->pos_z()<=p->B123)
+                Uc=0.0;
+            }
+                
 
-				Uin[FIp1JK]=Uc*fx;
-			}
+            Uin[FIp1JK]=Uc*fx;
+        }
           
         
         if(p->A329==1)

@@ -122,7 +122,8 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
     double hmin=+1.0e20;
 
     double depth, ks, H, B, M, I;
-    double tau, shearvel;
+    // double tau;
+    double shearvel;
     const double visc = p->W2;
     double ratio;
 
@@ -157,7 +158,7 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
         H=B=depth;
         M=26.0/pow(ks,(1.0/6.0));
         I=pow(p->Ui/(M*pow(H,(2.0/3.0))),2.0);
-        tau=(9.81*H*I*1000.0);
+        // tau=(9.81*H*I*1000.0);
 		
 		if(p->mpirank==0 && p->count==0)
 		cout<<"I   "<<I<<endl;

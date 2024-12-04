@@ -220,7 +220,6 @@ void net_barQuasiStatic::genericNet()
 
 void net_barQuasiStatic::iniInnerKnots()
 {
-    double xCoord, yCoord;
     int k, Kij;
     bool newK;
     
@@ -296,12 +295,8 @@ void net_barQuasiStatic::iniInnerKnots()
     
     for (int i = 1; i <= K[nK-1][0]; i++)
     {
-        xCoord = i;
-        
         for (int j = 0; j < K[nK-1][1]; j++)
         {
-            yCoord = j;
-
             for (int w = 0; w < nK; w++)
             {
                 if ((K[w][0]==i) && (K[w][1]==j))

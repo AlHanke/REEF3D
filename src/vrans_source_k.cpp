@@ -60,7 +60,8 @@ void vrans_f::ke_source(lexer *p, fdm *a, field &kin)
     int count;
     double uvel,vvel,wvel,uu;
     double por;
-    double kinf,einf;
+    double einf;
+    // double kinf;
     double ke_c_2e=1.92;
     
     count=0;
@@ -76,7 +77,7 @@ void vrans_f::ke_source(lexer *p, fdm *a, field &kin)
         por = a->porosity(i,j,k);
         
 
-        kinf = 3.7*(1.0-por)*pow(por,1.5)*uu;
+        // kinf = 3.7*(1.0-por)*pow(por,1.5)*uu;
         einf = 39.0*pow(1.0-por,2.5)*pow(por,2.0)*pow(uu,1.5)*(1.0/a->porpart(i,j,k));
         
         a->rhsvec.V[count] += por*MAX(einf,0.0);

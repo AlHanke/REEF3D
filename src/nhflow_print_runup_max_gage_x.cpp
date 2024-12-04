@@ -162,12 +162,12 @@ void nhflow_print_runup_max_gage_x::start(lexer *p, fdm_nhf *d, ghostcell *pgc, 
 
 void nhflow_print_runup_max_gage_x::ini_location(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    int check,count;
+    // int check,count;
     
     
     for(q=0;q<p->P134;++q)
     {
-        count=0;
+        // count=0;
         ILOOP
         {
         
@@ -177,7 +177,7 @@ void nhflow_print_runup_max_gage_x::ini_location(lexer *p, fdm_nhf *d, ghostcell
         if(p->j_dir==1)
         jloc[q]=p->posc_j(p->P134_y[q]);
 
-        ++count;
+        // ++count;
         }
     }
 }

@@ -134,13 +134,13 @@ void net_barQuasiStatic::print(lexer *p)
 		for (int n = 0; n < nK; ++n)
 		{
 			output = 0.0;
-			int index = 0;
+			// int index = 0;
 			for (int i = 0; i < nf; ++i)
 			{
 				if (Pi[i]==n || Ni[i]==n)
 				{
 					output += T[i]/2.0;
-					index++;
+					// index++;
 				}
 			}
 			

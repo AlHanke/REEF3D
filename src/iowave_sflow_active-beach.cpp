@@ -32,7 +32,8 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
     double fxdir,fydir,dP,dQ;
     double x=0.0;
     double z=0.0;
-    double fac1,fac,multiplier;
+    // double fac1;
+    double fac,multiplier;
     int aa,bb,ii,jj;
         
         
@@ -61,11 +62,11 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
         fx=(uvel/(uabs>1.0e-10?uabs:1.0e20));
         
 
-		if(eta_R>=0.0)
-		fac1=1.0;
+		// if(eta_R>=0.0)
+		// fac1=1.0;
 		
-		if(eta_R<0.0)
-		fac1=0.0;
+		// if(eta_R<0.0)
+		// fac1=0.0;
 		
 		aa=bb=0;
 		if(p->gcslawa1[n][2]==1)
@@ -103,12 +104,12 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
     
   if(p->B99==4)
   {
-    double dfx1,dfx4,dfy2,dfy3;
+    // double dfx1,dfx4,dfy2,dfy3;
     
-    dfx1 = (P(i+1,j)-P(i,j))/p->DXM;
-    dfx4 = (P(i,j)-P(i-1,j))/p->DXM;
-    dfy2 = (P(i,j)-P(i,j-1))/p->DXM;
-    dfy3 = (P(i,j+1)-P(i,j))/p->DXM;
+    // dfx1 = (P(i+1,j)-P(i,j))/p->DXM;
+    double dfx4 = (P(i,j)-P(i-1,j))/p->DXM;
+    // dfy2 = (P(i,j)-P(i,j-1))/p->DXM;
+    // dfy3 = (P(i,j+1)-P(i,j))/p->DXM;
 
      /*       
 	if(cs==1)
@@ -156,11 +157,11 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
         
         fy=(vvel/(uabs>1.0e-10?uabs:1.0e20));
 			
-		if(eta_R>=0.0)
-		fac1=1.0;
+		// if(eta_R>=0.0)
+		// fac1=1.0;
 		
-		if(eta_R<0.0)
-		fac1=0.0;
+		// if(eta_R<0.0)
+		// fac1=0.0;
 		
 		aa=bb=0;
 		if(p->gcslawa2[n][2]==1)

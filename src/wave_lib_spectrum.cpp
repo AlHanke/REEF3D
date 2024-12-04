@@ -72,12 +72,12 @@ void wave_lib_spectrum::irregular_parameters(lexer *p)
 	spectrum_file_read(p);
 
 
-  double maxS=-1.0;
-	double S,w,sigma;
-	int check_s,check_e;
-  int n;
+    double maxS=-1.0;
+    double S,w;
+    int check_s,check_e;
+    int n;
 
-  p->wN = p->B86;
+    p->wN = p->B86;
 
 	w=0.0;
 	wp=0.0;
@@ -193,10 +193,9 @@ void wave_lib_spectrum::irregular_parameters(lexer *p)
         }
 
         // find dw and maintain wp
-        double ds,de,dd;
+        double ds,de;
         int wNs,wNe;
 
-        dd=(we-ws)/double(p->wN);
         ds = wp-ws;
         de = we-wp;
 
@@ -570,8 +569,6 @@ void wave_lib_spectrum::print_spectrum(lexer *p)
 {
 	ofstream result;
 
-	double xval=ws;
-
 	// Create Folder
 	if(p->mpirank==0)
 	mkdir("./REEF3D_Log-Wave",0777);
@@ -580,10 +577,7 @@ void wave_lib_spectrum::print_spectrum(lexer *p)
   	result.open("./REEF3D_Log-Wave/REEF3D_wave-spectrum.dat");
 
 	for(int n=0;n<p->wN;++n)
-	{
-		xval+=dw[n];
 		result<<wi[n]<<" "<<Si[n]<<endl;
-	}
 
 	result.close();
 
@@ -592,8 +586,6 @@ void wave_lib_spectrum::print_spectrum(lexer *p)
 void wave_lib_spectrum::print_components(lexer *p)
 {
 	ofstream result;
-
-	double xval=ws;
 
 	// Create Folder
 	if(p->mpirank==0)
@@ -604,10 +596,7 @@ void wave_lib_spectrum::print_components(lexer *p)
 
 
 	for(int n=0;n<p->wN;++n)
-	{
-		xval+=dw[n];
 		result<<Ai[n]<<" "<<wi[n]<<" "<<ei[n]<<endl;
-	}
 
 	result.close();
 }

@@ -45,8 +45,6 @@ void wave_lib_spectrum::spectrum_file_read(lexer *p)
 	double val,val0,val1,Sval;
 	int count;
 
-
-	double ts,te;
 	int timecount;
 
 	char name[] = "spectrum-file.dat";

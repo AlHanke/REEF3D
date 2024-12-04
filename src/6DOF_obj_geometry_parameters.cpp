@@ -79,27 +79,27 @@ void sixdof_obj::geometry_parameters(lexer *p, fdm *a, ghostcell *pgc)
 			integ[9] += n2 * (x0 * g0z + x1 * g1z + x2 * g2z);	
 		}
         
-        double Vol,Vol_ls,H;
-        Vol=0.0;
-        for (int n = 0; n < tricount; ++n)
-        {
-        double x1, x2, x3, y1, y2, y3, z1, z2, z3;
+        double Vol_ls,H;
+        // double Vol=0.0;
+        // for (int n = 0; n < tricount; ++n)
+        // {
+        //     double x1, x2, x3, y1, y2, y3, z1, z2, z3;
         
-             x1 = tri_x[n][0];
-			x2 = tri_x[n][1];
-			x3 = tri_x[n][2];
-		
-			y1 = tri_y[n][0];
-			y2 = tri_y[n][1];
-			y3 = tri_y[n][2];
-		
-			z1 = tri_z[n][0];
-			z2 = tri_z[n][1];
-			z3 = tri_z[n][2];  
+        //     x1 = tri_x[n][0];
+        //     x2 = tri_x[n][1];
+        //     x3 = tri_x[n][2];
+        
+        //     y1 = tri_y[n][0];
+        //     y2 = tri_y[n][1];
+        //     y3 = tri_y[n][2];
+        
+        //     z1 = tri_z[n][0];
+        //     z2 = tri_z[n][1];
+        //     z3 = tri_z[n][2];  
             
-            Vol += (1.0/6.0)*(-x3*y2*z1 + x2*y3*z1 + x3*y1*z2 - x1*y3*z2 - x2*y1*z3 + x1*y2*z3);
+        //     Vol += (1.0/6.0)*(-x3*y2*z1 + x2*y3*z1 + x3*y1*z2 - x1*y3*z2 - x2*y1*z3 + x1*y2*z3);
             
-        }
+        // }
         
         Vol_ls=0.0;
         ALOOP
@@ -253,27 +253,27 @@ void sixdof_obj::geometry_parameters_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
 			integ[9] += n2 * (x0 * g0z + x1 * g1z + x2 * g2z);	
 		}
         
-        double Vol,Vol_ls,H;
-        Vol=0.0;
-        for (int n = 0; n < tricount; ++n)
-        {
-        double x1, x2, x3, y1, y2, y3, z1, z2, z3;
+        double Vol_ls,H;
+        // double Vol=0.0;
+        // for (int n = 0; n < tricount; ++n)
+        // {
+        // double x1, x2, x3, y1, y2, y3, z1, z2, z3;
         
-             x1 = tri_x[n][0];
-			x2 = tri_x[n][1];
-			x3 = tri_x[n][2];
-		
-			y1 = tri_y[n][0];
-			y2 = tri_y[n][1];
-			y3 = tri_y[n][2];
-		
-			z1 = tri_z[n][0];
-			z2 = tri_z[n][1];
-			z3 = tri_z[n][2];  
+        //     x1 = tri_x[n][0];
+        //     x2 = tri_x[n][1];
+        //     x3 = tri_x[n][2];
+        
+        //     y1 = tri_y[n][0];
+        //     y2 = tri_y[n][1];
+        //     y3 = tri_y[n][2];
+        
+        //     z1 = tri_z[n][0];
+        //     z2 = tri_z[n][1];
+        //     z3 = tri_z[n][2];  
             
-            Vol += (1.0/6.0)*(-x3*y2*z1 + x2*y3*z1 + x3*y1*z2 - x1*y3*z2 - x2*y1*z3 + x1*y2*z3);
+        //     Vol += (1.0/6.0)*(-x3*y2*z1 + x2*y3*z1 + x3*y1*z2 - x1*y3*z2 - x2*y1*z3 + x1*y2*z3);
             
-        }
+        // }
         
         Vol_ls=0.0;
         ALOOP

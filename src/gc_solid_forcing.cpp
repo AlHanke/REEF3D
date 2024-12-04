@@ -50,7 +50,8 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
     start4(p,a->fbh4,40);
 
 // Calculate forcing fields
-    double H,Ht, uf, vf, wf;
+    double H, uf, vf, wf;
+    // double Ht;
 	double nx, ny, nz,norm ;
 	double psi, phival_sf;
     double dirac;
@@ -127,7 +128,7 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
 		nz /= norm > 1.0e-20 ? norm : 1.0e20;
 
 		H = Hsolidface(p,a,1,0,0);
-	    Ht = Hsolidface_t(p,a,1,0,0);
+	    // Ht = Hsolidface_t(p,a,1,0,0);
 	
 		// Level set function
 		phival_sf = MIN(0.5*(a->solid(i,j,k) + a->solid(i+1,j,k)), 0.5*(a->topo(i,j,k) + a->topo(i+1,j,k))); 
@@ -168,8 +169,8 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
 		nz /= norm > 1.0e-20 ? norm : 1.0e20;
 
         
-         H = Hsolidface(p,a,0,1,0);
-		Ht = Hsolidface_t(p,a,0,1,0);
+        H = Hsolidface(p,a,0,1,0);
+		// Ht = Hsolidface_t(p,a,0,1,0);
 		
       
 		//Level set function
@@ -209,8 +210,8 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
 		nz /= norm > 1.0e-20 ? norm : 1.0e20;
 
         
-         H = Hsolidface(p,a,0,0,1);
-		Ht = Hsolidface_t(p,a,0,0,1);
+        H = Hsolidface(p,a,0,0,1);
+		// Ht = Hsolidface_t(p,a,0,0,1);
 
 
 		// Level set function
@@ -237,7 +238,7 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
     LOOP
     {
         H = Hsolidface(p,a,0,0,0);
-		Ht = Hsolidface_t(p,a,0,0,0);
+		// Ht = Hsolidface_t(p,a,0,0,0);
         a->fbh4(i,j,k) = min(a->fbh4(i,j,k) + H, 1.0); 
     }
     

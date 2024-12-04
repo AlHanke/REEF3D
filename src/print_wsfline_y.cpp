@@ -79,7 +79,6 @@ void print_wsfline_y::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 {
 
     char name[250];
-    double zval=0.0;
     int num,check;
 	
     num = p->count;
@@ -123,9 +122,7 @@ void print_wsfline_y::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
         JLOOP
         if(flag[q][j]>0)
         {
-        zval=0.0;
-		
-        i=iloc[q];
+            i=iloc[q];
 
             KLOOP
             PCHECK

@@ -78,12 +78,13 @@ void nhflow_forcing::rotation(double &xvec,double &yvec,double &zvec,double phi,
 
 void nhflow_forcing::angle_calc(double dX, double dY, double dZ, double &alpha, double &beta, double &gamma)
 {
-    double ddX,ddY,ddZ;
+    double ddX,ddY;
+    // double ddZ;
     double eps = 1.0e-10;
 
     ddX = fabs(dX)>eps?dX:1.0e20;
     ddY = fabs(dY)>eps?dY:1.0e20;
-    ddZ = fabs(dZ)>eps?dZ:1.0e20;
+    // ddZ = fabs(dZ)>eps?dZ:1.0e20;
 
     // alpha
     if(dY>eps && dZ>eps)
@@ -98,7 +99,7 @@ void nhflow_forcing::angle_calc(double dX, double dY, double dZ, double &alpha, 
     if(dY>eps && dZ<-eps)
     alpha = -atan(fabs(dZ/ddY));
 
-   // beta
+    // beta
     if(dX>eps && dZ>eps)
     beta = -atan(fabs(dZ/ddX));
 
@@ -111,11 +112,11 @@ void nhflow_forcing::angle_calc(double dX, double dY, double dZ, double &alpha, 
     if(dX>eps && dZ<-eps)
     beta = atan(fabs(dZ/ddX));
 
-        if(fabs(dX)<=eps && dZ>eps)
-        beta = -0.5*PI;
+    if(fabs(dX)<=eps && dZ>eps)
+    beta = -0.5*PI;
 
-        if(fabs(dX)<=eps && dZ<-eps)
-        beta = 0.5*PI;
+    if(fabs(dX)<=eps && dZ<-eps)
+    beta = 0.5*PI;
 
     // gamma
     if(dX>eps && dY>eps)
@@ -131,15 +132,15 @@ void nhflow_forcing::angle_calc(double dX, double dY, double dZ, double &alpha, 
     gamma = -atan(fabs(dY/ddX));
 
 
-        if(dX>eps && fabs(dY)<=eps)
-        gamma = 0.0;
+    if(dX>eps && fabs(dY)<=eps)
+    gamma = 0.0;
 
-        if(fabs(dX)<=eps && dY>eps)
-        gamma = 0.5*PI;
+    if(fabs(dX)<=eps && dY>eps)
+    gamma = 0.5*PI;
 
-        if(dX<-eps && fabs(dY)<=eps)
-        gamma = PI;
+    if(dX<-eps && fabs(dY)<=eps)
+    gamma = PI;
 
-        if(fabs(dX)<=eps && dY<-eps)
-        gamma = -0.5*PI;
+    if(fabs(dX)<=eps && dY<-eps)
+    gamma = -0.5*PI;
 }

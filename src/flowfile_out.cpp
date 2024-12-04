@@ -66,7 +66,7 @@ void flowfile_out::start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
 	{
 
         // filename
-        filename(p,a,pgc);
+        filename(p,a,pgc,num);
         fileout[n].open(name, ios::binary);
         
         // write

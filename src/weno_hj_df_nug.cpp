@@ -134,12 +134,10 @@ double weno_hj_df_nug::fx(lexer *p,fdm *a, field& b, field& uvel, int ipol, doub
     alpha();
 	weight();
     
-    double a1,a2,a3;
-            
- 
-            a1 = cfx[IP][uf][0]/pow(is1x+psi,2.0);
-            a2 = cfx[IP][uf][1]/pow(is2x+psi,2.0); 
-            a3 = cfx[IP][uf][2]/pow(is3x+psi,2.0); 
+    // double a1,a2,a3;
+    // a1 = cfx[IP][uf][0]/pow(is1x+psi,2.0);
+    // a2 = cfx[IP][uf][1]/pow(is2x+psi,2.0);
+    // a3 = cfx[IP][uf][2]/pow(is3x+psi,2.0);
     
 	grad = w1x*(q4 + qfx[IP][uf][0][0]*(q3-q4) - qfx[IP][uf][0][1]*(q5-q4))
     

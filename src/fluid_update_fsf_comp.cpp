@@ -39,7 +39,6 @@ fluid_update_fsf_comp::~fluid_update_fsf_comp()
 void fluid_update_fsf_comp::start(lexer *p, fdm* a, ghostcell* pgc)
 {
 	double H=0.0;
-	double Hro=0.0;
 	p->volume1=0.0;
 	p->volume2=0.0;
 	ro_air=p->W3;
@@ -67,12 +66,6 @@ void fluid_update_fsf_comp::start(lexer *p, fdm* a, ghostcell* pgc)
 
 		if(fabs(a->phi(i,j,k))<=epsi)
 		H=0.5*(1.0 + a->phi(i,j,k)/epsi + (1.0/PI)*sin((PI*a->phi(i,j,k))/epsi));
-		
-		if(a->phi(i,j,k)>=0.0)
-		Hro=1.0;
-
-		if(a->phi(i,j,k)<0.0)
-		Hro=0.0;
 
 		a->ro(i,j,k)=     ro_water*H +   ro_air*(1.0-H);
 		a->visc(i,j,k)= visc_water*H + visc_air*(1.0-H);

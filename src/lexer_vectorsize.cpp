@@ -29,12 +29,13 @@ void lexer::vecsize(ghostcell *pgc)
     gcbextra=10;
 	int gcbnum=0;
     int safetymargin=0;
-    int solid_gcb_est_max, topo_gcb_est_max, gcextra_max;
+    // int solid_gcb_est_max, topo_gcb_est_max;
+    int gcextra_max;
     
-    int gcbextra0;
+    // int gcbextra0;
 
-    solid_gcb_est_max = pgc->globalimax(solid_gcb_est);
-    topo_gcb_est_max = pgc->globalimax(topo_gcb_est);
+    // solid_gcb_est_max = pgc->globalimax(solid_gcb_est);
+    // topo_gcb_est_max = pgc->globalimax(topo_gcb_est);
     
     gcextra_max = pgc->globalimax(gcextra4);
 
@@ -48,7 +49,7 @@ void lexer::vecsize(ghostcell *pgc)
 // gcbextra
     gcbextra=gcextra_max*margin;
     
-    gcbextra0=gcbextra;
+    // gcbextra0=gcbextra;
     
     safetymargin = 0.2*double(solid_gcbextra_est+topo_gcbextra_est+tot_gcbextra_est) + 100.0;
     

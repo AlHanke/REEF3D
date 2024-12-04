@@ -41,7 +41,7 @@ void fsf_vtp::print(lexer* p, fdm* a, ghostcell *pgc)
 	
 	polygon_sum=0;
 	for(n=0;n<polygon_num;++n)
-	polygon_sum+=numpt[n]; 
+	polygon_sum+=numpt[n];
 	
 	point_num = ccptcount;
 	

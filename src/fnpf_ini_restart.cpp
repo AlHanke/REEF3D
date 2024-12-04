@@ -62,16 +62,16 @@ void fnpf_ini::fnpf_restart(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     
     // ----------------------
     // finish: ghostell update
-	int gcval,gcval_u,gcval_v,gcval_w;
+	// int gcval,gcval_u,gcval_v,gcval_w;
     int gcval_eta,gcval_fifsf;
     
-    gcval=250;
-    if(p->j_dir==0)
-    gcval=150;
+    // gcval=250;
+    // if(p->j_dir==0)
+    // gcval=150;
    
-    gcval_u=10;
-	gcval_v=11;
-	gcval_w=12;
+    // gcval_u=10;
+	// gcval_v=11;
+	// gcval_w=12;
     
     // 3D
     gcval_eta = 55;

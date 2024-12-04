@@ -69,8 +69,6 @@ print_1Dline::~print_1Dline()
 
 void print_1Dline::height_gauge(lexer *p, fdm *a, ghostcell *pgc)
 {
-    double zval=0.0;
-
     for(n=0;n<p->P51;++n)
     wsf[n]=-1.0e20;
 
@@ -78,10 +76,8 @@ void print_1Dline::height_gauge(lexer *p, fdm *a, ghostcell *pgc)
     for(n=0;n<p->P51;++n)
     if(flag[n]>0)
     {
-    zval=0.0;
-
-    i=iloc[n];
-    j=jloc[n];
+        i=iloc[n];
+        j=jloc[n];
 
         KLOOP
         PCHECK
@@ -128,22 +124,22 @@ void print_1Dline::ini_location(lexer *p, fdm *a, ghostcell *pgc)
 int print_1Dline::conv(double a)
 {
 
-int b,c;
-double d,diff;
+    int b,c;
+    double d,diff;
 
-c= int( a);
-d=double(c);
-diff=a-d;
+    c= int( a);
+    d=double(c);
+    diff=a-d;
 
-b=c;
+    b=c;
 
-if(diff>0.5)
-b=c+1;
+    if(diff>0.5)
+    b=c+1;
 
-if(diff<=-0.5)
-b=c-1;
+    if(diff<=-0.5)
+    b=c-1;
 
-return b;
+    return b;
 
 }
 

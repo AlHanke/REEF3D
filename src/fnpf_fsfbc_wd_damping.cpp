@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"fnpf_fsfbc_wd.h"
+
+#include"fnpf_fsfbc_wd.h"
 #include"lexer.h"
 #include"fdm_fnpf.h"
 #include"ghostcell.h"
@@ -29,15 +30,15 @@ void fnpf_fsfbc_wd::damping(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &f, int
 {
     double starttime=pgc->timer();
     
-    int check=0;
+    // int check=0;
     
-    // Fifsf damping
-    if((gcval==60 || gcval==160) && (p->A357==1 || p->A357==2))
-    check=1;
+    // // Fifsf damping
+    // if((gcval==60 || gcval==160) && (p->A357==1 || p->A357==2))
+    // check=1;
     
-    // eta damping
-    if((gcval==55 || gcval==155) && (p->A357==1 || p->A357==3))
-    check=1;
+    // // eta damping
+    // if((gcval==55 || gcval==155) && (p->A357==1 || p->A357==3))
+    // check=1;
     
     if(p->A350==1)
     {

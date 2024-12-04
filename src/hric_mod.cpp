@@ -131,7 +131,8 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
 {
 	double cj,cj_,cj_s,cj_ss;
 	double cc,cc_,cu,cd;
-    double umax,Co,costheta,gamma;
+    double costheta,gamma;
+    // double Co,umax;
 	double gradx,grady,gradz;
 	
 	
@@ -145,7 +146,7 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
 		
 		cd = b(i+1+pos,j,k);
         
-        umax = 0.5*(a->u(i+pos,j,k)+a->u(i-1+pos,j,k));
+        // umax = 0.5*(a->u(i+pos,j,k)+a->u(i-1+pos,j,k));
 		}
         
         if(uwind<0.0)
@@ -156,7 +157,7 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
 		
 		cd = b(i-0+pos,j,k);
         
-        umax = 0.5*(a->u(i+1-pos,j,k)+a->u(i-0-pos,j,k));
+        // umax = 0.5*(a->u(i+1-pos,j,k)+a->u(i-0-pos,j,k));
 		}
 	}
 	
@@ -170,7 +171,7 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
 		
 		cd = b(i,j+1+pos,k);
         
-        umax = 0.5*(a->v(i,j+pos,k)+a->v(i,j-1+pos,k));
+        // umax = 0.5*(a->v(i,j+pos,k)+a->v(i,j-1+pos,k));
 		}
         
         if(uwind<0.0)
@@ -181,7 +182,7 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
 		
 		cd = b(i,j-0+pos,k);
         
-        umax = 0.5*(a->v(i,j+1-pos,k)+a->v(i,j-0-pos,k));
+        // umax = 0.5*(a->v(i,j+1-pos,k)+a->v(i,j-0-pos,k));
 		}
 	}
 	
@@ -195,7 +196,7 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
 		
 		cd = b(i,j,k+1+pos);
         
-        umax = 0.5*(a->w(i,j,k+pos)+a->w(i,j,k-1+pos));
+        // umax = 0.5*(a->w(i,j,k+pos)+a->w(i,j,k-1+pos));
 		}
         
         if(uwind<0.0)
@@ -206,7 +207,7 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
 		
 		cd = b(i,j,k-0+pos);
         
-        umax = 0.5*(a->w(i,j,k+1-pos)+a->w(i,j,k-0-pos));
+        // umax = 0.5*(a->w(i,j,k+1-pos)+a->w(i,j,k-0-pos));
 		}
 	}
 	
@@ -229,7 +230,7 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
     cj_ = cc_;
     
     
-    Co = fabs(umax*p->dt/p->DXM);
+    // Co = fabs(umax*p->dt/p->DXM);
     
     
 

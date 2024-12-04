@@ -35,9 +35,6 @@ void nhflow_forcing::ray_cast_io(lexer *p, fdm_nhf *d, ghostcell *pgc, int ts, i
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
 	double PQx,PQy,PQz;
-	double PAx,PAy,PAz;
-	double PBx,PBy,PBz;
-	double PCx,PCy,PCz;
 	double Mx,My,Mz;
 	int is,ie,js,je,ks,ke;
 	int ir;
@@ -135,18 +132,6 @@ void nhflow_forcing::ray_cast_io(lexer *p, fdm_nhf *d, ghostcell *pgc, int ts, i
 		PQx = Qx-Px;
 		PQy = Qy-Py;
 		PQz = Qz-Pz;
-		
-		PAx = Ax-Px;
-		PAy = Ay-Py;
-		PAz = Az-Pz;
-		
-		PBx = Bx-Px;
-		PBy = By-Py;
-		PBz = Bz-Pz;
-		
-		PCx = Cx-Px;
-		PCy = Cy-Py;
-		PCz = Cz-Pz;
 		
 		// uvw
 		Mx = PQy*Pz - PQz*Py;

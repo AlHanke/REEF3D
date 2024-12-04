@@ -25,7 +25,7 @@ Author: Hans Bihs
 
 void wave_lib_hdc::read_header(lexer *p, ghostcell *pgc)
 {
-    int is,js,xs,ys;
+    // int is,js,xs,ys;
     ifstream header;
     
     // filename
@@ -48,17 +48,17 @@ void wave_lib_hdc::read_header(lexer *p, ghostcell *pgc)
         
         // origin_ij
         header.read((char*)&iin, sizeof (int));
-        is=iin;
+        // is=iin;
         
         header.read((char*)&iin, sizeof (int));
-        js=iin;
+        // js=iin;
         
         // origin_xy
         header.read((char*)&ffn, sizeof (float)); 
-        xs=ffn;
+        // xs=ffn;
         
         header.read((char*)&ffn, sizeof (float)); 
-        ys=ffn;
+        // ys=ffn;
         
         // Nx,Ny,Nz
         header.read((char*)&iin, sizeof (int));

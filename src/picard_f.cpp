@@ -83,9 +83,9 @@ void picard_f::correct_ls(lexer *p, fdm *a, ghostcell *pgc, field& b)
 {
     double r1,r2;
     double w;
-    double starttime, endtime;
+    // double starttime, endtime;
 
-    starttime=pgc->timer();
+    // starttime=pgc->timer();
 
     for(int n=0;n<p->F47;++n)
     {
@@ -104,7 +104,7 @@ void picard_f::correct_ls(lexer *p, fdm *a, ghostcell *pgc, field& b)
     b(i,j,k)+=w;// *(vol1-vol2);
 
     }
-    endtime=pgc->timer();
+    // endtime=pgc->timer();
 
     //if(p->mpirank==0)
     //cout<<"PICARD TIME: "<<endtime-starttime<<endl;

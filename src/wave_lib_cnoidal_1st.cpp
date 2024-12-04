@@ -81,7 +81,8 @@ double wave_lib_cnoidal_1st::wave_horzvel(lexer *p, double x, double y, double z
 
 double wave_lib_cnoidal_1st::wave_w(lexer *p, double x, double y, double z)
 {
-    double vel,eta,deta;
+    double vel,eta;
+    // double delta;
 	double sn,cn,dn;
 	
 	teta = 2.0*Km*(p->wavetime/wT - x/wL) + pshift;
@@ -90,7 +91,7 @@ double wave_lib_cnoidal_1st::wave_w(lexer *p, double x, double y, double z)
 	
 	elliptic(p,teta,sn,cn,dn);
 	
-	deta = - wa*sqrt(3.0*wa/wdt)*(1.0/(modulus*wdt))*cn*sqrt(1.0-cn*cn)*sqrt(1.0+modulus*(cn*cn-1.0));
+	// deta = - wa*sqrt(3.0*wa/wdt)*(1.0/(modulus*wdt))*cn*sqrt(1.0-cn*cn)*sqrt(1.0+modulus*(cn*cn-1.0));
 	
 	
 	vel = - wC * (wdt+z) * (((4.0*wH*(Km/wL)*cn*sn*dn)/wdt) * (1.0 - 2.0*(eta/wdt)) + (1.0/6.0)*wdt

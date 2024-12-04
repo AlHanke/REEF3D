@@ -94,8 +94,6 @@ void nhflow_print_wsf::height_gauge(lexer *p, fdm_nhf *d, ghostcell *pgc, slice 
 
 void nhflow_print_wsf::fill_eta(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &f)
 {
-    double zval=0.0;
-
     for(n=0;n<gauge_num;++n)
     wsf[n]=-1.0e20;
 
@@ -103,14 +101,12 @@ void nhflow_print_wsf::fill_eta(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &f)
     for(n=0;n<gauge_num;++n)
     if(flag[n]>0)
     {
-    zval=0.0;
-
-    i=iloc[n];
-    j=jloc[n];
-    
-    wsf[n] = p->ccslipol4(f, x[n], y[n]);
-    
-    //wsf[n] = f(i,j);
+        i=iloc[n];
+        j=jloc[n];
+        
+        wsf[n] = p->ccslipol4(f, x[n], y[n]);
+        
+        //wsf[n] = f(i,j);
     }
 	
     for(n=0;n<gauge_num;++n)

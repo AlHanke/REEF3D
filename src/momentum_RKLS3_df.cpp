@@ -80,8 +80,8 @@ void momentum_RKLS3_df::start(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, s
 void momentum_RKLS3_df::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, vrans* pvrans, vector<net*>& pnet, fsi* pfsi)
 {	
     // Set inflow 
-    double udisctime=0.0;
-    double udiscstart=0.0;
+    // double udisctime=0.0;
+    // double udiscstart=0.0;
     
     pflow->discharge(p,a,pgc);
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
@@ -114,9 +114,9 @@ void momentum_RKLS3_df::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, 
         ULOOP
         a->F(i,j,k)=0.0;
 
-        udiscstart=pgc->timer();
+        // udiscstart=pgc->timer();
         pconvec->start(p,a,a->u,1,a->u,a->v,a->w);
-        udisctime=pgc->timer()-udiscstart;
+        // udisctime=pgc->timer()-udiscstart;
 
         ULOOP
         urk(i,j,k) += gamma(loop)*p->dt*CPOR1*a->F(i,j,k) + zeta(loop)*p->dt*CPOR1*Cu(i,j,k);

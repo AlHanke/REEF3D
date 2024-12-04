@@ -25,9 +25,9 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-void flowfile_out::filename(lexer *p, fdm *a, ghostcell *pgc)
+void flowfile_out::filename(lexer *p, fdm *a, ghostcell *pgc, int num)
 {
     // open file
-    snprintf(name,sizeof(name),"./REEF3D_FlowFile/REEF3D-flowfile-%08i-%06i.r3d",n+1,p->count); 
+    snprintf(name,sizeof(name),"./REEF3D_FlowFile/REEF3D-flowfile-%08i-%06i.r3d",n+1,num); 
 }
 

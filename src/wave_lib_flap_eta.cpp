@@ -65,9 +65,7 @@ double wave_lib_flap_eta::wave_v(lexer *p, double x, double y, double z)
 
 double wave_lib_flap_eta::wave_horzvel(lexer *p, double x, double y, double z)
 {
-    double vel,zcoor,fac;
-    
-    zcoor=p->pos_z();
+    double vel,fac;
 
     if(p->wavetime<ts || p->wavetime>te || timecount>=ptnum-1)
 	return 0.0;

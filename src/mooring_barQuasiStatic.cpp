@@ -41,7 +41,7 @@ void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
 	B[sigma][1] = dy;
 	B[sigma][2] = dz;		
 
-	double length = 0.0;
+	// double length = 0.0;
 
 	// Solving the system of equations
     if (broken==false)
@@ -212,11 +212,11 @@ void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
                 }
             }
 
-            length = 0.0;
+            // length = 0.0;
             for (int j = 1; j < sigma+1; j++)	
             {			
                 l[j] = l0[j]*(1.0 + 0.5*(fabs(A[j][j]) + fabs(A[j-1][j-1]))/(p->X311_EA[line]));
-                length += l[j];
+                // length += l[j];
             }
                 
             for (int j = 0; j < sigma; j++)

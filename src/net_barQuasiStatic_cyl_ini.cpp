@@ -432,15 +432,15 @@ void net_barQuasiStatic::cyl_ini(lexer *p, fdm *a, ghostcell *pgc)
     }
     
     
-    int index_ = index - 1;
+    // int index_ = index - 1;
     
     
-    for (int i = 0; i < nd; i++)
-    {
- //       B(index_,2) += 0.008*9.81/nd;
+    // for (int i = 0; i < nd; i++)
+    // {
+    //    B(index_,2) += 0.008*9.81/nd;
         
-        index_--;
-    }    
+    //     index_--;
+    // }    
     
     
     

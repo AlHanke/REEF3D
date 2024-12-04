@@ -45,7 +45,7 @@ public:
 
 
 private:
-    void filename(lexer*,fdm*,ghostcell*);
+    void filename(lexer*,fdm*,ghostcell*,int);
     void header_file(lexer*, fdm*, ghostcell*);
     void header_file_ini(lexer*, fdm*, ghostcell*);
     

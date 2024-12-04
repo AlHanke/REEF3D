@@ -35,9 +35,6 @@ void sixdof_obj::ray_cast_z(lexer *p, fdm_nhf *d, ghostcell *pgc, int ts, int te
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
 	double PQx,PQy,PQz;
-	double PAx,PAy,PAz;
-	double PBx,PBy,PBz;
-	double PCx,PCy,PCz;
 	double Mx,My,Mz;
 	int is,ie,js,je,ks,ke;
     int checkin;
@@ -128,18 +125,6 @@ void sixdof_obj::ray_cast_z(lexer *p, fdm_nhf *d, ghostcell *pgc, int ts, int te
 		PQx = Qx-Px;
 		PQy = Qy-Py;
 		PQz = Qz-Pz;
-		
-		PAx = Ax-Px;
-		PAy = Ay-Py;
-		PAz = Az-Pz;
-		
-		PBx = Bx-Px;
-		PBy = By-Py;
-		PBz = Bz-Pz;
-		
-		PCx = Cx-Px;
-		PCy = Cy-Py;
-		PCz = Cz-Pz;
 		
 		// uvw
 		Mx = PQy*Pz - PQz*Py;

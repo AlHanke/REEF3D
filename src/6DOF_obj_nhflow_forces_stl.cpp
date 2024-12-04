@@ -43,7 +43,8 @@ void sixdof_obj::force_calc_stl(lexer* p, fdm_nhf *d, ghostcell *pgc, bool final
 	double du,dv,dw, dudx, dudy, dudz, dvdx, dvdy, dvdz, dwdx, dwdy, dwdz;
 	double dudxf, dudyf, dudzf, dvdxf, dvdyf, dvdzf, dwdxf, dwdyf, dwdzf;
 	double dudxb, dudyb, dudzb, dvdxb, dvdyb, dvdzb, dwdxb, dwdyb, dwdzb;
-	double xlocvel,ylocvel,zlocvel,xlocp,ylocp,zlocp;
+	double xlocvel,ylocvel,zlocvel;
+    double xlocp,ylocp,zlocp;
 	double Fx,Fy,Fz,Fp_x,Fp_y,Fp_z,Fv_x,Fv_y,Fv_z;
     double Xe_p,Ye_p,Ze_p,Xe_v,Ye_v,Ze_v;
     double fsf_z;
@@ -276,9 +277,9 @@ void sixdof_obj::force_calc_stl(lexer* p, fdm_nhf *d, ghostcell *pgc, bool final
             ny=0.0;
             
             // Add normal stress contributions
-            xlocp = xc + p->X42*nx*p->DXP[IP];
-            ylocp = yc + p->X42*ny*p->DYP[JP];
-            zlocp = zc + p->X42*nz*p->DZP[KP];
+            // xlocp = xc + p->X42*nx*p->DXP[IP];
+            // ylocp = yc + p->X42*ny*p->DYP[JP];
+            // zlocp = zc + p->X42*nz*p->DZP[KP];
             
             /*
             double p0,p1,p2,pc;

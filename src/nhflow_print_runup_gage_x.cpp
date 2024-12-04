@@ -153,22 +153,15 @@ void nhflow_print_runup_gage_x::start(lexer *p, fdm_nhf *d, ghostcell *pgc, iofl
 
 void nhflow_print_runup_gage_x::ini_location(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    int check,count;
-    
-    
     for(q=0;q<p->P133;++q)
     {
-        count=0;
         ILOOP
         {
-        
-        if(p->j_dir==0)
-        jloc[q]=0;
-        
-        if(p->j_dir==1)
-        jloc[q]=p->posc_j(p->P133_y[q]);
-
-        ++count;
+            if(p->j_dir==0)
+            jloc[q]=0;
+            
+            if(p->j_dir==1)
+            jloc[q]=p->posc_j(p->P133_y[q]);
         }
     }
 }

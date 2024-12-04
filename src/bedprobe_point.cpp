@@ -67,21 +67,14 @@ bedprobe_point::~bedprobe_point()
 
 void bedprobe_point::bed_gauge(lexer *p, fdm *a, ghostcell *pgc)
 {
-    double zval=0.0;
-
     for(n=0;n<p->P121;++n)
     wsf[n]=-1.0e20;
 
-	
     for(n=0;n<p->P121;++n)
     if(flag[n]>0)
     {
-    zval=0.0;
-
-    i=iloc[n];
-    j=jloc[n];
-	
-	//cout<<p->mpirank<<" n: "<<n<<" flag: "<<flag[n]<<" iloc: "<<iloc[n]<<" jloc: "<<jloc[n]<<endl;
+        i=iloc[n];
+        j=jloc[n];
 
         KLOOP
         PBASECHECK
@@ -114,15 +107,14 @@ void bedprobe_point::ini_location(lexer *p, fdm *a, ghostcell *pgc)
 
     for(n=0;n<p->P121;++n)
     {
-    iloc[n]=conv((p->P121_x[n]-p->originx)/p->DXM);
-    jloc[n]=conv((p->P121_y[n]-p->originy)/p->DXM);
+        iloc[n]=conv((p->P121_x[n]-p->originx)/p->DXM);
+        jloc[n]=conv((p->P121_y[n]-p->originy)/p->DXM);
 
-    check=ij_boundcheck(p,iloc[n],jloc[n],0);
+        check=ij_boundcheck(p,iloc[n],jloc[n],0);
 
-    if(check==1)
-    flag[n]=1;
+        if(check==1)
+        flag[n]=1;
 	
-	//cout<<p->mpirank<<" n: "<<n<<" x: "<<p->P121_x[n]<<" y: "<<p->P121_y[n]<<" iloc: "<<iloc[n]<<" jloc: "<<jloc[n]<<" n: "<<n<<" flag: "<<flag[n]<<endl;
     }
 }
 

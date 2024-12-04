@@ -189,6 +189,7 @@ void driver::vec_test(lexer *p, fdm *a, ghostcell *pgc, field &f)
 	
     if(p->mpirank==0)
 	cout<<"sum_field: "<<setprecision(9)<<t1<<"  sum_EigenVector: "<<setprecision(9)<<t7<<endl;
+    val = val +1;
 }
 
 void driver::func_test(lexer *p, fdm *a, ghostcell *pgc, field &f)

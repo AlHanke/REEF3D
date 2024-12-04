@@ -28,7 +28,7 @@ Authors: Arun Kamath, Hans Bihs
 
 void fnpf_force_ale::force_ale_force(lexer* p, fdm_fnpf *c, ghostcell *pgc)
 {	
-    double ztot=0; // check for strip total
+    // double ztot=0; // check for strip total
     
     double uvel,vvel,wvel;
 
@@ -66,7 +66,7 @@ void fnpf_force_ale::force_ale_force(lexer* p, fdm_fnpf *c, ghostcell *pgc)
         // Sum up forces
         Fx += Fx1;
         Fy += Fy1;
-        ztot += p->DZN[KP]; // checking total dz=1
+        // ztot += p->DZN[KP]; // checking total dz=1
         
         // Storing current time step information for next time step gradient calculation
         un[k] = uvel; 

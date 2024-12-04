@@ -127,12 +127,12 @@ void sandslide_pde::diff_update(lexer *p, ghostcell *pgc, sediment_fdm *s)
     double nz0,bx0,by0,gamma;
     
     int kmem=0;
-    double dH;
+    // double dH;
     
     k = s->bedk(i,j);
         
 
-    dH = sqrt(pow((s->bedzh(i+1,j)-s->bedzh(i-1,j))/p->DXM,2.0) + pow((s->bedzh(i,j+1)-s->bedzh(i,j-1))/p->DXM,2.0));
+    // dH = sqrt(pow((s->bedzh(i+1,j)-s->bedzh(i-1,j))/p->DXM,2.0) + pow((s->bedzh(i,j+1)-s->bedzh(i,j-1))/p->DXM,2.0));
         
         
     bx0 = (s->bedzh(i+1,j)-s->bedzh(i-1,j))/(p->DXP[IP]+p->DXP[IM1]);
@@ -141,15 +141,15 @@ void sandslide_pde::diff_update(lexer *p, ghostcell *pgc, sediment_fdm *s)
     gamma = atan(sqrt(bx0*bx0 + by0*by0));
 
 
-            if(gamma>s->phi(i,j))
-            {
-            ci(i,j) = 1.0;
-            
-            ++count;
-            }
-            
-            if(gamma<s->phi(i,j))
-            ci(i,j) = 0.0;
+    if(gamma>s->phi(i,j))
+    {
+        ci(i,j) = 1.0;
+        
+        ++count;
+    }
+    
+    if(gamma<s->phi(i,j))
+        ci(i,j) = 0.0;
 
 }
 

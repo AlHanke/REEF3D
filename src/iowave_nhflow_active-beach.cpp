@@ -32,7 +32,8 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
         double fxdir,fydir;
 		double x=0.0;
 		double z=0.0;
-		double fac1,fac,multiplier;
+		// double fac1;
+        double fac,multiplier;
         int aa,bb;
     
 		
@@ -59,63 +60,63 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
 		if(p->gcslout[n][3]==2)
 		bb=1;
         
-        if(eta_R>=0.0)
-		fac1=1.0;
+        // if(eta_R>=0.0)
+		// fac1=1.0;
 		
-		if(eta_R<0.0)
-		fac1=0.0;
+		// if(eta_R<0.0)
+		// fac1=0.0;
 
         fx=1.0;
             
-            if(p->wet[IJ]==1)
-			KLOOP
-			{
-				if(p->pos_z()<=p->phimean)
-				z=-(fabs(p->phimean-p->pos_z()));
-				
-				if(p->pos_z()>p->phimean)
-				z=(fabs(p->phimean-p->pos_z()));
-				
-				if(p->B99==3)
-				Uc=eta_R*sqrt(9.81/p->wd);
-				
-				if(p->B99==4)
-				Uc=eta_R*p->ww*(cosh(p->wk*(p->wd+z))/sinh(p->wk*p->wd));
-                
-               if(p->B99==5)
-               {
-                   if(p->ZP[KP]>p->B123)
-                   {
-                   fac = (p->pos_z()-p->B123)/(wsf-p->B123);
-                   multiplier = 2.0*((wsf)/(wsf-p->B123));
-                   Uc =   multiplier*fac*eta_R*sqrt(9.81/p->wd);
-                   }
-                   
-                   if(p->ZP[KP]<=p->B123)
-                   Uc=0.0;
-               }
-               
-                U[(i-p->imin+1*aa)*p->jmax*p->kmax + (j-p->jmin+1*bb)*p->kmax + k-p->kmin] = Uc*fx;
-                U[(i-p->imin+2*aa)*p->jmax*p->kmax + (j-p->jmin+2*bb)*p->kmax + k-p->kmin] = Uc*fx;
-                U[(i-p->imin+3*aa)*p->jmax*p->kmax + (j-p->jmin+3*bb)*p->kmax + k-p->kmin] = Uc*fx;
-                
-                UH[(i-p->imin+1*aa)*p->jmax*p->kmax + (j-p->jmin+1*bb)*p->kmax + k-p->kmin] = (d->eta(i,j)+d->depth(i,j))*Uc*fx;
-                UH[(i-p->imin+2*aa)*p->jmax*p->kmax + (j-p->jmin+2*bb)*p->kmax + k-p->kmin] = (d->eta(i,j)+d->depth(i,j))*Uc*fx;
-                UH[(i-p->imin+3*aa)*p->jmax*p->kmax + (j-p->jmin+3*bb)*p->kmax + k-p->kmin] = (d->eta(i,j)+d->depth(i,j))*Uc*fx;
-                
-			}
+        if(p->wet[IJ]==1)
+        KLOOP
+        {
+            if(p->pos_z()<=p->phimean)
+            z=-(fabs(p->phimean-p->pos_z()));
             
-             if(p->wet[IJ]==0)
-			KLOOP 
-			{
-             U[(i-p->imin+1*aa)*p->jmax*p->kmax + (j-p->jmin+1*bb)*p->kmax + k-p->kmin] = 0.0;
-             U[(i-p->imin+2*aa)*p->jmax*p->kmax + (j-p->jmin+2*bb)*p->kmax + k-p->kmin] = 0.0;
-             U[(i-p->imin+3*aa)*p->jmax*p->kmax + (j-p->jmin+3*bb)*p->kmax + k-p->kmin] = 0.0;
-             
-             UH[(i-p->imin+1*aa)*p->jmax*p->kmax + (j-p->jmin+1*bb)*p->kmax + k-p->kmin] = 0.0;
-             UH[(i-p->imin+2*aa)*p->jmax*p->kmax + (j-p->jmin+2*bb)*p->kmax + k-p->kmin] = 0.0;
-             UH[(i-p->imin+3*aa)*p->jmax*p->kmax + (j-p->jmin+3*bb)*p->kmax + k-p->kmin] = 0.0;
+            if(p->pos_z()>p->phimean)
+            z=(fabs(p->phimean-p->pos_z()));
+            
+            if(p->B99==3)
+            Uc=eta_R*sqrt(9.81/p->wd);
+            
+            if(p->B99==4)
+            Uc=eta_R*p->ww*(cosh(p->wk*(p->wd+z))/sinh(p->wk*p->wd));
+            
+            if(p->B99==5)
+            {
+                if(p->ZP[KP]>p->B123)
+                {
+                fac = (p->pos_z()-p->B123)/(wsf-p->B123);
+                multiplier = 2.0*((wsf)/(wsf-p->B123));
+                Uc =   multiplier*fac*eta_R*sqrt(9.81/p->wd);
+                }
+                
+                if(p->ZP[KP]<=p->B123)
+                Uc=0.0;
             }
+            
+            U[(i-p->imin+1*aa)*p->jmax*p->kmax + (j-p->jmin+1*bb)*p->kmax + k-p->kmin] = Uc*fx;
+            U[(i-p->imin+2*aa)*p->jmax*p->kmax + (j-p->jmin+2*bb)*p->kmax + k-p->kmin] = Uc*fx;
+            U[(i-p->imin+3*aa)*p->jmax*p->kmax + (j-p->jmin+3*bb)*p->kmax + k-p->kmin] = Uc*fx;
+            
+            UH[(i-p->imin+1*aa)*p->jmax*p->kmax + (j-p->jmin+1*bb)*p->kmax + k-p->kmin] = (d->eta(i,j)+d->depth(i,j))*Uc*fx;
+            UH[(i-p->imin+2*aa)*p->jmax*p->kmax + (j-p->jmin+2*bb)*p->kmax + k-p->kmin] = (d->eta(i,j)+d->depth(i,j))*Uc*fx;
+            UH[(i-p->imin+3*aa)*p->jmax*p->kmax + (j-p->jmin+3*bb)*p->kmax + k-p->kmin] = (d->eta(i,j)+d->depth(i,j))*Uc*fx;
+            
+        }
+        
+        if(p->wet[IJ]==0)
+        KLOOP 
+        {
+            U[(i-p->imin+1*aa)*p->jmax*p->kmax + (j-p->jmin+1*bb)*p->kmax + k-p->kmin] = 0.0;
+            U[(i-p->imin+2*aa)*p->jmax*p->kmax + (j-p->jmin+2*bb)*p->kmax + k-p->kmin] = 0.0;
+            U[(i-p->imin+3*aa)*p->jmax*p->kmax + (j-p->jmin+3*bb)*p->kmax + k-p->kmin] = 0.0;
+            
+            UH[(i-p->imin+1*aa)*p->jmax*p->kmax + (j-p->jmin+1*bb)*p->kmax + k-p->kmin] = 0.0;
+            UH[(i-p->imin+2*aa)*p->jmax*p->kmax + (j-p->jmin+2*bb)*p->kmax + k-p->kmin] = 0.0;
+            UH[(i-p->imin+3*aa)*p->jmax*p->kmax + (j-p->jmin+3*bb)*p->kmax + k-p->kmin] = 0.0;
+        }
 		}
 //-----------------------------------------------		
 		// VVEL
@@ -129,11 +130,11 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
 		eta_M = d->eta(i,j); 
 		eta_R = eta_M-eta_T;
         
-        if(eta_R>=0.0)
-		fac1=1.0;
+        // if(eta_R>=0.0)
+		// fac1=1.0;
 		
-		if(eta_R<0.0)
-		fac1=0.0;
+		// if(eta_R<0.0)
+		// fac1=0.0;
 		
 		
         aa=bb=0;
