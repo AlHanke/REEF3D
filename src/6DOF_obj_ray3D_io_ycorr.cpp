@@ -163,11 +163,7 @@ void sixdof_obj::ray_cast_io_ycorr(lexer *p, fdm *a, ghostcell *pgc, int ts, int
 		  + Mx*(Bx-Ax) + My*(By-Ay) + Mz*(Bz-Az);
 		
 		
-		int check=1;
-		if(u==0.0 && v==0.0 && w==0.0)
-		check = 0;
-		
-			if(((u>0.0 && v>0.0 && w>0.0) || (u<0.0 && v<0.0 && w<0.0)) && check==1)
+			if((u>0.0 && v>0.0 && w>0.0) || (u<0.0 && v<0.0 && w<0.0))
 			{
 			denom = 1.0/(u+v+w);
 			u *= denom;

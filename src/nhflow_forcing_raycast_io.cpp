@@ -163,12 +163,9 @@ void nhflow_forcing::ray_cast_io(lexer *p, fdm_nhf *d, ghostcell *pgc, int ts, i
 		w = PQx*(By*Az - Bz*Ay) + PQy*(Bz*Ax - Bx*Az) + PQz*(Bx*Ay - By*Ax)
 		  + Mx*(Bx-Ax) + My*(By-Ay) + Mz*(Bz-Az);
     
-         int check=1;
-		if(u==0.0 && v==0.0 && w==0.0)
-		check = 0;
 
-			if(((u>0.0 && v>0.0 && w>0.0) || (u<0.0 && v<0.0 && w<0.0)) && check==1)
-			{
+            if((u>0.0 && v>0.0 && w>0.0) || (u<0.0 && v<0.0 && w<0.0))
+            {
 			denom = 1.0/(u+v+w);
 			u *= denom;
 			v *= denom;
