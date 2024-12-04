@@ -146,7 +146,7 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
             double uval, vval, wval;
             double kappa = 0.4;
             double xip, yip, zip, zval;
-            double u_abs, tau, density;
+            // double u_abs, tau, density;
             double ks;
             double dir;
 
@@ -157,7 +157,7 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
             ylocvel = yc + p->X43*ny*p->DYP[JP];
             zlocvel = zc + p->X43*nz*p->DZP[KP];
             
-             nu_int = p->ccipol4a(a->visc,xlocvel,ylocvel,zlocvel);
+            nu_int = p->ccipol4a(a->visc,xlocvel,ylocvel,zlocvel);
 			enu_int = 0.0; //p->ccipol4a(a->eddyv,xlocvel,ylocvel,zlocvel);
 			rho_int = p->ccipol4a(a->ro,xlocvel,ylocvel,zlocvel);
 	        
@@ -228,7 +228,7 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
             dwdy = (wval)/delta;
             dwdz = (wval)/delta;
             
-            u_abs = sqrt(uval*uval + vval*vval + wval*wval);
+            // u_abs = sqrt(uval*uval + vval*vval + wval*wval);
 
             Fv_x = -rho_int*(nu_int + enu_int)*A_triang*(2.0*dudx*nx + (dudy + dvdx)*ny + (dudz + dwdx)*nz);
             Fv_y = -rho_int*(nu_int + enu_int)*A_triang*((dudy + dvdx)*nx + 2.0*dvdy*ny + (dvdz + dwdy)*nz);
@@ -311,9 +311,9 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
             rho_int = p->ccipol4a(a->ro,xlocvel,ylocvel,zlocvel);
 
 
-            u_abs = sqrt(uval*uval + vval*vval + wval*wval);
+            // u_abs = sqrt(uval*uval + vval*vval + wval*wval);
             
-            tau=density*(nu_int + enu_int)*(u_abs/delta);
+            // tau=density*(nu_int + enu_int)*(u_abs/delta);
             
             Fv_x = -rho_int*(nu_int + enu_int)*A_triang*(2.0*dudx*nx + (dudy + dvdx)*ny + (dudz + dwdx)*nz);
             Fv_y = -rho_int*(nu_int + enu_int)*A_triang*((dudy + dvdx)*nx + 2.0*dvdy*ny + (dvdz + dwdy)*nz);

@@ -172,13 +172,10 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
 
 // Moments of Inertia
 
-    double Ix,Iy,Iz;	
+    double Ix=0.0, Iy=0.0, Iz=0.0;
         
 	if(p->X24==0)
-	{
-        Ix = Iy = Iz = 0.0;
-		
-		
+	{	
 		// Non-homogenious body just needs rho as a function of space, integration is the same
 		
 		LOOP
@@ -327,13 +324,10 @@ void sixdof_obj::geometry_ls_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
 // Moments of Inertia
 
-    double Ix,Iy,Iz;	
+    double Ix=0.0, Iy=0.0, Iz=0.0;
         
 	if(p->X24==0)
-	{
-        Ix = Iy = Iz = 0.0;
-		
-		
+	{	
 		// Non-homogenious body just needs rho as a function of space, integration is the same
 		
 		LOOP
