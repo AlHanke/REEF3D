@@ -59,7 +59,6 @@ class bedprobe_line_x;
 class bedprobe_line_y;
 class probe_vel;
 class probe_vel_theory;
-class exportfile;
 class flowfile_out;
 class print_averaging;
 
@@ -73,7 +72,6 @@ public:
 	virtual ~printer_CFD();
 	void start(lexer*,fdm*,ghostcell*,turbulence*,heat*,ioflow*,data*,concentration*,multiphase*,sediment*);
     void print_stop(lexer*,fdm*,ghostcell*,turbulence*,heat*,ioflow*,data*,concentration*,multiphase*,sediment*);
-	void ini(lexer*,fdm*,ghostcell*);
 
 private:
     void print3D(lexer*,fdm*,ghostcell*,turbulence*,heat*,data*,concentration*,multiphase*,sediment*);
@@ -86,8 +84,6 @@ private:
     float ffn;
 	double *printtime_wT;
     double *printfsftime_wT;
-    int *printfsfiter_wI;
-    double zcoor;
 
     print_wsf *pwsf;
 	print_wsf_theory *pwsf_theory;
@@ -111,7 +107,6 @@ private:
 	cfd_state *pstate;
     sloshing_force *pslosh;
 	print_porous *ppor;
-    exportfile *pexport;
     flowfile_out *pflowfile;
     print_averaging *pmean;
     probe_vel *pvel;
