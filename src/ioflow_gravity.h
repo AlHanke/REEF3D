@@ -34,7 +34,7 @@ class ioflow_gravity : public ioflow, public increment
 public:
 
 	ioflow_gravity(lexer*,ghostcell*,patchBC_interface*);
-	virtual ~ioflow_gravity();
+	virtual ~ioflow_gravity() = default;
 	virtual void gcio_update(lexer*,fdm*,ghostcell*);
 	virtual void inflow_walldist(lexer*,fdm*,ghostcell*,convection*,reini*,ioflow*);
 	virtual void discharge(lexer*,fdm*,ghostcell*);

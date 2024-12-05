@@ -29,7 +29,7 @@ class fnpf_void : public fnpf
 {
 public:
 	fnpf_void();
-	virtual ~fnpf_void();
+	virtual ~fnpf_void() = default;
     
     virtual void start(lexer*, fdm_fnpf*, ghostcell*, solver*, convection*, ioflow*, reini*,onephase*);
     virtual void inidisc(lexer*, fdm_fnpf*, ghostcell*, ioflow*, solver*);

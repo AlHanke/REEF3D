@@ -36,10 +36,6 @@ fnpf_print_kinematics::fnpf_print_kinematics(lexer* p, fdm_fnpf *c, ghostcell *p
 	mkdir("./REEF3D_FNPF_Kinematics",0777);
 }
 
-fnpf_print_kinematics::~fnpf_print_kinematics()
-{
-}
-
 void fnpf_print_kinematics::ini(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
     fnpf_print_kinematicsprintcount=0;

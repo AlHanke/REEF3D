@@ -31,10 +31,6 @@ bedload_direction_f::bedload_direction_f(lexer *p)
     beta = 1.3;
 }
 
-bedload_direction_f::~bedload_direction_f()
-{
-}
-
 void bedload_direction_f::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 {
 	double cosa, sina;

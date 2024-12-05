@@ -29,10 +29,6 @@ c_1(1.8), c1(1.8),tt(2.0/3.0),ot(1.0/3.0),ctau(6.0)
 {
 }
 
-EARSM::~EARSM()
-{
-}
-
 void EARSM::sq(lexer *p, fdm* a)
 {
     s11 = tk*pudx(p,a);

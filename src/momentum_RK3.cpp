@@ -65,10 +65,6 @@ momentum_RK3::momentum_RK3(lexer *p, fdm *a, convection *pconvection, diffusion 
 	pupdate = new fluid_update_rheology(p,a);
 }
 
-momentum_RK3::~momentum_RK3()
-{
-}
-
 void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof, vector<net*>& pnet)
 {	
     pflow->discharge(p,a,pgc);

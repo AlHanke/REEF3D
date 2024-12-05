@@ -29,7 +29,7 @@ class onephase_v : public onephase
 {
 public:
     onephase_v(lexer*, fdm*, ghostcell*);
-	virtual ~onephase_v();
+	virtual ~onephase_v() = default;
     
 	virtual void update(lexer*, fdm*, ghostcell*, ioflow*);
     virtual void ini(lexer*, fdm*, ghostcell*, ioflow*);

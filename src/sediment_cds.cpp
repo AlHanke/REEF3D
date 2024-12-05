@@ -31,10 +31,6 @@ sediment_cds::sediment_cds(lexer* p)
 
 }
 
-sediment_cds::~sediment_cds()
-{
-}
-
 double sediment_cds::sx(lexer *p, slice &f, double ivel1, double ivel2)
 {   
     if(p->S31==1)

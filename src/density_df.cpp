@@ -29,10 +29,6 @@ density_df::density_df(lexer* p) : epsi(p->F45*p->DXM), eps(2.1*p->DXM)
     H=0.0;
 }
 
-density_df::~density_df()
-{
-}
-
 double density_df::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
     double factor = 1.0;

@@ -31,10 +31,6 @@ sflow_rheology_f::sflow_rheology_f(lexer* p)
     tanphi=tan(p->W102_phi*(PI/180.0));
 }
 
-sflow_rheology_f::~sflow_rheology_f()
-{
-}
-
 void sflow_rheology_f::u_source(lexer *p, fdm2D *b, slice &u, slice &v)
 {
     SLICELOOP1

@@ -37,7 +37,7 @@ class nhflow_strain : public nhflow_gradient
 
 public:
 	nhflow_strain (lexer*,fdm_nhf*);
-	virtual ~nhflow_strain();
+	virtual ~nhflow_strain() = default;
 
 	double sij(lexer*,fdm_nhf*,int,int);
 	double qij(lexer*,fdm_nhf*,int,int);

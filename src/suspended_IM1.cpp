@@ -35,10 +35,6 @@ suspended_IM1::suspended_IM1(lexer* p, fdm* a) : concn(p),wvel(p)
 	gcval_susp=60;
 }
 
-suspended_IM1::~suspended_IM1()
-{
-}
-
 void suspended_IM1::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow, sediment_fdm *s)
 {
     starttime=pgc->timer();

@@ -30,7 +30,7 @@ class wave_lib_reconstruct : public wave_lib_precalc,  public increment
 {
 public:
     wave_lib_reconstruct(lexer*, ghostcell*);
-	virtual ~wave_lib_reconstruct();
+	virtual ~wave_lib_reconstruct() = default;
 
     virtual double wave_u(lexer*,double,double,double);
     virtual double wave_v(lexer*,double,double,double);

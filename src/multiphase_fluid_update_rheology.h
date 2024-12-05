@@ -32,7 +32,7 @@ class multiphase_fluid_update_rheology : public multiphase_fluid_update, increme
 {
 public:
     multiphase_fluid_update_rheology(lexer*, fdm*, ghostcell*);
-	virtual ~multiphase_fluid_update_rheology();
+	virtual ~multiphase_fluid_update_rheology() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*,field&,field&);
 

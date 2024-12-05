@@ -28,10 +28,6 @@ boundarycheck::boundarycheck()
 {
 }
 
-boundarycheck::~boundarycheck()
-{
-}
-
 int boundarycheck::boundcheck(lexer *p,  int ii, int jj, int kk, int margin)
 {
     check=0;

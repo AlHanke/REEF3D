@@ -31,10 +31,6 @@ sediment_cds_hj::sediment_cds_hj(lexer* p)
 
 }
 
-sediment_cds_hj::~sediment_cds_hj()
-{
-}
-
 double sediment_cds_hj::sx(lexer *p, slice &f, double ivel1, double ivel2)
 {   
     grad = 0.5*(ivel1+ivel2)*(f(i+1,j)-f(i-1,j))/(p->DXP[IP]+p->DXP[IM1]);

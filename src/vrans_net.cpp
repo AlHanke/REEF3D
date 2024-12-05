@@ -32,8 +32,6 @@ vrans_net::vrans_net(lexer *p, ghostcell *pgc)
     //initialize(p,a,pgc);
 }
 
-vrans_net::~vrans_net(){}
-
 void vrans_net::start(lexer *p, fdm *a, ghostcell *pgc, net *&ppnet, int nNet)
 { 
     // Distribute net forces on surrounding cells

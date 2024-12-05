@@ -40,10 +40,6 @@ bedconc_VR::bedconc_VR(lexer *p)
     Rstar=(rhosed-rhowat)/rhowat;
 }
 
-bedconc_VR::~bedconc_VR()
-{
-}
-
 void bedconc_VR::start(lexer* p, ghostcell *pgc, sediment_fdm *s)
 {
     SLICELOOP4

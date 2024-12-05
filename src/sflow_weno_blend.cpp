@@ -44,10 +44,6 @@ sflow_weno_blend::sflow_weno_blend(lexer* p):tttw(13.0/12.0),fourth(1.0/4.0),thi
 
 }
 
-sflow_weno_blend::~sflow_weno_blend()
-{
-}
-
 void sflow_weno_blend::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice& vvel)
 {
     if(ipol==1)

@@ -32,10 +32,6 @@ fnpf_weno7::fnpf_weno7(lexer* p) :  ddweno_f_nug(p), epsilon(1.0e-10)
 
 }
 
-fnpf_weno7::~fnpf_weno7()
-{
-}
-
 double fnpf_weno7::fx(lexer *p, field &f, double ivel1, double ivel2)
 {
     grad=0.0;

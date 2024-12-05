@@ -33,7 +33,7 @@ class isusprhs : public increment
 {
 public:
 	isusprhs(lexer*);
-	virtual ~isusprhs();
+	virtual ~isusprhs() = default;
 	void isuspsource(lexer*,fdm*,field&);
 	void sedfsf(lexer*,fdm*,field&);
 	void clearrhs(lexer*,fdm*);

@@ -29,10 +29,6 @@ flux_HJ_CDS2::flux_HJ_CDS2(lexer *p)
 
 }
 
-flux_HJ_CDS2::~flux_HJ_CDS2()
-{
-}
-
 void flux_HJ_CDS2::u_flux(fdm* a,int ipol, field& uvel, double &uflux1, double &uflux2)
 {
 	if(ipol==1)

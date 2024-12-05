@@ -37,10 +37,6 @@ fsf_vtp::fsf_vtp(lexer* p, fdm *a, ghostcell *pgc):zero(0.0),interfac(1.6),verti
 	fsfprintcount=0;
 }
 
-fsf_vtp::~fsf_vtp()
-{
-}
-
 void fsf_vtp::start(lexer *p, fdm *a, ghostcell *pgc)
 {	
 	triangulation(p,a,pgc,a->phi);

@@ -30,10 +30,6 @@ sediment_fou::sediment_fou(lexer* p)
 {
 }
 
-sediment_fou::~sediment_fou()
-{
-}
-
 double sediment_fou::sx(lexer *p, slice &f, double ivel1, double ivel2)
 {
     if(ivel1>=0.0)

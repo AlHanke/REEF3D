@@ -40,7 +40,7 @@ class force :  public increment
 
 public:
 	force(lexer*,fdm*,ghostcell*,int);
-	virtual ~force();
+	virtual ~force() = default;
 	virtual void start(lexer*,fdm*,ghostcell*);
     virtual void ini(lexer*,fdm*,ghostcell*);
 

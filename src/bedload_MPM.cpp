@@ -38,10 +38,6 @@ bedload_MPM::bedload_MPM(lexer* p)
     ks=2.5*d50;
 }
 
-bedload_MPM::~bedload_MPM()
-{
-}
-
 void bedload_MPM::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 {
     double qb;

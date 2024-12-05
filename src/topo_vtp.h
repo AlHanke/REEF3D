@@ -38,7 +38,7 @@ class topo_vtp : virtual public increment, private vtp3D
 
 public:
     topo_vtp(lexer*,fdm*,ghostcell*);
-    virtual ~topo_vtp();
+    virtual ~topo_vtp() = default;
     void start(lexer*,fdm*,ghostcell*,sediment*);
 
 private:

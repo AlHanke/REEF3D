@@ -35,7 +35,7 @@ class sflow_eta : public sflow_fsf, public increment
 {
 public:    
 	sflow_eta(lexer*, fdm2D*, ghostcell*,patchBC_interface*);
-	virtual ~sflow_eta();
+	virtual ~sflow_eta() = default;
 	
     virtual void start(lexer*, fdm2D*, ghostcell*, ioflow*,slice&,slice&,double);
 	virtual void ini(lexer*, fdm2D*, ghostcell*, ioflow*);

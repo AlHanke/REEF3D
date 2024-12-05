@@ -37,10 +37,6 @@ sediment_wenoflux::sediment_wenoflux(lexer* p) :  weno_nug_func(p)
     uf=vf=0;
 }
 
-sediment_wenoflux::~sediment_wenoflux()
-{
-}
-
 double sediment_wenoflux::sx(lexer *p, slice &f, double ivel1, double ivel2)
 {
     grad=0.0;

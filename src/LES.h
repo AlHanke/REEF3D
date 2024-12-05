@@ -32,7 +32,7 @@ class LES : public les_io
 {
 public:
 	LES(lexer *, fdm*);
-	virtual ~LES();
+	virtual ~LES() = default;
 	virtual void isource(lexer*, fdm*);
 	virtual void jsource(lexer*, fdm*);
 	virtual void ksource(lexer*, fdm*);

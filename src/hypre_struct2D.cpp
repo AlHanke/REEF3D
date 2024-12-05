@@ -39,10 +39,6 @@ hypre_struct2D::hypre_struct2D(lexer* p,ghostcell *pgc)
     make_grid(p,pgc);	  
 }
 
-hypre_struct2D::~hypre_struct2D()
-{
-}
-
 void hypre_struct2D::start(lexer* p, ghostcell* pgc, slice &f, matrix2D &M, vec2D& xvec, vec2D& rhsvec, int var)
 {    
 	create_solvers(p,pgc);

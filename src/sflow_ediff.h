@@ -37,7 +37,7 @@ class sflow_ediff : public sflow_diffusion, public increment
 {
 public:
 	sflow_ediff(lexer*);
-	virtual ~sflow_ediff();
+	virtual ~sflow_ediff() = default;
 
 	virtual void diff_u(lexer*, fdm2D*, ghostcell*, solver2D*, slice&, slice&, double);
 	virtual void diff_v(lexer*, fdm2D*, ghostcell*, solver2D*, slice&, slice&, double);

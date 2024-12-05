@@ -30,10 +30,6 @@ strain::strain(lexer *p, fdm *a)	: gradient(p),epsi(p->F45*p->DXM)
 {
 }
 
-strain::~strain()
-{
-}
-
 void strain::wallf_update(lexer *p, fdm *a, ghostcell *pgc, fieldint &wallf)
 {
 	int n,q;

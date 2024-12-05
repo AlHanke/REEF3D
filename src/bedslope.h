@@ -35,7 +35,7 @@ class bedslope : public norm_vec
 {
 public:
     bedslope(lexer*);
-    virtual ~bedslope();
+    virtual ~bedslope() = default;
 
 	virtual void slope_weno(lexer*, ghostcell*,sediment_fdm*,field&);
     virtual void slope_cds(lexer*,ghostcell*,sediment_fdm*);

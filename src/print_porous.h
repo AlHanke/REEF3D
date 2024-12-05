@@ -34,7 +34,7 @@ class print_porous :  public increment
 
 public:
 	print_porous(lexer*,fdm*,ghostcell*);
-	virtual ~print_porous();
+	virtual ~print_porous() = default;
 	virtual void start(lexer*,fdm*,ghostcell*);
     virtual void print_vtp(lexer*,fdm*,ghostcell*);
 	virtual void objects(lexer*,fdm*,ghostcell*);

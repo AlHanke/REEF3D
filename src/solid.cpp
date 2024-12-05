@@ -32,10 +32,6 @@ solid::solid(lexer* p, fdm *a, ghostcell* pgc)
 {
 }
 
-solid::~solid()
-{
-}
-
 void solid::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow, convection* pconvec, reinitopo* preso)
 {
 

@@ -35,7 +35,7 @@ class data_void : public data
 {
 public:
 	data_void(lexer*, fdm*, ghostcell*);
-	virtual ~data_void();
+	virtual ~data_void() = default;
 	virtual void start(lexer*, fdm*, ghostcell*);
 	
     virtual void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&);

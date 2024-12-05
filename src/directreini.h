@@ -40,7 +40,7 @@ class directreini : public reini, gradient, public resize_class
 {
 public:
 	directreini(lexer* p, fdm *a);
-	virtual ~directreini();
+	virtual ~directreini() = default;
 	virtual void start(lexer*,fdm*,ghostcell*,field&,ioflow*);
 	
 	virtual void vtp(lexer*,fdm*,ghostcell*);

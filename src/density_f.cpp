@@ -29,10 +29,6 @@ density_f::density_f(lexer* p) : epsi(p->F45*p->DXM), eps(2.1*p->DXM)
     H=0.0;
 }
 
-density_f::~density_f()
-{
-}
-
 double density_f::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
     phival = 0.5*(a->phi(i,j,k) + a->phi(i+aa,j+bb,k+cc));

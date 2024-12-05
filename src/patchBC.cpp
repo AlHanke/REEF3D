@@ -38,10 +38,6 @@ patchBC::patchBC(lexer *p, ghostcell *pgc)
     
 }
 
-patchBC::~patchBC()
-{
-}
-
 void patchBC::patchBC_ini(lexer *p, ghostcell *pgc)
 {
     // fill patch objects

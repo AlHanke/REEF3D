@@ -32,7 +32,7 @@ class weno_flux_nug : public convection, public weno_nug_func
 {
 public:
 	weno_flux_nug(lexer*);
-	virtual ~weno_flux_nug();
+	virtual ~weno_flux_nug() = default;
 
 	virtual void start(lexer*,fdm*,field&,int,field&,field&,field&);
 

@@ -28,10 +28,6 @@ wave_lib_elliptic::wave_lib_elliptic() : epsi(1.0e-19)
 { 
 }
 
-wave_lib_elliptic::~wave_lib_elliptic()
-{
-}
-
 
 void wave_lib_elliptic::elliptic(lexer *p, double u, double &sn, double &cn, double &dn)
 { 

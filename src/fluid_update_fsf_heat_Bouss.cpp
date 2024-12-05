@@ -54,10 +54,6 @@ fluid_update_fsf_heat_Bouss::fluid_update_fsf_heat_Bouss(lexer *p, fdm* a, ghost
     
 }
 
-fluid_update_fsf_heat_Bouss::~fluid_update_fsf_heat_Bouss()
-{
-}
-
 void fluid_update_fsf_heat_Bouss::start(lexer *p, fdm* a, ghostcell* pgc)
 {
     

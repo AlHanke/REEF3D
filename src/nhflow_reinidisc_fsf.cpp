@@ -30,10 +30,6 @@ nhflow_reinidisc_fsf::nhflow_reinidisc_fsf(lexer *p) :  ddweno_nug_sig(p)
 {
 }
 
-nhflow_reinidisc_fsf::~nhflow_reinidisc_fsf()
-{
-}
-
 void nhflow_reinidisc_fsf::start(lexer *p, fdm_nhf *d, ghostcell *pgc, double *F, double *L)
 {
     LOOP

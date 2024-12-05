@@ -34,11 +34,6 @@ pressure_void::pressure_void(lexer* p)
 
 }
 
-
-pressure_void::~pressure_void()
-{
-}
-
 void pressure_void::start(lexer*p, fdm* a, ghostcell* pgc, poisson* ppois,solver* psolv, ioflow *pflow, field& uvel, field& vvel, field& wvel, double alpha)
 {
 }

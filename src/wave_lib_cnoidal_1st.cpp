@@ -40,10 +40,6 @@ wave_lib_cnoidal_1st::wave_lib_cnoidal_1st(lexer *p, ghostcell *pgc) : wave_lib_
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-wave_lib_cnoidal_1st::~wave_lib_cnoidal_1st()
-{
-}
-
 double wave_lib_cnoidal_1st::wave_u(lexer *p, double x, double y, double z)
 {
     double vel;

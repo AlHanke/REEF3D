@@ -74,10 +74,6 @@ wave_lib_irregular_2nd_a::wave_lib_irregular_2nd_a(lexer *p, ghostcell *pgc) : w
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-wave_lib_irregular_2nd_a::~wave_lib_irregular_2nd_a()
-{
-}
-
 double wave_lib_irregular_2nd_a::wave_u(lexer *p, double x, double y, double z)
 {
     vel=0.0;

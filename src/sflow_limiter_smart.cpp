@@ -29,10 +29,6 @@ sflow_fluxlim_smart::sflow_fluxlim_smart (lexer *p)
 {
 }
 
-sflow_fluxlim_smart::~sflow_fluxlim_smart()
-{
-}
-
 double sflow_fluxlim_smart::iphi(slice& f,int n1, int n2, int q1, int q2)
 {
     denom=(f(i+q1,j)-f(i+q2,j));

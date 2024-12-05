@@ -31,7 +31,7 @@ class sediment_fou : public sediment_exnerdisc, public increment
 {
 public:
 	sediment_fou(lexer*);
-	virtual ~sediment_fou();
+	virtual ~sediment_fou() = default;
 
     virtual double sx(lexer*, slice&, double, double);
 	virtual double sy(lexer*, slice&, double, double);

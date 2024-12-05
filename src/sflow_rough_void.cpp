@@ -28,10 +28,6 @@ sflow_rough_void::sflow_rough_void(lexer* p)
 {
 }
 
-sflow_rough_void::~sflow_rough_void()
-{
-}
-
 void sflow_rough_void::u_source(lexer *p, fdm2D *b, slice &u)
 {
 }

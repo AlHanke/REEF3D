@@ -51,7 +51,7 @@ public:
     
     
     sixdof_motionext_file_CoG(lexer*, ghostcell*);
-	virtual ~sixdof_motionext_file_CoG();
+	virtual ~sixdof_motionext_file_CoG() = default;
     
 private:
     double ramp_vel(lexer*);

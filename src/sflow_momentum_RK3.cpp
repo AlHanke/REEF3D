@@ -84,10 +84,6 @@ sflow_momentum_RK3::sflow_momentum_RK3(lexer *p, fdm2D *b, sflow_convection *pco
     prheo = new sflow_rheology_f(p);
 }
 
-sflow_momentum_RK3::~sflow_momentum_RK3()
-{
-}
-
 void sflow_momentum_RK3::start(lexer *p, fdm2D* b, ghostcell* pgc)
 {
     pflow->discharge2D(p,b,pgc);

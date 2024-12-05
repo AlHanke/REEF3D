@@ -72,11 +72,6 @@ sflow_chires::sflow_chires (lexer *p, fdm2D *b, int limiter)
 	*/
 }
 
-sflow_chires::~sflow_chires()
-{
-
-}
-
 void sflow_chires::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice& vvel)
 { 	
     if(ipol==1)

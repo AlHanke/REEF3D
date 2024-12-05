@@ -29,10 +29,6 @@ sflow_filter::sflow_filter(lexer* p) : f1x(p), f1y(p), f2x(p), f2y(p), f4x(p), f
 {
 }
 
-sflow_filter::~sflow_filter()
-{
-}
-
 void sflow_filter::filter(lexer* p, fdm2D *b, ghostcell *pgc)
 {
     if(p->count%200==0)

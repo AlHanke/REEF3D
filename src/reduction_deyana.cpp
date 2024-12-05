@@ -29,10 +29,6 @@ reduction_deyana::reduction_deyana(lexer *p) : bedslope(p)
 {
 }
 
-reduction_deyana::~reduction_deyana()
-{
-}
-
 void reduction_deyana::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double r=1.0;

@@ -36,7 +36,7 @@ class reinidisc_fsf_rig : public reinidisc, public ddweno_nug
 {
 public:
 	reinidisc_fsf_rig(lexer* p);
-	virtual ~reinidisc_fsf_rig();
+	virtual ~reinidisc_fsf_rig() = default;
 	virtual void start(lexer*, fdm*, ghostcell*, field&, field&, int);
 	
 private:

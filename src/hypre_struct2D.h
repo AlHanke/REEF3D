@@ -39,7 +39,7 @@ class hypre_struct2D : public solver2D, public increment
 public:
 
 	hypre_struct2D(lexer*,ghostcell*);
-	virtual ~hypre_struct2D();
+	virtual ~hypre_struct2D() = default;
 	virtual void start(lexer*, ghostcell*, slice&, matrix2D&, vec2D&, vec2D&, int);
 
 	void fillbackvec(lexer*,slice&,vec2D&,int);

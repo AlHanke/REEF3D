@@ -40,10 +40,6 @@ wave_lib_deep::wave_lib_deep(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-wave_lib_deep::~wave_lib_deep()
-{
-}
-
 double wave_lib_deep::wave_u(lexer *p, double x, double y, double z)
 {
     double vel;

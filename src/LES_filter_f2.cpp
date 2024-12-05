@@ -31,10 +31,6 @@ LES_filter_f2::LES_filter_f2(lexer* p, fdm* a) : strain(p,a)
 
 }
 
-LES_filter_f2::~LES_filter_f2()
-{
-}
-
 void LES_filter_f2::start(lexer *p, fdm *a, ghostcell *pgc, field &uprime, field &vprime, field &wprime, int gcval)
 {
  

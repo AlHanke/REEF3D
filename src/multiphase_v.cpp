@@ -39,10 +39,6 @@ multiphase_v::multiphase_v()
 {
 }
 
-multiphase_v::~multiphase_v()
-{
-}
-
 void multiphase_v::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, convection *pconvec, solver *psolv)
 {
 }

@@ -25,8 +25,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 mooring_barQuasiStatic::mooring_barQuasiStatic(int number):line(number){}
 
-mooring_barQuasiStatic::~mooring_barQuasiStatic(){}
-
 void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
 {
     // Current time

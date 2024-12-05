@@ -54,10 +54,6 @@ momentum_RK2::momentum_RK2(lexer *p, fdm *a, convection *pconvection, diffusion 
     pfsi=ppfsi;
 }
 
-momentum_RK2::~momentum_RK2()
-{
-}
-
 void momentum_RK2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof, vector<net*>& pnet)
 {
     pflow->discharge(p,a,pgc);

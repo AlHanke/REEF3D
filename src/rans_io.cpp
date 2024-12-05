@@ -36,10 +36,6 @@ rans_io::rans_io(lexer *p, fdm *a) : strain(p,a), kin(p), eps(p), eddyv0(p), wal
 {
 }
 
-rans_io::~rans_io()
-{
-}
-
 void rans_io::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
     iin=4*(p->pointnum);

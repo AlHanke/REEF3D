@@ -33,7 +33,7 @@ class wave_lib_irregular_2nd_b : public wave_lib_precalc, public wave_lib_parame
 {
 public:
     wave_lib_irregular_2nd_b(lexer*, ghostcell*);
-	virtual ~wave_lib_irregular_2nd_b();
+	virtual ~wave_lib_irregular_2nd_b() = default;
 
     double wave_horzvel(lexer*,double,double,double);
     

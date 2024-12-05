@@ -31,7 +31,7 @@ class wave_lib_flap : public wave_lib_precalc, public wave_lib_parameters, virtu
 {
 public:
     wave_lib_flap(lexer*, ghostcell*);
-	virtual ~wave_lib_flap();
+	virtual ~wave_lib_flap() = default;
     
     double wave_horzvel(lexer*,double,double,double);
     

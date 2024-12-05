@@ -115,10 +115,6 @@ momentum_FC2::momentum_FC2(lexer *p, fdm *a, ghostcell *pgc, convection *pconvec
 	ppicard = new picard_void(p);
 }
 
-momentum_FC2::~momentum_FC2()
-{
-}
-
 void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof, vector<net*>& pnet)
 {	
     pflow->discharge(p,a,pgc);

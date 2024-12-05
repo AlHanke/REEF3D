@@ -31,7 +31,7 @@ class bedload_VR : public bedload, public increment
 public:
 
     bedload_VR(lexer*);
-    virtual ~bedload_VR();
+    virtual ~bedload_VR() = default;
 
 	virtual void start(lexer*, ghostcell*, sediment_fdm*);
 

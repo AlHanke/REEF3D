@@ -26,10 +26,6 @@ bedconc_void::bedconc_void(lexer *p)
 {
 }
 
-bedconc_void::~bedconc_void()
-{
-}
-
 void bedconc_void::start(lexer* p, ghostcell *pgc, sediment_fdm *s)
 {
 }

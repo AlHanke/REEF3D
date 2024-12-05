@@ -32,7 +32,7 @@ class sflow_weno_blend : public sflow_convection, public increment
 {
 public:
 	sflow_weno_blend(lexer*);
-	virtual ~sflow_weno_blend();
+	virtual ~sflow_weno_blend() = default;
 
 	virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
 

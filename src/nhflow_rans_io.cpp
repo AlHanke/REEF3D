@@ -38,10 +38,6 @@ nhflow_rans_io::nhflow_rans_io(lexer *p, fdm_nhf *d) : nhflow_strain(p,d),
     p->Iarray(WALLF,p->imax*p->jmax*(p->kmax+2));
 }
 
-nhflow_rans_io::~nhflow_rans_io()
-{
-}
-
 void nhflow_rans_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
     

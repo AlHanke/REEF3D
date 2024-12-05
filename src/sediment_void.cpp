@@ -27,11 +27,6 @@ sediment_void::sediment_void()
 
 }
 
-sediment_void::~sediment_void()
-{
-
-}
-
 void sediment_void::start_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow,
                                     reinitopo *preto, solver *psolv)
 {

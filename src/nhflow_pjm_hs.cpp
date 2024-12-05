@@ -46,10 +46,6 @@ nhflow_pjm_hs::nhflow_pjm_hs(lexer* p, fdm_nhf *d, patchBC_interface *ppBC) : nh
     gcval_press=540;  
 }
 
-nhflow_pjm_hs::~nhflow_pjm_hs()
-{
-}
-
 void nhflow_pjm_hs::start(lexer*p, fdm_nhf *d, solver* psolv, ghostcell* pgc, ioflow *pflow, slice &WL, double *U, double *V, double *W, double alpha)
 {
 }

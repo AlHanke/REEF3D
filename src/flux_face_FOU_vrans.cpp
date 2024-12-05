@@ -29,10 +29,6 @@ flux_face_FOU_vrans::flux_face_FOU_vrans(lexer *pp)
 
 }
 
-flux_face_FOU_vrans::~flux_face_FOU_vrans()
-{
-}
-
 void flux_face_FOU_vrans::u_flux(fdm* a,int ipol, field& uvel, double &uflux1, double &uflux2)
 {
 	if(ipol==1)

@@ -53,11 +53,6 @@ print_averaging_f::print_averaging_f(lexer *p, fdm* a, ghostcell *pgc) : um(p),v
     stime = p->P22;
 }
 
-print_averaging_f::~print_averaging_f()
-{
-
-}
-
 void print_averaging_f::averaging(lexer *p, fdm *a, ghostcell *pgc, heat *pheat)
 {
     // u,v,w,p,T

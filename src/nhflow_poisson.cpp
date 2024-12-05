@@ -35,10 +35,6 @@ nhflow_poisson::nhflow_poisson(lexer *p)
 {
 }
 
-nhflow_poisson::~nhflow_poisson()
-{
-}
-
 void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
 {	
     double sigxyz2;

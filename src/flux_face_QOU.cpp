@@ -30,10 +30,6 @@ flux_face_QOU::flux_face_QOU(lexer *pp)
 
 }
 
-flux_face_QOU::~flux_face_QOU()
-{
-}
-
 void flux_face_QOU::u_flux(fdm* a,int ipol, field& uvel, double &uflux1, double &uflux2)
 {
 	if(ipol==1)

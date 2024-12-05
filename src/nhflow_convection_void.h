@@ -31,7 +31,7 @@ class nhflow_convection_void : public nhflow_convection
 {
 public:
 	nhflow_convection_void(lexer*);
-	virtual ~nhflow_convection_void();
+	virtual ~nhflow_convection_void() = default;
 
 	virtual void start(lexer*, fdm_nhf*&, int, slice&);
     virtual void precalc(lexer*, fdm_nhf*, int, slice&);

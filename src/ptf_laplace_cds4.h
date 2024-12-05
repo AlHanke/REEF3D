@@ -30,7 +30,7 @@ class ptf_laplace_cds4 : public ptf_laplace, public increment
 {
 public:
     ptf_laplace_cds4 ();
-	virtual ~ptf_laplace_cds4();
+	virtual ~ptf_laplace_cds4() = default;
 
     virtual void start(lexer *,fdm*,ghostcell*,solver*,field&,slice&);
     

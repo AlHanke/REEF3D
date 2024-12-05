@@ -45,10 +45,6 @@ wave_lib_hdc::wave_lib_hdc(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc
     endseries=0;
 }
 
-wave_lib_hdc::~wave_lib_hdc()
-{
-}
-
 double wave_lib_hdc::wave_u(lexer *p, double x, double y, double z)
 {
     double vel=0.0;

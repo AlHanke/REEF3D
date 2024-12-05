@@ -43,7 +43,7 @@ class mooring_barQuasiStatic : public mooring
 {
 public:
 	mooring_barQuasiStatic(int);
-	virtual ~mooring_barQuasiStatic();
+	virtual ~mooring_barQuasiStatic() = default;
 	
 	virtual void start(lexer*, ghostcell*);
 	virtual void initialize(lexer*, ghostcell*);

@@ -35,7 +35,7 @@ class sflow_hxy_hires : public sflow_hxy_disc, public increment
 public:
 
 	sflow_hxy_hires(lexer*,patchBC_interface*,int);
-	virtual ~sflow_hxy_hires();
+	virtual ~sflow_hxy_hires() = default;
 
 	virtual void start(lexer*,slice&,slice&,slice&,int*,slice&,slice&,slice&);
 	

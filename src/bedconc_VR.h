@@ -30,7 +30,7 @@ class bedconc_VR : public bedconc, public increment
 {
 public:
 	bedconc_VR(lexer*);
-	virtual ~bedconc_VR();
+	virtual ~bedconc_VR() = default;
 	void start(lexer*,ghostcell*,sediment_fdm*);
 
 private:

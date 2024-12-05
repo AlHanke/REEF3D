@@ -41,10 +41,6 @@ wave_lib_flap::wave_lib_flap(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
     
     singamma = sin((p->B105_1)*(PI/180.0));
     cosgamma = cos((p->B105_1)*(PI/180.0));
-}  
-
-wave_lib_flap::~wave_lib_flap()
-{
 }
 
 double wave_lib_flap::wave_u(lexer *p, double x, double y, double z)

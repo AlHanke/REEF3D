@@ -34,7 +34,7 @@ class hcds6 : public convection,  public increment
 public:
 
 	hcds6 (lexer *);
-	virtual ~hcds6();
+	virtual ~hcds6() = default;
 
 	virtual void start(lexer*,fdm*,field&,int,field&,field&,field&);
 

@@ -33,7 +33,7 @@ class reinitopo_AB2 : public reinitopo, gradient
 {
 public:
 	reinitopo_AB2(lexer* p);
-	virtual ~reinitopo_AB2();
+	virtual ~reinitopo_AB2() = default;
 	virtual void start(lexer*,fdm*,ghostcell*,field&);
 
 	int *sizeM;

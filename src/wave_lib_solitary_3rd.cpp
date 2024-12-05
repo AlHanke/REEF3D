@@ -39,10 +39,6 @@ wave_lib_solitary_3rd::wave_lib_solitary_3rd(lexer *p, ghostcell *pgc) : wave_li
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-wave_lib_solitary_3rd::~wave_lib_solitary_3rd()
-{
-}
-
 double wave_lib_solitary_3rd::wave_u(lexer *p, double x, double y, double z)
 {
     double vel;

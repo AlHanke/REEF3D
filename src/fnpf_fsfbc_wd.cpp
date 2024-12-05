@@ -149,10 +149,6 @@ fnpf_fsfbc_wd::fnpf_fsfbc_wd(lexer *p, fdm_fnpf *c, ghostcell *pgc) : eps(1.0e-6
     
 }
 
-fnpf_fsfbc_wd::~fnpf_fsfbc_wd()
-{
-}
-
 void fnpf_fsfbc_wd::fsfdisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, slice &Fifsf)
 {
     SLICELOOP4

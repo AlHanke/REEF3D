@@ -28,10 +28,6 @@ reduction_FD::reduction_FD(lexer *p) : bedslope(p)
 {
 }
 
-reduction_FD::~reduction_FD()
-{
-}
-
 void reduction_FD::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double r=1.0;

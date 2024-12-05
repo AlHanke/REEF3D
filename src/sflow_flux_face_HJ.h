@@ -34,7 +34,7 @@ class sflow_flux_face_HJ : public sflow_flux, public increment
 public:
 
 	sflow_flux_face_HJ (lexer *p);
-	virtual ~sflow_flux_face_HJ();
+	virtual ~sflow_flux_face_HJ() = default;
 
 	virtual void u_flux(int,slice&,double&,double&);
 	virtual void v_flux(int,slice&,double&,double&);

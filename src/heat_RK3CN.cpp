@@ -35,10 +35,6 @@ heat_RK3CN::heat_RK3CN(lexer* p, fdm* a, ghostcell *pgc, heat *&pheat) : bcheat(
 	gcval_heat=80;
 }
 
-heat_RK3CN::~heat_RK3CN()
-{
-}
-
 void heat_RK3CN::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow)
 {
 

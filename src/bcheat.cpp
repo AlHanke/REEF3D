@@ -29,10 +29,6 @@ bcheat::bcheat(lexer* p)
 
 }
 
-bcheat::~bcheat()
-{
-}
-
 void bcheat::bcheat_start(lexer* p,fdm* a,ghostcell *pgc,field& b)
 {
 

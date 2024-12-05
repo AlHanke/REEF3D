@@ -36,7 +36,7 @@ class sflow_diffusion_void : public sflow_diffusion
 {
 public:
 	sflow_diffusion_void(lexer*);
-	virtual ~sflow_diffusion_void();
+	virtual ~sflow_diffusion_void() = default;
 
 	virtual void diff_u(lexer*, fdm2D*, ghostcell*, solver2D*, slice&, slice&, double);
 	virtual void diff_v(lexer*, fdm2D*, ghostcell*, solver2D*, slice&, slice&, double);

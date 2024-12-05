@@ -38,7 +38,7 @@ class fnpf_RK2 : public fnpf_ini, public fnpf_sigma
 {
 public:
 	fnpf_RK2(lexer*, fdm_fnpf*, ghostcell*);
-	virtual ~fnpf_RK2();
+	virtual ~fnpf_RK2() = default;
     
     virtual void start(lexer*, fdm_fnpf*, ghostcell*, solver*, convection*, ioflow*, reini*,onephase*);
     virtual void inidisc(lexer*, fdm_fnpf*, ghostcell*, ioflow*, solver*);

@@ -35,10 +35,6 @@ sflow_forcing::sflow_forcing(lexer *p) : fx(p), fy(p), fz(p)
     forcing_flag=1;
 }
 
-sflow_forcing::~sflow_forcing()
-{
-}
-
 void sflow_forcing::forcing(lexer *p, fdm2D *b, ghostcell *pgc, sixdof *p6dof, 
                              int iter, double alpha, slice &P, slice &Q, slice &w, slice &WL, bool finalize)
 {

@@ -31,7 +31,7 @@ class bedload_direction_f : public bedload_direction, virtual public increment
 public:
 
     bedload_direction_f(lexer*);
-    virtual ~bedload_direction_f();
+    virtual ~bedload_direction_f() = default;
 
 	void start(lexer*, ghostcell*, sediment_fdm*);
 

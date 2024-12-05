@@ -31,7 +31,7 @@ class wave_lib_flap_eta : public wave_lib_precalc, public wave_lib_parameters, v
 {
 public:
     wave_lib_flap_eta(lexer*, ghostcell*);
-	virtual ~wave_lib_flap_eta();
+	virtual ~wave_lib_flap_eta() = default;
     
     double wave_horzvel(lexer*,double,double,double);
     

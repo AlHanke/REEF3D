@@ -69,10 +69,6 @@ sflow_pjm_sw::sflow_pjm_sw(lexer* p, fdm2D *b, patchBC_interface *ppBC) : wb(p),
 	
 }
 
-sflow_pjm_sw::~sflow_pjm_sw()
-{
-}
-
 void sflow_pjm_sw::start(lexer *p, fdm2D *b, ghostcell *pgc, solver2D *psolv, ioflow *pflow, slice &P, slice &Q, slice &Pn, slice &Qn, slice &ws, slice &eta, double alpha)
 {
     if(p->mpirank==0 && (p->count%p->P12==0))

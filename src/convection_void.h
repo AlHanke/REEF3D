@@ -32,7 +32,7 @@ class convection_void : public convection, public increment
 public:
 
 	convection_void (lexer *);
-	virtual ~convection_void();
+	virtual ~convection_void() = default;
 
 	virtual void start(lexer*,fdm*,field&,int,field&,field&,field&);
 

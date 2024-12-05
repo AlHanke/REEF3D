@@ -29,10 +29,6 @@ les_io::les_io(lexer *p, fdm *a) : strain(p,a), uprime(p), vprime(p), wprime(p)
 {
 }
 
-les_io::~les_io()
-{
-}
-
 void les_io::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
 

@@ -29,7 +29,7 @@ class particle_pls_void : public particle_corr
 {
 public:
     particle_pls_void();
-	virtual ~particle_pls_void();
+	virtual ~particle_pls_void() = default;
 
     virtual void start(lexer*,fdm*,ghostcell*,ioflow*);
 	virtual void setup(lexer*,fdm*,ghostcell*);

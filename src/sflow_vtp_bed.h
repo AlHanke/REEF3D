@@ -36,7 +36,7 @@ class sflow_vtp_bed : virtual public increment, private vtp3D
 {
 public:
     sflow_vtp_bed(lexer*,fdm2D*);
-    virtual ~sflow_vtp_bed();
+    virtual ~sflow_vtp_bed() = default;
     
     void start(lexer*,fdm2D*,ghostcell*,sediment*);
     

@@ -35,10 +35,6 @@ density_comp::density_comp(lexer* p)
         H=0.0;
 }
 
-density_comp::~density_comp()
-{
-}
-
 double density_comp::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 {       
         phival = 0.5*(a->phi(i,j,k) + a->phi(i+aa,j+bb,k+cc));

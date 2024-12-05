@@ -40,10 +40,6 @@ bedload_EH::bedload_EH(lexer *p)
     fh= 1.0e-8;
 }
 
-bedload_EH::~bedload_EH()
-{
-}
-
 void bedload_EH::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 {
 	double qb,qbx,qby,Ts,Tb;

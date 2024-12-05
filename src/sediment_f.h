@@ -50,7 +50,7 @@ class sediment_f : public sediment, public increment
 {
 public:
     sediment_f(lexer*,fdm*,ghostcell*,turbulence*, patchBC_interface*);
-	virtual ~sediment_f();
+	virtual ~sediment_f() = default;
     
     // CFD interface
     virtual void start_cfd(lexer*, fdm*, ghostcell*, ioflow*, reinitopo*, solver*);

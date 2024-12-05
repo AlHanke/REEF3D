@@ -54,7 +54,7 @@ class printer_fnpf : public printer, public increment
 
 public:
 	printer_fnpf(lexer*,fdm_fnpf*,ghostcell*);
-	virtual ~printer_fnpf();
+	virtual ~printer_fnpf() = default;
 	void start(lexer*,fdm_fnpf*,ghostcell*,ioflow*);
     void print_stop(lexer*,fdm_fnpf*,ghostcell*);
     

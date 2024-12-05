@@ -34,7 +34,7 @@ class idiff2_FS_2D : public diffusion, public increment
 public:
 
 	idiff2_FS_2D(lexer*);
-	virtual ~idiff2_FS_2D();
+	virtual ~idiff2_FS_2D() = default;
 
 	virtual void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, double, double);
 	virtual void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, double, double);

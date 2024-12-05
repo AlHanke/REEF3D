@@ -40,10 +40,6 @@ sflow_fou::sflow_fou(lexer* p)
     pflux = new sflow_flux_face_HJ(p);
 }
 
-sflow_fou::~sflow_fou()
-{
-}
-
 void sflow_fou::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice& vvel)
 {
     if(ipol==1)

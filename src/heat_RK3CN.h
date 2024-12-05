@@ -34,7 +34,7 @@ class heat_RK3CN :public bcheat, public heat_print
 {
 public:
     heat_RK3CN(lexer *, fdm*, ghostcell*,heat*&);
-	virtual ~heat_RK3CN();
+	virtual ~heat_RK3CN() = default;
     
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*);
 	virtual void ttimesave(lexer*, fdm*);

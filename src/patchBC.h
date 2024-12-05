@@ -29,7 +29,7 @@ class patchBC : public patchBC_interface, public increment
 {
 public:
 	patchBC(lexer*,ghostcell*);
-	virtual ~patchBC();
+	virtual ~patchBC() = default;
     
     virtual void patchBC_ini(lexer *p, ghostcell *pgc);
     

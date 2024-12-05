@@ -31,7 +31,7 @@ class wave_lib_spectrum
 {
 public:
     wave_lib_spectrum();
-	virtual ~wave_lib_spectrum();
+	virtual ~wave_lib_spectrum() = default;
 
     void irregular_parameters(lexer*);
     double wave_spectrum(lexer*, double);

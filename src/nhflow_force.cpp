@@ -69,10 +69,6 @@ nhflow_force::nhflow_force(lexer* p, fdm_nhf *d, ghostcell *pgc, int qn) : zero(
     gcval_press=40;  
 }
 
-nhflow_force::~nhflow_force()
-{
-}
-
 void nhflow_force::ini(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     triangulation(p,d,pgc);

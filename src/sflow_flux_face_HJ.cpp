@@ -30,10 +30,6 @@ sflow_flux_face_HJ::sflow_flux_face_HJ(lexer *pp)
 
 }
 
-sflow_flux_face_HJ::~sflow_flux_face_HJ()
-{
-}
-
 void sflow_flux_face_HJ::u_flux(int ipol, slice& uvel, double &uflux1, double &uflux2)
 {
 	if(ipol==1)

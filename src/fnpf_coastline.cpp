@@ -31,10 +31,6 @@ fnpf_coastline::fnpf_coastline(lexer* p) :  ddweno_f_nug(p), frk1(p),frk2(p),L(p
     time_preproc(p); 
 }
 
-fnpf_coastline::~fnpf_coastline()
-{
-}
-
 void fnpf_coastline::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &coastline, int *wet, sliceint &wet_n)
 {
     if(p->count==0)

@@ -37,7 +37,7 @@ class fnpf_vtp_fsf : virtual public increment, private vtp3D
 {
 public:
 	fnpf_vtp_fsf(lexer*,fdm_fnpf*,ghostcell*);
-	virtual ~fnpf_vtp_fsf();
+	virtual ~fnpf_vtp_fsf() = default;
 	
     void start(lexer*,fdm_fnpf*,ghostcell*);
 	

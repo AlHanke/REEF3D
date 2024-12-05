@@ -34,7 +34,7 @@ class density_df : public density, virtual public increment
 
 public:
     density_df(lexer*);
-	virtual ~density_df();
+	virtual ~density_df() = default;
 
 	virtual double roface(lexer*,fdm*,int,int,int);
 	

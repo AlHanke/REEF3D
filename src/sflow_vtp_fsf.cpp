@@ -80,10 +80,6 @@ sflow_vtp_fsf::sflow_vtp_fsf(lexer *p, fdm2D *b, ghostcell *pgc)
     phs = new fnpf_print_Hs(p,b->Hs);
 }
 
-sflow_vtp_fsf::~sflow_vtp_fsf()
-{
-}
-
 void sflow_vtp_fsf::start(lexer *p, fdm2D* b, ghostcell* pgc, ioflow *pflow, sflow_turbulence *pturb, sediment *psed)
 {
 	// Print out based on iteration

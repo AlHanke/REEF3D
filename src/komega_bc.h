@@ -33,7 +33,7 @@ class komega_bc : public roughness
 {
 public:
 	komega_bc(lexer*);
-	virtual ~komega_bc();
+	virtual ~komega_bc() = default;
 	void bckomega_start(lexer*,fdm*,field&,field&, int);
     void bckin_matrix(lexer*,fdm*,field&,field&);
     void bcomega_matrix(lexer*,fdm*,field&,field&);

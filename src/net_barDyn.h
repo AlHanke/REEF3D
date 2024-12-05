@@ -45,7 +45,7 @@ class net_barDyn : public net, public boundarycheck
 {
 public:
 	net_barDyn(int, lexer*);
-	virtual ~net_barDyn();
+	virtual ~net_barDyn() = default;
     
 	virtual void start(lexer*, fdm*, ghostcell*, double,Eigen::Matrix3d);
 	virtual void initialize(lexer*, fdm*, ghostcell*);

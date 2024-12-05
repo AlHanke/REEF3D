@@ -26,10 +26,6 @@ reini_void::reini_void(lexer* p)
 {
 }
 
-reini_void::~reini_void()
-{
-}
-
 void reini_void::start(lexer* p, fdm* a, ghostcell* pgc, field& b, ioflow* pflow)
 {
 }

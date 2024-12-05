@@ -30,10 +30,6 @@ concentration_io::concentration_io(lexer *p, fdm *a) : C(p)
 {
 }
 
-concentration_io::~concentration_io()
-{
-}
-
 void concentration_io::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
 	

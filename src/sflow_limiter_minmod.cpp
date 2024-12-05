@@ -28,10 +28,6 @@ sflow_fluxlim_minmod::sflow_fluxlim_minmod (lexer *p)
 {
 }
 
-sflow_fluxlim_minmod::~sflow_fluxlim_minmod()
-{
-}
-
 double sflow_fluxlim_minmod::iphi(slice& f,int n1, int n2, int q1, int q2)
 {
     denom=(f(i+q1,j)-f(i+q2,j));

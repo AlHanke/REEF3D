@@ -38,7 +38,7 @@ class sflow_turb_ke_IM1 : public sflow_turb_io
 
 public:
     sflow_turb_ke_IM1(lexer*);
-	virtual ~sflow_turb_ke_IM1();
+	virtual ~sflow_turb_ke_IM1() = default;
     
 	virtual void start(lexer*, fdm2D*, ghostcell*, sflow_convection*, sflow_diffusion*, solver2D*, ioflow*);
 	virtual void ktimesave(lexer*, fdm2D*, ghostcell*);

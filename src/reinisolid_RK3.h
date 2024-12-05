@@ -34,7 +34,7 @@ class reinisolid_RK3 : public reinitopo, public increment
 {
 public:
 	reinisolid_RK3(lexer* p);
-	virtual ~reinisolid_RK3();
+	virtual ~reinisolid_RK3() = default;
 	virtual void start(lexer*,fdm*,ghostcell*,field&);
 
 	int *sizeM;

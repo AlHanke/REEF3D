@@ -72,9 +72,6 @@ momentum_RKLS3_df::momentum_RKLS3_df
     zeta << 0.0, -17.0/60.0, -5.0/12.0;
 }
 
-momentum_RKLS3_df::~momentum_RKLS3_df(){}
-
-
 void momentum_RKLS3_df::start(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, sixdof *p6dof, vector<net*>& pnet){}
 
 void momentum_RKLS3_df::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, vrans* pvrans, vector<net*>& pnet, fsi* pfsi)

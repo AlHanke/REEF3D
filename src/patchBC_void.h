@@ -29,7 +29,7 @@ class patchBC_void : public patchBC_interface
 {
 public:
     patchBC_void(lexer*);
-	virtual ~patchBC_void();
+	virtual ~patchBC_void() = default;
     
     
     virtual void patchBC_ini(lexer*, ghostcell*);

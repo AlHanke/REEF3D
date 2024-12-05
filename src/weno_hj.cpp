@@ -40,10 +40,6 @@ weno_hj::weno_hj(lexer* p):tttw(13.0/12.0),fourth(1.0/4.0),third(1.0/3.0),
     pflux = new flux_HJ_CDS2_vrans(p);
 }
 
-weno_hj::~weno_hj()
-{
-}
-
 void weno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
 	

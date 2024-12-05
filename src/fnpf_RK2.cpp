@@ -80,10 +80,6 @@ fnpf_RK2::fnpf_RK2(lexer *p, fdm_fnpf *c, ghostcell *pgc) : fnpf_ini(p,c,pgc),fn
     pf = new fnpf_fsfbc_wd(p,c,pgc);
 }
 
-fnpf_RK2::~fnpf_RK2()
-{
-}
-
 void fnpf_RK2::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, convection *pconvec, ioflow *pflow, reini *preini, onephase* poneph)
 {	   
     

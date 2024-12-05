@@ -33,7 +33,7 @@ class sflow_cweno_flux : public sflow_convection, public increment
 {
 public:
 	sflow_cweno_flux(lexer*,fdm2D*);
-	virtual ~sflow_cweno_flux();
+	virtual ~sflow_cweno_flux() = default;
 
 	virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
 

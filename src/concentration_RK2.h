@@ -35,7 +35,7 @@ class concentration_RK2 :public bc_concentration, public concentration_io
 {
 public:
     concentration_RK2(lexer *, fdm*, ghostcell*);
-	virtual ~concentration_RK2();
+	virtual ~concentration_RK2() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, turbulence*, solver*, ioflow*);
 	virtual void ttimesave(lexer*, fdm*);

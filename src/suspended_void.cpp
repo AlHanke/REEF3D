@@ -26,10 +26,6 @@ suspended_void::suspended_void()
 {
 }
 
-suspended_void::~suspended_void()
-{
-}
-
 void suspended_void::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow, sediment_fdm*)
 {
 }

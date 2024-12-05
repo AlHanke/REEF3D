@@ -32,7 +32,7 @@ class sflow_hxy_weno : public sflow_hxy_disc, public increment
 {
 public:
 	sflow_hxy_weno(lexer*,patchBC_interface*);
-	virtual ~sflow_hxy_weno();
+	virtual ~sflow_hxy_weno() = default;
 
 	virtual void start(lexer*,slice&,slice&,slice&,int*,slice&,slice&,slice&);
 

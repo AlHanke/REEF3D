@@ -34,7 +34,7 @@ class hric : public convection,  public increment
 public:
 
 	hric (lexer *);
-	virtual ~hric();
+	virtual ~hric() = default;
 
 	virtual void start(lexer*,fdm*,field&,int,field&,field&,field&);
 

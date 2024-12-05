@@ -30,10 +30,6 @@ ptf_laplace_cds4::ptf_laplace_cds4()
 {
 }
 
-ptf_laplace_cds4::~ptf_laplace_cds4()
-{
-}
-
 void ptf_laplace_cds4::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, field &f, slice &Fifsf)
 {
     // see p. 1130-1132

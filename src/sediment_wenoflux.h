@@ -31,7 +31,7 @@ class sediment_wenoflux : public sediment_exnerdisc, virtual public increment, p
 {
 public:
 	sediment_wenoflux(lexer*);
-	virtual ~sediment_wenoflux();
+	virtual ~sediment_wenoflux() = default;
 
     virtual double sx(lexer*, slice&, double, double);
 	virtual double sy(lexer*, slice&, double, double);

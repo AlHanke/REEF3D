@@ -31,7 +31,7 @@ class sediment_weno_hj : public sediment_exnerdisc, virtual public increment, pu
 {
 public:
 	sediment_weno_hj(lexer*);
-	virtual ~sediment_weno_hj();
+	virtual ~sediment_weno_hj() = default;
 
     virtual double sx(lexer*, slice&, double,double);
 	virtual double sy(lexer*, slice&, double,double);

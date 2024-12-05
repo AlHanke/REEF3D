@@ -43,10 +43,6 @@ sixdof_motionext_wavemaker::sixdof_motionext_wavemaker(lexer *p, ghostcell *pgc)
     read_format_1(p,pgc);
 }
 
-sixdof_motionext_wavemaker::~sixdof_motionext_wavemaker()
-{
-}
-
 void sixdof_motionext_wavemaker::ini(lexer *p, ghostcell *pgc)
 {
     Uext = 0.0;

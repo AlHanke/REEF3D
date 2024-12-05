@@ -33,7 +33,7 @@ class sflow_voidconv : public sflow_convection, public increment
 {
 public:
 	sflow_voidconv(lexer*);
-	virtual ~sflow_voidconv();
+	virtual ~sflow_voidconv() = default;
 
 	virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
 

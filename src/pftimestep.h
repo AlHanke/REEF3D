@@ -32,7 +32,7 @@ class pftimestep : public timestep, public increment
 {
 public:
 	pftimestep(lexer*);
-	virtual ~pftimestep();
+	virtual ~pftimestep() = default;
 	virtual void start(lexer*,fdm*,ghostcell*,turbulence*);
 	virtual void ini(lexer*,fdm*,ghostcell*);
 

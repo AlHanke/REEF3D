@@ -29,10 +29,6 @@ surftens::surftens(lexer* p):gradient(p),epsi(p->F45*p->DXM)
 	tension=p->W5;
 }
 
-surftens::~surftens()
-{
-}
-
 void surftens::surface_tension(lexer*p,fdm* a,field& surf,int gcval)
 {
 	n=0;

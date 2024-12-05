@@ -48,11 +48,6 @@ partres::partres(lexer *p, ghostcell *pgc) : P(p,pgc), bedch(p), Tau(p), Ts(p), 
     timestep_ini=0;
 }
 
-partres::~partres()
-{
-
-}
-
 
 
 

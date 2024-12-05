@@ -54,10 +54,6 @@ VOF_RK3::VOF_RK3(lexer* p, fdm *a, ghostcell* pgc, heat *pheat):gradient(p),uc(p
 	ppconvec = new hric(p);
 }
 
-VOF_RK3::~VOF_RK3()
-{
-}
-
 void VOF_RK3::start(lexer* p, fdm* a, ghostcell* pgc,convection* pconvec,solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppls, field &F)
 {
     field4 ark1(p),ark2(p);

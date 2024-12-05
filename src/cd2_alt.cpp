@@ -39,10 +39,6 @@ cds2_alt::cds2_alt (lexer *p)
     pflux = new flux_HJ_CDS2_vrans(p);
 }
 
-cds2_alt::~cds2_alt()
-{
-}
-
 void cds2_alt::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     if(ipol==1)

@@ -33,7 +33,7 @@ class weno_hj : public convection, public increment
 {
 public:
 	weno_hj(lexer*);
-	virtual ~weno_hj();
+	virtual ~weno_hj() = default;
 
 	virtual void start(lexer*,fdm*,field&,int,field&,field&,field&);
 

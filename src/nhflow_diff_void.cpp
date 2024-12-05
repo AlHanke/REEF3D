@@ -37,10 +37,6 @@ nhflow_diff_void::nhflow_diff_void(lexer* p)
 	gcval_wh=22;
 }
 
-nhflow_diff_void::~nhflow_diff_void()
-{
-}
-
 
 void nhflow_diff_void::diff_u(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *psolv, double *UHdiff, double *UHin, double *UH, double *VH, double *WH, slice &WL, double alpha)
 {

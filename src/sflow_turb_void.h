@@ -33,7 +33,7 @@ class sflow_turb_void : public sflow_turbulence, public increment
 
 public:
     sflow_turb_void(lexer*);
-	virtual ~sflow_turb_void();
+	virtual ~sflow_turb_void() = default;
     
 	virtual void start(lexer*, fdm2D*, ghostcell*, sflow_convection*, sflow_diffusion*, solver2D*, ioflow*);
 	virtual void ktimesave(lexer*, fdm2D*, ghostcell*);

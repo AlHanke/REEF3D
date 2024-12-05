@@ -61,10 +61,6 @@ poisson_pcorr::poisson_pcorr(lexer *p, heat *&pheat, concentration *&pconc)
     pd = new density_rheo(p);
 }
 
-poisson_pcorr::~poisson_pcorr()
-{
-}
-
 void poisson_pcorr::start(lexer* p, fdm *a, field &press)
 {	
 	n=0;

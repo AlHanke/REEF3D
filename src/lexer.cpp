@@ -32,10 +32,6 @@ lexer::lexer() : position(this), interpolation(this), cmu(0.09)
     mpirank=0;
 }
 
-lexer::~lexer()
-{
-}
-
 int lexer::xmax,lexer::ymax,lexer::zmax;
 int lexer::knox,lexer::knoy,lexer::knoz;
 int lexer::margin;

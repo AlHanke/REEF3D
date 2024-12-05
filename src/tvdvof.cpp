@@ -28,10 +28,6 @@ tvdvof::tvdvof(lexer *p)
 {
 }
 
-tvdvof::~tvdvof()
-{
-}
-
 double tvdvof::iphi(field& b,int n1, int n2, int q1, int q2)
 {
     rp=b(i,j,k);

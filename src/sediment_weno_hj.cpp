@@ -33,10 +33,6 @@ sediment_weno_hj::sediment_weno_hj(lexer* p) :  ddweno_f_nug(p)
 
     dw.ck_weights(p, ckz, p->ZN, p->knoz+1, 1, 4, 6);
 }
-
-sediment_weno_hj::~sediment_weno_hj()
-{
-}
 double sediment_weno_hj::sx(lexer *p, slice &f, double ivel1, double ivel2)
 {
     grad=0.0;

@@ -38,7 +38,7 @@ class fnpf_print_Hs : public increment
 {
 public:
     fnpf_print_Hs(lexer*,slice&);
-	virtual ~fnpf_print_Hs();
+	virtual ~fnpf_print_Hs() = default;
 
 	void start(lexer*,ghostcell*,slice&,slice&);
     

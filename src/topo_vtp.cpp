@@ -43,10 +43,6 @@ topo_vtp::topo_vtp(lexer* p, fdm *a, ghostcell *pgc)
     polygon_sum*=2;
 }
 
-topo_vtp::~topo_vtp()
-{
-}
-
 void topo_vtp::start(lexer *p, fdm *a, ghostcell *pgc, sediment *psed)
 {	
 	print(p,a,pgc,psed);

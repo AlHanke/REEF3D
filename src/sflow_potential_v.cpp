@@ -31,10 +31,6 @@ sflow_potential_v::sflow_potential_v(lexer* p)
 {
 }
 
-sflow_potential_v::~sflow_potential_v()
-{
-}
-
 void sflow_potential_v::start(lexer *p, fdm2D *b, solver2D *psolv, ghostcell *pgc)
 {
 }

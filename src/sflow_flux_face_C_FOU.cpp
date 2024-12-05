@@ -31,10 +31,6 @@ sflow_flux_face_C_FOU::sflow_flux_face_C_FOU(lexer *pp, fdm2D *bb)
     b=bb;
 }
 
-sflow_flux_face_C_FOU::~sflow_flux_face_C_FOU()
-{
-}
-
 void sflow_flux_face_C_FOU::u_flux(int ipol, slice& uvel, double &uflux1, double &uflux2)
 {    
     if(ipol==1)

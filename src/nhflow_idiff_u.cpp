@@ -38,10 +38,6 @@ nhflow_idiff::nhflow_idiff(lexer* p)
 	gcval_wh=22;
 }
 
-nhflow_idiff::~nhflow_idiff()
-{
-}
-
 void nhflow_idiff::diff_u(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *psolv, double *UHdiff, double *UHin, double *UH, double *VH, double *WH, slice &WL, double alpha)
 {
 	starttime=pgc->timer();

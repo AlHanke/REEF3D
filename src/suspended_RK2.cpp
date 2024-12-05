@@ -35,10 +35,6 @@ suspended_RK2::suspended_RK2(lexer* p, fdm* a) : wvel(p)
 	gcval_susp=60;
 }
 
-suspended_RK2::~suspended_RK2()
-{
-}
-
 
 void suspended_RK2::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow, sediment_fdm *s)
 {

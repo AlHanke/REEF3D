@@ -36,10 +36,6 @@ multiphase_fluid_update_f::multiphase_fluid_update_f(lexer *p, fdm* a, ghostcell
 	eps23 = p->F323;
 }
 
-multiphase_fluid_update_f::~multiphase_fluid_update_f()
-{
-}
-
 void multiphase_fluid_update_f::start(lexer *p, fdm* a, ghostcell* pgc, field &ls1, field &ls2)
 {
 	double H1=0.0;

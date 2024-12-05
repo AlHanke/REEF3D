@@ -63,10 +63,6 @@ weno_flux_nug::weno_flux_nug(lexer* p):weno_nug_func(p)
     }
 }
 
-weno_flux_nug::~weno_flux_nug()
-{
-}
-
 void weno_flux_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     uf=vf=wf=0;

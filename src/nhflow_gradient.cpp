@@ -34,11 +34,6 @@ nhflow_gradient::nhflow_gradient(lexer* pp) : tttw(13.0/12.0),fourth(1.0/4.0),th
     grad=0.0;
 }
 
-nhflow_gradient::~nhflow_gradient()
-{
-
-}
-
 // **********************************************************
 // DUXDX2
 // **********************************************************

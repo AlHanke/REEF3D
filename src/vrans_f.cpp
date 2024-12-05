@@ -30,10 +30,6 @@ vrans_f::vrans_f(lexer *p, ghostcell *pgc) : alpha(p), beta(p), Cval(p->B264)
 	//initialize(p,a,pgc);
 }
 
-vrans_f::~vrans_f()
-{
-}
-
 void vrans_f::veltimesave(lexer *p, fdm *a, ghostcell *pgc)
 {
 }

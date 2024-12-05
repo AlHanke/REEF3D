@@ -33,10 +33,6 @@ sflow_eta_weno_hj::sflow_eta_weno_hj(lexer* p):tttw(13.0/12.0),fourth(1.0/4.0),t
     pflux = new sflow_flux_HJ_CDS(p);
 }
 
-sflow_eta_weno_hj::~sflow_eta_weno_hj()
-{
-}
-
 void sflow_eta_weno_hj::start(lexer* p, slice& f, int ipol, slice& uvel, slice& vvel, slice &depth,slice &L)
 {
 

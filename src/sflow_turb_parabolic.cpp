@@ -31,10 +31,6 @@ sflow_turb_parabolic::sflow_turb_parabolic(lexer* p) : sflow_turb_io_void(p)
 {
 }
 
-sflow_turb_parabolic::~sflow_turb_parabolic()
-{
-}
-
 void sflow_turb_parabolic::start(lexer *p, fdm2D *b, ghostcell *pgc, sflow_convection *pconvec, sflow_diffusion *pdiff, solver2D *psolv, ioflow *pflow)
 {
     double dudx,dvdy,dudy,dvdx;

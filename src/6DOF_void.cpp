@@ -43,10 +43,6 @@ sixdof_void::sixdof_void(lexer *p, ghostcell *pgc)
     mkdir("./REEF3D_CFD_6DOF",0777);
 }
 
-sixdof_void::~sixdof_void()
-{
-}
-
 void sixdof_void::ini(lexer *p, ghostcell *pgc)
 {
 }

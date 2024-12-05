@@ -36,10 +36,6 @@ concentration_RK2::concentration_RK2(lexer* p, fdm* a, ghostcell *pgc) : bc_conc
 	gcval_concentration=80;
 }
 
-concentration_RK2::~concentration_RK2()
-{
-}
-
 void concentration_RK2::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, turbulence *pturb, solver* psolv, ioflow* pflow)
 {
     field4 ark1(p);

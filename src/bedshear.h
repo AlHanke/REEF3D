@@ -38,7 +38,7 @@ class bedshear :  public norm_vec
 {
 public:
     bedshear(lexer*,turbulence*);
-    virtual ~bedshear();
+    virtual ~bedshear() = default;
 
 	virtual void taubed(lexer*, fdm*,ghostcell*,sediment_fdm*);
 	virtual void taucritbed(lexer*, fdm*,ghostcell*,sediment_fdm*);

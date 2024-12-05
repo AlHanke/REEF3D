@@ -31,7 +31,7 @@ class rheology_v : public rheology
 public:
 
 	rheology_v(lexer*,fdm*);
-	virtual ~rheology_v();
+	virtual ~rheology_v() = default;
 
     virtual double viscosity(lexer*,fdm*,ghostcell*);
     

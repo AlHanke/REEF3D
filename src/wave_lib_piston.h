@@ -31,7 +31,7 @@ class wave_lib_piston : public wave_lib_precalc, public wave_lib_parameters, vir
 {
 public:
     wave_lib_piston(lexer*, ghostcell*);
-	virtual ~wave_lib_piston();
+	virtual ~wave_lib_piston() = default;
     
     double wave_horzvel(lexer*,double,double,double);
     

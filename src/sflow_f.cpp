@@ -49,10 +49,6 @@ sflow_f::sflow_f(lexer *p, fdm2D *b, ghostcell* pgc, patchBC_interface *ppBC)
 	maxcoor(p,b,pgc);
 }
 
-sflow_f::~sflow_f()
-{
-}
-
 void sflow_f::start(lexer *p, fdm2D* b, ghostcell* pgc)
 {	
 	

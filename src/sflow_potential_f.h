@@ -34,7 +34,7 @@ class sflow_potential_f : public sflow_potential, public increment
 
 public:
 	sflow_potential_f(lexer*);
-	virtual ~sflow_potential_f();
+	virtual ~sflow_potential_f() = default;
 
 	virtual void start(lexer*,fdm2D*, solver2D*, ghostcell*);
 

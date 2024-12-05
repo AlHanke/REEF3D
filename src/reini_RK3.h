@@ -34,7 +34,7 @@ class reini_RK3 : public reini, public increment
 {
 public:
 	reini_RK3(lexer* p,int);
-	virtual ~reini_RK3();
+	virtual ~reini_RK3() = default;
 	virtual void start(lexer*,fdm*,ghostcell*,field&,ioflow*);
 
 	int *sizeM;

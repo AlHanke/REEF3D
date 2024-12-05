@@ -36,7 +36,7 @@ class fnpf_sigma : public increment
 {
 public:
 	fnpf_sigma(lexer*, fdm_fnpf*, ghostcell*);
-	virtual ~fnpf_sigma();
+	virtual ~fnpf_sigma() = default;
     
     virtual void sigma_ini(lexer*, fdm_fnpf*, ghostcell*, fnpf_fsf*, slice&);
     virtual void sigma_update(lexer*, fdm_fnpf*, ghostcell*, fnpf_fsf*, slice&);

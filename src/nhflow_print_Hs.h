@@ -39,7 +39,7 @@ class nhflow_print_Hs : public increment
 {
 public:
     nhflow_print_Hs(lexer*,slice&);
-	virtual ~nhflow_print_Hs();
+	virtual ~nhflow_print_Hs() = default;
 
 	void start(lexer*,ghostcell*,slice&,slice&);
     

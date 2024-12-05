@@ -33,10 +33,6 @@ diff_void::diff_void()
 	gcval_w=12;
 }
 
-diff_void::~diff_void()
-{
-}
-
 
 void diff_void::diff_scalar(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &b, field &visc, field &eddyv, double sig, double alpha)
 {

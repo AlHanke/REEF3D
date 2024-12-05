@@ -46,10 +46,6 @@ fnpf_laplace_cds2_v2::fnpf_laplace_cds2_v2(lexer *p, ghostcell *pgc)
 
 }
 
-fnpf_laplace_cds2_v2::~fnpf_laplace_cds2_v2()
-{
-}
-
 void fnpf_laplace_cds2_v2::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver *psolv_reg, fnpf_fsf *pf, double *f, slice &Fifsf)
 {
     if(p->j_dir==0)

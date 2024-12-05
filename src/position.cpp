@@ -27,7 +27,3 @@ position::position(lexer *pp)
 {	
     p=pp;
 }
-
-position::~position()
-{
-}

@@ -53,10 +53,6 @@ VOF_AB::VOF_AB(lexer* p, fdm *a, ghostcell* pgc, heat *pheat):gradient(p),uc(p),
 	ppconvec = new hric(p);
 }
 
-VOF_AB::~VOF_AB()
-{
-}
-
 void VOF_AB::start(lexer* p, fdm* a,ghostcell* pgc, convection* pconvec,solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppls, field &ls)
 {
     pflow->fsfinflow(p,a,pgc);

@@ -54,7 +54,7 @@ public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 
 	momentum_RKLS3_df(lexer*, fdm*, ghostcell*, convection*, diffusion*, pressure*, poisson*, turbulence*, solver*, solver*, ioflow*);
-	virtual ~momentum_RKLS3_df();
+	virtual ~momentum_RKLS3_df() = default;
 	virtual void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*,vector<net*>&);
 	virtual void utimesave(lexer*, fdm*, ghostcell*);
     virtual void vtimesave(lexer*, fdm*, ghostcell*);

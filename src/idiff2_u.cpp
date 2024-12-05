@@ -29,10 +29,6 @@ idiff2::idiff2(lexer* p):gradient(p)
 {
 }
 
-idiff2::~idiff2()
-{
-}
-
 void idiff2::diff_u(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &u, field &v, field &w, double alpha)
 {
      count=0;

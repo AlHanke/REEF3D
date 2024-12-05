@@ -28,10 +28,6 @@ convection_void::convection_void (lexer *p)
 {
 }
 
-convection_void::~convection_void()
-{
-}
-
 void convection_void::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
 	int count=0;

@@ -34,7 +34,7 @@ class reduction_void :  public bedshear_reduction, public increment
 {
 public:
     reduction_void(lexer*);
-    virtual ~reduction_void();
+    virtual ~reduction_void() = default;
 
 	virtual void start(lexer*,ghostcell*,sediment_fdm*);
 

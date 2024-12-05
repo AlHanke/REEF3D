@@ -46,10 +46,6 @@ bcmom::bcmom(lexer* p):surftens(p),roughness(p),kappa(0.4)
 	bckin=1;
 }
 
-bcmom::~bcmom()
-{
-}
-
 void bcmom::bcmom_start(lexer* p, fdm* a, ghostcell *pgc, turbulence *pturb, field& b,int gcval)
 {
 	int q;

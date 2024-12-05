@@ -37,8 +37,6 @@ fsi_strips::fsi_strips(lexer *p, ghostcell *pgc)
         pstrip.push_back(new fsi_strip(p,num));
     }
 }
-    
-fsi_strips::~fsi_strips(){}
 
 void fsi_strips::initialize(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
 {

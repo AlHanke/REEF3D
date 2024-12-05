@@ -40,7 +40,7 @@ class flowfile_in : virtual public increment
 
 public:
 	flowfile_in(lexer*,ghostcell*);
-	virtual ~flowfile_in();
+	virtual ~flowfile_in() = default;
     
     virtual void flowfile_start(lexer*,fdm*,ghostcell*,turbulence*);
     virtual void ff_inflow(lexer*,fdm*,ghostcell*,field&,field&,field&);

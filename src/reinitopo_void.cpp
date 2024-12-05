@@ -29,10 +29,6 @@ reinitopo_void::reinitopo_void()
 {
 }
 
-reinitopo_void::~reinitopo_void()
-{
-}
-
 void reinitopo_void::start(lexer *p, fdm *a, ghostcell *pgc, field &f)
 {
     pgc->start4a(p,f,150);

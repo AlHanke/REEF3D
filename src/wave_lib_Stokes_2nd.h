@@ -31,7 +31,7 @@ class wave_lib_Stokes_2nd : public wave_lib_precalc, public wave_lib_parameters,
 {
 public:
     wave_lib_Stokes_2nd(lexer*, ghostcell*);
-	virtual ~wave_lib_Stokes_2nd();
+	virtual ~wave_lib_Stokes_2nd() = default;
     
     double wave_horzvel(lexer*,double,double,double);
     

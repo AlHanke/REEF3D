@@ -34,7 +34,7 @@ class fluid_update_vof : public fluid_update, increment
 {
 public:
     fluid_update_vof(lexer*, fdm*, ghostcell*);
-	virtual ~fluid_update_vof();
+	virtual ~fluid_update_vof() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*);
 

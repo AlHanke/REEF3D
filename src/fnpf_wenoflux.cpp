@@ -37,10 +37,6 @@ fnpf_wenoflux::fnpf_wenoflux(lexer* p) :  weno_nug_func(p)
     uf=vf=wf=0;
 }
 
-fnpf_wenoflux::~fnpf_wenoflux()
-{
-}
-
 double fnpf_wenoflux::sx(lexer *p, slice &f, slice &Fifsf)
 {
     grad=0.0;

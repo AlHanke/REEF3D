@@ -34,7 +34,7 @@ class cds4 : public convection,  public increment
 public:
 
 	cds4 (lexer *);
-	virtual ~cds4();
+	virtual ~cds4() = default;
 
 	virtual void start(lexer*,fdm*,field&,int,field&,field&,field&);
 

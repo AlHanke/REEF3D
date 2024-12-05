@@ -61,10 +61,6 @@ poisson_f::poisson_f(lexer *p, heat *&pheat, concentration *&pconc)
     pd = new density_rheo(p);
 }
 
-poisson_f::~poisson_f()
-{
-}
-
 void poisson_f::start(lexer* p, fdm *a, field &press)
 {	
 	n=0;

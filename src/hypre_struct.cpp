@@ -71,10 +71,6 @@ hypre_struct::hypre_struct(lexer* p,ghostcell *pgc, int solve_input, int precon_
     precon_type = precon_input;
 }
 
-hypre_struct::~hypre_struct()
-{
-}
-
 void hypre_struct::start(lexer* p,fdm* a, ghostcell* pgc, field &f, vec& rhsvec, int var)
 {
     // diffusion and turbulence

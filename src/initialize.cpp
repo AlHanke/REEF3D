@@ -29,10 +29,6 @@ initialize::initialize(lexer* p):smallnum(1.0e-20)
 {
 }
 
-initialize::~initialize()
-{
-}
-
 void initialize::start(lexer* p, fdm* a, ghostcell* pgc)
 {
 	deltax=p->DXM;

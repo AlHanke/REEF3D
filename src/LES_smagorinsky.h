@@ -34,7 +34,7 @@ class LES_smagorinsky : public LES
 {
 public:
 	LES_smagorinsky(lexer *, fdm*);
-	virtual ~LES_smagorinsky();
+	virtual ~LES_smagorinsky() = default;
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*, vrans*);
 	virtual void ktimesave(lexer*, fdm*, ghostcell*);
 	virtual void etimesave(lexer*, fdm*, ghostcell*);

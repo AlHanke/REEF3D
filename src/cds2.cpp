@@ -63,10 +63,6 @@ cds2::cds2 (lexer *p)
     }
 }
 
-cds2::~cds2()
-{
-}
-
 void cds2::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     if(ipol==1)

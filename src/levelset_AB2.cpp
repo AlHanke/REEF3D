@@ -90,10 +90,6 @@ levelset_AB2::levelset_AB2(lexer* p, fdm *a, ghostcell* pgc, heat *&pheat, conce
 	ppicard = new picard_void(p);
 }
 
-levelset_AB2::~levelset_AB2()
-{
-}
-
 void levelset_AB2::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppls, field &ls)
 {
 

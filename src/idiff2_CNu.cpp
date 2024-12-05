@@ -36,10 +36,6 @@ idiff2_CN::idiff2_CN(lexer* p)
     
 }
 
-idiff2_CN::~idiff2_CN()
-{
-}
-
 void idiff2_CN::diff_u(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &u, field &v, field &w, double alpha)
 {
     starttime=pgc->timer();

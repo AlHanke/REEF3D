@@ -44,10 +44,6 @@ sandslide_f::sandslide_f(lexer *p) : bedslope(p), fh(p)
 	fac2 = p->S92*(1.0/12.0);
 }
 
-sandslide_f::~sandslide_f()
-{
-}
-
 void sandslide_f::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     SLICELOOP4

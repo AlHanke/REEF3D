@@ -34,10 +34,6 @@ fnpf_weno5_wd::fnpf_weno5_wd(lexer *p,fdm_fnpf *c) :  fnpf_ddweno_f_nug(p,c)
     dw.ck_weights(p, ckz, p->ZN, p->knoz+1, 1, 4, 6);
 }
 
-fnpf_weno5_wd::~fnpf_weno5_wd()
-{
-}
-
 double fnpf_weno5_wd::fx(lexer *p, field &f, double ivel1, double ivel2)
 {
     grad=0.0;

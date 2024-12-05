@@ -32,10 +32,6 @@ sflow_idiff::sflow_idiff(lexer* p)
     gcval_v = 11;
 }
 
-sflow_idiff::~sflow_idiff()
-{
-}
-
 void sflow_idiff::diff_u(lexer* p, fdm2D *b, ghostcell *pgc, solver2D *psolv, slice &u, slice &v, double alpha)
 {
     starttime=pgc->timer();

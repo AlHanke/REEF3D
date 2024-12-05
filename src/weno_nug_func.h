@@ -33,7 +33,7 @@ class weno_nug_func : virtual public increment
 {
 public:
 	weno_nug_func(lexer*);
-	virtual ~weno_nug_func();
+	virtual ~weno_nug_func() = default;
 
 	void precalc_qf(lexer*);
     void precalc_cf(lexer*);

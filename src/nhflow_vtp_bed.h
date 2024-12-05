@@ -36,7 +36,7 @@ class nhflow_vtp_bed : virtual public increment, private vtp3D
 {
 public:
     nhflow_vtp_bed(lexer*,fdm_nhf*,ghostcell*);
-    virtual ~nhflow_vtp_bed();
+    virtual ~nhflow_vtp_bed() = default;
     
     virtual void start(lexer*,fdm_nhf*,ghostcell*,sediment*);
     virtual void print2D(lexer*,fdm_nhf*,ghostcell*,sediment*);

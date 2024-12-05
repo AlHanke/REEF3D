@@ -39,10 +39,6 @@ sixdof_motionext_file_CoG::sixdof_motionext_file_CoG(lexer *p, ghostcell *pgc)
     read_format_1(p,pgc);
 }
 
-sixdof_motionext_file_CoG::~sixdof_motionext_file_CoG()
-{
-}
-
 void sixdof_motionext_file_CoG::ini(lexer *p, ghostcell *pgc)
 {
     Uext = 0.0;

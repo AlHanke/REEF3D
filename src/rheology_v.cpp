@@ -34,10 +34,6 @@ rheology_v::rheology_v(lexer *p, fdm *a)
 
 }
 
-rheology_v::~rheology_v()
-{
-}
-
 double rheology_v::viscosity(lexer *p, fdm *a, ghostcell *pgc)
 {
     val=0.0;

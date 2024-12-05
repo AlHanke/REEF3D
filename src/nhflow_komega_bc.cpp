@@ -29,10 +29,6 @@ nhflow_komega_bc::nhflow_komega_bc(lexer *p) : roughness(p)
     kappa=0.4;
 }
 
-nhflow_komega_bc::~nhflow_komega_bc()
-{
-}
-
 void nhflow_komega_bc::bckomega_start(lexer *p, fdm_nhf *d, double *KIN, double *EPS, int gcval)
 {
 	if(gcval==20)

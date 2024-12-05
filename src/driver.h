@@ -95,7 +95,7 @@ class driver : public increment
 public:
 
 	driver(int&,char**);
-	virtual ~driver();
+	virtual ~driver() = default;
     
     void start();
     

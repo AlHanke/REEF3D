@@ -31,8 +31,6 @@ Author: Hans Bihs
 
 fnpf_force_ale::fnpf_force_ale(lexer* p, fdm_fnpf *c, ghostcell *pgc, int qn) : ID(qn){}
 
-fnpf_force_ale::~fnpf_force_ale(){}
-
 void fnpf_force_ale::ini(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
     force_aleprintcount=0;

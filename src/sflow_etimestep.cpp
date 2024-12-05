@@ -39,10 +39,6 @@ sflow_etimestep::sflow_etimestep(lexer *p, fdm2D *b)
     wd_criterion=p->A245_val*p->DXM;
 }
 
-sflow_etimestep::~sflow_etimestep()
-{
-}
-
 void sflow_etimestep::start(lexer *p, fdm2D* b, ghostcell* pgc)
 {	
 	p->umax=p->vmax=p->viscmax=0.0;

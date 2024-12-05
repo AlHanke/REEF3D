@@ -30,7 +30,7 @@ class sflow_fixtimestep : public sflow_timestep, public increment
 {
 public:
 	sflow_fixtimestep(lexer*,fdm2D*);
-	virtual ~sflow_fixtimestep();
+	virtual ~sflow_fixtimestep() = default;
 	
     virtual void start(lexer*,fdm2D*,ghostcell*);
 	virtual void ini(lexer*,fdm2D*,ghostcell*);

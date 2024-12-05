@@ -35,7 +35,7 @@ class fluid_update_fsf_heat_Bouss : public fluid_update, increment
 {
 public:
     fluid_update_fsf_heat_Bouss(lexer*, fdm*, ghostcell*, heat*&);
-	virtual ~fluid_update_fsf_heat_Bouss();
+	virtual ~fluid_update_fsf_heat_Bouss() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*);
 

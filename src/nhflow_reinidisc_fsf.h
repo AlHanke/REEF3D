@@ -35,7 +35,7 @@ class nhflow_reinidisc_fsf : virtual public increment, public ddweno_nug_sig
 {
 public:
 	nhflow_reinidisc_fsf(lexer* p);
-	virtual ~nhflow_reinidisc_fsf();
+	virtual ~nhflow_reinidisc_fsf() = default;
     
 	virtual void start(lexer*, fdm_nhf*, ghostcell*, double*, double*);
 	

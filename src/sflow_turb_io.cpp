@@ -33,10 +33,6 @@ sflow_turb_io::sflow_turb_io(lexer* p) : kin(p), eps(p)
 
 }
 
-sflow_turb_io::~sflow_turb_io()
-{
-}
-
 void sflow_turb_io::print_2D(lexer *p, fdm2D *b, ghostcell *pgc, std::vector<char>& buffer, int& m)
 {
     iin=4*(p->pointnum2D);

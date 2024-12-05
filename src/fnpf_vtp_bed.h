@@ -36,7 +36,7 @@ class fnpf_vtp_bed : virtual public increment, private vtp3D
 {
 public:
 	fnpf_vtp_bed(lexer*,fdm_fnpf*,ghostcell*);
-	virtual ~fnpf_vtp_bed();
+	virtual ~fnpf_vtp_bed() = default;
 	
     void start(lexer*,fdm_fnpf*,ghostcell*,ioflow*);
 	

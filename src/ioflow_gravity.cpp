@@ -40,10 +40,6 @@ ioflow_gravity::ioflow_gravity(lexer *p, ghostcell *pgc, patchBC_interface *ppBC
 	theta_y = p->B192_1*(PI/180.0);
 }
 
-ioflow_gravity::~ioflow_gravity()
-{
-}
-
 void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 {
     int count1,count2,n;

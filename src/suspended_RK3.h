@@ -31,7 +31,7 @@ class suspended_RK3 : public suspended, public increment
 {
 public:
 	suspended_RK3(lexer *, fdm*);
-	virtual ~suspended_RK3();
+	virtual ~suspended_RK3() = default;
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*, sediment_fdm*);
 	virtual void ctimesave(lexer*, fdm*);
 

@@ -35,10 +35,6 @@ nhflow_komega_func::nhflow_komega_func(lexer* p, fdm_nhf *d, ghostcell *pgc) : n
     epsi = p->T38*(1.0/3.0)*(p->DRM+p->DSM+p->DTM);
 }
 
-nhflow_komega_func::~nhflow_komega_func()
-{
-}
-
 void  nhflow_komega_func::clearfield(lexer *p, fdm_nhf *d, double *F)
 {
 	LOOP

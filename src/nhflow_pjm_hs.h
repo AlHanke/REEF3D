@@ -36,7 +36,7 @@ class nhflow_pjm_hs : public nhflow_pressure, public nhflow_gradient
 public:
 
 	nhflow_pjm_hs(lexer* p, fdm_nhf*,patchBC_interface*);
-	virtual ~nhflow_pjm_hs();
+	virtual ~nhflow_pjm_hs() = default;
 
 	virtual void start(lexer*,fdm_nhf*,solver*,ghostcell*,ioflow*,slice&,double*,double*,double*,double);
 	virtual void ucorr(lexer*p,fdm_nhf*,slice&,double*,double*,double);

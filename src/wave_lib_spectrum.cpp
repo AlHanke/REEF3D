@@ -32,10 +32,6 @@ wave_lib_spectrum::wave_lib_spectrum()
 {
 }
 
-wave_lib_spectrum::~wave_lib_spectrum()
-{
-}
-
 double wave_lib_spectrum::wave_spectrum(lexer *p, double w)
 {
     if(p->B85==1)

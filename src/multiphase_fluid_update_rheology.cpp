@@ -39,10 +39,6 @@ multiphase_fluid_update_rheology::multiphase_fluid_update_rheology(lexer *p, fdm
     prheo = new rheology_f(p,a);
 }
 
-multiphase_fluid_update_rheology::~multiphase_fluid_update_rheology()
-{
-}
-
 void multiphase_fluid_update_rheology::start(lexer *p, fdm* a, ghostcell* pgc, field &ls1, field &ls2)
 {
 	double H1=0.0;

@@ -35,11 +35,6 @@ ptf_fsf_update::ptf_fsf_update(lexer *p, fdm *a, ghostcell *pgc)
     gcval_w = 12;
 }
 
-ptf_fsf_update::~ptf_fsf_update()
-{
-
-}
-
 void ptf_fsf_update::fsfupdate(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, onephase *poneph, slice &eta)
 {
     // update phi

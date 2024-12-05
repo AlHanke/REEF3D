@@ -30,10 +30,6 @@ reinidisc_fsf::reinidisc_fsf(lexer *p) :  ddweno_nug(p)
 {
 }
 
-reinidisc_fsf::~reinidisc_fsf()
-{
-}
-
 void reinidisc_fsf::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, int ipol)
 {
 	if(ipol==4)

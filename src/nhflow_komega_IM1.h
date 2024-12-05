@@ -31,7 +31,7 @@ class nhflow_komega_IM1 : public nhflow_komega_func
 {
 public:
 	nhflow_komega_IM1(lexer *, fdm_nhf*, ghostcell*);
-	virtual ~nhflow_komega_IM1();
+	virtual ~nhflow_komega_IM1() = default;
 	virtual void start(lexer*, fdm_nhf*, ghostcell*, nhflow_scalar_convection*, nhflow_diffusion*, solver*, ioflow*, vrans*);
 	virtual void ktimesave(lexer*, fdm_nhf*, ghostcell*);
 	virtual void etimesave(lexer*, fdm_nhf*, ghostcell*);

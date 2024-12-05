@@ -30,7 +30,7 @@ class fnpf_voiddisc : public fnpf_convection, public increment
 {
 public:
 	fnpf_voiddisc(lexer*);
-	virtual ~fnpf_voiddisc();
+	virtual ~fnpf_voiddisc() = default;
 
     virtual double fx(lexer*, field&, double, double);
 	virtual double fy(lexer*, field&, double, double);

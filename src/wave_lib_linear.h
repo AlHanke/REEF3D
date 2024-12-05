@@ -31,7 +31,7 @@ class wave_lib_linear : public wave_lib_precalc, public wave_lib_parameters, vir
 {
 public:
     wave_lib_linear(lexer*, ghostcell*);
-	virtual ~wave_lib_linear();
+	virtual ~wave_lib_linear() = default;
     
     double wave_horzvel(lexer*,double,double,double);
     

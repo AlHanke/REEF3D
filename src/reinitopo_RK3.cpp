@@ -56,10 +56,6 @@ reinitopo_RK3::reinitopo_RK3(lexer* p) : f(p),frk1(p),frk2(p),L(p),dt(p),epsi(p-
     time_preproc(p);    
 }
 
-reinitopo_RK3::~reinitopo_RK3()
-{
-}
-
 void reinitopo_RK3::start(lexer* p, fdm* a, ghostcell* pgc, field &f)
 { 
 	pgc->start4a(p,f,gcval);

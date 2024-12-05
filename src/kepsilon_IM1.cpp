@@ -36,10 +36,6 @@ kepsilon_IM1::kepsilon_IM1(lexer* p, fdm* a, ghostcell *pgc) : ikepsilon(p,a,pgc
 	gcval_eps=30;
 }
 
-kepsilon_IM1::~kepsilon_IM1()
-{
-}
-
 void kepsilon_IM1::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff,solver* psolv, ioflow* pflow, vrans *pvrans)
 {
 	wallf_update(p,a,pgc,wallf);

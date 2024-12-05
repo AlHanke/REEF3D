@@ -47,10 +47,6 @@ flowfile_in::flowfile_in(lexer *p, ghostcell *pgc)
     }
 }
 
-flowfile_in::~flowfile_in()
-{
-}
-
 void flowfile_in::flowfile_start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
 {
     if(p->gcin_count>0)

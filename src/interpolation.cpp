@@ -27,7 +27,3 @@ interpolation::interpolation(lexer *pp)
 {	
     p=pp;
 }
-
-interpolation::~interpolation()
-{
-}

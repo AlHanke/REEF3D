@@ -39,7 +39,7 @@ class concentration_io : public concentration, increment
 {
 public:
     concentration_io(lexer*,fdm*);
-	virtual ~concentration_io();
+	virtual ~concentration_io() = default;
 
     void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&);
     virtual void ini(lexer*, fdm*, ghostcell*, concentration *pconcentration);

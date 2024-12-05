@@ -49,10 +49,6 @@ wave_lib_reconstruct::wave_lib_reconstruct(lexer *p, ghostcell *pgc)
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-wave_lib_reconstruct::~wave_lib_reconstruct()
-{
-}
-
 double wave_lib_reconstruct::wave_u(lexer *p, double x, double y, double z)
 {
     double vel;

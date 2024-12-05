@@ -38,7 +38,7 @@ class les_io : public turbulence, public strain
 {
 public:
     les_io(lexer*,fdm*);
-	virtual ~les_io();
+	virtual ~les_io() = default;
 
     void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&);
     virtual void ini(lexer*, fdm*, ghostcell*);

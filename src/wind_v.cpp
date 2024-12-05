@@ -31,10 +31,6 @@ wind_v::wind_v(lexer *p)
 
 }
 
-wind_v::~wind_v()
-{
-}
-
 void wind_v::wind_forcing_ini(lexer *p, ghostcell *pgc)
 {
     

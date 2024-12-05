@@ -74,10 +74,6 @@ momentum_RKLS3_sf::momentum_RKLS3_sf
     zeta << 0.0, -17.0/60.0, -5.0/12.0;
 }
 
-momentum_RKLS3_sf::~momentum_RKLS3_sf()
-{
-}
-
 void momentum_RKLS3_sf::start(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, sixdof *p6dof, vector<net*>& pnet)
 {
 }

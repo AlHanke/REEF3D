@@ -58,7 +58,7 @@ class printer_nhflow : public printer, public increment
 
 public:
 	printer_nhflow(lexer*,fdm_nhf*,ghostcell*);
-	virtual ~printer_nhflow();
+	virtual ~printer_nhflow() = default;
 	void start(lexer*,fdm_nhf*,ghostcell*,ioflow*,nhflow_turbulence*,sediment*);
     void print_stop(lexer*,fdm_nhf*,ghostcell*,ioflow*,nhflow_turbulence*,sediment*);
     

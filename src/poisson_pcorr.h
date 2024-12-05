@@ -36,7 +36,7 @@ class poisson_pcorr : public poisson, public increment
 public:
 
 	poisson_pcorr (lexer*, heat*&, concentration*&);
-	virtual ~poisson_pcorr();
+	virtual ~poisson_pcorr() = default;
 
 	virtual void start(lexer *,fdm*,field&);
 

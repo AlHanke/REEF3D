@@ -37,7 +37,7 @@ class nhflow_reconstruct_wenograd : public nhflow_reconstruct, public nhflow_gra
 {
 public:
 	nhflow_reconstruct_wenograd(lexer*,patchBC_interface*);
-	virtual ~nhflow_reconstruct_wenograd();
+	virtual ~nhflow_reconstruct_wenograd() = default;
 
     virtual void reconstruct_2D_x(lexer*,ghostcell*,fdm_nhf*,slice&,slice&,slice&);
     virtual void reconstruct_2D_y(lexer*,ghostcell*,fdm_nhf*,slice&,slice&,slice&);

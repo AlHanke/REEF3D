@@ -30,10 +30,6 @@ nhflow_komega_func_void::nhflow_komega_func_void(lexer* p, fdm_nhf* d, ghostcell
 {
 }
 
-nhflow_komega_func_void::~nhflow_komega_func_void()
-{
-}
-
 void nhflow_komega_func_void::start(lexer* p, fdm_nhf* d, ghostcell* pgc, nhflow_scalar_convection* pconvec, nhflow_diffusion* pdiff,solver* psolv, ioflow* pflow, vrans* pvrans)
 {
 }

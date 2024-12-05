@@ -39,10 +39,6 @@ nhflow_komega_IM1::nhflow_komega_IM1(lexer* p, fdm_nhf* d, ghostcell *pgc) : nhf
     p->Darray(EN,p->imax*p->jmax*(p->kmax+2));
 }
 
-nhflow_komega_IM1::~nhflow_komega_IM1()
-{
-}
-
 void nhflow_komega_IM1::start(lexer* p, fdm_nhf* d, ghostcell* pgc, nhflow_scalar_convection* pconvec, nhflow_diffusion* pdiff,solver* psolv, ioflow* pflow, vrans *pvrans)
 {
 	Pk_update(p,d,pgc);

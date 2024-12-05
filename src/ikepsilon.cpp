@@ -30,10 +30,6 @@ ikepsilon::ikepsilon(lexer* p, fdm* a, ghostcell *pgc) : rans_io(p,a), bc_ikepsi
 {
 }
 
-ikepsilon::~ikepsilon()
-{
-}
-
 void  ikepsilon::clearfield(lexer *p, fdm*  a, field& b)
 {
 	LOOP

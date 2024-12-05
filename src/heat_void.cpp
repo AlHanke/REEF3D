@@ -34,10 +34,6 @@ heat_void::heat_void(lexer* p, fdm* a, ghostcell *pgc)
 {
 }
 
-heat_void::~heat_void()
-{
-}
-
 void heat_void::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow)
 {
 }

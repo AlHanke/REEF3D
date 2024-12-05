@@ -36,7 +36,7 @@ class sflow_pjm_quad : public sflow_pressure, public increment
 {
 public:
     sflow_pjm_quad(lexer*, fdm2D*,patchBC_interface*);
-	virtual ~sflow_pjm_quad();
+	virtual ~sflow_pjm_quad() = default;
     
 	virtual void start(lexer*, fdm2D*, ghostcell*, solver2D*, ioflow*, slice&, slice&, slice&, slice&, slice&, slice&, double);
 	virtual void upgrad(lexer*, fdm2D*, slice&, slice&);

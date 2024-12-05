@@ -30,10 +30,6 @@ sflow_turb_io_void::sflow_turb_io_void(lexer* p)
 
 }
 
-sflow_turb_io_void::~sflow_turb_io_void()
-{
-}
-
 void sflow_turb_io_void::print_2D(lexer *p, fdm2D *b, ghostcell *pgc, std::vector<char>& buffer, int& m)
 {
 

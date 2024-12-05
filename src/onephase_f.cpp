@@ -42,10 +42,6 @@ onephase_f::onephase_f(lexer *p, fdm *a, ghostcell *pgc) : ddweno_f_nug(p),uf(p)
     dt=pgc->timesync(dt);
 }
 
-onephase_f::~onephase_f()
-{
-}
-
 void onephase_f::update(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 {   
     FLUIDLOOP

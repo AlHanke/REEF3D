@@ -35,7 +35,7 @@ class sflow_hires : public sflow_convection, public increment
 public:
 
 	sflow_hires (lexer*,int);
-	virtual ~sflow_hires();
+	virtual ~sflow_hires() = default;
 
 	virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
 	

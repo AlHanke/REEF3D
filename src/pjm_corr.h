@@ -37,7 +37,7 @@ class pjm_corr : public pressure, public pressure_reference
 public:
 
 	pjm_corr(lexer*, fdm*, ghostcell*, heat*&, concentration*&);
-	virtual ~pjm_corr();
+	virtual ~pjm_corr() = default;
 
 	virtual void start(lexer*,fdm*, ghostcell*, poisson*, solver*, ioflow*, field&, field&, field&,double);
     virtual void ini(lexer*,fdm*,ghostcell*);

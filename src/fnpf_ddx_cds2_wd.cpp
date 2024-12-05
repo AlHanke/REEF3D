@@ -30,10 +30,6 @@ fnpf_ddx_cds2_wd::fnpf_ddx_cds2_wd(lexer* p, fdm_fnpf *cc)
     c=cc;
 }
 
-fnpf_ddx_cds2_wd::~fnpf_ddx_cds2_wd()
-{
-}
-
 double fnpf_ddx_cds2_wd::sxx(lexer *p, slice &f)
 {
     if(p->wet[Im1J]>0 && p->wet[Ip1J]>0)

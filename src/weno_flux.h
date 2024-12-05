@@ -32,7 +32,7 @@ class weno_flux : public convection, public increment
 {
 public:
 	weno_flux(lexer*);
-	virtual ~weno_flux();
+	virtual ~weno_flux() = default;
 
 	virtual void start(lexer*,fdm*,field&,int,field&,field&,field&);
 

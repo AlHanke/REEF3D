@@ -33,7 +33,7 @@ class mgcslice1 :  public increment
 public:
 
 	mgcslice1 (lexer *);
-	virtual ~mgcslice1();
+	virtual ~mgcslice1() = default;
 
     //mgcslice1
 	void makemgc(lexer*);

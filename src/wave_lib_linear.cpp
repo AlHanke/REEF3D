@@ -40,10 +40,6 @@ wave_lib_linear::wave_lib_linear(lexer *p, ghostcell *pgc) : wave_lib_parameters
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-wave_lib_linear::~wave_lib_linear()
-{
-}
-
 double wave_lib_linear::wave_u(lexer *p, double x, double y, double z)
 {
     double vel;

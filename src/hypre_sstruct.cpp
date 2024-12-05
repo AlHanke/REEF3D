@@ -53,10 +53,6 @@ hypre_sstruct::hypre_sstruct(lexer* p,fdm* a,ghostcell *pgc)
     make_grid_15p(p,a,pgc);	
 }
 
-hypre_sstruct::~hypre_sstruct()
-{
-}
-
 void hypre_sstruct::start(lexer* p,fdm* a, ghostcell* pgc, field &f, vec& rhsvec, int var)
 {
     if(var>=1 && var<=4)

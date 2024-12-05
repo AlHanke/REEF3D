@@ -30,10 +30,6 @@ fnpf_discrete_weights::fnpf_discrete_weights(lexer* p)
 {
 }
 
-fnpf_discrete_weights::~fnpf_discrete_weights()
-{
-}
-
 void fnpf_discrete_weights::ck_weights(lexer *p, double **ck, double *pos, int numpt, int order, int accuracy, int id)
 {    
     double c1, c2, c3, c4, c5;

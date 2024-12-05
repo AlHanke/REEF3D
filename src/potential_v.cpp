@@ -26,10 +26,6 @@ potential_v::potential_v()
 {
 }
 
-potential_v::~potential_v()
-{
-}
-
 void potential_v::start(lexer*p, fdm* a, ghostcell* pgc, solver* psolv)
 {
 }

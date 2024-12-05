@@ -34,7 +34,7 @@ class patch_obj : public increment
 {
 public:
 	patch_obj(lexer*,int);
-	virtual ~patch_obj();
+	virtual ~patch_obj() = default;
     
     void patch_obj_ini(lexer *p, ghostcell *pgc);
     

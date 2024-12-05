@@ -42,10 +42,6 @@ sflow_iweno_hj::sflow_iweno_hj(lexer *p)
     pflux = new sflow_flux_face_HJ(p);
 }
 
-sflow_iweno_hj::~sflow_iweno_hj()
-{
-}
-
 void sflow_iweno_hj::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice& vvel)
 {
     if(ipol==1)

@@ -36,10 +36,6 @@ sflow_fixtimestep::sflow_fixtimestep(lexer *p, fdm2D *b)
     wd_criterion=p->A245_val*p->DXM;
 }
 
-sflow_fixtimestep::~sflow_fixtimestep()
-{
-}
-
 void sflow_fixtimestep::start(lexer *p, fdm2D* b, ghostcell* pgc)
 {	
 	p->umax=p->vmax=p->viscmax=0.0;

@@ -33,7 +33,7 @@ class sflow_cfou : public sflow_convection, public increment
 {
 public:
 	sflow_cfou(lexer*,fdm2D*);
-	virtual ~sflow_cfou();
+	virtual ~sflow_cfou() = default;
 
 	virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
 

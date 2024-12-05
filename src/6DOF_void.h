@@ -42,7 +42,7 @@ class sixdof_void : public sixdof
 {
 public:
 	sixdof_void(lexer*,ghostcell*);
-	virtual ~sixdof_void();
+	virtual ~sixdof_void() = default;
     
     virtual void start_cfd(lexer*,fdm*,ghostcell*,vrans*,vector<net*>&,int,field&,field&,field&,field&,field&,field&,bool);
     virtual void start_nhflow(lexer*,fdm_nhf*,ghostcell*,vrans*,vector<net*>&,int,double*,double*,double*,double*,double*,double*,slice&,slice&,bool);

@@ -30,7 +30,7 @@ class multiphase_fluid_update_f : public multiphase_fluid_update, increment
 {
 public:
     multiphase_fluid_update_f(lexer*, fdm*, ghostcell*);
-	virtual ~multiphase_fluid_update_f();
+	virtual ~multiphase_fluid_update_f() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*,field&,field&);
 

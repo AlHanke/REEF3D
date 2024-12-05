@@ -30,10 +30,6 @@ data_f::data_f(lexer* p, fdm *a, ghostcell* pgc) : data(p)
 {
 }
 
-data_f::~data_f()
-{
-}
-
 void data_f::start(lexer* p, fdm* a, ghostcell* pgc)
 {
 	cout<<"DATA "<<p->P150<<endl;

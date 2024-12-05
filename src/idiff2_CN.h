@@ -34,7 +34,7 @@ class idiff2_CN : public diffusion, public increment
 public:
 
 	idiff2_CN(lexer*);
-	virtual ~idiff2_CN();
+	virtual ~idiff2_CN() = default;
 
 	virtual void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, double, double);
 	virtual void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, double, double);

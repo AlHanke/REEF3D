@@ -35,10 +35,6 @@ nhflow_sigma::nhflow_sigma(lexer *p) : nhflow_gradient(p)
 {
 }
 
-nhflow_sigma::~nhflow_sigma()
-{
-}
-
 void nhflow_sigma::sigma_coord_ini(lexer *p)
 {
     double L, ZN0temp;

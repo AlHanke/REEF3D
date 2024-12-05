@@ -30,7 +30,7 @@ class fnpf_laplace_cds4 : public fnpf_laplace, public increment
 {
 public:
     fnpf_laplace_cds4 (lexer*);
-	virtual ~fnpf_laplace_cds4();
+	virtual ~fnpf_laplace_cds4() = default;
 
     virtual void start(lexer *,fdm_fnpf*,ghostcell*,solver*,fnpf_fsf*,double*,slice&);
     

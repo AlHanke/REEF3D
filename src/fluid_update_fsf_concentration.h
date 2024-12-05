@@ -35,7 +35,7 @@ class fluid_update_fsf_concentration : public fluid_update, increment
 {
 public:
     fluid_update_fsf_concentration(lexer*, fdm*, ghostcell*, concentration*&);
-	virtual ~fluid_update_fsf_concentration();
+	virtual ~fluid_update_fsf_concentration() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*);
 

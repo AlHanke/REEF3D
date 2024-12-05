@@ -37,7 +37,7 @@ class nhflow_reconstruct_hires : public nhflow_reconstruct, public nhflow_gradie
 {
 public:
 	nhflow_reconstruct_hires(lexer*,patchBC_interface*);
-	virtual ~nhflow_reconstruct_hires();
+	virtual ~nhflow_reconstruct_hires() = default;
 
     virtual void reconstruct_2D_x(lexer*,ghostcell*,fdm_nhf*,slice&,slice&,slice&);
     virtual void reconstruct_2D_y(lexer*,ghostcell*,fdm_nhf*,slice&,slice&,slice&);

@@ -28,10 +28,6 @@ fnpf_ddx_cds2::fnpf_ddx_cds2(lexer* p)
 {
 }
 
-fnpf_ddx_cds2::~fnpf_ddx_cds2()
-{
-}
-
 double fnpf_ddx_cds2::sxx(lexer *p, slice &f)
 {
     return ((f(i+1,j)-f(i,j))/p->DXP[IP] - (f(i,j)-f(i-1,j))/p->DXP[IM1])/p->DXN[IP];

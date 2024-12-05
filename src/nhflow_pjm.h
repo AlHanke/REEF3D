@@ -37,7 +37,7 @@ class nhflow_pjm : public nhflow_pressure, public increment
 public:
 
 	nhflow_pjm(lexer*, fdm_nhf*, ghostcell*,patchBC_interface*);
-	virtual ~nhflow_pjm();
+	virtual ~nhflow_pjm() = default;
 
 	virtual void start(lexer*,fdm_nhf*,solver*,ghostcell*,ioflow*,slice&,double*,double*,double*,double);
 	virtual void ucorr(lexer*p,fdm_nhf*,slice&,double*,double*,double);

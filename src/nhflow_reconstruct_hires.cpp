@@ -33,10 +33,6 @@ nhflow_reconstruct_hires::nhflow_reconstruct_hires(lexer* p, patchBC_interface *
     p->Darray(DFDX,p->imax*p->jmax*(p->kmax+2));
 }
 
-nhflow_reconstruct_hires::~nhflow_reconstruct_hires()
-{
-}
-
 void nhflow_reconstruct_hires::reconstruct_2D_x(lexer* p, ghostcell *pgc, fdm_nhf*, slice& f, slice &fs, slice &fn)
 {
     SLICELOOP4

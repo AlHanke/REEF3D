@@ -30,7 +30,7 @@ class picard_void : public picard
 public:
 
     picard_void(lexer *p);
-    virtual ~picard_void();
+    virtual ~picard_void() = default;
 
     virtual void volcalc(lexer*, fdm*, ghostcell*, field&);
     virtual void correct_ls(lexer*, fdm*, ghostcell*, field&);

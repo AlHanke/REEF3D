@@ -29,10 +29,6 @@ vrans_v::vrans_v(lexer *p, ghostcell *pgc)
 {
 }
 
-vrans_v::~vrans_v()
-{
-}
-
 void vrans_v::veltimesave(lexer *p, fdm *a, ghostcell *pgc)
 {
 }

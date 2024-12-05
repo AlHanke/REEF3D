@@ -30,10 +30,6 @@ vrans_veg::vrans_veg(lexer *p, ghostcell *pgc) : N(p), D(p), Cd(p), un(p), unn(p
 	//initialize(p,a,pgc);
 }
 
-vrans_veg::~vrans_veg()
-{
-}
-
 void vrans_veg::veltimesave(lexer *p, fdm *a, ghostcell *pgc)
 {
     ULOOP

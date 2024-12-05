@@ -40,10 +40,6 @@ wave_lib_cnoidal_shallow::wave_lib_cnoidal_shallow(lexer *p, ghostcell *pgc) : w
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-wave_lib_cnoidal_shallow::~wave_lib_cnoidal_shallow()
-{
-}
-
 double wave_lib_cnoidal_shallow::wave_u(lexer *p, double x, double y, double z)
 {
     double vel;

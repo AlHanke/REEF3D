@@ -32,10 +32,6 @@ fnpf_laplace_cds2::fnpf_laplace_cds2(lexer *p)
     
 }
 
-fnpf_laplace_cds2::~fnpf_laplace_cds2()
-{
-}
-
 void fnpf_laplace_cds2::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, fnpf_fsf *pf, double *f, slice &Fifsf)
 {
     double sigxyz2;

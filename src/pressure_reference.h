@@ -35,7 +35,7 @@ class pressure_reference : virtual public increment
 
 public:
     pressure_reference(lexer*);
-	virtual ~pressure_reference();
+	virtual ~pressure_reference() = default;
     
     void reference_start(lexer*,fdm*,ghostcell*);
     void reference_ini(lexer*,fdm*,ghostcell*);

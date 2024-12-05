@@ -31,10 +31,6 @@ geotopo::geotopo(lexer* p, fdm *a, ghostcell* pgc)
 {
 }
 
-geotopo::~geotopo()
-{
-}
-
 void geotopo::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow, reinitopo* preto, vrans* pvrans)
 {
     dat(p,a,pgc);

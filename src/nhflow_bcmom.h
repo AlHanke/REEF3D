@@ -35,7 +35,7 @@ class nhflow_bcmom : public roughness
 {
 public:
 	nhflow_bcmom(lexer*);
-	virtual ~nhflow_bcmom();
+	virtual ~nhflow_bcmom() = default;
 	virtual void nhflow_bcmom_start(fdm*,lexer*,ghostcell*,turbulence*,field&, int);
 	void roughness_u(lexer*, fdm_nhf*, double*, double*, slice&);
 	void roughness_v(lexer*, fdm_nhf*, double*, double*, slice&);

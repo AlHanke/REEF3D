@@ -34,10 +34,6 @@ fnpf_sigma::fnpf_sigma(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
 }
 
-fnpf_sigma::~fnpf_sigma()
-{
-}
-
 void fnpf_sigma::sigma_ini(lexer *p, fdm_fnpf *c, ghostcell *pgc, fnpf_fsf *pf, slice &eta)
 {	
     

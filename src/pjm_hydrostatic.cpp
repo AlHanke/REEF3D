@@ -73,10 +73,6 @@ pjm_hydrostatic::pjm_hydrostatic(lexer* p, fdm *a, heat *&pheat, concentration *
 	gcval_w=9;
 }
 
-pjm_hydrostatic::~pjm_hydrostatic()
-{
-}
-
 void pjm_hydrostatic::start(lexer*p, fdm* a, ghostcell* pgc, poisson* ppois,solver* psolv, ioflow *pflow, field& uvel, field& vvel, field& wvel, double alpha)
 {
     if(p->mpirank==0 && (p->count%p->P12==0))

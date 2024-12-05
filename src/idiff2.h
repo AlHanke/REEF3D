@@ -35,7 +35,7 @@ class idiff2 : public diffusion, public gradient
 public:
 
 	idiff2(lexer*);
-	virtual ~idiff2();
+	virtual ~idiff2() = default;
 
 	virtual void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, double, double);
 	virtual void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, double, double){};

@@ -26,10 +26,6 @@ solver_void::solver_void(lexer* p,fdm* a,ghostcell *pgc)
 {
 }
 
-solver_void::~solver_void()
-{
-}
-
 void solver_void::start(lexer* p,fdm* a, ghostcell* pgc, field& xfield, vec& rhsvec, int var)
 {
 }

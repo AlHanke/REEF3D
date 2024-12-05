@@ -44,10 +44,6 @@ sandslide_pde::sandslide_pde(lexer *p) : bedslope(p), fh(p), ci(p)
 	fac2 = (1.0/12.0);
 }
 
-sandslide_pde::~sandslide_pde()
-{
-}
-
 void sandslide_pde::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     

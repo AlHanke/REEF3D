@@ -33,10 +33,6 @@ ddweno_f_nug::ddweno_f_nug(lexer* pp):weno_nug_func(pp)
     p=pp;
 }
 
-ddweno_f_nug::~ddweno_f_nug()
-{
-}
-
 double ddweno_f_nug::ddwenox(field& f, double uw)
 {
     DX = p->DXP;

@@ -34,7 +34,7 @@ class komega_func : public rans_io, public komega_bc
 {
 public:
 	komega_func(lexer *, fdm*, ghostcell*);
-	virtual ~komega_func();
+	virtual ~komega_func() = default;
 	virtual void isource(lexer*,fdm*);
 	virtual void jsource(lexer*,fdm*);
 	virtual void ksource(lexer*,fdm*);

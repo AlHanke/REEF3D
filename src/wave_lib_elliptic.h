@@ -31,7 +31,7 @@ class wave_lib_elliptic
 {
 public:
     wave_lib_elliptic();
-	virtual ~wave_lib_elliptic();
+	virtual ~wave_lib_elliptic() = default;
     
     void elliptic(lexer*,double,double&,double&,double&);
 	double K_elliptic_1(double);

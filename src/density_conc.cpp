@@ -38,10 +38,6 @@ density_conc::density_conc(lexer* p, concentration *& ppconc)
         H=0.0;
 }
 
-density_conc::~density_conc()
-{
-}
-
 double density_conc::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
     double concval;

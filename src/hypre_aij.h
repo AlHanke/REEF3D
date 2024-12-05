@@ -42,7 +42,7 @@ class hypre_aij : public solver, public increment
 public:
 
 	hypre_aij(lexer*,fdm*,ghostcell*);
-	virtual ~hypre_aij();
+	virtual ~hypre_aij() = default;
 	virtual void start(lexer*,fdm*, ghostcell*, field&, vec&, int);
     virtual void startf(lexer*, ghostcell*, field&, vec&, matrix_diag&, int);
     virtual void startM(lexer*, ghostcell*, double*, double*, double*, int);

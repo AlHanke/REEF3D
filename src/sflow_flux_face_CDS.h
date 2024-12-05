@@ -33,7 +33,7 @@ class sflow_flux_face_CDS : public sflow_flux, public increment
 public:
 
 	sflow_flux_face_CDS (lexer *p);
-	virtual ~sflow_flux_face_CDS();
+	virtual ~sflow_flux_face_CDS() = default;
 
 	virtual void u_flux(int,slice&,double&,double&);
 	virtual void v_flux(int,slice&,double&,double&);

@@ -33,7 +33,7 @@ class wave_lib_parameters : virtual public increment
 {
 public:
     wave_lib_parameters(lexer*, ghostcell*);
-	virtual ~wave_lib_parameters();
+	virtual ~wave_lib_parameters() = default;
     
     double sinhfunc(double);
     double coshfunc(double);

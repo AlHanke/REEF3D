@@ -29,10 +29,6 @@ picard_lsm::picard_lsm(lexer *p) : gradient(p), epsi(p->F45*p->DXM)
 {
 }
 
-picard_lsm::~picard_lsm()
-{
-}
-
 void picard_lsm::volcalc(lexer *p, fdm *a, ghostcell *pgc, field& b)
 {
 

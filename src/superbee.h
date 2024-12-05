@@ -30,7 +30,7 @@ class superbee : public fluxlim, public increment
 {
 public:
 	superbee (lexer *);
-	virtual ~superbee();
+	virtual ~superbee() = default;
 
 	virtual double iphi(field&,int,int,int,int);
 	virtual double jphi(field&,int,int,int,int);

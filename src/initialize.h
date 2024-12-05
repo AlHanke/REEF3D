@@ -39,7 +39,7 @@ class initialize : public increment, private resize_class
 
 public:
 	initialize(lexer*);
-	virtual ~initialize();
+	virtual ~initialize() = default;
 
 	void start(lexer*,fdm*,ghostcell*);
     void droplet_ini(lexer*,fdm*,ghostcell*);

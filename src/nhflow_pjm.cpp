@@ -54,10 +54,6 @@ nhflow_pjm::nhflow_pjm(lexer* p, fdm_nhf *d, ghostcell *pgc, patchBC_interface *
     
 }
 
-nhflow_pjm::~nhflow_pjm()
-{
-}
-
 void nhflow_pjm::start(lexer *p, fdm_nhf *d, solver* psolv, ghostcell* pgc, ioflow *pflow, slice &WL,
                         double *UH, double *VH, double *WH, double alpha)
 {

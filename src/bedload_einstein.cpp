@@ -39,10 +39,6 @@ bedload_einstein::bedload_einstein(lexer* p)
     sval=rhosed/rhowat;
 }
 
-bedload_einstein::~bedload_einstein()
-{
-}
-
 void bedload_einstein::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 {
     double qb;

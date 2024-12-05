@@ -33,10 +33,6 @@ rheology_f::rheology_f(lexer *p, fdm *a) : strain(p,a), tau_x(p), tau_y(p), tau_
 
 }
 
-rheology_f::~rheology_f()
-{
-}
-
 double rheology_f::viscosity(lexer *p, fdm *a, ghostcell *pgc)
 {
 	val=0.0;

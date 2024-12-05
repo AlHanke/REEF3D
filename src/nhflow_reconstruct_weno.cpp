@@ -34,10 +34,6 @@ nhflow_reconstruct_weno::nhflow_reconstruct_weno(lexer* p, patchBC_interface *pp
     uf=vf=wf=0;
 }
 
-nhflow_reconstruct_weno::~nhflow_reconstruct_weno()
-{
-}
-
 void nhflow_reconstruct_weno::reconstruct_2D_x(lexer* p, ghostcell *pgc, fdm_nhf*, slice& f, slice &fs, slice &fn)
 {
     SLICELOOP1

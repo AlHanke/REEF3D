@@ -57,10 +57,6 @@ particle_pls::particle_pls(lexer* p, fdm *a, ghostcell* pgc) : norm_vec(p), phim
 	mkdir("./REEF3D_PLS",0777);
 }
 
-particle_pls::~particle_pls()
-{
-}
-
 void particle_pls::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 { 
 

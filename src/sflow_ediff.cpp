@@ -27,10 +27,6 @@ sflow_ediff::sflow_ediff(lexer* p)
 {
 }
 
-sflow_ediff::~sflow_ediff()
-{
-}
-
 void sflow_ediff::diff_u(lexer* p, fdm2D *b, ghostcell *pgc, solver2D *psolv, slice &u, slice &v, double alpha)
 {
     double visc=p->W2;

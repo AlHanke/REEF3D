@@ -45,7 +45,7 @@ class net_sheet : public net, public boundarycheck
 {
 public:
 	net_sheet(int, lexer*);
-	virtual ~net_sheet();
+	virtual ~net_sheet() = default;
     
 	virtual void start(lexer*, fdm*, ghostcell*,double,Eigen::Matrix3d);
 	virtual void initialize(lexer*, fdm*, ghostcell*);

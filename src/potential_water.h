@@ -34,7 +34,7 @@ class potential_water : public potential, public increment
 
 public:
 	potential_water(lexer*);
-	virtual ~potential_water();
+	virtual ~potential_water() = default;
 
 	virtual void start(lexer*,fdm*,ghostcell*,solver*);
 

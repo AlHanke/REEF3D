@@ -28,10 +28,6 @@ density_rheo::density_rheo(lexer* p)
 {
 }
 
-density_rheo::~density_rheo()
-{
-}
-
 double density_rheo::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
 

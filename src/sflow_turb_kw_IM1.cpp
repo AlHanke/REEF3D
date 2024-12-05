@@ -42,10 +42,6 @@ sflow_turb_kw_IM1::sflow_turb_kw_IM1(lexer* p) : sflow_turb_io(p), kn(p), wn(p),
     pdiff = new sflow_idiff(p);
 }
 
-sflow_turb_kw_IM1::~sflow_turb_kw_IM1()
-{
-}
-
 void sflow_turb_kw_IM1::start(lexer *p, fdm2D *b, ghostcell *pgc, sflow_convection *pdisc, sflow_diffusion *pdiffmom, solver2D *psolv, ioflow *pflow)
 {
     Pk_update(p,b,pgc);

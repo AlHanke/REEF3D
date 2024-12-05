@@ -41,7 +41,7 @@ class sflow_momentum_RK3 : public sflow_momentum, public increment
 public:
 	sflow_momentum_RK3(lexer*, fdm2D*, sflow_convection*, sflow_diffusion*, sflow_pressure*, 
                         solver2D*, solver2D*, ioflow*, sflow_fsf*, sflow_forcing*, sixdof*);
-	virtual ~sflow_momentum_RK3();
+	virtual ~sflow_momentum_RK3() = default;
 	virtual void start(lexer*, fdm2D*, ghostcell*);
 
     slice1 Prk1,Prk2;

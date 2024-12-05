@@ -31,10 +31,6 @@ onephase_v::onephase_v(lexer *p, fdm *a, ghostcell *pgc)
 {
 }
 
-onephase_v::~onephase_v()
-{
-}
-
 void onephase_v::update(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 {    
 }

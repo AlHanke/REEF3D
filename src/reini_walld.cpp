@@ -34,10 +34,6 @@ reini_walld::reini_walld(lexer* p, fdm *a):gradient(p),dab(p)
 	prdisc = new reinidisc_f(p);
 }
 
-reini_walld::~reini_walld()
-{
-}
-
 void reini_walld::start(lexer* p, fdm* a, ghostcell* pgc, field &f, ioflow* pflow)
 {
 	starttime=pgc->timer();

@@ -30,10 +30,6 @@ nhflow_bcmom::nhflow_bcmom(lexer* p):roughness(p),kappa(0.4)
 {
 }
 
-nhflow_bcmom::~nhflow_bcmom()
-{
-}
-
 void nhflow_bcmom::nhflow_bcmom_start(fdm* a, lexer* p,ghostcell *pgc, turbulence *pturb,field& b,int gcval)
 {
 }

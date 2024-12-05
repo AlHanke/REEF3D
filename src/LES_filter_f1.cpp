@@ -31,10 +31,6 @@ LES_filter_f1::LES_filter_f1(lexer* p, fdm* a) : strain(p,a), ubar(p), etta_u1(p
 
 }
 
-LES_filter_f1::~LES_filter_f1()
-{
-}
-
 void LES_filter_f1::start(lexer *p, fdm *a, ghostcell *pgc, field &uprime, field &vprime, field &wprime, int gcval)
 {
 //    vel_label=veleval(p,gcv);

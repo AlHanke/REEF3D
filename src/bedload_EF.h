@@ -31,7 +31,7 @@ class bedload_EF : public bedload, public increment
 public:
 
     bedload_EF(lexer*);
-    virtual ~bedload_EF();
+    virtual ~bedload_EF() = default;
 
 	virtual void start(lexer*, ghostcell*, sediment_fdm*);
 

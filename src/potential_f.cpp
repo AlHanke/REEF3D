@@ -32,10 +32,6 @@ potential_f::potential_f(lexer* p) : bc(p)
     gcval_pot=49;
 }
 
-potential_f::~potential_f()
-{
-}
-
 void potential_f::start(lexer*p, fdm* a, ghostcell* pgc, solver* psolv)
 {
     int itermem;

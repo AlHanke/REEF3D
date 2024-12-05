@@ -32,7 +32,7 @@ class sflow_iweno_hj : public sflow_convection, public increment
 {
 public:
 	sflow_iweno_hj(lexer*);
-	virtual ~sflow_iweno_hj();
+	virtual ~sflow_iweno_hj() = default;
 
 	virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
 

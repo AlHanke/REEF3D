@@ -34,7 +34,7 @@ class fou : public convection, public increment
 public:
 
 	fou (lexer *);
-	virtual ~fou();
+	virtual ~fou() = default;
 
 	virtual void start(lexer*,fdm*,field&,int,field&,field&,field&);
 

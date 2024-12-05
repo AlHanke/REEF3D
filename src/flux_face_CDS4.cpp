@@ -29,10 +29,6 @@ flux_face_CDS4::flux_face_CDS4(lexer *pp)
 p=pp;
 }
 
-flux_face_CDS4::~flux_face_CDS4()
-{
-}
-
 void flux_face_CDS4::u_flux(fdm* a,int ipol, field& uvel, double &uflux1, double &uflux2)
 {
     

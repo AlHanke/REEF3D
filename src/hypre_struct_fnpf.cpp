@@ -44,10 +44,6 @@ hypre_struct_fnpf::hypre_struct_fnpf(lexer* p,ghostcell *pgc, int solve_input, i
     make_grid_2Dvert(p,pgc);
 }
 
-hypre_struct_fnpf::~hypre_struct_fnpf()
-{
-}
-
 void hypre_struct_fnpf::startF(lexer* p, ghostcell* pgc, double *f, double *rhs, double *M, int var)
 {
     start_solver8(p,pgc,f,rhs,M);

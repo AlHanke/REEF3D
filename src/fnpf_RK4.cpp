@@ -78,10 +78,6 @@ fnpf_RK4::fnpf_RK4(lexer *p, fdm_fnpf *c, ghostcell *pgc) : fnpf_ini(p,c,pgc),fn
     pf = new fnpf_fsfbc_wd(p,c,pgc);
 }
 
-fnpf_RK4::~fnpf_RK4()
-{
-}
-
 void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, convection *pconvec, ioflow *pflow, reini *preini, onephase* poneph)
 {	
     

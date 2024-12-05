@@ -30,10 +30,6 @@ bedload_direction_v::bedload_direction_v(lexer *p)
 {
 }
 
-bedload_direction_v::~bedload_direction_v()
-{
-}
-
 void bedload_direction_v::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 {
 }

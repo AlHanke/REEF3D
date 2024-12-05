@@ -39,7 +39,7 @@ class sflow_turb_io : public sflow_turbulence, public increment
 
 public:
     sflow_turb_io(lexer*);
-	virtual ~sflow_turb_io();
+	virtual ~sflow_turb_io() = default;
     
     void print_2D(lexer*, fdm2D*, ghostcell*, std::vector<char>&, int&);
     

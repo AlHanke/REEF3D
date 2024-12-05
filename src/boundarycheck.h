@@ -32,7 +32,7 @@ class boundarycheck : virtual public increment
 {
 public:
     boundarycheck();
-	virtual ~boundarycheck();
+	virtual ~boundarycheck() = default;
 
 	int boundcheck(lexer*,int,int,int,int);
     int boundcheck_ik(lexer*,int,int,int,int);

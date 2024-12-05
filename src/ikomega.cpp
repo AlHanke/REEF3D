@@ -35,10 +35,6 @@ komega_func::komega_func(lexer* p, fdm* a, ghostcell *pgc) : rans_io(p,a),komega
     epsi = p->T38*(1.0/3.0)*(p->DRM+p->DSM+p->DTM);
 }
 
-komega_func::~komega_func()
-{
-}
-
 void  komega_func::clearfield(lexer *p, fdm*  a, field& b)
 {
 	LOOP

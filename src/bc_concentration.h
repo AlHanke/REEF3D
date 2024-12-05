@@ -34,7 +34,7 @@ class bc_concentration : public increment
 {
 public:
 	bc_concentration(lexer*);
-	virtual ~bc_concentration();
+	virtual ~bc_concentration() = default;
 	void bc_concentration_start(lexer*,fdm*,ghostcell*,field&);
 
 private:

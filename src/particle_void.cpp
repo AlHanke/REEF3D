@@ -27,11 +27,6 @@ particle_pls_void::particle_pls_void()
 
 }
 
-particle_pls_void::~particle_pls_void()
-{
-
-}
-
 void particle_pls_void::start(lexer *p, fdm *a, ghostcell * pgc, ioflow *pflow)
 {
 

@@ -28,8 +28,3 @@ gradient::gradient(lexer* pp):dx(pp->DXM)
     p=pp;
 }
 
-gradient::~gradient()
-{
-
-}
-

@@ -43,7 +43,7 @@ class mooring_Catenary : public mooring
 {
 public:
 	mooring_Catenary(int);
-	virtual ~mooring_Catenary();
+	virtual ~mooring_Catenary() = default;
 	
 	virtual void start(lexer*, ghostcell*);
 	virtual void initialize(lexer*, ghostcell*);

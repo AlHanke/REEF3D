@@ -30,10 +30,6 @@ sixdof_motionext_fixed::sixdof_motionext_fixed(lexer *p, ghostcell *pgc)
     ini(p,pgc);
 }
 
-sixdof_motionext_fixed::~sixdof_motionext_fixed()
-{
-}
-
 void sixdof_motionext_fixed::ini(lexer *p, ghostcell *pgc)
 {
     Uext = p->X210_u;

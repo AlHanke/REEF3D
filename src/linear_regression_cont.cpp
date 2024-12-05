@@ -34,10 +34,6 @@ linear_regression_cont::linear_regression_cont (lexer *p)
     
 }
 
-linear_regression_cont::~linear_regression_cont()
-{
-}
-
 void linear_regression_cont::linreg_cont_func(lexer*,ghostcell*,double xval, double yval, double &b0, double &b1)
 {
     // y(x) = b1*x + b0

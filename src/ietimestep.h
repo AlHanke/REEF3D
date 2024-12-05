@@ -32,7 +32,7 @@ class ietimestep : public timestep, public increment
 {
 public:
 	ietimestep(lexer*);
-	virtual ~ietimestep();
+	virtual ~ietimestep() = default;
 	virtual void start(lexer*,fdm*,ghostcell*,turbulence*);
 	virtual void ini(lexer*,fdm*,ghostcell*);
 

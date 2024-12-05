@@ -53,11 +53,6 @@ sflow_hires::sflow_hires (lexer *p, int limiter)
         
 }
 
-sflow_hires::~sflow_hires()
-{
-
-}
-
 void sflow_hires::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice& vvel)
 { 	
     if(ipol==1)

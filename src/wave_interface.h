@@ -33,7 +33,7 @@ class wave_interface
 
 public:
 	wave_interface(lexer*, ghostcell*);
-	virtual ~wave_interface();
+	virtual ~wave_interface() = default;
 	
 
 	double wave_u(lexer*,ghostcell*,double,double,double);

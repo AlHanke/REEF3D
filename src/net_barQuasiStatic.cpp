@@ -28,8 +28,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 net_barQuasiStatic::net_barQuasiStatic(int number, lexer *p):nNet(number),cutl(p), cutr(p),f_(p),frk1(p),frk2(p),L_(p),dt(p){}
 
-net_barQuasiStatic::~net_barQuasiStatic(){}
-
 
 void net_barQuasiStatic::initialize(lexer *p, fdm *a, ghostcell *pgc)
 {

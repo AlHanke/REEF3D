@@ -30,10 +30,6 @@ fnpf_cds4::fnpf_cds4(lexer* p)
 {
 }
 
-fnpf_cds4::~fnpf_cds4()
-{
-}
-
 double fnpf_cds4::fx(lexer *p, field &f, double ivel1, double ivel2)
 {
     return (-f(i+2,j,k) + 8.0*f(i+1,j,k) - 8.0*f(i-1,j,k) + f(i-2,j,k))

@@ -53,10 +53,6 @@ ptf_laplace_cds2::ptf_laplace_cds2(lexer *p, fdm *a, ghostcell *pgc) : bc(p)
     }
 }
 
-ptf_laplace_cds2::~ptf_laplace_cds2()
-{
-}
-
 void ptf_laplace_cds2::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, field &f, slice &Fifsf)
 {
 

@@ -32,7 +32,7 @@ class sflow_rough_manning : public sflow_roughness, public increment
 
 public:
     sflow_rough_manning(lexer*);
-	virtual ~sflow_rough_manning();
+	virtual ~sflow_rough_manning() = default;
     
 	virtual void u_source(lexer*, fdm2D*, slice&);
     virtual void v_source(lexer*, fdm2D*, slice&);

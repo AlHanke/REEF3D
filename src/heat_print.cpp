@@ -30,10 +30,6 @@ heat_print::heat_print(lexer *p, fdm *a) : T(p)
 {
 }
 
-heat_print::~heat_print()
-{
-}
-
 void heat_print::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
 	

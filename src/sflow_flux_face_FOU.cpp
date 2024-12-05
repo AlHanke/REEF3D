@@ -28,10 +28,6 @@ sflow_flux_face_FOU::sflow_flux_face_FOU(lexer *p)
 {
 }
 
-sflow_flux_face_FOU::~sflow_flux_face_FOU()
-{
-}
-
 void sflow_flux_face_FOU::u_flux(int ipol, slice& uvel, double &uflux1, double &uflux2)
 {
 	if(ipol==1)

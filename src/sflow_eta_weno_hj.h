@@ -32,7 +32,7 @@ class sflow_eta_weno_hj : public sflow_eta_disc, public increment
 {
 public:
 	sflow_eta_weno_hj(lexer*);
-	virtual ~sflow_eta_weno_hj();
+	virtual ~sflow_eta_weno_hj() = default;
 
 	virtual void start(lexer*,slice&,int,slice&,slice&,slice&,slice&);
 

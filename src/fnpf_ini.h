@@ -43,7 +43,7 @@ class fnpf_ini : public fnpf, virtual public increment, public fnpf_fsf_update, 
 {
 public:
 	fnpf_ini(lexer*, fdm_fnpf*, ghostcell*);
-	virtual ~fnpf_ini();
+	virtual ~fnpf_ini() = default;
     
     virtual void ini(lexer*, fdm_fnpf*, ghostcell*, ioflow*, reini*, onephase*);
     

@@ -36,7 +36,7 @@ class sflow_chires : public sflow_convection, public increment
 public:
 
 	sflow_chires (lexer*,fdm2D*,int);
-	virtual ~sflow_chires();
+	virtual ~sflow_chires() = default;
 
 	virtual void start(lexer*,fdm2D*,slice&,int,slice&,slice&);
 	

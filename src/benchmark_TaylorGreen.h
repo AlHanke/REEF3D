@@ -37,7 +37,7 @@ class benchmark_TaylorGreen : public benchmark, virtual public increment, public
 
 public:
     benchmark_TaylorGreen(lexer*,fdm*);
-	virtual ~benchmark_TaylorGreen();
+	virtual ~benchmark_TaylorGreen() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, convection*);
 private:

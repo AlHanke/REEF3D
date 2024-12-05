@@ -56,10 +56,6 @@ sediment_f::sediment_f(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb, patc
 	gcval_eta = 54;
 }
 
-sediment_f::~sediment_f()
-{
-}
-
 void sediment_f::start_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinitopo *preto, solver *psolv)
 {
     sedcalc=0;

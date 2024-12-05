@@ -28,10 +28,6 @@ umist::umist (lexer *p)
 {
 }
 
-umist::~umist()
-{
-}
-
 double umist::iphi(field& b,int n1, int n2, int q1, int q2)
 {
     denom=(b(i+q1,j,k)-b(i+q2,j,k));

@@ -34,7 +34,7 @@ class onephase_f : public onephase, public ddweno_f_nug
 {
 public:
     onephase_f(lexer*, fdm*, ghostcell*);
-	virtual ~onephase_f();
+	virtual ~onephase_f() = default;
     
 	virtual void update(lexer*, fdm*, ghostcell*, ioflow*);
     virtual void ini(lexer*, fdm*, ghostcell*, ioflow*);

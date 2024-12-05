@@ -33,7 +33,7 @@ class susprhs : public increment
 {
 public:
 	susprhs(lexer*);
-	virtual ~susprhs();
+	virtual ~susprhs() = default;
 	void suspsource(lexer*,fdm*,field&);
 	void sedfsf(lexer*,fdm*,field&);
 	void clearrhs(lexer*,fdm*);

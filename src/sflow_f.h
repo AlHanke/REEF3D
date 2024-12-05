@@ -57,7 +57,7 @@ class sflow_f : public sflow, public increment
 {
 public:
 	sflow_f(lexer*, fdm2D*,ghostcell*,patchBC_interface*);
-	virtual ~sflow_f();
+	virtual ~sflow_f() = default;
 	
 	virtual void start(lexer*, fdm2D*, ghostcell*);
 	

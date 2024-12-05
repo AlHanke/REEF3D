@@ -38,10 +38,6 @@ nhflow_HLL::nhflow_HLL (lexer *p, ghostcell *ppgc, patchBC_interface *ppBC)
     pflux = new nhflow_flux_build_f(p,pgc,pBC);
 }
 
-nhflow_HLL::~nhflow_HLL()
-{
-}
-
 void nhflow_HLL::precalc(lexer* p, fdm_nhf* d, int ipolL, slice &eta)
 {
 }

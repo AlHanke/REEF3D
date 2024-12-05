@@ -32,7 +32,7 @@ class nhflow_komega_bc : public roughness
 {
 public:
 	nhflow_komega_bc(lexer*);
-	virtual ~nhflow_komega_bc();
+	virtual ~nhflow_komega_bc() = default;
 	void bckomega_start(lexer*,fdm_nhf*,double*,double*, int);
     void bckin_matrix(lexer*,fdm_nhf*,double*,double*);
     void bcomega_matrix(lexer*,fdm_nhf*,double*,double*);

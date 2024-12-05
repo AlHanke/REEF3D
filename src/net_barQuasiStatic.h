@@ -44,7 +44,7 @@ class net_barQuasiStatic : public net, public boundarycheck
 {
 public:
 	net_barQuasiStatic(int, lexer*);
-	virtual ~net_barQuasiStatic();
+	virtual ~net_barQuasiStatic() = default;
     
 	virtual void start(lexer*, fdm*, ghostcell*, double,Eigen::Matrix3d);
 	virtual void initialize(lexer*, fdm*, ghostcell*);

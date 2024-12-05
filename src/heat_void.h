@@ -32,7 +32,7 @@ class heat_void : public heat
 {
 public:
     heat_void(lexer *, fdm*, ghostcell*);
-	virtual ~heat_void();
+	virtual ~heat_void() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*);
 	virtual void ttimesave(lexer*, fdm*);

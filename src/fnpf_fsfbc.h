@@ -37,7 +37,7 @@ class fnpf_fsfbc : public fnpf_fsf, public increment
 {
 public:
 	fnpf_fsfbc(lexer*, fdm_fnpf*, ghostcell*);
-	virtual ~fnpf_fsfbc();
+	virtual ~fnpf_fsfbc() = default;
     
     virtual void fsfdisc(lexer*,fdm_fnpf*,ghostcell*,slice&,slice&);
     virtual void fsfdisc_ini(lexer*,fdm_fnpf*,ghostcell*,slice&,slice&);

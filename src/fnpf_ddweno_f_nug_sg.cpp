@@ -35,10 +35,6 @@ fnpf_ddweno_f_nug::fnpf_ddweno_f_nug(lexer* pp,fdm_fnpf *cc):weno_nug_func(pp)
     c=cc;
 }
 
-fnpf_ddweno_f_nug::~fnpf_ddweno_f_nug()
-{
-}
-
 double fnpf_ddweno_f_nug::dswenox(slice& f, double uw)
 {
     DX = p->DXP;

@@ -41,10 +41,6 @@ sflow_hxy_cds::sflow_hxy_cds(lexer* p, patchBC_interface *ppBC)
     
 }
 
-sflow_hxy_cds::~sflow_hxy_cds()
-{
-}
-
 void sflow_hxy_cds::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet, slice& eta, slice& uvel, slice& vvel)
 {
 	double eps=0.0;

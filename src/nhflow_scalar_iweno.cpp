@@ -35,10 +35,6 @@ nhflow_scalar_iweno::nhflow_scalar_iweno(lexer *p)
 
 }
 
-nhflow_scalar_iweno::~nhflow_scalar_iweno()
-{
-}
-
 void nhflow_scalar_iweno::start(lexer* p, fdm_nhf *d, double *F, int ipol, double *U, double *V, double *W)
 {
     uf=vf=wf=0;

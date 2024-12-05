@@ -33,10 +33,6 @@ kepsilon_void::kepsilon_void(lexer* p, fdm* a, ghostcell *pgc)
 {
 }
 
-kepsilon_void::~kepsilon_void()
-{
-}
-
 void kepsilon_void::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff,solver* psolv, ioflow* pflow, vrans* pvrans)
 {
 }

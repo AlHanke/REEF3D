@@ -33,7 +33,7 @@ class flux_face_QOU : public flux, public increment
 public:
 
 	flux_face_QOU (lexer *p);
-	virtual ~flux_face_QOU();
+	virtual ~flux_face_QOU() = default;
 
 	virtual void u_flux(fdm* a,int,field&,double&,double&);
 	virtual void v_flux(fdm* a,int,field&,double&,double&);

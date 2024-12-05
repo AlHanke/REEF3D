@@ -31,7 +31,7 @@ class sflow_hydrostatic : public sflow_pressure, public increment
 {
 public:
     sflow_hydrostatic(lexer*, fdm2D*,patchBC_interface*);
-	virtual ~sflow_hydrostatic();
+	virtual ~sflow_hydrostatic() = default;
     
 	virtual void start(lexer*, fdm2D*, ghostcell*, solver2D*, ioflow*, slice&, slice&, slice&, slice&, slice&, slice&, double);
 	virtual void upgrad(lexer*, fdm2D*, slice&, slice&);

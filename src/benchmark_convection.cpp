@@ -46,10 +46,6 @@ benchmark_convection::benchmark_convection(lexer *p, fdm *a)
 	
 }
 
-benchmark_convection::~benchmark_convection()
-{
-}
-
 void benchmark_convection::start(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec )
 {
 	if(p->count==0)

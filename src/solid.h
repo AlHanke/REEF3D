@@ -36,7 +36,7 @@ class solid : public increment
 {
 public:
 	solid(lexer*, fdm*, ghostcell*);
-	virtual ~solid();
+	virtual ~solid() = default;
 	virtual void start(lexer*, fdm*, ghostcell*, ioflow*, convection*, reinitopo*);
 
 private:

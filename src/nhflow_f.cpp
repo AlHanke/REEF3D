@@ -29,10 +29,6 @@ nhflow_f::nhflow_f(lexer *p, fdm_nhf *d, ghostcell *pgc)
     margin=3;
 }
 
-nhflow_f::~nhflow_f()
-{
-}
-
 void nhflow_f::ini(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow)
 {
     // count cells 3D

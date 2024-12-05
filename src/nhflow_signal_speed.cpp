@@ -31,10 +31,6 @@ nhflow_signal_speed::nhflow_signal_speed(lexer* p)
 
 }
 
-nhflow_signal_speed::~nhflow_signal_speed()
-{
-}
-
 void nhflow_signal_speed::signal_speed_update(lexer* p, ghostcell *pgc, fdm_nhf *d, 
                                         double *Us, double *Un, double *Ve, double *Vw, 
                                         slice &Ds,slice &Dn, slice &De, slice &Dw)

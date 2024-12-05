@@ -55,10 +55,6 @@ reinitopo_AB2::reinitopo_AB2(lexer* p):gradient(p),f(p),frk1(p),frk2(p),L(p),dt(
     time_preproc(p);   
 }
 
-reinitopo_AB2::~reinitopo_AB2()
-{
-}
-
 void reinitopo_AB2::start(lexer* p, fdm* a, ghostcell* pgc,field &f)
 {
 	reiniter=p->S37;

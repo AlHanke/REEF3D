@@ -31,7 +31,7 @@ class bicgstab_ijk_2D : public solver, public increment
 public:
 	bicgstab_ijk_2D(lexer*,fdm*,ghostcell*);
 
-	virtual ~bicgstab_ijk_2D();
+	virtual ~bicgstab_ijk_2D() = default;
 
 	virtual void start(lexer*,fdm*, ghostcell*, field&, vec&, int);
     virtual void startf(lexer*, ghostcell*, field&, vec&, matrix_diag&, int);

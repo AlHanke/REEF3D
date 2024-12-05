@@ -26,10 +26,6 @@ picard_void::picard_void(lexer *p)
 {
 }
 
-picard_void::~picard_void()
-{
-}
-
 void picard_void::volcalc(lexer *p, fdm *a, ghostcell *pgc, field& b)
 {
 }

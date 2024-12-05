@@ -29,10 +29,6 @@ reduction_void::reduction_void(lexer *p)
 {
 }
 
-reduction_void::~reduction_void()
-{
-}
-
 void reduction_void::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     SLICELOOP4

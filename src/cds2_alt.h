@@ -34,7 +34,7 @@ class cds2_alt : public convection,  public increment
 public:
 
 	cds2_alt (lexer *);
-	virtual ~cds2_alt();
+	virtual ~cds2_alt() = default;
 
 	virtual void start(lexer*,fdm*,field&,int,field&,field&,field&);
 

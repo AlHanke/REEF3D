@@ -29,10 +29,6 @@ Authors: Tobias Martin, Hans Bihs
 fsi_strip::fsi_strip(lexer *p, int num) : beam(num),nstrip(num),eps0(p)
 {    
 }
-    
-fsi_strip::~fsi_strip()
-{
-}
 
 void fsi_strip::start(lexer *p, fdm *a, ghostcell *pgc, double alpha)
 {

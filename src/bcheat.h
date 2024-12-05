@@ -34,7 +34,7 @@ class bcheat : public increment
 {
 public:
 	bcheat(lexer*);
-	virtual ~bcheat();
+	virtual ~bcheat() = default;
 	void bcheat_start(lexer*,fdm*,ghostcell*,field&);
 
 private:

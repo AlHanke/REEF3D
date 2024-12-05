@@ -43,10 +43,6 @@ wave_lib_piston::wave_lib_piston(lexer *p, ghostcell *pgc) : wave_lib_parameters
     
 }
 
-wave_lib_piston::~wave_lib_piston()
-{
-}
-
 double wave_lib_piston::wave_u(lexer *p, double x, double y, double z)
 {
     double vel;

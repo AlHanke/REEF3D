@@ -28,10 +28,6 @@ LES::LES(lexer* p, fdm* a) : les_io(p,a)
 {
 }
 
-LES::~LES()
-{
-}
-
 void LES::isource(lexer* p, fdm* a)
 {
 	ULOOP

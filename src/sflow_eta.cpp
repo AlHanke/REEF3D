@@ -80,10 +80,6 @@ sflow_eta::sflow_eta(lexer *p, fdm2D *b , ghostcell *pgc, patchBC_interface *ppB
     
 }
 
-sflow_eta::~sflow_eta()
-{
-}
-
 void sflow_eta::start(lexer* p, fdm2D* b, ghostcell* pgc, ioflow* pflow, slice &P, slice &Q, double alpha)
 {
     starttime=pgc->timer();

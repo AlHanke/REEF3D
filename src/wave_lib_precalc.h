@@ -29,7 +29,7 @@ class wave_lib_precalc : public wave_lib
 {
 public:
     wave_lib_precalc();
-	virtual ~wave_lib_precalc();
+	virtual ~wave_lib_precalc() = default;
     
 
     virtual double wave_u_space_sin(lexer*,double,double,double,int);

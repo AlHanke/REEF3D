@@ -35,10 +35,6 @@ density_vof::density_vof(lexer* p) : epsi(p->F45*p->DXM), eps(2.1*p->DXM)
     H=0.0;
 }
 
-density_vof::~density_vof()
-{
-}
-
 double density_vof::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
 	H= 0.5*(a->phi(i,j,k) + a->phi(i+aa,j+bb,k+cc));

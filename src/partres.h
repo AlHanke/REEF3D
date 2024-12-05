@@ -47,7 +47,7 @@ class partres : virtual public increment, private vtp3D
 {
 public:
     partres(lexer*, ghostcell*);
-    ~partres();
+    ~partres() = default;
     
     void move_RK2(lexer*, fdm*, ghostcell*, sediment_fdm*, turbulence*);
     

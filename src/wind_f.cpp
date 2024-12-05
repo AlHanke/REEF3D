@@ -35,10 +35,6 @@ wind_f::wind_f(lexer *p)
 
 }
 
-wind_f::~wind_f()
-{
-}
-
 void wind_f::wind_forcing_ini(lexer *p, ghostcell *pgc)
 {
     if(p->A570==2)

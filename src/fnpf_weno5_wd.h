@@ -31,7 +31,7 @@ class fnpf_weno5_wd : public fnpf_convection, virtual public increment, public f
 {
 public:
 	fnpf_weno5_wd(lexer*,fdm_fnpf*);
-	virtual ~fnpf_weno5_wd();
+	virtual ~fnpf_weno5_wd() = default;
 
     virtual double fx(lexer*, field&, double, double);
 	virtual double fy(lexer*, field&, double, double);

@@ -33,7 +33,7 @@ class flux_face_FOU_vrans : public flux, public increment
 public:
 
 	flux_face_FOU_vrans (lexer *p);
-	virtual ~flux_face_FOU_vrans();
+	virtual ~flux_face_FOU_vrans() = default;
 
 	virtual void u_flux(fdm* a,int,field&,double&,double&);
 	virtual void v_flux(fdm* a,int,field&,double&,double&);

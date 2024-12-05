@@ -32,7 +32,7 @@ class kepsilon_IM1 : public ikepsilon
 {
 public:
 	kepsilon_IM1(lexer*,fdm*,ghostcell*);
-	virtual ~kepsilon_IM1();
+	virtual ~kepsilon_IM1() = default;
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*, vrans*);
 	virtual void ktimesave(lexer*, fdm*, ghostcell*);
 	virtual void etimesave(lexer*, fdm*, ghostcell*);

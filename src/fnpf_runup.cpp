@@ -31,10 +31,6 @@ fnpf_runup::fnpf_runup(lexer* p, fdm_fnpf *c, ghostcell *pgc, int qn) : ID(qn)
 {
 }
 
-fnpf_runup::~fnpf_runup()
-{
-}
-
 void fnpf_runup::ini(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
     fnpf_runupprintcount=0;

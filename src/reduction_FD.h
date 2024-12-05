@@ -34,7 +34,7 @@ class reduction_FD :  public bedshear_reduction, public bedslope
 {
 public:
     reduction_FD(lexer*);
-    virtual ~reduction_FD();
+    virtual ~reduction_FD() = default;
 
 	virtual void start(lexer*,ghostcell*,sediment_fdm*);
 

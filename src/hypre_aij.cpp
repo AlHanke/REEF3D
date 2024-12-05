@@ -39,10 +39,6 @@ hypre_aij::hypre_aij(lexer* p,fdm* a,ghostcell *pgc) : xvec(p)
     p->Iarray(rows,vecsize);
 }
 
-hypre_aij::~hypre_aij()
-{
-}
-
 void hypre_aij::start(lexer* p,fdm* a, ghostcell* pgc, field &f, vec& rhsvec, int var)
 {
     make_grid(p,pgc);

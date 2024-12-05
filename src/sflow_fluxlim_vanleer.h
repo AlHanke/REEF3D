@@ -34,7 +34,7 @@ class sflow_fluxlim_vanleer : public sflow_fluxlim, public increment
 {
 public:
     sflow_fluxlim_vanleer (lexer *);
-	virtual ~sflow_fluxlim_vanleer();
+	virtual ~sflow_fluxlim_vanleer() = default;
 
 	virtual double iphi(slice&,int,int,int,int);
 	virtual double jphi(slice&,int,int,int,int);

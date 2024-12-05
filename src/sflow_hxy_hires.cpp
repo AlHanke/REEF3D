@@ -56,11 +56,6 @@ sflow_hxy_hires::sflow_hxy_hires (lexer* p, patchBC_interface *ppBC, int limiter
         
 }
 
-sflow_hxy_hires::~sflow_hxy_hires()
-{
-
-}
-
 void sflow_hxy_hires::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet, slice& eta, slice& uvel, slice& vvel)
 { 	
     double eps=1.0e-7;

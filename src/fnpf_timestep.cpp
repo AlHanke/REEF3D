@@ -29,10 +29,6 @@ fnpf_timestep::fnpf_timestep(lexer* p):epsi(1.0e-3),maxtimestep(p->N49),c0_orig(
 {
 }
 
-fnpf_timestep::~fnpf_timestep()
-{
-}
-
 void fnpf_timestep::start(fdm_fnpf *c, lexer *p,ghostcell *pgc)
 {
     double depthmax=0.0;

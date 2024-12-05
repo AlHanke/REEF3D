@@ -36,7 +36,7 @@ class poisson_nse : public poisson, public increment
 public:
 
 	poisson_nse (lexer*, heat*&, concentration*&);
-	virtual ~poisson_nse();
+	virtual ~poisson_nse() = default;
 
 	virtual void start(lexer *,fdm*,field&);
 

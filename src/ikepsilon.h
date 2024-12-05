@@ -33,7 +33,7 @@ class ikepsilon : public rans_io, public bc_ikepsilon
 {
 public:
 	ikepsilon(lexer*,fdm*,ghostcell*);
-	virtual ~ikepsilon();
+	virtual ~ikepsilon() = default;
 	virtual void isource(lexer*,fdm*);
 	virtual void jsource(lexer*,fdm*);
 	virtual void ksource(lexer*,fdm*);

@@ -31,7 +31,7 @@ class pressure_void : public pressure, public increment
 
 public:
 	pressure_void(lexer*);
-	virtual ~pressure_void();
+	virtual ~pressure_void() = default;
 
 	virtual void start(lexer*,fdm*,ghostcell*,poisson*, solver*,ioflow*, field&, field&, field&,double);
     virtual void ini(lexer*,fdm*,ghostcell*);

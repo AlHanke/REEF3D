@@ -28,10 +28,6 @@ fnpf_ddx_cds4::fnpf_ddx_cds4(lexer* p)
 {
 }
 
-fnpf_ddx_cds4::~fnpf_ddx_cds4()
-{
-}
-
 double fnpf_ddx_cds4::sxx(lexer *p, slice &f)
 {
     X0 = -0.5*p->XP[IP2] + 13.0*p->XP[IP1] - 13.0*p->XP[IM1] + 0.5*p->XP[IM2];

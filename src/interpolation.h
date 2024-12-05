@@ -35,7 +35,7 @@ class interpolation : virtual public boundarycheck
 {
 public:
     interpolation(lexer*);
-	virtual ~interpolation();
+	virtual ~interpolation() = default;
     
     double ccipol1(field&,double,double,double);
     double ccipol1c(field&,double,double,double);

@@ -35,10 +35,6 @@ momentum_forcing::momentum_forcing(lexer* p)
 	gcval_w=12;
 }
 
-momentum_forcing::~momentum_forcing()
-{
-}
-
 void momentum_forcing::momentum_forcing_start(fdm* a, lexer* p, ghostcell *pgc, sixdof* p6dof, vrans* pvrans, vector<net*>& pnet, fsi* pfsi,
                                               field &u, field &v, field &w, field &fx, field &fy, field &fz, int iter, double alpha, bool final)
 {

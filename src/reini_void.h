@@ -30,7 +30,7 @@ class reini_void : public reini
 {
 public:
 	reini_void(lexer* p);
-	virtual ~reini_void();
+	virtual ~reini_void() = default;
 	virtual void start(lexer*,fdm*,ghostcell*,field&,ioflow*);
 };
 

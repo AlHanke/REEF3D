@@ -26,8 +26,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 mooring_Catenary::mooring_Catenary(int number):line(number){}
 
-mooring_Catenary::~mooring_Catenary(){}
-
 void mooring_Catenary::start(lexer *p, ghostcell *pgc)
 {
     curr_time = p->simtime;

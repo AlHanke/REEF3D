@@ -31,7 +31,7 @@ class fnpf_wenoflux : public fnpf_etadisc, virtual public increment, public weno
 {
 public:
 	fnpf_wenoflux(lexer*);
-	virtual ~fnpf_wenoflux();
+	virtual ~fnpf_wenoflux() = default;
 
     virtual double sx(lexer*, slice&, slice&);
 	virtual double sy(lexer*, slice&, slice&);

@@ -36,7 +36,7 @@ class ptf_RK3 : public ptf, public ptf_fsfbc
 {
 public:
 	ptf_RK3(lexer*, fdm*, ghostcell*);
-	virtual ~ptf_RK3();
+	virtual ~ptf_RK3() = default;
     
     virtual void start(lexer*, fdm*, ghostcell*, solver*, convection*, ioflow*, reini*,onephase*);
     virtual void ini(lexer*, fdm*, ghostcell*, ioflow*, reini*, onephase*);

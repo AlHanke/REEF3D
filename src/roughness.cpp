@@ -29,10 +29,6 @@ roughness::roughness(lexer *p)
 {
 }
 
-roughness::~roughness()
-{
-}
-
 double roughness::ks_val(lexer *p, fdm* a,int ii,int jj, int kk, int cs, int bc)
 {
 	ks=p->B50;

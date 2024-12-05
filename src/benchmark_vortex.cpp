@@ -95,10 +95,6 @@ benchmark_vortex::benchmark_vortex(lexer *p, fdm *a)
     
 }
 
-benchmark_vortex::~benchmark_vortex()
-{
-}
-
 void benchmark_vortex::start(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec )
 {
     double xc,yc;

@@ -30,7 +30,7 @@ class bedconc_void : public bedconc, public increment
 {
 public:
 	bedconc_void(lexer*);
-	virtual ~bedconc_void();
+	virtual ~bedconc_void() = default;
 	void start(lexer*,ghostcell*,sediment_fdm*);
 
 

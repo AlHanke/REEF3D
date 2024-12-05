@@ -27,8 +27,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 net_barDyn::net_barDyn(int number, lexer *p):nNet(number){}
 
-net_barDyn::~net_barDyn(){}
-
 
 void net_barDyn::initialize(lexer *p, fdm *a, ghostcell *pgc)
 {    

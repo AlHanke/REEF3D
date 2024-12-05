@@ -47,10 +47,6 @@ sflow_csfou::sflow_csfou(lexer* p, fdm2D *b)
     pflux = new sflow_flux_face_C_HJ(p,b);
 }
 
-sflow_csfou::~sflow_csfou()
-{
-}
-
 void sflow_csfou::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice& vvel)
 {
     if(ipol==1)

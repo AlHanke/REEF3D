@@ -39,10 +39,6 @@ topo_relax::topo_relax(lexer *p)
 	tan_betaS73[n] = tan(betaS73[n]);
 }
 
-topo_relax::~topo_relax()
-{
-}
-
 void topo_relax::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     

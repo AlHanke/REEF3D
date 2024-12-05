@@ -35,7 +35,7 @@ class linear_regression_cont : public increment
 public:
 
 	linear_regression_cont (lexer *);
-	virtual ~linear_regression_cont();
+	virtual ~linear_regression_cont() = default;
 
 	void linreg_cont_func(lexer*,ghostcell*,double, double, double &b0, double &b1);
 

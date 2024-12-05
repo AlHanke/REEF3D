@@ -31,10 +31,6 @@ reduction_parker::reduction_parker(lexer *p) : bedslope(p)
 	eta = 0.85;
 }
 
-reduction_parker::~reduction_parker()
-{
-}
-
 
 void reduction_parker::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {

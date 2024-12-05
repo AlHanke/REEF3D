@@ -44,10 +44,6 @@ multiphase_f::multiphase_f(lexer* p, fdm *a, ghostcell* pgc) : ls1(p), ls2(p)
 	pwsf2=new print_wsf(p,a,pgc,2);
 }
 
-multiphase_f::~multiphase_f()
-{
-}
-
 void multiphase_f::start(lexer *p, fdm *a, ghostcell *pgc, convection *pmpconvec, solver *psolv, ioflow *pflow, reini* preini2, particle_corr* ppls)
 {
 	pfsf1->start(p,a,pgc,pmpconvec,psolv,pflow,preini,ppls,ls1);

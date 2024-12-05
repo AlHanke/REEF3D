@@ -31,7 +31,7 @@ class sediment_void : public sediment
 {
 public:
     sediment_void();
-	virtual ~sediment_void();
+	virtual ~sediment_void() = default;
     
     virtual void start_cfd(lexer*, fdm*, ghostcell*, ioflow*, reinitopo*, solver*);
     virtual void ini_cfd(lexer*,fdm*,ghostcell*);

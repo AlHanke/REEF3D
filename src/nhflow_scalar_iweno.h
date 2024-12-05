@@ -32,7 +32,7 @@ class nhflow_scalar_iweno : public nhflow_scalar_convection, public weno_nug_fun
 {
 public:
 	nhflow_scalar_iweno (lexer*);
-	virtual ~nhflow_scalar_iweno();
+	virtual ~nhflow_scalar_iweno() = default;
 
 	virtual void start(lexer*,fdm_nhf*,double*,int,double*,double*,double*);
 

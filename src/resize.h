@@ -33,7 +33,7 @@ class resize_class
 public:
 
 	resize_class();
-	virtual ~resize_class();
+	virtual ~resize_class() = default;
 	
 	void rank(int);
 

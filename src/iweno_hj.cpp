@@ -42,10 +42,6 @@ iweno_hj::iweno_hj(lexer *p)
     pflux = new flux_HJ_CDS2_vrans(p);
 }
 
-iweno_hj::~iweno_hj()
-{
-}
-
 void iweno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     if(ipol==1)

@@ -36,10 +36,6 @@ concentration_AB::concentration_AB(lexer* p, fdm* a, ghostcell *pgc) : bc_concen
 	gcval_concentration=80;
 }
 
-concentration_AB::~concentration_AB()
-{
-}
-
 void concentration_AB::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, turbulence *pturb, solver* psolv, ioflow* pflow)
 {
 

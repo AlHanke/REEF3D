@@ -41,10 +41,6 @@ ioflow_v::ioflow_v(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)  : flowfil
     tanphi=tan(p->W102_phi*(PI/180.0));
 }
 
-ioflow_v::~ioflow_v()
-{
-}
-
 void ioflow_v::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 {
 }

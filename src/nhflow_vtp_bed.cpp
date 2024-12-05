@@ -45,10 +45,6 @@ nhflow_vtp_bed::nhflow_vtp_bed(lexer *p, fdm_nhf *d, ghostcell *pgc)
     mkdir("./REEF3D_NHFLOW_VTP_BED",0777);
 }
 
-nhflow_vtp_bed::~nhflow_vtp_bed()
-{
-}
-
 void nhflow_vtp_bed::start(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *psed)
 {    
     print2D(p,d,pgc,psed);

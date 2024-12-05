@@ -30,10 +30,6 @@ sflow_gradient_weno::sflow_gradient_weno(lexer* p):tttw(13.0/12.0),fourth(1.0/4.
 {
 }
 
-sflow_gradient_weno::~sflow_gradient_weno()
-{
-}
-
 double sflow_gradient_weno::ddx(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
 {
     grad = 0.0;

@@ -31,10 +31,6 @@ LES_filter_box::LES_filter_box(lexer* p, fdm* a) : strain(p,a)
 
 }
 
-LES_filter_box::~LES_filter_box()
-{
-}
-
 void LES_filter_box::start(lexer *p, fdm *a, ghostcell *pgc, field &uprime, field &vprime, field &wprime, int gcval)
 {
 	//    vel_label=veleval(p,gcv);

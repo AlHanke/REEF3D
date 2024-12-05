@@ -52,10 +52,6 @@ fnpf_print_Hs::fnpf_print_Hs(lexer *p, slice &Hs) : ETAsum(p), ETAmean(p), //DKA
     }
 }
 
-fnpf_print_Hs::~fnpf_print_Hs()
-{
-}
-
 void fnpf_print_Hs::start(lexer *p, ghostcell *pgc, slice &eta, slice &Hs)
 {
     // RK3

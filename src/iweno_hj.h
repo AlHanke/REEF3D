@@ -32,7 +32,7 @@ class iweno_hj : public convection, public increment
 {
 public:
 	iweno_hj (lexer*);
-	virtual ~iweno_hj();
+	virtual ~iweno_hj() = default;
 
 	virtual void start(lexer*,fdm*,field&,int,field&,field&,field&);
 

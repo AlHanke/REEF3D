@@ -40,10 +40,6 @@ wave_lib_shallow::wave_lib_shallow(lexer *p, ghostcell *pgc) : wave_lib_paramete
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-wave_lib_shallow::~wave_lib_shallow()
-{
-}
-
 double wave_lib_shallow::wave_u(lexer *p, double x, double y, double z)
 {
     double vel;

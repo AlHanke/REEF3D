@@ -240,10 +240,6 @@ wave_lib_parameters::wave_lib_parameters(lexer *p, ghostcell *pgc) : pshift(p->B
 
 }
 
-wave_lib_parameters::~wave_lib_parameters()
-{
-}
-
 double wave_lib_parameters::sinfunc(double x)
 {
 

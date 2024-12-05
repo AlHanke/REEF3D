@@ -77,10 +77,6 @@ reini_RK3::reini_RK3(lexer* p, int type) : frk1(p),frk2(p),dt(p),epsi(p->F45*p->
     time_preproc(p);   
 }
 
-reini_RK3::~reini_RK3()
-{
-}
-
 void reini_RK3::start(lexer *p, fdm *a, ghostcell *pgc, field &f, ioflow* pflow)
 { 
     starttime=pgc->timer();

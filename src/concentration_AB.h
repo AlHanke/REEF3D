@@ -35,7 +35,7 @@ class concentration_AB :public bc_concentration, public concentration_io
 {
 public:
     concentration_AB(lexer *, fdm*, ghostcell*);
-	virtual ~concentration_AB();
+	virtual ~concentration_AB() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, turbulence*, solver*, ioflow*);
 	virtual void ttimesave(lexer*, fdm*);

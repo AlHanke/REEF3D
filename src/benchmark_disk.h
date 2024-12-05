@@ -36,7 +36,7 @@ class benchmark_disk : public benchmark, public increment
 
 public:
     benchmark_disk(lexer*,fdm*);
-	virtual ~benchmark_disk();
+	virtual ~benchmark_disk() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, convection*);
 

@@ -50,7 +50,7 @@ class ghostcell : public boundarycheck
 {
 public:
 	ghostcell(int&,char**,lexer*);
-	virtual ~ghostcell();
+	virtual ~ghostcell() = default;
 
 	void gcini(lexer* p);
     void mpi_check(lexer* p);

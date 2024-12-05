@@ -35,10 +35,6 @@ bedslope::bedslope(lexer *p) : norm_vec(p)
     pdx = new ddweno_f_nug(p);
 }
 
-bedslope::~bedslope()
-{
-}
-
 void bedslope::slope_weno(lexer *p, ghostcell *pgc, sediment_fdm *s, field &topo)
 {
     double uvel,vvel;

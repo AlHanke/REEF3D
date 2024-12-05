@@ -32,7 +32,7 @@ public:
 	virtual void start(lexer*, ghostcell*, sediment_fdm*);
 	
 	bedload_void();
-    virtual ~bedload_void();
+    virtual ~bedload_void() = default;
 
 };
 

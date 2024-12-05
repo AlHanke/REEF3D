@@ -35,10 +35,6 @@ fnpf_ini::fnpf_ini(lexer *p, fdm_fnpf *c, ghostcell *pgc) : fnpf_fsf_update(p,c,
 	gcval_w=12;
 }
 
-fnpf_ini::~fnpf_ini()
-{
-}
-
 void fnpf_ini::ini(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pflow, reini *preini, onephase *poneph)
 {	
     

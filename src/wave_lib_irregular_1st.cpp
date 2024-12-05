@@ -83,10 +83,6 @@ wave_lib_irregular_1st::wave_lib_irregular_1st(lexer *p, ghostcell *pgc) : wave_
     sinhkd[n] = sinh(ki[n]*wdt);
 }
 
-wave_lib_irregular_1st::~wave_lib_irregular_1st()
-{
-}
-
 // U -------------------------------------------------------------
 double wave_lib_irregular_1st::wave_u(lexer *p, double x, double y, double z)
 {

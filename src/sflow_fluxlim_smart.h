@@ -34,7 +34,7 @@ class sflow_fluxlim_smart : public sflow_fluxlim, public increment
 {
 public:
     sflow_fluxlim_smart (lexer *);
-	virtual ~sflow_fluxlim_smart();
+	virtual ~sflow_fluxlim_smart() = default;
 
 	virtual double iphi(slice&,int,int,int,int);
 	virtual double jphi(slice&,int,int,int,int);

@@ -31,10 +31,6 @@ patchBC_void::patchBC_void(lexer *p)
     obj_count=0;
 }
 
-patchBC_void::~patchBC_void()
-{
-}
-
 void patchBC_void::patchBC_ini(lexer *p, ghostcell *pgc)
 {
 } 

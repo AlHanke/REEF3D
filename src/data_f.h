@@ -37,7 +37,7 @@ class data_f : public data, public increment
 {
 public:
 	data_f(lexer*, fdm*, ghostcell*);
-	virtual ~data_f();
+	virtual ~data_f() = default;
 	virtual void start(lexer*, fdm*, ghostcell*);
 	
     void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&);

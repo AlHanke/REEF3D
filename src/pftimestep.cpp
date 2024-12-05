@@ -31,10 +31,6 @@ pftimestep::pftimestep(lexer* p):epsi(1.0e-19),maxtimestep(p->N49),c0_orig(p->N4
 {
 }
 
-pftimestep::~pftimestep()
-{
-}
-
 void pftimestep::start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
 {
     p->umax=p->vmax=p->wmax=p->viscmax=irsm=jrsm=krsm=0.0;

@@ -28,10 +28,6 @@ sflow_turb_prandtl::sflow_turb_prandtl(lexer* p) : sflow_turb_io_void(p)
 {
 }
 
-sflow_turb_prandtl::~sflow_turb_prandtl()
-{
-}
-
 void sflow_turb_prandtl::start(lexer *p, fdm2D *b, ghostcell *pgc, sflow_convection *pconvec, sflow_diffusion *pdiff, solver2D *psolv, ioflow *pflow)
 {
     double dudx,dvdy,dudy,dvdx;

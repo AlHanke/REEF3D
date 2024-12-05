@@ -32,7 +32,7 @@ class minmod : public fluxlim, public increment
 public:
 
 	minmod (lexer *);
-	virtual ~minmod();
+	virtual ~minmod() = default;
 
 	virtual double iphi(field&,int,int,int,int);
 	virtual double jphi(field&,int,int,int,int);

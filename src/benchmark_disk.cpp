@@ -80,10 +80,6 @@ benchmark_disk::benchmark_disk(lexer *p, fdm *a)
 	}    
 }
 
-benchmark_disk::~benchmark_disk()
-{
-}
-
 void benchmark_disk::start(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec )
 {
     LOOP

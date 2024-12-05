@@ -36,10 +36,6 @@ komega_IM1::komega_IM1(lexer* p, fdm* a, ghostcell *pgc) : komega_func(p,a,pgc)
 	gcval_eps=30;
 }
 
-komega_IM1::~komega_IM1()
-{
-}
-
 void komega_IM1::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow, vrans *pvrans)
 {
 	wallf_update(p,a,pgc,wallf);

@@ -32,10 +32,6 @@ potential_water::potential_water(lexer* p) : bc(p), eps(-1.6*p->DXM)
     gcval_pot=49;
 }
 
-potential_water::~potential_water()
-{
-}
-
 void potential_water::start(lexer*p, fdm* a, ghostcell* pgc, solver* psolv)
 {
     if(p->mpirank==0 )

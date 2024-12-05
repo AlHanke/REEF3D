@@ -44,10 +44,6 @@ potentialfile_in::potentialfile_in(lexer *p, ghostcell *pgc)
     }
 }
 
-potentialfile_in::~potentialfile_in()
-{
-}
-
 void potentialfile_in::flowfile_start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
 {
     /*

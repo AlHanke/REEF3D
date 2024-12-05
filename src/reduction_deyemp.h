@@ -34,7 +34,7 @@ class reduction_deyemp :  public bedshear_reduction, public bedslope
 {
 public:
     reduction_deyemp(lexer*);
-    virtual ~reduction_deyemp();
+    virtual ~reduction_deyemp() = default;
 
 	virtual void start(lexer*,ghostcell*,sediment_fdm*);
 

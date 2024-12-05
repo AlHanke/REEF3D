@@ -38,10 +38,6 @@ bedload_VR::bedload_VR(lexer *p)
     Ds= d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
 }
 
-bedload_VR::~bedload_VR()
-{
-}
-
 void bedload_VR::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 {
     double Ti,r;

@@ -36,7 +36,7 @@ class benchmark_vortex : public benchmark, public increment
 
 public:
     benchmark_vortex(lexer*,fdm*);
-	virtual ~benchmark_vortex();
+	virtual ~benchmark_vortex() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, convection*);
 

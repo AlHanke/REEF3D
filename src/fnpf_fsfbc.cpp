@@ -143,10 +143,6 @@ fnpf_fsfbc::fnpf_fsfbc(lexer *p, fdm_fnpf *c, ghostcell *pgc) : eps(1.0e-6),bx(p
     }
 }
 
-fnpf_fsfbc::~fnpf_fsfbc()
-{
-}
-
 void fnpf_fsfbc::fsfdisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, slice &Fifsf)
 {
     SLICELOOP4

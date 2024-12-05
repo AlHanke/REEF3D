@@ -30,7 +30,7 @@ class vanleer : public fluxlim, public increment
 {
 public:
 	vanleer (lexer *);
-	virtual ~vanleer();
+	virtual ~vanleer() = default;
 
 	virtual double iphi(field&,int,int,int,int);
 	virtual double jphi(field&,int,int,int,int);

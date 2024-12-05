@@ -55,10 +55,6 @@ reinisolid_RK3::reinisolid_RK3(lexer* p) : f(p),frk1(p),frk2(p),L(p),dt(p),epsi(
     time_preproc(p);    
 }
 
-reinisolid_RK3::~reinisolid_RK3()
-{
-}
-
 void reinisolid_RK3::start(lexer *p, fdm *a, ghostcell *pgc, field &f)
 { 
     gcval=gcval_topo;

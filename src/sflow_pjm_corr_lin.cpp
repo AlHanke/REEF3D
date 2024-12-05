@@ -72,10 +72,6 @@ sflow_pjm_corr_lin::sflow_pjm_corr_lin(lexer* p, fdm2D *b, patchBC_interface *pp
     wd_criterion=p->A245_val*p->DXM;
 }
 
-sflow_pjm_corr_lin::~sflow_pjm_corr_lin()
-{
-}
-
 void sflow_pjm_corr_lin::start(lexer *p, fdm2D *b, ghostcell *pgc, solver2D *psolv, ioflow *pflow, slice &P, slice &Q, slice &Pn, slice &Qn, slice &ws, slice &eta, double alpha)
 {
     if(p->mpirank==0 && (p->count%p->P12==0))

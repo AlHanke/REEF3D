@@ -32,10 +32,6 @@ vorticity_f::vorticity_f(lexer *p, fdm *a) : strain(p,a), omega1(p), omega2(p), 
 {
 }
 
-vorticity_f::~vorticity_f()
-{
-}
-
 void vorticity_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
     double wx,wy,wz;

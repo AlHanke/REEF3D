@@ -30,7 +30,7 @@ class nhflow_f : public nhflow, public increment
 {
 public:    
     nhflow_f(lexer*, fdm_nhf*, ghostcell*);
-	virtual ~nhflow_f();
+	virtual ~nhflow_f() = default;
 
     virtual void ini(lexer*, fdm_nhf*, ghostcell*, ioflow*);
     

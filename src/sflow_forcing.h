@@ -46,7 +46,7 @@ class sflow_forcing : public increment
 {
 public:
 	sflow_forcing(lexer*);
-	virtual ~sflow_forcing();
+	virtual ~sflow_forcing() = default;
     
     void forcing(lexer*, fdm2D*, ghostcell*, sixdof *p6dof, 
                  int, double, slice&, slice&, slice&, slice&, bool);

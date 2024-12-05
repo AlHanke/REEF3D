@@ -155,10 +155,6 @@ printer_fnpf::printer_fnpf(lexer* p, fdm_fnpf *c, ghostcell *pgc)
 	prunup[n]->ini(p,c,pgc);
 }
 
-printer_fnpf::~printer_fnpf()
-{
-}
-
 void printer_fnpf::start(lexer* p, fdm_fnpf* c,ghostcell* pgc, ioflow *pflow)
 {
     // Gages

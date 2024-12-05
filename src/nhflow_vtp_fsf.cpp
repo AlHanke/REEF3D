@@ -66,10 +66,6 @@ nhflow_vtp_fsf::nhflow_vtp_fsf(lexer *p, fdm_nhf *d, ghostcell *pgc)
     }
 }
 
-nhflow_vtp_fsf::~nhflow_vtp_fsf()
-{
-}
-
 void nhflow_vtp_fsf::start(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *psed)
 {	
     print2D(p,d,pgc,psed);

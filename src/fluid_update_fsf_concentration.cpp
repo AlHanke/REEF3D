@@ -39,10 +39,6 @@ fluid_update_fsf_concentration::fluid_update_fsf_concentration(lexer *p, fdm* a,
 	pconcentration = ppconcentration;
 }
 
-fluid_update_fsf_concentration::~fluid_update_fsf_concentration()
-{
-}
-
 void fluid_update_fsf_concentration::start(lexer *p, fdm* a, ghostcell* pgc)
 {
 	double H=0.0;

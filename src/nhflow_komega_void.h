@@ -33,7 +33,7 @@ class nhflow_komega_func_void : public nhflow_turbulence, public increment
 
 public:
 	nhflow_komega_func_void(lexer *,fdm_nhf*,ghostcell*);
-	virtual ~nhflow_komega_func_void();
+	virtual ~nhflow_komega_func_void() = default;
 
 	virtual void start(lexer*, fdm_nhf*, ghostcell*, nhflow_scalar_convection*, nhflow_diffusion*, solver*, ioflow*, vrans*);
 	virtual void ktimesave(lexer*, fdm_nhf*, ghostcell*);

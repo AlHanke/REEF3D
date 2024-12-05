@@ -30,7 +30,7 @@ class sflow_etimestep : public sflow_timestep, public increment
 {
 public:
 	sflow_etimestep(lexer*,fdm2D*);
-	virtual ~sflow_etimestep();
+	virtual ~sflow_etimestep() = default;
 	
     virtual void start(lexer*,fdm2D*,ghostcell*);
 	virtual void ini(lexer*,fdm2D*,ghostcell*);

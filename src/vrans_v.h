@@ -32,7 +32,7 @@ class vrans_v : public vrans, public increment
 {
 public:
 	vrans_v(lexer*, ghostcell*);
-	virtual ~vrans_v();
+	virtual ~vrans_v() = default;
 
 	virtual void initialize_cfd(lexer*, fdm*, ghostcell*);	
 	virtual void start(lexer*, fdm*, ghostcell*, net*&, int){};

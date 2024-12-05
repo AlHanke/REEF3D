@@ -33,10 +33,6 @@ nhflow_reconstruct_wenograd::nhflow_reconstruct_wenograd(lexer* p, patchBC_inter
     p->Darray(DFDXs,p->imax*p->jmax*(p->kmax+2));
     p->Darray(DFDXn,p->imax*p->jmax*(p->kmax+2));
 }
-
-nhflow_reconstruct_wenograd::~nhflow_reconstruct_wenograd()
-{
-}
   
 
 void nhflow_reconstruct_wenograd::reconstruct_2D_x(lexer* p, ghostcell *pgc, fdm_nhf*, slice& f, slice &fs, slice &fn)

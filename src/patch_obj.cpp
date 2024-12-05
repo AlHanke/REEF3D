@@ -84,10 +84,6 @@ patch_obj::patch_obj(lexer *p, int ID_ini)
     
 }
 
-patch_obj::~patch_obj()
-{
-}
-
 void patch_obj::patch_obj_ini(lexer *p, ghostcell *pgc)
 {
 }

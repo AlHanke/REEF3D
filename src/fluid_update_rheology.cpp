@@ -35,10 +35,6 @@ fluid_update_rheology::fluid_update_rheology(lexer *p, fdm* a) : dx(p->DXM),
 	prheo = new rheology_f(p,a);	
 }
 
-fluid_update_rheology::~fluid_update_rheology()
-{
-}
-
 void fluid_update_rheology::start(lexer *p, fdm* a, ghostcell* pgc)
 {
 	double H=0.0;

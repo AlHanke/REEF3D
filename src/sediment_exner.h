@@ -38,7 +38,7 @@ class sediment_exner : public topo, public increment
 {
 public:
 	sediment_exner(lexer*, ghostcell*);
-	virtual ~sediment_exner();
+	virtual ~sediment_exner() = default;
 	virtual void start(lexer*, ghostcell*, sediment_fdm*);
 
 

@@ -40,7 +40,7 @@ class fsf_vtp : virtual public increment, private vtp3D
 
 public:
 	fsf_vtp(lexer*,fdm*,ghostcell*);
-	virtual ~fsf_vtp();
+	virtual ~fsf_vtp() = default;
 	virtual void start(lexer*,fdm*,ghostcell*);
 
 private:

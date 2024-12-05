@@ -30,10 +30,6 @@ wave_lib_precalc::wave_lib_precalc()
     vel=eta=fi=T=0.0;
 }
 
-wave_lib_precalc::~wave_lib_precalc()
-{
-}
-
 // U -------------------------------------------------------------
 double wave_lib_precalc::wave_u_space_sin(lexer *p, double x, double y, double z, int n)
 {

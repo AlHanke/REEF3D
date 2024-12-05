@@ -30,10 +30,6 @@ fnpf_cds2::fnpf_cds2(lexer* p)
 {
 }
 
-fnpf_cds2::~fnpf_cds2()
-{
-}
-
 double fnpf_cds2::fx(lexer *p, field &f, double ivel1, double ivel2)
 {
     return (f(i+1,j,k)-f(i-1,j,k))/(p->DXN[IP]+p->DXN[IM1]);

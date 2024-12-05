@@ -157,10 +157,6 @@ momentum_FCC3::momentum_FCC3(lexer *p, fdm *a, ghostcell *pgc, convection *pconv
     ro_threshold = 0.05*p->W1 + p->W3;
 }
 
-momentum_FCC3::~momentum_FCC3()
-{
-}
-
 void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof, vector<net*>& pnet)
 {	
     pflow->discharge(p,a,pgc);

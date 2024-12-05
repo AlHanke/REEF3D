@@ -38,10 +38,6 @@ sixdof_nhflow::sixdof_nhflow(lexer *p, ghostcell *pgc) : press(p)
     fb_obj.push_back(new sixdof_obj(p,pgc,nb));
 }
 
-sixdof_nhflow::~sixdof_nhflow()
-{
-}
-
 void sixdof_nhflow::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vrans* pvrans, vector<net*>& pnet, int iter, 
                                  double *U, double *V, double *W, double *FX, double *FY, double *FZ, slice &WL, slice &fe, bool finalize)
 {

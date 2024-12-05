@@ -41,10 +41,6 @@ weno_hj_nug::weno_hj_nug(lexer* p):weno_nug_func(p),tttw(13.0/12.0),fourth(1.0/4
     pflux = new flux_HJ_CDS2_vrans(p);
 }
 
-weno_hj_nug::~weno_hj_nug()
-{
-}
-
 void weno_hj_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     uf=vf=wf=0;

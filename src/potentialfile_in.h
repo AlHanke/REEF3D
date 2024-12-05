@@ -40,7 +40,7 @@ class potentialfile_in : public increment
 
 public:
 	potentialfile_in(lexer*,ghostcell*);
-	virtual ~potentialfile_in();
+	virtual ~potentialfile_in() = default;
     
     virtual void flowfile_start(lexer*,fdm*,ghostcell*,turbulence*);
     virtual void ff_inflow(lexer*,fdm*,ghostcell*,field&,field&,field&);

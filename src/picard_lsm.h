@@ -31,7 +31,7 @@ class picard_lsm : public gradient, public picard
 public:
 
     picard_lsm(lexer *p);
-    virtual ~picard_lsm();
+    virtual ~picard_lsm() = default;
 
     virtual void volcalc(lexer*, fdm*, ghostcell*, field&);
     virtual void volcalc2(lexer*, fdm*, ghostcell*, field&);

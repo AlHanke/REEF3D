@@ -30,10 +30,6 @@ pressure_reference::pressure_reference(lexer* p)
 
 }
 
-pressure_reference::~pressure_reference()
-{
-}
-
 void pressure_reference::reference_start(lexer*p, fdm* a, ghostcell *pgc)
 {
     if(p->B30==1)

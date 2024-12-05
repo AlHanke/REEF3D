@@ -38,7 +38,7 @@ class nhflow_poisson : public increment
 public:
 
 	nhflow_poisson (lexer *);
-	virtual ~nhflow_poisson();
+	virtual ~nhflow_poisson() = default;
 
 	virtual void start(lexer *,fdm_nhf*,double*);
 

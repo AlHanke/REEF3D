@@ -25,8 +25,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 mooring_Spring::mooring_Spring(int number):line(number){}
 
-mooring_Spring::~mooring_Spring(){}
-
 
 void mooring_Spring::initialize(lexer *p, ghostcell *pgc)
 {   

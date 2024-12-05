@@ -36,10 +36,6 @@ heat_AB::heat_AB(lexer* p, fdm* a, ghostcell *pgc, heat *&pheat) : bcheat(p), he
 	gcval_heat=80;
 }
 
-heat_AB::~heat_AB()
-{
-}
-
 void heat_AB::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, solver* psolv, ioflow* pflow)
 {
 

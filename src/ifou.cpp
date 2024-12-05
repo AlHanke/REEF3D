@@ -63,10 +63,6 @@ ifou::ifou (lexer *p)
     }
 }
 
-ifou::~ifou()
-{
-}
-
 void ifou::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     count=0;

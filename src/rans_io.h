@@ -39,7 +39,7 @@ class rans_io : public turbulence, public strain
 {
 public:
     rans_io(lexer*,fdm*);
-	virtual ~rans_io();
+	virtual ~rans_io() = default;
 
     void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&);
     virtual void ini(lexer*, fdm*, ghostcell*);

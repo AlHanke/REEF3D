@@ -36,10 +36,6 @@ sflow_weno_hj::sflow_weno_hj(lexer* p):tttw(13.0/12.0),fourth(1.0/4.0),third(1.0
 
 }
 
-sflow_weno_hj::~sflow_weno_hj()
-{
-}
-
 void sflow_weno_hj::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice& vvel)
 {
     if(ipol==1)

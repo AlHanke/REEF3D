@@ -57,10 +57,6 @@ print_porous::print_porous(lexer* p, fdm *a, ghostcell *pgc)
 	p->Iarray(numvert,polygon_alloc);
 }
 
-print_porous::~print_porous()
-{
-}
-
 void print_porous::start(lexer *p, fdm *a, ghostcell *pgc)
 {
 	objects(p,a,pgc);

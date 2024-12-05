@@ -36,7 +36,7 @@ class pjm_hydrostatic : public pressure, public increment
 public:
 
 	pjm_hydrostatic(lexer* , fdm*, heat*&, concentration*&);
-	virtual ~pjm_hydrostatic();
+	virtual ~pjm_hydrostatic() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, poisson*, solver*, ioflow*, field&, field&, field&,double);
     virtual void ini(lexer*,fdm*,ghostcell*);

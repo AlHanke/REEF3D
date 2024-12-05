@@ -33,7 +33,7 @@ class diff_void : public diffusion, public increment
 public:
 
 	diff_void();
-	virtual ~diff_void();
+	virtual ~diff_void() = default;
 
 	virtual void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, double, double);
 	virtual void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, double, double);

@@ -35,7 +35,7 @@ class heat_RK2 :public bcheat, public heat_print
 {
 public:
     heat_RK2(lexer *, fdm*, ghostcell*,heat*&);
-	virtual ~heat_RK2();
+	virtual ~heat_RK2() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*);
 	virtual void ttimesave(lexer*, fdm*);

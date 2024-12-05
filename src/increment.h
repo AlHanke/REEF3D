@@ -32,7 +32,7 @@ class increment
 {
 	public:
 	increment();
-	virtual ~increment();
+	virtual ~increment() = default;
 	static int i,j,k,n,h;
 	static int innercounter;
 	static int pip;

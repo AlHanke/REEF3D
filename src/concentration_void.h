@@ -32,7 +32,7 @@ class concentration_void : public concentration
 {
 public:
     concentration_void(lexer *, fdm*, ghostcell*);
-	virtual ~concentration_void();
+	virtual ~concentration_void() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, turbulence*, solver*, ioflow*);
 	virtual void ini(lexer*, fdm*, ghostcell*, concentration *pconcentration);

@@ -28,10 +28,6 @@ sflow_flux_HJ_CDS::sflow_flux_HJ_CDS(lexer *p)
 {
 }
 
-sflow_flux_HJ_CDS::~sflow_flux_HJ_CDS()
-{
-}
-
 void sflow_flux_HJ_CDS::u_flux(int ipol, slice& uvel, double &uflux1, double &uflux2)
 {
 	if(ipol==1)

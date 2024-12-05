@@ -53,10 +53,6 @@ LES_WALE::LES_WALE(lexer* p, fdm* a) : LES(p,a)
     pfilter = new LES_filter_f2(p,a);
 }
 
-LES_WALE::~LES_WALE()
-{
-}
-
 void LES_WALE::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff,solver* psolv, ioflow* pflow, vrans* pvrans)
 {
 	

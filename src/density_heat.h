@@ -35,7 +35,7 @@ class density_heat : public density, virtual public increment
 
 public:
     density_heat(lexer*,heat*&);
-	virtual ~density_heat();
+	virtual ~density_heat() = default;
 
 	virtual double roface(lexer*,fdm*,int,int,int);
 	

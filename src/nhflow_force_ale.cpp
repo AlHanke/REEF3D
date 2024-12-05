@@ -31,8 +31,6 @@ Author: Hans Bihs
 
 nhflow_force_ale::nhflow_force_ale(lexer* p, fdm_nhf *d, ghostcell *pgc, int qn) : ID(qn){}
 
-nhflow_force_ale::~nhflow_force_ale(){}
-
 void nhflow_force_ale::ini(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     force_aleprintcount=0;

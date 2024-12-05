@@ -40,7 +40,7 @@ class nhflow_force_ale :  public increment
 
 public:
 	nhflow_force_ale(lexer*,fdm_nhf*,ghostcell*,int);
-	virtual ~nhflow_force_ale();
+	virtual ~nhflow_force_ale() = default;
 	virtual void start(lexer*,fdm_nhf*,ghostcell*);
     virtual void ini(lexer*,fdm_nhf*,ghostcell*);
 

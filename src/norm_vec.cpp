@@ -28,10 +28,6 @@ norm_vec::norm_vec(lexer* p) : ddweno_f_nug(p), dx(p->DXM)
 {
 }
 
-norm_vec::~norm_vec()
-{
-}
-
 double norm_vec::normvec_x(fdm *a, field &f)
 {
     double lsv,lsSig;

@@ -47,7 +47,7 @@ public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 
     mooring_dynamic(int);
-	virtual ~mooring_dynamic();
+	virtual ~mooring_dynamic() = default;
 	
 	virtual void start(lexer*, ghostcell*);
 	virtual void initialize(lexer*, ghostcell*);

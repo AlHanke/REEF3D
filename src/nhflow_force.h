@@ -42,7 +42,7 @@ class nhflow_force : virtual public increment, private vtp3D
 
 public:
 	nhflow_force(lexer*,fdm_nhf*,ghostcell*,int);
-	virtual ~nhflow_force();
+	virtual ~nhflow_force() = default;
 	void start(lexer*,fdm_nhf*,ghostcell*);
     void ini(lexer*,fdm_nhf*,ghostcell*);
 

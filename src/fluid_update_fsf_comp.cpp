@@ -32,10 +32,6 @@ fluid_update_fsf_comp::fluid_update_fsf_comp(lexer *p, fdm* a, ghostcell* pgc) :
 	gcval_visc=1;
 }
 
-fluid_update_fsf_comp::~fluid_update_fsf_comp()
-{
-}
-
 void fluid_update_fsf_comp::start(lexer *p, fdm* a, ghostcell* pgc)
 {
 	double H=0.0;

@@ -31,7 +31,7 @@ class flux_HJ_CDS4 : public flux, public increment
 public:
 
 	flux_HJ_CDS4 (lexer *p);
-	virtual ~flux_HJ_CDS4();
+	virtual ~flux_HJ_CDS4() = default;
 
 	virtual void u_flux(fdm* a,int,field&,double&,double&);
 	virtual void v_flux(fdm* a,int,field&,double&,double&);

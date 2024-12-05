@@ -38,10 +38,6 @@ fnpf_bed_update::fnpf_bed_update(lexer *p)
     pconvec = new fnpf_cds4(p);
 }
 
-fnpf_bed_update::~fnpf_bed_update()
-{
-}
-
 void fnpf_bed_update::bedbc_sig(lexer *p, fdm_fnpf *c, ghostcell *pgc, double *Fi, fnpf_fsf *pf)
 {
     // Calculate gradients

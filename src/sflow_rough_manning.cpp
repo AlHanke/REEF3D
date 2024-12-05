@@ -31,10 +31,6 @@ sflow_rough_manning::sflow_rough_manning(lexer* p)
 {
 }
 
-sflow_rough_manning::~sflow_rough_manning()
-{
-}
-
 void sflow_rough_manning::u_source(lexer *p, fdm2D *b, slice &u)
 {
     SLICELOOP1

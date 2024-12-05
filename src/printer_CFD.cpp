@@ -184,10 +184,6 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc)
         outputFormat->folder("CFD");
 }
 
-printer_CFD::~printer_CFD()
-{
-}
-
 void printer_CFD::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, heat *pheat, ioflow *pflow, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
 {
     pgc->gcparax4a(p,a->phi,5);

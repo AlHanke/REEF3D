@@ -31,10 +31,6 @@ sflow_flux_face_C_CDS::sflow_flux_face_C_CDS(lexer *pp, fdm2D *bb)
     b=bb;
 }
 
-sflow_flux_face_C_CDS::~sflow_flux_face_C_CDS()
-{
-}
-
 void sflow_flux_face_C_CDS::u_flux(int ipol, slice& uvel, double &uflux1, double &uflux2)
 {
 	if(ipol==1)

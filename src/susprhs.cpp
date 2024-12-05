@@ -34,10 +34,6 @@ susprhs::susprhs(lexer* p)
     ws=1.1*(rhosed/rhowat-1.0)*gi*d50*d50;
 }
 
-susprhs::~susprhs()
-{
-}
-
 void susprhs::suspsource(lexer* p,fdm* a,field& conc)
 {
     LOOP

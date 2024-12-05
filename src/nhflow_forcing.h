@@ -44,7 +44,7 @@ class nhflow_forcing : public increment
 {
 public:
 	nhflow_forcing(lexer*);
-	virtual ~nhflow_forcing();
+	virtual ~nhflow_forcing() = default;
     
     void forcing(lexer*, fdm_nhf*, ghostcell*, sixdof *p6dof, vrans* pvrans, vector<net*>& pnet, 
                  int, double, double*, double*, double*, slice&, bool);

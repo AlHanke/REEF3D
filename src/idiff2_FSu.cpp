@@ -33,10 +33,6 @@ idiff2_FS::idiff2_FS(lexer* p)
 	gcval_w=12;
 }
 
-idiff2_FS::~idiff2_FS()
-{
-}
-
 void idiff2_FS::diff_u(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &u, field &v, field &w, double alpha)
 {
 	starttime=pgc->timer();

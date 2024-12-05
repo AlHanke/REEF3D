@@ -29,10 +29,6 @@ flux_face_CDS2_vrans::flux_face_CDS2_vrans(lexer *p)
 
 }
 
-flux_face_CDS2_vrans::~flux_face_CDS2_vrans()
-{
-}
-
 void flux_face_CDS2_vrans::u_flux(fdm* a,int ipol, field& uvel, double &uflux1, double &uflux2)
 {
 	if(ipol==1)

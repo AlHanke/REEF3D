@@ -34,7 +34,7 @@ class potential_f : public potential, public increment
 
 public:
 	potential_f(lexer*);
-	virtual ~potential_f();
+	virtual ~potential_f() = default;
 
 	virtual void start(lexer*,fdm*,ghostcell*,solver*);
 

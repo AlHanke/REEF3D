@@ -30,7 +30,7 @@ class sflow_gradient_weno : public sflow_gradient, public increment
 {
 public:
     sflow_gradient_weno(lexer*);
-	virtual ~sflow_gradient_weno();
+	virtual ~sflow_gradient_weno() = default;
 
     virtual double ddx(lexer*,fdm2D*,slice&,int,double);
     virtual double ddy(lexer*,fdm2D*,slice&,int,double);

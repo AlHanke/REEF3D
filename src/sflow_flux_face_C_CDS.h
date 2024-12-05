@@ -34,7 +34,7 @@ class sflow_flux_face_C_CDS : public sflow_flux, public increment
 public:
 
 	sflow_flux_face_C_CDS (lexer *p, fdm2D*);
-	virtual ~sflow_flux_face_C_CDS();
+	virtual ~sflow_flux_face_C_CDS() = default;
 
 	virtual void u_flux(int,slice&,double&,double&);
 	virtual void v_flux(int,slice&,double&,double&);

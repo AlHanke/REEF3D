@@ -38,10 +38,6 @@ sixdof_sflow::sixdof_sflow(lexer *p, ghostcell *pgc) : press(p)
     fb_obj.push_back(new sixdof_obj(p,pgc,nb));
 }
 
-sixdof_sflow::~sixdof_sflow()
-{
-}
-
 void sixdof_sflow::start_sflow(lexer *p, ghostcell *pgc, int iter, slice &fsglobal, slice &P, slice &Q, slice &w, slice &fx, slice &fy, slice &fz, bool finalize)
 {
     if(p->X10==2)

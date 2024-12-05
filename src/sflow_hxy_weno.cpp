@@ -45,10 +45,6 @@ sflow_hxy_weno::sflow_hxy_weno(lexer* p, patchBC_interface *ppBC) :tttw(13.0/12.
     pflux = new sflow_flux_face_HJ(p);
 }
 
-sflow_hxy_weno::~sflow_hxy_weno()
-{
-}
-
 void sflow_hxy_weno::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet, slice& eta, slice& uvel, slice& vvel)
 {
     double eps=1.0e-7;

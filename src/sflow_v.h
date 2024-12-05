@@ -33,7 +33,7 @@ class sflow_v : public sflow
 {
 public:
 	sflow_v(lexer*, fdm2D*);
-	virtual ~sflow_v();
+	virtual ~sflow_v() = default;
 
 	virtual void start(lexer*, fdm2D*, ghostcell*);
 };

@@ -27,10 +27,6 @@ bc_ikepsilon::bc_ikepsilon(lexer* p):roughness(p),kappa(0.4)
 {
 }
 
-bc_ikepsilon::~bc_ikepsilon()
-{
-}
-
 void bc_ikepsilon::bckeps_start(lexer* p, fdm* a, field& kin, field& eps,int gcval)
 {
 	int q;

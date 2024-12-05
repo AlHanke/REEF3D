@@ -33,7 +33,7 @@ class bedload_MPM : public bedload, public increment
 public:
 
     bedload_MPM(lexer*);
-	virtual ~bedload_MPM();
+	virtual ~bedload_MPM() = default;
 	virtual void start(lexer*, ghostcell*, sediment_fdm*);
 
 private:

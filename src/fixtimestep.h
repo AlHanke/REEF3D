@@ -32,7 +32,7 @@ class fixtimestep : public timestep, public increment
 {
 public:
 	fixtimestep(lexer*);
-	virtual ~fixtimestep();
+	virtual ~fixtimestep() = default;
 	virtual void start(lexer*,fdm*,ghostcell*,turbulence*);
 	virtual void ini(lexer*,fdm*,ghostcell*);
 

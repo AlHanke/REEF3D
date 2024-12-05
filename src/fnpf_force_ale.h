@@ -40,7 +40,7 @@ class fnpf_force_ale :  public increment
 
 public:
 	fnpf_force_ale(lexer*,fdm_fnpf*,ghostcell*,int);
-	virtual ~fnpf_force_ale();
+	virtual ~fnpf_force_ale() = default;
 	virtual void start(lexer*,fdm_fnpf*,ghostcell*);
     virtual void ini(lexer*,fdm_fnpf*,ghostcell*);
 

@@ -26,10 +26,6 @@ resize_class::resize_class()
 {
 }
 
-resize_class::~resize_class()
-{
-}
-
 
 void resize_class::Darray(double *& field, int numi)
 {

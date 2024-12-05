@@ -96,10 +96,6 @@ levelset_RK3::levelset_RK3(lexer* p, fdm *a, ghostcell* pgc, heat *&pheat, conce
 	gcval_w=12;
 }
 
-levelset_RK3::~levelset_RK3()
-{
-}
-
 void levelset_RK3::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec,solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppart, field &ls)
 {
     pflow->fsfinflow(p,a,pgc);

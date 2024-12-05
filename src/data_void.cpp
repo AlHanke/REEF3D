@@ -29,10 +29,6 @@ data_void::data_void(lexer* p, fdm *a, ghostcell* pgc)
 {
 }
 
-data_void::~data_void()
-{
-}
-
 void data_void::start(lexer* p, fdm* a, ghostcell* pgc)
 {
 }

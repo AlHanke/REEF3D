@@ -41,7 +41,7 @@ class hypre_struct : public solver, public increment
 public:
 
 	hypre_struct(lexer*,ghostcell*,int,int);
-	virtual ~hypre_struct();
+	virtual ~hypre_struct() = default;
     
 	virtual void start(lexer*,fdm*, ghostcell*, field&, vec&, int);
     virtual void startf(lexer*, ghostcell*, field&, vec&, matrix_diag&, int);

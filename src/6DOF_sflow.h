@@ -43,7 +43,7 @@ class sixdof_sflow : public sixdof, public increment
 public:
 	
     sixdof_sflow(lexer*, ghostcell*);
-    virtual ~sixdof_sflow();
+    virtual ~sixdof_sflow() = default;
     
     virtual void start_cfd(lexer*,fdm*,ghostcell*,vrans*,vector<net*>&,int,field&,field&,field&,field&,field&,field&,bool);
     virtual void start_nhflow(lexer*,fdm_nhf*,ghostcell*,vrans*,vector<net*>&,int,double*,double*,double*,double*,double*,double*,slice&,slice&,bool);

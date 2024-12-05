@@ -42,10 +42,6 @@ sflow_bicgstab::sflow_bicgstab(lexer* p,ghostcell *pgc):epsi(1e-19)
     p->Darray(rhs,p->imax*p->jmax*p->kmax);
 }
 
-sflow_bicgstab::~sflow_bicgstab()
-{
-}
-
 
 void sflow_bicgstab::start(lexer* p, ghostcell* pgc, slice &f, matrix2D &M, vec2D &xvec, vec2D &rhsvec, int var)
 {

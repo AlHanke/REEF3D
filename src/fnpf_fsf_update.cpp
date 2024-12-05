@@ -36,11 +36,6 @@ fnpf_fsf_update::fnpf_fsf_update(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     gcval_w = 12;
 }
 
-fnpf_fsf_update::~fnpf_fsf_update()
-{
-    
-}
-
 void fnpf_fsf_update::fsfupdate(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pflow, onephase *poneph, slice &eta)
 {
 }

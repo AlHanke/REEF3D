@@ -63,10 +63,6 @@ sediment_part::sediment_part(lexer *p, fdm *a, ghostcell *pgc, turbulence *pptur
     mkdir("./REEF3D_CFD_SedPart",0777);
 }
 
-sediment_part::~sediment_part()
-{
-}
-
 void sediment_part::start_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinitopo *preto, solver *psolv)
 {
     sedcalc=0;

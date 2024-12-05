@@ -31,10 +31,6 @@ etimestep::etimestep(lexer* p):epsi(1.0e-19),c0_orig(p->N47)
 {
 }
 
-etimestep::~etimestep()
-{
-}
-
 void etimestep::start(lexer* p, fdm*a, ghostcell* pgc, turbulence* pturb)
 {
     p->umax=p->vmax=p->wmax=p->viscmax=irsm=jrsm=krsm=0.0;

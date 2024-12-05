@@ -39,7 +39,7 @@ class nhflow_vtp_fsf : virtual public increment, private vtp3D
 {
 public:
 	nhflow_vtp_fsf(lexer*,fdm_nhf*,ghostcell*);
-	virtual ~nhflow_vtp_fsf();
+	virtual ~nhflow_vtp_fsf() = default;
 	
     void start(lexer*,fdm_nhf*,ghostcell*,sediment*);
     void print2D(lexer*,fdm_nhf*,ghostcell*,sediment*);

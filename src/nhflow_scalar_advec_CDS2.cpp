@@ -28,10 +28,6 @@ nhflow_scalar_advec_CDS2::nhflow_scalar_advec_CDS2(lexer *pp)
 p=pp;
 }
 
-nhflow_scalar_advec_CDS2::~nhflow_scalar_advec_CDS2()
-{
-}
-
 void nhflow_scalar_advec_CDS2::uadvec(int ipol, double *U, double &uflux1, double &uflux2)
 {
 	if(ipol==4)

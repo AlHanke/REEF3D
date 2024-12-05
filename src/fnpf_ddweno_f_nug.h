@@ -39,7 +39,7 @@ class fnpf_ddweno_f_nug : public weno_nug_func
 public:
 
 	 fnpf_ddweno_f_nug(lexer*,fdm_fnpf*);
-	 ~fnpf_ddweno_f_nug();
+	 ~fnpf_ddweno_f_nug() = default;
     
     // field
     double ddwenox(field&, double);

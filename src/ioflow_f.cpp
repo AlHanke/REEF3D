@@ -90,7 +90,3 @@ ioflow_f::ioflow_f(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)
     iter0=-1;
 	
 }
-
-ioflow_f::~ioflow_f()
-{
-}

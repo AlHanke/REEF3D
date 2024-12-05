@@ -39,7 +39,7 @@ class nhflow_HLL : public nhflow_convection, public increment
 public:
 
 	nhflow_HLL (lexer*,ghostcell*,patchBC_interface*);
-	virtual ~nhflow_HLL();
+	virtual ~nhflow_HLL() = default;
 
     virtual void start(lexer*&, fdm_nhf*&, int, slice&);
     virtual void precalc(lexer*, fdm_nhf*, int, slice&);

@@ -30,7 +30,7 @@ class potential_v : public potential, public increment
 {
 public:
     potential_v();
-	virtual ~potential_v();
+	virtual ~potential_v() = default;
 
 	virtual void start(lexer*,fdm*,ghostcell*,solver*);
 

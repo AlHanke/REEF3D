@@ -28,10 +28,6 @@ sflow_rheology_v::sflow_rheology_v(lexer* p)
 {
 }
 
-sflow_rheology_v::~sflow_rheology_v()
-{
-}
-
 void sflow_rheology_v::u_source(lexer *p, fdm2D *b, slice &u, slice &v)
 {
 }

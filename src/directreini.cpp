@@ -71,10 +71,6 @@ directreini::directreini(lexer* p, fdm *a):gradient(p),vertice(p), nodeflag(p),d
 	
 }
 
-directreini::~directreini()
-{
-}
-
 void directreini::start(lexer* p, fdm* a, ghostcell* pgc, field& b, ioflow* pflow)
 {
     starttime=pgc->timer();

@@ -35,10 +35,6 @@ EARSM_kw_IM1::EARSM_kw_IM1(lexer* p, fdm* a, ghostcell *pgc): komega_IM1(p,a,pgc
 	gcval_earsm=25;
 }
 
-EARSM_kw_IM1::~EARSM_kw_IM1()
-{
-}
-
 void EARSM_kw_IM1::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff,solver* psolv, ioflow* pflow, vrans *pvrans)
 {
 	komega_IM1::start(p,a,pgc,pconvec,pdiff,psolv,pflow,pvrans);

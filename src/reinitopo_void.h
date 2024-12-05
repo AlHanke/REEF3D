@@ -29,7 +29,7 @@ class reinitopo_void : public reinitopo
 {
 public:
 	reinitopo_void();
-	virtual ~reinitopo_void();
+	virtual ~reinitopo_void() = default;
 	virtual void start(lexer*,fdm*,ghostcell*,field&);
 };
 

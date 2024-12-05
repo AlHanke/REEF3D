@@ -33,7 +33,7 @@ class bedload_einstein : public bedload, public increment
 public:
 
     bedload_einstein(lexer*);
-	virtual ~bedload_einstein();
+	virtual ~bedload_einstein() = default;
 	virtual void start(lexer*, ghostcell*, sediment_fdm*);
 
 private:

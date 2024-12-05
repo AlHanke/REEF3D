@@ -26,10 +26,6 @@ vorticity_void::vorticity_void(lexer *p, fdm *a)
 {
 }
 
-vorticity_void::~vorticity_void()
-{
-}
-
 void vorticity_void::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
 }

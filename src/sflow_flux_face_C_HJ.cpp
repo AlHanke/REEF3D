@@ -31,10 +31,6 @@ sflow_flux_face_C_HJ::sflow_flux_face_C_HJ(lexer *pp, fdm2D *bb)
     b=bb;
 }
 
-sflow_flux_face_C_HJ::~sflow_flux_face_C_HJ()
-{
-}
-
 void sflow_flux_face_C_HJ::u_flux(int ipol, slice& uvel, double &uflux1, double &uflux2)
 {
 	if(ipol==1)

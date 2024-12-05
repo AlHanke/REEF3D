@@ -34,7 +34,7 @@ class sflow_fluxlim_minmod : public sflow_fluxlim, public increment
 {
 public:
     sflow_fluxlim_minmod (lexer *);
-	virtual ~sflow_fluxlim_minmod();
+	virtual ~sflow_fluxlim_minmod() = default;
 
 	virtual double iphi(slice&,int,int,int,int);
 	virtual double jphi(slice&,int,int,int,int);

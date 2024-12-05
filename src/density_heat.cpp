@@ -47,10 +47,6 @@ density_heat::density_heat(lexer* p, heat *& ppheat) : epsi(p->F45*p->DXM), eps(
     psi = p->F45*(1.0/3.0)*(p->DRM+p->DSM+p->DTM);
 }
 
-density_heat::~density_heat()
-{
-}
-
 double density_heat::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
     double temp;

@@ -53,10 +53,6 @@ nhflow_print_Hs::nhflow_print_Hs(lexer *p, slice &Hs) : ETAsum(p), ETAmean(p), /
     }
 }
 
-nhflow_print_Hs::~nhflow_print_Hs()
-{
-}
-
 void nhflow_print_Hs::start(lexer *p, ghostcell *pgc, slice &eta, slice &Hs)
 {
     // RK3

@@ -146,10 +146,6 @@ wave_interface::wave_interface(lexer *p, ghostcell *pgc)
     pwave = new wave_lib_ssgw(p,pgc);
 }
 
-wave_interface::~wave_interface()
-{
-}
-
 double wave_interface::wave_u(lexer *p, ghostcell *pgc, double x, double y, double z)
 {
 

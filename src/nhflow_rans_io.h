@@ -37,7 +37,7 @@ class nhflow_rans_io : public nhflow_turbulence, public nhflow_strain
 {
 public:
     nhflow_rans_io(lexer*,fdm_nhf*);
-	virtual ~nhflow_rans_io();
+	virtual ~nhflow_rans_io() = default;
 
     virtual void print_3D(lexer*, fdm_nhf*, ghostcell*, std::vector<char>&, int&);
     virtual void ini(lexer*, fdm_nhf*, ghostcell*);

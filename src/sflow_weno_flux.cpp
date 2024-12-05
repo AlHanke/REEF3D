@@ -41,10 +41,6 @@ sflow_weno_flux::sflow_weno_flux(lexer* p):tttw(13.0/12.0),fourth(1.0/4.0),third
 
 }
 
-sflow_weno_flux::~sflow_weno_flux()
-{
-}
-
 void sflow_weno_flux::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice& vvel)
 {
     if(ipol==1)

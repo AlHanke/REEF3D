@@ -32,7 +32,7 @@ class sandslide_pde :  public sandslide, public bedslope
 {
 public:
     sandslide_pde(lexer*);
-    virtual ~sandslide_pde();
+    virtual ~sandslide_pde() = default;
 
 	virtual void start(lexer*,ghostcell*,sediment_fdm*);
 

@@ -63,10 +63,6 @@ hric::hric (lexer *p)
     }
 }
 
-hric::~hric()
-{
-}
-
 void hric::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     if(ipol==1)

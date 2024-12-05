@@ -35,7 +35,7 @@ class topo_relax : public increment
 {
 public:
     topo_relax(lexer*);
-    virtual ~topo_relax();
+    virtual ~topo_relax() = default;
 
 	virtual void start(lexer*,ghostcell*,sediment_fdm*);
     virtual double rf(lexer*,ghostcell*);

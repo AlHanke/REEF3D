@@ -32,7 +32,7 @@ class limo3 : public fluxlim, public increment
 public:
 
 	limo3 (lexer *);
-	virtual ~limo3();
+	virtual ~limo3() = default;
 
 	virtual double iphi(field&,int,int,int,int);
 	virtual double jphi(field&,int,int,int,int);

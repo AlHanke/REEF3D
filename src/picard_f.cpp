@@ -29,10 +29,6 @@ picard_f::picard_f(lexer *p) : gradient(p), epsi(p->F45*p->DXM)
 {
 }
 
-picard_f::~picard_f()
-{
-}
-
 void picard_f::volcalc(lexer *p, fdm *a, ghostcell *pgc, field& b)
 {
     double H = 0.0;

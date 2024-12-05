@@ -31,7 +31,7 @@ class wave_lib_piston_eta : public wave_lib_precalc, public wave_lib_parameters,
 {
 public:
     wave_lib_piston_eta(lexer*, ghostcell*);
-	virtual ~wave_lib_piston_eta();
+	virtual ~wave_lib_piston_eta() = default;
     
     double wave_horzvel(lexer*,double,double,double);
     

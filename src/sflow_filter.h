@@ -40,7 +40,7 @@ class sflow_filter : public increment
 {
 public:
 	sflow_filter(lexer*);
-	virtual ~sflow_filter();
+	virtual ~sflow_filter() = default;
 
     virtual void filter(lexer*, fdm2D*, ghostcell*);
 	virtual void filter1(lexer*, fdm2D*, ghostcell*);

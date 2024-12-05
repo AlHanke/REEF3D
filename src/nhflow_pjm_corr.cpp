@@ -54,10 +54,6 @@ nhflow_pjm_corr::nhflow_pjm_corr(lexer* p, fdm_nhf *d, ghostcell *pgc, patchBC_i
     gamma=0.5;
 }
 
-nhflow_pjm_corr::~nhflow_pjm_corr()
-{
-}
-
 void nhflow_pjm_corr::start(lexer *p, fdm_nhf *d, solver* psolv, ghostcell* pgc, ioflow *pflow, slice &WL,
                         double *UH, double *VH, double *WH, double alpha)
 {

@@ -74,9 +74,6 @@ momentum_RKLS3::momentum_RKLS3
     zeta << 0.0, -17.0/60.0, -5.0/12.0;
 }
 
-momentum_RKLS3::~momentum_RKLS3(){}
-
-
 void momentum_RKLS3::start(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, sixdof *p6dof, vector<net*>& pnet)
 {	
     // Set inflow 

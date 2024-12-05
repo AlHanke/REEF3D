@@ -31,7 +31,7 @@ class sediment_cds_hj : public sediment_exnerdisc, public increment
 {
 public:
 	sediment_cds_hj(lexer*);
-	virtual ~sediment_cds_hj();
+	virtual ~sediment_cds_hj() = default;
 
     virtual double sx(lexer*, slice&, double, double);
 	virtual double sy(lexer*, slice&, double, double);

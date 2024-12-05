@@ -45,7 +45,7 @@ class lexer : virtual public increment, public resize_class, public position, pu
 public:
 
 	lexer();
-	virtual ~lexer();
+	virtual ~lexer() = default;
 
 //-----functions------------------
 //---- setup

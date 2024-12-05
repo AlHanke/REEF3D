@@ -34,10 +34,6 @@ grid::grid(lexer *p)
     kmax=p->kmax;
 }
 
-grid::~grid()
-{
-}
-
 void grid::make_dgc(lexer* p)
 {
     p->dgc1_count=1;

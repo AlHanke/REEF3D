@@ -51,10 +51,6 @@ momentum_AB2::momentum_AB2(lexer *p, fdm *a, convection *pconvection, diffusion 
 	pflow=pioflow;
 }
 
-momentum_AB2::~momentum_AB2()
-{
-}
-
 void momentum_AB2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof, vector<net*>& pnet)
 {
 		

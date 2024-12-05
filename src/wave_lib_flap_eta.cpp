@@ -41,10 +41,6 @@ wave_lib_flap_eta::wave_lib_flap_eta(lexer *p, ghostcell *pgc) : wave_lib_parame
     cosgamma = cos((p->B105_1)*(PI/180.0));	
 }
 
-wave_lib_flap_eta::~wave_lib_flap_eta()
-{
-}
-
 double wave_lib_flap_eta::wave_u(lexer *p, double x, double y, double z)
 {
     double vel;

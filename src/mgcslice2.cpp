@@ -33,10 +33,6 @@ mgcslice2::mgcslice2(lexer *p)
     jmax=p->jmax;
 }
 
-mgcslice2::~mgcslice2()
-{
-}
-
 void mgcslice2::makemgc(lexer* p)
 {
 	p->Iarray(p->mgcsl2,imax*jmax);

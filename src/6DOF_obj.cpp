@@ -127,8 +127,4 @@ sixdof_obj::sixdof_obj(lexer *p, ghostcell *pgc, int number) : ddweno_f_nug(p), 
     }
     
 }
-
-sixdof_obj::~sixdof_obj()
-{
-}
     

@@ -31,7 +31,7 @@ class EARSM : private strain
 {
 public:
 	EARSM(lexer *,fdm*);
-	virtual ~EARSM();
+	virtual ~EARSM() = default;
 	virtual void sq(lexer*,fdm*);
 	virtual void invar();
 	virtual void beta(fdm*);

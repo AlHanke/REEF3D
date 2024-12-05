@@ -59,10 +59,6 @@ ptf_fsfbc::ptf_fsfbc(lexer *p, fdm *a, ghostcell *pgc) : Fx(p),Fy(p),Fz(p),Ex(p)
     
 }
 
-ptf_fsfbc::~ptf_fsfbc()
-{
-}
-
 void ptf_fsfbc::fsfdisc(lexer *p, fdm *a, ghostcell *pgc, slice &eta, slice &Fifsf, field &Fi)
 {
     // 3D

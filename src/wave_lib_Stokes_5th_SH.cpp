@@ -40,10 +40,6 @@ wave_lib_Stokes_5th_SH::wave_lib_Stokes_5th_SH(lexer *p, ghostcell *pgc) : wave_
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-wave_lib_Stokes_5th_SH::~wave_lib_Stokes_5th_SH()
-{
-}
-
 double wave_lib_Stokes_5th_SH::wave_u(lexer *p, double x, double y, double z)
 {
     double vel;

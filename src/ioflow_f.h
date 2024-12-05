@@ -39,7 +39,7 @@ class ioflow_f : public ioflow, private resize_class, public increment
 
 public:
 	ioflow_f(lexer*, ghostcell*,patchBC_interface*);
-	virtual ~ioflow_f();
+	virtual ~ioflow_f() = default;
 	virtual void gcio_update(lexer*,fdm*,ghostcell*);
 	virtual void inflow_walldist(lexer*,fdm*,ghostcell*,convection*,reini*,ioflow*);
 	virtual void discharge(lexer*,fdm*,ghostcell*);

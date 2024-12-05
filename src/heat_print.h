@@ -39,7 +39,7 @@ class heat_print : public heat, increment
 {
 public:
     heat_print(lexer*,fdm*);
-	virtual ~heat_print();
+	virtual ~heat_print() = default;
 
     void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&);
     void heat_ini(lexer*, fdm*, ghostcell*, heat*);

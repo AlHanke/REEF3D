@@ -42,10 +42,6 @@ sflow_potential_f::sflow_potential_f(lexer* p) : bc(p)
     gcval_pot=49;
 }
 
-sflow_potential_f::~sflow_potential_f()
-{
-}
-
 void sflow_potential_f::start(lexer *p, fdm2D *b, solver2D *psolv, ghostcell *pgc)
 {
     if(p->mpirank==0 )

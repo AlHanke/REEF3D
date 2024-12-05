@@ -35,7 +35,7 @@ class reduction_parker :  public bedshear_reduction, public bedslope
 {
 public:
     reduction_parker(lexer*);
-    virtual ~reduction_parker();
+    virtual ~reduction_parker() = default;
 
 	virtual void start(lexer*,ghostcell*,sediment_fdm*);
 

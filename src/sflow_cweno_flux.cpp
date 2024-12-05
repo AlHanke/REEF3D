@@ -47,10 +47,6 @@ sflow_cweno_flux::sflow_cweno_flux(lexer* p, fdm2D *b):tttw(13.0/12.0),fourth(1.
     pflux = new sflow_flux_face_C_HJ(p,b);
 }
 
-sflow_cweno_flux::~sflow_cweno_flux()
-{
-}
-
 void sflow_cweno_flux::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice& vvel)
 {
     if(ipol==1)

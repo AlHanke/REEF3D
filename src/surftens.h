@@ -29,7 +29,7 @@ class surftens : public gradient
 {
 public:
 	surftens(lexer*);
-	virtual ~surftens();
+	virtual ~surftens() = default;
 	void surface_tension(lexer*,fdm*,field&,int);
 
 private:

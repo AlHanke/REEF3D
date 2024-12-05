@@ -234,7 +234,3 @@ void driver::sflow_driver()
     // Start SFLOW
 	psflow->start(p,b,pgc);
 }
-
-driver::~driver()
-{
-}

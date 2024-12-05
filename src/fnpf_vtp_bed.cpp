@@ -44,10 +44,6 @@ fnpf_vtp_bed::fnpf_vtp_bed(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 	mkdir("./REEF3D_FNPF_VTP_BED",0777);
 }
 
-fnpf_vtp_bed::~fnpf_vtp_bed()
-{
-}
-
 void fnpf_vtp_bed::start(lexer *p, fdm_fnpf *c, ghostcell* pgc, ioflow *pflow)
 {	
     print2D(p,c,pgc);

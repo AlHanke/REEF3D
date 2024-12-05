@@ -30,7 +30,7 @@ class fnpf_cds6 : public fnpf_convection, public increment
 {
 public:
 	fnpf_cds6(lexer*);
-	virtual ~fnpf_cds6();
+	virtual ~fnpf_cds6() = default;
 
     virtual double fx(lexer*, field&, double, double);
 	virtual double fy(lexer*, field&, double, double);

@@ -30,10 +30,6 @@ fnpf_cds6::fnpf_cds6(lexer* p)
 {
 }
 
-fnpf_cds6::~fnpf_cds6()
-{
-}
-
 double fnpf_cds6::fx(lexer *p, field &f, double ivel1, double ivel2)
 {
     return (f(i+3,j,k) - 9.0*f(i+2,j,k) + 45.0*f(i+1,j,k) - 45.0*f(i-1,j,k) + 9.0*f(i-2,j,k) - f(i-3,j,k))

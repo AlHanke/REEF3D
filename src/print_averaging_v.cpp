@@ -37,11 +37,6 @@ print_averaging_v::print_averaging_v(lexer *p, fdm* a, ghostcell *pgc)
 
 }
 
-print_averaging_v::~print_averaging_v()
-{
-
-}
-
 void print_averaging_v::averaging(lexer *p, fdm *a, ghostcell *pgc, heat *pheat)
 {
 

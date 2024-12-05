@@ -38,7 +38,7 @@ class vorticity_f : public vorticity, public strain
 {
 public:
     vorticity_f(lexer*,fdm*);
-	virtual ~vorticity_f();
+	virtual ~vorticity_f() = default;
 
     void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&);
 

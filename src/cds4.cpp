@@ -63,10 +63,6 @@ cds4::cds4 (lexer *p)
     }
 }
 
-cds4::~cds4()
-{
-}
-
 void cds4::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     if(ipol==1)

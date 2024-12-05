@@ -76,10 +76,6 @@ sediment_exner::sediment_exner(lexer* p, ghostcell* pgc) : xvec(p),rhsvec(p),M(p
     psolv = new sflow_bicgstab(p,pgc);
 }
 
-sediment_exner::~sediment_exner()
-{
-}
-
 void sediment_exner::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 {   
     // eq.

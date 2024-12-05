@@ -38,7 +38,7 @@ class ddweno_nug_sig : public weno_nug_func
 public:
 
 	 ddweno_nug_sig(lexer*);
-	 ~ddweno_nug_sig();
+	 ~ddweno_nug_sig() = default;
 
 	 double ddwenox(double*, double);
 	 double ddwenoy(double*, double);

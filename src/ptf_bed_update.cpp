@@ -38,10 +38,6 @@ ptf_bed_update::ptf_bed_update(lexer *p, fdm *a, ghostcell *pgc)
     pconvec = new fnpf_cds4(p);
 }
 
-ptf_bed_update::~ptf_bed_update()
-{
-}
-
 void ptf_bed_update::bedbc(lexer *p, fdm *a, ghostcell *pgc, field &Fi)
 {
     double Fval;

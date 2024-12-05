@@ -34,10 +34,6 @@ weno3_nug_func::weno3_nug_func(lexer* p):epsilon(0.0),psi(1.0e-6)
     ini(p);
 }
 
-weno3_nug_func::~weno3_nug_func()
-{
-}
-
 void weno3_nug_func::ini(lexer* p)
 {
     if(iniflag==0)

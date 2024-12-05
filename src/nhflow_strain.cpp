@@ -30,10 +30,6 @@ nhflow_strain::nhflow_strain(lexer *p, fdm_nhf *d)	: nhflow_gradient(p),epsi(p->
     p->Darray(PK,p->imax*p->jmax*(p->kmax+2));
 }
 
-nhflow_strain::~nhflow_strain()
-{
-}
-
 void nhflow_strain::wallf_update(lexer *p, fdm_nhf *d, ghostcell *pgc, int *WALLF)
 {
 

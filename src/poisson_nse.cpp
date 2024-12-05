@@ -53,10 +53,6 @@ poisson_nse::poisson_nse(lexer * p, heat *&pheat, concentration *&pconc)
 	pd = new density_vof(p);
 }
 
-poisson_nse::~poisson_nse()
-{
-}
-
 void poisson_nse::start(lexer* p, fdm *a, field &press)
 {
 	n=0;

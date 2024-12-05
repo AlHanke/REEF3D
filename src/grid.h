@@ -32,7 +32,7 @@ class grid :  public increment
 public:
 
 	grid (lexer *);
-	virtual ~grid();
+	virtual ~grid() = default;
     
     // gcb
     void fillgcb1(lexer*);

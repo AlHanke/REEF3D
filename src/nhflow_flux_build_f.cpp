@@ -32,10 +32,6 @@ nhflow_flux_build_f::nhflow_flux_build_f(lexer *p, ghostcell *ppgc, patchBC_inte
     pBC = ppBC;
 }
 
-nhflow_flux_build_f::~nhflow_flux_build_f()
-{
-}
-
 void nhflow_flux_build_f::start_U(lexer* p, fdm_nhf *d, ghostcell *pgc)
 {
     // flux x-dir

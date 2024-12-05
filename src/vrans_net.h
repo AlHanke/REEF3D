@@ -45,7 +45,7 @@ public:
     typedef vector<vector<double> > MatrixVd;    
     
 	vrans_net(lexer*, ghostcell*);
-	virtual ~vrans_net();
+	virtual ~vrans_net() = default;
 
 	virtual void initialize_cfd(lexer*, fdm*, ghostcell*);	
 	virtual void start(lexer*, fdm*, ghostcell*, net*&, int);

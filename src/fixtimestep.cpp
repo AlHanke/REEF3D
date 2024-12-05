@@ -31,10 +31,6 @@ fixtimestep::fixtimestep(lexer* p)
 {
 }
 
-fixtimestep::~fixtimestep()
-{
-}
-
 void fixtimestep::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb)
 {
    	p->dt=p->N49;

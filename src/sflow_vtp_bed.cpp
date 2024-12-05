@@ -46,10 +46,6 @@ sflow_vtp_bed::sflow_vtp_bed(lexer *p, fdm2D *b)
     mkdir("./REEF3D_SFLOW_VTP_BED",0777);
 }
 
-sflow_vtp_bed::~sflow_vtp_bed()
-{
-}
-
 void sflow_vtp_bed::start(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
 {    
     pgc->gcsl_start4(p,b->depth,50);

@@ -32,7 +32,7 @@ class tvdvof : public fluxlim, public increment
 public:
 
 	tvdvof (lexer *);
-	virtual ~tvdvof();
+	virtual ~tvdvof() = default;
 
 	virtual double iphi(field&,int,int,int,int);
 	virtual double jphi(field&,int,int,int,int);

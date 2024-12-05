@@ -35,7 +35,7 @@ class nhflow_fsf_f : public nhflow_fsf, public increment
 {
 public:
     nhflow_fsf_f(lexer*, fdm_nhf*, ghostcell*,ioflow*,patchBC_interface*);
-	virtual ~nhflow_fsf_f();
+	virtual ~nhflow_fsf_f() = default;
     
     virtual void start(lexer*, fdm_nhf*, ghostcell*, ioflow*);
     virtual void ini(lexer*, fdm_nhf*, ghostcell*, ioflow*, double*, double*, double*);

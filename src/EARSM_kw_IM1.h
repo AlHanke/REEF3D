@@ -35,7 +35,7 @@ class EARSM_kw_IM1 : public komega_IM1, public EARSM
 
 public:
 	EARSM_kw_IM1(lexer *,fdm*,ghostcell*);
-	virtual ~EARSM_kw_IM1();
+	virtual ~EARSM_kw_IM1() = default;
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*, vrans*);
 	virtual void aniso(fdm*);
 	virtual double tau(fdm*);

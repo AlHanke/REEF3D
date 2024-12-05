@@ -79,10 +79,6 @@ wave_lib_irregular_2nd_b::wave_lib_irregular_2nd_b(lexer *p, ghostcell *pgc) : w
 
 }
 
-wave_lib_irregular_2nd_b::~wave_lib_irregular_2nd_b()
-{
-}
-
 // U -------------------------------------------------------------
 double wave_lib_irregular_2nd_b::wave_u(lexer *p, double x, double y, double z)
 {

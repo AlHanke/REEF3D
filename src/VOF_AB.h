@@ -39,7 +39,7 @@ class VOF_AB : public freesurface, gradient
 {
 public:
 	VOF_AB(lexer*, fdm*, ghostcell*,heat*);
-	virtual ~VOF_AB();
+	virtual ~VOF_AB() = default;
 	virtual void start(lexer*,fdm*,ghostcell*, convection*, solver*, ioflow*, reini*, particle_corr*,field&);
 	virtual void update(lexer*,fdm*,ghostcell*,field&);
 

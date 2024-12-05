@@ -37,10 +37,6 @@ bedshear::bedshear(lexer *p, turbulence *ppturb) : norm_vec(p), ks(p->S20*p->S21
     pturb=ppturb;
 }
 
-bedshear::~bedshear()
-{
-}
-
 // CFD
 void bedshear::taubed(lexer *p, fdm * a, ghostcell *pgc, sediment_fdm *s)
 {

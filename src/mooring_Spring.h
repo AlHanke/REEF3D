@@ -42,7 +42,7 @@ class mooring_Spring : public mooring
 {
 public:
 	mooring_Spring(int);
-	virtual ~mooring_Spring();
+	virtual ~mooring_Spring() = default;
 	
 	virtual void start(lexer*, ghostcell*);
 	virtual void initialize(lexer*, ghostcell*);

@@ -66,10 +66,6 @@ VOF_PLIC::VOF_PLIC
     ininorVecLS(p);
 }
 
-VOF_PLIC::~VOF_PLIC()
-{
-}
-
 
 void VOF_PLIC::start
 (

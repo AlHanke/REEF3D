@@ -115,10 +115,6 @@ wave_lib_ssgw::wave_lib_ssgw(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-wave_lib_ssgw::~wave_lib_ssgw()
-{
-}
-
 double wave_lib_ssgw::wave_eta(lexer *p, double x, double y)
 {
     // Transform x location to current position xcurr at time instance p->wavetime

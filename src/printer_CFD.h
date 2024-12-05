@@ -70,7 +70,7 @@ class printer_CFD : public printer, public increment
 
 public:
     printer_CFD(lexer*,fdm*,ghostcell*);
-    virtual ~printer_CFD();
+    virtual ~printer_CFD()=default;
     void start(lexer*,fdm*,ghostcell*,turbulence*,heat*,ioflow*,data*,concentration*,multiphase*,sediment*);
     void print_stop(lexer*,fdm*,ghostcell*,turbulence*,heat*,ioflow*,data*,concentration*,multiphase*,sediment*);
 

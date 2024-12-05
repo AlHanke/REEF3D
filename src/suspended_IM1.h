@@ -32,7 +32,7 @@ class suspended_IM1 : public suspended, public increment
 {
 public:
 	suspended_IM1(lexer *, fdm*);
-	virtual ~suspended_IM1();
+	virtual ~suspended_IM1() = default;
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*, sediment_fdm*);
 	virtual void ctimesave(lexer*, fdm*);
     

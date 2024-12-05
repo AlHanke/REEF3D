@@ -27,8 +27,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 net_sheet::net_sheet(int number, lexer *p):nNet(number){}
 
-net_sheet::~net_sheet(){}
-
 
 void net_sheet::initialize(lexer *p, fdm *a, ghostcell *pgc)
 {    

@@ -57,7 +57,7 @@ class print_interface : public printer, public increment
 
 public:
 	print_interface(lexer*,fdm*,ghostcell*);
-	virtual ~print_interface();
+	virtual ~print_interface() = default;
 	virtual void start(fdm*,lexer*,ghostcell*,turbulence*,heat*,ioflow*,solver*,data*,concentration*,sediment*);
 	
 

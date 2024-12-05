@@ -71,10 +71,6 @@ ptf_RK4::ptf_RK4(lexer *p, fdm *a, ghostcell *pgc) : ptf_fsfbc(p,a,pgc),
 
 }
 
-ptf_RK4::~ptf_RK4()
-{
-}
-
 void ptf_RK4::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection *pconvec, ioflow *pflow, reini *preini, onephase* poneph)
 {	
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);

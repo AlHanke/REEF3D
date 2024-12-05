@@ -34,7 +34,7 @@ class reduction_deyana :  public bedshear_reduction, public bedslope
 {
 public:
     reduction_deyana(lexer*);
-    virtual ~reduction_deyana();
+    virtual ~reduction_deyana() = default;
 
 	virtual void start(lexer*,ghostcell*,sediment_fdm*);
 

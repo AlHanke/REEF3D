@@ -26,8 +26,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 mooring_dynamic::mooring_dynamic(int number):beam(number),line(number)
 {}
 
-mooring_dynamic::~mooring_dynamic(){}
-
 void mooring_dynamic::start(lexer *p, ghostcell *pgc)
 {
 	// Set mooring time step

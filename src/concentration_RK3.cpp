@@ -36,10 +36,6 @@ concentration_RK3::concentration_RK3(lexer* p, fdm* a, ghostcell *pgc) : bc_conc
 	gcval_concentration=80;
 }
 
-concentration_RK3::~concentration_RK3()
-{
-}
-
 void concentration_RK3::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, diffusion* pdiff, turbulence *pturb, solver* psolv, ioflow* pflow)
 {
     

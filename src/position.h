@@ -33,7 +33,7 @@ class position : virtual public increment
 {
 public:
     position(lexer*);
-	virtual ~position();
+	virtual ~position() = default;
     
     // xyz
     double pos_x();

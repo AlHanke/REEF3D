@@ -41,7 +41,7 @@ class hypre_struct_fnpf : public solver_fnpf, public increment
 public:
 
 	hypre_struct_fnpf(lexer*,ghostcell*,int,int);
-	virtual ~hypre_struct_fnpf();
+	virtual ~hypre_struct_fnpf() = default;
 
     virtual void startF(lexer*, ghostcell*, double*, double*, double*, int);
     

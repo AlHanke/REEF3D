@@ -45,7 +45,7 @@ public:
     typedef Eigen::Matrix<double,3,Eigen::Dynamic> Matrix3Xd;
 	
     fsi_strip(lexer*,int);
-	virtual ~fsi_strip();
+	virtual ~fsi_strip() = default;
 	virtual void start(lexer*,fdm*,ghostcell*,double);
 	virtual void initialize(lexer*,fdm*,ghostcell*,turbulence*);
     

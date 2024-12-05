@@ -34,7 +34,7 @@ class wave_lib_hdc : public wave_lib_precalc, public wave_lib_parameters, virtua
 {
 public:
     wave_lib_hdc(lexer*, ghostcell*);
-	virtual ~wave_lib_hdc();
+	virtual ~wave_lib_hdc() = default;
     
     virtual double wave_u(lexer*,double,double,double);
     virtual double wave_v(lexer*,double,double,double);

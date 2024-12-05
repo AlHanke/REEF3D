@@ -29,10 +29,6 @@ komega_bc::komega_bc(lexer* p):roughness(p)
     kappa=0.4;
 }
 
-komega_bc::~komega_bc()
-{
-}
-
 void komega_bc::bckomega_start(lexer* p, fdm* a, field& kin, field& eps, int gcval)
 {
 	int q;

@@ -32,7 +32,7 @@ class particle_pls : public particle_corr, public norm_vec, public boundarycheck
 {
 public:
 	particle_pls(lexer*, fdm*, ghostcell*);
-	virtual ~particle_pls();
+	virtual ~particle_pls() = default;
 	virtual void start(lexer*,fdm*,ghostcell*,ioflow*);
 	void advect(lexer*,fdm*,ghostcell*,double**,int*,int);
 	void seed(lexer*,fdm*,ghostcell*,double,double);

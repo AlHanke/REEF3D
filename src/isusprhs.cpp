@@ -34,10 +34,6 @@ isusprhs::isusprhs(lexer *p)
     ws=1.1*(rhosed/rhowat-1.0)*gi*d50*d50;
 }
 
-isusprhs::~isusprhs()
-{
-}
-
 void isusprhs::isuspsource(lexer* p,fdm* a,field& conc)
 {
     count=0;

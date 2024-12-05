@@ -41,11 +41,6 @@ fnpf_laplace_cds4::fnpf_laplace_cds4(lexer *p)
 }
 
 
-fnpf_laplace_cds4::~fnpf_laplace_cds4()
-{
-}
-
-
 void fnpf_laplace_cds4::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, fnpf_fsf *pf, double *f, slice &Fifsf)
 {
     // see p. 1130-1132

@@ -35,7 +35,7 @@ class gradient : virtual public increment
 public:
 
 	gradient(lexer*);
-	 ~gradient();
+	 ~gradient() = default;
 
 
 

@@ -37,7 +37,7 @@ class LES_WALE : public LES
 {
 public:
 	LES_WALE(lexer *, fdm*);
-	virtual ~LES_WALE();
+	virtual ~LES_WALE() = default;
 	virtual void start(lexer*, fdm*, ghostcell*, convection*, diffusion*, solver*, ioflow*, vrans*);
 	virtual void ktimesave(lexer*, fdm*, ghostcell*);
 	virtual void etimesave(lexer*, fdm*, ghostcell*);

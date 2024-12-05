@@ -33,7 +33,7 @@ class sflow_flux_HJ_CDS : public sflow_flux, public increment
 public:
 
 	sflow_flux_HJ_CDS (lexer *p);
-	virtual ~sflow_flux_HJ_CDS();
+	virtual ~sflow_flux_HJ_CDS() = default;
 
 	virtual void u_flux(int,slice&,double&,double&);
 	virtual void v_flux(int,slice&,double&,double&);

@@ -32,7 +32,7 @@ class weno_hj_df_nug : public convection, public weno_nug_func
 {
 public:
 	weno_hj_df_nug(lexer*);
-	virtual ~weno_hj_df_nug();
+	virtual ~weno_hj_df_nug() = default;
 
 	virtual void start(lexer*,fdm*,field&,int,field&,field&,field&);
 

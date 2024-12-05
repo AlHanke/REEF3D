@@ -39,10 +39,6 @@ bicgstab_ijk::bicgstab_ijk(lexer* p, fdm *a, ghostcell *pgc):epsi(1e-19)
     p->Darray(rhs,p->imax*p->jmax*p->kmax);
 }
 
-bicgstab_ijk::~bicgstab_ijk()
-{
-}
-
 void bicgstab_ijk::setup(lexer* p, ghostcell* pgc, int var)
 {
 }

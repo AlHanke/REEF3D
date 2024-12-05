@@ -96,10 +96,6 @@ benchmark_TaylorGreen::benchmark_TaylorGreen(lexer *p, fdm *a) : gradient(p), vx
 
 }
 
-benchmark_TaylorGreen::~benchmark_TaylorGreen()
-{
-}
-
 void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec )
 {
 	
@@ -589,10 +585,6 @@ benchmark_TaylorGreen::benchmark_TaylorGreen(lexer *p, fdm *a) : gradient(p)
         print<<"time \t epsilon "<<endl;
         print.close();
     }
-}
-
-benchmark_TaylorGreen::~benchmark_TaylorGreen()
-{
 }
 
 void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec )

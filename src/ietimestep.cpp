@@ -31,10 +31,6 @@ ietimestep::ietimestep(lexer* p):epsi(1.0e-19),c0_orig(p->N47)
 {
 }
 
-ietimestep::~ietimestep()
-{
-}
-
 void ietimestep::start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
 {
     p->umax=p->vmax=p->wmax=p->viscmax=irsm=jrsm=krsm=0.0;

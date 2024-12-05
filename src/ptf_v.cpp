@@ -26,10 +26,6 @@ ptf_void::ptf_void()
 {
 }
 
-ptf_void::~ptf_void()
-{
-}
-
 void ptf_void::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection *pconvec, ioflow *pflow, reini *preini, onephase* poneph)
 {	
 	

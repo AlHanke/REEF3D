@@ -43,10 +43,6 @@ iweno_hj_df_nug::iweno_hj_df_nug(lexer *p)
     pflux = new flux_HJ_CDS2_vrans(p);
 }
 
-iweno_hj_df_nug::~iweno_hj_df_nug()
-{
-}
-
 void iweno_hj_df_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     uf=vf=wf=0;

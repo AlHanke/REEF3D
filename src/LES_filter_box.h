@@ -34,7 +34,7 @@ class LES_filter_box : public LES_filter, public strain
 {
 public:
 	LES_filter_box(lexer *, fdm*);
-	virtual ~LES_filter_box();
+	virtual ~LES_filter_box() = default;
     
 	virtual void start(lexer*, fdm*, ghostcell*,field&,field&,field&,int);
 

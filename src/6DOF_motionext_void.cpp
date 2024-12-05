@@ -28,10 +28,6 @@ Authors: Hans Bihs
 sixdof_motionext_void::sixdof_motionext_void(lexer *p, ghostcell *pgc)
 {
 }
-    
-sixdof_motionext_void::~sixdof_motionext_void()
-{
-}
 
 void sixdof_motionext_void::ini(lexer *p, ghostcell *pgc)
 {

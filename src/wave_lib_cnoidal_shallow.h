@@ -33,7 +33,7 @@ class wave_lib_cnoidal_shallow : public wave_lib_precalc, public wave_lib_parame
 {
 public:
     wave_lib_cnoidal_shallow(lexer*, ghostcell*);
-	virtual ~wave_lib_cnoidal_shallow();
+	virtual ~wave_lib_cnoidal_shallow() = default;
 
     double wave_horzvel(lexer*,double,double,double);
     

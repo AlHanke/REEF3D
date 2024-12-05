@@ -29,10 +29,6 @@ reduction_deyemp::reduction_deyemp(lexer *p) : bedslope(p)
 {
 }
 
-reduction_deyemp::~reduction_deyemp()
-{
-}
-
 void reduction_deyemp::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double r=1.0;

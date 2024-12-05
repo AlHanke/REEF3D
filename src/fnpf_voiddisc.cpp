@@ -28,10 +28,6 @@ fnpf_voiddisc::fnpf_voiddisc(lexer* p)
 {
 }
 
-fnpf_voiddisc::~fnpf_voiddisc()
-{
-}
-
 double fnpf_voiddisc::fx(lexer *p, field &f, double ivel1, double ivel2)
 {
     return 0.0;

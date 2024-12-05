@@ -38,10 +38,6 @@ wave_lib_void::wave_lib_void(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-wave_lib_void::~wave_lib_void()
-{
-}
-
 // U -------------------------------------------------------------
 double wave_lib_void::wave_u(lexer *p, double x, double y, double z)
 {
