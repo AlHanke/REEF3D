@@ -27,13 +27,9 @@ Author: Hans Bihs
 
 void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice &Q, slice &bed, slice &eta)
 {
-	double eta_R,Uc,Un,Vc,Wc,eta_T,eta_M;
-    double posx,posy,posz,uvel,vvel,uabs,fx,fy,pval,fp;
-    double fxdir,fydir,dP,dQ;
-    double x=0.0;
-    double z=0.0;
+	double eta_R,Uc,eta_T,eta_M;
+    double uvel,vvel,uabs,fx,fy;
     // double fac1;
-    double fac,multiplier;
     int aa,bb,ii,jj;
         
         

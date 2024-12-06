@@ -102,7 +102,7 @@ void sixdof_obj::update_forcing_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc,
     
 double sixdof_obj::Hsolidface_nhflow(lexer *p, fdm_nhf *d, int aa, int bb, int cc)
 {
-    double psi, H, phival_fb,dirac;
+    double psi, H, phival_fb;
     
     if (p->j_dir==0)
     psi = p->X41*(1.0/1.0)*(p->DXN[IP]);

@@ -27,11 +27,8 @@ Author: Hans Bihs
 
 void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U, double *V, double *W, double *UH, double *VH, double *WH)
 {
-		double eta_R,Uc,Un,Vc,Wc,eta_T,eta_M,wsf;
-		double posx,posy,posz,uvel,vvel,uabs,fx,fy,pval,fp;
-        double fxdir,fydir;
-		double x=0.0;
-		double z=0.0;
+		double eta_R,Uc,eta_T,eta_M,wsf;
+		double fx,fy;
 		// double fac1;
         double fac,multiplier;
         int aa,bb;

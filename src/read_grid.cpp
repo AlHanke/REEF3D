@@ -28,9 +28,8 @@ Author: Hans Bihs
 
 void lexer::read_grid()
 {
-	int i,n;
+	int i;
 	int isurf,jsurf,ksurf,surfside,surfgroup,side1,side2,paraconum;
-	int para_active;
     char name[100];
 	int DM_M10;
     int iin;

@@ -66,8 +66,6 @@ gage_discharge_x::~gage_discharge_x()
 
 void gage_discharge_x::start(lexer *p, fdm *a, ghostcell *pgc)
 {
-    double epsi,H;
-
     for(n=0;n<p->P167;++n)
     q[n]=0.0;
 

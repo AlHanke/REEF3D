@@ -31,22 +31,19 @@ Author: Hans Bihs
 #define HY (fabs(d->hy(i,j))>1.0e-20?d->hy(i,j):1.0e20)
 
 void nhflow_sigma::omega_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL, double *U, double *V, double *W)
-{ 
-    double wval,Pval,Qval,Rval,fac;
+{
+    FLOOP
+    d->omegaF[FIJK] = 0.0;
     
-
-        FLOOP
-        d->omegaF[FIJK] = 0.0;
-        
-        
-        LOOP
-        {
-        d->omegaF[FIJKp1] =   d->omegaF[FIJK]
-                            
-                            - p->DZN[KP]*(d->detadt(i,j) 
-                            
-                            + (d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP]  + (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir);
-        }
+    
+    LOOP
+    {
+    d->omegaF[FIJKp1] =   d->omegaF[FIJK]
+                        
+                        - p->DZN[KP]*(d->detadt(i,j) 
+                        
+                        + (d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP]  + (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir);
+    }
     
       
     GC4LOOP

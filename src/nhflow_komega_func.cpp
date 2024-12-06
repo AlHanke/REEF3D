@@ -76,9 +76,6 @@ void nhflow_komega_func::ksource(lexer *p, fdm_nhf *d)
 
 void nhflow_komega_func::eddyvisc(lexer* p, fdm_nhf *d, ghostcell* pgc, vrans* pvrans)
 {
-	double factor;
-	double H;
-	double epsi = 1.6*p->DXM;
 	int n;
 	
 		LOOP
@@ -185,15 +182,14 @@ void nhflow_komega_func::kinsource(lexer *p, fdm_nhf *d, vrans* pvrans)
 void nhflow_komega_func::epssource(lexer *p, fdm_nhf *d, vrans* pvrans)
 {
     count=0;
-    double dirac;
 
-        LOOP
-        {
+    LOOP
+    {
 		d->M.p[count] += kw_beta * MAX(EPS[IJK],0.0);
 
         d->rhsvec.V[count] +=  kw_alpha * (MAX(EPS[IJK],0.0)/(KIN[IJK]>(1.0e-10)?(fabs(KIN[IJK])):(1.0e20)))*pk(p,d);
         ++count;
-        }
+    }
 
     
     //pvrans->omega_source(p,a,kin,eps);

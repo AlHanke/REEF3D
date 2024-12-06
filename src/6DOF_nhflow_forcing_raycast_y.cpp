@@ -30,7 +30,7 @@ void sixdof_obj::ray_cast_y(lexer *p, fdm_nhf *d, ghostcell *pgc, int ts, int te
 	double ys,ye,zs,ze;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Ry;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;

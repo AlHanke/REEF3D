@@ -122,8 +122,7 @@ void net_barQuasiStatic::screenForceCoeff
     // Drag and lift force coefficients from Kristiansen (2012)
     
     double a3 = 0.0129;
-    double a5 = 0.0151; 
-    double a7 = 0.0;
+    double a5 = 0.0151;
 
     double b2 = 1.2044; 
     double b4 = 0.1466;

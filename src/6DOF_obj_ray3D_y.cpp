@@ -28,17 +28,17 @@ Author: Hans Bihs
 
 void sixdof_obj::ray_cast_y(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 {
-	double ys,ye,zs,ze;
+	double zs,ze;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Ry;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
 	double PQx,PQy,PQz;
 	double Mx,My,Mz;
-	int is,ie,js,je,ks,ke;
-	int ir,checkin;
+	int is,ie,ks,ke;
+	int checkin;
 	double u,v,w;
 	double denom;
 	double psi = 1.0e-8*p->DXM;	

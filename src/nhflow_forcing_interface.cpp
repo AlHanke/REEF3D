@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 double nhflow_forcing::Hsolidface(lexer *p, fdm_nhf *d, int aa, int bb, int cc)
 {
-    double psi, H, phival_sf,dirac;
+    double psi, H, phival_sf;
     
     if (p->j_dir==0)
     psi = p->X41*(1.0/1.0)*(p->DXN[IP]);

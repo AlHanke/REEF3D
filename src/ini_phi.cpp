@@ -27,7 +27,6 @@ Author: Hans Bihs
 
 void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)
 {
-    double dx=p->DXM;
     double r;
     double phidiff, xdiff;
     p->phimean=p->F56;

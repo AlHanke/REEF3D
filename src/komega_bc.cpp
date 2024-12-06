@@ -325,9 +325,6 @@ void komega_bc::vrans_wall_law_kin(lexer *p,fdm *a,field &kin,field &eps)
 
 void komega_bc::vrans_wall_law_omega(lexer *p,fdm *a,field &kin,field &eps)
 {
-    double uvel,vvel,wvel;
-    double fac = 3.0;
-    
     n=0;
     LOOP
     {

@@ -159,7 +159,7 @@ void wave_lib_flap_double::parameters(lexer *p, ghostcell *pgc)
 
 void wave_lib_flap_double::read(lexer *p, ghostcell* pgc)
 {
-	double val,val0,val1,val2;
+	double val0,val1,val2;
     double sign1,sign2;
     double beta,s,sign;
 	int count;

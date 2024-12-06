@@ -127,7 +127,7 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
 {
 	double cj,cj_,cj_s,cj_ss;
 	double cc,cc_,cu,cd;
-    double costheta,gamma;
+    double costheta;
     // double Co,umax;
 	double gradx,grady,gradz;
 	

@@ -63,7 +63,7 @@ void ptf_fsf_update::fsfbc(lexer *p, fdm *a, ghostcell *pgc, slice &Fifsf, field
     Fi(i,j,k)=0.0;
 
     double lsv0,lsv1,lsv2,lsv3;
-    double fival,lsval,dx,dist;
+    double fival;
 // ------
     if(p->A323==1)
     FILOOP4
@@ -97,7 +97,7 @@ void ptf_fsf_update::fsfbc(lexer *p, fdm *a, ghostcell *pgc, slice &Fifsf, field
     }
    
     double x0,x1,x2,y0,y1,y2;
-    double x,y;
+    double x;
     double denom1,denom2,denom3,denom4,denom5,denom6;
 // ------
     if(p->A323==3)
@@ -162,7 +162,7 @@ void ptf_fsf_update::fsfbc1(lexer *p, fdm *a, ghostcell *pgc, slice &Fifsf, fiel
     Fi(i,j,k)=0.0;
 
     double lsv0,lsv1,lsv2,lsv3,lsv4;
-    double fival0,fival1,lsval,dx,dist;
+    double fival0,fival1;
 
     FILOOP4
     {

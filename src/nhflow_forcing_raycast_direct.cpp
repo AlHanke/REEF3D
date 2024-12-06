@@ -28,24 +28,12 @@ Author: Hans Bihs
 void nhflow_forcing::ray_cast_direct(lexer *p, fdm_nhf *d, ghostcell *pgc, int ts, int te)
 {
 	double ys,ye,zs,ze;
-	double Px,Py,Pz;
-	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
-	double PQx,PQy,PQz;
-	double PAx,PAy,PAz;
-	double PBx,PBy,PBz; 
-	double PCx,PCy,PCz;
-	double Mx,My,Mz;
     double xc,yc,zc;
 	int is,ie,js,je,ks,ke;
-	int ir;
-	double u,v,w;
-	double denom;	
 	int checkin;
-	double psi = 1.0e-8*p->DXM;
     int margin = 5;
     double dist;
 

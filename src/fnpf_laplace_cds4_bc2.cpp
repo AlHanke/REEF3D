@@ -49,10 +49,8 @@ void fnpf_laplace_cds4_bc2::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver 
     // see p. 1130-1132
     
     double sigxyz2;
-    double ab,abb,abbb,denom;
-    double fbxm,fbxp,fbym,fbyp;
-    double distfac,dist;
-    double xdelta,ydelta;
+    double ab,abb,denom;
+    double dist;
 
     
     // 4th-order

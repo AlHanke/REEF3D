@@ -124,7 +124,6 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
     double depth, ks, H, B, M, I;
     // double tau;
     double shearvel;
-    const double visc = p->W2;
     double ratio;
 
     // water depth

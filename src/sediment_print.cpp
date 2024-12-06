@@ -307,8 +307,6 @@ void sediment_f::print_2D_bedshear(lexer* p, ghostcell *pgc, std::vector<char> &
 {	
 	float ffn;
 	int iin;
-    double tau_eff,shearvel_eff,shields_eff;
-    double tau_crit, shearvel_crit, shields_crit;
     
     if(p->P79==1)
     {
@@ -412,8 +410,6 @@ void sediment_f::print_3D_bedshear(lexer* p, ghostcell *pgc, std::vector<char> &
 {	
 	float ffn;
 	int iin;
-    double tau_eff,shearvel_eff,shields_eff;
-    double tau_crit, shearvel_crit, shields_crit;
     
     if(p->P79==1)
     {

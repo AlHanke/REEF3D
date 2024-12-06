@@ -31,8 +31,7 @@ void mgcslice1::make_ggc(lexer* p)
 
 void mgcslice1::fill_ggc(lexer* p)
 {
-	int q,qq,n,nn,a;
-	int check;
+	int q,qq,n,a;
 
 	p->Iarray(p->ggcslmem1,imax*jmax);
 

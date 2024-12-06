@@ -27,11 +27,9 @@ Author: Tobias Martin
 
 void VOF_PLIC::iniphi(fdm*a, lexer* p, ghostcell* pgc)
 {
-
-double dx=p->DXM;
-double r;
-double phidiff, xdiff;
-p->phimean=p->F56;
+    double r;
+    double phidiff, xdiff;
+    p->phimean=p->F56;
 
 
     LOOP

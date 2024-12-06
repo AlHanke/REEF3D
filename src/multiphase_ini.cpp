@@ -31,7 +31,7 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, convecti
 {	
 	int istart, iend, jstart, jend, kstart, kend;
     int qn;
-	double xc,yc,zc,r;
+	double xc,zc,r;
 	
 	LOOP
 	ls1(i,j,k)=-1.0;

@@ -27,17 +27,16 @@ Author: Hans Bihs
 
 void nhflow_forcing::ray_cast_io(lexer *p, fdm_nhf *d, ghostcell *pgc, int ts, int te)
 {
-	double ys,ye,zs,ze;
+	double ys,ye;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Rz;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
 	double PQx,PQy,PQz;
 	double Mx,My,Mz;
-	int is,ie,js,je,ks,ke;
-	int ir;
+	int is,ie,js,je;
     int checkin;
 	double u,v,w;
 	double denom;

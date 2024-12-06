@@ -97,9 +97,8 @@ void nhflow_pjm_corr::presscorr(lexer* p, fdm_nhf *d, slice &WL, double *P, doub
 void nhflow_pjm_corr::rhs(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U, double *V, double *W, double alpha)
 {
     double U1,U2,V1,V2,fac;
-    double Um1,Up,Up1;
+    double Up;
     double Vp;
-    double dz1,dz2;
     double dUdz,dVdz;
     double z,z0,z1,z2;
     double f0,f1,f2;

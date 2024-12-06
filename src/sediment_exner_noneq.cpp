@@ -29,17 +29,16 @@ Author: Hans Bihs
 
 void sediment_exner::non_equillibrium_solve(lexer* p, ghostcell *pgc, sediment_fdm *s)
 {
-    double rhosed=p->S22;
-    double rhowat=p->W1;
-    double g=9.81;
-    double d50=p->S20;
-    double visc=p->W2;
-    double kappa=0.4;
-    double ks=p->S21*d50;
-    double Rstar=(rhosed-rhowat)/rhowat;
-    double Ds= d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
+    // double rhosed=p->S22;
+    // double rhowat=p->W1;
+    // double g=9.81;
+    // double d50=p->S20;
+    // double visc=p->W2;
+    // double kappa=0.4;
+    // double ks=p->S21*d50;
+    // double Rstar=(rhosed-rhowat)/rhowat;
+    // double Ds= d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
     // double Ti;
-    double time,starttime;
     
     double dqx,dqy;
     double ux1,vx1,ux2,vx2,uy1,vy1,uy2,vy2;

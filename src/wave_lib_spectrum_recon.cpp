@@ -81,7 +81,7 @@ void wave_lib_spectrum::recon_parameters(lexer *p, ghostcell *pgc)
 
 void wave_lib_spectrum::recon_read(lexer *p, ghostcell* pgc)
 {
-	double val,val0,val1,val2,val0n,val1n,val2n;
+	double val0,val1,val2,val0n,val1n,val2n;
 	int count;
 	
     const char name[] = "waverecon.dat";

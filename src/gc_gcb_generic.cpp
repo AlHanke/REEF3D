@@ -29,7 +29,6 @@ void ghostcell::gcb_generic(lexer* p,field& f,int *gcb_count, int ***gcb)
 { 
     int aa,bb,cc;
 	int r;
-    double gravity;
     
     for(n=0;n<6;++n)
     for(q=0;q<gcb_count[n];++q)

@@ -47,10 +47,6 @@ void vrans_f::sedpart_update(lexer *p, fdm *a, ghostcell *pgc, field &por, field
 
 void vrans_f::sed_update(lexer *p, fdm *a, ghostcell *pgc)
 {
-	int qn;
-    double zmin,zmax,slope;
-    double xs,xe;
-    
     if(p->mpirank==0)
     cout<<"Update sediment for VRANS"<<endl;
 	

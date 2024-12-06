@@ -28,7 +28,7 @@ Author: Hans Bihs, Edgar Chavez
 
 void fnpf_runup::fnpf_runup_calc(lexer* p, fdm_fnpf *c, ghostcell *pgc)
 {	
-    double ru_eta, ru_L, ru_k, ru_m, ru_u, ru_g, ru_H, ru_Hm0, ru_Tp, ru_s0p, ru_mLA, ru_mLB, ru_mLC, ru_h, ru_Ur, ru_gammaD; //Free Surface, Wave length, Wave number, VSHT adjusment coefficient, particle velocity, gravity acceleration, Wave height, peak deep water steepness, m Level A, m Level B, m Level C, water depth, Ursell number, Diameter-run-up increasing factor
+    double ru_eta, ru_L, ru_k, ru_m, ru_u, ru_g, ru_H, ru_Hm0, ru_Tp, ru_s0p, ru_mLA, ru_mLB, ru_h, ru_Ur, ru_gammaD; //Free Surface, Wave length, Wave number, VSHT adjusment coefficient, particle velocity, gravity acceleration, Wave height, peak deep water steepness, m Level A, m Level B, m Level C, water depth, Ursell number, Diameter-run-up increasing factor
     
     k=0; //**Initial sigma grid**
     //Calculation of wvae Height and Period

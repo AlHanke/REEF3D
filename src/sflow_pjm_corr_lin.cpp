@@ -176,9 +176,6 @@ void sflow_pjm_corr_lin::poisson(lexer*p, fdm2D* b, double alpha)
 {
     sqd = (1.0/(p->DXM*p->DXM*p->W1));
     
-    double fac=1.0;
-    
-    
     n=0;
     SLICELOOP4
 	{

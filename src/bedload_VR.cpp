@@ -40,7 +40,7 @@ bedload_VR::bedload_VR(lexer *p)
 
 void bedload_VR::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 {
-    double Ti,r;
+    double Ti;
 	double qb;
 	
 	SLICELOOP4

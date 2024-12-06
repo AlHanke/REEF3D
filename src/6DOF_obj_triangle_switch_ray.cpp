@@ -44,7 +44,6 @@ void sixdof_obj::triangle_switch_ray(lexer *p, ghostcell *pgc)
     
     double x0,x1,x2,y0,y1,y2,z0,z1,z2;
 	double xc,yc,zc;
-	double at,bt,ct,st;
 	double nx,ny,nz,norm;
     int tricount_local_max,sum;
     int cutnum;

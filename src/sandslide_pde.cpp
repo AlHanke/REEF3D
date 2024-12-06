@@ -117,12 +117,8 @@ void sandslide_pde::slide(lexer *p, ghostcell *pgc, sediment_fdm *s)
 
 void sandslide_pde::diff_update(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
-    double uvel,vvel;
-    double nx,ny,nz,norm;
-    double nx0,ny0;
-    double nz0,bx0,by0,gamma;
+    double bx0,by0,gamma;
     
-    int kmem=0;
     // double dH;
     
     k = s->bedk(i,j);

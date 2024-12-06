@@ -26,7 +26,7 @@ Author: Hans Bihs
 int position::ihalf(int a, int b)
 {
     int c;
-    double d,diff;
+    double d;
 
     c = b-a;
     

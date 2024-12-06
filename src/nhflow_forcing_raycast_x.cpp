@@ -30,7 +30,7 @@ void nhflow_forcing::ray_cast_x(lexer *p, fdm_nhf *d, ghostcell *pgc, int ts, in
 	double ys,ye,zs,ze;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Rx;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;

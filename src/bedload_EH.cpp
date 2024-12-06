@@ -42,7 +42,7 @@ bedload_EH::bedload_EH(lexer *p)
 
 void bedload_EH::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 {
-	double qb,qbx,qby,Ts,Tb;
+	double qb,Ts,Tb;
 	
 	SLICELOOP4
     {

@@ -57,13 +57,10 @@ void net_barDyn::vransCoupling(lexer *p, fdm *a, ghostcell *pgc)
     
     //- Save Lagrangian coordinates and forces
      
-    double xc,yc,zc,x0,x1,x2,y0,y1,y2,z0,z1,z2,nx,ny,nz,mag,area; 
+    double xc,yc,zc,x0,x1,x2,y0,y1,y2,z0,z1,z2,mag,area; 
    
     lagrangePoints.resize(tend);
     lagrangeForces.resize(tend);
-    
-    int index = 0;
-    int indexSide = 0;
     
     Vector3d side1, side2, normalVec;
     Vector3d v_rel, n_d, n_s, n_l;
@@ -259,8 +256,8 @@ void net_barDyn::triangulation(lexer *p, fdm *a, ghostcell *pgc)
 
     // Refine according to cell size DXM
 
-	double x01,x02,x12,y01,y02,y12,z01,z02,z12,mag;
-	double at,bt,ct,st;
+	double x01,x02,x12,y01,y02,y12,z01,z02,z12;
+	double at,bt,ct;
 	double nx,ny,nz;	
   
     tri_x.reserve(tend*4);
@@ -416,7 +413,7 @@ void net_barDyn::create_triangle
 	const double& nx_old, const double& ny_old, const double& nz_old
 )
 {
-	double nx,ny,nz,temp;
+	double nx,ny,nz;
 
 	vector<double> tri_x_new(3,0.0);
 	vector<double> tri_y_new(3,0.0);

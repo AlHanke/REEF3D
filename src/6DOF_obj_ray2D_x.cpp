@@ -30,17 +30,15 @@ void sixdof_obj::ray_cast_2D_x(lexer *p, ghostcell *pgc, int ts, int te)
 	double ys,ye,zs,ze;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Rx;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
 	double PQx,PQy,PQz;
 	double Mx,My,Mz;
 	int js,je,ks,ke;
-	int ir;
 	double u,v,w;
 	double denom;	
-	int insidecheck;
     int checkin;
 	double psi = 1.0e-8*p->DXM;
 

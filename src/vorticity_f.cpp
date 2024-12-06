@@ -34,15 +34,13 @@ vorticity_f::vorticity_f(lexer *p, fdm *a) : strain(p,a), omega1(p), omega2(p), 
 
 void vorticity_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
-    double wx,wy,wz;
-
-// xy plane
+    // xy plane
 
     LOOP
     {
-     omega1(i,j,k) = qij(p,a,2,3);
-     omega2(i,j,k) = qij(p,a,1,3);
-     omega3(i,j,k) = qij(p,a,2,1);
+        omega1(i,j,k) = qij(p,a,2,3);
+        omega2(i,j,k) = qij(p,a,1,3);
+        omega3(i,j,k) = qij(p,a,2,1);
     }
 
     pgc->start4(p,omega1,1);

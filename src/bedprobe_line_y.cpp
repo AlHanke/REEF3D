@@ -83,7 +83,6 @@ void bedprobe_line_y::start(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 {
 	
     char name[250];
-    double zval=0.0;
     int num,check;
 	
     num = p->count;

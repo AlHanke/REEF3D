@@ -27,17 +27,16 @@ Author: Hans Bihs
 
 void sixdof_obj::ray_cast_2D_y(lexer *p, ghostcell *pgc, int ts, int te)
 {
-	double ys,ye,zs,ze;
+	double zs,ze;
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry,Rz;
+	double Ry;
 	double Ax,Ay,Az;
 	double Bx,By,Bz;
 	double Cx,Cy,Cz;
 	double PQx,PQy,PQz;
 	double Mx,My,Mz;
-	int is,ie,js,je,ks,ke;
-	int ir,insidecheck;
+	int is,ie,ks,ke;
     int checkin;
 	double u,v,w;
 	double denom;

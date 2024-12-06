@@ -59,7 +59,7 @@ double wave_lib_solitary_3rd::wave_v(lexer *p, double x, double y, double z)
 
 double wave_lib_solitary_3rd::wave_horzvel(lexer *p, double x, double y, double z)
 {
-    double vel,eta,e,s,t,aval;
+    double vel,e,s,t,aval;
 	
 	teta = -(wC*(p->wavetime) - (x - X0));
 	
@@ -80,7 +80,7 @@ double wave_lib_solitary_3rd::wave_horzvel(lexer *p, double x, double y, double 
 
 double wave_lib_solitary_3rd::wave_w(lexer *p, double x, double y, double z)
 {
-    double vel,eta,e,s,t,aval;
+    double vel,e,s,t,aval;
 	
 	teta = -(wC*(p->wavetime) - (x - X0));
 	

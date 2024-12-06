@@ -26,9 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void sixdof_obj::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
-{
-	int negcount, poscount;
-    
+{   
     polygon_num=facount=0;
     
     NDBASELOOP

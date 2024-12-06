@@ -185,7 +185,7 @@ void ptf_laplace_cds2::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
                 if(p->A323==3)
                 {
                 double x0,x1,x2,y2;
-                double x,y,Fival;
+                double x,Fival;
                 double Lx0,Lx1,Lx2;
                 
                 teta = fabs(a->phi(i,j,k))/(fabs(a->phi(i-1,j,k))+fabs(a->phi(i,j,k))) + 0.0001*p->DXN[IP]/(fabs(a->phi(i-1,j,k))+fabs(a->phi(i,j,k)));
@@ -262,7 +262,7 @@ void ptf_laplace_cds2::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
                 if(p->A323==3)
                 {
                 double x0,x1,x2,y2;
-                double x,y,Fival;
+                double x,Fival;
                 double Lx0,Lx1,Lx2;
                 
                 teta = fabs(a->phi(i,j,k))/(fabs(a->phi(i+1,j,k))+fabs(a->phi(i,j,k))) + 0.0001*p->DXN[IP]/(fabs(a->phi(i+1,j,k))+fabs(a->phi(i,j,k)));
@@ -350,7 +350,7 @@ void ptf_laplace_cds2::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
                 if(p->A323==3)
                 {
                 double x0,x1,x2,y2;
-                double x,y;
+                double x;
                 double Lx0,Lx1,Lx2;
                 double denom1,denom2,denom3,denom4,denom5,denom6;
 

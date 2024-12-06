@@ -29,7 +29,6 @@ Author: Hans Bihs
 void fnpf_ini::fnpf_restart_mainheader(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
     ifstream mainhead;
-    int ii1,ii2;
     
     snprintf(name,sizeof(name),"./REEF3D_FNPF_STATE/REEF3D-FNPF_State_Mainheader.r3d");
     

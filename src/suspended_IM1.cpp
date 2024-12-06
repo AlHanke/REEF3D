@@ -59,7 +59,6 @@ void suspended_IM1::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec,
 void suspended_IM1::timesource(lexer* p, fdm* a, field& fn)
 {
     int count=0;
-    int q;
 
     LOOP
     {
@@ -67,7 +66,7 @@ void suspended_IM1::timesource(lexer* p, fdm* a, field& fn)
 
         a->rhsvec.V[count] += a->L(i,j,k) + concn(i,j,k)/DT;
 
-	++count;
+	    ++count;
     }
 }
 

@@ -103,7 +103,7 @@ void mooring_Catenary::print(lexer *p)
 
 void mooring_Catenary::buildLine(lexer *p)
 {
-	double d_xy,dl, segLen, alpha;
+	double d_xy, segLen, alpha;
     
     lms = L - FV/w;
     segLen = L/(H-1);

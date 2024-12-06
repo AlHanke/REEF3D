@@ -154,7 +154,6 @@ void komega_func::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
     {
     double sgs_val;
     double c_sgs=0.2;
-    double factor=1.0;
     
         LOOP
         {
@@ -220,7 +219,6 @@ void komega_func::kinsource(lexer *p, fdm* a, vrans* pvrans)
 void komega_func::epssource(lexer *p, fdm* a, vrans* pvrans, field &kin)
 {
     count=0;
-    double dirac;
 
         LOOP
         {

@@ -29,7 +29,7 @@ Author: Hans Bihs
 
 void force::force_calc(lexer* p, fdm *a, ghostcell *pgc)
 {
-    double ux,vy,wz,vel,pressure,density,viscosity;
+    double density,viscosity;
     double du,dv,dw;
     double xloc,yloc,zloc;
 	double xlocvel,ylocvel,zlocvel;

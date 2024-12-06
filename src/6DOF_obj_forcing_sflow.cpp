@@ -30,7 +30,7 @@ void sixdof_obj::update_forcing_sflow(lexer *p, ghostcell *pgc,
 {
     // Calculate forcing fields
     double H, uf, vf, wf;
-    double ef,efc;
+    // double ef,efc;
     
     SLICELOOP4
     {        

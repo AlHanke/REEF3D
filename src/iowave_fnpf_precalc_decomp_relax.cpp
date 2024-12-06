@@ -41,7 +41,6 @@ void iowave::wavegen_precalc_decomp_relax_fnpf(lexer *p, ghostcell *pgc)
          ETA: cos()
         */
 
-    double fsfloc;
     int qn;
 
 

@@ -248,8 +248,6 @@ void pjm_nse::wcorr(lexer* p, fdm* a, field& wvel,double alpha)
  
 void pjm_nse::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w,double alpha)
 {
-	double uvel,vvel,wvel;
-	
     count=0;
     FLUIDLOOP
     {

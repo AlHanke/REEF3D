@@ -3067,8 +3067,6 @@ void lexer::read_control()
 	int countB106=0;
 	int countB107=0;
     int countB108=0;
-    int countB231=0;
-    int countB232=0;
 	int countB240=0;
     int countB270=0;
     int countB274=0;

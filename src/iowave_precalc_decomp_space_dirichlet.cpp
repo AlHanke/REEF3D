@@ -26,7 +26,6 @@ Author: Hans Bihs
 
 void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
 {
-    double fsfloc;
     int qn;
 
     count=0;

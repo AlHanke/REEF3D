@@ -29,8 +29,6 @@ void initialize::inivofPLIC(lexer* p, fdm* a, ghostcell* pgc)
 {
 
     double dx=p->DXM;
-    double r;
-    double vofdiff, xdiff;
     
     p->phimean=p->F56;
 

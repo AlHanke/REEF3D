@@ -137,7 +137,6 @@ void bc_ikepsilon::bckeps_start(lexer* p, fdm* a, field& kin, field& eps,int gcv
 void bc_ikepsilon::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii, int jj, int kk, int cs, int bc, int id, double dist)
 {
     double uvel,vvel,wvel;
-    double zval;
     dist=0.5*p->DXM;
 
 	i=ii;

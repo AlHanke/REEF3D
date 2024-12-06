@@ -70,7 +70,7 @@ void nhflow_fsf_f::ini(lexer* p, fdm_nhf* d, ghostcell* pgc, ioflow* pflow, doub
     // FSF Box
     if(p->F72>0)
     {
-    int istart, iend, jstart, jend, kstart, kend;
+    int istart, iend, jstart, jend;
     
     for(int qn=0;qn<p->F72;++qn)
     {

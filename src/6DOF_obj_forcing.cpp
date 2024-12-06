@@ -291,7 +291,7 @@ void sixdof_obj::update_forcing(lexer *p, fdm *a, ghostcell *pgc,field& uvel, fi
 
 double sixdof_obj::Hsolidface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
-    double psi, H, phival_fb,dirac;
+    double psi, H, phival_fb;
 	
     psi = p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
 
@@ -316,7 +316,7 @@ double sixdof_obj::Hsolidface(lexer *p, fdm *a, int aa, int bb, int cc)
 
 double sixdof_obj::Hsolidface_t(lexer *p, fdm *a, int aa, int bb, int cc)
 {
-    double psi, H, phival_fb,dirac;
+    double psi, H, phival_fb;
 	
 
     if(p->j_dir==0)

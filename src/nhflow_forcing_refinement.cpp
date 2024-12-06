@@ -32,7 +32,6 @@ void nhflow_forcing::geometry_refinement(lexer *p, ghostcell *pgc)
 	double at,bt,ct,st;
 	double nx_old,ny_old,nz_old;	
     double A_triang,A;
-    double l0,l1,l2;
     double tridist;
 
     A=0.0;
@@ -265,7 +264,7 @@ void nhflow_forcing::create_triangle
 	const double& nx_old, const double& ny_old, const double& nz_old
 )
 {
-	double nx,ny,nz,temp;
+	double nx,ny,nz;
 	
 	vector<double> tri_x_new(3,0.0);
 	vector<double> tri_y_new(3,0.0);

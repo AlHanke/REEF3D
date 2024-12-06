@@ -28,7 +28,7 @@ void ghostcell::nse3(lexer *p, fdm *a, field &f, int gcv)
 {
     double nx,ny,nz,dnorm;
     double xp, yp, zp;
-    double lsv,val;
+    double lsv;
     
     WAIRLOOP
     f(i,j,k)=0.0;

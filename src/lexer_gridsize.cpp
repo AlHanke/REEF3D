@@ -24,9 +24,6 @@ Author: Hans Bihs
 
 void lexer::gridsize()
 {
-int ii,jj;
-
-
 // -------
     cellnum=0;
 

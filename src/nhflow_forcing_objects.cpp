@@ -94,7 +94,7 @@ void nhflow_forcing::objects_create(lexer *p, ghostcell *pgc)
 
 void nhflow_forcing::objects_allocate(lexer *p, ghostcell *pgc)
 {
-    double U,ds,phi,r,snum,trisum;
+    double U,ds,r,snum,trisum;
     
     entity_sum = p->A581 + p->A583 + p->A584 + p->A585 + p->A586 + p->A587 + p->A588 + p->A589;
 	tricount=0;

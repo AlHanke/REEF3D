@@ -26,10 +26,6 @@ Author: Hans Bihs
 
 void ghostcell::nse4(lexer *p, fdm *a, field &f, int gcv)
 {
-    double nx,ny,nz,dnorm;
-    double xp, yp, zp;
-    double lsv,val;
-    
     if(gcv>=40 && gcv<=45)
     {
     AIRLOOP

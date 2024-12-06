@@ -196,7 +196,6 @@ void vts3D::structureWrite(lexer *p, fdm_nhf *d, std::vector<char> &buffer, int 
 {
     float ffn;
     int iin;
-    double phase;
     double zcoor;
 
     //  XYZ

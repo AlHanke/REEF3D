@@ -27,12 +27,10 @@ Author: Hans Bihs
 
 void iowave::active_beach_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, double *Fi, double *Uin, slice &Fifsf, slice &eta)
 {
-        double eta_R,Uc,Un,Vc,Wc,eta_T,eta_M,wsf;
-		double posx,posy,posz,uvel,vvel,uabs,fx,fy,pval,fp;
-        double fxdir,fydir;
-		double x=0.0;
+        double eta_R,Uc,eta_T,eta_M,wsf;
+		double fx;
 		double z=0.0;
-		double fac1,fac,multiplier;
+		double fac,multiplier;
 		// int aa,bb;
 
 		// U / FI

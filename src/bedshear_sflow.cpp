@@ -80,8 +80,6 @@ void bedshear::taubed(lexer *p, fdm2D *b, ghostcell *pgc, sediment_fdm *s)
 
 void bedshear::taucritbed(lexer *p, fdm2D *b, ghostcell *pgc, sediment_fdm *s)
 {
-	double r;
-    
     SLICELOOP4
     {
     tauc = (p->S30*fabs(p->W22)*(p->S22-p->W1))*p->S20*s->reduce(i,j);

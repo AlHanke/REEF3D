@@ -28,8 +28,7 @@ Authors: Hans Bihs
 void sixdof_motionext_file_CoG::read_format_1(lexer *p, ghostcell *pgc)
 {
     char name[100];
-	double val,val0,val1;
-    double sign,beta,s;
+	double val;
 	int count;
 	
 	snprintf(name,sizeof(name),"6DOF_motion.dat");

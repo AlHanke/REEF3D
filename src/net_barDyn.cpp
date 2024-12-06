@@ -79,7 +79,7 @@ void net_barDyn::initialize(lexer *p, fdm *a, ghostcell *pgc)
 
 void net_barDyn::start(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen::Matrix3d quatRotMat)
 {
-    double starttime1 = pgc->timer();    
+    // double starttime1 = pgc->timer();    
 
 	//- Set net time step
 	double phi = 0.0;
@@ -547,7 +547,6 @@ Eigen::VectorXd net_barDyn::timeWeight(lexer* p)
     // 3rd-order finite difference weights for first derivative and varying time step
     
 	double c2, c3, c5;
-	int mn;	
 
 	int nd = 4;    
     double c1 = 1.0;

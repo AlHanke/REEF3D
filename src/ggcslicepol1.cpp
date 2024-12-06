@@ -26,7 +26,7 @@ Author: Hans Bihs
 void slice1::ggcpol(lexer* p)
 {
     double val=0.0;
-    int a,n,q,count;
+    int n,q,count;
 
 	 for(n=0;n<p->ggcslcount1;n++)
 	 {

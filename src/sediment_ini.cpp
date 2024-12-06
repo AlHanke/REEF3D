@@ -31,7 +31,7 @@ Author: Hans Bihs
 
 void sediment_f::ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
 {
-	double h,h1;
+	double h;
 
 	ILOOP
     JLOOP
@@ -100,14 +100,14 @@ void sediment_f::ini_sflow(lexer *p, fdm2D *b, ghostcell *pgc)
 void sediment_f::ini_parameters(lexer *p, ghostcell *pgc)
 {
     // Fredsøe, p.199
-    double rhosed=p->S22;
-    double rhowat=p->W1;
-    double g=9.81;
-    double d50=p->S20;
-    double visc=p->W2;
-    double Ls = p->S20;
-    double cd = 1.5;
-    double R = rhosed/rhowat-1.0;
+    const double rhosed=p->S22;
+    const double rhowat=p->W1;
+    const double g=9.81;
+    const double d50=p->S20;
+    // double visc=p->W2;
+    // double Ls = p->S20;
+    const double cd = 1.5;
+    const double R = rhosed/rhowat-1.0;
     
     if(p->S25==0)
     s->ws = p->S23;

@@ -73,9 +73,6 @@ nhflow_print_runup_max_gage_x::~nhflow_print_runup_max_gage_x()
 
 void nhflow_print_runup_max_gage_x::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, slice &f)
 {
-    double zval=0.0;
-    int check;
-
     //-------------------
     if(p->mpirank==0)
     {

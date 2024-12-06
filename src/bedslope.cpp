@@ -40,7 +40,7 @@ void bedslope::slope_weno(lexer *p, ghostcell *pgc, sediment_fdm *s, field &topo
     double uvel,vvel;
     double nx,ny,nz,norm;
     double nx0,ny0,nx1,ny1,nz1;
-    double nz0,bx0,by0;
+    double nz0;
     
     SLICELOOP4
     {

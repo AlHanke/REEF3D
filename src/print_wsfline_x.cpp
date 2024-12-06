@@ -78,9 +78,7 @@ print_wsfline_x::~print_wsfline_x()
 
 void print_wsfline_x::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 {
-	
     char name[250];
-    double zval=0.0;
     int num,check;
 	
     num = p->count;

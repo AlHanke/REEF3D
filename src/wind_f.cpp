@@ -56,7 +56,7 @@ void wind_f::wind_forcing_nhf_x(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U,
     {
     F[IJK] += WL(i,j)*(p->W3/p->W1)*Cd*p->A571_u*p->A571_u*cosa;
     
-    double drag = WL(i,j)*(p->W3/p->W1)*Cd*p->A571_u*p->A571_u*cosa;
+    // double drag = WL(i,j)*(p->W3/p->W1)*Cd*p->A571_u*p->A571_u*cosa;
     
     //if(drag!=drag)
     //cout<<"DRAGL: "<<drag<<" "<<WL(i,j)<<endl;

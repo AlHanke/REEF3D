@@ -28,29 +28,28 @@ Author: Hans Bihs
 void initialize::droplet_ini(lexer* p, fdm *a, ghostcell* pgc)
 {
 
-double dx=p->DXM;
-double r;
-double diff = fabs(p->I58_2-p->F58_4)>1.0e-9?p->I58_2-p->F58_4 : 1.0e20;
+    double r;
+    double diff = fabs(p->I58_2-p->F58_4)>1.0e-9?p->I58_2-p->F58_4 : 1.0e20;
 
-if(p->F58_4>0.0)
-{
+    if(p->F58_4>0.0)
+    {
 
-	WLOOP
-	{
-    r = sqrt( pow(p->XP[IP]-p->F58_1,2.0)+pow(p->YP[JP]-p->F58_2,2.0)+pow(p->ZP[KP]-p->F58_3,2.0));
-
-         if(r<=p->F58_4)
+        WLOOP
         {
-        a->w(i,j,k)=p->I58_1;
-        }
+        r = sqrt( pow(p->XP[IP]-p->F58_1,2.0)+pow(p->YP[JP]-p->F58_2,2.0)+pow(p->ZP[KP]-p->F58_3,2.0));
 
-        if(r<=p->I58_2 && r>p->F58_4)
-        {
-        a->w(i,j,k)=p->I58_1 - p->I58_1*(r-p->F58_4)/(diff);
+            if(r<=p->F58_4)
+            {
+            a->w(i,j,k)=p->I58_1;
+            }
+
+            if(r<=p->I58_2 && r>p->F58_4)
+            {
+            a->w(i,j,k)=p->I58_1 - p->I58_1*(r-p->F58_4)/(diff);
+            }
         }
-	}
-}
-	pgc->start3(p,a->w,12);
+    }
+    pgc->start3(p,a->w,12);
 
 
 

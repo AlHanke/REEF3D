@@ -26,8 +26,6 @@ Author: Hans Bihs
 
 void nhflow_forcing::rotate_triangle(lexer* p, int ts, int te)
 {
-    double beta,xval,yval;
-
 	for(int qr=ts;qr<te;++qr)
 	{
 		rotation(tri_x[qr][0],tri_y[qr][0],tri_z[qr][0],phi,theta,psi);

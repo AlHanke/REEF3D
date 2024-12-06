@@ -215,7 +215,6 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
     patch[qq]->counter=0;
     
     // line
-    int count=0;
     for(qn=0;qn<p->B440;++qn)
     {
         

@@ -185,10 +185,10 @@ void suspended_RK3::bcsusp_start(lexer* p, fdm* a,ghostcell *pgc, sediment_fdm *
 
 void suspended_RK3::fillconc(lexer* p, fdm* a, sediment_fdm *s)
 {
-    double dist;
-    double d50=p->S20;
-    double adist=0.5*d50;
-    double deltab=3.0*d50;
+    // double dist;
+    // double d50=p->S20;
+    // double adist=0.5*d50;
+    // double deltab=3.0*d50;
 
     double cx,cy;
     

@@ -33,10 +33,8 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
 	double at,bt,ct,st;
 	double nx,ny,nz,norm;
 	double A_triang,A;
-	double p_int,rho_int,nu_int,enu_int,u_int,v_int,w_int;
-	double du,dv,dw, dudx, dudy, dudz, dvdx, dvdy, dvdz, dwdx, dwdy, dwdz;
-	double dudxf, dudyf, dudzf, dvdxf, dvdyf, dvdzf, dwdxf, dwdyf, dwdzf;
-	double dudxb, dudyb, dudzb, dvdxb, dvdyb, dvdzb, dwdxb, dwdyb, dwdzb;
+	double p_int,rho_int,nu_int,enu_int;
+	double dudx, dudy, dudz, dvdx, dvdy, dvdz, dwdx, dwdy, dwdz;
 	double xlocvel,ylocvel,zlocvel,xlocp,ylocp,zlocp;
 	double Fx,Fy,Fz,Fp_x,Fp_y,Fp_z,Fv_x,Fv_y,Fv_z;
     double Xe_p,Ye_p,Ze_p,Xe_v,Ye_v,Ze_v;
@@ -141,11 +139,10 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
 		   
     // Add viscous stress contributions
         
-            double ustar, uplus, dist, value;
-            double vstar,vplus,wstar,wplus;
+            double dist;
+            double uplus, vplus, wplus;
             double uval, vval, wval;
             double kappa = 0.4;
-            double xip, yip, zip, zval;
             // double u_abs, tau, density;
             double ks;
             double dir;
@@ -303,7 +300,7 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
             j = p->posc_j(ylocvel);
             k = p->posc_k(zlocvel);
             
-            double delta = sqrt(pow(xc-xlocvel,2.0) + pow(yc-ylocvel,2.0) + pow(zc-zlocvel,2.0));
+            // double delta = sqrt(pow(xc-xlocvel,2.0) + pow(yc-ylocvel,2.0) + pow(zc-zlocvel,2.0));
             
                 
             nu_int  = p->ccipol4a(a->visc,xlocvel,ylocvel,zlocvel);

@@ -31,7 +31,7 @@ Author: Hans Bihs
 // NHFLOW
 void bedshear::taubed(lexer *p, fdm_nhf*d, ghostcell *pgc, sediment_fdm *s)
 {
-    double uabs,cf,manning,tau;
+    double uabs,tau;
     double density=p->W1;
     double U,V,W;
     
@@ -61,7 +61,6 @@ void bedshear::taubed(lexer *p, fdm_nhf*d, ghostcell *pgc, sediment_fdm *s)
         if(p->S16==6)
         {
         double Cval,wh;
-        double bedlevel,waterlevel;
         int count=0;
         U=V=wh=0.0;
         KLOOP
@@ -317,7 +316,7 @@ void bedshear::taubed(lexer *p, fdm_nhf*d, ghostcell *pgc, sediment_fdm *s)
 void bedshear::taucritbed(lexer *p, fdm_nhf* d, ghostcell *pgc, sediment_fdm *s)
 {
     
-	double r,density;
+	double density;
     
     SLICELOOP4
     {

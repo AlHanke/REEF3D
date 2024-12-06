@@ -32,10 +32,7 @@ Author: Hans Bihs
 #define WLVL (fabs(WL(i,j))>0.00005?WL(i,j):1.0e20)
 
 void nhflow_sigma::sigma_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
-{
-    double wl,sigval;
-    double bx,by,ex,ey;
-    
+{    
     // calculate: Ex,Ey,Exx,Eyy
     // 3D
     if(p->i_dir==1 && p->j_dir==1)

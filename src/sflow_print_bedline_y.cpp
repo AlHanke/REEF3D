@@ -80,7 +80,6 @@ void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pf
 {
 	
     char name[250];
-    double zval=0.0;
     int num,check;
 	
     num = p->count;
@@ -205,8 +204,7 @@ void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pf
 
 void sflow_print_bedline_y::ini_location(lexer *p, fdm2D *b, ghostcell *pgc)
 {
-    int check,count;
-    
+    int count;
     
     for(q=0;q<p->P124;++q)
     {

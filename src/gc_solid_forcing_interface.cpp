@@ -26,7 +26,7 @@ Authors: Tobias Martin, Ahmet Soydan, Hans Bihs
 
 double ghostcell::Hsolidface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
-    double psi, H, phival_sf,dirac;
+    double psi, H, phival_sf;
     
     //cout<<"p->topoforcing: "<<p->topoforcing<<" p->toporead: "<<p->toporead<<endl;
     
@@ -66,7 +66,7 @@ double ghostcell::Hsolidface(lexer *p, fdm *a, int aa, int bb, int cc)
 
 double ghostcell::Hsolidface_t(lexer *p, fdm *a, int aa, int bb, int cc)
 {
-    double psi, H, phival_sf,dirac;
+    double psi, H, phival_sf;
 	
     psi = 0.5*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
 

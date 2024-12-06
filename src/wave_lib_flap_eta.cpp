@@ -110,7 +110,7 @@ void wave_lib_flap_eta::parameters(lexer *p, ghostcell *pgc)
 
 void wave_lib_flap_eta::read(lexer *p, ghostcell* pgc)
 {
-	double val,val0,val1;
+	double val0,val1;
 	int count;
 	
 	char name[] = "wavemaker_eta.dat";

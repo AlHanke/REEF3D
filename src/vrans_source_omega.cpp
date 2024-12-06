@@ -31,7 +31,6 @@ void vrans_f::omega_source(lexer *p, fdm *a, field &kin, field &eps)
     double uvel,vvel,wvel,uu;
     double por;
     double kinf,winf;
-    double ke_c_2e=1.92;
     
     count=0;
 	if(p->B295==1)

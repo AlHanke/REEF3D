@@ -142,7 +142,6 @@ int iowave::intriangle(lexer *p, double Ax, double Ay, double Bx, double By, dou
 {
 	double Px,Py,Pz;
 	double Qx,Qy,Qz;
-	double Rx,Ry;
 	double PQx,PQy,PQz;
 	
 	double Mx,My;

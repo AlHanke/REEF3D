@@ -291,7 +291,6 @@ void vtu3D::structureWrite(lexer *p, fdm_nhf *d, std::vector<char> &buffer, int 
 {
     float ffn;
     int iin;
-    double phase=0.0;
     double zcoor;
 
     //  XYZ

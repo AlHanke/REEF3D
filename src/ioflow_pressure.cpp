@@ -80,8 +80,7 @@ void ioflow_f::pressure_inlet(lexer *p, fdm *a, ghostcell *pgc)
 void ioflow_f::pressure_outlet(lexer *p, fdm *a, ghostcell *pgc)
 {
     double pval=0.0;
-    double diff;
-    double eps,H,roval;
+    double eps,H;
     
     /*
     if(p->count!=iter0)

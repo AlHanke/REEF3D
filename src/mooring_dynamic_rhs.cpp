@@ -110,7 +110,7 @@ void mooring_dynamic::setFieldBC(Matrix3Xd& c_, Matrix3Xd& cdot_, Matrix4Xd& q_,
     if (ind==0)
     {
         double delta_tm = t_mooring - t_mooring_n;
-        double tau = time - t_mooring_n;
+        // double tau = time - t_mooring_n;
 
         // Quadratic interpolation
         //a_O = 1.0/(1.0/2.0*delta_tm*delta_tm)*(fixPoint - c_moor_n.col(Ne) - cdot_n.col(Ne)*delta_tm);

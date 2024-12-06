@@ -28,12 +28,7 @@ void sixdof_obj::cylinder_x(lexer *p, ghostcell *pgc, int id)
 {
 	double U,ds,phi;
 	double xm,ym,zm,x1,x2,r;
-	int snum;
-	int vertice_mem, center1_num,center2_num;
-	double Ax,Ay,Az;
-	double Bx,By,Bz;
-	double Nx,Ny,Nz,norm;
-	
+	int snum;	
 
 	xm=p->X131_xc;
 	ym=p->X131_yc;
@@ -132,11 +127,6 @@ void sixdof_obj::cylinder_y(lexer *p, ghostcell *pgc, int id)
 	double U,ds,phi;
 	double xm,ym,zm,y1,y2,r;
 	int snum;
-	int vertice_mem, center1_num,center2_num;
-	double Ax,Ay,Az;
-	double Bx,By,Bz;
-	double Nx,Ny,Nz,norm;
-	
 	
 
 	xm=p->X132_xc;
@@ -235,10 +225,6 @@ void sixdof_obj::cylinder_z(lexer *p, ghostcell *pgc, int id)
 	double U,ds,phi;
 	double xm,ym,zm,z1,z2,r;
 	int snum;
-	int vertice_mem, center1_num,center2_num;
-	double Ax,Ay,Az;
-	double Bx,By,Bz;
-	double Nx,Ny,Nz,norm;
 	
 
 	xm=p->X133_xc;

@@ -138,7 +138,6 @@ void pjm_corr::presscorr(lexer* p, fdm* a, field& uvel, field& vvel, field& wvel
 void pjm_corr::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w,double alpha)
 {
     count=0;
-	double uvel,vvel,wvel;
 	
     NLOOP4
 	a->rhsvec.V[n]=0.0;

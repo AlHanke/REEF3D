@@ -78,9 +78,7 @@ nhflow_print_wsfline_y::~nhflow_print_wsfline_y()
 
 void nhflow_print_wsfline_y::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, slice &f)
 {
-	
     char name[250];
-    double zval=0.0;
     int num,check;
 	
     num = p->count;
@@ -211,7 +209,7 @@ void nhflow_print_wsfline_y::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow 
 
 void nhflow_print_wsfline_y::ini_location(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    int check,count;
+    int count;
     
     
     for(q=0;q<p->P56;++q)

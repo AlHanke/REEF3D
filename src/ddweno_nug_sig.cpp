@@ -39,8 +39,6 @@ double ddweno_nug_sig::ddwenox(double *F, double uw)
     DZ = p->DZP;
     uf=0;
     
-    int check=0;
-    
 	grad=0.0;
 
 	if(uw>0.0)

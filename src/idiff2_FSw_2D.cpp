@@ -30,7 +30,7 @@ void idiff2_FS_2D::diff_w(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field
 {
 	starttime=pgc->timer();
 	
-	double visc_ddx_p,visc_ddx_m,visc_ddy_p,visc_ddy_m;
+	double visc_ddx_p,visc_ddx_m;
     
 	count=0;
 
@@ -114,7 +114,7 @@ void idiff2_FS_2D::diff_w(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field
 {
 	starttime=pgc->timer();
 	
-	double visc_ddx_p,visc_ddx_m,visc_ddy_p,visc_ddy_m;
+	double visc_ddx_p,visc_ddx_m;
     
     WLOOP
     diff(i,j,k) = w_in(i,j,k);

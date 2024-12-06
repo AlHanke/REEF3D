@@ -27,9 +27,8 @@ Author: Hans Bihs
 
 void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, field &w)
 {
-		double eta_R,Uc,Un,Vc,Wc,eta_T,eta_M,wsf;
-		double posx,posy,posz,uvel,vvel,uabs,fx,fy,pval,fp;
-        double fxdir,fydir;
+		double eta_R,Uc,eta_T,eta_M,wsf;
+		double fy,pval;
 		double x=0.0;
 		double z=0.0;
 		double fac1,fac,multiplier;
@@ -405,7 +404,6 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         eta_M = wsf-p->wd; 
         eta_R = fabs(eta_M-eta_T);
         
-        double r=0.0;
         
         double wH=0.25*p->wH;
     

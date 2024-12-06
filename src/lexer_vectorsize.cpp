@@ -25,7 +25,6 @@ Author: Hans Bihs
 
 void lexer::vecsize(ghostcell *pgc)
 {
-    int n;
     gcbextra=10;
 	int gcbnum=0;
     int safetymargin=0;

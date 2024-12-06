@@ -125,8 +125,6 @@ void  ikepsilon::kinsource(lexer *p, fdm* a, vrans* pvrans)
 
 void  ikepsilon::epssource(lexer *p, fdm* a, vrans* pvrans)
 {
-	double epsi = 1.6*p->dx;
-	double dirac;
     count=0;
 
 	LOOP

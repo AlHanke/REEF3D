@@ -130,7 +130,7 @@ void fnpf_fsf_update::velcalc_sig(lexer *p, fdm_fnpf *c, ghostcell *pgc, double 
     
     
     // test: kfsfbc
-    double val;
+    // double val;
     
     
     SLICELOOP4
