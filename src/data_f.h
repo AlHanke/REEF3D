@@ -41,9 +41,9 @@ public:
 	virtual void start(lexer*, fdm*, ghostcell*);
 	
     void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&);
-	void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
-    void name_vtu(lexer*, fdm*, ghostcell*, stringstream&, int*, int &);
-    void offset_vtu(lexer*, int*, int &);
+	void name_ParaView_parallel(lexer*, fdm*, ghostcell*,ofstream&);
+    void name_ParaView(lexer*, fdm*, ghostcell*, stringstream&, int*, int &);
+    void offset_ParaView(lexer*, int*, int &);
 
 private:
 	

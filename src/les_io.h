@@ -52,9 +52,9 @@ public:
     virtual void epsget(int,int,int,double);
 	virtual void gcupdate(lexer*, fdm*, ghostcell*);
 
-    void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
-    void name_vtu(lexer*, fdm*, ghostcell*, stringstream&, int*, int &);
-    void offset_vtu(lexer*, int*, int &);
+    void name_ParaView_parallel(lexer*, fdm*, ghostcell*,ofstream&);
+    void name_ParaView(lexer*, fdm*, ghostcell*, stringstream&, int*, int &);
+    void offset_ParaView(lexer*, int*, int &);
     
     field1 uprime;
     field2 vprime;

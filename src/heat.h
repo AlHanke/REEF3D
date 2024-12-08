@@ -49,9 +49,9 @@ public:
 	virtual void heat_ini(lexer*, fdm*, ghostcell*,heat*)=0;
 	virtual double val(int,int,int)=0;
 
-    virtual void name_pvtu(lexer*, fdm*, ghostcell*, ofstream&)=0;
-    virtual void name_vtu(lexer*, fdm*, ghostcell*, stringstream&, int*, int &)=0;
-    virtual void offset_vtu(lexer*, int*, int &)=0;
+    virtual void name_ParaView_parallel(lexer*, fdm*, ghostcell*, ofstream&)=0;
+    virtual void name_ParaView(lexer*, fdm*, ghostcell*, stringstream&, int*, int &)=0;
+    virtual void offset_ParaView(lexer*, int*, int &)=0;
 };
 
 #endif

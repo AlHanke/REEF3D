@@ -93,14 +93,14 @@ void vorticity_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &
 	}
 }
 
-void vorticity_f::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
+void vorticity_f::name_ParaView_parallel(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 {
     result<<"<PDataArray type=\"Float32\" Name=\"vorticity x\"/>\n";
 	result<<"<PDataArray type=\"Float32\" Name=\"vorticity y\"/>\n";
 	result<<"<PDataArray type=\"Float32\" Name=\"vorticity z\"/>\n";
 }
 
-void vorticity_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
+void vorticity_f::name_ParaView(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"vorticity x\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
@@ -110,7 +110,7 @@ void vorticity_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &resul
     ++n;
 }
 
-void vorticity_f::offset_vtu(lexer *p, int *offset, int &n)
+void vorticity_f::offset_ParaView(lexer *p, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
 	++n;

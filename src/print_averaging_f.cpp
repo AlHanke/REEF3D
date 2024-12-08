@@ -81,7 +81,7 @@ void print_averaging_f::averaging(lexer *p, fdm *a, ghostcell *pgc, heat *pheat)
     }
 }
 
-void print_averaging_f::offset_vtu(lexer *p, int *offset, int &n)
+void print_averaging_f::offset_ParaView(lexer *p, int *offset, int &n)
 {
     // velocity
 	offset[n]=offset[n-1]+4*(p->pointnum)*3+4;
@@ -98,7 +98,7 @@ void print_averaging_f::offset_vtu(lexer *p, int *offset, int &n)
     }
 }
 
-void print_averaging_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
+void print_averaging_f::name_ParaView(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"velocity_mean\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
@@ -113,7 +113,7 @@ void print_averaging_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream 
     }
 }
 
-void print_averaging_f::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
+void print_averaging_f::name_ParaView_parallel(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 {
     result<<"<PDataArray type=\"Float32\" Name=\"velocity_mean\" NumberOfComponents=\"3\"/>\n";
     result<<"<PDataArray type=\"Float32\" Name=\"pressure_mean\"/>\n";

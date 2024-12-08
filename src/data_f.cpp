@@ -73,18 +73,18 @@ void data_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffe
     }
 }
 
-void data_f::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
+void data_f::name_ParaView_parallel(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 {
     result<<"<PDataArray type=\"Float32\" Name=\"data\"/>\n";
 }
 
-void data_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
+void data_f::name_ParaView(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"data\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
 }
 
-void data_f::offset_vtu(lexer *p, int *offset, int &n)
+void data_f::offset_ParaView(lexer *p, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
 	++n;

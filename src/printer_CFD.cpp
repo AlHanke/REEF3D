@@ -416,14 +416,14 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             offset[n]=offset[n-1]+4*(p->pointnum)*3+4;
             ++n;
             
-            pmean->offset_vtu(p,offset,n);
+            pmean->offset_ParaView(p,offset,n);
 
             // scalars
                 // pressure
                 offset[n]=offset[n-1]+4*(p->pointnum)+4;
                 ++n;
                 // k and eps
-                pturb->offset_vtu(p,offset,n);
+                pturb->offset_ParaView(p,offset,n);
                 // eddyv
                 offset[n]=offset[n-1]+4*(p->pointnum)+4;
                 ++n;
@@ -431,15 +431,15 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                 offset[n]=offset[n-1]+4*(p->pointnum)+4;
                 ++n;
                 // T
-                pheat->offset_vtu(p,offset,n);
+                pheat->offset_ParaView(p,offset,n);
                 // Multiphase
-                pmp->offset_vtu(p,offset,n);
+                pmp->offset_ParaView(p,offset,n);
                 // vorticity
-                pvort->offset_vtu(p,offset,n);
+                pvort->offset_ParaView(p,offset,n);
                 // data
-                pdata->offset_vtu(p,offset,n);
+                pdata->offset_ParaView(p,offset,n);
                 // concentration
-                pconc->offset_vtu(p,offset,n);
+                pconc->offset_ParaView(p,offset,n);
                 // rho
                 if(p->P24==1 && p->F300==0)
                 {
@@ -478,16 +478,16 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                 }
                 // sediment bedlaod
                 if(p->P76==1)
-                psed->offset_vtu_bedload(p,offset,n);
+                psed->offset_ParaView_bedload(p,offset,n);
                 // sediment parameters 1
                 if(p->P77==1)
-                psed->offset_vtu_parameter1(p,offset,n);
+                psed->offset_ParaView_parameter1(p,offset,n);
                 // sediment parameters 2
                 if(p->P78==1)
-                psed->offset_vtu_parameter2(p,offset,n);
+                psed->offset_ParaView_parameter2(p,offset,n);
                 // bed shear stress
                 if(p->P79>=1)
-                psed->offset_vtu_bedshear(p,offset,n);
+                psed->offset_ParaView_bedshear(p,offset,n);
                 // test
                 if(p->P23==1)
                 {
@@ -531,27 +531,27 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
         result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         
-        pmean->name_vtu(p,a,pgc,result,offset,n);
+        pmean->name_ParaView(p,a,pgc,result,offset,n);
 
         result<<"<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
 
-        pturb->name_vtu(p,a,pgc,result,offset,n);
+        pturb->name_ParaView(p,a,pgc,result,offset,n);
 
         result<<"<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         result<<"<DataArray type=\"Float32\" Name=\"phi\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
 
-        pheat->name_vtu(p,a,pgc,result,offset,n);
+        pheat->name_ParaView(p,a,pgc,result,offset,n);
         
-        pmp->name_vtu(p,a,pgc,result,offset,n);
+        pmp->name_ParaView(p,a,pgc,result,offset,n);
 
-        pvort->name_vtu(p,a,pgc,result,offset,n);
+        pvort->name_ParaView(p,a,pgc,result,offset,n);
 
-        pdata->name_vtu(p,a,pgc,result,offset,n);
+        pdata->name_ParaView(p,a,pgc,result,offset,n);
 
-        pconc->name_vtu(p,a,pgc,result,offset,n);
+        pconc->name_ParaView(p,a,pgc,result,offset,n);
 
         if(p->P24==1 && p->F300==0)
         {
@@ -590,16 +590,16 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
         }
         
         if(p->P76==1)
-        psed->name_vtu_bedload(p,pgc,result,offset,n);
+        psed->name_ParaView_bedload(p,pgc,result,offset,n);
         
         if(p->P77==1)
-        psed->name_vtu_parameter1(p,pgc,result,offset,n);
+        psed->name_ParaView_parameter1(p,pgc,result,offset,n);
 
         if(p->P78==1)
-        psed->name_vtu_parameter2(p,pgc,result,offset,n);
+        psed->name_ParaView_parameter2(p,pgc,result,offset,n);
 
         if(p->P79>=1)
-        psed->name_vtu_bedshear(p,pgc,result,offset,n);
+        psed->name_ParaView_bedshear(p,pgc,result,offset,n);
 
         if(p->P23==1)
         {
