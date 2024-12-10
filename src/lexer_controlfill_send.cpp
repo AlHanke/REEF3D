@@ -1211,7 +1211,7 @@ void lexer::ctrlsend()
     ictrl[ii] = Q61;
     ii++;
     ictrl[ii] = Q73;
-    dd++;
+    ii++;
     ictrl[ii] = Q101;
     ii++;
     dctrl[dd] = Q102;
@@ -2801,6 +2801,20 @@ void lexer::ctrlsend()
     ictrl[ii] = Q61_i[n];
 	ii++;
     }
+
+    for(n=0;n<Q73;++n)
+    {
+    dctrl[dd] = Q73_val[n];
+    dd++;
+	dctrl[dd] = Q73_dist[n];
+    dd++;
+	dctrl[dd] = Q73_b[n];
+    dd++;
+    dctrl[dd] = Q73_x[n];
+    dd++;
+	dctrl[dd] = Q73_y[n];
+    dd++;
+    }
     
     for(n=0;n<Q110;++n)
     {
@@ -2830,20 +2844,6 @@ void lexer::ctrlsend()
     dctrl[dd] = Q111_zs[n];
     dd++;
     dctrl[dd] = Q111_ze[n];
-    dd++;
-    }
-    
-    for(n=0;n<Q73;++n)
-    {
-    dctrl[dd] = Q73_val[n];
-    dd++;
-	dctrl[dd] = Q73_dist[n];
-    dd++;
-	dctrl[dd] = Q73_b[n];
-    dd++;
-    dctrl[dd] = Q73_x[n];
-    dd++;
-	dctrl[dd] = Q73_y[n];
     dd++;
     }
     

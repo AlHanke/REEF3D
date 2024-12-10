@@ -1207,7 +1207,7 @@ void lexer::ctrlrecv()
     Q61 = ictrl[ii];
 	ii++;
     Q73 = ictrl[ii];
-	dd++;
+	ii++;
     Q101 = ictrl[ii];
 	ii++;
     Q102 = dctrl[dd];
@@ -3892,6 +3892,12 @@ for(n=0;n<F369;++n)
             X315_t[n] = dctrl[dd]; 
             dd++;
         }
+    }
+
+    for(n=0;n<X320;++n)
+    {
+    X320_type[n] = ictrl[ii];
+    ii++;
     }
 
     for(n=0;n<X321;++n)
