@@ -594,6 +594,10 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 	++n;
     offset[n]=offset[n-1]+4*(p->cellnum)+4;
 	++n;
+    offset[n]=offset[n-1]+4*(p->cellnum)+4;
+	++n;
+    offset[n]=offset[n-1]+4*(p->cellnum)+4;
+	++n;
 
 	// end scalars
 	//---------------------------------------------
@@ -735,6 +739,10 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     result<<"<DataArray type=\"Float32\" Name=\"test4\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     result<<"<DataArray type=\"Float32\" Name=\"test5\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    ++n;
+    result<<"<DataArray type=\"Float32\" Name=\"test6\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    ++n;
+    result<<"<DataArray type=\"Float32\" Name=\"test7\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
 	result<<"</CellData>"<<endl;
     result<<"<Coordinates>"<<endl;
@@ -997,9 +1005,24 @@ void vtr3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 	result.write((char*)&iin, sizeof (int));
 	BASEREVLOOP
 	{
-	ffn=float(a->test5(i,j,k));
+	ffn=float(a->u(i,j,k));//test5
 	result.write((char*)&ffn, sizeof (float));
 	}
+    iin=4*(p->cellnum);
+	result.write((char*)&iin, sizeof (int));
+	BASEREVLOOP
+	{
+	ffn=float(a->solid(i,j,k));//test6
+	result.write((char*)&ffn, sizeof (float));
+	}
+    iin=4*(p->cellnum);
+	result.write((char*)&iin, sizeof (int));
+	BASEREVLOOP
+	{
+	ffn=float(a->fbh1(i,j,k));//test7
+	result.write((char*)&ffn, sizeof (float));
+	}
+
 
 	// Coordinates
 	// x

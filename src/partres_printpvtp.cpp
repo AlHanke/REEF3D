@@ -45,15 +45,18 @@ void partres::pvtp(lexer* p)
 	result<<"<FieldData>\n";
 	if(p->P16==1)
     {
-	result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime;
-    result<<"</DataArray>\n";
+        result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime;
+        result<<"</DataArray>\n";
 	}
 	result<<"</FieldData>\n";
 
 	result<<"<PPointData>\n";
 	result<<"<PDataArray type=\"Float32\" Name=\"Flag\"/>\n";
     if(p->P23==1)
-    result<<"<PDataArray type=\"Float32\" Name=\"Test\"/>\n";
+    {
+        result<<"<PDataArray type=\"Float32\" Name=\"Test\"/>\n";
+        result<<"<PDataArray type=\"Float32\" Name=\"Test2\"/>\n";
+    }
 	result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>\n";
 	result<<"<PDataArray type=\"Float32\" Name=\"radius\"/>\n";
     result<<"<DataArray type=\"Float32\" Name=\"fluid velocity\" NumberOfComponents=\"3\"/>\n";

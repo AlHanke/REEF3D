@@ -71,7 +71,7 @@ public:
 	field4 ro,dro,visc;
 	field4 phi,vof;
 	field4 conc;
-    field4 test,test2,test3,test4,test5;
+    field4 test,test2,test3,test4,test5,test6,test7;
 	field4a topo,solid;
 	field4a fb;
 	field4a porosity,porpart;

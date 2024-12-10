@@ -61,7 +61,8 @@ public:
 
     double *D,*RO;
     
-    double *Test;
+    double* Test;
+    double* Test2;
     
     int *Empty,*Flag;
     
