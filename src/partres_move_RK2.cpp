@@ -98,6 +98,16 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
         P.Y[n] = 0.5*P.Y[n] + 0.5*P.YRK1[n] + 0.5*p->dtsed*P.V[n];
         P.Z[n] = 0.5*P.Z[n] + 0.5*P.ZRK1[n] + 0.5*p->dtsed*P.W[n];
 
+        if(P.U[n]!=0 || P.V[n]!=0 || P.W[n]!=0)
+        {
+            P.Flag[n] = MOVING;
+        }
+        else
+        {
+            P.Flag[n] = ACTIVE;
+        }
+        P.Test2[n] = P.U[n];
+
         if(P.X[n]<relaxXBoundary)
             P.Flag[n] = PASSIVE;
     }

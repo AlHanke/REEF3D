@@ -42,18 +42,27 @@ void partres::timestep(lexer *p, ghostcell *pgc)
     
     
     maxvz = std::max(maxVelU,maxVelV);
-    maxvz = std::max(maxvz,maxVelV);
+    maxvz = std::max(maxvz,maxVelW);
     
     maxvz = pgc->globalmax(maxvz);
     
     maxVelU = pgc->globalmax(maxVelU);
     maxVelV = pgc->globalmax(maxVelV);
     maxVelW = pgc->globalmax(maxVelW);
+
+    double scaleFactorTimeStep;
+    scaleFactorTimeStep = 10*p->S13/(p->N49*p->N47);
+    if(maxVelU*scaleFactorTimeStep<p->umax)
+        maxvz = std::max(maxvz,p->umax);
+    if(maxVelV*scaleFactorTimeStep<p->vmax)
+        maxvz = std::max(maxvz,p->vmax);
+    if(maxVelW*scaleFactorTimeStep<p->wmax)
+        maxvz = std::max(maxvz,p->wmax);
     
     if(!timestep_ini)
     {
-    maxvz = std::max(maxvz,1000.0);
-    timestep_ini=true;
+        maxvz = std::max(maxvz,1000.0);
+        timestep_ini=true;
     }
     
     
@@ -64,7 +73,7 @@ void partres::timestep(lexer *p, ghostcell *pgc)
         p->dtsed=std::min(p->dt, (p->S14*p->DXM)/(fabs(maxvz)>1.0e-15?maxvz:1.0e-15));
     
     if(p->S15==2)
-    p->dtsed=p->S13;
+        p->dtsed=p->S13;
 
     p->dtsed=pgc->timesync(p->dtsed);
     p->sedtime+=p->dtsed;
@@ -74,11 +83,11 @@ void partres::timestep(lexer *p, ghostcell *pgc)
 	
 	if(p->mpirank==0)
     {
-	cout<<"tsed: "<<setprecision(4)<<p->sedtime<<" dtsed: "<<setprecision(4)<<p->dtsed<<endl;
-    cout<<"Up_max: "<<maxVelU<<endl;
-    cout<<"Vp_max: "<<maxVelV<<endl;
-    cout<<"Wp_max: "<<maxVelW<<endl;
+        cout<<"tsed: "<<setprecision(4)<<p->sedtime<<" dtsed: "<<setprecision(4)<<p->dtsed<<"\n"
+            <<"Up_max: "<<maxVelU<<"\n"
+            <<"Vp_max: "<<maxVelV<<"\n"
+            <<"Wp_max: "<<maxVelW<<"\n"
+            <<"dtsed/dt: "<<p->dtsed/p->dt<<endl;
+        
     }
-    
-    
 }
