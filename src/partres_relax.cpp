@@ -52,12 +52,12 @@ double partres::rf(lexer *p, double x1, double y1)
 		distcount=0;
 		for(int qn=0;qn<p->Q73;++qn)
 		{
-		dist_Q73[qn] =  distcalc(p,p->Q73_x[qn],p->Q73_y[qn],x1,y1,tan_betaQ73[qn]);
+		    dist_Q73[qn] =  distcalc(p,p->Q73_x[qn],p->Q73_y[qn],x1,y1,tan_betaQ73[qn]);
 		
 			if(dist_Q73[qn]<p->Q73_dist[qn])
 			{
-			distot += dist_Q73[qn];
-			++distcount;
+                distot += dist_Q73[qn];
+                ++distcount;
 			}
 		}
 		
@@ -66,14 +66,14 @@ double partres::rf(lexer *p, double x1, double y1)
 		{
             if(dist_Q73[qn]<p->Q73_dist[qn])
 			{
-            val=0.0;
-			relax = r1(p,dist_Q73[qn],p->Q73_dist[qn]);
-			
-			if(distcount==1)
-            val=(relax);
+                val=0.0;
+                relax = r1(p,dist_Q73[qn],p->Q73_dist[qn]);
                 
-			if(distcount>1)
-            val += (relax) * (1.0 - dist_Q73[qn]/(distot>1.0e-10?distot:1.0e20));
+                if(distcount==1)
+                    val=(relax);
+                    
+                if(distcount>1)
+                    val += (relax) * (1.0 - dist_Q73[qn]/(distot>1.0e-10?distot:1.0e20));
 			}
 		}
         

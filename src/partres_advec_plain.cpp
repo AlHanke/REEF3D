@@ -31,10 +31,6 @@ void partres::advec_plain(lexer *p, fdm *a, part &P, sediment_fdm *s, turbulence
                         double *PX, double *PY, double *PZ, double *PU, double *PV, double *PW,
                         double &F, double &G, double &H, double alpha)
 {
-    // find cell IJK
-    i=p->posc_i(PX[n]);
-    j=p->posc_j(PY[n]);
-    k=p->posc_k(PZ[n]);
    
     // velocity
     uf = p->ccipol1(a->u,PX[n],PY[n],PZ[n]);
@@ -66,45 +62,65 @@ void partres::advec_plain(lexer *p, fdm *a, part &P, sediment_fdm *s, turbulence
      
     F_tot = Fd-Fs;//*s.reduce(i,j);
     
-    F_tot = MAX(F_tot,0.0);
-    
-    //cout<<"Fd: "<<Fd<<" Fs: "<<Fs<<" F_tot: "<<F_tot<<" "<<P.d50<<" "<<DragCoeff<<endl;
+    // if(p->mpirank==5&&n==320057)
+    // cout<<"Output: "<<F_tot<<" "<<Fd<<" "<<rf(p,PX[n],PY[n])<<" "<<Fs<<endl;
+    // if(p->mpirank==5 && i==0&&j==0)
+    // cout<<"Particle: "<<n<<" Fd: "<<Fd<<" Uabs: "<<Uabs_rel<<" reduce: "<<rf(p,PX[n],PY[n])<<" Fs: "<<Fs<<" Ftot: "<<std::setprecision(10)<<F_tot<<endl;
+    F_tot = std::max(F_tot,0.0);
+    if(F_tot<1e-9)
+        F_tot = 0.0;
 
-
-// particle force
+    // particle force
     F = F_tot /(p->S22*PI*pow(P.d50,3.0)/6.0) * Urel/(fabs(Uabs_rel)>1.0e-10?fabs(Uabs_rel):1.0e20);
     G = F_tot /(p->S22*PI*pow(P.d50,3.0)/12.0) * Vrel/(fabs(Uabs_rel)>1.0e-10?fabs(Uabs_rel):1.0e20);
     H = 0.0;
-    
-    // solid forcing
-    double fx,fy,fz;
-    if(p->S10==2)
-    {
-    fx = p->ccipol1c(a->fbh1,PX[n],PY[n],PZ[n])*(0.0-PU[n])/(alpha*p->dtsed); 
-    fy = p->ccipol2c(a->fbh2,PX[n],PY[n],PZ[n])*(0.0-PV[n])/(alpha*p->dtsed); 
-    fz = p->ccipol3c(a->fbh3,PX[n],PY[n],PZ[n])*(0.0-PW[n])/(alpha*p->dtsed); 
-    
-    F += fx;
-    G += fy;
-    H += fz;
-    }
     
     // relax
     F *= rf(p,PX[n],PY[n]);
     G *= rf(p,PX[n],PY[n]);
     H *= rf(p,PX[n],PY[n]);
-    
-    if(PX[n]<1.9)
-    F=G=H=0.0;
+
+    // solid forcing
+    double fx,fy,fz;
+    if(p->S10==2)
+    {
+        fx = p->ccipol1c(a->fbh1,PX[n],PY[n],PZ[n])*(0.0-PU[n])/(alpha*p->dtsed); 
+        fy = p->ccipol2c(a->fbh2,PX[n],PY[n],PZ[n])*(0.0-PV[n])/(alpha*p->dtsed); 
+        fz = p->ccipol3c(a->fbh3,PX[n],PY[n],PZ[n])*(0.0-PW[n])/(alpha*p->dtsed); 
+        
+        F += fx;
+        G += fy;
+        H += fz;
+    }
+
+    // if(n==231007&&p->mpirank==2&&p->count>99)
+    // {
+    //     double xp,yp,zp;
+    //     xp = PX[n];
+    //     yp = PY[n];
+    //     zp = PZ[n];
+    //     i = p->posf_i(xp)-1;
+    //     j = p->posc_j(yp);
+    //     k = p->posc_k(zp);
+    //     if((p->XN[IP2]-xp)/p->DXP[IP1]<0.0) i++;
+    //     if((p->XN[IP2]-xp)/p->DXP[IP1]>1.0) i--;
+    //     if((p->YP[JP1]-yp)/p->DYN[JP]<0.0) j++;
+    //     if((p->YP[JP1]-yp)/p->DYN[JP]>1.0) j--;
+    //     if((p->ZP[KP1]-zp)/p->DZN[KP]<0.0) k++;
+    //     if((p->ZP[KP1]-zp)/p->DZN[KP]>1.0) k--;
+    //     k++;
+    //     // cout<<i<<" "<<j<<" "<<k<<" "<<a->u(i,j,k)<<" "<<a->u(i+1,j,k)<<" "<<a->u(i,j+1,k)<<" "<<a->u(i,j,k+1)<<" "<<a->u(i+1,j+1,k)<<" "<<a->u(i+1,j,k+1)<<" "<<a->u(i,j+1,k+1)<<" "<<a->u(i+1,j+1,k+1)<<endl;
+    //     cout<<p->XN[IP]<<" "<<p->YN[JP]<<" "<<p->ZN[KP]<<" "<<k<<" "<<p->knoz<<endl;
+    // }
     
     Umax = std::max(Umax,sqrt(PU[n]*PU[n] + PV[n]*PV[n]));
     
     // error call
     if(PU[n]!=PU[n] || PV[n]!=PV[n] || PW[n]!=PW[n])
     {
-    cout<<"NaN detected.\nUrel: "<<Urel<<" Vrel: "<<Vrel<<" Wrel: "<<Wrel<<"\nDrag: "<<Dp<<"\nTs: "<<Tsval<<endl;
-    cout<<"F: "<<F<<" G: "<<G<<" H: "<<H<<endl;
-    cout<<"dTx: "<<dTx_val<<" dTy: "<<dTy_val<<" dTz: "<<dTz_val<<endl;
-    exit(1);
-    }    
+        cout<<"NaN detected.\nUrel: "<<Urel<<" Vrel: "<<Vrel<<" Wrel: "<<Wrel<<"\nDrag: "<<Dp<<"\nTs: "<<Tsval<<endl;
+        cout<<"F: "<<F<<" G: "<<G<<" H: "<<H<<endl;
+        cout<<"dTx: "<<dTx_val<<" dTy: "<<dTy_val<<" dTz: "<<dTz_val<<endl;
+        exit(1);
+    }
 }

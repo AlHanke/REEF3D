@@ -32,12 +32,12 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
     count_particles(p,a,pgc,s);
     pressure_gradient(p,a,pgc,s);
     
-// RK step 1
+    // RK step 1
     stress_tensor(p,pgc,s);
     stress_gradient(p,a,pgc,s);
     
     for(n=0;n<P.index;++n)
-    if(P.Flag[n]==ACTIVE)
+    if(P.Flag[n]>=ACTIVE)
     {        
         if(p->Q11==1)
         advec_plain(p, a, P, s, pturb, 
@@ -57,27 +57,26 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
         // Position update
         P.XRK1[n] = P.X[n] + p->dtsed*P.URK1[n];
         P.YRK1[n] = P.Y[n] + p->dtsed*P.VRK1[n];
-        //P.ZRK1[n] = P.Z[n] + p->dtsed*P.WRK1[n];
-        P.ZRK1[n] = MAX(MIN(P.Z[n] + p->dtsed*P.WRK1[n],p->global_zmax),p->global_zmin+p->DZN[0+marge]+P.D[n]/2);
+        P.ZRK1[n] = P.Z[n] + p->dtsed*P.WRK1[n];
     }
-    
-    
-    // cellSum update
-    cellSum_full_update(p,pgc,1);
-    
-    boundcheck(p,a,pgc,s,1);
-    bedchange_update(p,pgc,s,1);
-    bedchange(p,a,pgc,s,1);
     
     // parallel transfer
     P.xchange(p,pgc,bedch,1);
 
-// RK step 2
+    // cellSum update
+    cellSum_full_update(p,pgc,1);
+    
+    bedchange_update(p,pgc,s,1);
+    // bedchange(p,a,pgc,s,1);
+
+    boundcheck(p,a,pgc,s,1);
+
+    // RK step 2
     stress_tensor(p, pgc, s);
     stress_gradient(p,a,pgc,s);
     
     for(n=0;n<P.index;++n)
-    if(P.Flag[n]==ACTIVE)
+    if(P.Flag[n]>=ACTIVE)
     {
         if(p->Q11==1)
         advec_plain(p, a, P, s, pturb, 
@@ -93,25 +92,55 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
         P.U[n] = 0.5*P.U[n] + 0.5*P.URK1[n] + 0.5*p->dtsed*F;
         P.V[n] = 0.5*P.V[n] + 0.5*P.VRK1[n] + 0.5*p->dtsed*G;
         P.W[n] = 0.5*P.W[n] + 0.5*P.WRK1[n] + 0.5*p->dtsed*H;
+
+        if(P.U[n]!=0 || P.V[n]!=0 || P.W[n]!=0)
+        {
+            P.Flag[n] = MOVING;
+        }
+        else
+        {
+            P.Flag[n] = ACTIVE;
+        }
+        P.Test2[n] = P.U[n];
         
         // Position update
         P.X[n] = 0.5*P.X[n] + 0.5*P.XRK1[n] + 0.5*p->dtsed*P.U[n];
         P.Y[n] = 0.5*P.Y[n] + 0.5*P.YRK1[n] + 0.5*p->dtsed*P.V[n];
-        //P.Z[n] = 0.5*P.Z[n] + 0.5*P.ZRK1[n] + 0.5*p->dtsed*P.W[n];
-        P.Z[n] = MAX(MIN(0.5*P.Z[n] + 0.5*P.ZRK1[n] + 0.5*p->dtsed*P.W[n],p->global_zmax),p->global_zmin+p->DZN[0+marge]+P.D[n]/2);
+        P.Z[n] = 0.5*P.Z[n] + 0.5*P.ZRK1[n] + 0.5*p->dtsed*P.W[n];
+
+        // Resseed relax boundary
+        i=p->posc_i(P.XRK1[n]);
+        if(P.X[n]>relax_boundary+p->DXN[IP] && P.XRK1[n]<relax_boundary+p->DXN[IP])
+        {
+            j = p->posc_j(P.YRK1[n]);
+            k = p->posc_k(P.ZRK1[n]);
+            // seed_particle(p);
+        }
     }
-    
-    
-    // cellSum update
-    cellSum_full_update(p,pgc,2);
-    
-    boundcheck(p,a,pgc,s,2);
-    bedchange_update(p,pgc,s,2);
-    bedchange(p,a,pgc,s,2);
     
     // parallel transfer
     P.xchange(p, pgc,bedch,2);
     
+    // cellSum update
+    cellSum_full_update(p,pgc,2);
+    
+    bedchange_update(p,pgc,s,2);
+    // bedchange(p,a,pgc,s,2);
     
     
+
+    boundcheck(p,a,pgc,s,2);
+
+    ALOOP
+    {
+        a->test(i,j,k) = p->W1 * 0.5 * PI/8.0 * pow(P.d50,2)  * (pow((a->u(i,j,k)+a->u(i+1,j,k))/2.0,2.0)+pow((a->v(i,j,k)+a->v(i,j+1,k))/2.0,2.0));
+        a->test2(i,j,k) = p->Q30*(p->S22-p->W1)*fabs(p->W22)*PI*pow(P.d50, 3.0)/6.0;
+        a->test3(i,j,k) = a->test(i,j,k)-a->test2(i,j,k);
+        a->test4(i,j,k) = a->test3(i,j,k)>0?1:0;
+    }
+
+    // for(n=0;n<P.index;++n)
+    // if(P.Flag[n]>=ACTIVE)
+    // if(P.X[n]>p->global_xmax || P.Y[n]> p->global_ymax)
+    // P.remove(n);
 }

@@ -149,6 +149,8 @@ private:
     
     double DragCoeff;
     double F_tot;
+
+    double relax_boundary;
 };
 
 #endif

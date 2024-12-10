@@ -100,18 +100,16 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
 	result<<"<?xml version=\"1.0\"?>\n";
 	result<<"<VTKFile type=\"PolyData\" version=\"1.0\" byte_order=\"LittleEndian\">\n";
 	result<<"<PolyData>\n";
-	result<<"<Piece NumberOfPoints=\""<<numpt<<"\" NumberOfVerts=\""<<numpt<<"\" NumberOfLines=\"0\" NumberOfStrips=\"0\" NumberOfPolys=\"0\">\n";
-	
-	result<<"<FieldData>\n";
+    result<<"<FieldData>\n";
 	if(p->P16==1)
     {
-	result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime<<endl;
-    result<<"</DataArray>\n";
+        result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime<<endl;
+        result<<"</DataArray>\n";
 	}
 	result<<"</FieldData>\n";
-	
+	result<<"<Piece NumberOfPoints=\""<<numpt<<"\" NumberOfVerts=\""<<numpt<<"\" NumberOfLines=\"0\" NumberOfStrips=\"0\" NumberOfPolys=\"0\">\n";
 	result<<"<PointData >\n";
-	result<<"<DataArray type=\"Float32\" Name=\"Flag\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+	result<<"<DataArray type=\"Float32\" Name=\"Flag\" format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
     ++n;
     if(p->P23==1)
     {
@@ -156,7 +154,7 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
 	for(n=0;n<P.index;++n)
 	if(P.Flag[n]>=0)
 	{
-		ffn=float(p->mpirank);
+		ffn=float(P.Flag[n]);
 		result.write((char*)&ffn, sizeof (float));
 	}
     
