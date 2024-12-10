@@ -37,7 +37,7 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
     stress_gradient(p,a,pgc,s);
     
     for(n=0;n<P.index;++n)
-    if(P.Flag[n]==ACTIVE)
+    if(P.Flag[n]>=ACTIVE)
     {        
         if(p->Q11==1)
         advec_plain(p, a, P, s, pturb, 
@@ -57,8 +57,7 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
         // Position update
         P.XRK1[n] = P.X[n] + p->dtsed*P.URK1[n];
         P.YRK1[n] = P.Y[n] + p->dtsed*P.VRK1[n];
-        //P.ZRK1[n] = P.Z[n] + p->dtsed*P.WRK1[n];
-        P.ZRK1[n] = MAX(MIN(P.Z[n] + p->dtsed*P.WRK1[n],p->global_zmax),p->global_zmin+p->DZN[0+marge]+P.D[n]/2);
+        P.ZRK1[n] = P.Z[n] + p->dtsed*P.WRK1[n];
     }
     
     
@@ -77,7 +76,7 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
     stress_gradient(p,a,pgc,s);
     
     for(n=0;n<P.index;++n)
-    if(P.Flag[n]==ACTIVE)
+    if(P.Flag[n]>=ACTIVE)
     {
         if(p->Q11==1)
         advec_plain(p, a, P, s, pturb, 
@@ -97,8 +96,7 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
         // Position update
         P.X[n] = 0.5*P.X[n] + 0.5*P.XRK1[n] + 0.5*p->dtsed*P.U[n];
         P.Y[n] = 0.5*P.Y[n] + 0.5*P.YRK1[n] + 0.5*p->dtsed*P.V[n];
-        //P.Z[n] = 0.5*P.Z[n] + 0.5*P.ZRK1[n] + 0.5*p->dtsed*P.W[n];
-        P.Z[n] = MAX(MIN(0.5*P.Z[n] + 0.5*P.ZRK1[n] + 0.5*p->dtsed*P.W[n],p->global_zmax),p->global_zmin+p->DZN[0+marge]+P.D[n]/2);
+        P.Z[n] = 0.5*P.Z[n] + 0.5*P.ZRK1[n] + 0.5*p->dtsed*P.W[n];
     }
     
     
@@ -109,9 +107,20 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
     bedchange_update(p,pgc,s,2);
     bedchange(p,a,pgc,s,2);
     
+    
+
     // parallel transfer
     P.xchange(p, pgc,bedch,2);
     
     
     
+
+    ALOOP
+    {
+        a->test(i,j,k) = p->W1 * 0.5 * PI/8.0 * pow(P.d50,2)  * (pow((a->u(i,j,k)+a->u(i+1,j,k))/2.0,2.0)+pow((a->v(i,j,k)+a->v(i,j+1,k))/2.0,2.0));
+        a->test2(i,j,k) = p->Q30*(p->S22-p->W1)*fabs(p->W22)*PI*pow(P.d50, 3.0)/6.0;
+        a->test3(i,j,k) = a->test(i,j,k)-a->test2(i,j,k);
+        a->test4(i,j,k) = a->test3(i,j,k)>0?1:0;
+    }
+
 }
