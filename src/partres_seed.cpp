@@ -63,7 +63,7 @@ void partres::seed_topo(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
     
     // remove above bed
     for(n=0;n<P.index;++n)
-    if(P.Flag[n]==ACTIVE)
+    if(P.Flag[n]>=PASSIVE)
     {
     topoval  = p->ccipol4_b(a->topo,P.X[n],P.Y[n],P.Z[n]);
     solidval = p->ccipol4_b(a->solid,P.X[n],P.Y[n],P.Z[n]);

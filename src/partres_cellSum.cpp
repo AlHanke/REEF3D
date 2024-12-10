@@ -31,7 +31,7 @@ Author: Alexander Hanke, Hans Bihs
 void partres::cellSum_update(lexer *p, ghostcell *pgc, sediment_fdm *s, int mode)
 {
     for(n=0;n<P.index;++n)
-    if(P.Flag[n]==ACTIVE)
+    if(P.Flag[n]>=ACTIVE)
     {
         // step 1
         if(mode==1)
@@ -81,7 +81,7 @@ void partres::cellSum_full_update(lexer *p, ghostcell *pgc, int mode)
     pgc->start4a(p,cellSum,1);
     
     for(size_t n=0;n<P.index;n++)
-    if(P.Flag[n]==ACTIVE)
+    if(P.Flag[n]>=ACTIVE)
     {
         if(mode==1)
         {
@@ -152,7 +152,7 @@ void partres::cellSum_gradient_redistirbution(lexer *p, ghostcell *pgc, int mode
         std::map<std::tuple<int,int,int>,std::vector<int>> cellSum_map;
 
         for(size_t n=0;n<P.index;n++)
-        if(P.Flag[n]==ACTIVE)
+        if(P.Flag[n]>=ACTIVE)
         {
             if(mode==1)
             {

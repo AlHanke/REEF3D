@@ -31,7 +31,7 @@ void partres::boundcheck(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, int 
     int inBounds;
     
     for(n=0;n<P.index;++n)
-    if(P.Flag[n]==ACTIVE)
+    if(P.Flag[n]>=ACTIVE)
     {  
             if(mode==1)
             {

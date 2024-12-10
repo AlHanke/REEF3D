@@ -39,7 +39,7 @@ void partres::count_particles(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
     {
     ++particle_count;
     
-    if(P.Flag[n]==ACTIVE)
+    if(P.Flag[n]>EMPTY)
     ++active_count;
     
     if(P.Flag[n]==EMPTY)
