@@ -48,16 +48,20 @@ void partres::seed_topo(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
     {
         for(int qn=0;qn<p->Q24;++qn)
         {
-        n=P.Empty[P.index_empty];
-        P.X[n] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
-        P.Y[n] = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
-        P.Z[n] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand; 
-        
-        P.D[n] = p->S20;
-        P.RO[n] = p->S22;
+            n=P.Empty[P.index_empty];
+            P.X[n] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
+            P.Y[n] = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
+            P.Z[n] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand; 
+            
+            P.D[n] = p->S20;
+            P.RO[n] = p->S22;
+            P.Test[n] = P.X[n];
 
-        P.Flag[n] = ACTIVE;
-        --P.index_empty;
+            if(P.X[n]<relaxXBoundary)
+                P.Flag[n] = PASSIVE;
+            else
+                P.Flag[n] = ACTIVE;
+            --P.index_empty;
         }
     }
     

@@ -32,7 +32,7 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
     count_particles(p,a,pgc,s);
     pressure_gradient(p,a,pgc,s);
     
-// RK step 1
+    // RK step 1
     stress_tensor(p,pgc,s);
     stress_gradient(p,a,pgc,s);
     
@@ -71,7 +71,7 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
     // parallel transfer
     P.xchange(p,pgc,bedch,1);
 
-// RK step 2
+    // RK step 2
     stress_tensor(p, pgc, s);
     stress_gradient(p,a,pgc,s);
     
@@ -97,6 +97,9 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
         P.X[n] = 0.5*P.X[n] + 0.5*P.XRK1[n] + 0.5*p->dtsed*P.U[n];
         P.Y[n] = 0.5*P.Y[n] + 0.5*P.YRK1[n] + 0.5*p->dtsed*P.V[n];
         P.Z[n] = 0.5*P.Z[n] + 0.5*P.ZRK1[n] + 0.5*p->dtsed*P.W[n];
+
+        if(P.X[n]<relaxXBoundary)
+            P.Flag[n] = PASSIVE;
     }
     
     
