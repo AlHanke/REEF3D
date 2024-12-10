@@ -145,7 +145,7 @@ private:
     
     double Ps,beta,epsilon,Tc;
     
-    int timestep_ini;
+    bool timestep_ini;
     
     double DragCoeff;
     double F_tot;

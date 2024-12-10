@@ -51,7 +51,7 @@ partres::partres(lexer *p, ghostcell *pgc) : P(p,pgc), bedch(p), Tau(p), Ts(p), 
     relax_ini(p);
     
     printcount=0;
-    timestep_ini=0;
+    timestep_ini=false;
 }
 
 partres::~partres()

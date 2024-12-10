@@ -50,10 +50,10 @@ void partres::timestep(lexer *p, ghostcell *pgc)
     maxVelV = pgc->globalmax(maxVelV);
     maxVelW = pgc->globalmax(maxVelW);
     
-    if(timestep_ini==0)
+    if(!timestep_ini)
     {
-    maxvz = 1000.0;
-    timestep_ini=1;
+    maxvz = std::max(maxvz,1000.0);
+    timestep_ini=true;
     }
     
     
