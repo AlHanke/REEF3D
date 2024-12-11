@@ -40,6 +40,9 @@ void partres::seed_topo(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
     count *= p->Q24;
     
     P.resize(p,count);
+
+    if(p->Q29>0)
+        srand(p->Q29);
     
     // seed
     n=0;
