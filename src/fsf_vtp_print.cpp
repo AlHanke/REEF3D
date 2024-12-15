@@ -24,76 +24,53 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
+#include<sstream>
+#include<cstdio>
+#include<cstring>
 
 void fsf_vtp::print(lexer* p, fdm* a, ghostcell *pgc)
 {
-	int polygon_num3,polygon_sum3;
 	if(p->mpirank==0)
     pvtp(p,a,pgc);
 	
 	name_iter(p,a,pgc);
 
-	ofstream result;
-	result.open(name, ios::binary);
 	//---------------------------------------------
 	
 	polygon_num=facount;
 	
 	polygon_sum=0;
 	for(n=0;n<polygon_num;++n)
-	polygon_sum+=numpt[n];
+	polygon_sum+=numpt[n]; 
 	
-	polygon_sum3=polygon_num3=0;
-	for(n=0;n<polygon_num;++n)
-	if(numpt[n]==4)
-	{
-	polygon_sum3+=numpt[n];
-	++polygon_num3;
-	}  
-	
-	vertice_num = ccptcount;
+	point_num = ccptcount;
 	
 	//---------------------------------------------
     n=0;
 	offset[n]=0;
 	++n;
-    offset[n]=offset[n-1] + 4*(vertice_num)*3 + 4;
-    ++n;
 	//Data
-	offset[n]=offset[n-1] + 4*vertice_num*3+ 4;
+	offset[n]=offset[n-1] + 4*point_num*3+ 4;
     ++n;
-	offset[n]=offset[n-1] + 4*vertice_num+ 4;
+	offset[n]=offset[n-1] + 4*point_num+ 4;
     ++n;
 	//End Data
+    // Points
+    offset[n]=offset[n-1] + 4*point_num*3 + 4;
+    ++n;
+    // Polys connectivity
     offset[n]=offset[n-1] + 4*polygon_sum + 4;
     ++n;
+    // Polys offset
     offset[n]=offset[n-1] + 4*polygon_num+ 4;
-    ++n;
-	offset[n]=offset[n-1] + 4*polygon_num+ 4;
     ++n;
 	//---------------------------------------------
 	
-	
+	std::stringstream result;
 
-	result<<"<?xml version=\"1.0\"?>\n";
-	result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
-	result<<"<PolyData>\n";
-	result<<"<Piece NumberOfPoints=\""<<vertice_num<<"\" NumberOfPolys=\""<<polygon_num<<"\">\n";
-    
-    if(p->P16==1)
-    {
-    result<<"<FieldData>\n";
-    result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime<<endl;
-    result<<"</DataArray>\n";
-    result<<"</FieldData>\n";
-    }
+    beginning(p,result,point_num,0,0,0,polygon_num);
 
     n=0;
-    result<<"<Points>\n";
-    result<<"<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-    ++n;
-    result<<"</Points>\n";
-	
     result<<"<PointData>\n";
     result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
@@ -101,123 +78,125 @@ void fsf_vtp::print(lexer* p, fdm* a, ghostcell *pgc)
     ++n;
     result<<"</PointData>\n";
 
-    result<<"<Polys>\n";
-    result<<"<DataArray type=\"Int32\" Name=\"connectivity\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-    ++n;
-	result<<"<DataArray type=\"Int32\" Name=\"offsets\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-	++n;
-    result<<"<DataArray type=\"Int32\" Name=\"types\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-	result<<"</Polys>\n";
+    points(result,offset,n);
+
+    polys(result,offset,n);
 	
+    ending(result);
 
-    result<<"</Piece>\n";
-    result<<"</PolyData>\n";
+    m=result.str().length();
+    buffer.resize(m+offset[n]+27);
+    std::memcpy(&buffer[0],result.str().data(),m);
 
-//----------------------------------------------------------------------------
-
-    result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
-
-//  XYZ
-	iin=4*vertice_num*3;
-	result.write((char*)&iin, sizeof (int));
-    for(n=0;n<vertice_num;++n)
-	{
-	ffn=ccpt[n][0];
-	result.write((char*)&ffn, sizeof (float));
-
-	ffn=ccpt[n][1];
-	result.write((char*)&ffn, sizeof (float));
-
-	ffn=ccpt[n][2];
-	result.write((char*)&ffn, sizeof (float));
-	}
+    //----------------------------------------------------------------------------
 	
-//  Velocity
-	iin=4*vertice_num*3;
-	result.write((char*)&iin, sizeof (int));
-    for(n=0;n<vertice_num;++n)
+    //  Velocity
+	iin=4*point_num*3;
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
+    for(n=0;n<point_num;++n)
 	{
 	ffn=float(p->ccipol1(a->u,ccpt[n][0],ccpt[n][1],ccpt[n][2]));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 
 	ffn=float(p->ccipol2(a->v,ccpt[n][0],ccpt[n][1],ccpt[n][2]));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 
 	ffn=float(p->ccipol3(a->w,ccpt[n][0],ccpt[n][1],ccpt[n][2]));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
 	
 	
-//  Elevation
-	iin=4*vertice_num;
-	result.write((char*)&iin, sizeof (int));
-    for(n=0;n<vertice_num;++n)
+    //  Elevation
+	iin=4*point_num;
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
+    for(n=0;n<point_num;++n)
 	{
 	ffn=ccpt[n][2];
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
 
-//  Connectivity POLYGON
+    //  XYZ
+	iin=4*point_num*3;
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
+    for(n=0;n<point_num;++n)
+	{
+	ffn=ccpt[n][0];
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
+
+	ffn=ccpt[n][1];
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
+
+	ffn=ccpt[n][2];
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
+	}
+
+    //  Connectivity POLYGON
     iin=4*polygon_sum;
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
     for(n=0;n<polygon_num;++n)
 	{
 		if(numpt[n]==3)
 		{
 		iin=facet[n][0];
-		result.write((char*)&iin, sizeof (int));
+		std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
 		
 		iin=facet[n][1];
-		result.write((char*)&iin, sizeof (int));
+		std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
 		
 		iin=facet[n][2];
-		result.write((char*)&iin, sizeof (int));
+		std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
 		}
 		
 		if(numpt[n]==4)
 		{
 		iin=facet[n][0];
-		result.write((char*)&iin, sizeof (int));
+		std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
 		
 		iin=facet[n][1];
-		result.write((char*)&iin, sizeof (int));
+		std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
 		
 		iin=facet[n][3];
-		result.write((char*)&iin, sizeof (int));
+		std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
 		
 		iin=facet[n][2];
-		result.write((char*)&iin, sizeof (int));
+		std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
 		}
 	}
 
-//  Offset of Connectivity
+    //  Offset of Connectivity
     iin=4*polygon_num;
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	iin=0;
 	for(n=0;n<polygon_num;++n)
 	{
 	iin+= numpt[n];
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	}
 
-//  Cell types
-    iin=4*polygon_num;
-    result.write((char*)&iin, sizeof (int));
-	for(n=0;n<polygon_num;++n)
-	{
-	iin=7;
-	result.write((char*)&iin, sizeof (int));
-	}
+	footer(buffer,m);
 
-	result<<endl<<"</AppendedData>\n";
-    result<<"</VTKFile>\n";
-
-	result.close();	
+	// Open File
+    FILE* file = std::fopen(name, "w");
+    std::fwrite(buffer.data(), buffer.size(), 1, file);
+    std::fclose(file);
 }
-
-
-
-
-
-
-
