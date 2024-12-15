@@ -58,7 +58,7 @@ public:
     
     virtual void ctimesave(lexer*, fdm*);
     
-    virtual void print_2D_bedload(lexer*, ghostcell*,ofstream&);
+    virtual void print_2D_bedload(lexer*, ghostcell*, std::vector<char>&, int&);
     virtual void print_3D_bedload(lexer*, ghostcell*,std::vector<char>&, int&);
 	virtual void name_ParaView_parallel_bedload(lexer*, ghostcell*,ofstream&);
     virtual void name_ParaView_bedload(lexer*, ghostcell*,ofstream&, int*, int &);
@@ -66,7 +66,7 @@ public:
     virtual void offset_ParaView_2D_bedload(lexer*, ghostcell*, int*, int &);
     virtual void offset_ParaView_bedload(lexer*, int*, int &);
     
-	virtual void print_2D_bedshear(lexer*, ghostcell*,ofstream&);
+	virtual void print_2D_bedshear(lexer*, ghostcell*, std::vector<char>&, int&);
     virtual void print_3D_bedshear(lexer*, ghostcell*,std::vector<char>&, int&);
 	virtual void name_ParaView_parallel_bedshear(lexer*, ghostcell*,ofstream&);
     virtual void name_ParaView_bedshear(lexer*, ghostcell*,ofstream&, int*, int &);
@@ -74,7 +74,7 @@ public:
     virtual void offset_ParaView_2D_bedshear(lexer*, ghostcell*, int*, int &);
     virtual void offset_ParaView_bedshear(lexer*, int*, int &);
     
-    virtual void print_2D_parameter1(lexer*, ghostcell*,ofstream&);
+    virtual void print_2D_parameter1(lexer*, ghostcell*, std::vector<char>&, int&);
     virtual void print_3D_parameter1(lexer*, ghostcell*,std::vector<char>&, int&);
 	virtual void name_ParaView_parallel_parameter1(lexer*, ghostcell*,ofstream&);
     virtual void name_ParaView_parameter1(lexer*, ghostcell*,ofstream&, int*, int &);
@@ -82,7 +82,7 @@ public:
     virtual void offset_ParaView_2D_parameter1(lexer*, ghostcell*, int*, int &);
     virtual void offset_ParaView_parameter1(lexer*, int*, int &);
     
-    virtual void print_2D_parameter2(lexer*, ghostcell*,ofstream&);
+    virtual void print_2D_parameter2(lexer*, ghostcell*, std::vector<char>&, int&);
     virtual void print_3D_parameter2(lexer*, ghostcell*,std::vector<char>&, int&);
 	virtual void name_ParaView_parallel_parameter2(lexer*, ghostcell*,ofstream&);
     virtual void name_ParaView_parameter2(lexer*, ghostcell*,ofstream&, int*, int &);

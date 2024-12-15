@@ -20,46 +20,41 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef SFLOW_VTP_BED_H_
+#define SFLOW_VTP_BED_H_
+
 #include"increment.h"
+#include"vtp3D.h"
+#include<vector>
 
 class lexer;
 class fdm2D;
 class ghostcell;
-class sflow_print_wsf;
 class sediment;
 
-using namespace std;
-
-#ifndef SFLOW_VTP_BED_H_
-#define SFLOW_VTP_BED_H_
-
-class sflow_vtp_bed : public increment
+class sflow_vtp_bed : public increment, private vtp3D
 {
 public:
-	sflow_vtp_bed(lexer*,fdm2D*);
-	virtual ~sflow_vtp_bed();
-	
-    virtual void start(lexer*,fdm2D*,ghostcell*,sediment*);
-	
+    sflow_vtp_bed(lexer*,fdm2D*);
+    virtual ~sflow_vtp_bed();
+    
+    void start(lexer*,fdm2D*,ghostcell*,sediment*);
+    
 private:
-	void print2D(lexer*,fdm2D*,ghostcell*,sediment*);
-	void etend(lexer*,fdm2D*,ghostcell*);
-	void pvtu(lexer*,fdm2D*,ghostcell*,sediment*);
-	void name_iter(lexer*,fdm2D*,ghostcell*);
+    void print2D(lexer*,fdm2D*,ghostcell*,sediment*);
+    void pvtp(lexer*,fdm2D*,ghostcell*,sediment*);
+    void name_iter(lexer*,fdm2D*,ghostcell*);
     void piecename(lexer*,fdm2D*,ghostcell*,int);
-	
-	
-	char name[200],pname[200];
+    
+    std::vector<char> buffer;
+    int m;
+    
+    char name[200],pname[200];
     int n,iin,offset[200];
     float ffn;
-    double ddn;
-	
-	double xs_local,ys_local,zs_local,xe_local,ye_local,ze_local;
-	double xs_global,ys_global,zs_global,xe_global,ye_global,ze_global;
-	
-	sflow_print_wsf *pwsf;
-	int printbedcount;
-	double printbedtime;
+    
+    int printbedcount;
+    double printbedtime;
 };
 
 #endif

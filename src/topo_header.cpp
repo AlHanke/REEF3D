@@ -21,7 +21,6 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"topo_vtp.h"
-#include<string>
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
