@@ -55,11 +55,11 @@ class printer_fnpf : public fnpf_printer, public increment
 public:
 	printer_fnpf(lexer*,fdm_fnpf*,ghostcell*);
 	virtual ~printer_fnpf();
-	virtual void start(lexer*,fdm_fnpf*,ghostcell*,ioflow*);
-    virtual void print_stop(lexer*,fdm_fnpf*,ghostcell*);
-    virtual void print_vtu(lexer*,fdm_fnpf*,ghostcell*);
-    
+	void start(lexer*,fdm_fnpf*,ghostcell*,ioflow*);
+    void print_stop(lexer*,fdm_fnpf*,ghostcell*);
+        
 private:
+void print_vtu(lexer*,fdm_fnpf*,ghostcell*);
     void parallel(lexer*,ghostcell*);
 
     vtk3D *outputFormat;
