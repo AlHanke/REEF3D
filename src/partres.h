@@ -29,6 +29,8 @@ Authora: Hans Bihs, Alexander Hanke
 #include"field4a.h"
 #include"fieldint4a.h"
 #include"boundarycheck.h"
+#include"vtp3D.h"
+#include<vector>
 
 class lexer;
 class fdm;
@@ -41,7 +43,7 @@ class vrans;
 using namespace std;
 
 
-class partres : public increment
+class partres : public increment, private vtp3D
 {
 public:
     partres(lexer*, ghostcell*);
@@ -95,13 +97,15 @@ public:
     
     // print
     void print_particles(lexer*,sediment_fdm*);
+        
+private:
+    // Printing
     void print_vtp(lexer*,sediment_fdm *);
     void pvtp(lexer*);
     void piecename_pos(lexer*, int);
     void header_pos(lexer*);
-        
-        
-private:
+    std::vector<char> buffer;
+    int m = 0;
     
     boundarycheck boundaries;
     
