@@ -108,35 +108,35 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
 	}
 	result<<"</FieldData>\n";
 	
-	result<<"<PointData >\n";
-	result<<"<DataArray type=\"Float32\" Name=\"Flag\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+	result<<"<PointData>\n";
+	result<<"<DataArray type=\"Float32\" Name=\"Flag\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
     if(p->P23==1)
     {
-    result<<"<DataArray type=\"Float32\" Name=\"Test\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+    result<<"<DataArray type=\"Float32\" Name=\"Test\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
     }
-	result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+	result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
 	++n;
-    result<<"<DataArray type=\"Float32\" Name=\"radius\" format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+    result<<"<DataArray type=\"Float32\" Name=\"radius\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"fluid velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+    result<<"<DataArray type=\"Float32\" Name=\"fluid velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-	result<<"<DataArray type=\"Float32\" Name=\"bedChange\" format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+	result<<"<DataArray type=\"Float32\" Name=\"bedChange\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
 	result<<"</PointData>\n";
 	
 
     result<<"<Points>\n";
-    result<<"<DataArray type=\"Float32\"  NumberOfComponents=\"3\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+    result<<"<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
     result<<"</Points>\n";
 	
 
     result<<"<Verts>\n";
-	result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+	result<<"<DataArray type=\"Int32\" Name=\"connectivity\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-	result<<"<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+	result<<"<DataArray type=\"Int32\" Name=\"offsets\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
 	++n;
 	result<<"</Verts>\n";
 

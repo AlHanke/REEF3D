@@ -85,16 +85,16 @@ void vtu3D::beginningParallel(lexer *p, std::ofstream &result)
 void vtu3D::ending(std::ofstream &result, const int *offset, int &n)
 {
     result<<"<Points>\n";
-    result<<"\t<DataArray type=\"Float32\"  NumberOfComponents=\"3\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+    result<<"\t<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
     result<<"</Points>\n";
 
     result<<"<Cells>\n";
-    result<<"\t<DataArray type=\"Int32\"  Name=\"connectivity\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+    result<<"\t<DataArray type=\"Int32\" Name=\"connectivity\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"\t<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+    result<<"\t<DataArray type=\"Int32\" Name=\"offsets\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"\t<DataArray type=\"Int32\"  Name=\"types\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
+    result<<"\t<DataArray type=\"Int32\" Name=\"types\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
     result<<"</Cells>\n";
 
@@ -109,9 +109,9 @@ void vtu3D::endingParallel(std::ofstream &result, const char *A10, const int M10
     result<<"</PPoints>\n";
 
     result<<"<Cells>\n";
-    result<<"\t<DataArray type=\"Int32\"  Name=\"connectivity\"/>\n";
-    result<<"\t<DataArray type=\"Int32\"  Name=\"offsets\" />\n";
-    result<<"\t<DataArray type=\"Int32\"  Name=\"types\" />\n";
+    result<<"\t<DataArray type=\"Int32\" Name=\"connectivity\"/>\n";
+    result<<"\t<DataArray type=\"Int32\" Name=\"offsets\" />\n";
+    result<<"\t<DataArray type=\"Int32\" Name=\"types\" />\n";
     result<<"</Cells>\n";
 
     for(int n=0; n<M10; ++n)

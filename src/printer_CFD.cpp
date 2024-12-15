@@ -534,20 +534,20 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
         outputFormat->beginning(p,result);
 
         n=0;
-        result<<"<PointData >"<<endl;
-        result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<PointData>\n";
+        result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         
         pmean->name_vtu(p,a,pgc,result,offset,n);
 
-        result<<"<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
 
         pturb->name_vtu(p,a,pgc,result,offset,n);
 
-        result<<"<DataArray type=\"Float32\" Name=\"eddyv\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
-        result<<"<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"phi\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
 
         pheat->name_vtu(p,a,pgc,result,offset,n);
@@ -562,37 +562,37 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
 
         if(p->P24==1 && p->F300==0)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"rho\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"rho\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
 
         if(p->P71==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"viscosity\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"viscosity\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
         
         if(p->P72==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"VOF\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"VOF\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
 
         if(p->A10==4)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"Fi\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"Fi\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
 
         if(p->P26==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"ST_conc\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"ST_conc\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
 
         if(p->P27==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"topo\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"topo\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
         
@@ -610,31 +610,31 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
 
         if(p->P23==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"test\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"test\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
 
-        result<<"<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"elevation\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
 
         if(p->P25==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"solid\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"solid\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
 
         if(p->P28==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"floating\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"floating\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
 
         if(p->P29==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"walldist\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"walldist\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
-        result<<"</PointData>"<<endl;
+        result<<"</PointData>\n";
 
         outputFormat->ending(result,offset,n);
 

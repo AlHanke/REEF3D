@@ -437,55 +437,55 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         outputFormat->beginning(p,result);
 
         n=0;
-        result<<"<PointData >"<<endl;
-        result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<PointData>\n";
+        result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
 
 
-        result<<"<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         
         pnhfturb->name_vtu(p,d,pgc,result,offset,n);
         
-        result<<"<DataArray type=\"Float32\" Name=\"omega_sig\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"omega_sig\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
 
 
-        result<<"<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"elevation\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         
         if(p->P23==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"test\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"test\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
         
         if(p->P110==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"Hs\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"Hs\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
 
 
         if(p->P25==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"solid\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"solid\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
         
         if(p->P25==1 || p->P28==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"Heaviside\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"Heaviside\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
         
         if(p->P28==1)
         {
-        result<<"<DataArray type=\"Float32\" Name=\"floating\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+        result<<"<DataArray type=\"Float32\" Name=\"floating\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         }
         
-        result<<"</PointData>"<<endl;
+        result<<"</PointData>\n";
 
 
         outputFormat->ending(result,offset,n);
