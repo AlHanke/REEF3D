@@ -72,7 +72,6 @@ public:
 	printer_CFD(lexer*,fdm*,ghostcell*);
 	virtual ~printer_CFD();
 	void start(fdm*,lexer*,ghostcell*,turbulence*,heat*,ioflow*,solver*,data*,concentration*,multiphase*,sediment*);
-    void print_vtu(fdm*,lexer*,ghostcell*,turbulence*,heat*,ioflow*,solver*,data*,concentration*,multiphase*,sediment*);
     void print_stop(fdm*,lexer*,ghostcell*,turbulence*,heat*,ioflow*,solver*,data*,concentration*,multiphase*,sediment*);
 	void ini(lexer*,fdm*,ghostcell*);
 
