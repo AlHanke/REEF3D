@@ -45,7 +45,7 @@ void sflow_turb_void::etimesave(lexer* p, fdm2D *b, ghostcell *pgc)
 }
 
 
-void sflow_turb_void::print_2D(lexer *p, fdm2D *b, ghostcell *pgc, ofstream &result)
+void sflow_turb_void::print_2D(lexer *p, fdm2D *b, ghostcell *pgc, std::vector<char>& buffer, int& m)
 {
 }
 
@@ -75,10 +75,10 @@ void sflow_turb_void::name_pvtp(lexer *p, fdm2D *b, ghostcell *pgc,ofstream &res
 {
 }
 
-void sflow_turb_void::name_vtp(lexer *p, fdm2D *b, ghostcell *pgc,ofstream &result, int *offset, int &n)
+void sflow_turb_void::name_vtp(lexer *p, fdm2D *b, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
 }
     
-void sflow_turb_void::offset_ParaView_2D(lexer *p, fdm2D *b, ghostcell *pgc,ofstream &result, int *offset, int &n)
+void sflow_turb_void::offset_ParaView_2D(lexer *p, int *offset, int &n)
 {
 }

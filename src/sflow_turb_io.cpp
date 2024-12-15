@@ -24,6 +24,9 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm2D.h"
 #include"ghostcell.h"
+#include<sstream>
+#include<cstdio>
+#include<cstring>
 
 sflow_turb_io::sflow_turb_io(lexer* p) : kin(p), eps(p)
 {
@@ -34,25 +37,29 @@ sflow_turb_io::~sflow_turb_io()
 {
 }
 
-void sflow_turb_io::print_2D(lexer *p, fdm2D *b, ghostcell *pgc, ofstream &result)
+void sflow_turb_io::print_2D(lexer *p, fdm2D *b, ghostcell *pgc, std::vector<char>& buffer, int& m)
 {
     iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
     
 	TPSLICELOOP
 	{
 	ffn=float(p->sl_ipol4(kin));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     
     iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
     
 	TPSLICELOOP
 	{
 	ffn=float(p->sl_ipol4(eps));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
 }
@@ -91,7 +98,7 @@ void sflow_turb_io::name_pvtp(lexer *p, fdm2D *b, ghostcell *pgc,ofstream &resul
     result<<"<PDataArray type=\"Float32\" Name=\"omega\"/>\n";
 }
 
-void sflow_turb_io::name_vtp(lexer *p, fdm2D *b, ghostcell *pgc,ofstream &result, int *offset, int &n)
+void sflow_turb_io::name_vtp(lexer *p, fdm2D *b, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"kin\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
@@ -102,7 +109,7 @@ void sflow_turb_io::name_vtp(lexer *p, fdm2D *b, ghostcell *pgc,ofstream &result
     ++n;
 }
     
-void sflow_turb_io::offset_ParaView_2D(lexer *p, fdm2D *b, ghostcell *pgc,ofstream &result, int *offset, int &n)
+void sflow_turb_io::offset_ParaView_2D(lexer *p, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
 	++n;

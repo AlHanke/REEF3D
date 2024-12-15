@@ -20,7 +20,12 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef SFLOW_VTP_FSF_H_
+#define SFLOW_VTP_FSF_H_
+
 #include"increment.h"
+#include"vtp3D.h"
+#include<vector>
 
 class lexer;
 class fdm2D;
@@ -41,10 +46,7 @@ class fnpf_print_Hs;
 
 using namespace std;
 
-#ifndef SFLOW_VTP_FSF_H_
-#define SFLOW_VTP_FSF_H_
-
-class sflow_vtp_fsf : public increment
+class sflow_vtp_fsf : public increment, private vtp3D
 {
 public:
 	sflow_vtp_fsf(lexer*,fdm2D*,ghostcell*);
@@ -54,17 +56,16 @@ public:
     virtual void print2D(lexer*,fdm2D*,ghostcell*,sflow_turbulence*,sediment*);
 
 private:
-
-	void etend(lexer*,fdm2D*,ghostcell*);
 	void pvtp(lexer*,fdm2D*,ghostcell*,sflow_turbulence*,sediment*);
 	void name_iter(lexer*,fdm2D*,ghostcell*);
     void piecename(lexer*,fdm2D*,ghostcell*,int);
 
+    std::vector<char> buffer;
+    int m = 0;
 
 	char name[200],pname[200];
     int n,iin,offset[200];
     float ffn;
-    double ddn;
 
 	double xs_local,ys_local,zs_local,xe_local,ye_local,ze_local;
 	double xs_global,ys_global,zs_global,xe_global,ye_global,ze_global;

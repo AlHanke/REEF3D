@@ -20,11 +20,11 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"sflow_turbulence.h"
-#include"increment.h"
-
 #ifndef SFLOW_TURB_VOID_H_
 #define SFLOW_TURB_VOID_H_
+
+#include"sflow_turbulence.h"
+#include"increment.h"
 
 using namespace std;
 
@@ -39,14 +39,14 @@ public:
 	virtual void ktimesave(lexer*, fdm2D*, ghostcell*);
 	virtual void etimesave(lexer*, fdm2D*, ghostcell*);
     
-    virtual void print_2D(lexer*, fdm2D*, ghostcell*,ofstream&);
+    virtual void print_2D(lexer*, fdm2D*, ghostcell*, std::vector<char>&, int&);
     virtual void kinget(int,int,double);
     virtual void epsget(int,int,double);
     virtual double kinval(int,int);
     virtual double epsval(int,int);
 	virtual void name_pvtp(lexer*, fdm2D*, ghostcell*,ofstream&);
-    virtual void name_vtp(lexer*, fdm2D*, ghostcell*,ofstream&, int*, int &);
-    virtual void offset_ParaView_2D(lexer*, fdm2D*, ghostcell*,ofstream&, int*, int &);
+    virtual void name_vtp(lexer*, fdm2D*, ghostcell*, stringstream&, int*, int &);
+    virtual void offset_ParaView_2D(lexer*, int*, int&);
     
 private:
     double val;

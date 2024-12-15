@@ -20,6 +20,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef SFLOW_TURB_IO_VOID_H_
+#define SFLOW_TURB_IO_VOID_H_
+
 #include"sflow_turbulence.h"
 #include"increment.h"
 #include"slice4.h"
@@ -28,9 +31,6 @@ Author: Hans Bihs
 class fdm2D;
 class lexer;
 class ghostcell;
-
-#ifndef SFLOW_TURB_IO_VOID_H_
-#define SFLOW_TURB_IO_VOID_H_
 
 using namespace std;
 
@@ -41,7 +41,7 @@ public:
     sflow_turb_io_void(lexer*);
 	virtual ~sflow_turb_io_void();
     
-    virtual void print_2D(lexer*, fdm2D*, ghostcell*,ofstream&);
+    virtual void print_2D(lexer*, fdm2D*, ghostcell*, std::vector<char>&, int&);
     
     virtual void kinget(int,int,double);
     virtual void epsget(int,int,double);
@@ -50,9 +50,9 @@ public:
     virtual double epsval(int,int);
     
 	virtual void name_pvtp(lexer*, fdm2D*, ghostcell*,ofstream&);
-    virtual void name_vtp(lexer*, fdm2D*, ghostcell*,ofstream&, int*, int &);
+    virtual void name_vtp(lexer*, fdm2D*, ghostcell*, stringstream&, int*, int &);
     
-    virtual void offset_ParaView_2D(lexer*, fdm2D*, ghostcell*,ofstream&, int*, int &);
+    virtual void offset_ParaView_2D(lexer*, int*, int&);
     
 
 };

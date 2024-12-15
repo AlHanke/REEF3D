@@ -20,6 +20,13 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef SFLOW_TURBULENCE_H_
+#define SFLOW_TURBULENCE_H_
+
+#include<fstream>
+#include<sstream>
+#include<vector>
+
 class fdm2D;
 class lexer;
 class sflow_convection;
@@ -28,11 +35,6 @@ class solver2D;
 class ghostcell;
 class ioflow;
 class slice;
-
-#include<fstream>
-
-#ifndef SFLOW_TURBULENCE_H_
-#define SFLOW_TURBULENCE_H_
 
 using namespace std;
 
@@ -44,14 +46,14 @@ public:
 	virtual void ktimesave(lexer*, fdm2D*, ghostcell*)=0;
 	virtual void etimesave(lexer*, fdm2D*, ghostcell*)=0;
     
-    virtual void print_2D(lexer*, fdm2D*, ghostcell*,ofstream&)=0;
+    virtual void print_2D(lexer*, fdm2D*, ghostcell*, std::vector<char>&, int&)=0;
     virtual void kinget(int,int,double)=0;
     virtual void epsget(int,int,double)=0;
     virtual double kinval(int,int)=0;
     virtual double epsval(int,int)=0;
-	virtual void name_pvtp(lexer*, fdm2D*, ghostcell*,ofstream&)=0;
-    virtual void name_vtp(lexer*, fdm2D*, ghostcell*,ofstream&, int*, int &)=0;
-    virtual void offset_ParaView_2D(lexer*, fdm2D*, ghostcell*,ofstream&, int*, int &)=0;
+	virtual void name_pvtp(lexer*, fdm2D*, ghostcell*, ofstream&)=0;
+    virtual void name_vtp(lexer*, fdm2D*, ghostcell*, stringstream&, int*, int &)=0;
+    virtual void offset_ParaView_2D(lexer*, int*, int&)=0;
 	
 };
 
