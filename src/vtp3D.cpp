@@ -24,6 +24,10 @@ Author: Hans Bihs
 
 #include "lexer.h"
 
+#include <sstream>
+#include <vector>
+#include <cstring>
+
 void vtp3D::beginning(lexer *p, std::stringstream &result, int numPoints, int numVerts, int numLines, int numStrips, int numPolys)
 {
     xmlVersion(result);
@@ -35,16 +39,6 @@ void vtp3D::beginning(lexer *p, std::stringstream &result, int numPoints, int nu
     result<<"<Piece NumberOfPoints=\""<<numPoints<<"\" NumberOfVerts=\""<<numVerts<<"\" NumberOfLines=\""<<numLines<<"\" NumberOfStrips=\""<<numStrips<<"\" NumberOfPolys=\""<<numPolys<<"\">\n";
 }
 
-void vtp3D::beginning(lexer *p, std::ofstream &result)
-{
-    xmlVersion(result);
-    result<<"<VTKFile type=\"PolyData\" ";
-    vtkVersion(result);
-    result<<"<PolyData>\n";
-    if(p->P16==1)
-        timeValue(result,p->simtime);
-}
-
 void vtp3D::beginningParallel(lexer *p, std::ofstream &result)
 {
     xmlVersion(result);
@@ -53,4 +47,58 @@ void vtp3D::beginningParallel(lexer *p, std::ofstream &result)
     result<<"<PPolyData GhostLevel=\"0\">\n";
     if(p->P16==1)
         timeValue(result,p->simtime);
+}
+
+void vtp3D::points(std::stringstream &result, const int *offset, int &n)
+{
+    result<<"<Points>\n";
+    result<<"<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
+    ++n;
+    result<<"</Points>\n";
+}
+
+void vtp3D::pointsParallel(std::ofstream &result)
+{
+    result<<"<PPoints>\n";
+    result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>\n";
+    result<<"</PPoints>\n";
+}
+
+void vtp3D::verts(std::stringstream &result, const int *offset, int &n)
+{
+    result<<"<Verts>\n";
+    result<<"<DataArray type=\"Int32\" Name=\"connectivity\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
+    ++n;
+    result<<"<DataArray type=\"Int32\" Name=\"offsets\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
+    ++n;
+    result<<"</Verts>\n";
+}
+
+void vtp3D::polys(std::stringstream& result, const int* offset, int& n)
+{
+    result<<"<Polys>\n";
+    result<<"<DataArray type=\"Int32\" Name=\"connectivity\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
+    ++n;
+    result<<"<DataArray type=\"Int32\" Name=\"offsets\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
+    ++n;
+    result<<"</Polys>\n";
+}
+
+void vtp3D::ending(std::stringstream& result)
+{
+    result<<"</Piece>\n";
+    result<<"</PolyData>\n";
+    appendData(result);
+}
+
+void vtp3D::endingParallel(std::ofstream& result)
+{
+    result<<"</PPolyData>\n";
+    result<<"</VTKFile>";
+}
+
+void vtp3D::footer(std::vector<char>& buffer, int& m )
+{
+    char footer[] = "\n</AppendedData>\n</VTKFile>";
+    std::memcpy(&buffer[m],&footer,sizeof(footer)-1);
 }

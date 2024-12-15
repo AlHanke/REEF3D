@@ -64,14 +64,7 @@ void topo_vtp::pvtp(lexer* p, fdm* a, ghostcell* pgc, sediment *psed)
     
     result<<"</PPointData>\n";
 
-    result<<"<PPoints>\n";
-    result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>\n";
-    result<<"</PPoints>\n";
-    
-    result<<"<Polys>\n";
-    result<<"<DataArray type=\"Int32\" Name=\"connectivity\"/>\n";
-    result<<"<DataArray type=\"Int32\" Name=\"offsets\"/>\n";
-    result<<"</Polys>\n";
+    pointsParallel(result);
 
     for(n=0; n<p->M10; ++n)
     {
@@ -79,8 +72,7 @@ void topo_vtp::pvtp(lexer* p, fdm* a, ghostcell* pgc, sediment *psed)
         result<<"<Piece Source=\""<<pname<<"\"/>\n";
     }
 
-    result<<"</PPolyData>\n";
-    result<<"</VTKFile>\n";
+    endingParallel(result);
 
     result.close();
 }

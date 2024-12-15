@@ -50,9 +50,7 @@ void partres::pvtp(lexer* p)
     result<<"<PDataArray type=\"Float32\" Name=\"bedChange\"/>\n";
     result<<"</PPointData>\n";
 
-    result<<"<PPoints>\n";
-    result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>\n";
-    result<<"</PPoints>\n";
+    pointsParallel(result);
 
     for(int n=0; n<p->M10; ++n)
     {
@@ -60,8 +58,7 @@ void partres::pvtp(lexer* p)
         result<<"<Piece Source=\""<<pname<<"\"/>\n";
     }
 
-    result<<"</PPolyData>\n";
-    result<<"</VTKFile>"<<std::flush;
+    endingParallel(result);
 
     result.close();
 }

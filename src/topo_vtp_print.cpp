@@ -103,20 +103,12 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
         psed->name_ParaView_bedshear(p,pgc,result,offset,n);
     result<<"</PointData>\n";
 
-    result<<"<Points>\n";
-    result<<"<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-    ++n;
-    result<<"</Points>\n";
+    points(result,offset,n);
 
-    result<<"<Polys>\n";
-    result<<"<DataArray type=\"Int32\" Name=\"connectivity\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-    ++n;
-    result<<"<DataArray type=\"Int32\" Name=\"offsets\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-    ++n;
-    result<<"</Polys>\n";
-    result<<"</Piece>\n";
-    result<<"</PolyData>\n";
-    result<<"<AppendedData encoding=\"raw\">\n_";
+    polys(result,offset,n);
+
+    ending(result);
+    
     m=result.str().length();
     buffer.resize(m+offset[n]+27);
     std::memcpy(&buffer[0],result.str().data(),m);
@@ -236,9 +228,7 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     m+=sizeof(int);
     }
 
-    std::stringstream footer;
-    footer<<"\n</AppendedData>\n</VTKFile>";
-    std::memcpy(&buffer[m],footer.str().data(),footer.str().size());
+    footer(buffer,m);
 
     // Open File
     FILE* file = std::fopen(name, "w");

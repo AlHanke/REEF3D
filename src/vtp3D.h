@@ -32,8 +32,16 @@ class vtp3D : public vtk3D , increment
 {
     protected:
         void beginning(lexer*, std::stringstream&, int, int, int, int, int);
-        void beginning(lexer*, std::ofstream&);
         void beginningParallel(lexer*, std::ofstream&);
+
+        void points(std::stringstream&, const int*, int&);
+        void pointsParallel(std::ofstream&);
+        void verts(std::stringstream&, const int*, int&);
+        void polys(std::stringstream&, const int*, int&);
+
+        void ending(std::stringstream&);
+        void endingParallel(std::ofstream&);
+        void footer(std::vector<char>&, int&);
 };
 
 #endif

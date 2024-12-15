@@ -114,24 +114,12 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
     ++n;
     result<<"</PointData>\n";
     
-
-    result<<"<Points>\n";
-    result<<"<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-    ++n;
-    result<<"</Points>\n";
+    points(result,offset,n);
     
+    verts(result,offset,n);
 
-    result<<"<Verts>\n";
-    result<<"<DataArray type=\"Int32\" Name=\"connectivity\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-    ++n;
-    result<<"<DataArray type=\"Int32\" Name=\"offsets\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-    ++n;
-    result<<"</Verts>\n";
+    ending(result);
 
-    result<<"</Piece>\n";
-    result<<"</PolyData>\n";
-
-    result<<"<AppendedData encoding=\"raw\">\n_";
     m=result.str().length();
     buffer.resize(m+offset[n]+27);
     std::memcpy(&buffer[0],result.str().data(),m);
@@ -277,9 +265,7 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
         ++count;
     }
 
-    stringstream footer;
-    footer<<"\n</AppendedData>\n</VTKFile>"<<flush;
-    std::memcpy(&buffer[m],footer.str().data(),footer.str().size());
+    footer(buffer,m);
 
     // Open File
     FILE* file = fopen(name, "w");
