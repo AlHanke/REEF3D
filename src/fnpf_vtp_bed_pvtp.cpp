@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm_fnpf.h"
 #include"ghostcell.h"
 
-void fnpf_vtp_bed::pvtu(lexer *p, fdm_fnpf *c, ghostcell* pgc)
+void fnpf_vtp_bed::pvtp(lexer *p, fdm_fnpf *c, ghostcell* pgc)
 {	
 	int num=0;
 
@@ -41,32 +41,14 @@ void fnpf_vtp_bed::pvtu(lexer *p, fdm_fnpf *c, ghostcell* pgc)
 	ofstream result;
 	result.open(name);
 
-	result<<"<?xml version=\"1.0\"?>\n";
-	result<<"<VTKFile type=\"PPolyData\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
-	result<<"<PPolyData  GhostLevel=\"0\">\n";
-    
-    if(p->P16==1)
-    {
-    result<<"<FieldData>\n";
-    result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime<<endl;
-    result<<"</DataArray>\n";
-    result<<"</FieldData>\n";
-    }
-	
-	result<<"<PPoints>\n";
-	result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>\n";
-	result<<"</PPoints>\n";
+	beginningParallel(p,result);
 	
 	result<<"<PPointData>\n";
 	result<<"<PDataArray type=\"Float32\" Name=\"elevation\"/>\n";
 	result<<"<PDataArray type=\"Float32\" Name=\"depth\"/>\n";
 	result<<"</PPointData>\n";
 	
-	result<<"<Polys>\n";
-    result<<"<DataArray type=\"Int32\" Name=\"connectivity\"/>\n";
-	result<<"<DataArray type=\"Int32\" Name=\"offsets\" />\n";
-    result<<"<DataArray type=\"Int32\" Name=\"types\" />\n";
-	result<<"</Polys>\n";
+	pointsParallel(result);
 
 	for(n=0; n<p->M10; ++n)
 	{
@@ -74,8 +56,7 @@ void fnpf_vtp_bed::pvtu(lexer *p, fdm_fnpf *c, ghostcell* pgc)
     result<<"<Piece Source=\""<<pname<<"\"/>\n";
 	}
 
-	result<<"</PPolyData>\n";
-	result<<"</VTKFile>\n";
+	endingParallel(result);
 
 	result.close();
 
