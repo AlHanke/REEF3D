@@ -93,8 +93,7 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
     //---------------------------------------------
     stringstream result;
 
-    beginning(p,result);
-    result<<"<Piece NumberOfPoints=\""<<numpt<<"\" NumberOfVerts=\""<<numpt<<"\" NumberOfLines=\"0\" NumberOfStrips=\"0\" NumberOfPolys=\"0\">\n";
+    beginning(p,result,numpt,numpt,0,0,0);
     
     result<<"<PointData>\n";
     n=0;

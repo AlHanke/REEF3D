@@ -24,7 +24,7 @@ Author: Hans Bihs
 
 #include "lexer.h"
 
-void vtp3D::beginning(lexer *p, std::stringstream &result)
+void vtp3D::beginning(lexer *p, std::stringstream &result, int numPoints, int numVerts, int numLines, int numStrips, int numPolys)
 {
     xmlVersion(result);
     result<<"<VTKFile type=\"PolyData\" ";
@@ -32,6 +32,7 @@ void vtp3D::beginning(lexer *p, std::stringstream &result)
     result<<"<PolyData>\n";
     if(p->P16==1)
         timeValue(result,p->simtime);
+    result<<"<Piece NumberOfPoints=\""<<numPoints<<"\" NumberOfVerts=\""<<numVerts<<"\" NumberOfLines=\""<<numLines<<"\" NumberOfStrips=\""<<numStrips<<"\" NumberOfPolys=\""<<numPolys<<"\">\n";
 }
 
 void vtp3D::beginning(lexer *p, std::ofstream &result)

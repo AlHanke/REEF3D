@@ -31,7 +31,7 @@ class lexer;
 class vtp3D : public vtk3D , increment
 {
     protected:
-        void beginning(lexer*, std::stringstream&);
+        void beginning(lexer*, std::stringstream&, int, int, int, int, int);
         void beginning(lexer*, std::ofstream&);
         void beginningParallel(lexer*, std::ofstream&);
 };
