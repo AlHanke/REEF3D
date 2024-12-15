@@ -114,7 +114,7 @@ public:
     virtual void name_vtu_bedload(lexer*, ghostcell*,ofstream&, int*, int &){};
     virtual void name_vtu_bedload(lexer*, ghostcell*, stringstream&, int*, int &){};
     virtual void offset_vtp_bedload(lexer*, ghostcell*,ofstream&, int*, int &){};
-    virtual void offset_vtu_bedload(lexer*, int*, int &){};
+    virtual void offset_ParaView_bedload(lexer*, int*, int &){};
     
 	virtual void print_2D_bedshear(lexer*, ghostcell*,ofstream&){};
     virtual void print_3D_bedshear(lexer*, ghostcell*,std::vector<char>&, int&){};
@@ -122,7 +122,7 @@ public:
     virtual void name_vtu_bedshear(lexer*, ghostcell*,ofstream&, int*, int &){};
     virtual void name_vtu_bedshear(lexer*, ghostcell*, stringstream&, int*, int &){};
     virtual void offset_vtp_bedshear(lexer*, ghostcell*,ofstream&, int*, int &){};
-    virtual void offset_vtu_bedshear(lexer*, int*, int &){};
+    virtual void offset_ParaView_bedshear(lexer*, int*, int &){};
     
     virtual void print_2D_parameter1(lexer*, ghostcell*,ofstream&){};
     virtual void print_3D_parameter1(lexer*, ghostcell*,std::vector<char>&, int&){};
@@ -130,7 +130,7 @@ public:
     virtual void name_vtu_parameter1(lexer*, ghostcell*,ofstream&, int*, int &){};
     virtual void name_vtu_parameter1(lexer*, ghostcell*, stringstream&, int*, int &){};
     virtual void offset_vtp_parameter1(lexer*, ghostcell*,ofstream&, int*, int &){};
-    virtual void offset_vtu_parameter1(lexer*, int*, int &){};
+    virtual void offset_ParaView_parameter1(lexer*, int*, int &){};
     
     virtual void print_2D_parameter2(lexer*, ghostcell*,ofstream&){};
     virtual void print_3D_parameter2(lexer*, ghostcell*,std::vector<char>&, int&){};
@@ -138,7 +138,7 @@ public:
     virtual void name_vtu_parameter2(lexer*, ghostcell*,ofstream&, int*, int &){};
     virtual void name_vtu_parameter2(lexer*, ghostcell*, stringstream&, int*, int &){};
     virtual void offset_vtp_parameter2(lexer*, ghostcell*,ofstream&, int*, int &){};
-    virtual void offset_vtu_parameter2(lexer*, int*, int &){};
+    virtual void offset_ParaView_parameter2(lexer*, int*, int &){};
     
     
     partres *pst;

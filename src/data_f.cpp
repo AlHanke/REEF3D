@@ -84,7 +84,7 @@ void data_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, in
     ++n;
 }
 
-void data_f::offset_vtu(lexer *p, int *offset, int &n)
+void data_f::offset_ParaView(lexer *p, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
 	++n;

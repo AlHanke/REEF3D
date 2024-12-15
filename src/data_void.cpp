@@ -49,7 +49,7 @@ void data_void::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result,
 {
 }
 
-void data_void::offset_vtu(lexer *p, int *offset, int &n)
+void data_void::offset_ParaView(lexer *p, int *offset, int &n)
 {
 }
 

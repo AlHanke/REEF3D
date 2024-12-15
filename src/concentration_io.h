@@ -47,7 +47,7 @@ public:
 
     void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
     void name_vtu(lexer*, fdm*, ghostcell*, stringstream&, int*, int &);
-    void offset_vtu(lexer*, int*, int &);
+    void offset_ParaView(lexer*, int*, int &);
 
     field4 C;
 	fluid_update *pupdate;

@@ -147,7 +147,7 @@ void kepsilon_void::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &res
 {
 }
 
-void kepsilon_void::offset_vtu(lexer *p, int *offset, int &n)
+void kepsilon_void::offset_ParaView(lexer *p, int *offset, int &n)
 {
 }
 

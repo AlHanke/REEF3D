@@ -69,7 +69,7 @@ void heat_print::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result
     ++n;
 }
 
-void heat_print::offset_vtu(lexer *p, int *offset, int &n)
+void heat_print::offset_ParaView(lexer *p, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
 	++n;

@@ -391,7 +391,7 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
             ++n;
             
             // k and eps
-            pnhfturb->offset_vtu(p,offset,n);
+            pnhfturb->offset_ParaView(p,offset,n);
             
             // omega_sig
             offset[n]=offset[n-1]+4*(p->pointnum)+4;

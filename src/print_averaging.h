@@ -41,7 +41,7 @@ public:
     
     virtual void name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)=0;
     virtual void name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)=0;
-    virtual void offset_vtu(lexer *p, int *offset, int &n)=0;
+    virtual void offset_ParaView(lexer *p, int *offset, int &n)=0;
     virtual void print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char>&, int&)=0;
 
 
