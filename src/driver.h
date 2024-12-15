@@ -72,7 +72,6 @@ class nhflow_pressure;
 class nhflow_diffusion;
 class nhflow_forcing;
 class sflow;
-class fnpf_printer;
 class fnpf_timestep;
 class nhflow_timestep;
 class grid;
@@ -82,7 +81,6 @@ class multiphase;
 class nhflow_momentum;
 class momentum_RKLS3_df;
 class momentum_RKLS3_sf;
-class nhflow_printer;
 class particle_base;
 
 #include<iostream>
@@ -194,7 +192,6 @@ public:
     onephase *poneph;
     nhflow_fsf *pnhfsf;
     sflow *psflow;
-    fnpf_printer *pfprint; 
     fnpf_timestep *pftstep;
     grid *pgrid;
     patchBC_interface *pBC;
@@ -209,7 +206,6 @@ public:
     multiphase *pmp;
     nhflow_timestep *pnhfstep;
     nhflow_momentum *pnhfmom;
-    nhflow_printer *pnhfprint;
     nhflow_forcing *pnhfdf;
     momentum_RKLS3_df *pmom_df;
     momentum_RKLS3_sf *pmom_sf;

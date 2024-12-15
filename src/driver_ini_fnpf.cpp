@@ -203,7 +203,7 @@ void driver::driver_ini_fnpf()
     
     pftstep->ini(c,p,pgc);
 	
-	pfprint->start(p,c,pgc,pflow);
+	pprint->start(p,c,pgc,pflow);
 	
     
 	p->gctime=0.0;

@@ -23,7 +23,7 @@ Author: Hans Bihs
 #ifndef PRINTER_FNPF_H_
 #define PRINTER_FNPF_H_
 
-#include"fnpf_printer.h"
+#include"printer.h"
 #include"increment.h"
 
 #include"vtks.h"
@@ -49,7 +49,7 @@ class fnpf_print_kinematics;
 
 using namespace std;
 
-class printer_fnpf : public fnpf_printer, public increment
+class printer_fnpf : public printer, public increment
 {
 
 public:
@@ -57,9 +57,9 @@ public:
 	virtual ~printer_fnpf();
 	void start(lexer*,fdm_fnpf*,ghostcell*,ioflow*);
     void print_stop(lexer*,fdm_fnpf*,ghostcell*);
-        
+    
 private:
-void print_vtu(lexer*,fdm_fnpf*,ghostcell*);
+    void print_vtu(lexer*,fdm_fnpf*,ghostcell*);
     void parallel(lexer*,ghostcell*);
 
     vtk3D *outputFormat;

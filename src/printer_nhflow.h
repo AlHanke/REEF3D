@@ -23,7 +23,7 @@ Author: Hans Bihs
 #ifndef PRINTER_NHFLOW_H_
 #define PRINTER_NHFLOW_H_
 
-#include"nhflow_printer.h"
+#include"printer.h"
 #include"increment.h"
 
 #include"vtks.h"
@@ -53,14 +53,14 @@ class bedshear_max;
 
 using namespace std;
 
-class printer_nhflow : public nhflow_printer, public increment
+class printer_nhflow : public printer, public increment
 {
 
 public:
 	printer_nhflow(lexer*,fdm_nhf*,ghostcell*);
 	virtual ~printer_nhflow();
 	void start(lexer*,fdm_nhf*,ghostcell*,ioflow*,nhflow_turbulence*,sediment*);
-        void print_stop(lexer*,fdm_nhf*,ghostcell*,ioflow*,nhflow_turbulence*,sediment*);
+    void print_stop(lexer*,fdm_nhf*,ghostcell*,ioflow*,nhflow_turbulence*,sediment*);
     
 private:
     void print_vtu(lexer*,fdm_nhf*,ghostcell*,nhflow_turbulence*,sediment*);
