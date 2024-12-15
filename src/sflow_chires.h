@@ -30,8 +30,6 @@ class sflow_flux;
 class sflow_fluxlim;
 class fdm2D;
 
-using namespace std;
-
 class sflow_chires : public sflow_convection, public increment
 {
 

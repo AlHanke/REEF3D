@@ -32,8 +32,6 @@ class sflow_convection;
 class sflow_fsf;
 class sflow_diffusion;
 
-using namespace std;
-
 class sflow_momentum_AB2 : public sflow_momentum, public increment
 {
 public:

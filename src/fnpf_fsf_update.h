@@ -34,8 +34,6 @@ class slice;
 class field;
 class vec;
 
-using namespace std;
-
 class fnpf_fsf_update : public increment
 {
 public:

@@ -30,8 +30,6 @@ class heat;
 class concentration;
 class density;
 
-using namespace std;
-
 class pjm_nse : public pressure, public increment
 {
 

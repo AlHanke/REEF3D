@@ -27,8 +27,6 @@ Author: Hans Bihs
 #include"strain.h"
 #include"field4.h"
 
-using namespace std;
-
 class rheology_f : public rheology, public strain
 {
 

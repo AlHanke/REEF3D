@@ -26,8 +26,6 @@ Author: Hans Bihs
 #include"fieldint.h"
 #include"increment.h"
 
-using namespace std;
-
 class fieldint6 : public fieldint, public increment
 {
 public:

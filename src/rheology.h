@@ -27,9 +27,6 @@ class lexer;
 class fdm;
 class ghostcell;
 
-using namespace std;
-
-
 class rheology 
 {
 

@@ -28,8 +28,6 @@ Author: Hans Bihs
 
 class sflow_flux;
 
-using namespace std;
-
 class sflow_eta_weno_hj : public sflow_eta_disc, public increment
 {
 public:

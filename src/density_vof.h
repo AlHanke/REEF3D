@@ -29,9 +29,6 @@ Author: Hans Bihs
 class fdm;
 class lexer;
 
-
-using namespace std;
-
 class density_vof : public density, virtual public increment
 {
 

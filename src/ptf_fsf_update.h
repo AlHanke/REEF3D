@@ -33,8 +33,6 @@ class ioflow;
 class slice;
 class field;
 
-using namespace std;
-
 class ptf_fsf_update : public increment
 {
 public:

@@ -25,8 +25,6 @@ Author: Hans Bihs
 
 #include"onephase.h"
 
-using namespace std;
-
 class onephase_v : public onephase
 {
 public:

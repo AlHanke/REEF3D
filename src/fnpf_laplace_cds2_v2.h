@@ -28,8 +28,6 @@ Author: Hans Bihs
 
 class solver_fnpf;
 
-using namespace std;
-
 class fnpf_laplace_cds2_v2 : public fnpf_laplace, public increment
 {
 public:

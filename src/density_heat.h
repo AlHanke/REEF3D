@@ -30,9 +30,6 @@ class fdm;
 class lexer;
 class heat;
 
-
-using namespace std;
-
 class density_heat : public density, virtual public increment
 {
 

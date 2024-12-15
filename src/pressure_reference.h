@@ -30,9 +30,6 @@ class fdm;
 class lexer;
 class ghostcell;
 
-
-using namespace std;
-
 class pressure_reference : virtual public increment
 {
 

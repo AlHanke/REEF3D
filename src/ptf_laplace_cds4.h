@@ -26,8 +26,6 @@ Author: Hans Bihs
 #include"ptf_laplace.h"
 #include"increment.h"
 
-using namespace std;
-
 class ptf_laplace_cds4 : public ptf_laplace, public increment
 {
 public:

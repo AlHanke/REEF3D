@@ -31,8 +31,6 @@ class lexer;
 class ghostcell;
 class rheology;
 
-using namespace std;
-
 class fluid_update_rheology : public fluid_update, increment
 {
 public:

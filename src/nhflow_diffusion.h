@@ -29,8 +29,6 @@ class ghostcell;
 class solver;
 class slice;
 
-using namespace std;
-
 class nhflow_diffusion
 {
 public:

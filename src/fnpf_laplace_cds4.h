@@ -26,8 +26,6 @@ Author: Hans Bihs
 #include"fnpf_laplace.h"
 #include"increment.h"
 
-using namespace std;
-
 class fnpf_laplace_cds4 : public fnpf_laplace, public increment
 {
 public:

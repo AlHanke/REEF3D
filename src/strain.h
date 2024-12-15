@@ -32,8 +32,6 @@ Author: Hans Bihs
 class ghostcell;
 class fieldint;
 
-using namespace std;
-
 class strain : public gradient
 {
 

@@ -29,8 +29,6 @@ class ghostcell;
 class ioflow;
 class field;
 
-using namespace std;
-
 class onephase
 {
 public:

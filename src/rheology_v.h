@@ -25,9 +25,6 @@ Author: Hans Bihs
 
 #include"rheology.h"
 
-using namespace std;
-
-
 class rheology_v : public rheology
 {
 

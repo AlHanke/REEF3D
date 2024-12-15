@@ -32,8 +32,6 @@ class ioflow;
 class reini;
 class onephase;
 
-using namespace std;
-
 class ptf
 {
 public:

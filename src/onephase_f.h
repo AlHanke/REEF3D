@@ -30,9 +30,6 @@ Author: Hans Bihs
 #include"field3.h"
 #include"field4.h"
 
-
-using namespace std;
-
 class onephase_f : public onephase, public ddweno_f_nug
 {
 public:

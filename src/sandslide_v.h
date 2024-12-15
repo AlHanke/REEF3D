@@ -28,9 +28,6 @@ Author: Hans Bihs
 #include"field4a.h"
 #include"sandslide.h"
 
-
-using namespace std;
-
 class sandslide_v :  public sandslide
 {
 public:

@@ -29,8 +29,6 @@ Author: Hans Bihs
 class sflow_flux;
 class fdm2D;
 
-using namespace std;
-
 class sflow_cweno_flux : public sflow_convection, public increment
 {
 public:

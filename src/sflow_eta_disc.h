@@ -26,8 +26,6 @@ Author: Hans Bihs
 class lexer;
 class slice;
 
-using namespace std;
-
 class sflow_eta_disc 
 {
 public:

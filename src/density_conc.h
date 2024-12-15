@@ -30,9 +30,6 @@ class fdm;
 class lexer;
 class concentration;
 
-
-using namespace std;
-
 class density_conc : public density, virtual public increment
 {
 
