@@ -111,7 +111,7 @@ void sediment_void::name_ParaView_bedload(lexer *p, ghostcell *pgc, stringstream
 {
 }
 
-void sediment_void::offset_vtp_bedload(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void sediment_void::offset_ParaView_2D_bedload(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
 }
 
@@ -139,7 +139,7 @@ void sediment_void::name_ParaView_bedshear(lexer *p, ghostcell *pgc, stringstrea
 {
 }
 
-void sediment_void::offset_vtp_bedshear(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void sediment_void::offset_ParaView_2D_bedshear(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
 }
 
@@ -167,7 +167,7 @@ void sediment_void::name_ParaView_parameter1(lexer *p, ghostcell *pgc, stringstr
 {
 }
 
-void sediment_void::offset_vtp_parameter1(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void sediment_void::offset_ParaView_2D_parameter1(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
 }
 
@@ -195,7 +195,7 @@ void sediment_void::name_ParaView_parameter2(lexer *p, ghostcell *pgc, stringstr
 {
 }
 
-void sediment_void::offset_vtp_parameter2(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void sediment_void::offset_ParaView_2D_parameter2(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
 }
 
