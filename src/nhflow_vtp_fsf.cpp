@@ -27,6 +27,9 @@ Author: Hans Bihs
 #include"sediment.h"
 #include<sys/stat.h>
 #include<sys/types.h>
+#include<sstream>
+#include<cstdio>
+#include<cstring>
 
 nhflow_vtp_fsf::nhflow_vtp_fsf(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
@@ -95,20 +98,11 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
     pvtu(p,d,pgc,psed);
 
 	name_iter(p,d,pgc);
-	
-	
-	// Open File
-	ofstream result;
-	result.open(name, ios::binary);
     
     // offsets
     n=0;
 	offset[n]=0;
 	++n;
-	
-	// Points
-    offset[n]=offset[n-1]+8*(p->pointnum2D)*3+4;
-    ++n;
 	
 	// velocity
 	offset[n]=offset[n-1]+4*(p->pointnum2D)*3+4;
@@ -161,36 +155,24 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
 	offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
 	++n;
     }
+
+    // Points
+    offset[n]=offset[n-1]+4*(p->pointnum2D)*3+4;
+    ++n;
 	
-	// Cells
+	// Polys
     offset[n]=offset[n-1] + 4*p->polygon_sum*3+4;
     ++n;
     offset[n]=offset[n-1] + 4*p->polygon_sum+4;
     ++n;
-	offset[n]=offset[n-1] + 4*p->polygon_sum+4;
-    ++n;
 	
-	
-	result<<"<?xml version=\"1.0\"?>\n";
-	result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
-	result<<"<PolyData>\n";
-	result<<"<Piece NumberOfPoints=\""<<p->pointnum2D<<"\" NumberOfPolys=\""<<p->polygon_sum<<"\">\n";
-    
-    if(p->P16==1)
-    {
-    result<<"<FieldData>\n";
-    result<<"<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<p->simtime<<endl;
-    result<<"</DataArray>\n";
-    result<<"</FieldData>\n";
-    }
+	//----------------------------------------------------------------------------
+
+    std::stringstream result;
+
+    beginning(p,result,p->pointnum2D,0,0,0,p->polygon_sum);
     
     n=0;
-	result<<"<Points>\n";
-    result<<"<DataArray type=\"Float64\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-    ++n;
-    result<<"</Points>\n";
-	
-	
     result<<"<PointData>\n";
     result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
@@ -231,45 +213,22 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
     
     result<<"</PointData>\n";
 
-    
+    points(result,offset,n);
 
-    result<<"<Polys>\n";
-    result<<"<DataArray type=\"Int32\" Name=\"connectivity\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-    ++n;
-	result<<"<DataArray type=\"Int32\" Name=\"offsets\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-	++n;
-    result<<"<DataArray type=\"Int32\" Name=\"types\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
-    ++n;
-	result<<"</Polys>\n";
+    polys(result,offset,n);
 
-    result<<"</Piece>\n";
-    result<<"</PolyData>\n";
-    
+    ending(result);
+
+    m=result.str().length();
+    buffer.resize(m+offset[n]+27);
+    std::memcpy(&buffer[0],result.str().data(),m);
     
     //----------------------------------------------------------------------------
-    result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
-	
-	//  XYZ
-	iin=8*(p->pointnum2D)*3;
-	result.write((char*)&iin, sizeof (int));
-    TPSLICELOOP
-	{
-	ddn=p->XN[IP1];
-	result.write((char*)&ddn, sizeof (double));
-
-	ddn=p->YN[JP1];
-	result.write((char*)&ddn, sizeof (double));
-
-    //ddn=float(p->sl_ipol4(d->eta) + p->wd);
-    
-    //ddn=float(0.5*(d->eta(i,j) + d->eta(i,j))  + p->wd);
-    ddn=p->nhf_ipol4eta(p->wet,d->eta, d->bed)+p->wd;
-	result.write((char*)&ddn, sizeof (double));
-	}
 	
     //  Velocities
     iin=4*(p->pointnum2D)*3;
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
     TPSLICELOOP
 	{
     k = p->knoz-1;
@@ -285,7 +244,8 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
     if(p->j_dir==1)
 	ffn=float(0.5*(d->U[IJK]+d->U[IJp1K]));
     
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 
 
 	if(p->j_dir==0)
@@ -299,7 +259,8 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
     if(p->j_dir==1)
 	ffn=float(0.5*(d->V[IJK]+d->V[IJp1K]));
     
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 
 
 	if(p->j_dir==0)
@@ -313,64 +274,77 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
     if(p->j_dir==1)
 	ffn=float(0.5*(d->W[IJK]+d->W[IJp1K]));
     
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     //  Eta
 	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
     TPSLICELOOP
 	{
 	ffn=float(p->sl_ipol4eta_wd(p->wet,d->eta,d->bed));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     //  WL
 	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPSLICELOOP
 	{
 	ffn=float(p->sl_ipol4(d->WL));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     //  Breaking
 	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPSLICELOOP
 	{
         
 	ffn=float(p->sl_ipol4(d->breaking_print));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     //  Coastline
 	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPSLICELOOP
 	{
 	ffn=float(p->sl_ipol4(d->coastline));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     //  Wetdry
 	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPSLICELOOP
 	{
     ffn = 0.25*float((p->wet[IJ]+p->wet[Ip1J]+p->wet[IJp1]+p->wet[Ip1Jp1]));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     //  test
     if(p->P23==1)
     {
 	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPSLICELOOP
 	{
 	ffn=float(p->sl_ipol4(d->test2D));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     }
     
@@ -378,11 +352,13 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
     if(p->P28==1)
     {
 	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPSLICELOOP
 	{
 	ffn=float(p->sl_ipol4(d->fs));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     }
     
@@ -390,11 +366,13 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
     if(p->P110==1)
     {
 	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPSLICELOOP
 	{
 	ffn=float(p->sl_ipol4(d->Hs));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     }
     
@@ -402,67 +380,92 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
     if(p->P131==1)
     {
 	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPSLICELOOP
 	{
     ffn = 0.25*float((wetmax[IJ]+wetmax[Ip1J]+wetmax[IJp1]+wetmax[Ip1Jp1]));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     }
 
+    //  XYZ
+	iin=4*(p->pointnum2D)*3;
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
+    TPSLICELOOP
+	{
+	ffn=p->XN[IP1];
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
+
+	ffn=p->YN[JP1];
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
+
+    //ddn=float(p->sl_ipol4(d->eta) + p->wd);
+    
+    //ddn=float(0.5*(d->eta(i,j) + d->eta(i,j))  + p->wd);
+    ffn=p->nhf_ipol4eta(p->wet,d->eta, d->bed)+p->wd;
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
+	}
+
     //  Connectivity
     iin=4*(p->polygon_sum)*3;
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
     SLICEBASELOOP
 	{
 	// Triangle 1
 	iin=int(d->nodeval2D(i-1,j-1))-1;
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 
 	iin=int(d->nodeval2D(i,j-1))-1;
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 
 	iin=int(d->nodeval2D(i,j))-1;
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	
 	
 	// Triangle 2
 	iin=int(d->nodeval2D(i-1,j-1))-1;
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 
 	iin=int(d->nodeval2D(i,j))-1;
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 
 	iin=int(d->nodeval2D(i-1,j))-1;
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	}
     
     
     //  Offset of Connectivity
     iin=4*(p->polygon_sum);
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	for(n=0;n<p->polygon_sum;++n)
 	{
 	iin=(n+1)*3;
-	result.write((char*)&iin, sizeof (int));
-	}
-    
-//  Cell types
-    iin=4*(p->polygon_sum);
-    result.write((char*)&iin, sizeof (int));
-	for(n=0;n<p->polygon_sum;++n)
-	{
-	iin=7;
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	}
 
-    result<<endl<<"</AppendedData>\n";
-    result<<"</VTKFile>\n";
+    footer(buffer,m);
 
-	result.close();
+    // Open File
+    FILE* file = std::fopen(name, "w");
+    std::fwrite(buffer.data(), buffer.size(), 1, file);
+    std::fclose(file);
 	
 	++printcount;
-
 }
 
 void nhflow_vtp_fsf::preproc(lexer *p, fdm_nhf *d, ghostcell* pgc)
