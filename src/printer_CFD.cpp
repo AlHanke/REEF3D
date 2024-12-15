@@ -83,16 +83,15 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc)
 
     if(p->I40==0)
     {
-	p->printtime=0.0;
-	p->sedprinttime=0.0;
-	p->fsfprinttime=0.0;
-	p->probeprinttime=0.0;
-	p->stateprinttime=0.0;
-    p->exportprinttime=0.0;
+        p->printtime=0.0;
+        p->sedprinttime=0.0;
+        p->fsfprinttime=0.0;
+        p->probeprinttime=0.0;
+        p->stateprinttime=0.0;
+        p->exportprinttime=0.0;
     }
 
 	p->Darray(printtime_wT,p->P35);
-    p->Iarray(printfsfiter_wI,p->P184);
     p->Darray(printfsftime_wT,p->P185);
 
 	for(int qn=0; qn<p->P35; ++qn)
@@ -100,9 +99,6 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc)
 
     for(int qn=0; qn<p->P185; ++qn)
 	printfsftime_wT[qn]=p->P185_ts[qn];
-
-    for(int qn=0; qn<p->P184; ++qn)
-	printfsfiter_wI[qn]=p->P184_its[qn];
 
 	pwsf = new print_wsf(p,a,pgc,0);
 	pwsf_theory = new print_wsf_theory(p,a,pgc,0);
@@ -170,8 +166,8 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc)
 
 	if(p->B270>0 || p->B274>0 || p->B281>0 || p->B282>0 || p->B291>0 || p->B310>0 || p->B321>0 || p->B322>0 || p->B311>0)
 	{
-	ppor = new print_porous(p,a,pgc);
-	ppor->start(p,a,pgc);
+        ppor = new print_porous(p,a,pgc);
+        ppor->start(p,a,pgc);
 	}
 
     if(p->P230>0)
@@ -189,10 +185,6 @@ printer_CFD::~printer_CFD()
 {
 }
 
-void printer_CFD::ini(lexer* p, fdm* a, ghostcell* pgc)
-{
-}
-
 void printer_CFD::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, heat *pheat, ioflow *pflow, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
 {
 	pgc->gcparax4a(p,a->phi,5);
@@ -201,24 +193,22 @@ void printer_CFD::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, hea
 
 	// Print out based on iteration
 	if(p->count%p->P20==0 && p->P30<0.0 && p->P34<0.0 && p->P20>0)
-	{
 	print3D(p,a,pgc,pturb,pheat,pdata,pconc,pmp,psed);
-	}
 
 	// Print out based on time
 	if((p->simtime>p->printtime && p->P30>0.0 && p->P34<0.0) || (p->count==0 &&  p->P30>0.0))
 	{
-	print3D(p,a,pgc,pturb,pheat,pdata,pconc,pmp,psed);
+        print3D(p,a,pgc,pturb,pheat,pdata,pconc,pmp,psed);
 
-	p->printtime+=p->P30;
+        p->printtime+=p->P30;
 	}
 
 	// Print out based on sediment time
 	if((p->sedtime>p->sedprinttime && p->P34>0.0 && p->P30<0.0) || (p->count==0 &&  p->P34>0.0))
 	{
-	print3D(p,a,pgc,pturb,pheat,pdata,pconc,pmp,psed);
+        print3D(p,a,pgc,pturb,pheat,pdata,pconc,pmp,psed);
 
-	p->sedprinttime+=p->P34;
+        p->sedprinttime+=p->P34;
 	}
 
 	// Print out based on time interval
@@ -226,9 +216,9 @@ void printer_CFD::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, hea
 	for(int qn=0; qn<p->P35; ++qn)
 	if(p->simtime>printtime_wT[qn] && p->simtime>=p->P35_ts[qn] && p->simtime<=(p->P35_te[qn]+0.5*p->P35_dt[qn]))
 	{
-	print3D(p,a,pgc,pturb,pheat,pdata,pconc,pmp,psed);
+        print3D(p,a,pgc,pturb,pheat,pdata,pconc,pmp,psed);
 
-	printtime_wT[qn]+=p->P35_dt[qn];
+        printtime_wT[qn]+=p->P35_dt[qn];
 	}
 
 
@@ -249,9 +239,7 @@ void printer_CFD::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, hea
 	pwsfline_y->wsfline(p,a,pgc,pflow);
 
 	if((p->simtime>p->probeprinttime && p->P55>0.0)  || (p->count==0 &&  p->P55>0.0))
-	{
 	p->probeprinttime+=p->P55;
-	}
 
 	if(p->P61>0)
 	pprobe->start(p,a,pgc,pturb);
@@ -286,23 +274,23 @@ void printer_CFD::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, hea
 	if(((p->S41==1 && p->count>=p->S43) || (p->S41==2 && p->simtime>=p->S45) || (p->S41==3 && p->simtime/p->wT>=p->S47) ) && p->S10>0)
 	if((p->S42==1 && p->count%p->S44==0 && p->sediter%p->P120==0) || (p->S42==2 && p->simtime>=p->sedsimtime && p->sediter%p->P120==0) || (p->S42==3  && p->simtime/p->wT>=p->sedwavetime && p->sediter%p->P120==0))
 	{
-	if(p->P121>0)
-	pbedpt->bed_gauge(p,a,pgc);
+        if(p->P121>0)
+        pbedpt->bed_gauge(p,a,pgc);
 
-	if(p->P122>0)
-	pbedmax->bed_max(p,a,pgc);
+        if(p->P122>0)
+        pbedmax->bed_max(p,a,pgc);
 
-	if(p->P123>0)
-	pbedlinex->start(p,a,pgc,pflow);
+        if(p->P123>0)
+        pbedlinex->start(p,a,pgc,pflow);
 
-	if(p->P124>0)
-	pbedliney->start(p,a,pgc,pflow);
+        if(p->P124>0)
+        pbedliney->start(p,a,pgc,pflow);
 
-	if(p->P125>0)
-	pbedshear->bedshear_gauge(p,pgc,psed);
+        if(p->P125>0)
+        pbedshear->bedshear_gauge(p,pgc,psed);
 
-	if(p->P126>0)
-	pbedshearmax->bedshear_maxval(p,pgc,psed);
+        if(p->P126>0)
+        pbedshearmax->bedshear_maxval(p,pgc,psed);
 	}
 
 	// Multiphase
@@ -314,24 +302,22 @@ void printer_CFD::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, hea
 
 	if((p->simtime>p->fsfprinttime && p->P182>0.0 && p->P180==1) || (p->count==0 &&  p->P182>0.0))
 	{
-	pfsf->start(p,a,pgc);
-	p->fsfprinttime+=p->P182;
+        pfsf->start(p,a,pgc);
+        p->fsfprinttime+=p->P182;
 	}
 
 	if(p->P180==1 && p->P184>0)
 	for(int qn=0; qn<p->P184; ++qn)
 	if(p->count%p->P184_dit[qn]==0 && p->count>=p->P184_its[qn] && p->count<=(p->P184_ite[qn]))
-	{
 	pfsf->start(p,a,pgc);
-	}
 
 	if(p->P180==1 && p->P185>0)
 	for(int qn=0; qn<p->P185; ++qn)
 	if(p->simtime>printfsftime_wT[qn] && p->simtime>=p->P185_ts[qn] && p->simtime<=(p->P185_te[qn]+0.5*p->P185_dt[qn]))
 	{
-	pfsf->start(p,a,pgc);
+        pfsf->start(p,a,pgc);
 
-	printfsftime_wT[qn]+=p->P185_dt[qn];
+        printfsftime_wT[qn]+=p->P185_dt[qn];
 	}
 	
 	// Print TOPO
@@ -340,24 +326,22 @@ void printer_CFD::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, hea
 
 	if((p->simtime>p->fsfprinttime && p->P192>0.0 && p->P190==1) || (p->count==0 &&  p->P192>0.0))
 	{
-	ptopo->start(p,a,pgc,psed);
-	p->fsfprinttime+=p->P192;
+        ptopo->start(p,a,pgc,psed);
+        p->fsfprinttime+=p->P192;
 	}
 
 	if(p->P190==1 && p->P194>0)
 	for(int qn=0; qn<p->P194; ++qn)
 	if(p->count%p->P194_dit[qn]==0 && p->count>=p->P194_its[qn] && p->count<=(p->P194_ite[qn]))
-	{
 	ptopo->start(p,a,pgc,psed);
-	}
 
 	if(p->P190==1 && p->P195>0)
 	for(int qn=0; qn<p->P195; ++qn)
 	if(p->simtime>printfsftime_wT[qn] && p->simtime>=p->P195_ts[qn] && p->simtime<=(p->P195_te[qn]+0.5*p->P195_dt[qn]))
 	{
-	ptopo->start(p,a,pgc,psed);
+        ptopo->start(p,a,pgc,psed);
 
-	printfsftime_wT[qn]+=p->P195_dt[qn];
+        printfsftime_wT[qn]+=p->P195_dt[qn];
 	}
 
 	if(p->P230>0)
@@ -365,16 +349,14 @@ void printer_CFD::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, hea
 
 	// Print state out based on iteration
 	if(p->count%p->P41==0 && p->P42<0.0 && p->P40>0 && p->P41>0 && (p->P46==0 || (p->count>=p->P46_is && p->count<p->P46_ie)))
-	{
 	pstate->write(p,a,pgc,pturb,psed);
-	}
 
 	// Print state out based on time
 	if((p->simtime>p->stateprinttime && p->P42>0.0 || (p->count==0 &&  p->P42>0.0)) && p->P40>0 && (p->P47==0 || (p->count>=p->P47_ts && p->count<<p->P47_te)))
 	{
-	pstate->write(p,a,pgc,pturb,psed);
+        pstate->write(p,a,pgc,pturb,psed);
 
-	p->stateprinttime+=p->P42;
+        p->stateprinttime+=p->P42;
 	}
 
 }
