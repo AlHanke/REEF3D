@@ -39,7 +39,7 @@ public:
 	virtual void start(lexer*, fdm*, ghostcell*);
 	
     virtual void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&);
-	virtual void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
+	virtual void name_ParaView_parallel(lexer*, fdm*, ghostcell*,ofstream&);
     virtual void name_ParaView(lexer*, fdm*, ghostcell*, stringstream&, int*, int &);
     virtual void offset_ParaView(lexer*, int*, int &);
 };

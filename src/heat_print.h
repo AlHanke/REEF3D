@@ -45,7 +45,7 @@ public:
     void heat_ini(lexer*, fdm*, ghostcell*, heat*);
     virtual double val(int,int,int);
 
-    void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
+    void name_ParaView_parallel(lexer*, fdm*, ghostcell*,ofstream&);
     void name_ParaView(lexer*, fdm*, ghostcell*, stringstream&, int*, int &);
     void offset_ParaView(lexer*, int*, int &);
 

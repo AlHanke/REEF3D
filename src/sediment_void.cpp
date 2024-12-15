@@ -99,7 +99,7 @@ void sediment_void::print_3D_bedload(lexer* p, ghostcell *pgc, std::vector<char>
 {	
 }
 
-void sediment_void::name_pvtu_bedload(lexer *p, ghostcell *pgc, ofstream &result)
+void sediment_void::name_ParaView_parallel_bedload(lexer *p, ghostcell *pgc, ofstream &result)
 {
 }
 
@@ -127,7 +127,7 @@ void sediment_void::print_3D_bedshear(lexer* p, ghostcell *pgc, std::vector<char
 {	
 }
 
-void sediment_void::name_pvtu_bedshear(lexer *p, ghostcell *pgc, ofstream &result)
+void sediment_void::name_ParaView_parallel_bedshear(lexer *p, ghostcell *pgc, ofstream &result)
 {
 }
 
@@ -155,7 +155,7 @@ void sediment_void::print_3D_parameter1(lexer* p, ghostcell *pgc, std::vector<ch
 {	
 }
 
-void sediment_void::name_pvtu_parameter1(lexer *p, ghostcell *pgc, ofstream &result)
+void sediment_void::name_ParaView_parallel_parameter1(lexer *p, ghostcell *pgc, ofstream &result)
 {
 }
 
@@ -183,7 +183,7 @@ void sediment_void::print_3D_parameter2(lexer* p, ghostcell *pgc, std::vector<ch
 {	
 }
 
-void sediment_void::name_pvtu_parameter2(lexer *p, ghostcell *pgc, ofstream &result)
+void sediment_void::name_ParaView_parallel_parameter2(lexer *p, ghostcell *pgc, ofstream &result)
 {
 }
 

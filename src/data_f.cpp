@@ -73,7 +73,7 @@ void data_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffe
     }
 }
 
-void data_f::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
+void data_f::name_ParaView_parallel(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 {
     result<<"<PDataArray type=\"Float32\" Name=\"data\"/>\n";
 }
