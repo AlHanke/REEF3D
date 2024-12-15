@@ -30,9 +30,6 @@ Author: Hans Bihs
 class vts3D : public vtk3D , increment
 {
     public:
-        vts3D();
-        ~vts3D();
-    public:
         void folder(const char*);
         void offset(lexer*, int*, int&);
         void structureWrite(lexer*, fdm*, std::vector<char>&, int&);

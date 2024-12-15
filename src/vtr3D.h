@@ -29,9 +29,6 @@ Author: Hans Bihs
 class vtr3D : public vtk3D , increment
 {
     public:
-        vtr3D();
-        ~vtr3D();
-    public:
         void folder(const char*);
         void offset(lexer*, int*, int&);
         void structureWrite(lexer*, fdm*, std::vector<char>&, int&);

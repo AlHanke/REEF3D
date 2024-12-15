@@ -31,14 +31,6 @@ Author: Hans Bihs
 #include <vector>
 #include <cstring>
 
-vts3D::vts3D()
-{
-}
-
-vts3D::~vts3D()
-{
-}
-
 void vts3D::folder(const char *A10)
 {
     sprintf(pname,"./REEF3D_%s_VTS", A10);

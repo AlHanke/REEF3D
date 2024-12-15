@@ -29,14 +29,6 @@ Author: Hans Bihs
 #include <vector>
 #include <cstring>
 
-vtr3D::vtr3D()
-{
-}
-
-vtr3D::~vtr3D()
-{
-}
-
 void vtr3D::folder(const char* A10)
 {
     sprintf(pname,"./REEF3D_%s_VTR", A10);

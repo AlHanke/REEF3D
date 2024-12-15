@@ -30,14 +30,6 @@ Author: Hans Bihs
 #include <vector>
 #include <cstring>
 
-vtu3D::vtu3D()
-{
-}
-
-vtu3D::~vtu3D()
-{
-}
-
 void vtu3D::folder(const char *A10)
 {
     char name[30];
