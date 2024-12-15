@@ -250,7 +250,7 @@ void printer_fnpf::start(lexer* p, fdm_fnpf* c,ghostcell* pgc, ioflow *pflow)
     }
 
     // Print state out based on time
-    if((p->simtime>p->stateprinttime && p->P42>0.0 || (p->count==0 &&  p->P42>0.0)) && p->P40>0 && (p->P47==0 || (p->count>=p->P47_ts && p->count<p->P47_te)))
+    if(((p->simtime>p->stateprinttime || p->count==0) &&  p->P42>0.0) && p->P40>0 && (p->P47==0 || (p->count>=p->P47_ts && p->count<p->P47_te)))
     {
     pstate->write(p,c,pgc);
 

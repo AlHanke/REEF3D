@@ -336,8 +336,8 @@ void komega_bc::vrans_wall_law_omega(lexer *p,fdm *a,field &kin,field &eps)
     LOOP
     {
         if(a->porosity(i,j,k)>=0.99 &&  (a->porosity(i-1,j,k)<0.99 || a->porosity(i+1,j,k)<0.99 
-                                        || a->porosity(i,j-1,k)<0.99 || a->porosity(i,j+1,k)<0.99)
-                                        || a->porosity(i,j,k-1)<0.99 || a->porosity(i,j,k+1)<0.99)
+                                        || a->porosity(i,j-1,k)<0.99 || a->porosity(i,j+1,k)<0.99
+                                        || a->porosity(i,j,k-1)<0.99 || a->porosity(i,j,k+1)<0.99))
         {
         if(p->j_dir==0)
         dist=(1.0/4.0)*(p->DXN[IP] + p->DZN[KP]);

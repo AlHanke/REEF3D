@@ -355,7 +355,7 @@ void printer_CFD::start(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, hea
     pstate->write(p,a,pgc,pturb,psed);
 
     // Print state out based on time
-    if((p->simtime>p->stateprinttime && p->P42>0.0 || (p->count==0 &&  p->P42>0.0)) && p->P40>0 && (p->P47==0 || (p->count>=p->P47_ts && p->count<p->P47_te)))
+    if(((p->simtime>p->stateprinttime || p->count==0) &&  p->P42>0.0) && p->P40>0 && (p->P47==0 || (p->count>=p->P47_ts && p->count<p->P47_te)))
     {
         pstate->write(p,a,pgc,pturb,psed);
 
