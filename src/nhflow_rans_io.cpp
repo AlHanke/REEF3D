@@ -205,7 +205,7 @@ void nhflow_rans_io::name_pvtu(lexer *p, fdm_nhf *d, ghostcell *pgc, ofstream &r
     result<<"<PDataArray type=\"Float32\" Name=\"omega\"/>\n";
 }
 
-void nhflow_rans_io::name_vtu(lexer *p, fdm_nhf *d, ghostcell *pgc, stringstream &result, int *offset, int &n)
+void nhflow_rans_io::name_ParaView(lexer *p, fdm_nhf *d, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"eddyv\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;

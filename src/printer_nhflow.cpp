@@ -450,7 +450,7 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         result<<"<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
         
-        pnhfturb->name_vtu(p,d,pgc,result,offset,n);
+        pnhfturb->name_ParaView(p,d,pgc,result,offset,n);
         
         result<<"<DataArray type=\"Float32\" Name=\"omega_sig\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;

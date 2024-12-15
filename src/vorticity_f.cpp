@@ -100,7 +100,7 @@ void vorticity_f::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 	result<<"<PDataArray type=\"Float32\" Name=\"vorticity z\"/>\n";
 }
 
-void vorticity_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
+void vorticity_f::name_ParaView(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"vorticity x\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;

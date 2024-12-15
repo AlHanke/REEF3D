@@ -52,7 +52,7 @@ void print_averaging_v::offset_ParaView(lexer *p, int *offset, int &n)
         
 }
 
-void print_averaging_v::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
+void print_averaging_v::name_ParaView(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
 
 }

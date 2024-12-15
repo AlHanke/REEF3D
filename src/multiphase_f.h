@@ -63,7 +63,7 @@ public:
     virtual void ls2get(int,int,int,double);
 
     void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
-    void name_vtu(lexer*, fdm*, ghostcell*, stringstream&, int*, int &);
+    void name_ParaView(lexer*, fdm*, ghostcell*, stringstream&, int*, int &);
     void offset_ParaView(lexer*, int*, int &);
 	
 	void logic(lexer*,fdm*,ghostcell*);

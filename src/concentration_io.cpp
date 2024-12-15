@@ -75,7 +75,7 @@ void concentration_io::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &res
 	result<<"<PDataArray type=\"Float32\" Name=\"rho\"/>\n";
 }
 
-void concentration_io::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
+void concentration_io::name_ParaView(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"C\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;

@@ -38,7 +38,7 @@ void sediment_f::name_pvtu_bedload(lexer *p, ghostcell *pgc, ofstream &result)
     result<<"<PDataArray type=\"Float32\" Name=\"ST_cb\"/>\n";
 }
 
-void sediment_f::name_vtu_bedload(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void sediment_f::name_ParaView_bedload(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"ST_qbe\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
@@ -50,7 +50,7 @@ void sediment_f::name_vtu_bedload(lexer *p, ghostcell *pgc, ofstream &result, in
     ++n;
 }
 
-void sediment_f::name_vtu_bedload(lexer *p, ghostcell *pgc, stringstream &result, int *offset, int &n)
+void sediment_f::name_ParaView_bedload(lexer *p, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"ST_qbe\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
@@ -225,7 +225,7 @@ void sediment_f::name_pvtu_bedshear(lexer *p, ghostcell *pgc, ofstream &result)
     }
 }
 
-void sediment_f::name_vtu_bedshear(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void sediment_f::name_ParaView_bedshear(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     if(p->P79==1)
     {
@@ -252,7 +252,7 @@ void sediment_f::name_vtu_bedshear(lexer *p, ghostcell *pgc, ofstream &result, i
     }
 }
 
-void sediment_f::name_vtu_bedshear(lexer *p, ghostcell *pgc, stringstream &result, int *offset, int &n)
+void sediment_f::name_ParaView_bedshear(lexer *p, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     if(p->P79==1)
     {
@@ -660,7 +660,7 @@ void sediment_f::name_pvtu_parameter1(lexer *p, ghostcell *pgc, ofstream &result
     result<<"<PDataArray type=\"Float32\" Name=\"ST_phi\"/>\n";
 }
 
-void sediment_f::name_vtu_parameter1(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void sediment_f::name_ParaView_parameter1(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"ST_alpha\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
@@ -674,7 +674,7 @@ void sediment_f::name_vtu_parameter1(lexer *p, ghostcell *pgc, ofstream &result,
     ++n;
 }
 
-void sediment_f::name_vtu_parameter1(lexer *p, ghostcell *pgc, stringstream &result, int *offset, int &n)
+void sediment_f::name_ParaView_parameter1(lexer *p, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"ST_alpha\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
@@ -878,7 +878,7 @@ void sediment_f::name_pvtu_parameter2(lexer *p, ghostcell *pgc, ofstream &result
     result<<"<PDataArray type=\"Float32\" Name=\"ST_slideflag\"/>\n";
 }
 
-void sediment_f::name_vtu_parameter2(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void sediment_f::name_ParaView_parameter2(lexer *p, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"ST_dh\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
@@ -892,7 +892,7 @@ void sediment_f::name_vtu_parameter2(lexer *p, ghostcell *pgc, ofstream &result,
     ++n;
 }
 
-void sediment_f::name_vtu_parameter2(lexer *p, ghostcell *pgc, stringstream &result, int *offset, int &n)
+void sediment_f::name_ParaView_parameter2(lexer *p, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"ST_dh\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
