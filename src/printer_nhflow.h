@@ -63,7 +63,7 @@ public:
     void print_stop(lexer*,fdm_nhf*,ghostcell*,ioflow*,nhflow_turbulence*,sediment*);
     
 private:
-    void print_vtu(lexer*,fdm_nhf*,ghostcell*,nhflow_turbulence*,sediment*);
+    void print3D(lexer*,fdm_nhf*,ghostcell*,nhflow_turbulence*,sediment*);
     void parallel(lexer*,fdm_nhf*,ghostcell*,nhflow_turbulence*,sediment*);
 
     vtk3D *outputFormat;
