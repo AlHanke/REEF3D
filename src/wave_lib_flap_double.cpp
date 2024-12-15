@@ -163,13 +163,12 @@ void wave_lib_flap_double::parameters(lexer *p, ghostcell *pgc)
 
 void wave_lib_flap_double::read(lexer *p, ghostcell* pgc)
 {
-	char name[100];
 	double val,val0,val1,val2;
     double sign1,sign2;
     double beta,s,sign;
 	int count;
 	
-	sprintf(name,"wavemaker.dat");
+	char name[] = "wavemaker.dat";
 
 // open file------------
 	ifstream file(name, ios_base::in);
@@ -195,7 +194,7 @@ void wave_lib_flap_double::read(lexer *p, ghostcell* pgc)
 	
 	p->Darray(kinematics,ptnum,5);
 	
-	file.open ("wavemaker.dat", ios_base::in);
+	file.open (name, ios_base::in);
 	
 	count=0;
 	while(!file.eof())

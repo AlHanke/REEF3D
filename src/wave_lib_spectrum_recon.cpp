@@ -81,11 +81,10 @@ void wave_lib_spectrum::recon_parameters(lexer *p, ghostcell *pgc)
 
 void wave_lib_spectrum::recon_read(lexer *p, ghostcell* pgc)
 {
-	char name[100];
 	double val,val0,val1,val2,val0n,val1n,val2n;
 	int count;
 	
-	sprintf(name,"waverecon.dat");
+    const char name[] = "waverecon.dat";
 
 // open file------------
 	ifstream file(name, ios_base::in);
@@ -114,7 +113,7 @@ void wave_lib_spectrum::recon_read(lexer *p, ghostcell* pgc)
 	
 	p->Darray(recon,wavenum,3);
 	
-	file.open ("waverecon.dat", ios_base::in);
+	file.open (name, ios_base::in);
 	
 	count=0;
 	for(int n=0; n<wavenum;++n)

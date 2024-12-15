@@ -31,7 +31,7 @@ Author: Hans Bihs
 
 void vtr3D::folder(const char* A10)
 {
-    sprintf(pname,"./REEF3D_%s_VTR", A10);
+    snprintf(pname,sizeof(pname),"./REEF3D_%s_VTR", A10);
     mkdir(pname,0777);
 }
 
@@ -98,8 +98,8 @@ void vtr3D::endingParallel(std::ofstream &result, const char *A10, const int M10
 
     for(int n=0; n<M10; ++n)
     {
-        sprintf(pname,"REEF3D-%s-%08i-%06i.vtr",A10,num,n+1);
-        sprintf(pextent,"%i %i %i %i %i %i",piextent[0+6*n],piextent[1+6*n],piextent[2+6*n],piextent[3+6*n],piextent[4+6*n],piextent[5+6*n]);
+        snprintf(pname,sizeof(pname),"REEF3D-%s-%08i-%06i.vtr",A10,num,n+1);
+        snprintf(pextent,sizeof(pextent),"%i %i %i %i %i %i",piextent[0+6*n],piextent[1+6*n],piextent[2+6*n],piextent[3+6*n],piextent[4+6*n],piextent[5+6*n]);
         result<<"<Piece Extent=\""<<pextent<<"\" Source=\""<<pname<<"\"/>\n";
     }
 

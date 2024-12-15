@@ -91,7 +91,7 @@ void bedprobe_line_x::start(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
     if(p->mpirank==0)
     {
 		// open file
-		sprintf(name,"./REEF3D_CFD_Sediment/Line/REEF3D-CFD-bedprobe_line_x-%06i.dat",num);
+		snprintf(name,sizeof(name),"./REEF3D_CFD_Sediment/Line/REEF3D-CFD-bedprobe_line_x-%06i.dat",num);
 
 		wsfout.open(name);
 

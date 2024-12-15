@@ -25,6 +25,7 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"ghostcell.h"
 #include"sediment.h"
+#include<stdio.h>
 
 void nhflow_vtp_bed::pvtp(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *psed)
 {    
@@ -36,7 +37,7 @@ void nhflow_vtp_bed::pvtp(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *psed)
     if(p->P15==2)
     num = p->count;
     
-    sprintf(name,"./REEF3D_NHFLOW_VTP_BED/REEF3D-NHFLOW-BED-%08i.pvtp",num);
+    std::snprintf(name,sizeof(name),"./REEF3D_NHFLOW_VTP_BED/REEF3D-NHFLOW-BED-%08i.pvtp",num);
 
 
     ofstream result;
@@ -89,6 +90,6 @@ void nhflow_vtp_bed::piecename(lexer *p, fdm_nhf *d, ghostcell *pgc, int n)
     if(p->P15==2)
     num = p->count;
 
-    sprintf(pname,"REEF3D-NHFLOW-BED-%08i-%06i.vtp",num,n+1);
+    std::snprintf(pname,sizeof(pname),"REEF3D-NHFLOW-BED-%08i-%06i.vtp",num,n+1);
 
 }

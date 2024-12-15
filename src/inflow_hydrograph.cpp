@@ -49,11 +49,10 @@ double ioflow_f::hydrograph_ipol(lexer *p, ghostcell* pgc, double ** hydro, int 
 
 void ioflow_f::hydrograph_in_read(lexer *p, ghostcell* pgc)
 {
-	char name[100];
 	double val;
 	int count;
 	
-	sprintf(name,"hydrograph.dat");
+	char name[] = "hydrograph.dat";
 
 // open file------------
 	ifstream hg(name, ios_base::in);
@@ -80,7 +79,7 @@ void ioflow_f::hydrograph_in_read(lexer *p, ghostcell* pgc)
 	
 	p->Darray(hydro_in,hydro_in_count,2);
 	
-	hg.open ("hydrograph.dat", ios_base::in);
+	hg.open (name, ios_base::in);
 	
 	count=0;
 	while(!hg.eof())
@@ -93,11 +92,10 @@ void ioflow_f::hydrograph_in_read(lexer *p, ghostcell* pgc)
 
 void ioflow_f::hydrograph_out_read(lexer *p, ghostcell* pgc)
 {
-	char name[100];
 	double val;
 	int count;
 	
-	sprintf(name,"hydrograph_out.dat");
+	char name[] = "hydrograph_out.dat";
 
 // open file------------
 	ifstream hg(name, ios_base::in);
@@ -124,7 +122,7 @@ void ioflow_f::hydrograph_out_read(lexer *p, ghostcell* pgc)
 	
 	p->Darray(hydro_out,hydro_out_count,2);
 	
-	hg.open ("hydrograph_out.dat", ios_base::in);
+	hg.open (name, ios_base::in);
 	
 	count=0;
 	while(!hg.eof())

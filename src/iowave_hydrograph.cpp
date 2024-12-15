@@ -49,11 +49,10 @@ double iowave::hydrograph_ipol(lexer *p, fdm* a, ghostcell* pgc, double ** hydro
 
 void iowave::hydrograph_in_read(lexer *p, fdm* a, ghostcell* pgc)
 {
-	char name[100];
 	double val;
 	int count;
 	
-	sprintf(name,"hydrograph.dat");
+	char name[] = "hydrograph.dat";
 
 // open file------------
 	ifstream hg(name, ios_base::in);
@@ -80,7 +79,7 @@ void iowave::hydrograph_in_read(lexer *p, fdm* a, ghostcell* pgc)
 	
 	p->Darray(hydro_in,hydro_in_count,2);
 	
-	hg.open ("hydrograph.dat", ios_base::in);
+	hg.open (name, ios_base::in);
 	
 	count=0;
 	while(!hg.eof())
@@ -93,11 +92,10 @@ void iowave::hydrograph_in_read(lexer *p, fdm* a, ghostcell* pgc)
 
 void iowave::hydrograph_out_read(lexer *p, fdm* a, ghostcell* pgc)
 {
-	char name[100];
 	double val;
 	int count;
 	
-	sprintf(name,"hydrograph_out.dat");
+	char name[] = "hydrograph_out.dat";
 
 // open file------------
 	ifstream hg(name, ios_base::in);
@@ -124,7 +122,7 @@ void iowave::hydrograph_out_read(lexer *p, fdm* a, ghostcell* pgc)
 	
 	p->Darray(hydro_out,hydro_out_count,2);
 	
-	hg.open ("hydrograph_out.dat", ios_base::in);
+	hg.open (name, ios_base::in);
 	
 	count=0;
 	while(!hg.eof())

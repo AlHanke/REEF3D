@@ -19,7 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include<iomanip>
+
+#include<iomanip>
 #include"sflow_print_wsfline.h"
 #include"lexer.h"
 #include"fdm2D.h"
@@ -87,7 +88,7 @@ void sflow_print_wsfline::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflo
     if(p->mpirank==0)
     {
 		// open file
-		sprintf(name,"./REEF3D_SFLOW_WSFLINE/REEF3D-SFLOW-wsfline-%08i.dat",num);
+		snprintf(name,sizeof(name),"./REEF3D_SFLOW_WSFLINE/REEF3D-SFLOW-wsfline-%08i.dat",num);
 
 		
 		wsfout.open(name);

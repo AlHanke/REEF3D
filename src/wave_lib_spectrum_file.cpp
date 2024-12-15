@@ -42,7 +42,6 @@ double wave_lib_spectrum::spectrum_file(lexer *p, double w)
 
 void wave_lib_spectrum::spectrum_file_read(lexer *p)
 {
-  char name[100];
 	double val,val0,val1,Sval;
 	int count;
 
@@ -50,7 +49,7 @@ void wave_lib_spectrum::spectrum_file_read(lexer *p)
 	double ts,te;
 	int timecount;
 
-	sprintf(name,"spectrum-file.dat");
+	char name[] = "spectrum-file.dat";
 
 // open file------------
 	ifstream file(name, ios_base::in);
@@ -75,7 +74,7 @@ void wave_lib_spectrum::spectrum_file_read(lexer *p)
 
 	p->Darray(spectrum,ptnum,2);
 
-	file.open ("spectrum-file.dat", ios_base::in);
+	file.open (name, ios_base::in);
 
 	count=0;
 	while(!file.eof())

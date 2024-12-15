@@ -33,7 +33,7 @@ Author: Hans Bihs
 void vtu3D::folder(const char *A10)
 {
     char name[30];
-    sprintf(name,"./REEF3D_%s_VTU", A10);
+    snprintf(name,sizeof(name),"./REEF3D_%s_VTU", A10);
     mkdir(name,0777);
 }
 
@@ -112,7 +112,7 @@ void vtu3D::endingParallel(std::ofstream &result, const char *A10, const int M10
 
     for(int n=0; n<M10; ++n)
     {
-    sprintf(pname,"REEF3D-%s-%08i-%06i.vtu",A10,num,n+1);
+    snprintf(pname,sizeof(pname),"REEF3D-%s-%08i-%06i.vtu",A10,num,n+1);
     result<<"<Piece Source=\""<<pname<<"\"/>\n";
     }
 
