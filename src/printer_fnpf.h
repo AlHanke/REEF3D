@@ -27,6 +27,7 @@ Author: Hans Bihs
 #include"increment.h"
 
 #include"vtks.h"
+#include<vector>
 
 class fdm_fnpf;
 class fnpf_force_ale;
@@ -62,6 +63,9 @@ private:
     void parallel(lexer*,ghostcell*);
 
     vtk3D *outputFormat;
+    bool initial_print = true;
+    std::vector<char> buffer;
+    int m = 0;
 
     char name[200];
     int n,iin,offset[200];

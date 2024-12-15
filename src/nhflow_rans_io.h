@@ -39,7 +39,7 @@ public:
     nhflow_rans_io(lexer*,fdm_nhf*);
 	virtual ~nhflow_rans_io();
 
-    virtual void print_3D(lexer*, fdm_nhf*, ghostcell*,ofstream&);
+    virtual void print_3D(lexer*, fdm_nhf*, ghostcell*, std::vector<char>&, int&);
     virtual void ini(lexer*, fdm_nhf*, ghostcell*);
     virtual void plain_wallfunc(lexer*, fdm_nhf*, ghostcell*);
     virtual void inflow(lexer*, fdm_nhf*, ghostcell*);
@@ -54,7 +54,7 @@ public:
     virtual void epsget(int,int,int,double);
 
     virtual void name_pvtu(lexer*, fdm_nhf*, ghostcell*,ofstream&);
-    virtual void name_vtu(lexer*, fdm_nhf*, ghostcell*,ofstream&, int*, int &);
+    virtual void name_vtu(lexer*, fdm_nhf*, ghostcell*, stringstream&, int*, int &);;
     virtual void offset_vtu(lexer*, int*, int &);
     
     double *KIN,*EPS,*EV0;

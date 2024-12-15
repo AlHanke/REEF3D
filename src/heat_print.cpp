@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
+#include<cstring>
 
 heat_print::heat_print(lexer *p, fdm *a) : T(p)
 {
@@ -33,16 +34,18 @@ heat_print::~heat_print()
 {
 }
 
-void heat_print::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
+void heat_print::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
 	
 	iin=4*(p->pointnum);
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	
 	TPLOOP
 	{
-	ffn=float(p->ipol4_a(T));
-	result.write((char*)&ffn, sizeof (float));
+        ffn=float(p->ipol4_a(T));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
 	}
 }
 
@@ -60,7 +63,7 @@ void heat_print::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
     result<<"<PDataArray type=\"Float32\" Name=\"T\"/>\n";
 }
 
-void heat_print::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void heat_print::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"T\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;

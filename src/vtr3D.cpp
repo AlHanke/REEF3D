@@ -25,6 +25,9 @@ Author: Hans Bihs
 #include "fdm.h"
 #include "ghostcell.h"
 #include <sys/stat.h>
+#include <sstream>
+#include <vector>
+#include <cstring>
 
 vtr3D::vtr3D()
 {
@@ -53,7 +56,7 @@ void vtr3D::offset(lexer *p, int *offset, int &n)
     ++n;
 }
 
-void vtr3D::beginning(lexer *p, std::ofstream &result)
+void vtr3D::beginning(lexer *p, std::stringstream &result)
 {
     xmlVersion(result);
     result<<"<VTKFile type=\"RectilinearGrid\" ";
@@ -78,7 +81,7 @@ void vtr3D::beginningParallel(lexer *p, std::ofstream &result)
     }
 }
 
-void vtr3D::ending(std::ofstream &result, const int *offset, int &n)
+void vtr3D::ending(std::stringstream &result, const int *offset, int &n)
 {
     result<<"<Coordinates>\n";
     result<<"\t<DataArray type=\"Float32\" Name=\"X\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
@@ -126,7 +129,7 @@ void vtr3D::extent(lexer *p, ghostcell *pgc)
     pgc->gather_int(iextent,6,piextent,6);
 }
 
-void vtr3D::structureWrite(lexer *p, fdm *a, std::ofstream &result)
+void vtr3D::structureWrite(lexer *p, fdm *a, std::vector<char> &buffer, int &m)
 {
     float ffn;
     int iin;
@@ -134,29 +137,36 @@ void vtr3D::structureWrite(lexer *p, fdm *a, std::ofstream &result)
     // Coordinates
     // x
     iin=4*(p->knox+1);
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
     ITLOOP
     {
         ffn=float(p->XN[IP]);
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
     }
     // y
     iin=4*(p->knoy+1);
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
     JTLOOP
     {
         ffn=float(p->YN[JP]);
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
     }
     // z
     iin=4*(p->knoz+1);
-    result.write((char*)&iin, sizeof (int));
+    std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
     KTLOOP
     {
         ffn=float(p->ZN[KP]);
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
     }
 
-    result<<"\n"<<"</AppendedData>\n";
-    result<<"</VTKFile>"<<flush;
+    stringstream result;
+    result<<"\n</AppendedData>\n</VTKFile>"<<flush;
+    std::memcpy(&buffer[m],result.str().data(),result.str().size());
 }

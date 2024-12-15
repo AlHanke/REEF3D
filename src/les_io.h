@@ -40,7 +40,7 @@ public:
     les_io(lexer*,fdm*);
 	virtual ~les_io();
 
-    virtual void print_3D(lexer*, fdm*, ghostcell*,ofstream&);
+    void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&);
     virtual void ini(lexer*, fdm*, ghostcell*);
     virtual double kinval(int,int,int);
     virtual double epsval(int,int,int);
@@ -52,9 +52,9 @@ public:
     virtual void epsget(int,int,int,double);
 	virtual void gcupdate(lexer*, fdm*, ghostcell*);
 
-    virtual void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
-    virtual void name_vtu(lexer*, fdm*, ghostcell*,ofstream&, int*, int &);
-    virtual void offset_vtu(lexer*, int*, int &);
+    void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
+    void name_vtu(lexer*, fdm*, ghostcell*, stringstream&, int*, int &);
+    void offset_vtu(lexer*, int*, int &);
     
     field1 uprime;
     field2 vprime;

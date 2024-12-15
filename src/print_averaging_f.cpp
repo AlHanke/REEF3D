@@ -29,6 +29,9 @@ Author: Hans Bihs
 #include<fstream>
 #include<sys/stat.h>
 #include<sys/types.h>
+#include<sstream>
+#include<vector>
+#include<cstring>
 
 print_averaging_f::print_averaging_f(lexer *p, fdm* a, ghostcell *pgc) : um(p),vm(p),wm(p),pm(p),Tm(p)
 {
@@ -95,7 +98,7 @@ void print_averaging_f::offset_vtu(lexer *p, int *offset, int &n)
     }
 }
 
-void print_averaging_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void print_averaging_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
     result<<"<DataArray type=\"Float32\" Name=\"velocity_mean\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
@@ -119,7 +122,7 @@ void print_averaging_f::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &re
     result<<"<PDataArray type=\"Float32\" Name=\"T_mean\"/>\n";
 }
 
-void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
+void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
     pgc->start1(p,um,110);
     pgc->start2(p,vm,111);
@@ -132,37 +135,45 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     if(p->simtime<=stime+1.0e-8)
     {
     iin=3*4*(p->pointnum);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
     TPLOOP
 	{
 	ffn=0.0;
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 
 	ffn=0.0;
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 
 	ffn=0.0;
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     //  Pressure
 	iin=4*(p->pointnum);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPLOOP
 	{
 	ffn=0.0;
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     //  Temperature
     if(p->H10>0)
     {
 	iin=4*(p->pointnum);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPLOOP
 	{
 	ffn=0.0;
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     }
     
@@ -171,41 +182,48 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     if(p->simtime>stime+1.0e-8)
     {
     iin=3*4*(p->pointnum);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
     TPLOOP
 	{
 	ffn=float(p->ipol1(um)/(p->simtime-stime));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 
 	ffn=float(p->ipol2(vm)/(p->simtime-stime));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 
 	ffn=float(p->ipol3(wm)/(p->simtime-stime));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     //  Pressure
 	iin=4*(p->pointnum);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPLOOP
 	{
 	ffn=float(p->ipol4press(pm)/(p->simtime-stime));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     
     //  Temperature
     if(p->H10>0)
     {
 	iin=4*(p->pointnum);
-	result.write((char*)&iin, sizeof (int));
+	std::memcpy(&buffer[m],&iin,sizeof(int));
+    m+=sizeof(int);
 	TPLOOP
 	{
 	ffn=float(p->ipol4(Tm)/(p->simtime-stime));
-	result.write((char*)&ffn, sizeof (float));
+	std::memcpy(&buffer[m],&ffn,sizeof(float));
+    m+=sizeof(float);
 	}
     }
     
     }
 
 }
-

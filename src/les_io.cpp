@@ -33,7 +33,7 @@ les_io::~les_io()
 {
 }
 
-void les_io::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
+void les_io::print_3D(lexer* p, fdm *a, ghostcell *pgc, std::vector<char> &buffer, int &m)
 {
 
 }
@@ -111,7 +111,7 @@ void les_io::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 {
 }
 
-void les_io::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void les_io::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
 }
 

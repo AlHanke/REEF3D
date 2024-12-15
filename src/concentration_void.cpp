@@ -46,7 +46,7 @@ void concentration_void::ttimesave(lexer *p, fdm* a)
 {
 }
 
-void concentration_void::print_3D(lexer *p, fdm *a, ghostcell *pgc, ofstream& r)
+void concentration_void::print_3D(lexer *p, fdm *a, ghostcell *pgc, std::vector<char>& buffer, int &m)
 {
 }
 
@@ -65,7 +65,7 @@ void concentration_void::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &r
 {
 }
 
-void concentration_void::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void concentration_void::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
 }
 

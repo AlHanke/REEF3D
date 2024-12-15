@@ -30,6 +30,8 @@ class ioflow;
 class vrans;
 
 #include<fstream>
+#include<vector>
+#include<sstream>
 
 #ifndef NHFLOW_TURBULENCE_H_
 #define NHFLOW_TURBULENCE_H_
@@ -47,7 +49,7 @@ public:
 	virtual void jsource(lexer*, fdm_nhf*)=0;
 	virtual void ksource(lexer*,fdm_nhf*)=0;
 
-	virtual void print_3D(lexer*, fdm_nhf*, ghostcell*,ofstream&)=0;
+	virtual void print_3D(lexer*, fdm_nhf*, ghostcell*, std::vector<char>&, int&)=0;
     virtual void ini(lexer*, fdm_nhf*, ghostcell*)=0;
     virtual double kinval(int,int,int)=0;
     virtual double epsval(int,int,int)=0;
@@ -60,7 +62,7 @@ public:
     virtual void epsget(int,int,int,double)=0;
 
     virtual void name_pvtu(lexer*, fdm_nhf*, ghostcell*,ofstream&)=0;
-    virtual void name_vtu(lexer*, fdm_nhf*, ghostcell*,ofstream&, int*, int &)=0;
+    virtual void name_vtu(lexer*, fdm_nhf*, ghostcell*, stringstream&, int*, int &)=0;
     virtual void offset_vtu(lexer*, int*, int &)=0;
 	
 	double uref;

@@ -27,7 +27,9 @@ class diffusion;
 class solver;
 class ghostcell;
 class ioflow;
-#include<iostream>
+#include<fstream>
+#include<vector>
+#include<sstream>
 
 using namespace std;
 
@@ -43,12 +45,12 @@ public:
     
     virtual void diff_update(lexer*, fdm*, ghostcell *pgc)=0;
 
-	virtual void print_3D(lexer*, fdm*, ghostcell *pgc, ofstream&)=0;
+    virtual void print_3D(lexer*, fdm*, ghostcell *, std::vector<char>&, int&)=0;
 	virtual void heat_ini(lexer*, fdm*, ghostcell*,heat*)=0;
 	virtual double val(int,int,int)=0;
 
-    virtual void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&)=0;
-    virtual void name_vtu(lexer*, fdm*, ghostcell*,ofstream&, int*, int &)=0;
+    virtual void name_pvtu(lexer*, fdm*, ghostcell*, ofstream&)=0;
+    virtual void name_vtu(lexer*, fdm*, ghostcell*, stringstream&, int*, int &)=0;
     virtual void offset_vtu(lexer*, int*, int &)=0;
 };
 

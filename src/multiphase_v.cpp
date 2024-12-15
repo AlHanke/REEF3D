@@ -55,7 +55,7 @@ void multiphase_v::update(lexer *p, fdm *a, ghostcell *pgc)
 {
 }
 
-void multiphase_v::print_3D(lexer*, fdm*, ghostcell*,ofstream&)
+void multiphase_v::print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, int&)
 {	
 }
 
@@ -107,7 +107,7 @@ void multiphase_v::name_pvtu(lexer*, fdm*, ghostcell*,ofstream&)
 	
 }
 
-void multiphase_v::name_vtu(lexer*, fdm*, ghostcell*,ofstream&, int*, int &)
+void multiphase_v::name_vtu(lexer*, fdm*, ghostcell*, stringstream&, int*, int &)
 {
 	
 }

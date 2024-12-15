@@ -45,6 +45,9 @@ Author: Hans Bihs
 #include"bedshear_max.h"
 #include<sys/stat.h>
 #include<sys/types.h>
+#include<sstream>
+#include<cstdio>
+#include<cstring>
 
 printer_nhflow::printer_nhflow(lexer* p, fdm_nhf *d, ghostcell *pgc)
 {	
@@ -368,79 +371,81 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         num = p->count;
         outputFormat->fileName(name,"NHFLOW",num,p->mpirank+1);
 
-        // Open File
-        ofstream result;
-        result.open(name, ios::binary);
-
-        n=0;
-
-        offset[n]=0;
-        ++n;
-
-        // velocity
-        offset[n]=offset[n-1]+4*(p->pointnum)*3+4;
-        ++n;
-
-        // scalars
-
-        // P
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-        
-        // k and eps
-        pnhfturb->offset_vtu(p,offset,n);
-        
-        // omega_sig
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-
-        // elevation
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-        
-        // test
-        if(p->P23==1)
+        if(initial_print)
         {
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-        }
-        // Hs
-        if(p->P110==1)
-        {
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-        }
-        
-        // solid
-        if(p->P25==1)
-        {
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-        }
-        
-        if(p->P25==1 || p->P28==1)  
-        {
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-        }
-        
-        // floating
-        if(p->P28==1)
-        {
-        offset[n]=offset[n-1]+4*(p->pointnum)+4;
-        ++n;
-        }
+            initial_print = false;
 
-        // Format specific structure
-        outputFormat->offset(p,offset,n);
+            n=0;
+
+            offset[n]=0;
+            ++n;
+
+            // velocity
+            offset[n]=offset[n-1]+4*(p->pointnum)*3+4;
+            ++n;
+
+            // scalars
+
+            // P
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+            
+            // k and eps
+            pnhfturb->offset_vtu(p,offset,n);
+            
+            // omega_sig
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+
+            // elevation
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+            
+            // test
+            if(p->P23==1)
+            {
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+            }
+            // Hs
+            if(p->P110==1)
+            {
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+            }
+            
+            // solid
+            if(p->P25==1)
+            {
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+            }
+            
+            if(p->P25==1 || p->P28==1)  
+            {
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+            }
+            
+            // floating
+            if(p->P28==1)
+            {
+            offset[n]=offset[n-1]+4*(p->pointnum)+4;
+            ++n;
+            }
+
+            // Format specific structure
+            outputFormat->offset(p,offset,n);
+        }
         //---------------------------------------------
+
+        std::stringstream result;
         outputFormat->beginning(p,result);
 
         n=0;
         result<<"<PointData>\n";
         result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
-
 
         result<<"<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
@@ -449,7 +454,6 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         
         result<<"<DataArray type=\"Float32\" Name=\"omega_sig\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
-
 
         result<<"<DataArray type=\"Float32\" Name=\"elevation\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
         ++n;
@@ -487,15 +491,20 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         
         result<<"</PointData>\n";
 
-
         outputFormat->ending(result,offset,n);
+        result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
+
+        m=result.str().length();
+        buffer.resize(m+offset[n]+27);
+        std::memcpy(&buffer[0],result.str().data(),m);
 
     //----------------------------------------------------------------------------
-        result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
+        
 
     //  Velocities
         iin=3*4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         if(p->j_dir==0)
@@ -510,7 +519,8 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         ffn=float(0.125*(d->U[IJK]+d->U[Ip1JK]+d->U[IJp1K]+d->U[Ip1Jp1K]
                     +  d->U[IJKp1]+d->U[Ip1JKp1]+d->U[IJp1Kp1]+d->U[Ip1Jp1Kp1]));
         
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
 
 
         if(p->j_dir==0)
@@ -525,7 +535,8 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         ffn=float(0.125*(d->V[IJK]+d->V[Ip1JK]+d->V[IJp1K]+d->V[Ip1Jp1K]
                     +  d->V[IJKp1]+d->V[Ip1JKp1]+d->V[IJp1Kp1]+d->V[Ip1Jp1Kp1]));
         
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
 
 
         if(p->j_dir==0)
@@ -540,12 +551,14 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         ffn=float(0.125*(d->W[IJK]+d->W[Ip1JK]+d->W[IJp1K]+d->W[Ip1Jp1K]
                     +  d->W[IJKp1]+d->W[Ip1JKp1]+d->W[IJp1Kp1]+d->W[Ip1Jp1Kp1]));
         
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
 
     //  P
         iin=4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         if(p->j_dir==0)
@@ -559,15 +572,17 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         if(p->j_dir==1)
         ffn=float(0.25*(d->P[FIJKp1]+d->P[FIm1JKp1] + d->P[FIJm1Kp1]+d->P[FIm1Jm1Kp1]));
 
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
     
     //  kin and eps
-        pnhfturb->print_3D(p,d,pgc,result);
+        pnhfturb->print_3D(p,d,pgc,buffer,m);
         
     //  Omega_sig
         iin=4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         if(p->j_dir==0)
@@ -581,23 +596,27 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         if(p->j_dir==1)
         ffn=float(0.5*(d->omegaF[FIJKp1]+d->omegaF[FIJp1Kp1]));
         
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
 
     //  elevation
         iin=4*(p->pointnum)*3;
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         ffn=float(p->ZN[KP1]*d->WL(i,j) + d->bed(i,j));
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
 
     //  test
         if(p->P23==1)
         {
         iin=4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         if(p->j_dir==0)
@@ -612,7 +631,8 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         ffn=float(0.125*(d->test[IJK]+d->test[Ip1JK]+d->test[IJp1K]+d->test[Ip1Jp1K]
                     +  d->test[IJKp1]+d->test[Ip1JKp1]+d->test[IJp1Kp1]+d->test[Ip1Jp1Kp1]));
                     
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
         }
         
@@ -620,11 +640,13 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         if(p->P110==1)
         {
         iin=4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         ffn=float(p->sl_ipol4(d->Hs));
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
         }
         
@@ -632,7 +654,8 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         if(p->P25==1)
         {
         iin=4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         if(p->j_dir==0)
@@ -647,14 +670,16 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         ffn=float(0.125*(d->SOLID[IJK]+d->SOLID[Ip1JK]+d->SOLID[IJp1K]+d->SOLID[Ip1Jp1K]
                     +  d->SOLID[IJKp1]+d->SOLID[Ip1JKp1]+d->SOLID[IJp1Kp1]+d->SOLID[Ip1Jp1Kp1]));
         
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
         }
         
         if(p->P25==1 || p->P28==1)
         {
         iin=4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         if(p->j_dir==0)
@@ -669,7 +694,8 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         ffn=float(0.125*(d->FHB[IJK]+d->FHB[Ip1JK]+d->FHB[IJp1K]+d->FHB[Ip1Jp1K]
                     +  d->FHB[IJKp1]+d->FHB[Ip1JKp1]+d->FHB[IJp1Kp1]+d->FHB[Ip1Jp1Kp1]));
         
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
         }
         
@@ -677,7 +703,8 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         if(p->P28==1)
         {
         iin=4*(p->pointnum);
-        result.write((char*)&iin, sizeof (int));
+        std::memcpy(&buffer[m],&iin,sizeof(int));
+        m+=sizeof(int);
         TPLOOP
         {
         if(p->j_dir==0)
@@ -692,16 +719,19 @@ void printer_nhflow::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turb
         ffn=float(0.125*(d->FB[IJK]+d->FB[Ip1JK]+d->FB[IJp1K]+d->FB[Ip1Jp1K]
                     +  d->FB[IJKp1]+d->FB[Ip1JKp1]+d->FB[IJp1Kp1]+d->FB[Ip1Jp1Kp1]));
         
-        result.write((char*)&ffn, sizeof (float));
+        std::memcpy(&buffer[m],&ffn,sizeof(float));
+        m+=sizeof(float);
         }
-        
         }
 
         // -----------------------
 
-        outputFormat->structureWrite(p,d,result);
+        outputFormat->structureWrite(p,d,buffer,m);
 
-        result.close();
+        // Open File
+        FILE* file = fopen(name, "w");
+        fwrite(buffer.data(), buffer.size(), 1, file);
+        fclose(file);
 
         ++printcount;
     }

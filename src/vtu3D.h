@@ -34,17 +34,17 @@ class vtu3D : public vtk3D , increment
     public:
         void folder(const char*);
         void offset(lexer*, int*, int&);
-        void structureWrite(lexer*, fdm*, std::ofstream&);
-        void structureWrite(lexer*, fdm_fnpf*, std::ofstream&);
-        void structureWrite(lexer*, fdm_nhf*, std::ofstream&);
-        void beginning(lexer*, std::ofstream&);
+        void structureWrite(lexer*, fdm*, std::vector<char>&, int&);
+        void structureWrite(lexer*, fdm_fnpf*, std::vector<char>&, int&);
+        void structureWrite(lexer*, fdm_nhf*, std::vector<char>&, int&);
+        void beginning(lexer*, std::stringstream&);
         void beginningParallel(lexer*, std::ofstream&);
-        void ending(std::ofstream&, const int*, int&);
+        void ending(std::stringstream&, const int*, int&);
         void endingParallel(std::ofstream&, const char*, const int, const int);
         void fileName(char *name, const char *A10, const int num, const int rank){sprintf(name,"./REEF3D_%s_VTU/REEF3D-%s-%08i-%06i.vtu",A10,A10,num,rank);};
         void parallelFileName(char *name, const char *A10, const int num){sprintf(name,"./REEF3D_%s_VTU/REEF3D-%s-%08i.pvtu",A10,A10,num);};
     private:
-        void structureWriteEnd(lexer*, std::ofstream&);
+        void structureWriteEnd(lexer*, std::vector<char>&, int&);
         char pname[50];
 };
 

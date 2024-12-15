@@ -27,6 +27,7 @@ Author: Hans Bihs
 #include"increment.h"
 
 #include"vtks.h"
+#include<vector>
 
 class fdm_nhf;
 class ioflow;
@@ -66,6 +67,9 @@ private:
     void parallel(lexer*,fdm_nhf*,ghostcell*,nhflow_turbulence*,sediment*);
 
     vtk3D *outputFormat;
+    bool initial_print = true;
+    std::vector<char> buffer;
+    int m = 0;
 
     char name[200],pname[200];
     int n,iin,offset[200];

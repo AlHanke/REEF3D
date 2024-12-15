@@ -50,7 +50,7 @@ void heat_void::diff_update(lexer *p, fdm *a, ghostcell *pgc)
 {
 }
 
-void heat_void::print_3D(lexer *p, fdm *a, ghostcell *pgc, ofstream& r)
+void heat_void::print_3D(lexer *p, fdm *a, ghostcell *pgc, std::vector<char>& buffer, int& m)
 {
 }
 
@@ -69,7 +69,7 @@ void heat_void::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 {
 }
 
-void heat_void::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
+void heat_void::name_vtu(lexer *p, fdm *a, ghostcell *pgc, stringstream &result, int *offset, int &n)
 {
 }
 

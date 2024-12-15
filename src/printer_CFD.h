@@ -28,6 +28,7 @@ Author: Hans Bihs
 #include"field5.h"
 
 #include"vtks.h"
+#include<vector>
 
 class turbulence;
 class heat;
@@ -78,6 +79,9 @@ private:
     void parallel(lexer*,fdm*,ghostcell*,turbulence*,heat*,data*,concentration*,multiphase*,sediment*);
 
     vtk3D *outputFormat;
+    bool initial_print = true;
+    std::vector<char> buffer;
+    int m = 0;
 
     char name[200];
     int n,iin,offset[300];
