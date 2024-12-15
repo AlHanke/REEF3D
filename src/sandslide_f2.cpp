@@ -19,13 +19,14 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"sandslide_f2.h"
+
+#include"sandslide_f2.h"
 #include"lexer.h"
 #include"ghostcell.h"
 #include"sediment_fdm.h"
 #include"sliceint.h"
 
-sandslide_f2::sandslide_f2(lexer *p) : norm_vec(p), bedslope(p), fh(p)
+sandslide_f2::sandslide_f2(lexer *p) : bedslope(p), fh(p)
 {
     if(p->S50==1)
 	gcval_topo=151;

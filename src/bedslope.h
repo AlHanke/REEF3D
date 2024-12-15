@@ -31,7 +31,7 @@ class ghostcell;
 class ddweno_f_nug;
 class sediment_fdm;
 
-class bedslope :  public norm_vec
+class bedslope : public norm_vec
 {
 public:
     bedslope(lexer*);

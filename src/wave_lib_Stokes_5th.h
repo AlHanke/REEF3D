@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"wave_lib.h"
 #include"increment.h"
 
-class wave_lib_Stokes_5th : public wave_lib, public increment
+class wave_lib_Stokes_5th : public wave_lib, virtual public increment
 {
 public:
     wave_lib_Stokes_5th(lexer*, ghostcell*);

@@ -29,7 +29,7 @@ Author: Hans Bihs
 #include"increment.h"
 
 class wave_lib_cnoidal_1st : public wave_lib_precalc, public wave_lib_parameters, public wave_lib_elliptic,
-                                 public increment
+                                 virtual public increment
 {
 public:
     wave_lib_cnoidal_1st(lexer*, ghostcell*);

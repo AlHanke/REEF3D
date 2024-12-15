@@ -28,7 +28,7 @@ Author: Hans Bihs
 class lexer;
 class fdm;
 
-class boundarycheck : public increment
+class boundarycheck : virtual public increment
 {
 public:
     boundarycheck();

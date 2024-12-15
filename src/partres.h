@@ -43,7 +43,7 @@ class vrans;
 using namespace std;
 
 
-class partres : public increment, private vtp3D
+class partres : virtual public increment, private vtp3D
 {
 public:
     partres(lexer*, ghostcell*);

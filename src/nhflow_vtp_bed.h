@@ -32,7 +32,7 @@ class fdm_nhf;
 class ghostcell;
 class sediment;
 
-class nhflow_vtp_bed : public increment, private vtp3D
+class nhflow_vtp_bed : virtual public increment, private vtp3D
 {
 public:
     nhflow_vtp_bed(lexer*,fdm_nhf*,ghostcell*);

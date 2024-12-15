@@ -33,7 +33,7 @@ class fdm;
 class ghostcell;
 class sediment;
 
-class topo_vtp :  public increment, private vtp3D
+class topo_vtp : virtual public increment, private vtp3D
 {
 
 public:

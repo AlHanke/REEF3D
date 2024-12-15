@@ -37,7 +37,7 @@ class ghostcell;
 
 using namespace std;
 
-class nhflow_force :  public increment, private vtp3D
+class nhflow_force : virtual public increment, private vtp3D
 {
 
 public:

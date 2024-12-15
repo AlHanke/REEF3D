@@ -46,7 +46,7 @@ class fnpf_print_Hs;
 
 using namespace std;
 
-class sflow_vtp_fsf : public increment, private vtp3D
+class sflow_vtp_fsf : virtual public increment, private vtp3D
 {
 public:
 	sflow_vtp_fsf(lexer*,fdm2D*,ghostcell*);

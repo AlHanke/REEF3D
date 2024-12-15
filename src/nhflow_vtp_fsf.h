@@ -35,7 +35,7 @@ class sediment;
 
 using namespace std;
 
-class nhflow_vtp_fsf : public increment, private vtp3D
+class nhflow_vtp_fsf : virtual public increment, private vtp3D
 {
 public:
 	nhflow_vtp_fsf(lexer*,fdm_nhf*,ghostcell*);

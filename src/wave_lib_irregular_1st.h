@@ -29,7 +29,7 @@ Author: Hans Bihs
 #include"increment.h"
 
 class wave_lib_irregular_1st : public wave_lib, public wave_lib_parameters, public wave_lib_spectrum,
-                               public increment
+                               virtual public increment
 {
 public:
     wave_lib_irregular_1st(lexer*, ghostcell*);

@@ -29,7 +29,7 @@ class ghostcell;
 
 #include"increment.h"
 
-class wave_lib_parameters : public increment
+class wave_lib_parameters : virtual public increment
 {
 public:
     wave_lib_parameters(lexer*, ghostcell*);

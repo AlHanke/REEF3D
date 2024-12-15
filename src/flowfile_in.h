@@ -35,7 +35,7 @@ class field;
 
 using namespace std;
 
-class flowfile_in : public increment
+class flowfile_in : virtual public increment
 {
 
 public:

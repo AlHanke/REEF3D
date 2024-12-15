@@ -35,7 +35,7 @@ class ghostcell;
 
 using namespace std;
 
-class fsf_vtp :  public increment, private vtp3D
+class fsf_vtp : virtual public increment, private vtp3D
 {
 
 public:

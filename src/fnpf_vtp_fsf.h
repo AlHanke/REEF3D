@@ -33,7 +33,7 @@ class ghostcell;
 
 using namespace std;
 
-class fnpf_vtp_fsf : public increment, private vtp3D
+class fnpf_vtp_fsf : virtual public increment, private vtp3D
 {
 public:
 	fnpf_vtp_fsf(lexer*,fdm_fnpf*,ghostcell*);

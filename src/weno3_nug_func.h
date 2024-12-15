@@ -29,7 +29,7 @@ class lexer;
 class fdm;
 class field;
 
-class weno3_nug_func : public increment
+class weno3_nug_func : virtual public increment
 {
 public:
 	weno3_nug_func(lexer*);

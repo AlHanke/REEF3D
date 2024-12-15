@@ -35,7 +35,7 @@ class fnpf_ddx;
 class fnpf_convection;
 class fnpf_fsf;
 
-class fnpf_bed_update : public increment
+class fnpf_bed_update : virtual public increment
 {
 public:
     fnpf_bed_update(lexer*);

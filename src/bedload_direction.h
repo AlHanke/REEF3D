@@ -31,7 +31,7 @@ class sediment_fdm;
 class slice;
 class sliceint;
 
-class bedload_direction : public increment
+class bedload_direction : virtual public increment
 {
 public:
 

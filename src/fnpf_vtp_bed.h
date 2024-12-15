@@ -32,7 +32,7 @@ class fdm_fnpf;
 class ghostcell;
 class ioflow;
 
-class fnpf_vtp_bed : public increment, private vtp3D
+class fnpf_vtp_bed : virtual public increment, private vtp3D
 {
 public:
 	fnpf_vtp_bed(lexer*,fdm_fnpf*,ghostcell*);

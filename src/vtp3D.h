@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 class lexer;
 
-class vtp3D : public vtk3D , increment
+class vtp3D : public vtk3D , virtual public increment
 {
     protected:
         void beginning(lexer*, std::stringstream&, int, int, int, int, int);
