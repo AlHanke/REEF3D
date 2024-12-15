@@ -77,6 +77,7 @@ void vts3D::ending(std::stringstream &result, const int *offset, int &n)
     result<<"</Points>\n";
     result<<"</Piece>\n";
     result<<"</StructuredGrid>\n";
+    appendData(result);
 }
 
 void vts3D::endingParallel(std::ofstream &result, const char *A10, const int M10, const int num)

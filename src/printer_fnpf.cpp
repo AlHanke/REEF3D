@@ -415,7 +415,6 @@ void printer_fnpf::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
 
 
         outputFormat->ending(result,offset,n);
-        result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
 
         m=result.str().length();
         buffer.resize(m+offset[n]+27);

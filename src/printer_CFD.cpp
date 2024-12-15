@@ -631,8 +631,6 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
 
         outputFormat->ending(result,offset,n);
 
-        result<<"<AppendedData encoding=\"raw\">\n_";
-
         m=result.str().length();
         buffer.resize(m+offset[n]+27);
         std::memcpy(&buffer[0],result.str().data(),m);

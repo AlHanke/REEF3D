@@ -95,6 +95,7 @@ void vtu3D::ending(std::stringstream &result, const int *offset, int &n)
 
     result<<"</Piece>\n";
     result<<"</UnstructuredGrid>\n";
+    appendData(result);
 }
 
 void vtu3D::endingParallel(std::ofstream &result, const char *A10, const int M10, const int num)

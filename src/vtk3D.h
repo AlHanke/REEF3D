@@ -56,6 +56,7 @@ class vtk3D
         void xmlVersion(std::stringstream &result){result<<"<?xml version=\"1.0\"?>\n";};
         void timeValue(std::ofstream &result, const double time){result<<"<FieldData>\n<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<std::setprecision(7)<<time<<"\n</DataArray>\n</FieldData>\n";};
         void timeValue(std::stringstream &result, const double time){result<<"<FieldData>\n<DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"> "<<std::setprecision(7)<<time<<"\n</DataArray>\n</FieldData>\n";};
+        void appendData(std::stringstream &result){result<<"<AppendedData encoding=\"raw\">\n_";};
 };
 
 #endif

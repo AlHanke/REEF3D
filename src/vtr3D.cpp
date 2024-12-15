@@ -85,6 +85,7 @@ void vtr3D::ending(std::stringstream &result, const int *offset, int &n)
     result<<"</Coordinates>\n";
     result<<"</Piece>\n";
     result<<"</RectilinearGrid>\n";
+    appendData(result);
 }
 
 void vtr3D::endingParallel(std::ofstream &result, const char *A10, const int M10, const int num)
