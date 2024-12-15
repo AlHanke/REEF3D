@@ -20,6 +20,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef VORTICITY_H_
+#define VORTICITY_H_
+
 class fdm;
 class lexer;
 class convection;
@@ -31,9 +34,6 @@ class ioflow;
 #include<fstream>
 #include<vector>
 #include<sstream>
-
-#ifndef VORTICITY_H_
-#define VORTICITY_H_
 
 using namespace std;
 

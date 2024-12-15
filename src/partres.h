@@ -20,8 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Authora: Hans Bihs, Alexander Hanke
 --------------------------------------------------------------------*/
 
-#ifndef PARTRES2_H_
-#define PARTRES2_H_
+#ifndef PARTRES_H_
+#define PARTRES_H_
 
 #include"increment.h"
 #include"part.h"

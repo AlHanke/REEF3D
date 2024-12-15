@@ -20,6 +20,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef FDM_HEADER_H_
+#define FDM_HEADER_H_
+
 #include"printer_CFD.h"
 
 #include"ioflow.h"
@@ -41,3 +44,5 @@ Author: Hans Bihs
 #include"patchBC.h"
 #include"patchBC_2D.h"
 #include"patchBC_void.h"
+
+#endif

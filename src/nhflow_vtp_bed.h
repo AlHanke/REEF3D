@@ -21,7 +21,7 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #ifndef NHFLOW_VTP_BED_H_
-#define NFHLOW_VTP_BED_H_
+#define NHFLOW_VTP_BED_H_
 
 #include"increment.h"
 #include"vtp3D.h"

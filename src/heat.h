@@ -20,6 +20,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef HEAT_H_
+#define HEAT_H_
+
 class fdm;
 class lexer;
 class convection;
@@ -32,9 +35,6 @@ class ioflow;
 #include<sstream>
 
 using namespace std;
-
-#ifndef HEAT_H_
-#define HEAT_H_
 
 class heat
 {

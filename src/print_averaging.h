@@ -20,6 +20,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef PRINT_AVERAGING_H_
+#define PRINT_AVERAGING_H_
+
 class lexer;
 class fdm;
 class ghostcell;
@@ -30,9 +33,6 @@ class heat;
 #include<sstream>
 
 using namespace std;
-
-#ifndef PRINT_AVERAGING_H_
-#define PRINT_AVERAGING_H_
 
 class print_averaging
 {

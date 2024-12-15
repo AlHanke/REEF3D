@@ -20,6 +20,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef MULTIPHASE_H_
+#define MULTIPHASE_H_
+
 class fdm;
 class lexer;
 class convection;
@@ -35,9 +38,6 @@ class particle_corr;
 #include<sstream>
 
 using namespace std;
-
-#ifndef MULTIPHASE_H_
-#define MULTIPHASE_H_
 
 class multiphase
 {
