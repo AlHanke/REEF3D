@@ -22,26 +22,19 @@ Author: Hans Bihs
 
 #include"wind_v.h"
 #include"lexer.h"
-#include"fdm_nhf.h"
-#include"ghostcell.h"
 #include"slice.h"
 
-wind_v::wind_v(lexer *p) 
+wind_v::wind_v(lexer*) 
 {
 
 }
 
-void wind_v::wind_forcing_ini(lexer *p, ghostcell *pgc)
-{
-    
-}
-
-void wind_v::wind_forcing_nhf_x(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U, double *V, double *F, slice &WL, slice &eta)
+void wind_v::wind_forcing_nhf_x(lexer*, double*, slice&)
 {
     
 }
 
-void wind_v::wind_forcing_nhf_y(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U, double *V, double *G, slice &WL, slice &eta)
+void wind_v::wind_forcing_nhf_y(lexer*, double*, slice&)
 {
     
 }

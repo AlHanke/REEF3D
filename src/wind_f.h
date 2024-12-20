@@ -27,8 +27,6 @@ Author: Hans Bihs
 #include"wind.h"
 
 class lexer;
-class fdm_nhf;
-class ghostcell;
 class slice;
 
 class wind_f : public wind, public increment
@@ -37,10 +35,8 @@ public:
     wind_f(lexer*);
 	virtual ~wind_f() = default;
     
-    virtual void wind_forcing_nhf_x(lexer*, fdm_nhf*, ghostcell*, double*, double*, double*,slice&,slice&);
-    virtual void wind_forcing_nhf_y(lexer*, fdm_nhf*, ghostcell*, double*, double*, double*,slice&,slice&);
-
-    virtual void wind_forcing_ini(lexer*, ghostcell*);
+    virtual void wind_forcing_nhf_x(lexer*, double*, slice&);
+    virtual void wind_forcing_nhf_y(lexer*, double*, slice&);
     
 private:
     void wind_forcing_drag_coeff(lexer*);

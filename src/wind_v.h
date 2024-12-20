@@ -37,14 +37,8 @@ public:
     wind_v(lexer*);
 	virtual ~wind_v() = default;
     
-    virtual void wind_forcing_nhf_x(lexer*, fdm_nhf*, ghostcell*, double*, double*, double*,slice&,slice&);
-    virtual void wind_forcing_nhf_y(lexer*, fdm_nhf*, ghostcell*, double*, double*, double*,slice&,slice&);
-
-    virtual void wind_forcing_ini(lexer*, ghostcell*);
-    
-private:
-    
-
+    virtual void wind_forcing_nhf_x(lexer*, double*, slice&);
+    virtual void wind_forcing_nhf_y(lexer*, double*, slice&);
 };
 
 #endif
