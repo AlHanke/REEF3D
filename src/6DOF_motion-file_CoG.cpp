@@ -22,12 +22,10 @@ Authors: Hans Bihs
 
 #include"6DOF_motionext_CoG.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-sixdof_motionext_file_CoG::sixdof_motionext_file_CoG(lexer *p, ghostcell *pgc)
+sixdof_motionext_file_CoG::sixdof_motionext_file_CoG(lexer *p)
 {
-    ini(p,pgc);
+    ini();
     
     // number of file columns
     colnum = 4;
@@ -36,10 +34,10 @@ sixdof_motionext_file_CoG::sixdof_motionext_file_CoG(lexer *p, ghostcell *pgc)
 	timecount=1;
     
     // read file
-    read_format_1(p,pgc);
+    read_format_1(p);
 }
 
-void sixdof_motionext_file_CoG::ini(lexer *p, ghostcell *pgc)
+void sixdof_motionext_file_CoG::ini()
 {
     Uext = 0.0;
     Vext = 0.0;
@@ -50,7 +48,7 @@ void sixdof_motionext_file_CoG::ini(lexer *p, ghostcell *pgc)
     Rext = 0.0;
 }
 
-void sixdof_motionext_file_CoG::motionext_trans(lexer *p, ghostcell *pgc, Eigen::Vector3d& dp_, Eigen::Vector3d& dc_)
+void sixdof_motionext_file_CoG::motionext_trans(lexer *p, Eigen::Vector3d& dp_, Eigen::Vector3d& dc_)
 {
     // find correct time step
     if((p->simtime>data[timecount][0]))

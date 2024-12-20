@@ -47,10 +47,10 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& 
     
     // Initialise folder structure
     if(p->X50==1)
-	print_ini_vtp(p,pgc);
+	print_ini_vtp(p);
     
     if(p->X50==2)
-    print_ini_stl(p,pgc);
+    print_ini_stl(p);
  
     // Initialise processor boundaries
     ini_parallel(p,pgc);
@@ -59,7 +59,7 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& 
 	objects_create(p,pgc);
     
     // Initialise fbvel
-	ini_fbvel(p,pgc);
+	ini_fbvel(p);
     
     // Level Set for floating body
     ray_cast(p,a,pgc);
@@ -71,7 +71,7 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& 
 	geometry_parameters(p,a,pgc);
     
     // Initialise position of bodies
-    iniPosition_RBM(p,pgc);
+    iniPosition_RBM(p);
 	
 	// Recalculate distances
 	ray_cast(p,a,pgc);
@@ -79,7 +79,7 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& 
     pgc->start4a(p,a->fb,50);
     
     // Initialise global variables
-	update_fbvel(p,pgc);
+	update_fbvel(p);
    
     // Initialise floating fields
      ULOOP
@@ -101,10 +101,10 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& 
 
     // Print initial body 
     if(p->X50==1)
-    print_vtp(p,pgc);
+    print_vtp(p);
     
     if(p->X50==2)
-    print_stl(p,pgc);
+    print_stl(p);
 
 	// Mooring
 	if(p->X310==0)

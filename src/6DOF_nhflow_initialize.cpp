@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"vrans.h"
    
-void sixdof_nhflow::ini(lexer *p, ghostcell *pgc)
+void sixdof_nhflow::ini(lexer *, ghostcell *)
 {
 }
 
@@ -42,15 +42,15 @@ void sixdof_nhflow::initialize(lexer *p, fdm_nhf *d, ghostcell *pgc, vector<net*
     fb_obj[nb]->initialize_shipwave(p, pgc);
 }
 
-void sixdof_nhflow::initialize(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& pnet)
+void sixdof_nhflow::initialize(lexer *, fdm *, ghostcell *, vector<net*>& )
 {
 }
 
-void sixdof_nhflow::start_sflow(lexer *p, ghostcell *pgc, int iter, slice &fsglobal, slice &P, slice &Q, slice &w, slice &fx, slice &fy, slice &fz, bool finalize)
+void sixdof_nhflow::start_sflow(lexer *, ghostcell *, int , slice &, slice &, slice &, slice &, slice &, slice &, slice &, bool )
 {
 }
 
-void sixdof_nhflow::start_cfd(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, vector<net*>& pnet, int iter, field &uvel, field &vvel, field &wvel, field &fx, field &fy, field &fz, bool finalize)
+void sixdof_nhflow::start_cfd(lexer* , fdm* , ghostcell* , vrans* , vector<net*>& , int , field &, field &, field &, field &, field &, field &, bool )
 {
 }
 

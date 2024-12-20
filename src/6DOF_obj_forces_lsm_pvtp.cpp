@@ -22,10 +22,8 @@ Author: Hans Bihs
 
 #include"6DOF_obj.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-void sixdof_obj::pvtp(lexer* p, fdm* a, ghostcell* pgc)
+void sixdof_obj::pvtp(lexer* p)
 {
     
     int num=0;
@@ -65,7 +63,7 @@ void sixdof_obj::pvtp(lexer* p, fdm* a, ghostcell* pgc)
 
 	for(n=0; n<p->M10; ++n)
 	{
-    piecename(p,a,pgc,n);
+    piecename(p,n);
     result<<"<Piece Source=\""<<pname<<"\"/>\n";
 	}
 
@@ -75,7 +73,7 @@ void sixdof_obj::pvtp(lexer* p, fdm* a, ghostcell* pgc)
 	result.close();
 }
 
-void sixdof_obj::piecename(lexer* p, fdm* a,  ghostcell* pgc, int n)
+void sixdof_obj::piecename(lexer* p, int n)
 {
     
     int num=0;
@@ -91,7 +89,7 @@ void sixdof_obj::piecename(lexer* p, fdm* a,  ghostcell* pgc, int n)
 
 }
 
-void sixdof_obj::name_iter(lexer* p,fdm* a,ghostcell* pgc)
+void sixdof_obj::name_iter(lexer* p)
 {
     int num=0;
 

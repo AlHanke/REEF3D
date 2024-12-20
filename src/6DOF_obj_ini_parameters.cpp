@@ -23,10 +23,9 @@ Author: Tobias Martin
 #include"6DOF_obj.h"
 #include"lexer.h"
 #include"momentum.h"
-#include"ghostcell.h"
 #include<sys/stat.h>
   
-void sixdof_obj::ini_fbvel(lexer *p, ghostcell *pgc)
+void sixdof_obj::ini_fbvel(lexer *p)
 {
     // external velocity
       Uext = Vext = Wext = Pext = Qext = Rext = 0.0; 
@@ -111,7 +110,7 @@ void sixdof_obj::ini_fbvel(lexer *p, ghostcell *pgc)
     p->printcount_sixdof = 0;
 }
 
-void sixdof_obj::ini_parameter_stl(lexer *p, fdm *a, ghostcell *pgc)
+void sixdof_obj::ini_parameter_stl(lexer *, fdm *, ghostcell *)
 {
     
     

@@ -22,12 +22,10 @@ Authors: Hans Bihs
 
 #include"6DOF_motionext_file.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-sixdof_motionext_file::sixdof_motionext_file(lexer *p, ghostcell *pgc)
+sixdof_motionext_file::sixdof_motionext_file(lexer *p)
 {
-    ini(p,pgc);
+    ini();
     
     //cout<<"6DOF MOTION START"<<endl;
     
@@ -49,10 +47,10 @@ sixdof_motionext_file::sixdof_motionext_file(lexer *p, ghostcell *pgc)
     
     // read file
     //if(p->mpirank==0)
-    read_format_1(p,pgc);
+    read_format_1(p);
 }
 
-void sixdof_motionext_file::ini(lexer *p, ghostcell *pgc)
+void sixdof_motionext_file::ini()
 {
     Uext = 0.0;
     Vext = 0.0;
@@ -63,7 +61,7 @@ void sixdof_motionext_file::ini(lexer *p, ghostcell *pgc)
     Rext = 0.0;
 }
 
-void sixdof_motionext_file::motionext_trans(lexer *p, ghostcell *pgc, Eigen::Vector3d& dp_, Eigen::Vector3d& dc_)
+void sixdof_motionext_file::motionext_trans(lexer* p, Eigen::Vector3d& dp_, Eigen::Vector3d& dc_)
 {
     // find correct time step
     if((p->simtime>data[timecount][0]))

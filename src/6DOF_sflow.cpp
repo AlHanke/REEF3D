@@ -27,7 +27,7 @@ Authors: Hans Bihs, Tobias Martin
 #include"ghostcell.h"
 #include"vrans.h"
    
-sixdof_sflow::sixdof_sflow(lexer *p, ghostcell *pgc) : press(p)
+sixdof_sflow::sixdof_sflow(lexer *p) : press(p)
 {
     if(p->mpirank==0)
     cout<<"6DOF startup ..."<<endl;
@@ -35,7 +35,7 @@ sixdof_sflow::sixdof_sflow(lexer *p, ghostcell *pgc) : press(p)
     number6DOF = 1;
     
     for (int nb = 0; nb < number6DOF; nb++)
-    fb_obj.push_back(new sixdof_obj(p,pgc,nb));
+    fb_obj.push_back(new sixdof_obj(p,nb));
 }
 
 void sixdof_sflow::start_sflow(lexer *p, ghostcell *pgc, int iter, slice &fsglobal, slice &P, slice &Q, slice &w, slice &fx, slice &fy, slice &fz, bool finalize)
@@ -52,16 +52,16 @@ void sixdof_sflow::start_oneway(lexer *p, ghostcell *pgc, int iter, slice &fsglo
     for (int nb=0; nb<number6DOF;++nb)
     {
         // Advance body in time
-        fb_obj[nb]->solve_eqmotion_oneway_sflow(p,pgc,iter);
+        fb_obj[nb]->solve_eqmotion_oneway_sflow(p,iter);
         
         // Update transformation matrices
-        fb_obj[nb]->quat_matrices(p);
+        fb_obj[nb]->quat_matrices();
         
         // Update position and trimesh
         fb_obj[nb]->update_position_2D(p,pgc,fsglobal);  
         
         // Save
-        fb_obj[nb]->update_fbvel(p,pgc);
+        fb_obj[nb]->update_fbvel(p);
         
         // Update forcing terms
         fb_obj[nb]->update_forcing_sflow(p,pgc,P,Q,w,fx,fy,fz,iter);
@@ -72,33 +72,33 @@ void sixdof_sflow::start_oneway(lexer *p, ghostcell *pgc, int iter, slice &fsglo
             fb_obj[nb]->saveTimeStep(p,iter);
             
             if(p->X50==1)
-            fb_obj[nb]->print_vtp(p,pgc);
+            fb_obj[nb]->print_vtp(p);
             
             if(p->X50==2)
-            fb_obj[nb]->print_stl(p,pgc);
+            fb_obj[nb]->print_stl(p);
             
-            fb_obj[nb]->print_parameter(p,pgc);
+            fb_obj[nb]->print_parameter(p);
         }
     }
 }
 
-void sixdof_sflow::start_shipwave(lexer *p, ghostcell *pgc, int iter, slice &fsglobal, slice &P, slice&Q, slice &fx, slice &fy, slice &fz, bool finalize)
+void sixdof_sflow::start_shipwave(lexer *p, ghostcell *pgc, int iter, slice &fsglobal, slice &, slice&, slice &, slice &, slice &, bool )
 {
     
     for (int nb=0; nb<number6DOF;++nb)
     {
         // Advance body in time
         if(iter==0)
-        fb_obj[nb]->solve_eqmotion_oneway_onestep(p,pgc);
+        fb_obj[nb]->solve_eqmotion_oneway_onestep(p);
         
         // Update transformation matrices
-        fb_obj[nb]->quat_matrices(p);
+        fb_obj[nb]->quat_matrices();
         
         // Update position and trimesh
         fb_obj[nb]->update_position_2D(p,pgc,fsglobal);  
         
         // Save
-        fb_obj[nb]->update_fbvel(p,pgc);
+        fb_obj[nb]->update_fbvel(p);
         
         // Update forcing terms
         if(p->X400==2)
@@ -112,12 +112,12 @@ void sixdof_sflow::start_shipwave(lexer *p, ghostcell *pgc, int iter, slice &fsg
         
             // Print
             if(p->X50==1)
-            fb_obj[nb]->print_vtp(p,pgc);
+            fb_obj[nb]->print_vtp(p);
             
             if(p->X50==2)
-            fb_obj[nb]->print_stl(p,pgc);
+            fb_obj[nb]->print_stl(p);
             
-            fb_obj[nb]->print_parameter(p,pgc);
+            fb_obj[nb]->print_parameter(p);
         
     }
 }

@@ -25,13 +25,11 @@ Author: Hans Bihs
 #include<fstream>
 #include"6DOF_obj.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-void sixdof_obj::print_vtp(lexer *p, ghostcell *pgc)
+void sixdof_obj::print_vtp(lexer *p)
 {
     // print normals
-    //print_normals_vtp(p,pgc);
+    //print_normals_vtp(p);
     
     
 	int num=0;

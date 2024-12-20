@@ -100,7 +100,7 @@ void sixdof_obj::update_forcing_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc,
     pgc->start5V(p,d->FHB,50);
 }
     
-double sixdof_obj::Hsolidface_nhflow(lexer *p, fdm_nhf *d, int aa, int bb, int cc)
+double sixdof_obj::Hsolidface_nhflow(lexer *p, fdm_nhf *d, int , int , int )
 {
     double psi, H, phival_fb;
     

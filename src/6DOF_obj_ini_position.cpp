@@ -23,11 +23,9 @@ Author: Tobias Martin
 #include"6DOF_obj.h"
 #include"lexer.h"
 #include"momentum.h"
-#include"fdm.h"
-#include"ghostcell.h"
 #include<sys/stat.h>
 
-void sixdof_obj::iniPosition_RBM(lexer *p, ghostcell *pgc)
+void sixdof_obj::iniPosition_RBM(lexer *p)
 {
     // Store initial position of triangles
 	for(n=0; n<tricount; ++n)
@@ -106,6 +104,6 @@ void sixdof_obj::iniPosition_RBM(lexer *p, ghostcell *pgc)
 
 
     // Initialise rotation matrices
-    quat_matrices(p);
+    quat_matrices();
 }
 

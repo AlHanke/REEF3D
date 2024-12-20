@@ -27,7 +27,7 @@ Authors: Tobias Martin, Hans Bihs
 #include"ghostcell.h"
 #include"ddweno_f_nug.h"
 
-sixdof_cfd::sixdof_cfd(lexer *p, fdm *a, ghostcell *pgc)
+sixdof_cfd::sixdof_cfd(lexer *p)
 {
     if(p->mpirank==0)
     cout<<"6DOF startup ..."<<endl;
@@ -35,7 +35,7 @@ sixdof_cfd::sixdof_cfd(lexer *p, fdm *a, ghostcell *pgc)
     number6DOF = 1;
     
     for (int nb = 0; nb < number6DOF; nb++)
-    fb_obj.push_back(new sixdof_obj(p,pgc,nb));
+    fb_obj.push_back(new sixdof_obj(p,nb));
 }
 
 void sixdof_cfd::start_cfd(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, vector<net*>& pnet, int iter, field &uvel, field &vvel, field &wvel, field &fx, field &fy, field &fz, bool finalize)
@@ -51,13 +51,13 @@ void sixdof_cfd::start_cfd(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, vect
         fb_obj[nb]->solve_eqmotion(p,a,pgc,iter,pvrans,pnet);
         
         // Update transformation matrices
-        fb_obj[nb]->quat_matrices(p);
+        fb_obj[nb]->quat_matrices();
         
         // Update position and trimesh
         fb_obj[nb]->update_position_3D(p,a,pgc,finalize);  //----> main time consumer
         
         // Save
-        fb_obj[nb]->update_fbvel(p,pgc);
+        fb_obj[nb]->update_fbvel(p);
         
         // Update forcing terms
         fb_obj[nb]->update_forcing(p,a,pgc,uvel,vvel,wvel,fx,fy,fz,iter);
@@ -69,12 +69,12 @@ void sixdof_cfd::start_cfd(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, vect
             fb_obj[nb]->saveTimeStep(p,iter);
             
             if(p->X50==1)
-            fb_obj[nb]->print_vtp(p,pgc);
+            fb_obj[nb]->print_vtp(p);
             
             if(p->X50==2)
-            fb_obj[nb]->print_stl(p,pgc);
+            fb_obj[nb]->print_stl(p);
             
-            fb_obj[nb]->print_parameter(p,pgc);
+            fb_obj[nb]->print_parameter(p);
         }
     }
     
@@ -82,12 +82,12 @@ void sixdof_cfd::start_cfd(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, vect
     pgc->gcdf_update(p,a);
 }
 
-void sixdof_cfd::start_sflow(lexer *p, ghostcell *pgc, int iter, slice &fsglobal, slice &P, slice &Q, slice &w, slice &fx, slice &fy, slice &fz, bool finalize)
+void sixdof_cfd::start_sflow(lexer *, ghostcell *, int , slice &, slice &, slice &, slice &, slice &, slice &, slice &, bool )
 {
     
 }
 
-void sixdof_cfd::start_nhflow(lexer* p, fdm_nhf* d, ghostcell* pgc, vrans* pvrans, vector<net*>& pnet, int iter, 
-                                        double *U, double *V, double *W, double *FX, double *FY, double *FZ, slice &WL, slice &fe, bool finalize)
+void sixdof_cfd::start_nhflow(lexer* , fdm_nhf* , ghostcell* , vrans* , vector<net*>&, int , 
+                                        double *, double *, double *, slice &, slice &, bool )
 {
 }

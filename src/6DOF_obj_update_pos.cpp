@@ -31,7 +31,7 @@ void sixdof_obj::update_position_3D(lexer *p, fdm *a, ghostcell *pgc, bool final
     update_Euler_angles(p,pgc);
     
     // Update STL mesh
-    update_trimesh_3D(p,a,pgc,finalize);
+    update_trimesh_3D(p,a,pgc);
 
     // Update angular velocities 
     omega_B = I_.inverse()*h_;
@@ -44,7 +44,7 @@ void sixdof_obj::update_position_3D(lexer *p, fdm *a, ghostcell *pgc, bool final
     }
 }
 
-void sixdof_obj::update_Euler_angles(lexer *p, ghostcell *pgc)
+void sixdof_obj::update_Euler_angles(lexer *, ghostcell *)
 {
 	// Calculate Euler angles from quaternion
 	
@@ -64,7 +64,7 @@ void sixdof_obj::update_Euler_angles(lexer *p, ghostcell *pgc)
 	phi = atan2(2.0*(e_(2)*e_(3) + e_(1)*e_(0)), 1.0 - 2.0*(e_(1)*e_(1) + e_(2)*e_(2)));	
 }
 
-void sixdof_obj::update_trimesh_3D(lexer *p, fdm *a, ghostcell *pgc, bool finalize)
+void sixdof_obj::update_trimesh_3D(lexer *p, fdm *a, ghostcell *pgc)
 {
 	// Update position of triangles 
 	for(n=0; n<tricount; ++n)

@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"fieldint.h"
 
-void sixdof_obj::ray_cast_y(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
+void sixdof_obj::ray_cast_y(lexer *p, fdm *a, ghostcell *, int ts, int te)
 {
 	double zs,ze;
 	double Px,Py,Pz;

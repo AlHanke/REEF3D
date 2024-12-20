@@ -145,7 +145,7 @@ void sixdof_void::initialize(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& pne
 }
 
 
-void sixdof_void::initialize(lexer *p, fdm_nhf *d, ghostcell *pgc, vector<net*>& pnet)
+void sixdof_void::initialize(lexer *p, fdm_nhf *, ghostcell *, vector<net*>& )
 {
     //if(p->mpirank==0)
     //cout<<"6DOF: ini"<<endl;

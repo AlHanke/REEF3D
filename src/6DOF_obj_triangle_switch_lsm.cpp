@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"ghostcell.h"
 
-void sixdof_obj::triangle_switch_lsm(lexer *p, ghostcell *pgc)
+void sixdof_obj::triangle_switch_lsm(lexer *, ghostcell *)
 {
     /*
     double x0,x1,x2,y0,y1,y2,z0,z1,z2;

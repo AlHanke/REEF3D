@@ -28,49 +28,49 @@ void sixdof_obj::objects_create(lexer *p, ghostcell *pgc)
 {
     int qn;
 
-    objects_allocate(p,pgc);
+    objects_allocate(p);
 	
     entity_count=0;
 	
 	for(qn=0;qn<p->X110;++qn)
     {
-        box(p,pgc,qn);
+        box(p,qn);
         ++entity_count;
     }
     
     for(qn=0;qn<p->X131;++qn)
     {
-        cylinder_x(p,pgc,qn);
+        cylinder_x(p,qn);
         ++entity_count;
     }
 	
 	for(qn=0;qn<p->X132;++qn)
     {
-        cylinder_y(p,pgc,qn);
+        cylinder_y(p,qn);
         ++entity_count;
     }
 	
 	for(qn=0;qn<p->X133;++qn)
     {
-        cylinder_z(p,pgc,qn);
+        cylinder_z(p,qn);
         ++entity_count;
     }
 	
 	for(qn=0;qn<p->X153;++qn)
     {
-        wedge_sym(p,pgc,qn);
+        wedge_sym(p,qn);
         ++entity_count;
     }
     
     for(qn=0;qn<p->X163;++qn)
     {
-        wedge(p,pgc,qn);
+        wedge(p,qn);
         ++entity_count;
     }
     
     for(qn=0;qn<p->X164;++qn)
     {
-        hexahedron(p,pgc,qn);
+        hexahedron(p,qn);
         ++entity_count;
     }
     
@@ -92,7 +92,7 @@ void sixdof_obj::objects_create(lexer *p, ghostcell *pgc)
 	cout<<"Surface triangles: "<<tricount<<endl;
     
     // Initialise STL geometric parameters
-	geometry_stl(p,pgc);
+	geometry_stl(p);
     
     // Order Triangles for correct inside/outside orientation
     //triangle_switch_ray(p,pgc);
@@ -105,7 +105,7 @@ void sixdof_obj::objects_create(lexer *p, ghostcell *pgc)
 	cout<<"Refined surface triangles: "<<tricount<<endl;
 }
 
-void sixdof_obj::objects_allocate(lexer *p, ghostcell *pgc)
+void sixdof_obj::objects_allocate(lexer *p)
 {
     double U,ds,r,snum,trisum;
     

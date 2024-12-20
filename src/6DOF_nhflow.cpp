@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"vrans.h"
    
-sixdof_nhflow::sixdof_nhflow(lexer *p, ghostcell *pgc) : press(p)
+sixdof_nhflow::sixdof_nhflow(lexer *p) : press(p)
 {
     if(p->mpirank==0)
     cout<<"6DOF startup ..."<<endl;
@@ -35,11 +35,11 @@ sixdof_nhflow::sixdof_nhflow(lexer *p, ghostcell *pgc) : press(p)
     number6DOF = 1;
     
     for (int nb = 0; nb < number6DOF; nb++)
-    fb_obj.push_back(new sixdof_obj(p,pgc,nb));
+    fb_obj.push_back(new sixdof_obj(p,nb));
 }
 
 void sixdof_nhflow::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vrans* pvrans, vector<net*>& pnet, int iter, 
-                                 double *U, double *V, double *W, double *FX, double *FY, double *FZ, slice &WL, slice &fe, bool finalize)
+                                 double *FX, double *FY, double *FZ, slice &WL, slice &fe, bool finalize)
 {
     if(p->X10==1)
     start_twoway(p,d,pgc,pvrans,pnet,iter,FX,FY,FZ,WL,fe,finalize);
@@ -63,13 +63,13 @@ void sixdof_nhflow::start_twoway(lexer *p, fdm_nhf *d, ghostcell *pgc, vrans* pv
         fb_obj[nb]->solve_eqmotion_nhflow(p,d,pgc,iter,pvrans,pnet);
         
         // Update transformation matrices
-        fb_obj[nb]->quat_matrices(p);
+        fb_obj[nb]->quat_matrices();
         
         // Update position and trimesh
         fb_obj[nb]->update_position_nhflow(p,d,pgc,d->fs,finalize);  
         
         // Save
-        fb_obj[nb]->update_fbvel(p,pgc);
+        fb_obj[nb]->update_fbvel(p);
         
         // Update forcing terms
         fb_obj[nb]->update_forcing_nhflow(p,d,pgc,d->U,d->V,d->W,FX,FY,FZ,WL,fe,iter);
@@ -80,12 +80,12 @@ void sixdof_nhflow::start_twoway(lexer *p, fdm_nhf *d, ghostcell *pgc, vrans* pv
             fb_obj[nb]->saveTimeStep(p,iter);
             
             if(p->X50==1)
-            fb_obj[nb]->print_vtp(p,pgc);
+            fb_obj[nb]->print_vtp(p);
             
             if(p->X50==2)
-            fb_obj[nb]->print_stl(p,pgc);
+            fb_obj[nb]->print_stl(p);
             
-            fb_obj[nb]->print_parameter(p,pgc);
+            fb_obj[nb]->print_parameter(p);
         }
     }
 }
@@ -95,16 +95,16 @@ void sixdof_nhflow::start_oneway(lexer *p, fdm_nhf *d, ghostcell *pgc, int iter,
     for (int nb=0; nb<number6DOF;++nb)
     {
         // Advance body in time
-        fb_obj[nb]->solve_eqmotion_oneway_nhflow(p,pgc,iter);
+        fb_obj[nb]->solve_eqmotion_oneway_nhflow(p,iter);
         
         // Update transformation matrices
-        fb_obj[nb]->quat_matrices(p);
+        fb_obj[nb]->quat_matrices();
         
         // Update position and trimesh
         fb_obj[nb]->update_position_nhflow(p,d,pgc,d->fs,finalize);  
         
         // Save
-        fb_obj[nb]->update_fbvel(p,pgc);
+        fb_obj[nb]->update_fbvel(p);
         
         // Update forcing terms
         fb_obj[nb]->update_forcing_nhflow(p,d,pgc,d->U,d->V,d->W,FX,FY,FZ,WL,fe,iter);
@@ -116,33 +116,33 @@ void sixdof_nhflow::start_oneway(lexer *p, fdm_nhf *d, ghostcell *pgc, int iter,
             
             // Print
             if(p->X50==1)
-            fb_obj[nb]->print_vtp(p,pgc);
+            fb_obj[nb]->print_vtp(p);
             
             if(p->X50==2)
-            fb_obj[nb]->print_stl(p,pgc);
+            fb_obj[nb]->print_stl(p);
             
-            fb_obj[nb]->print_parameter(p,pgc);
+            fb_obj[nb]->print_parameter(p);
         }
     }
 }
 
-void sixdof_nhflow::start_shipwave(lexer *p, fdm_nhf *d, ghostcell *pgc, int iter, bool finalize)
+void sixdof_nhflow::start_shipwave(lexer *p, fdm_nhf *d, ghostcell *pgc, int iter, bool)
 {
     
     if(iter==0)
     for (int nb=0; nb<number6DOF;++nb)
     {
         // Advance body in time
-        fb_obj[nb]->solve_eqmotion_oneway_onestep(p,pgc);
+        fb_obj[nb]->solve_eqmotion_oneway_onestep(p);
         
         // Update transformation matrices
-        fb_obj[nb]->quat_matrices(p);
+        fb_obj[nb]->quat_matrices();
         
         // Update position and trimesh
         fb_obj[nb]->update_position_2D(p,pgc,d->fs);  
         
         // Save
-        fb_obj[nb]->update_fbvel(p,pgc);
+        fb_obj[nb]->update_fbvel(p);
         
         // Update forcing terms
         if (p->X400==2)
@@ -156,11 +156,11 @@ void sixdof_nhflow::start_shipwave(lexer *p, fdm_nhf *d, ghostcell *pgc, int ite
         
             // Print
             if(p->X50==1)
-            fb_obj[nb]->print_vtp(p,pgc);
+            fb_obj[nb]->print_vtp(p);
             
             if(p->X50==2)
-            fb_obj[nb]->print_stl(p,pgc);
+            fb_obj[nb]->print_stl(p);
             
-            fb_obj[nb]->print_parameter(p,pgc);
+            fb_obj[nb]->print_parameter(p);
     }
 }

@@ -22,16 +22,14 @@ Authors: Hans Bihs
 
 #include"6DOF_motionext_wavemaker.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-sixdof_motionext_wavemaker::sixdof_motionext_wavemaker(lexer *p, ghostcell *pgc)
+sixdof_motionext_wavemaker::sixdof_motionext_wavemaker(lexer *p)
 {
     if(p->mpirank==0)
     cout<<"6DOF_motion  Wavemaker "<<endl;
     
     
-    ini(p,pgc);
+    ini(p);
     
     // number of file columns
     colnum = 2;
@@ -40,10 +38,10 @@ sixdof_motionext_wavemaker::sixdof_motionext_wavemaker(lexer *p, ghostcell *pgc)
 	timecount=1;
     
     // read file
-    read_format_1(p,pgc);
+    read_format_1(p);
 }
 
-void sixdof_motionext_wavemaker::ini(lexer *p, ghostcell *pgc)
+void sixdof_motionext_wavemaker::ini(lexer*)
 {
     Uext = 0.0;
     Vext = 0.0;
@@ -54,7 +52,7 @@ void sixdof_motionext_wavemaker::ini(lexer *p, ghostcell *pgc)
     Rext = 0.0;
 }
 
-void sixdof_motionext_wavemaker::motionext_trans(lexer *p, ghostcell *pgc, Eigen::Vector3d& dp_, Eigen::Vector3d& dc_)
+void sixdof_motionext_wavemaker::motionext_trans(lexer *p, Eigen::Vector3d& dp_, Eigen::Vector3d& dc_)
 {
     // find correct time step
     if((p->simtime>data[timecount][0]))
@@ -82,7 +80,7 @@ void sixdof_motionext_wavemaker::motionext_trans(lexer *p, ghostcell *pgc, Eigen
         dc_(2) = 0.0;
 }
 
-void sixdof_motionext_wavemaker::motionext_rot(lexer *p, Eigen::Vector3d& dh_, Eigen::Vector3d& h_, Eigen::Vector4d& de_, Eigen::Matrix<double, 3, 4>&G_,  Eigen::Matrix3d&I_)
+void sixdof_motionext_wavemaker::motionext_rot(lexer*, Eigen::Vector3d& dh_, Eigen::Vector3d& h_, Eigen::Vector4d& de_, Eigen::Matrix<double, 3, 4>&G_,  Eigen::Matrix3d&I_)
 {
         dh_ << 0.0,0.0,0.0;
         

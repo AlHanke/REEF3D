@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"ghostcell.h"
 
-void sixdof_obj::update_forcing_sflow(lexer *p, ghostcell *pgc, 
+void sixdof_obj::update_forcing_sflow(lexer *p, ghostcell *, 
                              slice &P, slice &Q, slice &w, slice &fx, slice &fy, slice &fz, int iter)
 {
     // Calculate forcing fields

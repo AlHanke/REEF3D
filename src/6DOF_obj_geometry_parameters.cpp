@@ -374,7 +374,7 @@ void sixdof_obj::geometry_parameters_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
 }
 
 
-void sixdof_obj::geometry_parameters_2D(lexer *p, ghostcell *pgc)
+void sixdof_obj::geometry_parameters_2D(lexer *p, ghostcell *)
 {
     double x0, x1, x2, y0, y1, y2, z0, z1, z2;
     double xmin = .10e9;

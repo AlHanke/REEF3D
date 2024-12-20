@@ -37,17 +37,17 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include"net_barQuasiStatic.h"
 #include"net_sheet.h"
     
-sixdof_void::sixdof_void(lexer *p, ghostcell *pgc)
+sixdof_void::sixdof_void(lexer* p)
 {
     if(p->mpirank==0)
     mkdir("./REEF3D_CFD_6DOF",0777);
 }
 
-void sixdof_void::ini(lexer *p, ghostcell *pgc)
+void sixdof_void::ini(lexer*, ghostcell*)
 {
 }
 
-void sixdof_void::start_cfd(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, vector<net*>& pnet, int iter, field &uvel, field &vvel, field &wvel, field &fx, field &fy, field &fz, bool finalize)
+void sixdof_void::start_cfd(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, vector<net*>& pnet, int , field &, field &, field &, field &, field &, field &, bool )
 {
 
     if (p->X310 > 0)
@@ -80,44 +80,44 @@ void sixdof_void::start_cfd(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, vec
 }
 
 
-void sixdof_void::start_nhflow(lexer* p, fdm_nhf* d, ghostcell* pgc, vrans* pvrans, vector<net*>& pnet, int iter, 
-                                        double *U, double *V, double *W, double *FX, double *FY, double *FZ, slice &WL, slice &fe, bool finalize)
+void sixdof_void::start_nhflow(lexer*, fdm_nhf*, ghostcell* , vrans* , vector<net*>& , int , 
+                                        double *, double *, double *, slice &, slice &, bool )
 {
 }
 
-void sixdof_void::start_sflow(lexer *p, ghostcell *pgc, int iter, slice &fsglobal, slice &P, slice &Q, slice &w, slice &fx, slice &fy, slice &fz, bool finalize)
+void sixdof_void::start_sflow(lexer*, ghostcell*, int , slice&, slice &, slice &, slice &, slice &, slice &, slice &, bool )
 {
     
 }
 
-void sixdof_void::isource(lexer *p, fdm *a, ghostcell *pgc)
+void sixdof_void::isource(lexer*, fdm*, ghostcell*)
 {
 }
 
-void sixdof_void::jsource(lexer *p, fdm *a, ghostcell *pgc)
+void sixdof_void::jsource(lexer*, fdm*, ghostcell*)
 {
 }
 
-void sixdof_void::ksource(lexer *p, fdm *a, ghostcell *pgc)
+void sixdof_void::ksource(lexer*, fdm*, ghostcell*)
 {
 }
 
-void sixdof_void::isource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
+void sixdof_void::isource(lexer*, fdm_nhf*, ghostcell*, slice &)
 {
 }
 
-void sixdof_void::jsource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
+void sixdof_void::jsource(lexer*, fdm_nhf*, ghostcell*, slice &)
 {
 }
 
-void sixdof_void::ksource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
+void sixdof_void::ksource(lexer*, fdm_nhf*, ghostcell*, slice &)
 {
 }
 
-void sixdof_void::isource2D(lexer *p, fdm2D *b, ghostcell *pgc)
+void sixdof_void::isource2D(lexer*, fdm2D*, ghostcell*)
 {
 }
 
-void sixdof_void::jsource2D(lexer *p, fdm2D *b, ghostcell *pgc)
+void sixdof_void::jsource2D(lexer*, fdm2D*, ghostcell*)
 {
 }

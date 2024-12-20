@@ -22,10 +22,8 @@ Authors: Hans Bihs
 
 #include"6DOF_motionext_file.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-void sixdof_motionext_file::read_format_1(lexer *p, ghostcell *pgc)
+void sixdof_motionext_file::read_format_1(lexer *p)
 {
     char name[100];
 	double val;

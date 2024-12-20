@@ -56,7 +56,7 @@ void sixdof_obj::reconstruct(lexer *p, fdm_nhf *d)
     polygon_num=facount;
 }
 
-void sixdof_obj::addpoint(lexer *p, fdm_nhf *d, int q1, int q2)
+void sixdof_obj::addpoint(lexer *, fdm_nhf *, int q1, int q2)
 {
 	// p. 917
     double xd,dnom;

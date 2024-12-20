@@ -58,7 +58,7 @@ public:
     
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 	
-    sixdof_obj(lexer*, ghostcell*, int);
+    sixdof_obj(lexer*, int);
 	virtual ~sixdof_obj() = default;
 	
 	virtual void solve_eqmotion(lexer*,fdm*,ghostcell*,int,vrans*,vector<net*>&);
@@ -73,29 +73,29 @@ public:
     void hydrodynamic_forces_cfd(lexer*, fdm*, ghostcell*,field&,field&,field&,int,bool);
     void hydrodynamic_forces_nhflow(lexer*, fdm_nhf*, ghostcell*,bool);
 	
-    void quat_matrices(lexer*);
+    void quat_matrices();
     void update_position_3D(lexer*, fdm*, ghostcell*, bool);
     void update_position_nhflow(lexer*, fdm_nhf*, ghostcell*,slice&, bool);
     void update_position_2D(lexer*, ghostcell*,slice&);
     
-    void solve_eqmotion_oneway_onestep(lexer*,ghostcell*);
+    void solve_eqmotion_oneway_onestep(lexer*);
     
     // NHFLOW
     virtual void solve_eqmotion_nhflow(lexer*,fdm_nhf*,ghostcell*,int,vrans*,vector<net*>&);
-    void solve_eqmotion_oneway_nhflow(lexer*,ghostcell*,int);
+    void solve_eqmotion_oneway_nhflow(lexer*,int);
     void update_forcing_nhflow(lexer*, fdm_nhf*, ghostcell*, double*, double*, double*, double*, double*, double*, slice&, slice&, int);
     
     double Hsolidface_nhflow(lexer*, fdm_nhf*, int,int,int);
     
     // print
     void saveTimeStep(lexer*,int);
-    void print_parameter(lexer*,ghostcell*);
-    void print_ini_vtp(lexer*,ghostcell*);
-	void print_vtp(lexer*,ghostcell*);
-    void print_normals_vtp(lexer*,ghostcell*);
-    void print_ini_stl(lexer*,ghostcell*);
-	void print_stl(lexer*,ghostcell*);
-	void update_fbvel(lexer*,ghostcell*);
+    void print_parameter(lexer*);
+    void print_ini_vtp(lexer*);
+	void print_vtp(lexer*);
+    void print_normals_vtp(lexer*);
+    void print_ini_stl(lexer*);
+	void print_stl(lexer*);
+	void update_fbvel(lexer*);
     
     // SFLOW
     double Hsolidface_2D(lexer*, int,int);
@@ -105,16 +105,15 @@ public:
     
     void update_forcing_sflow(lexer*, ghostcell*, slice&, slice&, slice&, slice&, slice&, slice&, int);
     
-    void solve_eqmotion_sflow(lexer*,ghostcell*,int);
-    void solve_eqmotion_oneway_sflow(lexer*,ghostcell*,int);
+    void solve_eqmotion_oneway_sflow(lexer*,int);
     
     double Mass_fb, Vfb, Rfb;
 
 private:
 
 	void ini_parameter_stl(lexer*, fdm*, ghostcell*);
-    void ini_fbvel(lexer*, ghostcell*);
-    void maxvel(lexer*, ghostcell*);
+    void ini_fbvel(lexer*);
+    void maxvel(lexer*);
     
     void externalForces(lexer*, fdm*, ghostcell*, double, vrans*, vector<net*>&);
     void externalForces_nhflow(lexer*, fdm_nhf*, ghostcell*, double, vrans*, vector<net*>&);
@@ -126,16 +125,16 @@ private:
     double ramp_draft(lexer*);
     
     void objects_create(lexer*, ghostcell*);
-    void objects_allocate(lexer*, ghostcell*);
+    void objects_allocate(lexer*);
 	void geometry_refinement(lexer*,ghostcell*);
 	void create_triangle(double&,double&,double&,double&,double&,double&,double&,double&,double&,const double&,const double&,const double&);
-	void box(lexer*, ghostcell*,int);
-	void cylinder_x(lexer*, ghostcell*,int);
-	void cylinder_y(lexer*, ghostcell*,int);
-	void cylinder_z(lexer*, ghostcell*,int);
-	void wedge_sym(lexer*, ghostcell*,int);
-    void wedge(lexer*, ghostcell*,int);
-    void hexahedron(lexer*, ghostcell*,int);
+	void box(lexer*, int);
+	void cylinder_x(lexer*, int);
+	void cylinder_y(lexer*, int);
+	void cylinder_z(lexer*, int);
+	void wedge_sym(lexer*, int);
+    void wedge(lexer*, int);
+    void hexahedron(lexer*, int);
     void read_stl(lexer*, ghostcell*);
     void triangle_switch_lsm(lexer*, ghostcell*);
     void triangle_switch_ray(lexer*, ghostcell*);
@@ -149,7 +148,7 @@ private:
 	void geometry_parameters(lexer*, fdm*, ghostcell*);
     void geometry_parameters_nhflow(lexer*, fdm_nhf*, ghostcell*);
     void geometry_parameters_2D(lexer*, ghostcell*);
-    void geometry_stl(lexer*, ghostcell*);
+    void geometry_stl(lexer*);
 	void geometry_f(double&,double&,double&,double&,double&,double&,double&,double&,double&);
     void geometry_ls(lexer*, fdm*, ghostcell*);
     void geometry_ls_nhflow(lexer*, fdm_nhf*, ghostcell*);
@@ -164,31 +163,29 @@ private:
     
     void print_force(lexer*,fdm*,ghostcell*);
     void print_ini(lexer*,fdm*,ghostcell*);
-    void print_vtp(lexer*,fdm*,ghostcell*);
-    void pvtp(lexer*,fdm*,ghostcell*);
-    void header(lexer*,fdm*,ghostcell*);
-    void name_iter(lexer*,fdm*,ghostcell*);
-    void name_time(lexer*,fdm*,ghostcell*);
-    void piecename(lexer*,fdm*,ghostcell*,int);
+    void print_vtp(lexer*,fdm*);
+    void pvtp(lexer*);
+    void name_iter(lexer*);
+    void piecename(lexer*,int);
     
     
-    void iniPosition_RBM(lexer*, ghostcell*);
+    void iniPosition_RBM(lexer*);
     void update_Euler_angles(lexer*, ghostcell*);
-    void update_trimesh_3D(lexer*, fdm*, ghostcell*, bool);
-    void update_trimesh_nhflow(lexer*, fdm_nhf*, ghostcell*, bool);
+    void update_trimesh_3D(lexer*, fdm*, ghostcell*);
+    void update_trimesh_nhflow(lexer*, fdm_nhf*, ghostcell*);
     void update_trimesh_2D(lexer*, ghostcell*);
     void motionext_trans(lexer*, ghostcell*, Eigen::Vector3d&, Eigen::Vector3d&);
     void motionext_rot(lexer*, Eigen::Vector3d&, Eigen::Vector3d&, Eigen::Vector4d&);
     
 
-    void get_trans(lexer*, ghostcell*, Eigen::Vector3d&, Eigen::Vector3d&, Eigen::Vector3d&, Eigen::Vector3d&);
-    void get_rot(lexer*,Eigen::Vector3d&, Eigen::Vector4d&, Eigen::Vector3d&, Eigen::Vector4d&);
+    void get_trans(lexer*, Eigen::Vector3d&, Eigen::Vector3d&, Eigen::Vector3d&, Eigen::Vector3d&);
+    void get_rot(lexer*, Eigen::Vector3d&, Eigen::Vector4d&, Eigen::Vector3d&, Eigen::Vector4d&);
     Eigen::Matrix3d quatRotMat;
     
     
-    void rk2(lexer*, ghostcell*,int);
-    void rk3(lexer*, ghostcell*,int);
-    void rkls3(lexer*, ghostcell*,int);
+    void rk2(lexer*, int);
+    void rk3(lexer*, int);
+    void rkls3(lexer*, int);
 
     void rotation_tri(lexer*,double,double,double,double&,double&,double&, const double&, const double&, const double&);
    
@@ -262,7 +259,7 @@ private:
 	void ray_cast_2D_y(lexer*, ghostcell*,int,int);
     void ray_cast_2D_z(lexer*, ghostcell*,int,int);
     void reini_2D(lexer*,ghostcell*,slice&);
-    void disc_2D(lexer*,ghostcell*,slice&);
+    void disc_2D(lexer*,slice&);
     void time_preproc_2D(lexer*);
     
     slice4 press,lrk1,lrk2,K,dts,fs,Ls,Bs,Rxmin,Rxmax,Rymin,Rymax,draft;

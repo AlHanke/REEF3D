@@ -194,10 +194,10 @@ void driver::logic_nhflow()
     
 //6DOF
     if(p->X10==0)
-    p6dof = new sixdof_void(p,pgc);
+    p6dof = new sixdof_void(p);
     
     if(p->X10>0)
-    p6dof = new sixdof_nhflow(p,pgc);
+    p6dof = new sixdof_nhflow(p);
     
 // Sediment
     if(p->S10==0)

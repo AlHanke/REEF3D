@@ -42,7 +42,7 @@ void sixdof_obj::reini_2D(lexer *p, ghostcell *pgc, slice &f)
     for(int q=0;q<reiniter;++q)
     {
 	// Step 1
-    disc_2D(p,pgc,f);
+    disc_2D(p,f);
     
 	SLICELOOP4
 	lrk1(i,j) = f(i,j) + dts(i,j)*K(i,j);
@@ -51,7 +51,7 @@ void sixdof_obj::reini_2D(lexer *p, ghostcell *pgc, slice &f)
     
 
     // Step 2
-    disc_2D(p,pgc,lrk1);
+    disc_2D(p,lrk1);
     
 	SLICELOOP4
 	lrk2(i,j)=  0.75*f(i,j) + 0.25*lrk1(i,j) + 0.25*dts(i,j)*K(i,j);
@@ -60,7 +60,7 @@ void sixdof_obj::reini_2D(lexer *p, ghostcell *pgc, slice &f)
 
 
     // Step 3
-    disc_2D(p,pgc,lrk2);
+    disc_2D(p,lrk2);
     
 	SLICELOOP4
 	f(i,j) = (1.0/3.0)*f(i,j) + (2.0/3.0)*lrk2(i,j) + (2.0/3.0)*dts(i,j)*K(i,j);
@@ -72,7 +72,7 @@ void sixdof_obj::reini_2D(lexer *p, ghostcell *pgc, slice &f)
 }
 
 
-void sixdof_obj::disc_2D(lexer *p, ghostcell *pgc, slice &f)
+void sixdof_obj::disc_2D(lexer *p, slice &f)
 {
     double dx,dy,xmin,xplus,ymin,yplus;
     double lsv,lsSig;

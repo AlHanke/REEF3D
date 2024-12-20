@@ -27,34 +27,34 @@ Authors: Tobias Martin, Hans Bihs
 #include"fdm2D.h"
 #include"ghostcell.h"
 
-void sixdof_cfd::isource(lexer *p, fdm *a, ghostcell *pgc)
+void sixdof_cfd::isource(lexer*, fdm*, ghostcell*)
 {
 }
 
-void sixdof_cfd::jsource(lexer *p, fdm *a, ghostcell *pgc)
+void sixdof_cfd::jsource(lexer*, fdm*, ghostcell*)
 {
 }
 
-void sixdof_cfd::ksource(lexer *p, fdm *a, ghostcell *pgc)
+void sixdof_cfd::ksource(lexer*, fdm*, ghostcell*)
 {
 }
 
-void sixdof_cfd::isource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
+void sixdof_cfd::isource(lexer*, fdm_nhf*, ghostcell*, slice&)
 {
 }
 
-void sixdof_cfd::jsource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
+void sixdof_cfd::jsource(lexer*, fdm_nhf*, ghostcell*, slice&)
 {
 }
 
-void sixdof_cfd::ksource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
+void sixdof_cfd::ksource(lexer*, fdm_nhf*, ghostcell*, slice&)
 {
 }
 
-void sixdof_cfd::isource2D(lexer *p, fdm2D *b, ghostcell *pgc)
+void sixdof_cfd::isource2D(lexer*, fdm2D*, ghostcell*)
 {
 }
 
-void sixdof_cfd::jsource2D(lexer *p, fdm2D *b, ghostcell *pgc)
+void sixdof_cfd::jsource2D(lexer*, fdm2D*, ghostcell*)
 {
 }

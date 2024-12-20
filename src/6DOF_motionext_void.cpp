@@ -22,22 +22,16 @@ Authors: Hans Bihs
 
 #include"6DOF_motionext_void.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-sixdof_motionext_void::sixdof_motionext_void(lexer *p, ghostcell *pgc)
+sixdof_motionext_void::sixdof_motionext_void()
 {
 }
 
-void sixdof_motionext_void::ini(lexer *p, ghostcell *pgc)
+void sixdof_motionext_void::motionext_trans(lexer*, Eigen::Vector3d&, Eigen::Vector3d&)
 {
 }
 
-void sixdof_motionext_void::motionext_trans(lexer *p, ghostcell *pgc, Eigen::Vector3d& dp, Eigen::Vector3d& dc)
-{
-}
-
-void sixdof_motionext_void::motionext_rot(lexer *p, Eigen::Vector3d& dh, Eigen::Vector3d& h, Eigen::Vector4d& de, Eigen::Matrix<double, 3, 4>&G_,  Eigen::Matrix3d&I_)
+void sixdof_motionext_void::motionext_rot(lexer*, Eigen::Vector3d&, Eigen::Vector3d&, Eigen::Vector4d&, Eigen::Matrix<double, 3, 4>&, Eigen::Matrix3d&)
 {
 }
 

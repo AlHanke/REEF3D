@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"slice.h"
 
-void sixdof_obj::ray_cast_2D_x(lexer *p, ghostcell *pgc, int ts, int te)
+void sixdof_obj::ray_cast_2D_x(lexer *p, ghostcell *, int ts, int te)
 {
 	double ys,ye,zs,ze;
 	double Px,Py,Pz;

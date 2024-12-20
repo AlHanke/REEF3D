@@ -27,19 +27,19 @@ Author: Hans Bihs
 #include"fdm2D.h"
 #include"ghostcell.h"
 
-void sixdof_nhflow::isource(lexer *p, fdm *a, ghostcell *pgc)
+void sixdof_nhflow::isource(lexer *, fdm *, ghostcell *)
 {
 }
 
-void sixdof_nhflow::jsource(lexer *p, fdm *a, ghostcell *pgc)
+void sixdof_nhflow::jsource(lexer *, fdm *, ghostcell *)
 {
 }
 
-void sixdof_nhflow::ksource(lexer *p, fdm *a, ghostcell *pgc)
+void sixdof_nhflow::ksource(lexer *, fdm *, ghostcell *)
 {
 }
 
-void sixdof_nhflow::isource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
+void sixdof_nhflow::isource(lexer *p, fdm_nhf *d, ghostcell *, slice &WL)
 {
     if(p->X10==3)
     LOOP
@@ -55,7 +55,7 @@ void sixdof_nhflow::isource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
     }
 }
 
-void sixdof_nhflow::jsource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
+void sixdof_nhflow::jsource(lexer *p, fdm_nhf *d, ghostcell *, slice &WL)
 {
     if(p->X10==3)
     LOOP
@@ -71,15 +71,15 @@ void sixdof_nhflow::jsource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
     }
 }
 
-void sixdof_nhflow::ksource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
+void sixdof_nhflow::ksource(lexer *, fdm_nhf *, ghostcell *, slice &)
 {
 }
 
-void sixdof_nhflow::isource2D(lexer *p, fdm2D *b, ghostcell *pgc)
+void sixdof_nhflow::isource2D(lexer *, fdm2D *, ghostcell *)
 {
 }
 
-void sixdof_nhflow::jsource2D(lexer *p, fdm2D *b, ghostcell *pgc)
+void sixdof_nhflow::jsource2D(lexer *, fdm2D *, ghostcell *)
 {
 }
 

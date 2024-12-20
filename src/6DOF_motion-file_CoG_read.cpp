@@ -25,7 +25,7 @@ Authors: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-void sixdof_motionext_file_CoG::read_format_1(lexer *p, ghostcell *pgc)
+void sixdof_motionext_file_CoG::read_format_1(lexer *p)
 {
     char name[100];
 	double val;

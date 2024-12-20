@@ -25,10 +25,8 @@ Author: Hans Bihs
 #include<fstream>
 #include"6DOF_obj.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-void sixdof_obj::print_ini_vtp(lexer *p, ghostcell *pgc)
+void sixdof_obj::print_ini_vtp(lexer *p)
 {
 	if(p->mpirank==0)
     {
@@ -105,7 +103,7 @@ void sixdof_obj::print_ini_vtp(lexer *p, ghostcell *pgc)
 	printtime_wT[qn]=p->P35_ts[qn];
 }
 
-void sixdof_obj::print_ini_stl(lexer *p, ghostcell *pgc)
+void sixdof_obj::print_ini_stl(lexer *p)
 {
 	if(p->mpirank==0)
     {

@@ -23,25 +23,15 @@ Author: Hans Bihs
 #ifndef SIXDOF_MOTIONEXT_H_
 #define SIXDOF_MOTIONEXT_H_
 
-class lexer;
-class fdm;
-class fdm_nhf;
-class fdm2D;
-class ghostcell;
-class vrans;
-class net;
-class field;
 #include <Eigen/Dense>
 
-using namespace std;
+class lexer;
 
 class sixdof_motionext
 {
 public:
-    virtual void motionext_trans(lexer*, ghostcell*, Eigen::Vector3d&, Eigen::Vector3d&)=0;
+    virtual void motionext_trans(lexer*, Eigen::Vector3d&, Eigen::Vector3d&)=0;
     virtual void motionext_rot(lexer*, Eigen::Vector3d&, Eigen::Vector3d&, Eigen::Vector4d&, Eigen::Matrix<double, 3, 4>&,  Eigen::Matrix3d&)=0;
-
-    virtual void ini(lexer*,ghostcell*)=0;
 };
 
 #endif

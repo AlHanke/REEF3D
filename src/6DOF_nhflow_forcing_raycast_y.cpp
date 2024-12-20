@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"ghostcell.h"
 
-void sixdof_obj::ray_cast_y(lexer *p, fdm_nhf *d, ghostcell *pgc, int ts, int te)
+void sixdof_obj::ray_cast_y(lexer *p, fdm_nhf *d, ghostcell *, int ts, int te)
 {
 	double ys,ye,zs,ze;
 	double Px,Py,Pz;

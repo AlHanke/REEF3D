@@ -22,9 +22,6 @@ Author: Tobias Martin, Hans Bihs
 
 #include"6DOF_obj.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
-#include"reinidisc_f.h"
 #include"reinidisc_fsf.h"
 #include"nhflow_reinidisc_fsf.h"
 #include"6DOF_motionext_fixed.h"
@@ -33,7 +30,7 @@ Author: Tobias Martin, Hans Bihs
 #include"6DOF_motionext_wavemaker.h"
 #include"6DOF_motionext_void.h"
 
-sixdof_obj::sixdof_obj(lexer *p, ghostcell *pgc, int number) : ddweno_f_nug(p), cutl(p),cutr(p),fbio(p),
+sixdof_obj::sixdof_obj(lexer *p, int number) : ddweno_f_nug(p), cutl(p),cutr(p),fbio(p),
                                                                                 epsifb(1.6*p->DXM),epsi(1.6),
                                                                                 f(p),frk1(p),L(p),dt(p),
                                                                                 press(p),lrk1(p),lrk2(p),K(p),dts(p),
@@ -92,19 +89,19 @@ sixdof_obj::sixdof_obj(lexer *p, ghostcell *pgc, int number) : ddweno_f_nug(p), 
     
     
     if(p->X210==0 && p->X211==0)
-    pmotion = new sixdof_motionext_void(p,pgc);
+    pmotion = new sixdof_motionext_void();
     
     if((p->X210==1 || p->X211==1) && p->X240==0)
-    pmotion = new sixdof_motionext_fixed(p,pgc);
+    pmotion = new sixdof_motionext_fixed(p);
     
     if(p->X240==1)
-    pmotion = new sixdof_motionext_file(p,pgc);
+    pmotion = new sixdof_motionext_file(p);
     
     if(p->X240==11)
-    pmotion = new sixdof_motionext_file_CoG(p,pgc);
+    pmotion = new sixdof_motionext_file_CoG(p);
     
     if(p->X240==21)
-    pmotion = new sixdof_motionext_wavemaker(p,pgc);
+    pmotion = new sixdof_motionext_wavemaker(p);
     
     Mass_fb =  Rfb = Vfb = 1.0;
     

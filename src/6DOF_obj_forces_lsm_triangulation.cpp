@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-void sixdof_obj::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
+void sixdof_obj::triangulation(lexer *p,fdm* a, ghostcell *, field& )
 {   
     polygon_num=facount=0;
     

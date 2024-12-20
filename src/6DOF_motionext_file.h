@@ -28,13 +28,6 @@ Author: Hans Bihs
 #include <Eigen/Dense>
 
 class lexer;
-class fdm;
-class fdm_nhf;
-class fdm2D;
-class ghostcell;
-class vrans;
-class net;
-class field;
 
 using namespace std;
 
@@ -43,22 +36,20 @@ class sixdof_motionext_file : public sixdof_motionext
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
     
-    virtual void motionext_trans(lexer*, ghostcell*, Eigen::Vector3d&, Eigen::Vector3d&);
+    virtual void motionext_trans(lexer*, Eigen::Vector3d&, Eigen::Vector3d&);
     virtual void motionext_rot(lexer*, Eigen::Vector3d&, Eigen::Vector3d&, Eigen::Vector4d&, Eigen::Matrix<double, 3, 4>&,  Eigen::Matrix3d&);
-
-    virtual void ini(lexer*,ghostcell*);
     
-    
-    
-    sixdof_motionext_file(lexer*, ghostcell*);
+    sixdof_motionext_file(lexer*);
 	virtual ~sixdof_motionext_file() = default;
     
 private:
     double ramp_vel(lexer*);
     double ramp_draft(lexer*);
     
-    void read_format_1(lexer*,ghostcell*);
-    void read_format_2(lexer*,ghostcell*);
+    void read_format_1(lexer*);
+    void read_format_2(lexer*);
+
+    void ini();
     
     Eigen::Vector3d omega_;
     

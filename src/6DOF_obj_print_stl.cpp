@@ -25,10 +25,8 @@ Author: Hans Bihs
 #include<fstream>
 #include"6DOF_obj.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-void sixdof_obj::print_stl(lexer *p, ghostcell *pgc)
+void sixdof_obj::print_stl(lexer *p)
 {
 	int num=0;
     int printflag=0;

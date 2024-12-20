@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include <math.h>
 
-void sixdof_obj::forces_lsm(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field& vvel, field& wvel, int iter, bool finalize)
+void sixdof_obj::forces_lsm(lexer* p, fdm *a, ghostcell *pgc, field& , field& , field& , int iter, bool finalize)
 {
     triangulation(p,a,pgc,a->fb);
 	reconstruct(p,a,a->fb);
@@ -46,7 +46,7 @@ void sixdof_obj::forces_lsm(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
     p->del_Darray(ccpt,numtri*4,3);
 }
 
-void sixdof_obj::forces_lsm_calc(lexer* p, fdm *a, ghostcell *pgc, int iter, bool finalize)
+void sixdof_obj::forces_lsm_calc(lexer* p, fdm *a, ghostcell *pgc, int , bool finalize)
 {
     double density,viscosity;
     double du,dv,dw;

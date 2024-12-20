@@ -25,12 +25,12 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
+void sixdof_obj::print_vtp(lexer* p, fdm* a)
 {
 	if(p->mpirank==0)
-    pvtp(p,a,pgc);
+    pvtp(p);
 	
-	name_iter(p,a,pgc);
+	name_iter(p);
 
 	ofstream result;
 	result.open(name, ios::binary);

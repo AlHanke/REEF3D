@@ -37,17 +37,17 @@ Author: Tobias Martin
 #include"net_barDyn.h"
 #include"net_sheet.h"
 
-void sixdof_obj::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vector<net*>& pnet)
+void sixdof_obj::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vector<net*>&)
 {
     if(p->mpirank==0)
     cout<<"6DOF_df_ini "<<endl;
     
     // Initialise folder structure
     if(p->X50==1)
-	print_ini_vtp(p,pgc);
+	print_ini_vtp(p);
     
     if(p->X50==2)
-    print_ini_stl(p,pgc);
+    print_ini_stl(p);
  
     // Initialise processor boundaries
     ini_parallel(p,pgc);
@@ -56,7 +56,7 @@ void sixdof_obj::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vector<
 	objects_create(p,pgc);
     
     // Initialise fbvel
-	ini_fbvel(p,pgc);
+	ini_fbvel(p);
     
     // Level Set for floating body
     ray_cast(p,d,pgc);
@@ -66,21 +66,21 @@ void sixdof_obj::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vector<
     geometry_parameters_nhflow(p,d,pgc);
     
     // Initialise position of bodies
-    iniPosition_RBM(p,pgc);
+    iniPosition_RBM(p);
 	
 	// Recalculate distances
 	ray_cast(p,d,pgc);
 	nhflow_reini_RK2(p,d,pgc,d->FB);
     
     // Initialise global variables
-	update_fbvel(p,pgc);
+	update_fbvel(p);
 
     // Print initial body 
     if(p->X50==1)
-    print_vtp(p,pgc);
+    print_vtp(p);
     
     if(p->X50==2)
-    print_stl(p,pgc);
+    print_stl(p);
 
 
 

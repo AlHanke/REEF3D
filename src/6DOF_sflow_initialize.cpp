@@ -33,20 +33,20 @@ void sixdof_sflow::ini(lexer *p, ghostcell *pgc)
     fb_obj[nb]->initialize_shipwave(p, pgc);
 }
 
-void sixdof_sflow::initialize(lexer *p, fdm *a, ghostcell *pgc, vector<net*>& pnet)
+void sixdof_sflow::initialize(lexer *, fdm *, ghostcell *, vector<net*>& )
 {
 }
 
-void sixdof_sflow::initialize(lexer *p, fdm_nhf *d, ghostcell *pgc, vector<net*>& pnet)
+void sixdof_sflow::initialize(lexer *, fdm_nhf *, ghostcell *, vector<net*>& )
 {
 }
 
 
-void sixdof_sflow::start_cfd(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, vector<net*>& pnet, int iter, field &uvel, field &vvel, field &wvel, field &fx, field &fy, field &fz, bool finalize)
+void sixdof_sflow::start_cfd(lexer* , fdm* , ghostcell* , vrans* , vector<net*>& , int , field &, field &, field &, field &, field &, field &, bool )
 {
 }
 
-void sixdof_sflow::start_nhflow(lexer* p, fdm_nhf* d, ghostcell* pgc, vrans* pvrans, vector<net*>& pnet, int iter, 
-                                        double *U, double *V, double *W, double *FX, double *FY, double *FZ, slice &WL, slice &fe, bool finalize)
+void sixdof_sflow::start_nhflow(lexer* , fdm_nhf* , ghostcell* , vrans* , vector<net*>& , int , 
+                                        double *, double *, double *, slice &, slice &, bool )
 {
 }

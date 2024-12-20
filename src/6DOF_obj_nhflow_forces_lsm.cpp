@@ -249,7 +249,7 @@ void sixdof_obj::force_calc_lsm(lexer* p, fdm_nhf *d, ghostcell *pgc)
     }*/
 }
 
-void sixdof_obj::allocate(lexer* p, fdm_nhf *d, ghostcell *pgc)
+void sixdof_obj::allocate(lexer* p, fdm_nhf *, ghostcell *)
 {
     p->Iarray(tri,numtri,4);
     p->Darray(pt,numvert,3);
@@ -291,7 +291,7 @@ void sixdof_obj::allocate(lexer* p, fdm_nhf *d, ghostcell *pgc)
     }
 }
 
-void sixdof_obj::deallocate(lexer* p, fdm_nhf *d, ghostcell *pgc)
+void sixdof_obj::deallocate(lexer* p, fdm_nhf *, ghostcell *)
 {
     p->del_Iarray(tri,numtri,4);
     p->del_Darray(pt,numvert,3);

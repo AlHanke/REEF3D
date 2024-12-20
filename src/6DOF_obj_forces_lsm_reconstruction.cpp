@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 
-void sixdof_obj::reconstruct(lexer *p,fdm* a, field& b)
+void sixdof_obj::reconstruct(lexer *p,fdm* a, field&)
 {
     ccptcount=0;
 
@@ -55,7 +55,7 @@ void sixdof_obj::reconstruct(lexer *p,fdm* a, field& b)
     }
 }
 
-void sixdof_obj::addpoint(lexer *p, fdm *a, int q1, int q2)
+void sixdof_obj::addpoint(lexer *, fdm *, int q1, int q2)
 {
 	// p. 917
     double xd,dnom;

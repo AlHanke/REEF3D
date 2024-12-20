@@ -38,7 +38,7 @@ void sixdof_obj::geometry_f(double& w0, double& w1, double& w2, double& f1, doub
     g2 = f2 + w2 * (f1 + w2);
 }
 
-void sixdof_obj::geometry_stl(lexer *p, ghostcell *pgc)
+void sixdof_obj::geometry_stl(lexer *p)
 {
     if(p->X180==1)
     {

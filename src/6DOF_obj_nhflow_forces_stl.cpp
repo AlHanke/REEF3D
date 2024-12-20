@@ -370,7 +370,7 @@ void sixdof_obj::force_calc_stl(lexer* p, fdm_nhf *d, ghostcell *pgc, bool final
 }
 
 
-double sixdof_obj::triangle_area(lexer *p, double x0, double y0, double z0, double x1, double y1, double z1, double x2, double y2, double z2)
+double sixdof_obj::triangle_area(lexer *, double x0, double y0, double z0, double x1, double y1, double z1, double x2, double y2, double z2)
 {
     double at,bt,ct,st,A;
     
