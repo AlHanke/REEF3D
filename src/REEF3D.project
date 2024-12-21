@@ -1120,7 +1120,6 @@
         <File Name="wave_lib_linear.h"/>
         <File Name="wave_lib_piston.h"/>
         <File Name="wave_lib_piston_eta.h"/>
-        <File Name="wave_lib_reconstruct.h"/>
         <File Name="wave_lib_shallow.h"/>
         <File Name="wave_lib_solitary_1st.h"/>
         <File Name="wave_lib_solitary_3rd.h"/>
@@ -3077,7 +3076,6 @@
         <File Name="wave_lib_linear.cpp"/>
         <File Name="wave_lib_piston.cpp"/>
         <File Name="wave_lib_piston_eta.cpp"/>
-        <File Name="wave_lib_reconstruct.cpp"/>
         <File Name="wave_lib_shallow.cpp"/>
         <File Name="wave_lib_solitary_1st.cpp"/>
         <File Name="wave_lib_solitary_3rd.cpp"/>
