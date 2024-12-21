@@ -71,12 +71,12 @@ levelset_void::levelset_void(lexer* p, fdm *a, ghostcell* pgc, heat *&pheat, con
 }
 
 
-void levelset_void::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppls, field &ls)
+void levelset_void::start(lexer* p, fdm* a, ghostcell* pgc, convection*, ioflow*, reini*, particle_corr*, field &)
 {
     pupdate->start(p,a,pgc);
 }
 
-void levelset_void::update(lexer *p, fdm *a, ghostcell *pgc, field &f)
+void levelset_void::update(lexer *p, fdm *a, ghostcell *pgc)
 {
     pupdate->start(p,a,pgc);
 }

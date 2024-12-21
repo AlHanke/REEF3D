@@ -31,17 +31,16 @@ Author: Hans Bihs
 #include"field4.h"
 
 class picard;
-class heat;
 class convection;
 class fluid_update;
 
 class VOF_AB : public freesurface, gradient
 {
 public:
-	VOF_AB(lexer*, fdm*, ghostcell*,heat*);
+	VOF_AB(lexer*, fdm*, ghostcell*);
 	virtual ~VOF_AB() = default;
-	virtual void start(lexer*,fdm*,ghostcell*, convection*, solver*, ioflow*, reini*, particle_corr*,field&);
-	virtual void update(lexer*,fdm*,ghostcell*,field&);
+	virtual void start(lexer*,fdm*,ghostcell*, convection*, ioflow*, reini*, particle_corr*,field&);
+	virtual void update(lexer*,fdm*,ghostcell*);
 
 	void compression(lexer*,fdm*,ghostcell*,convection*,field&,double);
 	

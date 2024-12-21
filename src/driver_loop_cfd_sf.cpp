@@ -79,7 +79,7 @@ void driver::loop_cfd_sf(fdm* a)
         // Benchmark cases
         pbench->start(p,a,pgc,pconvec);
 
-        pfsf->start(p,a,pgc,pfsfdisc,psolv,pflow,preini,ppls,a->phi);
+        pfsf->start(p,a,pgc,pfsfdisc,pflow,preini,ppls,a->phi);
         poneph->update(p,a,pgc,pflow);
 
         // Turbulence computation
@@ -97,7 +97,7 @@ void driver::loop_cfd_sf(fdm* a)
         pflow->u_relax(p,a,pgc,a->u);
         pflow->v_relax(p,a,pgc,a->v);
         pflow->w_relax(p,a,pgc,a->w);
-        pfsf->update(p,a,pgc,a->phi);
+        pfsf->update(p,a,pgc);
 	
         // Momentum 
         pmom_sf->starti(p,a,pgc,p6dof,pvrans,pnet,pfsi);

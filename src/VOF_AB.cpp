@@ -30,11 +30,10 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"ioflow.h"
 #include"fluid_update_vof.h"
-#include"heat.h"
 #include"weno_hj.h"
 #include"hric.h"
 
-VOF_AB::VOF_AB(lexer* p, fdm *a, ghostcell* pgc, heat *pheat):gradient(p),uc(p),vc(p),wc(p),F(p),lab(p)
+VOF_AB::VOF_AB(lexer* p, fdm *a, ghostcell* pgc):gradient(p),uc(p),vc(p),wc(p),F(p),lab(p)
 {
     if(p->F50==1)
 	gcval_frac=71;
@@ -53,7 +52,7 @@ VOF_AB::VOF_AB(lexer* p, fdm *a, ghostcell* pgc, heat *pheat):gradient(p),uc(p),
 	ppconvec = new hric(p);
 }
 
-void VOF_AB::start(lexer* p, fdm* a,ghostcell* pgc, convection* pconvec,solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppls, field &ls)
+void VOF_AB::start(lexer* p, fdm* a,ghostcell* pgc, convection* pconvec, ioflow* pflow, reini* preini, particle_corr* ppls, field &ls)
 {
     pflow->fsfinflow(p,a,pgc);
 	
@@ -96,7 +95,7 @@ void VOF_AB::start(lexer* p, fdm* a,ghostcell* pgc, convection* pconvec,solver* 
 
 }
 
-void VOF_AB::update(lexer *p, fdm *a, ghostcell *pgc, field &F)
+void VOF_AB::update(lexer *p, fdm *a, ghostcell *pgc)
 {
     pupdate->start(p,a,pgc);
 }

@@ -91,7 +91,7 @@ levelset_RK2::levelset_RK2(lexer* p, fdm *a, ghostcell* pgc, heat *&pheat, conce
 	ppicard = new picard_void(p);
 }
 
-void levelset_RK2::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppls, field &ls)
+void levelset_RK2::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, ioflow* pflow, reini* preini, particle_corr* ppls, field &ls)
 {
     field4 ark1(p);
     pflow->fsfinflow(p,a,pgc);
@@ -145,7 +145,7 @@ void levelset_RK2::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, 
 	cout<<"lsmtime: "<<setprecision(3)<<p->lsmtime<<endl;
 }
 
-void levelset_RK2::update(lexer *p, fdm *a, ghostcell *pgc, field &f)
+void levelset_RK2::update(lexer *p, fdm *a, ghostcell *pgc)
 {
     pupdate->start(p,a,pgc);
 }

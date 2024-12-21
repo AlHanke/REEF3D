@@ -386,13 +386,13 @@ void driver::logic_cfd()
 
 
 	if(p->F80==1)
-	pfsf = new VOF_AB(p,a,pgc,pheat);
+	pfsf = new VOF_AB(p,a,pgc);
 
 	if(p->F80==3)
-	pfsf = new VOF_RK3(p,a,pgc,pheat);
+	pfsf = new VOF_RK3(p,a,pgc);
 
 	if(p->F80==4)
-	pfsf = new VOF_PLIC(p,a,pgc,pheat);
+	pfsf = new VOF_PLIC(p,a,pgc);
 
 
     //  Convection VOF

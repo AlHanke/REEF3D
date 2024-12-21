@@ -96,7 +96,7 @@ levelset_RK3::levelset_RK3(lexer* p, fdm *a, ghostcell* pgc, heat *&pheat, conce
 	gcval_w=12;
 }
 
-void levelset_RK3::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec,solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppart, field &ls)
+void levelset_RK3::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec, ioflow* pflow, reini* preini, particle_corr* ppart, field &ls)
 {
     pflow->fsfinflow(p,a,pgc);
     pflow->fsfrkin(p,a,pgc,ark1);
@@ -173,7 +173,7 @@ void levelset_RK3::start(lexer* p, fdm* a, ghostcell* pgc, convection* pconvec,s
 	cout<<"lsmtime: "<<setprecision(3)<<p->lsmtime<<endl;
 }
 
-void levelset_RK3::update(lexer *p, fdm *a, ghostcell *pgc, field &f)
+void levelset_RK3::update(lexer *p, fdm *a, ghostcell *pgc)
 {
     pupdate->start(p,a,pgc);
 }

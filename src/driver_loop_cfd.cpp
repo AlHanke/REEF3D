@@ -77,7 +77,7 @@ void driver::loop_cfd(fdm* a)
             
         fill_vel(p,a,pgc);
         
-        pfsf->start(p,a,pgc,pfsfdisc,psolv,pflow,preini,ppls,a->phi);
+        pfsf->start(p,a,pgc,pfsfdisc,pflow,preini,ppls,a->phi);
         poneph->update(p,a,pgc,pflow);
         pturb->start(p,a,pgc,pturbdisc,pturbdiff,psolv,pflow,pvrans);
         pheat->start(p,a,pgc,pheatdisc,pdiff,psolv,pflow);
@@ -89,7 +89,7 @@ void driver::loop_cfd(fdm* a)
         pflow->u_relax(p,a,pgc,a->u);
         pflow->v_relax(p,a,pgc,a->v);
         pflow->w_relax(p,a,pgc,a->w);
-        pfsf->update(p,a,pgc,a->phi);
+        pfsf->update(p,a,pgc);
         pmom->start(p,a,pgc,pvrans,p6dof,pnet); 
         pbench->start(p,a,pgc,pconvec);
 		

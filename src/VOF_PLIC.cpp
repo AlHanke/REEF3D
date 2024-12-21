@@ -32,7 +32,6 @@ Author: Tobias Martin
 #include"freesurface_header.h"
 #include"ioflow.h"
 #include"fluid_update_vof.h"
-#include"heat.h"
 #include"hires.h"
 #include"weno_hj.h"
 #include"hric.h"
@@ -41,8 +40,7 @@ VOF_PLIC::VOF_PLIC
 (
     lexer* p,
     fdm *a,
-    ghostcell* pgc,
-    heat *pheat
+    ghostcell* pgc
 ):gradient(p),norm_vec(p),nx(p),ny(p),nz(p),alpha(p),vof1(p),vof2(p),vof3(p)
 {
     if(p->F50==1)
@@ -73,7 +71,6 @@ void VOF_PLIC::start
     fdm* a,
     ghostcell* pgc,
     convection* pconvec,
-    solver* psolv,
     ioflow* pflow,
     reini* preini,
     particle_corr* ppls,
@@ -191,13 +188,7 @@ void VOF_PLIC::start
 
 }
 
-void VOF_PLIC::update
-(
-    lexer *p,
-    fdm *a,
-    ghostcell *pgc,
-    field &F
-)
+void VOF_PLIC::update(lexer *p, fdm *a, ghostcell *pgc)
 {
     pupdate->start(p,a,pgc);
 }

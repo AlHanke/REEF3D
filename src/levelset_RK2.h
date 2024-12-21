@@ -36,8 +36,8 @@ class levelset_RK2 : public freesurface, gradient
 public:
 	levelset_RK2(lexer*, fdm*, ghostcell*, heat*&, concentration*&);
 	virtual ~levelset_RK2() = default;
-	virtual void start(lexer*,fdm*,ghostcell*, convection*, solver*, ioflow*, reini*, particle_corr*,field&);
-    virtual void update(lexer*,fdm*,ghostcell*,field&);
+	virtual void start(lexer*,fdm*,ghostcell*, convection*, ioflow*, reini*, particle_corr*,field&);
+    virtual void update(lexer*,fdm*,ghostcell*);
 
 private:
     fluid_update *pupdate;

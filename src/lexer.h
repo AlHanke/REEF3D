@@ -52,7 +52,7 @@ public:
     void lexer_read(ghostcell*);
     void flagini();
 	void gridini(ghostcell*);
-    void gcd_ini(ghostcell*);
+    void gcd_ini();
     void gridini_patchBC();
     void makeflag(int*);
     void sigma_coord_ini();
@@ -67,7 +67,6 @@ public:
 	int maxparacount();
 	void gridsize();
 	void vecsize(ghostcell*);
-    void gcbextra_est(ghostcell*);
 	void vellast();
 	void indices_minmax();
 	void lexer_ini();

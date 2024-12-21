@@ -160,7 +160,7 @@ void driver::driver_ini_cfd()
         for(int qn=0;qn<20;++qn)
         pflow->phi_relax(p,pgc,a->phi);
         preini->start(p,a,pgc,a->phi,pflow);
-        pfsf->update(p,a,pgc,a->phi);        
+        pfsf->update(p,a,pgc);        
         pini->iniphi_surfarea(p,a,pgc);
     }
 

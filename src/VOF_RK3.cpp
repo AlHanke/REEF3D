@@ -30,12 +30,11 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"ioflow.h"
 #include"fluid_update_vof.h"
-#include"heat.h"
 #include"hires.h"
 #include"weno_hj.h"
 #include"hric.h"
 
-VOF_RK3::VOF_RK3(lexer* p, fdm *a, ghostcell* pgc, heat *pheat):gradient(p),uc(p),vc(p),wc(p),F(p)
+VOF_RK3::VOF_RK3(lexer* p, fdm *a, ghostcell* pgc):gradient(p),uc(p),vc(p),wc(p),F(p)
 {
     if(p->F50==1)
 	gcval_frac=71;
@@ -54,7 +53,7 @@ VOF_RK3::VOF_RK3(lexer* p, fdm *a, ghostcell* pgc, heat *pheat):gradient(p),uc(p
 	ppconvec = new hric(p);
 }
 
-void VOF_RK3::start(lexer* p, fdm* a, ghostcell* pgc,convection* pconvec,solver* psolv, ioflow* pflow, reini* preini, particle_corr* ppls, field &F)
+void VOF_RK3::start(lexer* p, fdm* a, ghostcell* pgc,convection* pconvec, ioflow* pflow, reini* preini, particle_corr* ppls, field &F)
 {
     field4 ark1(p),ark2(p);
     
@@ -122,7 +121,7 @@ void VOF_RK3::start(lexer* p, fdm* a, ghostcell* pgc,convection* pconvec,solver*
 	cout<<"voftime: "<<setprecision(3)<<p->lsmtime<<endl;
 }
 
-void VOF_RK3::update(lexer *p, fdm *a, ghostcell *pgc, field &F)
+void VOF_RK3::update(lexer *p, fdm *a, ghostcell *pgc)
 {
     pupdate->start(p,a,pgc);
 }

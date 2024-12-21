@@ -26,7 +26,6 @@ Author: Hans Bihs
 class fdm;
 class lexer;
 class convection;
-class solver;
 class ghostcell;
 class ioflow;
 class reini;
@@ -37,8 +36,8 @@ class freesurface
 {
 public:
 
-	virtual void start(lexer*,fdm*,ghostcell*,convection*, solver*, ioflow*, reini*, particle_corr*,field&)=0;
-    virtual void update(lexer*,fdm*,ghostcell*,field&)=0;
+	virtual void start(lexer*,fdm*,ghostcell*,convection*, ioflow*, reini*, particle_corr*,field&)=0;
+    virtual void update(lexer*,fdm*,ghostcell*)=0;
 
 };
 
