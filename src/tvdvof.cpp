@@ -21,10 +21,10 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"tvdvof.h"
-#include"lexer.h"
-#include"fdm.h"
+#include"field.h"
+#include<math.h>
 
-tvdvof::tvdvof(lexer *p)
+tvdvof::tvdvof()
 {
 }
 

@@ -72,28 +72,28 @@ hires::hires (lexer *p, int limiter)
     
     
 	if(limiter==10)
-	plim = new minmod(p);
+	plim = new minmod();
 	
 	if(limiter==11)
-	plim = new vanleer(p);
+	plim = new vanleer();
 	
 	if(limiter==12)
-	plim = new umist(p);
+	plim = new umist();
 	
 	if(limiter==13)
-	plim = new vanalbada(p);
+	plim = new vanalbada();
 	
 	if(limiter==14)
-	plim = new superbee(p);
+	plim = new superbee();
 	
 	if(limiter==15)
-	plim = new smart(p);
+	plim = new smart();
 	
 	if(limiter==16)
 	plim = new limo3(p);
 	
 	if(limiter==42)
-	plim = new tvdvof(p);
+	plim = new tvdvof();
 }
 
 void hires::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)

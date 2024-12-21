@@ -21,10 +21,10 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"superbee.h"
-#include"lexer.h"
-#include"fdm.h"
+#include"field.h"
+#include<math.h>
 
-superbee::superbee (lexer *p)
+superbee::superbee()
 {
 }
 

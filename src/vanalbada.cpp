@@ -21,10 +21,10 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"vanalbada.h"
-#include"lexer.h"
-#include"fdm.h"
+#include"field.h"
+#include<math.h>
 
-vanalbada::vanalbada (lexer *p)
+vanalbada::vanalbada()
 {
 }
 

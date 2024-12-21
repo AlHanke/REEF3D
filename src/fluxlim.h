@@ -24,8 +24,6 @@ Author: Hans Bihs
 #define FLUXLIM_H_
 
 class field;
-class fdm;
-class lexer;
 
 class fluxlim 
 {

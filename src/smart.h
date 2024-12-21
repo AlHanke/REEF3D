@@ -31,7 +31,7 @@ class smart : public fluxlim, public increment
 
 public:
 
-	smart (lexer *);
+	smart();
 	virtual ~smart() = default;
 	
 	virtual double iphi(field&,int,int,int,int);

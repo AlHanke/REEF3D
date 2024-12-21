@@ -26,6 +26,8 @@ Author: Hans Bihs
 #include"fluxlim.h"
 #include"increment.h"
 
+class lexer;
+
 class limo3 : public fluxlim, public increment
 {
 

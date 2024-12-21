@@ -21,10 +21,10 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"umist.h"
-#include"lexer.h"
-#include"fdm.h"
+#include"field.h"
+#include<math.h>
 
-umist::umist (lexer *p)
+umist::umist()
 {
 }
 

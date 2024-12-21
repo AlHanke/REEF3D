@@ -21,10 +21,10 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"vanleer.h"
-#include"lexer.h"
-#include"fdm.h"
+#include"field.h"
+#include<math.h>
 
-vanleer::vanleer (lexer *p)
+vanleer::vanleer()
 {
 }
 

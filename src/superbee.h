@@ -29,7 +29,7 @@ Author: Hans Bihs
 class superbee : public fluxlim, public increment
 {
 public:
-	superbee (lexer *);
+	superbee();
 	virtual ~superbee() = default;
 
 	virtual double iphi(field&,int,int,int,int);

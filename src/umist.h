@@ -29,7 +29,7 @@ Author: Hans Bihs
 class umist : public fluxlim, public increment
 {
 public:
-	umist (lexer *);
+	umist();
 	virtual ~umist() = default;
 
 	virtual double iphi(field&,int,int,int,int);

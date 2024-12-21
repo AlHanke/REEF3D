@@ -29,7 +29,7 @@ Author: Hans Bihs
 class vanleer : public fluxlim, public increment
 {
 public:
-	vanleer (lexer *);
+	vanleer();
 	virtual ~vanleer() = default;
 
 	virtual double iphi(field&,int,int,int,int);
