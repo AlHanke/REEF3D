@@ -30,7 +30,7 @@ void lexer::gridini(ghostcell *pgc)
     
     lexer_gridspacing(pgc);
 	parse();	
-    gcd_ini(pgc);
+    gcd_ini();
 }
 
 void lexer::flagini()
@@ -117,7 +117,7 @@ int lexer::conv(double a)
 	return b;
 }
 
-void lexer::gcd_ini(ghostcell *pgc)
+void lexer::gcd_ini()
 {  
     for(int q=0;q<gcb4_count;++q)
 	{

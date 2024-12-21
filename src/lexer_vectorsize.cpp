@@ -45,7 +45,7 @@ void lexer::vecsize(ghostcell *pgc)
     //cout<<mpirank<<" solid_gcb_est_max: "<<solid_gcb_est_max<<" topo_gcb_est_max: "<<topo_gcb_est_max<<endl;
     
     
-// gcbextra
+    // gcbextra
     gcbextra=gcextra_max*margin;
     
     // gcbextra0=gcbextra;
@@ -92,7 +92,7 @@ void lexer::vecsize(ghostcell *pgc)
     
     
     // 2D
-     slicenum= 0;
+    slicenum= 0;
     for(i=0; i<knox; ++i)
     for(j=0; j<knoy; ++j)
 	if(flagslice4[(i-imin)*jmax + (j-jmin)]>0)
@@ -104,13 +104,4 @@ void lexer::vecsize(ghostcell *pgc)
     vec2Dlength = slicenum + gcbnum*3  + gcpara_sum*4;    
     
     C1_2D_size=C2_2D_size=C4_2D_size=M_2D_size=vec2Dlength;
-}
-
-void lexer::gcbextra_est(ghostcell *pgc)
-{
-    
-    
-    
-    
-    
 }
