@@ -22,12 +22,11 @@ Author: Hans Bihs
 
 #include"wave_lib_irregular_1st.h"
 #include"lexer.h"
-#include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_irregular_1st::wave_lib_irregular_1st(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_irregular_1st::wave_lib_irregular_1st(lexer *p, ghostcell *pgc) : wave_lib_parameters(p)
 { 
-    parameters(p,pgc);
+    parameters(p);
     
 	if(p->B85!=4 && p->B85!=5 && p->B85!=6 && p->B92!=51)
 	{
@@ -51,8 +50,8 @@ wave_lib_irregular_1st::wave_lib_irregular_1st(lexer *p, ghostcell *pgc) : wave_
     
     if(p->B92==51)
     {
-    recon_read(p,pgc);
-    recon_parameters(p,pgc);
+    recon_read(p);
+    recon_parameters(p);
     }
     
 	if(p->B85==4 || p->B85==5 || p->B85==6)
@@ -213,7 +212,7 @@ double wave_lib_irregular_1st::wave_w(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_irregular_1st::wave_w_space_sin(lexer *p, double x, double y, double z, int n)
+double wave_lib_irregular_1st::wave_w_space_sin(lexer *, double x, double y, double z, int n)
 {
 	T = sin(ki[n]*(cosbeta[n]*x + sinbeta[n]*y));
 
@@ -222,7 +221,7 @@ double wave_lib_irregular_1st::wave_w_space_sin(lexer *p, double x, double y, do
     return vel;
 }
 
-double wave_lib_irregular_1st::wave_w_space_cos(lexer *p, double x, double y, double z, int n)
+double wave_lib_irregular_1st::wave_w_space_cos(lexer *, double x, double y, double z, int n)
 {
 	T = cos(ki[n]*(cosbeta[n]*x + sinbeta[n]*y));
 
@@ -259,7 +258,7 @@ double wave_lib_irregular_1st::wave_eta(lexer *p, double x, double y)
     return eta;
 }
 
-double wave_lib_irregular_1st::wave_eta_space_sin(lexer *p, double x, double y, int n)
+double wave_lib_irregular_1st::wave_eta_space_sin(lexer *, double x, double y, int n)
 {
 	T = sin(ki[n]*(cosbeta[n]*x + sinbeta[n]*y));
 
@@ -268,7 +267,7 @@ double wave_lib_irregular_1st::wave_eta_space_sin(lexer *p, double x, double y, 
     return eta;
 }
 
-double wave_lib_irregular_1st::wave_eta_space_cos(lexer *p, double x, double y, int n)
+double wave_lib_irregular_1st::wave_eta_space_cos(lexer *, double x, double y, int n)
 {
 	T = cos(ki[n]*(cosbeta[n]*x + sinbeta[n]*y));
 
@@ -306,7 +305,7 @@ double wave_lib_irregular_1st::wave_fi(lexer *p, double x, double y, double z)
 }
     
 
-double wave_lib_irregular_1st::wave_fi_space_sin(lexer *p, double x, double y, double z, int n)
+double wave_lib_irregular_1st::wave_fi_space_sin(lexer *, double x, double y, double z, int n)
 {
 	T = sin(ki[n]*(cosbeta[n]*x + sinbeta[n]*y));
 	
@@ -315,7 +314,7 @@ double wave_lib_irregular_1st::wave_fi_space_sin(lexer *p, double x, double y, d
     return fi;
 }
 
-double wave_lib_irregular_1st::wave_fi_space_cos(lexer *p, double x, double y, double z, int n)
+double wave_lib_irregular_1st::wave_fi_space_cos(lexer *, double x, double y, double z, int n)
 {
     T = cos(ki[n]*(cosbeta[n]*x + sinbeta[n]*y));
 	
@@ -338,11 +337,11 @@ double wave_lib_irregular_1st::wave_fi_time_cos(lexer *p, int n)
     return T;
 }
 
-void wave_lib_irregular_1st::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_irregular_1st::parameters(lexer*)
 {
 
 }
 
-void wave_lib_irregular_1st::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_irregular_1st::wave_prestep(lexer*)
 {
 }

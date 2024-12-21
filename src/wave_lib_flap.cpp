@@ -22,11 +22,9 @@ Author: Hans Bihs
 
 #include"wave_lib_flap.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 #include<fstream>
 
-wave_lib_flap::wave_lib_flap(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_flap::wave_lib_flap(lexer *p) : wave_lib_parameters(p)
 { 
     if(p->mpirank==0)
     {
@@ -37,7 +35,7 @@ wave_lib_flap::wave_lib_flap(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
 	timecount=1;
     timecount_z=0;
 	
-	read(p,pgc);
+	read(p);
     
     singamma = sin((p->B105_1)*(PI/180.0));
     cosgamma = cos((p->B105_1)*(PI/180.0));
@@ -61,7 +59,7 @@ double wave_lib_flap::wave_v(lexer *p, double x, double y, double z)
     return singamma*vel;
 }
 
-double wave_lib_flap::wave_horzvel(lexer *p, double x, double y, double z)
+double wave_lib_flap::wave_horzvel(lexer *p, double, double, double z)
 {
     double vel,fac;
 	
@@ -89,7 +87,7 @@ double wave_lib_flap::wave_horzvel(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_flap::wave_w(lexer *p, double x, double y, double z)
+double wave_lib_flap::wave_w(lexer *p, double, double, double z)
 {
     double vel,fac;
     
@@ -111,13 +109,9 @@ double wave_lib_flap::wave_w(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_flap::wave_eta(lexer *p, double x, double y)
+double wave_lib_flap::wave_eta(lexer *, double, double)
 {
-    double eta;
-
-    eta =  0.0;
-
-    return eta;
+    return 0.0;
 }
 
 double wave_lib_flap::wave_fi(lexer *p, double x, double y, double z)
@@ -129,12 +123,12 @@ double wave_lib_flap::wave_fi(lexer *p, double x, double y, double z)
     return fi;
 }
 
-void wave_lib_flap::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_flap::parameters(lexer*)
 {
 
 }
 
-void wave_lib_flap::read(lexer *p, ghostcell* pgc)
+void wave_lib_flap::read(lexer* p)
 {
 	double val0,val1;
     double sign,beta,s;
@@ -215,6 +209,6 @@ void wave_lib_flap::read(lexer *p, ghostcell* pgc)
     */
 }
 
-void wave_lib_flap::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_flap::wave_prestep(lexer*)
 {
 }

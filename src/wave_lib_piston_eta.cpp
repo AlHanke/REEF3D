@@ -22,11 +22,9 @@ Author: Hans Bihs
 
 #include"wave_lib_piston_eta.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 #include<fstream>
 
-wave_lib_piston_eta::wave_lib_piston_eta(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_piston_eta::wave_lib_piston_eta(lexer *p) : wave_lib_parameters(p)
 { 
     if(p->mpirank==0)
     {
@@ -35,7 +33,7 @@ wave_lib_piston_eta::wave_lib_piston_eta(lexer *p, ghostcell *pgc) : wave_lib_pa
 	
 	timecount=0;
 	
-	read(p,pgc);
+	read(p);
     
     singamma = sin((p->B105_1)*(PI/180.0));
     cosgamma = cos((p->B105_1)*(PI/180.0));	
@@ -82,16 +80,12 @@ double wave_lib_piston_eta::wave_horzvel(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_piston_eta::wave_w(lexer *p, double x, double y, double z)
+double wave_lib_piston_eta::wave_w(lexer *, double, double, double)
 {
-    double vel;
-    
-    vel = 0.0;
-
-    return vel;
+    return 0.0;
 }
 
-double wave_lib_piston_eta::wave_eta(lexer *p, double x, double y)
+double wave_lib_piston_eta::wave_eta(lexer *p, double, double)
 {
     double val=0.0;
     
@@ -104,17 +98,17 @@ double wave_lib_piston_eta::wave_eta(lexer *p, double x, double y)
     return val;
 }
 
-double wave_lib_piston_eta::wave_fi(lexer *p, double x, double y, double z)
+double wave_lib_piston_eta::wave_fi(lexer *, double, double, double)
 {
     return 0.0;
 }
 
-void wave_lib_piston_eta::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_piston_eta::parameters(lexer*)
 {
 
 }
 
-void wave_lib_piston_eta::read(lexer *p, ghostcell* pgc)
+void wave_lib_piston_eta::read(lexer* p)
 {
 	double val0,val1;
 	int count;
@@ -166,6 +160,6 @@ void wave_lib_piston_eta::read(lexer *p, ghostcell* pgc)
 	
 }
 
-void wave_lib_piston_eta::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_piston_eta::wave_prestep(lexer*)
 {
 }

@@ -22,12 +22,10 @@ Author: Hans Bihs
 
 #include"wave_lib_Stokes_2nd.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-wave_lib_Stokes_2nd::wave_lib_Stokes_2nd(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+wave_lib_Stokes_2nd::wave_lib_Stokes_2nd(lexer *p) : wave_lib_parameters(p)
 { 
-    parameters(p,pgc);
+    parameters(p);
     
     if(p->mpirank==0)
     {
@@ -40,25 +38,25 @@ wave_lib_Stokes_2nd::wave_lib_Stokes_2nd(lexer *p, ghostcell *pgc) : wave_lib_pa
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-double wave_lib_Stokes_2nd::wave_u(lexer *p, double x, double y, double z)
+double wave_lib_Stokes_2nd::wave_u(lexer *p, double x, double, double z)
 {
     double vel;
 	
-	vel = wave_horzvel(p,x,y,z);
+	vel = wave_horzvel(p,x,z);
     
     return cosgamma*vel;
 }
 
-double wave_lib_Stokes_2nd::wave_v(lexer *p, double x, double y, double z)
+double wave_lib_Stokes_2nd::wave_v(lexer *p, double x, double, double z)
 {
     double vel;
 	
-	vel = wave_horzvel(p,x,y,z);
+	vel = wave_horzvel(p,x,z);
 
     return singamma*vel;
 }
 
-double wave_lib_Stokes_2nd::wave_w(lexer *p, double x, double y, double z)
+double wave_lib_Stokes_2nd::wave_w(lexer *p, double x, double , double z)
 {
     double vel;
 	
@@ -70,7 +68,7 @@ double wave_lib_Stokes_2nd::wave_w(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_Stokes_2nd::wave_horzvel(lexer *p, double x, double y, double z)
+double wave_lib_Stokes_2nd::wave_horzvel(lexer *p, double x, double z)
 {
     double vel;
 	
@@ -82,7 +80,7 @@ double wave_lib_Stokes_2nd::wave_horzvel(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_Stokes_2nd::wave_eta(lexer *p, double x, double y)
+double wave_lib_Stokes_2nd::wave_eta(lexer *p, double x, double)
 {
     double eta;
 	
@@ -93,7 +91,7 @@ double wave_lib_Stokes_2nd::wave_eta(lexer *p, double x, double y)
     return eta;
 }
 
-double wave_lib_Stokes_2nd::wave_fi(lexer *p, double x, double y, double z)
+double wave_lib_Stokes_2nd::wave_fi(lexer *p, double x, double, double z)
 {
     double fi;
     
@@ -107,11 +105,11 @@ double wave_lib_Stokes_2nd::wave_fi(lexer *p, double x, double y, double z)
     return fi;
 }
 
-void wave_lib_Stokes_2nd::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_Stokes_2nd::parameters(lexer*)
 {
     
 }
 
-void wave_lib_Stokes_2nd::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_Stokes_2nd::wave_prestep(lexer*)
 {
 }

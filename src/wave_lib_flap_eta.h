@@ -30,7 +30,7 @@ Author: Hans Bihs
 class wave_lib_flap_eta : public wave_lib_precalc, public wave_lib_parameters, virtual public increment
 {
 public:
-    wave_lib_flap_eta(lexer*, ghostcell*);
+    wave_lib_flap_eta(lexer*);
 	virtual ~wave_lib_flap_eta() = default;
     
     double wave_horzvel(lexer*,double,double,double);
@@ -42,11 +42,11 @@ public:
     virtual double wave_fi(lexer*,double,double,double);
     
     
-    virtual void parameters(lexer*,ghostcell*);
-    virtual void wave_prestep(lexer*,ghostcell*);
+    virtual void parameters(lexer*);
+    virtual void wave_prestep(lexer*);
     
 private:
-	void read(lexer*, ghostcell*);
+	void read(lexer*);
 	
 	int ptnum;
 	

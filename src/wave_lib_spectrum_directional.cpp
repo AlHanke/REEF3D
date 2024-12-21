@@ -22,7 +22,6 @@ Author: Widar W. Wang
 
 #include"wave_lib_spectrum.h"
 #include"lexer.h"
-#include"ghostcell.h"
 #include <ctime>        // std::time
 #include <cstdlib>      // std::rand, std::srand
 

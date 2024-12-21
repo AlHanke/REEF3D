@@ -22,12 +22,10 @@ Author: Hans Bihs
 
 #include"wave_lib_cnoidal_5th.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-wave_lib_cnoidal_5th::wave_lib_cnoidal_5th(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_cnoidal_5th::wave_lib_cnoidal_5th(lexer *p) : wave_lib_parameters(p)
 { 
-    parameters(p,pgc);
+    parameters(p);
     
     if(p->mpirank==0)
     {
@@ -58,7 +56,7 @@ double wave_lib_cnoidal_5th::wave_v(lexer *p, double x, double y, double z)
     return singamma*vel;
 }
 
-double wave_lib_cnoidal_5th::wave_horzvel(lexer *p, double x, double y, double z)
+double wave_lib_cnoidal_5th::wave_horzvel(lexer *p, double x, double, double z)
 {
     double vel;
 	double yh;
@@ -68,7 +66,7 @@ double wave_lib_cnoidal_5th::wave_horzvel(lexer *p, double x, double y, double z
 		
 	teta = 2.0*Km*(x/wL - p->wavetime/wT) + pshift;
 	
-	elliptic(p,teta,sn,cn,dn);
+	elliptic(teta,sn,cn,dn);
 	
 	vel =  wC + sqrt(9.81*wht)*(-1.0 + delta*(-0.5 + cn*cn) 
 	    + pow(delta,2.0)*((-(19.0/40.0) + (3.0/2.0)*cn*cn - pow(cn,4.0)) + yh*yh*(-(3.0/2.0)*cn*cn + (9.0/4.0)*pow(cn,4.0)))
@@ -106,7 +104,7 @@ double wave_lib_cnoidal_5th::wave_horzvel(lexer *p, double x, double y, double z
     return vel;
 }
 
-double wave_lib_cnoidal_5th::wave_w(lexer *p, double x, double y, double z)
+double wave_lib_cnoidal_5th::wave_w(lexer *p, double x, double, double z)
 {
     double vel;
 	double yh;
@@ -116,7 +114,7 @@ double wave_lib_cnoidal_5th::wave_w(lexer *p, double x, double y, double z)
 	
 	teta = 2.0*Km*(x/wL - p->wavetime/wT) + pshift;
 
-	elliptic(p,teta,sn,cn,dn);
+	elliptic(teta,sn,cn,dn);
 	
 	vel =  2.0*acn*dn*sn*cn*sqrt(9.81*wht)*( delta*yh 
 	
@@ -154,14 +152,14 @@ double wave_lib_cnoidal_5th::wave_w(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_cnoidal_5th::wave_eta(lexer *p, double x, double y)
+double wave_lib_cnoidal_5th::wave_eta(lexer *p, double x, double)
 {
     double eta;
 	double sn,cn,dn;
 	
 	teta = 2.0*Km*(x/wL - p->wavetime/wT) + pshift;
 	
-	elliptic(p,teta,sn,cn,dn);
+	elliptic(teta,sn,cn,dn);
 	
 	eta =    -wdt + wht + wht*(epsilon*cn*cn + pow(epsilon,2.0)*(-0.75*cn*cn + 0.75*pow(cn,4.0)) 
 	
@@ -176,12 +174,12 @@ double wave_lib_cnoidal_5th::wave_eta(lexer *p, double x, double y)
 	return eta;	
 }
 
-double wave_lib_cnoidal_5th::wave_fi(lexer *p, double x, double y, double z)
+double wave_lib_cnoidal_5th::wave_fi(lexer *, double, double, double)
 {
     return 0.0;
 }
 
-void wave_lib_cnoidal_5th::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_cnoidal_5th::parameters(lexer* p)
 {
     double diff=1.0;
 	int qq,maxiter;
@@ -252,6 +250,6 @@ void wave_lib_cnoidal_5th::parameters(lexer *p, ghostcell *pgc)
 	cout<<"wC: "<<wC<<" wR: "<<wR<<endl;
 }
 
-void wave_lib_cnoidal_5th::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_cnoidal_5th::wave_prestep(lexer*)
 {
 }

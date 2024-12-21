@@ -23,16 +23,14 @@ Author: Hans Bihs
 #ifndef WAVE_LIB_PARAMETERS_H_
 #define WAVE_LIB_PARAMETERS_H_
 
-class lexer;
-class fdm;
-class ghostcell;
-
 #include"increment.h"
+
+class lexer;
 
 class wave_lib_parameters : virtual public increment
 {
 public:
-    wave_lib_parameters(lexer*, ghostcell*);
+    wave_lib_parameters(lexer*);
 	virtual ~wave_lib_parameters() = default;
     
     double sinhfunc(double);

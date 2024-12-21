@@ -30,10 +30,8 @@ Author: Hans Bihs
 class wave_lib_Stokes_2nd : public wave_lib_precalc, public wave_lib_parameters, virtual public increment
 {
 public:
-    wave_lib_Stokes_2nd(lexer*, ghostcell*);
+    wave_lib_Stokes_2nd(lexer*);
 	virtual ~wave_lib_Stokes_2nd() = default;
-    
-    double wave_horzvel(lexer*,double,double,double);
     
     virtual double wave_u(lexer*,double,double,double);
     virtual double wave_v(lexer*,double,double,double);
@@ -41,11 +39,12 @@ public:
     virtual double wave_eta(lexer*,double,double);
     virtual double wave_fi(lexer*,double,double,double);
     
-    virtual void parameters(lexer*,ghostcell*);
-    virtual void wave_prestep(lexer*,ghostcell*);
+    virtual void parameters(lexer*);
+    virtual void wave_prestep(lexer*);
     
     
 private:
+    double wave_horzvel(lexer*,double,double);
     double singamma,cosgamma;
 };
 

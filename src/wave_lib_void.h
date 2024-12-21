@@ -30,7 +30,7 @@ Author: Hans Bihs
 class wave_lib_void : public wave_lib_precalc, public wave_lib_parameters, virtual public increment
 {
 public:
-    wave_lib_void(lexer*, ghostcell*);
+    wave_lib_void(lexer*);
 	virtual ~wave_lib_void() = default;
 
     virtual double wave_u(lexer*,double,double,double);
@@ -39,8 +39,8 @@ public:
     virtual double wave_eta(lexer*,double,double);
     virtual double wave_fi(lexer*,double,double,double);
 
-    virtual void parameters(lexer*,ghostcell*);
-    virtual void wave_prestep(lexer*,ghostcell*);
+    virtual void parameters(lexer*);
+    virtual void wave_prestep(lexer*);
     
 private:
     double singamma,cosgamma;

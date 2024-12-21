@@ -24,7 +24,6 @@ Author: Hans Bihs
 #define WAVE_INTERFACE_H_
 
 class lexer;
-class fdm;
 class ghostcell;
 class wave_lib;
 
@@ -69,15 +68,13 @@ public:
     double wave_fi_time_sin(lexer*,ghostcell*,int);
     double wave_fi_time_cos(lexer*,ghostcell*,int);
     
-    void wave_prestep(lexer*,ghostcell*);
+    void wave_prestep(lexer*);
 
 
 private:
     wave_lib *pwave;
     
-    
     int n,m,count;
-    int wtype;
     double wD;
 
 	double starttime,endtime;
@@ -86,5 +83,3 @@ private:
 };
 
 #endif
-
-

@@ -23,7 +23,7 @@ Author: Hans Bihs
 #include"wave_lib_hdc.h"
 #include"lexer.h"
 
-void wave_lib_hdc::allocate(lexer *p, ghostcell *pgc)
+void wave_lib_hdc::allocate(lexer *p)
 {
     p->Darray(U1,Nx,Ny,Nz);
     p->Darray(U2,Nx,Ny,Nz);

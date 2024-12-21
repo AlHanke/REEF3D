@@ -22,10 +22,8 @@ Author: Csaba Pakozdi
 
 #include"wave_lib_ssgw.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-wave_lib_ssgw::wave_lib_ssgw(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_ssgw::wave_lib_ssgw(lexer *p) : wave_lib_parameters(p)
 {
     N   = p->B170;  // default = 1024
     tol = 1e-14;
@@ -115,7 +113,7 @@ wave_lib_ssgw::wave_lib_ssgw(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
-double wave_lib_ssgw::wave_eta(lexer *p, double x, double y)
+double wave_lib_ssgw::wave_eta(lexer *p, double x, double )
 {
     // Transform x location to current position xcurr at time instance p->wavetime
     xcurr = fabs(modulo(x - ParameterValue.phaseVelocity*p->wavetime, wL));
@@ -133,7 +131,7 @@ double wave_lib_ssgw::wave_eta(lexer *p, double x, double y)
     return eta;
 }
 
-double wave_lib_ssgw::wave_fi(lexer *p, double x, double y, double z)
+double wave_lib_ssgw::wave_fi(lexer* p, double x, double , double )
 {
     // Transform x location to current position xcurr at time instance p->wavetime
     xcurr = fabs(modulo(x - ParameterValue.phaseVelocity*p->wavetime, wL));
@@ -151,34 +149,26 @@ double wave_lib_ssgw::wave_fi(lexer *p, double x, double y, double z)
     return fi;
 }
 
-double wave_lib_ssgw::wave_u(lexer *p, double x, double y, double z)
+double wave_lib_ssgw::wave_u(lexer*, double, double, double)
 {
-    double vel = 0.0;
-
-    return cosgamma*vel;
+    return cosgamma*0.0;
 }
 
-double wave_lib_ssgw::wave_v(lexer *p, double x, double y, double z)
+double wave_lib_ssgw::wave_v(lexer*, double, double, double)
 {
-    double vel = 0.0;
-
-    return singamma*vel;
+    return singamma*0.0;
 }
 
-double wave_lib_ssgw::wave_horzvel(lexer *p, double x, double y, double z)
+double wave_lib_ssgw::wave_horzvel(lexer*, double, double, double)
 {
-    double vel = 0.0;
-
-    return vel;
+    return 0.0;
 }
 
-double wave_lib_ssgw::wave_w(lexer *p, double x, double y, double z)
+double wave_lib_ssgw::wave_w(lexer*, double, double, double)
 {
-    double vel = 0.0;
-
-    return vel;
+    return 0.0;
 }
 
-void wave_lib_ssgw::parameters(lexer *p, ghostcell *pgc){}
+void wave_lib_ssgw::parameters(lexer*){}
 
-void wave_lib_ssgw::wave_prestep(lexer *p, ghostcell *pgc){}
+void wave_lib_ssgw::wave_prestep(lexer*){}

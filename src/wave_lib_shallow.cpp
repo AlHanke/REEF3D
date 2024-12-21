@@ -22,12 +22,10 @@ Author: Hans Bihs
 
 #include"wave_lib_shallow.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-wave_lib_shallow::wave_lib_shallow(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+wave_lib_shallow::wave_lib_shallow(lexer *p) : wave_lib_parameters(p)
 { 
-    parameters(p,pgc);
+    parameters(p);
     
     if(p->mpirank==0)
     {
@@ -58,7 +56,7 @@ double wave_lib_shallow::wave_v(lexer *p, double x, double y, double z)
     return singamma*vel;
 }
 
-double wave_lib_shallow::wave_horzvel(lexer *p, double x, double y, double z)
+double wave_lib_shallow::wave_horzvel(lexer *p, double x, double, double)
 {
     double vel;
 	
@@ -69,7 +67,7 @@ double wave_lib_shallow::wave_horzvel(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_shallow::wave_w(lexer *p, double x, double y, double z)
+double wave_lib_shallow::wave_w(lexer *p, double x, double, double z)
 {
     double vel;
 	
@@ -80,7 +78,7 @@ double wave_lib_shallow::wave_w(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_shallow::wave_eta(lexer *p, double x, double y)
+double wave_lib_shallow::wave_eta(lexer *p, double x, double)
 {
     double eta;
 	
@@ -91,17 +89,17 @@ double wave_lib_shallow::wave_eta(lexer *p, double x, double y)
     return eta;
 }
 
-double wave_lib_shallow::wave_fi(lexer *p, double x, double y, double z)
+double wave_lib_shallow::wave_fi(lexer *, double, double, double)
 {
     return 0.0;
 }
 
-void wave_lib_shallow::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_shallow::parameters(lexer*)
 {
     
     
 }
 
-void wave_lib_shallow::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_shallow::wave_prestep(lexer*)
 {
 }

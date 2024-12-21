@@ -29,7 +29,7 @@ void iowave::wavegen_precalc(lexer *p, ghostcell *pgc)
     p->wavetime = p->simtime;
     
     // prestep
-    wave_prestep(p,pgc);
+    wave_prestep(p);
     
     if(p->A10!=3 && p->A10!=5)
     {

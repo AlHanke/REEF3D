@@ -22,9 +22,8 @@ Author: Hans Bihs
 
 #include"wave_lib_spectrum.h"
 #include"lexer.h"
-#include"ghostcell.h"
 
-void wave_lib_spectrum::recon_parameters(lexer *p, ghostcell *pgc)
+void wave_lib_spectrum::recon_parameters(lexer *p)
 {
     if(p->B94==0)
 	wD=p->phimean;
@@ -79,7 +78,7 @@ void wave_lib_spectrum::recon_parameters(lexer *p, ghostcell *pgc)
     
 }
 
-void wave_lib_spectrum::recon_read(lexer *p, ghostcell* pgc)
+void wave_lib_spectrum::recon_read(lexer *p)
 {
 	double val0,val1,val2,val0n,val1n,val2n;
 	int count;

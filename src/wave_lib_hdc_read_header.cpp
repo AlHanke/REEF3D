@@ -23,13 +23,13 @@ Author: Hans Bihs
 #include"wave_lib_hdc.h"
 #include"lexer.h"
 
-void wave_lib_hdc::read_header(lexer *p, ghostcell *pgc)
+void wave_lib_hdc::read_header(lexer *p)
 {
     // int is,js,xs,ys;
     ifstream header;
     
     // filename
-    filename_header(p,pgc);
+    filename_header(p);
     
     // open header
     header.open(name, ios::binary);

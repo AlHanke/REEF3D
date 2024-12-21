@@ -23,7 +23,6 @@ Author: Hans Bihs
 #include"wave_lib_reconstruct.h"
 #include"wave_lib_shallow.h"
 #include"lexer.h"
-#include"fdm.h"
 #include"ghostcell.h"
 #include"wave_lib_irregular_1st.h"
 #include"wave_lib_irregular_2nd_a.h"
@@ -94,12 +93,12 @@ double wave_lib_reconstruct::wave_fi(lexer *p, double x, double y, double z)
     return fi;
 }
 
-void wave_lib_reconstruct::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_reconstruct::parameters(lexer*)
 {
 
 }
 
-void wave_lib_reconstruct::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_reconstruct::wave_prestep(lexer*)
 {
 }
 

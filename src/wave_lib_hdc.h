@@ -33,7 +33,7 @@ using namespace std;
 class wave_lib_hdc : public wave_lib_precalc, public wave_lib_parameters, virtual public increment
 {
 public:
-    wave_lib_hdc(lexer*, ghostcell*);
+    wave_lib_hdc(lexer*);
 	virtual ~wave_lib_hdc() = default;
     
     virtual double wave_u(lexer*,double,double,double);
@@ -42,37 +42,37 @@ public:
     virtual double wave_eta(lexer*,double,double);
     virtual double wave_fi(lexer*,double,double,double);
     
-    virtual void parameters(lexer*,ghostcell*);
-    virtual void wave_prestep(lexer*,ghostcell*);
+    virtual void parameters(lexer*);
+    virtual void wave_prestep(lexer*);
     
 private:
     
     // functions
-    void read_header(lexer*,ghostcell*);
-    void read_result(lexer*,ghostcell*,double**,double***,double***,double***,int);
-    void read_result_continuous(lexer*,ghostcell*,double**,double***,double***,double***,int);
+    void read_header(lexer*);
+    void read_result(lexer*,double**,double***,double***,double***,int);
+    void read_result_continuous(lexer*,double**,double***,double***,double***);
     
-    void fill_result_continuous(lexer*,ghostcell*);
+    void fill_result_continuous();
     
-    void filename_header(lexer*,ghostcell*);
-    void filename_single(lexer*,ghostcell*,int);
-    void filename_continuous(lexer*,ghostcell*);
+    void filename_header(lexer*);
+    void filename_single(lexer*,int);
+    void filename_continuous(lexer*);
     
     
-    void allocate(lexer*,ghostcell*);
+    void allocate(lexer*);
     
     void time_interpol(lexer*);
     
     // interpolation
     double ccpol3D(lexer*,double***,double,double,double);
-    double ccpol2D(lexer*,double**,double,double);
-    double ccpol2DM(lexer*,double***,double,double);
+    double ccpol2D(double**);
+    double ccpol2DM(double***);
     double space_interpol(lexer*,double***,double,double,double);
     double plane_interpol(lexer*,double**,double,double);
     
-    int pos_i(lexer*,double);
-    int pos_j(lexer*,double);
-    int pos_k(lexer*,double,int,int);
+    int pos_i(double);
+    int pos_j(double);
+    int pos_k(double,int,int);
     
     int ihalf(int,int);
 

@@ -27,7 +27,7 @@ Author: Hans Bihs
 void iowave::wavegen_precalc_ini(lexer *p, ghostcell *pgc)
 {
     // prestep
-    wave_prestep(p,pgc);
+    wave_prestep(p);
     
     if(p->A10!=3)
     {

@@ -22,12 +22,10 @@ Author: Hans Bihs
 
 #include"wave_lib_solitary_3rd.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-wave_lib_solitary_3rd::wave_lib_solitary_3rd(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_solitary_3rd::wave_lib_solitary_3rd(lexer *p) : wave_lib_parameters(p)
 { 
-    parameters(p,pgc);
+    parameters(p);
     
     if(p->mpirank==0)
     {
@@ -57,7 +55,7 @@ double wave_lib_solitary_3rd::wave_v(lexer *p, double x, double y, double z)
     return singamma*vel;
 }
 
-double wave_lib_solitary_3rd::wave_horzvel(lexer *p, double x, double y, double z)
+double wave_lib_solitary_3rd::wave_horzvel(lexer *p, double x, double, double z)
 {
     double vel,e,s,t,aval;
 	
@@ -78,7 +76,7 @@ double wave_lib_solitary_3rd::wave_horzvel(lexer *p, double x, double y, double 
     return vel;
 }
 
-double wave_lib_solitary_3rd::wave_w(lexer *p, double x, double y, double z)
+double wave_lib_solitary_3rd::wave_w(lexer *p, double x, double, double z)
 {
     double vel,e,s,t,aval;
 	
@@ -101,7 +99,7 @@ double wave_lib_solitary_3rd::wave_w(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_solitary_3rd::wave_eta(lexer *p, double x, double y)
+double wave_lib_solitary_3rd::wave_eta(lexer *p, double x, double)
 {
     double eta,e,t,s,aval;
 
@@ -121,14 +119,12 @@ double wave_lib_solitary_3rd::wave_eta(lexer *p, double x, double y)
 	return eta;	
 }
 
-double wave_lib_solitary_3rd::wave_fi(lexer *p, double x, double y, double z)
+double wave_lib_solitary_3rd::wave_fi(lexer *, double, double, double)
 {
-    double fi=0.0;
-    
-    return fi;
+    return 0.0;
 }
 
-void wave_lib_solitary_3rd::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_solitary_3rd::parameters(lexer* p)
 {
 	double e = wH/wdt;
 	
@@ -149,6 +145,6 @@ void wave_lib_solitary_3rd::parameters(lexer *p, ghostcell *pgc)
     
 }
 
-void wave_lib_solitary_3rd::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_solitary_3rd::wave_prestep(lexer*)
 {
 }

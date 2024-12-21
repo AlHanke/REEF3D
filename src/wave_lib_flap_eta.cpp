@@ -22,11 +22,9 @@ Author: Hans Bihs
 
 #include"wave_lib_flap_eta.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 #include<fstream>
 
-wave_lib_flap_eta::wave_lib_flap_eta(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_flap_eta::wave_lib_flap_eta(lexer *p) : wave_lib_parameters(p)
 { 
     if(p->mpirank==0)
     {
@@ -35,7 +33,7 @@ wave_lib_flap_eta::wave_lib_flap_eta(lexer *p, ghostcell *pgc) : wave_lib_parame
 	
 	timecount=0;
 	
-	read(p,pgc);
+	read(p);
     
     singamma = sin((p->B105_1)*(PI/180.0));
     cosgamma = cos((p->B105_1)*(PI/180.0));	
@@ -76,39 +74,31 @@ double wave_lib_flap_eta::wave_horzvel(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_flap_eta::wave_w(lexer *p, double x, double y, double z)
-{
-    double vel;
-    
-    vel = 0.0;
-
-    return vel;
-}
-
-double wave_lib_flap_eta::wave_eta(lexer *p, double x, double y)
-{
-    double val=0.0;
-    
-    if(p->wavetime<ts || p->wavetime>te || timecount>=ptnum-1)
-	return 0.0;
-    
-    val =  ((eta[timecount+1][1]-eta[timecount][1])/(eta[timecount+1][0]-eta[timecount][0]))
-            *((p->wavetime)-eta[timecount][0]) + eta[timecount][1];
-	
-    return val;
-}
-
-double wave_lib_flap_eta::wave_fi(lexer *p, double x, double y, double z)
+double wave_lib_flap_eta::wave_w(lexer *, double , double, double )
 {
     return 0.0;
 }
 
-void wave_lib_flap_eta::parameters(lexer *p, ghostcell *pgc)
+double wave_lib_flap_eta::wave_eta(lexer *p, double , double)
+{   
+    if(p->wavetime<ts || p->wavetime>te || timecount>=ptnum-1)
+	    return 0.0;
+    else
+        return ((eta[timecount+1][1]-eta[timecount][1])/(eta[timecount+1][0]-eta[timecount][0]))
+                *((p->wavetime)-eta[timecount][0]) + eta[timecount][1];
+}
+
+double wave_lib_flap_eta::wave_fi(lexer *, double, double, double)
+{
+    return 0.0;
+}
+
+void wave_lib_flap_eta::parameters(lexer*)
 {
 
 }
 
-void wave_lib_flap_eta::read(lexer *p, ghostcell* pgc)
+void wave_lib_flap_eta::read(lexer* p)
 {
 	double val0,val1;
 	int count;
@@ -162,6 +152,6 @@ void wave_lib_flap_eta::read(lexer *p, ghostcell* pgc)
 	    
 }
 
-void wave_lib_flap_eta::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_flap_eta::wave_prestep(lexer*)
 {
 }

@@ -69,8 +69,8 @@ public:
     double dbeta;
 
     // recon
-    void recon_read(lexer*, ghostcell*);
-    void recon_parameters(lexer*, ghostcell*);
+    void recon_read(lexer*);
+    void recon_parameters(lexer*);
     int wavenum;
     double ts,te;
     double **recon;

@@ -22,14 +22,12 @@ Author: Hans Bihs
 
 #include"wave_lib_hdc.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-wave_lib_hdc::wave_lib_hdc(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_hdc::wave_lib_hdc(lexer *p) : wave_lib_parameters(p)
 { 
     // read header
-    read_header(p,pgc);
-    allocate(p,pgc);
+    read_header(p);
+    allocate(p);
     
     // time_interpol
     if(p->mpirank==0)
@@ -97,18 +95,16 @@ double wave_lib_hdc::wave_eta(lexer *p, double x, double y)
     return eta;
 }
 
-double wave_lib_hdc::wave_fi(lexer *p, double x, double y, double z)
+double wave_lib_hdc::wave_fi(lexer *, double, double, double)
 {
-    double fi=0.0;
-    
-    return fi;
+    return 0.0;
 }
 
-void wave_lib_hdc::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_hdc::parameters(lexer*)
 {
 }
 
-void wave_lib_hdc::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_hdc::wave_prestep(lexer *p)
 {
     // only at startup
     if(startup==0)
@@ -125,12 +121,12 @@ void wave_lib_hdc::wave_prestep(lexer *p, ghostcell *pgc)
         
         if(file_type==2)
         {
-        filename_continuous(p,pgc);
+        filename_continuous(p);
         result.open(name, ios::binary);
         }
     
-        read_result(p,pgc,E1,U1,V1,W1,q1);
-        read_result(p,pgc,E2,U2,V2,W2,q2);
+        read_result(p,E1,U1,V1,W1,q1);
+        read_result(p,E2,U2,V2,W2,q2);
         startup=1;
         
         
@@ -140,7 +136,7 @@ void wave_lib_hdc::wave_prestep(lexer *p, ghostcell *pgc)
         ++q1;
         
         if(file_type==2)
-        read_result_continuous(p,pgc,E1,U1,V1,W1,q1);
+        read_result_continuous(p,E1,U1,V1,W1);
         }
             
         // find q2
@@ -149,7 +145,7 @@ void wave_lib_hdc::wave_prestep(lexer *p, ghostcell *pgc)
         ++q2;
         
         if(file_type==2 )
-        read_result_continuous(p,pgc,E2,U2,V2,W2,q2);
+        read_result_continuous(p,E2,U2,V2,W2);
         }
     }
     
@@ -182,15 +178,15 @@ void wave_lib_hdc::wave_prestep(lexer *p, ghostcell *pgc)
         if(q1!=q1n)
         {
         // Open File 1
-        filename_single(p,pgc,q1);
-        read_result(p,pgc,E1,U1,V1,W1,q1);
+        filename_single(p,q1);
+        read_result(p,E1,U1,V1,W1,q1);
         }
         
         if(q2!=q2n)
         {
         // Open File 2
-        filename_single(p,pgc,q2);
-        read_result(p,pgc,E2,U2,V2,W2,q2);
+        filename_single(p,q2);
+        read_result(p,E2,U2,V2,W2,q2);
         }
     }
         
@@ -198,10 +194,10 @@ void wave_lib_hdc::wave_prestep(lexer *p, ghostcell *pgc)
     if(file_type==2)
     {
         if(q1!=q1n)
-        fill_result_continuous(p,pgc);
+        fill_result_continuous();
         
         if(q2!=q2n)
-        read_result_continuous(p,pgc,E2,U2,V2,W2,q2);
+        read_result_continuous(p,E2,U2,V2,W2);
     }
         
 

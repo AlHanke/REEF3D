@@ -28,11 +28,13 @@ Author: Hans Bihs
 #include"wave_lib_spectrum.h"
 #include"increment.h"
 
+class ghostcell;
+
 class wave_lib_irregular_2nd_b : public wave_lib_precalc, public wave_lib_parameters, public wave_lib_spectrum,
                                virtual public increment
 {
 public:
-    wave_lib_irregular_2nd_b(lexer*, ghostcell*);
+    wave_lib_irregular_2nd_b(lexer*,ghostcell*);
 	virtual ~wave_lib_irregular_2nd_b() = default;
 
     double wave_horzvel(lexer*,double,double,double);
@@ -43,8 +45,8 @@ public:
     virtual double wave_eta(lexer*,double,double);
     virtual double wave_fi(lexer*,double,double,double);
     
-    virtual void parameters(lexer*,ghostcell*);
-    virtual void wave_prestep(lexer*,ghostcell*);
+    virtual void parameters(lexer*);
+    virtual void wave_prestep(lexer*);
     
 private: 
     double wave_A_plus(double,double,double,double);

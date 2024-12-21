@@ -32,7 +32,7 @@ class wave_lib_cnoidal_5th : public wave_lib_precalc, public wave_lib_parameters
                                  virtual public increment
 {
 public:
-    wave_lib_cnoidal_5th(lexer*, ghostcell*);
+    wave_lib_cnoidal_5th(lexer*);
 	virtual ~wave_lib_cnoidal_5th() = default;
     
     double wave_horzvel(lexer*,double,double,double);
@@ -44,8 +44,8 @@ public:
     virtual double wave_fi(lexer*,double,double,double);
     
     
-    virtual void parameters(lexer*,ghostcell*);
-    virtual void wave_prestep(lexer*,ghostcell*);
+    virtual void parameters(lexer*);
+    virtual void wave_prestep(lexer*);
     
 private:
     double wht,acn,delta,epsilon,wR;

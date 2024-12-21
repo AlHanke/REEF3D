@@ -23,7 +23,7 @@ Author: Hans Bihs
 #include"wave_lib_hdc.h"
 #include"lexer.h"
 
-void wave_lib_hdc::read_result_continuous(lexer *p, ghostcell *pgc, double **E0, double ***U0, double ***V0, double ***W0, int q0)
+void wave_lib_hdc::read_result_continuous(lexer *p, double **E0, double ***U0, double ***V0, double ***W0)
 {
 
     // read file_iter

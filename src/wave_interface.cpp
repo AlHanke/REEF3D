@@ -45,108 +45,118 @@ Author: Hans Bihs
 #include"wave_lib_hdc.h"
 #include"wave_lib_ssgw.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
 wave_interface::wave_interface(lexer *p, ghostcell *pgc) 
 { 
     p->wts=0.0;
     p->wte=1.0e20;
     
-    wtype=p->B92;
-    
     if(p->B94==0)
 	 wD=p->phimean;
 	
 	if(p->B94==1)
 	wD=p->B94_wdt;
-    
-    if(wtype==0)
-    pwave = new wave_lib_void(p,pgc);
+
+    switch(p->B92) // wave type
+    {
+    default:
+    case 0:
+        pwave = new wave_lib_void(p);
+        break;
 	
-    if(wtype==1)
-    pwave = new wave_lib_shallow(p,pgc);
+    case 1:
+        pwave = new wave_lib_shallow(p);
+        break;
+        
+    case 2:
+        pwave = new wave_lib_linear(p);
+        break;
+        
+    case 3:
+        pwave = new wave_lib_deep(p);
+        break;
+        
+    case 4:
+        pwave = new wave_lib_Stokes_2nd(p);
+        break;
+        
+    case 5:
+        pwave = new wave_lib_Stokes_5th(p);
+        break;
+        
+    case 6:
+        pwave = new wave_lib_cnoidal_shallow(p);
+        break;
+        
+    case 7:
+        pwave = new wave_lib_cnoidal_1st(p);
+        break;
+        
+    case 8:
+        pwave = new wave_lib_cnoidal_5th(p);
+        break;
+        
+    case 9:
+        pwave = new wave_lib_solitary_1st(p);
+        break;
+        
+    case 10:
+        pwave = new wave_lib_solitary_3rd(p);
+        break;
+        
+    case 11:
+        pwave = new wave_lib_Stokes_5th_SH(p);
+        break;
+        
+    case 20:
+        pwave = new wave_lib_piston_eta(p);
+        break;
+        
+    case 21:
+        pwave = new wave_lib_piston(p);
+        break;
+        
+    case 22:
+        pwave = new wave_lib_flap(p);
+        break;
+        
+    case 23:
+        pwave = new wave_lib_flap_double(p);
+        break;
+        
+    case 24:
+        pwave = new wave_lib_flap_eta(p);
+        break;
+        
+    case 31:
+    case 41:
+    case 51:
+        pwave = new wave_lib_irregular_1st(p,pgc);
+        break;
+        
+    case 32:
+    case 42:
+    case 52:
+        pwave = new wave_lib_irregular_2nd_a(p,pgc);
+        break;
+        
+    case 33:
+    case 43:
+    case 53:
+        pwave = new wave_lib_irregular_2nd_b(p,pgc);
+        break;
+        
+    case 61:
+        pwave = new wave_lib_hdc(p);
+        break;
     
-    if(wtype==2)
-    pwave = new wave_lib_linear(p,pgc);
-    
-    if(wtype==3)
-    pwave = new wave_lib_deep(p,pgc);
-    
-    if(wtype==4)
-    pwave = new wave_lib_Stokes_2nd(p,pgc);
-    
-    if(wtype==5)
-    pwave = new wave_lib_Stokes_5th(p,pgc);
-    
-	if(wtype==6)
-    pwave = new wave_lib_cnoidal_shallow(p,pgc);
-    
-	if(wtype==7)
-    pwave = new wave_lib_cnoidal_1st(p,pgc);
-    
-	if(wtype==8)
-    pwave = new wave_lib_cnoidal_5th(p,pgc);
-    
-	if(wtype==9)
-    pwave = new wave_lib_solitary_1st(p,pgc);
-    
-	if(wtype==10)
-    pwave = new wave_lib_solitary_3rd(p,pgc);
-    
-    if(wtype==11)
-    pwave = new wave_lib_Stokes_5th_SH(p,pgc);
-    
-    if(wtype==20)
-    pwave = new wave_lib_piston_eta(p,pgc);
-    
-	if(wtype==21)
-    pwave = new wave_lib_piston(p,pgc);
-    
-	if(wtype==22)
-    pwave = new wave_lib_flap(p,pgc);
-    
-    if(wtype==23)
-    pwave = new wave_lib_flap_double(p,pgc);
-    
-    if(wtype==24)
-    pwave = new wave_lib_flap_eta(p,pgc);
-    
-	if(wtype==31)
-    pwave = new wave_lib_irregular_1st(p,pgc);
-    
-    if(wtype==32)
-    pwave = new wave_lib_irregular_2nd_a(p,pgc);
-    
-	if(wtype==33)
-    pwave = new wave_lib_irregular_2nd_b(p,pgc);
-    
-	if(wtype==41)
-    pwave = new wave_lib_irregular_1st(p,pgc);
-    
-    if(wtype==42)
-    pwave = new wave_lib_irregular_2nd_a(p,pgc);
-    
-	if(wtype==43)
-    pwave = new wave_lib_irregular_2nd_b(p,pgc);
-    
-    if(wtype==51)
-    pwave = new wave_lib_irregular_1st(p,pgc);
-    
-    if(wtype==52)
-    pwave = new wave_lib_irregular_2nd_a(p,pgc);
-    
-	if(wtype==53)
-    pwave = new wave_lib_irregular_2nd_b(p,pgc);
-    
-    if(wtype==61)
-    pwave = new wave_lib_hdc(p,pgc);
-    
-    if(wtype==70)
-    pwave = new wave_lib_ssgw(p,pgc);
+    case 70:
+        pwave = new wave_lib_ssgw(p);
+        break;
+    }
 }
 
-double wave_interface::wave_u(lexer *p, ghostcell *pgc, double x, double y, double z)
+double wave_interface::wave_u(lexer *p, ghostcell *, double x, double y, double z)
 {
 
     double uvel=0.0;
@@ -159,7 +169,7 @@ double wave_interface::wave_u(lexer *p, ghostcell *pgc, double x, double y, doub
     return uvel;
 }
 
-double wave_interface::wave_v(lexer *p, ghostcell *pgc, double x, double y, double z)
+double wave_interface::wave_v(lexer *p, ghostcell *, double x, double y, double z)
 {
     double vvel=0.0;
     
@@ -171,7 +181,7 @@ double wave_interface::wave_v(lexer *p, ghostcell *pgc, double x, double y, doub
     return vvel;
 }
 
-double wave_interface::wave_w(lexer *p, ghostcell *pgc, double x, double y, double z)
+double wave_interface::wave_w(lexer *p, ghostcell *, double x, double y, double z)
 {
     double wvel=0.0;
     
@@ -183,7 +193,7 @@ double wave_interface::wave_w(lexer *p, ghostcell *pgc, double x, double y, doub
     return wvel;
 }
 
-double wave_interface::wave_h(lexer *p, ghostcell *pgc, double x, double y, double z)
+double wave_interface::wave_h(lexer *p, ghostcell *, double x, double y, double )
 {
     double lsv=p->phimean;
     
@@ -193,7 +203,7 @@ double wave_interface::wave_h(lexer *p, ghostcell *pgc, double x, double y, doub
     return lsv;
 }
 
-double wave_interface::wave_fi(lexer *p, ghostcell *pgc, double x, double y, double z)
+double wave_interface::wave_fi(lexer *p, ghostcell *, double x, double y, double z)
 {
     double pval=0.0;
     
@@ -204,7 +214,7 @@ double wave_interface::wave_fi(lexer *p, ghostcell *pgc, double x, double y, dou
     return pval;
 }
 
-double wave_interface::wave_eta(lexer *p, ghostcell *pgc, double x, double y)
+double wave_interface::wave_eta(lexer *p, ghostcell *, double x, double y)
 {
     double eta=0.0;
     
@@ -214,9 +224,9 @@ double wave_interface::wave_eta(lexer *p, ghostcell *pgc, double x, double y)
     return eta;
 }
 
-void wave_interface::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_interface::wave_prestep(lexer *p)
 {
-    pwave->wave_prestep(p,pgc);
+    pwave->wave_prestep(p);
 }
 
 int wave_interface::printcheck=0;

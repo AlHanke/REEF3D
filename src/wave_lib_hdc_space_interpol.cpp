@@ -38,20 +38,20 @@ double wave_lib_hdc::space_interpol(lexer *p, double ***F, double x, double y, d
     
     if(xp>=Xstart  && xp<Xend && ((yp>=Ystart && yp<Yend)|| jdir==0))
     {
-        i = pos_i(p,xp);
-        j = pos_j(p,yp);
+        i = pos_i(xp);
+        j = pos_j(yp);
         
         
         // sflow
         if(file_version==2)
         {
-        val=ccpol2DM(p,F,xp,yp);
+        val=ccpol2DM(F);
         }
         
         // fnpf
         if(file_version==4)
         {
-        k = pos_k(p,zp,i,j);
+        k = pos_k(zp,i,j);
 
         val=ccpol3D(p,F,xp,yp,zp);
         }
@@ -59,7 +59,7 @@ double wave_lib_hdc::space_interpol(lexer *p, double ***F, double x, double y, d
         // nhflow
         if(file_version==5)
         {
-        k = pos_k(p,zp,i,j);
+        k = pos_k(zp,i,j);
 
         val=ccpol3D(p,F,xp,yp,zp);
         }

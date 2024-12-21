@@ -29,14 +29,8 @@ Author: Hans Bihs
 class wave_lib_Stokes_5th : public wave_lib, virtual public increment
 {
 public:
-    wave_lib_Stokes_5th(lexer*, ghostcell*);
+    wave_lib_Stokes_5th(lexer*);
 	virtual ~wave_lib_Stokes_5th() = default;
-    
-    double wave_horzvel(lexer*,double,double,double);
-    virtual double wave_horzvel_space_sin(lexer*,double,double,double,int);
-    virtual double wave_horzvel_space_cos(lexer*,double,double,double,int);
-    virtual double wave_horzvel_time_sin(lexer*,int);
-    virtual double wave_horzvel_time_cos(lexer*,int);
     
     virtual double wave_u(lexer*,double,double,double);
     virtual double wave_u_space_sin(lexer*,double,double,double,int);
@@ -71,12 +65,18 @@ public:
     virtual double wave_fi_time_sin(lexer*,int);
     virtual double wave_fi_time_cos(lexer*,int);
     
-    
-    virtual void wave_parameters(lexer*,ghostcell*);
-    virtual void parameters(lexer*,ghostcell*);
-    virtual void wave_prestep(lexer*,ghostcell*);
+    virtual void parameters(lexer*);
+    virtual void wave_prestep(lexer*);
     
 private:
+    void wave_parameters(lexer*);
+
+    double wave_horzvel(lexer*,double,double);
+    double wave_horzvel_space_sin(double,double,int);
+    double wave_horzvel_space_cos(double,double,int);
+    double wave_horzvel_time_sin(lexer*,int);
+    double wave_horzvel_time_cos(lexer*,int);
+
     double a11,a22,a31,a33,a42,a44,a51,a53,a55;
     double b22,b31,b42,b44,b53,b55;
     double e2,e4;

@@ -22,10 +22,8 @@ Author: Hans Bihs
 
 #include"wave_lib_parameters.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-wave_lib_parameters::wave_lib_parameters(lexer *p, ghostcell *pgc) : pshift(p->B120*(PI/180.0)), order(5)
+wave_lib_parameters::wave_lib_parameters(lexer* p) : pshift(p->B120*(PI/180.0)), order(5)
 {
 
   p->phiin=p->phimean;
@@ -68,34 +66,34 @@ wave_lib_parameters::wave_lib_parameters(lexer *p, ghostcell *pgc) : pshift(p->B
     wT = 1.0/wf;
     wC = wL/wT;
 
-        // 5th-order Stokes
-        if(wtype==5)
-        {
-	    eps = 0.5*wk*wH;
-	    S = 1.0/cosh(2*wk*wdt);
-	    C = 1.0 - S;
+    // 5th-order Stokes
+    if(wtype==5)
+    {
+        eps = 0.5*wk*wH;
+        S = 1.0/cosh(2*wk*wdt);
+        C = 1.0 - S;
 
-	    c0 = sqrt(tanh(wk*wdt));
+        c0 = sqrt(tanh(wk*wdt));
 
         c2 = (c0*(2.0 + 7.0*S*S)/(4.0*C*C));
 
         c4 = (c0*(4.0 + 32.0*S -116.0*S*S - 400.0*S*S*S - 71.0*pow(S,4.0) + 146.0*pow(S,5.0)))/(32.0*pow(C,5.0));
 
-	    wT= (2.0*PI)/(sqrt(9.81*wk)*(c0 + eps*eps*c2 + eps*eps*eps*eps*c4));
-	    wf = 1.0/wT;
-	    ww = 2.0*PI*wf;
+        wT= (2.0*PI)/(sqrt(9.81*wk)*(c0 + eps*eps*c2 + eps*eps*eps*eps*c4));
+        wf = 1.0/wT;
+        ww = 2.0*PI*wf;
 
-	    wC = ww/wk;
-	    ubar = (c0 + eps*eps*c2 + eps*eps*eps*eps*c4)/sqrt(wk/9.81);
+        wC = ww/wk;
+        ubar = (c0 + eps*eps*c2 + eps*eps*eps*eps*c4)/sqrt(wk/9.81);
         
         //cout<<"C-Umean: "<<wC-ubar<<" C: "<<wC<<" Umean: "<<ubar<<endl;
-	   }
+    }
        
     p->wT = wT;
     p->wC = wC;
     }
 
-// Wave Period given
+    // Wave Period given
     if(p->B93==1 && (p->B92<30 || p->B92==70))
     {
 		// define wave parameters

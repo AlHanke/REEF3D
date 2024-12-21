@@ -30,7 +30,7 @@ Author: Hans Bihs
 class wave_lib_shallow : public wave_lib_precalc, public wave_lib_parameters, virtual public increment
 {
 public:
-    wave_lib_shallow(lexer*, ghostcell*);
+    wave_lib_shallow(lexer*);
 	virtual ~wave_lib_shallow() = default;
     
     double wave_horzvel(lexer*,double,double,double);
@@ -42,8 +42,8 @@ public:
     virtual double wave_fi(lexer*,double,double,double);
     
     
-    virtual void parameters(lexer*,ghostcell*);
-    virtual void wave_prestep(lexer*,ghostcell*);
+    virtual void parameters(lexer*);
+    virtual void wave_prestep(lexer*);
     
 private:
     double singamma,cosgamma;

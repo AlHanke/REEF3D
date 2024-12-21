@@ -22,12 +22,10 @@ Author: Hans Bihs
 
 #include"wave_lib_linear.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-wave_lib_linear::wave_lib_linear(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_linear::wave_lib_linear(lexer *p) : wave_lib_parameters(p)
 { 
-    parameters(p,pgc);
+    parameters(p);
     
     if(p->mpirank==0)
     {
@@ -58,7 +56,7 @@ double wave_lib_linear::wave_v(lexer *p, double x, double y, double z)
     return singamma*vel;
 }
 
-double wave_lib_linear::wave_horzvel(lexer *p, double x, double y, double z)
+double wave_lib_linear::wave_horzvel(lexer *p, double x, double, double z)
 {
     double vel=0.0;
 	
@@ -69,7 +67,7 @@ double wave_lib_linear::wave_horzvel(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_linear::wave_w(lexer *p, double x, double y, double z)
+double wave_lib_linear::wave_w(lexer *p, double x, double, double z)
 {
     double vel=0.0;
 	
@@ -80,7 +78,7 @@ double wave_lib_linear::wave_w(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_linear::wave_eta(lexer *p, double x, double y)
+double wave_lib_linear::wave_eta(lexer *p, double x, double)
 {
     double eta=0.0;
 
@@ -91,7 +89,7 @@ double wave_lib_linear::wave_eta(lexer *p, double x, double y)
     return eta;
 }
 
-double wave_lib_linear::wave_fi(lexer *p, double x, double y, double z)
+double wave_lib_linear::wave_fi(lexer *p, double x, double, double z)
 {
     double fi;
     
@@ -104,10 +102,10 @@ double wave_lib_linear::wave_fi(lexer *p, double x, double y, double z)
     return fi;
 }
 
-void wave_lib_linear::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_linear::parameters(lexer*)
 {
 }
 
-void wave_lib_linear::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_linear::wave_prestep(lexer*)
 {
 }

@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"wave_lib_spectrum.h"
 #include"lexer.h"
-#include"ghostcell.h"
 #include<iostream>
 #include<fstream>
 #include<sys/stat.h>

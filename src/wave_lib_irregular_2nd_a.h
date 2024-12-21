@@ -32,7 +32,7 @@ class wave_lib_irregular_2nd_a : public wave_lib_precalc, public wave_lib_parame
                                virtual public increment
 {
 public:
-    wave_lib_irregular_2nd_a(lexer*, ghostcell*);
+    wave_lib_irregular_2nd_a(lexer*,ghostcell*);
 	virtual ~wave_lib_irregular_2nd_a() = default;
     
     double wave_horzvel(lexer*,double,double,double);
@@ -44,8 +44,8 @@ public:
     virtual double wave_fi(lexer*,double,double,double);
     
     
-    virtual void parameters(lexer*,ghostcell*);
-    virtual void wave_prestep(lexer*,ghostcell*);
+    virtual void parameters(lexer*);
+    virtual void wave_prestep(lexer*);
     
 private: 
     double wave_C(double,double,double,double);

@@ -24,9 +24,7 @@ Author: Hans Bihs
 #define WAVE_LIB_H_
 
 class lexer;
-class fdm;
 class ghostcell;
-class field;
 
 class wave_lib
 {
@@ -63,8 +61,8 @@ public:
     virtual double wave_fi_time_cos(lexer*,int)=0;
     
     
-    virtual void parameters(lexer*,ghostcell*)=0;
-    virtual void wave_prestep(lexer*,ghostcell*)=0;
+    virtual void parameters(lexer*)=0;
+    virtual void wave_prestep(lexer*)=0;
 
 };
 

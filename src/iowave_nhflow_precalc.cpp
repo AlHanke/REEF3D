@@ -29,7 +29,7 @@ void iowave::wavegen_precalc_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     starttime=pgc->timer();
     
-    wave_prestep(p,pgc);
+    wave_prestep(p);
     
     if(p->B89==0)
     {
@@ -60,7 +60,7 @@ void iowave::wavegen_precalc_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
 void iowave::wavegen_precalc_ini_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    wave_prestep(p,pgc);
+    wave_prestep(p);
     
     if(p->B98==2)
     nhflow_precalc_relax_ini(p,d,pgc);

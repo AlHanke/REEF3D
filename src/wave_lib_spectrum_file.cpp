@@ -22,10 +22,9 @@ Author: Hans Bihs
 
 #include"wave_lib_spectrum.h"
 #include"lexer.h"
-#include"ghostcell.h"
 
 
-double wave_lib_spectrum::spectrum_file(lexer *p, double w)
+double wave_lib_spectrum::spectrum_file(lexer *, double w)
 {
 
 	Sval = 0.0;

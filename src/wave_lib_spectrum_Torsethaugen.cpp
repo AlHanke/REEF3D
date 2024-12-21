@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"wave_lib_spectrum.h"
 #include"lexer.h"
-#include"ghostcell.h"
 
 double wave_lib_spectrum::Torsethaugen(lexer *p, double w)
 {

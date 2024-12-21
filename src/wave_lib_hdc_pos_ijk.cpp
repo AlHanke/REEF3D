@@ -21,9 +21,8 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"wave_lib_hdc.h"
-#include"lexer.h"
 
-int wave_lib_hdc::pos_i(lexer *p, double xs)
+int wave_lib_hdc::pos_i(double xs)
 {
     int is,ie,iloc;
     int stop=0;
@@ -121,7 +120,7 @@ int wave_lib_hdc::pos_i(lexer *p, double xs)
     return ii;
 }
 
-int wave_lib_hdc::pos_j(lexer *p, double ys)
+int wave_lib_hdc::pos_j(double ys)
 {
     int js,je,jloc;
     int stop=0;
@@ -222,7 +221,7 @@ int wave_lib_hdc::pos_j(lexer *p, double ys)
     return jj;    
 }
 
-int wave_lib_hdc::pos_k(lexer *p, double zs, int i, int k)
+int wave_lib_hdc::pos_k(double zs, int i, int k)
 {
     int ks,ke,kloc;
     int stop=0;

@@ -22,8 +22,6 @@ Author: Hans Bihs
 
 #include"wave_lib_precalc.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
 wave_lib_precalc::wave_lib_precalc() 
 { 
@@ -31,87 +29,87 @@ wave_lib_precalc::wave_lib_precalc()
 }
 
 // U -------------------------------------------------------------
-double wave_lib_precalc::wave_u_space_sin(lexer *p, double x, double y, double z, int n)
+double wave_lib_precalc::wave_u_space_sin(lexer *, double, double, double, int)
 {
     return vel;
 }
 
-double wave_lib_precalc::wave_u_space_cos(lexer *p, double x, double y, double z, int n)
+double wave_lib_precalc::wave_u_space_cos(lexer *, double, double, double, int)
 {
     return vel;
 }
 
-double wave_lib_precalc::wave_u_time_sin(lexer *p, int n)
+double wave_lib_precalc::wave_u_time_sin(lexer *, int)
 {
     return T;
 }
 
-double wave_lib_precalc::wave_u_time_cos(lexer *p, int n)
+double wave_lib_precalc::wave_u_time_cos(lexer *, int)
 {
     return T;
 }
 
 
 // V -------------------------------------------------------------
-double wave_lib_precalc::wave_v_space_sin(lexer *p, double x, double y, double z, int n)
+double wave_lib_precalc::wave_v_space_sin(lexer *, double, double, double, int)
 {
     return vel;
 }
 
-double wave_lib_precalc::wave_v_space_cos(lexer *p, double x, double y, double z, int n)
+double wave_lib_precalc::wave_v_space_cos(lexer *, double, double, double, int)
 { 
     return vel;
 }
 
-double wave_lib_precalc::wave_v_time_sin(lexer *p, int n)
+double wave_lib_precalc::wave_v_time_sin(lexer *, int)
 { 
     return T;
 }
 
-double wave_lib_precalc::wave_v_time_cos(lexer *p, int n)
+double wave_lib_precalc::wave_v_time_cos(lexer *, int)
 {
     return T;
 }
 
 
 // W -------------------------------------------------------------
-double wave_lib_precalc::wave_w_space_sin(lexer *p, double x, double y, double z, int n)
+double wave_lib_precalc::wave_w_space_sin(lexer *, double, double, double, int)
 {
     return vel;
 }
 
-double wave_lib_precalc::wave_w_space_cos(lexer *p, double x, double y, double z, int n)
+double wave_lib_precalc::wave_w_space_cos(lexer *, double, double, double, int)
 {
     return vel;
 }
 
-double wave_lib_precalc::wave_w_time_sin(lexer *p, int n)
+double wave_lib_precalc::wave_w_time_sin(lexer *, int)
 {
     return T;
 }
 
-double wave_lib_precalc::wave_w_time_cos(lexer *p, int n)
+double wave_lib_precalc::wave_w_time_cos(lexer *, int)
 {
     return T;
 }
 
 // ETA -------------------------------------------------------------
-double wave_lib_precalc::wave_eta_space_sin(lexer *p, double x, double y, int n)
+double wave_lib_precalc::wave_eta_space_sin(lexer *, double, double, int)
 {
     return eta;
 }
 
-double wave_lib_precalc::wave_eta_space_cos(lexer *p, double x, double y, int n)
+double wave_lib_precalc::wave_eta_space_cos(lexer *, double, double, int)
 {
     return eta;
 }
 
-double wave_lib_precalc::wave_eta_time_sin(lexer *p, int n)
+double wave_lib_precalc::wave_eta_time_sin(lexer *, int)
 {
     return T;
 }
 
-double wave_lib_precalc::wave_eta_time_cos(lexer *p, int n)
+double wave_lib_precalc::wave_eta_time_cos(lexer *, int)
 {
     return T;
 }
@@ -132,25 +130,25 @@ void wave_lib_precalc::wave_fi_precalc_n(lexer*)
     
 }
     
-double wave_lib_precalc::wave_fi_space_sin(lexer *p, double x, double y, double z, int n)
+double wave_lib_precalc::wave_fi_space_sin(lexer *, double, double, double, int)
 {
     
     return fi;
 }
 
-double wave_lib_precalc::wave_fi_space_cos(lexer *p, double x, double y, double z, int n)
+double wave_lib_precalc::wave_fi_space_cos(lexer *, double, double, double, int)
 {
     
     return fi;
 }
 
-double wave_lib_precalc::wave_fi_time_sin(lexer *p, int n)
+double wave_lib_precalc::wave_fi_time_sin(lexer *, int)
 {
     
     return fi;
 }
 
-double wave_lib_precalc::wave_fi_time_cos(lexer *p, int n)
+double wave_lib_precalc::wave_fi_time_cos(lexer *, int)
 {
     return fi;
 }

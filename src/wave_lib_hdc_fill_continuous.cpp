@@ -21,9 +21,8 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"wave_lib_hdc.h"
-#include"lexer.h"
 
-void wave_lib_hdc::fill_result_continuous(lexer *p, ghostcell *pgc)
+void wave_lib_hdc::fill_result_continuous()
 {
     // fill
     for(i=0; i<Nx; ++i)
@@ -46,7 +45,4 @@ void wave_lib_hdc::fill_result_continuous(lexer *p, ghostcell *pgc)
     W1[i][j][k]=W2[i][j][k];
     
     
-}
-
-
-        
+}      

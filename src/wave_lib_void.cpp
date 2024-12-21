@@ -22,67 +22,53 @@ Author: Hans Bihs
 
 #include"wave_lib_void.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-wave_lib_void::wave_lib_void(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+wave_lib_void::wave_lib_void(lexer *p) : wave_lib_parameters(p)
 { 
-    parameters(p,pgc);
+    parameters(p);
     
     if(p->mpirank==0)
-    {
-    cout<<"Wave_Lib: no wave specified; "<<endl;
-    }
+        cout<<"Wave_Lib: no wave specified; "<<endl;
     
     singamma = sin((p->B105_1)*(PI/180.0));
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
 // U -------------------------------------------------------------
-double wave_lib_void::wave_u(lexer *p, double x, double y, double z)
+double wave_lib_void::wave_u(lexer*, double, double, double)
 {
-    double vel=0.0;
-
-    return cosgamma*vel;
+    return cosgamma*0.0;
 }
 
 // V -------------------------------------------------------------
-double wave_lib_void::wave_v(lexer *p, double x, double y, double z)
+double wave_lib_void::wave_v(lexer*, double, double, double)
 {
-    double vel=0.0;
-
-    return singamma*vel;
+    return singamma*0.0;
 }
 
 // W -------------------------------------------------------------
-double wave_lib_void::wave_w(lexer *p, double x, double y, double z)
+double wave_lib_void::wave_w(lexer*, double, double, double)
 {
-    double vel=0.0;
-
-    return vel;
+    return 0.0;
 }
 
 // ETA -------------------------------------------------------------
-double wave_lib_void::wave_eta(lexer *p, double x, double y)
+double wave_lib_void::wave_eta(lexer *, double , double )
 {
-    double eta=0.0;
-
-    return eta;
+    return 0.0;
 }
 
 // FI -------------------------------------------------------------
-double wave_lib_void::wave_fi(lexer *p, double x, double y, double z)
+double wave_lib_void::wave_fi(lexer*, double, double, double)
 {
-    double fi=0.0;
-    
-    return fi;
+    return 0.0;
 }
 
 //  -------------------------------------------------------------
-void wave_lib_void::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_void::parameters(lexer*)
 {
 }
 
-void wave_lib_void::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_void::wave_prestep(lexer*)
 {
 }

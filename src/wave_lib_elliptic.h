@@ -23,17 +23,13 @@ Author: Hans Bihs
 #ifndef WAVE_LIB_ELLIPTIC_H_
 #define WAVE_LIB_ELLIPTIC_H_
 
-class lexer;
-class fdm;
-class ghostcell;
-
 class wave_lib_elliptic 
 {
 public:
     wave_lib_elliptic();
 	virtual ~wave_lib_elliptic() = default;
     
-    void elliptic(lexer*,double,double&,double&,double&);
+    void elliptic(double,double&,double&,double&);
 	double K_elliptic_1(double);
 	double E_elliptic_1(double);
 	double K_elliptic_5(double);

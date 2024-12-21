@@ -30,7 +30,7 @@ void iowave::wavegen_precalc_fnpf(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     starttime=pgc->timer();
     
     // prestep
-    wave_prestep(p,pgc);
+    wave_prestep(p);
     
 
         if(p->B89==0 )

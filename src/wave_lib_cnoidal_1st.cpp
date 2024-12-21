@@ -22,12 +22,10 @@ Author: Hans Bihs
 
 #include"wave_lib_cnoidal_1st.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 
-wave_lib_cnoidal_1st::wave_lib_cnoidal_1st(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_cnoidal_1st::wave_lib_cnoidal_1st(lexer *p) : wave_lib_parameters(p)
 { 
-    parameters(p,pgc);
+    parameters(p);
     
     if(p->mpirank==0)
     {
@@ -67,7 +65,7 @@ double wave_lib_cnoidal_1st::wave_horzvel(lexer *p, double x, double y, double z
 	
 	eta = wave_eta(p,x,y);
 	
-	elliptic(p,teta,sn,cn,dn);
+	elliptic(teta,sn,cn,dn);
 	
 	vel = wC * (eta/wdt - pow(eta/wdt,2.0) + 0.5*(1.0/3.0 - pow((z+wdt)/wdt, 2.0))
 	    * wdt*8.0*wH*pow(Km/wL,2.0) * (dn*dn*sn*sn + cn*cn*(-dn*dn + modulus*sn*sn)));
@@ -85,7 +83,7 @@ double wave_lib_cnoidal_1st::wave_w(lexer *p, double x, double y, double z)
 	
 	eta = wave_eta(p,x,y);
 	
-	elliptic(p,teta,sn,cn,dn);
+	elliptic(teta,sn,cn,dn);
 	
 	// deta = - wa*sqrt(3.0*wa/wdt)*(1.0/(modulus*wdt))*cn*sqrt(1.0-cn*cn)*sqrt(1.0+modulus*(cn*cn-1.0));
 	
@@ -97,7 +95,7 @@ double wave_lib_cnoidal_1st::wave_w(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_cnoidal_1st::wave_eta(lexer *p, double x, double y)
+double wave_lib_cnoidal_1st::wave_eta(lexer *p, double x, double)
 {
     double eta;
 	double sn,cn,dn;
@@ -105,19 +103,19 @@ double wave_lib_cnoidal_1st::wave_eta(lexer *p, double x, double y)
 	teta = 2.0*Km*(p->wavetime/wT - x/wL);
 	
 	
-	elliptic(p,teta,sn,cn,dn);
+	elliptic(teta,sn,cn,dn);
 	
 	eta =  wH*cn*cn + eta2;
 	
 	return eta;	
 }
 
-double wave_lib_cnoidal_1st::wave_fi(lexer *p, double x, double y, double z)
+double wave_lib_cnoidal_1st::wave_fi(lexer *, double, double, double)
 {
     return 0.0;
 }
 
-void wave_lib_cnoidal_1st::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_cnoidal_1st::parameters(lexer* p)
 {
     double diff=1.0;
 	int qq,maxiter;
@@ -170,6 +168,6 @@ void wave_lib_cnoidal_1st::parameters(lexer *p, ghostcell *pgc)
     
 }
 
-void wave_lib_cnoidal_1st::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_cnoidal_1st::wave_prestep(lexer*)
 {
 }

@@ -36,10 +36,7 @@ double wave_lib_hdc::plane_interpol(lexer *p, double **F, double x, double y)
 
     if(xp>=Xstart  && xp<Xend && ((yp>=Ystart && yp<Yend)|| jdir==0))
     {
-        i = pos_i(p,xp);
-        j = pos_j(p,yp);
-
-        val=ccpol2D(p,F,x,y);
+        val=ccpol2D(F);
     }
     
 
@@ -49,9 +46,10 @@ double wave_lib_hdc::plane_interpol(lexer *p, double **F, double x, double y)
     return val;
 }
 
-double wave_lib_hdc::ccpol2D(lexer *p, double **F, double x, double y)
+double wave_lib_hdc::ccpol2D(double **F)
 {
-    
+    i = pos_i(xp);
+    j = pos_j(yp);
     // wa
     if(xp>X[0] && xp<X[Nx-1])
     {
@@ -70,8 +68,6 @@ double wave_lib_hdc::ccpol2D(lexer *p, double **F, double x, double y)
         wa = (X[i]-xp)/(X[i]-X[i-1]);
         --i;
         }
-        
-        //cout<<i<<" X[i-2]: "<<X[i-2]<<" X[i-1]: "<<X[i-1]<<" X[i]: "<<X[i]<<" X[i+1]: "<<X[i+1]<<" X[i+2]: "<<X[i+2]<<endl;
     }
     
     if(xp<=X[0] || i<0)
@@ -110,9 +106,6 @@ double wave_lib_hdc::ccpol2D(lexer *p, double **F, double x, double y)
     if(yp>=Y[Ny-1])
     wb=1.0;
     }
-    
-    //cout<<"wb2D: "<<wb<<endl;
-
 
     v1=v2=v3=v4=0.0;
 
@@ -135,16 +128,12 @@ double wave_lib_hdc::ccpol2D(lexer *p, double **F, double x, double y)
     v3 = F[ip1][j];
     v4 = F[ip1][jp1];
     
-    //cout<<"i: "<<i<<" j: "<<j<<" ip1: "<<ip1<<" jp1: "<<jp1<<endl;
-
 
     x1 = wa*v1 + (1.0-wa)*v3;
     x2 = wa*v2 + (1.0-wa)*v4;
 
     val = wb*x1 +(1.0-wb)*x2;
-    
-    //cout<<p->mpirank<<" HDC  i: "<<i<<" j: "<<j<<" xp: "<<xp<<" yp: "<<yp<<" val: "<<val<<" Fi: "<<F[i][j]<<endl;
-    
+        
     i=iii;
     j=jjj;
     
@@ -153,7 +142,7 @@ double wave_lib_hdc::ccpol2D(lexer *p, double **F, double x, double y)
 }
 
 
-double wave_lib_hdc::ccpol2DM(lexer *p, double ***F, double x, double y)
+double wave_lib_hdc::ccpol2DM(double ***F)
 {
     
     // wa
@@ -175,7 +164,6 @@ double wave_lib_hdc::ccpol2DM(lexer *p, double ***F, double x, double y)
         --i;
         }
         
-        //cout<<i<<" X[i-2]: "<<X[i-2]<<" X[i-1]: "<<X[i-1]<<" X[i]: "<<X[i]<<" X[i+1]: "<<X[i+1]<<" X[i+2]: "<<X[i+2]<<endl;
     }
     
     if(xp<=X[0] || i<0)
@@ -236,16 +224,13 @@ double wave_lib_hdc::ccpol2DM(lexer *p, double ***F, double x, double y)
     v3 = F[ip1][j][0];
     v4 = F[ip1][jp1][0];
     
-    //cout<<"i: "<<i<<" j: "<<j<<" ip1: "<<ip1<<" jp1: "<<jp1<<endl;
-
 
     x1 = wa*v1 + (1.0-wa)*v3;
     x2 = wa*v2 + (1.0-wa)*v4;
 
     val = wb*x1 +(1.0-wb)*x2;
-    
-    //cout<<p->mpirank<<" HDC  i: "<<i<<" j: "<<j<<" xp: "<<xp<<" yp: "<<yp<<" val: "<<val<<" Fi: "<<F[i][j]<<endl;
-    
+
+
     i=iii;
     j=jjj;
     

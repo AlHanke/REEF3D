@@ -22,15 +22,14 @@ Author: Hans Bihs
 
 #include"wave_lib_irregular_2nd_b.h"
 #include"lexer.h"
-#include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_irregular_2nd_b::wave_lib_irregular_2nd_b(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_irregular_2nd_b::wave_lib_irregular_2nd_b(lexer *p, ghostcell *pgc) : wave_lib_parameters(p)
 { 
     if(p->B85!=4 && p->B85!=5 && p->B85!=6 && p->B92!=53)
 	{
         irregular_parameters(p);
-        parameters(p,pgc);
+        parameters(p);
         
         if(p->B92==33)
         {
@@ -48,15 +47,15 @@ wave_lib_irregular_2nd_b::wave_lib_irregular_2nd_b(lexer *p, ghostcell *pgc) : w
     
     if(p->B92==53)
     {
-    recon_read(p,pgc);
-    recon_parameters(p,pgc);
-    parameters(p,pgc);
+    recon_read(p);
+    recon_parameters(p);
+    parameters(p);
     }
 	
 	if(p->B85==4 || p->B85==5 || p->B85==6)
 	{
 	wavepackets_parameters(p);
-	parameters(p,pgc);
+	parameters(p);
 	}
     
     print_components(p);
@@ -159,12 +158,9 @@ double wave_lib_irregular_2nd_b::wave_v(lexer *p, double x, double y, double z)
     return vel;
 }
 
-double wave_lib_irregular_2nd_b::wave_horzvel(lexer *p, double x, double y, double z)
+double wave_lib_irregular_2nd_b::wave_horzvel(lexer *, double, double, double)
 {
-    vel=0.0;
-    
-	
-    return vel;
+    return 0.0;
 }
 
 double wave_lib_irregular_2nd_b::wave_w(lexer *p, double x, double y, double z)
@@ -256,7 +252,7 @@ double wave_lib_irregular_2nd_b::wave_fi(lexer *p, double x, double y, double z)
     return fi;
 }
 
-void wave_lib_irregular_2nd_b::parameters(lexer *p, ghostcell *pgc)
+void wave_lib_irregular_2nd_b::parameters(lexer* p)
 {
     p->Darray(Aplus,p->wN,p->wN);
     p->Darray(Aminus,p->wN,p->wN);
@@ -433,7 +429,7 @@ double wave_lib_irregular_2nd_b::wave_F_minus(double w1, double w2, double k1, d
 	return F;	
 }
 
-void wave_lib_irregular_2nd_b::wave_prestep(lexer *p, ghostcell *pgc)
+void wave_lib_irregular_2nd_b::wave_prestep(lexer*)
 {
 }
 

@@ -21,15 +21,15 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"wave_lib_elliptic.h"
-#include"lexer.h"
-#include"ghostcell.h"
+#include"looping.h"
+#include<math.h>
 
 wave_lib_elliptic::wave_lib_elliptic() : epsi(1.0e-19)
 { 
 }
 
 
-void wave_lib_elliptic::elliptic(lexer *p, double u, double &sn, double &cn, double &dn)
+void wave_lib_elliptic::elliptic(double u, double &sn, double &cn, double &dn)
 { 
 	double res = 1.0e-10;
 	double sinu,cosu,r; 
