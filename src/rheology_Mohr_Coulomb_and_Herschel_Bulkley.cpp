@@ -25,7 +25,7 @@ Author: Alexander Hanke
 #include"fdm.h"
 #include"ghostcell.h"
 #include<algorithm>
-#include<math.h>
+#include<cmath>
 
 // https://doi.org/10.5194/gmd-9-2909-2016
 // Three phase viscosity - air, slurry and gravel
