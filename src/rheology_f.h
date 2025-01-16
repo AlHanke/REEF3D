@@ -50,7 +50,6 @@ private:
     
     double Herschel_Bulkley(lexer*,fdm*,ghostcell*);
     double Mohr_Coulomb_and_Herschel_Bulkley(lexer*,fdm*,ghostcell*);
-    double Mohr_Coulomb_and_Bingham(lexer*,fdm*,ghostcell*){return 0;};
     
 	
 	double gamma;
