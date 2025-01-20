@@ -63,7 +63,7 @@ private:
 	void maxcoor(fdm*, lexer*,ghostcell*);
 	void paraini(lexer*, fdm*,ghostcell*);
 	void pressini(lexer*,fdm*,ghostcell*);
-	void topoini(lexer*,fdm*,ghostcell*);
+	void initopo(lexer*,fdm*,ghostcell*);
     
 	int conv(double);
 
