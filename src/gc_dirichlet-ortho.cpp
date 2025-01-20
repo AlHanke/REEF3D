@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"field.h"
 #include"math.h"
-#include"density_f.h"
+#include"density_df.h"
 
 void ghostcell::dirichlet_ortho(lexer *p,field& f,double dist,int gcv, int bc, int cs)
 {

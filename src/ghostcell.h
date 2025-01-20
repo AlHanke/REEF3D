@@ -39,7 +39,7 @@ class vec;
 class vec2D;
 class cpt;
 class cpt2D;
-class density_f;
+class density;
 class reini;
 class convection;
 class ioflow;
@@ -402,7 +402,7 @@ private:
 	double **dsend,**drecv;
 	double *trecv;
 
-	density_f *pdens;
+	density *pdens;
 
     double originx,originy,originz;
 

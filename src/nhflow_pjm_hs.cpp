@@ -29,7 +29,7 @@ Author: Hans Bihs
 #include"ioflow.h"
 #include"heat.h"
 #include"concentration.h"
-#include"density_f.h"
+#include"density_df.h"
 #include"patchBC_interface.h"
 
 #define HX (fabs(d->hx(i,j))>1.0e-20?d->hx(i,j):1.0e20)
@@ -41,7 +41,7 @@ nhflow_pjm_hs::nhflow_pjm_hs(lexer* p, fdm_nhf *d, patchBC_interface *ppBC) : nh
 {
     pBC = ppBC;
     
-	pd = new density_f(p);
+	pd = new density_df(p);
 
     gcval_press=540;  
 }
