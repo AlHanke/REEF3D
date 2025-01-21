@@ -54,3 +54,16 @@ double rheology_f::viscosity(lexer *p, fdm *a, ghostcell *pgc)
 
     return val;
 }
+
+double rheology_f::heaviside(int phival)
+{
+    double H;
+    if(phival>epsi)
+        H=1.0;
+    else if(phival<-epsi)
+        H=0.0;
+    else
+        H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
+
+    return H;
+}
