@@ -20,6 +20,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef FLUID_UPDATE_FSF_H_
+#define FLUID_UPDATE_FSF_H_
+
 #include"fluid_update.h"
 #include"increment.h"
 
@@ -29,16 +32,13 @@ class ghostcell;
 
 using namespace std;
 
-#ifndef FLUID_UPDATE_FSF_H_
-#define FLUID_UPDATE_FSF_H_
-
 class fluid_update_fsf : public fluid_update, increment
 {
 public:
     fluid_update_fsf(lexer*, fdm*, ghostcell*);
 	virtual ~fluid_update_fsf();
 
-	virtual void start(lexer*, fdm*, ghostcell*);
+	void start(lexer*, fdm*, ghostcell*) override;
 
 private:
     static int iocheck,iter;
@@ -46,7 +46,7 @@ private:
 	int n;
 	const double dx,visc_air,visc_water,visc_body,ro_air,ro_water;
     double epsi,chi;
-
+    double ro_sediment;
 };
 
 #endif
