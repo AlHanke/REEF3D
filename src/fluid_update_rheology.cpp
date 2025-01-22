@@ -31,7 +31,7 @@ fluid_update_rheology::fluid_update_rheology(lexer *p, fdm* a) : ro1(p->W1), ro2
     iter=0;
     iocheck = true;
 	
-	prheo = new rheology_f(p,a);
+	prheo = new rheology_f(p);
 }
 
 fluid_update_rheology::~fluid_update_rheology()
