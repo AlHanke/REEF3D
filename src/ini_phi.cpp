@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"lexer.h"
 #include"ghostcell.h"
+#include<cmath>
 
 void initialize::iniphi(fdm*a, lexer* p, ghostcell* pgc)
 {
@@ -44,6 +45,17 @@ void initialize::iniphi(fdm*a, lexer* p, ghostcell* pgc)
 	&& p->YN[JP]>=p->F52 && p->YN[JP]<p->F55
 	&& p->ZN[KP]>=p->F53 && p->ZN[KP]<p->F56)
 	a->phi(i,j,k)=1.0;
+
+    if(p->F50_flag==2)
+	LOOP
+	if(p->XN[IP]>=p->F51 && p->XN[IP]<p->F54
+	&& p->YN[JP]>=p->F52 && p->YN[JP]<p->F55)
+	{
+        if(p->ZN[KP]>=p->F53 + (p->XN[IP]-p->F54) * tan(-p->F531/180.0*M_PI)
+        && p->ZN[KP]<p->F56 - (p->XN[IP]-p->F51) * tan(p->F531/180.0*M_PI)
+        )
+	    a->phi(i,j,k)=1.0;
+    }
 
 
     if(p->F57_1>0||p->F57_2>0||p->F57_3>0||p->F57_4>0)
