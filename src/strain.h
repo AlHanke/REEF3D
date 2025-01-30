@@ -57,6 +57,7 @@ public:
 private:
     double roface(lexer*,fdm*,int,int,int);
     void symmetricStrainRateTensor(lexer*,field&,field&,field&);
+    void skewSymmetricStrainRateTensor(lexer*,field&,field&,field&);
     
     double s11,s22,s33,s12,s13,s23;
     double r11,r22,r33,r12,r13,r23;
