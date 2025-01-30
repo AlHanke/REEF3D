@@ -40,8 +40,6 @@ fluid_update_rheology::~fluid_update_rheology()
 
 void fluid_update_rheology::start(lexer *p, fdm* a, ghostcell* pgc)
 {
-    if(p->mpirank==5)
-    std::cout<<"Fluid Update Rheology: "<<a->visc(0,0,0)<<std::endl;
     const int gcval_ro = 1;
     const int gcval_visc = 1;
 
