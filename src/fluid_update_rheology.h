@@ -43,12 +43,14 @@ public:
 
 private:
 	rheology *prheo;
-	static int iocheck,iter;
-    int gcval_ro,gcval_visc;
+	int iter;
 	int n;
-	const double dx,ro1,visc2,ro2;
+	const double ro1,ro2;
+    const double visc2;
 	double visc1;
     double epsi;
+
+    bool iocheck;
 
 };
 
