@@ -47,7 +47,6 @@ Author: Hans Bihs
 #include"nhflow.h"
 #include"heat.h"
 #include"concentration.h"
-#include"density_f.h"
 #include"density_df.h"
 #include"density_comp.h"
 #include"density_conc.h"
@@ -117,11 +116,8 @@ momentum_FCC3::momentum_FCC3(lexer *p, fdm *a, ghostcell *pgc, convection *pconv
 	pupdate = new fluid_update_void();
     
     // face density
-    if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==0)
-	pd = new density_f(p);
-    
-    if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==1)  
-	pd = new density_df(p);
+    if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && (p->X10==0 || p->X10==1))
+    pd = new density_df(p);
     
 	if(p->F80==0 && p->H10==0 && p->W30==1  && p->F300==0 && p->W90==0)
 	pd = new density_comp(p);

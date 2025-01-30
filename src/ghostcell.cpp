@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"fdm_fnpf.h"
 #include"fdm_nhf.h"
-#include"density_f.h"
+#include"density_df.h"
 
 ghostcell::ghostcell(int& argc, char **argv,lexer *pp):size(15),tag1(1),tag2(2),tag3(3),tag4(4),tag5(5),tag6(6),eps(1.0e-10),
 														gcx(1)
@@ -362,7 +362,7 @@ void ghostcell::gcini(lexer* p)
 	
 	p->colnum = new int[p->M10+1];
 	
-	pdens = new density_f(p);
+	pdens = new density_df(p);
 }
 
 void ghostcell::fdm_update(fdm *aa)

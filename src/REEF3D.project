@@ -1013,7 +1013,6 @@
         <File Name="density_heat.h"/>
         <File Name="density_comp.h"/>
         <File Name="density.h"/>
-        <File Name="density_f.h"/>
       </VirtualDirectory>
       <File Name="pjm_nse.h"/>
     </VirtualDirectory>
@@ -2754,7 +2753,6 @@
         <File Name="density_conc.cpp"/>
         <File Name="density_comp.cpp"/>
         <File Name="density_heat.cpp"/>
-        <File Name="density_f.cpp"/>
       </VirtualDirectory>
       <File Name="pjm_nse.cpp"/>
     </VirtualDirectory>
