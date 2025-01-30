@@ -36,7 +36,7 @@ multiphase_fluid_update_rheology::multiphase_fluid_update_rheology(lexer *p, fdm
 	eps13 = p->F322;
 	eps23 = p->F323;
     
-    prheo = new rheology_f(p,a);
+    prheo = new rheology_f(p);
 }
 
 multiphase_fluid_update_rheology::~multiphase_fluid_update_rheology()

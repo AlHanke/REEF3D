@@ -20,20 +20,19 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"rheology.h"
-
-using namespace std;
-
 #ifndef RHEOLOGY_V_H_
 #define RHEOLOGY_V_H_
 
+#include"rheology.h"
+
+using namespace std;
 
 class rheology_v : public rheology
 {
 
 public:
 
-	rheology_v(lexer*,fdm*);
+	rheology_v(lexer*);
 	virtual ~rheology_v();
 
     virtual double viscosity(lexer*,fdm*,ghostcell*);
