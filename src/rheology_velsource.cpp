@@ -28,6 +28,7 @@ Author: Hans Bihs
 void rheology_f::u_source(lexer *p, fdm *a)
 {    
     // Force base F = A*tau
+    double tau;
  
     count=0;
     if(p->W110==2 || p->W110==3)
@@ -66,15 +67,16 @@ void rheology_f::u_source(lexer *p, fdm *a)
         }
         
         yield_stress(p,a);
+        tau = tau0;
          
         if(p->W110==3)
-            tau0 += ((p->W97)*pow(gamma,p->W98-1.0))/a->ro(i,j,k);
+            tau += ((p->W97)*pow(gamma,p->W98-1.0))/a->ro(i,j,k);
         
         f = fabs(a->u(i,j,k))>1.0e-20?(a->u(i,j,k)/fabs(a->u(i,j,k))):0.0;
 
         H = heaviside(phival);
         
-        a->rhsvec.V[count] -= H*(tau0/(p->DXM*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))))*f;
+        a->rhsvec.V[count] -= H*f*(tau/(p->DXM*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))));
 
         ++count;
     }

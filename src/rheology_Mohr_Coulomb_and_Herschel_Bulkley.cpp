@@ -34,7 +34,7 @@ Author: Alexander Hanke
 double rheology_f::Mohr_Coulomb_and_Herschel_Bulkley(lexer* p, fdm* a, ghostcell* pgc)
 {
     // fines + suspension = slurry: Herschel–Bulkley
-    double shear_rate = sqrt(2)*strainterm(p,a);
+    double shear_rate = strainterm(p,a);
     const double b = p->W106_b;
     const double n = p->W98; // calibration : shear thinning vs shear thickening
     const double C = p->W105_C_total; // volumetric solid concentration: the volume of all solid particles including fine material relative to the volume of the debris-flow material including water m^3/m^3
