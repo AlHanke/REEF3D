@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 
-density_df::density_df(lexer* p) : epsi(p->F45*p->DXM), eps(2.1*p->DXM)
+density_df::density_df(lexer* p)
 {
     H=0.0;
 }

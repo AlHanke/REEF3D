@@ -20,15 +20,14 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"density.h"
-#include"increment.h"
-
-class fdm;
-class lexer;
-
 #ifndef DENSITY_DF_H_
 #define DENSITY_DF_H_
 
+#include"density.h"
+#include"increment.h"
+
+class lexer;
+class fdm;
 
 using namespace std;
 
@@ -39,18 +38,9 @@ public:
     density_df(lexer*);
 	virtual ~density_df();
 
-	virtual double roface(lexer*,fdm*,int,int,int);
+	double roface(lexer*,fdm*,int,int,int) override;
 	
-	double H,H_fb,roval,phival,fbval;
-	int ii,jj,kk;
-	const double epsi,eps;
-    double chi;
-    double r,s;
-
+	double H,roval,phival;
 };
 
 #endif
-
-
-
-
