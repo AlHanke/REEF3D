@@ -20,6 +20,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef STRAIN_H_
+#define STRAIN_H_
+
 #include"gradient.h"
 #include"field1.h"
 #include"field2.h"
@@ -29,16 +32,13 @@ Author: Hans Bihs
 class ghostcell;
 class fieldint;
 
-#ifndef STRAIN_H_
-#define STRAIN_H_
-
 using namespace std;
 
 class strain : public gradient
 {
 
 public:
-	strain (lexer*,fdm*);
+	strain (lexer*);
 	virtual ~strain();
 
 	double sij(lexer*,fdm*,int,int);
