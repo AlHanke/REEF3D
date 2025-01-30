@@ -46,12 +46,12 @@ public:
 	double pk(lexer*,fdm*,field&);
     double pk_b(lexer*,fdm*,field&);
 	void wallf_update(lexer*,fdm*,ghostcell*,fieldint&);
-	virtual double strainterm(lexer*,fdm*);
-    virtual double strainterm(lexer*,field&,field&,field&);
-	virtual double rotationterm(lexer*,fdm*);
-    virtual double rotationterm(lexer*,field&,field&,field&);
-	virtual double magSqrSd(lexer*,fdm*);
-    virtual double magSqrSd(lexer*,field&,field&,field&);
+	double strainterm(lexer*,fdm*);
+    double strainterm(lexer*,field&,field&,field&);
+	double rotationterm(lexer*,fdm*);
+    double rotationterm(lexer*,field&,field&,field&);
+	double magSqrSd(lexer*,fdm*);
+    double magSqrSd(lexer*,field&,field&,field&);
 	double strainplain(lexer*,fdm*);
 
 private:
