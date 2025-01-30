@@ -60,6 +60,7 @@ private:
     double tanphi;
     
     const double epsi;
+    const double gravity;
     
     int count;
 };
