@@ -200,3 +200,7 @@ double gradient::pwdz(lexer *p, field &w)
 	return grad;
 }
 
+double gradient::divComponent(lexer* p, field& A, field& B, field& C)
+{
+    return pudx(p,A)+pvdy(p,B)+pwdz(p,C);
+}
