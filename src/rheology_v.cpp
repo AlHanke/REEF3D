@@ -22,7 +22,7 @@ Author: Hans Bihs
 
 #include"rheology_v.h"
 
-rheology_v::rheology_v(lexer *p) 
+rheology_v::rheology_v() 
 {
 
 }
@@ -31,29 +31,26 @@ rheology_v::~rheology_v()
 {
 }
 
-double rheology_v::viscosity(lexer *p, fdm *a, ghostcell *pgc)
+double rheology_v::viscosity(lexer*, fdm*, ghostcell*)
 {
-    val=0.0;
-    
-    
-    return val;
+    return 0.0;
 }
 
-void rheology_v::u_source(lexer *p, fdm *a)
+void rheology_v::u_source(lexer*, fdm*)
 {
     
 }
 
-void rheology_v::v_source(lexer *p, fdm *a)
+void rheology_v::v_source(lexer*, fdm*)
 {
     
 }
 
-void rheology_v::w_source(lexer *p, fdm *a)
+void rheology_v::w_source(lexer*, fdm*)
 {
     
 }
 
-void rheology_v::filltau(lexer *p, fdm *a, ghostcell *pgc)
+void rheology_v::filltau(lexer*, fdm*, ghostcell*)
 {
 }
