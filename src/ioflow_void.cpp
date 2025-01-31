@@ -25,8 +25,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"fdm2D.h"
 #include"fdm_nhf.h"
-#include"vrans_v.h"
-#include"vrans_f.h"
+#include"vrans.h"
 #include"rheology_v.h"
 #include"rheology_f.h"
 #include"turbulence.h"
@@ -834,13 +833,7 @@ void ioflow_v::jsource2D(lexer *p, fdm2D* b, ghostcell* pgc)
 }
 
 void ioflow_v::ini(lexer *p, fdm* a, ghostcell* pgc)
-{
-    if(p->B269==0)
-	pvrans = new vrans_v(p,pgc);
-	
-	if(p->B269==1 || p->S10==2)
-	pvrans = new vrans_f(p,pgc);
-    
+{   
     if(p->W90>0)
     prheo = new rheology_f(p);
     else
