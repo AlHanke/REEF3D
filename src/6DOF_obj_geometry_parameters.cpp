@@ -177,8 +177,7 @@ void sixdof_obj::geometry_parameters(lexer *p, fdm *a, ghostcell *pgc)
 		I_(1,1) = Iy;
 		I_(2,0) = I_(0,2); 
 		I_(2,1) = I_(1,2); 
-		I_(2,2) = Iz;  
-        p->W_fb = Rfb;
+		I_(2,2) = Iz;
 
         p->xg = c_(0);
         p->yg = c_(1);
@@ -351,9 +350,8 @@ void sixdof_obj::geometry_parameters_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
 		I_(1,1) = Iy;
 		I_(2,0) = I_(0,2); 
 		I_(2,1) = I_(1,2); 
-		I_(2,2) = Iz;  
-        p->W_fb = Rfb;
-
+		I_(2,2) = Iz;
+        
         p->xg = c_(0);
         p->yg = c_(1);
         p->zg = c_(2);
