@@ -112,6 +112,11 @@ void rheology_f::u_source(lexer *p, fdm *a)
 
         ++count;
     }
+    if(p->W110==8)
+    {
+        ULOOP
+        a->rhsvec.V[count++] += sourceX(i,j,k);
+    }
 }
 
 void rheology_f::v_source(lexer *p, fdm *a)
@@ -167,6 +172,11 @@ void rheology_f::v_source(lexer *p, fdm *a)
         a->rhsvec.V[count] += H*sinphi*(fyx*dpdx + fyy*dpdy + fyz*dpdz)/(0.5*(a->ro(i,j,k)+a->ro(i,j+1,k)));
 
         ++count;
+    }
+    if(p->W110==8)
+    {
+        VLOOP
+        a->rhsvec.V[count++] += sourceY(i,j,k);
     }
 }
 
@@ -251,7 +261,11 @@ void rheology_f::w_source(lexer *p, fdm *a)
 
         ++count;
     }
-    
+    if(p->W110==8)
+    {
+        WLOOP
+        a->rhsvec.V[count++] += sourceZ(i,j,k);
+    }
 }
 
 void rheology_f::yield_stress(lexer* p, fdm* a)
