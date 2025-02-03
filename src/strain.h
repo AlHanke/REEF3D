@@ -54,8 +54,10 @@ public:
     double magSqrSd(lexer*,field&,field&,field&);
 	double strainplain(lexer*,fdm*);
 
+    void fill2xStrainRateTensor(lexer*,fdm*);
+    field4 S11,S22,S33,S12,S13,S23;
+
 private:
-    double roface(lexer*,fdm*,int,int,int);
     void symmetricStrainRateTensor(lexer*,field&,field&,field&);
     void skewSymmetricStrainRateTensor(lexer*,field&,field&,field&);
     
