@@ -37,7 +37,7 @@ public:
     rheology_f(lexer*);
     virtual ~rheology_f();
 
-    double viscosity(lexer*,fdm*,ghostcell*);
+    double viscosity(lexer*,fdm*,ghostcell*) override;
     
     void u_source(lexer*,fdm*) override;
     void v_source(lexer*,fdm*) override;
@@ -50,6 +50,9 @@ private:
     double Mohr_Coulomb_and_Herschel_Bulkley(lexer*,fdm*,ghostcell*);
     double heaviside(int);
     void yield_stress(lexer*,fdm*);
+    void yieldStressGradient(lexer*,fdm*,int,int,int);
+    void pressurePhi(lexer*,fdm*,int,int,int);
+    void pressurePhiGradient(lexer*,fdm*,int,int,int);
 
     field4 tau_x,tau_y,tau_z;
     
@@ -58,6 +61,9 @@ private:
     double tau0;
     double tau0_p,tau0_m;
     double sinphi;
+
+    double pressureval1,pressureval2;
+    double tau01,tau02;
     
     const double epsi;
     const double gravity;
