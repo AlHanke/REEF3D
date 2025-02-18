@@ -35,10 +35,6 @@ Author: Hans Bihs
 ioflow_v::ioflow_v(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)  : flowfile_in(p,pgc)
 {
     pBC = ppBC;
-    
-	tanphi=0.0;
-    if(p->W101>0)
-    tanphi=tan(p->W102_phi*(PI/180.0));
 }
 
 ioflow_v::~ioflow_v()
