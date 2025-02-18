@@ -49,7 +49,7 @@ private:
     field4 tau_x,tau_y,tau_z;
     
     double Herschel_Bulkley(lexer*,fdm*,ghostcell*);
-    double Mohr_Coulomb_and_Herschel_Bulkley(lexer*,fdm*,ghostcell*){return 0;};
+    double Mohr_Coulomb_and_Herschel_Bulkley(lexer*,fdm*,ghostcell*);
     double Mohr_Coulomb_and_Bingham(lexer*,fdm*,ghostcell*){return 0;};
     
 	
