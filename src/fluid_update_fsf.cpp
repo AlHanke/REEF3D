@@ -38,9 +38,9 @@ fluid_update_fsf::~fluid_update_fsf()
 
 void fluid_update_fsf::start(lexer *p, fdm* a, ghostcell* pgc)
 {
-	double H=0.0;
-    double H_fb=0.0;
-    double factor=1.0;
+	double H_phi = 0.0;
+    double H_topo = 0.0;
+    double factor = 1.0;
 	p->volume1=0.0;
 	p->volume2=0.0;
     
@@ -48,33 +48,42 @@ void fluid_update_fsf::start(lexer *p, fdm* a, ghostcell* pgc)
     iocheck=0;
 	iter=p->count;
 
-	LOOP
+	ALOOP
 	{
         factor = 1.0;
         
         if(p->j_dir==0 && p->X46==1) 
-        if(a->fb(i,j,k) <- 0.5*(1.0/2.0)*(p->DRM+p->DTM))
-        factor = 2.0;
+            if(a->fb(i,j,k) <- 0.5*(1.0/2.0)*(p->DRM+p->DTM))
+                factor = 2.0;
         
         if(p->j_dir==1 && p->X46==1)  
-        if(a->fb(i,j,k) <- 0.5*(1.0/3.0)*(p->DRM+p->DSM+p->DTM))
-        factor = 2.0;
+            if(a->fb(i,j,k) <- 0.5*(1.0/3.0)*(p->DRM+p->DSM+p->DTM))
+                factor = 2.0;
     
 		if(a->phi(i,j,k)>(p->psi*factor))
-		    H=1.0;
+		    H_phi=1.0;
 		else if(a->phi(i,j,k)<-(p->psi*factor))
-		    H=0.0;
+		    H_phi=0.0;
         else
-		    H=0.5*(1.0 + a->phi(i,j,k)/(p->psi*factor) + (1.0/PI)*sin((PI*a->phi(i,j,k))/(p->psi*factor)));
+		    H_phi=0.5*(1.0 + a->phi(i,j,k)/(p->psi*factor) + (1.0/PI)*sin((PI*a->phi(i,j,k))/(p->psi*factor)));
+
+        if(a->topo(i,j,k)>(p->psi))
+            H_topo = 1.0;
+        else if(a->topo(i,j,k)<-(p->psi))
+            H_topo=0.0;
+        else
+            H_topo=0.5*(1.0 + a->topo(i,j,k)/(p->psi) + (1.0/PI)*sin((PI*a->topo(i,j,k))/(p->psi)));
+
+        ro_sediment = (p->S10==2?a->porosity(i,j,k):p->S24)*p->W1+(1-(p->S10==2?a->porosity(i,j,k):p->S24))*p->S22;
 
         // Construct floating body heaviside function if used
-        a->ro(i,j,k) = ro_water*H + ro_air*(1.0-H);
-        a->visc(i,j,k) = visc_water*H + visc_air*(1.0-H);
+        a->ro(i,j,k) = ro_water*(H_phi+H_topo-1) + ro_air*(1.0-H_phi) + (1.0-H_topo)*ro_sediment;
+        a->visc(i,j,k) = visc_water*H_phi + visc_air*(1.0-H_phi);
             
         if(p->flagsf4[IJK]>0)
         {
-            p->volume1 += p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*(H-(1.0-PORVAL4));
-            p->volume2 += p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*(1.0-H-(1.0-PORVAL4));
+            p->volume1 += p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*(H_phi-(1.0-PORVAL4));
+            p->volume2 += p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*(1.0-H_phi-(1.0-PORVAL4));
         }
 	}
     
