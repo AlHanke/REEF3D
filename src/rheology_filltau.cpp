@@ -63,36 +63,7 @@ void rheology_f::filltau(lexer *p, fdm *a, ghostcell *pgc)
         }
         
         // Yield Stress
-        switch(p->W101)
-        {
-        default:
-        case 0:
-            tau0=p->W96;
-            break;
-        
-        case 1:  // HB-C dry sand
-            tau0 = sinphi*pressureval + p->W102_c;
-            break;
-        
-        case 2:  // HB-C dry sand, without MAX -> issues with negative viscosity and Hypre
-            tau0 = (sinphi*pressureval + p->W102_c)*(1.0-exp(-p->W103*gamma));
-            break;
-            
-        case 3:  // HB-C hydrostatic  - MAX added for cells on the interface.
-            tau0 = std::max(0.0,sinphi*pressureval*std::max(0.0,a->ro(i,j,k)-1000.0)/a->ro(i,j,k) + p->W102_c)*(1.0-exp(-p->W103*gamma));    // rho_water = 1000.0, new input?
-            break;
-
-        case 4:  // HB-C shear rate generated excess pore pressure
-            tau0 = std::max(0.0,sinphi*pressureval*exp(-p->W104*gamma)*std::max(0.0,a->ro(i,j,k)-1000.0)/a->ro(i,j,k) + p->W102_c)*(1.0-exp(-p->W103*gamma));    // m_p is new input W 104 
-            break;
-
-        case 5:  // HB-C linear shear rate coupling, max given by pressure
-            tau0 = std::max(0.0,sinphi*std::max(0.0,pressureval*std::max(0.0,a->ro(i,j,k)-1000.0)/a->ro(i,j,k)-p->W104*gamma) + p->W102_c)*(1.0-exp(-p->W103*gamma));    // m_u also use new input W 104
-            break;
-        }
-
-        if(p->count==0)
-            tau0=p->W96;
+        yield_stress(p,a);
          
         if(p->W110==7)
             tau0 += ((p->W97)*pow(gamma,p->W98-1.0))/a->ro(i,j,k);   
