@@ -776,7 +776,7 @@ void lexer::ini_default()
     W98=1.0;         // int n Herschel-Bulkley exponent
     W101=0;          // int turn on Mohr-Coloumb
     W102_phi=30.0;   // double angle of repose
-    W102_c=0.0;      // double c factor
+    W102_c=0.0;      // double coheasion
     W103=1.0;        // double MC transition factor
     W104=1.0;        // double shear rate dependent excess pore pressure factor
     W105_tau_00 = 0.0; // double grid-size dependency of the shear rate

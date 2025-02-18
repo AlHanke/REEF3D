@@ -23,14 +23,14 @@ Author: Hans Bihs
 #include"rheology_f.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"ghostcell.h" 
+#include"ghostcell.h"
 #include<cmath>
 
 rheology_f::rheology_f(lexer *p) : strain(p), tau_x(p), tau_y(p), tau_z(p), epsi(p->F45*p->DXM), gravity(sqrt(p->W20*p->W20+p->W21*p->W21+p->W22*p->W22))
 {
     sinphi=0.0;
     if(p->W101>0)
-    sinphi=sin(p->W102_phi*(M_PI/180.0));
+    sinphi=sin(fabs(p->W102_phi)*(M_PI/180.0));
 
 }
 
