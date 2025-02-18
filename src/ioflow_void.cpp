@@ -60,8 +60,6 @@ void ioflow_v::inflow(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, fiel
     if(p->I230>0)
     ff_inflow(p,a,pgc,u,v,w);
     
-    prheo->filltau(p,a,pgc);
-    
     velocity_inlet(p,a,pgc,u,v,w);
     
     pBC->patchBC_ioflow(p,a,pgc,u,v,w);
@@ -843,11 +841,10 @@ void ioflow_v::ini(lexer *p, fdm* a, ghostcell* pgc)
 	if(p->B269==1 || p->S10==2)
 	pvrans = new vrans_f(p,pgc);
     
-    if(p->W90==0)
-    prheo = new rheology_v(p,a);
-    
-    if(p->W90==1)
-    prheo = new rheology_f(p,a);
+    if(p->W90>0)
+    prheo = new rheology_f(p);
+    else
+    prheo = new rheology_v(p);
 }
 
 void ioflow_v::full_initialize2D(lexer *p, fdm2D *b, ghostcell *pgc)
