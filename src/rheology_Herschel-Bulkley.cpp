@@ -23,11 +23,7 @@ Author: Hans Bihs
 #include"rheology_f.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"ghostcell.h" 
-#include"diff_void.h"
-#include"ediff2.h"
-#include"idiff2.h"
-#include"idiff2_FS.h"
+#include"ghostcell.h"
 #include<algorithm>
 
 double rheology_f::Herschel_Bulkley(lexer *p, fdm *a, ghostcell *pgc)
@@ -48,6 +44,4 @@ double rheology_f::Herschel_Bulkley(lexer *p, fdm *a, ghostcell *pgc)
     }
 	
     return val;
-    
-
 }
