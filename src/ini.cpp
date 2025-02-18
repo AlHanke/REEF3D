@@ -795,7 +795,6 @@ void lexer::ini_default()
     W110=1;          // int add rheology as source term or viscosity
     W111=1;          // int which pressure for MC
     W112=2.1;        // double threshold factor for pressure blening in W111 3
-    W_fb=0.0;        // double density of floating body
 
 	// 6DOF
 	X10=0;		// int turn 6DOF on

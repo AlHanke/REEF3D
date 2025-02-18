@@ -112,8 +112,6 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
 	cout<<"Density Floating Body: "<<Rfb<<endl;
 	}
 
-    p->W_fb = Rfb;
-
 
 	// Origin
 	double xorig=0.0;
@@ -264,9 +262,6 @@ void sixdof_obj::geometry_ls_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 	cout<<"Mass Floating Body: "<<Mass_fb<<endl;
 	cout<<"Density Floating Body: "<<Rfb<<endl;
 	}
-
-    p->W_fb = Rfb;
-
 
 	
 	// Origin
