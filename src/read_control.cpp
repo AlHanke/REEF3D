@@ -968,6 +968,10 @@ void lexer::read_control()
                         F50_flag=1;
 						 clear(c,numint);
 						 break;
+                case 531: control>>F531;
+                        F50_flag=2;
+						 clear(c,numint);
+						 break;
                 case 54: control>>F54;
                         F50_flag=1;
 						 clear(c,numint);
