@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"fieldint.h"
 
-strain::strain(lexer *p) : gradient(p),epsi(p->F45*p->DXM)
+strain::strain(lexer *p) : gradient(p), S11(p), S22(p), S33(p), S12(p), S13(p), S23(p), epsi(p->F45*p->DXM)
 {
 }
 
@@ -150,6 +150,20 @@ void strain::symmetricStrainRateTensor(lexer *p, field &u, field &v, field &w)
         s12 = 0.0;
         s13 = (pudz(p,u) + pwdx(p,w));
         s23 = 0.0;
+    }
+}
+
+void strain::fill2xStrainRateTensor(lexer *p, fdm *a)
+{
+    LOOP
+    {
+        symmetricStrainRateTensor(p,a->u,a->v,a->w);
+        S11(i,j,k) = 2.0*s11;
+        S22(i,j,k) = 2.0*s22;
+        S33(i,j,k) = 2.0*s33;
+        S12(i,j,k) = s12;
+        S13(i,j,k) = s13;
+        S23(i,j,k) = s23;
     }
 }
 
