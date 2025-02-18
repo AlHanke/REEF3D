@@ -57,7 +57,7 @@ private:
     double val,f,H,phival,pressureval;
     double tau0;
     double tau0_p,tau0_m;
-    double tanphi;
+    double sinphi;
     
     const double epsi;
     const double gravity;
