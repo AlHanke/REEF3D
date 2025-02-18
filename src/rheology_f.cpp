@@ -47,10 +47,6 @@ double rheology_f::viscosity(lexer *p, fdm *a, ghostcell *pgc)
     case 2:
         val = Mohr_Coulomb_and_Herschel_Bulkley(p,a,pgc);
         break;
-    case 3:
-        val = Mohr_Coulomb_and_Bingham(p,a,pgc);
-        break;
-    
     default:
         val=0.0;
         break;
