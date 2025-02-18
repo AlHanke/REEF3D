@@ -26,9 +26,7 @@ Author: Hans Bihs
 #include<algorithm>
 
 void rheology_f::u_source(lexer *p, fdm *a)
-{
-    double pressureval;
-    
+{    
     // Force base F = A*tau
  
     count=0;
@@ -41,7 +39,7 @@ void rheology_f::u_source(lexer *p, fdm *a)
         {
         default:
         case 1:
-            pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))*fabs(p->W22);
+            pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))*gravity;
             break;
         
         case 2:
@@ -52,18 +50,18 @@ void rheology_f::u_source(lexer *p, fdm *a)
             if(phival<p->W112*p->DXM)
                 pressureval=0.5*(a->press(i,j,k)+a->press(i+1,j,k));
             else
-                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))*fabs(p->W22);
+                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))*gravity;
             break;
         
         case 4:
-            pressureval=0.25*(a->press(i,j,k)+a->press(i+1,j,k)) + 0.5*phival*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))*fabs(p->W22);
+            pressureval=0.25*(a->press(i,j,k)+a->press(i+1,j,k)) + 0.5*phival*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))*gravity;
             break;
         
         case 5:
             if(p->count>=10)
                 pressureval=0.5*(a->press(i,j,k)+a->press(i+1,j,k));
             else
-                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))*fabs(p->W22);
+                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))*gravity;
             break;
         }
         
@@ -99,8 +97,8 @@ void rheology_f::u_source(lexer *p, fdm *a)
         {
         default:
         case 1:
-            pressureval1 = phival*a->ro(i,j,k)*fabs(p->W22);
-            pressureval2 = phival*a->ro(i+1,j,k)*fabs(p->W22);
+            pressureval1 = phival*a->ro(i,j,k)*gravity;
+            pressureval2 = phival*a->ro(i+1,j,k)*gravity;
             break;
         
         case 2:
@@ -116,8 +114,8 @@ void rheology_f::u_source(lexer *p, fdm *a)
             }
             else
             {
-                pressureval1 = phival*a->ro(i,j,k)*fabs(p->W22);
-                pressureval2 = phival*a->ro(i+1,j,k)*fabs(p->W22);
+                pressureval1 = phival*a->ro(i,j,k)*gravity;
+                pressureval2 = phival*a->ro(i+1,j,k)*gravity;
             }
             break;
         }
@@ -214,7 +212,6 @@ void rheology_f::u_source(lexer *p, fdm *a)
 
 void rheology_f::v_source(lexer *p, fdm *a)
 {
-    double pressureval;
     double dvdx,dvdy,dvdz;
     double fyx,fyy,fyz;
     double dpdx,dpdy,dpdz;
@@ -228,7 +225,7 @@ void rheology_f::v_source(lexer *p, fdm *a)
         switch(p->W111)
         {
         case 1:
-            pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j+1,k))*fabs(p->W22);
+            pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j+1,k))*gravity;
             break;
         
         case 2:
@@ -239,18 +236,18 @@ void rheology_f::v_source(lexer *p, fdm *a)
             if(phival<p->W112*p->DXM)
                 pressureval=0.5*(a->press(i,j,k)+a->press(i,j+1,k));
             else
-                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j+1,k))*fabs(p->W22);
+                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j+1,k))*gravity;
             break;
         
         case 4:
-            pressureval=0.25*(a->press(i,j,k)+a->press(i,j+1,k)) + 0.5*phival*0.5*(a->ro(i,j,k)+a->ro(i,j+1,k))*fabs(p->W22);
+            pressureval=0.25*(a->press(i,j,k)+a->press(i,j+1,k)) + 0.5*phival*0.5*(a->ro(i,j,k)+a->ro(i,j+1,k))*gravity;
             break;
         
         case 5:
             if(p->count>=10)
                 pressureval=0.5*(a->press(i,j,k)+a->press(i,j+1,k));
             else
-                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j+1,k))*fabs(p->W22);
+                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j+1,k))*gravity;
             break;
         }
         
@@ -299,9 +296,7 @@ void rheology_f::v_source(lexer *p, fdm *a)
 }
 
 void rheology_f::w_source(lexer *p, fdm *a)
-{
-    double pressureval;
-    
+{   
     count=0;
     if(p->W110==2 || p->W110==3)
     WLOOP
@@ -312,7 +307,7 @@ void rheology_f::w_source(lexer *p, fdm *a)
         {
         default:
         case 1:
-            pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j,k+1))*fabs(p->W22);
+            pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j,k+1))*gravity;
             break;
         
         case 2:
@@ -323,18 +318,18 @@ void rheology_f::w_source(lexer *p, fdm *a)
             if(phival<p->W112*p->DXM)
                 pressureval=0.5*(a->press(i,j,k)+a->press(i,j,k+1));
             else
-                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j,k+1))*fabs(p->W22);
+                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j,k+1))*gravity;
             break;
         
         case 4:
-            pressureval=0.5*0.5*(a->press(i,j,k)+a->press(i,j,k+1)) + 0.5*phival*0.5*(a->ro(i,j,k)+a->ro(i,j,k+1))*fabs(p->W22);
+            pressureval=0.5*0.5*(a->press(i,j,k)+a->press(i,j,k+1)) + 0.5*phival*0.5*(a->ro(i,j,k)+a->ro(i,j,k+1))*gravity;
             break;
         
         case 5:
             if(p->count>=10)
                 pressureval=0.5*(a->press(i,j,k)+a->press(i,j,k+1));
             else
-                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j,k+1))*fabs(p->W22);
+                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i,j,k+1))*gravity;
             break;
         }
         
@@ -370,8 +365,8 @@ void rheology_f::w_source(lexer *p, fdm *a)
         {
         default:
         case 1:
-            pressureval1 = phival*a->ro(i,j,k)*fabs(p->W22);
-            pressureval2 = phival*a->ro(i,j,k+1)*fabs(p->W22);
+            pressureval1 = phival*a->ro(i,j,k)*gravity;
+            pressureval2 = phival*a->ro(i,j,k+1)*gravity;
             break;
         
         case 2:
@@ -387,8 +382,8 @@ void rheology_f::w_source(lexer *p, fdm *a)
             }
             else
             {
-                pressureval1 = phival*a->ro(i,j,k)*fabs(p->W22);
-                pressureval2 = phival*a->ro(i,j,k+1)*fabs(p->W22);
+                pressureval1 = phival*a->ro(i,j,k)*gravity;
+                pressureval2 = phival*a->ro(i,j,k+1)*gravity;
             }
             break;
         }
