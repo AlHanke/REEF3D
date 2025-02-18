@@ -139,6 +139,8 @@ public:
 	 double wdzz(fdm*);
 	 
 
+    double divComponent(lexer*,field&,field&,field&);
+
 	double grad1,grad2;
 	double grad;
 	const double dx;
