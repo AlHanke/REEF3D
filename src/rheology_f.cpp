@@ -87,8 +87,8 @@ void rheology_f::prepSource(lexer* p, fdm* a, ghostcell* pgc)
     pgc->start4(p,S23,1);
     LOOP
     {
-        a->test1(i,j,k) = sourceX(i,j,k) = heaviside(a->phi(i,j,k)) * (gammatau(i,j,k) * divComponent(p,S11,S12,S13) + (S11(i,j,k)*pudx(p,gammatau) + S12(i,j,k)*pvdy(p,gammatau) + S13(i,j,k)*pwdz(p,gammatau)));
-        a->test2(i,j,k) = sourceY(i,j,k) = heaviside(a->phi(i,j,k)) * (gammatau(i,j,k) * divComponent(p,S12,S22,S23) + (S12(i,j,k)*pudx(p,gammatau) + S22(i,j,k)*pvdy(p,gammatau) + S23(i,j,k)*pwdz(p,gammatau)));
-        a->test3(i,j,k) = sourceZ(i,j,k) = heaviside(a->phi(i,j,k)) * (gammatau(i,j,k) * divComponent(p,S13,S23,S33) + (S13(i,j,k)*pudx(p,gammatau) + S23(i,j,k)*pvdy(p,gammatau) + S33(i,j,k)*pwdz(p,gammatau)));
+        sourceX(i,j,k) = heaviside(a->phi(i,j,k)) * (gammatau(i,j,k) * divComponent(p,S11,S12,S13) + (S11(i,j,k)*pudx(p,gammatau) + S12(i,j,k)*pvdy(p,gammatau) + S13(i,j,k)*pwdz(p,gammatau)));
+        sourceY(i,j,k) = heaviside(a->phi(i,j,k)) * (gammatau(i,j,k) * divComponent(p,S12,S22,S23) + (S12(i,j,k)*pudx(p,gammatau) + S22(i,j,k)*pvdy(p,gammatau) + S23(i,j,k)*pwdz(p,gammatau)));
+        sourceZ(i,j,k) = heaviside(a->phi(i,j,k)) * (gammatau(i,j,k) * divComponent(p,S13,S23,S33) + (S13(i,j,k)*pudx(p,gammatau) + S23(i,j,k)*pvdy(p,gammatau) + S33(i,j,k)*pwdz(p,gammatau)));
     }
 }
