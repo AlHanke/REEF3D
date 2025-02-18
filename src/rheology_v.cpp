@@ -19,16 +19,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Hans Bihs
 --------------------------------------------------------------------*/
-#include"rheology_v.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h" a
-#include"diff_void.h"
-#include"ediff2.h"
-#include"idiff2.h"
-#include"idiff2_FS.h"
 
-rheology_v::rheology_v(lexer *p, fdm *a) 
+#include"rheology_v.h"
+
+rheology_v::rheology_v(lexer *p) 
 {
 
 }
