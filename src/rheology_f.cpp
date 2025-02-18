@@ -31,7 +31,6 @@ rheology_f::rheology_f(lexer *p) : strain(p), tau_x(p), tau_y(p), tau_z(p), epsi
     sinphi=0.0;
     if(p->W101>0)
     sinphi=sin(fabs(p->W102_phi)*(M_PI/180.0));
-
 }
 
 rheology_f::~rheology_f()
