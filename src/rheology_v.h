@@ -40,6 +40,8 @@ public:
     void w_source(lexer*,fdm*) override;
     
     void filltau(lexer*,fdm*,ghostcell*) override;
+
+    void prepSource(lexer*,fdm*,ghostcell*) override {};
 	
 };
 #endif

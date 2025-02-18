@@ -40,6 +40,8 @@ public:
     
     virtual void filltau(lexer*,fdm*,ghostcell*)=0;
 
+    virtual void prepSource(lexer*,fdm*,ghostcell*)=0;
+
 };
 
 #endif

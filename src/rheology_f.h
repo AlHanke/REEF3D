@@ -45,6 +45,8 @@ public:
     
     void filltau(lexer*,fdm*,ghostcell*) override;
 
+    void prepSource(lexer*,fdm*,ghostcell*) override;
+
 private:
     double Herschel_Bulkley(lexer*,fdm*,ghostcell*);
     double Mohr_Coulomb_and_Herschel_Bulkley(lexer*,fdm*,ghostcell*);
@@ -55,6 +57,9 @@ private:
     void pressurePhiGradient(lexer*,fdm*,int,int,int);
 
     field4 tau_x,tau_y,tau_z;
+    field1 sourceX;
+    field2 sourceY;
+    field3 sourceZ;
     
     double gamma;
     double val,f,H,phival,pressureval;

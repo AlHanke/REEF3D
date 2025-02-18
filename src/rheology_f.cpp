@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include<cmath>
 
-rheology_f::rheology_f(lexer *p) : strain(p), tau_x(p), tau_y(p), tau_z(p), epsi(p->F45*p->DXM), gravity(sqrt(p->W20*p->W20+p->W21*p->W21+p->W22*p->W22))
+rheology_f::rheology_f(lexer *p) : strain(p), tau_x(p), tau_y(p), tau_z(p), sourceX(p), sourceY(p), sourceZ(p), epsi(p->F45*p->DXM), gravity(sqrt(p->W20*p->W20+p->W21*p->W21+p->W22*p->W22))
 {
     sinphi=0.0;
     if(p->W101>0)
@@ -66,4 +66,29 @@ double rheology_f::heaviside(int phival)
         H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
 
     return H;
+}
+
+void rheology_f::prepSource(lexer* p, fdm* a, ghostcell* pgc)
+{
+    pgc->start1(p,a->u,1);
+    pgc->start2(p,a->v,1);
+    pgc->start3(p,a->w,1);
+    pgc->start4(p,a->press,1);
+    field4 gammatau(p);
+    LOOP
+        gammatau(i,j,k) = ((p->W102_c + sin(fabs(p->W102_phi)*(M_PI/180.0)) * a->press(i,j,k))/a->ro(i,j,k))/strain::strainterm(p,a);
+    pgc->start4(p,gammatau,1);
+    fill2xStrainRateTensor(p,a);
+    pgc->start4(p,S11,1);
+    pgc->start4(p,S22,1);
+    pgc->start4(p,S33,1);
+    pgc->start4(p,S12,1);
+    pgc->start4(p,S13,1);
+    pgc->start4(p,S23,1);
+    LOOP
+    {
+        a->test1(i,j,k) = sourceX(i,j,k) = heaviside(a->phi(i,j,k)) * (gammatau(i,j,k) * divComponent(p,S11,S12,S13) + (S11(i,j,k)*pudx(p,gammatau) + S12(i,j,k)*pvdy(p,gammatau) + S13(i,j,k)*pwdz(p,gammatau)));
+        a->test2(i,j,k) = sourceY(i,j,k) = heaviside(a->phi(i,j,k)) * (gammatau(i,j,k) * divComponent(p,S12,S22,S23) + (S12(i,j,k)*pudx(p,gammatau) + S22(i,j,k)*pvdy(p,gammatau) + S23(i,j,k)*pwdz(p,gammatau)));
+        a->test3(i,j,k) = sourceZ(i,j,k) = heaviside(a->phi(i,j,k)) * (gammatau(i,j,k) * divComponent(p,S13,S23,S33) + (S13(i,j,k)*pudx(p,gammatau) + S23(i,j,k)*pvdy(p,gammatau) + S33(i,j,k)*pwdz(p,gammatau)));
+    }
 }

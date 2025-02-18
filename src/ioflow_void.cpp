@@ -357,6 +357,7 @@ void  ioflow_v::isource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 	pvrans->u_source(p,a);
     
     //Rheology
+    prheo->prepSource(p,a,pgc);
     prheo->u_source(p,a);
 }
 
