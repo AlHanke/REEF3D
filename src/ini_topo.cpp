@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"ghostcell.h"
 
-void initialize::topoini(lexer *p, fdm *a, ghostcell *pgc)
+void initialize::initopo(lexer *p, fdm *a, ghostcell *pgc)
 {
     double dx=p->DXM;
 
