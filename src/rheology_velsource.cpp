@@ -108,7 +108,7 @@ void rheology_f::u_source(lexer *p, fdm *a)
         
         H = heaviside(phival);
                  
-        a->rhsvec.V[count] += H*sinphi*(fxx*dpdx + fxy*dpdy + fxz*dpdz)/(0.5*(a->ro(i,j,k)+a->ro(i+1,j,k)));
+        a->rhsvec.V[count] += H*tanphi*(fxx*dpdx + fxy*dpdy + fxz*dpdz)/(0.5*(a->ro(i,j,k)+a->ro(i+1,j,k)));
 
         ++count;
     }
@@ -169,7 +169,7 @@ void rheology_f::v_source(lexer *p, fdm *a)
         
         H = heaviside(phival);
                  
-        a->rhsvec.V[count] += H*sinphi*(fyx*dpdx + fyy*dpdy + fyz*dpdz)/(0.5*(a->ro(i,j,k)+a->ro(i,j+1,k)));
+        a->rhsvec.V[count] += H*tanphi*(fyx*dpdx + fyy*dpdy + fyz*dpdz)/(0.5*(a->ro(i,j,k)+a->ro(i,j+1,k)));
 
         ++count;
     }
@@ -257,7 +257,7 @@ void rheology_f::w_source(lexer *p, fdm *a)
         
         H = heaviside(phival);
                          
-        a->rhsvec.V[count] += H*sinphi*(fzx*dpdx + fzy*dpdy + fzz*dpdz)/(0.5*(a->ro(i,j,k)+a->ro(i,j,k+1)));
+        a->rhsvec.V[count] += H*tanphi*(fzx*dpdx + fzy*dpdy + fzz*dpdz)/(0.5*(a->ro(i,j,k)+a->ro(i,j,k+1)));
 
         ++count;
     }
@@ -271,7 +271,7 @@ void rheology_f::w_source(lexer *p, fdm *a)
 void rheology_f::yield_stress(lexer* p, fdm* a)
 {
     pressureval = std::max(0.0,pressureval);
-    // sinphi >0 is enforced
+    // tanphi >0 is enforced
     double relative_density = std::max(0.0,a->ro(i,j,k)-density_gap_fluid)/a->ro(i,j,k);
     gamma = strainterm(p,a);
 
@@ -283,20 +283,20 @@ void rheology_f::yield_stress(lexer* p, fdm* a)
         break;
 
     // http://dx.doi.org/10.1016/j.jnnfm.2013.07.005
-    case 1:  // Yield stress from viscoplastic fluid (bingham) Druker-Prager - sinphi*pressureval valid in 2D - W102_c is cohesion
-        tau0 = (sinphi*pressureval + p->W102_c)*(1.0-exp(-p->W103*gamma));
+    case 1:  // Yield stress from viscoplastic fluid (bingham) Druker-Prager - tanphi*pressureval valid in 2D - W102_c is cohesion
+        tau0 = (tanphi*pressureval + p->W102_c)*(1.0-exp(-p->W103*gamma));
         break;
         
     case 3:  // HB-C hydrostatic  - MAX added for cells on the interface.
-        tau0 = (sinphi*pressureval*relative_density + p->W102_c)*(1.0-exp(-p->W103*gamma));    // rho_water = 1000.0, new input?
+        tau0 = (tanphi*pressureval*relative_density + p->W102_c)*(1.0-exp(-p->W103*gamma));    // rho_water = 1000.0, new input?
         break;
 
     case 4:  // HB-C shear rate generated excess pore pressure
-        tau0 = std::max(0.0,sinphi*pressureval*exp(-p->W104*gamma)*relative_density + p->W102_c)*(1.0-exp(-p->W103*gamma));    // m_p is new input W 104 
+        tau0 = std::max(0.0,tanphi*pressureval*exp(-p->W104*gamma)*relative_density + p->W102_c)*(1.0-exp(-p->W103*gamma));    // m_p is new input W 104 
         break;
 
     case 5:  // HB-C linear shear rate coupling, max given by pressure
-        tau0 = std::max(0.0,sinphi*std::max(0.0,pressureval*relative_density-p->W104*gamma) + p->W102_c)*(1.0-exp(-p->W103*gamma));    // m_u also use new input W 104
+        tau0 = std::max(0.0,tanphi*std::max(0.0,pressureval*relative_density-p->W104*gamma) + p->W102_c)*(1.0-exp(-p->W103*gamma));    // m_u also use new input W 104
         break;
     }
 
@@ -314,24 +314,24 @@ void rheology_f::yieldStressGradient(lexer* p, fdm* a, int ii, int jj, int kk)
         tau02=p->W96;
         break;
 
-    case 1:  // Yield stress from viscoplastic fluid (bingham) Druker-Prager - sinphi*pressureval valid in 2D - W102_c is cohesion
-        tau01 = (sinphi*pressureval1 + p->W102_c)*(1.0-exp(-p->W103*gamma));
-        tau02 = (sinphi*pressureval2 + p->W102_c)*(1.0-exp(-p->W103*gamma));
+    case 1:  // Yield stress from viscoplastic fluid (bingham) Druker-Prager - tanphi*pressureval valid in 2D - W102_c is cohesion
+        tau01 = (tanphi*pressureval1 + p->W102_c)*(1.0-exp(-p->W103*gamma));
+        tau02 = (tanphi*pressureval2 + p->W102_c)*(1.0-exp(-p->W103*gamma));
         break;
         
     case 3:  // HB-C hydrostatic  - MAX added for cells on the interface.
-        tau01 = std::max(0.0,sinphi*pressureval1*std::max(0.0,a->ro(i,j,k)-density_gap_fluid)/a->ro(i,j,k) + p->W102_c);
-        tau02 = std::max(0.0,sinphi*pressureval2*std::max(0.0,a->ro(i+1,j,k)-density_gap_fluid)/a->ro(i+1,j,k) + p->W102_c);
+        tau01 = std::max(0.0,tanphi*pressureval1*std::max(0.0,a->ro(i,j,k)-density_gap_fluid)/a->ro(i,j,k) + p->W102_c);
+        tau02 = std::max(0.0,tanphi*pressureval2*std::max(0.0,a->ro(i+1,j,k)-density_gap_fluid)/a->ro(i+1,j,k) + p->W102_c);
         break;
         
     case 4:  // HB-C shear rate generated excess pore pressure
-        tau01 = std::max(0.0,sinphi*pressureval1*exp(-p->W104*gamma)*std::max(0.0,a->ro(i,j,k)-density_gap_fluid)/a->ro(i,j,k) + p->W102_c);
-        tau02 = std::max(0.0,sinphi*pressureval2*exp(-p->W104*gamma)*std::max(0.0,a->ro(i+1,j,k)-density_gap_fluid)/a->ro(i+1,j,k) + p->W102_c);
+        tau01 = std::max(0.0,tanphi*pressureval1*exp(-p->W104*gamma)*std::max(0.0,a->ro(i,j,k)-density_gap_fluid)/a->ro(i,j,k) + p->W102_c);
+        tau02 = std::max(0.0,tanphi*pressureval2*exp(-p->W104*gamma)*std::max(0.0,a->ro(i+1,j,k)-density_gap_fluid)/a->ro(i+1,j,k) + p->W102_c);
         break;
         
     case 5:  // HB-C linear shear rate coupling, max given by pressure
-        tau01 = std::max(0.0,sinphi*std::max(0.0,pressureval1*std::max(0.0,a->ro(i,j,k)-density_gap_fluid)/a->ro(i,j,k)-p->W104*gamma) + p->W102_c);
-        tau02 = std::max(0.0,sinphi*std::max(0.0,pressureval2*std::max(0.0,a->ro(i+1,j,k)-density_gap_fluid)/a->ro(i+1,j,k)-p->W104*gamma) + p->W102_c);
+        tau01 = std::max(0.0,tanphi*std::max(0.0,pressureval1*std::max(0.0,a->ro(i,j,k)-density_gap_fluid)/a->ro(i,j,k)-p->W104*gamma) + p->W102_c);
+        tau02 = std::max(0.0,tanphi*std::max(0.0,pressureval2*std::max(0.0,a->ro(i+1,j,k)-density_gap_fluid)/a->ro(i+1,j,k)-p->W104*gamma) + p->W102_c);
         break;
     }   
 

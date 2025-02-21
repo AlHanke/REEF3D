@@ -28,9 +28,9 @@ Author: Hans Bihs
 
 rheology_f::rheology_f(lexer *p) : strain(p), tau_x(p), tau_y(p), tau_z(p), sourceX(p), sourceY(p), sourceZ(p), epsi(p->F45*p->DXM), gravity(sqrt(p->W20*p->W20+p->W21*p->W21+p->W22*p->W22)), density_gap_fluid(1000.0)
 {
-    sinphi=0.0;
+    tanphi=0.0;
     if(p->W101>0)
-    sinphi=sin(fabs(p->W102_phi)*(M_PI/180.0));
+    tanphi=tan(fabs(p->W102_phi)*(M_PI/180.0));
 }
 
 rheology_f::~rheology_f()

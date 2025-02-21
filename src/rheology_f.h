@@ -65,7 +65,7 @@ private:
     double val,f,H,phival,pressureval;
     double tau0;
     double tau0_p,tau0_m;
-    double sinphi;
+    double tanphi;
 
     double pressureval1,pressureval2;
     double tau01,tau02;
