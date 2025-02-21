@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include<cmath>
 
-rheology_f::rheology_f(lexer *p) : strain(p), tau_x(p), tau_y(p), tau_z(p), sourceX(p), sourceY(p), sourceZ(p), epsi(p->F45*p->DXM), gravity(sqrt(p->W20*p->W20+p->W21*p->W21+p->W22*p->W22))
+rheology_f::rheology_f(lexer *p) : strain(p), tau_x(p), tau_y(p), tau_z(p), sourceX(p), sourceY(p), sourceZ(p), epsi(p->F45*p->DXM), gravity(sqrt(p->W20*p->W20+p->W21*p->W21+p->W22*p->W22)), density_gap_fluid(1000.0)
 {
     sinphi=0.0;
     if(p->W101>0)

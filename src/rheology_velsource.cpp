@@ -272,8 +272,7 @@ void rheology_f::yield_stress(lexer* p, fdm* a)
 {
     pressureval = std::max(0.0,pressureval);
     // sinphi >0 is enforced
-    const double density_water = 1000.0;
-    double relative_density = std::max(0.0,a->ro(i,j,k)-density_water)/a->ro(i,j,k);
+    double relative_density = std::max(0.0,a->ro(i,j,k)-density_gap_fluid)/a->ro(i,j,k);
     gamma = strainterm(p,a);
 
     switch(p->W101)
@@ -319,26 +318,21 @@ void rheology_f::yieldStressGradient(lexer* p, fdm* a, int ii, int jj, int kk)
         tau01 = (sinphi*pressureval1 + p->W102_c)*(1.0-exp(-p->W103*gamma));
         tau02 = (sinphi*pressureval2 + p->W102_c)*(1.0-exp(-p->W103*gamma));
         break;
-    
-    // case 2:  // HB-C dry sand
-    //     tau01 = sinphi*pressureval1 + p->W102_c;
-    //     tau02 = sinphi*pressureval2 + p->W102_c;
-    //     break;
         
-    // case 3:  // HB-C hydrostatic  - MAX added for cells on the interface.
-    //     tau01 = std::max(0.0,sinphi*pressureval1*std::max(0.0,a->ro(i,j,k)-1000.0)/a->ro(i,j,k) + p->W102_c);
-    //     tau02 = std::max(0.0,sinphi*pressureval2*std::max(0.0,a->ro(i+1,j,k)-1000.0)/a->ro(i+1,j,k) + p->W102_c);
-    //     break;
+    case 3:  // HB-C hydrostatic  - MAX added for cells on the interface.
+        tau01 = std::max(0.0,sinphi*pressureval1*std::max(0.0,a->ro(i,j,k)-density_gap_fluid)/a->ro(i,j,k) + p->W102_c);
+        tau02 = std::max(0.0,sinphi*pressureval2*std::max(0.0,a->ro(i+1,j,k)-density_gap_fluid)/a->ro(i+1,j,k) + p->W102_c);
+        break;
         
-    // case 4:  // HB-C shear rate generated excess pore pressure
-    //     tau01 = std::max(0.0,sinphi*pressureval1*exp(-p->W104*gamma)*std::max(0.0,a->ro(i,j,k)-1000.0)/a->ro(i,j,k) + p->W102_c);
-    //     tau02 = std::max(0.0,sinphi*pressureval2*exp(-p->W104*gamma)*std::max(0.0,a->ro(i+1,j,k)-1000.0)/a->ro(i+1,j,k) + p->W102_c);
-    //     break;
+    case 4:  // HB-C shear rate generated excess pore pressure
+        tau01 = std::max(0.0,sinphi*pressureval1*exp(-p->W104*gamma)*std::max(0.0,a->ro(i,j,k)-density_gap_fluid)/a->ro(i,j,k) + p->W102_c);
+        tau02 = std::max(0.0,sinphi*pressureval2*exp(-p->W104*gamma)*std::max(0.0,a->ro(i+1,j,k)-density_gap_fluid)/a->ro(i+1,j,k) + p->W102_c);
+        break;
         
-    // case 5:  // HB-C linear shear rate coupling, max given by pressure
-    //     tau01 = std::max(0.0,sinphi*std::max(0.0,pressureval1*std::max(0.0,a->ro(i,j,k)-1000.0)/a->ro(i,j,k)-p->W104*gamma) + p->W102_c);
-    //     tau02 = std::max(0.0,sinphi*std::max(0.0,pressureval2*std::max(0.0,a->ro(i+1,j,k)-1000.0)/a->ro(i+1,j,k)-p->W104*gamma) + p->W102_c);
-    //     break;
+    case 5:  // HB-C linear shear rate coupling, max given by pressure
+        tau01 = std::max(0.0,sinphi*std::max(0.0,pressureval1*std::max(0.0,a->ro(i,j,k)-density_gap_fluid)/a->ro(i,j,k)-p->W104*gamma) + p->W102_c);
+        tau02 = std::max(0.0,sinphi*std::max(0.0,pressureval2*std::max(0.0,a->ro(i+1,j,k)-density_gap_fluid)/a->ro(i+1,j,k)-p->W104*gamma) + p->W102_c);
+        break;
     }   
 
     if(p->count==0)

@@ -72,6 +72,7 @@ private:
     
     const double epsi;
     const double gravity;
+    const double density_gap_fluid;
     
     int count;
 };
