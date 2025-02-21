@@ -348,7 +348,7 @@ void rheology_f::yieldStressGradient(lexer* p, fdm* a, int ii, int jj, int kk)
     }
 }
 
-void rheology_f::pressurePhi(lexer* p, fdm* a, int ii, int jj, int kk)
+void rheology_f::pressurePhi(lexer* p, fdm* a, int ii, int jj, int kk, bool pressureGauge)
 {
     phival = 0.5*(a->phi(i,j,k)+a->phi(i+1,j,k));
 
@@ -360,23 +360,23 @@ void rheology_f::pressurePhi(lexer* p, fdm* a, int ii, int jj, int kk)
         break;
     
     case 2:
-        pressureval=0.5*(a->press(i,j,k)+a->press(i+ii,j+jj,k+kk));
+        pressureval=0.5*(a->press(i,j,k)+a->press(i+ii,j+jj,k+kk))-p->pressgage*pressureGauge;
         break;
     
     case 3:
         if(phival<p->W112*p->DXM)
-            pressureval=0.5*(a->press(i,j,k)+a->press(i+ii,j+jj,k+kk));
+            pressureval=0.5*(a->press(i,j,k)+a->press(i+ii,j+jj,k+kk))-p->pressgage*pressureGauge;
         else
             pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i+ii,j+jj,k+kk))*gravity;
         break;
     
     case 4:
-        pressureval=0.25*(a->press(i,j,k)+a->press(i+ii,j+jj,k+kk)) + 0.5*phival*0.5*(a->ro(i,j,k)+a->ro(i+ii,j+jj,k+kk))*gravity;
+        pressureval=0.5*(0.5*(a->press(i,j,k)+a->press(i+ii,j+jj,k+kk))-p->pressgage*pressureGauge + phival*0.5*(a->ro(i,j,k)+a->ro(i+ii,j+jj,k+kk))*gravity);
         break;
     
     case 5:
         if(p->count>=10)
-            pressureval=0.5*(a->press(i,j,k)+a->press(i+ii,j+jj,k+kk));
+            pressureval=0.5*(a->press(i,j,k)+a->press(i+ii,j+jj,k+kk))-p->pressgage*pressureGauge;
         else
             pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i+ii,j+jj,k+kk))*gravity;
         break;

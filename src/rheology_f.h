@@ -53,7 +53,7 @@ private:
     double heaviside(int);
     void yield_stress(lexer*,fdm*);
     void yieldStressGradient(lexer*,fdm*,int,int,int);
-    void pressurePhi(lexer*,fdm*,int,int,int);
+    void pressurePhi(lexer*,fdm*,int,int,int,bool=false);
     void pressurePhiGradient(lexer*,fdm*,int,int,int);
 
     field4 tau_x,tau_y,tau_z;

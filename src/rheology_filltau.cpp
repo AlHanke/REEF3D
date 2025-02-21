@@ -23,44 +23,13 @@ Author: Hans Bihs
 #include"rheology_f.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"ghostcell.h" 
-#include<algorithm>
+#include"ghostcell.h"
 
 void rheology_f::filltau(lexer *p, fdm *a, ghostcell *pgc)
 {
     LOOP
     {
-        phival = a->phi(i,j,k);
-        
-        switch(p->W111)
-        {
-        default:
-        case 1:
-            pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))*gravity;
-            break;
-        
-        case 2:
-            pressureval=0.5*((a->press(i,j,k)-p->pressgage)+(a->press(i+1,j,k)-p->pressgage));
-            break;
-        
-        case 3:
-            if(phival<p->W112*p->DXM)
-                pressureval=0.5*((a->press(i,j,k)-p->pressgage)+(a->press(i+1,j,k)-p->pressgage));
-            else
-                pressureval=phival*0.5*((a->press(i,j,k)-p->pressgage)+(a->press(i+1,j,k)-p->pressgage))*gravity;
-            break;
-        
-        case 4:
-            pressureval=0.25*((a->press(i,j,k)-p->pressgage)+(a->press(i+1,j,k)-p->pressgage)) + 0.5*phival*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))*gravity;
-            break;
-        
-        case 5:
-            if(p->count>=10)
-                pressureval=0.5*((a->press(i,j,k)-p->pressgage)+(a->press(i+1,j,k)-p->pressgage));
-            else
-                pressureval=phival*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))*gravity;
-            break;
-        }
+        pressurePhi(p,a,1,0,0,true);
         
         // Yield Stress
         yield_stress(p,a);
