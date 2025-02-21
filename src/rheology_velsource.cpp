@@ -350,7 +350,7 @@ void rheology_f::yieldStressGradient(lexer* p, fdm* a, int ii, int jj, int kk)
 
 void rheology_f::pressurePhi(lexer* p, fdm* a, int ii, int jj, int kk, bool pressureGauge)
 {
-    phival = 0.5*(a->phi(i,j,k)+a->phi(i+1,j,k));
+    phival = 0.5*(a->phi(i,j,k)+a->phi(i+ii,j+jj,k+kk));
 
     switch(p->W111)
     {
