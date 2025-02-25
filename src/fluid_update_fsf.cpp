@@ -39,7 +39,6 @@ fluid_update_fsf::~fluid_update_fsf()
 void fluid_update_fsf::start(lexer *p, fdm* a, ghostcell* pgc)
 {
 	double H_phi = 0.0;
-    double H_topo = 0.0;
     double factor = 1.0;
 	p->volume1=0.0;
 	p->volume2=0.0;
@@ -67,17 +66,8 @@ void fluid_update_fsf::start(lexer *p, fdm* a, ghostcell* pgc)
         else
 		    H_phi=0.5*(1.0 + a->phi(i,j,k)/(p->psi*factor) + (1.0/PI)*sin((PI*a->phi(i,j,k))/(p->psi*factor)));
 
-        if(a->topo(i,j,k)>(p->psi))
-            H_topo = 1.0;
-        else if(a->topo(i,j,k)<-(p->psi))
-            H_topo=0.0;
-        else
-            H_topo=0.5*(1.0 + a->topo(i,j,k)/(p->psi) + (1.0/PI)*sin((PI*a->topo(i,j,k))/(p->psi)));
-
-        ro_sediment = (p->S10==2?a->porosity(i,j,k):p->S24)*p->W1+(1-(p->S10==2?a->porosity(i,j,k):p->S24))*p->S22;
-
         // Construct floating body heaviside function if used
-        a->ro(i,j,k) = ro_water*(H_phi+H_topo-1) + ro_air*(1.0-H_phi) + (1.0-H_topo)*ro_sediment;
+        a->ro(i,j,k) = ro_water*H_phi + ro_air*(1.0-H_phi);
         a->visc(i,j,k) = visc_water*H_phi + visc_air*(1.0-H_phi);
             
         if(p->flagsf4[IJK]>0)

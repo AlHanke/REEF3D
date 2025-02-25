@@ -46,7 +46,6 @@ private:
 	int n;
 	const double dx,visc_air,visc_water,visc_body,ro_air,ro_water;
     double epsi,chi;
-    double ro_sediment;
 };
 
 #endif
