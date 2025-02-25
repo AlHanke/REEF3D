@@ -20,17 +20,17 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef FLUID_UPDATE_FSF_COMP_H_
+#define FLUID_UPDATE_FSF_COMP_H_
+
 #include"fluid_update.h"
 #include"increment.h"
 
-class fdm;
 class lexer;
+class fdm;
 class ghostcell;
 
 using namespace std;
-
-#ifndef FLUID_UPDATE_FSF_COMP_H_
-#define FLUID_UPDATE_FSF_COMP_H_
 
 class fluid_update_fsf_comp : public fluid_update, increment
 {
@@ -38,7 +38,7 @@ public:
     fluid_update_fsf_comp(lexer*, fdm*, ghostcell*);
 	virtual ~fluid_update_fsf_comp();
 
-	virtual void start(lexer*, fdm*, ghostcell*);
+	void start(lexer*, fdm*, ghostcell*) override;
 
 private:
     static int iocheck,iter;

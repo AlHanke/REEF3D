@@ -20,15 +20,12 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-class fdm;
-class lexer;
-class ghostcell;
-class field;
-
-using namespace std;
-
 #ifndef FLUID_UPDATE_H_
 #define FLUID_UPDATE_H_
+
+class lexer;
+class fdm;
+class ghostcell;
 
 class fluid_update
 {
@@ -36,8 +33,6 @@ public:
 
 	virtual void start(lexer*, fdm*, ghostcell*)=0;
 
-
 };
 
 #endif
-

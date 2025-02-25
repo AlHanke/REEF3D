@@ -26,8 +26,8 @@ Author: Hans Bihs
 #include"fluid_update.h"
 #include"increment.h"
 
-class fdm;
 class lexer;
+class fdm;
 class ghostcell;
 
 using namespace std;

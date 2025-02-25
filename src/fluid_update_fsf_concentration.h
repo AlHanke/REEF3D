@@ -20,18 +20,18 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#ifndef FLUID_UPDATE_FSF_CONCENTRATION_H_
+#define FLUID_UPDATE_FSF_CONCENTRATION_H_
+
 #include"fluid_update.h"
 #include"increment.h"
 
-class fdm;
 class lexer;
+class fdm;
 class ghostcell;
 class concentration;
 
 using namespace std;
-
-#ifndef FLUID_UPDATE_FSF_CONCENTRATION_H_
-#define FLUID_UPDATE_FSF_CONCENTRATION_H_
 
 class fluid_update_fsf_concentration : public fluid_update, increment
 {
@@ -39,7 +39,7 @@ public:
     fluid_update_fsf_concentration(lexer*, fdm*, ghostcell*, concentration*&);
 	virtual ~fluid_update_fsf_concentration();
 
-	virtual void start(lexer*, fdm*, ghostcell*);
+	void start(lexer*, fdm*, ghostcell*) override;
 
 private:
 
