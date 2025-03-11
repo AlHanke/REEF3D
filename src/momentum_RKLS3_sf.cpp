@@ -32,7 +32,6 @@ Authors: Hans Bihs, Tobias Martin
 #include"density_sf.h"
 #include"ediff2.h"
 #include"pressure.h"
-#include"poisson.h"
 #include"ioflow.h"
 #include"turbulence.h"
 #include"solver.h"
@@ -44,8 +43,7 @@ momentum_RKLS3_sf::momentum_RKLS3_sf
     ghostcell *pgc, 
     convection *pconvection, 
     diffusion *pdiffusion, 
-    pressure* ppressure, 
-    poisson* ppoisson,
+    pressure* ppressure,
     turbulence *pturbulence, 
     solver *psolver, 
     solver *ppoissonsolver, 
@@ -59,7 +57,6 @@ momentum_RKLS3_sf::momentum_RKLS3_sf
     pconvec=pconvection;
     pdiff=pdiffusion;
     ppress=ppressure;
-    ppois=ppoisson;
     pturb=pturbulence;
     psolv=psolver;
     ppoissonsolv=ppoissonsolver;

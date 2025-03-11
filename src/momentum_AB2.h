@@ -31,7 +31,6 @@ Author: Hans Bihs
 #include"convection.h"
 #include"diffusion.h"
 #include"pressure.h"
-#include"poisson.h"
 #include"turbulence.h"
 #include"solver.h"
 
@@ -40,7 +39,7 @@ using namespace std;
 class momentum_AB2 : public momentum, public bcmom
 {
 public:
-    momentum_AB2(lexer*, fdm*, convection*, diffusion*, pressure*, poisson*, turbulence*, solver*, solver*, ioflow*);
+    momentum_AB2(lexer*, fdm*, convection*, diffusion*, pressure*, turbulence*, solver*, solver*, ioflow*);
     virtual ~momentum_AB2();
     virtual void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*,vector<net*>&);
     virtual void utimesave(lexer*, fdm*, ghostcell*);
@@ -62,7 +61,6 @@ private:
     convection *pconvec;
     diffusion *pdiff;
     pressure *ppress;
-    poisson *ppois;
     turbulence *pturb;
     solver *psolv;
     solver *ppoissonsolv;

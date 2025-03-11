@@ -35,9 +35,7 @@ class diffusion;
 class pressure;
 class turbulence;
 class solver;
-class poisson;
 class fluid_update;
-class nhflow;
 class sixdof;
 class fsi;
 
@@ -46,12 +44,12 @@ using namespace std;
 class momentum_RK3CN : public momentum, public momentum_forcing, public bcmom
 {
 public:
-    momentum_RK3CN(lexer*, fdm*, convection*, diffusion*, pressure*, poisson*, turbulence*, solver*, solver*, ioflow*, fsi*);
+    momentum_RK3CN(lexer*, fdm*, convection*, diffusion*, pressure*, turbulence*, solver*, solver*, ioflow*, fsi*);
     virtual ~momentum_RK3CN();
     virtual void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*,vector<net*>&);
-        virtual void utimesave(lexer*, fdm*, ghostcell*);
-        virtual void vtimesave(lexer*, fdm*, ghostcell*);
-        virtual void wtimesave(lexer*, fdm*, ghostcell*);
+    virtual void utimesave(lexer*, fdm*, ghostcell*);
+    virtual void vtimesave(lexer*, fdm*, ghostcell*);
+    virtual void wtimesave(lexer*, fdm*, ghostcell*);
 
     field1 udiff,urk1,urk2,fx;
     field2 vdiff,vrk1,vrk2,fy;
@@ -63,11 +61,9 @@ private:
     void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-        void addirhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-        void addjrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-        void addkrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-    
-        void timecheck(lexer*,fdm*,ghostcell*,field&,field&,field&);
+    void addirhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
+    void addjrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
+    void addkrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     
     int gcval_u, gcval_v, gcval_w;
     double starttime;
@@ -75,12 +71,10 @@ private:
     convection *pconvec;
     diffusion *pdiff;
     pressure *ppress;
-    poisson *ppois;
     turbulence *pturb;
     solver *psolv;
     solver *ppoissonsolv;
     ioflow *pflow;
-    nhflow *pnh;
     fsi *pfsi;
 };
 

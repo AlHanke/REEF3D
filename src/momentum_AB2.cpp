@@ -28,12 +28,11 @@ Author: Hans Bihs
 #include"convection.h"
 #include"diffusion.h"
 #include"pressure.h"
-#include"poisson.h"
 #include"ioflow.h"
 #include"turbulence.h"
 #include"solver.h"
 
-momentum_AB2::momentum_AB2(lexer *p, fdm *a, convection *pconvection, diffusion *pdiffusion, pressure* ppressure, poisson* ppoisson,
+momentum_AB2::momentum_AB2(lexer *p, fdm *a, convection *pconvection, diffusion *pdiffusion, pressure* ppressure,
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver, ioflow *pioflow)
                                                     :bcmom(p),uab(p),vab(p),wab(p)
 {
@@ -44,7 +43,6 @@ momentum_AB2::momentum_AB2(lexer *p, fdm *a, convection *pconvection, diffusion 
     pconvec=pconvection;
     pdiff=pdiffusion;
     ppress=ppressure;
-    ppois=ppoisson;
     pturb=pturbulence;
     psolv=psolver;
     ppoissonsolv=ppoissonsolver;

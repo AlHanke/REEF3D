@@ -28,15 +28,13 @@ Author: Elyas Larkermani
 #include"convection.h"
 #include"diffusion.h"
 #include"pressure.h"
-#include"poisson.h"
 #include"ioflow.h"
 #include"turbulence.h"
 #include"solver.h"
 #include"fluid_update_rheology.h"
 #include"fluid_update_void.h"
-#include"nhflow.h"
 
-momentum_RK3CN::momentum_RK3CN(lexer *p, fdm *a, convection *pconvection, diffusion *pdiffusion, pressure* ppressure, poisson* ppoisson,
+momentum_RK3CN::momentum_RK3CN(lexer *p, fdm *a, convection *pconvection, diffusion *pdiffusion, pressure* ppressure,
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver, 
                                                     ioflow *pioflow, fsi *ppfsi)
                                                     :momentum_forcing(p),bcmom(p),udiff(p),vdiff(p),wdiff(p),urk1(p),urk2(p),vrk1(p),
@@ -49,7 +47,6 @@ momentum_RK3CN::momentum_RK3CN(lexer *p, fdm *a, convection *pconvection, diffus
     pconvec=pconvection;
     pdiff=pdiffusion;
     ppress=ppressure;
-    ppois=ppoisson;
     pturb=pturbulence;
     psolv=psolver;
     ppoissonsolv=ppoissonsolver;
@@ -61,8 +58,6 @@ momentum_RK3CN::momentum_RK3CN(lexer *p, fdm *a, convection *pconvection, diffus
     
     if(p->W90>0 && p->F300==0)
     pupdate = new fluid_update_rheology(p);
-    
-
 }
 
 momentum_RK3CN::~momentum_RK3CN()
