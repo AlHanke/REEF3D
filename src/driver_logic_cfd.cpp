@@ -428,26 +428,18 @@ void driver::logic_cfd()
 
     assign_density();
 
-//pressure scheme
+    //pressure scheme + poisson scheme for pressure
     if(p->D30==0)
-    ppress = new pressure_void();
-
-    if((p->D30==1 || p->D30==2 || p->D30==3) && p->F10==2)
-    ppress = new pjm_corr(p,pd);
-    
-    if((p->D30==1 || p->D30==2 || p->D30==3) && p->F10==1)
-    ppress = new pjm_nse(pd);
-
-    if(p->D30==10)
-    ppress = new pjm_hydrostatic(pd);
-
-
-//poisson scheme for pressure
-    if((p->D30==1 || p->D30==2 || p->D30==3) && p->F10==2)
-    ppois = new poisson_pcorr(pd);
-
-    if(p->D30<9 && p->F10==1)
-    ppois = new poisson_nse(pd);
+        ppress = new pressure_void();
+    else if(p->D30==1 || p->D30==2 || p->D30==3)
+    {
+        if(p->F10==1)
+            ppress = new pjm_nse(pd);
+        else if(p->F10==2)
+            ppress = new pjm_corr(p,pd);
+    }
+    else if(p->D30==10)
+        ppress = new pjm_hydrostatic(pd);
 
 //Solver
     if(p->j_dir==0)
