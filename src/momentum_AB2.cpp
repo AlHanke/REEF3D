@@ -158,7 +158,7 @@ void momentum_AB2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     //--------------------------------------------------------
     // pressure    
     pflow->pressure_io(p,a,pgc);
-    ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow,a->u,a->v,a->w,1.0);
+    ppress->start(p,a,pgc,pflow,ppoissonsolv,a->u,a->v,a->w,1.0);
 
     pflow->u_relax(p,a,pgc,a->u);
     pflow->v_relax(p,a,pgc,a->v);

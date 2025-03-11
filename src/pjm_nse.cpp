@@ -47,7 +47,7 @@ pjm_nse::~pjm_nse()
     delete ppois;
 }
 
-void pjm_nse::start(fdm* a,lexer*p, poisson*,solver* psolv, ghostcell* pgc, ioflow *pflow, field& uvel, field& vvel, field& wvel, double alpha)
+void pjm_nse::start(lexer* p, fdm* a, ghostcell* pgc, ioflow* pflow, solver* psolv, field& uvel, field& vvel, field& wvel, double alpha)
 {
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<".";
