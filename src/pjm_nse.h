@@ -52,6 +52,8 @@ public:
     virtual void wpgrad(lexer*,fdm*,slice&,slice&);
 
 private:
+    void rhs(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
+    void vel_setup(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
     double starttime,endtime;
     double teta;
     int count, gcval_press, check;
@@ -62,7 +64,4 @@ private:
     density *pd;
 };
 
-
-
 #endif
-

@@ -41,7 +41,7 @@ public:
     poisson_nse (lexer*, heat*&, concentration*&);
     virtual ~poisson_nse();
 
-    virtual void start(lexer *,fdm*,field&);
+    void start(lexer*,fdm*,field&) override;
 
 private:
 
@@ -51,8 +51,4 @@ private:
     density *pd;
 };
 
-
 #endif
-
-
-
