@@ -411,6 +411,7 @@ public:
     int F10,F30,F31,F32,F34,F35,F36,F40,F44,F46,F47,F49,F50,F150,F151;
     double F33,F39,F42,F43,F45;
     double F51,F52,F53,F54,F55,F56;
+    double F531;
     int F50_flag;
     double F57_1,F57_2,F57_3,F57_4;
     double F58_1,F58_2,F58_3,F58_4;

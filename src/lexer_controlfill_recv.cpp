@@ -717,6 +717,8 @@ void lexer::ctrlrecv()
     dd++;
     F53 = dctrl[dd];
     dd++;
+    F531 = dctrl[dd];
+    dd++;
     F54 = dctrl[dd];
     dd++;
     F55 = dctrl[dd];
