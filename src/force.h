@@ -35,77 +35,54 @@ class ghostcell;
 
 using namespace std;
 
-class force :  public increment
+class force : public increment
 {
 
 public:
     force(lexer*,fdm*,ghostcell*,int);
-    virtual ~force();
+    virtual ~force() = default;
     virtual void start(lexer*,fdm*,ghostcell*);
     virtual void ini(lexer*,fdm*,ghostcell*);
 
 private:
-    void triangulation(lexer*, fdm*, ghostcell*, field&);
-    void reconstruct(lexer*, fdm*, field&);
-    void addpoint(lexer*,fdm*,int,int);
-    void finalize(lexer*,fdm*);
+    void triangulation(lexer*,fdm*);
+    void reconstruct(lexer*,fdm*);
+    void addpoint(lexer*,int,int,int);
+    void force_calc(lexer*,fdm*,ghostcell*);
+    
+    void print_force(lexer*);
+    void print_ini(lexer*);
+    void print_vtp(lexer*,fdm*);
+    void pvtp(int);
+
+    int numtri,numvert;
+    int n,q;
+    int ccptcount,facount;
+    int is,ie,js,je,ks,ke;
+    int gcval_press;
+
+    const int ID;
+    const double interfac;
+    const double threshold;
+
+    double xs,xe,ys,ye,zs,ze;
+    double xm,ym,zm;
+
+    // force
+    double Fx,Fy,Fz;
+    double A_tot;
     
     int **tri, **facet, *confac, *numfac,*numpt;
     double **ccpt, **pt, *ls;
-    double   dV1,dV2,C1,C2,mi;
-    int numtri,numvert, numtri_mem, numvert_mem;
-    int count,countM,n,nn,q;
-    int ccptcount,facount,check;
-    int polygon_sum,polygon_num,vertice_num;
-    const double zero,interfac;
-    double epsi;
     
-
     fieldint5 vertice, nodeflag;
     field5 eta;
-    
-    
-    void force_calc(lexer*,fdm*,ghostcell*);
-    
-    void print_force(lexer*,fdm*,ghostcell*);
-    void print_ini(lexer*,fdm*,ghostcell*);
-    void print_vtp(lexer*,fdm*,ghostcell*);
-    void pvtp(lexer*,fdm*,ghostcell*);
-    void header(lexer*,fdm*,ghostcell*);
-    void name_iter(lexer*,fdm*,ghostcell*);
-    void name_time(lexer*,fdm*,ghostcell*);
-    void piecename(lexer*,fdm*,ghostcell*,int);
 
-    char name[100],pname[100],epsvar[100];
+    char name[100],pname[100];
     int iin,offset[100];
     float ffn;
-    int gcval_phi;
-    double printtime,printtime2;
-    int forceprintcount;
-    int gcval_press;
-    
-    // force
-    double Fx,Fy,Fz;
-    double A_tot,A;
-    
-    double x1,x2,x3,x4,y1,y2,y3,y4,z1,z2,z3,z4;
-    double xc,yc,zc;
-    double nx,ny,nz,norm;
-    double nxs,nys,nzs;
-    double uval,vval,wval,pval,viscosity,density,phival;
-    double du,dv,dw;
-    double at,bt,ct,st;
     
     ofstream fout;
-    
-    double xs,xe,ys,ye,zs,ze;
-    double xm,ym,zm;
-    int is,ie,js,je,ks,ke;
-    const int ID;
-    
-
 };
 
 #endif
-
-

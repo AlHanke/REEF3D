@@ -2690,9 +2690,7 @@
           <File Name="force_reconstruction.cpp"/>
           <File Name="force_pvtp.cpp"/>
           <File Name="force_print.cpp"/>
-          <File Name="force_header.cpp"/>
           <File Name="force_force.cpp"/>
-          <File Name="force_finalize.cpp"/>
           <File Name="force.cpp"/>
         </VirtualDirectory>
       </VirtualDirectory>

@@ -23,193 +23,160 @@ Author: Hans Bihs
 #include"force.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"ghostcell.h"
 
-void force::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
+void force::print_vtp(lexer* p, fdm* a)
 {
-    int polygon_num3,polygon_sum3;
     if(p->mpirank==0)
-    pvtp(p,a,pgc);
+        pvtp(p->M10);
     
-    name_iter(p,a,pgc);
+    snprintf(name,sizeof(name),"./REEF3D_SOLID/REEF3D-SOLID-%06i-%06i.vtp",ID,p->mpirank+1);
 
     ofstream result;
     result.open(name, ios::binary);
     //---------------------------------------------
     
-    polygon_num=facount;
+    const int polygon_num=facount;
     
-    polygon_sum=0;
+    int polygon_sum=0;
     for(n=0;n<polygon_num;++n)
-    polygon_sum+=numpt[n];
+        polygon_sum+=numpt[n];
     
-    polygon_sum3=polygon_num3=0;
-    for(n=0;n<polygon_num;++n)
-    if(numpt[n]==4)
-    {
-    polygon_sum3+=numpt[n];
-    ++polygon_num3;
-    }  
-    
-    vertice_num = ccptcount;
+    const int point_num = ccptcount;
     
     //---------------------------------------------
     n=0;
     offset[n]=0;
     ++n;
-    offset[n]=offset[n-1] + 4*(vertice_num)*3 + 4;
-    ++n;
     //Data
-    offset[n]=offset[n-1] + 4*vertice_num*3+ 4;
+    offset[n]=offset[n-1] + 3*4*point_num + sizeof(int);
     ++n;
-    offset[n]=offset[n-1] + 4*vertice_num+ 4;
+    offset[n]=offset[n-1] + 4*point_num + sizeof(int);
     ++n;
     //End Data
-    offset[n]=offset[n-1] + 4*polygon_sum + 4;
+    offset[n]=offset[n-1] + 3*4*point_num + sizeof(int);
     ++n;
-    offset[n]=offset[n-1] + 4*polygon_num+ 4;
+    offset[n]=offset[n-1] + 4*polygon_sum + sizeof(int);
     ++n;
-    offset[n]=offset[n-1] + 4*polygon_num+ 4;
+    offset[n]=offset[n-1] + 4*polygon_num + sizeof(int);
     ++n;
     //---------------------------------------------
-    
-    
 
-    result<<"<?xml version=\"1.0\"?>"<<endl;
-    result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
-    result<<"<PolyData>"<<endl;
-    result<<"<Piece NumberOfPoints=\""<<vertice_num<<"\" NumberOfPolys=\""<<polygon_num<<"\">"<<endl;
+    result<<"<?xml version=\"1.0\"?>\n";
+    result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
+    result<<"<PolyData>\n";
+    result<<"<Piece NumberOfPoints=\""<<point_num<<"\" NumberOfPolys=\""<<polygon_num<<"\">\n";
 
     n=0;
-    result<<"<Points>"<<endl;
-    result<<"<DataArray type=\"Float32\"  NumberOfComponents=\"3\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<PointData >\n";
+    result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"</Points>"<<endl;
-    
-    result<<"<PointData >"<<endl;
-    result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"pressure\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    ++n;
-    result<<"</PointData>"<<endl;
+    result<<"</PointData>\n";
 
-    result<<"<Polys>"<<endl;
-    result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<Points>\n";
+    result<<"<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
     ++n;
-    result<<"<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    ++n;
-    result<<"<DataArray type=\"Int32\"  Name=\"types\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-    result<<"</Polys>"<<endl;
-    
+    result<<"</Points>\n";
 
-    result<<"</Piece>"<<endl;
-    result<<"</PolyData>"<<endl;
+    result<<"<Polys>\n";
+    result<<"<DataArray type=\"Int32\" Name=\"connectivity\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
+    ++n;
+    result<<"<DataArray type=\"Int32\" Name=\"offsets\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
+    ++n;
+    result<<"</Polys>\n";
+
+    result<<"</Piece>\n";
+    result<<"</PolyData>\n";
 
 //----------------------------------------------------------------------------
 
-    result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
-
-//  XYZ
-    iin=4*vertice_num*3;
-    result.write((char*)&iin, sizeof (int));
-    for(n=0;n<vertice_num;++n)
+    result<<"<AppendedData encoding=\"raw\">\n_";
+    
+    //  Velocity
+    iin=3*4*point_num;
+    result.write((char*)&iin, sizeof(int));
+    for(n=0;n<point_num;++n)
     {
-    ffn=ccpt[n][0];
-    result.write((char*)&ffn, sizeof (float));
+        ffn=float(p->ccipol1(a->u,ccpt[n][0],ccpt[n][1],ccpt[n][2]));
+        result.write((char*)&ffn, sizeof(float));
 
-    ffn=ccpt[n][1];
-    result.write((char*)&ffn, sizeof (float));
+        ffn=float(p->ccipol2(a->v,ccpt[n][0],ccpt[n][1],ccpt[n][2]));
+        result.write((char*)&ffn, sizeof(float));
 
-    ffn=ccpt[n][2];
-    result.write((char*)&ffn, sizeof (float));
+        ffn=float(p->ccipol3(a->w,ccpt[n][0],ccpt[n][1],ccpt[n][2]));
+        result.write((char*)&ffn, sizeof(float));
     }
     
-//  Velocity
-    iin=4*vertice_num*3;
-    result.write((char*)&iin, sizeof (int));
-    for(n=0;n<vertice_num;++n)
+    //  Pressure
+    iin=4*point_num;
+    result.write((char*)&iin, sizeof(int));
+    for(n=0;n<point_num;++n)
     {
-    ffn=float(p->ccipol1(a->u,ccpt[n][0],ccpt[n][1],ccpt[n][2]));
-    result.write((char*)&ffn, sizeof (float));
-
-    ffn=float(p->ccipol2(a->v,ccpt[n][0],ccpt[n][1],ccpt[n][2]));
-    result.write((char*)&ffn, sizeof (float));
-
-    ffn=float(p->ccipol3(a->w,ccpt[n][0],ccpt[n][1],ccpt[n][2]));
-    result.write((char*)&ffn, sizeof (float));
-    }
-    
-    
-//  Pressure
-    iin=4*vertice_num;
-    result.write((char*)&iin, sizeof (int));
-    for(n=0;n<vertice_num;++n)
-    {
-    ffn=float(p->ccipol4(a->press,ccpt[n][0],ccpt[n][1],ccpt[n][2]) - p->pressgage);
-    result.write((char*)&ffn, sizeof (float));
+        ffn=float(p->ccipol4(a->press,ccpt[n][0],ccpt[n][1],ccpt[n][2]) - p->pressgage);
+        result.write((char*)&ffn, sizeof(float));
     }
 
-//  Connectivity POLYGON
+    //  XYZ
+    iin=3*4*point_num;
+    result.write((char*)&iin, sizeof(int));
+    for(n=0;n<point_num;++n)
+    {
+        ffn=ccpt[n][0];
+        result.write((char*)&ffn, sizeof(float));
+
+        ffn=ccpt[n][1];
+        result.write((char*)&ffn, sizeof(float));
+
+        ffn=ccpt[n][2];
+        result.write((char*)&ffn, sizeof(float));
+    }
+
+    //  Connectivity POLYGON
     iin=4*polygon_sum;
-    result.write((char*)&iin, sizeof (int));
+    result.write((char*)&iin, sizeof(int));
     for(n=0;n<polygon_num;++n)
     {
         if(numpt[n]==3)
         {
-        iin=facet[n][0];
-        result.write((char*)&iin, sizeof (int));
-        
-        iin=facet[n][1];
-        result.write((char*)&iin, sizeof (int));
-        
-        iin=facet[n][2];
-        result.write((char*)&iin, sizeof (int));
+            iin=facet[n][0];
+            result.write((char*)&iin, sizeof(int));
+            
+            iin=facet[n][1];
+            result.write((char*)&iin, sizeof(int));
+            
+            iin=facet[n][2];
+            result.write((char*)&iin, sizeof(int));
         }
         
         if(numpt[n]==4)
         {
-        iin=facet[n][0];
-        result.write((char*)&iin, sizeof (int));
-        
-        iin=facet[n][1];
-        result.write((char*)&iin, sizeof (int));
-        
-        iin=facet[n][3];
-        result.write((char*)&iin, sizeof (int));
-        
-        iin=facet[n][2];
-        result.write((char*)&iin, sizeof (int));
+            iin=facet[n][0];
+            result.write((char*)&iin, sizeof(int));
+            
+            iin=facet[n][1];
+            result.write((char*)&iin, sizeof(int));
+            
+            iin=facet[n][3];
+            result.write((char*)&iin, sizeof(int));
+            
+            iin=facet[n][2];
+            result.write((char*)&iin, sizeof(int));
         }
     }
 
-//  Offset of Connectivity
+    //  Offset of Connectivity
     iin=4*polygon_num;
-    result.write((char*)&iin, sizeof (int));
+    result.write((char*)&iin, sizeof(int));
     iin=0;
     for(n=0;n<polygon_num;++n)
     {
-    iin+= numpt[n];
-    result.write((char*)&iin, sizeof (int));
+        iin+= numpt[n];
+        result.write((char*)&iin, sizeof(int));
     }
 
-//  Cell types
-    iin=4*polygon_num;
-    result.write((char*)&iin, sizeof (int));
-    for(n=0;n<polygon_num;++n)
-    {
-    iin=7;
-    result.write((char*)&iin, sizeof (int));
-    }
-
-    result<<endl<<"</AppendedData>"<<endl;
+    result<<"\n</AppendedData>\n";
     result<<"</VTKFile>"<<endl;
 
     result.close();    
 }
-
-
-
-
-
-
-

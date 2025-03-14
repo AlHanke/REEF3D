@@ -21,71 +21,36 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"force.h"
-#include<string>
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
+#include<stdio.h>
 
-void force::pvtp(lexer* p, fdm* a, ghostcell* pgc)
-{
-    int num=0;
-
-    if(p->P15==1)
-    num = forceprintcount;
-
-    if(p->P15==2)
-    num = p->count;
-    
-    sprintf(name,"./REEF3D_SOLID/REEF3D-SOLID-%08i-%06i.pvtp",num,ID);
+void force::pvtp(int M10)
+{   
+    sprintf(name,"./REEF3D_SOLID/REEF3D-SOLID-%06i.pvtp",ID);
 
     ofstream result;
     result.open(name);
 
-    result<<"<?xml version=\"1.0\"?>"<<endl;
-    result<<"<VTKFile type=\"PPolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
-    result<<"<PPolyData  GhostLevel=\"0\">"<<endl;
-
-
-    result<<"<PPoints>"<<endl;
-    result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>"<<endl;
-    result<<"</PPoints>"<<endl;
+    result<<"<?xml version=\"1.0\"?>\n";
+    result<<"<VTKFile type=\"PPolyData\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
+    result<<"<PPolyData GhostLevel=\"0\">\n";
     
-    result<<"<PPointData>"<<endl;
-    result<<"<PDataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>"<<endl;
-    result<<"<PDataArray type=\"Float32\" Name=\"pressure\"/>"<<endl;
-    result<<"</PPointData>"<<endl;
-    
-    result<<"<Polys>"<<endl;
-    result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"/>"<<endl;
-    ++n;
-    result<<"<DataArray type=\"Int32\"  Name=\"offsets\"/>"<<endl;
-    ++n;
-    result<<"<DataArray type=\"Int32\"  Name=\"types\"/>"<<endl;
-    result<<"</Polys>"<<endl;
+    result<<"<PPointData>\n";
+    result<<"<PDataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>\n";
+    result<<"<PDataArray type=\"Float32\" Name=\"pressure\"/>\n";
+    result<<"</PPointData>\n";
 
-    for(n=0; n<p->M10; ++n)
+    result<<"<PPoints>\n";
+    result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>\n";
+    result<<"</PPoints>\n";
+
+    for(n=0; n<M10; ++n)
     {
-    piecename(p,a,pgc,n);
-    result<<"<Piece Source=\""<<pname<<"\"/>"<<endl;
+        snprintf(pname,sizeof(pname),"REEF3D-SOLID-%06i-%06i.vtp",ID,n+1);
+        result<<"<Piece Source=\""<<pname<<"\"/>\n";
     }
 
-    result<<"</PPolyData>"<<endl;
+    result<<"</PPolyData>\n";
     result<<"</VTKFile>"<<endl;
 
     result.close();
-}
-
-void force::piecename(lexer* p, fdm* a,  ghostcell* pgc, int n)
-{
-    int num=0;
-
-
-    if(p->P15==1)
-    num = forceprintcount;
-
-    if(p->P15==2)
-    num = p->count;
-
-    sprintf(pname,"REEF3D-SOLID-%08i-%i-%06i.vtp",num,ID,n+1);
-
 }
