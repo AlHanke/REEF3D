@@ -43,11 +43,11 @@ void driver::logic_ptf()
     if(p->mpirank==0)
     cout<<"creating objects"<<endl;
 
-    pini = new initialize(p);
+    pini = new initialize();
 
     if(p->mpirank==0)
     cout<<"starting ini"<<endl;
-    pini->start(a,p,pgc);
+    pini->start(p,a,pgc);
 
 // time stepping
     if(p->N48==0)
