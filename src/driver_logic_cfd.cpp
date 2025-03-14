@@ -43,11 +43,11 @@ Author: Hans Bihs
 void driver::logic_cfd()
 {
 	makegrid_cds();
-	pini = new initialize(p);
+	pini = new initialize();
 
     if(p->mpirank==0)
 	cout<<"starting ini"<<endl;
-	pini->start(a,p,pgc);
+	pini->start(p,a,pgc);
 
 	if(p->mpirank==0)
     cout<<"creating objects"<<endl;
