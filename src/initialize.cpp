@@ -51,16 +51,23 @@ void initialize::start(fdm* a, lexer* p, ghostcell* pgc)
 
     
     if(p->F40>0)
-    iniphi(a,p,pgc);
+    {
+        iniphi(p,a,pgc);
+
+        if(p->F70>0 || p->F71>0 ||p->F72>0)
+        iniphi_box(p,a,pgc);
+
+        if(p->F112>0)
+        iniphi_wedge(p,a);
+
+        iniphi_fields(p,a,pgc);
+    }
 
     if(p->F80>0 && p->F80<4)
     inivof(a,p,pgc);
     
     if(p->F80==4)
     inivofPLIC(a,p,pgc);  
-
-    if((p->F70>0 || p->F71>0 ||p->F72>0) && p->F40>0)
-    iniphi_box(p,a,pgc);
 
     if(p->F70>0 && p->F80>0)
     inivof_box(p,a,pgc);

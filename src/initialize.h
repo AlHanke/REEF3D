@@ -52,8 +52,10 @@ public:
 
 private:
     void inifdm(fdm*, lexer*, ghostcell*);
-    void iniphi(fdm*, lexer*,ghostcell*);
-    void iniphi_box(lexer*,fdm*,ghostcell*);    
+    void iniphi(lexer*,fdm*,ghostcell*);
+    void iniphi_box(lexer*,fdm*,ghostcell*);
+    void iniphi_wedge(lexer*,fdm*);
+    void iniphi_fields(lexer*,fdm*,ghostcell*);
     void inivof(fdm*, lexer*,ghostcell*);
     void inivof_box(lexer*,fdm*,ghostcell*);
     void inivofPLIC(fdm*, lexer*,ghostcell*);
