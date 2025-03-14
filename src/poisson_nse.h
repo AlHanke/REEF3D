@@ -26,20 +26,15 @@ Author: Hans Bihs
 #include"poisson.h"
 #include"increment.h"
 
-class heat;
-class concentration;
 class density;
-
-using namespace std;
-
 
 class poisson_nse : public poisson, public increment
 {
 
 public:
 
-    poisson_nse (lexer*, heat*&, concentration*&);
-    virtual ~poisson_nse();
+    poisson_nse (density*);
+    virtual ~poisson_nse() = default;
 
     void start(lexer*,fdm*,field&) override;
 
