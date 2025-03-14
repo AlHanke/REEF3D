@@ -55,19 +55,16 @@ void pjm_corr::start(fdm* a,lexer*p, poisson* ppois,solver* psolv, ghostcell* pg
     
     ppois->start(p,a,pcorr);
     
-        starttime=pgc->timer();
+    starttime=pgc->timer();
 
     psolv->start(p,a,pgc,pcorr,a->rhsvec,5);
     
-        endtime=pgc->timer();
+    endtime=pgc->timer();
     
     pgc->start4(p,pcorr,gcval_press);
     presscorr(p,a,uvel,vvel,wvel,pcorr,alpha);
     reference_start(p,a,pgc);
     pgc->start4(p,a->press,gcval_press);
-    
-    LOOP
-    a->test(i,j,k) = pcorr(i,j,k);
     
     ucorr(p,a,uvel,alpha);
     vcorr(p,a,vvel,alpha);
@@ -125,11 +122,11 @@ void pjm_corr::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &
 
     LOOP
     {
-    a->rhsvec.V[count] =  -(u.V[IJK] - u.V[Im1JK])/(alpha*p->dt*p->DXN[IP])
-                          -(v.V[IJK] - v.V[IJm1K])/(alpha*p->dt*p->DYN[JP])
-                          -(w.V[IJK] - w.V[IJKm1])/(alpha*p->dt*p->DZN[KP]);
-                           
-    ++count;
+        a->rhsvec.V[count] =  -(u.V[IJK] - u.V[Im1JK])/(alpha*p->dt*p->DXN[IP])
+                            -(v.V[IJK] - v.V[IJm1K])/(alpha*p->dt*p->DYN[JP])
+                            -(w.V[IJK] - w.V[IJKm1])/(alpha*p->dt*p->DZN[KP]);
+        
+        ++count;
     }
     
     pip=0;
@@ -164,7 +161,3 @@ void pjm_corr::ini(lexer*p,fdm* a, ghostcell *pgc)
 {
     reference_ini(p,a,pgc);
 }
-
-
-
-
