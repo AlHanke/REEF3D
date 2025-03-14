@@ -24,15 +24,16 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h" 
 #include"ghostcell.h"
-#include"poisson.h"
 #include"solver.h"
 #include"momentum.h"
 #include"ioflow.h"
 #include"density.h"
+#include"poisson_nse.h"
  
 pjm_nse::pjm_nse(density* ppd)
 {
     pd = ppd;
+    ppois = new poisson_nse(pd);
 
     gcval_press=40;  
     
@@ -43,9 +44,10 @@ pjm_nse::pjm_nse(density* ppd)
 
 pjm_nse::~pjm_nse()
 {
+    delete ppois;
 }
 
-void pjm_nse::start(fdm* a,lexer*p, poisson* ppois,solver* psolv, ghostcell* pgc, ioflow *pflow, field& uvel, field& vvel, field& wvel, double alpha)
+void pjm_nse::start(fdm* a,lexer*p, poisson*,solver* psolv, ghostcell* pgc, ioflow *pflow, field& uvel, field& vvel, field& wvel, double alpha)
 {
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<".";

@@ -27,6 +27,7 @@ Author: Hans Bihs
 #include"increment.h"
 
 class density;
+class poisson_nse;
 
 using namespace std;
 
@@ -56,6 +57,7 @@ private:
     int gcval_u, gcval_v, gcval_w;
     
     density *pd;
+    poisson_nse *ppois;
 };
 
 #endif
