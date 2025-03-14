@@ -38,8 +38,11 @@ public:
 
     double roface(lexer*,fdm*,int,int,int) override;
 private:
-
-    double H,roval,phival;
+    double H;
+    double roval;
+    double phival;
+    double fbpsi;
+    double factor;
 };
 
 #endif
