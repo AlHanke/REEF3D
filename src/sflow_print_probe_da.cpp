@@ -24,142 +24,122 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm2D.h"
 #include"ghostcell.h"
-#include"turbulence.h"
 #include<sys/stat.h>
 #include<sys/types.h>
+#include<string>
+#include<iostream>
 
 sflow_print_probe_da::sflow_print_probe_da(lexer *p, fdm2D *b, ghostcell *pgc) : probenum(p->P63)
 {
     p->Iarray(iloc,probenum);
-	p->Iarray(jloc,probenum);
-	p->Iarray(flag,probenum);
-	
-	// Create Folder
-	if(p->mpirank==0)
-	mkdir("./REEF3D_SFLOW_ProbePoint",0777);
-	
-	pout = new ofstream[probenum];
-	
+    p->Iarray(jloc,probenum);
+    p->Iarray(flag,probenum);
+    
     if(p->mpirank==0 && probenum>0)
     {
-		cout<<"probepoint_num: "<<probenum<<endl;
-		// open file
-		for(n=0;n<probenum;++n)
-		{
-		sprintf(name,"./REEF3D_SFLOW_ProbePoint/REEF3D-SFLOW-Probe-Point-%i.dat",n+1);
-		
-		pout[n].open(name);
+        cout<<"probepoint_num: "<<probenum<<endl;
 
-	    pout[n]<<"Depth Averaged Point Probe ID:  "<<n<<endl<<endl;
-		pout[n]<<"x_coord     y_coord"<<endl;
-		
-		pout[n]<<n+1<<"\t "<<p->P63_x[n]<<"\t "<<p->P63_y[n]<<endl;
+        // Create Folder
+        mkdir("./REEF3D_SFLOW_ProbePoint",0777);
 
-		pout[n]<<endl<<endl;
-		
-		pout[n]<<"t \t Um \t Vm \t Wm \t Pm \t eta"<<endl;
-		}
+        pout = new ofstream[probenum];
+        // write file headers
+        for(int n=0;n<probenum;++n)
+        {
+            char name[100];
+            sprintf(name,"./REEF3D_SFLOW_ProbePoint/REEF3D-SFLOW-Probe-Point-%i.dat",n+1);
+            
+            pout[n].open(name);
+
+            pout[n]<<"Depth Averaged Point Probe ID:  "<<n<<"\n\n";
+            pout[n]<<"x_coord     y_coord\n";
+            
+            pout[n]<<n+1<<"\t "<<p->P63_x[n]<<"\t "<<p->P63_y[n]<<"\n\n\n";
+            
+            pout[n]<<"t \t Um \t Vm \t Wm \t Pm \t eta\n";
+
+            pout[n].close();
+        }
     }
-	
-    ini_location(p,b,pgc);
     
-    // close
-    if(p->mpirank==0)
-    for(n=0;n<probenum;++n)
-    pout[n].close();
+    ini_location(p);
 }
 
 sflow_print_probe_da::~sflow_print_probe_da()
 {
-	for(n=0;n<probenum;++n)
-    pout[n].close();
+    delete[] iloc;
+    delete[] jloc;
+    delete[] flag;
+    
+    delete[] pout;
 }
 
 void sflow_print_probe_da::start(lexer *p, fdm2D *b, ghostcell *pgc)
 {
-	double xp,yp;
-    
-    
-    
-    // open
-    if(p->mpirank==0)
-    for(n=0;n<probenum;++n)
-    {
-    sprintf(name,"./REEF3D_SFLOW_ProbePoint/REEF3D-SFLOW-Probe-Point-%i.dat",n+1);
-        
-    pout[n].open(name, std::ofstream::out | std::ofstream::app);
-    }
-	
-    
     // find values and write
-	for(n=0;n<probenum;++n)
-	{
-	uval=vval=wval=pval=eval=-1.0e20;
-	
-		if(flag[n]>0)
-		{
-		xp=p->P63_x[n];
-		yp=p->P63_y[n];
+    for(int n=0;n<probenum;++n)
+    {
+        double uval = -1.0e20;
+        double vval = -1.0e20;
+        double wval = -1.0e20;
+        double pval = -1.0e20;
+        double eval = -1.0e20;
+    
+        if(flag[n]>0)
+        {
+            double xp =p->P63_x[n];
+            double yp = p->P63_y[n];
+            
+            uval = p->ccslipol1(b->P, xp, yp);
+            vval = p->ccslipol2(b->Q, xp, yp);
+            wval = p->ccslipol4(b->ws,xp,yp);
+            pval = p->ccslipol4(b->press,xp,yp);
+            eval = p->ccslipol4(b->eta,xp,yp);
+        }
+    
+        uval = pgc->globalmax(uval);
+        vval = pgc->globalmax(vval);
+        wval = pgc->globalmax(wval);
+        pval = pgc->globalmax(pval);
+        eval = pgc->globalmax(eval);
+    
+        if(p->mpirank==0)
+        {
+            std::string name = "./REEF3D_SFLOW_ProbePoint/REEF3D-SFLOW-Probe-Point-" + std::to_string(n + 1) + ".dat";
+            pout[n].open(name, std::ofstream::out | std::ofstream::app);
+            pout[n]<<setprecision(9)<<p->simtime<<" \t "<<uval<<" \t "<<vval<<" \t "<<wval<<" \t "<<pval<<" \t "<<eval<<"\n";
+            pout[n].close();
+        }
+    }
+}
+
+void sflow_print_probe_da::ini_location(lexer *p)
+{
+    for(int n=0;n<probenum;++n)
+    {
+        bool check=false;
         
-		uval = p->ccslipol1(b->P, xp, yp);
-		vval = p->ccslipol2(b->Q, xp, yp);
-		wval = p->ccslipol4(b->ws,xp,yp); 
-		pval = p->ccslipol4(b->press,xp,yp);
-        eval = p->ccslipol4(b->eta,xp,yp); 
-		}
-	
-	uval=pgc->globalmax(uval);
-	vval=pgc->globalmax(vval);
-	wval=pgc->globalmax(wval);
-	pval=pgc->globalmax(pval);
-    eval=pgc->globalmax(eval);
-	
-	if(p->mpirank==0)
-	pout[n]<<setprecision(9)<<p->simtime<<" \t "<<uval<<" \t "<<vval<<" \t "<<wval<<" \t "<<pval<<" \t "<<eval<<endl;
-	}
-    
-    // close
-    if(p->mpirank==0)
-    for(n=0;n<probenum;++n)
-    pout[n].close();
-}
+        iloc[n]=p->posc_i(p->P63_x[n]);
+        
+        if(p->j_dir==0)
+            jloc[n]=0;
+        else if(p->j_dir==1)
+            jloc[n]=p->posc_j(p->P63_y[n]);
+        
+        if(iloc[n]>=0 && iloc[n]<p->knox)
+            if(jloc[n]>=0 && jloc[n]<p->knoy)
+                check=true;
+        
+        if(check)
+        {
+            int i = iloc[n];
+            int j = jloc[n];
+            
+            if(p->flagslice4[IJ]<0)
+                check=false;
+        }
 
-void sflow_print_probe_da::write(lexer *p, fdm2D *b, ghostcell *pgc)
-{
-}
-
-void sflow_print_probe_da::ini_location(lexer *p, fdm2D *b, ghostcell *pgc)
-{
-    int check;
-
-    for(n=0;n<probenum;++n)
-    {
-    check=0;
-    
-    iloc[n]=p->posc_i(p->P63_x[n]);
-    
-    if(p->j_dir==0)
-    jloc[n]=0;
-  
-    if(p->j_dir==1)
-    jloc[n]=p->posc_j(p->P63_y[n]);
-    
-    if(iloc[n]>=0 && iloc[n]<p->knox)
-    if(jloc[n]>=0 && jloc[n]<p->knoy)
-    check=1;
-    
-    if(check==1)
-    {
-    i = iloc[n];
-    j = jloc[n];
-    
-    if(p->flagslice4[IJ]<0)
-    check=0;
-    }
-
-    if(check==1)
-    flag[n]=1;
+        if(check)
+            flag[n]=1;
     }
 }
-
-

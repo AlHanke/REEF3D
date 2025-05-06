@@ -23,39 +23,28 @@ Author: Hans Bihs
 #ifndef SFLOW_PRINT_PROBE_DA_H_
 #define SFLOW_PRINT_PROBE_DA_H_
 
-#include"boundarycheck.h"
-#include<iostream>
 #include<fstream>
 
 class lexer;
 class fdm2D;
 class ghostcell;
-class field;
-class turbulence;
 
 using namespace std;
 
-class sflow_print_probe_da : public boundarycheck
+class sflow_print_probe_da
 {
 public:
     sflow_print_probe_da(lexer*,fdm2D*,ghostcell*);
-	virtual ~sflow_print_probe_da();
+    virtual ~sflow_print_probe_da();
 
-	void start(lexer*, fdm2D*, ghostcell*);
-
+    void start(lexer*, fdm2D*, ghostcell*);
 
 private:
-    void ini_location(lexer*, fdm2D*, ghostcell*);
-    void write(lexer*, fdm2D*, ghostcell*);
-	char name[100];
+    void ini_location(lexer*);
 
     int *iloc,*jloc,*flag;
-    int n,q;
-	const int probenum;
+    const int probenum;
     ofstream *pout;
-	
-	double uval,vval,wval,pval,eval;
-
 };
 
 #endif
