@@ -23,19 +23,15 @@ Author: Hans Bihs
 #ifndef MULTIPHASE_FLUID_UPDATE_H_
 #define MULTIPHASE_FLUID_UPDATE_H_
 
-class fdm;
 class lexer;
+class fdm;
 class ghostcell;
 class field;
-
-using namespace std;
 
 class multiphase_fluid_update
 {
 public:
-
     virtual void start(lexer*, fdm*, ghostcell*,field&,field&)=0;
-
 };
 
 #endif
