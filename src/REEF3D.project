@@ -465,7 +465,6 @@
       <VirtualDirectory Name="Multiphase">
         <VirtualDirectory Name="Fluid Update">
           <File Name="multiphase_fluid_update_rheology.h"/>
-          <File Name="multiphase_fluid_update_f.h"/>
           <File Name="multiphase_fluid_update.h"/>
         </VirtualDirectory>
         <File Name="multiphase.h"/>
@@ -1725,7 +1724,6 @@
       <VirtualDirectory Name="Multiphase">
         <VirtualDirectory Name="Fluid Update">
           <File Name="multiphase_fluid_update_rheology.cpp"/>
-          <File Name="multiphase_fluid_update_f.cpp"/>
         </VirtualDirectory>
         <File Name="multiphase_v.cpp"/>
         <File Name="multiphase_update.cpp"/>

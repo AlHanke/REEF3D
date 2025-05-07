@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"multiphase_f.h"
 #include"freesurface_header.h"
-#include"multiphase_fluid_update_f.h"
 #include"multiphase_fluid_update_rheology.h"
 #include"lexer.h"
 #include"heat.h"
@@ -35,6 +34,7 @@ void multiphase_f::logic(lexer *p, fdm *a, ghostcell *pgc)
 {
     pconc = new concentration_void(p,a,pgc);
     pheat = new heat_void(p,a,pgc);
+    pupdate = new multiphase_fluid_update_rheology(p);
     pwsf1 = new print_wsf(p,a,pgc,1);
     pwsf2 = new print_wsf(p,a,pgc,2);
     
@@ -71,9 +71,4 @@ void multiphase_f::logic(lexer *p, fdm *a, ghostcell *pgc)
         ppls = new particle_pls_void();
     else if(p->F31==1 || p->F31==2)
         ppls = new particle_pls(p,a,pgc);
-
-    if(p->W90==0)
-        pupdate = new multiphase_fluid_update_f(p,a,pgc);
-    else if(p->W90>0)
-        pupdate = new multiphase_fluid_update_rheology(p);
 }

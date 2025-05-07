@@ -431,7 +431,7 @@ public:
     double *F113_xs,*F113_xe,*F113_ys,*F113_ye,*F113_zs,*F113_ze;
     
     int F300,F305,F310,F350;
-	double F321,F322,F323,F360,F361,F362;
+	double F360,F361,F362;
     int F363;
     double *F363_xs,*F363_xe,*F363_ys,*F363_ye,*F363_zs,*F363_ze;
 	int F369,F370,F371,F374,F375,F378,F379;

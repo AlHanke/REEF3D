@@ -1040,15 +1040,6 @@ void lexer::read_control()
 				case 310: control>>F310;
 						 clear(c,numint);
 						 break;
-				case 321: control>>F321;
-						 clear(c,numint);
-						 break;
-				case 322: control>>F322;
-						 clear(c,numint);
-						 break;
-				case 323: control>>F323;
-						 clear(c,numint);
-						 break;
 				case 350: control>>F350;
 						 clear(c,numint);
 						 break;
