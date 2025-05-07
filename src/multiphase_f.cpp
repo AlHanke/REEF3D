@@ -21,31 +21,24 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"multiphase_f.h"
-#include"freesurface_header.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
-#include"convection.h"
-#include"solver.h"
-#include"ioflow.h"
-#include"reini.h"
-#include"picard.h"
-#include"multiphase_fluid_update.h"
-#include"picard_f.h"
-#include"picard_lsm.h"
-#include"picard_void.h"
-#include"print_wsf.h"
+#include"freesurface.h"
 
 multiphase_f::multiphase_f(lexer* p, fdm *a, ghostcell* pgc) : ls1(p), ls2(p)
 {
     logic(p,a,pgc);
-
-    pwsf1=new print_wsf(p,a,pgc,1);
-    pwsf2=new print_wsf(p,a,pgc,2);
 }
 
 multiphase_f::~multiphase_f()
 {
+    delete pconc;
+    delete pheat;
+    delete pupdate;
+    delete pfsf1;
+    delete pfsf2;
+    delete pwsf1;
+    delete pwsf2;
+    delete preini;
+    delete ppls;
 }
 
 void multiphase_f::start(lexer *p, fdm *a, ghostcell *pgc, convection *pmpconvec, solver *psolv, ioflow *pflow, reini* preini2, particle_corr* ppls, printer *pprint)

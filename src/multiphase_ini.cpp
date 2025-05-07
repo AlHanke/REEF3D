@@ -34,36 +34,40 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
     double xc,yc,zc,r;
 
     LOOP
-    ls1(i,j,k)=-1.0;
+    {
+        ls1(i,j,k)=-1.0;
+        ls2(i,j,k)=-1.0;
+    }
 
     pgc->start4(p,ls1,50);
-
-    LOOP
-    ls2(i,j,k)=-1.0;
-
     pgc->start4(p,ls2,50);
 
-    
-// LS1
+
+    // LS1
+        // xdir
     if(p->F360>-1.0e20)
     {
-    LOOP
-    ls1(i,j,k)=p->F360-p->pos_x();
+        LOOP
+            ls1(i,j,k)=p->F360-p->pos_x();
     }
-
+        // ydir
     if(p->F361>-1.0e20)
     {
-    LOOP
-    ls1(i,j,k)=p->F361-p->pos_y();
+        LOOP
+            ls1(i,j,k)=p->F361-p->pos_y();
     }
-
+        // zdir
     if(p->F362>-1.0e20)
     {
-    LOOP
-    ls1(i,j,k)=p->F362-p->pos_z();
+        LOOP
+            ls1(i,j,k)=p->F362-p->pos_z();
     }
-
-    
+        // wedge z-direction
+    for(int qn=0; qn<p->F363; ++qn)
+    {
+        ini_wedge(p,ls1,p->F363_xs[qn],p->F363_xe[qn],p->F363_ys[qn],p->F363_ye[qn],p->F363_zs[qn],p->F363_ze[qn]);
+    }
+        // tiltbox
     for(qn=0;qn<p->F369;++qn)
     {
         double xp1,zp1,xp2,zp2,xp3,zp3,xp4,zp4,x0,z0;
@@ -93,18 +97,18 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
 
         LOOP
         {
-        xc = p->pos_x();
-        zc = p->pos_z();
+            xc = p->pos_x();
+            zc = p->pos_z();
 
-        // g1 : P1 - P2
-        xr = fz(xp1,zp1,xp2,zp2,zc);
-        zr = fx(xp1,zp1,xp2,zp2,xc);
+            // g1 : P1 - P2
+            xr = fz(xp1,zp1,xp2,zp2,zc);
+            zr = fx(xp1,zp1,xp2,zp2,xc);
 
-        if(xc<xr && zc>zr)
-        {
-            // g2 : P4 - P3
-            xr = fz(xp4,zp4,xp3,zp3,zc);
-            zr = fx(xp4,zp4,xp3,zp3,xc);
+            if(xc<xr && zc>zr)
+            {
+                // g2 : P4 - P3
+                xr = fz(xp4,zp4,xp3,zp3,zc);
+                zr = fx(xp4,zp4,xp3,zp3,xc);
 
                 if(xc>xr && zc<zr)
                 {
@@ -112,28 +116,26 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
                     xr = fz(xp3,zp3,xp2,zp2,zc);
                     zr = fx(xp3,zp3,xp2,zp2,xc);
 
-                        if(xc<xr && zc<zr)
+                    if(xc<xr && zc<zr)
+                    {
+                        // g4 : P4 - P1
+                        xr = fz(xp4,zp4,xp1,zp1,zc);
+                        zr = fx(xp4,zp4,xp1,zp1,xc);
+
+                        if(xc>xr && zc>zr)
                         {
-                            // g4 : P4 - P1
-                            xr = fz(xp4,zp4,xp1,zp1,zc);
-                            zr = fx(xp4,zp4,xp1,zp1,xc);
+                            ls1(i,j,k)=1;
 
-                                if(xc>xr && zc>zr)
-                                {
-                                    ls1(i,j,k)=1;
-
-                                    a->u(i,j,k) = cos(alpha)*vel;
-                                    a->w(i,j,k) = -sin(alpha)*vel;
-                                }
+                            a->u(i,j,k) = cos(alpha)*vel;
+                            a->w(i,j,k) = -sin(alpha)*vel;
                         }
+                    }
                 }
+            }
         }
-        }
+    }
 
-            
-        }
-
-// F370
+        // box
     for(qn=0;qn<p->F370;++qn)
     {
         istart = p->posc_i(p->F370_xs[qn]);
@@ -146,8 +148,8 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
         kend = p->posc_k(p->F370_ze[qn]);
 
         LOOP
-        if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend)
-        ls1(i,j,k)=1;
+            if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend)
+                ls1(i,j,k)=1;
     }
 
     for(qn=0;qn<p->F371;++qn)
@@ -161,69 +163,69 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
         kstart = p->posc_k(p->F371_zs[qn]);
         kend = p->posc_k(p->F371_ze[qn]);
 
-
         LOOP
-        if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend)
-        ls1(i,j,k)=-1.0;
+            if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend)
+                ls1(i,j,k)=-1.0;
     }
 
-// F374
+    // F374
     for(qn=0;qn<p->F374;++qn)
     {
-
         xc = p->F374_xc[qn] - p->originx;
         zc = p->F374_zc[qn] - p->originz;
 
         LOOP
         {
-        r = sqrt( pow(p->XP[IP]-xc,2.0)+pow(p->ZP[KP]-zc,2.0));
+            r = sqrt(pow(p->XP[IP]-xc,2.0)+pow(p->ZP[KP]-zc,2.0));
 
-        if(r<=p->F374_r[qn])
-        ls1(i,j,k)=1.0;
-
-        if(r>p->F374_r[qn])
-        ls1(i,j,k)=-1.0;
+            if(r<=p->F374_r[qn])
+                ls1(i,j,k)=1.0;
+            else
+                ls1(i,j,k)=-1.0;
         }
     }
 
-// F375
+    // F375
     for(qn=0;qn<p->F375;++qn)
     {
-
         xc = p->F375_xc[qn] - p->originx;
         zc = p->F375_zc[qn] - p->originz;
 
         LOOP
         {
-        r = sqrt( pow(p->XP[IP]-xc,2.0)+pow(p->ZP[KP]-zc,2.0));
+            r = sqrt( pow(p->XP[IP]-xc,2.0)+pow(p->ZP[KP]-zc,2.0));
 
-        if(r<=p->F375_r[qn])
-        ls1(i,j,k)=-1.0;
-
-        if(r>p->F375_r[qn])
-        ls1(i,j,k)=1.0;
+            if(r<=p->F375_r[qn])
+                ls1(i,j,k)=-1.0;
+            else
+                ls1(i,j,k)=1.0;
         }
     }
 
-// LS2
+    // LS2
     if(p->F380>-1.0e20)
     {
-    LOOP
-    ls2(i,j,k)=p->F380-p->pos_x();
+        LOOP
+            ls2(i,j,k)=p->F380-p->pos_x();
     }
 
     if(p->F381>-1.0e20)
     {
-    LOOP
-    ls2(i,j,k)=p->F381-p->pos_y();
+        LOOP
+            ls2(i,j,k)=p->F381-p->pos_y();
     }
 
     if(p->F382>-1.0e20)
     {
-    LOOP
-    ls2(i,j,k)=p->F382-p->pos_z();
+        LOOP
+            ls2(i,j,k)=p->F382-p->pos_z();
     }
 
+    // Wedge z-direction
+    for(int qn=0; qn<p->F383; ++qn)
+    {
+        ini_wedge(p,ls2,p->F383_xs[qn],p->F383_xe[qn],p->F383_ys[qn],p->F383_ye[qn],p->F383_zs[qn],p->F383_ze[qn]);
+    }
 
     for(qn=0;qn<p->F390;++qn)
     {
@@ -236,10 +238,9 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
         kstart = p->posc_k(p->F390_zs[qn]);
         kend = p->posc_k(p->F390_ze[qn]);
 
-
         LOOP
-        if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend)
-        ls2(i,j,k)=1;
+            if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend)
+                ls2(i,j,k)=1;
     }
 
     for(qn=0;qn<p->F391;++qn)
@@ -253,63 +254,42 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
         kstart = p->posc_k(p->F391_zs[qn]);
         kend = p->posc_k(p->F391_ze[qn]);
 
-
         LOOP
-        if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend)
-        ls2(i,j,k)=-1;
+            if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend)
+                ls2(i,j,k)=-1;
     }
 
     // F394
     for(qn=0;qn<p->F394;++qn)
     {
-
         xc = p->F394_xc[qn] - p->originx;
         zc = p->F394_zc[qn] - p->originz;
 
         LOOP
         {
-        r = sqrt( pow(p->XP[IP]-xc,2.0)+pow(p->ZP[KP]-zc,2.0));
+            r = sqrt( pow(p->XP[IP]-xc,2.0)+pow(p->ZP[KP]-zc,2.0));
 
-        if(r<=p->F394_r[qn])
-        ls2(i,j,k)=1.0;
-
-        if(r>p->F394_r[qn])
-        ls2(i,j,k)=-1.0;
+            if(r<=p->F394_r[qn])
+                ls2(i,j,k)=1.0;
+            else
+                ls2(i,j,k)=-1.0;
         }
     }
 
-// F395
+    // F395
     for(qn=0;qn<p->F395;++qn)
     {
-
         xc = p->F395_xc[qn] - p->originx;
         zc = p->F395_zc[qn] - p->originz;
 
         LOOP
         {
-        r = sqrt( pow(p->XP[IP]-xc,2.0)+pow(p->ZP[KP]-zc,2.0));
+            r = sqrt( pow(p->XP[IP]-xc,2.0)+pow(p->ZP[KP]-zc,2.0));
 
-        if(r<=p->F395_r[qn])
-        ls2(i,j,k)=-1.0;
-
-        if(r>p->F395_r[qn])
-        ls2(i,j,k)=1.0;
-        }
-    }
-
-    // F374
-    for(qn=0;qn<p->F374;++qn)
-    {
-
-        xc = p->F374_xc[qn] - p->originx;
-        zc = p->F374_zc[qn] - p->originz;
-
-        LOOP
-        {
-        r = sqrt( pow(p->XP[IP]-xc,2.0)+pow(p->ZP[KP]-zc,2.0));
-
-        if(r<=p->F374_r[qn])
-        ls2(i,j,k)=-1.0;
+            if(r<=p->F395_r[qn])
+                ls2(i,j,k)=-1.0;
+            else
+                ls2(i,j,k)=1.0;
         }
     }
 
@@ -324,20 +304,33 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
 
 double multiphase_f::fx(double x1, double z1, double x2, double z2, double x)
 {
-    double f;
-
-    f = ((z2-z1)/(x2-x1))*(x-x1) + z1;
+    double f = ((z2-z1)/(x2-x1))*(x-x1) + z1;
 
     return f;
-
 }
 
 double multiphase_f::fz(double x1, double z1, double x2, double z2, double z)
 {
-    double f;
-
-    f = ((x2-x1)/(z2-z1))*(z-z1) + x1;
+    double f = ((x2-x1)/(z2-z1))*(z-z1) + x1;
 
     return f;
+}
 
+void multiphase_f::ini_wedge(lexer* p, field& f, double xs, double xe, double ys, double ye, double zs, double ze)
+{
+    double slope=(ze-zs)/(xe-xs);
+    double z = zs;
+    if(ze<zs)
+    {
+        std::swap(ze,zs);
+        z = ze;
+    }
+
+    LOOP
+        if(p->pos_x()>=xs && p->pos_x()<xe
+            && p->pos_y()>=ys && p->pos_y()<ye
+            && p->pos_z()>=zs && p->pos_z()<slope*(p->pos_x()-xs)+z)
+        {
+            f(i,j,k)=1.0;
+        }
 }

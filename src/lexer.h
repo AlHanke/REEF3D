@@ -443,6 +443,8 @@ public:
 
     int F300,F305,F310,F350;
     double F321,F322,F323,F360,F361,F362;
+    int F363;
+    double *F363_xs,*F363_xe,*F363_ys,*F363_ye,*F363_zs,*F363_ze;
     int F369,F370,F371,F374,F375,F378,F379;
     double *F369_x,*F369_z,*F369_a,*F369_s,*F369_l,*F369_v;
     double *F370_xs, *F370_xe, *F370_ys, *F370_ye, *F370_zs, *F370_ze;
@@ -452,6 +454,8 @@ public:
     double *F378_xc, *F378_yc,*F378_zc, *F378_r;
     double *F379_xc, *F379_yc,*F379_zc, *F379_r;
     double F380,F381,F382;
+    int F383;
+    double *F383_xs,*F383_xe,*F383_ys,*F383_ye,*F383_zs,*F383_ze;
     int F390,F391,F394,F395,F398,F399;
     double *F390_xs, *F390_xe, *F390_ys, *F390_ye, *F390_zs, *F390_ze;
     double *F391_xs, *F391_xe, *F391_ys, *F391_ye, *F391_zs, *F391_ze;
