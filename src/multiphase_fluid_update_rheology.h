@@ -36,20 +36,15 @@ public:
     multiphase_fluid_update_rheology(lexer*);
     virtual ~multiphase_fluid_update_rheology();
 
-	virtual void start(lexer*, fdm*, ghostcell*,field&,field&);
+    void start(lexer*, fdm*, ghostcell*,field&,field&) override;
 
 private:
-    rheology *prheo;
-    
-    static int iocheck,iter;
-    int gcval_ro,gcval_visc;
-	int n;
-	const double dx,visc3,visc2,ro1,ro2,ro3;
+    const int gcval_ro,gcval_visc;
+    const double ro1;
     double visc1;
-	double eps12,eps13,eps23;
-    double epsi;
+    const double ro2,visc2;
+    const double ro3,visc3;
+    rheology *prheo;
 };
 
 #endif
-
-
