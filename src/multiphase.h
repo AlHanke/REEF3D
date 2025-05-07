@@ -23,31 +23,26 @@ Author: Hans Bihs
 #ifndef MULTIPHASE_H_
 #define MULTIPHASE_H_
 
-class fdm;
 class lexer;
+class fdm;
+class ghostcell;
 class convection;
 class solver;
-class ghostcell;
 class ioflow;
 class reini;
-class printer;
-class field;
 class particle_corr;
+class printer;
 
 #include<fstream>
-
 using namespace std;
 
 class multiphase
 {
 public:
-
     virtual void start(lexer*,fdm*,ghostcell*,convection*,solver*,ioflow*,reini*,particle_corr*,printer*)=0;
     virtual void ini(lexer*,fdm*,ghostcell*,ioflow*,printer*,convection*,solver*)=0;
     virtual void update(lexer*,fdm*,ghostcell*)=0;
-
-    virtual void print_3D(lexer*, fdm*, ghostcell*,ofstream&)=0;
-    virtual void print_file(lexer*, fdm*, ghostcell*)=0;
+    
     virtual double ls1val(int,int,int)=0;
     virtual double ls2val(int,int,int)=0;
     virtual double ccipol_ls1val(lexer*,ghostcell*,double,double,double)=0;
@@ -55,9 +50,12 @@ public:
     virtual void ls1get(int,int,int,double)=0;
     virtual void ls2get(int,int,int,double)=0;
 
-    virtual void name_ParaView_parallel(lexer*, fdm*, ghostcell*,ofstream&)=0;
-    virtual void name_ParaView(lexer*, fdm*, ghostcell*,ofstream&, int*, int &)=0;
+    virtual void name_ParaView_parallel(lexer*, fdm*, ghostcell*, ofstream&)=0;
+    virtual void name_ParaView(lexer*, fdm*, ghostcell*, ofstream&, int*, int&)=0;
     virtual void offset_ParaView(lexer*, int*, int &)=0;
+    virtual void print_3D(lexer*,fdm*,ghostcell*,ofstream&)=0;
+    
+    virtual void print_file(lexer*,fdm*,ghostcell*)=0;
 };
 
 #endif

@@ -23,42 +23,44 @@ Author: Hans Bihs
 #ifndef MULTIPHASE_V_H_
 #define MULTIPHASE_V_H_
 
-class fdm;
-class lexer;
-class convection;
-class solver;
-class ghostcell;
-class ioflow;
-class reini;
-class printer;
-class field;
+#include<fstream>
 
 #include"multiphase.h"
-#include<fstream>
+
+class lexer;
+class fdm;
+class ghostcell;
+class convection;
+class solver;
+class ioflow;
+class reini;
+class particle_corr;
+class printer;
 
 using namespace std;
 
 class multiphase_v : public multiphase
 {
 public:
-    multiphase_v();
-    virtual ~multiphase_v();
-    virtual void start(lexer*,fdm*,ghostcell*,convection*,solver*,ioflow*,reini*,particle_corr*,printer*);
-    virtual void ini(lexer*,fdm*,ghostcell*,ioflow*,printer*,convection*,solver*);
-    virtual void update(lexer*,fdm*,ghostcell*);
+    virtual ~multiphase_v() = default;
 
-    virtual void print_3D(lexer*, fdm*, ghostcell*,ofstream&);
-    virtual void print_file(lexer*, fdm*, ghostcell*);
-    virtual double ls1val(int,int,int);
-    virtual double ls2val(int,int,int);
-    virtual double ccipol_ls1val(lexer*,ghostcell*,double,double,double);
-    virtual double ccipol_ls2val(lexer*,ghostcell*,double,double,double);
-    virtual void ls1get(int,int,int,double);
-    virtual void ls2get(int,int,int,double);
+    void start(lexer*,fdm*,ghostcell*,convection*,solver*,ioflow*,reini*,particle_corr*,printer*) override;
+    void ini(lexer*,fdm*,ghostcell*,ioflow*,printer*,convection*,solver*) override;
+    void update(lexer*,fdm*,ghostcell*) override;
 
-    virtual void name_ParaView_parallel(lexer*, fdm*, ghostcell*,ofstream&);
-    virtual void name_ParaView(lexer*, fdm*, ghostcell*,ofstream&, int*, int &);
-    virtual void offset_ParaView(lexer*, int*, int &);
+    double ls1val(int,int,int) override;
+    double ls2val(int,int,int) override;
+    double ccipol_ls1val(lexer*,ghostcell*,double,double,double) override;
+    double ccipol_ls2val(lexer*,ghostcell*,double,double,double) override;
+    void ls1get(int,int,int,double) override;
+    void ls2get(int,int,int,double) override;
+
+    void name_ParaView_parallel(lexer*, fdm*, ghostcell*,ofstream&) override;
+    void name_ParaView(lexer*, fdm*, ghostcell*,ofstream&, int*, int &) override;
+    void offset_ParaView(lexer*, int*, int &) override;
+    void print_3D(lexer*,fdm*,ghostcell*,ofstream&) override;
+
+    void print_file(lexer*,fdm*,ghostcell*) override;
 };
 
 #endif
