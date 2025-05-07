@@ -1061,6 +1061,9 @@ void lexer::read_control()
 				case 362: control>>F362;
 						 clear(c,numint);
 						 break;
+                case 363: ++F363;
+                         clear(c,numint);
+                         break;
 			    case 369: ++F369;
 						 clear(c,numint);
 						 break;
@@ -1091,6 +1094,9 @@ void lexer::read_control()
 				case 382: control>>F382;
 						 clear(c,numint);
 						 break;
+                case 383: ++F383;
+                         clear(c,numint);
+                         break;
 				case 390: ++F390;
 						 clear(c,numint);
 						 break;
@@ -2718,6 +2724,18 @@ void lexer::read_control()
 
     Darray(F113_zs,F113);
     Darray(F113_ze,F113);
+
+    if(F363>0)
+    {
+        Darray(F363_xs,F363);  
+        Darray(F363_xe,F363);  
+        
+        Darray(F363_ys,F363);  
+        Darray(F363_ye,F363);  
+        
+        Darray(F363_zs,F363);  
+        Darray(F363_ze,F363);  
+    }
     
     if(F369>0)
 	{
@@ -2783,6 +2801,18 @@ void lexer::read_control()
 	Darray(F379_zc,F379);
     Darray(F379_r,F379);  
 	}
+
+    if(F383>0)
+    {
+        Darray(F383_xs,F383);  
+        Darray(F383_xe,F383);  
+        
+        Darray(F383_ys,F383);  
+        Darray(F383_ye,F383);  
+        
+        Darray(F383_zs,F383);  
+        Darray(F383_ze,F383);  
+    }
 	
 	if(F390>0)
 	{
@@ -3186,6 +3216,7 @@ void lexer::read_control()
 	int countF72=0;
     int countF112=0;
     int countF113=0;
+    int countF363=0;
     int countF369=0;
 	int countF370=0;
 	int countF371=0;
@@ -3193,6 +3224,7 @@ void lexer::read_control()
     int countF375=0;
     int countF378=0;
     int countF379=0;
+    int countF383=0;
 	int countF390=0;
 	int countF391=0;
     int countF394=0;
@@ -3444,6 +3476,10 @@ void lexer::read_control()
                         ++countF113;
                         clear(c,numint);
                         break;
+                case 363: control>>F363_xs[countF363]>>F363_xe[countF363]>>F363_ys[countF363]>>F363_ye[countF363]>>F363_zs[countF363]>>F363_ze[countF363];
+                        ++countF363;
+                        clear(c,numint);
+                        break;
                 case 369: control>>F369_x[countF369]>>F369_z[countF369]>>F369_a[countF369]>>F369_s[countF369]>>F369_l[countF369]>>F369_v[countF369];
                         ++countF369;
 						 clear(c,numint);
@@ -3472,6 +3508,10 @@ void lexer::read_control()
                         ++countF379;
 						 clear(c,numint);
 						 break;
+                case 383: control>>F383_xs[countF383]>>F383_xe[countF383]>>F383_ys[countF383]>>F383_ye[countF383]>>F383_zs[countF383]>>F383_ze[countF383];
+                        ++countF383;
+                        clear(c,numint);
+                        break;
 				case 390: control>>F390_xs[countF390]>>F390_xe[countF390]>>F390_ys[countF390]>>F390_ye[countF390]>>F390_zs[countF390]>>F390_ze[countF390];
                         ++countF390;
 						 clear(c,numint);

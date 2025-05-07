@@ -404,9 +404,10 @@ void lexer::ini_default()
     F360=-1.0e20;  // double ini x-dir ls1
     F361=-1.0e20;  // double ini y-dir ls1
     F362=-1.0e20;  // double ini z-dir ls1
-    F369=0;             // int number of phi 1 ini tiltboxes ls1
-    F370=0;             // int number of phi 1 ini boxes ls1
-    F371=0;             // int number of phi 2 ini boxes ls1
+    F363=0;             // int number of z-dir wedges ls1
+    F369=0;             // int number of ls1 tiltboxes 
+    F370=0;             // int number of pos ls1 boxes
+    F371=0;             // int number of neg ls1 boxes
     F374=0;             // int number of pos ls1 ycyl
     F375=0;             // int number of neg ls1 ycyl
     F378=0;             // int number of pos ls1 sphere
@@ -414,8 +415,9 @@ void lexer::ini_default()
 	F380=-1.0e20;  // double ini x-dir ls2
 	F381=-1.0e20;  // double ini y-dir ls2
 	F382=-1.0e20;  // double ini z-dir ls2
-	F390=0;             // int number of phi 1 ini boxes ls2
-	F391=0;             // int number of phi 2 ini boxes ls2
+    F383=0;             // int number of z-dir wedges ls2
+	F390=0;             // int number of pos ls2 boxes
+	F391=0;             // int number of neg ls2 boxes
     F394=0;             // int number of pos ls2 ycyl
     F395=0;             // int number of neg ls2 ycyl
     F398=0;             // int number of pos ls2 sphere

@@ -801,6 +801,8 @@ void lexer::ctrlsend()
 	dd++;
 	dctrl[dd] = F362;
 	dd++;
+    ictrl[ii] = F363;
+    ii++;
     ictrl[ii] = F369;
 	ii++;
 	ictrl[ii] = F370;
@@ -821,6 +823,8 @@ void lexer::ctrlsend()
 	dd++;
 	dctrl[dd] = F382;
 	dd++;
+    ictrl[ii] = F383;
+    ii++;
 	ictrl[ii] = F390;
 	ii++;
 	ictrl[ii] = F391;
@@ -2565,6 +2569,22 @@ void lexer::ctrlsend()
     dd++;
     }
 
+    for(n=0;n<F363;++n)
+    {
+        dctrl[dd] = F363_xs[n];
+        dd++;
+        dctrl[dd] = F363_xe[n];
+        dd++;
+        dctrl[dd] = F363_ys[n];
+        dd++;
+        dctrl[dd] = F363_ye[n];
+        dd++;
+        dctrl[dd] = F363_zs[n];
+        dd++;
+        dctrl[dd] = F363_ze[n];
+        dd++;
+    }
+
     for(n=0;n<F369;++n)
     {
     dctrl[dd] = F369_x[n];
@@ -2655,6 +2675,22 @@ void lexer::ctrlsend()
 	dd++;
     dctrl[dd] = F379_r[n];
 	dd++;
+    }
+
+    for(n=0;n<F383;++n)
+    {
+        dctrl[dd] = F383_xs[n];
+        dd++;
+        dctrl[dd] = F383_xe[n];
+        dd++;
+        dctrl[dd] = F383_ys[n];
+        dd++;
+        dctrl[dd] = F383_ye[n];
+        dd++;
+        dctrl[dd] = F383_zs[n];
+        dd++;
+        dctrl[dd] = F383_ze[n];
+        dd++;
     }
 	
 	for(n=0;n<F390;++n)
