@@ -419,9 +419,6 @@ void lexer::ini_default()
     F300=0;             // int multiphase flow level set
     F305=5;             // int multiphase flow lsm convection
     F310=3;             // int multiphase flow reini
-    F321=1.6;         // double epsi12
-    F322=1.6;         // double epsi13
-    F323=1.6;         // double epsi23
     F350=0;             // int multiphase flow fix level set inflow/outflow
     F360=-1.0e20;  // double ini x-dir ls1
     F361=-1.0e20;  // double ini y-dir ls1
