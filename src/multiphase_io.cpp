@@ -23,9 +23,6 @@ Author: Hans Bihs
 #include"multiphase_f.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"ghostcell.h"
-#include"ioflow.h"
-#include"reini.h"
 #include"print_wsf.h"
 
 void multiphase_f::print_3D(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
@@ -35,8 +32,8 @@ void multiphase_f::print_3D(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 
     TPLOOP
     {
-    ffn=float(p->ipol4(ls1));
-    result.write((char*)&ffn, sizeof (float));
+        ffn=float(p->ipol4(ls1));
+        result.write((char*)&ffn, sizeof (float));
     }
 
 
@@ -45,8 +42,8 @@ void multiphase_f::print_3D(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 
     TPLOOP
     {
-    ffn=float(p->ipol4(ls2));
-    result.write((char*)&ffn, sizeof (float));
+        ffn=float(p->ipol4(ls2));
+        result.write((char*)&ffn, sizeof (float));
     }
 
 
@@ -55,81 +52,48 @@ void multiphase_f::print_3D(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 
     TPLOOP
     {
-    ffn=float(p->ipol4_a(a->ro));
-    result.write((char*)&ffn, sizeof (float));
+        ffn=float(p->ipol4_a(a->ro));
+        result.write((char*)&ffn, sizeof (float));
     }
-
 }
 
 void multiphase_f::print_file(lexer *p, fdm *a, ghostcell *pgc)
 {
     if(p->P351>0)
-    pwsf1->height_gauge(p,a,pgc,ls1);
+        pwsf1->height_gauge(p,a,pgc,ls1);
 
     if(p->P352>0)
-    pwsf2->height_gauge(p,a,pgc,ls2);
+        pwsf2->height_gauge(p,a,pgc,ls2);
 }
 
 double multiphase_f::ls1val(int ii, int jj, int kk)
 {
-    double val;
-    i=ii;
-    j=jj;
-    k=kk;
-
-    val=ls1(i,j,k);
-
-    return val;
-
+    return ls1(ii,jj,kk);
 }
 
 double multiphase_f::ls2val(int ii, int jj, int kk)
 {
-    double val;
-    i=ii;
-    j=jj;
-    k=kk;
-
-    val=ls2(i,j,k);
-
-    return val;
-
+    return ls2(ii,jj,kk);
 }
 
 double multiphase_f::ccipol_ls1val(lexer *p, ghostcell *pgc, double xp, double yp, double zp)
 {
-    double val;
-
-    val=p->ccipol4( ls1, xp, yp, zp);
-
-    return val;
+    return p->ccipol4(ls1, xp, yp, zp);
 }
 
 double multiphase_f::ccipol_ls2val(lexer *p, ghostcell *pgc, double xp, double yp, double zp)
 {
-    double val;
-
-    val=p->ccipol4( ls2, xp, yp, zp);
-
-    return val;
+    return p->ccipol4(ls2, xp, yp, zp);
 }
 
 void multiphase_f::ls1get(int ii, int jj, int kk, double val)
 {
-    i=ii;
-    j=jj;
-    k=kk;
-
-    ls1(i,j,k)=val;
+    ls1(ii,jj,kk)=val;
 }
 
 void multiphase_f::ls2get(int ii, int jj, int kk, double val)
 {
-    i=ii;
-    j=jj;
-    k=kk;
-
-    ls2(i,j,k)=val;
+    ls2(ii,jj,kk)=val;
 }
 
 void multiphase_f::name_ParaView_parallel(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
@@ -141,11 +105,11 @@ void multiphase_f::name_ParaView_parallel(lexer *p, fdm *a, ghostcell *pgc, ofst
 
 void multiphase_f::name_ParaView(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
-    result<<"<DataArray type=\"Float32\" Name=\"ls1\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ls1\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"ls2\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"ls2\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-    result<<"<DataArray type=\"Float32\" Name=\"rho\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"rho\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
 }
 

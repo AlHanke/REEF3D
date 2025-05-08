@@ -21,9 +21,6 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"multiphase_f.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 #include"multiphase_fluid_update.h"
 
 void multiphase_f::update(lexer *p, fdm *a, ghostcell *pgc)
