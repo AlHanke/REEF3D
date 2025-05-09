@@ -38,6 +38,7 @@ Author: Hans Bihs
 #include"density_heat.h"
 #include"density_vof.h"
 #include"density_rheo.h"
+#include"density_multiphase.h"
  
 pjm_corr::pjm_corr(lexer* p, fdm *a, ghostcell *pgc, heat *&pheat, concentration *&pconc) : pcorr(p), pressure_reference(p)
 {
@@ -63,7 +64,7 @@ pjm_corr::pjm_corr(lexer* p, fdm *a, ghostcell *pgc, heat *&pheat, concentration
     pd = new density_rheo(p);
     
     if(p->F300>=1)
-    pd = new density_rheo(p);
+    pd = new density_multiphase();
     
     gcval_press=40;  
 	
