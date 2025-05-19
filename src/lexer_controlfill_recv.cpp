@@ -3603,6 +3603,37 @@ void lexer::ctrlrecv()
 
     for(n=0;n<F114;++n)
     {
+        F114_xs[n] = dctrl[dd];
+        dd++;
+        F114_xe[n] = dctrl[dd];
+        dd++;
+        F114_ys[n] = dctrl[dd];
+        dd++;
+        F114_ye[n] = dctrl[dd];
+        dd++;
+        F114_zs[n] = dctrl[dd];
+        dd++;
+        F114_ze[n] = dctrl[dd];
+        dd++;
+    }
+    for(n=0;n<F115;++n)
+    {
+        F115_xs[n] = dctrl[dd];
+        dd++;
+        F115_xe[n] = dctrl[dd];
+        dd++;
+        F115_ys[n] = dctrl[dd];
+        dd++;
+        F115_ye[n] = dctrl[dd];
+        dd++;
+        F115_zs[n] = dctrl[dd];
+        dd++;
+        F115_ze[n] = dctrl[dd];
+        dd++;
+    }
+
+    for(n=0;n<F114;++n)
+    {
     F114_xs[n] = dctrl[dd];
     dd++;
     F114_xe[n] = dctrl[dd];
