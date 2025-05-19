@@ -44,7 +44,7 @@ void initialize::start(lexer* p, fdm* a, ghostcell* pgc)
         if(p->F70>0 || p->F71>0 || p->F72>0)
             iniphi_box(p,a,pgc);
 
-        if(p->F112>0 || p->F113>0)
+        if(p->F112>0 || p->F113>0 || p->F114>0 || p->F115>0)
             iniphi_wedge(p,a);
 
         iniphi_fields(p,a,pgc);

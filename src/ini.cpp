@@ -392,6 +392,8 @@ void lexer::ini_default()
     F85=0;             // int convection scheme VOF
     F112=0;            // int wedge in x-direction
     F113=0;            // int wedge in y-direction
+    F114=0;            // int inv.-wedge in x-direction
+    F115=0;            // int inv.-wedge in y-direction
     F150=0;         // int benchmark
     F151=0;         // int benchmark inverse sign of level set
     F300=0;             // int multiphase flow level set
