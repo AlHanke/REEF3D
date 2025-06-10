@@ -58,7 +58,7 @@ public:
     void print_stop(lexer*,fdm_fnpf*,ghostcell*);
 
 private:
-    void print_vtu(lexer*,fdm_fnpf*,ghostcell*);
+    void print(lexer*,fdm_fnpf*,ghostcell*);
     void parallel(lexer*,ghostcell*);
 
     vtk3D *outputFormat;
