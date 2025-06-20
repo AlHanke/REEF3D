@@ -404,6 +404,7 @@ void lexer::ini_default()
     F361=-1.0e20;  // double ini y-dir ls1
     F362=-1.0e20;  // double ini z-dir ls1
     F363=0;             // int number of z-dir wedges ls1
+    F364=0;             // int number of inv. z-dir wedges ls1
     F369=0;             // int number of ls1 tiltboxes 
     F370=0;             // int number of pos ls1 boxes
     F371=0;             // int number of neg ls1 boxes

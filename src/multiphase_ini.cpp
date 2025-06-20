@@ -88,6 +88,12 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
     {
         ini_wedge(p,ls1,p->F363_xs[qn],p->F363_xe[qn],p->F363_ys[qn],p->F363_ye[qn],p->F363_zs[qn],p->F363_ze[qn]);
     }
+
+    // F364: Inv. wedge-shaped regions sloped in x-z for LS1
+    for(int qn=0; qn<p->F364; ++qn)
+    {
+        ini_wedge_inv(p,ls1,p->F364_xs[qn],p->F364_xe[qn],p->F364_ys[qn],p->F364_ye[qn],p->F364_zs[qn],p->F364_ze[qn]);
+    }
     
     // F369: Tilted box regions with initial velocity for debris flow or landslides
     for(qn=0;qn<p->F369;++qn)
@@ -447,6 +453,29 @@ void multiphase_f::ini_wedge(lexer* p, field& f, double xs, double xe, double ys
         if(p->pos_x()>=xs && p->pos_x()<xe      // Within x-bounds
             && p->pos_y()>=ys && p->pos_y()<ye   // Within y-bounds
             && p->pos_z()>=zs && p->pos_z()<slope*(p->pos_x()-xs)+z)  // Below sloped surface
+        {
+            f(i,j,k)=1.0;  // Set as active phase
+        }
+}
+
+void multiphase_f::ini_wedge_inv(lexer* p, field& f, double xs, double xe, double ys, double ye, double zs, double ze)
+{
+    // Calculate slope of wedge in x-z plane
+    double slope=(ze-zs)/(xe-xs);
+    double z = zs;
+    
+    // Ensure consistent orientation (swap if end is below start)
+    if(ze<zs)
+    {
+        std::swap(ze,zs);
+        z = ze;
+    }
+
+    // Apply wedge condition to all grid points
+    LOOP
+        if(p->pos_x()>=xs && p->pos_x()<xe      // Within x-bounds
+            && p->pos_y()>=ys && p->pos_y()<ye   // Within y-bounds
+            && p->pos_z()>=slope*(p->pos_x()-xs)+z && p->pos_z()<ze)
         {
             f(i,j,k)=1.0;  // Set as active phase
         }

@@ -801,6 +801,8 @@ void lexer::ctrlsend()
 	dd++;
     ictrl[ii] = F363;
     ii++;
+    ictrl[ii] = F364;
+    ii++;
     ictrl[ii] = F369;
 	ii++;
 	ictrl[ii] = F370;
@@ -2612,6 +2614,22 @@ void lexer::ctrlsend()
         dctrl[dd] = F363_zs[n];
         dd++;
         dctrl[dd] = F363_ze[n];
+        dd++;
+    }
+
+    for(n=0;n<F364;++n)
+    {
+        dctrl[dd] = F364_xs[n];
+        dd++;
+        dctrl[dd] = F364_xe[n];
+        dd++;
+        dctrl[dd] = F364_ys[n];
+        dd++;
+        dctrl[dd] = F364_ye[n];
+        dd++;
+        dctrl[dd] = F364_zs[n];
+        dd++;
+        dctrl[dd] = F364_ze[n];
         dd++;
     }
 
