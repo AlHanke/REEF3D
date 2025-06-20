@@ -75,6 +75,7 @@ private:
     double fz(double,double,double,double,double);
 
     void ini_wedge(lexer*,field&,double,double,double,double,double,double);
+    void ini_wedge_inv(lexer*,field&,double,double,double,double,double,double);
     void logic(lexer*,fdm*,ghostcell*);
 
     concentration *pconc;

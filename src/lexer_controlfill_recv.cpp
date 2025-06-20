@@ -832,6 +832,8 @@ void lexer::ctrlrecv()
     dd++;
     F363 = ictrl[ii];
     ii++;
+    F364 = ictrl[ii];
+    ii++;
     F369 = ictrl[ii];
     ii++;
     F370 = ictrl[ii];
@@ -2425,6 +2427,18 @@ void lexer::ctrlrecv()
         Darray(F363_ze,F363);
     }
 
+    if(F364>0)
+    {
+        Darray(F364_xs,F364);
+        Darray(F364_xe,F364);
+
+        Darray(F364_ys,F364);
+        Darray(F364_ye,F364);
+
+        Darray(F364_zs,F364);
+        Darray(F364_ze,F364);
+    }
+
     if(F369>0)
     {
     Darray(F369_x,F369);
@@ -3677,6 +3691,22 @@ void lexer::ctrlrecv()
         F363_zs[n] = dctrl[dd];
         dd++;
         F363_ze[n] = dctrl[dd];
+        dd++;
+    }
+
+    for(n=0;n<F364;++n)
+    {
+        F364_xs[n] = dctrl[dd];
+        dd++;
+        F364_xe[n] = dctrl[dd];
+        dd++;
+        F364_ys[n] = dctrl[dd];
+        dd++;
+        F364_ye[n] = dctrl[dd];
+        dd++;
+        F364_zs[n] = dctrl[dd];
+        dd++;
+        F364_ze[n] = dctrl[dd];
         dd++;
     }
 

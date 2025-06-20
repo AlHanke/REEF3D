@@ -445,6 +445,8 @@ public:
     double F360,F361,F362;
     int F363;
     double *F363_xs,*F363_xe,*F363_ys,*F363_ye,*F363_zs,*F363_ze;
+    int F364;
+    double *F364_xs,*F364_xe,*F364_ys,*F364_ye,*F364_zs,*F364_ze;
     int F369,F370,F371,F374,F375,F378,F379;
     double *F369_x,*F369_z,*F369_a,*F369_s,*F369_l,*F369_v;
     double *F370_xs, *F370_xe, *F370_ys, *F370_ye, *F370_zs, *F370_ze;
