@@ -303,6 +303,8 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
     pgc->start4(p,ls2,50);
 
     preini->start(a,p,ls1, pgc, pflow);
+    PLAINLOOP
+        a->phi(i,j,k) = ls1(i,j,k);
     preini->start(a,p,ls2, pgc, pflow);
 
     update(p,a,pgc);
