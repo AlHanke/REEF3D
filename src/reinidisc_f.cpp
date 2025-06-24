@@ -25,6 +25,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"reinidisc_f.h"
 #include"cpt.h"
+#include<cmath>
 
 reinidisc_f::reinidisc_f(lexer *p) :  ddweno_nug_sf(p)
 {
@@ -35,21 +36,12 @@ reinidisc_f::~reinidisc_f()
 }
 
 void reinidisc_f::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, int ipol)
-{
-    if(ipol==4)
+{	
+    if(ipol==4 || ipol==5)
     {
         BASELOOP
         L.V[IJK] = 0.0;
-
-        BASELOOP
-        disc(p,a,pgc,f,L);
-    }
-
-    if(ipol==5)
-    {
-        BASELOOP
-        L.V[IJK] = 0.0;
-
+        
         BASELOOP
         disc(p,a,pgc,f,L);
     }
@@ -119,7 +111,7 @@ void reinidisc_f::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L)
 
     sign=lsv/sqrt(lsv*lsv+ dnorm*dnorm*deltax*deltax);
 
-    if(sign!=sign)
+    if(sign!=sign || std::isinf(sign))
     sign=1.0;
 
 

@@ -91,7 +91,7 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
     if(p->count>0)
     gcval = gcval_phi;
 
-    ppicard->volcalc(p,a,pgc,a->phi);
+    ppicard->volcalc(p,a,pgc,f);
 
     if(p->count==0)
     {
