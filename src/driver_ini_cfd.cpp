@@ -151,10 +151,8 @@ void driver::driver_ini_cfd()
     pflow->gcio_update(p,a,pgc);
     pflow->pressure_io(p,a,pgc);
     if (p->F80>0)
-    {
         pflow->vof_relax(p,a,pgc,a->vof);
-    }
-    else if(p->F30>0 || p->F40>0)
+    else if ((p->F30>0 || p->F40>0) && p->F300==0)
     {
         pini->inipsi(p,a,pgc);
         for(int qn=0;qn<20;++qn)
