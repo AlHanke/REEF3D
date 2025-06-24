@@ -74,7 +74,7 @@ void driver::loop_cfd(fdm* a)
         
         pflow->wavegen_precalc(p,pgc);
 
-        
+        if(p->F300==0)
             pfsf->start(a,p, pfsfdisc,psolv,pgc,pflow,preini,ppls,a->phi);
             pturb->start(a,p,pturbdisc,pturbdiff,psolv,pgc,pflow,pvrans);
             pheat->start(a,p,pheatdisc,pdiff,psolv,pgc,pflow);
