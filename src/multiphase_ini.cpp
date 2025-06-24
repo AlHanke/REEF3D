@@ -381,6 +381,8 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
     
     // Perform reinitialization to ensure proper signed distance function properties
     preini->start(a,p,ls1, pgc, pflow);
+    PLAINLOOP
+        a->phi(i,j,k) = ls1(i,j,k);
     preini->start(a,p,ls2, pgc, pflow);
     
     // Update material properties based on phase distribution
