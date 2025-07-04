@@ -26,45 +26,42 @@ Authors: Hans Bihs, Tobias Martin, Ahmet Soydan
 
 void ghostcell::solid_forcing_ini(lexer *p, fdm *a)
 {
-    double dirac,H;
-
-     // ghostcell update
+    // ghostcell update
     gcdf_update(p,a);
 
     // Initialise floating fields
-     ULOOP
-     a->fbh1(i,j,k) = Hsolidface(p,a,1,0,0);
+    ULOOP
+        a->fbh1(i,j,k) = Hsolidface(p,a,1,0,0);
 
-     VLOOP
-     a->fbh2(i,j,k) = Hsolidface(p,a,0,1,0);
+    VLOOP
+        a->fbh2(i,j,k) = Hsolidface(p,a,0,1,0);
 
-     WLOOP
-     a->fbh3(i,j,k) = Hsolidface(p,a,0,0,1);
-
-     LOOP
-     a->fbh4(i,j,k) = H = Hsolidface(p,a,0,0,0);
-
-     start1(p,a->fbh1,10);
-     start2(p,a->fbh2,11);
-     start3(p,a->fbh3,12);
-     start4(p,a->fbh4,40);
-
-    double psi;
-
-    psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-
-    if (p->j_dir==0)
-    psi = 1.1*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
+    WLOOP
+        a->fbh3(i,j,k) = Hsolidface(p,a,0,0,1);
 
     LOOP
+        a->fbh4(i,j,k) = Hsolidface(p,a,0,0,0);
+
+    start1(p,a->fbh1,10);
+    start2(p,a->fbh2,11);
+    start3(p,a->fbh3,12);
+    start4(p,a->fbh4,40);
+
+    const double factor = 1.1;
+    LOOP
     {
-        dirac = 0.0;
+        double psi;
+        if (p->j_dir==1)
+            psi = factor*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
+        else
+            psi = factor*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
+
+        double dirac;
         if(fabs(MIN(a->solid(i,j,k),a->topo(i,j,k)))<psi)
-        dirac = (0.5/psi)*(1.0 + cos((PI*(MIN(a->solid(i,j,k),a->topo(i,j,k))))/psi));
+            dirac = (0.5/psi)*(1.0 + cos((PI*(MIN(a->solid(i,j,k),a->topo(i,j,k))))/psi));
+        else
+            dirac = 0.0;
 
         a->fbh5(i,j,k) =  1.0-MIN(dirac,1.0);
     }
-
-    
-
 }
