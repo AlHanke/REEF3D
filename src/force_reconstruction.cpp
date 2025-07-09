@@ -24,42 +24,40 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 
-void force::reconstruct(lexer *p,fdm* a, field& b)
+void force::reconstruct(lexer *p, fdm* a)
 {
-    ccptcount=0;
-
-    for(n=0;n<numtri; ++n)
-    confac[n]=-1;
     facount=ccptcount=0;
-
 
     for(n=0;n<numtri; ++n)
     {
-        if((ls[tri[n][0]] >= -zero && ls[tri[n][1]] < zero)  ||  (ls[tri[n][0]] < zero && ls[tri[n][1]] >= -zero))
-        addpoint(p,a,tri[n][0],tri[n][1]);
+        confac[n]=-1;
 
-        if((ls[tri[n][0]] >= -zero && ls[tri[n][2]] < zero)  ||  (ls[tri[n][0]] < zero && ls[tri[n][2]] >= -zero))
-        addpoint(p,a,tri[n][0],tri[n][2]);
+        if((ls[tri[n][0]] >= 0.0 && ls[tri[n][1]] < 0.0)  ||  (ls[tri[n][0]] < 0.0 && ls[tri[n][1]] >= 0.0))
+            addpoint(p,n,tri[n][0],tri[n][1]);
 
-        if((ls[tri[n][0]] >= -zero && ls[tri[n][3]] < zero)  ||  (ls[tri[n][0]] < zero && ls[tri[n][3]] >= -zero))
-        addpoint(p,a,tri[n][0],tri[n][3]);
+        if((ls[tri[n][0]] >= 0.0 && ls[tri[n][2]] < 0.0)  ||  (ls[tri[n][0]] < 0.0 && ls[tri[n][2]] >= 0.0))
+            addpoint(p,n,tri[n][0],tri[n][2]);
 
-        if((ls[tri[n][1]] >= -zero && ls[tri[n][2]] < zero)  ||  (ls[tri[n][1]] < zero && ls[tri[n][2]] >= -zero))
-        addpoint(p,a,tri[n][1],tri[n][2]);
+        if((ls[tri[n][0]] >= 0.0 && ls[tri[n][3]] < 0.0)  ||  (ls[tri[n][0]] < 0.0 && ls[tri[n][3]] >= 0.0))
+            addpoint(p,n,tri[n][0],tri[n][3]);
 
-        if((ls[tri[n][1]] >= -zero && ls[tri[n][3]] < zero)  ||  (ls[tri[n][1]] < zero && ls[tri[n][3]] >= -zero))
-        addpoint(p,a,tri[n][1],tri[n][3]);
+        if((ls[tri[n][1]] >= 0.0 && ls[tri[n][2]] < 0.0)  ||  (ls[tri[n][1]] < 0.0 && ls[tri[n][2]] >= 0.0))
+            addpoint(p,n,tri[n][1],tri[n][2]);
 
-        if((ls[tri[n][2]] >= -zero && ls[tri[n][3]] < zero)  ||  (ls[tri[n][2]] < zero && ls[tri[n][3]] >= -zero))
-        addpoint(p,a,tri[n][2],tri[n][3]);
+        if((ls[tri[n][1]] >= 0.0 && ls[tri[n][3]] < 0.0)  ||  (ls[tri[n][1]] < 0.0 && ls[tri[n][3]] >= 0.0))
+            addpoint(p,n,tri[n][1],tri[n][3]);
+
+        if((ls[tri[n][2]] >= 0.0 && ls[tri[n][3]] < 0.0)  ||  (ls[tri[n][2]] < 0.0 && ls[tri[n][3]] >= 0.0))
+            addpoint(p,n,tri[n][2],tri[n][3]);
     }
 }
 
-void force::addpoint(lexer *p, fdm *a, int q1, int q2)
+void force::addpoint(lexer *p, int n, int q1, int q2)
 {
 	// p. 917
 	
     double dist,xd,dnom;
+    int nn;
 
     dnom=ls[q2]-ls[q1];
     dnom=fabs(dnom)>1.0e-20?dnom:1.0e-20;
@@ -71,7 +69,7 @@ void force::addpoint(lexer *p, fdm *a, int q1, int q2)
     ccpt[ccptcount][2] = (pt[q2][2]-pt[q1][2])*xd + pt[q1][2];
 
     if(confac[n]>-1)
-    nn=confac[n];
+        nn=confac[n];
 
     if(confac[n]==-1)
     {

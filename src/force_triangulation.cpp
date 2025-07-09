@@ -23,66 +23,58 @@ Author: Hans Bihs
 #include"force.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"ghostcell.h"
 
-void force::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
-{
-	int negcount, poscount;
+void force::triangulation(lexer *p, fdm* a)
+{    
+    NDBASELOOP
+    {
+        eta(i,j,k) = 0.125*(a->solid(i,j,k) + a->solid(i+1,j,k) + a->solid(i,j+1,k) + a->solid(i+1,j+1,k)
+                    + a->solid(i,j,k+1) + a->solid(i+1,j,k+1) + a->solid(i,j+1,k+1) + a->solid(i+1,j+1,k+1));
     
-    NDBASELOOP
-    eta(i,j,k) = 0.125*(a->solid(i,j,k) + a->solid(i+1,j,k) + a->solid(i,j+1,k) + a->solid(i+1,j+1,k)
-                      + a->solid(i,j,k+1) + a->solid(i+1,j,k+1) + a->solid(i,j+1,k+1) + a->solid(i+1,j+1,k+1));
-	
-    NDBASELOOP
-    vertice(i,j,k)=-1;
+        vertice(i,j,k)=-1;
 
-    NDBASELOOP
-    nodeflag(i,j,k)=0;
-	
-
+        nodeflag(i,j,k)=0;
+    }
+    
     BASELOOP
     if(i>=is && i<=ie && j>=js && j<=je && k>=ks && k<=ke)
     {
-        epsi = interfac*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
+        double epsi = interfac*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
         
         if(fabs(a->solid(i,j,k))<epsi)
         {
-            check=1;
+            bool check = true;
 
-            if(eta(i,j,k)<zero && eta(i-1,j,k)<zero && eta(i-1,j-1,k)<zero && eta(i,j-1,k)<zero &&
-               eta(i,j,k-1)<zero && eta(i-1,j,k-1)<zero && eta(i-1,j-1,k-1)<zero && eta(i,j-1,k-1)<zero)
-            check=0;
+            if(eta(i,j,k)<0.0 && eta(i-1,j,k)<0.0 && eta(i-1,j-1,k)<0.0 && eta(i,j-1,k)<0.0 &&
+               eta(i,j,k-1)<0.0 && eta(i-1,j,k-1)<0.0 && eta(i-1,j-1,k-1)<0.0 && eta(i,j-1,k-1)<0.0)
+                check = false;
             
-            if(eta(i,j,k)>zero && eta(i-1,j,k)>zero && eta(i-1,j-1,k)>zero && eta(i,j-1,k)>zero &&
-               eta(i,j,k-1)>zero && eta(i-1,j,k-1)>zero && eta(i-1,j-1,k-1)>zero && eta(i,j-1,k-1)>zero)
-            check=0;
+            if(eta(i,j,k)>0.0 && eta(i-1,j,k)>0.0 && eta(i-1,j-1,k)>0.0 && eta(i,j-1,k)>0.0 &&
+               eta(i,j,k-1)>0.0 && eta(i-1,j,k-1)>0.0 && eta(i-1,j-1,k-1)>0.0 && eta(i,j-1,k-1)>0.0)
+               check = false;
 
-            if(check==1)
+            if(check)
             {
-            nodeflag(i,j,k)=1;
-            nodeflag(i-1,j,k)=1;
-            nodeflag(i-1,j-1,k)=1;
-            nodeflag(i,j-1,k)=1;
-            nodeflag(i,j,k-1)=1;
-            nodeflag(i-1,j,k-1)=1;
-            nodeflag(i-1,j-1,k-1)=1;
-            nodeflag(i,j-1,k-1)=1;
+                nodeflag(i,j,k)=1;
+                nodeflag(i-1,j,k)=1;
+                nodeflag(i-1,j-1,k)=1;
+                nodeflag(i,j-1,k)=1;
+                nodeflag(i,j,k-1)=1;
+                nodeflag(i-1,j,k-1)=1;
+                nodeflag(i-1,j-1,k-1)=1;
+                nodeflag(i,j-1,k-1)=1;
             }
         }
     }
-
-	
-	//--------------------
-    countM=0;
+    
+    //--------------------
+    int count=0;
     NDBASELOOP
     if(nodeflag(i,j,k)==1)
-    ++countM;
+        ++count;
 
-    numtri = 6*countM;
-    numvert = countM;
-
-    numtri_mem = numtri;
-    numvert_mem = numvert;
+    numtri = 6*count;
+    numvert = count;
 
     p->Iarray(tri,numtri,4);
     p->Darray(pt,numvert,3);
@@ -93,20 +85,19 @@ void force::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
 	p->Iarray(numpt,numtri);
     p->Darray(ccpt,numtri*4,3);
 
-
-    countM=0;
+    count=0;
     NDBASELOOP
     if(nodeflag(i,j,k)==1)
     {
-    pt[countM][0] = p->posnode_x();
-    pt[countM][1] = p->posnode_y();
-    pt[countM][2] = p->posnode_z();
+        pt[count][0] = p->posnode_x();
+        pt[count][1] = p->posnode_y();
+        pt[count][2] = p->posnode_z();
 
-    ls[countM] = eta(i,j,k);
+        ls[count] = eta(i,j,k);
 
-    vertice(i,j,k) = countM;
+        vertice(i,j,k) = count;
 
-    ++countM;
+        ++count;
     }
 
 	// p. 725, 956
@@ -121,47 +112,47 @@ void force::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
     if(nodeflag(i-1,j-1,k-1)==1)
     if(nodeflag(i,j-1,k-1)==1)
     {
-    // 1
-    tri[count][0] = vertice(i-1,j-1,k-1);
-    tri[count][1] = vertice(i-1,j,k-1);
-    tri[count][2] = vertice(i-1,j-1,k);
-    tri[count][3] = vertice(i,j-1,k);
-    ++count;
+        // 1
+        tri[count][0] = vertice(i-1,j-1,k-1);
+        tri[count][1] = vertice(i-1,j,k-1);
+        tri[count][2] = vertice(i-1,j-1,k);
+        tri[count][3] = vertice(i,j-1,k);
+        ++count;
 
-    // 2
-    tri[count][0] = vertice(i-1,j-1,k-1);
-    tri[count][1] = vertice(i,j-1,k-1);
-    tri[count][2] = vertice(i-1,j,k-1);
-    tri[count][3] = vertice(i,j-1,k);
-    ++count;
+        // 2
+        tri[count][0] = vertice(i-1,j-1,k-1);
+        tri[count][1] = vertice(i,j-1,k-1);
+        tri[count][2] = vertice(i-1,j,k-1);
+        tri[count][3] = vertice(i,j-1,k);
+        ++count;
 
-    // 3
-    tri[count][0] = vertice(i-1,j,k-1);
-    tri[count][1] = vertice(i,j,k-1);
-    tri[count][2] = vertice(i,j-1,k-1);
-    tri[count][3] = vertice(i,j-1,k);
-    ++count;
+        // 3
+        tri[count][0] = vertice(i-1,j,k-1);
+        tri[count][1] = vertice(i,j,k-1);
+        tri[count][2] = vertice(i,j-1,k-1);
+        tri[count][3] = vertice(i,j-1,k);
+        ++count;
 
-    // 4
-    tri[count][0] = vertice(i,j,k-1);
-    tri[count][1] = vertice(i-1,j,k-1);
-    tri[count][2] = vertice(i,j-1,k);
-    tri[count][3] = vertice(i,j,k);
-    ++count;
+        // 4
+        tri[count][0] = vertice(i,j,k-1);
+        tri[count][1] = vertice(i-1,j,k-1);
+        tri[count][2] = vertice(i,j-1,k);
+        tri[count][3] = vertice(i,j,k);
+        ++count;
 
-    // 5
-	tri[count][0] = vertice(i-1,j,k-1);
-    tri[count][1] = vertice(i-1,j,k);
-    tri[count][2] = vertice(i,j,k);
-    tri[count][3] = vertice(i,j-1,k);
-    ++count;
+        // 5
+        tri[count][0] = vertice(i-1,j,k-1);
+        tri[count][1] = vertice(i-1,j,k);
+        tri[count][2] = vertice(i,j,k);
+        tri[count][3] = vertice(i,j-1,k);
+        ++count;
 
-    // 6
-    tri[count][0] = vertice(i-1,j,k-1);
-    tri[count][1] = vertice(i-1,j-1,k);
-    tri[count][2] = vertice(i,j-1,k);
-    tri[count][3] = vertice(i-1,j,k);
-    ++count;
+        // 6
+        tri[count][0] = vertice(i-1,j,k-1);
+        tri[count][1] = vertice(i-1,j-1,k);
+        tri[count][2] = vertice(i,j-1,k);
+        tri[count][3] = vertice(i-1,j,k);
+        ++count;
     }
 	
     numtri=count;
