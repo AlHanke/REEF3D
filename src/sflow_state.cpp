@@ -30,17 +30,17 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 sflow_state::sflow_state(lexer *p, fdm2D *b, ghostcell *pgc, int state_restart)
-{	
+{    
     restart=state_restart;
     
-	// Create Folder
-	if(p->mpirank==0 && restart==0)
-	mkdir("./REEF3D_SFLOW_STATE",0777);
+    // Create Folder
+    if(p->mpirank==0 && restart==0)
+    mkdir("./REEF3D_SFLOW_STATE",0777);
     
     if(p->mpirank==0 && restart==1)
-	mkdir("./REEF3D_SFLOW_STATE_RESTART",0777);
-	
-	printcount=0;
+    mkdir("./REEF3D_SFLOW_STATE_RESTART",0777);
+    
+    printcount=0;
     
     file_version=2;
     

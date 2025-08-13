@@ -29,13 +29,13 @@ Author: Hans Bihs
 
 nhflow_ediff::nhflow_ediff(lexer* p)
 {
-	gcval_u=10;
-	gcval_v=11;
-	gcval_w=12;
+    gcval_u=10;
+    gcval_v=11;
+    gcval_w=12;
     
     gcval_uh=14;
-	gcval_vh=15;
-	gcval_wh=16;
+    gcval_vh=15;
+    gcval_wh=16;
 }
 
 nhflow_ediff::~nhflow_ediff()
@@ -45,7 +45,7 @@ nhflow_ediff::~nhflow_ediff()
 void nhflow_ediff::diff_u(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, solver *psolv, double *UHdiff, double *UHin, double *UH, double *VH, double *WH, slice &WL, double alpha)
 {
     
-	starttime=pgc->timer();
+    starttime=pgc->timer();
     
     LOOP
     UHdiff[IJK] = UHin[IJK];
@@ -77,8 +77,8 @@ void nhflow_ediff::diff_u(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, s
                         
         + visc*2.0*0.5*(p->sigy[FIJK]+p->sigy[FIJKp1])*(UH[IJp1Kp1] - UH[IJm1Kp1] - UH[IJp1Km1] + UH[IJm1Km1])
                             /((p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1]))*p->y_dir;
-		
-	}
+        
+    }
 }
 
 void nhflow_ediff::diff_v(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, solver *psolv, double *VHdiff, double *VHin, double *UH, double *VH, double *WH, slice &WL, double alpha)
@@ -114,8 +114,8 @@ void nhflow_ediff::diff_v(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, s
                         
         + visc*2.0*0.5*(p->sigy[FIJK]+p->sigy[FIJKp1])*(UH[IJp1Kp1] - UH[IJm1Kp1] - UH[IJp1Km1] + UH[IJm1Km1])
                             /((p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1]))*p->y_dir;
-		
-	}
+        
+    }
 }
 
 void nhflow_ediff::diff_w(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, solver *psolv, double *WHdiff, double *WHin, double *UH, double *VH, double *WH, slice &WL, double alpha)
@@ -151,8 +151,8 @@ void nhflow_ediff::diff_w(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, s
                         
         + visc*2.0*0.5*(p->sigy[FIJK]+p->sigy[FIJKp1])*(WH[IJp1Kp1] - WH[IJm1Kp1] - WH[IJp1Km1] + WH[IJm1Km1])
                             /((p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1]))*p->y_dir;
-		
-	}
+        
+    }
 }
 
 void nhflow_ediff::diff_scalar(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *psolv, double *F, double sig, double alpha)

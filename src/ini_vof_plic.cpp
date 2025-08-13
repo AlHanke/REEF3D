@@ -35,7 +35,7 @@ double r;
 double vofdiff, xdiff;
 
     LOOP
-	a->vof(i,j,k)=0.0;
+    a->vof(i,j,k)=0.0;
     a->nZ(i,j,k)=1E06;
     a->nY(i,j,k)=1E06;
     a->nZ(i,j,k)=1E06;
@@ -56,8 +56,8 @@ double vofdiff, xdiff;
 
 if(p->F57_1>1E-20||p->F57_2>1E-20||p->F57_3>1E-20||p->F57_4>1E-20)
 {
-	LOOP
-	if(p->F57_1*p->XP[IP]+ p->F57_2*p->YP[JP]+ p->F57_3*p->ZP[KP] < p->F57_4)
+    LOOP
+    if(p->F57_1*p->XP[IP]+ p->F57_2*p->YP[JP]+ p->F57_3*p->ZP[KP] < p->F57_4)
         a->vof(i,j,k)=1.0;
 }
 
@@ -97,26 +97,26 @@ if(p->F60>-1.0e20)
         a->vof(i,j,k)=(vofdiff/xdiff)*(p->pos_x()-p->F63) + p->phimean    - p->pos_z() ;
     }*/
 
-	double H=0.0;
+    double H=0.0;
 
-	LOOP
-	{
-		H=a->vof(i,j,k);
+    LOOP
+    {
+        H=a->vof(i,j,k);
 
-		H=MAX(H,0.0);
-		H=MIN(H,1.0);
+        H=MAX(H,0.0);
+        H=MIN(H,1.0);
 
-		a->ro(i,j,k)= p->W1*H + p->W3*(1.0-H);
-		a->visc(i,j,k)= p->W2*H + p->W4*(1.0-H);
-	}
+        a->ro(i,j,k)= p->W1*H + p->W3*(1.0-H);
+        a->visc(i,j,k)= p->W2*H + p->W4*(1.0-H);
+    }
     
     //LOOP
     //a->phi(i,j,k) = a->vof(i,j,k);
 
-	pgc->start4(p,a->vof,50);
+    pgc->start4(p,a->vof,50);
    // pgc->start4(p,a->phi,50);
-	pgc->start4(p,a->ro,1);
-	pgc->start4(p,a->visc,1);
+    pgc->start4(p,a->ro,1);
+    pgc->start4(p,a->visc,1);
 }
 
 
@@ -138,13 +138,13 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
     p->phimean=p->F56;
 
     LOOP
-	a->vof(i,j,k)=0.0;
+    a->vof(i,j,k)=0.0;
     
-	LOOP
-	if 
+    LOOP
+    if 
     (
         double(i)*dx + p->originx >= p->F51 && double(i)*dx + p->originx < p->F54
-	 && double(j)*dx + p->originy >= p->F52 && double(j)*dx + p->originy < p->F55
+     && double(j)*dx + p->originy >= p->F52 && double(j)*dx + p->originy < p->F55
     )
     {
         double value;    
@@ -239,21 +239,21 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
         a->vof(i,j,k) = (vofdiff/xdiff)*(p->pos_x()-p->F63) + p->phimean - p->pos_z();
     }
 
-	double H=0.0;
+    double H=0.0;
 
-	LOOP
-	{
-		H = a->vof(i,j,k);
+    LOOP
+    {
+        H = a->vof(i,j,k);
 
-		H = MAX(H, 0.0);
-		H = MIN(H, 1.0);
+        H = MAX(H, 0.0);
+        H = MIN(H, 1.0);
 
-		a->ro(i,j,k) = p->W1*H + p->W3*(1.0 - H);
-		a->visc(i,j,k) = p->W2*H + p->W4*(1.0 - H);
-	}
-	pgc->start4(p,a->vof,50);
-	pgc->start4(p,a->ro,1);
-	pgc->start4(p,a->visc,1);
+        a->ro(i,j,k) = p->W1*H + p->W3*(1.0 - H);
+        a->visc(i,j,k) = p->W2*H + p->W4*(1.0 - H);
+    }
+    pgc->start4(p,a->vof,50);
+    pgc->start4(p,a->ro,1);
+    pgc->start4(p,a->visc,1);
 */
 /*
     //- Initialise distance function at start of simulation
@@ -267,10 +267,10 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
         iniphi(a, p, pgc);
     } 
 
-	LOOP
-	{
-		a->test(i,j,k) = a->vof(i,j,k);
-	} 
-	pgc->start4(p,a->test,50);
+    LOOP
+    {
+        a->test(i,j,k) = a->vof(i,j,k);
+    } 
+    pgc->start4(p,a->test,50);
 }
 */

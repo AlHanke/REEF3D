@@ -167,8 +167,8 @@ void sflow_state::boundary(lexer *p, fdm2D* b, ghostcell* pgc, int restart)
     if(p->P45==2 && restart==0)
     {
     filename_continuous(p,b,pgc);
-	 
-	result.open(name, ios::binary);
+     
+    result.open(name, ios::binary);
     }
     
 

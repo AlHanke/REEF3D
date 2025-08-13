@@ -68,11 +68,11 @@ void ioflow_f::inflow_plain_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *
         U[Im2JK]=0.0;
         U[Im3JK]=0.0;
         }
-		
+        
         V[Im1JK]=0.0;
         V[Im2JK]=0.0;
         V[Im3JK]=0.0;
-		
+        
         W[Im1JK]=0.0;
         W[Im2JK]=0.0;
         W[Im3JK]=0.0;
@@ -90,11 +90,11 @@ void ioflow_f::inflow_plain_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *
         UH[Im2JK]=0.0;
         UH[Im3JK]=0.0;
         }
-		
+        
         VH[Im1JK]=0.0;
         VH[Im2JK]=0.0;
         VH[Im3JK]=0.0;
-		
+        
         WH[Im1JK]=0.0;
         WH[Im2JK]=0.0;
         WH[Im3JK]=0.0;
@@ -140,11 +140,11 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
         M=26.0/pow(ks,(1.0/6.0));
         I=pow(p->Ui/(M*pow(H,(2.0/3.0))),2.0);
         tau=(9.81*H*I*1000.0);
-		
-		if(p->mpirank==0 && p->count==0)
-		cout<<"I   "<<I<<endl;
-		
-		shearvel = p->Ui/(2.5*log((11.0*H/ks)));
+        
+        if(p->mpirank==0 && p->count==0)
+        cout<<"I   "<<I<<endl;
+        
+        shearvel = p->Ui/(2.5*log((11.0*H/ks)));
 
         for(n=0;n<p->gcin_count;n++)
         {
@@ -167,14 +167,14 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
     {
     Qin_nhf(p,d,pgc);
 
-	if(p->B60==1)
+    if(p->B60==1)
     ratio = p->W10/p->Qi;
-	
-	if(p->B60==2||p->B60==4)
-	ratio = hydrograph_ipol(p,pgc,hydro_in,hydro_in_count)/p->Qi;
+    
+    if(p->B60==2||p->B60==4)
+    ratio = hydrograph_ipol(p,pgc,hydro_in,hydro_in_count)/p->Qi;
 
-	if(fabs(p->Qi)<1.0e-20)
-	ratio=1.0;
+    if(fabs(p->Qi)<1.0e-20)
+    ratio=1.0;
     
     //if(p->mpirank==0)
     //cout<<"W10: "<<p->W10<<" Qi: "<<p->Qi<<" ratio: "<<ratio<<endl;
@@ -191,8 +191,8 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
         U[Im3JK]*=ratio;
         }
     }
-	
-	for(n=0;n<p->gcin_count;n++)
+    
+    for(n=0;n<p->gcin_count;n++)
     {
     i=p->gcin[n][0];
     j=p->gcin[n][1];
@@ -201,7 +201,7 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
         V[Im1JK]=0.0;
         V[Im2JK]=0.0;
         V[Im3JK]=0.0;
-		
+        
         W[Im1JK]=0.0;
         W[Im2JK]=0.0;
         W[Im3JK]=0.0;
@@ -213,7 +213,7 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
         VH[Im1JK]=0.0;
         VH[Im2JK]=0.0;
         VH[Im3JK]=0.0;
-		
+        
         WH[Im1JK]=0.0;
         WH[Im2JK]=0.0;
         WH[Im3JK]=0.0;

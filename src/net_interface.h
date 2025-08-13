@@ -36,8 +36,8 @@ using namespace std;
 class net_interface : public increment
 {
 public:
-	net_interface(lexer*, ghostcell*);
-	virtual ~net_interface();
+    net_interface(lexer*, ghostcell*);
+    virtual ~net_interface();
 
     virtual void start_cfd(lexer*, fdm*, ghostcell*, double, Eigen::Matrix3d){};
     virtual void start_nhflow(lexer*, fdm_nhf*, ghostcell*, double, Eigen::Matrix3d){};

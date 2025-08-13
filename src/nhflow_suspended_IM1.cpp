@@ -32,7 +32,7 @@ Author: Hans Bihs
 
 nhflow_suspended_IM1::nhflow_suspended_IM1(lexer* p) 
 {
-	gcval_susp=60;
+    gcval_susp=60;
     
     p->Darray(CONCN,p->imax*p->jmax*(p->kmax+2));
     p->Darray(WVEL,p->imax*p->jmax*(p->kmax+2));
@@ -49,16 +49,16 @@ void nhflow_suspended_IM1::start(lexer *p, fdm_nhf *d, ghostcell *pgc, nhflow_sc
     fill_wvel(p,d,pgc,s);
     pconvec->start(p,d,d->CONC,4,d->U,d->V,WVEL);
     pdiff->diff_scalar(p,d,pgc,psolv,d->CONC,1.0,1.0);
-	suspsource(p,d,d->CONC,s);
-	timesource(p,d,d->CONC);
+    suspsource(p,d,d->CONC,s);
+    timesource(p,d,d->CONC);
     bcsusp_start(p,d,pgc,s,d->CONC);
     psolv->startV(p,pgc,d->CONC,d->rhsvec,d->M,4);
-	pgc->start4V(p,d->CONC,gcval_susp);
+    pgc->start4V(p,d->CONC,gcval_susp);
     fillconc(p,d,pgc,s);
-	p->susptime=pgc->timer()-starttime;
-	p->suspiter=p->solveriter;
-	if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"suspiter: "<<p->suspiter<<"  susptime: "<<setprecision(3)<<p->susptime<<endl;
+    p->susptime=pgc->timer()-starttime;
+    p->suspiter=p->solveriter;
+    if(p->mpirank==0 && (p->count%p->P12==0))
+    cout<<"suspiter: "<<p->suspiter<<"  susptime: "<<setprecision(3)<<p->susptime<<endl;
 }
 
 void nhflow_suspended_IM1::timesource(lexer* p, fdm_nhf *d, double *FN)
@@ -72,7 +72,7 @@ void nhflow_suspended_IM1::timesource(lexer* p, fdm_nhf *d, double *FN)
 
         d->rhsvec.V[count] += d->L[IJK] + CONCN[IJK]/DT;
 
-	++count;
+    ++count;
     }
 }
 
@@ -104,7 +104,7 @@ void nhflow_suspended_IM1::suspsource(lexer* p, fdm_nhf *d, double *CONC, sedime
         d->rhsvec.V[count]  += (-s->ws)*(s->cb(i,j)-s->cbe(i,j))/(zdist);
         }
 
-	++count;
+    ++count;
     }
 }
 
@@ -204,6 +204,6 @@ void nhflow_suspended_IM1::clearrhs(lexer* p, fdm_nhf *d)
     {
     d->rhsvec.V[count]=0.0;
     d->L[IJK]=0.0;
-	++count;
+    ++count;
     }
 }

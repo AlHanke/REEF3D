@@ -28,7 +28,7 @@ Author: Hans Bihs
 void sediment_exner::timestep(lexer* p, ghostcell *pgc, sediment_fdm *s)
 {
     double dx;
-	maxvz=maxdh=0.0;
+    maxvz=maxdh=0.0;
     
     
     SLICELOOP4
@@ -40,12 +40,12 @@ void sediment_exner::timestep(lexer* p, ghostcell *pgc, sediment_fdm *s)
     dx = p->DXN[IP];
     }
     
-	SLICELOOP4
-	maxvz = MAX(fabs(s->vz(i,j)),maxvz);
+    SLICELOOP4
+    maxvz = MAX(fabs(s->vz(i,j)),maxvz);
 
-	maxvz=pgc->globalmax(maxvz);
-	
-	if(p->S15==0)
+    maxvz=pgc->globalmax(maxvz);
+    
+    if(p->S15==0)
     p->dtsed=MIN(p->S13, (p->S14*dx)/(fabs(maxvz)>1.0e-15?maxvz:1.0e-15));
 
     if(p->S15==1)
@@ -58,7 +58,7 @@ void sediment_exner::timestep(lexer* p, ghostcell *pgc, sediment_fdm *s)
     
     //
     maxdh=p->dtsed*maxvz;
-	
-	if(p->mpirank==0)
-	cout<<p->mpirank<<" maxvz: "<<setprecision(4)<<maxvz<<" maxdh: "<<setprecision(4)<<maxdh<<" dtsed: "<<setprecision(4)<<p->dtsed<<endl;
+    
+    if(p->mpirank==0)
+    cout<<p->mpirank<<" maxvz: "<<setprecision(4)<<maxvz<<" maxdh: "<<setprecision(4)<<maxdh<<" dtsed: "<<setprecision(4)<<p->dtsed<<endl;
 }

@@ -81,7 +81,7 @@ void bedshear::taubed(lexer *p, fdm2D *b, ghostcell *pgc, sediment_fdm *s)
 
 void bedshear::taucritbed(lexer *p, fdm2D *b, ghostcell *pgc, sediment_fdm *s)
 {
-	double density = p->W1;
+    double density = p->W1;
     
     SLICELOOP4
     {

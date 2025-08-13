@@ -53,18 +53,18 @@ momentum_RKLS3_df::momentum_RKLS3_df
     ioflow *pioflow
 ):bcmom(p),urk(p),vrk(p),wrk(p),Cu(p),Cv(p),Cw(p),Du(p),Dv(p),Dw(p),fx(p),fy(p),fz(p)
 {
-	gcval_u=10;
-	gcval_v=11;
-	gcval_w=12;
-	
-	pconvec=pconvection;
-	pdiff=pdiffusion;
-	ppress=ppressure;
-	ppois=ppoisson;
-	pturb=pturbulence;
-	psolv=psolver;
+    gcval_u=10;
+    gcval_v=11;
+    gcval_w=12;
+    
+    pconvec=pconvection;
+    pdiff=pdiffusion;
+    ppress=ppressure;
+    ppois=ppoisson;
+    pturb=pturbulence;
+    psolv=psolver;
     ppoissonsolv=ppoissonsolver;
-	pflow=pioflow;
+    pflow=pioflow;
 
     alpha << 4.0/15.0, 1.0/15.0, 1.0/6.0;
     gamma << 8.0/15.0, 5.0/12.0, 3.0/4.0;
@@ -77,15 +77,15 @@ momentum_RKLS3_df::~momentum_RKLS3_df(){}
 void momentum_RKLS3_df::start(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, sixdof *p6dof){}
 
 void momentum_RKLS3_df::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, vrans* pvrans, fsi* pfsi)
-{	
+{    
     // Set inflow 
     double udisctime=0.0;
     double udiscstart=0.0;
     
     pflow->discharge(p,a,pgc);
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
-	//pflow->rkinflow(p,a,pgc,urk,vrk,wrk);
-		
+    //pflow->rkinflow(p,a,pgc,urk,vrk,wrk);
+        
     bool final = false;
 
     for (int loop=0; loop<3; loop++)
@@ -260,7 +260,7 @@ void momentum_RKLS3_df::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, 
 
 void momentum_RKLS3_df::irhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uvel, field &vvel, field &wvel, double alpha)
 {
-	n=0;
+    n=0;
     
         ULOOP
         {
@@ -276,7 +276,7 @@ void momentum_RKLS3_df::irhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &
 
 void momentum_RKLS3_df::jrhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uvel, field &vvel, field &wvel, double alpha)
 {
-	n=0;
+    n=0;
 
         VLOOP
         {
@@ -291,7 +291,7 @@ void momentum_RKLS3_df::jrhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &
 
 void momentum_RKLS3_df::krhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uvel, field &vvel, field &wvel, double alpha)
 {
-	n=0;
+    n=0;
 
         WLOOP
         {

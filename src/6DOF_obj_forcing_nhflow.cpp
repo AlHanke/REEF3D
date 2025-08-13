@@ -59,15 +59,15 @@ void sixdof_obj::update_forcing_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc,
         d->FHB[IJK] = MIN(d->FHB[IJK] + H, 1.0); 
         
     // Normal vectors calculation 
-		nx = -(d->FB[Ip1JK] - d->FB[Im1JK])/(p->DXN[IP] + p->DXN[IM1]);
-		ny = -(d->FB[IJp1K] - d->FB[IJm1K])/(p->DYN[JP] + p->DYN[JM1]);
-		nz = -(d->FB[IJKp1] - d->FB[IJKm1])/(p->DZN[KP]*WL(i,j) + p->DZN[KM1]*WL(i,j));
+        nx = -(d->FB[Ip1JK] - d->FB[Im1JK])/(p->DXN[IP] + p->DXN[IM1]);
+        ny = -(d->FB[IJp1K] - d->FB[IJm1K])/(p->DYN[JP] + p->DYN[JM1]);
+        nz = -(d->FB[IJKp1] - d->FB[IJKm1])/(p->DZN[KP]*WL(i,j) + p->DZN[KM1]*WL(i,j));
 
-		norm = sqrt(nx*nx + ny*ny + nz*nz);
+        norm = sqrt(nx*nx + ny*ny + nz*nz);
                 
-		nx /= norm > 1.0e-20 ? norm : 1.0e20;
-		ny /= norm > 1.0e-20 ? norm : 1.0e20;
-		nz /= norm > 1.0e-20 ? norm : 1.0e20;
+        nx /= norm > 1.0e-20 ? norm : 1.0e20;
+        ny /= norm > 1.0e-20 ? norm : 1.0e20;
+        nz /= norm > 1.0e-20 ? norm : 1.0e20;
         
         
         if(d->FB[IJK]<=0.0)
@@ -98,7 +98,7 @@ double sixdof_obj::Hsolidface_nhflow(lexer *p, fdm_nhf *d, int aa, int bb, int c
     
     if (p->j_dir==0)
     psi = p->X41*(1.0/1.0)*(p->DXN[IP]);
-	
+    
     if (p->j_dir==1)
     psi = p->X41*(1.0/2.0)*(p->DXN[IP]+p->DYN[JP]);
 

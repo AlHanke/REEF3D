@@ -42,15 +42,15 @@ using namespace std;
 class net_sheet : public net, public boundarycheck
 {
 public:
-	net_sheet(int, lexer*);
-	virtual ~net_sheet();
+    net_sheet(int, lexer*);
+    virtual ~net_sheet();
     
-	virtual void start_cfd(lexer*, fdm*, ghostcell*, double,Eigen::Matrix3d);
+    virtual void start_cfd(lexer*, fdm*, ghostcell*, double,Eigen::Matrix3d);
     virtual void start_nhflow(lexer*, fdm_nhf*, ghostcell*, double,Eigen::Matrix3d);
     
-	virtual void initialize_cfd(lexer*, fdm*, ghostcell*);
+    virtual void initialize_cfd(lexer*, fdm*, ghostcell*);
     virtual void initialize_nhflow(lexer*, fdm_nhf*, ghostcell*);
-	virtual void netForces(lexer*, double&, double&, double&, double&, double&, double&);
+    virtual void netForces(lexer*, double&, double&, double&, double&, double&, double&);
     
     virtual const EigenMat& getLagrangePoints(){return lagrangePoints;} 
     virtual const EigenMat& getLagrangeForces(){return lagrangeForces;} 
@@ -61,8 +61,8 @@ public:
 private:
     
     // -------------------------------
-	// Runtime
-	void startLoop(lexer*, ghostcell*, int&);
+    // Runtime
+    void startLoop(lexer*, ghostcell*, int&);
     void update_velocity_cfd(lexer*, fdm*, ghostcell*);
     void update_velocity_nhflow(lexer*, fdm_nhf*, ghostcell*);
     
@@ -108,17 +108,17 @@ private:
         );
     
     
-	// ------ 
-	
+    // ------ 
     
-	// Parallelisation
-	int nNet;
-	double *xstart, *xend, *ystart, *yend, *zstart, *zend;
-	
-	// Material constants
-	double rho_c, l_c, d_c;
-	
-	// Mesh
+    
+    // Parallelisation
+    int nNet;
+    double *xstart, *xend, *ystart, *yend, *zstart, *zend;
+    
+    // Material constants
+    double rho_c, l_c, d_c;
+    
+    // Mesh
     int nK;
     MatrixXd x0_, x_, xdot_;
     double dt_; 
@@ -135,7 +135,7 @@ private:
     vector<Eigen::Vector3d> collarVel;    
     vector<Eigen::Vector3d> collarPoints;    
 
-	// Forces
+    // Forces
     double Fx,Fy,Fz;
 
     // Knots
@@ -144,9 +144,9 @@ private:
     // Probe Points
     Eigen::VectorXi probeKnot;
 
-	// Print
-	char name[100];
-	double printtime;
+    // Print
+    char name[100];
+    double printtime;
 };
 
 #endif

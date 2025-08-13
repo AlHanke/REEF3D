@@ -46,7 +46,7 @@ public:
     virtual void ini(lexer*,ghostcell*);
     
     sixdof_motionext_void(lexer*, ghostcell*);
-	virtual ~sixdof_motionext_void();
+    virtual ~sixdof_motionext_void();
     
 };
 

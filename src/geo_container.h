@@ -33,8 +33,8 @@ using namespace std;
 class geo_container : increment
 {
 public:
-	geo_container(lexer*);
-	virtual ~geo_container();
+    geo_container(lexer*);
+    virtual ~geo_container();
     
     void create_obj(lexer*, int, int , int);
     

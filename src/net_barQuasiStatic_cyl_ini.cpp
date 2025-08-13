@@ -61,12 +61,12 @@ void net_barQuasiStatic::cyl_ini(lexer *p, ghostcell *pgc)
     
      
     // Initialise fields
-    p->Darray(coupledField, nK, 3);		// fluid coupling matrix (velocity 1,2,3 + phi 4)
-    p->Darray(v_t, nf, 3);		// tangential direction
-    p->Darray(v_n, nf, 3);		// normal direction
+    p->Darray(coupledField, nK, 3);        // fluid coupling matrix (velocity 1,2,3 + phi 4)
+    p->Darray(v_t, nf, 3);        // tangential direction
+    p->Darray(v_n, nf, 3);        // normal direction
     
-    p->Darray(l0, nf);			// initial bar length
-    p->Darray(l, nf);			// bar length
+    p->Darray(l0, nf);            // initial bar length
+    p->Darray(l, nf);            // bar length
 
     fi = MatrixXd::Zero(nf,3);  // inner bar matrix      
     p->Darray(fb,nd,3);         // boundary bar matrix
@@ -82,7 +82,7 @@ void net_barQuasiStatic::cyl_ini(lexer *p, ghostcell *pgc)
     B = MatrixXd::Zero(nf,3);   // External force matrix
     Bh = MatrixXd::Zero(nf,3);   // External force matrix with hydrodynamics
     
-    p->Iarray(nfK, niK, 5);		          // Bars per Knot -> first entry is knot ID, then up to four bars
+    p->Iarray(nfK, niK, 5);                  // Bars per Knot -> first entry is knot ID, then up to four bars
     meshID.resize(nd*nl,vector<int>(4));  // List of knots in each mesh
     
 
@@ -270,7 +270,7 @@ void net_barQuasiStatic::cyl_ini(lexer *p, ghostcell *pgc)
     for (int i = 0; i < nK; i++)
     {
         bK = false;
-		
+        
         // Check whether it is a boundary knot
         for (int k = 0; k < nd; k++)
         {
@@ -540,7 +540,7 @@ void net_barQuasiStatic::cyl_ini(lexer *p, ghostcell *pgc)
         sprintf(str,"./REEF3D_CFD_6DOF/REEF3D_6DOF_Net_Forces_%i.dat",nNet);
         eTout.open(str);
         eTout<<"time [s] \t Tmax [N] \t Fx [N] \t Fy [N] \t Fz [N]"<<endl;
-    }		
+    }        
     printtime = 0.0;
 
 

@@ -43,8 +43,8 @@ void nhflow_forcing::print_vtp(lexer *p, ghostcell *pgc)
     // ---------------------------------------------------
     n=0;
 
-	offset[n]=0;
-	++n;
+    offset[n]=0;
+    ++n;
 
     offset[n]=offset[n-1]+4*tricount*3*3 + 4;
     ++n;
@@ -52,12 +52,12 @@ void nhflow_forcing::print_vtp(lexer *p, ghostcell *pgc)
     ++n;
     offset[n]=offset[n-1]+4*tricount + 4;
     ++n;
-	//---------------------------------------------
+    //---------------------------------------------
 
-	result<<"<?xml version=\"1.0\"?>"<<endl;
-	result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
-	result<<"<PolyData>"<<endl;
-	result<<"<Piece NumberOfPoints=\""<<tricount*3<<"\" NumberOfPolys=\""<<tricount<<"\">"<<endl;
+    result<<"<?xml version=\"1.0\"?>"<<endl;
+    result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
+    result<<"<PolyData>"<<endl;
+    result<<"<Piece NumberOfPoints=\""<<tricount*3<<"\" NumberOfPolys=\""<<tricount<<"\">"<<endl;
 
     n=0;
     result<<"<Points>"<<endl;
@@ -68,11 +68,11 @@ void nhflow_forcing::print_vtp(lexer *p, ghostcell *pgc)
     result<<"<Polys>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-	result<<"<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-	++n;
+    result<<"<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    ++n;
     result<<"<DataArray type=\"Int32\"  Name=\"types\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
 
-	result<<"</Polys>"<<endl;
+    result<<"</Polys>"<<endl;
 
     result<<"</Piece>"<<endl;
     result<<"</PolyData>"<<endl;
@@ -82,56 +82,56 @@ void nhflow_forcing::print_vtp(lexer *p, ghostcell *pgc)
 
 
 //  XYZ
-	iin=4*tricount*3*3;
-	result.write((char*)&iin, sizeof (int));
+    iin=4*tricount*3*3;
+    result.write((char*)&iin, sizeof (int));
     for(n=0;n<tricount;++n)
-	for(q=0;q<3;++q)
-	{
-	ffn=tri_x[n][q];
-	result.write((char*)&ffn, sizeof (float));
+    for(q=0;q<3;++q)
+    {
+    ffn=tri_x[n][q];
+    result.write((char*)&ffn, sizeof (float));
 
-	ffn=tri_y[n][q];
-	result.write((char*)&ffn, sizeof (float));
+    ffn=tri_y[n][q];
+    result.write((char*)&ffn, sizeof (float));
 
-	ffn=tri_z[n][q];
-	result.write((char*)&ffn, sizeof (float));
-	}
+    ffn=tri_z[n][q];
+    result.write((char*)&ffn, sizeof (float));
+    }
     
 //  Connectivity POLYGON
-	int count=0;
+    int count=0;
     iin=4*tricount*3;
     result.write((char*)&iin, sizeof (int));
     for(n=0;n<tricount;++n)
-	for(q=0;q<3;++q)
-	{
-	iin=count;
-	result.write((char*)&iin, sizeof (int));
-	++count;
-	}
+    for(q=0;q<3;++q)
+    {
+    iin=count;
+    result.write((char*)&iin, sizeof (int));
+    ++count;
+    }
 
 //  Offset of Connectivity
     iin=4*tricount;
     result.write((char*)&iin, sizeof (int));
-	iin=0;
-	for(n=0;n<tricount;++n)
-	{
-	iin+= 3;
-	result.write((char*)&iin, sizeof (int));
-	}
+    iin=0;
+    for(n=0;n<tricount;++n)
+    {
+    iin+= 3;
+    result.write((char*)&iin, sizeof (int));
+    }
 
 //  Cell types
     iin=4*tricount;
     result.write((char*)&iin, sizeof (int));
-	for(n=0;n<tricount;++n)
-	{
-	iin=7;
-	result.write((char*)&iin, sizeof (int));
-	}
+    for(n=0;n<tricount;++n)
+    {
+    iin=7;
+    result.write((char*)&iin, sizeof (int));
+    }
 
-	result<<endl<<"</AppendedData>"<<endl;
+    result<<endl<<"</AppendedData>"<<endl;
     result<<"</VTKFile>"<<endl;
 
-	result.close();	
+    result.close();    
 }
 
 

@@ -54,15 +54,15 @@ void nhflow_forcing::solid_forcing(lexer *p, fdm_nhf *d, ghostcell *pgc,
         d->FHB[IJK] = MIN(d->FHB[IJK] + H, 1.0); 
         
     // Normal vectors calculation 
-		nx = -(d->SOLID[Ip1JK] - d->SOLID[Im1JK])/(p->DXN[IP] + p->DXN[IM1]);
-		ny = -(d->SOLID[IJp1K] - d->SOLID[IJm1K])/(p->DYN[JP] + p->DYN[JM1]);
-		nz = -(d->SOLID[IJKp1] - d->SOLID[IJKm1])/(p->DZN[KP]*WL(i,j) + p->DZN[KM1]*WL(i,j));
+        nx = -(d->SOLID[Ip1JK] - d->SOLID[Im1JK])/(p->DXN[IP] + p->DXN[IM1]);
+        ny = -(d->SOLID[IJp1K] - d->SOLID[IJm1K])/(p->DYN[JP] + p->DYN[JM1]);
+        nz = -(d->SOLID[IJKp1] - d->SOLID[IJKm1])/(p->DZN[KP]*WL(i,j) + p->DZN[KM1]*WL(i,j));
 
-		norm = sqrt(nx*nx + ny*ny + nz*nz);
+        norm = sqrt(nx*nx + ny*ny + nz*nz);
                 
-		nx /= norm > 1.0e-20 ? norm : 1.0e20;
-		ny /= norm > 1.0e-20 ? norm : 1.0e20;
-		nz /= norm > 1.0e-20 ? norm : 1.0e20;
+        nx /= norm > 1.0e-20 ? norm : 1.0e20;
+        ny /= norm > 1.0e-20 ? norm : 1.0e20;
+        nz /= norm > 1.0e-20 ? norm : 1.0e20;
         
         
         if(d->SOLID[IJK]<=0.0)

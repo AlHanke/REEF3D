@@ -23,7 +23,7 @@ Authors: Tobias Martin, Hans Bihs
 #include"net_barQuasiStatic.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"ghostcell.h"	
+#include"ghostcell.h"    
 
 net_barQuasiStatic::net_barQuasiStatic(int number, lexer *p):nNet(number),f_(p),dt(p),frk1(p),frk2(p),L_(p), cutl(p), cutr(p)
 {
@@ -42,15 +42,15 @@ void net_barQuasiStatic::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alph
    
     //- Get velocities at knots
     updateField_cfd(p,a,pgc,0);
-    updateField_cfd(p,a,pgc,1);	
+    updateField_cfd(p,a,pgc,1);    
     updateField_cfd(p,a,pgc,2);
     
     //- Get density at knots
     updateField_cfd(p,a,pgc,3);
 
-	//- Solving the system of equations
-	while(iter < 200)
-	{
+    //- Solving the system of equations
+    while(iter < 200)
+    {
         //- Fill right-hand side Bh with gravity and hydrodynamic forces
         if (p->X320_type[nNet]==1)
         {
@@ -61,27 +61,27 @@ void net_barQuasiStatic::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alph
             // fillRhs_Morison(p);  
             fillRhs_Screen(p);
         }
-		
+        
         //- Solve the system A * fi = Bh
         // fi = A.lu().solve(Bh); 
 
-		//-  Correct system such that length of normal vectors equals one
-		error = 0.0;
-		for (int j = 0; j < nf; j++)
-		{
+        //-  Correct system such that length of normal vectors equals one
+        error = 0.0;
+        for (int j = 0; j < nf; j++)
+        {
             norm = fi.row(j).norm();
 
             fi(j,0) /= norm;
             fi(j,1) /= norm;
             fi(j,2) /= norm;
         
-			for (int k = 0; k < niK; k++) 
-			{
-				A(k,j) *= norm;
-			}
+            for (int k = 0; k < niK; k++) 
+            {
+                A(k,j) *= norm;
+            }
             
             error = max(error,fabs(norm-1.0));
-		}	
+        }    
 
         //- Check convergence
         if (error < 1e-2)
@@ -90,15 +90,15 @@ void net_barQuasiStatic::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alph
         else
         iter++;
 
-		//- Correct length of bars
+        //- Correct length of bars
         updateLength();
-	}
+    }
    
     if (p->mpirank==0)
     cout<<"Number of iterations = "<<iter<<setprecision(5)<<" with error = "<<error<<endl;
     
-	//- Build and save net	
-	print(p);	
+    //- Build and save net    
+    print(p);    
  
     
     //- Update porous zone and coefficients
@@ -123,9 +123,9 @@ void net_barQuasiStatic::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, doub
     //- Get density at knots
     updateField_nhflow(p,d,pgc,3);
 
-	//- Solving the system of equations
-	while(iter < 200)
-	{
+    //- Solving the system of equations
+    while(iter < 200)
+    {
         //- Fill right-hand side Bh with gravity and hydrodynamic forces
         if (p->X320_type[nNet]==1)
         {
@@ -136,27 +136,27 @@ void net_barQuasiStatic::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, doub
             // fillRhs_Morison(p);  
             fillRhs_Screen(p);
         }
-		
+        
         //- Solve the system A * fi = Bh
         // fi = A.lu().solve(Bh); 
 
-		//-  Correct system such that length of normal vectors equals one
-		error = 0.0;
-		for (int j = 0; j < nf; j++)
-		{
+        //-  Correct system such that length of normal vectors equals one
+        error = 0.0;
+        for (int j = 0; j < nf; j++)
+        {
             norm = fi.row(j).norm();
 
             fi(j,0) /= norm;
             fi(j,1) /= norm;
             fi(j,2) /= norm;
         
-			for (int k = 0; k < niK; k++) 
-			{
-				A(k,j) *= norm;
-			}
+            for (int k = 0; k < niK; k++) 
+            {
+                A(k,j) *= norm;
+            }
             
             error = max(error,fabs(norm-1.0));
-		}	
+        }    
 
         //- Check convergence
         if (error < 1e-2)
@@ -165,15 +165,15 @@ void net_barQuasiStatic::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, doub
         else
         iter++;
 
-		//- Correct length of bars
+        //- Correct length of bars
         updateLength();
-	}
+    }
    
     if (p->mpirank==0)
     cout<<"Number of iterations = "<<iter<<setprecision(5)<<" with error = "<<error<<endl;
     
-	//- Build and save net	
-	print(p);	
+    //- Build and save net    
+    print(p);    
  
     
     //- Update porous zone and coefficients
@@ -210,7 +210,7 @@ void net_barQuasiStatic::fillRhs_Morison(lexer *p)
         v_n[j][0] = vel_x - v_t[j][0];
         v_n[j][1] = vel_y - v_t[j][1];
         v_n[j][2] = vel_z - v_t[j][2];   
-    }	
+    }    
 
     
     for (int i = 0; i < niK; i++)
@@ -327,13 +327,13 @@ void net_barQuasiStatic::fillRhs_bag(lexer *p)
 {
     double vn_mag, cn, ct;
     
-	int index = 0;
+    int index = 0;
     bool bk;
-		
+        
     for (int j = 0; j < nK; j++)
     {
         bk = false;
-		
+        
         for (int k = 0; k < 2*nd+2*nl; k++)
         {
             if (j==Pb[k] || j==Nb[k])
@@ -342,24 +342,24 @@ void net_barQuasiStatic::fillRhs_bag(lexer *p)
                 break;
             }
         }
-			
+            
         if (bk==false)
         {
             Bh.row(index) = B.row(index);
 
             for (int k = 0; k < 4; k++)
             {
-                int nfKik = nfK[index][k]; 	
+                int nfKik = nfK[index][k];     
 
                 vn_mag = sqrt(v_n[nfKik][0]*v_n[nfKik][0] + v_n[nfKik][1]*v_n[nfKik][1] + v_n[nfKik][2]*v_n[nfKik][2]);
                     
                 morisonForceCoeff(cn,ct,vn_mag);
-					
+                    
                 Bh(index,0) -= (p->W1/2.0*d_c*l[nfKik]/2.0*cn*vn_mag*v_n[nfKik][0] + ct*v_t[nfKik][0]);
                 Bh(index,1) -= (p->W1/2.0*d_c*l[nfKik]/2.0*cn*vn_mag*v_n[nfKik][1] + ct*v_t[nfKik][1]);
                 Bh(index,2) -= (p->W1/2.0*d_c*l[nfKik]/2.0*cn*vn_mag*v_n[nfKik][2] + ct*v_t[nfKik][2]);
             }
-							
+                            
             index++;
         }
     } 

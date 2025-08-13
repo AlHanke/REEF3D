@@ -43,7 +43,7 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     
     // Initialise folder structure
     if(p->X50==1)
-	print_ini_vtp(p,pgc);
+    print_ini_vtp(p,pgc);
     
     if(p->X50==2)
     print_ini_stl(p,pgc);
@@ -52,30 +52,30 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     ini_parallel(p,pgc);
     
     // Initialise objects
-	objects_create(p,pgc);
+    objects_create(p,pgc);
     
     // Initialise fbvel
-	ini_fbvel(p,pgc);
+    ini_fbvel(p,pgc);
     
     // Level Set for floating body
     ray_cast(p,a,pgc);
 
-	reini_RK2(p,a,pgc,a->fb);
+    reini_RK2(p,a,pgc,a->fb);
     pgc->start4a(p,a->fb,50);
     
     // Calculate geometrical properties
-	geometry_parameters(p,a,pgc);
+    geometry_parameters(p,a,pgc);
     
     // Initialise position of bodies
     iniPosition_RBM(p,pgc);
-	
-	// Recalculate distances
-	ray_cast(p,a,pgc);
-	reini_RK2(p,a,pgc,a->fb);
+    
+    // Recalculate distances
+    ray_cast(p,a,pgc);
+    reini_RK2(p,a,pgc,a->fb);
     pgc->start4a(p,a->fb,50);
     
     // Initialise global variables
-	update_fbvel(p,pgc);
+    update_fbvel(p,pgc);
    
     // Initialise floating fields
      ULOOP
@@ -102,57 +102,57 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     if(p->X50==2)
     print_stl(p,pgc);
 
-	// Mooring
-	if(p->X310==0)
-	{
-		pmooring.push_back(new mooring_void());
-	}
+    // Mooring
+    if(p->X310==0)
+    {
+        pmooring.push_back(new mooring_void());
+    }
     
-	else
-	{
-		MPI_Bcast(&p->mooring_count,1,MPI_DOUBLE,0,pgc->mpi_comm);	
+    else
+    {
+        MPI_Bcast(&p->mooring_count,1,MPI_DOUBLE,0,pgc->mpi_comm);    
 
-		Xme.resize(p->mooring_count);
-		Yme.resize(p->mooring_count);
-		Zme.resize(p->mooring_count);
-		Kme.resize(p->mooring_count);
-		Mme.resize(p->mooring_count);
-		Nme.resize(p->mooring_count);
+        Xme.resize(p->mooring_count);
+        Yme.resize(p->mooring_count);
+        Zme.resize(p->mooring_count);
+        Kme.resize(p->mooring_count);
+        Mme.resize(p->mooring_count);
+        Nme.resize(p->mooring_count);
 
-		if(p->mpirank==0)
-		mkdir("./REEF3D_CFD_6DOF_Mooring",0777);	
+        if(p->mpirank==0)
+        mkdir("./REEF3D_CFD_6DOF_Mooring",0777);    
 
-		pmooring.reserve(p->mooring_count);
-		X311_xen.resize(p->mooring_count,0.0);
-		X311_yen.resize(p->mooring_count,0.0);
-		X311_zen.resize(p->mooring_count,0.0);
-			
-		for (int i=0; i < p->mooring_count; i++)
-		{
-			if(p->X310==1)
-			{
-				pmooring.push_back(new mooring_Catenary(i));
-			}	
-			else if(p->X310==2)
-			{
-				pmooring.push_back(new mooring_barQuasiStatic(i)); 
-			}	
-			else if(p->X310==3)
-			{
+        pmooring.reserve(p->mooring_count);
+        X311_xen.resize(p->mooring_count,0.0);
+        X311_yen.resize(p->mooring_count,0.0);
+        X311_zen.resize(p->mooring_count,0.0);
+            
+        for (int i=0; i < p->mooring_count; i++)
+        {
+            if(p->X310==1)
+            {
+                pmooring.push_back(new mooring_Catenary(i));
+            }    
+            else if(p->X310==2)
+            {
+                pmooring.push_back(new mooring_barQuasiStatic(i)); 
+            }    
+            else if(p->X310==3)
+            {
                 pmooring.push_back(new mooring_dynamic(i));
-			}
-			else if(p->X310==4)
-			{
-				pmooring.push_back(new mooring_Spring(i));
-			}
-		
-			X311_xen[i] = p->X311_xe[i] - p->xg;
-			X311_yen[i] = p->X311_ye[i] - p->yg;
-			X311_zen[i] = p->X311_ze[i] - p->zg;
-		
-			pmooring[i]->initialize(p,pgc);
-		}
-	}	
+            }
+            else if(p->X310==4)
+            {
+                pmooring.push_back(new mooring_Spring(i));
+            }
+        
+            X311_xen[i] = p->X311_xe[i] - p->xg;
+            X311_yen[i] = p->X311_ye[i] - p->yg;
+            X311_zen[i] = p->X311_ze[i] - p->zg;
+        
+            pmooring[i]->initialize(p,pgc);
+        }
+    }    
 
 
     pnetinter->initialize_cfd(p,a,pgc);

@@ -39,8 +39,8 @@ using namespace std;
 class fnpf_fsfbc_sc : public fnpf_fsf, public increment 
 {
 public:
-	fnpf_fsfbc_sc(lexer*, fdm_fnpf*, ghostcell*);
-	virtual ~fnpf_fsfbc_sc();
+    fnpf_fsfbc_sc(lexer*, fdm_fnpf*, ghostcell*);
+    virtual ~fnpf_fsfbc_sc();
     
     virtual void fsfdisc(lexer*,fdm_fnpf*,ghostcell*,slice&,slice&);
     virtual void fsfdisc_ini(lexer*,fdm_fnpf*,ghostcell*,slice&,slice&);

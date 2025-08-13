@@ -214,11 +214,11 @@ void ioflow_f::waterlevel_update(lexer *p,fdm *a,ghostcell *pgc)
 {
     double zval;
     
-	ILOOP
+    ILOOP
     JLOOP
-	{
+    {
     zval=-1e20;
-	
+    
         KLOOP
         PCHECK
         {

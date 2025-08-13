@@ -24,7 +24,7 @@ Authors: Tobias Martin, Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"fdm_nhf.h"
-#include"ghostcell.h"	
+#include"ghostcell.h"    
 
 net_sheet::net_sheet(int number, lexer *p):nNet(number){}
 
@@ -66,7 +66,7 @@ void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen:
 
     //- Get velocities at knots
     updateField_cfd(p,a,pgc,0);
-    updateField_cfd(p,a,pgc,1);	
+    updateField_cfd(p,a,pgc,1);    
     updateField_cfd(p,a,pgc,2);
     
     //- Get density at knots
@@ -96,15 +96,15 @@ void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen:
         Fz += forces_knot(knotI, 2); 
     }
 
-	// Update position of triangles
+    // Update position of triangles
     Eigen::Vector3d point;
-	for(int n = 0; n < nK; ++n)
-	{
+    for(int n = 0; n < nK; ++n)
+    {
         for(int q = 0; q < 3; q++)
         {
             // (tri_x0 is initial vector between tri_x and xg)
             point << tri_x0[n][q], tri_y0[n][q], tri_z0[n][q];
-					
+                    
             point = quatRotMat*point;
         
             tri_x[n][q] = point(0) + p->xg;
@@ -119,13 +119,13 @@ void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen:
         x_(n,1) = point(1) + p->yg;
         x_(n,2) = point(2) + p->zg;
 
-	}
+    }
 
     //- Coupling to vrans model
     coupling_dlm_cfd(p,a,pgc);
-	
+    
     //- Build and save net
-	print(p);	
+    print(p);    
 
     //- Print output
     double endtime1 = pgc->timer() - starttime1; 
@@ -180,15 +180,15 @@ void net_sheet::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha,
         Fz += forces_knot(knotI, 2); 
     }
 
-	// Update position of triangles
+    // Update position of triangles
     Eigen::Vector3d point;
-	for(int n = 0; n < nK; ++n)
-	{
+    for(int n = 0; n < nK; ++n)
+    {
         for(int q = 0; q < 3; q++)
         {
             // (tri_x0 is initial vector between tri_x and xg)
             point << tri_x0[n][q], tri_y0[n][q], tri_z0[n][q];
-					
+                    
             point = quatRotMat*point;
         
             tri_x[n][q] = point(0) + p->xg;
@@ -203,13 +203,13 @@ void net_sheet::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha,
         x_(n,1) = point(1) + p->yg;
         x_(n,2) = point(2) + p->zg;
 
-	}
+    }
 
     //- Coupling to vrans model
     coupling_dlm_nhflow(p,d,pgc);
-	
+    
     //- Build and save net
-	print(p);	
+    print(p);    
 
     //- Print output
     double endtime1 = pgc->timer() - starttime1; 

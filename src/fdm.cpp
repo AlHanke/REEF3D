@@ -48,13 +48,13 @@ fdm::fdm(lexer *p) :
             nX(p),nY(p),nZ(p),Alpha(p)
             
 {
-	maxF=0.0;
-	maxG=0.0; 
-	maxH=0.0;
+    maxF=0.0;
+    maxG=0.0; 
+    maxH=0.0;
     
-	gi=p->W20;
-	gj=p->W21;
-	gk=p->W22;
+    gi=p->W20;
+    gj=p->W21;
+    gk=p->W22;
 }
 
 

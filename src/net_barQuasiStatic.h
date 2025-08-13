@@ -44,15 +44,15 @@ using namespace std;
 class net_barQuasiStatic : public net, public boundarycheck
 {
 public:
-	net_barQuasiStatic(int, lexer*);
-	virtual ~net_barQuasiStatic();
+    net_barQuasiStatic(int, lexer*);
+    virtual ~net_barQuasiStatic();
     
-	virtual void start_cfd(lexer*, fdm*, ghostcell*, double,Eigen::Matrix3d);
+    virtual void start_cfd(lexer*, fdm*, ghostcell*, double,Eigen::Matrix3d);
     virtual void start_nhflow(lexer*, fdm_nhf*, ghostcell*, double,Eigen::Matrix3d);
     
-	virtual void initialize_cfd(lexer*, fdm*, ghostcell*);
+    virtual void initialize_cfd(lexer*, fdm*, ghostcell*);
     virtual void initialize_nhflow(lexer*, fdm_nhf*, ghostcell*);
-	virtual void netForces(lexer*, double&, double&, double&, double&, double&, double&);
+    virtual void netForces(lexer*, double&, double&, double&, double&, double&, double&);
     
     virtual const EigenMat& getLagrangePoints(){return lagrangePoints;} 
     virtual const EigenMat& getLagrangeForces(){return lagrangeForces;} 
@@ -63,8 +63,8 @@ public:
 private:
     
     // -------------------------------
-	// Runtime
-	void startLoop(lexer*, ghostcell*, int&);
+    // Runtime
+    void startLoop(lexer*, ghostcell*, int&);
     void update_velocity_cfd(lexer*, fdm*, ghostcell*);
     void update_velocity_nhflow(lexer*, fdm_nhf*, ghostcell*);
     
@@ -86,7 +86,7 @@ private:
     void iniBoundaryKnots();  
     void stretch();
     void iniLSE(lexer*);
-	void ini_parallel(lexer*, ghostcell*);
+    void ini_parallel(lexer*, ghostcell*);
     
     
     
@@ -107,7 +107,7 @@ private:
     void print(lexer*);
     
     void buildNet_bag(lexer*);
-	void buildNet_cyl(lexer*);
+    void buildNet_cyl(lexer*);
     void buildNet_wall(lexer*);
     
     void fillRhs_bag(lexer*);
@@ -129,18 +129,18 @@ private:
             const double&
         );
     
-	// ------ 
-	
-	// Parallelisation
-	int nNet;
-	double *xstart, *xend, *ystart, *yend, *zstart, *zend;
-	
-	// Material constants
-	double EA, w, rho_c, l_c, d_c;
-	
-	// Mesh
-	double origin_x, origin_y, origin_z, phi, theta, psi;
-	double *l0, *l;
+    // ------ 
+    
+    // Parallelisation
+    int nNet;
+    double *xstart, *xend, *ystart, *yend, *zstart, *zend;
+    
+    // Material constants
+    double EA, w, rho_c, l_c, d_c;
+    
+    // Mesh
+    double origin_x, origin_y, origin_z, phi, theta, psi;
+    double *l0, *l;
     double L, D, al, ad, Fg, beta, gamma; 
     int nd, nl, niK, nbK, nK, nf;
     MatrixXd fi, A, B, Bh;
@@ -160,23 +160,23 @@ private:
     fieldint5 cutl,cutr;
     double xs,xe,ys,ye,zs,ze;
     int tend;  
-	
+    
     // Reini
-	vec f_,frk1,frk2,L_, dt;
-	int reiniter;
-	double xmin,xplus,ymin,yplus,zmin,zplus;
-	double dstx,dsty,dstz,lsSig,dnorm,op,lsv,sign;
+    vec f_,frk1,frk2,L_, dt;
+    int reiniter;
+    double xmin,xplus,ymin,yplus,zmin,zplus;
+    double dstx,dsty,dstz,lsSig,dnorm,op,lsv,sign;
 
-	// Forces
+    // Forces
     double Fx,Fy,Fz;
-	double **coupledField, **v_t, **v_n;
-	int **nfK;
+    double **coupledField, **v_t, **v_n;
+    int **nfK;
 
-	// Print
-	double *x, *y, *z, *T;
-	char name[100];
-	ofstream eTout;
-	double printtime;
+    // Print
+    double *x, *y, *z, *T;
+    char name[100];
+    ofstream eTout;
+    double printtime;
 };
 
 #endif

@@ -40,7 +40,7 @@ using namespace std;
 class sixdof_nhflow : public sixdof, public increment
 {
 public:
-	
+    
     sixdof_nhflow(lexer*, ghostcell*);
     virtual ~sixdof_nhflow();
     
@@ -52,11 +52,11 @@ public:
     void start_oneway(lexer*,fdm_nhf*,ghostcell*,int,double*,double*,double*,slice&,slice&,bool);
     void start_shipwave(lexer*,fdm_nhf*,ghostcell*,int,bool);
        
-	virtual void ini(lexer*,ghostcell*);
+    virtual void ini(lexer*,ghostcell*);
     virtual void initialize(lexer*, fdm*, ghostcell*);
     virtual void initialize(lexer*, fdm2D*, ghostcell*);
     virtual void initialize(lexer*, fdm_nhf*, ghostcell*);
-	
+    
     
     virtual void isource(lexer*,fdm*,ghostcell*);
     virtual void jsource(lexer*,fdm*,ghostcell*);
@@ -70,7 +70,7 @@ public:
     virtual void jsource2D(lexer*,fdm2D*,ghostcell*);
     
 private:
-	
+    
     // hires gradient
     double limiter(double v1, double v2);
     double starttime;

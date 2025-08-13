@@ -36,8 +36,8 @@ using namespace std;
 class geo_interface : increment
 {
 public:
-	geo_interface(lexer*);
-	virtual ~geo_interface();
+    geo_interface(lexer*);
+    virtual ~geo_interface();
     
     void create_geometry(lexer*);
     

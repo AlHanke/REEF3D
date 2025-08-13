@@ -35,16 +35,16 @@ sflow_eta::sflow_eta(lexer *p, fdm2D *b , ghostcell *pgc, patchBC_interface *ppB
     pBC = ppBC;
     
     if(p->F50==1)
-	gcval_eta = 51;
+    gcval_eta = 51;
     
     if(p->F50==2)
-	gcval_eta = 52;
+    gcval_eta = 52;
     
     if(p->F50==3)
-	gcval_eta = 53;
+    gcval_eta = 53;
     
     if(p->F50==4)
-	gcval_eta = 54;
+    gcval_eta = 54;
     
     
     p->phimean=p->F60;
@@ -54,7 +54,7 @@ sflow_eta::sflow_eta(lexer *p, fdm2D *b , ghostcell *pgc, patchBC_interface *ppB
 
     pgc->gcsl_start4(p,b->eta,gcval_eta);
 
-	phxy = new sflow_hxy_fou(p,pBC);
+    phxy = new sflow_hxy_fou(p,pBC);
     
     wd_criterion=p->A244;
     
@@ -75,7 +75,7 @@ void sflow_eta::disc(lexer *p, fdm2D *b , ghostcell *pgc, slice &P, slice &Q, sl
     double factor=1.0;
     double eps=0.0;
     
-	phxy->start(p,b->hx,b->hy,b->depth,p->wet,eta,P,Q);
+    phxy->start(p,b->hx,b->hy,b->depth,p->wet,eta,P,Q);
     
     SLICELOOP1
     b->hx(i,j) = MAX(b->hx(i,j), 0.0);
@@ -84,17 +84,17 @@ void sflow_eta::disc(lexer *p, fdm2D *b , ghostcell *pgc, slice &P, slice &Q, sl
     b->hy(i,j) = MAX(b->hy(i,j), 0.0);
     
 
-	pgc->gcsl_start1(p,b->hx,gcval_eta);    
-	pgc->gcsl_start2(p,b->hy,gcval_eta);  
+    pgc->gcsl_start1(p,b->hx,gcval_eta);    
+    pgc->gcsl_start2(p,b->hy,gcval_eta);  
 }
 
 void sflow_eta::depth_update(lexer *p, fdm2D *b , ghostcell *pgc, slice &P, slice &Q, slice &ws, slice &eta)
 {
     double factor=1.0;
     
-	// cell center
-	SLICELOOP4
-	b->depth(i,j) = p->wd - b->bed(i,j);
+    // cell center
+    SLICELOOP4
+    b->depth(i,j) = p->wd - b->bed(i,j);
     
     pgc->gcsl_start4(p,b->depth,1);
     
@@ -142,7 +142,7 @@ void sflow_eta::depth_update(lexer *p, fdm2D *b , ghostcell *pgc, slice &P, slic
     if(p->A221==0)
     wetdrydeep(p,b,pgc,eta,P,Q,ws);
 }
-	
+    
 void sflow_eta::ini(lexer *p, fdm2D *b , ghostcell *pgc, ioflow *pflow)
 {
     p->phimean=p->F60;

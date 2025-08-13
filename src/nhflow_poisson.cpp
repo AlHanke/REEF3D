@@ -40,7 +40,7 @@ nhflow_poisson::~nhflow_poisson()
 }
 
 void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
-{	
+{    
     double ab,denom;
     
     n=0;
@@ -60,9 +60,9 @@ void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
     ++n;
     }
     
-	n=0;
+    n=0;
     LOOP
-	{
+    {
         WETDRYDEEP
         {
             sigxyz2 = pow(p->sigx[FIJK],2.0) + pow(p->sigy[FIJK],2.0) + pow(p->sigz[IJ],2.0);
@@ -128,13 +128,13 @@ void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
         
         d->rhsvec.V[n] =  0.0;
         }
-	
-	++n;
-	}
+    
+    ++n;
+    }
     
     n=0;
-	LOOP
-	{
+    LOOP
+    {
         WETDRYDEEP 
         {
             // South
@@ -263,8 +263,8 @@ void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
             
             }
         }
-	++n;
-	}
+    ++n;
+    }
 }
 
 

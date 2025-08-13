@@ -45,19 +45,19 @@ void rans_io::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
     //gcupdate(p,a,pgc);
     
     TPLOOP
-	{
-	ffn=float(p->ipol4_a(kin));
-	result.write((char*)&ffn, sizeof (float));
-	}
+    {
+    ffn=float(p->ipol4_a(kin));
+    result.write((char*)&ffn, sizeof (float));
+    }
     
-	iin=4*(p->pointnum);
+    iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 
-	TPLOOP
-	{
-	ffn=float(p->ipol4_a(eps));
-	result.write((char*)&ffn, sizeof (float));
-	}
+    TPLOOP
+    {
+    ffn=float(p->ipol4_a(eps));
+    result.write((char*)&ffn, sizeof (float));
+    }
 
 }
 
@@ -128,16 +128,16 @@ void rans_io::epsget(int ii, int jj, int kk,double val)
 void rans_io::gcupdate(lexer *p, fdm *a, ghostcell *pgc)
 {
     pgc->start4(p,kin,20);
-	pgc->start4(p,eps,30);
+    pgc->start4(p,eps,30);
 }
 
 void rans_io::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 {
     result<<"<PDataArray type=\"Float32\" Name=\"kin\"/>"<<endl;
-	
-	if(p->T10==1||p->T10==11 || p->T10==21 ||p->T10==0 || p->T10>30)
-	result<<"<PDataArray type=\"Float32\" Name=\"epsilon\"/>"<<endl;
-	if(p->T10==2||p->T10==12 || p->T10==22||p->T10==3||p->T10==13)
+    
+    if(p->T10==1||p->T10==11 || p->T10==21 ||p->T10==0 || p->T10>30)
+    result<<"<PDataArray type=\"Float32\" Name=\"epsilon\"/>"<<endl;
+    if(p->T10==2||p->T10==12 || p->T10==22||p->T10==3||p->T10==13)
     result<<"<PDataArray type=\"Float32\" Name=\"omega\"/>"<<endl;
 }
 
@@ -145,9 +145,9 @@ void rans_io::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *
 {
     result<<"<DataArray type=\"Float32\" Name=\"kin\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-	if(p->T10==1||p->T10==11 || p->T10==21 ||p->T10==0 || p->T10>30)
-	result<<"<DataArray type=\"Float32\" Name=\"epsilon\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-	if(p->T10==2||p->T10==12 || p->T10==22||p->T10==3||p->T10==13)
+    if(p->T10==1||p->T10==11 || p->T10==21 ||p->T10==0 || p->T10>30)
+    result<<"<DataArray type=\"Float32\" Name=\"epsilon\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    if(p->T10==2||p->T10==12 || p->T10==22||p->T10==3||p->T10==13)
     result<<"<DataArray type=\"Float32\" Name=\"omega\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
 }
@@ -155,8 +155,8 @@ void rans_io::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *
 void rans_io::offset_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
-	++n;
-	offset[n]=offset[n-1]+4*(p->pointnum)+4;
-	++n;
+    ++n;
+    offset[n]=offset[n-1]+4*(p->pointnum)+4;
+    ++n;
 }
 

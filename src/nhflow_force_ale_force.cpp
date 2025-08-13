@@ -27,16 +27,16 @@ Author: Hans Bihs
 #include <math.h>
 
 void nhflow_force_ale::force_ale_force(lexer* p, fdm_nhf *d, ghostcell *pgc)
-{	
+{    
     double ztot=0; // check for strip total
     
     double uvel,vvel,wvel;
     double axrk;
 
-	Fx=Fy=0;
-	
+    Fx=Fy=0;
+    
     for(k=0; k<p->knoz; ++k)
-	{
+    {
         uvel = d->U[IJK];
         vvel = d->V[IJK];
         wvel = d->W[IJK];
@@ -79,9 +79,9 @@ void nhflow_force_ale::force_ale_force(lexer* p, fdm_nhf *d, ghostcell *pgc)
  
         vnn[k] = vn[k];
         vn[k] = vvel;
-	}
-	
-	eta_nn = eta_n;
+    }
+    
+    eta_nn = eta_n;
     eta_n = d->eta(i,j);
     
     simtime_nn = simtime_n;
@@ -97,21 +97,21 @@ double nhflow_force_ale::dndt_f(lexer *p, fdm_nhf *d, ghostcell *pgc)
     return dndt;
 }
 
-double nhflow_force_ale::dudsig_f(lexer *p, fdm_nhf *d, ghostcell *pgc) 	
+double nhflow_force_ale::dudsig_f(lexer *p, fdm_nhf *d, ghostcell *pgc)     
 {
   
     dudsig = (d->U[IJKp1] - d->U[IJKm1])/(p->DZN[KP]+p->DZN[KM1]);
 
-	return dudsig;        
+    return dudsig;        
 }
 
-double nhflow_force_ale::dvdsig_f(lexer *p, fdm_nhf *d, ghostcell *pgc) 	
+double nhflow_force_ale::dvdsig_f(lexer *p, fdm_nhf *d, ghostcell *pgc)     
 {
-	double dvdsig = 0;
+    double dvdsig = 0;
 
     dvdsig = (d->V[IJKp1] - d->V[IJKm1])/(p->DZN[KP]+p->DZN[KM1]);
 
-	return dvdsig;        
+    return dvdsig;        
 }
 
 double nhflow_force_ale::dudxi(lexer *p, fdm_nhf *d, ghostcell *pgc) 

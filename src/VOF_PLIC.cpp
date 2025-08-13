@@ -129,7 +129,7 @@ void VOF_PLIC::update
 }
 
 void VOF_PLIC::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcell* pgc,ioflow* pflow, reini* preini, particle_corr* ppart, field &ls)
-{	
+{    
     
 //********************************************************
 //Step 1
@@ -140,13 +140,13 @@ void VOF_PLIC::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostce
     // FSF
     LOOP
     {
-	a->L(i,j,k)=0.0;
+    a->L(i,j,k)=0.0;
     VoF(i,j,k)=a->vof(i,j,k);
     }
 /*
-	RKcalcL(a,p,pgc,a->u,a->v,a->w);
-	
-	LOOP
+    RKcalcL(a,p,pgc,a->u,a->v,a->w);
+    
+    LOOP
     {
         vof_rk1(i,j,k) = VoF(i,j,k) + a->L(i,j,k);
         
@@ -158,8 +158,8 @@ void VOF_PLIC::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostce
     
     pgc->start4(p,vof_rk1,gcval_vof);
     updatePlaneData(p,a,pgc,vof_rk1);
-	pflow->vof_relax(p,a,pgc,vof_rk1);
-	pgc->start4(p,vof_rk1,gcval_vof);
+    pflow->vof_relax(p,a,pgc,vof_rk1);
+    pgc->start4(p,vof_rk1,gcval_vof);
     
     LOOP
     {
@@ -192,8 +192,8 @@ void VOF_PLIC::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostce
     // FSF
     
    RKcalcL(a,p,pgc,a->u,a->v,a->w);
-	
-	LOOP
+    
+    LOOP
     {
         vof_rk2(i,j,k) = 0.75*VoF(i,j,k) + 0.25*vof_rk1(i,j,k)+0.25*a->L(i,j,k);
         
@@ -204,7 +204,7 @@ void VOF_PLIC::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostce
     }
     
     updatePlaneData(p,a,pgc,vof_rk2);
-	pflow->vof_relax(p,a,pgc,vof_rk2);
+    pflow->vof_relax(p,a,pgc,vof_rk2);
     pgc->start4(p,vof_rk2,gcval_vof);
     
     LOOP
@@ -234,8 +234,8 @@ void VOF_PLIC::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostce
     // FSF
     */
     RKcalcL(a,p,pgc,a->u,a->v,a->w);
-	
-	LOOP
+    
+    LOOP
     {
         a->vof(i,j,k) = VoF(i,j,k) + a->L(i,j,k);
         

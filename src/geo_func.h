@@ -41,8 +41,8 @@ using namespace std;
 class geometry_objects : public increment
 {
 public:
-	geometry_objects(lexer*);
-	virtual ~geometry_objects();
+    geometry_objects(lexer*);
+    virtual ~geometry_objects();
 
     void objects_create(lexer*, ghostcell*);
     void objects_allocate(lexer*, ghostcell*);
@@ -67,7 +67,7 @@ private:
     
     void rotation(double&,double&,double&,double,double,double);
     
-	void rotate_triangle(lexer*,int,int);
+    void rotate_triangle(lexer*,int,int);
     void rotation_ellipsoid(lexer*,int,double&,double&,double&,double,double,double);
     
     void angle_calc(double,double,double,double&,double&,double&);
@@ -81,8 +81,8 @@ private:
     
     double **tri_x,**tri_y,**tri_z,**tri_x0,**tri_y0,**tri_z0;
     vector<vector<double> > tri_x_r;
-	vector<vector<double> > tri_y_r;
-	vector<vector<double> > tri_z_r;
+    vector<vector<double> > tri_y_r;
+    vector<vector<double> > tri_z_r;
     
     int *tstart,*tend;
     int tricount;
@@ -101,8 +101,8 @@ private:
     
     double H,Ht, uf, vf, wf, ef;
     double efc;
-	double nx, ny, nz,norm ;
-	double phival_sf;
+    double nx, ny, nz,norm ;
+    double phival_sf;
     double dirac;
     
     double phi,theta,psi;

@@ -29,9 +29,9 @@ void VOF_PLIC::surface_tension2D(lexer* p,fdm* a,ghostcell*pgc,int gcval)
 {
     double calccurv, dHp, dHm, nx_loc, nz_loc;
     
-	n=0;
-	
-	if(gcval==10 && p->W5>1.0e-10)
+    n=0;
+    
+    if(gcval==10 && p->W5>1.0e-10)
     {
         ULOOP
         {
@@ -104,12 +104,12 @@ void VOF_PLIC::surface_tension2D(lexer* p,fdm* a,ghostcell*pgc,int gcval)
         }
     }
 
-	if(gcval==11 && p->W5>1.0e-10)
+    if(gcval==11 && p->W5>1.0e-10)
     {
        
     }
 
-	if(gcval==12 && p->W5>1.0e-10)
+    if(gcval==12 && p->W5>1.0e-10)
     {
         WLOOP
         {

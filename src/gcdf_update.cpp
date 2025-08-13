@@ -37,7 +37,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     {
     if (p->j_dir==0)
     psi = -p->X41*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-	
+    
     if (p->j_dir==1)
     psi = -p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]); 
     
@@ -226,19 +226,19 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     count=0;
 
     BASELOOP
-	{
+    {
     cval(i,j,k)=count;
     
     ++count;
-	}
+    }
     
     GC4LOOP
     {
     i=p->gcb4[n][0];
     j=p->gcb4[n][1];
     k=p->gcb4[n][2];
-	p->gcb4[n][5]=cval(i,j,k);
-	}
+    p->gcb4[n][5]=cval(i,j,k);
+    }
     
 
     GCDF4LOOP
@@ -246,8 +246,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     i=p->gcdf4[n][0];
     j=p->gcdf4[n][1];
     k=p->gcdf4[n][2];
-	p->gcdf4[n][5]=cval(i,j,k);
-	}
+    p->gcdf4[n][5]=cval(i,j,k);
+    }
     
     
     // -----------------------

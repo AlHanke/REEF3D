@@ -35,15 +35,15 @@ class sflow_potential_f : public sflow_potential, public increment
 {
 
 public:
-	sflow_potential_f(lexer*);
-	virtual ~sflow_potential_f();
+    sflow_potential_f(lexer*);
+    virtual ~sflow_potential_f();
 
-	virtual void start(lexer*,fdm2D*, solver2D*, ghostcell*);
+    virtual void start(lexer*,fdm2D*, solver2D*, ghostcell*);
 
 
 private:
-	void ucalc(lexer*,fdm2D*,slice&);
-	void vcalc(lexer*,fdm2D*,slice&);
+    void ucalc(lexer*,fdm2D*,slice&);
+    void vcalc(lexer*,fdm2D*,slice&);
     
     void laplace(lexer*,fdm2D*,slice&);
     void ini_bc(lexer*,fdm2D*,ghostcell*);
@@ -52,9 +52,9 @@ private:
     void Qout2D(lexer*,fdm2D*,ghostcell*);
     
     
-	double starttime,endtime;
-	int count;
-	int gcval_pot;
+    double starttime,endtime;
+    int count;
+    int gcval_pot;
     
     double Qi_pf,Qo_pf;
     double Ui_pf,Uo_pf;

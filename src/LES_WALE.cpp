@@ -38,11 +38,11 @@ LES_WALE::LES_WALE(lexer* p, fdm* a) : LES(p,a)
 {
 
     gcval_u1=10;
-	gcval_v1=11;
-	gcval_w1=12;
+    gcval_v1=11;
+    gcval_w1=12;
 
-	gcval_sgs=24;
-	c_wale=0.6;
+    gcval_sgs=24;
+    c_wale=0.6;
     
     if(p->T21==0)
     pfilter = new LES_filter_box(p,a);

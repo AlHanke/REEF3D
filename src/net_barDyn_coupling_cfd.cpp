@@ -68,17 +68,17 @@ void net_barDyn::coupling_dlm_cfd(lexer *p, fdm *a, ghostcell *pgc)
     for (int i = 0; i < tend; i++)
     {
         // Coordinates
-		x0 = tri_x[i][0];
-		x1 = tri_x[i][1];
-		x2 = tri_x[i][2];
-		
-		y0 = tri_y[i][0];
-		y1 = tri_y[i][1];
-		y2 = tri_y[i][2];
-		
-		z0 = tri_z[i][0];
-		z1 = tri_z[i][1];
-		z2 = tri_z[i][2];  
+        x0 = tri_x[i][0];
+        x1 = tri_x[i][1];
+        x2 = tri_x[i][2];
+        
+        y0 = tri_y[i][0];
+        y1 = tri_y[i][1];
+        y2 = tri_y[i][2];
+        
+        z0 = tri_z[i][0];
+        z1 = tri_z[i][1];
+        z2 = tri_z[i][2];  
         
         xc = (x0 + x1 + x2)/3.0;
         yc = (y0 + y1 + y2)/3.0;

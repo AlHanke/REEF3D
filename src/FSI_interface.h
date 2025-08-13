@@ -37,14 +37,14 @@ using namespace std;
 class FSI_interface
 {
 public:
-	FSI_interface(lexer*,ghostcell*);
-	virtual ~FSI_interface();
+    FSI_interface(lexer*,ghostcell*);
+    virtual ~FSI_interface();
     
     // Generic
-	virtual void FSI_logic(lexer*,ghostcell*);
+    virtual void FSI_logic(lexer*,ghostcell*);
     virtual void start(lexer*,ghostcell*);
     
-	virtual void initialize(lexer*,fdm*,ghostcell*,turbulence*){};
+    virtual void initialize(lexer*,fdm*,ghostcell*,turbulence*){};
     virtual void forcing(lexer*,fdm*,ghostcell*,double,field&,field&,field&,field&,field&,field&,bool){};
     
     

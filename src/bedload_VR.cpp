@@ -46,12 +46,12 @@ bedload_VR::~bedload_VR()
 void bedload_VR::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 {
     double Ti,r,f,Ts,Tb;
-	double qb;
-	
-	SLICELOOP4
+    double qb;
+    
+    SLICELOOP4
     {
         Ts = s->shields_crit(i,j);
-	    Tb = s->shields_eff(i,j);
+        Tb = s->shields_eff(i,j);
 
         Ti=MAX((Tb-Ts)/(Ts),0.0);
         
@@ -61,9 +61,9 @@ void bedload_VR::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 
         if(s->active(i,j)==0 || Tb<Ts)
         qb=0.0;
-		
-		s->qbe(i,j) = qb;
-	}
+        
+        s->qbe(i,j) = qb;
+    }
     
     pgc->gcsl_start4a(p,s->qbe,1);    
     

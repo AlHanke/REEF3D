@@ -111,7 +111,7 @@ void bedshear::taubed(lexer *p, fdm_nhf*d, ghostcell *pgc, sediment_fdm *s)
         Cval=18.0*log10((12.0*wh)/ks);
 
         u_abs = sqrt(U*U + V*V);
-	
+    
         tau = density*pow(sqrt(9.81)*(u_abs/Cval),2.0);
         }
 

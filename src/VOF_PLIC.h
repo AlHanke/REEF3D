@@ -42,9 +42,9 @@ using namespace std;
 class VOF_PLIC : public freesurface, gradient, norm_vec
 {
 public:
-	VOF_PLIC(lexer*, fdm*, ghostcell*,heat*);
-	virtual ~VOF_PLIC();
-	virtual void update(lexer*,fdm*,ghostcell*,field&);
+    VOF_PLIC(lexer*, fdm*, ghostcell*,heat*);
+    virtual ~VOF_PLIC();
+    virtual void update(lexer*,fdm*,ghostcell*,field&);
     
     virtual void start(fdm*,lexer*, convection*, solver*, ghostcell*,ioflow*, reini*, particle_corr*,field&);
     void RKcalcL(fdm*,lexer*,ghostcell*, field&, field&, field&);
@@ -57,23 +57,23 @@ public:
     void updatePlaneData(lexer*,fdm*,ghostcell*,field&);
     double return_alpha_reconstructPlane_alt(fdm*, lexer*,field&,int,int,int);
     
-	
-private:	
+    
+private:    
     void iniphi(fdm*, lexer*,ghostcell*);
-	void iniphi_io(fdm*, lexer*,ghostcell*);
+    void iniphi_io(fdm*, lexer*,ghostcell*);
     void iniphi_box(lexer*,fdm*,ghostcell*);
     void iniphi_surfarea(lexer*,fdm*,ghostcell*);
     int conv(double);
-	
-	void reconstructPlane(fdm*, lexer*);
-	double calcAlpha(fdm*, double&,  double&,  double&);
+    
+    void reconstructPlane(fdm*, lexer*);
+    double calcAlpha(fdm*, double&,  double&,  double&);
 
-	void ininorVecLS(lexer*);
-	void calcNormalFO(fdm*, lexer*, field&);
-	void calcNormalLS(fdm*, lexer*, field&);
+    void ininorVecLS(lexer*);
+    void calcNormalFO(fdm*, lexer*, field&);
+    void calcNormalLS(fdm*, lexer*, field&);
     void calcNormalWENO(fdm*, lexer*, field&);
     void calcNormalPhi(fdm*, lexer*);
-		
+        
     //Alternative version by Fabian
     void calcNormalWeymouth(fdm*, lexer*, field&);
     void calcNormalWang(fdm*, lexer*);
@@ -137,11 +137,11 @@ private:
     int gcval_vof, gcval_ro, gcval_visc;
     int gcval_phi;
 
-	int gcval_frac;
-	double starttime; 
+    int gcval_frac;
+    double starttime; 
    
-	//- Sweep tracker for alternating starting point
-	int sSweep;
+    //- Sweep tracker for alternating starting point
+    int sSweep;
     int Sweepdim;
     int sweep;
    
@@ -150,7 +150,7 @@ private:
     field4 ny;
     field4 nz;
     
-	double ****nxCoeff, ****nyCoeff, ****nzCoeff;
+    double ****nxCoeff, ****nyCoeff, ****nzCoeff;
     
     double w_thres, a_thres, corr_thres;
     

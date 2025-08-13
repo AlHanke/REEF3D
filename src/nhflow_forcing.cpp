@@ -76,24 +76,24 @@ nhflow_forcing::nhflow_forcing(lexer *p, fdm_nhf *d, ghostcell *pgc) : epsi(1.6)
     dlm_forcing_ini(p,pgc);
     
     if(p->F50==1)
-	gcval_eta = 51;
+    gcval_eta = 51;
     
     if(p->F50==2)
-	gcval_eta = 52;
+    gcval_eta = 52;
     
     if(p->F50==3)
-	gcval_eta = 53;
+    gcval_eta = 53;
     
     if(p->F50==4)
-	gcval_eta = 54;
+    gcval_eta = 54;
     
     gcval_u=10;
-	gcval_v=11;
-	gcval_w=12;
+    gcval_v=11;
+    gcval_w=12;
     
     gcval_uh=14;
-	gcval_vh=15;
-	gcval_wh=16;
+    gcval_vh=15;
+    gcval_wh=16;
 }
 
 nhflow_forcing::~nhflow_forcing()

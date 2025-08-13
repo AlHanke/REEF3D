@@ -78,7 +78,7 @@ void rheology_f::u_source(lexer *p, fdm *a)
         a->rhsvec.V[count] += H*((tau02-tau01)/(p->DXM*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k)))); // *f ?
 
         ++count;
-	}
+    }
     
     
     count=0;
@@ -190,7 +190,7 @@ void rheology_f::w_source(lexer *p, fdm *a)
         a->rhsvec.V[count] -= H*(tau0/(0.5*(p->DXM*a->ro(i,j,k)+a->ro(i,j,k+1))))*f;
 
         ++count;
-	}
+    }
     
     // Gradient Based
     double dwdx,dwdy,dwdz;
@@ -219,7 +219,7 @@ void rheology_f::w_source(lexer *p, fdm *a)
         a->rhsvec.V[count] += H*((tau02-tau01)/(p->DXM*0.5*(a->ro(i,j,k)+a->ro(i,j,k+1)))); // PFo: Missing "*f" ?
 
         ++count;
-	}
+    }
     
     
     count=0;

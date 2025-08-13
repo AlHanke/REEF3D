@@ -41,15 +41,15 @@ using namespace std;
 class sixdof_void : public sixdof
 {
 public:
-	sixdof_void(lexer*,ghostcell*);
-	virtual ~sixdof_void();
+    sixdof_void(lexer*,ghostcell*);
+    virtual ~sixdof_void();
     
     virtual void start_cfd(lexer*,fdm*,ghostcell*,int,field&,field&,field&,field&,field&,field&,bool);
     virtual void start_nhflow(lexer*,fdm_nhf*,ghostcell*,int,double*,double*,double*,double*,double*,double*,slice&,slice&,bool);
     
     virtual void start_sflow(lexer*,fdm2D*,ghostcell*,int,slice&,slice&,slice&,slice&,slice&,slice&,slice&,bool);
     
-	virtual void ini(lexer*,ghostcell*);
+    virtual void ini(lexer*,ghostcell*);
     virtual void initialize(lexer*, fdm*, ghostcell*);
     virtual void initialize(lexer*, fdm2D*, ghostcell*);
     virtual void initialize(lexer*, fdm_nhf*, ghostcell*);
@@ -72,11 +72,11 @@ private:
     Eigen::Matrix3d quatRotMat;
 
     // Mooring
-	vector<double> X311_xen, X311_yen, X311_zen;
-	vector<mooring*> pmooring;
+    vector<double> X311_xen, X311_yen, X311_zen;
+    vector<mooring*> pmooring;
     
-	vector<double> Xme, Yme, Zme, Kme, Mme, Nme;    
-	vector<double> Xne, Yne, Zne, Kne, Mne, Nne;    
+    vector<double> Xme, Yme, Zme, Kme, Mme, Nme;    
+    vector<double> Xne, Yne, Zne, Kne, Mne, Nne;    
     
     double alpha[3],gamma[3],zeta[3];
 };

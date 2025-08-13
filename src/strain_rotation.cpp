@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 double strain::qij(lexer *p, fdm *a, int ii, int jj)
 {
-	double q=0.0;
+    double q=0.0;
 
     if((ii==1 && jj==1) || (ii==2 && jj==2) || (ii==3 && jj==3))
         q = 0.0;
@@ -51,7 +51,7 @@ double strain::qij(lexer *p, fdm *a, int ii, int jj)
     if(ii==3 && jj==2)
         q = -pvdz(p,a) + pwdy(p,a);
 
-	return q;
+    return q;
 }
 
 double strain::Qij2(lexer *p, fdm *a)
@@ -62,7 +62,7 @@ double strain::Qij2(lexer *p, fdm *a)
     
     r=r*r;
 
-	return r;
+    return r;
 }
 
 double strain::rotationterm(lexer *p, fdm *a)
@@ -76,7 +76,7 @@ double strain::rotationterm(lexer *p, field &u, field &v, field &w)
 
     double r = sqrt(r12*r12 + r13*r13 + r23*r23);
 
-	return r;
+    return r;
 }
 
 void strain::skewSymmetricStrainRateTensor(lexer *p, field &u, field &v, field &w)

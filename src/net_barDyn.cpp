@@ -24,7 +24,7 @@ Author: Tobias Martin
 #include"lexer.h"
 #include"fdm.h"
 #include"fdm_nhf.h"
-#include"ghostcell.h"	
+#include"ghostcell.h"    
 
 net_barDyn::net_barDyn(int number, lexer *p):nNet(number)
 {
@@ -38,20 +38,20 @@ void net_barDyn::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen
 {
     double starttime1 = pgc->timer();    
 
-	//- Set net time step
-	double phi = 0.0;
-	t_net_n = t_net;
-	t_net = phi*p->simtime + (1.0 - phi)*(p->simtime + alpha*p->dt);
-	double dtm = t_net - t_net_n;
-	
+    //- Set net time step
+    double phi = 0.0;
+    t_net_n = t_net;
+    t_net = phi*p->simtime + (1.0 - phi)*(p->simtime + alpha*p->dt);
+    double dtm = t_net - t_net_n;
+    
     dt_ = p->X325_dt > 0.0 ? min(dtm, p->X325_dt) : dtm;
 
-	//- Start loop
+    //- Start loop
     int loops = ceil(dtm/dt_);
     if (dt_==0.0) loops = 0;
     dt_ = dtm/loops;
 
-	Eigen::VectorXi convIt(loops);
+    Eigen::VectorXi convIt(loops);
     
     for (int loop = 0; loop < loops; loop++)
     {
@@ -64,28 +64,28 @@ void net_barDyn::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen
     //- Coupling forces for vrans model
     coupling_dlm_cfd(p,a,pgc);
 
-	//- Build and save net
-	print(p);	
+    //- Build and save net
+    print(p);    
 }
 
 void net_barDyn::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha, Eigen::Matrix3d quatRotMat)
 {
     double starttime1 = pgc->timer();    
 
-	//- Set net time step
-	double phi = 0.0;
-	t_net_n = t_net;
-	t_net = phi*p->simtime + (1.0 - phi)*(p->simtime + alpha*p->dt);
-	double dtm = t_net - t_net_n;
-	
+    //- Set net time step
+    double phi = 0.0;
+    t_net_n = t_net;
+    t_net = phi*p->simtime + (1.0 - phi)*(p->simtime + alpha*p->dt);
+    double dtm = t_net - t_net_n;
+    
     dt_ = p->X325_dt > 0.0 ? min(dtm, p->X325_dt) : dtm;
 
-	//- Start loop
+    //- Start loop
     int loops = ceil(dtm/dt_);
     if (dt_==0.0) loops = 0;
     dt_ = dtm/loops;
 
-	Eigen::VectorXi convIt(loops);
+    Eigen::VectorXi convIt(loops);
     
     for (int loop = 0; loop < loops; loop++)
     {
@@ -98,8 +98,8 @@ void net_barDyn::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha
     //- Coupling forces for vrans model
     coupling_dlm_nhflow(p,d,pgc);
 
-	//- Build and save net
-	print(p);	
+    //- Build and save net
+    print(p);    
 }
 
 
@@ -125,7 +125,7 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
 
         // Solve system for tension forces
         T_ = A_.partialPivLu().solve(B_.transpose());
-	    limitTension();
+        limitTension();
 
         iter = 1;
     }
@@ -148,16 +148,16 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
             // Fill non-linear function
             fillNonLinRhs(p, pgc);
 
-	        // Store tension forces
-	        T_old = T_;
+            // Store tension forces
+            T_old = T_;
 
             // Solve system for intermediate tension forces
             T_ -= inv.solve(B_.transpose());
-	        limitTension();
+            limitTension();
 
-	        // Accelerated Newton step
-	        fillNonLinRhs(p, pgc);
-	        
+            // Accelerated Newton step
+            fillNonLinRhs(p, pgc);
+            
             T_ -= inv.solve(B_.transpose());
             limitTension();
 
@@ -167,8 +167,8 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
             iter++;
 
             if (norm_error < 1e-10) 
-	        { 
-		        break;
+            { 
+                break;
             }
         }
 
@@ -247,13 +247,13 @@ void net_barDyn::limitTension()
 }
 
 Eigen::VectorXd net_barDyn::timeWeight(lexer* p)
-{	
+{    
     // 3rd-order finite difference weights for first derivative and varying time step
     
-	double c2, c3, c5;
-	int mn;	
+    double c2, c3, c5;
+    int mn;    
 
-	int nd = 4;    
+    int nd = 4;    
     double c1 = 1.0;
     double c4 = 0.0;
 
@@ -265,7 +265,7 @@ Eigen::VectorXd net_barDyn::timeWeight(lexer* p)
     
     VectorXd ti(nd);
 
-	ti(0) = 0.0;
+    ti(0) = 0.0;
     ti(1) = ti(0) - dt_;
     ti(2) = ti(1) - dtn_;
     ti(3) = ti(2) - dtnn_;

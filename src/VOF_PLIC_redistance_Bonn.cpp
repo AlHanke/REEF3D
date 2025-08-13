@@ -58,11 +58,11 @@ void VOF_PLIC::redistancePhiByPlane_Bonn
             for(int kk=-bandWidth;kk<bandWidth+1;kk++)
             {
                         ip = i + ii;
-						jp = j + jj;
-						kp = k + kk;
+                        jp = j + jj;
+                        kp = k + kk;
   
-						if (ip >= 0 && jp >= 0 && kp >= 0 && ip < p->knox && jp < p->knoy && kp < p->knoz)
-						{
+                        if (ip >= 0 && jp >= 0 && kp >= 0 && ip < p->knox && jp < p->knoy && kp < p->knoz)
+                        {
                                 if(ii==0 && jj==0 && kk==0)
                                 {
                                     if(a->vof(i,j,k)>0.0001 && a->vof(i,j,k)<0.9999)
