@@ -43,18 +43,18 @@ private:
     void ucalc(lexer*,fdm_nhf*);
     void vcalc(lexer*,fdm_nhf*);
     void wcalc(lexer*,fdm_nhf*);
-    
+
     void laplace(lexer*,fdm_nhf*,ghostcell*);
     void ini_bc(lexer*,fdm_nhf*,ghostcell*);
-    
+
     
     double starttime,endtime;
     int count;
     int gcval_pot;
     double sigxyz2;
-    
+
     double *PSI;
-    
+
     int *BC;
 
 };

@@ -45,12 +45,12 @@ void heat_RK3CN::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, 
 // Step 1
     starttime=pgc->timer();
     diff_update(p,a,pgc);
-    
+
     clearrhs(p,a,pgc);
     pconvec->start(p,a,T,4,a->u,a->v,a->w);
     addrhs(p,a,pgc,1.0);
     pdiff->diff_scalar(p,a,pgc,psolv,ark1,T,thermdiff,a->eddyv,p->sigT, 8.0/15.0);
-    
+
     bcheat_start(p,a,pgc,ark1);
     pgc->start4(p,ark1,gcval_heat);
 
@@ -61,7 +61,7 @@ void heat_RK3CN::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, 
     pconvec->start(p,a,T,4,a->u,a->v,a->w);
     addrhs(p,a,pgc,-17.0/8.0);
     pdiff->diff_scalar(p,a,pgc,psolv,ark2,ark1,thermdiff,a->eddyv,p->sigT, 2.0/15.0);
-    
+
     bcheat_start(p,a,pgc,ark2);
     pgc->start4(p,ark2,gcval_heat);
 
@@ -72,7 +72,7 @@ void heat_RK3CN::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, 
     pconvec->start(p,a,ark1,4,a->u,a->v,a->w);
     addrhs(p,a,pgc,-5.0/4.0);
     pdiff->diff_scalar(p,a,pgc,psolv,T,ark2,thermdiff,a->eddyv,p->sigT, 1.0/3.0);
-    
+
     
     bcheat_start(p,a,pgc,T);
     pgc->start4(p,T,gcval_heat);
@@ -92,19 +92,19 @@ void heat_RK3CN::diff_update(lexer *p, fdm *a, ghostcell *pgc)
     double alpha_2;
     double H;
     double epsi=p->F45*p->DXM;
-    
+
     if(p->H9==1)
     {
     alpha_1 = p->H1;
     alpha_2 = p->H2;
     }
-    
+
     if(p->H9==2)
     {
     alpha_1 = p->H2;
     alpha_2 = p->H1;
     }
-    
+
     LOOP
     {
         if(a->phi(i,j,k)>epsi)
@@ -118,7 +118,7 @@ void heat_RK3CN::diff_update(lexer *p, fdm *a, ghostcell *pgc)
 
         thermdiff(i,j,k) = alpha_1*H + alpha_2*(1.0-H);
     }
-    
+
     pgc->start4(p,thermdiff,1);
 }
 

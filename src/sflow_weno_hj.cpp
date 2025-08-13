@@ -47,7 +47,7 @@ void sflow_weno_hj::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, s
     if(ipol==2)
     SLICELOOP2
     b->G(i,j)+=aij(p,b,f,2,uvel,vvel);
-    
+
     if(ipol==4)
     SLICELOOP4
     b->L(i,j)+=aij(p,b,f,4,uvel,vvel);
@@ -66,19 +66,19 @@ double sflow_weno_hj::aij(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel, slic
 double sflow_weno_hj::fx(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
 {
     grad = 0.0;
-    
+
     if(iadvec>0.0)
     {
     iqmin(p,b,f,ipol);
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
     }
-    
+
 
     if(iadvec<0.0)
     {
@@ -86,7 +86,7 @@ double sflow_weno_hj::fx(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -98,20 +98,20 @@ double sflow_weno_hj::fx(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
 double sflow_weno_hj::fy(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
 {
     grad = 0.0;
-    
+
     if(jadvec>0.0)
     {
     jqmin(p,b,f,ipol);
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
-    
+
     }
-    
+
 
     if(jadvec<0.0)
     {
@@ -119,13 +119,13 @@ double sflow_weno_hj::fy(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
-    
+
     }
-    
+
     return grad;
 }
 

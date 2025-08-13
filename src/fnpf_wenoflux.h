@@ -43,17 +43,17 @@ private:
     double ffx(lexer *p, slice &f, double advec);
     double ffy(lexer *p, slice &f, double advec);
 
-    
+
     void iqmin(lexer*, slice&);
     void jqmin(lexer*, slice&);
     void iqmax(lexer*, slice&);
     void jqmax(lexer*, slice&);
-    
+
     
     double **ckz;
     double ivel1,ivel2,jvel1,jvel2;
     double grad;
-    
+
     double fu1,fu2,fv1,fv2;
 
 };

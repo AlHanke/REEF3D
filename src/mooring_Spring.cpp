@@ -37,7 +37,7 @@ void mooring_Spring::initialize(lexer *p, ghostcell *pgc)
     dy = p->X311_ye[line] - p->X311_ys[line];
     dz = p->X311_ze[line] - p->X311_zs[line];
     L0 = sqrt(dx*dx + dy*dy + dz*dz);
-   
+
     k = p->X312_k[line];
     T0 = p->X312_T0[line];
 
@@ -48,9 +48,9 @@ void mooring_Spring::initialize(lexer *p, ghostcell *pgc)
         eTout.open(str);
         eTout<<"time \t T"<<endl;
     }
-    
+
     printtime = 0.0;
-    
+
     // Initialise breaking
     broken = false;
     curr_time = 0.0;
@@ -66,7 +66,7 @@ void mooring_Spring::start(lexer *p, ghostcell *pgc)
     dy = p->X311_ye[line] - p->X311_ys[line];
     dz = p->X311_ze[line] - p->X311_zs[line];
     L = sqrt(dx*dx + dy*dy + dz*dz);
-    
+
     double dL = L - L0;
 
     //- Calculate tension force in spring

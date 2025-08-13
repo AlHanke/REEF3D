@@ -28,17 +28,17 @@ void sixdof_obj::box(lexer *p, ghostcell *pgc, int id)
 {
     xs = p->X110_xs[id];
     xe = p->X110_xe[id];
-    
+
     ys = p->X110_ys[id];
     ye = p->X110_ye[id];
 
     zs = p->X110_zs[id];
     ze = p->X110_ze[id];
-    
+
     // Face 3
     // Tri 1
     tstart[entity_count]=tricount;
-    
+
     tri_x[tricount][0] = xs;
     tri_x[tricount][1] = xe;
     tri_x[tricount][2] = xe;
@@ -123,7 +123,7 @@ void sixdof_obj::box(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][1] = ze;
     tri_z[tricount][2] = zs;
     ++tricount;
-    
+
     // Face 2
     // Tri 7
     tri_x[tricount][0] = xe;
@@ -210,7 +210,7 @@ void sixdof_obj::box(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][1] = ze;
     tri_z[tricount][2] = ze;
     ++tricount;
-     
+
     tend[entity_count]=tricount;
 }
 

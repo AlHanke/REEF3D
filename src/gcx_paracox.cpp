@@ -167,7 +167,7 @@ void ghostcell::gcparacox(lexer* p,field& f,int gcv)
     k=p->gcparaco6[q][2];
        f(i,j,k+1)=recv6[q];
     }
-    
+
     pip=0;
 }
 

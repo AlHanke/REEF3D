@@ -39,7 +39,7 @@ public:
 
     virtual void resize(lexer*);
     virtual void dealloc(lexer*);
-    
+
     int di,dj;
     int imin,imax,jmax,jmin;
 
@@ -49,10 +49,10 @@ private:
 
     int iter;
     int feldsize;
-    
+
     
     double starttime;
-    
+
     lexer *pp;
 
 };

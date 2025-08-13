@@ -38,7 +38,7 @@ public:
     virtual ~fieldint5();
 
     int& operator()(int, int , int);
-    
+
     virtual void resize(lexer*);
 
 private:
@@ -52,7 +52,7 @@ private:
     int iter;
 
     int imin,imax,jmax,jmin,kmin,kmax;
-    
+
     lexer *pp;
 
 };

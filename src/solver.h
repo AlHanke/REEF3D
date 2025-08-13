@@ -44,7 +44,7 @@ public:
     virtual void startF(lexer*, ghostcell*, double*, vec&, matrix_diag&, int)=0;
     virtual void startV(lexer*, ghostcell*, double*, vec&, matrix_diag&, int)=0;
     virtual void startM(lexer*, ghostcell*, double*, double*, double*, int)=0;
-    
+
 };
 
 #endif

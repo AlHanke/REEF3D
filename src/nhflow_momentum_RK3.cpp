@@ -50,31 +50,31 @@ nhflow_momentum_RK3::nhflow_momentum_RK3(lexer *p, fdm_nhf *d, ghostcell *pgc, s
     gcval_u=10;
     gcval_v=11;
     gcval_w=12;
-    
+
     gcval_uh=14;
     gcval_vh=15;
     gcval_wh=16;
-    
+
     
     p->Darray(UHRK1,p->imax*p->jmax*(p->kmax+2));
     p->Darray(VHRK1,p->imax*p->jmax*(p->kmax+2));
     p->Darray(WHRK1,p->imax*p->jmax*(p->kmax+2));
-    
+
     p->Darray(UHRK2,p->imax*p->jmax*(p->kmax+2));
     p->Darray(VHRK2,p->imax*p->jmax*(p->kmax+2));
     p->Darray(WHRK2,p->imax*p->jmax*(p->kmax+2));
-    
+
     p->Darray(UHDIFF,p->imax*p->jmax*(p->kmax+2));
     p->Darray(VHDIFF,p->imax*p->jmax*(p->kmax+2));
     p->Darray(WHDIFF,p->imax*p->jmax*(p->kmax+2));
-    
+
     p6dof=pp6dof;
     pnhfdf = ppnhfdf;
     pvrans = ppvrans;
-    
+
     if(p->A570==0)
     pwind = new wind_v(p);
-    
+
     if(p->A570>0)
     pwind = new wind_f(p);
 }
@@ -91,26 +91,26 @@ void nhflow_momentum_RK3::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
     pflow->inflow_nhflow(p,d,pgc,d->U,d->V,d->W,d->UH,d->VH,d->WH);
     pflow->rkinflow_nhflow(p,d,pgc,d->U,d->V,d->W,UHRK1,VHRK1,WHRK1);
     pflow->rkinflow_nhflow(p,d,pgc,d->U,d->V,d->W,UHRK2,VHRK2,WHRK2);
-        
+
 //Step 1
 //--------------------------------------------------------
     p->RK_alpha = 1.0;
-    
+
     sigma_update(p,d,pgc,d->WL);
     reconstruct(p,d,pgc,pfsf,pss,precon,d->WL,d->U,d->V,d->W,d->UH,d->VH,d->WH);
-    
+
     pfsf->kinematic_fsf(p,d,d->U,d->V,d->W,d->eta);
     pfsf->kinematic_bed(p,d,d->U,d->V,d->W);
-    
+
     // FSF
     starttime=pgc->timer();
-    
+
     pconvec->start(p,d,4,d->eta);
     pfsf->rk3_step1(p, d, pgc, pflow, d->UH, d->VH, d->WH, WLRK1, WLRK2, 1.0);
     omega_update(p,d,pgc,WLRK1,d->U,d->V,d->W);
-    
+
     p->fsftime+=pgc->timer()-starttime;
-    
+
     // U
     starttime=pgc->timer();
 
@@ -162,16 +162,16 @@ void nhflow_momentum_RK3::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
     LOOP
     WHRK1[IJK] = WHDIFF[IJK]
                 + p->dt*CPORNH*d->H[IJK];
-    
+
     p->wtime=pgc->timer()-starttime;
-    
+
     velcalc(p,d,pgc,UHRK1,VHRK1,WHRK1,WLRK1);
-    
+
     pnhfdf->forcing(p, d, pgc, p6dof, 0, 1.0, UHRK1, VHRK1, WHRK1, WLRK1, 0);
-    
+
     ppress->start(p,d,ppoissonsolv,pgc,pflow,WLRK1,UHRK1,VHRK1,WHRK1,1.0);
     velcalc(p,d,pgc,UHRK1,VHRK1,WHRK1,WLRK1);
-    
+
     pflow->U_relax(p,pgc,d->U,UHRK1);
     pflow->V_relax(p,pgc,d->V,VHRK1);
     pflow->W_relax(p,pgc,d->W,WHRK1);
@@ -181,28 +181,28 @@ void nhflow_momentum_RK3::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
     pgc->start4V(p,UHRK1,gcval_uh);
     pgc->start4V(p,VHRK1,gcval_vh);
     pgc->start4V(p,WHRK1,gcval_wh);
-    
+
     clearrhs(p,d,pgc);
-    
+
 //Step 2
 //--------------------------------------------------------
     p->RK_alpha = 0.25;
-    
+
     sigma_update(p,d,pgc,WLRK1);
     reconstruct(p,d,pgc,pfsf,pss,precon,WLRK1,d->U,d->V,d->W,UHRK1,VHRK1,WHRK1);
-    
+
     pfsf->kinematic_fsf(p,d,d->U,d->V,d->W,d->eta);
     pfsf->kinematic_bed(p,d,d->U,d->V,d->W);
-    
+
     // FSF
     starttime=pgc->timer();
-    
+
     pconvec->start(p,d,4,WLRK1);
     pfsf->rk3_step2(p, d, pgc, pflow, d->UH, d->VH, d->WH, WLRK1, WLRK2, 0.25);
     omega_update(p,d,pgc,WLRK2,d->U,d->V,d->W);
-    
+
     p->fsftime+=pgc->timer()-starttime;
-    
+
     // U
     starttime=pgc->timer();
 
@@ -219,9 +219,9 @@ void nhflow_momentum_RK3::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
     LOOP
     UHRK2[IJK] = 0.75*d->UH[IJK] + 0.25*UHDIFF[IJK]
                 + 0.25*p->dt*CPORNH*d->F[IJK];
-                
+
     p->utime+=pgc->timer()-starttime;
-    
+
     // V
     starttime=pgc->timer();
 
@@ -238,7 +238,7 @@ void nhflow_momentum_RK3::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
     LOOP
     VHRK2[IJK] = 0.75*d->VH[IJK] + 0.25*VHDIFF[IJK]
                 + 0.25*p->dt*CPORNH*d->G[IJK];
-    
+
     p->vtime+=pgc->timer()-starttime;
 
     // W
@@ -256,14 +256,14 @@ void nhflow_momentum_RK3::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
                 + 0.25*p->dt*CPORNH*d->H[IJK];
 
     p->wtime+=pgc->timer()-starttime;
-    
+
     velcalc(p,d,pgc,UHRK2,VHRK2,WHRK2,WLRK2);
-    
+
     pnhfdf->forcing(p, d, pgc, p6dof, 1, 0.25, UHRK2, VHRK2, WHRK2, WLRK2, 0);
-    
+
     ppress->start(p,d,ppoissonsolv,pgc,pflow,WLRK2,UHRK2,VHRK2,WHRK2,0.25);
     velcalc(p,d,pgc,UHRK2,VHRK2,WHRK2,WLRK2);
-    
+
     pflow->U_relax(p,pgc,d->U,UHRK2);
     pflow->V_relax(p,pgc,d->V,VHRK2);
     pflow->W_relax(p,pgc,d->W,WHRK2);
@@ -278,22 +278,22 @@ void nhflow_momentum_RK3::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
 //Step 3
 //--------------------------------------------------------
     p->RK_alpha = 2.0/3.0;
-    
+
     sigma_update(p,d,pgc,WLRK2);
     reconstruct(p,d,pgc,pfsf,pss,precon,WLRK2,d->U,d->V,d->W,UHRK2,VHRK2,WHRK2);
-    
+
     pfsf->kinematic_fsf(p,d,d->U,d->V,d->W,d->eta);
     pfsf->kinematic_bed(p,d,d->U,d->V,d->W);
-    
+
     // FSF
     starttime=pgc->timer();
-    
+
     pconvec->start(p,d,4,WLRK2);
     pfsf->rk3_step3(p, d, pgc, pflow, d->UH, d->VH, d->WH, WLRK1, WLRK2, 2.0/3.0);
     omega_update(p,d,pgc,d->WL,d->U,d->V,d->W);
-    
+
     p->fsftime+=pgc->timer()-starttime;
-    
+
     // U
     starttime=pgc->timer();
 
@@ -310,7 +310,7 @@ void nhflow_momentum_RK3::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
     LOOP
     d->UH[IJK] = (1.0/3.0)*d->UH[IJK] + (2.0/3.0)*UHDIFF[IJK]
                 + (2.0/3.0)*p->dt*CPORNH*d->F[IJK];
-    
+
     p->utime+=pgc->timer()-starttime;
 
     // V
@@ -329,7 +329,7 @@ void nhflow_momentum_RK3::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
     LOOP
     d->VH[IJK] = (1.0/3.0)*d->VH[IJK] + (2.0/3.0)*VHDIFF[IJK]
                 + (2.0/3.0)*p->dt*CPORNH*d->G[IJK];
-    
+
     p->vtime+=pgc->timer()-starttime;
 
     // W
@@ -345,16 +345,16 @@ void nhflow_momentum_RK3::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
     LOOP
     d->WH[IJK] = (1.0/3.0)*d->WH[IJK] + (2.0/3.0)*WHDIFF[IJK]
                 + (2.0/3.0)*p->dt*CPORNH*d->H[IJK];
-    
+
     p->wtime+=pgc->timer()-starttime;
-    
+
     velcalc(p,d,pgc,d->UH,d->VH,d->WH,d->WL);
-    
+
     pnhfdf->forcing(p, d, pgc, p6dof, 2, 2.0/3.0, d->UH, d->VH, d->WH, d->WL, 1);
-    
+
     ppress->start(p,d,ppoissonsolv,pgc,pflow,d->WL,d->UH,d->VH,d->WH,2.0/3.0);
     velcalc(p,d,pgc,d->UH,d->VH,d->WH,d->WL);
-    
+
     pflow->U_relax(p,pgc,d->U,d->UH);
     pflow->V_relax(p,pgc,d->V,d->VH);
     pflow->W_relax(p,pgc,d->W,d->WH);
@@ -364,7 +364,7 @@ void nhflow_momentum_RK3::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pf
     pgc->start4V(p,d->UH,gcval_uh);
     pgc->start4V(p,d->VH,gcval_vh);
     pgc->start4V(p,d->WH,gcval_wh);
-    
+
     clearrhs(p,d,pgc);
 }
 

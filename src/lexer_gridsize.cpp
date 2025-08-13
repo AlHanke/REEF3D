@@ -55,7 +55,7 @@ int ii,jj;
     sizeM6[n]=0;
     sizeM9[n]=0;
     }
-    
+
     Iarray(range_row4, M10+5);
     Iarray(range_col4, M10+5);
     Iarray(range_row7, M10+5);
@@ -70,34 +70,34 @@ void lexer::vellast()
     // parallel boundaries
     if(nb4>=0)
     ulast=0;
-    
+
     if(nb2>=0)
     vlast=0;
 
     if(nb6>=0)
     wlast=0;
-    
+
     // non-parallel perioddic bounbdaries
     if(periodic1>=1)
     ulast=0;
-    
+
     if(periodic2>=1)
     vlast=0;
 
     if(periodic3>=1)
     wlast=0;
-    
+
     flast=0;
-    
+
     if(A10==3 || A10==5)
     flast=1;
-    
+
     
     ulastsflow=1;
-    
+
     if(nb4>=0)
     ulastsflow=0;
-    
+
     if(F50==51 || F50==54)
     ulastsflow=0;
 }

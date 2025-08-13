@@ -26,7 +26,7 @@ Author: Hans Bihs, Alexander Hanke
 void part::remove(int n)
 {
     Flag[n] = -1;
-    
+
     Empty[index_empty] = n;
     ++index_empty;
 

@@ -38,9 +38,9 @@ class print_averaging_v : public print_averaging, public increment
 public:
     print_averaging_v(lexer*,fdm*,ghostcell*);
     virtual ~print_averaging_v();
-    
+
     virtual void averaging(lexer *p, fdm *a, ghostcell *pgc, heat*);
-    
+
     virtual void name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result);
     virtual void name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n);
     virtual void offset_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n);

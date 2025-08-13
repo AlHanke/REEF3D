@@ -37,9 +37,9 @@ public:
     virtual ~fnpf_laplace_cds2();
 
     virtual void start(lexer *,fdm_fnpf*,ghostcell*,solver*,fnpf_fsf*,double*,slice&);
-    
+
 private:
-    
+
     fnpf_bed_update *pbed;
     double denom;
 

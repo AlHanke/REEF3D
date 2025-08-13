@@ -32,10 +32,10 @@ Author: Hans Bihs
 ioflow_gravity::ioflow_gravity(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)
 {
     pBC = ppBC;
-    
+
     omega_x = 2.0*PI*p->B191_2;
     omega_y = 2.0*PI*p->B192_2;
-    
+
     theta_x = p->B191_1*(PI/180.0);
     theta_y = p->B192_1*(PI/180.0);
 }
@@ -94,36 +94,36 @@ void ioflow_gravity::inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
     a->gi = p->W20;
     a->gj = p->W21;
     a->gk = p->W22;
-    
+
     
     // -------
     // translation
     if(p->B181==1)
     a->gi += p->B181_1*pow(2.0*PI*p->B181_2,2.0)*sin((2.0*PI*p->B181_2)*p->simtime + p->B181_3*(PI/180.0));
-    
+
     if(p->B182==1)
     a->gj += p->B182_1*pow(2.0*PI*p->B182_2,2.0)*sin((2.0*PI*p->B182_2)*p->simtime + p->B182_3*(PI/180.0));
 
     if(p->B183==1)
     a->gk += p->B183_1*pow(2.0*PI*p->B183_2,2.0)*sin((2.0*PI*p->B183_2)*p->simtime + p->B183_3*(PI/180.0));
-    
+
     
     // -------
     // rotation
     if(p->B191==1 && p->simtime>=p->B194_s && p->simtime<=p->B194_e)
     {
     a->gj += sin(theta_x*sin(omega_x*p->simtime))*p->W22;
-    
+
     a->gk +=  cos(theta_x*sin(omega_x*p->simtime))*p->W22 - p->W22;
     }
-    
+
     if(p->B192==1 && p->simtime>=p->B194_s && p->simtime<=p->B194_e)
     {
     a->gi += sin(theta_y*sin(omega_y*p->simtime))*p->W22;
-    
+
     a->gk +=  cos(theta_y*sin(omega_y*p->simtime))*p->W22  - p->W22;
     }
-    
+
     // -------
     pBC->patchBC_ioflow(p,a,pgc,u,v,w);
 }
@@ -155,7 +155,7 @@ void  ioflow_gravity::isource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 {
     NLOOP4
     a->rhsvec.V[n]=0.0;
-    
+
     if(p->B192==1 && p->simtime>=p->B194_s && p->simtime<=p->B194_e)
     {
         n=0;
@@ -168,7 +168,7 @@ void  ioflow_gravity::isource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
                          //- a->w(i,j,k)*theta_y*omega_y*cos(omega_y*p->simtime);
         ++n;
         }
-        
+
     //a->gi = sin(theta_y*sin(omega_y*p->simtime))*p->W22;
     /*a->gi = p->W22*sin( theta_y*sin(omega_y*p->simtime) - 0.31*theta_y*theta_y*(1.0+cos(2.0*omega_y*p->simtime))
                         + pow(theta_y,3.0)*(0.16*cos(omega_y*p->simtime) - 0.16*cos(3.0*omega_y*p->simtime)
@@ -181,7 +181,7 @@ void  ioflow_gravity::jsource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 {
     NLOOP4
     a->rhsvec.V[n]=0.0;
-    
+
     //if(p->B191==1 && p->simtime>=p->B194_s && p->simtime<=p->B194_e)
     //a->gj = sin(theta_x*sin(omega_x*p->simtime))*p->W22;
 }
@@ -190,7 +190,7 @@ void  ioflow_gravity::ksource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 {
     NLOOP4
     a->rhsvec.V[n]=0.0;
-    
+
     if(p->B191==1 && p->simtime>=p->B194_s && p->simtime<=p->B194_e)
     {
         n=0;
@@ -198,15 +198,15 @@ void  ioflow_gravity::ksource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
         {
             dist_y = p->pos_y() - p->B191_3;
             a->rhsvec.V[n] -= dist_y*theta_x*pow(omega_x,2.0)*sin(omega_x*p->simtime);
-            
+
         ++n;
         }
-        
+
         //a->gk =  cos(theta_x*sin(omega_x*p->simtime))*p->W22;
     }
+
     
-    
-    
+
     if(p->B192==1 && p->simtime>=p->B194_s && p->simtime<=p->B194_e)
     {
         n=0;
@@ -219,7 +219,7 @@ void  ioflow_gravity::ksource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
                          //- a->u(i,j,k)*theta_y*omega_y*cos(omega_y*p->simtime);
         ++n;
         }
-        
+
         //a->gk =  cos(theta_y*sin(omega_y*p->simtime))*p->W22;
         /*
         a->gk = p->W22*cos( theta_y*sin(omega_y*p->simtime) - 0.31*theta_y*theta_y*(1.0+cos(2.0*omega_y*p->simtime))
@@ -233,7 +233,7 @@ void  ioflow_gravity::isource_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vrans
 {
     NLOOP4
     d->rhsvec.V[n]=0.0;
-    
+
     if(p->B192==1 && p->simtime>=p->B194_s && p->simtime<=p->B194_e)
     {
         n=0;
@@ -245,7 +245,7 @@ void  ioflow_gravity::isource_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vrans
                          + dist_x*pow(theta_y*omega_y*cos(omega_y*p->simtime),2.0);
         ++n;
         }
-        
+
     d->gi = sin(theta_y*sin(omega_y*p->simtime))*p->W22;
     }
 }
@@ -254,7 +254,7 @@ void  ioflow_gravity::jsource_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vrans
 {
     NLOOP4
     d->rhsvec.V[n]=0.0;
-    
+
     if(p->B191==1 && p->simtime>=p->B194_s && p->simtime<=p->B194_e)
     d->gj = sin(theta_x*sin(omega_x*p->simtime))*p->W22;
 }
@@ -263,7 +263,7 @@ void  ioflow_gravity::ksource_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vrans
 {
     NLOOP4
     d->rhsvec.V[n]=0.0;
-    
+
     if(p->B191==1 && p->simtime>=p->B194_s && p->simtime<=p->B194_e)
     {
         n=0;
@@ -271,15 +271,15 @@ void  ioflow_gravity::ksource_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vrans
         {
             dist_y = p->pos_y() - p->B191_3;
             d->rhsvec.V[n] -= dist_y*theta_x*pow(omega_x,2.0)*sin(omega_x*p->simtime);
-            
+
         ++n;
         }
-        
+
         //d->gk =  cos(theta_x*sin(omega_x*p->simtime))*p->W22;
     }
+
     
-    
-    
+
     if(p->B192==1 && p->simtime>=p->B194_s && p->simtime<=p->B194_e)
     {
         n=0;
@@ -292,7 +292,7 @@ void  ioflow_gravity::ksource_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, vrans
                          //- a->u(i,j,k)*theta_y*omega_y*cos(omega_y*p->simtime);
         ++n;
         }
-        
+
         //d->gk =  cos(theta_y*sin(omega_y*p->simtime))*p->W22;
         /*
         a->gk = p->W22*cos( theta_y*sin(omega_y*p->simtime) - 0.31*theta_y*theta_y*(1.0+cos(2.0*omega_y*p->simtime))
@@ -367,7 +367,7 @@ void ioflow_gravity::fi_relax(lexer *p, ghostcell *pgc, field &f, field &phi)
 void ioflow_gravity::fivec_relax(lexer *p, ghostcell *pgc, double *f)
 {
 }
-    
+
 void ioflow_gravity::fifsf_relax(lexer *p, ghostcell *pgc, slice& f)
 {
 }
@@ -432,7 +432,7 @@ double ioflow_gravity::wave_zvel(lexer *p, ghostcell *pgc, double x, double y, d
 int ioflow_gravity::iozonecheck(lexer *p, fdm*a)
 {
     int check = 1;
-    
+
     return check;
 }
 
@@ -477,13 +477,13 @@ void ioflow_gravity::ini(lexer *p, fdm* a, ghostcell* pgc)
 {
     ALOOP
     a->porosity(i,j,k)=1.0;
-    
+
     pgc->start4a(p,a->porosity,1);
 }
 
 void ioflow_gravity::full_initialize2D(lexer *p, fdm2D *b, ghostcell *pgc)
 {
-    
+
 }
 
 void ioflow_gravity::flowfile(lexer *p, fdm* a, ghostcell* pgc, turbulence *pturb)
@@ -492,22 +492,22 @@ void ioflow_gravity::flowfile(lexer *p, fdm* a, ghostcell* pgc, turbulence *ptur
 
 void ioflow_gravity::wavegen_precalc(lexer *p, ghostcell *pgc)
 {
-    
+
 }
 
 void ioflow_gravity::wavegen_precalc_ini(lexer *p, ghostcell *pgc)
 {
-    
+
 }
 
 void ioflow_gravity::wavegen_2D_precalc(lexer *p, fdm2D *b, ghostcell *pgc)
 {
-    
+
 }
 
 void ioflow_gravity::wavegen_2D_precalc_ini(lexer *p, ghostcell *pgc)
 {
-    
+
 }
 
 void ioflow_gravity::ini_fnpf(lexer *p, fdm_fnpf *c, ghostcell *pgc)
@@ -516,17 +516,17 @@ void ioflow_gravity::ini_fnpf(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 
 void ioflow_gravity::ini_ptf(lexer *p, fdm* a, ghostcell* pgc)
 {
-    
+
 }
 
 void ioflow_gravity::ini2D(lexer *p, fdm2D *b, ghostcell *pgc)
 {
-    
+
 }
 
 void ioflow_gravity::veltimesave(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 {
-    
+
 }
 
 void ioflow_gravity::inflow_fnpf(lexer *p, fdm_fnpf*, ghostcell *pgc, double *Fi, double *Uin,slice &Fifsf, slice &eta)
@@ -540,7 +540,7 @@ void ioflow_gravity::rkinflow_fnpf(lexer *p, fdm_fnpf*, ghostcell *pgc, slice &f
 
 void ioflow_gravity::vrans_sed_update(lexer *p,fdm *a,ghostcell *pgc, vrans *pvrans)
 {
-    
+
 }
 
 void ioflow_gravity::ini_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
@@ -565,17 +565,17 @@ void ioflow_gravity::rkinflow_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, doubl
 
 void ioflow_gravity::wavegen_precalc_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    
+
 }
 
 void ioflow_gravity::wavegen_precalc_ini_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    
+
 }
 
 void ioflow_gravity::waterlevel2D(lexer *p, fdm2D *b, ghostcell* pgc, slice &eta)
 {
-    
+
 }
 
 void ioflow_gravity::fsfinflow_nhflow(lexer *p, fdm_nhf* d, ghostcell* pgc, slice &WL)

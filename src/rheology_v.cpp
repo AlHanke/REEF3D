@@ -38,17 +38,17 @@ double rheology_v::viscosity(lexer*, fdm*, ghostcell*)
 
 void rheology_v::u_source(lexer*, fdm*)
 {
-    
+
 }
 
 void rheology_v::v_source(lexer*, fdm*)
 {
-    
+
 }
 
 void rheology_v::w_source(lexer*, fdm*)
 {
-    
+
 }
 
 void rheology_v::filltau(lexer*, fdm*, ghostcell*)

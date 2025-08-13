@@ -41,7 +41,7 @@ class fnpf_fsfbc_wd : public fnpf_fsf, public increment
 public:
     fnpf_fsfbc_wd(lexer*, fdm_fnpf*, ghostcell*);
     virtual ~fnpf_fsfbc_wd();
-    
+
     virtual void fsfdisc(lexer*,fdm_fnpf*,ghostcell*,slice&,slice&);
     virtual void fsfdisc_ini(lexer*,fdm_fnpf*,ghostcell*,slice&,slice&);
     virtual void kfsfbc(lexer*,fdm_fnpf*,ghostcell*);
@@ -53,7 +53,7 @@ public:
     virtual void coastline_eta(lexer*,fdm_fnpf*,ghostcell*,slice&);
     virtual void coastline_fi(lexer*,fdm_fnpf*,ghostcell*,slice&);
     virtual void damping(lexer*,fdm_fnpf*,ghostcell*,slice&,int,double);
-    
+
     
     void filter(lexer*, fdm_fnpf*,ghostcell*, slice&);
 
@@ -66,23 +66,23 @@ public:
     solver2D *psolv;
 
     double ivel,jvel,kvel;
-    
+
 private:
     double rb3(lexer*,double);
     double rb4(lexer*,double);
-    
+
     double dist3,dist4,expinverse,db;
-    
+
     double visc;
-    
+
     int *temp;
     int gcval_eta,gcval_fifsf;
     const double eps;
-    
+
     sliceint4 bx,by;
     sliceint4 wetcoast;
     int count_n;
-    
+
 };
 
 #endif

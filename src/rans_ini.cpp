@@ -30,27 +30,27 @@ void rans_io::ini(lexer* p, fdm*a, ghostcell* pgc)
     gcval_kin=20;
     gcval_eps=30;
     gcval_edv=24;
-    
+
     if(p->B60>=1)
     uref=p->Ui;
-    
+
     if(p->B90>0)
     uref=0.01;
-    
+
     if(fabs(uref)<1.0e-6)
     uref=0.01;
-    
+
     //cout<<"UREF: "<<uref<<endl;
     /*
     if(p->T10==2)
     {
-    
+
     
     LOOP
     {
     kin(i,j,k) = (2.0/3.0)*uref*0.07;
     eps(i,j,k) = 0.16*pow(kin(i,j,k),1.5)/(0.07*p->F60);
-        
+
         
     }
     }*/
@@ -147,7 +147,7 @@ void rans_io::inflow(lexer* p, fdm*a, ghostcell* pgc)
         kin(i-2,j,k)=kin(i,j,k);
         kin(i-3,j,k)=kin(i,j,k);
         }
-        
+
         GC4LOOP
         if(p->gcb4[n][4]==2)
         {
@@ -168,7 +168,7 @@ void rans_io::inflow(lexer* p, fdm*a, ghostcell* pgc)
 void rans_io::tau_calc(fdm* a, lexer* p, double maxwdist)
 {
     ks=p->B50;
-    
+
     H=B=depth+p->DXM;
     M=26.0/pow((ks/3.0),(1.0/6.0));
     I=pow(uref/(M*pow(H,(2.0/3.0))),2.0);

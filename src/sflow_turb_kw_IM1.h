@@ -38,11 +38,11 @@ class sflow_turb_kw_IM1 : public sflow_turb_io
 public:
     sflow_turb_kw_IM1(lexer*);
     virtual ~sflow_turb_kw_IM1();
-    
+
     virtual void start(lexer*, fdm2D*, ghostcell*, sflow_convection*, sflow_diffusion*, solver2D*, ioflow*);
     virtual void ktimesave(lexer*, fdm2D*, ghostcell*);
     virtual void etimesave(lexer*, fdm2D*, ghostcell*);
-    
+
 private:
     void Pk_update(lexer*, fdm2D*, ghostcell*);
     void ustar_update(lexer*, fdm2D*, ghostcell*);
@@ -53,19 +53,19 @@ private:
     void clearrhs(lexer*, fdm2D*);
     void wall_law_kin(lexer*, fdm2D*);
     void wall_law_omega(lexer*, fdm2D*);
-    
+
     slice4 kn, wn, Pk, S, Vw, Qw, ustar, cf;
     sliceint4 wallf;
-    
+
     double const kw_alpha, kw_beta,kw_sigma_k,kw_sigma_w;
-    
+
     int gcval_kin, gcval_omega;
     int count;
     double starttime;
-    
+
     sflow_convection *pconvec;
     sflow_diffusion *pdiff;
-    
+
 };
 
 #endif

@@ -49,7 +49,7 @@ private:
     void fill_deta(lexer*, fdm_nhf*, ghostcell*,slice&);
     void fill_Uhorz(lexer*, fdm_nhf*, ghostcell*,slice&);
 
-    
+
     double *x,*y;
     int gauge_num;
 

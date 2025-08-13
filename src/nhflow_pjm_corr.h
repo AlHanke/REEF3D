@@ -48,15 +48,15 @@ public:
     virtual void upgrad(lexer*,fdm_nhf*,slice&);
     virtual void vpgrad(lexer*,fdm_nhf*,slice&);
     virtual void wpgrad(lexer*,fdm_nhf*,slice&);
-    
+
     void presscorr(lexer*p,fdm_nhf*,slice&,double*,double*,double);
-    
+
     void rhs(lexer*,fdm_nhf*,ghostcell*,double*,double*,double*,double);
     void vel_setup(lexer*,fdm_nhf*,ghostcell*,double*,double*,double*,double);
     void bedbc(lexer*,fdm_nhf*,ghostcell*,double*,double*,double*,double);
 
 private:
-    
+
     double starttime,endtime;
     const double teta;
     int check;

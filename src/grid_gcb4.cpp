@@ -28,19 +28,19 @@ Author: Hans Bihs
 void grid::fillgcb4_wall(lexer *p)
 {
     int q,n;
-    
+
     
     fieldint4 cval(p);
-    
+
     int count=0;
 
     BASELOOP
     {
     cval(i,j,k)=count;
-    
+
     ++count;
     }
-    
+
     GC4LOOP
     {
     i=p->gcb4[n][0];
@@ -48,5 +48,5 @@ void grid::fillgcb4_wall(lexer *p)
     k=p->gcb4[n][2];
     p->gcb4[n][5]=cval(i,j,k);
     }
-    
+
 }

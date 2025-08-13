@@ -42,12 +42,12 @@ public:
 
 private:
     double aij(lexer*, fdm*, field&, int,field&,field&,field&,double*,double*,double*);
-    
+
     double dx,dy,dz;
     double L;
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
     double iadvec,jadvec,kadvec;
-    
+
     flux *pflux;
 };
 

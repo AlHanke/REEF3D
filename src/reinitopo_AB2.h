@@ -45,7 +45,7 @@ public:
 private:
     reinidisc *prdisc;
     field4a f,frk1,frk2,L,dt;
-    
+
     void step(lexer*, fdm*);
     void time_preproc(lexer*);
 

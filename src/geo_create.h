@@ -35,12 +35,12 @@ class geo_create : increment
 public:
     geo_create(lexer*);
     virtual ~geo_create();
-    
+
     void create_obj(lexer*, int, int , int);
-    
+
     void delete_obj(lexer*, int ID);
 
-    
+
 private:
 
 };

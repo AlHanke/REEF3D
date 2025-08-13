@@ -53,7 +53,7 @@ private:
     int n,q;
     const int probenum;
     ofstream *pout;
-    
+
     double uval,vval,wval,pval,eval;
 
 };

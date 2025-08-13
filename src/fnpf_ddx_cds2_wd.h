@@ -38,7 +38,7 @@ public:
 
     virtual double sxx(lexer*, slice&);
     virtual double syy(lexer*, slice&);
-    
+
 private:
     fdm_fnpf *c;
 

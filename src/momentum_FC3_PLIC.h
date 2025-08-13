@@ -51,7 +51,7 @@ using namespace std;
 
 class momentum_FC3_PLIC : public momentum, public momentum_forcing, public bcmom
 {
-    
+
 public:
     momentum_FC3_PLIC(lexer*, fdm*, ghostcell*, convection*, diffusion*, pressure*, poisson*,
                 turbulence*, solver*, solver*, ioflow*, heat*&, concentration*&, reini*, fsi*);
@@ -65,15 +65,15 @@ public:
     field2 vdiff,vrk1,vrk2,fy;
     field3 wdiff,wrk1,wrk2,fz;
     field4 VoF, vof_rk1, vof_rk2;
-    
+
 private:
     fluid_update *pupdate;
-    
+
     void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void clear_FGH(lexer*,fdm*);
-    
+
     int gcval_u, gcval_v, gcval_w;
     int gcval_vof, gcval_phi,gcval_ro,gcval_visc;
     double starttime;
@@ -94,7 +94,7 @@ private:
     reini *preini;
     density *pd;
     picard *ppicard;
-    
+
 };
 
 #endif

@@ -40,7 +40,7 @@ fdm_fnpf::fdm_fnpf(lexer *p) : press(p),test(p),Fifsf(p),Fibed(p),
     p->Darray(p->sigy,p->imax*p->jmax*(p->kmax+2));
     p->Darray(p->sigz,p->imax*p->jmax);
     p->Darray(p->sigxx,p->imax*p->jmax*(p->kmax+2));
-    
+
     p->Darray(U,p->imax*p->jmax*(p->kmax+2));
     p->Darray(V,p->imax*p->jmax*(p->kmax+2));
     p->Darray(W,p->imax*p->jmax*(p->kmax+2));

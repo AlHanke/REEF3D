@@ -30,7 +30,7 @@ multiphase_fluid_update_f::multiphase_fluid_update_f(lexer *p, fdm* a, ghostcell
 {
     gcval_ro=1;
     gcval_visc=1;
-    
+
     eps12 = p->F321;
     eps13 = p->F322;
     eps23 = p->F323;
@@ -45,24 +45,24 @@ void multiphase_fluid_update_f::start(lexer *p, fdm* a, ghostcell* pgc, field &l
     double H1=0.0;
     double H2=0.0;
     double H3=0.0;
-    
+
     p->volume1=0.0;
     p->volume2=0.0;
     p->volume3=0.0;
-    
+
     if(p->count>iter)
     iocheck=0;
     iter=p->count;
-    
+
     if(p->j_dir==0)
     epsi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
-        
+
     if(p->j_dir==1)
     epsi = p->F45*(1.0/3.0)*(p->DRM+p->DSM+p->DTM);
 
     LOOP
     {
-        
+
         // water
         if(ls1(i,j,k)>epsi)
         {
@@ -70,11 +70,11 @@ void multiphase_fluid_update_f::start(lexer *p, fdm* a, ghostcell* pgc, field &l
         H2=0.0;
         H3=0.0;
         }
-        
+
         if(fabs(ls1(i,j,k))<=epsi)
         {
         H1=0.5*(1.0 + ls1(i,j,k)/epsi + (1.0/PI)*sin((PI*ls1(i,j,k))/epsi));
-        
+
             
             // water-oil
             if(ls2(i,j,k)>epsi)
@@ -82,21 +82,21 @@ void multiphase_fluid_update_f::start(lexer *p, fdm* a, ghostcell* pgc, field &l
             H2=0.0;
             H3=1.0-H1;
             }
-            
+
             // water-oil
             if(ls2(i,j,k)<=epsi && ls2(i,j,k)>=0.0)
             {
             H2=0.0;
             H3=1.0-H1;
             }
-            
+
             // water-air
             if(ls2(i,j,k)<-epsi)
             {
             H2=1.0-H1;
             H3=0.0;
             }
-            
+
             // water-air
             if(ls2(i,j,k)>=-epsi && ls2(i,j,k)<0.0)
             {
@@ -104,25 +104,25 @@ void multiphase_fluid_update_f::start(lexer *p, fdm* a, ghostcell* pgc, field &l
             H3=0.0;
             }
         }
-        
+
         if(ls1(i,j,k)<-epsi)
         {
         H1=0.0;
-        
+
             // oil
             if(ls2(i,j,k)>epsi)
             {
             H2=0.0;
             H3=1.0;
             }
-            
+
             // air
             if(ls2(i,j,k)<-epsi)
             {
             H2=1.0;
             H3=0.0;
             }
-            
+
             // oil-air
             if(fabs(ls2(i,j,k))<=epsi)
             {
@@ -133,12 +133,12 @@ void multiphase_fluid_update_f::start(lexer *p, fdm* a, ghostcell* pgc, field &l
 
         a->ro(i,j,k) =     ro1*H1 + ro2*H2 + ro3*H3;
         a->visc(i,j,k) =   visc1*H1 + visc2*H2 + visc3*H3;
-        
+
         p->volume1 += p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*H1;
         p->volume2 += p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*H2;
         p->volume3 += p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*H3;
     }
-    
+
     
 
     pgc->start4(p,a->ro,gcval_ro);

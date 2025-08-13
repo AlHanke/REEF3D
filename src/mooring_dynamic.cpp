@@ -38,7 +38,7 @@ void mooring_dynamic::start(lexer *p, ghostcell *pgc)
 
     // Update fields
     updateFields(p, pgc);
-    
+
     // Update boundary conditions
     fixPoint << p->X311_xe[line], p->X311_ye[line], p->X311_ze[line];
 
@@ -56,10 +56,10 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
 {
     /*
     int *recVel, *count;
-    
+
     p->Iarray(count,p->mpi_size);
     p->Iarray(recVel,Ne + 1);
-    
+
     // Get velocities on own processor
     for (int i = 0; i < Ne + 1; i++)
     {
@@ -111,11 +111,11 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
         }
     }
 
-    
+
     // Fill array for sending
     double *sendVel;
     p->Darray(sendVel, count[p->mpirank]);
-    
+
     int counts = 0;
     for (int i = 0; i < Ne + 1; i++)
     {
@@ -135,19 +135,19 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
     for (int n = 0; n < p->mpi_size; ++n)
     {
         recvVel[n] = new double[count[n]];
-        
+
         for (int m = 0; m < count[n]; ++m)
         {
             recvVel[n][m] = 0.0;
         }
     }
 
-    
+
     // Send and receive
     vector<MPI_Request> sreq(p->mpi_size, MPI_REQUEST_NULL);
     vector<MPI_Request> rreq(p->mpi_size, MPI_REQUEST_NULL);
     MPI_Status status;
-    
+
     for (int j = 0; j < p->mpi_size; j++)
     {
         if (j!=p->mpirank)
@@ -155,14 +155,14 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
             if (count[p->mpirank] > 0)
             {
             //    cout<<"Processor "<<p->mpirank<<" sends "<<count[p->mpirank]<<" elements to processor "<<j<<endl;
-                
+
                 MPI_Isend(sendVel,count[p->mpirank],MPI_DOUBLE,j,1,pgc->mpi_comm,&sreq[j]);
             }
-            
+
             if (count[j] > 0)
             {
             //    cout<<"Processor "<<p->mpirank<<" receives "<<count[j]<<" elements from processor "<<j<<endl;
-        
+
                 MPI_Irecv(recvVel[j],count[j],MPI_DOUBLE,j,1,pgc->mpi_comm,&rreq[j]);
             }
         }
@@ -174,7 +174,7 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
         MPI_Wait(&sreq[j],&status);
         MPI_Wait(&rreq[j],&status);
     }
-    
+
     
     // Fill velocity vector
     for (int j = 0; j < p->mpi_size; j++)
@@ -184,7 +184,7 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
             count[j] = 0;
         }
     }
-        
+
     for (int i = 0; i < Ne + 1; i++)
     {
         for (int j = 0; j < p->mpi_size; j++)
@@ -196,7 +196,7 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
             }
         }
     }
-    
+
     for (int i = 0; i < Ne + 1; i++)
     {
         fluid_vel[i][cmp] += 1e-10;
@@ -217,7 +217,7 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
         }
     }
     delete [ ] recvVel;
-    
+
     p->del_Iarray(count,p->mpi_size);
     p->del_Iarray(recVel,Ne + 1);*/
 }
@@ -227,12 +227,12 @@ void mooring_dynamic::updateFields(lexer *p, ghostcell *pgc)
 {
     // Get position of points
     getTransPos(c_moor);
-    
+
     // Fluid velocity
     updateFluidVel(p, pgc, 0);
     updateFluidVel(p, pgc, 1);
     updateFluidVel(p, pgc, 2);
-    
+
     // Fluid acceleration
     for (int i = 0; i < Ne + 1; i++)
     {
@@ -296,7 +296,7 @@ void mooring_dynamic::saveMooringPoint(lexer *p)
     {
         eTout<<p->simtime<<" \t "<<getTensLoc(Ne)<<endl;
     }
-    
+
     Eigen::Vector3d tension = getTensGlob(Ne);
     Xme_ = -tension(0);
     Yme_ = -tension(1);

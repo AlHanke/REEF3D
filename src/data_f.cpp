@@ -36,24 +36,24 @@ data_f::~data_f()
 void data_f::start(lexer* p, fdm* a, ghostcell* pgc)
 {
     cout<<"DATA "<<p->P150<<endl;
-    
+
     if(p->P151==1)
     LOOP
     data(i,j,k)=p->data[(i-p->imin)*p->jmax + (j-p->jmin)];
-    
+
     if(p->P151==2)
     LOOP
     data(i,j,k)=-p->data[(i-p->imin)*p->jmax + (j-p->jmin)]+p->pos_z();
-    
+
     if(p->P152==1)
     pgc->start4(p,data,101);
-    
+
     if(p->P152==2)
     pgc->start4(p,data,102);
-    
+
     if(p->P152==3)
     pgc->start4(p,data,103);
-    
+
     if(p->P152==4)
     pgc->start4(p,data,1);
 }

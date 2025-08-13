@@ -34,7 +34,7 @@ void mgcslice2::fill_ggc(lexer* p)
 {
     int q,qq,n,nn,a;
     int check;
-    
+
     p->Iarray(p->ggcslmem2,imax*jmax);
 
 //--------------------------
@@ -74,7 +74,7 @@ void mgcslice2::fill_ggc(lexer* p)
 
     ++a;
     }
-    
+
     p->Iresize(p->ggcsl2,p->ggcslsize2,p->ggcslcount2*p->margin, 3, 3);
     p->ggcslsize2=p->ggcslcount2*p->margin;
 

@@ -35,7 +35,7 @@ void hypre_sstruct::create_solver1234(lexer* p,ghostcell* pgc)
     HYPRE_SStructBiCGSTABSetTol(solver, p->N43);
     HYPRE_SStructBiCGSTABSetPrintLevel(solver, 0 );
     HYPRE_SStructBiCGSTABSetLogging(solver, 1);
-    
+
     HYPRE_SStructSysPFMGCreate(pgc->mpi_comm, &precond);
     HYPRE_SStructSysPFMGSetMaxIter(precond, 1);
     HYPRE_SStructSysPFMGSetTol(precond, 0.0);
@@ -48,7 +48,7 @@ void hypre_sstruct::create_solver1234(lexer* p,ghostcell* pgc)
     HYPRE_SStructSysPFMGSetPrintLevel(precond, 0);
     HYPRE_SStructSysPFMGSetLogging(precond, 0);
 
-    
+
     HYPRE_SStructBiCGSTABSetPrecond(solver, HYPRE_SStructSysPFMGSolve, HYPRE_SStructSysPFMGSetup, precond);
 }
 
@@ -62,7 +62,7 @@ void hypre_sstruct::delete_solver1234(lexer* p,ghostcell* pgc)
 void hypre_sstruct::create_solver5(lexer* p, ghostcell* pgc)
 {
     // solver for pressure poisson and potential laplace equation
-    
+
     if(p->N10==31)
     {
     HYPRE_SStructPCGCreate(pgc->mpi_comm, &solver);
@@ -73,7 +73,7 @@ void hypre_sstruct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructPCGSetPrintLevel(solver, 0 );
     HYPRE_SStructPCGSetLogging(solver, 1);
     }
-    
+
     if(p->N10==32)
     {
     HYPRE_SStructGMRESCreate(pgc->mpi_comm, &solver);
@@ -83,7 +83,7 @@ void hypre_sstruct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructGMRESSetPrintLevel(solver, 0);
     HYPRE_SStructGMRESSetLogging(solver, 1);
     }
-    
+
     if(p->N10==33)
     {
     HYPRE_SStructLGMRESCreate(pgc->mpi_comm, &solver);
@@ -93,7 +93,7 @@ void hypre_sstruct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructLGMRESSetPrintLevel(solver, 0);
     HYPRE_SStructLGMRESSetLogging(solver, 1);
     }
-    
+
     if(p->N10==34)
     {
     HYPRE_SStructBiCGSTABCreate(pgc->mpi_comm, &solver);
@@ -102,7 +102,7 @@ void hypre_sstruct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructBiCGSTABSetPrintLevel(solver, 0 );
     HYPRE_SStructBiCGSTABSetLogging(solver, 1);
     }
-    
+
     if(p->N10==34)
     {
     HYPRE_SStructBiCGSTABCreate(pgc->mpi_comm, &solver);
@@ -111,7 +111,7 @@ void hypre_sstruct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructBiCGSTABSetPrintLevel(solver, 0 );
     HYPRE_SStructBiCGSTABSetLogging(solver, 1);
     }
-    
+
     if(p->N10==38)
     {
     HYPRE_SStructSysPFMGCreate(pgc->mpi_comm, &solver);
@@ -126,7 +126,7 @@ void hypre_sstruct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructSysPFMGSetPrintLevel(solver, 0);
     HYPRE_SStructSysPFMGSetLogging(solver, 0);
     }
-    
+
     if(p->N11==31)
     {
     HYPRE_SStructSysPFMGCreate(pgc->mpi_comm, &precond);
@@ -141,7 +141,7 @@ void hypre_sstruct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructSysPFMGSetPrintLevel(precond, 0);
     HYPRE_SStructSysPFMGSetLogging(precond, 0);
     }
-    
+
     if(p->N11==32)
     {
     HYPRE_SStructSplitCreate(pgc->mpi_comm, &precond);
@@ -151,7 +151,7 @@ void hypre_sstruct::create_solver5(lexer* p, ghostcell* pgc)
     //HYPRE_SStructSplitSetRAPType(precond, 0);
     HYPRE_SStructSplitSetStructSolver(precond, HYPRE_PFMG);
     }
-    
+
     if(p->N11==33)
     {
     HYPRE_SStructSplitCreate(pgc->mpi_comm, &precond);
@@ -163,26 +163,26 @@ void hypre_sstruct::create_solver5(lexer* p, ghostcell* pgc)
 
     if(p->N10==31 && p->N11==31)
     HYPRE_SStructPCGSetPrecond(solver, HYPRE_SStructSysPFMGSolve, HYPRE_SStructSysPFMGSetup, precond);
-  
+
     if(p->N10==32 && p->N11==31)
     HYPRE_SStructGMRESSetPrecond(solver, HYPRE_SStructSysPFMGSolve, HYPRE_SStructSysPFMGSetup, precond);
 
     if(p->N10==33 && p->N11==31)
     HYPRE_SStructLGMRESSetPrecond(solver, HYPRE_SStructSysPFMGSolve, HYPRE_SStructSysPFMGSetup, precond);
-    
+
     if(p->N10==34 && p->N11==31)
     HYPRE_SStructBiCGSTABSetPrecond(solver, HYPRE_SStructSysPFMGSolve, HYPRE_SStructSysPFMGSetup, precond);
-    
+
     
     if(p->N10==31 && (p->N11==32 || p->N11==33))
     HYPRE_SStructPCGSetPrecond(solver,  HYPRE_SStructSplitSolve, HYPRE_SStructSplitSetup, precond);
-  
+
     if(p->N10==32 && (p->N11==32 || p->N11==33))
     HYPRE_SStructGMRESSetPrecond(solver, HYPRE_SStructSplitSolve, HYPRE_SStructSplitSetup, precond);
 
     if(p->N10==33 && (p->N11==32 || p->N11==33))
     HYPRE_SStructLGMRESSetPrecond(solver, HYPRE_SStructSplitSolve, HYPRE_SStructSplitSetup, precond);
-    
+
     if(p->N10==34 && (p->N11==32 || p->N11==33))
     HYPRE_SStructBiCGSTABSetPrecond(solver, HYPRE_SStructSplitSolve, HYPRE_SStructSplitSetup, precond);
 
@@ -192,25 +192,25 @@ void hypre_sstruct::delete_solver5(lexer* p,ghostcell* pgc)
 {
     if(p->N10==31)
     HYPRE_SStructPCGDestroy(solver);
-    
+
     if(p->N10==32)
     HYPRE_SStructGMRESDestroy(solver);
-    
+
     if(p->N10==33)
     HYPRE_SStructLGMRESDestroy(solver);
-    
+
     if(p->N10==34)
     HYPRE_SStructBiCGSTABDestroy(solver);
-    
+
     if(p->N10==38)
     HYPRE_SStructSysPFMGDestroy(solver);
-    
+
     if(p->N11==31)
     HYPRE_SStructSysPFMGDestroy(precond);
-    
+
     if(p->N11==32)
     HYPRE_SStructSplitDestroy(precond);
-    
+
     if(p->N11==33)
     HYPRE_SStructSplitDestroy(precond);
 

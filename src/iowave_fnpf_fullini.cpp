@@ -30,9 +30,9 @@ void iowave::full_initialize_fnpf(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
     if(p->mpirank==0)
     cout<<"full NWT initialize"<<endl;
-    
+
     p->wavetime = p->simtime;
-    
+
     // eta
     SLICELOOP4
     if(p->wet[IJ]==1)
@@ -45,7 +45,7 @@ void iowave::full_initialize_fnpf(lexer *p, fdm_fnpf *c, ghostcell *pgc)
         c->eta(i,j) = wave_eta(p,pgc,xg,yg);
 
     }
-    
+
     // Fifsf
     SLICELOOP4
     if(p->wet[IJ]==1)
@@ -54,13 +54,13 @@ void iowave::full_initialize_fnpf(lexer *p, fdm_fnpf *c, ghostcell *pgc)
         yg = ygen(p);
         dg = distgen(p);
         db = distbeach(p);
-        
+
         z = c->eta(i,j);
 
         c->Fifsf(i,j) = wave_fi(p,pgc,xg,yg,z);
     }
 
-    
+
     // Fi
     FLOOP
     if(p->wet[IJ]==1)
@@ -69,15 +69,15 @@ void iowave::full_initialize_fnpf(lexer *p, fdm_fnpf *c, ghostcell *pgc)
         yg = ygen(p);
         dg = distgen(p);
         db = distbeach(p);
-        
+
         z=p->ZSN[FIJK]-p->phimean;
-        
+
         z = p->ZN[KP]*(c->eta(i,j) + p->wd - c->bed(i,j)) + c->bed(i,j)-p->phimean;
-        
+
         c->Fi[FIJK] = wave_fi(p,pgc,xg,yg,z);
-      
+
     }
-    
+
     SLICELOOP4
     c->WL(i,j) = c->eta(i,j) + p->wd - c->bed(i,j);
 

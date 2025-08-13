@@ -61,25 +61,25 @@ levelset_RK3::levelset_RK3(lexer* p, fdm *a, ghostcell* pgc, heat *&pheat, conce
 
     if(p->F30>0 && p->H10==0 && p->W30==0 && p->F300==0 && p->W90==0)
     pupdate = new fluid_update_fsf(p,a,pgc);
-    
+
     if(p->F30>0 && p->H10==0 && p->W30==1 && p->F300==0 && p->W90==0)
     pupdate = new fluid_update_fsf_comp(p,a,pgc);
-    
+
     if(p->F30>0 && p->H10>0 && p->W90==0 && p->F300==0 && p->H3==1)
     pupdate = new fluid_update_fsf_heat(p,a,pgc,pheat);
-    
+
     if(p->F30>0 && p->H10>0 && p->W90==0 && p->F300==0 && p->H3==2)
     pupdate = new fluid_update_fsf_heat_Bouss(p,a,pgc,pheat);
-    
+
     if(p->F30>0 && p->C10>0 && p->W90==0 && p->F300==0)
     pupdate = new fluid_update_fsf_concentration(p,a,pgc,pconc);
-    
+
     if(p->F30>0 && p->H10==0 && p->W30==0 && p->F300==0 && p->W90>0)
     pupdate = new fluid_update_rheology(p);
-    
+
     if(p->F300>0)
     pupdate = new fluid_update_void();
-    
+
 
     if(p->F46==2)
     ppicard = new picard_f(p);
@@ -89,7 +89,7 @@ levelset_RK3::levelset_RK3(lexer* p, fdm *a, ghostcell* pgc, heat *&pheat, conce
 
     if(p->F46!=2 && p->F46!=3)
     ppicard = new picard_void(p);
-    
+
     
     gcval_u=10;
     gcval_v=11;
@@ -116,17 +116,17 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
     a->L.V[IJK]=0.0;
 
     pconvec->start(p,a,ls,4,a->u,a->v,a->w);
-    
+
 
     LOOP
     ark1.V[IJK] = ls.V[IJK]
                 + p->dt*a->L.V[IJK];
-    
+
     pflow->phi_relax(p,pgc,ark1);
-    
+
     pgc->start4(p,ark1,gcval_phi);
     pgc->solid_forcing_lsm(p,a,ark1);
-    
+
     
 // Step 2
     LOOP
@@ -138,12 +138,12 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
     ark2.V[IJK] =     0.75*ls.V[IJK]
                    + 0.25*ark1.V[IJK]
                    + 0.25*p->dt*a->L.V[IJK];
-                
+
     pflow->phi_relax(p,pgc,ark2);
-    
+
     pgc->start4(p,ark2,gcval_phi);
     pgc->solid_forcing_lsm(p,a,ark2);
-    
+
 // Step 3
     LOOP
     a->L.V[IJK]=0.0;
@@ -158,19 +158,19 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
     pflow->phi_relax(p,pgc,ls);
     pgc->start4(p,ls,gcval_phi);
     pgc->solid_forcing_lsm(p,a,ls);
-    
+
 
     ppart->start(p,a,pgc,pflow);
-    
+
     
     p->lsmtime=pgc->timer()-starttime;
-    
+
     preini->start(a,p,ls,pgc,pflow);
-    
+
 
     ppicard->correct_ls(p,a,pgc,ls);
     ppart->picardmove(p,a,pgc);
-    
+
     pupdate->start(p,a,pgc);
 
     if(p->mpirank==0 && (p->count%p->P12==0))

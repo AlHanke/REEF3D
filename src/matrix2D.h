@@ -33,7 +33,7 @@ public:
 
     matrix2D(lexer*);
     virtual ~matrix2D();
-    
+
     void resize(lexer*,int,int);
 
     double *n,*s,*e,*w,*p;

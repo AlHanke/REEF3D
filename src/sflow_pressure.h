@@ -41,7 +41,7 @@ public:
     virtual void upgrad(lexer*, fdm2D*, slice&, slice&)=0;
     virtual void vpgrad(lexer*, fdm2D*, slice&, slice&)=0;
     virtual void wpgrad(lexer*, fdm2D*, slice&, slice&)=0;
-    
+
     virtual void ucorr(lexer*,fdm2D*,slice&,slice&,double)=0;
     virtual void vcorr(lexer*,fdm2D*,slice&,slice&,double)=0;
     virtual void wcorr(lexer*,fdm2D*,double,slice&,slice&,slice&)=0;

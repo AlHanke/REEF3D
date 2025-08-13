@@ -43,19 +43,19 @@ public:
 
     virtual void start_cfd(lexer*, fdm*, ghostcell*, double,Eigen::Matrix3d);
     virtual void start_nhflow(lexer*, fdm_nhf*, ghostcell*, double,Eigen::Matrix3d);
-    
+
     virtual void initialize_cfd(lexer*, fdm*, ghostcell*);
     virtual void initialize_nhflow(lexer*, fdm_nhf*, ghostcell*);
     virtual void netForces(lexer*, double&, double&, double&, double&, double&, double&);
-    
+
     virtual const EigenMat& getLagrangePoints(){return lagrangePoints;}
     virtual const EigenMat& getLagrangeForces(){return lagrangeForces;}
     virtual const EigenMat& getCollarVel(){return collarVel;}
     virtual const EigenMat& getCollarPoints(){return collarPoints;}
- 
+
 
 private:
-  
+
     vector<Eigen::Vector3d> lagrangePoints;
     vector<Eigen::Vector3d> lagrangeForces;
     vector<Eigen::Vector3d> collarVel;

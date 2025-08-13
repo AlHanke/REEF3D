@@ -46,10 +46,10 @@ public:
     virtual void update(lexer*,fdm*,ghostcell*,field&);
 
     void compression(lexer*,fdm*,ghostcell*,convection*,field&,double);
-    
+
 private:
     fluid_update *pupdate;
-    
+
     field1 uc;
     field2 vc;
     field3 wc;
@@ -58,7 +58,7 @@ private:
 
     int gcval_frac;
     double starttime;
-    
+
     convection *ppconvec;
 };
 #endif

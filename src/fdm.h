@@ -77,38 +77,38 @@ public:
     field4a fb;
     field4a porosity,porpart;
     field5 walld;
-     
+
     fieldint5 nodeval;
     sliceint5 nodeval2D;
-   
+
     // 6DOF
     field1 fbh1;
     field2 fbh2;
     field3 fbh3;
     field4 fbh4;
     field4 fbh5;
-    
+
     //PLIC
     field4 nX,nY,nZ,Alpha;
-    
+
     // PTF
     slice4 eta,eta_n,depth,WL;
     slice4 Fifsf;
     slice4 K;
     sliceint4 etaloc;
-    
+
     slice1 P;
     slice2 Q;
-    
+
     slice4 bed;
-    
+
     vec rhsvec;
 
     matrix_diag M;
 
     double maxF,maxG,maxH;
     double wd_criterion;
-    
+
     double t1,t2,t3,t4,t5;
 };
 

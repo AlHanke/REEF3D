@@ -32,7 +32,7 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
 
     p->Iarray(count,p->mpi_size);
     p->Iarray(recField, nK);
-    
+
     // Get velocities on own processor
     for (int i = 0; i < nK; i++)
     {
@@ -58,7 +58,7 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
             else if (cmp==3)
             {
                 coupledField[i][cmp] = p->ccipol4a(a->phi,x_(i,0),x_(i,1),x_(i,2));
-                
+
                 if (coupledField[i][cmp] >= 0.0) // water
                 {
                     coupledField[i][cmp] = p->W1;
@@ -68,7 +68,7 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
                     coupledField[i][cmp] = p->W3;
         }
             }
-            
+
             recField[i] = -1;
             count[p->mpirank]++;
         }
@@ -95,11 +95,11 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
         }
     }
 
-    
+
     // Fill array for sending
     double *sendField;
     p->Darray(sendField, count[p->mpirank]);
-    
+
     int counts = 0;
     for (int i = 0; i < nK; i++)
     {
@@ -119,19 +119,19 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
     for (int n = 0; n < p->mpi_size; ++n)
     {
         recvField[n] = new double[count[n]];
-        
+
         for (int m = 0; m < count[n]; ++m)
         {
             recvField[n][m] = 0.0;
         }
     }
 
-    
+
     // Send and receive
     vector<MPI_Request> sreq(p->mpi_size, MPI_REQUEST_NULL);
     vector<MPI_Request> rreq(p->mpi_size, MPI_REQUEST_NULL);
     MPI_Status status;
-    
+
     for (int j = 0; j < p->mpi_size; j++)
     {
         if (j!=p->mpirank)
@@ -139,14 +139,14 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
             if (count[p->mpirank] > 0)
             {
             //    cout<<"Processor "<<p->mpirank<<" sends "<<count[p->mpirank]<<" elements to processor "<<j<<endl;
-                
+
                 MPI_Isend(sendField,count[p->mpirank],MPI_DOUBLE,j,1,pgc->mpi_comm,&sreq[j]);
             }
-            
+
             if (count[j] > 0)
             {
             //    cout<<"Processor "<<p->mpirank<<" receives "<<count[j]<<" elements from processor "<<j<<endl;
-        
+
                 MPI_Irecv(recvField[j],count[j],MPI_DOUBLE,j,1,pgc->mpi_comm,&rreq[j]);
             }
         }
@@ -158,7 +158,7 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
         MPI_Wait(&sreq[j],&status);
         MPI_Wait(&rreq[j],&status);
     }
-    
+
     
     // Fill velocity vector
     for (int j = 0; j < p->mpi_size; j++)
@@ -168,7 +168,7 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
             count[j] = 0;
         }
     }
-        
+
     for (int i = 0; i < nK; i++)
     {
         for (int j = 0; j < p->mpi_size; j++)
@@ -180,7 +180,7 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
             }
         }
     }
-    
+
     for (int i = 0; i < nK; i++)
     {
         coupledField[i][cmp] += 1e-10;
@@ -201,7 +201,7 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
         }
     }
     delete [ ] recvField;
-    
+
     p->del_Iarray(count,p->mpi_size);
     p->del_Iarray(recField, nK);
 }

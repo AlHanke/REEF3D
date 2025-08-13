@@ -31,9 +31,9 @@ void partres::pvtp(lexer* p)
 {
 
     num = printcount;
-    
+
     sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%08i.pvtp",num);
-    
+
 
     ofstream result;
     result.open(name);

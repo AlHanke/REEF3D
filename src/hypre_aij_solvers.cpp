@@ -40,7 +40,7 @@ void hypre_aij::create_solvers(lexer* p, ghostcell* pgc)
     HYPRE_PCGSetPrintLevel(solver, 0 );
     HYPRE_PCGSetLogging(solver, 1);
     }
-    
+
     if(p->N10==22)
     {
     HYPRE_ParCSRGMRESCreate(MPI_COMM_WORLD, &solver);
@@ -50,7 +50,7 @@ void hypre_aij::create_solvers(lexer* p, ghostcell* pgc)
     HYPRE_GMRESSetPrintLevel(solver, 0);
     HYPRE_GMRESSetLogging(solver, 1);
     }
-    
+
     if(p->N10==23)
     {
     HYPRE_ParCSRLGMRESCreate(MPI_COMM_WORLD, &solver);
@@ -60,7 +60,7 @@ void hypre_aij::create_solvers(lexer* p, ghostcell* pgc)
     HYPRE_LGMRESSetPrintLevel(solver, 0);
     HYPRE_LGMRESSetLogging(solver, 1);
     }
-    
+
     if(p->N10==24)
     {
     HYPRE_ParCSRBiCGSTABCreate(pgc->mpi_comm, &solver);
@@ -69,7 +69,7 @@ void hypre_aij::create_solvers(lexer* p, ghostcell* pgc)
     HYPRE_BiCGSTABSetPrintLevel(solver, 0 );
     HYPRE_BiCGSTABSetLogging(solver, 1);
     }
-    
+
     if(p->N10==25)
     {
     HYPRE_BoomerAMGCreate(&solver);
@@ -91,40 +91,40 @@ void hypre_aij::create_solvers(lexer* p, ghostcell* pgc)
     HYPRE_BoomerAMGSetTol(precond, 0.0);
     HYPRE_BoomerAMGSetMaxIter(precond, 1);
     }
-    
+
       
-    
+
     if(p->N10==21 && p->N11==21)
     HYPRE_PCGSetPrecond(solver, (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSolve, (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSetup, precond);
-    
+
     if(p->N10==22 && p->N11==21)
     HYPRE_GMRESSetPrecond(solver, (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSolve, (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSetup, precond);
-    
+
     if(p->N10==23 && p->N11==21)
     HYPRE_LGMRESSetPrecond(solver, (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSolve, (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSetup, precond);
-    
+
     if(p->N10==24 && p->N11==21)
     HYPRE_BiCGSTABSetPrecond(solver, (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSolve, (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSetup, precond);
-    
+
 }
 
 void hypre_aij::delete_solvers(lexer* p, ghostcell* pgc)
 {
     if(p->N10==21)
     HYPRE_ParCSRPCGDestroy(solver);
-    
+
     if(p->N10==22)
     HYPRE_ParCSRGMRESDestroy(solver);
-    
+
     if(p->N10==23)
     HYPRE_ParCSRLGMRESDestroy(solver);
-    
+
     if(p->N10==24)
     HYPRE_ParCSRBiCGSTABDestroy(solver);
-    
+
     if(p->N10==25)
     HYPRE_BoomerAMGDestroy(solver);
-    
+
     if(p->N11==21)
     HYPRE_BoomerAMGDestroy(precond);
 }

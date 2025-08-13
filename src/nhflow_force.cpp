@@ -34,38 +34,38 @@ nhflow_force::nhflow_force(lexer* p, fdm_nhf *d, ghostcell *pgc, int qn) : inter
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_NHFLOW_SOLID",0777);
-    
+
     forceprintcount=0;
-    
+
     p->Darray(eta,p->imax*p->jmax*(p->kmax+2));
     p->Iarray(vertice,p->imax*p->jmax*(p->kmax+2));
     p->Iarray(nodeflag,p->imax*p->jmax*(p->kmax+2));
-    
+
     // open files
     print_ini(p,d,pgc);
-    
+
     is = p->posc_i(p->P81_xs[ID]);
     ie = p->posc_i(p->P81_xe[ID]);
-    
+
     js = p->posc_j(p->P81_ys[ID]);
     je = p->posc_j(p->P81_ye[ID]);
-    
+
     ks = p->posc_k(p->P81_zs[ID]);
     ke = p->posc_k(p->P81_ze[ID]);
-    
+
     xs = p->P81_xs[ID];
     xe = p->P81_xe[ID];
-    
+
     ys = p->P81_ys[ID];
     ye = p->P81_ye[ID];
-    
+
     zs = p->P81_zs[ID];
     ze = p->P81_ze[ID];
-    
+
     xm = xs + (xe-xs)*0.5;
     ym = ys + (ye-ys)*0.5;
     zm = zs + (ze-zs)*0.5;
-    
+
     gcval_press=40;
 }
 
@@ -91,16 +91,16 @@ void nhflow_force::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
         {
         if(p->count==2)
         cout<<"Atot_solid: "<<A_tot<<endl;
-        
+
         cout<<"Ax: "<<Ax<<" Ay: "<<Ay<<" Az: "<<Az<<endl;
         cout<<"Atot: "<<A_tot<<endl;
         cout<<"Fx: "<<Fx<<" Fy: "<<Fy<<" Fz: "<<Fz<<endl;
 
         print_force(p,d,pgc);
         }
-        
+
     print_vtp(p,d,pgc);
-    
+
     deallocate(p,d,pgc);
 }
 

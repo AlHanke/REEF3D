@@ -39,7 +39,7 @@ public:
     virtual void v_flux(fdm* a,int,field&,double&,double&);
     virtual void w_flux(fdm* a,int,field&,double&,double&);
 
-    
+
 private:
     lexer *p;
 

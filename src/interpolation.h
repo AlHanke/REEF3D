@@ -38,7 +38,7 @@ class interpolation : virtual public boundarycheck
 public:
     interpolation(lexer*);
     virtual ~interpolation();
-    
+
     double ccipol1(field&,double,double,double);
     double ccipol1c(field&,double,double,double);
     double ccipol2(field&,double,double,double);
@@ -59,11 +59,11 @@ public:
     double ccipol4_b(field&,double,double,double);
     double ccipol4_c(field&,double,double,double);
     double ccipol4_kin(field&,double,double,double);
-    
+
     double cctripol4_a(fdm*,field&,double,double,double);
     double cint4a(double,double,double,double,double);
     double tricubic4a(lexer*,fdm*,field&,int&,int&,int&,double,double,double);
-    
+
     double ipol1(field&);
     double ipol2(field&);
     double ipol3(field&);
@@ -75,7 +75,7 @@ public:
     double ipol4press(field&);
     double ipol4_a(field&);
 
-    
+
     double lint(field&,int&,int&,int&,double,double,double);
     double lint1(field&,int&,int&,int&,double,double,double);
     double lint1c(field&,int&,int&,int&,double,double,double);
@@ -92,7 +92,7 @@ public:
     double lint_a(field&,int&,int&,int&,double,double,double);
     double lint4b(field&,int&,int&,int&,double,double,double);
     double lint4kin(field&,int&,int&,int&,double,double,double);
-    
+
     double lint1_2D(field&,int&,int&,int&,double,double,double);
     double lint2_2D(field&,int&,int&,int&,double,double,double);
     double lint3_2D(field&,int&,int&,int&,double,double,double);
@@ -101,9 +101,9 @@ public:
     double lint7V_2D(double*,int&,int&,int&,double,double,double);
     double lint_a_2D(field&,int&,int&,int&,double,double,double);
     double lint4phi_2D(fdm*,field&,int&,int&,int&,double,double,double);
-    
+
     double tricubic4a(field&,int&,int&,int&,double,double,double);
-    
+
     
     // slice
     double sl_ipol1(slice&);
@@ -116,17 +116,17 @@ public:
     double sl_ipol4eta(int*,slice&,slice&);
     double sl_ipol4eta_wd(int*,slice&,slice&);
     double sl_ipolint(sliceint&);
-    
+
     double nhf_ipol4eta(int*,slice&,slice&);
-    
+
     double ccslipol1(slice&,double,double);
     double ccslipol2(slice&,double,double);
     double ccslipol4(slice&,double,double);
-    
+
     double lintsl1(slice&,int&,int&,double,double);
     double lintsl2(slice&,int&,int&,double,double);
     double lintsl4(slice&,int&,int&,double,double);
-    
+
     
 
 private:
@@ -136,9 +136,9 @@ private:
     double wa,wb,wc,wx,wy,wz;
     double value;
 
-    
+
     int ii,jj,kk;
-    
+
     lexer *p;
 };
 

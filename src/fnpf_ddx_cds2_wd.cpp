@@ -38,7 +38,7 @@ double fnpf_ddx_cds2_wd::sxx(lexer *p, slice &f)
 {
     if(p->wet[Im1J]>0 && p->wet[Ip1J]>0)
     return ((f(i+1,j)-f(i,j))/p->DXP[IP] - (f(i,j)-f(i-1,j))/p->DXP[IM1])/p->DXN[IP];
-    
+
     else
     return 0.0;
 }

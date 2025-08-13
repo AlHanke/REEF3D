@@ -47,7 +47,7 @@ private:
     double c_wale;
     int gcval_u1, gcval_v1, gcval_w1;
     int gcval_u2, gcval_v2, gcval_w2;
-    
+
     LES_filter *pfilter;
 
 };

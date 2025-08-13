@@ -35,7 +35,7 @@ void ghostcell::flagx7(lexer* p,int *f)
     i=p->gcx7[0][q][0];
     j=p->gcx7[0][q][1];
     k=p->gcx7[0][q][2];
-        
+
 
         isend1[count] = f[FIJK];
         ++count;
@@ -52,7 +52,7 @@ void ghostcell::flagx7(lexer* p,int *f)
     i=p->gcx7[2][q][0];
     j=p->gcx7[2][q][1];
     k=p->gcx7[2][q][2];
-        
+
         isend3[count] = f[FIJK];
         ++count;
         isend3[count] = f[FIJp1K];
@@ -67,7 +67,7 @@ void ghostcell::flagx7(lexer* p,int *f)
     i=p->gcx7[3][q][0];
     j=p->gcx7[3][q][1];
     k=p->gcx7[3][q][2];
-        
+
         isend4[count] = f[FIJK];
         ++count;
         isend4[count] = f[FIm1JK];
@@ -82,7 +82,7 @@ void ghostcell::flagx7(lexer* p,int *f)
     i=p->gcx7[1][q][0];
     j=p->gcx7[1][q][1];
     k=p->gcx7[1][q][2];
-        
+
         isend2[count] = f[FIJK];
         ++count;
         isend2[count] = f[FIJm1K];
@@ -132,7 +132,7 @@ void ghostcell::flagx7(lexer* p,int *f)
     i=p->gcx7[0][q][0];
     j=p->gcx7[0][q][1];
     k=p->gcx7[0][q][2];
-        
+
 
         f[FIm1JK] = irecv1[count];
         ++count;
@@ -140,7 +140,7 @@ void ghostcell::flagx7(lexer* p,int *f)
         ++count;
         f[FIm3JK] = irecv1[count];
         ++count;
-        
+
     }
 
     count=0;
@@ -149,7 +149,7 @@ void ghostcell::flagx7(lexer* p,int *f)
     i=p->gcx7[2][q][0];
     j=p->gcx7[2][q][1];
     k=p->gcx7[2][q][2];
-        
+
         f[FIJm1K] = irecv3[count];
         ++count;
         f[FIJm2K] = irecv3[count];
@@ -164,7 +164,7 @@ void ghostcell::flagx7(lexer* p,int *f)
     i=p->gcx7[3][q][0];
     j=p->gcx7[3][q][1];
     k=p->gcx7[3][q][2];
-        
+
         f[FIp1JK] = irecv4[count];
         ++count;
         f[FIp2JK] = irecv4[count];
@@ -179,7 +179,7 @@ void ghostcell::flagx7(lexer* p,int *f)
     i=p->gcx7[1][q][0];
     j=p->gcx7[1][q][1];
     k=p->gcx7[1][q][2];
-        
+
         f[FIJp1K] = irecv2[count];
         ++count;
         f[FIJp2K] = irecv2[count];

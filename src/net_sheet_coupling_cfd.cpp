@@ -33,13 +33,13 @@ void net_sheet::coupling_dlm_cfd(lexer *p, fdm *a, ghostcell *pgc)
     for (int knotI = 0; knotI < nK; knotI++)
     {
         lagrangePoints[knotI] << x_.row(knotI).transpose();
-        
+
         // Forces
         const Eigen::Vector3d& coordI = lagrangePoints[knotI];
-            
+
         // Density
         rho = coupledField[knotI][3];
-        
+
         if
         (
             coordI(0) >= xstart[p->mpirank] && coordI(0) < xend[p->mpirank] &&
@@ -56,7 +56,7 @@ void net_sheet::coupling_dlm_cfd(lexer *p, fdm *a, ghostcell *pgc)
             lagrangeForces[knotI] << 0.0, 0.0, 0.0;
         }
     }
-    
+
     for (int pI = 0; pI < nK; pI++)
     {
         Eigen::Vector3d& forceI = lagrangeForces[pI];

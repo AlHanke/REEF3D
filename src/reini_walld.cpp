@@ -43,7 +43,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
     starttime=pgc->timer();
 
     pgc->start4(p,f,50);
-    
+
     int qq;
     QQGC4LOOP
     if(p->gcb4[qq][4]==5|| p->gcb4[qq][4]==21|| p->gcb4[qq][4]==22)
@@ -51,7 +51,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
         i=p->gcb4[qq][0];
         j=p->gcb4[qq][1];
         k=p->gcb4[qq][2];
-        
+
         if(p->gcb4[qq][3]==1)
         {
         f.V[Im1JK]=-0.5*p->DXN[IP] - 0.0*p->DXN[IP];
@@ -72,21 +72,21 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
         f.V[IJm2K]=-0.5*p->DYN[JP] - 1.0*p->DYN[JP];
         f.V[IJm3K]=-0.5*p->DYN[JP] - 2.0*p->DYN[JP];
         }
-        
+
         if(p->gcb4[qq][3]==2)
         {
         f.V[IJp1K]=-0.5*p->DYN[JP] - 0.0*p->DYN[JP];
         f.V[IJp2K]=-0.5*p->DYN[JP] - 1.0*p->DYN[JP];
         f.V[IJp3K]=-0.5*p->DYN[JP] - 2.0*p->DYN[JP];
         }
-        
+
         if(p->gcb4[qq][3]==5)
         {
         f.V[IJKm1]=-0.5*p->DZN[KP] - 0.0*p->DZN[KP];
         f.V[IJKm2]=-0.5*p->DZN[KP] - 1.0*p->DZN[KP];
         f.V[IJKm3]=-0.5*p->DZN[KP] - 2.0*p->DZN[KP];
         }
-                
+
         if(p->gcb4[qq][3]==6)
         {
         f.V[IJKp1]=-0.5*p->DZN[KP] - 0.0*p->DZN[KP];
@@ -94,7 +94,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
         f.V[IJKp3]=-0.5*p->DZN[KP] - 2.0*p->DZN[KP];
         }
     }
-    
+
     QQGC4LOOP
     if(p->gcb4[qq][4]==1|| p->gcb4[qq][4]==2|| p->gcb4[qq][4]==3)
     {
@@ -102,7 +102,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
         j=p->gcb4[qq][1];
         k=p->gcb4[qq][2];
         n=p->gcb4[qq][5];
-        
+
         if(p->gcb4[qq][3]==1)
         {
         f.V[Im1JK] = f.V[IJK];
@@ -123,21 +123,21 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
         f.V[IJm2K] = f.V[IJK];
         f.V[IJm3K] = f.V[IJK];
         }
-        
+
         if(p->gcb4[qq][3]==2)
         {
         f.V[IJp1K] = f.V[IJK];
         f.V[IJp2K] = f.V[IJK];
         f.V[IJp3K] = f.V[IJK];
         }
-        
+
         if(p->gcb4[qq][3]==5)
         {
         f.V[IJKm1] = f.V[IJK];
         f.V[IJKm2] = f.V[IJK];
         f.V[IJKm3] = f.V[IJK];
         }
-                
+
         if(p->gcb4[qq][3]==6)
         {
         f.V[IJKp1] = f.V[IJK];
@@ -145,7 +145,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
         f.V[IJKp3] = f.V[IJK];
         }
     }
-    
+
     double dx;
     dt=1e9;
     if(p->N50==1)
@@ -155,13 +155,13 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
 
     dt = MIN(dt,0.5*dx);
     }
-    
+
     reiniter=2*int(p->maxlength/(dt));
-    
+
     reiniter = pgc->globalimax(reiniter);
-  
+
     pgc->gcparax(p,f,4);
-   
+
     for(int q=0;q<reiniter;++q)
     {
 
@@ -178,7 +178,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
 
         dab.V[IJK]=a->L.V[IJK];
         }
-        
+
     QQGC4LOOP
     if(p->gcb4[qq][4]==5|| p->gcb4[qq][4]==21|| p->gcb4[qq][4]==22)
     {
@@ -186,17 +186,17 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
     j=p->gcb4[qq][1];
     k=p->gcb4[qq][2];
     n=p->gcb4[qq][5];
-    
+
         if(p->gcb4[qq][3]==1 || p->gcb4[qq][3]==4)
         f.V[IJK] = 0.5*p->DXN[IP];
-        
+
         if(p->gcb4[qq][3]==3 || p->gcb4[qq][3]==2)
         f.V[IJK] = 0.5*p->DYN[JP];
-        
+
         if(p->gcb4[qq][3]==5 || p->gcb4[qq][3]==6)
         f.V[IJK] = 0.5*p->DZN[KP];
     }
-    
+
     pgc->gcparax(p,f,4);
     }
 
@@ -205,7 +205,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
 
 void reini_walld::step(fdm* a, lexer *p)
 {
-    
+
 
 }
 

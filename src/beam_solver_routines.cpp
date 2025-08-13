@@ -142,9 +142,9 @@ void beam::sol(const int n, double **A, double *b, int *ip)
         }
     }
     b[0] = b[0]/A[0][0];
-    
+
     return;
-    
+
 } //sol
 
 
@@ -154,12 +154,12 @@ int beam::dech(const int n, double **A, int lb, int *ip)
 /*-----------------------------------------------------------------------
     Matrix Triangularization by Gaussian Elimination of a Hessenberg
         matrix with lower bandwidth lb
-    
+
     Input:
         n        order of matrix
         A        matrix to be triangularized
         lb        lower bandwidth of A (diagonal is not counted, lb >= 1)
-        
+
     Output:
         A[i][j], i <= j        upper triangular factor, U
         A[i][j], i > j        multipliers = lower triangular factor, i - l
@@ -169,11 +169,11 @@ int beam::dech(const int n, double **A, int lb, int *ip)
                                 to be singular at stage k
 
     Use solh to obtain solution of linear system
-    
+
     determ(A) = ip[n-1]*A[0][0]*A[1][1]*...*A[n-1][n-1]
-    
+
     If ip[n-1] = 0, A is singular, solh will divide by zero
-    
+
     Reference:
         This is a slight modification of
         C.B. Moler, Algorithm 423, Linear Equation Solver,
@@ -223,7 +223,7 @@ int beam::dech(const int n, double **A, int lb, int *ip)
         ier = k;
         ip[n-1] = 0;
     }
-    
+
     return (ier);
 
 } //dech
@@ -234,16 +234,16 @@ void beam::solh(const int n, double **A, int lb, double *b, int *ip)
 
 /*-----------------------------------------------------------------------
     Solution of linear system A*x = b -- Hessenberg matrix
-    
+
     Input:
         n        order of matrix
         A        triangularized matrix obtained from dech
         lb        lower bandwidth of A
         b        right hand side vector
         ip        pivot vector obtained from dec
-        
+
     Do not use if dec has set ier!=0
-    
+
     Output:
         b        solution vector, x
 
@@ -274,7 +274,7 @@ void beam::solh(const int n, double **A, int lb, double *b, int *ip)
         }
     }
     b[0] = b[0]/A[0][0];
-    
+
     return;
 
 } //solh
@@ -285,11 +285,11 @@ int beam::decc(const int n, double **AR, double **AI, int *ip)
 /*-----------------------------------------------------------------------
     Matrix Triangularization by Gaussian Elimination
     ------ Modification for complex matrices -------
-    
+
     Input:
         n            order of matrix
         AR, AI        matrix to be triangularized
-        
+
     Output:
         AR[i][j], i <= j    upper triangular factor, U; real part
         AI[i][j], i <= j    upper triangular factor, U; imaginary part
@@ -301,11 +301,11 @@ int beam::decc(const int n, double **AR, double **AI, int *ip)
         ip[n-1]                (-1)^(number of interchanges) or 0
         ier                    0 if matrix A is nonsingular, or k if found
                                 to be singular at stage k
-            
+
     Use solc to obtain solution of linear system
-    
+
     If ip[n-1] = 0, A is singular, sol will divide by zero
-    
+
     Reference:
         C.B. Moler, Algorithm 423, Linear Equation Solver,
         C.A.C.M. 15 (1972), p. 274.
@@ -402,15 +402,15 @@ void beam::solc(const int n, double **AR, double **AI, double *br,
 
 /*-----------------------------------------------------------------------
     Solution of linear system A*x = b
-    
+
     Input:
         n            order of matrix
         AR, AI        triangularized matrix obtained from decc
         br, bi        right hand side vector
         ip            pivot vector obtained from dec
-        
+
     Do not use if decc has set ier!=0
-    
+
     Output:
         br, bi        solution vector, x
 
@@ -418,7 +418,7 @@ void beam::solc(const int n, double **AR, double **AI, double *br,
 
     int nm1, kp1, m, kb, km1;
     double den, prodr, prodi, tr, ti;
-      
+
     if (n!=1) {
         nm1 = n - 1;
         for (int k = 0; k < nm1; k++) {
@@ -460,9 +460,9 @@ void beam::solc(const int n, double **AR, double **AI, double *br,
     prodi = bi[0]*AR[0][0] - br[0]*AI[0][0];
     br[0] = prodr/den;
     bi[0] = prodi/den;
-    
+
     return;
-        
+
 } // solc
 
 int beam::dechc(const int n, double **AR, double **AI, int lb, int *ip)
@@ -471,11 +471,11 @@ int beam::dechc(const int n, double **AR, double **AI, int lb, int *ip)
 /*-----------------------------------------------------------------------
     Matrix Triangularization by Gaussian Elimination
     ------ Modification for complex matrices -------
-    
+
     Input:
         n            order of matrix
         AR, AI        matrix to be triangularized
-        
+
     Output:
         AR[i][j], i <= j    upper triangular factor, U; real part
         AI[i][j], i <= j    upper triangular factor, U; imaginary part
@@ -488,7 +488,7 @@ int beam::dechc(const int n, double **AR, double **AI, int lb, int *ip)
         ip[n-1]                (-1)^(number of interchanges) or 0
         ier                    0 if matrix A is nonsingular, or k if found
                                 to be singular at stage k
-            
+
     Use solhc to obtain solution of linear system
 
     If ip[n-1] = 0, A is singular, solhc will divide by zero
@@ -500,7 +500,7 @@ int beam::dechc(const int n, double **AR, double **AI, int lb, int *ip)
 
     int kp1, m, nm1, k, na, ier;
     double tr, ti, den, prodr, prodi;
- 
+
     ier = 0;
     ip[n-1] = 1;
     if ((n!=1) && (lb!=0)) {
@@ -597,9 +597,9 @@ void beam::solhc(const int n, double **AR, double **AI, int lb,
         br, bi        right hand side vector
         lb            lower bandwidth of A
         ip            pivot vector obtained from dec
-        
+
     Do not use if dechc has set ier!=0
-    
+
     Output:
         br, bi        solution vector, x
 
@@ -607,7 +607,7 @@ void beam::solhc(const int n, double **AR, double **AI, int lb,
 
     int nm1, kp1, m, kb, km1;
     double den, prodr, prodi, tr, ti;
-      
+
     if (n!=1) {
         nm1 = n - 1;
         if (lb!=0) {
@@ -651,7 +651,7 @@ void beam::solhc(const int n, double **AR, double **AI, int lb,
     prodi = bi[0]*AR[0][0] - br[0]*AI[0][0];
     br[0] = prodr/den;
     bi[0] = prodi/den;
-    
+
     return;
 
 }
@@ -662,7 +662,7 @@ int beam::decb(const int n, double **A, int ml, int mu, int *ip)
 /*-----------------------------------------------------------------------
     Matrix Triangularization by Gaussian Elimination of a banded
         matrix with lower bandwidth ml and upper bandwidth mu
-    
+
     Input:
         n        order of matrix
         A        contains the matrix in band storage.
@@ -671,7 +671,7 @@ int beam::decb(const int n, double **A, int ml, int mu, int *ip)
                 rows ml    through 2*ml + mu of A.
         ml        lower bandwidth of A (diagonal is not counted)
         mu        upper bandwidth of A (diagonal is not counted)
-                
+
     Output:
         A         upper triangular matrix in band storage and the
                 multipliers which were used to obtain it
@@ -679,14 +679,14 @@ int beam::decb(const int n, double **A, int ml, int mu, int *ip)
         ip[n-1]    (-1)^(number of interchanges) or 0
         ier        0 if matrix A is nonsingular, or k if found to be
                     singular at stage k
-            
+
     Use solb to obtain solution of linear system
-    
+
     determ(A) = ip[n-1]*A[md][0]*A[md][1]*...*A[md][n-1] with
             md = ml + mu
-    
+
     If ip[n-1] = 0, A is singular, solb will divide by zero
-    
+
     Reference:
         This is a modification of:
         C.B. Moler, Algorithm 423, Linear Equation Solver,
@@ -755,14 +755,14 @@ int beam::decb(const int n, double **A, int ml, int mu, int *ip)
         ier = k;
         ip[n-1] = 0;
     }
-    
+
     return (ier);
 
 }
 
 void beam::solb(const int n, double **A, int ml, int mu, double *b, int *ip)
 {
-    
+
 /*-----------------------------------------------------------------------
     Solution of linear system A*x = b
 
@@ -773,14 +773,14 @@ void beam::solb(const int n, double **A, int ml, int mu, double *b, int *ip)
         mu        upper bandwidth of A (diagonal not counted)
         b        right hand side vector
         ip        pivot vector obtained from dec
-        
+
     Do not use if decb has set ier!=0
-    
+
     Output:
         b        solution vector, x
 
 -----------------------------------------------------------------------*/
-      
+
     int m, kb, nm1, md, md1, mdl, mdm, imd, kmd, lm;
     double t;
 
@@ -815,18 +815,18 @@ void beam::solb(const int n, double **A, int ml, int mu, double *b, int *ip)
         }
     }
     b[0] = b[0]/A[md][0];
-    
+
     return;
 
 }
 
 int beam::decbc(const int n, double **AR, double **AI, int ml, int mu, int *ip)
 {
-      
+
 /*-----------------------------------------------------------------------
     Matrix Triangularization by Gaussian Elimination of a banded complex
         matrix with lower bandwidth ml and upper bandwidth mu
-    
+
     Input:
         n            order of the original matrix A
         AR, AI        contains the matrix in band storage.
@@ -836,7 +836,7 @@ int beam::decbc(const int n, double **AR, double **AI, int ml, int mu, int *ip)
                     2*ml+mu of AR and AI
         ml            lower bandwidth of A (diagonal is not counted)
         mu            upper bandwidth of A (diagonal is not counted)
-                
+
     Output:
         AR, AI        an upper triangular matrix in band storage and the
                         multipliers which were used to obtain it
@@ -844,13 +844,13 @@ int beam::decbc(const int n, double **AR, double **AI, int ml, int mu, int *ip)
         ip[n-1]        (-1)^(number of interchanges) or 0
         ier         0 if matrix A is nonsingular, or k if found to be
                         singular at stage k
-            
+
     Use solbc to obtain solution of linear system
-    
+
     determ(A) = ip[n-1]*A[md][0]*A[md][1]*...*A[md][n-1] with md = ml+mu
-    
+
     If ip[n-1] = 0, A is singular, solbc will divide by zero
-    
+
     Reference:
         This is a modification of:
         C.B. Moler, Algorithm 423, Linear Equation Solver,
@@ -859,7 +859,7 @@ int beam::decbc(const int n, double **AR, double **AI, int ml, int mu, int *ip)
 
     int kp1, m, nm1, k, md, md1, mdl, mm, jk, ijk, ju, ier;
     double tr, ti, den, prodr, prodi;
-      
+
     ier = 0;
     ip[n-1] = 1;
     md = ml + mu;
@@ -969,11 +969,11 @@ int beam::decbc(const int n, double **AR, double **AI, int ml, int mu, int *ip)
 void beam::solbc(const int n, double **AR, double **AI, int ml, int mu,
     double *br, double *bi, int *ip)
 {
-      
+
 /*-----------------------------------------------------------------------
     Solution of linear system A*x = b
         version banded and complex
-    
+
     Input:
         n            order of matrix
         AR, AI        triangularized matrix obtained from decb
@@ -982,17 +982,17 @@ void beam::solbc(const int n, double **AR, double **AI, int ml, int mu,
         mu            upper bandwidth of A (diagonal is not counted)
         br, bi        right hand side vector (real and imaginary parts)
         ip            pivot vector obtained from decbc
-        
+
     Do not use if decbc has set ier!=0
-    
+
     Output:
         br, bi        solution vector, x (real and imaginary parts)
 
 -----------------------------------------------------------------------*/
-      
+
     int nm1, m, kb, md, md1, mdl, mdm, imd, kmd, lm;
     double den, prodr, prodi, tr, ti;
-  
+
     md = ml + mu;
     md1 = md + 1;
     mdm = md - 1;
@@ -1042,7 +1042,7 @@ void beam::solbc(const int n, double **AR, double **AI, int ml, int mu,
         br[0] = prodr/den;
         bi[0] = prodi/den;
     }
-    
+
     return;
 
 }

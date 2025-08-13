@@ -39,7 +39,7 @@ fluid_update_fsf_heat::fluid_update_fsf_heat(lexer *p, fdm* a, ghostcell* pgc, h
     alpha_water = p->H1;
 
     material(p,a,pgc);
-    
+
     pheat = ppheat;
 }
 
@@ -57,10 +57,10 @@ void fluid_update_fsf_heat::start(lexer *p, fdm* a, ghostcell* pgc)
     if(p->count>iter)
     iocheck=0;
     iter=p->count;
-    
+
     if(p->j_dir==0)
     epsi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
-        
+
     if(p->j_dir==1)
     epsi = p->F45*(1.0/3.0)*(p->DRM+p->DSM+p->DTM);
 
@@ -68,7 +68,7 @@ void fluid_update_fsf_heat::start(lexer *p, fdm* a, ghostcell* pgc)
     LOOP
     {
         temp = pheat->val(i,j,k);
-        
+
         if(p->H9==1)
         {
         ro_1 = material_ipol(water_density,water_density_num, temp);
@@ -77,7 +77,7 @@ void fluid_update_fsf_heat::start(lexer *p, fdm* a, ghostcell* pgc)
         visc_1 = material_ipol(water_viscosity,water_viscosity_num, temp);
         visc_2 = material_ipol(air_viscosity,air_viscosity_num, temp);
         }
-        
+
         if(p->H9==2)
         {
         ro_1 = material_ipol(air_density,air_density_num, temp);

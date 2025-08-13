@@ -42,9 +42,9 @@ public:
 
 private:
     void clearrhs(lexer*,fdm*,ghostcell*);
-    
+
     field4 cab;
-    
+
     int gcval_concentration;
     double starttime, endtime;
 };

@@ -32,17 +32,17 @@ class patchBC_void : public patchBC_interface
 public:
     patchBC_void(lexer*);
     virtual ~patchBC_void();
-    
+
     
     virtual void patchBC_ini(lexer*, ghostcell*);
-    
+
     // BC update
     virtual void patchBC_ioflow(lexer*, fdm*, ghostcell*, field&,field&,field&);
     virtual void patchBC_rkioflow(lexer*, fdm*, ghostcell*, field&,field&,field&);
     virtual void patchBC_discharge(lexer*, fdm*, ghostcell*);
     virtual void patchBC_pressure(lexer*, fdm*, ghostcell*, field&);
     virtual void patchBC_waterlevel(lexer*, fdm*, ghostcell*, field&);
-    
+
     virtual void patchBC_ioflow2D(lexer*, ghostcell*, slice&, slice&, slice&, slice&);
     virtual void patchBC_rkioflow2D(lexer*, ghostcell*, slice&, slice&, slice&, slice&);
     virtual void patchBC_discharge2D(lexer*, fdm2D*, ghostcell*, slice&, slice&, slice&, slice&);
@@ -50,9 +50,9 @@ public:
     virtual void patchBC_pressure2D_ugrad(lexer*, fdm2D*, slice&,slice&);
     virtual void patchBC_pressure2D_vgrad(lexer*, fdm2D*, slice&, slice&);
     virtual void patchBC_waterlevel2D(lexer*, fdm2D*, ghostcell*, slice&);
-    
+
     virtual void patchBC_loop2D(lexer*, fdm2D*, int&, int&, int&, int&);
-    
+
 };
 
 #endif

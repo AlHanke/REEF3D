@@ -33,7 +33,7 @@ fieldint4::fieldint4(lexer *p)
     kmax=p->kmax;
 
     fieldalloc(p);
-    
+
     pp=p;
 }
 

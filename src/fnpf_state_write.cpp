@@ -38,40 +38,40 @@ void fnpf_state::write_result(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 
     if(p->P15>=1)
     num = printcount;
-    
+
     filename_single(p,c,pgc,num);
-     
+
     result.open(name, ios::binary);
     }
-     
+
     // read head section
     iin=file_version;
     result.write((char*)&iin, sizeof (int));
-    
+
     iin=p->count;
     result.write((char*)&iin, sizeof (int));
-    
+
     iin=p->printcount;
     result.write((char*)&iin, sizeof (int));
-    
+
     ddn=p->simtime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     ddn=p->printtime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     ddn=p->sedprinttime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     ddn=p->fsfprinttime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     ddn=p->probeprinttime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     ddn=p->stateprinttime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     // read result section
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
@@ -80,7 +80,7 @@ void fnpf_state::write_result(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     ffn=float(c->eta(i,j));
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
     PSLICECHECK4
@@ -88,7 +88,7 @@ void fnpf_state::write_result(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     ffn=float(c->Fifsf(i,j));
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
     for(k=0; k<p->knoz+1; ++k)
@@ -115,7 +115,7 @@ void fnpf_state::write_result(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     ffn=float(c->W[FIJK]);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     if(p->P44==1)
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
@@ -125,9 +125,9 @@ void fnpf_state::write_result(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     ffn=float(c->Fi[FIJK]);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     if(p->P45==1)
     result.close();
-    
+
     ++printcount;
 }

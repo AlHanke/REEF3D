@@ -36,17 +36,17 @@ public:
     virtual ~sflow_bicgstab();
     virtual void start(lexer*, ghostcell*, slice&, matrix2D&, vec2D&, vec2D&, int);
     virtual void solve(lexer*, ghostcell*, matrix2D&, vec2D&, vec2D&, int, int&);
-    
+
     void fillxvec(lexer*,slice&,vec2D&);
     void finalize(lexer*,slice&);
 
     double res_calc(lexer*, matrix2D&, ghostcell*, double*);
     void matvec_axb(lexer*, matrix2D&, double*, double*);
     void matvec_std(lexer*, matrix2D&, double*, double*);
-    
+
     void precon_setup(lexer*, matrix2D&,ghostcell*);
     void precon_solve(lexer*,ghostcell*,double*,double*);
-    
+
     
 private:
 
@@ -56,9 +56,9 @@ private:
     double final_res_norm;
     int stencil_indices[7];
     int nentries;
-   
+
     int numiter,count,q;
-    
+
     
     //cg
     int *sizeS,*range;
@@ -68,7 +68,7 @@ private:
     int margin;
     int ulast,vlast,wlast;
     int *flagslice;
-    
+
     double alpha,beta,w1,w2,w,residual,norm_vj,norm_r0,norm_sj,norm_rj ;
     double r_j1, r_j, sigma;
 

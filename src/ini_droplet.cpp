@@ -57,7 +57,7 @@ if(p->F58_4>0.0)
     LOOP
     {
         epsi = (1.6/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-        
+
         if(a->phi(i,j,k)>=0)
         H=1.0;
 

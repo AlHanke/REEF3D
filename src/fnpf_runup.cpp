@@ -64,12 +64,12 @@ void fnpf_runup::ini(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 void fnpf_runup::start(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
     R1=R2=R3=R4=R5=R6=0.0;
-    
+
     if (xc >= xstart && xc < xend && yc >= ystart && yc < yend) // cylinder in processor
     {
         i = p->posc_i(xc);
         j = p->posc_j(yc);
-        
+
         cout<<"Run-up "<<i<<" "<<j<<endl;
 
         // Calculate runup

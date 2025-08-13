@@ -37,12 +37,12 @@ void net_interface::netForces_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha
     NETLOOP
     {
         pnet[n]->start_cfd(p, a, pgc, alpha, quatRotMat);
-        
+
         dlm_cfd(p, a, pgc, n);
-        
+
         // Forces on rigid body
         pnet[n]->netForces(p,Xne[n],Yne[n],Zne[n],Kne[n],Mne[n],Nne[n]);
-        
+
         // Distribute forces and moments to all processor
         pgc->bcast_double(&Xne[n],1);
         pgc->bcast_double(&Yne[n],1);
@@ -51,5 +51,5 @@ void net_interface::netForces_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha
         pgc->bcast_double(&Mne[n],1);
         pgc->bcast_double(&Nne[n],1);
     }
-    
+
 }

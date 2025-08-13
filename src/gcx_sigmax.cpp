@@ -38,7 +38,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
         send1[count]=f[(i-p->imin+q)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin];
         ++count;
         }
-        
+
     }
 
     count=0;
@@ -47,7 +47,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
     i=p->gcpara2[n][0];
     j=p->gcpara2[n][1];
     k=p->gcpara2[n][2];
-        
+
         for(q=0;q<paramargin;++q)
         {
         send2[count]=f[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin-q)*p->kmax + k-p->kmin];
@@ -61,7 +61,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
     i=p->gcpara3[n][0];
     j=p->gcpara3[n][1];
     k=p->gcpara3[n][2];
-        
+
         for(q=0;q<paramargin;++q)
         {
         send3[count]=f[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+q)*p->kmax + k-p->kmin];
@@ -75,7 +75,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
     i=p->gcpara4[n][0];
     j=p->gcpara4[n][1];
     k=p->gcpara4[n][2];
-        
+
         for(q=0;q<paramargin;++q)
         {
         send4[count]=f[(i-p->imin-q)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin];
@@ -89,7 +89,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
     i=p->gcpara5[n][0];
     j=p->gcpara5[n][1];
     k=p->gcpara5[n][2];
-        
+
         for(q=0;q<paramargin;++q)
         {
         send5[count]=f[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+q];
@@ -103,7 +103,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
     i=p->gcpara6[n][0];
     j=p->gcpara6[n][1];
     k=p->gcpara6[n][2];
-        
+
         for(q=0;q<paramargin;++q)
         {
         send6[count]=f[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-q];
@@ -160,7 +160,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
     i=p->gcpara1[n][0];
     j=p->gcpara1[n][1];
     k=p->gcpara1[n][2];
-        
+
         for(q=0;q<paramargin;++q)
         {
         f[(i-p->imin-q-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]=recv1[count];
@@ -174,7 +174,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
     i=p->gcpara2[n][0];
     j=p->gcpara2[n][1];
     k=p->gcpara2[n][2];
-        
+
         for(q=0;q<paramargin;++q)
         {
         f[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+q+1)*p->kmax + k-p->kmin]=recv2[count];
@@ -188,7 +188,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
     i=p->gcpara3[n][0];
     j=p->gcpara3[n][1];
     k=p->gcpara3[n][2];
-        
+
         for(q=0;q<paramargin;++q)
         {
         f[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin-q-1)*p->kmax + k-p->kmin]=recv3[count];
@@ -202,7 +202,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
     i=p->gcpara4[n][0];
     j=p->gcpara4[n][1];
     k=p->gcpara4[n][2];
-        
+
         for(q=0;q<paramargin;++q)
         {
         f[(i-p->imin+q+1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]=recv4[count];
@@ -216,7 +216,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
     i=p->gcpara5[n][0];
     j=p->gcpara5[n][1];
     k=p->gcpara5[n][2];
-        
+
         for(q=0;q<paramargin;++q)
         {
         f[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-q-1]=recv5[count];
@@ -230,7 +230,7 @@ void ghostcell::sigmax(lexer* p, fdm* a, double *f)
     i=p->gcpara6[n][0];
     j=p->gcpara6[n][1];
     k=p->gcpara6[n][2];
-        
+
         for(q=0;q<paramargin;++q)
         {
         f[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+q+1]=recv6[count];

@@ -35,11 +35,11 @@ public:
 
 
     double viscosity(lexer*,fdm*,ghostcell*) override;
-    
+
     void u_source(lexer*,fdm*) override;
     void v_source(lexer*,fdm*) override;
     void w_source(lexer*,fdm*) override;
-    
+
     void filltau(lexer*,fdm*,ghostcell*) override;
 
 };

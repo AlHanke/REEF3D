@@ -29,15 +29,15 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 void ghostcell::extend(lexer *p,field& f,double dist,int gcv, int bc, int cs)
 {
     weight=1.0;
-    
+
     double dx;
-    
+
     if(cs==1||cs==4)
     dx = p->DXP[IP];
-    
+
     if(cs==2||cs==3)
     dx = p->DYP[JP];
-    
+
     if(cs==5||cs==6)
     dx = p->DZP[KP];
 
@@ -46,7 +46,7 @@ void ghostcell::extend(lexer *p,field& f,double dist,int gcv, int bc, int cs)
 
     if(bc_label==35)
     orderext=2;
-    
+
 
     for(m=0;m<=orderext-3;m++)
     pos[m]=-dx*double(orderext-m-2);
@@ -56,7 +56,7 @@ void ghostcell::extend(lexer *p,field& f,double dist,int gcv, int bc, int cs)
 
     for(m=0;m<margin;m++)
     x[m]=dx*double(m+2);
-    
+
     
 
 //fill y[]
@@ -90,7 +90,7 @@ void ghostcell::extend(lexer *p,field& f,double dist,int gcv, int bc, int cs)
     if(cs==6)
     for(m=0;m<orderext;m++)
     y[m]=f(i,j,k-orderext+m+1);
-    
+
     
     for(q=0; q<margin; ++q)
     {
@@ -135,7 +135,7 @@ void ghostcell::extend(lexer *p,field& f,double dist,int gcv, int bc, int cs)
     {
     for(q=0;q<margin;++q)
     f(i,j,k-q-1)=y[orderext+q];
-    
+
     //cout<<" LSM: "<<f(i,j,k+1)<<" "<<f(i,j,k)<<" "<<y[2]<<" "<<y[3]<<" "<<y[4]<<endl;
     }
 

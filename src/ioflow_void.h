@@ -58,7 +58,7 @@ public:
     virtual void turbulence_io(lexer*,fdm*,ghostcell*);
     virtual void veltimesave(lexer*,fdm*,ghostcell*,vrans*);
     virtual void flowfile(lexer*,fdm*,ghostcell*,turbulence*);
-    
+
     virtual void wavegen_precalc(lexer*,ghostcell*);
     virtual void wavegen_precalc_ini(lexer*,ghostcell*);
     virtual void u_relax(lexer*,fdm*,ghostcell*,field&);
@@ -84,10 +84,10 @@ public:
     virtual void ws_relax(lexer*,ghostcell*,slice&,slice&,slice&);
     virtual void pm_relax(lexer*,ghostcell*,slice&);
     virtual void full_initialize2D(lexer*,fdm2D*,ghostcell*);
-    
+
     virtual void wavegen_2D_precalc(lexer*,fdm2D*,ghostcell*);
     virtual void wavegen_2D_precalc_ini(lexer*,ghostcell*);
-    
+
     virtual void discharge2D(lexer*,fdm2D*,ghostcell*);
     virtual void waterlevel2D(lexer*,fdm2D*,ghostcell*,slice&);
     virtual void Qin2D(lexer*,fdm2D*,ghostcell*);
@@ -96,26 +96,26 @@ public:
     virtual void rkinflow2D(lexer*,fdm2D*,ghostcell*,slice&,slice&,slice&,slice&);
     virtual void isource2D(lexer*,fdm2D*,ghostcell*);
     virtual void jsource2D(lexer*,fdm2D*,ghostcell*);
-    
+
     virtual double wave_fsf(lexer*,ghostcell*,double);
     virtual double wave_xvel(lexer*,ghostcell*,double,double,double);
     virtual double wave_yvel(lexer*,ghostcell*,double,double,double);
     virtual double wave_zvel(lexer*,ghostcell*,double,double,double);
-    
+
     virtual int iozonecheck(lexer*,fdm*);
-    
+
     virtual void wavegen_precalc_fnpf(lexer*,fdm_fnpf*,ghostcell*){};
     virtual void ini(lexer*,fdm*,ghostcell*);
-    
+
     virtual void waterlevel_update(lexer*,fdm*,ghostcell*){};
-    
+
     // fnpf
     virtual void ini_fnpf(lexer*,fdm_fnpf*,ghostcell*);
     virtual void inflow_fnpf(lexer*,fdm_fnpf*,ghostcell*,double*,double*,slice&,slice&);
     virtual void rkinflow_fnpf(lexer*,fdm_fnpf*,ghostcell*,slice&,slice&);
     virtual void ini2D(lexer*,fdm2D*,ghostcell*);
     virtual void ini_ptf(lexer*,fdm*,ghostcell*);
-    
+
     // nhflow
     virtual void wavegen_precalc_nhflow(lexer*,fdm_nhf*,ghostcell*);
     virtual void wavegen_precalc_ini_nhflow(lexer*,fdm_nhf*,ghostcell*);
@@ -130,13 +130,13 @@ public:
     virtual void fsfinflow_nhflow(lexer*,fdm_nhf*,ghostcell*,slice&);
     virtual void vrans_sed_update(lexer*,fdm*,ghostcell*,vrans*);
     virtual void turb_relax_nhflow(lexer*,fdm_nhf*,ghostcell*,double*){};
-    
+
 private:
     void velocity_inlet(lexer*,fdm*,ghostcell*,field&,field&,field&);
     int count;
-    
+
     double Apor,Bpor,porval,partval;
-    
+
     rheology *prheo;
     patchBC_interface *pBC;
 };

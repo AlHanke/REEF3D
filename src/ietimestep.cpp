@@ -42,37 +42,37 @@ void ietimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
     p->pressmin=1.0e9;
 
     p->umax=p->vmax=p->wmax=p->viscmax=0.0;
-    
+
     p->umax=MAX(p->W11_u,p->umax);
     p->umax=MAX(p->W12_u,p->umax);
     p->umax=MAX(p->W13_u,p->umax);
     p->umax=MAX(p->W14_u,p->umax);
     p->umax=MAX(p->W15_u,p->umax);
     p->umax=MAX(p->W16_u,p->umax);
-    
+
     p->vmax=MAX(p->W11_v,p->vmax);
     p->vmax=MAX(p->W12_v,p->vmax);
     p->vmax=MAX(p->W13_v,p->vmax);
     p->vmax=MAX(p->W14_v,p->vmax);
     p->vmax=MAX(p->W15_v,p->vmax);
     p->vmax=MAX(p->W16_v,p->vmax);
-    
+
     p->wmax=MAX(p->W11_w,p->wmax);
     p->wmax=MAX(p->W12_w,p->wmax);
     p->wmax=MAX(p->W13_w,p->wmax);
     p->wmax=MAX(p->W14_w,p->wmax);
     p->wmax=MAX(p->W15_w,p->wmax);
     p->wmax=MAX(p->W16_w,p->wmax);
-    
+
     sqd=1.0/(p->DXM*p->DXM);
-    
+
 // maximum velocities
 
     ULOOP
     p->umax=MAX(p->umax,fabs(a->u(i,j,k)));
 
     p->umax=pgc->globalmax(p->umax);
-    
+
     
 
 
@@ -86,7 +86,7 @@ void ietimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
     p->wmax=MAX(p->wmax,fabs(a->w(i,j,k)));
 
     p->wmax=pgc->globalmax(p->wmax);
-    
+
     velmax=max(p->umax,p->vmax,p->wmax);
 
     if(p->mpirank==0 && (p->count%p->P12==0))
@@ -95,13 +95,13 @@ void ietimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
     cout<<"vmax: "<<setprecision(3)<<p->vmax<<" \t vtime: "<<p->vtime<<endl;
     cout<<"wmax: "<<setprecision(3)<<p->wmax<<" \t wtime: "<<p->wtime<<endl;
     }
-    
+
     p->umax=MAX(p->umax,p->ufbmax);
     p->vmax=MAX(p->vmax,p->vfbmax);
     p->wmax=MAX(p->wmax,p->wfbmax);
 
     velmax=max(p->umax,p->vmax,p->wmax);
-    
+
     // rhs globalmax
     a->maxF=pgc->globalmax(a->maxF);
     a->maxG=pgc->globalmax(a->maxG);
@@ -117,7 +117,7 @@ void ietimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
 
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<"viscmax: "<<p->viscmax<<endl;
-    
+
     //----kin
     LOOP
     p->kinmax=MAX(p->kinmax,pturb->kinval(i,j,k));
@@ -150,44 +150,44 @@ void ietimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
 
 // maximum reynolds stress source term
     visccrit=p->viscmax*(6.0/pow(p->DXM,2.0));
-    
+
     
     cu=1.0e10;
     cv=1.0e10;
     cw=1.0e10;
     cb=1.0e10;
-    
+
     if(p->N50==1)
     LOOP
     {
     dx = MIN3(p->DXN[IP],p->DYN[JP],p->DZN[KP]);
 
     cu = MIN(cu, 2.0/((sqrt(p->umax*p->umax + p->vmax*p->vmax + p->wmax*p->wmax))/dx
-    
+
             + sqrt((4.0*fabs(MAX3(a->maxF,a->maxG,a->maxH)))/dx)));
     }
-    
+
     if(p->N50==2)
     LOOP
     {
     cu = MIN(cu, 2.0/((sqrt(p->umax*p->umax))/p->DXN[IP]
-    
+
             + sqrt((4.0*fabs(a->maxF))/p->DXN[IP])));
-            
+
     cv = MIN(cv, 2.0/((sqrt(p->vmax*p->vmax))/p->DYN[JP]
-    
+
             + sqrt((4.0*fabs(a->maxG))/p->DYN[JP])));
-            
+
     cw = MIN(cw, 2.0/((sqrt(p->wmax*p->wmax))/p->DZN[KP]
-    
+
             + sqrt((4.0*fabs(a->maxH))/p->DZN[KP])));
     }
-    
+
     cu = MIN3(cu,cv,cw);
-    
+
     p->dt=p->N47*cu;
     p->dt=pgc->timesync(p->dt);
-    
+
     
     // fbdt
     LOOP
@@ -196,47 +196,47 @@ void ietimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
 
     cb = MIN(cb, 2.0/sqrt((4.0*fabs(p->fbmax))/dx));
     }
-    
+
     p->fbdt=p->N47*cb;
     p->fbdt=pgc->timesync(p->fbdt);
 
     a->maxF=0.0;
     a->maxG=0.0;
     a->maxH=0.0;
-    
+
 }
 
 void ietimestep::ini(fdm* a, lexer* p,ghostcell* pgc)
 {
     dx = p->DXM;
-    
+
     p->umax=p->vmax=p->wmax=p->viscmax=-1e19;
-    
+
     p->viscmax = MAX(p->W2,p->W4);
 
     p->umax=MAX(p->W10,p->umax);
-    
+
     p->umax=MAX(p->W11_u,p->umax);
     p->umax=MAX(p->W12_u,p->umax);
     p->umax=MAX(p->W13_u,p->umax);
     p->umax=MAX(p->W14_u,p->umax);
     p->umax=MAX(p->W15_u,p->umax);
     p->umax=MAX(p->W16_u,p->umax);
-    
+
     p->vmax=MAX(p->W11_v,p->vmax);
     p->vmax=MAX(p->W12_v,p->vmax);
     p->vmax=MAX(p->W13_v,p->vmax);
     p->vmax=MAX(p->W14_v,p->vmax);
     p->vmax=MAX(p->W15_v,p->vmax);
     p->vmax=MAX(p->W16_v,p->vmax);
-    
+
     p->wmax=MAX(p->W11_w,p->wmax);
     p->wmax=MAX(p->W12_w,p->wmax);
     p->wmax=MAX(p->W13_w,p->wmax);
     p->wmax=MAX(p->W14_w,p->wmax);
     p->wmax=MAX(p->W15_w,p->wmax);
     p->wmax=MAX(p->W16_w,p->wmax);
-    
+
     ULOOP
     p->umax=MAX(p->umax,fabs(a->u(i,j,k)));
 
@@ -257,56 +257,56 @@ void ietimestep::ini(fdm* a, lexer* p,ghostcell* pgc)
     p->umax=MAX(p->umax,2.0*p->ufbmax);
     p->umax=MAX(p->umax,2.0*p->vfbmax);
     p->umax=MAX(p->umax,2.0*p->wfbmax);
-    
+
     p->umax=MAX(p->umax,2.0*p->X210_u);
     p->umax=MAX(p->umax,2.0*p->X210_v);
     p->umax=MAX(p->umax,2.0*p->X210_w);
-    
+
     p->umax=MAX(p->umax,2.0);
-    
+
     
     cu=1.0e10;
     cv=1.0e10;
     cw=1.0e10;
-    
+
     if(p->N50==1)
     LOOP
     {
     dx = MIN3(p->DXN[IP],p->DYN[JP],p->DZN[KP]);
 
     cu = MIN(cu, 2.0/((sqrt(p->umax*p->umax + p->vmax*p->vmax + p->wmax*p->wmax))/dx
-    
+
             + sqrt((4.0*fabs(MAX3(a->maxF,a->maxG,a->maxH)))/dx)));
     }
-    
+
     if(p->N50==2)
     LOOP
     {
     cu = MIN(cu, 2.0/((sqrt(p->umax*p->umax))/p->DXN[IP]
-    
+
             + sqrt((4.0*fabs(a->maxF))/p->DXN[IP])));
-            
+
     cv = MIN(cv, 2.0/((sqrt(p->vmax*p->vmax))/p->DYN[JP]
-    
+
             + sqrt((4.0*fabs(a->maxG))/p->DYN[JP])));
-            
+
     cw = MIN(cw, 2.0/((sqrt(p->wmax*p->wmax))/p->DZN[KP]
-    
+
             + sqrt((4.0*fabs(a->maxH))/p->DZN[KP])));
     }
-    
+
     cu = MIN3(cu,cv,cw);
-    
+
     p->dt=p->N47*cu*0.25;
     p->dt = MAX(p->dt,1.0e-6);
-    
+
     p->dt=pgc->timesync(p->dt);
     p->dt_old=p->dt;
-    
+
     a->maxF = fabs(a->gi);
     a->maxG = fabs(a->gj);
     a->maxH = fabs(a->gk);
-    
+
 }
 
 double ietimestep::min(double val1,double val2,double val3)

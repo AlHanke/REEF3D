@@ -36,12 +36,12 @@ sflow_print_bedline_y::sflow_print_bedline_y(lexer *p, fdm2D *b, ghostcell *pgc)
 
     maxknoy=pgc->globalimax(p->knoy);
     sumknoy=pgc->globalisum(maxknoy);
-    
+
     p->Darray(yloc,p->P124+2,maxknoy);
     p->Darray(wsf,p->P124+2,maxknoy);
     p->Iarray(flag,p->P124+2,maxknoy);
     p->Iarray(wsfpoints,p->P124+2);
-    
+
 
     p->Darray(yloc_all,p->P124+2,sumknoy);
     p->Darray(wsf_all,p->P124+2,sumknoy);
@@ -65,7 +65,7 @@ sflow_print_bedline_y::sflow_print_bedline_y(lexer *p, fdm2D *b, ghostcell *pgc)
     }
 
     ini_location(p,b,pgc);
-    
+
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_SFLOW_BEDLINE_Y",0777);
@@ -78,11 +78,11 @@ sflow_print_bedline_y::~sflow_print_bedline_y()
 
 void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflow, slice &f)
 {
-    
+
     char name[250];
     double zval=0.0;
     int num,check;
-    
+
     num = p->count;
 
     if(p->mpirank==0)
@@ -90,7 +90,7 @@ void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pf
         // open file
         sprintf(name,"./REEF3D_SFLOW_BEDLINE_Y/REEF3D-SFLOW-bedline_y-%08i.dat",num);
 
-        
+
         wsfout.open(name);
 
         wsfout<<"simtime:  "<<p->simtime<<endl;
@@ -102,7 +102,7 @@ void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pf
 
         wsfout<<endl<<endl;
 
-        
+
         for(q=0;q<p->P124;++q)
         {
         wsfout<<"Y "<<q+1;
@@ -133,11 +133,11 @@ void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pf
             yloc[q][j]=p->pos_y();
         }
     }
-    
+
     
     for(q=0;q<p->P124;++q)
     wsfpoints[q]=sumknoy;
-    
+
     // gather
     for(q=0;q<p->P124;++q)
     {
@@ -145,32 +145,32 @@ void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pf
     pgc->gather_double(wsf[q],maxknoy,wsf_all[q],maxknoy);
     pgc->gather_int(flag[q],maxknoy,flag_all[q],maxknoy);
 
-        
+
         if(p->mpirank==0)
         {
         sort(yloc_all[q], wsf_all[q], flag_all[q], 0, wsfpoints[q]-1);
         remove_multientry(p,yloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]);
         }
-        
+
     }
-    
+
     // write to file
     if(p->mpirank==0)
     {
         for(n=0;n<sumknoy;++n)
         rowflag[n]=0;
-        
+
         for(n=0;n<sumknoy;++n)
         {
             check=0;
             for(q=0;q<p->P124;++q)
             if(flag_all[q][n]>0 && yloc_all[q][n]<1.0e20)
             check=1;
-            
+
             if(check==1)
             rowflag[n]=1;
         }
-        
+
 
         for(n=0;n<sumknoy;++n)
         {
@@ -181,20 +181,20 @@ void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pf
                 {
                 wsfout<<setprecision(5)<<yloc_all[q][n]<<" \t ";
                 wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
-                
+
                 
                 check=1;
                 }
-                
+
                 if((flag_all[q][n]<0 || yloc_all[q][n]>=1.0e20) && rowflag[n]==1)
                 {
                     wsfout<<setprecision(5)<<" \t ";
                     wsfout<<setprecision(5)<<" \t ";
-                    
+
                 }
             }
 
-            
+
             if(check==1)
             wsfout<<endl;
         }
@@ -206,7 +206,7 @@ void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pf
 void sflow_print_bedline_y::ini_location(lexer *p, fdm2D *b, ghostcell *pgc)
 {
     int check,count;
-    
+
     
     for(q=0;q<p->P124;++q)
     {
@@ -247,7 +247,7 @@ void sflow_print_bedline_y::sort(double *a, double *b, int *c, int left, int rig
 
           b[l] = b[r];
           b[r] = swapd;
-          
+
           c[l] = c[r];
           c[r] = swapc;
 
@@ -270,7 +270,7 @@ void sflow_print_bedline_y::remove_multientry(lexer *p, double* b, double* c, in
 
     double *f,*g;
     int *h;
-    
+
     p->Darray(f,num);
     p->Darray(g,num);
     p->Iarray(h,num);
@@ -302,11 +302,11 @@ void sflow_print_bedline_y::remove_multientry(lexer *p, double* b, double* c, in
     d[n]=h[n];
     }
 
-    
+
     p->del_Darray(f,num);
     p->del_Darray(g,num);
     p->del_Iarray(h,num);
-    
+
     num=count;
 
 }

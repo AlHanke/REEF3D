@@ -46,7 +46,7 @@ void sflow_weno_flux::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel,
     if(ipol==2)
     SLICELOOP2
     b->G(i,j)+=aij(p,b,f,2,uvel,vvel);
-    
+
     if(ipol==4)
     SLICELOOP4
     b->L(i,j)+=aij(p,b,f,4,uvel,vvel);
@@ -61,32 +61,32 @@ double sflow_weno_flux::aij(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel, sl
         i-=1;
         fu1 = fx(p,b,f,ipol,ivel1);
         i+=1;
-        
+
         fu2 = fx(p,b,f,ipol,ivel2);
 
-        
+
         j-=1;
         fv1 = fy(p,b,f,ipol,jvel1);
         j+=1;
-        
+
         fv2 = fy(p,b,f,ipol,jvel2);
-        
+
         
         L =   - ((ivel2*fu2-ivel1*fu1)/p->DXM)
               - ((jvel2*fv2-jvel1*fv1)/p->DXM);
-                
+
         return L;
 }
 
 double sflow_weno_flux::aij_fou(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel, slice& vvel)
 {
     double q1,q2;
-    
+
     ul=ur=vl=vr=dx=dy=0.0;
-    
+
     pflux->u_flux(ipol,uvel,ivel1,ivel2);
     pflux->v_flux(ipol,vvel,jvel1,jvel2);
-        
+
         // X-dir
         if(ivel1>=0.0)
         ul=1.0;
@@ -104,7 +104,7 @@ double sflow_weno_flux::aij_fou(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel
         vr=1.0;
 
         dy= (jvel2*(vr*f(i,j) +  (1.0-vr)*f(i,j+1))  -  jvel1*(vl*f(i,j-1) +  (1.0-vl)*f(i,j)))/(p->DXM);
-        
+
         
         L = -dx-dy;
 
@@ -121,7 +121,7 @@ double sflow_weno_flux::fx(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -133,7 +133,7 @@ double sflow_weno_flux::fx(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -152,7 +152,7 @@ double sflow_weno_flux::fy(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -164,12 +164,12 @@ double sflow_weno_flux::fy(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
     }
-    
+
     return grad;
 }
 

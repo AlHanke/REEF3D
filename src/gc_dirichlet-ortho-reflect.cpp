@@ -32,22 +32,22 @@ void ghostcell::dirichlet_ortho_reflect(lexer *p,field& f,double dist,int gcv, i
     wallvalue=0.0;
     weight=1.0;
     margin=3;
-    
+
     double dx;
-    
+
     if(cs==1||cs==4)
     dx = p->DXP[IP];
-    
+
     if(cs==2||cs==3)
     dx = p->DYP[JP];
-    
+
     if(cs==5||cs==6)
     dx = p->DZP[KP];
-    
+
     ys=1;
     if(dist>p->DXM*(1.0-1.0e-6) && dist<p->DXM*(1.0+1.0e-6))
     ys=0;
-    
+
     //cout<<" dist: "<<dist<<endl;
 
 //fill pos[]
@@ -94,7 +94,7 @@ void ghostcell::dirichlet_ortho_reflect(lexer *p,field& f,double dist,int gcv, i
     pos[orderdir-2] = x_ip;
     y[orderdir-2] = val_ip;
     }
-        
+
 /*
     for(q=0; q<margin; ++q)
     {
@@ -112,7 +112,7 @@ void ghostcell::dirichlet_ortho_reflect(lexer *p,field& f,double dist,int gcv, i
         }
     }
 */
-    
+
     for(q=0; q<margin; ++q)
     {
         y[orderdir+q]=0.0;
@@ -158,7 +158,7 @@ void ghostcell::dirichlet_ortho_reflect(lexer *p,field& f,double dist,int gcv, i
     if(cs==6)
     for(q=0;q<margin;++q)
     f(i,j,k+q+1) = y[orderdir+q-1+ys];
-    
+
 /*
     if(p->mpirank==0)
     if(cs==1 && gcv==10)
@@ -167,7 +167,7 @@ void ghostcell::dirichlet_ortho_reflect(lexer *p,field& f,double dist,int gcv, i
     for(q=0;q<margin;++q)
     cout<<y[orderdir+q-1+ys]<<" ";
  cout<<ys<<" ";
-    
+
     cout<<endl;
     }*/
 

@@ -40,7 +40,7 @@ public:
 
 private:
     double aij(lexer*, fdm*, field&, int,field&,field&,field&,double*,double*,double*);
-    
+
     virtual double fx(lexer*, fdm*, field&, field&, int, double);
     virtual double fy(lexer*, fdm*, field&, field&, int, double);
     virtual double fz(lexer*, fdm*, field&, field&, int, double);
@@ -61,14 +61,14 @@ private:
     double q1,q2,q3,q4,q5;
     double gradx, grady, gradz;
     double fu1,fv1,fw1,fu2,fv2,fw2;
-    
+
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 
 
     void is(field&);
     void alpha();
     void weight();
-    
+
     flux *pflux;
 };
 

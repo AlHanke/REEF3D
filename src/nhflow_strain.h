@@ -56,7 +56,7 @@ public:
     virtual double magSqrSd(lexer*,fdm_nhf*);
     virtual double magSqrSd(lexer*,double*,double*,double*);
     double strainplain(lexer*,fdm_nhf*);
-    
+
     double *PK,*PK0,*PK_b;
 
 private:

@@ -48,7 +48,7 @@ private:
     double uvel, vvel;
     double midphi,delta,beta;
     double alpha0, teta0;
-    
+
     ddweno_f_nug *pdx;
 };
 

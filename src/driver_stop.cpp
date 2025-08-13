@@ -30,59 +30,59 @@ Author: Hans Bihs
 
 void driver::stop(lexer *p, fdm *a, ghostcell *pgc)
 {
-    
+
     if(p->A10==4 || p->A10==6)
     {
     int check=0;
-    
+
     ULOOP
     if(a->u(i,j,k)!=a->u(i,j,k))
     check=1;
-    
+
     VLOOP
     if(a->v(i,j,k)!=a->v(i,j,k))
     check=1;
-    
+
     WLOOP
     if(a->w(i,j,k)!=a->w(i,j,k))
     check=1;
-    
+
     LOOP
     if(a->press(i,j,k)!=a->press(i,j,k))
     check=1;
-    
+
     if(check==1)
     {
-    
+
         if(p->mpirank==0)
         cout<<endl<<"EMERGENCY STOP  --  solver breaking down - NAN values"<<endl<<endl;
 
      pprint->print_stop(a,p,pgc,pturb,pheat,pflow,psolv,pdata,pconc,pmp,psed);
-     
+
      //pgc->final();
      //exit(0);
     }
     }
-        
+
     if(p->umax>p->N61 || p->vmax>p->N61 || p->wmax>p->N61)
     {
-    
+
         if(p->mpirank==0)
         cout<<endl<<"EMERGENCY STOP  --  velocities exceeding critical value N 61"<<endl<<endl;
-    
+
      if(p->A10==3)
      pfprint->print_stop(p,c,pgc);
-    
+
      if(p->A10==4 || p->A10==6)
      pprint->print_stop(a,p,pgc,pturb,pheat,pflow,psolv,pdata,pconc,pmp,psed);
-    
+
     if(p->A10==5)
     pnhfprint->print_stop(p,d,pgc,pflow,pnhfturb,psed);
-     
+
      pgc->final();
      exit(0);
     }
-    
+
     // Solver Status
     p->solver_status = pgc->globalimax(p->solver_status);
     /*
@@ -90,13 +90,13 @@ void driver::stop(lexer *p, fdm *a, ghostcell *pgc)
     {
     if(p->mpirank==0)
     cout<<endl<<" HYPRE solver broke down! Emergency Stop! "<<p->solver_status<<endl<<endl;
-    
+
     if(p->A10==3)
      pfprint->print_vtu(p,c,pgc);
-    
+
      if(p->A10==4 || p->A10==5 || p->A10==6)
      pprint->print_vtu(a,p,pgc,pturb,pheat,pflow,psolv,pdata,pconc,psed);
-    
+
     pgc->final();
     exit(0);
     }*/

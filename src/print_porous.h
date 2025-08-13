@@ -40,13 +40,13 @@ public:
     virtual void start(lexer*,fdm*,ghostcell*);
     virtual void print_vtp(lexer*,fdm*,ghostcell*);
     virtual void objects(lexer*,fdm*,ghostcell*);
-    
+
     void box(lexer*,fdm*,ghostcell*,int);
     void cylinder_z(lexer*,fdm*,ghostcell*,int);
     void wedge_x(lexer*,fdm*,ghostcell*,int);
     void wedge_y(lexer*,fdm*,ghostcell*,int);
     void plate_x(lexer*,fdm*,ghostcell*,int);
-    
+
     void box_veg(lexer*,fdm*,ghostcell*,int);
     void wedge_x_veg(lexer*,fdm*,ghostcell*,int);
     void wedge_y_veg(lexer*,fdm*,ghostcell*,int);
@@ -56,7 +56,7 @@ private:
     int offset[200];
     int **polygon,*numvert;
     double **vertice;
-    
+
     float ffn;
     int polygon_num,vertice_num,polygon_sum ,iin,q;
     double xs,xe,ys,ye,zs,ze;

@@ -35,7 +35,7 @@ public:
     virtual ~nhflow_suspended_IM1();
     virtual void start(lexer*, fdm_nhf*, ghostcell*, nhflow_scalar_convection*, nhflow_diffusion*, solver*, ioflow*, sediment_fdm*);
     virtual void ctimesave(lexer*, fdm_nhf*);
-    
+
     void suspsource(lexer*,fdm_nhf*,double*,sediment_fdm*);
     void bcsusp_start(lexer*,fdm_nhf*,ghostcell*,sediment_fdm*,double*);
     void clearrhs(lexer*,fdm_nhf*);
@@ -50,7 +50,7 @@ private:
     double starttime;
     void fill_wvel(lexer*,fdm_nhf*,ghostcell*,sediment_fdm*);
     double *WVEL;
-    
+
     int count,q;
 };
 

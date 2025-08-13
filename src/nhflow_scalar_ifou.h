@@ -41,12 +41,12 @@ public:
 private:
 
     int count;
-    
+
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
     double udir,vdir,wdir;
-    
+
     nhflow_scalar_advec *padvec;
-    
+
 };
 
 #endif

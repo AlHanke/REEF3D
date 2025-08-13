@@ -38,11 +38,11 @@ void net_barDyn::updateAcc(lexer *p, ghostcell *pgc)
     for (int knotI = 0; knotI < nK; knotI++)
     {
         T_knot << 0.0, 0.0, 0.0;
-        
+
         if (knotI >= nfK[0][0]) // then inner knot
         {
             xdotdot_.row(knotI) *= 0.0;
-            
+
             for (int k = 1; k < 5; k++)
             {
                 barI = nfK[knotI - nfK[0][0]][k];

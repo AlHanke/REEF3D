@@ -40,7 +40,7 @@ public:
 
 private:
     double aij(lexer*, fdm2D*, slice&, int, slice&, slice&);
-    
+
     void wenoloop1(lexer*,fdm2D*,slice&,int,slice&,slice&);
     void wenoloop2(lexer*,fdm2D*,slice&,int,slice&,slice&);
     void wenoloop4(lexer*,fdm2D*,slice&,int,slice&,slice&);
@@ -49,12 +49,12 @@ private:
     void jqmin(lexer*, fdm2D*, slice&, int);
     void iqmax(lexer*, fdm2D*, slice&, int);
     void jqmax(lexer*, fdm2D*, slice&, int);
-    
+
     void aij_south(lexer*,fdm2D*,slice&, slice&);
     void aij_north(lexer*,fdm2D*,slice&, slice&);
     void aij_east(lexer*,fdm2D*,slice&, slice&);
     void aij_west(lexer*,fdm2D*,slice&, slice&);
-    
+
     void is_south(slice&);
     void is_north(slice&);
     void is_east(slice&);
@@ -79,11 +79,11 @@ private:
     void is(slice&);
     void alpha();
     void weight();
-    
+
     sflow_flux *pflux;
     double ivel1,ivel2,jvel1,jvel2;
     double iadvec,jadvec;
-    
+
     const double deltin;
     int count;
 };

@@ -36,7 +36,7 @@ void topo_vtp::pvtp(lexer* p, fdm* a, ghostcell* pgc, sediment *psed)
 
     if(p->P15==2)
     num = p->count;
-    
+
 
     sprintf(name,"./REEF3D_CFD_Topo/REEF3D-CFD-Topo-%08i.pvtp",num);
 
@@ -52,14 +52,14 @@ void topo_vtp::pvtp(lexer* p, fdm* a, ghostcell* pgc, sediment *psed)
     result<<"<PPoints>"<<endl;
     result<<"<PDataArray type=\"Float64\" NumberOfComponents=\"3\"/>"<<endl;
     result<<"</PPoints>"<<endl;
-    
+
     result<<"<PPointData>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"elevation\"/>"<<endl;
-    
+
     if(p->P76==1)
     psed->name_pvtu_bedload(p,pgc,result);
-    
+
     if(p->P77==1)
     psed->name_pvtu_parameter1(p,pgc,result);
 
@@ -68,9 +68,9 @@ void topo_vtp::pvtp(lexer* p, fdm* a, ghostcell* pgc, sediment *psed)
 
     if(p->P79>=1)
     psed->name_pvtu_bedshear(p,pgc,result);
-    
+
     result<<"</PPointData>"<<endl;
-    
+
     result<<"<Polys>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"/>"<<endl;
     ++n;

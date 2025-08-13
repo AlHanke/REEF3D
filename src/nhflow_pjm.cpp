@@ -36,22 +36,22 @@ Author: Hans Bihs
 nhflow_pjm::nhflow_pjm(lexer* p, fdm_nhf *d, ghostcell *pgc, patchBC_interface *ppBC) : teta(1.0)
 {
     pBC = ppBC;
-    
+
     pd = new density_f(p);
 
     ppois = new nhflow_poisson(p);
 
     gcval_press=540;
-    
+
     gamma=0.5;
-    
+
     
     if(p->D33==0)
     solver_id = 8;
-    
+
     if(p->D33==1)
     solver_id = 9;
-    
+
 }
 
 nhflow_pjm::~nhflow_pjm()
@@ -93,9 +93,9 @@ void nhflow_pjm::ucorr(lexer* p, fdm_nhf *d, slice &WL, double *UH, double *P, d
     LOOP
     WETDRYDEEP
     UH[IJK] -= alpha*p->dt*CPORNH*PORVALNH*WL(i,j)*(1.0/p->W1)*
-    
+
                 (((0.5*(d->P[FIp1JKp1]+d->P[FIp1JK])-0.5*(d->P[FIm1JKp1]+d->P[FIm1JK]))/(p->DXP[IP]+p->DXP[IM1]))
-                
+
                 + 0.5*(p->sigx[FIJK]+p->sigx[FIJKp1])*((d->P[FIJKp1]-d->P[FIJK])/p->DZN[KP]));
 }
 
@@ -105,9 +105,9 @@ void nhflow_pjm::vcorr(lexer* p, fdm_nhf *d, slice &WL, double *VH, double *P, d
     LOOP
     WETDRYDEEP
     VH[IJK] -= alpha*p->dt*CPORNH*PORVALNH*WL(i,j)*(1.0/p->W1)*
-    
+
                 (((0.5*(d->P[FIJp1Kp1]+d->P[FIJp1K])-0.5*(d->P[FIJm1Kp1]+d->P[FIJm1K]))/(p->DYP[JP]+p->DYP[JM1]))
-                
+
                 + 0.5*(p->sigy[FIJK]+p->sigy[FIJKp1])*((d->P[FIJKp1]-d->P[FIJK])/p->DZN[KP]));
 }
 
@@ -128,7 +128,7 @@ void nhflow_pjm::rhs(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U, double *V,
     double z,z0,z1,z2;
     double f0,f1,f2;
     double dWdz;
-    
+
     n=0;
     FBASELOOP
     {
@@ -139,62 +139,62 @@ void nhflow_pjm::rhs(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U, double *V,
     n=0;
     LOOP
     {
-    
+
         WETDRYDEEP
         {
         fac = p->DZN[KM1]/(p->DZN[KP]+p->DZN[KM1]);
 
         U1 = (1.0-fac)*U[Im1JK] + fac*U[Im1JKm1];
         U2 = (1.0-fac)*U[Ip1JK] + fac*U[Ip1JKm1];
-        
+
         V1 = (1.0-fac)*V[IJm1K] + fac*V[IJm1Km1];
         V2 = (1.0-fac)*V[IJp1K] + fac*V[IJp1Km1];
-        
+
         if(k==0)
         {
         fac = MAX((1.0 - p->A522*fabs(d->Bx(i,j))),0.0)*p->DZN[KM1]/(p->DZN[KP]+p->DZN[KM1]);
-        
+
         U1 = (1.0-fac)*U[Im1JK] + fac*U[Im1JKm1];
         U2 = (1.0-fac)*U[Ip1JK] + fac*U[Ip1JKm1];
-        
+
         
         fac = MAX((1.0 - p->A522*fabs(d->By(i,j))),0.0)*p->DZN[KM1]/(p->DZN[KP]+p->DZN[KM1]);
-        
+
         V1 = (1.0-fac)*V[IJm1K] + fac*V[IJm1Km1];
         V2 = (1.0-fac)*V[IJp1K] + fac*V[IJp1Km1];
         }
-        
+
         z0 = p->ZP[KM2];
         z1 = p->ZP[KM1];
         z2 = p->ZP[KP];
         z  = p->ZP[KP] - p->DZN[KP];
-        
+
         f0 = U[IJKm2];
         f1 = U[IJKm1];
         f2 = U[IJK];
-        
+
         Up = f0*(z-z1)*(z-z2)/((z0-z1)*(z0-z2)) + f1*(z-z0)*(z-z2)/((z1-z0)*(z1-z2)) + f2*(z-z0)*(z-z1)/((z2-z0)*(z2-z1));
-        
+
         
         f0 = V[IJKm2];
         f1 = V[IJKm1];
         f2 = V[IJK];
-        
+
         Vp = f0*(z-z1)*(z-z2)/((z0-z1)*(z0-z2)) + f1*(z-z0)*(z-z2)/((z1-z0)*(z1-z2)) + f2*(z-z0)*(z-z1)/((z2-z0)*(z2-z1));
 
         dUdz = (U[IJK] - Up)/p->DZN[KP];
         dVdz = (V[IJK] - Vp)/p->DZN[KP];
         dWdz = p->sigz[IJ]*(W[IJK]-W[IJKm1])/p->DZP[KM1];
-        
+
         d->rhsvec.V[n] =      -  ((U2-U1)/(p->DXP[IP] + p->DXP[IM1])
                                 + p->sigx[FIJK]*dUdz
-                                
+
                                 + (V2-V1)/(p->DYP[JP] + p->DYP[JM1])
                                 + p->sigy[FIJK]*dVdz
 
                                 + dWdz)/(alpha*p->dt);
         }
-                            
+
     ++n;
     }
 }

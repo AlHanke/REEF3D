@@ -30,7 +30,7 @@ Author: Hans Bihs
 
 bedshear_max::bedshear_max(lexer *p, ghostcell *pgc)
 {
-    
+
     // Create Folder
     if(p->mpirank==0)
     {
@@ -41,7 +41,7 @@ bedshear_max::bedshear_max(lexer *p, ghostcell *pgc)
             snprintf(folder,sizeof(folder),"./REEF3D_CFD_Sediment");
         mkdir(folder,0777);
     }
-    
+
     if(p->mpirank==0 && p->P126>0)
     {
         // open file
@@ -57,7 +57,7 @@ bedshear_max::bedshear_max(lexer *p, ghostcell *pgc)
 
         bsgout<<endl<<endl;
     }
-    
+
 
 }
 
@@ -72,12 +72,12 @@ void bedshear_max::bedshear_maxval(lexer *p, ghostcell *pgc, sediment *psed)
 
     maxval=-1.0e20;
 
-    
+
     ILOOP
     JLOOP
     maxval = MAX(maxval, psed->bedshear_point(p,pgc));
 
-    
+
     maxval=pgc->globalmax(maxval);
 
     // write to file

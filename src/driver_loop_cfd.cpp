@@ -43,44 +43,44 @@ void driver::loop_cfd(fdm* a)
 {
     if(p->mpirank==0)
     cout<<"starting mainloop.CFD"<<endl;
-    
+
     //vec_test(p,a,pgc,a->test);
-    
+
 //-----------MAINLOOP CFD----------------------------
     while(p->count<p->N45 && p->simtime<p->N41  && p->sedtime<p->S19)
     {
         ++p->count;
         starttime=pgc->timer();
-        
+
         if(p->mpirank==0 && (p->count%p->P12==0))
         {
         cout<<"------------------------------------"<<endl;
         cout<<p->count<<endl;
-        
+
         cout<<"simtime: "<<p->simtime<<endl;
         cout<<setprecision(5)<<"timestep: "<<p->dt<<endl;
-        
+
         if(p->X10>0)
         cout<<"fbtimestep: "<<p->fbdt<<" fbmax: "<<p->fbmax<<endl;
-        
+
         if(p->B90>0 && p->B92<=11)
         cout<<"t/T: "<<p->simtime/p->wT<<endl;
-        
+
         if(p->B90>0 && p->B92>11)
         cout<<"t/T: "<<p->simtime/p->wTp<<endl;
         }
-        
+
         pflow->flowfile(p,a,pgc,pturb);
-        
+
         pflow->wavegen_precalc(p,pgc);
 
-            
+
             pfsf->start(a,p, pfsfdisc,psolv,pgc,pflow,preini,ppls,a->phi);
             pturb->start(a,p,pturbdisc,pturbdiff,psolv,pgc,pflow,pvrans);
             pheat->start(a,p,pheatdisc,pdiff,psolv,pgc,pflow);
             pconc->start(a,p,pconcdisc,pconcdiff,pturb,psolv,pgc,pflow);
             pmp->start(p,a,pgc,pmpconvec,psolv,pflow,preini,ppls,pprint);
-        
+
         psed->start_susp(p,a,pgc,pflow,psolv);
         psed->start_cfd(p,a,pgc,pflow,preto,psolv);
         pflow->u_relax(p,a,pgc,a->u);
@@ -89,7 +89,7 @@ void driver::loop_cfd(fdm* a)
         pfsf->update(p,a,pgc,a->phi);
         pmom->start(p,a,pgc,pvrans,p6dof);
         pbench->start(p,a,pgc,pconvec);
-        
+
         //save previous timestep
         pturb->ktimesave(p,a,pgc);
         pturb->etimesave(p,a,pgc);
@@ -99,7 +99,7 @@ void driver::loop_cfd(fdm* a)
         //timestep control
         p->simtime+=p->dt;
         ptstep->start(a,p,pgc,pturb);
-        
+
         // printer
         pprint->start(a,p,pgc,pturb,pheat,pflow,psolv,pdata,pconc,pmp,psed);
 
@@ -107,7 +107,7 @@ void driver::loop_cfd(fdm* a)
         if(p->mpirank==0)
         {
         endtime=pgc->timer();
-        
+
         p->itertime=endtime-starttime;
         p->totaltime+=p->itertime;
         p->gctotaltime+=p->gctime;
@@ -115,7 +115,7 @@ void driver::loop_cfd(fdm* a)
         p->meantime=(p->totaltime/double(p->count));
         p->gcmeantime=(p->gctotaltime/double(p->count));
         p->Xmeantime=(p->Xtotaltime/double(p->count));
-        
+
             if( (p->count%p->P12==0))
             {
             if(p->B90>0)
@@ -138,9 +138,9 @@ void driver::loop_cfd(fdm* a)
     p->reinitime=0.0;
     p->wavecalctime=0.0;
     p->field4time=0.0;
-    
+
     pgc->gcparax(p,a->press,4);
-    
+
     
     stop(p,a,pgc);
     }

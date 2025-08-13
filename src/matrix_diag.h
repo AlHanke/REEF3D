@@ -33,7 +33,7 @@ public:
 
     matrix_diag(lexer*);
     virtual ~matrix_diag();
-    
+
     void resize(lexer*,int,int);
 
     double *n,*s,*e,*w,*b,*t,*p;

@@ -35,7 +35,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara1[q][0]-1;
     j=p->gcpara1[q][1];
     k=p->gcpara1[q][2];
-        
+
         //if(p->gcpara1[q][2+gcv]>=1)
         {
         send1[count]=f[Ip1JK];
@@ -53,7 +53,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara3[q][0];
     j=p->gcpara3[q][1]-1;
     k=p->gcpara3[q][2];
-        
+
         //if(p->gcpara3[q][2+gcv]>=1)
         {
         send3[count]=f[IJp1K];
@@ -71,7 +71,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara5[q][0];
     j=p->gcpara5[q][1];
     k=p->gcpara5[q][2]-1;
-        
+
         //if(p->gcpara5[q][2+gcv]>=1)
         {
         send5[count]=f[IJKp1];
@@ -89,7 +89,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara4[q][0]+1;
     j=p->gcpara4[q][1];
     k=p->gcpara4[q][2];
-        
+
         //if(p->gcpara4[q][2+gcv]>=1)
         {
         send4[count]=f[Im1JK];
@@ -107,7 +107,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara2[q][0];
     j=p->gcpara2[q][1]+1;
     k=p->gcpara2[q][2];
-        
+
         //if(p->gcpara2[q][2+gcv]>=1)
         {
         send2[count]=f[IJm1K];
@@ -125,7 +125,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara6[q][0];
     j=p->gcpara6[q][1];
     k=p->gcpara6[q][2]+1;
-        
+
         //if(p->gcpara6[q][2+gcv]>=1)
         {
         send6[count]=f[IJKm1];
@@ -136,7 +136,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
         ++count;
         }
     }
-    
+
     
 //  SEND / RECEIVE
 
@@ -188,7 +188,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara1[q][0];
     j=p->gcpara1[q][1];
     k=p->gcpara1[q][2];
-        
+
             //if(p->gcpara1[q][2+gcv]==1)
             {
             f[Im1JK]=recv1[count];
@@ -206,7 +206,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara3[q][0];
     j=p->gcpara3[q][1];
     k=p->gcpara3[q][2];
-        
+
             //if(p->gcpara3[q][2+gcv]==1)
             {
             f[IJm1K]=recv3[count];
@@ -224,7 +224,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara5[q][0];
     j=p->gcpara5[q][1];
     k=p->gcpara5[q][2];
-        
+
             //if(p->gcpara5[q][2+gcv]==1)
             {
             f[IJKm1]=recv5[count];
@@ -242,7 +242,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara4[q][0];
     j=p->gcpara4[q][1];
     k=p->gcpara4[q][2];
-        
+
             //if(p->gcpara4[q][2+gcv]==1)
             {
             f[Ip1JK]=recv4[count];
@@ -260,7 +260,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara2[q][0];
     j=p->gcpara2[q][1];
     k=p->gcpara2[q][2];
-        
+
             //if(p->gcpara2[q][2+gcv]==1)
             {
             f[IJp1K]=recv2[count];
@@ -278,7 +278,7 @@ void ghostcell::gcparaxV(lexer* p, double *f,int gcv)
     i=p->gcpara6[q][0];
     j=p->gcpara6[q][1];
     k=p->gcpara6[q][2];
-        
+
             //if(p->gcpara6[q][2+gcv]==1)
             {
             f[IJKp1]=recv6[count];

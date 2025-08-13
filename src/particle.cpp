@@ -39,7 +39,7 @@ particle_pls::particle_pls(lexer* p, fdm *a, ghostcell* pgc) : norm_vec(p), phim
     posactive=0;
     negactive=0;
     printcount=0;
-    
+
     if(p->F50==1)
     gcval_phi=51;
 
@@ -51,7 +51,7 @@ particle_pls::particle_pls(lexer* p, fdm *a, ghostcell* pgc) : norm_vec(p), phim
 
     if(p->F50==4)
     gcval_phi=54;
-    
+
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_PLS",0777);
@@ -65,7 +65,7 @@ void particle_pls::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 {
 
     starttime=pgc->timer();
-    
+
     posactive_old=posactive;
     negactive_old=negactive;
 
@@ -73,14 +73,14 @@ void particle_pls::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
     advect(p,a,pgc,neg,negflag,negactive);
     particlex(p,a,pgc);
     remove(p,a,pgc);
-    
+
     if((p->count%p->F34==0 || p->count==0) && p->F34>0)
     {
     print_vtu(p,a,pgc,pos,posflag,posactive,1);
     print_vtu(p,a,pgc,neg,negflag,negactive,2);
     ++printcount;
     }
-    
+
     correct(p,a,pgc,pflow);
     xupdate(p,a,pgc);
     parcount(p,a,pgc);
@@ -103,7 +103,7 @@ void particle_pls::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
     gxchange = pgc->globalisum(xchange);
     gposbalance = pgc->globalisum(posbalance);
     gnegbalance = pgc->globalisum(negbalance);
-    
+
     p->plstime=pgc->timer()-starttime;
 
     if(p->mpirank==0 && (p->count%p->P12==0))

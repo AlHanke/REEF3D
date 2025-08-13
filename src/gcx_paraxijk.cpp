@@ -27,9 +27,9 @@ Author: Hans Bihs
 void ghostcell::gcparaxijk(lexer* p, double *f, int gcv)
 {
     starttime=timer();
-    
+
     paramargin=3;
-    
+
 //  FILL SEND
     count=0;
     for(q=0;q<p->gcpara1_count;++q)
@@ -37,30 +37,30 @@ void ghostcell::gcparaxijk(lexer* p, double *f, int gcv)
     i=p->gcpara1[q][0];
     j=p->gcpara1[q][1];
     k=p->gcpara1[q][2];
-    
+
         send1[count]=f[IJK];
         ++count;
 
         send1[count]=f[Ip1JK];
         ++count;
-        
+
         send1[count]=f[Ip2JK];
         ++count;
     }
-    
+
     count=0;
     for(q=0;q<p->gcpara2_count;++q)
     {
     i=p->gcpara2[q][0];
     j=p->gcpara2[q][1];
     k=p->gcpara2[q][2];
-    
+
         send2[count]=f[IJK];
         ++count;
 
         send2[count]=f[IJm1K];
         ++count;
-  
+
         send2[count]=f[IJm2K];
         ++count;
     }
@@ -71,24 +71,24 @@ void ghostcell::gcparaxijk(lexer* p, double *f, int gcv)
     i=p->gcpara3[q][0];
     j=p->gcpara3[q][1];
     k=p->gcpara3[q][2];
-    
+
         send3[count]=f[IJK];
         ++count;
-        
+
         send3[count]=f[IJp1K];
         ++count;
-     
+
         send3[count]=f[IJp2K];
         ++count;
     }
-    
+
     count=0;
     for(q=0;q<p->gcpara4_count;++q)
     {
     i=p->gcpara4[q][0];
     j=p->gcpara4[q][1];
     k=p->gcpara4[q][2];
-    
+
         send4[count]=f[IJK];
         ++count;
 
@@ -105,7 +105,7 @@ void ghostcell::gcparaxijk(lexer* p, double *f, int gcv)
     i=p->gcpara5[q][0];
     j=p->gcpara5[q][1];
     k=p->gcpara5[q][2];
-    
+
         send5[count]=f[IJK];
         ++count;
 
@@ -122,7 +122,7 @@ void ghostcell::gcparaxijk(lexer* p, double *f, int gcv)
     i=p->gcpara6[q][0];
     j=p->gcpara6[q][1];
     k=p->gcpara6[q][2];
-    
+
         send6[count]=f[IJK];
         ++count;
 
@@ -199,11 +199,11 @@ void ghostcell::gcparaxijk(lexer* p, double *f, int gcv)
 
         f[IJp2K]=recv2[count];
         ++count;
-        
+
         f[IJp3K]=recv2[count];
         ++count;
     }
-    
+
     count=0;
     for(q=0;q<p->gcpara3_count;++q)
     {
@@ -212,7 +212,7 @@ void ghostcell::gcparaxijk(lexer* p, double *f, int gcv)
 
         f[IJm2K]=recv3[count];
         ++count;
-        
+
         f[IJm3K]=recv3[count];
         ++count;
     }
@@ -225,17 +225,17 @@ void ghostcell::gcparaxijk(lexer* p, double *f, int gcv)
 
         f[Ip2JK]=recv4[count];
         ++count;
-        
+
         f[Ip3JK]=recv4[count];
         ++count;
     }
-    
+
     count=0;
     for(q=0;q<p->gcpara5_count;++q)
     {
         f[IJKm1]=recv5[count];
         ++count;
-    
+
         f[IJKm2]=recv5[count];
         ++count;
 
@@ -248,7 +248,7 @@ void ghostcell::gcparaxijk(lexer* p, double *f, int gcv)
     {
         f[IJKp1]=recv6[count];
         ++count;
-  
+
         f[IJKp2]=recv6[count];
         ++count;
 

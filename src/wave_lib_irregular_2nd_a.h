@@ -36,25 +36,25 @@ class wave_lib_irregular_2nd_a : public wave_lib_precalc, public wave_lib_parame
 public:
     wave_lib_irregular_2nd_a(lexer*, ghostcell*);
     virtual ~wave_lib_irregular_2nd_a();
-    
+
     double wave_horzvel(lexer*,double,double,double);
-    
+
     virtual double wave_u(lexer*,double,double,double);
     virtual double wave_v(lexer*,double,double,double);
     virtual double wave_w(lexer*,double,double,double);
     virtual double wave_eta(lexer*,double,double);
     virtual double wave_fi(lexer*,double,double,double);
-    
+
     
     virtual void parameters(lexer*,ghostcell*);
     virtual void wave_prestep(lexer*,ghostcell*);
-    
+
 private:
     double wave_C(double,double,double,double);
     double wave_D(double,double,double,double);
     double wave_E(double,double,double,double,double,double);
     double wave_F(double,double,double,double,double,double);
-    
+
     double **Cval,**Dval,**Eval,**Fval;
     int m;
     double singamma,cosgamma;

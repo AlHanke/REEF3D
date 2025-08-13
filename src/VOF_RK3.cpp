@@ -50,7 +50,7 @@ VOF_RK3::VOF_RK3(lexer* p, fdm *a, ghostcell* pgc, heat *pheat):gradient(p),uc(p
     gcval_frac=74;
 
     pupdate = new fluid_update_vof(p,a,pgc);
-    
+
     ppconvec = new hric(p);
 }
 
@@ -61,7 +61,7 @@ VOF_RK3::~VOF_RK3()
 void VOF_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcell* pgc,ioflow* pflow, reini* preini, particle_corr* ppls, field &F)
 {
     field4 ark1(p),ark2(p);
-    
+
     pflow->fsfinflow(p,a,pgc);
     pflow->fsfrkin(p,a,pgc,ark1);
     pflow->fsfrkin(p,a,pgc,ark2);
@@ -114,14 +114,14 @@ void VOF_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcel
                   + (2.0/3.0)*p->dt*a->L(i,j,k);
 
     compression(p,a,pgc,pconvec,a->phi,1.0);
-    
+
 
     pgc->start4(p,a->phi,gcval_frac);
 
     pupdate->start(p,a,pgc);
 
     p->lsmtime=pgc->timer()-starttime;
-    
+
     if(p->mpirank==0)
     cout<<"voftime: "<<setprecision(3)<<p->lsmtime<<endl;
 }
@@ -150,62 +150,62 @@ void VOF_RK3::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec,
     di = xdx(a,a->phi);
     dj = xdy(a,a->phi);
     dk = xdz(a,a->phi);
-    
+
     dnorm=sqrt(di*di + dj*dj + dk*dk);
 
     nx=di/(dnorm>1.0e-15?dnorm:1.0e20);
-    
+
     
 
         uvel=a->u(i,j,k);
 
         vvel=0.25*(a->v(i,j,k) + a->v(i+1,j,k) + a->v(i,j-1,k) + a->v(i+1,j-1,k));
-   
+
         wvel=0.25*(a->w(i,j,k) + a->w(i+1,j,k) + a->w(i+1,j,k-1) + a->w(i,j,k-1));
 
-        
+
     uabs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
-    
+
     uc(i,j,k) = p->F84*uabs * nx;
 
     }
-    
+
     VLOOP
     {
     di = ydx(a,a->phi);
     dj = ydy(a,a->phi);
     dk = ydz(a,a->phi);
-    
+
     dnorm=sqrt(di*di + dj*dj + dk*dk);
 
     ny=dj/(dnorm>1.0e-15?dnorm:1.0e20);
-    
+
     
 
         uvel=0.25*(a->u(i,j,k) + a->u(i,j+1,k) + a->u(i-1,j,k) + a->u(i-1,j+1,k));
-        
+
         vvel=a->v(i,j,k);
 
         wvel=0.25*(a->w(i,j,k) + a->w(i+1,j,k) + a->w(i+1,j,k-1) + a->w(i,j,k-1));
 
-        
+
     uabs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
-    
+
     vc(i,j,k) = p->F84*uabs * ny;
 
     }
-    
+
     
     WLOOP
     {
     di = zdx(a,a->phi);
     dj = zdy(a,a->phi);
     dk = zdz(a,a->phi);
-    
+
     dnorm=sqrt(di*di + dj*dj + dk*dk);
 
     nz=dk/(dnorm>1.0e-15?dnorm:1.0e20);
-    
+
     
         uvel=0.25*(a->u(i,j,k) + a->u(i,j,k+1) + a->u(i-1,j,k) + a->u(i-1,j,k+1));
 
@@ -213,13 +213,13 @@ void VOF_RK3::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec,
 
         wvel=a->w(i,j,k);
 
-        
+
     uabs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
-    
+
     wc(i,j,k) = p->F84*uabs * nz;
 
     }
-    
+
     
     pgc->start1(p,uc,14);
     pgc->start2(p,vc,15);
@@ -229,13 +229,13 @@ void VOF_RK3::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec,
 
     ULOOP
     umax=MAX(umax,fabs(uc(i,j,k)));
-    
+
     VLOOP
     vmax=MAX(vmax,fabs(vc(i,j,k)));
-    
+
     WLOOP
     wmax=MAX(wmax,fabs(wc(i,j,k)));
-    
+
 
     timestep = (0.5*MAX(umax,MAX(vmax,wmax)))/p->DXM;
 
@@ -265,7 +265,7 @@ void VOF_RK3::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec,
     LOOP
     f(i,j,k)+=p->dt*a->L(i,j,k);
     }
-    
+
 
 }
 

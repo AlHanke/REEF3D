@@ -76,7 +76,7 @@ void fnpf_force_ale::start(lexer *p, fdm_fnpf *c, ghostcell *pgc)
         // Calculate force
         force_ale_force(p,c,pgc);
     }
-    
+
     else
     {
         Fx = Fy = 0.0;

@@ -63,7 +63,7 @@ public:
     void start4(lexer*,field&, int);
     void start4a(lexer*,field&, int);
     void start4a_sum(lexer*,field&, int);
-    
+
     void start1V(lexer*,double*,int);
     void start2V(lexer*,double*,int);
     void start3V(lexer*,double*,int);
@@ -72,16 +72,16 @@ public:
     void start4S(lexer*,double*,int);
     void start4P(lexer*,double*,int);
     void start5V(lexer*,double*,int);
-    
+
     void start20V(lexer*,double*,int);
     void start24V(lexer*,double*,int);
     void start30V(lexer*,double*,int);
     void start49V(lexer*,double*,int);
-    
+
     void start7V(lexer*,double*,sliceint&, int);
     void start7S(lexer*,double*, int);
     void start7P(lexer*,double*, int);
-    
+
     void startintV(lexer*,int*,int);
 
 
@@ -94,7 +94,7 @@ public:
     int globalimin(int);
     double timesync(double);
     void globalctrl(lexer*);
-    
+
     void dgcpol1(lexer*,field&, int);
     void dgcpol2(lexer*,field&, int);
     void dgcpol3(lexer*,field&, int);
@@ -122,13 +122,13 @@ public:
     void fdm_fnpf_update(fdm_fnpf*);
     void fdm_nhf_update(fdm_nhf*);
     void fdm_update(fdm*);
-    
+
     void gcb_velflagio(lexer*, fdm*);
 
 // 2D CPT_
 
     void sizeS_update(lexer*);
-    
+
 // Forcing CFD
     void solid_forcing(lexer*,fdm*,double,field&,field&,field&,field&,field&,field&);
     void solid_forcing_ini(lexer*,fdm*);
@@ -170,7 +170,7 @@ public:
 // 6DOF update gcdf
     void gcdf_update(lexer*,fdm*);
     void gcsldf_update(lexer*);
-    
+
 
 // IBM
     void flagfield(lexer*);
@@ -253,12 +253,12 @@ public:
     void gcsl_setbc2(lexer*);
     void gcsl_setbc4(lexer*);
     void gcsl_setbcio(lexer*);
-    
+
     void dgcslini1(lexer*);
     void dgcslini2(lexer*);
     void dgcslini3(lexer*);
     void dgcslini4(lexer*);
-    
+
     void dgcslpol(lexer*, slice&, int**,int, int);
     void dgcslpol1(lexer*, slice&);
     void dgcslpol2(lexer*, slice&);
@@ -315,7 +315,7 @@ public:
     void gcdistro3(lexer *p,field&,int, int, int, int, double, int, int, int);
     void gcdistro4(lexer *p,field&,int, int, int, int, double, int, int, int);
     void gcdistro4a(lexer *p,field&,int, int, int, int, double, int, int, int);
-    
+
     int gceval1(lexer*,int,int,int);
     int gceval2(lexer*,int,int,int);
     int gceval3(lexer*,int,int,int);
@@ -361,10 +361,10 @@ public:
     void fivec2D_vel(lexer*,double*,sliceint&);
     void gc_periodic(lexer*,field&,int,int);
     void patchBC(lexer*,field&,double,int,int,int);
-    
+
     //NHFLOW
     void gciobc_update(lexer*, fdm_nhf*);
-    
+
 
 private:
     const int size;

@@ -41,13 +41,13 @@ void vrans_veg::veltimesave(lexer *p, fdm *a, ghostcell *pgc)
     unn(i,j,k) = un(i,j,k);
     un(i,j,k) = a->u(i,j,k);
     }
-    
+
     VLOOP
     {
     vnn(i,j,k) = vn(i,j,k);
     vn(i,j,k) = a->v(i,j,k);
     }
-    
+
     WLOOP
     {
     wnn(i,j,k) = wn(i,j,k);

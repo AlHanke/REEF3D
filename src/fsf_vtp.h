@@ -46,7 +46,7 @@ private:
     void reconstruct(lexer*, fdm*, field&);
     void addpoint(lexer*,fdm*,int,int);
     void finalize(lexer*,fdm*);
-    
+
     int **tri, **facet, *confac, *numfac,*numpt;
     double **ccpt, **pt, *ls;
     double   dV1,dV2,C1,C2,mi;
@@ -56,10 +56,10 @@ private:
     int polygon_sum,polygon_num,vertice_num;
     const double zero,interfac;
     double epsi;
-    
+
     fieldint5 vertice, nodeflag;
     field5 eta;
-    
+
     void print(lexer*,fdm*,ghostcell*);
     void pvtp(lexer*,fdm*,ghostcell*);
     void header(lexer*,fdm*,ghostcell*);
@@ -73,7 +73,7 @@ private:
     int gcval_phi;
     double printtime,printtime2;
     int fsfprintcount;
-    
+
 
 };
 

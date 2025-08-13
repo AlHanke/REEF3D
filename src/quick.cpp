@@ -40,37 +40,37 @@ quick::quick (lexer *p)
     {
         if(p->D11==1)
         pflux = new flux_face_FOU_2D(p);
-        
+
         if(p->D11==2)
         pflux = new flux_face_CDS2_2D(p);
     }
-    
+
     if(p->B269>=1 || p->S10==2)
     {
         if(p->D11==1)
         pflux = new flux_face_FOU_vrans_2D(p);
-        
+
         if(p->D11==2)
         pflux = new flux_face_CDS2_vrans_2D(p);
     }
     }
-    
+
     if(p->j_dir==1)
     {
     if(p->B269==0)
     {
         if(p->D11==1)
         pflux = new flux_face_FOU(p);
-        
+
         if(p->D11==2)
         pflux = new flux_face_CDS2(p);
     }
-    
+
     if(p->B269>=1 || p->S10==2)
     {
         if(p->D11==1)
         pflux = new flux_face_FOU_vrans(p);
-        
+
         if(p->D11==2)
         pflux = new flux_face_CDS2_vrans(p);
     }
@@ -87,7 +87,7 @@ void quick::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel
     if(ipol==1)
     ULOOP
     a->F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel);
-    
+
     if(p->j_dir==1)
     if(ipol==2)
     VLOOP
@@ -111,11 +111,11 @@ double quick::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, f
 {
 
     ul=ur=vl=vr=wl=wr=dx=dy=dz=0.0;
-        
+
         pflux->u_flux(a,ipol,uvel,ivel1,ivel2);
         pflux->v_flux(a,ipol,vvel,jvel1,jvel2);
         pflux->w_flux(a,ipol,wvel,kvel1,kvel2);
-        
+
         if(ivel1>=0.0)
         ul=1.0;
 
@@ -158,7 +158,7 @@ double quick::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, f
 
            -  kvel1*(wl*(3.0*b(i,j,k) + 6.0*b(i,j,k-1) - b(i,j,k-2))
               +(1.0-wl)*(3.0*b(i,j,k-1) + 6.0*b(i,j,k) - b(i,j,k+1))))/(8.0*p->DXM);
-        
+
 
         L = -dx-dy-dz;
 

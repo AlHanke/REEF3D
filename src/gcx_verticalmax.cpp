@@ -26,9 +26,9 @@ Author: Hans Bihs
 
 void ghostcell::verticalmax(lexer *p, fdm* a, double **vmax)
 {
-        
+
 //  FILL SEND
-   
+
     count=0;
     for(q=0;q<p->gcpara5_count;++q)
     {

@@ -39,14 +39,14 @@ class fnpf_RK3 : public fnpf_ini, public fnpf_sigma
 public:
     fnpf_RK3(lexer*, fdm_fnpf*, ghostcell*);
     virtual ~fnpf_RK3();
-    
+
     virtual void start(lexer*, fdm_fnpf*, ghostcell*, solver*, convection*, ioflow*, reini*);
     virtual void inidisc(lexer*, fdm_fnpf*, ghostcell*, ioflow*, solver*);
     virtual void ini_wetdry(lexer*, fdm_fnpf*, ghostcell*);
-    
+
 private:
     void reference_gage(lexer*, fdm_fnpf*, ghostcell*, slice&);
-    
+
     int gcval,gcval_u,gcval_v,gcval_w;
     int gcval_eta,gcval_fifsf;
     int hypre_type;
@@ -57,7 +57,7 @@ private:
 
     fnpf_laplace *plap;
     fnpf_fsf *pf;
-    
+
     int gcval_sl;
     double t0;
 

@@ -49,7 +49,7 @@ private:
     void reconstruct(lexer*, fdm*, field&);
     void addpoint(lexer*,fdm*,int,int);
     void finalize(lexer*,fdm*);
-    
+
     int **tri, **facet, *confac, *numfac,*numpt;
     double **ccpt, **pt, *ls;
     double   dV1,dV2,C1,C2,mi;
@@ -59,14 +59,14 @@ private:
     int polygon_sum,polygon_num,vertice_num;
     const double zero,interfac;
     double epsi;
-    
+
 
     fieldint5 vertice, nodeflag;
     field5 eta;
-    
+
     
     void force_calc(lexer*,fdm*,ghostcell*);
-    
+
     void print_force(lexer*,fdm*,ghostcell*);
     void print_ini(lexer*,fdm*,ghostcell*);
     void print_vtp(lexer*,fdm*,ghostcell*);
@@ -83,11 +83,11 @@ private:
     double printtime,printtime2;
     int forceprintcount;
     int gcval_press;
-    
+
     // force
     double Fx,Fy,Fz;
     double A_tot,A;
-    
+
     double x1,x2,x3,x4,y1,y2,y3,y4,z1,z2,z3,z4;
     double xc,yc,zc;
     double nx,ny,nz,norm;
@@ -95,14 +95,14 @@ private:
     double uval,vval,wval,pval,viscosity,density,phival;
     double du,dv,dw;
     double at,bt,ct,st;
-    
+
     ofstream fout;
-    
+
     double xs,xe,ys,ye,zs,ze;
     double xm,ym,zm;
     int is,ie,js,je,ks,ke;
     const int ID;
-    
+
 
 };
 

@@ -32,11 +32,11 @@ class fnpf_void : public fnpf
 public:
     fnpf_void();
     virtual ~fnpf_void();
-    
+
     virtual void start(lexer*, fdm_fnpf*, ghostcell*, solver*, convection*, ioflow*, reini*);
     virtual void inidisc(lexer*, fdm_fnpf*, ghostcell*, ioflow*, solver*);
     virtual void ini_wetdry(lexer*, fdm_fnpf*, ghostcell*);
-    
+
 
 };
 

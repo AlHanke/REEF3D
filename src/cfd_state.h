@@ -42,16 +42,16 @@ public:
     virtual ~cfd_state();
     void write(lexer*,fdm*,ghostcell*,turbulence*,sediment*);
     void read(lexer*,fdm*,ghostcell*,turbulence*,sediment*);
-    
+
     void ini_mainheader(lexer*,fdm*,ghostcell*);
-    
+
     void write_result(lexer*,fdm*,ghostcell*,turbulence*,sediment*);
     void write_mainheader(lexer*,fdm*,ghostcell*);
     void write_header(lexer*,fdm*,ghostcell*);
-    
+
 private:
     void filename(lexer*,fdm*,ghostcell*,int);
-    
+
     void filename_single(lexer*,fdm*,ghostcell*,int);
     void filename_continuous(lexer*,fdm*,ghostcell*);
     void filename_header(lexer*,fdm*,ghostcell*);
@@ -66,7 +66,7 @@ private:
     int restart;
     int qn;
     ofstream result;
-    
+
     int is,ie,js,je;
     int is_global,ie_global,js_global,je_global;
     int is_global_root,ie_global_root,js_global_root,je_global_root;
@@ -75,7 +75,7 @@ private:
     int *flag_all;
     int *is_flag_all,*ie_flag_all,*js_flag_all,*je_flag_all;
     int *is_global_all,*ie_global_all,*js_global_all,*je_global_all;
-    
+
     
 };
 

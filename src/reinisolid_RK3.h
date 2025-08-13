@@ -47,7 +47,7 @@ private:
 
     void step(lexer*, fdm*);
     void time_preproc(lexer*);
-    
+
     double starttime,endtime;
 
     int gcval,gcval_topo,gcval_initopo,reiniter,n;

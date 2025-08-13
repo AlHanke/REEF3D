@@ -39,13 +39,13 @@ public:
     fnpf_state(lexer*,fdm_fnpf*,ghostcell*);
     virtual ~fnpf_state();
     void write(lexer*,fdm_fnpf*,ghostcell*);
-    
+
     void ini_mainheader(lexer*,fdm_fnpf*,ghostcell*);
-    
+
     void write_result(lexer*,fdm_fnpf*,ghostcell*);
     void write_mainheader(lexer*,fdm_fnpf*,ghostcell*);
     void write_header(lexer*,fdm_fnpf*,ghostcell*);
-    
+
 private:
     void filename_single(lexer*,fdm_fnpf*,ghostcell*,int);
     void filename_continuous(lexer*,fdm_fnpf*,ghostcell*);
@@ -60,7 +60,7 @@ private:
     int file_version,file_type;
     int qn;
     ofstream result;
-    
+
     int is,ie,js,je;
     int is_global,ie_global,js_global,je_global;
     int is_global_root,ie_global_root,js_global_root,je_global_root;
@@ -69,7 +69,7 @@ private:
     int *flag_all;
     int *is_flag_all,*ie_flag_all,*js_flag_all,*je_flag_all;
     int *is_global_all,*ie_global_all,*js_global_all,*je_global_all;
-    
+
     
 };
 

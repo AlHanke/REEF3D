@@ -38,18 +38,18 @@ public:
     virtual void start(lexer*, fdm*, ghostcell*, int){};
     virtual void sed_update(lexer*, fdm*, ghostcell*);
     virtual void sedpart_update(lexer*, fdm*, ghostcell*, field&, field&){};
-    
+
     virtual void u_source(lexer*, fdm*);
     virtual void v_source(lexer*, fdm*);
     virtual void w_source(lexer*, fdm*);
-    
+
     virtual void ke_source(lexer*, fdm*, field&);
     virtual void kw_source(lexer*, fdm*, field&);
     virtual void eps_source(lexer*, fdm*, field&, field&);
     virtual void omega_source(lexer*, fdm*, field&, field&);
-    
+
     virtual void eddyv_func(lexer*, fdm*);
-    
+
     virtual void veltimesave(lexer*,fdm*,ghostcell*);
 };
 

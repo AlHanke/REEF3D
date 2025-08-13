@@ -83,10 +83,10 @@ fnpf_vtu3D::fnpf_vtu3D(lexer* p, fdm_fnpf *c, ghostcell *pgc)
     pwsfline=new fnpf_print_wsfline(p,c,pgc);
 
     pwsfline_y=new fnpf_print_wsfline_y(p,c,pgc);
-    
+
     if(p->P65>0)
     pvel=new fnpf_vel_probe(p,c);
-    
+
     if(p->P66>0)
     pveltheo=new fnpf_vel_probe_theory(p,c);
 
@@ -103,38 +103,38 @@ fnpf_vtu3D::fnpf_vtu3D(lexer* p, fdm_fnpf *c, ghostcell *pgc)
 
     if(p->P59==1)
     pbreaklog=new fnpf_breaking_log(p,c,pgc);
-    
+
     if(p->P85>0)
     {
     pforce_ale = new fnpf_force_ale*[p->P85];
-    
+
     for(n=0;n<p->P85;++n)
     pforce_ale[n]=new fnpf_force_ale(p,c,pgc,n);
-    
+
     for(n=0;n<p->P85;++n)
     pforce_ale[n]->ini(p,c,pgc);
     }
-    
+
     if(p->P88>0)
     {
     pkin = new fnpf_print_kinematics*[p->P88];
-    
+
     for(n=0;n<p->P88;++n)
     pkin[n]=new fnpf_print_kinematics(p,c,pgc,n);
-    
+
     for(n=0;n<p->P88;++n)
     pkin[n]->ini(p,c,pgc);
     }
-    
+
     if(p->P110==1)
     phs = new fnpf_print_Hs(p,c->Hs);
-    
+
     if(p->P140>0)
     prunup = new fnpf_runup*[p->P140];
-    
+
     for(n=0;n<p->P140;++n)
     prunup[n]=new fnpf_runup(p,c,pgc,n);
-    
+
     for(n=0;n<p->P140;++n)
     prunup[n]->ini(p,c,pgc);
 }
@@ -151,13 +151,13 @@ void fnpf_vtu3D::start(lexer* p, fdm_fnpf* c,ghostcell* pgc, ioflow *pflow)
 
     if(p->P50>0)
     pwsf_theory->height_gauge(p,c,pgc,pflow);
-    
+
     if(p->P110==1)
     phs->start(p,pgc,c->eta,c->Hs);
-    
+
     if(p->P65>0)
     pvel->start(p,c,pgc);
-    
+
     if(p->P66>0)
     pveltheo->start(p,c,pgc,pflow);
 
@@ -246,19 +246,19 @@ void fnpf_vtu3D::start(lexer* p, fdm_fnpf* c,ghostcell* pgc, ioflow *pflow)
 
     if(p->P59==1)
     pbreaklog->write(p,c,pgc);
-    
+
     // ALE force
     if(p->count>0)
     if(p->count%p->P80==0)
     for(n=0;n<p->P85;++n)
     pforce_ale[n]->start(p,c,pgc);
-    
+
     // print kinematics
     if(p->count>0)
     if(p->count%p->P80==0)
     for(n=0;n<p->P88;++n)
     pkin[n]->start(p,c,pgc);
-    
+
     // Runup
     if(p->count>0)
     for(n=0;n<p->P140;++n)
@@ -269,7 +269,7 @@ void fnpf_vtu3D::print_stop(lexer* p, fdm_fnpf *c, ghostcell* pgc)
 {
     if(p->P180==1)
     pfsf->start(p,c,pgc);
-    
+
     print_vtu(p,c,pgc);
 }
 
@@ -326,21 +326,21 @@ void fnpf_vtu3D::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
     // elevation
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
     ++n;
-    
+
     // test
     if(p->P23==1)
     {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
     ++n;
     }
-    
+
     // Hs
     if(p->P110==1)
     {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
     ++n;
     }
-    
+
     // solid
     if(p->P25==1)
     {
@@ -365,7 +365,7 @@ void fnpf_vtu3D::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
     result<<"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
     result<<"<UnstructuredGrid>"<<endl;
     result<<"<Piece NumberOfPoints=\""<<p->pointnum<<"\" NumberOfCells=\""<<p->tpcellnum<<"\">"<<endl;
-    
+
     if(p->P16==1)
     {
     result<<"<FieldData>"<<endl;
@@ -388,13 +388,13 @@ void fnpf_vtu3D::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
 
     result<<"<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-    
+
     if(p->P23==1)
     {
     result<<"<DataArray type=\"Float32\" Name=\"test\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     }
-    
+
     if(p->P110==1)
     {
     result<<"<DataArray type=\"Float32\" Name=\"Hs\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
@@ -469,13 +469,13 @@ void fnpf_vtu3D::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
     ffn=float(c->Fi[FIJp1Kp1]);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     if(p->j_dir==0)
     TPLOOP
     {
     if(j==-1)
     ffn=float(c->Fi[FIJp1Kp1]);
-    
+
     if(j==0)
     ffn=float(c->Fi[FIJKp1]);
 
@@ -504,7 +504,7 @@ void fnpf_vtu3D::print_vtu(lexer* p, fdm_fnpf *c, ghostcell* pgc)
     result.write((char*)&ffn, sizeof (float));
     }
     }
-    
+
 //  Hs
     if(p->P110==1)
     {

@@ -35,10 +35,10 @@ public:
     virtual ~nhflow_f();
 
     virtual void ini(lexer*, fdm_nhf*, ghostcell*, ioflow*);
-    
+
 private:
     int q,margin;
-        
+
 
 };
 

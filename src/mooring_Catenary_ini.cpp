@@ -29,17 +29,17 @@ Author: Tobias Martin
 void mooring_Catenary::initialize(lexer *p, ghostcell *pgc)
 {
     double rho_f = 1000.0;
-    
+
     rho_c = p->X311_rho_c[line];
     w = p->X311_w[line]*9.81*(rho_c - rho_f)/rho_c;
     L = p->X311_l[line];
     H = p->X311_H[line];
     EA = p->X311_EA[line];
-    
+
     xs = p->X311_xs[line];
     ys = p->X311_ys[line];
     zs = p->X311_zs[line];
-    
+
     p->Darray(x,H);
     p->Darray(y,H);
     p->Darray(z,H);
@@ -56,7 +56,7 @@ void mooring_Catenary::initialize(lexer *p, ghostcell *pgc)
         eTout<<"time \t T"<<endl;
     }
     printtime = 0.0;
-    
+
     // Initialise breaking
     broken = false;
     curr_time = 0.0;

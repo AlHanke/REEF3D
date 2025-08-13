@@ -35,7 +35,7 @@ void nhflow_force::pvtp(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
     if(p->P15==2)
     num = p->count;
-    
+
     sprintf(name,"./REEF3D_NHFLOW_SOLID/REEF3D-NHFLOW-SOLID-%i-%08i.pvtp",ID,num);
 
     ofstream result;
@@ -49,12 +49,12 @@ void nhflow_force::pvtp(lexer *p, fdm_nhf *d, ghostcell *pgc)
     result<<"<PPoints>"<<endl;
     result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>"<<endl;
     result<<"</PPoints>"<<endl;
-    
+
     result<<"<PPointData>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"pressure\"/>"<<endl;
     result<<"</PPointData>"<<endl;
-    
+
     result<<"<Polys>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"/>"<<endl;
     ++n;

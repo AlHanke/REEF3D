@@ -33,26 +33,26 @@ strain::strain(lexer *p) : gradient(p), epsi(p->F45*p->DXM)
 void strain::wallf_update(lexer *p, fdm *a, ghostcell *pgc, fieldint &wallf)
 {
     int n,q;
-    
+
     LOOP
         wallf(i,j,k)=0;
-    
+
     GC4LOOP
     if((p->gcb4[n][4]==21 || p->gcb4[n][4]==22 || p->gcb4[n][4]==5 || p->gcb4[n][4]==41  || p->gcb4[n][4]==42 || p->gcb4[n][4]==43 || p->gcb4[n][4]==6 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8))
     {
         i = p->gcb4[n][0];
         j = p->gcb4[n][1];
         k = p->gcb4[n][2];
-        
+
         wallf(i,j,k)=1;
     }
-    
+
     QGCDF4LOOP
     {
         i = p->gcdf4[q][0];
         j = p->gcdf4[q][1];
         k = p->gcdf4[q][2];
-        
+
         wallf(i,j,k)=1;
     }
 }
@@ -85,9 +85,9 @@ double strain::sij(lexer *p, fdm *a, int ii, int jj)
 double strain::Sij2(lexer *p, fdm *a)
 {
     symmetricStrainRateTensor(p,a->u,a->v,a->w);
-    
+
     double s = sqrt(2.0*s11*s11 + 2.0*s22*s22 + 2.0*s33*s33 + s12*s12 + s13*s13 + s23*s23);
-    
+
     s = s*s;
 
     return s;
@@ -101,7 +101,7 @@ double strain::strainterm(lexer *p, fdm *a)
 double strain::strainterm(lexer *p, field &u, field &v, field &w)
 {
     symmetricStrainRateTensor(p,u,v,w);
-    
+
     double s = sqrt(2.0*s11*s11 + 2.0*s22*s22 + 2.0*s33*s33 + s12*s12 + s13*s13 + s23*s23);
 
     return s;
@@ -118,7 +118,7 @@ void strain::symmetricStrainRateTensor(lexer *p, field &u, field &v, field &w)
         s13 = (pudz(p,u) + pwdx(p,w));
         s23 = (pvdz(p,v) + pwdy(p,w));
     }
-    
+
     if(p->j_dir==0)
     {
         s11 = pudx(p,u);
@@ -159,7 +159,7 @@ double strain::magSqrSd(lexer *p, field &u, field &v, field &w)
 
     double Strain = strainterm(p,u,v,w);
     double Omega = rotationterm(p,u,v,w);
-    
+
     double Sd = ((1.0/24.0)*((pow(Strain, 2.0)*pow(Strain, 2.0)) + (pow(Omega, 2.0)*pow(Omega, 2.0)))) + ((2.0/12.0)*(pow(Strain, 2.0)*pow(Omega, 2.0))) + (2.0*IV_SR);
 
     return Sd;

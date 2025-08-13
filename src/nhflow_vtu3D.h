@@ -60,7 +60,7 @@ public:
     virtual void start(lexer*,fdm_nhf*,ghostcell*,ioflow*,nhflow_turbulence*,sediment*);
     virtual void print_vtu(lexer*,fdm_nhf*,ghostcell*,nhflow_turbulence*,sediment*);
     virtual void print_stop(lexer*,fdm_nhf*,ghostcell*,ioflow*,nhflow_turbulence*,sediment*);
-    
+
 private:
     void pvtu(lexer*,fdm_nhf*,ghostcell*,nhflow_turbulence*,sediment*);
     void name_iter(lexer*,ghostcell*);
@@ -77,9 +77,9 @@ private:
     int *printfsfiter_wI;
     double phase;
     double zcoor;
-    
+
     int printcount;
-    
+
     nhflow_print_wsf *pwsf;
     nhflow_print_wsf_theory *pwsf_theory;
     nhflow_print_wsfline *pwsfline;
@@ -96,7 +96,7 @@ private:
     nhflow_print_Hs *phs;
     nhflow_force **pforce;
     nhflow_force_ale **pforce_ale;
-    
+
 };
 
 #endif

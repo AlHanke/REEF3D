@@ -40,21 +40,21 @@ void initialize::start(fdm* a, lexer* p, ghostcell* pgc)
     nodecalc(p,a);
     maxcoor(p,a,pgc);
     paraini(p,a,pgc);
-    
-    
-    p->phimean=p->F56;
-    
-    if(p->F60>-1.0e20)
-    p->phimean=p->F60;
-        
 
     
+    p->phimean=p->F56;
+
+    if(p->F60>-1.0e20)
+    p->phimean=p->F60;
+
+
+
     if(p->F40>0)
     iniphi(p,a,pgc);
 
     if(p->F80>0 && p->F80<4)
     inivof(a,p,pgc);
-    
+
     if(p->F80==4)
     inivofPLIC(a,p,pgc);
 
@@ -63,7 +63,7 @@ void initialize::start(fdm* a, lexer* p, ghostcell* pgc)
 
     if(p->S10>0 || p->toporead==1)
     topoini(p,a,pgc);
-    
+
     pgc->flagbase(p,a);
 }
 
@@ -85,7 +85,7 @@ void initialize::inifdm(lexer* p, fdm* a, ghostcell* pgc)
         a->H(i,j,k)=0.0;
 
         a->press(i,j,k)=p->I55;
-        
+
         a->Fi(i,j,k)=0.0;
 
         a->ro(i,j,k)=p->W1;
@@ -122,7 +122,7 @@ void initialize::nodecalc(lexer* p, fdm* a)
     p->pointnum=0;
     p->cellnum=0;
     i=0;
-    
+
     // 3D
     TPLOOP
     {
@@ -133,10 +133,10 @@ void initialize::nodecalc(lexer* p, fdm* a)
 
     LOOP
     ++p->cellnum;
-    
+
     LOOP
     ++p->tpcellnum;
-    
+
     // 2D
     count=0;
     TPSLICELOOP
@@ -172,15 +172,15 @@ p->zcoormin=1.0e9;
      p->maxlength=MAX(p->maxlength,p->zcoormax-p->zcoormin);
 
      p->maxlength=pgc->globalmax(p->maxlength);
-     
+
      p->xcoormax=pgc->globalmax(p->xcoormax);
      p->ycoormax=pgc->globalmax(p->ycoormax);
      p->zcoormax=pgc->globalmax(p->zcoormax);
-     
+
      p->xcoormin=pgc->globalmin(p->xcoormin);
      p->ycoormin=pgc->globalmin(p->ycoormin);
      p->zcoormin=pgc->globalmin(p->zcoormin);
-     
+
      if(p->F42>=0.0)
      p->maxlength = p->F42;
 }

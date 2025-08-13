@@ -37,16 +37,16 @@ iweno_hj::iweno_hj(lexer *p)
     {
     if(p->B269==0 && p->S10!=2)
     pflux = new flux_HJ_CDS2_2D(p);
-    
+
     if(p->B269>=1 || p->S10==2)
     pflux = new flux_HJ_CDS2_vrans_2D(p);
     }
-    
+
     if(p->j_dir==1)
     {
     if(p->B269==0 && p->S10!=2)
     pflux = new flux_HJ_CDS2(p);
-    
+
     if(p->B269>=1 || p->S10==2)
     pflux = new flux_HJ_CDS2_vrans(p);
     }
@@ -60,7 +60,7 @@ void iweno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& v
 {
     if(ipol==1)
     wenoloop1(p,a,b,ipol,uvel,vvel,wvel);
-    
+
     if(p->j_dir==1)
     if(ipol==2)
     wenoloop2(p,a,b,ipol,uvel,vvel,wvel);
@@ -78,13 +78,13 @@ void iweno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& v
 void iweno_hj::wenoloop1(lexer *p, fdm *a, field& f, int ipol, field& uvel, field& vvel, field& wvel)
 {
     count=0;
-    
+
     ULOOP
     {
         pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
         pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
         pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
-    
+
 
             if(iadvec>=0.0)
             {
@@ -103,7 +103,7 @@ void iweno_hj::wenoloop1(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
             }
 
 
-            
+
             if(jadvec>=0.0 && p->j_dir==1)
             {
             is_east(f);
@@ -214,11 +214,11 @@ void iweno_hj::wenoloop3(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
 
     WLOOP
     {
-    
+
         pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
         pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
         pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
-                
+
             if(iadvec>=0.0)
             {
             is_south(f);
@@ -236,7 +236,7 @@ void iweno_hj::wenoloop3(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
             }
 
 
-        
+
             if(jadvec>=0.0 && p->j_dir==1)
             {
             is_east(f);
@@ -254,7 +254,7 @@ void iweno_hj::wenoloop3(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
             }
 
 
-            
+
             if(kadvec>=0.0)
             {
             is_bottom(f);
@@ -270,7 +270,7 @@ void iweno_hj::wenoloop3(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
             weight_calc();
             aij_top(p,a,f,a->H);
             }
-            
+
          ++count;
     }
 }
@@ -281,11 +281,11 @@ void iweno_hj::wenoloop4(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
 
     LOOP
     {
-        
+
         pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
         pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
         pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
-            
+
             if(iadvec>=0.0)
             {
             is_south(f);
@@ -319,7 +319,7 @@ void iweno_hj::wenoloop4(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
             aij_west(p,a,f,a->L);
             }
 
-    
+
             if(kadvec>=0.0)
             {
             is_bottom(f);
@@ -335,7 +335,7 @@ void iweno_hj::wenoloop4(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
             weight_calc();
             aij_top(p,a,f,a->L);
             }
-            
+
      ++count;
     }
 }
@@ -345,9 +345,9 @@ void iweno_hj::aij_south(lexer* p, fdm* a, field &f, field &F)
     F(i,j,k)    += (w1*third)*iadvec*deltin*f(i-3,j,k)
                  - (w2*sixth + w1*1.5)*iadvec*deltin*f(i-2,j,k)
                  + (w3*sixth)*iadvec*deltin*f(i+2,j,k);
-                 
+
     a->M.p[count] = (-w3*0.5 + w2*0.5 + w1*elvsix)*iadvec*deltin;
-                     
+
     a->M.s[count] = (-w3*third -w2 - w1*3.0)*iadvec*deltin;
     a->M.n[count] = (w3 + w2*third)*iadvec*deltin;
 }
@@ -357,9 +357,9 @@ void iweno_hj::aij_north(lexer* p, fdm* a, field &f, field &F)
     F(i,j,k)   += -(w3*sixth)*iadvec*deltin*f(i-2,j,k)
                 -    (-w1*1.5 - w2*sixth)*iadvec*deltin*f(i+2,j,k)
                 -   (w1*third)*iadvec*deltin*f(i+3,j,k);
-                    
+
     a->M.p[count] = (-w1*elvsix - w2*0.5 + w3*0.5)*iadvec*deltin;
-                     
+
     a->M.s[count] = (-w2*third - w3)*iadvec*deltin;
     a->M.n[count] = (w1*3.0 + w2 + w3*third)*iadvec*deltin;
 }
@@ -369,9 +369,9 @@ void iweno_hj::aij_east(lexer* p, fdm* a, field &f, field &F)
     F(i,j,k)     += (w1*third)*jadvec*deltin*f(i,j-3,k)
                 -  (w2*sixth + w1*1.5)*jadvec*deltin*f(i,j-2,k)
                 -  (-w3*sixth)*jadvec*deltin*f(i,j+2,k);
-                    
+
     a->M.p[count] += (-w3*0.5 +w2*0.5 + w1*elvsix)*jadvec*deltin;
-                     
+
     a->M.e[count] = (-w3*third -w2 - w1*3.0)*jadvec*deltin;
     a->M.w[count] = (w3 + w2*third)*jadvec*deltin;
 }
@@ -381,9 +381,9 @@ void iweno_hj::aij_west(lexer* p, fdm* a, field &f, field &F)
     F(i,j,k)     += -(w3*sixth)*jadvec*deltin*f(i,j-2,k)
                 -    (-w1*1.5 - w2*sixth)*jadvec*deltin*f(i,j+2,k)
                 -     (w1*third)*jadvec*deltin*f(i,j+3,k);
-                
+
     a->M.p[count] += (-w1*elvsix - w2*0.5 + w3*0.5)*jadvec*deltin;
-                     
+
     a->M.e[count] = (-w2*third - w3)*jadvec*deltin;
     a->M.w[count] = (w1*3.0 + w2 + w3*third)*jadvec*deltin;
 }
@@ -393,9 +393,9 @@ void iweno_hj::aij_bottom(lexer* p, fdm* a, field &f, field &F)
     F(i,j,k)     += (w1*third)*kadvec*deltin*f(i,j,k-3)
                 -  (w2*sixth + w1*1.5)*kadvec*deltin*f(i,j,k-2)
                 -  (-w3*sixth)*kadvec*deltin*f(i,j,k+2);
-    
+
     a->M.p[count] += (-w3*0.5 +w2*0.5 + w1*elvsix)*kadvec*deltin;
-                     
+
     a->M.b[count] = (-w3*third -w2 - w1*3.0)*kadvec*deltin;
     a->M.t[count] = (w3 + w2*third)*kadvec*deltin;
 }
@@ -405,9 +405,9 @@ void iweno_hj::aij_top(lexer* p, fdm* a, field &f, field &F)
     F(i,j,k)     += -(w3*sixth)*kadvec*deltin*f(i,j,k-2)
                 -   (-w1*1.5 - w2*sixth)*kadvec*deltin*f(i,j,k+2)
                 -   (w1*third)*kadvec*deltin*f(i,j,k+3);
-                
+
     a->M.p[count] += (-w1*elvsix - w2*0.5 + w3*0.5)*kadvec*deltin;
-                     
+
     a->M.b[count] = (-w2*third - w3)*kadvec*deltin;
     a->M.t[count] = (w1*3.0 + w2 + w3*third)*kadvec*deltin;
 }

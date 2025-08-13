@@ -43,10 +43,10 @@ void nhflow_coastline::start(lexer *p, ghostcell *pgc, slice &coastline, int *we
         {
             if(wet[IJ]==0)
             coastline(i,j)=-1.0;
-            
+
             if(wet[IJ]==1)
             coastline(i,j)=1.0;
-   
+
         }
         reini(p,pgc,coastline);
     }

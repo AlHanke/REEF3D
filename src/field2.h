@@ -49,9 +49,9 @@ private:
 
     int iter;
     int feldsize;
-    
+
     int rank, gcextra;
-    
+
     lexer *pp;
 };
 

@@ -36,13 +36,13 @@ density_heat::density_heat(lexer* p, heat *& ppheat) : epsi(p->F45*p->DXM), eps(
     H=0.0;
 
     material(p);
-    
+
     pheat = ppheat;
-    
+
     
     if(p->j_dir==0)
     psi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
-        
+
     if(p->j_dir==1)
     psi = p->F45*(1.0/3.0)*(p->DRM+p->DSM+p->DTM);
 }
@@ -54,11 +54,11 @@ density_heat::~density_heat()
 double density_heat::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
     double temp;
-    
+
         phival = 0.5*(a->phi(i,j,k) + a->phi(i+aa,j+bb,k+cc));
-        
+
         temp = 0.5*(pheat->val(i,j,k) + pheat->val(i+aa,j+bb,k+cc));
-        
+
         if(p->H9==1)
         {
         ro_1 = material_ipol(water_density,water_density_num, temp);
@@ -67,7 +67,7 @@ double density_heat::roface(lexer *p, fdm *a, int aa, int bb, int cc)
         visc_2 = material_ipol(water_viscosity,water_viscosity_num, temp);
         visc_2 = material_ipol(air_viscosity,air_viscosity_num, temp);
         }
-        
+
         if(p->H9==2)
         {
         ro_1 = material_ipol(air_density,air_density_num, temp);
@@ -76,7 +76,7 @@ double density_heat::roface(lexer *p, fdm *a, int aa, int bb, int cc)
         visc_1 = material_ipol(air_viscosity,air_viscosity_num, temp);
         visc_2 = material_ipol(water_viscosity,water_viscosity_num, temp);
         }
-        
+
     
         if(phival>psi)
         H=1.0;
@@ -86,7 +86,7 @@ double density_heat::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 
         if(fabs(phival)<=psi)
         H=0.5*(1.0 + phival/psi + (1.0/PI)*sin((PI*phival)/psi));
-        
+
         roval = ro_1*H + ro_2*(1.0-H);
 
     return roval;

@@ -42,13 +42,13 @@ void LES_filter_box::start(lexer *p, fdm *a, ghostcell *pgc, field &uprime, fiel
 
     if(gcval==10)
     {
-        
+
         ULOOP
         uprime(i,j,k) = a->u(i,j,k);
-        
+
         pgc->start1(p,uprime,gcval);
 
-        
+
     }
 
     if(gcval==11)
@@ -56,10 +56,10 @@ void LES_filter_box::start(lexer *p, fdm *a, ghostcell *pgc, field &uprime, fiel
 
         VLOOP
         vprime(i,j,k) = a->v(i,j,k);
-        
+
         pgc->start2(p,vprime,gcval);
 
-        
+
     }
 
     if(gcval==12)
@@ -67,12 +67,12 @@ void LES_filter_box::start(lexer *p, fdm *a, ghostcell *pgc, field &uprime, fiel
 
         WLOOP
         wprime(i,j,k) = a->w(i,j,k);
-        
+
         pgc->start3(p,wprime,gcval);
 
 
     }
- 
+
 }
 
 

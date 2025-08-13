@@ -96,7 +96,7 @@ p->phimean=p->F60;
         a->ro(i,j,k)= p->W1*H + p->W3*(1.0-H);
         a->visc(i,j,k)= p->W2*H + p->W4*(1.0-H);
     }
-    
+
     LOOP
     a->phi(i,j,k) = a->vof(i,j,k);
 

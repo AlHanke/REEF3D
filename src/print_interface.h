@@ -59,7 +59,7 @@ public:
     print_interface(lexer*,fdm*,ghostcell*);
     virtual ~print_interface();
     virtual void start(fdm*,lexer*,ghostcell*,turbulence*,heat*,ioflow*,solver*,data*,concentration*,sediment*);
-    
+
 
 private:
     void print3D(fdm*,lexer*,ghostcell*,turbulence*,heat*,solver*,data*,concentration*,sediment*);
@@ -76,7 +76,7 @@ private:
     int gcval_phi,gcval_phiext;
     double *printtime_wT;
     double phase;
-    
+
     field5 eta;
 
     print_wsf *pwsf;

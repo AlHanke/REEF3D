@@ -39,19 +39,19 @@ public:
     virtual ~nhflow_coastline();
 
    void start(lexer*,ghostcell*,slice&,int*,sliceint&);
-   
+
 private:
    void reini(lexer*,ghostcell*,slice&);
    void disc(lexer*,ghostcell*,slice&);
-   
+
    void step(lexer*);
    void time_preproc(lexer*);
-   
+
    slice4 frk1,frk2,L,dt,wet_n;
-   
+
    
    int reiniter,change;
-   
+
 
 };
 

@@ -35,7 +35,7 @@ public:
     virtual ~nhflow_v();
 
     virtual void ini(lexer*, fdm_nhf*, ghostcell*, ioflow*);
-     
+
 
 };
 

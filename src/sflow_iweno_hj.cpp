@@ -63,7 +63,7 @@ void sflow_iweno_hj::wenoloop4(lexer *p, fdm2D *b, slice &f, int ipol, slice &uv
 
     SLICELOOP4
     {
-        
+
         pflux->u_flux(ipol,uvel,iadvec,ivel2);
         pflux->v_flux(ipol,vvel,jadvec,jvel2);
 
@@ -109,9 +109,9 @@ void sflow_iweno_hj::aij_south(lexer* p, fdm2D *b, slice &f, slice &F)
     F(i,j)    += (w1*third)*iadvec*deltin*f(i-3,j)
                  - (w2*sixth + w1*1.5)*iadvec*deltin*f(i-2,j)
                  + (w3*sixth)*iadvec*deltin*f(i+2,j);
-                 
+
     b->M.p[count] = (-w3*0.5 + w2*0.5 + w1*elvsix)*iadvec*deltin;
-                     
+
     b->M.s[count] = (-w3*third -w2 - w1*3.0)*iadvec*deltin;
     b->M.n[count] = (w3 + w2*third)*iadvec*deltin;
 }
@@ -121,9 +121,9 @@ void sflow_iweno_hj::aij_north(lexer* p, fdm2D *b, slice &f, slice &F)
     F(i,j)   += -(w3*sixth)*iadvec*deltin*f(i-2,j)
                 -    (-w1*1.5 - w2*sixth)*iadvec*deltin*f(i+2,j)
                 -   (w1*third)*iadvec*deltin*f(i+3,j);
-                    
+
     b->M.p[count] = (-w1*elvsix - w2*0.5 + w3*0.5)*iadvec*deltin;
-                     
+
     b->M.s[count] = (-w2*third - w3)*iadvec*deltin;
     b->M.n[count] = (w1*3.0 + w2 + w3*third)*iadvec*deltin;
 }
@@ -133,9 +133,9 @@ void sflow_iweno_hj::aij_east(lexer* p, fdm2D *b, slice &f, slice &F)
     F(i,j)     += (w1*third)*jadvec*deltin*f(i,j-3)
                 -  (w2*sixth + w1*1.5)*jadvec*deltin*f(i,j-2)
                 -  (-w3*sixth)*jadvec*deltin*f(i,j+2);
-                    
+
     b->M.p[count] += (-w3*0.5 +w2*0.5 + w1*elvsix)*jadvec*deltin;
-                     
+
     b->M.e[count] = (-w3*third -w2 - w1*3.0)*jadvec*deltin;
     b->M.w[count] = (w3 + w2*third)*jadvec*deltin;
 }
@@ -145,9 +145,9 @@ void sflow_iweno_hj::aij_west(lexer* p, fdm2D *b, slice &f, slice &F)
     F(i,j)     += -(w3*sixth)*jadvec*deltin*f(i,j-2)
                 -    (-w1*1.5 - w2*sixth)*jadvec*deltin*f(i,j+2)
                 -     (w1*third)*jadvec*deltin*f(i,j+3);
-                
+
     b->M.p[count] += (-w1*elvsix - w2*0.5 + w3*0.5)*jadvec*deltin;
-                     
+
     b->M.e[count] = (-w2*third - w3)*jadvec*deltin;
     b->M.w[count] = (w1*3.0 + w2 + w3*third)*jadvec*deltin;
 }

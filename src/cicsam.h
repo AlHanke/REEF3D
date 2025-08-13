@@ -42,7 +42,7 @@ public:
 
 private:
     double aij(lexer*, fdm*, field&, int,field&,field&,field&);
-    
+
     double cface(lexer*,fdm*,field&,int,int,double);
 
     double dx,dy,dz;

@@ -42,12 +42,12 @@ concentration_RK3::~concentration_RK3()
 
 void concentration_RK3::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, turbulence *pturb, solver* psolv, ghostcell* pgc, ioflow* pflow)
 {
-    
+
     field4 ark1(p),ark2(p);
-    
+
 // Step 1
     starttime=pgc->timer();
-    
+
     clearrhs(p,a,pgc);
     pconvec->start(p,a,C,4,a->u,a->v,a->w);
     pdiff->diff_scalar(p,a,pgc,psolv,C,a->visc,a->eddyv,1.0,1.0);
@@ -55,7 +55,7 @@ void concentration_RK3::start(fdm* a, lexer* p, convection* pconvec, diffusion* 
     LOOP
     ark1(i,j,k) = C(i,j,k)
                    + p->dt*a->L(i,j,k);
-    
+
     bc_concentration_start(p,a,pgc,ark1);
     pgc->start4(p,ark1,gcval_concentration);
 
@@ -68,7 +68,7 @@ void concentration_RK3::start(fdm* a, lexer* p, convection* pconvec, diffusion* 
     ark2(i,j,k) = 0.75*C(i,j,k)
                    + 0.25*ark1(i,j,k)
                    + 0.25*p->dt*a->L(i,j,k);
-    
+
     bc_concentration_start(p,a,pgc,ark2);
     pgc->start4(p,ark2,gcval_concentration);
 

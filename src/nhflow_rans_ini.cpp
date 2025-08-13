@@ -30,51 +30,51 @@ void nhflow_rans_io::ini(lexer* p, fdm_nhf *d, ghostcell* pgc)
     /*gcval_kin=20;
     gcval_eps=30;
     gcval_edv=24;
-    
+
     if(p->B60>=1)
     uref=p->Ui;
-    
+
     if(p->B90>0)
     uref=0.01;
-    
+
     if(fabs(uref)<1.0e-6)
     uref=0.01;
 
     plain_wallfunc(p,a,pgc);*/
-    
+
     if(p->B90==1)
     LOOP
     {
     KIN[IJK] = 0.0001;
     EPS[IJK] = 1000.0001;
     }
-    
+
     
     if(p->B60==1)
     {
     ev_fac = 0.11;
-    
+
     LOOP
     {
     beddist = p->ZSP[IJK] - d->bed(i,j);
     tau_calc(p,d,pgc);
     bedval_calc(p,d,pgc);
-    
+
         
     d->EV[IJK] = ev_fac*shearvel*beddist;
     KIN[IJK] = kinbed * (1.0 - 0.5*(beddist/(d->WL(i,j)>0.0?d->WL(i,j):1.0e20)));
-    
+
     if(p->B11==0)
     EPS[IJK] = 1.0;
-    
+
     if(p->B11>0)
     EPS[IJK] = KIN[IJK]/d->EV[IJK];
     }
-    
+
     // inflow
     inflow(p,d,pgc);
     }
-    
+
     pgc->start20V(p,KIN,20);
     pgc->start30V(p,EPS,30);
     pgc->start24V(p,d->EV,24);
@@ -84,7 +84,7 @@ void nhflow_rans_io::tau_calc(lexer* p, fdm_nhf *d, ghostcell *pgc)
 {
     ks=p->B50;
     H=beddist;
-    
+
     M=26.0/pow((ks),(1.0/6.0));
     I=pow(p->Ui/(M*pow(H,(2.0/3.0))),2.0);
     tau=(9.81*H*I);
@@ -95,11 +95,11 @@ void nhflow_rans_io::bedval_calc(lexer* p, fdm_nhf *d, ghostcell* pgc)
 {
     kk=k;
     k=0;
-    
+
     dist = 0.5*p->DZN[KP]*d->WL(i,j);
-    
+
     k=kk;
-    
+
     kinbed = tau/sqrt(p->cmu);
     epsbed = (pow(p->cmu, 0.75)*pow(kinbed,1.5)) / (0.4*dist);
     omegabed = pow(kinbed,0.5) / (0.4*dist*pow(p->cmu, 0.25));
@@ -108,30 +108,30 @@ void nhflow_rans_io::bedval_calc(lexer* p, fdm_nhf *d, ghostcell* pgc)
 void nhflow_rans_io::inflow(lexer* p, fdm_nhf *d, ghostcell* pgc)
 {
     double evval,kinval,epsval;
-    
+
     if(p->B60==1)
     for(n=0;n<p->gcin_count;n++)
     {
     i=p->gcin[n][0];
     j=p->gcin[n][1];
     k=p->gcin[n][2];
-    
+
     beddist = p->ZSP[IJK] - d->bed(i,j);
     tau_calc(p,d,pgc);
     bedval_calc(p,d,pgc);
-    
+
     evval = ev_fac*shearvel*beddist;
     kinval = kinbed * (1.0 - 0.5*(beddist/(d->WL(i,j)>0.0?d->WL(i,j):1.0e20)));
     epsval = kinval/evval;
-    
+
     d->EV[Im1JK] = evval;
     d->EV[Im2JK] = evval;
     d->EV[Im3JK] = evval;
-    
+
     KIN[Im1JK] = kinval;
     KIN[Im2JK] = kinval;
     KIN[Im3JK] = kinval;
-    
+
     EPS[Im1JK] = epsval;
     EPS[Im2JK] = epsval;
     EPS[Im3JK] = epsval;
@@ -141,21 +141,21 @@ void nhflow_rans_io::inflow(lexer* p, fdm_nhf *d, ghostcell* pgc)
 void nhflow_rans_io::flowdepth_inflow(lexer* p, fdm_nhf *d, ghostcell* pgc)
 {
     depth_inflow = 0.0;
-    
+
     double counter = 0.0;
-    
+
     for(n=0;n<p->gcslin_count;n++)
     {
     i=p->gcin[n][0];
     j=p->gcin[n][1];
-    
+
     depth_inflow += d->WL(i,j);
     counter += 1.0;
     }
-    
+
     depth_inflow = pgc->globalsum(depth_inflow);
     counter = pgc->globalsum(counter);
-    
+
     depth_inflow = depth_inflow/(counter>0.0?counter:1.0e20);
 }
 

@@ -32,7 +32,7 @@ Author: Hans Bihs
 void cfd_state::ini_mainheader(lexer *p, fdm *a, ghostcell *pgc)
 {
     ofstream mainout;
-    
+
     // open file
     mainout.open("./REEF3D_CFD_STATE/REEF3D-CFD_State_Mainheader.r3d", ios::binary);
 
@@ -54,7 +54,7 @@ void cfd_state::ini_mainheader(lexer *p, fdm *a, ghostcell *pgc)
 
     iin=file_version;
     mainout.write((char*)&iin, sizeof (int));
-    
+
     iin=file_type;
     mainout.write((char*)&iin, sizeof (int));
 
@@ -71,7 +71,7 @@ void cfd_state::ini_mainheader(lexer *p, fdm *a, ghostcell *pgc)
 void cfd_state::write_mainheader(lexer *p, fdm *a, ghostcell *pgc)
 {
     ofstream mainout;
-    
+
     // open file
     mainout.open("./REEF3D_CFD_STATE/REEF3D-CFD_State_Mainheader.r3d", ios::binary | ios::app);
 

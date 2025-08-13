@@ -43,7 +43,7 @@ public:
 
 private:
     lexer *p;
-    
+
 };
 
 #endif

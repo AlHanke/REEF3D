@@ -40,7 +40,7 @@ void reinidisc_fsf_rig::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field 
     {
         BASELOOP
         L.V[IJK] = 0.0;
-        
+
         n=0;
         LOOP
         {
@@ -48,12 +48,12 @@ void reinidisc_fsf_rig::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field 
         ++n;
         }
     }
-    
+
     if(ipol==5)
     {
         BASELOOP
         L.V[IJK] = 0.0;
-        
+
         n=0;
         BASELOOP
         {
@@ -61,7 +61,7 @@ void reinidisc_fsf_rig::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field 
         ++n;
         }
     }
-    
+
     if(ipol==6)
     {
         BASELOOP
@@ -88,14 +88,14 @@ void reinidisc_fsf_rig::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &
     dz=0.0;
     lsv=f.V[IJK];
     lsSig=lsv/sqrt(lsv*lsv);
-    
+
     if(fabs(lsv)<1.0e-8)
     lsSig=1.0;
 
 // x
     xmin=(lsv-f.V[Im1JK])/p->DXP[IM1];
     xplus=(f.V[Ip1JK]-lsv)/p->DXP[IP];
-    
+
     if(xmin*lsSig>0.0 && xplus*lsSig>-xmin*lsSig)
     dx=ddwenox(a,f,1.0);
 
@@ -110,7 +110,7 @@ void reinidisc_fsf_rig::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &
     {
     ymin=(lsv-f.V[IJm1K])/p->DYP[JM1];
     yplus=(f.V[IJp1K]-lsv)/p->DYP[JP];
-    
+
     if(ymin*lsSig>0.0 && yplus*lsSig>-ymin*lsSig)
     dy=ddwenoy(a,f,1.0);
 
@@ -124,7 +124,7 @@ void reinidisc_fsf_rig::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &
 // z
     zmin=(lsv-f.V[IJKm1])/p->DZP[KM1];
     zplus=(f.V[IJKp1]-lsv)/p->DZP[KP];
-    
+
     if(zmin*lsSig>0.0 && zplus*lsSig>-zmin*lsSig)
     dz=ddwenoz(a,f,1.0);
 
@@ -133,13 +133,13 @@ void reinidisc_fsf_rig::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &
 
     if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
     dz=0.0;
-                    
+
 
     dnorm=sqrt(dx*dx + dy*dy + dz*dz);
-    
+
     if(p->j_dir==0)
     deltax = (1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-    
+
     if(p->j_dir==1)
     deltax = (1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
 

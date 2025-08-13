@@ -31,15 +31,15 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     if((bc==21||bc==22||bc==5||bc==41||bc==42||bc==43||bc==7||bc==8||bc==9||bc==41||bc==221||bc==211||bc==121||bc==111)
         && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
     return gclabel_lsm;
-    
+
     else
     if((bc==3||bc==221||bc==211||bc==121||bc==111) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
     return 4;
-    
+
     else
     if((bc==1||bc==6||bc==221||bc==211||bc==121||bc==111) && (gcv==52 || gcv==54))
     return 4;
-    
+
     // outflow
     else
     if((bc==2||bc==221||bc==211||bc==121||bc==111) && (gcv==51 || gcv==54 || (gcv==52 && p->B77==1)))
@@ -48,12 +48,12 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if(gcv==50)
     return 4;
-    
+
     // inflow
     else
     if((bc==1||bc==221||bc==211||bc==121||bc==111) && (gcv==52 || gcv==54))
     return gclabel_lsm_in;
-    
+
     if((bc==6 ) && (gcv==51 || gcv==52 || gcv==53 || gcv==54) )
     return gclabel_lsm_in;
 
@@ -61,41 +61,41 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if((bc==21||bc==22||bc==5||bc==3||bc==211||bc==212||bc==112||bc==111) && gcv==40)
     return gclabel_press;
-    
+
     // wavegen
     else
     if(((bc==6&&pressin_lable==0)||bc==211||bc==212||bc==112||bc==111) && gcv==40)
     return gclabel_press;
-    
+
     // awa beach
     else
     if(((bc==7&&awa_lable==0)||bc==211||bc==212||bc==112||bc==111) && gcv==40)
     return gclabel_press;
-    
+
     // inflow
     else
     if(((bc==1&&pressin_lable==0)||bc==211||bc==212||bc==112||bc==111) && gcv==40)
     return gclabel_press_in;
-    
+
     // outflow
     else
     if(( (bc==2&&pressout_lable==0) ||bc==211||bc==212||bc==112||bc==111) && gcv==40)
     return gclabel_press;
-    
+
     // amtosphere
     else
     if(bc==9 && gcv==40)
     return 21;
-    
+
 // ro
     else
     if(gcv==1)
     return 4;
-    
+
     // ro
     if(gcv==2 && (cs!=5 && bc!=5 && bc!=21))
     return 4;
-    
+
 // Turbulence kin
     else
     if((bc==21||bc==22||bc==5||bc==41||bc==42||bc==43||bc==9) && gcv==20)
@@ -104,15 +104,15 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if((bc==3||bc==2) && (cs!=6||bc!=3)  && gcv==20)
     return 4;
-    
+
     else
     if((cs==6 && bc==3) && gcv==20)
     return 5;
-    
+
     else
     if((bc==6 || bc==7 || bc==8) && gcv==20)
     return 5;
-    
+
     /*else
     if((bc==1) && gcv==20)
     return 4;*/
@@ -139,23 +139,23 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if((bc==3||bc==2||bc==1)&&(gcv==24))
     return 4;
-    
+
     else
     if(bc==1 && gcv==24)
     return 5;
-    
+
     else
     if((cs==6 && bc==3) && (gcv==24))
     return 5;
-    
+
     else
     if((cs!=6 || bc!=3) && (gcv==24))
     return 4;
-    
+
     else
     if((bc==6 || bc==7 || bc==8) && gcv==24)
     return 5;
-    
+
 // omega (sigma coordinate)
     // Parallel
     // Wall
@@ -171,16 +171,16 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if((bc==6 && gcv==12))
     return 4;
-    
+
     //Outflow
     else
     if((bc==2 && gclabel_outflow==1) && (gcv==12||gcv==3) && (cs==2||cs==3||cs==1||cs==4))
     return 4;
-    
+
     else
     if((bc==2 && gclabel_outflow==1) && (gcv==12) && (cs==5||cs==6))
     return 5;
-    
+
     //Patch
     else
     if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==12))
@@ -194,7 +194,7 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if(bc==3 && (cs==5||cs==6)&&(gcv==12) && p->A10==5)
     return 4;
-    
+
 // VOF
     else
     if((bc==21||bc==22||bc==5||bc==41||bc==42||bc==43||bc==3||bc==6||bc==7||bc==8||bc==9) && (gcv==71 || gcv==72 || gcv==73 || gcv==74))
@@ -215,17 +215,17 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if((bc==21||bc==22||bc==5||bc==41||bc==42||bc==43||bc==3||bc==6||bc==7||bc==8||bc==9) && gcv==75)
     return 3;
-    
+
 // Pk Velocity
     else
     if((bc==21||bc==22||bc==5||bc==41)&&(gcv==101||gcv==102||gcv==103))
     return 5;
-    
+
     //Outflow, Inflow
     else
     if((bc==2||bc==1||bc==7||bc==8||bc==6) && (gcv==101||gcv==102||gcv==103))
     return 4;
-    
+
     // Free Surface Uvel
     else
     if(bc==3 && (cs==2||cs==3||cs==5||cs==6) && gcv==101)
@@ -234,7 +234,7 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if(bc==3 && (cs==1||cs==4) && gcv==101)
     return 5;
-    
+
     // Free Surface Vvel
     else
     if(bc==3 && (cs==1||cs==4||cs==5||cs==6) && gcv==102)
@@ -243,7 +243,7 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if(bc==3 && (cs==2||cs==3) && gcv==102)
     return 5;
-    
+
     // Free Surface Wvel
     else
     if(bc==3 && (cs==1||cs==4||cs==2||cs==3) && gcv==103)
@@ -252,7 +252,7 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if(bc==3 && (cs==5||cs==6) && gcv==103)
     return 5;
-    
+
 // Suspended Sediment
     else
     if(gcv==60)
@@ -263,7 +263,7 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     if(gcv==80 && ((p->H61==1 && cs==1) || (p->H62==1 && cs==2) || (p->H63==1 && cs==3)
                 || (p->H64==1 && cs==4) || (p->H65==1 && cs==5) || (p->H66==1 && cs==6)))
     return 61;
-    
+
     else
     if(gcv==80)
     return 4;
@@ -280,11 +280,11 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if((bc==2||bc==1||bc==6||bc==7||bc==8)&&(gcv==49))
     return 7;
-    
+
     else
     if(bc==3 && gcv==49)
     return 4;
-    
+
 // Potential Waves
     else
     if((bc==21||bc==22||bc==5||bc==41||bc==42||bc==43||bc==7||bc==8||bc==9)&&(cs!=5)&&(gcv==250))
@@ -293,24 +293,24 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else
     if((bc==2||bc==1||bc==7||bc==6)&&(gcv==250))
     return 4;
-    
+
     else
     if(bc==3 && (cs!=6) && gcv==250)
     return 4;
-    
+
     else
     if(gcv==999)
     return 99;
-    
+
 // NHFLOW
     else
     if((bc==21||bc==22||bc==5||bc==3||(bc==2&&pressout_lable==0)||bc==6||(bc==7&&awa_lable==0)||bc==211||bc==212||bc==112||bc==111) && cs!=6 && gcv==540)
     return 4;
-    
+
     else
     if(bc==3 && cs==6 && gcv==540)
     return 11;
-    
+
     
     else
     return 0;
@@ -328,13 +328,13 @@ void ghostcell::gcdistro4(lexer *p, field &f, int ii, int jj, int kk, int nn, do
 
     if(bc_label==22)
     lsm(p,f,dist,gcv,bc,cs);
-    
+
     if(bc_label==3)
     extend(p,f,dist,gcv,bc,cs);
 
     if(bc_label==4)
     neumann(f,gcv,bc,cs);
-    
+
     if(bc_label==5)
     noslip(f,dist,gcv,bc,cs);
 
@@ -346,16 +346,16 @@ void ghostcell::gcdistro4(lexer *p, field &f, int ii, int jj, int kk, int nn, do
 
     if(bc_label==10)
     gravity_press(p,f,dist,gcv,bc,cs);
-    
+
     if(bc_label==11)
     nhpress(p,f,dist,gcv,bc,cs);
 
     if(bc_label==21)
     atmosphere(p,f,gcv,bc,cs);
-    
+
     if(bc_label==61)
     heatbc(p,f,gcv,bc,cs);
-    
+
     if(bc_label==99)
     gcb_debug(f,gcv,bc,cs);
 }

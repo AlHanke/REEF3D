@@ -47,7 +47,7 @@ private:
     void aij_west(lexer*,fdm_nhf*,double*, double*);
     void aij_top(lexer*,fdm_nhf*,double*, double*);
     void aij_bottom(lexer*,fdm_nhf*,double*, double*);
-    
+
     void iqmin(lexer*, fdm_nhf*, double*);
     void jqmin(lexer*, fdm_nhf*, double*);
     void kqmin(lexer*, fdm_nhf*, double*);
@@ -65,15 +65,15 @@ private:
     double umin, umax, uplus;
     int count;
 
-    
+
     
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
     double iadvec,jadvec,kadvec;
-    
+
     nhflow_scalar_advec *padvec;
-    
+
     double *DX,*DY,*DZ;
-    
+
 };
 
 #endif

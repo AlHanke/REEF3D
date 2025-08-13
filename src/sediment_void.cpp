@@ -56,7 +56,7 @@ void sediment_void::start_sflow(lexer *p, fdm2D *b, ghostcell *pgc, ioflow*, sli
 void sediment_void::ini_sflow(lexer *p, fdm2D *b, ghostcell *pgc)
 {
 }
-    
+
 void sediment_void::update_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinitopo*)
 {
 }

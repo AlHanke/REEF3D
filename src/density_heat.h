@@ -41,12 +41,12 @@ public:
     virtual ~density_heat();
 
     virtual double roface(lexer*,fdm*,int,int,int);
-    
+
     double H,roval,phival;
     int ii,jj,kk;
     const double epsi,eps;
     double psi;
-    
+
     heat *pheat;
 private:
     void material(lexer*);

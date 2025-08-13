@@ -30,7 +30,7 @@ sliceint1::sliceint1(lexer *p)
     imax=p->imax;
     jmin=p->jmin;
     jmax=p->jmax;
-    
+
     fieldalloc(p);
 
     pp=p;

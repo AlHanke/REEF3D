@@ -34,11 +34,11 @@ nhflow_print_wsf::nhflow_print_wsf(lexer *p, fdm_nhf *d) : fileFlushMaxCount(100
     x = p->P51_x;
     y = p->P51_y;
 
-    
+
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_NHFLOW_WSF",0777);
-    
+
     if(p->mpirank==0 && p->P51>0)
     {
     // open WSF file
@@ -57,9 +57,9 @@ nhflow_print_wsf::nhflow_print_wsf(lexer *p, fdm_nhf *d) : fileFlushMaxCount(100
 
     wsfout<<endl<<endl;
     }
-    
+
     //-------------------
-    
+
     
     p->Iarray(iloc,gauge_num);
     p->Iarray(jloc,gauge_num);
@@ -78,9 +78,9 @@ nhflow_print_wsf::~nhflow_print_wsf()
 
 void nhflow_print_wsf::height_gauge(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &f)
 {
-    
+
     fill_eta(p,d,pgc,f);
-    
+
     // write to file
     if(p->mpirank==0)
     {
@@ -104,7 +104,7 @@ void nhflow_print_wsf::fill_eta(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &f)
     for(n=0;n<gauge_num;++n)
     wsf[n]=-1.0e20;
 
-    
+
     for(n=0;n<gauge_num;++n)
     if(flag[n]>0)
     {
@@ -112,22 +112,22 @@ void nhflow_print_wsf::fill_eta(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &f)
 
     i=iloc[n];
     j=jloc[n];
-    
+
     wsf[n] = p->ccslipol4(f, x[n], y[n]);
     }
-    
+
     for(n=0;n<gauge_num;++n)
     wsf[n]=pgc->globalmax(wsf[n]);
 }
 
 void nhflow_print_wsf::fill_deta(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &f)
 {
-    
+
 }
-    
+
 void nhflow_print_wsf::fill_Uhorz(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &f)
 {
-    
+
 }
 
 
@@ -136,14 +136,14 @@ void nhflow_print_wsf::ini_location(lexer *p, fdm_nhf *d)
     for(n=0;n<gauge_num;++n)
     {
         iloc[n] = p->posc_i(x[n]);
-        
+
         if(p->j_dir==0)
         {
         jloc[n] = 0;
         j=0;
         y[n] = p->YP[JP];
         }
-        
+
         if(p->j_dir==1)
         jloc[n] = p->posc_j(y[n]);
 

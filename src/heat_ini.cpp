@@ -31,7 +31,7 @@ void heat_print::heat_ini(lexer* p, fdm *a, ghostcell* pgc,heat *pheat)
 {
     if(p->H10>0 && p->W90==0 && p->H3==1)
     pupdate = new fluid_update_fsf_heat(p,a,pgc,pheat);
-    
+
     if(p->H10>0 && p->W90==0 && p->H3==2)
     pupdate = new fluid_update_fsf_heat_Bouss(p,a,pgc,pheat);
 
@@ -58,7 +58,7 @@ double r;
         if(p->H57_1*p->XP[IP]+ p->H57_2*p->YP[JP] + p->H57_3*p->ZP[KP] < p->H57_4)
         T(i,j,k)=p->H50_1;
     }
-    
+
 
     if(p->H58_4>0.0)
     {
@@ -73,7 +73,7 @@ double r;
 
     pgc->start4(p,T,80);
     pgc->start4(p,T,80);
-    
+
     pupdate->start(p,a,pgc);
     pgc->start4(p,a->ro,1);
 

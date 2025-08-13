@@ -35,16 +35,16 @@ concentration_io::~concentration_io()
 
 void concentration_io::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
 {
-    
+
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-    
+
     TPLOOP
     {
     ffn=float(p->ipol4(C));
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 

@@ -35,7 +35,7 @@ public:
     virtual double& operator[](int)=0;
     virtual void resize(lexer*)=0;
     virtual void dealloc(lexer*)=0;
-    
+
     double *V;
 };
 

@@ -73,11 +73,11 @@ private:
     double umin, umax, uplus;
     int count,rocount,countN,coliN,aiipos;
     int *range;
-    
+
     
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
     double iadvec,jadvec,kadvec;
-    
+
     flux *pflux;
 
 };

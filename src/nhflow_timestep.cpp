@@ -50,7 +50,7 @@ void nhflow_timestep::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
     SLICELOOP4
     depthmax=MAX(depthmax,d->WL(i,j));
-    
+
     depthmax=pgc->globalmax(depthmax);
 
 
@@ -68,14 +68,14 @@ void nhflow_timestep::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
     LOOP
     p->wmax=MAX(p->wmax,fabs(d->W[IJK]));
-    
+
     p->wmax=pgc->globalmax(p->wmax);
-    
+
     FLOOP
     p->omegamax=MAX(p->omegamax,fabs(d->omegaF[FIJK]));
-    
+
     p->omegamax=pgc->globalmax(p->omegamax);
-    
+
     
     if(p->mpirank==0 && (p->count%p->P12==0))
     {
@@ -89,66 +89,66 @@ void nhflow_timestep::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
     //cout<<"c_shallow: "<<sqrt(9.81*depthmax)<<" c: "<<p->wC<<endl;
     //cout<<"depthmax: "<<setprecision(3)<<depthmax<<endl;
     }
-    
+
     p->umax=MAX(p->umax,p->ufbmax);
     p->vmax=MAX(p->vmax,p->vfbmax);
     p->wmax=MAX(p->wmax,p->wfbmax);
 
 
     cu=cv=cw=co=1.0e10;
-    
+
 
     LOOP
     WETDRY
     {
     if(p->j_dir==1 && p->knoy>1)
     dx = MIN(p->DXN[IP],p->DYN[JP]);
-    
+
     if(p->j_dir==0 || p->knoy==1)
     dx = p->DXN[IP];
-    
+
     dz = p->DZN[KP]*d->WL(i,j);
-    
+
     /*cu = MIN(cu, 1.0/(MAX(fabs(p->umax), sqrt(9.81*depthmax))/dx));
-    
+
     if(p->j_dir==1 )
     cv = MIN(cv, 1.0/(MAX(fabs(p->vmax), sqrt(9.81*depthmax))/dx));
-    
+
     cw = MIN(cw, 1.0/((fabs(p->wmax)/dx)));*/
-    
+
     cu = MIN(cu, dx/(p->umax + sqrt(9.81*depthmax)));
-    
+
     if(p->j_dir==1 )
     cv = MIN(cv, dx/(p->vmax + sqrt(9.81*depthmax)));
-    
+
     cw = MIN(cw, 1.0/((fabs(p->wmax)/dz)));
-    
+
     //co = MIN(co, 1.0/((fabs(p->omegamax)/dz)));
     }
-    
+
     cu = pgc->globalmin(cu);
     cw = pgc->globalmin(cw);
-    
+
     
     if(p->j_dir==1 )
     cu = MIN(cu,cv);
-    
+
     cu = MIN(cu,cw);
-    
+
     //cu = MIN(cu,co);
-    
+
        p->dt=p->N47*cu;
-    
+
     p->dt=pgc->timesync(p->dt);
-    
+
     if(p->N48==0)
     p->dt=p->N49;
-    
+
     else
     p->dt=MIN(p->dt,maxtimestep);
+
     
-    
-    
+
     
     // reini
     p->recontime=0.0;
@@ -159,18 +159,18 @@ void nhflow_timestep::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
 void nhflow_timestep::ini(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     double depthmax;
-    
+
     p->umax = p->vmax = p->wmax = 0.0;
     depthmax = -1e19;
-    
+
     cu=cv=cw=co=1.0e10;
-    
+
     
     SLICELOOP4
     depthmax=MAX(depthmax,p->wd - d->bed(i,j));
-    
+
     depthmax=pgc->globalmax(depthmax);
-    
+
     ULOOP
     p->umax=MAX(p->umax,fabs(d->U[IJK]));
 
@@ -180,7 +180,7 @@ void nhflow_timestep::ini(lexer *p, fdm_nhf *d, ghostcell *pgc)
     p->vmax=MAX(p->vmax,fabs(d->V[IJK]));
 
     p->vmax=pgc->globalmax(p->vmax);
-    
+
     if(p->j_dir==0)
     p->vmax=0.0;
 
@@ -189,31 +189,31 @@ void nhflow_timestep::ini(lexer *p, fdm_nhf *d, ghostcell *pgc)
     p->wmax=MAX(p->wmax,fabs(d->W[IJK]));
 
     p->wmax=pgc->globalmax(p->wmax);
-    
+
     
     p->umax=MAX(p->umax,2.0*p->ufbmax);
     p->umax=MAX(p->umax,2.0*p->vfbmax);
     p->umax=MAX(p->umax,2.0*p->wfbmax);
-    
+
     p->umax=MAX(p->umax,2.0*p->X210_u);
     p->umax=MAX(p->umax,2.0*p->X210_v);
     p->umax=MAX(p->umax,2.0*p->X210_w);
 
     p->dt=p->DXM/(p->umax+epsi);
-    
+
 
     p->umax+=10.0;
-    
+
 
 
     LOOP
     {
     if(p->j_dir==1 && p->knoy>1)
     dx = MIN(p->DXN[IP],p->DYN[JP]);
-    
+
     if(p->j_dir==0 || p->knoy==1)
     dx = p->DXN[IP];
-    
+
     
     cu = MIN(cu, 1.0/((fabs((p->umax + sqrt(9.81*depthmax)))/dx)));
     cv = MIN(cv, 1.0/((fabs((p->vmax + sqrt(9.81*depthmax)))/dx)));
@@ -222,18 +222,18 @@ void nhflow_timestep::ini(lexer *p, fdm_nhf *d, ghostcell *pgc)
     }
 
     cu = MIN(cu,cv);
-    
+
     cu = MIN(cu,cw);
-    
+
     cu = MIN(cu,co);
-    
+
        p->dt=0.75*p->N47*cu;
-    
+
     p->dt=pgc->timesync(p->dt);
     p->dt=pgc->globalmin(p->dt);
     p->dt_old=p->dt;
 
-    
+
     if(p->mpirank==0 && (p->count%p->P12==0))
     {
     cout<<"umax: "<<setprecision(5)<<p->umax<<endl;
@@ -241,13 +241,13 @@ void nhflow_timestep::ini(lexer *p, fdm_nhf *d, ghostcell *pgc)
     cout<<"wmax: "<<setprecision(5)<<p->wmax<<endl;
     cout<<"dmax: "<<setprecision(5)<<depthmax<<endl;
     }
-    
+
     if(p->N48==0)
     p->dt=p->N49;
-    
+
     else
     p->dt=MIN(p->dt,maxtimestep);
-    
+
     // reini
     p->recontime=0.0;
     p->fsftime=0.0;

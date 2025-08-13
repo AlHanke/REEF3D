@@ -37,7 +37,7 @@ public:
 
 private:
     int ii,jj,kk;
-    
+
     double d50,ks,shields,kappa;
     double Rstar, g, visc;
     double rhosed,rhowat;

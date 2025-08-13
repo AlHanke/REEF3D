@@ -59,7 +59,7 @@ private:
 
     double xcoor;
     double T;
-    
+
 
 };
 

@@ -35,7 +35,7 @@ void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)
 
     LOOP
     a->phi(i,j,k)=-1.0;
-    
+
     pgc->start4(p,a->phi,50);
 
     if(p->F50_flag==1)
@@ -67,7 +67,7 @@ void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)
 
     if(p->F59_r>0.0)
     {
-        
+
         LOOP
         {
         r = sqrt( pow(p->XP[IP]-p->F59_xm,2.0)+pow(p->YP[JP]-p->F59_ym,2.0));
@@ -83,7 +83,7 @@ void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)
         a->phi(i,j,k)=p->F60-p->pos_z();
 
         p->phimean=p->F60;
-        
+
     }
 
     if((p->F60>-1.0e20 || p->F56>-1.0e20) && p->F62>-1.0e-20&& p->F63>-1.0e-20 )
@@ -131,7 +131,7 @@ void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)
     p->fsfin=p->F60;
     p->fsfout=p->F60;
     }
-    
+
     if(p->F61>-1.0e20)
     {
     p->phiin=p->F61;
@@ -143,7 +143,7 @@ void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)
     p->phiout=p->F62;
     p->fsfout=p->F62;
     }
-    
+
     
     pgc->start4(p,a->phi,50);
 }
@@ -192,10 +192,10 @@ void initialize::iniphi_box(lexer* p, fdm *a, ghostcell* pgc)
     {
         istart = p->posc_i(p->F70_xs[qn]);
         iend = p->posc_i(p->F70_xe[qn]);
-        
+
         jstart = p->posc_j(p->F70_ys[qn]);
         jend = p->posc_j(p->F70_ye[qn]);
-        
+
         kstart = p->posc_k(p->F70_zs[qn]);
         kend = p->posc_k(p->F70_ze[qn]);
 
@@ -204,16 +204,16 @@ void initialize::iniphi_box(lexer* p, fdm *a, ghostcell* pgc)
         if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend)
         a->phi(i,j,k)=1;
     }
-    
+
     if(p->F71>0)
     for(qn=0;qn<p->F71;++qn)
     {
         istart = p->posc_i(p->F71_xs[qn]);
         iend = p->posc_i(p->F71_xe[qn]);
-        
+
         jstart = p->posc_j(p->F71_ys[qn]);
         jend = p->posc_j(p->F71_ye[qn]);
-        
+
         kstart = p->posc_k(p->F71_zs[qn]);
         kend = p->posc_k(p->F71_ze[qn]);
 
@@ -222,13 +222,13 @@ void initialize::iniphi_box(lexer* p, fdm *a, ghostcell* pgc)
         if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend)
         a->phi(i,j,k)=-1;
     }
-    
+
     if(p->F72>0)
     for(qn=0;qn<p->F72;++qn)
     {
         istart = p->posc_i(p->F72_xs[qn]);
         iend = p->posc_i(p->F72_xe[qn]);
-        
+
         jstart = p->posc_j(p->F72_ys[qn]);
         jend = p->posc_j(p->F72_ye[qn]);
 
@@ -262,7 +262,7 @@ void initialize::iniphi_wedge(lexer* p, fdm *a, ghostcell* pgc)
                 }
         }
     }
-     
+
     if(p->F113>0)
     {
         for(int qn=0; qn<p->F113; ++qn)
@@ -335,26 +335,26 @@ void initialize::iniphi_surfarea(lexer* p, fdm *a, ghostcell* pgc)
     double dx,dy,dz,dnorm,dirac;
     double area=0.0;
     double epsi = 1.6*p->DXM;
-    
+
     LOOP
     {
     epsi = (1.6/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-        
+
     dx = (a->phi(i+1,j,k)-a->phi(i-1,j,k))/(p->DXP[IM1]+p->DXP[IP]);
     dy = (a->phi(i,j+1,k)-a->phi(i,j-1,k))/(p->DYP[JM1]+p->DYP[JP]);
     dz = (a->phi(i,j,k+1)-a->phi(i,j,k-1))/(p->DZP[KM1]+p->DZP[KP]);
-    
+
     dnorm = sqrt(p->DXN[IP]*p->DXN[IP] + p->DYN[JP]*p->DYN[JP] + p->DZN[KP]*p->DZN[KP]);
-    
+
 
     dirac=0.0;
-    
+
     if(fabs(a->phi(i,j,k))<epsi)
     dirac = (0.5/epsi)*(1.0 + cos((PI*a->phi(i,j,k))/epsi));
-    
+
     area +=  pow(p->DXM,3.0) * dirac *dnorm;
     }
-    
+
     area = pgc->globalsum(area);
-    
+
 }

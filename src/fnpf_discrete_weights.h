@@ -43,7 +43,7 @@ public:
     void ck_weights(lexer*, double**, double *, int, int, int, int);
 
 private:
-    
+
 
 };
 

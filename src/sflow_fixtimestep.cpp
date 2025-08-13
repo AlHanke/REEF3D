@@ -28,7 +28,7 @@ Author: Hans Bihs
 sflow_fixtimestep::sflow_fixtimestep(lexer *p, fdm2D *b)
 {
     wd_criterion=0.00005;
-    
+
     wd_criterion=p->A244;
 }
 
@@ -59,9 +59,9 @@ void sflow_fixtimestep::start(lexer *p, fdm2D* b, ghostcell* pgc)
 
     SLICELOOP4
     depthmax=MAX(depthmax,b->depth(i,j));
-    
+
     depthmax=pgc->globalmax(depthmax);
-    
+
     if(p->mpirank==0 && (p->count%p->P12==0))
     {
     cout<<"umax: "<<setprecision(3)<<p->umax<<" \t utime: "<<p->utime<<endl;

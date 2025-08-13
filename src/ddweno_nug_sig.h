@@ -56,7 +56,7 @@ public:
 
     double grad;
     double *DX,*DY,*DZ;
-    
+
 private:
     lexer *p;
 };

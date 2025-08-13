@@ -34,19 +34,19 @@ print_averaging_f::print_averaging_f(lexer *p, fdm* a, ghostcell *pgc) : um(p),v
 {
     ULOOP
     um(i,j,k) = 0.0;
-    
+
     VLOOP
     vm(i,j,k) = 0.0;
-    
+
     WLOOP
     wm(i,j,k) = 0.0;
-    
+
     LOOP
     {
     pm(i,j,k) = 0.0;
     Tm(i,j,k) = 0.0;
     }
-    
+
     stime = p->P22;
 }
 
@@ -58,21 +58,21 @@ print_averaging_f::~print_averaging_f()
 void print_averaging_f::averaging(lexer *p, fdm *a, ghostcell *pgc, heat *pheat)
 {
     // u,v,w,p,T
-    
+
     if(p->simtime>stime)
     {
         ULOOP
         um(i,j,k) = um(i,j,k) + p->dt*a->u(i,j,k);
-        
+
         VLOOP
         vm(i,j,k) = vm(i,j,k) + p->dt*a->v(i,j,k);
-        
+
         WLOOP
         wm(i,j,k) = wm(i,j,k) + p->dt*a->w(i,j,k);
-        
+
         LOOP
         pm(i,j,k) = pm(i,j,k) + p->dt*a->press(i,j,k);
-        
+
         LOOP
         Tm(i,j,k) = Tm(i,j,k) + p->dt*pheat->val(i,j,k);
     }
@@ -86,7 +86,7 @@ void print_averaging_f::offset_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &r
     // pressure
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
     ++n;
-    
+
     // heat
     if(p->H10>0)
     {
@@ -99,10 +99,10 @@ void print_averaging_f::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &res
 {
     result<<"<DataArray type=\"Float32\" Name=\"velocity_mean\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-    
+
     result<<"<DataArray type=\"Float32\" Name=\"pressure_mean\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-    
+
     if(p->H10>0)
     {
     result<<"<DataArray type=\"Float32\" Name=\"T_mean\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
@@ -114,7 +114,7 @@ void print_averaging_f::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &re
 {
     result<<"<PDataArray type=\"Float32\" Name=\"velocity_mean\" NumberOfComponents=\"3\"/>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"pressure_mean\"/>"<<endl;
-    
+
     if(p->H10>0)
     result<<"<PDataArray type=\"Float32\" Name=\"T_mean\"/>"<<endl;
 }
@@ -126,7 +126,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     pgc->start3(p,wm,112);
     pgc->start4(p,pm,40);
     pgc->start4(p,Tm,1);
-    
+
     
     //  Velocities
     if(p->simtime<=stime+1.0e-8)
@@ -144,7 +144,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     ffn=0.0;
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     //  Pressure
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
@@ -153,7 +153,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     ffn=0.0;
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     //  Temperature
     if(p->H10>0)
     {
@@ -165,9 +165,9 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     result.write((char*)&ffn, sizeof (float));
     }
     }
-    
+
     }
-    
+
     if(p->simtime>stime+1.0e-8)
     {
     iin=3*4*(p->pointnum);
@@ -183,7 +183,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     ffn=float(p->ipol3(wm)/(p->simtime-stime));
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     //  Pressure
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
@@ -192,7 +192,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     ffn=float(p->ipol4press(pm)/(p->simtime-stime));
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     //  Temperature
     if(p->H10>0)
     {
@@ -204,7 +204,7 @@ void print_averaging_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
     result.write((char*)&ffn, sizeof (float));
     }
     }
-    
+
     }
 
 }

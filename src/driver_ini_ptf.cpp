@@ -60,14 +60,14 @@ if(p->mpirank==0)
 cout<<"starting driver_ini_PTF"<<endl;
 
     pgc->start4(p,a->Fi,250);
-    
+
     // Solid
     if(p->solidread==1)
     {
     solid solid_object(p,a,pgc);
     solid_object.start(p,a,pgc,pflow,pconvec,preto);
     }
-    
+
     // Geotopo
     if(p->toporead>0)
     {
@@ -80,7 +80,7 @@ cout<<"starting driver_ini_PTF"<<endl;
 
     SLICELOOP4
     a->bed(i,j) = p->bed[IJ];
-    
+
     pflow->ini_ptf(p,a,pgc);
     pptf->ini(p,a,pgc,pflow,preini);
     pflow->ini_ptf(p,a,pgc);
@@ -91,7 +91,7 @@ cout<<"starting driver_ini_PTF"<<endl;
     pflow->fi_relax(p,pgc,a->Fi,a->phi);
 
     pgc->start4(p,a->Fi,250);
-    
+
     pflow->gcio_update(p,a,pgc);
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
 

@@ -36,7 +36,7 @@ public:
     virtual void ggcpol(lexer*)=0;
     virtual void resize(lexer*)=0;
     virtual void dealloc(lexer*)=0;
-    
+
     double *V;
 };
 

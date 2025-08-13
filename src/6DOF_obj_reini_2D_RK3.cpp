@@ -31,7 +31,7 @@ void sixdof_obj::reini_2D(lexer *p, ghostcell *pgc, slice &f)
     if(p->count==0)
     {
     reiniter=2*int(p->maxlength/(1.0*p->DXM));
-    
+
     if(p->mpirank==0)
     cout<<"initializing 6DOF... "<<endl<<endl;
     }
@@ -43,16 +43,16 @@ void sixdof_obj::reini_2D(lexer *p, ghostcell *pgc, slice &f)
     {
     // Step 1
     disc_2D(p,pgc,f);
-    
+
     SLICELOOP4
     lrk1(i,j) = f(i,j) + dts(i,j)*K(i,j);
 
     pgc->gcsl_start4(p,lrk1,50);
-    
+
 
     // Step 2
     disc_2D(p,pgc,lrk1);
-    
+
     SLICELOOP4
     lrk2(i,j)=  0.75*f(i,j) + 0.25*lrk1(i,j) + 0.25*dts(i,j)*K(i,j);
 
@@ -61,13 +61,13 @@ void sixdof_obj::reini_2D(lexer *p, ghostcell *pgc, slice &f)
 
     // Step 3
     disc_2D(p,pgc,lrk2);
-    
+
     SLICELOOP4
     f(i,j) = (1.0/3.0)*f(i,j) + (2.0/3.0)*lrk2(i,j) + (2.0/3.0)*dts(i,j)*K(i,j);
 
     pgc->gcsl_start4(p,f,50);
     }
-    
+
     pgc->gcsl_start4(p,f,50);
 }
 
@@ -77,13 +77,13 @@ void sixdof_obj::disc_2D(lexer *p, ghostcell *pgc, slice &f)
     double dx,dy,xmin,xplus,ymin,yplus;
     double lsv,lsSig;
     double dnorm,deltax,sign;
-    
+
     SLICELOOP4
     {
-    
+
     dx=0.0;
     dy=0.0;
-    
+
     lsv=f(i,j);
     lsSig=lsv/sqrt(lsv*lsv);
 
@@ -93,7 +93,7 @@ void sixdof_obj::disc_2D(lexer *p, ghostcell *pgc, slice &f)
 // x
     xmin=(lsv-f(i-1,j))/p->DXP[IM1];
     xplus=(f(i+1,j)-lsv)/p->DXP[IP];
-    
+
     if(xmin*lsSig>0.0 && xplus*lsSig>-xmin*lsSig)
     dx=dswenox(f,1.0);
 
@@ -108,7 +108,7 @@ void sixdof_obj::disc_2D(lexer *p, ghostcell *pgc, slice &f)
     {
     ymin=(lsv-f(i,j-1))/p->DYP[JM1];
     yplus=(f(i,j+1)-lsv)/p->DYP[JP];
-    
+
     if(ymin*lsSig>0.0 && yplus*lsSig>-ymin*lsSig)
     dy=dswenoy(f,1.0);
 
@@ -120,9 +120,9 @@ void sixdof_obj::disc_2D(lexer *p, ghostcell *pgc, slice &f)
     }
 
     dnorm=sqrt(dx*dx + dy*dy);
-    
+
     deltax = 0.5*(p->DXN[IP] + p->DYN[JP]);
-    
+
     sign=lsv/sqrt(lsv*lsv+ dnorm*dnorm*deltax*deltax);
 
     K(i,j) = -(sign*dnorm - sign);

@@ -33,7 +33,7 @@ void mgcslice2::gcb_seed(lexer *p)
     {
         if(p->flagslice2[Im1J]<0)
         ++count;
-    
+
         if(p->flagslice2[IJp1]<0)
         ++count;
 
@@ -43,10 +43,10 @@ void mgcslice2::gcb_seed(lexer *p)
         if(p->flagslice2[Ip1J]<0)
         ++count;
     }
-    
+
     p->Iresize(p->gcbsl2,p->gcbsl2_count, count, 6, 6);
     p->Dresize(p->gcdsl2,p->gcbsl2_count, count);
-    
+
     // find gcbsl
     count=0;
     SLICELOOP2

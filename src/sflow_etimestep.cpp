@@ -31,7 +31,7 @@ Author: Hans Bihs
 sflow_etimestep::sflow_etimestep(lexer *p, fdm2D *b)
 {
     wd_criterion=0.00005;
-    
+
     wd_criterion=p->A244;
 }
 
@@ -62,13 +62,13 @@ void sflow_etimestep::start(lexer *p, fdm2D* b, ghostcell* pgc)
 
     SLICELOOP4
     depthmax=MAX(depthmax,b->depth(i,j));
-    
+
     depthmax=MAX(depthmax,0.00001);
-    
+
     depthmax=pgc->globalmax(depthmax);
+
     
-    
-    
+
     if(p->mpirank==0 && (p->count%p->P12==0))
     {
     cout<<"umax: "<<setprecision(3)<<p->umax<<" \t utime: "<<p->utime<<endl;
@@ -80,28 +80,28 @@ void sflow_etimestep::start(lexer *p, fdm2D* b, ghostcell* pgc)
 
 
 //
-    
+
     cu=2.0/((p->umax/p->DXM)+sqrt(4.0*fabs(b->maxF)/p->DXM));
     cv=2.0/((p->vmax/p->DXM)+sqrt(4.0*fabs(b->maxG)/p->DXM));
-    
+
     if(p->A219==1)
     {
     cu=MIN(cu,2.0/((p->umax+sqrt(9.81*depthmax))/p->DXM));
     cv=MIN(cv,2.0/((p->vmax+sqrt(9.81*depthmax))/p->DXM));
     }
-    
+
     if(p->A219==2)
     {
     cu=p->DXM/(fabs(p->umax)>1.0e-20?p->umax:1.0);
     cv=p->DXM/(fabs(p->vmax)>1.0e-20?p->vmax:1.0);
     }
-    
+
     if(p->A219==3)
     {
     cu=2.0/((p->umax+sqrt(9.81*depthmax))/p->DXM);
     cv=2.0/((p->vmax+sqrt(9.81*depthmax))/p->DXM);
     }
-    
+
 
     p->dt=p->N47*MIN(cu,cv);
     p->dt=pgc->timesync(p->dt);
@@ -114,12 +114,12 @@ void sflow_etimestep::start(lexer *p, fdm2D* b, ghostcell* pgc)
 
 void sflow_etimestep::ini(lexer *p, fdm2D* b, ghostcell* pgc)
 {
-    
+
     p->umax=p->W10;
-    
+
     SLICELOOP1
     p->umax=MAX(p->umax,fabs(b->P(i,j)));
-    
+
 
     p->umax=pgc->globalmax(p->umax);
 
@@ -128,16 +128,16 @@ void sflow_etimestep::ini(lexer *p, fdm2D* b, ghostcell* pgc)
     p->vmax=MAX(p->vmax,fabs(b->Q(i,j)));
 
     p->vmax=pgc->globalmax(p->vmax);
-    
+
     p->umax=MAX(p->umax,p->vmax);
     p->umax=MAX(p->umax,5.0);
-    
+
+
+
+    cu=2.0/((p->umax/p->DXM));
 
     
-    cu=2.0/((p->umax/p->DXM));
-    
-    
-    
+
     p->dt=p->N47*cu;
     p->dt=pgc->timesync(p->dt);
 

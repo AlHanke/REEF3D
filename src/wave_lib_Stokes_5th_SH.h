@@ -36,17 +36,17 @@ public:
     virtual ~wave_lib_Stokes_5th_SH();
 
     double wave_horzvel(lexer*,double,double,double);
-    
+
     virtual double wave_u(lexer*,double,double,double);
     virtual double wave_v(lexer*,double,double,double);
     virtual double wave_w(lexer*,double,double,double);
     virtual double wave_eta(lexer*,double,double);
     virtual double wave_fi(lexer*,double,double,double);
-    
+
     
     virtual void parameters(lexer*,ghostcell*);
     virtual void wave_prestep(lexer*,ghostcell*);
-    
+
 private:
     double a11,a22,a31,a33,a42,a44,a51,a53,a55;
     double b22,b31,b42,b44,b53,b55;

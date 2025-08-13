@@ -36,11 +36,11 @@ public:
     virtual ~rheology_f()=default;
 
     double viscosity(lexer*,fdm*,ghostcell*) override;
-    
+
     void u_source(lexer*,fdm*) override;
     void v_source(lexer*,fdm*) override;
     void w_source(lexer*,fdm*) override;
-    
+
     void filltau(lexer*,fdm*,ghostcell*) override;
 
 private:
@@ -53,21 +53,21 @@ private:
     void pressurePhiGradient(lexer*,fdm*,int,int,int);
 
     field4 tau_x,tau_y,tau_z;
-    
+
     double gamma;
     double val,f,H,phival,pressureval;
-    
+
     double tau0;
     double tau0_p,tau0_m;
     double tanphi;
 
     double pressureval1,pressureval2;
     double tau01,tau02;
-    
+
     const double epsi;
     const double gravity;
     const double density_interstitial_fluid;
-    
+
     int count;
 };
 #endif

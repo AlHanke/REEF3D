@@ -26,10 +26,10 @@ Author: Hans Bihs
 
 int ghostcell::gcsleval3(lexer *p, int gcv, int bc, int cs)
 {
- 
+
     if(bc==1)
     return 5;
-    
+
     else
     return 4;
 }
@@ -42,8 +42,8 @@ void ghostcell::gcsldistro3(lexer *p, slice &f, int ii, int jj, int nn, double d
     n=nn;
 
     bc_label=gcsleval3(p,gcv,bc,cs);
-    
+
     if(bc_label==4)
     gcsl_neumann(f,gcv,bc,cs);
-    
+
 }

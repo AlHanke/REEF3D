@@ -39,16 +39,16 @@ using namespace std;
 class fsi_strip : public beam, public increment
 {
 public:
-    
+
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
-    
+
     typedef Eigen::Matrix<double,3,Eigen::Dynamic> Matrix3Xd;
-    
+
     fsi_strip(lexer*,int);
     virtual ~fsi_strip();
     virtual void start(lexer*,fdm*,ghostcell*,double);
     virtual void initialize(lexer*,fdm*,ghostcell*,turbulence*);
-    
+
     void interpolate_vel(lexer*,fdm*,ghostcell*,field&,field&,field&);
     void update_points();
     void coupling_vel();
@@ -58,7 +58,7 @@ public:
     void print_ini(lexer *p);
     void print_stl(lexer*,fdm*,ghostcell*);
     void print_parameter(lexer*,fdm*,ghostcell*);
-    
+
     void setFieldBC(Matrix3Xd&, Matrix3Xd&, Matrix4Xd&, Matrix4Xd&, Matrix4Xd&, Matrix3Xd&, Matrix4Xd&, Matrix3Xd&, double, int);
     void setConstantLoads(Matrix3Xd&, Matrix4Xd&, const Matrix3Xd&, const Matrix3Xd&, const Matrix4Xd&, const Matrix4Xd&);
     void setVariableLoads(Matrix3Xd&, Matrix4Xd&, const Matrix3Xd&, const Matrix3Xd&, const Matrix4Xd&, const Matrix4Xd&, const double);
@@ -89,9 +89,9 @@ private:
     int printcount_fsi;
     double printtime;
     Matrix3Xd tri_x, tri_y, tri_z;
-    
+
     double starttime, endtime;
-    
+
     turbulence *pturb;
     field4 eps0;
 };

@@ -48,7 +48,7 @@ public:
     virtual void filter1(lexer*, fdm2D*, ghostcell*);
     virtual void filter2(lexer*, fdm2D*, ghostcell*);
     virtual void filter4(lexer*, fdm2D*, ghostcell*);
-    
+
     slice1 f1x,f1y;
     slice2 f2x,f2y;
     slice4 f4x,f4y;

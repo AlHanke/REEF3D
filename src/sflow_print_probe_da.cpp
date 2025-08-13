@@ -33,13 +33,13 @@ sflow_print_probe_da::sflow_print_probe_da(lexer *p, fdm2D *b, ghostcell *pgc) :
     p->Iarray(iloc,probenum);
     p->Iarray(jloc,probenum);
     p->Iarray(flag,probenum);
-    
+
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_SFLOW_ProbePoint",0777);
-    
+
     pout = new ofstream[probenum];
-    
+
     if(p->mpirank==0 && probenum>0)
     {
         cout<<"probepoint_num: "<<probenum<<endl;
@@ -47,21 +47,21 @@ sflow_print_probe_da::sflow_print_probe_da(lexer *p, fdm2D *b, ghostcell *pgc) :
         for(n=0;n<probenum;++n)
         {
         sprintf(name,"./REEF3D_SFLOW_ProbePoint/REEF3D-SFLOW-Probe-Point-%i.dat",n+1);
-        
+
         pout[n].open(name);
 
         pout[n]<<"Depth Averaged Point Probe ID:  "<<n<<endl<<endl;
         pout[n]<<"x_coord     y_coord"<<endl;
-        
+
         pout[n]<<n+1<<"\t "<<p->P63_x[n]<<"\t "<<p->P63_y[n]<<endl;
 
         pout[n]<<endl<<endl;
-        
+
         pout[n]<<"t \t Um \t Vm \t Wm \t Pm \t eta \t bed"<<endl;
         pout[n].close();
         }
     }
-    
+
     ini_location(p,b,pgc);
 }
 
@@ -81,7 +81,7 @@ void sflow_print_probe_da::start(lexer *p, fdm2D *b, ghostcell *pgc)
         {
         xp=p->P63_x[n];
         yp=p->P63_y[n];
-        
+
         uval = p->ccslipol1(b->P, xp, yp);
         vval = p->ccslipol2(b->Q, xp, yp);
         wval = p->ccslipol4(b->ws,xp,yp);
@@ -89,14 +89,14 @@ void sflow_print_probe_da::start(lexer *p, fdm2D *b, ghostcell *pgc)
         eval = p->ccslipol4(b->eta,xp,yp);
         bval = p->ccslipol4(b->bed,xp,yp);
         }
-    
+
     uval=pgc->globalmax(uval);
     vval=pgc->globalmax(vval);
     wval=pgc->globalmax(wval);
     pval=pgc->globalmax(pval);
     eval=pgc->globalmax(eval);
     bval=pgc->globalmax(bval);
-    
+
         if(p->mpirank==0)
         {
             sprintf(name,"./REEF3D_SFLOW_ProbePoint/REEF3D-SFLOW-Probe-Point-%i.dat",n+1);
@@ -118,24 +118,24 @@ void sflow_print_probe_da::ini_location(lexer *p, fdm2D *b, ghostcell *pgc)
     for(n=0;n<probenum;++n)
     {
     check=0;
-    
+
     iloc[n]=p->posc_i(p->P63_x[n]);
-    
+
     if(p->j_dir==0)
     jloc[n]=0;
-  
+
     if(p->j_dir==1)
     jloc[n]=p->posc_j(p->P63_y[n]);
-    
+
     if(iloc[n]>=0 && iloc[n]<p->knox)
     if(jloc[n]>=0 && jloc[n]<p->knoy)
     check=1;
-    
+
     if(check==1)
     {
     i = iloc[n];
     j = jloc[n];
-    
+
     if(p->flagslice4[IJ]<0)
     check=0;
     }

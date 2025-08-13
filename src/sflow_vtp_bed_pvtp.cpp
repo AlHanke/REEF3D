@@ -35,7 +35,7 @@ void sflow_vtp_bed::pvtu(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
 
     if(p->P15==2)
     num = p->count;
-    
+
 
     sprintf(name,"./REEF3D_SFLOW_VTP_BED/REEF3D-SFLOW-BED-%08i.pvtp",num);
 
@@ -46,7 +46,7 @@ void sflow_vtp_bed::pvtu(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     result<<"<?xml version=\"1.0\"?>"<<endl;
     result<<"<VTKFile type=\"PPolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
     result<<"<PPolyData  GhostLevel=\"0\">"<<endl;
-    
+
     if(p->P16==1)
     {
     result<<"<FieldData>"<<endl;
@@ -58,15 +58,15 @@ void sflow_vtp_bed::pvtu(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     result<<"<PPoints>"<<endl;
     result<<"<PDataArray type=\"Float64\" NumberOfComponents=\"3\"/>"<<endl;
     result<<"</PPoints>"<<endl;
-    
+
     result<<"<PPointData>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"pressure\"/>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"elevation\"/>"<<endl;
-    
+
     if(p->P76==1)
     psed->name_pvtu_bedload(p,pgc,result);
-    
+
     if(p->P77==1)
     psed->name_pvtu_parameter1(p,pgc,result);
 
@@ -75,11 +75,11 @@ void sflow_vtp_bed::pvtu(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
 
     if(p->P79>=1)
     psed->name_pvtu_bedshear(p,pgc,result);
-    
+
     if(p->P23==1)
     result<<"<PDataArray type=\"Float32\" Name=\"test\"/>"<<endl;
     result<<"</PPointData>"<<endl;
-    
+
     result<<"<Polys>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"/>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"offsets\" />"<<endl;

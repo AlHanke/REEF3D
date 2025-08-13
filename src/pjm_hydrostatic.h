@@ -56,9 +56,9 @@ private:
     double starttime,endtime;
     int count, gcval_press;
     int gcval_u, gcval_v, gcval_w;
-    
+
     density *pd;
-    
+
     concentration *pconc;
 };
 

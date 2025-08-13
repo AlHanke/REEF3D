@@ -37,27 +37,27 @@ sediment_part::sediment_part(lexer *p, fdm *a, ghostcell *pgc, turbulence *pptur
 {
     pBC = ppBC;
     pturb = ppturb;
-    
+
     sediment_logic(p,a,pgc,pturb);
 
     p->gcin4a_count=p->gcin_count;
     p->gcout4a_count=p->gcout_count;
-    
+
     
     volume_token=0;
-    
+
     if(p->F50==1)
     gcval_eta = 51;
-    
+
     if(p->F50==2)
     gcval_eta = 52;
-    
+
     if(p->F50==3)
     gcval_eta = 53;
-    
+
     if(p->F50==4)
     gcval_eta = 54;
-    
+
     // Create Folder
     if(p->mpirank==0 && p->Q180>0 && (p->Q181>0||p->Q182>0))
     mkdir("./REEF3D_CFD_SedPart",0777);
@@ -70,15 +70,15 @@ sediment_part::~sediment_part()
 void sediment_part::start_cfd(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reinitopo *preto, solver *psolv)
 {
     sedcalc=0;
-    
+
     if((p->S41==1 && p->count>=p->S43) || (p->S41==2 && p->simtime>=p->S45) || (p->S41==3 && p->simtime/p->wT>=p->S47))
     {
         sediment_algorithm_cfd(p,a,pgc,pflow,preto,pturb);
-        
+
     
     sedcalc=1;
     }
-    
+
     if(sedcalc==0)
     {
     fill_bedk(p,a,pgc);

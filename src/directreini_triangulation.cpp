@@ -76,7 +76,7 @@ void directreini::triangulation(lexer *p,fdm* a, field& b, fieldint& nodeflag, f
         if(b(i,j,k)<zero && b(i+1,j,k)<zero && b(i+1,j+1,k)<zero && b(i,j+1,k)<zero &&
            b(i,j,k+1)<zero && b(i+1,j,k+1)<zero && b(i+1,j+1,k+1)<zero && b(i,j+1,k+1)<zero)
         check=0;
-        
+
         if(b(i,j,k)>zero && b(i+1,j,k)>zero && b(i+1,j+1,k)>zero && b(i,j+1,k)>zero &&
            b(i,j,k+1)>zero && b(i+1,j,k+1)>zero && b(i+1,j+1,k+1)>zero && b(i,j+1,k+1)>zero)
         check=0;
@@ -101,7 +101,7 @@ void directreini::triangulation(lexer *p,fdm* a, field& b, fieldint& nodeflag, f
         if(b(i,j,k)<zero && b(i-1,j,k)<zero && b(i-1,j-1,k)<zero && b(i,j-1,k)<zero &&
            b(i,j,k-1)<zero && b(i-1,j,k-1)<zero && b(i-1,j-1,k-1)<zero && b(i,j-1,k-1)<zero)
         check=0;
-        
+
         if(b(i,j,k)>zero && b(i-1,j,k)>zero && b(i-1,j-1,k)>zero && b(i,j-1,k)>zero &&
            b(i,j,k-1)>zero && b(i-1,j,k-1)>zero && b(i-1,j-1,k-1)>zero && b(i,j-1,k-1)>zero)
         check=0;
@@ -182,7 +182,7 @@ void directreini::triangulation(lexer *p,fdm* a, field& b, fieldint& nodeflag, f
     if(nodeflag(i+1,j+1,k+1)==1)
     if(nodeflag(i,j+1,k+1)==1)
     {
-        
+
     // 1
     tri[count][0] = vertice(i,j,k);
     tri[count][1] = vertice(i,j+1,k);

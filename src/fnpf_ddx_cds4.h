@@ -36,7 +36,7 @@ public:
 
     virtual double sxx(lexer*, slice&);
     virtual double syy(lexer*, slice&);
-    
+
 private:
     double X1,X2,X3,X4,X0;
     double Y1,Y2,Y3,Y4,Y0;

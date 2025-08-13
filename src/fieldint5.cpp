@@ -31,7 +31,7 @@ fieldint5::fieldint5(lexer *p)
     jmax=p->jmax;
     kmin=p->kmin;
     kmax=p->kmax;
-    
+
     fieldalloc(p);
 
     pp=p;

@@ -54,7 +54,7 @@ private:
     int **flag,**active,**active_all,**flag_all,**elid,**elid_all;
     int **iloc, **iloc_all, **kloc, **kloc_all;
     double **xs,**xs_all;
-    
+
     int *totelnum,*totelnum_all,*elnum,**elnum_all,**displ;
     int maxelnum,maxlocalelnum,count,allcount;
     double *length,*ds,*norm;
@@ -65,9 +65,9 @@ private:
     const int probenum;
     const double eps;
     ofstream *lineout;
-    
+
     double domain_xs,domain_xe,domain_ys,domain_ye,domain_zs,domain_ze;
-    
+
     double uval,vval,wval,pval,kval,eval,edval;
     int check;
     double t;

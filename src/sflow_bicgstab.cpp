@@ -28,7 +28,7 @@ Author: Hans Bihs
 sflow_bicgstab::sflow_bicgstab(lexer* p,ghostcell *pgc):epsi(1e-19)
 {
     margin=3;
-    
+
     p->Darray(sj,p->imax*p->jmax*p->kmax);
     p->Darray(rj,p->imax*p->jmax*p->kmax);
     p->Darray(r0,p->imax*p->jmax*p->kmax);
@@ -50,7 +50,7 @@ sflow_bicgstab::~sflow_bicgstab()
 void sflow_bicgstab::start(lexer* p, ghostcell* pgc, slice &f, matrix2D &M, vec2D &xvec, vec2D &rhsvec, int var)
 {
     p->preconiter=0;
-    
+
     
     if(var==1)
     {
@@ -58,28 +58,28 @@ void sflow_bicgstab::start(lexer* p, ghostcell* pgc, slice &f, matrix2D &M, vec2
     ulast=p->ulast;
     vlast=0;
     }
-    
+
     if(var==2)
     {
     flagslice = p->flagslice2;
     ulast=0;
     vlast=p->vlast;
     }
-    
+
     if(var==4||var==5)
     {
     flagslice = p->flagslice4;
     ulast=0;
     vlast=0;
     }
-    
+
     fillxvec(p,f,rhsvec);
     solve(p,pgc,M,xvec,rhsvec,var,p->solveriter);
-    
+
     finalize(p,f);
 }
 
-    
+
 void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, vec2D &rhsvec, int var, int &solveriter)
 {
     solveriter=0;
@@ -92,9 +92,9 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
  restart:
     r_j=norm_r0=0.0;
     pgc->gcslparaxijk_single(p,x,var);
-    
+
     matvec_axb(p,M,x,rj);
-    
+
     SLICEFLEXLOOP
     {
         r0[IJ]=pj[IJ]=rj[IJ];
@@ -111,21 +111,21 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
         sigma=0.0;
         norm_vj=0.0;
         norm_rj=0.0;
-        
+
         // -------------------------
         precon_solve(p,pgc,ph,pj);
         pgc->gcslparaxijk_single(p,ph,var);
         // -------------------------
-        
+
         matvec_std(p,M,ph,vj);
-        
+
         SLICEFLEXLOOP
         {
             sigma   += vj[IJ]*r0[IJ];
             norm_vj += vj[IJ]*vj[IJ];
             norm_rj += rj[IJ]*rj[IJ];
         }
-        
+
         sigma = pgc->globalsum(sigma);
         norm_vj = sqrt(pgc->globalsum(norm_vj));
         norm_rj = sqrt(pgc->globalsum(norm_rj));
@@ -149,7 +149,7 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
     }
 
         norm_sj=0.0;
-        
+
         SLICEFLEXLOOP
         {
         sj[IJ] = rj[IJ] - alpha*vj[IJ];
@@ -166,9 +166,9 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
         // -------------------------
 
         matvec_std(p,M,sh,tj);
-        
+
         w1=w2=0.0;
-        
+
         SLICEFLEXLOOP
         {
             w1 += tj[IJ]*sj[IJ];
@@ -181,7 +181,7 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
         w=w1/(w2==0?1.0e-15:w2);
 
         r_j1=0.0;
-        
+
         SLICEFLEXLOOP
         {
         x[IJ] += alpha*ph[IJ] + w*sh[IJ];
@@ -192,7 +192,7 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
         r_j1=pgc->globalsum(r_j1);
 
         beta=alpha*r_j1/(w*r_j==0?1.0e-15:(w*r_j));
-        
+
         SLICEFLEXLOOP
         pj[IJ] = rj[IJ] + beta*(pj[IJ]-w*vj[IJ]);
     }
@@ -201,7 +201,7 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
     if(norm_sj<=p->N44)
     {
     r_j1=0.0;
-        
+
         SLICEFLEXLOOP
         {
         x[IJ] += alpha*ph[IJ];
@@ -215,25 +215,25 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
         r_j = r_j1 ;
 
         residual=0.0;
-        
+
         SLICEFLEXLOOP
         residual += rj[IJ]*rj[IJ];
 
         residual = sqrt(pgc->globalsum(residual))/double(p->cellnumtot2D);
-        
+
         ++solveriter;
-        
+
     }while((residual>=p->N44) && (solveriter<p->N46));
 
     }
-        
+
     
     SLICELOOP4
     {
     ph[IJ]=0.0;
     sh[IJ]=0.0;
     }
-    
+
     pgc->gcslparaxijk_single(p,ph,var);
     pgc->gcslparaxijk_single(p,sh,var);
 }
@@ -272,7 +272,7 @@ double sflow_bicgstab::res_calc(lexer *p, matrix2D &M, ghostcell *pgc, double *x
 {
     double y;
     double resi=0.0;
-    
+
     n=0;
     SLICEFLEXLOOP
     {
@@ -285,7 +285,7 @@ double sflow_bicgstab::res_calc(lexer *p, matrix2D &M, ghostcell *pgc, double *x
         + M.e[n]*x[IJm1]);
 
     resi+=y*y;
-    
+
     ++n;
     }
 
@@ -316,7 +316,7 @@ void sflow_bicgstab::fillxvec(lexer* p, slice& f, vec2D &rhsvec)
     SLICEFLEXLOOP
     {
     x[IJ] = f(i,j);
-    
+
     rhs[IJ] = rhsvec.V[n];
 
     ++n;

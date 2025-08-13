@@ -47,7 +47,7 @@ public:
     virtual void startf(lexer*, ghostcell*, field&, vec&, matrix_diag&, int);
     virtual void startM(lexer*, ghostcell*, double*, double*, double*, int);
     virtual void startV(lexer*, ghostcell*, double*, vec&, matrix_diag&, int);
-    
+
     void solve(lexer*,fdm*, ghostcell*, vec&, vec&, int, int, int&);
 
     void fillxvec1(lexer*,fdm*,field&);
@@ -55,29 +55,29 @@ public:
     void fillxvec3(lexer*,fdm*,field&);
     void fillxvec4(lexer*,fdm*,field&);
     void fillbackvec(lexer*,fdm*,field&,vec&,int);
-    
+
     
     void make_grid(lexer*,ghostcell*);
     void delete_grid(lexer*,ghostcell*);
     void fill_matrix_7p(lexer*,fdm*, ghostcell*,field&);
-    
+
     void fillbackvec_F(lexer*,double*,double*,int);
     void fillbackvec_F_v2(lexer*,double*,double*,int);
-    
+
     
     void create_solvers(lexer*,ghostcell*);
     void delete_solvers(lexer*,ghostcell*);
-    
+
     // FNPF Laplace solver
     virtual void startF(lexer*, ghostcell*, double*, vec&, matrix_diag&, int);
     void make_grid_F(lexer*, ghostcell*);
     void fill_matrix_F_7p(lexer*,ghostcell*, matrix_diag&,double*,double*,vec&);
 
+
     
-    
-    
+
 private:
-    
+
 // HYPRE
     HYPRE_IJMatrix A;
     HYPRE_ParCSRMatrix parcsr_A;
@@ -85,23 +85,23 @@ private:
     HYPRE_ParVector par_b;
     HYPRE_IJVector x;
     HYPRE_ParVector par_x;
-    
+
     HYPRE_Solver solver, precond;
-    
+
     vec xvec;
-   
+
     double val[19];
     int col[19];
     int *rows;
     int rownum;
     int num_iterations;
     double final_res_norm;
-   
+
     int is,ie,js,je,ks,ke;
-    
+
     
 // -------------
-    
+
     int *sizeM;
 
     int numiter,count,q;

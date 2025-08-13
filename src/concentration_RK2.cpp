@@ -43,7 +43,7 @@ concentration_RK2::~concentration_RK2()
 void concentration_RK2::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, turbulence *pturb, solver* psolv, ghostcell* pgc, ioflow* pflow)
 {
     field4 ark1(p);
-    
+
     // Step 1
     starttime=pgc->timer();
 
@@ -68,7 +68,7 @@ void concentration_RK2::start(fdm* a, lexer* p, convection* pconvec, diffusion* 
     C(i,j,k) = 0.5*C(i,j,k)
                 + 0.5*ark1(i,j,k)
                 + 0.5*p->dt*a->L(i,j,k);
-    
+
     bc_concentration_start(p,a,pgc,C);
     pgc->start4(p,C,gcval_concentration);
 

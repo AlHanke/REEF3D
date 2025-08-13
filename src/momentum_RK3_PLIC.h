@@ -60,12 +60,12 @@ public:
 
 private:
     fluid_update *pupdate;
-    
+
     void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void clear_FGH(lexer*,fdm*);
-    
+
     int gcval_u, gcval_v, gcval_w;
     double starttime;
 

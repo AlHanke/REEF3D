@@ -32,19 +32,19 @@ void net_barDyn::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     if (p->X320_type[nNet]==12)
     {
         cyl_ini(p,pgc);
- 
+
         buildNet_cyl(p);
     }
     else if (p->X320_type[nNet]==13)
     {
         wall_ini(p,pgc);
-        
+
         buildNet_wall(p);
     }
     else if (p->X320_type[nNet]==14)
     {
         cone_ini(p,pgc);
-        
+
         buildNet_wall(p);
     }
 
@@ -53,7 +53,7 @@ void net_barDyn::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     xn_ = x_;
     xdotnn_ = xdot_;
     xdotn_ = xdot_;
-    
+
     if (p->X325_dt==0.0)
     {
         dtnn_ = p->dt;
@@ -72,7 +72,7 @@ void net_barDyn::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     //- Initialise printing
     printtime = 0.0;
     print(p);
-    
+
     //- Update porous zone
     coupling_dlm_cfd(p,a,pgc);
 }
@@ -84,19 +84,19 @@ void net_barDyn::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     if (p->X320_type[nNet]==12)
     {
         cyl_ini(p,pgc);
- 
+
         buildNet_cyl(p);
     }
     else if (p->X320_type[nNet]==13)
     {
         wall_ini(p,pgc);
-        
+
         buildNet_wall(p);
     }
     else if (p->X320_type[nNet]==14)
     {
         cone_ini(p,pgc);
-        
+
         buildNet_wall(p);
     }
 
@@ -105,7 +105,7 @@ void net_barDyn::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     xn_ = x_;
     xdotnn_ = xdot_;
     xdotn_ = xdot_;
-    
+
     if (p->X325_dt==0.0)
     {
         dtnn_ = p->dt;
@@ -124,7 +124,7 @@ void net_barDyn::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     //- Initialise printing
     printtime = 0.0;
     print(p);
-    
+
     //- Update porous zone
     coupling_dlm_nhflow(p,d,pgc);
 }

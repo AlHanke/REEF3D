@@ -43,35 +43,35 @@ class mooring_Spring : public mooring
 public:
     mooring_Spring(int);
     virtual ~mooring_Spring();
-    
+
     virtual void start(lexer*, ghostcell*);
     virtual void initialize(lexer*, ghostcell*);
     virtual void mooringForces(double&, double&, double&);
-    
+
 private:
 
     // Print
     void print(lexer*);
-    
+
     // --------------------
-    
+
     // Line number
     int line;
-    
+
     // Material constants
     double L0, k;
-    
+
     // Mesh
     double dx, dy, dz, L;
 
     // Forces
     double T0, T;
     double Xme_, Yme_, Zme_;
-    
+
     // Print
     char name[100];
     ofstream eTout;
-    
+
     // Breaking
     bool broken;
     double breakTension, breakTime, curr_time;

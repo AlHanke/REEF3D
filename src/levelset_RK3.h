@@ -45,7 +45,7 @@ public:
 private:
     fluid_update *pupdate;
     picard *ppicard;
-    
+
     field4 ark1,ark2;
 
     int gcval_phi;

@@ -36,13 +36,13 @@ public:
     virtual ~ptf_laplace_cds2();
 
     virtual void start(lexer *,fdm*,ghostcell*,solver*,field&,slice&);
-    
+
 private:
-    
+
     double Bx,By;
     double ab,denom;
     double teta;
-    
+
     
     sliceint4 bc;
 

@@ -43,7 +43,7 @@ void ghostcell::facenbx(lexer* p,fieldint& cv, int* range)
     i=p->gcpara2[n][0];
     j=p->gcpara2[n][1];
     k=p->gcpara2[n][2];
-    
+
         isend2[count]=cv(i,j,k);
         ++count;
     }

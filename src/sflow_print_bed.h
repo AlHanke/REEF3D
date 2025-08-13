@@ -46,7 +46,7 @@ public:
 private:
     void ini_location(lexer*, fdm2D*);
     int conv(double);
-    
+
     double *x,*y;
     int gauge_num;
 

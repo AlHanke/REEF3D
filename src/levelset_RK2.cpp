@@ -61,25 +61,25 @@ levelset_RK2::levelset_RK2(lexer* p, fdm *a, ghostcell* pgc, heat *&pheat, conce
 
     if(p->F30>0 && p->H10==0 && p->W30==0 && p->F300==0 && p->W90==0)
     pupdate = new fluid_update_fsf(p,a,pgc);
-    
+
     if(p->F30>0 && p->H10==0 && p->W30==1 && p->F300==0 && p->W90==0)
     pupdate = new fluid_update_fsf_comp(p,a,pgc);
-    
+
     if(p->F30>0 && p->H10>0 && p->W90==0 && p->F300==0 && p->H3==1)
     pupdate = new fluid_update_fsf_heat(p,a,pgc,pheat);
-    
+
     if(p->F30>0 && p->H10>0 && p->W90==0 && p->F300==0 && p->H3==2)
     pupdate = new fluid_update_fsf_heat_Bouss(p,a,pgc,pheat);
-    
+
     if(p->F30>0 && p->C10>0 && p->W90==0 && p->F300==0)
     pupdate = new fluid_update_fsf_concentration(p,a,pgc,pconc);
-    
+
     if(p->F30>0 && p->H10==0 && p->W30==0 && p->F300==0 && p->W90>0)
     pupdate = new fluid_update_rheology(p);
-    
+
     if(p->F300>0)
     pupdate = new fluid_update_void();
-    
+
 
     if(p->F46==2)
     ppicard = new picard_f(p);
@@ -116,7 +116,7 @@ void levelset_RK2::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
                 + p->dt*a->L(i,j,k);
 
     pflow->phi_relax(p,pgc,ark1);
-    
+
     pgc->start4(p,ark1,gcval_phi);
 
 // Step 2
@@ -134,17 +134,17 @@ void levelset_RK2::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
     pgc->start4(p,ls,gcval_phi);
 
     ppls->start(p,a,pgc,pflow);
-    
+
     p->lsmtime=pgc->timer()-starttime;
 
     preini->start(a,p,ls, pgc, pflow);
-    
+
     
     ppicard->correct_ls(p,a,pgc,ls);
     ppls->picardmove(p,a,pgc);
 
     pupdate->start(p,a,pgc);
-    
+
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<"lsmtime: "<<setprecision(3)<<p->lsmtime<<endl;
 }

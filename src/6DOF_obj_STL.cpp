@@ -29,7 +29,7 @@ void sixdof_obj::read_stl(lexer *p, ghostcell *pgc)
     string word;
     int count, vert_count;
     double trivec_x,trivec_y,trivec_z;
-    
+
     // read and count number of triangles
     ifstream stl;
     if (n6DOF==0)
@@ -42,26 +42,26 @@ void sixdof_obj::read_stl(lexer *p, ghostcell *pgc)
         sprintf(str,"floating-%i.stl",n6DOF);
         stl.open(str, ios_base::in);
     }
-    
+
     tstart[entity_count]=tricount;
-    
+
     count=tricount;
-    
+
     int chk=0;
     while(!stl.eof())
     {
         stl>>word;
-        
+
         if(word=="facet")
         ++count;
 
         if(word=="solid")
         chk=1;
     }
-    
+
     stl.close();
     stl.clear();
-    
+
     if(chk==0)
     {
     cout<<"Please convert STL file to ASCII format!"<<endl<<endl;
@@ -69,7 +69,7 @@ void sixdof_obj::read_stl(lexer *p, ghostcell *pgc)
     pgc->final();
     exit(0);
     }
-    
+
     // create vecs
     p->Dresize(tri_x,tricount,count,3,3);
     p->Dresize(tri_y,tricount,count,3,3);
@@ -77,9 +77,9 @@ void sixdof_obj::read_stl(lexer *p, ghostcell *pgc)
     p->Dresize(tri_x0,tricount,count,3,3);
     p->Dresize(tri_y0,tricount,count,3,3);
     p->Dresize(tri_z0,tricount,count,3,3);
-    
+
     tricount=count;
-    
+
     // reopen and read triangles
     if (n6DOF==0)
     {
@@ -91,34 +91,34 @@ void sixdof_obj::read_stl(lexer *p, ghostcell *pgc)
         sprintf(str,"floating-%i.stl",n6DOF);
         stl.open(str, ios_base::in);
     }
-    
+
     count=-1;
     while(!stl.eof())
     {
-    
+
         stl>>word;
-        
+
         if(word=="facet")
         {
         ++count;
         vert_count=0;
         }
-        
+
         if(word=="normal")
         stl>>trivec_x>>trivec_y>>trivec_z;
-        
+
         if(word=="vertex")
         {
         stl>>tri_x[count][vert_count]>>tri_y[count][vert_count]>>tri_z[count][vert_count];
-        
+
         ++vert_count;
         }
     }
     stl.close();
-    
+
     tricount = count + 1;
     tend[entity_count] = tricount;
-    
+
     // scale STL model
     if (p->X181==1)
     for(n=0; n<tricount; ++n)
@@ -128,7 +128,7 @@ void sixdof_obj::read_stl(lexer *p, ghostcell *pgc)
         tri_y[n][q] *= p->X181_y;
         tri_z[n][q] *= p->X181_z;
     }
-    
+
     // change orgin
     if(p->X182==1)
     for(n=0; n<tricount; ++n)
@@ -138,7 +138,7 @@ void sixdof_obj::read_stl(lexer *p, ghostcell *pgc)
         tri_y[n][q] += p->X182_y;
         tri_z[n][q] += p->X182_z;
     }
-    
+
     // rotate STL model
     p->X183_phi *= -(PI/180.0);
     p->X183_theta *= -(PI/180.0);

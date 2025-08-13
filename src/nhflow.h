@@ -49,7 +49,7 @@ class nhflow
 public:
 
     virtual void ini(lexer*, fdm_nhf*, ghostcell*, ioflow*)=0;
-    
+
 
 
 };

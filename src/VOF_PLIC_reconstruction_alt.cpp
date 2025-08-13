@@ -46,7 +46,7 @@ void VOF_PLIC::reconstructPlane_alt(fdm* a, lexer* p, field& voffield)
     {
         case 0:
                 break;
-                
+
         case 1:
                 break;
         case 2:
@@ -84,7 +84,7 @@ void VOF_PLIC::reconstructPlane_alt(fdm* a, lexer* p, field& voffield)
                 break;
     }
     //normalise normal vector (to be sure)
-    
+
     if(p->F88 != 9)
     {
     double vecsum = sqrt(nx(i,j,k)*nx(i,j,k)+ny(i,j,k)*ny(i,j,k)+nz(i,j,k)*nz(i,j,k));
@@ -92,18 +92,18 @@ void VOF_PLIC::reconstructPlane_alt(fdm* a, lexer* p, field& voffield)
     ny(i,j,k)=ny(i,j,k)/vecsum;
     nz(i,j,k)=nz(i,j,k)/vecsum;
   //  cout<<"nx:"<<nx(i,j,k)<<" ny:"<<ny(i,j,k)<<" nz:"<<nz(i,j,k)<<" i:"<<i<<" j:"<<j<<" k:"<<k<<endl;
-    
+
     //scale with cellsize
     n_a=fabs(nx(i,j,k))*p->DXN[IP];
     n_b=fabs(ny(i,j,k))*p->DYN[JP];
     n_c=fabs(nz(i,j,k))*p->DZN[KP];
-    
+
     //normalise scaled vector
     double vecsum2 = sqrt(n_a*n_a+n_b*n_b+n_c*n_c);
     n_a=n_a/vecsum2;
     n_b=n_b/vecsum2;
     n_c=n_c/vecsum2;
-    
+
     //sort vector components
     if(n_b>=n_a)
     {
@@ -115,7 +115,7 @@ void VOF_PLIC::reconstructPlane_alt(fdm* a, lexer* p, field& voffield)
         n_1=n_b;
         n_2=n_a;
     }
-    
+
     if(n_c>=n_2)
     {
         n_3=n_c;
@@ -131,7 +131,7 @@ void VOF_PLIC::reconstructPlane_alt(fdm* a, lexer* p, field& voffield)
         n_3=n_2;
         n_2=n_c;
     }
-    
+
     //reduced symmetry transformation
     V=0.5-fabs(V0-0.5);
     if(n_1+n_2<=2.0*V*n_3)   //case 5
@@ -142,12 +142,12 @@ void VOF_PLIC::reconstructPlane_alt(fdm* a, lexer* p, field& voffield)
     {
         r=0.5*n_1+sqrt(2*V*n_2*n_3-1.0/12.0*n_1*n_1);
     }
-    
+
     else if(6.0*V*n_2*n_3<n_1*n_1) //case 1
     {
         r=cbrt(6.0*V*n_1*n_2*n_3);
     }
-    
+
     else //cases 3 und 4
     {
         double x3, y32, u3,f3;
@@ -167,7 +167,7 @@ void VOF_PLIC::reconstructPlane_alt(fdm* a, lexer* p, field& voffield)
             y42=fdim(4.0*t4*t4*t4,x4*x4);
             u4=cbrt(x4*x4+y42);
             f4=0.5*(n_1+n_2+n_3)-(0.20998684*t4+0.13228342*u4)*1.0/sqrt(u4)*sin(0.5235988-1.0/3.0*atan(sqrt(y42)/x4));
-            
+
             r=f4;
         }
     }
@@ -180,12 +180,12 @@ void VOF_PLIC::reconstructPlane_alt(fdm* a, lexer* p, field& voffield)
     {
         r0=-(0.5*(n_1+n_2+n_3)-r);
     }
-    
+
     alpha(i,j,k)=r0*sqrt(nx(i,j,k)*nx(i,j,k)*p->DXN[IP]*p->DXN[IP]+ny(i,j,k)*ny(i,j,k)*p->DYN[JP]*p->DYN[JP]+nz(i,j,k)*nz(i,j,k)*p->DZN[KP]*p->DZN[KP]);
    // cout<<"alpha: "<<alpha(i,j,k)<<" nx:"<<nx(i,j,k)<<" ny:"<<ny(i,j,k)<<" nz:"<<nz(i,j,k)<<endl;
    }
 }
-    
+
 double VOF_PLIC::calcAlphaFromInput(fdm* a, lexer* p, double n_x, double n_y, double n_z, double d_x, double d_y, double d_z, double V0)
 {
     double vecsum = sqrt(n_x*n_x+n_y*n_y+n_z*n_z);
@@ -194,18 +194,18 @@ double VOF_PLIC::calcAlphaFromInput(fdm* a, lexer* p, double n_x, double n_y, do
     n_y=n_y/vecsum;
     n_z=n_z/vecsum;
   //  cout<<"nx:"<<nx(i,j,k)<<" ny:"<<ny(i,j,k)<<" nz:"<<nz(i,j,k)<<" i:"<<i<<" j:"<<j<<" k:"<<k<<endl;
-    
+
     //scale with cellsize
     n_a=fabs(n_x)*d_x;
     n_b=fabs(n_y)*d_y;
     n_c=fabs(n_z)*d_z;
-    
+
     //normalise scaled vector
     double vecsum2 = sqrt(n_a*n_a+n_b*n_b+n_c*n_c);
     n_a=n_a/vecsum2;
     n_b=n_b/vecsum2;
     n_c=n_c/vecsum2;
-    
+
     //sort vector components
     if(n_b>=n_a)
     {
@@ -217,7 +217,7 @@ double VOF_PLIC::calcAlphaFromInput(fdm* a, lexer* p, double n_x, double n_y, do
         n_1=n_b;
         n_2=n_a;
     }
-    
+
     if(n_c>=n_2)
     {
         n_3=n_c;
@@ -233,7 +233,7 @@ double VOF_PLIC::calcAlphaFromInput(fdm* a, lexer* p, double n_x, double n_y, do
         n_3=n_2;
         n_2=n_c;
     }
-    
+
     //reduced symmetry transformation
     V=0.5-fabs(V0-0.5);
     if(n_1+n_2<=2.0*V*n_3)   //case 5
@@ -244,12 +244,12 @@ double VOF_PLIC::calcAlphaFromInput(fdm* a, lexer* p, double n_x, double n_y, do
     {
         r=0.5*n_1+sqrt(2*V*n_2*n_3-1.0/12.0*n_1*n_1);
     }
-    
+
     else if(6.0*V*n_2*n_3<n_1*n_1) //case 1
     {
         r=cbrt(6.0*V*n_1*n_2*n_3);
     }
-    
+
     else //cases 3 und 4
     {
         double x3, y32, u3,f3;
@@ -269,7 +269,7 @@ double VOF_PLIC::calcAlphaFromInput(fdm* a, lexer* p, double n_x, double n_y, do
             y42=fdim(4.0*t4*t4*t4,x4*x4);
             u4=cbrt(x4*x4+y42);
             f4=0.5*(n_1+n_2+n_3)-(0.20998684*t4+0.13228342*u4)*1.0/sqrt(u4)*sin(0.5235988-1.0/3.0*atan(sqrt(y42)/x4));
-            
+
             r=f4;
         }
     }
@@ -282,9 +282,9 @@ double VOF_PLIC::calcAlphaFromInput(fdm* a, lexer* p, double n_x, double n_y, do
     {
         r0=-(0.5*(n_1+n_2+n_3)-r);
     }
-    
+
     ret=r0*sqrt(n_x*n_x*d_x*d_x+n_y*n_y*d_y*d_y+n_z*n_z*d_z*d_z);
-    
+
     return ret;
 }
 
@@ -297,7 +297,7 @@ double VOF_PLIC::return_alpha_reconstructPlane_alt(fdm* a, lexer* p, field& voff
     {
         case 0:
                 break;
-                
+
         case 1:
                 break;
         case 2:
@@ -335,7 +335,7 @@ double VOF_PLIC::return_alpha_reconstructPlane_alt(fdm* a, lexer* p, field& voff
                 break;
     }
     //normalise normal vector (to be sure)
-    
+
     if(p->F88 != 9)
     {
     double vecsum = sqrt(nx(i,j,k)*nx(i,j,k)+ny(i,j,k)*ny(i,j,k)+nz(i,j,k)*nz(i,j,k));
@@ -343,18 +343,18 @@ double VOF_PLIC::return_alpha_reconstructPlane_alt(fdm* a, lexer* p, field& voff
     ny(i,j,k)=ny(i,j,k)/vecsum;
     nz(i,j,k)=nz(i,j,k)/vecsum;
   //  cout<<"nx:"<<nx(i,j,k)<<" ny:"<<ny(i,j,k)<<" nz:"<<nz(i,j,k)<<" i:"<<i<<" j:"<<j<<" k:"<<k<<endl;
-    
+
     //scale with cellsize
     n_a=fabs(nx(i,j,k))*p->DXN[IP];
     n_b=fabs(ny(i,j,k))*p->DYN[JP];
     n_c=fabs(nz(i,j,k))*p->DZN[KP];
-    
+
     //normalise scaled vector
     double vecsum2 = sqrt(n_a*n_a+n_b*n_b+n_c*n_c);
     n_a=n_a/vecsum2;
     n_b=n_b/vecsum2;
     n_c=n_c/vecsum2;
-    
+
     //sort vector components
     if(n_b>=n_a)
     {
@@ -366,7 +366,7 @@ double VOF_PLIC::return_alpha_reconstructPlane_alt(fdm* a, lexer* p, field& voff
         n_1=n_b;
         n_2=n_a;
     }
-    
+
     if(n_c>=n_2)
     {
         n_3=n_c;
@@ -382,7 +382,7 @@ double VOF_PLIC::return_alpha_reconstructPlane_alt(fdm* a, lexer* p, field& voff
         n_3=n_2;
         n_2=n_c;
     }
-    
+
     //reduced symmetry transformation
     V=0.5-fabs(V0-0.5);
     if(n_1+n_2<=2.0*V*n_3)   //case 5
@@ -393,12 +393,12 @@ double VOF_PLIC::return_alpha_reconstructPlane_alt(fdm* a, lexer* p, field& voff
     {
         r=0.5*n_1+sqrt(2*V*n_2*n_3-1.0/12.0*n_1*n_1);
     }
-    
+
     else if(6.0*V*n_2*n_3<n_1*n_1) //case 1
     {
         r=cbrt(6.0*V*n_1*n_2*n_3);
     }
-    
+
     else //cases 3 und 4
     {
         double x3, y32, u3,f3;
@@ -418,7 +418,7 @@ double VOF_PLIC::return_alpha_reconstructPlane_alt(fdm* a, lexer* p, field& voff
             y42=fdim(4.0*t4*t4*t4,x4*x4);
             u4=cbrt(x4*x4+y42);
             f4=0.5*(n_1+n_2+n_3)-(0.20998684*t4+0.13228342*u4)*1.0/sqrt(u4)*sin(0.5235988-1.0/3.0*atan(sqrt(y42)/x4));
-            
+
             r=f4;
         }
     }
@@ -431,10 +431,10 @@ double VOF_PLIC::return_alpha_reconstructPlane_alt(fdm* a, lexer* p, field& voff
     {
         r0=-(0.5*(n_1+n_2+n_3)-r);
     }
-    
+
     alpha(i,j,k)=r0*sqrt(nx(i,j,k)*nx(i,j,k)*p->DXN[IP]*p->DXN[IP]+ny(i,j,k)*ny(i,j,k)*p->DYN[JP]*p->DYN[JP]+nz(i,j,k)*nz(i,j,k)*p->DZN[KP]*p->DZN[KP]);
    // cout<<"alpha: "<<alpha(i,j,k)<<" nx:"<<nx(i,j,k)<<" ny:"<<ny(i,j,k)<<" nz:"<<nz(i,j,k)<<endl;
    }
-   
+
    return alpha(i,j,k);
 }

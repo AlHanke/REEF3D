@@ -57,7 +57,7 @@ private:
     float ffn;
     double ddn;
     int n,iin;
-    
+
     double fx(double,double,double,double,double);
     double fz(double,double,double,double,double);
 };

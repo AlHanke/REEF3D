@@ -64,7 +64,7 @@ void wave_lib_spectrum::irregular_parameters(lexer *p)
 
     if(p->B94==0)
     wD=p->phimean;
-    
+
     if(p->B94==1)
     wD=p->B94_wdt;
 
@@ -438,15 +438,15 @@ void wave_lib_spectrum::irregular_parameters(lexer *p)
 
 
         print_spectrum(p);
-        
+
         // directional spreading
         directional_spreading(p);
         print_spreading(p);
-                
+
                 
     // peak wave speed
     double wdt,wL;
-    
+
     if(p->B94==0)
     wdt=p->phimean;
 

@@ -34,14 +34,14 @@ public:
 
     resize_class();
     virtual ~resize_class();
-    
+
     void rank(int);
 
     void Darray(double*&, int);
     void Darray(double**&, int, int);
     void Darray(double***&, int, int, int);
     void Darray(double****&, int, int, int, int);
-    
+
     void Darray(double**&, int, int*);
 
     void Iarray(int*&, int);
@@ -49,7 +49,7 @@ public:
     void Iarray(int***&, int, int, int);
     void Iarray(int****&, int, int, int, int);
     void Iarray(int*****&, int, int, int, int, int);
-    
+
     void Iarray(int**&, int, int*);
     void Iarray(int***&, int, int*, int);
 
@@ -68,25 +68,25 @@ public:
     void del_Iarray(int***&,int, int, int);
     void del_Iarray(int****&,int, int, int, int);
     void del_Iarray(int*****&,int,int, int, int, int);
-    
+
     void del_Iarray(int***&,int, int*, int);
 
     void del_cvec(char*&,int);
     void del_cvec(char**&,int, int);
     void del_cvec(char***&,int, int, int);
-    
+
     void Dresize(double*&,int,int);
     void Dresize(double**&,int,int,int,int);
     void Dresize(double***&,int,int,int,int,int,int);
     void Dresize(double****&,int,int,int,int,int,int,int,int);
-    
+
     void Iresize(int*&,int,int);
     void Iresize(int**&,int,int,int,int);
     void Iresize(int***&,int,int,int,int,int,int);
     void Iresize(int****&,int,int,int,int,int,int,int,int);
-    
+
     void Iresize(int***&,int,int,int*,int*,int,int);
-    
+
     int pararank;
 
 };

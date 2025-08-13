@@ -29,28 +29,28 @@ void particle_pls::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *fl
 {
     int numpt=0;
     int count;
-    
+
     for(n=0;n<active;++n)
     if(flag[n]>0)
     ++numpt;
+
     
-    
-    
+
     if(p->count>0)
-    
+
     
     if(p->mpirank==0)
     {
         if(sign==1)
         pvtu_pos(a,p,pgc);
-        
+
         if(sign==2)
         pvtu_neg(a,p,pgc);
     }
-    
+
     if(sign==1)
     header_pos(a,p,pgc);
-    
+
     if(sign==2)
     header_neg(a,p,pgc);
 
@@ -62,14 +62,14 @@ void particle_pls::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *fl
 
     offset[n]=0;
     ++n;
-    
+
     offset[n]=offset[n-1]+4*(numpt)+4;
     ++n;
     offset[n]=offset[n-1]+4*(numpt)+4;
     ++n;
     offset[n]=offset[n-1]+4*(numpt)+4;
     ++n;
-    
+
     // end scalars
     offset[n]=offset[n-1]+4*(numpt)*3+4;
     ++n;
@@ -86,7 +86,7 @@ void particle_pls::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *fl
     result<<"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
     result<<"<UnstructuredGrid>"<<endl;
     result<<"<Piece NumberOfPoints=\""<<numpt<<"\" NumberOfCells=\""<<numpt<<"\">"<<endl;
-    
+
     
     result<<"<PointData >"<<endl;
     result<<"<DataArray type=\"Float32\" Name=\"phi\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
@@ -96,15 +96,15 @@ void particle_pls::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *fl
     result<<"<DataArray type=\"Float32\" Name=\"correction\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     result<<"</PointData>"<<endl;
+
     
-    
-    
+
 
     result<<"<Points>"<<endl;
     result<<"<DataArray type=\"Float32\"  NumberOfComponents=\"3\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     result<<"</Points>"<<endl;
-    
+
     
 
     result<<"<Cells>"<<endl;
@@ -121,7 +121,7 @@ void particle_pls::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *fl
 
 //----------------------------------------------------------------------------
     result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
-    
+
 
 //  lsv
     iin=4*(numpt);
@@ -132,7 +132,7 @@ void particle_pls::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *fl
     ffn=float(f[n][3]);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
 //  radius
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
@@ -153,20 +153,20 @@ void particle_pls::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *fl
         {
         if(f[n][3]<=-f[n][4])
         ffn=float(1.0);
-        
+
         if(f[n][3]>-f[n][4])
         ffn=float(0.0);
         }
-        
+
         if(sign==2)
         {
         if(f[n][3]>=f[n][4])
         ffn=float(1.0);
-        
+
         if(f[n][3]<f[n][4])
         ffn=float(0.0);
         }
-        
+
     result.write((char*)&ffn, sizeof (float));
     }
 
@@ -185,7 +185,7 @@ void particle_pls::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *fl
     ffn=float(f[n][2]+p->originz);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
 //  Connectivity
     count=0;
     iin=4*(numpt)*2;

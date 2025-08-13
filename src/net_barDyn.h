@@ -46,56 +46,56 @@ class net_barDyn : public net, public boundarycheck
 public:
     net_barDyn(int, lexer*);
     virtual ~net_barDyn();
-    
+
     virtual void start_cfd(lexer*, fdm*, ghostcell*, double, Eigen::Matrix3d);
     virtual void start_nhflow(lexer*, fdm_nhf*, ghostcell*, double, Eigen::Matrix3d);
-    
+
     virtual void initialize_cfd(lexer*, fdm*, ghostcell*);
     virtual void initialize_nhflow(lexer*, fdm_nhf*, ghostcell*);
     virtual void netForces(lexer*, double&, double&, double&, double&, double&, double&);
-    
+
     virtual const EigenMat& getLagrangePoints(){return lagrangePoints;}
     virtual const EigenMat& getLagrangeForces(){return lagrangeForces;}
     virtual const EigenMat& getCollarVel(){return collarVel;}
     virtual const EigenMat& getCollarPoints(){return collarPoints;}
 
-    
+
 private:
-    
+
     // -------------------------------
     // Runtime
     void startLoop(lexer*, ghostcell*, int&);
     void update_velocity_cfd(lexer*, fdm*, ghostcell*);
     void update_velocity_nhflow(lexer*, fdm_nhf*, ghostcell*);
-    
+
     void updateField_cfd(lexer*, fdm*, ghostcell*, int);
     void updateField_nhflow(lexer*, fdm_nhf*, ghostcell*, int);
-    
+
     void coupling_dlm_cfd(lexer*, fdm*, ghostcell*);
     void coupling_dlm_nhflow(lexer*, fdm_nhf*, ghostcell*);
-    
+
     // -------------------------------
-    
+
     // Preprocessing
     void cone_ini(lexer*, ghostcell*);
     void cyl_ini(lexer*, ghostcell*);
     void wall_ini(lexer*, ghostcell*);
-    
+
     typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> MatrixXd;
     typedef Eigen::Matrix<double, 1, Eigen::Dynamic> VectorXd;
     typedef Eigen::Matrix<double, 3, 3> Matrix3d;
     typedef Eigen::Matrix<double, 1, 3> Vector3d;
-    
+
     typedef vector<vector<double> > MatrixVd;
     typedef vector<vector<int> > MatrixVi;
-    
+
     void print(lexer*);
-    
+
     void buildNet_cyl(lexer*);
     void buildNet_wall(lexer*);
-    
+
     Eigen::VectorXd timeWeight(lexer*);
-    
+
     void updateAcc(lexer*, ghostcell*);
     void updateTopAcc(lexer*);
     void fillLinSystem(lexer*, ghostcell*);
@@ -103,14 +103,14 @@ private:
     void fillNonLinSystem(lexer*, ghostcell*);
     void fillNonLinRhs(lexer*, ghostcell*);
     void limitTension();
-    
+
     void getForces(lexer*);
     void gravityForce(lexer*);
     void dragForce(lexer*);
     void inertiaForce(lexer*);
     Eigen::Vector3d screenForce(lexer*, const double&, const Vector3d&, const Vector3d&, const double&, const int, const int);
     void screenForceCoeff(lexer*,double&, double&, const double&, const double&, const double&);
-    
+
     
     void triangulation(lexer*, ghostcell*);
     void create_triangle
@@ -121,18 +121,18 @@ private:
             const double&,const double&,const double&,const double&,
             const double&
         );
-    
+
     
     // ------
-    
+
     
     // Parallelisation
     int nNet;
     double *xstart, *xend, *ystart, *yend, *zstart, *zend;
-    
+
     // Material constants
     double EA, w, rho_c, l_c, d_c, kappa, C1_, C2_;
-    
+
     // Mesh
     double origin_x, origin_y, origin_z, phi, theta, psi;
     double *l0;
@@ -144,7 +144,7 @@ private:
     double **coupledField, **coupledFieldn, **fb, **K;
     int *Pb, *Nb, *Pi, *Ni;
     vector<vector<int> > meshID;
-    
+
     // Net mesh
     int tend;
     MatrixVd tri_x, tri_y, tri_z, tri_vel, tri_forces;
@@ -152,7 +152,7 @@ private:
     vector<Eigen::Vector3d> lagrangeForces;
     vector<Eigen::Vector3d> collarVel;
     vector<Eigen::Vector3d> collarPoints;
-    
+
     // Forces
     double Tne,Fx,Fy,Fz;
     int **nfK, *nfbK;

@@ -32,7 +32,7 @@ void resize_class::del_Darray(double *&field,int numi)
 void resize_class::del_Darray(double **&field,int numi, int numj)
 {
     int i;
-    
+
     if(numj>0)
     for(i=0;i<numi;++i)
     delete [ ] field[i];
@@ -44,7 +44,7 @@ void resize_class::del_Darray(double **&field,int numi, int numj)
 void resize_class::del_Darray(double ***&field,int numi, int numj, int numk)
 {
     int i,j;
-    
+
     if(numk>0)
     for(i=0; i<numi; ++i)
     for(j=0; j<numj; ++j)
@@ -61,7 +61,7 @@ void resize_class::del_Darray(double ***&field,int numi, int numj, int numk)
 void resize_class::del_Darray(double ****&field,int numi, int numj, int numk, int numl)
 {
     int i,j,k;
-    
+
     if(numl>0)
     for(i=0; i<numi; ++i)
     for(j=0; j<numj; ++j)
@@ -72,7 +72,7 @@ void resize_class::del_Darray(double ****&field,int numi, int numj, int numk, in
     for(i=0; i<numi; ++i)
     for(j=0; j<numj; ++j)
     delete [ ] field[i][j];
-    
+
     if(numj>0)
     for(i=0; i<numi; ++i)
     delete [ ] field[i];
@@ -92,11 +92,11 @@ void resize_class::del_Iarray(int *&field,int numi)
 void resize_class::del_Iarray(int **&field,int numi, int numj)
 {
     int i;
-    
+
     if(numj>0)
     for(i=0;i<numi;++i)
     delete [ ] field[i];
-    
+
     if(numi>0)
     delete [ ] field;
 }
@@ -128,7 +128,7 @@ void resize_class::del_Iarray(int ***&field,int numi, int *numj, int numk)
     for(j=0; j<numj[i]; ++j)
     delete [ ] field[i][j];
 
-    
+
     for(i=0; i<numi; ++i)
     if(numj[i]>0)
     delete [ ] field[i];
@@ -151,7 +151,7 @@ void resize_class::del_Iarray(int ****&field,int numi, int numj, int numk, int n
     for(i=0; i<numi; ++i)
     for(j=0; j<numj; ++j)
     delete [ ] field[i][j];
-    
+
     if(numj>0)
     for(i=0; i<numi; ++i)
     delete [ ] field[i];
@@ -176,12 +176,12 @@ void resize_class::del_Iarray(int *****&field,int numi, int numj, int numk, int 
     for(j=0; j<numj; ++j)
     for(k=0; k<numk; ++k)
     delete [ ] field[i][j][k];
-    
+
     if(numk>0)
     for(i=0; i<numi; ++i)
     for(j=0; j<numj; ++j)
     delete [ ] field[i][j];
-    
+
     if(numj>0)
     for(i=0; i<numi; ++i)
     delete [ ] field[i];
@@ -201,11 +201,11 @@ void resize_class::del_cvec(char *&field,int numi)
 void resize_class::del_cvec(char **&field,int numi, int numj)
 {
     int i;
-    
+
     if(numj>0)
     for(i=0;i<numi;++i)
     delete [ ] field[i];
-    
+
     if(numi>0)
     delete [ ] field;
 }
@@ -213,16 +213,16 @@ void resize_class::del_cvec(char **&field,int numi, int numj)
 void resize_class::del_cvec(char ***&field,int numi, int numj, int numk)
 {
     int i,j;
-    
+
     if(numk>0)
     for(i=0; i<numi; ++i)
     for(j=0; j<numj; ++j)
     delete [ ] field[i][j];
-    
+
     if(numj>0)
     for(i=0; i<numi; ++i)
     delete [ ] field[i];
-    
+
     if(numi>0)
     delete [ ] field;
 }

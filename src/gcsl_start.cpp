@@ -199,19 +199,19 @@ void ghostcell::gcsl_start4Vint(lexer *p, int *f, int gcv)
     gcsldistro4Vint(p,f,p->gcbsl4[qq][0],p->gcbsl4[qq][1], p->gcbsl4[qq][5], p->gcdsl4[qq], gcv, p->gcbsl4[qq][4], p->gcbsl4[qq][3]);
     endtime=timer();
     p->gctime+=endtime-starttime;
-    
+
 
     SLICELOOP4
     {
         if(p->flagslice4[Im1Jm1]<0 && p->flagslice4[Im1J]<0 && p->flagslice4[IJm1]<0)
         f[Im1Jm1] = f[IJ];
-        
+
         if(p->flagslice4[Im1Jp1]<0 && p->flagslice4[Im1J]<0 && p->flagslice4[IJp1]<0)
         f[Im1Jp1] = f[IJ];
-        
+
         if(p->flagslice4[Ip1Jm1]<0 && p->flagslice4[Ip1J]<0 && p->flagslice4[IJm1]<0)
         f[Ip1Jm1] = f[IJ];
-        
+
         if(p->flagslice4[Ip1Jp1]<0 && p->flagslice4[Ip1J]<0 && p->flagslice4[IJp1]<0)
         f[Ip1Jp1] = f[IJ];
     }

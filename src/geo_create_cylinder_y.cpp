@@ -40,11 +40,11 @@ void geometry_objects::cylinder_y(lexer *p, ghostcell *pgc, int &ts, int &te, in
 
 // Vertices
     ds = (2.0*PI)/double(snum);
-    
+
     phi=0.0;
-    
+
     tstart[entity_count]=tricount;
-    
+
 
     for(n=0;n<snum;++n)
     {
@@ -52,55 +52,55 @@ void geometry_objects::cylinder_y(lexer *p, ghostcell *pgc, int &ts, int &te, in
     tri_x[tricount][0] = xm;
     tri_y[tricount][0] = y1;
     tri_z[tricount][0] = zm;
-    
+
     tri_x[tricount][1] = xm + r1*sin(phi);
     tri_y[tricount][1] = y1;
     tri_z[tricount][1] = zm + r1*cos(phi);
-    
+
     tri_x[tricount][2] = xm + r1*sin(phi+ds);
     tri_y[tricount][2] = y1;
     tri_z[tricount][2] = zm + r1*cos(phi+ds);
     ++tricount;
-        
+
     //top circle
     tri_x[tricount][0] = xm;
     tri_y[tricount][0] = y2;
     tri_z[tricount][0] = zm;
-    
+
     tri_x[tricount][1] = xm + r1*sin(phi);
     tri_y[tricount][1] = y2;
     tri_z[tricount][1] = zm + r1*cos(phi);
-    
+
     tri_x[tricount][2] = xm + r1*sin(phi+ds);
     tri_y[tricount][2] = y2;
     tri_z[tricount][2] = zm + r1*cos(phi+ds);
     ++tricount;
-    
+
     //side
     // 1st triangle
     tri_x[tricount][0] = xm + r1*sin(phi);
     tri_y[tricount][0] = y1;
     tri_z[tricount][0] = zm + r1*cos(phi);
-    
+
     tri_x[tricount][1] = xm + r1*sin(phi+ds);
     tri_y[tricount][1] = y2;
     tri_z[tricount][1] = zm + r1*cos(phi+ds);
-    
+
     tri_x[tricount][2] = xm + r1*sin(phi+ds);
     tri_y[tricount][2] = y1;
     tri_z[tricount][2] = zm + r1*cos(phi+ds);
 
     ++tricount;
-    
+
     // 2nd triangle
     tri_x[tricount][0] = xm + r1*sin(phi);
     tri_y[tricount][0] = y1;
     tri_z[tricount][0] = zm + r1*cos(phi);
-    
+
     tri_x[tricount][1] = xm + r1*sin(phi+ds);
     tri_y[tricount][1] = y2;
     tri_z[tricount][1] = zm + r1*cos(phi+ds);
-    
+
     tri_x[tricount][2] = xm + r1*sin(phi);
     tri_y[tricount][2] = y2;
     tri_z[tricount][2] = zm + r1*cos(phi);
@@ -108,7 +108,7 @@ void geometry_objects::cylinder_y(lexer *p, ghostcell *pgc, int &ts, int &te, in
 
     phi+=ds;
     }
-    
+
     tend[entity_count]=tricount;
 }
 */

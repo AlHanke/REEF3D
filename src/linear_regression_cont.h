@@ -47,7 +47,7 @@ private:
     double xsum,ysum;
     double xy_sum,xx_sum;
     double SS_xy,SS_xx;
-  
+
 };
 
 #endif

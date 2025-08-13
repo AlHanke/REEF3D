@@ -53,7 +53,7 @@ private:
     int feldsize;
 
     int imin,imax,jmax,jmin,kmin,kmax;
-    
+
     lexer *pp;
 };
 

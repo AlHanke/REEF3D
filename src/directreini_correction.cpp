@@ -34,7 +34,7 @@ void directreini::correction(lexer *p, fdm* a, ghostcell *pgc, field& b)
     for(n=0;n<numvert;++n)
     ls1[n]=ls[n];
 
-        
+
     for(n=0;n<numvert;++n)
     {
         dV1 = 1.0;
@@ -43,11 +43,11 @@ void directreini::correction(lexer *p, fdm* a, ghostcell *pgc, field& b)
         C2 = 0.0;
         mi = 0.0;
         eta = 0.0;
-        
+
         count=0;
         while(dV1>1.0e-10*dV && count<1000)
         {
-            
+
             phival = ls0[n];
             if(phival>epsi)
             H0=1.0;
@@ -57,7 +57,7 @@ void directreini::correction(lexer *p, fdm* a, ghostcell *pgc, field& b)
 
             if(fabs(phival)<=epsi)
             H0=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
-            
+
             dval = ls[n];
             if(dval>epsi)
             H=1.0;
@@ -67,7 +67,7 @@ void directreini::correction(lexer *p, fdm* a, ghostcell *pgc, field& b)
 
             if(fabs(dval)<=epsi)
             H=0.5*(1.0 + dval/epsi + (1.0/PI)*sin((PI*dval)/epsi));
-            
+
             
             /*
             phival = ls0[n];
@@ -76,7 +76,7 @@ void directreini::correction(lexer *p, fdm* a, ghostcell *pgc, field& b)
 
             if(phival<0.0)
             H0=0.0;
-            
+
             dval = ls[n];
             if(dval>=0)
             H=1.0;
@@ -84,19 +84,19 @@ void directreini::correction(lexer *p, fdm* a, ghostcell *pgc, field& b)
             if(dval<0)
             H=0.0;
             */
-            
+
             dV1 = dV*(H0-H);
-            
+
             denom = fabs(ls[n])>1.0e-19?fabs(ls[n]):1.0e20;
             eta = dV1/denom;
-            
+
             ls[n] += eta;
-            
+
             
             ++count;
         }
     }
-    
+
     
     for(n=0;n<numvert;++n)
     {

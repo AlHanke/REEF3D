@@ -38,19 +38,19 @@ void fnpf_force_ale::print_ini(lexer* p, fdm_fnpf *c, ghostcell *pgc)
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_FNPF_Force_ALE",0777);
-    
+
     if(p->mpirank==0)
     {
         // open force_ale file
         sprintf(name,"./REEF3D_FNPF_Force_ALE/REEF3D_FNPF_ALE_Force-%i.dat",ID+1);
-        
+
         fout.open(name);
 
         fout<<"x \t y \t Cd \t Cm"<<endl;
 
         fout<<p->P85_x[ID]<<" \t "<<p->P85_y[ID]<<" \t "<<p->P85_cd[ID]<<" \t "<<p->P85_cm[ID] <<endl;
         fout<<endl<<endl;
-     
+
         fout<<"it \t time \t Fx \t Fy ";
 
         fout<<endl;

@@ -45,7 +45,7 @@ void fluid_update_vof::start(lexer *p, fdm* a, ghostcell* pgc)
     double psiro;
     p->volume1=0.0;
     p->volume2=0.0;
-    
+
     if(p->count>iter)
     iocheck=0;
     iter=p->count;
@@ -66,7 +66,7 @@ void fluid_update_vof::start(lexer *p, fdm* a, ghostcell* pgc)
 
             if(fabs(phival)<=p->psi)
                 H=0.5*(1.0 + phival/(p->psi) + (1.0/PI)*sin((PI*phival)/(p->psi)));
-                
+
             psiro = p->psi;
             if(phival>psiro)
                 Hro=1.0;
@@ -77,7 +77,7 @@ void fluid_update_vof::start(lexer *p, fdm* a, ghostcell* pgc)
             if(fabs(phival)<=psiro)
                 Hro=0.5*(1.0 + phival/(psiro) + (1.0/PI)*sin((PI*phival)/(psiro)));
         }
-            
+
         if(p->F92>1)
         {
             H=a->vof(i,j,k);
@@ -86,20 +86,20 @@ void fluid_update_vof::start(lexer *p, fdm* a, ghostcell* pgc)
             if(H<0.0)
                 H=0.0;
         }
-            
+
         a->ro(i,j,k)=     ro_water*H +   ro_air*(1.0-H);
         a->visc(i,j,k)= visc_water*H + visc_air*(1.0-H);
-            
+
         p->volume1 += p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*(H-(1.0-PORVAL4));
         p->volume2 += p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*(1.0-H-(1.0-PORVAL4));
     }
-    
+
     pgc->start4(p,a->ro,gcval_ro);
     pgc->start4(p,a->visc,gcval_visc);
 
     p->volume1 = pgc->globalsum(p->volume1);
     p->volume2 = pgc->globalsum(p->volume2);
-    
+
     if(p->mpirank==0 && iocheck==0 && (p->count%p->P12==0))
     {
     cout<<"Volume 1: "<<p->volume1<<endl;

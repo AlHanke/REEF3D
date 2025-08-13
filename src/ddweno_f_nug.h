@@ -46,7 +46,7 @@ public:
      double ddwenox(field&, double);
      double ddwenoy(field&, double);
      double ddwenoz(field&, double);
-     
+
      double dswenox(slice&, double);
      double dswenoy(slice&, double);
 
@@ -57,16 +57,16 @@ public:
     void iqmax(lexer*, field&);
     void jqmax(lexer*, field&);
     void kqmax(lexer*, field&);
-    
+
     void isqmin(lexer*, slice&);
     void jsqmin(lexer*, slice&);
     void isqmax(lexer*, slice&);
     void jsqmax(lexer*, slice&);
 
-    
+
     double grad;
     double *DX,*DY,*DZ;
-    
+
 private:
     lexer *p;
 };

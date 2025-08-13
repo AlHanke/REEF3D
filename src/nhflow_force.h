@@ -49,13 +49,13 @@ private:
     void reconstruct(lexer*, fdm_nhf*);
     void addpoint(lexer*,fdm_nhf*,int,int);
     void finalize(lexer*,fdm_nhf*);
-    
+
     void allocate(lexer*,fdm_nhf*,ghostcell*);
     void deallocate(lexer*,fdm_nhf*,ghostcell*);
 
     int *vertice,*nodeflag;
     double *eta;
-    
+
     int **tri, **facet, *confac, *numfac,*numpt;
     double **ccpt, **pt, *ls;
     double   dV1,dV2,C1,C2,mi;
@@ -65,10 +65,10 @@ private:
     int polygon_sum,polygon_num,vertice_num;
     const double zero,interfac;
     double epsi;
-    
+
     
     void force_calc(lexer*,fdm_nhf*,ghostcell*);
-    
+
     
     void print_force(lexer*,fdm_nhf*,ghostcell*);
     void print_ini(lexer*,fdm_nhf*,ghostcell*);
@@ -85,11 +85,11 @@ private:
     double printtime,printtime2;
     int forceprintcount;
     int gcval_press;
-    
+
     // force
     double Fx,Fy,Fz;
     double A_tot,A;
-    
+
     double x1,x2,x3,x4,y1,y2,y3,y4,z1,z2,z3,z4;
     double xc,yc,zc;
     double nx,ny,nz,norm;
@@ -98,14 +98,14 @@ private:
     double etaval,hspval;
     double du,dv,dw;
     double at,bt,ct,st;
-    
+
     ofstream fout;
-    
+
     double xs,xe,ys,ye,zs,ze;
     double xm,ym,zm;
     int is,ie,js,je,ks,ke;
     const int ID;
-    
+
     double ux,vy,wz,vel,pressure;
     double xloc,yloc,zloc;
     double xlocvel,ylocvel,zlocvel;

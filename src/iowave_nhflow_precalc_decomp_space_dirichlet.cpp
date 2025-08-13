@@ -34,12 +34,12 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
     {
     i=p->gcslin[n][0];
     j=p->gcslin[n][1];
-    
+
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
         db = distbeach(p);
-        
+
         // Wave Generation
         if(p->B98==3 && h_switch==1)
         {
@@ -55,17 +55,17 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
             }
         }
     }
-        
+
 // U
     count=0;
     for(n=0;n<p->gcslin_count;n++)
     {
     i=p->gcslin[n][0];
     j=p->gcslin[n][1];
-    
+
     xg = xgen1(p);
     yg = ygen1(p);
-        
+
         KLOOP
         PCHECK
         {
@@ -90,15 +90,15 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
     {
     i=p->gcslin[n][0];
     j=p->gcslin[n][1];
-    
+
     xg = xgen2(p);
     yg = ygen2(p);
-        
+
         KLOOP
         PCHECK
         {
         z=p->ZSP[IJK]-p->phimean;
-        
+
         // Wave Generation
         if(p->B98>=3 && v_switch==1)
         {
@@ -118,15 +118,15 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
     {
     i=p->gcslin[n][0];
     j=p->gcslin[n][1];
-    
+
     xg = xgen(p);
     yg = ygen(p);
-        
+
         KLOOP
         PCHECK
         {
         z=p->ZSP[IJK]-p->phimean;
-        
+
         // Wave Generation
         if(p->B98>=3 && w_switch==1)
         {

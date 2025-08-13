@@ -28,7 +28,7 @@ Author: Hans Bihs
 double interpolation::tricubic4a(field& f, int& i,int& j, int& k, double wx, double wy, double wz)
 {
     int i0,j0,k0,i3,j3,k3;
-    
+
 pip=4;
     i0=j0=k0=1;
     i3=j3=k3=2;
@@ -108,7 +108,7 @@ double interpolation::cctripol4_a(fdm* a,field& f, double xp, double yp, double 
 double interpolation::cint4a(double wx, double f0, double f1, double f2, double f3)
 {
     double di0,di1,a0,a1,a2,a3,df;
-    
+
     di0 = (f2-f0)*0.5;
     di1 = (f3-f1)*0.5;
     df=(f2-f1);

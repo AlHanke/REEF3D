@@ -35,7 +35,7 @@ field1::field1(lexer *p)
 
     fieldalloc(p);
     rank=p->mpirank;
-    
+
     pp=p;
 }
 

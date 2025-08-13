@@ -37,10 +37,10 @@ class strain : public gradient
 public:
     strain(lexer*);
     virtual ~strain()=default;
-    
+
     double Sij2(lexer*,fdm*);
     double Qij2(lexer*,fdm*);
-    
+
     double sij(lexer*,fdm*,int,int);
     double qij(lexer*,fdm*,int,int);
     double pk(lexer*,fdm*,field&);
@@ -58,7 +58,7 @@ public:
 private:
     void symmetricStrainRateTensor(lexer*,field&,field&,field&);
     void skewSymmetricStrainRateTensor(lexer*,field&,field&,field&);
-    
+
     double s11,s22,s33,s12,s13,s23;
     double r11,r22,r33,r12,r13,r23;
     double ss11,ss22,ss33,ss12,ss13,ss23;

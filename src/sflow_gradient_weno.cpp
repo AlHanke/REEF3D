@@ -37,19 +37,19 @@ sflow_gradient_weno::~sflow_gradient_weno()
 double sflow_gradient_weno::ddx(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
 {
     grad = 0.0;
-    
+
     if(advec>0.0)
     {
     iqmin(p,b,f,ipol);
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
     }
-    
+
 
     if(advec<0.0)
     {
@@ -57,7 +57,7 @@ double sflow_gradient_weno::ddx(lexer *p,fdm2D *b, slice& f, int ipol, double ad
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -70,20 +70,20 @@ double sflow_gradient_weno::ddx(lexer *p,fdm2D *b, slice& f, int ipol, double ad
 double sflow_gradient_weno::ddy(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
 {
     grad = 0.0;
-    
+
     if(advec>0.0)
     {
     jqmin(p,b,f,ipol);
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
-    
+
     }
-    
+
 
     if(advec<0.0)
     {
@@ -91,13 +91,13 @@ double sflow_gradient_weno::ddy(lexer *p,fdm2D *b, slice& f, int ipol, double ad
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
-    
+
     }
-    
+
     return grad;
 }
 

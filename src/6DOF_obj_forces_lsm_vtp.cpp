@@ -30,19 +30,19 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
     int polygon_num3,polygon_sum3;
     if(p->mpirank==0)
     pvtp(p,a,pgc);
-    
+
     name_iter(p,a,pgc);
 
     ofstream result;
     result.open(name, ios::binary);
     //---------------------------------------------
-    
+
     polygon_num=facount;
-    
+
     polygon_sum=0;
     for(n=0;n<polygon_num;++n)
     polygon_sum+=numpt[n];
-    
+
     polygon_sum3=polygon_num3=0;
     for(n=0;n<polygon_num;++n)
     if(numpt[n]==4)
@@ -50,9 +50,9 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
     polygon_sum3+=numpt[n];
     ++polygon_num3;
     }
-    
+
     vertice_num = ccptcount;
-    
+
     //---------------------------------------------
     n=0;
     offset[n]=0;
@@ -72,7 +72,7 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
     offset[n]=offset[n-1] + 4*polygon_num+ 4;
     ++n;
     //---------------------------------------------
-    
+
     
 
     result<<"<?xml version=\"1.0\"?>"<<endl;
@@ -85,7 +85,7 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
     result<<"<DataArray type=\"Float32\"  NumberOfComponents=\"3\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     result<<"</Points>"<<endl;
-    
+
     result<<"<PointData >"<<endl;
     result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
@@ -100,7 +100,7 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
     ++n;
     result<<"<DataArray type=\"Int32\"  Name=\"types\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     result<<"</Polys>"<<endl;
-    
+
 
     result<<"</Piece>"<<endl;
     result<<"</PolyData>"<<endl;
@@ -123,7 +123,7 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
     ffn=ccpt[n][2];
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
 //  Velocity
     iin=4*vertice_num*3;
     result.write((char*)&iin, sizeof (int));
@@ -138,7 +138,7 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
     ffn=float(p->ccipol3(a->w,ccpt[n][0]-p->originx,ccpt[n][1]-p->originy,ccpt[n][2]-p->originz));
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     
 //  Pressure
     iin=4*vertice_num;
@@ -158,25 +158,25 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
         {
         iin=facet[n][0];
         result.write((char*)&iin, sizeof (int));
-        
+
         iin=facet[n][1];
         result.write((char*)&iin, sizeof (int));
-        
+
         iin=facet[n][2];
         result.write((char*)&iin, sizeof (int));
         }
-        
+
         if(numpt[n]==4)
         {
         iin=facet[n][0];
         result.write((char*)&iin, sizeof (int));
-        
+
         iin=facet[n][1];
         result.write((char*)&iin, sizeof (int));
-        
+
         iin=facet[n][3];
         result.write((char*)&iin, sizeof (int));
-        
+
         iin=facet[n][2];
         result.write((char*)&iin, sizeof (int));
         }

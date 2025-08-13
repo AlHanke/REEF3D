@@ -58,15 +58,15 @@ void driver::loop_cfd_sf(fdm* a)
             cout<<"simtime: "<<p->simtime<<endl;
             cout<<setprecision(5)<<"timestep: "<<p->dt<<endl;
             cout<<"sftimestep: "<<p->sfdt<<" sfmax: "<<p->sfmax<<endl;
-            
+
 
             if(p->B90>0 && p->B92<=11)
             cout<<"t/T: "<<p->simtime/p->wT<<endl;
-            
+
             if(p->B90>0 && p->B92>11)
             cout<<"t/T: "<<p->simtime/p->wTp<<endl;
         }
-        
+
         p->fbmax=0.0;
         p->sfmax=0.0;
 
@@ -81,13 +81,13 @@ void driver::loop_cfd_sf(fdm* a)
 
         // Turbulence computation
         pturb->start(a,p,pturbdisc,pturbdiff,psolv,pgc,pflow,pvrans);
-        
+
         // Heat computation
         pheat->start(a,p,pconvec,pdiff,psolv,pgc,pflow);
-        
+
         // Concentration computation
         pconc->start(a,p,pconcdisc,pconcdiff,pturb,psolv,pgc,pflow);
-        
+
         // Sediment computation
         psed->start_cfd(p,a,pgc,pflow,preto,psolv);
 
@@ -95,7 +95,7 @@ void driver::loop_cfd_sf(fdm* a)
         pflow->v_relax(p,a,pgc,a->v);
         pflow->w_relax(p,a,pgc,a->w);
         pfsf->update(p,a,pgc,a->phi);
-    
+
         // Momentum
         pmom_sf->starti(p,a,pgc,p6dof,pvrans,pfsi);
 
@@ -135,7 +135,7 @@ void driver::loop_cfd_sf(fdm* a)
             cout<<"total time: "<<setprecision(6)<<p->totaltime<<"   average time: "<<setprecision(3)<<p->meantime<<endl;
             cout<<"timer per step: "<<setprecision(3)<<p->itertime<<endl;
             }
-            
+
         // Write log files
         mainlog(p);
         maxlog(p);

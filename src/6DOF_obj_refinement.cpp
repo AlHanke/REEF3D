@@ -40,41 +40,41 @@ void sixdof_obj::geometry_refinement(lexer *p, ghostcell *pgc)
         x0 = tri_x[n][0];
         y0 = tri_y[n][0];
         z0 = tri_z[n][0];
-        
+
         x1 = tri_x[n][1];
         y1 = tri_y[n][1];
         z1 = tri_z[n][1];
-        
+
         x2 = tri_x[n][2];
         y2 = tri_y[n][2];
         z2 = tri_z[n][2];
-        
+
             at = sqrt(pow(x1-x0,2.0) + pow(y1-y0,2.0) + pow(z1-z0,2.0));
             bt = sqrt(pow(x1-x2,2.0) + pow(y1-y2,2.0) + pow(z1-z2,2.0));
             ct = sqrt(pow(x2-x0,2.0) + pow(y2-y0,2.0) + pow(z2-z0,2.0));
-                
+
             st = 0.5*(at+bt+ct);
-                
+
             A_triang = sqrt(MAX(0.0,st*(st-at)*(st-bt)*(st-ct)));
-            
+
             A+=A_triang;
     }
-    
+
     A = pgc->globalsum(A);
-    
+
     if(p->mpirank==0)
     cout<<endl<<"A_orig: "<<A<<endl;
+
     
-    
-    
+
     tri_x_r.reserve(3*tricount);
     tri_y_r.reserve(3*tricount);
     tri_z_r.reserve(3*tricount);
-    
+
     tri_x_r.resize(tricount,vector<double>(3,0.0));
     tri_y_r.resize(tricount,vector<double>(3,0.0));
     tri_z_r.resize(tricount,vector<double>(3,0.0));
-    
+
     
     for (int i = 0; i < tricount; i++)
     {
@@ -85,107 +85,107 @@ void sixdof_obj::geometry_refinement(lexer *p, ghostcell *pgc)
             tri_z_r[i][j] = tri_z[i][j];
         }
     }
-    
+
     
     double critL = p->DXM*p->X186;
-    
+
     double dxmin=1.0e10;
-    
+
     ILOOP
     dxmin = MIN(dxmin,p->DXN[IP]);
-    
+
     if(p->j_dir==1)
     JLOOP
     dxmin = MIN(dxmin,p->DYN[JP]);
-    
+
     KLOOP
     dxmin = MIN(dxmin,p->DZN[KP]);
-    
+
         
-    
+
     for (int n = 0; n < tri_x_r.size(); n++)
     {
     //cout<<"n: "<<n<<" tri_x_r.size()"<<tri_x_r.size()<<endl;
-        
+
         x0 = tri_x_r[n][0];
         x1 = tri_x_r[n][1];
         x2 = tri_x_r[n][2];
-        
+
         y0 = tri_y_r[n][0];
         y1 = tri_y_r[n][1];
         y2 = tri_y_r[n][2];
-        
+
         z0 = tri_z_r[n][0];
         z1 = tri_z_r[n][1];
         z2 = tri_z_r[n][2];
-           
+
         at = sqrt(pow(x1-x0,2.0) + pow(y1-y0,2.0) + pow(z1-z0,2.0));
         bt = sqrt(pow(x1-x2,2.0) + pow(y1-y2,2.0) + pow(z1-z2,2.0));
         ct = sqrt(pow(x2-x0,2.0) + pow(y2-y0,2.0) + pow(z2-z0,2.0));
-        
+
         if(p->X185==1)
         critL = p->DXM*p->X186;
-        
+
         if(p->X185==2)
         critL = dxmin*p->X186;
-        
+
         if(p->X185==3)
         {
         dxmin=1.0e10;
-        
+
         double xm = (1.0/3.0)*(x0+x1+x2);
         double ym = (1.0/3.0)*(y0+y1+y2);
         double zm = (1.0/3.0)*(z0+z1+z2);
-        
+
         i = p->posc_i(xm);
         j = p->posc_j(ym);
         k = p->posc_k(zm);
-        
+
         dxmin = MIN(dxmin,p->DXN[IP]);
-        
+
         if(p->j_dir==1)
         dxmin = MIN(dxmin,p->DYN[JP]);
-        
+
         dxmin = MIN(dxmin,p->DZN[KP]);
         }
-        
+
         // Check size of triangle and split into 4 triangles if too big
-        
+
         if(p->j_dir==0)
         tridist=(at + bt + ct)/3.0;
-        
+
         if(p->j_dir==1)
         tridist=(at + bt + ct)/3.0;
-        
+
         if((at>critL || bt>critL || ct>critL) && p->X185>0)
         if(tridist>critL && p->X185>0)
         {
             // Half points
-            
+
             // a
             x01 = x0 + (x1 - x0)/2.0;
             y01 = y0 + (y1 - y0)/2.0;
             z01 = z0 + (z1 - z0)/2.0;
-            
+
             // c
             x02 = x0 + (x2 - x0)/2.0;
             y02 = y0 + (y2 - y0)/2.0;
             z02 = z0 + (z2 - z0)/2.0;
-            
+
             // b
             x12 = x1 + (x2 - x1)/2.0;
             y12 = y1 + (y2 - y1)/2.0;
             z12 = z1 + (z2 - z1)/2.0;
-                        
+
             // Old normal vector
-                
+
             nx_old = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
             ny_old = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
             nz_old = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
-            
+
             
             // Delete old and add new triangles
-        
+
             tri_x_r.erase(tri_x_r.begin() + n);
             tri_y_r.erase(tri_y_r.begin() + n);
             tri_z_r.erase(tri_z_r.begin() + n);
@@ -195,32 +195,32 @@ void sixdof_obj::geometry_refinement(lexer *p, ghostcell *pgc)
             create_triangle(x01,y01,z01,x12,y12,z12,x02,y02,z02,nx_old,ny_old,nz_old);
             create_triangle(x01,y01,z01,x1,y1,z1,x12,y12,z12,nx_old,ny_old,nz_old);
             create_triangle(x02,y02,z02,x12,y12,z12,x2,y2,z2,nx_old,ny_old,nz_old);
-            
+
             /*if(at>=bt && at>=ct)
             {
             create_triangle(x0,y0,z0,x01,y01,z01,x2,y2,z2,nx_old,ny_old,nz_old);
             create_triangle(x01,y01,z01,x1,y1,z1,x2,y2,z2,nx_old,ny_old,nz_old);
             }
-            
+
             if(bt>at && bt>=ct)
             {
             create_triangle(x0,y0,z0,x1,y1,z1,x12,y12,z12,nx_old,ny_old,nz_old);
             create_triangle(x0,y0,z0,x12,y12,z12,x2,y2,z2,nx_old,ny_old,nz_old);
             }
-            
+
             if(ct>at && ct>bt)
             {
             create_triangle(x0,y0,z0,x1,y1,z1,x02,y02,z02,nx_old,ny_old,nz_old);
             create_triangle(x02,y02,z02,x1,y1,z1,x2,y2,z2,nx_old,ny_old,nz_old);
             }*/
-    
+
         
             if (tri_x_r.size() > 100000) break;
         }
-        
+
         if (tri_x_r.size() > 100000) break;
     }
-    
+
     
     p->Dresize(tri_x,tricount,tri_x_r.size(),3,3);
     p->Dresize(tri_y,tricount,tri_y_r.size(),3,3);
@@ -228,10 +228,10 @@ void sixdof_obj::geometry_refinement(lexer *p, ghostcell *pgc)
     p->Dresize(tri_x0,tricount,tri_x_r.size(),3,3);
     p->Dresize(tri_y0,tricount,tri_y_r.size(),3,3);
     p->Dresize(tri_z0,tricount,tri_z_r.size(),3,3);
-    
+
     tricount = tri_x_r.size();
     tend[0] = tricount;
-    
+
     for (int i = 0; i < tricount; i++)
     {
         for (int j = 0; j < 3; j++)
@@ -241,7 +241,7 @@ void sixdof_obj::geometry_refinement(lexer *p, ghostcell *pgc)
             tri_z[i][j] = tri_z_r[i][j];
         }
     }
-    
+
     
     A=0.0;
     for (int n = 0; n < tricount; ++n)
@@ -249,28 +249,28 @@ void sixdof_obj::geometry_refinement(lexer *p, ghostcell *pgc)
         x0 = tri_x[n][0];
         y0 = tri_y[n][0];
         z0 = tri_z[n][0];
-        
+
         x1 = tri_x[n][1];
         y1 = tri_y[n][1];
         z1 = tri_z[n][1];
-        
+
         x2 = tri_x[n][2];
         y2 = tri_y[n][2];
         z2 = tri_z[n][2];
-        
+
              at = sqrt(pow(x1-x0,2.0) + pow(y1-y0,2.0) + pow(z1-z0,2.0));
             bt = sqrt(pow(x1-x2,2.0) + pow(y1-y2,2.0) + pow(z1-z2,2.0));
             ct = sqrt(pow(x2-x0,2.0) + pow(y2-y0,2.0) + pow(z2-z0,2.0));
-                
+
             st = 0.5*(at+bt+ct);
-                
+
             A_triang = sqrt(MAX(0.0,st*(st-at)*(st-bt)*(st-ct)));
-            
+
             A+=A_triang;
     }
-    
+
     A = pgc->globalsum(A);
-    
+
     if(p->mpirank==0)
     cout<<"A_refined: "<<A<<endl;
 }
@@ -285,14 +285,14 @@ void sixdof_obj::create_triangle
 )
 {
     double nx,ny,nz,temp;
-    
+
     vector<double> tri_x_new(3,0.0);
     vector<double> tri_y_new(3,0.0);
     vector<double> tri_z_new(3,0.0);
 
-    
+
     // Calculate new normal vector
-    
+
     nx = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
     ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
     nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
@@ -300,10 +300,10 @@ void sixdof_obj::create_triangle
     nx = nx > 1.0e-5 ? nx : nx_old;
     ny = ny > 1.0e-5 ? ny : ny_old;
     nz = nz > 1.0e-5 ? nz : nz_old;
-    
+
     
     // Arrange triangle such that normal vector points outward
-    
+
     if
     (
            SIGN(nx)!=SIGN(nx_old)
@@ -337,10 +337,10 @@ void sixdof_obj::create_triangle
         tri_z_new[1] = z1;
         tri_z_new[2] = z2;
     }
-    
+
     
     // Add triangle to list
-    
+
     tri_x_r.push_back(tri_x_new);
     tri_y_r.push_back(tri_y_new);
     tri_z_r.push_back(tri_z_new);

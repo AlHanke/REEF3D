@@ -42,9 +42,9 @@ public:
 
 private:
     lexer *p;
-    
+
     sflow_flux *pflux;
-    
+
 };
 
 #endif

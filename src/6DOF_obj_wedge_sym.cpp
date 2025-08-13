@@ -27,11 +27,11 @@ Author: Hans Bihs
 void sixdof_obj::wedge_sym(lexer *p, ghostcell *pgc, int id)
 {
     double xm;
-        
+
     
     xs = p->X153_xs;
     xe = p->X153_xe;
-    
+
     ys = p->X153_ys;
     ye = p->X153_ye;
 
@@ -39,36 +39,36 @@ void sixdof_obj::wedge_sym(lexer *p, ghostcell *pgc, int id)
     ze = p->X153_ze;
 
     xm = xs + 0.5*(xe-xs);
-    
+
 
 // Vert
 
 // Face 3
     // Tri 1
     tstart[entity_count]=tricount;
-    
+
     tri_x[tricount][0] = xs;
     tri_y[tricount][0] = ys;
     tri_z[tricount][0] = zs;
-    
+
     tri_x[tricount][1] = xe;
     tri_y[tricount][1] = ys;
     tri_z[tricount][1] = zs;
-    
+
     tri_x[tricount][2] = xe;
     tri_y[tricount][2] = ye;
     tri_z[tricount][2] = zs;
     ++tricount;
-    
+
     // Tri 2
     tri_x[tricount][0] = xs;
     tri_y[tricount][0] = ys;
     tri_z[tricount][0] = zs;
-    
+
     tri_x[tricount][1] = xe;
     tri_y[tricount][1] = ye;
     tri_z[tricount][1] = zs;
-    
+
     tri_x[tricount][2] = xs;
     tri_y[tricount][2] = ye;
     tri_z[tricount][2] = zs;
@@ -79,25 +79,25 @@ void sixdof_obj::wedge_sym(lexer *p, ghostcell *pgc, int id)
     tri_x[tricount][0] = xs;
     tri_y[tricount][0] = ys;
     tri_z[tricount][0] = zs;
-    
+
     tri_x[tricount][1] = xe;
     tri_y[tricount][1] = ys;
     tri_z[tricount][1] = zs;
-    
+
     tri_x[tricount][2] = xm;
     tri_y[tricount][2] = ys;
     tri_z[tricount][2] = ze;
     ++tricount;
-    
+
     // Tri 4
     tri_x[tricount][0] = xs;
     tri_y[tricount][0] = ye;
     tri_z[tricount][0] = zs;
-    
+
     tri_x[tricount][1] = xe;
     tri_y[tricount][1] = ye;
     tri_z[tricount][1] = zs;
-    
+
     tri_x[tricount][2] = xm;
     tri_y[tricount][2] = ye;
     tri_z[tricount][2] = ze;
@@ -108,25 +108,25 @@ void sixdof_obj::wedge_sym(lexer *p, ghostcell *pgc, int id)
     tri_x[tricount][0] = xs;
     tri_y[tricount][0] = ys;
     tri_z[tricount][0] = zs;
-    
+
     tri_x[tricount][1] = xm;
     tri_y[tricount][1] = ys;
     tri_z[tricount][1] = ze;
-    
+
     tri_x[tricount][2] = xs;
     tri_y[tricount][2] = ye;
     tri_z[tricount][2] = zs;
     ++tricount;
-    
+
     // Tri 6
     tri_x[tricount][0] = xs;
     tri_y[tricount][0] = ye;
     tri_z[tricount][0] = zs;
-    
+
     tri_x[tricount][1] = xm;
     tri_y[tricount][1] = ye;
     tri_z[tricount][1] = ze;
-    
+
     tri_x[tricount][2] = xm;
     tri_y[tricount][2] = ys;
     tri_z[tricount][2] = ze;
@@ -137,31 +137,31 @@ void sixdof_obj::wedge_sym(lexer *p, ghostcell *pgc, int id)
     tri_x[tricount][0] = xm;
     tri_y[tricount][0] = ys;
     tri_z[tricount][0] = ze;
-    
+
     tri_x[tricount][1] = xe;
     tri_y[tricount][1] = ys;
     tri_z[tricount][1] = zs;
-    
-    tri_x[tricount][2] = xe;
-    tri_y[tricount][2] = ye;
-    tri_z[tricount][2] = zs;
-    ++tricount;
-    
-    // Tri 8
-    tri_x[tricount][0] = xm;
-    tri_y[tricount][0] = ys;
-    tri_z[tricount][0] = ze;
-    
-    tri_x[tricount][1] = xm;
-    tri_y[tricount][1] = ye;
-    tri_z[tricount][1] = ze;
-    
+
     tri_x[tricount][2] = xe;
     tri_y[tricount][2] = ye;
     tri_z[tricount][2] = zs;
     ++tricount;
 
-    
+    // Tri 8
+    tri_x[tricount][0] = xm;
+    tri_y[tricount][0] = ys;
+    tri_z[tricount][0] = ze;
+
+    tri_x[tricount][1] = xm;
+    tri_y[tricount][1] = ye;
+    tri_z[tricount][1] = ze;
+
+    tri_x[tricount][2] = xe;
+    tri_y[tricount][2] = ye;
+    tri_z[tricount][2] = zs;
+    ++tricount;
+
+
     tend[entity_count]=tricount;
 }
 

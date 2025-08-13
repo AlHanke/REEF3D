@@ -32,15 +32,15 @@ wave_lib_piston::wave_lib_piston(lexer *p, ghostcell *pgc) : wave_lib_parameters
     {
     cout<<"Wave_Lib: piston wavemaker theory"<<endl;
     }
-    
+
     timecount_old=0;
     timecount=1;
-    
+
     read(p,pgc);
-    
+
     singamma = sin((p->B105_1)*(PI/180.0));
     cosgamma = cos((p->B105_1)*(PI/180.0));
-    
+
 }
 
 wave_lib_piston::~wave_lib_piston()
@@ -68,33 +68,33 @@ double wave_lib_piston::wave_v(lexer *p, double x, double y, double z)
 double wave_lib_piston::wave_horzvel(lexer *p, double x, double y, double z)
 {
     double vel;
-    
+
     if(p->wavetime<ts || p->wavetime>te)
     return 0.0;
-    
+
     if((p->wavetime>kinematics[timecount][0]))
     timecount_old=timecount;
-    
+
     while(p->wavetime>kinematics[timecount][0])
     ++timecount;
-    
+
     vel = (kinematics[timecount][1]-kinematics[timecount_old][1])/(kinematics[timecount][0]-kinematics[timecount_old][0]);
-    
+
     if(p->B110==1)
     {
     z+=p->wd;
-    
+
     if(z<p->B110_zs || z>p->B110_ze)
     vel=0.0;
     }
-    
+
     return vel;
 }
 
 double wave_lib_piston::wave_w(lexer *p, double x, double y, double z)
 {
     double vel;
-    
+
     vel = 0.0;
 
     return vel;
@@ -103,11 +103,11 @@ double wave_lib_piston::wave_w(lexer *p, double x, double y, double z)
 double wave_lib_piston::wave_eta(lexer *p, double x, double y)
 {
     double eta=0.0;
-    
+
     double depth = p->wd - p->bed[IJ];
-    
+
     eta =  (kinematics[timecount][1]-kinematics[timecount_old][1])/(kinematics[timecount][0]-kinematics[timecount_old][0]) * sqrt(depth/9.81);
-    
+
     return eta;
 }
 
@@ -116,7 +116,7 @@ double wave_lib_piston::wave_fi(lexer *p, double x, double y, double z)
     double fi;
 
     fi = (x-p->global_xmin)*wave_horzvel(p,x,y,z);
-    
+
     return fi;
 }
 
@@ -130,18 +130,18 @@ void wave_lib_piston::read(lexer *p, ghostcell* pgc)
     char name[100];
     double val,val0,val1;
     int count;
-    
+
     sprintf(name,"wavemaker.dat");
 
 // open file------------
     ifstream file(name, ios_base::in);
-    
+
     if(!file)
     {
         cout<<endl<<("no 'wavemaker.dat' file found")<<endl<<endl;
 
     }
-    
+
     count=0;
     while(!file.eof())
     {
@@ -149,22 +149,22 @@ void wave_lib_piston::read(lexer *p, ghostcell* pgc)
     if(val0>=p->B117)
     ++count;
     }
-    
+
     file.close();
 
-    
+
     ptnum=count;
-    
+
     p->Darray(kinematics,ptnum,2);
-    
+
     file.open ("wavemaker.dat", ios_base::in);
-    
+
     count=0;
     while(!file.eof())
     {
-    
+
     file>>val0>>val1;
-    
+
     if(val0>=p->B117)
     {
     kinematics[count][0] = val0-p->B117;
@@ -172,10 +172,10 @@ void wave_lib_piston::read(lexer *p, ghostcell* pgc)
     ++count;
     }
     }
-    
+
     ts = kinematics[0][0];
     te = kinematics[ptnum-1][0];
-        
+
 }
 
 void wave_lib_piston::wave_prestep(lexer *p, ghostcell *pgc)

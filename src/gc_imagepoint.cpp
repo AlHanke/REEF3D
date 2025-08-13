@@ -27,16 +27,16 @@ Author: Hans Bihs
 void ghostcell::imagepoint(lexer *p, field& f,double &x_ip, double& val_ip, double dist, int cs)
 {
     double dx;
-    
+
     if(cs==1||cs==4)
     dx = p->DXP[IP];
-    
+
     if(cs==2||cs==3)
     dx = p->DYP[JP];
-    
+
     if(cs==5||cs==6)
     dx = p->DZP[KP];
-    
+
     double y0,y1;
     y1=0.0;      // x_j-1
     y0=f(i,j,k); // x_j

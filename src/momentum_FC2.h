@@ -65,11 +65,11 @@ public:
 private:
     fluid_update *pupdate;
     picard *ppicard;
-    
+
     void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-    
+
     int gcval_u, gcval_v, gcval_w;
     int gcval_phi;
     double starttime;
@@ -87,7 +87,7 @@ private:
     reini *preini;
     sixdof *p6dof;
     fsi *pfsi;
-    
+
 };
 
 #endif

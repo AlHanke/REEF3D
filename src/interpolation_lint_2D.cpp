@@ -28,7 +28,7 @@ Author: Hans Bihs
 double interpolation::lint1_2D(field& b, int& i,int& j, int& k, double wa, double wb, double wc)
 {
     v1=v2=v3=v4=0.0;
-    
+
     jj=j;
     j=0;
 
@@ -55,7 +55,7 @@ pip=0;
 double interpolation::lint2_2D(field& b, int& i,int& j, int& k, double wa, double wb, double wc)
 {
     v1=v2=v3=v4=0.0;
-    
+
     jj=j;
     j=0;
 
@@ -82,7 +82,7 @@ pip=0;
 double interpolation::lint3_2D(field& b, int& i,int& j, int& k, double wa, double wb, double wc)
 {
     v1=v2=v3=v4=0.0;
-    
+
     jj=j;
     j=0;
 
@@ -109,7 +109,7 @@ pip=0;
 double interpolation::lint4_2D(field& f, int& i,int& j, int& k, double wa, double wb, double wc)
 {
     v1=v2=v3=v4=0.0;
-    
+
     jj=j;
     j=0;
 
@@ -127,7 +127,7 @@ double interpolation::lint4_2D(field& f, int& i,int& j, int& k, double wa, doubl
 
     x1 = wa*v1 + (1.0-wa)*v3;
     x2 = wa*v2 + (1.0-wa)*v4;
-    
+
     value = wc*x1 +(1.0-wc)*x2;
 
     return value;
@@ -138,7 +138,7 @@ double interpolation::lint4phi_2D(fdm *a, field& b, int& i,int& j, int& k, doubl
     double epphi=1.6*p->DXM;
     double epphi2=0.6*p->DXM;
     v1=v2=v3=v4=p->phimean-p->pos_z();
-    
+
     jj=j;
     j=0;
 
@@ -152,12 +152,12 @@ double interpolation::lint4phi_2D(fdm *a, field& b, int& i,int& j, int& k, doubl
     if(a->topo(i+1,j,k+1)>-epphi && a->fb(i+1,j,k+1)>-epphi2)
     v4=b(i+1,j,k+1);
     pip=0;
-    
+
     j=jj;
 
     x1 = wa*v1 + (1.0-wa)*v3;
     x2 = wa*v2 + (1.0-wa)*v4;
-    
+
     value = wc*x1 +(1.0-wc)*x2;
 
     return value;
@@ -167,7 +167,7 @@ double interpolation::lint_a_2D(field& f, int& i,int& j, int& k, double wa, doub
 {
     jj=j;
     j=0;
-        
+
     pip=4;
 
     x1 = wa*f(i,j,k)   + (1.0-wa)*f(i+1,j,k);
@@ -185,7 +185,7 @@ double interpolation::lint_a_2D(field& f, int& i,int& j, int& k, double wa, doub
 double interpolation::lint4V_2D(double *f, int& i,int& j, int& k, double wa, double wb, double wc)
 {
     v1=v2=v3=v4=0.0;
-    
+
     jj=j;
     j=0;
 
@@ -198,12 +198,12 @@ double interpolation::lint4V_2D(double *f, int& i,int& j, int& k, double wa, dou
     v4=f[Ip1JKp1];
 
     j=jj;
-    
+
     //cout<<" wa: "<<wa<<" wc: "<<wc<<endl;
 
     x1 = wa*v1 + (1.0-wa)*v3;
     x2 = wa*v2 + (1.0-wa)*v4;
-    
+
     value = wc*x1 +(1.0-wc)*x2;
 
     return value;
@@ -212,7 +212,7 @@ double interpolation::lint4V_2D(double *f, int& i,int& j, int& k, double wa, dou
 double interpolation::lint7V_2D(double *f, int& i,int& j, int& k, double wa, double wb, double wc)
 {
     v1=v2=v3=v4=0.0;
-    
+
     jj=j;
     j=0;
 
@@ -225,12 +225,12 @@ double interpolation::lint7V_2D(double *f, int& i,int& j, int& k, double wa, dou
     v4=f[FIp1JKp1];
 
     j=jj;
-    
+
     //cout<<" wa: "<<wa<<" wc: "<<wc<<endl;
 
     x1 = wa*v1 + (1.0-wa)*v3;
     x2 = wa*v2 + (1.0-wa)*v4;
-    
+
     value = wc*x1 +(1.0-wc)*x2;
 
     return value;

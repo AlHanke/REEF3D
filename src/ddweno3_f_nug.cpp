@@ -43,7 +43,7 @@ double ddweno3_f_nug::ddwenox(field& f, double uw)
     DY = p->DYP;
     DZ = p->DZP;
     uf=0;
-    
+
     grad=0.0;
 
     if(uw>=0.0)
@@ -53,7 +53,7 @@ double ddweno3_f_nug::ddwenox(field& f, double uw)
     weight_min_x();
 
     grad = w1x*(qfx[IP][uf][0][0]*q2 + qfx[IP][uf][0][1]*q3)
-    
+
          + w2x*(qfx[IP][uf][1][0]*q2 - qfx[IP][uf][1][1]*q1);
     }
 
@@ -62,10 +62,10 @@ double ddweno3_f_nug::ddwenox(field& f, double uw)
     iqmax(p,f);
     is_max_x();
     weight_max_x();
-    
+
     
     grad = w1x*(qfx[IP][uf][2][0]*q2 - qfx[IP][uf][2][1]*q3)
-    
+
          + w2x*(qfx[IP][uf][3][0]*q1 + qfx[IP][uf][3][1]*q2);
     }
 
@@ -78,7 +78,7 @@ double ddweno3_f_nug::ddwenoy(field& f, double uw)
     DY = p->DYP;
     DZ = p->DZP;
     vf=0;
-    
+
     grad=0.0;
 
     if(uw>=0.0)
@@ -86,9 +86,9 @@ double ddweno3_f_nug::ddwenoy(field& f, double uw)
     jqmin(p,f);
     is_min_y();
     weight_min_y();
-    
+
     grad = w1y*(qfy[JP][vf][0][0]*q2 + qfy[JP][vf][0][1]*q3)
-    
+
          + w2y*(qfy[JP][vf][1][0]*q2 - qfy[JP][vf][1][1]*q1);
     }
 
@@ -97,9 +97,9 @@ double ddweno3_f_nug::ddwenoy(field& f, double uw)
     jqmax(p,f);
     is_max_y();
     weight_max_y();
-    
+
     grad = w1y*(qfy[JP][vf][2][0]*q2 - qfy[JP][vf][2][1]*q3)
-    
+
          + w2y*(qfy[JP][vf][3][0]*q1 + qfy[JP][vf][3][1]*q2);
     }
 
@@ -112,7 +112,7 @@ double ddweno3_f_nug::ddwenoz(field& f, double uw)
     DY = p->DYP;
     DZ = p->DZP;
     wf=0;
-    
+
     
     grad=0.0;
 
@@ -123,7 +123,7 @@ double ddweno3_f_nug::ddwenoz(field& f, double uw)
     weight_min_z();
 
     grad = w1z*(qfz[KP][wf][0][0]*q2 + qfz[KP][wf][0][1]*q3)
-    
+
          + w2z*(qfz[KP][wf][1][0]*q2 - qfz[KP][wf][1][1]*q1);
     }
 
@@ -133,12 +133,12 @@ double ddweno3_f_nug::ddwenoz(field& f, double uw)
     kqmax(p,f);
     is_max_z();
     weight_max_z();
-    
+
     grad = w1z*(qfz[KP][wf][2][0]*q2 - qfz[KP][wf][2][1]*q3)
-    
+
          + w2z*(qfz[KP][wf][3][0]*q1 + qfz[KP][wf][3][1]*q2);
     }
-    
+
     return grad;
 }
 
@@ -150,7 +150,7 @@ double ddweno3_f_nug::dswenox(slice& f, double uw)
     DY = p->DYP;
     DZ = p->DZP;
     uf=0;
-    
+
     grad=0.0;
 
     if(uw>=0.0)
@@ -160,7 +160,7 @@ double ddweno3_f_nug::dswenox(slice& f, double uw)
     weight_min_x();
 
     grad = w1x*(qfx[IP][uf][0][0]*q2 + qfx[IP][uf][0][1]*q3)
-    
+
          + w2x*(qfx[IP][uf][1][0]*q2 - qfx[IP][uf][1][1]*q1);
     }
 
@@ -171,7 +171,7 @@ double ddweno3_f_nug::dswenox(slice& f, double uw)
     weight_max_x();
 
     grad = w1x*(qfx[IP][uf][2][0]*q2 - qfx[IP][uf][2][1]*q3)
-    
+
          + w2x*(qfx[IP][uf][3][0]*q1 + qfx[IP][uf][3][1]*q2);
     }
 
@@ -184,7 +184,7 @@ double ddweno3_f_nug::dswenoy(slice& f, double uw)
     DY = p->DYP;
     DZ = p->DZP;
     vf=0;
-    
+
     grad=0.0;
 
     if(uw>=0.0)
@@ -192,9 +192,9 @@ double ddweno3_f_nug::dswenoy(slice& f, double uw)
     jsqmin(p,f);
     is_min_y();
     weight_min_y();
-    
+
     grad = w1y*(qfy[JP][vf][0][0]*q2 + qfy[JP][vf][0][1]*q3)
-    
+
          + w2y*(qfy[JP][vf][1][0]*q2 - qfy[JP][vf][1][1]*q1);
     }
 
@@ -203,9 +203,9 @@ double ddweno3_f_nug::dswenoy(slice& f, double uw)
     jsqmax(p,f);
     is_max_y();
     weight_max_y();
-    
+
     grad = w1y*(qfy[JP][vf][2][0]*q2 - qfy[JP][vf][2][1]*q3)
-    
+
          + w2y*(qfy[JP][vf][3][0]*q1 + qfy[JP][vf][3][1]*q2);
     }
 

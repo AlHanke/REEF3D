@@ -62,11 +62,11 @@ private:
     void is(slice&);
     void alpha();
     void weight();
-    
+
     sflow_flux *pflux;
     double ivel1,ivel2,jvel1,jvel2;
     int qq;
-    
+
     patchBC_interface *pBC;
 
 };

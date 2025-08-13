@@ -43,7 +43,7 @@ private:
 
     double ivel1,ivel2,jvel1,jvel2;
     double grad;
-    
+
     double fu1,fu2,fv1,fv2;
 
 };

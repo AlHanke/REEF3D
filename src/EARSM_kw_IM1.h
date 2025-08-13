@@ -39,7 +39,7 @@ public:
     virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*);
     virtual void aniso(fdm*);
     virtual double tau(fdm*);
-    
+
 private:
     int gcval_earsm;
     const double cmu;

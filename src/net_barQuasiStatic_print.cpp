@@ -30,16 +30,16 @@ Author: Tobias Martin
 void net_barQuasiStatic::print(lexer *p)
 {
     int num=0;
-    
+
     if(p->P15==1)
     num = p->printcount_sixdof;
 
     if(p->P15==2)
     num = p->count;
-    
+
     if(num<0)
     num=0;
-    
+
     // Build current net
     if (p->X320_type[nNet]==1)
     {
@@ -53,12 +53,12 @@ void net_barQuasiStatic::print(lexer *p)
     {
         buildNet_wall(p);
     }
-    
+
     // Print maximum tension forces
     if (p->mpirank==0)
     {
         double Tmax = 0.0;
-        
+
         for (int j = 0; j < nf; j++)
         {
             for (int i = 0; i < niK; i++)
@@ -66,10 +66,10 @@ void net_barQuasiStatic::print(lexer *p)
                 if (fabs(A(i,j)) > Tmax) Tmax = fabs(A(i,j));
             }
         }
-        
+
         eTout<<p->simtime<<"\t"<<Tmax<<"\t"<<Fx<<"\t"<<Fy<<"\t"<<Fz<<endl;
     }
-    
+
     if
     (
         p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)
@@ -78,10 +78,10 @@ void net_barQuasiStatic::print(lexer *p)
     )
     {
         printtime+=p->P30;
-        
+
         if(p->A10==5)
         sprintf(name,"./REEF3D_NHFLOW_6DOF_Net/REEF3D-Net-%08i-%06i.vtk",nNet,num);
-        
+
         if(p->A10==6)
         sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%08i-%06i.vtk",nNet,num);
 
@@ -89,11 +89,11 @@ void net_barQuasiStatic::print(lexer *p)
         // Tension forces
         double *T;
         p->Darray(T, nf);
-    
+
         for (int j = 0; j < nf; j++)
         {
             T[j] = 0.0;
-            
+
             for (int i = 0; i < niK; i++)
             {
                 T[j] = MAX(fabs(A(i,j)),T[j]);
@@ -102,19 +102,19 @@ void net_barQuasiStatic::print(lexer *p)
 
         ofstream result;
         result.open(name);
-        
+
         result << "# vtk DataFile Version 2.0" << endl;
         result << "Net " << nNet << endl;
         result << "ASCII \nDATASET UNSTRUCTURED_GRID" << endl;
         result << "POINTS " << nK << " float" <<endl;
-        
+
         for(int n=0; n<nK; ++n)
         {
             result<<K_[n][0]<<" "<<K_[n][1]<<" "<<K_[n][2]<<endl;
         }
-        
+
         result << "\nCELLS " << nf+nbK << " " << (nf+nbK)*3 <<endl;
-        
+
         for (int i = 0; i < nf; i++)
         {
             result<<"2 "<< Pi[i] << " " << Ni[i] <<endl;
@@ -126,7 +126,7 @@ void net_barQuasiStatic::print(lexer *p)
         }
 
         result << "\nCELL_TYPES " << nf+nbK << endl;
-        
+
         for (int i = 0; i < nf+nbK; i++)
         {
             result<<"3"<<endl;
@@ -134,7 +134,7 @@ void net_barQuasiStatic::print(lexer *p)
 
         result<<"\nPOINT_DATA " << nK <<endl;
         result<<"SCALARS Tension float 1 \nLOOKUP_TABLE default"<<endl;
-        
+
         double output;
         for (int n = 0; n < nK; ++n)
         {
@@ -148,10 +148,10 @@ void net_barQuasiStatic::print(lexer *p)
                     index++;
                 }
             }
-            
+
             result<<output<<endl;
         }
-        
+
         p->del_Darray(T, nf);
 
         result.close();
@@ -162,7 +162,7 @@ void net_barQuasiStatic::buildNet_bag(lexer *p)
 {
     int *fillK;
     p->Iarray(fillK, nK);
-    
+
     
     for (int i = 0; i < 2*nd+2*nl; i++)
     {
@@ -177,11 +177,11 @@ void net_barQuasiStatic::buildNet_bag(lexer *p)
         fillK[Pb[i]] = 1;
         fillK[Nb[i]] = 1;
     }
-  
+
      K_[nd+1][0] = K[0][0] + fi(0,0)*al;
     K_[nd+1][1] = K[0][1] + fi(0,1)*al;
     K_[nd+1][2] = K[0][2] + fi(0,2)*al;
-  
+
   
     int curRow = 0;
     int leftK = nd + 1;
@@ -199,7 +199,7 @@ void net_barQuasiStatic::buildNet_bag(lexer *p)
                         K_[leftK + nd + 1][0] = K_[leftK][0] + fi(fI,0)*al;
                         K_[leftK + nd + 1][1] = K_[leftK][1] + fi(fI,1)*al;
                         K_[leftK + nd + 1][2] = K_[leftK][2] + fi(fI,2)*al;
-    
+
                         fillK[leftK + nd + 1] = 1;
                     }
                     else if (Ni[fI]==leftK && Pi[fI]==leftK + nd + 1 && fillK[leftK + nd + 1]==0)
@@ -247,7 +247,7 @@ void net_barQuasiStatic::buildNet_bag(lexer *p)
                         K_[leftK + nd + 1][0] = K_[leftK][0] + fi(fI,0)*al;
                         K_[leftK + nd + 1][1] = K_[leftK][1] + fi(fI,1)*al;
                         K_[leftK + nd + 1][2] = K_[leftK][2] + fi(fI,2)*al;
-    
+
                         fillK[leftK + nd + 1] = 1;
                     }
                     else if (Ni[fI]==leftK && Pi[fI]==leftK + nd + 1 && fillK[leftK + nd + 1]==0)
@@ -285,7 +285,7 @@ void net_barQuasiStatic::buildNet_bag(lexer *p)
             leftK++;
         }
     }
-    
+
     p->del_Iarray(fillK, nK);
 }
 
@@ -298,16 +298,16 @@ void net_barQuasiStatic::buildNet_cyl(lexer *p)
         K_[i][1] = K[i][1];
         K_[i][2] = K[i][2];
     }
-    
+
     // Find position of inner knots by going along vertical lines and knowing that owner is above neighbour
     int index = 0;
-        
+
     for (int i = 0; i < nd*nl; i++)
     {
         K_[Ni[i]][0] = K_[Pi[i]][0] + fi(index,0)*l[index];
         K_[Ni[i]][1] = K_[Pi[i]][1] + fi(index,1)*l[index];
         K_[Ni[i]][2] = K_[Pi[i]][2] + fi(index,2)*l[index];
-        
+
         index++;
     }
 }
@@ -321,10 +321,10 @@ void net_barQuasiStatic::buildNet_wall(lexer *p)
         K_[i][1] = K[i][1];
         K_[i][2] = K[i][2];
     }
-    
+
     // Find position of inner knots by going along vertical lines and knowing that owner is above neighbour
     int index = 0;
-        
+
     for (int i = 0; i < (nd + 1)*nl; i++)
     {
         K_[Ni[i]][0] = K_[Pi[i]][0] + fi(index,0)*l[index];

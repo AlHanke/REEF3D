@@ -41,22 +41,22 @@ public:
     double sx(slice&);
     double sy(slice&);
     double limiter(double, double);
-    
+
     double sxx(slice&);
     double syy(slice&);
-    
+
     double dslwenox(slice&, double);
     double dslwenoy(slice&, double);
-    
+
     void iqminsl(slice&, double);
     void jqminsl(slice&, double);
     void iqmaxsl(slice&, double);
     void jqmaxsl(slice&, double);
     //--------------------------------
-    
+
     double dwenox(double*, double);
     double dwenoy(double*, double);
-    
+
     void iqmin(double*, double);
     void jqmin(double*, double);
     void iqmax(double*, double);
@@ -89,18 +89,18 @@ public:
      double dwdxx(double*);
      double dwdyy(double*);
      double dwdzz(double*);
-     
+
 
     double grad1,grad2;
     double grad;
-    
+
     
     lexer *p;
-    
+
 private:
     double dfdx_min, dfdx_plus, dfdy_min, dfdy_plus, dfdz_min, dfdz_plus;
     double denom,val;
-    
+
     const double tttw,fourth,third,sevsix,elvsix,sixth,fivsix,tenth;
     const double sixten,treten;
     const double epsilon,dx;
@@ -111,10 +111,10 @@ private:
     double gradx, grady, gradz;
 
     double f1,f2,f3,f4;
-    
+
     double X1,X2,X3,X4,X0;
     double Y1,Y2,Y3,Y4,Y0;
-    
+
     void is();
     void alpha();
     void weight();

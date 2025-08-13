@@ -54,6 +54,6 @@ void bedload_einstein::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 
         s->qbe(i,j) = qb;
     }
-    
+
     pgc->gcsl_start4(p,s->qbe,1);
 }

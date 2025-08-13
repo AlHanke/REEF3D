@@ -36,12 +36,12 @@ bedprobe_line_y::bedprobe_line_y(lexer *p, ghostcell *pgc, sediment_fdm *s)
 
     maxknox=pgc->globalimax(p->knoy);
     sumknox=pgc->globalisum(maxknox);
-    
+
     p->Darray(yloc,p->P124+1,maxknox);
     p->Darray(wsf,p->P124+1,maxknox);
     p->Iarray(flag,p->P124+1,maxknox);
     p->Iarray(wsfpoints,p->P124+1);
-    
+
 
     p->Darray(yloc_all,p->P124+1,sumknox);
     p->Darray(wsf_all,p->P124+1,sumknox);
@@ -65,20 +65,20 @@ bedprobe_line_y::bedprobe_line_y(lexer *p, ghostcell *pgc, sediment_fdm *s)
     }
 
     ini_location(p,pgc,s);
-    
+
     // Create Folder
     if(p->mpirank==0 && p->A10==2)
     {
     mkdir("./REEF3D_SFLOW_Sediment",0777);
     mkdir("./REEF3D_SFLOW_Sediment/Line",0777);
     }
-    
+
     if(p->mpirank==0 && p->A10==5)
     {
     mkdir("./REEF3D_NHFLOW_Sediment",0777);
     mkdir("./REEF3D_NHFLOW_Sediment/Line",0777);
     }
-    
+
     if(p->mpirank==0 && p->A10==6)
     {
     mkdir("./REEF3D_CFD_Sediment",0777);
@@ -93,11 +93,11 @@ bedprobe_line_y::~bedprobe_line_y()
 
 void bedprobe_line_y::start(lexer *p, ghostcell *pgc, sediment_fdm *s, ioflow *pflow)
 {
-    
+
     char name[250];
     double zval=0.0;
     int num,check;
-    
+
     num = p->count;
 
     if(p->mpirank==0)
@@ -105,16 +105,16 @@ void bedprobe_line_y::start(lexer *p, ghostcell *pgc, sediment_fdm *s, ioflow *p
         // open file
         if(p->A10==2)
         sprintf(name,"./REEF3D_SFLOW_Sediment/Line/REEF3D-SFLOW-bedprobe_line_y-%06i.dat",num);
-        
+
         if(p->A10==5)
         sprintf(name,"./REEF3D_NHFLOW_Sediment/Line/REEF3D-NHFLOW-bedprobe_line_y-%06i.dat",num);
-        
+
         if(p->A10==6)
         sprintf(name,"./REEF3D_CFD_Sediment/Line/REEF3D-CFD-bedprobe_line_y-%06i.dat",num);
 
-        
+
         wsfout.open(name);
-        
+
         wsfout<<"sedtime:  "<<p->sedtime<<endl;
         wsfout<<"simtime:  "<<p->simtime<<endl;
         wsfout<<"number of topo-y-lines:  "<<p->P124<<endl<<endl;
@@ -125,7 +125,7 @@ void bedprobe_line_y::start(lexer *p, ghostcell *pgc, sediment_fdm *s, ioflow *p
 
         wsfout<<endl<<endl;
 
-        
+
         for(q=0;q<p->P124;++q)
         {
         wsfout<<"Y "<<q+1;
@@ -155,11 +155,11 @@ void bedprobe_line_y::start(lexer *p, ghostcell *pgc, sediment_fdm *s, ioflow *p
         yloc[q][j]=p->DYP[JP];
         }
     }
-    
+
     
     for(q=0;q<p->P124;++q)
     wsfpoints[q]=sumknox;
-    
+
     // gather
     for(q=0;q<p->P124;++q)
     {
@@ -167,28 +167,28 @@ void bedprobe_line_y::start(lexer *p, ghostcell *pgc, sediment_fdm *s, ioflow *p
     pgc->gather_double(wsf[q],maxknox,wsf_all[q],maxknox);
     pgc->gather_int(flag[q],maxknox,flag_all[q],maxknox);
 
-        
+
         if(p->mpirank==0)
         {
         sort(yloc_all[q], wsf_all[q], flag_all[q], 0, wsfpoints[q]-1);
         remove_multientry(p,yloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]);
         }
-        
+
     }
-    
+
     // write to file
     if(p->mpirank==0)
     {
         for(n=0;n<sumknox;++n)
         rowflag[n]=0;
-        
+
         for(n=0;n<sumknox;++n)
         {
             check=0;
             for(q=0;q<p->P124;++q)
             if(flag_all[q][n]>0 && yloc_all[q][n]<1.0e20)
             check=1;
-            
+
             if(check==1)
             rowflag[n]=1;
         }
@@ -202,21 +202,21 @@ void bedprobe_line_y::start(lexer *p, ghostcell *pgc, sediment_fdm *s, ioflow *p
                 {
                 wsfout<<setprecision(5)<<yloc_all[q][n]<<" \t ";
                 wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
+
                 
-                
-                    
+
                 check=1;
                 }
-                
+
                 if((flag_all[q][n]<0 || yloc_all[q][n]>=1.0e20) && rowflag[n]==1)
                 {
                     wsfout<<setprecision(5)<<" \t ";
                     wsfout<<setprecision(5)<<" \t ";
-                    
+
                 }
             }
 
-            
+
             if(check==1)
             wsfout<<endl;
         }
@@ -245,7 +245,7 @@ void bedprobe_line_y::ini_location(lexer *p, ghostcell *pgc, sediment_fdm *s)
         }
     }
 }
- 
+
 void bedprobe_line_y::sort(double *a, double *b, int *c, int left, int right)
 {
 
@@ -271,7 +271,7 @@ void bedprobe_line_y::sort(double *a, double *b, int *c, int left, int right)
 
           b[l] = b[r];
           b[r] = swapd;
-          
+
           c[l] = c[r];
           c[r] = swapc;
 
@@ -294,7 +294,7 @@ void bedprobe_line_y::remove_multientry(lexer *p, double* b, double* c, int *d, 
 
     double *f,*g;
     int *h;
-    
+
     p->Darray(f,num);
     p->Darray(g,num);
     p->Iarray(h,num);
@@ -326,11 +326,11 @@ void bedprobe_line_y::remove_multientry(lexer *p, double* b, double* c, int *d, 
     d[n]=h[n];
     }
 
-    
+
     p->del_Darray(f,num);
     p->del_Darray(g,num);
     p->del_Iarray(h,num);
-    
+
     num=count;
 
 }

@@ -62,13 +62,13 @@ directreini::directreini(lexer* p, fdm *a):gradient(p),vertice(p), nodeflag(p),d
     ppicard = new picard_void(p);
 
     ppreini = new reini_RK3(p,1);
-    
+
     p->F49=0;
     p->F44=2;
-    
+
     dT = p->F43*p->DXM;
     dV = pow(p->DXM,3.0);
-    
+
 }
 
 directreini::~directreini()
@@ -78,14 +78,14 @@ directreini::~directreini()
 void directreini::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
 {
     starttime=pgc->timer();
-    
+
     LOOP
     d0(i,j,k)=b(i,j,k);
     pgc->start4(p,d0,gcval_phi);
 
     ppicard->volcalc(p,a,pgc,a->phi);
     pgc->start4(p,b,gcval_phi);
-    
+
     
 //---------------
 // Algorithm
@@ -97,7 +97,7 @@ void directreini::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
     constraint(p,a,pgc,b);
     //correction(p,a,pgc,b);
     }
-    
+
     ppreini->start(a,p,b,pgc,pflow);
     //debug(p,a);
 
@@ -112,7 +112,7 @@ void directreini::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
 
 void directreini::startV(fdm* a,lexer* p,vec &f, ghostcell* pgc,ioflow* pflow)
 {
-    
+
 }
 
 

@@ -30,17 +30,17 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
     int polygon_num3,polygon_sum3;
     if(p->mpirank==0)
     pvtp(p,d,pgc);
-    
+
     name_iter(p,d,pgc);
 
     ofstream result;
     result.open(name, ios::binary);
     //---------------------------------------------
-    
+
     polygon_sum=0;
     for(n=0;n<polygon_num;++n)
     polygon_sum+=numpt[n];
-    
+
     polygon_sum3=polygon_num3=0;
     for(n=0;n<polygon_num;++n)
     if(numpt[n]==4)
@@ -48,9 +48,9 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
     polygon_sum3+=numpt[n];
     ++polygon_num3;
     }
-    
+
     vertice_num = ccptcount;
-    
+
     //---------------------------------------------
     n=0;
     offset[n]=0;
@@ -70,7 +70,7 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
     offset[n]=offset[n-1] + 4*polygon_num+ 4;
     ++n;
     //---------------------------------------------
-    
+
     //cout<<p->mpirank<<" <Piece NumberOfPoints=\""<<vertice_num<<"\" NumberOfPolys=\""<<polygon_num<<"\">"<<endl;
 
     result<<"<?xml version=\"1.0\"?>"<<endl;
@@ -83,7 +83,7 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
     result<<"<DataArray type=\"Float32\"  NumberOfComponents=\"3\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     result<<"</Points>"<<endl;
-    
+
     result<<"<PointData >"<<endl;
     result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
@@ -98,7 +98,7 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
     ++n;
     result<<"<DataArray type=\"Int32\"  Name=\"types\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     result<<"</Polys>"<<endl;
-    
+
 
     result<<"</Piece>"<<endl;
     result<<"</PolyData>"<<endl;
@@ -120,10 +120,10 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
 
     ffn=ccpt[n][2];
     result.write((char*)&ffn, sizeof (float));
-    
+
     //cout<<" ccpt_x: "<<ccpt[n][0] <<" ccpt_y: "<<ccpt[n][1]<<" ccpt_z: "<<ccpt[n][2]<<endl;
     }
-    
+
 //  Velocity
     iin=4*vertice_num*3;
     result.write((char*)&iin, sizeof (int));
@@ -138,7 +138,7 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
     ffn=float(p->ccipol4V(d->W, d->WL, d->bed,ccpt[n][0],ccpt[n][1],ccpt[n][2]));
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     
 //  Pressure
     iin=4*vertice_num;
@@ -158,25 +158,25 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
         {
         iin=facet[n][0];
         result.write((char*)&iin, sizeof (int));
-        
+
         iin=facet[n][1];
         result.write((char*)&iin, sizeof (int));
-        
+
         iin=facet[n][2];
         result.write((char*)&iin, sizeof (int));
         }
-        
+
         if(numpt[n]==4)
         {
         iin=facet[n][0];
         result.write((char*)&iin, sizeof (int));
-        
+
         iin=facet[n][1];
         result.write((char*)&iin, sizeof (int));
-        
+
         iin=facet[n][3];
         result.write((char*)&iin, sizeof (int));
-        
+
         iin=facet[n][2];
         result.write((char*)&iin, sizeof (int));
         }
@@ -205,7 +205,7 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
     result<<"</VTKFile>"<<endl;
 
     result.close();
-    
+
     ++forceprintcount;
 }
 

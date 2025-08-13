@@ -39,7 +39,7 @@ class pressure_reference : virtual public increment
 public:
     pressure_reference(lexer*);
     virtual ~pressure_reference();
-    
+
     void reference_start(lexer*,fdm*,ghostcell*);
     void reference_ini(lexer*,fdm*,ghostcell*);
 
@@ -48,9 +48,9 @@ private:
     void gage_fsf(lexer*,fdm*,ghostcell*);
     void fsf_normalize(lexer*,fdm*,ghostcell*);
     void atmosphere(lexer*,fdm*,ghostcell*);
-    
+
     double gageval;
-    
+
     double H,H_fb,roval,phival;
     int ii,jj,kk;
     double r,s;

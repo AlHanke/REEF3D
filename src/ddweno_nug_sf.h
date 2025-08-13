@@ -52,21 +52,21 @@ public:
     void iqmax0(fdm*, field&);
     void jqmax0(fdm*, field&);
     void kqmax0(fdm*, field&);
-    
+
     void iqmin1(fdm*, field&);
     void jqmin1(fdm*, field&);
     void kqmin1(fdm*, field&);
     void iqmax1(fdm*, field&);
     void jqmax1(fdm*, field&);
     void kqmax1(fdm*, field&);
-    
+
     void iqmin2(fdm*, field&);
     void jqmin2(fdm*, field&);
     void kqmin2(fdm*, field&);
     void iqmax2(fdm*, field&);
     void jqmax2(fdm*, field&);
     void kqmax2(fdm*, field&);
-    
+
     void iqmin3(fdm*, field&);
     void jqmin3(fdm*, field&);
     void kqmin3(fdm*, field&);
@@ -76,11 +76,11 @@ public:
 
     double grad;
     double *DX,*DY,*DZ;
-    
+
     int check1,check2,check3;
-    
+
     int modus;
-    
+
 private:
     lexer *p;
 };

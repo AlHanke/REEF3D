@@ -46,15 +46,15 @@ private:
     void ucalc(lexer*,fdm*,field&);
     void vcalc(lexer*,fdm*,field&);
     void wcalc(lexer*,fdm*,field&);
-    
+
     void laplace(lexer*,fdm*,ghostcell*,field&);
     void ini_bc(lexer*,fdm*,ghostcell*);
-    
+
     
     double starttime,endtime;
     int count;
     int gcval_pot;
-    
+
     fieldint4 bc;
 };
 

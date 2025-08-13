@@ -43,7 +43,7 @@ public:
 
     virtual void start(lexer*, fdm*, ghostcell*, convection*);
 private:
-    
+
     field4 vx,vy,vz;
 };
 

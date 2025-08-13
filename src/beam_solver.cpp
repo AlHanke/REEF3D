@@ -44,7 +44,7 @@ void beam::resetSolver()
     m2 = n_dim/2;
     mlmas = 0;
     mumas = 0;
-    
+
     // Use default values (see header files) for these parameters:
     hmax = 0.0;
     nmax = 0;
@@ -55,7 +55,7 @@ void beam::resetSolver()
     caljac = true, calhes = true, first = true, reject = false, hess = false;
     fnewt = 0.0, quot1 = 0.0, quot2 = 0.0, thet = 0.0;
     nfcn = 0, nstep = 0, naccpt = 0, nrejct =0;
-    
+
 
 
     // n, the dimension of the system
@@ -63,21 +63,21 @@ void beam::resetSolver()
         cout << "System too big, max. n_dim = " << UINT_MAX - 1 << endl;
         throw -1;
     }
-    
+
     // rtoler, the relative tolerance of the integration
     if (!rtoler) {
         itoler = 0;
         rtoler = new double;
         *rtoler = 1.0e-7;
     }
-    
+
     // atoler, the absolute tolerance of the integration
     if (!atoler) {
         itoler = 0;
         atoler = new double;
         *atoler = 1.0e-7;
     }
-    
+
     // -------- nmax--maximal number of steps
     if (nmax == 0) nmax = 100000;
     if (nmax <= 0) {
@@ -91,7 +91,7 @@ void beam::resetSolver()
         cout << " coefficients have 20 digits, uround = " << uround << endl;
         throw -1;
     }
-    
+
     // --------- safe--safety factor in step size prediction
     if (safe == 0.0) safe = 0.9;
     if ((safe <= 0.001) || (safe >= 1.0)) {
@@ -125,10 +125,10 @@ void beam::resetSolver()
             }
         }
     }
-    
+
     // initial step length
     if (fabs(delta_t) < 10.0*uround) delta_t = 1.0e-8;
-    
+
     // facl, facr--parameters for step size selection
     if (facl==0.0) facl = 5.0;
     if (facr == 0.0) facr = 1.0/8.0;
@@ -262,7 +262,7 @@ void beam::Integrate(double t_old, double t_new)
 {
     // Reset solver
     resetSolver();
-    
+
     // Set constant external forces and moments
     setConstantLoads(Fext, Mext, c, cdot, q, qdot);
 
@@ -322,7 +322,7 @@ int beam::CoreIntegrator(double t_old, double t_new)
     xold = x;
     xd = x;
     hmax = x_end - x;
-    
+
     // initial step length
     if (fabs(delta_t) < 10.0*uround) delta_t = 1.0e-8;
 
@@ -711,7 +711,7 @@ int beam::CoreIntegrator(double t_old, double t_new)
             break;
         }
     }
-    
+
     return 1;
 }  // CoreIntegrator
 
@@ -1905,7 +1905,7 @@ void beam::Function(double time, double *y, double *f)
        q.col(i).normalize();
        qdot.col(i) -= q.col(i).dot(qdot.col(i))*q.col(i);
     }
-  
+
     setStateDot(f);
 } // Numerical rhs
 

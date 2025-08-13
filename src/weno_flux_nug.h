@@ -40,7 +40,7 @@ public:
 
 private:
     double aij(lexer*, fdm*, field&, int,field&,field&,field&,double*,double*,double*);
-    
+
     virtual double fx(lexer*, fdm*, field&, field&, int, double);
     virtual double fy(lexer*, fdm*, field&, field&, int, double);
     virtual double fz(lexer*, fdm*, field&, field&, int, double);
@@ -51,16 +51,16 @@ private:
     void jqmax(lexer*, field&, field&, int);
     void kqmax(lexer*, field&, field&, int);
 
-    
+
     double L,grad;
     double sig;
 
     double gradx, grady, gradz;
     double fu1,fv1,fw1,fu2,fv2,fw2;
-    
+
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 
-    
+
     flux *pflux;
 
 };

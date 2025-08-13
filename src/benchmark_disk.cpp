@@ -31,7 +31,7 @@ benchmark_disk::benchmark_disk(lexer *p, fdm *a)
     double r,xc,zc,radius;
     double H;
     double xs,xe,zs,ze;
-    
+
     xc = 0.0;
     zc = 0.5;
     radius = 0.3;
@@ -45,7 +45,7 @@ benchmark_disk::benchmark_disk(lexer *p, fdm *a)
     {
         a->vof(i,j,k) = 0.0;
         a->phi(i,j,k) = -0.5;
-        
+
         r = sqrt(pow(p->pos_x() - xc, 2.0) + pow(p->pos_z() - zc, 2.0));
         if (r <= radius)
         {

@@ -25,7 +25,7 @@ Author: Tobias Martin
 beam::beam(int number):nBeam(number),iout(0),imas(0),ijac(0)
 {
     // Call from derived class
-    
+
     // iniBeam(Ne, E, A, rho, L, G, IX, IY, IZ);
     // iniMaterial();
     // meshBeam(x,y,z);

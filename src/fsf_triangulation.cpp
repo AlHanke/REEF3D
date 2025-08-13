@@ -28,11 +28,11 @@ Author: Hans Bihs
 void fsf_vtp::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
 {
     int negcount, poscount;
-    
+
     TPLOOP
     eta(i,j,k) = (p->ipol4phi(a,a->phi));
 
-    
+
     NDBASELOOP
     vertice(i,j,k)=-1;
 
@@ -42,7 +42,7 @@ void fsf_vtp::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
     BASELOOP
     {
         epsi=interfac*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
-        
+
         if(vertice(i,j,k)<0 && fabs(a->phi(i,j,k))<epsi)
         {
             check=1;
@@ -50,7 +50,7 @@ void fsf_vtp::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
             if(eta(i,j,k)<zero && eta(i-1,j,k)<zero && eta(i-1,j-1,k)<zero && eta(i,j-1,k)<zero &&
                eta(i,j,k-1)<zero && eta(i-1,j,k-1)<zero && eta(i-1,j-1,k-1)<zero && eta(i,j-1,k-1)<zero)
             check=0;
-            
+
             if(eta(i,j,k)>zero && eta(i-1,j,k)>zero && eta(i-1,j-1,k)>zero && eta(i,j-1,k)>zero &&
                eta(i,j,k-1)>zero && eta(i-1,j,k-1)>zero && eta(i-1,j-1,k-1)>zero && eta(i,j-1,k-1)>zero)
             check=0;
@@ -69,7 +69,7 @@ void fsf_vtp::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
         }
     }
 
-    
+
     //------
     countM=0;
     NDBASELOOP

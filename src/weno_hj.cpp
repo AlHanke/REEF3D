@@ -36,16 +36,16 @@ weno_hj::weno_hj(lexer* p):tttw(13.0/12.0),fourth(1.0/4.0),third(1.0/3.0),
     {
     if(p->B269==0 && p->S10!=2)
     pflux = new flux_HJ_CDS2_2D(p);
-    
+
     if(p->B269>=1 || p->S10==2)
     pflux = new flux_HJ_CDS2_vrans_2D(p);
     }
-    
+
     if(p->j_dir==1)
     {
     if(p->B269==0 && p->S10!=2)
     pflux = new flux_HJ_CDS2(p);
-    
+
     if(p->B269>=1 || p->S10==2)
     pflux = new flux_HJ_CDS2_vrans(p);
     }
@@ -57,7 +57,7 @@ weno_hj::~weno_hj()
 
 void weno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
-    
+
     if(ipol==1)
     {
         n=0;
@@ -67,7 +67,7 @@ void weno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vv
         ++n;
         }
     }
-    
+
     if(p->j_dir==1)
     if(ipol==2)
     {
@@ -106,7 +106,7 @@ double weno_hj::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel,
         pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
         pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
         pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
-        
+
         L = -iadvec*ddx(p,a,b)*DRDX[IP]  - jadvec*ddy(p,a,b)*DSDY[JP]  - kadvec*ddz(p,a,b)*DTDZ[KP] ;
 
         return L;
@@ -115,19 +115,19 @@ double weno_hj::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel,
 double weno_hj::ddx(lexer* p,fdm* a, field& b)
 {
     grad = 0.0;
-    
+
     if(iadvec>0.0)
     {
     iqmin(b,p->DRM,p->DRDXN);
     is();
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
     }
-    
+
 
     if(iadvec<0.0)
     {
@@ -135,7 +135,7 @@ double weno_hj::ddx(lexer* p,fdm* a, field& b)
     is();
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -147,20 +147,20 @@ double weno_hj::ddx(lexer* p,fdm* a, field& b)
 double weno_hj::ddy(lexer* p,fdm* a, field& b)
 {
     grad = 0.0;
-    
+
     if(jadvec>0.0)
     {
     jqmin(b,p->DSM,p->DSDYN);
     is();
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
-    
+
     }
-    
+
 
     if(jadvec<0.0)
     {
@@ -168,32 +168,32 @@ double weno_hj::ddy(lexer* p,fdm* a, field& b)
     is();
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
-    
+
     }
-    
+
     return grad;
 }
 
 double weno_hj::ddz(lexer* p,fdm* a, field& b)
 {
     grad = 0.0;
-    
+
     if(kadvec>0.0)
     {
     kqmin(b,p->DTM,p->DTDZN);
     is();
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
     }
-     
+
     
     if(kadvec<0.0)
     {
@@ -201,12 +201,12 @@ double weno_hj::ddz(lexer* p,fdm* a, field& b)
     is();
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
     }
-    
+
     return grad;
 }
 

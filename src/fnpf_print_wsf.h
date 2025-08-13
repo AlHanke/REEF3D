@@ -48,7 +48,7 @@ private:
     void fill_eta(lexer*, fdm_fnpf*, ghostcell*,slice&);
     void fill_deta(lexer*, fdm_fnpf*, ghostcell*,slice&);
     void fill_Uhorz(lexer*, fdm_fnpf*, ghostcell*,slice&);
-    
+
     double *x,*y;
     int gauge_num;
 
@@ -57,7 +57,7 @@ private:
     int n;
     ofstream wsfout,detaout,Uhorzout;
     const int fileFlushMaxCount;
-    
+
 
 };
 

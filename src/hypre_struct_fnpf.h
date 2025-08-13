@@ -44,11 +44,11 @@ public:
     virtual ~hypre_struct_fnpf();
 
     virtual void startF(lexer*, ghostcell*, double*, double*, double*, int);
-    
+
     void start_solver8(lexer*, ghostcell*, double*, double*, double*);
-    
+
     virtual void solve(lexer*,ghostcell*);
-    
+
     void make_grid(lexer*, ghostcell*);
     void make_grid_2Dvert(lexer*, ghostcell*);
 
@@ -57,14 +57,14 @@ public:
 
 
     virtual void fillbackvec8(lexer*,double*,double*,double*);
-    
+
 
     void create_solver5(lexer*,ghostcell*);
     void delete_solver5(lexer*,ghostcell*);
-    
+
 
 private:
-    
+
 // HYPRE
    HYPRE_StructGrid     grid;
    HYPRE_StructStencil  stencil;
@@ -74,16 +74,16 @@ private:
    HYPRE_StructVector   x;
    HYPRE_StructSolver   solver;
    HYPRE_StructSolver   precond;
-   
+
 
     int *ilower,*iupper;
     int num_iterations;
     double final_res_norm;
     int stencil_indices[15];
     int nentries;
-   
+
     int numiter,count,q;
-    
+
     const int solve_type,precon_type;
 
 

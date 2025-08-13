@@ -47,11 +47,11 @@ void sflow_f::maxcoor(lexer *p, fdm2D* b, ghostcell* pgc)
      p->maxlength=MAX(p->maxlength,p->ycoormax-p->ycoormin);
 
      p->maxlength=pgc->globalmax(p->maxlength);
-     
+
      p->xcoormax=pgc->globalmax(p->xcoormax);
      p->ycoormax=pgc->globalmax(p->ycoormax);
-     
+
      p->xcoormin=pgc->globalmin(p->xcoormin);
      p->ycoormin=pgc->globalmin(p->ycoormin);
-     
+
 }

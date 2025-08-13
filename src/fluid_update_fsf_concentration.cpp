@@ -35,7 +35,7 @@ fluid_update_fsf_concentration::fluid_update_fsf_concentration(lexer *p, fdm* a,
     visc_water = p->W2;
     ro_air = p->W3;
     ro_water = p->W1;
-    
+
     pconcentration = ppconcentration;
 }
 
@@ -53,16 +53,16 @@ void fluid_update_fsf_concentration::start(lexer *p, fdm* a, ghostcell* pgc)
     if(p->count>iter)
     iocheck=0;
     iter=p->count;
-    
+
     if(p->j_dir==0)
     epsi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
-        
+
     if(p->j_dir==1)
     epsi = p->F45*(1.0/3.0)*(p->DRM+p->DSM+p->DTM);
 
     LOOP
     {
-        
+
         if(a->phi(i,j,k)>epsi)
         H=1.0;
 
@@ -71,11 +71,11 @@ void fluid_update_fsf_concentration::start(lexer *p, fdm* a, ghostcell* pgc)
 
         if(fabs(a->phi(i,j,k))<=epsi)
         H=0.5*(1.0 + a->phi(i,j,k)/epsi + (1.0/PI)*sin((PI*a->phi(i,j,k))/epsi));
-        
+
         conc=pconcentration->val(i,j,k);
 
         a->ro(i,j,k)=      (ro_water+conc*p->C1)*H +   (ro_air+conc*p->C3)*(1.0-H);
-        
+
         a->visc(i,j,k)=    (visc_water+conc*p->C2)*H + (visc_air+conc*p->C4)*(1.0-H);
 
         p->volume1 += p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*(H-(1.0-PORVAL4));

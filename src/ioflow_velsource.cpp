@@ -31,7 +31,7 @@ void  ioflow_f::isource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 {
     NLOOP4
     a->rhsvec.V[n]=0.0;
-    
+
     double porousterm;
 
     // Darcy Porosity
@@ -39,7 +39,7 @@ void  ioflow_f::isource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
     if(p->B240>0 && p->B241==1)
     ULOOP
     {
-        
+
         porousterm=0.0;
         for(n=0;n<p->B240;++n)
         {
@@ -48,11 +48,11 @@ void  ioflow_f::isource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
             if(p->pos_z() >= p->B240_zs[n] && p->pos_z() < p->B240_ze[n])
             porousterm=p->B240_D[n]*a->visc(i,j,k)*a->u(i,j,k) + 0.5*p->B240_C[n]*a->u(i,j,k)*fabs(a->u(i,j,k));
         }
-    
+
     a->rhsvec.V[count] -= porousterm;
     ++count;
     }
-    
+
     //VRANS
     pvrans->u_source(p,a);
 }
@@ -61,7 +61,7 @@ void  ioflow_f::jsource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 {
     NLOOP4
     a->rhsvec.V[n]=0.0;
-    
+
     double porousterm;
 
     count=0;
@@ -77,11 +77,11 @@ void  ioflow_f::jsource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
             if(p->pos_z() >= p->B240_zs[n] && p->pos_z() < p->B240_ze[n])
             porousterm=p->B240_D[n]*a->visc(i,j,k)*a->v(i,j,k) + 0.5*p->B240_C[n]*a->v(i,j,k)*fabs(a->v(i,j,k));
         }
-    
+
     a->rhsvec.V[count] -= porousterm;
     ++count;
     }
-    
+
     //VRANS
     pvrans->v_source(p,a);
 }
@@ -90,9 +90,9 @@ void  ioflow_f::ksource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 {
     NLOOP4
     a->rhsvec.V[n]=0.0;
-    
+
     double porousterm;
-    
+
     count=0;
     if(p->B240>0 && p->B243==1)
     WLOOP
@@ -110,7 +110,7 @@ void  ioflow_f::ksource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
     a->rhsvec.V[count] -= porousterm;
     ++count;
     }
-    
+
     //VRANS
     pvrans->w_source(p,a);
 }

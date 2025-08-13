@@ -47,7 +47,7 @@ public:
     virtual void upgrad(lexer*,fdm_nhf*,slice&);
     virtual void vpgrad(lexer*,fdm_nhf*,slice&);
     virtual void wpgrad(lexer*,fdm_nhf*,slice&);
-    
+
     void rhs(lexer*,fdm_nhf*,ghostcell*,double*,double*,double*,double);
     void vel_setup(lexer*,fdm_nhf*,ghostcell*,double*,double*,double*,double);
     void bedbc(lexer*,fdm_nhf*,ghostcell*,double*,double*,double*,double);
@@ -59,7 +59,7 @@ private:
     int count, gcval_press;
     int gcval_u, gcval_v, gcval_w;
     double val, denom;
-    
+
     
     density *pd;
     patchBC_interface *pBC;

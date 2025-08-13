@@ -32,47 +32,47 @@ void sixdof_obj::print_vtp(lexer *p, ghostcell *pgc)
 {
     // print normals
     //print_normals_vtp(p,pgc);
-    
+
     
     int num=0;
     int printflag=0;
-    
+
     if(p->P15==1)
     num = p->printcount_sixdof;
 
     if(p->P15==2)
     num = p->count;
-    
+
     if(num<0)
     num=0;
 
     if(((p->count%p->P20==0) && p->P30<0.0)  || (p->simtime>printtime && p->P30>0.0)   || (p->count==0 && p->P35==0))
     printflag=1;
-    
+
     if(p->P35>0)
     for(int qn=0; qn<p->P35; ++qn)
     if(p->simtime>printtime_wT[qn] && p->simtime>=p->P35_ts[qn] && p->simtime<=(p->P35_te[qn]+0.5*p->P35_dt[qn]))
     {
     printflag=1;
-    
+
     printtime_wT[qn]+=p->P35_dt[qn];
     }
-    
+
     if(p->mpirank==0 && printflag==1)
     {
         printtime+=p->P30;
-        
+
         char path[300];
-        
+
         if(p->A10==2)
         sprintf(path,"./REEF3D_SFLOW_6DOF_VTP/REEF3D-6DOF-%i-%06i.vtp",n6DOF,num);
-        
+
         if(p->A10==5)
         sprintf(path,"./REEF3D_NHFLOW_6DOF_VTP/REEF3D-6DOF-%i-%06i.vtp",n6DOF,num);
-        
+
         if(p->A10==6)
         sprintf(path,"./REEF3D_CFD_6DOF_VTP/REEF3D-6DOF-%i-%06i.vtp",n6DOF,num);
-        
+
 
 
         ofstream result;
@@ -134,7 +134,7 @@ void sixdof_obj::print_vtp(lexer *p, ghostcell *pgc)
     ffn=tri_z[n][q];
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
 //  Connectivity POLYGON
     int count=0;
     iin=4*tricount*3;

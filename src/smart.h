@@ -35,11 +35,11 @@ public:
 
     smart (lexer *);
     virtual ~smart();
-    
+
     virtual double iphi(field&,int,int,int,int);
     virtual double jphi(field&,int,int,int,int);
     virtual double kphi(field&,int,int,int,int);
-    
+
 private:
 
     double r, phi, minphi, denom;

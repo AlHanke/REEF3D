@@ -55,7 +55,7 @@ public:
     virtual void start(lexer*,fdm_fnpf*,ghostcell*,ioflow*);
     virtual void print_stop(lexer*,fdm_fnpf*,ghostcell*);
     virtual void print_vtu(lexer*,fdm_fnpf*,ghostcell*);
-    
+
 private:
     void pvtu(lexer*,ghostcell*);
     void name_iter(lexer*,ghostcell*);
@@ -71,9 +71,9 @@ private:
     int *printfsfiter_wI;
     double phase;
     double zcoor;
-    
+
     int printcount;
-    
+
     fnpf_print_wsf *pwsf;
     fnpf_print_wsf_theory *pwsf_theory;
     fnpf_print_wsfline *pwsfline;

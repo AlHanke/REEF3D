@@ -27,7 +27,7 @@ Author: Hans Bihs
 void ghostcell::largeval(field& f,double dist,int gcv, int bc, int cs)
 {
     int qstart=1;
-    
+
     if(cs==1)
     {
     f(i-1,j,k)=f(i,j,k);

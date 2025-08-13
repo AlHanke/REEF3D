@@ -59,14 +59,14 @@ void mgcslice4::mgcsetup(lexer* p)
 void mgcslice4::fillmgc(lexer* p)
 {
     int q,n;
-    
+
 //--------------------------
 //WALL1
     QGCSL4LOOP
     {
         i=p->gcbsl4[q][0];
         j=p->gcbsl4[q][1];
-        
+
         if(p->gcbsl4[q][3]==1)
         for(n=0;n<p->margin;++n)
         p->mgcsl4[(i-imin-n-1)*jmax + (j-jmin)]+=1;
@@ -87,7 +87,7 @@ void mgcslice4::fillmgc(lexer* p)
 //--------------------------
 //WALL2
     p->gcsl_extra4=10;
-    
+
     QGCSL4LOOP
     {
         i=p->gcbsl4[q][0];
@@ -135,16 +135,16 @@ void mgcslice4::gcdirfill(lexer* p)
 {
 // GCORIG
     int q,n;
-    
+
     p->Iresize(p->gcslorig4,p->gcsldirsize4, p->gcsl_extra4, 6, 6, 4, 4);
     p->gcsldirsize4=p->gcsl_extra4;
-    
+
     
     for(n=0;n<p->gcsldirsize4;++n)
     for(q=0;q<6;++q)
     for(qn=0;qn<4;++qn)
     p->gcslorig4[n][q][qn]=0;
-    
+
     QGCSL4LOOP
     {
         i=p->gcbsl4[q][0];

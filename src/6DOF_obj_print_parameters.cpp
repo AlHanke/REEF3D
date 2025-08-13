@@ -34,7 +34,7 @@ void sixdof_obj::print_parameter(lexer *p, ghostcell *pgc)
     {
         ofstream print;
         char str[1000];
-        
+
         
         printpos<<p->simtime<<" \t "<<p->xg<<" \t "<<p->yg<<" \t "<<p->zg<<" \t "<<phi*(180/PI)<<" \t "<<theta*(180/PI)<<" \t "<<psi*(180/PI)<<endl;
 

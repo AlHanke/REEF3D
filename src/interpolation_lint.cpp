@@ -443,7 +443,7 @@ double interpolation::lint4b(field& f, int& i,int& j, int& k, double wa, double 
     v3=f(i+1,j,k);
     if(p->flag4[Ip1Jp1K]>TOPO_FLAG)
     v4=f(i+1,j+1,k);
-    
+
     if(p->flag4[IJK]<=TOPO_FLAG)
     v1=f(i,j,k+1);
     if(p->flag4[IJp1K]<=TOPO_FLAG)
@@ -452,14 +452,14 @@ double interpolation::lint4b(field& f, int& i,int& j, int& k, double wa, double 
     v3=f(i+1,j,k+1);
     if(p->flag4[Ip1Jp1K]<=TOPO_FLAG)
     v4=f(i+1,j+1,k+1);
-    
+
     v5=f(i,j,k+1);
     v6=f(i,j+1,k+1);
     v7=f(i+1,j,k+1);
     v8=f(i+1,j+1,k+1);
+
     
-    
-    
+
     pip=0;
 
 
@@ -492,7 +492,7 @@ double interpolation::lint4kin(field& f, int& i,int& j, int& k, double wa, doubl
     v7=f(i+1,j,k+1);
     v8=f(i+1,j+1,k+1);
 
-    
+
     if(p->flagsf4[IJK]<0)
     v1=f(i,j,k+1);
     if(p->flagsf4[IJp1K]<0)
@@ -540,7 +540,7 @@ double interpolation::lint4V(double *f, int& i,int& j, int& k, double wa, double
     v6=f[IJp1Kp1];
     v7=f[Ip1JKp1];
     v8=f[Ip1Jp1Kp1];
-  
+
     x1 = wa*v1 + (1.0-wa)*v3;
     x2 = wa*v2 + (1.0-wa)*v4;
 
@@ -562,7 +562,7 @@ double interpolation::lint7V(double *f, int& i,int& j, int& k, double wa, double
 {
     v1=v2=v3=v4=v5=v6=v7=v8=0.0;
 
-  
+
     v1=f[FIJK];
 
     v2=f[FIJp1K];
@@ -570,15 +570,15 @@ double interpolation::lint7V(double *f, int& i,int& j, int& k, double wa, double
     v3=f[FIp1JK];
 
     v4=f[FIp1Jp1K];
-  
+
     v5=f[FIJKp1];
-    
+
     v6=f[FIJp1Kp1];
 
     v7=f[FIp1JKp1];
- 
+
     v8=f[FIp1Jp1Kp1];
-  
+
 
 
     x1 = wa*v1 + (1.0-wa)*v3;

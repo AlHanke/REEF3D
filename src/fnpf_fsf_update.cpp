@@ -38,7 +38,7 @@ fnpf_fsf_update::fnpf_fsf_update(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 
 fnpf_fsf_update::~fnpf_fsf_update()
 {
-    
+
 }
 
 void fnpf_fsf_update::fsfupdate(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pflow, slice &eta)
@@ -54,7 +54,7 @@ void fnpf_fsf_update::etaloc_sig(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     // find k location for eta
     SLICELOOP4
     c->etaloc(i,j) = p->knoz;
-    
+
     pgc->gcsl_start4int(p,c->etaloc,50);
 }
 

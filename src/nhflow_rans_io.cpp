@@ -42,7 +42,7 @@ nhflow_rans_io::~nhflow_rans_io()
 
 void nhflow_rans_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, ofstream &result)
 {
-    
+
     // eddyv
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
@@ -56,14 +56,14 @@ void nhflow_rans_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, ofstream &re
     ffn=float(0.5*(d->EV[IJK]+d->EV[IJKp1]));
     j=jj;
     }
-    
+
     if(p->j_dir==1)
     ffn=float(0.25*(d->EV[IJK]+d->EV[IJKp1]+d->EV[IJp1K]+d->EV[IJp1Kp1]));
-        
+
         
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     // kin
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
@@ -77,14 +77,14 @@ void nhflow_rans_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, ofstream &re
     ffn=float(0.5*(KIN[IJK]+KIN[IJKp1]));
     j=jj;
     }
-    
+
     if(p->j_dir==1)
     ffn=float(0.25*(KIN[IJK]+KIN[IJKp1]+KIN[IJp1K]+KIN[IJp1Kp1]));
-        
+
         
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     // eps
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
@@ -98,10 +98,10 @@ void nhflow_rans_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, ofstream &re
     ffn=float(0.5*(EPS[IJK]+EPS[IJKp1]));
     j=jj;
     }
-    
+
     if(p->j_dir==1)
     ffn=float(0.25*(EPS[IJK]+EPS[IJKp1]+EPS[IJp1K]+EPS[IJp1Kp1]));
-    
+
     result.write((char*)&ffn, sizeof (float));
     }
 
@@ -166,7 +166,7 @@ void nhflow_rans_io::kinget(int ii, int jj, int kk,double val)
     i=ii;
     j=jj;
     k=kk;
-    
+
     KIN[IJK]=val;
 }
 
@@ -175,7 +175,7 @@ void nhflow_rans_io::epsget(int ii, int jj, int kk,double val)
     i=ii;
     j=jj;
     k=kk;
-    
+
     EPS[IJK]=val;
 }
 
@@ -188,9 +188,9 @@ void nhflow_rans_io::gcupdate(lexer *p, fdm_nhf *d, ghostcell *pgc)
 void nhflow_rans_io::name_pvtu(lexer *p, fdm_nhf *d, ghostcell *pgc, ofstream &result)
 {
     result<<"<PDataArray type=\"Float32\" Name=\"eddyv\"/>"<<endl;
-    
+
     result<<"<PDataArray type=\"Float32\" Name=\"kin\"/>"<<endl;
-    
+
     if(p->A560==1)
     result<<"<PDataArray type=\"Float32\" Name=\"epsilon\"/>"<<endl;
     if(p->A560==2 || p->A560==22)

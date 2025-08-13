@@ -29,9 +29,9 @@ void fsi_strip::initialize(lexer *p, fdm *a, ghostcell *pgc, turbulence *ppturb)
 {
     if(p->mpirank==0)
     cout<<"FSI initialize"<<endl;
-    
+
     pturb = ppturb;
-    
+
     // Initialise parameter
     double x_ini = p->Z11_x[nstrip]; // x-position of strip bottom
     double y_ini = p->Z11_y[nstrip]; // y-position of strip bottom
@@ -69,7 +69,7 @@ void fsi_strip::initialize(lexer *p, fdm *a, ghostcell *pgc, turbulence *ppturb)
     {
         ini_coord.col(n) << x_ini, y_ini, z_ini + L/Ne*n;
     }
-    
+
     Eigen::Vector3d d1,d2,d3;
     d1 << 0, 0, 1;
     d2 << 0, 1, 0;
@@ -78,7 +78,7 @@ void fsi_strip::initialize(lexer *p, fdm *a, ghostcell *pgc, turbulence *ppturb)
 
     // Initialise solver
     iniSolver();
-    
+
     // Initialise communication
     ini_parallel(p, a, pgc);
 
@@ -90,7 +90,7 @@ void fsi_strip::initialize(lexer *p, fdm *a, ghostcell *pgc, turbulence *ppturb)
     getTransVel(xdot_el);
     getRotPos(q_el);
     getRotVel(qdot_el);
-    
+
     t_strip = 0.0;
     t_strip_n = 0.0;
 
@@ -109,7 +109,7 @@ void fsi_strip::initialize(lexer *p, fdm *a, ghostcell *pgc, turbulence *ppturb)
     lagrangeArea.resize(Ne);
     Xil.resize(Ne);
     Xil_0.resize(Ne);
- 
+
     l_el = L/Ne;
     int nl = ceil(l_el/dx_body);
     int nw = ceil(W_el/dx_body);
@@ -123,7 +123,7 @@ void fsi_strip::initialize(lexer *p, fdm *a, ghostcell *pgc, turbulence *ppturb)
         lagrangeVelCoup[n] = Eigen::MatrixXd::Zero(3,nl*nw);
         lagrangeForceCoup[n] = Eigen::MatrixXd::Zero(3,nl*nw);
         lagrangeArea[n] = Eigen::VectorXd::Zero(nl*nw);
-        
+
         double l_0 = n*l_el;
         int ind = 0;
         for (int ii = 0; ii < nl; ii++)
@@ -142,7 +142,7 @@ void fsi_strip::initialize(lexer *p, fdm *a, ghostcell *pgc, turbulence *ppturb)
     {
         Xil[eI] = Eigen::Matrix3Xd::Zero(3,lagrangePoints[eI].cols());
         Xil_0[eI] = Eigen::Matrix3Xd::Zero(3,lagrangePoints[eI].cols());
-        
+
         Eigen::Vector3d cg = (x_el.col(eI+1) + x_el.col(eI))/2.0;
 
         for (int pI = 0; pI < lagrangePoints[eI].cols(); pI++)
@@ -163,14 +163,14 @@ void fsi_strip::ini_parallel(lexer *p, fdm *a, ghostcell *pgc)
     p->Darray(yend, p->mpi_size);
     p->Darray(zstart, p->mpi_size);
     p->Darray(zend, p->mpi_size);
-    
+
     xstart[p->mpirank] = p->originx;
     ystart[p->mpirank] = p->originy;
     zstart[p->mpirank] = p->originz;
     xend[p->mpirank] = p->endx;
     yend[p->mpirank] = p->endy;
     zend[p->mpirank] = p->endz;
-    
+
     for (int i = 0; i < p->mpi_size; i++)
     {
         MPI_Bcast(&xstart[i],1,MPI_DOUBLE,i,pgc->mpi_comm);
@@ -186,7 +186,7 @@ void fsi_strip::get_cellsize(lexer *p, fdm *a, ghostcell *pgc)
 {
     Eigen::Vector3d coordI;
     coordI << p->Z11_t[nstrip]/2.0, p->Z11_w[nstrip]/2.0, p->Z11_l[nstrip]/2.0;
-    
+
     if
     (
         coordI(0) >= xstart[p->mpirank] && coordI(0) < xend[p->mpirank] &&
@@ -197,7 +197,7 @@ void fsi_strip::get_cellsize(lexer *p, fdm *a, ghostcell *pgc)
         int ii = p->posc_i(coordI(0));
         int jj = p->posc_j(coordI(1));
         int kk = p->posc_k(coordI(2));
-        
+
         dx_body = p->DXN[ii + marge];
     }
     else
@@ -207,4 +207,4 @@ void fsi_strip::get_cellsize(lexer *p, fdm *a, ghostcell *pgc)
 
     dx_body = pgc->globalsum(dx_body);
 }
-    
+

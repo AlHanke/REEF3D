@@ -46,29 +46,29 @@ void sixdof_obj::geometry_stl(lexer *p, ghostcell *pgc)
         Vfb=0.0;
         for (int n = 0; n < tricount; ++n)
         {
-        
+
             
             x1 = tri_x[n][0];
             x2 = tri_x[n][1];
             x3 = tri_x[n][2];
-            
+
             y1 = tri_y[n][0];
             y2 = tri_y[n][1];
             y3 = tri_y[n][2];
-            
+
             z1 = tri_z[n][0];
             z2 = tri_z[n][1];
             z3 = tri_z[n][2];
-                
+
             Vfb += (1.0/6.0)*(-x3*y2*z1 + x2*y3*z1 + x3*y1*z2 - x1*y3*z2 - x2*y1*z3 + x1*y2*z3);
         }
-        
+
         if (p->X22==1)
         {
             Mass_fb = p->X22_m;
             Rfb = Mass_fb/Vfb;
         }
-            
+
         else if (p->X21==1)
         {
             Rfb = p->X21_d;
@@ -83,14 +83,14 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
     // Total Volume
     double H;
     Vfb=0.0;
-   
+
     ALOOP
     {
         H = Hsolidface(p,a,0,0,0);
         Vfb+= p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*H;
     }
     Vfb=pgc->globalsum(Vfb);
-   
+
     // Mass and density calculation
     if(p->X21==1)
     {
@@ -98,13 +98,13 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
     Mass_fb = Vfb*Rfb;
     p->X22_m = Mass_fb;
     }
-    
+
     if(p->X22==1)
     {
     Mass_fb = p->X22_m;
     Rfb = Mass_fb/Vfb;
     }
-    
+
     if(p->mpirank==0)
     {
     cout<<"Volume Floating Body: "<<Vfb<<endl;
@@ -122,20 +122,20 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
     double rx, ry, rz, Vol;
 
     // Center of Gravity
-    
+
     if (p->X23==0)
     {
-        
+
         c_(0) = c_(1) = c_(2) = 0.0;
-        
+
         LOOP
         {
             rx=p->pos_x()-xorig;
             ry=p->pos_y()-yorig;
             rz=p->pos_z()-zorig;
-            
+
             //cout<<p->mpirank<<" CG: "<<rx<<" "<<ry<<" "<<rz<<" . "<<a->fb(i,j,k)<<endl;
-            
+
             H = Hsolidface(p,a,0,0,0);
 
             Vol = H*p->DXN[IP]*p->DYN[JP]*p->DZN[KP];
@@ -144,23 +144,23 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
             c_(1) += (1.0/Mass_fb)*ry*Rfb*Vol;
             c_(2) += (1.0/Mass_fb)*rz*Rfb*Vol;
         }
-    
+
         c_(0) = pgc->globalsum(c_(0));
         c_(1) = pgc->globalsum(c_(1));
         c_(2) = pgc->globalsum(c_(2));
-    
+
         c_(0) += xorig;
         c_(1) += yorig;
         c_(2) += zorig;
     }
-    
+
     else if (p->X23==1)
     {
         c_(0) = p->X23_x;
         c_(1) = p->X23_y;
         c_(2) = p->X23_z;
     }
-    
+
     if(p->mpirank==0)
     cout<<"Center of Gravity   xg: "<<c_(0)<<" yg: "<<c_(1)<<" zg: "<<c_(2)<<endl;
 
@@ -173,28 +173,28 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
 // Moments of Inertia
 
     double Ix,Iy,Iz;
-        
+
     if(p->X24==0)
     {
         Ix = Iy = Iz = 0.0;
-        
+
         
         // Non-homogenious body just needs rho as a function of space, integration is the same
-        
+
         LOOP
         {
             rx=p->pos_x() - c_(0);
             ry=p->pos_y() - c_(1);
             rz=p->pos_z() - c_(2);
-            
+
             H = Hsolidface(p,a,0,0,0);
-            
+
             Vol = H*p->DXN[IP]*p->DYN[JP]*p->DZN[KP];
 
             Ix += (ry*ry + rz*rz)*Rfb*Vol;
             Iy += (rx*rx + rz*rz)*Rfb*Vol;
             Iz += (rx*rx + ry*ry)*Rfb*Vol;
-        
+
             I_(0,1) -= (rx*ry)*Rfb*Vol;
             I_(0,2) -= (rx*rz)*Rfb*Vol;
             I_(1,2) -= (ry*rz)*Rfb*Vol;
@@ -218,14 +218,14 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
         I_(0,2) = 0.0;
         I_(1,2) = 0.0;
     }
-    
+
     I_(0,0) = Ix;
     I_(1,0) = I_(0,1);
     I_(1,1) = Iy;
     I_(2,0) = I_(0,2);
     I_(2,1) = I_(1,2);
     I_(2,2) = Iz;
-    
+
     if(p->mpirank==0)
     cout<<"Moments of Inertia Tensor:\n"<<I_<<endl;
 }
@@ -236,14 +236,14 @@ void sixdof_obj::geometry_ls_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     // Total Volume
     double H;
     Vfb=0.0;
-   
+
     ALOOP
     {
         H = Hsolidface_nhflow(p,d,0,0,0);
         Vfb+= p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*H;
     }
     Vfb=pgc->globalsum(Vfb);
-   
+
     // Mass and density calculation
     if(p->X21==1)
     {
@@ -251,13 +251,13 @@ void sixdof_obj::geometry_ls_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     Mass_fb = Vfb*Rfb;
     p->X22_m = Mass_fb;
     }
-    
+
     if(p->X22==1)
     {
     Mass_fb = p->X22_m;
     Rfb = Mass_fb/Vfb;
     }
-    
+
     if(p->mpirank==0)
     {
     cout<<"Volume Floating Body: "<<Vfb<<endl;
@@ -268,29 +268,29 @@ void sixdof_obj::geometry_ls_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     p->W_fb = Rfb;
 
 
-    
+
     // Origin
-    
+
     double xorig=0.0;
     double yorig=0.0;
     double zorig=0.0;
     double rx, ry, rz, Vol;
 
     // Center of Gravity
-    
+
     if (p->X23==0)
     {
-        
+
         c_(0) = c_(1) = c_(2) = 0.0;
-        
+
         LOOP
         {
             rx=p->pos_x()-xorig;
             ry=p->pos_y()-yorig;
             rz=p->pos_z()-zorig;
-            
+
             //cout<<p->mpirank<<" CG: "<<rx<<" "<<ry<<" "<<rz<<" . "<<a->fb(i,j,k)<<endl;
-            
+
             H = Hsolidface_nhflow(p,d,0,0,0);
 
             Vol = H*p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*d->WL(i,j);
@@ -299,23 +299,23 @@ void sixdof_obj::geometry_ls_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
             c_(1) += (1.0/Mass_fb)*ry*Rfb*Vol;
             c_(2) += (1.0/Mass_fb)*rz*Rfb*Vol;
         }
-    
+
         c_(0) = pgc->globalsum(c_(0));
         c_(1) = pgc->globalsum(c_(1));
         c_(2) = pgc->globalsum(c_(2));
-    
+
         c_(0) += xorig;
         c_(1) += yorig;
         c_(2) += zorig;
     }
-    
+
     else if (p->X23==1)
     {
         c_(0) = p->X23_x;
         c_(1) = p->X23_y;
         c_(2) = p->X23_z;
     }
-    
+
     if(p->mpirank==0)
     cout<<"Center of Gravity   xg: "<<c_(0)<<" yg: "<<c_(1)<<" zg: "<<c_(2)<<endl;
 
@@ -328,28 +328,28 @@ void sixdof_obj::geometry_ls_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 // Moments of Inertia
 
     double Ix,Iy,Iz;
-        
+
     if(p->X24==0)
     {
         Ix = Iy = Iz = 0.0;
-        
+
         
         // Non-homogenious body just needs rho as a function of space, integration is the same
-        
+
         LOOP
         {
             rx=p->pos_x() - c_(0);
             ry=p->pos_y() - c_(1);
             rz=p->pos_z() - c_(2);
-            
+
             H = Hsolidface_nhflow(p,d,0,0,0);
-            
+
             Vol = H*p->DXN[IP]*p->DYN[JP]*p->DZN[KP]*d->WL(i,j);
 
             Ix += (ry*ry + rz*rz)*Rfb*Vol;
             Iy += (rx*rx + rz*rz)*Rfb*Vol;
             Iz += (rx*rx + ry*ry)*Rfb*Vol;
-        
+
             I_(0,1) -= (rx*ry)*Rfb*Vol;
             I_(0,2) -= (rx*rz)*Rfb*Vol;
             I_(1,2) -= (ry*rz)*Rfb*Vol;
@@ -373,14 +373,14 @@ void sixdof_obj::geometry_ls_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         I_(0,2) = 0.0;
         I_(1,2) = 0.0;
     }
-    
+
     I_(0,0) = Ix;
     I_(1,0) = I_(0,1);
     I_(1,1) = Iy;
     I_(2,0) = I_(0,2);
     I_(2,1) = I_(1,2);
     I_(2,2) = Iz;
-    
+
     if(p->mpirank==0)
     cout<<"Moments of Inertia Tensor:\n"<<I_<<endl;
 }

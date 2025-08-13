@@ -47,7 +47,7 @@ private:
     double L;
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 
-    
+
     flux *pflux;
 };
 

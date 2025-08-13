@@ -79,9 +79,9 @@ void particle_pls::pvtu_neg(fdm* a, lexer* p, ghostcell* pgc)
 
     if(p->P15==2)
     num = p->count;
-    
+
     sprintf(name,"./REEF3D_PLS/XPLS-NEG-%08i.pvtu",num);
-    
+
     ofstream result;
     result.open(name);
 
@@ -151,7 +151,7 @@ void particle_pls::header_pos(fdm* a,lexer* p,ghostcell* pgc)
     if(p->P15==2)
     num = p->count;
 
-    
+
     sprintf(name,"./REEF3D_PLS/XPLS-POS-%08i-%06i.vtp",num,p->mpirank+1);
 
 }

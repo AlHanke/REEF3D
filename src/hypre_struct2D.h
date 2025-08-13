@@ -43,17 +43,17 @@ public:
     virtual void start(lexer*, ghostcell*, slice&, matrix2D&, vec2D&, vec2D&, int);
 
     void fillbackvec(lexer*,slice&,vec2D&,int);
-    
+
     void make_grid(lexer*, ghostcell*);
     void fill_matrix(lexer*, ghostcell*, matrix2D&, slice&, vec2D&);
-    
+
     void solve(lexer*, ghostcell*);
-    
+
     void create_solvers(lexer*,ghostcell*);
     void delete_solvers(lexer*,ghostcell*);
 
 private:
-    
+
 // HYPRE
     HYPRE_StructGrid     grid;
     HYPRE_StructStencil  stencil;
@@ -69,7 +69,7 @@ private:
     double final_res_norm;
     int stencil_indices[7];
     int nentries;
-   
+
     int numiter,count,q;
 
 };

@@ -40,12 +40,12 @@ public:
 
 private:
     double aij(lexer*, fdm2D*, slice&, int, slice&, slice&);
-    
+
     double dx,dy,L;
     double ul,ur,vl,vr;
-    
+
     sflow_flux *pflux;
-    
+
     double ivel1,ivel2,jvel1,jvel2;
 
 };

@@ -41,7 +41,7 @@ public:
     virtual double kphi(field&,int,int,int,int);
 
 private:
-    
+
     double max(double,double,double);
     double max(double,double);
     double min(double,double,double);

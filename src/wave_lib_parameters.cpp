@@ -87,10 +87,10 @@ wave_lib_parameters::wave_lib_parameters(lexer *p, ghostcell *pgc) : pshift(p->B
 
         wC = ww/wk;
         ubar = (c0 + eps*eps*c2 + eps*eps*eps*eps*c4)/sqrt(wk/9.81);
-        
+
         //cout<<"C-Umean: "<<wC-ubar<<" C: "<<wC<<" Umean: "<<ubar<<endl;
        }
-       
+
     p->wT = wT;
     p->wC = wC;
     }

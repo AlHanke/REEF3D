@@ -42,7 +42,7 @@ reinitopo_AB2::reinitopo_AB2(lexer* p):gradient(p),f(p),frk1(p),frk2(p),L(p),dt(
 
     if(p->S50==3)
     gcval_topo=153;
-    
+
     if(p->S50==4)
     gcval_topo=154;
 
@@ -51,7 +51,7 @@ reinitopo_AB2::reinitopo_AB2(lexer* p):gradient(p),f(p),frk1(p),frk2(p),L(p),dt(
 
     prdisc = new reinidisc_fsf(p);
 
-    
+
     time_preproc(p);
 }
 
@@ -63,9 +63,9 @@ void reinitopo_AB2::start(lexer* p, fdm* a, ghostcell* pgc,field &f)
 {
     reiniter=p->S37;
     gcval=gcval_topo;
-    
+
     pgc->start4a(p,f,gcval);
-    
+
     if(p->count==0)
     {
     if(p->mpirank==0)
@@ -73,7 +73,7 @@ void reinitopo_AB2::start(lexer* p, fdm* a, ghostcell* pgc,field &f)
     reiniter=2*int(p->maxlength/(p->F43*p->DXM));
     gcval=gcval_initopo;
     pgc->start4a(p,f,gcval);
-    
+
     ALOOP
     L.V[IJK]=frk1.V[IJK]=0.0;
     }
@@ -81,7 +81,7 @@ void reinitopo_AB2::start(lexer* p, fdm* a, ghostcell* pgc,field &f)
     for(int q=0;q<reiniter;++q)
     {
         prdisc->start(p,a,pgc,f,L,5);
-        
+
         if(q==0)
         ALOOP
         frk1.V[IJK]=L.V[IJK];
@@ -106,7 +106,7 @@ void reinitopo_AB2::step(lexer* p, fdm *a)
 
 void reinitopo_AB2::time_preproc(lexer* p)
 {
-    
+
     n=0;
     ALOOP
     {

@@ -37,7 +37,7 @@ public:
     data_void(lexer*, fdm*, ghostcell*);
     virtual ~data_void();
     virtual void start(lexer*, fdm*, ghostcell*);
-    
+
     virtual void print_3D(lexer*, fdm*, ghostcell*,ofstream&);
     virtual void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
     virtual void name_vtu(lexer*, fdm*, ghostcell*,ofstream&, int*, int &);

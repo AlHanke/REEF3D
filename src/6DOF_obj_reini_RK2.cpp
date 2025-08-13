@@ -33,13 +33,13 @@ void sixdof_obj::reini_RK2(lexer* p, fdm* a, ghostcell* pgc, field &f)
     {
     if(p->j_dir==0)
     dt.V[IJK] = p->F43*MIN(p->DXP[IP],p->DZP[KP]);
-    
+
     if(p->j_dir==1)
     dt.V[IJK] = p->F43*MIN3(p->DXP[IP],p->DYP[JP],p->DZP[KP]);
     }
-    
+
     reiniter=5;
-    
+
     if(p->count==0)
     {
     if(p->mpirank==0)
@@ -56,7 +56,7 @@ void sixdof_obj::reini_RK2(lexer* p, fdm* a, ghostcell* pgc, field &f)
         frk1.V[IJK] = f.V[IJK] + dt.V[IJK]*L.V[IJK];
 
          pgc->start4a(p,frk1,50);
-        
+
         
         // Step 2
         prdisc->start(p,a,pgc,frk1,L,5);
@@ -66,7 +66,7 @@ void sixdof_obj::reini_RK2(lexer* p, fdm* a, ghostcell* pgc, field &f)
 
         pgc->start4a(p,f,50);
     }
-        
+
 }
 
 

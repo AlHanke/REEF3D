@@ -46,7 +46,7 @@ private:
 
     double pval;
     int count,n,q;
-    
+
     density *pd;
 };
 

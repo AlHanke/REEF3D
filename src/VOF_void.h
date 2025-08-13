@@ -46,7 +46,7 @@ public:
     virtual ~VOF_void();
     virtual void start(fdm*,lexer*, convection*, solver*, ghostcell*,ioflow*, reini*, particle_corr*,field&);
     virtual void update(lexer*,fdm*,ghostcell*,field&);
-    
+
 private:
     fluid_update *pupdate;
 };

@@ -26,7 +26,7 @@ Author: Hans Bihs
 
 void ghostcell::patchBC(lexer *p,field& f,double dist,int gcv, int bc, int cs)
 {
+
     
-    
-    
+
 }

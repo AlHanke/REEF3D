@@ -40,7 +40,7 @@ public:
 
 private:
     rheology *prheo;
-    
+
     static int iocheck,iter;
     int gcval_ro,gcval_visc;
     int n;

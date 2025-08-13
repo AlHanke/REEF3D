@@ -36,11 +36,11 @@ Author: Hans Bihs
 #define HXP (fabs(0.5*(d->WL(i,j)+d->WL(i+1,j)))>1.0e-20?0.5*(d->WL(i,j)+d->WL(i+1,j)):1.0e20)
 #define HY (fabs(d->hy(i,j))>1.0e-20?d->hy(i,j):1.0e20)
 #define WLVL (fabs(d->WL(i,j))>1.0e-20?d->WL(i,j):1.0e20)
- 
+
 nhflow_pjm_hs::nhflow_pjm_hs(lexer* p, fdm_nhf *d, patchBC_interface *ppBC) : nhflow_gradient(p)
 {
     pBC = ppBC;
-    
+
     pd = new density_f(p);
 
     gcval_press=540;
@@ -65,7 +65,7 @@ void nhflow_pjm_hs::vcorr(lexer* p, fdm_nhf *d, slice &WL, double *V, double *P,
 void nhflow_pjm_hs::wcorr(lexer* p, fdm_nhf *d, slice &WL, double *W, double *P, double alpha)
 {
 }
- 
+
 void nhflow_pjm_hs::rhs(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U, double *V, double *W, double alpha)
 {
 }

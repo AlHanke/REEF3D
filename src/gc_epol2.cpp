@@ -32,33 +32,33 @@ int ghostcell::gceval2(lexer *p, int gcv, int bc, int cs)
     //Wall
     if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==11||gcv==2))
     return gclabel_v;
-    
+
     if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==111))
     return 5;
-    
+
     if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==115))
     return gclabel_v;
-    
+
     if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==118))
     return 4;
-    
+
     // Topo
     if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==11||gcv==2))
     return gclabel_vtopo;
-    
+
     if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==111))
     return 5;
-    
+
     if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==115))
     return gclabel_vtopo;
-    
+
     if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==118))
     return 4;
-    
+
     else
     if((bc==21||bc==22||bc==5) && gcv==15)
     return 4;
-    
+
     // Orthogonal
     else
     if((bc==21||bc==22||bc==5||bc==7)&&(cs==2||cs==3)&&(gcv==11||gcv==2))
@@ -67,22 +67,22 @@ int ghostcell::gceval2(lexer *p, int gcv, int bc, int cs)
     else
     if((bc==21||bc==22||bc==5||bc==7)&&(cs==2||cs==3)&&gcv==8)
     return gclabel_vel;
-    
+
 
 //Inflow
     else
     if((bc==6  && (gcv==11||gcv==2||gcv==8)))
     return gclabel_v_in;
-    
+
 //Outflow
     else
     if((bc==2 && gclabel_outflow==1) && (gcv==11||gcv==2) && (cs==1||cs==4||cs==5||cs==6))
     return 4;
-    
+
     else
     if((bc==2 && gclabel_outflow==1) && (gcv==11||gcv==2) && (cs==2||cs==3))
     return gclabel_v_out;
-    
+
 //Patch
     else
     if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==11||gcv==2||gcv==8))
@@ -97,11 +97,11 @@ int ghostcell::gceval2(lexer *p, int gcv, int bc, int cs)
     else
     if(bc==3 && (cs==2||cs==3)&&(gcv==11||gcv==18 || gcv==2))
     return 1;
-    
+
     else
     if((bc==9) && cs==6 && (gcv==11||gcv==18 || gcv==2))
     return 4;
-    
+
 // 6DOF
     else
     if(bc==41||bc==42||bc==43)
@@ -141,19 +141,19 @@ void ghostcell::gcdistro2(lexer *p,field& f, int ii, int jj, int kk, int nn, dou
 
     if(bc_label==5)
     noslip(f,dist,gcv,bc,cs);
-    
+
     if(bc_label==6)
     outflow(p,f,gcv,bc,cs);
-    
+
     if(bc_label==7)
     sommerfeld(p,f,gcv,bc,cs);
-    
+
     if(bc_label==11)
     dirichlet_ortho_reflect(p,f,dist,gcv,bc,cs);
 
     if(bc_label==12)
     dirichlet_para_reflect(p,f,dist,gcv,bc,cs);
-    
+
     if(bc_label==99)
     gcb_debug(f,gcv,bc,cs);
 }

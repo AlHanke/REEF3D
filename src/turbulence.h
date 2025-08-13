@@ -62,7 +62,7 @@ public:
     virtual void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&)=0;
     virtual void name_vtu(lexer*, fdm*, ghostcell*,ofstream&, int*, int &)=0;
     virtual void offset_vtu(lexer*, fdm*, ghostcell*,ofstream&, int*, int &)=0;
-    
+
     double uref;
 };
 

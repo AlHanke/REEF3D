@@ -32,13 +32,13 @@ void sixdof_obj::reini_AB2(lexer* p, fdm* a, ghostcell* pgc, field &f)
     {
     if(p->j_dir==0)
     dt.V[IJK] = p->F43*MIN(p->DXP[IP],p->DZP[KP]);
-    
+
     if(p->j_dir==1)
     dt.V[IJK] = p->F43*MIN3(p->DXP[IP],p->DYP[JP],p->DZP[KP]);
     }
-    
+
     reiniter=10;
-    
+
     
     if(p->count==0)
     {

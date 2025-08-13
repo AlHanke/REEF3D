@@ -58,7 +58,7 @@ momentum_RK3CN::momentum_RK3CN(lexer *p, fdm *a, convection *pconvection, diffus
 
     if(p->W90==0  || p->F300>0)
     pupdate = new fluid_update_void();
-    
+
     if(p->W90>0 && p->F300==0)
     pupdate = new fluid_update_rheology(p);
 }
@@ -73,7 +73,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
     pflow->rkinflow(p,a,pgc,urk1,vrk1,wrk1);
     pflow->rkinflow(p,a,pgc,urk2,vrk2,wrk2);
-        
+
 //Step 1
 //--------------------------------------------------------
 
@@ -99,7 +99,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
     pflow->jsource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
     ppress->vpgrad(p,a,a->eta,a->eta_n);
-    
+
         jrhs(p,a,pgc,a->v,a->u,a->v,a->w,1.0);
     pconvec->start(p,a,a->v,2,a->u,a->v,a->w);
         addjrhs(p,a,pgc,a->v,a->u,a->v,a->w,1.0);
@@ -119,17 +119,17 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
     pconvec->start(p,a,a->w,3,a->u,a->v,a->w);
         addkrhs(p,a,pgc,a->w,a->u,a->v,a->w,1.0);
     pdiff->diff_w(p,a,pgc,psolv,wrk1,a->w,a->u,a->v,a->w,8.0/15.0);
-    
+
         p->wtime=pgc->timer()-starttime;
-    
+
         pgc->start1(p,urk1,gcval_u);
     pgc->start2(p,vrk1,gcval_v);
         pgc->start3(p,wrk1,gcval_w);
 
-    
+
     momentum_forcing_start(a, p, pgc, p6dof, pfsi,
                            urk1, vrk1, wrk1, fx, fy, fz, 0, 1.0, false);
-    
+
     pflow->pressure_io(p,a,pgc);
     ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk1, vrk1, wrk1, 8.0/15.0);
 
@@ -141,12 +141,12 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
     pgc->start1(p,urk1,gcval_u);
     pgc->start2(p,vrk1,gcval_v);
     pgc->start3(p,wrk1,gcval_w);
-    
+
     pupdate->start(p,a,pgc);
 
 //Step 2
 //--------------------------------------------------------
-    
+
     // U
     starttime=pgc->timer();
 
@@ -162,9 +162,9 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
         pconvec->start(p,a,a->u,1,a->u,a->v,a->w);
         addirhs(p,a,pgc,a->u,a->u,a->v,a->w,-17.0/8.0);
     pdiff->diff_u(p,a,pgc,psolv,urk2,urk1,urk1,vrk1,wrk1,2.0/15.0);
-                
+
         p->utime+=pgc->timer()-starttime;
-    
+
     // V
     starttime=pgc->timer();
 
@@ -180,7 +180,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
         pconvec->start(p,a,a->v,2,a->u,a->v,a->w);
         addjrhs(p,a,pgc,a->v,a->u,a->v,a->w,-17.0/8.0);
     pdiff->diff_v(p,a,pgc,psolv,vrk2,vrk1,urk1,vrk1,wrk1,2.0/15.0);
-    
+
         p->vtime+=pgc->timer()-starttime;
 
     // W
@@ -190,7 +190,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
     pflow->ksource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
     ppress->wpgrad(p,a,a->eta,a->eta_n);
- 
+
     krhs(p,a,pgc,wrk1,urk1,vrk1,wrk1,1.0);
         addkrhs(p,a,pgc,wrk1,urk1,vrk1,wrk1,1.0);
     pconvec->start(p,a,wrk1,3,urk1,vrk1,wrk1);
@@ -200,7 +200,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
     pdiff->diff_w(p,a,pgc,psolv,wrk2,wrk1,urk1,vrk1,wrk1,2.0/15.0);
 
         p->wtime+=pgc->timer()-starttime;
-    
+
         pgc->start1(p,urk2,gcval_u);
     pgc->start2(p,vrk2,gcval_v);
             pgc->start3(p,wrk2,gcval_w);
@@ -210,12 +210,12 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
 
     pflow->pressure_io(p,a,pgc);
     ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk2, vrk2, wrk2, 2.0/15.0);
-    
+
     pflow->u_relax(p,a,pgc,urk2);
     pflow->v_relax(p,a,pgc,vrk2);
     pflow->w_relax(p,a,pgc,wrk2);
     pflow->p_relax(p,a,pgc,a->press);
-    
+
     pgc->start1(p,urk2,gcval_u);
     pgc->start2(p,vrk2,gcval_v);
     pgc->start3(p,wrk2,gcval_w);
@@ -240,7 +240,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
         pconvec->start(p,a,urk1,1,urk1,vrk1,wrk1);
         addirhs(p,a,pgc,urk1,urk1,vrk1,wrk1,-5.0/4.0);
     pdiff->diff_u(p,a,pgc,psolv,a->u,urk2,urk2,vrk2,wrk2,1.0/3.0);
-    
+
         p->utime+=pgc->timer()-starttime;
 
     // V
@@ -258,7 +258,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
         pconvec->start(p,a,vrk1,2,urk1,vrk1,wrk1);
         addjrhs(p,a,pgc,vrk1,urk1,vrk1,wrk1,-5.0/4.0);
     pdiff->diff_v(p,a,pgc,psolv,a->v,vrk2,urk2,vrk2,wrk2,1.0/3.0);
-    
+
         p->vtime+=pgc->timer()-starttime;
 
     // W
@@ -276,7 +276,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
         pconvec->start(p,a,wrk1,3,urk1,vrk1,wrk1);
         addkrhs(p,a,pgc,wrk1,urk1,vrk1,wrk1,-5.0/4.0);
     pdiff->diff_w(p,a,pgc,psolv,a->w,wrk2,urk2,vrk2,wrk2,1.0/3.0);
-    
+
         p->wtime+=pgc->timer()-starttime;
 
         pgc->start1(p,a->u,gcval_u);
@@ -288,7 +288,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
 
     pflow->pressure_io(p,a,pgc);
     ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, a->u, a->v,a->w,1.0/3.0);
-    
+
     pflow->u_relax(p,a,pgc,a->u);
     pflow->v_relax(p,a,pgc,a->v);
     pflow->w_relax(p,a,pgc,a->w);
@@ -314,7 +314,7 @@ void momentum_RK3CN::irhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uve
             dens = 1.0;
         }
     a->F(i,j,k) += (a->rhsvec.V[n] + a->gi*dens + p->W29_x + a->Fext(i,j,k))*PORVAL1;
-    
+
     a->rhsvec.V[n] = 0.0;
     a->Fext(i,j,k) = 0.0;
     ++n;
@@ -345,7 +345,7 @@ void momentum_RK3CN::jrhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uve
             dens = 1.0;
         }
     a->G(i,j,k) += (a->rhsvec.V[n] + a->gj*dens + p->W29_y + a->Gext(i,j,k))*PORVAL2;
-    
+
     a->rhsvec.V[n] = 0.0;
     a->Gext(i,j,k) = 0.0;
     ++n;
@@ -376,7 +376,7 @@ void momentum_RK3CN::krhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uve
             dens = 1.0;
         }
     a->H(i,j,k) += (a->rhsvec.V[n] + a->gk*dens + p->W29_z + a->Hext(i,j,k))*PORVAL3;
-    
+
     a->rhsvec.V[n] = 0.0;
     a->Hext(i,j,k) = 0.0;
     ++n;

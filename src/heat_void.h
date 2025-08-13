@@ -36,7 +36,7 @@ public:
 
     virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*);
     virtual void ttimesave(lexer*, fdm*);
-    
+
     virtual void diff_update(lexer*, fdm*, ghostcell*);
 
     virtual void print_3D(lexer*, fdm*, ghostcell*,ofstream&);

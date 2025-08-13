@@ -28,13 +28,13 @@ Author: Hans Bihs
 void iowave::eta_relax(lexer *p, ghostcell *pgc, slice &f)
 {
     starttime=pgc->timer();
-    
+
     count=0;
     SLICELOOP4
     {
         dg = distgen(p);
         db = distbeach(p);
-        
+
 
         // Wave Generation
         if(p->B98==2 && h_switch==1)
@@ -46,7 +46,7 @@ void iowave::eta_relax(lexer *p, ghostcell *pgc, slice &f)
             ++count;
             }
         }
-        
+
         
         // Numerical Beach
         if(p->B99==1 || p->B99==2)
@@ -60,20 +60,20 @@ void iowave::eta_relax(lexer *p, ghostcell *pgc, slice &f)
             }
         }
     }
-    
+
     p->wavecalctime+=pgc->timer()-starttime;
 }
 
 void iowave::um_relax(lexer *p, ghostcell *pgc, slice &P, slice &bed, slice &eta)
 {
     starttime=pgc->timer();
-    
+
     count=0;
     SLICELOOP1
     {
         dg = distgen(p);
         db = distbeach(p);
-        
+
     
         // Wave Generation
         if(p->B98==2 && u_switch==1)
@@ -85,7 +85,7 @@ void iowave::um_relax(lexer *p, ghostcell *pgc, slice &P, slice &bed, slice &eta
             ++count;
             }
         }
-        
+
         // Numerical Beach
         if(p->B99==1 || p->B99==2)
         {
@@ -94,14 +94,14 @@ void iowave::um_relax(lexer *p, ghostcell *pgc, slice &P, slice &bed, slice &eta
             P(i,j) = relax1_nb(i,j)*P(i,j);
         }
     }
-    
+
     p->wavecalctime+=pgc->timer()-starttime;
 }
 
 void iowave::vm_relax(lexer *p, ghostcell *pgc, slice &Q, slice &bed, slice &eta)
 {
     starttime=pgc->timer();
-    
+
     count=0;
     SLICELOOP2
     {
@@ -118,7 +118,7 @@ void iowave::vm_relax(lexer *p, ghostcell *pgc, slice &Q, slice &bed, slice &eta
             ++count;
             }
         }
-        
+
         // Numerical Beach
         if(p->B99==1 || p->B99==2)
         {
@@ -127,14 +127,14 @@ void iowave::vm_relax(lexer *p, ghostcell *pgc, slice &Q, slice &bed, slice &eta
             Q(i,j) = relax2_nb(i,j)*Q(i,j);
         }
     }
-    
+
     p->wavecalctime+=pgc->timer()-starttime;
 }
 
 void iowave::wm_relax(lexer *p, ghostcell *pgc, slice &W, slice &bed, slice &eta)
 {
     starttime=pgc->timer();
-    
+
     count=0;
     SLICELOOP4
     {
@@ -152,7 +152,7 @@ void iowave::wm_relax(lexer *p, ghostcell *pgc, slice &W, slice &bed, slice &eta
             ++count;
             }
         }
-        
+
         // Numerical Beach
         if(p->B99==1 || p->B99==2)
         {
@@ -161,16 +161,16 @@ void iowave::wm_relax(lexer *p, ghostcell *pgc, slice &W, slice &bed, slice &eta
             W(i,j) = relax4_nb(i,j)*W(i,j);
         }
     }
-    
+
     p->wavecalctime+=pgc->timer()-starttime;
 }
 
 void iowave::ws_relax(lexer *p, ghostcell *pgc, slice &W, slice &bed, slice &eta)
 {
     starttime=pgc->timer();
-    
+
     double wval=0.0;
-    
+
     SLICELOOP4
     {
         xg = xgen(p);
@@ -181,7 +181,7 @@ void iowave::ws_relax(lexer *p, ghostcell *pgc, slice &W, slice &bed, slice &eta
         z=eta(i,j);
 
         wval = wave_w(p,pgc,xg,yg,z);
-        
+
         
         // Wave Generation
         if(p->B98==2 && w_switch==1)
@@ -190,7 +190,7 @@ void iowave::ws_relax(lexer *p, ghostcell *pgc, slice &W, slice &bed, slice &eta
             if(dg<1.0e20)
             W(i,j) = (1.0-relax4_wg(i,j))*ramp(p)*wval + relax4_wg(i,j)*W(i,j);
         }
-        
+
         // Numerical Beach
         if(p->B99==1 || p->B99==2)
         {
@@ -199,21 +199,21 @@ void iowave::ws_relax(lexer *p, ghostcell *pgc, slice &W, slice &bed, slice &eta
             W(i,j) = relax4_nb(i,j)*W(i,j);
         }
     }
-    
+
     p->wavecalctime+=pgc->timer()-starttime;
 }
 
 void iowave::pm_relax(lexer *p, ghostcell *pgc, slice &f)
 {
     starttime=pgc->timer();
-    
+
     SLICELOOP4
     {
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
         db = distbeach(p);
-        
+
         // Wave Generation
         if(p->B98==2)
         {
@@ -221,7 +221,7 @@ void iowave::pm_relax(lexer *p, ghostcell *pgc, slice &f)
             //if(dg<1.0e20)
             //f(i,j) = relax4_wg(i,j) * f(i,j);
         }
-        
+
         // Numerical Beach
         if(p->B99==1 || p->B99==2)
         {
@@ -230,6 +230,6 @@ void iowave::pm_relax(lexer *p, ghostcell *pgc, slice &f)
             f(i,j) = relax4_nb(i,j)*f(i,j);
         }
     }
-    
+
     p->wavecalctime+=pgc->timer()-starttime;
 }

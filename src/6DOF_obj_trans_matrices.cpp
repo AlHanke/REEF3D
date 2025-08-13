@@ -39,18 +39,18 @@ void sixdof_obj::get_rot(lexer *p, Eigen::Vector3d& dh, Eigen::Vector4d& de_, Ei
 {
     // Update Euler parameter matrices
     quat_matrices(p);
-    
+
     // RHS of e
     de_ = 0.5*G_.transpose()*I_.inverse()*h_;
-    
+
     // RHS of h
     // Transforming torsion into body fixed system (Shivarama and Schwab)
     Gdot_ << -de_(1), de_(0), de_(3),-de_(2),
              -de_(2),-de_(3), de_(0), de_(1),
              -de_(3), de_(2),-de_(1), de_(0);
-   
+
     dh_ = 2.0*Gdot_*G_.transpose()*h_ + Rinv_*Mfb_;
-    
+
     // External motions
     pmotion->motionext_rot(p,dh_,h_,de_,G_,I_);
 }

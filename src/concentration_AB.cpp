@@ -44,7 +44,7 @@ void concentration_AB::start(fdm* a, lexer* p, convection* pconvec, diffusion* p
 {
 
     starttime=pgc->timer();
-    
+
     clearrhs(p,a,pgc);
     pconvec->start(p,a,C,4,a->u,a->v,a->w);
     pdiff->diff_scalar(p,a,pgc,psolv,C,a->visc,a->eddyv,1.0,1.0);
@@ -59,7 +59,7 @@ void concentration_AB::start(fdm* a, lexer* p, convection* pconvec, diffusion* p
                                 -(p->dt/p->dt_old)*cab(i,j,k));
     cab(i,j,k)=a->L(i,j,k);
     }
-    
+
     bc_concentration_start(p,a,pgc,C);
     pgc->start4(p,C,gcval_concentration);
 

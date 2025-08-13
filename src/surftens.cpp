@@ -36,7 +36,7 @@ surftens::~surftens()
 void surftens::surface_tension(fdm* a,lexer*p,field& surf,int gcval)
 {
     n=0;
-    
+
     if(gcval==10 && tension>1.0e-10)
     ULOOP
     {

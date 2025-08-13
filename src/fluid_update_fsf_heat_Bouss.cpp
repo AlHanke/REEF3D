@@ -37,21 +37,21 @@ fluid_update_fsf_heat_Bouss::fluid_update_fsf_heat_Bouss(lexer *p, fdm* a, ghost
     ro_1 = p->W1;
     alpha_air = p->H2;
     alpha_water = p->H1;
-    
+
     if(p->H9==1)
     {
     T0_1 = p->H50_1 + 273.0;
     T0_2 = p->H50_2 + 273.0;
     }
-    
+
     if(p->H9==2)
     {
     T0_1 = p->H50_2 + 273.0;
     T0_2 = p->H50_1 + 273.0;
     }
-    
+
     pheat = ppheat;
-    
+
 }
 
 fluid_update_fsf_heat_Bouss::~fluid_update_fsf_heat_Bouss()
@@ -60,7 +60,7 @@ fluid_update_fsf_heat_Bouss::~fluid_update_fsf_heat_Bouss()
 
 void fluid_update_fsf_heat_Bouss::start(lexer *p, fdm* a, ghostcell* pgc)
 {
-    
+
     double H=0.0;
     double temp;
     p->volume1=0.0;
@@ -69,10 +69,10 @@ void fluid_update_fsf_heat_Bouss::start(lexer *p, fdm* a, ghostcell* pgc)
     if(p->count>iter)
     iocheck=0;
     iter=p->count;
-    
+
     if(p->j_dir==0)
     epsi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
-        
+
     if(p->j_dir==1)
     epsi = p->F45*(1.0/3.0)*(p->DRM+p->DSM+p->DTM);
 
@@ -80,7 +80,7 @@ void fluid_update_fsf_heat_Bouss::start(lexer *p, fdm* a, ghostcell* pgc)
     LOOP
     {
         temp = pheat->val(i,j,k) + 273.0;
-        
+
         if(p->H4==0)
         {
             if(p->H9==1)
@@ -91,7 +91,7 @@ void fluid_update_fsf_heat_Bouss::start(lexer *p, fdm* a, ghostcell* pgc)
             visc_1 = p->W2;
             visc_2 = p->W4;
             }
-            
+
             if(p->H9==2)
             {
             ro_1 = p->W3 - p->W3*(temp - T0_2)/T0_2;
@@ -101,7 +101,7 @@ void fluid_update_fsf_heat_Bouss::start(lexer *p, fdm* a, ghostcell* pgc)
             visc_2 = p->W2;
             }
         }
-        
+
         if(p->H4==1)
         {
             if(p->H9==1)
@@ -112,7 +112,7 @@ void fluid_update_fsf_heat_Bouss::start(lexer *p, fdm* a, ghostcell* pgc)
             visc_1 = p->W2;
             visc_2 = p->W4;
             }
-            
+
             if(p->H9==2)
             {
             ro_1 = p->W3 - p->W3*p->H4_beta2*(temp - T0_2);

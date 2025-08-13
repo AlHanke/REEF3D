@@ -45,7 +45,7 @@ public:
 private:
 
     int count,n,q;
-    
+
     density *pd;
 };
 

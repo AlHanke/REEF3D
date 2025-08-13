@@ -51,7 +51,7 @@ private:
     void aij_west(lexer*,fdm*,field&, field&);
     void aij_top(lexer*,fdm*,field&, field&);
     void aij_bottom(lexer*,fdm*,field&, field&);
-    
+
     void iqmin(lexer*, fdm*, field&);
     void jqmin(lexer*, fdm*, field&);
     void kqmin(lexer*, fdm*, field&);
@@ -69,15 +69,15 @@ private:
     double umin, umax, uplus;
     int count;
 
-    
+
     
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
     double iadvec,jadvec,kadvec;
-    
+
     flux *pflux;
-    
+
     double *DX,*DY,*DZ;
-    
+
 
 
 };

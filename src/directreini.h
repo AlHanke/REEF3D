@@ -43,7 +43,7 @@ public:
     virtual ~directreini();
     virtual void start(fdm*,lexer*,field&, ghostcell*,ioflow*);
     virtual void startV(fdm*,lexer*,vec&,ghostcell*,ioflow*);
-    
+
     virtual void vtp(lexer*,fdm*,ghostcell*);
     virtual void name_iter(lexer*,fdm*,ghostcell*);
     virtual void pvtp(lexer*,fdm*,ghostcell*);
@@ -51,14 +51,14 @@ public:
 
     double dstx, dsty, dstz, dnorm, sign;
     double sx,sy,sz,snorm,op;
-    
+
     char name[200],pname[200],epsvar[200];
     int iin,offset[200];
     float ffn;
 
 private:
     fieldint5 vertice, nodeflag;
-    
+
     field4 d0;
     fieldint4 wallf;
 
@@ -70,11 +70,11 @@ private:
     void reini(lexer*, fdm*, ghostcell*, field&, fieldint&, fieldint&);
     void finalize(lexer *p, fdm*);
     void debug(lexer*,fdm*);
-    
+
     void constraint(lexer *p, fdm*, ghostcell*, field&);
     void correction(lexer *p, fdm*, ghostcell*, field&);
 
-    
+
     double determinant(double,double,double,double,double,double,double,double,double,
                         double,double,double,double,double,double,double);
 
@@ -92,16 +92,16 @@ private:
     int count,countM,n,nn,q;
 
     int ccptcount,facount,check;
-    
+
     int polygon_sum,polygon_num,vertice_num;
 
     int gcval_phi,gcval_ro,gcval_iniphi,reiniter;
     const double epsi,zero;
-    
+
     double H,H0,grad,dT,dirac;
     double lambda1,lambda2,dV,dval,Cs;
     void wallf_update(lexer*,fdm*,ghostcell*);
-    
+
     double dx,dy,dz;
 };
 

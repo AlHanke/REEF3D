@@ -41,9 +41,9 @@ partres::partres(lexer *p, ghostcell *pgc) : P(p,pgc), bedch(p), Tau(p), Ts(p), 
 
     for(n=0;n<p->Q73;++n)
     tan_betaQ73[n] = tan(betaQ73[n]);
-    
+
     relax_ini(p);
-    
+
     printcount=0;
     timestep_ini=0;
 }

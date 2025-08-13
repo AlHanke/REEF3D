@@ -37,16 +37,16 @@ public:
 
     sflow_flux (lexer*);
     virtual ~sflow_flux();
-    
+
     void iflux(int,slice&);
     void jflux(int,slice&);
 
     void ifluxC(fdm2D*,int,slice&);
     void jfluxC(fdm2D*,int,slice&);
-    
+
     void ifluxHJ(int,slice&);
     void jfluxHJ(int,slice&);
-    
+
 
     double iadvec,jadvec;
     double ivel1,jvel1;

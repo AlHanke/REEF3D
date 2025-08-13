@@ -47,7 +47,7 @@ struct Parameters
 {
     int N, iter;
     double tol, res;
-    
+
     double phaseVelocity, celerityCs, groupVelocity, BernoulliConstant;
     double waveHeight, creastHeight, troughHeight, waveLength, waveNumber, waterDepth, gravityAcc;
     double Impulse, PotentialEnergy, KineticEnergy, RadiationStress;
@@ -59,21 +59,21 @@ class wave_lib_ssgw : public wave_lib_precalc, public wave_lib_parameters, publi
 public:
     wave_lib_ssgw(lexer*, ghostcell*);
     virtual ~wave_lib_ssgw();
-    
+
     double wave_horzvel(lexer*,double,double,double);
-    
+
     virtual double wave_u(lexer*,double,double,double);
     virtual double wave_v(lexer*,double,double,double);
     virtual double wave_w(lexer*,double,double,double);
     virtual double wave_eta(lexer*,double,double);
     virtual double wave_fi(lexer*,double,double,double);
-    
+
     virtual void parameters(lexer*,ghostcell*);
     virtual void wave_prestep(lexer*,ghostcell*);
-    
+
 private:
     double singamma,cosgamma;
-    
+
     void setWave(double k, double d, double H);
     void getPhysicsParameters();
     bool computeSurfaceVariables();
@@ -82,12 +82,12 @@ private:
     void computePotentialField(std::vector<double>& x, std::vector<double>& y, std::vector<double>& phi);
     Parameters ParameterValue;
     std::vector<double> xs, ys, us, vs, phis;
-    
+
     bool resizing();
     void defineInput2Iteration(double k, double d, double H);
     void PetviashviliIteration();
     double modulo(double, double);
-    
+
     int N, iter;
     double tol, err;
     bool allocated, infiniteDepth, surfaceCalculated;
@@ -100,7 +100,7 @@ private:
     Eigen::FFT<double> fft;
 
     double xcurr, xl, xr, yl, yr, fi, eta;
-    
+
     Eigen::VectorXd dummy_real;
     Eigen::VectorXd Upsilon, CYs, C_hat;
     Eigen::VectorXd S2_hat, Upsilon2,CUpsilon;
@@ -109,7 +109,7 @@ private:
     Eigen::VectorXd IC, ydx, ICydx;
     Eigen::VectorXd U, Xs, Ys;
     Eigen::VectorXd vectorAlpha, vectorK;
-    
+
     Eigen::VectorXcd zs, dzs, ws;
     Eigen::VectorXcd Zs, dZs, dummy_hat, dummy;
     Eigen::VectorXcd Ys_hat, Upsilon_hat,Upsilon2_hat;

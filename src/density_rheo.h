@@ -40,7 +40,7 @@ public:
     virtual ~density_rheo();
 
     virtual double roface(lexer*,fdm*,int,int,int);
-    
+
     double H,roval,phival;
 
 };

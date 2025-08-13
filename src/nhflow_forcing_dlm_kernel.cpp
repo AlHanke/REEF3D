@@ -37,6 +37,6 @@ double nhflow_forcing::kernel(const double& dist)
     {
         D = 1.0/6.0*(5.0 - 3.0*fabs(dist) - sqrt(-3*(1 - fabs(dist))*(1 - fabs(dist)) + 1));
     }
-    
+
     return D;
 }

@@ -60,37 +60,37 @@ public:
     field1 ur,udiff,urk1,urk2,fx;
     field2 vr,vdiff,vrk1,vrk2,fy;
     field3 wr,wdiff,wrk1,wrk2,fz;
-    
+
     field1 Mx,rox;
     field2 My,roy;
     field3 Mz,roz;
-    
+
     field1 Mx_rk1,Mx_rk2;
     field2 My_rk1,My_rk2;
     field3 Mz_rk1,Mz_rk2;
-    
+
     field1 rox_rk1,rox_rk2;
     field2 roy_rk1,roy_rk2;
     field3 roz_rk1,roz_rk2;
-    
+
     field4 ls,frk1,frk2;
 
 private:
     fluid_update *pupdate;
     picard *ppicard;
-    
+
     void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-    
+
     void clear_FGH(lexer*,fdm*);
     void face_density(lexer*,fdm*,ghostcell*,field&,field&,field&);
-    
+
     
     double vel_limiter(lexer*,fdm*,field&,field&,field&,field&);
     double ro_filter(lexer*,fdm*,field&);
 
-    
+
     int gcval_u, gcval_v, gcval_w;
     int gcval_phi, gcval_ro, gcval_visc;
     double val;
@@ -111,7 +111,7 @@ private:
     density *pd;
     sixdof *p6dof;
     fsi *pfsi;
-    
+
 };
 
 #endif

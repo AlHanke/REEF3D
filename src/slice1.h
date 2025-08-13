@@ -40,7 +40,7 @@ public:
     virtual void ggcpol(lexer*);
     virtual void resize(lexer*);
     virtual void dealloc(lexer*);
-    
+
     int di,dj;
     int imin,imax,jmax,jmin;
 
@@ -54,11 +54,11 @@ private:
 
     int iter;
     int gcfeldsize,feldsize;
-    
+
     int rank, gcsl_extra;
-    
+
     double starttime;
-    
+
     lexer *pp;
 
 };

@@ -31,11 +31,11 @@ void nhflow_sigma::sigma_ini(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &eta)
 {
 
     d->wd_criterion=p->A544;
-    
+
 
     FLOOP
     p->sig[FIJK] =  p->ZN[KP];
-    
+
     // bc
     SLICELOOP4
     {
@@ -46,7 +46,7 @@ void nhflow_sigma::sigma_ini(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &eta)
             p->sig[FIJKm2] = p->ZN[KM2];
             p->sig[FIJKm3] = p->ZN[KM3];
         }
-        
+
         k=p->knoz;
         if(p->nb6==-2)
         {
@@ -55,22 +55,22 @@ void nhflow_sigma::sigma_ini(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &eta)
             p->sig[FIJKp3] = p->ZN[KP3];
         }
     }
-    
+
     pgc->start7S(p,p->sig,1);
 
-    
+
     SLICELOOP4
     {
     d->Bx(i,j) = 0.0;
     d->By(i,j) = 0.0;
     }
-    
+
     pgc->gcsl_start4(p,d->Bx,50);
     pgc->gcsl_start4(p,d->By,50);
-    
+
     SLICELOOP4
     p->sigz[IJ] = 0.0;
-    
+
     SLICELOOP4
     p->sigt[FIJK] = 0.0;
 

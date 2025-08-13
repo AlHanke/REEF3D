@@ -77,7 +77,7 @@ void nhflow_force_ale::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
         // Calculate force
         force_ale_force(p,d,pgc);
     }
-    
+
     else
     {
         Fx = Fy = 0.0;

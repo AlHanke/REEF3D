@@ -37,7 +37,7 @@ void mooring_Catenary::start(lexer *p, ghostcell *pgc)
     FV_0 = 0.01;
 
     calcForce(p,pgc);
-        
+
     // Print mooring line
     print(p);
 }
@@ -65,12 +65,12 @@ void mooring_Catenary::calcForce(lexer *p, ghostcell *pgc)
         FV = FV_0;
         FH_0 = FH + 1.0;
         FV_0 = FV + 1.0;
-       
+
         while (fabs(FH - FH_0) > 1e-5 && fabs(FV - FV_0) > 1e-5)
         {
             FH_0 = FH;
             FV_0 = FV;
-   
+
             f1 = L - FV/w + FH/EA*FV/w + FH/w*log(FV/FH + sqrt(1+(FV/FH)*(FV/FH))) - dxy_;
             f2 = FH/w*(sqrt(1+(FV/FH)*(FV/FH))-1) + FV*FV/(2*EA*w) - dz;
 
@@ -78,7 +78,7 @@ void mooring_Catenary::calcForce(lexer *p, ghostcell *pgc)
             df1V = (-1.0 + FH/EA)/w + (FH*((1/FH) + FV/(FH*FH*sqrt(1 + FV*FV/(FH*FH)))))/((FV/FH + sqrt(1 + FV*FV/(FH*FH)))*w);
             df2H = (-1.0 + FH/sqrt(FH*FH + FV*FV))/w;
             df2V = FV/(EA*w) + FV/(FH*sqrt(1 + FV*FV/(FH*FH))*w);
-           
+
             A_eigen << df1H, df1V, df2H, df2V;
             B_eigen << -f1, -f2;
             F_eigen = A_eigen.colPivHouseholderQr().solve(B_eigen);
@@ -91,7 +91,7 @@ void mooring_Catenary::calcForce(lexer *p, ghostcell *pgc)
         Zme_ = FV;
 
         buildLine(p);
-   
+
         // Check convergence
         double dx_curr = x[H-1] - p->X311_xs[line];
         double dy_curr = y[H-1] - p->X311_ys[line];
@@ -169,13 +169,13 @@ void mooring_Catenary::getForce(lexer *p, ghostcell *pgc, double& FH_, double& F
 {
     // Ini line
     double rho_f = 1000.0;
-    
+
     rho_c = p->X311_rho_c[line];
     w = p->X311_w[line]*9.81*(rho_c - rho_f)/rho_c;
     L = p->X311_l[line];
     H = p->X311_H[line];
     EA = p->X311_EA[line];
-    
+
     p->Darray(x,H);
     p->Darray(y,H);
     p->Darray(z,H);
@@ -198,20 +198,20 @@ void mooring_Catenary::getShape(lexer *p, ghostcell *pgc, double*& x_, double*& 
 {
     // Ini line
     double rho_f = 1000.0;
-    
+
     rho_c = p->X311_rho_c[line];
     w = p->X311_w[line]*9.81*(rho_c - rho_f)/rho_c;
     L = p->X311_l[line];
     H = p->X311_H[line] + 2;
     EA = p->X311_EA[line];
-    
+
     p->Darray(x,H);
     p->Darray(y,H);
     p->Darray(z,H);
     p->Darray(T,H);
 
     // Calculate force
-         
+
     double dx_ = x_[H-1] - x_[H-2];
     double dy_ = y_[H-1] - y_[H-2];
     double dxy_ = sqrt(dx_*dx_ + dy_*dy_);
@@ -236,20 +236,20 @@ void mooring_Catenary::iniShape(lexer *p, ghostcell *pgc,Eigen::VectorXd& x_, Ei
 {
     // Ini line
     double rho_f = 1000.0;
-    
+
     rho_c = p->X311_rho_c[line];
     w = p->X311_w[line]*9.81*(rho_c - rho_f)/rho_c;
     L = p->X311_l[line];
     H = p->X311_H[line] + 1;
     EA = p->X311_EA[line];
-    
+
     p->Darray(x,H);
     p->Darray(y,H);
     p->Darray(z,H);
     p->Darray(T,H);
 
     // Calculate force
-         
+
     FH_0 = 1.0;
     FV_0 = 1.0;
 

@@ -60,7 +60,7 @@ void vorticity_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
 
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     // --
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
@@ -71,7 +71,7 @@ void vorticity_f::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
 
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     // --
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));

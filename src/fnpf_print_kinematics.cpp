@@ -43,7 +43,7 @@ fnpf_print_kinematics::~fnpf_print_kinematics()
 void fnpf_print_kinematics::ini(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
     fnpf_print_kinematicsprintcount=0;
-    
+
     // Ini processor boundaries
     xstart = p->originx;
     ystart = p->originy;
@@ -77,7 +77,7 @@ void fnpf_print_kinematics::start(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 
         // calculate kinematics
         kinematics_calc(p,c,pgc);
-        
+
         // print kinematics
         print_kinematics(p,c,pgc);
     }

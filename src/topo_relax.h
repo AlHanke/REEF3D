@@ -45,10 +45,10 @@ public:
 private:
     double distcalc(lexer*, double, double, double);
     double r1(lexer*, double, double);
-    
+
     double *tan_betaS73,*betaS73,*dist_S73;
     double val;
-    
+
 
 };
 

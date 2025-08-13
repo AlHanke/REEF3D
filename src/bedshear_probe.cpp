@@ -34,27 +34,27 @@ bedshear_probe::bedshear_probe(lexer *p, ghostcell *pgc)
     p->Iarray(jloc,p->P125);
     p->Iarray(flag,p->P125);
     p->Darray(bsg,p->P125);
-    
+
     // Create Folder
     // Create Folder
     if(p->mpirank==0 && p->A10==2)
     mkdir("./REEF3D_SFLOW_Sediment",0777);
-    
+
     if(p->mpirank==0 && p->A10==5)
     mkdir("./REEF3D_NHFLOW_Sediment",0777);
-    
+
     if(p->mpirank==0 && p->A10==6)
     mkdir("./REEF3D_CFD_Sediment",0777);
-    
+
     if(p->mpirank==0 && p->P125>0)
     {
     // open file
     if(p->A10==2)
     bsgout.open("./REEF3D_SFLOW_Sediment/REEF3D-SFLOW-Sediment-Bedshear.dat");
-    
+
     if(p->A10==5)
     bsgout.open("./REEF3D_NHFLOW_Sediment/REEF3D-NHFLOW-Sediment-Bedshear.dat");
-    
+
     if(p->A10==6)
     bsgout.open("./REEF3D_CFD_Sediment/REEF3D-CFD-Sediment-Bedshear.dat");
 
@@ -71,7 +71,7 @@ bedshear_probe::bedshear_probe(lexer *p, ghostcell *pgc)
 
     bsgout<<endl<<endl;
     }
-    
+
 
     ini_location(p,pgc);
 }
@@ -86,7 +86,7 @@ void bedshear_probe::bedshear_gauge(lexer *p, ghostcell *pgc, sediment *psed)
     for(n=0;n<p->P125;++n)
         bsg[n]=-1.0e20;
 
-    
+
     for(n=0;n<p->P125;++n)
         if(flag[n]>0)
         {
@@ -95,7 +95,7 @@ void bedshear_probe::bedshear_gauge(lexer *p, ghostcell *pgc, sediment *psed)
             j=jloc[n];
             bsg[n] = psed->bedshear_point(p,pgc);
         }
-    
+
     for(n=0;n<p->P125;++n)
         bsg[n]=pgc->globalmax(bsg[n]);
 
@@ -116,16 +116,16 @@ void bedshear_probe::ini_location(lexer *p, ghostcell *pgc)
     for(n=0;n<p->P125;++n)
     {
     iloc[n] = p->posc_i(p->P125_x[n]);
-    
+
     if(p->j_dir==0)
     jloc[n]=0;
-    
+
     if(p->j_dir==1)
     jloc[n] = p->posc_j(p->P125_y[n]);
 
     check=ij_boundcheck(p,iloc[n],jloc[n],0);
 
-    
+
     if(check==1)
     flag[n]=1;
     }

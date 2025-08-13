@@ -27,22 +27,22 @@ Author: Hans Bihs
 void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
 {
     paramargin=margin;
-    
+
     int aa,bb,cc;
     aa=bb=cc=0;
     /*
     if(gcv==1)
     aa=1;
-    
+
     if(gcv==2)
     bb=1;
-    
+
     if(gcv==3)
     cc=1;*/
-    
+
     //cout<<p->mpirank<<"  p->periodicX1: "<<p->periodicX1<<" "<<p->gcpara1_count<<endl;
     //cout<<p->mpirank<<"  p->periodicX4: "<<p->periodicX4<<" "<<p->gcpara4_count<<endl;
-    
+
     //cout<<p->mpirank<<" nb1: "<<p->nb1<<" nb4: "<<p->nb4<<endl;
 
 //  FILL SEND
@@ -52,7 +52,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara1[q][0]-1;
     j=p->gcpara1[q][1];
     k=p->gcpara1[q][2];
-        
+
         if(p->gcpara1[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -67,7 +67,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara3[q][0];
     j=p->gcpara3[q][1]-1;
     k=p->gcpara3[q][2];
-        
+
         if(p->gcpara3[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -82,7 +82,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara5[q][0];
     j=p->gcpara5[q][1];
     k=p->gcpara5[q][2]-1;
-        
+
         if(p->gcpara5[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -97,7 +97,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara4[q][0]+1-aa;
     j=p->gcpara4[q][1];
     k=p->gcpara4[q][2];
-        
+
         if(p->gcpara4[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -112,7 +112,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara2[q][0];
     j=p->gcpara2[q][1]+1-bb;
     k=p->gcpara2[q][2];
-        
+
         if(p->gcpara2[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -127,7 +127,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara6[q][0];
     j=p->gcpara6[q][1];
     k=p->gcpara6[q][2]+1-cc;
-        
+
         if(p->gcpara6[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -186,7 +186,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara1[q][0];
     j=p->gcpara1[q][1];
     k=p->gcpara1[q][2];
-        
+
         if(p->gcpara1[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -202,7 +202,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara3[q][0];
     j=p->gcpara3[q][1];
     k=p->gcpara3[q][2];
-        
+
         if(p->gcpara3[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -218,7 +218,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara5[q][0];
     j=p->gcpara5[q][1];
     k=p->gcpara5[q][2];
-        
+
         if(p->gcpara5[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -234,7 +234,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara4[q][0]-aa;
     j=p->gcpara4[q][1];
     k=p->gcpara4[q][2];
-        
+
         if(p->gcpara4[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -250,7 +250,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara2[q][0];
     j=p->gcpara2[q][1]-bb;
     k=p->gcpara2[q][2];
-        
+
         if(p->gcpara2[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -266,7 +266,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->gcpara6[q][0];
     j=p->gcpara6[q][1];
     k=p->gcpara6[q][2]-cc;
-        
+
         if(p->gcpara6[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
         {
@@ -275,7 +275,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
             ++count;
         }
     }
-    
+
     
     /*
     if(p->mpirank==5)
@@ -283,7 +283,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     i=p->knox-1;
     j=0;
     k=6;
-    
+
     GC4LOOP
     {
         i=p->gcb4[n][0];
@@ -293,14 +293,14 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     cout<<i<<" "<<p->gcb4[n][4]<<" PRESS PERIODX 4: "<<a->press(i-2,j,k)<<" "<<a->press(i-1,j,k)<<" "<<a->press(i,j,k)<<" . "<<a->press(i+1,j,k)<<" "<<a->press(i+2,j,k)<<" "<<a->press(i+3,j,k)<<" "<<endl;
     }
     }
-    
+
     
     if(p->mpirank==0)
     {
     i=0;
     j=0;
     k=6;
-    
+
     GC4LOOP
     {
         i=p->gcb4[n][0];

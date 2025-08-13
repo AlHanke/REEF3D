@@ -43,7 +43,7 @@ void net_barDyn::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen
     t_net_n = t_net;
     t_net = phi*p->simtime + (1.0 - phi)*(p->simtime + alpha*p->dt);
     double dtm = t_net - t_net_n;
-    
+
     dt_ = p->X325_dt > 0.0 ? min(dtm, p->X325_dt) : dtm;
 
     //- Start loop
@@ -52,11 +52,11 @@ void net_barDyn::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen
     dt_ = dtm/loops;
 
     Eigen::VectorXi convIt(loops);
-    
+
     for (int loop = 0; loop < loops; loop++)
     {
         convIt(loop) = loop;
-        
+
         update_velocity_cfd(p,a,pgc);
         startLoop(p,pgc,convIt(loop));
     }
@@ -77,7 +77,7 @@ void net_barDyn::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha
     t_net_n = t_net;
     t_net = phi*p->simtime + (1.0 - phi)*(p->simtime + alpha*p->dt);
     double dtm = t_net - t_net_n;
-    
+
     dt_ = p->X325_dt > 0.0 ? min(dtm, p->X325_dt) : dtm;
 
     //- Start loop
@@ -86,11 +86,11 @@ void net_barDyn::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha
     dt_ = dtm/loops;
 
     Eigen::VectorXi convIt(loops);
-    
+
     for (int loop = 0; loop < loops; loop++)
     {
         convIt(loop) = loop;
-        
+
         update_velocity_nhflow(p,d,pgc);
         startLoop(p,pgc,convIt(loop));
     }
@@ -105,7 +105,7 @@ void net_barDyn::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha
 
 void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
 {
-          
+
     //- Get time weights for finite differences
     coeffs_ = timeWeight(p);
 
@@ -116,7 +116,7 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
     if (p->count < 1 && iter==0)
     {
         //- Solve linear system
-        
+
         // Fill system of equations in A_
         fillLinSystem(p, pgc);
 
@@ -132,9 +132,9 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
     else
     {
         //- Solve non-linear system
-        
+
         double norm_error;
-       
+
         T_backup = T_;
         iter = 0;
 
@@ -144,7 +144,7 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
             fillNonLinSystem(p, pgc);
 
             Eigen::PartialPivLU<MatrixXd> inv(A_);
-            
+
             // Fill non-linear function
             fillNonLinRhs(p, pgc);
 
@@ -157,7 +157,7 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
 
             // Accelerated Newton step
             fillNonLinRhs(p, pgc);
-            
+
             T_ -= inv.solve(B_.transpose());
             limitTension();
 
@@ -177,7 +177,7 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
             T_ = T_backup;
         }
     }
-    
+
     //- Calculate accelerations
     updateAcc(p, pgc);
 
@@ -195,7 +195,7 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
     }
 
     /*MatrixXd xdot_new(nK,3);
-    
+
     xdot_new =
         1.0/coeffs_(0)*
         (
@@ -229,11 +229,11 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
     xdotnn_ = xdotn_;
     xdotn_ = xdot_;
     //xdot_ = xdot_new;
-    
+
     //- Save old time steps
     dtnn_ = dtn_;
     dtn_ = dt_;
-    
+
 }
 
 
@@ -249,7 +249,7 @@ void net_barDyn::limitTension()
 Eigen::VectorXd net_barDyn::timeWeight(lexer* p)
 {
     // 3rd-order finite difference weights for first derivative and varying time step
-    
+
     double c2, c3, c5;
     int mn;
 
@@ -262,22 +262,22 @@ Eigen::VectorXd net_barDyn::timeWeight(lexer* p)
         dtn_ = dt_;
         dtnn_ = dt_;
     }
-    
+
     VectorXd ti(nd);
 
     ti(0) = 0.0;
     ti(1) = ti(0) - dt_;
     ti(2) = ti(1) - dtn_;
     ti(3) = ti(2) - dtnn_;
-    
+
     MatrixXd coeff = MatrixXd::Zero(nd,nd);
-            
+
     coeff(0,0) = 1.0;
 
     for(int r = 1; r < nd; ++r)
     {
         int mn = MIN(r,1);
-        
+
         c2 = 1.0;
         c5 = c4;
         c4 = ti(r) - ti(0);
@@ -286,26 +286,26 @@ Eigen::VectorXd net_barDyn::timeWeight(lexer* p)
         {
             c3 = ti(r) - ti(s);
             c2 *= c3;
-                
+
             if(s==r-1)
             {
                 for(int t = mn; t >= 1; t--)
                 {
                     coeff(r,t) = c1*(double(t)*coeff(r-1,t-1) - c5*coeff(r-1,t))/c2;
                 }
-         
+
                 coeff(r,0) = -c1*c5*coeff(r-1,0)/c2;
             }
-                
+
             for(int t = mn; t >= 1; t--)
             {
                 coeff(s,t) = (c4*coeff(s,t) - double(t)*coeff(s,t-1))/c3;
             }
-           
+
             coeff(s,0) *= c4/c3;
         }
         c1 = c2;
     }
-    
+
     return coeff.col(1);
 }

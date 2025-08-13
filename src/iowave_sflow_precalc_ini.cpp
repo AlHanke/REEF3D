@@ -30,12 +30,12 @@ void iowave::wavegen_2D_precalc_ini(lexer *p, ghostcell *pgc)
     // count number of relax points
     // allocate double* array
     upt_count=vpt_count=wpt_count=ppt_count=ept_count=0;
-    
+
     // U ------------------------------------------------
     SLICEBASELOOP
     {
         dg = distgen(p);
-        
+
         // Wave Generation
         if(p->B98==2 && u_switch==1)
         {
@@ -44,14 +44,14 @@ void iowave::wavegen_2D_precalc_ini(lexer *p, ghostcell *pgc)
             ++upt_count;
         }
     }
-    
+
     
     // V ------------------------------------------------
     SLICEBASELOOP
     {
         dg = distgen(p);
 
-        
+
         // Wave Generation
         if(p->B98==2 && v_switch==1)
         {
@@ -60,7 +60,7 @@ void iowave::wavegen_2D_precalc_ini(lexer *p, ghostcell *pgc)
             ++vpt_count;
         }
     }
-    
+
     // W ------------------------------------------------
     SLICEBASELOOP
     {
@@ -90,14 +90,14 @@ void iowave::wavegen_2D_precalc_ini(lexer *p, ghostcell *pgc)
 
         }
     }
-    
+
     //cout<<"EPT_COUNT: "<<ept_count;
-    
+
     // precalc array alloc
     upt_count *= (p->B160+1);
     vpt_count *= (p->B160+1);
     wpt_count *= (p->B160+1);
-    
+
     p->Darray(uval,upt_count);
     p->Darray(vval,upt_count);
     p->Darray(wval,upt_count);
@@ -109,19 +109,19 @@ void iowave::wavegen_2D_precalc_ini(lexer *p, ghostcell *pgc)
     p->Darray(wval_S_sin,wpt_count,p->wN);
     p->Darray(etaval_S_sin,ept_count,p->wN);
     p->Darray(Fival_S_sin,ppt_count,p->wN);
-    
+
     p->Darray(uval_S_cos,upt_count,p->wN);
     p->Darray(vval_S_cos,vpt_count,p->wN);
     p->Darray(wval_S_cos,wpt_count,p->wN);
     p->Darray(etaval_S_cos,ept_count,p->wN);
     p->Darray(Fival_S_cos,ppt_count,p->wN);
-    
+
     p->Darray(uval_T_sin,p->wN);
     p->Darray(vval_T_sin,p->wN);
     p->Darray(wval_T_sin,p->wN);
     p->Darray(etaval_T_sin,p->wN);
     p->Darray(Fival_T_sin,p->wN);
-    
+
     p->Darray(uval_T_cos,p->wN);
     p->Darray(vval_T_cos,p->wN);
     p->Darray(wval_T_cos,p->wN);

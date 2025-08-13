@@ -34,7 +34,7 @@ field4::field4(lexer *p)
     kmax=p->kmax;
 
     fieldalloc(p);
-    
+
     pp=p;
 }
 
@@ -52,7 +52,7 @@ void field4::fieldalloc(lexer* p)
 void field4::dealloc(lexer* p)
 {
     delete [ ] V;
-    
+
     feldsize=0;
 }
 

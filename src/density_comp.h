@@ -40,7 +40,7 @@ public:
     virtual ~density_comp();
 
     virtual double roface(lexer*,fdm*,int,int,int);
-    
+
     double H,roval,phival;
     int ii,jj,kk;
     double ro_air,psi;

@@ -33,14 +33,14 @@ void partres::seed_topo(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
     ALOOP
     if(a->topo(i,j,k)<=0)
     ++count;
-    
+
     // safety
     count += 100;
-    
+
     count *= p->Q24;
-    
+
     P.resize(p,count);
-    
+
     // seed
     n=0;
     ALOOP
@@ -52,7 +52,7 @@ void partres::seed_topo(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
         P.X[n] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
         P.Y[n] = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
         P.Z[n] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
-        
+
         P.D[n] = p->S20;
         P.RO[n] = p->S22;
 
@@ -60,20 +60,20 @@ void partres::seed_topo(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
         --P.index_empty;
         }
     }
-    
+
     // remove above bed
     for(n=0;n<P.index;++n)
     if(P.Flag[n]==ACTIVE)
     {
     topoval  = p->ccipol4_b(a->topo,P.X[n],P.Y[n],P.Z[n]);
     solidval = p->ccipol4_b(a->solid,P.X[n],P.Y[n],P.Z[n]);
-    
+
     if(topoval>0.0)
     P.remove(n);
-        
+
     if(solidval<0.0)
     P.remove(n);
     }
-    
+
     cellSum_full_update(p,pgc,s,2);
 }

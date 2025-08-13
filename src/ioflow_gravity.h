@@ -55,7 +55,7 @@ public:
     virtual void turbulence_io(lexer*,fdm*,ghostcell*);
     virtual void veltimesave(lexer*,fdm*,ghostcell*,vrans*);
     virtual void flowfile(lexer*,fdm*,ghostcell*,turbulence*);
-    
+
     virtual void wavegen_precalc(lexer*,ghostcell*);
     virtual void wavegen_precalc_ini(lexer*,ghostcell*);
     virtual void u_relax(lexer*,fdm*,ghostcell*,field&);
@@ -80,10 +80,10 @@ public:
     virtual void wm_relax(lexer*,ghostcell*,slice&,slice&,slice&);
     virtual void ws_relax(lexer*,ghostcell*,slice&,slice&,slice&);
     virtual void pm_relax(lexer*,ghostcell*,slice&);
-    
+
     virtual void wavegen_2D_precalc(lexer*,fdm2D*,ghostcell*);
     virtual void wavegen_2D_precalc_ini(lexer*,ghostcell*);
-    
+
     virtual void discharge2D(lexer*,fdm2D*,ghostcell*);
     virtual void waterlevel2D(lexer*,fdm2D*,ghostcell*,slice&);
     virtual void Qin2D(lexer*,fdm2D*,ghostcell*);
@@ -93,18 +93,18 @@ public:
     virtual void isource2D(lexer*,fdm2D*,ghostcell*);
     virtual void jsource2D(lexer*,fdm2D*,ghostcell*);
     virtual void full_initialize2D(lexer*,fdm2D*,ghostcell*);
-    
+
     virtual double wave_fsf(lexer*,ghostcell*,double);
     virtual double wave_xvel(lexer*,ghostcell*,double,double,double);
     virtual double wave_yvel(lexer*,ghostcell*,double,double,double);
     virtual double wave_zvel(lexer*,ghostcell*,double,double,double);
-    
+
     virtual int iozonecheck(lexer*,fdm*);
-    
+
     virtual void ini(lexer*,fdm*,ghostcell*);
-    
+
     virtual void waterlevel_update(lexer*,fdm*,ghostcell*){};
-    
+
     
     // fnpf
     virtual void wavegen_precalc_fnpf(lexer*,fdm_fnpf*,ghostcell*){};
@@ -113,7 +113,7 @@ public:
     virtual void rkinflow_fnpf(lexer*,fdm_fnpf*,ghostcell*,slice&,slice&);
     virtual void ini2D(lexer*,fdm2D*,ghostcell*);
     virtual void ini_ptf(lexer*,fdm*,ghostcell*);
-    
+
     // nhflow
     virtual void wavegen_precalc_nhflow(lexer*,fdm_nhf*,ghostcell*);
     virtual void wavegen_precalc_ini_nhflow(lexer*,fdm_nhf*,ghostcell*);
@@ -127,15 +127,15 @@ public:
     virtual void ksource_nhflow(lexer*,fdm_nhf*,ghostcell*,vrans*);
     virtual void fsfinflow_nhflow(lexer*,fdm_nhf*,ghostcell*,slice&);
     virtual void turb_relax_nhflow(lexer*,fdm_nhf*,ghostcell*,double*){};
-    
+
     virtual void vrans_sed_update(lexer*,fdm*,ghostcell*,vrans*);
-    
+
     
 private:
     double omega_x,omega_y;
     double theta_x,theta_y;
     double dist_x,dist_y,dist_z;
-    
+
     patchBC_interface *pBC;
 };
 

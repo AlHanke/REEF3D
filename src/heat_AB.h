@@ -40,11 +40,11 @@ public:
     virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*);
     virtual void ttimesave(lexer*, fdm*);
     virtual void diff_update(lexer*, fdm*, ghostcell*);
-    
+
     field4 thermdiff;
 private:
     void clearrhs(lexer*,fdm*,ghostcell*);
-    
+
     field4 tab;
     fluid_update *pupdate;
 

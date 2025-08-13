@@ -45,10 +45,10 @@ void sixdof_sflow::isource2D(lexer *p, fdm2D *b, ghostcell *pgc)
     SLICELOOP1
     {
     dfdx = (press(i+1,j)-press(i,j))/(p->DXP[IP]);
-    
+
     b->F(i,j) += dfdx/p->W1;
     }
-    
+
     SLICELOOP4
     b->test(i,j) = press(i,j);
 }
@@ -59,7 +59,7 @@ void sixdof_sflow::jsource2D(lexer *p, fdm2D *b, ghostcell *pgc)
     SLICELOOP2
     {
     dfdy = (press(i,j+1)-press(i,j))/(p->DYP[JP]);
-    
+
     b->G(i,j) += dfdy/p->W1;
     }
 }
@@ -79,9 +79,9 @@ void sixdof_sflow::ksource(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
 double sixdof_sflow::limiter(double v1, double v2)
 {
     r=v2/(fabs(v1)>1.0e-10?v1:1.0e20);
-    
+
     phival = (r*r + r)/(r*r+1.0);
-    
+
     val = 0.5*phival*(v1+v2);
 
     return val;

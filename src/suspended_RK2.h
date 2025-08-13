@@ -49,7 +49,7 @@ private:
     double starttime;
     void fill_wvel(lexer*,fdm*,ghostcell*,sediment_fdm*);
     field3 wvel;
-    
+
     int count,q;
 
 };

@@ -40,7 +40,7 @@ public:
     virtual ~fnpf_breaking_log();
     void write(lexer*,fdm_fnpf*,ghostcell*);
 
-    
+
 private:
     void filename(lexer*,fdm_fnpf*,ghostcell*);
 

@@ -40,15 +40,15 @@ void mooring_barQuasiStatic::initialize(lexer *p, ghostcell *pgc)
     p->Darray(z,sigma + 2);
     p->Darray(T,sigma + 2);
     p->Darray(Fb,sigma + 2);
-    
+
     vector<double> three(3, 0);
-    
+
     l0.resize(sigma+1, 0);
     l.resize(sigma+1, 0);
     A.resize(sigma+1, l);
     f.resize(sigma+1, three);
     B.resize(sigma+1, three);
-        
+
     R.resize(sigma+1, three);
     v.resize(sigma+2, three);
     e.resize(sigma+1, three);
@@ -66,7 +66,7 @@ void mooring_barQuasiStatic::initialize(lexer *p, ghostcell *pgc)
         eTout<<"time \t T"<<endl;
     }
     printtime = 0.0;
-    
+
     
     // Initial element lengths
     l[0] = 0.0;
@@ -76,7 +76,7 @@ void mooring_barQuasiStatic::initialize(lexer *p, ghostcell *pgc)
         l[j+1] = p->X311_l[line]/sigma;
         l0[j+1] = l[j+1];
     }
-    
+
     
     // Filling system matrix A
 
@@ -85,7 +85,7 @@ void mooring_barQuasiStatic::initialize(lexer *p, ghostcell *pgc)
         A[j-1][j-1] = -w;
         A[j-1][j]    = +w;
     }
-        
+
     for (int j = 0; j < sigma; j++)
     {
         A[sigma][j] = 0.5*(l[j] + l[j+1]);
@@ -94,20 +94,20 @@ void mooring_barQuasiStatic::initialize(lexer *p, ghostcell *pgc)
 
 
     // Initial angles for direction vectors
-    
+
     dx = p->X311_xe[line] - p->X311_xs[line];
     dy = p->X311_ye[line] - p->X311_ys[line];
     dz = p->X311_ze[line] - p->X311_zs[line];
-    
+
     double magDist = sqrt(dx*dx+dy*dy+dz*dz);
-        
+
     for (int j = 0; j < sigma + 1; j++)
     {
         f[j][0] = dx/magDist;
         f[j][1] = dy/magDist;
         f[j][2] = dz/magDist;
     }
-    
+
     // Initialise communication
     ini_parallel(p, pgc);
 
@@ -130,14 +130,14 @@ void mooring_barQuasiStatic::ini_parallel(lexer *p, ghostcell *pgc)
     p->Darray(yend, p->mpi_size);
     p->Darray(zstart, p->mpi_size);
     p->Darray(zend, p->mpi_size);
-    
+
     xstart[p->mpirank] = p->originx;
     ystart[p->mpirank] = p->originy;
     zstart[p->mpirank] = p->originz;
     xend[p->mpirank] = p->endx;
     yend[p->mpirank] = p->endy;
     zend[p->mpirank] = p->endz;
-    
+
     for (int i = 0; i < p->mpi_size; i++)
     {
         MPI_Bcast(&xstart[i],1,MPI_DOUBLE,i,pgc->mpi_comm);

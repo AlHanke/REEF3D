@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-                          
+
 The solver was written in C++ by Blake Ashby (bmashby@stanford.edu) (version Nov 15, 2002).
 It is modified for C++ from the code RADAU5 originally written in FORTRAN (version July 9,
 1996, latest small correction: January 18, 2002) by E. Hairer (ernst.hairer@math.unige.ch)
@@ -43,7 +43,7 @@ using namespace std;
 class beam
 {
 public:
-    
+
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 
     typedef Eigen::Matrix<double,3,Eigen::Dynamic> Matrix3Xd;
@@ -51,7 +51,7 @@ public:
 
     beam(int);
     ~beam();
-    
+
     virtual void iniMaterial();
     virtual void meshBeam(const Eigen::VectorXd&, const Eigen::VectorXd&, const Eigen::VectorXd&, const Eigen::Vector3d&);
     virtual void meshBeam(double, double, double, Eigen::Vector3d&, Eigen::Vector3d&, Eigen::Vector3d&);
@@ -69,14 +69,14 @@ public:
     void getTransVel(Matrix3Xd& cdot_){cdot_ = cdot;};
     void getRotPos(Matrix4Xd& q_){q_ = q;};
     void getRotVel(Matrix4Xd& qdot_){qdot_ = qdot;};
-    
+
     Eigen::Vector3d getOmega(const Eigen::Vector4d&, const Eigen::Vector4d&);
     Eigen::Vector3d getOmega0(const Eigen::Vector4d&, const Eigen::Vector4d&);
     Eigen::Vector3d rotVec(const Eigen::Vector3d&, const Eigen::Vector4d&);
 
     double getTensLoc(int n){return f0.col(n).norm();};
     Eigen::Vector3d getTensGlob(int n){return R(q.col(n+1))*f0.col(n).tail(3);};
-    
+
 private:
 
     // Initialisation
@@ -115,9 +115,9 @@ private:
     void Mass(double **M);
     int SolutionOutput();
 
-        
+
     // ------
-       
+
     // Beam number
     int nBeam;
 

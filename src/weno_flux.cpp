@@ -36,44 +36,44 @@ weno_flux::weno_flux(lexer* p):tttw(13.0/12.0),fourth(1.0/4.0),third(1.0/3.0),
             sevsix(7.0/6.0),elvsix(11.0/6.0),sixth(1.0/6.0),fivsix(5.0/6.0),tenth(1.0/10.0),
             sixten(6.0/10.0),treten(3.0/10.0),epsilon(0.000001)
 {
-    
+
     if(p->j_dir==0)
     {
     if(p->B269==0)
     {
         if(p->D11==1)
         pflux = new flux_face_FOU_2D(p);
-        
+
         if(p->D11==2)
         pflux = new flux_face_CDS2_2D(p);
     }
-    
+
     if(p->B269>=1 || p->S10==2)
     {
         if(p->D11==1)
         pflux = new flux_face_FOU_vrans_2D(p);
-        
+
         if(p->D11==2)
         pflux = new flux_face_CDS2_vrans_2D(p);
     }
     }
-    
+
     if(p->j_dir==1)
     {
     if(p->B269==0)
     {
         if(p->D11==1)
         pflux = new flux_face_FOU(p);
-        
+
         if(p->D11==2)
         pflux = new flux_face_CDS2(p);
     }
-    
+
     if(p->B269>=1 || p->S10==2)
     {
         if(p->D11==1)
         pflux = new flux_face_FOU_vrans(p);
-        
+
         if(p->D11==2)
         pflux = new flux_face_CDS2_vrans(p);
     }
@@ -89,7 +89,7 @@ void weno_flux::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& 
     if(ipol==1)
     ULOOP
     a->F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel,p->DRDXN,p->DSDYP,p->DTDZP);
-    
+
     if(p->j_dir==1)
     if(ipol==2)
     VLOOP
@@ -117,11 +117,11 @@ double weno_flux::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vve
         pflux->v_flux(a,ipol,vvel,jvel1,jvel2);
         pflux->w_flux(a,ipol,wvel,kvel1,kvel2);
 
-        
+
         i-=1;
         fu1 = fx(p,a,b,uvel,ipol,ivel1);
         i+=1;
-        
+
         fu2 = fx(p,a,b,uvel,ipol,ivel2);
 
 
@@ -130,7 +130,7 @@ double weno_flux::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vve
         j-=1;
         fv1 = fy(p,a,b,vvel,ipol,jvel1);
         j+=1;
-        
+
         fv2 = fy(p,a,b,vvel,ipol,jvel2);
         }
 
@@ -139,14 +139,14 @@ double weno_flux::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vve
         k-=1;
         fw1 = fz(p,a,b,wvel,ipol,kvel1);
         k+=1;
-        
+
         fw2 = fz(p,a,b,wvel,ipol,kvel2);
-        
+
         
         L =   - ((ivel2*fu2-ivel1*fu1)/p->DRM)*DRDX[IP]
               - ((jvel2*fv2-jvel1*fv1)/p->DSM)*DSDY[JP]
               - ((kvel2*fw2-kvel1*fw1)/p->DTM)*DTDZ[KP];
-              
+
               
         return L;
 }
@@ -161,11 +161,11 @@ double weno_flux::fx(lexer *p,fdm *a, field& b, field& uvel, int ipol, double ad
     is(b);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
-          
+
     }
 
     if(advec<0.0)
@@ -174,7 +174,7 @@ double weno_flux::fx(lexer *p,fdm *a, field& b, field& uvel, int ipol, double ad
     is(b);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -193,7 +193,7 @@ double weno_flux::fy(lexer *p,fdm *a, field& b, field& vvel, int ipol, double ad
     is(b);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -205,12 +205,12 @@ double weno_flux::fy(lexer *p,fdm *a, field& b, field& vvel, int ipol, double ad
     is(b);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
     }
-    
+
     return grad;
 }
 
@@ -224,7 +224,7 @@ double weno_flux::fz(lexer *p,fdm *a, field& b, field& wvel, int ipol, double ad
     is(b);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -236,7 +236,7 @@ double weno_flux::fz(lexer *p,fdm *a, field& b, field& wvel, int ipol, double ad
     is(b);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));

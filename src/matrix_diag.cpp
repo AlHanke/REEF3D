@@ -32,7 +32,7 @@ matrix_diag::matrix_diag(lexer *pp)
     pp->Darray(t,pp->veclength);
     pp->Darray(b,pp->veclength);
     pp->Darray(p,pp->veclength);
-    
+
     if(pp->D33==1)
     {
     pp->Darray(sb,pp->veclength);
@@ -44,7 +44,7 @@ matrix_diag::matrix_diag(lexer *pp)
     pp->Darray(wb,pp->veclength);
     pp->Darray(wt,pp->veclength);
     }
-    
+
 }
 
 matrix_diag::~matrix_diag()
@@ -56,7 +56,7 @@ matrix_diag::~matrix_diag()
     delete [] t;
     delete [] b;
     delete [] p;
-    
+
     delete [] sb;
     delete [] st;
     delete [] nb;
@@ -76,7 +76,7 @@ void matrix_diag::resize(lexer *pp, int size_old, int size_new)
     pp->Dresize(t,size_old,size_new);
     pp->Dresize(b,size_old,size_new);
     pp->Dresize(p,size_old,size_new);
-    
+
     if(pp->D33==1)
     {
     pp->Dresize(sb,size_old,size_new);

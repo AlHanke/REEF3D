@@ -33,7 +33,7 @@ fsf_vtp::fsf_vtp(lexer* p, fdm *a, ghostcell *pgc):vertice(p),nodeflag(p),eta(p)
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_CFD_FSF",0777);
-    
+
     fsfprintcount=0;
 }
 
@@ -45,10 +45,10 @@ void fsf_vtp::start(lexer *p, fdm *a, ghostcell *pgc)
 {
     triangulation(p,a,pgc,a->phi);
     reconstruct(p,a,a->phi);
-    
+
     print(p,a,pgc);
     ++fsfprintcount;
-    
+
     finalize(p,a);
 }
 

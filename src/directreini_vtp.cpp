@@ -29,23 +29,23 @@ void directreini::vtp(lexer* p, fdm* a, ghostcell *pgc)
 {
     if(p->mpirank==0)
     pvtp(p,a,pgc);
-    
+
     name_iter(p,a,pgc);
 
     ofstream result;
     result.open(name, ios::binary);
     //---------------------------------------------
-    
+
     polygon_num=facount;
-    
+
     polygon_sum=0;
     for(n=0;n<polygon_num;++n)
     polygon_sum+=numfac[n];
-    
+
     vertice_num = ccptcount;
-    
+
     cout<<p->mpirank<<" Vertice_num: "<<vertice_num<<" Polygon_Num: "<<polygon_num<<" Polygon_Sum: "<<polygon_sum<<endl;
-    
+
     //---------------------------------------------
     n=0;
 

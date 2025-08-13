@@ -27,7 +27,7 @@ Author: Hans Bihs
 void ghostcell::largevaladd(field &f,double dist,int gcv, int bc, int cs)
 {
     int qstart=1;
-    
+
     margin=3;
 
     if(cs==1)

@@ -31,16 +31,16 @@ Author: Hans Bihs
 void hypre_sstruct::fill_matrix8(lexer* p, ghostcell* pgc, double *f, vec &rhs, matrix_diag &M)
 {
     fieldint4 cval4(p);
-    
+
     count=0;
     LOOP
     {
     cval4(i,j,k)=count;
     ++count;
     }
-    
+
     nentries=7;
-    
+
     for (j = 0; j < nentries; j++)
     stencil_indices[j] = j;
 
@@ -50,57 +50,57 @@ void hypre_sstruct::fill_matrix8(lexer* p, ghostcell* pgc, double *f, vec &rhs, 
         PFLUIDCHECK
         {
         n=cval4(i,j,k);
-        
+
         values[count]=M.p[n];
         ++count;
-        
+
         values[count]=M.s[n];
         ++count;
-        
+
         values[count]=M.n[n];
         ++count;
-        
+
         values[count]=M.e[n];
         ++count;
-        
+
         values[count]=M.w[n];
         ++count;
-        
+
         values[count]=M.b[n];
         ++count;
-        
+
         values[count]=M.t[n];
         ++count;
         }
-        
+
         FSCHECK
         {
         values[count]=1.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
         }
     }
-    
+
     HYPRE_SStructMatrixSetBoxValues(A, part, ilower, iupper, variable, nentries, stencil_indices, values);
     HYPRE_SStructMatrixAssemble(A);
-    
+
     
     // vec
     count=0;
@@ -108,16 +108,16 @@ void hypre_sstruct::fill_matrix8(lexer* p, ghostcell* pgc, double *f, vec &rhs, 
     {
         FPCHECK
         values[count] = f[FIJK];
-        
+
         FSCHECK
         values[count] = 0.0;
-    
+
     ++count;
     }
 
     HYPRE_SStructVectorSetBoxValues(x, part, ilower, iupper, variable, values);
     HYPRE_SStructVectorAssemble(x);
-    
+
     
     count=0;
     KJILOOP
@@ -127,28 +127,28 @@ void hypre_sstruct::fill_matrix8(lexer* p, ghostcell* pgc, double *f, vec &rhs, 
         n=cval4(i,j,k);
         values[count] = rhs.V[n];
         }
-        
+
         FSCHECK
         values[count] = 0.0;
 
     ++count;
     }
-    
+
     HYPRE_SStructVectorSetBoxValues(b, part, ilower, iupper, variable, values);
     HYPRE_SStructVectorAssemble(b);
-    
+
 }
 
 void hypre_sstruct::fillbackvec8(lexer *p, double *f, int var)
 {
     HYPRE_SStructVectorGetBoxValues(x, part, ilower, iupper, variable, values);
-    
+
         count=0;
         KJILOOP
         {
          FPCHECK
         f[FIJK]=values[count];
-        
+
         ++count;
         }
 }

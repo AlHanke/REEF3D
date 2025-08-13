@@ -31,31 +31,31 @@ void sflow_eta::wetdry(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &P,
     if(eta(i,j)< -p->wd  + b->bed(i,j) - wd_criterion + 1.0e-20)
     eta(i,j) = -p->wd  + b->bed(i,j)   - wd_criterion - 1.0e-15;
 
-    
+
     // WL update
     SLICELOOP4
     b->hp(i,j) = MAX(eta(i,j) + p->wd - b->bed(i,j),0.0);
-    
+
     pgc->gcsl_start4(p,b->hp,gcval_eta);
 
-    
+
     SLICELOOP1
     b->hx(i,j) = MAX(b->hx(i,j), 0.0);
-    
+
     SLICELOOP2
     b->hy(i,j) = MAX(b->hy(i,j), 0.0);
-    
+
 
     pgc->gcsl_start1(p,b->hx,gcval_eta);
     pgc->gcsl_start2(p,b->hy,gcval_eta);
+
     
-    
-    
+
       SLICELOOP4
       {
           if(b->hp(i,j)>=wd_criterion)
           p->wet[IJ]=1;
-              
+
           if(b->hp(i,j)<wd_criterion)
           {
            ws(i,j)=0.0;
@@ -63,15 +63,15 @@ void sflow_eta::wetdry(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &P,
            p->wet[IJ]=0;
           }
       }
-      
+
       pgc->gcsl_start4Vint(p,p->wet,50);
-      
+
       
       SLICELOOP1
       {
           if(b->hx(i,j)>=wd_criterion)
            b->wet1(i,j)=1;
-           
+
           if(b->hx(i,j)<wd_criterion || (p->wet[IJ]==0 && p->wet[Ip1J]==0))
           {
            b->P(i,j)=0.0;
@@ -79,12 +79,12 @@ void sflow_eta::wetdry(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &P,
            b->wet1(i,j)=0;
           }
       }
-      
+
       SLICELOOP2
       {
           if(b->hy(i,j)>=wd_criterion)
            b->wet2(i,j)=1;
-           
+
           if(b->hy(i,j)<wd_criterion || (p->wet[IJ]==0 && p->wet[IJp1]==0))
           {
            b->Q(i,j)=0.0;
@@ -94,7 +94,7 @@ void sflow_eta::wetdry(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &P,
       }
     pgc->gcsl_start1int(p,b->wet1,50);
     pgc->gcsl_start2int(p,b->wet2,50);
-    
+
       
     // gcslin update
     if(p->count<=1)
@@ -103,7 +103,7 @@ void sflow_eta::wetdry(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &P,
         {
         i=p->gcslin[n][0];
         j=p->gcslin[n][1];
-        
+
         if(p->wet[IJ]==0)
         p->gcslin[n][5]=0;
         }

@@ -34,7 +34,7 @@ void mgcslice4::fill_ggc(lexer* p)
 {
     int q,qq,n,nn,a;
     int check;
-    
+
     p->Iarray(p->ggcslmem4,imax*jmax);
 
 //--------------------------
@@ -74,7 +74,7 @@ void mgcslice4::fill_ggc(lexer* p)
 
     ++a;
     }
-    
+
     p->Iresize(p->ggcsl4,p->ggcslsize4,p->ggcslcount4*p->margin, 3, 3);
     p->ggcslsize4=p->ggcslcount4*p->margin;
 
@@ -140,7 +140,7 @@ void mgcslice4::fill_ggc(lexer* p)
     }
     p->ggcslcount4=n;
 
-    
+
     //cout<<p->mpirank<<"  ggcslcount: "<<p->ggcslcount4<<endl;
     p->del_Iarray(p->ggcslmem4,imax*jmax);
 }

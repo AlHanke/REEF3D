@@ -45,12 +45,12 @@ reinitopo_RK3::reinitopo_RK3(lexer* p) : epsi(p->F45*p->DXM),f(p),frk1(p),frk2(p
 
     if(p->S50==3)
     gcval_topo=153;
-    
+
     if(p->S50==4)
     gcval_topo=150;
 
     gcval_initopo=150;
-    
+
     prdisc = new reinidisc_fsf_rig(p);
 
     time_preproc(p);
@@ -63,9 +63,9 @@ reinitopo_RK3::~reinitopo_RK3()
 void reinitopo_RK3::start(lexer* p, fdm* a, ghostcell* pgc, field &f)
 {
     pgc->start4a(p,f,gcval);
-    
+
     gcval=gcval_topo;
-    
+
     if(p->count==0)
     {
     if(p->mpirank==0)
@@ -87,7 +87,7 @@ void reinitopo_RK3::start(lexer* p, fdm* a, ghostcell* pgc, field &f)
     frk1.V[IJK] = f.V[IJK] + dt.V[IJK]*L.V[IJK];
 
     pgc->start4a(p,frk1,gcval);
-    
+
 
     // Step 2
     prdisc->start(p,a,pgc,frk1,L,5);

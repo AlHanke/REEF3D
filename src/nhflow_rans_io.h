@@ -56,10 +56,10 @@ public:
     virtual void name_pvtu(lexer*, fdm_nhf*, ghostcell*,ofstream&);
     virtual void name_vtu(lexer*, fdm_nhf*, ghostcell*,ofstream&, int*, int &);
     virtual void offset_vtu(lexer*, fdm_nhf*, ghostcell*,ofstream&, int*, int &);
-    
+
     double *KIN,*EPS;
     int *WALLF;
-    
+
     double const ke_c_1e, ke_c_2e,ke_sigma_k,ke_sigma_e;
     double const kw_alpha, kw_beta,kw_sigma_k,kw_sigma_w;
     double const sst_alpha1, sst_alpha2, sst_beta1, sst_beta2, sst_sigma_k1, sst_sigma_k2, sst_sigma_w1, sst_sigma_w2;
@@ -78,7 +78,7 @@ private:
     double uvel,refwalldist,fc,ev_fac, beddist, dist;
     double kinw,epsw;
     double walld,ddn,depth,depth_inflow;
-    
+
 };
 
 #endif

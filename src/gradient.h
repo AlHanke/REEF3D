@@ -94,7 +94,7 @@ public:
      double pwdx(lexer*,fdm*);
      double pwdy(lexer*,fdm*);
      double pwdz(lexer*,fdm*);
-     
+
      //
      double pudx(lexer*,field&);
      double pudy(lexer*,field&);
@@ -107,7 +107,7 @@ public:
      double pwdx(lexer*,field&);
      double pwdy(lexer*,field&);
      double pwdz(lexer*,field&);
-     
+
 
     //--------------------------------
 
@@ -137,7 +137,7 @@ public:
      double wdxx(fdm*);
      double wdyy(fdm*);
      double wdzz(fdm*);
-     
+
 
     double grad1,grad2;
     double grad;
@@ -145,7 +145,7 @@ public:
 
     double gradx, grady, gradz;
     double f1,f2,f3,f4;
-    
+
     lexer *p;
 };
 

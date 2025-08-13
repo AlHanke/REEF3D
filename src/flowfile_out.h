@@ -48,13 +48,13 @@ private:
     void filename(lexer*,fdm*,ghostcell*);
     void header_file(lexer*, fdm*, ghostcell*);
     void header_file_ini(lexer*, fdm*, ghostcell*);
-    
+
     void initialize(lexer*, fdm*, ghostcell*);
     void ini_location(lexer*, fdm*, ghostcell*);
-    
+
     void write_data(lexer*, fdm*, ghostcell*);
 
-    
+
     
     char name[450];
     char headername[450];
@@ -74,12 +74,12 @@ private:
     double xp,yp,zp;
 
     int filecount;
-    
+
     double ddn;
     float ffn;
     int iin;
     int Ni,Nj,Nk;
-    
+
 };
 
 #endif

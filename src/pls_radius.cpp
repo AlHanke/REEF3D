@@ -41,7 +41,7 @@ void particle_pls::setradius(lexer* p, fdm* a)
 void particle_pls::posradius(lexer *p, fdm *a, int qx)
 {
     pos[qx][3]=phipol(p,a,pos[qx][0],pos[qx][1],pos[qx][2]);
-    
+
     if(pos[qx][3]<rmin)
     pos[qx][4]=rmin;
 

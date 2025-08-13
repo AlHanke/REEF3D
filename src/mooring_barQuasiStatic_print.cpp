@@ -29,31 +29,31 @@ Author: Tobias Martin
 void mooring_barQuasiStatic::print(lexer *p, ghostcell *pgc)
 {
     int num=0;
-    
+
     if(p->P15==1)
     num = p->printcount_sixdof;
 
     if(p->P15==2)
     num = p->count;
-    
+
     if(num<0)
     num=0;
-    
+
     // Check bottom and switch to catenary if necessary
     buildLine(p,pgc);
     checkBottom(p,pgc);
-   
+
 
     // Print tension forces
     if (p->mpirank==0)
     {
         if(broken==true)
         eTout<<p->simtime<<" \t "<<0.0<<endl;
-        
+
         if(broken==false)
         eTout<<p->simtime<<" \t "<<T[sigma+1]<<endl;
     }
-    
+
     // Print line
     if
     (
@@ -63,36 +63,36 @@ void mooring_barQuasiStatic::print(lexer *p, ghostcell *pgc)
     )
     {
         printtime+=p->P30;
-        
+
         if(p->A10==5)
         sprintf(name,"./REEF3D_NHFLOW_6DOF_Mooring/REEF3D-Mooring-%08i-%06i.vtk",line,num);
-        
+
         if(p->A10==6)
         sprintf(name,"./REEF3D_CFD_6DOF_Mooring/REEF3D-Mooring-%08i-%06i.vtk",line,num);
 
 
         ofstream result;
         result.open(name, ios::binary);
-        
+
         result << "# vtk DataFile Version 2.0" << endl;
         result << "Mooring line " << line << endl;
         result << "ASCII \nDATASET UNSTRUCTURED_GRID" << endl;
         result << "POINTS " << sigma+2 << " float" <<endl;
-        
+
         for(int n=0; n<sigma+2; ++n)
         {
             result<<x[n]<<" "<<y[n]<<" "<<z[n]<<endl;
         }
-        
+
         result << "\nCELLS " << sigma+1 << " " << (sigma+1)*3 <<endl;
-        
+
         for(int n=0; n<sigma+1; ++n)
         {
             result<<"2 "<< n << " " << n+1 << endl;
         }
-        
+
         result << "\nCELL_TYPES " << sigma+1 << endl;
-        
+
         for(int n=0; n<sigma+1; ++n)
         {
             result<<"3"<<endl;
@@ -100,7 +100,7 @@ void mooring_barQuasiStatic::print(lexer *p, ghostcell *pgc)
 
         result<<"\nPOINT_DATA " << sigma+2 <<endl;
         result<<"SCALARS Tension float 1 \nLOOKUP_TABLE default"<<endl;
-        
+
         for(int n=0; n<sigma+2; ++n)
         {
             result<<T[n]<<endl;
@@ -126,7 +126,7 @@ void mooring_barQuasiStatic::buildLine(lexer *p, ghostcell *pgc)
         x[cnt] = x[cnt-1] + 0.5*(l[cnt] + l[cnt-1])*f[cnt-1][0];
         y[cnt] = y[cnt-1] + 0.5*(l[cnt] + l[cnt-1])*f[cnt-1][1];
         z[cnt] = z[cnt-1] + 0.5*(l[cnt] + l[cnt-1])*f[cnt-1][2];
-            
+
         T[cnt-1] = fabs(A[cnt-1][cnt-1]);
     }
     x[sigma+1] = x[sigma] + 0.5*(l[sigma])*f[sigma][0];

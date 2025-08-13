@@ -31,10 +31,10 @@ void iowave::ini2D(lexer *p, fdm2D* b, ghostcell* pgc)
     {
     wavegen_2D_precalc_ini(p,pgc);
     wavegen_precalc_relax_func(p,pgc);
-   
+
     wavegen_2D_precalc(p,b,pgc);
     }
-    
+
     if(p->I30==1)
     full_initialize2D(p,b,pgc);
 }

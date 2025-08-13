@@ -32,22 +32,22 @@ Author: Hans Bihs
 sflow_state::sflow_state(lexer *p, fdm2D *b, ghostcell *pgc, int state_restart)
 {
     restart=state_restart;
-    
+
     // Create Folder
     if(p->mpirank==0 && restart==0)
     mkdir("./REEF3D_SFLOW_STATE",0777);
-    
+
     if(p->mpirank==0 && restart==1)
     mkdir("./REEF3D_SFLOW_STATE_RESTART",0777);
-    
+
     printcount=0;
-    
+
     file_version=2;
-    
+
     file_type=p->P45;
-    
+
     ini_token=0;
-    
+
     boundary(p,b,pgc,restart);
 }
 
@@ -63,16 +63,16 @@ void sflow_state::write(lexer *p, fdm2D *c, ghostcell *pgc)
     {
     if(p->mpirank==0)
     ini_mainheader(p,c,pgc);
-    
+
     if(flag==1)
     write_header(p,c,pgc);
-    
+
     ini_token=1;
     }
-    
+
     if(p->mpirank==0)
     write_mainheader(p,c,pgc);
-    
+
     
     // result file
     if(flag==1)
@@ -81,16 +81,16 @@ void sflow_state::write(lexer *p, fdm2D *c, ghostcell *pgc)
 
 void sflow_state::write_single(lexer *p, fdm2D *c, ghostcell *pgc)
 {
-    
+
 }
 
 void sflow_state::write_contiuous(lexer *p, fdm2D *c, ghostcell *pgc)
 {
-    
+
 }
 
 
 void sflow_state::write_restart(lexer *p, fdm2D *c, ghostcell *pgc)
 {
-    
+
 }

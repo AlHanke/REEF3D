@@ -35,19 +35,19 @@ class geo_container : increment
 public:
     geo_container(lexer*);
     virtual ~geo_container();
-    
+
     void create_obj(lexer*, int, int , int);
-    
+
     void delete_obj(lexer*, int ID);
 
-    
+
 private:
     double **tri;
     int trinum;
     int ID;
     int type;
     double xs,xe,ys,ye,zs,ze;
-   
+
    
     int q,iin;
     float ffn;

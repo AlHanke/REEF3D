@@ -32,36 +32,36 @@ void fnpf_print_kinematics::kinematics_calc(lexer* p, fdm_fnpf *c, ghostcell *pg
     {
         dudsig_= dudsig(p,c,pgc);
         dvdsig_= dvdsig(p,c,pgc);
-        
+
         // Term 1 from eqn (9) of Pakozdi et al (2021) MS
         ax1= (c->U[FIJK] - un[k])/(p->dt);
         ay1= (c->V[FIJK] - vn[k])/ (p->dt);
-        
+
         // Term 2
         ax2 = c->U[FIJK]*(dudxi(p,c,pgc) + (dudsig_*p->sigx[FIJK]));
         ay2 = c->V[FIJK]*(dvdxi(p,c,pgc) + (dvdsig_*p->sigy[FIJK]));
-        
+
         // Term 3
         ax3 = (c->W[FIJK] - (p->sig[FIJK]*dndt(p,c,pgc)))* dudsig_*p->sigz[IJ];
         ay3 = (c->W[FIJK] - (p->sig[FIJK]*dndt(p,c,pgc)))* dvdsig_*p->sigz[IJ];
-      
+
         // Sum up acceleration
         ax[k] = ax1 + ax2 + ax3;
         ay[k] = ay1 + ay2 + ay3;
-        
+
         
         // Storing current time step information for next time step gradient calculation
         un[k] = c->U[FIJK];
         vn[k] = c->V[FIJK];
     }
-    
+
     etan=c->eta(i,j);
 }
 
 double fnpf_print_kinematics::dndt(lexer *p, fdm_fnpf *c, ghostcell *pgc) // to calculate dn dt for ax3
 {
     double dndt = (c->eta(i,j) - etan)/ p->dt;
-         
+
     return dndt;
 }
 
@@ -69,7 +69,7 @@ double fnpf_print_kinematics::dudsig(lexer *p, fdm_fnpf *c, ghostcell *pgc)     
 {
     double dudsig_ = 0;
     double dudsig2_ = 0;
-    
+
     if(k<p->knoz)
     {
         dudsig_ =  (c->U[FIJKp1] - c->U[FIJKm1])/(p->DZN[KP1] + p->DZN[KM1]);

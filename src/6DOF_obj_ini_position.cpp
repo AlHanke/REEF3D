@@ -39,7 +39,7 @@ void sixdof_obj::iniPosition_RBM(lexer *p, ghostcell *pgc)
             tri_z0[n][q] = tri_z[n][q] - c_(2);
         }
     }
-    
+
     // Initial rotation
 
     if (p->X101==1)
@@ -47,7 +47,7 @@ void sixdof_obj::iniPosition_RBM(lexer *p, ghostcell *pgc)
         phi = p->X101_phi*(PI/180.0);
         theta = p->X101_theta*(PI/180.0);
         psi = p->X101_psi*(PI/180.0);
-    
+
         for (n=0; n<tricount; ++n)
         {
             rotation_tri
@@ -67,7 +67,7 @@ void sixdof_obj::iniPosition_RBM(lexer *p, ghostcell *pgc)
             }
         }
     }
-    
+
 
     // Initialise quaternions (Goldstein p. 604)
     e_(0) =
@@ -82,28 +82,28 @@ void sixdof_obj::iniPosition_RBM(lexer *p, ghostcell *pgc)
     e_(3) =
          cos(0.5*phi)*cos(0.5*theta)*sin(0.5*psi)
         - sin(0.5*phi)*sin(0.5*theta)*cos(0.5*psi);
-        
+
         
     en1_ = e_;
     en2_ = e_;
     en3_ = e_;
     ek_  = e_;
-    
+
     cn1_ = c_;
     cn2_ = c_;
     cn3_ = c_;
     ck_  = c_;
-    
+
     pn1_ = p_;
     pn2_ = p_;
     pn3_ = p_;
     pk_  = p_;
-    
+
     hn1_ = h_;
     hn2_ = h_;
     hn3_ = h_;
     hk_  = h_;
-    
+
     dpk_ = dp_;
     dck_ = dc_;
     dhk_ = dh_;

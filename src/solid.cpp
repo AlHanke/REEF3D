@@ -40,7 +40,7 @@ void solid::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow, convection* p
 {
 
     solid_topo(p,a,pgc);
-    
+
     preso->start(p,a,pgc,a->solid);
 }
 
@@ -50,7 +50,7 @@ void solid::solid_topo(lexer* p, fdm* a, ghostcell* pgc)
     {
     a->solid(i,j,k) = p->flag_solid[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin];
     }
-    
+
     p->del_Darray(p->flag_solid,p->imax*p->jmax*p->kmax);
 }
 

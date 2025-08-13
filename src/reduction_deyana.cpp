@@ -37,10 +37,10 @@ void reduction_deyana::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double r=1.0;
     eta = 0.85;
-    
+
     SLICELOOP4
     {
-    
+
     alphaval = s->alpha(i,j);
     tetaval = s->teta(i,j);
     phival = s->phi(i,j);
@@ -60,7 +60,7 @@ void reduction_deyana::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
         r = cos(tetaval)*(1.0 - tan(tetaval/tanphi));
         r*= cos(alphaval)*(1.0 - pow(tan(alphaval),2.0)/pow(tanphi,2.0));
         }
-        
+
         if(p->S84==2)
         r = 0.1/(fabs(s->gamma(i,j)) + 0.0000001)+0.1;
     }
@@ -74,7 +74,7 @@ void reduction_deyana::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 
     if(p->pos_x()>p->S72)
     r=10.0;
-    
+
     
     s->reduce(i,j)=r;
     }

@@ -28,9 +28,9 @@ Author: Hans Bihs
 void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     double fsfloc;
-    
+
     p->wavetime = p->simtime;
-    
+
 // ETA
     SLICELOOP4
     {
@@ -38,7 +38,7 @@ void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
         yg = ygen(p);
         dg = distgen(p);
         db = distbeach(p);
-        
+
         // Wave Generation
         if(p->B98==2)
         {
@@ -48,7 +48,7 @@ void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
         }
     }
     pgc->gcsl_start4(p,eta,50);
-    
+
 // U
     count=0;
     LOOP
@@ -57,9 +57,9 @@ void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
         yg = ygen(p);
         dg = distgen(p);
         db = distbeach(p);
-        
+
         z=p->ZSP[IJK]-p->phimean;
-        
+
         // Wave Generation
         if(p->B98==2)
         {
@@ -72,7 +72,7 @@ void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
             }
         }
     }
-        
+
 // V
     count=0;
     if(p->j_dir==1)
@@ -82,9 +82,9 @@ void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
         yg = ygen(p);
         dg = distgen(p);
         db = distbeach(p);
-        
+
         z=p->ZSP[IJK]-p->phimean;
-        
+
         // Wave Generation
         if(p->B98==2 && v_switch==1)
         {
@@ -97,7 +97,7 @@ void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
             }
         }
     }
-    
+
 // W
     count=0;
     LOOP
@@ -106,7 +106,7 @@ void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
         yg = ygen(p);
         dg = distgen(p);
         db = distbeach(p);
-        
+
         zloc3 = p->pos3_z();
         fsfloc = eta(i,j) + p->phimean;
 
@@ -124,6 +124,6 @@ void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
             }
         }
     }
-    
+
 }
-    
+

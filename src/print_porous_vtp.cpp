@@ -32,7 +32,7 @@ void print_porous::print_vtp(lexer *p, fdm *a, ghostcell *pgc)
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_CFD_Porous",0777);
-    
+
     sprintf(name,"./REEF3D_CFD_Porous/REEF3D_Porous-Object.vtp");
 
     ofstream result;
@@ -126,5 +126,5 @@ void print_porous::print_vtp(lexer *p, fdm *a, ghostcell *pgc)
     result<<"</VTKFile>"<<endl;
 
     result.close();
-    
+
 }

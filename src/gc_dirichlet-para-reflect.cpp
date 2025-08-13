@@ -28,18 +28,18 @@ void ghostcell::dirichlet_para_reflect(lexer *p,field& f,double dist,int gcv, in
 {
     wallvalue=0.0;
     weight=1.0;
-    
+
     double dx;
-    
+
     if(cs==1||cs==4)
     dx = p->DXP[IP];
-    
+
     if(cs==2||cs==3)
     dx = p->DYP[JP];
-    
+
     if(cs==5||cs==6)
     dx = p->DZP[KP];
-    
+
     ys=1;
     if(dist>dx*(1.0-1.0e-9) && dist<dx*(1.0+1.0e-9))
     ys=0;

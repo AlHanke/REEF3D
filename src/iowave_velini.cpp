@@ -28,7 +28,7 @@ Author: Hans Bihs
 void iowave::velini(lexer *p, fdm *a, ghostcell *pgc)
 {
     double Ai,Ui,area;
-    
+
     
     if(p->B98==3 || p->B98==4)
     {

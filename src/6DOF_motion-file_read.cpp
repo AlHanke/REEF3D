@@ -31,16 +31,16 @@ void sixdof_motionext_file::read_format_1(lexer *p, ghostcell *pgc)
     double val,val0,val1;
     double sign,beta,s;
     int count;
-    
+
     sprintf(name,"6DOF_motion.dat");
 
 // open file and count
     ifstream file(name, ios_base::in);
-    
+
     if(!file)
     cout<<endl<<("no '6DOF_motion.dat' file found")<<endl<<endl;
 
-    
+
     count=0;
     while(!file.eof())
     {
@@ -49,39 +49,39 @@ void sixdof_motionext_file::read_format_1(lexer *p, ghostcell *pgc)
     ++count;
     }
     ptnum=count;
-    
+
     //cout<<"6DOF MOTION READ "<<count<<endl;
-    
+
     file.close();
-    
+
 // allocate
     p->Darray(data,ptnum,colnum);
-    
+
 
 // re.open file
     file.open (name, ios_base::in);
-    
+
     if(!file)
     cout<<endl<<("no '6DOF_motion.dat' file found")<<endl<<endl;
-    
+
  // read file
     rowcount=colcount=0;
     while(!file.eof())
     {
         for(qn=0;qn<colnum;++qn)
         file>>data[rowcount][qn];
-        
+
         ++rowcount;
     }
-    
+
     ts = data[0][0];
     te = data[ptnum-1][0];
-    
+
     //if(p->mpirank==0)
     //cout<<"6DOF_motion  ts: "<<ts<<" te: "<<te<<endl;
-    
+
 // add deltas
     for(qn=0;qn<ptnum;++qn)
     data[qn][0] += p->X241;
-    
+
 }

@@ -28,18 +28,18 @@ void nhflow_forcing::box(lexer *p, ghostcell *pgc, int id)
 {
     xs = p->A581_xs[id];
     xe = p->A581_xe[id];
-    
+
     ys = p->A581_ys[id];
     ye = p->A581_ye[id];
 
     zs = p->A581_zs[id];
     ze = p->A581_ze[id];
-    
+
     //cout<<p->mpirank<<" FORCING_CYLINDER  xs: "<<xs<<" xe: "<<xe<<" id: "<<id<<endl;
     // Face 3
     // Tri 1
     tstart[entity_count]=tricount;
-    
+
     tri_x[tricount][0] = xs;
     tri_x[tricount][1] = xe;
     tri_x[tricount][2] = xe;
@@ -124,7 +124,7 @@ void nhflow_forcing::box(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][1] = ze;
     tri_z[tricount][2] = zs;
     ++tricount;
-    
+
     // Face 2
     // Tri 7
     tri_x[tricount][0] = xe;
@@ -211,7 +211,7 @@ void nhflow_forcing::box(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][1] = ze;
     tri_z[tricount][2] = ze;
     ++tricount;
-     
+
     tend[entity_count]=tricount;
-    
+
 }

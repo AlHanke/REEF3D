@@ -35,11 +35,11 @@ class heat_RK3CN :public bcheat, public heat_print
 public:
     heat_RK3CN(lexer *, fdm*, ghostcell*,heat*&);
     virtual ~heat_RK3CN();
-    
+
     virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*);
     virtual void ttimesave(lexer*, fdm*);
     virtual void diff_update(lexer*, fdm*, ghostcell*);
-    
+
     field4 thermdiff;
     field4 ark1,ark2,Tdiff;
 

@@ -46,7 +46,7 @@ potentialfile_out::~potentialfile_out()
 void potentialfile_out::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, turbulence *pturb)
 {
     int num;
-    
+
     if(p->P15==1)
     num = filecount;
 
@@ -58,12 +58,12 @@ void potentialfile_out::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, turbulence 
     if(p->P230_x[n]>=p->originx && p->P230_x[n]<p->endx)
     {
 
-        
+
         
         // write
         write_data(p,c,pgc);
     }
-    
+
     ++filecount;
 }
 

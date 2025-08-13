@@ -30,7 +30,7 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     int qn;
     double zmin,zmax,slope;
     double xs,xe,ys,ye;
-    
+
     ALOOP
     {
     a->porosity(i,j,k)=1.0;
@@ -38,12 +38,12 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     alpha(i,j,k)=0.0;
     beta(i,j,k)=0.0;
     }
-    
+
     pgc->start4a(p,a->porosity,1);
     pgc->start4a(p,a->porpart,1);
     pgc->start4a(p,alpha,1);
     pgc->start4a(p,beta,1);
-    
+
     
     // Box
     for(qn=0;qn<p->B270;++qn)
@@ -57,13 +57,13 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     alpha(i,j,k) = p->B270_alpha[qn];
     beta(i,j,k) = p->B270_beta[qn];
     }
-    
+
     // Vertical Cylinder
     for(qn=0;qn<p->B274;++qn)
     ALOOP
     {
         double  r = sqrt( pow(p->XP[IP]-p->B274_xc[qn],2.0)+pow(p->YP[JP]-p->B274_yc[qn],2.0));
-        
+
         if(r<=p->B274_r[qn] && p->pos_z()>p->B274_zs[qn] && p->pos_z()<=p->B274_ze[qn])
         {
         a->porosity(i,j,k)= p->B274_n[qn];
@@ -73,18 +73,18 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
         }
     }
 
-    
+
     // Wedge x-dir
     for(qn=0;qn<p->B281;++qn)
     {
         zmin=MIN(p->B281_zs[qn],p->B281_ze[qn]);
-        
+
             if(p->B281_xs[qn]<=p->B281_xe[qn])
             {
             xs = p->B281_xs[qn];
             xe = p->B281_xe[qn];
             }
-            
+
             if(p->B281_xs[qn]>p->B281_xe[qn])
             {
             xs = p->B281_xe[qn];
@@ -104,18 +104,18 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
         beta(i,j,k) = p->B281_beta[qn];
         }
     }
-    
+
     // Wedge y-dir
     for(qn=0;qn<p->B282;++qn)
     {
         zmin=MIN(p->B282_zs[qn],p->B282_ze[qn]);
-        
+
             if(p->B282_xs[qn]<=p->B282_xe[qn])
             {
             ys = p->B282_ys[qn];
             ye = p->B282_ye[qn];
             }
-            
+
             if(p->B282_xs[qn]>p->B282_xe[qn])
             {
             ys = p->B282_ye[qn];
@@ -135,19 +135,19 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
         beta(i,j,k) = p->B282_beta[qn];
         }
     }
-    
+
     // Plate x-dir
     for(qn=0;qn<p->B291;++qn)
     {
         zmin=MIN(p->B291_zs[qn],p->B291_ze[qn]);
         zmin=MAX(p->B291_zs[qn],p->B291_ze[qn]);
-        
+
             if(p->B291_xs[qn]<=p->B291_xe[qn])
             {
             xs = p->B291_xs[qn];
             xe = p->B291_xe[qn];
             }
-            
+
             if(p->B291_xs[qn]>p->B291_xe[qn])
             {
             xs = p->B291_xe[qn];
@@ -159,10 +159,10 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
         ALOOP
         if(p->pos_x()>=xs && p->pos_x()<xe
         && p->pos_y()>=p->B291_ys[qn] && p->pos_y()<p->B291_ye[qn]
-        
+
         && p->pos_z()>=zmin
         && p->pos_z()<=zmax
-        
+
         && p->pos_z()<slope*(p->pos_x()-p->B291_xs[qn])+p->B291_zs[qn]+p->B291_d[qn] //lower
         && p->pos_z()>slope*(p->pos_x()-p->B291_xs[qn])+p->B291_zs[qn]) // upper
         {
@@ -172,13 +172,13 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
         beta(i,j,k) = p->B291_beta[qn];
         }
     }
-    
+
     
     pgc->start4a(p,a->porosity,1);
     pgc->start4a(p,a->porpart,1);
     pgc->start4a(p,alpha,1);
     pgc->start4a(p,beta,1);
-    
+
     
     // Sediment
     if(p->S10==2)

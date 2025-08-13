@@ -44,7 +44,7 @@ void ptf_fsf_update::fsfupdate(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, 
     // update phi
     FLUIDLOOP
     a->phi(i,j,k) = eta(i,j) + p->phimean - p->pos_z();
-    
+
     pgc->start4(p,a->phi,50);
 
 }
@@ -97,7 +97,7 @@ void ptf_fsf_update::fsfbc(lexer *p, fdm *a, ghostcell *pgc, slice &Fifsf, field
         //if(p->mpirank==2)
         //cout<<"F_k: "<<fival<<" Fifsf: "<<Fifsf(i,j)<<" F_k+1: "<<Fi(i,j,k+1)<<"  | lsv0: "<<lsv0<<" lsv1: "<<lsv1<<endl;
     }
-   
+
     double x0,x1,x2,y0,y1,y2;
     double x,y;
     double denom1,denom2,denom3,denom4,denom5,denom6;
@@ -113,15 +113,15 @@ void ptf_fsf_update::fsfbc(lexer *p, fdm *a, ghostcell *pgc, slice &Fifsf, field
     y0 = Fi(i,j,k-1);
     y1 = Fi(i,j,k);
     y2 = Fifsf(i,j);
-    
+
     denom1 = fabs(x0-x1)>1.0e-6?(x0-x1):1.0e20 + 0.0001*p->DZN[KP]/(fabs(a->phi(i,j,k+1))+fabs(a->phi(i,j,k))) + 0.000001;
     denom2 = fabs(x1-x0)>1.0e-6?(x1-x0):1.0e20 + 0.0001*p->DZN[KP]/(fabs(a->phi(i,j,k+1))+fabs(a->phi(i,j,k))) + 0.000001;
     denom3 = fabs(x2-x0)>1.0e-6?(x2-x0):1.0e20 + 0.0001*p->DZN[KP]/(fabs(a->phi(i,j,k+1))+fabs(a->phi(i,j,k))) + 0.000001;
-    
+
     denom4 = fabs(x0-x2)>1.0e-6?(x0-x2):1.0e20 + 0.0001*p->DZN[KP]/(fabs(a->phi(i,j,k+1))+fabs(a->phi(i,j,k))) + 0.000001;
     denom5 = fabs(x1-x2)>1.0e-6?(x1-x2):1.0e20 + 0.0001*p->DZN[KP]/(fabs(a->phi(i,j,k+1))+fabs(a->phi(i,j,k))) + 0.000001;
     denom6 = fabs(x2-x1)>1.0e-6?(x2-x1):1.0e20 + 0.0001*p->DZN[KP]/(fabs(a->phi(i,j,k+1))+fabs(a->phi(i,j,k))) + 0.000001;
-    
+
 
         x = fabs(a->phi(i,j,k+1));
         Fi(i,j,k+1) =   ((x-x1)/denom1) * ((x-x2)/denom4) * y0
@@ -139,7 +139,7 @@ void ptf_fsf_update::fsfbc(lexer *p, fdm *a, ghostcell *pgc, slice &Fifsf, field
                       + ((x-x0)/denom3) * ((x-x1)/denom6) * y2;
 
         //cout<<"F_k: "<<Fi(i,j,k)<<" Fifsf: "<<Fifsf(i,j)<<" F_k+1: "<<Fi(i,j,k+1)<<"  | x1: "<<x1<<" x: "<<x<<endl;
-        
+
     //if(i+p->origin_i==0)
     //Fi(i-1,j,k+1) = Fi(i,j,k+1);
     }

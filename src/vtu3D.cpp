@@ -117,22 +117,22 @@ vtu3D::vtu3D(lexer* p, fdm *a, ghostcell *pgc) : eta(p)
     pline = new probe_line(p,a,pgc);
     pq = new gage_discharge_x(p,a,pgc);
     pqw = new gage_discharge_window_x(p,a,pgc);
-    
+
     if(p->P21==0)
     pmean = new print_averaging_v(p,a,pgc);
-    
+
     if(p->P21==1)
     pmean = new print_averaging_f(p,a,pgc);
 
     if(p->P180==1)
     pfsf = new fsf_vtp(p,a,pgc);
-    
+
     if(p->P190==1)
     ptopo = new topo_vtp(p,a,pgc);
-    
+
     if(p->P65>0)
     pvel=new probe_vel(p,a);
-    
+
     if(p->P66>0)
     pveltheo=new probe_vel_theory(p,a);
 
@@ -145,11 +145,11 @@ vtu3D::vtu3D(lexer* p, fdm *a, ghostcell *pgc) : eta(p)
     if(p->P81>0)
     pforce = new force*[p->P81];
 
-    
+
 
     for(n=0;n<p->P81;++n)
     pforce[n]=new force(p,a,pgc,n);
-    
+
     //if(p->P37>0)
     //pstate_restart=new cfd_state(p,a,pgc,0);
 
@@ -189,7 +189,7 @@ void vtu3D::ini(lexer* p, fdm* a, ghostcell* pgc)
 void vtu3D::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, ioflow *pflow, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
 {
     pgc->gcparax4a(p,a->phi,5);
-    
+
     pmean->averaging(p,a,pgc,pheat);
 
     // Print out based on iteration
@@ -234,10 +234,10 @@ void vtu3D::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat
 
     if(p->P51>0 && p->F80!=4)
     pwsf->height_gauge(p,a,pgc,a->phi);
-    
+
     if(p->P51>0 && p->F80==4)
     pwsf->height_gauge(p,a,pgc,a->vof);
-    
+
     if((p->P52>0 && p->count%p->P54==0 && p->P55<0.0) || ((p->P52>0 && p->simtime>p->probeprinttime && p->P55>0.0)  || (p->count==0 &&  p->P55>0.0)))
     pwsfline_x->wsfline(p,a,pgc,pflow);
 
@@ -251,19 +251,19 @@ void vtu3D::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat
 
     if(p->P61>0)
     pprobe->start(p,a,pgc,pturb);
-    
+
     if(p->P64>0)
     ppressprobe->start(p,a,pgc,pturb);
-    
+
     if(p->P65>0)
     pvel->start(p,a,pgc);
-    
+
     if(p->P66>0)
     pveltheo->start(p,a,pgc,pflow);
 
     if(p->P167>0)
     pq->start(p,a,pgc);
-    
+
     if(p->P168>0)
     pqw->start(p,a,pgc);
 
@@ -278,7 +278,7 @@ void vtu3D::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat
     if(p->P101>0)
     pslosh->start(p,a,pgc);
 
-    
+
 
     // Multiphase
     pmp->print_file(p,a,pgc);
@@ -308,7 +308,7 @@ void vtu3D::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat
 
     printfsftime_wT[qn]+=p->P185_dt[qn];
     }
-    
+
     // Print TOPO
     if(((p->count%p->P191==0 && p->P182<0.0 && p->P190==1 )|| (p->count==0 &&  p->P192<0.0 && p->P190==1)) && p->P191>0)
     ptopo->start(p,a,pgc,psed);
@@ -351,7 +351,7 @@ void vtu3D::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat
 
     p->stateprinttime+=p->P42;
     }
-    
+
     // Print state restart out based on iteration
     if(p->count%p->P38==0 && p->P37>0)
     {
@@ -363,14 +363,14 @@ void vtu3D::start(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat
 void vtu3D::print_stop(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, ioflow *pflow, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
 {
     print_vtu(a,p,pgc,pturb,pheat,pflow,psolv,pdata,pconc,pmp,psed);
-    
+
 }
 
 void vtu3D::print_vtu(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *pheat, ioflow *pflow, solver *psolv, data *pdata, concentration *pconc, multiphase *pmp, sediment *psed)
 {
     if(p->P180==1)
     pfsf->start(p,a,pgc);
-    
+
     print3D(a,p,pgc,pturb,pheat,psolv,pdata,pconc,pmp,psed);
 }
 
@@ -386,7 +386,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 
     pgc->gcparacox(p,a->topo,150);
     pgc->gcparacox(p,a->topo,150);
-    
+
     //pgc->start4a(p,a->topo,159);
 
      pgc->gcperiodicx(p,a->press,4);
@@ -410,7 +410,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     // velocity
     offset[n]=offset[n-1]+4*(p->pointnum)*3+4;
     ++n;
-    
+
     pmean->offset_vtu(p,a,pgc,result,offset,n);
 
     // scalars
@@ -449,7 +449,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
     ++n;
     }
-    
+
         // VOF
     if(p->P72==1)
     {
@@ -476,7 +476,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
     ++n;
     }
-    
+
         // sediment bedlaod
     if(p->P76==1)
     psed->offset_vtu_bedload(p,pgc,result,offset,n);
@@ -523,7 +523,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
     ++n;
     }
-    
+
      // VOF_C
     if(p->P72==1)
     {
@@ -549,7 +549,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     result<<"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
     result<<"<UnstructuredGrid>"<<endl;
     result<<"<Piece NumberOfPoints=\""<<p->pointnum<<"\" NumberOfCells=\""<<p->tpcellnum<<"\">"<<endl;
-    
+
     if(p->P16==1)
     {
     result<<"<FieldData>"<<endl;
@@ -562,7 +562,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     result<<"<PointData >"<<endl;
     result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-    
+
     pmean->name_vtu(p,a,pgc,result,offset,n);
 
     result<<"<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
@@ -576,7 +576,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     ++n;
 
     pheat->name_vtu(p,a,pgc,result,offset,n);
-    
+
     pmp->name_vtu(p,a,pgc,result,offset,n);
 
     pvort->name_vtu(p,a,pgc,result,offset,n);
@@ -596,7 +596,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     result<<"<DataArray type=\"Float32\" Name=\"viscosity\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     }
-    
+
     if(p->P72==1)
     {
     result<<"<DataArray type=\"Float32\" Name=\"VOF\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
@@ -620,10 +620,10 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     result<<"<DataArray type=\"Float32\" Name=\"topo\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     }
-    
+
     if(p->P76==1)
     psed->name_vtu_bedload(p,pgc,result,offset,n);
-    
+
     if(p->P77==1)
     psed->name_vtu_parameter1(p,pgc,result,offset,n);
 
@@ -739,7 +739,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
 
 //  T
     pheat->print_3D(p,a,pgc,result);
-    
+
 //  Multiphase
     pmp->print_3D(p,a,pgc,result);
 
@@ -775,7 +775,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     result.write((char*)&ffn, sizeof (float));
     }
     }
-    
+
 //  VOF
     if(p->P72==1)
     {
@@ -824,11 +824,11 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     result.write((char*)&ffn, sizeof (float));
     }
     }
-    
+
 //  sediment bedload
     if(p->P76==1)
     psed->print_3D_bedload(p,pgc,result);
-    
+
 //  sediment parameter 1
     if(p->P77==1)
     psed->print_3D_parameter1(p,pgc,result);
@@ -897,7 +897,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     result.write((char*)&ffn, sizeof (float));
     }
     }
-    
+
     //  VOF_C
     if(p->P72==1)
     {
@@ -922,7 +922,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     result.write((char*)&iin, sizeof (int));
     TPLOOP
     {
- 
+
     zcoor=p->ZN[KP1];
 
     ffn=float( (p->XN[IP1]-p->B192_3)*cos(theta_y*sin(phase)) - (zcoor-p->B192_4)*sin(theta_y*sin(phase)) + p->B192_3

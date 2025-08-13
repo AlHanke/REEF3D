@@ -29,37 +29,37 @@ void ghostcell::verticalsum(lexer *p, fdm* a, double **sum)
     double ***vsum;
     int **marker;
     double *s5,*s6,*r5,*r6;
-    
+
     p->Darray(vsum,p->knox,p->knoy,p->mz);
     p->Iarray(marker,p->mz,2);
     p->Darray(s5,p->knox*p->knoy*(p->mz+1));
     p->Darray(s6,p->knox*p->knoy*(p->mz+1));
     p->Darray(r5,p->knox*p->knoy*(p->mz+1));
     p->Darray(r6,p->knox*p->knoy*(p->mz+1));
-    
+
     for(i=0;i<p->knox;++i)
     for(j=0;j<p->knoy;++j)
     for(n=0;n<p->mz;++n)
     vsum[i][j][n]=0;
-    
+
     for(i=0;i<p->knox;++i)
     for(j=0;j<p->knoy;++j)
     vsum[i][j][p->mk]=sum[i][j];
-    
+
     //  FILL SEND MARKER
     marker[p->mk][0]=1;
     marker[p->mk][1]=1;
-    
+
     for(int qn=0;qn<p->mz;++qn)
     {
         if(p->gcpara5_count>0)
         for(n=0;n<p->mz;++n)
         s5[n]=marker[n][1];
-        
+
         if(p->gcpara6_count>0)
         for(n=0;n<p->mz;++n)
         s6[n]=marker[n][0];
-        
+
     //  SEND / RECEIVE MARKER
         if(p->gcpara5_count>0)
         {
@@ -72,18 +72,18 @@ void ghostcell::verticalsum(lexer *p, fdm* a, double **sum)
         MPI_Isend(s6,p->mz,MPI_DOUBLE,p->nb6,tag6,mpi_comm,&sreq6);
         MPI_Irecv(r6,p->mz,MPI_DOUBLE,p->nb6,tag5,mpi_comm,&rreq6);
         }
-        
+
     // FILL RECEIVE MARKER
         if(p->gcpara5_count>0)
         for(n=0;n<p->mz;++n)
         if(r5[n]==1)
         marker[n][0]=1;
-        
+
         if(p->gcpara6_count>0)
         for(n=0;n<p->mz;++n)
         if(r6[n]==1)
         marker[n][1]=1;
-    
+
             
     //  FILL SEND
         count=0;
@@ -147,7 +147,7 @@ void ghostcell::verticalsum(lexer *p, fdm* a, double **sum)
         {
         i=p->gcpara5[q][0];
         j=p->gcpara5[q][1];
-            
+
             for(n=0;n<p->mz;++n)
             {
             if(marker[n][0]==1)
@@ -172,17 +172,17 @@ void ghostcell::verticalsum(lexer *p, fdm* a, double **sum)
 
         }
     }
-    
+
     // sum up and fill back
     for(i=0;i<p->knox;++i)
     for(j=0;j<p->knoy;++j)
     sum[i][j]=0.0;
-    
+
     for(i=0;i<p->knox;++i)
     for(j=0;j<p->knoy;++j)
     for(n=0;n<p->mz;++n)
     sum[i][j] += vsum[i][j][n];
-    
+
     p->del_Darray(vsum,p->knox,p->knoy,p->mz);
     p->del_Iarray(marker,p->mz,2);
     p->del_Darray(s5,p->knox*p->knoy*(p->mz+1));

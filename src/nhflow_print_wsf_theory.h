@@ -45,7 +45,7 @@ public:
 
 
 private:
-    
+
     double *x,*y;
     int gauge_num;
 

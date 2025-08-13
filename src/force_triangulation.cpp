@@ -28,23 +28,23 @@ Author: Hans Bihs
 void force::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
 {
     int negcount, poscount;
-    
+
     NDBASELOOP
     eta(i,j,k) = 0.125*(a->solid(i,j,k) + a->solid(i+1,j,k) + a->solid(i,j+1,k) + a->solid(i+1,j+1,k)
                       + a->solid(i,j,k+1) + a->solid(i+1,j,k+1) + a->solid(i,j+1,k+1) + a->solid(i+1,j+1,k+1));
-    
+
     NDBASELOOP
     vertice(i,j,k)=-1;
 
     NDBASELOOP
     nodeflag(i,j,k)=0;
-    
+
 
     BASELOOP
     if(i>=is && i<=ie && j>=js && j<=je && k>=ks && k<=ke)
     {
         epsi = interfac*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
-        
+
         if(fabs(a->solid(i,j,k))<epsi)
         {
             check=1;
@@ -52,7 +52,7 @@ void force::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
             if(eta(i,j,k)<zero && eta(i-1,j,k)<zero && eta(i-1,j-1,k)<zero && eta(i,j-1,k)<zero &&
                eta(i,j,k-1)<zero && eta(i-1,j,k-1)<zero && eta(i-1,j-1,k-1)<zero && eta(i,j-1,k-1)<zero)
             check=0;
-            
+
             if(eta(i,j,k)>zero && eta(i-1,j,k)>zero && eta(i-1,j-1,k)>zero && eta(i,j-1,k)>zero &&
                eta(i,j,k-1)>zero && eta(i-1,j,k-1)>zero && eta(i-1,j-1,k-1)>zero && eta(i,j-1,k-1)>zero)
             check=0;
@@ -71,7 +71,7 @@ void force::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
         }
     }
 
-    
+
     //--------------------
     countM=0;
     NDBASELOOP
@@ -163,6 +163,6 @@ void force::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
     tri[count][3] = vertice(i-1,j,k);
     ++count;
     }
-    
+
     numtri=count;
 }

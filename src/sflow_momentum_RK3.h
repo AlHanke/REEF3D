@@ -54,7 +54,7 @@ public:
 private:
     void irhs(lexer*,fdm2D*,ghostcell*,slice&,double);
     void jrhs(lexer*,fdm2D*,ghostcell*,slice&,double);
-    
+
     int gcval_u, gcval_v, gcval_w;
     int gcval_eta;
     double starttime;

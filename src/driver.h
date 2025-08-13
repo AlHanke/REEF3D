@@ -97,41 +97,41 @@ public:
 
     driver(int&,char**);
     virtual ~driver();
-    
+
     void start();
-    
+
     void cfd_driver();
     void nhflow_driver();
     void fnpf_driver();
     void ptf_driver();
     void sflow_driver();
-    
+
     void loop_cfd(fdm*);
     void loop_cfd_df(fdm*);
     void loop_cfd_sf(fdm*);
     void loop_nhflow();
     void loop_ptf(fdm*);
     void loop_fnpf();
-    
+
     void logic_cfd();
     void logic_ptf();
     void logic_fnpf();
     void logic_nhflow();
     void logic_sflow();
-    
+
     void patchBC_logic();
-    
+
     void driver_ini_cfd();
     void driver_ini_nhflow();
     void driver_ini_fnpf();
     void driver_ini_ptf();
     void driver_ini_sflow();
-    
+
     void log_ini();
     void mainlog(lexer*);
     void maxlog(lexer*);
     void solverlog(lexer*);
-    
+
     void makegrid(lexer*,ghostcell*);
     void makegrid_cds();
     void makegrid2D(lexer*,ghostcell*);
@@ -139,11 +139,11 @@ public:
     void makegrid2D_cds(lexer*,ghostcell*,fdm2D*);
     void makegrid_sigma(lexer*,ghostcell*);
     void makegrid_sigma_cds(lexer*,ghostcell*);
-    
+
     void vec_test(lexer*,fdm*,ghostcell*,field&);
     void func_test(lexer*,fdm*,ghostcell*,field&);
     double calc();
-    
+
     void stop(lexer*,fdm*,ghostcell*);
 
     printer* pprint;
@@ -218,7 +218,7 @@ private:
     ofstream mainlogout;
     ofstream maxlogout;
     ofstream solvlogout;
-    
+
     double nom,val;
     char version[100];
 };

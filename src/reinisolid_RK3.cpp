@@ -43,7 +43,7 @@ reinisolid_RK3::reinisolid_RK3(lexer* p) : epsi(p->F45*p->DXM),f(p),frk1(p),frk2
 
     if(p->S50==3)
     gcval_topo=153;
-    
+
     if(p->S50==4)
     gcval_topo=150;
 
@@ -64,7 +64,7 @@ void reinisolid_RK3::start(lexer *p, fdm *a, ghostcell *pgc, field &f)
     gcval=gcval_topo;
 
     pgc->start4a(p,f,gcval);
-    
+
     if(p->count==0)
     {
     if(p->mpirank==0)
@@ -87,7 +87,7 @@ void reinisolid_RK3::start(lexer *p, fdm *a, ghostcell *pgc, field &f)
     frk1.V[IJK] = f.V[IJK] + dt.V[IJK]*L.V[IJK];
 
     pgc->start4a(p,frk1,gcval);
-    
+
     
     // Step 2
     prdisc->start(p,a,pgc,frk1,L,5);
@@ -96,7 +96,7 @@ void reinisolid_RK3::start(lexer *p, fdm *a, ghostcell *pgc, field &f)
     frk2.V[IJK]=  0.75*f.V[IJK] + 0.25*frk1.V[IJK] + 0.25*dt.V[IJK]*L.V[IJK];
 
     pgc->start4a(p,frk2,gcval);
-    
+
 
     // Step 3
     prdisc->start(p,a,pgc,frk2,L,5);
@@ -120,7 +120,7 @@ void reinisolid_RK3::time_preproc(lexer* p)
     {
     if(p->j_dir==0)
     dt.V[IJK] = p->F43*MIN(p->DXP[IP],p->DZP[KP]);
-    
+
     if(p->j_dir==1)
     dt.V[IJK] = p->F43*MIN3(p->DXP[IP],p->DYP[JP],p->DZP[KP]);
     ++n;

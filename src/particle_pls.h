@@ -56,7 +56,7 @@ public:
     void finalcorr(lexer*,fdm*,ghostcell*);
     int posseed(lexer*,fdm*,ghostcell*,double);
     int negseed(lexer*,fdm*,ghostcell*,double);
-    
+
 
     double hside(fdm*);
     double phipol(lexer*,fdm*, double&,double&,double&);
@@ -72,11 +72,11 @@ public:
     void allocate(lexer*,fdm*,ghostcell*);
     void print(lexer*,fdm*,ghostcell*);
     void print_ascii(lexer*,fdm*,ghostcell*);
-    
+
     
     field4 phimax,phimin,phiold;
     field4 posnum, negnum;
-    
+
     double **pos,**neg;
     double **posxs;
     double **negxs;
@@ -122,15 +122,15 @@ public:
     const int irand;
     const double drand;
     const double nu;
-    
+
     double starttime;
 
     int maxpart, minpart;
-    
+
     
     // PRINTVTU
     void print_vtu(lexer*,fdm*,ghostcell*,double**,int*,int,int);
-    
+
     void pvtu_pos(fdm*,lexer*,ghostcell*);
     void pvtu_neg(fdm*,lexer*,ghostcell*);
 
@@ -139,7 +139,7 @@ public:
 
     void piecename_pos(fdm*,lexer*,ghostcell*, int);
     void piecename_neg(fdm*,lexer*,ghostcell*, int);
-    
+
     char name[100],pname[100],epsvar[100];
     int iin,offset[100];
     float ffn;

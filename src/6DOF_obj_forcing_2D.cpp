@@ -34,7 +34,7 @@ void sixdof_obj::updateForcing_box(lexer *p, ghostcell *pgc, slice &press)
     cl = p->X401_cl;
     cb = p->X401_cb;
 
-   
+
     Ls = p->X110_xe[0] - p->X110_xs[0];
     Bs = p->X110_ye[0] - p->X110_ys[0];
 
@@ -43,7 +43,7 @@ void sixdof_obj::updateForcing_box(lexer *p, ghostcell *pgc, slice &press)
         xpos = p->pos_x() - p->xg;
         ypos = p->pos_y() - p->yg;
         H = Hsolidface_2D(p,0,0);
-        
+
         if (xpos <= Ls/2.0 && xpos >= -Ls/2.0 && ypos <= Bs/2.0 && ypos >= -Bs/2.0)
         {
             press(i,j) = -H*press0*(1.0 - cl*pow(xpos/Ls,4.0))*(1.0 - cb*pow(ypos/Bs,2.0))*exp(-as*pow(ypos/Bs,2.0))*ramp_draft(p);
@@ -53,7 +53,7 @@ void sixdof_obj::updateForcing_box(lexer *p, ghostcell *pgc, slice &press)
             press(i,j) = 0.0;
         }
     }
-    
+
     pgc->gcsl_start4(p,press,50);
 }
 
@@ -66,32 +66,32 @@ void sixdof_obj::updateForcing_stl(lexer *p, ghostcell *pgc, slice &press, slice
     SLICELOOP4
     {
         H = Hsolidface_2D(p,0,0);
-        
+
         //
         etaval =0.0;
-        
+
         if(p->X410==1)
         {
         dfdx = (fs(i+1,j) - fs(i-1,j))/(p->DXP[IP] + p->DXP[IM1]);
         dfdy = (fs(i,j+1) - fs(i,j-1))/(p->DYP[JP] + p->DYP[JM1]);
-        
+
         dnorm=sqrt(dfdx*dfdx + dfdy*dfdy);
-        
+
         nx = dfdx/(dnorm>1.0e-20?dnorm:1.0e20);
         ny = dfdy/(dnorm>1.0e-20?dnorm:1.0e20);
-        
+
         xc = p->XP[IP] + p->X41*nx*p->DXN[IP];
         yc = p->YP[JP] + p->X41*ny*p->DYN[JP];
-        
+
         fbval = p->ccslipol4(fs,xc,yc);
-        
+
         if(fbval>-0.6*(1.0/2.0)*(p->DXN[IP] + p->DYN[JP]))
         etaval = p->ccslipol4(eta,xc,yc);
         }
-        
+
         press(i,j) = -H*fabs(p->W22)*p->W1*(draft(i,j)+etaval)*ramp_draft(p);
     }
-    
+
     pgc->gcsl_start4(p,press,50);
 }
 
@@ -106,7 +106,7 @@ void sixdof_obj::updateForcing_oned(lexer *p, ghostcell *pgc, slice &press)
     SLICELOOP4
     {
         xpos = p->pos_x() - p->xg;
-   
+
         press(i,j) = press0*exp(-pow(xpos/as,2));
     }
 
@@ -121,15 +121,15 @@ double sixdof_obj::Hsolidface_2D(lexer *p, int aa, int bb)
 
     // Construct solid heaviside function
     phival_fb = 0.5*(fs(i,j) + fs(i+aa,j+bb));
-    
+
     if (-phival_fb > psi)
     H = 1.0;
-    
+
     else if (-phival_fb < -psi)
     H = 0.0;
 
     else
     H = 0.5*(1.0 + -phival_fb/psi + (1.0/PI)*sin((PI*-phival_fb)/psi));
-        
+
     return H;
 }

@@ -33,7 +33,7 @@ Author: Hans Bihs
 nhflow_suspended_IM1::nhflow_suspended_IM1(lexer* p)
 {
     gcval_susp=60;
-    
+
     p->Darray(CONCN,p->imax*p->jmax*(p->kmax+2));
     p->Darray(WVEL,p->imax*p->jmax*(p->kmax+2));
 }
@@ -86,14 +86,14 @@ void nhflow_suspended_IM1::fill_wvel(lexer *p, fdm_nhf *d, ghostcell *pgc, sedim
 {
     FLOOP
     WVEL[FIJK] = d->omegaF[FIJK] - s->ws;
-    
+
     pgc->start7S(p,WVEL,17);
 }
 
 void nhflow_suspended_IM1::suspsource(lexer* p, fdm_nhf *d, double *CONC, sediment_fdm *s)
 {
     double zdist;
-    
+
     count=0;
     LOOP
     {
@@ -111,7 +111,7 @@ void nhflow_suspended_IM1::suspsource(lexer* p, fdm_nhf *d, double *CONC, sedime
 void nhflow_suspended_IM1::bcsusp_start(lexer *p, fdm_nhf *d, ghostcell *pgc, sediment_fdm *s, double *CONC)
 {
     double cval;
-    
+
         n=0;
         LOOP
         {
@@ -120,33 +120,33 @@ void nhflow_suspended_IM1::bcsusp_start(lexer *p, fdm_nhf *d, ghostcell *pgc, se
             d->rhsvec.V[n] -= d->M.s[n]*CONC[Im1JK];
             d->M.s[n] = 0.0;
             }
-            
+
             if((p->flag4[Ip1JK]<0 || p->DF[Ip1JK]<0))
             {
             d->rhsvec.V[n] -= d->M.n[n]*CONC[Ip1JK];
             d->M.n[n] = 0.0;
             }
-            
+
             if(p->j_dir==1)
             if((p->flag4[IJm1K]<0 || p->DF[IJm1K]<0))
             {
             d->rhsvec.V[n] -= d->M.e[n]*CONC[IJm1K];
             d->M.e[n] = 0.0;
             }
-            
+
             if(p->j_dir==1)
             if((p->flag4[IJp1K]<0 || p->DF[IJp1K]<0))
             {
             d->rhsvec.V[n] -= d->M.w[n]*CONC[IJp1K];
             d->M.w[n] = 0.0;
             }
-            
+
             if(p->flag4[IJKm1]<0 || p->DF[IJKm1]<0)
             {
             d->rhsvec.V[n] -= d->M.b[n]*CONC[IJKm1];
             d->M.b[n] = 0.0;
             }
-            
+
             if(p->flag4[IJKp1]<0 || p->DF[IJKp1]<0)
             {
             d->rhsvec.V[n] -= d->M.t[n]*CONC[IJKp1];
@@ -155,7 +155,7 @@ void nhflow_suspended_IM1::bcsusp_start(lexer *p, fdm_nhf *d, ghostcell *pgc, se
 
         ++n;
         }
-        
+
         
     // turn off inside direct forcing body
     //if(p->X10==1)
@@ -175,7 +175,7 @@ void nhflow_suspended_IM1::bcsusp_start(lexer *p, fdm_nhf *d, ghostcell *pgc, se
 
             d->M.t[n] = 0.0;
             d->M.b[n] = 0.0;
-            
+
             d->rhsvec.V[n] = 0.0;
             }
         ++n;
@@ -190,10 +190,10 @@ void nhflow_suspended_IM1::fillconc(lexer* p, fdm_nhf *d, ghostcell *pgc, sedime
         i=p->gcdf4[n][0];
         j=p->gcdf4[n][1];
         k=p->gcdf4[n][2];
-        
+
         s->cb(i,j) = d->CONC[IJK];
     }
-    
+
     pgc->gcsl_start4(p,s->cb,1);
 }
 

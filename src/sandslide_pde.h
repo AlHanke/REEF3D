@@ -44,7 +44,7 @@ private:
     void diff_update(lexer*,ghostcell*,sediment_fdm*);
 
     slice4 fh,ci;
-    
+
     int gcval_topo,count;
 
     double fac1, fac2;

@@ -37,16 +37,16 @@ public:
     virtual double fx(lexer*, field&, double, double);
     virtual double fy(lexer*, field&, double, double);
     virtual double fz(lexer*, field&, double, double);
-    
+
     virtual double sx(lexer*, slice&, double);
     virtual double sy(lexer*, slice&, double);
     virtual double sz(lexer*, double*);
 
 private:
-   
+
 
     double L,grad;
-    
+
     double gradx, grady, gradz;
     double fu1,fv1,fw1,fu2,fv2,fw2;
 

@@ -25,7 +25,7 @@ Authors: Hans Bihs, Tobias Martin
 #include"fdm.h"
 #include"fdm2D.h"
 #include"ghostcell.h"
-   
+
 void sixdof_sflow::ini(lexer *p, ghostcell *pgc)
 {
 }

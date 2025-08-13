@@ -34,7 +34,7 @@ void ghostcell::gcslparax_fh(lexer* p,slice& f,int gcv)
     {
     i=p->gcslpara1[q][0];
     j=p->gcslpara1[q][1];
-        
+
         for(n=0;n<paramargin;++n)
         {
         send1[count]=f(i-n-1,j);
@@ -47,7 +47,7 @@ void ghostcell::gcslparax_fh(lexer* p,slice& f,int gcv)
     {
     i=p->gcslpara3[q][0];
     j=p->gcslpara3[q][1];
-        
+
         for(n=0;n<paramargin;++n)
         {
         send3[count]=f(i,j-n-1);
@@ -60,20 +60,20 @@ void ghostcell::gcslparax_fh(lexer* p,slice& f,int gcv)
     {
     i=p->gcslpara4[q][0];
     j=p->gcslpara4[q][1];
-        
+
         for(n=0;n<paramargin;++n)
         {
         send4[count]=f(i+n+1,j);
         ++count;
         }
     }
-    
+
     count=0;
     for(q=0;q<p->gcslpara2_count;++q)
     {
     i=p->gcslpara2[q][0];
     j=p->gcslpara2[q][1];
-        
+
         for(n=0;n<paramargin;++n)
         {
         send2[count]=f(i,j+n+1);
@@ -119,7 +119,7 @@ void ghostcell::gcslparax_fh(lexer* p,slice& f,int gcv)
     {
     i=p->gcslpara1[q][0];
     j=p->gcslpara1[q][1];
-        
+
         for(n=0;n<paramargin;++n)
         {
         f(i+n,j)+=recv1[count];
@@ -132,7 +132,7 @@ void ghostcell::gcslparax_fh(lexer* p,slice& f,int gcv)
     {
     i=p->gcslpara3[q][0];
     j=p->gcslpara3[q][1];
-        
+
         for(n=0;n<paramargin;++n)
         {
         f(i,j+n)+=recv3[count];
@@ -146,7 +146,7 @@ void ghostcell::gcslparax_fh(lexer* p,slice& f,int gcv)
     {
     i=p->gcslpara4[q][0];
     j=p->gcslpara4[q][1];
-        
+
         for(n=0;n<paramargin;++n)
         {
         f(i-n,j)+=recv4[count];
@@ -159,7 +159,7 @@ void ghostcell::gcslparax_fh(lexer* p,slice& f,int gcv)
     {
     i=p->gcslpara2[q][0];
     j=p->gcslpara2[q][1];
-        
+
         for(n=0;n<paramargin;++n)
         {
         f(i,j-n)+=recv2[count];

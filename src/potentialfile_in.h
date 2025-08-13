@@ -41,7 +41,7 @@ class potentialfile_in : public increment
 public:
     potentialfile_in(lexer*,ghostcell*);
     virtual ~potentialfile_in();
-    
+
     virtual void flowfile_start(lexer*,fdm*,ghostcell*,turbulence*);
     virtual void ff_inflow(lexer*,fdm*,ghostcell*,field&,field&,field&);
 
@@ -55,7 +55,7 @@ private:
      double ccipol4(lexer*,double**,double,double,double);
      double lint4(double**,int&,int&,int&,double,double,double);
      int conv(double);
-     
+
      ifstream headerfile;
      ifstream potentialfile;
 
@@ -74,18 +74,18 @@ private:
     double deltaT;
     double deltax;
     int dk,maxk;
-    
+
     double bedlevel,waterlevel;
-    
+
     int Ni,Nj,Nk;
     double xs,xe,ys,ye,zs,ze;
-    
+
     //data
     int *iter;
     double *xloc,*simtime;
     double *T,*S,*E;
     double **U,**W;
-     
+
     
 };
 

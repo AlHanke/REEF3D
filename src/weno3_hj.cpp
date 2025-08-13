@@ -34,16 +34,16 @@ weno3_hj::weno3_hj(lexer* p) : weno3_nug_func(p)
     {
     if(p->B269==0 && p->S10!=2)
     pflux = new flux_HJ_CDS2_2D(p);
-    
+
     if(p->B269>=1 || p->S10==2)
     pflux = new flux_HJ_CDS2_vrans_2D(p);
     }
-    
+
     if(p->j_dir==1)
     {
     if(p->B269==0 && p->S10!=2)
     pflux = new flux_HJ_CDS2(p);
-    
+
     if(p->B269>=1 || p->S10==2)
     pflux = new flux_HJ_CDS2_vrans(p);
     }
@@ -56,14 +56,14 @@ weno3_hj::~weno3_hj()
 void weno3_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     uf=vf=wf=0;
-    
+
     if(ipol==1)
     {
     uf=1;
     ULOOP
     a->F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel,p->DXP,p->DYN,p->DZN);
     }
-    
+
     if(p->j_dir==1)
     if(ipol==2)
     {
@@ -82,7 +82,7 @@ void weno3_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& v
     if(ipol==4)
     LOOP
     a->L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel,p->DXN,p->DYN,p->DZN);
-    
+
     if(ipol==5)
     LOOP
     a->L(i,j,k)+=aij(p,a,b,5,uvel,vvel,wvel,p->DXN,p->DYN,p->DZN);
@@ -93,13 +93,13 @@ double weno3_hj::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel
         DX=DXD;
         DY=DYD;
         DZ=DZD;
-        
+
         pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
         pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
         pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
-        
+
         L = -iadvec*fx(p,a,b,uvel,ipol,iadvec) - jadvec*fy(p,a,b,vvel,ipol,jadvec) - kadvec*fz(p,a,b,wvel,ipol,kadvec);
-        
+
         return L;
 }
 
@@ -114,7 +114,7 @@ double weno3_hj::fx(lexer *p,fdm *a, field& b, field& uvel, int ipol, double adv
     weight_min_x();
 
     grad = w1x*(qfx[IP][uf][0][0]*q2 + qfx[IP][uf][0][1]*q3)
-    
+
          + w2x*(qfx[IP][uf][1][0]*q2 - qfx[IP][uf][1][1]*q1);
     }
 
@@ -123,12 +123,12 @@ double weno3_hj::fx(lexer *p,fdm *a, field& b, field& uvel, int ipol, double adv
     iqmax(p,a,b,uvel,ipol);
     is_max_x();
     weight_max_x();
-    
+
     grad = w1x*(qfx[IP][uf][2][0]*q2 - qfx[IP][uf][2][1]*q3)
-    
+
          + w2x*(qfx[IP][uf][3][0]*q1 + qfx[IP][uf][3][1]*q2);
     }
-    
+
     return grad;
 }
 
@@ -141,9 +141,9 @@ double weno3_hj::fy(lexer *p,fdm *a, field& b, field& vvel, int ipol, double adv
     jqmin(p,a,b,vvel,ipol);
     is_min_y();
     weight_min_y();
-    
+
     grad = w1y*(qfy[JP][vf][0][0]*q2 + qfy[JP][vf][0][1]*q3)
-    
+
          + w2y*(qfy[JP][vf][1][0]*q2 - qfy[JP][vf][1][1]*q1);
     }
 
@@ -152,12 +152,12 @@ double weno3_hj::fy(lexer *p,fdm *a, field& b, field& vvel, int ipol, double adv
     jqmax(p,a,b,vvel,ipol);
     is_max_y();
     weight_max_y();
-    
+
     grad = w1y*(qfy[JP][vf][2][0]*q2 - qfy[JP][vf][2][1]*q3)
-    
+
          + w2y*(qfy[JP][vf][3][0]*q1 + qfy[JP][vf][3][1]*q2);
     }
-    
+
     return grad;
 }
 
@@ -170,9 +170,9 @@ double weno3_hj::fz(lexer *p,fdm *a, field& b, field& wvel, int ipol, double adv
     kqmin(p,a,b,wvel,ipol);
     is_min_z();
     weight_min_z();
-    
+
     grad = w1z*(qfz[KP][wf][0][0]*q2 + qfz[KP][wf][0][1]*q3)
-    
+
          + w2z*(qfz[KP][wf][1][0]*q2 - qfz[KP][wf][1][1]*q1);
     }
 
@@ -181,9 +181,9 @@ double weno3_hj::fz(lexer *p,fdm *a, field& b, field& wvel, int ipol, double adv
     kqmax(p,a,b,wvel,ipol);
     is_max_z();
     weight_max_z();
-    
+
     grad = w1z*(qfz[KP][wf][2][0]*q2 - qfz[KP][wf][2][1]*q3)
-    
+
          + w2z*(qfz[KP][wf][3][0]*q1 + qfz[KP][wf][3][1]*q2);
     }
 

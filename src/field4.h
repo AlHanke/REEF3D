@@ -39,7 +39,7 @@ public:
     double& operator[](int);
     virtual void resize(lexer*);
     virtual void dealloc(lexer*);
-    
+
     int di,dj,dk;
     int imin,imax,jmax,jmin,kmin,kmax;
 
@@ -50,13 +50,13 @@ private:
 
     int iter;
     int feldsize;
-    
+
     int level[12];
-    
+
     int rank, gcextra;
-    
+
     double starttime;
-    
+
     lexer *pp;
 
 };

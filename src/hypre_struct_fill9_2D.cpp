@@ -31,7 +31,7 @@ Author: Hans Bihs
 
 void hypre_struct::fill_matrix9_2Dvert(lexer* p, ghostcell* pgc, double *f, vec &rhs, matrix_diag &M)
 {
-    
+
     count=0;
     LOOP
     {
@@ -40,7 +40,7 @@ void hypre_struct::fill_matrix9_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
     }
 
     nentries=9;
-    
+
     for (j = 0; j < nentries; j++)
     stencil_indices[j] = j;
 
@@ -50,70 +50,70 @@ void hypre_struct::fill_matrix9_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
         FPWDCHECK
         {
         n=CVAL4[IJK];
-        
+
         values[count]=M.p[n];
         ++count;
-        
+
         values[count]=M.s[n];
         ++count;
-        
+
         values[count]=M.n[n];
         ++count;
 
         values[count]=M.b[n];
         ++count;
-        
+
         values[count]=M.t[n];
         ++count;
-        
+
         values[count]=M.sb[n];
         ++count;
-        
+
         values[count]=M.st[n];
         ++count;
-        
+
         values[count]=M.nb[n];
         ++count;
-        
+
         values[count]=M.nt[n];
         ++count;
         }
-        
+
         FSWDCHECK
         {
         values[count]=1.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
-        
+
          values[count]=0.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
-        
+
         values[count]=0.0;
         ++count;
         }
     }
-    
+
     
     HYPRE_StructMatrixSetBoxValues(A, ilower, iupper, nentries, stencil_indices, values);
     HYPRE_StructMatrixAssemble(A);
-    
+
     
     // vec
     count=0;
@@ -121,16 +121,16 @@ void hypre_struct::fill_matrix9_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
     {
         FPWDCHECK
         values[count] = f[FIJK];
-        
+
         FSWDCHECK
         values[count] = 0.0;
-    
+
     ++count;
     }
 
     HYPRE_StructVectorSetBoxValues(x, ilower, iupper, values);
     HYPRE_StructVectorAssemble(x);
-    
+
     
     count=0;
     KJILOOP
@@ -140,16 +140,16 @@ void hypre_struct::fill_matrix9_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
         n=CVAL4[IJK];
         values[count] = rhs.V[n];
         }
-        
+
         FSWDCHECK
         values[count] = 0.0;
 
     ++count;
     }
-    
+
     HYPRE_StructVectorSetBoxValues(b, ilower, iupper, values);
     HYPRE_StructVectorAssemble(b);
-    
+
 }
 
 #endif

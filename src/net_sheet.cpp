@@ -35,7 +35,7 @@ void net_sheet::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
 {
     //- Initialise net model
     ini(p,pgc);
-    
+
     //- Initialise printing
     printtime = 0.0;
     print(p);
@@ -45,7 +45,7 @@ void net_sheet::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     //- Initialise net model
     ini(p,pgc);
-    
+
     //- Initialise printing
     printtime = 0.0;
     print(p);
@@ -68,10 +68,10 @@ void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen:
     updateField_cfd(p,a,pgc,0);
     updateField_cfd(p,a,pgc,1);
     updateField_cfd(p,a,pgc,2);
-    
+
     //- Get density at knots
     updateField_cfd(p,a,pgc,3);
-    
+
     //- Calculate velocities from rigid body motion
     for (int knotI = 0; knotI < nK; knotI++)
     {
@@ -79,13 +79,13 @@ void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen:
         xdot_(knotI,1) = p->vfbi + (x_(knotI,0) - p->xg)*p->rfbi - (x_(knotI,2) - p->zg)*p->pfbi;
         xdot_(knotI,2) = p->wfbi + (x_(knotI,1) - p->yg)*p->pfbi - (x_(knotI,0) - p->xg)*p->qfbi;
     }
-    
+
     //- Calculate force vector
     forces_knot *= 0.0;
     gravityForce(p);
     inertiaForce(p);
     dragForce(p);
-    
+
     Fx = 0.0;
     Fy = 0.0;
     Fz = 0.0;
@@ -104,17 +104,17 @@ void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen:
         {
             // (tri_x0 is initial vector between tri_x and xg)
             point << tri_x0[n][q], tri_y0[n][q], tri_z0[n][q];
-                    
+
             point = quatRotMat*point;
-        
+
             tri_x[n][q] = point(0) + p->xg;
             tri_y[n][q] = point(1) + p->yg;
             tri_z[n][q] = point(2) + p->zg;
         }
-        
+
         // (x0_ is initial vector between x_ and xg)
         point = quatRotMat*(x0_.row(n)).transpose();
-    
+
         x_(n,0) = point(0) + p->xg;
         x_(n,1) = point(1) + p->yg;
         x_(n,2) = point(2) + p->zg;
@@ -123,7 +123,7 @@ void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen:
 
     //- Coupling to vrans model
     coupling_dlm_cfd(p,a,pgc);
-    
+
     //- Build and save net
     print(p);
 
@@ -152,10 +152,10 @@ void net_sheet::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha,
     updateField_nhflow(p,d,pgc,0);
     updateField_nhflow(p,d,pgc,1);
     updateField_nhflow(p,d,pgc,2);
-    
+
     //- Get density at knots
     updateField_nhflow(p,d,pgc,3);
-    
+
     //- Calculate velocities from rigid body motion
     for (int knotI = 0; knotI < nK; knotI++)
     {
@@ -163,13 +163,13 @@ void net_sheet::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha,
         xdot_(knotI,1) = p->vfbi + (x_(knotI,0) - p->xg)*p->rfbi - (x_(knotI,2) - p->zg)*p->pfbi;
         xdot_(knotI,2) = p->wfbi + (x_(knotI,1) - p->yg)*p->pfbi - (x_(knotI,0) - p->xg)*p->qfbi;
     }
-    
+
     //- Calculate force vector
     forces_knot *= 0.0;
     gravityForce(p);
     inertiaForce(p);
     dragForce(p);
-    
+
     Fx = 0.0;
     Fy = 0.0;
     Fz = 0.0;
@@ -188,17 +188,17 @@ void net_sheet::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha,
         {
             // (tri_x0 is initial vector between tri_x and xg)
             point << tri_x0[n][q], tri_y0[n][q], tri_z0[n][q];
-                    
+
             point = quatRotMat*point;
-        
+
             tri_x[n][q] = point(0) + p->xg;
             tri_y[n][q] = point(1) + p->yg;
             tri_z[n][q] = point(2) + p->zg;
         }
-        
+
         // (x0_ is initial vector between x_ and xg)
         point = quatRotMat*(x0_.row(n)).transpose();
-    
+
         x_(n,0) = point(0) + p->xg;
         x_(n,1) = point(1) + p->yg;
         x_(n,2) = point(2) + p->zg;
@@ -207,7 +207,7 @@ void net_sheet::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha,
 
     //- Coupling to vrans model
     coupling_dlm_nhflow(p,d,pgc);
-    
+
     //- Build and save net
     print(p);
 

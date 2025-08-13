@@ -45,18 +45,18 @@ public:
     void make_ggc(lexer*);
     void fill_ggc(lexer*);
 
-    
+
     void gcb_seed(lexer*);
-    
+
     int imin,imax,jmax,jmin,kmin,kmax;
     int gcdirsize;
     int ggcsize;
-    
+
 private:
     int di,dj;
     int qn;
     int count;
-    
+
 };
 
 #endif

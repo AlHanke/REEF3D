@@ -32,7 +32,7 @@ void partres::print_particles(lexer* p, sediment_fdm *s)
     print_vtp(p,s);
     ++printcount;
     }
-    
+
     if((p->simtime>p->partprinttime || p->count==0) && (p->Q180==1 && p->Q181<0 && p->Q182>0.0))
     {
     print_vtp(p,s);
@@ -56,7 +56,7 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
     int offset[100];
     int iin;
     float ffn;
-    
+
     if(p->mpirank==0)
     pvtp(p);
 
@@ -68,7 +68,7 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
 
     offset[n]=0;
     ++n;
-    
+
     offset[n]=offset[n-1]+4*(numpt)+4; //flag
     ++n;
     if(p->P23==1)
@@ -84,7 +84,7 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
     ++n;
     offset[n]=offset[n-1]+4*(numpt)+4; //bedChange
     ++n;
-    
+
 
     offset[n]=offset[n-1]+4*(numpt)*3+4; //xyz
     ++n;
@@ -99,7 +99,7 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
     result<<"<VTKFile type=\"PolyData\" version=\"1.0\" byte_order=\"LittleEndian\">\n";
     result<<"<PolyData>\n";
     result<<"<Piece NumberOfPoints=\""<<numpt<<"\" NumberOfVerts=\""<<numpt<<"\" NumberOfLines=\"0\" NumberOfStrips=\"0\" NumberOfPolys=\"0\">\n";
-    
+
     result<<"<FieldData>\n";
     if(p->P16==1)
     {
@@ -107,7 +107,7 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
     result<<"</DataArray>\n";
     }
     result<<"</FieldData>\n";
-    
+
     result<<"<PointData >\n";
     result<<"<DataArray type=\"Float32\" Name=\"Flag\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
     ++n;
@@ -125,13 +125,13 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
     result<<"<DataArray type=\"Float32\" Name=\"bedChange\" format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
     ++n;
     result<<"</PointData>\n";
-    
+
 
     result<<"<Points>\n";
     result<<"<DataArray type=\"Float32\"  NumberOfComponents=\"3\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
     ++n;
     result<<"</Points>\n";
-    
+
 
     result<<"<Verts>\n";
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"  format=\"appended\" offset=\""<<offset[n]<<"\" />\n";
@@ -145,7 +145,7 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
 
     //----------------------------------------------------------------------------
     result<<"<AppendedData encoding=\"raw\">\n"<<"_";
-    
+
     // flag
     iin=4*(numpt);
     result.write((char*)&iin, sizeof (int));
@@ -155,7 +155,7 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
         ffn=float(p->mpirank);
         result.write((char*)&ffn, sizeof (float));
     }
-    
+
     // Test
     if(p->P23==1)
     {
@@ -237,7 +237,7 @@ void partres::print_vtp(lexer* p, sediment_fdm *s)
     ffn=float(P.Z[n]);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     //  Connectivity
     count=0;
     iin=4*(numpt);

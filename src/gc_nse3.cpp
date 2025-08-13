@@ -29,14 +29,14 @@ void ghostcell::nse3(lexer *p, fdm *a, field &f, int gcv)
     double nx,ny,nz,dnorm;
     double xp, yp, zp;
     double lsv,val;
-    
+
     WAIRLOOP
     f(i,j,k)=0.0;
 
     WAIRLOOP
     {
     lsv = 0.5*(a->phi(i,j,k)+a->phi(i,j,k+1));
-    
+
         if(lsv>-4.1*(1.0/3.0)*(p->DXP[IP] + p->DYP[JP] + p->DZN[KP]))
         {
         nx = (0.5*(a->phi(i+1,j,k)+a->phi(i+1,j,k+1)) - 0.5*(a->phi(i-1,j,k)+a->phi(i-1,j,k+1)))/(p->DXP[IP]+p->DXP[IM1]);
@@ -44,15 +44,15 @@ void ghostcell::nse3(lexer *p, fdm *a, field &f, int gcv)
         nz = (a->phi(i,j,k+1)-a->phi(i,j,k))/p->DZP[KP];
 
         dnorm = sqrt(nx*nx + ny*ny + nz*nz);
-        
+
         nx/=dnorm;
         ny/=dnorm;
         nz/=dnorm;
-        
+
         xp = p->pos3_x() + nx*(1.0*fabs(lsv)+0.0*p->DXP[IP]);
         yp = p->pos3_y() + ny*(1.0*fabs(lsv)+0.0*p->DYP[JP]);
         zp = p->pos3_z() + nz*(1.0*fabs(lsv)+0.0*p->DZN[KP]);
-  
+
         f(i,j,k) = p->ccipol3_a(f, xp, yp, zp);
         }
 

@@ -66,7 +66,7 @@ void momentum_RK2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 
 //Step 1
 //--------------------------------------------------------
-    
+
     // U
     starttime=pgc->timer();
 
@@ -98,7 +98,7 @@ void momentum_RK2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     VLOOP
     vrk1(i,j,k) = vdiff(i,j,k)
                 + p->dt*CPOR2*a->G(i,j,k);
-    
+
     p->vtime=pgc->timer()-starttime;
 
     // W
@@ -115,15 +115,15 @@ void momentum_RK2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     WLOOP
     wrk1(i,j,k) = wdiff(i,j,k)
                 + p->dt*CPOR3*a->H(i,j,k);
-    
+
     p->wtime=pgc->timer()-starttime;
-    
+
     momentum_forcing_start(a, p, pgc, p6dof, pfsi,
                            urk1, vrk1, wrk1, fx, fy, fz, 0, 1.0, false);
 
     pflow->pressure_io(p,a,pgc);
     ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk1, vrk1, wrk1, 1.0);
-    
+
     pflow->u_relax(p,a,pgc,urk1);
     pflow->v_relax(p,a,pgc,vrk1);
     pflow->w_relax(p,a,pgc,wrk1);
@@ -135,7 +135,7 @@ void momentum_RK2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 
 //Step 2
 //--------------------------------------------------------
-    
+
     // U
     starttime=pgc->timer();
 
@@ -150,7 +150,7 @@ void momentum_RK2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     ULOOP
     a->u(i,j,k) = 0.5*a->u(i,j,k) + 0.5*udiff(i,j,k)
                 + 0.5*p->dt*CPOR1*a->F(i,j,k);
-    
+
     p->utime+=pgc->timer()-starttime;
 
     // V
@@ -167,7 +167,7 @@ void momentum_RK2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     VLOOP
     a->v(i,j,k) = 0.5*a->v(i,j,k) + 0.5*vdiff(i,j,k)
                 + 0.5*p->dt*CPOR2*a->G(i,j,k);
-    
+
     p->vtime+=pgc->timer()-starttime;
 
     // W
@@ -184,15 +184,15 @@ void momentum_RK2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     WLOOP
     a->w(i,j,k) = 0.5*a->w(i,j,k) + 0.5*wdiff(i,j,k)
                 + 0.5*p->dt*CPOR3*a->H(i,j,k);
-    
+
     p->wtime+=pgc->timer()-starttime;
-    
+
     momentum_forcing_start(a, p, pgc, p6dof, pfsi,
                            a->u, a->v, a->w, fx, fy, fz, 1, 0.5, true);
 
     pflow->pressure_io(p,a,pgc);
     ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow,a->u,a->v,a->w,0.5);
-    
+
     pflow->u_relax(p,a,pgc,a->u);
     pflow->v_relax(p,a,pgc,a->v);
     pflow->w_relax(p,a,pgc,a->w);
@@ -210,7 +210,7 @@ void momentum_RK2::irhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uvel,
     {
     a->maxF=MAX(fabs(a->rhsvec.V[n] + a->gi),a->maxF);
     a->F(i,j,k) += (a->rhsvec.V[n] + a->gi + p->W29_x + a->Fext(i,j,k))*PORVAL1;
-    
+
     a->rhsvec.V[n] = 0.0;
     a->Fext(i,j,k) = 0.0;
     ++n;
@@ -224,7 +224,7 @@ void momentum_RK2::jrhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uvel,
     {
     a->maxG=MAX(fabs(a->rhsvec.V[n] + a->gj),a->maxG);
     a->G(i,j,k) += (a->rhsvec.V[n] + a->gj + p->W29_y + a->Gext(i,j,k))*PORVAL2;
-    
+
     a->rhsvec.V[n] = 0.0;
     a->Gext(i,j,k) = 0.0;
     ++n;
@@ -238,7 +238,7 @@ void momentum_RK2::krhs(lexer *p, fdm *a, ghostcell *pgc, field &f, field &uvel,
     {
     a->maxH=MAX(fabs(a->rhsvec.V[n] + a->gk),a->maxH);
     a->H(i,j,k) += (a->rhsvec.V[n] + a->gk + p->W29_z + a->Hext(i,j,k))*PORVAL3;
-    
+
     a->rhsvec.V[n] = 0.0;
     a->Hext(i,j,k) = 0.0;
     ++n;

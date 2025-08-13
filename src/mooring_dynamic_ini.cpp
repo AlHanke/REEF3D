@@ -34,12 +34,12 @@ void mooring_dynamic::initialize(lexer *p, ghostcell *pgc)
     rho_c = p->X311_rho_c[line];           // density of material [kg/m3]
     d_c = p->X311_d[line];              // diameter of the cable [m]
     Ne = p->X311_H[line];                // number of elements
- 
+
     A = gamma/rho_c;
-    
+
     // Initialise beam
     iniBeam(Ne, EA/A, gamma/rho_c, rho_c, L, (EA/A)/(2.0*(1.0 + 0.5)), 1e-8, 1e-8, 1e-8);
-    
+
     // Initialise material
     iniMaterial();
 
@@ -58,7 +58,7 @@ void mooring_dynamic::initialize(lexer *p, ghostcell *pgc)
 
     // Initialise solver
     iniSolver();
-    
+
     // Initialise communication
     ini_parallel(p, pgc);
 
@@ -87,7 +87,7 @@ void mooring_dynamic::initialize(lexer *p, ghostcell *pgc)
 
     t_mooring = 0.0;
     t_mooring_n = 0.0;
-    
+
     // Initialise breaking
     broken = false;
     breakTension = p->X314 > 0 ? p->X314_T[line]: 0.0;
@@ -102,14 +102,14 @@ void mooring_dynamic::ini_parallel(lexer *p, ghostcell *pgc)
     p->Darray(yend, p->mpi_size);
     p->Darray(zstart, p->mpi_size);
     p->Darray(zend, p->mpi_size);
-    
+
     xstart[p->mpirank] = p->originx;
     ystart[p->mpirank] = p->originy;
     zstart[p->mpirank] = p->originz;
     xend[p->mpirank] = p->endx;
     yend[p->mpirank] = p->endy;
     zend[p->mpirank] = p->endz;
-    
+
     for (int i = 0; i < p->mpi_size; i++)
     {
         MPI_Bcast(&xstart[i],1,MPI_DOUBLE,i,pgc->mpi_comm);

@@ -31,24 +31,24 @@ Author: Hans Bihs
 void hypre_struct_fnpf::fill_matrix8(lexer* p, ghostcell* pgc, double *f, double *rhs, double *M)
 {
     nentries=15;
-    
+
     for (j = 0; j < nentries; j++)
     stencil_indices[j] = j;
 
-   
+
     // M
     HYPRE_StructMatrixSetBoxValues(A, ilower, iupper, nentries, stencil_indices, M);
     HYPRE_StructMatrixAssemble(A);
-    
+
     
     // x
     HYPRE_StructVectorSetBoxValues(x, ilower, iupper, f);
     HYPRE_StructVectorAssemble(x);
-    
+
     // b
     HYPRE_StructVectorSetBoxValues(b, ilower, iupper, rhs);
     HYPRE_StructVectorAssemble(b);
-    
+
 }
 
 void hypre_struct_fnpf::fillbackvec8(lexer *p, double *f, double *rhs, double *M)

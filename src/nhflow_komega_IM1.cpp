@@ -34,7 +34,7 @@ nhflow_komega_IM1::nhflow_komega_IM1(lexer* p, fdm_nhf* d, ghostcell *pgc) : nhf
 {
     gcval_kin=20;
     gcval_eps=30;
-    
+
     p->Darray(KN,p->imax*p->jmax*(p->kmax+2));
     p->Darray(EN,p->imax*p->jmax*(p->kmax+2));
 }
@@ -106,7 +106,7 @@ void nhflow_komega_IM1::kinupdate(lexer *p, fdm_nhf* d, ghostcell *pgc)
 {
     LOOP
     d->KIN[IJK]=KIN[IJK];
-    
+
     pgc->start4V(p,d->KIN,gcval_kin);
 }
 
@@ -133,7 +133,7 @@ void nhflow_komega_IM1::clearrhs(lexer* p, fdm_nhf *d)
 
     ++count;
     }
-    
+
     n=0;
     BASELOOP
     {
@@ -144,12 +144,12 @@ void nhflow_komega_IM1::clearrhs(lexer* p, fdm_nhf *d)
 
         d->M.w[n] = 0.0;
         d->M.e[n] = 0.0;
-        
+
         d->M.t[n] = 0.0;
         d->M.b[n] = 0.0;
-        
+
         d->rhsvec.V[n] =  0.0;
-        
+
     ++n;
     }
 }

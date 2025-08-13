@@ -36,16 +36,16 @@ public:
     virtual ~fieldint3();
 
     int& operator()(int, int , int);
-    
+
     virtual void resize(lexer*);
-    
+
     
     void gcdebug(lexer*);
     void vel_update(lexer*);
 
     int di,dj,dk;
     int imin,imax,jmax,jmin,kmin,kmax;
-    
+
     int* V;
     int*** gcfeld;
 
@@ -57,7 +57,7 @@ private:
 
     int iter;
     int gcfeldsize;
-    
+
     lexer *pp;
 };
 

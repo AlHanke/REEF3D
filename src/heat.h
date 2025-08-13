@@ -40,7 +40,7 @@ public:
 
     virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*)=0;
     virtual void ttimesave(lexer*, fdm*)=0;
-    
+
     virtual void diff_update(lexer*, fdm*, ghostcell *pgc)=0;
 
     virtual void print_3D(lexer*, fdm*, ghostcell *pgc, ofstream&)=0;

@@ -32,9 +32,9 @@ void nhflow_forcing::print_vtp(lexer *p, ghostcell *pgc)
 {
 
         char path[300];
-        
+
         mkdir("./REEF3D_NHFLOW_FORCING_VTP", 0777);
-        
+
         sprintf(path,"./REEF3D_NHFLOW_FORCING_VTP/REEF3D-NHFLOW-FORCING.vtp");
 
         ofstream result;
@@ -96,7 +96,7 @@ void nhflow_forcing::print_vtp(lexer *p, ghostcell *pgc)
     ffn=tri_z[n][q];
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
 //  Connectivity POLYGON
     int count=0;
     iin=4*tricount*3;

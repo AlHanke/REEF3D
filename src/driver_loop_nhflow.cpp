@@ -43,7 +43,7 @@ void driver::loop_nhflow()
 {
     if(p->mpirank==0)
     cout<<"starting mainloop.NHFLOW"<<endl;
-    
+
 //-----------MAINLOOP NSEWAVE----------------------------
     while(p->count<p->N45 && p->simtime<p->N41  && p->sedtime<p->S19)
     {
@@ -54,27 +54,27 @@ void driver::loop_nhflow()
         {
         cout<<"------------------------------------"<<endl;
         cout<<p->count<<endl;
-        
+
         cout<<"simtime: "<<p->simtime<<endl;
         cout<<"timestep: "<<p->dt<<endl;
-        
+
         if(p->B90>0 && p->B92<=11)
         cout<<"t/T: "<<p->simtime/p->wT<<endl;
-        
+
         if(p->B90>0 && p->B92>11)
         cout<<"t/T: "<<p->simtime/p->wTp<<endl;
         }
-        
+
         pflow->flowfile(p,a,pgc,pturb);
         pflow->wavegen_precalc_nhflow(p,d,pgc);
-            
+
         pnhfturb->start(p,d,pgc,pnhfscalarconvec,pnhfturbdiff,psolv,pflow,pvrans);
-        
+
         // Sediment Computation
         psed->start_susp_nhflow(p,d,pgc,pflow,psolv);
         psed->start_nhflow(p,d,pgc,pflow);
         pnhfsf->depth_update(p,d,pgc,pflow);
-        
+
         pnhfmom->start(p,d,pgc,pflow,pss,precon,pnhfconvec,pnhfdiff,
                        pnhpress,ppoissonsolv,psolv,pnhf,pnhfsf,pnhfturb,pvrans);
 
@@ -82,11 +82,11 @@ void driver::loop_nhflow()
         pnhfturb->ktimesave(p,d,pgc);
         pnhfturb->etimesave(p,d,pgc);
         //pflow->veltimesave(p,a,pgc,pvrans);
-        
+
         //timestep control
         p->simtime+=p->dt;
         pnhfstep->start(p,d,pgc);
-        
+
         // printer
         pnhfprint->start(p,d,pgc,pflow,pnhfturb,psed);
 
@@ -94,7 +94,7 @@ void driver::loop_nhflow()
         if(p->mpirank==0)
         {
         endtime=pgc->timer();
-        
+
         p->itertime=endtime-starttime;
         p->totaltime+=p->itertime;
         p->gctotaltime+=p->gctime;
@@ -102,7 +102,7 @@ void driver::loop_nhflow()
         p->meantime=(p->totaltime/double(p->count));
         p->gcmeantime=(p->gctotaltime/double(p->count));
         p->Xmeantime=(p->Xtotaltime/double(p->count));
-        
+
         
         if(p->count%p->P12==0)
         {
@@ -127,7 +127,7 @@ void driver::loop_nhflow()
     p->wavecalctime=0.0;
     p->field4time=0.0;
     p->fbtime=0.0;
-    
+
     stop(p,a,pgc);
     }
 

@@ -27,7 +27,7 @@ Author: Hans Bihs
 void ghostcell::gcparax_test(lexer* p,int gcv)
 {
     int testmargin=2;
-    
+
     fieldint4 f(p);
 
 //  FILL SEND
@@ -90,7 +90,7 @@ void ghostcell::gcparax_test(lexer* p,int gcv)
         {
         isend4[count]=j;
         ++count;
-        
+
         isend4[count]=k;
         ++count;
         }
@@ -222,7 +222,7 @@ void ghostcell::gcparax_test(lexer* p,int gcv)
     i=p->gcpara4[q][0];
     j=p->gcpara4[q][1];
     k=p->gcpara4[q][2];
-        
+
         if(p->gcpara4[q][2+gcv]==1)
         for(n=0;n<testmargin;++n)
         {
@@ -260,36 +260,36 @@ void ghostcell::gcparax_test(lexer* p,int gcv)
         ++count;
         }
     }
-    
+
     int coin=0;
     count=0;
-    
+
     for(q=0;q<p->gcpara4_count;++q)
     {
     i=p->gcpara4[q][0];
     j=p->gcpara4[q][1];
     k=p->gcpara4[q][2];
-    
+
          if(p->gcpara4[q][2+gcv]==1)
          {
          if(isend4[count]!=f(i+1,j,k) || isend4[count+1]!=f(i+2,j,k))
          cout<<p->mpirank<<" PARAX: send: "<<isend4[count]<<" "<<isend4[count+1]<<" recv: "<<irecv4[count]<<" "<<irecv4[count+1]<<" f: "<<f(i+1,j,k)<<" "<<f(i+2,j,k)<<endl;
-        
+
         if(isend4[count]==irecv4[count] && isend4[count+1]==irecv4[count+1])
         ++coin;
-        
+
          count+=2;
          }
     }
-    
+
 
     //cout<<p->mpirank<<" COIN: "<<coin<<endl;
+
     
-    
-    
+
     /*
     int count1,count2,count3,count4;
-    
+
     count1=count2=count3=count4=0;
     if(p->mpirank==2)
     {
@@ -297,19 +297,19 @@ void ghostcell::gcparax_test(lexer* p,int gcv)
         {
         if(p->gcpara1[n][3]==1)
         ++count1;
-        
+
         if(p->gcpara1[n][4]==1)
         ++count2;
-        
+
         if(p->gcpara1[n][5]==1)
         ++count3;
-        
+
         if(p->gcpara1[n][6]==1)
         ++count4;
         }
      cout<<p->mpirank<<" GCX_COUNT: "<<count1<<" "<<count2<<" "<<count3<<" "<<count4<<endl;
     }
-    
+
     count1=count2=count3=count4=0;
     if(p->mpirank==1)
     {
@@ -317,13 +317,13 @@ void ghostcell::gcparax_test(lexer* p,int gcv)
         {
         if(p->gcpara4[n][3]==1)
         ++count1;
-        
+
         if(p->gcpara4[n][4]==1)
         ++count2;
-        
+
         if(p->gcpara4[n][5]==1)
         ++count3;
-        
+
         if(p->gcpara4[n][6]==1)
         ++count4;
         }

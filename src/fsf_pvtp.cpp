@@ -35,7 +35,7 @@ void fsf_vtp::pvtp(lexer* p, fdm* a, ghostcell* pgc)
 
     if(p->P15==2)
     num = p->count;
-    
+
     sprintf(name,"./REEF3D_CFD_FSF/REEF3D-CFD-FSF-%08i.pvtp",num);
 
     ofstream result;
@@ -44,7 +44,7 @@ void fsf_vtp::pvtp(lexer* p, fdm* a, ghostcell* pgc)
     result<<"<?xml version=\"1.0\"?>"<<endl;
     result<<"<VTKFile type=\"PPolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
     result<<"<PPolyData  GhostLevel=\"0\">"<<endl;
-    
+
     if(p->P16==1)
     {
     result<<"<FieldData>"<<endl;
@@ -56,12 +56,12 @@ void fsf_vtp::pvtp(lexer* p, fdm* a, ghostcell* pgc)
     result<<"<PPoints>"<<endl;
     result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>"<<endl;
     result<<"</PPoints>"<<endl;
-    
+
     result<<"<PPointData>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"elevation\"/>"<<endl;
     result<<"</PPointData>"<<endl;
-    
+
     result<<"<Polys>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"/>"<<endl;
     ++n;

@@ -28,14 +28,14 @@ Author: Hans Bihs
 wave_lib_Stokes_5th_SH::wave_lib_Stokes_5th_SH(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
 {
     parameters(p,pgc);
-    
+
     if(p->mpirank==0)
     {
     cout<<"Wave_Lib: 5th-order Stokes SH waves "<<endl;
     cout<<"k: "<<wk<<" w: "<<ww<<" f: "<<wf<<" T: "<<wT<<" L: "<<wL<<" d: "<<wdt<<" kd: "<<wdt*wk<<" c: "<<p->wC<<endl;
     cout<<"d/gT^2: "<<wdt/(fabs(p->W22)*wT*wT)<<" H/gT^2: "<<wH/(fabs(p->W22)*wT*wT)<<endl;
     }
-    
+
     singamma = sin((p->B105_1)*(PI/180.0));
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
@@ -56,7 +56,7 @@ double wave_lib_Stokes_5th_SH::wave_u(lexer *p, double x, double y, double z)
 double wave_lib_Stokes_5th_SH::wave_v(lexer *p, double x, double y, double z)
 {
     double vel;
-    
+
     vel = wave_horzvel(p,x,y,z);
 
     return singamma*vel;
@@ -65,7 +65,7 @@ double wave_lib_Stokes_5th_SH::wave_v(lexer *p, double x, double y, double z)
 double wave_lib_Stokes_5th_SH::wave_horzvel(lexer *p, double x, double y, double z)
 {
     double vel;
-    
+
     teta = wk*x-ww*(p->wavetime) + pshift;
 
     vel = c0*sqrt(fabs(p->W22)/wk)
@@ -81,7 +81,7 @@ double wave_lib_Stokes_5th_SH::wave_horzvel(lexer *p, double x, double y, double
 double wave_lib_Stokes_5th_SH::wave_w(lexer *p, double x, double y, double z)
 {
     double vel;
-    
+
     teta = wk*x-ww*(p->wavetime) + pshift;
 
     vel = c0*sqrt(fabs(p->W22)/wk)
@@ -97,7 +97,7 @@ double wave_lib_Stokes_5th_SH::wave_w(lexer *p, double x, double y, double z)
 double wave_lib_Stokes_5th_SH::wave_eta(lexer *p, double x, double y)
 {
     double eta;
-    
+
     teta = wk*x-ww*(p->wavetime) + pshift;
 
     eta =  (1.0/wk)*((eps + pow(eps,3.0)*b31 - pow(eps,5.0)*(b53 + b55))*cos(teta)
@@ -112,7 +112,7 @@ double wave_lib_Stokes_5th_SH::wave_eta(lexer *p, double x, double y)
 double wave_lib_Stokes_5th_SH::wave_fi(lexer *p, double x, double y, double z)
 {
     double fi;
-    
+
     return fi;
 }
 

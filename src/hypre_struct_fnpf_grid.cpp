@@ -30,23 +30,23 @@ Author: Hans Bihs
 void hypre_struct_fnpf::make_grid(lexer* p, ghostcell* pgc)
 {
     int kend=0;
-    
+
     if(p->A10==3)
     kend=0;
-    
+
     // grid
     ilower[0] = p->origin_i;
     ilower[1] = p->origin_j;
     ilower[2] = p->origin_k;
-    
+
     iupper[0] = p->knox+p->origin_i-1;
     iupper[1] = p->knoy+p->origin_j-1;
     iupper[2] = p->knoz+p->origin_k-1+kend;
-    
+
     HYPRE_StructGridCreate(pgc->mpi_comm, 3, &grid);
     HYPRE_StructGridSetExtents(grid, ilower, iupper);
     HYPRE_StructGridAssemble(grid);
-    
+
     
     // stencil
     HYPRE_StructStencilCreate(3, 15, &stencil);
@@ -57,11 +57,11 @@ void hypre_struct_fnpf::make_grid(lexer* p, ghostcell* pgc)
 
     for (entry=0; entry<15; ++entry)
     HYPRE_StructStencilSetElement(stencil, entry, offsets[entry]);
-    
+
     // matrix
     HYPRE_StructMatrixCreate(pgc->mpi_comm, grid, stencil, &A);
     HYPRE_StructMatrixInitialize(A);
-    
+
     // vec
     HYPRE_StructVectorCreate(pgc->mpi_comm, grid, &b);
     HYPRE_StructVectorCreate(pgc->mpi_comm, grid, &x);
@@ -73,21 +73,21 @@ void hypre_struct_fnpf::make_grid(lexer* p, ghostcell* pgc)
 void hypre_struct_fnpf::make_grid_2Dvert(lexer* p,ghostcell* pgc)
 {
     int kend=0;
-    
+
     if(p->A10==3)
     kend=0;
-    
+
     // grid
     ilower[0] = p->origin_i;
     ilower[1] = p->origin_k;
-    
+
     iupper[0] = p->knox+p->origin_i-1;
     iupper[1] = p->knoz+p->origin_k-1+kend;
-    
+
     HYPRE_StructGridCreate(pgc->mpi_comm, 2, &grid);
     HYPRE_StructGridSetExtents(grid, ilower, iupper);
     HYPRE_StructGridAssemble(grid);
-    
+
     
     // stencil
     HYPRE_StructStencilCreate(2, 9, &stencil);
@@ -97,11 +97,11 @@ void hypre_struct_fnpf::make_grid_2Dvert(lexer* p,ghostcell* pgc)
 
     for (entry=0; entry<9; ++entry)
     HYPRE_StructStencilSetElement(stencil, entry, offsets[entry]);
-    
+
     // matrix
     HYPRE_StructMatrixCreate(pgc->mpi_comm, grid, stencil, &A);
     HYPRE_StructMatrixInitialize(A);
-    
+
     // vec
     HYPRE_StructVectorCreate(pgc->mpi_comm, grid, &b);
     HYPRE_StructVectorCreate(pgc->mpi_comm, grid, &x);

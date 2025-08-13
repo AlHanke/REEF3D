@@ -45,7 +45,7 @@ topo_relax::~topo_relax()
 
 void topo_relax::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
-    
+
     double relax,distot,distcount,zhval,qbval,cbval;
     double tauval, shearvelval, shieldsval;
     if(p->S73>0)
@@ -57,7 +57,7 @@ void topo_relax::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
         for(n=0;n<p->S73;++n)
         {
         dist_S73[n] =  distcalc(p,p->S73_x[n],p->S73_y[n],tan_betaS73[n]);
-        
+
             if(dist_S73[n]<p->S73_dist[n])
             {
             zhval = s->bedzh(i,j);
@@ -76,13 +76,13 @@ void topo_relax::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
             ++distcount;
             }
         }
-        
+
         for(n=0;n<p->S73;++n)
         {
             if(dist_S73[n]<p->S73_dist[n])
             {
             relax = r1(p,dist_S73[n],p->S73_dist[n]);
-            
+
             if(distcount==1)
             {
             s->bedzh(i,j) += (1.0-relax)*p->S73_val[n] + relax*zhval;
@@ -92,7 +92,7 @@ void topo_relax::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
             s->shearvel_eff(i,j)=relax*shearvelval;
             s->shields_eff(i,j)=relax*shieldsval;
             }
-            
+
             
             if(distcount>1)
             {
@@ -103,31 +103,31 @@ void topo_relax::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
             s->shearvel_eff(i,j) +=  relax*shearvelval * (1.0 - dist_S73[n]/(distot>1.0e-10?distot:1.0e20));
             s->shields_eff(i,j) +=  relax*shieldsval * (1.0 - dist_S73[n]/(distot>1.0e-10?distot:1.0e20));
             }
-            
+
             }
         }
     }
-    
+
 }
 
 double topo_relax::rf(lexer *p, ghostcell *pgc)
 {
     double relax,distot,distcount;
     double val=1.0;
-    
+
         distot = 0.0;
         distcount=0;
         for(n=0;n<p->S73;++n)
         {
         dist_S73[n] =  distcalc(p,p->S73_x[n],p->S73_y[n],tan_betaS73[n]);
-        
+
             if(dist_S73[n]<p->S73_dist[n])
             {
             distot += dist_S73[n];
             ++distcount;
             }
         }
-        
+
         
         for(n=0;n<p->S73;++n)
         {
@@ -135,19 +135,19 @@ double topo_relax::rf(lexer *p, ghostcell *pgc)
             {
             val=0.0;
             relax = r1(p,dist_S73[n],p->S73_dist[n]);
-            
+
             if(distcount==1)
             val=(relax);
-                
+
             if(distcount>1)
             val += (relax) * (1.0 - dist_S73[n]/(distot>1.0e-10?distot:1.0e20));
-            
+
             //cout<<p->XP[IP]<<" "<<val<<endl;
             }
         }
-        
+
     return val;
-    
+
 }
 
 double topo_relax::r1(lexer *p, double x, double threshold)
@@ -156,7 +156,7 @@ double topo_relax::r1(lexer *p, double x, double threshold)
 
     x=(threshold-fabs(x))/(fabs(threshold)>1.0e-10?threshold:1.0e20);
     x=MAX(x,0.0);
-    
+
 
     r = 1.0 - (exp(pow(x,3.5))-1.0)/(exp(1.0)-1.0);
 
@@ -170,9 +170,9 @@ double topo_relax::distcalc(lexer *p ,double x0, double y0, double tan_beta)
 
     x1 = p->pos_x();
     y1 = p->pos_y();
-    
+
     dist = fabs(y1 - tan_beta*x1 + tan_beta*x0 - y0)/sqrt(pow(tan_beta,2.0)+1.0);
-    
+
     return dist;
 }
 

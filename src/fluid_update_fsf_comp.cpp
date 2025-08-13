@@ -43,22 +43,22 @@ void fluid_update_fsf_comp::start(lexer *p, fdm* a, ghostcell* pgc)
     p->volume1=0.0;
     p->volume2=0.0;
     ro_air=p->W3;
-    
+
     if(p->count>iter)
     iocheck=0;
     iter=p->count;
-    
+
     if(p->j_dir==0)
     epsi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
-        
+
     if(p->j_dir==1)
     epsi = p->F45*(1.0/3.0)*(p->DRM+p->DSM+p->DTM);
 
     LOOP
     {
-        
+
         ro_air = (0.0035*(101325.0 + a->press(i,j,k)))  / (273.15 + p->W31);
-        
+
         if(a->phi(i,j,k)>epsi)
         H=1.0;
 
@@ -67,7 +67,7 @@ void fluid_update_fsf_comp::start(lexer *p, fdm* a, ghostcell* pgc)
 
         if(fabs(a->phi(i,j,k))<=epsi)
         H=0.5*(1.0 + a->phi(i,j,k)/epsi + (1.0/PI)*sin((PI*a->phi(i,j,k))/epsi));
-        
+
         if(a->phi(i,j,k)>=0.0)
         Hro=1.0;
 

@@ -61,11 +61,11 @@ public:
 private:
 
     double Hsolidface(lexer*, fdm*, int, int, int);
-    
+
     void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-    
+
     field1 urk, Cu, Du, fx;
     field2 vrk, Cv, Dv, fy;
     field3 wrk, Cw, Dw, fz;
@@ -80,7 +80,7 @@ private:
     solver *psolv;
     solver *ppoissonsolv;
     ioflow *pflow;
-    
+
     int gcval_u, gcval_v, gcval_w;
 
     Eigen::Vector3d alpha, gamma, zeta;

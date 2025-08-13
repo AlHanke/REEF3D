@@ -31,15 +31,15 @@ Author: Hans Bihs
 hypre_struct_fnpf::hypre_struct_fnpf(lexer* p,ghostcell *pgc, int solve_input, int precon_input) : solve_type(solve_input), precon_type(precon_input)
 {
     int vecsize=p->knox*p->knoy*p->knoz;
-    
+
     vecsize=p->knox*p->knoy*(p->knoz+1);
-    
+
     p->Iarray(ilower,3);
     p->Iarray(iupper,3);
 
     if(p->j_dir==1)
     make_grid(p,pgc);
-    
+
     if(p->j_dir==0)
     make_grid_2Dvert(p,pgc);
 }
@@ -58,12 +58,12 @@ void hypre_struct_fnpf::start_solver8(lexer* p, ghostcell* pgc, double *f, doubl
 {
     numiter=0;
     p->solveriter=0;
-    
+
     create_solver5(p,pgc);
 
     if(p->j_dir==1)
     fill_matrix8(p,pgc,f,rhs,M);
-    
+
     if(p->j_dir==0)
     fill_matrix8_2Dvert(p,pgc,f,rhs,M);
 
@@ -71,9 +71,9 @@ void hypre_struct_fnpf::start_solver8(lexer* p, ghostcell* pgc, double *f, doubl
 
     p->solveriter=num_iterations;
     p->final_res = final_res_norm;
-        
+
     fillbackvec8(p,f,rhs,M);
-    
+
     delete_solver5(p,pgc);
 }
 

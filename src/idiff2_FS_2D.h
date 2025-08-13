@@ -42,14 +42,14 @@ public:
     virtual void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, double, double);
     virtual void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, double, double);
     virtual void idiff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, double, double);
-    
+
     virtual void diff_u(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double);
     virtual void diff_v(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double);
     virtual void diff_w(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double);
 
 private:
     rheology *prheo;
-    
+
     double D;
     double time,starttime,endtime;
     int count,q;
@@ -58,7 +58,7 @@ private:
     double b_im_j_k, b_ip_j_k, b_i_jm_k, b_i_jp_k, b_i_j_km, b_i_j_kp;
     double ev_im_j_k, ev_ip_j_k, ev_i_jm_k, ev_i_jp_k, ev_i_j_km, ev_i_j_kp;
     double visc_im_j_k, visc_ip_j_k, visc_i_jm_k, visc_i_jp_k, visc_i_j_km, visc_i_j_kp;
-    
+
 };
 #endif
 

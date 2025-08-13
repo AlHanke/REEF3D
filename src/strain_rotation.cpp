@@ -59,7 +59,7 @@ double strain::Qij2(lexer *p, fdm *a)
     skewSymmetricStrainRateTensor(p,a->u,a->v,a->w);
 
     double r = sqrt(r12*r12 + r13*r13 + r23*r23);
-    
+
     r=r*r;
 
     return r;
@@ -90,7 +90,7 @@ void strain::skewSymmetricStrainRateTensor(lexer *p, field &u, field &v, field &
         r13 = (pudz(p,u) - pwdx(p,w));
         r23 = (pvdz(p,v) - pwdy(p,w));
     }
-    
+
     if(p->j_dir==0)
     {
         r11 = 0.0;

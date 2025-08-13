@@ -26,7 +26,7 @@ Author: Hans Bihs
 
 void ghostcell::gcparacoxV(lexer* p, double *f, int gcv)
 {
-    
+
 //  FILL SEND
     for(q=0;q<p->gcparaco1_count;++q)
     {

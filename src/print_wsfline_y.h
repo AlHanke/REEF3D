@@ -58,7 +58,7 @@ private:
     ofstream wsfout;
 
     double xcoor;
-    
+
     wave_theory *pwave;
 
     int maxknoy,sumknoy;

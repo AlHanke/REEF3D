@@ -40,7 +40,7 @@ void sixdof_obj::ray_cast_2D(lexer *p, ghostcell *pgc)
         Bs(i,j) = 1.0e-6;
         draft(i,j) = 0.0;
     }
-    
+
     for(int rayiter=0; rayiter<2; ++rayiter)
     {
         if(rayiter==0)
@@ -48,44 +48,44 @@ void sixdof_obj::ray_cast_2D(lexer *p, ghostcell *pgc)
             ray_cast_2D_io_x(p,pgc,0,tricount);
             ray_cast_2D_io_ycorr(p,pgc,0,tricount);
         }
-    
+
         if(rayiter==1)
         {
             pgc->gcslparax_int(p,fsio,1);
-            
+
             ray_cast_2D_x(p,pgc,0,tricount);
             ray_cast_2D_y(p,pgc,0,tricount);
             ray_cast_2D_z(p,pgc,0,tricount);
         }
     }
-    
+
     SLICELOOP4
     {
         if(fsio(i,j)==-1)
         fs(i,j) = -fabs(fs(i,j));
-        
+
         if(fsio(i,j)==1)
         fs(i,j) = fabs(fs(i,j));
     }
-    
+
     SLICELOOP4
     {
         if(fs(i,j) > 10.0*p->DXM)
         fs(i,j) = 10.0*p->DXM;
-        
+
         if(fs(i,j) < -10.0*p->DXM)
         fs(i,j) = -10.0*p->DXM;
     }
-    
+
     SLICELOOP4
     {
     if(Rxmax(i,j)>-1.0e9 && Rxmin(i,j)<1.0e9)
     Ls(i,j) = Rxmax(i,j)-Rxmin(i,j);
-    
+
     if(Rymax(i,j)>-1.0e8 && Rymin(i,j)<1.0e8)
     Bs(i,j) = Rymax(i,j)-Rymin(i,j);
     }
-    
+
     pgc->gcsl_start4(p,fs,50);
     pgc->gcsl_start4(p,draft,50);
 }

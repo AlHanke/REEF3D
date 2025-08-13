@@ -39,7 +39,7 @@ void net_barDyn::update_velocity_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     updateField_nhflow(p, d, pgc, 0);
     updateField_nhflow(p, d, pgc, 1);
     updateField_nhflow(p, d, pgc, 2);
-    
+
     //- Get density at knots
     updateField_nhflow(p, d, pgc, 3);
 }
@@ -51,7 +51,7 @@ void net_barDyn::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int cm
 
     p->Iarray(count,p->mpi_size);
     p->Iarray(recField, nK);
-    
+
     // Get velocities on own processor
     for (int i = 0; i < nK; i++)
     {
@@ -78,7 +78,7 @@ void net_barDyn::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int cm
             {
                 coupledField[i][cmp] = p->W1;
             }
-            
+
             recField[i] = -1;
             count[p->mpirank]++;
         }
@@ -105,11 +105,11 @@ void net_barDyn::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int cm
         }
     }
 
-    
+
     // Fill array for sending
     double *sendField;
     p->Darray(sendField, count[p->mpirank]);
-    
+
     int counts = 0;
     for (int i = 0; i < nK; i++)
     {
@@ -129,17 +129,17 @@ void net_barDyn::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int cm
     for (int n = 0; n < p->mpi_size; ++n)
     {
         recvField[n] = new double[count[n]];
-        
+
         for (int m = 0; m < count[n]; ++m)
         recvField[n][m] = 0.0;
     }
 
-    
+
     // Send and receive
     vector<MPI_Request> sreq(p->mpi_size, MPI_REQUEST_NULL);
     vector<MPI_Request> rreq(p->mpi_size, MPI_REQUEST_NULL);
     MPI_Status status;
-    
+
     for (int j = 0; j < p->mpi_size; j++)
     {
         if (j!=p->mpirank)
@@ -147,14 +147,14 @@ void net_barDyn::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int cm
             if (count[p->mpirank] > 0)
             {
             //    cout<<"Processor "<<p->mpirank<<" sends "<<count[p->mpirank]<<" elements to processor "<<j<<endl;
-                
+
                 MPI_Isend(sendField,count[p->mpirank],MPI_DOUBLE,j,1,pgc->mpi_comm,&sreq[j]);
             }
-            
+
             if (count[j] > 0)
             {
             //    cout<<"Processor "<<p->mpirank<<" receives "<<count[j]<<" elements from processor "<<j<<endl;
-        
+
                 MPI_Irecv(recvField[j],count[j],MPI_DOUBLE,j,1,pgc->mpi_comm,&rreq[j]);
             }
         }
@@ -166,7 +166,7 @@ void net_barDyn::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int cm
         MPI_Wait(&sreq[j],&status);
         MPI_Wait(&rreq[j],&status);
     }
-    
+
     
     // Fill velocity vector
     for (int j = 0; j < p->mpi_size; j++)
@@ -176,7 +176,7 @@ void net_barDyn::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int cm
             count[j] = 0;
         }
     }
-        
+
     for (int i = 0; i < nK; i++)
     {
         for (int j = 0; j < p->mpi_size; j++)
@@ -188,7 +188,7 @@ void net_barDyn::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int cm
             }
         }
     }
-    
+
     for (int i = 0; i < nK; i++)
     {
         coupledField[i][cmp] += 1e-10;
@@ -209,7 +209,7 @@ void net_barDyn::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int cm
         }
     }
     delete [ ] recvField;
-    
+
     p->del_Iarray(count,p->mpi_size);
     p->del_Iarray(recField, nK);
 }

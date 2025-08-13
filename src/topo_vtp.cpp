@@ -33,13 +33,13 @@ topo_vtp::topo_vtp(lexer* p, fdm *a, ghostcell *pgc)
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_CFD_Topo",0777);
-    
+
     topoprintcount=0;
     polygon_sum=0;
-    
+
     SLICEBASELOOP
     ++polygon_sum;
-    
+
     polygon_sum*=2;
 }
 

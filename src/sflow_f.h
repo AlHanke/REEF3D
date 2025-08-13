@@ -59,24 +59,24 @@ class sflow_f : public sflow, public increment
 public:
     sflow_f(lexer*, fdm2D*,ghostcell*,patchBC_interface*);
     virtual ~sflow_f();
-    
+
     virtual void start(lexer*, fdm2D*, ghostcell*);
-    
+
 private:
     void logic(lexer*, fdm2D*, ghostcell*);
     void ini(lexer*, fdm2D*, ghostcell*);
     void loop(lexer*, fdm2D*, ghostcell*);
-    
+
     void ini_fsf(lexer*, fdm2D*, ghostcell*);
     void ini_fsf_2(lexer*, fdm2D*, ghostcell*);
-    
+
     void maxcoor(lexer*, fdm2D*, ghostcell*);
-    
+
     void print_debug(lexer*, fdm2D*, ghostcell*);
-    
+
     void log_ini(lexer*);
     void mainlog(lexer*);
-    
+
     sflow_timestep *ptime;
     sflow_momentum *pmom;
     sflow_pressure *ppress;
@@ -93,16 +93,16 @@ private:
     sflow_turbulence *pturb;
     sediment *psed;
     sflow_potential *potflow;
-    
+
     fdm *aa;
     turbulence *pturbcfd;
-    
+
     patchBC_interface *pBC;
-    
+
     sixdof *p6dof;
-    
+
     double starttime, endtime;
-    
+
     ofstream mainlogout;
 };
 

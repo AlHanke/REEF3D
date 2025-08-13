@@ -27,7 +27,7 @@ Author: Hans Bihs
 
 void sixdof_obj::pvtp(lexer* p, fdm* a, ghostcell* pgc)
 {
-    
+
     int num=0;
 
     if(p->P15==1)
@@ -35,7 +35,7 @@ void sixdof_obj::pvtp(lexer* p, fdm* a, ghostcell* pgc)
 
     if(p->P15==2)
     num = p->count;
-    
+
     sprintf(name,"./REEF3D_CFD_6DOF/REEF3D-FB-%08i.pvtp",num);
 
     ofstream result;
@@ -49,12 +49,12 @@ void sixdof_obj::pvtp(lexer* p, fdm* a, ghostcell* pgc)
     result<<"<PPoints>"<<endl;
     result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>"<<endl;
     result<<"</PPoints>"<<endl;
-    
+
     result<<"<PPointData>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>"<<endl;
     result<<"<PDataArray type=\"Float32\" Name=\"pressure\"/>"<<endl;
     result<<"</PPointData>"<<endl;
-    
+
     result<<"<Polys>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"/>"<<endl;
     ++n;
@@ -77,7 +77,7 @@ void sixdof_obj::pvtp(lexer* p, fdm* a, ghostcell* pgc)
 
 void sixdof_obj::piecename(lexer* p, fdm* a,  ghostcell* pgc, int n)
 {
-    
+
     int num=0;
 
 

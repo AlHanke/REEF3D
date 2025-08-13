@@ -51,7 +51,7 @@ void fnpf_timestep::start(fdm_fnpf *c, lexer *p,ghostcell *pgc)
     FFILOOP4
     FPWDCHECK
     depthmax=MAX(depthmax,c->depth(i,j));
-    
+
     depthmax=pgc->globalmax(depthmax);
 
     FFILOOP4
@@ -75,7 +75,7 @@ void fnpf_timestep::start(fdm_fnpf *c, lexer *p,ghostcell *pgc)
     p->wmax=MAX(p->wmax,fabs(c->W[FIJK]));
 
     p->wmax=pgc->globalmax(p->wmax);
-    
+
 
     if(p->mpirank==0 && (p->count%p->P12==0))
     {
@@ -83,84 +83,84 @@ void fnpf_timestep::start(fdm_fnpf *c, lexer *p,ghostcell *pgc)
     cout<<"vmax: "<<setprecision(3)<<p->vmax<<endl;
     cout<<"wmax: "<<setprecision(3)<<p->wmax<<endl;
     }
-    
+
     p->umax=MAX(p->umax,p->ufbmax);
     p->vmax=MAX(p->vmax,p->vfbmax);
     p->wmax=MAX(p->wmax,p->wfbmax);
 
 
     cu=cv=cw=1.0e10;
-    
+
     
     FFILOOP4
     FPWDCHECK
     p->wmax = MAX(fabs(c->Fz(i,j)),p->wmax);
-    
+
     p->wmax=pgc->globalmax(p->wmax);
-    
+
     
     // visc
     SLICELOOP4
     p->viscmax=MAX(p->viscmax, c->vb(i,j));
 
     p->viscmax=pgc->globalmax(p->viscmax);
-    
+
     if(p->mpirank==0 && (p->count%p->P12==0) && p->viscmax>0.0)
     cout<<"viscmax: "<<p->viscmax<<endl;
-    
+
 
     FLOOP
     FPWDCHECK
     {
     if(p->j_dir==1 && p->knoy>1)
     dx = MIN(p->DXN[IP],p->DYN[JP]);
-    
+
     if(p->j_dir==0 || p->knoy==1)
     dx = p->DXN[IP];
-    
+
     cu = MIN(cu, 1.0/((fabs(MAX(p->umax, sqrt(9.81*depthmax)))/dx)));
-    
+
     if(p->j_dir==1 )
     cv = MIN(cv, 1.0/((fabs(MAX(p->vmax, sqrt(9.81*depthmax)))/dx)));
-    
+
     }
 
     if(p->j_dir==1 )
     cu = MIN(cu,cv);
-    
+
        p->dt=p->N47*cu;
-    
+
     p->dt=pgc->timesync(p->dt);
-    
+
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<"dt: "<<p->dt<<endl;
 
-    
+
     if (p->N48==0)
     p->dt=maxtimestep;
-    
+
     else
     p->dt=MIN(p->dt,maxtimestep);
-    
+
     
 }
 
 void fnpf_timestep::ini(fdm_fnpf* c, lexer* p,ghostcell* pgc)
 {
     double depthmax;
-    
+
     p->umax = p->vmax = p->wmax = -1e19;
     depthmax = -1e19;
-    
+
     cu=cv=1.0e10;
-    
+
     
     FFILOOP4
     FPWDCHECK
     depthmax=MAX(depthmax,p->wd - c->bed(i,j));
-    
+
     depthmax=pgc->globalmax(depthmax);
-    
+
     k=p->knoz;
     SLICELOOP4
     p->umax=MAX(p->umax,fabs((c->Fifsf[Ip1J]-c->Fifsf[Im1J])/(p->DXP[IP]+p->DXP[IM1])));
@@ -179,43 +179,43 @@ void fnpf_timestep::ini(fdm_fnpf* c, lexer* p,ghostcell* pgc)
     p->wmax=MAX(p->wmax,fabs(c->W[FIJK]));
 
     p->wmax=pgc->globalmax(p->wmax);
-    
+
     p->umax=MAX(p->umax,2.0*p->ufbmax);
     p->umax=MAX(p->umax,2.0*p->vfbmax);
     p->umax=MAX(p->umax,2.0*p->wfbmax);
-    
+
     p->umax=MAX(p->umax,2.0*p->X210_u);
     p->umax=MAX(p->umax,2.0*p->X210_v);
     p->umax=MAX(p->umax,2.0*p->X210_w);
 
     p->dt=p->DXM/(p->umax+epsi);
-    
+
 
     p->umax+=10.0;
 
- 
+
     FLOOP
     FPWDCHECK
     {
     if(p->j_dir==1 && p->knoy>1)
     dx = MIN(p->DXN[IP],p->DYN[JP]);
-    
+
     if(p->j_dir==0 || p->knoy==1)
     dx = p->DXN[IP];
-    
+
     
     cu = MIN(cu, 1.0/((fabs(MAX(p->umax, sqrt(9.81*depthmax)))/dx)));
     cv = MIN(cv, 1.0/((fabs(MAX(p->vmax, sqrt(9.81*depthmax)))/dx)));
     }
 
     cu = MIN(cu,cv);
-    
+
        p->dt=p->N47*cu;
-    
+
     //p->dt=pgc->timesync(p->dt);
     p->dt=pgc->globalmin(p->dt);
     p->dt_old=p->dt;
-    
+
     
     if(p->mpirank==0 && (p->count%p->P12==0))
     {

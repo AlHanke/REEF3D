@@ -64,7 +64,7 @@ print_wsfline_y::print_wsfline_y(lexer *p, fdm* a, ghostcell *pgc)
     }
 
     ini_location(p,a,pgc);
-    
+
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_CFD_WSFLINE_Y",0777);
@@ -81,7 +81,7 @@ void print_wsfline_y::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
     char name[250];
     double zval=0.0;
     int num,check;
-    
+
     num = p->count;
 
     if(p->mpirank==0)
@@ -124,7 +124,7 @@ void print_wsfline_y::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
         if(flag[q][j]>0)
         {
         zval=0.0;
-        
+
         i=iloc[q];
 
             KLOOP
@@ -141,7 +141,7 @@ void print_wsfline_y::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 
     for(q=0;q<p->P56;++q)
     wsfpoints[q]=sumknoy;
-    
+
     // gather
     for(q=0;q<p->P56;++q)
     {
@@ -161,18 +161,18 @@ void print_wsfline_y::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
     {
         for(n=0;n<sumknoy;++n)
         rowflag[n]=0;
-        
+
         for(n=0;n<sumknoy;++n)
         {
             check=0;
             for(q=0;q<p->P56;++q)
             if(flag_all[q][n]>0 && yloc_all[q][n]<1.0e20)
             check=1;
-            
+
             if(check==1)
             rowflag[n]=1;
         }
-        
+
         for(n=0;n<sumknoy;++n)
         {
             check=0;
@@ -182,23 +182,23 @@ void print_wsfline_y::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
                 {
                 wsfout<<setprecision(5)<<yloc_all[q][n]<<" \t ";
                 wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
-                
+
                 
                     if(p->P53==1)
                     wsfout<<pflow->wave_fsf(p,pgc,yloc_all[q][n])<<" \t  ";
-                    
+
                 check=1;
                 }
-                
+
                 if((flag_all[q][n]<0 || yloc_all[q][n]>=1.0e20) && rowflag[n]==1)
                 {
                     wsfout<<setprecision(5)<<" \t \t  ";
                     wsfout<<setprecision(5)<<" \t \t  ";
-                    
+
                 }
             }
 
-            
+
             if(check==1)
             wsfout<<endl;
         }
@@ -253,7 +253,7 @@ void print_wsfline_y::sort(double *a, double *b, int *c, int left, int right)
 
           b[l] = b[r];
           b[r] = swapd;
-          
+
           c[l] = c[r];
           c[r] = swapc;
 
@@ -276,7 +276,7 @@ void print_wsfline_y::remove_multientry(lexer *p, double* b, double* c, int *d, 
 
     double *f,*g;
     int *h;
-    
+
     p->Darray(f,num);
     p->Darray(g,num);
     p->Iarray(h,num);
@@ -297,7 +297,7 @@ void print_wsfline_y::remove_multientry(lexer *p, double* b, double* c, int *d, 
         h[count]=d[n];
         ++count;
         }
-    
+
     yval=b[n];
     }
 
@@ -307,7 +307,7 @@ void print_wsfline_y::remove_multientry(lexer *p, double* b, double* c, int *d, 
     c[n]=g[n];
     d[n]=h[n];
     }
-    
+
     p->del_Darray(f,num);
     p->del_Darray(g,num);
     p->del_Iarray(h,num);

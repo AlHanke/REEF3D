@@ -29,7 +29,7 @@ Authors: Hans Bihs, Alexander Hanke
 void partres::boundcheck(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, int mode)
 {
     int inBounds;
-    
+
     for(n=0;n<P.index;++n)
     if(P.Flag[n]==ACTIVE)
     {
@@ -39,7 +39,7 @@ void partres::boundcheck(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, int 
             j=p->posc_j(P.YRK1[n]);
             k=p->posc_k(P.ZRK1[n]);
             }
-            
+
             if(mode==2)
             {
             i=p->posc_i(P.X[n]);
@@ -60,5 +60,5 @@ void partres::boundcheck(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, int 
             ++P.index_empty;
         }
     }
-    
+
 }

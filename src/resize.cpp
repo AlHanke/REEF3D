@@ -34,7 +34,7 @@ resize_class::~resize_class()
 void resize_class::Darray(double *& field, int numi)
 {
     int n;
-    
+
     if(numi>0)
     field = new double[numi];
 
@@ -45,7 +45,7 @@ void resize_class::Darray(double *& field, int numi)
 void resize_class::Darray(double **& field, int numi, int numj)
 {
     int n,m;
-    
+
     if(numi>0)
     field=new double*[numi];
 
@@ -60,7 +60,7 @@ void resize_class::Darray(double **& field, int numi, int numj)
 void resize_class::Darray(double ***& field, int numi, int numj, int numk)
 {
     int n,m,q;
-    
+
     if(numi>0)
     field = new double**[numi];
 
@@ -80,7 +80,7 @@ void resize_class::Darray(double ***& field, int numi, int numj, int numk)
 void resize_class::Darray(double ****& field, int numi, int numj, int numk, int numl)
 {
     int n,m,l,q;
-    
+
     if(numi>0)
     field = new double***[numi];
 
@@ -90,7 +90,7 @@ void resize_class::Darray(double ****& field, int numi, int numj, int numk, int 
     for(n=0; n<numi; ++n)
     for(m=0; m<numj; ++m)
     field[n][m] = new double*[numk];
-    
+
     for(n=0; n<numi; ++n)
     for(m=0; m<numj; ++m)
     for(q=0; q<numk; ++q)
@@ -106,7 +106,7 @@ void resize_class::Darray(double ****& field, int numi, int numj, int numk, int 
 void resize_class::Darray(double **& field, int numi, int *numj)
 {
     int n,m;
-    
+
     if(numi>0)
     field=new double*[numi];
 
@@ -121,7 +121,7 @@ void resize_class::Darray(double **& field, int numi, int *numj)
 void resize_class::Iarray(int *& field, int numi)
 {
     int n;
-    
+
     if(numi>0)
     field=new int[numi];
 
@@ -132,7 +132,7 @@ void resize_class::Iarray(int *& field, int numi)
 void resize_class::Iarray(int **& field, int numi, int numj)
 {
     int n,m;
-    
+
     if(numi>0)
     field=new int*[numi];
 
@@ -147,10 +147,10 @@ void resize_class::Iarray(int **& field, int numi, int numj)
 void resize_class::Iarray(int ***& field, int numi, int numj, int numk)
 {
     int n,m,q;
-    
+
     if(numi>0)
     field=new int**[numi];
-    
+
     for(n=0; n<numi; ++n)
     field[n] = new int*[numj];
 
@@ -167,7 +167,7 @@ void resize_class::Iarray(int ***& field, int numi, int numj, int numk)
 void resize_class::Iarray(int ****& field, int numi, int numj, int numk, int numl)
 {
     int n,m,q,r;
-    
+
     if(numi>0)
     field = new int***[numi];
 
@@ -182,7 +182,7 @@ void resize_class::Iarray(int ****& field, int numi, int numj, int numk, int num
     for(m=0;m<numj;++m)
     for(q=0;q<numk;++q)
     field[n][m][q]=new int[numl];
-    
+
     for(n=0; n<numi;++n)
     for(m=0;m<numj;++m)
     for(q=0;q<numk;++q)
@@ -193,7 +193,7 @@ void resize_class::Iarray(int ****& field, int numi, int numj, int numk, int num
 void resize_class::Iarray(int *****& field, int numi, int numj, int numk, int numl, int numh)
 {
     int n,m,q,r,s;
-    
+
     if(numi>0)
     field = new int****[numi];
 
@@ -208,13 +208,13 @@ void resize_class::Iarray(int *****& field, int numi, int numj, int numk, int nu
     for(m=0;m<numj;++m)
     for(q=0;q<numk;++q)
     field[n][m][q]=new int*[numl];
-    
+
     for(n=0;n<numi;++n)
     for(m=0;m<numj;++m)
     for(q=0;q<numk;++q)
     for(r=0;r<numk;++r)
     field[n][m][q][r]=new int[numh];
-    
+
     for(n=0;n<numi;++n)
     for(m=0;m<numj;++m)
     for(q=0;q<numk;++q)
@@ -226,7 +226,7 @@ void resize_class::Iarray(int *****& field, int numi, int numj, int numk, int nu
 void resize_class::Iarray(int **& field, int numi, int *numj)
 {
     int n,m;
-    
+
     if(numi>0)
     field=new int*[numi];
 
@@ -241,10 +241,10 @@ void resize_class::Iarray(int **& field, int numi, int *numj)
 void resize_class::Iarray(int ***& field, int numi, int *numj, int numk)
 {
     int n,m,q;
-    
+
     if(numi>0)
     field=new int**[numi];
-    
+
     for(n=0; n<numi; ++n)
     field[n] = new int*[numj[n]];
 
@@ -267,7 +267,7 @@ void resize_class::cvec(char *& field, int numi)
 void resize_class::cvec(char **& field, int numi, int numj)
 {
     int i;
-    
+
     if(numi>0)
     field=new char*[numi];
 
@@ -279,7 +279,7 @@ void resize_class::cvec(char ***& field, int numi, int numj, int numk)
 {
 
     int i,j;
-    
+
     if(numi>0)
     field = new char**[numi];
 
@@ -293,6 +293,6 @@ void resize_class::cvec(char ***& field, int numi, int numj, int numk)
 
 void resize_class::rank(int r)
 {
-    
+
     pararank=r;
 }

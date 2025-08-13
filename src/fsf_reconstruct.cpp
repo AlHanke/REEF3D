@@ -58,7 +58,7 @@ void fsf_vtp::reconstruct(lexer *p,fdm* a, field& b)
 void fsf_vtp::addpoint(lexer *p, fdm *a, int q1, int q2)
 {
     // p. 917
-    
+
     double dist,xd,dnom;
 
     dnom=ls[q2]-ls[q1];

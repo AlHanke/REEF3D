@@ -30,7 +30,7 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
 {
     if(p->mpirank==0)
     pvtp(p,a,pgc,psed);
-    
+
     name_iter(p,a,pgc);
 
     ofstream result;
@@ -43,14 +43,14 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     // Points
     offset[n]=offset[n-1] + 8*p->pointnum2D*3 + 4;
     ++n;
-    
+
     //Velocity
     offset[n]=offset[n-1] + 4*p->pointnum2D*3+ 4;
     ++n;
     // Elevation
     offset[n]=offset[n-1] + 4*p->pointnum2D + 4;
     ++n;
-    
+
     // sediment bedlaod
     if(p->P76==1)
     psed->offset_vtp_bedload(p,pgc,result,offset,n);
@@ -66,9 +66,9 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     // bed shear stress
     if(p->P79>=1)
     psed->offset_vtp_bedshear(p,pgc,result,offset,n);
-    
+
     //End Data
-    
+
     offset[n]=offset[n-1] + 4*polygon_sum*3 + 4;
     ++n;
     offset[n]=offset[n-1] + 4*polygon_sum + 4;
@@ -76,7 +76,7 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     offset[n]=offset[n-1] + 4*polygon_sum + 4;
     ++n;
     //---------------------------------------------
-    
+
     
 
     result<<"<?xml version=\"1.0\"?>"<<endl;
@@ -89,16 +89,16 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     result<<"<DataArray type=\"Float64\"  NumberOfComponents=\"3\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     result<<"</Points>"<<endl;
-    
+
     result<<"<PointData >"<<endl;
     result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     result<<"<DataArray type=\"Float32\" Name=\"elevation\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-    
+
     if(p->P76==1)
     psed->name_vtu_bedload(p,pgc,result,offset,n);
-    
+
     if(p->P77==1)
     psed->name_vtu_parameter1(p,pgc,result,offset,n);
 
@@ -116,7 +116,7 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     ++n;
     result<<"<DataArray type=\"Int32\"  Name=\"types\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     result<<"</Polys>"<<endl;
-    
+
 
     result<<"</Piece>"<<endl;
     result<<"</PolyData>"<<endl;
@@ -139,7 +139,7 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     ddn=p->sl_ipol4(a->bed);
     result.write((char*)&ddn, sizeof (double));
     }
-    
+
 //  Velocities
     iin=4*(p->pointnum2D)*3;
     result.write((char*)&iin, sizeof (int));
@@ -154,7 +154,7 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     ffn=0.0;
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
 //  Elevation
     iin=4*p->pointnum2D;
     result.write((char*)&iin, sizeof (int));
@@ -163,11 +163,11 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     ffn=float(p->sl_ipol4(a->bed));
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     //  sediment bedload
     if(p->P76==1)
     psed->print_2D_bedload(p,pgc,result);
-    
+
     //  sediment parameter 1
     if(p->P77==1)
     psed->print_2D_parameter1(p,pgc,result);
@@ -179,7 +179,7 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     //  bed shear stress
     if(p->P79>=1)
     psed->print_2D_bedshear(p,pgc,result);
-    
+
 
 //  Connectivity
     iin=4*(polygon_sum)*3;

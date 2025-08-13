@@ -32,14 +32,14 @@ void sixdof_obj::nhflow_reini_RK2(lexer* p, fdm_nhf* d, ghostcell* pgc, double *
     LOOP
     WETDRY
     DTT[IJK] = 0.5*MIN(p->DXP[IP],p->DZP[KP]*d->WL(i,j));
-    
+
     if(p->j_dir==1)
     LOOP
     WETDRY
     DTT[IJK] = 0.5*MIN3(p->DXP[IP],p->DYP[JP],p->DZP[KP]*d->WL(i,j));
 
     reiniter=5;
-    
+
     if(p->count==0 && p->mpirank==0)
     cout<<endl<<"initializing reini forcing..."<<endl<<endl;
 
@@ -54,7 +54,7 @@ void sixdof_obj::nhflow_reini_RK2(lexer* p, fdm_nhf* d, ghostcell* pgc, double *
         FRK1[IJK] = F[IJK] + DTT[IJK]*LL[IJK];
 
          pgc->start5V(p,FRK1,1);
-        
+
         
         // Step 2
         pnhfrdisc->start(p,d,pgc,FRK1,LL);

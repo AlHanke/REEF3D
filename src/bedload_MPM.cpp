@@ -56,9 +56,9 @@ void bedload_MPM::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
 
         if(s->active(i,j)==0 || Tb<Ts)
         qb=0.0;
-        
+
         s->qbe(i,j) = qb;
     }
-    
+
     pgc->gcsl_start4(p,s->qbe,1);
 }

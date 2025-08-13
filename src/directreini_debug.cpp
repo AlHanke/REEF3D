@@ -98,7 +98,7 @@ void directreini::debug(lexer* p,fdm* a)
     x0 = pt[tri[n][q]][0] + t0*nx;
     y0 = pt[tri[n][q]][1] + t0*ny;
     z0 = pt[tri[n][q]][2] + t0*nz;
-    
+
     result<<"x: "<<x0<<" "<<y0<<" "<<z0<<endl;
     result<<"nx: "<<nx<<" ny: "<<ny<<" nz: "<<nz<<" d: "<<d<<" nl: "<<nl<<endl;
     result<<"b: "<<xp[0]<<" "<<yp[0]<<" "<<zp[0]<<"   c: "<<xp[1]<<" "<<yp[1]<<" "<<zp[1]<<endl;

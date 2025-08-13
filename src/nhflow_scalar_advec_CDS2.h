@@ -40,7 +40,7 @@ public:
     virtual void uadvec(int,double*,double&,double&);
     virtual void vadvec(int,double*,double&,double&);
     virtual void wadvec(int,double*,double&,double&);
-    
+
 private:
     lexer *p;
 

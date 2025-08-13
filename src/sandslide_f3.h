@@ -41,9 +41,9 @@ public:
 private:
 
     void slide(lexer*,ghostcell*, sediment_fdm*);
-    
+
     slice4 fh;
-    
+
     int gcval_topo,count;
 
     double fac1, fac2;

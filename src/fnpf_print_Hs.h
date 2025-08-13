@@ -41,7 +41,7 @@ public:
     virtual ~fnpf_print_Hs();
 
     void start(lexer*,ghostcell*,slice&,slice&);
-    
+
     slice4 ETAsum, ETAmean; //DKAF
     slice4 ETA2sum, ETAvar; //DKAF
 

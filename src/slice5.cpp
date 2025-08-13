@@ -30,10 +30,10 @@ slice5::slice5(lexer *p)
     imax=p->imax;
     jmin=p->jmin;
     jmax=p->jmax;
-    
+
     fieldalloc(p);
     fieldgcalloc(p);
-    
+
     pp=p;
 }
 
@@ -73,7 +73,7 @@ double & slice5::operator()(int ii, int jj)
 {
 
     return V[(ii-imin)*jmax + (jj-jmin)];
-    
+
 }
 
 void slice5::ggcpol(lexer* p)

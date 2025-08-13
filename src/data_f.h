@@ -39,14 +39,14 @@ public:
     data_f(lexer*, fdm*, ghostcell*);
     virtual ~data_f();
     virtual void start(lexer*, fdm*, ghostcell*);
-    
+
     virtual void print_3D(lexer*, fdm*, ghostcell*,ofstream&);
     virtual void name_pvtu(lexer*, fdm*, ghostcell*,ofstream&);
     virtual void name_vtu(lexer*, fdm*, ghostcell*,ofstream&, int*, int &);
     virtual void offset_vtu(lexer*, fdm*, ghostcell*,ofstream&, int*, int &);
 
 private:
-    
+
     field4 data;
     float ffn;
     int n,q,iin;

@@ -28,17 +28,17 @@ void nhflow_forcing::wedge_z(lexer *p, ghostcell *pgc, int id)
 {
     xs = p->A589_xs[id];
     xe = p->A589_xe[id];
-    
+
     ys = p->A589_ys[id];
     ye = p->A589_ye[id];
 
     zs = p->A589_zs[id];
     ze = p->A589_ze[id];
-    
+
     // Face 3
     // Tri 1
     tstart[entity_count]=tricount;
-    
+
     if(zs<ze)
     {
     // sides
@@ -264,7 +264,7 @@ void nhflow_forcing::wedge_z(lexer *p, ghostcell *pgc, int id)
 
 
     }
-     
+
     tend[entity_count]=tricount;
-    
+
 }

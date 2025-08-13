@@ -39,7 +39,7 @@ void sixdof_void::initialize(lexer *p, fdm *a, ghostcell *pgc)
 {
     //if(p->mpirank==0)
     //cout<<"6DOF: ini_CFD"<<endl;
-    
+
     
     if(p->X310==0)
     {
@@ -48,7 +48,7 @@ void sixdof_void::initialize(lexer *p, fdm *a, ghostcell *pgc)
     else
     {
         MPI_Bcast(&p->mooring_count,1,MPI_DOUBLE,0,pgc->mpi_comm);
-        
+
         Xme.resize(p->mooring_count);
         Yme.resize(p->mooring_count);
         Zme.resize(p->mooring_count);
@@ -62,7 +62,7 @@ void sixdof_void::initialize(lexer *p, fdm *a, ghostcell *pgc)
         }
 
         pmooring.reserve(p->mooring_count);
-            
+
         for (int i=0; i < p->mooring_count; i++)
         {
             if(p->X310==1)
@@ -81,7 +81,7 @@ void sixdof_void::initialize(lexer *p, fdm *a, ghostcell *pgc)
             {
                 pmooring.push_back(new mooring_Spring(i));
             }
-        
+
             pmooring[i]->initialize(p,pgc);
         }
     }
@@ -101,13 +101,13 @@ void sixdof_void::initialize(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     if(p->mpirank==0)
     cout<<"6DOF: ini"<<endl;
-    
+
     // Mooring
     if(p->X310==0)
     {
         pmooring.push_back(new mooring_void());
     }
-    
+
     else
     {
         MPI_Bcast(&p->mooring_count,1,MPI_DOUBLE,0,pgc->mpi_comm);
@@ -126,7 +126,7 @@ void sixdof_void::initialize(lexer *p, fdm_nhf *d, ghostcell *pgc)
         X311_xen.resize(p->mooring_count,0.0);
         X311_yen.resize(p->mooring_count,0.0);
         X311_zen.resize(p->mooring_count,0.0);
-            
+
         for (int i=0; i < p->mooring_count; i++)
         {
             if(p->X310==1)
@@ -145,15 +145,15 @@ void sixdof_void::initialize(lexer *p, fdm_nhf *d, ghostcell *pgc)
             {
                 pmooring.push_back(new mooring_Spring(i));
             }
-        
+
             X311_xen[i] = p->X311_xe[i] - p->xg;
             X311_yen[i] = p->X311_ye[i] - p->yg;
             X311_zen[i] = p->X311_ze[i] - p->zg;
-        
+
             pmooring[i]->initialize(p,pgc);
         }
     }
-    
+
     // Net
     pnetinter->initialize_nhflow(p,d,pgc);
 

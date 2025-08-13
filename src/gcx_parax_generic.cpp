@@ -29,9 +29,9 @@ void ghostcell::gcparax_generic(lexer* p,field& f,int *gcx_count, int ***gcx)
     int aa,bb,cc;
     int r;
     int count[6];
-    
+
     paramargin=3;
-    
+
     for(qn=0;qn<6;++qn)
     count[qn]=0;
 
@@ -43,34 +43,34 @@ void ghostcell::gcparax_generic(lexer* p,field& f,int *gcx_count, int ***gcx)
     i=gcx[n][q][0];
     j=gcx[n][q][1];
     k=gcx[n][q][2];
-    
+
     aa=bb=cc=0;
-    
+
         for(r=1;r<=paramargin;++r)
         {
         if(n==0)
         aa=r;
-        
+
         if(n==1)
         bb=r;
-        
+
         if(n==2)
         bb=r;
-        
+
         if(n==3)
         aa=r;
-        
+
         if(n==4)
         cc=r;
-        
+
         if(n==5)
         cc=-r;
-            
+
         send[n][count[n]]=f(i+aa,j+bb,k+cc);
         ++count[n];
         }
     }
-    
+
 
 //  SEND / RECEIVE
 
@@ -102,29 +102,29 @@ void ghostcell::gcparax_generic(lexer* p,field& f,int *gcx_count, int ***gcx)
     i=gcx[n][q][0];
     j=gcx[n][q][1];
     k=gcx[n][q][2];
-    
+
     aa=bb=cc=0;
-    
+
         for(r=1;r<=paramargin;++r)
         {
         if(n==0)
         aa=-r;
-        
+
         if(n==1)
         bb=r;
-        
+
         if(n==2)
         bb=-r;
-        
+
         if(n==3)
         aa=r;
-        
+
         if(n==4)
         cc=-r;
-        
+
         if(n==5)
         cc=r;
-            
+
 
         f(i+aa,j+bb,k+cc)=recv[n][count[n]];
         ++count[n];

@@ -39,7 +39,7 @@ Author: Hans Bihs
 multiphase_f::multiphase_f(lexer* p, fdm *a, ghostcell* pgc) : ls1(p), ls2(p)
 {
     logic(p,a,pgc);
-    
+
     pwsf1=new print_wsf(p,a,pgc,1);
     pwsf2=new print_wsf(p,a,pgc,2);
 }
@@ -52,7 +52,7 @@ void multiphase_f::start(lexer *p, fdm *a, ghostcell *pgc, convection *pmpconvec
 {
     pfsf1->start(a,p,pmpconvec,psolv,pgc,pflow,preini,ppls,ls1);
     pfsf2->start(a,p,pmpconvec,psolv,pgc,pflow,preini,ppls,ls2);
-    
+
     update(p,a,pgc);
 }
 

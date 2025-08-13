@@ -40,7 +40,7 @@ double vofdiff, xdiff;
     a->nY(i,j,k)=1E06;
     a->nZ(i,j,k)=1E06;
     a->Alpha(i,j,k)=1E06;
-    
+
     pgc->start4(p,a->vof,1);
 
     if(p->F54<1E06 || p->F55 <1E06 || p->F56<1E06)
@@ -109,7 +109,7 @@ if(p->F60>-1.0e20)
         a->ro(i,j,k)= p->W1*H + p->W3*(1.0-H);
         a->visc(i,j,k)= p->W2*H + p->W4*(1.0-H);
     }
-    
+
     //LOOP
     //a->phi(i,j,k) = a->vof(i,j,k);
 
@@ -134,12 +134,12 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
     double dx=p->DXM;
     double r;
     double vofdiff, xdiff;
-    
+
     p->phimean=p->F56;
 
     LOOP
     a->vof(i,j,k)=0.0;
-    
+
     LOOP
     if
     (
@@ -162,7 +162,7 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
             {
                 value = (p->phimean - p->pos_z() + p->DZN[KP]/2.0)/p->DZN[KP];
             }
-            
+
             a->vof(i,j,k) = value;
         }
     }
@@ -197,7 +197,7 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
                   + pow((double(j) + 0.5)*dx - p->F58_2, 2.0)
                   + pow((double(k) + 0.5)*dx - p->F58_3, 2.0)
                 );
-            
+
             if(r<=p->F58_4)
             a->vof(i,j,k)=1.0;
         }
@@ -206,9 +206,9 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
     if (p->F60 > -1.0e20)
     {
         p->phimean=p->F60;
-        
+
         double value;
-        
+
         LOOP
         {
             if (p->phimean >= p->pos_z() + p->DZN[KP]/2.0)
@@ -223,7 +223,7 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
             {
                 value = (p->phimean - p->pos_z() + p->DZN[KP]/2.0)/p->DZN[KP];
             }
-            
+
             a->vof(i,j,k) = value;
         }
     }

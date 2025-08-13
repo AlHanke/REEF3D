@@ -45,7 +45,7 @@ public:
     virtual void start(lexer*,fdm*,ghostcell*,convection*,solver*,ioflow*,reini*,particle_corr*,printer*)=0;
     virtual void ini(lexer*,fdm*,ghostcell*,ioflow*,printer*,convection*,solver*)=0;
     virtual void update(lexer*,fdm*,ghostcell*)=0;
-    
+
     virtual void print_3D(lexer*, fdm*, ghostcell*,ofstream&)=0;
     virtual void print_file(lexer*, fdm*, ghostcell*)=0;
     virtual double ls1val(int,int,int)=0;

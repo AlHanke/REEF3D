@@ -26,7 +26,7 @@ void lexer::ini_default()
 {
     // Hydrodynamic Models
     A10=6;       // int turn on wave models
-    
+
     // SFLOW
     A209=1;      // int interpolation sweeps for bed
     A210=3;          // int time scheme for SFLOW velocities
@@ -96,11 +96,11 @@ void lexer::ini_default()
     A365=1.86;   // double viscosity breaking wave
     A368=0;      // int breaking waves in numerical beach
 
-    
+
     // PTF
     A410=1;      // int scheme eta
     A440=1.6;    // double epsi for depth integration
-    
+
     
     // NHFLOW
     A501=1;      // int nhf mode
@@ -125,12 +125,12 @@ void lexer::ini_default()
     A543=1;        // int NHFLOW wetting & drying or coastline
     A544=0.001;  // double wetting & drying criterion
     A545=10.0;   // double deep criterion
-    
+
     A550=0;      // int turn on breaking (which method)
     A551=0;      // int type of breaking detection (deep / shallow)
     A552=0;      // int additional filtering to viscosity based breaking
     A553=0;      // int breaking in very shallow regions turned onf
-    
+
     A560=0;      // int turbulence model
     A564=1;      // int eddyv limiter
     A565=0;      // int stabilization
@@ -138,12 +138,12 @@ void lexer::ini_default()
     A567=0;      // int fsf eps
     A568=1.0;      // double URANS C3 coefficient
     A569=0;      // int
-    
+
     A570=0;      // int wind model
     A571_u=0.0;  // double wind velocity
     A571_dir=0.0;  // double wind direction
     A573=1;      // int wind forcing region
-    
+
     A580=0;      // int block eta
     A581=0;      // int solid box
     A583=0;      // int solid cylinder y
@@ -153,7 +153,7 @@ void lexer::ini_default()
     A587=0;      // int solid wedge x
     A588=0;      // int solid wedge y
     A589=0;      // int solid wedge z
-    
+
     A590=0;      // int STL
     A591_x=A591_y=A591_z=1.0;  // double scaling of stl geometry
     A592=0;     // int translation on/off
@@ -409,7 +409,7 @@ void lexer::ini_default()
     F97=0;           // PLIC density softening from superfine to fine y direction start & end
     F97_ys=-1.0e20;
     F97_ye=-1.0e20;
-    
+
     F112=0;            // int wedge x-dir
     F113=0;            // int wedge y-dir
     F114=0;            // int inv. wedge x-dir
@@ -644,7 +644,7 @@ void lexer::ini_default()
     P240=0;         // int print potentialfile
     P351=0;             // int print out wsf lsm1
     P352=0;             // int print out wsf lsm2
-    
+
     // Particles
     Q10=0;              // int time scheme
     Q11=1;              // int move function

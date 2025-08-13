@@ -38,7 +38,7 @@ void fsi_strip::setFieldBC(Matrix3Xd& c_, Matrix3Xd& cdot_, Matrix4Xd& q_, Matri
              2*qb(0)*qb(1), 2.0*qb(1)*qb(1) - 1.0, 2*qb(2)*qb(1), 2*qb(3)*qb(1),
              2*qb(0)*qb(2), 2*qb(1)*qb(2), 2.0*qb(2)*qb(2) - 1.0, 2*qb(3)*qb(2),
              2*qb(0)*qb(3), 2*qb(1)*qb(3), 2*qb(2)*qb(3), 2.0*qb(3)*qb(3) - 1.0;
-         
+
         q_.col(0) = 2.0*qb.dot(q_.col(1))*qb - q_.col(1);
         qdot_.col(0) = J*qdot_.col(1);
     }
@@ -81,7 +81,7 @@ void fsi_strip::setVariableLoads(Matrix3Xd& Fext_, Matrix4Xd& Mext_, const Matri
         I_el_star << 0.0, 0.0, 0.0;
         s0 << 0.0, 0.0, 0.0;
         J0 << Eigen::Matrix3d::Zero();
-        
+
         for (int pI = 0; pI < lagrangePoints[eI-1].cols(); pI++)
         {
             // Mass of element
@@ -93,7 +93,7 @@ void fsi_strip::setVariableLoads(Matrix3Xd& Fext_, Matrix4Xd& Mext_, const Matri
 
             // Static moment
             s0 += dm_el*Xil_0[eI-1].col(pI);
-            
+
             // Preliminary angular momentum
             I_el_star += dm_el*Xil[eI-1].col(pI).cross(lagrangeVel[eI-1].col(pI));
 
@@ -113,11 +113,11 @@ void fsi_strip::setVariableLoads(Matrix3Xd& Fext_, Matrix4Xd& Mext_, const Matri
         // Determine angular momentum
         omega_el_0 = getOmega0(q_.col(eI),qdot_.col(eI));
         I_el.col(eI) = rotVec(s0,q_.col(eI)).cross((cdot_.col(eI-1)+cdot_.col(eI))/2.0) + rotVec(J0*omega_el_0,q_.col(eI));
-        
+
         // Determine coupling moment
         M_el.col(eI) = -(I_el.col(eI) - I_el_n.col(eI))/delta_time - (I_el_n.col(eI) - I_el_star)/(t_strip - t_strip_n);
     }
-    
+
     // Assign external forces
     for (int eI = 0; eI < Ne+1; eI++)
     {

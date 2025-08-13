@@ -28,15 +28,15 @@ Author: Hans Bihs
 void ghostcell::extend_all(lexer *p,field& f,double dist,int gcv, int bc, int cs)
 {
     weight=1.0;
-    
+
     double dx;
-    
+
     if(cs==1||cs==4)
     dx = p->DXP[IP];
-    
+
     if(cs==2||cs==3)
     dx = p->DYP[JP];
-    
+
     if(cs==5||cs==6)
     dx = p->DZP[KP];
 
@@ -45,7 +45,7 @@ void ghostcell::extend_all(lexer *p,field& f,double dist,int gcv, int bc, int cs
 
    // if(bc_label==135)
     orderext=2;
-    
+
 
     for(m=0;m<=orderext-3;m++)
     pos[m]=-dx*double(orderext-m-2);

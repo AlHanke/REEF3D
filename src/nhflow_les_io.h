@@ -52,7 +52,7 @@ public:
     virtual double ccipol_a_epsval(lexer*,ghostcell*,double,double,double);
     virtual void kinget(int,int,int,double);
     virtual void epsget(int,int,int,double);
-    
+
     virtual void isource(lexer*,fdm_nhf*);
     virtual void jsource(lexer*,fdm_nhf*);
     virtual void ksource(lexer*,fdm_nhf*);
@@ -60,7 +60,7 @@ public:
     virtual void name_pvtu(lexer*, fdm_nhf*, ghostcell*,ofstream&);
     virtual void name_vtu(lexer*, fdm_nhf*, ghostcell*,ofstream&, int*, int &);
     virtual void offset_vtu(lexer*, fdm_nhf*, ghostcell*,ofstream&, int*, int &);
-    
+
 
 private:
     void tau_calc(fdm_nhf*, lexer*, double);

@@ -132,7 +132,7 @@ Author: Hans Bihs
 #define RAWLOOP ILOOP JLOOP KLOOP
 
 #define NHFWKLOOP for(k=1; k<=p->knoz; ++k)
-    
+
 #define NHFWLOOP NHFWKLOOP ILOOP JLOOP NHFWKLOOP PCHECK
 
 
@@ -162,7 +162,7 @@ Author: Hans Bihs
 #define VFLUIDCHECK  if(p->flag2[IJK]>=AIR_FLAG)
 #define WFLUIDCHECK  if(p->flag3[IJK]>=AIR_FLAG)
 #define PFLUIDCHECK  if(p->flag4[IJK]>=AIR_FLAG)
-    
+
 #define PWDFLUIDCHECK  if(p->flag4[IJK]>=AIR_FLAG && p->wet[IJ]>0)
 #define FSWDCHECK  if(p->flag7[FIJK]<=0 || p->wet[IJ]==0)
 #define FPWDCHECK  if(p->flag7[FIJK]>0  && p->wet[IJ]>0)
@@ -177,7 +177,7 @@ Author: Hans Bihs
 #define FKLOOP for(k=0; k<p->knoz+1; ++k)
 #define FLOOP FILOOP FJLOOP FKLOOP FPCHECK
 #define FBASELOOP FILOOP FJLOOP FKLOOP
-    
+
 
 #define ETALOC for(k=a->etaloc(i,j); k<a->etaloc(i,j)+1; ++k)
 #define FILOOP4 ILOOP JLOOP ETALOC PFLUIDCHECK
@@ -329,12 +329,12 @@ Author: Hans Bihs
 #define GGC4A  for(g=0;g<p->gcb4a_count;++g)
 #define GGCB4ACHECK if(p->gcb4a[g][3]>0)
 #define GGC4ALOOP  GGC4A GGCB4ACHECK
-        
+
 #define GC6LOOP  for(n=0;n<p->gcb_fix;++n)
 #define QGC6LOOP  for(q=0;q<p->gcb_fix;++q)
 #define QQGC6LOOP  for(qq=0;qq<p->gcb_fix;++qq)
 #define GGC6LOOP  for(g=0;g<p->gcb_fix;++g)
-    
+
 #define NETLOOP for (int n=0; n<p->net_count; ++n)
 
 

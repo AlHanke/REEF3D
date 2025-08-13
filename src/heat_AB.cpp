@@ -44,7 +44,7 @@ void heat_AB::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, sol
 {
 
     starttime=pgc->timer();
-    
+
     diff_update(p,a,pgc);
 
     clearrhs(p,a,pgc);
@@ -61,7 +61,7 @@ void heat_AB::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, sol
                                 -(p->dt/p->dt_old)*tab(i,j,k));
     tab(i,j,k)=a->L(i,j,k);
     }
-    
+
     bcheat_start(p,a,pgc,T);
     pgc->start4(p,T,gcval_heat);
     pupdate->start(p,a,pgc);
@@ -79,21 +79,21 @@ void heat_AB::diff_update(lexer *p, fdm *a, ghostcell *pgc)
     double alpha_2;
     double H;
     double epsi=p->F45*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
-    
+
     if(p->H9==1)
     {
     alpha_1 = p->H1;
     alpha_2 = p->H2;
     }
-    
+
     if(p->H9==2)
     {
     alpha_1 = p->H2;
     alpha_2 = p->H1;
     }
+
     
-    
-    
+
     LOOP
     {
         if(a->phi(i,j,k)>epsi)
@@ -107,7 +107,7 @@ void heat_AB::diff_update(lexer *p, fdm *a, ghostcell *pgc)
 
         thermdiff(i,j,k) = alpha_1*H + alpha_2*(1.0-H);
     }
-    
+
     pgc->start4(p,thermdiff,1);
 }
 

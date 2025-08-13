@@ -36,16 +36,16 @@ weno_hj_df_nug::weno_hj_df_nug(lexer* p):weno_nug_func(p),tttw(13.0/12.0),fourth
     {
     if(p->B269==0 && p->S10!=2)
     pflux = new flux_HJ_CDS2_2D(p);
-    
+
     if(p->B269>=1 || p->S10==2)
     pflux = new flux_HJ_CDS2_vrans_2D(p);
     }
-    
+
     if(p->j_dir==1)
     {
     if(p->B269==0 && p->S10!=2)
     pflux = new flux_HJ_CDS2(p);
-    
+
     if(p->B269>=1 || p->S10==2)
     pflux = new flux_HJ_CDS2_vrans(p);
     }
@@ -58,14 +58,14 @@ weno_hj_df_nug::~weno_hj_df_nug()
 void weno_hj_df_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     uf=vf=wf=0;
-    
+
     if(ipol==1)
     {
     uf=1;
     ULOOP
     a->F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel,p->DXN,p->DYP,p->DZP);
     }
-    
+
     if(p->j_dir==1)
     if(ipol==2)
     {
@@ -84,7 +84,7 @@ void weno_hj_df_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, fi
     if(ipol==4)
     LOOP
     a->L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel,p->DXP,p->DYP,p->DZP);
-    
+
     if(ipol==5)
     LOOP
     a->L(i,j,k)+=aij(p,a,b,5,uvel,vvel,wvel,p->DXP,p->DYP,p->DZP);
@@ -95,18 +95,18 @@ double weno_hj_df_nug::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field
         DX=DXD;
         DY=DYD;
         DZ=DZD;
-        
+
         pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
         pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
         pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
-        
+
         L = -iadvec*fx(p,a,b,uvel,ipol,iadvec);
-        
+
         if(p->j_dir==1)
         L -= jadvec*fy(p,a,b,vvel,ipol,jadvec);
-        
+
         L -= kadvec*fz(p,a,b,wvel,ipol,kadvec);
-        
+
         return L;
 }
 
@@ -118,44 +118,44 @@ double weno_hj_df_nug::fx(lexer *p,fdm *a, field& b, field& uvel, int ipol, doub
     {
     if(p->X45==0)
     iqmin_0(p,a,b,uvel,ipol);
-    
+
     if(p->X45==1)
     iqmin_1(p,a,b,uvel,ipol);
-    
+
     if(p->X45==2)
     iqmin_2(p,a,b,uvel,ipol);
-    
+
     if(p->X45==3)
     iqmin_3(p,a,b,uvel,ipol);
-    
+
     if(p->X45==4)
     iqmin_4(p,a,b,uvel,ipol);
-    
+
     if(p->X45==5)
     iqmin_5(p,a,b,uvel,ipol);
-    
+
     if(p->X45==6)
     iqmin_6(p,a,b,uvel,ipol);
-    
+
     is_min_x();
     weight_min_x();
-    
+
     
     is();
     alpha();
     weight();
-    
+
     double a1,a2,a3;
-            
+
  
             a1 = cfx[IP][uf][0]/pow(is1x+psi,2.0);
             a2 = cfx[IP][uf][1]/pow(is2x+psi,2.0);
             a3 = cfx[IP][uf][2]/pow(is3x+psi,2.0);
-    
+
     grad = w1x*(q4 + qfx[IP][uf][0][0]*(q3-q4) - qfx[IP][uf][0][1]*(q5-q4))
-    
+
          + w2x*(q3 + qfx[IP][uf][1][0]*(q4-q3) - qfx[IP][uf][1][1]*(q2-q3))
-          
+
          + w3x*(q2 + qfx[IP][uf][2][0]*(q1-q2) + qfx[IP][uf][2][1]*(q3-q2));
     }
 
@@ -163,35 +163,35 @@ double weno_hj_df_nug::fx(lexer *p,fdm *a, field& b, field& uvel, int ipol, doub
     {
     if(p->X45==0)
     iqmax_0(p,a,b,uvel,ipol);
-    
+
     if(p->X45==1)
     iqmax_1(p,a,b,uvel,ipol);
-    
+
     if(p->X45==2)
     iqmax_2(p,a,b,uvel,ipol);
-    
+
     if(p->X45==3)
     iqmax_3(p,a,b,uvel,ipol);
-    
+
     if(p->X45==4)
     iqmax_4(p,a,b,uvel,ipol);
-    
+
     if(p->X45==5)
     iqmax_5(p,a,b,uvel,ipol);
-    
+
     if(p->X45==6)
     iqmax_6(p,a,b,uvel,ipol);
-    
+
     is_max_x();
     weight_max_x();
-    
+
     grad = w1x*(q4 + qfx[IP][uf][3][0]*(q3-q4) + qfx[IP][uf][3][1]*(q5-q4))
-    
+
          + w2x*(q3 + qfx[IP][uf][4][0]*(q2-q3) - qfx[IP][uf][4][1]*(q4-q3))
-          
+
          + w3x*(q2 + qfx[IP][uf][5][0]*(q3-q2) - qfx[IP][uf][5][1]*(q1-q2));
     }
-    
+
     return grad;
 }
 
@@ -203,32 +203,32 @@ double weno_hj_df_nug::fy(lexer *p,fdm *a, field& b, field& vvel, int ipol, doub
     {
     if(p->X45==0)
     jqmin_0(p,a,b,vvel,ipol);
-    
+
     if(p->X45==1)
     jqmin_1(p,a,b,vvel,ipol);
-    
+
     if(p->X45==2)
     jqmin_2(p,a,b,vvel,ipol);
-    
+
     if(p->X45==3)
     jqmin_3(p,a,b,vvel,ipol);
-    
+
     if(p->X45==4)
     jqmin_4(p,a,b,vvel,ipol);
-    
+
     if(p->X45==5)
     jqmin_5(p,a,b,vvel,ipol);
-    
+
     if(p->X45==6)
     jqmin_6(p,a,b,vvel,ipol);
-    
+
     is_min_y();
     weight_min_y();
-    
+
     grad = w1y*(q4 + qfy[JP][vf][0][0]*(q3-q4) - qfy[JP][vf][0][1]*(q5-q4))
-    
+
          + w2y*(q3 + qfy[JP][vf][1][0]*(q4-q3) - qfy[JP][vf][1][1]*(q2-q3))
-          
+
          + w3y*(q2 + qfy[JP][vf][2][0]*(q1-q2) + qfy[JP][vf][2][1]*(q3-q2));
     }
 
@@ -236,35 +236,35 @@ double weno_hj_df_nug::fy(lexer *p,fdm *a, field& b, field& vvel, int ipol, doub
     {
     if(p->X45==0)
     jqmax_0(p,a,b,vvel,ipol);
-    
+
     if(p->X45==1)
     jqmax_1(p,a,b,vvel,ipol);
-    
+
     if(p->X45==2)
     jqmax_2(p,a,b,vvel,ipol);
-    
+
     if(p->X45==3)
     jqmax_3(p,a,b,vvel,ipol);
-    
+
     if(p->X45==4)
     jqmax_4(p,a,b,vvel,ipol);
-    
+
     if(p->X45==5)
     jqmax_5(p,a,b,vvel,ipol);
-    
+
     if(p->X45==6)
     jqmax_6(p,a,b,vvel,ipol);
-    
+
     is_max_y();
     weight_max_y();
-    
+
     grad = w1y*(q4 + qfy[JP][vf][3][0]*(q3-q4) + qfy[JP][vf][3][1]*(q5-q4))
-    
+
          + w2y*(q3 + qfy[JP][vf][4][0]*(q2-q3) - qfy[JP][vf][4][1]*(q4-q3))
-          
+
          + w3y*(q2 + qfy[JP][vf][5][0]*(q3-q2) - qfy[JP][vf][5][1]*(q1-q2));
     }
-    
+
     return grad;
 }
 
@@ -276,32 +276,32 @@ double weno_hj_df_nug::fz(lexer *p,fdm *a, field& b, field& wvel, int ipol, doub
     {
     if(p->X45==0)
     kqmin_0(p,a,b,wvel,ipol);
-    
+
     if(p->X45==1)
     kqmin_1(p,a,b,wvel,ipol);
-    
+
     if(p->X45==2)
     kqmin_2(p,a,b,wvel,ipol);
-    
+
     if(p->X45==3)
     kqmin_3(p,a,b,wvel,ipol);
-    
+
     if(p->X45==4)
     kqmin_4(p,a,b,wvel,ipol);
-    
+
     if(p->X45==5)
     kqmin_5(p,a,b,wvel,ipol);
-    
+
     if(p->X45==6)
     kqmin_6(p,a,b,wvel,ipol);
-    
+
     is_min_z();
     weight_min_z();
-    
+
     grad = w1z*(q4 + qfz[KP][wf][0][0]*(q3-q4) - qfz[KP][wf][0][1]*(q5-q4))
-    
+
          + w2z*(q3 + qfz[KP][wf][1][0]*(q4-q3) - qfz[KP][wf][1][1]*(q2-q3))
-          
+
          + w3z*(q2 + qfz[KP][wf][2][0]*(q1-q2) + qfz[KP][wf][2][1]*(q3-q2));
     }
 
@@ -309,32 +309,32 @@ double weno_hj_df_nug::fz(lexer *p,fdm *a, field& b, field& wvel, int ipol, doub
     {
     if(p->X45==0)
     kqmax_0(p,a,b,wvel,ipol);
-    
+
     if(p->X45==1)
     kqmax_1(p,a,b,wvel,ipol);
-    
+
     if(p->X45==2)
     kqmax_2(p,a,b,wvel,ipol);
-    
+
     if(p->X45==3)
     kqmax_3(p,a,b,wvel,ipol);
-    
+
     if(p->X45==4)
     kqmax_4(p,a,b,wvel,ipol);
-    
+
     if(p->X45==5)
     kqmax_5(p,a,b,wvel,ipol);
-    
+
     if(p->X45==6)
     kqmax_6(p,a,b,wvel,ipol);
-    
+
     is_max_z();
     weight_max_z();
-    
+
     grad = w1z*(q4 + qfz[KP][wf][3][0]*(q3-q4) + qfz[KP][wf][3][1]*(q5-q4))
-    
+
          + w2z*(q3 + qfz[KP][wf][4][0]*(q2-q3) - qfz[KP][wf][4][1]*(q4-q3))
-          
+
          + w3z*(q2 + qfz[KP][wf][5][0]*(q3-q2) - qfz[KP][wf][5][1]*(q1-q2));
     }
 
@@ -747,19 +747,19 @@ void weno_hj_df_nug::kqmax_4(lexer *p,fdm *a, field& f, field& wvel, int ipol)
 void weno_hj_df_nug::iqmin_5(lexer *p,fdm *a, field& f, field& uvel, int ipol)
 {
     q1=q2=q3=q4=q5=0.0;
-    
+
     if(a->solid(i-2,j,k)>0.0 && a->topo(i-2,j,k)>0.0 && a->solid(i-3,j,k)>0.0 && a->topo(i-3,j,k)>0.0)
     q1 = (f(i-2,j,k)-f(i-3,j,k))/DX[IM3];
-    
+
     if(a->solid(i-1,j,k)>0.0 && a->topo(i-1,j,k)>0.0 && a->solid(i-2,j,k)>0.0 && a->topo(i-2,j,k)>0.0)
     q2 = (f(i-1,j,k)-f(i-2,j,k))/DX[IM2];
-    
+
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i-1,j,k)>0.0 && a->topo(i-1,j,k)>0.0)
     q3 = (f(i,j,k)-f(i-1,j,k))/DX[IM1];
-    
+
     if(a->solid(i+1,j,k)>0.0 && a->topo(i+1,j,k)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
     q4 = (f(i+1,j,k)-f(i,j,k))/DX[IP];
-    
+
     if(a->solid(i+2,j,k)>0.0 && a->topo(i+2,j,k)>0.0 && a->solid(i+1,j,k)>0.0 && a->topo(i+1,j,k)>0.0)
     q5 = (f(i+2,j,k)-f(i+1,j,k))/DX[IP1];
 }
@@ -767,19 +767,19 @@ void weno_hj_df_nug::iqmin_5(lexer *p,fdm *a, field& f, field& uvel, int ipol)
 void weno_hj_df_nug::jqmin_5(lexer *p,fdm *a, field& f, field& vvel, int ipol)
 {
     q1=q2=q3=q4=q5=0.0;
-    
+
     if(a->solid(i,j-2,k)>0.0 && a->topo(i,j-2,k)>0.0 && a->solid(i,j-3,k)>0.0 && a->topo(i,j-3,k)>0.0)
     q1 = (f(i,j-2,k)-f(i,j-3,k))/DY[JM3];
-    
+
     if(a->solid(i,j-1,k)>0.0 && a->topo(i,j-1,k)>0.0 && a->solid(i,j-2,k)>0.0 && a->topo(i,j-2,k)>0.0)
     q2 = (f(i,j-1,k)-f(i,j-2,k))/DY[JM2];
-    
+
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i,j-1,k)>0.0 && a->topo(i,j-1,k)>0.0)
     q3 = (f(i,j,k)-f(i,j-1,k))/DY[JM1];
-    
+
     if(a->solid(i,j+1,k)>0.0 && a->topo(i,j+1,k)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
     q4 = (f(i,j+1,k)-f(i,j,k))/DY[JP];
-    
+
     if(a->solid(i,j+2,k)>0.0 && a->topo(i,j+2,k)>0.0 && a->solid(i,j+1,k)>0.0 && a->topo(i,j+1,k)>0.0)
     q5 = (f(i,j+2,k)-f(i,j+1,k))/DY[JP1];
 }
@@ -787,19 +787,19 @@ void weno_hj_df_nug::jqmin_5(lexer *p,fdm *a, field& f, field& vvel, int ipol)
 void weno_hj_df_nug::kqmin_5(lexer *p,fdm *a, field& f, field& wvel, int ipol)
 {
     q1=q2=q3=q4=q5=0.0;
-    
+
     if(a->solid(i,j,k-2)>0.0 && a->topo(i,j,k-2)>0.0 && a->solid(i,j,k-3)>0.0 && a->topo(i,j,k-3)>0.0)
     q1 = (f(i,j,k-2)-f(i,j,k-3))/DZ[KM3];
-    
+
     if(a->solid(i,j,k-1)>0.0 && a->topo(i,j,k-1)>0.0 && a->solid(i,j,k-2)>0.0 && a->topo(i,j,k-2)>0.0)
     q2 = (f(i,j,k-1)-f(i,j,k-2))/DZ[KM2];
-    
+
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i,j,k-1)>0.0 && a->topo(i,j,k-1)>0.0)
     q3 = (f(i,j,k)-f(i,j,k-1))/DZ[KM1];
-    
+
     if(a->solid(i,j,k+1)>0.0 && a->topo(i,j,k+1)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
     q4 = (f(i,j,k+1)-f(i,j,k))/DZ[KP];
-    
+
     if(a->solid(i,j,k+2)>0.0 && a->topo(i,j,k+2)>0.0 && a->solid(i,j,k+1)>0.0 && a->topo(i,j,k+1)>0.0)
     q5 = (f(i,j,k+2)-f(i,j,k+1))/DZ[KP1];
 }
@@ -807,19 +807,19 @@ void weno_hj_df_nug::kqmin_5(lexer *p,fdm *a, field& f, field& wvel, int ipol)
 void weno_hj_df_nug::iqmax_5(lexer *p,fdm *a, field& f, field& uvel, int ipol)
 {
     q1=q2=q3=q4=q5=0.0;
-    
+
     if(a->solid(i-1,j,k)>0.0 && a->topo(i-1,j,k)>0.0 && a->solid(i-2,j,k)>0.0 && a->topo(i-2,j,k)>0.0)
     q1 = (f(i-1,j,k)-f(i-2,j,k))/DX[IM2];
-    
+
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i-1,j,k)>0.0 && a->topo(i-1,j,k)>0.0)
     q2 = (f(i,j,k)-f(i-1,j,k))/DX[IM1];
-    
+
     if(a->solid(i+1,j,k)>0.0 && a->topo(i+1,j,k)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
     q3 = (f(i+1,j,k)-f(i,j,k))/DX[IP];
-    
+
     if(a->solid(i+2,j,k)>0.0 && a->topo(i+2,j,k)>0.0 && a->solid(i+1,j,k)>0.0 && a->topo(i+1,j,k)>0.0)
     q4 = (f(i+2,j,k)-f(i+1,j,k))/DX[IP1];
-    
+
     if(a->solid(i+3,j,k)>0.0 && a->topo(i+3,j,k)>0.0 && a->solid(i+2,j,k)>0.0 && a->topo(i+2,j,k)>0.0)
     q5 = (f(i+3,j,k)-f(i+2,j,k))/DX[IP2];
 }
@@ -827,19 +827,19 @@ void weno_hj_df_nug::iqmax_5(lexer *p,fdm *a, field& f, field& uvel, int ipol)
 void weno_hj_df_nug::jqmax_5(lexer *p,fdm *a, field& f, field& vvel, int ipol)
 {
     q1=q2=q3=q4=q5=0.0;
-    
+
     if(a->solid(i,j-1,k)>0.0 && a->topo(i,j-1,k)>0.0 && a->solid(i,j-2,k)>0.0 && a->topo(i,j-2,k)>0.0)
     q1 = (f(i,j-1,k)-f(i,j-2,k))/DY[JM2];
-    
+
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i,j-1,k)>0.0 && a->topo(i,j-1,k)>0.0)
     q2 = (f(i,j,k)-f(i,j-1,k))/DY[JM1];
-    
+
     if(a->solid(i,j+1,k)>0.0 && a->topo(i,j+1,k)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
     q3 = (f(i,j+1,k)-f(i,j,k))/DY[JP];
-    
+
     if(a->solid(i,j+2,k)>0.0 && a->topo(i,j+2,k)>0.0 && a->solid(i,j+1,k)>0.0 && a->topo(i,j+1,k)>0.0)
     q4 = (f(i,j+2,k)-f(i,j+1,k))/DY[JP1];
-    
+
     if(a->solid(i,j+3,k)>0.0 && a->topo(i,j+3,k)>0.0 && a->solid(i,j+2,k)>0.0 && a->topo(i,j+2,k)>0.0)
     q5 = (f(i,j+3,k)-f(i,j+2,k))/DY[JP2];
 }
@@ -847,19 +847,19 @@ void weno_hj_df_nug::jqmax_5(lexer *p,fdm *a, field& f, field& vvel, int ipol)
 void weno_hj_df_nug::kqmax_5(lexer *p,fdm *a, field& f, field& wvel, int ipol)
 {
     q1=q2=q3=q4=q5=0.0;
-    
+
     if(a->solid(i,j,k-1)>0.0 && a->topo(i,j,k-1)>0.0 && a->solid(i,j,k-2)>0.0 && a->topo(i,j,k-2)>0.0)
     q1 = (f(i,j,k-1)-f(i,j,k-2))/DZ[KM2];
-    
+
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i,j,k-1)>0.0 && a->topo(i,j,k-1)>0.0)
     q2 = (f(i,j,k)-f(i,j,k-1))/DZ[KM1];
-    
+
     if(a->solid(i,j,k+1)>0.0 && a->topo(i,j,k+1)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
     q3 = (f(i,j,k+1)-f(i,j,k))/DZ[KP];
-    
+
     if(a->solid(i,j,k+2)>0.0 && a->topo(i,j,k+2)>0.0 && a->solid(i,j,k+1)>0.0 && a->topo(i,j,k+1)>0.0)
     q4 = (f(i,j,k+2)-f(i,j,k+1))/DZ[KP1];
-    
+
     if(a->solid(i,j,k+3)>0.0 && a->topo(i,j,k+3)>0.0 && a->solid(i,j,k+2)>0.0 && a->topo(i,j,k+2)>0.0)
     q5 = (f(i,j,k+3)-f(i,j,k+2))/DZ[KP2];
 }

@@ -33,7 +33,7 @@ Author: Alexander Hanke
 
 void sediment_part::ini_cfd(lexer *p, fdm *a, ghostcell *pgc)
 {
-    
+
     double h;
     ILOOP
     JLOOP
@@ -55,38 +55,38 @@ void sediment_part::ini_cfd(lexer *p, fdm *a, ghostcell *pgc)
     //gparticle_active = pgc->globalisum(P.size);
 
     fill_PQ_cfd(p,a,pgc);
-  
+
   
     // print
     //print_particles(p);
-    
+
     //if(p->mpirank==0)
     //cout<<"Sediment particles: "<<gparticle_active<<"\n";
 
-    
+
     SLICELOOP4
     s->bedk(i,j)=0;
-    
+
     SLICELOOP4
     {
         KLOOP
         PBASECHECK
         if(a->topo(i,j,k)<0.0 && a->topo(i,j,k+1)>=0.0)
         s->bedk(i,j)=k+1;
-        
+
         s->reduce(i,j)=0.3;
     }
-    
+
     pbedshear->taubed(p,a,pgc,s);
     pgc->gcsl_start4(p,s->tau_eff,1);
     pbedshear->taucritbed(p,a,pgc,s);
     pgc->gcsl_start4(p,s->tau_crit,1);
-    
+
     
     pst->update(p,a,pgc,s,por,d50);
     //pst->timestep(p,pgc);
     pst->print_particles(p,s);
-    
+
     
     pgc->gcdf_update(p,a);
 }

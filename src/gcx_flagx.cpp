@@ -248,7 +248,7 @@ void ghostcell::flagx(lexer* p, int *flag)
         flag[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+3]=irecv6[count];
         ++count;
     }
-    
+
     
 // -- Paraco
 
@@ -392,6 +392,6 @@ void ghostcell::flagx(lexer* p, int *flag)
     k=p->gcparaco6[q][2];
        flag[IJKp1]=irecv6[q];
     }
-    
+
 
 }

@@ -43,7 +43,7 @@ void sflow_fou::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice
     if(ipol==2)
     SLICELOOP2
     b->G(i,j)+=aij(p,b,f,2,uvel,vvel);
-    
+
     if(ipol==4)
     SLICELOOP4
     b->L(i,j)+=aij(p,b,f,4,uvel,vvel);
@@ -52,12 +52,12 @@ void sflow_fou::start(lexer* p, fdm2D* b, slice& f, int ipol, slice& uvel, slice
 double sflow_fou::aij(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel, slice& vvel)
 {
     double q1,q2;
-    
+
     ul=ur=vl=vr=dx=dy=0.0;
-    
+
     pflux->u_flux(ipol,uvel,ivel1,ivel2);
     pflux->v_flux(ipol,vvel,jvel1,jvel2);
-        
+
         // X-dir
         if(ivel1>=0.0)
         ul=1.0;
@@ -75,10 +75,10 @@ double sflow_fou::aij(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel, slice& v
         vr=1.0;
 
         dy= (jvel2*(vr*f(i,j) +  (1.0-vr)*f(i,j+1))  -  jvel1*(vl*f(i,j-1) +  (1.0-vl)*f(i,j)))/(p->DXM);
-        
+
         
         L = -dx-dy;
-        
+
         return L;
 }
 

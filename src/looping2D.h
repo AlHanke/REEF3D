@@ -46,7 +46,7 @@ Author: Hans Bihs
 #define SLICELOOPREV4 IREVLOOP JREVLOOP  PSLICECHECK4
 
 #define PSLICECHECK4E  if(p->flagslice4[IJ]>=-1)
-    
+
 #define SLICELOOP4E ILOOP JLOOP  PSLICECHECK4
 
 #define SLICEBASELOOP ILOOP JLOOP
@@ -58,14 +58,14 @@ Author: Hans Bihs
 #define NSLICELOOP1 for(n=p->sizeS1[0]; n<p->sizeS1[1]; ++n)
 #define NSLICELOOP2 for(n=p->sizeS2[0]; n<p->sizeS2[1]; ++n)
 #define NSLICELOOP4 for(n=p->sizeS4[0]; n<p->sizeS4[1]; ++n)
-    
+
 #define IFLEXLOOP    for(i=0; i<p->knox-ulast; ++i)
 #define JFLEXLOOP    for(j=0; j<p->knoy-vlast; ++j)
 #define KFLEXLOOP    for(k=0; k<p->knoz-wlast; ++k)
-    
+
 #define SLICEFLEXCHECK  if(flagslice[IJ]>0)
 #define SLICEFLEXLOOP IFLEXLOOP JFLEXLOOP SLICEFLEXCHECK
-    
+
 
 
 #define WETDRY1 if(b->wet1(i,j)==1)

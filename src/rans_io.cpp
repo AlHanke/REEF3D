@@ -41,15 +41,15 @@ void rans_io::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &result)
 {
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
-    
+
     //gcupdate(p,a,pgc);
-    
+
     TPLOOP
     {
     ffn=float(p->ipol4_a(kin));
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
 
@@ -100,7 +100,7 @@ double rans_io::ccipol_a_epsval(lexer *p, ghostcell *pgc, double xp, double yp, 
 double rans_io::kinval(int ii, int jj, int kk)
 {
     double val;
-    
+
     val=kin(ii,jj,kk);
 
     return val;
@@ -109,9 +109,9 @@ double rans_io::kinval(int ii, int jj, int kk)
 double rans_io::epsval(int ii, int jj, int kk)
 {
     double val;
- 
+
     val=eps(ii,jj,kk);
-    
+
     return val;
 }
 
@@ -134,7 +134,7 @@ void rans_io::gcupdate(lexer *p, fdm *a, ghostcell *pgc)
 void rans_io::name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result)
 {
     result<<"<PDataArray type=\"Float32\" Name=\"kin\"/>"<<endl;
-    
+
     if(p->T10==1||p->T10==11 || p->T10==21 ||p->T10==0 || p->T10>30)
     result<<"<PDataArray type=\"Float32\" Name=\"epsilon\"/>"<<endl;
     if(p->T10==2||p->T10==12 || p->T10==22||p->T10==3||p->T10==13)

@@ -32,7 +32,7 @@ sflow_hxy_weno::sflow_hxy_weno(lexer* p, patchBC_interface *ppBC) :tttw(13.0/12.
             sixten(6.0/10.0),treten(3.0/10.0),epsilon(0.000001)
 {
     pBC = ppBC;
-    
+
     pflux = new sflow_flux_face_CDS(p);
 }
 
@@ -47,36 +47,36 @@ void sflow_hxy_weno::start(lexer* p, slice& hx, slice& hy, slice& depth, int *we
     SLICELOOP1
     {
     ivel1 = P(i,j);
-    
+
     if(ivel1>=0.0)
     hx(i,j) = fx(p,eta,1,ivel1) + MIN(depth(i,j), depth(i+1,j));
-    
+
     if(ivel1<0.0)
     hx(i,j) = fx(p,eta,1,ivel1) + MIN(depth(i,j), depth(i+1,j));
     }
-    
+
     
     if(p->F50==1 || p->F50==4)
     for(n=0;n<p->gcslout_count;n++)
     {
     i=p->gcslout[n][0];
     j=p->gcslout[n][1];
-    
+
         if(wet[IJ]==1)
         {
         ivel1 = P(i,j);
 
         if(ivel1>eps)
         hx(i,j) = eta(i,j) + depth(i,j);
-        
+
         if(ivel1<-eps)
         hx(i,j) = eta(i+1,j) + depth(i+1,j);
-        
+
         if(fabs(ivel1)<=eps)
         hx(i,j) = MAX(eta(i,j),eta(i+1,j)) + MIN(depth(i,j), depth(i+1,j));
         }
     }
-    
+
     int qq;
     for(qq=0;qq<pBC->obj_count;++qq)
     if(pBC->patch[qq]->waterlevel_flag==0)
@@ -85,32 +85,32 @@ void sflow_hxy_weno::start(lexer* p, slice& hx, slice& hy, slice& depth, int *we
     {
     if(pBC->patch[qq]->gcb[n][3]==1)
     i=pBC->patch[qq]->gcb[n][0]-1;
-    
+
     j=pBC->patch[qq]->gcb[n][1];
 
-        
+
         if(wet[IJ]==1)
         {
         ivel1 = P(i,j);
 
         if(ivel1>eps)
         hx(i,j) = eta(i,j) + depth(i,j);
-        
+
         if(ivel1<-eps)
         hx(i,j) = eta(i+1,j) + depth(i+1,j);
-        
+
         if(fabs(ivel1)<=eps)
         hx(i,j) = MAX(eta(i,j),eta(i+1,j)) + MIN(depth(i,j), depth(i+1,j));
         }
     }
-    
+
     SLICELOOP2
     {
     jvel1 = Q(i,j);
-    
+
     if(jvel1>=0.0)
     hy(i,j) = fy(p,eta,2,jvel1) + MIN(depth(i,j), depth(i,j+1));
-    
+
     if(jvel1<0.0)
     hy(i,j) = fy(p,eta,2,jvel1) + MIN(depth(i,j), depth(i,j+1));
     }
@@ -120,28 +120,28 @@ void sflow_hxy_weno::start(lexer* p, slice& hx, slice& hy, slice& depth, int *we
     for(n=0;n<pBC->patch[qq]->gcb_count;++n)
     if(pBC->patch[qq]->gcb[n][3]==3 || pBC->patch[qq]->gcb[n][3]==2)
     {
-    
+
     i=pBC->patch[qq]->gcb[n][0];
-    
+
     if(pBC->patch[qq]->gcb[n][3]==3)
     j=pBC->patch[qq]->gcb[n][1]-1;
 
-        
+
         if(wet[IJ]==1)
         {
         jvel1 = Q(i,j);
-    
+
         if(jvel1>eps)
         hy(i,j) = eta(i,j) + depth(i,j);
-        
+
         if(jvel1<-eps)
         hy(i,j) = eta(i,j+1) + depth(i,j+1);
-        
+
         if(fabs(jvel1)<=eps)
         hy(i,j) = MAX(eta(i,j),eta(i,j+1)) + MIN(depth(i,j), depth(i,j+1));
         }
     }
-     
+
 }
 
 double sflow_hxy_weno::fx(lexer *p, slice& f, int ipol, double advec)
@@ -154,7 +154,7 @@ double sflow_hxy_weno::fx(lexer *p, slice& f, int ipol, double advec)
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -166,7 +166,7 @@ double sflow_hxy_weno::fx(lexer *p, slice& f, int ipol, double advec)
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -185,7 +185,7 @@ double sflow_hxy_weno::fy(lexer *p, slice& f, int ipol, double advec)
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
@@ -197,12 +197,12 @@ double sflow_hxy_weno::fy(lexer *p, slice& f, int ipol, double advec)
     is(f);
     alpha();
     weight();
-    
+
     grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
           + w2*(-q2*sixth + q3*fivsix + q4*third)
           + w3*( q3*third + q4*fivsix - q5*sixth));
     }
-    
+
     return grad;
 }
 

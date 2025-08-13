@@ -35,7 +35,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara1[q][0];
     j=p->gcpara1[q][1];
     k=p->gcpara1[q][2];
-        
+
         if(p->gcpara1[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {
@@ -50,7 +50,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara3[q][0];
     j=p->gcpara3[q][1];
     k=p->gcpara3[q][2];
-        
+
         if(p->gcpara3[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {
@@ -65,7 +65,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara5[q][0];
     j=p->gcpara5[q][1];
     k=p->gcpara5[q][2];
-        
+
         if(p->gcpara5[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {
@@ -80,7 +80,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara4[q][0];
     j=p->gcpara4[q][1];
     k=p->gcpara4[q][2];
-        
+
         if(p->gcpara4[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {
@@ -95,7 +95,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara2[q][0];
     j=p->gcpara2[q][1];
     k=p->gcpara2[q][2];
-        
+
         if(p->gcpara2[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {
@@ -110,7 +110,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara6[q][0];
     j=p->gcpara6[q][1];
     k=p->gcpara6[q][2];
-        
+
         if(p->gcpara6[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {
@@ -170,7 +170,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara1[q][0];
     j=p->gcpara1[q][1];
     k=p->gcpara1[q][2];
-        
+
         if(p->gcpara1[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {
@@ -185,7 +185,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara3[q][0];
     j=p->gcpara3[q][1];
     k=p->gcpara3[q][2];
-        
+
         if(p->gcpara3[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {
@@ -200,7 +200,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara5[q][0];
     j=p->gcpara5[q][1];
     k=p->gcpara5[q][2];
-        
+
         if(p->gcpara5[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {
@@ -215,7 +215,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara4[q][0];
     j=p->gcpara4[q][1];
     k=p->gcpara4[q][2];
-        
+
         if(p->gcpara4[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {
@@ -230,7 +230,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara2[q][0];
     j=p->gcpara2[q][1];
     k=p->gcpara2[q][2];
-        
+
         if(p->gcpara2[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {
@@ -245,7 +245,7 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     i=p->gcpara6[q][0];
     j=p->gcpara6[q][1];
     k=p->gcpara6[q][2];
-        
+
         if(p->gcpara6[q][2+gcv]==1)
         for(n=0;n<paramargin;++n)
         {

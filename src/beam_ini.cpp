@@ -31,12 +31,12 @@ void beam::iniBeam(double Ne_, double E_, double A_, double rho_, double L_, dou
     rho = rho_;
     L = L_;
     G = G_;
-    
+
     // Set inertia matrix
     I << IX_, 0.0, 0.0,
          0.0, IY_, 0.0,
          0.0, 0.0, IZ_;
-    
+
     // Initialise fields
     iniFields();
 
@@ -44,12 +44,12 @@ void beam::iniBeam(double Ne_, double E_, double A_, double rho_, double L_, dou
     mkdir("./REEF3D_CFD_Beam",0777);
     printtime = 0.0;
 }
-    
+
 
 void beam::iniMaterial()
 {
     corr_k << 1.0, 1.0, 1.0;
-    
+
     // Linear visco-elasticity model
     Ceps << E*A, 0, 0,
             0, corr_k(0)*G*A, 0,
@@ -85,7 +85,7 @@ void beam::iniFields()
     // State vector
     n_dim = 6*(Ne+1) + 8*(Ne+2);
     y = new double[n_dim];
-    
+
     // Matrices
     Iq = Eigen::Matrix4d::Zero(4,4);
     invIq = Eigen::Matrix4d::Zero(4,4);
@@ -128,16 +128,16 @@ void beam::meshBeam(double x_ini, double y_ini, double z_ini, Eigen::Vector3d& d
     d1.normalize();
     d2.normalize();
     d3.normalize();
-            
+
     double sp = (d3(1)*d2(2)-d3(2)*d2(1))*d1(0) +(d3(2)*d2(0)-d3(0)*d2(2))*d1(1)+(d3(0)*d2(1)-d3(1)*d2(0))*d1(2);
     if (sp < 0.0) d3 = -d3;
-    
+
     if( (1+d3(0)+d2(1)+d1(2)) < 1e-3)
     {
         d3 = -d3;
         d2 = -d2;
     }
-    
+
     // Coordinates
     dZ = L/Ne;
     for (int i=0; i < Ne+1; i++)
@@ -192,7 +192,7 @@ void beam::iniSolver()
 {
     setState(y);
     resetSolver();
-    
+
     z1 = new double[n_dim];
     z2 = new double[n_dim];
     z3 = new double[n_dim];

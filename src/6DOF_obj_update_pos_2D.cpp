@@ -29,19 +29,19 @@ void sixdof_obj::update_position_2D(lexer *p, ghostcell *pgc, slice &fsglobal)
 {
     // Calculate new position
     update_Euler_angles(p,pgc);
-    
+
     // Update STL mesh
     update_trimesh_2D(p,pgc);
 
     // Update angular velocities
     omega_B = I_.inverse()*h_;
     omega_I = R_*omega_B;
-    
+
     SLICELOOP4
     fsglobal(i,j) = fs(i,j);
-    
+
     pgc->gcsl_start4(p,fsglobal,50);
-    
+
     if(p->mpirank==0)
     {
         cout<<"XG: "<<c_(0)<<" YG: "<<c_(1)<<" ZG: "<<c_(2)<<" phi: "<<phi*(180.0/PI)<<" theta: "<<theta*(180.0/PI)<<" psi: "<<psi*(180.0/PI)<<endl;
@@ -59,9 +59,9 @@ void sixdof_obj::update_trimesh_2D(lexer *p, ghostcell *pgc)
             // Update coordinates of triangles
             // (tri_x0 is vector between tri_x and xg)
             Eigen::Vector3d point(tri_x0[n][q], tri_y0[n][q], tri_z0[n][q]);
-                    
+
             point = R_*point;
-        
+
             tri_x[n][q] = point(0) + c_(0);
             tri_y[n][q] = point(1) + c_(1);
             tri_z[n][q] = point(2) + c_(2);

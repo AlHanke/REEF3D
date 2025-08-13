@@ -30,14 +30,14 @@ Author: Hans Bihs
 void nhflow_idiff::diff_v(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, solver *psolv, double *VHdiff, double *VHin, double *UH, double *VH, double *WH, slice &WL, double alpha)
 {
     starttime=pgc->timer();
-    
+
     LOOP
     VHdiff[IJK] = VHin[IJK];
-    
+
     pgc->start4V(p,VHdiff,gcval_vh);
-    
+
     pflow->rkinflow_nhflow(p,d,pgc,VHdiff,VHin);
-    
+
     
     n=0;
     LOOP
@@ -45,19 +45,19 @@ void nhflow_idiff::diff_v(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, s
         if(p->wet[IJ]==1)
         {
             visc = d->VISC[IJK] + d->EV[IJK];
-            
+
             sigxyz2 = pow(0.5*(p->sigx[FIJK]+p->sigx[FIJKp1]),2.0) + pow(0.5*(p->sigy[FIJK]+p->sigy[FIJKp1]),2.0) + pow(p->sigz[IJ],2.0);
-            
+
             
             d->M.p[n]  =  visc/(p->DXP[IP]*p->DXN[IP])
                         + visc/(p->DXP[IM1]*p->DXN[IP])
-                        
+
                         + 2.0*visc/(p->DYP[JP]*p->DYN[JP])*p->y_dir
                         + 2.0*visc/(p->DYP[JM1]*p->DYN[JP])*p->y_dir
-                        
+
                         + (visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KP])
                         + (visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KM1])
-                        
+
                         + CPORNH/(alpha*p->dt);
 
 
@@ -69,20 +69,20 @@ void nhflow_idiff::diff_v(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, s
 
             d->M.t[n] = -(visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KP]);
             d->M.b[n] = -(visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KM1]);
-            
+
             
             d->rhsvec.V[n] =  visc*((UH[Ip1Jp1K]-UH[Ip1Jm1K]) - (UH[Im1Jp1K]-UH[Im1Jm1K]))/((p->DYN[JP]+p->DYN[JM1])*(p->DXP[IP]+p->DXP[IM1]))
                          +  visc*((WH[IJp1Kp1]-WH[IJm1Kp1]) - (WH[IJp1Km1]-WH[IJm1Km1]))/((p->DYN[JP]+p->DYN[JM1])*(p->DZN[KP]+p->DZN[KM1])*p->sigz[IJ])
 
                          + (CPORNH*VHin[IJK])/(alpha*p->dt)
-                            
+
                             + visc*2.0*0.5*(p->sigx[FIJK]+p->sigx[FIJKp1])*(VH[Ip1JKp1] - VH[Im1JKp1] - VH[Ip1JKm1] + VH[Im1JKm1])
                             /((p->DXP[IP]+p->DXP[IM1])*(p->DZN[KP]+p->DZN[KM1]))
-                        
+
                             + visc*2.0*0.5*(p->sigy[FIJK]+p->sigy[FIJKp1])*(VH[IJp1Kp1] - VH[IJm1Kp1] - VH[IJp1Km1] + VH[IJm1Km1])
                             /((p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1]))*p->y_dir;
         }
-        
+
         if(p->wet[IJ]==0 || p->flag4[IJK]<0)
         {
         d->M.p[n]  =  1.0;
@@ -96,13 +96,13 @@ void nhflow_idiff::diff_v(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, s
 
         d->M.t[n] = 0.0;
         d->M.b[n] = 0.0;
-        
+
         d->rhsvec.V[n] =  0.0;
         }
-    
+
     ++n;
     }
-    
+
     
     n=0;
     LOOP
@@ -114,31 +114,31 @@ void nhflow_idiff::diff_v(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, s
             d->rhsvec.V[n] -= d->M.s[n]*VH[Im1JK];
             d->M.s[n] = 0.0;
             }
-            
+
             if(p->flag4[Ip1JK]<0)
             {
             d->rhsvec.V[n] -= d->M.n[n]*VH[Ip1JK];
             d->M.n[n] = 0.0;
             }
-            
+
             if(p->flag4[IJm1K]<0)
             {
             d->rhsvec.V[n] -= d->M.e[n]*VH[IJm1K]*p->y_dir;
             d->M.e[n] = 0.0;
             }
-            
+
             if(p->flag4[IJp1K]<0)
             {
             d->rhsvec.V[n] -= d->M.w[n]*VH[IJp1K]*p->y_dir;
             d->M.w[n] = 0.0;
             }
-            
+
             if(p->flag4[IJKm1]<0)
             {
             d->rhsvec.V[n] -= d->M.b[n]*VH[IJKm1];
             d->M.b[n] = 0.0;
             }
-            
+
             if(p->flag4[IJKp1]<0 && p->flag4[IJKp1]>0)
             {
             d->rhsvec.V[n] -= d->M.t[n]*VH[IJKp1];
@@ -147,12 +147,12 @@ void nhflow_idiff::diff_v(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, s
         }
     ++n;
     }
-    
+
     psolv->startV(p,pgc,VHdiff,d->rhsvec,d->M,4);
-    
+
     
     pgc->start4V(p,VHdiff,gcval_vh);
-    
+
     
     time=pgc->timer()-starttime;
     p->viter=p->solveriter;

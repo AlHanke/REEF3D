@@ -35,14 +35,14 @@ benchmark_convection::benchmark_convection(lexer *p, fdm *a)
     {
         if(p->pos_x()>0.5 && p->pos_x()<1.5)
         a->phi(i,j,k) = 1.0;
-        
+
         if(p->pos_x()>2.5 && p->pos_x()<3.5)
         a->phi(i,j,k) = 1.0 - fabs(2.0*(p->pos_x()-3.0));
-        
+
         if(p->pos_x()>4.5 && p->pos_x()<5.5)
         a->phi(i,j,k) = sin((p->pos_x()-4.5)*PI);
     }
-    
+
     
 }
 
@@ -57,16 +57,16 @@ void benchmark_convection::start(lexer* p, fdm *a, ghostcell *pgc, convection *p
     {
         if(p->pos_x()>0.5 && p->pos_x()<1.5)
         a->phi(i,j,k) = 1.0;
-        
+
         if(p->pos_x()>2.5 && p->pos_x()<3.5)
         a->phi(i,j,k) = 1.0 - fabs(2.0*(p->pos_x()-3.0));
-        
+
         if(p->pos_x()>4.5 && p->pos_x()<5.5)
         a->phi(i,j,k) = sin((p->pos_x()-4.5)*PI);
     }
-    
+
      pgc->start4(p,a->phi,40);
-     
+
     ULOOP
     a->u(i,j,k) = 1.0;
 

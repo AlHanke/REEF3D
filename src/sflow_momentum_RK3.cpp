@@ -68,7 +68,7 @@ sflow_momentum_RK3::sflow_momentum_RK3(lexer *p, fdm2D *b, sflow_convection *pco
     pfsf=pfreesurf;
     p6dof=pp6dof;
     psfdf=ppsfdf;
-    
+
 
     if(p->A218==0)
     prough = new sflow_rough_void(p);
@@ -166,7 +166,7 @@ void sflow_momentum_RK3::start(lexer *p, fdm2D* b, ghostcell* pgc)
               + p->dt*b->L(i,j);
 
     pgc->gcsl_start4(p,wrk1,12);
-    
+
     psfdf->forcing(p,b,pgc,p6dof,0,1.0,Prk1,Qrk1,wrk1,etark1,b->hp,0);
 
     // press
@@ -202,7 +202,7 @@ void sflow_momentum_RK3::start(lexer *p, fdm2D* b, ghostcell* pgc)
     pflow->waterlevel2D(p,b,pgc,etark2);
     pflow->eta_relax(p,pgc,etark2);
     pgc->gcsl_start4(p,etark2,gcval_eta);
-    
+
 
     // U
     starttime=pgc->timer();
@@ -256,7 +256,7 @@ void sflow_momentum_RK3::start(lexer *p, fdm2D* b, ghostcell* pgc)
               + 0.25*p->dt*b->L(i,j);
 
     pgc->gcsl_start4(p,wrk2,12);
-    
+
     psfdf->forcing(p,b,pgc,p6dof,1,0.25,Prk2,Qrk2,wrk2,etark2,b->hp,0);
 
     // press
@@ -344,7 +344,7 @@ void sflow_momentum_RK3::start(lexer *p, fdm2D* b, ghostcell* pgc)
               + (2.0/3.0)*p->dt*b->L(i,j);
 
     pgc->gcsl_start4(p,b->ws,12);
-    
+
     psfdf->forcing(p,b,pgc,p6dof,2,2.0/3.0,b->P,b->Q,b->ws,b->eta,b->hp,1);
 
     //--------------------------------------------------------
@@ -366,7 +366,7 @@ void sflow_momentum_RK3::start(lexer *p, fdm2D* b, ghostcell* pgc)
 
     SLICELOOP4
     b->eta_n(i,j) = b->eta(i,j);
-    
+
     pgc->gcsl_start4(p,b->eta_n,gcval_eta);
 }
 

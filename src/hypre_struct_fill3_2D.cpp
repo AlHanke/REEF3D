@@ -29,16 +29,16 @@ Author: Hans Bihs
 
 void hypre_struct::fill_matrix3_2Dvert(lexer* p,fdm* a, ghostcell* pgc, field &f)
 {
-    
+
     count=0;
     WFLUIDLOOP
     {
     CVAL4[IJK]=count;
     ++count;
     }
-    
+
     nentries=5;
-    
+
     for (j = 0; j < nentries; j++)
     stencil_indices[j] = j;
 
@@ -48,45 +48,45 @@ void hypre_struct::fill_matrix3_2Dvert(lexer* p,fdm* a, ghostcell* pgc, field &f
         WCHECK
         {
         n=CVAL4[IJK];
-        
+
         values[count]=a->M.p[n];
         ++count;
-        
+
         values[count]=a->M.s[n];
         ++count;
-        
+
         values[count]=a->M.n[n];
         ++count;
-        
+
         values[count]=a->M.b[n];
         ++count;
-        
+
         values[count]=a->M.t[n];
         ++count;
         }
-        
+
         WSCHECK
         {
         values[count]=1.0;
         ++count;
-        
-        values[count]=0.0;
-        ++count;
-        
+
         values[count]=0.0;
         ++count;
 
         values[count]=0.0;
         ++count;
-        
+
+        values[count]=0.0;
+        ++count;
+
         values[count]=0.0;
         ++count;
         }
     }
-    
+
     HYPRE_StructMatrixSetBoxValues(A, ilower, iupper, nentries, stencil_indices, values);
     HYPRE_StructMatrixAssemble(A);
-    
+
     
     // vec
     count=0;
@@ -94,16 +94,16 @@ void hypre_struct::fill_matrix3_2Dvert(lexer* p,fdm* a, ghostcell* pgc, field &f
     {
         WCHECK
         values[count] = f(i,j,k);
-        
+
         WSCHECK
         values[count] = 0.0;
-    
+
     ++count;
     }
 
     HYPRE_StructVectorSetBoxValues(x, ilower, iupper, values);
     HYPRE_StructVectorAssemble(x);
-    
+
     
     count=0;
     KJILOOP
@@ -113,13 +113,13 @@ void hypre_struct::fill_matrix3_2Dvert(lexer* p,fdm* a, ghostcell* pgc, field &f
         n=CVAL4[IJK];
         values[count] = a->rhsvec.V[n];
         }
-        
+
         WSCHECK
         values[count] = 0.0;
 
     ++count;
     }
-    
+
     HYPRE_StructVectorSetBoxValues(b, ilower, iupper, values);
     HYPRE_StructVectorAssemble(b);
 }

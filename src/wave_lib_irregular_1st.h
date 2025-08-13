@@ -36,47 +36,47 @@ class wave_lib_irregular_1st : public wave_lib, public wave_lib_parameters, publ
 public:
     wave_lib_irregular_1st(lexer*, ghostcell*);
     virtual ~wave_lib_irregular_1st();
-    
+
     double wave_horzvel(lexer*,double,double,double);
-    
+
     virtual double wave_u(lexer*,double,double,double);
     virtual double wave_u_space_sin(lexer*,double,double,double,int);
     virtual double wave_u_space_cos(lexer*,double,double,double,int);
     virtual double wave_u_time_sin(lexer*,int);
     virtual double wave_u_time_cos(lexer*,int);
-    
+
     virtual double wave_v(lexer*,double,double,double);
     virtual double wave_v_space_sin(lexer*,double,double,double,int);
     virtual double wave_v_space_cos(lexer*,double,double,double,int);
     virtual double wave_v_time_sin(lexer*,int);
     virtual double wave_v_time_cos(lexer*,int);
-    
+
     virtual double wave_w(lexer*,double,double,double);
     virtual double wave_w_space_sin(lexer*,double,double,double,int);
     virtual double wave_w_space_cos(lexer*,double,double,double,int);
     virtual double wave_w_time_sin(lexer*,int);
     virtual double wave_w_time_cos(lexer*,int);
-    
+
     virtual double wave_eta(lexer*,double,double);
     virtual double wave_eta_space_sin(lexer*,double,double,int);
     virtual double wave_eta_space_cos(lexer*,double,double,int);
     virtual double wave_eta_time_sin(lexer*,int);
     virtual double wave_eta_time_cos(lexer*,int);
-    
+
     virtual double wave_fi(lexer*,double,double,double);
     virtual double wave_fi_space_sin(lexer*,double,double,double,int);
     virtual double wave_fi_space_cos(lexer*,double,double,double,int);
     virtual double wave_fi_time_sin(lexer*,int);
     virtual double wave_fi_time_cos(lexer*,int);
-    
+
     
     virtual void parameters(lexer*,ghostcell*);
     virtual void wave_prestep(lexer*,ghostcell*);
-    
+
 private:
     double singamma,cosgamma;
     double T,vel,eta,fi;
-    
+
     double *sinhkd;
     double **fixy,*fin;
 };

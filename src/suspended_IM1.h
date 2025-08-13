@@ -37,7 +37,7 @@ public:
     virtual ~suspended_IM1();
     virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, sediment_fdm*);
     virtual void ctimesave(lexer*, fdm*);
-    
+
     void suspsource(lexer*,fdm*,field&,sediment_fdm*);
     void bcsusp_start(lexer*,fdm*,ghostcell*,sediment_fdm*,field&);
     void sedfsf(lexer*,fdm*,field&);
@@ -53,7 +53,7 @@ private:
     double starttime;
     void fill_wvel(lexer*,fdm*,ghostcell*,sediment_fdm*);
     field3 wvel;
-    
+
     int count,q;
 
 };

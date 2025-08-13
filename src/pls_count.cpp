@@ -32,10 +32,10 @@ void particle_pls::parcount(lexer* p, fdm* a, ghostcell* pgc)
         posnum(i,j,k)=0.0;
         negnum(i,j,k)=0.0;
     }
-    
+
     pgc->start4(p,posnum,1);
     pgc->start4(p,negnum,1);
-        
+
     // POS
     for(n=0;n<posactive;++n)
     if(posflag[n]>0)

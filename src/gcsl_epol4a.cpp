@@ -40,5 +40,5 @@ void ghostcell::gcsldistro4a(lexer *p, slice &f, int ii, int jj, int nn, double 
 
     if(bc_label==4)
     gcsl_neumann(f,gcv,bc,cs);
-    
+
 }

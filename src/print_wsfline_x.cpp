@@ -36,12 +36,12 @@ print_wsfline_x::print_wsfline_x(lexer *p, fdm* a, ghostcell *pgc)
 
     maxknox=pgc->globalimax(p->knox);
     sumknox=pgc->globalisum(maxknox);
-    
+
     p->Darray(xloc,p->P52+1,maxknox);
     p->Darray(wsf,p->P52+1,maxknox);
     p->Iarray(flag,p->P52+1,maxknox);
     p->Iarray(wsfpoints,p->P52+1);
-    
+
 
     p->Darray(xloc_all,p->P52+1,sumknox);
     p->Darray(wsf_all,p->P52+1,sumknox);
@@ -65,7 +65,7 @@ print_wsfline_x::print_wsfline_x(lexer *p, fdm* a, ghostcell *pgc)
     }
 
     ini_location(p,a,pgc);
-    
+
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_CFD_WSFLINE",0777);
@@ -78,18 +78,18 @@ print_wsfline_x::~print_wsfline_x()
 
 void print_wsfline_x::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 {
-    
+
     char name[250];
     double zval=0.0;
     int num,check;
-    
+
     num = p->count;
 
     if(p->mpirank==0)
     {
         // open file
         sprintf(name,"./REEF3D_CFD_WSFLINE/REEF3D-CFD-wsfline-%08i.dat",num);
-        
+
         wsfout.open(name);
 
         wsfout<<"simtime:  "<<p->simtime<<endl;
@@ -103,7 +103,7 @@ void print_wsfline_x::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 
         wsfout<<endl<<endl;
 
-        
+
         for(q=0;q<p->P52;++q)
         {
         wsfout<<"X "<<q+1;
@@ -138,17 +138,17 @@ void print_wsfline_x::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
                 {
                 wsf[q][i]=MAX(wsf[q][i],-(a->phi(i,j,k)*p->DZP[KP])/(a->phi(i,j,k+1)-a->phi(i,j,k)) + p->pos_z());
                 xloc[q][i]=p->pos_x();
-                
+
                 
                 }
             }
         }
     }
-    
+
     
     for(q=0;q<p->P52;++q)
     wsfpoints[q]=sumknox;
-    
+
     // gather
     for(q=0;q<p->P52;++q)
     {
@@ -156,28 +156,28 @@ void print_wsfline_x::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
     pgc->gather_double(wsf[q],maxknox,wsf_all[q],maxknox);
     pgc->gather_int(flag[q],maxknox,flag_all[q],maxknox);
 
-        
+
         if(p->mpirank==0)
         {
         sort(xloc_all[q], wsf_all[q], flag_all[q], 0, wsfpoints[q]-1);
         remove_multientry(p,xloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]);
         }
-        
+
     }
-    
+
     // write to file
     if(p->mpirank==0)
     {
         for(n=0;n<sumknox;++n)
         rowflag[n]=0;
-        
+
         for(n=0;n<sumknox;++n)
         {
             check=0;
             for(q=0;q<p->P52;++q)
             if(flag_all[q][n]>0 && xloc_all[q][n]<1.0e20)
             check=1;
-            
+
             if(check==1)
             rowflag[n]=1;
         }
@@ -191,23 +191,23 @@ void print_wsfline_x::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
                 {
                 wsfout<<setprecision(5)<<xloc_all[q][n]<<" \t ";
                 wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
-                
+
                 
                     if(p->P53==1)
                     wsfout<<pflow->wave_fsf(p,pgc,xloc_all[q][n])<<" \t  ";
-                    
+
                 check=1;
                 }
-                
+
                 if((flag_all[q][n]<0 || xloc_all[q][n]>=1.0e20) && rowflag[n]==1)
                 {
                     wsfout<<setprecision(5)<<" \t ";
                     wsfout<<setprecision(5)<<" \t ";
-                    
+
                 }
             }
 
-            
+
             if(check==1)
             wsfout<<endl;
         }
@@ -227,7 +227,7 @@ void print_wsfline_x::ini_location(lexer *p, fdm *a, ghostcell *pgc)
         {
         if(p->j_dir==0)
         jloc[q]=0;
-        
+
         if(p->j_dir==1)
         jloc[q]=p->posc_j(p->P52_y[q]);
 
@@ -266,7 +266,7 @@ void print_wsfline_x::ini_location(lexer *p, fdm *a, ghostcell *pgc)
 
           b[l] = b[r];
           b[r] = swapd;
-          
+
           c[l] = c[r];
           c[r] = swapc;
 
@@ -289,7 +289,7 @@ void print_wsfline_x::remove_multientry(lexer *p, double* b, double* c, int *d, 
 
     double *f,*g;
     int *h;
-    
+
     p->Darray(f,num);
     p->Darray(g,num);
     p->Iarray(h,num);
@@ -321,11 +321,11 @@ void print_wsfline_x::remove_multientry(lexer *p, double* b, double* c, int *d, 
     d[n]=h[n];
     }
 
-    
+
     p->del_Darray(f,num);
     p->del_Darray(g,num);
     p->del_Iarray(h,num);
-    
+
     num=count;
 
 }

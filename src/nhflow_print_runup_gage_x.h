@@ -58,7 +58,7 @@ private:
     char name[250];
 
     double xcoor;
-    
+
 
 
 };

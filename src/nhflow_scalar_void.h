@@ -38,7 +38,7 @@ public:
 
     virtual void start(lexer*,fdm_nhf*,double*,int,double*,double*,double*);
 
-    
+
 };
 
 #endif

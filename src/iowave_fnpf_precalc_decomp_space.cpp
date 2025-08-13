@@ -38,7 +38,7 @@ void iowave::wavegen_precalc_decomp_space_fnpf(lexer *p, ghostcell *pgc)
         yg = ygen(p);
         dg = distgen(p);
         db = distbeach(p);
-        
+
         // Wave Generation
         if(p->B98==2 && h_switch==1)
         {
@@ -55,20 +55,20 @@ void iowave::wavegen_precalc_decomp_space_fnpf(lexer *p, ghostcell *pgc)
         }
     }
     pgc->gcsl_start4(p,eta,50);
-    
+
 
     //FI
     count=0;
     FLOOP
     {
-        
+
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
         db = distbeach(p);
-        
+
         z=p->ZSN[FIJK]-p->phimean;
-        
+
         // Wave Generation
         if(p->B98==2)
         {
@@ -84,9 +84,9 @@ void iowave::wavegen_precalc_decomp_space_fnpf(lexer *p, ghostcell *pgc)
             }
         }
     }
+
     
-    
-    
+
     // Fifsf
     count=0;
     SLICELOOP4
@@ -95,9 +95,9 @@ void iowave::wavegen_precalc_decomp_space_fnpf(lexer *p, ghostcell *pgc)
         yg = ygen(p);
         dg = distgen(p);
         db = distbeach(p);
-        
+
         z = eta(i,j);
-        
+
         // Wave Generation
         if(p->B98==2 && h_switch==1)
         {

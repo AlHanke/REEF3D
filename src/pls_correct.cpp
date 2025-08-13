@@ -30,7 +30,7 @@ Author: Hans Bihs
 void particle_pls::correct(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 {
     corrected=0;
-    
+
     inicorr(p,a,pgc);
 
     for(n=0;n<posactive;++n)
@@ -75,16 +75,16 @@ void particle_pls::correct(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
 void particle_pls::parcorr(lexer *p,fdm* a,ioflow *pflow,double sign,double* f,int i1,int j1,int k1,int i0, int j0, int k0)
 {
     int check=0;
-    
+
     i=i1;
     j=j1;
     k=k1;
-    
+
     check=boundcheck(p,i,j,k,1);
-    
+
     if(check==1)
     check=pflow->iozonecheck(p,a);
-    
+
     if(check==1)
     {
     xc=(double(i) + 0.5)*dx;
@@ -96,7 +96,7 @@ void particle_pls::parcorr(lexer *p,fdm* a,ioflow *pflow,double sign,double* f,i
     zcell=(double(k0) + 0.5)*dx;
 
     normreg(a,i,j,k);
-    
+
     length = sqrt(pow(f[0]-xc,2.0) + pow(f[1]-yc,2.0) + pow(f[2]-zc,2.0));
 
     gamma=1.0-(f[4]/(length>1.0e-15?length:1.0e20));
@@ -135,22 +135,22 @@ void particle_pls::parcorr(lexer *p,fdm* a,ioflow *pflow,double sign,double* f,i
 
 void particle_pls::finalcorr(lexer* p, fdm* a, ghostcell* pgc)
 {
-        
+
     LOOP
     {
         if(fabs(phimax(i,j,k))<fabs(phimin(i,j,k)))
         {
         a->phi(i,j,k)=phimax(i,j,k);
-        
+
         corrected++;
         }
 
         // ---
-        
+
         if(fabs(phimax(i,j,k))>fabs(phimin(i,j,k)))
         {
         a->phi(i,j,k)=phimin(i,j,k);
-        
+
         corrected++;
         }
     }
@@ -164,7 +164,7 @@ void particle_pls::inicorr(lexer* p, fdm* a, ghostcell* pgc)
     phimin(i,j,k)=a->phi(i,j,k);
     phiold(i,j,k)=a->phi(i,j,k);
     }
-    
+
     pgc->start4(p,phimax,1);
     pgc->start4(p,phimin,1);
     pgc->start4(p,phiold,1);

@@ -114,7 +114,7 @@ void driver::solverlog(lexer* p)
 
      solvlogout<<p->kiniter<<" \t "<<setprecision(4)<<p->kintime<<" \t ";
      solvlogout<<p->epsiter<<" \t "<<setprecision(4)<<p->epstime<<" \t ";
-     
+
      solvlogout<<p->lsmiter<<" \t "<<setprecision(4)<<p->lsmtime<<" \t ";
      solvlogout<<p->F44<<" \t "<<setprecision(4)<<p->reinitime<<" \t "<<endl;
      }

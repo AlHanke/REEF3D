@@ -27,16 +27,16 @@ Author: Hans Bihs
 void grid::fillgcb2(lexer *p)
 {
     int q,n;
-    
+
     p->Iarray(p->fgc,imax*jmax*kmax,6);
-    
+
 // ----
 
     if(p->gcb2_count!=p->gcb4_count)
     {
     p->Iresize(p->gcb2,p->gcb2_count, p->gcb4_count, 6, 6);
     p->Dresize(p->gcd2,p->gcb2_count, p->gcb4_count);
-    
+
     p->gcb2_count=p->gcb4_count;
     }
 
@@ -57,15 +57,15 @@ void grid::fillgcb2(lexer *p)
         i=p->gcb2[q][0];
         j=p->gcb2[q][1];
         k=p->gcb2[q][2];
-        
+
         if(p->gcb2[q][3]==2 || p->gcb2[q][3]==3)
         p->gcd2[q] += 0.5*p->DYP[JP];
 
         p->fgc[IJK][p->gcb2[q][3]-1]=1;
     }
+
     
-    
-    
+
     QGC2LOOP
     {
         i=p->gcb2[q][0];
@@ -75,7 +75,7 @@ void grid::fillgcb2(lexer *p)
             if(p->gcb2[q][3]==2 && (p->periodic2!=1 || j+p->origin_j<p->gknoy-1))
             p->gcb2[q][1]-=1;
     }
-    
+
     QGC2LOOP
     {
         i=p->gcb2[q][0];

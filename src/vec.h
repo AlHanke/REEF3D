@@ -33,9 +33,9 @@ public:
 
     vec(lexer*);
     virtual ~vec();
-    
+
     void resize(lexer*,int,int);
-    
+
     double *V;
 
 };

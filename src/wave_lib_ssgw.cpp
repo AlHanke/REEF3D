@@ -29,7 +29,7 @@ wave_lib_ssgw::wave_lib_ssgw(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
 {
     N   = p->B170;  // default = 1024
     tol = 1e-14;
-    
+
     if (p->B91==1)
     {
         // Wave length known
@@ -45,18 +45,18 @@ wave_lib_ssgw::wave_lib_ssgw(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
         wk = 2.0*PI/(wT*sqrt(9.81*wdt));
         double delta_omega = 100000;
         int count = 0;
-            
+
         allocated = false;
         allocated = resizing();
         setWave(wk, wdt, wH);
         getPhysicsParameters();
         surfaceCalculated = computeSurfaceVariables();
-        
+
         while (fabs(delta_omega/ww) > 1e-7 && count < 30)
         {
             delta_omega = ww - ParameterValue.phaseVelocity*wk;
             wk += delta_omega/ParameterValue.groupVelocity;
-         
+
             if (wk <= 0)
             {
                 if (p->mpirank==0)
@@ -110,7 +110,7 @@ wave_lib_ssgw::wave_lib_ssgw(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
         cout<<"wk: "<<wk<<" ww: "<<ww<<" wf: "<<wf<<" wT: "<<wT<<" wL: "<<wL<<" wdt: "<<wdt<<" kd: "<<wdt*wk<<endl;
         writeResult(".");
     }
-    
+
     singamma = sin((p->B105_1)*(PI/180.0));
     cosgamma = cos((p->B105_1)*(PI/180.0));
 }
@@ -124,7 +124,7 @@ double wave_lib_ssgw::wave_eta(lexer *p, double x, double y)
     // Transform x location to current position xcurr at time instance p->wavetime
     xcurr = fabs(modulo(x - ParameterValue.phaseVelocity*p->wavetime, wL));
     xcurr = xcurr>0.5*wL ? xcurr-wL : xcurr;
-   
+
     // Linear interpolation
     auto is = std::upper_bound(xs.begin(),xs.end(),xcurr);
     int index = std::distance(xs.begin(), is)-1;

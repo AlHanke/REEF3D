@@ -38,10 +38,10 @@ void net_interface::netForces_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, doubl
     {
         pnet[n]->start_nhflow(p, d, pgc, alpha, quatRotMat);
         dlm_nhflow(p, d, pgc, n);
-    
+
         // Forces on rigid body
         pnet[n]->netForces(p,Xne[n],Yne[n],Zne[n],Kne[n],Mne[n],Nne[n]);
-        
+
         // Distribute forces and moments to all processors
         pgc->bcast_double(&Xne[n],1);
         pgc->bcast_double(&Yne[n],1);

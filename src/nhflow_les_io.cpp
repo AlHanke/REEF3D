@@ -36,7 +36,7 @@ nhflow_les_io::~nhflow_les_io()
 
 void nhflow_les_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, ofstream &result)
 {
-    
+
     // eddyv
     iin=4*(p->pointnum);
     result.write((char*)&iin, sizeof (int));
@@ -50,10 +50,10 @@ void nhflow_les_io::print_3D(lexer* p, fdm_nhf *d, ghostcell *pgc, ofstream &res
     ffn=float(0.5*(d->EV[IJK]+d->EV[IJKp1]));
     j=jj;
     }
-    
+
     if(p->j_dir==1)
     ffn=float(0.25*(d->EV[IJK]+d->EV[IJKp1]+d->EV[IJp1K]+d->EV[IJp1Kp1]));
-        
+
         
     result.write((char*)&ffn, sizeof (float));
     }

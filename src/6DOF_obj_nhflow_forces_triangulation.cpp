@@ -29,22 +29,22 @@ void sixdof_obj::triangulation(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     int negcount, poscount;
     double eps;
-    
+
     NDBASELOOP
     fsf[IJK] = 0.125*(d->FB[IJK] + d->FB[Ip1JK] + d->FB[IJp1K] + d->FB[Ip1Jp1K]
                     + d->FB[IJKp1] + d->FB[Ip1JKp1] + d->FB[IJp1Kp1] + d->FB[Ip1Jp1Kp1]);
-    
+
     NDBASELOOP
     vert[IJK]=-1;
 
     NDBASELOOP
     nflag[IJK]=0;
-    
+
 
     BASELOOP
     {
         eps = interfac*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]*d->WL(i,j));
-        
+
         if(fabs(d->FB[IJK])<eps)
         {
             check=1;
@@ -52,7 +52,7 @@ void sixdof_obj::triangulation(lexer *p, fdm_nhf *d, ghostcell *pgc)
             if(fsf[IJK]<zero && fsf[Im1JK]<zero && fsf[Im1Jm1K]<zero && fsf[IJm1K]<zero &&
                fsf[IJKm1]<zero && fsf[Im1JKm1]<zero && fsf[Im1Jm1Km1]<zero && fsf[IJm1Km1]<zero)
             check=0;
-            
+
             if(fsf[IJK]>zero && fsf[Im1JK]>zero && fsf[Im1Jm1K]>zero && fsf[IJm1K]>zero &&
                fsf[IJKm1]>zero && fsf[Im1JKm1]>zero && fsf[Im1Jm1Km1]>zero && fsf[IJm1Km1]>zero)
             check=0;
@@ -100,7 +100,7 @@ void sixdof_obj::triangulation(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
     ++countM;
     }
-    
+
     // p. 725, 956
     count=0;
     BASELOOP
@@ -155,6 +155,6 @@ void sixdof_obj::triangulation(lexer *p, fdm_nhf *d, ghostcell *pgc)
     tri[count][3] = vert[Im1JK];
     ++count;
     }
-    
+
     numtri=count;
 }

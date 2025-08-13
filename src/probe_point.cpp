@@ -34,13 +34,13 @@ probe_point::probe_point(lexer *p, fdm* a, ghostcell *pgc) : probenum(p->P61)
     p->Iarray(jloc,probenum);
     p->Iarray(kloc,probenum);
     p->Iarray(flag,probenum);
-    
+
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_CFD_ProbePoint",0777);
-    
+
     pout = new ofstream[probenum];
-    
+
     if(p->mpirank==0 && probenum>0)
     {
         cout<<"probepoint_num: "<<probenum<<endl;
@@ -48,23 +48,23 @@ probe_point::probe_point(lexer *p, fdm* a, ghostcell *pgc) : probenum(p->P61)
         for(n=0;n<probenum;++n)
         {
         sprintf(name,"./REEF3D_CFD_ProbePoint/REEF3D-CFD-Probe-Point-%i.dat",n+1);
-        
+
         pout[n].open(name);
-        
+
         //cout<<pout[n].is_open()<<" "<<n+1<<endl;
 
         pout[n]<<"Point Probe ID:  "<<n<<endl<<endl;
         pout[n]<<"x_coord     y_coord     z_coord"<<endl;
-        
+
         pout[n]<<n+1<<"\t "<<p->P61_x[n]<<"\t "<<p->P61_y[n]<<"\t "<<p->P61_z[n]<<endl;
 
         pout[n]<<endl<<endl;
-        
+
         pout[n]<<"t \t U \t V \t W \t P \t Kin \t Eps/Omega \t Eddyv"<<endl;
-        
+
         }
     }
-    
+
     ini_location(p,a,pgc);
 }
 
@@ -77,17 +77,17 @@ probe_point::~probe_point()
 void probe_point::start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
 {
     double xp,yp,zp;
-    
+
     for(n=0;n<probenum;++n)
     {
     uval=vval=wval=pval=kval=eval=edval=-1.0e20;
-    
+
         if(flag[n]>0)
         {
         xp=p->P61_x[n];
         yp=p->P61_y[n];
         zp=p->P61_z[n];
-        
+
         uval = p->ccipol1(a->u, xp, yp, zp);
         vval = p->ccipol2(a->v, xp, yp, zp);
         wval = p->ccipol3(a->w, xp, yp, zp);
@@ -96,7 +96,7 @@ void probe_point::start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
         eval = pturb->ccipol_epsval(p, pgc, xp, yp, zp);
         edval = p->ccipol4a(a->eddyv, xp, yp, zp);
         }
-    
+
     uval=pgc->globalmax(uval);
     vval=pgc->globalmax(vval);
     wval=pgc->globalmax(wval);
@@ -105,7 +105,7 @@ void probe_point::start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
     eval=pgc->globalmax(eval);
     edval=pgc->globalmax(edval);
 
-    
+
     if(p->mpirank==0)
     pout[n]<<setprecision(9)<<p->simtime<<" \t "<<uval<<" \t "<<vval<<" \t "<<wval<<" \t "<<pval<<" \t "<<kval<<" \t "<<eval<<" \t "<<edval<<endl;
     }
@@ -122,15 +122,15 @@ void probe_point::ini_location(lexer *p, fdm *a, ghostcell *pgc)
     for(n=0;n<probenum;++n)
     {
     check=0;
-    
+
     iloc[n]=p->posc_i(p->P61_x[n]);
-    
+
     if(p->j_dir==0)
     jloc[n]=0;
-    
+
     if(p->j_dir==1)
     jloc[n]=p->posc_j(p->P61_y[n]);
-    
+
     kloc[n]=p->posc_k(p->P61_z[n]);
 
     check=boundcheck(p,iloc[n],jloc[n],kloc[n],0);

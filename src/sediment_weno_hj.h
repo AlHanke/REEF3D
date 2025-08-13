@@ -40,7 +40,7 @@ public:
 
 private:
     double **ckz;
-    
+
     double ivel,jvel;
 };
 

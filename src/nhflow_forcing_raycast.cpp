@@ -30,20 +30,20 @@ void nhflow_forcing::ray_cast(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     zmin = 1.0e1;
     zmax = -1.0e8;
-    
+
     LOOP
     WETDRY
     {
     zmin = MIN(zmin, p->ZSP[IJK]);
     zmax = MAX(zmax, p->ZSP[IJK]);
     }
-    
+
     LOOP
     {
     IO[IJK]=1;
     d->SOLID[IJK]=1.0e8;
     }
-    
+
         
     for(int rayiter=0; rayiter<2; ++rayiter)
     {
@@ -56,9 +56,9 @@ void nhflow_forcing::ray_cast(lexer *p, fdm_nhf *d, ghostcell *pgc)
             {
             //pgc->gcparaxintV(p,IO,1);
             pgc->startintV(p,IO,1);
-   
+
             //ray_cast_direct(p,d,pgc,tstart[qn],tend[qn]);
-            
+
             ray_cast_x(p,d,pgc,tstart[qn],tend[qn]);
             if(p->j_dir==1)
             ray_cast_y(p,d,pgc,tstart[qn],tend[qn]);
@@ -66,32 +66,32 @@ void nhflow_forcing::ray_cast(lexer *p, fdm_nhf *d, ghostcell *pgc)
             }
         }
     }
-    
+
     LOOP
     WETDRY
     {
         if(IO[IJK]==-1)
         d->SOLID[IJK]=-fabs(d->SOLID[IJK]);
-        
+
         
         if(IO[IJK]==1)
         d->SOLID[IJK]=fabs(d->SOLID[IJK]);
     }
-    
+
     LOOP
     WETDRY
     {
         if(d->SOLID[IJK]>100.0*p->DXM)
         d->SOLID[IJK]=100.0*p->DXM;
-        
+
         if(d->SOLID[IJK]<-100.0*p->DXM)
         d->SOLID[IJK]=-100.0*p->DXM;
     }
-    
+
     LOOP
     if(p->wet[IJ]==0)
     d->SOLID[IJK]=100.0*p->DXM;
-    
+
     
     pgc->start5V(p,d->SOLID,1);
 }

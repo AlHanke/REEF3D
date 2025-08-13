@@ -40,7 +40,7 @@ void reduction_parker::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double r=1.0;
     double r1,r2;
-    
+
     SLICELOOP4
     {
     alphaval = s->alpha(i,j);
@@ -52,13 +52,13 @@ void reduction_parker::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 
     mu = atan(1.0/phival);
     d = (4.0/3.0)*mu*0.85*0.74;
-    
+
     pval = (2.0/(1.0-d))*(d/sqrt(1.0 + tan(alphaval)*tan(alphaval) + tan(tetaval)*tan(tetaval)) + sin(tetaval)/mu);
 
     qval = ((1.0+d)/(1.0-d))*(1.0/(1.0 + tan(alphaval)*tan(alphaval) + tan(tetaval)*tan(tetaval)))*(-1.0 + ((tan(alphaval)*tan(alphaval) + tan(tetaval)*tan(tetaval))/mu));
 
     r1 = -0.5*pval - sqrt(pval*pval*0.25 - qval);
-    
+
     r = -0.5*pval + sqrt(pval*pval*0.25 - qval);
 
     // limiter
@@ -69,11 +69,11 @@ void reduction_parker::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
         r = cos(tetaval)*(1.0 - tan(tetaval/tanphi));
         r*= cos(alphaval)*(1.0 - pow(tan(alphaval),2.0)/pow(tanphi,2.0));
         }
-        
+
         if(p->S84==2)
         r = 0.1/(fabs(s->gamma(i,j)) + 0.0000001)+0.1;
     }
-    
+
     r=MAX(r,0.01);
     r=MIN(r,1.5);
 
@@ -82,7 +82,7 @@ void reduction_parker::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 
     if(p->pos_x()>p->S72)
     r=1.0;
-    
+
     s->reduce(i,j)=r;
     }
 }

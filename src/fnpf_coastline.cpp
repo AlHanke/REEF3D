@@ -44,10 +44,10 @@ void fnpf_coastline::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &coastli
         {
 
             coastline(i,j)=1.0;
-            
+
             if(p->wd - c->bed(i,j) < c->wd_criterion)
             coastline(i,j)=-1.0;
-   
+
         }
         reini(p,pgc,coastline);
     }

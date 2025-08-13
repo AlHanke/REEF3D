@@ -41,7 +41,7 @@ public:
     virtual void breaking(lexer*, fdm2D*, ghostcell*, slice&, slice&, double)=0;
     virtual void breaking_persist(lexer*, fdm2D*, ghostcell*, slice&, slice&, double)=0;
     virtual void wetdry(lexer*, fdm2D*, ghostcell*,slice&,slice&,slice&,slice&)=0;
-    
+
         
 
 };

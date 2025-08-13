@@ -41,45 +41,45 @@ void cfd_state::write_result(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb
 
     if(p->P15==2)
     num = printcount;
-    
+
     if(p->P40==1)
     num=0;
-    
+
     filename(p,a,pgc,num);
-     
+
     ofstream result;
     result.open(name, ios::binary);
-    
+
     iin=p->count;
     result.write((char*)&iin, sizeof (int));
-    
+
     iin=p->printcount;
     result.write((char*)&iin, sizeof (int));
-    
+
     ddn=p->simtime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     ddn=p->printtime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     ddn=p->sedprinttime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     ddn=p->fsfprinttime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     ddn=p->probeprinttime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     ddn=p->stateprinttime;
     result.write((char*)&ddn, sizeof (double));
-    
+
     ALOOP
     {
     ffn=a->topo(i,j,k);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     ULOOP
     {
     ffn=a->u(i,j,k);
@@ -91,37 +91,37 @@ void cfd_state::write_result(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb
     ffn=a->v(i,j,k);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     WLOOP
     {
     ffn=a->w(i,j,k);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     LOOP
     {
     ffn=a->press(i,j,k);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     LOOP
     {
     ffn=a->phi(i,j,k);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     LOOP
     {
     ffn=pturb->kinval(i,j,k);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     LOOP
     {
     ffn=pturb->epsval(i,j,k);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     LOOP
     {
     ffn=a->eddyv(i,j,k);
@@ -133,15 +133,15 @@ void cfd_state::write_result(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb
     ffn=psed->qbeval(i,j);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     LOOP
     {
     ffn=a->conc(i,j,k);
     result.write((char*)&ffn, sizeof (float));
     }
-    
+
     
     result.close();
-    
+
     ++printcount;
 }

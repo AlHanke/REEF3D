@@ -29,7 +29,7 @@ Author: Tobias Martin
 void net_barQuasiStatic::bag_ini(lexer *p, ghostcell *pgc)
 {
     // Input data
- 
+
     // Net wall in current
     L = 1.0;        // length of net in y-direction
     D = 1.0;        // length of net in x-direction b
@@ -49,7 +49,7 @@ void net_barQuasiStatic::bag_ini(lexer *p, ghostcell *pgc)
     phi = 0.0;
     theta = 0*PI/180;
     psi = 0.0;
-    
+
 /*
     // Net wall in waves
     L = 1.0;        // length of net in y-direction
@@ -72,7 +72,7 @@ void net_barQuasiStatic::bag_ini(lexer *p, ghostcell *pgc)
     psi = 0.0;
  */
 
- 
+
     if (2*nd*al < (D / sin(atan(D/L))))
     {
         cout<<"wrong input data"<<endl;
@@ -80,7 +80,7 @@ void net_barQuasiStatic::bag_ini(lexer *p, ghostcell *pgc)
 
 
     // Initialise values
-    
+
     beta = D/nd;                    // length of boundary bars in x-direction
     gamma = L/nl;                   // length of boundary bars in y-direction
     nf = 4*nd*nl;                   // number of bars
@@ -90,17 +90,17 @@ void net_barQuasiStatic::bag_ini(lexer *p, ghostcell *pgc)
 
     Fg = 9.81*(rho_c - p->W1)/rho_c*w;
 
-    
+
     // Initialise fields
     p->Darray(v_t, nf, 3);        // tangential direction
     p->Darray(v_n, nf, 3);        // normal direction
-    
+
     p->Darray(l0, nf);            // initial bar length
     p->Darray(l, nf);            // bar length
-    
+
     fi = MatrixXd::Zero(nf,3);  // inner bar matrix
     p->Darray(fb,nbK,3);         // boundary bar matrix
-    
+
     p->Iarray(Pb,nbK);           // boundary owner knots
     p->Iarray(Nb,nbK);           // boundary neighbour knots
     p->Iarray(Pi,nf);           // inner owner knots
@@ -109,7 +109,7 @@ void net_barQuasiStatic::bag_ini(lexer *p, ghostcell *pgc)
     p->Darray(K_, nK, 3);
 
     p->Iarray(nfK, niK, 4);        // Bars per Knot
- 
+
 
     // Get standard net coordinates in K
     genericNet();
@@ -128,18 +128,18 @@ void net_barQuasiStatic::bag_ini(lexer *p, ghostcell *pgc)
     {
         l0[i] = al;
         l[i] = al;
-        
+
         fi(i,0) = K[Ni[i]][0] - K[Pi[i]][0];
         fi(i,1) = K[Ni[i]][1] - K[Pi[i]][1];
         fi(i,2) = K[Ni[i]][2] - K[Pi[i]][2];
-        
+
         double mag = fi.row(i).norm();
-  
+
         fi(i,0) /= mag;
         fi(i,1) /= mag;
         fi(i,2) /= mag;
     }
- 
+
     // Initialise system of equations
     iniLSE(p);
 
@@ -147,13 +147,13 @@ void net_barQuasiStatic::bag_ini(lexer *p, ghostcell *pgc)
     if(p->mpirank==0)
     {
         char str[1000];
-        
+
         if(p->A10==5)
         sprintf(str,"./REEF3D_NHFLOW_6DOF_Net/REEF3D_6DOF_net_max_force_%i.dat",nNet);
-        
+
         if(p->A10==6)
         sprintf(str,"./REEF3D_CFD_6DOF_Net/REEF3D_6DOF_net_max_force_%i.dat",nNet);
-        
+
         eTout.open(str);
         eTout<<"time \t Tmax \t Fx \t Fy \t Fz"<<endl;
     }
@@ -172,14 +172,14 @@ void net_barQuasiStatic::ini_parallel(lexer *p, ghostcell *pgc)
     p->Darray(yend, p->mpi_size);
     p->Darray(zstart, p->mpi_size);
     p->Darray(zend, p->mpi_size);
-    
+
     xstart[p->mpirank] = p->originx;
     ystart[p->mpirank] = p->originy;
     zstart[p->mpirank] = p->originz;
     xend[p->mpirank] = p->endx;
     yend[p->mpirank] = p->endy;
     zend[p->mpirank] = p->endz;
-    
+
     for (int i = 0; i < p->mpi_size; i++)
     {
         MPI_Bcast(&xstart[i],1,MPI_DOUBLE,i,pgc->mpi_comm);
@@ -196,7 +196,7 @@ void net_barQuasiStatic::genericNet()
 {
     int p = 0;
     int index = 0;
-    
+
     for (int i = 0; i < 2*nl+1; i++)
     {
         if (i%2!=0)   // odd index
@@ -207,7 +207,7 @@ void net_barQuasiStatic::genericNet()
                 K[index][1] = p;
                 index++;
             }
-        
+
             p++;
         }
         else            // even index
@@ -218,7 +218,7 @@ void net_barQuasiStatic::genericNet()
                 K[index][1] = p;
                 index++;
             }
-        
+
             p++;
         }
     }
@@ -230,17 +230,17 @@ void net_barQuasiStatic::iniInnerKnots()
     double xCoord, yCoord;
     int k, Kij;
     bool newK;
-    
+
     for (int w = 0; w < nf; w++)
     {
         Pi[w] = -1;
         Ni[w] = -1;
     }
 
-    
+
     // vertical direction
     k = 0;
-    
+
     for (int i = 0; i < K[nK-1][0]; i++)
     {
         for (int j = 0; j < nK; j++)
@@ -248,7 +248,7 @@ void net_barQuasiStatic::iniInnerKnots()
             if (K[j][0]==i)
             {
                 newK = true;
-                
+
                 for (int w = 0; w < nf; w++)
                 {
                     if (Pi[w]==j || K[j][1]==K[nK-1][1])
@@ -256,17 +256,17 @@ void net_barQuasiStatic::iniInnerKnots()
                         newK = false;
                     }
                 }
-            
+
                 if (newK==true)
                 {
                     Pi[k] = j;
                      k++;
                 }
             }
-            
+
         }
     }
-    
+
    
     // horizontal direction
     k = 0;
@@ -278,7 +278,7 @@ void net_barQuasiStatic::iniInnerKnots()
             if (K[j][0]==i)
             {
                 newK = true;
-                
+
                 for (int w = 0; w < nf; w++)
                 {
                     if (Ni[w]==j || K[j][1]==0)
@@ -286,25 +286,25 @@ void net_barQuasiStatic::iniInnerKnots()
                         newK = false;
                     }
                 }
-            
+
                 if (newK==true)
                 {
                     Ni[k] = j;
                     k++;
                 }
             }
-            
+
         }
-        
+
     }
-    
+
     
     // diagonal direction
-    
+
     for (int i = 1; i <= K[nK-1][0]; i++)
     {
         xCoord = i;
-        
+
         for (int j = 0; j < K[nK-1][1]; j++)
         {
             yCoord = j;
@@ -320,7 +320,7 @@ void net_barQuasiStatic::iniInnerKnots()
             if (j%2==0)   // even index
             {
                 Pi[k] = Kij;
-                
+
                 for (int w = 0; w < nK; w++)
                 {
                     if ((K[w][0]==i-1) && (K[w][1]==j+1))
@@ -345,7 +345,7 @@ void net_barQuasiStatic::iniInnerKnots()
                         Ni[k] = w;
                     }
                 }
-                
+
                 k++;
             }
         }
@@ -356,39 +356,39 @@ void net_barQuasiStatic::iniInnerKnots()
 void net_barQuasiStatic::iniBoundaryKnots()
 {
    int index;
-    
+
     for (int i = 0; i < nd; i++)
     {
         fb[i][0] = beta;
         fb[i][1] = 0.0;
         fb[i][2] = 0.0;
-        
+
         fb[i + nd + nl][0] = beta;
         fb[i + nd + nl][1] = 0.0;
         fb[i + nd + nl][2] = 0.0;
-        
+
         Pb[i] = i;
         Pb[i + nd + nl] = nK - i - 2;
-        
+
         Nb[i] = i + 1;
         Nb[i + nd + nl] = nK - i - 1;
     }
- 
+
     index = 0;
-    
+
     for (int i = nd ; i < nd + nl; i++)
     {
         fb[i][0] = 0.0;
         fb[i][1] = gamma;
         fb[i][2] = 0.0;
-        
+
         fb[i + nd + nl][0] = 0.0;
         fb[i + nd + nl][1] = gamma;
         fb[i + nd + nl][2] = 0.0;
-        
+
         Pb[i] = nd + index*(2*nd + 1);
         Pb[i + nd + nl] = nK - (nd + 1) - (index + 1)*(2*nd + 1);
-     
+
         Nb[i] = nd + (index + 1)*(2*nd + 1);
         Nb[i + nd + nl] = nK - (nd + 1) - index*(2*nd + 1);
 
@@ -403,7 +403,7 @@ void net_barQuasiStatic::stretch()
     for (int j = 0; j < nK; j++)
     {
         K[j][2] = 0.0;
-        
+
         if (j%2!=0)   // odd index
         {
             for (int k = 0; k < nK; k++)
@@ -427,7 +427,7 @@ void net_barQuasiStatic::stretch()
             }
         }
     }
-    
+
     // Shift and rotate K_
     for (int j = 0; j < nK; j++)
     {
@@ -452,16 +452,16 @@ void net_barQuasiStatic::iniLSE(lexer *p)
     int numk;
     double Fini;
     bool bk;
-    
+
  
     // Static force equilibria
     Fini = 1.0;
-    
+
     for (int i = 0; i < nK; i++)
     {
         numk = 0;
         bk = false;
-        
+
         for (int j = 0; j < 2*nd+2*nl; j++)
         {
             if (i==Pb[j] || i==Nb[j])
@@ -470,7 +470,7 @@ void net_barQuasiStatic::iniLSE(lexer *p)
                 break;
             }
         }
-        
+
         if (bk==false)
         {
             for (int j = 0; j < nf; j++)
@@ -478,25 +478,25 @@ void net_barQuasiStatic::iniLSE(lexer *p)
                 if (Pi[j]==i)
                 {
                     A(index,j) = Fini;
-        
+
                     nfK[index][numk] = j;
                     numk++;
                 }
                 else if (Ni[j]==i)
                 {
                     A(index,j) = -Fini;
-                    
+
                     nfK[index][numk] = j;
                     numk++;
                 }
             }
-            
+
             B(index,0) = 0.0;
             B(index,1) = 0.0;
             B(index,2) = 2.0*Fg*2*al;
-  
+
 //if (fabs(K[i][1]-origin_y) < 0.1 && fabs(K[i][2]-1.66) < 0.1) cout<<i<<endl; B[index][0] -= 0.1;
-      
+
             index++;
         }
     }
@@ -504,13 +504,13 @@ void net_barQuasiStatic::iniLSE(lexer *p)
 
     // Geometrical boundary equations
     double dotProd;
-    
+
     for (int i = 0; i < (2*nd+2*nl); i++)
     {
         for (int j = 0; j < nf; j++)
         {
             dotProd = fi(j,0)*fb[i][0] + fi(j,1)*fb[i][1] + fi(j,2)*fb[i][2];
-            
+
             if (Pi[j]==Pb[i] && dotProd > 0)
             {
                 A(index,j) = al;
@@ -527,29 +527,29 @@ void net_barQuasiStatic::iniLSE(lexer *p)
             {
                 A(index,j) = al;
             }
-  
+
         }
         B(index,0) = fb[i][0]*(cos(psi)*cos(theta)) + fb[i][1]*(cos(theta)*sin(psi)) - fb[i][2]*sin(theta);
         B(index,1) = fb[i][0]*(cos(psi)*sin(phi)*sin(theta)-cos(phi)*sin(psi)) + fb[i][1]*(cos(phi)*cos(psi)+sin(phi)*sin(psi)*sin(theta)) + fb[i][2]*(cos(theta)*sin(phi));
         B(index,2) = fb[i][0]*(sin(phi)*sin(psi)+cos(phi)*cos(psi)*sin(theta)) + fb[i][1]*(cos(phi)*sin(psi)*sin(theta)-cos(psi)*sin(phi)) + fb[i][2]*(cos(phi)*cos(theta));
-        
+
         Bh.row(index) = B.row(index);
      /*   Bh(index,0) = B(index,0);
         Bh(index,1) = B(index,1);
         Bh(index,2) = B(index,2);*/
-        
+
         index++;
     }
 
 
     // Geometrical mesh equations
-   
+
     int *knotID;
     p->Iarray(knotID,5);
-    
+
     int currRow = 0;
     int leftK = nd + 1;
-  
+
     while (index < nf)
     {
         if (currRow%2==0)   // even index
@@ -561,7 +561,7 @@ void net_barQuasiStatic::iniLSE(lexer *p)
                     knotID[0] = leftK; knotID[1] = leftK + nd + 1;
                     knotID[2] = leftK + 1; knotID[3] = leftK - nd;
                      knotID[4] = leftK;
-              
+
                     for (int j = 0; j < nf; j++)
                     {
                         for (int k = 0; k < 4; k++)
@@ -577,7 +577,7 @@ void net_barQuasiStatic::iniLSE(lexer *p)
                         }
                     }
                     leftK++;
-                    
+
                     index++;
                 }
             }
@@ -593,7 +593,7 @@ void net_barQuasiStatic::iniLSE(lexer *p)
                     knotID[0] = leftK; knotID[1] = leftK + nd + 1;
                     knotID[2] = leftK + 1; knotID[3] = leftK - nd;
                     knotID[4] = leftK;
-                    
+
                     for (int j = 0; j < nf; j++)
                     {
                         for (int k = 0; k < 4; k++)
@@ -609,7 +609,7 @@ void net_barQuasiStatic::iniLSE(lexer *p)
                         }
                     }
                     leftK++;
-                    
+
                     index++;
                 }
             }
