@@ -47,8 +47,8 @@ void iowave::fnpf_precalc_relax_ini(lexer *p, ghostcell *pgc)
     // FI ------------------------------------------------
     FLOOP
     {
-        dg = distgen(p); 
-        db = distbeach(p); 
+        dg = distgen(p);
+        db = distbeach(p);
 
         // Wave Generation
         if(p->B98==2)
@@ -64,12 +64,12 @@ void iowave::fnpf_precalc_relax_ini(lexer *p, ghostcell *pgc)
             if(db<1.0e20)
             ++dbcount;
         }
-    }    
+    }
 
 // ETA ------------------------------------------------
     SLICEBASELOOP
     {
-        dg = distgen(p); 
+        dg = distgen(p);
 
         // Wave Generation
         if(p->B98==2)
@@ -79,7 +79,7 @@ void iowave::fnpf_precalc_relax_ini(lexer *p, ghostcell *pgc)
             ++ept_count;
 
         }
-    }    
+    }
     
     // precalc array alloc
     p->Darray(Fival,ppt_count);
@@ -90,7 +90,7 @@ void iowave::fnpf_precalc_relax_ini(lexer *p, ghostcell *pgc)
     p->Darray(Fifsfval1,ept_count);
     
     
-    if(p->B89==1) 
+    if(p->B89==1)
     {
     p->Darray(etaval_S_sin,ept_count,wave_comp);
     p->Darray(Fival_S_sin,ppt_count,wave_comp);
@@ -116,7 +116,7 @@ void iowave::fnpf_precalc_relax_ini(lexer *p, ghostcell *pgc)
 }
 
 void iowave::fnpf_precalc_dirichlet_ini(lexer *p, ghostcell *pgc)
-{    
+{
     int dbcount=0;
     
     upt_count=vpt_count=wpt_count=ppt_count=ept_count=dbcount=0;
@@ -125,14 +125,14 @@ void iowave::fnpf_precalc_dirichlet_ini(lexer *p, ghostcell *pgc)
     // FI ------------------------------------------------
     FLOOP
     {
-        db = distbeach(p); 
+        db = distbeach(p);
         
         if(p->B99==1||p->B99==2)
         {
             if(db<1.0e20)
             ++dbcount;
         }
-    }    
+    }
     
     for(n=0;n<p->gcslin_count;n++)
     {
@@ -163,7 +163,7 @@ void iowave::fnpf_precalc_dirichlet_ini(lexer *p, ghostcell *pgc)
     
     p->Darray(rb3val,dbcount);
     
-    if(p->B89==1) 
+    if(p->B89==1)
     {
     p->Darray(etaval_S_sin,ept_count,wave_comp);
     p->Darray(Fival_S_sin,ppt_count,wave_comp);

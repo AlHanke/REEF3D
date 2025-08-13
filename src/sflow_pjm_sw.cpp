@@ -22,7 +22,7 @@ Author: Hans Bihs
 
 #include"sflow_pjm_sw.h"
 #include"lexer.h"
-#include"fdm2D.h" 
+#include"fdm2D.h"
 #include"ghostcell.h"
 #include"poisson.h"
 #include"solver2D.h"
@@ -51,7 +51,7 @@ sflow_pjm_sw::sflow_pjm_sw(lexer* p, fdm2D *b, patchBC_interface *ppBC) : wb(p),
 {
     pBC = ppBC;
     
-    gcval_press=40;  
+    gcval_press=40;
 
     gcval_u=10;
     gcval_v=11;
@@ -109,7 +109,7 @@ void sflow_pjm_sw::start(lexer *p, fdm2D *b, ghostcell *pgc, solver2D *psolv, io
 }
 
 void sflow_pjm_sw::ucorr(lexer* p, fdm2D* b, slice& P, slice &eta, double alpha)
-{    
+{
     SLICELOOP1
     if(b->breaking(i,j)==0 && b->breaking(i+1,j)==0)
     P(i,j) -= alpha*p->dt*(((b->press(i+1,j)-b->press(i,j))/(2.0*p->DXM)));
@@ -122,7 +122,7 @@ void sflow_pjm_sw::ucorr(lexer* p, fdm2D* b, slice& P, slice &eta, double alpha)
 }
 
 void sflow_pjm_sw::vcorr(lexer* p, fdm2D* b, slice& Q, slice &eta, double alpha)
-{    
+{
     SLICELOOP2
     if(b->breaking(i,j)==0 && b->breaking(i,j+1)==0)
     Q(i,j) -= alpha*p->dt*(((b->press(i,j+1)-b->press(i,j))/(2.0*p->DXM)));
@@ -134,14 +134,14 @@ void sflow_pjm_sw::vcorr(lexer* p, fdm2D* b, slice& Q, slice &eta, double alpha)
 }
 
 void sflow_pjm_sw::wcorr(lexer* p, fdm2D* b,double alpha, slice &P, slice &Q, slice &ws)
-{        
+{
     SLICELOOP4
     if(b->breaking(i,j)==0)
     ws(i,j) += p->dt*alpha*(2.0*b->press(i,j)/HP);
 }
 
 void sflow_pjm_sw::wcalc(lexer* p, fdm2D* b,double alpha, slice &P, slice &Q, slice &ws)
-{    
+{
     SLICELOOP4
     wbn(i,j) = wb(i,j);
 
@@ -175,7 +175,7 @@ void sflow_pjm_sw::upgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
 {
     SLICELOOP1
     WETDRY1
-    b->F(i,j) -= fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j) - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM); 
+    b->F(i,j) -= fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j) - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM);
     
     pBC->patchBC_pressure2D_ugrad(p,b,eta,eta_n);
 }
@@ -184,7 +184,7 @@ void sflow_pjm_sw::vpgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
 {
     SLICELOOP2
     WETDRY2
-    b->G(i,j) -= fabs(p->W22)*(p->A223*eta(i,j+1) + (1.0-p->A223)*eta_n(i,j+1) - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM); 
+    b->G(i,j) -= fabs(p->W22)*(p->A223*eta(i,j+1) + (1.0-p->A223)*eta_n(i,j+1) - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM);
     
     pBC->patchBC_pressure2D_vgrad(p,b,eta,eta_n);
 }
@@ -241,7 +241,7 @@ void sflow_pjm_sw::poisson(lexer*p, fdm2D* b)
 }
 
 void sflow_pjm_sw::wpgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
-{    
+{
     SLICELOOP4
     b->L(i,j)=0.0;
 }

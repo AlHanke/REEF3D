@@ -78,13 +78,13 @@ void iowave::fnpf_precalc_dirichlet(lexer *p, ghostcell *pgc)
         
         
     count=0;
-    FILOOP 
-    FJLOOP 
+    FILOOP
+    FJLOOP
     {
 
         db = distbeach(p);
         
-        FKLOOP 
+        FKLOOP
         FPCHECK
         {
                     

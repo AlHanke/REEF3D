@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include<iomanip>
 
-nhflow_potential_f::nhflow_potential_f(lexer* p) 
+nhflow_potential_f::nhflow_potential_f(lexer* p)
 {
     gcval_pot=49;
 }
@@ -121,10 +121,10 @@ void nhflow_potential_f::start(lexer*p, fdm_nhf *d, solver* psolv, ghostcell* pg
 }
 
 void nhflow_potential_f::ucalc(lexer *p, fdm_nhf *d)
-{    
+{
     LOOP
     {
-    d->U[IJK] =  (PSI[Ip1JK]-PSI[Im1JK])/(p->DXP[IP]+p->DXP[IM1]) 
+    d->U[IJK] =  (PSI[Ip1JK]-PSI[Im1JK])/(p->DXP[IP]+p->DXP[IM1])
     
               + 0.5*(p->sigx[FIJK]+p->sigx[FIJKp1])*((PSI[IJKp1]-PSI[IJKm1])/(p->DZP[KP]+p->DZP[KM1]));
               
@@ -133,7 +133,7 @@ void nhflow_potential_f::ucalc(lexer *p, fdm_nhf *d)
     
     
     LOOP
-    if(p->DF[IJK]<0 || p->DF[Im1JK]<0 || p->DF[Ip1JK]<0 
+    if(p->DF[IJK]<0 || p->DF[Im1JK]<0 || p->DF[Ip1JK]<0
     ||p->wet[IJ]==0||p->wet[Im1J]==0||p->wet[Ip1J]==0)
     {
     d->U[IJK] = 0.0;
@@ -142,10 +142,10 @@ void nhflow_potential_f::ucalc(lexer *p, fdm_nhf *d)
 }
 
 void nhflow_potential_f::vcalc(lexer *p, fdm_nhf *d)
-{    
+{
     LOOP
     {
-    d->V[IJK] =  (PSI[IJp1K]-PSI[IJm1K])/(p->DYP[JP]+p->DYP[JP1]) 
+    d->V[IJK] =  (PSI[IJp1K]-PSI[IJm1K])/(p->DYP[JP]+p->DYP[JP1])
     
               + 0.5*(p->sigy[FIJK]+p->sigy[FIJKp1])*((PSI[IJKp1]-PSI[IJKm1])/(p->DZP[KP]+p->DZP[KM1]));
               
@@ -154,7 +154,7 @@ void nhflow_potential_f::vcalc(lexer *p, fdm_nhf *d)
 
 
     LOOP
-    if(p->DF[IJK]<0 || p->DF[IJm1K]<0 || p->DF[IJp1K]<0 
+    if(p->DF[IJK]<0 || p->DF[IJm1K]<0 || p->DF[IJp1K]<0
     ||p->wet[IJ]==0||p->wet[IJm1]==0||p->wet[IJp1]==0)
     {
     d->V[IJK] = 0.0;
@@ -166,7 +166,7 @@ void nhflow_potential_f::wcalc(lexer *p, fdm_nhf *d)
 {
     LOOP
     {
-    d->W[IJK] =  p->sigz[IJ]*(PSI[IJKp1]-PSI[IJKm1])/(p->DZP[KP]+p->DZP[KP1]); 
+    d->W[IJK] =  p->sigz[IJ]*(PSI[IJKp1]-PSI[IJKm1])/(p->DZP[KP]+p->DZP[KP1]);
               
     d->WH[IJK] = d->WL(i,j)*d->W[IJK];
     }
@@ -235,10 +235,10 @@ void nhflow_potential_f::laplace(lexer *p, fdm_nhf *d, ghostcell *pgc)
             d->M.w[n] = -1.0/(p->DYP[JP]*p->DYN[JP])*p->y_dir;
             d->M.e[n] = -1.0/(p->DYP[JM1]*p->DYN[JP])*p->y_dir;
 
-            d->M.t[n] = -sigxyz2/(p->DZP[KM1]*p->DZN[KP])     
+            d->M.t[n] = -sigxyz2/(p->DZP[KM1]*p->DZN[KP])
                         - p->sigxx[FIJK]/((p->DZN[KP]+p->DZN[KM1]));
                         
-            d->M.b[n] = -sigxyz2/(p->DZP[KM1]*p->DZN[KM1]) 
+            d->M.b[n] = -sigxyz2/(p->DZP[KM1]*p->DZN[KM1])
                         + p->sigxx[FIJK]/((p->DZN[KP]+p->DZN[KM1]));
             
             
@@ -272,7 +272,7 @@ void nhflow_potential_f::laplace(lexer *p, fdm_nhf *d, ghostcell *pgc)
     }
     
     
-    double denom,ab;  
+    double denom,ab;
     
     n=0;
     LOOP
@@ -419,9 +419,9 @@ void nhflow_potential_f::ini_bc(lexer *p, fdm_nhf *d, ghostcell *pgc)
     {
         if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
         {
-            i=p->gcb4[n][0]; 
+            i=p->gcb4[n][0];
             j=p->gcb4[n][1];
-            k=p->gcb4[n][2];  
+            k=p->gcb4[n][2];
             
             WETDRY
             {
@@ -442,9 +442,9 @@ void nhflow_potential_f::ini_bc(lexer *p, fdm_nhf *d, ghostcell *pgc)
         
         if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
         {
-            i=p->gcb4[n][0]; 
+            i=p->gcb4[n][0];
             j=p->gcb4[n][1];
-            k=p->gcb4[n][2];  
+            k=p->gcb4[n][2];
             
             WETDRY
             {

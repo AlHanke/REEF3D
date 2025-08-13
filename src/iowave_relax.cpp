@@ -33,7 +33,7 @@ void iowave::u_relax(lexer *p, fdm *a, ghostcell *pgc, field& uvel)
     
     ULOOP
     {
-        dg = distgen(p);    
+        dg = distgen(p);
         db = distbeach(p);
         
         phival = 0.5*(a->phi(i,j,k)+a->phi(i-1,j,k));
@@ -99,7 +99,7 @@ void iowave::v_relax(lexer *p, fdm *a, ghostcell *pgc, field& vvel)
     count=0;
     VLOOP
     {
-        dg = distgen(p);    
+        dg = distgen(p);
         db = distbeach(p);
         
         phival = 0.5*(a->phi(i,j,k)+a->phi(i,j-1,k));
@@ -147,7 +147,7 @@ void iowave::v_relax(lexer *p, fdm *a, ghostcell *pgc, field& vvel)
         
         // Numerical Beach
         if(p->B99==1||p->B99==2||beach_relax==1)
-        {    
+        {
             // Zone 2
             if(db<1.0e20)
             vvel(i,j,k) = relax2_nb(i,j)*vvel(i,j,k);
@@ -164,7 +164,7 @@ void iowave::w_relax(lexer *p, fdm *a, ghostcell *pgc, field& wvel)
     count=0;
     WLOOP
     {
-        dg = distgen(p);    
+        dg = distgen(p);
         db = distbeach(p);
         
         phival = 0.5*(a->phi(i,j,k)+a->phi(i,j,k-1));
@@ -237,14 +237,14 @@ void iowave::p_relax(lexer *p, fdm *a, ghostcell *pgc, field& press)
         
         // Numerical Beach
         if(p->B99==1||p->B99==2||beach_relax==1)
-        {            
+        {
             // Zone 2
             if(db<1.0e20)
             press(i,j,k) = (1.0-relax4_nb(i,j))*((p->phimean - p->pos_z())*a->ro(i,j,k)*fabs(p->W22)) + relax4_nb(i,j)*press(i,j,k);
         }
     }
 
-p->wavecalctime+=pgc->timer()-starttime;        
+p->wavecalctime+=pgc->timer()-starttime;
 }
 
 void iowave::phi_relax(lexer *p, ghostcell *pgc, field& f)
@@ -254,7 +254,7 @@ void iowave::phi_relax(lexer *p, ghostcell *pgc, field& f)
     count=0;
     LOOP
     {
-        dg = distgen(p);    
+        dg = distgen(p);
         db = distbeach(p);
 
         if(p->pos_z()<=p->phimean)
@@ -274,7 +274,7 @@ void iowave::phi_relax(lexer *p, ghostcell *pgc, field& f)
             }
         }
             
-        // Numerical Beach    
+        // Numerical Beach
         if(p->B99==2)
         {
             // Zone 2
@@ -295,7 +295,7 @@ void iowave::vof_relax(lexer *p, fdm* a, ghostcell *pgc, field& f)
         vofheight(i,j)=0.0;
         genheight(i,j)=0.0;
         KLOOP
-        {   
+        {
             vofheight(i,j)+=f(i,j,k)*p->DZN[KP];
             
            /* if(f(i,j,k)>p->F94 && f(i,j,k+1)<p->F93)
@@ -453,7 +453,7 @@ void iowave::vof_relax(lexer *p, fdm* a, ghostcell *pgc, field& f)
             }
         }
             
-        // Numerical Beach    
+        // Numerical Beach
         if(p->B99==2)
         {
             // Zone 2
@@ -480,7 +480,7 @@ void iowave::turb_relax(lexer *p, fdm *a, ghostcell *pgc, field &f)
     
     LOOP
     {
-        dg = distgen(p);    
+        dg = distgen(p);
         db = distbeach(p);
 
         phival = -0.5*(a->phi(i,j,k)+a->phi(i-1,j,k));
@@ -492,7 +492,7 @@ void iowave::turb_relax(lexer *p, fdm *a, ghostcell *pgc, field &f)
         H=0.0;
 
         if(phival>=-epsi && phival<-psi)
-        H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));        
+        H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
         
         // Wave Generation
         if(p->B98==2 && u_switch==1)

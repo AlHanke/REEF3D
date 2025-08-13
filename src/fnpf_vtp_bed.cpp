@@ -46,12 +46,12 @@ fnpf_vtp_bed::~fnpf_vtp_bed()
 }
 
 void fnpf_vtp_bed::start(lexer *p, fdm_fnpf *c, ghostcell* pgc, ioflow *pflow)
-{    
+{
     print2D(p,c,pgc);
 }
 
 void fnpf_vtp_bed::print2D(lexer *p, fdm_fnpf *c, ghostcell* pgc)
-{    
+{
     
     if(p->mpirank==0)
     pvtu(p,c,pgc);

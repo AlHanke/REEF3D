@@ -46,10 +46,10 @@ double fnpf_ddx_cds2_wd::sxx(lexer *p, slice &f)
 double fnpf_ddx_cds2_wd::syy(lexer *p, slice &f)
 {
     if(p->wet[IJm1]>0 && p->wet[IJp1]>0)
-    return ((f(i,j+1)-f(i,j))/p->DYP[JP] - (f(i,j)-f(i,j-1))/p->DYP[JM1])/p->DYN[JP];   
+    return ((f(i,j+1)-f(i,j))/p->DYP[JP] - (f(i,j)-f(i,j-1))/p->DYP[JM1])/p->DYN[JP];
 
     else
-    return 0.0; 
+    return 0.0;
 }
 
 

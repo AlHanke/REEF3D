@@ -82,7 +82,7 @@ void sixdof_obj::forces_lsm_calc(lexer* p, fdm *a, ghostcell *pgc, int iter, boo
     vertice_num = ccptcount;
 
     for(n=0;n<polygon_num;++n)
-    {       
+    {
         
             // triangle
             if(numpt[n]==3)
@@ -245,7 +245,7 @@ void sixdof_obj::forces_lsm_calc(lexer* p, fdm *a, ghostcell *pgc, int iter, boo
             phival =    p->ccipol4a(a->phi,xloc,yloc,zloc);
             
             if(p->P82==1)
-            viscosity += p->ccipol4a(a->eddyv,xloc,yloc,zloc);   
+            viscosity += p->ccipol4a(a->eddyv,xloc,yloc,zloc);
             
             i = p->posc_i(xloc);
             j = p->posc_j(yloc);
@@ -260,7 +260,7 @@ void sixdof_obj::forces_lsm_calc(lexer* p, fdm *a, ghostcell *pgc, int iter, boo
 
             Fv_x = density*viscosity*A*(du*ny+du*nz);
             Fv_y = density*viscosity*A*(dv*nx+dv*nz);
-            Fv_z = density*viscosity*A*(dw*nx+dw*ny); 
+            Fv_z = density*viscosity*A*(dw*nx+dw*ny);
             
             if(Fv_x!=Fv_x)
             cout<<"density: "<<density<<" viscosity: "<<viscosity<<" uval: "<<uval<<" du: "<<du<<" i: "<<i<<" p->DXP[IP]: "<<p->DXP[IP]<<endl;
@@ -357,13 +357,13 @@ void sixdof_obj::forces_lsm_calc(lexer* p, fdm *a, ghostcell *pgc, int iter, boo
     
     // Print results
     
-    if (p->mpirank==0 && finalize==1)  
+    if (p->mpirank==0 && finalize==1)
     {
         ofstream print;
         char str[1000];
 
         printforce<<curr_time<<" \t "<<Xe<<" \t "<<Ye<<" \t "<<Ze<<" \t "<<Ke
-        <<" \t "<<Me<<" \t "<<Ne<<" \t "<<Xe_p<<" \t "<<Ye_p<<" \t "<<Ze_p<<" \t "<<Xe_v<<" \t "<<Ye_v<<" \t "<<Ze_v<<endl;   
+        <<" \t "<<Me<<" \t "<<Ne<<" \t "<<Xe_p<<" \t "<<Ye_p<<" \t "<<Ze_p<<" \t "<<Xe_v<<" \t "<<Ye_v<<" \t "<<Ze_v<<endl;
     }
 
     if (p->mpirank==0)

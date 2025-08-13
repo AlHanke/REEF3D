@@ -375,10 +375,10 @@ void iweno_hj_nug::aij_south(lexer* p, fdm* a, field &f, field &F)
                            - w3x*(1.0 - qfx[IP][uf][2][0] - qfx[IP][uf][2][1])/DX[IM2]
                            + w3x*(qfx[IP][uf][2][0])/DX[IM3])*iadvec
                             
-                + f(i+2,j,k)*(-w1x*qfx[IP][uf][0][1]/DX[IP1])*iadvec;  
+                + f(i+2,j,k)*(-w1x*qfx[IP][uf][0][1]/DX[IP1])*iadvec;
                         
                            
-    a->M.p[count] = (- w1x*(1.0 - qfx[IP][uf][0][0] + qfx[IP][uf][0][1])/DX[IP] 
+    a->M.p[count] = (- w1x*(1.0 - qfx[IP][uf][0][0] + qfx[IP][uf][0][1])/DX[IP]
                     - w2x*(qfx[IP][uf][1][0])/DX[IP]
                     + w1x*(qfx[IP][uf][0][0])/DX[IM1]
                     + w2x*(1.0 - qfx[IP][uf][1][0] + qfx[IP][uf][1][1])/DX[IM1]
@@ -406,8 +406,8 @@ void iweno_hj_nug::aij_north(lexer* p, fdm* a, field &f, field &F)
                 + f(i+3,j,k)*(w1x*qfx[IP][uf][3][1]/DX[IP2])*iadvec;
                         
                  
-    a->M.p[count] = (- w1x*(qfx[IP][uf][3][0])/DX[IP] 
-                    - w2x*(1.0 - qfx[IP][uf][4][0] + qfx[IP][uf][4][1])/DX[IP] 
+    a->M.p[count] = (- w1x*(qfx[IP][uf][3][0])/DX[IP]
+                    - w2x*(1.0 - qfx[IP][uf][4][0] + qfx[IP][uf][4][1])/DX[IP]
                     - w3x*(qfx[IP][uf][5][0])/DX[IP]
                     + w2x*(qfx[IP][uf][4][0])/DX[IM1]
                     + w3x*(1.0 - qfx[IP][uf][5][0] + qfx[IP][uf][5][1])/DX[IM1])*iadvec;
@@ -434,7 +434,7 @@ void iweno_hj_nug::aij_east(lexer* p, fdm* a, field &f, field &F)
                 + f(i,j+2,k)*(w1y*qfy[JP][vf][0][1]/DY[JP1])*jadvec;
                         
                            
-    a->M.p[count] +=(-w1y*(1.0 - qfy[JP][vf][0][0] + qfy[JP][vf][0][1])/DY[JP] 
+    a->M.p[count] +=(-w1y*(1.0 - qfy[JP][vf][0][0] + qfy[JP][vf][0][1])/DY[JP]
                     - w2y*(qfy[JP][vf][1][0])/DY[JP]
                     + w1y*(qfy[JP][vf][0][0])/DY[JM1]
                     + w2y*(1.0 - qfy[JP][vf][1][0] + qfy[JP][vf][1][1])/DY[JM1]
@@ -462,8 +462,8 @@ void iweno_hj_nug::aij_west(lexer* p, fdm* a, field &f, field &F)
                 + f(i,j+3,k)*(-w1y*qfy[JP][vf][3][1]/DY[JP2])*jadvec;
                         
                  
-    a->M.p[count] +=(-w1y*(qfy[JP][vf][3][0])/DY[JP] 
-                    - w2y*(1.0 - qfy[JP][vf][4][0] + qfy[JP][vf][4][1])/DY[JP] 
+    a->M.p[count] +=(-w1y*(qfy[JP][vf][3][0])/DY[JP]
+                    - w2y*(1.0 - qfy[JP][vf][4][0] + qfy[JP][vf][4][1])/DY[JP]
                     - w3y*(qfy[JP][vf][5][0])/DY[JP]
                     + w2y*(qfy[JP][vf][4][0])/DY[JM1]
                     + w3y*(1.0 - qfy[JP][vf][5][0] + qfy[JP][vf][5][1])/DY[JM1])*jadvec;
@@ -490,7 +490,7 @@ void iweno_hj_nug::aij_bottom(lexer* p, fdm* a, field &f, field &F)
                 + f(i,j,k+2)*(-w1z*qfz[KP][wf][0][1]/DZ[KP1])*kadvec;
                         
                            
-    a->M.p[count]+= (-w1z*(1.0 - qfz[KP][wf][0][0] + qfz[KP][wf][0][1])/DZ[KP] 
+    a->M.p[count]+= (-w1z*(1.0 - qfz[KP][wf][0][0] + qfz[KP][wf][0][1])/DZ[KP]
                     - w2z*(qfz[KP][wf][1][0])/DZ[KP]
                     + w1z*(qfz[KP][wf][0][0])/DZ[KM1]
                     + w2z*(1.0 - qfz[KP][wf][1][0] + qfz[KP][wf][1][1])/DZ[KM1]
@@ -518,8 +518,8 @@ void iweno_hj_nug::aij_top(lexer* p, fdm* a, field &f, field &F)
                 + f(i,j,k+3)*(w1z*qfz[KP][wf][3][1]/DZ[KP2])*kadvec;
                         
                  
-    a->M.p[count]+= (-w1z*(qfz[KP][wf][3][0])/DZ[KP] 
-                    - w2z*(1.0 - qfz[KP][wf][4][0] + qfz[KP][wf][4][1])/DZ[KP] 
+    a->M.p[count]+= (-w1z*(qfz[KP][wf][3][0])/DZ[KP]
+                    - w2z*(1.0 - qfz[KP][wf][4][0] + qfz[KP][wf][4][1])/DZ[KP]
                     - w3z*(qfz[KP][wf][5][0])/DZ[KP]
                     + w2z*(qfz[KP][wf][4][0])/DZ[KM1]
                     + w3z*(1.0 - qfz[KP][wf][5][0] + qfz[KP][wf][5][1])/DZ[KM1])*kadvec;
@@ -536,7 +536,7 @@ void iweno_hj_nug::aij_top(lexer* p, fdm* a, field &f, field &F)
 }
 
 void iweno_hj_nug::iqmin(lexer *p,fdm *a, field& f)
-{    
+{
     q1 = (f(i-2,j,k)-f(i-3,j,k))/DX[IM3];
     q2 = (f(i-1,j,k)-f(i-2,j,k))/DX[IM2];
     q3 = (f(i,j,k)-f(i-1,j,k))/DX[IM1];

@@ -48,7 +48,7 @@ void driver::loop_cfd(fdm* a)
     
 //-----------MAINLOOP CFD----------------------------
     while(p->count<p->N45 && p->simtime<p->N41  && p->sedtime<p->S19)
-    {        
+    {
         ++p->count;
         starttime=pgc->timer();
         
@@ -87,7 +87,7 @@ void driver::loop_cfd(fdm* a)
         pflow->v_relax(p,a,pgc,a->v);
         pflow->w_relax(p,a,pgc,a->w);
         pfsf->update(p,a,pgc,a->phi);
-        pmom->start(p,a,pgc,pvrans,p6dof); 
+        pmom->start(p,a,pgc,pvrans,p6dof);
         pbench->start(p,a,pgc,pconvec);
         
         //save previous timestep
@@ -124,7 +124,7 @@ void driver::loop_cfd(fdm* a)
             cout<<"fbtime: "<<setprecision(3)<<p->fbtime<<endl;
             cout<<"reinitime: "<<setprecision(3)<<p->reinitime<<endl;
             cout<<"gctime: "<<setprecision(3)<<p->gctime<<"\t average gctime: "<<setprecision(3)<<p->gcmeantime<<endl;
-            cout<<"Xtime: "<<setprecision(3)<<p->xtime<<"\t average Xtime: "<<setprecision(3)<<p->Xmeantime<<endl;        
+            cout<<"Xtime: "<<setprecision(3)<<p->xtime<<"\t average Xtime: "<<setprecision(3)<<p->Xmeantime<<endl;
             cout<<"total time: "<<setprecision(6)<<p->totaltime<<"   average time: "<<setprecision(3)<<p->meantime<<endl;
             cout<<"timer per step: "<<setprecision(3)<<p->itertime<<endl;
             }

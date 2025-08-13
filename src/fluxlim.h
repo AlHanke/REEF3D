@@ -29,7 +29,7 @@ class lexer;
 
 using namespace std;
 
-class fluxlim 
+class fluxlim
 {
 public:
 

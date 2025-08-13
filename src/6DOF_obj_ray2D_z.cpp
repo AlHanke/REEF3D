@@ -47,7 +47,7 @@ void sixdof_obj::ray_cast_2D_z(lexer *p, ghostcell *pgc, int ts, int te)
 
 
     for(n=ts; n<te; ++n)
-    { 
+    {
         
     Ax = tri_x[n][0];
     Ay = tri_y[n][0];
@@ -63,15 +63,15 @@ void sixdof_obj::ray_cast_2D_z(lexer *p, ghostcell *pgc, int ts, int te)
     
     checkin = 0;
     
-    if(Ax>=p->global_xmin && Ax<=p->global_xmax 
+    if(Ax>=p->global_xmin && Ax<=p->global_xmax
     && Ay>=p->global_ymin && Ay<=p->global_ymax)
     checkin=1;
         
-    if(Bx>=p->global_xmin && Bx<=p->global_xmax 
+    if(Bx>=p->global_xmin && Bx<=p->global_xmax
     && By>=p->global_ymin && By<=p->global_ymax)
     checkin=1;
         
-    if(Cx>=p->global_xmin && Cx<=p->global_xmax 
+    if(Cx>=p->global_xmin && Cx<=p->global_xmax
     && Cy>=p->global_ymin && Cy<=p->global_ymax)
     checkin=1;
     
@@ -80,8 +80,8 @@ void sixdof_obj::ray_cast_2D_z(lexer *p, ghostcell *pgc, int ts, int te)
 
     
     if(checkin==1)
-    {  
-    xs = MIN3(Ax,Bx,Cx); 
+    {
+    xs = MIN3(Ax,Bx,Cx);
     xe = MAX3(Ax,Bx,Cx);
     
     ys = MIN3(Ay,By,Cy);

@@ -27,7 +27,7 @@ Author: Fabian Knoblauch
 #include"ghostcell.h"
 
 double iowave::V0Calc_PLIC(lexer* p, fdm* a, double n_a, double n_b, double n_c, double r0)
-{   
+{
     double d_a, d_b, d_c;
     d_a=p->DXN[IP];
     d_b=p->DYN[JP];

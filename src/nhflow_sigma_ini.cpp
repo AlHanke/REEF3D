@@ -28,7 +28,7 @@ Author: Hans Bihs
 #define WLVL (fabs(d->WL(i,j))>(p->A544)?d->WL(i,j):1.0e20)
 
 void nhflow_sigma::sigma_ini(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &eta)
-{    
+{
 
     d->wd_criterion=p->A544;
     
@@ -53,7 +53,7 @@ void nhflow_sigma::sigma_ini(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &eta)
             p->sig[FIJKp1] = p->ZN[KP1];
             p->sig[FIJKp2] = p->ZN[KP2];
             p->sig[FIJKp3] = p->ZN[KP3];
-        } 
+        }
     }
     
     pgc->start7S(p,p->sig,1);

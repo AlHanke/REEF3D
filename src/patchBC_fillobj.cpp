@@ -291,7 +291,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
     for(qn=0;qn<p->B442;++qn)
     {
         int count=0;
-        {            
+        {
             
             for(n=0;n<p->gcb4_count;++n)
             {

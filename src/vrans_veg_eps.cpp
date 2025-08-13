@@ -47,7 +47,7 @@ void vrans_veg::eps_source(lexer *p, fdm *a, field &kin, field &eps)
 
         a->rhsvec.V[count] += ew;
     
-        ++count;  
+        ++count;
     }
 
 }

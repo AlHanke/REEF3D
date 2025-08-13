@@ -26,7 +26,7 @@ Author: Tobias Martin
 #include"ghostcell.h"
 
 void mooring_barQuasiStatic::initialize(lexer *p, ghostcell *pgc)
-{        
+{
     sigma = p->X311_H[line];
 
     double rho_f =1000.0;
@@ -35,9 +35,9 @@ void mooring_barQuasiStatic::initialize(lexer *p, ghostcell *pgc)
     w = p->X311_w[line]*9.81*(rho_c - rho_f)/rho_c;
     L = p->X311_l[line];
 
-    p->Darray(x,sigma + 2); 
+    p->Darray(x,sigma + 2);
     p->Darray(y,sigma + 2);
-    p->Darray(z,sigma + 2); 
+    p->Darray(z,sigma + 2);
     p->Darray(T,sigma + 2);
     p->Darray(Fb,sigma + 2);
     
@@ -64,7 +64,7 @@ void mooring_barQuasiStatic::initialize(lexer *p, ghostcell *pgc)
         sprintf(str,"./REEF3D_CFD_6DOF/REEF3D_6DOF_mooring_force_%i.dat",line);
         eTout.open(str);
         eTout<<"time \t T"<<endl;
-    }        
+    }
     printtime = 0.0;
     
     
@@ -81,7 +81,7 @@ void mooring_barQuasiStatic::initialize(lexer *p, ghostcell *pgc)
     // Filling system matrix A
 
     for (int j = 1; j < sigma + 1; j++)
-    {        
+    {
         A[j-1][j-1] = -w;
         A[j-1][j]    = +w;
     }
@@ -102,13 +102,13 @@ void mooring_barQuasiStatic::initialize(lexer *p, ghostcell *pgc)
     double magDist = sqrt(dx*dx+dy*dy+dz*dz);
         
     for (int j = 0; j < sigma + 1; j++)
-    {        
-        f[j][0] = dx/magDist;    
-        f[j][1] = dy/magDist;    
-        f[j][2] = dz/magDist;            
+    {
+        f[j][0] = dx/magDist;
+        f[j][1] = dy/magDist;
+        f[j][2] = dz/magDist;
     }
     
-    // Initialise communication 
+    // Initialise communication
     ini_parallel(p, pgc);
 
     // Initialise catenary

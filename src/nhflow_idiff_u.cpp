@@ -82,8 +82,8 @@ void nhflow_idiff::diff_u(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow, s
             d->M.w[n] = -visc/(p->DYP[JP]*p->DYN[JP])*p->y_dir;
             d->M.e[n] = -visc/(p->DYP[JM1]*p->DYN[JP])*p->y_dir;
 
-            d->M.t[n] = -(visc*sigxyz2)/(p->DZP[KP]*p->DZN[KP]);    
-            d->M.b[n] = -(visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KP]); 
+            d->M.t[n] = -(visc*sigxyz2)/(p->DZP[KP]*p->DZN[KP]);
+            d->M.b[n] = -(visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KP]);
             
             
             d->rhsvec.V[n] = visc*((VH[Ip1Jp1K]-VH[Im1Jp1K]) - (VH[Ip1Jm1K]-VH[Im1Jm1K]))/((p->DXP[IP]+p->DXP[IM1])*(p->DYN[JP]+p->DYN[JM1]))

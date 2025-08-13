@@ -39,7 +39,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     psi = -p->X41*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
     
     if (p->j_dir==1)
-    psi = -p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]); 
+    psi = -p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
     
     
     if( (a->solid(i,j,k)>=psi || p->solidread==0) && (a->topo(i,j,k)>=psi || p->toporead==0))
@@ -142,7 +142,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         ++count;
         
         if(p->flagsf4[IJKp1]<0)
-        ++count;        
+        ++count;
     }
     
     if(p->gcdf4_count!=count)
@@ -218,7 +218,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         p->gcdf4[count][3]=6;
         p->gcdf4[count][4]=48;
         ++count;
-        }       
+        }
     }
     
     fieldint4 cval(p);
@@ -273,7 +273,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         ++count;
         
         if(p->flagsf1[IJKp1]<0)
-        ++count;        
+        ++count;
     }
     
     if(p->gcdf1_count!=count)
@@ -349,7 +349,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         p->gcdf1[count][3]=6;
         p->gcdf1[count][4]=48;
         ++count;
-        }       
+        }
     }
     
     // -----------------------
@@ -374,7 +374,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         ++count;
         
         if(p->flagsf2[IJKp1]<0)
-        ++count;        
+        ++count;
     }
     
     if(p->gcdf2_count!=count)
@@ -450,7 +450,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         p->gcdf2[count][3]=6;
         p->gcdf2[count][4]=48;
         ++count;
-        }       
+        }
     }
     
     // -----------------------
@@ -476,7 +476,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         ++count;
         
         if(p->flagsf3[IJKp1]<0)
-        ++count;        
+        ++count;
     }
     
     if(p->gcdf3_count!=count)
@@ -552,7 +552,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         p->gcdf3[count][3]=6;
         p->gcdf3[count][4]=48;
         ++count;
-        }       
+        }
     }
 
 

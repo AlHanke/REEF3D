@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 nhflow_print_runup_max_gage_x::nhflow_print_runup_max_gage_x(lexer *p, fdm_nhf *d, ghostcell *pgc)
-{    
+{
     p->Iarray(jloc,p->P134);
 
     p->Darray(xloc,p->P134+1);

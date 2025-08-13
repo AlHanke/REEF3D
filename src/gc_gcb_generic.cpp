@@ -26,7 +26,7 @@ Author: Hans Bihs
 
 
 void ghostcell::gcb_generic(lexer* p,field& f,int *gcb_count, int ***gcb)
-{ 
+{
     int aa,bb,cc;
     int r;
     double gravity;

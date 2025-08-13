@@ -79,7 +79,7 @@ void nhflow_u_profile::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
         }
     
     
-    // print 
+    // print
     double xp,yp;
     
     for(n=0;n<probenum;++n)
@@ -99,7 +99,7 @@ void nhflow_u_profile::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
         }
  
     pout[n]<<setprecision(9)<<p->ZSP[IJK]<<" \t "<<uval<<endl;
-    } 
+    }
     
     for(n=0;n<probenum;++n)
     if(flag[n]==1)

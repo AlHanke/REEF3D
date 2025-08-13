@@ -29,7 +29,7 @@ Author: Hans Bihs
 #include"sediment_fdm.h"
 
 void sediment_f::prep_cfd(lexer *p, fdm *a,ghostcell *pgc)
-{    
+{
     // vel prep --------
     pgc->start1(p,a->u,14);
     pgc->start2(p,a->v,15);
@@ -44,7 +44,7 @@ void sediment_f::prep_cfd(lexer *p, fdm *a,ghostcell *pgc)
 }
 
 void sediment_f::prep_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc)
-{    
+{
     
     fill_PQ_nhflow(p,d,pgc);
         

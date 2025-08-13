@@ -25,7 +25,7 @@ Author: Hans Bihs
 
 #include"sflow_fsf.h"
 #include"increment.h"
-#include"slice4.h" 
+#include"slice4.h"
 
 class sflow_hxy_disc;
 class patchBC_interface;
@@ -34,7 +34,7 @@ using namespace std;
 
 class sflow_eta : public sflow_fsf, public increment
 {
-public:    
+public:
     sflow_eta(lexer*, fdm2D*, ghostcell*,patchBC_interface*);
     virtual ~sflow_eta();
     

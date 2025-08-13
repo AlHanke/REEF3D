@@ -68,8 +68,8 @@ void hypre_struct::fill_matrix3(lexer* p,fdm* a, ghostcell* pgc, field &f)
         ++count;
         
         values[count]=a->M.t[n];
-        ++count; 
-        }     
+        ++count;
+        }
         
         WSCHECK
         {
@@ -92,8 +92,8 @@ void hypre_struct::fill_matrix3(lexer* p,fdm* a, ghostcell* pgc, field &f)
         ++count;
         
         values[count]=0.0;
-        ++count;  
-        }    
+        ++count;
+        }
     }
     
     HYPRE_StructMatrixSetBoxValues(A, ilower, iupper, nentries, stencil_indices, values);
@@ -117,7 +117,7 @@ void hypre_struct::fill_matrix3(lexer* p,fdm* a, ghostcell* pgc, field &f)
     HYPRE_StructVectorAssemble(x);
     
     
-    count=0; 
+    count=0;
     KJILOOP
     {
         WCHECK

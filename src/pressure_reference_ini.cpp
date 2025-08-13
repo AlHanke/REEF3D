@@ -59,7 +59,7 @@ void pressure_reference::reference_ini(lexer*p, fdm* a, ghostcell *pgc)
         
         if(gcinglobal==0)
         LOOP
-        {    
+        {
         xmin = MIN(xmin,p->XP[IP]);
         ymin = MIN(ymin,p->YP[JP]);
         zmax = MAX(zmax,p->ZP[KP]);
@@ -94,7 +94,7 @@ void pressure_reference::reference_ini(lexer*p, fdm* a, ghostcell *pgc)
         
         if(gcinglobal==0)
         LOOP
-        {    
+        {
         xmax = MAX(xmax,p->XP[IP]);
         ymin = MIN(ymin,p->YP[JP]);
         zmax = MAX(zmax,p->ZP[KP]);

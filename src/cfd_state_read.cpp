@@ -150,7 +150,7 @@ void cfd_state::read(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb, sedime
     
     int gcval_press, gcval_phi, gcval_topo;
     
-    gcval_press=40;  
+    gcval_press=40;
     
     if(p->F50==1)
     gcval_phi=51;

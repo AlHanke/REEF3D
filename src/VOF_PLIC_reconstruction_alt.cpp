@@ -49,7 +49,7 @@ void VOF_PLIC::reconstructPlane_alt(fdm* a, lexer* p, field& voffield)
                 
         case 1:
                 break;
-        case 2: 
+        case 2:
                 calcNormalWeymouth(a,p,voffield);
                 break;
         case 3:
@@ -149,7 +149,7 @@ void VOF_PLIC::reconstructPlane_alt(fdm* a, lexer* p, field& voffield)
     }
     
     else //cases 3 und 4
-    {   
+    {
         double x3, y32, u3,f3;
         x3=81.0*n_1*n_2*(n_1+n_2-2.0*n_3*V);
         y32=fdim(23328.0*n_1*n_1*n_1*n_2*n_2*n_2,x3*x3);
@@ -160,7 +160,7 @@ void VOF_PLIC::reconstructPlane_alt(fdm* a, lexer* p, field& voffield)
             r=f3;
         }
         else //case 4
-        {   
+        {
             double t4,x4,y42,u4,f4;
             t4=9.0*(n_1+n_2+n_3)*(n_1+n_2+n_3)-18.0;
             x4=max(n_1*n_2*n_3*(324.0-648.0*V),1E-35);
@@ -251,7 +251,7 @@ double VOF_PLIC::calcAlphaFromInput(fdm* a, lexer* p, double n_x, double n_y, do
     }
     
     else //cases 3 und 4
-    {   
+    {
         double x3, y32, u3,f3;
         x3=81.0*n_1*n_2*(n_1+n_2-2.0*n_3*V);
         y32=fdim(23328.0*n_1*n_1*n_1*n_2*n_2*n_2,x3*x3);
@@ -262,7 +262,7 @@ double VOF_PLIC::calcAlphaFromInput(fdm* a, lexer* p, double n_x, double n_y, do
             r=f3;
         }
         else //case 4
-        {   
+        {
             double t4,x4,y42,u4,f4;
             t4=9.0*(n_1+n_2+n_3)*(n_1+n_2+n_3)-18.0;
             x4=max(n_1*n_2*n_3*(324.0-648.0*V),1E-35);
@@ -300,7 +300,7 @@ double VOF_PLIC::return_alpha_reconstructPlane_alt(fdm* a, lexer* p, field& voff
                 
         case 1:
                 break;
-        case 2: 
+        case 2:
                 calcNormalWeymouth(a,p,voffield);
                 break;
         case 3:
@@ -400,7 +400,7 @@ double VOF_PLIC::return_alpha_reconstructPlane_alt(fdm* a, lexer* p, field& voff
     }
     
     else //cases 3 und 4
-    {   
+    {
         double x3, y32, u3,f3;
         x3=81.0*n_1*n_2*(n_1+n_2-2.0*n_3*V);
         y32=fdim(23328.0*n_1*n_1*n_1*n_2*n_2*n_2,x3*x3);
@@ -411,7 +411,7 @@ double VOF_PLIC::return_alpha_reconstructPlane_alt(fdm* a, lexer* p, field& voff
             r=f3;
         }
         else //case 4
-        {   
+        {
             double t4,x4,y42,u4,f4;
             t4=9.0*(n_1+n_2+n_3)*(n_1+n_2+n_3)-18.0;
             x4=max(n_1*n_2*n_3*(324.0-648.0*V),1E-35);

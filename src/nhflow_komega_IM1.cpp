@@ -93,19 +93,19 @@ void nhflow_komega_IM1::start(lexer* p, fdm_nhf* d, ghostcell* pgc, nhflow_scala
 void nhflow_komega_IM1::ktimesave(lexer *p, fdm_nhf* d, ghostcell *pgc)
 {
     LOOP
-    KN[IJK]=KIN[IJK]; 
+    KN[IJK]=KIN[IJK];
 }
 
 void nhflow_komega_IM1::etimesave(lexer *p, fdm_nhf* d, ghostcell *pgc)
 {
     LOOP
-    EN[IJK]=EPS[IJK]; 
+    EN[IJK]=EPS[IJK];
 }
 
 void nhflow_komega_IM1::kinupdate(lexer *p, fdm_nhf* d, ghostcell *pgc)
 {
     LOOP
-    d->KIN[IJK]=KIN[IJK]; 
+    d->KIN[IJK]=KIN[IJK];
     
     pgc->start4V(p,d->KIN,gcval_kin);
 }

@@ -29,7 +29,7 @@ Author: Hans Bihs
 
 komega_func::komega_func(lexer* p, fdm* a, ghostcell *pgc) : rans_io(p,a),komega_bc(p)
 {
-    if(p->j_dir==0)        
+    if(p->j_dir==0)
     epsi = p->T38*(1.0/2.0)*(p->DRM+p->DTM);
         
     if(p->j_dir==1)
@@ -101,7 +101,7 @@ void komega_func::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
             epsi = p->T38*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
 
             if(p->j_dir==0)
-            epsi = p->T38*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]); 
+            epsi = p->T38*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
         
             if(a->phi(i,j,k)>epsi)
             H=1.0;
@@ -210,7 +210,7 @@ void komega_func::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
         epsi = p->T38*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
 
         if(p->j_dir==0)
-        epsi = p->T38*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]); 
+        epsi = p->T38*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
         
         
         if(fabs(a->phi(i,j,k))<epsi)
@@ -239,7 +239,7 @@ void komega_func::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
 }
 
 void komega_func::kinsource(lexer *p, fdm* a, vrans* pvrans)
-{    
+{
     int count=0;
 
     LOOP
@@ -292,7 +292,7 @@ void komega_func::epsfsf(lexer *p, fdm* a, ghostcell *pgc, ioflow *pflow)
     epsi = p->T38*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
 
     if(p->j_dir==0)
-    epsi = p->T38*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]); 
+    epsi = p->T38*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
         
     if(fabs(a->phi(i,j,k))<epsi)
     dirac = (0.5/epsi)*(1.0 + cos((PI*a->phi(i,j,k))/epsi));

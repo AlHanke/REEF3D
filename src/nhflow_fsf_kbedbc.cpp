@@ -42,7 +42,7 @@ void nhflow_fsf_f::kinematic_bed(lexer *p, fdm_nhf *d, double *U, double *V, dou
     Pval = U[IJK];
     Qval = V[IJK];
     
-    wval=0.0;    
+    wval=0.0;
     
         dfdx_plus = (d->depth(i+1,j)-d->depth(i,j))/p->DXP[IP];
         dfdx_min  = (d->depth(i,j)-d->depth(i-1,j))/p->DXP[IM1];

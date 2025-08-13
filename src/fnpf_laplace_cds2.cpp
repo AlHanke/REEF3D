@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"solver.h"
 #include"fnpf_bed_update.h"
 
-fnpf_laplace_cds2::fnpf_laplace_cds2(lexer *p) 
+fnpf_laplace_cds2::fnpf_laplace_cds2(lexer *p)
 {
     
 }
@@ -51,11 +51,11 @@ void fnpf_laplace_cds2::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver *pso
         {
         sigxyz2 = pow(p->sigx[FIJK],2.0) + pow(p->sigy[FIJK],2.0) + pow(p->sigz[IJ],2.0);
         
-        c->M.p[n]  =  1.0/(p->DXP[IP]*p->DXN[IP])*p->x_dir 
-                    + 1.0/(p->DXP[IM1]*p->DXN[IP])*p->x_dir 
+        c->M.p[n]  =  1.0/(p->DXP[IP]*p->DXN[IP])*p->x_dir
+                    + 1.0/(p->DXP[IM1]*p->DXN[IP])*p->x_dir
                     
-                    + 1.0/(p->DYP[JP]*p->DYN[JP])*p->y_dir 
-                    + 1.0/(p->DYP[JM1]*p->DYN[JP])*p->y_dir 
+                    + 1.0/(p->DYP[JP]*p->DYN[JP])*p->y_dir
+                    + 1.0/(p->DYP[JM1]*p->DYN[JP])*p->y_dir
                     
                     + (sigxyz2/(p->DZP[KM1]*p->DZN[KP]))*p->z_dir
                     + (sigxyz2/(p->DZP[KM1]*p->DZN[KM1]))*p->z_dir;
@@ -133,7 +133,7 @@ void fnpf_laplace_cds2::start(lexer* p, fdm_fnpf *c, ghostcell *pgc, solver *pso
             c->M.p[n] += (4.0/3.0)*c->M.s[n];
             c->M.n[n] -= (1.0/3.0)*c->M.s[n];
             c->M.s[n] = 0.0;
-            }          
+            }
             
             // north
             if((p->flag7[FIp1JK]<0) && c->bc(i+1,j)==0)

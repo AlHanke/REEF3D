@@ -119,7 +119,7 @@ void sediment_f::sediment_logic(lexer *p, fdm *a,ghostcell *pgc, turbulence *ptu
     
     
     if(p->S90==0)
-    pslide=new sandslide_v(p);   
+    pslide=new sandslide_v(p);
     
     if(p->S90==1)
     pslide=new sandslide_f(p);
@@ -171,7 +171,7 @@ void sediment_f::sediment_logic(lexer *p, fdm *a,ghostcell *pgc, turbulence *ptu
     // Suspended Sediments
     // Suspended NHFLOW
     if(p->A10==5)
-    {  
+    {
     if(p->S60==0)
     pnhfsuspdiff=new nhflow_diff_void(p);
     
@@ -197,7 +197,7 @@ void sediment_f::sediment_logic(lexer *p, fdm *a,ghostcell *pgc, turbulence *ptu
     
     // Suspended CFD
     if(p->A10==6)
-    {  
+    {
     if(p->S60==0)
     psuspdiff=new diff_void();
     

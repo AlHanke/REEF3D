@@ -36,7 +36,7 @@ void sixdof_obj::wedge_sym(lexer *p, ghostcell *pgc, int id)
     ye = p->X153_ye;
 
     zs = p->X153_zs;
-    ze = p->X153_ze;  
+    ze = p->X153_ze;
 
     xm = xs + 0.5*(xe-xs);
     
@@ -103,7 +103,7 @@ void sixdof_obj::wedge_sym(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][2] = ze;
     ++tricount;
 
-// Front    
+// Front
     // Tri 5
     tri_x[tricount][0] = xs;
     tri_y[tricount][0] = ys;
@@ -132,7 +132,7 @@ void sixdof_obj::wedge_sym(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][2] = ze;
     ++tricount;
 
-// Back    
+// Back
     // Tri 7
     tri_x[tricount][0] = xm;
     tri_y[tricount][0] = ys;
@@ -147,7 +147,7 @@ void sixdof_obj::wedge_sym(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][2] = zs;
     ++tricount;
     
-    // Tri 8    
+    // Tri 8
     tri_x[tricount][0] = xm;
     tri_y[tricount][0] = ys;
     tri_z[tricount][0] = ze;

@@ -29,7 +29,7 @@ Author: Hans Bihs
 #include"patchBC_interface.h"
 #include"linear_regression_cont.h"
 
-iowave::iowave(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)  : wave_interface(p,pgc),flowfile_in(p,pgc),epsi(3.0*p->DXM),psi(0.6*p->DXM), 
+iowave::iowave(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)  : wave_interface(p,pgc),flowfile_in(p,pgc),epsi(3.0*p->DXM),psi(0.6*p->DXM),
                                           eta(p),relax1_wg(p),relax1_nb(p),relax2_wg(p),relax2_nb(p),relax4_wg(p),relax4_nb(p),vofheight(p),vofgen(p),genheight(p)
 {
     pBC = ppBC;
@@ -44,7 +44,7 @@ iowave::iowave(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)  : wave_interf
     
     gcval_press=40;
     
-    kinval = 0.00001;    
+    kinval = 0.00001;
     
     beach_relax=0;
     
@@ -55,7 +55,7 @@ iowave::iowave(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)  : wave_interf
     epsval=(pow(0.09,0.75)*pow(kinval,0.5))/(0.5*0.4*p->DXM);
 
     if(p->T10==3 || p->T10==13)
-    epsval=(pow(0.09,0.75)*pow(kinval,0.5))/(0.5*0.4*p->DXM);    
+    epsval=(pow(0.09,0.75)*pow(kinval,0.5))/(0.5*0.4*p->DXM);
     
     // ---------------------------------------
     
@@ -176,19 +176,19 @@ iowave::iowave(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)  : wave_interf
     tan_beta[n] = tan(beta[n]);
     
     gcawa1_count=gcawa2_count=gcawa3_count=gcawa4_count=1;
-    p->Iarray(gcawa1, gcawa1_count, 4); 
-    p->Iarray(gcawa2, gcawa2_count, 4); 
-    p->Iarray(gcawa3, gcawa3_count, 4); 
-    p->Iarray(gcawa4, gcawa4_count, 4); 
+    p->Iarray(gcawa1, gcawa1_count, 4);
+    p->Iarray(gcawa2, gcawa2_count, 4);
+    p->Iarray(gcawa3, gcawa3_count, 4);
+    p->Iarray(gcawa4, gcawa4_count, 4);
     p->Darray(Uoutval,gcawa4_count);
     p->Darray(Fioutval, gcawa4_count);
     p->Darray(Fifsfoutval, gcawa4_count);
     
     gcgen1_count=gcgen2_count=gcgen3_count=gcgen4_count=1;
-    p->Iarray(gcgen1, gcgen1_count, 4); 
-    p->Iarray(gcgen2, gcgen2_count, 4); 
-    p->Iarray(gcgen3, gcgen3_count, 4); 
-    p->Iarray(gcgen4, gcgen4_count, 4); 
+    p->Iarray(gcgen1, gcgen1_count, 4);
+    p->Iarray(gcgen2, gcgen2_count, 4);
+    p->Iarray(gcgen3, gcgen3_count, 4);
+    p->Iarray(gcgen4, gcgen4_count, 4);
     
     p->Darray(wsfmax,p->knox,p->knoy);
     

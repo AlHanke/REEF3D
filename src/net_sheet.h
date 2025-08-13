@@ -52,10 +52,10 @@ public:
     virtual void initialize_nhflow(lexer*, fdm_nhf*, ghostcell*);
     virtual void netForces(lexer*, double&, double&, double&, double&, double&, double&);
     
-    virtual const EigenMat& getLagrangePoints(){return lagrangePoints;} 
-    virtual const EigenMat& getLagrangeForces(){return lagrangeForces;} 
-    virtual const EigenMat& getCollarVel(){return collarVel;} 
-    virtual const EigenMat& getCollarPoints(){return collarPoints;} 
+    virtual const EigenMat& getLagrangePoints(){return lagrangePoints;}
+    virtual const EigenMat& getLagrangeForces(){return lagrangeForces;}
+    virtual const EigenMat& getCollarVel(){return collarVel;}
+    virtual const EigenMat& getCollarPoints(){return collarPoints;}
 
     
 private:
@@ -75,7 +75,7 @@ private:
     // -------------------------------
     
     // Preprocessing
-    void ini(lexer*, ghostcell*); 
+    void ini(lexer*, ghostcell*);
     void rotation_tri(lexer*,double,double,double,double&,double&,double&, const double&, const double&, const double&);
     
 
@@ -108,7 +108,7 @@ private:
         );
     
     
-    // ------ 
+    // ------
     
     
     // Parallelisation
@@ -121,19 +121,19 @@ private:
     // Mesh
     int nK;
     MatrixXd x0_, x_, xdot_;
-    double dt_; 
+    double dt_;
     VectorXd mass_knot, weight_knot, added_mass;
     MatrixXd forces_knot;
     double **coupledField, **coupledFieldn;
     
     // Net mesh
-    int tend;  
+    int tend;
     MatrixVd tri_x, tri_y, tri_z;
     MatrixVd tri_x0, tri_y0, tri_z0;
-    vector<Eigen::Vector3d> lagrangePoints;    
-    vector<Eigen::Vector3d> lagrangeForces;  
-    vector<Eigen::Vector3d> collarVel;    
-    vector<Eigen::Vector3d> collarPoints;    
+    vector<Eigen::Vector3d> lagrangePoints;
+    vector<Eigen::Vector3d> lagrangeForces;
+    vector<Eigen::Vector3d> collarVel;
+    vector<Eigen::Vector3d> collarPoints;
 
     // Forces
     double Fx,Fy,Fz;

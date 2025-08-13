@@ -46,10 +46,10 @@ public:
     slice4 ETA2sum, ETAvar; //DKAF
 
 private:
-    int NumDT1;      
+    int NumDT1;
     double T_INTV_mean; // Averaging time for sig wave height
-    double T_sum,dT_sum; 
-    int wfcall;      
+    double T_sum,dT_sum;
+    int wfcall;
     double wtime;
     double stime;        // Start avreging after transients
 

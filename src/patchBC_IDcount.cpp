@@ -27,7 +27,7 @@ Author: Hans Bihs
 
 
 void patchBC::patchBC_IDcount(lexer *p, ghostcell *pgc)
-{    
+{
     int check;
     
     geo_count = p->B440 + p->B441 + p->B442;
@@ -71,7 +71,7 @@ void patchBC::patchBC_IDcount(lexer *p, ghostcell *pgc)
         if(check==1)
         {
         ID_array[count] = p->B440_ID[n];
-        ++count;       
+        ++count;
         }
     }
     
@@ -85,7 +85,7 @@ void patchBC::patchBC_IDcount(lexer *p, ghostcell *pgc)
         if(check==1)
         {
         ID_array[count] = p->B441_ID[n];
-        ++count;       
+        ++count;
         }
     }
     
@@ -99,11 +99,11 @@ void patchBC::patchBC_IDcount(lexer *p, ghostcell *pgc)
         if(check==1)
         {
         ID_array[count] = p->B442_ID[n];
-        ++count;       
+        ++count;
         }
     }
     
     obj_count=count;
 
-} 
+}
 

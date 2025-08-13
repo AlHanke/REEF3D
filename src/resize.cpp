@@ -259,7 +259,7 @@ void resize_class::Iarray(int ***& field, int numi, int *numj, int numk)
 }
 
 void resize_class::cvec(char *& field, int numi)
-{    
+{
     if(numi>0)
     field = new char[numi];
 }

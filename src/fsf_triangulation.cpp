@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-void fsf_vtp::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f) 
+void fsf_vtp::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
 {
     int negcount, poscount;
     

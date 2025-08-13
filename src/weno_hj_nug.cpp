@@ -129,8 +129,8 @@ double weno_hj_nug::fx(lexer *p,fdm *a, field& b, field& uvel, int ipol, double 
             
  
             a1 = cfx[IP][uf][0]/pow(is1x+psi,2.0);
-            a2 = cfx[IP][uf][1]/pow(is2x+psi,2.0); 
-            a3 = cfx[IP][uf][2]/pow(is3x+psi,2.0); 
+            a2 = cfx[IP][uf][1]/pow(is2x+psi,2.0);
+            a3 = cfx[IP][uf][2]/pow(is3x+psi,2.0);
     
     grad = w1x*(q4 + qfx[IP][uf][0][0]*(q3-q4) - qfx[IP][uf][0][1]*(q5-q4))
     
@@ -222,7 +222,7 @@ double weno_hj_nug::fz(lexer *p,fdm *a, field& b, field& wvel, int ipol, double 
 }
 
 void weno_hj_nug::iqmin(lexer *p,fdm *a, field& f, field& uvel, int ipol)
-{    
+{
     q1 = (f.V[Im2JK] - f.V[Im3JK])/DX[IM3];
     q2 = (f.V[Im1JK] - f.V[Im2JK])/DX[IM2];
     q3 = (f.V[IJK]   - f.V[Im1JK])/DX[IM1];

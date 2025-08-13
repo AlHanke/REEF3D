@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 bedprobe_line_y::bedprobe_line_y(lexer *p, ghostcell *pgc, sediment_fdm *s)
-{    
+{
     p->Iarray(iloc,p->P124);
 
     maxknox=pgc->globalimax(p->knoy);
@@ -66,7 +66,7 @@ bedprobe_line_y::bedprobe_line_y(lexer *p, ghostcell *pgc, sediment_fdm *s)
 
     ini_location(p,pgc,s);
     
-    // Create Folder     
+    // Create Folder
     if(p->mpirank==0 && p->A10==2)
     {
     mkdir("./REEF3D_SFLOW_Sediment",0777);
@@ -171,7 +171,7 @@ void bedprobe_line_y::start(lexer *p, ghostcell *pgc, sediment_fdm *s, ioflow *p
         if(p->mpirank==0)
         {
         sort(yloc_all[q], wsf_all[q], flag_all[q], 0, wsfpoints[q]-1);
-        remove_multientry(p,yloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]); 
+        remove_multientry(p,yloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]);
         }
         
     }

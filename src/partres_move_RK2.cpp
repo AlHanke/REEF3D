@@ -38,14 +38,14 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
     
     for(n=0;n<P.index;++n)
     if(P.Flag[n]==ACTIVE)
-    {        
+    {
         if(p->Q11==1)
-        advec_plain(p, a, P, s, pturb, 
+        advec_plain(p, a, P, s, pturb,
                         P.X, P.Y, P.Z, P.U, P.V, P.W,
                         F, G, H, 1.0);
         
         if(p->Q11==2)
-        advec_mppic(p, a, P, s, pturb, 
+        advec_mppic(p, a, P, s, pturb,
                         P.X, P.Y, P.Z, P.U, P.V, P.W,
                         F, G, H, 1.0);
                                          
@@ -80,12 +80,12 @@ void partres::move_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbul
     if(P.Flag[n]==ACTIVE)
     {
         if(p->Q11==1)
-        advec_plain(p, a, P, s, pturb, 
+        advec_plain(p, a, P, s, pturb,
                         P.XRK1, P.YRK1, P.ZRK1, P.URK1, P.VRK1, P.WRK1,
                         F, G, H, 0.5);
                         
         if(p->Q11==2)
-        advec_mppic(p, a, P, s, pturb, 
+        advec_mppic(p, a, P, s, pturb,
                         P.XRK1, P.YRK1, P.ZRK1, P.URK1, P.VRK1, P.WRK1,
                         F, G, H, 0.5);
                         

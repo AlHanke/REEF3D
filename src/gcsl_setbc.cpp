@@ -46,7 +46,7 @@ void ghostcell::gcsl_setbc1(lexer *p)
     
     if(cs==2 && bc==21 && j+p->origin_j==p->gknoy-1)
     p->gcbsl1[n][4]=p->bcside2;
-    }    
+    }
 }
 
 void ghostcell::gcsl_setbc2(lexer *p)
@@ -71,7 +71,7 @@ void ghostcell::gcsl_setbc2(lexer *p)
     
     if(cs==2 && bc==21 && j+p->origin_j==p->gknoy-2)
     p->gcbsl2[n][4]=p->bcside2;
-    }    
+    }
 }
 
 void ghostcell::gcsl_setbc4(lexer *p)
@@ -96,7 +96,7 @@ void ghostcell::gcsl_setbc4(lexer *p)
     
     if(cs==2 && bc==21 && j+p->origin_j==p->gknoy-1)
     p->gcbsl4[n][4]=p->bcside2;
-    }    
+    }
 }
 
 void ghostcell::gcsl_setbcio(lexer *p)
@@ -116,7 +116,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
 
     if(bc==2 || bc==7 || bc==8)
     ++p->gcslout_count;
-    }  
+    }
     
 
     p->Iarray(p->gcslin,p->gcslin_count,6);
@@ -155,7 +155,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
         p->gcslout[count2][5]=1;
         ++count2;
         }
-    }  
+    }
     
     count2=0;
     GCSL1LOOP
@@ -172,7 +172,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
         p->gcslawa1[count2][2]=cs;
         ++count2;
         }
-    } 
+    }
     p->gcslawa1_count=count2;
     
     count2=0;
@@ -190,7 +190,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
         p->gcslawa2[count2][2]=cs;
         ++count2;
         }
-    } 
+    }
     p->gcslawa2_count=count2;
     
     
@@ -216,5 +216,5 @@ void ghostcell::gcsl_setbcio(lexer *p)
         if(cs==4)
         p->IOSL[Ip1J]=2;
         }
-    }  
+    }
 }

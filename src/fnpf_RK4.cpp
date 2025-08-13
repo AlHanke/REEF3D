@@ -70,7 +70,7 @@ fnpf_RK4::~fnpf_RK4()
 }
 
 void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, convection *pconvec, ioflow *pflow, reini *preini)
-{    
+{
     
 // Step 1
     // fsf eta
@@ -222,7 +222,7 @@ void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, conve
     SLICELOOP4
     en(i,j) = erk(i,j);
 
-// Step 4 
+// Step 4
     // fsf eta
     pf->kfsfbc(p,c,pgc);
     pf->damping(p,c,pgc,erk,gcval_eta,1.0);
@@ -269,7 +269,7 @@ void fnpf_RK4::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, conve
 }
 
 void fnpf_RK4::inidisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pflow, solver *psolv)
-{    
+{
     pgc->gcsl_start4(p,c->eta,gcval_eta);
     pgc->start7V(p,c->Fi,c->bc,gcval);
     etaloc_sig(p,c,pgc);
@@ -323,7 +323,7 @@ void fnpf_RK4::inidisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pflow, sol
 }
 
 void fnpf_RK4::ini_wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc)
-{    
+{
     pf->wetdry(p,c,pgc,c->eta,c->Fifsf);   // coastline ini
 
     pf->coastline_eta(p,c,pgc,c->eta);

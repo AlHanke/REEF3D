@@ -64,6 +64,6 @@ double & field2::operator[](int n)
 }
 
 double & field2::operator()(int ii, int jj, int kk)
-{    
+{
     return V[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin];
 }

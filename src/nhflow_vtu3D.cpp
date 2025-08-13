@@ -46,7 +46,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 nhflow_vtu3D::nhflow_vtu3D(lexer* p, fdm_nhf *d, ghostcell *pgc)
-{    
+{
     if(p->I40==0)
     {
     p->printtime=0.0;
@@ -128,7 +128,7 @@ nhflow_vtu3D::nhflow_vtu3D(lexer* p, fdm_nhf *d, ghostcell *pgc)
     if(p->P180==1)
     pfsf = new nhflow_vtp_fsf(p,d,pgc);
 
-    pbed = new nhflow_vtp_bed(p,d,pgc);    
+    pbed = new nhflow_vtp_bed(p,d,pgc);
 }
 
 nhflow_vtu3D::~nhflow_vtu3D()
@@ -287,7 +287,7 @@ void nhflow_vtu3D::start(lexer* p, fdm_nhf* d, ghostcell* pgc, ioflow *pflow, nh
     pforce[n]->start(p,d,pgc);
     
     
-    // ALE force    
+    // ALE force
     if(p->count>0)
     if(p->count%p->P80==0)
     for(n=0;n<p->P85;++n)
@@ -406,7 +406,7 @@ void nhflow_vtu3D::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turbul
     ++n;
     }
     
-    if(p->P25==1 || p->P28==1)  
+    if(p->P25==1 || p->P28==1)
     {
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
     ++n;
@@ -776,7 +776,7 @@ void nhflow_vtu3D::print_vtu(lexer* p, fdm_nhf *d, ghostcell* pgc, nhflow_turbul
     if(i+p->origin_i==-1 && j+p->origin_j==-1 && p->wet[(0-p->imin)*p->jmax + (0-p->jmin)]==1)
     zcoor = p->ZN[KP1]*d->WL(i,j) + d->bed(i,j);
 
-    // -- 
+    // --
     ffn=float(p->XN[IP1]);
     result.write((char*)&ffn, sizeof (float));
 

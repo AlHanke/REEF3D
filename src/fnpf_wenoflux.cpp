@@ -79,7 +79,7 @@ double fnpf_wenoflux::sy(lexer *p, slice &f, slice &Fifsf)
         
         grad = ((jvel2*fv2-jvel1*fv1)/p->DYN[JP]);
               
-    return grad;  
+    return grad;
 }
 
 double fnpf_wenoflux::ffx(lexer *p, slice &f, double advec)
@@ -150,7 +150,7 @@ double fnpf_wenoflux::ffy(lexer *p, slice &f, double advec)
 
 
 void fnpf_wenoflux::iqmin(lexer *p, slice &f)
-{    
+{
     q1 = f(i-2,j);
     q2 = f(i-1,j);
     q3 = f(i,j);

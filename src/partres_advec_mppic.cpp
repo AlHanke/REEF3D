@@ -27,7 +27,7 @@ Authors: Hans Bihs, Alexander Hanke
 #include"sediment_fdm.h"
 #include"ghostcell.h"
 
-void partres::advec_mppic(lexer *p, fdm *a, part &P, sediment_fdm *s, turbulence *pturb, 
+void partres::advec_mppic(lexer *p, fdm *a, part &P, sediment_fdm *s, turbulence *pturb,
                         double *PX, double *PY, double *PZ, double *PU, double *PV, double *PW,
                         double &F, double &G, double &H, double alpha)
 {
@@ -81,9 +81,9 @@ void partres::advec_mppic(lexer *p, fdm *a, part &P, sediment_fdm *s, turbulence
     double fx,fy,fz;
     if(p->S10==2)
     {
-    fx = p->ccipol1c(a->fbh1,PX[n],PY[n],PZ[n])*(0.0-PU[n])/(alpha*p->dtsed); 
-    fy = p->ccipol2c(a->fbh2,PX[n],PY[n],PZ[n])*(0.0-PV[n])/(alpha*p->dtsed); 
-    fz = p->ccipol3c(a->fbh3,PX[n],PY[n],PZ[n])*(0.0-PW[n])/(alpha*p->dtsed); 
+    fx = p->ccipol1c(a->fbh1,PX[n],PY[n],PZ[n])*(0.0-PU[n])/(alpha*p->dtsed);
+    fy = p->ccipol2c(a->fbh2,PX[n],PY[n],PZ[n])*(0.0-PV[n])/(alpha*p->dtsed);
+    fz = p->ccipol3c(a->fbh3,PX[n],PY[n],PZ[n])*(0.0-PW[n])/(alpha*p->dtsed);
     
     F += fx;
     G += fy;
@@ -113,7 +113,7 @@ void partres::advec_mppic(lexer *p, fdm *a, part &P, sediment_fdm *s, turbulence
     cout<<"F: "<<F<<" G: "<<G<<" H: "<<H<<endl;
     cout<<"dTx: "<<dTx_val<<" dTy: "<<dTy_val<<" dTz: "<<dTz_val<<endl;
     exit(1);
-    }    
+    }
 }
 
 

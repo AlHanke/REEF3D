@@ -49,7 +49,7 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
     {
     polygon_sum3+=numpt[n];
     ++polygon_num3;
-    }  
+    }
     
     vertice_num = ccptcount;
     
@@ -204,6 +204,6 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
     result<<endl<<"</AppendedData>"<<endl;
     result<<"</VTKFile>"<<endl;
 
-    result.close();    
+    result.close();
 }
 

@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void iowave::nhflow_precalc_dirichlet(lexer *p, fdm_nhf *d, ghostcell *pgc)
-{  
+{
         double etaval=0.0;
         
         p->wavetime = p->simtime;

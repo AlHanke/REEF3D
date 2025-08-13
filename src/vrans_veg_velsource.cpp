@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void vrans_veg::u_source(lexer *p, fdm *a)
-{    
+{
     // VRANS Vegetation porosity
     count=0;
     if(p->B310>0 || p->B321>0 || p->B322>0)

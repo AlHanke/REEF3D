@@ -68,12 +68,12 @@ nhflow_vtp_fsf::~nhflow_vtp_fsf()
 }
 
 void nhflow_vtp_fsf::start(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *psed)
-{    
+{
     print2D(p,d,pgc,psed);
 }
 
 void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *psed)
-{    
+{
     //pgc->gcsl_start4(p,d->eta,gcval_eta);
     //pgc->gcsl_start4(p,d->Fifsf,gcval_fifsf);
     
@@ -85,7 +85,7 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
     d->breaking_print(i,j)=double(d->breaking(i,j));
         
     if(d->breaking(i,j)==0)
-    d->breaking_print(i,j)=0.0;   
+    d->breaking_print(i,j)=0.0;
     }
     
     //pgd->gcsl_start4(p,d->breaking_print,50);
@@ -467,13 +467,13 @@ void nhflow_vtp_fsf::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
 }
 
 void nhflow_vtp_fsf::preproc(lexer *p, fdm_nhf *d, ghostcell* pgc)
-{    
+{
     if(p->P131==1)
     {
     SLICELOOP4
     wetmax[IJ] = MAX(wetmax[IJ],p->wet[IJ]);
     
-    pgc->gcsl_start4Vint(p,wetmax,50);    
+    pgc->gcsl_start4Vint(p,wetmax,50);
     }
     
 }

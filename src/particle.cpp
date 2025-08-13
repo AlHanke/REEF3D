@@ -62,7 +62,7 @@ particle_pls::~particle_pls()
 }
 
 void particle_pls::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
-{ 
+{
 
     starttime=pgc->timer();
     
@@ -86,7 +86,7 @@ void particle_pls::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow)
     parcount(p,a,pgc);
     random_delete(p,a,pgc);
     reseed(p,a,pgc,0.5);
-    setradius(p,a);    
+    setradius(p,a);
     vel_setback(p,a,pgc);
     pgc->start4(p,a->phi,gcval_phi);
 

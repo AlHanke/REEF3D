@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"mgcslice4.h"
 
 void driver::makegrid_sigma(lexer *p, ghostcell *pgc)
-{    
+{
     int q;
     
 // flag7
@@ -83,7 +83,7 @@ void driver::makegrid_sigma(lexer *p, ghostcell *pgc)
     p->Iarray(p->gcxco7,4,maxnum,3);
 
 // ---------------
-// gcx7 
+// gcx7
     //nb1
     q=0;
     if(p->nb1>=0)
@@ -142,7 +142,7 @@ void driver::makegrid_sigma(lexer *p, ghostcell *pgc)
     p->gcx7_count[2]=q;
 
 // ---------------
-// gcxco7 
+// gcxco7
     //nb1
     q=0;
     if(p->nb1>=0)
@@ -338,7 +338,7 @@ void driver::makegrid_sigma(lexer *p, ghostcell *pgc)
 
 void driver::makegrid2D_basic(lexer *p, ghostcell *pgc)
 {
-    // 2D   
+    // 2D
     pgc->gcslflagx(p,p->flagslice4);
     
     mgcslice4 msl4(p);
@@ -355,13 +355,13 @@ void driver::makegrid2D_basic(lexer *p, ghostcell *pgc)
     pgc->gcsl_setbc4(p);
     pgc->gcsl_setbcio(p);
     
-    pgc->dgcslini4(p); 
+    pgc->dgcslini4(p);
 }
     
 void driver::makegrid_sigma_cds(lexer *p, ghostcell *pgc)
-{    
+{
     p->flagini2D();
-    p->gridini2D();    
+    p->gridini2D();
     
     pgc->sizeS_update(p);
     pgc->gcxslupdate(p);

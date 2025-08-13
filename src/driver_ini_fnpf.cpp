@@ -147,7 +147,7 @@ void driver::driver_ini_fnpf()
     p->polygon_sum=0;
     
    
-    TPSLICELOOP  
+    TPSLICELOOP
     {
     ++count;
     ++p->pointnum2D;
@@ -187,7 +187,7 @@ void driver::driver_ini_fnpf()
     pflow->gcio_update(p,a,pgc);
     pflow->ini_fnpf(p,c,pgc);  // including fullini
 
-    ppfsg->ini(p,c,pgc,pflow,preini);  // --- 
+    ppfsg->ini(p,c,pgc,pflow,preini);  // ---
     
     pgc->start7V(p,c->Fi,c->bc,250);
     ppfsg->inidisc(p,c,pgc,pflow,psolv);    // ini wetdry and coastline

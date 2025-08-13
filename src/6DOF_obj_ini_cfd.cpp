@@ -95,7 +95,7 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
      pgc->start3(p,a->fbh3,12);
      pgc->start4(p,a->fbh4,40);
 
-    // Print initial body 
+    // Print initial body
     if(p->X50==1)
     print_vtp(p,pgc);
     
@@ -110,7 +110,7 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     
     else
     {
-        MPI_Bcast(&p->mooring_count,1,MPI_DOUBLE,0,pgc->mpi_comm);    
+        MPI_Bcast(&p->mooring_count,1,MPI_DOUBLE,0,pgc->mpi_comm);
 
         Xme.resize(p->mooring_count);
         Yme.resize(p->mooring_count);
@@ -120,7 +120,7 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
         Nme.resize(p->mooring_count);
 
         if(p->mpirank==0)
-        mkdir("./REEF3D_CFD_6DOF_Mooring",0777);    
+        mkdir("./REEF3D_CFD_6DOF_Mooring",0777);
 
         pmooring.reserve(p->mooring_count);
         X311_xen.resize(p->mooring_count,0.0);
@@ -132,11 +132,11 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
             if(p->X310==1)
             {
                 pmooring.push_back(new mooring_Catenary(i));
-            }    
+            }
             else if(p->X310==2)
             {
-                pmooring.push_back(new mooring_barQuasiStatic(i)); 
-            }    
+                pmooring.push_back(new mooring_barQuasiStatic(i));
+            }
             else if(p->X310==3)
             {
                 pmooring.push_back(new mooring_dynamic(i));
@@ -152,7 +152,7 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
         
             pmooring[i]->initialize(p,pgc);
         }
-    }    
+    }
 
 
     pnetinter->initialize_cfd(p,a,pgc);
@@ -196,5 +196,5 @@ void sixdof_obj::ini_parallel(lexer *p, ghostcell *pgc)
         MPI_Bcast(&zstart[i],1,MPI_DOUBLE,i,pgc->mpi_comm);
         MPI_Bcast(&zend[i],1,MPI_DOUBLE,i,pgc->mpi_comm);
     }
-}    
+}
 

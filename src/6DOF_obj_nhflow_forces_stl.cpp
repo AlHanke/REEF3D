@@ -57,7 +57,7 @@ void sixdof_obj::force_calc_stl(lexer* p, fdm_nhf *d, ghostcell *pgc, bool final
     curr_time = p->simtime;
 
     for (int n = 0; n < tricount; ++n)
-    {     
+    {
         // Vertices of triangle
         x0 = tri_x[n][0];
         y0 = tri_y[n][0];
@@ -69,7 +69,7 @@ void sixdof_obj::force_calc_stl(lexer* p, fdm_nhf *d, ghostcell *pgc, bool final
         
         x2 = tri_x[n][2];
         y2 = tri_y[n][2];
-        z2 = tri_z[n][2];  
+        z2 = tri_z[n][2];
            
         // Center of triangle
         xc = (x0 + x1 + x2)/3.0;
@@ -87,9 +87,9 @@ void sixdof_obj::force_calc_stl(lexer* p, fdm_nhf *d, ghostcell *pgc, bool final
         {
             
             
-            // Normal vectors (always pointing outwards)     
+            // Normal vectors (always pointing outwards)
             nx = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
-            ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0); 
+            ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
             nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
 
             norm = sqrt(nx*nx + ny*ny + nz*nz);
@@ -109,7 +109,7 @@ void sixdof_obj::force_calc_stl(lexer* p, fdm_nhf *d, ghostcell *pgc, bool final
             j = p->posc_j(yc);
             k = p->posc_sig(i,j,zc);
             
-            etaval = p->ccslipol4(d->eta,xc,yc);  
+            etaval = p->ccslipol4(d->eta,xc,yc);
             
             fsf_z = p->wd + etaval;
             
@@ -294,7 +294,7 @@ void sixdof_obj::force_calc_stl(lexer* p, fdm_nhf *d, ghostcell *pgc, bool final
 
             // pressure
             pval   = p->ccipol7P(d->P, d->WL, d->bed, xp, yp, zp);// - p->pressgage;
-            etaval = p->ccslipol4(d->eta,xp,yp);  
+            etaval = p->ccslipol4(d->eta,xp,yp);
             hspval = (p->wd + etaval - zp)*p->W1*fabs(p->W22);
 
             Fp_x = -(pval + hspval)*A_triang*nx*f_jdir;
@@ -329,7 +329,7 @@ void sixdof_obj::force_calc_stl(lexer* p, fdm_nhf *d, ghostcell *pgc, bool final
             A += A_triang;
             }
         }
-    }        
+    }
  
     // Communication with other processors
     A = pgc->globalsum(A);
@@ -365,11 +365,11 @@ void sixdof_obj::force_calc_stl(lexer* p, fdm_nhf *d, ghostcell *pgc, bool final
     cout<<"Xe: "<<Xe<<" Ye: "<<Ye<<" Ze: "<<Ze<<" Ke: "<<Ke<<" Me: "<<Me<<" Ne: "<<Ne<<endl;
     }
 
-    // Print results    
-    if (p->mpirank==0 && finalize==1) 
+    // Print results
+    if (p->mpirank==0 && finalize==1)
     {
         printforce<<curr_time<<" \t "<<Xe<<" \t "<<Ye<<" \t "<<Ze<<" \t "<<Ke
-        <<" \t "<<Me<<" \t "<<Ne<<" \t "<<Xe_p<<" \t "<<Ye_p<<" \t "<<Ze_p<<" \t "<<Xe_v<<" \t "<<Ye_v<<" \t "<<Ze_v<<endl;   
+        <<" \t "<<Me<<" \t "<<Ne<<" \t "<<Xe_p<<" \t "<<Ye_p<<" \t "<<Ze_p<<" \t "<<Xe_v<<" \t "<<Ye_v<<" \t "<<Ze_v<<endl;
     }
 }
 

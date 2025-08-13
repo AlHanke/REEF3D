@@ -29,7 +29,7 @@ Author: Hans Bihs
 #include"mgcslice4.h"
 
 void driver::makegrid2D(lexer *p, ghostcell *pgc)
-{   
+{
     pgc->gcslflagx(p,p->flagslice4);
     
     mgcslice1 m1(p);
@@ -75,11 +75,11 @@ void driver::makegrid2D(lexer *p, ghostcell *pgc)
 }
  
 void driver::makegrid2D_cds(lexer *p, ghostcell *pgc, fdm2D *b)
-{      
+{
     p->flagini2D();
-    p->gridini2D();    
+    p->gridini2D();
 
     pgc->sizeS_update(p);
     
-    pgc->gcxslupdate(p); 
+    pgc->gcxslupdate(p);
 }

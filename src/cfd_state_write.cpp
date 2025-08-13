@@ -72,73 +72,73 @@ void cfd_state::write_result(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb
     result.write((char*)&ddn, sizeof (double));
     
     ddn=p->stateprinttime;
-    result.write((char*)&ddn, sizeof (double));   
+    result.write((char*)&ddn, sizeof (double));
     
     ALOOP
     {
     ffn=a->topo(i,j,k);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     ULOOP
     {
     ffn=a->u(i,j,k);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
 
     VLOOP
     {
     ffn=a->v(i,j,k);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     WLOOP
     {
     ffn=a->w(i,j,k);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     LOOP
     {
     ffn=a->press(i,j,k);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     LOOP
     {
     ffn=a->phi(i,j,k);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     LOOP
     {
     ffn=pturb->kinval(i,j,k);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     LOOP
     {
     ffn=pturb->epsval(i,j,k);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     LOOP
     {
     ffn=a->eddyv(i,j,k);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
 
     SLICELOOP4
     {
     ffn=psed->qbeval(i,j);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     LOOP
     {
     ffn=a->conc(i,j,k);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     
     result.close();

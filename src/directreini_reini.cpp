@@ -37,7 +37,7 @@ void directreini::reini(lexer *p,fdm* a, ghostcell *pgc, field& b, fieldint& nod
 
     for(n=0;n<numtri; ++n)
     if(numfac[n]>0)
-    for(q=0;q<4;++q)    
+    for(q=0;q<4;++q)
     {
     ls[tri[n][q]] = sg(ls[tri[n][q]])*1.0e20;
     
@@ -45,7 +45,7 @@ void directreini::reini(lexer *p,fdm* a, ghostcell *pgc, field& b, fieldint& nod
     
     lsfac[tri[n][q]] = sg(lsfac[tri[n][q]])*1.0e20;
 
-    reiniflag[tri[n][q]]=0;    
+    reiniflag[tri[n][q]]=0;
     }
 
     int checker=0;
@@ -148,7 +148,7 @@ void directreini::reini(lexer *p,fdm* a, ghostcell *pgc, field& b, fieldint& nod
     {
         if(reiniflag[tri[n][q]]>=1)
         {
-        ls[tri[n][q]]=lsfac[tri[n][q]];    
+        ls[tri[n][q]]=lsfac[tri[n][q]];
         }
         
         if(reiniflag[tri[n][q]]==0)

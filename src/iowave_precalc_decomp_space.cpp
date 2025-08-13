@@ -93,7 +93,7 @@ void iowave::wavegen_precalc_space(lexer *p, ghostcell *pgc)
     }
 
 
-    count=0;    
+    count=0;
     VLOOP
     {
         xg = xgen2(p);
@@ -113,7 +113,7 @@ void iowave::wavegen_precalc_space(lexer *p, ghostcell *pgc)
         if(zloc2>p->phimean+p->wA)
         z = 0.5*(eta(i,j)+eta(i,j+1));
         
-        // Wave Generation        
+        // Wave Generation
         if(p->B98==2 && v_switch==1)
         {
             // Zone 1
@@ -164,7 +164,7 @@ void iowave::wavegen_precalc_space(lexer *p, ghostcell *pgc)
             ++count;
             }
         }
-    }    
+    }
 
     count=0;
     if(f_switch==1)

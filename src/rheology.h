@@ -27,7 +27,7 @@ class lexer;
 class fdm;
 class ghostcell;
 
-class rheology 
+class rheology
 {
 
 public:

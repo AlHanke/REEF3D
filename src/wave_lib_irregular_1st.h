@@ -74,7 +74,7 @@ public:
     virtual void wave_prestep(lexer*,ghostcell*);
     
 private:
-    double singamma,cosgamma;    
+    double singamma,cosgamma;
     double T,vel,eta,fi;
     
     double *sinhkd;

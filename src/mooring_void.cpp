@@ -23,7 +23,7 @@ Author: Tobias Martin
 #include"mooring_void.h"
 
 void mooring_void::start(lexer *p, ghostcell *pgc)
-{    
+{
 }
 
 void mooring_void::initialize(lexer *p, ghostcell *pgc)

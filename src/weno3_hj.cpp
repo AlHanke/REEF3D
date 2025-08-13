@@ -191,7 +191,7 @@ double weno3_hj::fz(lexer *p,fdm *a, field& b, field& wvel, int ipol, double adv
 }
 
 void weno3_hj::iqmin(lexer *p,fdm *a, field& f, field& uvel, int ipol)
-{    
+{
     q1 = (f(i-1,j,k)-f(i-2,j,k))/DX[IM2];
     q2 = (f(i,j,k)-f(i-1,j,k))/DX[IM1];
     q3 = (f(i+1,j,k)-f(i,j,k))/DX[IP];

@@ -44,7 +44,7 @@ void VOF_PLIC::updatePhasemarkers( lexer* p, fdm* a, ghostcell* pgc,field& voffi
     LOOP
     {
         if(a->phasemarker(i,j,k)>-0.1 && a->phasemarker(i,j,k)<1.0)
-        {   
+        {
             if(searchMarkerInVicinity(p,a,1,10.0,i,j,k)>=1)
             {
                 a->phasemarker(i,j,k)=6.0;
@@ -67,7 +67,7 @@ void VOF_PLIC::updatePhasemarkers( lexer* p, fdm* a, ghostcell* pgc,field& voffi
     
     pgc->start4(p,a->phasemarker,1);*/
 
-} 
+}
 
 void VOF_PLIC::updatePhasemarkersCompression( lexer* p, fdm* a, ghostcell* pgc,field& voffield)
 {
@@ -89,7 +89,7 @@ void VOF_PLIC::updatePhasemarkersCompression( lexer* p, fdm* a, ghostcell* pgc,f
     LOOP
     {
         if(a->phasemarker(i,j,k)>-0.1 && a->phasemarker(i,j,k)<1.0)
-        {   
+        {
             if(searchMarkerInVicinity(p,a,2,10.0,i,j,k)>=1)
             {
                 a->phasemarker(i,j,k)=6.0;
@@ -192,7 +192,7 @@ void VOF_PLIC::updatePhasemarkersCompression( lexer* p, fdm* a, ghostcell* pgc,f
     LOOP
     {
         if(a->phasemarker(i,j,k)>-0.1 && a->phasemarker(i,j,k)<1.0)
-        {   
+        {
             if(searchMarkerInVicinity(p,a,2,10.0,i,j,k)>=1)
             {
                 a->phasemarker(i,j,k)=6.0;
@@ -209,7 +209,7 @@ void VOF_PLIC::updatePhasemarkersCompression( lexer* p, fdm* a, ghostcell* pgc,f
             voffield(i,j,k)=0.0;
     }
     
-    pgc->start4(p,voffield,1); 
+    pgc->start4(p,voffield,1);
     
     return;
     
@@ -233,7 +233,7 @@ void VOF_PLIC::updatePhasemarkersCorrection( lexer* p, fdm* a, ghostcell* pgc,fi
     LOOP
     {
         if(a->phasemarker(i,j,k)>-0.1 && a->phasemarker(i,j,k)<0.1)
-        {   
+        {
             if(searchMarkerInVicinity(p,a,12,10.0,i,j,k)>=1)
             {
                 a->phasemarker(i,j,k)=6.0;
@@ -275,7 +275,7 @@ void VOF_PLIC::updatePhasemarkersCorrection( lexer* p, fdm* a, ghostcell* pgc,fi
             voffield(i,j,k)=0.0;
     }
     
-    pgc->start4(p,voffield,1); 
+    pgc->start4(p,voffield,1);
     
     return;
 }

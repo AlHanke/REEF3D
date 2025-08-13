@@ -69,7 +69,7 @@ void nhflow_forcing::read_stl(lexer *p, ghostcell *pgc)
     p->Dresize(tri_z,tricount,count,3,3);
     p->Dresize(tri_x0,tricount,count,3,3);
     p->Dresize(tri_y0,tricount,count,3,3);
-    p->Dresize(tri_z0,tricount,count,3,3);        
+    p->Dresize(tri_z0,tricount,count,3,3);
     
     tricount=count;
     
@@ -137,8 +137,8 @@ void nhflow_forcing::read_stl(lexer *p, ghostcell *pgc)
     }
 }
 
-void nhflow_forcing::rotation_tri(lexer *p,double phi_,double theta_,double psi_, 
-                                    double &xvec,double &yvec,double &zvec, 
+void nhflow_forcing::rotation_tri(lexer *p,double phi_,double theta_,double psi_,
+                                    double &xvec,double &yvec,double &zvec,
                                     const double& x0, const double& y0, const double& z0)
 {
     // Distance to origin
@@ -155,5 +155,5 @@ void nhflow_forcing::rotation_tri(lexer *p,double phi_,double theta_,double psi_
     xvec += x0;
     yvec += y0;
     zvec += z0;
-}    
+}
 

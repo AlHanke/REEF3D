@@ -131,7 +131,7 @@ void gage_discharge_x::start(lexer *p, fdm *a, ghostcell *pgc)
     
     if(p->mpirank==0 && p->P166==1)
     for(n=0;n<p->P167;++n)
-    cout<<n+1<<setprecision(6)<<" Qi: "<<q[n]<<endl;  
+    cout<<n+1<<setprecision(6)<<" Qi: "<<q[n]<<endl;
 
     // write to file
     if(p->mpirank==0)

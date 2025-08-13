@@ -33,7 +33,7 @@ void sixdof_obj::box(lexer *p, ghostcell *pgc, int id)
     ye = p->X110_ye[id];
 
     zs = p->X110_zs[id];
-    ze = p->X110_ze[id];    
+    ze = p->X110_ze[id];
     
     // Face 3
     // Tri 1

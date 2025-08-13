@@ -1888,7 +1888,7 @@ void lexer::ctrlrecv()
     X211_q = dctrl[dd];
     dd++;
     X211_r = dctrl[dd];
-    dd++;    
+    dd++;
     X240 = ictrl[ii];
     ii++;
     X241 = dctrl[dd];
@@ -1902,17 +1902,17 @@ void lexer::ctrlrecv()
     X243 = dctrl[dd];
     dd++;
     X310 = ictrl[ii];
-    ii++;    
+    ii++;
     X311 = ictrl[ii];
     ii++;
     X312 = ictrl[ii];
-    ii++;    
+    ii++;
     X313 = ictrl[ii];
-    ii++;    
+    ii++;
     X314 = ictrl[ii];
-    ii++;    
+    ii++;
     X315 = ictrl[ii];
-    ii++;    
+    ii++;
     X320 = ictrl[ii];
     ii++;
     X321 = ictrl[ii];
@@ -1937,11 +1937,11 @@ void lexer::ctrlrecv()
     ii++;
     X401_p0 = dctrl[dd];
     dd++;
-    X401_cl = dctrl[dd]; 
+    X401_cl = dctrl[dd];
     dd++;
-    X401_cb = dctrl[dd]; 
+    X401_cb = dctrl[dd];
     dd++;
-    X401_a = dctrl[dd]; 
+    X401_a = dctrl[dd];
     dd++;
     X410 = ictrl[ii];
     ii++;
@@ -1989,7 +1989,7 @@ void lexer::ctrlrecv()
     Z12_ckz = dctrl[dd];
     dd++;
 
-// --------------------------    
+// --------------------------
     
     if(A581>0)
     {
@@ -2104,7 +2104,7 @@ void lexer::ctrlrecv()
     }
     
     if(B240>0)
-    {    
+    {
     Darray(B240_C,B240);
     Darray(B240_D,B240);
     Darray(B240_xs,B240);
@@ -2116,7 +2116,7 @@ void lexer::ctrlrecv()
     }
     
     if(B270>0)
-    {    
+    {
     Darray(B270_xs,B270);
     Darray(B270_xe,B270);
     Darray(B270_ys,B270);
@@ -2130,7 +2130,7 @@ void lexer::ctrlrecv()
     }
     
     if(B274>0)
-    {    
+    {
     Darray(B274_xc,B274);
     Darray(B274_yc,B274);
     Darray(B274_zs,B274);
@@ -2143,7 +2143,7 @@ void lexer::ctrlrecv()
     }
     
     if(B281>0)
-    {    
+    {
     Darray(B281_xs,B281);
     Darray(B281_xe,B281);
     Darray(B281_ys,B281);
@@ -2157,7 +2157,7 @@ void lexer::ctrlrecv()
     }
 
     if(B282>0)
-    {    
+    {
     Darray(B282_xs,B282);
     Darray(B282_xe,B282);
     Darray(B282_ys,B282);
@@ -2171,7 +2171,7 @@ void lexer::ctrlrecv()
     }
     
     if(B291>0)
-    {    
+    {
     Darray(B291_xs,B291);
     Darray(B291_xe,B291);
     Darray(B291_ys,B291);
@@ -2186,7 +2186,7 @@ void lexer::ctrlrecv()
     }
     
     if(B310>0)
-    {    
+    {
     Darray(B310_xs,B310);
     Darray(B310_xe,B310);
     Darray(B310_ys,B310);
@@ -2199,7 +2199,7 @@ void lexer::ctrlrecv()
     }
 
     if(B321>0)
-    {    
+    {
     Darray(B321_xs,B321);
     Darray(B321_xe,B321);
     Darray(B321_ys,B321);
@@ -2212,7 +2212,7 @@ void lexer::ctrlrecv()
     }
 
     if(B322>0)
-    {    
+    {
     Darray(B322_xs,B322);
     Darray(B322_xe,B322);
     Darray(B322_ys,B322);
@@ -2324,48 +2324,48 @@ void lexer::ctrlrecv()
     
     if(C75>0)
     {
-    Darray(C75_x,C75);   
-    Darray(C75_z,C75);  
+    Darray(C75_x,C75);
+    Darray(C75_z,C75);
     
-    Darray(C75_a,C75);      
-    Darray(C75_s,C75);  
-    Darray(C75_l,C75);  
-    Darray(C75_v,C75);  
+    Darray(C75_a,C75);
+    Darray(C75_s,C75);
+    Darray(C75_l,C75);
+    Darray(C75_v,C75);
     }
 
     if(F70>0)
     {
-    Darray(F70_xs,F70);  
-    Darray(F70_xe,F70);  
+    Darray(F70_xs,F70);
+    Darray(F70_xe,F70);
     
-    Darray(F70_ys,F70);  
-    Darray(F70_ye,F70);  
+    Darray(F70_ys,F70);
+    Darray(F70_ye,F70);
     
-    Darray(F70_zs,F70);  
-    Darray(F70_ze,F70);  
+    Darray(F70_zs,F70);
+    Darray(F70_ze,F70);
     }
     
     if(F71>0)
     {
-    Darray(F71_xs,F71);  
-    Darray(F71_xe,F71);  
+    Darray(F71_xs,F71);
+    Darray(F71_xe,F71);
     
-    Darray(F71_ys,F71);  
-    Darray(F71_ye,F71);  
+    Darray(F71_ys,F71);
+    Darray(F71_ye,F71);
     
-    Darray(F71_zs,F71);  
-    Darray(F71_ze,F71);  
+    Darray(F71_zs,F71);
+    Darray(F71_ze,F71);
     }
     
     if(F72>0)
     {
-    Darray(F72_xs,F72);  
-    Darray(F72_xe,F72);  
+    Darray(F72_xs,F72);
+    Darray(F72_xe,F72);
     
-    Darray(F72_ys,F72);  
-    Darray(F72_ye,F72);  
+    Darray(F72_ys,F72);
+    Darray(F72_ye,F72);
     
-    Darray(F72_h,F72);  
+    Darray(F72_h,F72);
     }
     
     if(F112>0)
@@ -2418,235 +2418,235 @@ void lexer::ctrlrecv()
 
     if(F369>0)
     {
-    Darray(F369_x,F369);   
-    Darray(F369_z,F369);  
+    Darray(F369_x,F369);
+    Darray(F369_z,F369);
     
-    Darray(F369_a,F369);      
-    Darray(F369_s,F369);  
-    Darray(F369_l,F369);  
-    Darray(F369_v,F369);  
+    Darray(F369_a,F369);
+    Darray(F369_s,F369);
+    Darray(F369_l,F369);
+    Darray(F369_v,F369);
     }
     
     if(F370>0)
     {
-    Darray(F370_xs,F370);  
-    Darray(F370_xe,F370);  
+    Darray(F370_xs,F370);
+    Darray(F370_xe,F370);
     
-    Darray(F370_ys,F370);  
-    Darray(F370_ye,F370);  
+    Darray(F370_ys,F370);
+    Darray(F370_ye,F370);
     
-    Darray(F370_zs,F370);  
-    Darray(F370_ze,F370);  
+    Darray(F370_zs,F370);
+    Darray(F370_ze,F370);
     }
     
     if(F371>0)
     {
-    Darray(F371_xs,F371);  
-    Darray(F371_xe,F371);  
+    Darray(F371_xs,F371);
+    Darray(F371_xe,F371);
     
-    Darray(F371_ys,F371);  
-    Darray(F371_ye,F371);  
+    Darray(F371_ys,F371);
+    Darray(F371_ye,F371);
     
-    Darray(F371_zs,F371);  
-    Darray(F371_ze,F371);  
+    Darray(F371_zs,F371);
+    Darray(F371_ze,F371);
     }
     
     if(F374>0)
     {
-    Darray(F374_xc,F374);  
+    Darray(F374_xc,F374);
     Darray(F374_zc,F374);
-    Darray(F374_r,F374);  
+    Darray(F374_r,F374);
     }
     
     if(F375>0)
     {
-    Darray(F375_xc,F375);  
+    Darray(F375_xc,F375);
     Darray(F375_zc,F375);
-    Darray(F375_r,F375);  
+    Darray(F375_r,F375);
     }
     
     if(F378>0)
     {
-    Darray(F378_xc,F378);  
-    Darray(F378_yc,F378);  
+    Darray(F378_xc,F378);
+    Darray(F378_yc,F378);
     Darray(F378_zc,F378);
-    Darray(F378_r,F378);  
+    Darray(F378_r,F378);
     }
     
     if(F379>0)
     {
-    Darray(F379_xc,F379);  
-    Darray(F379_yc,F379);  
+    Darray(F379_xc,F379);
+    Darray(F379_yc,F379);
     Darray(F379_zc,F379);
-    Darray(F379_r,F379);  
+    Darray(F379_r,F379);
     }
     
     if(F390>0)
     {
-    Darray(F390_xs,F390);  
-    Darray(F390_xe,F390);  
+    Darray(F390_xs,F390);
+    Darray(F390_xe,F390);
     
-    Darray(F390_ys,F390);  
-    Darray(F390_ye,F390);  
+    Darray(F390_ys,F390);
+    Darray(F390_ye,F390);
     
-    Darray(F390_zs,F390);  
-    Darray(F390_ze,F390);  
+    Darray(F390_zs,F390);
+    Darray(F390_ze,F390);
     }
     
     if(F391>0)
     {
-    Darray(F391_xs,F391);  
-    Darray(F391_xe,F391);  
+    Darray(F391_xs,F391);
+    Darray(F391_xe,F391);
     
-    Darray(F391_ys,F391);  
-    Darray(F391_ye,F391);  
+    Darray(F391_ys,F391);
+    Darray(F391_ye,F391);
     
-    Darray(F391_zs,F391);  
-    Darray(F391_ze,F391);  
+    Darray(F391_zs,F391);
+    Darray(F391_ze,F391);
     }
     
     if(F394>0)
     {
-    Darray(F394_xc,F394);  
+    Darray(F394_xc,F394);
     Darray(F394_zc,F394);
-    Darray(F394_r,F394);  
+    Darray(F394_r,F394);
     }
     
     if(F395>0)
     {
-    Darray(F395_xc,F395);  
+    Darray(F395_xc,F395);
     Darray(F395_zc,F395);
-    Darray(F395_r,F395);  
+    Darray(F395_r,F395);
     }
     
     if(F398>0)
     {
-    Darray(F398_xc,F398);  
-    Darray(F398_yc,F398);  
+    Darray(F398_xc,F398);
+    Darray(F398_yc,F398);
     Darray(F398_zc,F398);
-    Darray(F398_r,F398);  
+    Darray(F398_r,F398);
     }
     
     if(F399>0)
     {
-    Darray(F399_xc,F399);  
-    Darray(F399_yc,F399);  
+    Darray(F399_xc,F399);
+    Darray(F399_yc,F399);
     Darray(F399_zc,F399);
-    Darray(F399_r,F399);  
+    Darray(F399_r,F399);
     }
     
     if(P35>0)
     {
-    Darray(P35_ts,P35);  
-    Darray(P35_te,P35);  
-    Darray(P35_dt,P35);  
+    Darray(P35_ts,P35);
+    Darray(P35_te,P35);
+    Darray(P35_dt,P35);
     }
     
     if(P50>0)
     {
-    Darray(P50_x,P50);  
-    Darray(P50_y,P50);  
+    Darray(P50_x,P50);
+    Darray(P50_y,P50);
     }
     
     if(P51>0)
     {
-    Darray(P51_x,P51);  
-    Darray(P51_y,P51);  
+    Darray(P51_x,P51);
+    Darray(P51_y,P51);
     }
     
     if(P52>0)
     Darray(P52_y,P52);
 
     if(P56>0)
-    Darray(P56_x,P56);  
+    Darray(P56_x,P56);
 
     if(P58>0)
     {
-    Darray(P58_x,P58);  
-    Darray(P58_y,P58); 
-    Darray(P58_T,P58);  
+    Darray(P58_x,P58);
+    Darray(P58_y,P58);
+    Darray(P58_T,P58);
     }
     
     if(P61>0)
     {
-    Darray(P61_x,P61);  
-    Darray(P61_y,P61); 
-    Darray(P61_z,P61);  
+    Darray(P61_x,P61);
+    Darray(P61_y,P61);
+    Darray(P61_z,P61);
     }
     
     if(P62>0)
     {
-    Darray(P62_xs,P62); 
-    Darray(P62_xe,P62); 
+    Darray(P62_xs,P62);
+    Darray(P62_xe,P62);
     
-    Darray(P62_ys,P62); 
-    Darray(P62_ye,P62); 
+    Darray(P62_ys,P62);
+    Darray(P62_ye,P62);
     
-    Darray(P62_zs,P62); 
-    Darray(P62_ze,P62); 
+    Darray(P62_zs,P62);
+    Darray(P62_ze,P62);
     }
     
     if(P63>0)
     {
-    Darray(P63_x,P63);  
-    Darray(P63_y,P63); 
+    Darray(P63_x,P63);
+    Darray(P63_y,P63);
     }
 
     if(P64>0)
     {
-    Darray(P64_x,P64);  
-    Darray(P64_y,P64); 
-    Darray(P64_z,P64);  
+    Darray(P64_x,P64);
+    Darray(P64_y,P64);
+    Darray(P64_z,P64);
     }
     
     if(P65>0)
     {
-    Darray(P65_x,P65);  
-    Darray(P65_y,P65); 
-    Darray(P65_z,P65);  
+    Darray(P65_x,P65);
+    Darray(P65_y,P65);
+    Darray(P65_z,P65);
     }
 
     if(P66>0)
     {
-    Darray(P66_x,P66);  
-    Darray(P66_y,P66); 
-    Darray(P66_z,P66);  
+    Darray(P66_x,P66);
+    Darray(P66_y,P66);
+    Darray(P66_z,P66);
     }
     
     if(P67>0)
     {
-    Darray(P67_x,P67);  
-    Darray(P67_y,P67);  
+    Darray(P67_x,P67);
+    Darray(P67_y,P67);
     }
     
     if(P68>0)
     {
-    Darray(P68_x,P68);  
-    Darray(P68_y,P68);  
+    Darray(P68_x,P68);
+    Darray(P68_y,P68);
     }
     
     if(P69>0)
     {
-    Darray(P69_x,P69);  
-    Darray(P69_y,P69);  
+    Darray(P69_x,P69);
+    Darray(P69_y,P69);
     }
     
     if(P81>0)
     {
-    Darray(P81_xs,P81); 
-    Darray(P81_xe,P81); 
+    Darray(P81_xs,P81);
+    Darray(P81_xe,P81);
     
-    Darray(P81_ys,P81); 
-    Darray(P81_ye,P81); 
+    Darray(P81_ys,P81);
+    Darray(P81_ye,P81);
     
-    Darray(P81_zs,P81); 
-    Darray(P81_ze,P81); 
+    Darray(P81_zs,P81);
+    Darray(P81_ze,P81);
     }
     
     if(P85>0)
     {
-    Darray(P85_x,P85); 
-    Darray(P85_y,P85); 
+    Darray(P85_x,P85);
+    Darray(P85_y,P85);
     Darray(P85_r,P85);
     Darray(P85_cd,P85);
     Darray(P85_cm,P85);
@@ -2654,14 +2654,14 @@ void lexer::ctrlrecv()
     
     if(P88>0)
     {
-    Darray(P88_x,P88); 
-    Darray(P88_y,P88); 
+    Darray(P88_x,P88);
+    Darray(P88_y,P88);
     }
     
     if(P121>0)
     {
-    Darray(P121_x,P121);  
-    Darray(P121_y,P121);  
+    Darray(P121_x,P121);
+    Darray(P121_y,P121);
     }
     
     if(P123>0)
@@ -2672,8 +2672,8 @@ void lexer::ctrlrecv()
     
     if(P125>0)
     {
-    Darray(P125_x,P125);  
-    Darray(P125_y,P125);  
+    Darray(P125_x,P125);
+    Darray(P125_y,P125);
     }
     
     if(P133>0)
@@ -2689,7 +2689,7 @@ void lexer::ctrlrecv()
     }
 
     if(P167>0)
-    Darray(P167_x,P167); 
+    Darray(P167_x,P167);
 
     if(P168>0)
     {
@@ -2700,57 +2700,57 @@ void lexer::ctrlrecv()
     
     if(P184>0)
     {
-    Iarray(P184_its,P184);  
-    Iarray(P184_ite,P184);  
-    Iarray(P184_dit,P184);  
+    Iarray(P184_its,P184);
+    Iarray(P184_ite,P184);
+    Iarray(P184_dit,P184);
     }
     
     if(P185>0)
     {
-    Darray(P185_ts,P185);  
-    Darray(P185_te,P185);  
-    Darray(P185_dt,P185);  
+    Darray(P185_ts,P185);
+    Darray(P185_te,P185);
+    Darray(P185_dt,P185);
     }
 
     if(P194>0)
     {
-    Iarray(P194_its,P194);  
-    Iarray(P194_ite,P194);  
-    Iarray(P194_dit,P194);  
+    Iarray(P194_its,P194);
+    Iarray(P194_ite,P194);
+    Iarray(P194_dit,P194);
     }
     
     if(P195>0)
     {
-    Darray(P195_ts,P195);  
-    Darray(P195_te,P195);  
-    Darray(P195_dt,P195);  
+    Darray(P195_ts,P195);
+    Darray(P195_te,P195);
+    Darray(P195_dt,P195);
     }
     
     if(P230>0)
     {
-    Darray(P230_x,P230);  
+    Darray(P230_x,P230);
     }
     
     if(P240>0)
     {
-    Darray(P240_x,P240);  
+    Darray(P240_x,P240);
     }
     
     if(P351>0)
     {
-    Darray(P351_x,P351);  
-    Darray(P351_y,P351);  
+    Darray(P351_x,P351);
+    Darray(P351_y,P351);
     }
     
     if(P352>0)
     {
-    Darray(P352_x,P352);  
-    Darray(P352_y,P352);  
+    Darray(P352_x,P352);
+    Darray(P352_y,P352);
     }
 
     if(Q61>0)
     {
-    Darray(Q61_x,Q61); 
+    Darray(Q61_x,Q61);
     Darray(Q61_y,Q61);
     Darray(Q61_z,Q61);
     Iarray(Q61_i,Q61);
@@ -2767,25 +2767,25 @@ void lexer::ctrlrecv()
     
     if(Q110>0)
     {
-    Darray(Q110_xs,Q110);  
-    Darray(Q110_xe,Q110);  
+    Darray(Q110_xs,Q110);
+    Darray(Q110_xe,Q110);
     
-    Darray(Q110_ys,Q110);  
-    Darray(Q110_ye,Q110);  
+    Darray(Q110_ys,Q110);
+    Darray(Q110_ye,Q110);
     
-    Darray(Q110_zs,Q110);  
-    Darray(Q110_ze,Q110);  
+    Darray(Q110_zs,Q110);
+    Darray(Q110_ze,Q110);
     }
     if(Q111>0)
     {
-    Darray(Q111_xs,Q111);  
+    Darray(Q111_xs,Q111);
     Darray(Q111_xe,Q111);
 
-    Darray(Q111_ys,Q111);  
-    Darray(Q111_ye,Q111);  
+    Darray(Q111_ys,Q111);
+    Darray(Q111_ye,Q111);
     
-    Darray(Q111_zs,Q111);  
-    Darray(Q111_ze,Q111);  
+    Darray(Q111_zs,Q111);
+    Darray(Q111_ze,Q111);
     }
 
     if(S73>0)
@@ -2816,14 +2816,14 @@ void lexer::ctrlrecv()
 
     if(X110>0)
     {
-    Darray(X110_xs,X110);  
-    Darray(X110_xe,X110);  
+    Darray(X110_xs,X110);
+    Darray(X110_xe,X110);
     
-    Darray(X110_ys,X110);  
-    Darray(X110_ye,X110);  
+    Darray(X110_ys,X110);
+    Darray(X110_ye,X110);
     
-    Darray(X110_zs,X110);  
-    Darray(X110_ze,X110); 
+    Darray(X110_zs,X110);
+    Darray(X110_ze,X110);
     }
     
     if(X163>0)
@@ -2878,24 +2878,24 @@ void lexer::ctrlrecv()
     
     if(X311>0)
     {
-        Darray(X311_xs,X311);  
-        Darray(X311_xe,X311);  
-        Darray(X311_ys,X311);  
-        Darray(X311_ye,X311);  
-        Darray(X311_zs,X311);  
-        Darray(X311_ze,X311);  
+        Darray(X311_xs,X311);
+        Darray(X311_xe,X311);
+        Darray(X311_ys,X311);
+        Darray(X311_ye,X311);
+        Darray(X311_zs,X311);
+        Darray(X311_ze,X311);
     
-        Darray(X311_w,X311); 
-        Darray(X311_rho_c,X311); 
-        Darray(X311_EA,X311); 
-        Darray(X311_d,X311);  
-        Darray(X311_l,X311); 
-        Darray(X311_H,X311); 
-        Darray(X311_P,X311); 
-        Darray(X311_facT,X311);  
+        Darray(X311_w,X311);
+        Darray(X311_rho_c,X311);
+        Darray(X311_EA,X311);
+        Darray(X311_d,X311);
+        Darray(X311_l,X311);
+        Darray(X311_H,X311);
+        Darray(X311_P,X311);
+        Darray(X311_facT,X311);
         
-        Darray(X314_T,X311);  
-        Darray(X315_t,X311);  
+        Darray(X314_T,X311);
+        Darray(X315_t,X311);
     }
 
     if(X312>0)
@@ -2909,8 +2909,8 @@ void lexer::ctrlrecv()
         Darray(X312_k,X312);
         Darray(X312_T0,X312);
         
-        Darray(X314_T,X312);  
-        Darray(X315_t,X312);  
+        Darray(X314_T,X312);
+        Darray(X315_t,X312);
     }
 
     if(X320>0)
@@ -2947,19 +2947,19 @@ void lexer::ctrlrecv()
     
     if(Z11>0)
     {
-        Darray(Z11_x,Z11);  
-        Darray(Z11_y,Z11);  
-        Darray(Z11_z,Z11);  
-        Darray(Z11_l,Z11);  
-        Darray(Z11_w,Z11);  
-        Darray(Z11_t,Z11);  
-        Darray(Z11_rho,Z11);  
-        Darray(Z11_e,Z11);  
-        Darray(Z11_ix,Z11);  
-        Darray(Z11_iy,Z11);  
-        Darray(Z11_iz,Z11);  
-        Darray(Z11_nu,Z11);  
-        Darray(Z11_n,Z11);  
+        Darray(Z11_x,Z11);
+        Darray(Z11_y,Z11);
+        Darray(Z11_z,Z11);
+        Darray(Z11_l,Z11);
+        Darray(Z11_w,Z11);
+        Darray(Z11_t,Z11);
+        Darray(Z11_rho,Z11);
+        Darray(Z11_e,Z11);
+        Darray(Z11_ix,Z11);
+        Darray(Z11_iy,Z11);
+        Darray(Z11_iz,Z11);
+        Darray(Z11_nu,Z11);
+        Darray(Z11_n,Z11);
     }
 
 // --------------------------
@@ -4313,9 +4313,9 @@ void lexer::ctrlrecv()
     X311_EA[n] = dctrl[dd];
     dd++;
     X311_d[n] = dctrl[dd];
-    dd++;    
+    dd++;
     X311_l[n] = dctrl[dd];
-    dd++; 
+    dd++;
     X311_H[n] = dctrl[dd];
     dd++;
     X311_P[n] = dctrl[dd];
@@ -4348,12 +4348,12 @@ void lexer::ctrlrecv()
     {
         for(n=0;n<X311;++n)
         {
-            X314_T[n] = dctrl[dd]; 
+            X314_T[n] = dctrl[dd];
             dd++;
         }
         for(n=0;n<X312;++n)
         {
-            X314_T[n] = dctrl[dd]; 
+            X314_T[n] = dctrl[dd];
             dd++;
         }
     }
@@ -4366,7 +4366,7 @@ void lexer::ctrlrecv()
         }
         for(n=0;n<X312;++n)
         {
-            X315_t[n] = dctrl[dd]; 
+            X315_t[n] = dctrl[dd];
             dd++;
         }
     }

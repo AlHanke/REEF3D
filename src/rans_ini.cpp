@@ -167,7 +167,7 @@ void rans_io::inflow(lexer* p, fdm*a, ghostcell* pgc)
 
 void rans_io::tau_calc(fdm* a, lexer* p, double maxwdist)
 {
-    ks=p->B50;    
+    ks=p->B50;
     
     H=B=depth+p->DXM;
     M=26.0/pow((ks/3.0),(1.0/6.0));

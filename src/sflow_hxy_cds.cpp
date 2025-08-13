@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"sflow_flux_face_CDS.h"
 #include"patchBC_interface.h"
 
-sflow_hxy_cds::sflow_hxy_cds(lexer* p, patchBC_interface *ppBC)  
+sflow_hxy_cds::sflow_hxy_cds(lexer* p, patchBC_interface *ppBC)
 {
     pBC = ppBC;
     
@@ -57,7 +57,7 @@ void sflow_hxy_cds::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet
         hx(i,j) = 0.5*(eta(i,j)+eta(i+1,j)) + 0.5*(depth(i,j)+depth(i+1,j));
     }
     
-    int qq;    
+    int qq;
     for(qq=0;qq<pBC->obj_count;++qq)
     if(pBC->patch[qq]->waterlevel_flag==0)
     for(n=0;n<pBC->patch[qq]->gcb_count;++n)

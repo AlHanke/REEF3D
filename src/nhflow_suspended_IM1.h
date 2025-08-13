@@ -48,7 +48,7 @@ public:
 private:
     void timesource(lexer*, fdm_nhf*, double*);
     double starttime;
-    void fill_wvel(lexer*,fdm_nhf*,ghostcell*,sediment_fdm*); 
+    void fill_wvel(lexer*,fdm_nhf*,ghostcell*,sediment_fdm*);
     double *WVEL;
     
     int count,q;

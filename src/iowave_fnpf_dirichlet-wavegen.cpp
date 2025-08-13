@@ -30,7 +30,7 @@ void iowave::dirichlet_wavegen_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, doubl
 {
     double etax;
     
-    // 
+    //
     count=0;
     for(n=0;n<p->gcslin_count;n++)
     {
@@ -107,7 +107,7 @@ void iowave::dirichlet_wavegen_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, doubl
         FKLOOP
         FPCHECK
         {// add eta guard
-        Uin[FIm1JK] = Uinval[count]; 
+        Uin[FIm1JK] = Uinval[count];
         
         ++count;
         }

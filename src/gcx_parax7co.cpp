@@ -36,7 +36,7 @@ void ghostcell::gcparax7co(lexer* p,double *f,int gcv)
     j=p->gcxco7[0][q][1];
     k=p->gcxco7[0][q][2];
 
-        send1[count] = f[FIJK];  
+        send1[count] = f[FIJK];
         ++count;
     }
 
@@ -47,7 +47,7 @@ void ghostcell::gcparax7co(lexer* p,double *f,int gcv)
     j=p->gcxco7[2][q][1];
     k=p->gcxco7[2][q][2];
         
-        send3[count] = f[FIJK];  
+        send3[count] = f[FIJK];
         ++count;
     }
 
@@ -58,7 +58,7 @@ void ghostcell::gcparax7co(lexer* p,double *f,int gcv)
     j=p->gcxco7[3][q][1];
     k=p->gcxco7[3][q][2];
         
-        send4[count] = f[FIJK];  
+        send4[count] = f[FIJK];
         ++count;
     }
 
@@ -69,7 +69,7 @@ void ghostcell::gcparax7co(lexer* p,double *f,int gcv)
     j=p->gcxco7[1][q][1];
     k=p->gcxco7[1][q][2];
         
-        send2[count] = f[FIJK];  
+        send2[count] = f[FIJK];
         ++count;
     }
 

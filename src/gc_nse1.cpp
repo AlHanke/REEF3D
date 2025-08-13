@@ -33,7 +33,7 @@ void ghostcell::nse1(lexer *p, fdm *a, field &f, int gcv)
     double lsv;
     double psi;
     
-        if(p->j_dir==0)        
+        if(p->j_dir==0)
         psi = 4.1*(1.0/2.0)*(p->DRM+p->DTM);
         
         if(p->j_dir==1)

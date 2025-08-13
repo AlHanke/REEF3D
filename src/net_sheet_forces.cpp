@@ -26,7 +26,7 @@ Author: Tobias Martin
 #include"ghostcell.h"
 
 void net_sheet::gravityForce(lexer *p)
-{    
+{
     for (int knotI = 0; knotI < nK; knotI++)
     {
         // Assign gravity force to knot
@@ -36,7 +36,7 @@ void net_sheet::gravityForce(lexer *p)
 
 
 void net_sheet::inertiaForce(lexer *p)
-{   
+{
     if (dt_ < 1e-10) dt_ = 1e10;
     
     for (int knotI = 0; knotI < nK; knotI++)
@@ -44,14 +44,14 @@ void net_sheet::inertiaForce(lexer *p)
         // Assign inertia force to knot
         forces_knot(knotI,0) = 2.0*weight_knot(knotI)*(coupledField[knotI][0] - coupledFieldn[knotI][0])/dt_;
         forces_knot(knotI,1) = 2.0*weight_knot(knotI)*(coupledField[knotI][1] - coupledFieldn[knotI][1])/dt_;
-        forces_knot(knotI,2) = 2.0*weight_knot(knotI)*(coupledField[knotI][2] - coupledFieldn[knotI][2])/dt_;   
+        forces_knot(knotI,2) = 2.0*weight_knot(knotI)*(coupledField[knotI][2] - coupledFieldn[knotI][2])/dt_;
     }
 }
 
 
 void net_sheet::dragForce(lexer *p)
-{    
-    // Assign hydrodynamic forces to knot 
+{
+    // Assign hydrodynamic forces to knot
     Vector3d side1, side2, normalVec;
     Vector3d v_rel, n_d, n_s, n_l;
     double mag, v_mag, rho, error, area, thetan, cd, cl, v_mag_corr;
@@ -70,7 +70,7 @@ void net_sheet::dragForce(lexer *p)
         
         z0 = tri_z[knotI][0];
         z1 = tri_z[knotI][1];
-        z2 = tri_z[knotI][2];  
+        z2 = tri_z[knotI][2];
         
         side1 << x1-x0, y1-y0, z1-z0;
         side2 << x2-x0, y2-y0, z2-z0;
@@ -81,8 +81,8 @@ void net_sheet::dragForce(lexer *p)
         normalVec /= mag;
         
         // Calculate relative velocity at knot
-        v_rel << coupledField[knotI][0] - xdot_(knotI,0), 
-                 coupledField[knotI][1] - xdot_(knotI,1), 
+        v_rel << coupledField[knotI][0] - xdot_(knotI,0),
+                 coupledField[knotI][1] - xdot_(knotI,1),
                  coupledField[knotI][2] - xdot_(knotI,2);
                      
         // Calculate normal velocity vector
@@ -90,13 +90,13 @@ void net_sheet::dragForce(lexer *p)
         n_d = v_rel/(v_mag + 1e-10);
 
         // Access density at knot
-        rho = coupledField[knotI][3] > 900 ? coupledField[knotI][3] : 0.0;   
+        rho = coupledField[knotI][3] > 900 ? coupledField[knotI][3] : 0.0;
        
         // Correct direction of normal vector of triangle
         n_s = SIGN(n_d.dot(normalVec))*normalVec;
         
         // Angle between velocity and normal vector
-        thetan = acos(n_d.dot(n_s));     
+        thetan = acos(n_d.dot(n_s));
 
         // Normal vector of lift force
         n_l = (n_d.cross(n_s)).cross(n_d).normalized();
@@ -109,12 +109,12 @@ void net_sheet::dragForce(lexer *p)
 
         while (error > 1e-3 && nIt < 10)
         {
-            error = v_mag_corr;    
+            error = v_mag_corr;
             
             screenForceCoeff(p,cd,cl,v_mag_corr,thetan,p->X321_Sn[nNet]);
             
             // Froude momentum theory
-            v_mag_corr = v_mag*cd/(2.0*(sqrt(1.0 + cd) - 1.0)); 
+            v_mag_corr = v_mag*cd/(2.0*(sqrt(1.0 + cd) - 1.0));
 
             error = fabs(v_mag_corr - error);
             
@@ -125,7 +125,7 @@ void net_sheet::dragForce(lexer *p)
         {
             v_mag_corr = v_mag;
             screenForceCoeff(p,cd,cl,v_mag_corr,thetan,p->X321_Sn[nNet]);
-        }            
+        }
         
 
         // Save directional forces
@@ -149,10 +149,10 @@ void net_sheet::screenForceCoeff
 {
     //- Drag and lift force coefficients according to Kristiansen (2012)
     
-    double a3 = 0.01387;    
-    double a5 = 0.01361;  
+    double a3 = 0.01387;
+    double a5 = 0.01361;
 
-    double b2 = 1.45;       //1.22905;  
+    double b2 = 1.45;       //1.22905;
     double b4 = 0.05369;    //0.11155;
     double b6 = 0.000367;   //0.0;
 
@@ -184,12 +184,12 @@ void net_sheet::screenForceCoeff
 
     cd = cd0*((1.0 - a3 - a5)*cos(thetan) + a3*cos(3.0*thetan) + a5*cos(5.0*thetan));
 
-    cl = cl0*(b2*sin(2.0*thetan) + b4*sin(4.0*thetan) + b6*sin(6.0*thetan)); 
+    cl = cl0*(b2*sin(2.0*thetan) + b4*sin(4.0*thetan) + b6*sin(6.0*thetan));
     
 
     if(p->Y1==1)
     {
-        // Simulation-based screen force model 
+        // Simulation-based screen force model
 
         double theta = thetan*180/PI;
         vector<double> p0 {-0.132, 340.797, -59.643, -9.129, 2.245, -12473.957, 0.063, 27831.591, 1458.245, 0.619};
@@ -200,16 +200,16 @@ void net_sheet::screenForceCoeff
     
         double cd45 = p45[0]*v_mag+p45[1]*d_c+p45[2]*l_c+p45[3]*v_mag*d_c+p45[4]*v_mag*l_c+p45[5]*d_c*l_c+p45[6]*v_mag*v_mag+p45[7]*d_c*d_c+p45[8]*l_c*l_c
                       + p45[9]*v_mag*v_mag*v_mag+p45[10]*l_c*l_c*l_c+p45[11]*v_mag*d_c*l_c
-            +p45[12]*v_mag*d_c*d_c+p45[13]*v_mag*l_c*l_c+p45[14]*d_c*v_mag*v_mag+p45[15]*d_c*l_c*l_c+p45[16]*l_c*v_mag*v_mag+p45[17]*l_c*d_c*d_c+p45[18]*d_c*d_c*d_c+p45[19];    
+            +p45[12]*v_mag*d_c*d_c+p45[13]*v_mag*l_c*l_c+p45[14]*d_c*v_mag*v_mag+p45[15]*d_c*l_c*l_c+p45[16]*l_c*v_mag*v_mag+p45[17]*l_c*d_c*d_c+p45[18]*d_c*d_c*d_c+p45[19];
     
         double cl45 = pl[0]*v_mag + pl[1]*d_c + pl[2]*l_c + pl[3]*v_mag*d_c + pl[4]*v_mag*l_c + pl[5]*d_c*l_c + pl[6]*v_mag*v_mag + pl[7]*d_c*d_c + pl[8]*l_c*l_c + pl[9];
     
         
-        double a = -0.000493827160494*(cd45 - cd0) - 0.000246913580247*cd0; 
+        double a = -0.000493827160494*(cd45 - cd0) - 0.000246913580247*cd0;
         double b = 0.044444444444444*(cd45 - cd0) + 0.011111111111111*cd0;
         cd = cd0 + a*theta*theta + b*theta;
 
-        a = -0.000493827160494*cl45; 
+        a = -0.000493827160494*cl45;
         b = 0.044444444444444*cl45;
         cl = a*theta*theta + b*theta;
     }
@@ -219,7 +219,7 @@ void net_sheet::netForces(lexer *p, double& Xne, double& Yne, double& Zne, doubl
 {
     Xne = 0.0;
     Yne = 0.0;
-    Zne = 0.0;        
+    Zne = 0.0;
     Kne = 0.0;
     Mne = 0.0;
     Nne = 0.0;
@@ -234,7 +234,7 @@ void net_sheet::netForces(lexer *p, double& Xne, double& Yne, double& Zne, doubl
         FzI = forces_knot(knotI, 2);
 
         // Add force distribution
-        Xne += FxI; 
+        Xne += FxI;
         Yne += FyI;
         Zne += FzI;
 
@@ -242,5 +242,5 @@ void net_sheet::netForces(lexer *p, double& Xne, double& Yne, double& Zne, doubl
         Kne += (x_(knotI,1) - p->yg)*FyI - (x_(knotI,2) - p->zg)*FzI;
         Mne += (x_(knotI,2) - p->zg)*FzI - (x_(knotI,0) - p->xg)*FxI;
         Nne += (x_(knotI,0) - p->xg)*FxI - (x_(knotI,1) - p->yg)*FyI;
-    } 
+    }
 }

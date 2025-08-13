@@ -64,8 +64,8 @@ void hypre_struct::fill_matrix8_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
         ++count;
         
         values[count]=M.t[n];
-        ++count; 
-        }     
+        ++count;
+        }
         
         FSWDCHECK
         {
@@ -82,8 +82,8 @@ void hypre_struct::fill_matrix8_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
         ++count;
         
         values[count]=0.0;
-        ++count;  
-        }    
+        ++count;
+        }
     }
     
     
@@ -108,7 +108,7 @@ void hypre_struct::fill_matrix8_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
     HYPRE_StructVectorAssemble(x);
     
     
-    count=0; 
+    count=0;
     KJILOOP
     {
         FPWDCHECK

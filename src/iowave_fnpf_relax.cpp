@@ -31,7 +31,7 @@ void iowave::fifsf_relax(lexer *p, ghostcell *pgc, slice& f)
     count=0;
     SLICELOOP4
     {
-        dg = distgen(p);    
+        dg = distgen(p);
         db = distbeach(p);
         
         // Wave Generation

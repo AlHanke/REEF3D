@@ -22,7 +22,7 @@ Author: Hans Bihs
 
 #include"sflow_pjm_quad.h"
 #include"lexer.h"
-#include"fdm2D.h" 
+#include"fdm2D.h"
 #include"ghostcell.h"
 #include"poisson.h"
 #include"solver2D.h"
@@ -44,7 +44,7 @@ sflow_pjm_quad::sflow_pjm_quad(lexer* p, fdm2D *b, patchBC_interface *ppBC) : pr
 {
     pBC = ppBC;
     
-    gcval_press=40;  
+    gcval_press=40;
     
     gcval_u=10;
     gcval_v=11;
@@ -104,7 +104,7 @@ void sflow_pjm_quad::start(lexer *p, fdm2D *b, ghostcell *pgc, solver2D *psolv, 
 }
 
 void sflow_pjm_quad::ucorr(lexer* p, fdm2D* b, slice& P, slice &eta, double alpha)
-{    
+{
     SLICELOOP1
     WETDRY1
     if(b->breaking(i,j)==0 && b->breaking(i+1,j)==0)
@@ -120,7 +120,7 @@ void sflow_pjm_quad::ucorr(lexer* p, fdm2D* b, slice& P, slice &eta, double alph
 }
 
 void sflow_pjm_quad::vcorr(lexer* p, fdm2D* b, slice& Q, slice &eta, double alpha)
-{    
+{
     SLICELOOP2
     WETDRY2
     if(b->breaking(i,j)==0 && b->breaking(i,j+1)==0)
@@ -136,7 +136,7 @@ void sflow_pjm_quad::vcorr(lexer* p, fdm2D* b, slice& Q, slice &eta, double alph
 }
 
 void sflow_pjm_quad::wcorr(lexer* p, fdm2D* b, double alpha, slice &P, slice &Q, slice &ws)
-{        
+{
     SLICELOOP4
     WETDRY
     if(b->breaking(i,j)==0)
@@ -144,7 +144,7 @@ void sflow_pjm_quad::wcorr(lexer* p, fdm2D* b, double alpha, slice &P, slice &Q,
 }
 
 void sflow_pjm_quad::wcalc(lexer* p, fdm2D* b,double alpha, slice &P, slice &Q, slice &ws)
-{    
+{
 }
 
 void sflow_pjm_quad::rhs(lexer *p, fdm2D* b, slice &P, slice &Q, slice &ws, double alpha)
@@ -160,7 +160,7 @@ void sflow_pjm_quad::rhs(lexer *p, fdm2D* b, slice &P, slice &Q, slice &ws, doub
                            
                             - 2.0*
                             (
-                                ws(i,j) 
+                                ws(i,j)
                                 + 0.25*(P(i,j)+P(i-1,j))*(b->depth(i+1,j)-b->depth(i-1,j))/p->DXM
                                 + 0.25*(Q(i,j)+Q(i,j-1))*(b->depth(i,j+1)-b->depth(i,j-1))/p->DXM
                            )
@@ -184,7 +184,7 @@ void sflow_pjm_quad::poisson(lexer*p, fdm2D* b, double alpha)
     SLICELOOP4
     {
     b->M.p[n]  =  (b->hp(i,j)*sqd + b->hp(i,j)*sqd)*p->x_dir
-               +  (b->hp(i,j)*sqd + b->hp(i,j)*sqd)*p->y_dir + 2.0/(HP*p->W1);     
+               +  (b->hp(i,j)*sqd + b->hp(i,j)*sqd)*p->y_dir + 2.0/(HP*p->W1);
 
                
 
@@ -265,7 +265,7 @@ void sflow_pjm_quad::upgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
 {
         SLICELOOP1
         WETDRY1
-        b->F(i,j) -= fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j) 
+        b->F(i,j) -= fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j)
                                      - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM);
         
         if(p->B77==10)
@@ -276,14 +276,14 @@ void sflow_pjm_quad::upgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
         
         WETDRY1
         {
-        b->F(i,j) += fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j) 
+        b->F(i,j) += fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j)
                                      - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM);
                                      
         b->F(i,j) -= fabs(p->W22)*(p->A223*(b->bed(i,j)-p->wd) + (1.0-p->A223)*(b->bed(i,j)-p->wd)
                                      - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM);
         }
                                      
-        }    
+        }
 
         pBC->patchBC_pressure2D_ugrad(p,b,eta,eta_n);
 }
@@ -292,20 +292,20 @@ void sflow_pjm_quad::vpgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
 {
         SLICELOOP2
         WETDRY2
-        b->G(i,j) -= fabs(p->W22)*(p->A223*eta(i,j+1) + (1.0-p->A223)*eta_n(i,j+1) 
-                                 - p->A223*eta(i,j) -  (1.0-p->A223)*eta_n(i,j) )/(p->DXM); 
+        b->G(i,j) -= fabs(p->W22)*(p->A223*eta(i,j+1) + (1.0-p->A223)*eta_n(i,j+1)
+                                 - p->A223*eta(i,j) -  (1.0-p->A223)*eta_n(i,j) )/(p->DXM);
                                  
         pBC->patchBC_pressure2D_vgrad(p,b,eta,eta_n);
 }
 
 void sflow_pjm_quad::quad_calc(lexer *p,fdm2D *b,slice &P, slice &Q, slice &Pn, slice &Qn, double alpha)
-{    
+{
     double Pval,Pnval;
     double Qval,Qnval;
     
     
     SLICELOOP4
-    {   
+    {
         Pval = 0.5*(P(i-1,j)+P(i,j));
         Pnval = 0.5*(Pn(i-1,j)+Pn(i,j));
         
@@ -320,7 +320,7 @@ void sflow_pjm_quad::quad_calc(lexer *p,fdm2D *b,slice &P, slice &Q, slice &Pn, 
     
                                     * ((Pval-Pnval)/(alpha*p->dt)
                                                                     
-                                    + Pval*((P(i,j)-P(i-1,j))/(p->DXM)) 
+                                    + Pval*((P(i,j)-P(i-1,j))/(p->DXM))
                                                          
                                     + Qval*((0.5*(P(i,j+1)+P(i-1,j+1))-0.5*(P(i,j-1)+P(i-1,j-1)))/(2.0*p->DXM)))
                                                 
@@ -329,7 +329,7 @@ void sflow_pjm_quad::quad_calc(lexer *p,fdm2D *b,slice &P, slice &Q, slice &Pn, 
                     
                 + MIN(0.0,Qval)*((b->depth(i,j+1)-b->depth(i,j))/(p->DXM)))
                 
-                                    * ((Qval-Qnval)/(alpha*p->dt)    
+                                    * ((Qval-Qnval)/(alpha*p->dt)
      
                                     + Pval*((0.5*(Q(i+1,j)+Q(i+1,j-1))-0.5*(Q(i-1,j)+Q(i-1,j-1)))/(2.0*p->DXM))
                                                          
@@ -344,7 +344,7 @@ void sflow_pjm_quad::quad_calc(lexer *p,fdm2D *b,slice &P, slice &Q, slice &Pn, 
 }
 
 void sflow_pjm_quad::quad_prep(lexer *p,fdm2D *b,ghostcell *pgc,slice &P, slice &Q, slice &eta, double alpha)
-{   
+{
     SLICELOOP1
     Ps(i,j) = P(i,j);
     
@@ -362,5 +362,5 @@ void sflow_pjm_quad::quad_prep(lexer *p,fdm2D *b,ghostcell *pgc,slice &P, slice 
 void sflow_pjm_quad::wpgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
 {
     SLICELOOP4
-    b->L(i,j)=0.0;        
+    b->L(i,j)=0.0;
 }

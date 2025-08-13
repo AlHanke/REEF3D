@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"ghostcell.h"
 
-nhflow_f::nhflow_f(lexer *p, fdm_nhf *d, ghostcell *pgc) 
+nhflow_f::nhflow_f(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     margin=3;
 }
@@ -65,7 +65,7 @@ void nhflow_f::ini(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow)
     p->polygon_sum=0;
     
    
-    TPSLICELOOP  
+    TPSLICELOOP
     {
     ++count;
     ++p->pointnum2D;

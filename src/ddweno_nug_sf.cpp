@@ -223,7 +223,7 @@ double ddweno_nug_sf::ddwenoz(fdm* a, field &f, double uw)
 }
 
 void ddweno_nug_sf::iqmin0(fdm* a, field &f)
-{   
+{
     q1 = (f.V[Im2JK] - f.V[Im3JK])/DX[IM3];
     q2 = (f.V[Im1JK] - f.V[Im2JK])/DX[IM2];
     q3 = (f.V[IJK]   - f.V[Im1JK])/DX[IM1];
@@ -277,7 +277,7 @@ void ddweno_nug_sf::kqmax0(fdm* a, field &f)
 }
     
 void ddweno_nug_sf::iqmin1(fdm* a, field &f)
-{   
+{
     q1=q2=q3=q4=q5=0.0;
     
     if(a->solid(i-2,j,k)>0.0 && a->topo(i-2,j,k)>0.0 && a->solid(i-3,j,k)>0.0 && a->topo(i-3,j,k)>0.0)
@@ -519,7 +519,7 @@ void ddweno_nug_sf::kqmax2(fdm* a, field &f)
 
 
 void ddweno_nug_sf::iqmin3(fdm* a, field &f)
-{   
+{
     q1 = a->fbh5(i-3,j,k)*(f.V[Im2JK] - f.V[Im3JK])/DX[IM3];
     q2 = a->fbh5(i-2,j,k)*(f.V[Im1JK] - f.V[Im2JK])/DX[IM2];
     q3 = a->fbh5(i-1,j,k)*(f.V[IJK]   - f.V[Im1JK])/DX[IM1];

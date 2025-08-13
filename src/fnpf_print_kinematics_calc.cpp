@@ -27,14 +27,14 @@ Author: Hans Bihs
 #include <math.h>
 
 void fnpf_print_kinematics::kinematics_calc(lexer* p, fdm_fnpf *c, ghostcell *pgc)
-{    
+{
     for(k=0; k<p->knoz+1; ++k)
     {
-        dudsig_= dudsig(p,c,pgc); 
-        dvdsig_= dvdsig(p,c,pgc); 
+        dudsig_= dudsig(p,c,pgc);
+        dvdsig_= dvdsig(p,c,pgc);
         
         // Term 1 from eqn (9) of Pakozdi et al (2021) MS
-        ax1= (c->U[FIJK] - un[k])/(p->dt);  
+        ax1= (c->U[FIJK] - un[k])/(p->dt);
         ay1= (c->V[FIJK] - vn[k])/ (p->dt);
         
         // Term 2
@@ -51,7 +51,7 @@ void fnpf_print_kinematics::kinematics_calc(lexer* p, fdm_fnpf *c, ghostcell *pg
         
         
         // Storing current time step information for next time step gradient calculation
-        un[k] = c->U[FIJK]; 
+        un[k] = c->U[FIJK];
         vn[k] = c->V[FIJK];
     }
     
@@ -76,11 +76,11 @@ double fnpf_print_kinematics::dudsig(lexer *p, fdm_fnpf *c, ghostcell *pgc)     
     }
 
     if(k==p->knoz)
-    { 
+    {
         dudsig_ = (c->U[FIJK] - c->U[FIJKm1])/(p->DZN[KM1]);
     }
 
-    return dudsig_;        
+    return dudsig_;
 }
 
 double fnpf_print_kinematics::dvdsig(lexer *p, fdm_fnpf *c, ghostcell *pgc)     // getting dvdsig for ax2 and 3
@@ -93,17 +93,17 @@ double fnpf_print_kinematics::dvdsig(lexer *p, fdm_fnpf *c, ghostcell *pgc)     
     if(k==p->knoz)
     dvdsig_ = (c->V[FIJK] - c->V[FIJKm1])/(p->DZN[KM1]);
 
-    return dvdsig_;        
+    return dvdsig_;
 }
 
 double fnpf_print_kinematics::dudxi(lexer *p, fdm_fnpf *c, ghostcell *pgc)     // getting dudxi
 {
-    return (c->U[FIp1JK] - c->U[FIm1JK])/(p->DXN[IP1] + p->DXN[IM1]); 
+    return (c->U[FIp1JK] - c->U[FIm1JK])/(p->DXN[IP1] + p->DXN[IM1]);
 }
 
 double fnpf_print_kinematics::dvdxi(lexer *p, fdm_fnpf *c, ghostcell *pgc)     // getting dvdxi
 {
-    return (c->V[FIJp1K] - c->V[FIJm1K])/(p->DYN[JP1] + p->DYN[JM1]); 
+    return (c->V[FIJp1K] - c->V[FIJm1K])/(p->DYN[JP1] + p->DYN[JM1]);
 }
 
 

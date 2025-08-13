@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 sflow_bicgstab::sflow_bicgstab(lexer* p,ghostcell *pgc):epsi(1e-19)
-{    
+{
     margin=3;
     
     p->Darray(sj,p->imax*p->jmax*p->kmax);
@@ -34,7 +34,7 @@ sflow_bicgstab::sflow_bicgstab(lexer* p,ghostcell *pgc):epsi(1e-19)
     p->Darray(r0,p->imax*p->jmax*p->kmax);
     p->Darray(vj,p->imax*p->jmax*p->kmax);
     p->Darray(tj,p->imax*p->jmax*p->kmax);
-    p->Darray(pj,p->imax*p->jmax*p->kmax); 
+    p->Darray(pj,p->imax*p->jmax*p->kmax);
     p->Darray(ph,p->imax*p->jmax*p->kmax);
     p->Darray(sh,p->imax*p->jmax*p->kmax);
     p->Darray(aii,p->imax*p->jmax*p->kmax);
@@ -90,7 +90,7 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
     // -----------------
 
  restart:
-    r_j=norm_r0=0.0;    
+    r_j=norm_r0=0.0;
     pgc->gcslparaxijk_single(p,x,var);
     
     matvec_axb(p,M,x,rj);
@@ -114,7 +114,7 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
         
         // -------------------------
         precon_solve(p,pgc,ph,pj);
-        pgc->gcslparaxijk_single(p,ph,var);                
+        pgc->gcslparaxijk_single(p,ph,var);
         // -------------------------
         
         matvec_std(p,M,ph,vj);
@@ -133,7 +133,7 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
         alpha=r_j/sigma;
 
     if(fabs(sigma) <= (1.0e-12*(norm_vj*norm_r0)))
-    {    
+    {
         residual=res_calc(p,M,pgc,x);
         ++solveriter;
 
@@ -162,7 +162,7 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
     {
         // -------------------------
         precon_solve(p,pgc,sh,sj);
-        pgc->gcslparaxijk_single(p,sh,var);        
+        pgc->gcslparaxijk_single(p,sh,var);
         // -------------------------
 
         matvec_std(p,M,sh,tj);
@@ -225,7 +225,7 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
         
     }while((residual>=p->N44) && (solveriter<p->N46));
 
-    } 
+    }
         
     
     SLICELOOP4
@@ -234,8 +234,8 @@ void sflow_bicgstab::solve(lexer* p, ghostcell* pgc, matrix2D &M, vec2D &xvec, v
     sh[IJ]=0.0;
     }
     
-    pgc->gcslparaxijk_single(p,ph,var);    
-    pgc->gcslparaxijk_single(p,sh,var);    
+    pgc->gcslparaxijk_single(p,ph,var);
+    pgc->gcslparaxijk_single(p,sh,var);
 }
 
 void sflow_bicgstab::matvec_axb(lexer *p, matrix2D &M, double *x, double *y)
@@ -246,7 +246,7 @@ void sflow_bicgstab::matvec_axb(lexer *p, matrix2D &M, double *x, double *y)
     y[IJ]  = rhs[IJ]
 
             -(M.p[n]*x[IJ]
-            + M.n[n]*x[Ip1J] 
+            + M.n[n]*x[Ip1J]
             + M.s[n]*x[Im1J]
             + M.w[n]*x[IJp1]
             + M.e[n]*x[IJm1]);
@@ -260,7 +260,7 @@ void sflow_bicgstab::matvec_std(lexer *p, matrix2D &M, double *x, double *y)
     SLICEFLEXLOOP
     {
     y[IJ]      = M.p[n]*x[IJ]
-                + M.n[n]*x[Ip1J] 
+                + M.n[n]*x[Ip1J]
                 + M.s[n]*x[Im1J]
                 + M.w[n]*x[IJp1]
                 + M.e[n]*x[IJm1];
@@ -275,11 +275,11 @@ double sflow_bicgstab::res_calc(lexer *p, matrix2D &M, ghostcell *pgc, double *x
     
     n=0;
     SLICEFLEXLOOP
-    {    
+    {
     y  = rhs[IJ]
 
         -(M.p[n]*x[IJ]
-        + M.n[n]*x[Ip1J] 
+        + M.n[n]*x[Ip1J]
         + M.s[n]*x[Im1J]
         + M.w[n]*x[IJp1]
         + M.e[n]*x[IJm1]);
@@ -291,7 +291,7 @@ double sflow_bicgstab::res_calc(lexer *p, matrix2D &M, ghostcell *pgc, double *x
 
     resi=sqrt(pgc->globalsum(resi));
 
-    return resi/double(p->cellnumtot2D);    
+    return resi/double(p->cellnumtot2D);
 }
 
 void sflow_bicgstab::precon_setup(lexer* p, matrix2D &M, ghostcell* pgc)
@@ -325,7 +325,7 @@ void sflow_bicgstab::fillxvec(lexer* p, slice& f, vec2D &rhsvec)
 
 
 void sflow_bicgstab::finalize(lexer *p, slice &f)
-{  
+{
         SLICEFLEXLOOP
         f(i,j)=x[IJ];
 }

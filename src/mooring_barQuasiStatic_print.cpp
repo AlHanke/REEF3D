@@ -57,8 +57,8 @@ void mooring_barQuasiStatic::print(lexer *p, ghostcell *pgc)
     // Print line
     if
     (
-        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)  
-        || (p->simtime>printtime && p->P30>0.0)   
+        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)
+        || (p->simtime>printtime && p->P30>0.0)
         || p->count==0)
     )
     {
@@ -84,19 +84,19 @@ void mooring_barQuasiStatic::print(lexer *p, ghostcell *pgc)
             result<<x[n]<<" "<<y[n]<<" "<<z[n]<<endl;
         }
         
-        result << "\nCELLS " << sigma+1 << " " << (sigma+1)*3 <<endl;    
+        result << "\nCELLS " << sigma+1 << " " << (sigma+1)*3 <<endl;
         
         for(int n=0; n<sigma+1; ++n)
         {
             result<<"2 "<< n << " " << n+1 << endl;
         }
         
-        result << "\nCELL_TYPES " << sigma+1 << endl;    
+        result << "\nCELL_TYPES " << sigma+1 << endl;
         
         for(int n=0; n<sigma+1; ++n)
         {
             result<<"3"<<endl;
-        }    
+        }
 
         result<<"\nPOINT_DATA " << sigma+2 <<endl;
         result<<"SCALARS Tension float 1 \nLOOKUP_TABLE default"<<endl;
@@ -128,7 +128,7 @@ void mooring_barQuasiStatic::buildLine(lexer *p, ghostcell *pgc)
         z[cnt] = z[cnt-1] + 0.5*(l[cnt] + l[cnt-1])*f[cnt-1][2];
             
         T[cnt-1] = fabs(A[cnt-1][cnt-1]);
-    }        
+    }
     x[sigma+1] = x[sigma] + 0.5*(l[sigma])*f[sigma][0];
     y[sigma+1] = y[sigma] + 0.5*(l[sigma])*f[sigma][1];
     z[sigma+1] = z[sigma] + 0.5*(l[sigma])*f[sigma][2];

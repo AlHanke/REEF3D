@@ -109,7 +109,7 @@ double fnpf_weno3::fz(lexer *p, field &f, double kvel1, double kvel2)
         if(i+p->origin_i==0)
         grad = (-1.5*f(i,j,k) + 2.0*f(i,j,k-1) - 0.5*f(i,j,k-2))/(-1.5*p->ZP[KP] + 2.0*p->ZP[KM1] - 0.5*p->ZP[KM2]);
             
-        //cout<<" return 2"<<endl;    
+        //cout<<" return 2"<<endl;
         
         return grad;
     }
@@ -122,7 +122,7 @@ double fnpf_weno3::fz(lexer *p, field &f, double kvel1, double kvel2)
         if(i+p->origin_i==0)
         grad = (f(i,j,k) - f(i,j,k-1))/(p->ZP[KM1]);
             
-        //cout<<" return 1"<<endl;    
+        //cout<<" return 1"<<endl;
             
         return grad;
     }
@@ -151,13 +151,13 @@ double fnpf_weno3::sy(lexer *p, slice &f, double jvel)
     if(jvel<0.0)
     grad=dswenoy(f,-1.0);
     
-    return grad;   
+    return grad;
 }
 
 double fnpf_weno3::sz(lexer *p, double *f)
 {
-    grad = (ckz[p->knoz+marge][4]*f[FIJK] + ckz[p->knoz+marge][3]*f[FIJKm1] + ckz[p->knoz+marge][2]*f[FIJKm2] 
+    grad = (ckz[p->knoz+marge][4]*f[FIJK] + ckz[p->knoz+marge][3]*f[FIJKm1] + ckz[p->knoz+marge][2]*f[FIJKm2]
           + ckz[p->knoz+marge][1]*f[FIJKm3] + ckz[p->knoz+marge][0]*f[FIJKm4]);
           
-    return grad;   
+    return grad;
 }

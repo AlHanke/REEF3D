@@ -58,7 +58,7 @@ void multiphase_fluid_update_rheology::start(lexer *p, fdm* a, ghostcell* pgc, f
     iocheck=0;
     iter=p->count;
     
-    if(p->j_dir==0)        
+    if(p->j_dir==0)
     epsi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
         
     if(p->j_dir==1)

@@ -129,7 +129,7 @@ void VOF_PLIC::update
 }
 
 void VOF_PLIC::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcell* pgc,ioflow* pflow, reini* preini, particle_corr* ppart, field &ls)
-{    
+{
     
 //********************************************************
 //Step 1
@@ -166,7 +166,7 @@ void VOF_PLIC::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostce
      a->vof(i,j,k) = vof_rk1(i,j,k);
      a->L(i,j,k)=0.0;
     }
-    pgc->start4(p,a->vof,gcval_vof); 
+    pgc->start4(p,a->vof,gcval_vof);
     
     //!no update yet -> update after diffusion!
     

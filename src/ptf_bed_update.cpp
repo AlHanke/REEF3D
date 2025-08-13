@@ -29,8 +29,8 @@ Author: Hans Bihs
 #include"fnpf_cds2.h"
 #include"fnpf_cds4.h"
 
-ptf_bed_update::ptf_bed_update(lexer *p, fdm *a, ghostcell *pgc) 
-{    
+ptf_bed_update::ptf_bed_update(lexer *p, fdm *a, ghostcell *pgc)
+{
     if(p->A313==2)
     pconvec = new fnpf_cds2(p);
     

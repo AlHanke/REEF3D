@@ -40,7 +40,7 @@ void fnpf_state::write_header(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     // open file
     headout.open(name, ios::binary);
     
-    // ini write    
+    // ini write
     iin=p->origin_i-is_global;
     
     if(is_flag==1)
@@ -100,19 +100,19 @@ void fnpf_state::write_header(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     {
     ddn=p->XP[IP];
     headout.write((char*)&ddn, sizeof (double));
-    } 
+    }
     
     for(j=js;j<je;++j)
     {
     ddn=p->YP[JP];
     headout.write((char*)&ddn, sizeof (double));
-    } 
+    }
     
     FKLOOP
     {
     ddn=p->ZN[KP];
     headout.write((char*)&ddn, sizeof (double));
-    } 
+    }
     
     
     for(i=is;i<ie;++i)
@@ -121,7 +121,7 @@ void fnpf_state::write_header(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     {
     ddn=c->bed(i,j);
     headout.write((char*)&ddn, sizeof (double));
-    } 
+    }
     
     headout.close();
 }

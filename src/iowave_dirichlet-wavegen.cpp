@@ -32,7 +32,7 @@ void iowave::dirichlet_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field
         {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
-        k=p->gcin[n][2];        
+        k=p->gcin[n][2];
 
         uvel=uval[count]*ramp(p);
         vvel=vval[count]*ramp(p);

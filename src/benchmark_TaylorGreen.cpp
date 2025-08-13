@@ -42,7 +42,7 @@ benchmark_TaylorGreen::benchmark_TaylorGreen(lexer *p, fdm *a) : gradient(p), vx
         a->u(i,j,k) = U*(sin(x/L)*cos(y/L)*cos(z/L));
 //        a->u(i,j,k) = 1.0;
 
-    }   
+    }
     
     VLOOP
     {
@@ -103,7 +103,7 @@ benchmark_TaylorGreen::~benchmark_TaylorGreen()
 void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec )
 {
     
-    //Data file    
+    //Data file
     char name[250];
     int numberi = p->count;
     
@@ -126,7 +126,7 @@ void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *
     {
         if(p->j_dir==1)
         {
-            vx(i,j,k) = pvdz(p,a) - pwdy(p,a); 
+            vx(i,j,k) = pvdz(p,a) - pwdy(p,a);
             vy(i,j,k) = pudz(p,a) - pwdx(p,a);
             vz(i,j,k) = pvdx(p,a) - pudy(p,a);
             uu = 0.5*(a->u(i,j,k) + a->u(i-1,j,k));
@@ -150,10 +150,10 @@ void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *
 
     velVolAvg += velmag2*vol;
 
-        volTot += vol; 
+        volTot += vol;
     }
 
-    // Sum up vorticity and volume and send to rank 0 
+    // Sum up vorticity and volume and send to rank 0
     double dissipation = 0.0;
     double energy = 0.0;
     double volume = 0.0;
@@ -177,7 +177,7 @@ void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *
         print<<setprecision(15)<<p->simtime<<" \t "<<energy<<endl;
         print.close();
     }
-/*    
+/*
 //W_Velocity_X_Line
 //    if(p->mpirank==0)
 //    {
@@ -246,7 +246,7 @@ void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *
             
             
     }
-*/    
+*/
         //Growth_Ratio
 //    if(p->mpirank==0)
 //    {
@@ -385,7 +385,7 @@ void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *
                     vyP=float(p->ipol4(vy));
                     vzP=float(p->ipol4(vz));
 
-                    vmagP = sqrt(vxP*vxP + vyP*vyP + vzP*vzP); 
+                    vmagP = sqrt(vxP*vxP + vyP*vyP + vzP*vzP);
         
                     
                     
@@ -404,7 +404,7 @@ void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *
                 {
                     if(p->j_dir==1)
                     {
-                            vx = pvdz(p,a) - pwdy(p,a); 
+                            vx = pvdz(p,a) - pwdy(p,a);
                              vy = pudz(p,a) - pwdx(p,a);
                              vz = pvdx(p,a) - pudy(p,a);
                        }
@@ -429,7 +429,7 @@ void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *
 
     
                 }
-*/            
+*/
             printdata.close();
             
             
@@ -484,7 +484,7 @@ void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *
                 {
                     if(p->j_dir==1)
                     {
-                            vx = pvdz(p,a) - pwdy(p,a); 
+                            vx = pvdz(p,a) - pwdy(p,a);
                              vy = pudz(p,a) - pwdx(p,a);
                              vz = pvdx(p,a) - pudy(p,a);
                        }
@@ -651,7 +651,7 @@ benchmark_TaylorGreen::benchmark_TaylorGreen(lexer *p, fdm *a) : gradient(p)
         y = p->pos1_y();
         z = p->pos1_z();
         a->u(i,j,k) = U*(sin(x/L)*cos(y/L)*cos(z/L));
-    }   
+    }
     
     VLOOP
     {
@@ -691,9 +691,9 @@ void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *
     {
         if(p->j_dir==1)
         {
-            vx = pvdz(p,a) - pwdy(p,a); 
+            vx = pvdz(p,a) - pwdy(p,a);
             vy = pudz(p,a) - pwdx(p,a);
-            vz = pvdx(p,a) - pudy(p,a); 
+            vz = pvdx(p,a) - pudy(p,a);
         }
         else
         {
@@ -707,10 +707,10 @@ void benchmark_TaylorGreen::start(lexer* p, fdm *a, ghostcell *pgc, convection *
         vol = p->DXN[IP]*p->DYN[JP]*p->DZN[KP];
 
         vVolAvg += vmag2*vol;
-        volTot += vol; 
+        volTot += vol;
     }
 
-    // Sum up vorticity and volume and send to rank 0 
+    // Sum up vorticity and volume and send to rank 0
     double dissipation = 0.0;
     double volume = 0.0;
     MPI_Reduce(&vVolAvg, &dissipation, 1, MPI_DOUBLE, MPI_SUM, 0, pgc->mpi_comm);

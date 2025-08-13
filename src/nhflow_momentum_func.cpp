@@ -54,7 +54,7 @@ nhflow_momentum_func::~nhflow_momentum_func()
 {
 }
 
-void nhflow_momentum_func::reconstruct(lexer *p, fdm_nhf *d, ghostcell *pgc, nhflow_fsf *pfsf, nhflow_signal_speed *pss, 
+void nhflow_momentum_func::reconstruct(lexer *p, fdm_nhf *d, ghostcell *pgc, nhflow_fsf *pfsf, nhflow_signal_speed *pss,
                                      nhflow_reconstruct *precon, slice &WL, double *U, double *V, double *W, double *UH, double *VH, double *WH)
 {
     starttime=pgc->timer();
@@ -64,7 +64,7 @@ void nhflow_momentum_func::reconstruct(lexer *p, fdm_nhf *d, ghostcell *pgc, nhf
     precon->reconstruct_2D_y(p, pgc, d, d->eta, d->ETAe, d->ETAw);
     precon->reconstruct_2D_WL(p, pgc, d);
 
-    // reconstruct U 
+    // reconstruct U
     precon->reconstruct_3D_x(p, pgc, d, U, d->Us, d->Un);
     precon->reconstruct_3D_y(p, pgc, d, U, d->Ue, d->Uw);
     precon->reconstruct_3D_z(p, pgc, d, U, d->Ub, d->Ut);
@@ -107,11 +107,11 @@ void nhflow_momentum_func::velcalc(lexer *p, fdm_nhf *d, ghostcell *pgc, double 
     {
     UH[IJK] = MIN(UH[IJK], p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
     VH[IJK] = MIN(VH[IJK], p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
-    WH[IJK] = MIN(WH[IJK], p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));      
+    WH[IJK] = MIN(WH[IJK], p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
     
     UH[IJK] = MAX(UH[IJK], -p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
     VH[IJK] = MAX(VH[IJK], -p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
-    WH[IJK] = MAX(WH[IJK], -p->A531*WL(i,j)*sqrt(9.81*WL(i,j))); 
+    WH[IJK] = MAX(WH[IJK], -p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
     }
     
     
@@ -121,11 +121,11 @@ void nhflow_momentum_func::velcalc(lexer *p, fdm_nhf *d, ghostcell *pgc, double 
     {
     UH[IJK] = MIN(UH[IJK], 0.1*p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
     VH[IJK] = MIN(VH[IJK], 0.1*p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
-    WH[IJK] = MIN(WH[IJK], 0.1*p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));      
+    WH[IJK] = MIN(WH[IJK], 0.1*p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
     
     UH[IJK] = MAX(UH[IJK], -0.1*p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
     VH[IJK] = MAX(VH[IJK], -0.1*p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
-    WH[IJK] = MAX(WH[IJK], -0.1*p->A531*WL(i,j)*sqrt(9.81*WL(i,j))); 
+    WH[IJK] = MAX(WH[IJK], -0.1*p->A531*WL(i,j)*sqrt(9.81*WL(i,j)));
     }
     
     
@@ -134,7 +134,7 @@ void nhflow_momentum_func::velcalc(lexer *p, fdm_nhf *d, ghostcell *pgc, double 
     {
     d->U[IJK] = UH[IJK]/WLVL;
     d->V[IJK] = VH[IJK]/WLVL;
-    d->W[IJK] = WH[IJK]/WLVL;       
+    d->W[IJK] = WH[IJK]/WLVL;
     }
     
 

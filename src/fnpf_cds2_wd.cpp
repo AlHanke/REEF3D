@@ -71,7 +71,7 @@ double fnpf_cds2_wd::sx(lexer *p, slice &f, double ivel)
 double fnpf_cds2_wd::sy(lexer *p, slice &f, double jvel)
 {
     if(p->wet[IJm1]>0 && p->wet[IJp1]>0)
-    return (f(i,j+1)-f(i,j-1))/(p->DYN[JP]+p->DYN[JM1]);    
+    return (f(i,j+1)-f(i,j-1))/(p->DYN[JP]+p->DYN[JM1]);
     
     else
     return 0.0;

@@ -26,8 +26,8 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"fnpf_coastline.h"
 
-void fnpf_fsfbc_wd::wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, slice &Fifsf) 
-{   
+void fnpf_fsfbc_wd::wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, slice &Fifsf)
+{
     if(p->count<=2)
     {
     SLICELOOP4
@@ -78,7 +78,7 @@ void fnpf_fsfbc_wd::wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, sl
             temp[IJ]=1;
         }
         
-        else              
+        else
         if(c->WL(i,j)<=c->wd_criterion && wetcoast(i,j)==1)
         {
         temp[IJ]=0;
@@ -106,7 +106,7 @@ void fnpf_fsfbc_wd::wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, sl
       
       if(p->count<2)
       SLICELOOP4
-      {     
+      {
           p->wet[IJ]=1;
           
           if(p->A343>=1)
@@ -122,7 +122,7 @@ void fnpf_fsfbc_wd::wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, sl
       
       // eta wetdry limit
       /*SLICELOOP4
-      {     
+      {
           if(p->A343>=1 && p->wet[IJ]==1)
           eta(i,j) = MAX(eta(i,j),c->wd_criterion-c->depth(i,j));
       }*/

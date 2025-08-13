@@ -45,7 +45,7 @@ void idiff2_CN::diff_u(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &d
     starttime=pgc->timer();
     double visc_ddy_p,visc_ddy_m,visc_ddz_p,visc_ddz_m;
         double visctermp, viscterms, visctermn, viscterme;
-        double visctermw, visctermb, visctermt;    
+        double visctermw, visctermb, visctermt;
 
     ULOOP
     diff(i,j,k) = u_in(i,j,k);
@@ -56,7 +56,7 @@ void idiff2_CN::diff_u(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &d
 
     if(p->i_dir==1)
     {
-    ULOOP  
+    ULOOP
     {
     ev_ijk=a->eddyv(i,j,k);
     ev_ip_j_k=a->eddyv(i+1,j,k);
@@ -72,7 +72,7 @@ void idiff2_CN::diff_u(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &d
     visc_i_j_km=a->visc(i,j,k-1);
     visc_i_j_kp=a->visc(i,j,k+1);
     
-    visc_ddy_p = 0.25*(visc_ijk+ev_ijk + visc_ip_j_k+ev_ip_j_k + visc_i_jp_k+ev_i_jp_k + a->visc(i+1,j+1,k)+a->eddyv(i+1,j+1,k));    
+    visc_ddy_p = 0.25*(visc_ijk+ev_ijk + visc_ip_j_k+ev_ip_j_k + visc_i_jp_k+ev_i_jp_k + a->visc(i+1,j+1,k)+a->eddyv(i+1,j+1,k));
     
     visc_ddy_m = 0.25*(visc_i_jm_k+ev_i_jm_k  +a->visc(i+1,j-1,k)+a->eddyv(i+1,j-1,k) + visc_ijk+ev_ijk + visc_ip_j_k+ev_ip_j_k);
     

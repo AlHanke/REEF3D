@@ -47,7 +47,7 @@ void iowave::discharge2D(lexer *p, fdm2D* b, ghostcell* pgc)
     p->Qi=pgc->globalsum(p->Qi);
     
     //if(p->B60==1)
-    p->Ui=p->W10/(Ai>1.0e-20?Ai:1.0e20); 
+    p->Ui=p->W10/(Ai>1.0e-20?Ai:1.0e20);
     
 
 
@@ -107,10 +107,10 @@ void iowave::Qin2D(lexer *p, fdm2D* b, ghostcell* pgc)
     p->Qi=pgc->globalsum(p->Qi);
     
     if(p->B60==1)
-    p->Ui=p->W10/(Ai>1.0e-20?Ai:1.0e20); 
+    p->Ui=p->W10/(Ai>1.0e-20?Ai:1.0e20);
     
     if(p->B60==2 || p->B60==4)
-    p->Ui=hydrograph_ipol(p,a,pgc,hydro_in,hydro_in_count)/(Ai>1.0e-20?Ai:1.0e20);    
+    p->Ui=hydrograph_ipol(p,a,pgc,hydro_in,hydro_in_count)/(Ai>1.0e-20?Ai:1.0e20);
     
     if(p->mpirank==0 && (p->B60==2 || p->B60==4))
     cout<<"Qi_ipol: "<<hydrograph_ipol(p,a,pgc,hydro_in,hydro_in_count)<<endl;
@@ -162,7 +162,7 @@ void iowave::Qout2D(lexer *p, fdm2D* b, ghostcell* pgc)
     p->Uo=p->Qo/(Ao>1.0e-20?Ao:1.0e20);
     
     if(p->B60==3 || p->B60==4)
-    p->Uo=hydrograph_ipol(p,a,pgc,hydro_out,hydro_out_count)/(Ao>1.0e-20?Ao:1.0e20); 
+    p->Uo=hydrograph_ipol(p,a,pgc,hydro_out,hydro_out_count)/(Ao>1.0e-20?Ao:1.0e20);
     
     if(p->mpirank==0 && (p->B60==3 || p->B60==4))
     cout<<"Qo_ipol: "<<hydrograph_ipol(p,a,pgc,hydro_out,hydro_out_count)<<endl;

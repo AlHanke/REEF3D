@@ -54,10 +54,10 @@ public:
     virtual void initialize_nhflow(lexer*, fdm_nhf*, ghostcell*);
     virtual void netForces(lexer*, double&, double&, double&, double&, double&, double&);
     
-    virtual const EigenMat& getLagrangePoints(){return lagrangePoints;} 
-    virtual const EigenMat& getLagrangeForces(){return lagrangeForces;} 
-    virtual const EigenMat& getCollarVel(){return collarVel;} 
-    virtual const EigenMat& getCollarPoints(){return collarPoints;} 
+    virtual const EigenMat& getLagrangePoints(){return lagrangePoints;}
+    virtual const EigenMat& getLagrangeForces(){return lagrangeForces;}
+    virtual const EigenMat& getCollarVel(){return collarVel;}
+    virtual const EigenMat& getCollarPoints(){return collarPoints;}
 
     
 private:
@@ -77,9 +77,9 @@ private:
     // -------------------------------
     
     // Preprocessing
-    void cone_ini(lexer*, ghostcell*); 
-    void cyl_ini(lexer*, ghostcell*); 
-    void wall_ini(lexer*, ghostcell*); 
+    void cone_ini(lexer*, ghostcell*);
+    void cyl_ini(lexer*, ghostcell*);
+    void wall_ini(lexer*, ghostcell*);
     
     typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> MatrixXd;
     typedef Eigen::Matrix<double, 1, Eigen::Dynamic> VectorXd;
@@ -96,13 +96,13 @@ private:
     
     Eigen::VectorXd timeWeight(lexer*);
     
-    void updateAcc(lexer*, ghostcell*);  
-    void updateTopAcc(lexer*);  
+    void updateAcc(lexer*, ghostcell*);
+    void updateTopAcc(lexer*);
     void fillLinSystem(lexer*, ghostcell*);
-    void fillLinRhs(lexer*, ghostcell*);  
+    void fillLinRhs(lexer*, ghostcell*);
     void fillNonLinSystem(lexer*, ghostcell*);
     void fillNonLinRhs(lexer*, ghostcell*);
-    void limitTension();    
+    void limitTension();
     
     void getForces(lexer*);
     void gravityForce(lexer*);
@@ -123,7 +123,7 @@ private:
         );
     
     
-    // ------ 
+    // ------
     
     
     // Parallelisation
@@ -136,22 +136,22 @@ private:
     // Mesh
     double origin_x, origin_y, origin_z, phi, theta, psi;
     double *l0;
-    double L, D, al, ad, beta, gamma; 
+    double L, D, al, ad, beta, gamma;
     int nd, nl, niK, nbK, nK, nf;
     MatrixXd x0_, x_, xn_, xnn_, xdot_, xdotn_, xdotnn_, xdotdot_, top_xdot_, top_xdotdot_, A_, forces_knot;
     double dt_, dtn_, dtnn_, t_net, t_net_n;
     VectorXd mass_knot, weight_knot, sinker_knot, added_mass, B_, T_, T_old, T_backup, coeffs_;
-    double **coupledField, **coupledFieldn, **fb, **K; 
+    double **coupledField, **coupledFieldn, **fb, **K;
     int *Pb, *Nb, *Pi, *Ni;
     vector<vector<int> > meshID;
     
     // Net mesh
-    int tend;  
+    int tend;
     MatrixVd tri_x, tri_y, tri_z, tri_vel, tri_forces;
-    vector<Eigen::Vector3d> lagrangePoints;    
-    vector<Eigen::Vector3d> lagrangeForces;  
-    vector<Eigen::Vector3d> collarVel;    
-    vector<Eigen::Vector3d> collarPoints;    
+    vector<Eigen::Vector3d> lagrangePoints;
+    vector<Eigen::Vector3d> lagrangeForces;
+    vector<Eigen::Vector3d> collarVel;
+    vector<Eigen::Vector3d> collarPoints;
     
     // Forces
     double Tne,Fx,Fy,Fz;

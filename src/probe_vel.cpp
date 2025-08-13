@@ -103,7 +103,7 @@ void probe_vel::start(lexer *p, fdm *a, ghostcell *pgc)
     
     if(p->mpirank==0)
     pout[n]<<setprecision(9)<<p->simtime<<" \t "<<uval<<" \t "<<vval<<" \t "<<wval<<endl;
-    }    
+    }
 }
 
 void probe_vel::ini_location(lexer *p, fdm *a)

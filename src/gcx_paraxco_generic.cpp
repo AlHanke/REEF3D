@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"field.h"
 
 void ghostcell::gcparacox_generic(lexer* p,field& f,int *gcx_count, int ***gcx)
-{    
+{
     int aa,bb,cc;
     int r;
     int count[6];
@@ -130,5 +130,5 @@ void ghostcell::gcparacox_generic(lexer* p,field& f,int *gcx_count, int ***gcx)
         f(i+aa,j+bb,k+cc)=recv[n][count[n]];
         ++count[n];
         }
-    }                        
+    }
 }

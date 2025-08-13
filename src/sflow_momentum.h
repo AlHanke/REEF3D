@@ -33,7 +33,7 @@ class sixdof;
 
 using namespace std;
 
-class sflow_momentum 
+class sflow_momentum
 {
 public:
 

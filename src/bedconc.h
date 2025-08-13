@@ -29,7 +29,7 @@ class ghostcell;
 
 using namespace std;
 
-class bedconc 
+class bedconc
 {
 public:
 

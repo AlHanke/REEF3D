@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include <math.h>
 
 void nhflow_force_ale::force_ale_force(lexer* p, fdm_nhf *d, ghostcell *pgc)
-{    
+{
     double ztot=0; // check for strip total
     
     double uvel,vvel,wvel;
@@ -41,14 +41,14 @@ void nhflow_force_ale::force_ale_force(lexer* p, fdm_nhf *d, ghostcell *pgc)
         vvel = d->V[IJK];
         wvel = d->W[IJK];
         
-        dudsig = dudsig_f(p,d,pgc); 
-        dvdsig = dvdsig_f(p,d,pgc); 
+        dudsig = dudsig_f(p,d,pgc);
+        dvdsig = dvdsig_f(p,d,pgc);
         
         // Term 1 from eqn (9) of Pakozdi et al (2021) MS
-        ax1= (uvel - un[k])/(p->dt);  
+        ax1= (uvel - un[k])/(p->dt);
         
         
-        ax1= (uvel - un[k])/(p->dt); 
+        ax1= (uvel - un[k])/(p->dt);
 
         ay1= (vvel - vn[k])/ (p->dt);
         
@@ -88,7 +88,7 @@ void nhflow_force_ale::force_ale_force(lexer* p, fdm_nhf *d, ghostcell *pgc)
     simtime_n = p->simtime;
 }
 
-double nhflow_force_ale::dndt_f(lexer *p, fdm_nhf *d, ghostcell *pgc) 
+double nhflow_force_ale::dndt_f(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     dndt = (d->eta(i,j) - eta_n)/ p->dt;
     
@@ -97,35 +97,35 @@ double nhflow_force_ale::dndt_f(lexer *p, fdm_nhf *d, ghostcell *pgc)
     return dndt;
 }
 
-double nhflow_force_ale::dudsig_f(lexer *p, fdm_nhf *d, ghostcell *pgc)     
+double nhflow_force_ale::dudsig_f(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
   
     dudsig = (d->U[IJKp1] - d->U[IJKm1])/(p->DZN[KP]+p->DZN[KM1]);
 
-    return dudsig;        
+    return dudsig;
 }
 
-double nhflow_force_ale::dvdsig_f(lexer *p, fdm_nhf *d, ghostcell *pgc)     
+double nhflow_force_ale::dvdsig_f(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
     double dvdsig = 0;
 
     dvdsig = (d->V[IJKp1] - d->V[IJKm1])/(p->DZN[KP]+p->DZN[KM1]);
 
-    return dvdsig;        
+    return dvdsig;
 }
 
-double nhflow_force_ale::dudxi(lexer *p, fdm_nhf *d, ghostcell *pgc) 
+double nhflow_force_ale::dudxi(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    grad = (d->U[Ip1JK] - d->U[Im1JK])/(p->DXN[IP1] + p->DXN[IM1]); 
+    grad = (d->U[Ip1JK] - d->U[Im1JK])/(p->DXN[IP1] + p->DXN[IM1]);
     
     //grad = dwenox(d->U, d->U[IJK]);
     
     return grad;
 }
 
-double nhflow_force_ale::dvdxi(lexer *p, fdm_nhf *d, ghostcell *pgc) 
+double nhflow_force_ale::dvdxi(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    grad = (d->V[IJp1K] - d->V[IJm1K])/(p->DYN[JP1] + p->DYN[JM1]); 
+    grad = (d->V[IJp1K] - d->V[IJm1K])/(p->DYN[JP1] + p->DYN[JM1]);
     
     return grad;
 }

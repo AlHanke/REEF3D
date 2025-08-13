@@ -104,7 +104,7 @@ void probe_vel_theory::start(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
     
     if(p->mpirank==0)
     pout[n]<<setprecision(9)<<p->simtime<<" \t "<<uval<<" \t "<<vval<<" \t "<<wval<<endl;
-    }    
+    }
 }
 
 void probe_vel_theory::ini_location(lexer *p, fdm *a)

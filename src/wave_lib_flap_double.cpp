@@ -26,8 +26,8 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include<fstream>
 
-wave_lib_flap_double::wave_lib_flap_double(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_flap_double::wave_lib_flap_double(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     if(p->mpirank==0)
     {
     cout<<"Wave_Lib: double-hinged flap wavemaker theory"<<endl;

@@ -83,7 +83,7 @@ int ghostcell::gceval2(lexer *p, int gcv, int bc, int cs)
     if((bc==2 && gclabel_outflow==1) && (gcv==11||gcv==2) && (cs==2||cs==3))
     return gclabel_v_out;
     
-//Patch    
+//Patch
     else
     if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==11||gcv==2||gcv==8))
     return 4;

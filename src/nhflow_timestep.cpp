@@ -141,7 +141,7 @@ void nhflow_timestep::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
     
     p->dt=pgc->timesync(p->dt);
     
-    if(p->N48==0) 
+    if(p->N48==0)
     p->dt=p->N49;
     
     else
@@ -242,7 +242,7 @@ void nhflow_timestep::ini(lexer *p, fdm_nhf *d, ghostcell *pgc)
     cout<<"dmax: "<<setprecision(5)<<depthmax<<endl;
     }
     
-    if(p->N48==0) 
+    if(p->N48==0)
     p->dt=p->N49;
     
     else

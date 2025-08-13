@@ -40,7 +40,7 @@ Author: Hans Bihs
 #include"flux_face_FOU_2D.h"
 #include"flux_face_FOU_vrans_2D.h"
 
-hires::hires (lexer *p, int limiter) 
+hires::hires (lexer *p, int limiter)
 {
     if(p->j_dir==0)
     {
@@ -116,7 +116,7 @@ hires::~hires()
 }
 
 void hires::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
-{     
+{
     if(ipol==1)
     ULOOP
     a->F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel,p->DXP,p->DYN,p->DZN);
@@ -156,12 +156,12 @@ double hires::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, f
 
         dx = udir*(ivel2*(b(i,j,k) + 0.5*plim->iphi(b,0,-1,1,0)*(b(i+1,j,k)-b(i,j,k)))
         
-                - ivel1*(b(i-1,j,k) + 0.5*plim->iphi(b,-1,-2,0,-1)*(b(i,j,k)-b(i-1,j,k))))/DX[IM1] 
+                - ivel1*(b(i-1,j,k) + 0.5*plim->iphi(b,-1,-2,0,-1)*(b(i,j,k)-b(i-1,j,k))))/DX[IM1]
             
             
              + (1.0-udir)*(ivel2*(b(i+1,j,k) - 0.5*plim->iphi(b,1,0,2,1)*(b(i+2,j,k)-b(i+1,j,k)))
           
-             -            ivel1*(b(i,j,k) - 0.5*plim->iphi(b,0,-1,1,0)*(b(i+1,j,k)-b(i,j,k))))/DX[IP]; 
+             -            ivel1*(b(i,j,k) - 0.5*plim->iphi(b,0,-1,1,0)*(b(i+1,j,k)-b(i,j,k))))/DX[IP];
              
 
         // y-dir
@@ -172,12 +172,12 @@ double hires::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, f
 
         dy = vdir*(jvel2*(b(i,j,k) + 0.5*plim->jphi(b,0,-1,1,0)*(b(i,j+1,k)-b(i,j,k)))
         
-                - jvel1*(b(i,j-1,k) + 0.5*plim->jphi(b,-1,-2,0,-1)*(b(i,j,k)-b(i,j-1,k))))/DY[JM1] 
+                - jvel1*(b(i,j-1,k) + 0.5*plim->jphi(b,-1,-2,0,-1)*(b(i,j,k)-b(i,j-1,k))))/DY[JM1]
         
         
              + (1.0-vdir)*(jvel2*(b(i,j+1,k) - 0.5*plim->jphi(b,1,0,2,1)*(b(i,j+2,k)-b(i,j+1,k)))
 
-             -             jvel1*(b(i,j,k) - 0.5*plim->jphi(b,0,-1,1,0)*(b(i,j,k)-b(i+1,j,k))))/DY[JP]; 
+             -             jvel1*(b(i,j,k) - 0.5*plim->jphi(b,0,-1,1,0)*(b(i,j,k)-b(i+1,j,k))))/DY[JP];
         }
 
 
@@ -187,7 +187,7 @@ double hires::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, f
 
         dz = wdir*(kvel2*(b(i,j,k) + 0.5*plim->kphi(b,0,-1,1,0)*(b(i,j,k+1)-b(i,j,k)))
         
-                -  kvel1*(b(i,j,k-1) + 0.5*plim->kphi(b,-1,-2,0,-1)*(b(i,j,k)-b(i,j,k-1))))/DZ[KM1] 
+                -  kvel1*(b(i,j,k-1) + 0.5*plim->kphi(b,-1,-2,0,-1)*(b(i,j,k)-b(i,j,k-1))))/DZ[KM1]
         
         
             + (1.0-wdir)*(kvel2*(b(i,j,k+1) - 0.5*plim->kphi(b,1,0,2,1)*(b(i,j,k+2)-b(i,j,k+1)))

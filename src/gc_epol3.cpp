@@ -77,7 +77,7 @@ int ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
     if((bc==21||bc==22||bc==5||(bc==7&&awa_lable==0))&&(cs==5||cs==6)&&gcv==9)
     return gclabel_vel;
 
-//Inflow    
+//Inflow
     else
     if((bc==6 && (gcv==12||gcv==3||gcv==9)))
     return gclabel_w_in;
@@ -91,7 +91,7 @@ int ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
     if((bc==2 && gclabel_outflow==1) && (gcv==12||gcv==3) && (cs==5||cs==6))
     return gclabel_w_out;
     
-//Patch    
+//Patch
     else
     if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==12||gcv==3||gcv==9))
     return 4;

@@ -51,21 +51,21 @@ void bedshear::taubed(lexer *p, fdm2D *b, ghostcell *pgc, sediment_fdm *s)
     {
     cf = pow(manning,2.0)/pow(HP,1.0/3.0);
     
-    tau = p->W1*9.81*cf*uabs*uabs; 
+    tau = p->W1*9.81*cf*uabs*uabs;
     }
     
     if(p->S16==2)
-    {    
+    {
     cf = 2.5*log(12.0*b->hp(i,j)/(s->ks(i,j)));
     
-    tau = p->W1*9.81*uabs*uabs/(fabs(cf*cf)>1.0e-20?(cf*cf):1.0e20); 
+    tau = p->W1*9.81*uabs*uabs/(fabs(cf*cf)>1.0e-20?(cf*cf):1.0e20);
     }
     
     if(p->S16==3)
-    {    
+    {
     cf = 2.5*log(12.0*b->hp(i,j)/(s->ks(i,j)));
     
-    tau = p->W1*9.81*uabs*uabs/(fabs(cf*cf)>1.0e-20?(cf*cf):1.0e20); 
+    tau = p->W1*9.81*uabs*uabs/(fabs(cf*cf)>1.0e-20?(cf*cf):1.0e20);
     }
     
     if(p->S16==4)

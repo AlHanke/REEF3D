@@ -64,7 +64,7 @@ private:
     
     void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-    void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);    
+    void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
     
     field1 urk, Cu, Du, fx;
     field2 vrk, Cv, Dv, fy;
@@ -77,7 +77,7 @@ private:
     turbulence *pturb;
     solver *psolv;
     solver *ppoissonsolv;
-    ioflow *pflow;    
+    ioflow *pflow;
     
     int gcval_u, gcval_v, gcval_w;
 

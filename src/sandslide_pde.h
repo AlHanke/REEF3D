@@ -51,7 +51,7 @@ private:
     double dh,maxdh,maxdhs,dxs,dh_corr;
     double slide_dh,slide_dhs;
     double teta, alpha, beta, gamma;
-}; 
+};
 
 #endif
 

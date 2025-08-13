@@ -30,7 +30,7 @@ void sixdof_obj::updateForcing_box(lexer *p, ghostcell *pgc, slice &press)
     double H, press0, xpos, ypos, Ls, Bs, as, cl, cb;
 
     press0 = p->X401_p0;
-    as = p->X401_a; 
+    as = p->X401_a;
     cl = p->X401_cl;
     cb = p->X401_cb;
 
@@ -101,7 +101,7 @@ void sixdof_obj::updateForcing_oned(lexer *p, ghostcell *pgc, slice &press)
     double press0, xpos, as;
 
     press0 = p->X401_p0;
-    as = p->X401_a; 
+    as = p->X401_a;
 
     SLICELOOP4
     {
@@ -117,7 +117,7 @@ double sixdof_obj::Hsolidface_2D(lexer *p, int aa, int bb)
 {
     double psi, H, phival_fb;
 
-    psi = p->X41*(1.0/2.0)*(p->DXN[IP] + p->DYN[JP]); 
+    psi = p->X41*(1.0/2.0)*(p->DXN[IP] + p->DYN[JP]);
 
     // Construct solid heaviside function
     phival_fb = 0.5*(fs(i,j) + fs(i+aa,j+bb));

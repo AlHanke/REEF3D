@@ -65,7 +65,7 @@ void hypre_struct2D::fill_matrix(lexer* p, ghostcell* pgc, matrix2D &M, slice &f
         
         values[count]=M.w[n];
         ++count;
-        }     
+        }
         
         SSLICECHECK4
         {
@@ -83,7 +83,7 @@ void hypre_struct2D::fill_matrix(lexer* p, ghostcell* pgc, matrix2D &M, slice &f
         
         values[count]=0.0;
         ++count;
-        }    
+        }
     }
     
     HYPRE_StructMatrixSetBoxValues(A, ilower, iupper, nentries, stencil_indices, values);
@@ -107,7 +107,7 @@ void hypre_struct2D::fill_matrix(lexer* p, ghostcell* pgc, matrix2D &M, slice &f
     HYPRE_StructVectorAssemble(x);
     
     
-    count=0; 
+    count=0;
     JILOOP
     {
         PSLICECHECK4

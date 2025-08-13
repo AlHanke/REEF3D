@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"sediment_fdm.h"
 
-topo_relax::topo_relax(lexer *p) 
+topo_relax::topo_relax(lexer *p)
 {
     p->Darray(betaS73,p->S73);
     p->Darray(tan_betaS73,p->S73);

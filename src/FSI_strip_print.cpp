@@ -145,7 +145,7 @@ void fsi_strip::print_stl(lexer *p, fdm *a, ghostcell *pgc)
         }
         result.close();
 
-        printcount_fsi++;    
+        printcount_fsi++;
     }
 }
 

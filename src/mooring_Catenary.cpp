@@ -45,16 +45,16 @@ void mooring_Catenary::start(lexer *p, ghostcell *pgc)
 
 void mooring_Catenary::calcForce(lexer *p, ghostcell *pgc)
 {
-    Eigen::MatrixXd A_eigen = Eigen::MatrixXd::Zero(2,2); 
-    Eigen::VectorXd B_eigen = Eigen::VectorXd::Zero(2);    
-    Eigen::VectorXd F_eigen = Eigen::VectorXd::Zero(2);   
+    Eigen::MatrixXd A_eigen = Eigen::MatrixXd::Zero(2,2);
+    Eigen::VectorXd B_eigen = Eigen::VectorXd::Zero(2);
+    Eigen::VectorXd F_eigen = Eigen::VectorXd::Zero(2);
 
     // Calculate distances between start and mooring points
-    dx = p->X311_xe[line] - p->X311_xs[line];            
-    dy = p->X311_ye[line] - p->X311_ys[line];                
-    dz = p->X311_ze[line] - p->X311_zs[line];    
+    dx = p->X311_xe[line] - p->X311_xs[line];
+    dy = p->X311_ye[line] - p->X311_ys[line];
+    dz = p->X311_ze[line] - p->X311_zs[line];
 
-    dxy_aim = sqrt(dx*dx+dy*dy);            
+    dxy_aim = sqrt(dx*dx+dy*dy);
 
     double dxy_ = dxy_aim;
 
@@ -64,7 +64,7 @@ void mooring_Catenary::calcForce(lexer *p, ghostcell *pgc)
         FH = FH_0;
         FV = FV_0;
         FH_0 = FH + 1.0;
-        FV_0 = FV + 1.0;    
+        FV_0 = FV + 1.0;
        
         while (fabs(FH - FH_0) > 1e-5 && fabs(FV - FV_0) > 1e-5)
         {
@@ -74,8 +74,8 @@ void mooring_Catenary::calcForce(lexer *p, ghostcell *pgc)
             f1 = L - FV/w + FH/EA*FV/w + FH/w*log(FV/FH + sqrt(1+(FV/FH)*(FV/FH))) - dxy_;
             f2 = FH/w*(sqrt(1+(FV/FH)*(FV/FH))-1) + FV*FV/(2*EA*w) - dz;
 
-            df1H = FV/(EA*w) + (FH*(-(FV/(FH*FH)) - (FV*FV)/((FH*FH*FH)*sqrt(1 + FV*FV/(FH*FH)))))/((FV/FH + sqrt(1 + FV*FV/(FH*FH)))*w) + log(FV/FH + sqrt(1 + FV*FV/(FH*FH)))/w;            
-            df1V = (-1.0 + FH/EA)/w + (FH*((1/FH) + FV/(FH*FH*sqrt(1 + FV*FV/(FH*FH)))))/((FV/FH + sqrt(1 + FV*FV/(FH*FH)))*w);           
+            df1H = FV/(EA*w) + (FH*(-(FV/(FH*FH)) - (FV*FV)/((FH*FH*FH)*sqrt(1 + FV*FV/(FH*FH)))))/((FV/FH + sqrt(1 + FV*FV/(FH*FH)))*w) + log(FV/FH + sqrt(1 + FV*FV/(FH*FH)))/w;
+            df1V = (-1.0 + FH/EA)/w + (FH*((1/FH) + FV/(FH*FH*sqrt(1 + FV*FV/(FH*FH)))))/((FV/FH + sqrt(1 + FV*FV/(FH*FH)))*w);
             df2H = (-1.0 + FH/sqrt(FH*FH + FV*FV))/w;
             df2V = FV/(EA*w) + FV/(FH*sqrt(1 + FV*FV/(FH*FH))*w);
            
@@ -88,14 +88,14 @@ void mooring_Catenary::calcForce(lexer *p, ghostcell *pgc)
         }
         Xme_ = FH*fabs(cos(atan(dy/dx)));
         Yme_ = FH*fabs(sin(atan(dy/dx)));
-        Zme_ = FV;    
+        Zme_ = FV;
 
         buildLine(p);
    
         // Check convergence
-        double dx_curr = x[H-1] - p->X311_xs[line];            
-        double dy_curr = y[H-1] - p->X311_ys[line];            
-        double dxy_curr = sqrt(dx_curr*dx_curr+dy_curr*dy_curr);            
+        double dx_curr = x[H-1] - p->X311_xs[line];
+        double dy_curr = y[H-1] - p->X311_ys[line];
+        double dxy_curr = sqrt(dx_curr*dx_curr+dy_curr*dy_curr);
 
         if (fabs(dxy_aim - dxy_curr) > 0.0001)
         {
@@ -114,16 +114,16 @@ void mooring_Catenary::calcForce(lexer *p, ghostcell *pgc)
         }
     }
 
-    // Reaction forces at mooring points    
-    if (dx > 0)    
+    // Reaction forces at mooring points
+    if (dx > 0)
     {
         Xme_ *= -1.0;
     }
-    if (dy > 0)    
+    if (dy > 0)
     {
         Yme_ *= -1.0;
     }
-    if (dz > 0)    
+    if (dz > 0)
     {
         Zme_ *= -1.0;
     }
@@ -138,7 +138,7 @@ void mooring_Catenary::mooringForces
     // Tension forces if line is not broken
     if (broken==false)
     {
-        Xme = Xme_; 
+        Xme = Xme_;
         Yme = Yme_;
         Zme = Zme_;
     }
@@ -146,7 +146,7 @@ void mooring_Catenary::mooringForces
     // Breakage due to max tension force
     if (breakTension > 0.0 && fabs(T[H-1]) >= breakTension)
     {
-        Xme = 0.0; 
+        Xme = 0.0;
         Yme = 0.0;
         Zme = 0.0;
 
@@ -156,7 +156,7 @@ void mooring_Catenary::mooringForces
     // Breakage due to time limit
     if (breakTime > 0.0 && curr_time >= breakTime)
     {
-        Xme = 0.0; 
+        Xme = 0.0;
         Yme = 0.0;
         Zme = 0.0;
 
@@ -176,9 +176,9 @@ void mooring_Catenary::getForce(lexer *p, ghostcell *pgc, double& FH_, double& F
     H = p->X311_H[line];
     EA = p->X311_EA[line];
     
-    p->Darray(x,H); 
+    p->Darray(x,H);
     p->Darray(y,H);
-    p->Darray(z,H); 
+    p->Darray(z,H);
     p->Darray(T,H);
 
     printtime = 0.0;
@@ -205,9 +205,9 @@ void mooring_Catenary::getShape(lexer *p, ghostcell *pgc, double*& x_, double*& 
     H = p->X311_H[line] + 2;
     EA = p->X311_EA[line];
     
-    p->Darray(x,H); 
+    p->Darray(x,H);
     p->Darray(y,H);
-    p->Darray(z,H); 
+    p->Darray(z,H);
     p->Darray(T,H);
 
     // Calculate force
@@ -243,15 +243,15 @@ void mooring_Catenary::iniShape(lexer *p, ghostcell *pgc,Eigen::VectorXd& x_, Ei
     H = p->X311_H[line] + 1;
     EA = p->X311_EA[line];
     
-    p->Darray(x,H); 
+    p->Darray(x,H);
     p->Darray(y,H);
-    p->Darray(z,H); 
+    p->Darray(z,H);
     p->Darray(T,H);
 
     // Calculate force
          
     FH_0 = 1.0;
-    FV_0 = 1.0; 
+    FV_0 = 1.0;
 
     calcForce(p, pgc);
 

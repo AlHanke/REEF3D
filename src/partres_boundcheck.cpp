@@ -32,7 +32,7 @@ void partres::boundcheck(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, int 
     
     for(n=0;n<P.index;++n)
     if(P.Flag[n]==ACTIVE)
-    {  
+    {
             if(mode==1)
             {
             i=p->posc_i(P.XRK1[n]);

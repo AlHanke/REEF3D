@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include"patchBC_interface.h"
 
 sflow_eta::sflow_eta(lexer *p, fdm2D *b , ghostcell *pgc, patchBC_interface *ppBC) : Lab(p)
-{   
+{
     pBC = ppBC;
     
     if(p->F50==1)
@@ -84,8 +84,8 @@ void sflow_eta::disc(lexer *p, fdm2D *b , ghostcell *pgc, slice &P, slice &Q, sl
     b->hy(i,j) = MAX(b->hy(i,j), 0.0);
     
 
-    pgc->gcsl_start1(p,b->hx,gcval_eta);    
-    pgc->gcsl_start2(p,b->hy,gcval_eta);  
+    pgc->gcsl_start1(p,b->hx,gcval_eta);
+    pgc->gcsl_start2(p,b->hy,gcval_eta);
 }
 
 void sflow_eta::depth_update(lexer *p, fdm2D *b , ghostcell *pgc, slice &P, slice &Q, slice &ws, slice &eta)

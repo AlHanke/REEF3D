@@ -38,7 +38,7 @@ void sixdof_obj::geometry_parameters(lexer *p, fdm *a, ghostcell *pgc)
     if (p->X131 > 0 || p->X132 > 0 || p->X133 > 0 || p->X153 > 0)
     {
         geometry_ls(p,a,pgc);
-    }    
+    }
         
     else
     {
@@ -57,15 +57,15 @@ void sixdof_obj::geometry_parameters(lexer *p, fdm *a, ghostcell *pgc)
         
             z0 = tri_z[n][0];
             z1 = tri_z[n][1];
-            z2 = tri_z[n][2];  
+            z2 = tri_z[n][2];
             
             n0 = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
-            n1 = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0); 
+            n1 = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
             n2 = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
         
-            geometry_f(x0,x1,x2,f1x,f2x,f3x,g0x,g1x,g2x); 
-            geometry_f(y0,y1,y2,f1y,f2y,f3y,g0y,g1y,g2y); 
-            geometry_f(z0,z1,z2,f1z,f2z,f3z,g0z,g1z,g2z);    
+            geometry_f(x0,x1,x2,f1x,f2x,f3x,g0x,g1x,g2x);
+            geometry_f(y0,y1,y2,f1y,f2y,f3y,g0y,g1y,g2y);
+            geometry_f(z0,z1,z2,f1z,f2z,f3z,g0z,g1z,g2z);
         
             integ[0] += n0 * f1x;
             integ[1] += n0 * f2x;
@@ -76,7 +76,7 @@ void sixdof_obj::geometry_parameters(lexer *p, fdm *a, ghostcell *pgc)
             integ[6] += n2 * f3z;
             integ[7] += n0 * (y0 * g0x + y1 * g1x + y2 * g2x);
             integ[8] += n1 * (z0 * g0y + z1 * g1y + z2 * g2y);
-            integ[9] += n2 * (x0 * g0z + x1 * g1z + x2 * g2z);    
+            integ[9] += n2 * (x0 * g0z + x1 * g1z + x2 * g2z);
         }
         
         double Vol,Vol_ls,H;
@@ -95,7 +95,7 @@ void sixdof_obj::geometry_parameters(lexer *p, fdm *a, ghostcell *pgc)
         
             z1 = tri_z[n][0];
             z2 = tri_z[n][1];
-            z3 = tri_z[n][2];  
+            z3 = tri_z[n][2];
             
             Vol += (1.0/6.0)*(-x3*y2*z1 + x2*y3*z1 + x3*y1*z2 - x1*y3*z2 - x2*y1*z3 + x1*y2*z3);
             
@@ -118,7 +118,7 @@ void sixdof_obj::geometry_parameters(lexer *p, fdm *a, ghostcell *pgc)
             {
                 Mass_fb = p->X22_m;
                 Rfb = Mass_fb/Vfb;
-            }    
+            }
             
             else if (p->X21==1)
             {
@@ -138,22 +138,22 @@ void sixdof_obj::geometry_parameters(lexer *p, fdm *a, ghostcell *pgc)
         
         if(p->X23==1)
         {
-            c_(0) = p->X23_x; 
-            c_(1) = p->X23_y; 
-            c_(2) = p->X23_z; 
+            c_(0) = p->X23_x;
+            c_(1) = p->X23_y;
+            c_(2) = p->X23_z;
         }
         
         double Ix, Iy, Iz;
 
         if(p->X24==1)
         {
-            Ix = p->X24_Ix; 
-            Iy = p->X24_Iy; 
-            Iz = p->X24_Iz; 
+            Ix = p->X24_Ix;
+            Iy = p->X24_Iy;
+            Iz = p->X24_Iz;
 
             I_(0,1) = 0.0;
             I_(0,2) = 0.0;
-            I_(1,2) = 0.0;              
+            I_(1,2) = 0.0;
         }
         else
         {
@@ -175,9 +175,9 @@ void sixdof_obj::geometry_parameters(lexer *p, fdm *a, ghostcell *pgc)
         I_(0,0) = Ix;
         I_(1,0) = I_(0,1);
         I_(1,1) = Iy;
-        I_(2,0) = I_(0,2); 
-        I_(2,1) = I_(1,2); 
-        I_(2,2) = Iz;  
+        I_(2,0) = I_(0,2);
+        I_(2,1) = I_(1,2);
+        I_(2,2) = Iz;
         p->W_fb = Rfb;
 
         p->xg = c_(0);
@@ -195,7 +195,7 @@ void sixdof_obj::geometry_parameters(lexer *p, fdm *a, ghostcell *pgc)
             cout<<"Moments of Inertia Tensor:\n"<<I_<<endl;
         }
         
-        p->del_Darray(integ, 10);    
+        p->del_Darray(integ, 10);
     }
 }
 
@@ -212,7 +212,7 @@ void sixdof_obj::geometry_parameters_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
     if (p->X131 > 0 || p->X132 > 0 || p->X133 > 0 || p->X153 > 0)
     {
         geometry_ls_nhflow(p,d,pgc);
-    }    
+    }
         
     else
     {
@@ -231,15 +231,15 @@ void sixdof_obj::geometry_parameters_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
         
             z0 = tri_z[n][0];
             z1 = tri_z[n][1];
-            z2 = tri_z[n][2];  
+            z2 = tri_z[n][2];
             
             n0 = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
-            n1 = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0); 
+            n1 = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
             n2 = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
         
-            geometry_f(x0,x1,x2,f1x,f2x,f3x,g0x,g1x,g2x); 
-            geometry_f(y0,y1,y2,f1y,f2y,f3y,g0y,g1y,g2y); 
-            geometry_f(z0,z1,z2,f1z,f2z,f3z,g0z,g1z,g2z);    
+            geometry_f(x0,x1,x2,f1x,f2x,f3x,g0x,g1x,g2x);
+            geometry_f(y0,y1,y2,f1y,f2y,f3y,g0y,g1y,g2y);
+            geometry_f(z0,z1,z2,f1z,f2z,f3z,g0z,g1z,g2z);
         
             integ[0] += n0 * f1x;
             integ[1] += n0 * f2x;
@@ -250,7 +250,7 @@ void sixdof_obj::geometry_parameters_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
             integ[6] += n2 * f3z;
             integ[7] += n0 * (y0 * g0x + y1 * g1x + y2 * g2x);
             integ[8] += n1 * (z0 * g0y + z1 * g1y + z2 * g2y);
-            integ[9] += n2 * (x0 * g0z + x1 * g1z + x2 * g2z);    
+            integ[9] += n2 * (x0 * g0z + x1 * g1z + x2 * g2z);
         }
         
         double Vol,Vol_ls,H;
@@ -269,7 +269,7 @@ void sixdof_obj::geometry_parameters_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
         
             z1 = tri_z[n][0];
             z2 = tri_z[n][1];
-            z3 = tri_z[n][2];  
+            z3 = tri_z[n][2];
             
             Vol += (1.0/6.0)*(-x3*y2*z1 + x2*y3*z1 + x3*y1*z2 - x1*y3*z2 - x2*y1*z3 + x1*y2*z3);
             
@@ -292,7 +292,7 @@ void sixdof_obj::geometry_parameters_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
             {
                 Mass_fb = p->X22_m;
                 Rfb = Mass_fb/Vfb;
-            }    
+            }
             
             else if (p->X21==1)
             {
@@ -312,22 +312,22 @@ void sixdof_obj::geometry_parameters_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
         
         if(p->X23==1)
         {
-            c_(0) = p->X23_x; 
-            c_(1) = p->X23_y; 
-            c_(2) = p->X23_z; 
+            c_(0) = p->X23_x;
+            c_(1) = p->X23_y;
+            c_(2) = p->X23_z;
         }
         
         double Ix, Iy, Iz;
 
         if(p->X24==1)
         {
-            Ix = p->X24_Ix; 
-            Iy = p->X24_Iy; 
-            Iz = p->X24_Iz; 
+            Ix = p->X24_Ix;
+            Iy = p->X24_Iy;
+            Iz = p->X24_Iz;
 
             I_(0,1) = 0.0;
             I_(0,2) = 0.0;
-            I_(1,2) = 0.0;              
+            I_(1,2) = 0.0;
         }
         else
         {
@@ -349,9 +349,9 @@ void sixdof_obj::geometry_parameters_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
         I_(0,0) = Ix;
         I_(1,0) = I_(0,1);
         I_(1,1) = Iy;
-        I_(2,0) = I_(0,2); 
-        I_(2,1) = I_(1,2); 
-        I_(2,2) = Iz;  
+        I_(2,0) = I_(0,2);
+        I_(2,1) = I_(1,2);
+        I_(2,2) = Iz;
         p->W_fb = Rfb;
 
         p->xg = c_(0);
@@ -369,7 +369,7 @@ void sixdof_obj::geometry_parameters_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
             cout<<"Moments of Inertia Tensor:\n"<<I_<<endl;
         }
         
-        p->del_Darray(integ, 10);    
+        p->del_Darray(integ, 10);
     }
 }
 
@@ -402,7 +402,7 @@ void sixdof_obj::geometry_parameters_2D(lexer *p, ghostcell *pgc)
         
             z0 = tri_z[n][0];
             z1 = tri_z[n][1];
-            z2 = tri_z[n][2];  
+            z2 = tri_z[n][2];
             
             
             xmin = MIN3(x0,x1,x2);
@@ -417,49 +417,49 @@ void sixdof_obj::geometry_parameters_2D(lexer *p, ghostcell *pgc)
         
         if(p->X23!=1)
         {
-            c_(0) = xmin + 0.5*(xmax-xmin); 
-            c_(1) = ymin + 0.5*(ymax-ymin); 
-            c_(2) = zmin + 0.5*(zmax-zmin); 
+            c_(0) = xmin + 0.5*(xmax-xmin);
+            c_(1) = ymin + 0.5*(ymax-ymin);
+            c_(2) = zmin + 0.5*(zmax-zmin);
         }
 
         if(p->X23==1)
         {
-            c_(0) = p->X23_x; 
-            c_(1) = p->X23_y; 
-            c_(2) = p->X23_z; 
+            c_(0) = p->X23_x;
+            c_(1) = p->X23_y;
+            c_(2) = p->X23_z;
         }
         
         double Ix, Iy, Iz;
 
         if(p->X24!=1)
         {
-            Ix = 1.0; 
-            Iy = 1.0; 
-            Iz = 1.0; 
+            Ix = 1.0;
+            Iy = 1.0;
+            Iz = 1.0;
 
             I_(0,1) = 0.0;
             I_(0,2) = 0.0;
-            I_(1,2) = 0.0;              
+            I_(1,2) = 0.0;
         }
         
         if(p->X24==1)
         {
-            Ix = p->X24_Ix; 
-            Iy = p->X24_Iy; 
-            Iz = p->X24_Iz; 
+            Ix = p->X24_Ix;
+            Iy = p->X24_Iy;
+            Iz = p->X24_Iz;
 
             I_(0,1) = 0.0;
             I_(0,2) = 0.0;
-            I_(1,2) = 0.0;              
+            I_(1,2) = 0.0;
         }
 
 
         I_(0,0) = Ix;
         I_(1,0) = I_(0,1);
         I_(1,1) = Iy;
-        I_(2,0) = I_(0,2); 
-        I_(2,1) = I_(1,2); 
-        I_(2,2) = Iz; 
+        I_(2,0) = I_(0,2);
+        I_(2,1) = I_(1,2);
+        I_(2,2) = Iz;
  
 
         p->xg = c_(0);

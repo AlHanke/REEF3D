@@ -30,8 +30,8 @@ void fsi_strip::setFieldBC(Matrix3Xd& c_, Matrix3Xd& cdot_, Matrix4Xd& q_, Matri
     if (ind==0)
     {
         //BC: Fixed rotatory end
-        Eigen::Vector4d qb; 
-        Eigen::Matrix4d J; 
+        Eigen::Vector4d qb;
+        Eigen::Matrix4d J;
 
         qb << 1.0, 0, 0, 0;
         J << 2.0*qb(0)*qb(0) - 1.0, 2*qb(1)*qb(0), 2*qb(2)*qb(0), 2*qb(3)*qb(0),
@@ -40,7 +40,7 @@ void fsi_strip::setFieldBC(Matrix3Xd& c_, Matrix3Xd& cdot_, Matrix4Xd& q_, Matri
              2*qb(0)*qb(3), 2*qb(1)*qb(3), 2*qb(2)*qb(3), 2.0*qb(3)*qb(3) - 1.0;
          
         q_.col(0) = 2.0*qb.dot(q_.col(1))*qb - q_.col(1);
-        qdot_.col(0) = J*qdot_.col(1); 
+        qdot_.col(0) = J*qdot_.col(1);
     }
     else if (ind==1)
     {
@@ -49,7 +49,7 @@ void fsi_strip::setFieldBC(Matrix3Xd& c_, Matrix3Xd& cdot_, Matrix4Xd& q_, Matri
     }
     else if (ind==2)
     {
-        // BC: Free rotatory end with vanishing moments 
+        // BC: Free rotatory end with vanishing moments
         m0_.col(Ne) = Eigen::Vector4d::Zero(4); q_.col(Ne+1) = q_.col(Ne); q0_.col(Ne+1) = q0_.col(Ne);
     }
     else if (ind==3)
@@ -75,7 +75,7 @@ void fsi_strip::setVariableLoads(Matrix3Xd& Fext_, Matrix4Xd& Mext_, const Matri
 
     for (int eI = 1; eI < Ne+1; eI++)
     {
-        m_el = 0.0;   
+        m_el = 0.0;
         P_el.col(eI) << 0.0, 0.0, 0.0;
         P_el_star << 0.0, 0.0, 0.0;
         I_el_star << 0.0, 0.0, 0.0;

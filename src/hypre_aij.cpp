@@ -30,11 +30,11 @@ Author: Hans Bihs
 
 
 hypre_aij::hypre_aij(lexer* p,fdm* a,ghostcell *pgc) : xvec(p)
-{    
+{
     int vecsize=p->knox*p->knoy*p->knoz;
     
     if(p->A10==3)
-    vecsize=p->knox*p->knoy*(p->knoz+1); 
+    vecsize=p->knox*p->knoy*(p->knoz+1);
     
     p->Iarray(rows,vecsize);
 }
@@ -94,7 +94,7 @@ void hypre_aij::start(lexer* p,fdm* a, ghostcell* pgc, field &f, vec& rhsvec, in
     
     HYPRE_BoomerAMGGetNumIterations(solver, &num_iterations);
     HYPRE_BoomerAMGGetFinalRelativeResidualNorm(solver, &final_res_norm);
-    } 
+    }
     
     p->solveriter=num_iterations;
     p->final_res = final_res_norm;
@@ -125,7 +125,7 @@ void hypre_aij::solve(lexer* p,fdm* a, ghostcell* pgc, vec& xvec, vec& rhsvec, i
     numiter=0;
     p->solveriter=0;
 
-    p->solveriter=numiter;        
+    p->solveriter=numiter;
 }
 
 void hypre_aij::fillbackvec(lexer *p, fdm *a, field &f, vec &xvec, int var)

@@ -52,5 +52,5 @@ void sediment_f::print_probes(lexer *p, ghostcell *pgc, sediment_fdm *s, ioflow 
     pbedshearprobe->bedshear_gauge(p,pgc,psed);
 
     if(p->P126>0)
-    pbedshearmax->bedshear_maxval(p,pgc,psed);    
+    pbedshearmax->bedshear_maxval(p,pgc,psed);
 }

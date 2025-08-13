@@ -78,10 +78,10 @@ void reinidisc_fsf_rig::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field 
 
 
 void reinidisc_fsf_rig::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L)
-{    
+{
 
-    if((f.V[IJK]>=0.0 && f.V[Ip1JK]>=0.0 && f.V[Im1JK]>=0.0 && f.V[IJp1K]>=0.0 && f.V[IJm1K]>=0.0 && f.V[IJKp1]>=0.0 && f.V[IJKm1]>=0.0) 
-    || (f.V[IJK]<0.0  && f.V[Ip1JK]<0.0  && f.V[Im1JK]<0.0  && f.V[IJp1K]<0.0  && f.V[IJm1K]<0.0   && f.V[IJKp1]<0.0  && f.V[IJKm1]<0.0)) 
+    if((f.V[IJK]>=0.0 && f.V[Ip1JK]>=0.0 && f.V[Im1JK]>=0.0 && f.V[IJp1K]>=0.0 && f.V[IJm1K]>=0.0 && f.V[IJKp1]>=0.0 && f.V[IJKm1]>=0.0)
+    || (f.V[IJK]<0.0  && f.V[Ip1JK]<0.0  && f.V[Im1JK]<0.0  && f.V[IJp1K]<0.0  && f.V[IJm1K]<0.0   && f.V[IJKp1]<0.0  && f.V[IJKm1]<0.0))
     {
     dx=0.0;
     dy=0.0;
@@ -132,7 +132,7 @@ void reinidisc_fsf_rig::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &
     dz=ddwenoz(a,f,-1.0);
 
     if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
-    dz=0.0;    
+    dz=0.0;
                     
 
     dnorm=sqrt(dx*dx + dy*dy + dz*dz);

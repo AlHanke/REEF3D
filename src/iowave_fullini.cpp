@@ -48,7 +48,7 @@ void iowave::full_initialize(lexer *p, fdm*a, ghostcell *pgc)
         xg = xgen1(p);
         yg = ygen1(p);
         dg = distgen(p);
-        db = distbeach(p); 
+        db = distbeach(p);
         
         if(p->pos_z()<=p->phimean)
         z=-(fabs(p->phimean-p->pos_z()));
@@ -71,7 +71,7 @@ void iowave::full_initialize(lexer *p, fdm*a, ghostcell *pgc)
         H=0.5*(1.0 + phival/fabs(epsi) + (1.0/PI)*sin((PI*phival)/fabs(epsi)));
     
         a->u(i,j,k) = wave_u(p,pgc,xg,yg,z)*H;
-    }    
+    }
     
     
     VFLUIDLOOP
@@ -79,7 +79,7 @@ void iowave::full_initialize(lexer *p, fdm*a, ghostcell *pgc)
         xg = xgen2(p);
         yg = ygen2(p);
         dg = distgen(p);
-        db = distbeach(p); 
+        db = distbeach(p);
         
         if(p->pos_z()<=p->phimean)
         z=-(fabs(p->phimean-p->pos_z()));
@@ -109,7 +109,7 @@ void iowave::full_initialize(lexer *p, fdm*a, ghostcell *pgc)
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
-        db = distbeach(p); 
+        db = distbeach(p);
         
         if(p->pos_z()<=p->phimean)
         z=-(fabs(p->phimean-p->pos3_z()));
@@ -139,7 +139,7 @@ void iowave::full_initialize(lexer *p, fdm*a, ghostcell *pgc)
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
-        db = distbeach(p); 
+        db = distbeach(p);
         
         if(p->pos_z()<=p->phimean)
         z=-(fabs(p->phimean-p->pos_z()));
@@ -156,7 +156,7 @@ void iowave::full_initialize(lexer *p, fdm*a, ghostcell *pgc)
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
-        db = distbeach(p); 
+        db = distbeach(p);
         
         if(p->pos_z()<=p->phimean)
         z=-(fabs(p->phimean-p->pos_z()));

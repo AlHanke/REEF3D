@@ -34,7 +34,7 @@ void pressure_reference::fsf_normalize(lexer*p, fdm* a, ghostcell *pgc)
 
     
     // epsi
-    if(p->j_dir==0)        
+    if(p->j_dir==0)
     epsi = 2.1*(1.0/2.0)*(p->DRM+p->DTM);
         
     if(p->j_dir==1)

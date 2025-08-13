@@ -70,7 +70,7 @@ public:
     slice4 solidbed,topobed;
     slice5 bednode;
     sliceint5 nodeval;
-    sliceint4 breaking; 
+    sliceint4 breaking;
     slice4 breaking_print;
     
     sliceint1 wet1,deep1;

@@ -18,10 +18,10 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
                           
-The solver was written in C++ by Blake Ashby (bmashby@stanford.edu) (version Nov 15, 2002). 
-It is modified for C++ from the code RADAU5 originally written in FORTRAN (version July 9, 
-1996, latest small correction: January 18, 2002) by E. Hairer (ernst.hairer@math.unige.ch) 
-and G. Wanner (gerhard.wanner@math.unige.ch), Universite de Geneve. 
+The solver was written in C++ by Blake Ashby (bmashby@stanford.edu) (version Nov 15, 2002).
+It is modified for C++ from the code RADAU5 originally written in FORTRAN (version July 9,
+1996, latest small correction: January 18, 2002) by E. Hairer (ernst.hairer@math.unige.ch)
+and G. Wanner (gerhard.wanner@math.unige.ch), Universite de Geneve.
 
 --------------------------------------------------------------------
 Author: Tobias Martin
@@ -116,7 +116,7 @@ private:
     int SolutionOutput();
 
         
-    // ------ 
+    // ------
        
     // Beam number
     int nBeam;
@@ -133,8 +133,8 @@ private:
 
     // Fields
     double *y;
-    Matrix3Xd Fext, c, c0, cdot, cdotdot, rhs_cdot, f; 
-    Matrix4Xd Mext, q, q0, qdot, rhs_qdot, f0, m0; 
+    Matrix3Xd Fext, c, c0, cdot, cdotdot, rhs_cdot, f;
+    Matrix4Xd Mext, q, q0, qdot, rhs_qdot, f0, m0;
     Eigen::Vector3d corr_k, mdot;
     Eigen::Vector4d qb, dcdz, dc0dz, dcdotdz, fdot, qmult, fq;
     Eigen::Vector4d dummy;

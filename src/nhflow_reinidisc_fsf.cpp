@@ -41,12 +41,12 @@ void nhflow_reinidisc_fsf::start(lexer *p, fdm_nhf *d, ghostcell *pgc, double *F
 }
 
 void nhflow_reinidisc_fsf::disc(lexer *p, fdm_nhf *d, ghostcell *pgc, double *F, double *L)
-{    
+{
     
     L[IJK]=0.0;
     
-    if((F[IJK]>=0.0 && F[Ip1JK]>=0.0 && F[Im1JK]>=0.0 && F[IJp1K]>=0.0 && F[IJm1K]>=0.0 && F[IJKp1]>=0.0 && F[IJKm1]>=0.0) 
-    || (F[IJK]<0.0  && F[Ip1JK]<0.0  && F[Im1JK]<0.0  && F[IJp1K]<0.0  && F[IJm1K]<0.0   && F[IJKp1]<0.0  && F[IJKm1]<0.0)) 
+    if((F[IJK]>=0.0 && F[Ip1JK]>=0.0 && F[Im1JK]>=0.0 && F[IJp1K]>=0.0 && F[IJm1K]>=0.0 && F[IJKp1]>=0.0 && F[IJKm1]>=0.0)
+    || (F[IJK]<0.0  && F[Ip1JK]<0.0  && F[Im1JK]<0.0  && F[IJp1K]<0.0  && F[IJm1K]<0.0   && F[IJKp1]<0.0  && F[IJKm1]<0.0))
     {
     dx=0.0;
     dy=0.0;
@@ -97,7 +97,7 @@ void nhflow_reinidisc_fsf::disc(lexer *p, fdm_nhf *d, ghostcell *pgc, double *F,
     dz=ddwenoz(F,-1.0);
 
     if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
-    dz=0.0;    
+    dz=0.0;
                     
 
     dnorm=sqrt(dx*dx + dy*dy + dz*dz);

@@ -172,7 +172,7 @@ void fnpf_breaking::breaking_algorithm(lexer *p, fdm_fnpf *c, ghostcell *pgc, sl
         
         if(p->j_dir==0)
         SLICELOOP4
-        {   
+        {
             
             if(c->breaking(i,j)>=1 || c->breaking(i-1,j)>=1 || c->breaking(i+1,j)>=1)
             c->vb(i,j) = p->A365*double(c->breaking(i,j));
@@ -184,7 +184,7 @@ void fnpf_breaking::breaking_algorithm(lexer *p, fdm_fnpf *c, ghostcell *pgc, sl
 
         if(p->j_dir==1)
         SLICELOOP4
-        {   
+        {
             
             if(c->breaking(i,j)>=1 || c->breaking(i-1,j)>=1 || c->breaking(i+1,j)>=1 || c->breaking(i,j-1)>=1 || c->breaking(i,j+1)>=1)
             c->vb(i,j) = p->A365*double(c->breaking(i,j));
@@ -200,7 +200,7 @@ void fnpf_breaking::breaking_algorithm(lexer *p, fdm_fnpf *c, ghostcell *pgc, sl
         {
          filter(p,c,pgc,eta);
          filter(p,c,pgc,Fifsf);
-        }   
+        }
         
         if(p->A352==2)
         SLICELOOP4
@@ -208,7 +208,7 @@ void fnpf_breaking::breaking_algorithm(lexer *p, fdm_fnpf *c, ghostcell *pgc, sl
         {
          filter(p,c,pgc,eta);
          filter(p,c,pgc,Fifsf);
-        }   
+        }
         
         if(p->A352==3)
         SLICELOOP4
@@ -216,7 +216,7 @@ void fnpf_breaking::breaking_algorithm(lexer *p, fdm_fnpf *c, ghostcell *pgc, sl
         {
          filter(p,c,pgc,eta);
          filter(p,c,pgc,Fifsf);
-        }   
+        }
         
     pgc->gcsl_start4(p,c->vb,1);
     }
@@ -228,7 +228,7 @@ void fnpf_breaking::breaking_algorithm(lexer *p, fdm_fnpf *c, ghostcell *pgc, sl
         {
          filter(p,c,pgc,eta);
          filter(p,c,pgc,Fifsf);
-        }   
+        }
     }
     
     SLICELOOP4

@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 wave_lib_void::wave_lib_void(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
-{ 
+{
     parameters(p,pgc);
     
     if(p->mpirank==0)

@@ -55,7 +55,7 @@ void net_sheet::print(lexer *p)
         header_out.open(str, std::ofstream::out | std::ofstream::app);
         header_out<<p->simtime<<" \t "<<Fx<<" "<<Fy<<" "<<Fz<<endl;
         header_out.close();
-    }  
+    }
     
     // Print probe points
     if (p->mpirank==0 && p->X324 > 0)
@@ -75,13 +75,13 @@ void net_sheet::print(lexer *p)
             header_out<<p->simtime<<" \t "<<x_(probeKnot(pp),0)<<" \t "<<x_(probeKnot(pp),1)<<" \t "<<x_(probeKnot(pp),2)<<endl;
             header_out.close();
         }
-    }  
+    }
     
     
     if
     (
-        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)  
-        || (p->simtime>printtime && p->P30>0.0)   
+        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)
+        || (p->simtime>printtime && p->P30>0.0)
         || p->count==0)
     )
     {
@@ -113,10 +113,10 @@ void net_sheet::print(lexer *p)
             
             z0 = tri_z[n][0];
             z1 = tri_z[n][1];
-            z2 = tri_z[n][2];          
+            z2 = tri_z[n][2];
             
             nx = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
-            ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0); 
+            ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
             nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
                 
             mag = sqrt(nx*nx + ny*ny + nz*nz);
@@ -136,7 +136,7 @@ void net_sheet::print(lexer *p)
 
         result<<"endsolid"<<endl;
 
-        result.close(); 
+        result.close();
 
         //- Print Lagrangian points
         if(p->A10==5)

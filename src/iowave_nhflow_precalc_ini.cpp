@@ -73,7 +73,7 @@ void iowave::nhflow_precalc_relax_ini(lexer *p,fdm_nhf *d, ghostcell *pgc)
     // W ------------------------------------------------
     BASELOOP
     {
-        dg = distgen(p); 
+        dg = distgen(p);
 
         // Wave Generation
         if(p->B98==2)
@@ -88,7 +88,7 @@ void iowave::nhflow_precalc_relax_ini(lexer *p,fdm_nhf *d, ghostcell *pgc)
     // FI ------------------------------------------------
     FBASELOOP
     {
-        dg = distgen(p); 
+        dg = distgen(p);
 
         // Wave Generation
         if(p->B98==2)
@@ -98,12 +98,12 @@ void iowave::nhflow_precalc_relax_ini(lexer *p,fdm_nhf *d, ghostcell *pgc)
             ++ppt_count;
 
         }
-    }    
+    }
 
 // ETA ------------------------------------------------
     SLICEBASELOOP
     {
-        dg = distgen(p); 
+        dg = distgen(p);
 
         // Wave Generation
         if(p->B98==2)
@@ -113,7 +113,7 @@ void iowave::nhflow_precalc_relax_ini(lexer *p,fdm_nhf *d, ghostcell *pgc)
             ++ept_count;
 
         }
-    }    
+    }
     
     // precalc array alloc
     p->Darray(uval,upt_count);
@@ -125,7 +125,7 @@ void iowave::nhflow_precalc_relax_ini(lexer *p,fdm_nhf *d, ghostcell *pgc)
 
     
     
-    if(p->B89==1) 
+    if(p->B89==1)
     {
     p->Darray(uval_S_sin,upt_count,wave_comp);
     p->Darray(vval_S_sin,vpt_count,wave_comp);
@@ -174,7 +174,7 @@ void iowave::nhflow_precalc_dirichlet_ini(lexer *p, fdm_nhf *d, ghostcell *pgc)
     p->Darray(VHval,vpt_count);
     p->Darray(WHval,wpt_count);
     
-    if(p->B89==1) 
+    if(p->B89==1)
     {
     p->Darray(uval_S_sin,upt_count,wave_comp);
     p->Darray(vval_S_sin,vpt_count,wave_comp);

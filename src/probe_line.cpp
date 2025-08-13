@@ -237,7 +237,7 @@ void probe_line::start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
             }
         }
         
-        pgc->gatherv_double(U[n],elnum[n],VAL[n],elnum_all[n],displ[n]); 
+        pgc->gatherv_double(U[n],elnum[n],VAL[n],elnum_all[n],displ[n]);
         
         if(p->mpirank==0)
         for(q=0;q<totelnum_all[n];++q)
@@ -344,7 +344,7 @@ void probe_line::ini_global_location(lexer *p, fdm *a, ghostcell *pgc)
         zloc = p->P62_zs[n] + t*ds[n]*(p->P62_ze[n]-p->P62_zs[n])/(norm[n]>eps?norm[n]:1.0e20);
             
             if(p->j_dir==0)
-            if(xloc>domain_xs+eps_xs && xloc<=domain_xe+eps_xe 
+            if(xloc>domain_xs+eps_xs && xloc<=domain_xe+eps_xe
             && zloc>domain_zs+eps_zs && zloc<=domain_ze+eps_ze)
             {
             active[n][q]=1;
@@ -352,15 +352,15 @@ void probe_line::ini_global_location(lexer *p, fdm *a, ghostcell *pgc)
             }
             
             if(p->j_dir==1)
-            if(xloc>domain_xs+eps_xs && xloc<=domain_xe+eps_xe 
-            && yloc>domain_ys+eps_ys && yloc<=domain_ye+eps_ye 
+            if(xloc>domain_xs+eps_xs && xloc<=domain_xe+eps_xe
+            && yloc>domain_ys+eps_ys && yloc<=domain_ye+eps_ye
             && zloc>domain_zs+eps_zs && zloc<=domain_ze+eps_ze)
             {
             active[n][q]=1;
             ++count;
             }
         
-        t+=1.0;    
+        t+=1.0;
         }
         elnum[n]=count;
     }
@@ -368,7 +368,7 @@ void probe_line::ini_global_location(lexer *p, fdm *a, ghostcell *pgc)
     // --------------------
 
     for(n=0;n<p->P62;++n)
-    {    
+    {
         count=0;
         allcount=0;
         for(q=0;q<totelnum[n];++q)
@@ -417,7 +417,7 @@ void probe_line::ini_location(lexer *p, fdm *a, ghostcell *pgc)
     
     
     for(n=0;n<p->P62;++n)
-    {    
+    {
         count=0;
         t=0.0;
         for(q=0;q<totelnum[n];++q)

@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 nhflow_print_wsfline_y::nhflow_print_wsfline_y(lexer *p, fdm_nhf *d, ghostcell *pgc)
-{    
+{
     p->Iarray(iloc,p->P56);
 
     maxknoy=pgc->globalimax(p->knoy);
@@ -152,7 +152,7 @@ void nhflow_print_wsfline_y::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow 
         if(p->mpirank==0)
         {
         sort(yloc_all[q], wsf_all[q], flag_all[q], 0, wsfpoints[q]-1);
-        remove_multientry(p,yloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]); 
+        remove_multientry(p,yloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]);
         }
         
     }

@@ -44,7 +44,7 @@ int position::posf_i(double xs)
             ii = iloc;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(xs>=p->XP[iloc+marge] && xs<p->XP[iloc+1+marge])
@@ -52,7 +52,7 @@ int position::posf_i(double xs)
             ii = iloc+1;
    
          stop=1;
-         break;   
+         break;
         }
         
         // out of bounds
@@ -61,7 +61,7 @@ int position::posf_i(double xs)
             ii = -1;
 
          stop=1;
-         break;   
+         break;
         }
         
         // out of bounds
@@ -70,7 +70,7 @@ int position::posf_i(double xs)
             ii = p->knox+1;
             
          stop=1;
-         break;   
+         break;
         }
         
         // further division
@@ -111,7 +111,7 @@ int position::posf_j(double ys)
             //cout<<"EXIT 0m"<<endl;
    
          stop=1;
-         break;   
+         break;
         }
         
         // out of bounds
@@ -122,7 +122,7 @@ int position::posf_j(double ys)
             //cout<<"EXIT 0p  "<<p->YP[p->knoy-1]<<endl;
    
          stop=1;
-         break;   
+         break;
         }
     
         // matching criterion
@@ -133,7 +133,7 @@ int position::posf_j(double ys)
             //cout<<"EXIT 1"<<endl;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(ys>=p->YP[jloc+marge] && ys<p->YP[jloc+1+marge])
@@ -143,7 +143,7 @@ int position::posf_j(double ys)
             //cout<<"EXIT 2"<<endl;
    
          stop=1;
-         break;   
+         break;
         }
         
         // further divjsion
@@ -185,7 +185,7 @@ int position::posf_k(double zs)
             kk = -1;
    
          stop=1;
-         break;   
+         break;
         }
         
         // out of bounds
@@ -194,7 +194,7 @@ int position::posf_k(double zs)
             kk = p->knoz+1;
 
          stop=1;
-         break;   
+         break;
         }
     
         // matching criterion
@@ -203,7 +203,7 @@ int position::posf_k(double zs)
             kk = kloc;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(zs>=p->ZP[kloc+marge] && zs<p->ZP[kloc+1+marge])
@@ -211,7 +211,7 @@ int position::posf_k(double zs)
             kk = kloc+1;
 
          stop=1;
-         break;   
+         break;
         }
         
         // further divksion
@@ -249,7 +249,7 @@ int position::posf_k(double zs)
             kk = -1;
    
          stop=1;
-         break;   
+         break;
         }
         
         // out of bounds
@@ -258,7 +258,7 @@ int position::posf_k(double zs)
             kk = p->knoz+1;
 
          stop=1;
-         break;   
+         break;
         }
     
         // matching criterion
@@ -267,7 +267,7 @@ int position::posf_k(double zs)
             kk = kloc;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(zs>=p->ZSP[kloc+marge] && zs<p->ZSP[kloc+1+marge])
@@ -275,7 +275,7 @@ int position::posf_k(double zs)
             kk = kloc+1;
 
          stop=1;
-         break;   
+         break;
         }
         
         // further divksion
@@ -331,7 +331,7 @@ int position::posf_sig(int ii, int jj, double zs)
             kk = -1;
    
          stop=1;
-         break;   
+         break;
         }
         
         // out of bounds
@@ -340,7 +340,7 @@ int position::posf_sig(int ii, int jj, double zs)
             kk = p->knoz+1;
 
          stop=1;
-         break;   
+         break;
         }
     
         // matching criterion
@@ -349,7 +349,7 @@ int position::posf_sig(int ii, int jj, double zs)
             kk = kloc;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(zs>=p->ZSP[IJK] && zs<p->ZSP[IJKp1])
@@ -357,7 +357,7 @@ int position::posf_sig(int ii, int jj, double zs)
             kk = kloc+1;
 
          stop=1;
-         break;   
+         break;
         }
         
         // further divksion

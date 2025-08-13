@@ -588,7 +588,7 @@ void ioflow_v::u_relax(lexer *p, fdm *a, ghostcell *pgc, field &uvel)
             H=0.0;
 
             if(fabs(dist)<=epsi)
-            H=0.5*(1.0 + dist/epsi + (1.0/PI)*sin((PI*dist)/epsi));    
+            H=0.5*(1.0 + dist/epsi + (1.0/PI)*sin((PI*dist)/epsi));
             
         
             
@@ -620,7 +620,7 @@ void ioflow_v::v_relax(lexer *p, fdm *a, ghostcell *pgc, field &vvel)
             H=0.0;
 
             if(fabs(dist)<=epsi)
-            H=0.5*(1.0 + dist/epsi + (1.0/PI)*sin((PI*dist)/epsi));    
+            H=0.5*(1.0 + dist/epsi + (1.0/PI)*sin((PI*dist)/epsi));
             
         
             
@@ -652,7 +652,7 @@ void ioflow_v::p_relax(lexer *p, fdm *a, ghostcell *pgc, field &press)
         H=0.0;
 
         if(fabs(phival)<=epsi)
-        H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));   
+        H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
     
     
         // get gamma from rheology
@@ -670,7 +670,7 @@ void ioflow_v::p_relax(lexer *p, fdm *a, ghostcell *pgc, field &press)
         tau0 = MAX(0.0,tanphi*pval*MAX(0.0,a->ro(i,j,k)-1000.0)/a->ro(i,j,k) + p->W102_c)*(1.0-exp(-p->W103*gamma));    // rho_water = 1000.0, new input?
             
         if(p->W101==4)  // HB-C shear rate generated excess pore pressure
-        tau0 = MAX(0.0,tanphi*pval*exp(-p->W104*gamma)*MAX(0.0,a->ro(i,j,k)-1000.0)/a->ro(i,j,k) + p->W102_c)*(1.0-exp(-p->W103*gamma));    // m_p is new input W 104 
+        tau0 = MAX(0.0,tanphi*pval*exp(-p->W104*gamma)*MAX(0.0,a->ro(i,j,k)-1000.0)/a->ro(i,j,k) + p->W102_c)*(1.0-exp(-p->W103*gamma));    // m_p is new input W 104
             
         if(p->W101==5)  // HB-C linear shear rate coupling, max given by pressure
         tau0 = MAX(0.0,tanphi*MAX(0.0,pval*MAX(0.0,a->ro(i,j,k)-1000.0)/a->ro(i,j,k)-p->W104*gamma) + p->W102_c)*(1.0-exp(-p->W103*gamma));    // m_u also use new input W 104
@@ -788,7 +788,7 @@ double ioflow_v::wave_zvel(lexer *p, ghostcell *pgc, double x, double y, double 
 }
 
 int ioflow_v::iozonecheck(lexer *p, fdm*a)
-{    
+{
     int check =1;
     
     return check;
@@ -884,7 +884,7 @@ void ioflow_v::ini_ptf(lexer *p, fdm* a, ghostcell* pgc)
     
 }
 
-void ioflow_v::veltimesave(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans) 
+void ioflow_v::veltimesave(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 {
     
 }

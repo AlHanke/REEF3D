@@ -43,7 +43,7 @@ void sixdof_obj::ray_cast_direct(lexer *p, fdm *a, ghostcell *pgc, int ts, int t
     int is,ie,js,je,ks,ke;
     int ir;
     double u,v,w;
-    double denom;    
+    double denom;
     int checkin;
     double psi = 1.0e-8*p->DXM;
     double dist;
@@ -64,17 +64,17 @@ void sixdof_obj::ray_cast_direct(lexer *p, fdm *a, ghostcell *pgc, int ts, int t
     
     checkin = 0;
     
-    if(Ax>=p->global_xmin && Ax<=p->global_xmax 
+    if(Ax>=p->global_xmin && Ax<=p->global_xmax
     && Ay>=p->global_ymin && Ay<=p->global_ymax
     && Az>=p->global_zmin && Az<=p->global_zmax)
     checkin=1;
     
-    if(Bx>=p->global_xmin && Bx<=p->global_xmax 
+    if(Bx>=p->global_xmin && Bx<=p->global_xmax
     && By>=p->global_ymin && By<=p->global_ymax
     && Bz>=p->global_zmin && Bz<=p->global_zmax)
     checkin=1;
     
-    if(Cx>=p->global_xmin && Cx<=p->global_xmax 
+    if(Cx>=p->global_xmin && Cx<=p->global_xmax
     && Cy>=p->global_ymin && Cy<=p->global_ymax
     && Cz>=p->global_zmin && Cz<=p->global_zmax)
     checkin=1;
@@ -98,7 +98,7 @@ void sixdof_obj::ray_cast_direct(lexer *p, fdm *a, ghostcell *pgc, int ts, int t
     je = p->posc_j(ye)+2;
     
     ks = p->posc_k(zs)-2;
-    ke = p->posc_k(ze)+2;    
+    ke = p->posc_k(ze)+2;
 
     is = MAX(is,0);
     ie = MIN(ie,p->knox);
@@ -107,7 +107,7 @@ void sixdof_obj::ray_cast_direct(lexer *p, fdm *a, ghostcell *pgc, int ts, int t
     je = MIN(je,p->knoy);
     
     ks = MAX(ks,0);
-    ke = MIN(ke,p->knoz);            
+    ke = MIN(ke,p->knoz);
         
          for(i=is;i<ie;i++)
         for(j=js;j<je;j++)

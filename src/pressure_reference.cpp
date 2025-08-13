@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-pressure_reference::pressure_reference(lexer* p) 
+pressure_reference::pressure_reference(lexer* p)
 {
 
 }

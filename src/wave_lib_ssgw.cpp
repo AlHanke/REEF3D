@@ -25,7 +25,7 @@ Author: Csaba Pakozdi
 #include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_ssgw::wave_lib_ssgw(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
+wave_lib_ssgw::wave_lib_ssgw(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
 {
     N   = p->B170;  // default = 1024
     tol = 1e-14;
@@ -38,7 +38,7 @@ wave_lib_ssgw::wave_lib_ssgw(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
         setWave(wk, wdt, wH);
         getPhysicsParameters();
         surfaceCalculated = computeSurfaceVariables();
-    } 
+    }
     else if (p->B93==1)
     {
         // Wave period known
@@ -85,21 +85,21 @@ wave_lib_ssgw::wave_lib_ssgw(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
     // Soliton
 /*    xs.resize(8593);
     vector<double> xs_swapped = xs;
-    std::reverse(xs_swapped.begin(), xs_swapped.end()); 
+    std::reverse(xs_swapped.begin(), xs_swapped.end());
     xs_swapped.resize(8593-7792);
-    std::reverse(xs_swapped.begin(), xs_swapped.end()); 
+    std::reverse(xs_swapped.begin(), xs_swapped.end());
     xs = xs_swapped;
     ys.resize(8593);
     vector<double> ys_swapped = ys;
-    std::reverse(ys_swapped.begin(), ys_swapped.end()); 
+    std::reverse(ys_swapped.begin(), ys_swapped.end());
     ys_swapped.resize(8593-7792);
-    std::reverse(ys_swapped.begin(), ys_swapped.end()); 
+    std::reverse(ys_swapped.begin(), ys_swapped.end());
     ys = ys_swapped;
     phis.resize(8593);
     vector<double> phis_swapped = phis;
-    std::reverse(phis_swapped.begin(), phis_swapped.end()); 
+    std::reverse(phis_swapped.begin(), phis_swapped.end());
     phis_swapped.resize(8593-7792);
-    std::reverse(phis_swapped.begin(), phis_swapped.end()); 
+    std::reverse(phis_swapped.begin(), phis_swapped.end());
     phis = phis_swapped;
     wL = xs.back()-xs.front()+0.1;
 */
@@ -128,9 +128,9 @@ double wave_lib_ssgw::wave_eta(lexer *p, double x, double y)
     // Linear interpolation
     auto is = std::upper_bound(xs.begin(),xs.end(),xcurr);
     int index = std::distance(xs.begin(), is)-1;
-    xl = xs[index]; 
+    xl = xs[index];
     xr = xs[index + 1];
-    yl = ys[index]; 
+    yl = ys[index];
     yr = ys[index + 1];
     eta = yl + (xcurr - xl)/(xr - xl)*(yr - yl);
 
@@ -146,9 +146,9 @@ double wave_lib_ssgw::wave_fi(lexer *p, double x, double y, double z)
     // Linear interpolation
     auto is = std::upper_bound(xs.begin(),xs.end(),xcurr);
     int index = std::distance(xs.begin(), is)-1;
-    xl = xs[index]; 
+    xl = xs[index];
     xr = xs[index + 1];
-    yl = phis[index]; 
+    yl = phis[index];
     yr = phis[index + 1];
     fi = yl + (xcurr - xl)/(xr - xl)*(yr - yl);
 

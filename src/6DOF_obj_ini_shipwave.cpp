@@ -67,7 +67,7 @@ void sixdof_obj::initialize_shipwave(lexer *p, ghostcell *pgc, slice &eta, slice
     // Initialise global variables
     update_fbvel(p,pgc);
     
-    // Print initial body 
+    // Print initial body
     if(p->X50==1)
     print_vtp(p,pgc);
     

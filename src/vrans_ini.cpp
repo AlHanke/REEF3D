@@ -160,8 +160,8 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
         if(p->pos_x()>=xs && p->pos_x()<xe
         && p->pos_y()>=p->B291_ys[qn] && p->pos_y()<p->B291_ye[qn]
         
-        && p->pos_z()>=zmin 
-        && p->pos_z()<=zmax 
+        && p->pos_z()>=zmin
+        && p->pos_z()<=zmax
         
         && p->pos_z()<slope*(p->pos_x()-p->B291_xs[qn])+p->B291_zs[qn]+p->B291_d[qn] //lower
         && p->pos_z()>slope*(p->pos_x()-p->B291_xs[qn])+p->B291_zs[qn]) // upper

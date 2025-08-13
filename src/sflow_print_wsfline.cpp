@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 sflow_print_wsfline::sflow_print_wsfline(lexer *p, fdm2D* b, ghostcell *pgc)
-{    
+{
     p->Iarray(jloc,p->P52);
 
     maxknox=pgc->globalimax(p->knox);
@@ -155,7 +155,7 @@ void sflow_print_wsfline::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflo
         if(p->mpirank==0)
         {
         sort(xloc_all[q], wsf_all[q], flag_all[q], 0, wsfpoints[q]-1);
-        remove_multientry(p,xloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]); 
+        remove_multientry(p,xloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]);
         }
         
     }

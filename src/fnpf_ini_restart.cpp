@@ -46,7 +46,7 @@ void fnpf_ini::fnpf_restart(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     result.open(name, ios::binary);
     
     // read single state file
-    if(file_type==1) 
+    if(file_type==1)
     fnpf_restart_read(p,c,pgc);
     
     // read continuous state file

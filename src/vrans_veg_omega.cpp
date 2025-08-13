@@ -47,7 +47,7 @@ void vrans_veg::omega_source(lexer *p, fdm *a, field &kin, field &eps)
 
         a->rhsvec.V[count] += ww;
     
-        ++count;  
+        ++count;
     }
 
 }

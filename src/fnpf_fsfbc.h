@@ -35,7 +35,7 @@ class solver2D;
 
 using namespace std;
 
-class fnpf_fsfbc : public fnpf_fsf, public increment 
+class fnpf_fsfbc : public fnpf_fsf, public increment
 {
 public:
     fnpf_fsfbc(lexer*, fdm_fnpf*, ghostcell*);

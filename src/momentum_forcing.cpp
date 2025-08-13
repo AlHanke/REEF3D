@@ -57,9 +57,9 @@ void momentum_forcing::momentum_forcing_start(fdm* a, lexer* p, ghostcell *pgc, 
         
         pgc->start1(p,fx,10);
         pgc->start2(p,fy,11);
-        pgc->start3(p,fz,12); 
+        pgc->start3(p,fz,12);
          
-        pgc->solid_forcing(p,a,alpha,u,v,w,fx,fy,fz);         
+        pgc->solid_forcing(p,a,alpha,u,v,w,fx,fy,fz);
         
         p6dof->start_cfd(p,a,pgc,iter,u,v,w,fx,fy,fz,final);
         

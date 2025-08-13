@@ -99,7 +99,7 @@ double & slice1::operator[](int n)
 }
 
 double & slice1::operator()(int ii, int jj)
-{            
+{
     if(pp->mgcsl1[(ii-imin)*jmax + (jj-jmin)]<2)
     return V[(ii-imin)*jmax + (jj-jmin)];
     
@@ -176,7 +176,7 @@ double & slice1::operator()(int ii, int jj)
             return gcfeld[pp->mgcsl1[iter]-10][2][-dj-1];
             
             if(dj<-2)
-            if(pp->gcslorig1[pp->mgcsl1[iter]-10][2][-dj-2]==1) 
+            if(pp->gcslorig1[pp->mgcsl1[iter]-10][2][-dj-2]==1)
             return gcfeld[pp->mgcsl1[iter]-10][2][-dj-2];
             
             if(dj<-1)
@@ -199,7 +199,7 @@ double & slice1::operator()(int ii, int jj)
             return gcfeld[pp->mgcsl1[iter]-10][1][dj-1];
             
             if(dj>2)
-            if(pp->gcslorig1[pp->mgcsl1[iter]-10][1][dj-2]==1) 
+            if(pp->gcslorig1[pp->mgcsl1[iter]-10][1][dj-2]==1)
             return gcfeld[pp->mgcsl1[iter]-10][1][dj-2];
             
             if(dj>1)

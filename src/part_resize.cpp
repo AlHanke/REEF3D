@@ -35,7 +35,7 @@ void part::resize(lexer *p, int capacity_new)
     
     p->Dresize(URK1,capacity,capacity_new);
     p->Dresize(VRK1,capacity,capacity_new);
-    p->Dresize(WRK1,capacity,capacity_new); 
+    p->Dresize(WRK1,capacity,capacity_new);
 
     p->Dresize(X,capacity,capacity_new);
     p->Dresize(Y,capacity,capacity_new);
@@ -43,7 +43,7 @@ void part::resize(lexer *p, int capacity_new)
     
     p->Dresize(XRK1,capacity,capacity_new);
     p->Dresize(YRK1,capacity,capacity_new);
-    p->Dresize(ZRK1,capacity,capacity_new);  
+    p->Dresize(ZRK1,capacity,capacity_new);
     
     p->Dresize(Uf,capacity,capacity_new);
     p->Dresize(Vf,capacity,capacity_new);

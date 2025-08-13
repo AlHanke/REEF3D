@@ -68,15 +68,15 @@ void net_barDyn::triangulation(lexer *p, ghostcell *pgc)
         // Tri 2
         tri_x[index][0] = x_(meshID[i][1], 0);
         tri_x[index][1] = x_(meshID[i][3], 0);
-        tri_x[index][2] = x_(meshID[i][2], 0);      
+        tri_x[index][2] = x_(meshID[i][2], 0);
         
         tri_y[index][0] = x_(meshID[i][1], 1);
         tri_y[index][1] = x_(meshID[i][3], 1);
-        tri_y[index][2] = x_(meshID[i][2], 1); 
+        tri_y[index][2] = x_(meshID[i][2], 1);
 
         tri_z[index][0] = x_(meshID[i][1], 2);
         tri_z[index][1] = x_(meshID[i][3], 2);
-        tri_z[index][2] = x_(meshID[i][2], 2); 
+        tri_z[index][2] = x_(meshID[i][2], 2);
 
         tri_vel[index][0] = 1.0/3.0*(xdot_(meshID[i][0],0) + xdot_(meshID[i][1],0) + xdot_(meshID[i][2],0));
         tri_vel[index][1] = 1.0/3.0*(xdot_(meshID[i][0],1) + xdot_(meshID[i][1],1) + xdot_(meshID[i][2],1));
@@ -96,13 +96,13 @@ void net_barDyn::triangulation(lexer *p, ghostcell *pgc)
 
     double x01,x02,x12,y01,y02,y12,z01,z02,z12,mag;
     double at,bt,ct,st;
-    double nx,ny,nz;    
+    double nx,ny,nz;
   
     tri_x.reserve(tend*4);
     tri_y.reserve(tend*4);
-    tri_z.reserve(tend*4); 
+    tri_z.reserve(tend*4);
 
-    tri_vel.reserve(tend*4);    
+    tri_vel.reserve(tend*4);
 
 
     for (int n = 0; n < tend; n++)
@@ -117,11 +117,11 @@ void net_barDyn::triangulation(lexer *p, ghostcell *pgc)
         
         double z0 = tri_z[n][0];
         double z1 = tri_z[n][1];
-        double z2 = tri_z[n][2];  
+        double z2 = tri_z[n][2];
            
         at = sqrt(pow(x1 - x0, 2.0) + pow(y1 - y0, 2.0) + pow(z1 - z0, 2.0));
         bt = sqrt(pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0) + pow(z1 - z2, 2.0));
-        ct = sqrt(pow(x2 - x0, 2.0) + pow(y2 - y0, 2.0) + pow(z2 - z0, 2.0));   
+        ct = sqrt(pow(x2 - x0, 2.0) + pow(y2 - y0, 2.0) + pow(z2 - z0, 2.0));
            
 
         // Check size of triangle and split into 4 triangles if too big
@@ -136,17 +136,17 @@ void net_barDyn::triangulation(lexer *p, ghostcell *pgc)
 
             x02 = x0 + (x2 - x0)/2.0;
             y02 = y0 + (y2 - y0)/2.0;
-            z02 = z0 + (z2 - z0)/2.0;            
+            z02 = z0 + (z2 - z0)/2.0;
 
             x12 = x1 + (x2 - x1)/2.0;
             y12 = y1 + (y2 - y1)/2.0;
             z12 = z1 + (z2 - z1)/2.0;
             
             
-            // Old normal vector    
+            // Old normal vector
                 
             nx = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
-            ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0); 
+            ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
             nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
             
             
@@ -164,11 +164,11 @@ void net_barDyn::triangulation(lexer *p, ghostcell *pgc)
             
             // Delete old triangles
         
-            tri_x.erase(tri_x.begin() + n); 
-            tri_y.erase(tri_y.begin() + n); 
-            tri_z.erase(tri_z.begin() + n); 
-            tri_vel.erase(tri_vel.begin() + n); 
-            tri_forces.erase(tri_forces.begin() + n); 
+            tri_x.erase(tri_x.begin() + n);
+            tri_y.erase(tri_y.begin() + n);
+            tri_z.erase(tri_z.begin() + n);
+            tri_vel.erase(tri_vel.begin() + n);
+            tri_forces.erase(tri_forces.begin() + n);
             n--;
             
 
@@ -184,13 +184,13 @@ void net_barDyn::triangulation(lexer *p, ghostcell *pgc)
             tri_vel.push_back(vec3);
             tri_forces.push_back(vec3f);
             create_triangle(tri_x,tri_y,tri_z,x02,y02,z02,x12,y12,z12,x2,y2,z2,nx,ny,nz);
-            tri_vel.push_back(vec3); 
+            tri_vel.push_back(vec3);
             tri_forces.push_back(vec3f);
         }
 
         if (tri_x.size() > 5000) break;
         
-        tend = tri_x.size(); 
+        tend = tri_x.size();
     }
 
 }
@@ -198,7 +198,7 @@ void net_barDyn::triangulation(lexer *p, ghostcell *pgc)
 
 void net_barDyn::create_triangle
 (
-    MatrixVd& tri_x_, MatrixVd& tri_y_, MatrixVd& tri_z_, 
+    MatrixVd& tri_x_, MatrixVd& tri_y_, MatrixVd& tri_z_,
     const double& x0, const double& y0, const double& z0,
     const double& x1, const double& y1, const double& z1,
     const double& x2, const double& y2, const double& z2,
@@ -209,25 +209,25 @@ void net_barDyn::create_triangle
 
     vector<double> tri_x_new(3,0.0);
     vector<double> tri_y_new(3,0.0);
-    vector<double> tri_z_new(3,0.0); 
+    vector<double> tri_z_new(3,0.0);
 
     // Calculate new normal vector
     
     nx = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
-    ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0); 
-    nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);        
+    ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
+    nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
 
     nx = nx > 1.0e-5 ? nx : nx_old;
     ny = ny > 1.0e-5 ? ny : ny_old;
-    nz = nz > 1.0e-5 ? nz : nz_old;    
+    nz = nz > 1.0e-5 ? nz : nz_old;
     
     
     // Arrange triangle such that normal vector points outward
     
-    if 
+    if
     (
-           SIGN(nx)!=SIGN(nx_old) 
-        || SIGN(ny)!=SIGN(ny_old) 
+           SIGN(nx)!=SIGN(nx_old)
+        || SIGN(ny)!=SIGN(ny_old)
         || SIGN(nz)!=SIGN(nz_old)
     )
     {
@@ -241,10 +241,10 @@ void net_barDyn::create_triangle
 
         tri_z_new[0] = z2;
         tri_z_new[1] = z1;
-        tri_z_new[2] = z0;                
+        tri_z_new[2] = z0;
     }
     else
-    {    
+    {
         tri_x_new[0] = x0;
         tri_x_new[1] = x1;
         tri_x_new[2] = x2;
@@ -255,7 +255,7 @@ void net_barDyn::create_triangle
 
         tri_z_new[0] = z0;
         tri_z_new[1] = z1;
-        tri_z_new[2] = z2;    
+        tri_z_new[2] = z2;
     }
     
     

@@ -142,7 +142,7 @@ void etimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
 
 
 // maximum reynolds stress source term
-    visccrit=p->viscmax*(6.0/pow(p->DXM,2.0));  
+    visccrit=p->viscmax*(6.0/pow(p->DXM,2.0));
  
     cu=1.0e10;
     cv=1.0e10;

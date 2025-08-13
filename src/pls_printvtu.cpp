@@ -45,7 +45,7 @@ void particle_pls::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *fl
         pvtu_pos(a,p,pgc);
         
         if(sign==2)
-        pvtu_neg(a,p,pgc);    
+        pvtu_neg(a,p,pgc);
     }
     
     if(sign==1)
@@ -66,9 +66,9 @@ void particle_pls::print_vtu(lexer* p, fdm* a, ghostcell* pgc,double** f,int *fl
     offset[n]=offset[n-1]+4*(numpt)+4;
     ++n;
     offset[n]=offset[n-1]+4*(numpt)+4;
-    ++n;    
+    ++n;
     offset[n]=offset[n-1]+4*(numpt)+4;
-    ++n;    
+    ++n;
     
     // end scalars
     offset[n]=offset[n-1]+4*(numpt)*3+4;

@@ -28,7 +28,7 @@ Author: Hans Bihs
 #include"sediment.h"
 
 void sflow_vtp_fsf::pvtp(lexer *p, fdm2D* b, ghostcell* pgc, sflow_turbulence *pturb, sediment *psed)
-{    
+{
     int num=0;
 
     if(p->P15==1)

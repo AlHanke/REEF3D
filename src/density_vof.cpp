@@ -33,7 +33,7 @@ density_vof::density_vof(lexer* p) : epsi(p->F45*p->DXM), eps(2.1*p->DXM)
     double psim;
     int count;
     
-    if(p->j_dir==0)        
+    if(p->j_dir==0)
     p->psi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
         
     if(p->j_dir==1)
@@ -48,8 +48,8 @@ density_vof::~density_vof()
 }
 
 double density_vof::roface(lexer *p, fdm *a, int aa, int bb, int cc)
-{  
-    if(p->F92==1)   
+{
+    if(p->F92==1)
     {
         double phival, psiro;
         phival = 0.5*(a->phi(i,j,k) + a->phi(i+aa,j+bb,k+cc));

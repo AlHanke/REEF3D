@@ -29,7 +29,7 @@ Authors: Tobias Martin, Hans Bihs
 #include <Eigen/Dense>
 
 void net_interface::dlm_cfd(lexer *p, fdm *a, ghostcell *pgc, int nNet)
-{ 
+{
     // Distribute net forces on surrounding cells
     int ii, jj, kk;
     double dist, D, dx, dy, dz;
@@ -104,9 +104,9 @@ void net_interface::dlm_cfd(lexer *p, fdm *a, ghostcell *pgc, int nNet)
                 }
             }
         }
-    } 
+    }
     
-    pgc->start1(p,a->Fext,10); 
-    pgc->start2(p,a->Gext,11); 
-    pgc->start3(p,a->Hext,12); 
+    pgc->start1(p,a->Fext,10);
+    pgc->start2(p,a->Gext,11);
+    pgc->start3(p,a->Hext,12);
 }

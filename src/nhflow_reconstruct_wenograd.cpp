@@ -55,9 +55,9 @@ void nhflow_reconstruct_wenograd::reconstruct_2D_x(lexer* p, ghostcell *pgc, fdm
     pgc->gcsl_start1(p,dfdxn,10);
     
     // reconstruct
-    SLICELOOP1  
+    SLICELOOP1
     {
-    fs(i,j) = f(i,j)   + 0.5*p->DXP[IP]*dfdxs(i,j); 
+    fs(i,j) = f(i,j)   + 0.5*p->DXP[IP]*dfdxs(i,j);
     fn(i,j) = f(i+1,j) - 0.5*p->DXP[IP1]*dfdxn(i+1,j);
     }
     
@@ -71,7 +71,7 @@ void nhflow_reconstruct_wenograd::reconstruct_2D_y(lexer* p, ghostcell *pgc, fdm
     {
     // gradient
     SLICELOOP4
-    {   
+    {
     dfdy_plus = (f(i,j+1) - f(i,j))/p->DYP[JP];
     dfdy_min  = (f(i,j) - f(i,j-1))/p->DYP[JM1];
     
@@ -83,10 +83,10 @@ void nhflow_reconstruct_wenograd::reconstruct_2D_y(lexer* p, ghostcell *pgc, fdm
     pgc->gcsl_start2(p,dfdyw,11);
     
     // reconstruct
-    SLICELOOP2 
+    SLICELOOP2
     {
-    fe(i,j) = f(i,j)   + 0.5*p->DYP[JP]*dfdye(i,j); 
-    fw(i,j) = f(i,j+1) - 0.5*p->DYP[JP1]*dfdyw(i,j+1); 
+    fe(i,j) = f(i,j)   + 0.5*p->DYP[JP]*dfdye(i,j);
+    fw(i,j) = f(i,j+1) - 0.5*p->DYP[JP1]*dfdyw(i,j+1);
     }
     
     pgc->gcsl_start2(p,fe,1);
@@ -96,7 +96,7 @@ void nhflow_reconstruct_wenograd::reconstruct_2D_y(lexer* p, ghostcell *pgc, fdm
 
 void nhflow_reconstruct_wenograd::reconstruct_2D_WL(lexer* p, ghostcell *pgc, fdm_nhf *d)
 {
-    // water level  
+    // water level
     SLICELOOP1
     d->dfx(i,j) = 0.5*(d->depth(i+1,j)+d->depth(i,j));
     
@@ -137,9 +137,9 @@ void nhflow_reconstruct_wenograd::reconstruct_3D_x(lexer* p, ghostcell *pgc, fdm
     pgc->start1V(p,DFDXn,10);
     
     // reconstruct
-    ULOOP 
+    ULOOP
     {
-    Fs[IJK] = (Fx[IJK]    + 0.5*p->DXP[IP]*DFDXs[IJK]); 
+    Fs[IJK] = (Fx[IJK]    + 0.5*p->DXP[IP]*DFDXs[IJK]);
     Fn[IJK] = (Fx[Ip1JK]  - 0.5*p->DXP[IP1]*DFDXn[Ip1JK]);
     }
 }
@@ -163,7 +163,7 @@ void nhflow_reconstruct_wenograd::reconstruct_3D_y(lexer* p, ghostcell *pgc, fdm
     // reconstruct
     VLOOP
     {
-    Fe[IJK] = (Fy[IJK]    + 0.5*p->DYP[JP]*DFDXs[IJK]); 
+    Fe[IJK] = (Fy[IJK]    + 0.5*p->DYP[JP]*DFDXs[IJK]);
     Fw[IJK] = (Fy[IJp1K]  - 0.5*p->DYP[JP1]*DFDXn[IJp1K]);
     }
     
@@ -184,9 +184,9 @@ void nhflow_reconstruct_wenograd::reconstruct_3D_z(lexer* p, ghostcell *pgc, fdm
     pgc->start3V(p,DFDXs,12);
     
     // reconstruct
-    WLOOP 
+    WLOOP
     {
-    Fb[IJK] = (Fz[IJK]    + 0.5*p->DZN[KP]*DFDXs[IJK]); 
+    Fb[IJK] = (Fz[IJK]    + 0.5*p->DZN[KP]*DFDXs[IJK]);
     Ft[IJK] = (Fz[IJKp1]  - 0.5*p->DZN[KP1]*DFDXs[IJKp1]);
     }
 }

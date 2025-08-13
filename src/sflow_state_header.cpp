@@ -40,7 +40,7 @@ void sflow_state::write_header(lexer *p, fdm2D *b, ghostcell *pgc)
     // open file
     headout.open(name, ios::binary);
     
-    // ini write    
+    // ini write
     iin=p->origin_i-is_global;
     
     if(is_flag==1)
@@ -98,13 +98,13 @@ void sflow_state::write_header(lexer *p, fdm2D *b, ghostcell *pgc)
     {
     ddn=p->XP[IP];
     headout.write((char*)&ddn, sizeof (double));
-    } 
+    }
     
     for(j=js;j<je;++j)
     {
     ddn=p->YP[JP];
     headout.write((char*)&ddn, sizeof (double));
-    } 
+    }
     
     // ZN
     ddn=0.0;
@@ -117,7 +117,7 @@ void sflow_state::write_header(lexer *p, fdm2D *b, ghostcell *pgc)
     {
     ffn=float(b->bed(i,j));
     headout.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     headout.close();
 }

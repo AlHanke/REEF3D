@@ -25,8 +25,8 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_cnoidal_5th::wave_lib_cnoidal_5th(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_cnoidal_5th::wave_lib_cnoidal_5th(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     parameters(p,pgc);
     
     singamma = sin((p->B105_1)*(PI/180.0));
@@ -61,13 +61,13 @@ double wave_lib_cnoidal_5th::wave_horzvel(lexer *p, double x, double y, double z
     double yh;
     double sn,cn,dn;
     
-    yh = (z+wdt)/wht; 
+    yh = (z+wdt)/wht;
         
     teta = 2.0*Km*(x/wL - p->wavetime/wT) + pshift;
     
     elliptic(p,teta,sn,cn,dn);
     
-    vel =  ubar + sqrt(9.81*wht)*(-1.0 + delta*(-0.5 + cn*cn) 
+    vel =  ubar + sqrt(9.81*wht)*(-1.0 + delta*(-0.5 + cn*cn)
         + pow(delta,2.0)*((-(19.0/40.0) + (3.0/2.0)*cn*cn - pow(cn,4.0)) + yh*yh*(-(3.0/2.0)*cn*cn + (9.0/4.0)*pow(cn,4.0)))
     
         + pow(delta,3.0)*(-(55.0/112.0) + (71.0/40.0)*cn*cn - (27.0/10.0)*pow(cn,4.0) + (6.0/5.0)*pow(cn,6.0)
@@ -94,11 +94,11 @@ double wave_lib_cnoidal_5th::wave_horzvel(lexer *p, double x, double y, double z
                 + pow(yh,4.0)*((213.0/320.0)*cn*cn - (13563.0/640.0)*pow(cn,4.0) + (68643.0/640.0)*pow(cn,6.0)
                         - (5481.0/32.0)*pow(cn,8.0) + (1701.0/20.0)*pow(cn,10.0))
                         
-                + pow(yh,6.0)*(-(9.0/160.0)*cn*cn + (267.0/64.0)*pow(cn,4.0) - (987.0/32.0)*pow(cn,6.0) 
+                + pow(yh,6.0)*(-(9.0/160.0)*cn*cn + (267.0/64.0)*pow(cn,4.0) - (987.0/32.0)*pow(cn,6.0)
                         + (7875.0/128.0)*pow(cn,8.0) - (567.0/16.0)*pow(cn,10.0))
                         
                 + pow(yh,8.0)*((9.0/4480.0)*cn*cn - (459.0/1792.0)*pow(cn,4.0) + (567.0/256.0)*pow(cn,6.0)
-                        - (1215.0/256.0)*pow(cn,8.0) + (729.0/256.0)*pow(cn,10.0))));        
+                        - (1215.0/256.0)*pow(cn,8.0) + (729.0/256.0)*pow(cn,10.0))));
     
     return vel;
 }
@@ -115,7 +115,7 @@ double wave_lib_cnoidal_5th::wave_w(lexer *p, double x, double y, double z)
 
     elliptic(p,teta,sn,cn,dn);
     
-    vel =  2.0*acn*dn*sn*cn*sqrt(9.81*wht)*( delta*yh 
+    vel =  2.0*acn*dn*sn*cn*sqrt(9.81*wht)*( delta*yh
     
         + pow(delta,2.0)*(yh*((3.0/2.0) - 2.0*cn*cn) + pow(yh,3.0)*(-0.5 + 1.5*cn*cn))
         
@@ -142,7 +142,7 @@ double wave_lib_cnoidal_5th::wave_w(lexer *p, double x, double y, double z)
                         + pow(yh,5.0)*((213.0/1600.0) - (27126.0/1600.0)*cn*cn + (205929/3200.0)*pow(cn,4.0)
                             - (5481.0/40.0)*pow(cn,6.0) - (1773.0/25.0)*pow(cn,8.0))
                             
-                        + pow(yh,7.0)*(-(9.0/1120.0) + (267.0/224.0)*cn*cn -(423.0/32.0)*pow(cn,4.0) 
+                        + pow(yh,7.0)*(-(9.0/1120.0) + (267.0/224.0)*cn*cn -(423.0/32.0)*pow(cn,4.0)
                             + (1125.0/32.0)*pow(cn,6.0) + (1701.0/20.0)*pow(cn,8.0))
                             
                         + pow(yh,9.0)*((1.0/4480.0) - (51.0/896.0)*cn*cn + (189.0/256.0)*pow(cn,4.0)
@@ -160,17 +160,17 @@ double wave_lib_cnoidal_5th::wave_eta(lexer *p, double x, double y)
     
     elliptic(p,teta,sn,cn,dn);
     
-    eta =    -wdt + wht + wht*(epsilon*cn*cn + pow(epsilon,2.0)*(-0.75*cn*cn + 0.75*pow(cn,4.0)) 
+    eta =    -wdt + wht + wht*(epsilon*cn*cn + pow(epsilon,2.0)*(-0.75*cn*cn + 0.75*pow(cn,4.0))
     
             + pow(epsilon,3.0)*((5.0/8.0)*cn*cn - (151.0/80.0)*pow(cn,4.0) + (101.0/80.0)*pow(cn,6.0))
             
-            + pow(epsilon,4.0)*(-(8209.0/6000.0)*cn*cn + (11641.0/3000.0)*pow(cn,4.0) - (112393.0/24000.0)*pow(cn,6.0)  
+            + pow(epsilon,4.0)*(-(8209.0/6000.0)*cn*cn + (11641.0/3000.0)*pow(cn,4.0) - (112393.0/24000.0)*pow(cn,6.0)
                                 + (17367.0/8000.0)*pow(cn,8.0))
             
-            + pow(epsilon,5.0)*((364671.0/196000.0)*cn*cn - (2920931.0/392000.0)*pow(cn,4.0) + (2001361.0/156800.0)*pow(cn,6.0)  
+            + pow(epsilon,5.0)*((364671.0/196000.0)*cn*cn - (2920931.0/392000.0)*pow(cn,4.0) + (2001361.0/156800.0)*pow(cn,6.0)
                                 - (17906339.0/1568000.0)*pow(cn,8.0) + (1331817.0/313600.0)*pow(cn,10.0)));
     
-    return eta;    
+    return eta;
 }
 
 double wave_lib_cnoidal_5th::wave_fi(lexer *p, double x, double y, double z)
@@ -215,7 +215,7 @@ void wave_lib_cnoidal_5th::parameters(lexer *p, ghostcell *pgc)
     }
     
     if(p->mpirank==0)
-    cout<<"MODULUS: "<<modulus<<"    qq: "<<qq<<endl;    
+    cout<<"MODULUS: "<<modulus<<"    qq: "<<qq<<endl;
     
     Km = K_elliptic_5(modulus);
     Em = E_elliptic_5(modulus);
@@ -228,15 +228,15 @@ void wave_lib_cnoidal_5th::parameters(lexer *p, ghostcell *pgc)
     
     wht =  wdt*(1.0 - (wH/md)*ell + pow(wH/md,2.0)*(ell/4.0) + pow(wH/md,3.0)*((1.0/25.0)*ell + 0.25*ell*ell)
         + pow(wH/md,4.0)*((573.0/2000.0)*ell - (57.0/400.0)*pow(ell,2.0) + 0.25*pow(ell,3.0))
-        + pow(wH/md,5.0)*(-(302159.0/1470000.0)*ell + (1779.0/2000.0)*ell*ell - (123.0/400.0)*pow(ell,3.0) + 0.25*pow(ell,4.0))); 
+        + pow(wH/md,5.0)*(-(302159.0/1470000.0)*ell + (1779.0/2000.0)*ell*ell - (123.0/400.0)*pow(ell,3.0) + 0.25*pow(ell,4.0)));
 
-    if(p->mpirank==0)    
+    if(p->mpirank==0)
     cout<<"WAVE TROUGH: "<<wht<<endl;
     
     epsilon = wH/wht;
     
-    acn = sqrt((3.0*epsilon)/4.0) 
-          * (1.0 - (5.0*epsilon)/8.0 + (71.0*pow(epsilon,2.0))/128.0 - (100627.0*pow(epsilon,3.0))/179200.0 
+    acn = sqrt((3.0*epsilon)/4.0)
+          * (1.0 - (5.0*epsilon)/8.0 + (71.0*pow(epsilon,2.0))/128.0 - (100627.0*pow(epsilon,3.0))/179200.0
             + (16259737.0*pow(epsilon,4.0))/28672000.0);
     
     delta = (4.0/3.0)*acn*acn;

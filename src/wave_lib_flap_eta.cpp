@@ -26,8 +26,8 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include<fstream>
 
-wave_lib_flap_eta::wave_lib_flap_eta(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_flap_eta::wave_lib_flap_eta(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     if(p->mpirank==0)
     {
     cout<<"Wave_Lib: flap_eta wavemaker theory";
@@ -38,7 +38,7 @@ wave_lib_flap_eta::wave_lib_flap_eta(lexer *p, ghostcell *pgc) : wave_lib_parame
     read(p,pgc);
     
     singamma = sin((p->B105_1)*(PI/180.0));
-    cosgamma = cos((p->B105_1)*(PI/180.0));    
+    cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
 wave_lib_flap_eta::~wave_lib_flap_eta()

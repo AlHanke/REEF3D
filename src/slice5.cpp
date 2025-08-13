@@ -70,7 +70,7 @@ double & slice5::operator[](int n)
 }
 
 double & slice5::operator()(int ii, int jj)
-{            
+{
 
     return V[(ii-imin)*jmax + (jj-jmin)];
     

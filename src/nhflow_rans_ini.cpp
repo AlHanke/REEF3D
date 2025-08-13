@@ -82,7 +82,7 @@ void nhflow_rans_io::ini(lexer* p, fdm_nhf *d, ghostcell* pgc)
 
 void nhflow_rans_io::tau_calc(lexer* p, fdm_nhf *d, ghostcell *pgc)
 {
-    ks=p->B50;    
+    ks=p->B50;
     H=beddist;
     
     M=26.0/pow((ks),(1.0/6.0));

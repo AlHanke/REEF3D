@@ -81,7 +81,7 @@ void iowave::nhflow_wavegen_precalc_decomp_space(lexer *p, ghostcell *pgc)
     }
 
 // V
-    count=0;    
+    count=0;
     LOOP
     {
         xg = xgen(p);
@@ -90,7 +90,7 @@ void iowave::nhflow_wavegen_precalc_decomp_space(lexer *p, ghostcell *pgc)
         
         z=p->ZSP[IJK]-p->phimean;
         
-        // Wave Generation        
+        // Wave Generation
         if(p->B98==2 && v_switch==1)
         {
             // Zone 1
@@ -130,5 +130,5 @@ void iowave::nhflow_wavegen_precalc_decomp_space(lexer *p, ghostcell *pgc)
             ++count;
             }
         }
-    }    
+    }
 }

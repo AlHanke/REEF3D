@@ -22,7 +22,7 @@ Author: Hans Bihs, Alexander Hanke
 #include"rheology_f.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"ghostcell.h" 
+#include"ghostcell.h"
 #include<algorithm>
 
 void rheology_f::u_source(lexer *p, fdm *a)
@@ -85,7 +85,7 @@ void rheology_f::u_source(lexer *p, fdm *a)
     if(p->W110==6 || p->W110==7)
     ULOOP
     {
-        // PFo: Adding direction to the yield stress gradient below. Should be *f for each term, where f = (pu_idx_j)/fabs(pu_idx_j) 
+        // PFo: Adding direction to the yield stress gradient below. Should be *f for each term, where f = (pu_idx_j)/fabs(pu_idx_j)
         // f(pwdx)*tau_x-term, f(pwdy)*tau_y-term, f(pwdz)*tau_z-term - PFo not sure how to write this
         // Try with u_x first instead: f = (a->u(i,j,k)/fabs(a->u(i,j,k)))
 
@@ -171,7 +171,7 @@ void rheology_f::v_source(lexer *p, fdm *a)
 }
 
 void rheology_f::w_source(lexer *p, fdm *a)
-{   
+{
     count=0;
     if(p->W110==2 || p->W110==3)
     WLOOP

@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void nhflow_fsf_f::fsf_guard(lexer* p, fdm_nhf* d, ghostcell* pgc, slice& WL, slice &K)
-{   
+{
     if(p->A580==1)
     SLICELOOP4
     if(p->flagfsf[IJ]==0)
@@ -39,7 +39,7 @@ void nhflow_fsf_f::fsf_guard(lexer* p, fdm_nhf* d, ghostcell* pgc, slice& WL, sl
 
     SLICELOOP4
     if(p->flagfsf[IJ]==1)
-    {  
+    {
         if(p->flagfsf[Im1J]==0)
         WL(i-1,j) = WL(i,j);
 

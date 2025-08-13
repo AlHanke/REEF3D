@@ -64,7 +64,7 @@ double sediment_weno_hj::sy(lexer *p, slice &f, double jvel1, double jvel2)
     if(jvel<0.0)
     grad=dswenoy(f,-1.0)*jvel;
     
-    return grad;   
+    return grad;
 }
 
 

@@ -25,16 +25,16 @@ Author: Tobias Martin
 
 void beam::iniBeam(double Ne_, double E_, double A_, double rho_, double L_, double G_, double IX_, double IY_, double IZ_)
 {
-    Ne = Ne_; 
-    E = E_; 
-    A = A_; 
-    rho = rho_; 
-    L = L_; 
+    Ne = Ne_;
+    E = E_;
+    A = A_;
+    rho = rho_;
+    L = L_;
     G = G_;
     
     // Set inertia matrix
-    I << IX_, 0.0, 0.0, 
-         0.0, IY_, 0.0, 
+    I << IX_, 0.0, 0.0,
+         0.0, IY_, 0.0,
          0.0, 0.0, IZ_;
     
     // Initialise fields
@@ -51,14 +51,14 @@ void beam::iniMaterial()
     corr_k << 1.0, 1.0, 1.0;
     
     // Linear visco-elasticity model
-    Ceps << E*A, 0, 0, 
+    Ceps << E*A, 0, 0,
             0, corr_k(0)*G*A, 0,
             0, 0, corr_k(1)*G*A;
 
     Ckappa << corr_k(2)*G, 0, 0,
               0, E, 0,
               0, 0, E;
-    Ckappa *=I; 
+    Ckappa *=I;
 
     Iq(1,1) = I(0,0); Iq(2,2) = I(1,1); Iq(3,3) = I(2,2);
     invIq(1,1) = 1.0/I(0,0); invIq(2,2) = 1.0/I(1,1); invIq(3,3) = 1.0/I(2,2);
@@ -69,7 +69,7 @@ void beam::iniDamping(double cdx, double cdy, double cdz, double ckx, double cky
     // Linear visco-elasticity model
     Cepsdot << cdx, 0, 0,
                0, cdy, 0,
-               0, 0, cdz; 
+               0, 0, cdz;
 
     Ckappadot << ckx, 0, 0,
                  0, cky, 0,
@@ -93,17 +93,17 @@ void beam::iniFields()
 
     // Edge matrices
     Fext = Matrix3Xd::Zero(3,Ne+1);
-    c  = Matrix3Xd::Zero(3,Ne+1); 
-    c0 = Matrix3Xd::Zero(3,Ne+1); 
-    cdot  = Matrix3Xd::Zero(3,Ne+1); 
-    cdotdot  = Matrix3Xd::Zero(3,Ne+1); 
-    rhs_cdot = Matrix3Xd::Zero(3,Ne+1); 
+    c  = Matrix3Xd::Zero(3,Ne+1);
+    c0 = Matrix3Xd::Zero(3,Ne+1);
+    cdot  = Matrix3Xd::Zero(3,Ne+1);
+    cdotdot  = Matrix3Xd::Zero(3,Ne+1);
+    rhs_cdot = Matrix3Xd::Zero(3,Ne+1);
 
     // Centre matrices with ghostpoints
     Mext = Matrix4Xd::Zero(4,Ne+2);
-    q  = Matrix4Xd::Zero(4,Ne+2); 
-    q0 = Matrix4Xd::Zero(4,Ne+2); 
-    qdot  = Matrix4Xd::Zero(4,Ne+2); 
+    q  = Matrix4Xd::Zero(4,Ne+2);
+    q0 = Matrix4Xd::Zero(4,Ne+2);
+    qdot  = Matrix4Xd::Zero(4,Ne+2);
     rhs_qdot = Matrix4Xd::Zero(4,Ne+2);
 
     // Internal forces and moment matrices
@@ -130,7 +130,7 @@ void beam::meshBeam(double x_ini, double y_ini, double z_ini, Eigen::Vector3d& d
     d3.normalize();
             
     double sp = (d3(1)*d2(2)-d3(2)*d2(1))*d1(0) +(d3(2)*d2(0)-d3(0)*d2(2))*d1(1)+(d3(0)*d2(1)-d3(1)*d2(0))*d1(2);
-    if (sp < 0.0) d3 = -d3; 
+    if (sp < 0.0) d3 = -d3;
     
     if( (1+d3(0)+d2(1)+d1(2)) < 1e-3)
     {
@@ -139,12 +139,12 @@ void beam::meshBeam(double x_ini, double y_ini, double z_ini, Eigen::Vector3d& d
     }
     
     // Coordinates
-    dZ = L/Ne; 
+    dZ = L/Ne;
     for (int i=0; i < Ne+1; i++)
     {
         c.col(i) << x_ini + d1(0), y_ini + d1(1), z_ini + dZ*i*d1(2);
     }
-    c0 = c; 
+    c0 = c;
 
     // Quaternions
     for (int i=0; i < Ne+2; i++)
@@ -167,13 +167,13 @@ void beam::meshBeam(const Eigen::VectorXd& x_, const Eigen::VectorXd& y_, const 
     c.row(0) = x_;
     c.row(1) = y_;
     c.row(2) = z_;
-    c0 = c; 
+    c0 = c;
 
     // Quaternions
     // R*q rotates point into body-fixed coordinate system
     for (int i=1; i < Ne+1; i++)
     {
-        Eigen::Vector3d dc = (c.col(i) - c.col(i-1)).normalized(); 
+        Eigen::Vector3d dc = (c.col(i) - c.col(i-1)).normalized();
         Eigen::Vector3d v = d0.cross(dc);
         double w = 1.0 + d0.dot(dc);
         q.col(i) << w, v(0), v(1), v(2);
@@ -182,7 +182,7 @@ void beam::meshBeam(const Eigen::VectorXd& x_, const Eigen::VectorXd& y_, const 
     q.col(0) = q.col(1); q.col(Ne+1) = q.col(Ne);
     q0=q;
 
-    dZ = L/Ne; 
+    dZ = L/Ne;
 
     // Fixed end quaternion
     qb << 1.0, 0.0, 0.0, 0.0;

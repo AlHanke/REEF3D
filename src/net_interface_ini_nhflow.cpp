@@ -42,13 +42,13 @@ void net_interface::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         pgc->bcast_int(&p->net_count, 1);
         
         if(p->mpirank==0)
-        mkdir("./REEF3D_NHFLOW_6DOF_Net",0777);    
+        mkdir("./REEF3D_NHFLOW_6DOF_Net",0777);
 
         else
         p->X320_type = new int[p->net_count];
 
         
-        pnet.reserve(p->net_count);    
+        pnet.reserve(p->net_count);
   
         NETLOOP
         {

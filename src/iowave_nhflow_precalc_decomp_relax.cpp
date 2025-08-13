@@ -141,7 +141,7 @@ void iowave::nhflow_wavegen_precalc_decomp_relax(lexer *p, fdm_nhf *d, ghostcell
             ++count;
             }
         }
-    }    
+    }
     
 
 

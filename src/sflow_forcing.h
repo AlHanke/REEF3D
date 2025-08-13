@@ -47,7 +47,7 @@ public:
     sflow_forcing(lexer*);
     virtual ~sflow_forcing();
     
-    void forcing(lexer*, fdm2D*, ghostcell*, sixdof *p6dof, 
+    void forcing(lexer*, fdm2D*, ghostcell*, sixdof *p6dof,
                  int, double, slice&, slice&, slice&, slice&, slice&, bool);
     
     void forcing_ini(lexer*, fdm2D*, ghostcell*);

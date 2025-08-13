@@ -24,7 +24,7 @@ Authors: Tobias Martin, Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"fdm_nhf.h"
-#include"ghostcell.h"    
+#include"ghostcell.h"
 
 net_sheet::net_sheet(int number, lexer *p):nNet(number){}
 
@@ -32,7 +32,7 @@ net_sheet::~net_sheet(){}
 
 
 void net_sheet::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
-{    
+{
     //- Initialise net model
     ini(p,pgc);
     
@@ -42,7 +42,7 @@ void net_sheet::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
 }
 
 void net_sheet::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
-{    
+{
     //- Initialise net model
     ini(p,pgc);
     
@@ -53,7 +53,7 @@ void net_sheet::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
 void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen::Matrix3d quatRotMat)
 {
-    double starttime1 = pgc->timer();    
+    double starttime1 = pgc->timer();
     dt_ = alpha*p->dt;
 
     //- Store old velocities
@@ -66,11 +66,11 @@ void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen:
 
     //- Get velocities at knots
     updateField_cfd(p,a,pgc,0);
-    updateField_cfd(p,a,pgc,1);    
+    updateField_cfd(p,a,pgc,1);
     updateField_cfd(p,a,pgc,2);
     
     //- Get density at knots
-    updateField_cfd(p,a,pgc,3);       
+    updateField_cfd(p,a,pgc,3);
     
     //- Calculate velocities from rigid body motion
     for (int knotI = 0; knotI < nK; knotI++)
@@ -81,7 +81,7 @@ void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen:
     }
     
     //- Calculate force vector
-    forces_knot *= 0.0; 
+    forces_knot *= 0.0;
     gravityForce(p);
     inertiaForce(p);
     dragForce(p);
@@ -91,9 +91,9 @@ void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen:
     Fz = 0.0;
     for (int knotI = 0; knotI < nK; knotI++)
     {
-        Fx += forces_knot(knotI, 0); 
-        Fy += forces_knot(knotI, 1); 
-        Fz += forces_knot(knotI, 2); 
+        Fx += forces_knot(knotI, 0);
+        Fy += forces_knot(knotI, 1);
+        Fz += forces_knot(knotI, 2);
     }
 
     // Update position of triangles
@@ -125,19 +125,19 @@ void net_sheet::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen:
     coupling_dlm_cfd(p,a,pgc);
     
     //- Build and save net
-    print(p);    
+    print(p);
 
     //- Print output
-    double endtime1 = pgc->timer() - starttime1; 
+    double endtime1 = pgc->timer() - starttime1;
     if (p->mpirank==0)
     {
-        cout<<"Net time: "<<endtime1<<endl;    
+        cout<<"Net time: "<<endtime1<<endl;
     }
 }
 
 void net_sheet::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha, Eigen::Matrix3d quatRotMat)
 {
-    double starttime1 = pgc->timer();    
+    double starttime1 = pgc->timer();
     dt_ = alpha*p->dt;
 
     //- Store old velocities
@@ -154,7 +154,7 @@ void net_sheet::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha,
     updateField_nhflow(p,d,pgc,2);
     
     //- Get density at knots
-    updateField_nhflow(p,d,pgc,3);       
+    updateField_nhflow(p,d,pgc,3);
     
     //- Calculate velocities from rigid body motion
     for (int knotI = 0; knotI < nK; knotI++)
@@ -165,7 +165,7 @@ void net_sheet::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha,
     }
     
     //- Calculate force vector
-    forces_knot *= 0.0; 
+    forces_knot *= 0.0;
     gravityForce(p);
     inertiaForce(p);
     dragForce(p);
@@ -175,9 +175,9 @@ void net_sheet::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha,
     Fz = 0.0;
     for (int knotI = 0; knotI < nK; knotI++)
     {
-        Fx += forces_knot(knotI, 0); 
-        Fy += forces_knot(knotI, 1); 
-        Fz += forces_knot(knotI, 2); 
+        Fx += forces_knot(knotI, 0);
+        Fy += forces_knot(knotI, 1);
+        Fz += forces_knot(knotI, 2);
     }
 
     // Update position of triangles
@@ -209,13 +209,13 @@ void net_sheet::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha,
     coupling_dlm_nhflow(p,d,pgc);
     
     //- Build and save net
-    print(p);    
+    print(p);
 
     //- Print output
-    double endtime1 = pgc->timer() - starttime1; 
+    double endtime1 = pgc->timer() - starttime1;
     if (p->mpirank==0)
     {
-        cout<<"Net time: "<<endtime1<<endl;    
+        cout<<"Net time: "<<endtime1<<endl;
     }
 }
 

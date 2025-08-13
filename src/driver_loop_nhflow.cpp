@@ -30,7 +30,7 @@ Author: Hans Bihs
 #include"sediment_header.h"
 #include"heat_header.h"
 #include"concentration_header.h"
-#include"benchmark_header.h"    
+#include"benchmark_header.h"
 #include"convection_header.h"
 #include"solver_header.h"
 #include"field_header.h"
@@ -46,7 +46,7 @@ void driver::loop_nhflow()
     
 //-----------MAINLOOP NSEWAVE----------------------------
     while(p->count<p->N45 && p->simtime<p->N41  && p->sedtime<p->S19)
-    {        
+    {
         ++p->count;
         starttime=pgc->timer();
 
@@ -68,7 +68,7 @@ void driver::loop_nhflow()
         pflow->flowfile(p,a,pgc,pturb);
         pflow->wavegen_precalc_nhflow(p,d,pgc);
             
-        pnhfturb->start(p,d,pgc,pnhfscalarconvec,pnhfturbdiff,psolv,pflow,pvrans);        
+        pnhfturb->start(p,d,pgc,pnhfscalarconvec,pnhfturbdiff,psolv,pflow,pvrans);
         
         // Sediment Computation
         psed->start_susp_nhflow(p,d,pgc,pflow,psolv);
@@ -76,7 +76,7 @@ void driver::loop_nhflow()
         pnhfsf->depth_update(p,d,pgc,pflow);
         
         pnhfmom->start(p,d,pgc,pflow,pss,precon,pnhfconvec,pnhfdiff,
-                       pnhpress,ppoissonsolv,psolv,pnhf,pnhfsf,pnhfturb,pvrans); 
+                       pnhpress,ppoissonsolv,psolv,pnhf,pnhfsf,pnhfturb,pvrans);
 
         //save previous timestep
         pnhfturb->ktimesave(p,d,pgc);
@@ -111,7 +111,7 @@ void driver::loop_nhflow()
         if(p->X10>0)
         cout<<"fbtime: "<<setprecision(3)<<p->fbtime<<endl;
         cout<<"gctime: "<<setprecision(3)<<p->gctime<<"\t average gctime: "<<setprecision(3)<<p->gcmeantime<<endl;
-        cout<<"Xtime: "<<setprecision(3)<<p->xtime<<"\t average Xtime: "<<setprecision(3)<<p->Xmeantime<<endl;        
+        cout<<"Xtime: "<<setprecision(3)<<p->xtime<<"\t average Xtime: "<<setprecision(3)<<p->Xmeantime<<endl;
         cout<<"total time: "<<setprecision(6)<<p->totaltime<<"   average time: "<<setprecision(3)<<p->meantime<<endl;
         cout<<"timer per step: "<<setprecision(3)<<p->itertime<<endl;
         }

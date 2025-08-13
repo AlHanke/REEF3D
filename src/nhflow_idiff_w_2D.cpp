@@ -62,10 +62,10 @@ void nhflow_idiff_2D::diff_w(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow
             d->M.n[n] = -visc/(p->DXP[IP]*p->DXN[IP]);
             d->M.s[n] = -visc/(p->DXP[IM1]*p->DXN[IP]);
 
-            d->M.t[n] = -2.0*(visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KP])     
+            d->M.t[n] = -2.0*(visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KP])
                         - 0.0*2.0*p->sigxx[FIJK]/((p->DZN[KP]+p->DZN[KM1]));
                         
-            d->M.b[n] = -2.0*(visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KM1]) 
+            d->M.b[n] = -2.0*(visc*sigxyz2)/(p->DZP[KM1]*p->DZN[KM1])
                         + 0.0*2.0*p->sigxx[FIJK]/((p->DZN[KP]+p->DZN[KM1]));
             
             

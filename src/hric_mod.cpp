@@ -228,7 +228,7 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
     
     
         
-    cc_ = (cc-cu)/(fabs(cd-cu)>1.0e-20?(cd-cu):1.0e20); 
+    cc_ = (cc-cu)/(fabs(cd-cu)>1.0e-20?(cd-cu):1.0e20);
     
     
 
@@ -290,7 +290,7 @@ double hric_mod::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
     cj_ss = cj_*sqrt(costheta) + cj_s*(1.0-sqrt(costheta));
     
     
-    cj = cj_ss*(cd-cu) + cu; 
+    cj = cj_ss*(cd-cu) + cu;
 
     return cj;
 }

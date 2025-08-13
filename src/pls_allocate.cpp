@@ -60,7 +60,7 @@ void particle_pls::allocate(lexer* p,fdm* a,ghostcell* pgc)
     negxs= new double*[6];
 
     for(n=0;n<6;++n)
-    {    
+    {
     if(p->gcpara1_count>0)
     posxs[0] = new double[5*p->gcpara1_count*pnum];
     if(p->gcpara2_count>0)

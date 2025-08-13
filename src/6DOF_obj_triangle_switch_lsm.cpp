@@ -68,10 +68,10 @@ void sixdof_obj::triangle_switch_lsm(lexer *p, ghostcell *pgc)
         
         x2 = tri_x[n][2];
         y2 = tri_y[n][2];
-        z2 = tri_z[n][2]; 
+        z2 = tri_z[n][2];
         
         nx = (y1 - y0)*(z2 - z0) - (y2 - y0)*(z1 - z0);
-        ny = (x2 - x0)*(z1 - z0) - (x1 - x0)*(z2 - z0); 
+        ny = (x2 - x0)*(z1 - z0) - (x1 - x0)*(z2 - z0);
         nz = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0);
 
         norm = sqrt(nx*nx + ny*ny + nz*nz);
@@ -127,10 +127,10 @@ void sixdof_obj::triangle_switch_lsm(lexer *p, ghostcell *pgc)
         
         x2 = tri_x[n][2];
         y2 = tri_y[n][2];
-        z2 = tri_z[n][2]; 
+        z2 = tri_z[n][2];
         
         nx = (y1 - y0)*(z2 - z0) - (y2 - y0)*(z1 - z0);
-        ny = (x2 - x0)*(z1 - z0) - (x1 - x0)*(z2 - z0); 
+        ny = (x2 - x0)*(z1 - z0) - (x1 - x0)*(z2 - z0);
         nz = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0);
 
         norm = sqrt(nx*nx + ny*ny + nz*nz);
@@ -204,7 +204,7 @@ void sixdof_obj::triangle_switch_lsm(lexer *p, ghostcell *pgc)
         tricount_switch_total=0;
         for (int n=0;n<tricount;++n)
         if(tri_switch[tri_switch_id[n]]==1)
-        {   
+        {
         cout<<n<<" tri_switch_id[n]: "<<tri_switch_id[n]<<endl;
         x1 = tri_x[tri_switch_id[n]][1];
         y1 = tri_y[tri_switch_id[n]][1];

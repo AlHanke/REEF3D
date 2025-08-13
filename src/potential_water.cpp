@@ -77,7 +77,7 @@ void potential_water::start(lexer*p,fdm* a,solver* psolv, ghostcell* pgc)
 }
 
 void potential_water::ucalc(lexer *p, fdm *a, field &phi)
-{    
+{
     ULOOP
     if(a->phi(i,j,k)>eps && a->phi(i+1,j,k)>eps)
     a->u(i,j,k) = (phi(i+1,j,k)-phi(i,j,k))/p->DXP[IP];
@@ -94,7 +94,7 @@ void potential_water::ucalc(lexer *p, fdm *a, field &phi)
 }
 
 void potential_water::vcalc(lexer *p, fdm *a, field &phi)
-{    
+{
     VLOOP
     if(a->phi(i,j,k)>eps && a->phi(i,j+1,k)>eps)
     a->v(i,j,k) = (phi(i,j+1,k)-phi(i,j,k))/p->DYP[JP];
@@ -274,9 +274,9 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
     {
         if(p->gcb4[n][4]==1)
         {
-            i=p->gcb4[n][0]; 
+            i=p->gcb4[n][0];
             j=p->gcb4[n][1];
-            k=p->gcb4[n][2];  
+            k=p->gcb4[n][2];
        
             if(p->gcb4[n][3]==1)
             bc(i-1,j,k)=1;
@@ -294,9 +294,9 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
         
         if(p->gcb4[n][4]==2)
         {
-            i=p->gcb4[n][0]; 
+            i=p->gcb4[n][0];
             j=p->gcb4[n][1];
-            k=p->gcb4[n][2];  
+            k=p->gcb4[n][2];
        
             if(p->gcb4[n][3]==1)
             bc(i-1,j,k)=2;

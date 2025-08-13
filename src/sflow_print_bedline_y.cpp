@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 sflow_print_bedline_y::sflow_print_bedline_y(lexer *p, fdm2D *b, ghostcell *pgc)
-{    
+{
     p->Iarray(iloc,p->P124);
 
     maxknoy=pgc->globalimax(p->knoy);
@@ -149,7 +149,7 @@ void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pf
         if(p->mpirank==0)
         {
         sort(yloc_all[q], wsf_all[q], flag_all[q], 0, wsfpoints[q]-1);
-        remove_multientry(p,yloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]); 
+        remove_multientry(p,yloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]);
         }
         
     }

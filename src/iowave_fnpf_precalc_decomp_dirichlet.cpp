@@ -82,13 +82,13 @@ void iowave::wavegen_precalc_decomp_dirichlet_fnpf(lexer *p, ghostcell *pgc)
     
     // beach
     count=0;
-    FILOOP 
-    FJLOOP 
+    FILOOP
+    FJLOOP
     {
 
         db = distbeach(p);
         
-        FKLOOP 
+        FKLOOP
         FPCHECK
         {
                     

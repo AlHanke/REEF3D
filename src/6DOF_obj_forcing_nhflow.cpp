@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"ghostcell.h"
 
-void sixdof_obj::update_forcing_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, 
+void sixdof_obj::update_forcing_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc,
                              double *U, double *V, double *W, double *FX, double *FY, double *FZ, slice &WL, slice &fe, int iter)
 {
     // Calculate forcing fields
@@ -41,7 +41,7 @@ void sixdof_obj::update_forcing_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc,
         vf = u_fb(1) + u_fb(5)*(p->pos_x() - c_(0)) - u_fb(3)*(p->pos_z() - c_(2));
         wf = u_fb(2) + u_fb(3)*(p->pos_y() - c_(1)) - u_fb(4)*(p->pos_x() - c_(0));
          
-        d->FHB[IJK] = MIN(d->FHB[IJK] + H, 1.0); 
+        d->FHB[IJK] = MIN(d->FHB[IJK] + H, 1.0);
         
         FX[IJK] += H*(uf - U[IJK])/(alpha[iter]*p->dt);
         FY[IJK] += H*(vf - V[IJK])/(alpha[iter]*p->dt);
@@ -56,9 +56,9 @@ void sixdof_obj::update_forcing_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc,
         vf = u_fb(1) + u_fb(5)*(p->pos_x() - c_(0)) - u_fb(3)*(p->pos_z() - c_(2));
         wf = u_fb(2) + u_fb(3)*(p->pos_y() - c_(1)) - u_fb(4)*(p->pos_x() - c_(0));
          
-        d->FHB[IJK] = MIN(d->FHB[IJK] + H, 1.0); 
+        d->FHB[IJK] = MIN(d->FHB[IJK] + H, 1.0);
         
-    // Normal vectors calculation 
+    // Normal vectors calculation
         nx = -(d->FB[Ip1JK] - d->FB[Im1JK])/(p->DXN[IP] + p->DXN[IM1]);
         ny = -(d->FB[IJp1K] - d->FB[IJm1K])/(p->DYN[JP] + p->DYN[JM1]);
         nz = -(d->FB[IJKp1] - d->FB[IJKm1])/(p->DZN[KP]*WL(i,j) + p->DZN[KM1]*WL(i,j));

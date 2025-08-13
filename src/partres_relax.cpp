@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"sediment_fdm.h"
 #include"ghostcell.h"
 
-void partres::relax_ini(lexer *p) 
+void partres::relax_ini(lexer *p)
 {
     p->Darray(betaQ73,p->Q73);
     p->Darray(tan_betaQ73,p->Q73);

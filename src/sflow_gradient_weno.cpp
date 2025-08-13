@@ -103,7 +103,7 @@ double sflow_gradient_weno::ddy(lexer *p,fdm2D *b, slice& f, int ipol, double ad
 
 
 void sflow_gradient_weno::iqmin(lexer *p,fdm2D *b, slice& f, int ipol)
-{    
+{
     q1 = (f(i-2,j) - f(i-3,j))/p->DXM;
     q2 = (f(i-1,j) - f(i-2,j))/p->DXM;
     q3 = (f(i,j)   - f(i-1,j))/p->DXM;

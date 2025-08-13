@@ -37,7 +37,7 @@ Author: Hans Bihs
 #include"nhflow.h"
 
 momentum_RK3::momentum_RK3(lexer *p, fdm *a, convection *pconvection, diffusion *pdiffusion, pressure* ppressure, poisson* ppoisson,
-                                                    turbulence *pturbulence, solver *psolver, solver *ppoissonsolver, 
+                                                    turbulence *pturbulence, solver *psolver, solver *ppoissonsolver,
                                                     ioflow *pioflow, fsi *ppfsi)
                                                     :momentum_forcing(p),bcmom(p),udiff(p),vdiff(p),wdiff(p),urk1(p),urk2(p),vrk1(p),
                                                     vrk2(p),wrk1(p),wrk2(p),fx(p),fy(p),fz(p)
@@ -53,7 +53,7 @@ momentum_RK3::momentum_RK3(lexer *p, fdm *a, convection *pconvection, diffusion 
     pturb=pturbulence;
     psolv=psolver;
     ppoissonsolv=ppoissonsolver;
-    pflow=pioflow;    
+    pflow=pioflow;
     pfsi=ppfsi;
 
     if(p->W90==0  || p->F300>0)
@@ -68,7 +68,7 @@ momentum_RK3::~momentum_RK3()
 }
 
 void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof)
-{    
+{
     pflow->discharge(p,a,pgc);
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
     pflow->rkinflow(p,a,pgc,urk1,vrk1,wrk1);
@@ -81,7 +81,7 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     starttime=pgc->timer();
 
     pturb->isource(p,a);
-    pflow->isource(p,a,pgc,pvrans); 
+    pflow->isource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
     ppress->upgrad(p,a,a->eta,a->eta_n);
     irhs(p,a,pgc,a->u,a->u,a->v,a->w,1.0);

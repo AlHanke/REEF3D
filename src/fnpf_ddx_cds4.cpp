@@ -61,7 +61,7 @@ double fnpf_ddx_cds4::syy(lexer *p, slice &f)
          + ( 27.0*f(i,j+1) - 729.0*f(i,j) + 729.0*f(i,j-1) - 27.0*f(i,j-2))/Y3
          + (-f(i,j) + 27.0*f(i,j-1) - 27.0*f(i,j-2) + f(i,j-3))/Y4;
     
-    return grad;    
+    return grad;
 }
 
 

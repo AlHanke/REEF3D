@@ -64,20 +64,20 @@ void hypre_struct::fill_matrix9_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
         ++count;
         
         values[count]=M.t[n];
-        ++count; 
+        ++count;
         
         values[count]=M.sb[n];
-        ++count; 
+        ++count;
         
         values[count]=M.st[n];
-        ++count; 
+        ++count;
         
         values[count]=M.nb[n];
-        ++count; 
+        ++count;
         
         values[count]=M.nt[n];
-        ++count; 
-        }     
+        ++count;
+        }
         
         FSWDCHECK
         {
@@ -94,7 +94,7 @@ void hypre_struct::fill_matrix9_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
         ++count;
         
         values[count]=0.0;
-        ++count;  
+        ++count;
         
          values[count]=0.0;
         ++count;
@@ -107,7 +107,7 @@ void hypre_struct::fill_matrix9_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
         
         values[count]=0.0;
         ++count;
-        }    
+        }
     }
     
     
@@ -132,7 +132,7 @@ void hypre_struct::fill_matrix9_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
     HYPRE_StructVectorAssemble(x);
     
     
-    count=0; 
+    count=0;
     KJILOOP
     {
         FPWDCHECK

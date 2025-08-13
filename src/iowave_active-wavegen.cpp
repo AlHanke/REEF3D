@@ -49,7 +49,7 @@ void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
         {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
-        k=p->gcin[n][2];        
+        k=p->gcin[n][2];
 
         uvel=uval[count]*ramp(p);
         vvel=vval[count]*ramp(p);
@@ -145,7 +145,7 @@ void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
                 wsf=wsfmax[i][j];
                 
                 eta_T = wave_eta(p,pgc,x,0.0);
-                eta_M = wsf-p->wd; 
+                eta_M = wsf-p->wd;
                 eta_R = eta_T-eta_M;
                 
                 

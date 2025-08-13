@@ -47,7 +47,7 @@ void VOF_PLIC::vof_transport_COSMIC2D_RK
 )
 {
     if(nSweep<2 && sweep==0)
-    {   
+    {
         LOOP
         {
             Flux_x(i,j,k)=(Vn_p(i,j,k)-Vn_m(i,j,k))/(p->DXN[IP]*p->DYN[JP]*p->DZN[KP]);
@@ -94,7 +94,7 @@ void VOF_PLIC::vof_transport_COSMIC2D_RK
             }
         
             F_new(i,j,k)=F_n(i,j,k)-0.5*(Flux_x(i,j,k)+Crossflux_zx(i,j,k)+Flux_z(i,j,k)+Crossflux_xz(i,j,k));
-        }               
+        }
     }
     
 }

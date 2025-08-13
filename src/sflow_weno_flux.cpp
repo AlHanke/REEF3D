@@ -72,7 +72,7 @@ double sflow_weno_flux::aij(lexer* p,fdm2D* b,slice& f,int ipol, slice& uvel, sl
         fv2 = fy(p,b,f,ipol,jvel2);
         
         
-        L =   - ((ivel2*fu2-ivel1*fu1)/p->DXM) 
+        L =   - ((ivel2*fu2-ivel1*fu1)/p->DXM)
               - ((jvel2*fv2-jvel1*fv1)/p->DXM);
                 
         return L;
@@ -175,7 +175,7 @@ double sflow_weno_flux::fy(lexer *p,fdm2D *b, slice& f, int ipol, double advec)
 
 
 void sflow_weno_flux::iqmin(lexer *p,fdm2D *b, slice& f, int ipol)
-{    
+{
     q1 = f(i-2,j);
     q2 = f(i-1,j);
     q3 = f(i,j);

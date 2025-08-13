@@ -51,7 +51,7 @@ void ghostcell::verticalsum(lexer *p, fdm* a, double **sum)
     marker[p->mk][1]=1;
     
     for(int qn=0;qn<p->mz;++qn)
-    {   
+    {
         if(p->gcpara5_count>0)
         for(n=0;n<p->mz;++n)
         s5[n]=marker[n][1];
@@ -160,7 +160,7 @@ void ghostcell::verticalsum(lexer *p, fdm* a, double **sum)
         for(q=0;q<p->gcpara6_count;++q)
         {
         i=p->gcpara6[q][0];
-        j=p->gcpara6[q][1]; 
+        j=p->gcpara6[q][1];
 
 
             for(n=0;n<p->mz;++n)

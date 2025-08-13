@@ -19,7 +19,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 Author: Elyas Larkermani
 
-Source: Nicoud, F., Ducros, F. Subgrid-Scale Stress Modelling Based on the Square of the Velocity Gradient Tensor. 
+Source: Nicoud, F., Ducros, F. Subgrid-Scale Stress Modelling Based on the Square of the Velocity Gradient Tensor.
 Flow, Turbulence and Combustion 62, 183–200 (1999). https://doi.org/10.1023/A:1009995426001
 --------------------------------------------------------------------*/
 

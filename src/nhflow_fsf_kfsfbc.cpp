@@ -68,7 +68,7 @@ void nhflow_fsf_f::kinematic_fsf(lexer *p, fdm_nhf *d, double *U, double *V, dou
         d->Wt[IJKp1] = wval;
         d->Wt[IJKp2] = wval;
     }
-}   
+}
 
 double nhflow_fsf_f::limiter(double v1, double v2)
 {
@@ -78,5 +78,5 @@ double nhflow_fsf_f::limiter(double v1, double v2)
     
     val =  (v1*fabs(v2) + fabs(v1)*v2)/denom;
 
-    return val;    
+    return val;
 }

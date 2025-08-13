@@ -46,7 +46,7 @@ public:
     virtual void bedbc_sig(lexer*, fdm_fnpf*, ghostcell*,double*,fnpf_fsf*);
     virtual void waterdepth(lexer*, fdm_fnpf*, ghostcell*);
 
-private: 
+private:
     
     fnpf_convection *pconvec;
     fnpf_ddx *pddx;

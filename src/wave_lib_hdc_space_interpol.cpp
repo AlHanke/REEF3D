@@ -103,7 +103,7 @@ double wave_lib_hdc::ccpol3D(lexer *p, double ***F, double xp, double yp, double
     
     // wb
     if(Ny==1 || jdir==0)
-    wb=1.0;    
+    wb=1.0;
         
     if(Ny>1 && jdir==1)
     {

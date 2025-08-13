@@ -28,7 +28,7 @@ Authors: Tobias Martin, Hans Bihs
 
 void net_barDyn::coupling_dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    //- Coupling to collar  
+    //- Coupling to collar
     collarPoints.resize(0);
     collarVel.resize(0);
 
@@ -36,7 +36,7 @@ void net_barDyn::coupling_dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     {
         const Eigen::Vector3d& coordI = x_.row(knotI);
         
-        if 
+        if
         (
             coordI(0) >= xstart[p->mpirank] && coordI(0) < xend[p->mpirank] &&
             coordI(1) >= ystart[p->mpirank] && coordI(1) < yend[p->mpirank] &&
@@ -55,7 +55,7 @@ void net_barDyn::coupling_dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     
     //- Save Lagrangian coordinates and forces
      
-    double xc,yc,zc,x0,x1,x2,y0,y1,y2,z0,z1,z2,nx,ny,nz,mag,area; 
+    double xc,yc,zc,x0,x1,x2,y0,y1,y2,z0,z1,z2,nx,ny,nz,mag,area;
    
     lagrangePoints.resize(tend);
     lagrangeForces.resize(tend);
@@ -79,7 +79,7 @@ void net_barDyn::coupling_dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         
         z0 = tri_z[i][0];
         z1 = tri_z[i][1];
-        z2 = tri_z[i][2];  
+        z2 = tri_z[i][2];
         
         xc = (x0 + x1 + x2)/3.0;
         yc = (y0 + y1 + y2)/3.0;
@@ -100,7 +100,7 @@ void net_barDyn::coupling_dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
         const Eigen::Vector3d& coordI = lagrangePoints[i];
         
-        if 
+        if
         (
             coordI(0) >= xstart[p->mpirank] && coordI(0) < xend[p->mpirank] &&
             coordI(1) >= ystart[p->mpirank] && coordI(1) < yend[p->mpirank] &&
@@ -109,7 +109,7 @@ void net_barDyn::coupling_dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         {
             //- Calculate relative velocity at knot
             
-            v_rel << 
+            v_rel <<
                 p->ccipol4V(d->U,d->WL,d->bed,coordI(0),coordI(1),coordI(2)) - tri_vel[i][0],
                 p->ccipol4V(d->V,d->WL,d->bed,coordI(0),coordI(1),coordI(2)) - tri_vel[i][1],
                 p->ccipol4V(d->W,d->WL,d->bed,coordI(0),coordI(1),coordI(2)) - tri_vel[i][2];
@@ -129,7 +129,7 @@ void net_barDyn::coupling_dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
             
             // Angle between velocity and normal vector
             
-            double thetan = acos(n_d.dot(n_s));     
+            double thetan = acos(n_d.dot(n_s));
 
 
             // Normal vector of lift force
@@ -148,12 +148,12 @@ void net_barDyn::coupling_dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
             while (error > 1e-3 && nIt < 10)
             {
-                error = v_mag_corr;    
+                error = v_mag_corr;
                 
                 screenForceCoeff(p,cd,cl,v_mag_corr,thetan,p->X321_Sn[nNet]);
                 
                 // Froude momentum theory
-                v_mag_corr = v_mag*cd/(2.0*(sqrt(1.0 + cd) - 1.0)); 
+                v_mag_corr = v_mag*cd/(2.0*(sqrt(1.0 + cd) - 1.0));
 
                 error = fabs(v_mag_corr - error);
                 
@@ -164,7 +164,7 @@ void net_barDyn::coupling_dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
             {
                 v_mag_corr = v_mag;
                 screenForceCoeff(p,cd,cl,v_mag_corr,thetan,p->X321_Sn[nNet]);
-            }            
+            }
             
 
             // Save directional forces at lagrangian points (w/o density since multiplied later)
@@ -175,9 +175,9 @@ void net_barDyn::coupling_dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         }
         else
         {
-            lagrangeForces[i] << 0.0, 0.0, 0.0;   
+            lagrangeForces[i] << 0.0, 0.0, 0.0;
         }
-    }    
+    }
     
     for (int pI = 0; pI < tend; pI++)
     {

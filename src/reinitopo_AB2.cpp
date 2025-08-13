@@ -52,7 +52,7 @@ reinitopo_AB2::reinitopo_AB2(lexer* p):gradient(p),f(p),frk1(p),frk2(p),L(p),dt(
     prdisc = new reinidisc_fsf(p);
 
     
-    time_preproc(p);   
+    time_preproc(p);
 }
 
 reinitopo_AB2::~reinitopo_AB2()
@@ -95,7 +95,7 @@ void reinitopo_AB2::start(lexer* p, fdm* a, ghostcell* pgc,field &f)
         }
 
     pgc->start4a(p,f,gcval);
-    }        
+    }
 }
 
 void reinitopo_AB2::step(lexer* p, fdm *a)

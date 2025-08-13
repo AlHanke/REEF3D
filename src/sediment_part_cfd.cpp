@@ -38,7 +38,7 @@ void sediment_part::sediment_algorithm_cfd(lexer* p, fdm* a, ghostcell* pgc, iof
 {
     double starttime=pgc->timer();
 
-    // sediment 
+    // sediment
     fill_PQ_cfd(p,a,pgc);
     pslope->slope_cds(p,pgc,s);
     pbedshear->taubed(p,a,pgc,s);
@@ -49,7 +49,7 @@ void sediment_part::sediment_algorithm_cfd(lexer* p, fdm* a, ghostcell* pgc, iof
 
     //point_source(p,a);
         
-    pst->timestep(p,pgc);  
+    pst->timestep(p,pgc);
     pst->move_RK2(p,a,pgc,s,pturb);
     pst->update(p,a,pgc,s,por,d50);
     pst->print_particles(p,s);

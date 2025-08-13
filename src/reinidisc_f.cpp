@@ -35,7 +35,7 @@ reinidisc_f::~reinidisc_f()
 }
 
 void reinidisc_f::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, int ipol)
-{    
+{
     if(ipol==4)
     {
         BASELOOP
@@ -66,7 +66,7 @@ void reinidisc_f::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L)
     if(fabs(lsv)<1.0e-8)
     lsSig=1.0;
 
-// x    
+// x
     xmin=(lsv-f.V[Im1JK])/p->DXP[IM1];
     xplus=(f.V[Ip1JK]-lsv)/p->DXP[IP];
     
@@ -106,7 +106,7 @@ void reinidisc_f::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L)
     dz=ddwenoz(a,f,-1.0);
 
     if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
-    dz=0.0;    
+    dz=0.0;
 
 
     dnorm=sqrt(dx*dx + dy*dy + dz*dz);

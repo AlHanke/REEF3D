@@ -76,7 +76,7 @@ void sediment_part::sediment_logic(lexer *p, fdm *a,ghostcell *pgc, turbulence *
     s = new sediment_fdm(p);
     
     if(p->S90==0)
-    pslide=new sandslide_v(p);   
+    pslide=new sandslide_v(p);
     
     if(p->S90==1)
     pslide=new sandslide_f(p);

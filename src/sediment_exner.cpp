@@ -81,7 +81,7 @@ sediment_exner::~sediment_exner()
 }
 
 void sediment_exner::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
-{   
+{
     // eq.
     if(p->S17==0)
     SLICELOOP4
@@ -89,7 +89,7 @@ void sediment_exner::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
     
     // non-eq.
     if(p->S17==1)
-    non_equillibrium_solve(p,pgc,s); 
+    non_equillibrium_solve(p,pgc,s);
     
     pgc->gcsl_start4(p,s->qb,1);
     

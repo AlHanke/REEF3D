@@ -84,7 +84,7 @@ void sixdof_obj::mooringForces(lexer *p, ghostcell *pgc, double alpha)
         MPI_Bcast(&Zme[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);
         MPI_Bcast(&Kme[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);
         MPI_Bcast(&Mme[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);
-        MPI_Bcast(&Nme[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);    
+        MPI_Bcast(&Nme[ii],1,MPI_DOUBLE,0,pgc->mpi_comm);
         
         // Add to external forces
         Xext += Xme[ii];
@@ -98,7 +98,7 @@ void sixdof_obj::mooringForces(lexer *p, ghostcell *pgc, double alpha)
 }
 
 void sixdof_obj::netForces_cfd(lexer *p, fdm* a, ghostcell *pgc, double alpha)
-{    
+{
     pnetinter->netForces_cfd(p,a,pgc,alpha,quatRotMat,Xne,Yne,Zne,Kne,Mne,Nne);
     
     NETLOOP
@@ -127,5 +127,5 @@ void sixdof_obj::netForces_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double a
         Mext += Mne[n];
         Next += Nne[n];
     }
-}    
+}
 

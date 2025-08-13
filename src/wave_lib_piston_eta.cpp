@@ -26,8 +26,8 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include<fstream>
 
-wave_lib_piston_eta::wave_lib_piston_eta(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_piston_eta::wave_lib_piston_eta(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     if(p->mpirank==0)
     {
     cout<<"Wave_Lib: piston_eta wavemaker theory";
@@ -38,7 +38,7 @@ wave_lib_piston_eta::wave_lib_piston_eta(lexer *p, ghostcell *pgc) : wave_lib_pa
     read(p,pgc);
     
     singamma = sin((p->B105_1)*(PI/180.0));
-    cosgamma = cos((p->B105_1)*(PI/180.0));    
+    cosgamma = cos((p->B105_1)*(PI/180.0));
 }
 
 wave_lib_piston_eta::~wave_lib_piston_eta()

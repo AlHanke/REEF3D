@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-patch_obj::patch_obj(lexer *p, int ID_ini) 
+patch_obj::patch_obj(lexer *p, int ID_ini)
 {
     ID = ID_ini;
     

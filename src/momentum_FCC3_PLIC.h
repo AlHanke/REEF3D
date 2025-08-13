@@ -53,7 +53,7 @@ using namespace std;
 class momentum_FCC3_PLIC : public momentum, public momentum_forcing, public bcmom
 {
 public:
-    momentum_FCC3_PLIC(lexer*, fdm*, ghostcell*, convection*, diffusion*, pressure*, poisson*, 
+    momentum_FCC3_PLIC(lexer*, fdm*, ghostcell*, convection*, diffusion*, pressure*, poisson*,
                 turbulence*, solver*, solver*, ioflow*, heat*&, concentration*&, reini*, fsi*);
     virtual ~momentum_FCC3_PLIC();
     virtual void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*);

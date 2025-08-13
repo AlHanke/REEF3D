@@ -30,7 +30,7 @@ Author: Hans Bihs
 #include <Eigen/Dense>
 
 void driver::vec_test(lexer *p, fdm *a, ghostcell *pgc, field &f)
-{    
+{
     int qn,n;
     double t1,t2,t3,t4,t5,t6,t7;
     double val;
@@ -115,7 +115,7 @@ void driver::vec_test(lexer *p, fdm *a, ghostcell *pgc, field &f)
     for(n=0; n<p->cellnum; ++n)
     val=stdvector[n];
     
-    t5 = pgc->timer() - starttime;    
+    t5 = pgc->timer() - starttime;
 
 
     //--
@@ -129,7 +129,7 @@ void driver::vec_test(lexer *p, fdm *a, ghostcell *pgc, field &f)
     for(n=0; n<p->cellnum; ++n)
     val=stdarray[n];
     */
-    t6 = pgc->timer() - starttime;        
+    t6 = pgc->timer() - starttime;
     
     
     //--
@@ -143,7 +143,7 @@ void driver::vec_test(lexer *p, fdm *a, ghostcell *pgc, field &f)
     for(n=0; n<p->cellnum; ++n)
     val=eigenVector(n);
     
-    t7 = pgc->timer() - starttime;    
+    t7 = pgc->timer() - starttime;
     
 
     t1=pgc->globalmax(t1);
@@ -182,7 +182,7 @@ void driver::vec_test(lexer *p, fdm *a, ghostcell *pgc, field &f)
     for(n=0; n<p->cellnum; ++n)
     val=2.0*eigenVector(n);
     
-    t7 = pgc->timer() - starttime;    
+    t7 = pgc->timer() - starttime;
 
     t1=pgc->globalmax(t1);
     t7=pgc->globalmax(t7);
@@ -192,7 +192,7 @@ void driver::vec_test(lexer *p, fdm *a, ghostcell *pgc, field &f)
 }
 
 void driver::func_test(lexer *p, fdm *a, ghostcell *pgc, field &f)
-{    
+{
     int qn,n;
     double t1,t2;
     

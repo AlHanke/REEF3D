@@ -40,7 +40,7 @@ density_heat::density_heat(lexer* p, heat *& ppheat) : epsi(p->F45*p->DXM), eps(
     pheat = ppheat;
     
     
-    if(p->j_dir==0)        
+    if(p->j_dir==0)
     psi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
         
     if(p->j_dir==1)
@@ -89,7 +89,7 @@ double density_heat::roface(lexer *p, fdm *a, int aa, int bb, int cc)
         
         roval = ro_1*H + ro_2*(1.0-H);
 
-    return roval;        
+    return roval;
 }
 
 double density_heat::material_ipol(double **pm, int num, double temp)

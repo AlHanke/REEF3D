@@ -207,7 +207,7 @@ void ghostcell::start4a(lexer *p, field& f, int gcv)
     gcparacox(p,f,gcv);
     endtime=timer();
     p->xtime+=endtime-starttime;
-    } 
+    }
     
     starttime=timer();
     QQGC4ALOOP
@@ -243,7 +243,7 @@ void ghostcell::start4a_sum(lexer *p, field& f, int gcv)
     //gcparacox_sum(p,f,gcv);
     endtime=timer();
     p->xtime+=endtime-starttime;
-    } 
+    }
     
     starttime=timer();
     QQGC4ALOOP

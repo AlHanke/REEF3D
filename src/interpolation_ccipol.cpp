@@ -770,7 +770,7 @@ double interpolation::ccipol4press(fdm *a,field& f, double xp, double yp, double
     j = p->posc_j(yp);
     k = p->posc_k(zp);
     
-    /*    
+    /*
     if(p->mpirank==0)
     {
     cout<<"i: "<<i<<" j: "<<j<<" k: "<<k<<endl;

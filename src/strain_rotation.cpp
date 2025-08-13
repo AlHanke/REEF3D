@@ -55,7 +55,7 @@ double strain::qij(lexer *p, fdm *a, int ii, int jj)
 }
 
 double strain::Qij2(lexer *p, fdm *a)
-{    
+{
     skewSymmetricStrainRateTensor(p,a->u,a->v,a->w);
 
     double r = sqrt(r12*r12 + r13*r13 + r23*r23);
@@ -71,7 +71,7 @@ double strain::rotationterm(lexer *p, fdm *a)
 }
 
 double strain::rotationterm(lexer *p, field &u, field &v, field &w)
-{    
+{
     skewSymmetricStrainRateTensor(p,u,v,w);
 
     double r = sqrt(r12*r12 + r13*r13 + r23*r23);
@@ -97,7 +97,7 @@ void strain::skewSymmetricStrainRateTensor(lexer *p, field &u, field &v, field &
         r22 = 0.0;
         r33 = 0.0;
         r12 = 0.0;
-        r13 = (pudz(p,u) - pwdx(p,w)); 
+        r13 = (pudz(p,u) - pwdx(p,w));
         r23 = 0.0;
     }
 }

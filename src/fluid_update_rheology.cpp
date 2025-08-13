@@ -34,7 +34,7 @@ fluid_update_rheology::fluid_update_rheology(lexer *p) : ro1(p->W1), ro2(p->W3),
     prheo = new rheology_f(p);
 
     if(p->j_dir==0)
-    epsi = p->F45*(1.0/2.0)*(p->DRM+p->DTM); 
+    epsi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
     
     if(p->j_dir==1)
     epsi = p->F45*(1.0/3.0)*(p->DRM+p->DSM+p->DTM);
@@ -61,7 +61,7 @@ void fluid_update_rheology::start(lexer *p, fdm* a, ghostcell* pgc)
 
     // density, viscosity & volumes
     LOOP
-    {  
+    {
         if(a->phi(i,j,k)>epsi)
         {
             H_phi=1.0;

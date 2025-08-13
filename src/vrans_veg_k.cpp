@@ -47,7 +47,7 @@ void vrans_veg::kw_source(lexer *p, fdm *a, field &kin)
 
         a->rhsvec.V[count] += kw;
     
-        ++count;  
+        ++count;
     }
 }
 
@@ -73,6 +73,6 @@ void vrans_veg::ke_source(lexer *p, fdm *a, field &kin)
 
         a->rhsvec.V[count] += kw;
     
-        ++count;  
+        ++count;
     }
 }

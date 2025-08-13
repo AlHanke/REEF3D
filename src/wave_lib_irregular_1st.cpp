@@ -25,8 +25,8 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_irregular_1st::wave_lib_irregular_1st(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_irregular_1st::wave_lib_irregular_1st(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     parameters(p,pgc);
     
     if(p->B85!=4 && p->B85!=5 && p->B85!=6 && p->B92!=51)

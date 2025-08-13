@@ -40,16 +40,16 @@ Author: Tobias Martin, Hans Bihs
 
 momentum_RKLS3_df::momentum_RKLS3_df
 (
-    lexer *p, 
-    fdm *a, 
-    ghostcell *pgc, 
-    convection *pconvection, 
-    diffusion *pdiffusion, 
-    pressure* ppressure, 
+    lexer *p,
+    fdm *a,
+    ghostcell *pgc,
+    convection *pconvection,
+    diffusion *pdiffusion,
+    pressure* ppressure,
     poisson* ppoisson,
-    turbulence *pturbulence, 
-    solver *psolver, 
-    solver *ppoissonsolver, 
+    turbulence *pturbulence,
+    solver *psolver,
+    solver *ppoissonsolver,
     ioflow *pioflow
 ):bcmom(p),urk(p),vrk(p),wrk(p),Cu(p),Cv(p),Cw(p),Du(p),Dv(p),Dw(p),fx(p),fy(p),fz(p)
 {
@@ -77,8 +77,8 @@ momentum_RKLS3_df::~momentum_RKLS3_df(){}
 void momentum_RKLS3_df::start(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, sixdof *p6dof){}
 
 void momentum_RKLS3_df::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, vrans* pvrans, fsi* pfsi)
-{    
-    // Set inflow 
+{
+    // Set inflow
     double udisctime=0.0;
     double udiscstart=0.0;
     
@@ -100,7 +100,7 @@ void momentum_RKLS3_df::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, 
 
         // Fill F
         pturb->isource(p,a);
-        pflow->isource(p,a,pgc,pvrans); 
+        pflow->isource(p,a,pgc,pvrans);
         bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
         ppress->upgrad(p,a,a->eta,a->eta_n);
         irhs(p,a,pgc,a->u,a->u,a->v,a->w,2.0*alpha(loop));
@@ -202,7 +202,7 @@ void momentum_RKLS3_df::starti(lexer* p, fdm* a, ghostcell* pgc, sixdof* p6dof, 
         
         pgc->start1(p,fx,10);
         pgc->start2(p,fy,11);
-        pgc->start3(p,fz,12);           
+        pgc->start3(p,fz,12);
         
 
         p6dof->start_cfd(p,a,pgc,loop,urk,vrk,wrk,fx,fy,fz,final);

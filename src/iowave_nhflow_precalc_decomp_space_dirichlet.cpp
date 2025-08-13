@@ -68,7 +68,7 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
         
         KLOOP
         PCHECK
-        {        
+        {
         z=p->ZSP[IJK]-p->phimean;
 
         // Wave Generation
@@ -99,7 +99,7 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
         {
         z=p->ZSP[IJK]-p->phimean;
         
-        // Wave Generation        
+        // Wave Generation
         if(p->B98>=3 && v_switch==1)
         {
                 for(qn=0;qn<wave_comp;++qn)
@@ -138,6 +138,6 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
             ++count;
         }
         }
-    }    
+    }
 
 }

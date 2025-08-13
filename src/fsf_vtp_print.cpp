@@ -49,7 +49,7 @@ void fsf_vtp::print(lexer* p, fdm* a, ghostcell *pgc)
     {
     polygon_sum3+=numpt[n];
     ++polygon_num3;
-    }  
+    }
     
     vertice_num = ccptcount;
     
@@ -212,7 +212,7 @@ void fsf_vtp::print(lexer* p, fdm* a, ghostcell *pgc)
     result<<endl<<"</AppendedData>"<<endl;
     result<<"</VTKFile>"<<endl;
 
-    result.close();    
+    result.close();
 }
 
 

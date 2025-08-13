@@ -269,7 +269,7 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
         
         if(p->gcpara6[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
-        {  
+        {
             if(p->gcpara6[q][2+gcv]==1)
             f(i,j,k+n+1)=recv6[count];
             ++count;

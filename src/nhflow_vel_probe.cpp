@@ -103,7 +103,7 @@ void nhflow_vel_probe::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
     
     if(p->mpirank==0)
     pout[n]<<setprecision(9)<<p->simtime<<" \t "<<uval<<" \t "<<vval<<" \t "<<wval<<endl;
-    }    
+    }
 }
 
 void nhflow_vel_probe::ini_location(lexer *p, fdm_nhf *d)

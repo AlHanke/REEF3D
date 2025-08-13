@@ -35,7 +35,7 @@ fnpf_discrete_weights::~fnpf_discrete_weights()
 }
 
 void fnpf_discrete_weights::ck_weights(lexer *p, double **ck, double *pos, int numpt, int order, int accuracy, int id)
-{    
+{
     double c1, c2, c3, c4, c5;
     double z;
     double x[20],c[20][20];
@@ -43,7 +43,7 @@ void fnpf_discrete_weights::ck_weights(lexer *p, double **ck, double *pos, int n
     int nd,mn;
     int r,s,t;
     
-    nd = accuracy+1; 
+    nd = accuracy+1;
     
     // ini
     for(int qn=0;qn<numpt;++qn)
@@ -52,7 +52,7 @@ void fnpf_discrete_weights::ck_weights(lexer *p, double **ck, double *pos, int n
         
     for(int qn=0;qn<numpt;++qn)
     {
-        nd = accuracy+1; 
+        nd = accuracy+1;
         z = pos[qn+marge];
         
         //fill x regular
@@ -65,7 +65,7 @@ void fnpf_discrete_weights::ck_weights(lexer *p, double **ck, double *pos, int n
             // fill beginning
             if((id==1||id==2||id==3) && qn==0)
             {
-                nd = accuracy; 
+                nd = accuracy;
                 
                 for(r=0;r<nd;++r)
                 x[r] = pos[qn+marge - 1 + r];
@@ -123,7 +123,7 @@ void fnpf_discrete_weights::ck_weights(lexer *p, double **ck, double *pos, int n
                 c3 = x[r] - x[s];
                 c2 = c2*c3;
                 
-                if(s==r-1) 
+                if(s==r-1)
                 {
                 for(t=mn;t>=1;t--)
                 c[r][t] = c1*(double(t)*c[r-1][t-1] - c5*c[r-1][t])/c2;

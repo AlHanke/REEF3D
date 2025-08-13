@@ -37,7 +37,7 @@ void hypre_aij::create_solvers(lexer* p, ghostcell* pgc)
     HYPRE_PCGSetTol(solver, p->N44 );
     HYPRE_PCGSetTwoNorm(solver, 1 );
     HYPRE_PCGSetRelChange(solver, 0 );
-    HYPRE_PCGSetPrintLevel(solver, 0 ); 
+    HYPRE_PCGSetPrintLevel(solver, 0 );
     HYPRE_PCGSetLogging(solver, 1);
     }
     
@@ -66,30 +66,30 @@ void hypre_aij::create_solvers(lexer* p, ghostcell* pgc)
     HYPRE_ParCSRBiCGSTABCreate(pgc->mpi_comm, &solver);
     HYPRE_BiCGSTABSetMaxIter(solver, p->N46);
     HYPRE_BiCGSTABSetTol(solver, p->N44);
-    HYPRE_BiCGSTABSetPrintLevel(solver, 0 ); 
+    HYPRE_BiCGSTABSetPrintLevel(solver, 0 );
     HYPRE_BiCGSTABSetLogging(solver, 1);
     }
     
     if(p->N10==25)
     {
     HYPRE_BoomerAMGCreate(&solver);
-    HYPRE_BoomerAMGSetPrintLevel(solver, 0); 
+    HYPRE_BoomerAMGSetPrintLevel(solver, 0);
     HYPRE_BoomerAMGSetCoarsenType(solver, 22);
-    HYPRE_BoomerAMGSetRelaxType(solver, 3); 
+    HYPRE_BoomerAMGSetRelaxType(solver, 3);
     HYPRE_BoomerAMGSetNumSweeps(solver, 1);
     HYPRE_BoomerAMGSetTol(solver, p->N44);
-    HYPRE_BoomerAMGSetMaxIter(solver, p->N46); 
+    HYPRE_BoomerAMGSetMaxIter(solver, p->N46);
     }
 
     if(p->N11==21)
     {
     HYPRE_BoomerAMGCreate(&precond);
-    HYPRE_BoomerAMGSetPrintLevel(precond, 0); 
+    HYPRE_BoomerAMGSetPrintLevel(precond, 0);
     HYPRE_BoomerAMGSetCoarsenType(precond, 22);
-    HYPRE_BoomerAMGSetRelaxType(precond, 3); 
+    HYPRE_BoomerAMGSetRelaxType(precond, 3);
     HYPRE_BoomerAMGSetNumSweeps(precond, 1);
     HYPRE_BoomerAMGSetTol(precond, 0.0);
-    HYPRE_BoomerAMGSetMaxIter(precond, 1); 
+    HYPRE_BoomerAMGSetMaxIter(precond, 1);
     }
     
       

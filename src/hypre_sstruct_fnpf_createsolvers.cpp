@@ -38,7 +38,7 @@ void hypre_sstruct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructPCGSetTol(solver, p->N44 );
     HYPRE_SStructPCGSetTwoNorm(solver, 1 );
     HYPRE_SStructPCGSetRelChange(solver, 0 );
-    HYPRE_SStructPCGSetPrintLevel(solver, 0 ); 
+    HYPRE_SStructPCGSetPrintLevel(solver, 0 );
     HYPRE_SStructPCGSetLogging(solver, 1);
     }
     
@@ -67,7 +67,7 @@ void hypre_sstruct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructBiCGSTABCreate(pgc->mpi_comm, &solver);
     HYPRE_SStructBiCGSTABSetMaxIter(solver, p->N46);
     HYPRE_SStructBiCGSTABSetTol(solver, p->N44);
-    HYPRE_SStructBiCGSTABSetPrintLevel(solver, 0 ); 
+    HYPRE_SStructBiCGSTABSetPrintLevel(solver, 0 );
     HYPRE_SStructBiCGSTABSetLogging(solver, 1);
     }
     
@@ -76,7 +76,7 @@ void hypre_sstruct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructBiCGSTABCreate(pgc->mpi_comm, &solver);
     HYPRE_SStructBiCGSTABSetMaxIter(solver, p->N46);
     HYPRE_SStructBiCGSTABSetTol(solver, p->N44);
-    HYPRE_SStructBiCGSTABSetPrintLevel(solver, 0 ); 
+    HYPRE_SStructBiCGSTABSetPrintLevel(solver, 0 );
     HYPRE_SStructBiCGSTABSetLogging(solver, 1);
     }
     
@@ -85,7 +85,7 @@ void hypre_sstruct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructSysPFMGCreate(pgc->mpi_comm, &solver);
     HYPRE_SStructSysPFMGSetMaxIter(solver, p->N46);
     HYPRE_SStructSysPFMGSetTol(solver, p->N44);
-    HYPRE_SStructSysPFMGSetZeroGuess(solver);        
+    HYPRE_SStructSysPFMGSetZeroGuess(solver);
     //HYPRE_SStructSysPFMGSetRAPType(solver, 0);
     HYPRE_SStructSysPFMGSetRelaxType(solver, 1);
     HYPRE_SStructSysPFMGSetNumPreRelax(solver, 1);
@@ -100,7 +100,7 @@ void hypre_sstruct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_SStructSysPFMGCreate(pgc->mpi_comm, &precond);
     HYPRE_SStructSysPFMGSetMaxIter(precond, 1);
     HYPRE_SStructSysPFMGSetTol(precond, 0.0);
-    HYPRE_SStructSysPFMGSetZeroGuess(precond);        
+    HYPRE_SStructSysPFMGSetZeroGuess(precond);
     //HYPRE_SStructSysPFMGSetRAPType(precond, 0);
     HYPRE_SStructSysPFMGSetRelaxType(precond, 3);
     HYPRE_SStructSysPFMGSetNumPreRelax(precond, 1);

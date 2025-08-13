@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"slice.h"
 
-wind_v::wind_v(lexer *p) 
+wind_v::wind_v(lexer *p)
 {
 
 }

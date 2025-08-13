@@ -31,7 +31,7 @@ class sliceint;
 
 using namespace std;
 
-class sandslide  
+class sandslide
 {
 public:
 

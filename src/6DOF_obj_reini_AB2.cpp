@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"reinidisc.h"
 
 void sixdof_obj::reini_AB2(lexer* p, fdm* a, ghostcell* pgc, field &f)
-{    
+{
     LOOP
     {
     if(p->j_dir==0)

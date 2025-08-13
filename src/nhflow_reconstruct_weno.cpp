@@ -74,7 +74,7 @@ void nhflow_reconstruct_weno::reconstruct_2D_x(lexer* p, ghostcell *pgc, fdm_nhf
     /*
     // Dirichlet Wave Generation
     if(p->B98>2)
-    {   
+    {
     for(n=0;n<p->gcslin_count;n++)
     for(i=p->gcslin[n][0];i<p->gcslin[n][0]+5;++i)
     {
@@ -97,7 +97,7 @@ void nhflow_reconstruct_weno::reconstruct_2D_x(lexer* p, ghostcell *pgc, fdm_nhf
     j=p->gcslin[n][1];
 
         
-        fs(i,j) = f(i,j)   + 0.5*p->DXP[IM1]*dfdx(i,j); 
+        fs(i,j) = f(i,j)   + 0.5*p->DXP[IM1]*dfdx(i,j);
         fn(i,j) = f(i+1,j) - 0.5*p->DXP[IP]*dfdx(i+1,j);
     }
     
@@ -142,7 +142,7 @@ void nhflow_reconstruct_weno::reconstruct_2D_y(lexer* p, ghostcell *pgc, fdm_nhf
 
 void nhflow_reconstruct_weno::reconstruct_2D_WL(lexer* p, ghostcell *pgc, fdm_nhf *d)
 {
-    // water level  
+    // water level
     SLICELOOP1
     d->dfx(i,j) = 0.5*(d->depth(i+1,j)+d->depth(i,j));
     
@@ -208,10 +208,10 @@ void nhflow_reconstruct_weno::reconstruct_3D_x(lexer* p, ghostcell *pgc, fdm_nhf
     /*
     // Dirichlet Wave Generation
     if(p->B98>2)
-    {   
+    {
     for(n=0;n<p->gcin_count;++n)
     for(i=p->gcin[n][0];i<p->gcin[n][0]+5;++i)
-    {   
+    {
         // i
         j=p->gcin[n][1];
         k=p->gcin[n][2];
@@ -233,7 +233,7 @@ void nhflow_reconstruct_weno::reconstruct_3D_x(lexer* p, ghostcell *pgc, fdm_nhf
         k=p->gcin[n][2];
 
         
-        Fs[IJK] = (Fx[IJK]    + 0.5*p->DXP[IM1]*DFDX[IJK]); 
+        Fs[IJK] = (Fx[IJK]    + 0.5*p->DXP[IM1]*DFDX[IJK]);
         Fn[IJK] = (Fx[Ip1JK]  - 0.5*p->DXP[IP]*DFDX[Ip1JK]);
     }
     
@@ -294,15 +294,15 @@ void nhflow_reconstruct_weno::reconstruct_3D_z(lexer* p, ghostcell *pgc, fdm_nhf
     pgc->start3V(p,DFDX,1);
     
     // reconstruct
-    WLOOP 
+    WLOOP
     {
-    Fb[IJK] = (Fz[IJK]    + 0.5*p->DZN[KP]*DFDX[IJK]); 
+    Fb[IJK] = (Fz[IJK]    + 0.5*p->DZN[KP]*DFDX[IJK]);
     Ft[IJK] = (Fz[IJKp1]  - 0.5*p->DZN[KP1]*DFDX[IJKp1]);
     }
 }
 /*
 void nhflow_reconstruct_weno::reconstruct_3D_z(lexer* p, ghostcell *pgc, fdm_nhf *d, double *Fz, double *Fb, double *Ft)
-{    
+{
     WLOOP
     {
     // left
@@ -333,7 +333,7 @@ void nhflow_reconstruct_weno::reconstruct_3D_z(lexer* p, ghostcell *pgc, fdm_nhf
 }
 */
 inline void nhflow_reconstruct_weno::iqmin(lexer *p, double *F)
-{     
+{
     q1 = F[Im2JK];
     q2 = F[Im1JK];
     q3 = F[IJK];
@@ -387,7 +387,7 @@ inline void nhflow_reconstruct_weno::kqmax(lexer *p, double *F)
 }
 
 inline void nhflow_reconstruct_weno::iqmin_sl(lexer *p, slice& f)
-{    
+{
     q1 = f(i-2,j);
     q2 = f(i-1,j);
     q3 = f(i,j);

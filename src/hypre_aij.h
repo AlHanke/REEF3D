@@ -68,7 +68,7 @@ public:
     void create_solvers(lexer*,ghostcell*);
     void delete_solvers(lexer*,ghostcell*);
     
-    // FNPF Laplace solver 
+    // FNPF Laplace solver
     virtual void startF(lexer*, ghostcell*, double*, vec&, matrix_diag&, int);
     void make_grid_F(lexer*, ghostcell*);
     void fill_matrix_F_7p(lexer*,ghostcell*, matrix_diag&,double*,double*,vec&);
@@ -78,7 +78,7 @@ public:
     
 private:
     
-// HYPRE 
+// HYPRE
     HYPRE_IJMatrix A;
     HYPRE_ParCSRMatrix parcsr_A;
     HYPRE_IJVector b;

@@ -77,7 +77,7 @@ void sflow_hxy_weno::start(lexer* p, slice& hx, slice& hy, slice& depth, int *we
         }
     }
     
-    int qq;    
+    int qq;
     for(qq=0;qq<pBC->obj_count;++qq)
     if(pBC->patch[qq]->waterlevel_flag==0)
     for(n=0;n<pBC->patch[qq]->gcb_count;++n)
@@ -207,7 +207,7 @@ double sflow_hxy_weno::fy(lexer *p, slice& f, int ipol, double advec)
 }
 
 void sflow_hxy_weno::iqmin(lexer *p, slice& f, int ipol)
-{    
+{
     q1 = f(i-2,j);
     q2 = f(i-1,j);
     q3 = f(i,j);

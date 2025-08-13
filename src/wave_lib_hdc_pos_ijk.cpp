@@ -60,7 +60,7 @@ int wave_lib_hdc::pos_i(lexer *p, double xs)
             ii = iloc;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(xs>=XP && xs<XP1)
@@ -68,7 +68,7 @@ int wave_lib_hdc::pos_i(lexer *p, double xs)
             ii = iloc+1;
    
          stop=1;
-         break;   
+         break;
         }
         
         // out of bounds
@@ -77,7 +77,7 @@ int wave_lib_hdc::pos_i(lexer *p, double xs)
             ii = 0;
 
          stop=1;
-         break;   
+         break;
         }
         
         // out of bounds
@@ -86,7 +86,7 @@ int wave_lib_hdc::pos_i(lexer *p, double xs)
             ii = Nx-1;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(iloc<=0)
@@ -94,7 +94,7 @@ int wave_lib_hdc::pos_i(lexer *p, double xs)
             ii = 0;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(iloc>=Nx-1)
@@ -102,7 +102,7 @@ int wave_lib_hdc::pos_i(lexer *p, double xs)
             ii = Nx-1;
             
          stop=1;
-         break;   
+         break;
         }
         
         // further division
@@ -157,7 +157,7 @@ int wave_lib_hdc::pos_j(lexer *p, double ys)
             jj = jloc;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(ys>=YP && ys<YP1)
@@ -165,7 +165,7 @@ int wave_lib_hdc::pos_j(lexer *p, double ys)
             jj = jloc+1;
    
          stop=1;
-         break;   
+         break;
         }
         
         // out of bounds
@@ -174,7 +174,7 @@ int wave_lib_hdc::pos_j(lexer *p, double ys)
             jj = 0;
 
          stop=1;
-         break;   
+         break;
         }
         
         // out of bounds
@@ -183,7 +183,7 @@ int wave_lib_hdc::pos_j(lexer *p, double ys)
             jj = Ny-1;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(jloc<=0)
@@ -191,7 +191,7 @@ int wave_lib_hdc::pos_j(lexer *p, double ys)
             jj = 0;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(jloc>=Ny-1)
@@ -199,7 +199,7 @@ int wave_lib_hdc::pos_j(lexer *p, double ys)
             jj = Ny-1;
             
          stop=1;
-         break;   
+         break;
         }
         
         // further divjsion
@@ -219,7 +219,7 @@ int wave_lib_hdc::pos_j(lexer *p, double ys)
     if(jdir==0)
     jj=0;
     
-    return jj;    
+    return jj;
 }
 
 int wave_lib_hdc::pos_k(lexer *p, double zs, int i, int k)
@@ -246,7 +246,7 @@ int wave_lib_hdc::pos_k(lexer *p, double zs, int i, int k)
             kk = 0;
 
          stop=1;
-         break;   
+         break;
         }
         
         // out of bounds
@@ -255,7 +255,7 @@ int wave_lib_hdc::pos_k(lexer *p, double zs, int i, int k)
             kk = Nz-1;
             
          stop=1;
-         break;   
+         break;
         }
         
         // matching criterion
@@ -264,7 +264,7 @@ int wave_lib_hdc::pos_k(lexer *p, double zs, int i, int k)
             kk = kloc-1;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(zs>=Z[i][k][kloc] && zs<Z[i][k][kloc+1] && stop==0)
@@ -272,7 +272,7 @@ int wave_lib_hdc::pos_k(lexer *p, double zs, int i, int k)
             kk = kloc;
 
          stop=1;
-         break;   
+         break;
         }
         
         if(kloc<=0)
@@ -280,7 +280,7 @@ int wave_lib_hdc::pos_k(lexer *p, double zs, int i, int k)
             kk = 0;
             
          stop=1;
-         break;   
+         break;
         }
         
         if(kloc>=Nz-1)
@@ -288,7 +288,7 @@ int wave_lib_hdc::pos_k(lexer *p, double zs, int i, int k)
             kk = Nz-1;
             
          stop=1;
-         break;   
+         break;
         }
         
         // further divsion

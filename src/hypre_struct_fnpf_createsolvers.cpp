@@ -38,7 +38,7 @@ void hypre_struct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructPCGSetTol(solver, p->N44 );
     HYPRE_StructPCGSetTwoNorm(solver, 1 );
     HYPRE_StructPCGSetRelChange(solver, 0 );
-    HYPRE_StructPCGSetPrintLevel(solver, 0 ); 
+    HYPRE_StructPCGSetPrintLevel(solver, 0 );
     HYPRE_StructPCGSetLogging(solver, 1);
     }
     
@@ -67,7 +67,7 @@ void hypre_struct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructBiCGSTABCreate(pgc->mpi_comm, &solver);
     HYPRE_StructBiCGSTABSetMaxIter(solver, p->N46);
     HYPRE_StructBiCGSTABSetTol(solver, p->N44);
-    HYPRE_StructBiCGSTABSetPrintLevel(solver, 0 ); 
+    HYPRE_StructBiCGSTABSetPrintLevel(solver, 0 );
     HYPRE_StructBiCGSTABSetLogging(solver, 1);
     }
     
@@ -78,7 +78,7 @@ void hypre_struct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructHybridSetPCGMaxIter(solver, p->N46);
     HYPRE_StructHybridSetDSCGMaxIter(solver,1);
     HYPRE_StructHybridSetTol(solver, p->N44);
-    HYPRE_StructHybridSetPrintLevel(solver, 0 ); 
+    HYPRE_StructHybridSetPrintLevel(solver, 0 );
     HYPRE_StructHybridSetLogging(solver, 1);
     }
     
@@ -89,7 +89,7 @@ void hypre_struct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructHybridSetPCGMaxIter(solver, p->N46);
     HYPRE_StructHybridSetDSCGMaxIter(solver,1);
     HYPRE_StructHybridSetTol(solver, p->N44);
-    HYPRE_StructHybridSetPrintLevel(solver, 0 ); 
+    HYPRE_StructHybridSetPrintLevel(solver, 0 );
     HYPRE_StructHybridSetLogging(solver, 1);
     }
     
@@ -100,7 +100,7 @@ void hypre_struct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructHybridSetPCGMaxIter(solver, p->N46);
     HYPRE_StructHybridSetDSCGMaxIter(solver,1);
     HYPRE_StructHybridSetTol(solver, p->N44);
-    HYPRE_StructHybridSetPrintLevel(solver, 0 ); 
+    HYPRE_StructHybridSetPrintLevel(solver, 0 );
     HYPRE_StructHybridSetLogging(solver, 1);
     }
     
@@ -109,7 +109,7 @@ void hypre_struct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructPFMGCreate(pgc->mpi_comm, &solver);
     HYPRE_StructPFMGSetMaxIter(solver, p->N46);
     HYPRE_StructPFMGSetTol(solver, p->N44);
-    HYPRE_StructPFMGSetZeroGuess(solver);        
+    HYPRE_StructPFMGSetZeroGuess(solver);
     HYPRE_StructPFMGSetRAPType(solver, 0);
     HYPRE_StructPFMGSetRelaxType(solver, 1);
     HYPRE_StructPFMGSetNumPreRelax(solver, 1);
@@ -141,7 +141,7 @@ void hypre_struct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructPFMGCreate(pgc->mpi_comm, &precond);
     HYPRE_StructPFMGSetMaxIter(precond, 1);
     HYPRE_StructPFMGSetTol(precond, 0.0);
-    HYPRE_StructPFMGSetZeroGuess(precond);        
+    HYPRE_StructPFMGSetZeroGuess(precond);
     HYPRE_StructPFMGSetRAPType(precond, 0);
     HYPRE_StructPFMGSetRelaxType(precond, 3);
     HYPRE_StructPFMGSetNumPreRelax(precond, 1);

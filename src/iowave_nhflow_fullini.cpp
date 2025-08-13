@@ -63,7 +63,7 @@ void iowave::full_initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         d->U[IJK] = wave_u(p,pgc,xg,yg,z);
         d->UH[IJK] = (d->eta(i,j)+d->depth(i,j))*d->U[IJK];
 
-    }    
+    }
     
     LOOP
     WETDRY

@@ -60,12 +60,12 @@ fnpf_vtp_fsf::~fnpf_vtp_fsf()
 }
 
 void fnpf_vtp_fsf::start(lexer *p, fdm_fnpf *c, ghostcell* pgc)
-{    
+{
     print2D(p,c,pgc);
 }
 
 void fnpf_vtp_fsf::print2D(lexer *p, fdm_fnpf *c, ghostcell* pgc)
-{    
+{
     pgc->gcsl_start4(p,c->eta,gcval_eta);
     pgc->gcsl_start4(p,c->Fifsf,gcval_fifsf);
     pgc->gcsl_start4(p,c->test2D,1);
@@ -76,7 +76,7 @@ void fnpf_vtp_fsf::print2D(lexer *p, fdm_fnpf *c, ghostcell* pgc)
     c->breaking_print(i,j)=double(c->breaking(i,j));
         
     if(c->breaking(i,j)==0)
-    c->breaking_print(i,j)=0.0;   
+    c->breaking_print(i,j)=0.0;
     }
     
     pgc->gcsl_start4(p,c->breaking_print,50);

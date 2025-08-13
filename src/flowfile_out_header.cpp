@@ -42,7 +42,7 @@ void flowfile_out::header_file_ini(lexer *p, fdm *a, ghostcell *pgc)
      // header
     if(p->mpirank==0)
     for(n=0;n<p->P230;++n)
-    {  
+    {
         // xs,xe,ys,ye,zs,ze
         ddn=p->global_xmin;
         headerout[n].write((char*)&ddn, sizeof (double));
@@ -74,7 +74,7 @@ void flowfile_out::header_file_ini(lexer *p, fdm *a, ghostcell *pgc)
 }
 
 void flowfile_out::header_file(lexer *p, fdm *a, ghostcell *pgc)
-{   
+{
     headerout[n].open(headername, ios::binary | ios::app);
     
     iin=p->count;

@@ -41,7 +41,7 @@ public:
     virtual void bedbc(lexer*, fdm*, ghostcell*,field&);
     virtual void waterdepth(lexer*, fdm*, ghostcell*);
 
-private: 
+private:
     
     fnpf_convection *pconvec;
 

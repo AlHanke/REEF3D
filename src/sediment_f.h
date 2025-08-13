@@ -158,7 +158,7 @@ private:
     void log_ini(lexer*);
     void sedimentlog(lexer*);
     sediment_fdm *s;
-    bedload *pbed;  
+    bedload *pbed;
     bedconc *pcbed;
     sandslide *pslide;
     topo_relax *prelax;

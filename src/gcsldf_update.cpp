@@ -76,7 +76,7 @@ void ghostcell::gcsldf_update(lexer *p)
         {
         p->gcsldfeta4[count][0]=i;
         p->gcsldfeta4[count][1]=j;
-        p->gcsldfeta4[count][3]=4;      
+        p->gcsldfeta4[count][3]=4;
         p->gcsldfeta4[count][4]=48;
         ++count;
         }
@@ -149,7 +149,7 @@ void ghostcell::gcsldf_update(lexer *p)
         {
         p->gcsldfbed4[count][0]=i;
         p->gcsldfbed4[count][1]=j;
-        p->gcsldfbed4[count][3]=4;      
+        p->gcsldfbed4[count][3]=4;
         p->gcsldfbed4[count][4]=48;
         ++count;
         }

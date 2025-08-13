@@ -24,7 +24,7 @@ Authors: Tobias Martin, Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"fdm_nhf.h"
-#include"ghostcell.h"    
+#include"ghostcell.h"
 
 void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
 {
@@ -35,8 +35,8 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
     
     // Get velocities on own processor
     for (int i = 0; i < nK; i++)
-    {    
-        if 
+    {
+        if
         (
             x_(i,0) >= xstart[p->mpirank] && x_(i,0) < xend[p->mpirank] &&
             x_(i,1) >= ystart[p->mpirank] && x_(i,1) < yend[p->mpirank] &&
@@ -75,8 +75,8 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
         else
         {
             for (int j = 0; j < p->mpi_size; j++)
-            {    
-                if 
+            {
+                if
                 (
                     x_(i,0) >= xstart[j] && x_(i,0) < xend[j] &&
                     x_(i,1) >= ystart[j] && x_(i,1) < yend[j] &&
@@ -91,7 +91,7 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
                 {
                     recField[i] = -2;
                 }
-            }            
+            }
         }
     }
 
@@ -145,7 +145,7 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
             
             if (count[j] > 0)
             {
-            //    cout<<"Processor "<<p->mpirank<<" receives "<<count[j]<<" elements from processor "<<j<<endl;                    
+            //    cout<<"Processor "<<p->mpirank<<" receives "<<count[j]<<" elements from processor "<<j<<endl;
         
                 MPI_Irecv(recvField[j],count[j],MPI_DOUBLE,j,1,pgc->mpi_comm,&rreq[j]);
             }
@@ -172,9 +172,9 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
     for (int i = 0; i < nK; i++)
     {
         for (int j = 0; j < p->mpi_size; j++)
-        {            
+        {
             if (recField[i]==j)
-            {        
+            {
                 coupledField[i][cmp] = recvField[j][count[j]];
                 count[j]++;
             }
@@ -182,9 +182,9 @@ void net_sheet::updateField_cfd(lexer *p, fdm *a, ghostcell *pgc, int cmp)
     }
     
     for (int i = 0; i < nK; i++)
-    {     
+    {
         coupledField[i][cmp] += 1e-10;
-    }    
+    }
 
 
     // Delete arrays

@@ -40,11 +40,11 @@ void nhflow_forcing::cylinder_y(lexer *p, ghostcell *pgc, int id)
     
     r1=p->A583_r[id];
 
-    U = 2.0 * PI * r1;    
+    U = 2.0 * PI * r1;
     ds = 0.75*(U*p->DXM);
     snum = int(U/ds);
 
-// Vertices    
+// Vertices
     ds = (2.0*PI)/double(snum);
     
     phi=0.0;
@@ -54,7 +54,7 @@ void nhflow_forcing::cylinder_y(lexer *p, ghostcell *pgc, int id)
 
     for(n=0;n<snum;++n)
     {
-    //bottom circle    
+    //bottom circle
     tri_x[tricount][0] = xm;
     tri_y[tricount][0] = y1;
     tri_z[tricount][0] = zm;
@@ -82,7 +82,7 @@ void nhflow_forcing::cylinder_y(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][2] = zm + r1*cos(phi+ds);
     ++tricount;
     
-    //side        
+    //side
     // 1st triangle
     tri_x[tricount][0] = xm + r1*sin(phi);
     tri_y[tricount][0] = y1;

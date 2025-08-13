@@ -45,7 +45,7 @@ Author: Hans Bihs
 #include"hypre_struct2D.h"
 
 fnpf_fsfbc::fnpf_fsfbc(lexer *p, fdm_fnpf *c, ghostcell *pgc) : bx(p),by(p),eps(1.0e-6)
-{    
+{
     if(p->A311==0)
     {
     pconvec = new fnpf_voiddisc(p);
@@ -158,7 +158,7 @@ void fnpf_fsfbc::fsfdisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, slic
     if(p->i_dir==1 && p->j_dir==1)
     FFILOOP4
     {
-    ivel = (Fifsf(i+1,j) - Fifsf(i-1,j))/(p->DXP[IP]+p->DXP[IM1]);    
+    ivel = (Fifsf(i+1,j) - Fifsf(i-1,j))/(p->DXP[IP]+p->DXP[IM1]);
     jvel = (Fifsf(i,j+1) - Fifsf(i,j-1))/(p->DYP[JP]+p->DYP[JM1]);
     
     c->Fx(i,j) = pconvec->sx(p,Fifsf,ivel);
@@ -175,7 +175,7 @@ void fnpf_fsfbc::fsfdisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, slic
     if(p->i_dir==1 && p->j_dir==0)
     FFILOOP4
     {
-    ivel = (Fifsf(i+1,j) - Fifsf(i-1,j))/(p->DXP[IP]+p->DXP[IM1]);    
+    ivel = (Fifsf(i+1,j) - Fifsf(i-1,j))/(p->DXP[IP]+p->DXP[IM1]);
     
     c->Fx(i,j) = pconvec->sx(p,Fifsf,ivel);
     c->Ex(i,j) = pconeta->sx(p,eta,ivel);
@@ -204,7 +204,7 @@ void fnpf_fsfbc::fsfdisc_ini(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
     if(p->i_dir==1 && p->j_dir==0)
     FFILOOP4
     {
-    c->Bx(i,j) = pdx->sx(p,c->depth,1.0);    
+    c->Bx(i,j) = pdx->sx(p,c->depth,1.0);
     c->Bxx(i,j) = pddx->sxx(p,c->depth);
     }
     
@@ -238,7 +238,7 @@ void fnpf_fsfbc::kfsfbc(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 }
 
 void fnpf_fsfbc::dfsfbc(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta)
-{ 
+{
     SLICELOOP4
     c->K(i,j) =  - 0.5*c->Fx(i,j)*c->Fx(i,j) - 0.5*c->Fy(i,j)*c->Fy(i,j)
     
@@ -246,8 +246,8 @@ void fnpf_fsfbc::dfsfbc(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta)
 }
 
 
-void fnpf_fsfbc::wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, slice &Fifsf) 
-{   
+void fnpf_fsfbc::wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, slice &Fifsf)
+{
     
     SLICELOOP4
     p->wet[IJ]=1;
@@ -286,7 +286,7 @@ void fnpf_fsfbc::wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, slice
             temp[IJ]=1;
         }
         
-        else              
+        else
         if(c->WL(i,j)<=c->wd_criterion)
         {
         temp[IJ]=0;
@@ -308,10 +308,10 @@ void fnpf_fsfbc::wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, slice
 }
 
 
-void fnpf_fsfbc::coastline_eta(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &f) 
-{  
+void fnpf_fsfbc::coastline_eta(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &f)
+{
 }
 
-void fnpf_fsfbc::coastline_fi(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &f) 
-{   
+void fnpf_fsfbc::coastline_fi(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &f)
+{
 }

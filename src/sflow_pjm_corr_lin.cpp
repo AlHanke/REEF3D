@@ -22,7 +22,7 @@ Author: Hans Bihs
 
 #include"sflow_pjm_corr_lin.h"
 #include"lexer.h"
-#include"fdm2D.h" 
+#include"fdm2D.h"
 #include"ghostcell.h"
 #include"poisson.h"
 #include"solver2D.h"
@@ -57,7 +57,7 @@ sflow_pjm_corr_lin::sflow_pjm_corr_lin(lexer* p, fdm2D *b, patchBC_interface *pp
 {
     pBC = ppBC;
     
-    gcval_press=40;  
+    gcval_press=40;
     
     gcval_u=10;
     gcval_v=11;
@@ -81,7 +81,7 @@ void sflow_pjm_corr_lin::start(lexer *p, fdm2D *b, ghostcell *pgc, solver2D *pso
     
     
     rhs(p,b,P,Q,ws,alpha);
-    pgc->gcsl_start4(p,pcorr,gcval_press); 
+    pgc->gcsl_start4(p,pcorr,gcval_press);
     
     poisson(p,b,alpha);
     
@@ -92,12 +92,12 @@ void sflow_pjm_corr_lin::start(lexer *p, fdm2D *b, ghostcell *pgc, solver2D *pso
         p->poissontime=pgc->timer()-solvtime;
     
     pflow->pm_relax(p,pgc,pcorr);
-    pgc->gcsl_start4(p,pcorr,gcval_press);    
+    pgc->gcsl_start4(p,pcorr,gcval_press);
   
     presscorr(p,b);
     
     pflow->pm_relax(p,pgc,b->press);
-    pgc->gcsl_start4(p,b->press,gcval_press);    
+    pgc->gcsl_start4(p,b->press,gcval_press);
   
     ucorr(p,b,P,eta,alpha);
     vcorr(p,b,Q,eta,alpha);
@@ -119,17 +119,17 @@ void sflow_pjm_corr_lin::presscorr(lexer* p, fdm2D* b)
 }
 
 void sflow_pjm_corr_lin::ucorr(lexer* p, fdm2D* b, slice& P, slice &eta, double alpha)
-{    
+{
     SLICELOOP1
     if(b->breaking(i,j)==0 && b->breaking(i+1,j)==0)
     P(i,j) += - alpha*p->dt*(((pcorr(i+1,j)-pcorr(i,j))/(p->DXM*p->W1)))
            
-              + alpha*p->dt*((pcorr(i+1,j)+pcorr(i,j))*(b->depth(i+1,j)-b->depth(i,j))     
+              + alpha*p->dt*((pcorr(i+1,j)+pcorr(i,j))*(b->depth(i+1,j)-b->depth(i,j))
                              /(p->DXM*HPXP*p->W1));
 }
 
 void sflow_pjm_corr_lin::vcorr(lexer* p, fdm2D* b, slice& Q, slice &eta, double alpha)
-{    
+{
     SLICELOOP2
     if(b->breaking(i,j)==0 && b->breaking(i,j+1)==0)
     Q(i,j) += - alpha*p->dt*(((pcorr(i,j+1)-pcorr(i,j))/(p->DXM*p->W1)))
@@ -139,14 +139,14 @@ void sflow_pjm_corr_lin::vcorr(lexer* p, fdm2D* b, slice& Q, slice &eta, double 
 }
 
 void sflow_pjm_corr_lin::wcorr(lexer* p, fdm2D* b, double alpha, slice &P, slice &Q, slice &ws)
-{        
+{
     SLICELOOP4
     if(b->breaking(i,j)==0)
     ws(i,j) += p->dt*alpha*(2.0*pcorr(i,j)/(HP*p->W1));
 }
 
 void sflow_pjm_corr_lin::wcalc(lexer* p, fdm2D* b,double alpha, slice &P, slice &Q, slice &ws)
-{    
+{
 }
 
 void sflow_pjm_corr_lin::rhs(lexer *p, fdm2D* b, slice &P, slice &Q, slice &w, double alpha)
@@ -183,7 +183,7 @@ void sflow_pjm_corr_lin::poisson(lexer*p, fdm2D* b, double alpha)
     SLICELOOP4
     {
     b->M.p[n]  =  (b->hp(i,j)*sqd + b->hp(i,j)*sqd)*p->x_dir
-               +  (b->hp(i,j)*sqd + b->hp(i,j)*sqd)*p->y_dir + 2.0/(HP*p->W1);     
+               +  (b->hp(i,j)*sqd + b->hp(i,j)*sqd)*p->y_dir + 2.0/(HP*p->W1);
                
 
        b->M.n[n] = -b->hp(i,j)*sqd*p->x_dir;
@@ -249,12 +249,12 @@ void sflow_pjm_corr_lin::upgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
 {
     SLICELOOP1
     WETDRY1
-    b->F(i,j) += -fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j) 
+    b->F(i,j) += -fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j)
                                      - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/p->DXM
                                      
                  - (((b->press(i+1,j)-b->press(i,j))/(p->DXM*p->W1)))
            
-                 + ((b->press(i+1,j)+b->press(i,j))*(b->depth(i+1,j)-b->depth(i,j))     
+                 + ((b->press(i+1,j)+b->press(i,j))*(b->depth(i+1,j)-b->depth(i,j))
                              /(p->DXM*HPXP*p->W1));
                              
 
@@ -266,14 +266,14 @@ void sflow_pjm_corr_lin::upgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
         
         WETDRY1
         {
-        b->F(i,j) += fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j) 
+        b->F(i,j) += fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j)
                                      - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/p->DXM;
                                      
         b->F(i,j) -= fabs(p->W22)*(p->A223*(b->bed(i,j)-p->wd) + (1.0-p->A223)*(b->bed(i,j)-p->wd)
                                      - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM);
         }
                                      
-        }  
+        }
 
 
     pBC->patchBC_pressure2D_ugrad(p,b,eta,eta_n);
@@ -283,7 +283,7 @@ void sflow_pjm_corr_lin::vpgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
 {
         SLICELOOP2
         WETDRY2
-        b->G(i,j) += -fabs(p->W22)*(p->A223*eta(i,j+1) + (1.0-p->A223)*eta_n(i,j+1) 
+        b->G(i,j) += -fabs(p->W22)*(p->A223*eta(i,j+1) + (1.0-p->A223)*eta_n(i,j+1)
                                  - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM)
                                  
                      - (((b->press(i,j+1)-b->press(i,j))/(p->DXM*p->W1)))
@@ -298,5 +298,5 @@ void sflow_pjm_corr_lin::wpgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
 {
         SLICELOOP4
         if(b->breaking(i,j)==0)
-        b->L(i,j) += (2.0*b->press(i,j)/(HP*p->W1));        
+        b->L(i,j) += (2.0*b->press(i,j)/(HP*p->W1));
 }

@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"sediment_fdm.h"
 
-bedload_MPM::bedload_MPM(lexer* p) 
+bedload_MPM::bedload_MPM(lexer* p)
 {
     rhosed=p->S22;
     rhowat=p->W1;

@@ -143,7 +143,7 @@ void ghostcell::gcslparaxijk(lexer* p, double *f, int gcv)
         ++count;
 
         f[Im3J]=recv1[count];
-        ++count; 
+        ++count;
     }
 
     count=0;
@@ -160,7 +160,7 @@ void ghostcell::gcslparaxijk(lexer* p, double *f, int gcv)
         
         f[IJp3]=recv2[count];
         ++count;
-    }    
+    }
     
     count=0;
     for(q=0;q<p->gcslpara3_count;++q)

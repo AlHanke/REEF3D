@@ -29,7 +29,7 @@ class field;
 
 using namespace std;
 
-class flux 
+class flux
 {
 public:
 

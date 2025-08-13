@@ -33,13 +33,13 @@ void fsi_strip::interpolate_vel(lexer* p, fdm* a, ghostcell* pgc, field& uvel, f
 
     for (int eI = 0; eI < Ne; eI++)
     {
-        lagrangeVel[eI] = Eigen::MatrixXd::Zero(3,lagrangePoints[eI].cols());   
+        lagrangeVel[eI] = Eigen::MatrixXd::Zero(3,lagrangePoints[eI].cols());
     
         for (int pI = 0; pI < lagrangePoints[eI].cols(); pI++)
         {
             const Eigen::Vector3d& coordI = lagrangePoints[eI].col(pI);
 
-            if 
+            if
             (
                 coordI(0) >= xstart[p->mpirank] && coordI(0) < xend[p->mpirank] &&
                 coordI(1) >= ystart[p->mpirank] && coordI(1) < yend[p->mpirank] &&

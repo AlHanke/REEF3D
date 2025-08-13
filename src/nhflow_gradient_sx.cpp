@@ -64,5 +64,5 @@ double nhflow_gradient::limiter(double v1, double v2)
     
     val =  (v1*fabs(v2) + fabs(v1)*v2)/denom;
 
-    return val;    
+    return val;
 }

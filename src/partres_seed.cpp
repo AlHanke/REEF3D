@@ -51,7 +51,7 @@ void partres::seed_topo(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
         n=P.Empty[P.index_empty];
         P.X[n] = p->XN[IP] + p->DXN[IP]*double(rand() % irand)/drand;
         P.Y[n] = p->YN[JP] + p->DYN[JP]*double(rand() % irand)/drand;
-        P.Z[n] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand; 
+        P.Z[n] = p->ZN[KP] + p->DZN[KP]*double(rand() % irand)/drand;
         
         P.D[n] = p->S20;
         P.RO[n] = p->S22;
@@ -72,7 +72,7 @@ void partres::seed_topo(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
     P.remove(n);
         
     if(solidval<0.0)
-    P.remove(n);    
+    P.remove(n);
     }
     
     cellSum_full_update(p,pgc,s,2);

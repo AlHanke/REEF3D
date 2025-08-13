@@ -63,7 +63,7 @@ private:
     void buildLine(lexer*,ghostcell*);
     void checkBottom(lexer*,ghostcell*);
     
-    // ------ 
+    // ------
     
     // Parallelisation
     int line;

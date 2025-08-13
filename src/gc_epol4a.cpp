@@ -64,7 +64,7 @@ int ghostcell::gceval4a(lexer *p, int gcv, int bc, int cs)
     return 75;
     
     
-//Level Set    
+//Level Set
     
     else
     if((bc==21||bc==22||bc==5||bc==41||bc==6||bc==7||bc==8||bc==9) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))

@@ -64,8 +64,8 @@ void cds2_alt::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& v
 }
 
 double cds2_alt::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, field& wvel, double *DX,double *DY, double *DZ)
-{        
-        dx=dy=dz=0.0;    
+{
+        dx=dy=dz=0.0;
 
         pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
         pflux->v_flux(a,ipol,vvel,jadvec,jvel2);

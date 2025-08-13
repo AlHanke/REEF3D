@@ -142,26 +142,26 @@ void nhflow_pjm::rhs(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U, double *V,
     
         WETDRYDEEP
         {
-        fac = p->DZN[KM1]/(p->DZN[KP]+p->DZN[KM1]);    
+        fac = p->DZN[KM1]/(p->DZN[KP]+p->DZN[KM1]);
 
-        U1 = (1.0-fac)*U[Im1JK] + fac*U[Im1JKm1]; 
-        U2 = (1.0-fac)*U[Ip1JK] + fac*U[Ip1JKm1]; 
+        U1 = (1.0-fac)*U[Im1JK] + fac*U[Im1JKm1];
+        U2 = (1.0-fac)*U[Ip1JK] + fac*U[Ip1JKm1];
         
-        V1 = (1.0-fac)*V[IJm1K] + fac*V[IJm1Km1]; 
-        V2 = (1.0-fac)*V[IJp1K] + fac*V[IJp1Km1];     
+        V1 = (1.0-fac)*V[IJm1K] + fac*V[IJm1Km1];
+        V2 = (1.0-fac)*V[IJp1K] + fac*V[IJp1Km1];
         
         if(k==0)
         {
         fac = MAX((1.0 - p->A522*fabs(d->Bx(i,j))),0.0)*p->DZN[KM1]/(p->DZN[KP]+p->DZN[KM1]);
         
-        U1 = (1.0-fac)*U[Im1JK] + fac*U[Im1JKm1]; 
-        U2 = (1.0-fac)*U[Ip1JK] + fac*U[Ip1JKm1]; 
+        U1 = (1.0-fac)*U[Im1JK] + fac*U[Im1JKm1];
+        U2 = (1.0-fac)*U[Ip1JK] + fac*U[Ip1JKm1];
         
         
         fac = MAX((1.0 - p->A522*fabs(d->By(i,j))),0.0)*p->DZN[KM1]/(p->DZN[KP]+p->DZN[KM1]);
         
-        V1 = (1.0-fac)*V[IJm1K] + fac*V[IJm1Km1]; 
-        V2 = (1.0-fac)*V[IJp1K] + fac*V[IJp1Km1]; 
+        V1 = (1.0-fac)*V[IJm1K] + fac*V[IJm1Km1];
+        V2 = (1.0-fac)*V[IJp1K] + fac*V[IJp1Km1];
         }
         
         z0 = p->ZP[KM2];

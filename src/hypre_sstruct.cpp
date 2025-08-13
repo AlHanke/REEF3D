@@ -30,27 +30,27 @@ Author: Hans Bihs
 #include"vec.h"
 
 hypre_sstruct::hypre_sstruct(lexer* p,fdm* a,ghostcell *pgc)
-{    
-    int vecsize=p->knox*p->knoy*p->knoz; 
+{
+    int vecsize=p->knox*p->knoy*p->knoz;
     
     if(p->A10==3)
-    vecsize=p->knox*p->knoy*(p->knoz+1); 
+    vecsize=p->knox*p->knoy*(p->knoz+1);
     
     p->Iarray(ilower,3);
     p->Iarray(iupper,3);
     p->Darray(values,vecsize*13);
     
     if(p->A320!=2 && p->D30!=4)
-    make_grid_7p(p,a,pgc);    
+    make_grid_7p(p,a,pgc);
     
     if(p->A320==2 && p->D30!=4)
-    make_grid_13p(p,a,pgc);    
+    make_grid_13p(p,a,pgc);
     
     if(p->D30==4 && p->j_dir==0)
     make_grid_2Dvert_9p(p,a,pgc);
     
     if(p->D30==4 && p->j_dir==1)
-    make_grid_15p(p,a,pgc);    
+    make_grid_15p(p,a,pgc);
 }
 
 hypre_sstruct::~hypre_sstruct()

@@ -44,7 +44,7 @@ public:
     virtual void start(lexer*,fdm_nhf*,ghostcell*);
     virtual void ini(lexer*,fdm_nhf*,ghostcell*);
 
-private:    
+private:
     
     void force_ale_force(lexer*,fdm_nhf*,ghostcell*);
     void print_force_ale(lexer*,fdm_nhf*,ghostcell*);

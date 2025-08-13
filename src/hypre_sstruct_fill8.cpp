@@ -70,8 +70,8 @@ void hypre_sstruct::fill_matrix8(lexer* p, ghostcell* pgc, double *f, vec &rhs, 
         ++count;
         
         values[count]=M.t[n];
-        ++count; 
-        }     
+        ++count;
+        }
         
         FSCHECK
         {
@@ -94,8 +94,8 @@ void hypre_sstruct::fill_matrix8(lexer* p, ghostcell* pgc, double *f, vec &rhs, 
         ++count;
         
         values[count]=0.0;
-        ++count;  
-        }    
+        ++count;
+        }
     }
     
     HYPRE_SStructMatrixSetBoxValues(A, part, ilower, iupper, variable, nentries, stencil_indices, values);
@@ -119,7 +119,7 @@ void hypre_sstruct::fill_matrix8(lexer* p, ghostcell* pgc, double *f, vec &rhs, 
     HYPRE_SStructVectorAssemble(x);
     
     
-    count=0; 
+    count=0;
     KJILOOP
     {
         FPCHECK

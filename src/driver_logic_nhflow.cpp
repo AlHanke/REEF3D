@@ -41,7 +41,7 @@ Author: Hans Bihs
 #include"6DOF_nhflow.h"
 
 void driver::logic_nhflow()
-{    
+{
     if(p->mpirank==0)
     cout<<"creating objects"<<endl;
     
@@ -68,7 +68,7 @@ void driver::logic_nhflow()
     // signal speed
     pss = new nhflow_signal_speed(p);
     
-//Convection    
+//Convection
     if(p->A511==1)
     pnhfconvec = new nhflow_HLL(p,pgc,pBC);
     
@@ -135,7 +135,7 @@ void driver::logic_nhflow()
     if(p->j_dir==1)
     psolv = new bicgstab_ijk(p,a,pgc);
 
-//Poison Solver    
+//Poison Solver
     if(p->N10==0)
     ppoissonsolv = new solver_void(p,a,pgc);
     
@@ -219,6 +219,6 @@ void driver::logic_nhflow()
     pnhfmom = new nhflow_momentum_RK2(p,d,pgc,p6dof,pvrans,pnhfdf);
     
     if(p->A510==3)
-    pnhfmom = new nhflow_momentum_RK3(p,d,pgc,p6dof,pvrans,pnhfdf);    
+    pnhfmom = new nhflow_momentum_RK3(p,d,pgc,p6dof,pvrans,pnhfdf);
     
 }

@@ -32,7 +32,7 @@ void sixdof_obj::geometry_f(double& w0, double& w1, double& w2, double& f1, doub
     double temp1 = w0 * w0;
     double temp2 = temp1 + w1 * temp0;
     f2 = temp2 + w2 * f1;
-    f3 = w0 * temp1 + w1 * temp2 + w2 * f2; 
+    f3 = w0 * temp1 + w1 * temp2 + w2 * f2;
     g0 = f2 + w0 * (f1 + w0);
     g1 = f2 + w1 * (f1 + w1);
     g2 = f2 + w2 * (f1 + w2);
@@ -58,7 +58,7 @@ void sixdof_obj::geometry_stl(lexer *p, ghostcell *pgc)
             
             z1 = tri_z[n][0];
             z2 = tri_z[n][1];
-            z3 = tri_z[n][2];  
+            z3 = tri_z[n][2];
                 
             Vfb += (1.0/6.0)*(-x3*y2*z1 + x2*y3*z1 + x3*y1*z2 - x1*y3*z2 - x2*y1*z3 + x1*y2*z3);
         }
@@ -67,7 +67,7 @@ void sixdof_obj::geometry_stl(lexer *p, ghostcell *pgc)
         {
             Mass_fb = p->X22_m;
             Rfb = Mass_fb/Vfb;
-        }    
+        }
             
         else if (p->X21==1)
         {
@@ -156,9 +156,9 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
     
     else if (p->X23==1)
     {
-        c_(0) = p->X23_x; 
-        c_(1) = p->X23_y; 
-        c_(2) = p->X23_z; 
+        c_(0) = p->X23_x;
+        c_(1) = p->X23_y;
+        c_(2) = p->X23_z;
     }
     
     if(p->mpirank==0)
@@ -172,7 +172,7 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
 
 // Moments of Inertia
 
-    double Ix,Iy,Iz;    
+    double Ix,Iy,Iz;
         
     if(p->X24==0)
     {
@@ -206,25 +206,25 @@ void sixdof_obj::geometry_ls(lexer *p, fdm *a, ghostcell *pgc)
 
         I_(0,1) = pgc->globalsum(I_(0,1));
         I_(0,2) = pgc->globalsum(I_(0,2));
-        I_(1,2) = pgc->globalsum(I_(1,2));    
+        I_(1,2) = pgc->globalsum(I_(1,2));
     }
     else if (p->X24==1)
     {
-        Ix = p->X24_Ix; 
-        Iy = p->X24_Iy; 
-        Iz = p->X24_Iz; 
+        Ix = p->X24_Ix;
+        Iy = p->X24_Iy;
+        Iz = p->X24_Iz;
 
         I_(0,1) = 0.0;
         I_(0,2) = 0.0;
-        I_(1,2) = 0.0;              
+        I_(1,2) = 0.0;
     }
     
     I_(0,0) = Ix;
     I_(1,0) = I_(0,1);
     I_(1,1) = Iy;
-    I_(2,0) = I_(0,2); 
-    I_(2,1) = I_(1,2); 
-    I_(2,2) = Iz;       
+    I_(2,0) = I_(0,2);
+    I_(2,1) = I_(1,2);
+    I_(2,2) = Iz;
     
     if(p->mpirank==0)
     cout<<"Moments of Inertia Tensor:\n"<<I_<<endl;
@@ -311,9 +311,9 @@ void sixdof_obj::geometry_ls_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     
     else if (p->X23==1)
     {
-        c_(0) = p->X23_x; 
-        c_(1) = p->X23_y; 
-        c_(2) = p->X23_z; 
+        c_(0) = p->X23_x;
+        c_(1) = p->X23_y;
+        c_(2) = p->X23_z;
     }
     
     if(p->mpirank==0)
@@ -327,7 +327,7 @@ void sixdof_obj::geometry_ls_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
 // Moments of Inertia
 
-    double Ix,Iy,Iz;    
+    double Ix,Iy,Iz;
         
     if(p->X24==0)
     {
@@ -361,25 +361,25 @@ void sixdof_obj::geometry_ls_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
         I_(0,1) = pgc->globalsum(I_(0,1));
         I_(0,2) = pgc->globalsum(I_(0,2));
-        I_(1,2) = pgc->globalsum(I_(1,2));    
+        I_(1,2) = pgc->globalsum(I_(1,2));
     }
     else if (p->X24==1)
     {
-        Ix = p->X24_Ix; 
-        Iy = p->X24_Iy; 
-        Iz = p->X24_Iz; 
+        Ix = p->X24_Ix;
+        Iy = p->X24_Iy;
+        Iz = p->X24_Iz;
 
         I_(0,1) = 0.0;
         I_(0,2) = 0.0;
-        I_(1,2) = 0.0;              
+        I_(1,2) = 0.0;
     }
     
     I_(0,0) = Ix;
     I_(1,0) = I_(0,1);
     I_(1,1) = Iy;
-    I_(2,0) = I_(0,2); 
-    I_(2,1) = I_(1,2); 
-    I_(2,2) = Iz;       
+    I_(2,0) = I_(0,2);
+    I_(2,1) = I_(1,2);
+    I_(2,2) = Iz;
     
     if(p->mpirank==0)
     cout<<"Moments of Inertia Tensor:\n"<<I_<<endl;

@@ -27,7 +27,7 @@ Author: Hans Bihs
 #define WLVL (fabs(d->WL(i,j))>0.00005?d->WL(i,j):1.0e20)
 
 void sixdof_obj::ray_cast(lexer *p, fdm_nhf *d, ghostcell *pgc)
-{    
+{
     zmin = 1.0e1;
     zmax = -1.0e8;
     
@@ -88,5 +88,5 @@ void sixdof_obj::ray_cast(lexer *p, fdm_nhf *d, ghostcell *pgc)
     d->FB[IJK]=100.0*p->DXM;
     
         
-    pgc->start5V(p,d->FB,1); 
+    pgc->start5V(p,d->FB,1);
 }

@@ -128,7 +128,7 @@ double gradient::pvdz(lexer *p, fdm* a)
     f1 = 0.0;
     }*/
     
-    grad = ((f2*a->v(i,j,k+1)+f1*a->v(i,j-1,k+1)) - (f2*a->v(i,j,k-1)+f1*a->v(i,j-1,k-1)))/(p->DZP[KP]+p->DZP[KM1]); 
+    grad = ((f2*a->v(i,j,k+1)+f1*a->v(i,j-1,k+1)) - (f2*a->v(i,j,k-1)+f1*a->v(i,j-1,k-1)))/(p->DZP[KP]+p->DZP[KM1]);
 
     return grad;
 }

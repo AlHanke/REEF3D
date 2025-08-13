@@ -83,7 +83,7 @@ void sflow_eta::wetdry_nb(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice 
             temp[IJ]=1;
         }
         
-        else              
+        else
         if(eta(i,j) < wd_criterion - b->depth(i,j) + eps)
         {
         temp[IJ]=0;
@@ -105,8 +105,8 @@ void sflow_eta::wetdry_nb(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice 
            
           if(p->wet[IJ]==0 || p->wet[Ip1J]==0)// || b->hx(i,j)<wd_criterion)
           {
-           b->P(i,j)=0.0; 
-           P(i,j)=0.0; 
+           b->P(i,j)=0.0;
+           P(i,j)=0.0;
            b->wet1(i,j)=0;
           }
       }
@@ -118,8 +118,8 @@ void sflow_eta::wetdry_nb(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice 
            
           if(p->wet[IJ]==0 || p->wet[IJp1]==0)// || b->hy(i,j)<wd_criterion)
           {
-           b->Q(i,j)=0.0; 
-           Q(i,j)=0.0; 
+           b->Q(i,j)=0.0;
+           Q(i,j)=0.0;
            b->wet2(i,j)=0;
           }
       }

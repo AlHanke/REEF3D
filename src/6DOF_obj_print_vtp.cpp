@@ -169,9 +169,9 @@ void sixdof_obj::print_vtp(lexer *p, ghostcell *pgc)
     result<<endl<<"</AppendedData>"<<endl;
     result<<"</VTKFile>"<<endl;
 
-    result.close();    
+    result.close();
 
-        ++p->printcount_sixdof;    
+        ++p->printcount_sixdof;
     }
 }
 

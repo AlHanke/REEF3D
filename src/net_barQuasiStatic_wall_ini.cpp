@@ -30,19 +30,19 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
 {
     D = p->X322_D[nNet];        // Width of wall
     L = p->X322_L[nNet];        // Height of wall
-    nd = p->X321_nd[nNet];      // Number of meshes over width  
-    nl = p->X321_nl[nNet];      // Number of meshes over height    
+    nd = p->X321_nd[nNet];      // Number of meshes over width
+    nl = p->X321_nl[nNet];      // Number of meshes over height
     
     l_c = p->X321_lambda[nNet];  // Length of twine
     d_c = p->X321_d[nNet];       // Diameter of twine
     rho_c = p->X321_rho[nNet];   // Density of material
     
-    origin_x = p->X322_x0[nNet];  
-    origin_y = p->X322_y0[nNet];  
-    origin_z = p->X322_z0[nNet];  
-    phi = p->X322_phi[nNet]*PI/180;  
-    theta = p->X322_theta[nNet]*PI/180;  
-    psi = p->X322_psi[nNet]*PI/180;  
+    origin_x = p->X322_x0[nNet];
+    origin_y = p->X322_y0[nNet];
+    origin_z = p->X322_z0[nNet];
+    phi = p->X322_phi[nNet]*PI/180;
+    theta = p->X322_theta[nNet]*PI/180;
+    psi = p->X322_psi[nNet]*PI/180;
 
 /*---------------------------------------*/
 
@@ -66,7 +66,7 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
     p->Darray(l0, nf);            // initial bar length
     p->Darray(l, nf);            // bar length
     
-    fi = MatrixXd::Zero(nf,3);  // inner bar matrix      
+    fi = MatrixXd::Zero(nf,3);  // inner bar matrix
     p->Darray(fb,nd,3);         // boundary bar matrix
     
     p->Iarray(Pb,nd);           // boundary bar owner knots
@@ -161,7 +161,7 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
             
             index++;
         }
-    }    
+    }
 
 
     // List of knots in each mesh
@@ -185,7 +185,7 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
             for (int s = 0; s < nf; s++)
             {
                 // left half, bar always pointing downwards
-                if 
+                if
                 (
                     v1[0]==K[Pi[s]][0] && v1[1]==K[Pi[s]][1] && v1[2]==K[Pi[s]][2]
                     && v2[0]==K[Ni[s]][0] && v2[1]==K[Ni[s]][1] && v2[2]==K[Ni[s]][2]
@@ -196,7 +196,7 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
                 }
                 
                 // right half, bar always pointing downwards
-                if 
+                if
                 (
                     v4[0]==K[Pi[s]][0] && v4[1]==K[Pi[s]][1] && v4[2]==K[Pi[s]][2]
                     && v3[0]==K[Ni[s]][0] && v3[1]==K[Ni[s]][1] && v3[2]==K[Ni[s]][2]
@@ -222,7 +222,7 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
             
         coord_neigh[0] = i+1;
         coord_neigh[1] = 0.0;
-        coord_neigh[2] = 0.0;  
+        coord_neigh[2] = 0.0;
 
         for (int k = 0; k < nK; k++)
         {
@@ -304,22 +304,22 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
         coord_owner[1] = ad*i;
       
         for (int j = 0; j <= nl; j++)
-        { 
+        {
             coord_owner[2] = (nl-j)*al;
         
             for (int k = 0; k < nK; k++)
             {
                 if (K[k][0]==i && K[k][1]==j && K[k][2]==0.0 && transK[k]==0)
-                { 
+                {
                     K[k][0] = coord_owner[0];
                     K[k][1] = coord_owner[1];
                     K[k][2] = coord_owner[2];
                     
                     transK[k] = 1;
                 }
-            } 
-        }    
-    } 
+            }
+        }
+    }
 
     // Shift and rotate K
     for (int j = 0; j < nK; j++)
@@ -330,12 +330,12 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
 
         K[j][0] = a*(cos(psi)*cos(theta)) + b*(cos(theta)*sin(psi)) - c*sin(theta);
         K[j][1] = a*(cos(psi)*sin(phi)*sin(theta)-cos(phi)*sin(psi)) + b*(cos(phi)*cos(psi)+sin(phi)*sin(psi)*sin(theta)) + c*(cos(theta)*sin(phi));
-        K[j][2] = a*(sin(phi)*sin(psi)+cos(phi)*cos(psi)*sin(theta)) + b*(cos(phi)*sin(psi)*sin(theta)-cos(psi)*sin(phi)) + c*(cos(phi)*cos(theta));    
+        K[j][2] = a*(sin(phi)*sin(psi)+cos(phi)*cos(psi)*sin(theta)) + b*(cos(phi)*sin(psi)*sin(theta)-cos(psi)*sin(phi)) + c*(cos(phi)*cos(theta));
 
         K[j][0] += origin_x;
         K[j][1] += origin_y - D/2.0;
-        K[j][2] += origin_z;        
-    } 
+        K[j][2] += origin_z;
+    }
  
  
  
@@ -373,14 +373,14 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
         fb[i][0] = K[Nb[i]][0] - K[Pb[i]][0];
         fb[i][1] = K[Nb[i]][1] - K[Pb[i]][1];
         fb[i][2] = K[Nb[i]][2] - K[Pb[i]][2];
-    }   
+    }
  
 
     // Initialise system of equations
 
     // Force equilibrium at each inner knot
     
-    Fg = 9.81*(rho_c - p->W1)/rho_c*d_c*p->X321_Sn[nNet];  // Gravity force per unit area  
+    Fg = 9.81*(rho_c - p->W1)/rho_c*d_c*p->X321_Sn[nNet];  // Gravity force per unit area
     
     double As;
     double F_ini = 4.0*l_c*Fg;
@@ -407,14 +407,14 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
         }
         
         // Calculate total length of bars adjoint to knot nfK[i]
-        if (nBars==2) 
+        if (nBars==2)
         {
             As = 0.25*l_c*l_c;
         }
         else if (nBars==3)
         {
             As = 0.5*l_c*l_c;
-        }  
+        }
         else
         {
             As = l_c*l_c;
@@ -426,7 +426,7 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
     }
  
    
-    // Sinker 
+    // Sinker
     int index_ = index - 1;
     
     
@@ -458,19 +458,19 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
             else if (Ni[j]==Pb[i])
             {
                 A(index,j) = al;
-                addOwner = Pi[j];               
+                addOwner = Pi[j];
             }
             else if (Pi[j]==Nb[i])
             {
                 A(index,j) = al;
-                addNeigh = Ni[j];               
+                addNeigh = Ni[j];
             }
             else if (Ni[j]==Nb[i])
             {
                 A(index,j) = -al;
-                addNeigh = Pi[j];              
+                addNeigh = Pi[j];
             }
-        }  
+        }
 
         // Horizontal bar from addOwner, addNeigh
         for (int j = 0; j < nf; j++)
@@ -481,7 +481,7 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
             }
             else if (Pi[j]==addNeigh && Ni[j]==addOwner)
             {
-                A(index,j) = al;              
+                A(index,j) = al;
             }
         }
 
@@ -505,7 +505,7 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
             else if (Pi[j]==meshID[i][2] && Ni[j]==meshID[i][3])
             {
                 A(index,j) = al;
-            }  
+            }
           
             // horizontal bars, bars always positiv to the right
             if (Pi[j]==meshID[i][0] && Ni[j]==meshID[i][2])
@@ -515,7 +515,7 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
             else if (Pi[j]==meshID[i][1] && Ni[j]==meshID[i][3])
             {
                 A(index,j) = -ad;
-            }    
+            }
         }
         
         // B[index][] = [0 0 0];
@@ -535,11 +535,11 @@ void net_barQuasiStatic::wall_ini(lexer *p, ghostcell *pgc)
         sprintf(str,"./REEF3D_CFD_6DOF/REEF3D_6DOF_Net_Forces_%i.dat",nNet);
         eTout.open(str);
         eTout<<"time [s] \t Tmax [N] \t Fx [N] \t Fy [N] \t Fz [N]"<<endl;
-    }        
+    }
     printtime = 0.0;
 
 
-    // Initialise communication 
+    // Initialise communication
     p->Darray(xstart, p->mpi_size);
     p->Darray(xend, p->mpi_size);
     p->Darray(ystart, p->mpi_size);

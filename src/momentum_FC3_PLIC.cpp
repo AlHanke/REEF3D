@@ -101,7 +101,7 @@ momentum_FC3_PLIC::~momentum_FC3_PLIC()
 }
 
 void momentum_FC3_PLIC::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof)
-{    
+{
     pflow->discharge(p,a,pgc);
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
     pflow->rkinflow(p,a,pgc,urk1,vrk1,wrk1);
@@ -142,7 +142,7 @@ void momentum_FC3_PLIC::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, s
      a->vof(i,j,k) = vof_rk1(i,j,k);
      a->L(i,j,k)=0.0;
     }
-    pgc->start4(p,a->vof,gcval_vof); 
+    pgc->start4(p,a->vof,gcval_vof);
     
     //!no update yet -> update after diffusion!
     
@@ -191,7 +191,7 @@ void momentum_FC3_PLIC::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, s
     starttime=pgc->timer();
 
     pturb->isource(p,a);
-    pflow->isource(p,a,pgc,pvrans); 
+    pflow->isource(p,a,pgc,pvrans);
     bcmomPLIC_start(a,p,pgc,pturb,pplic,a->u,gcval_u);
     ppress->upgrad(p,a,a->eta,a->eta_n);
     irhs(p,a,pgc,a->u,a->u,a->v,a->w,1.0);

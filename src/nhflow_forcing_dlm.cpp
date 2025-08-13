@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"ghostcell.h"
 
-void nhflow_forcing::dlm_forcing(lexer *p, fdm_nhf *d, ghostcell *pgc, 
+void nhflow_forcing::dlm_forcing(lexer *p, fdm_nhf *d, ghostcell *pgc,
                              double alpha, double *U, double *V, double *W, slice &WL)
 {
     /*
@@ -101,7 +101,7 @@ void nhflow_forcing::dlm_forcing(lexer *p, fdm_nhf *d, ghostcell *pgc,
             eps0(i_it,j_it,k_it) += eps_star;
             }*/
 
-        }     
+        }
     }
     
 

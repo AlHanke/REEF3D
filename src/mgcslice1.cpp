@@ -42,7 +42,7 @@ void mgcslice1::makemgc(lexer* p)
     p->Iarray(p->mgcsl1,imax*jmax);
 
 //make gcdir
-    p->gcsldirsize1=1;    
+    p->gcsldirsize1=1;
     p->Iarray(p->gcslorig1, p->gcsldirsize1, 6,4);
     
 //flagslice1
@@ -148,14 +148,14 @@ void mgcslice1::gcdirfill(lexer* p)
 // GCORIG
     int q,n;
     
-    p->Iresize(p->gcslorig1,p->gcsldirsize1, p->gcsl_extra1, 6, 6, 4, 4); 
+    p->Iresize(p->gcslorig1,p->gcsldirsize1, p->gcsl_extra1, 6, 6, 4, 4);
     p->gcsldirsize1=p->gcsl_extra1;
     
     
     for(n=0;n<p->gcsldirsize1;++n)
-    for(q=0;q<6;++q)    
-    for(qn=0;qn<4;++qn)    
-    p->gcslorig1[n][q][qn]=0;    
+    for(q=0;q<6;++q)
+    for(qn=0;qn<4;++qn)
+    p->gcslorig1[n][q][qn]=0;
     
     QGCSL1LOOP
     {

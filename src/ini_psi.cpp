@@ -30,7 +30,7 @@ void initialize::inipsi(lexer* p, fdm *a, ghostcell* pgc)
     double psim;
     int count;
     
-    if(p->j_dir==0)        
+    if(p->j_dir==0)
     p->psi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
         
     if(p->j_dir==1)

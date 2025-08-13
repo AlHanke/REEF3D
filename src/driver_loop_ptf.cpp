@@ -98,7 +98,7 @@ void driver::loop_ptf(fdm* a)
         
         cout<<"reinitime: "<<setprecision(3)<<p->reinitime<<endl;
         cout<<"gctime: "<<setprecision(3)<<p->gctime<<"\t average gctime: "<<setprecision(3)<<p->gcmeantime<<endl;
-        cout<<"Xtime: "<<setprecision(3)<<p->xtime<<"\t average Xtime: "<<setprecision(3)<<p->Xmeantime<<endl;        
+        cout<<"Xtime: "<<setprecision(3)<<p->xtime<<"\t average Xtime: "<<setprecision(3)<<p->Xmeantime<<endl;
         cout<<"total time: "<<setprecision(6)<<p->totaltime<<"   average time: "<<setprecision(3)<<p->meantime<<endl;
         cout<<"timer per step: "<<setprecision(3)<<p->itertime<<endl;
         }

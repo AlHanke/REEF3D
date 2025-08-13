@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 void flowfile_in::read0(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
-{    
+{
     
     for(j=0;j<Nj;++j)
     for(k=0;k<Nk;++k)
@@ -91,7 +91,7 @@ void flowfile_in::read0(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
 }
     
  void flowfile_in::read1(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
-{      
+{
     // read ff1
     for(j=0;j<Nj;++j)
     for(k=0;k<Nk;++k)

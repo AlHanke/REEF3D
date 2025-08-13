@@ -46,7 +46,7 @@ void sflow_eta::wetdry(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &P,
     b->hy(i,j) = MAX(b->hy(i,j), 0.0);
     
 
-    pgc->gcsl_start1(p,b->hx,gcval_eta);    
+    pgc->gcsl_start1(p,b->hx,gcval_eta);
     pgc->gcsl_start2(p,b->hy,gcval_eta);
     
     
@@ -58,7 +58,7 @@ void sflow_eta::wetdry(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &P,
               
           if(b->hp(i,j)<wd_criterion)
           {
-           ws(i,j)=0.0; 
+           ws(i,j)=0.0;
            b->ws(i,j)=0.0;
            p->wet[IJ]=0;
           }
@@ -74,8 +74,8 @@ void sflow_eta::wetdry(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &P,
            
           if(b->hx(i,j)<wd_criterion || (p->wet[IJ]==0 && p->wet[Ip1J]==0))
           {
-           b->P(i,j)=0.0; 
-           P(i,j)=0.0; 
+           b->P(i,j)=0.0;
+           P(i,j)=0.0;
            b->wet1(i,j)=0;
           }
       }
@@ -87,8 +87,8 @@ void sflow_eta::wetdry(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &P,
            
           if(b->hy(i,j)<wd_criterion || (p->wet[IJ]==0 && p->wet[IJp1]==0))
           {
-           b->Q(i,j)=0.0; 
-           Q(i,j)=0.0; 
+           b->Q(i,j)=0.0;
+           Q(i,j)=0.0;
            b->wet2(i,j)=0;
           }
       }

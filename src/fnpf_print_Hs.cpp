@@ -29,10 +29,10 @@ Author: Dave Kelly, Hans Bihs
 fnpf_print_Hs::fnpf_print_Hs(lexer *p, slice &Hs) : ETAsum(p), ETAmean(p), //DKAF
                                                     ETA2sum(p), ETAvar(p)
 {
-    NumDT1=0;      
+    NumDT1=0;
     T_INTV_mean = 3600.5; // Averaging time for sig wave height
-    dT_sum=0; 
-    wfcall=0;     
+    dT_sum=0;
+    wfcall=0;
     //T_INTV_mean = 3600.0; // Averaging time for sig. wave height
     wtime=0.0;
     stime = p->P111;        // Start avreging after transients
@@ -78,10 +78,10 @@ void fnpf_print_Hs::start(lexer *p, ghostcell *pgc, slice &eta, slice &Hs)
     ETA2sum(i,j)     += eta(i,j)*eta(i,j);
     
     //cout << "T_sum " << T_sum << " wtim " << wtime <<endl;
-    //cin.get();  
+    //cin.get();
     
     if(NumDT1>1)
-    { 
+    {
         ETAvar(i,j)        = (1.0/double(NumDT1-1))*ETA2sum(i,j)-ETAmean(i,j)*ETAmean(i,j)*(double(NumDT1)/double(NumDT1-1));
         Hs(i,j)         = 4.0*sqrt(MAX(ETAvar(i,j),0.0));
     }

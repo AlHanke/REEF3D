@@ -42,7 +42,7 @@ void iowave::active_beach_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, double *Fi
         j=p->gcslout[n][1];
 
         eta_T = 0.0;
-        eta_M = eta(i,j); 
+        eta_M = eta(i,j);
         eta_R = eta_M-eta_T;
 
         aa=bb=0;
@@ -63,7 +63,7 @@ void iowave::active_beach_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, double *Fi
         
         
             
-            FKLOOP 
+            FKLOOP
             {
                 z=p->ZSN[FIJK]-p->phimean;
                 
@@ -92,7 +92,7 @@ void iowave::active_beach_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, double *Fi
           
         
         if(p->A329==1)
-        { 
+        {
         Fifsf(i+1,j) = Fifsf(i,j) + Uc*fx*1.0*p->DXP[IP1];
         Fifsf(i+2,j) = Fifsf(i,j) + Uc*fx*2.0*p->DXP[IP1];
         Fifsf(i+3,j) = Fifsf(i,j) + Uc*fx*3.0*p->DXP[IP1];

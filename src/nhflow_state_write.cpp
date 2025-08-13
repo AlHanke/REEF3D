@@ -70,7 +70,7 @@ void nhflow_state::write_result(lexer *p, fdm_nhf *d, ghostcell *pgc)
     result.write((char*)&ddn, sizeof (double));
     
     ddn=p->stateprinttime;
-    result.write((char*)&ddn, sizeof (double)); 
+    result.write((char*)&ddn, sizeof (double));
     
     // write result section
     for(i=is;i<ie;++i)
@@ -79,44 +79,44 @@ void nhflow_state::write_result(lexer *p, fdm_nhf *d, ghostcell *pgc)
     {
     ffn=float(d->eta(i,j));
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
     for(k=0; k<p->knoz; ++k)
-    PCHECK  
+    PCHECK
     {
     ffn=float(d->U[IJK]);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
 
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
     for(k=0; k<p->knoz; ++k)
-    PCHECK 
+    PCHECK
     {
     ffn=float(d->V[IJK]);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
 
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
     for(k=0; k<p->knoz; ++k)
-    PCHECK 
+    PCHECK
     {
     ffn=float(d->W[IJK]);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     if(p->P44==1)
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
     for(k=0; k<p->knoz+1; ++k)
-    FPCHECK 
+    FPCHECK
     {
     ffn=float(d->P[FIJK]);
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     if(p->P45==1)
     result.close();

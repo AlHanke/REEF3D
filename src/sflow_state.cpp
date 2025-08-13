@@ -30,7 +30,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 sflow_state::sflow_state(lexer *p, fdm2D *b, ghostcell *pgc, int state_restart)
-{    
+{
     restart=state_restart;
     
     // Create Folder
@@ -64,7 +64,7 @@ void sflow_state::write(lexer *p, fdm2D *c, ghostcell *pgc)
     if(p->mpirank==0)
     ini_mainheader(p,c,pgc);
     
-    if(flag==1) 
+    if(flag==1)
     write_header(p,c,pgc);
     
     ini_token=1;

@@ -25,8 +25,8 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_solitary_1st::wave_lib_solitary_1st(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_solitary_1st::wave_lib_solitary_1st(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     parameters(p,pgc);
     
     if(p->mpirank==0)
@@ -95,7 +95,7 @@ double wave_lib_solitary_1st::wave_eta(lexer *p, double x, double y)
     
     eta =  wH/pow(cosh(sqrt(0.75*wH/pow(wdt,3.0)) * teta),2.0);
     
-    return eta;    
+    return eta;
 }
 
 double wave_lib_solitary_1st::wave_fi(lexer *p, double x, double y, double z)
@@ -106,7 +106,7 @@ double wave_lib_solitary_1st::wave_fi(lexer *p, double x, double y, double z)
 }
 
 void wave_lib_solitary_1st::parameters(lexer *p, ghostcell *pgc)
-{    
+{
     wC = sqrt(9.81*(wH+wdt));
     
     X0 = - (2.12*wdt)/(sqrt((0.5*wa)/wdt));

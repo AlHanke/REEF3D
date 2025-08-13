@@ -40,7 +40,7 @@ void ghostcell::nse2(lexer *p, fdm *a, field &f, int gcv)
     lsv = 0.5*(a->phi(i,j,k)+a->phi(i,j+1,k));
     
         if(lsv>-4.1*(1.0/3.0)*(p->DXP[IP] + p->DYN[JP] + p->DZP[KP]))
-        {         
+        {
         nx = (a->phi(i+1,j,k)-a->phi(i,j,k))/p->DXP[IP];
         ny = (a->phi(i,j+1,k)-a->phi(i,j,k))/p->DYP[JP];
         nz = (a->phi(i,j,k+1)-a->phi(i,j,k))/p->DZP[KP];

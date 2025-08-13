@@ -83,7 +83,7 @@ double wave_lib_hdc::ccpol2D(lexer *p, double **F, double x, double y)
 
     // wb
     if(Ny==1 || jdir==0)
-    wb=1.0;    
+    wb=1.0;
         
     if(Ny>1 && jdir==1)
     {
@@ -187,7 +187,7 @@ double wave_lib_hdc::ccpol2DM(lexer *p, double ***F, double x, double y)
 
     // wb
     if(Ny==1 || jdir==0)
-    wb=1.0;    
+    wb=1.0;
         
     if(Ny>1 && jdir==1)
     {

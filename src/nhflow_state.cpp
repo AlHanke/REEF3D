@@ -30,7 +30,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 nhflow_state::nhflow_state(lexer *p, fdm_nhf *c, ghostcell *pgc)
-{    
+{
     // Create Folder
     if(p->mpirank==0)
     mkdir("./REEF3D_NHFLOW_STATE",0777);
@@ -105,7 +105,7 @@ nhflow_state::nhflow_state(lexer *p, fdm_nhf *c, ghostcell *pgc)
     
     // is communication
     if(is_flag==1)
-    is_global = is + p->origin_i;    
+    is_global = is + p->origin_i;
     
     pgc->gather_int(&is_flag,1,is_flag_all,1);
     pgc->gather_int(&is_global,1,is_global_all,1);
@@ -121,7 +121,7 @@ nhflow_state::nhflow_state(lexer *p, fdm_nhf *c, ghostcell *pgc)
 
     // ie communication
     if(ie_flag==1)
-    ie_global = ie + p->origin_i;    
+    ie_global = ie + p->origin_i;
     
     pgc->gather_int(&ie_flag,1,ie_flag_all,1);
     pgc->gather_int(&ie_global,1,ie_global_all,1);
@@ -138,7 +138,7 @@ nhflow_state::nhflow_state(lexer *p, fdm_nhf *c, ghostcell *pgc)
     
     // js communication
     if(js_flag==1)
-    js_global = js + p->origin_j;    
+    js_global = js + p->origin_j;
     
     pgc->gather_int(&js_flag,1,js_flag_all,1);
     pgc->gather_int(&js_global,1,js_global_all,1);
@@ -154,7 +154,7 @@ nhflow_state::nhflow_state(lexer *p, fdm_nhf *c, ghostcell *pgc)
     
     // je communication
     if(je_flag==1)
-    je_global = je + p->origin_j;    
+    je_global = je + p->origin_j;
     
     pgc->gather_int(&je_flag,1,je_flag_all,1);
     pgc->gather_int(&je_global,1,je_global_all,1);

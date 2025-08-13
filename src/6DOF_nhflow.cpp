@@ -41,7 +41,7 @@ sixdof_nhflow::~sixdof_nhflow()
 {
 }
 
-void sixdof_nhflow::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int iter, 
+void sixdof_nhflow::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int iter,
                                  double *U, double *V, double *W, double *FX, double *FY, double *FZ, slice &WL, slice &fe, bool finalize)
 {
     starttime = pgc->timer();
@@ -58,7 +58,7 @@ void sixdof_nhflow::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int iter,
     p->fbtime+=pgc->timer()-starttime;
 }
 
-void sixdof_nhflow::start_twoway(lexer *p, fdm_nhf *d, ghostcell *pgc, int iter, 
+void sixdof_nhflow::start_twoway(lexer *p, fdm_nhf *d, ghostcell *pgc, int iter,
                                 double *FX, double *FY, double *FZ, slice &WL, slice &fe, bool finalize)
 {
     for (int nb=0; nb<number6DOF;++nb)
@@ -73,7 +73,7 @@ void sixdof_nhflow::start_twoway(lexer *p, fdm_nhf *d, ghostcell *pgc, int iter,
         fb_obj[nb]->quat_matrices(p);
         
         // Update position and trimesh
-        fb_obj[nb]->update_position_nhflow(p,d,pgc,d->fs,finalize);  
+        fb_obj[nb]->update_position_nhflow(p,d,pgc,d->fs,finalize);
         
         // Save
         fb_obj[nb]->update_fbvel(p,pgc);
@@ -108,7 +108,7 @@ void sixdof_nhflow::start_oneway(lexer *p, fdm_nhf *d, ghostcell *pgc, int iter,
         fb_obj[nb]->quat_matrices(p);
         
         // Update position and trimesh
-        fb_obj[nb]->update_position_nhflow(p,d,pgc,d->fs,finalize);  
+        fb_obj[nb]->update_position_nhflow(p,d,pgc,d->fs,finalize);
         
         // Save
         fb_obj[nb]->update_fbvel(p,pgc);
@@ -146,7 +146,7 @@ void sixdof_nhflow::start_shipwave(lexer *p, fdm_nhf *d, ghostcell *pgc, int ite
         fb_obj[nb]->quat_matrices(p);
         
         // Update position and trimesh
-        fb_obj[nb]->update_position_2D(p,pgc,d->fs);  
+        fb_obj[nb]->update_position_2D(p,pgc,d->fs);
         
         // Save
         fb_obj[nb]->update_fbvel(p,pgc);

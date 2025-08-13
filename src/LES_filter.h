@@ -30,9 +30,9 @@ class field;
 
 using namespace std;
 
-class LES_filter 
+class LES_filter
 {
-public:    
+public:
     virtual void start(lexer*, fdm*, ghostcell*,field&,field&,field&,int)=0;
 
 

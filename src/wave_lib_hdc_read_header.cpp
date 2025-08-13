@@ -54,10 +54,10 @@ void wave_lib_hdc::read_header(lexer *p, ghostcell *pgc)
         js=iin;
         
         // origin_xy
-        header.read((char*)&ffn, sizeof (float)); 
+        header.read((char*)&ffn, sizeof (float));
         xs=ffn;
         
-        header.read((char*)&ffn, sizeof (float)); 
+        header.read((char*)&ffn, sizeof (float));
         ys=ffn;
         
         // Nx,Ny,Nz
@@ -82,28 +82,28 @@ void wave_lib_hdc::read_header(lexer *p, ghostcell *pgc)
         // write coordinates
         for(i=0; i<Nx; ++i)
         {
-        header.read((char*)&ffn, sizeof (float)); 
+        header.read((char*)&ffn, sizeof (float));
         X[i]=ffn;
         }
             
         for(j=0; j<Ny; ++j)
         {
-        header.read((char*)&ffn, sizeof (float)); 
+        header.read((char*)&ffn, sizeof (float));
         Y[j]=ffn;
         }
         
         for(k=0; k<Nz; ++k)
         {
-        header.read((char*)&ffn, sizeof (float)); 
+        header.read((char*)&ffn, sizeof (float));
         Zsig[k]=ffn;
         }
         
         for(i=0; i<Nx; ++i)
         for(j=0; j<Ny; ++j)
         {
-        header.read((char*)&ffn, sizeof (float)); 
+        header.read((char*)&ffn, sizeof (float));
         B[i][j]=ffn;
-        }  
+        }
 
         // numer of iterations
         header.read((char*)&iin, sizeof (int));

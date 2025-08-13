@@ -30,13 +30,13 @@ Author: Hans Bihs
 #include"vec.h"
 
 hypre_struct::hypre_struct(lexer* p,ghostcell *pgc, int solve_input, int precon_input)
-{    
-    int vecsize=p->knox*p->knoy*p->knoz; 
+{
+    int vecsize=p->knox*p->knoy*p->knoz;
     
     p->Iarray(CVAL4,p->imax*p->jmax*(p->kmax+2));
     
     if(p->A10==3)
-    vecsize=p->knox*p->knoy*(p->knoz+1); 
+    vecsize=p->knox*p->knoy*(p->knoz+1);
     
     p->Iarray(ilower,3);
     p->Iarray(iupper,3);
@@ -48,13 +48,13 @@ hypre_struct::hypre_struct(lexer* p,ghostcell *pgc, int solve_input, int precon_
     p->Darray(values,vecsize*15);
     
     if(p->j_dir==1 && p->D33==0)
-    make_grid(p,pgc);    
+    make_grid(p,pgc);
     
     if(p->j_dir==0 && p->D33==0)
     make_grid_2Dvert(p,pgc);
     
     if(p->j_dir==1 && p->D33==1)
-    make_grid_15pt(p,pgc);    
+    make_grid_15pt(p,pgc);
     
     if(p->j_dir==0 && p->D33==1)
     make_grid_2D_9pt(p,pgc);
@@ -110,10 +110,10 @@ void hypre_struct::startF(lexer* p, ghostcell* pgc, double *f, vec& rhs, matrix_
 void hypre_struct::startV(lexer* p, ghostcell* pgc, double *f, vec& rhs, matrix_diag &M, int var)
 {
     if(var==4)
-    start_solver4V(p,pgc,f,rhs,M,var); 
+    start_solver4V(p,pgc,f,rhs,M,var);
     
     if(var==44)
-    start_solver44V(p,pgc,f,rhs,M,var); 
+    start_solver44V(p,pgc,f,rhs,M,var);
 }
 
 void hypre_struct::startM(lexer* p, ghostcell* pgc, double *x, double *rhs, double *M, int var)

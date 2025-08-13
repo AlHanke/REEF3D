@@ -22,7 +22,7 @@ Author: Hans Bihs
 
 #include"nhflow_pjm_hs.h"
 #include"lexer.h"
-#include"fdm_nhf.h" 
+#include"fdm_nhf.h"
 #include"ghostcell.h"
 #include"nhflow_poisson.h"
 #include"solver.h"
@@ -43,7 +43,7 @@ nhflow_pjm_hs::nhflow_pjm_hs(lexer* p, fdm_nhf *d, patchBC_interface *ppBC) : nh
     
     pd = new density_f(p);
 
-    gcval_press=540;  
+    gcval_press=540;
 }
 
 nhflow_pjm_hs::~nhflow_pjm_hs()
@@ -55,11 +55,11 @@ void nhflow_pjm_hs::start(lexer*p, fdm_nhf *d, solver* psolv, ghostcell* pgc, io
 }
 
 void nhflow_pjm_hs::ucorr(lexer* p, fdm_nhf *d, slice &WL, double *U, double *P, double alpha)
-{    
+{
 }
 
 void nhflow_pjm_hs::vcorr(lexer* p, fdm_nhf *d, slice &WL, double *V, double *P, double alpha)
-{     
+{
 }
 
 void nhflow_pjm_hs::wcorr(lexer* p, fdm_nhf *d, slice &WL, double *W, double *P, double alpha)

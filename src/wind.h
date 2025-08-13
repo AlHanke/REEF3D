@@ -31,7 +31,7 @@ class slice;
 
 using namespace std;
 
-class wind 
+class wind
 {
 public:
     virtual void wind_forcing_nhf_x(lexer*, fdm_nhf*, ghostcell*, double*, double*, double*,slice&,slice&)=0;

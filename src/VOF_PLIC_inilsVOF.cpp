@@ -184,7 +184,7 @@ void VOF_PLIC::iniphi_io(fdm*a, lexer* p, ghostcell* pgc)
         a->phi(i+2,j,k)=p->F62-p->pos_z();
         a->phi(i+3,j,k)=p->F62-p->pos_z();
         }
-    } 
+    }
 }
 
 void VOF_PLIC::iniphi_box(lexer* p, fdm *a, ghostcell* pgc)

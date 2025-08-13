@@ -43,7 +43,7 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
         j=p->gcslout[n][1];
         
         eta_T = 0.0;
-        eta_M = d->eta(i,j); 
+        eta_M = d->eta(i,j);
         eta_R = eta_M-eta_T;
 
         
@@ -94,7 +94,7 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
                 
             }
         }
-//-----------------------------------------------        
+//-----------------------------------------------
         // VVEL
         
         for(n=0;n<p->gcslout_count;++n)
@@ -103,7 +103,7 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
         j=p->gcslout[n][1];
         
         eta_T = 0.0;
-        eta_M = d->eta(i,j); 
+        eta_M = d->eta(i,j);
         eta_R = eta_M-eta_T;
         
         if(eta_R>=0.0)
@@ -132,7 +132,7 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
 
 
             if(p->wet[IJ]==1)
-            KLOOP 
+            KLOOP
             {
                 if(p->pos_z()<=p->phimean)
                 z=-(fabs(p->phimean-p->pos_z()));
@@ -171,7 +171,7 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
             }
             
             if(p->wet[IJ]==0)
-            KLOOP 
+            KLOOP
             {
              V[(i-p->imin+1*aa)*p->jmax*p->kmax + (j-p->jmin+1*bb)*p->kmax + k-p->kmin] = 0.0;
              V[(i-p->imin+2*aa)*p->jmax*p->kmax + (j-p->jmin+2*bb)*p->kmax + k-p->kmin] = 0.0;
@@ -183,7 +183,7 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
             }
         }
         
-        //-----------------------------------------------        
+        //-----------------------------------------------
         // PRESSURE
         for(n=0;n<p->gcslout_count;n++)
         {
@@ -206,12 +206,12 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
                     
         
         eta_T = 0.0;
-        eta_M = d->eta(i,j); 
+        eta_M = d->eta(i,j);
         eta_R = fabs(eta_M-eta_T);
         
 /*
             if(p->wet[IJ]==1)
-            KLOOP 
+            KLOOP
             {
             d->P[(i-p->imin+1*aa)*p->jmax*p->kmax + (j-p->jmin+1*bb)*p->kmax + k-p->kmin] = 0.0;
              d->P[(i-p->imin+2*aa)*p->jmax*p->kmax + (j-p->jmin+2*bb)*p->kmax + k-p->kmin] = 0.0;

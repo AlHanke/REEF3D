@@ -41,8 +41,8 @@ void mooring_Catenary::print(lexer *p)
     
     if
     (
-        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)  
-        || (p->simtime>printtime && p->P30>0.0)   
+        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)
+        || (p->simtime>printtime && p->P30>0.0)
         || p->count==0)
     )
     {
@@ -72,19 +72,19 @@ void mooring_Catenary::print(lexer *p)
             result<<x[n]<<" "<<y[n]<<" "<<z[n]<<endl;
         }
         
-        result << "\nCELLS " << H-1 << " " << (H-1)*3 <<endl;    
+        result << "\nCELLS " << H-1 << " " << (H-1)*3 <<endl;
         
         for(int n = 0; n < (H-1); ++n)
         {
             result<<"2 "<< n << " " << n+1 << endl;
         }
         
-        result << "\nCELL_TYPES " << H-1 << endl;    
+        result << "\nCELL_TYPES " << H-1 << endl;
         
         for(int n = 0; n < (H-1); ++n)
         {
             result<<"3"<<endl;
-        }    
+        }
 
         result<<"\nPOINT_DATA " << H <<endl;
         result<<"SCALARS Tension float 1 \nLOOKUP_TABLE default"<<endl;
@@ -97,7 +97,7 @@ void mooring_Catenary::print(lexer *p)
         result.close();
 
 
-        eTout<<p->simtime<<" \t "<<T[H-1]<<endl;    
+        eTout<<p->simtime<<" \t "<<T[H-1]<<endl;
     }
 }
 
@@ -139,7 +139,7 @@ void mooring_Catenary::buildLine(lexer *p)
         }
         else
         {
-            z[cnt] = p->X311_zs[line] + FH/w*(sqrt(1+(w*(segLen*cnt-lms)/FH)*(w*(segLen*cnt-lms)/FH)) - 1) + w*(segLen*cnt-lms)*(segLen*cnt-lms)/(2*EA);        
+            z[cnt] = p->X311_zs[line] + FH/w*(sqrt(1+(w*(segLen*cnt-lms)/FH)*(w*(segLen*cnt-lms)/FH)) - 1) + w*(segLen*cnt-lms)*(segLen*cnt-lms)/(2*EA);
             
             T[cnt] = sqrt(FH*FH + (w*(segLen*cnt - lms))*(w*(segLen*cnt - lms)));
                     
@@ -161,7 +161,7 @@ void mooring_Catenary::buildLine(lexer *p)
             else
             {
                 y[cnt] = p->X311_ys[line] - lms*fabs(sin(alpha)) - d_xy*fabs(sin(alpha));
-            }                    
+            }
         }
     }
 }

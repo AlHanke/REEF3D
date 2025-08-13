@@ -208,7 +208,7 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
 {
     int istart,iend,jstart,jend;
     p->phimean = 0.0;
-    p->phiout = 0.0; 
+    p->phiout = 0.0;
     
     // depth
     if(p->F60>-1.0e20)
@@ -417,13 +417,13 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
     if(p->F50==4)
     gcval_eta = 54;
     
-    pgc->gcsl_start1(p,b->hx,gcval_eta);    
-    pgc->gcsl_start2(p,b->hy,gcval_eta);  
+    pgc->gcsl_start1(p,b->hx,gcval_eta);
+    pgc->gcsl_start2(p,b->hy,gcval_eta);
 
 }
 
 void sflow_f::ini_fsf_2(lexer *p, fdm2D* b, ghostcell* pgc)
-{   
+{
     int gcval_eta;
     
     if(p->F50==1)

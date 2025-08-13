@@ -49,7 +49,7 @@ fdm::fdm(lexer *p) :
             
 {
     maxF=0.0;
-    maxG=0.0; 
+    maxG=0.0;
     maxH=0.0;
     
     gi=p->W20;

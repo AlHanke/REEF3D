@@ -30,7 +30,7 @@ Author: Hans Bihs
 #include"nhflow_signal_speed.h"
 #include"nhflow_flux_build_f.h"
 
-nhflow_HLLC::nhflow_HLLC (lexer *p, ghostcell *ppgc, patchBC_interface *ppBC) 
+nhflow_HLLC::nhflow_HLLC (lexer *p, ghostcell *ppgc, patchBC_interface *ppBC)
 {
     pgc = ppgc;
     pBC = ppBC;
@@ -63,7 +63,7 @@ void nhflow_HLLC::start(lexer *&p, fdm_nhf *&d, int ipol, slice &eta)
 
 void nhflow_HLLC::aij_U(lexer* p,fdm_nhf* d, int ipol)
 {
-    // HLLC flux 
+    // HLLC flux
     pflux->start_U(p,d,pgc);
     HLLC(p,d,d->UHs,d->UHn,d->UHe,d->UHw,d->SSx,d->SSx,d->Ue,d->Uw);
     
@@ -74,15 +74,15 @@ void nhflow_HLLC::aij_U(lexer* p,fdm_nhf* d, int ipol)
     LOOP
     WETDRY
     {
-    d->F[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP] 
+    d->F[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP]
                 + (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir
                 + (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
-    }    
+    }
 }
 
 void nhflow_HLLC::aij_V(lexer* p, fdm_nhf* d, int ipol)
 {
-    // HLLC flux 
+    // HLLC flux
     if(p->j_dir==1)
     {
     pflux->start_V(p,d,pgc);
@@ -105,17 +105,17 @@ void nhflow_HLLC::aij_V(lexer* p, fdm_nhf* d, int ipol)
     LOOP
     WETDRY
     {
-    d->G[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP] 
+    d->G[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP]
                 + (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir
                 + (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
-    }  
+    }
 
-    }  
+    }
 }
 
 void nhflow_HLLC::aij_W(lexer* p,fdm_nhf* d, int ipol)
 {
-    // HLLC flux 
+    // HLLC flux
     pflux->start_W(p,d,pgc);
     HLLC(p,d,d->WHs,d->WHn,d->WHe,d->WHw,d->Ws,d->Wn,d->We,d->Ww);
     //HLL(p,d,d->WHs,d->WHn,d->WHe,d->WHw);
@@ -127,15 +127,15 @@ void nhflow_HLLC::aij_W(lexer* p,fdm_nhf* d, int ipol)
     LOOP
     WETDRY
     {
-    d->H[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP] 
+    d->H[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP]
                 + (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir
                 + (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
-    }    
+    }
 }
 
 void nhflow_HLLC::aij_E(lexer* p,fdm_nhf* d, int ipol)
 {
-    // HLLC flux 
+    // HLLC flux
     pflux->start_E(p,d,pgc);
     HLLC_E(p,d);
     
@@ -156,7 +156,7 @@ void nhflow_HLLC::aij_E(lexer* p,fdm_nhf* d, int ipol)
     }
     
     pgc->start1V(p,d->Fx,14);
-    pgc->start2V(p,d->Fy,14); 
+    pgc->start2V(p,d->Fy,14);
 }
 
 void nhflow_HLLC::HLLC(lexer* p,fdm_nhf* d, double *Us, double *Un, double *Ue, double *Uw, double *SSxs, double *SSxn, double *SSye, double *SSyw)

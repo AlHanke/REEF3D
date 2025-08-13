@@ -118,10 +118,10 @@ void sixdof_obj::print_normals_vtp(lexer *p, ghostcell *pgc)
         
         x2 = tri_x[n][2];
         y2 = tri_y[n][2];
-        z2 = tri_z[n][2]; 
+        z2 = tri_z[n][2];
         
         nx = (y1 - y0)*(z2 - z0) - (y2 - y0)*(z1 - z0);
-        ny = (x2 - x0)*(z1 - z0) - (x1 - x0)*(z2 - z0); 
+        ny = (x2 - x0)*(z1 - z0) - (x1 - x0)*(z2 - z0);
         nz = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0);
 
         norm = sqrt(nx*nx + ny*ny + nz*nz);
@@ -200,7 +200,7 @@ void sixdof_obj::print_normals_vtp(lexer *p, ghostcell *pgc)
     result<<endl<<"</AppendedData>"<<endl;
     result<<"</VTKFile>"<<endl;
 
-    result.close();    
+    result.close();
     
     ++printnormal_count;
     }

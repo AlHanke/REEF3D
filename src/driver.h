@@ -138,7 +138,7 @@ public:
     void makegrid2D_basic(lexer*,ghostcell*);
     void makegrid2D_cds(lexer*,ghostcell*,fdm2D*);
     void makegrid_sigma(lexer*,ghostcell*);
-    void makegrid_sigma_cds(lexer*,ghostcell*);  
+    void makegrid_sigma_cds(lexer*,ghostcell*);
     
     void vec_test(lexer*,fdm*,ghostcell*,field&);
     void func_test(lexer*,fdm*,ghostcell*,field&);
@@ -175,7 +175,7 @@ public:
     timestep* ptstep;
     freesurface* pfsf;
     reini* preini;
-    particle_corr* ppls; 
+    particle_corr* ppls;
     sediment* psed;
     reinitopo* preto;
     reinitopo* preso;
@@ -190,7 +190,7 @@ public:
     ptf *pptf;
     nhflow_fsf *pnhfsf;
     sflow *psflow;
-    fnpf_printer *pfprint; 
+    fnpf_printer *pfprint;
     fnpf_timestep *pftstep;
     grid *pgrid;
     patchBC_interface *pBC;
@@ -201,7 +201,7 @@ public:
     nhflow_reconstruct *precon;
     nhflow_pressure *pnhpress;
     nhflow_turbulence *pnhfturb;
-    nhflow_diffusion *pnhfdiff,*pnhfturbdiff; 
+    nhflow_diffusion *pnhfdiff,*pnhfturbdiff;
     nhflow_potential *pnhfpot;
     multiphase *pmp;
     nhflow_timestep *pnhfstep;

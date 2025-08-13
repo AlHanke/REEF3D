@@ -24,12 +24,12 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void lexer::gridini(ghostcell *pgc)
-{        
+{
     if(G2==1)
     sigma_coord_ini();
     
     lexer_gridspacing(pgc);
-    parse();    
+    parse();
     gcd_ini(pgc);
 }
 
@@ -98,7 +98,7 @@ void lexer::flagini()
     if(B98>=3)
     for(n=0;n<gcb4_count;++n)
     if(gcb4[n][4]==6)
-    gcb4[n][4]=1;    
+    gcb4[n][4]=1;
     
     // gcdf
     gcdf1_count=gcdf2_count=gcdf3_count=gcdf4_count=1;
@@ -139,7 +139,7 @@ int lexer::conv(double a)
 }
 
 void lexer::gcd_ini(ghostcell *pgc)
-{  
+{
     for(int q=0;q<gcb4_count;++q)
     {
         i=gcb4[q][0];

@@ -41,8 +41,8 @@ void iowave::distbeach_ini(lexer *p)
 
     for(n=0;n<p->B107;++n)
     {
-    dx = Be[n][0]-Bs[n][0]; 
-    dy = Be[n][1]-Bs[n][1]; 
+    dx = Be[n][0]-Bs[n][0];
+    dy = Be[n][1]-Bs[n][1];
     
     n1x = -dy;
     n1y =  dx;
@@ -61,17 +61,17 @@ void iowave::distbeach_ini(lexer *p)
     //if(p->mpirank==0)
     //cout<<"dist: "<<dist<<" "<<l1<<" "<<l2<<endl;
     
-    B1[n][0] = Bs[n][0] + (n1x/l1)*dist; 
-    B1[n][1] = Bs[n][1] + (n1y/l1)*dist; 
+    B1[n][0] = Bs[n][0] + (n1x/l1)*dist;
+    B1[n][1] = Bs[n][1] + (n1y/l1)*dist;
     
-    B2[n][0] = Bs[n][0] + (n2x/l2)*dist; 
-    B2[n][1] = Bs[n][1] + (n2y/l2)*dist; 
+    B2[n][0] = Bs[n][0] + (n2x/l2)*dist;
+    B2[n][1] = Bs[n][1] + (n2y/l2)*dist;
     
-    B3[n][0] = Be[n][0] + (n1x/l1)*dist; 
-    B3[n][1] = Be[n][1] + (n1y/l1)*dist; 
+    B3[n][0] = Be[n][0] + (n1x/l1)*dist;
+    B3[n][1] = Be[n][1] + (n1y/l1)*dist;
     
-    B4[n][0] = Be[n][0] + (n2x/l2)*dist; 
-    B4[n][1] = Be[n][1] + (n2y/l2)*dist; 
+    B4[n][0] = Be[n][0] + (n2x/l2)*dist;
+    B4[n][1] = Be[n][1] + (n2y/l2)*dist;
     }
     
     /*
@@ -98,8 +98,8 @@ void iowave::distgen_ini(lexer *p)
 
     for(n=0;n<p->B108;++n)
     {
-    dx = Ge[n][0]-Gs[n][0]; 
-    dy = Ge[n][1]-Gs[n][1]; 
+    dx = Ge[n][0]-Gs[n][0];
+    dy = Ge[n][1]-Gs[n][1];
     
     n1x = -dy;
     n1y =  dx;
@@ -118,17 +118,17 @@ void iowave::distgen_ini(lexer *p)
     //if(p->mpirank==0)
     //cout<<"dist: "<<dist<<" "<<l1<<" "<<l2<<endl;
     
-    G1[n][0] = Gs[n][0] + (n1x/l1)*dist; 
-    G1[n][1] = Gs[n][1] + (n1y/l1)*dist; 
+    G1[n][0] = Gs[n][0] + (n1x/l1)*dist;
+    G1[n][1] = Gs[n][1] + (n1y/l1)*dist;
     
-    G2[n][0] = Gs[n][0] + (n2x/l2)*dist; 
-    G2[n][1] = Gs[n][1] + (n2y/l2)*dist; 
+    G2[n][0] = Gs[n][0] + (n2x/l2)*dist;
+    G2[n][1] = Gs[n][1] + (n2y/l2)*dist;
     
-    G3[n][0] = Ge[n][0] + (n1x/l1)*dist; 
-    G3[n][1] = Ge[n][1] + (n1y/l1)*dist; 
+    G3[n][0] = Ge[n][0] + (n1x/l1)*dist;
+    G3[n][1] = Ge[n][1] + (n1y/l1)*dist;
     
-    G4[n][0] = Ge[n][0] + (n2x/l2)*dist; 
-    G4[n][1] = Ge[n][1] + (n2y/l2)*dist; 
+    G4[n][0] = Ge[n][0] + (n2x/l2)*dist;
+    G4[n][1] = Ge[n][1] + (n2y/l2)*dist;
     }
     
     /*
@@ -159,7 +159,7 @@ int iowave::intriangle(lexer *p, double Ax, double Ay, double Bx, double By, dou
         
         PQx = Qx-Px;
         PQy = Qy-Py;
-        PQz = Qz-Pz; 
+        PQz = Qz-Pz;
 
         
         // uvw

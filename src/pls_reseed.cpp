@@ -54,16 +54,16 @@ void particle_pls::reseed(lexer* p, fdm* a, ghostcell* pgc, double pnum_coeff)
         
         qn=0;
         while(posnum(i,j,k)<maxpos && qn<pnum)
-        {        
+        {
         check=posseed(p,a,pgc,distfac);
         
         if(check==1)
         posnum(i,j,k)+=1.0;
         
         ++qn;
-        }    
+        }
     
-        // NEG        
+        // NEG
         if(lsc>-0.5*p->DXM && lsc<0.5*p->DXM)
         maxneg = (0.5 - lsc/p->DXM)*double(pnum)*pnum_coeff;
         
@@ -76,7 +76,7 @@ void particle_pls::reseed(lexer* p, fdm* a, ghostcell* pgc, double pnum_coeff)
         //cout<<"maxpos: "<<maxpos<<"  maxneg: "<<maxneg<<"      lsc: "<<lsc/p->DXM<<endl;
         
         qn=0;
-        while(negnum(i,j,k)<maxneg && qn<pnum)        
+        while(negnum(i,j,k)<maxneg && qn<pnum)
         {
         check=negseed(p,a,pgc,distfac);
         
@@ -84,6 +84,6 @@ void particle_pls::reseed(lexer* p, fdm* a, ghostcell* pgc, double pnum_coeff)
         negnum(i,j,k)+=1.0;
         
         ++qn;
-        }    
-    }    
+        }
+    }
 }

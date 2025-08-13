@@ -70,7 +70,7 @@ fnpf_RK3::~fnpf_RK3()
 }
 
 void fnpf_RK3::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, convection *pconvec, ioflow *pflow, reini *preini)
-{       
+{
     
 // Step 1
     // fsf eta
@@ -162,7 +162,7 @@ void fnpf_RK3::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, conve
     pgc->start7V(p,c->Fi,c->bc,gcval);
     pf->fsfwvel(p,c,pgc,erk2,frk2);
 
-// Step 3 
+// Step 3
     // fsf eta
     pf->kfsfbc(p,c,pgc);
     pf->damping(p,c,pgc,erk2,gcval_eta,2.0/3.0);
@@ -215,14 +215,14 @@ void fnpf_RK3::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, solver *psolv, conve
 }
 
 void fnpf_RK3::inidisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pflow, solver *psolv)
-{    
+{
     pgc->gcsl_start4(p,c->eta,gcval_eta);
     pgc->start7V(p,c->Fi,c->bc,gcval);
     etaloc_sig(p,c,pgc);
     fsfbc_sig(p,c,pgc,c->Fifsf,c->Fi);
     sigma_ini(p,c,pgc,pf,c->eta);
     pf->fsfdisc_ini(p,c,pgc,c->eta,c->Fifsf);
-    pf->wetdry(p,c,pgc,c->eta,c->Fifsf);   
+    pf->wetdry(p,c,pgc,c->eta,c->Fifsf);
     sigma_ini(p,c,pgc,pf,c->eta);
     pf->fsfdisc(p,c,pgc,c->eta,c->Fifsf);
     sigma_update(p,c,pgc,pf,c->eta);
@@ -271,7 +271,7 @@ void fnpf_RK3::inidisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *pflow, sol
 }
 
 void fnpf_RK3::ini_wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc)
-{    
+{
     pf->wetdry(p,c,pgc,c->eta,c->Fifsf);   // coastline ini
 
     pf->coastline_eta(p,c,pgc,c->eta);
@@ -279,7 +279,7 @@ void fnpf_RK3::ini_wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 }
 
 void fnpf_RK3::reference_gage(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &Fifsf)
-{    
+{
     double gageval = -1.0e20;
     
     if(p->B98==3 || p->B98==4)

@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void particle_pls::parcount(lexer* p, fdm* a, ghostcell* pgc)
-{        
+{
     LOOP
     {
         posnum(i,j,k)=0.0;

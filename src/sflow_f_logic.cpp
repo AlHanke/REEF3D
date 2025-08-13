@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"sflow_header.h"
 
 void sflow_f::logic(lexer *p, fdm2D* b, ghostcell* pgc)
-{    
+{
     
     // forcing
     psfdf=new sflow_forcing(p);

@@ -48,7 +48,7 @@ public:
     virtual void initialize(lexer*, ghostcell*);
     virtual void mooringForces(double&, double&, double&);
     
-private:    
+private:
 
     // Print
     void print(lexer*);
@@ -65,7 +65,7 @@ private:
     double dx, dy, dz, L;
 
     // Forces
-    double T0, T;    
+    double T0, T;
     double Xme_, Yme_, Zme_;
     
     // Print

@@ -119,7 +119,7 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
         if(zloc2>p->phimean+p->wA)
         z = 0.5*(eta(i,j)+eta(i,j+1));
         
-        // Wave Generation        
+        // Wave Generation
         if(p->B98>=3 && v_switch==1)
         {
                 for(qn=0;qn<wave_comp;++qn)
@@ -169,7 +169,7 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
             ++count;
         }
         }
-    }    
+    }
 
 
     

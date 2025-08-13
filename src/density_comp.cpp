@@ -24,9 +24,9 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 
-density_comp::density_comp(lexer* p) 
+density_comp::density_comp(lexer* p)
 {
-        if(p->j_dir==0)        
+        if(p->j_dir==0)
         psi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
         
         if(p->j_dir==1)
@@ -40,7 +40,7 @@ density_comp::~density_comp()
 }
 
 double density_comp::roface(lexer *p, fdm *a, int aa, int bb, int cc)
-{       
+{
         phival = 0.5*(a->phi(i,j,k) + a->phi(i+aa,j+bb,k+cc));
         
         ro_air = (0.0035*(101325.0 + 0.5*(a->press(i,j,k) + a->press(i+aa,j+bb,k+cc))))  / (273.15 + p->W31);
@@ -58,7 +58,7 @@ double density_comp::roface(lexer *p, fdm *a, int aa, int bb, int cc)
             
         roval = p->W1*H + ro_air*(1.0-H);
 
-    return roval;        
+    return roval;
 }
 
 

@@ -54,7 +54,7 @@ void beam::resetSolver()
     nind1 = 0, nind2 = 0, nind3 = 0, npred = 0;
     caljac = true, calhes = true, first = true, reject = false, hess = false;
     fnewt = 0.0, quot1 = 0.0, quot2 = 0.0, thet = 0.0;
-    nfcn = 0, nstep = 0, naccpt = 0, nrejct =0; 
+    nfcn = 0, nstep = 0, naccpt = 0, nrejct =0;
     
 
 
@@ -260,7 +260,7 @@ void beam::resetSolver()
 
 void beam::Integrate(double t_old, double t_new)
 {
-    // Reset solver 
+    // Reset solver
     resetSolver();
     
     // Set constant external forces and moments
@@ -1903,8 +1903,8 @@ void beam::Function(double time, double *y, double *f)
     for (int i = 0; i < Ne+2; i++)
     {
        q.col(i).normalize();
-       qdot.col(i) -= q.col(i).dot(qdot.col(i))*q.col(i); 
-    }         
+       qdot.col(i) -= q.col(i).dot(qdot.col(i))*q.col(i);
+    }
   
     setStateDot(f);
 } // Numerical rhs

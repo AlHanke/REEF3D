@@ -30,7 +30,7 @@ Author: Hans Bihs
 void ioflow_f::waterlevel2D(lexer *p, fdm2D *b, ghostcell* pgc, slice &eta)
 {
     // -------------------------------------
-    // set fsf 
+    // set fsf
     double wsfout=p->phimean;
     double f=1.0;
     

@@ -45,7 +45,7 @@ void VOF_PLIC::calculateSubFractions(lexer* p, fdm* a, ghostcell* pgc, field& vo
             a->vof_sb(i,j,k)=1.0;
         }
         else
-        {   
+        {
             double r0xz,scaledVol,recheck;
             reconstructPlane_alt(a,p,voffield);
             

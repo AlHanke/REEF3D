@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"vec.h"
 #include"fnpf_discrete_weights.h"
 
-sediment_fou::sediment_fou(lexer* p) 
+sediment_fou::sediment_fou(lexer* p)
 {
 }
 
@@ -77,6 +77,6 @@ double sediment_fou::sy(lexer *p, slice &f, double jvel1, double jvel2)
         if(p->S31==2)
         grad = ((fv2-fv1)/p->DYN[JP]);
               
-    return grad;  
+    return grad;
 }
 

@@ -30,23 +30,23 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
 {
     D = p->X322_D[nNet];        // Width of wall
     L = p->X322_L[nNet];        // Height of wall
-    nd = p->X321_nd[nNet];      // Number of meshes over width  
-    nl = p->X321_nl[nNet];      // Number of meshes over height    
+    nd = p->X321_nd[nNet];      // Number of meshes over width
+    nl = p->X321_nl[nNet];      // Number of meshes over height
     
     l_c = p->X321_lambda[nNet];  // Length of twine
     d_c = p->X321_d[nNet];       // Diameter of twine
     rho_c = p->X321_rho[nNet];   // Density of material
     
-    origin_x = p->X322_x0[nNet];  
-    origin_y = p->X322_y0[nNet];  
-    origin_z = p->X322_z0[nNet];  
-    phi = p->X322_phi[nNet]*PI/180;  
-    theta = p->X322_theta[nNet]*PI/180;  
-    psi = p->X322_psi[nNet]*PI/180;  
+    origin_x = p->X322_x0[nNet];
+    origin_y = p->X322_y0[nNet];
+    origin_z = p->X322_z0[nNet];
+    phi = p->X322_phi[nNet]*PI/180;
+    theta = p->X322_theta[nNet]*PI/180;
+    psi = p->X322_psi[nNet]*PI/180;
     
     kappa = 0.01;                   // Elasticity constant
-    C1_ = 1160.0;    
-    C2_ = 37300.0;  
+    C1_ = 1160.0;
+    C2_ = 37300.0;
    
     sinker_m = p->X323_m;    // Sinker mass in air [kg]
     sinker_d = p->X323_d;    // Sinker diameter [m]
@@ -85,7 +85,7 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
     p->Iarray(nfbK, nbK);                  // Bars per Knot -> first entry is knot ID, then up to four bars
     meshID.resize(nd*nl,vector<int>(4));  // List of knots in each mesh
  
-    x0_ = MatrixXd::Zero(nK,3); 
+    x0_ = MatrixXd::Zero(nK,3);
     x_ = MatrixXd::Zero(nK,3);
     xdot_ = MatrixXd::Zero(nK,3);
     xdotdot_ = MatrixXd::Zero(nK,3);
@@ -100,10 +100,10 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
     forces_knot = MatrixXd::Zero(nK, 3);
 
     A_ = MatrixXd::Zero(nf,nf);   // Linear system matrix
-    B_ = VectorXd::Zero(nf);      // Linear rhs 
+    B_ = VectorXd::Zero(nf);      // Linear rhs
     T_ = VectorXd::Zero(nf);      // Tension forces
     T_old = VectorXd::Zero(nf);
-    T_backup = VectorXd::Zero(nf);   
+    T_backup = VectorXd::Zero(nf);
   
     sinker_m /= (nd + 1.0);    // Sinker mass per bottom knot
 
@@ -189,7 +189,7 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
             
             index++;
         }
-    }    
+    }
 
 
     // List of knots in each mesh
@@ -213,7 +213,7 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
             for (int s = 0; s < nf; s++)
             {
                 // left half, bar always pointing downwards
-                if 
+                if
                 (
                     v1[0]==K[Pi[s]][0] && v1[1]==K[Pi[s]][1] && v1[2]==K[Pi[s]][2]
                     && v2[0]==K[Ni[s]][0] && v2[1]==K[Ni[s]][1] && v2[2]==K[Ni[s]][2]
@@ -224,7 +224,7 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
                 }
                 
                 // right half, bar always pointing downwards
-                if 
+                if
                 (
                     v4[0]==K[Pi[s]][0] && v4[1]==K[Pi[s]][1] && v4[2]==K[Pi[s]][2]
                     && v3[0]==K[Ni[s]][0] && v3[1]==K[Ni[s]][1] && v3[2]==K[Ni[s]][2]
@@ -250,7 +250,7 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
             
         coord_neigh[0] = i+1;
         coord_neigh[1] = 0.0;
-        coord_neigh[2] = 0.0;  
+        coord_neigh[2] = 0.0;
 
         for (int k = 0; k < nK; k++)
         {
@@ -344,22 +344,22 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
         coord_owner[1] = ad*i;
       
         for (int j = 0; j <= nl; j++)
-        { 
+        {
             coord_owner[2] = (nl-j)*al;
         
             for (int k = 0; k < nK; k++)
             {
                 if (K[k][0]==i && K[k][1]==j && K[k][2]==0.0 && transK[k]==0)
-                { 
+                {
                     K[k][0] = coord_owner[0];
                     K[k][1] = coord_owner[1];
                     K[k][2] = coord_owner[2];
                     
                     transK[k] = 1;
                 }
-            } 
-        }    
-    } 
+            }
+        }
+    }
    
     // Initialise length of bars
     double mag;
@@ -394,12 +394,12 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
         
         x_(j,0) = a*(cos(psi)*cos(theta)) + b*(cos(theta)*sin(psi)) - c*sin(theta);
         x_(j,1) = a*(cos(psi)*sin(phi)*sin(theta)-cos(phi)*sin(psi)) + b*(cos(phi)*cos(psi)+sin(phi)*sin(psi)*sin(theta)) + c*(cos(theta)*sin(phi));
-        x_(j,2) = a*(sin(phi)*sin(psi)+cos(phi)*cos(psi)*sin(theta)) + b*(cos(phi)*sin(psi)*sin(theta)-cos(psi)*sin(phi)) + c*(cos(phi)*cos(theta));    
+        x_(j,2) = a*(sin(phi)*sin(psi)+cos(phi)*cos(psi)*sin(theta)) + b*(cos(phi)*sin(psi)*sin(theta)-cos(psi)*sin(phi)) + c*(cos(phi)*cos(theta));
 
         x_(j,0) += origin_x;
         x_(j,1) += origin_y - D/2.0;
-        x_(j,2) += origin_z;        
-    } 
+        x_(j,2) += origin_z;
+    }
     
     x0_ = x_;
 
@@ -437,25 +437,25 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
             else if (nBars==3)
             {
                 A_panel = 2.0*0.25*al*ad;
-            }  
+            }
             else
             {
                 A_panel = 4.0*0.25*al*ad;
             }
             
             A_solid = p->X321_Sn[nNet]*A_panel;
-            l_solid = A_solid/d_c;    
+            l_solid = A_solid/d_c;
             
             
             // Mass (in air)
-            mass_knot(i) = rho_c*PI/4.0*d_c*d_c*l_solid; 
+            mass_knot(i) = rho_c*PI/4.0*d_c*d_c*l_solid;
             
             // Weight (in water)
-            weight_knot(i) = p->W1*PI/4.0*d_c*d_c*l_solid; 
+            weight_knot(i) = p->W1*PI/4.0*d_c*d_c*l_solid;
             
             // Added mass
             double c_a = 1.0;
-            added_mass(i) = p->W1*PI/4.0*d_c*d_c*c_a*l_solid; 
+            added_mass(i) = p->W1*PI/4.0*d_c*d_c*c_a*l_solid;
       
             // Add sinker to bottom row
             if (i >= nK - nd - 1)
@@ -489,7 +489,7 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
         {
             dist_new = (x_.row(kI).transpose() - ppI).norm();
 
-            if (dist_new < dist) 
+            if (dist_new < dist)
             {
                 dist = dist_new;
                 probeKnot(pp) = kI;
@@ -512,7 +512,7 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
             header_out<<"Knot point probe located near ("<<ppI.transpose()<<")"<<endl;
             header_out<<"time [s] \t x [m] \t y [m] \t z [m]"<<endl;
             header_out.close();
-        }        
+        }
     }
 
     // Initialise force print
@@ -531,11 +531,11 @@ void net_barDyn::wall_ini(lexer *p, ghostcell *pgc)
         header_out.open(str);
         header_out<<"time [s] \t Ttop [N] \t Fx [N] \t Fy [N] \t Fz [N]"<<endl;
         header_out.close();
-    }        
+    }
     printtime = 0.0;
 
 
-    // Initialise communication 
+    // Initialise communication
     p->Darray(xstart, p->mpi_size);
     p->Darray(xend, p->mpi_size);
     p->Darray(ystart, p->mpi_size);

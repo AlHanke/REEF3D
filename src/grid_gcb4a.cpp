@@ -29,7 +29,7 @@ void grid::fillgcb4a(lexer *p)
     int q;
     
     p->Iresize(p->gcb4a,p->gcb4a_count, p->gcb4_count, 6, 6);
-    p->Dresize(p->gcd4a,p->gcb4a_count, p->gcb4_count); 
+    p->Dresize(p->gcd4a,p->gcb4a_count, p->gcb4_count);
     
     p->gcb4a_count=p->gcb4_count;
 

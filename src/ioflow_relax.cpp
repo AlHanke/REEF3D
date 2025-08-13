@@ -181,7 +181,7 @@ double ioflow_f::distcalc(lexer *p,double x0, double y0, double tan_beta)
 }
 
 int ioflow_f::iozonecheck(lexer *p, fdm*a)
-{    
+{
     int check = 1;
     
     return check;

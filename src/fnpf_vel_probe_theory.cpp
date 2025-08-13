@@ -104,7 +104,7 @@ void fnpf_vel_probe_theory::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow 
     
     if(p->mpirank==0)
     pout[n]<<setprecision(9)<<p->simtime<<" \t "<<uval<<" \t "<<vval<<" \t "<<wval<<endl;
-    }    
+    }
 }
 
 void fnpf_vel_probe_theory::ini_location(lexer *p, fdm_fnpf *c)

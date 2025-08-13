@@ -74,7 +74,7 @@ void slice1::ggcpol(lexer* p)
         val/=double(count);
     
 
-        V[iter]=val; 
+        V[iter]=val;
         
      }
 }

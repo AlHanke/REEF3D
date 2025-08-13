@@ -66,7 +66,7 @@ nhflow_force::nhflow_force(lexer* p, fdm_nhf *d, ghostcell *pgc, int qn) : inter
     ym = ys + (ye-ys)*0.5;
     zm = zs + (ze-zs)*0.5;
     
-    gcval_press=40;  
+    gcval_press=40;
 }
 
 nhflow_force::~nhflow_force()
@@ -78,7 +78,7 @@ void nhflow_force::ini(lexer *p, fdm_nhf *d, ghostcell *pgc)
     triangulation(p,d,pgc);
     reconstruct(p,d);
     print_vtp(p,d,pgc);
-} 
+}
 
 void nhflow_force::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
@@ -90,7 +90,7 @@ void nhflow_force::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
         if(p->mpirank==0)
         {
         if(p->count==2)
-        cout<<"Atot_solid: "<<A_tot<<endl;  
+        cout<<"Atot_solid: "<<A_tot<<endl;
         
         cout<<"Ax: "<<Ax<<" Ay: "<<Ay<<" Az: "<<Az<<endl;
         cout<<"Atot: "<<A_tot<<endl;
@@ -102,5 +102,5 @@ void nhflow_force::start(lexer *p, fdm_nhf *d, ghostcell *pgc)
     print_vtp(p,d,pgc);
     
     deallocate(p,d,pgc);
-} 
+}
 

@@ -61,7 +61,7 @@ void bedconc_VR::start(lexer* p, ghostcell *pgc, sediment_fdm *s)
     
     Ti=MAX((Tb-Ts)/(Ts),0.0);
         
-    f = MAX(MIN(2.0*Tb/Ts-1.0,1.0),0.0);    
+    f = MAX(MIN(2.0*Tb/Ts-1.0,1.0),0.0);
         
 
     Ds = d50*pow((Rstar*g)/(visc*visc),1.0/3.0);

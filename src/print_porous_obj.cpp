@@ -39,10 +39,10 @@ void print_porous::box(lexer *p, fdm *a, ghostcell *pgc, int rank)
     ye = p->B270_ye[rank];
 
     zs = p->B270_zs[rank];
-    ze = p->B270_ze[rank];    
+    ze = p->B270_ze[rank];
     
 
-    // Vertices    
+    // Vertices
     vertice[vertice_num][0] = xs;
     vertice[vertice_num][1] = ys;
     vertice[vertice_num][2] = zs;
@@ -145,7 +145,7 @@ void print_porous::cylinder_z(lexer *p, fdm *a, ghostcell *pgc, int rank)
     z1=p->B274_zs[rank];
     z2=p->B274_ze[rank];
     
-    r=p->B274_r[rank]; 
+    r=p->B274_r[rank];
     
 
     U = 2.0 * PI * r;
@@ -155,7 +155,7 @@ void print_porous::cylinder_z(lexer *p, fdm *a, ghostcell *pgc, int rank)
     snum = int(U/ds);
     
 cout<<"snum: "<<snum<<" U: "<<U<<" ds: "<<ds<<" r: "<<r<<endl;
-// Vertices    
+// Vertices
     ds = (2.0*PI)/double(snum);
     
     phi=0.0;
@@ -196,7 +196,7 @@ cout<<"snum: "<<snum<<" U: "<<U<<" ds: "<<ds<<" r: "<<r<<endl;
     vertice[vertice_num][2] = z2;
     ++vertice_num;
     
-    //side        
+    //side
     // 1st triangle
     vertice[vertice_num][0] = xm + r*cos(phi);
     vertice[vertice_num][1] = ym + r*sin(phi);
@@ -263,7 +263,7 @@ cout<<"snum: "<<snum<<" U: "<<U<<" ds: "<<ds<<" r: "<<r<<endl;
 }
 
 void print_porous::wedge_x(lexer *p, fdm *a, ghostcell *pgc,int rank)
-{    
+{
     double xs,ys,zs,xe,ye,ze;
     int vertice_start=vertice_num;
     
@@ -275,11 +275,11 @@ void print_porous::wedge_x(lexer *p, fdm *a, ghostcell *pgc,int rank)
     ye = p->B281_ye[rank];
 
     zs = p->B281_zs[rank];
-    ze = p->B281_ze[rank];  
+    ze = p->B281_ze[rank];
 
     if(zs<ze)
     {
-    // Vertices    
+    // Vertices
         vertice[vertice_num][0] = xs;
         vertice[vertice_num][1] = ys;
         vertice[vertice_num][2] = zs;
@@ -315,7 +315,7 @@ void print_porous::wedge_x(lexer *p, fdm *a, ghostcell *pgc,int rank)
     
     if(zs>=ze)
     {
-    // Vertices    
+    // Vertices
         vertice[vertice_num][0] = xs;
         vertice[vertice_num][1] = ys;
         vertice[vertice_num][2] = ze;
@@ -419,11 +419,11 @@ void print_porous::wedge_x(lexer *p, fdm *a, ghostcell *pgc,int rank)
     polygon[polygon_num][3] = 4 + vertice_start;
     numvert[polygon_num] = 4;
     ++polygon_num;
-    }  
+    }
 }
 
 void print_porous::wedge_y(lexer *p, fdm *a, ghostcell *pgc,int rank)
-{    
+{
     double xs,ys,zs,xe,ye,ze;
     int vertice_start=vertice_num;
     
@@ -435,11 +435,11 @@ void print_porous::wedge_y(lexer *p, fdm *a, ghostcell *pgc,int rank)
     ye = p->B282_ye[rank];
 
     zs = p->B282_zs[rank];
-    ze = p->B282_ze[rank];  
+    ze = p->B282_ze[rank];
 
     if(zs<ze)
     {
-    // Vertices    
+    // Vertices
         vertice[vertice_num][0] = xs;
         vertice[vertice_num][1] = ys;
         vertice[vertice_num][2] = zs;
@@ -475,7 +475,7 @@ void print_porous::wedge_y(lexer *p, fdm *a, ghostcell *pgc,int rank)
     
     if(zs>=ze)
     {
-    // Vertices    
+    // Vertices
         vertice[vertice_num][0] = xs;
         vertice[vertice_num][1] = ys;
         vertice[vertice_num][2] = ze;
@@ -579,12 +579,12 @@ void print_porous::wedge_y(lexer *p, fdm *a, ghostcell *pgc,int rank)
     polygon[polygon_num][3] = 4 + vertice_start;
     numvert[polygon_num] = 4;
     ++polygon_num;
-    }  
+    }
 }
 
 
 void print_porous::plate_x(lexer *p, fdm *a, ghostcell *pgc,int rank)
-{    
+{
     double xs,ys,zs,xe,ye,ze,d;
     int vertice_start=vertice_num;
     
@@ -598,10 +598,10 @@ void print_porous::plate_x(lexer *p, fdm *a, ghostcell *pgc,int rank)
     zs = p->B291_zs[rank];
     ze = p->B291_ze[rank];
 
-    d = p->B291_d[rank];  
+    d = p->B291_d[rank];
 
 
-    // Vertices    
+    // Vertices
         vertice[vertice_num][0] = xs;
         vertice[vertice_num][1] = ys;
         vertice[vertice_num][2] = zs;
@@ -708,10 +708,10 @@ void print_porous::box_veg(lexer *p, fdm *a, ghostcell *pgc,int rank)
     ye = p->B310_ye[rank];
 
     zs = p->B310_zs[rank];
-    ze = p->B310_ze[rank];    
+    ze = p->B310_ze[rank];
     
 
-    // Vertices    
+    // Vertices
     vertice[vertice_num][0] = xs;
     vertice[vertice_num][1] = ys;
     vertice[vertice_num][2] = zs;
@@ -800,7 +800,7 @@ void print_porous::box_veg(lexer *p, fdm *a, ghostcell *pgc,int rank)
 }
 
 void print_porous::wedge_x_veg(lexer *p, fdm *a, ghostcell *pgc,int rank)
-{    
+{
     double xs,ys,zs,xe,ye,ze;
     int vertice_start=vertice_num;
     
@@ -812,11 +812,11 @@ void print_porous::wedge_x_veg(lexer *p, fdm *a, ghostcell *pgc,int rank)
     ye = p->B321_ye[rank];
 
     zs = p->B321_zs[rank];
-    ze = p->B321_ze[rank];  
+    ze = p->B321_ze[rank];
 
     if(zs<ze)
     {
-    // Vertices    
+    // Vertices
         vertice[vertice_num][0] = xs;
         vertice[vertice_num][1] = ys;
         vertice[vertice_num][2] = zs;
@@ -852,7 +852,7 @@ void print_porous::wedge_x_veg(lexer *p, fdm *a, ghostcell *pgc,int rank)
     
     if(zs>=ze)
     {
-    // Vertices    
+    // Vertices
         vertice[vertice_num][0] = xs;
         vertice[vertice_num][1] = ys;
         vertice[vertice_num][2] = ze;
@@ -956,11 +956,11 @@ void print_porous::wedge_x_veg(lexer *p, fdm *a, ghostcell *pgc,int rank)
     polygon[polygon_num][3] = 4 + vertice_start;
     numvert[polygon_num] = 4;
     ++polygon_num;
-    }  
+    }
 }
 
 void print_porous::wedge_y_veg(lexer *p, fdm *a, ghostcell *pgc,int rank)
-{    
+{
     double xs,ys,zs,xe,ye,ze;
     int vertice_start=vertice_num;
     
@@ -972,11 +972,11 @@ void print_porous::wedge_y_veg(lexer *p, fdm *a, ghostcell *pgc,int rank)
     ye = p->B322_ye[rank];
 
     zs = p->B322_zs[rank];
-    ze = p->B322_ze[rank];  
+    ze = p->B322_ze[rank];
 
     if(zs<ze)
     {
-    // Vertices    
+    // Vertices
         vertice[vertice_num][0] = xs;
         vertice[vertice_num][1] = ys;
         vertice[vertice_num][2] = zs;
@@ -1012,7 +1012,7 @@ void print_porous::wedge_y_veg(lexer *p, fdm *a, ghostcell *pgc,int rank)
     
     if(zs>=ze)
     {
-    // Vertices    
+    // Vertices
         vertice[vertice_num][0] = xs;
         vertice[vertice_num][1] = ys;
         vertice[vertice_num][2] = ze;
@@ -1116,5 +1116,5 @@ void print_porous::wedge_y_veg(lexer *p, fdm *a, ghostcell *pgc,int rank)
     polygon[polygon_num][3] = 4 + vertice_start;
     numvert[polygon_num] = 4;
     ++polygon_num;
-    }  
+    }
 }

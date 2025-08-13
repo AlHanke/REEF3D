@@ -28,7 +28,7 @@ Author: Hans Bihs
 #include"reini.h"
 
 void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer *pprint, convection *pconvec, solver *psolv)
-{    
+{
     int istart, iend, jstart, jend, kstart, kend;
     int qn;
     double xc,yc,zc,r;
@@ -49,19 +49,19 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
     {
     LOOP
     ls1(i,j,k)=p->F360-p->pos_x();
-    }    
+    }
     
     if(p->F361>-1.0e20)
     {
     LOOP
     ls1(i,j,k)=p->F361-p->pos_y();
-    }    
+    }
     
     if(p->F362>-1.0e20)
     {
     LOOP
     ls1(i,j,k)=p->F362-p->pos_z();
-    }    
+    }
     
     
     for(qn=0;qn<p->F369;++qn)
@@ -101,7 +101,7 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
         zr = fx(xp1,zp1,xp2,zp2,xc);
         
         if(xc<xr && zc>zr)
-        {    
+        {
             // g2 : P4 - P3
             xr = fz(xp4,zp4,xp3,zp3,zc);
             zr = fx(xp4,zp4,xp3,zp3,xc);
@@ -167,7 +167,7 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
         ls1(i,j,k)=-1.0;
     }
     
-// F374    
+// F374
     for(qn=0;qn<p->F374;++qn)
     {
 
@@ -210,19 +210,19 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
     {
     LOOP
     ls2(i,j,k)=p->F380-p->pos_x();
-    }    
+    }
     
     if(p->F381>-1.0e20)
     {
     LOOP
     ls2(i,j,k)=p->F381-p->pos_y();
-    }    
+    }
     
     if(p->F382>-1.0e20)
     {
     LOOP
     ls2(i,j,k)=p->F382-p->pos_z();
-    }    
+    }
 
 
     for(qn=0;qn<p->F390;++qn)
@@ -259,7 +259,7 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
         ls2(i,j,k)=-1;
     }
     
-    // F394    
+    // F394
     for(qn=0;qn<p->F394;++qn)
     {
 
@@ -297,7 +297,7 @@ void multiphase_f::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, printer 
         }
     }
     
-    // F374    
+    // F374
     for(qn=0;qn<p->F374;++qn)
     {
 

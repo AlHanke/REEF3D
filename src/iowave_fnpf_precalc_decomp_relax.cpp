@@ -74,13 +74,13 @@ void iowave::wavegen_precalc_decomp_relax_fnpf(lexer *p, ghostcell *pgc)
     count=0;
     int dbcount=0;
     
-    FILOOP 
-    FJLOOP 
+    FILOOP
+    FJLOOP
     {
         dg = distgen(p);
         db = distbeach(p);
         
-        FKLOOP 
+        FKLOOP
         FPCHECK
         {
         
@@ -88,7 +88,7 @@ void iowave::wavegen_precalc_decomp_relax_fnpf(lexer *p, ghostcell *pgc)
 
         
         if(p->B98==2 && f_switch==1)
-        {  
+        {
             // Zone 1
             if(dg<dist1)
             {

@@ -44,7 +44,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 fnpf_vtu3D::fnpf_vtu3D(lexer* p, fdm_fnpf *c, ghostcell *pgc)
-{    
+{
     if(p->I40==0)
     {
     p->printtime=0.0;
@@ -247,19 +247,19 @@ void fnpf_vtu3D::start(lexer* p, fdm_fnpf* c,ghostcell* pgc, ioflow *pflow)
     if(p->P59==1)
     pbreaklog->write(p,c,pgc);
     
-    // ALE force    
+    // ALE force
     if(p->count>0)
     if(p->count%p->P80==0)
     for(n=0;n<p->P85;++n)
     pforce_ale[n]->start(p,c,pgc);
     
-    // print kinematics    
+    // print kinematics
     if(p->count>0)
     if(p->count%p->P80==0)
     for(n=0;n<p->P88;++n)
     pkin[n]->start(p,c,pgc);
     
-    // Runup  
+    // Runup
     if(p->count>0)
     for(n=0;n<p->P140;++n)
     prunup[n]->start(p,c,pgc);

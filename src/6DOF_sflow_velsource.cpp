@@ -84,5 +84,5 @@ double sixdof_sflow::limiter(double v1, double v2)
     
     val = 0.5*phival*(v1+v2);
 
-    return val;    
+    return val;
 }

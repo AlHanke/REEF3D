@@ -27,7 +27,7 @@ Author: Hans Bihs
 #define HXIJ (fabs(b->hx(i,j))>1.0e-20?b->hx(i,j):1.0e20)
 #define HYIJ (fabs(b->hy(i,j))>1.0e-20?b->hy(i,j):1.0e20)
 
-sflow_rough_manning::sflow_rough_manning(lexer* p) 
+sflow_rough_manning::sflow_rough_manning(lexer* p)
 {
 }
 
@@ -56,6 +56,6 @@ void sflow_rough_manning::v_source(lexer *p, fdm2D *b, slice &v)
     cf = pow(manning,2.0)*9.81/pow(HYIJ,1.0/3.0);
     
     b->G(i,j) -= cf*v(i,j)*fabs(v(i,j))*(1.0/HYIJ);
-    }   
+    }
 }
 

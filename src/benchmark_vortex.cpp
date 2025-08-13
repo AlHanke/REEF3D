@@ -42,7 +42,7 @@ benchmark_vortex::benchmark_vortex(lexer *p, fdm *a)
         a->vof(i,j,k)=0.0;
     }
     
-/*  
+/*
     LOOP
     {
     r = sqrt( pow(p->pos_x()-xc,2.0) + pow(p->pos_y()-yc,2.0));
@@ -62,7 +62,7 @@ benchmark_vortex::benchmark_vortex(lexer *p, fdm *a)
     if(dist>radius)
     sign=-1.0;
     
-    a->phi(i,j,k)=sign*dist;    
+    a->phi(i,j,k)=sign*dist;
     }
     
     /*

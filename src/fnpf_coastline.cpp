@@ -29,7 +29,7 @@ Author: Hans Bihs
 
 fnpf_coastline::fnpf_coastline(lexer* p) :  ddweno_f_nug(p), frk1(p),frk2(p),L(p),dt(p),wet_n(p)
 {
-    time_preproc(p); 
+    time_preproc(p);
 }
 
 fnpf_coastline::~fnpf_coastline()

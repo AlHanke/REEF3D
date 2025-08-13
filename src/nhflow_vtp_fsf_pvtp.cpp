@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void nhflow_vtp_fsf::pvtu(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *psed)
-{    
+{
     int num=0;
 
     if(p->P15==1)

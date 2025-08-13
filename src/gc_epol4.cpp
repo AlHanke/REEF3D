@@ -28,7 +28,7 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
 
 //Level Set
 
-    if((bc==21||bc==22||bc==5||bc==41||bc==42||bc==43||bc==7||bc==8||bc==9||bc==41||bc==221||bc==211||bc==121||bc==111) 
+    if((bc==21||bc==22||bc==5||bc==41||bc==42||bc==43||bc==7||bc==8||bc==9||bc==41||bc==221||bc==211||bc==121||bc==111)
         && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
     return gclabel_lsm;
     
@@ -57,7 +57,7 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     if((bc==6 ) && (gcv==51 || gcv==52 || gcv==53 || gcv==54) )
     return gclabel_lsm_in;
 
-// Pressure    
+// Pressure
     else
     if((bc==21||bc==22||bc==5||bc==3||bc==211||bc==212||bc==112||bc==111) && gcv==40)
     return gclabel_press;
@@ -167,7 +167,7 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     if((bc==21||bc==22||bc==5||(bc==7&&awa_lable==0))&&(cs==6)&&(gcv==12))
     return 5;
 
-    //Inflow    
+    //Inflow
     else
     if((bc==6 && gcv==12))
     return 4;
@@ -181,7 +181,7 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     if((bc==2 && gclabel_outflow==1) && (gcv==12) && (cs==5||cs==6))
     return 5;
     
-    //Patch    
+    //Patch
     else
     if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==12))
     return 4;
@@ -260,7 +260,7 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
 
 // Heat
     else
-    if(gcv==80 && ((p->H61==1 && cs==1) || (p->H62==1 && cs==2) || (p->H63==1 && cs==3) 
+    if(gcv==80 && ((p->H61==1 && cs==1) || (p->H62==1 && cs==2) || (p->H63==1 && cs==3)
                 || (p->H64==1 && cs==4) || (p->H65==1 && cs==5) || (p->H66==1 && cs==6)))
     return 61;
     

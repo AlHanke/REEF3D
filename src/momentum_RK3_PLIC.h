@@ -49,7 +49,7 @@ using namespace std;
 class momentum_RK3_PLIC : public momentum, public momentum_forcing, public bcmom
 {
 public:
-    momentum_RK3_PLIC(lexer*, fdm*,ghostcell*, convection*, diffusion*, pressure*, poisson*, 
+    momentum_RK3_PLIC(lexer*, fdm*,ghostcell*, convection*, diffusion*, pressure*, poisson*,
                 turbulence*, solver*, solver*, ioflow*,heat*&,concentration*&,fsi*);
     virtual ~momentum_RK3_PLIC();
     virtual void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*);

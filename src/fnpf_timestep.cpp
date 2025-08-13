@@ -136,7 +136,7 @@ void fnpf_timestep::start(fdm_fnpf *c, lexer *p,ghostcell *pgc)
     cout<<"dt: "<<p->dt<<endl;
 
     
-    if (p->N48==0) 
+    if (p->N48==0)
     p->dt=maxtimestep;
     
     else

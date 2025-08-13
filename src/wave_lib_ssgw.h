@@ -17,11 +17,11 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Authors: 
+Authors:
     Csaba Pakozdi, Sébastien Fouques: Routine implementation
     Tobias Martin: Interface implementation
 
-Based on Clamond and Dutykh (2018). Accurate fast computation of steady two-dimensional 
+Based on Clamond and Dutykh (2018). Accurate fast computation of steady two-dimensional
 surface gravity waves in arbitrary depth. Journal of Fluid Mechanics, Vol. 844, pp. 491-518.
 --------------------------------------------------------------------*/
 

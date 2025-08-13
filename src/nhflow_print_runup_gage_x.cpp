@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 nhflow_print_runup_gage_x::nhflow_print_runup_gage_x(lexer *p, fdm_nhf *d, ghostcell *pgc)
-{    
+{
     p->Iarray(jloc,p->P133);
 
 

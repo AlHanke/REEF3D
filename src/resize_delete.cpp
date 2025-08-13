@@ -83,7 +83,7 @@ void resize_class::del_Darray(double ****&field,int numi, int numj, int numk, in
 
 
 void resize_class::del_Iarray(int *&field,int numi)
-{    
+{
     if(numi>0)
     delete [ ] field;
 }

@@ -52,7 +52,7 @@ using namespace std;
 class momentum_FC2 : public momentum, public momentum_forcing, public bcmom
 {
 public:
-    momentum_FC2(lexer*, fdm*, ghostcell*, convection*, convection*, diffusion*, pressure*, poisson*, 
+    momentum_FC2(lexer*, fdm*, ghostcell*, convection*, convection*, diffusion*, pressure*, poisson*,
                 turbulence*, solver*, solver*, ioflow*, heat*&, concentration*&, reini*, fsi*);
     virtual ~momentum_FC2();
     virtual void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*);

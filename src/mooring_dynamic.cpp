@@ -40,7 +40,7 @@ void mooring_dynamic::start(lexer *p, ghostcell *pgc)
     updateFields(p, pgc);
     
     // Update boundary conditions
-    fixPoint << p->X311_xe[line], p->X311_ye[line], p->X311_ze[line]; 
+    fixPoint << p->X311_xe[line], p->X311_ye[line], p->X311_ze[line];
 
     // Integrate from t_mooring_n to t_mooring
     Integrate(t_mooring_n,t_mooring);
@@ -48,7 +48,7 @@ void mooring_dynamic::start(lexer *p, ghostcell *pgc)
     // Save mooring point
     saveMooringPoint(p);
 
-    // Plot mooring line    
+    // Plot mooring line
     print(p);
 }
 
@@ -62,10 +62,10 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
     
     // Get velocities on own processor
     for (int i = 0; i < Ne + 1; i++)
-    {    
+    {
         fluid_vel[i][cmp] = 0.0;
 
-        if 
+        if
         (
             c_moor(0,i) >= xstart[p->mpirank] && c_moor(0,i) < xend[p->mpirank] &&
             c_moor(1,i) >= ystart[p->mpirank] && c_moor(1,i) < yend[p->mpirank] &&
@@ -91,8 +91,8 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
         else
         {
             for (int j = 0; j < p->mpi_size; j++)
-            {    
-                if 
+            {
+                if
                 (
                     c_moor(0,i) >= xstart[j] && c_moor(0,i) < xend[j] &&
                     c_moor(1,i) >= ystart[j] && c_moor(1,i) < yend[j] &&
@@ -107,7 +107,7 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
                 {
                     recVel[i] = -2;
                 }
-            }            
+            }
         }
     }
 
@@ -161,7 +161,7 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
             
             if (count[j] > 0)
             {
-            //    cout<<"Processor "<<p->mpirank<<" receives "<<count[j]<<" elements from processor "<<j<<endl;                    
+            //    cout<<"Processor "<<p->mpirank<<" receives "<<count[j]<<" elements from processor "<<j<<endl;
         
                 MPI_Irecv(recvVel[j],count[j],MPI_DOUBLE,j,1,pgc->mpi_comm,&rreq[j]);
             }
@@ -188,9 +188,9 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
     for (int i = 0; i < Ne + 1; i++)
     {
         for (int j = 0; j < p->mpi_size; j++)
-        {            
+        {
             if (recVel[i]==j)
-            {        
+            {
                 fluid_vel[i][cmp] = recvVel[j][count[j]];
                 count[j]++;
             }
@@ -198,9 +198,9 @@ void mooring_dynamic::updateFluidVel(lexer *p, ghostcell *pgc, int cmp)
     }
     
     for (int i = 0; i < Ne + 1; i++)
-    {     
-        fluid_vel[i][cmp] += 1e-10;        
-    }    
+    {
+        fluid_vel[i][cmp] += 1e-10;
+    }
 
 
     // Delete arrays
@@ -231,7 +231,7 @@ void mooring_dynamic::updateFields(lexer *p, ghostcell *pgc)
     // Fluid velocity
     updateFluidVel(p, pgc, 0);
     updateFluidVel(p, pgc, 1);
-    updateFluidVel(p, pgc, 2);    
+    updateFluidVel(p, pgc, 2);
     
     // Fluid acceleration
     for (int i = 0; i < Ne + 1; i++)
@@ -251,7 +251,7 @@ void mooring_dynamic::mooringForces
     // Tension forces if line is not broken
     if (broken==false)
     {
-        Xme = Xme_; 
+        Xme = Xme_;
         Yme = Yme_;
         Zme = Zme_;
     }
@@ -259,7 +259,7 @@ void mooring_dynamic::mooringForces
     // Breakage due to max tension force
     if (breakTension > 0.0 && fabs(getTensLoc(Ne)) >= breakTension)
     {
-        Xme = 0.0; 
+        Xme = 0.0;
         Yme = 0.0;
         Zme = 0.0;
 
@@ -269,7 +269,7 @@ void mooring_dynamic::mooringForces
     // Breakage due to time limit
     if (breakTime > 0.0 && t_mooring >= breakTime)
     {
-        Xme = 0.0; 
+        Xme = 0.0;
         Yme = 0.0;
         Zme = 0.0;
 
@@ -284,10 +284,10 @@ void mooring_dynamic::saveMooringPoint(lexer *p)
     getTransPos(c_moor);
     getTransVel(cdot_moor);
 
-    // Save location of line 
+    // Save location of line
     c_moor_n = c_moor;
 
-    // Save acceleration of line 
+    // Save acceleration of line
     cdotdot_moor = (cdot_moor - cdot_moor_n)/p->dt;
     cdot_moor_n = cdot_moor;
 

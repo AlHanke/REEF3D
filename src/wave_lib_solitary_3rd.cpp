@@ -25,8 +25,8 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_solitary_3rd::wave_lib_solitary_3rd(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_solitary_3rd::wave_lib_solitary_3rd(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     parameters(p,pgc);
     
     if(p->mpirank==0)
@@ -98,7 +98,7 @@ double wave_lib_solitary_3rd::wave_w(lexer *p, double x, double y, double z)
             
     vel = sqrt(9.81*wdt)*sqrt(3.0*e)*((wdt+z)/wdt)*s*s*t*( e
         + e*e*((3.0/8.0)*s*s + 2.0*s*s + pow((wdt+z)/wdt,2.0)*((-1.0/2.0) + 1.5*s*s))
-        + e*e*e*((49.0/640.0) -(17.0/20.0)*s*s - (18.0/5.0)*s*s*s*s 
+        + e*e*e*((49.0/640.0) -(17.0/20.0)*s*s - (18.0/5.0)*s*s*s*s
             + pow((wdt+z)/wdt,2.0)*(-(13.0/16.0) - (25.0/16.0)*s*s + (15.0/2.0)*s*s*s*s)
             + pow((wdt+z)/wdt,4.0)*(-(3.0/40.0) + (9.0/8.0)*s*s - (27.0/16.0)*s*s*s*s)));
                 
@@ -122,7 +122,7 @@ double wave_lib_solitary_3rd::wave_eta(lexer *p, double x, double y)
     
     eta =  wdt*(e*s*s - 0.75*e*e*s*s*t*t + e*e*e*((5.0/8.0)*s*s*t*t - (101.0/80.0)*s*s*s*s*t*t));
     
-    return eta;    
+    return eta;
 }
 
 double wave_lib_solitary_3rd::wave_fi(lexer *p, double x, double y, double z)

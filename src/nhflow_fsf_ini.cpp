@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"ioflow.h"
 
 void nhflow_fsf_f::ini(lexer* p, fdm_nhf* d, ghostcell* pgc, ioflow* pflow, double *U, double *V, double *W)
-{   
+{
     pgc->gcsl_start4Vint(p,p->wet,50);
     
     wetdry(p,d,pgc,U,V,W,d->WL);
@@ -58,7 +58,7 @@ void nhflow_fsf_f::ini(lexer* p, fdm_nhf* d, ghostcell* pgc, ioflow* pflow, doub
     
     if(p->A580==1)
     SLICELOOP4
-    if(i>=guard_is && i<=guard_ie && j>=guard_js && j<=guard_je) 
+    if(i>=guard_is && i<=guard_ie && j>=guard_js && j<=guard_je)
     {
     
     p->flagfsf[IJ]=0;

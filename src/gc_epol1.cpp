@@ -73,9 +73,9 @@ int ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
 //Inflow
     else
     if((bc==6 && (cs==1||cs==4) && (gcv==10||gcv==1||gcv==7)))
-    return gclabel_u_in;   
+    return gclabel_u_in;
 
-//Patch    
+//Patch
     else
     if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==10||gcv==1||gcv==7))
     return 4;

@@ -112,7 +112,7 @@ void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
         z=p->ZSP[IJK]-p->phimean;
 
-        // Wave Generation        
+        // Wave Generation
         if(p->B98==2 && w_switch==1)
         {
             // Zone 1
@@ -123,7 +123,7 @@ void iowave::nhflow_precalc_relax(lexer *p, fdm_nhf *d, ghostcell *pgc)
             ++count;
             }
         }
-    }    
+    }
     
 }
     

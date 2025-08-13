@@ -51,7 +51,7 @@ public:
     void velcalc(lexer*, fdm_fnpf*, ghostcell *pgc, field&);
     void velcalc_sig(lexer*, fdm_fnpf*, ghostcell *pgc, double*);
     
-private: 
+private:
     int gcval,gcval_u,gcval_v,gcval_w;
 
 

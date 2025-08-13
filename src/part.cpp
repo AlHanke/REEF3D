@@ -27,7 +27,7 @@ Authors: Hans Bihs, Alexander Hanke
 #include<iostream>
 
 part::part(lexer *p, ghostcell *pgc)
-{    
+{
     capacity=1;
     index=1;
     index_empty=capacity;
@@ -41,14 +41,14 @@ part::part(lexer *p, ghostcell *pgc)
     if(p->mpirank==0)
     cout<<"ParcelFactor: "<<ParcelFactor<<" DXM: "<<p->DXM<<endl;
     
-    // 
+    //
     p->Darray(U,capacity);
     p->Darray(V,capacity);
     p->Darray(W,capacity);
     
     p->Darray(URK1,capacity);
     p->Darray(VRK1,capacity);
-    p->Darray(WRK1,capacity); 
+    p->Darray(WRK1,capacity);
 
     p->Darray(X,capacity);
     p->Darray(Y,capacity);
@@ -56,7 +56,7 @@ part::part(lexer *p, ghostcell *pgc)
     
     p->Darray(XRK1,capacity);
     p->Darray(YRK1,capacity);
-    p->Darray(ZRK1,capacity);  
+    p->Darray(ZRK1,capacity);
     
     p->Darray(Uf,capacity);
     p->Darray(Vf,capacity);

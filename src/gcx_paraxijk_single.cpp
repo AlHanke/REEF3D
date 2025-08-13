@@ -162,7 +162,7 @@ void ghostcell::gcparaxijk_single(lexer* p, double *f, int gcv)
     
         f[IJp1K]=recv2[count];
         ++count;
-    }    
+    }
     
     count=0;
     for(q=0;q<p->gcpara3_count;++q)

@@ -90,7 +90,7 @@ void sixdof_obj::ray_cast(lexer *p, fdm *a, ghostcell *pgc)
         a->fb(i,j,k)=-10.0*p->DXM;
     }
     
-    pgc->start4a(p,a->fb,50); 
+    pgc->start4a(p,a->fb,50);
 }
 
 

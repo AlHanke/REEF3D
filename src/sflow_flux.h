@@ -28,7 +28,7 @@ class slice;
 
 using namespace std;
 
-class sflow_flux 
+class sflow_flux
 {
 public:
 

@@ -54,10 +54,10 @@ public:
     virtual void initialize_nhflow(lexer*, fdm_nhf*, ghostcell*);
     virtual void netForces(lexer*, double&, double&, double&, double&, double&, double&);
     
-    virtual const EigenMat& getLagrangePoints(){return lagrangePoints;} 
-    virtual const EigenMat& getLagrangeForces(){return lagrangeForces;} 
-    virtual const EigenMat& getCollarVel(){return collarVel;} 
-    virtual const EigenMat& getCollarPoints(){return collarPoints;} 
+    virtual const EigenMat& getLagrangePoints(){return lagrangePoints;}
+    virtual const EigenMat& getLagrangeForces(){return lagrangeForces;}
+    virtual const EigenMat& getCollarVel(){return collarVel;}
+    virtual const EigenMat& getCollarPoints(){return collarPoints;}
    
 
 private:
@@ -79,11 +79,11 @@ private:
     
     // Preprocessing
     void bag_ini(lexer*, ghostcell*);
-    void cyl_ini(lexer*, ghostcell*); 
-    void wall_ini(lexer*, ghostcell*); 
+    void cyl_ini(lexer*, ghostcell*);
+    void wall_ini(lexer*, ghostcell*);
     void genericNet();
     void iniInnerKnots();
-    void iniBoundaryKnots();  
+    void iniBoundaryKnots();
     void stretch();
     void iniLSE(lexer*);
     void ini_parallel(lexer*, ghostcell*);
@@ -98,10 +98,10 @@ private:
     typedef vector<vector<int> > MatrixVi;
     
     
-    vector<Eigen::Vector3d> lagrangePoints;    
-    vector<Eigen::Vector3d> lagrangeForces;    
-    vector<Eigen::Vector3d> collarVel;    
-    vector<Eigen::Vector3d> collarPoints;    
+    vector<Eigen::Vector3d> lagrangePoints;
+    vector<Eigen::Vector3d> lagrangeForces;
+    vector<Eigen::Vector3d> collarVel;
+    vector<Eigen::Vector3d> collarPoints;
     
     
     void print(lexer*);
@@ -113,9 +113,9 @@ private:
     void fillRhs_bag(lexer*);
     
     void fillRhs_Morison(lexer*);
-    void morisonForceCoeff(double&, double&, const double&); 
+    void morisonForceCoeff(double&, double&, const double&);
  
-    void fillRhs_Screen(lexer*);  
+    void fillRhs_Screen(lexer*);
     Eigen::Vector3d screenForce(lexer*, const double&, const Vector3d&, const Vector3d&, const double&, const int, const int);
     void screenForceCoeff(lexer*,double&, double&, const double&, const double&, const double&);
     
@@ -129,7 +129,7 @@ private:
             const double&
         );
     
-    // ------ 
+    // ------
     
     // Parallelisation
     int nNet;
@@ -141,7 +141,7 @@ private:
     // Mesh
     double origin_x, origin_y, origin_z, phi, theta, psi;
     double *l0, *l;
-    double L, D, al, ad, Fg, beta, gamma; 
+    double L, D, al, ad, Fg, beta, gamma;
     int nd, nl, niK, nbK, nK, nf;
     MatrixXd fi, A, B, Bh;
     double **fb, **K, **K_;
@@ -159,7 +159,7 @@ private:
     // Raytracing
     fieldint5 cutl,cutr;
     double xs,xe,ys,ye,zs,ze;
-    int tend;  
+    int tend;
     
     // Reini
     vec f_,frk1,frk2,L_, dt;

@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm.h"
 
 double strain::pk(lexer *p, fdm *a, field &eddyv)
-{ 
+{
     if(p->j_dir==1)
     {
         s11 = pudx(p,a);
@@ -53,7 +53,7 @@ double strain::pk(lexer *p, fdm *a, field &eddyv)
 }
 
 double strain::pk_b(lexer *p, fdm *a, field &eddyv)
-{ 
+{
     val =      (1.0/0.85)*(1.0/a->ro(i,j,k))*eddyv(i,j,k)*(
              p->W20*(a->ro(i+1,j,k) - a->ro(i-1,j,k))/(p->DXP[IP]+p->DXP[IM1])
            + p->W21*(a->ro(i,j+1,k) - a->ro(i,j-1,k))/(p->DYP[JP]+p->DYP[JM1])*p->y_dir

@@ -58,7 +58,7 @@ public:
     double return_alpha_reconstructPlane_alt(fdm*, lexer*,field&,int,int,int);
     
     
-private:    
+private:
     void iniphi(fdm*, lexer*,ghostcell*);
     void iniphi_io(fdm*, lexer*,ghostcell*);
     void iniphi_box(lexer*,fdm*,ghostcell*);
@@ -138,7 +138,7 @@ private:
     int gcval_phi;
 
     int gcval_frac;
-    double starttime; 
+    double starttime;
    
     //- Sweep tracker for alternating starting point
     int sSweep;

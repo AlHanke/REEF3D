@@ -47,9 +47,9 @@ void mooring_dynamic::initialize(lexer *p, ghostcell *pgc)
     iniDamping(10,0,0,0,0,0,false);
 
     // Meshing
-    Eigen::VectorXd xIni = Eigen::VectorXd::Zero(Ne+1);   
-    Eigen::VectorXd yIni = Eigen::VectorXd::Zero(Ne+1);   
-    Eigen::VectorXd zIni = Eigen::VectorXd::Zero(Ne+1);   
+    Eigen::VectorXd xIni = Eigen::VectorXd::Zero(Ne+1);
+    Eigen::VectorXd yIni = Eigen::VectorXd::Zero(Ne+1);
+    Eigen::VectorXd zIni = Eigen::VectorXd::Zero(Ne+1);
     mooring_Catenary *pcatenary;
     pcatenary = new mooring_Catenary(line);
     pcatenary->iniShape(p,pgc,xIni,yIni,zIni);
@@ -59,7 +59,7 @@ void mooring_dynamic::initialize(lexer *p, ghostcell *pgc)
     // Initialise solver
     iniSolver();
     
-    // Initialise communication 
+    // Initialise communication
     ini_parallel(p, pgc);
 
     // Initialise print
@@ -68,13 +68,13 @@ void mooring_dynamic::initialize(lexer *p, ghostcell *pgc)
         /*char str[1000];
         sprintf(str,"./REEF3D_CFD_6DOF/REEF3D_6DOF_mooring_force_%i.dat",line);
         eTout.open(str);
-        eTout<<"time \t T"<<endl;*/    
+        eTout<<"time \t T"<<endl;*/
     }
 
     // Initialise fields
-    c_moor = Matrix3Xd::Zero(3,Ne+1); 
-    c_moor_n = Matrix3Xd::Zero(3,Ne+1); 
-    cdot_moor = Matrix3Xd::Zero(3,Ne+1); 
+    c_moor = Matrix3Xd::Zero(3,Ne+1);
+    c_moor_n = Matrix3Xd::Zero(3,Ne+1);
+    cdot_moor = Matrix3Xd::Zero(3,Ne+1);
     cdot_moor_n = Matrix3Xd::Zero(3,Ne+1);
     cdotdot_moor = Matrix3Xd::Zero(3,Ne+1);
 

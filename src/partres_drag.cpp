@@ -28,7 +28,7 @@ Author: Hans Bihs
 #include"turbulence.h"
 
 double partres::drag_model(lexer *p, double d50, double rhoS, double vel, double Ts)
-{    
+{
         Tf = 1.0-Ts;
         
         vel = fabs(vel);

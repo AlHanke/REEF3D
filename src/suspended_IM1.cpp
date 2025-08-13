@@ -89,7 +89,7 @@ void suspended_IM1::fill_wvel(lexer *p, fdm* a, ghostcell *pgc, sediment_fdm *s)
 }
 
 void suspended_IM1::suspsource(lexer* p,fdm* a,field& conc, sediment_fdm *s)
-{    
+{
     double zdist;
     
     count=0;

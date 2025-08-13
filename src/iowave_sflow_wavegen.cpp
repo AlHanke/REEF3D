@@ -91,5 +91,5 @@ void iowave::wavegen2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice &Q, s
         eta(i-1,j)=wave_eta(p,pgc,x,y);
         eta(i-2,j)=wave_eta(p,pgc,x,y);
         eta(i-3,j)=wave_eta(p,pgc,x,y);
-    }    
+    }
 }

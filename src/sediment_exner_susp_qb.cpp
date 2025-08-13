@@ -33,7 +33,7 @@ double sediment_exner::susp_qb(lexer* p, ghostcell *pgc, sediment_fdm *s)
     double val=0.0;
     
     if(p->count>p->S43)
-    val = (-s->ws)*(s->cb(i,j) - s->cbe(i,j)); 
+    val = (-s->ws)*(s->cb(i,j) - s->cbe(i,j));
     
     return val;
 }

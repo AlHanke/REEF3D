@@ -74,10 +74,10 @@ void fsi_strips::forcing(lexer* p, fdm* a, ghostcell* pgc, double alpha, field &
         // Get coupling forces at Lagrangian points
         pstrip[num]->coupling_force(p,alpha);
         
-        // Distribute coupling forces on Eulerian grid 
+        // Distribute coupling forces on Eulerian grid
         pstrip[num]->distribute_forces(p,a,pgc,fx,fy,fz);
         
-        // Update Lagrangian points 
+        // Update Lagrangian points
         pstrip[num]->update_points();
 
         // Store variables

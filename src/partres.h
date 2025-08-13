@@ -48,11 +48,11 @@ public:
     
     void move_RK2(lexer*, fdm*, ghostcell*, sediment_fdm*, turbulence*);
     
-    void advec_plain(lexer*, fdm*, part&, sediment_fdm*, turbulence*, 
-                        double*, double*, double*, double*, double*, double*, 
+    void advec_plain(lexer*, fdm*, part&, sediment_fdm*, turbulence*,
+                        double*, double*, double*, double*, double*, double*,
                         double&, double&, double&, double);
-    void advec_mppic(lexer*, fdm*, part&, sediment_fdm*, turbulence*, 
-                        double*, double*, double*, double*, double*, double*, 
+    void advec_mppic(lexer*, fdm*, part&, sediment_fdm*, turbulence*,
+                        double*, double*, double*, double*, double*, double*,
                         double&, double&, double&, double);
     
     // drag
@@ -88,7 +88,7 @@ public:
     // relax
     void relax_ini(lexer*);
     void relax(lexer*, ghostcell*, sediment_fdm*);
-    double rf(lexer*, double, double);     
+    double rf(lexer*, double, double);
     double r1(lexer*, double, double);
     double distcalc(lexer*, double , double, double , double, double);
     

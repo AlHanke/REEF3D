@@ -43,7 +43,7 @@ public:
     virtual void start(lexer*,fdm_fnpf*,ghostcell*);
     virtual void ini(lexer*,fdm_fnpf*,ghostcell*);
 
-private:    
+private:
     
     void fnpf_runup_calc(lexer*,fdm_fnpf*,ghostcell*);
     void print_fnpf_runup(lexer*,fdm_fnpf*,ghostcell*);

@@ -66,7 +66,7 @@ private:
     void updateFluidVel(lexer*, ghostcell*, int);
     void saveMooringPoint(lexer*);
 
-    // ------ 
+    // ------
     
     // Parallelisation
     int line;

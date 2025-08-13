@@ -29,7 +29,7 @@ Author: Hans Bihs
 #include"matrix_diag.h"
 
 void hypre_struct_fnpf::fill_matrix8(lexer* p, ghostcell* pgc, double *f, double *rhs, double *M)
-{    
+{
     nentries=15;
     
     for (j = 0; j < nentries; j++)

@@ -77,7 +77,7 @@ private:
 
     // Strip
     int Ne;
-    vector<Matrix3Xd> Xil, Xil_0, lagrangePoints, lagrangeVel, lagrangeVelCoup, lagrangeForceCoup; 
+    vector<Matrix3Xd> Xil, Xil_0, lagrangePoints, lagrangeVel, lagrangeVelCoup, lagrangeForceCoup;
     Matrix3Xd x_el, xdot_el, F_el, P_el, P_el_n, M_el, I_el, I_el_n;
     Matrix4Xd q_el, qdot_el;
     vector<Eigen::VectorXd> lagrangeArea;

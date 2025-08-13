@@ -48,8 +48,8 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-wave_interface::wave_interface(lexer *p, ghostcell *pgc) 
-{ 
+wave_interface::wave_interface(lexer *p, ghostcell *pgc)
+{
     p->wts=0.0;
     p->wte=1.0e20;
     

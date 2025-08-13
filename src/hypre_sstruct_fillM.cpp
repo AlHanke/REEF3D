@@ -28,7 +28,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void hypre_sstruct::fill_matrixM(lexer* p, ghostcell* pgc, double *f, double *rhs, double *M)
-{  
+{
     nentries=15;
     
     for (j=0; j< nentries; j++)

@@ -36,11 +36,11 @@ void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
     // Correct geometrical constraint
     dx = p->X311_xe[line] - p->X311_xs[line];
     dy = p->X311_ye[line] - p->X311_ys[line];
-    dz = p->X311_ze[line] - p->X311_zs[line]; 
+    dz = p->X311_ze[line] - p->X311_zs[line];
     
     B[sigma][0] = dx;
     B[sigma][1] = dy;
-    B[sigma][2] = dz;        
+    B[sigma][2] = dz;
 
     double length = 0.0;
 
@@ -48,7 +48,7 @@ void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
     if (broken==false)
     {
         for (int it = 0; it < 1000; it++)
-        {    
+        {
             // Reconstruct current line
             buildLine(p,pgc);
             
@@ -85,14 +85,14 @@ void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
             /*
                 double magVal = sqrt(v[j][0]*v[j][0]+v[j][1]*v[j][1]+v[j][2]*v[j][2]);
 
-                e[j][0] = v[j][0]/magVal;    
-                e[j][1] = v[j][1]/magVal;    
+                e[j][0] = v[j][0]/magVal;
+                e[j][1] = v[j][1]/magVal;
                 e[j][2] = v[j][2]/magVal;
 
                 // Drag force
                 e_d[j][0] = -e[j][0];
                 e_d[j][1] = -e[j][1];
-                e_d[j][2] = -e[j][2];            
+                e_d[j][2] = -e[j][2];
                 
                 // Shear force
                 double val_x = f[j][2]*e[j][1] - f[j][1]*e[j][2];
@@ -105,10 +105,10 @@ void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
                 e_q[j][1] = val_y / magVal;
                 e_q[j][2] = val_z / magVal;
                 
-                //    Lift force    
+                //    Lift force
                 val_x = e_q[j][2]*e[j][1] - e_q[j][1]*e[j][2];
                 val_y = e_q[j][0]*e[j][2] - e_q[j][2]*e[j][0];
-                val_z = e_q[j][1]*e[j][0] - e_q[j][0]*e[j][1];            
+                val_z = e_q[j][1]*e[j][0] - e_q[j][0]*e[j][1];
 
                 magVal = sqrt(val_x*val_x+val_y*val_y+val_z*val_z);
                     
@@ -122,7 +122,7 @@ void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
                     double theta = acos(e[j][0]*f[j][0] + e[j][1]*f[j][1] + e[j][2]*f[j][2]);
                         
                     c_coeff[j] = getC(theta);
-                }    */        
+                }    */
             }
                 
             // Calculating hydrodynamic forces
@@ -131,41 +131,41 @@ void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
                 double cdt = 0.5;
                 double cdn = 2.5;
 
-                R[j][0] = 
+                R[j][0] =
                     p->W1/2.0*p->X311_d[line]*l[j-1]/2.0*(cdt*e_d[j-1][0] + cdn*e_l[j-1][0])
                     + p->W1/2.0*p->X311_d[line]*l[j]/2.0*(cdt*e_d[j][0] + cdn*e_l[j][0]);
                 
-                R[j][1] = 
+                R[j][1] =
                     p->W1/2.0*p->X311_d[line]*l[j-1]/2.0*(cdt*e_d[j-1][1] + cdn*e_l[j-1][1])
                     + p->W1/2.0*p->X311_d[line]*l[j]/2.0*(cdt*e_d[j][1] + cdn*e_l[j][1]);
                         
-                R[j][2] = 
+                R[j][2] =
                     p->W1/2.0*p->X311_d[line]*l[j-1]/2.0*(cdt*e_d[j-1][2] + cdn*e_l[j-1][2])
                     + p->W1/2.0*p->X311_d[line]*l[j]/2.0*(cdt*e_d[j][2] + cdn*e_l[j][2]);
                     
                 
-            /*    R[j][0] = 
+            /*    R[j][0] =
                     0.5*p->W1*v[j][0]*v[j][0]*0.5*l[j]*p->X311_d[line]*
                     (
-                          c_coeff[j-1][0]*e_d[j-1][0] + c_coeff[j][0]*e_d[j][0] 
-                        + c_coeff[j-1][1]*e_q[j-1][0] + c_coeff[j][1]*e_q[j][0] 
+                          c_coeff[j-1][0]*e_d[j-1][0] + c_coeff[j][0]*e_d[j][0]
+                        + c_coeff[j-1][1]*e_q[j-1][0] + c_coeff[j][1]*e_q[j][0]
                         + c_coeff[j-1][2]*e_l[j-1][0] + c_coeff[j][2]*e_l[j][0]
                     );
-                R[j][1] = 
+                R[j][1] =
                     0.5*p->W1*v[j][1]*v[j][1]*0.5*l[j]*p->X311_d[line]*
                     (
-                          c_coeff[j-1][0]*e_d[j-1][1] + c_coeff[j][0]*e_d[j][1] 
-                        + c_coeff[j-1][1]*e_q[j-1][1] + c_coeff[j][1]*e_q[j][1] 
+                          c_coeff[j-1][0]*e_d[j-1][1] + c_coeff[j][0]*e_d[j][1]
+                        + c_coeff[j-1][1]*e_q[j-1][1] + c_coeff[j][1]*e_q[j][1]
                         + c_coeff[j-1][2]*e_l[j-1][1] + c_coeff[j][2]*e_l[j][1]
-                    );    
-                R[j][2] = 
+                    );
+                R[j][2] =
                     0.5*p->W1*v[j][2]*v[j][2]*0.5*l[j]*p->X311_d[line]*
                     (
-                          c_coeff[j-1][0]*e_d[j-1][2] + c_coeff[j][0]*e_d[j][2] 
-                        + c_coeff[j-1][1]*e_q[j-1][2] + c_coeff[j][1]*e_q[j][2] 
+                          c_coeff[j-1][0]*e_d[j-1][2] + c_coeff[j][0]*e_d[j][2]
+                        + c_coeff[j-1][1]*e_q[j-1][2] + c_coeff[j][1]*e_q[j][2]
                         + c_coeff[j-1][2]*e_l[j-1][2] + c_coeff[j][2]*e_l[j][2]
-                    );    */        
-            } 
+                    );    */
+            }
                 
             // Filling right hand side
             for (int j=0; j<sigma; j++)
@@ -199,7 +199,7 @@ void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
             }
                 
             // Correct system
-            for (int j = 0; j < sigma + 1; j++)    
+            for (int j = 0; j < sigma + 1; j++)
             {
                 norm = sqrt(f[j][0]*f[j][0] + f[j][1]*f[j][1] + f[j][2]*f[j][2]);
                     
@@ -207,25 +207,25 @@ void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
                 f[j][1] /= norm;
                 f[j][2] /= norm;
             
-                for (int k=0; k<sigma; k++) 
+                for (int k=0; k<sigma; k++)
                 {
                     A[k][j] *= norm;
                 }
             }
 
             length = 0.0;
-            for (int j = 1; j < sigma+1; j++)    
-            {            
+            for (int j = 1; j < sigma+1; j++)
+            {
                 l[j] = l0[j]*(1.0 + 0.5*(fabs(A[j][j]) + fabs(A[j-1][j-1]))/(p->X311_EA[line]));
                 length += l[j];
             }
                 
             for (int j = 0; j < sigma; j++)
-            {            
-                A[sigma][j] = 0.5*(l[j] + l[j+1]);  
+            {
+                A[sigma][j] = 0.5*(l[j] + l[j+1]);
             }
             A[sigma][sigma] = 0.5*l[sigma];
-        }    
+        }
     }
     else
     {
@@ -239,8 +239,8 @@ void mooring_barQuasiStatic::start(lexer *p, ghostcell *pgc)
     Yme_ = -fabs(A[sigma-1][sigma])*f[sigma][1];
     Zme_ = -fabs(A[sigma-1][sigma])*f[sigma][2];
         
-    // Plotting mooring line    
-    print(p,pgc);    
+    // Plotting mooring line
+    print(p,pgc);
 }
 
 
@@ -253,8 +253,8 @@ void mooring_barQuasiStatic::updateVel(lexer *p, ghostcell *pgc, int cmp)
     
     // Get velocities on own processor
     for (int i = 0; i < sigma + 2; i++)
-    {    
-        if 
+    {
+        if
         (
             x[i] >= xstart[p->mpirank] && x[i] < xend[p->mpirank] &&
             y[i] >= ystart[p->mpirank] && y[i] < yend[p->mpirank] &&
@@ -280,8 +280,8 @@ void mooring_barQuasiStatic::updateVel(lexer *p, ghostcell *pgc, int cmp)
         else
         {
             for (int j = 0; j < p->mpi_size; j++)
-            {    
-                if 
+            {
+                if
                 (
                     x[i] >= xstart[j] && x[i] < xend[j] &&
                     y[i] >= ystart[j] && y[i] < yend[j] &&
@@ -296,7 +296,7 @@ void mooring_barQuasiStatic::updateVel(lexer *p, ghostcell *pgc, int cmp)
                 {
                     recVel[i] = -2;
                 }
-            }            
+            }
         }
     }
 
@@ -350,7 +350,7 @@ void mooring_barQuasiStatic::updateVel(lexer *p, ghostcell *pgc, int cmp)
             
             if (count[j] > 0)
             {
-            //    cout<<"Processor "<<p->mpirank<<" receives "<<count[j]<<" elements from processor "<<j<<endl;                    
+            //    cout<<"Processor "<<p->mpirank<<" receives "<<count[j]<<" elements from processor "<<j<<endl;
         
                 MPI_Irecv(recvVel[j],count[j],MPI_DOUBLE,j,1,pgc->mpi_comm,&rreq[j]);
             }
@@ -377,9 +377,9 @@ void mooring_barQuasiStatic::updateVel(lexer *p, ghostcell *pgc, int cmp)
     for (int i = 0; i < sigma + 2; i++)
     {
         for (int j = 0; j < p->mpi_size; j++)
-        {            
+        {
             if (recVel[i]==j)
-            {        
+            {
                 v[i][cmp] = recvVel[j][count[j]];
                 count[j]++;
             }
@@ -387,9 +387,9 @@ void mooring_barQuasiStatic::updateVel(lexer *p, ghostcell *pgc, int cmp)
     }
     
     for (int i = 0; i < sigma + 2; i++)
-    {     
-        v[i][cmp] += 1e-10;        
-    }    
+    {
+        v[i][cmp] += 1e-10;
+    }
 
 
     // Delete arrays
@@ -429,22 +429,22 @@ vector<double> mooring_barQuasiStatic::getC(double theta)
 
 vector< vector<double> > mooring_barQuasiStatic::solveGauss
 (
-    std::vector< std::vector<double> > A, 
+    std::vector< std::vector<double> > A,
     std::vector< std::vector<double> > B
-) 
+)
 {
     int n  = A.size();
     int nB = B[0].size();
 
-    for (int i=0; i<n; i++) 
+    for (int i=0; i<n; i++)
     {
         // Search for maximum in this column
         double maxEl = fabs(A[i][i]);
         int maxRow = i;
         
-        for (int k=i+1; k<n; k++) 
+        for (int k=i+1; k<n; k++)
         {
-            if (fabs(A[k][i]) > maxEl) 
+            if (fabs(A[k][i]) > maxEl)
             {
                 maxEl = fabs(A[k][i]);
                 maxRow = k;
@@ -469,17 +469,17 @@ vector< vector<double> > mooring_barQuasiStatic::solveGauss
         
         
         // Make all rows below this one 0 in current column
-        for (int k=i+1; k<n; k++) 
+        for (int k=i+1; k<n; k++)
         {
             double c = -A[k][i]/A[i][i];
             
             for (int j=i; j<n; j++)
             {
-                if (i==j) 
+                if (i==j)
                 {
                     A[k][j] = 0;
-                } 
-                else 
+                }
+                else
                 {
                     A[k][j] += c * A[i][j];
                 }
@@ -487,7 +487,7 @@ vector< vector<double> > mooring_barQuasiStatic::solveGauss
             for (int j=0; j<nB; j++)
             {
                 B[k][j] += c * B[i][j];
-            }            
+            }
         }
     }
 
@@ -495,19 +495,19 @@ vector< vector<double> > mooring_barQuasiStatic::solveGauss
     vector<double> xVec(nB);
     vector< vector<double> > x(n,xVec);
 
-    for (int i=n-1; i>=0; i--) 
+    for (int i=n-1; i>=0; i--)
     {
         for (int j=0; j<nB; j++)
         {
             x[i][j] = B[i][j]/A[i][i];
-        }            
+        }
         
-        for (int k=i-1; k>=0; k--) 
+        for (int k=i-1; k>=0; k--)
         {
             for (int j=0; j<nB; j++)
             {
                 B[k][j] -= A[k][i] * x[i][j];
-            }            
+            }
         }
     }
 
@@ -522,7 +522,7 @@ void mooring_barQuasiStatic::mooringForces
     // Tension forces if line is not broken
     if (broken==false)
     {
-        Xme = Xme_; 
+        Xme = Xme_;
         Yme = Yme_;
         Zme = Zme_;
     }
@@ -530,7 +530,7 @@ void mooring_barQuasiStatic::mooringForces
     // Breakage due to max tension force
     if (breakTension > 0.0 && fabs(A[sigma-1][sigma]) >= breakTension)
     {
-        Xme = 0.0; 
+        Xme = 0.0;
         Yme = 0.0;
         Zme = 0.0;
 
@@ -540,7 +540,7 @@ void mooring_barQuasiStatic::mooringForces
     // Breakage due to time limit
     if (breakTime > 0.0 && curr_time >= breakTime)
     {
-        Xme = 0.0; 
+        Xme = 0.0;
         Yme = 0.0;
         Zme = 0.0;
 

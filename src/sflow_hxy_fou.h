@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"sflow_hxy_disc.h"
 #include"increment.h"
 
-class sflow_flux;  
+class sflow_flux;
 
 using namespace std;
 

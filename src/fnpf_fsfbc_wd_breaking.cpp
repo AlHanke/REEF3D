@@ -75,7 +75,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
                     break;
                     }
                     
-                    --i;    
+                    --i;
                     }*/
                 i=ii;
             }
@@ -100,7 +100,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
                     break;
                     }
                     
-                    ++i;    
+                    ++i;
                     }*/
                 i=ii;
             }
@@ -127,7 +127,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
                     break;
                     }
                     
-                    --j;    
+                    --j;
                     }*/
                 j=jj;
             }
@@ -151,9 +151,9 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
                     {
                     by(i,j) = 2;
                     break;
-                    } 
+                    }
                     
-                    ++j;    
+                    ++j;
                     }*/
                 j=jj;
             }
@@ -184,7 +184,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
                     break;
                     }
                     
-                    --i;    
+                    --i;
                     }
                 i=ii;
             }
@@ -205,7 +205,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
                     break;
                     }
                     
-                    ++i;    
+                    ++i;
                     }
                 i=ii;
             }
@@ -229,7 +229,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
                     break;
                     }
                     
-                    --j;    
+                    --j;
                     }
                 j=jj;
             }
@@ -251,7 +251,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
                     break;
                     }
                     
-                    ++j;    
+                    ++j;
                     }
                 j=jj;
             }
@@ -317,7 +317,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
         
         if(p->j_dir==0)
         SLICELOOP4
-        {   
+        {
             
             if(c->breaking(i,j)>=1 || c->breaking(i-1,j)>=1 || c->breaking(i+1,j)>=1)
             c->vb(i,j) = p->A365*double(c->breaking(i,j));
@@ -329,7 +329,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
 
         if(p->j_dir==1)
         SLICELOOP4
-        {   
+        {
             
             if(c->breaking(i,j)>=1 || c->breaking(i-1,j)>=1 || c->breaking(i+1,j)>=1 || c->breaking(i,j-1)>=1 || c->breaking(i,j+1)>=1)
             c->vb(i,j) = p->A365*double(c->breaking(i,j));
@@ -345,7 +345,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
         {
          filter(p,c,pgc,eta);
          filter(p,c,pgc,Fifsf);
-        }   
+        }
         
         if(p->A352==2)
         SLICELOOP4
@@ -353,7 +353,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
         {
          filter(p,c,pgc,eta);
          filter(p,c,pgc,Fifsf);
-        }   
+        }
         
         if(p->A352==3)
         SLICELOOP4
@@ -361,7 +361,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
         {
          filter(p,c,pgc,eta);
          filter(p,c,pgc,Fifsf);
-        }   
+        }
         
         // coastline filter
         /*SLICELOOP4
@@ -389,7 +389,7 @@ void fnpf_fsfbc_wd::breaking(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, 
         {
          filter(p,c,pgc,eta);
          filter(p,c,pgc,Fifsf);
-        }   
+        }
     }
     
     

@@ -63,7 +63,7 @@ force::force(lexer* p, fdm *a, ghostcell *pgc, int qn):vertice(p),nodeflag(p),in
     ym = ys + (ye-ys)*0.5;
     zm = zs + (ze-zs)*0.5;
     
-    gcval_press=40;  
+    gcval_press=40;
 }
 
 force::~force()
@@ -76,7 +76,7 @@ void force::ini(lexer *p, fdm *a, ghostcell *pgc)
     reconstruct(p,a,a->phi);
     
     print_vtp(p,a,pgc);
-} 
+}
 
 void force::start(lexer *p, fdm *a, ghostcell *pgc)
 {
@@ -88,7 +88,7 @@ void force::start(lexer *p, fdm *a, ghostcell *pgc)
         if(p->mpirank==0)
         {
         if(p->count==2)
-        cout<<"Atot_solid: "<<A_tot<<endl;  
+        cout<<"Atot_solid: "<<A_tot<<endl;
         
         cout<<"Fx: "<<Fx<<" Fy: "<<Fy<<" Fz: "<<Fz<<endl;
 
@@ -96,5 +96,5 @@ void force::start(lexer *p, fdm *a, ghostcell *pgc)
         }
     
     pgc->start4(p,a->press,gcval_press);
-} 
+}
 

@@ -59,7 +59,7 @@ void sliceint4a::resize(lexer* p)
 }
 
 int & sliceint4a::operator()(int ii, int jj)
-{            
-    return V[(ii-imin)*jmax + (jj-jmin)];    
+{
+    return V[(ii-imin)*jmax + (jj-jmin)];
 }
 

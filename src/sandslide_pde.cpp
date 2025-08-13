@@ -111,10 +111,10 @@ void sandslide_pde::slide(lexer *p, ghostcell *pgc, sediment_fdm *s)
     double dt = 0.1*p->DXM*p->DXM;
     double sqd = (1.0/(p->DXM*p->DXM));
 
-    fh(i,j) =  dt*sqd*( (s->bedzh(i+1,j)-s->bedzh(i,j))*0.5*(ci(i+1,j)+ci(i,j)) 
+    fh(i,j) =  dt*sqd*( (s->bedzh(i+1,j)-s->bedzh(i,j))*0.5*(ci(i+1,j)+ci(i,j))
                         -(s->bedzh(i,j)-s->bedzh(i-1,j))*0.5*(ci(i,j)+ci(i-1,j))
                                 
-                        +(s->bedzh(i,j+1)-s->bedzh(i,j))*0.5*(ci(i,j+1)+ci(i,j)) 
+                        +(s->bedzh(i,j+1)-s->bedzh(i,j))*0.5*(ci(i,j+1)+ci(i,j))
                         -(s->bedzh(i,j)-s->bedzh(i,j-1))*0.5*(ci(i,j)+ci(i,j-1)));
     
   

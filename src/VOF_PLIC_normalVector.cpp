@@ -39,30 +39,30 @@ Author: Tobias Martin, Fabian Knoblauch
 
 void VOF_PLIC::calcNormalFO(fdm* a, lexer* p, field& voffield)
 {   double nsum;
-    // 1st-order method 
-    nx(i,j,k) = 
+    // 1st-order method
+    nx(i,j,k) =
         (voffield(i-1,j-1,k-1)+voffield(i-1,j-1,k+1)+voffield(i-1,j+1,k-1)
         +voffield(i-1,j+1,k+1)+2.0*(voffield(i-1,j-1,k)+voffield(i-1,j+1,k)
-        +voffield(i-1,j,k-1)+voffield(i-1,j,k+1))+4.0*voffield(i-1,j,k)) 
+        +voffield(i-1,j,k-1)+voffield(i-1,j,k+1))+4.0*voffield(i-1,j,k))
         - (voffield(i+1,j-1,k-1)+voffield(i+1,j-1,k+1)+voffield(i+1,j+1,k-1)
         +voffield(i+1,j+1,k+1)+2.0*(voffield(i+1,j-1,k)+voffield(i+1,j+1,k)
         +voffield(i+1,j,k-1)+voffield(i+1,j,k+1))+4.0*voffield(i+1,j,k));
                  
-    ny(i,j,k) = 
+    ny(i,j,k) =
         (voffield(i-1,j-1,k-1)+voffield(i-1,j-1,k+1)+voffield(i+1,j-1,k-1)
         +voffield(i+1,j-1,k+1)+2.0*(voffield(i-1,j-1,k)+voffield(i+1,j-1,k)
-        +voffield(i,j-1,k-1)+voffield(i,j-1,k+1))+4.0*voffield(i,j-1,k)) 
+        +voffield(i,j-1,k-1)+voffield(i,j-1,k+1))+4.0*voffield(i,j-1,k))
         - (voffield(i-1,j+1,k-1)+voffield(i-1,j+1,k+1)+voffield(i+1,j+1,k-1)
         +voffield(i+1,j+1,k+1)+2.0*(voffield(i-1,j+1,k)+voffield(i+1,j+1,k)
         +voffield(i,j+1,k-1)+voffield(i,j+1,k+1))+4.0*voffield(i,j+1,k));
 
-    nz(i,j,k) = 
+    nz(i,j,k) =
         (voffield(i-1,j-1,k-1)+voffield(i-1,j+1,k-1)+voffield(i+1,j-1,k-1)
         +voffield(i+1,j+1,k-1)+2.0*(voffield(i-1,j,k-1)+voffield(i+1,j,k-1)
-        +voffield(i,j-1,k-1)+voffield(i,j+1,k-1))+4.0*voffield(i,j,k-1)) 
+        +voffield(i,j-1,k-1)+voffield(i,j+1,k-1))+4.0*voffield(i,j,k-1))
         - ( voffield(i-1,j-1,k+1)+voffield(i-1,j+1,k+1)+voffield(i+1,j-1,k+1)
         +voffield(i+1,j+1,k+1)+2.0*(voffield(i-1,j,k+1)+voffield(i+1,j,k+1)
-        +voffield(i,j-1,k+1)+voffield(i,j+1,k+1))+4.0*voffield(i,j,k+1));    
+        +voffield(i,j-1,k+1)+voffield(i,j+1,k+1))+4.0*voffield(i,j,k+1));
         
         nsum=sqrt(nx(i,j,k)*nx(i,j,k)+ny(i,j,k)*ny(i,j,k)+nz(i,j,k)*nz(i,j,k));
         nx(i,j,k)=nx(i,j,k)/nsum;
@@ -99,7 +99,7 @@ void VOF_PLIC::ininorVecLS(lexer* p)
         dPN[5][0] = -p->DXP[IM1];     dPN[5][1] = -p->DYP[JM1];     dPN[5][2] = 0.0;
         dPN[6][0] = 0.0;             dPN[6][1] = p->DYP[JP];     dPN[6][2] = 0.0;
         dPN[7][0] = 0.0;             dPN[7][1] = -p->DYP[JM1];     dPN[7][2] = 0.0;
-        dPN[8][0] = 0.0;             dPN[8][1] = 0.0;             dPN[8][2] = p->DZP[KP];    
+        dPN[8][0] = 0.0;             dPN[8][1] = 0.0;             dPN[8][2] = p->DZP[KP];
         dPN[9][0] = p->DXP[IP];     dPN[9][1] = 0.0;             dPN[9][2] = p->DZP[KP];
         dPN[10][0] = p->DXP[IP];     dPN[10][1] = p->DYP[JP];     dPN[10][2] = p->DZP[KP];
         dPN[11][0] = p->DXP[IP];     dPN[11][1] = -p->DYP[JM1]; dPN[11][2] = p->DZP[KP];
@@ -107,8 +107,8 @@ void VOF_PLIC::ininorVecLS(lexer* p)
         dPN[13][0] = -p->DXP[IM1]; dPN[13][1] = p->DYP[JP];     dPN[13][2] = p->DZP[KP];
         dPN[14][0] = -p->DXP[IM1]; dPN[14][1] = -p->DYP[JM1]; dPN[14][2] = p->DZP[KP];
         dPN[15][0] = 0.0;             dPN[15][1] = p->DYP[JP];     dPN[15][2] = p->DZP[KP];
-        dPN[16][0] = 0.0;             dPN[16][1] = -p->DYP[JM1]; dPN[16][2] = p->DZP[KP];    
-        dPN[17][0] = 0.0;             dPN[17][1] = 0.0;             dPN[17][2] = -p->DZP[KM1];    
+        dPN[16][0] = 0.0;             dPN[16][1] = -p->DYP[JM1]; dPN[16][2] = p->DZP[KP];
+        dPN[17][0] = 0.0;             dPN[17][1] = 0.0;             dPN[17][2] = -p->DZP[KM1];
         dPN[18][0] = p->DXP[IP];     dPN[18][1] = 0.0;             dPN[18][2] = -p->DZP[KM1];
         dPN[19][0] = p->DXP[IP];     dPN[19][1] = p->DYP[JP];     dPN[19][2] = -p->DZP[KM1];
         dPN[20][0] = p->DXP[IP];     dPN[20][1] = -p->DYP[JM1]; dPN[20][2] = -p->DZP[KM1];
@@ -145,9 +145,9 @@ void VOF_PLIC::ininorVecLS(lexer* p)
         
         //- Invert G
         
-        double det = 
-             G[0][0]*(G[1][1]*G[2][2] - G[2][1]*G[1][2]) 
-            - G[0][1]*(G[1][0]*G[2][2] - G[1][2]*G[2][0]) 
+        double det =
+             G[0][0]*(G[1][1]*G[2][2] - G[2][1]*G[1][2])
+            - G[0][1]*(G[1][0]*G[2][2] - G[1][2]*G[2][0])
             + G[0][2]*(G[1][0]*G[2][1] - G[1][1]*G[2][0]);
 
         double invdet = 1.0/det;
@@ -179,7 +179,7 @@ void VOF_PLIC::ininorVecLS(lexer* p)
     p->del_Darray(wn, 26);
     p->del_Darray(dPN, 26, 3);
     p->del_Darray(G, 3, 3);
-    p->del_Darray(invG, 3, 3);    
+    p->del_Darray(invG, 3, 3);
 }
 
 void VOF_PLIC::calcNormalLS(fdm* a, lexer* p, field& voffield)
@@ -197,7 +197,7 @@ void VOF_PLIC::calcNormalLS(fdm* a, lexer* p, field& voffield)
         + nxCoeff[i][j][k][9]*(voffield(i+1,j,k+1) - voffield(i,j,k))
         + nxCoeff[i][j][k][10]*(voffield(i+1,j+1,k+1) - voffield(i,j,k))
         + nxCoeff[i][j][k][11]*(voffield(i+1,j-1,k+1) - voffield(i,j,k))
-        + nxCoeff[i][j][k][12]*(voffield(i-1,j,k+1) - voffield(i,j,k))        
+        + nxCoeff[i][j][k][12]*(voffield(i-1,j,k+1) - voffield(i,j,k))
         + nxCoeff[i][j][k][13]*(voffield(i-1,j+1,k+1) - voffield(i,j,k))
         + nxCoeff[i][j][k][14]*(voffield(i-1,j-1,k+1) - voffield(i,j,k))
         + nxCoeff[i][j][k][15]*(voffield(i,j+1,k+1) - voffield(i,j,k))
@@ -225,7 +225,7 @@ void VOF_PLIC::calcNormalLS(fdm* a, lexer* p, field& voffield)
         + nyCoeff[i][j][k][9]*(voffield(i+1,j,k+1) - voffield(i,j,k))
         + nyCoeff[i][j][k][10]*(voffield(i+1,j+1,k+1) - voffield(i,j,k))
         + nyCoeff[i][j][k][11]*(voffield(i+1,j-1,k+1) - voffield(i,j,k))
-        + nyCoeff[i][j][k][12]*(voffield(i-1,j,k+1) - voffield(i,j,k))        
+        + nyCoeff[i][j][k][12]*(voffield(i-1,j,k+1) - voffield(i,j,k))
         + nyCoeff[i][j][k][13]*(voffield(i-1,j+1,k+1) - voffield(i,j,k))
         + nyCoeff[i][j][k][14]*(voffield(i-1,j-1,k+1) - voffield(i,j,k))
         + nyCoeff[i][j][k][15]*(voffield(i,j+1,k+1) - voffield(i,j,k))
@@ -253,7 +253,7 @@ void VOF_PLIC::calcNormalLS(fdm* a, lexer* p, field& voffield)
         + nzCoeff[i][j][k][9]*(voffield(i+1,j,k+1) - voffield(i,j,k))
         + nzCoeff[i][j][k][10]*(voffield(i+1,j+1,k+1) - voffield(i,j,k))
         + nzCoeff[i][j][k][11]*(voffield(i+1,j-1,k+1) - voffield(i,j,k))
-        + nzCoeff[i][j][k][12]*(voffield(i-1,j,k+1) - voffield(i,j,k))        
+        + nzCoeff[i][j][k][12]*(voffield(i-1,j,k+1) - voffield(i,j,k))
         + nzCoeff[i][j][k][13]*(voffield(i-1,j+1,k+1) - voffield(i,j,k))
         + nzCoeff[i][j][k][14]*(voffield(i-1,j-1,k+1) - voffield(i,j,k))
         + nzCoeff[i][j][k][15]*(voffield(i,j+1,k+1) - voffield(i,j,k))
@@ -266,7 +266,7 @@ void VOF_PLIC::calcNormalLS(fdm* a, lexer* p, field& voffield)
         + nzCoeff[i][j][k][22]*(voffield(i-1,j+1,k-1) - voffield(i,j,k))
         + nzCoeff[i][j][k][23]*(voffield(i-1,j-1,k-1) - voffield(i,j,k))
         + nzCoeff[i][j][k][24]*(voffield(i,j+1,k-1) - voffield(i,j,k))
-        + nzCoeff[i][j][k][25]*(voffield(i,j-1,k-1) - voffield(i,j,k)));    
+        + nzCoeff[i][j][k][25]*(voffield(i,j-1,k-1) - voffield(i,j,k)));
         
         nsum=sqrt(nx(i,j,k)*nx(i,j,k)+ny(i,j,k)*ny(i,j,k)+nz(i,j,k)*nz(i,j,k));
         nx(i,j,k)=nx(i,j,k)/nsum;
@@ -281,7 +281,7 @@ void VOF_PLIC::calcNormalWENO(fdm* a, lexer* p, field& voffield)
     double nsum;
     nx(i,j,k) = -normvec_x(a, voffield);
     ny(i,j,k) = -normvec_y(a, voffield);
-    nz(i,j,k) = -normvec_z(a, voffield);  
+    nz(i,j,k) = -normvec_z(a, voffield);
     nsum=sqrt(nx(i,j,k)*nx(i,j,k)+ny(i,j,k)*ny(i,j,k)+nz(i,j,k)*nz(i,j,k));
     nx(i,j,k)=nx(i,j,k)/nsum;
     ny(i,j,k)=ny(i,j,k)/nsum;
@@ -291,7 +291,7 @@ void VOF_PLIC::calcNormalWENO(fdm* a, lexer* p, field& voffield)
 
 void VOF_PLIC::calcNormalMassCentre(fdm* a, lexer* p, field& voffield)
 {
-    double nsum,invvec_x,invvec_y, invvec_z; 
+    double nsum,invvec_x,invvec_y, invvec_z;
     double Vsum=0.0;
     double Vxsum=0.0;
     double Vysum=0.0;
@@ -492,29 +492,29 @@ void VOF_PLIC::calcNormalMassCentre(fdm* a, lexer* p, field& voffield)
 void VOF_PLIC::calcNormalPhi(fdm* a, lexer* p)
 {
     double nsum;
-    nx(i,j,k) = 
+    nx(i,j,k) =
         (a->phi(i-1,j-1,k-1)+a->phi(i-1,j-1,k+1)+a->phi(i-1,j+1,k-1)
         +a->phi(i-1,j+1,k+1)+2.0*(a->phi(i-1,j-1,k)+a->phi(i-1,j+1,k)
-        +a->phi(i-1,j,k-1)+a->phi(i-1,j,k+1))+4.0*a->phi(i-1,j,k)) 
+        +a->phi(i-1,j,k-1)+a->phi(i-1,j,k+1))+4.0*a->phi(i-1,j,k))
         - (a->phi(i+1,j-1,k-1)+a->phi(i+1,j-1,k+1)+a->phi(i+1,j+1,k-1)
         +a->phi(i+1,j+1,k+1)+2.0*(a->phi(i+1,j-1,k)+a->phi(i+1,j+1,k)
         +a->phi(i+1,j,k-1)+a->phi(i+1,j,k+1))+4.0*a->phi(i+1,j,k));
                  
-    ny(i,j,k) = 
+    ny(i,j,k) =
         (a->phi(i-1,j-1,k-1)+a->phi(i-1,j-1,k+1)+a->phi(i+1,j-1,k-1)
         +a->phi(i+1,j-1,k+1)+2.0*(a->phi(i-1,j-1,k)+a->phi(i+1,j-1,k)
-        +a->phi(i,j-1,k-1)+a->phi(i,j-1,k+1))+4.0*a->phi(i,j-1,k)) 
+        +a->phi(i,j-1,k-1)+a->phi(i,j-1,k+1))+4.0*a->phi(i,j-1,k))
         - (a->phi(i-1,j+1,k-1)+a->phi(i-1,j+1,k+1)+a->phi(i+1,j+1,k-1)
         +a->phi(i+1,j+1,k+1)+2.0*(a->phi(i-1,j+1,k)+a->phi(i+1,j+1,k)
         +a->phi(i,j+1,k-1)+a->phi(i,j+1,k+1))+4.0*a->phi(i,j+1,k));
 
-    nz(i,j,k) = 
+    nz(i,j,k) =
         (a->phi(i-1,j-1,k-1)+a->phi(i-1,j+1,k-1)+a->phi(i+1,j-1,k-1)
         +a->phi(i+1,j+1,k-1)+2.0*(a->phi(i-1,j,k-1)+a->phi(i+1,j,k-1)
-        +a->phi(i,j-1,k-1)+a->phi(i,j+1,k-1))+4.0*a->phi(i,j,k-1)) 
+        +a->phi(i,j-1,k-1)+a->phi(i,j+1,k-1))+4.0*a->phi(i,j,k-1))
         - ( a->phi(i-1,j-1,k+1)+a->phi(i-1,j+1,k+1)+a->phi(i+1,j-1,k+1)
         +a->phi(i+1,j+1,k+1)+2.0*(a->phi(i-1,j,k+1)+a->phi(i+1,j,k+1)
-        +a->phi(i,j-1,k+1)+a->phi(i,j+1,k+1))+4.0*a->phi(i,j,k+1)); 
+        +a->phi(i,j-1,k+1)+a->phi(i,j+1,k+1))+4.0*a->phi(i,j,k+1));
         
     nsum=sqrt(nx(i,j,k)*nx(i,j,k)+ny(i,j,k)*ny(i,j,k)+nz(i,j,k)*nz(i,j,k));
     nx(i,j,k)=nx(i,j,k)/nsum;
@@ -560,7 +560,7 @@ void VOF_PLIC:: calcNormalWeymouth(fdm* a, lexer* p, field& voffield)
     n1_max=max({fabs(n1m),fabs(n1c),fabs(n1p)});
     
     if(p->j_dir>0)
-    {   
+    {
         p2m=voffield(i,j-1,k-1)+voffield(i,j-1,k)+voffield(i,j-1,k+1);
         p2p=voffield(i,j+1,k-1)+voffield(i,j+1,k)+voffield(i,j+1,k+1);
         n2m=-(pcc-p2m)/(p->DYP[JM1]);
@@ -632,7 +632,7 @@ void VOF_PLIC:: calcNormalWeymouth(fdm* a, lexer* p, field& voffield)
     }
     
     if(p->j_dir>0)
-    {   
+    {
         if(voffield(i,j+1,k)>vof_max)
         {
             vof_max=voffield(i,j+1,k);
@@ -727,7 +727,7 @@ void VOF_PLIC:: calcNormalWeymouth(fdm* a, lexer* p, field& voffield)
         n_z=-(p1p-p1m)/(p->DZP[KP]+p->DZP[KM1]);
         
         if(p->j_dir>0)
-        {   
+        {
             p2m=voffield(i-1,j-1,k)+voffield(i,j-1,k)+voffield(i+1,j-1,k);
             p2p=voffield(i-1,j+1,k)+voffield(i,j+1,k)+voffield(i+1,j+1,k);
            /* if(voffield(i,j,k)>=0.5)

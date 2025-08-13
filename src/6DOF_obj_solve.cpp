@@ -72,7 +72,7 @@ void sixdof_obj::solve_eqmotion_oneway_nhflow(lexer *p, ghostcell *pgc, int iter
     rk2(p,pgc,iter);
     
     if(p->A510==3)
-    rk3(p,pgc,iter);       
+    rk3(p,pgc,iter);
 }
 
 void sixdof_obj::solve_eqmotion_oneway_sflow(lexer *p, ghostcell *pgc, int iter)
@@ -81,12 +81,12 @@ void sixdof_obj::solve_eqmotion_oneway_sflow(lexer *p, ghostcell *pgc, int iter)
     rk2(p,pgc,iter);
     
     if(p->A210==3)
-    rk3(p,pgc,iter);       
+    rk3(p,pgc,iter);
 }
     
 void sixdof_obj::rk2(lexer *p, ghostcell *pgc, int iter)
-{   
-    get_trans(p,pgc, dp_, dc_, p_, c_);    
+{
+    get_trans(p,pgc, dp_, dc_, p_, c_);
     get_rot(p,dh_, de_, h_, e_);
         
     if(iter==0)
@@ -103,17 +103,17 @@ void sixdof_obj::rk2(lexer *p, ghostcell *pgc, int iter)
     }
     
     if(iter==1)
-    {  
+    {
         p_ = 0.5*pk_ + 0.5*p_ + 0.5*p->dt*dp_;
         c_ = 0.5*ck_ + 0.5*c_ + 0.5*p->dt*dc_;
         h_ = 0.5*hk_ + 0.5*h_ + 0.5*p->dt*dh_;
-        e_ = 0.5*ek_ + 0.5*e_ + 0.5*p->dt*de_;    
+        e_ = 0.5*ek_ + 0.5*e_ + 0.5*p->dt*de_;
     }
 }
 
 void sixdof_obj::rk3(lexer *p, ghostcell *pgc, int iter)
-{   
-    get_trans(p, pgc, dp_, dc_, p_, c_);    
+{
+    get_trans(p, pgc, dp_, dc_, p_, c_);
     get_rot(p, dh_, de_, h_, e_);
         
     if(iter==0)
@@ -135,7 +135,7 @@ void sixdof_obj::rk3(lexer *p, ghostcell *pgc, int iter)
         c_ = 0.75*ck_ + 0.25*c_ + 0.25*p->dt*dc_;
         h_ = 0.75*hk_ + 0.25*h_ + 0.25*p->dt*dh_;
         e_ = 0.75*ek_ + 0.25*e_ + 0.25*p->dt*de_;
-    }  
+    }
     
     if(iter==2)
     {
@@ -148,7 +148,7 @@ void sixdof_obj::rk3(lexer *p, ghostcell *pgc, int iter)
 
 void sixdof_obj::rkls3(lexer *p, ghostcell *pgc, int iter)
 {
-    get_trans(p, pgc, dp_, dc_, p_, c_);    
+    get_trans(p, pgc, dp_, dc_, p_, c_);
     get_rot(p, dh_, de_, h_, e_);
 
     p_ = p_ + gamma[iter]*p->dt*dp_ + zeta[iter]*p->dt*dpk_;
@@ -164,7 +164,7 @@ void sixdof_obj::rkls3(lexer *p, ghostcell *pgc, int iter)
 
 void sixdof_obj::solve_eqmotion_oneway_onestep(lexer *p, ghostcell *pgc)
 {
-    get_trans(p, pgc, dp_, dc_, p_, c_);    
+    get_trans(p, pgc, dp_, dc_, p_, c_);
     get_rot(p, dh_, de_, h_, e_);
         
         pk_ = p_;
@@ -180,7 +180,7 @@ void sixdof_obj::solve_eqmotion_oneway_onestep(lexer *p, ghostcell *pgc)
         p_ = 0.5*pk_ + 0.5*p_ + 0.5*p->dt*dp_;
         c_ = 0.5*ck_ + 0.5*c_ + 0.5*p->dt*dc_;
         h_ = 0.5*hk_ + 0.5*h_ + 0.5*p->dt*dh_;
-        e_ = 0.5*ek_ + 0.5*e_ + 0.5*p->dt*de_;         
+        e_ = 0.5*ek_ + 0.5*e_ + 0.5*p->dt*de_;
 }
 
 

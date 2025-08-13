@@ -61,7 +61,7 @@ double fnpf_cds4::sx(lexer *p, slice &f, double ivel)
 double fnpf_cds4::sy(lexer *p, slice &f, double jvel)
 {
     return (-f(i,j+2) + 8.0*f(i,j+1) - 8.0*f(i,j-1) + f(i,j-2))
-          /(-p->YP[JP2] + 8.0*p->YP[JP1] - 8.0*p->YP[JM1] + p->YP[JM2]);   
+          /(-p->YP[JP2] + 8.0*p->YP[JP1] - 8.0*p->YP[JM1] + p->YP[JM2]);
 }
 
 double fnpf_cds4::sz(lexer *p, double *f)

@@ -36,14 +36,14 @@ void nhflow_forcing::ray_cast_direct(lexer *p, fdm_nhf *d, ghostcell *pgc, int t
     double Cx,Cy,Cz;
     double PQx,PQy,PQz;
     double PAx,PAy,PAz;
-    double PBx,PBy,PBz; 
+    double PBx,PBy,PBz;
     double PCx,PCy,PCz;
     double Mx,My,Mz;
     double xc,yc,zc;
     int is,ie,js,je,ks,ke;
     int ir;
     double u,v,w;
-    double denom;    
+    double denom;
     int checkin;
     double psi = 1.0e-8*p->DXM;
     int margin = 5;
@@ -65,17 +65,17 @@ void nhflow_forcing::ray_cast_direct(lexer *p, fdm_nhf *d, ghostcell *pgc, int t
     
     checkin = 0;
     
-    if(Ax>=p->global_xmin && Ax<=p->global_xmax 
+    if(Ax>=p->global_xmin && Ax<=p->global_xmax
     && Ay>=p->global_ymin && Ay<=p->global_ymax
     && Az>=zmin && Az<=zmax)
     checkin=1;
     
-    if(Bx>=p->global_xmin && Bx<=p->global_xmax 
+    if(Bx>=p->global_xmin && Bx<=p->global_xmax
     && By>=p->global_ymin && By<=p->global_ymax
     && Bz>=zmin && Bz<=zmax)
     checkin=1;
     
-    if(Cx>=p->global_xmin && Cx<=p->global_xmax 
+    if(Cx>=p->global_xmin && Cx<=p->global_xmax
     && Cy>=p->global_ymin && Cy<=p->global_ymax
     && Cz>=zmin && Cz<=zmax)
     checkin=1;
@@ -102,7 +102,7 @@ void nhflow_forcing::ray_cast_direct(lexer *p, fdm_nhf *d, ghostcell *pgc, int t
     je = p->posc_j(ye)+margin;
     
     ks = p->posc_sig(is+margin,js+margin,zs)-margin;
-    ke = p->posc_sig(is+margin,js+margin,ze)+margin;    
+    ke = p->posc_sig(is+margin,js+margin,ze)+margin;
 
    // ks=0;
    // ke=p->knoz;
@@ -114,13 +114,13 @@ void nhflow_forcing::ray_cast_direct(lexer *p, fdm_nhf *d, ghostcell *pgc, int t
     je = MIN(je,p->knoy);
     
     ks = MAX(ks,0);
-    ke = MIN(ke,p->knoz);        
+    ke = MIN(ke,p->knoz);
         
         //cout<<"xs: "<<xs<<" xe: "<<xe<<" ys: "<<ys<<" ye: "<<ye<<" zs: "<<zs<<" ze: "<<ze<<endl;
-        //cout<<"is: "<<is<<" ie: "<<ie<<" js: "<<js<<" je: "<<je<<" ks: "<<ks<<" ke: "<<ke<<endl;    
+        //cout<<"is: "<<is<<" ie: "<<ie<<" js: "<<js<<" je: "<<je<<" ks: "<<ks<<" ke: "<<ke<<endl;
         
          for(i=is;i<ie;++i)
-        for(j=js;j<je;++j) 
+        for(j=js;j<je;++j)
         for(k=ks;k<ke;++k)
         {
         xc = p->XP[IP];

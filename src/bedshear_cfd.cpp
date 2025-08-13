@@ -131,7 +131,7 @@ void bedshear::taubed(lexer *p, fdm * a, ghostcell *pgc, sediment_fdm *s)
         wvel=p->ccipol3_a(a->w,xip,yip,zval);
         }
         
-    // predictor    
+    // predictor
     u_abs = sqrt(uvel*uvel + vvel*vvel);
     u_plus = (1.0/kappa)*log(30.0*(dist/ks));
     tau0=tau=density*(u_abs*u_abs)/pow((u_plus>0.0?u_plus:1.0e20),2.0);
@@ -314,7 +314,7 @@ void bedshear::taubed(lexer *p, fdm * a, ghostcell *pgc, sediment_fdm *s)
         v_t=p->ccipol4(a->eddyv,xip,yip,zval);
         }
         
-    // predictor    
+    // predictor
     u_abs = sqrt(uvel*uvel + vvel*vvel);
     u_plus = (1.0/kappa)*log(30.0*(dist/ks));
     tau0=tau=density*(u_abs*u_abs)/pow((u_plus>0.0?u_plus:1.0e20),2.0);

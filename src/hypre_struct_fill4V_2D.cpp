@@ -64,8 +64,8 @@ void hypre_struct::fill_matrix4V_2D(lexer* p, ghostcell* pgc, double *f, vec &rh
         ++count;
         
         values[count]=M.t[n];
-        ++count; 
-        }     
+        ++count;
+        }
         
         SFLUIDCHECK
         {
@@ -82,8 +82,8 @@ void hypre_struct::fill_matrix4V_2D(lexer* p, ghostcell* pgc, double *f, vec &rh
         ++count;
         
         values[count]=0.0;
-        ++count;  
-        }    
+        ++count;
+        }
     }
     
     
@@ -108,7 +108,7 @@ void hypre_struct::fill_matrix4V_2D(lexer* p, ghostcell* pgc, double *f, vec &rh
     HYPRE_StructVectorAssemble(x);
     
     
-    count=0; 
+    count=0;
     KJILOOP
     {
         PFLUIDCHECK

@@ -62,17 +62,17 @@ void sediment_exner::non_equillibrium_solve(lexer* p, ghostcell *pgc, sediment_f
     SLICELOOP4
     {
         ux1=s->P(i-1,j);
-        vx1=0.25*(s->Q(i,j)+s->Q(i-1,j)+s->Q(i,j-1)+s->Q(i-1,j-1)); 
+        vx1=0.25*(s->Q(i,j)+s->Q(i-1,j)+s->Q(i,j-1)+s->Q(i-1,j-1));
         
         ux2=s->P(i,j);
-        vx2=0.25*(s->Q(i,j)+s->Q(i+1,j)+s->Q(i,j-1)+s->Q(i+1,j-1)); 
+        vx2=0.25*(s->Q(i,j)+s->Q(i+1,j)+s->Q(i,j-1)+s->Q(i+1,j-1));
         
         
         uy1=0.25*(s->P(i,j-1)+s->P(i,j)+s->P(i-1,j-1)+s->P(i-1,j));
-        vy1=s->Q(i,j-1); 
+        vy1=s->Q(i,j-1);
         
         uy2=0.25*(s->P(i,j)+s->P(i,j+1)+s->P(i-1,j)+s->P(i-1,j+1));
-        vy2=s->Q(i,j); 
+        vy2=s->Q(i,j);
         
         
         ux1_abs = sqrt(ux1*ux1 + vx1*vx1);
@@ -102,7 +102,7 @@ void sediment_exner::non_equillibrium_solve(lexer* p, ghostcell *pgc, sediment_f
     Ls = MAX(Ls,0.0);
     Ls = MIN(Ls,1.0);
     
-    //Ls = 100.0*p->S20; 
+    //Ls = 100.0*p->S20;
     
     Ls = 0.1;
     
@@ -126,7 +126,7 @@ starttime=pgc->timer();
     {
     Ls = 4000.0*MAX(s->shields_eff(i,j)-s->shields_crit(i,j), 1.0e-6)*d50;
     
-    M.p[n]  =  1.0;     
+    M.p[n]  =  1.0;
                
 
        M.n[n] = Ls/(p->DXP[IP]+p->DXP[IM1]);

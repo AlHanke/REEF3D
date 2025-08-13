@@ -50,7 +50,7 @@ void komega_bc::bckomega_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
         vrans_wall_law_kin(p,a,kin,eps);
     }
 
-// ----------------- 
+// -----------------
     if(gcval==30)
     {
         QGC4LOOP
@@ -95,7 +95,7 @@ void komega_bc::wall_law_kin(fdm* a,lexer* p,field& kin,field& eps,int ii,int jj
         
             uvel=p->ccipol1(a->u,p->XP[IP],p->YP[JP],zval);
             vvel=p->ccipol2(a->v,p->XP[IP],p->YP[JP],zval);
-            wvel=p->ccipol3(a->w,p->XP[IP],p->YP[JP],zval);    
+            wvel=p->ccipol3(a->w,p->XP[IP],p->YP[JP],zval);
         }
         
         u_abs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
@@ -112,7 +112,7 @@ void komega_bc::wall_law_kin(fdm* a,lexer* p,field& kin,field& eps,int ii,int jj
 }
 
 void komega_bc::wall_law_omega(fdm* a,lexer* p,field& kin,field& eps,int ii,int jj,int kk,int cs, int bc, int id, double dist)
-{    
+{
     i=ii;
     j=jj;
     k=kk;
@@ -281,7 +281,7 @@ void komega_bc::vrans_wall_law_kin(lexer *p,fdm *a,field &kin,field &eps)
     n=0;
     LOOP
     {
-        if(a->porosity(i,j,k)>=0.99 &&  (a->porosity(i-1,j,k)<0.99 || a->porosity(i+1,j,k)<0.99 
+        if(a->porosity(i,j,k)>=0.99 &&  (a->porosity(i-1,j,k)<0.99 || a->porosity(i+1,j,k)<0.99
                                         || a->porosity(i,j-1,k)<0.99 || a->porosity(i,j+1,k)<0.99)
                                         || a->porosity(i,j,k-1)<0.99 || a->porosity(i,j,k+1)<0.99)
         {
@@ -338,7 +338,7 @@ void komega_bc::vrans_wall_law_omega(lexer *p,fdm *a,field &kin,field &eps)
     n=0;
     LOOP
     {
-        if(a->porosity(i,j,k)>=0.99 &&  (a->porosity(i-1,j,k)<0.99 || a->porosity(i+1,j,k)<0.99 
+        if(a->porosity(i,j,k)>=0.99 &&  (a->porosity(i-1,j,k)<0.99 || a->porosity(i+1,j,k)<0.99
                                         || a->porosity(i,j-1,k)<0.99 || a->porosity(i,j+1,k)<0.99)
                                         || a->porosity(i,j,k-1)<0.99 || a->porosity(i,j,k+1)<0.99)
         {

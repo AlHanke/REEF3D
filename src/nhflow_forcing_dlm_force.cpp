@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"ghostcell.h"
 
-void nhflow_forcing::dlm_forcecalc(lexer *p, fdm_nhf *d, ghostcell *pgc, 
+void nhflow_forcing::dlm_forcecalc(lexer *p, fdm_nhf *d, ghostcell *pgc,
                              double alpha, double *U, double *V, double *W, slice &WL)
 {
     for(int n=0; n<p->A584; ++n)
@@ -34,7 +34,7 @@ void nhflow_forcing::dlm_forcecalc(lexer *p, fdm_nhf *d, ghostcell *pgc,
     {
     EL_FX[n][q] = 0.0;
     EL_FY[n][q] = 0.0;
-    EL_FZ[n][q] = 0.0;        
+    EL_FZ[n][q] = 0.0;
     }
 
     for(int n=0; n<p->A584; ++n)
@@ -84,7 +84,7 @@ void nhflow_forcing::dlm_forcecalc(lexer *p, fdm_nhf *d, ghostcell *pgc,
             D *= kernel(dist);
                         
             EL_FZ[n][q] -= W[IJK]*D;
-        }     
+        }
     }
     
     
@@ -94,7 +94,7 @@ void nhflow_forcing::dlm_forcecalc(lexer *p, fdm_nhf *d, ghostcell *pgc,
     {
     EL_FX[n][q] /= (alpha*p->dt);
     EL_FY[n][q] /= (alpha*p->dt);
-    EL_FZ[n][q] /= (alpha*p->dt);        
+    EL_FZ[n][q] /= (alpha*p->dt);
     }
  
 }

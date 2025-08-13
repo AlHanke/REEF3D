@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"slice.h"
 
-wind_f::wind_f(lexer *p) 
+wind_f::wind_f(lexer *p)
 {
     wind_forcing_drag_coeff(p);
     

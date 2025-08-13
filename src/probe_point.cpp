@@ -108,7 +108,7 @@ void probe_point::start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
     
     if(p->mpirank==0)
     pout[n]<<setprecision(9)<<p->simtime<<" \t "<<uval<<" \t "<<vval<<" \t "<<wval<<" \t "<<pval<<" \t "<<kval<<" \t "<<eval<<" \t "<<edval<<endl;
-    }            
+    }
 }
 
 void probe_point::write(lexer *p, fdm *a, ghostcell *pgc)

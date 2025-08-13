@@ -47,7 +47,7 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
     {
     polygon_sum3+=numpt[n];
     ++polygon_num3;
-    }  
+    }
     
     vertice_num = ccptcount;
     
@@ -121,7 +121,7 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
     ffn=ccpt[n][2];
     result.write((char*)&ffn, sizeof (float));
     
-    //cout<<" ccpt_x: "<<ccpt[n][0] <<" ccpt_y: "<<ccpt[n][1]<<" ccpt_z: "<<ccpt[n][2]<<endl;  
+    //cout<<" ccpt_x: "<<ccpt[n][0] <<" ccpt_y: "<<ccpt[n][1]<<" ccpt_z: "<<ccpt[n][2]<<endl;
     }
     
 //  Velocity
@@ -204,7 +204,7 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
     result<<endl<<"</AppendedData>"<<endl;
     result<<"</VTKFile>"<<endl;
 
-    result.close();    
+    result.close();
     
     ++forceprintcount;
 }

@@ -90,7 +90,7 @@ void sixdof_obj::disc_2D(lexer *p, ghostcell *pgc, slice &f)
     if(fabs(lsv)<1.0e-8)
     lsSig=1.0;
 
-// x    
+// x
     xmin=(lsv-f(i-1,j))/p->DXP[IM1];
     xplus=(f(i+1,j)-lsv)/p->DXP[IP];
     
@@ -131,7 +131,7 @@ void sixdof_obj::disc_2D(lexer *p, ghostcell *pgc, slice &f)
 
 
 void sixdof_obj::time_preproc_2D(lexer* p)
-{    
+{
     n=0;
     SLICELOOP4
     {

@@ -27,7 +27,7 @@ Author: Hans Bihs
 
 void sediment_f::filter(lexer *p,ghostcell *pgc, slice &f, int outer_iter, int inner_iter)
 {
-    slice4 h(p),dh(p); 
+    slice4 h(p),dh(p);
     
     for(int qn=0;qn<outer_iter;++qn)
     {

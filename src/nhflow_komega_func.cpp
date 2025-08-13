@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 nhflow_komega_func::nhflow_komega_func(lexer* p, fdm_nhf *d, ghostcell *pgc) : nhflow_rans_io(p,d), nhflow_komega_bc(p)
 {
-    if(p->j_dir==0)        
+    if(p->j_dir==0)
     epsi = p->T38*(1.0/2.0)*(p->DRM+p->DTM);
         
     if(p->j_dir==1)
@@ -155,7 +155,7 @@ void nhflow_komega_func::eddyvisc(lexer* p, fdm_nhf *d, ghostcell* pgc, vrans* p
 }
 
 void nhflow_komega_func::kinsource(lexer *p, fdm_nhf *d, vrans* pvrans)
-{    
+{
     int count=0;
 
     LOOP

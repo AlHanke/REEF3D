@@ -196,7 +196,7 @@ void pftimestep::ini(fdm* a, lexer* p,ghostcell* pgc)
     
     
     
-    if(p->j_dir==1) 
+    if(p->j_dir==1)
        cu = MIN(cu,cv);
     
        p->dt=p->N47*cu;

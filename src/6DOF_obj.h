@@ -217,12 +217,12 @@ private:
     int entity_sum, count, rayiter;
     int *tstart,*tend;
     double epsifb;
-    const double epsi; 
+    const double epsi;
     
     reinidisc *prdisc;
     net_interface *pnetinter;
     
-    field4a f, frk1, L, dt; 
+    field4a f, frk1, L, dt;
     int reiniter;
     
     
@@ -289,7 +289,7 @@ private:
         - c: position of mass centre in inertial system
         - p: velocity of mass centre in inertial system
     */
-    Eigen::Vector3d p_, pk_, pn1_, pn2_, pn3_, dp_, dpk_, dpn1_, dpn2_, dpn3_; 
+    Eigen::Vector3d p_, pk_, pn1_, pn2_, pn3_, dp_, dpk_, dpn1_, dpn2_, dpn3_;
     Eigen::Vector3d c_, ck_, cn1_, cn2_, cn3_, dc_, dck_, dcn1_, dcn2_, dcn3_;
     Eigen::Vector3d h_, hk_, hn1_, hn2_, hn3_, dh_, dhk_, dhn1_, dhn2_, dhn3_;
     Eigen::Vector4d e_, ek_, en1_, en2_, en3_, de_, dek_, den1_, den2_, den3_;
@@ -339,7 +339,7 @@ private:
     field5 eta;
     
     
-    // Parallel    
+    // Parallel
     double *xstart, *xend, *ystart, *yend, *zstart, *zend;
    
     double kernel(const double&);
@@ -363,10 +363,10 @@ private:
     // Mooring
     vector<double> X311_xen, X311_yen, X311_zen;
     vector<mooring*> pmooring;
-    vector<double> Xme, Yme, Zme, Kme, Mme, Nme;    
+    vector<double> Xme, Yme, Zme, Kme, Mme, Nme;
     
     // Net Forces
-    vector<double> Xne, Yne, Zne, Kne, Mne, Nne;   
+    vector<double> Xne, Yne, Zne, Kne, Mne, Nne;
 
     // Number
     int n6DOF;

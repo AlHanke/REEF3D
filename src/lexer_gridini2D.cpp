@@ -52,7 +52,7 @@ void lexer::gridini2D()
     sizeS1[n]=0;
     sizeS2[n]=0;
     sizeS4[n]=0;
-    }    
+    }
     
     Iarray(IOSL,imax*jmax);
     

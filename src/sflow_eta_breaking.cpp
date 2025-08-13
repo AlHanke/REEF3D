@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void sflow_eta::breaking(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &eta_n, double alpha)
-{    
+{
     if(p->A246>=1)
     SLICELOOP4
     {
@@ -155,7 +155,7 @@ void sflow_eta::breaking(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &
         b->breaking(i+1,j)=1;
             
         b->breaking(i,j-1)=1;
-        b->breaking(i,j+1)=1;  
+        b->breaking(i,j+1)=1;
         }
     }
     
@@ -169,7 +169,7 @@ void sflow_eta::breaking(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &
         b->breaking(i+1,j)=1;
             
         b->breaking(i,j-1)=1;
-        b->breaking(i,j+1)=1;  
+        b->breaking(i,j+1)=1;
         }
     }
     
@@ -178,7 +178,7 @@ void sflow_eta::breaking(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &
 
 
 void sflow_eta::breaking_persist(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &eta_n, double alpha)
-{    
+{
     SLICELOOP4
     b->breaking_print(i,j)=double(b->breaking(i,j));
     
@@ -195,5 +195,5 @@ void sflow_eta::breaking_persist(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta,
             b->breaking(i,j)=0;
             }
         }
-    }    
+    }
 }

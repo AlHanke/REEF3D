@@ -96,7 +96,7 @@ void idiff2_CN::diff_w(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &d
         a->M.b[count] = alphaCN*visctermb;
         a->M.t[count] = alphaCN*visctermt;
 
-        a->rhsvec.V[count] -= (1.0-alphaCN)*(viscterms*w(i-1,j,k) + visctermn*w(i+1,j,k) + viscterme*w(i,j-1,k) + visctermw*w(i,j+1,k) + visctermb*w(i,j,k-1) + visctermt*w(i,j,k+1));    
+        a->rhsvec.V[count] -= (1.0-alphaCN)*(viscterms*w(i-1,j,k) + visctermn*w(i+1,j,k) + viscterme*w(i,j-1,k) + visctermw*w(i,j+1,k) + visctermb*w(i,j,k-1) + visctermt*w(i,j,k+1));
 
      ++count;
     }

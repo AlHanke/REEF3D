@@ -43,7 +43,7 @@ void force::force_calc(lexer* p, fdm *a, ghostcell *pgc)
     A_tot=0.0;
     
     for(n=0;n<polygon_num;++n)
-    {       
+    {
             // triangle
             if(numpt[n]==3)
             {
@@ -172,7 +172,7 @@ void force::force_calc(lexer* p, fdm *a, ghostcell *pgc)
             phival =    p->ccipol4a(a->phi,xloc,yloc,zloc);
             
             if(p->P82==1)
-            viscosity += p->ccipol4a(a->eddyv,xloc,yloc,zloc);   
+            viscosity += p->ccipol4a(a->eddyv,xloc,yloc,zloc);
             
             i = p->posc_i(xloc);
             j = p->posc_j(yloc);
@@ -188,7 +188,7 @@ void force::force_calc(lexer* p, fdm *a, ghostcell *pgc)
                        + density*viscosity*A*(dv*nx+dv*nz);
                     
             Fz += -(pval)*A*nz
-                       + density*viscosity*A*(dw*nx+dw*ny);   
+                       + density*viscosity*A*(dw*nx+dw*ny);
                        
             }
     Ax+=A*nx;

@@ -25,8 +25,8 @@ Author: Tobias Martin
 #include<math.h>
 
 
-void sixdof_obj::rotation_tri(lexer *p,double phi_,double theta_,double psi_, 
-                                    double &xvec,double &yvec,double &zvec, 
+void sixdof_obj::rotation_tri(lexer *p,double phi_,double theta_,double psi_,
+                                    double &xvec,double &yvec,double &zvec,
                                     const double& x0, const double& y0, const double& z0)
 {
     // Distance to origin
@@ -43,4 +43,4 @@ void sixdof_obj::rotation_tri(lexer *p,double phi_,double theta_,double psi_,
     xvec += x0;
     yvec += y0;
     zvec += z0;
-}    
+}

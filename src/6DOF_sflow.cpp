@@ -64,7 +64,7 @@ void sixdof_sflow::start_oneway(lexer *p, ghostcell *pgc, int iter, slice &fsglo
         fb_obj[nb]->quat_matrices(p);
         
         // Update position and trimesh
-        fb_obj[nb]->update_position_2D(p,pgc,fsglobal);  
+        fb_obj[nb]->update_position_2D(p,pgc,fsglobal);
         
         // Save
         fb_obj[nb]->update_fbvel(p,pgc);
@@ -100,7 +100,7 @@ void sixdof_sflow::start_shipwave(lexer *p, ghostcell *pgc, int iter, slice &fsg
         fb_obj[nb]->quat_matrices(p);
         
         // Update position and trimesh
-        fb_obj[nb]->update_position_2D(p,pgc,fsglobal);  
+        fb_obj[nb]->update_position_2D(p,pgc,fsglobal);
         
         // Save
         fb_obj[nb]->update_fbvel(p,pgc);

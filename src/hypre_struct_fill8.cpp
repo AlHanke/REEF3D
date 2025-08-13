@@ -30,7 +30,7 @@ Author: Hans Bihs
 #include"matrix_diag.h"
 
 void hypre_struct::fill_matrix8(lexer* p, ghostcell* pgc, double *f, vec &rhs, matrix_diag &M)
-{    
+{
     count=0;
     LOOP
     {
@@ -69,8 +69,8 @@ void hypre_struct::fill_matrix8(lexer* p, ghostcell* pgc, double *f, vec &rhs, m
         ++count;
         
         values[count]=M.t[n];
-        ++count; 
-        }     
+        ++count;
+        }
         
         FSWDCHECK
         {
@@ -93,8 +93,8 @@ void hypre_struct::fill_matrix8(lexer* p, ghostcell* pgc, double *f, vec &rhs, m
         ++count;
         
         values[count]=0.0;
-        ++count;  
-        }    
+        ++count;
+        }
     }
     
     HYPRE_StructMatrixSetBoxValues(A, ilower, iupper, nentries, stencil_indices, values);
@@ -118,7 +118,7 @@ void hypre_struct::fill_matrix8(lexer* p, ghostcell* pgc, double *f, vec &rhs, m
     HYPRE_StructVectorAssemble(x);
     
     
-    count=0; 
+    count=0;
     KJILOOP
     {
         FPWDCHECK

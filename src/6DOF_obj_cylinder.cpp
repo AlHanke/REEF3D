@@ -51,7 +51,7 @@ void sixdof_obj::cylinder_x(lexer *p, ghostcell *pgc, int id)
     snum = int(U/ds);
     
 
-// Vertices    
+// Vertices
     ds = (2.0*PI)/double(snum);
     
     phi=0.0;
@@ -60,7 +60,7 @@ void sixdof_obj::cylinder_x(lexer *p, ghostcell *pgc, int id)
     
     for(n=0;n<snum;++n)
     {
-    //bottom circle    
+    //bottom circle
     tri_x[tricount][0] = x1;
     tri_y[tricount][0] = ym;
     tri_z[tricount][0] = zm;
@@ -88,7 +88,7 @@ void sixdof_obj::cylinder_x(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][2] = zm + r*cos(phi+ds);
     ++tricount;
     
-    //side        
+    //side
     // 1st triangle
     tri_x[tricount][0] = x1;
     tri_y[tricount][0] = ym + r*sin(phi);
@@ -156,7 +156,7 @@ void sixdof_obj::cylinder_y(lexer *p, ghostcell *pgc, int id)
     
     
 
-// Vertices    
+// Vertices
     ds = (2.0*PI)/double(snum);
     
     phi=0.0;
@@ -165,7 +165,7 @@ void sixdof_obj::cylinder_y(lexer *p, ghostcell *pgc, int id)
 
     for(n=0;n<snum;++n)
     {
-    //bottom circle    
+    //bottom circle
     tri_x[tricount][0] = xm;
     tri_y[tricount][0] = y1;
     tri_z[tricount][0] = zm;
@@ -193,7 +193,7 @@ void sixdof_obj::cylinder_y(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][2] = zm + r*cos(phi+ds);
     ++tricount;
     
-    //side        
+    //side
     // 1st triangle
     tri_x[tricount][0] = xm + r*sin(phi);
     tri_y[tricount][0] = y1;
@@ -257,7 +257,7 @@ void sixdof_obj::cylinder_z(lexer *p, ghostcell *pgc, int id)
     snum = int(U/ds);
     
 
-// Vertices    
+// Vertices
     ds = (2.0*PI)/double(snum);
     
     phi=0.0;
@@ -266,7 +266,7 @@ void sixdof_obj::cylinder_z(lexer *p, ghostcell *pgc, int id)
     
     for(n=0;n<snum;++n)
     {
-    //bottom circle    
+    //bottom circle
     tri_x[tricount][0] = xm;
     tri_y[tricount][0] = ym;
     tri_z[tricount][0] = z1;
@@ -294,7 +294,7 @@ void sixdof_obj::cylinder_z(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][2] = z2;
     ++tricount;
     
-    //side        
+    //side
     // 1st triangle
     tri_x[tricount][0] = xm + r*cos(phi);
     tri_y[tricount][0] = ym + r*sin(phi);

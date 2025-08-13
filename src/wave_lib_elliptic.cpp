@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 wave_lib_elliptic::wave_lib_elliptic() : epsi(1.0e-19)
-{ 
+{
 }
 
 wave_lib_elliptic::~wave_lib_elliptic()
@@ -34,9 +34,9 @@ wave_lib_elliptic::~wave_lib_elliptic()
 
 
 void wave_lib_elliptic::elliptic(lexer *p, double u, double &sn, double &cn, double &dn)
-{ 
+{
     double res = 1.0e-10;
-    double sinu,cosu,r; 
+    double sinu,cosu,r;
     int maxiter=18;
     
     if(modulus<epsi)
@@ -71,14 +71,14 @@ void wave_lib_elliptic::elliptic(lexer *p, double u, double &sn, double &cn, dou
         
         if(n>=maxiter)
         break;
-        }    
+        }
         
     sinu = sin(u*mu[n]);
     cosu = cos(u*mu[n]);
     
         // second recursion
         if(fabs(sinu) < fabs(cosu))
-        { 
+        {
         c[n] = mu[n] * (sinu/cosu);
         d[n] = 1.0;
         
@@ -89,7 +89,7 @@ void wave_lib_elliptic::elliptic(lexer *p, double u, double &sn, double &cn, dou
             c[n] = d[n+1] * c[n+1];
             r = (c[n+1]*c[n+1])/mu[n+1];
             
-            d[n] = (r + nu[n])/(r + mu[n]); 
+            d[n] = (r + nu[n])/(r + mu[n]);
             }
             
         dn = sqrt(1.0 - modulus)/d[n];
@@ -109,12 +109,12 @@ void wave_lib_elliptic::elliptic(lexer *p, double u, double &sn, double &cn, dou
             c[n] = d[n+1]*c[n+1];
             r = (c[n+1]*c[n+1])/mu[n+1];
             
-            d[n] = (r + nu[n])/(r + mu[n]);                
+            d[n] = (r + nu[n])/(r + mu[n]);
             }
             
         dn = d[n];
         sn = SIGN(sinu)/sqrt(1.0 + c[n]*c[n]);
-        cn = c[n]*sn;        
+        cn = c[n]*sn;
         }
     }
 }
@@ -136,10 +136,10 @@ double wave_lib_elliptic::K_elliptic_1(double m)
     b[1] = 0.1212478;
     b[2] = 0.0288729;
     
-    K = a[0] + a[1]*m1 + a[2]*m1*m1 
-      +(b[0] + b[1]*m1 + b[2]*m1*m1)*log(1.0/m1); 
+    K = a[0] + a[1]*m1 + a[2]*m1*m1
+      +(b[0] + b[1]*m1 + b[2]*m1*m1)*log(1.0/m1);
       
-    return K;     
+    return K;
 }
 
 double wave_lib_elliptic::E_elliptic_1(double m)
@@ -148,7 +148,7 @@ double wave_lib_elliptic::E_elliptic_1(double m)
     
     double a[3],b[3];
     double m1 = 1.0 - m;
-    double E;    
+    double E;
     
     a[0] = 1.0;
     a[1] = 0.4630151;
@@ -159,7 +159,7 @@ double wave_lib_elliptic::E_elliptic_1(double m)
     b[2] = 0.0412496;
     
     E = a[0] + a[1]*m1 + a[2]*m1*m1
-      +(b[0] + b[1]*m1 + b[2]*m1*m1)*log(1.0/m1); 
+      +(b[0] + b[1]*m1 + b[2]*m1*m1)*log(1.0/m1);
      
     return E;
 }
@@ -181,10 +181,10 @@ double wave_lib_elliptic::K_elliptic_5(double m)
     b[1] = 0.1212478;
     b[2] = 0.0288729;
     
-    K = a[0] + a[1]*m1 + a[2]*m1*m1 
-      +(b[0] + b[1]*m1 + b[2]*m1*m1)*log(1.0/m1); 
+    K = a[0] + a[1]*m1 + a[2]*m1*m1
+      +(b[0] + b[1]*m1 + b[2]*m1*m1)*log(1.0/m1);
       
-    return K;     
+    return K;
 }
 
 double wave_lib_elliptic::E_elliptic_5(double m)
@@ -193,7 +193,7 @@ double wave_lib_elliptic::E_elliptic_5(double m)
     
     double a[3],b[3];
     double m1 = 1.0 - m;
-    double E;    
+    double E;
     
     a[0] = 1.0;
     a[1] = 0.4630151;
@@ -204,7 +204,7 @@ double wave_lib_elliptic::E_elliptic_5(double m)
     b[2] = 0.0412496;
     
     E = a[0] + a[1]*m1 + a[2]*m1*m1
-      +(b[0] + b[1]*m1 + b[2]*m1*m1)*log(1.0/m1); 
+      +(b[0] + b[1]*m1 + b[2]*m1*m1)*log(1.0/m1);
      
     return E;
 }
@@ -231,9 +231,9 @@ double wave_lib_elliptic::K_elliptic(double m)
     b[4] = 0.00441;
     
     K = a[0] + a[1]*m1 + a[2]*m1*m1 + a[3]*m1*m1*m1 + a[4]*m1*m1*m1*m1
-      +(b[0] + b[1]*m1 + b[2]*m1*m1 + b[3]*m1*m1*m1 + b[4]*m1*m1*m1*m1)*log(1.0/m1); 
+      +(b[0] + b[1]*m1 + b[2]*m1*m1 + b[3]*m1*m1*m1 + b[4]*m1*m1*m1*m1)*log(1.0/m1);
       
-    return K;     
+    return K;
 }
 
 double wave_lib_elliptic::E_elliptic(double m)
@@ -242,7 +242,7 @@ double wave_lib_elliptic::E_elliptic(double m)
     
     double a[5],b[5];
     double m1 = 1.0 - m;
-    double E;    
+    double E;
     
     a[0] = 1.0;
     a[1] = 0.44325;
@@ -257,7 +257,7 @@ double wave_lib_elliptic::E_elliptic(double m)
     b[4] = 0.00526;
     
     E = a[0] + a[1]*m1 + a[2]*m1*m1 + a[3]*m1*m1*m1 + a[4]*m1*m1*m1*m1
-      +(b[0] + b[1]*m1 + b[2]*m1*m1 + b[3]*m1*m1*m1 + b[4]*m1*m1*m1*m1)*log(1.0/m1); 
+      +(b[0] + b[1]*m1 + b[2]*m1*m1 + b[3]*m1*m1*m1 + b[4]*m1*m1*m1*m1)*log(1.0/m1);
      
     return E;
 }

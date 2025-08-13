@@ -180,13 +180,13 @@ void fnpf_print_wsf::ini_location(lexer *p, fdm_fnpf *c)
 {
     for(n=0;n<gauge_num;++n)
     {
-    iloc[n] = p->posc_i(x[n]); 
+    iloc[n] = p->posc_i(x[n]);
     
     if(p->j_dir==0)
-    jloc[n] = 0; 
+    jloc[n] = 0;
     
     if(p->j_dir==1)
-    jloc[n] = p->posc_j(y[n]); 
+    jloc[n] = p->posc_j(y[n]);
 
     if(iloc[n]>=0 && iloc[n]<p->knox)
     if(jloc[n]>=0 && jloc[n]<p->knoy)

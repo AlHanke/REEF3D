@@ -67,7 +67,7 @@ void multiphase_f::print_file(lexer *p, fdm *a, ghostcell *pgc)
     pwsf1->height_gauge(p,a,pgc,ls1);
     
     if(p->P352>0)
-    pwsf2->height_gauge(p,a,pgc,ls2);    
+    pwsf2->height_gauge(p,a,pgc,ls2);
 }
 
 double multiphase_f::ls1val(int ii, int jj, int kk)

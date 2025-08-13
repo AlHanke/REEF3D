@@ -35,7 +35,7 @@ class sixdof;
 using namespace std;
 
 class net
-{    
+{
 public:
     
     typedef vector<Eigen::Vector3d> EigenMat;

@@ -22,7 +22,7 @@ Author: Hans Bihs
 
 #include"rheology_v.h"
 
-rheology_v::rheology_v() 
+rheology_v::rheology_v()
 {
 
 }

@@ -51,7 +51,7 @@ void nhflow_forcing::cylinder_z(lexer *p, ghostcell *pgc, int id)
     snum = int(U/ds);
     
 
-// Vertices    
+// Vertices
     ds = (2.0*PI)/double(snum);
     
     phi=0.0;
@@ -61,7 +61,7 @@ void nhflow_forcing::cylinder_z(lexer *p, ghostcell *pgc, int id)
 
     for(n=0;n<snum;++n)
     {
-    //bottom circle    
+    //bottom circle
     tri_x[tricount][0] = xm;
     tri_y[tricount][0] = ym;
     tri_z[tricount][0] = z1;
@@ -89,7 +89,7 @@ void nhflow_forcing::cylinder_z(lexer *p, ghostcell *pgc, int id)
     tri_z[tricount][2] = z2;
     ++tricount;
     
-    //side        
+    //side
     // 1st triangle
     tri_x[tricount][0] = xm + r1*cos(phi);
     tri_y[tricount][0] = ym + r1*sin(phi);

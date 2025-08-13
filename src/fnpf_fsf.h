@@ -34,7 +34,7 @@ class fnpf_etadisc;
 
 using namespace std;
 
-class fnpf_fsf 
+class fnpf_fsf
 {
 public:
    

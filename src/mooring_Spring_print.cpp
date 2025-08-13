@@ -40,13 +40,13 @@ void mooring_Spring::print(lexer *p)
     
     if (p->mpirank==0)
     {
-        eTout<<p->simtime<<" \t "<<T<<endl;    
-    }  
+        eTout<<p->simtime<<" \t "<<T<<endl;
+    }
     
     if
     (
-        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)  
-        || (p->simtime>printtime && p->P30>0.0)   
+        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)
+        || (p->simtime>printtime && p->P30>0.0)
         || p->count==0)
     )
     {
@@ -73,12 +73,12 @@ void mooring_Spring::print(lexer *p)
         result<<p->X311_xe[line]<<" "<<p->X311_ye[line]<<" "<<p->X311_ze[line]<<endl;
         
         
-        result << "\nCELLS " << 1 << " " << 3 <<endl;    
+        result << "\nCELLS " << 1 << " " << 3 <<endl;
         
         result<<"2 "<< 0 << " " << 1 << endl;
 
         
-        result << "\nCELL_TYPES " << 1 << endl;    
+        result << "\nCELL_TYPES " << 1 << endl;
 
         result<<"3"<<endl;
 

@@ -131,7 +131,7 @@ double iowave::distgen(lexer *p)
 {
     double x0,y0,denom;
     double dist=1.0e20;
-    int test1,test2;    
+    int test1,test2;
     
     x0 = p->pos_x();
     y0 = p->pos_y();
@@ -149,7 +149,7 @@ double iowave::distgen(lexer *p)
         denom = sqrt(pow(Ge[qn][1]-Gs[qn][1],2.0) + pow(Ge[qn][0]-Gs[qn][0],2.0));
         denom = denom>1.0e-20?denom:1.0e20;
         
-        dist = MIN(fabs((Ge[qn][1]-Gs[qn][1])*x0 - (Ge[qn][0]-Gs[qn][0])*y0 
+        dist = MIN(fabs((Ge[qn][1]-Gs[qn][1])*x0 - (Ge[qn][0]-Gs[qn][0])*y0
                   + Ge[qn][0]*Gs[qn][1] - Ge[qn][1]*Gs[qn][0])/denom,dist);
         
         }
@@ -162,7 +162,7 @@ double iowave::distbeach(lexer *p)
 {
     double x0,y0,denom;
     double dist=1.0e20;
-    int test1,test2;    
+    int test1,test2;
     
     x0 = p->pos_x();
     y0 = p->pos_y();
@@ -180,7 +180,7 @@ double iowave::distbeach(lexer *p)
         denom = sqrt(pow(Be[qn][1]-Bs[qn][1],2.0) + pow(Be[qn][0]-Bs[qn][0],2.0));
         denom = denom>1.0e-20?denom:1.0e20;
         
-        dist = MIN(fabs((Be[qn][1]-Bs[qn][1])*x0 - (Be[qn][0]-Bs[qn][0])*y0 
+        dist = MIN(fabs((Be[qn][1]-Bs[qn][1])*x0 - (Be[qn][0]-Bs[qn][0])*y0
                   + Be[qn][0]*Bs[qn][1] - Be[qn][1]*Bs[qn][0])/denom,dist);
         
         }

@@ -237,7 +237,7 @@ double ddweno_f_nug::dswenoy(slice& f, double uw)
 
 
 void ddweno_f_nug::iqmin(lexer *p,field& f)
-{    
+{
     q1 = (f(i-2,j,k)-f(i-3,j,k))/DX[IM3];
     q2 = (f(i-1,j,k)-f(i-2,j,k))/DX[IM2];
     q3 = (f(i,j,k)-f(i-1,j,k))/DX[IM1];
@@ -293,7 +293,7 @@ void ddweno_f_nug::kqmax(lexer *p,field& f)
 
 
 void ddweno_f_nug::isqmin(lexer *p,slice& f)
-{    
+{
     q1 = (f(i-2,j)-f(i-3,j))/DX[IM3];
     q2 = (f(i-1,j)-f(i-2,j))/DX[IM2];
     q3 = (f(i,j)-f(i-1,j))/DX[IM1];

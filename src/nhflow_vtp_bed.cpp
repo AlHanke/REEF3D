@@ -47,12 +47,12 @@ nhflow_vtp_bed::~nhflow_vtp_bed()
 }
 
 void nhflow_vtp_bed::start(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *psed)
-{    
+{
     print2D(p,d,pgc,psed);
 }
 
 void nhflow_vtp_bed::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *psed)
-{    
+{
     
     if(p->mpirank==0)
     pvtu(p,d,pgc,psed);

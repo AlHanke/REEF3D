@@ -87,18 +87,18 @@ sflow_momentum_RK2::~sflow_momentum_RK2()
 }
 
 void sflow_momentum_RK2::start(lexer *p, fdm2D* b, ghostcell* pgc)
-{            
+{
     pflow->discharge2D(p,b,pgc);
     pflow->inflow2D(p,b,pgc,b->P,b->Q,b->bed,b->eta);
     pflow->inflow2D(p,b,pgc,Prk1,Qrk1,b->bed,b->eta);
     
 //Step 1
-//--------------------------------------------------------    
+//--------------------------------------------------------
     // fsf
     pfsf->disc(p,b,pgc,b->P,b->Q,b->ws,b->eta);
     
     SLICELOOP4
-    etark1(i,j) =      b->eta(i,j) 
+    etark1(i,j) =      b->eta(i,j)
     
                 -      p->dt*(b->P(i,j)*b->hx(i,j) - b->P(i-1,j)*b->hx(i-1,j)
                        +      b->Q(i,j)*b->hy(i,j) - b->Q(i,j-1)*b->hy(i,j-1))/p->DXM;
@@ -115,7 +115,7 @@ void sflow_momentum_RK2::start(lexer *p, fdm2D* b, ghostcell* pgc)
 
     // U
     starttime=pgc->timer();
-    pflow->isource2D(p,b,pgc); 
+    pflow->isource2D(p,b,pgc);
     ppress->upgrad(p,b,etark1,b->eta);
     irhs(p,b,pgc,b->P,1.0);
     prough->u_source(p,b,b->P);
@@ -191,7 +191,7 @@ void sflow_momentum_RK2::start(lexer *p, fdm2D* b, ghostcell* pgc)
                 - 0.5*p->dt*(Prk1(i,j)*b->hx(i,j) - Prk1(i-1,j)*b->hx(i-1,j)
                        +     Qrk1(i,j)*b->hy(i,j) - Qrk1(i,j-1)*b->hy(i,j-1))/p->DXM;
                        
-    pgc->gcsl_start4(p,b->eta,gcval_eta);   
+    pgc->gcsl_start4(p,b->eta,gcval_eta);
     pfsf->depth_update(p,b,pgc,Prk1,Qrk1,wrk1,b->eta);
     pfsf->disc(p,b,pgc,Prk1,Qrk1,wrk1,b->eta);
     pfsf->breaking(p,b,pgc,b->eta,etark1,0.5);
@@ -236,11 +236,11 @@ void sflow_momentum_RK2::start(lexer *p, fdm2D* b, ghostcell* pgc)
     b->Q(i,j) = 0.5*b->Q(i,j) + 0.5*Qrk1(i,j)
               + 0.5*p->dt*b->G(i,j);
     
-    pgc->gcsl_start2(p,b->Q,gcval_v);    
+    pgc->gcsl_start2(p,b->Q,gcval_v);
     
     p->vtime+=pgc->timer()-starttime;
     
-    // W     
+    // W
     ppress->wpgrad(p,b,b->eta,etark1);
     if(p->A214==1)
     pconvec->start(p,b,wrk1,4,Prk1,Qrk1);

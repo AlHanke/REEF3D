@@ -35,7 +35,7 @@ void nhflow_fsf_f::depth_update(lexer* p, fdm_nhf* d, ghostcell* pgc, ioflow* pf
     d->WL(i,j) = d->eta(i,j) + d->depth(i,j);
     
     pgc->gcsl_start4(p,d->depth,50);
-    pgc->gcsl_start4(p,d->WL,gcval_eta);   
+    pgc->gcsl_start4(p,d->WL,gcval_eta);
     
-    wetdry(p,d,pgc,d->U,d->V,d->W,d->WL); 
+    wetdry(p,d,pgc,d->U,d->V,d->W,d->WL);
 }

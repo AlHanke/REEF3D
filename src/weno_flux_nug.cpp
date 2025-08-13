@@ -147,8 +147,8 @@ double weno_flux_nug::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field&
         
         fw2 = fz(p,a,b,wvel,ipol,kvel2);
     
-        L =   - ((ivel2*fu2-ivel1*fu1)/DX[IP]) 
-              - ((jvel2*fv2-jvel1*fv1)/DY[JP]) 
+        L =   - ((ivel2*fu2-ivel1*fu1)/DX[IP])
+              - ((jvel2*fv2-jvel1*fv1)/DY[JP])
               - ((kvel2*fw2-kvel1*fw1)/DZ[KP]);
                    
         return L;
@@ -259,7 +259,7 @@ double weno_flux_nug::fz(lexer *p,fdm *a, field& b, field& wvel, int ipol, doubl
 }
 
 void weno_flux_nug::iqmin(lexer *p, field& f, field& uvel, int ipol)
-{    
+{
     q1 = f.V[Im2JK];
     q2 = f.V[Im1JK];
     q3 = f.V[IJK];

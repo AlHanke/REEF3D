@@ -40,9 +40,9 @@ void mooring_Catenary::initialize(lexer *p, ghostcell *pgc)
     ys = p->X311_ys[line];
     zs = p->X311_zs[line];
     
-    p->Darray(x,H); 
+    p->Darray(x,H);
     p->Darray(y,H);
-    p->Darray(z,H); 
+    p->Darray(z,H);
     p->Darray(T,H);
     p->Darray(B,2);
     p->Darray(F,2);
@@ -53,7 +53,7 @@ void mooring_Catenary::initialize(lexer *p, ghostcell *pgc)
         char str[1000];
         sprintf(str,"./REEF3D_CFD_6DOF/REEF3D_6DOF_mooring_force_%i.dat",line);
         eTout.open(str);
-        eTout<<"time \t T"<<endl;    
+        eTout<<"time \t T"<<endl;
     }
     printtime = 0.0;
     

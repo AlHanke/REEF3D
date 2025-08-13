@@ -105,7 +105,7 @@ void ioflow_f::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
     p->phiout=pgc->globalmax(p->phiout);
     }
     
-    // set outflow fsf 
+    // set outflow fsf
     double wsfout=p->phimean;
     double f;
     

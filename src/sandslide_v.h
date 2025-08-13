@@ -39,7 +39,7 @@ public:
 
     virtual void start(lexer*,ghostcell*,sediment_fdm*);
 
-}; 
+};
 
 #endif
 

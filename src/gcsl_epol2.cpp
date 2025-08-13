@@ -31,7 +31,7 @@ int ghostcell::gcsleval2(lexer *p, int gcv, int bc, int cs)
     return 4;
     
 //Wall
-    // Parallel    
+    // Parallel
     if((bc==21||bc==22||bc==7||bc==6||bc==5||bc==1)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==11||gcv==21||gcv==2))
     return gclabel_v;
     
@@ -40,12 +40,12 @@ int ghostcell::gcsleval2(lexer *p, int gcv, int bc, int cs)
     if((bc==21||bc==22||bc==5||bc==7)&&(cs==2||cs==3)&&(gcv==11||gcv==21||gcv==2))
     return 5;
     
-//Inflow 
+//Inflow
     else
     if((bc==1) && (gcv==11||gcv==21||gcv==2) && (cs==1||cs==4||cs==5||cs==6))
     return 4;
     
-//Patch    
+//Patch
     else
     if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==11||gcv==2||gcv==21||gcv==8))
     return 4;
@@ -131,5 +131,5 @@ void ghostcell::gcsldistro2int(lexer *p, sliceint &f, int ii, int jj, int nn, do
     j=jj;
     n=nn;
 
-    gcsl_neumann_int(f,gcv,bc,cs);    
+    gcsl_neumann_int(f,gcv,bc,cs);
 }

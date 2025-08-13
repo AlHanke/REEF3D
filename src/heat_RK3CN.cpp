@@ -51,7 +51,7 @@ void heat_RK3CN::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff, 
     addrhs(p,a,pgc,1.0);
     pdiff->diff_scalar(p,a,pgc,psolv,ark1,T,thermdiff,a->eddyv,p->sigT, 8.0/15.0);
     
-    bcheat_start(p,a,pgc,ark1); 
+    bcheat_start(p,a,pgc,ark1);
     pgc->start4(p,ark1,gcval_heat);
 
 // Step 2

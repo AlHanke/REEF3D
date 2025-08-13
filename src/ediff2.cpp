@@ -40,7 +40,7 @@ ediff2::~ediff2()
 }
 
 void ediff2::diff_scalar(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &b, field &visc, field &eddyv, double sig, double alpha)
-{    
+{
     
     LOOP
      a->L(i,j,k) += ((b(i+1,j,k)-b(i,j,k))*0.5*(visc(i+1,j,k)+eddyv(i+1,j,k)/sig+visc(i,j,k)+eddyv(i,j,k)/sig)*(1.0/p->DXP[IP])
@@ -54,7 +54,7 @@ void ediff2::diff_scalar(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field 
 }
 
 void ediff2::diff_scalar(lexer* p, fdm* a, ghostcell* pgc, solver* psolv, field &diff, field &b, field &visc, field &eddyv, double sig, double alpha)
-{    
+{
     LOOP
     {
         a->L(i,j,k) += ((b(i+1,j,k)-b(i,j,k))*0.5*(visc(i+1,j,k)+eddyv(i+1,j,k)/sig+visc(i,j,k)+eddyv(i,j,k)/sig)*(1.0/p->DXP[IP])
@@ -72,7 +72,7 @@ void ediff2::diff_scalar(lexer* p, fdm* a, ghostcell* pgc, solver* psolv, field 
 }
 
 void ediff2::idiff_scalar(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &b, field &eddyv, double sig, double alpha)
-{    
+{
 }
 
 void ediff2::diff_u(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &diff, field &u_in, field &u, field &v, field &w, double alpha)

@@ -122,7 +122,7 @@ double gradient::vdz(fdm* a)
 // **********************************************************
 
 double gradient::vdxx(fdm* a)
-{ 
+{
     grad = ((a->v(i+1,j,k) - a->v(i,j,k))/p->DXP[IP] - (a->v(i,j,k) + a->v(i-1,j,k))/p->DXP[IM1])/p->DXN[IP];
 
     return grad;

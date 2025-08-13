@@ -33,7 +33,7 @@ void sixdof_obj::update_position_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, sl
     // Update STL mesh
     update_trimesh_nhflow(p,d,pgc,finalize);
 
-    // Update angular velocities 
+    // Update angular velocities
     omega_B = I_.inverse()*h_;
     omega_I = R_*omega_B;
     
@@ -53,12 +53,12 @@ void sixdof_obj::update_position_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, sl
 
 void sixdof_obj::update_trimesh_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, bool finalize)
 {
-    // Update position of triangles 
+    // Update position of triangles
     for(n=0; n<tricount; ++n)
     {
         for(int q=0; q<3; q++)
         {
-            // Update coordinates of triangles 
+            // Update coordinates of triangles
             Eigen::Vector3d point(tri_x0[n][q], tri_y0[n][q], tri_z0[n][q]);
                     
             point = R_*point;

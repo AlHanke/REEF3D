@@ -52,7 +52,7 @@ public:
     void getShape(lexer*, ghostcell*, double*&, double*&, double*&, double*&);
     void iniShape(lexer*, ghostcell*, Eigen::VectorXd&, Eigen::VectorXd&, Eigen::VectorXd&);
     
-private:    
+private:
 
     void calcForce(lexer*, ghostcell*);
 
@@ -60,7 +60,7 @@ private:
     void print(lexer*);
     void buildLine(lexer*);
     
-    // ------ 
+    // ------
     
     // Line number
     int line;
@@ -74,7 +74,7 @@ private:
     double xs, ys, zs, dx, dy, dz, dxy_aim;
     
     // Forces
-    double *T;    
+    double *T;
     double FH, FV, FH_0, FV_0, f_Fh, ddf_Fh;
     double Xme_, Yme_, Zme_;
     

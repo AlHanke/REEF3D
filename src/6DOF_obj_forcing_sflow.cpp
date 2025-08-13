@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"ghostcell.h"
 
-void sixdof_obj::update_forcing_sflow(lexer *p, ghostcell *pgc, 
+void sixdof_obj::update_forcing_sflow(lexer *p, ghostcell *pgc,
                              slice &P, slice &Q, slice &w, slice &fx, slice &fy, slice &eta, int iter)
 {
     // Calculate forcing fields
@@ -33,7 +33,7 @@ void sixdof_obj::update_forcing_sflow(lexer *p, ghostcell *pgc,
     double ef,efc;
     
     SLICELOOP4
-    { 
+    {
         /*
         efc = 0.0;
         
@@ -41,16 +41,16 @@ void sixdof_obj::update_forcing_sflow(lexer *p, ghostcell *pgc,
         {
             efc = 0.0;
             
-            if(fs(i-1,j)>0.0)   
+            if(fs(i-1,j)>0.0)
             efc+=1.0;
             
-            if(fs(i+1,j)>0.0)    
+            if(fs(i+1,j)>0.0)
             efc+=1.0;
 
-            if(fs(i,j-1)>0.0 && p->j_dir==1) 
+            if(fs(i,j-1)>0.0 && p->j_dir==1)
             efc+=1.0;
             
-            if(fs(i,j+1)>0.0 && p->j_dir==1)    
+            if(fs(i,j+1)>0.0 && p->j_dir==1)
             efc+=1.0;
         }*/
         

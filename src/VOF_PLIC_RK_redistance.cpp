@@ -33,7 +33,7 @@ void VOF_PLIC::RK_redistance
     lexer* p,
     ghostcell* pgc
 )
-{   
+{
     LOOP
     {
         if(a->vof(i,j,k)>0.001 && a->vof(i,j,k)<0.999)

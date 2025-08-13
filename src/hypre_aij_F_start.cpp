@@ -30,7 +30,7 @@ Author: Hans Bihs
 #include"vec.h"
 
 void hypre_aij::startF(lexer* p, ghostcell* pgc, double *f, vec& rhsvec, matrix_diag &M, int var)
-{     
+{
     double *xvec;
     
     p->Darray(xvec,p->knox*p->knoy*(p->knoz+1));
@@ -90,7 +90,7 @@ void hypre_aij::startF(lexer* p, ghostcell* pgc, double *f, vec& rhsvec, matrix_
     
     HYPRE_BoomerAMGGetNumIterations(solver, &num_iterations);
     HYPRE_BoomerAMGGetFinalRelativeResidualNorm(solver, &final_res_norm);
-    } 
+    }
     
     p->solveriter=num_iterations;
     p->final_res = final_res_norm;
@@ -102,7 +102,7 @@ void hypre_aij::startF(lexer* p, ghostcell* pgc, double *f, vec& rhsvec, matrix_
     fillbackvec_F_v2(p,f,xvec,var);
     
     delete_solvers(p,pgc);
-    delete_grid(p,pgc); 
+    delete_grid(p,pgc);
     
     p->del_Darray(xvec,p->knox*p->knoy*(p->knoz+1));
 }

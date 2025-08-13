@@ -33,7 +33,7 @@ void lexer::ini_default()
     A211=4;          // int convection scheme for SLOW velocities
     A212=0;          // int diffusion treatment for SLOW velocities
     A214=1;      // int convection for vertical velocity
-    A215=0;      // int 
+    A215=0;      // int
     A216=0;      // int
     A217=2;      // int slip or no-slip boundary conditions
     A218=0;      // int turn on roughness
@@ -41,7 +41,7 @@ void lexer::ini_default()
     A220=2;          // int non-hydrostatic pressure scheme for SFLOW
     A221=1;          // int non-hydrostatic pressure in very shallow regions
     A223=0.5;    // double blending factor hydrostatic pressure gradient
-    A230=0;      // int 
+    A230=0;      // int
     A240=1;      // int FSF algorithm SFLOW
     A241=0;          // int
     A242=0;          // int non-hydostatic pressure for shallow areas
@@ -108,10 +108,10 @@ void lexer::ini_default()
     A510=2;      // int NFHLOW time scheme
     A511=1;        // int NHFLOW HLL scheme
     A512=0;        // int NHFLOW diffusion
-    A514=4;        // int NHFLOW reconstruction 
+    A514=4;        // int NHFLOW reconstruction
     A515=1;      // int Dirichlet wave BC type
     A516=3;      // int
-    A517=3;      // int 
+    A517=3;      // int
     A518=2;      // int NHFLOW bed BC
     A519=0;      // int turn on bed roughness
     A520=2;        // int NFHLOW non-hydrostatic pressure scheme
@@ -137,7 +137,7 @@ void lexer::ini_default()
     A566=0;      // int buoyancy
     A567=0;      // int fsf eps
     A568=1.0;      // double URANS C3 coefficient
-    A569=0;      // int 
+    A569=0;      // int
     
     A570=0;      // int wind model
     A571_u=0.0;  // double wind velocity
@@ -236,7 +236,7 @@ void lexer::ini_default()
     B123=0.0;       // double flap AWA hinge location
     B125=0;         // int take 2D slice input for HDC
     B125_y=0.0;     // double 2D slice y-coor input for HDC
-    B127=0;         // int turn of y-dir velociteis for HDC 
+    B127=0;         // int turn of y-dir velociteis for HDC
     B130=0;         // int directional spreading for irregular waves
     B131=0.0;       // double main direction for multidirectional irregular waves
     B132_s=-90.0;  // double start directional spreading
@@ -664,14 +664,14 @@ void lexer::ini_default()
     Q41=0;              // double default parcel factor
     Q43=0;              // int number of water iteration, before particle transport starts
     Q61=0;              // point source x,y,z, iterations between particles
-    Q73=0;              // int relax 
+    Q73=0;              // int relax
     Q101=0;             // int ini particle as topo
     Q102=0.9;           // double max distance from topo = Q102*dz
     Q110=0;             // int ini particle as box
     Q111=0;             // int ini particle as box for dummy particles
     Q120=0;             // int seed particles in suspension
     Q121=1;             // int iterations between pariticle seeding in suspension
-    Q122=2;             // int particles per cell in susp seeding      
+    Q122=2;             // int particles per cell in susp seeding
     Q180=0;             // int print vtp
     Q181=-10;           // int print vtp iter interval
     Q182=-1.0;          // double print vtp time interval
@@ -688,7 +688,7 @@ void lexer::ini_default()
     S14=0.3;               // double relaxation timestep size for sediment transport
     S15=0;                  // int synchronize sediment time step with main solver
     S16=1;                  // int bed shear stress formulation
-    S17=0;                  // int non-equillibrium bedload 
+    S17=0;                  // int non-equillibrium bedload
     S18=0.823;                // double mu_d
     S19=1.0e+19;             // double total time sediment
     S20=0.001;          // double sediment d50
@@ -832,7 +832,7 @@ void lexer::ini_default()
     X10=0;        // int turn 6DOF on
     X11_u=X11_v=X11_w=X11_p=X11_q=X11_r=1;        // int turn on degrees of freedom
     X12=1;      // int turn force calculation on
-    X14=1;      // int tangential velocity 
+    X14=1;      // int tangential velocity
     X19=1;        // int print out interval 6DOF log files
     X20=1;        // int number of floating body
     X21=1;        // int presribe homogeneous density floating body
@@ -844,9 +844,9 @@ void lexer::ini_default()
     X25_Cp=X25_Cq=X25_Cr=0.0;    // double damping rotation
     X26_Cu=X26_Cv=X26_Cw=0.0;    // double damping translational
     X31=4;        // int
-    X32=1;        // int 
-    X33=1;        // int 
-    X34=0;        // int 
+    X32=1;        // int
+    X33=1;        // int
+    X34=0;        // int
     X39=0;       // int type of viscous force calculation
     X40=3;        // int type of force calculation
     X41=0.6;    // double eps for continuous forcing heaviside

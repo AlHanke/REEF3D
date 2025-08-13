@@ -74,7 +74,7 @@ ptf_RK3::~ptf_RK3()
 }
 
 void ptf_RK3::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection *pconvec, ioflow *pflow, reini *preini)
-{    
+{
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
     
 // Step 1
@@ -153,7 +153,7 @@ void ptf_RK3::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection 
     pgc->start4(p,a->Fi,gcval);
     fsfwvel(p,a,pgc,erk2,frk2);
 
-// Step 3  
+// Step 3
 
     // fsf eta
     kfsfbc(p,a,pgc);
@@ -195,7 +195,7 @@ void ptf_RK3::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection 
 }
 
 void ptf_RK3::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reini *preini)
-{    
+{
     pfsfupdate->fsfupdate(p,a,pgc,pflow,a->eta);
     pfsfupdate->etaloc(p,a,pgc);
     
@@ -219,5 +219,5 @@ void ptf_RK3::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reini *preini
 }
 
 void ptf_RK3::inidisc(lexer *p, fdm *a, ghostcell *pgc)
-{    
+{
 }

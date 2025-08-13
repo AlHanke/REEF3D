@@ -29,7 +29,7 @@ Author: Hans Bihs
 #include"sflow_flux_HJ_CDS.h"
 #include"patchBC_interface.h"
 
-sflow_hxy_fou::sflow_hxy_fou(lexer* p, patchBC_interface *ppBC) 
+sflow_hxy_fou::sflow_hxy_fou(lexer* p, patchBC_interface *ppBC)
 {
     pBC = ppBC;
 
@@ -80,7 +80,7 @@ void sflow_hxy_fou::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet
         }
     }
      
-    int qq;    
+    int qq;
     for(qq=0;qq<pBC->obj_count;++qq)
     if(pBC->patch[qq]->waterlevel_flag==0)
     for(n=0;n<pBC->patch[qq]->gcb_count;++n)
@@ -146,7 +146,7 @@ void sflow_hxy_fou::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet
         
         if(fabs(jvel1)<=eps)
         hy(i,j) = MAX(eta(i,j),eta(i,j+1)) + MIN(depth(i,j), depth(i,j+1));
-        }        
+        }
     }
     
 }

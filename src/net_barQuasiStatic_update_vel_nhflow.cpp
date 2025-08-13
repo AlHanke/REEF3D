@@ -30,11 +30,11 @@ void net_barQuasiStatic::update_velocity_nhflow(lexer *p, fdm_nhf *d, ghostcell 
 
     //- Get velocities at knots
     updateField_nhflow(p, d, pgc, 0);
-    updateField_nhflow(p, d, pgc, 1);    
+    updateField_nhflow(p, d, pgc, 1);
     updateField_nhflow(p, d, pgc, 2);
     
     //- Get density at knots
-    updateField_nhflow(p, d, pgc, 3);  
+    updateField_nhflow(p, d, pgc, 3);
 }
 
 void net_barQuasiStatic::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int cmp)
@@ -46,8 +46,8 @@ void net_barQuasiStatic::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
 
     // Get velocities on own processor
     for (int i = 0; i < nK; i++)
-    {    
-        if 
+    {
+        if
         (
             K_[i][0] >= xstart[p->mpirank] && K_[i][0] < xend[p->mpirank] &&
             K_[i][1] >= ystart[p->mpirank] && K_[i][1] < yend[p->mpirank] &&
@@ -77,8 +77,8 @@ void net_barQuasiStatic::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
         else
         {
             for (int j = 0; j < p->mpi_size; j++)
-            {    
-                if 
+            {
+                if
                 (
                     K_[i][0] >= xstart[j] && K_[i][0] < xend[j] &&
                     K_[i][1] >= ystart[j] && K_[i][1] < yend[j] &&
@@ -93,7 +93,7 @@ void net_barQuasiStatic::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
                 {
                     recField[i] = -2;
                 }
-            }            
+            }
         }
     }
 
@@ -147,7 +147,7 @@ void net_barQuasiStatic::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
             
             if (count[j] > 0)
             {
-            //    cout<<"Processor "<<p->mpirank<<" receives "<<count[j]<<" elements from processor "<<j<<endl;                    
+            //    cout<<"Processor "<<p->mpirank<<" receives "<<count[j]<<" elements from processor "<<j<<endl;
         
                 MPI_Irecv(recvField[j],count[j],MPI_DOUBLE,j,1,pgc->mpi_comm,&rreq[j]);
             }
@@ -174,9 +174,9 @@ void net_barQuasiStatic::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
     for (int i = 0; i < nK; i++)
     {
         for (int j = 0; j < p->mpi_size; j++)
-        {            
+        {
             if (recField[i]==j)
-            {        
+            {
                 coupledField[i][cmp] = recvField[j][count[j]];
                 count[j]++;
             }
@@ -184,9 +184,9 @@ void net_barQuasiStatic::updateField_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
     }
     
     for (int i = 0; i < nK; i++)
-    {     
+    {
         coupledField[i][cmp] += 1e-10;
-    }    
+    }
 
 
     // Delete arrays

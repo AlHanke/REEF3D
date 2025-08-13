@@ -99,7 +99,7 @@ void sixdof_obj::objects_create(lexer *p, ghostcell *pgc)
     
     // Refine triangles
     if(p->X185>0 && p->X60==1 && entity_count>0)
-    geometry_refinement(p,pgc);    
+    geometry_refinement(p,pgc);
 
     if(p->mpirank==0)
     cout<<"Refined surface triangles: "<<tricount<<endl;
@@ -116,7 +116,7 @@ void sixdof_obj::objects_allocate(lexer *p, ghostcell *pgc)
     // box
     trisum+=12*p->X110;
     
-    // cylinder_x   
+    // cylinder_x
     r=p->X131_rad;
     U = 2.0 * PI * r;
     ds = 0.75*(U*p->dx);
@@ -156,7 +156,7 @@ void sixdof_obj::objects_allocate(lexer *p, ghostcell *pgc)
     p->Darray(tri_z,trisum,3);
     p->Darray(tri_x0,trisum,3);
     p->Darray(tri_y0,trisum,3);
-    p->Darray(tri_z0,trisum,3);        
+    p->Darray(tri_z0,trisum,3);
     
     p->Iarray(tstart,entity_sum);
     p->Iarray(tend,entity_sum);

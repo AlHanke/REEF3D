@@ -141,13 +141,13 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
     a->vof(i,j,k)=0.0;
     
     LOOP
-    if 
+    if
     (
         double(i)*dx + p->originx >= p->F51 && double(i)*dx + p->originx < p->F54
      && double(j)*dx + p->originy >= p->F52 && double(j)*dx + p->originy < p->F55
     )
     {
-        double value;    
+        double value;
         LOOP
         {
             if (p->phimean >= p->pos_z() + p->DZN[KP]/2.0)
@@ -158,7 +158,7 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
             {
                 value = 0.0;
             }
-            else 
+            else
             {
                 value = (p->phimean - p->pos_z() + p->DZN[KP]/2.0)/p->DZN[KP];
             }
@@ -170,11 +170,11 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
     if (p->F57_1 > 0 || p->F57_2 > 0 || p->F57_3 > 0 || p->F57_4 > 0)
     {
         LOOP
-        if 
+        if
         (
-            p->F57_1*((double(i) + 0.5)*dx + p->originx) 
+            p->F57_1*((double(i) + 0.5)*dx + p->originx)
           + p->F57_2*((double(j) + 0.5)*dx + p->originy)
-          + p->F57_3*((double(k) + 0.5)*dx + p->originz) 
+          + p->F57_3*((double(k) + 0.5)*dx + p->originz)
           < p->F57_4
         )
         {
@@ -190,9 +190,9 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
 
         LOOP
         {
-            r = 
+            r =
                 sqrt
-                ( 
+                (
                     pow((double(i) + 0.5)*dx - p->F58_1, 2.0)
                   + pow((double(j) + 0.5)*dx - p->F58_2, 2.0)
                   + pow((double(k) + 0.5)*dx - p->F58_3, 2.0)
@@ -204,7 +204,7 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
     }
 
     if (p->F60 > -1.0e20)
-    {        
+    {
         p->phimean=p->F60;
         
         double value;
@@ -219,7 +219,7 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
             {
                 value = 0.0;
             }
-            else 
+            else
             {
                 value = (p->phimean - p->pos_z() + p->DZN[KP]/2.0)/p->DZN[KP];
             }
@@ -265,12 +265,12 @@ void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
     else
     {
         iniphi(a, p, pgc);
-    } 
+    }
 
     LOOP
     {
         a->test(i,j,k) = a->vof(i,j,k);
-    } 
+    }
     pgc->start4(p,a->test,50);
 }
 */

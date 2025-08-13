@@ -92,7 +92,7 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
         fx=1.0;
         
     if(p->B99==3)
-    {    
+    {
         Uc = eta_R*sqrt(9.81/p->wd);
 
         P(i+1*aa,j+1*bb) = Uc*fx;
@@ -110,7 +110,7 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
     dfy2 = (P(i,j)-P(i,j-1))/p->DXM;
     dfy3 = (P(i,j+1)-P(i,j))/p->DXM;
 
-     /*       
+     /*
     if(cs==1)
     for(q=0;q<margin;++q)
     P(i-q-1,j) = P(i,j) - p->dt*sqrt(9.81*p->wd)*dfx1;
@@ -130,7 +130,7 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
     }
     }
         
-//-----------------------------------------------        
+//-----------------------------------------------
         // VVEL
         
         for(n=0;n<p->gcslawa2_count;++n)

@@ -27,7 +27,7 @@ Authors: Tobias Martin, Hans Bihs
 #include"field.h"
 
 fsi_strip::fsi_strip(lexer *p, int num) : nstrip(num),beam(num),eps0(p)
-{    
+{
 }
     
 fsi_strip::~fsi_strip()

@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"patchBC_interface.h"
 
-ioflow_f::ioflow_f(lexer *p, ghostcell *pgc, patchBC_interface *ppBC) 
+ioflow_f::ioflow_f(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)
 {
     pBC = ppBC;
     
@@ -49,7 +49,7 @@ ioflow_f::ioflow_f(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)
     tan_betaB71[n] = tan(betaB71[n]);
     
     
-    kinval = 0.0;    
+    kinval = 0.0;
     
     if(p->T10==1 || p->T10==11 || p->T10==21)
     {
@@ -65,23 +65,23 @@ ioflow_f::ioflow_f(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)
 
     if(p->T10==3 || p->T10==13)
     {
-    epsval=(pow(0.09,0.75)*pow(kinval,0.5))/(0.5*0.4*p->DXM);    
+    epsval=(pow(0.09,0.75)*pow(kinval,0.5))/(0.5*0.4*p->DXM);
     eddyval = kinval/epsval;
     }
     
     if(p->B60==2||p->B60==4)
     {
     hydrograph_in_read(p,pgc);
-    p->Ui=hydrograph_ipol(p,pgc,hydro_in,hydro_in_count)/(Ai>1.0e-20?Ai:1.0e20);    
+    p->Ui=hydrograph_ipol(p,pgc,hydro_in,hydro_in_count)/(Ai>1.0e-20?Ai:1.0e20);
     }
     
     if(p->B60==3||p->B60==4)
     {
     hydrograph_out_read(p,pgc);
-    p->Uo=hydrograph_ipol(p,pgc,hydro_out,hydro_out_count)/(Ai>1.0e-20?Ai:1.0e20);    
+    p->Uo=hydrograph_ipol(p,pgc,hydro_out,hydro_out_count)/(Ai>1.0e-20?Ai:1.0e20);
     }
     
-    epsi1 = 1.6;    
+    epsi1 = 1.6;
     epsi2 = 3.6;
     
     p->fsfoutval=p->fsfout;

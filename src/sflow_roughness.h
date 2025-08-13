@@ -29,7 +29,7 @@ class slice;
 
 using namespace std;
 
-class sflow_roughness 
+class sflow_roughness
 {
 
 public:

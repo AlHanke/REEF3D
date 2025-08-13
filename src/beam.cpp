@@ -87,26 +87,26 @@ void beam::setFieldBC(Matrix3Xd& c_, Matrix3Xd& cdot_, Matrix4Xd& q_, Matrix4Xd&
 void beam::setStateDot(double *state)
 {
     int index = 0;
-    for (int i = 0; i < Ne+1; i++) 
+    for (int i = 0; i < Ne+1; i++)
     {
         state[index++] = cdot(0,i);
         state[index++] = cdot(1,i);
         state[index++] = cdot(2,i);
     }
-    for (int i = 0; i < Ne+2; i++) 
+    for (int i = 0; i < Ne+2; i++)
     {
         state[index++] = qdot(0,i);
         state[index++] = qdot(1,i);
         state[index++] = qdot(2,i);
         state[index++] = qdot(3,i);
     }
-    for (int i = 0; i < Ne+1; i++) 
+    for (int i = 0; i < Ne+1; i++)
     {
         state[index++] = rhs_cdot(0,i);
         state[index++] = rhs_cdot(1,i);
         state[index++] = rhs_cdot(2,i);
     }
-    for (int i = 0; i < Ne+2; i++) 
+    for (int i = 0; i < Ne+2; i++)
     {
         state[index++] = rhs_qdot(0,i);
         state[index++] = rhs_qdot(1,i);
@@ -118,26 +118,26 @@ void beam::setStateDot(double *state)
 void beam::setState(double *state)
 {
     int index = 0;
-    for (int i = 0; i < Ne+1; i++) 
+    for (int i = 0; i < Ne+1; i++)
     {
         state[index++] = c(0,i);
         state[index++] = c(1,i);
         state[index++] = c(2,i);
     }
-    for (int i = 0; i < Ne+2; i++) 
+    for (int i = 0; i < Ne+2; i++)
     {
         state[index++] = q(0,i);
         state[index++] = q(1,i);
         state[index++] = q(2,i);
         state[index++] = q(3,i);
     }
-    for (int i = 0; i < Ne+1; i++) 
+    for (int i = 0; i < Ne+1; i++)
     {
         state[index++] = cdot(0,i);
         state[index++] = cdot(1,i);
         state[index++] = cdot(2,i);
     }
-    for (int i = 0; i < Ne+2; i++) 
+    for (int i = 0; i < Ne+2; i++)
     {
         state[index++] = qdot(0,i);
         state[index++] = qdot(1,i);
@@ -149,26 +149,26 @@ void beam::setState(double *state)
 void beam::getState(double *state)
 {
     int index = 0;
-    for (int i = 0; i < Ne+1; i++) 
+    for (int i = 0; i < Ne+1; i++)
     {
         c(0,i) = state[index++];
         c(1,i) = state[index++];
         c(2,i) = state[index++];
     }
-    for (int i = 0; i < Ne+2; i++) 
+    for (int i = 0; i < Ne+2; i++)
     {
         q(0,i) = state[index++];
         q(1,i) = state[index++];
         q(2,i) = state[index++];
         q(3,i) = state[index++];
     }
-    for (int i = 0; i < Ne+1; i++) 
+    for (int i = 0; i < Ne+1; i++)
     {
         cdot(0,i) = state[index++];
         cdot(1,i) = state[index++];
         cdot(2,i) = state[index++];
     }
-    for (int i = 0; i < Ne+2; i++) 
+    for (int i = 0; i < Ne+2; i++)
     {
         qdot(0,i) = state[index++];
         qdot(1,i) = state[index++];

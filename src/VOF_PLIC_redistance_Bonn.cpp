@@ -73,7 +73,7 @@ void VOF_PLIC::redistancePhiByPlane_Bonn
                                     }
                                 }
                                 else
-                                {   
+                                {
                                     phitemp=ShortestDistanceOnBoundaryCandidate(a,p,ii,jj,kk,dd);
                                     if(fabs(phitemp)<1E05)
                                     {
@@ -81,13 +81,13 @@ void VOF_PLIC::redistancePhiByPlane_Bonn
                                             phiaux(ip,jp,kp)=copysign(phitemp,a->vof(ip,jp,kp)-0.5);
                                     }
                                     else
-                                    {   
+                                    {
                                         phitemp=ProjectionPointCandidate(a,p,ii,jj,kk,dd);
                                         if(fabs(phitemp)<1E05)
                                         {
                                             if(fabs(phitemp)<fabs(phiaux(ip,jp,kp)))
                                                 phiaux(ip,jp,kp)=copysign(phitemp,a->vof(ip,jp,kp)-0.5);
-                                        }   
+                                        }
                                         else
                                         {
                                             phitemp=IntersectionPointCandidate(a,p,ii,jj,kk,dd);
@@ -106,8 +106,8 @@ void VOF_PLIC::redistancePhiByPlane_Bonn
                                         }
                                     }
                                 }
-                        }       
-            }          
+                        }
+            }
         }
     }
 }
@@ -133,7 +133,7 @@ double VOF_PLIC::ShortestDistanceOnBoundaryCandidate
     dist=nx(i,j,k)*xvx+ny(i,j,k)*xvy+nz(i,j,k)*xvz+dd;
     if(-dist*(phistep(i+ii,j+jj,k+kk))<0.0)
         ret=copysign(sqrt(xvx*xvx+xvy*xvy+xvz*xvz),(a->vof(i+ii,j+jj,k+kk)-0.5));
-    else 
+    else
         ret=1E06;
         
     return ret;
@@ -264,7 +264,7 @@ double VOF_PLIC::IntersectionPointCandidate
         {
             double dx,dy,dz;
             if(dimchange==1)
-            {   
+            {
                 //würfelkante entlang x
                 pisy=p1y;
                 pisz=p1z;

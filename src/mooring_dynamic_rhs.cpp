@@ -46,15 +46,15 @@ void mooring_dynamic::setConstantLoads(Matrix3Xd& Fext_, Matrix4Xd& Mext_, const
         // Direction vectors
         if (i < Ne)
         {
-            t_x = c_(0,i+1) - c_(0,i); 
-            t_y = c_(1,i+1) - c_(1,i); 
-            t_z = c_(2,i+1) - c_(2,i); 
+            t_x = c_(0,i+1) - c_(0,i);
+            t_y = c_(1,i+1) - c_(1,i);
+            t_z = c_(2,i+1) - c_(2,i);
         }
         else
         {
-            t_x = c_(0,i) - c_(0,i-1); 
-            t_y = c_(1,i) - c_(1,i-1); 
-            t_z = c_(2,i) - c_(2,i-1); 
+            t_x = c_(0,i) - c_(0,i-1);
+            t_y = c_(1,i) - c_(1,i-1);
+            t_z = c_(2,i) - c_(2,i-1);
         }
         t_mag = sqrt(t_x*t_x + t_y*t_y + t_z*t_z);
         t_x = t_x/t_mag; t_y = t_y/t_mag; t_z = t_z/t_mag;
@@ -128,8 +128,8 @@ void mooring_dynamic::setFieldBC(Matrix3Xd& c_, Matrix3Xd& cdot_, Matrix4Xd& q_,
     }
     else if (ind==2)
     {
-        // BC: Free rotatory end with vanishing moments 
-        m0_.col(0) = Eigen::Vector4d::Zero(4); q_.col(0) = q_.col(1); q0_.col(0) = q0_.col(1); 
+        // BC: Free rotatory end with vanishing moments
+        m0_.col(0) = Eigen::Vector4d::Zero(4); q_.col(0) = q_.col(1); q0_.col(0) = q0_.col(1);
         m0_.col(Ne) = Eigen::Vector4d::Zero(4); q_.col(Ne+1) = q_.col(Ne); q0_.col(Ne+1) = q0_.col(Ne);
     }
     else if (ind==3)

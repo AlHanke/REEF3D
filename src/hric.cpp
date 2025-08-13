@@ -227,7 +227,7 @@ double hric::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
     }
     
     
-    cc_ = (cc-cu)/(fabs(cd-cu)>1.0e-20?(cd-cu):1.0e20); 
+    cc_ = (cc-cu)/(fabs(cd-cu)>1.0e-20?(cd-cu):1.0e20);
     
     
 

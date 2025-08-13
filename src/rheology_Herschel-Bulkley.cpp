@@ -28,7 +28,7 @@ Author: Hans Bihs, Alexander Hanke
 
 double rheology_f::Herschel_Bulkley(lexer *p, fdm *a, ghostcell *pgc)
 {
-    gamma = strainterm(p,a); 
+    gamma = strainterm(p,a);
     
     tau0=val=0.0;
     pressureval = a->press(i,j,k)-p->pressgage;

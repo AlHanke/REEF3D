@@ -46,7 +46,7 @@ void potentialfile_out::header_file_ini(lexer *p, fdm_fnpf *c, ghostcell *pgc)
         headerout.write((char*)&iin, sizeof (int));
         
         for(n=0;n<p->P240;++n)
-        {  
+        {
             iin=n;
             headerout.write((char*)&iin, sizeof (int));
             ffn=float(p->P240_x[n]);
@@ -58,6 +58,6 @@ void potentialfile_out::header_file_ini(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 }
 
 void potentialfile_out::header_file(lexer *p, fdm_fnpf *c, ghostcell *pgc)
-{   
+{
 }
 

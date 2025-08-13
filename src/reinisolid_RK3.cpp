@@ -52,7 +52,7 @@ reinisolid_RK3::reinisolid_RK3(lexer* p) : epsi(p->F45*p->DXM),f(p),frk1(p),frk2
 
     prdisc = new reinidisc_fsf_rig(p);
 
-    time_preproc(p);    
+    time_preproc(p);
 }
 
 reinisolid_RK3::~reinisolid_RK3()
@@ -60,7 +60,7 @@ reinisolid_RK3::~reinisolid_RK3()
 }
 
 void reinisolid_RK3::start(lexer *p, fdm *a, ghostcell *pgc, field &f)
-{ 
+{
     gcval=gcval_topo;
 
     pgc->start4a(p,f,gcval);
@@ -114,7 +114,7 @@ void reinisolid_RK3::step(lexer* p, fdm *a)
 }
 
 void reinisolid_RK3::time_preproc(lexer* p)
-{    
+{
     n=0;
     ALOOP
     {

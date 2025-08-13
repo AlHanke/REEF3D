@@ -51,7 +51,7 @@ void vrans_f::kw_source(lexer *p, fdm *a, field &kin)
         
         a->rhsvec.V[count] += por*ke_c_2e*MAX(winf,0.0)*MAX(kinf,0.0);
     
-        ++count;  
+        ++count;
     }
 }
 
@@ -81,7 +81,7 @@ void vrans_f::ke_source(lexer *p, fdm *a, field &kin)
         
         a->rhsvec.V[count] += por*MAX(einf,0.0);
     
-        ++count;  
+        ++count;
     }
 
 }

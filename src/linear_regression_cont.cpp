@@ -28,7 +28,7 @@ linear_regression_cont::linear_regression_cont (lexer *p)
 {
     num=1.0;
     xm=ym=0.0;
-    SS_xy=SS_xx=0.0; 
+    SS_xy=SS_xx=0.0;
     xsum=ysum=0.0;
     xx_sum=xy_sum=0.0;
     
@@ -56,6 +56,6 @@ void linear_regression_cont::linreg_cont_func(lexer*,ghostcell*,double xval, dou
     
     b1 = SS_xy/SS_xx;
     
-    b0 = (ysum/num)  - b1*(xsum/num);    
+    b0 = (ysum/num)  - b1*(xsum/num);
 }
 

@@ -42,7 +42,7 @@ void sixdof_obj::triangle_switch_ray(lexer *p, ghostcell *pgc)
     double PCx,PCy,PCz;
     double Mx,My,Mz;
     double u,v,w;
-    double denom;    
+    double denom;
     double psi = 1.0e-8*p->DXM;
     
     double x0,x1,x2,y0,y1,y2,z0,z1,z2;
@@ -114,11 +114,11 @@ void sixdof_obj::triangle_switch_ray(lexer *p, ghostcell *pgc)
         
         x2 = tri_x[q][2];
         y2 = tri_y[q][2];
-        z2 = tri_z[q][2]; 
+        z2 = tri_z[q][2];
         
         // normals
         nx = (y1 - y0)*(z2 - z0) - (y2 - y0)*(z1 - z0);
-        ny = (x2 - x0)*(z1 - z0) - (x1 - x0)*(z2 - z0); 
+        ny = (x2 - x0)*(z1 - z0) - (x1 - x0)*(z2 - z0);
         nz = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0);
 
         norm = sqrt(nx*nx + ny*ny + nz*nz);
@@ -166,7 +166,7 @@ void sixdof_obj::triangle_switch_ray(lexer *p, ghostcell *pgc)
             
             Cx = tri_x[n][2];
             Cy = tri_y[n][2];
-            Cz = tri_z[n][2]; 
+            Cz = tri_z[n][2];
             
             
             xs = MIN3(Ax,Bx,Cx);
@@ -180,8 +180,8 @@ void sixdof_obj::triangle_switch_ray(lexer *p, ghostcell *pgc)
             
             
             if((yc>=ys-psi && yc<=ye+psi && zc>=zs-psi && zc<=ze+psi && domdir==1)
-            || (xc>=xs-psi && xc<=xe+psi && zc>=zs-psi && zc<=ze+psi && domdir==2 && p->y_dir==1) 
-            || (xc>=xs-psi && xc<=xe+psi && yc>=ys-psi && yc<=ye+psi && domdir==3)) 
+            || (xc>=xs-psi && xc<=xe+psi && zc>=zs-psi && zc<=ze+psi && domdir==2 && p->y_dir==1)
+            || (xc>=xs-psi && xc<=xe+psi && yc>=ys-psi && yc<=ye+psi && domdir==3))
             {
             //cout<<"TRIANGLE SWITCH "<<domdir<<" | nx: "<<nx<<" ny: "<<ny<<" nz: "<<nz<<endl;
         
@@ -353,7 +353,7 @@ void sixdof_obj::triangle_switch_ray(lexer *p, ghostcell *pgc)
         tricount_switch_total=0;
         for (int n=0;n<tricount;++n)
         if(tri_switch[n]==1)
-        {   
+        {
         x1 = tri_x[n][1];
         y1 = tri_y[n][1];
         z1 = tri_z[n][1];
@@ -381,5 +381,5 @@ void sixdof_obj::triangle_switch_ray(lexer *p, ghostcell *pgc)
     p->del_Iarray(tri_switch,tricount);
     p->del_Iarray(tricount_local_list,p->M10+1);
     p->del_Iarray(tricount_local_displ,p->M10+1);
-    p->del_Iarray(tri_switch_local,tricount_local);    
+    p->del_Iarray(tri_switch_local,tricount_local);
 }

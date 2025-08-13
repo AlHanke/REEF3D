@@ -102,7 +102,7 @@ public:
 
 private:
     
-//  HYPRE 
+//  HYPRE
     HYPRE_SStructGrid     grid;
     HYPRE_SStructGraph    graph;
     HYPRE_SStructStencil  stencil;

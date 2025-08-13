@@ -121,10 +121,10 @@ void nhflow_scalar_iweno::aij_south(lexer* p, fdm_nhf *d, double *F, double *L)
                            - w3x*(1.0 - qfx[IP][uf][2][0] - qfx[IP][uf][2][1])/DX[IM2]
                            + w3x*(qfx[IP][uf][2][0])/DX[IM3])*iadvec
                             
-                 + F[Ip2JK]*(-w1x*qfx[IP][uf][0][1]/DX[IP1])*iadvec;  
+                 + F[Ip2JK]*(-w1x*qfx[IP][uf][0][1]/DX[IP1])*iadvec;
                         
                            
-    d->M.p[count] = (- w1x*(1.0 - qfx[IP][uf][0][0] + qfx[IP][uf][0][1])/DX[IP] 
+    d->M.p[count] = (- w1x*(1.0 - qfx[IP][uf][0][0] + qfx[IP][uf][0][1])/DX[IP]
                     - w2x*(qfx[IP][uf][1][0])/DX[IP]
                     + w1x*(qfx[IP][uf][0][0])/DX[IM1]
                     + w2x*(1.0 - qfx[IP][uf][1][0] + qfx[IP][uf][1][1])/DX[IM1]
@@ -152,8 +152,8 @@ void nhflow_scalar_iweno::aij_north(lexer* p, fdm_nhf *d, double *F, double *L)
                  + F[Ip3JK]*(w1x*qfx[IP][uf][3][1]/DX[IP2])*iadvec;
                         
                  
-    d->M.p[count] = (- w1x*(qfx[IP][uf][3][0])/DX[IP] 
-                    - w2x*(1.0 - qfx[IP][uf][4][0] + qfx[IP][uf][4][1])/DX[IP] 
+    d->M.p[count] = (- w1x*(qfx[IP][uf][3][0])/DX[IP]
+                    - w2x*(1.0 - qfx[IP][uf][4][0] + qfx[IP][uf][4][1])/DX[IP]
                     - w3x*(qfx[IP][uf][5][0])/DX[IP]
                     + w2x*(qfx[IP][uf][4][0])/DX[IM1]
                     + w3x*(1.0 - qfx[IP][uf][5][0] + qfx[IP][uf][5][1])/DX[IM1])*iadvec;
@@ -180,7 +180,7 @@ void nhflow_scalar_iweno::aij_east(lexer* p, fdm_nhf *d, double *F, double *L)
                  + F[IJp2K]*(w1y*qfy[JP][vf][0][1]/DY[JP1])*jadvec;
                         
                            
-    d->M.p[count] +=(-w1y*(1.0 - qfy[JP][vf][0][0] + qfy[JP][vf][0][1])/DY[JP] 
+    d->M.p[count] +=(-w1y*(1.0 - qfy[JP][vf][0][0] + qfy[JP][vf][0][1])/DY[JP]
                     - w2y*(qfy[JP][vf][1][0])/DY[JP]
                     + w1y*(qfy[JP][vf][0][0])/DY[JM1]
                     + w2y*(1.0 - qfy[JP][vf][1][0] + qfy[JP][vf][1][1])/DY[JM1]
@@ -208,8 +208,8 @@ void nhflow_scalar_iweno::aij_west(lexer* p, fdm_nhf *d, double *F, double *L)
                  + F[IJp3K]*(-w1y*qfy[JP][vf][3][1]/DY[JP2])*jadvec;
                         
                  
-    d->M.p[count] +=(-w1y*(qfy[JP][vf][3][0])/DY[JP] 
-                    - w2y*(1.0 - qfy[JP][vf][4][0] + qfy[JP][vf][4][1])/DY[JP] 
+    d->M.p[count] +=(-w1y*(qfy[JP][vf][3][0])/DY[JP]
+                    - w2y*(1.0 - qfy[JP][vf][4][0] + qfy[JP][vf][4][1])/DY[JP]
                     - w3y*(qfy[JP][vf][5][0])/DY[JP]
                     + w2y*(qfy[JP][vf][4][0])/DY[JM1]
                     + w3y*(1.0 - qfy[JP][vf][5][0] + qfy[JP][vf][5][1])/DY[JM1])*jadvec;
@@ -236,7 +236,7 @@ void nhflow_scalar_iweno::aij_bottom(lexer* p, fdm_nhf *d, double *F, double *L)
                 + F[IJKp2]*(-w1z*qfz[KP][wf][0][1]/DZ[KP1])*kadvec;
                         
                            
-    d->M.p[count]+= (-w1z*(1.0 - qfz[KP][wf][0][0] + qfz[KP][wf][0][1])/DZ[KP] 
+    d->M.p[count]+= (-w1z*(1.0 - qfz[KP][wf][0][0] + qfz[KP][wf][0][1])/DZ[KP]
                     - w2z*(qfz[KP][wf][1][0])/DZ[KP]
                     + w1z*(qfz[KP][wf][0][0])/DZ[KM1]
                     + w2z*(1.0 - qfz[KP][wf][1][0] + qfz[KP][wf][1][1])/DZ[KM1]
@@ -264,8 +264,8 @@ void nhflow_scalar_iweno::aij_top(lexer* p, fdm_nhf *d, double *F, double *L)
                 + F[IJKp3]*(w1z*qfz[KP][wf][3][1]/DZ[KP2])*kadvec;
                         
                  
-    d->M.p[count]+= (-w1z*(qfz[KP][wf][3][0])/DZ[KP] 
-                    - w2z*(1.0 - qfz[KP][wf][4][0] + qfz[KP][wf][4][1])/DZ[KP] 
+    d->M.p[count]+= (-w1z*(qfz[KP][wf][3][0])/DZ[KP]
+                    - w2z*(1.0 - qfz[KP][wf][4][0] + qfz[KP][wf][4][1])/DZ[KP]
                     - w3z*(qfz[KP][wf][5][0])/DZ[KP]
                     + w2z*(qfz[KP][wf][4][0])/DZ[KM1]
                     + w3z*(1.0 - qfz[KP][wf][5][0] + qfz[KP][wf][5][1])/DZ[KM1])*kadvec;
@@ -282,7 +282,7 @@ void nhflow_scalar_iweno::aij_top(lexer* p, fdm_nhf *d, double *F, double *L)
 }
 
 void nhflow_scalar_iweno::iqmin(lexer *p,fdm_nhf *d, double *F)
-{    
+{
     q1 = (F[Im2JK]-F[Im3JK])/DX[IM3];
     q2 = (F[Im1JK]-F[Im2JK])/DX[IM2];
     q3 = (F[IJK]-F[Im1JK])/DX[IM1];

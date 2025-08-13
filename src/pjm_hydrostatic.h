@@ -51,7 +51,7 @@ public:
     virtual void vpgrad(lexer*,fdm*,slice&,slice&);
     virtual void wpgrad(lexer*,fdm*,slice&,slice&);
 
-private:    
+private:
     void debug(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
     double starttime,endtime;
     int count, gcval_press;

@@ -59,8 +59,8 @@ void weno_nug_func::ini(lexer* p)
     precalc_cf(p);
     precalc_isf(p);
                
-    iniflag=1;    
-    }              
+    iniflag=1;
+    }
                       
 }
 

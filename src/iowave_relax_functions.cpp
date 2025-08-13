@@ -29,7 +29,7 @@ double iowave::rb1_ext(lexer *p, int var)
 {
     double x0,y0,denom,r;
     double dist=1.0e20;
-    int test1,test2,test_all;    
+    int test1,test2,test_all;
     int count;
     
     if(var==1)
@@ -70,11 +70,11 @@ double iowave::rb1_ext(lexer *p, int var)
         denom = sqrt(pow(Ge[qn][1]-Gs[qn][1],2.0) + pow(Ge[qn][0]-Gs[qn][0],2.0));
         denom = denom>1.0e-20?denom:1.0e20;
         
-        x = MIN(fabs((Ge[qn][1]-Gs[qn][1])*x0 - (Ge[qn][0]-Gs[qn][0])*y0 
+        x = MIN(fabs((Ge[qn][1]-Gs[qn][1])*x0 - (Ge[qn][0]-Gs[qn][0])*y0
                   + Ge[qn][0]*Gs[qn][1] - Ge[qn][1]*Gs[qn][0])/denom,dist);
         
         // relax
-        dist1 = p->B108_d[qn]; 
+        dist1 = p->B108_d[qn];
         
         x=1.0-x/dist1;
         x=MAX(x,0.0);
@@ -83,7 +83,7 @@ double iowave::rb1_ext(lexer *p, int var)
 
         ++count;
         }
-    }  
+    }
     
     if(test_all==0)
     r=1.0;
@@ -100,7 +100,7 @@ double iowave::rb3_ext(lexer *p, int var)
 {
     double x0,y0,denom,r;
     double dist=1.0e20;
-    int test1,test2,test_all;    
+    int test1,test2,test_all;
     int count;
     
     if(var==1)
@@ -141,12 +141,12 @@ double iowave::rb3_ext(lexer *p, int var)
         denom = sqrt(pow(Be[qn][1]-Bs[qn][1],2.0) + pow(Be[qn][0]-Bs[qn][0],2.0));
         denom = denom>1.0e-20?denom:1.0e20;
         
-        x = MIN(fabs((Be[qn][1]-Bs[qn][1])*x0 - (Be[qn][0]-Bs[qn][0])*y0 
+        x = MIN(fabs((Be[qn][1]-Bs[qn][1])*x0 - (Be[qn][0]-Bs[qn][0])*y0
                   + Be[qn][0]*Bs[qn][1] - Be[qn][1]*Bs[qn][0])/denom,dist);
         
         // relax
         
-        dist2 = p->B107_d[qn]; 
+        dist2 = p->B107_d[qn];
         
         x=(dist2-fabs(x))/(dist2*dist2_fac);
         x=MAX(x,0.0);

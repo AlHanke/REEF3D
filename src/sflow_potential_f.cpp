@@ -191,7 +191,7 @@ void sflow_potential_f::laplace(lexer *p, fdm2D *b, slice &phi)
 }
 
 void sflow_potential_f::ucalc(lexer *p, fdm2D *b, slice &phi)
-{    
+{
     SLICELOOP1
     if(p->wet[IJ]==1 && p->wet[Ip1J]==1)
     b->P(i,j) = (phi(i+1,j)-phi(i,j))/(p->DXP[IP]*HXP);
@@ -202,7 +202,7 @@ void sflow_potential_f::ucalc(lexer *p, fdm2D *b, slice &phi)
 }
 
 void sflow_potential_f::vcalc(lexer *p, fdm2D *b, slice &phi)
-{    
+{
     SLICELOOP2
     if(p->wet[IJ]==1 && p->wet[IJp1]==1)
     b->Q(i,j) = (phi(i,j+1)-phi(i,j))/(p->DYP[JP]*HYP);
@@ -257,7 +257,7 @@ void sflow_potential_f::ini_bc(lexer *p, fdm2D *b, ghostcell *pgc)
         
         if(p->gcbsl4[n][4]==2)
         {
-            i=p->gcbsl4[n][0]; 
+            i=p->gcbsl4[n][0];
             j=p->gcbsl4[n][1];
       
        

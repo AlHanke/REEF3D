@@ -34,7 +34,7 @@ fdm_fnpf::fdm_fnpf(lexer *p) : press(p),test(p),Fifsf(p),Fibed(p),
                               coastline(p),vb(p),test2D(p),Hs(p),
                               nodeval2D(p),breaking_print(p),
                               rhsvec(p),rvec(p),xvec(p),N(p),M(p)
-{   
+{
     p->Darray(p->sig,p->imax*p->jmax*(p->kmax+2));
     p->Darray(p->sigx,p->imax*p->jmax*(p->kmax+2));
     p->Darray(p->sigy,p->imax*p->jmax*(p->kmax+2));

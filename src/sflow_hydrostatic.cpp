@@ -22,7 +22,7 @@ Author: Hans Bihs
 
 #include"sflow_hydrostatic.h"
 #include"lexer.h"
-#include"fdm2D.h" 
+#include"fdm2D.h"
 #include"ghostcell.h"
 #include"poisson.h"
 #include"solver2D.h"
@@ -49,19 +49,19 @@ void sflow_hydrostatic::start(lexer *p, fdm2D *b, ghostcell *pgc, solver2D *psol
 }
 
 void sflow_hydrostatic::ucorr(lexer* p, fdm2D* b, slice& uvel, slice &eta,double alpha)
-{    
+{
 }
 
 void sflow_hydrostatic::vcorr(lexer* p, fdm2D* b, slice& vvel, slice &eta,double alpha)
-{    
+{
 }
 
 void sflow_hydrostatic::wcorr(lexer* p, fdm2D* b,double alpha, slice &uvel, slice &vvel, slice &ws)
-{    
+{
 }
 
 void sflow_hydrostatic::wcalc(lexer* p, fdm2D* b,double alpha, slice &uvel, slice &vvel, slice &ws)
-{    
+{
 }
 
 void sflow_hydrostatic::upgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
@@ -69,7 +69,7 @@ void sflow_hydrostatic::upgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
         SLICELOOP1
         WETDRY1
         {
-        b->F(i,j) -= fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j) 
+        b->F(i,j) -= fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j)
                                      - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM);
         }
         
@@ -80,7 +80,7 @@ void sflow_hydrostatic::upgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
         i=p->gcslout[n][0]-1;
         j=p->gcslout[n][1];
         
-        b->F(i,j) += fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j) 
+        b->F(i,j) += fabs(p->W22)*(p->A223*eta(i+1,j) + (1.0-p->A223)*eta_n(i+1,j)
                                      - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM);
                                      
         b->F(i,j) -= fabs(p->W22)*(p->A223*(b->bed(i,j)-p->wd) + (1.0-p->A223)*(b->bed(i,j)-p->wd)
@@ -95,16 +95,16 @@ void sflow_hydrostatic::vpgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
 {
         SLICELOOP2
         WETDRY2
-        b->G(i,j) -= fabs(p->W22)*(p->A223*eta(i,j+1) + (1.0-p->A223)*eta_n(i,j+1) 
+        b->G(i,j) -= fabs(p->W22)*(p->A223*eta(i,j+1) + (1.0-p->A223)*eta_n(i,j+1)
                                  - p->A223*eta(i,j) - (1.0-p->A223)*eta_n(i,j) )/(p->DXM);
                                             
         pBC->patchBC_pressure2D_vgrad(p,b,eta,eta_n);
 }
 
 void sflow_hydrostatic::wpgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
-{    
+{
     SLICELOOP4
-    b->L(i,j)=b->ws(i,j)=0.0;    
+    b->L(i,j)=b->ws(i,j)=0.0;
 }
 
 

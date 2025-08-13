@@ -122,7 +122,7 @@ momentum_FCC3::momentum_FCC3(lexer *p, fdm *a, ghostcell *pgc, convection *pconv
     if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==0)
     pd = new density_f(p);
     
-    if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==1)  
+    if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==1)
     pd = new density_df(p);
     
     if(p->F80==0 && p->H10==0 && p->W30==1  && p->F300==0 && p->W90==0)
@@ -162,7 +162,7 @@ momentum_FCC3::~momentum_FCC3()
 }
 
 void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof)
-{    
+{
     pflow->discharge(p,a,pgc);
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
     pflow->rkinflow(p,a,pgc,urk1,vrk1,wrk1);
@@ -244,7 +244,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     pgc->start2(p,My,gcval_v);
     pgc->start3(p,Mz,gcval_w);
     
-    // advect M    
+    // advect M
     pconvec->start(p,a,Mx,1,a->u,a->v,a->w);
     pconvec->start(p,a,My,2,a->u,a->v,a->w);
     pconvec->start(p,a,Mz,3,a->u,a->v,a->w);
@@ -311,7 +311,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     starttime=pgc->timer();
 
     pturb->isource(p,a);
-    pflow->isource(p,a,pgc,pvrans); 
+    pflow->isource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
     ppress->upgrad(p,a,a->eta,a->eta_n);
     irhs(p,a,pgc,a->u,a->u,a->v,a->w,1.0);
@@ -450,7 +450,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     pgc->start2(p,My_rk1,gcval_v);
     pgc->start3(p,Mz_rk1,gcval_w);
     
-    // advect M    
+    // advect M
     pconvec->start(p,a,Mx_rk1,1,urk1,vrk1,wrk1);
     pconvec->start(p,a,My_rk1,2,urk1,vrk1,wrk1);
     pconvec->start(p,a,Mz_rk1,3,urk1,vrk1,wrk1);
@@ -654,7 +654,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     pgc->start2(p,My_rk2,gcval_v);
     pgc->start3(p,Mz_rk2,gcval_w);
     
-    // advect M    
+    // advect M
     pconvec->start(p,a,Mx_rk2,1,urk2,vrk2,wrk2);
     pconvec->start(p,a,My_rk2,2,urk2,vrk2,wrk2);
     pconvec->start(p,a,Mz_rk2,3,urk1,vrk1,wrk1);
@@ -874,7 +874,7 @@ double momentum_FCC3::vel_limiter(lexer *p, fdm *a, field &vel, field &M, field 
     val = (M(i,j,k)/ro_filter(p,a,ro))*(ro_filter(p,a,ro)/ro_threshold) + vel(i,j,k)*(ro_threshold-ro_filter(p,a,ro))/ro_threshold;
     
     else
-    val = vel(i,j,k);  
+    val = vel(i,j,k);
 
     return val;
 }

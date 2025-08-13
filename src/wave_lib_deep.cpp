@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 wave_lib_deep::wave_lib_deep(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
-{ 
+{
     parameters(p,pgc);
     
     if(p->mpirank==0)
@@ -107,7 +107,7 @@ double wave_lib_deep::wave_fi(lexer *p, double x, double y, double z)
 }
 
 void wave_lib_deep::parameters(lexer *p, ghostcell *pgc)
-{    
+{
     
 }
 

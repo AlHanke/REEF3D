@@ -25,8 +25,8 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_cnoidal_shallow::wave_lib_cnoidal_shallow(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_cnoidal_shallow::wave_lib_cnoidal_shallow(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     parameters(p,pgc);
     
     if(p->mpirank==0)
@@ -68,7 +68,7 @@ double wave_lib_cnoidal_shallow::wave_horzvel(lexer *p, double x, double y, doub
     
     eta = wave_eta(p,x,y);
 
-    vel = sqrt(9.81/wdt) * eta; 
+    vel = sqrt(9.81/wdt) * eta;
 
     return vel;
 }
@@ -98,7 +98,7 @@ double wave_lib_cnoidal_shallow::wave_eta(lexer *p, double x, double y)
     
     eta =  wH*cn*cn + eta2;
     
-    return eta;    
+    return eta;
 }
 
 double wave_lib_cnoidal_shallow::wave_fi(lexer *p, double x, double y, double z)
@@ -141,7 +141,7 @@ void wave_lib_cnoidal_shallow::parameters(lexer *p, ghostcell *pgc)
     }
     //modulus=MAX(0.9, modulus);
     if(p->mpirank==0)
-    cout<<"MODULUS: "<<modulus<<"    qq: "<<qq<<endl;    
+    cout<<"MODULUS: "<<modulus<<"    qq: "<<qq<<endl;
     
     Km = K_elliptic_1(modulus);
     Em = E_elliptic_1(modulus);
@@ -153,7 +153,7 @@ void wave_lib_cnoidal_shallow::parameters(lexer *p, ghostcell *pgc)
     
     wC = sqrt(9.81*wdt*(1.0 +(wH/wdt)*(2.0/modulus - 1.0 - 3.0/modulus*Em/Km)));
     
-    if(p->mpirank==0)    
+    if(p->mpirank==0)
     {
     cout<<"WAVE TROUGH: "<<eta2+wdt<<endl;
     cout<<"wC: "<<wC<<" wC_old: "<<(wL/wT)<<endl;

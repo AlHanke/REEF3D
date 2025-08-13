@@ -61,7 +61,7 @@ void driver::driver_ini_nhflow()
     
     //ioflow ini
     pflow->ini_nhflow(p,d,pgc);
-    pnhfsf->wetdry(p,d,pgc,d->U,d->V,d->W,d->WL); 
+    pnhfsf->wetdry(p,d,pgc,d->U,d->V,d->W,d->WL);
     
     // sigma ini
     pnhfmom->inidisc(p,d,pgc,pnhfsf);
@@ -75,7 +75,7 @@ void driver::driver_ini_nhflow()
 
     pnhfstep->ini(p,d,pgc);
  
-    pflow->gcio_update_nhflow(p,d,pgc); 
+    pflow->gcio_update_nhflow(p,d,pgc);
 
     // inflow ini
     pflow->discharge_nhflow(p,d,pgc);
@@ -116,7 +116,7 @@ void driver::driver_ini_nhflow()
     pnhfsf->ini(p,d,pgc,pflow,d->U,d->V,d->W);
     pnhfsf->kinematic_fsf(p,d,d->U,d->V,d->W,d->eta);
     
-    pflow->gcio_update_nhflow(p,d,pgc); 
+    pflow->gcio_update_nhflow(p,d,pgc);
     
     // potential ini
     pnhfpot->start(p,d,ppoissonsolv,pgc);

@@ -25,11 +25,11 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"concentration.h"
 
-density_conc::density_conc(lexer* p, concentration *& ppconc) 
+density_conc::density_conc(lexer* p, concentration *& ppconc)
 {
         pconc = ppconc;
     
-        if(p->j_dir==0)        
+        if(p->j_dir==0)
         psi = p->F45*(1.0/2.0)*(p->DRM+p->DTM);
         
         if(p->j_dir==1)
@@ -64,7 +64,7 @@ double density_conc::roface(lexer *p, fdm *a, int aa, int bb, int cc)
     
 
     
-    return roval;        
+    return roval;
 }
 
 

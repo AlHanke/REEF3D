@@ -72,7 +72,7 @@ void sediment_f::offset_vtu_bedload(lexer *p, ghostcell *pgc, ofstream &result, 
 }
 
 void sediment_f::print_3D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
-{    
+{
     float ffn;
     int iin;
 
@@ -127,7 +127,7 @@ void sediment_f::print_3D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
 }
 
 void sediment_f::print_2D_bedload(lexer* p, ghostcell *pgc, ofstream &result)
-{    
+{
     float ffn;
     int iin;
 
@@ -246,7 +246,7 @@ void sediment_f::offset_vtu_bedshear(lexer *p, ghostcell *pgc, ofstream &result,
 }
 
 void sediment_f::print_2D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
-{    
+{
     float ffn;
     int iin;
     double tau_eff,shearvel_eff,shields_eff;
@@ -339,7 +339,7 @@ void sediment_f::print_2D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
 }
 
 void sediment_f::print_3D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
-{    
+{
     float ffn;
     int iin;
     double tau_eff,shearvel_eff,shields_eff;
@@ -432,7 +432,7 @@ void sediment_f::print_3D_bedshear(lexer* p, ghostcell *pgc, ofstream &result)
 }
 
 void sediment_f::print_2D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
-{    
+{
     float ffn;
     int iin;
     
@@ -504,7 +504,7 @@ void sediment_f::print_2D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
 }
 
 void sediment_f::print_3D_parameter1(lexer* p, ghostcell *pgc, ofstream &result)
-{    
+{
     float ffn;
     int iin;
     
@@ -632,7 +632,7 @@ void sediment_f::offset_vtu_parameter1(lexer *p, ghostcell *pgc, ofstream &resul
 
 
 void sediment_f::print_2D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
-{    
+{
     float ffn;
     int iin;
     
@@ -713,7 +713,7 @@ void sediment_f::print_2D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
 }
 
 void sediment_f::print_3D_parameter2(lexer* p, ghostcell *pgc, ofstream &result)
-{    
+{
     float ffn;
     int iin;
     

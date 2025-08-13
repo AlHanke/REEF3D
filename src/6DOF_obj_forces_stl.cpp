@@ -50,7 +50,7 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
 
 
     for (int n = 0; n < tricount; ++n)
-    {     
+    {
         // Vertices of triangle
         x0 = tri_x[n][0];
         y0 = tri_y[n][0];
@@ -62,7 +62,7 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
         
         x2 = tri_x[n][2];
         y2 = tri_y[n][2];
-        z2 = tri_z[n][2];  
+        z2 = tri_z[n][2];
            
         // Center of triangle
         xc = (x0 + x1 + x2)/3.0;
@@ -78,9 +78,9 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
             A_triang = sqrt(MAX(0.0,st*(st-at)*(st-bt)*(st-ct)));
                 
 
-            // Normal vectors (always pointing outwards)      
+            // Normal vectors (always pointing outwards)
             nx = (y1 - y0)*(z2 - z0) - (y2 - y0)*(z1 - z0);
-            ny = (x2 - x0)*(z1 - z0) - (x1 - x0)*(z2 - z0); 
+            ny = (x2 - x0)*(z1 - z0) - (x1 - x0)*(z2 - z0);
             nz = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0);
 
             norm = sqrt(nx*nx + ny*ny + nz*nz);
@@ -109,10 +109,10 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
             A_triang = sqrt(MAX(0.0,st*(st-at)*(st-bt)*(st-ct)));
                 
 
-            // Normal vectors (always pointing outwards)      
+            // Normal vectors (always pointing outwards)
                 
             nx = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
-            ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0); 
+            ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
             nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
 
             norm = sqrt(nx*nx + ny*ny + nz*nz);
@@ -259,7 +259,7 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
             ks = 0.00001;
             
         
-        // x-dir            
+        // x-dir
             uplus = (1.0/kappa)*log(30.0*(dist/ks));
             
             dir = uval/(fabs(uval)>0.0?uval:1.0e20);
@@ -358,7 +358,7 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
                             
             A += A_triang;
         }
-    }        
+    }
  
     // Communication with other processors
     
@@ -390,11 +390,11 @@ void sixdof_obj::forces_stl(lexer* p, fdm *a, ghostcell *pgc,field& uvel, field&
 
     // Print results
     
-    if (p->mpirank==0 && finalize==1) 
+    if (p->mpirank==0 && finalize==1)
     {
 
         printforce<<curr_time<<" \t "<<Xe<<" \t "<<Ye<<" \t "<<Ze<<" \t "<<Ke
-        <<" \t "<<Me<<" \t "<<Ne<<" \t "<<Xe_p<<" \t "<<Ye_p<<" \t "<<Ze_p<<" \t "<<Xe_v<<" \t "<<Ye_v<<" \t "<<Ze_v<<endl;   
+        <<" \t "<<Me<<" \t "<<Ne<<" \t "<<Xe_p<<" \t "<<Ye_p<<" \t "<<Ze_p<<" \t "<<Xe_v<<" \t "<<Ye_v<<" \t "<<Ze_v<<endl;
 
     }
 

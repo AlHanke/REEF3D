@@ -26,8 +26,8 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include<fstream>
 
-wave_lib_flap::wave_lib_flap(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_flap::wave_lib_flap(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     if(p->mpirank==0)
     {
     cout<<"Wave_Lib: flap wavemaker theory"<<endl;
@@ -41,7 +41,7 @@ wave_lib_flap::wave_lib_flap(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,p
     
     singamma = sin((p->B105_1)*(PI/180.0));
     cosgamma = cos((p->B105_1)*(PI/180.0));
-}  
+}
 
 wave_lib_flap::~wave_lib_flap()
 {
@@ -202,7 +202,7 @@ void wave_lib_flap::read(lexer *p, ghostcell* pgc)
     kinematics[qn][1] = sign*fabs(sin(kinematics[qn][1])*(p->B111_ze-p->B111_zs));
     }
     
-    // calculate vertical component 
+    // calculate vertical component
     for(int qn=0; qn<ptnum; ++qn)
     {
     sign = -1.0;

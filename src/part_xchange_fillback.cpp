@@ -33,7 +33,7 @@ void part::xchange_fillback(lexer *p, ghostcell *pgc, double *F)
     for(n=0;n<6;++n)
     for(q=0;q<recvnum[n];++q)
     {
-    F[Empty[index_empty]] = recv[n][q]; 
+    F[Empty[index_empty]] = recv[n][q];
     --index_empty;
     }
 }
@@ -50,7 +50,7 @@ void part::xchange_fillback_flag(lexer *p, ghostcell *pgc, slice &bedch, int mod
     n=Empty[index_empty];
     
     // flag
-    Flag[n] = ACTIVE; 
+    Flag[n] = ACTIVE;
     
     // bedch
     if(mode==1)

@@ -263,7 +263,7 @@ void nhflow_komega_bc::bckin_matrix(lexer *p, fdm_nhf *d, double *KIN, double *E
         LOOP
         {
             if(p->DF[IJK]<0)
-            {            
+            {
             d->M.p[n]  =   1.0;
 
             d->M.n[n] = 0.0;

@@ -124,7 +124,7 @@ void bedslope::slope_cds(lexer *p, ghostcell *pgc, sediment_fdm *s)
 
     s->gamma(i,j) = atan(sqrt(bx0*bx0 + by0*by0));// * s->teta(i,j)/(fabs(s->teta(i,j))>1.0e-10?fabs(s->teta(i,j)):1.0e10);
 
-    s->phi(i,j) = midphi + MIN(1.0,fabs(s->teta(i,j)/midphi))*(s->teta(i,j)/(fabs(s->gamma(i,j))>1.0e-20?fabs(s->gamma(i,j)):1.0e20))*delta; 
+    s->phi(i,j) = midphi + MIN(1.0,fabs(s->teta(i,j)/midphi))*(s->teta(i,j)/(fabs(s->gamma(i,j))>1.0e-20?fabs(s->gamma(i,j)):1.0e20))*delta;
     }
 }
 
@@ -235,6 +235,6 @@ void bedslope::slope_weno(lexer *p, ghostcell *pgc, sediment_fdm *s, field &topo
     s->gamma(i,j) = PI*0.5 - acos(    (nx1*nx1 + ny1*ny1 + nz1*0.0)/( sqrt(nx1*nx1 + ny1*ny1 + nz1*nz1 )*sqrt(nx1*nx1 + ny1*ny1 + nz1*0.0))+1e-20);
     
     
-    s->phi(i,j) = midphi + MIN(1.0,fabs(s->teta(i,j)/midphi))*(s->teta(i,j)/(fabs(s->gamma(i,j))>1.0e-20?fabs(s->gamma(i,j)):1.0e20))*delta; 
+    s->phi(i,j) = midphi + MIN(1.0,fabs(s->teta(i,j)/midphi))*(s->teta(i,j)/(fabs(s->gamma(i,j))>1.0e-20?fabs(s->gamma(i,j)):1.0e20))*delta;
     }
 }

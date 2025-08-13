@@ -29,13 +29,13 @@ Author: Hans Bihs
 
 ghostcell::ghostcell(int& argc, char **argv,lexer *pp):size(15),tag1(1),tag2(2),tag3(3),tag4(4),tag5(5),tag6(6),eps(1.0e-10),
                                                         gcx(1)
-{  
+{
     p=pp;
     
     MPI_Init(&argc,&argv);
     
     MPI_Comm_rank(MPI_COMM_WORLD,&p->mpirank);
-    MPI_Comm_size(MPI_COMM_WORLD,&p->mpi_size);    
+    MPI_Comm_size(MPI_COMM_WORLD,&p->mpi_size);
     
     mpi_comm = MPI_COMM_WORLD;
 }
@@ -101,7 +101,7 @@ void ghostcell::gcini(lexer* p)
     x[m]=0.0;
     }
 
-    tag=0;    
+    tag=0;
     
 
     gcx_count[0] = p->gcpara1_count*paramargin + p->gcparaco1_count*paramargin;
@@ -194,7 +194,7 @@ void ghostcell::gcini(lexer* p)
     gclabel_u_orth=1;
     gclabel_v_orth=1;
     gclabel_w_orth=1;
-    gclabel_vel=5;    
+    gclabel_vel=5;
 
     // for reflective BC
     if(p->B23==2)

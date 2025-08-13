@@ -194,7 +194,7 @@ void iowave::wavegen_precalc_decomp_relax(lexer *p, ghostcell *pgc)
             ++count;
             }
         }
-    }    
+    }
     
     count=0;
     LOOP
@@ -277,9 +277,9 @@ void iowave::wavegen_precalc_decomp_relax(lexer *p, ghostcell *pgc)
         if(zloc4>fsfloc)
         z = eta(i,j);
         
-        // Wave Generation        
+        // Wave Generation
         if(p->B98==2 && u_switch==1)
-        {  
+        {
             // Zone 1
             if(dg<dist1)
             {

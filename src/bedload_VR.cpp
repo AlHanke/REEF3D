@@ -65,6 +65,6 @@ void bedload_VR::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
         s->qbe(i,j) = qb;
     }
     
-    pgc->gcsl_start4a(p,s->qbe,1);    
+    pgc->gcsl_start4a(p,s->qbe,1);
     
 }

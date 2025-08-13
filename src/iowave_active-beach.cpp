@@ -62,7 +62,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         
         
         eta_T = 0.0;
-        eta_M = wsf-p->wd; 
+        eta_M = wsf-p->wd;
         eta_R = eta_M-eta_T;
         
          if(eta_R>=0.0)
@@ -93,7 +93,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         //cout<<p->mpirank<<" eta_R: "<<eta_R<<" eta_M: "<<eta_M<<"   wsf: "<<wsf<<"   Uc: "<<Uc<<endl;
 
             if(wsf>-1.0e19)
-            KLOOP 
+            KLOOP
              PCHECK
              if(p->flagsf4[IJK]>0)
             {
@@ -184,7 +184,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
             
             if(wsf<-1.0e19 && fabs(p->W10)<1.0e-10)
             KLOOP
-            PCHECK 
+            PCHECK
             if(p->flagsf4[IJK]>0)
             {
             u(i+1*aa,j+1*bb,k) = 0.0;
@@ -194,7 +194,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
             
             if(wsf<-1.0e19 && p->W10>1.0e-10)
             KLOOP
-            PCHECK 
+            PCHECK
             if(p->flagsf4[IJK]>0)
             {
             u(i+1*aa,j+1*bb,k) = u(i,j,k);
@@ -202,7 +202,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
             u(i+3*aa,j+3*bb,k) = u(i,j,k);
             }
         }
-//-----------------------------------------------        
+//-----------------------------------------------
         // VVEL
         
         for(n=0;n<p->gcslawa2_count;++n)
@@ -218,7 +218,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         wsf=wsfmax[i][j+jj];
 
         eta_T = 0.0;
-        eta_M = wsf-p->wd; 
+        eta_M = wsf-p->wd;
         eta_R = eta_M-eta_T;
         
         if(eta_R>=0.0)
@@ -322,7 +322,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
             }
         }
         
-        //-----------------------------------------------        
+        //-----------------------------------------------
         // PRESSURE
         for(n=0;n<p->gcslout_count;n++)
         {
@@ -349,7 +349,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         
         
         eta_T = 0.0;
-        eta_M = wsf-p->wd; 
+        eta_M = wsf-p->wd;
         eta_R = fabs(eta_M-eta_T);
         
         double r=0.0;
@@ -367,7 +367,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         H = -2.0*x*x*x + 3.0*x*x;
             
             if(wsf>-1.0e19)
-            KLOOP 
+            KLOOP
              PCHECK
              if(p->flagsf4[IJK]>0)
             {
@@ -382,7 +382,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
             w(i+1*aa,j+1*bb,k)=0.0;
             w(i+2*aa,j+2*bb,k)=0.0;
             w(i+3*aa,j+3*bb,k)=0.0;
-            }    
+            }
             
         }
 }

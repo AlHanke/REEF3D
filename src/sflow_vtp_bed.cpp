@@ -48,7 +48,7 @@ sflow_vtp_bed::~sflow_vtp_bed()
 }
 
 void sflow_vtp_bed::start(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
-{    
+{
     pgc->gcsl_start4(p,b->depth,50);
     pgc->gcsl_start4(p,b->bed,50);
     pgc->gcsl_start4(p,b->test,50);
@@ -69,7 +69,7 @@ void sflow_vtp_bed::start(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
 }
 
 void sflow_vtp_bed::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
-{    
+{
     if(p->mpirank==0)
     pvtu(p,b,pgc,psed);
     
@@ -95,7 +95,7 @@ void sflow_vtp_bed::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     b->bednode(i,j) = (1.0/3.0)*(b->bed(i+1,j+1) + b->bed(i+1,j) + b->bed(i,j+1));
     
     pip=0;
-    } 
+    }
     
     i=-1;
     j=-1;

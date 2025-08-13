@@ -39,14 +39,14 @@ sflow_forcing::~sflow_forcing()
 {
 }
 
-void sflow_forcing::forcing(lexer *p, fdm2D *b, ghostcell *pgc, sixdof *p6dof, 
+void sflow_forcing::forcing(lexer *p, fdm2D *b, ghostcell *pgc, sixdof *p6dof,
                              int iter, double alpha, slice &P, slice &Q, slice &w, slice &eta, slice &WL, bool finalize)
 {
     SLICELOOP4
     {
-    b->fx(i,j) = 0.0;   
-    b->fy(i,j) = 0.0; 
-    b->fz(i,j) = 0.0; 
+    b->fx(i,j) = 0.0;
+    b->fy(i,j) = 0.0;
+    b->fz(i,j) = 0.0;
     }
     
 

@@ -34,12 +34,12 @@ Author: Hans Bihs
 #include"density_vof.h"
 #include"density_rheo.h"
 
-poisson_pcorr::poisson_pcorr(lexer *p, heat *&pheat, concentration *&pconc) 
+poisson_pcorr::poisson_pcorr(lexer *p, heat *&pheat, concentration *&pconc)
 {
     if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==0)
     pd = new density_f(p);
     
-    if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==1)  
+    if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==1)
     pd = new density_df(p);
     
     if(p->F80==0 && p->H10==0 && p->W30==1  && p->F300==0 && p->W90==0)
@@ -66,7 +66,7 @@ poisson_pcorr::~poisson_pcorr()
 }
 
 void poisson_pcorr::start(lexer* p, fdm *a, field &press)
-{    
+{
     n=0;
     BASELOOP
     {
@@ -181,12 +181,12 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
         }
         
         // AWA outflow
-        if(p->flag4[Ip1JK]<0 && (i+p->origin_i<p->gknox-1 || p->periodic1==0) 
+        if(p->flag4[Ip1JK]<0 && (i+p->origin_i<p->gknox-1 || p->periodic1==0)
             && (p->IO[Ip1JK]==2 && p->B90==1 && p->B99>2))
         {
         pval = (p->fsfout - p->pos_z())*a->ro(i,j,k)*fabs(p->W22);
         
-        a->rhsvec.V[n] -= a->M.n[n]*(-a->press(i,j,k)+pval);        
+        a->rhsvec.V[n] -= a->M.n[n]*(-a->press(i,j,k)+pval);
         a->M.n[n] = 0.0;
         }
         

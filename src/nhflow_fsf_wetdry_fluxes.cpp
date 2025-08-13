@@ -28,7 +28,7 @@ Author: Hans Bihs
 void nhflow_fsf_f::wetdry_fluxes(lexer* p, fdm_nhf* d, ghostcell* pgc, slice &WL, double *U, double *V, double *W, double *UH, double *VH, double *WH)
 {
    if(p->A540==1)
-   { 
+   {
     // eta + WL
     SLICELOOP1
     {
@@ -52,7 +52,7 @@ void nhflow_fsf_f::wetdry_fluxes(lexer* p, fdm_nhf* d, ghostcell* pgc, slice &WL
         }
         
         else
-        if(p->wet[IJ]==0 && p->wet[Ip1J]==0) 
+        if(p->wet[IJ]==0 && p->wet[Ip1J]==0)
         {
         d->ETAs(i,j) = d->eta(i,j);
         d->Ds(i,j) = WL(i,j);

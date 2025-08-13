@@ -75,7 +75,7 @@ public:
     double *Fi,*Uin,*Uout,*U,*V,*W;
 
     matrix2D N;
-    matrix_diag M;    
+    matrix_diag M;
     
     double gi,gj,gk;
     double wd_criterion;

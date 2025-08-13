@@ -29,7 +29,7 @@ Author: Hans Bihs
 #include <Eigen/Dense>
 
 void net_interface::dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int nNet)
-{ 
+{
     // Distribute net forces on surrounding cells
     int ii, jj, kk;
     double dist, D, dx, dy, dz;
@@ -108,9 +108,9 @@ void net_interface::dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int nNet)
                 }
             }
         }
-    } 
+    }
     
-    pgc->start4V(p,d->Fext,10); 
-    pgc->start4V(p,d->Gext,11); 
-    pgc->start4V(p,d->Hext,12); 
+    pgc->start4V(p,d->Fext,10);
+    pgc->start4V(p,d->Gext,11);
+    pgc->start4V(p,d->Hext,12);
 }

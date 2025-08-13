@@ -34,7 +34,7 @@ limo3::~limo3()
 }
 
 double limo3::iphi(field& b,int n1, int n2, int q1, int q2)
-{    
+{
     d1 = b(i+n1,j,k)-b(i+n2,j,k);
     d2 = b(i+q1,j,k)-b(i+q2,j,k);
     
@@ -82,7 +82,7 @@ double limo3::jphi(field& b,int n1, int n2, int q1, int q2)
 }
 
 double limo3::kphi(field& b,int n1, int n2, int q1, int q2)
-{        
+{
     d1=b(i,j,k+n1)-b(i,j,k+n2);
     d2=b(i,j,k+q1)-b(i,j,k+q2);
     

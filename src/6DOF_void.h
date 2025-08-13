@@ -75,8 +75,8 @@ private:
     vector<double> X311_xen, X311_yen, X311_zen;
     vector<mooring*> pmooring;
     
-    vector<double> Xme, Yme, Zme, Kme, Mme, Nme;    
-    vector<double> Xne, Yne, Zne, Kne, Mne, Nne;    
+    vector<double> Xme, Yme, Zme, Kme, Mme, Nme;
+    vector<double> Xne, Yne, Zne, Kne, Mne, Nne;
     
     double alpha[3],gamma[3],zeta[3];
 };

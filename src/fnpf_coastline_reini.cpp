@@ -77,7 +77,7 @@ void fnpf_coastline::step(lexer* p)
 }
 
 void fnpf_coastline::time_preproc(lexer* p)
-{    
+{
     n=0;
     SLICELOOP4
     {

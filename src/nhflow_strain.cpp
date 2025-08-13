@@ -45,7 +45,7 @@ void nhflow_strain::wallf_update(lexer *p, fdm_nhf *d, ghostcell *pgc, int *WALL
     
     LOOP
     if(p->DF[IJK]>0)
-    {  
+    {
         if(p->flag4[Im1JK]<0 && p->IO[Im1JK]!=1)
         WALLF[IJK]=1;
 
@@ -96,7 +96,7 @@ void nhflow_strain::Pk_update(lexer *p, fdm_nhf *d, ghostcell *pgc)
 }
 
 void nhflow_strain::Pk_b_update(lexer *p, fdm_nhf *d, ghostcell *pgc)
-{ 
+{
     if(p->A566==1)
     LOOP
     {
@@ -164,7 +164,7 @@ double nhflow_strain::qij(lexer *p, fdm_nhf *d, int ii, int jj)
 }
 
 double nhflow_strain::pk(lexer *p, fdm_nhf *d)
-{ 
+{
     return PK[IJK];
 }
 double nhflow_strain::strainterm(lexer *p, fdm_nhf *d)
@@ -305,7 +305,7 @@ double nhflow_strain::magSqrSd(lexer *p, fdm_nhf *d)
 {
     double Sd=0.0;
     /*double IV_SR=0.0;
-    double Strain=0.0;    
+    double Strain=0.0;
     double Omega=0.0;
     
 
@@ -363,12 +363,12 @@ double nhflow_strain::magSqrSd(lexer *p, fdm_nhf *d)
     rr13 = 0.25*r12*r23;
     rr23 = -0.25*r12*r13;
     
-    IV_SR = ss11*rr11 + 2.0*ss12*rr12 + 2.0*ss13*rr13 + ss22*rr22 + 2.0*ss23*rr23 + ss33*rr33;    
+    IV_SR = ss11*rr11 + 2.0*ss12*rr12 + 2.0*ss13*rr13 + ss22*rr22 + 2.0*ss23*rr23 + ss33*rr33;
 
-    Strain = nhflow_strainterm(p,a);    
+    Strain = nhflow_strainterm(p,a);
     Omega = rotationterm(p,a);
     
-    Sd = ((1.0/6.0)*((pow(Strain, 2.0)*pow(Strain, 2.0)) + (pow(Omega, 2.0)*pow(Omega, 2.0)))) + ((2.0/3.0)*(pow(Strain, 2.0)*pow(Omega, 2.0))) + (2.0*IV_SR);                
+    Sd = ((1.0/6.0)*((pow(Strain, 2.0)*pow(Strain, 2.0)) + (pow(Omega, 2.0)*pow(Omega, 2.0)))) + ((2.0/3.0)*(pow(Strain, 2.0)*pow(Omega, 2.0))) + (2.0*IV_SR);
 //    Sd = ((1.0/6.0)*((pow(nhflow_strainterm(p,a), 2.0)*pow(nhflow_strainterm(p,a), 2.0)) + (pow(rotationterm(p,a), 2.0)*pow(rotationterm(p,a), 2.0)))) + ((2.0/3.0)*(pow(nhflow_strainterm(p,a), 2.0)*pow(rotationterm(p,a), 2.0))) + (2.0*IV_SR);
 */
     return Sd;
@@ -379,7 +379,7 @@ double nhflow_strain::magSqrSd(lexer *p, double *U, double *V, double *W)
     double Sd=0.0;
     /*
     double IV_SR=0.0;
-    double Strain=0.0;    
+    double Strain=0.0;
     double Omega=0.0;
     
 
@@ -439,10 +439,10 @@ double nhflow_strain::magSqrSd(lexer *p, double *U, double *V, double *W)
     
     IV_SR = ss11*rr11 + 2.0*ss12*rr12 + 2.0*ss13*rr13 + ss22*rr22 + 2.0*ss23*rr23 + ss33*rr33;
 
-    Strain = nhflow_strainterm(p,u,v,w);    
+    Strain = nhflow_strainterm(p,u,v,w);
     Omega = rotationterm(p,u,v,w);
     
-    Sd = ((1.0/6.0)*((pow(Strain, 2.0)*pow(Strain, 2.0)) + (pow(Omega, 2.0)*pow(Omega, 2.0)))) + ((2.0/3.0)*(pow(Strain, 2.0)*pow(Omega, 2.0))) + (2.0*IV_SR);        
+    Sd = ((1.0/6.0)*((pow(Strain, 2.0)*pow(Strain, 2.0)) + (pow(Omega, 2.0)*pow(Omega, 2.0)))) + ((2.0/3.0)*(pow(Strain, 2.0)*pow(Omega, 2.0))) + (2.0*IV_SR);
 //    Sd = ((1.0/6.0)*((pow(nhflow_strainterm(p,u,v,w), 2.0)*pow(nhflow_strainterm(p,u,v,w), 2.0)) + (pow(rotationterm(p,u,v,w), 2.0)*pow(rotationterm(p,u,v,w), 2.0)))) + ((2.0/3.0)*(pow(nhflow_strainterm(p,u,v,w), 2.0)*pow(rotationterm(p,u,v,w), 2.0))) + (2.0*IV_SR);
 */
     return Sd;

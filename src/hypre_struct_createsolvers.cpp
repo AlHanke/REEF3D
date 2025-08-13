@@ -33,7 +33,7 @@ void hypre_struct::create_solver1234(lexer* p,ghostcell* pgc)
     HYPRE_StructBiCGSTABCreate(MPI_COMM_WORLD, &solver);
     HYPRE_StructBiCGSTABSetMaxIter(solver, p->N46);
     HYPRE_StructBiCGSTABSetTol(solver, p->N43);
-    HYPRE_StructBiCGSTABSetPrintLevel(solver, 0 ); 
+    HYPRE_StructBiCGSTABSetPrintLevel(solver, 0 );
     HYPRE_StructBiCGSTABSetLogging(solver, 1);
     
     HYPRE_StructJacobiCreate(MPI_COMM_WORLD, &precond);
@@ -46,8 +46,8 @@ void hypre_struct::create_solver1234(lexer* p,ghostcell* pgc)
 void hypre_struct::delete_solver1234(lexer* p,ghostcell* pgc)
 {
     
-    HYPRE_StructJacobiDestroy(precond);  
-    HYPRE_StructBiCGSTABDestroy(solver);    
+    HYPRE_StructJacobiDestroy(precond);
+    HYPRE_StructBiCGSTABDestroy(solver);
 }
 
 void hypre_struct::create_solver5(lexer* p, ghostcell* pgc)
@@ -61,7 +61,7 @@ void hypre_struct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructPCGSetTol(solver, p->N44 );
     HYPRE_StructPCGSetTwoNorm(solver, 1 );
     HYPRE_StructPCGSetRelChange(solver, 0 );
-    HYPRE_StructPCGSetPrintLevel(solver, 0 ); 
+    HYPRE_StructPCGSetPrintLevel(solver, 0 );
     HYPRE_StructPCGSetLogging(solver, 1);
     }
     
@@ -90,7 +90,7 @@ void hypre_struct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructBiCGSTABCreate(MPI_COMM_WORLD, &solver);
     HYPRE_StructBiCGSTABSetMaxIter(solver, p->N46);
     HYPRE_StructBiCGSTABSetTol(solver, p->N44);
-    HYPRE_StructBiCGSTABSetPrintLevel(solver, 0 ); 
+    HYPRE_StructBiCGSTABSetPrintLevel(solver, 0 );
     HYPRE_StructBiCGSTABSetLogging(solver, 1);
     }
     
@@ -101,7 +101,7 @@ void hypre_struct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructHybridSetPCGMaxIter(solver, p->N46);
     HYPRE_StructHybridSetDSCGMaxIter(solver,1);
     HYPRE_StructHybridSetTol(solver, p->N44);
-    HYPRE_StructHybridSetPrintLevel(solver, 0 ); 
+    HYPRE_StructHybridSetPrintLevel(solver, 0 );
     HYPRE_StructHybridSetLogging(solver, 1);
     }
     
@@ -112,7 +112,7 @@ void hypre_struct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructHybridSetPCGMaxIter(solver, p->N46);
     HYPRE_StructHybridSetDSCGMaxIter(solver,1);
     HYPRE_StructHybridSetTol(solver, p->N44);
-    HYPRE_StructHybridSetPrintLevel(solver, 0 ); 
+    HYPRE_StructHybridSetPrintLevel(solver, 0 );
     HYPRE_StructHybridSetLogging(solver, 1);
     }
     
@@ -123,7 +123,7 @@ void hypre_struct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructHybridSetPCGMaxIter(solver, p->N46);
     HYPRE_StructHybridSetDSCGMaxIter(solver,1);
     HYPRE_StructHybridSetTol(solver, p->N44);
-    HYPRE_StructHybridSetPrintLevel(solver, 0 ); 
+    HYPRE_StructHybridSetPrintLevel(solver, 0 );
     HYPRE_StructHybridSetLogging(solver, 1);
     }
     
@@ -132,7 +132,7 @@ void hypre_struct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructPFMGCreate(MPI_COMM_WORLD, &solver);
     HYPRE_StructPFMGSetMaxIter(solver, p->N46);
     HYPRE_StructPFMGSetTol(solver, p->N44);
-    HYPRE_StructPFMGSetZeroGuess(solver);        
+    HYPRE_StructPFMGSetZeroGuess(solver);
     HYPRE_StructPFMGSetRAPType(solver, 0);
     HYPRE_StructPFMGSetRelaxType(solver, 1);
     HYPRE_StructPFMGSetNumPreRelax(solver, 1);
@@ -164,7 +164,7 @@ void hypre_struct::create_solver5(lexer* p, ghostcell* pgc)
     HYPRE_StructPFMGCreate(MPI_COMM_WORLD, &precond);
     HYPRE_StructPFMGSetMaxIter(precond, 1);
     HYPRE_StructPFMGSetTol(precond, 0.0);
-    HYPRE_StructPFMGSetZeroGuess(precond);        
+    HYPRE_StructPFMGSetZeroGuess(precond);
     HYPRE_StructPFMGSetRAPType(precond, 0);    // now: 0; before: 0
     HYPRE_StructPFMGSetRelaxType(precond, 3);  // now: 3; before: 1
     HYPRE_StructPFMGSetNumPreRelax(precond, 1);
@@ -285,15 +285,15 @@ void hypre_struct::create_solver44(lexer* p,ghostcell* pgc)
 
 void hypre_struct::delete_solver44(lexer* p,ghostcell* pgc)
 {
-    HYPRE_StructSMGDestroy(precond);  
+    HYPRE_StructSMGDestroy(precond);
     
-    HYPRE_StructGMRESDestroy(solver);   
+    HYPRE_StructGMRESDestroy(solver);
 }
 
 void hypre_struct::precon_switch(lexer* p,ghostcell* pgc)
 {
     if(num_iterations>p->N20 && precon_type==11 && p->count>0
-    && ((p->N22==1&&p->A10==2) || (p->N23==1&&p->A10==3) || (p->N24==1&&p->A10==4) || (p->N25==1&&p->A10==5)  || (p->N26==1&&p->A10==6))) 
+    && ((p->N22==1&&p->A10==2) || (p->N23==1&&p->A10==3) || (p->N24==1&&p->A10==4) || (p->N25==1&&p->A10==5)  || (p->N26==1&&p->A10==6)))
     {
     precon_type=12;
     

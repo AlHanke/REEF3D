@@ -147,7 +147,7 @@ double fnpf_ddweno_f_nug::ddwenoz(field& f, double uw)
 }
 
 void fnpf_ddweno_f_nug::iqmin(field& f)
-{    
+{
     q1 = (f(i-2,j,k)-f(i-3,j,k))/DX[IM3];
     q2 = (f(i-1,j,k)-f(i-2,j,k))/DX[IM2];
     q3 = (f(i,j,k)-f(i-1,j,k))/DX[IM1];

@@ -24,7 +24,7 @@ Author: Tobias Martin
 #include"lexer.h"
 #include"fdm.h"
 #include"fdm_nhf.h"
-#include"ghostcell.h"    
+#include"ghostcell.h"
 
 net_barDyn::net_barDyn(int number, lexer *p):nNet(number)
 {
@@ -36,7 +36,7 @@ net_barDyn::~net_barDyn()
 
 void net_barDyn::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen::Matrix3d quatRotMat)
 {
-    double starttime1 = pgc->timer();    
+    double starttime1 = pgc->timer();
 
     //- Set net time step
     double phi = 0.0;
@@ -65,12 +65,12 @@ void net_barDyn::start_cfd(lexer *p, fdm *a, ghostcell *pgc, double alpha, Eigen
     coupling_dlm_cfd(p,a,pgc);
 
     //- Build and save net
-    print(p);    
+    print(p);
 }
 
 void net_barDyn::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha, Eigen::Matrix3d quatRotMat)
 {
-    double starttime1 = pgc->timer();    
+    double starttime1 = pgc->timer();
 
     //- Set net time step
     double phi = 0.0;
@@ -99,7 +99,7 @@ void net_barDyn::start_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double alpha
     coupling_dlm_nhflow(p,d,pgc);
 
     //- Build and save net
-    print(p);    
+    print(p);
 }
 
 
@@ -141,7 +141,7 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
         for (int it = 0; it < 10; it++)
         {
             // Fill Jacobian and invert
-            fillNonLinSystem(p, pgc); 
+            fillNonLinSystem(p, pgc);
 
             Eigen::PartialPivLU<MatrixXd> inv(A_);
             
@@ -166,8 +166,8 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
 
             iter++;
 
-            if (norm_error < 1e-10) 
-            { 
+            if (norm_error < 1e-10)
+            {
                 break;
             }
         }
@@ -179,11 +179,11 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
     }
     
     //- Calculate accelerations
-    updateAcc(p, pgc); 
+    updateAcc(p, pgc);
 
 
     //- Advance velocitie
-    xdot_ = 
+    xdot_ =
         1.0/coeffs_(0)*
         (
             xdotdot_ - coeffs_(1)*xdot_ - coeffs_(2)*xdotn_ - coeffs_(3)*xdotnn_
@@ -194,9 +194,9 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
         xdot_.col(1) *= 0.0;
     }
 
-    /*MatrixXd xdot_new(nK,3); 
+    /*MatrixXd xdot_new(nK,3);
     
-    xdot_new = 
+    xdot_new =
         1.0/coeffs_(0)*
         (
             xdotdot_ - coeffs_(1)*xdot_ - coeffs_(2)*xdotn_ - coeffs_(3)*xdotnn_
@@ -210,13 +210,13 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
 */
 
     //- Advance position
-    x_ =         
+    x_ =
         1.0/coeffs_(0)*
         (
             xdot_ - coeffs_(1)*x_ - coeffs_(2)*xn_ - coeffs_(3)*xnn_
         );
     /*
-    x_new =         
+    x_new =
         1.0/coeffs_(0)*
         (
             xdot_new - coeffs_(1)*x_ - coeffs_(2)*xn_ - coeffs_(3)*xnn_
@@ -224,9 +224,9 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
     */
 
     //- Save old velocity and position vectors
-    xnn_ = xn_;    
+    xnn_ = xn_;
     xn_ = x_;
-    xdotnn_ = xdotn_;    
+    xdotnn_ = xdotn_;
     xdotn_ = xdot_;
     //xdot_ = xdot_new;
     
@@ -238,7 +238,7 @@ void net_barDyn::startLoop(lexer *p, ghostcell *pgc, int& iter)
 
 
 void net_barDyn::limitTension()
-{ 
+{
     // Avoid unphysical tension forces
     for (int barI = 0; barI < nK; barI++)
     {
@@ -247,13 +247,13 @@ void net_barDyn::limitTension()
 }
 
 Eigen::VectorXd net_barDyn::timeWeight(lexer* p)
-{    
+{
     // 3rd-order finite difference weights for first derivative and varying time step
     
     double c2, c3, c5;
-    int mn;    
+    int mn;
 
-    int nd = 4;    
+    int nd = 4;
     double c1 = 1.0;
     double c4 = 0.0;
 
@@ -270,7 +270,7 @@ Eigen::VectorXd net_barDyn::timeWeight(lexer* p)
     ti(2) = ti(1) - dtn_;
     ti(3) = ti(2) - dtnn_;
     
-    MatrixXd coeff = MatrixXd::Zero(nd,nd);    
+    MatrixXd coeff = MatrixXd::Zero(nd,nd);
             
     coeff(0,0) = 1.0;
 
@@ -287,7 +287,7 @@ Eigen::VectorXd net_barDyn::timeWeight(lexer* p)
             c3 = ti(r) - ti(s);
             c2 *= c3;
                 
-            if(s==r-1) 
+            if(s==r-1)
             {
                 for(int t = mn; t >= 1; t--)
                 {
@@ -307,5 +307,5 @@ Eigen::VectorXd net_barDyn::timeWeight(lexer* p)
         c1 = c2;
     }
     
-    return coeff.col(1);    
+    return coeff.col(1);
 }

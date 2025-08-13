@@ -55,7 +55,7 @@ void fnpf_print_kinematics::ini(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     yc = p->P88_y[ID];
 
     // Open files
-    if (xc >= xstart && xc < xend && yc >= ystart && yc < yend) 
+    if (xc >= xstart && xc < xend && yc >= ystart && yc < yend)
     print_ini(p,c,pgc);
 
     // Ini arrays
@@ -70,7 +70,7 @@ void fnpf_print_kinematics::ini(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 
 void fnpf_print_kinematics::start(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
-    if (xc >= xstart && xc < xend && yc >= ystart && yc < yend) 
+    if (xc >= xstart && xc < xend && yc >= ystart && yc < yend)
     {
         i = p->posc_i(xc);
         j = p->posc_j(yc);

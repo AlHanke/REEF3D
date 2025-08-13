@@ -81,7 +81,7 @@ void hypre_struct::make_grid(lexer* p, ghostcell* pgc)
 }
 
 void hypre_struct::make_grid_2Dvert(lexer* p,ghostcell* pgc)
-{    
+{
     // grid
     ilower[0] = p->origin_i;
     ilower[1] = p->origin_k;
@@ -128,7 +128,7 @@ void hypre_struct::make_grid_2Dvert(lexer* p,ghostcell* pgc)
 }
 
 void hypre_struct::make_grid_2D_9pt(lexer* p,ghostcell* pgc)
-{    
+{
     // grid
     ilower[0] = p->origin_i;
     ilower[1] = p->origin_k;
@@ -175,7 +175,7 @@ void hypre_struct::make_grid_2D_9pt(lexer* p,ghostcell* pgc)
 }
 
 void hypre_struct::make_grid_15pt(lexer* p, ghostcell* pgc)
-{    
+{
     // grid
     ilower[0] = p->origin_i;
     ilower[1] = p->origin_j;

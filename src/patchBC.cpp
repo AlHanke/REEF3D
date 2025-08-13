@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"patch_obj.h"
 
-patchBC::patchBC(lexer *p, ghostcell *pgc) 
+patchBC::patchBC(lexer *p, ghostcell *pgc)
 {
     obj_count=0;
     patchBC_IDcount(p,pgc);
@@ -48,5 +48,5 @@ void patchBC::patchBC_ini(lexer *p, ghostcell *pgc)
     patchBC_gcb_count(p,pgc);
     patchBC_fillobj(p,pgc);
     patchBC_gcb_convert(p,pgc);
-} 
+}
 

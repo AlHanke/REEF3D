@@ -102,7 +102,7 @@ void concentration_io::ini(lexer* p, fdm *a, ghostcell* pgc,concentration *pconc
         zr = fx(xp1,zp1,xp2,zp2,xc);
         
         if(xc<xr && zc>zr)
-        {    
+        {
             // g2 : P4 - P3
             xr = fz(xp4,zp4,xp3,zp3,zc);
             zr = fx(xp4,zp4,xp3,zp3,xc);

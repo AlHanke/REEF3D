@@ -38,19 +38,19 @@ void sediment_exner::topovel1(lexer* p, ghostcell *pgc, sediment_fdm *s)
 
     SLICELOOP4
     if(p->pos_x()>=p->S71 && p->pos_x()<=p->S72)
-    {                        
+    {
         ux1=s->P(i-1,j);
-        vx1=0.25*(s->Q(i,j)+s->Q(i-1,j)+s->Q(i,j-1)+s->Q(i-1,j-1)); 
+        vx1=0.25*(s->Q(i,j)+s->Q(i-1,j)+s->Q(i,j-1)+s->Q(i-1,j-1));
         
         ux2=s->P(i,j);
-        vx2=0.25*(s->Q(i,j)+s->Q(i+1,j)+s->Q(i,j-1)+s->Q(i+1,j-1)); 
+        vx2=0.25*(s->Q(i,j)+s->Q(i+1,j)+s->Q(i,j-1)+s->Q(i+1,j-1));
         
         
         uy1=0.25*(s->P(i,j-1)+s->P(i,j)+s->P(i-1,j-1)+s->P(i-1,j));
-        vy1=s->Q(i,j-1); 
+        vy1=s->Q(i,j-1);
         
         uy2=0.25*(s->P(i,j)+s->P(i,j+1)+s->P(i-1,j)+s->P(i-1,j+1));
-        vy2=s->Q(i,j); 
+        vy2=s->Q(i,j);
         
         
         ux1_abs = sqrt(ux1*ux1 + vx1*vx1);
@@ -114,19 +114,19 @@ void sediment_exner::topovel2(lexer* p, ghostcell *pgc, sediment_fdm *s)
 
     SLICELOOP4
     if(p->pos_x()>=p->S71 && p->pos_x()<=p->S72)
-    {                        
+    {
         ux1=s->P(i-1,j);
-        vx1=0.25*(s->Q(i,j)+s->Q(i-1,j)+s->Q(i,j-1)+s->Q(i-1,j-1)); 
+        vx1=0.25*(s->Q(i,j)+s->Q(i-1,j)+s->Q(i,j-1)+s->Q(i-1,j-1));
         
         ux2=s->P(i,j);
-        vx2=0.25*(s->Q(i,j)+s->Q(i+1,j)+s->Q(i,j-1)+s->Q(i+1,j-1)); 
+        vx2=0.25*(s->Q(i,j)+s->Q(i+1,j)+s->Q(i,j-1)+s->Q(i+1,j-1));
         
         
         uy1=0.25*(s->P(i,j-1)+s->P(i,j)+s->P(i-1,j-1)+s->P(i-1,j));
-        vy1=s->Q(i,j-1); 
+        vy1=s->Q(i,j-1);
         
         uy2=0.25*(s->P(i,j)+s->P(i,j+1)+s->P(i-1,j)+s->P(i-1,j+1));
-        vy2=s->Q(i,j); 
+        vy2=s->Q(i,j);
         
         
         ux1_abs = sqrt(ux1*ux1 + vx1*vx1);

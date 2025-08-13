@@ -25,8 +25,8 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_irregular_2nd_a::wave_lib_irregular_2nd_a(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_irregular_2nd_a::wave_lib_irregular_2nd_a(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     if(p->B85!=4 && p->B85!=5 && p->B85!=6 && p->B92!=52)
     {
         irregular_parameters(p);
@@ -195,7 +195,7 @@ double wave_lib_irregular_2nd_a::wave_eta(lexer *p, double x, double y)
     // 2nd-order
     for(n=0;n<p->wN-1;++n)
     for(m=n+1;m<p->wN;++m)
-    eta +=  ((Ai[n]*Ai[m])/(2.0*fabs(p->W22))) 
+    eta +=  ((Ai[n]*Ai[m])/(2.0*fabs(p->W22)))
         * (Cval[n][m]*cos(Ti[n]-Ti[m]) - Dval[n][m]*cos(Ti[n]+Ti[m]));
     
     return eta;
@@ -213,7 +213,7 @@ void wave_lib_irregular_2nd_a::parameters(lexer *p, ghostcell *pgc)
     p->Darray(Cval,p->wN,p->wN);
     p->Darray(Dval,p->wN,p->wN);
     p->Darray(Eval,p->wN,p->wN);
-    p->Darray(Fval,p->wN,p->wN);   
+    p->Darray(Fval,p->wN,p->wN);
     
     for(n=0;n<p->wN-1;++n)
     for(m=n+1;m<p->wN;++m)
@@ -222,7 +222,7 @@ void wave_lib_irregular_2nd_a::parameters(lexer *p, ghostcell *pgc)
     Dval[n][m] = wave_D(wi[n],wi[m],ki[n],ki[m]);
     Eval[n][m] = wave_E(wi[n],wi[m],ki[n],ki[m],Ai[n],Ai[m]);
     Fval[n][m] = wave_F(wi[n],wi[m],ki[n],ki[m],Ai[n],Ai[m]);
-    }  
+    }
 }
 
 double wave_lib_irregular_2nd_a::wave_C(double w1, double w2, double k1, double k2)

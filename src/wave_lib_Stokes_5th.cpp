@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 wave_lib_Stokes_5th::wave_lib_Stokes_5th(lexer *p, ghostcell *pgc) : pshift(p->B120*(PI/180.0))
-{   
+{
     wave_parameters(p,pgc);
     parameters(p,pgc);
     
@@ -705,7 +705,7 @@ void wave_lib_Stokes_5th::wave_parameters(lexer *p, ghostcell *pgc)
         int qn=0;
             do
             {
-            wk_temp = (2.0*PI)/(wL>1.0e-20?wL:1.0e20); 
+            wk_temp = (2.0*PI)/(wL>1.0e-20?wL:1.0e20);
 
             eps = 0.5*wk_temp*wH;
             S = 1.0/cosh(2.0*wk_temp*wdt);

@@ -42,7 +42,7 @@ void sixdof_obj::update_forces(lexer *p)
     Mfb_ << 0.0, 0.0, 0.0;
 
     if(p->X11_u==1)
-    Ffb_(0) = Xext + Xe - p->X26_Cu*p_(0)/Mass_fb; 
+    Ffb_(0) = Xext + Xe - p->X26_Cu*p_(0)/Mass_fb;
     
     if(p->X11_v==1)
     Ffb_(1) = Yext + Ye - p->X26_Cv*p_(1)/Mass_fb;
@@ -52,7 +52,7 @@ void sixdof_obj::update_forces(lexer *p)
  
     
     if(p->X11_p==1)
-    Mfb_(0) = Kext + Ke - p->X25_Cp*omega_I(0); 
+    Mfb_(0) = Kext + Ke - p->X25_Cp*omega_I(0);
     
     if(p->X11_q==1)
     Mfb_(1) = Mext + Me - p->X25_Cq*omega_I(1);

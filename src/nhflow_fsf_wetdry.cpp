@@ -76,7 +76,7 @@ void nhflow_fsf_f::wetdry(lexer* p, fdm_nhf* d, ghostcell* pgc, double *UH, doub
             temp[IJ]=1;
         }
         
-        else              
+        else
         if(WL(i,j)<=p->A544+eps)
         {
         temp[IJ]=0;
@@ -95,7 +95,7 @@ void nhflow_fsf_f::wetdry(lexer* p, fdm_nhf* d, ghostcell* pgc, double *UH, doub
     // ----------------
     // ----------------
     if(p->A540==2)
-    { 
+    {
     
         SLICELOOP4
         {

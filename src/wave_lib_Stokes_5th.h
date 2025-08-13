@@ -92,7 +92,7 @@ private:
     double wk_temp,ww_temp,wL_temp,wT_temp,wT_test,wf_temp;
     
     
-    double eps,c0,c2,c4; 
+    double eps,c0,c2,c4;
     double S,C;
     double wC,ubar;
     double wS;

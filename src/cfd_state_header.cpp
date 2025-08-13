@@ -40,7 +40,7 @@ void cfd_state::write_header(lexer *p, fdm *a, ghostcell *pgc)
     // open file
     headout.open(name, ios::binary);
     
-    // ijk origin    
+    // ijk origin
     iin=p->origin_i-is_global;
     
     if(is_flag==1)
@@ -100,19 +100,19 @@ void cfd_state::write_header(lexer *p, fdm *a, ghostcell *pgc)
     {
     ddn=p->XN[IP];
     headout.write((char*)&ddn, sizeof (double));
-    } 
+    }
     
     for(j=js;j<=je;++j)
     {
     ddn=p->YN[JP];
     headout.write((char*)&ddn, sizeof (double));
-    } 
+    }
     
     FKLOOP
     {
     ddn=p->ZN[KP];
     headout.write((char*)&ddn, sizeof (double));
-    } 
+    }
 
     
     headout.close();

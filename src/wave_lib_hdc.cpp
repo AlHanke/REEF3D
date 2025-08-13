@@ -25,8 +25,8 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_hdc::wave_lib_hdc(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_hdc::wave_lib_hdc(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     // read header
     read_header(p,pgc);
     allocate(p,pgc);
@@ -180,7 +180,7 @@ void wave_lib_hdc::wave_prestep(lexer *p, ghostcell *pgc)
     ++q2;
     
     
-    // single file read 
+    // single file read
     if(file_type==1)
     {
         if(q1!=q1n)

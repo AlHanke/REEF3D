@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void nhflow_fsf_f::breaking(lexer* p, fdm_nhf* d, ghostcell* pgc, slice& eta, slice &eta_n, double alpha)
-{   
+{
     
     SLICELOOP4
     d->breaking(i,j)=0;
@@ -34,7 +34,7 @@ void nhflow_fsf_f::breaking(lexer* p, fdm_nhf* d, ghostcell* pgc, slice& eta, sl
     if(p->A550>=1)
     SLICELOOP4
     if(p->wet[IJ]==1)
-    {       
+    {
             if(p->A551==1 || p->A551==3)
             if( (eta(i,j)-eta_n(i,j))/(alpha*p->dt) > p->A247*sqrt(9.81*d->WL(i,j)))
             d->breaking(i,j)=1;
@@ -96,21 +96,21 @@ void nhflow_fsf_f::breaking(lexer* p, fdm_nhf* d, ghostcell* pgc, slice& eta, sl
         if(d->breaking(i,j)==2)
         {
          filter(p,d,pgc,d->WL);
-        }   
+        }
         
         if(p->A552==2)
         SLICELOOP4
         if(d->breaking(i,j)==1)
         {
          filter(p,d,pgc,d->WL);
-        }   
+        }
         
         if(p->A552==3)
         SLICELOOP4
         if(d->breaking(i,j)>=1)
         {
          filter(p,d,pgc,d->WL);
-        } 
+        }
 }
 
 void nhflow_fsf_f::filter(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &f)

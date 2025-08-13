@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm2D.h"
 #include"ghostcell.h"
 
-sflow_filter::sflow_filter(lexer* p) : f1x(p), f1y(p), f2x(p), f2y(p), f4x(p), f4y(p) 
+sflow_filter::sflow_filter(lexer* p) : f1x(p), f1y(p), f2x(p), f2y(p), f4x(p), f4y(p)
 {
 }
 

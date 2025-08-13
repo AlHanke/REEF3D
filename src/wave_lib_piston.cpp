@@ -26,8 +26,8 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include<fstream>
 
-wave_lib_piston::wave_lib_piston(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_piston::wave_lib_piston(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     if(p->mpirank==0)
     {
     cout<<"Wave_Lib: piston wavemaker theory"<<endl;
@@ -106,7 +106,7 @@ double wave_lib_piston::wave_eta(lexer *p, double x, double y)
     
     double depth = p->wd - p->bed[IJ];
     
-    eta =  (kinematics[timecount][1]-kinematics[timecount_old][1])/(kinematics[timecount][0]-kinematics[timecount_old][0]) * sqrt(depth/9.81);    
+    eta =  (kinematics[timecount][1]-kinematics[timecount_old][1])/(kinematics[timecount][0]-kinematics[timecount_old][0]) * sqrt(depth/9.81);
     
     return eta;
 }

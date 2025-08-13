@@ -40,7 +40,7 @@ sflow_etimestep::~sflow_etimestep()
 }
 
 void sflow_etimestep::start(lexer *p, fdm2D* b, ghostcell* pgc)
-{    
+{
     p->umax=p->vmax=p->viscmax=0.0;
     p->dt_old=p->dt;
     double depthmax=-10.0;
@@ -79,7 +79,7 @@ void sflow_etimestep::start(lexer *p, fdm2D* b, ghostcell* pgc)
     velmax=MAX(p->umax,p->vmax);
 
 
-// 
+//
     
     cu=2.0/((p->umax/p->DXM)+sqrt(4.0*fabs(b->maxF)/p->DXM));
     cv=2.0/((p->vmax/p->DXM)+sqrt(4.0*fabs(b->maxG)/p->DXM));
@@ -113,7 +113,7 @@ void sflow_etimestep::start(lexer *p, fdm2D* b, ghostcell* pgc)
 
 
 void sflow_etimestep::ini(lexer *p, fdm2D* b, ghostcell* pgc)
-{    
+{
     
     p->umax=p->W10;
     

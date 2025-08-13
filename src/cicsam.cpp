@@ -32,7 +32,7 @@ Author: Hans Bihs
 #include"flux_face_FOU_2D.h"
 #include"flux_face_FOU_vrans_2D.h"
 
-cicsam::cicsam (lexer *p) 
+cicsam::cicsam (lexer *p)
 {
     if(p->j_dir==0)
     {
@@ -227,7 +227,7 @@ double cicsam::cface(lexer *p,fdm *a,field& b,int dir, int pos, double uwind)
     }
     
     
-    cc_ = (cc-cu)/(fabs(cd-cu)>1.0e-20?(cd-cu):1.0e20); 
+    cc_ = (cc-cu)/(fabs(cd-cu)>1.0e-20?(cd-cu):1.0e20);
     
     
     Co = fabs(umax*p->dt/p->DXM);

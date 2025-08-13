@@ -36,7 +36,7 @@ class solver2D;
 
 using namespace std;
 
-class fnpf_breaking : public fnpf_fsf, public increment 
+class fnpf_breaking : public fnpf_fsf, public increment
 {
 public:
     fnpf_breaking(lexer*, fdm_fnpf*, ghostcell*);

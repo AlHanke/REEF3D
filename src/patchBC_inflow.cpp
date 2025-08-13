@@ -346,7 +346,7 @@ void patchBC::patchBC_ioflow(lexer *p, fdm *a, ghostcell *pgc, field &u, field &
     }
 
 
-} 
+}
 
 void patchBC::patchBC_rkioflow(lexer *p, fdm *a, ghostcell *pgc, field &u, field &v, field &w)
 {

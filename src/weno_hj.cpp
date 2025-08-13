@@ -211,7 +211,7 @@ double weno_hj::ddz(lexer* p,fdm* a, field& b)
 }
 
 void weno_hj::iqmin(field& f, double DRM, double *DRDX)
-{    
+{
     q1 = (f(i-2,j,k) - f(i-3,j,k))/DRM;
     q2 = (f(i-1,j,k) - f(i-2,j,k))/DRM;
     q3 = (f(i,j,k)   - f(i-1,j,k))/DRM;
@@ -220,7 +220,7 @@ void weno_hj::iqmin(field& f, double DRM, double *DRDX)
 }
 
 void weno_hj::jqmin(field& f, double DSM, double *DSDY)
-{    
+{
     q1 = (f(i,j-2,k) - f(i,j-3,k))/DSM;
     q2 = (f(i,j-1,k) - f(i,j-2,k))/DSM;
     q3 = (f(i,j,k)   - f(i,j-1,k))/DSM;
@@ -229,7 +229,7 @@ void weno_hj::jqmin(field& f, double DSM, double *DSDY)
 }
 
 void weno_hj::kqmin(field& f, double DTM, double *DTDZ)
-{    
+{
     q1 = (f(i,j,k-2) - f(i,j,k-3))/DTM;
     q2 = (f(i,j,k-1) - f(i,j,k-2))/DTM;
     q3 = (f(i,j,k)   - f(i,j,k-1))/DTM;
@@ -238,7 +238,7 @@ void weno_hj::kqmin(field& f, double DTM, double *DTDZ)
 }
 
 void weno_hj::iqmax(field& f, double DRM, double *DRDX)
-{    
+{
     q1 = (f(i+3,j,k) - f(i+2,j,k))/DRM;
     q2 = (f(i+2,j,k) - f(i+1,j,k))/DRM;
     q3 = (f(i+1,j,k) - f(i,j,k)  )/DRM;
@@ -247,7 +247,7 @@ void weno_hj::iqmax(field& f, double DRM, double *DRDX)
 }
 
 void weno_hj::jqmax(field& f, double DSM, double *DSDY)
-{    
+{
     q1 = (f(i,j+3,k) - f(i,j+2,k))/DSM;
     q2 = (f(i,j+2,k) - f(i,j+1,k))/DSM;
     q3 = (f(i,j+1,k) - f(i,j,k)  )/DSM;

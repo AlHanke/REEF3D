@@ -104,7 +104,7 @@ void potential_f::start(lexer*p, fdm* a, solver* psolv, ghostcell* pgc)
 }
 
 void potential_f::ucalc(lexer *p, fdm *a, field &phi)
-{    
+{
     ULOOP
     a->u(i,j,k) = (phi(i+1,j,k)-phi(i,j,k))/p->DXP[IP];
     
@@ -131,7 +131,7 @@ void potential_f::ucalc(lexer *p, fdm *a, field &phi)
 }
 
 void potential_f::vcalc(lexer *p, fdm *a, field &phi)
-{    
+{
     VLOOP
     a->v(i,j,k) = (phi(i,j+1,k)-phi(i,j,k))/p->DYP[JP];
     
@@ -337,9 +337,9 @@ void potential_f::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
     {
         if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
         {
-            i=p->gcb4[n][0]; 
+            i=p->gcb4[n][0];
             j=p->gcb4[n][1];
-            k=p->gcb4[n][2];  
+            k=p->gcb4[n][2];
             
             if((p->X10==0 || a->fb(i,j,k)>0.0) && ((a->solid(i,j,k)>0.0 || p->solidread==0) && (a->topo(i,j,k)>0.0 || p->toporead==0)))
             {
@@ -361,9 +361,9 @@ void potential_f::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
         
         if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
         {
-            i=p->gcb4[n][0]; 
+            i=p->gcb4[n][0];
             j=p->gcb4[n][1];
-            k=p->gcb4[n][2];  
+            k=p->gcb4[n][2];
             
             if((p->X10==0 || a->fb(i,j,k)>0.0) && ((a->solid(i,j,k)>0.0 || p->solidread==0) && (a->topo(i,j,k)>0.0 || p->toporead==0)))
             {

@@ -33,7 +33,7 @@ void sixdof_obj::update_position_2D(lexer *p, ghostcell *pgc, slice &fsglobal)
     // Update STL mesh
     update_trimesh_2D(p,pgc);
 
-    // Update angular velocities 
+    // Update angular velocities
     omega_B = I_.inverse()*h_;
     omega_I = R_*omega_B;
     
@@ -51,12 +51,12 @@ void sixdof_obj::update_position_2D(lexer *p, ghostcell *pgc, slice &fsglobal)
 
 void sixdof_obj::update_trimesh_2D(lexer *p, ghostcell *pgc)
 {
-    // Update position of triangles 
+    // Update position of triangles
     for(n=0; n<tricount; ++n)
     {
         for(int q=0; q<3; q++)
         {
-            // Update coordinates of triangles 
+            // Update coordinates of triangles
             // (tri_x0 is vector between tri_x and xg)
             Eigen::Vector3d point(tri_x0[n][q], tri_y0[n][q], tri_z0[n][q]);
                     
@@ -72,6 +72,6 @@ void sixdof_obj::update_trimesh_2D(lexer *p, ghostcell *pgc)
     ray_cast_2D(p,pgc);
     reini_2D(p,pgc,fs);
 
-    pgc->gcsl_start4(p,fs,50);  
+    pgc->gcsl_start4(p,fs,50);
 }
 

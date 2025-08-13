@@ -30,7 +30,7 @@ class wave_lib;
 
 using namespace std;
 
-class wave_interface 
+class wave_interface
 {
 
 public:

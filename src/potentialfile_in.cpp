@@ -30,8 +30,8 @@ Author: Hans Bihs
 #include<sys/stat.h>
 #include<sys/types.h>
 
-potentialfile_in::potentialfile_in(lexer *p, ghostcell *pgc) 
-{    
+potentialfile_in::potentialfile_in(lexer *p, ghostcell *pgc)
+{
     if(p->I230>0 && p->gcin_count>0)
     {
     header_read(p,pgc);
@@ -138,7 +138,7 @@ void potentialfile_in::ff_inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, fie
     u(i-2,j,k)=uval;
     u(i-3,j,k)=uval;
     
-    // V 
+    // V
     if(k<maxk && a->phi(i-1,j,k)>=0.6*p->DXM)
     vval = V0[0][k+dk]*t0 + V1[0][k+dk]*t1;
     

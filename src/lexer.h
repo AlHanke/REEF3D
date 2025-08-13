@@ -195,13 +195,13 @@ public:
     int* ictrl;
     double* dctrl;
     int ctrlsize;
-    int stencil;    
+    int stencil;
 
     // Solver
     int *colnum;
     int *range_col4,*range_row4,*range_col7,*range_row7;
     int *sizeM1,*sizeM2,*sizeM3,*sizeM4,*sizeM4a,*sizeM6,*sizeM9;
-    int *sizeS1,*sizeS2,*sizeS4; 
+    int *sizeS1,*sizeS2,*sizeS4;
     int mglevel_max,*MGL;
 
     // SMO
@@ -271,7 +271,7 @@ public:
     int A310,A311,A312,A313,A320,A321,A322,A323,A329,A343,A344,A345,A347,A348;
     double A340,A341,A342,A344_val,A345_val,A346;
     int A350,A351,A352,A353,A357,A358,A361,A362,A363,A368;
-    double A354,A355,A356,A365; 
+    double A354,A355,A356,A365;
     
     // NSEWAVE
     int A410;
@@ -316,7 +316,7 @@ public:
     // boundary conditions
     int B10,B11,B20,B21,B23;
     int B30,B32,B33;
-    double B31,B32_x,B32_y,B32_z;    
+    double B31,B32_x,B32_y,B32_z;
     int B60,B61,B71,B75,B76,B77,B84,B85,B81,B82,B86,B87,B89,B90,B91,B92,B93,B94,B98,B99,B101,B105,B106,B107;
     int B136,B138,B138_1,B138_2,B139;
     int B180,B191,B192,B240,B241,B242,B243;
@@ -505,7 +505,7 @@ public:
     double *P51_x,*P51_y;
     double *P52_y,*P56_x;
     double P55;
-    double *P58_x,*P58_y,*P58_T;   
+    double *P58_x,*P58_y,*P58_T;
     double *P61_x,*P61_y,*P61_z;
     double *P62_xs,*P62_ys,*P62_zs,*P62_xe,*P62_ye,*P62_ze;
     double *P63_x,*P63_y;
@@ -635,7 +635,7 @@ public:
     double xgn,ygn,zgn;
     double phi_fb,theta_fb,psi_fb;
     double ufbmax, vfbmax, wfbmax;
-    //Eigen::Matrix3d quatRotMat;    
+    //Eigen::Matrix3d quatRotMat;
     int X10,X12,X14,X19,X11_u,X11_v,X11_w,X11_p,X11_q,X11_r,X21,X22,X23,X24,X31,X32,X33,X34,X38;
     int X39,X40,X45,X46,X48,X49,X50,X60,X110,X120,X131,X132,X133;
     int X100,X101,X102,X103,X141,X142,X143,X153,X180,X181,X182,X183,X210,X211;
@@ -796,7 +796,7 @@ public:
     int gcx_1range3[7],gcx_3range3[7];
     int gcx_1range4[7],gcx_3range4[7];
     
-// Non-Uniform Mesh    
+// Non-Uniform Mesh
     double *XN,*YN,*ZN;
     double *XP,*YP,*ZP;
     double *DXN,*DYN,*DZN;

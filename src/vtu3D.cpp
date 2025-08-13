@@ -379,7 +379,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
     pgc->start4a(p,a->test,1);
     pgc->start1(p,a->u,110);
     pgc->start2(p,a->v,111);
-    pgc->start3(p,a->w,112);    
+    pgc->start3(p,a->w,112);
 
     pgc->gcparacox(p,a->phi,50);
     pgc->gcparacox(p,a->phi,50);
@@ -925,7 +925,7 @@ void vtu3D::print3D(fdm* a,lexer* p,ghostcell* pgc, turbulence *pturb, heat *phe
  
     zcoor=p->ZN[KP1];
 
-    ffn=float( (p->XN[IP1]-p->B192_3)*cos(theta_y*sin(phase)) - (zcoor-p->B192_4)*sin(theta_y*sin(phase)) + p->B192_3 
+    ffn=float( (p->XN[IP1]-p->B192_3)*cos(theta_y*sin(phase)) - (zcoor-p->B192_4)*sin(theta_y*sin(phase)) + p->B192_3
                 + p->B181_1*sin((2.0*PI*p->B181_2)*p->simtime + p->B181_3));
     result.write((char*)&ffn, sizeof (float));
 

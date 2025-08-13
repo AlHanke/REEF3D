@@ -37,7 +37,7 @@ sflow_fixtimestep::~sflow_fixtimestep()
 }
 
 void sflow_fixtimestep::start(lexer *p, fdm2D* b, ghostcell* pgc)
-{    
+{
     p->umax=p->vmax=p->viscmax=0.0;
     p->dt_old=p->dt;
     double depthmax=-10.0;
@@ -78,7 +78,7 @@ void sflow_fixtimestep::start(lexer *p, fdm2D* b, ghostcell* pgc)
 
 
 void sflow_fixtimestep::ini(lexer *p, fdm2D* b, ghostcell* pgc)
-{    
+{
 
     p->dt=p->N49;
     p->dt_old=p->dt;

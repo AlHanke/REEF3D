@@ -54,7 +54,7 @@ sflow_f::~sflow_f()
 }
 
 void sflow_f::start(lexer *p, fdm2D* b, ghostcell* pgc)
-{    
+{
     
     // logic
     logic(p,b,pgc);
@@ -69,7 +69,7 @@ void sflow_f::start(lexer *p, fdm2D* b, ghostcell* pgc)
     
 //-----------MAINLOOP SFLOW----------------------------
     while(p->count<p->N45 && p->simtime<p->N41 && p->sedtime<p->S19)
-    {        
+    {
         ++p->count;
         starttime=pgc->timer();
 
@@ -160,7 +160,7 @@ void sflow_f::start(lexer *p, fdm2D* b, ghostcell* pgc)
             cout<<"wavegentime: "<<setprecision(3)<<p->wavecalctime<<endl;
             cout<<"printouttime: "<<setprecision(3)<<p->printouttime<<endl;
             cout<<"gctime: "<<setprecision(3)<<p->gctime<<"\t average gctime: "<<setprecision(3)<<p->gcmeantime<<endl;
-            cout<<"Xtime: "<<setprecision(3)<<p->xtime<<"\t average Xtime: "<<setprecision(3)<<p->Xmeantime<<endl;        
+            cout<<"Xtime: "<<setprecision(3)<<p->xtime<<"\t average Xtime: "<<setprecision(3)<<p->Xmeantime<<endl;
             cout<<"total time: "<<setprecision(6)<<p->totaltime<<"   average time: "<<setprecision(3)<<p->meantime<<endl;
             cout<<"timer per step: "<<setprecision(3)<<p->itertime<<endl;
             }
@@ -209,7 +209,7 @@ void sflow_f::start(lexer *p, fdm2D* b, ghostcell* pgc)
 }
 
 void sflow_f::print_debug(lexer *p, fdm2D* b, ghostcell* pgc)
-{    
+{
     
     char name[100];
     ofstream debug;
@@ -247,7 +247,7 @@ void sflow_f::log_ini(lexer *p)
 
     mainlogout<<"number of cells:  "<<p->cellnumtot2D<<endl;
     mainlogout<<"#iteration \t #timestep \t #simtime \t #itertime \t #piter \t #ptime \t #Inflow \t #Outflow "<<endl;
-    }    
+    }
 }
 
 void sflow_f::mainlog(lexer *p)

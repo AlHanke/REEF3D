@@ -26,11 +26,11 @@ Author: Hans Bihs
 #include"fdm.h"
 
 void mgcslice1::gcb_seed(lexer *p)
-{    
+{
     // count gcbsl
     count=0;
     SLICELOOP1
-    {   
+    {
         if(p->flagslice1[Im1J]<0)
         ++count;
     
@@ -44,8 +44,8 @@ void mgcslice1::gcb_seed(lexer *p)
         ++count;
     }
     
-    p->Iresize(p->gcbsl1,p->gcbsl1_count, count, 6, 6); 
-    p->Dresize(p->gcdsl1,p->gcbsl1_count, count); 
+    p->Iresize(p->gcbsl1,p->gcbsl1_count, count, 6, 6);
+    p->Dresize(p->gcdsl1,p->gcbsl1_count, count);
     
     // find gcbsl
     count=0;
@@ -87,6 +87,6 @@ void mgcslice1::gcb_seed(lexer *p)
         ++count;
         }
 
-    } 
+    }
     p->gcbsl1_count=count;
 }

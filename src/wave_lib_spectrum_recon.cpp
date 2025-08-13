@@ -59,7 +59,7 @@ void wave_lib_spectrum::recon_parameters(lexer *p, ghostcell *pgc)
     // fillvalues for Ai, wi, Li, ki and ei
     for(int n=0;n<p->wN;++n)
     {
-    // fill 
+    // fill
     Ai[n]=recon[n][0];
     wi[n]=recon[n][1];
     ei[n]=recon[n][2];
@@ -68,7 +68,7 @@ void wave_lib_spectrum::recon_parameters(lexer *p, ghostcell *pgc)
     // ki
     wL0 = (2.0*PI*9.81)/pow(wi[n],2.0);
     k0 = (2.0*PI)/wL0;
-    S0 = sqrt(k0*wD) * (1.0 + (k0*wD)/6.0 + (k0*k0*wD*wD)/30.0); 
+    S0 = sqrt(k0*wD) * (1.0 + (k0*wD)/6.0 + (k0*k0*wD*wD)/30.0);
     Li[n] = wL0*tanh(S0);
         
     for(int qn=0; qn<100; ++qn)
@@ -124,7 +124,7 @@ void wave_lib_spectrum::recon_read(lexer *p, ghostcell* pgc)
     recon[n][0] = val0;
     recon[n][1] = val1;
     recon[n][2] = val2;
-    }    
+    }
     
     
     

@@ -43,7 +43,7 @@ void vrans_f::u_source(lexer *p, fdm *a)
         Bporval = Bpor(porval,partval,betaval);
             
 
-        porousterm = Aporval*a->u(i,j,k) + Bporval*a->u(i,j,k)*fabs(a->u(i,j,k)); 
+        porousterm = Aporval*a->u(i,j,k) + Bporval*a->u(i,j,k)*fabs(a->u(i,j,k));
         
     a->rhsvec.V[count] -= porousterm;
     ++count;

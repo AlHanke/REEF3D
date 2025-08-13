@@ -42,7 +42,7 @@ void ghostcell::flagfield(lexer *p)
     
     if(p->Y60==1)
     LOOP
-    {   
+    {
         if(p->i_dir==1)
         if(p->flag4[Im1JK]<0
         && p->flag4[Ip1JK]<0)
@@ -94,7 +94,7 @@ void ghostcell::flagfield(lexer *p)
 
         if(p->gcb4[n][3]==6 && (p->periodic3!=1 || k+p->origin_k<p->gknoz-1))
         p->flag3[IJK]=OBJ_FLAG;
-    }    
+    }
 }
 
 void ghostcell::flagfield_topo(lexer *p)

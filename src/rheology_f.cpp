@@ -88,7 +88,7 @@ void rheology_f::yield_stress(lexer* p, fdm* a)
         break;
 
     case 4:  // HB-C shear rate generated excess pore pressure
-        tau0 = std::max(0.0,tanphi*pressureval*exp(-p->W104*gamma)*relative_density + p->W102_c)*(1.0-exp(-p->W103*gamma));    // m_p is new input W 104 
+        tau0 = std::max(0.0,tanphi*pressureval*exp(-p->W104*gamma)*relative_density + p->W102_c)*(1.0-exp(-p->W103*gamma));    // m_p is new input W 104
         break;
 
     case 5:  // HB-C linear shear rate coupling, max given by pressure
@@ -129,7 +129,7 @@ void rheology_f::yieldStressGradient(lexer* p, fdm* a, int ii, int jj, int kk)
         tau01 = std::max(0.0,tanphi*std::max(0.0,pressureval1*std::max(0.0,a->ro(i,j,k)-density_interstitial_fluid)/a->ro(i,j,k)-p->W104*gamma) + p->W102_c);
         tau02 = std::max(0.0,tanphi*std::max(0.0,pressureval2*std::max(0.0,a->ro(i+1,j,k)-density_interstitial_fluid)/a->ro(i+1,j,k)-p->W104*gamma) + p->W102_c);
         break;
-    }   
+    }
 
     if(p->count==0)
     {

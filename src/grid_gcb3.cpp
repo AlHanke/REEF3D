@@ -34,7 +34,7 @@ void grid::fillgcb3(lexer *p)
     
     if(p->gcb3_count!=p->gcb4_count)
     {
-    p->Iresize(p->gcb3,p->gcb3_count, p->gcb4_count, 6, 6); 
+    p->Iresize(p->gcb3,p->gcb3_count, p->gcb4_count, 6, 6);
     p->Dresize(p->gcd3,p->gcb3_count, p->gcb4_count);
     
     p->gcb3_count=p->gcb4_count;

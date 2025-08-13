@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include <math.h>
 
 void nhflow_force::force_calc(lexer* p, fdm_nhf *d, ghostcell *pgc)
-{  
+{
     Ax=0.0;
     Ay=0.0;
     Az=0.0;
@@ -36,7 +36,7 @@ void nhflow_force::force_calc(lexer* p, fdm_nhf *d, ghostcell *pgc)
     A_tot=0.0;
     
     for(n=0;n<polygon_num;++n)
-    { 
+    {
             // triangle
             if(numpt[n]==3)
             {
@@ -157,7 +157,7 @@ void nhflow_force::force_calc(lexer* p, fdm_nhf *d, ghostcell *pgc)
             
             // pressure
             pval   = p->ccipol7P(d->P, d->WL, d->bed, xc, yc, zc);
-            etaval = p->ccslipol4(d->eta,xc,yc);  
+            etaval = p->ccslipol4(d->eta,xc,yc);
             hspval = (p->wd + etaval - zc)*p->W1*fabs(p->W22);
             
             
@@ -169,9 +169,9 @@ void nhflow_force::force_calc(lexer* p, fdm_nhf *d, ghostcell *pgc)
                       // + 0.0*density*viscosity*A*(dv*nx+dv*nz);
                     
             Fz += -(pval + hspval)*A*nz;
-                      // + 0.0*density*viscosity*A*(dw*nx+dw*ny); 
+                      // + 0.0*density*viscosity*A*(dw*nx+dw*ny);
                       
-    Ax+=fabs(A*nx);    
+    Ax+=fabs(A*nx);
     Ay+=A*ny;
     Az+=A*nz;
     

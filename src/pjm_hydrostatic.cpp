@@ -22,7 +22,7 @@ Author: Hans Bihs
 
 #include"pjm_hydrostatic.h"
 #include"lexer.h"
-#include"fdm.h" 
+#include"fdm.h"
 #include"ghostcell.h"
 #include"poisson.h"
 #include"solver.h"
@@ -45,7 +45,7 @@ pjm_hydrostatic::pjm_hydrostatic(lexer* p, fdm *a, heat *&pheat, concentration *
     if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==0)
     pd = new density_f(p);
     
-    if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==1)  
+    if((p->F80==0) && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0 && p->X10==1)
     pd = new density_df(p);
     
     if(p->F80==0 && p->H10==0 && p->W30==1  && p->F300==0 && p->W90==0)
@@ -66,7 +66,7 @@ pjm_hydrostatic::pjm_hydrostatic(lexer* p, fdm *a, heat *&pheat, concentration *
     if(p->F300>=1)
     pd = new density_rheo(p);
     
-    gcval_press=40;  
+    gcval_press=40;
     
     gcval_u=7;
     gcval_v=8;
@@ -82,7 +82,7 @@ void pjm_hydrostatic::start(fdm* a,lexer*p, poisson* ppois,solver* psolv, ghostc
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<".";
 
-    vel_setup(p,a,pgc,uvel,vvel,wvel,alpha);    
+    vel_setup(p,a,pgc,uvel,vvel,wvel,alpha);
     rhs(p,a,pgc,uvel,vvel,wvel,alpha);
 
     pgc->start4(p,a->press,gcval_press);
@@ -100,21 +100,21 @@ void pjm_hydrostatic::start(fdm* a,lexer*p, poisson* ppois,solver* psolv, ghostc
 }
 
 void pjm_hydrostatic::ucorr(lexer* p, fdm* a, field& uvel,double alpha)
-{    
+{
     ULOOP
     uvel(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*((a->press(i+1,j,k)-a->press(i,j,k))
     /(p->DXP[IP]*pd->roface(p,a,1,0,0)));
 }
 
 void pjm_hydrostatic::vcorr(lexer* p, fdm* a, field& vvel,double alpha)
-{    
+{
     VLOOP
     vvel(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*(a->press(i,j+1,k)-a->press(i,j,k))
     /(p->DYP[JP]*(pd->roface(p,a,0,1,0)));
 }
 
 void pjm_hydrostatic::wcorr(lexer* p, fdm* a, field& wvel,double alpha)
-{    
+{
     WLOOP
     wvel(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*((a->press(i,j,k+1)-a->press(i,j,k))
     /(p->DZP[KP]*pd->roface(p,a,0,0,1)));
@@ -125,7 +125,7 @@ void pjm_hydrostatic::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, 
     double H,roval,phival,epsi,psi;
     
     
-    if(p->j_dir==0)        
+    if(p->j_dir==0)
     psi = 1.6*(1.0/2.0)*(p->DRM+p->DTM);
         
     if(p->j_dir==1)
@@ -146,8 +146,8 @@ void pjm_hydrostatic::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, 
     
     roval = p->W1*H + p->W3*(1.0-H);
     
-    a->press(i,j,k) = a->phi(i,j,k)*roval*fabs(p->W22); 
-    } 
+    a->press(i,j,k) = a->phi(i,j,k)*roval*fabs(p->W22);
+    }
 }
  
 void pjm_hydrostatic::vel_setup(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w,double alpha)

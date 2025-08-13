@@ -77,7 +77,7 @@ void nhflow_coastline::step(lexer* p)
 }
 
 void nhflow_coastline::time_preproc(lexer* p)
-{    
+{
     n=0;
     SLICELOOP4
     {

@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include<sys/types.h>
 
 void potentialfile_in::read0(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
-{    
+{
     
     // Open File
     sprintf(name,"./REEF3D_PotentialFile/REEF3D-flowfile-%i-%i.r3d",p->I230,q0);
@@ -101,7 +101,7 @@ void potentialfile_in::read0(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb
     t1 = T[1];
 
     
-    // start reading 
+    // start reading
     potentialfile.read((char*)&ffn, sizeof (float));
     xloc[n]=ffn;
 

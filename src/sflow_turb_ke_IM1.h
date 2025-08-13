@@ -63,8 +63,8 @@ private:
     int count;
     double starttime;
     
-    sflow_convection *pconvec;   
-    sflow_diffusion *pdiff; 
+    sflow_convection *pconvec;
+    sflow_diffusion *pdiff;
     
 };
 

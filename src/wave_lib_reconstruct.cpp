@@ -30,7 +30,7 @@ Author: Hans Bihs
 #include"wave_lib_irregular_2nd_b.h"
 
 wave_lib_reconstruct::wave_lib_reconstruct(lexer *p, ghostcell *pgc)
-{ 
+{
     
     if(p->mpirank==0)
     cout<<"Wave_Lib: reconstruct water waves; "<<endl;

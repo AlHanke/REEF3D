@@ -140,7 +140,7 @@ void fsi_strip::distribute_forces(lexer *p, fdm *a, ghostcell *pgc, field& fx, f
                         }
                     }
                 }
-            }     
+            }
         }
     }
     

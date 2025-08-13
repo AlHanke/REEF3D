@@ -72,11 +72,11 @@ void grid::fill_dgc2(lexer* p)
         ++count;
         
         if(p->flag2[Ip1Jp1K]<0 && p->flag2[Ip1JK]<0 && p->flag2[IJp1K]<0 && hgc[Ip1Jp1K]==0)
-        if((i<p->knox || p->nb4<0) && (j<p->knoy || p->nb2<0))   
+        if((i<p->knox || p->nb4<0) && (j<p->knoy || p->nb2<0))
         ++count;
         
         if(p->flag2[Im1Jp1K]<0 && p->flag2[Im1JK]<0  && p->flag2[IJp1K]<0 && hgc[Im1Jp1K]==0)
-        if((i>=0 || p->nb1<0) && (j<p->knoy || p->nb2<0)) 
+        if((i>=0 || p->nb1<0) && (j<p->knoy || p->nb2<0))
         ++count;
         
         // i-k
@@ -98,46 +98,46 @@ void grid::fill_dgc2(lexer* p)
         
         // j-k
         if(p->flag2[IJp1Kp1]<0 && p->flag2[IJp1K]<0 && p->flag2[IJKp1]<0 && hgc[IJp1Kp1]==0)
-        if((j<p->knoy || p->nb2<0) && (k<p->knoz || p->nb6<0))   
+        if((j<p->knoy || p->nb2<0) && (k<p->knoz || p->nb6<0))
         ++count;
         
         if(p->flag2[IJm1Kp1]<0 && p->flag2[IJm1K]<0 && p->flag2[IJKp1]<0 && hgc[IJm1Kp1]==0)
-        if((j>=0 || p->nb3<0) && (k<p->knoz || p->nb6<0)) 
+        if((j>=0 || p->nb3<0) && (k<p->knoz || p->nb6<0))
         ++count;
         
         if(p->flag2[IJp1Km1]<0 && p->flag2[IJp1K]<0 && p->flag2[IJKm1]<0 && hgc[IJp1Km1]==0)
-        if((j<p->knoy || p->nb2<0) && (k>=0 || p->nb5<0))   
+        if((j<p->knoy || p->nb2<0) && (k>=0 || p->nb5<0))
         ++count;
         
         if(p->flag2[IJm1Km1]<0 && p->flag2[IJm1K]<0 && p->flag2[IJKm1]<0 && hgc[IJm1Km1]==0)
-        if((j>=0 || p->nb3<0) && (k>=0 || p->nb5<0)) 
+        if((j>=0 || p->nb3<0) && (k>=0 || p->nb5<0))
         ++count;
         
         
         // diag
         if(p->flag2[Im1Jm1Km1]<0 && p->flag2[Im1JK]<0 && p->flag2[IJm1K]<0 && p->flag2[IJKm1]<0 && hgc[Im1Jm1Km1]==0)
-        if((i>=0 || p->nb1<0) && (j>=0 || p->nb3<0) && (k>=0 || p->nb5<0)) 
+        if((i>=0 || p->nb1<0) && (j>=0 || p->nb3<0) && (k>=0 || p->nb5<0))
         ++count;
         
         if(p->flag2[Ip1Jm1Km1]<0 && p->flag2[Ip1JK]<0 && p->flag2[IJm1K]<0 && p->flag2[IJKm1]<0 && hgc[Ip1Jm1Km1]==0)
-        if((i<p->knox || p->nb4<0) && (j>=0 || p->nb3<0) && (k>=0 || p->nb5<0))  
+        if((i<p->knox || p->nb4<0) && (j>=0 || p->nb3<0) && (k>=0 || p->nb5<0))
         ++count;
         
         if(p->flag2[Ip1Jp1Km1]<0 && p->flag2[Ip1JK]<0 && p->flag2[IJp1K]<0 && p->flag2[IJKm1]<0 && hgc[Ip1Jp1Km1]==0)
-        if((i<p->knox || p->nb4<0) && (j<p->knoy || p->nb2<0) && (k>=0 || p->nb5<0))  
+        if((i<p->knox || p->nb4<0) && (j<p->knoy || p->nb2<0) && (k>=0 || p->nb5<0))
         ++count;
         
         if(p->flag2[Im1Jp1Km1]<0 && p->flag2[Im1JK]<0 && p->flag2[IJp1K]<0 && p->flag2[IJKm1]<0 && hgc[Im1Jp1Km1]==0)
-        if((i>=0 || p->nb1<0) && (j<p->knoy || p->nb2<0) && (k>=0 || p->nb5<0))  
+        if((i>=0 || p->nb1<0) && (j<p->knoy || p->nb2<0) && (k>=0 || p->nb5<0))
         ++count;
         
         
         if(p->flag2[Im1Jm1Kp1]<0 && p->flag2[Im1JK]<0 && p->flag2[IJm1K]<0 && p->flag2[IJKp1]<0 && hgc[Im1Jm1Kp1]==0)
-        if((i>=0 || p->nb1<0) && (j>=0 || p->nb3<0) && (k<p->knoz || p->nb6<0))   
+        if((i>=0 || p->nb1<0) && (j>=0 || p->nb3<0) && (k<p->knoz || p->nb6<0))
         ++count;
         
         if(p->flag2[Ip1Jm1Kp1]<0 && p->flag2[Ip1JK]<0 && p->flag2[IJm1K]<0 && p->flag2[IJKp1]<0 && hgc[Ip1Jm1Kp1]==0)
-        if((i<p->knox || p->nb4<0) && (j>=0 || p->nb3<0) && (k<p->knoz || p->nb6<0))  
+        if((i<p->knox || p->nb4<0) && (j>=0 || p->nb3<0) && (k<p->knoz || p->nb6<0))
         ++count;
         
         if(p->flag2[Ip1Jp1Kp1]<0 && p->flag2[Ip1JK]<0 && p->flag2[IJp1K]<0 && p->flag2[IJKp1]<0 && hgc[Ip1Jp1Kp1]==0)
@@ -145,7 +145,7 @@ void grid::fill_dgc2(lexer* p)
         ++count;
         
         if(p->flag2[Im1Jp1Kp1]<0 && p->flag2[Im1JK]<0 && p->flag2[IJp1K]<0 && p->flag2[IJKp1]<0 && hgc[Im1Jp1Kp1]==0)
-        if((i>=0 || p->nb1<0) && (j<p->knoy || p->nb2<0) && (k<p->knoz || p->nb6<0))   
+        if((i>=0 || p->nb1<0) && (j<p->knoy || p->nb2<0) && (k<p->knoz || p->nb6<0))
         ++count;
     }
     
@@ -274,7 +274,7 @@ void grid::fill_dgc2(lexer* p)
         
         // j-k
         if(p->flag2[IJp1Kp1]<0 && p->flag2[IJp1K]<0 && p->flag2[IJKp1]<0 && hgc[IJp1Kp1]==0)
-        if((j<p->knoy || p->nb2<0) && (k<p->knoz || p->nb6<0))   
+        if((j<p->knoy || p->nb2<0) && (k<p->knoz || p->nb6<0))
         {
         p->dgc2[count][0]=i;
         p->dgc2[count][1]=j;
@@ -288,7 +288,7 @@ void grid::fill_dgc2(lexer* p)
         }
         
         if(p->flag2[IJm1Kp1]<0 && p->flag2[IJm1K]<0 && p->flag2[IJKp1]<0 && hgc[IJm1Kp1]==0)
-        if((j>=0 || p->nb3<0) && (k<p->knoz || p->nb6<0)) 
+        if((j>=0 || p->nb3<0) && (k<p->knoz || p->nb6<0))
         {
         p->dgc2[count][0]=i;
         p->dgc2[count][1]=j;
@@ -302,7 +302,7 @@ void grid::fill_dgc2(lexer* p)
         }
         
         if(p->flag2[IJp1Km1]<0 && p->flag2[IJp1K]<0 && p->flag2[IJKm1]<0 && hgc[IJp1Km1]==0)
-        if((j<p->knoy || p->nb2<0) && (k>=0 || p->nb5<0))   
+        if((j<p->knoy || p->nb2<0) && (k>=0 || p->nb5<0))
         {
         p->dgc2[count][0]=i;
         p->dgc2[count][1]=j;
@@ -316,7 +316,7 @@ void grid::fill_dgc2(lexer* p)
         }
         
         if(p->flag2[IJm1Km1]<0 && p->flag2[IJm1K]<0 && p->flag2[IJKm1]<0 && hgc[IJm1Km1]==0)
-        if((j>=0 || p->nb3<0) && (k>=0 || p->nb5<0)) 
+        if((j>=0 || p->nb3<0) && (k>=0 || p->nb5<0))
         {
         p->dgc2[count][0]=i;
         p->dgc2[count][1]=j;

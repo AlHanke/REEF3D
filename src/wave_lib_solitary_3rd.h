@@ -49,7 +49,7 @@ public:
     virtual void parameters(lexer*,ghostcell*);
     virtual void wave_prestep(lexer*,ghostcell*);
   
-private:  
+private:
     double wht,acn,delta,epsilon,wR;
     double singamma,cosgamma;
 

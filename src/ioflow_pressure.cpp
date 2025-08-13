@@ -65,7 +65,7 @@ void ioflow_f::pressure_inlet(lexer *p, fdm *a, ghostcell *pgc)
     
         
         if(a->phi(i,j,k)>=0.0)
-        pval=a->press(i,j,k) + p->Ui*p->DXP[IM1]; 
+        pval=a->press(i,j,k) + p->Ui*p->DXP[IM1];
         
         if(a->phi(i,j,k)<0.0)
         pval = a->press(i,j,k);
@@ -106,7 +106,7 @@ void ioflow_f::pressure_outlet(lexer *p, fdm *a, ghostcell *pgc)
         
         if(p->B77==0)
         {
-        pval = a->press(i,j,k); 
+        pval = a->press(i,j,k);
         a->press(i+1,j,k)=pval;
         a->press(i+2,j,k)=pval;
         a->press(i+3,j,k)=pval;

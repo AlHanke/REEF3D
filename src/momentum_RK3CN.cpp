@@ -37,7 +37,7 @@ Authors: Elyas Larkermani, Hans Bihs
 #include"nhflow.h"
 
 momentum_RK3CN::momentum_RK3CN(lexer *p, fdm *a, convection *pconvection, diffusion *pdiffusion, pressure* ppressure, poisson* ppoisson,
-                                                    turbulence *pturbulence, solver *psolver, solver *ppoissonsolver, 
+                                                    turbulence *pturbulence, solver *psolver, solver *ppoissonsolver,
                                                     ioflow *pioflow, fsi *ppfsi)
                                                     :momentum_forcing(p),bcmom(p),udiff(p),vdiff(p),wdiff(p),urk1(p),urk2(p),vrk1(p),
                                                     vrk2(p),wrk1(p),wrk2(p),fx(p),fy(p),fz(p)
@@ -53,7 +53,7 @@ momentum_RK3CN::momentum_RK3CN(lexer *p, fdm *a, convection *pconvection, diffus
     pturb=pturbulence;
     psolv=psolver;
     ppoissonsolv=ppoissonsolver;
-    pflow=pioflow;    
+    pflow=pioflow;
     pfsi=ppfsi;
 
     if(p->W90==0  || p->F300>0)
@@ -68,7 +68,7 @@ momentum_RK3CN::~momentum_RK3CN()
 }
 
 void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof)
-{    
+{
     pflow->discharge(p,a,pgc);
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
     pflow->rkinflow(p,a,pgc,urk1,vrk1,wrk1);
@@ -81,7 +81,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
     starttime=pgc->timer();
 
     pturb->isource(p,a);
-    pflow->isource(p,a,pgc,pvrans); 
+    pflow->isource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
     ppress->upgrad(p,a,a->eta,a->eta_n);
 
@@ -102,7 +102,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
     
         jrhs(p,a,pgc,a->v,a->u,a->v,a->w,1.0);
     pconvec->start(p,a,a->v,2,a->u,a->v,a->w);
-        addjrhs(p,a,pgc,a->v,a->u,a->v,a->w,1.0);        
+        addjrhs(p,a,pgc,a->v,a->u,a->v,a->w,1.0);
         pdiff->diff_v(p,a,pgc,psolv,vrk1,a->v,a->u,a->v,a->w,8.0/15.0);
 
         p->vtime=pgc->timer()-starttime;
@@ -236,7 +236,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
     irhs(p,a,pgc,urk2,urk2,vrk2,wrk2,1.0);
         addirhs(p,a,pgc,urk2,urk2,vrk2,wrk2,1.0);
     pconvec->start(p,a,urk2,1,urk2,vrk2,wrk2);
-        addirhs(p,a,pgc,urk2,urk2,vrk2,wrk2,9.0/4.0);        
+        addirhs(p,a,pgc,urk2,urk2,vrk2,wrk2,9.0/4.0);
         pconvec->start(p,a,urk1,1,urk1,vrk1,wrk1);
         addirhs(p,a,pgc,urk1,urk1,vrk1,wrk1,-5.0/4.0);
     pdiff->diff_u(p,a,pgc,psolv,a->u,urk2,urk2,vrk2,wrk2,1.0/3.0);

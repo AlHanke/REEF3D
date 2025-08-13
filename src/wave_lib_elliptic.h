@@ -29,7 +29,7 @@ class ghostcell;
 
 using namespace std;
 
-class wave_lib_elliptic 
+class wave_lib_elliptic
 {
 public:
     wave_lib_elliptic();

@@ -50,7 +50,7 @@ void net_barDyn::print(lexer *p)
         header_out.open(str, std::ofstream::out | std::ofstream::app);
         header_out<<p->simtime<<" \t "<<Tne<<" "<<Fx<<" "<<Fy<<" "<<Fz<<endl;
         header_out.close();
-    }  
+    }
   
     // Print probe points
     if (p->mpirank==0 && p->X324 > 0)
@@ -64,13 +64,13 @@ void net_barDyn::print(lexer *p)
             header_out<<p->simtime<<" \t "<<x_(probeKnot(pp),0)<<" \t "<<x_(probeKnot(pp),1)<<" \t "<<x_(probeKnot(pp),2)<<endl;
             header_out.close();
         }
-    }  
+    }
     
     
     if
     (
-        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)  
-        || (p->simtime>printtime && p->P30>0.0)   
+        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)
+        || (p->simtime>printtime && p->P30>0.0)
         || p->count==0)
     )
     {
@@ -85,8 +85,8 @@ void net_barDyn::print(lexer *p)
         ofstream header_out;
         header_out.open(str, std::ofstream::out | std::ofstream::app);
         
-        for (int j = 0; j < nf; j++)    
-        {    
+        for (int j = 0; j < nf; j++)
+        {
             header_out<<T_(j)<<" "<<(0.5*(x_.row(Pi[j])+x_.row(Ni[j])))<<endl;
         }
         
@@ -105,7 +105,7 @@ void net_barDyn::print(lexer *p)
         for(int n=0; n<nK; ++n)
         {
             result<<x_(n,0)<<" "<<x_(n,1)<<" "<<x_(n,2)<<endl;
-        }     
+        }
         
         result << "\nCELLS " << nf+nbK << " " << (nf+nbK)*3 <<endl;
         
@@ -119,12 +119,12 @@ void net_barDyn::print(lexer *p)
             result<<"2 "<< Pb[i] << " " << Nb[i] <<endl;
         }
 
-        result << "\nCELL_TYPES " << nf+nbK << endl;    
+        result << "\nCELL_TYPES " << nf+nbK << endl;
         
         for (int i = 0; i < nf+nbK; i++)
         {
             result<<"3"<<endl;
-        }        
+        }
 
         result<<"\nPOINT_DATA " << nK <<endl;
         result<<"SCALARS Tension float 1 \nLOOKUP_TABLE default"<<endl;
@@ -172,5 +172,5 @@ void net_barDyn::buildNet_cyl(lexer *p)
 }
 
 void net_barDyn::buildNet_wall(lexer *p)
-{     
+{
 }

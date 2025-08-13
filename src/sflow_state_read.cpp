@@ -71,7 +71,7 @@ void sflow_state::read(lexer *p, fdm2D *b, ghostcell *pgc)
     result.write((char*)&ddn, sizeof (double));
     
     ddn=p->stateprinttime;
-    result.write((char*)&ddn, sizeof (double)); 
+    result.write((char*)&ddn, sizeof (double));
     
     // result section
     for(i=is;i<ie;++i)
@@ -80,7 +80,7 @@ void sflow_state::read(lexer *p, fdm2D *b, ghostcell *pgc)
     {
     ffn=float(b->eta(i,j));
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
@@ -88,15 +88,15 @@ void sflow_state::read(lexer *p, fdm2D *b, ghostcell *pgc)
     {
     ffn=float(b->bed(i,j));
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
-    PSLICECHECK4 
+    PSLICECHECK4
     {
     ffn=float(b->P(i,j));
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
 
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
@@ -104,15 +104,15 @@ void sflow_state::read(lexer *p, fdm2D *b, ghostcell *pgc)
     {
     ffn=float(b->Q(i,j));
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
 
     for(i=is;i<ie;++i)
     for(j=js;j<je;++j)
-    PSLICECHECK4 
+    PSLICECHECK4
     {
     ffn=float(b->ws(i,j));
     result.write((char*)&ffn, sizeof (float));
-    } 
+    }
     
     
     

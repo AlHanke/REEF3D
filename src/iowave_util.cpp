@@ -28,7 +28,7 @@ Author: Hans Bihs
 #include"patchBC_interface.h"
 
 int iowave::iozonecheck(lexer *p, fdm*a)
-{    
+{
     int check=1;
     
     dg = distgen(p);
@@ -38,7 +38,7 @@ int iowave::iozonecheck(lexer *p, fdm*a)
     if(dg<dist1 || db<dist2)
     check=0;
 
-    return check;        
+    return check;
 }
 
 void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
@@ -63,8 +63,8 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     
     //cout<<p->mpirank<<"  gcin_count: "<<p->gcin_count<<" count1: "<<count1<<"  gcout_count: "<<p->gcout_count<<" count2: "<<count2<<endl;
     
-    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6); 
-    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6); 
+    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6);
+    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6);
 
     count1=0;
     count2=0;
@@ -252,8 +252,8 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     
     //cout<<p->mpirank<<"  gcin_count: "<<p->gcin_count<<" count1: "<<count1<<"  gcout_count: "<<p->gcout_count<<" count2: "<<count2<<endl;
     
-    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6); 
-    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6); 
+    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6);
+    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6);
 
     count1=0;
     count2=0;
@@ -400,8 +400,8 @@ void iowave::iogcb_update(lexer *p, fdm *a, ghostcell *pgc)
     }
     
     
-    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6); 
-    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6); 
+    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6);
+    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6);
 
     count1=0;
     count2=0;
@@ -453,10 +453,10 @@ void iowave::awa_ini(lexer *p, fdm *a, ghostcell *pgc)
         ++count;
     }
     
-    p->Iresize(gcawa1, gcawa1_count,count, 4, 4); 
-    p->Iresize(gcawa2, gcawa2_count,count, 4, 4); 
-    p->Iresize(gcawa3, gcawa3_count,count, 4, 4); 
-    p->Iresize(gcawa4, gcawa4_count,count, 4, 4); 
+    p->Iresize(gcawa1, gcawa1_count,count, 4, 4);
+    p->Iresize(gcawa2, gcawa2_count,count, 4, 4);
+    p->Iresize(gcawa3, gcawa3_count,count, 4, 4);
+    p->Iresize(gcawa4, gcawa4_count,count, 4, 4);
     gcawa1_count=count;
     gcawa2_count=count;
     gcawa3_count=count;
@@ -547,17 +547,17 @@ void iowave::awa_ini(lexer *p, fdm *a, ghostcell *pgc)
         }
     }
     
-    p->Iresize(gcawa1, gcawa1_count,count1, 4, 4); 
-    p->Iresize(gcawa2, gcawa2_count,count2, 4, 4); 
-    p->Iresize(gcawa3, gcawa3_count,count3, 4, 4); 
-    p->Iresize(gcawa4, gcawa4_count,count4, 4, 4); 
+    p->Iresize(gcawa1, gcawa1_count,count1, 4, 4);
+    p->Iresize(gcawa2, gcawa2_count,count2, 4, 4);
+    p->Iresize(gcawa3, gcawa3_count,count3, 4, 4);
+    p->Iresize(gcawa4, gcawa4_count,count4, 4, 4);
     
     gcawa1_count=count1;
     gcawa2_count=count2;
     gcawa3_count=count3;
     gcawa4_count=count4;
     
-    //cout<<p->mpirank<<" GCAWA_COUNT: "<<gcawa4_count<<endl;    
+    //cout<<p->mpirank<<" GCAWA_COUNT: "<<gcawa4_count<<endl;
 }
 
 void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
@@ -572,10 +572,10 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
         ++count;
     }
     
-    p->Iresize(gcgen1, gcgen1_count,count, 4, 4); 
-    p->Iresize(gcgen2, gcgen2_count,count, 4, 4); 
-    p->Iresize(gcgen3, gcgen3_count,count, 4, 4); 
-    p->Iresize(gcgen4, gcgen4_count,count, 4, 4); 
+    p->Iresize(gcgen1, gcgen1_count,count, 4, 4);
+    p->Iresize(gcgen2, gcgen2_count,count, 4, 4);
+    p->Iresize(gcgen3, gcgen3_count,count, 4, 4);
+    p->Iresize(gcgen4, gcgen4_count,count, 4, 4);
     gcgen1_count=count;
     gcgen2_count=count;
     gcgen3_count=count;
@@ -664,7 +664,7 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
                 }
         }
     }
-    //cout<<p->mpirank<<" GCGEN_COUNT: "<<gcgen4_count<<endl;    
+    //cout<<p->mpirank<<" GCGEN_COUNT: "<<gcgen4_count<<endl;
 }
 
 void iowave::awa_update(lexer *p, fdm *a, ghostcell *pgc)

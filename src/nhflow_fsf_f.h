@@ -64,7 +64,7 @@ public:
     
     void update(lexer*,fdm_nhf*,ghostcell*,slice&);
     
-private: 
+private:
     void filter(lexer*, fdm_nhf*, ghostcell*, slice&);
     
     void fsf_guard(lexer*, fdm_nhf*, ghostcell*, slice&, slice&);

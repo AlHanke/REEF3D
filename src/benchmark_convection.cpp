@@ -65,10 +65,10 @@ void benchmark_convection::start(lexer* p, fdm *a, ghostcell *pgc, convection *p
         a->phi(i,j,k) = sin((p->pos_x()-4.5)*PI);
     }
     
-     pgc->start4(p,a->phi,40);    
+     pgc->start4(p,a->phi,40);
      
     ULOOP
     a->u(i,j,k) = 1.0;
 
-    pgc->start1(p,a->u,10);    
+    pgc->start1(p,a->u,10);
 }

@@ -134,7 +134,7 @@ double interpolation::lint4_2D(field& f, int& i,int& j, int& k, double wa, doubl
 }
 
 double interpolation::lint4phi_2D(fdm *a, field& b, int& i,int& j, int& k, double wa, double wb, double wc)
-{    
+{
     double epphi=1.6*p->DXM;
     double epphi2=0.6*p->DXM;
     v1=v2=v3=v4=p->phimean-p->pos_z();

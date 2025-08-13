@@ -40,8 +40,8 @@ void beam::print(lexer *p)
     // Print beam
     if
     (
-        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)  
-        || (p->simtime>printtime && p->P30>0.0)   
+        p->mpirank==0 && (((p->count%p->P20==0) && p->P30<0.0)
+        || (p->simtime>printtime && p->P30>0.0)
         || p->count==0)
     )
     {
@@ -62,19 +62,19 @@ void beam::print(lexer *p)
             result<<c(0,n)<<" "<<c(1,n)<<" "<<c(2,n)<<endl;
         }
         
-        result << "\nCELLS " << Ne << " " << (Ne)*3 <<endl;    
+        result << "\nCELLS " << Ne << " " << (Ne)*3 <<endl;
         
         for(int n=0; n<Ne; ++n)
         {
             result<<"2 "<< n << " " << n+1 << endl;
         }
         
-        result << "\nCELL_TYPES " << Ne << endl;    
+        result << "\nCELL_TYPES " << Ne << endl;
         
         for(int n=0; n<Ne; ++n)
         {
             result<<"3"<<endl;
-        }    
+        }
 
         result<<"\nPOINT_DATA " << Ne + 1 <<endl;
         result<<"VECTORS tensLoc double"<<endl;

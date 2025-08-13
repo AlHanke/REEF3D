@@ -25,8 +25,8 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_cnoidal_1st::wave_lib_cnoidal_1st(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc) 
-{ 
+wave_lib_cnoidal_1st::wave_lib_cnoidal_1st(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc)
+{
     parameters(p,pgc);
     
     if(p->mpirank==0)
@@ -94,7 +94,7 @@ double wave_lib_cnoidal_1st::wave_w(lexer *p, double x, double y, double z)
     
     
     vel = - wC * (wdt+z) * (((4.0*wH*(Km/wL)*cn*sn*dn)/wdt) * (1.0 - 2.0*(eta/wdt)) + (1.0/6.0)*wdt
-            *(-cn*dn*sn*(dn*dn + modulus*cn*cn - sn*sn) 
+            *(-cn*dn*sn*(dn*dn + modulus*cn*cn - sn*sn)
             * 64.0*wH*pow(Km/wL,3.0)) * (1.0 - pow((z+wdt)/wdt,2.0)));
             
     return vel;
@@ -112,7 +112,7 @@ double wave_lib_cnoidal_1st::wave_eta(lexer *p, double x, double y)
     
     eta =  wH*cn*cn + eta2;
     
-    return eta;    
+    return eta;
 }
 
 double wave_lib_cnoidal_1st::wave_fi(lexer *p, double x, double y, double z)
@@ -155,7 +155,7 @@ void wave_lib_cnoidal_1st::parameters(lexer *p, ghostcell *pgc)
     }
     //modulus=MAX(0.9, modulus);
     if(p->mpirank==0)
-    cout<<"MODULUS: "<<modulus<<"    qq: "<<qq<<endl;    
+    cout<<"MODULUS: "<<modulus<<"    qq: "<<qq<<endl;
     
     Km = K_elliptic_1(modulus);
     Em = E_elliptic_1(modulus);
@@ -167,7 +167,7 @@ void wave_lib_cnoidal_1st::parameters(lexer *p, ghostcell *pgc)
     
     wC = sqrt(9.81*wdt*(1.0 +(wH/wdt)*(2.0/modulus - 1.0 - 3.0/modulus*Em/Km)));
     
-    if(p->mpirank==0)    
+    if(p->mpirank==0)
     {
     cout<<"WAVE TROUGH: "<<eta2+wdt<<endl;
     cout<<"wC: "<<wC<<" wC_old: "<<(wL/wT)<<endl;

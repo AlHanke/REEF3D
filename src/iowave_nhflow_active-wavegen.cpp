@@ -74,7 +74,7 @@ void iowave::nhflow_active_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, double 
         {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
-        k=p->gcin[n][2];    
+        k=p->gcin[n][2];
         
             WETDRYDEEP
             {
@@ -113,7 +113,7 @@ void iowave::nhflow_active_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, double 
                 
                 // fsf deviation
                 eta_T = wave_eta(p,pgc,x,0.0);
-                eta_M = d->eta(i,j); 
+                eta_M = d->eta(i,j);
                 eta_R = eta_T-eta_M;
                 
                 Uc=eta_R*sqrt(9.81/p->wd);

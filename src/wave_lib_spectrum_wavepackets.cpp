@@ -65,7 +65,7 @@ void wave_lib_spectrum::wavepackets_parameters(lexer *p)
     we=p->B87_2;
     
     
-    dd =(we-ws)/double(p->wN);    
+    dd =(we-ws)/double(p->wN);
     
     for(int n=0;n<p->wN;++n)
     dw[n] = dd;
@@ -125,7 +125,7 @@ void wave_lib_spectrum::wavepackets_parameters(lexer *p)
     fac = p->wAs/Asum;
 
     for(int n=0;n<p->wN;++n)
-    Ai[n]*=fac;    
+    Ai[n]*=fac;
     
     // Wave number
     w=ws;
@@ -133,7 +133,7 @@ void wave_lib_spectrum::wavepackets_parameters(lexer *p)
     {
     wL0 = (2.0*PI*9.81)/pow(w,2.0);
     k0 = (2.0*PI)/wL0;
-    S0 = sqrt(k0*wD) * (1.0 + (k0*wD)/6.0 + (k0*k0*wD*wD)/30.0); 
+    S0 = sqrt(k0*wD) * (1.0 + (k0*wD)/6.0 + (k0*k0*wD*wD)/30.0);
     Li[n] = wL0*tanh(S0);
         
     for(int qn=0; qn<100; ++qn)
@@ -161,11 +161,11 @@ void wave_lib_spectrum::wavepackets_parameters(lexer *p)
     duration = 0.5*(p->B81_1/cmin + p->B81_1/cmax);
     
     if(p->B81_2<duration)
-    duration_tot = p->B81_2; 
+    duration_tot = p->B81_2;
     
     if(p->B81_2>=duration)
     {
-    duration_tot = p->B81_2; 
+    duration_tot = p->B81_2;
     
     p->wts = p->B81_2-duration;
     }

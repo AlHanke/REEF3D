@@ -52,7 +52,7 @@ void nhflow_sigma::sigma_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
     if(p->j_dir==0)
     SLICELOOP4
     {
-    d->Ex(i,j) = sx(d->eta);    
+    d->Ex(i,j) = sx(d->eta);
     d->Exx(i,j) = sxx(d->eta);
     }
     
@@ -82,7 +82,7 @@ void nhflow_sigma::sigma_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
     if(p->j_dir==0 && p->A312!=1)
     SLICELOOP4
     {
-    d->Bx(i,j) = sx(d->depth);    
+    d->Bx(i,j) = sx(d->depth);
     d->Bxx(i,j) = sxx(d->depth);
     }
     
@@ -116,7 +116,7 @@ void nhflow_sigma::sigma_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
     
     if(p->wet[IJ]==1)
     p->sigy[FIJK] = (1.0 - p->sig[FIJK])*(d->By(i,j)/WLVL) - p->sig[FIJK]*(d->Ey(i,j)/WLVL);
-    }    
+    }
     
     // sigz
     SLICELOOP4
@@ -175,7 +175,7 @@ void nhflow_sigma::sigma_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
             p->sigx[FIJKp1] = p->sigx[FIJK];
             p->sigx[FIJKp2] = p->sigx[FIJK];
             p->sigx[FIJKp3] = p->sigx[FIJK];
-        } 
+        }
     }
     
     SLICELOOP4
@@ -194,7 +194,7 @@ void nhflow_sigma::sigma_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
             p->sigy[FIJKp1] = p->sigy[FIJK];
             p->sigy[FIJKp2] = p->sigy[FIJK];
             p->sigy[FIJKp3] = p->sigy[FIJK];
-        } 
+        }
     }
     
     SLICELOOP4
@@ -213,7 +213,7 @@ void nhflow_sigma::sigma_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
             p->sigxx[FIJKp1] = p->sigxx[FIJK];
             p->sigxx[FIJKp2] = p->sigxx[FIJK];
             p->sigxx[FIJKp3] = p->sigxx[FIJK];
-        } 
+        }
     }
     
     

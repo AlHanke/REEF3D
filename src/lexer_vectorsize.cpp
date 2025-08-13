@@ -38,7 +38,7 @@ void lexer::vecsize(ghostcell *pgc)
     
     gcextra_max = pgc->globalimax(gcextra4);
 
-    gcb_sediment_est = gcb4_count*margin;    
+    gcb_sediment_est = gcb4_count*margin;
     
     gcb_floating_est=0;
     
@@ -58,7 +58,7 @@ void lexer::vecsize(ghostcell *pgc)
     if(S10>0 || G1>0)
     gcbextra+=MAX(MAX(solid_gcbextra_est,topo_gcbextra_est),tot_gcbextra_est) + int(safetymargin);
     
-    // floating 
+    // floating
     if(X10>0)
     gcbextra+=(gcb_floating_est);
     
@@ -101,7 +101,7 @@ void lexer::vecsize(ghostcell *pgc)
     gcpara_sum = gcslpara1_count + gcslpara2_count + gcslpara3_count + gcslpara4_count
               + gcslparaco1_count + gcslparaco2_count + gcslparaco3_count + gcslparaco4_count;
     
-    vec2Dlength = slicenum + gcbnum*3  + gcpara_sum*4;    
+    vec2Dlength = slicenum + gcbnum*3  + gcpara_sum*4;
     
     C1_2D_size=C2_2D_size=C4_2D_size=M_2D_size=vec2Dlength;
 }

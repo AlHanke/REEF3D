@@ -41,7 +41,7 @@ void VOF_PLIC::surface_tension2D(lexer* p,fdm* a,ghostcell*pgc,int gcval)
                 if(nx(i,j,k)!=nx(i,j,k))
                     cout<<"nxNAN"<<endl;
                 if(nz(i,j,k)!=nz(i,j,k))
-                    cout<<"nzNAN"<<endl;    
+                    cout<<"nzNAN"<<endl;
                 if(fabs(nz(i,j,k))>=fabs(nx(i,j,k)))
                 {
                     dHp=((a->vof(i+1,j,k-1)*p->DZN[KM1]+a->vof(i+1,j,k)*p->DZN[KP]+a->vof(i+1,j,k+1)*p->DZN[KP1])

@@ -44,10 +44,10 @@ void sixdof_obj::hydrodynamic_forces_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc
         
     deallocate(p,d,pgc);
     }
-} 
+}
 
 void sixdof_obj::force_calc_lsm(lexer* p, fdm_nhf *d, ghostcell *pgc)
-{  
+{
     Ax=0.0;
     Ay=0.0;
     Az=0.0;
@@ -57,7 +57,7 @@ void sixdof_obj::force_calc_lsm(lexer* p, fdm_nhf *d, ghostcell *pgc)
     
 
     for(n=0;n<polygon_num;++n)
-    { 
+    {
             // triangle
             if(numpt[n]==3)
             {
@@ -184,7 +184,7 @@ void sixdof_obj::force_calc_lsm(lexer* p, fdm_nhf *d, ghostcell *pgc)
             
             // pressure
             pval   = p->ccipol7P(d->P, d->WL, d->bed, xc, yc, zc);// - p->pressgage;
-            etaval = p->ccslipol4(d->eta,xc,yc);  
+            etaval = p->ccslipol4(d->eta,xc,yc);
             hspval = (p->wd + etaval - zc)*p->W1*fabs(p->W22);
     
             
@@ -197,10 +197,10 @@ void sixdof_obj::force_calc_lsm(lexer* p, fdm_nhf *d, ghostcell *pgc)
                       // + 0.0*density*viscosity*A*(dv*nx+dv*nz);
                     
             Fz = -(pval + hspval)*A*nz;
-                      // + 0.0*density*viscosity*A*(dw*nx+dw*ny); 
+                      // + 0.0*density*viscosity*A*(dw*nx+dw*ny);
                       
                       
-            Ax+=A*nx;    
+            Ax+=A*nx;
             Ay+=A*ny;
             Az+=A*nz;
     
@@ -241,11 +241,11 @@ void sixdof_obj::force_calc_lsm(lexer* p, fdm_nhf *d, ghostcell *pgc)
     }
     
     /*
-    // Print results    
-    if (p->mpirank==0 && finalize==1) 
+    // Print results
+    if (p->mpirank==0 && finalize==1)
     {
         printforce<<curr_time<<" \t "<<Xe<<" \t "<<Ye<<" \t "<<Ze<<" \t "<<Ke
-        <<" \t "<<Me<<" \t "<<Ne<<" \t "<<Xe_p<<" \t "<<Ye_p<<" \t "<<Ze_p<<" \t "<<Xe_v<<" \t "<<Ye_v<<" \t "<<Ze_v<<endl;   
+        <<" \t "<<Me<<" \t "<<Ne<<" \t "<<Xe_p<<" \t "<<Ye_p<<" \t "<<Ze_p<<" \t "<<Xe_v<<" \t "<<Ye_v<<" \t "<<Ze_v<<endl;
     }*/
 }
 

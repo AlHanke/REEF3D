@@ -55,22 +55,22 @@ void part::xchange_count(lexer *p, ghostcell *pgc, int mode)
             
         
         if(p->flag5[IJK]==-1)
-        ++sendnum[0]; 
+        ++sendnum[0];
         
         if(p->flag5[IJK]==-2)
         ++sendnum[1];
 
         if(p->flag5[IJK]==-3)
-        ++sendnum[2];  
+        ++sendnum[2];
 
         if(p->flag5[IJK]==-4)
-        ++sendnum[3]; 
+        ++sendnum[3];
         
         if(p->flag5[IJK]==-5)
-        ++sendnum[4]; 
+        ++sendnum[4];
         
         if(p->flag5[IJK]==-6)
-        ++sendnum[5]; 
+        ++sendnum[5];
     }
 }
 

@@ -118,11 +118,11 @@ double fnpf_ddweno_f_nug::dswenoy(slice& f, double uw)
 }
 
 void fnpf_ddweno_f_nug::isqmin(slice& f)
-{    
+{
     q1=q2=q3=q4=q5=0.0;
     
-    if(p->wet[Im2J]>0 && p->wet[Im3J]>0) 
-    if(p->wet[Im1J]>0 && p->wet[Im2J]>0) 
+    if(p->wet[Im2J]>0 && p->wet[Im3J]>0)
+    if(p->wet[Im1J]>0 && p->wet[Im2J]>0)
     if(p->wet[Im1J]>0 && p->wet[IJ]>0)
     if(p->wet[Ip1J]>0 && p->wet[IJ]>0)
     if(p->wet[Ip2J]>0 && p->wet[Ip1J]>0)
@@ -148,9 +148,9 @@ void fnpf_ddweno_f_nug::jsqmin(slice& f)
 {
     q1=q2=q3=q4=q5=0.0;
     
-    if(p->wet[IJm2]>0 && p->wet[IJm3]>0)  
+    if(p->wet[IJm2]>0 && p->wet[IJm3]>0)
     if(p->wet[IJm1]>0 && p->wet[IJm2]>0)
-    if(p->wet[IJ]>0 && p->wet[IJm1]>0) 
+    if(p->wet[IJ]>0 && p->wet[IJm1]>0)
     if(p->wet[IJp1]>0 && p->wet[IJ]>0)
     if(p->wet[IJp2]>0 && p->wet[IJp1]>0)
     {
@@ -176,9 +176,9 @@ void fnpf_ddweno_f_nug::isqmax(slice& f)
     q1=q2=q3=q4=q5=0.0;
     
     if(p->wet[Im1J]>0 && p->wet[Im2J]>0)
-    if(p->wet[IJ]>0 && p->wet[Im1J]>0) 
-    if(p->wet[Ip1J]>0 && p->wet[IJ]>0) 
-    if(p->wet[Ip2J]>0 && p->wet[Ip1J]>0) 
+    if(p->wet[IJ]>0 && p->wet[Im1J]>0)
+    if(p->wet[Ip1J]>0 && p->wet[IJ]>0)
+    if(p->wet[Ip2J]>0 && p->wet[Ip1J]>0)
     if(p->wet[Ip3J]>0 && p->wet[Ip2J]>0)
     {
     
@@ -204,7 +204,7 @@ void fnpf_ddweno_f_nug::jsqmax(slice& f)
     q1=q2=q3=q4=q5=0.0;
     
     
-    if(p->wet[IJm1]>0 && p->wet[IJm2]>0) 
+    if(p->wet[IJm1]>0 && p->wet[IJm2]>0)
     if(p->wet[IJ]>0 && p->wet[IJm1]>0)
     if(p->wet[IJp1]>0 && p->wet[IJ]>0)
     if(p->wet[IJp2]>0 && p->wet[IJp1]>0)

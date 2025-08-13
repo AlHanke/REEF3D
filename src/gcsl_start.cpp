@@ -202,7 +202,7 @@ void ghostcell::gcsl_start4Vint(lexer *p, int *f, int gcv)
     
 
     SLICELOOP4
-    {  
+    {
         if(p->flagslice4[Im1Jm1]<0 && p->flagslice4[Im1J]<0 && p->flagslice4[IJm1]<0)
         f[Im1Jm1] = f[IJ];
         

@@ -33,7 +33,7 @@ Author: Hans Bihs
 #include"ptf_fsf_update.h"
 #include"ptf_bed_update.h"
 
-ptf_RK4::ptf_RK4(lexer *p, fdm *a, ghostcell *pgc) : ptf_fsfbc(p,a,pgc),   
+ptf_RK4::ptf_RK4(lexer *p, fdm *a, ghostcell *pgc) : ptf_fsfbc(p,a,pgc),
                                                       erk1(p),erk2(p),erk3(p),erk(p),
                                                       frk1(p),frk2(p),frk3(p),frk(p)
 {
@@ -70,7 +70,7 @@ ptf_RK4::~ptf_RK4()
 }
 
 void ptf_RK4::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection *pconvec, ioflow *pflow, reini *preini)
-{    
+{
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
 
 // Step 1
@@ -97,7 +97,7 @@ void ptf_RK4::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection 
     
     pgc->gcsl_start4(p,frk,gcval_fifsf);
     
-    // Set Boundary Conditions    
+    // Set Boundary Conditions
     pflow->eta_relax(p,pgc,erk);
     pflow->fifsf_relax(p,pgc,frk);
     pfsfupdate->fsfupdate(p,a,pgc,pflow,erk);
@@ -247,7 +247,7 @@ void ptf_RK4::start(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, convection 
 }
 
 void ptf_RK4::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reini *preini)
-{    
+{
     pfsfupdate->fsfupdate(p,a,pgc,pflow,a->eta);
     pfsfupdate->etaloc(p,a,pgc);
     
@@ -269,7 +269,7 @@ void ptf_RK4::ini(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, reini *preini
 }
 
 void ptf_RK4::inidisc(lexer *p, fdm *a, ghostcell *pgc)
-{    
+{
 }
 
 

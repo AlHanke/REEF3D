@@ -63,7 +63,7 @@ void ghostcell::dgcslini1(lexer* p)
     
         //------------
         
-    count=0;   
+    count=0;
     SLICELOOP1
     {
         if(p->flagslice1[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0
@@ -148,7 +148,7 @@ void ghostcell::dgcslini2(lexer* p)
     
         //------------
         
-    count=0;   
+    count=0;
     SLICELOOP2
     {
         if(p->flagslice2[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0
@@ -238,7 +238,7 @@ void ghostcell::dgcslini4(lexer* p)
     
         //------------
         
-    count=0;   
+    count=0;
     SLICELOOP4
     {
         if(p->flagslice4[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0

@@ -25,8 +25,8 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-wave_lib_precalc::wave_lib_precalc() 
-{ 
+wave_lib_precalc::wave_lib_precalc()
+{
     vel=eta=fi=T=0.0;
 }
 
@@ -63,12 +63,12 @@ double wave_lib_precalc::wave_v_space_sin(lexer *p, double x, double y, double z
 }
 
 double wave_lib_precalc::wave_v_space_cos(lexer *p, double x, double y, double z, int n)
-{ 
+{
     return vel;
 }
 
 double wave_lib_precalc::wave_v_time_sin(lexer *p, int n)
-{ 
+{
     return T;
 }
 

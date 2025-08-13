@@ -33,7 +33,7 @@ void ghostcell::nse4(lexer *p, fdm *a, field &f, int gcv)
     if(gcv>=40 && gcv<=45)
     {
     AIRLOOP
-    f(i,j,k)=0.0; 
+    f(i,j,k)=0.0;
     /*
     AIRLOOP
     {
@@ -43,7 +43,7 @@ void ghostcell::nse4(lexer *p, fdm *a, field &f, int gcv)
         {
          nx = (a->phi(i+1,j,k)-a->phi(i-1,j,k))/(p->DXP[IM1]+p->DXP[IP]);
          ny = (a->phi(i,j+1,k)-a->phi(i,j-1,k))/(p->DYP[JM1]+p->DYP[JP]);
-         nz = (a->phi(i,j,k+1)-a->phi(i,j,k-1))/(p->DZP[KM1]+p->DZP[KP]);  
+         nz = (a->phi(i,j,k+1)-a->phi(i,j,k-1))/(p->DZP[KM1]+p->DZP[KP]);
 
         dnorm = sqrt(nx*nx + ny*ny + nz*nz);
         

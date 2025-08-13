@@ -27,7 +27,7 @@ Author: Hans Bihs, Edgar Chavez
 #include <math.h>
 
 void fnpf_runup::fnpf_runup_calc(lexer* p, fdm_fnpf *c, ghostcell *pgc)
-{    
+{
     double ru_eta, ru_L, ru_k, ru_m, ru_u, ru_g, ru_H, ru_Hm0, ru_Tp, ru_s0p, ru_mLA, ru_mLB, ru_mLC, ru_h, ru_Ur, ru_gammaD; //Free Surface, Wave length, Wave number, VSHT adjusment coefficient, particle velocity, gravity acceleration, Wave height, peak deep water steepness, m Level A, m Level B, m Level C, water depth, Ursell number, Diameter-run-up increasing factor
     
     k=0; //**Initial sigma grid**
@@ -45,11 +45,11 @@ void fnpf_runup::fnpf_runup_calc(lexer* p, fdm_fnpf *c, ghostcell *pgc)
     R1 = ru_eta * sqrt(1 + pow(2 * ru_k * rc,2)); //McCarmy and Fuchs (1954)
     
     //------------------------------------------------------------------------------------------------------------------------
-    ru_m = 1; //VSHT adjustment coefficient for long waves + LWT or regular waves + 2nd order ST 
+    ru_m = 1; //VSHT adjustment coefficient for long waves + LWT or regular waves + 2nd order ST
     ru_u = acceleration(p,c,pgc) * p->dt; //Particle acceleration at the free surface in lagrangian coordinates
     ru_g = p->W22; //gravity acceleration
     
-    R2 = ru_eta + ru_m * pow(ru_u,2)/(2 * ru_g); //Hallermeier (1976) - De Vos et al (2007) only when 2nd order stokes used. 
+    R2 = ru_eta + ru_m * pow(ru_u,2)/(2 * ru_g); //Hallermeier (1976) - De Vos et al (2007) only when 2nd order stokes used.
     
     //------------------------------------------------------------------------------------------------------------------------
     //ru_m = 6.83; //VSHT adjustment coefficient regular and irregular waves + LWT
@@ -139,25 +139,25 @@ double fnpf_runup::dndt(lexer *p, fdm_fnpf *c, ghostcell *pgc) //Free surface el
 
 double fnpf_runup::dudsig(lexer *p, fdm_fnpf *c, ghostcell *pgc) //Velocity in X direction derivated on sigma grid
 {
-    return (c->U[FIJKp1] - c->U[FIJKm1])/(p->DZN[KP1] + p->DZN[KM1]);     
+    return (c->U[FIJKp1] - c->U[FIJKm1])/(p->DZN[KP1] + p->DZN[KM1]);
 }
 
 
 double fnpf_runup::dvdsig(lexer *p, fdm_fnpf *c, ghostcell *pgc) //Velocity in Y direction derivated on sigma grid
 {
-    return (c->V[FIJKp1] - c->V[FIJKm1])/(p->DZN[KP1] + p->DZN[KM1]);       
+    return (c->V[FIJKp1] - c->V[FIJKm1])/(p->DZN[KP1] + p->DZN[KM1]);
 }
 
 
 double fnpf_runup::dudxi(lexer *p, fdm_fnpf *c, ghostcell *pgc) //Velocity in Y direction derivated on sigma grid
 {
-    return (c->U[FIp1JK] - c->U[FIm1JK])/(p->DXN[IP1] + p->DXN[IM1]); 
+    return (c->U[FIp1JK] - c->U[FIm1JK])/(p->DXN[IP1] + p->DXN[IM1]);
 }
 
 
 double fnpf_runup::dvdxi(lexer *p, fdm_fnpf *c, ghostcell *pgc)     // getting dvdxi
 {
-    return (c->V[FIJp1K] - c->V[FIJm1K])/(p->DYN[JP1] + p->DYN[JM1]); 
+    return (c->V[FIJp1K] - c->V[FIJm1K])/(p->DYN[JP1] + p->DYN[JM1]);
 }
 
 

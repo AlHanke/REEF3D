@@ -30,7 +30,7 @@ Author: Hans Bihs
 #include<sys/stat.h>
 #include<sys/types.h>
 
-print_averaging_v::print_averaging_v(lexer *p, fdm* a, ghostcell *pgc) 
+print_averaging_v::print_averaging_v(lexer *p, fdm* a, ghostcell *pgc)
 {
 
 }

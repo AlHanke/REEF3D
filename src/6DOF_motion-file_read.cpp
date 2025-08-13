@@ -64,7 +64,7 @@ void sixdof_motionext_file::read_format_1(lexer *p, ghostcell *pgc)
     if(!file)
     cout<<endl<<("no '6DOF_motion.dat' file found")<<endl<<endl;
     
- // read file   
+ // read file
     rowcount=colcount=0;
     while(!file.eof())
     {

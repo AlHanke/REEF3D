@@ -50,7 +50,7 @@ Author: Hans Bihs
 #include"sflow_bicgstab.h"
 
 fnpf_fsfbc_wd::fnpf_fsfbc_wd(lexer *p, fdm_fnpf *c, ghostcell *pgc) : bx(p),by(p),wetcoast(p),eps(1.0e-6)
-{    
+{
     if(p->A311==0)
     pconvec = pconeta = new fnpf_voiddisc(p);
     
@@ -163,7 +163,7 @@ void fnpf_fsfbc_wd::fsfdisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, s
     if(p->i_dir==1 && p->j_dir==1)
     FFILOOP4
     {
-    ivel = (Fifsf(i+1,j) - Fifsf(i-1,j))/(p->DXP[IP]+p->DXP[IM1]);    
+    ivel = (Fifsf(i+1,j) - Fifsf(i-1,j))/(p->DXP[IP]+p->DXP[IM1]);
     jvel = (Fifsf(i,j+1) - Fifsf(i,j-1))/(p->DYP[JP]+p->DYP[JM1]);
     
     c->Fx(i,j) = pconvec->sx(p,Fifsf,ivel);
@@ -183,7 +183,7 @@ void fnpf_fsfbc_wd::fsfdisc(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, s
     if(p->i_dir==1 && p->j_dir==0)
     FFILOOP4
     {
-    ivel = (Fifsf(i+1,j) - Fifsf(i-1,j))/(p->DXP[IP]+p->DXP[IM1]);    
+    ivel = (Fifsf(i+1,j) - Fifsf(i-1,j))/(p->DXP[IP]+p->DXP[IM1]);
     
     c->Fx(i,j) = pconvec->sx(p,Fifsf,ivel);
     c->Ex(i,j) = pconeta->sx(p,eta,ivel);
@@ -230,7 +230,7 @@ void fnpf_fsfbc_wd::fsfwvel(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, s
 }
 
 void fnpf_fsfbc_wd::kfsfbc(lexer *p, fdm_fnpf *c, ghostcell *pgc)
-{    
+{
     SLICELOOP4
     {
     c->K(i,j) =  - c->Fx(i,j)*c->Ex(i,j) - c->Fy(i,j)*c->Ey(i,j)
@@ -243,12 +243,12 @@ void fnpf_fsfbc_wd::kfsfbc(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 }
 
 void fnpf_fsfbc_wd::dfsfbc(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta)
-{  
+{
     SLICELOOP4
     {
     c->K(i,j) =  - 0.5*c->Fx(i,j)*c->Fx(i,j) - 0.5*c->Fy(i,j)*c->Fy(i,j)
     
-                 + 0.5*pow(c->Fz(i,j),2.0)*(1.0 + pow(c->Ex(i,j),2.0) + pow(c->Ey(i,j),2.0)) - fabs(p->W22)*eta(i,j);   
+                 + 0.5*pow(c->Fz(i,j),2.0)*(1.0 + pow(c->Ex(i,j),2.0) + pow(c->Ey(i,j),2.0)) - fabs(p->W22)*eta(i,j);
 
       
     if(p->wet[IJ]==0)

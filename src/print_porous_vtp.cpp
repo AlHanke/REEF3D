@@ -125,6 +125,6 @@ void print_porous::print_vtp(lexer *p, fdm *a, ghostcell *pgc)
     result<<endl<<"</AppendedData>"<<endl;
     result<<"</VTKFile>"<<endl;
 
-    result.close();    
+    result.close();
     
 }

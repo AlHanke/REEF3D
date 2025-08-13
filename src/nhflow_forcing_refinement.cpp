@@ -30,7 +30,7 @@ void nhflow_forcing::geometry_refinement(lexer *p, ghostcell *pgc)
     double x0,x1,x2,y0,y1,y2,z0,z1,z2;
     double x01,x02,x12,y01,y02,y12,z01,z02,z12;
     double at,bt,ct,st;
-    double nx_old,ny_old,nz_old;    
+    double nx_old,ny_old,nz_old;
     double A_triang,A;
     double l0,l1,l2;
     double tridist;
@@ -48,7 +48,7 @@ void nhflow_forcing::geometry_refinement(lexer *p, ghostcell *pgc)
         
         x2 = tri_x[n][2];
         y2 = tri_y[n][2];
-        z2 = tri_z[n][2]; 
+        z2 = tri_z[n][2];
         
             at = sqrt(pow(x1-x0,2.0) + pow(y1-y0,2.0) + pow(z1-z0,2.0));
             bt = sqrt(pow(x1-x2,2.0) + pow(y1-y2,2.0) + pow(z1-z2,2.0));
@@ -69,7 +69,7 @@ void nhflow_forcing::geometry_refinement(lexer *p, ghostcell *pgc)
 
     tri_x_r.reserve(3*tricount);
     tri_y_r.reserve(3*tricount);
-    tri_z_r.reserve(3*tricount);    
+    tri_z_r.reserve(3*tricount);
     
     tri_x_r.resize(tricount,vector<double>(3,0.0));
     tri_y_r.resize(tricount,vector<double>(3,0.0));
@@ -104,7 +104,7 @@ void nhflow_forcing::geometry_refinement(lexer *p, ghostcell *pgc)
         
     
     for (int n = 0; n < tri_x_r.size(); n++)
-    {        
+    {
         x0 = tri_x_r[n][0];
         x1 = tri_x_r[n][1];
         x2 = tri_x_r[n][2];
@@ -115,11 +115,11 @@ void nhflow_forcing::geometry_refinement(lexer *p, ghostcell *pgc)
         
         z0 = tri_z_r[n][0];
         z1 = tri_z_r[n][1];
-        z2 = tri_z_r[n][2];  
+        z2 = tri_z_r[n][2];
            
         at = sqrt(pow(x1-x0,2.0) + pow(y1-y0,2.0) + pow(z1-z0,2.0));
         bt = sqrt(pow(x1-x2,2.0) + pow(y1-y2,2.0) + pow(z1-z2,2.0));
-        ct = sqrt(pow(x2-x0,2.0) + pow(y2-y0,2.0) + pow(z2-z0,2.0));   
+        ct = sqrt(pow(x2-x0,2.0) + pow(y2-y0,2.0) + pow(z2-z0,2.0));
         
         if(p->X185==1)
         critL = p->DXM*1.6;
@@ -167,25 +167,25 @@ void nhflow_forcing::geometry_refinement(lexer *p, ghostcell *pgc)
             // c
             x02 = x0 + (x2 - x0)/2.0;
             y02 = y0 + (y2 - y0)/2.0;
-            z02 = z0 + (z2 - z0)/2.0;            
+            z02 = z0 + (z2 - z0)/2.0;
             
             // b
             x12 = x1 + (x2 - x1)/2.0;
             y12 = y1 + (y2 - y1)/2.0;
             z12 = z1 + (z2 - z1)/2.0;
                         
-            // Old normal vector    
+            // Old normal vector
                 
             nx_old = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
-            ny_old = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0); 
+            ny_old = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
             nz_old = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
             
             
             // Delete old and add new triangles
         
-            tri_x_r.erase(tri_x_r.begin() + n); 
-            tri_y_r.erase(tri_y_r.begin() + n); 
-            tri_z_r.erase(tri_z_r.begin() + n); 
+            tri_x_r.erase(tri_x_r.begin() + n);
+            tri_y_r.erase(tri_y_r.begin() + n);
+            tri_z_r.erase(tri_z_r.begin() + n);
             n--;
 
             create_triangle(x0,y0,z0,x01,y01,z01,x02,y02,z02,nx_old,ny_old,nz_old);
@@ -213,7 +213,7 @@ void nhflow_forcing::geometry_refinement(lexer *p, ghostcell *pgc)
     for (int i = 0; i < tricount; i++)
     {
         for (int j = 0; j < 3; j++)
-        {    
+        {
             tri_x[i][j] = tri_x_r[i][j];
             tri_y[i][j] = tri_y_r[i][j];
             tri_z[i][j] = tri_z_r[i][j];
@@ -234,7 +234,7 @@ void nhflow_forcing::geometry_refinement(lexer *p, ghostcell *pgc)
         
         x2 = tri_x[n][2];
         y2 = tri_y[n][2];
-        z2 = tri_z[n][2]; 
+        z2 = tri_z[n][2];
         
              at = sqrt(pow(x1-x0,2.0) + pow(y1-y0,2.0) + pow(z1-z0,2.0));
             bt = sqrt(pow(x1-x2,2.0) + pow(y1-y2,2.0) + pow(z1-z2,2.0));
@@ -275,20 +275,20 @@ void nhflow_forcing::create_triangle
     // Calculate new normal vector
     
     nx = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
-    ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0); 
-    nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);        
+    ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
+    nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
 
     nx = nx > 1.0e-5 ? nx : nx_old;
     ny = ny > 1.0e-5 ? ny : ny_old;
-    nz = nz > 1.0e-5 ? nz : nz_old;    
+    nz = nz > 1.0e-5 ? nz : nz_old;
     
     
     // Arrange triangle such that normal vector points outward
     
-    if 
+    if
     (
-           SIGN(nx)!=SIGN(nx_old) 
-        || SIGN(ny)!=SIGN(ny_old) 
+           SIGN(nx)!=SIGN(nx_old)
+        || SIGN(ny)!=SIGN(ny_old)
         || SIGN(nz)!=SIGN(nz_old)
     )
     {
@@ -302,10 +302,10 @@ void nhflow_forcing::create_triangle
 
         tri_z_new[0] = z2;
         tri_z_new[1] = z1;
-        tri_z_new[2] = z0;                
+        tri_z_new[2] = z0;
     }
     else
-    {    
+    {
         tri_x_new[0] = x0;
         tri_x_new[1] = x1;
         tri_x_new[2] = x2;
@@ -316,7 +316,7 @@ void nhflow_forcing::create_triangle
 
         tri_z_new[0] = z0;
         tri_z_new[1] = z1;
-        tri_z_new[2] = z2;    
+        tri_z_new[2] = z2;
     }
     
     

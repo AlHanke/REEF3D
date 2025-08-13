@@ -40,7 +40,7 @@ void hypre_aij::fill_matrix_F_7p(lexer* p, ghostcell* pgc, matrix_diag &M, doubl
     FLOOP
     {
     count=0;
-    val[count] = M.p[n];    
+    val[count] = M.p[n];
     col[count] = rownum7[FIJK];
     rownum = rownum7[FIJK];
     ++count;

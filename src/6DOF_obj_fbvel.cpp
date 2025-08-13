@@ -25,7 +25,7 @@ Authors: Hans Bihs, Tobias Martin
 #include"fdm.h"
 #include"ghostcell.h"
 
-void sixdof_obj::update_fbvel(lexer *p, ghostcell *pgc)         
+void sixdof_obj::update_fbvel(lexer *p, ghostcell *pgc)
 {
     // Determine floating body velocities
         // U
@@ -128,19 +128,19 @@ void sixdof_obj::saveTimeStep(lexer *p, int iter)
     hn2_ = hn1_;
     hn1_ = h_;
     en3_ = en2_;
-    en2_ = en1_;   
+    en2_ = en1_;
     en1_ = e_;
     
     dtn3 = dtn2;
     dtn2 = dtn1;
-    dtn1 = alpha[iter]*p->dt;   
+    dtn1 = alpha[iter]*p->dt;
 }
 
 
 void sixdof_obj::maxvel(lexer *p, ghostcell *pgc)
 {
     p->ufbmax = p->ufbi;
-    p->vfbmax = p->vfbi; 
+    p->vfbmax = p->vfbi;
     p->wfbmax = p->wfbi;
     
     double uvel,vvel,wvel;

@@ -93,5 +93,5 @@ void nhflow_forcing::ray_cast(lexer *p, fdm_nhf *d, ghostcell *pgc)
     d->SOLID[IJK]=100.0*p->DXM;
     
     
-    pgc->start5V(p,d->SOLID,1); 
+    pgc->start5V(p,d->SOLID,1);
 }

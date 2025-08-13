@@ -30,7 +30,7 @@ class patchBC_interface;
 
 using namespace std;
 
-class sflow_hxy_disc 
+class sflow_hxy_disc
 {
 public:
     virtual void start(lexer*,slice&,slice&,slice&,int*,slice&,slice&,slice&)=0;

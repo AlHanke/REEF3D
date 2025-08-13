@@ -230,7 +230,7 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     result<<endl<<"</AppendedData>"<<endl;
     result<<"</VTKFile>"<<endl;
 
-    result.close();    
+    result.close();
 }
 
 

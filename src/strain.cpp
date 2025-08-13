@@ -83,7 +83,7 @@ double strain::sij(lexer *p, fdm *a, int ii, int jj)
 }
 
 double strain::Sij2(lexer *p, fdm *a)
-{    
+{
     symmetricStrainRateTensor(p,a->u,a->v,a->w);
     
     double s = sqrt(2.0*s11*s11 + 2.0*s22*s22 + 2.0*s33*s33 + s12*s12 + s13*s13 + s23*s23);
@@ -99,7 +99,7 @@ double strain::strainterm(lexer *p, fdm *a)
 }
 
 double strain::strainterm(lexer *p, field &u, field &v, field &w)
-{    
+{
     symmetricStrainRateTensor(p,u,v,w);
     
     double s = sqrt(2.0*s11*s11 + 2.0*s22*s22 + 2.0*s33*s33 + s12*s12 + s13*s13 + s23*s23);

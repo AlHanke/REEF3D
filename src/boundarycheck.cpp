@@ -75,7 +75,7 @@ int boundarycheck::boundcheck_ik(lexer *p, int ii, int jj, int kk, int margin)
 
 int boundarycheck::positioncheck(lexer *p, double posx, double posy, double posz, int margin)
 {
-    int ii,jj,kk;    
+    int ii,jj,kk;
     check=0;
 
     ii = p->posf_i(posx);

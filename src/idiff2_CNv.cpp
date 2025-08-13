@@ -32,7 +32,7 @@ void idiff2_CN::diff_v(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &d
     
     double visc_ddx_p,visc_ddx_m,visc_ddz_p,visc_ddz_m;
         double visctermp, viscterms, visctermn, viscterme;
-        double visctermw, visctermb, visctermt;    
+        double visctermw, visctermb, visctermt;
 
         VLOOP
         diff(i,j,k) = v_in(i,j,k);

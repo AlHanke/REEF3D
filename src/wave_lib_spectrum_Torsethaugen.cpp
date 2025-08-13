@@ -58,9 +58,9 @@ double wave_lib_spectrum::Torsethaugen(lexer *p, double w)
     {
     // Primary Peak
     Rw = (1.0-a10)*exp(-pow(epsl/a1,2.0)) + a10;
-    H1 = Rw*p->wHs;    
+    H1 = Rw*p->wHs;
     
-    Tp1 = p->wTp;    
+    Tp1 = p->wTp;
     
     sp = ((2.0*PI)/9.81)*(H1/pow(Tp1,2.0));
     gamma = kg*pow(sp,(6.0/7.0));
@@ -76,9 +76,9 @@ double wave_lib_spectrum::Torsethaugen(lexer *p, double w)
     {
     // Primary Peak
     Rs = (1.0-a20)*exp(-pow(epsu/a2,2.0)) + a20;
-    H1 = Rs*p->wHs;    
+    H1 = Rs*p->wHs;
     
-    Tp1 = p->wTp;    
+    Tp1 = p->wTp;
     
     sp = ((2.0*PI)/9.81)*(p->wHs/pow(Tpf,2.0));
     gammaf = kg*pow(sp,(6.0/7.0));

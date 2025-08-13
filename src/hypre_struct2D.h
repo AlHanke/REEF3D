@@ -54,7 +54,7 @@ public:
 
 private:
     
-// HYPRE 
+// HYPRE
     HYPRE_StructGrid     grid;
     HYPRE_StructStencil  stencil;
     HYPRE_StructMatrix   A;

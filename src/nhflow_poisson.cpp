@@ -31,7 +31,7 @@ Author: Hans Bihs
 #include"density_heat.h"
 #include"density_vof.h"
 
-nhflow_poisson::nhflow_poisson(lexer *p) 
+nhflow_poisson::nhflow_poisson(lexer *p)
 {
 }
 
@@ -40,7 +40,7 @@ nhflow_poisson::~nhflow_poisson()
 }
 
 void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
-{    
+{
     double ab,denom;
     
     n=0;
@@ -84,10 +84,10 @@ void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
             d->M.w[n] = -(CPORNH*PORVALNH)/(p->W1*p->DYP[JP]*p->DYN[JP])*p->y_dir;
             d->M.e[n] = -(CPORNHm*PORVALNHm)/(p->W1*p->DYP[JM1]*p->DYN[JP])*p->y_dir;
 
-            d->M.t[n] = -(sigxyz2*CPORNH*PORVALNH)/(p->W1*p->DZP[KM1]*p->DZN[KP])     
+            d->M.t[n] = -(sigxyz2*CPORNH*PORVALNH)/(p->W1*p->DZP[KM1]*p->DZN[KP])
                         - 0.0*CPORNH*PORVALNH*p->sigxx[FIJK]/(p->W1*(p->DZN[KP]+p->DZN[KM1]));
                         
-            d->M.b[n] = -(sigxyz2*CPORNHm*PORVALNHm)/(p->W1*p->DZP[KM1]*p->DZN[KM1]) 
+            d->M.b[n] = -(sigxyz2*CPORNHm*PORVALNHm)/(p->W1*p->DZP[KM1]*p->DZN[KM1])
                         + 0.0*CPORNH*PORVALNH*p->sigxx[FIJK]/(p->W1*(p->DZN[KP]+p->DZN[KM1]));
             
             
@@ -135,7 +135,7 @@ void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
     n=0;
     LOOP
     {
-        WETDRYDEEP 
+        WETDRYDEEP
         {
             // South
             if((p->flag7[FIm1JK]<0 || p->wet[Im1J]==0 || p->deep[Im1J]==0) && p->IO[Im1JK]==0)

@@ -120,7 +120,7 @@ momentum_FC2::~momentum_FC2()
 }
 
 void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof)
-{    
+{
     pflow->discharge(p,a,pgc);
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);
     pflow->rkinflow(p,a,pgc,urk1,vrk1,wrk1);
@@ -160,7 +160,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     starttime=pgc->timer();
 
     pturb->isource(p,a);
-    pflow->isource(p,a,pgc,pvrans); 
+    pflow->isource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
     ppress->upgrad(p,a,a->eta,a->eta_n);
     irhs(p,a,pgc,a->u,a->u,a->v,a->w,1.0);

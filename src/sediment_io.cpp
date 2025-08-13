@@ -87,7 +87,7 @@ void sediment_f::fill_PQ_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     s->Q(i,j) = 0.5*(d->V[IJK] + d->V[IJp1K]);
     
     pgc->gcsl_start1(p,s->P,10);
-    pgc->gcsl_start2(p,s->Q,11);  
+    pgc->gcsl_start2(p,s->Q,11);
     
     k=0;
 }

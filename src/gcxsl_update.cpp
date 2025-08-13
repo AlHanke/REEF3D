@@ -115,7 +115,7 @@ void ghostcell::gcxslupdate(lexer* p)
         
         if(p->flagslice4[IJm1]<0 || p->flagslice4[IJ]<0)
         p->gcslpara3[n][6]=p->Y74;
-    }    
+    }
     
     for(n=0;n<p->gcslpara4_count;++n)
     {

@@ -41,7 +41,7 @@ void iowave::WL_relax(lexer *p, ghostcell *pgc, slice &WL, slice &depth)
         {
             // Zone 1
             if(dg<1.0e20)
-            { 
+            {
             WETDRYDEEP
             WL(i,j) = (1.0-relax4_wg(i,j))*ramp(p)*(eta(i,j) + depth(i,j)) + relax4_wg(i,j) * WL(i,j);
             ++count;
@@ -103,7 +103,7 @@ void iowave::U_relax(lexer *p, ghostcell *pgc, double *U, double *UH)
 }
 
 void iowave::V_relax(lexer *p, ghostcell *pgc, double *V, double *VH)
-{ 
+{
     starttime=pgc->timer();
     
     count=0;
@@ -130,7 +130,7 @@ void iowave::V_relax(lexer *p, ghostcell *pgc, double *V, double *VH)
         
         // Numerical Beach
         if(p->B99==1||p->B99==2||beach_relax==1)
-        {    
+        {
             // Zone 2
             if(db<1.0e20)
             {
@@ -144,7 +144,7 @@ void iowave::V_relax(lexer *p, ghostcell *pgc, double *V, double *VH)
 }
 
 void iowave::W_relax(lexer *p, ghostcell *pgc, double *W, double *WH)
-{   
+{
     starttime=pgc->timer();
     
     count=0;
@@ -179,7 +179,7 @@ void iowave::W_relax(lexer *p, ghostcell *pgc, double *W, double *WH)
             }
         }
     }
-    p->wavecalctime+=pgc->timer()-starttime;        
+    p->wavecalctime+=pgc->timer()-starttime;
 }
 
 void iowave::P_relax(lexer *p, ghostcell *pgc, double *P)
@@ -192,13 +192,13 @@ void iowave::P_relax(lexer *p, ghostcell *pgc, double *P)
         
         // Numerical Beach
         if(p->B99==1||p->B99==2||beach_relax==1)
-        {            
+        {
             // Zone 2
             if(db<1.0e20)
 
             P[FIJK] = relax4_nb(i,j)*P[FIJK];
         }
-    }    
+    }
     p->wavecalctime+=pgc->timer()-starttime;
 }
 
@@ -208,7 +208,7 @@ void iowave::turb_relax_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, double *F)
     
     LOOP
     {
-        dg = distgen(p);    
+        dg = distgen(p);
         db = distbeach(p);
 
         // Wave Generation

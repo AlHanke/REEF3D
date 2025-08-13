@@ -72,7 +72,7 @@ void particle_pls::seed(lexer* p, fdm* a, ghostcell* pgc, double fraction,double
             partcount(i,j,k)+=1.0;
             }
             
-        }    
+        }
 
         //NEG
         if(partcount(i,j,k)<double(pnum)*fraction && a->phi(i,j,k)<0.0)
@@ -86,7 +86,7 @@ void particle_pls::seed(lexer* p, fdm* a, ghostcell* pgc, double fraction,double
             partcount(i,j,k)+=1.0;
             }
             
-        }    
+        }
     }
 
 }
@@ -145,7 +145,7 @@ int particle_pls::posseed(lexer* p, fdm* a, ghostcell* pgc, double factor)
             }
             
             if(pcount==0 && posactive<maxparticle)
-            {    
+            {
                 pos[posactive][0] = (double(i)  + (rand()%(irand))/drand)*dx;
                 pos[posactive][1] = (double(j)  + (rand()%(irand))/drand)*dx;
                 pos[posactive][2] = (double(k)  + (rand()%(irand))/drand)*dx;
@@ -193,7 +193,7 @@ int particle_pls::posseed(lexer* p, fdm* a, ghostcell* pgc, double factor)
 
 
 int particle_pls::negseed(lexer* p, fdm* a, ghostcell* pgc, double factor)
-{    
+{
     int success=1;
     
     
@@ -245,7 +245,7 @@ int particle_pls::negseed(lexer* p, fdm* a, ghostcell* pgc, double factor)
             }
 
             if(ncount==0 && negactive<maxparticle)
-            {    
+            {
                 neg[negactive][0] = (double(i) + (rand()%(irand))/drand)*dx;
                 neg[negactive][1] = (double(j) + (rand()%(irand))/drand)*dx;
                 neg[negactive][2] = (double(k) + (rand()%(irand))/drand)*dx;

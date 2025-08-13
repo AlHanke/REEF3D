@@ -39,7 +39,7 @@ Author: Hans Bihs
 #include"waves_header.h"
 
 void driver::logic_fnpf()
-{    
+{
     if(p->mpirank==0)
     cout<<"creating objects"<<endl;
     
@@ -75,7 +75,7 @@ void driver::logic_fnpf()
     preto = new reinitopo_RK3(p);
     }
     
-//  Laplace Solver    
+//  Laplace Solver
     if(p->N10==0)
     plapsolv = new solver_void(p,a,pgc);
 

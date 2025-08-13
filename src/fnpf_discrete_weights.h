@@ -22,7 +22,7 @@ Author: Hans Bihs
 
 /*
     Reference:
-    Bengt Fornberg, Generation of Finite Difference Formulas on Arbitrarily Spaced Grids, 
+    Bengt Fornberg, Generation of Finite Difference Formulas on Arbitrarily Spaced Grids,
     Mathematics of Compuation, 51, 184, 1988, pp. 699-706
 */
 

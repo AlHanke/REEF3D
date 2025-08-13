@@ -260,7 +260,7 @@ void patchBC_2D::patchBC_ioflow(lexer *p, fdm *a, ghostcell *pgc, field &u, fiel
     
 
 
-} 
+}
 
 void patchBC_2D::patchBC_rkioflow(lexer *p, fdm *a, ghostcell *pgc, field &u, field &v, field &w)
 {

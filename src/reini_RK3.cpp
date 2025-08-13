@@ -74,7 +74,7 @@ reini_RK3::reini_RK3(lexer* p, int type) : epsi(p->F45*p->DXM),frk1(p),frk2(p),d
     if(p->F49==1)
     prdisc = new reinidisc_f(p);
     
-    time_preproc(p);   
+    time_preproc(p);
 }
 
 reini_RK3::~reini_RK3()
@@ -82,7 +82,7 @@ reini_RK3::~reini_RK3()
 }
 
 void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
-{ 
+{
     starttime=pgc->timer();
 
     if(p->count==0)

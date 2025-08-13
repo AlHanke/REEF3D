@@ -194,7 +194,7 @@ double interpolation::ipol3( field& b)
     v1=v2=v3=v4=v5=v6=v7=v8=0.0;
     
     if(p->j_dir==0)
-    { 
+    {
     pip=4;
     if(j==-1)
     {
@@ -261,7 +261,7 @@ double interpolation::ipol3( field& b)
     }
 
     if(p->j_dir==1)
-    { 
+    {
     pip=4;
     if(p->flag[IJK]>0)
     v1=b(i,j,k);

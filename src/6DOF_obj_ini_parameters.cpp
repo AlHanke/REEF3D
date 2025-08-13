@@ -29,9 +29,9 @@ Author: Tobias Martin
 void sixdof_obj::ini_fbvel(lexer *p, ghostcell *pgc)
 {
     // external velocity
-      Uext = Vext = Wext = Pext = Qext = Rext = 0.0; 
+      Uext = Vext = Wext = Pext = Qext = Rext = 0.0;
 
-    // Rigid body motion ini    
+    // Rigid body motion ini
     R_ << 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0;
     e_ << 0.0, 0.0, 0.0, 0.0;
     p_ << 0.0, 0.0, 0.0;
@@ -75,20 +75,20 @@ void sixdof_obj::ini_fbvel(lexer *p, ghostcell *pgc)
         h_(0) = p->X103_p;
         h_(1) = p->X103_q;
         h_(2) = p->X103_r;
-    }  
+    }
     
     if (p->X103==1)
     {
         h_(0) = p->X103_p;
         h_(1) = p->X103_q;
         h_(2) = p->X103_r;
-    }  
+    }
     
     // Velocities
     p->ufb = p->vfb = p->wfb = 0.0;
-    p->pfb = p->qfb = p->rfb = 0.0; 
+    p->pfb = p->qfb = p->rfb = 0.0;
     p->ufbi = p->vfbi = p->wfbi = 0.0;
-    p->pfbi = p->qfbi = p->rfbi = 0.0; 
+    p->pfbi = p->qfbi = p->rfbi = 0.0;
     
     if(p->X210==1)
     {

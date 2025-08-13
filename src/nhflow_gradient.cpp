@@ -45,7 +45,7 @@ nhflow_gradient::~nhflow_gradient()
 
 double nhflow_gradient::dudx(double *U)
 {
-    grad = (U[Ip1JK] - U[Im1JK])/(p->DXP[IP]+p->DXP[IM1]) 
+    grad = (U[Ip1JK] - U[Im1JK])/(p->DXP[IP]+p->DXP[IM1])
     
          + 0.5*(p->sigx[FIJK]+p->sigx[FIJKp1])*(U[IJKp1] - U[IJKm1])/(p->DZP[KP]+p->DZP[KM1]);
 
@@ -166,7 +166,7 @@ double nhflow_gradient::dudzz(double *U)
 // **********************************************************
 
 double nhflow_gradient::dvdxx(double *V)
-{ 
+{
     //grad = ((a->v(i+1,j,k) - a->v(i,j,k))/p->DXP[IP] - (a->v(i,j,k) + a->v(i-1,j,k))/p->DXP[IM1])/p->DXN[IP];
 
     return grad;

@@ -84,10 +84,10 @@ void sflow_print_probe_da::start(lexer *p, fdm2D *b, ghostcell *pgc)
         
         uval = p->ccslipol1(b->P, xp, yp);
         vval = p->ccslipol2(b->Q, xp, yp);
-        wval = p->ccslipol4(b->ws,xp,yp); 
+        wval = p->ccslipol4(b->ws,xp,yp);
         pval = p->ccslipol4(b->press,xp,yp);
         eval = p->ccslipol4(b->eta,xp,yp);
-        bval = p->ccslipol4(b->bed,xp,yp); 
+        bval = p->ccslipol4(b->bed,xp,yp);
         }
     
     uval=pgc->globalmax(uval);

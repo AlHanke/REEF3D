@@ -136,7 +136,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         z = eta(i,j);
 
 
-        // Wave Generation        
+        // Wave Generation
         if(p->B98==2 && w_switch==1)
         {
             // Zone 1
@@ -151,7 +151,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
             ++count;
             }
         }
-    }    
+    }
 
     count=0;
     LOOP
@@ -217,7 +217,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         {
             // Zone 1
             if(dg<1.0e20)
-            { 
+            {
             Fival[count] = wave_fi(p,pgc,xg,yg,z);
             ++count;
             }
@@ -249,12 +249,12 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         z = eta(i,j);
         }
         
-        // Wave Generation        
+        // Wave Generation
         if(p->B98==2 && f_switch==1)
         {
             // Zone 1
             if(dg<1.0e20)
-            { 
+            {
             if(zloc4<=fsfloc+epsi)
             Fival[count] = wave_fi(p,pgc,xg,yg,z);
             
@@ -273,7 +273,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         
         xg = xgen(p);
         yg = ygen(p);
-        dg = distgen(p);    
+        dg = distgen(p);
         db = distbeach(p);
         
         z = eta(i,j);
@@ -283,7 +283,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         {
             // Zone 1
             if(dg<1.0e20)
-            { 
+            {
             if(zloc4<=fsfloc+epsi || p->A10==3)
             Fifsfval[count] = wave_fi(p,pgc,xg,yg,z);
             

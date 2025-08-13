@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"slice.h"
 #include"patchBC_interface.h"
 
-nhflow_flux_build_f::nhflow_flux_build_f(lexer *p, ghostcell *ppgc, patchBC_interface *ppBC) 
+nhflow_flux_build_f::nhflow_flux_build_f(lexer *p, ghostcell *ppgc, patchBC_interface *ppBC)
 {
     pBC = ppBC;
 }
@@ -79,12 +79,12 @@ void nhflow_flux_build_f::start_V(lexer* p, fdm_nhf *d, ghostcell *pgc)
     // flux y-dir
     VLOOP
     {
-    d->Fe[IJK] = d->VHe[IJK]*d->Ve[IJK] 
+    d->Fe[IJK] = d->VHe[IJK]*d->Ve[IJK]
             + 0.5*fabs(p->W22)*d->ETAe(i,j)*d->ETAe(i,j)
             + fabs(p->W22)*d->ETAe(i,j)*d->dfy(i,j);
     
-    d->Fw[IJK] = d->VHw[IJK]*d->Vw[IJK] 
-            + 0.5*fabs(p->W22)*d->ETAw(i,j)*d->ETAw(i,j) 
+    d->Fw[IJK] = d->VHw[IJK]*d->Vw[IJK]
+            + 0.5*fabs(p->W22)*d->ETAw(i,j)*d->ETAw(i,j)
             + fabs(p->W22)*d->ETAw(i,j)*d->dfy(i,j);
     }
     

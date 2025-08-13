@@ -49,7 +49,7 @@ public:
     
     void velcalc(lexer*, fdm*, ghostcell *pgc, field&);
     
-private: 
+private:
     int gcval,gcval_u,gcval_v,gcval_w;
 
 };

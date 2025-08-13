@@ -58,7 +58,7 @@ void particle_pls::random_delete(lexer* p, fdm* a, ghostcell* pgc)
         if(lsc<=-0.5*p->DXM)
         maxpos = 0.0;
         
-        if(posnum(i,j,k)>maxpos)        
+        if(posnum(i,j,k)>maxpos)
         if(pos[n][3]>pos[n][4]+0.1*rmin || qn==1)
         {
         ++pcount;
@@ -66,7 +66,7 @@ void particle_pls::random_delete(lexer* p, fdm* a, ghostcell* pgc)
         posmem[pcount]=n;
         ++removed;
         posnum(i,j,k)-=1.0;
-        }    
+        }
     }
     
     // NEG
@@ -95,7 +95,7 @@ void particle_pls::random_delete(lexer* p, fdm* a, ghostcell* pgc)
         if(lsc>=0.5*p->DXM)
         maxneg = 0.0;
         
-        if(negnum(i,j,k)>maxneg)        
+        if(negnum(i,j,k)>maxneg)
         if(neg[n][3]<-neg[n][4]-0.1*rmin || qn==1)
         {
         ++ncount;
@@ -103,6 +103,6 @@ void particle_pls::random_delete(lexer* p, fdm* a, ghostcell* pgc)
         negmem[ncount]=n;
         ++removed;
         negnum(i,j,k)-=1.0;
-        }    
+        }
     }
 }

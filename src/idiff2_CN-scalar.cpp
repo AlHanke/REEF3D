@@ -56,7 +56,7 @@ void idiff2_CN::diff_scalar(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, fie
 
          a->rhsvec.V[count] -= (1-alphaCN)*visctermp*b(i,j,k);
     
-         a->rhsvec.V[count] += b(i,j,k)/(alpha*p->dt); 
+         a->rhsvec.V[count] += b(i,j,k)/(alpha*p->dt);
      
      viscterms = -0.5*(visc_ijk+ev_ijk/sig + visc(i-1,j,k)+a->eddyv(i-1,j,k)/sig)/(p->DXN[IP]*p->DXP[IM1]);
      visctermn = -0.5*(visc(i+1,j,k)+a->eddyv(i+1,j,k)/sig + visc_ijk+ev_ijk/sig)/(p->DXN[IP]*p->DXP[IP]);

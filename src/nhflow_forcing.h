@@ -44,10 +44,10 @@ public:
     nhflow_forcing(lexer*, fdm_nhf*, ghostcell*);
     virtual ~nhflow_forcing();
     
-    void forcing(lexer*, fdm_nhf*, ghostcell*, sixdof *p6dof, 
+    void forcing(lexer*, fdm_nhf*, ghostcell*, sixdof *p6dof,
                  int, double, double*, double*, double*, slice&, bool);
                  
-    void forcing_update(lexer*, fdm_nhf*, ghostcell*, sixdof *p6dof, 
+    void forcing_update(lexer*, fdm_nhf*, ghostcell*, sixdof *p6dof,
                  int, double, double*, double*, double*, slice&, bool);
     
     void solid_forcing(lexer*, fdm_nhf*, ghostcell*, double, double*, double*, double*, slice&);

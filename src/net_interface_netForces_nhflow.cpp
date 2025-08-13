@@ -48,6 +48,6 @@ void net_interface::netForces_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, doubl
         pgc->bcast_double(&Zne[n],1);
         pgc->bcast_double(&Kne[n],1);
         pgc->bcast_double(&Mne[n],1);
-        pgc->bcast_double(&Nne[n],1);    
+        pgc->bcast_double(&Nne[n],1);
     }
 }

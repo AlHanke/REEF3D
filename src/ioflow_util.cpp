@@ -46,8 +46,8 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         ++count2;
     }
     
-    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6); 
-    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6); 
+    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6);
+    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6);
 
     count1=0;
     count2=0;
@@ -97,8 +97,8 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         ++count2;
     }
     
-    p->Iresize(p->gcin4a,p->gcin4a_count, count1, 6, 6); 
-    p->Iresize(p->gcout4a,p->gcout4a_count, count2, 6, 6); 
+    p->Iresize(p->gcin4a,p->gcin4a_count, count1, 6, 6);
+    p->Iresize(p->gcout4a,p->gcout4a_count, count2, 6, 6);
     
     count1=0;
     count2=0;
@@ -240,8 +240,8 @@ void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     
     //cout<<p->mpirank<<"  gcin_count: "<<p->gcin_count<<" count1: "<<count1<<"  gcout_count: "<<p->gcout_count<<" count2: "<<count2<<endl;
     
-    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6); 
-    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6); 
+    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6);
+    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6);
 
     count1=0;
     count2=0;

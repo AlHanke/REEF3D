@@ -137,7 +137,7 @@ void particle_pls::finalcorr(lexer* p, fdm* a, ghostcell* pgc)
 {
         
     LOOP
-    {    
+    {
         if(fabs(phimax(i,j,k))<fabs(phimin(i,j,k)))
         {
         a->phi(i,j,k)=phimax(i,j,k);

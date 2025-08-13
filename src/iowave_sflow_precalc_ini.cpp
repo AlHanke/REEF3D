@@ -64,7 +64,7 @@ void iowave::wavegen_2D_precalc_ini(lexer *p, ghostcell *pgc)
     // W ------------------------------------------------
     SLICEBASELOOP
     {
-        dg = distgen(p); 
+        dg = distgen(p);
 
         // Wave Generation
         if(p->B98==2 && w_switch==1)
@@ -79,7 +79,7 @@ void iowave::wavegen_2D_precalc_ini(lexer *p, ghostcell *pgc)
 // ETA ------------------------------------------------
     SLICEBASELOOP
     {
-        dg = distgen(p); 
+        dg = distgen(p);
 
         // Wave Generation
         if(p->B98==2 && w_switch==1)
@@ -89,12 +89,12 @@ void iowave::wavegen_2D_precalc_ini(lexer *p, ghostcell *pgc)
             ++ept_count;
 
         }
-    }    
+    }
     
     //cout<<"EPT_COUNT: "<<ept_count;
     
     // precalc array alloc
-    upt_count *= (p->B160+1); 
+    upt_count *= (p->B160+1);
     vpt_count *= (p->B160+1);
     wpt_count *= (p->B160+1);
     
@@ -102,7 +102,7 @@ void iowave::wavegen_2D_precalc_ini(lexer *p, ghostcell *pgc)
     p->Darray(vval,upt_count);
     p->Darray(wval,upt_count);
 
-    if((p->B92==31 || p->B92==41 || p->B92==51 ) && p->B89==1) 
+    if((p->B92==31 || p->B92==41 || p->B92==51 ) && p->B89==1)
     {
     p->Darray(uval_S_sin,upt_count,p->wN);
     p->Darray(vval_S_sin,vpt_count,p->wN);

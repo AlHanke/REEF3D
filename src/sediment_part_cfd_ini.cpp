@@ -48,7 +48,7 @@ void sediment_part::ini_cfd(lexer *p, fdm *a, ghostcell *pgc)
         s->bedzh0(i,j)=h;
     }
 
-    pgc->gcsl_start4(p,s->bedzh0,50); 
+    pgc->gcsl_start4(p,s->bedzh0,50);
 
     pst->seed_topo(p,a,pgc,s);
 

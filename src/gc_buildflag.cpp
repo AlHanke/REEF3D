@@ -48,7 +48,7 @@ void ghostcell::gcb_velflagio(lexer *p, fdm *a)
         p->flag1[Ip1JK] =-4;
         p->flag1[Ip2JK] =-4;
         p->flag1[Ip3JK] =-4;
-        }    
+        }
     }
     
     
@@ -74,7 +74,7 @@ void ghostcell::gcb_velflagio(lexer *p, fdm *a)
         p->flag2[Ip1JK] =-4;
         p->flag2[Ip2JK] =-4;
         p->flag2[Ip3JK] =-4;
-        }    
+        }
     }
     
     
@@ -100,6 +100,6 @@ void ghostcell::gcb_velflagio(lexer *p, fdm *a)
         p->flag3[Ip1JK] =-4;
         p->flag3[Ip2JK] =-4;
         p->flag3[Ip3JK] =-4;
-        }    
+        }
     }
 }

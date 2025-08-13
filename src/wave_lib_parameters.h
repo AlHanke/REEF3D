@@ -48,7 +48,7 @@ public:
     double wk_temp,ww_temp,wL_temp,wT_temp,wf_temp;
     
     
-    double eps,c0,c2,c4; 
+    double eps,c0,c2,c4;
     double S,C;
     double wC,ubar;
     double wS;
@@ -58,7 +58,7 @@ public:
     const double pshift;
     
     
-private: 
+private:
 
     
     int wtype;

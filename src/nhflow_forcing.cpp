@@ -100,7 +100,7 @@ nhflow_forcing::~nhflow_forcing()
 {
 }
 
-void nhflow_forcing::forcing(lexer *p, fdm_nhf *d, ghostcell *pgc, sixdof *p6dof, 
+void nhflow_forcing::forcing(lexer *p, fdm_nhf *d, ghostcell *pgc, sixdof *p6dof,
                              int iter, double alpha, double *UH, double *VH, double *WH, slice &WL, bool finalize)
 {
     starttime=pgc->timer();
@@ -215,7 +215,7 @@ void nhflow_forcing::forcing(lexer *p, fdm_nhf *d, ghostcell *pgc, sixdof *p6dof
     p->dftime+=pgc->timer()-starttime;
 }
 
-void nhflow_forcing::forcing_update(lexer *p, fdm_nhf *d, ghostcell *pgc, sixdof *p6dof, 
+void nhflow_forcing::forcing_update(lexer *p, fdm_nhf *d, ghostcell *pgc, sixdof *p6dof,
                              int iter, double alpha, double *UH, double *VH, double *WH, slice &WL, bool finalize)
 {
     starttime=pgc->timer();

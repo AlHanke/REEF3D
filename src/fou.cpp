@@ -119,9 +119,9 @@ double fou::aij(lexer* p,fdm* a,field& f,int ipol, field& uvel, field& vvel, fie
     if(0.5*(ivel1+ivel2)>=0.0)
     udir=1.0;
     
-    dx =     udir*(ivel2*f(i,j,k)- ivel1*f(i-1,j,k))/DX[IM1] 
+    dx =     udir*(ivel2*f(i,j,k)- ivel1*f(i-1,j,k))/DX[IM1]
     
-    +   (1.0-udir)*(ivel2*f(i+1,j,k)- ivel1*f(i,j,k))/DX[IP]; 
+    +   (1.0-udir)*(ivel2*f(i+1,j,k)- ivel1*f(i,j,k))/DX[IP];
     
     
     // y-dir
@@ -130,9 +130,9 @@ double fou::aij(lexer* p,fdm* a,field& f,int ipol, field& uvel, field& vvel, fie
     if(0.5*(jvel1+jvel2)>=0.0)
     vdir=1.0;
     
-    dy =     vdir*(jvel2*f(i,j,k)- jvel1*f(i,j-1,k))/DY[JM1] 
+    dy =     vdir*(jvel2*f(i,j,k)- jvel1*f(i,j-1,k))/DY[JM1]
     
-    +   (1.0-vdir)*(jvel2*f(i,j+1,k)- jvel1*f(i,j,k))/DY[JP]; 
+    +   (1.0-vdir)*(jvel2*f(i,j+1,k)- jvel1*f(i,j,k))/DY[JP];
     }
     
     
@@ -140,9 +140,9 @@ double fou::aij(lexer* p,fdm* a,field& f,int ipol, field& uvel, field& vvel, fie
     if(0.5*(kvel1+kvel2)>=0.0)
     wdir=1.0;
     
-    dz =     wdir*(kvel2*f(i,j,k)- kvel1*f(i,j,k-1))/DZ[KM1] 
+    dz =     wdir*(kvel2*f(i,j,k)- kvel1*f(i,j,k-1))/DZ[KM1]
     
-    +   (1.0-wdir)*(kvel2*f(i,j,k+1)- kvel1*f(i,j,k))/DZ[KP]; 
+    +   (1.0-wdir)*(kvel2*f(i,j,k+1)- kvel1*f(i,j,k))/DZ[KP];
     
     
     L = -dx-dy-dz;

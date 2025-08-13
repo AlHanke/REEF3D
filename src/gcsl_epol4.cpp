@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"slice.h"
 
 int ghostcell::gcsleval4(lexer *p, int gcv, int bc, int cs)
-{   
+{
     // general Neuman
     if(gcv==40 || gcv==50 || gcv==1 )
     return 4;
@@ -206,7 +206,7 @@ void ghostcell::gcsldistro4int(lexer *p, sliceint &f, int ii, int jj, int nn, do
     j=jj;
     n=nn;
 
-    gcsl_neumann_int(f,gcv,bc,cs);    
+    gcsl_neumann_int(f,gcv,bc,cs);
 }
 
 void ghostcell::gcsldistro4Vint(lexer *p, int *f, int ii, int jj, int nn, double dist,  int gcv, int bc, int cs)
@@ -215,5 +215,5 @@ void ghostcell::gcsldistro4Vint(lexer *p, int *f, int ii, int jj, int nn, double
     j=jj;
     n=nn;
 
-    gcsl_neumann_V_int(p,f,gcv,bc,cs);    
+    gcsl_neumann_V_int(p,f,gcv,bc,cs);
 }

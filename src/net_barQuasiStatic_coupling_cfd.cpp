@@ -32,7 +32,7 @@ void net_barQuasiStatic::coupling_dlm_cfd(lexer *p, fdm *a, ghostcell *pgc)
     
     //- Save Lagrangian coordinates and forces
      
-    double xc,yc,zc,x0,x1,x2,y0,y1,y2,z0,z1,z2,nx,ny,nz,mag,area; 
+    double xc,yc,zc,x0,x1,x2,y0,y1,y2,z0,z1,z2,nx,ny,nz,mag,area;
    
     lagrangePoints.resize(tend);
     lagrangeForces.resize(tend);
@@ -56,7 +56,7 @@ void net_barQuasiStatic::coupling_dlm_cfd(lexer *p, fdm *a, ghostcell *pgc)
         
         z0 = tri_z[i][0];
         z1 = tri_z[i][1];
-        z2 = tri_z[i][2];  
+        z2 = tri_z[i][2];
         
         xc = (x0 + x1 + x2)/3.0;
         yc = (y0 + y1 + y2)/3.0;
@@ -77,7 +77,7 @@ void net_barQuasiStatic::coupling_dlm_cfd(lexer *p, fdm *a, ghostcell *pgc)
 
         const Eigen::Vector3d& coordI = lagrangePoints[i];
         
-        if 
+        if
         (
             coordI(0) >= xstart[p->mpirank] && coordI(0) < xend[p->mpirank] &&
             coordI(1) >= ystart[p->mpirank] && coordI(1) < yend[p->mpirank] &&
@@ -86,7 +86,7 @@ void net_barQuasiStatic::coupling_dlm_cfd(lexer *p, fdm *a, ghostcell *pgc)
         {
             // Calculate relative velocity at screen
             
-            velI << 
+            velI <<
                 p->ccipol1_a(a->u,coordI(0),coordI(1),coordI(2)) + 1e-10,
                 p->ccipol2_a(a->v,coordI(0),coordI(1),coordI(2)) + 1e-10,
                 p->ccipol3_a(a->w,coordI(0),coordI(1),coordI(2)) + 1e-10;
@@ -106,7 +106,7 @@ void net_barQuasiStatic::coupling_dlm_cfd(lexer *p, fdm *a, ghostcell *pgc)
             
             // Angle between velocity and normal vector
             
-            double thetan = acos(n_d.dot(n_s));     
+            double thetan = acos(n_d.dot(n_s));
 
 
             // Normal vector of lift force
@@ -125,12 +125,12 @@ void net_barQuasiStatic::coupling_dlm_cfd(lexer *p, fdm *a, ghostcell *pgc)
 
             while (error > 1e-3 && nIt < 10)
             {
-                error = v_mag_corr;    
+                error = v_mag_corr;
                 
                 screenForceCoeff(p,cd,cl,v_mag_corr,thetan,p->X321_Sn[nNet]);
                 
                 // Froude momentum theory
-                v_mag_corr = v_mag*cd/(2.0*(sqrt(1.0 + cd) - 1.0)); 
+                v_mag_corr = v_mag*cd/(2.0*(sqrt(1.0 + cd) - 1.0));
 
                 error = fabs(v_mag_corr - error);
                 
@@ -141,18 +141,18 @@ void net_barQuasiStatic::coupling_dlm_cfd(lexer *p, fdm *a, ghostcell *pgc)
             {
                 v_mag_corr = v_mag;
                 screenForceCoeff(p,cd,cl,v_mag_corr,thetan,p->X321_Sn[nNet]);
-            }            
+            }
             
 
             // Save directional forces at lagrangian points (w/o density since multiplied later), w/o area now
 
-            lagrangeForces[i] = 0.5*area*pow(v_mag_corr,2.0)*(cd*n_d + cl*n_l);            
+            lagrangeForces[i] = 0.5*area*pow(v_mag_corr,2.0)*(cd*n_d + cl*n_l);
         }
         else
         {
-            lagrangeForces[i] << 0.0, 0.0, 0.0;   
+            lagrangeForces[i] << 0.0, 0.0, 0.0;
         }
-    }    
+    }
 
     for (int pI = 0; pI < tend; pI++)
     {
@@ -196,15 +196,15 @@ void net_barQuasiStatic::triangulation(lexer *p, ghostcell *pgc)
         // Tri 2
         tri_x[index][0] = K_[meshID[i][1]][0];
         tri_x[index][1] = K_[meshID[i][3]][0];
-        tri_x[index][2] = K_[meshID[i][2]][0];      
+        tri_x[index][2] = K_[meshID[i][2]][0];
        
         tri_y[index][0] = K_[meshID[i][1]][1];
         tri_y[index][1] = K_[meshID[i][3]][1];
-        tri_y[index][2] = K_[meshID[i][2]][1]; 
+        tri_y[index][2] = K_[meshID[i][2]][1];
 
         tri_z[index][0] = K_[meshID[i][1]][2];
         tri_z[index][1] = K_[meshID[i][3]][2];
-        tri_z[index][2] = K_[meshID[i][2]][2];  
+        tri_z[index][2] = K_[meshID[i][2]][2];
 
         index++;
     }
@@ -216,11 +216,11 @@ void net_barQuasiStatic::triangulation(lexer *p, ghostcell *pgc)
 
     double x01,x02,x12,y01,y02,y12,z01,z02,z12,mag;
     double at,bt,ct,st;
-    double nx,ny,nz;    
+    double nx,ny,nz;
   
     tri_x.reserve(tend*4);
     tri_y.reserve(tend*4);
-    tri_z.reserve(tend*4); 
+    tri_z.reserve(tend*4);
 
 
     for (int n = 0; n < tend; n++)
@@ -235,11 +235,11 @@ void net_barQuasiStatic::triangulation(lexer *p, ghostcell *pgc)
         
         double z0 = tri_z[n][0];
         double z1 = tri_z[n][1];
-        double z2 = tri_z[n][2];  
+        double z2 = tri_z[n][2];
            
         at = sqrt(pow(x1 - x0, 2.0) + pow(y1 - y0, 2.0) + pow(z1 - z0, 2.0));
         bt = sqrt(pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0) + pow(z1 - z2, 2.0));
-        ct = sqrt(pow(x2 - x0, 2.0) + pow(y2 - y0, 2.0) + pow(z2 - z0, 2.0));   
+        ct = sqrt(pow(x2 - x0, 2.0) + pow(y2 - y0, 2.0) + pow(z2 - z0, 2.0));
            
 
         // Check size of triangle and split into 4 triangles if too big
@@ -254,25 +254,25 @@ void net_barQuasiStatic::triangulation(lexer *p, ghostcell *pgc)
 
             x02 = x0 + (x2 - x0)/2.0;
             y02 = y0 + (y2 - y0)/2.0;
-            z02 = z0 + (z2 - z0)/2.0;            
+            z02 = z0 + (z2 - z0)/2.0;
 
             x12 = x1 + (x2 - x1)/2.0;
             y12 = y1 + (y2 - y1)/2.0;
             z12 = z1 + (z2 - z1)/2.0;
             
             
-            // Old normal vector    
+            // Old normal vector
                 
             nx = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
-            ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0); 
+            ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
             nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
             
             
             // Delete old triangles
         
-            tri_x.erase(tri_x.begin() + n); 
-            tri_y.erase(tri_y.begin() + n); 
-            tri_z.erase(tri_z.begin() + n); 
+            tri_x.erase(tri_x.begin() + n);
+            tri_y.erase(tri_y.begin() + n);
+            tri_z.erase(tri_z.begin() + n);
             n--;
             
 
@@ -286,13 +286,13 @@ void net_barQuasiStatic::triangulation(lexer *p, ghostcell *pgc)
 
         if (tri_x.size() > 5000) break;
         
-        tend = tri_x.size(); 
+        tend = tri_x.size();
     }
 }
 
 void net_barQuasiStatic::create_triangle
 (
-    MatrixVd& tri_x_, MatrixVd& tri_y_, MatrixVd& tri_z_, 
+    MatrixVd& tri_x_, MatrixVd& tri_y_, MatrixVd& tri_z_,
     const double& x0, const double& y0, const double& z0,
     const double& x1, const double& y1, const double& z1,
     const double& x2, const double& y2, const double& z2,
@@ -303,25 +303,25 @@ void net_barQuasiStatic::create_triangle
 
     vector<double> tri_x_new(3,0.0);
     vector<double> tri_y_new(3,0.0);
-    vector<double> tri_z_new(3,0.0); 
+    vector<double> tri_z_new(3,0.0);
 
     // Calculate new normal vector
     
     nx = (y1 - y0) * (z2 - z0) - (y2 - y0) * (z1 - z0);
-    ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0); 
-    nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);        
+    ny = (x2 - x0) * (z1 - z0) - (x1 - x0) * (z2 - z0);
+    nz = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
 
     nx = nx > 1.0e-5 ? nx : nx_old;
     ny = ny > 1.0e-5 ? ny : ny_old;
-    nz = nz > 1.0e-5 ? nz : nz_old;    
+    nz = nz > 1.0e-5 ? nz : nz_old;
     
     
     // Arrange triangle such that normal vector points outward
     
-    if 
+    if
     (
-           SIGN(nx)!=SIGN(nx_old) 
-        || SIGN(ny)!=SIGN(ny_old) 
+           SIGN(nx)!=SIGN(nx_old)
+        || SIGN(ny)!=SIGN(ny_old)
         || SIGN(nz)!=SIGN(nz_old)
     )
     {
@@ -335,10 +335,10 @@ void net_barQuasiStatic::create_triangle
 
         tri_z_new[0] = z2;
         tri_z_new[1] = z1;
-        tri_z_new[2] = z0;                
+        tri_z_new[2] = z0;
     }
     else
-    {    
+    {
         tri_x_new[0] = x0;
         tri_x_new[1] = x1;
         tri_x_new[2] = x2;
@@ -349,7 +349,7 @@ void net_barQuasiStatic::create_triangle
 
         tri_z_new[0] = z0;
         tri_z_new[1] = z1;
-        tri_z_new[2] = z2;    
+        tri_z_new[2] = z2;
     }
     
     

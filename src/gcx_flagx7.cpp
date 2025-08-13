@@ -37,11 +37,11 @@ void ghostcell::flagx7(lexer* p,int *f)
     k=p->gcx7[0][q][2];
         
 
-        isend1[count] = f[FIJK];  
+        isend1[count] = f[FIJK];
         ++count;
-        isend1[count] = f[FIp1JK];  
+        isend1[count] = f[FIp1JK];
         ++count;
-        isend1[count] = f[FIp2JK];  
+        isend1[count] = f[FIp2JK];
         ++count;
 
     }
@@ -53,11 +53,11 @@ void ghostcell::flagx7(lexer* p,int *f)
     j=p->gcx7[2][q][1];
     k=p->gcx7[2][q][2];
         
-        isend3[count] = f[FIJK];  
+        isend3[count] = f[FIJK];
         ++count;
-        isend3[count] = f[FIJp1K];  
+        isend3[count] = f[FIJp1K];
         ++count;
-        isend3[count] = f[FIJp2K];  
+        isend3[count] = f[FIJp2K];
         ++count;
     }
 
@@ -68,11 +68,11 @@ void ghostcell::flagx7(lexer* p,int *f)
     j=p->gcx7[3][q][1];
     k=p->gcx7[3][q][2];
         
-        isend4[count] = f[FIJK];  
+        isend4[count] = f[FIJK];
         ++count;
-        isend4[count] = f[FIm1JK];  
+        isend4[count] = f[FIm1JK];
         ++count;
-        isend4[count] = f[FIm2JK];  
+        isend4[count] = f[FIm2JK];
         ++count;
     }
 
@@ -83,11 +83,11 @@ void ghostcell::flagx7(lexer* p,int *f)
     j=p->gcx7[1][q][1];
     k=p->gcx7[1][q][2];
         
-        isend2[count] = f[FIJK];  
+        isend2[count] = f[FIJK];
         ++count;
-        isend2[count] = f[FIJm1K];  
+        isend2[count] = f[FIJm1K];
         ++count;
-        isend2[count] = f[FIJm2K];  
+        isend2[count] = f[FIJm2K];
         ++count;
     }
 

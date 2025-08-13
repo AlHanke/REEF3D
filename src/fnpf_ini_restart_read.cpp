@@ -61,13 +61,13 @@ void fnpf_ini::fnpf_restart_read(lexer *p, fdm_fnpf *c, ghostcell *pgc)
     {
     result.read((char*)&ffn, sizeof (float));
     c->eta(i,j)=double(ffn);
-    } 
+    }
     
     SLICELOOP4
     {
     result.read((char*)&ffn, sizeof (float));
     c->Fifsf(i,j)=double(ffn);
-    } 
+    }
     
     FLOOP
     result.read((char*)&ffn, sizeof (float));

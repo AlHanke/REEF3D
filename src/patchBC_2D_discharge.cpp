@@ -109,10 +109,10 @@ void patchBC_2D::patchBC_discharge2D(lexer *p, fdm2D* b, ghostcell *pgc, slice &
             Hi=pgc->globalsum(hval);
             hcount=pgc->globalisum(hcount);
             
-            Hi = Hi/(hcount>1.0e-20?hcount:1.0e20); 
+            Hi = Hi/(hcount>1.0e-20?hcount:1.0e20);
     
-            patch[qq]->Uq = patch[qq]->Q/(Ai>1.0e-20?Ai:1.0e20); 
-            Ui = Qi/(Ai>1.0e-20?Ai:1.0e20); 
+            patch[qq]->Uq = patch[qq]->Q/(Ai>1.0e-20?Ai:1.0e20);
+            Ui = Qi/(Ai>1.0e-20?Ai:1.0e20);
             
 
         if(p->mpirank==0)
