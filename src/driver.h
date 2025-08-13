@@ -184,7 +184,7 @@ public:
 	benchmark* pbench;
 	fsi* pfsi;
 	vrans* pvrans;
-	data *pdata;
+	::data *pdata;
 	concentration *pconc;
     fnpf *ppfsg;
     ptf *pptf;
