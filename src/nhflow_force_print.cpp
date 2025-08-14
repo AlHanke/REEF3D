@@ -30,8 +30,8 @@ Author: Hans Bihs
 void nhflow_force::print_force(lexer* p, fdm_nhf *d, ghostcell *pgc)
 {
     // write to surf file
-    fout<<p->count<<"\t";
-    fout<<setprecision(9)<<p->simtime<<"\t";
+    fout<<p->count<<" \t ";
+    fout<<setprecision(9)<<p->simtime<<" \t ";
     fout<<Fx<<" \t ";
     fout<<Fy<<" \t ";
     fout<<Fz;

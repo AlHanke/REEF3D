@@ -97,7 +97,7 @@ void print_1Dline::height_gauge(lexer *p, fdm *a, ghostcell *pgc)
     // write to file
     if(p->mpirank==0)
     {
-    wsfout<<p->simtime<<"\t";
+    wsfout<<p->simtime<<" \t ";
     for(n=0;n<p->P51;++n)
     wsfout<<wsf[n]<<" \t ";
     wsfout<<endl;

@@ -75,7 +75,7 @@ void fnpf_print_wsf_theory::height_gauge(lexer *p, fdm_fnpf *c, ghostcell *pgc, 
     // write to file
     if(p->mpirank==0)
     {
-    wsfout<<setprecision(9)<<p->simtime<<"\t";
+    wsfout<<setprecision(9)<<p->simtime<<" \t ";
     for(n=0;n<gauge_num;++n)
     wsfout<<setprecision(9)<<pflow->wave_fsf(p,pgc,x[n])-p->wd<<" \t ";
     wsfout<<endl;

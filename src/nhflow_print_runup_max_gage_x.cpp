@@ -150,7 +150,7 @@ void nhflow_print_runup_max_gage_x::start(lexer *p, fdm_nhf *d, ghostcell *pgc, 
     // write to file
     if(p->mpirank==0)
     {
-    wsfout<<setprecision(9)<<T<<"\t";
+    wsfout<<setprecision(9)<<T<<" \t ";
     for(q=0;q<p->P134;++q)
     wsfout<<setprecision(9)<<xloc[q]<<" \t "<<zloc[q];
     wsfout<<endl;

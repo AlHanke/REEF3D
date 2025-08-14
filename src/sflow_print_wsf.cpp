@@ -100,10 +100,10 @@ void sflow_print_wsf::height_gauge(lexer *p, fdm2D *b, ghostcell *pgc, slice &f)
     // write to file
     if(p->mpirank==0)
     {
-    wsfout<<setprecision(9)<<p->simtime<<"\t";
+    wsfout<<setprecision(9)<<p->simtime<<" \t ";
     for(n=0;n<gauge_num;++n)
     {
-        wsfout<<setprecision(9)<<wsf[n]<<"\t";
+        wsfout<<setprecision(9)<<wsf[n]<<" \t ";
         // flush print to disc limited to prevent data loss for many gauges
         if(n%fileFlushMaxCount==0&&n!=0)
             wsfout<<std::flush;

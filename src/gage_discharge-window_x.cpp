@@ -137,7 +137,7 @@ void gage_discharge_window_x::start(lexer *p, fdm *a, ghostcell *pgc)
     // write to file
     if(p->mpirank==0)
     {
-    qout<<setprecision(9)<<p->count<<"\t";
+    qout<<setprecision(9)<<p->count<<" \t ";
     for(n=0;n<p->P168;++n)
     qout<<setprecision(6)<<q[n]<<" \t ";
     qout<<endl;
