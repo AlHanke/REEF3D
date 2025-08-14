@@ -366,5 +366,3 @@ void sflow_vtp_bed::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     ++printbedcount;
 
 }
-
-

@@ -1031,4 +1031,3 @@ void ghostcell::start7S(lexer *p, double *f, int gcv)
     p->xtime+=timer()-starttime;
     }
 }
-

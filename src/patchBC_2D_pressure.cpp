@@ -132,4 +132,3 @@ void patchBC_2D::patchBC_pressure(lexer *p, fdm *a, ghostcell *pgc, field &press
 
     
 }
-

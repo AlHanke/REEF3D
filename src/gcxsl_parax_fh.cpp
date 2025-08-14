@@ -167,4 +167,3 @@ void ghostcell::gcslparax_fh(lexer* p,slice& f,int gcv)
         }
     }
 }
-

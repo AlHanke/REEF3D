@@ -130,4 +130,3 @@ void ghostcell::gc_periodic(lexer *p, field& f, int gcv, int cs)
     f(i,j,k+3) = val3;
     }
 }
-

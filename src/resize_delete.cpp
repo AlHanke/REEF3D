@@ -226,4 +226,3 @@ void resize_class::del_cvec(char ***&field,int numi, int numj, int numk)
     if(numi>0)
     delete [ ] field;
 }
-

@@ -243,5 +243,3 @@ void ghostcell::gcparax4a(lexer* p,field& f,int gcv)
     }
 
 }
-
-

@@ -118,7 +118,3 @@ void ghostcell::nse4(lexer *p, fdm *a, field &f, int gcv)
 
     }
 }
-
-
-
-

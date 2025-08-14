@@ -114,5 +114,3 @@ void directreini::startV(fdm* a,lexer* p,vec &f, ghostcell* pgc,ioflow* pflow)
 {
 
 }
-
-

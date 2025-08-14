@@ -88,5 +88,3 @@ void nhflow_force::piecename(lexer* p, fdm_nhf *d,  ghostcell* pgc, int n)
 
     sprintf(pname,"REEF3D-NHFLOW-SOLID-%i-%08i-%06i.vtp",ID,num,n+1);
 }
-
-

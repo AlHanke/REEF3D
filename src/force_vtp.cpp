@@ -206,10 +206,3 @@ void force::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
 
     result.close();
 }
-
-
-
-
-
-
-

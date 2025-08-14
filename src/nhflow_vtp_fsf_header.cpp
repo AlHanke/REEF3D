@@ -40,4 +40,3 @@ void nhflow_vtp_fsf::name_iter(lexer *p, fdm_nhf *d, ghostcell* pgc)
     sprintf(name,"./REEF3D_NHFLOW_VTP_FSF/REEF3D-NHFLOW-FSF-%08i-%06i.vtp",num,p->mpirank+1);
 
 }
-

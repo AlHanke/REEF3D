@@ -63,5 +63,3 @@ void part::xchange_resize(lexer *p, ghostcell *pgc)
     index_empty0 = index_empty;
     }
 }
-
-

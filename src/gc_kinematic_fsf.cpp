@@ -42,4 +42,3 @@ void ghostcell::kinematic_fsf(lexer *p,field& f,double dist,int gcv, int bc, int
     
     cout<<"KINEMATIC FSF"<<endl;
 }
-

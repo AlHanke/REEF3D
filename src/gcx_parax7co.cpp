@@ -153,4 +153,3 @@ void ghostcell::gcparax7co(lexer* p,double *f,int gcv)
     }
 
 }
-

@@ -52,4 +52,3 @@ void topo_vtp::start(lexer *p, fdm *a, ghostcell *pgc, sediment *psed)
     print(p,a,pgc,psed);
     ++topoprintcount;
 }
-

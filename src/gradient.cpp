@@ -32,4 +32,3 @@ gradient::~gradient()
 {
 
 }
-

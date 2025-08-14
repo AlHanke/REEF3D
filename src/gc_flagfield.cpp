@@ -166,4 +166,3 @@ void ghostcell::flagfield_topo(lexer *p)
     }
 
 }
-

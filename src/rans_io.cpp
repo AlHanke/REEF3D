@@ -159,4 +159,3 @@ void rans_io::offset_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
     ++n;
 }
-

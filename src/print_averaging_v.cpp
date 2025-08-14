@@ -64,4 +64,3 @@ void print_averaging_v::print_3D(lexer* p, fdm *a, ghostcell *pgc, ofstream &res
 {
 
 }
-

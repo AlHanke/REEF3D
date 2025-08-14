@@ -138,4 +138,3 @@ void nhflow_fsf_f::rk2_step2(lexer* p, fdm_nhf* d, ghostcell* pgc, ioflow* pflow
 
     wetdry(p,d,pgc,U,V,W,d->WL);
 }
-

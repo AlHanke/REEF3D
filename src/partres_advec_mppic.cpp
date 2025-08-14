@@ -115,5 +115,3 @@ void partres::advec_mppic(lexer *p, fdm *a, part &P, sediment_fdm *s, turbulence
     exit(1);
     }
 }
-
-

@@ -150,4 +150,3 @@ void ghostcell::gcxslupdate(lexer* p)
 
 
 }
-

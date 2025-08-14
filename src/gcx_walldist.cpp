@@ -249,5 +249,3 @@ void ghostcell::walldistance(lexer *p, fdm *a, ghostcell *pgc, convection *pdisc
     }*/
 
 }
-
-

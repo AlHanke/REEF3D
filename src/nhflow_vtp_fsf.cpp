@@ -477,5 +477,3 @@ void nhflow_vtp_fsf::preproc(lexer *p, fdm_nhf *d, ghostcell* pgc)
     }
 
 }
-
-

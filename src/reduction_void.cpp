@@ -38,7 +38,3 @@ void reduction_void::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
     SLICELOOP4
     s->reduce(i,j)=1.0;
 }
-
-
-
-

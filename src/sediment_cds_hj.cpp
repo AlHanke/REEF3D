@@ -48,4 +48,3 @@ double sediment_cds_hj::sy(lexer *p, slice &f, double jvel1, double jvel2)
 
     return grad;
 }
-

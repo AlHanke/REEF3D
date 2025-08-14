@@ -174,6 +174,3 @@ void sixdof_obj::print_vtp(lexer *p, ghostcell *pgc)
         ++p->printcount_sixdof;
     }
 }
-
-
-

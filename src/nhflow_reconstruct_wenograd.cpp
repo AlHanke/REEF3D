@@ -214,5 +214,3 @@ double nhflow_reconstruct_wenograd::limiter(double v1, double v2)
 
     return val;
 }
-
-

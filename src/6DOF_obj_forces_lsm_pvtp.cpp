@@ -103,4 +103,3 @@ void sixdof_obj::name_iter(lexer* p,fdm* a,ghostcell* pgc)
 
     sprintf(name,"./REEF3D_CFD_6DOF/REEF3D-FB-%08i-%06i.vtp",num,p->mpirank+1);
 }
-

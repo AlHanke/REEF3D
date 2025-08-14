@@ -146,5 +146,3 @@ void hypre_sstruct_fnpf::make_grid_2Dvert(lexer* p,ghostcell* pgc)
 }
 
 #endif
-
-

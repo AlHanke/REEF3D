@@ -255,4 +255,3 @@ void ghostcell::gcparaxint(lexer* p,fieldint& f,int gcv)
     }
 
 }
-

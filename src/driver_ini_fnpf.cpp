@@ -213,7 +213,3 @@ void driver::driver_ini_fnpf()
      if(p->mpirank==0)
     cout<<"starting mainloop.FNPF"<<endl;
 }
-
-
-
-

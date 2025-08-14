@@ -66,8 +66,3 @@ void sixdof_obj::reini_AB2(lexer* p, fdm* a, ghostcell* pgc, field &f)
     pgc->start4a(p,f,50);
     }
 }
-
-
-
-
-

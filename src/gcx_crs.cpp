@@ -45,6 +45,3 @@ void ghostcell::rangex(lexer* p, int* range, int cellcount)
     p->del_Iarray(colnum, p->M10+1);
 
 }
-
-
-

@@ -366,4 +366,3 @@ void driver::makegrid_sigma_cds(lexer *p, ghostcell *pgc)
     pgc->sizeS_update(p);
     pgc->gcxslupdate(p);
 }
-

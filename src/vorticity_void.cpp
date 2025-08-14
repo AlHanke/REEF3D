@@ -45,5 +45,3 @@ void vorticity_void::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result
 void vorticity_void::offset_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
 }
-
-

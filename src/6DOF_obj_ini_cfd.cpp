@@ -197,4 +197,3 @@ void sixdof_obj::ini_parallel(lexer *p, ghostcell *pgc)
         MPI_Bcast(&zend[i],1,MPI_DOUBLE,i,pgc->mpi_comm);
     }
 }
-

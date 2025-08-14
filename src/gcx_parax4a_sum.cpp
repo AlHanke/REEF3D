@@ -207,5 +207,3 @@ void ghostcell::gcparax4a_sum(lexer* p,field& f,int gcv)
         ++count;
     }
 }
-
-

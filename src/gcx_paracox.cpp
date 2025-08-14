@@ -170,4 +170,3 @@ void ghostcell::gcparacox(lexer* p,field& f,int gcv)
 
     pip=0;
 }
-

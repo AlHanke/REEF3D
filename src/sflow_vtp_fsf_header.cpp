@@ -39,4 +39,3 @@ void sflow_vtp_fsf::name_iter(lexer *p, fdm2D* b, ghostcell* pgc)
 
     sprintf(name,"./REEF3D_SFLOW_VTP_FSF/REEF3D-SFLOW-FSF-%08i-%06i.vtp",num,p->mpirank+1);
 }
-

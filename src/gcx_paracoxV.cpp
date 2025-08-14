@@ -166,4 +166,3 @@ void ghostcell::gcparacoxV(lexer* p, double *f, int gcv)
        f[IJKp1]=recv6[q];
     }
 }
-

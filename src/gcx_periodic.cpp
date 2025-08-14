@@ -312,4 +312,3 @@ void ghostcell::gcperiodicx(lexer* p,field& f,int gcv)
     }*/
 
 }
-

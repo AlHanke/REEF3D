@@ -158,5 +158,3 @@ void multiphase_f::offset_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
     ++n;
 }
-
-

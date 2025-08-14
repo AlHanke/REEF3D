@@ -97,5 +97,3 @@ void momentum_forcing::momentum_forcing_start(fdm* a, lexer* p, ghostcell *pgc, 
 
         p->fbtime+=pgc->timer()-starttime;
 }
-
-

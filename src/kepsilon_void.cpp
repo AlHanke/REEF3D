@@ -148,4 +148,3 @@ void kepsilon_void::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result,
 void kepsilon_void::offset_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
 }
-

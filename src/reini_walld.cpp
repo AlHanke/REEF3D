@@ -208,7 +208,3 @@ void reini_walld::step(fdm* a, lexer *p)
 
 
 }
-
-
-
-

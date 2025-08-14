@@ -113,4 +113,3 @@ void ghostcell::gcslparacox(lexer* p,slice& f,int gcv)
     f(i,j+1)=recv2[q];
     }
 }
-

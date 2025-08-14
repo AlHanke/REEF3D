@@ -331,4 +331,3 @@ void ghostcell::gcparax_test(lexer* p,int gcv)
     }*/
 
 }
-

@@ -172,4 +172,3 @@ void ghostcell::dirichlet_ortho_reflect(lexer *p,field& f,double dist,int gcv, i
     }*/
 
 }
-

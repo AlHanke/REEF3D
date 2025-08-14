@@ -379,5 +379,3 @@ void fnpf_vtp_fsf::print2D(lexer *p, fdm_fnpf *c, ghostcell* pgc)
     ++printcount;
 
 }
-
-

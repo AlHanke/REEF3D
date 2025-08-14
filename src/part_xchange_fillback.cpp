@@ -71,6 +71,3 @@ void part::xchange_fillback_flag(lexer *p, ghostcell *pgc, slice &bedch, int mod
     ++n;
     }
 }
-
-
-

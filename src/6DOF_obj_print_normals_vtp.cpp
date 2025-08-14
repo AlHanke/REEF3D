@@ -206,6 +206,3 @@ void sixdof_obj::print_normals_vtp(lexer *p, ghostcell *pgc)
     }
 
 }
-
-
-

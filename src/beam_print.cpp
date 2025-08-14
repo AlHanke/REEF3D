@@ -124,4 +124,3 @@ void beam::print(lexer *p)
         result.close();
     }
 }
-

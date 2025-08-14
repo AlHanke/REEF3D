@@ -63,4 +63,3 @@ void ghostcell::inflowbc(field& f,double dist,int gcv, int bc, int cs)
     }*/
 
 }
-

@@ -207,4 +207,3 @@ int initialize::conv(double a)
     return b;
 
 }
-

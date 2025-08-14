@@ -91,7 +91,3 @@ void nhflow_bcmom::roughness_w(lexer* p, fdm_nhf *d, double *W, double *H, slice
 {
 
 }
-
-
-
-

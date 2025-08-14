@@ -206,4 +206,3 @@ void sixdof_obj::print_vtp(lexer* p, fdm* a, ghostcell *pgc)
 
     result.close();
 }
-

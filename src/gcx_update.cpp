@@ -374,4 +374,3 @@ void ghostcell::gcxupdate(lexer* p)
         p->gcpara6[n][8]=1;
     }
 }
-

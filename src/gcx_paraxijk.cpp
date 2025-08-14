@@ -258,4 +258,3 @@ void ghostcell::gcparaxijk(lexer* p, double *f, int gcv)
     endtime=timer();
     p->xtime+=endtime-starttime;
 }
-

@@ -141,5 +141,3 @@ void levelset_AB2::update(lexer *p, fdm *a, ghostcell *pgc, field &f)
 {
     pupdate->start(p,a,pgc);
 }
-
-

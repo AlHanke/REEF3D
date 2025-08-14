@@ -115,7 +115,3 @@ void partres::cellSum_full_update(lexer *p, ghostcell *pgc, sediment_fdm *s, int
 
     pgc->start4a_sum(p,cellSum,1);
 }
-
-
-
-

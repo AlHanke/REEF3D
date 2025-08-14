@@ -129,5 +129,3 @@ part::~part()
     delete[] Flag;
     Flag=nullptr;
 }
-
-

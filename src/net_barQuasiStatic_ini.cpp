@@ -77,4 +77,3 @@ void net_barQuasiStatic::initialize_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     //- Update porous zone
     coupling_dlm_nhflow(p,d,pgc);
 }
-

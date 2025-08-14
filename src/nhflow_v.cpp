@@ -38,6 +38,3 @@ void nhflow_v::ini(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow)
 {
 
 }
-
-
-

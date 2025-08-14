@@ -73,4 +73,3 @@ void part::xchange_count(lexer *p, ghostcell *pgc, int mode)
         ++sendnum[5];
     }
 }
-

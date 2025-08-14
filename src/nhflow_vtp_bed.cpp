@@ -295,5 +295,3 @@ void nhflow_vtp_bed::print2D(lexer *p, fdm_nhf *d, ghostcell* pgc, sediment *pse
     ++printcount;
 
 }
-
-

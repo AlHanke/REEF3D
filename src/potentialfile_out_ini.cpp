@@ -76,4 +76,3 @@ void potentialfile_out::ini_location(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
 
 }
-

@@ -267,4 +267,3 @@ void ghostcell::start4a_sum(lexer *p, field& f, int gcv)
     if(p->M10>0)
     gcparacox(p,f,gcv);
 }
-

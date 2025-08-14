@@ -133,6 +133,3 @@ void nhflow_forcing::print_vtp(lexer *p, ghostcell *pgc)
 
     result.close();
 }
-
-
-

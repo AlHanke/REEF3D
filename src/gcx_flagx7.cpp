@@ -189,4 +189,3 @@ void ghostcell::flagx7(lexer* p,int *f)
     }
 
 }
-

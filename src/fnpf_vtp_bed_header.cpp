@@ -41,4 +41,3 @@ void fnpf_vtp_bed::name_iter(lexer *p, fdm_fnpf *c, ghostcell* pgc)
 
 
 }
-

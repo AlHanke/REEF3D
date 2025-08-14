@@ -114,5 +114,3 @@ void reinitopo_AB2::time_preproc(lexer* p)
     ++n;
     }
 }
-
-

@@ -123,4 +123,3 @@ void sixdof_obj::ini_parameter_stl(lexer *p, fdm *a, ghostcell *pgc)
 
     
 }
-

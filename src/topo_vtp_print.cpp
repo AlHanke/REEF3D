@@ -232,10 +232,3 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
 
     result.close();
 }
-
-
-
-
-
-
-

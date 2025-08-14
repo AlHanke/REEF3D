@@ -214,10 +214,3 @@ void fsf_vtp::print(lexer* p, fdm* a, ghostcell *pgc)
 
     result.close();
 }
-
-
-
-
-
-
-

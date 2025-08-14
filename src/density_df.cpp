@@ -61,7 +61,3 @@ double density_df::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 
     return roval;
 }
-
-
-
-

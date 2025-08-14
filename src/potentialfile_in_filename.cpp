@@ -36,5 +36,3 @@ void potentialfile_in::filename(lexer *p, fdm *a, ghostcell *pgc, char *name, in
         }
 
 }
-
-

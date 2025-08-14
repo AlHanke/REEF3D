@@ -136,10 +136,3 @@ void directreini::vtp(lexer* p, fdm* a, ghostcell *pgc)
 
     result.close();
 }
-
-
-
-
-
-
-

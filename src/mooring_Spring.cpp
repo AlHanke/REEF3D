@@ -137,5 +137,3 @@ void mooring_Spring::mooringForces
         broken = true;
     }
 }
-
-

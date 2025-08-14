@@ -219,4 +219,3 @@ void nhflow_rans_io::offset_vtu(lexer *p, fdm_nhf *d, ghostcell *pgc, ofstream &
     offset[n]=offset[n-1]+4*(p->pointnum)+4;
     ++n;
 }
-

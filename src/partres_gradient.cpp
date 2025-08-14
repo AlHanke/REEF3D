@@ -53,4 +53,3 @@ void partres::pressure_gradient(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *
     pgc->start4a(p,dPy,1);
     pgc->start4a(p,dPz,1);
 }
-

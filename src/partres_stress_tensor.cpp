@@ -43,4 +43,3 @@ void partres::stress_tensor(lexer *p, ghostcell *pgc, sediment_fdm *s)
     pgc->start4a(p,Tau,1);
     pgc->start4a(p,Ts,1);
 }
-

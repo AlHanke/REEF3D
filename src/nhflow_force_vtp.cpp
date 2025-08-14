@@ -208,10 +208,3 @@ void nhflow_force::print_vtp(lexer* p, fdm_nhf *d, ghostcell *pgc)
 
     ++forceprintcount;
 }
-
-
-
-
-
-
-

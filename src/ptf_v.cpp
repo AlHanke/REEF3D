@@ -43,4 +43,3 @@ void ptf_void::inidisc(lexer *p, fdm *a, ghostcell *pgc)
 {
 
 }
-

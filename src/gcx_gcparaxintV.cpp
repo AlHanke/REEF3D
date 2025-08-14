@@ -291,4 +291,3 @@ void ghostcell::gcparaxintV(lexer* p, int *f,int gcv)
     }
 
 }
-
