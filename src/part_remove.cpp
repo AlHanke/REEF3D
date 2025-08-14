@@ -34,5 +34,4 @@ void part::remove(int n)
 
 void part::erase_all()
 {
-
 }

@@ -49,10 +49,8 @@ void vtu3D::name_iter(fdm* a,lexer* p,ghostcell* pgc)
 
 void vtu3D::name_time(fdm* a,lexer* p,ghostcell* pgc)
 {
-
 }
 
 void vtu3D::header(fdm* a,lexer* p,ghostcell* pgc)
 {
-
 }

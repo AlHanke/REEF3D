@@ -50,5 +50,4 @@ partres::partres(lexer *p, ghostcell *pgc) : P(p,pgc), bedch(p), Tau(p), Ts(p), 
 
 partres::~partres()
 {
-
 }

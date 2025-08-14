@@ -86,12 +86,10 @@ void komega_IM1::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff,s
 
 void komega_IM1::ktimesave(lexer *p, fdm* a, ghostcell *pgc)
 {
-
 }
 
 void komega_IM1::etimesave(lexer *p, fdm* a, ghostcell *pgc)
 {
-
 }
 
 void komega_IM1::timesource(lexer* p, fdm* a, field& fn)
