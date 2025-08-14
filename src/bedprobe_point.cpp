@@ -105,7 +105,7 @@ void bedprobe_point::bed_gauge(lexer *p, ghostcell *pgc, sediment_fdm *s)
     {
     wsfout<<p->sedtime<<"\t ";
     for(n=0;n<p->P121;++n)
-    wsfout<<wsf[n]<<"  \t  ";
+    wsfout<<wsf[n]<<" \t ";
     wsfout<<endl;
     }
 }

@@ -201,7 +201,7 @@ void bedprobe_line_x::start(lexer *p, ghostcell *pgc, sediment_fdm *s, ioflow *p
                 if(flag_all[q][n]>0 && xloc_all[q][n]<1.0e20)
                 {
                 wsfout<<setprecision(5)<<xloc_all[q][n]<<" \t ";
-                wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
+                wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t ";
 
                 
 

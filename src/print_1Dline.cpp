@@ -99,7 +99,7 @@ void print_1Dline::height_gauge(lexer *p, fdm *a, ghostcell *pgc)
     {
     wsfout<<p->simtime<<"\t";
     for(n=0;n<p->P51;++n)
-    wsfout<<wsf[n]<<"  \t  ";
+    wsfout<<wsf[n]<<" \t ";
     wsfout<<endl;
     }
 }

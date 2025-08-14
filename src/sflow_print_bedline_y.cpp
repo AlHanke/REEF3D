@@ -180,7 +180,7 @@ void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pf
                 if(flag_all[q][n]>0 && yloc_all[q][n]<1.0e20)
                 {
                 wsfout<<setprecision(5)<<yloc_all[q][n]<<" \t ";
-                wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
+                wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t ";
 
                 
                 check=1;

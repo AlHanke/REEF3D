@@ -80,7 +80,7 @@ void print_wsf_theory::height_gauge(lexer *p, fdm *a, ghostcell *pgc, ioflow *pf
     {
     wsfout<<setprecision(9)<<p->simtime<<"\t";
     for(n=0;n<gauge_num;++n)
-    wsfout<<setprecision(9)<<pflow->wave_fsf(p,pgc,x[n])<<"  \t  ";
+    wsfout<<setprecision(9)<<pflow->wave_fsf(p,pgc,x[n])<<" \t ";
     wsfout<<endl;
     }
 }

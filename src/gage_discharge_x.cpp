@@ -138,7 +138,7 @@ void gage_discharge_x::start(lexer *p, fdm *a, ghostcell *pgc)
     {
     qout<<setprecision(9)<<p->count<<"\t";
     for(n=0;n<p->P167;++n)
-    qout<<setprecision(6)<<q[n]<<"  \t  ";
+    qout<<setprecision(6)<<q[n]<<" \t ";
     qout<<endl;
     }
 }

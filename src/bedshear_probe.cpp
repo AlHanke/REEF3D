@@ -104,7 +104,7 @@ void bedshear_probe::bedshear_gauge(lexer *p, ghostcell *pgc, sediment *psed)
     {
         bsgout<<p->sedtime<<"\t ";
         for(n=0;n<p->P125;++n)
-            bsgout<<bsg[n]<<"  \t  ";
+            bsgout<<bsg[n]<<" \t ";
         bsgout<<endl;
     }
 }

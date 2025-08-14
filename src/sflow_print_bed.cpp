@@ -102,7 +102,7 @@ void sflow_print_bed::height_gauge(lexer *p, fdm2D *b, ghostcell *pgc, slice &f)
     {
     bedout<<setprecision(9)<<p->simtime<<"\t";
     for(n=0;n<gauge_num;++n)
-    bedout<<setprecision(9)<<bed[n]<<"  \t  ";
+    bedout<<setprecision(9)<<bed[n]<<" \t ";
     bedout<<endl;
     }
 }
