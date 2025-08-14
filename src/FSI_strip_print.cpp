@@ -71,23 +71,7 @@ void fsi_strip::print_stl(lexer *p, fdm *a, ghostcell *pgc)
         
         char path[300];
         
-        if(num<10)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-%i-00000%i.stl",nstrip,num);
-
-        if(num<100&&num>9)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-%i-0000%i.stl",nstrip,num);
-
-        if(num<1000&&num>99)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-%i-000%i.stl",nstrip,num);
-
-        if(num<10000&&num>999)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-%i-00%i.stl",nstrip,num);
-
-        if(num<100000&&num>9999)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-%i-0%i.stl",nstrip,num);
-
-        if(num>99999)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-%i-%i.stl",nstrip,num);
+        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-%i-%0*i.stl",nstrip,p->padding_time,num);
 
         build_strip();
 
@@ -112,23 +96,7 @@ void fsi_strip::print_stl(lexer *p, fdm *a, ghostcell *pgc)
         result<<"endsolid"<<endl;
         result.close();
 
-        if(num<10)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-Lagrange-%i-00000%i.csv",nstrip,num);
-
-        if(num<100&&num>9)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-Lagrange-%i-0000%i.csv",nstrip,num);
-
-        if(num<1000&&num>99)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-Lagrange-%i-000%i.csv",nstrip,num);
-
-        if(num<10000&&num>999)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-Lagrange-%i-00%i.csv",nstrip,num);
-
-        if(num<100000&&num>9999)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-Lagrange-%i-0%i.csv",nstrip,num);
-
-        if(num>99999)
-        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-Lagrange-%i-%i.csv",nstrip,num);
+        sprintf(path,"./REEF3D_CFD_Beam_STL/REEF3D-Beam-Lagrange-%i-%0*i.csv",nstrip,p->padding_time,num);
         
         result.open(path, ios::binary);
 
