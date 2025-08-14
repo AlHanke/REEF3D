@@ -56,7 +56,7 @@ probe_point::probe_point(lexer *p, fdm* a, ghostcell *pgc) : probenum(p->P61)
         pout[n]<<"Point Probe ID:  "<<n<<endl<<endl;
         pout[n]<<"x_coord     y_coord     z_coord"<<endl;
 
-        pout[n]<<n+1<<"\t "<<p->P61_x[n]<<"\t "<<p->P61_y[n]<<"\t "<<p->P61_z[n]<<endl;
+        pout[n]<<n+1<<" \t "<<p->P61_x[n]<<" \t "<<p->P61_y[n]<<" \t "<<p->P61_z[n]<<endl;
 
         pout[n]<<endl<<endl;
 

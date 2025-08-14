@@ -59,7 +59,7 @@ nhflow_print_runup_gage_x::nhflow_print_runup_gage_x(lexer *p, fdm_nhf *d, ghost
         wsfout<<"number of runup-probes:  "<<p->P133<<endl<<endl;
         wsfout<<"line_No     y_coord"<<endl;
         for(q=0;q<p->P133;++q)
-        wsfout<<q+1<<"\t "<<p->P133_y[q]<<endl;
+        wsfout<<q+1<<" \t "<<p->P133_y[q]<<endl;
 
 
         wsfout<<endl<<endl;

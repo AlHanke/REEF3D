@@ -47,7 +47,7 @@ fnpf_print_wsf::fnpf_print_wsf(lexer *p, fdm_fnpf *c) : fileFlushMaxCount(100)
     wsfout<<"number of gauges:  "<<gauge_num<<endl<<endl;
     wsfout<<"x_coord     y_coord"<<endl;
     for(n=0;n<gauge_num;++n)
-    wsfout<<n+1<<"\t "<<x[n]<<"\t "<<y[n]<<endl;
+    wsfout<<n+1<<" \t "<<x[n]<<" \t "<<y[n]<<endl;
 
     wsfout<<endl<<endl;
 
@@ -66,7 +66,7 @@ fnpf_print_wsf::fnpf_print_wsf(lexer *p, fdm_fnpf *c) : fileFlushMaxCount(100)
         detaout<<"number of rise velocity gauges:  "<<gauge_num<<endl<<endl;
         detaout<<"x_coord     y_coord"<<endl;
         for(n=0;n<gauge_num;++n)
-        detaout<<n+1<<"\t "<<x[n]<<"\t "<<y[n]<<endl;
+        detaout<<n+1<<" \t "<<x[n]<<" \t "<<y[n]<<endl;
 
         detaout<<endl<<endl;
 
@@ -85,7 +85,7 @@ fnpf_print_wsf::fnpf_print_wsf(lexer *p, fdm_fnpf *c) : fileFlushMaxCount(100)
         Uhorzout<<"number of horizontal fsf velocity gauges:  "<<gauge_num<<endl<<endl;
         Uhorzout<<"x_coord     y_coord"<<endl;
         for(n=0;n<gauge_num;++n)
-        Uhorzout<<n+1<<"\t "<<x[n]<<"\t "<<y[n]<<endl;
+        Uhorzout<<n+1<<" \t "<<x[n]<<" \t "<<y[n]<<endl;
 
         Uhorzout<<endl<<endl;
 

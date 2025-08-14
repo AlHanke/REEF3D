@@ -61,7 +61,7 @@ bedshear_probe::bedshear_probe(lexer *p, ghostcell *pgc)
     bsgout<<"number of gauges:  "<<p->P125<<endl<<endl;
     bsgout<<"x_coord     y_coord"<<endl;
     for(n=0;n<p->P125;++n)
-            bsgout<<n+1<<"\t "<<p->P125_x[n]<<"\t "<<p->P125_y[n]<<endl;
+            bsgout<<n+1<<" \t "<<p->P125_x[n]<<" \t "<<p->P125_y[n]<<endl;
 
     bsgout<<endl<<endl;
 
@@ -102,7 +102,7 @@ void bedshear_probe::bedshear_gauge(lexer *p, ghostcell *pgc, sediment *psed)
     // write to file
     if(p->mpirank==0)
     {
-        bsgout<<p->sedtime<<"\t ";
+        bsgout<<p->sedtime<<" \t ";
         for(n=0;n<p->P125;++n)
             bsgout<<bsg[n]<<" \t ";
         bsgout<<endl;

@@ -62,7 +62,7 @@ probe_pressure::probe_pressure(lexer *p, fdm* a, ghostcell *pgc) : probenum(p->P
         pout[n]<<"Point Probe ID:  "<<n+1<<endl<<endl;
         pout[n]<<"x_coord     y_coord     z_coord"<<endl;
 
-        pout[n]<<n+1<<"\t "<<p->P64_x[n]<<"\t "<<p->P64_y[n]<<"\t "<<p->P64_z[n]<<endl;
+        pout[n]<<n+1<<" \t "<<p->P64_x[n]<<" \t "<<p->P64_y[n]<<" \t "<<p->P64_z[n]<<endl;
 
         pout[n]<<endl<<endl;
         }

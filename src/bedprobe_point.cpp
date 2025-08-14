@@ -59,7 +59,7 @@ bedprobe_point::bedprobe_point(lexer *p, ghostcell *pgc, sediment_fdm *s)
     wsfout<<"number of gauges:  "<<p->P121<<endl<<endl;
     wsfout<<"x_coord     y_coord"<<endl;
     for(n=0;n<p->P121;++n)
-    wsfout<<n+1<<"\t "<<p->P121_x[n]<<"\t "<<p->P121_y[n]<<endl;
+    wsfout<<n+1<<" \t "<<p->P121_x[n]<<" \t "<<p->P121_y[n]<<endl;
 
     wsfout<<endl<<endl;
 
@@ -103,7 +103,7 @@ void bedprobe_point::bed_gauge(lexer *p, ghostcell *pgc, sediment_fdm *s)
     // write to file
     if(p->mpirank==0)
     {
-    wsfout<<p->sedtime<<"\t ";
+    wsfout<<p->sedtime<<" \t ";
     for(n=0;n<p->P121;++n)
     wsfout<<wsf[n]<<" \t ";
     wsfout<<endl;

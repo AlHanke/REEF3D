@@ -87,7 +87,7 @@ void nhflow_print_runup_max_gage_x::start(lexer *p, fdm_nhf *d, ghostcell *pgc, 
         wsfout<<"number of runup-max-probes:  "<<p->P134<<endl<<endl;
         wsfout<<"line_No     y_coord"<<endl;
         for(q=0;q<p->P134;++q)
-        wsfout<<q+1<<"\t "<<p->P134_y[q]<<endl;
+        wsfout<<q+1<<" \t "<<p->P134_y[q]<<endl;
 
 
         wsfout<<endl<<endl;

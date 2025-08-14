@@ -83,7 +83,7 @@ void bedshear_max::bedshear_maxval(lexer *p, ghostcell *pgc, sediment *psed)
     // write to file
     if(p->mpirank==0)
     {
-    bsgout<<p->sedtime<<"\t ";
+    bsgout<<p->sedtime<<" \t ";
     bsgout<<maxval<<endl;
     }
 }

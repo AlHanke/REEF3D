@@ -45,7 +45,7 @@ gage_discharge_window_x::gage_discharge_window_x(lexer *p, fdm* a, ghostcell *pg
     qout<<"number of x-discharge window gages:  "<<p->P168<<endl<<endl;
     qout<<"x_coord   zs   ze"<<endl;
     for(n=0;n<p->P168;++n)
-    qout<<n+1<<"\t "<<p->P168_x[n]<<" "<<p->P168_zs[n]<<" "<<p->P168_ze[n]<<endl;
+    qout<<n+1<<" \t "<<p->P168_x[n]<<" "<<p->P168_zs[n]<<" "<<p->P168_ze[n]<<endl;
 
     qout<<endl<<endl;
 

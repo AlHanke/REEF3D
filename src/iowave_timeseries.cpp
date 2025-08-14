@@ -62,7 +62,7 @@ void iowave::timeseries(lexer *p, ghostcell* pgc)
         pout<<"Wave Timeseries ID:  "<<n<<endl<<endl;
         pout<<"x_coord     y_coord     T"<<endl;
 
-        pout<<"\t "<<p->P58_x[n]<<"\t "<<p->P58_y[n]<<"\t "<<p->P58_T[n]<<endl<<endl;
+        pout<<" \t "<<p->P58_x[n]<<" \t "<<p->P58_y[n]<<" \t "<<p->P58_T[n]<<endl<<endl;
 
         pout<<"t \t eta"<<endl<<endl;
 

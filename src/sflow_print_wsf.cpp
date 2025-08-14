@@ -47,7 +47,7 @@ sflow_print_wsf::sflow_print_wsf(lexer *p, fdm2D* b) : fileFlushMaxCount(100)
     wsfout<<"number of gauges:  "<<gauge_num<<endl<<endl;
     wsfout<<"x_coord     y_coord"<<endl;
     for(n=0;n<gauge_num;++n)
-    wsfout<<n+1<<"\t "<<x[n]<<"\t "<<y[n]<<endl;
+    wsfout<<n+1<<" \t "<<x[n]<<" \t "<<y[n]<<endl;
 
     wsfout<<endl<<endl;
 

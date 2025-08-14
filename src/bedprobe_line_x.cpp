@@ -120,7 +120,7 @@ void bedprobe_line_x::start(lexer *p, ghostcell *pgc, sediment_fdm *s, ioflow *p
         wsfout<<"number of topo-x-lines:  "<<p->P123<<endl<<endl;
         wsfout<<"line_No     y_coord"<<endl;
         for(q=0;q<p->P123;++q)
-        wsfout<<q+1<<"\t "<<p->P123_y[q]<<endl;
+        wsfout<<q+1<<" \t "<<p->P123_y[q]<<endl;
 
 
         wsfout<<endl<<endl;

@@ -96,10 +96,10 @@ void fnpf_print_wsfline_y::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *
         wsfout<<"number of wsf-lines:  "<<p->P56<<endl<<endl;
         wsfout<<"line_No     x_coord"<<endl;
         for(q=0;q<p->P56;++q)
-        wsfout<<q+1<<"\t "<<p->P56_x[q]<<endl;
+        wsfout<<q+1<<" \t "<<p->P56_x[q]<<endl;
 
         if(p->P53==1)
-        wsfout<<q+1<<"\t "<<" Wave Theory "<<endl;
+        wsfout<<q+1<<" \t "<<" Wave Theory "<<endl;
 
         wsfout<<endl<<endl;
 

@@ -97,10 +97,10 @@ void sflow_print_wsfline::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pflo
         wsfout<<"number of wsf-lines:  "<<p->P52<<endl<<endl;
         wsfout<<"line_No     y_coord"<<endl;
         for(q=0;q<p->P52;++q)
-        wsfout<<q+1<<"\t "<<p->P52_y[q]<<endl;
+        wsfout<<q+1<<" \t "<<p->P52_y[q]<<endl;
 
         if(p->P53==1)
-        wsfout<<q+1<<"\t "<<" Wave Theory "<<endl;
+        wsfout<<q+1<<" \t "<<" Wave Theory "<<endl;
 
         wsfout<<endl<<endl;
 

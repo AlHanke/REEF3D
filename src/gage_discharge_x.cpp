@@ -45,7 +45,7 @@ gage_discharge_x::gage_discharge_x(lexer *p, fdm* a, ghostcell *pgc)
     qout<<"number of x-discharge gages:  "<<p->P167<<endl<<endl;
     qout<<"x_coord  "<<endl;
     for(n=0;n<p->P167;++n)
-    qout<<n+1<<"\t "<<p->P167_x[n]<<endl;
+    qout<<n+1<<" \t "<<p->P167_x[n]<<endl;
 
     qout<<endl<<endl;
 

@@ -53,7 +53,7 @@ sflow_print_probe_da::sflow_print_probe_da(lexer *p, fdm2D *b, ghostcell *pgc) :
         pout[n]<<"Depth Averaged Point Probe ID:  "<<n<<endl<<endl;
         pout[n]<<"x_coord     y_coord"<<endl;
 
-        pout[n]<<n+1<<"\t "<<p->P63_x[n]<<"\t "<<p->P63_y[n]<<endl;
+        pout[n]<<n+1<<" \t "<<p->P63_x[n]<<" \t "<<p->P63_y[n]<<endl;
 
         pout[n]<<endl<<endl;
 

@@ -47,7 +47,7 @@ sflow_print_bed::sflow_print_bed(lexer *p, fdm2D* b)
     bedout<<"number of gauges:  "<<gauge_num<<endl<<endl;
     bedout<<"x_coord     y_coord"<<endl;
     for(n=0;n<gauge_num;++n)
-    bedout<<n+1<<"\t "<<x[n]<<"\t "<<y[n]<<endl;
+    bedout<<n+1<<" \t "<<x[n]<<" \t "<<y[n]<<endl;
 
     bedout<<endl<<endl;
 

@@ -48,7 +48,7 @@ print_1Dline::print_1Dline(lexer *p, fdm* a, ghostcell *pgc)
     wsfout<<"number of gauges:  "<<p->P51<<endl<<endl;
     wsfout<<"x_coord     ycoord"<<endl;
     for(n=0;n<p->P51;++n)
-    wsfout<<n+1<<"\t "<<p->P51_x[n]<<"\t "<<p->P51_y[n]<<endl;
+    wsfout<<n+1<<" \t "<<p->P51_x[n]<<" \t "<<p->P51_y[n]<<endl;
 
     wsfout<<endl<<endl;
 

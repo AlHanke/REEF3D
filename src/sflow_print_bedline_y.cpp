@@ -97,7 +97,7 @@ void sflow_print_bedline_y::start(lexer *p, fdm2D *b, ghostcell *pgc, ioflow *pf
         wsfout<<"number of bed-lines:  "<<p->P124<<endl<<endl;
         wsfout<<"line_No     x_coord"<<endl;
         for(q=0;q<p->P124;++q)
-        wsfout<<q+1<<"\t "<<p->P124_x[q]<<endl;
+        wsfout<<q+1<<" \t "<<p->P124_x[q]<<endl;
 
 
         wsfout<<endl<<endl;

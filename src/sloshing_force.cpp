@@ -56,7 +56,7 @@ void sloshing_force::start(lexer *p, fdm *a, ghostcell *pgc)
 
     // write to file
     if(p->mpirank==0)
-    result<<p->simtime<<"\t "<<Fx_l<<"\t "<<Fx_r<<"\t "<<Fz<<"\t "<<M<<endl;
+    result<<p->simtime<<" \t "<<Fx_l<<" \t "<<Fx_r<<" \t "<<Fz<<" \t "<<M<<endl;
 }
 
 void sloshing_force::force(lexer *p, fdm *a, ghostcell *pgc)

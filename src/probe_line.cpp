@@ -197,7 +197,7 @@ void probe_line::start(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb)
             lineout[n]<<"Line Probe ID:  "<<n+1<<endl<<endl;
             lineout[n]<<"x_start     x_end     y_start     y_end     z_start     z_end"<<endl;
 
-            lineout[n]<<p->P62_xs[n]<<"\t "<<p->P62_xe[n]<<"\t "<<p->P62_ys[n]<<"\t "<<p->P62_ye[n]<<"\t "<<p->P62_zs[n]<<"\t "<<p->P62_ze[n]<<endl;
+            lineout[n]<<p->P62_xs[n]<<" \t "<<p->P62_xe[n]<<" \t "<<p->P62_ys[n]<<" \t "<<p->P62_ye[n]<<" \t "<<p->P62_zs[n]<<" \t "<<p->P62_ze[n]<<endl;
 
             lineout[n]<<endl<<endl;
 

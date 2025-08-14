@@ -57,7 +57,7 @@ probe_vel_theory::probe_vel_theory(lexer *p, fdm *a) : probenum(p->P66)
         pout[n]<<"Vel Probe Theory ID:  "<<n<<endl<<endl;
         pout[n]<<"x_coord     y_coord     z_coord"<<endl;
 
-        pout[n]<<n+1<<"\t "<<p->P66_x[n]<<"\t "<<p->P66_y[n]<<"\t "<<p->P66_z[n]<<endl;
+        pout[n]<<n+1<<" \t "<<p->P66_x[n]<<" \t "<<p->P66_y[n]<<" \t "<<p->P66_z[n]<<endl;
 
         pout[n]<<endl<<endl;
 
