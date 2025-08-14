@@ -37,6 +37,6 @@ void nhflow_vtu3D::name_iter(lexer *p, ghostcell* pgc)
     num = p->count;
 
     
-    sprintf(name,"./REEF3D_NHFLOW_VTU/REEF3D-NHFLOW-%08i-%06i.vtu",num,p->mpirank+1);
+    sprintf(name,"./REEF3D_NHFLOW_VTU/REEF3D-NHFLOW-%0*i-%0*i.vtu",p->padding_time,num,p->padding_mpi,p->mpirank+1);
 }
 

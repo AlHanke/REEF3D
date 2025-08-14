@@ -88,10 +88,10 @@ void net_sheet::print(lexer *p)
 		printtime += p->P30;
 		
         if(p->A10==5)
-        sprintf(name,"./REEF3D_NHFLOW_6DOF_Net/REEF3D-Net-%08i-%06i.stl",nNet,num);
+        sprintf(name,"./REEF3D_NHFLOW_6DOF_Net/REEF3D-Net-%0*i-%0*i.stl",p->padding_time,nNet,p->padding_mpi,num);
         
         if(p->A10==6)
-        sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%08i-%06i.stl",nNet,num);
+        sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%0*i-%0*i.stl",p->padding_time,nNet,p->padding_mpi,num);
 
         // Save net as .stl
         ofstream result;
@@ -140,10 +140,10 @@ void net_sheet::print(lexer *p)
 
         //- Print Lagrangian points
         if(p->A10==5)
-        sprintf(name,"./REEF3D_NHFLOW_6DOF_Net/REEF3D-Net-Lagrange-%08i.pvtu",num);
+        sprintf(name,"./REEF3D_NHFLOW_6DOF_Net/REEF3D-Net-Lagrange-%0*i.pvtu",p->padding_time,num);
         
         if(p->A10==6)
-        sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-Lagrange-%08i.pvtu",num);
+        sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-Lagrange-%0*i.pvtu",p->padding_time,num);
         
         result.open(name, ios::binary);
         for (int ii = 0; ii < nK; ii++)

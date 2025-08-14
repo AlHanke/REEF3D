@@ -38,7 +38,7 @@ void nhflow_vtu3D::pvtu(lexer *p, fdm_nhf *d, ghostcell* pgc, nhflow_turbulence 
     num = p->count;
 	
 
-	sprintf(name,"./REEF3D_NHFLOW_VTU/REEF3D-NHFLOW-%08i.pvtu",num);
+	sprintf(name,"./REEF3D_NHFLOW_VTU/REEF3D-NHFLOW-%0*i.pvtu",p->padding_time,num);
 
 
 	ofstream result;
@@ -109,5 +109,5 @@ void nhflow_vtu3D::piecename(lexer *p, ghostcell *pgc, int n)
     if(p->P15==2)
     num = p->count;
 
-	sprintf(pname,"REEF3D-NHFLOW-%08i-%06i.vtu",num,n+1);
+	sprintf(pname,"REEF3D-NHFLOW-%0*i-%0*i.vtu",p->padding_time,num,p->padding_mpi,n+1);
 }

@@ -36,7 +36,7 @@ void sixdof_obj::pvtp(lexer* p, fdm* a, ghostcell* pgc)
     if(p->P15==2)
     num = p->count;
 	
-	sprintf(name,"./REEF3D_CFD_6DOF/REEF3D-FB-%08i.pvtp",num);
+	sprintf(name,"./REEF3D_CFD_6DOF/REEF3D-FB-%0*i.pvtp",p->padding_time,num);
 
 	ofstream result;
 	result.open(name);
@@ -87,7 +87,7 @@ void sixdof_obj::piecename(lexer* p, fdm* a,  ghostcell* pgc, int n)
     if(p->P15==2)
     num = p->count;
 
-	sprintf(pname,"REEF3D-FB-%08i-%06i.vtp",num,n+1);
+	sprintf(pname,"REEF3D-FB-%0*i-%0*i.vtp",p->padding_time,num,p->padding_mpi,n+1);
 
 }
 
@@ -101,6 +101,6 @@ void sixdof_obj::name_iter(lexer* p,fdm* a,ghostcell* pgc)
     if(p->P15==2)
     num = p->count;
 
-    sprintf(name,"./REEF3D_CFD_6DOF/REEF3D-FB-%08i-%06i.vtp",num,p->mpirank+1);
+    sprintf(name,"./REEF3D_CFD_6DOF/REEF3D-FB-%0*i-%0*i.vtp",p->padding_time,num,p->padding_mpi,p->mpirank+1);
 }
 

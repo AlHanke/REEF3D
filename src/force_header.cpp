@@ -36,5 +36,5 @@ void force::name_iter(lexer* p,fdm* a,ghostcell* pgc)
     if(p->P15==2)
     num = p->count;
 
-    sprintf(name,"./REEF3D_SOLID/REEF3D-SOLID-00000%i-%08i-%06i.vtp",num,ID,p->mpirank+1);
+    sprintf(name,"./REEF3D_SOLID/REEF3D-SOLID-%0*i-%i-%0*i.vtp",p->padding_time,num,ID,p->padding_mpi,p->mpirank+1);
 }

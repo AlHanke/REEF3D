@@ -822,8 +822,9 @@ public:
     double *sig;
     double *sigx,*sigy,*sigz,*sigt;
     double *sigxx;
-    
+
 // file names
+    const int padding_time = 8;
     const int padding_mpi = 6;
 
 private:

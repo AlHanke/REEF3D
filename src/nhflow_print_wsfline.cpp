@@ -88,7 +88,7 @@ void nhflow_print_wsfline::start(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *p
     if(p->mpirank==0)
     {
 		// open file
-		sprintf(name,"./REEF3D_NHFLOW_WSFLINE/REEF3D-NHFLOW-wsfline-%08i.dat",num);
+		sprintf(name,"./REEF3D_NHFLOW_WSFLINE/REEF3D-NHFLOW-wsfline-%0*i.dat",p->padding_time,num);
 
 		
 		wsfout.open(name);

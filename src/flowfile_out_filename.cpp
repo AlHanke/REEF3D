@@ -32,7 +32,7 @@ void flowfile_out::filename(lexer *p, fdm *a, ghostcell *pgc)
     num = p->count;
 
     // open file
-    sprintf(name,"./REEF3D_FlowFile/REEF3D-flowfile-%08i-%06i.r3d",n+1,num);
+    sprintf(name,"./REEF3D_FlowFile/REEF3D-flowfile-%0*i-%0*i.r3d",p->padding_time,n+1,p->padding_mpi,num);
   
 }
 

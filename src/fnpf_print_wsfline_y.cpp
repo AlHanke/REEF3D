@@ -88,7 +88,7 @@ void fnpf_print_wsfline_y::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, ioflow *
     if(p->mpirank==0)
     {
 		// open file
-		sprintf(name,"./REEF3D_FNPF_WSFLINE_Y/REEF3D-FNPF-wsfline_y-%06i.dat",num);
+		sprintf(name,"./REEF3D_FNPF_WSFLINE_Y/REEF3D-FNPF-wsfline_y-%0*i.dat",p->padding_mpi,num);
 		
 		wsfout.open(name);
 
