@@ -27,7 +27,7 @@ Author: Hans Bihs
 
 void sixdof_obj::pvtp(lexer* p, fdm* a, ghostcell* pgc)
 {
-    
+
     int num=0;
 
     if(p->P15==1)
@@ -35,49 +35,49 @@ void sixdof_obj::pvtp(lexer* p, fdm* a, ghostcell* pgc)
 
     if(p->P15==2)
     num = p->count;
-	
-	sprintf(name,"./REEF3D_CFD_6DOF/REEF3D-FB-%08i.pvtp",num);
 
-	ofstream result;
-	result.open(name);
+    sprintf(name,"./REEF3D_CFD_6DOF/REEF3D-FB-%08i.pvtp",num);
 
-	result<<"<?xml version=\"1.0\"?>"<<endl;
-	result<<"<VTKFile type=\"PPolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
-	result<<"<PPolyData  GhostLevel=\"0\">"<<endl;
+    ofstream result;
+    result.open(name);
+
+    result<<"<?xml version=\"1.0\"?>"<<endl;
+    result<<"<VTKFile type=\"PPolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
+    result<<"<PPolyData  GhostLevel=\"0\">"<<endl;
 
 
-	result<<"<PPoints>"<<endl;
-	result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>"<<endl;
-	result<<"</PPoints>"<<endl;
-	
-	result<<"<PPointData>"<<endl;
-	result<<"<PDataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>"<<endl;
-	result<<"<PDataArray type=\"Float32\" Name=\"pressure\"/>"<<endl;
-	result<<"</PPointData>"<<endl;
-	
-	result<<"<Polys>"<<endl;
+    result<<"<PPoints>"<<endl;
+    result<<"<PDataArray type=\"Float32\" NumberOfComponents=\"3\"/>"<<endl;
+    result<<"</PPoints>"<<endl;
+
+    result<<"<PPointData>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\"/>"<<endl;
+    result<<"<PDataArray type=\"Float32\" Name=\"pressure\"/>"<<endl;
+    result<<"</PPointData>"<<endl;
+
+    result<<"<Polys>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"/>"<<endl;
     ++n;
-	result<<"<DataArray type=\"Int32\"  Name=\"offsets\"/>"<<endl;
-	++n;
+    result<<"<DataArray type=\"Int32\"  Name=\"offsets\"/>"<<endl;
+    ++n;
     result<<"<DataArray type=\"Int32\"  Name=\"types\"/>"<<endl;
-	result<<"</Polys>"<<endl;
+    result<<"</Polys>"<<endl;
 
-	for(n=0; n<p->M10; ++n)
-	{
+    for(n=0; n<p->M10; ++n)
+    {
     piecename(p,a,pgc,n);
     result<<"<Piece Source=\""<<pname<<"\"/>"<<endl;
-	}
+    }
 
-	result<<"</PPolyData>"<<endl;
-	result<<"</VTKFile>"<<endl;
+    result<<"</PPolyData>"<<endl;
+    result<<"</VTKFile>"<<endl;
 
-	result.close();
+    result.close();
 }
 
 void sixdof_obj::piecename(lexer* p, fdm* a,  ghostcell* pgc, int n)
 {
-    
+
     int num=0;
 
 
@@ -87,7 +87,7 @@ void sixdof_obj::piecename(lexer* p, fdm* a,  ghostcell* pgc, int n)
     if(p->P15==2)
     num = p->count;
 
-	sprintf(pname,"REEF3D-FB-%08i-%06i.vtp",num,n+1);
+    sprintf(pname,"REEF3D-FB-%08i-%06i.vtp",num,n+1);
 
 }
 
@@ -103,4 +103,3 @@ void sixdof_obj::name_iter(lexer* p,fdm* a,ghostcell* pgc)
 
     sprintf(name,"./REEF3D_CFD_6DOF/REEF3D-FB-%08i-%06i.vtp",num,p->mpirank+1);
 }
-

@@ -29,13 +29,13 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
     // Update DF
     LOOP
     p->DF[IJK]=1;
-    
+
     
     if(p->solidread>0)
     LOOP
     if(a->solid(i,j,k)<0.0)
     p->DF[IJK]=-1;
-    
+
     
     startintV(p,p->DF,1);
 }

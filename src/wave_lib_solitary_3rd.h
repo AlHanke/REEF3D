@@ -35,21 +35,21 @@ class wave_lib_solitary_3rd : public wave_lib_precalc, public wave_lib_parameter
 {
 public:
     wave_lib_solitary_3rd(lexer*, ghostcell*);
-	virtual ~wave_lib_solitary_3rd();
-    
+    virtual ~wave_lib_solitary_3rd();
+
     double wave_horzvel(lexer*,double,double,double);
-    
+
     virtual double wave_u(lexer*,double,double,double);
     virtual double wave_v(lexer*,double,double,double);
     virtual double wave_w(lexer*,double,double,double);
     virtual double wave_eta(lexer*,double,double);
     virtual double wave_fi(lexer*,double,double,double);
-    
+
     
     virtual void parameters(lexer*,ghostcell*);
     virtual void wave_prestep(lexer*,ghostcell*);
-  
-private:  
+
+private:
     double wht,acn,delta,epsilon,wR;
     double singamma,cosgamma;
 

@@ -35,34 +35,34 @@ using namespace std;
 class sixdof_cfd : public sixdof, public increment
 {
 public:
-	sixdof_cfd(lexer*, fdm*, ghostcell*);
-	virtual ~sixdof_cfd();
+    sixdof_cfd(lexer*, fdm*, ghostcell*);
+    virtual ~sixdof_cfd();
 
     virtual void start_cfd(lexer*,fdm*,ghostcell*,int,field&,field&,field&,field&,field&,field&,bool);
     virtual void start_nhflow(lexer*,fdm_nhf*,ghostcell*,int,double*,double*,double*,double*,double*,double*,slice&,slice&,bool);
-    
+
     
     virtual void start_sflow(lexer*,fdm2D*,ghostcell*,int,slice&,slice&,slice&,slice&,slice&,slice&,slice&,bool);
-    
+
     virtual void ini(lexer*,ghostcell*);
     virtual void initialize(lexer*, fdm*, ghostcell*);
     virtual void initialize(lexer*, fdm2D*, ghostcell*);
     virtual void initialize(lexer*, fdm_nhf*, ghostcell*);
-    
+
     virtual void isource(lexer*,fdm*,ghostcell*);
     virtual void jsource(lexer*,fdm*,ghostcell*);
     virtual void ksource(lexer*,fdm*,ghostcell*);
-    
+
     virtual void isource(lexer*,fdm_nhf*,ghostcell*,slice&);
     virtual void jsource(lexer*,fdm_nhf*,ghostcell*,slice&);
     virtual void ksource(lexer*,fdm_nhf*,ghostcell*,slice&);
-    
+
     virtual void isource2D(lexer*,fdm2D*,ghostcell*);
     virtual void jsource2D(lexer*,fdm2D*,ghostcell*);
 
 private:
    void setup(lexer*,fdm*,ghostcell*);
-   
+
     int number6DOF;
     vector<sixdof_obj*> fb_obj;
 

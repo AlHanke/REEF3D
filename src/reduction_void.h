@@ -38,10 +38,8 @@ public:
     reduction_void(lexer*);
     virtual ~reduction_void();
 
-	virtual void start(lexer*,ghostcell*,sediment_fdm*);
+    virtual void start(lexer*,ghostcell*,sediment_fdm*);
 
 };
 
 #endif
-
-

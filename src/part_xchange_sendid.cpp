@@ -29,7 +29,7 @@ void part::xchange_sendid(lexer *p, ghostcell *pgc, int mode)
     for(q=0;q<6;++q)
     sendnum[q]=0;
 
-    
+
     // count particles for xchange
     for(n=0;n<index;++n)
     if(Flag[n]==ACTIVE)
@@ -40,20 +40,20 @@ void part::xchange_sendid(lexer *p, ghostcell *pgc, int mode)
             j=p->posc_j(YRK1[n]);
             k=p->posc_k(ZRK1[n]);
             }
-            
+
             if(mode==2)
             {
             i=p->posc_i(X[n]);
             j=p->posc_j(Y[n]);
             k=p->posc_k(Z[n]);
             }
-        
+
         if(p->flag5[IJK]==-1)
         {
         sendid[0][sendnum[0]]=n;
-        ++sendnum[0]; 
+        ++sendnum[0];
         }
-        
+
         if(p->flag5[IJK]==-2)
         {
         sendid[1][sendnum[1]]=n;
@@ -63,26 +63,25 @@ void part::xchange_sendid(lexer *p, ghostcell *pgc, int mode)
         if(p->flag5[IJK]==-3)
         {
         sendid[2][sendnum[2]]=n;
-        ++sendnum[2];  
+        ++sendnum[2];
         }
-        
+
         if(p->flag5[IJK]==-4)
         {
         sendid[3][sendnum[3]]=n;
-        ++sendnum[3]; 
+        ++sendnum[3];
         }
-        
+
         if(p->flag5[IJK]==-5)
         {
         sendid[4][sendnum[4]]=n;
-        ++sendnum[4]; 
+        ++sendnum[4];
         }
-        
+
         if(p->flag5[IJK]==-6)
         {
         sendid[5][sendnum[5]]=n;
-        ++sendnum[5]; 
+        ++sendnum[5];
         }
     }
 }
-

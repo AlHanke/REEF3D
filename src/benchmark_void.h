@@ -38,16 +38,11 @@ class benchmark_void : public benchmark
 
 public:
     benchmark_void();
-	virtual ~benchmark_void();
+    virtual ~benchmark_void();
 
-	virtual void start(lexer*, fdm*, ghostcell*, convection*);
+    virtual void start(lexer*, fdm*, ghostcell*, convection*);
 
 
 };
 
 #endif
-
-
-
-
-

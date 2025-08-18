@@ -35,23 +35,23 @@ class wave_lib_cnoidal_5th : public wave_lib_precalc, public wave_lib_parameters
 {
 public:
     wave_lib_cnoidal_5th(lexer*, ghostcell*);
-	virtual ~wave_lib_cnoidal_5th();
-    
+    virtual ~wave_lib_cnoidal_5th();
+
     double wave_horzvel(lexer*,double,double,double);
-    
+
     virtual double wave_u(lexer*,double,double,double);
     virtual double wave_v(lexer*,double,double,double);
     virtual double wave_w(lexer*,double,double,double);
     virtual double wave_eta(lexer*,double,double);
     virtual double wave_fi(lexer*,double,double,double);
-    
+
     
     virtual void parameters(lexer*,ghostcell*);
     virtual void wave_prestep(lexer*,ghostcell*);
-    
+
 private:
     double wht,acn,delta,epsilon,wR;
-    double singamma,cosgamma;    
+    double singamma,cosgamma;
     double ubar;
 };
 

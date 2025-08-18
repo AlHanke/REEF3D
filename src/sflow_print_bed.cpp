@@ -30,24 +30,24 @@ Author: Hans Bihs
 sflow_print_bed::sflow_print_bed(lexer *p, fdm2D* b)
 {
 
-	gauge_num = p->P121;
-	x = p->P121_x;
-	y = p->P121_y;
+    gauge_num = p->P121;
+    x = p->P121_x;
+    y = p->P121_y;
 
-	
-	// Create Folder
-	if(p->mpirank==0)
-	mkdir("./REEF3D_SFLOW_BED",0777);
-	
+
+    // Create Folder
+    if(p->mpirank==0)
+    mkdir("./REEF3D_SFLOW_BED",0777);
+
     if(p->mpirank==0 && p->P121>0)
     {
     // open file
-	bedout.open("./REEF3D_SFLOW_BED/REEF3D-SFLOW-BED-HG.dat");
+    bedout.open("./REEF3D_SFLOW_BED/REEF3D-SFLOW-BED-HG.dat");
 
     bedout<<"number of gauges:  "<<gauge_num<<endl<<endl;
     bedout<<"x_coord     y_coord"<<endl;
     for(n=0;n<gauge_num;++n)
-    bedout<<n+1<<"\t "<<x[n]<<"\t "<<y[n]<<endl;
+    bedout<<n+1<<" \t "<<x[n]<<" \t "<<y[n]<<endl;
 
     bedout<<endl<<endl;
 
@@ -57,14 +57,14 @@ sflow_print_bed::sflow_print_bed(lexer *p, fdm2D* b)
 
     bedout<<endl<<endl;
     }
-	
-	//-------------------
-	
-	
-	p->Iarray(iloc,gauge_num);
-	p->Iarray(jloc,gauge_num);
-	p->Iarray(flag,gauge_num);
-	p->Darray(bed,gauge_num);
+
+    //-------------------
+
+    
+    p->Iarray(iloc,gauge_num);
+    p->Iarray(jloc,gauge_num);
+    p->Iarray(flag,gauge_num);
+    p->Darray(bed,gauge_num);
 
     ini_location(p,b);
 }
@@ -81,7 +81,7 @@ void sflow_print_bed::height_gauge(lexer *p, fdm2D *b, ghostcell *pgc, slice &f)
     for(n=0;n<gauge_num;++n)
     bed[n]=-1.0e20;
 
-	
+
     for(n=0;n<gauge_num;++n)
     if(flag[n]>0)
     {
@@ -89,20 +89,20 @@ void sflow_print_bed::height_gauge(lexer *p, fdm2D *b, ghostcell *pgc, slice &f)
 
     i=iloc[n];
     j=jloc[n];
-	
-			bed[n] = f(i,j);
+
+            bed[n] = f(i,j);
 
     }
-	
+
     for(n=0;n<gauge_num;++n)
     bed[n]=pgc->globalmax(bed[n]);
 
     // write to file
     if(p->mpirank==0)
     {
-    bedout<<setprecision(9)<<p->simtime<<"\t";
+    bedout<<setprecision(9)<<p->simtime<<" \t ";
     for(n=0;n<gauge_num;++n)
-    bedout<<setprecision(9)<<bed[n]<<"  \t  ";
+    bedout<<setprecision(9)<<bed[n]<<" \t ";
     bedout<<endl;
     }
 }
@@ -112,10 +112,10 @@ void sflow_print_bed::ini_location(lexer *p, fdm2D *b)
     for(n=0;n<gauge_num;++n)
     {
     iloc[n]=conv((x[n]-p->originx)/p->DXM);
-    
+
     if(p->j_dir==0)
     jloc[n]=0;
-    
+
     if(p->j_dir==1)
     jloc[n]=conv((y[n]-p->originy)/p->DXM);
 

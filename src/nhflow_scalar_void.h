@@ -33,12 +33,12 @@ using namespace std;
 class nhflow_scalar_void : public nhflow_scalar_convection, public increment
 {
 public:
-	nhflow_scalar_void (lexer*);
-	virtual ~nhflow_scalar_void();
+    nhflow_scalar_void (lexer*);
+    virtual ~nhflow_scalar_void();
 
-	virtual void start(lexer*,fdm_nhf*,double*,int,double*,double*,double*);
+    virtual void start(lexer*,fdm_nhf*,double*,int,double*,double*,double*);
 
-    
+
 };
 
 #endif

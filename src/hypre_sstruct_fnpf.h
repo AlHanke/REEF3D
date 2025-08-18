@@ -41,17 +41,17 @@ class hypre_sstruct_fnpf : public solver_fnpf, public increment
 {
 public:
 
-	hypre_sstruct_fnpf(lexer*,ghostcell*,int,int);
-	virtual ~hypre_sstruct_fnpf();
+    hypre_sstruct_fnpf(lexer*,ghostcell*,int,int);
+    virtual ~hypre_sstruct_fnpf();
 
     virtual void start(lexer*, ghostcell*, double*, double*, double*, int);
     virtual void startF(lexer*, ghostcell*, double*, double*, double*, int);
-    
+
     void start_solver5(lexer*, ghostcell*, double*, double*, double*);
     void start_solver8(lexer*, ghostcell*, double*, double*, double*);
-    
+
     virtual void solve(lexer*,ghostcell*);
-    
+
     void make_grid(lexer*, ghostcell*);
     void make_grid_2Dvert(lexer*, ghostcell*);
 
@@ -60,15 +60,15 @@ public:
 
 
     virtual void fillbackvec8(lexer*,double*,double*,double*);
-	
+
 
     void create_solver5(lexer*,ghostcell*);
     void delete_solver5(lexer*,ghostcell*);
-    
+
 
 private:
-    
-// HYPRE 
+
+// HYPRE
    HYPRE_SStructGrid     grid;
    HYPRE_SStructStencil  stencil;
    HYPRE_SStructGraph   graph;
@@ -79,22 +79,22 @@ private:
    HYPRE_SStructSolver   precond;
    HYPRE_Solver solver_csr, precond_csr;
    HYPRE_SStructVariable vartypes[1];
-   
 
-	int *ilower,*iupper;
+
+    int *ilower,*iupper;
     int num_iterations;
     double final_res_norm;
-	int stencil_indices[15];
-	int nentries;
-   
-	int numiter,count,q;
+    int stencil_indices[15];
+    int nentries;
+
+    int numiter,count,q;
      int numparts;
     int part;
     int dimensions;
     int variable;
     int numvar;
     int object_type;
-    
+
     const int solve_type,precon_type;
 
 
@@ -103,4 +103,3 @@ private:
 #endif
 
 #endif
-

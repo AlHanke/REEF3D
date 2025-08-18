@@ -38,17 +38,17 @@ class sflow_turb_ke_IM1 : public sflow_turb_io
 
 public:
     sflow_turb_ke_IM1(lexer*);
-	virtual ~sflow_turb_ke_IM1();
-    
-	virtual void start(lexer*, fdm2D*, ghostcell*, sflow_convection*, sflow_diffusion*, solver2D*, ioflow*);
-	virtual void ktimesave(lexer*, fdm2D*, ghostcell*);
-	virtual void etimesave(lexer*, fdm2D*, ghostcell*);
-    
+    virtual ~sflow_turb_ke_IM1();
+
+    virtual void start(lexer*, fdm2D*, ghostcell*, sflow_convection*, sflow_diffusion*, solver2D*, ioflow*);
+    virtual void ktimesave(lexer*, fdm2D*, ghostcell*);
+    virtual void etimesave(lexer*, fdm2D*, ghostcell*);
+
 private:
     void Pk_update(lexer*, fdm2D*, ghostcell*);
     void ustar_update(lexer*, fdm2D*, ghostcell*);
-	void kin_source(lexer*, fdm2D*);
-	void eps_source(lexer*, fdm2D*);
+    void kin_source(lexer*, fdm2D*);
+    void eps_source(lexer*, fdm2D*);
     void timesource(lexer*, fdm2D*, slice&);
     void eddyvisc(lexer*, fdm2D*, ghostcell*);
     void clearrhs(lexer*, fdm2D*);
@@ -58,14 +58,14 @@ private:
     slice4 kn, en, Pk, S, ustar, cf;
     sliceint4 wallf;
     double const ce1,ce2,sigk,sige,ceg;
-    
+
     int gcval_kin, gcval_eps;
     int count;
     double starttime;
-    
-    sflow_convection *pconvec;   
-    sflow_diffusion *pdiff; 
-    
+
+    sflow_convection *pconvec;
+    sflow_diffusion *pdiff;
+
 };
 
 #endif

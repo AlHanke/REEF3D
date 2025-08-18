@@ -26,31 +26,31 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 void nhflow_fsf_f::fsf_guard(lexer* p, fdm_nhf* d, ghostcell* pgc, slice& WL, slice &K)
-{   
+{
     if(p->A580==1)
     SLICELOOP4
     if(p->flagfsf[IJ]==0)
     {
-    
+
     WL(i,j) = d->depth(i,j);
     K(i,j) = 0.0;
-        
+
     }
 
     SLICELOOP4
     if(p->flagfsf[IJ]==1)
-    {  
+    {
         if(p->flagfsf[Im1J]==0)
         WL(i-1,j) = WL(i,j);
 
         if(p->flagfsf[Ip1J]==0)
         WL(i+1,j) = WL(i,j);
-        
+
         if(p->flagfsf[IJm1]==0)
         WL(i,j-1) = WL(i,j);
-        
+
         if(p->flagfsf[IJp1]==0)
         WL(i,j+1) = WL(i,j);
     }
-    
+
 }

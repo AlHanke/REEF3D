@@ -36,13 +36,13 @@ class ptf_bed_update : public increment
 {
 public:
     ptf_bed_update(lexer*, fdm*, ghostcell*);
-	virtual ~ptf_bed_update();
-    
-	virtual void bedbc(lexer*, fdm*, ghostcell*,field&);
+    virtual ~ptf_bed_update();
+
+    virtual void bedbc(lexer*, fdm*, ghostcell*,field&);
     virtual void waterdepth(lexer*, fdm*, ghostcell*);
 
-private: 
-    
+private:
+
     fnpf_convection *pconvec;
 
 

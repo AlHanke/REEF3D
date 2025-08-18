@@ -28,7 +28,7 @@ void ghostcell::flagfield(lexer *p)
     for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
     p->flag[i]=1;
 
-        
+
     for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
     {
     if(p->flag4[i]==1)
@@ -37,34 +37,34 @@ void ghostcell::flagfield(lexer *p)
     if(p->flag4[i]==-1)
     p->flag4[i]=OBJ_FLAG;
     }
-    
+
     flagx(p,p->flag4);
-    
-	if(p->Y60==1)
+
+    if(p->Y60==1)
     LOOP
-    {   
+    {
         if(p->i_dir==1)
         if(p->flag4[Im1JK]<0
         && p->flag4[Ip1JK]<0)
         p->flag4[IJK]=OBJ_FLAG;
-        
+
         if(p->j_dir==1)
         if(p->flag4[IJm1K]<0
         && p->flag4[IJp1K]<0)
         p->flag4[IJK]=OBJ_FLAG;
-        
+
         if(p->k_dir==1)
         if(p->flag4[IJKm1]<0
         && p->flag4[IJKp1]<0)
         p->flag4[IJK]=OBJ_FLAG;
     }
-    
+
     for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
-	{
-	p->flag1[i]=p->flag4[i];
-	p->flag2[i]=p->flag4[i];
-	p->flag3[i]=p->flag4[i];
-	}
+    {
+    p->flag1[i]=p->flag4[i];
+    p->flag2[i]=p->flag4[i];
+    p->flag3[i]=p->flag4[i];
+    }
 
     GC4LOOP
     {
@@ -94,7 +94,7 @@ void ghostcell::flagfield(lexer *p)
 
         if(p->gcb4[n][3]==6 && (p->periodic3!=1 || k+p->origin_k<p->gknoz-1))
         p->flag3[IJK]=OBJ_FLAG;
-    }	
+    }
 }
 
 void ghostcell::flagfield_topo(lexer *p)
@@ -108,10 +108,10 @@ void ghostcell::flagfield_topo(lexer *p)
     if(p->flag4[i]==-1)
     p->flag4[i]=OBJ_FLAG;
     }
-    
+
     flagx(p,p->flag4);
-    
-	if(p->Y60==1)
+
+    if(p->Y60==1)
     LOOP
     {
         if(p->flag4[(i-p->imin-1)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin]<0
@@ -129,11 +129,11 @@ void ghostcell::flagfield_topo(lexer *p)
 
 
     for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
-	{
-	p->flag1[i]=p->flag4[i];
-	p->flag2[i]=p->flag4[i];
-	p->flag3[i]=p->flag4[i];
-	}
+    {
+    p->flag1[i]=p->flag4[i];
+    p->flag2[i]=p->flag4[i];
+    p->flag3[i]=p->flag4[i];
+    }
 
     GC4LOOP
     {
@@ -164,6 +164,5 @@ void ghostcell::flagfield_topo(lexer *p)
         if(p->gcb4[n][3]==6)
         p->flag3[IJK]=OBJ_FLAG;
     }
-	
-}
 
+}

@@ -38,15 +38,15 @@ class topo_vtp :  public increment
 {
 
 public:
-	topo_vtp(lexer*,fdm*,ghostcell*);
-	virtual ~topo_vtp();
-	virtual void start(lexer*,fdm*,ghostcell*,sediment*);
+    topo_vtp(lexer*,fdm*,ghostcell*);
+    virtual ~topo_vtp();
+    virtual void start(lexer*,fdm*,ghostcell*,sediment*);
 
 private:
-	void print(lexer*,fdm*,ghostcell*,sediment*);
+    void print(lexer*,fdm*,ghostcell*,sediment*);
     void pvtp(lexer*,fdm*,ghostcell*,sediment*);
     void header(lexer*,fdm*,ghostcell*);
-    
+
     void name_iter(lexer*,fdm*,ghostcell*);
     void name_time(lexer*,fdm*,ghostcell*);
     void piecename(lexer*,fdm*,ghostcell*,int);
@@ -57,11 +57,9 @@ private:
     double ddn;
     int gcval_phi;
     double printtime,printtime2;
-	int topoprintcount;
-	int polygon_sum,polygon_num;
+    int topoprintcount;
+    int polygon_sum,polygon_num;
 
 };
 
 #endif
-
-

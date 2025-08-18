@@ -35,10 +35,8 @@ public:
     bedload_direction_v(lexer*);
     virtual ~bedload_direction_v();
 
-	virtual void start(lexer*, ghostcell*, sediment_fdm*);
+    virtual void start(lexer*, ghostcell*, sediment_fdm*);
 
 };
 
 #endif
-
-

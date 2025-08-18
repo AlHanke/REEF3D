@@ -34,10 +34,9 @@ class fluid_update
 {
 public:
 
-	virtual void start(lexer*, fdm*, ghostcell*)=0;
+    virtual void start(lexer*, fdm*, ghostcell*)=0;
 
 
 };
 
 #endif
-

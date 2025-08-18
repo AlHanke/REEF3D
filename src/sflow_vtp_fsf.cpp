@@ -41,34 +41,34 @@ Author: Hans Bihs
 
 sflow_vtp_fsf::sflow_vtp_fsf(lexer *p, fdm2D *b, ghostcell *pgc)
 {
-	if(p->I40==0)
+    if(p->I40==0)
     {
-	p->printtime=0.0;
+    p->printtime=0.0;
     }
 
-	p->printcount=0;
+    p->printcount=0;
 
-	// Create Folder
-	if(p->mpirank==0)
-	mkdir("./REEF3D_SFLOW_VTP_FSF",0777);
+    // Create Folder
+    if(p->mpirank==0)
+    mkdir("./REEF3D_SFLOW_VTP_FSF",0777);
 
 
-	pwsf=new sflow_print_wsf(p,b);
+    pwsf=new sflow_print_wsf(p,b);
 
-	pwsf_theory=new sflow_print_wsf_theory(p,b,pgc);
+    pwsf_theory=new sflow_print_wsf_theory(p,b,pgc);
 
     pwsfline=new sflow_print_wsfline(p,b,pgc);
 
     pwsfline_y=new sflow_print_wsfline_y(p,b,pgc);
 
     pprobe=new sflow_print_probe_da(p,b,pgc);
-    
+
     //if(p->P37>0)
-	//pstate_restart=new sflow_state(p,b,pgc,1);
-    
+    //pstate_restart=new sflow_state(p,b,pgc,1);
+
     if(p->P40>0)
-	pstate=new sflow_state(p,b,pgc,0);
-    
+    pstate=new sflow_state(p,b,pgc,0);
+
     if(p->P110==1)
     phs = new fnpf_print_Hs(p,b->Hs);
 }
@@ -79,7 +79,7 @@ sflow_vtp_fsf::~sflow_vtp_fsf()
 
 void sflow_vtp_fsf::start(lexer *p, fdm2D* b, ghostcell* pgc, ioflow *pflow, sflow_turbulence *pturb, sediment *psed)
 {
-	// Print out based on iteration
+    // Print out based on iteration
     if((p->count%p->P20==0 && p->P30<0.0 && p->P34<0.0 && p->P10==1 && p->P20>0)  || (p->count==0 &&  p->P30<0.0))
     {
     print2D(p,b,pgc,pturb,psed);
@@ -93,7 +93,7 @@ void sflow_vtp_fsf::start(lexer *p, fdm2D* b, ghostcell* pgc, ioflow *pflow, sfl
     p->printtime+=p->P30;
     }
 
-	// WSF Gages
+    // WSF Gages
     if(p->P51>0)
     pwsf->height_gauge(p,b,pgc,b->eta);
 
@@ -105,21 +105,21 @@ void sflow_vtp_fsf::start(lexer *p, fdm2D* b, ghostcell* pgc, ioflow *pflow, sfl
 
     if((p->P56>0 && p->count%p->P54==0 && p->P55<0.0) || ((p->P56>0 && p->simtime>p->probeprinttime && p->P55>0.0)  || (p->count==0 &&  p->P55>0.0)))
     pwsfline_y->start(p,b,pgc,pflow,b->eta);
-    
+
     // DA Gages
     if(p->P63>0 && p->count%p->P54==0)
     pprobe->start(p,b,pgc);
-    
+
     // Hs
     if(p->P110==1)
     phs->start(p,pgc,b->eta,b->Hs);
-    
+
      // Print state restart out based on iteration
     /*if(p->count%p->P38==0 && p->P37>0)
     {
     pstate_restart->write(p,b,pgc);
     }*/
-    
+
     // Print state out based on iteration
     if(p->count%p->P41==0 && p->P42<0.0 && p->P40>0 && (p->P46==0 || (p->count>=p->P46_is && p->count<<p->P46_ie)))
     {
@@ -133,126 +133,126 @@ void sflow_vtp_fsf::start(lexer *p, fdm2D* b, ghostcell* pgc, ioflow *pflow, sfl
 
     p->stateprinttime+=p->P42;
     }
-    
+
     if((p->simtime>p->probeprinttime && p->P55>0.0)  || (p->count==0 &&  p->P55>0.0))
     p->probeprinttime+=p->P55;
 }
 
 void sflow_vtp_fsf::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sflow_turbulence *pturb, sediment *psed)
 {
-	if(p->mpirank==0)
+    if(p->mpirank==0)
     pvtp(p,b,pgc,pturb,psed);
 
-	name_iter(p,b,pgc);
-    
+    name_iter(p,b,pgc);
+
     if(p->origin_i==0 && p->origin_j==0)
     {
     i=0;
     j=0;
-	p->wet[Im1Jm1] = p->wet[IJ];
+    p->wet[Im1Jm1] = p->wet[IJ];
     }
-    
+
     if(p->origin_i==0 && p->gknoy==p->knoy+p->origin_j)
     {
     i=0;
     j=p->knoy-1;
-	p->wet[Im1Jp1] = p->wet[IJ];
+    p->wet[Im1Jp1] = p->wet[IJ];
     }
-    
+
     if(p->gknox==p->knox+p->origin_i && p->origin_j==0)
     {
     i=p->knox-1;
     j=0;
-	p->wet[Ip1Jm1] = p->wet[IJ];
+    p->wet[Ip1Jm1] = p->wet[IJ];
     }
-    
+
     if(p->gknox==p->knox+p->origin_i && p->gknoy==p->knoy+p->origin_j)
     {
     i=p->knox-1;
     j=p->knoy-1;
-	p->wet[Ip1Jp1] = p->wet[IJ];
+    p->wet[Ip1Jp1] = p->wet[IJ];
     }
 
 
-	// Open File
-	ofstream result;
-	result.open(name, ios::binary);
+    // Open File
+    ofstream result;
+    result.open(name, ios::binary);
 
     // offsets
     n=0;
-	offset[n]=0;
-	++n;
+    offset[n]=0;
+    ++n;
 
-	// Points
+    // Points
     offset[n]=offset[n-1]+8*(p->pointnum2D)*3+4;
     ++n;
 
-	// velocity
-	offset[n]=offset[n-1]+4*(p->pointnum2D)*3+4;
-	++n;
+    // velocity
+    offset[n]=offset[n-1]+4*(p->pointnum2D)*3+4;
+    ++n;
 
     // pressure
-	offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
-	++n;
-    
+    offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
+    ++n;
+
     // eddyv
-	offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
-	++n;
-    
+    offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
+    ++n;
+
     // k and eps
-	pturb->offset_vtp(p,b,pgc,result,offset,n);
-    
+    pturb->offset_vtp(p,b,pgc,result,offset,n);
+
     // eta
-	offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
-	++n;
-    
+    offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
+    ++n;
+
     // waterlevel
-	offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
-	++n;
-    
+    offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
+    ++n;
+
     // wetdry
-	offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
-	++n;
+    offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
+    ++n;
 
     // breaking
-	offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
-	++n;
+    offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
+    ++n;
 
     // test
     if(p->P23==1)
     {
-	offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
-	++n;
+    offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
+    ++n;
     }
-    
+
     // fb
     if(p->P28==1)
     {
-	offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
-	++n;
-    }
-    
-    // Hs
-    if(p->P110==1)
-	{
-	offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
-	++n;
+    offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
+    ++n;
     }
 
-	// Cells
+    // Hs
+    if(p->P110==1)
+    {
+    offset[n]=offset[n-1]+4*(p->pointnum2D)+4;
+    ++n;
+    }
+
+    // Cells
     offset[n]=offset[n-1] + 4*p->polygon_sum*3+4;
     ++n;
     offset[n]=offset[n-1] + 4*p->polygon_sum+4;
     ++n;
-	offset[n]=offset[n-1] + 4*p->polygon_sum+4;
+    offset[n]=offset[n-1] + 4*p->polygon_sum+4;
     ++n;
 
 
-	result<<"<?xml version=\"1.0\"?>"<<endl;
-	result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
-	result<<"<PolyData>"<<endl;
-	result<<"<Piece NumberOfPoints=\""<<p->pointnum2D<<"\" NumberOfPolys=\""<<p->polygon_sum<<"\">"<<endl;
-    
+    result<<"<?xml version=\"1.0\"?>"<<endl;
+    result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
+    result<<"<PolyData>"<<endl;
+    result<<"<Piece NumberOfPoints=\""<<p->pointnum2D<<"\" NumberOfPolys=\""<<p->polygon_sum<<"\">"<<endl;
+
     if(p->P16==1)
     {
     result<<"<FieldData>"<<endl;
@@ -262,7 +262,7 @@ void sflow_vtp_fsf::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sflow_turbulence
     }
 
     n=0;
-	result<<"<Points>"<<endl;
+    result<<"<Points>"<<endl;
     result<<"<DataArray type=\"Float64\"  NumberOfComponents=\"3\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     result<<"</Points>"<<endl;
@@ -273,30 +273,30 @@ void sflow_vtp_fsf::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sflow_turbulence
     ++n;
     result<<"<DataArray type=\"Float32\" Name=\"pressure\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-	result<<"<DataArray type=\"Float32\" Name=\"eddyv\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"eddyv\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     pturb->name_vtp(p,b,pgc,result,offset,n);
     result<<"<DataArray type=\"Float32\" Name=\"eta\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-	result<<"<DataArray type=\"Float32\" Name=\"waterlevel\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    result<<"<DataArray type=\"Float32\" Name=\"waterlevel\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     result<<"<DataArray type=\"Float32\" Name=\"wetdry\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     result<<"<DataArray type=\"Float32\" Name=\"breaking\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-    
+
     if(p->P23==1)
     {
     result<<"<DataArray type=\"Float32\" Name=\"test\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     }
-    
+
     if(p->P28==1)
     {
     result<<"<DataArray type=\"Float32\" Name=\"fb\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
     }
-    
+
     if(p->P110==1)
     {
     result<<"<DataArray type=\"Float32\" Name=\"Hs\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
@@ -309,11 +309,11 @@ void sflow_vtp_fsf::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sflow_turbulence
     result<<"<Polys>"<<endl;
     result<<"<DataArray type=\"Int32\"  Name=\"connectivity\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-	result<<"<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
-	++n;
+    result<<"<DataArray type=\"Int32\"  Name=\"offsets\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
+    ++n;
     result<<"<DataArray type=\"Int32\"  Name=\"types\"  format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
-	result<<"</Polys>"<<endl;
+    result<<"</Polys>"<<endl;
 
     result<<"</Piece>"<<endl;
     result<<"</PolyData>"<<endl;
@@ -322,53 +322,53 @@ void sflow_vtp_fsf::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sflow_turbulence
     //----------------------------------------------------------------------------
     result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
 
-	//  XYZ
-	iin=8*(p->pointnum2D)*3;
-	result.write((char*)&iin, sizeof (int));
+    //  XYZ
+    iin=8*(p->pointnum2D)*3;
+    result.write((char*)&iin, sizeof (int));
     TPSLICELOOP
-	{
-	ddn=p->XN[IP1];
-	result.write((char*)&ddn, sizeof (double));
+    {
+    ddn=p->XN[IP1];
+    result.write((char*)&ddn, sizeof (double));
 
-	ddn=p->YN[JP1];
-	result.write((char*)&ddn, sizeof (double));
+    ddn=p->YN[JP1];
+    result.write((char*)&ddn, sizeof (double));
 
     if(p->P73==0)
-	ddn=p->sl_ipol4eta(p->wet,b->eta,b->bed) + p->wd;
-    
+    ddn=p->sl_ipol4eta(p->wet,b->eta,b->bed) + p->wd;
+
     if(p->wet[IJ]==1 && p->wet[Ip1J]==1 && p->wet[IJp1]==1 && p->wet[Ip1Jp1]==1)
     ddn = MAX(ddn,b->bednode(i,j)+p->A244);
-    
+
     if(p->P73==1)
     {
     ddn=0.5*(b->hx(i,j)+b->hx(i,j+1)) + p->sl_ipol4(b->bed);
     }
-    
+
     if(p->P73==2)
-	{
+    {
     ddn=0.5*(b->hy(i,j)+b->hy(i+1,j)) + p->sl_ipol4(b->bed);
     }
-    
+
     if(p->P73==3)
     ddn=p->sl_ipol4(b->eta) + p->wd;
-    
-	result.write((char*)&ddn, sizeof (double));
-	}
+
+    result.write((char*)&ddn, sizeof (double));
+    }
 
     //  Velocities
     iin=4*(p->pointnum2D)*3;
-	result.write((char*)&iin, sizeof (int));
+    result.write((char*)&iin, sizeof (int));
     TPSLICELOOP
-	{
-	ffn=float(p->sl_ipol1a(b->P));
-	result.write((char*)&ffn, sizeof (float));
+    {
+    ffn=float(p->sl_ipol1a(b->P));
+    result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(p->sl_ipol2a(b->Q));
-	result.write((char*)&ffn, sizeof (float));
+    ffn=float(p->sl_ipol2a(b->Q));
+    result.write((char*)&ffn, sizeof (float));
 
-	ffn=float(p->sl_ipol4(b->ws));
-	result.write((char*)&ffn, sizeof (float));
-	}
+    ffn=float(p->sl_ipol4(b->ws));
+    result.write((char*)&ffn, sizeof (float));
+    }
 
     //  Pressure
     iin=4*(p->pointnum2D);
@@ -380,140 +380,140 @@ void sflow_vtp_fsf::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sflow_turbulence
     }
 
     //  eddyv
-	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
-	TPSLICELOOP
-	{
-	ffn=float(p->sl_ipol4(b->eddyv));
-	result.write((char*)&ffn, sizeof (float));
-	}
+    iin=4*(p->pointnum2D);
+    result.write((char*)&iin, sizeof (int));
+    TPSLICELOOP
+    {
+    ffn=float(p->sl_ipol4(b->eddyv));
+    result.write((char*)&ffn, sizeof (float));
+    }
 
     //  turbulence
     pturb->print_2D(p,b,pgc,result);
 
     //  Eta
-	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
+    iin=4*(p->pointnum2D);
+    result.write((char*)&iin, sizeof (int));
     TPSLICELOOP
-	{
-	ffn=float(p->sl_ipol4eta_wd(p->wet,b->eta,b->bed));
-	result.write((char*)&ffn, sizeof (float));
-	}
+    {
+    ffn=float(p->sl_ipol4eta_wd(p->wet,b->eta,b->bed));
+    result.write((char*)&ffn, sizeof (float));
+    }
 
-	//  Waterlevel
-	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
-	TPSLICELOOP
-	{
-	ffn=float(p->sl_ipol4(b->hp));
-	result.write((char*)&ffn, sizeof (float));
-	}
-    
+    //  Waterlevel
+    iin=4*(p->pointnum2D);
+    result.write((char*)&iin, sizeof (int));
+    TPSLICELOOP
+    {
+    ffn=float(p->sl_ipol4(b->hp));
+    result.write((char*)&ffn, sizeof (float));
+    }
+
     //  wetdry
-	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
-	TPSLICELOOP
-	{
-	ffn=0.25*float((p->wet[IJ]+p->wet[Ip1J]+p->wet[IJp1]+p->wet[Ip1Jp1]));
-	result.write((char*)&ffn, sizeof (float));
-	}
-    
+    iin=4*(p->pointnum2D);
+    result.write((char*)&iin, sizeof (int));
+    TPSLICELOOP
+    {
+    ffn=0.25*float((p->wet[IJ]+p->wet[Ip1J]+p->wet[IJp1]+p->wet[Ip1Jp1]));
+    result.write((char*)&ffn, sizeof (float));
+    }
+
     //  Breaking
-	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
-	TPSLICELOOP
-	{
-	ffn=float(p->sl_ipol4(b->breaking_print));
-	result.write((char*)&ffn, sizeof (float));
-	}
+    iin=4*(p->pointnum2D);
+    result.write((char*)&iin, sizeof (int));
+    TPSLICELOOP
+    {
+    ffn=float(p->sl_ipol4(b->breaking_print));
+    result.write((char*)&ffn, sizeof (float));
+    }
 
     //  test
     if(p->P23==1)
     {
-	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
-	TPSLICELOOP
-	{
-	ffn=float(p->sl_ipol4(b->test));
-	result.write((char*)&ffn, sizeof (float));
-	}
+    iin=4*(p->pointnum2D);
+    result.write((char*)&iin, sizeof (int));
+    TPSLICELOOP
+    {
+    ffn=float(p->sl_ipol4(b->test));
+    result.write((char*)&ffn, sizeof (float));
     }
-    
+    }
+
     //  fb
     if(p->P28==1)
     {
-	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
-	TPSLICELOOP
-	{
-	ffn=float(p->sl_ipol4(b->fs));
-	result.write((char*)&ffn, sizeof (float));
-	}
+    iin=4*(p->pointnum2D);
+    result.write((char*)&iin, sizeof (int));
+    TPSLICELOOP
+    {
+    ffn=float(p->sl_ipol4(b->fs));
+    result.write((char*)&ffn, sizeof (float));
     }
-    
+    }
+
     //  Hs
     if(p->P110==1)
     {
-	iin=4*(p->pointnum2D);
-	result.write((char*)&iin, sizeof (int));
-	TPSLICELOOP
-	{
-	ffn=float(p->sl_ipol4(b->Hs));
-	result.write((char*)&ffn, sizeof (float));
-	}
+    iin=4*(p->pointnum2D);
+    result.write((char*)&iin, sizeof (int));
+    TPSLICELOOP
+    {
+    ffn=float(p->sl_ipol4(b->Hs));
+    result.write((char*)&ffn, sizeof (float));
+    }
     }
 
     //  Connectivity
     iin=4*(p->polygon_sum)*3;
     result.write((char*)&iin, sizeof (int));
     SLICEBASELOOP
-	{
-	// Triangle 1
-	iin=int(b->nodeval(i-1,j-1))-1;
-	result.write((char*)&iin, sizeof (int));
+    {
+    // Triangle 1
+    iin=int(b->nodeval(i-1,j-1))-1;
+    result.write((char*)&iin, sizeof (int));
 
-	iin=int(b->nodeval(i,j-1))-1;
-	result.write((char*)&iin, sizeof (int));
+    iin=int(b->nodeval(i,j-1))-1;
+    result.write((char*)&iin, sizeof (int));
 
-	iin=int(b->nodeval(i,j))-1;
-	result.write((char*)&iin, sizeof (int));
+    iin=int(b->nodeval(i,j))-1;
+    result.write((char*)&iin, sizeof (int));
 
 
-	// Triangle 2
-	iin=int(b->nodeval(i-1,j-1))-1;
-	result.write((char*)&iin, sizeof (int));
+    // Triangle 2
+    iin=int(b->nodeval(i-1,j-1))-1;
+    result.write((char*)&iin, sizeof (int));
 
-	iin=int(b->nodeval(i,j))-1;
-	result.write((char*)&iin, sizeof (int));
+    iin=int(b->nodeval(i,j))-1;
+    result.write((char*)&iin, sizeof (int));
 
-	iin=int(b->nodeval(i-1,j))-1;
-	result.write((char*)&iin, sizeof (int));
-	}
+    iin=int(b->nodeval(i-1,j))-1;
+    result.write((char*)&iin, sizeof (int));
+    }
 
 
     // Offset of Connectivity
     iin=4*(p->polygon_sum);
     result.write((char*)&iin, sizeof (int));
-	for(n=0;n<p->polygon_sum;++n)
-	{
-	iin=(n+1)*3;
-	result.write((char*)&iin, sizeof (int));
-	}
+    for(n=0;n<p->polygon_sum;++n)
+    {
+    iin=(n+1)*3;
+    result.write((char*)&iin, sizeof (int));
+    }
 
 //  Cell types
     iin=4*(p->polygon_sum);
     result.write((char*)&iin, sizeof (int));
-	for(n=0;n<p->polygon_sum;++n)
-	{
-	iin=7;
-	result.write((char*)&iin, sizeof (int));
-	}
+    for(n=0;n<p->polygon_sum;++n)
+    {
+    iin=7;
+    result.write((char*)&iin, sizeof (int));
+    }
 
     result<<endl<<"</AppendedData>"<<endl;
     result<<"</VTKFile>"<<endl;
 
-	result.close();
+    result.close();
 
-	++p->printcount;
+    ++p->printcount;
 
 }

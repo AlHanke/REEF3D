@@ -36,39 +36,39 @@ class sflow_state : public increment
 {
 
 public:
-	sflow_state(lexer*,fdm2D*,ghostcell*,int);
-	virtual ~sflow_state();
-	void write(lexer*,fdm2D*,ghostcell*);
+    sflow_state(lexer*,fdm2D*,ghostcell*,int);
+    virtual ~sflow_state();
+    void write(lexer*,fdm2D*,ghostcell*);
     void write_single(lexer*,fdm2D*,ghostcell*);
     void write_contiuous(lexer*,fdm2D*,ghostcell*);
     void write_restart(lexer*,fdm2D*,ghostcell*);
-    
+
     void read(lexer*,fdm2D*,ghostcell*);
-    
+
     void ini_mainheader(lexer*,fdm2D*,ghostcell*);
-    
+
     void write_result(lexer*,fdm2D*,ghostcell*);
     void write_mainheader(lexer*,fdm2D*,ghostcell*);
     void write_header(lexer*,fdm2D*,ghostcell*);
-	
+
 private:
     void boundary(lexer*,fdm2D*,ghostcell*,int);
-    
+
     void filename_single(lexer*,fdm2D*,ghostcell*,int);
     void filename_continuous(lexer*,fdm2D*,ghostcell*);
     void filename_header(lexer*,fdm2D*,ghostcell*);
-    
+
     char name[500];
     float ffn;
-	int iin;
-	double ddn;
-	int printcount;
+    int iin;
+    double ddn;
+    int printcount;
     int ini_token;
     int restart;
     int file_version,file_type;
     int qn;
     ofstream result;
-    
+
     
     int is,ie,js,je;
     int is_global,ie_global,js_global,je_global;
@@ -78,7 +78,7 @@ private:
     int *flag_all;
     int *is_flag_all,*ie_flag_all,*js_flag_all,*je_flag_all;
     int *is_global_all,*ie_global_all,*js_global_all,*je_global_all;
-    
+
     
 };
 

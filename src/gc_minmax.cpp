@@ -140,5 +140,3 @@ maxi=-1.0e18;
 
    return maxi;
 }
-
-

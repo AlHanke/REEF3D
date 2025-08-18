@@ -37,10 +37,10 @@ class print_averaging_f : public print_averaging, public increment
 {
 public:
     print_averaging_f(lexer*,fdm*,ghostcell*);
-	virtual ~print_averaging_f();
-    
+    virtual ~print_averaging_f();
+
     virtual void averaging(lexer *p, fdm *a, ghostcell *pgc, heat*);
-    
+
     virtual void name_pvtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result);
     virtual void name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n);
     virtual void offset_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n);
@@ -50,10 +50,10 @@ public:
 private:
     double stime;
     int Tswitch;
-    
+
     float ffn;
-	int q,iin;
-    
+    int q,iin;
+
     field1 um;
     field2 vm;
     field3 wm;

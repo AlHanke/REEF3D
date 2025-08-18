@@ -30,12 +30,11 @@ using namespace std;
 class momentum_void : public momentum
 {
 public:
-	momentum_void();
-	virtual ~momentum_void();
-	virtual void start(lexer*, fdm*, ghostcell*,vrans*,sixdof*);
+    momentum_void();
+    virtual ~momentum_void();
+    virtual void start(lexer*, fdm*, ghostcell*,vrans*,sixdof*);
 
 private:
 };
 
 #endif
-

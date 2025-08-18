@@ -39,31 +39,31 @@ class sflow_turb_io : public sflow_turbulence, public increment
 
 public:
     sflow_turb_io(lexer*);
-	virtual ~sflow_turb_io();
-    
+    virtual ~sflow_turb_io();
+
     virtual void print_2D(lexer*, fdm2D*, ghostcell*,ofstream&);
-    
+
     virtual void kinget(int,int,double);
     virtual void epsget(int,int,double);
-    
+
     virtual double kinval(int,int);
     virtual double epsval(int,int);
-    
-	virtual void name_pvtp(lexer*, fdm2D*, ghostcell*,ofstream&);
+
+    virtual void name_pvtp(lexer*, fdm2D*, ghostcell*,ofstream&);
     virtual void name_vtp(lexer*, fdm2D*, ghostcell*,ofstream&, int*, int &);
-    
+
     virtual void offset_vtp(lexer*, fdm2D*, ghostcell*,ofstream&, int*, int &);
-    
+
     slice4 kin, eps;
-    
+
     int gcval_eps,gcval_kin;
-    
+
 private:
-    
+
     double val;
     float ffn;
     int iin;
-    
+
 };
 
 #endif

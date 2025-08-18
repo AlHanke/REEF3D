@@ -35,18 +35,18 @@ class print_porous :  public increment
 {
 
 public:
-	print_porous(lexer*,fdm*,ghostcell*);
-	virtual ~print_porous();
-	virtual void start(lexer*,fdm*,ghostcell*);
+    print_porous(lexer*,fdm*,ghostcell*);
+    virtual ~print_porous();
+    virtual void start(lexer*,fdm*,ghostcell*);
     virtual void print_vtp(lexer*,fdm*,ghostcell*);
-	virtual void objects(lexer*,fdm*,ghostcell*);
-	
+    virtual void objects(lexer*,fdm*,ghostcell*);
+
     void box(lexer*,fdm*,ghostcell*,int);
     void cylinder_z(lexer*,fdm*,ghostcell*,int);
-	void wedge_x(lexer*,fdm*,ghostcell*,int);
+    void wedge_x(lexer*,fdm*,ghostcell*,int);
     void wedge_y(lexer*,fdm*,ghostcell*,int);
     void plate_x(lexer*,fdm*,ghostcell*,int);
-    
+
     void box_veg(lexer*,fdm*,ghostcell*,int);
     void wedge_x_veg(lexer*,fdm*,ghostcell*,int);
     void wedge_y_veg(lexer*,fdm*,ghostcell*,int);
@@ -54,17 +54,15 @@ public:
 private:
     char name[100];
     int offset[200];
-	int **polygon,*numvert;
+    int **polygon,*numvert;
     double **vertice;
-	
+
     float ffn;
     int polygon_num,vertice_num,polygon_sum ,iin,q;
-	double xs,xe,ys,ye,zs,ze;
-	int vertice_alloc, polygon_alloc;
+    double xs,xe,ys,ye,zs,ze;
+    int vertice_alloc, polygon_alloc;
 
 
 };
 
 #endif
-
-

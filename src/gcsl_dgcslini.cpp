@@ -42,14 +42,14 @@ void ghostcell::dgcslini1(lexer* p)
         {
         ++count;
         }
-        
+
         if(p->flagslice1[(i-p->imin+1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice1[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice1[(i-p->imin+1)*p->jmax + (j-p->jmin)+1]<0)
         {
         ++count;
         }
-        
+
         if(p->flagslice1[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice1[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice1[(i-p->imin-1)*p->jmax + (j-p->jmin)+1]<0)
@@ -57,13 +57,13 @@ void ghostcell::dgcslini1(lexer* p)
         ++count;
         }
     }
-    
+
     p->Iarray(p->dgcsl1,count,3);
-	p->dgcsl1_count=count;
-    
+    p->dgcsl1_count=count;
+
         //------------
-        
-    count=0;   
+
+    count=0;
     SLICELOOP1
     {
         if(p->flagslice1[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0
@@ -85,7 +85,7 @@ void ghostcell::dgcslini1(lexer* p)
         p->dgcsl1[count][2]=2;
         ++count;
         }
-        
+
         if(p->flagslice1[(i-p->imin+1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice1[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice1[(i-p->imin+1)*p->jmax + (j-p->jmin)+1]<0)
@@ -95,7 +95,7 @@ void ghostcell::dgcslini1(lexer* p)
         p->dgcsl1[count][2]=3;
         ++count;
         }
-        
+
         if(p->flagslice1[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice1[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice1[(i-p->imin-1)*p->jmax + (j-p->jmin)+1]<0)
@@ -106,7 +106,7 @@ void ghostcell::dgcslini1(lexer* p)
         ++count;
         }
     }
-    
+
 }
 
 void ghostcell::dgcslini2(lexer* p)
@@ -127,14 +127,14 @@ void ghostcell::dgcslini2(lexer* p)
         {
         ++count;
         }
-        
+
         if(p->flagslice2[(i-p->imin+1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice2[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice2[(i-p->imin+1)*p->jmax + (j-p->jmin)+1]<0)
         {
         ++count;
         }
-        
+
         if(p->flagslice2[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice2[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice2[(i-p->imin-1)*p->jmax + (j-p->jmin)+1]<0)
@@ -142,13 +142,13 @@ void ghostcell::dgcslini2(lexer* p)
         ++count;
         }
     }
-    
+
     p->Iarray(p->dgcsl2,count,3);
-	p->dgcsl2_count=count;
-    
+    p->dgcsl2_count=count;
+
         //------------
-        
-    count=0;   
+
+    count=0;
     SLICELOOP2
     {
         if(p->flagslice2[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0
@@ -170,7 +170,7 @@ void ghostcell::dgcslini2(lexer* p)
         p->dgcsl2[count][2]=2;
         ++count;
         }
-        
+
         if(p->flagslice2[(i-p->imin+1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice2[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice2[(i-p->imin+1)*p->jmax + (j-p->jmin)+1]<0)
@@ -180,7 +180,7 @@ void ghostcell::dgcslini2(lexer* p)
         p->dgcsl2[count][2]=3;
         ++count;
         }
-        
+
         if(p->flagslice2[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice2[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice2[(i-p->imin-1)*p->jmax + (j-p->jmin)+1]<0)
@@ -191,12 +191,11 @@ void ghostcell::dgcslini2(lexer* p)
         ++count;
         }
     }
-    		
+
 }
 
 void ghostcell::dgcslini3(lexer* p)
 {
-		
 }
 
 void ghostcell::dgcslini4(lexer* p)
@@ -217,14 +216,14 @@ void ghostcell::dgcslini4(lexer* p)
         {
         ++count;
         }
-        
+
         if(p->flagslice4[(i-p->imin+1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice4[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice4[(i-p->imin+1)*p->jmax + (j-p->jmin)+1]<0)
         {
         ++count;
         }
-        
+
         if(p->flagslice4[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice4[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice4[(i-p->imin-1)*p->jmax + (j-p->jmin)+1]<0)
@@ -232,13 +231,13 @@ void ghostcell::dgcslini4(lexer* p)
         ++count;
         }
     }
-    
+
     p->Iarray(p->dgcsl4,count,3);
-	p->dgcsl4_count=count;
-    
+    p->dgcsl4_count=count;
+
         //------------
-        
-    count=0;   
+
+    count=0;
     SLICELOOP4
     {
         if(p->flagslice4[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0
@@ -260,7 +259,7 @@ void ghostcell::dgcslini4(lexer* p)
         p->dgcsl4[count][2]=2;
         ++count;
         }
-        
+
         if(p->flagslice4[(i-p->imin+1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice4[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice4[(i-p->imin+1)*p->jmax + (j-p->jmin)+1]<0)
@@ -270,7 +269,7 @@ void ghostcell::dgcslini4(lexer* p)
         p->dgcsl4[count][2]=3;
         ++count;
         }
-        
+
         if(p->flagslice4[(i-p->imin-1)*p->jmax + (j-p->jmin)]<0
         && p->flagslice4[(i-p->imin)*p->jmax + (j-p->jmin)+1]<0
         && p->flagslice4[(i-p->imin-1)*p->jmax + (j-p->jmin)+1]<0)
@@ -281,5 +280,5 @@ void ghostcell::dgcslini4(lexer* p)
         ++count;
         }
     }
-    
+
 }

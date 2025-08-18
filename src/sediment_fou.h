@@ -32,18 +32,18 @@ using namespace std;
 class sediment_fou : public sediment_exnerdisc, public increment
 {
 public:
-	sediment_fou(lexer*);
-	virtual ~sediment_fou();
+    sediment_fou(lexer*);
+    virtual ~sediment_fou();
 
     virtual double sx(lexer*, slice&, double, double);
-	virtual double sy(lexer*, slice&, double, double);
+    virtual double sy(lexer*, slice&, double, double);
 
 
 private:
 
     double ivel1,ivel2,jvel1,jvel2;
     double grad;
-    
+
     double fu1,fu2,fv1,fv2;
 
 };

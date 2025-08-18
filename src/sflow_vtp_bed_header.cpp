@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include<string>
 
 void sflow_vtp_bed::name_iter(lexer *p, fdm2D* b, ghostcell* pgc)
-{	
+{
     int num=0;
 
     if(p->P15==1)
@@ -39,4 +39,3 @@ void sflow_vtp_bed::name_iter(lexer *p, fdm2D* b, ghostcell* pgc)
     sprintf(name,"./REEF3D_SFLOW_VTP_BED/REEF3D-SFLOW-BED-%08i-%06i.vtp",num,p->mpirank+1);
 
 }
-

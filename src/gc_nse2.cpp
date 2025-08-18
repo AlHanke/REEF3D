@@ -29,37 +29,37 @@ void ghostcell::nse2(lexer *p, fdm *a, field &f, int gcv)
     double nx,ny,nz,dnorm;
     double xp, yp, zp;
     double lsv;
-    
+
     
     VAIRLOOP
     f(i,j,k)=0.0;
-    
+
 
     VAIRLOOP
     {
     lsv = 0.5*(a->phi(i,j,k)+a->phi(i,j+1,k));
-    
+
         if(lsv>-4.1*(1.0/3.0)*(p->DXP[IP] + p->DYN[JP] + p->DZP[KP]))
-        {         
+        {
         nx = (a->phi(i+1,j,k)-a->phi(i,j,k))/p->DXP[IP];
         ny = (a->phi(i,j+1,k)-a->phi(i,j,k))/p->DYP[JP];
         nz = (a->phi(i,j,k+1)-a->phi(i,j,k))/p->DZP[KP];
 
         dnorm = sqrt(nx*nx + ny*ny + nz*nz);
-        
+
         nx/=dnorm;
         ny/=dnorm;
         nz/=dnorm;
-        
+
         xp = p->pos2_x() + nx*(1.0*fabs(lsv)+0.0*p->DXP[IP]);
         yp = p->pos2_y() + ny*(1.0*fabs(lsv)+0.0*p->DYN[JP]);
         zp = p->pos2_z() + nz*(1.0*fabs(lsv)+0.0*p->DZP[KP]);
-        
+
         // chk bounds
         f(i,j,k) = p->ccipol2_a(f, xp, yp, zp);
         }
-    
+
     }
-    
+
     
 }

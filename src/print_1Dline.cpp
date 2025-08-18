@@ -26,11 +26,11 @@ Author: Hans Bihs
 #include"ghostcell.h"
 
 print_1Dline::print_1Dline(lexer *p, fdm* a, ghostcell *pgc)
-{	
-	p->Iarray(iloc,p->P51);
-	p->Iarray(jloc,p->P51);
-	p->Iarray(flag,p->P51);
-	p->Darray(wsf,p->P51);
+{
+    p->Iarray(iloc,p->P51);
+    p->Iarray(jloc,p->P51);
+    p->Iarray(flag,p->P51);
+    p->Darray(wsf,p->P51);
 
     for(n=0;n<p->P51;++n)
     {
@@ -48,7 +48,7 @@ print_1Dline::print_1Dline(lexer *p, fdm* a, ghostcell *pgc)
     wsfout<<"number of gauges:  "<<p->P51<<endl<<endl;
     wsfout<<"x_coord     ycoord"<<endl;
     for(n=0;n<p->P51;++n)
-    wsfout<<n+1<<"\t "<<p->P51_x[n]<<"\t "<<p->P51_y[n]<<endl;
+    wsfout<<n+1<<" \t "<<p->P51_x[n]<<" \t "<<p->P51_y[n]<<endl;
 
     wsfout<<endl<<endl;
 
@@ -68,7 +68,7 @@ print_1Dline::~print_1Dline()
 }
 
 void print_1Dline::height_gauge(lexer *p, fdm *a, ghostcell *pgc)
-{   
+{
     double zval=0.0;
 
     for(n=0;n<p->P51;++n)
@@ -97,9 +97,9 @@ void print_1Dline::height_gauge(lexer *p, fdm *a, ghostcell *pgc)
     // write to file
     if(p->mpirank==0)
     {
-    wsfout<<p->simtime<<"\t";
+    wsfout<<p->simtime<<" \t ";
     for(n=0;n<p->P51;++n)
-    wsfout<<wsf[n]<<"  \t  ";
+    wsfout<<wsf[n]<<" \t ";
     wsfout<<endl;
     }
 }
@@ -146,5 +146,3 @@ b=c-1;
 return b;
 
 }
-
-

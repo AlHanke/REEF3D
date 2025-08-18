@@ -32,12 +32,12 @@ class flux_HJ_CDS2_vrans_2D : public flux, public increment
 {
 public:
 
-	flux_HJ_CDS2_vrans_2D (lexer *p);
-	virtual ~flux_HJ_CDS2_vrans_2D();
+    flux_HJ_CDS2_vrans_2D (lexer *p);
+    virtual ~flux_HJ_CDS2_vrans_2D();
 
-	virtual void u_flux(fdm* a,int,field&,double&,double&);
-	virtual void v_flux(fdm* a,int,field&,double&,double&);
-	virtual void w_flux(fdm* a,int,field&,double&,double&);
+    virtual void u_flux(fdm* a,int,field&,double&,double&);
+    virtual void v_flux(fdm* a,int,field&,double&,double&);
+    virtual void w_flux(fdm* a,int,field&,double&,double&);
 
 };
 

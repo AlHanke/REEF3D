@@ -35,42 +35,42 @@ class wave_lib_irregular_2nd_b : public wave_lib_precalc, public wave_lib_parame
 {
 public:
     wave_lib_irregular_2nd_b(lexer*, ghostcell*);
-	virtual ~wave_lib_irregular_2nd_b();
+    virtual ~wave_lib_irregular_2nd_b();
 
     double wave_horzvel(lexer*,double,double,double);
-    
+
     virtual double wave_u(lexer*,double,double,double);
     virtual double wave_v(lexer*,double,double,double);
     virtual double wave_w(lexer*,double,double,double);
     virtual double wave_eta(lexer*,double,double);
     virtual double wave_fi(lexer*,double,double,double);
-    
+
     virtual void parameters(lexer*,ghostcell*);
     virtual void wave_prestep(lexer*,ghostcell*);
-    
-private: 
+
+private:
     double wave_A_plus(double,double,double,double);
-	double wave_A_minus(double,double,double,double);
+    double wave_A_minus(double,double,double,double);
     double wave_D_plus(double,double,double,double);
-	double wave_D_minus(double,double,double,double);
-	double wave_G_plus(double,double,double,double);
-	double wave_G_minus(double,double,double,double);
-	double wave_H_plus(double,double,double,double);
-	double wave_H_minus(double,double,double,double);
-	double wave_F_plus(double,double,double,double);
-	double wave_F_minus(double,double,double,double);
-    
+    double wave_D_minus(double,double,double,double);
+    double wave_G_plus(double,double,double,double);
+    double wave_G_minus(double,double,double,double);
+    double wave_H_plus(double,double,double,double);
+    double wave_H_minus(double,double,double,double);
+    double wave_F_plus(double,double,double,double);
+    double wave_F_minus(double,double,double,double);
+
     double **Aplus,**Aminus,**Dplus,**Dminus,**Gplus,**Gminus,**Hplus,**Hminus,**Fplus,**Fminus;
-    
+
     double *cosh_kpk,*cosh_kmk,*cosh_2k,*sinh_4kh;
     int m;
     double singamma,cosgamma;
     double T,vel,eta,fi;
     double denom1,denom2,denom3;
-    
+
     
     double *sinhkd;
-    
+
 };
 
 #endif

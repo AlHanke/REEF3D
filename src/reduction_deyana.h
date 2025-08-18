@@ -38,7 +38,7 @@ public:
     reduction_deyana(lexer*);
     virtual ~reduction_deyana();
 
-	virtual void start(lexer*,ghostcell*,sediment_fdm*);
+    virtual void start(lexer*,ghostcell*,sediment_fdm*);
 
 private:
 
@@ -49,5 +49,3 @@ private:
 };
 
 #endif
-
-

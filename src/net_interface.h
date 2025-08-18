@@ -36,36 +36,36 @@ using namespace std;
 class net_interface : public increment
 {
 public:
-	net_interface(lexer*, ghostcell*);
-	virtual ~net_interface();
+    net_interface(lexer*, ghostcell*);
+    virtual ~net_interface();
 
     virtual void start_cfd(lexer*, fdm*, ghostcell*, double, Eigen::Matrix3d){};
     virtual void start_nhflow(lexer*, fdm_nhf*, ghostcell*, double, Eigen::Matrix3d){};
 
     virtual void netForces_cfd(lexer*, fdm*, ghostcell*, double, Eigen::Matrix3d, vector<double>, vector<double>, vector<double>, vector<double>, vector<double>, vector<double>);
     virtual void netForces_nhflow(lexer*, fdm_nhf*, ghostcell*, double, Eigen::Matrix3d, vector<double>, vector<double>, vector<double>, vector<double>, vector<double>, vector<double>);
-    
+
 
     void dlm_cfd(lexer*, fdm*, ghostcell*, int);
     void dlm_nhflow(lexer*, fdm_nhf*, ghostcell*, int);
-    
+
     virtual void initialize_cfd(lexer*, fdm*, ghostcell*);
     virtual void initialize_nhflow(lexer*, fdm_nhf*, ghostcell*);
-    
+
     typedef vector<Eigen::Vector3d> EigenMat;
-    
+
     
 private:
     vector<net*> pnet;
-   
+
     field1 kernel_x;
     field2 kernel_y;
     field3 kernel_z;
-    
+
     double *KX,*KY,*KZ;
-   
+
    double kernel_peskin(const double&);
-   
+
 };
 
 #endif

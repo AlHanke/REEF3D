@@ -37,57 +37,57 @@ class nhflow_fsf_f : public nhflow_fsf, public increment
 {
 public:
     nhflow_fsf_f(lexer*, fdm_nhf*, ghostcell*,ioflow*,patchBC_interface*);
-	virtual ~nhflow_fsf_f();
-    
+    virtual ~nhflow_fsf_f();
+
     virtual void start(lexer*, fdm_nhf*, ghostcell*, ioflow*);
     virtual void ini(lexer*, fdm_nhf*, ghostcell*, ioflow*, double*, double*, double*);
-    
+
     virtual void rk2_step1(lexer*, fdm_nhf*, ghostcell*, ioflow*, double*, double*, double*, slice&, slice&, double);
     virtual void rk2_step2(lexer*, fdm_nhf*, ghostcell*, ioflow*, double*, double*, double*, slice&, slice&, double);
-    
+
     virtual void rk3_step1(lexer*, fdm_nhf*, ghostcell*, ioflow*, double*, double*, double*, slice&, slice&, double);
     virtual void rk3_step2(lexer*, fdm_nhf*, ghostcell*, ioflow*, double*, double*, double*, slice&, slice&, double);
     virtual void rk3_step3(lexer*, fdm_nhf*, ghostcell*, ioflow*, double*, double*, double*, slice&, slice&, double);
 
     virtual void kinematic_fsf(lexer*, fdm_nhf*, double*, double*, double*,slice&);
     virtual void kinematic_bed(lexer*, fdm_nhf*, double*, double*, double*);
-    
+
     virtual void wetdry(lexer*, fdm_nhf*, ghostcell*, double*, double*, double*, slice&);
     virtual void wetdry_fluxes(lexer*, fdm_nhf*, ghostcell*,slice&,double*,double*,double*,double*,double*,double*);
-    
+
     virtual void breaking(lexer*, fdm_nhf*, ghostcell*,slice&, slice&, double);
-    
+
     virtual void ucorr(lexer*, fdm_nhf*, double*, slice&, double);
     virtual void vcorr(lexer*, fdm_nhf*, double*, slice&, double);
-    
+
     virtual void depth_update(lexer*, fdm_nhf*, ghostcell*, ioflow*);
-    
+
     void update(lexer*,fdm_nhf*,ghostcell*,slice&);
-    
-private: 
+
+private:
     void filter(lexer*, fdm_nhf*, ghostcell*, slice&);
-    
+
     void fsf_guard(lexer*, fdm_nhf*, ghostcell*, slice&, slice&);
-    
+
     double limiter(double, double);
-    
+
     patchBC_interface *pBC;
-    
+
     slice1 P;
     slice2 Q;
     slice4 K;
     int *temp;
 
     int gcval_phi,gcval_eta;
-	double starttime;
+    double starttime;
     double phival,H;
-	double d;
+    double d;
     double val, denom;
     double dfdx_min, dfdx_plus, dfdy_min, dfdy_plus;
     double detadx,detady;
-    
+
     int guard_is,guard_ie,guard_js,guard_je;
-    
+
     const double eps;
 
 };

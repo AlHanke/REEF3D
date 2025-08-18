@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include<string>
 
 void fnpf_vtu3D::name_iter(lexer *p, ghostcell* pgc)
-{	
+{
     int num=0;
 
     if(p->P15==1)
@@ -39,4 +39,3 @@ void fnpf_vtu3D::name_iter(lexer *p, ghostcell* pgc)
     sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-%08i-%06i.vtu",num,p->mpirank+1);
 
 }
-

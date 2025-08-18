@@ -30,27 +30,27 @@ sliceint4a::sliceint4a(lexer *p)
     imax=p->imax;
     jmin=p->jmin;
     jmax=p->jmax;
-    
-	fieldalloc(p);
 
-	pp=p;
+    fieldalloc(p);
+
+    pp=p;
 }
 
 sliceint4a::~sliceint4a()
 {
-	delete [ ] V;
+    delete [ ] V;
 }
 
 void sliceint4a::fieldalloc(lexer* p)
 {
-	int gridsize = imax*jmax;
-	p->Iarray(V,gridsize);
+    int gridsize = imax*jmax;
+    p->Iarray(V,gridsize);
 }
 
 void sliceint4a::dealloc(lexer* p)
 {
 
-	delete [ ] V;
+    delete [ ] V;
 
 }
 
@@ -59,7 +59,6 @@ void sliceint4a::resize(lexer* p)
 }
 
 int & sliceint4a::operator()(int ii, int jj)
-{			
-	return V[(ii-imin)*jmax + (jj-jmin)];	
+{
+    return V[(ii-imin)*jmax + (jj-jmin)];
 }
-

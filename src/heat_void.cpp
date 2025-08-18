@@ -76,6 +76,3 @@ void heat_void::name_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int
 void heat_void::offset_vtu(lexer *p, fdm *a, ghostcell *pgc, ofstream &result, int *offset, int &n)
 {
 }
-
-
-
