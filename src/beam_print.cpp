@@ -47,7 +47,7 @@ void beam::print(lexer *p)
     {
         printtime+=p->P30;
 
-        sprintf(name,"./REEF3D_CFD_Beam/REEF3D-Beam-%i-%06i.vtk",nBeam,num);
+        sprintf(name,"./REEF3D_CFD_Beam/REEF3D-Beam-%i-%0*i.vtk",nBeam,p->padding_mpi,num);
 
         ofstream result;
         result.open(name, ios::binary);

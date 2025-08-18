@@ -36,7 +36,7 @@ void force::pvtp(lexer* p, fdm* a, ghostcell* pgc)
     if(p->P15==2)
     num = p->count;
 
-    sprintf(name,"./REEF3D_SOLID/REEF3D-SOLID-%08i-%06i.pvtp",num,ID);
+    sprintf(name,"./REEF3D_SOLID/REEF3D-SOLID-%0*i-%0*i.pvtp",p->padding_time,num,p->padding_mpi,ID);
 
     ofstream result;
     result.open(name);
@@ -86,6 +86,6 @@ void force::piecename(lexer* p, fdm* a,  ghostcell* pgc, int n)
     if(p->P15==2)
     num = p->count;
 
-    sprintf(pname,"REEF3D-SOLID-%08i-%i-%06i.vtp",num,ID,n+1);
+    sprintf(pname,"REEF3D-SOLID-%0*i-%i-%0*i.vtp",p->padding_time,num,ID,p->padding_mpi,n+1);
 
 }

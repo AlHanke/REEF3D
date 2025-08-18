@@ -76,7 +76,7 @@ void net_barDyn::print(lexer *p)
     {
         printtime += p->P30;
 
-        sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%08i-%06i.vtk",nNet,num);
+        sprintf(name,"./REEF3D_CFD_6DOF_Net/REEF3D-Net-%0*i-%0*i.vtk",p->padding_time,nNet,p->padding_mpi,num);
 
 
         /*

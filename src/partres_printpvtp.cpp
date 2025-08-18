@@ -32,7 +32,7 @@ void partres::pvtp(lexer* p)
 
     num = printcount;
 
-    sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%08i.pvtp",num);
+    sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%0*i.pvtp",p->padding_time,num);
 
 
     ofstream result;
@@ -78,11 +78,11 @@ void partres::pvtp(lexer* p)
 
 void partres::piecename_pos(lexer* p, int n)
 {
-    sprintf(pname,"REEF3D-SedPart-%08i-%06i.vtp",printcount,n+1);
+    sprintf(pname,"REEF3D-SedPart-%0*i-%0*i.vtp",p->padding_time,printcount,p->padding_mpi,n+1);
 }
 
 /// @brief Setting name of indivdual vtp file
 void partres::header_pos(lexer* p)
 {
-    sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%08i-%06i.vtp",printcount,p->mpirank+1);
+    sprintf(name,"./REEF3D_CFD_SedPart/REEF3D-SedPart-%0*i-%0*i.vtp",p->padding_time,printcount,p->padding_mpi,p->mpirank+1);
 }

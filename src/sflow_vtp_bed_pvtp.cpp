@@ -37,7 +37,7 @@ void sflow_vtp_bed::pvtu(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     num = p->count;
 
 
-    sprintf(name,"./REEF3D_SFLOW_VTP_BED/REEF3D-SFLOW-BED-%08i.pvtp",num);
+    sprintf(name,"./REEF3D_SFLOW_VTP_BED/REEF3D-SFLOW-BED-%0*i.pvtp",p->padding_time,num);
 
 
     ofstream result;
@@ -110,5 +110,5 @@ void sflow_vtp_bed::piecename(lexer *p, fdm2D *b, ghostcell *pgc, int n)
     if(p->P15==2)
     num = p->count;
 
-    sprintf(pname,"REEF3D-SFLOW-BED-%08i-%06i.vtp",num,n+1);
+    sprintf(pname,"REEF3D-SFLOW-BED-%0*i-%0*i.vtp",p->padding_time,num,p->padding_mpi,n+1);
 }

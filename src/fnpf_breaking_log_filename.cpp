@@ -25,5 +25,5 @@ Author: Hans Bihs
 
 void fnpf_breaking_log::filename(lexer *p, fdm_fnpf *c, ghostcell *pgc)
 {
-    sprintf(name,"./REEF3D_FNPF_Breaking_Log/REEF3D_FNPF-Breaking-Log-%06i.r3d",p->mpirank+1);
+    sprintf(name,"./REEF3D_FNPF_Breaking_Log/REEF3D_FNPF-Breaking-Log-%0*i.r3d",p->padding_mpi,p->mpirank+1);
 }

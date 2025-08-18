@@ -36,7 +36,7 @@ void fnpf_vtu3D::pvtu(lexer *p, ghostcell* pgc)
     if(p->P15==2)
     num = p->count;
 
-    sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-%08i.pvtu",num);
+    sprintf(name,"./REEF3D_FNPF_VTU/REEF3D-FNPF-%0*i.pvtu",p->padding_time,num);
 
 
     ofstream result;
@@ -100,6 +100,6 @@ void fnpf_vtu3D::piecename(lexer *p, ghostcell *pgc, int n)
     if(p->P15==2)
     num = p->count;
 
-    sprintf(pname,"REEF3D-FNPF-%08i-%06i.vtu",num,n+1);
+    sprintf(pname,"REEF3D-FNPF-%0*i-%0*i.vtu",p->padding_time,num,p->padding_mpi,n+1);
 
 }

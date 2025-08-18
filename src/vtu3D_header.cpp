@@ -36,7 +36,7 @@ void vtu3D::name_iter(fdm* a,lexer* p,ghostcell* pgc)
     if(p->P15==2)
     num = p->count;
 
-    sprintf(name,"./REEF3D_CFD_VTU/REEF3D-CFD-%08i-%06i.vtu",num,p->mpirank+1);
+    sprintf(name,"./REEF3D_CFD_VTU/REEF3D-CFD-%0*i-%0*i.vtu",p->padding_time,num,p->padding_mpi,p->mpirank+1);
 
 
     sprintf(epsvar,"epsilon");
