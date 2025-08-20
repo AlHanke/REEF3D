@@ -74,7 +74,7 @@ void driver::driver_ini_fnpf()
     if(p->mpirank==0)
     cout<<"number of cells: "<<p->cellnumtot<<endl;
 
-    
+
     // maxcoor
     p->maxlength=-1.0e9;
     p->xcoormax=-1.0e9;
@@ -146,7 +146,7 @@ void driver::driver_ini_fnpf()
     p->cellnum2D=0;
     p->polygon_sum=0;
 
-   
+
     TPSLICELOOP
     {
     ++count;
@@ -167,7 +167,7 @@ void driver::driver_ini_fnpf()
 
     p->cellnumtot2D=pgc->globalisum(p->cellnum2D);
 
-    
+
     // eta ini
     SLICELOOP4
     c->eta(i,j) = 0.0;
@@ -177,7 +177,7 @@ void driver::driver_ini_fnpf()
      SLICELOOP4
     c->WL(i,j) = MAX(0.0,c->eta(i,j) + p->wd - c->bed(i,j));
 
-    
+
 
     SLICELOOP4
     p->sigz[IJ] = 1.0/WLVL;
@@ -201,15 +201,15 @@ void driver::driver_ini_fnpf()
 
     pftstep->ini(c,p,pgc);
 
-    pfprint->start(p,c,pgc,pflow);
+    pprint->start(p,c,pgc,pflow);
 
-    
+
     p->gctime=0.0;
     p->xtime=0.0;
     p->wavecalctime=0.0;
     p->field4time=0.0;
 
 
-     if(p->mpirank==0)
+    if(p->mpirank==0)
     cout<<"starting mainloop.FNPF"<<endl;
 }

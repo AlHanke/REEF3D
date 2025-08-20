@@ -88,7 +88,7 @@ void driver::loop_nhflow()
         pnhfstep->start(p,d,pgc);
 
         // printer
-        pnhfprint->start(p,d,pgc,pflow,pnhfturb,psed);
+        pprint->start(p,d,pgc,pflow,pnhfturb,psed);
 
         // Shell-Printout
         if(p->mpirank==0)
@@ -103,7 +103,7 @@ void driver::loop_nhflow()
         p->gcmeantime=(p->gctotaltime/double(p->count));
         p->Xmeantime=(p->Xtotaltime/double(p->count));
 
-        
+
         if(p->count%p->P12==0)
         {
         if(p->B90>0)

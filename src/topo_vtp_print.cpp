@@ -77,7 +77,7 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     ++n;
     //---------------------------------------------
 
-    
+
 
     result<<"<?xml version=\"1.0\"?>"<<endl;
     result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
@@ -97,16 +97,16 @@ void topo_vtp::print(lexer* p, fdm* a, ghostcell *pgc, sediment *psed)
     ++n;
 
     if(p->P76==1)
-    psed->name_vtu_bedload(p,pgc,result,offset,n);
+    psed->name_ParaView_bedload(p,pgc,result,offset,n);
 
     if(p->P77==1)
-    psed->name_vtu_parameter1(p,pgc,result,offset,n);
+    psed->name_ParaView_parameter1(p,pgc,result,offset,n);
 
     if(p->P78==1)
-    psed->name_vtu_parameter2(p,pgc,result,offset,n);
+    psed->name_ParaView_parameter2(p,pgc,result,offset,n);
 
     if(p->P79>=1)
-    psed->name_vtu_bedshear(p,pgc,result,offset,n);
+    psed->name_ParaView_bedshear(p,pgc,result,offset,n);
     result<<"</PointData>"<<endl;
 
     result<<"<Polys>"<<endl;

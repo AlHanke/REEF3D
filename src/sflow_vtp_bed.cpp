@@ -169,7 +169,7 @@ void sflow_vtp_bed::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     offset[n]=offset[n-1] + 4*p->polygon_sum+4;
     ++n;
 
-    
+
     result<<"<?xml version=\"1.0\"?>"<<endl;
     result<<"<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">"<<endl;
     result<<"<PolyData>"<<endl;
@@ -189,7 +189,7 @@ void sflow_vtp_bed::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     ++n;
     result<<"</Points>"<<endl;
 
-    
+
     result<<"<PointData >"<<endl;
     result<<"<DataArray type=\"Float32\" Name=\"velocity\" NumberOfComponents=\"3\" format=\"appended\" offset=\""<<offset[n]<<"\" />"<<endl;
     ++n;
@@ -199,16 +199,16 @@ void sflow_vtp_bed::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     ++n;
 
     if(p->P76==1)
-    psed->name_vtu_bedload(p,pgc,result,offset,n);
+    psed->name_ParaView_bedload(p,pgc,result,offset,n);
 
     if(p->P77==1)
-    psed->name_vtu_parameter1(p,pgc,result,offset,n);
+    psed->name_ParaView_parameter1(p,pgc,result,offset,n);
 
     if(p->P78==1)
-    psed->name_vtu_parameter2(p,pgc,result,offset,n);
+    psed->name_ParaView_parameter2(p,pgc,result,offset,n);
 
     if(p->P79>=1)
-    psed->name_vtu_bedshear(p,pgc,result,offset,n);
+    psed->name_ParaView_bedshear(p,pgc,result,offset,n);
 
     if(p->P23==1)
     {
@@ -231,7 +231,7 @@ void sflow_vtp_bed::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     result<<"</Piece>"<<endl;
     result<<"</PolyData>"<<endl;
 
-    
+
     //----------------------------------------------------------------------------
     result<<"<AppendedData encoding=\"raw\">"<<endl<<"_";
 
@@ -299,7 +299,7 @@ void sflow_vtp_bed::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     if(p->P79>=1)
     psed->print_2D_bedshear(p,pgc,result);
 
-    
+
     //  Test
     if(p->P23==1)
     {
@@ -327,7 +327,7 @@ void sflow_vtp_bed::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     iin=int(b->nodeval(i,j))-1;
     result.write((char*)&iin, sizeof (int));
 
-    
+
     // Triangle 2
     iin=int(b->nodeval(i-1,j-1))-1;
     result.write((char*)&iin, sizeof (int));
@@ -339,7 +339,7 @@ void sflow_vtp_bed::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sediment *psed)
     result.write((char*)&iin, sizeof (int));
     }
 
-    
+
     //  Offset of Connectivity
     iin=4*(p->polygon_sum);
     result.write((char*)&iin, sizeof (int));

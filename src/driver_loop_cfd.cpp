@@ -101,7 +101,7 @@ void driver::loop_cfd(fdm* a)
         ptstep->start(a,p,pgc,pturb);
 
         // printer
-        pprint->start(a,p,pgc,pturb,pheat,pflow,psolv,pdata,pconc,pmp,psed);
+        pprint->start(p,a,pgc,pturb,pheat,pflow,pdata,pconc,pmp,psed);
 
         // Shell-Printout
         if(p->mpirank==0)
@@ -141,7 +141,7 @@ void driver::loop_cfd(fdm* a)
 
     pgc->gcparax(p,a->press,4);
 
-    
+
     stop(p,a,pgc);
     }
 

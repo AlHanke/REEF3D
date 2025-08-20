@@ -74,9 +74,9 @@ void driver::loop_ptf(fdm* a)
         p->simtime+=p->dt;
         ptstep->start(a,p,pgc,pturb);
 
-        
+
         // printer
-        pprint->start(a,p,pgc,pturb,pheat,pflow,psolv,pdata,pconc,pmp,psed);
+        pprint->start(p,a,pgc,pturb,pheat,pflow,pdata,pconc,pmp,psed);
 
         // Shell-Printout
         if(p->mpirank==0)

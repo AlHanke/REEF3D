@@ -63,7 +63,7 @@ void driver::logic_cfd()
     if((p->N48==1) && (p->D20==0||p->D20>=2))
     ptstep=new ietimestep(p);
 
-  
+
 
 // Multiphase
     if(p->F300==0)
@@ -158,7 +158,7 @@ void driver::logic_cfd()
     if(p->F35>=40 && p->F35<50)
     pfsfdisc=new hires(p,p->F35);
 
-  
+
 //  Convection Multiphase LSM
     if(p->F305==0)
     pmpconvec=new convection_void(p);
@@ -230,7 +230,7 @@ void driver::logic_cfd()
     if(p->S60>0&&p->S60<10)
     pconcdisc=new weno_hj(p);
 
-  
+
 //turbulence model
     if(p->T10==0)
     pturb = new kepsilon_void(p,a,pgc);
@@ -401,7 +401,7 @@ void driver::logic_cfd()
     if(p->F80==4 && p->N40!=22 && p->N40!=23 && p->N40!=33)
     pfsf = new VOF_PLIC(p,a,pgc,pheat);
 
-    
+
     //  Convection VOF
     if(p->F85==0 && p->F35==0)
     pfsfdisc=new convection_void(p);
@@ -539,8 +539,7 @@ void driver::logic_cfd()
     pbench = new benchmark_convection(p,a);
 
 // Printer
-    if(p->P10>0)
-    pprint = new vtu3D(p,a,pgc);
+    pprint = new printer_CFD(p,a,pgc);
 
     if(p->P150==0)
     pdata = new data_void(p,a,pgc);

@@ -68,7 +68,7 @@ void driver::loop_fnpf()
 
         pflow->wavegen_precalc_fnpf(p,c,pgc);
 
-        
+
         SLICELOOP4
         c->breaklog(i,j)=0;
 
@@ -77,7 +77,7 @@ void driver::loop_fnpf()
         ppfsg->start(p,c,pgc,plapsolv,pfsfdisc,pflow,preini);
 
         // printer
-        pfprint->start(p,c,pgc,pflow);
+        pprint->start(p,c,pgc,pflow);
 
         //timestep control
         p->simtime+=p->dt;
