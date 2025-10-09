@@ -197,7 +197,6 @@ public:
     void gcperiodicx(lexer*, field&, int);
     void gcsync();
 	void verticalmax(lexer*,fdm*,double**);
-    void verticalsum(lexer*,fdm*,double**);
     double timer();
     //Collective Communication
     void gather_int(int *, int, int *, int);
