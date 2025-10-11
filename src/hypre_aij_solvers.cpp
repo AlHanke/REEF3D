@@ -43,7 +43,7 @@ void hypre_aij::create_solvers(lexer* p, ghostcell* pgc)
     
     if(p->N10==22)
     {
-    HYPRE_ParCSRGMRESCreate(MPI_COMM_WORLD, &solver);
+    HYPRE_ParCSRGMRESCreate(pgc->mpi_comm, &solver);
     HYPRE_GMRESSetMaxIter(solver, p->N46);
     HYPRE_GMRESSetKDim(solver,30);
     HYPRE_GMRESSetTol(solver, p->N44);
@@ -53,7 +53,7 @@ void hypre_aij::create_solvers(lexer* p, ghostcell* pgc)
     
     if(p->N10==23)
     {
-    HYPRE_ParCSRLGMRESCreate(MPI_COMM_WORLD, &solver);
+    HYPRE_ParCSRLGMRESCreate(pgc->mpi_comm, &solver);
     HYPRE_LGMRESSetMaxIter(solver, p->N46);
     HYPRE_LGMRESSetKDim(solver,30);
     HYPRE_LGMRESSetTol(solver, p->N44);

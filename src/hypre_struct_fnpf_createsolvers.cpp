@@ -44,7 +44,7 @@ void hypre_struct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     
     if(solve_type==12)
     {
-    HYPRE_StructGMRESCreate(MPI_COMM_WORLD, &solver);
+    HYPRE_StructGMRESCreate(pgc->mpi_comm, &solver);
     HYPRE_StructGMRESSetMaxIter(solver, p->N46);
     HYPRE_StructGMRESSetKDim(solver,30);
     HYPRE_StructGMRESSetTol(solver, p->N44);
@@ -54,7 +54,7 @@ void hypre_struct_fnpf::create_solver5(lexer* p, ghostcell* pgc)
     
     if(solve_type==13)
     {
-    HYPRE_StructLGMRESCreate(MPI_COMM_WORLD, &solver);
+    HYPRE_StructLGMRESCreate(pgc->mpi_comm, &solver);
     HYPRE_StructLGMRESSetMaxIter(solver, p->N46);
     HYPRE_StructLGMRESSetKDim(solver,30);
     HYPRE_StructLGMRESSetTol(solver, p->N44);
