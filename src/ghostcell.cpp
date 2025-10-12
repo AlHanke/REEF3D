@@ -39,24 +39,11 @@ ghostcell::ghostcell(int& argc, char **argv): tag1(1),tag2(2),tag3(3),tag4(4),ta
 void ghostcell::mpi_check(lexer* p)
 {
     int check=1;
-    int ok=0;
-    
+
     check=globalisum(check);
-    
-    if(check==p->mpi_size)
-    ok=1;
-    
-    if(p->mpirank==0 && ok==0)
-    cout<<"mpi - checksum: "<<check<<" vs "<<p->mpi_size;
-    
-    //if(p->mpirank==0 && ok==1)
-    //cout<<" ... ok";
-    
-    if(p->mpirank==0 && ok==0)
-    cout<<" ... mismatch";
-    
-    if(p->mpirank==0)
-    cout<<endl;
+
+    if(p->mpirank==0 && check!=p->mpi_size)
+        cout<<"mpi - checksum: "<<check<<" vs "<<p->mpi_size<<" ... mismatch"<<endl;
 }
 
 void ghostcell::gcini(lexer* p)
