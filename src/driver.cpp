@@ -32,8 +32,8 @@ Author: Hans Bihs
 
 driver::driver(int& argc, char **argv)
 {
+    pgc = new ghostcell(argc,argv);
 	p = new lexer;
-	pgc = new ghostcell(argc,argv,p);
 
 	if(p->mpirank==0)
     {

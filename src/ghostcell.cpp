@@ -27,15 +27,13 @@ Author: Hans Bihs, Alexander Hanke
 #include"fdm_nhf.h"
 #include"density_f.h"
 
-ghostcell::ghostcell(int& argc, char **argv, lexer *pp): tag1(1),tag2(2),tag3(3),tag4(4),tag5(5),tag6(6)
+ghostcell::ghostcell(int& argc, char **argv): tag1(1),tag2(2),tag3(3),tag4(4),tag5(5),tag6(6)
 {
     MPI_Init(&argc,&argv);
     MPI_Comm_dup(MPI_COMM_WORLD,&mpi_comm);
 
     MPI_Comm_rank(mpi_comm,&p->mpirank);
     MPI_Comm_size(mpi_comm,&p->mpi_size);
-
-    p=pp;
 }
 
 void ghostcell::mpi_check(lexer* p)
@@ -63,6 +61,7 @@ void ghostcell::mpi_check(lexer* p)
 
 void ghostcell::gcini(lexer* p)
 {
+    ghostcell::p=p;
     margin=p->margin;
 	paramargin=p->margin;
     gamma=p->B29;

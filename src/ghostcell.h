@@ -51,7 +51,7 @@ using namespace std;
 class ghostcell : public boundarycheck
 {
 public:
-	ghostcell(int&,char**,lexer*);
+	ghostcell(int&,char**);
 	virtual ~ghostcell() = default;
 
     void final();
