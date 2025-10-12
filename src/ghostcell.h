@@ -46,7 +46,7 @@ using namespace std;
 class ghostcell : public increment
 {
 public:
-	ghostcell(int&,char**);
+	ghostcell(int&,char**,lexer*);
 	virtual ~ghostcell() = default;
 
     void final();
@@ -168,7 +168,7 @@ public:
     //Utilities
     void walldistance(lexer*,fdm*,ghostcell*,convection*,reini*,ioflow*,field&);
 
-    MPI_Comm mpi_comm;
+    MPI_Comm mpi_comm = MPI_COMM_NULL;
 
 // Slice
     // epol

@@ -26,13 +26,15 @@ Author: Hans Bihs, Alexander Hanke
 #include"fdm_fnpf.h"
 #include"fdm_nhf.h"
 
-ghostcell::ghostcell(int& argc, char **argv): stag{1,2,3,4,5,6},rtag{4,3,2,1,6,5}
+ghostcell::ghostcell(int& argc, char **argv, lexer* p): stag{1,2,3,4,5,6},rtag{4,3,2,1,6,5}
 {
     MPI_Init(&argc,&argv);
     MPI_Comm_dup(MPI_COMM_WORLD,&mpi_comm);
 
     MPI_Comm_rank(mpi_comm,&p->mpirank);
     MPI_Comm_size(mpi_comm,&p->mpi_size);
+
+    ghostcell::p=p;
 }
 
 void ghostcell::mpi_check(lexer* p)
@@ -47,7 +49,6 @@ void ghostcell::mpi_check(lexer* p)
 
 void ghostcell::gcini(lexer* p)
 {
-    ghostcell::p=p;
     margin=p->margin;
     paramargin=p->margin;
     gamma=p->B29;
