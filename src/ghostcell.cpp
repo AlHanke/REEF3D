@@ -26,7 +26,7 @@ Author: Hans Bihs, Alexander Hanke
 #include"fdm_fnpf.h"
 #include"fdm_nhf.h"
 
-ghostcell::ghostcell(int& argc, char **argv): tag1(1),tag2(2),tag3(3),tag4(4),tag5(5),tag6(6)
+ghostcell::ghostcell(int& argc, char **argv): stag{1,2,3,4,5,6},rtag{4,3,2,1,6,5}
 {
     MPI_Init(&argc,&argv);
     MPI_Comm_dup(MPI_COMM_WORLD,&mpi_comm);
@@ -215,6 +215,13 @@ void ghostcell::gcini(lexer* p)
         x[m]=0.0;
     }
 
+    nb[0] = p->nb1;
+    nb[1] = p->nb2;
+    nb[2] = p->nb3;
+    nb[3] = p->nb4;
+    nb[4] = p->nb5;
+    nb[5] = p->nb6;
+    
     int gcx_count[6];
     gcx_count[0] = (p->gcpara1_count+p->flast)*paramargin + p->gcparaco1_count*paramargin;
     gcx_count[1] = (p->gcpara2_count+p->flast)*paramargin + p->gcparaco2_count*paramargin;
@@ -250,27 +257,6 @@ void ghostcell::gcini(lexer* p)
     p->Iarray(irecv4,gcx_count[3]);
     p->Iarray(irecv5,gcx_count[4]);
     p->Iarray(irecv6,gcx_count[5]);
-
-    nb[0] = p->nb1;
-    nb[1] = p->nb2;
-    nb[2] = p->nb3;
-    nb[3] = p->nb4;
-    nb[4] = p->nb5;
-    nb[5] = p->nb6;
-
-    stag[0] = 1;
-    stag[1] = 2;
-    stag[2] = 3;
-    stag[3] = 4;
-    stag[4] = 5;
-    stag[5] = 6;
-
-    rtag[0] = 4;
-    rtag[1] = 3;
-    rtag[2] = 2;
-    rtag[3] = 1;
-    rtag[4] = 6;
-    rtag[5] = 5;
 
     p->Iarray(isend,6,p->gcpara_sum*9);
     p->Iarray(irecv,6,p->gcpara_sum*9);
