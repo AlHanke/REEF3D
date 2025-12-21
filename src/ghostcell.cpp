@@ -26,6 +26,7 @@ Author: Hans Bihs, Alexander Hanke
 #include"fdm_fnpf.h"
 #include"fdm_nhf.h"
 #include<sstream>
+#include<HYPRE_utilities.h>
 
 ghostcell::ghostcell(int& argc, char **argv, lexer *p)
 {
@@ -34,6 +35,8 @@ ghostcell::ghostcell(int& argc, char **argv, lexer *p)
 
     MPI_Comm_rank(mpi_comm,&p->mpirank);
     MPI_Comm_size(mpi_comm,&p->mpi_size);
+
+    HYPRE_Init();
 
     ghostcell::p=p;
 
@@ -314,6 +317,7 @@ void ghostcell::fdm_update(fdm *aa)
 
 void ghostcell::final(bool error)
 {
+    HYPRE_Finalize();
     if(cart_comm != MPI_COMM_NULL)
         MPI_Comm_free(&cart_comm);
     if(mpi_comm != MPI_COMM_NULL)
