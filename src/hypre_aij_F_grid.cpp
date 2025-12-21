@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"hypre_aij.h"
 
-#ifdef HYPRE_COMPILATION
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -55,7 +54,3 @@ void hypre_aij::make_grid_F(lexer* p, ghostcell* pgc)
     
     p->del_Iarray(rownum7,p->imax*p->jmax*(p->kmax+2));
 }
-
-
-
-#endif

@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"hypre_struct2D.h"
 
-#ifdef HYPRE_COMPILATION
 #include"lexer.h"
 #include"ghostcell.h"
 
@@ -220,5 +219,3 @@ void hypre_struct2D::delete_solvers(lexer* p, ghostcell* pgc)
     HYPRE_StructSMGDestroy(precond);
     
 }
-
-#endif

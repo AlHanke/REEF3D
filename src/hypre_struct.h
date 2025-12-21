@@ -24,10 +24,6 @@ Author: Hans Bihs
 #ifndef HYPRE_STRUCT_H_
 #define HYPRE_STRUCT_H_
 
-#define HYPRE_COMPILATION
-
-#ifdef HYPRE_COMPILATION
-
 #include"solver.h"
 #include"increment.h"
 #include"vec.h"
@@ -150,6 +146,3 @@ private:
 };
 
 #endif
-
-#endif
-

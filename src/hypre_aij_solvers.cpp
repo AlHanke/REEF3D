@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"hypre_aij.h"
 
-#ifdef HYPRE_COMPILATION
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -130,5 +129,3 @@ void hypre_aij::delete_solvers(lexer* p, ghostcell* pgc)
     if(p->N11==21)
     HYPRE_BoomerAMGDestroy(precond);
 }
-
-#endif

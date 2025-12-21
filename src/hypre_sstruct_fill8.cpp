@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"hypre_sstruct.h"
 
-#ifdef HYPRE_COMPILATION
 #include"lexer.h"
 #include"ghostcell.h"
 #include"fieldint4.h"
@@ -152,5 +151,3 @@ void hypre_sstruct::fillbackvec8(lexer *p, double *f, int var)
         ++count;
         }
 }
-
-#endif

@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"hypre_sstruct.h"
 
-#ifdef HYPRE_COMPILATION
 #include"lexer.h"
 #include"ghostcell.h"
 #include"matrix_diag.h"
@@ -154,5 +153,3 @@ void hypre_sstruct::fillbackvec7(lexer *p, double *f, int var)
         ++count;
         }
 }
-
-#endif

@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"hypre_struct.h"
 
-#ifdef HYPRE_COMPILATION
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -130,6 +129,3 @@ void hypre_struct::fill_matrix4_2Dvert(lexer* p,fdm* a, ghostcell* pgc, field &f
     HYPRE_StructVectorSetBoxValues(b, ilower, iupper, values);
     HYPRE_StructVectorAssemble(b);
 }
-
-
-#endif

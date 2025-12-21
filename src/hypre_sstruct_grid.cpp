@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"hypre_sstruct.h"
 
-#ifdef HYPRE_COMPILATION
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -260,7 +259,3 @@ void hypre_sstruct::make_grid_2Dvert_9p(lexer* p,fdm* a, ghostcell* pgc)
     HYPRE_SStructVectorInitialize(b);
     HYPRE_SStructVectorInitialize(x);
 }
-
-#endif
-
-

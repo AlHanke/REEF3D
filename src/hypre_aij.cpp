@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"hypre_aij.h"
 
-#ifdef HYPRE_COMPILATION
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -155,5 +154,3 @@ void hypre_aij::fillxvec3(lexer* p, fdm* a, field& f)
 void hypre_aij::fillxvec4(lexer* p, fdm* a, field& f)
 {
 }
-
-#endif

@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"hypre_struct.h"
 
-#ifdef HYPRE_COMPILATION
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -236,8 +235,3 @@ wt 14
     HYPRE_StructVectorInitialize(b);
     HYPRE_StructVectorInitialize(x);
 }
-
-
-#endif
-
-

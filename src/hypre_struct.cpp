@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"hypre_struct.h"
 
-#ifdef HYPRE_COMPILATION
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
@@ -402,5 +401,3 @@ void hypre_struct::fillxvec3(lexer* p, fdm* a, field& f)
 void hypre_struct::fillxvec4(lexer* p, fdm* a, field& f)
 {
 }
-
-#endif
