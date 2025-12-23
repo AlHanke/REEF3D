@@ -108,7 +108,11 @@ void hypre_struct2D::create_solvers(lexer* p, ghostcell* pgc)
 	HYPRE_StructPFMGSetTol(solver, p->N44);
 	HYPRE_StructPFMGSetZeroGuess(solver);		
 	HYPRE_StructPFMGSetRAPType(solver, 0);
-	HYPRE_StructPFMGSetRelaxType(solver, 1);
+    int relax_type = 1;
+#if defined(HYPRE_USING_CUDA) || defined(HYPRE_USING_HIP) || defined(HYPRE_USING_SYCL)
+    relax_type = 3;
+#endif
+    HYPRE_StructPFMGSetRelaxType(solver, relax_type);
 	HYPRE_StructPFMGSetNumPreRelax(solver, 1);
 	HYPRE_StructPFMGSetNumPostRelax(solver, 1);
 	HYPRE_StructPFMGSetSkipRelax(solver, 0);
@@ -134,7 +138,11 @@ void hypre_struct2D::create_solvers(lexer* p, ghostcell* pgc)
 	HYPRE_StructPFMGSetTol(precond, 0.0);
 	HYPRE_StructPFMGSetZeroGuess(precond);		
 	HYPRE_StructPFMGSetRAPType(precond, 0);
-	HYPRE_StructPFMGSetRelaxType(precond, 1);
+    int precond_relax_type = 1;
+#if defined(HYPRE_USING_CUDA) || defined(HYPRE_USING_HIP) || defined(HYPRE_USING_SYCL)
+    precond_relax_type = 3;
+#endif
+    HYPRE_StructPFMGSetRelaxType(precond, precond_relax_type);
 	HYPRE_StructPFMGSetNumPreRelax(precond, 1);
 	HYPRE_StructPFMGSetNumPostRelax(precond, 3);
 	HYPRE_StructPFMGSetSkipRelax(precond, 0);

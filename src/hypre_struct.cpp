@@ -28,8 +28,33 @@ Author: Hans Bihs
 #include"field.h"
 #include"vec.h"
 
+static void reef3d_hypre_try_enable_device_execution()
+{
+#if defined(HYPRE_USING_CUDA) || defined(HYPRE_USING_HIP) || defined(HYPRE_USING_SYCL)
+    static int configured = 0;
+    if(!configured)
+    {
+        HYPRE_SetExecutionPolicy(HYPRE_EXEC_DEVICE);
+    // Memory location:
+    // - If HYPRE is built with Umpire Unified Memory, prefer unified/managed allocations
+    //   when the enum is available.
+    // - Otherwise, use device allocations for best GPU performance.
+#if defined(HYPRE_USING_UMPIRE_UM)
+#if defined(HYPRE_MEMORY_UNIFIED)
+    HYPRE_SetMemoryLocation(HYPRE_MEMORY_UNIFIED);
+#endif
+#else
+    HYPRE_SetMemoryLocation(HYPRE_MEMORY_DEVICE);
+#endif
+        configured = 1;
+    }
+#endif
+}
+
 hypre_struct::hypre_struct(lexer* p,ghostcell *pgc, int solve_input, int precon_input)
 {	
+    reef3d_hypre_try_enable_device_execution();
+
     int vecsize=p->knox*p->knoy*p->knoz; 
     
     p->Iarray(CVAL4,p->imax*p->jmax*(p->kmax+2));

@@ -133,7 +133,11 @@ void hypre_struct::create_solver5(lexer* p, ghostcell* pgc)
         HYPRE_StructPFMGSetTol(solver, p->N44);
         HYPRE_StructPFMGSetZeroGuess(solver);
         HYPRE_StructPFMGSetRAPType(solver, 0);
-        HYPRE_StructPFMGSetRelaxType(solver, 1);
+        int relax_type = 1;
+    #if defined(HYPRE_USING_CUDA) || defined(HYPRE_USING_HIP) || defined(HYPRE_USING_SYCL)
+        relax_type = 3;
+    #endif
+        HYPRE_StructPFMGSetRelaxType(solver, relax_type);
         HYPRE_StructPFMGSetNumPreRelax(solver, 1);
         HYPRE_StructPFMGSetNumPostRelax(solver, 1);
         HYPRE_StructPFMGSetSkipRelax(solver, 0);

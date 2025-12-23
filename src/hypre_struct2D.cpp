@@ -27,8 +27,29 @@ Author: Hans Bihs
 #include"field.h"
 #include"vec2D.h"
 
+static void reef3d_hypre_try_enable_device_execution()
+{
+#if defined(HYPRE_USING_CUDA) || defined(HYPRE_USING_HIP) || defined(HYPRE_USING_SYCL)
+    static int configured = 0;
+    if(!configured)
+    {
+        HYPRE_SetExecutionPolicy(HYPRE_EXEC_DEVICE);
+#if defined(HYPRE_USING_UMPIRE_UM)
+#if defined(HYPRE_MEMORY_UNIFIED)
+    HYPRE_SetMemoryLocation(HYPRE_MEMORY_UNIFIED);
+#endif
+#else
+    HYPRE_SetMemoryLocation(HYPRE_MEMORY_DEVICE);
+#endif
+        configured = 1;
+    }
+#endif
+}
+
 hypre_struct2D::hypre_struct2D(lexer* p,ghostcell *pgc)
 {	
+    reef3d_hypre_try_enable_device_execution();
+
     int vecsize=p->knox*p->knoy; 
     
     p->Iarray(ilower,2);
