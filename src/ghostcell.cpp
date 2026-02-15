@@ -156,11 +156,6 @@ void ghostcell::gc_ini(lexer* p)
         gclabel_u=bc_labels::NOSLIP;
         gclabel_v=bc_labels::NOSLIP;
     }
-
-    for(m=0;m<15;m++)
-    {
-        y[m]=0.0;
-    }
 }
 
 void ghostcell::fdm2D_update(fdm2D *bb)

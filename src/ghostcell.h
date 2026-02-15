@@ -293,8 +293,6 @@ private:
     bc_labels gcsleval2(int,int,int);
     bc_labels gcsleval4(int,int,int);
 
-    void imagepoint(lexer*,field&,double&,double&,double,int);
-
     MPI_Comm cart_comm = MPI_COMM_NULL;
     int neighbors[6] = {MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL,
                         MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL};
@@ -303,14 +301,11 @@ private:
 
     const int margin;
     int paramargin;
-    double y[15],pos[15];
-    int m,q,qq,qn,g;
-    double wallvalue,x_ip,val_ip,gamma;
+    int m,q,qq;
+    double gamma;
     int orderdir;
-    double weight;
     int count;
     double starttime,endtime;
-    int ys;
 
     bc_labels bc_label; 
     bc_labels gcval_topodist;
