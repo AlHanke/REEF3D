@@ -87,17 +87,15 @@ void sixdof_obj::ray_cast_x(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 	zs = MIN3(Az,Bz,Cz);
 	ze = MAX3(Az,Bz,Cz);
 	
-	js = p->posc_j(ys);
-	je = p->posc_j(ye);
-	
-	ks = p->posc_k(zs);
-	ke = p->posc_k(ze);	
-	
-	ys = MIN3(Ay,By,Cy) - epsi*p->DYP[js + marge];
-	ye = MAX3(Ay,By,Cy) + epsi*p->DYP[je + marge];
-	
-	zs = MIN3(Az,Bz,Cz) - epsi*p->DZP[ks + marge];
-	ze = MAX3(Az,Bz,Cz) + epsi*p->DZP[ke + marge];
+    int jj = p->posc_j(ys);
+    ys = MIN3(Ay,By,Cy) - epsi*p->DYP[JJP];
+    jj = p->posc_j(ye);
+    ye = MAX3(Ay,By,Cy) + epsi*p->DYP[JJP];
+
+    int kk = p->posc_k(zs);
+    zs = MIN3(Az,Bz,Cz) - epsi*p->DZP[KKP];
+    kk = p->posc_k(ze);
+    ze = MAX3(Az,Bz,Cz) + epsi*p->DZP[KKP];
 
 	js = p->posc_j(ys);
 	je = p->posc_j(ye);

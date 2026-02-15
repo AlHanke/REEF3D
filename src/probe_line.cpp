@@ -456,10 +456,6 @@ void probe_line::ini_location(lexer *p, fdm *a, ghostcell *pgc)
 		t+=1.0;
 		}
 	}
-    
-    
-
-    //cout<<p->mpirank<<"  POSC_I: "<<p->posc_i(22.0)<<" XN_0: "<<p->XN[0+marge]<<"  "<<p->XN[p->knox+marge]<<" p->originx: "<<p->originx<<" p->endx: "<<p->endx<<endl;
 }
 
 int probe_line::conv(double a)

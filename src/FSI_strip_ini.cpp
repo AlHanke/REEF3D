@@ -198,7 +198,7 @@ void fsi_strip::get_cellsize(lexer *p, fdm *a, ghostcell *pgc)
         int jj = p->posc_j(coordI(1));
         int kk = p->posc_k(coordI(2));
         
-        dx_body = p->DXN[ii + marge];
+        dx_body = p->DXN[IIP];
     }
     else
     {
