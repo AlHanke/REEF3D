@@ -59,7 +59,7 @@ void initialize::start(fdm* a, lexer* p, ghostcell* pgc)
     if(p->S10>0 || p->toporead==1)
     topoini(p,a,pgc);
 
-    pgc->flagbase(p,a);
+    pgc->flagbase(p);
 }
 
 void initialize::inifdm(lexer* p, fdm* a, ghostcell* pgc)
