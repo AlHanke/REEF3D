@@ -57,7 +57,7 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         if((p->gcb4[n][4]==1 || p->gcb4[n][4]==6) && p->flagsf4[IJK]>0)
         ++count1;
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8) && p->flagsf4[IJK]>0)
+        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7) && p->flagsf4[IJK]>0)
         ++count2;
     }
 	
@@ -81,7 +81,7 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
             ++count1;
         }
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8) && p->flagsf4[IJK]>0)
+        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7) && p->flagsf4[IJK]>0)
         {
             p->gcout[count2][0]=p->gcb4[n][0];
             p->gcout[count2][1]=p->gcb4[n][1];
@@ -139,7 +139,7 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
             }
         }
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8))
+        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7))
         {
         i = p->gcb4[n][0];
         j = p->gcb4[n][1];
@@ -212,7 +212,7 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         if((p->gcb4[n][4]==1 || p->gcb4[n][4]==6) && p->flagsf4[IJK]>0)
         ++count1;
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8) && p->flagsf4[IJK]>0)
+        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7) && p->flagsf4[IJK]>0)
         ++count2;
     }
 	
@@ -238,7 +238,7 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
             ++count1;
         }
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8) && p->flagsf4[IJK]>0)
+        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7) && p->flagsf4[IJK]>0)
         {
             p->gcout[count2][0]=p->gcb4[n][0];
             p->gcout[count2][1]=p->gcb4[n][1];
@@ -292,7 +292,7 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
             }
         }
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8))
+        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7))
         {
         i = p->gcb4[n][0];
         j = p->gcb4[n][1];
@@ -358,7 +358,7 @@ void iowave::iogcb_update(lexer *p, fdm *a, ghostcell *pgc)
     {
         if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
             ++count1;
-        else if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
+        else if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7)
             ++count2;
     }
 	
@@ -377,7 +377,7 @@ void iowave::iogcb_update(lexer *p, fdm *a, ghostcell *pgc)
             p->gcin[count1][3]=p->gcb4[n][3];
             ++count1;
         }
-        else if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
+        else if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7)
         {
             p->gcout[count2][0]=p->gcb4[n][0];
             p->gcout[count2][1]=p->gcb4[n][1];
@@ -408,7 +408,7 @@ void iowave::awa_ini(lexer *p, fdm *a, ghostcell *pgc)
 	count=0;
     for(n=0;n<p->gcb4_count;++n)
     {
-        if(p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
+        if(p->gcb4[n][4]==7)
             ++count;
     }
 	
@@ -425,7 +425,7 @@ void iowave::awa_ini(lexer *p, fdm *a, ghostcell *pgc)
     count1=0;
     for(n=0;n<p->gcb1_count;++n)
     {
-        if(p->gcb1[n][4]==7 || p->gcb1[n][4]==8)
+        if(p->gcb1[n][4]==7)
         {
 			flag=1;
 			for(q=0;q<count1;++q)
@@ -446,7 +446,7 @@ void iowave::awa_ini(lexer *p, fdm *a, ghostcell *pgc)
     count2=0;
     for(n=0;n<p->gcb2_count;++n)
     {
-        if(p->gcb2[n][4]==7 || p->gcb2[n][4]==8)
+        if(p->gcb2[n][4]==7)
         {
 			flag=1;
 			for(q=0;q<count2;++q)
@@ -467,7 +467,7 @@ void iowave::awa_ini(lexer *p, fdm *a, ghostcell *pgc)
     count3=0;
     for(n=0;n<p->gcb3_count;++n)
     {
-        if(p->gcb3[n][4]==7 || p->gcb3[n][4]==8)
+        if(p->gcb3[n][4]==7)
         {
 			flag=1;
 			for(q=0;q<count3;++q)
@@ -488,7 +488,7 @@ void iowave::awa_ini(lexer *p, fdm *a, ghostcell *pgc)
     count4=0;
     for(n=0;n<p->gcb4_count;++n)
     {
-        if(p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
+        if(p->gcb4[n][4]==7)
         {
             
 			flag=1;

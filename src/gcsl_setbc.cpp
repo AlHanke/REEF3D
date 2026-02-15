@@ -112,7 +112,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
 
         if(bc==1 || bc==6)
             ++p->gcslin_count;
-        else if(bc==2 || bc==7 || bc==8)
+        else if(bc==2 || bc==7)
             ++p->gcslout_count;
     }
 
@@ -141,7 +141,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
             p->gcslin[count1][5]=1;
             ++count1;
         }
-        else if(bc==2 || bc==7 || bc==8)
+        else if(bc==2 || bc==7)
         {
             p->gcslout[count2][0]=i;
             p->gcslout[count2][1]=j;
@@ -160,7 +160,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
         cs = p->gcbsl1[n][3];
         bc = p->gcbsl1[n][4];
 
-        if(bc==2 || bc==7 || bc==8)
+        if(bc==2 || bc==7)
         {
             p->gcslawa1[count2][0]=i;
             p->gcslawa1[count2][1]=j;
@@ -178,7 +178,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
         cs = p->gcbsl2[n][3];
         bc = p->gcbsl2[n][4];
 
-        if(bc==2 || bc==7 || bc==8)
+        if(bc==2 || bc==7)
         {
             p->gcslawa2[count2][0]=i;
             p->gcslawa2[count2][1]=j;
@@ -201,7 +201,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
 
         if((bc==1 || bc==6) && cs==X_NEG)
             p->IOSL[Im1J]=1;
-        else if((bc==2 || bc==7 || bc==8) && cs==X_POS)
+        else if((bc==2 || bc==7) && cs==X_POS)
             p->IOSL[Ip1J]=2;
     }
 }

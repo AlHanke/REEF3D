@@ -44,7 +44,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
 
     int qq;
     QQGC4LOOP
-    if(p->gcb4[qq][4]==5|| p->gcb4[qq][4]==21|| p->gcb4[qq][4]==22)
+    if(p->gcb4[qq][4]==21)
     {
         i=p->gcb4[qq][0];
         j=p->gcb4[qq][1];
@@ -168,7 +168,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
         }
 
         QQGC4LOOP
-        if(p->gcb4[qq][4]==5|| p->gcb4[qq][4]==21|| p->gcb4[qq][4]==22)
+        if(p->gcb4[qq][4]==21)
         {
             i=p->gcb4[qq][0];
             j=p->gcb4[qq][1];

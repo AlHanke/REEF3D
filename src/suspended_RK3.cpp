@@ -191,24 +191,6 @@ void suspended_RK3::fillconc(lexer* p, fdm* a, sediment_fdm *s)
     double cx,cy;
     
     if(p->S34==1)
-    GC4LOOP
-    if(p->gcb4[n][4]==5)
-    {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
-        
-        s->conc(i,j) = a->conc(i,j,k);
-        
-        //dist = 0.5*p->DZN[KP]-adist;
-        
-        //s->conc(i,j) = (s->cbe(i,j)*(dist-deltab+adist) + a->conc(i,j,k+1)*(deltab-adist))/(dist);
-
-        //if(s->conc(i,j)>s->cbe(i,j))
-        //cout<<"conc: "<<s->conc(i,j)<<" cbe: "<<s->cbe(i,j)<<endl;
-    }
-    
-    if(p->S34==1)
     GCDF4LOOP
     {
         i=p->gcdf4[n][0];

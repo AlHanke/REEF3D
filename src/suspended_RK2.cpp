@@ -117,28 +117,10 @@ void suspended_RK2::suspsource(lexer* p,fdm* a,field& conc, sediment_fdm *s)
 
 void suspended_RK2::bcsusp_start(lexer* p, fdm* a,ghostcell *pgc, sediment_fdm *s, field& conc)
 {
-    GC4LOOP
-    if(p->gcb4[n][4]==5)
-    {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
-        
-        conc(i,j,k) =  s->cb(i,j);
-    }
 }
 
 void suspended_RK2::fillconc(lexer* p, fdm* a, sediment_fdm *s)
 {
-    GC4LOOP
-    if(p->gcb4[n][4]==5)
-    {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
-        
-        s->conc(i,j) = a->conc(i,j,k+1);
-    }
 }
 
 void suspended_RK2::sedfsf(lexer* p,fdm* a,field& conc)

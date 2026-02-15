@@ -359,7 +359,7 @@ void potential_f::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
  
         }
         
-        if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
+        if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7)
         {
             i=p->gcb4[n][0]; 
             j=p->gcb4[n][1];

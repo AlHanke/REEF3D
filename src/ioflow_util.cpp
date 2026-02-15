@@ -42,7 +42,7 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         if((p->gcb4[n][4]==1 || p->gcb4[n][4]==6) && p->flagsf4[IJK]>0)
         ++count1;
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8) && p->flagsf4[IJK]>0)
+        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7) && p->flagsf4[IJK]>0)
         ++count2;
     }
 	
@@ -92,7 +92,7 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         if(p->gcb4a[qq][4]==1 || p->gcb4a[qq][4]==6)
             ++count1;
 
-        if(p->gcb4a[qq][4]==2 || p->gcb4a[qq][4]==7 || p->gcb4a[qq][4]==8)
+        if(p->gcb4a[qq][4]==2 || p->gcb4a[qq][4]==7)
             ++count2;
     }
     
@@ -125,7 +125,7 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
             }
         }
 
-        if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
+        if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7)
         {
             i = p->gcb4[n][0];
             j = p->gcb4[n][1];
@@ -191,7 +191,7 @@ void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         if((p->gcb4[n][4]==1 || p->gcb4[n][4]==6) && p->DF[IJK]>0 && p->wet[IJ]==1)
         ++count1;
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8) && p->DF[IJK]>0)
+        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7) && p->DF[IJK]>0)
         ++count2;
     }
 	
@@ -217,7 +217,7 @@ void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
             ++count1;
         }
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8) && p->DF[IJK]>0)
+        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7) && p->DF[IJK]>0)
         {
             p->gcout[count2][0]=p->gcb4[n][0];
             p->gcout[count2][1]=p->gcb4[n][1];
@@ -271,7 +271,7 @@ void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
             }
         }
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8))
+        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7))
         {
         i = p->gcb4[n][0];
         j = p->gcb4[n][1];
