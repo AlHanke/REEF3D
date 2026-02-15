@@ -47,15 +47,6 @@ void ghostcell::start1(lexer *p, field& f, int gcv)
     // periodic ghostcells
     gcperiodicx(p,f,1);
 
-    if(p->periodic1==1)
-        gc_periodic(p, f, 1);
-
-    if(p->periodic2==1)
-        gc_periodic(p, f, 2);
-
-    if(p->periodic3==1)
-        gc_periodic(p, f, 3);
-
     if((p->Y40==1 || p->Y40==3) && p->j_dir==1)
         dgcpol1(p,f);
 
@@ -85,15 +76,6 @@ void ghostcell::start2(lexer *p, field& f, int gcv)
 
         // periodic ghostcells
         gcperiodicx(p,f,2);
-
-        if(p->periodic1==1)
-            gc_periodic(p, f, 1);
-
-        if(p->periodic2==1)
-            gc_periodic(p, f, 2);
-
-        if(p->periodic3==1)
-            gc_periodic(p, f, 3);
     }
 
     if((p->Y40==1 || p->Y40==3) && p->j_dir==1)
@@ -125,15 +107,6 @@ void ghostcell::start3(lexer *p, field& f, int gcv)
     // periodic ghostcells
     gcperiodicx(p,f,3);
 
-    if(p->periodic1==1)
-        gc_periodic(p, f, 1);
-
-    if(p->periodic2==1)
-        gc_periodic(p, f, 2);
-
-    if(p->periodic3==1)
-        gc_periodic(p, f, 3);
-
     if((p->Y40==1 || p->Y40==3) && p->j_dir==1)
         dgcpol3(p,f);
 
@@ -163,15 +136,6 @@ void ghostcell::start4(lexer *p, field &f, int gcv)
     // periodic ghostcells
     gcperiodicx(p,f,4);
 
-    if(p->periodic1==1)
-        gc_periodic(p, f, 1);
-
-    if(p->periodic2==1)
-        gc_periodic(p, f, 2);
-
-    if(p->periodic3==1)
-        gc_periodic(p, f, 3);
-
     if(p->Y40==1 || p->Y40==3)
         dgcpol4(p,f);
 
@@ -198,15 +162,6 @@ void ghostcell::start4_sum(lexer *p, field& f, int gcv)
 
     // periodic ghostcells
     gcperiodicx(p,f,4);
-
-    if(p->periodic1==1)
-        gc_periodic(p, f, 1);
-
-    if(p->periodic2==1)
-        gc_periodic(p, f, 2);
-
-    if(p->periodic3==1)
-        gc_periodic(p, f, 3);
 
     if(do_comms)
         gcparacox(p,f);

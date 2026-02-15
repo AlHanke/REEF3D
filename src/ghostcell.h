@@ -238,8 +238,6 @@ private:
 
     void gcwait(lexer*);
 
-    void gc_periodic(lexer*,field&,int);
-
     void gcdistro1(field&, int, int, int, int, int, double, int);
     void gcdistro2(field&, int, int, int, int, int, double, int);
     void gcdistro3(field&, int, int, int, int, int, double, int);
