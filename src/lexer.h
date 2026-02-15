@@ -39,12 +39,17 @@ Author: Hans Bihs
 #include"coordinates.h"
 
 // AMReX includes
-#include <AMReX_Geometry.H>
-#include <AMReX_BoxArray.H>
-#include <AMReX_DistributionMapping.H>
+#include <AMReX_BCRec.H>
 #include <AMReX_MFIter.H>
 #include <AMReX_MultiFab.H>
 #include <AMReX_iMultiFab.H>
+#include <AMReX_Vector.H>
+
+namespace amrex {
+    class Geometry;
+    class BoxArray;
+    class DistributionMapping;
+}
 
 class weno_nug_func;
 class ghostcell;
@@ -87,6 +92,8 @@ public:
     std::vector<amrex::Geometry> amrex_geometry;
     std::vector<amrex::BoxArray> amrex_box_array;
     std::vector<amrex::DistributionMapping> amrex_distribution_mapping;
+    std::vector<amrex::Vector<amrex::BCRec>> amrex_bc;
+    const int n_comp = 1;
     std::vector<amrex::MultiFab> amr_mf;
     std::unique_ptr<amrex::MFIter> default_mfi;
     amrex::MFIter* amr_mfi = nullptr;
