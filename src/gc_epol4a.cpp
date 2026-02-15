@@ -28,7 +28,7 @@ ghostcell::bc_labels ghostcell::gceval4a(lexer *p, int gcv, int bc)
     if(gcv==1 || gcv==50 || gcv==150 || gcv==154)
         return bc_labels::NEUMANN;
 
-    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==21 || bc==22) && (gcv==151 || gcv==152 || gcv==153))
+    else if((bc==3 || bc==6 || bc==7 || bc==21) && (gcv==151 || gcv==152 || gcv==153))
         return bc_labels::NEUMANN;
 
     else if(bc==1 && gcv==152)

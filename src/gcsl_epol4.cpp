@@ -51,20 +51,17 @@ ghostcell::bc_labels ghostcell::gcsleval4(int gcv, int bc, int cs)
     else if(bc==2 && (gcv==51 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if((bc==7 || bc==8) && (gcv==51 || gcv==52 || gcv==53 || gcv==54) && p->B99==3)
+    else if(bc==7 && (gcv==51 || gcv==52 || gcv==53 || gcv==54) && p->B99==3)
         return bc_labels::NEUMANN;
-
-    else if(bc==8 && (gcv==51 || gcv==52 || gcv==53 || gcv==54) && p->B99==4)
-        return bc_labels::SOMMERFELD;
 
     else if((bc==3 || bc==21) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
 
     // Potential Ini
-    else if((bc==3 || bc==5 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && gcv==49)
+    else if((bc==3 || bc==21) && gcv==49)
         return bc_labels::NEUMANN;
 
-    else if((bc==1 || bc==2 || bc==6 || bc==7 || bc==8) && gcv==49)
+    else if((bc==1 || bc==2 || bc==6 || bc==7) && gcv==49)
         return bc_labels::POTENTIAL;
 
     // Fifsf 60 - 3D
