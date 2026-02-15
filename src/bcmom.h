@@ -43,11 +43,12 @@ public:
     void bcmomPLIC_start(fdm*,lexer*,ghostcell*,turbulence*,VOF_PLIC*,field&,int);
 
 private:
+    void wall_laws(lexer*,fdm*,field&,int);
     void wall_law_u(lexer*,fdm*,field&,int,int,int,int,int,double);
     void wall_law_v(lexer*,fdm*,field&,int,int,int,int,int,double);
     void wall_law_w(lexer*,fdm*,field&,int,int,int,int,int,double);
 
     const double kappa;
-    double uplus,ks_plus,ks,ustar,deltaZ,z0;
+    double uplus,ks,deltaZ,z0;
 };
 #endif
