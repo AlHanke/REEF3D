@@ -34,18 +34,12 @@ void ghostcell::dirichlet_ortho_reflect(field& f, double dist, int cs)
     else if(cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS)
         dx = p->DZP[KP];
 
-    ys=1;
+    int ys=1;
     if(dist>dx*(1.0-1.0e-9) && dist<dx*(1.0+1.0e-9))
         ys=0;
 
-    //fill pos[]
-    for(m=0; m<=orderdir-3; m++)
-        pos[m]=-dx*double(orderdir-m-2);
-
-    pos[orderdir-2]=0.0;
-    pos[orderdir-1]=dist;
-
     //fill y[]
+    double y[15] = {0.0};
     for(m=0; m<=orderdir-2; m++)
     {
         if(cs==dir_labels::X_NEG )
@@ -66,9 +60,7 @@ void ghostcell::dirichlet_ortho_reflect(field& f, double dist, int cs)
 
     if(ys==1 && dist<gamma*dx)
     {
-        double y1 = 0.0;
-
-        //fill y[]
+        double y1;
         if(cs==dir_labels::X_NEG)
             y1=f(i+1,j,k);
         else if(cs==dir_labels::X_POS)
@@ -82,10 +74,10 @@ void ghostcell::dirichlet_ortho_reflect(field& f, double dist, int cs)
         else if(cs==dir_labels::Z_POS)
             y1=f(i,j,k-1);
 
-        pos[orderdir-2] = -(gamma*dx);
         y[orderdir-2] = (1.0-gamma)*f(i,j,k) + gamma*y1;
     }
 
+    double weight;
     for(q=0; q<margin; ++q)
     {
         y[orderdir+q]=0.0;
