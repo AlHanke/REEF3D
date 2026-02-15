@@ -31,22 +31,22 @@ Author: Alexander Hanke
 
 field_amrex::field_amrex(lexer* p)
 {
-    pp = p;
+    field_amrex::p = p;
 }
 
 double& field_amrex::operator()(int ii, int jj, int kk)
 {
-    return (mf[pp->level][*(pp->amr_mfi)].array()(amrex::IntVect{AMREX_D_DECL(ii, jj, kk)} + amrex::IntVect{amrex::lbound(pp->amr_mfi->validbox())}, 0));
+    return (mf[p->level][*(p->amr_mfi)].array()(amrex::IntVect{AMREX_D_DECL(ii, jj, kk)} + amrex::IntVect{amrex::lbound(p->amr_mfi->validbox())}, 0));
 }
 
 void field_amrex::setVal(double val, bool includeGhost)
 {
-    mf[pp->level].setVal(val, (includeGhost ? pp->margin : 0));
+    mf[p->level].setVal(val, (includeGhost ? p->margin : 0));
 }
 
 void field_amrex::fillBoundary()
 {
-    mf[pp->level].FillBoundary(pp->amrex_geometry[pp->level].periodicity());
+    mf[p->level].FillBoundary(p->amrex_geometry[p->level].periodicity());
 }
 
 void field_amrex::FillDomainBoundary()
