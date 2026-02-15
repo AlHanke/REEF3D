@@ -52,9 +52,6 @@ void ghostcell::gcdistro(field& f, int ii, int jj, int kk, double dist, bc_label
         case bc_labels::POTENTIAL:
             potentialbc(f,cs);
             break;
-        case bc_labels::NHPRESS:
-            nhpress(f,cs);
-            break;
         case bc_labels::GRAVITY_PRESS:
             gravity_press(f,cs);
             break;
@@ -72,9 +69,6 @@ void ghostcell::gcdistro(field& f, int ii, int jj, int kk, double dist, bc_label
             break;
         case bc_labels::HEATBC:
             heatbc(f,cs);
-            break;
-        case bc_labels::DEBUG:
-            gcb_debug(f,cs);
             break;
         default:
             break;

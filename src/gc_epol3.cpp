@@ -45,7 +45,7 @@ ghostcell::bc_labels ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Othogonal
-    else if(((bc==7 && !awa_label) || bc==5 || bc==21 || bc==22) && (cs==dir_labels::Z_POS || (cs==dir_labels::Z_NEG && (p->A10==5 || p->A10==6))) && (gcv==12))
+    else if(((bc==7 && !awa_label) || bc==5 || bc==21 || bc==22) && (cs==dir_labels::Z_POS || (cs==dir_labels::Z_NEG && p->A10==6)) && (gcv==12))
         return gclabel_w_orth;
 
     else if(((bc==7 && !awa_label) || bc==5 || bc==21 || bc==22) && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==9)
@@ -70,24 +70,14 @@ ghostcell::bc_labels ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
     else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Y_POS) && (gcv==12 || gcv==19))
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==12 || gcv==19) && p->A10!=3 && p->A10!=5)
+    else if(bc==3 && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==12 || gcv==19) && p->A10!=3)
         return bc_labels::NOSLIP;
 
     else if(bc==3 && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==12 || gcv==19) && p->A10==3)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==12 || gcv==19 || gcv==112) && p->A10==5)
-        return bc_labels::NHPRESS;
-
     else if(bc==9 && cs==dir_labels::Z_POS && (gcv==12 || gcv==19))
         return bc_labels::NEUMANN;
-
-    // 6DOF
-    else if(bc==41 || bc==42 || bc==43)
-        return bc_labels::NHPRESS;
-
-    else if(gcv==999)
-        return bc_labels::DEBUG;
 
     else
         return bc_labels::NONE;
