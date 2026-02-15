@@ -21,14 +21,12 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"lexer.h"
-#include"ghostcell.h"
-
 
 lexer::lexer() : cmu(0.09), position(this), interpolation(this)
 {
     sigT=0.9;
     
-	ini_default();
+	ini_default(this);
     mpirank=0;
 }
 

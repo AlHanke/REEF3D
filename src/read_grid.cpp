@@ -901,9 +901,3 @@ void lexer::read_grid()
 
     grid.close();
 }
-
-void lexer::clear(char& b, int& j)
-{
-    b='a';
-    j=0;
-}

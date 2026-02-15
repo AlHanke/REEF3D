@@ -20,9 +20,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#include"control.h"
 #include"lexer.h"
 
-void lexer::ini_default()
+void control::ini_default(lexer* p)
 {
     // Hydrodynamic Models
     A10=6;       // int hydrodynamic models
@@ -980,14 +981,14 @@ void lexer::ini_default()
 	Z10=0;		// int turn FSI on
     Z12_ckx=Z12_cky=Z12_ckz=Z12_cdx=Z12_cdy=Z12_cdz=0.0;   // double fsi beam structural damping coefficients
 
-	solveriter=0;
-	mpirank=0;
+	p->solveriter=0;
+	p->mpirank=0;
 
-	simtime=0.0;
-	poissontime=0.0;
-	pressval=0;
-    alpha=0.0;
-    solidread=toporead=porousread=0;
-    net_count=0;
-    mooring_count=0;
+	p->simtime=0.0;
+	p->poissontime=0.0;
+	p->pressval=0;
+    p->alpha=0.0;
+    p->solidread=p->toporead=p->porousread=0;
+    p->net_count=0;
+    p->mooring_count=0;
 }
