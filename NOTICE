@@ -25,6 +25,29 @@ licenses; see hypre's own COPYRIGHT file for details if redistributing
 hypre's source.)
 
 ------------------------------------------------------------------------
+AMReX
+------------------------------------------------------------------------
+AMReX Copyright (c) 2024, The Regents of the University of California,
+through Lawrence Berkeley National Laboratory (subject to receipt of any
+required approvals from the U.S. Dept. of Energy). All rights reserved.
+
+Licensed under the BSD 3-Clause License (BSD-3-Clause-LBNL variant).
+Full text: https://github.com/AMReX-Codes/amrex/blob/development/LICENSE
+
+If you have questions about your rights to use or distribute this
+software, please contact Berkeley Lab's Intellectual Property Office at
+IPO@lbl.gov.
+
+NOTICE (reproduced from AMReX): This Software was developed under
+funding from the U.S. Department of Energy and the U.S. Government
+consequently retains certain rights. As such, the U.S. Government has
+been granted for itself and others acting on its behalf a paid-up,
+nonexclusive, irrevocable, worldwide license in the Software to
+reproduce, distribute copies to the public, prepare derivative works,
+and perform publicly and display publicly, and to permit others to do
+so.
+
+------------------------------------------------------------------------
 Eigen
 ------------------------------------------------------------------------
 Eigen is a C++ template library for linear algebra. The Core, Dense, and
@@ -41,6 +64,7 @@ Eigen; unmodified upstream source is used as-is.
 ------------------------------------------------------------------------
 
 The full license texts for the above components can be found at:
+  - BSD 3-Clause:        https://opensource.org/license/bsd-3-clause/
   - GNU GPL v3:          https://www.gnu.org/licenses/gpl-3.0.html
   - MIT License:        https://opensource.org/license/mit/
   - Mozilla Public License 2.0: https://www.mozilla.org/MPL/2.0/
