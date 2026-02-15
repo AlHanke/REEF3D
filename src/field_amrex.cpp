@@ -46,9 +46,9 @@ field_amrex::field_amrex(lexer* p, unsigned int data_location): const_params({p-
         bc_rec.resize(p->ncomp);
 }
 
-double& field_amrex::operator()(int ii, int jj, int kk) noexcept
+double& field_amrex::operator()(int ii, int jj, int kk, bool addOrigin) noexcept
 {
-    return (mf[p->level][*(p->amr_cell_mfi)].array()(amrex::IntVect{AMREX_D_DECL(ii, jj, kk)} + amrex::IntVect{amrex::lbound(p->amr_cell_mfi->validbox())}, 0));
+    return (mf[p->level][*(p->amr_cell_mfi)].array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + (addOrigin?amrex::IntVect(amrex::lbound(p->amr_cell_mfi->validbox())):amrex::IntVect()), 0));
 }
 
 void field_amrex::setVal(double val, bool includeGhost)
