@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
 REEF3D
-Copyright 2008-2025 Alexander Hanke
+Copyright 2008-2025 Alexander Hanke (@AlHanke)
 
 This file is part of REEF3D.
 
@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Alexander Hanke
+Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
 #if USE_AMREX
