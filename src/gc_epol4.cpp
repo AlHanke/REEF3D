@@ -25,7 +25,7 @@ Author: Hans Bihs
 
 ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
 {
-    if(gcv==50)
+    if(gcv==1 || gcv==50 || gcv==150 || gcv==151 || gcv==152 || gcv==153 || gcv==154)
         return bc_labels::NEUMANN;
 
     //Level Set
@@ -70,10 +70,6 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // ro
-    else if(gcv==1)
-        return bc_labels::NEUMANN;
-
-    // ro
     else if((bc!=5 && bc!=21) && cs!=dir_labels::Z_NEG && gcv==2)
         return bc_labels::NEUMANN;
 
@@ -97,7 +93,7 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else if((bc==gbc_labels::OUTFLOW || bc==gbc_labels::SYMMETRY) && gcv==30)
         return bc_labels::NEUMANN;
 
-    else if(bc==gbc_labels::INFLOW && gcv==30)
+    else if(bc==gbc_labels::INFLOW && (gcv==30 || gcv==72 || gcv==74))
         return bc_labels::NEUMANN;
 
     // Turbulence eddyv
@@ -150,9 +146,6 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
 
     // VOF
     else if((bc==gbc_labels::SYMMETRY || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL) && (gcv==71 || gcv==72 || gcv==73 || gcv==74))
-        return bc_labels::NEUMANN;
-
-    else if(bc==gbc_labels::INFLOW && (gcv==72 || gcv==74))
         return bc_labels::NEUMANN;
 
     else if(bc==gbc_labels::OUTFLOW && (gcv==71 || gcv==74))
