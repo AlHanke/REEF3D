@@ -60,6 +60,8 @@ public:
 
     void FillDomainBoundaryValue(double value, int dir, bool high) override;
 
+    amrex::MultiFab& GetMultiFab() {return mf[p->level];};
+
 protected:
     field_amrex(lexer* p, amrex_bc_func::DataLocation data_location);
 
