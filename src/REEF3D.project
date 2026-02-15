@@ -998,6 +998,7 @@
         <VirtualDirectory Name="Grid">
           <File Name="grid_helper.h"/>
           <File Name="grid.h"/>
+          <File Name="grid_amrex.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Field">
           <File Name="field.h"/>
@@ -2842,6 +2843,7 @@
           <File Name="grid_helper_dgc1.cpp"/>
           <File Name="grid_helper.cpp"/>
           <File Name="grid.cpp"/>
+          <File Name="grid_amrex.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Field">
           <File Name="field_amrex.cpp"/>

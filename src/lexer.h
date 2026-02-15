@@ -34,28 +34,15 @@ Author: Hans Bihs
 #include<fstream>
 #include"looping.h"
 #include<vector>
-#include"grid.h"
+#include "grid_amrex.h"
 #include "control.h"
-
-// AMReX includes
-#include <AMReX_BCRec.H>
-#include <AMReX_MFIter.H>
-#include <AMReX_MultiFab.H>
-#include <AMReX_iMultiFab.H>
-#include <AMReX_Vector.H>
-
-namespace amrex {
-    class Geometry;
-    class BoxArray;
-    class DistributionMapping;
-}
 
 class weno_nug_func;
 class ghostcell;
 
 using namespace std;
 
-class lexer : virtual public resize_class, public position, public interpolation, public grid, public control
+class lexer : virtual public resize_class, public position, public interpolation, public grid_amrex, public control
 {
 public:
 
@@ -85,25 +72,6 @@ public:
 
 
 //-----data-----------------------
-
-    // AMReX Geometry
-    std::vector<amrex::Geometry> amrex_geometry;
-    std::vector<amrex::BoxArray> amrex_box_array;
-    std::vector<amrex::DistributionMapping> amrex_distribution_mapping;
-    std::vector<amrex::Vector<amrex::BCRec>> amrex_bc;
-    const int n_comp = 1;
-    std::vector<amrex::MultiFab> amr_mf;
-    std::unique_ptr<amrex::MFIter> default_mfi;
-    amrex::MFIter* amr_mfi = nullptr;
-    std::vector<amrex::iMultiFab> flag1_imf;
-    std::vector<amrex::iMultiFab> flag2_imf;
-    std::vector<amrex::iMultiFab> flag3_imf;
-    std::vector<amrex::iMultiFab> flag4_imf;
-    std::vector<amrex::iMultiFab> flag7_imf;
-
-    int level;
-    const int nlevs = 1;
-
 	//REEF3D
 
 	int pointnum,cellnum,tpcellnum;
@@ -315,9 +283,6 @@ public:
     double *sig;
     double *sigx,*sigy,*sigz,*sigt;
     double *sigxx;
-
-private:
-    void setup_amrex_geometry(ghostcell*);
 };
 
 #endif
