@@ -258,11 +258,13 @@ private:
     void gcsl_potentialbc(slice&,int);
     void gcsl_sommerfeld(slice&,int);
 
-    enum bc_labels { NONE=0, DIRICHLET_ORTH=1, NEUMANN=4, NOSLIP=5, OUTFLOW=6, SOMMERFELD=7, POTENTIAL=8,
+    enum bc_labels { NONE=0, DIRICHLET_ORTH=1, NEUMANN=4, NOSLIP=5, OUTFLOWBC=6, SOMMERFELD=7, POTENTIAL=8,
          DIRICHLET_ORTH_REFLECT=11, DIRICHLET_PARA_REFLECT=12, NEUMANN_X=14, NEUMANN_HX=41, NEUMANN_HY=42,
          HEATBC=61};
 
     enum dir_labels { X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2, Z_NEG=5, Z_POS=6 };
+
+    enum gbc_labels { INFLOW=1, OUTFLOW, SYMMETRY, WAVEGEN=6, NUMBEACH, WALL=21};
 
     // 3D BC decision
     void gcdistro1(field&, int, int, int, int, int, double, int);
