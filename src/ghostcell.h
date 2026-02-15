@@ -214,19 +214,6 @@ public:
     void dgcslpol2(lexer*, slice&);
     void dgcslpol4(lexer*, slice&);
 
-    // Slice BCs
-    void gcsl_neumann(slice&,int,int,int);
-    void gcsl_neumann_hx(slice&,int,int,int);
-    void gcsl_neumann_hy(slice&,int,int,int);
-    void gcsl_neumann_x(slice&,int,int,int);
-    void gcsl_neumann_int(sliceint&,int,int,int);
-    void gcsl_neumann_V_int(lexer*,int*,int,int,int);
-	void gcsl_noslip(slice&,int,int,int);
-    void gcsl_sommerfeld(lexer*,slice&,int,int,int);
-    void gcsl_outflow(lexer*,slice&,int,int,int);
-    void gcsl_outflow_fsf(lexer*,slice&,int,int,int);
-    void gcsl_potentialbc(lexer*,slice&,int,int);
-
     // parallel
     void gcslparax(lexer*, slice&, int);
     void gcslparax_fh(lexer*, slice&, int);
@@ -287,6 +274,18 @@ private:
     void dirichlet_ortho_reflect(field&,double,int);
     void neumann(field&,int);
     void noslip(field&,int);
+
+    // Slice BCs
+    void gcsl_neumann(slice&,int);
+    void gcsl_neumann_hx(slice&,int);
+    void gcsl_neumann_hy(slice&,int);
+    void gcsl_neumann_x(slice&,int);
+    void gcsl_neumann_int(sliceint&,int);
+    void gcsl_neumann_V_int(lexer*,int*,int);
+	void gcsl_noslip(slice&,int);
+    void gcsl_sommerfeld(lexer*,slice&,int);
+    void gcsl_outflow(slice&,int);
+    void gcsl_potentialbc(lexer*,slice&,int);
 
     MPI_Comm cart_comm = MPI_COMM_NULL;
     int neighbors[6] = {MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL,
