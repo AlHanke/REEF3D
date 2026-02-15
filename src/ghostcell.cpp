@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Authors: Hans Bihs, Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"ghostcell.h"
@@ -26,6 +26,11 @@ Author: Hans Bihs
 #include"fdm_fnpf.h"
 #include"fdm_nhf.h"
 #include<sstream>
+#if USE_AMREX
+    #include <AMReX.H>
+#else
+    #include <HYPRE_utilities.h>
+#endif
 
 ghostcell::ghostcell(int& argc, char **argv, lexer *p) : margin(p->margin)
 {
@@ -34,6 +39,18 @@ ghostcell::ghostcell(int& argc, char **argv, lexer *p) : margin(p->margin)
 
     MPI_Comm_rank(mpi_comm,&p->mpirank);
     MPI_Comm_size(mpi_comm,&p->mpi_size);
+
+    #if USE_AMREX
+        amrex::Initialize(argc,argv,mpi_comm);
+
+        if(AMREX_SPACEDIM != 3)
+        {
+            std::cerr << "Error: AMReX must be configured for 3D (AMREX_SPACEDIM=3)" << std::endl;
+            exit(1);
+        }
+    #else
+        HYPRE_Initialize();
+    #endif
 
     ghostcell::p=p;
 
@@ -175,3 +192,17 @@ void ghostcell::fdm_update(fdm *aa)
     a=aa;
 }
 
+void ghostcell::final(bool error)
+{
+    #if USE_AMREX
+        amrex::Finalize();
+    #else
+        HYPRE_Finalize();
+    #endif
+    if(cart_comm != MPI_COMM_NULL)
+        MPI_Comm_free(&cart_comm);
+    if(mpi_comm != MPI_COMM_NULL)
+        MPI_Comm_free(&mpi_comm);
+    MPI_Finalize();
+    exit(error);
+}
