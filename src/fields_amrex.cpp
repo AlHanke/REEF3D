@@ -33,11 +33,10 @@ field1::field1(lexer *p) : field_amrex(p)
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
         // box = amrex::convert(p->amrex_box_array, amrex::IntVect{AMREX_D_DECL(1,0,0)});
-        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], num_components, p->margin);
+        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
         mf[p->level].setVal(0);
     }
-    initialize_bc();
     for(p->level=0; p->level<p->nlevs; ++p->level)
         fillBoundary();
 }
@@ -49,11 +48,10 @@ field2::field2(lexer *p) : field_amrex(p)
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
         // box = amrex::convert(p->amrex_box_array, amrex::IntVect{AMREX_D_DECL(0,1,0)});
-        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], num_components, p->margin);
+        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
         mf[p->level].setVal(0);
     }
-    initialize_bc();
     for(p->level=0; p->level<p->nlevs; ++p->level)
         fillBoundary();
 }
@@ -65,11 +63,10 @@ field3::field3(lexer *p) : field_amrex(p)
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
         // box = amrex::convert(p->amrex_box_array, amrex::IntVect{AMREX_D_DECL(0,0,1)});
-        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], num_components, p->margin);
+        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
         mf[p->level].setVal(0);
     }
-    initialize_bc();
     for(p->level=0; p->level<p->nlevs; ++p->level)
         fillBoundary();
 }
@@ -81,11 +78,10 @@ field4::field4(lexer *p) : field_amrex(p)
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
         // box = amrex::convert(p->amrex_box_array, amrex::IntVect{AMREX_D_DECL(0,0,0)});
-        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], num_components, p->margin);
+        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
         mf[p->level].setVal(0);
     }
-    initialize_bc();
     for(p->level=0; p->level<p->nlevs; ++p->level)
         fillBoundary();
 }
