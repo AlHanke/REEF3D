@@ -25,7 +25,6 @@ Author: Hans Bihs
 
 #include"norm_vec.h"
 #include"bedslope.h"
-#include"field4a.h"
 #include"sandslide.h"
 
 
