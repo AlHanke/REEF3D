@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"slice.h"
 
-void ghostcell::gcsldistro4a(lexer *p, slice &f, int ii, int jj, int nn, int gcv, int bc, int cs)
+void ghostcell::gcsldistro4a(lexer *p, slice &f, int ii, int jj, int gcv, int bc, int cs)
 {
     i=ii;
     j=jj;
