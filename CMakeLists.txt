@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # ── Dependency versions ───────────────────────────────────────────────────────
 set(REEF3D_HYPRE_VERSION  "3.2.0")
 set(REEF3D_EIGEN_VERSION  "5.0.0")
+set(REEF3D_AMREX_VERSION  "26.09")
 
 # Default build type mirrors Makefile's .DEFAULT_GOAL = release
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -106,6 +107,44 @@ endif()
 # Enforce MPL2-only regardless of how Eigen was found
 target_compile_definitions(Eigen3::Eigen INTERFACE EIGEN_MPL2_ONLY)
 
+# ── AMReX ─────────────────────────────────────────────────────────────────────
+
+option(USE_AMREX "Build with AMReX adaptive mesh refinement" ON)
+
+if(USE_AMREX)
+  set(AMREX_LOCAL_DIR "${PROJECT_SOURCE_DIR}/ThirdParty/amrex-${REEF3D_AMREX_VERSION}")
+
+  find_library(_AMREX_LIB NAMES amrex HINTS "${AMREX_LOCAL_DIR}/lib" NO_DEFAULT_PATH)
+  if(_AMREX_LIB)
+    message(STATUS "Found AMReX: ${_AMREX_LIB}")
+    add_library(AMReX::amrex UNKNOWN IMPORTED)
+    set_target_properties(AMReX::amrex PROPERTIES
+      IMPORTED_LOCATION             "${_AMREX_LIB}"
+      INTERFACE_INCLUDE_DIRECTORIES "${AMREX_LOCAL_DIR}/include")
+    # AMReX Fortran runtime (required on macOS with Homebrew GCC)
+    find_library(GFORTRAN_LIB gfortran
+      HINTS /opt/homebrew/lib/gcc/current
+      NO_DEFAULT_PATH)
+    if(GFORTRAN_LIB)
+      set_property(TARGET AMReX::amrex APPEND PROPERTY
+        INTERFACE_LINK_LIBRARIES "${GFORTRAN_LIB}")
+    endif()
+  else()
+    message(STATUS "AMReX not found at ${AMREX_LOCAL_DIR} — downloading ${REEF3D_AMREX_VERSION} via FetchContent")
+    include(FetchContent)
+    FetchContent_Declare(AMReX
+      GIT_REPOSITORY https://github.com/AMReX-Codes/amrex.git
+      GIT_TAG        ${REEF3D_AMREX_VERSION}
+      GIT_SHALLOW    ON)
+    set(AMReX_EB        ON  CACHE BOOL "" FORCE)
+    set(AMReX_HYPRE     ON  CACHE BOOL "" FORCE)
+    set(AMReX_MPI       ON  CACHE BOOL "" FORCE)
+    set(AMReX_PARTICLES OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(AMReX)
+    add_library(AMReX::amrex ALIAS amrex)
+  endif()
+endif()
+
 # ── Executable ───────────────────────────────────────────────────────────────
 
 file(GLOB SOURCES CONFIGURE_DEPENDS src/*.cpp)
@@ -141,3 +180,8 @@ target_link_libraries(REEF3D PRIVATE
   MPI::MPI_CXX
   HYPRE::HYPRE
   Eigen3::Eigen)
+
+if(USE_AMREX)
+  target_compile_definitions(REEF3D PRIVATE USE_AMREX=1)
+  target_link_libraries(REEF3D PRIVATE AMReX::amrex)
+endif()

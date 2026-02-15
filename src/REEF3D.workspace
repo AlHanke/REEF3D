@@ -18,5 +18,9 @@
       <Environment/>
       <Project Name="REEF3D" ConfigName="Release"/>
     </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="AMReX">
+      <Environment/>
+      <Project Name="REEF3D" ConfigName="AMReX"/>
+    </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>
