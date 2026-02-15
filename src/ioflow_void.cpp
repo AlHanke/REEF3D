@@ -348,10 +348,6 @@ void ioflow_v::fsfrkin(lexer *p, fdm *a, ghostcell *pgc, field& f)
     pBC->patchBC_waterlevel(p,a,pgc,f);
 }
 
-void ioflow_v::iogcb_update(lexer *p, fdm *a, ghostcell *pgc)
-{
-}
-
 void  ioflow_v::isource(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 {
     double porousterm;

@@ -52,7 +52,6 @@ public:
     void fsfinflow(lexer*,fdm*,ghostcell*) override final;
     void fsfrkin(lexer*,fdm*,ghostcell*,field&) override final;
     void fsfrkout(lexer*,fdm*,ghostcell*,field&) override final;
-    void iogcb_update(lexer*,fdm*,ghostcell*) override final;
     void isource(lexer*,fdm*,ghostcell*,vrans*) override final;
     void jsource(lexer*,fdm*,ghostcell*,vrans*) override final;
     void ksource(lexer*,fdm*,ghostcell*,vrans*) override final;

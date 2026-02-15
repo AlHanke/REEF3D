@@ -55,7 +55,6 @@ public:
     virtual void fsfinflow(lexer*,fdm*,ghostcell*)=0;
     virtual void fsfrkin(lexer*,fdm*,ghostcell*,field&)=0;
     virtual void fsfrkout(lexer*,fdm*,ghostcell*,field&)=0;
-    virtual void iogcb_update(lexer*,fdm*,ghostcell*)=0;
     virtual void isource(lexer*,fdm*,ghostcell*,vrans*)=0;
     virtual void jsource(lexer*,fdm*,ghostcell*,vrans*)=0;
     virtual void ksource(lexer*,fdm*,ghostcell*,vrans*)=0;
