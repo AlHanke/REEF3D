@@ -68,9 +68,9 @@ void ghostcell::gc_ini(lexer* p)
     }
     else if(p->B20==3)
     {
-        gclabel_u=bc_labels::DIRICHLET_PARA;
-        gclabel_v=bc_labels::DIRICHLET_PARA;
-        gclabel_w=bc_labels::DIRICHLET_PARA;
+        gclabel_u=bc_labels::DIRICHLET_ORTH;
+        gclabel_v=bc_labels::DIRICHLET_ORTH;
+        gclabel_w=bc_labels::DIRICHLET_ORTH;
     }
 
     gclabel_u_orth=bc_labels::DIRICHLET_ORTH;
