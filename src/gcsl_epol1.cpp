@@ -31,31 +31,31 @@ ghostcell::bc_labels ghostcell::gcsleval1(int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
     // Wall
     // Parallel
-    else if((bc==7 || bc==21) && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && (gcv==1 || gcv==10))
+    else if((bc==NUMBEACH || bc==WALL) && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && (gcv==1 || gcv==10))
         return gclabel_u;
     // Orthogonal
-    else if((bc==3 || (bc==7 && !awa_label) || bc==21) && (cs==X_NEG || cs==X_POS) && (gcv==1 || gcv==10))
+    else if((bc==SYMMETRY || (bc==NUMBEACH && !awa_label) || bc==WALL) && (cs==X_NEG || cs==X_POS) && (gcv==1 || gcv==10))
         return bc_labels::NOSLIP;
     // Outflow
-    else if(bc==2 && (cs==X_NEG || cs==X_POS) && (gcv==1 || gcv==10))
-        return bc_labels::OUTFLOW;
+    else if(bc==OUTFLOW && (cs==X_NEG || cs==X_POS) && (gcv==1 || gcv==10))
+        return bc_labels::OUTFLOWBC;
     // Symmetry
-    else if(bc==3 && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && (gcv==1 || gcv==10))
+    else if(bc==SYMMETRY && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && (gcv==1 || gcv==10))
         return bc_labels::NEUMANN;
     // Hx
-    else if((bc==1 || bc==6) && (gcv==52 || gcv==54))
+    else if((bc==INFLOW || bc==WAVEGEN) && (gcv==52 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if((bc==2 || bc==7) && (gcv==52 || gcv==53))
+    else if((bc==OUTFLOW || bc==NUMBEACH) && (gcv==52 || gcv==53))
         return bc_labels::NEUMANN;
 
-    else if((bc==2 || bc==7) && (gcv==51 || gcv==54))
+    else if((bc==OUTFLOW || bc==NUMBEACH) && (gcv==51 || gcv==54))
         return bc_labels::NEUMANN_HX;
 
-    else if(bc==7 && p->B99==3)
+    else if(bc==NUMBEACH && p->B99==3)
         return bc_labels::NEUMANN;
 
-    else if((bc==3 || bc==21) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if((bc==SYMMETRY || bc==WALL) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
     // Patch
     else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==1 || gcv==10))
