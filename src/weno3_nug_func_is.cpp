@@ -21,6 +21,7 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"weno3_nug_func.h"
+#include"lexer.h"
 #include<math.h>
 
 // IS ----

@@ -78,6 +78,9 @@ public:
     double w1z,w2z,w3z;
     
     int uf,vf,wf;
+
+private:
+    lexer* p;
 };
 
 #endif

@@ -87,20 +87,20 @@ void ifou::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel,
 
     if(ipol==1)
     ULOOP
-    aij(p,a,b,1,uvel,vvel,wvel,p->DXP,p->DYN,p->DZN);
+    aij(p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data());
     
     if(p->j_dir==1)
     if(ipol==2)
     VLOOP
-    aij(p,a,b,2,uvel,vvel,wvel,p->DXN,p->DYP,p->DZN);
+    aij(p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data());
 
     if(ipol==3)
     WLOOP
-    aij(p,a,b,3,uvel,vvel,wvel,p->DXN,p->DYN,p->DZP);
+    aij(p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data());
 
     if(ipol==4)
     LOOP
-    aij(p,a,b,4,uvel,vvel,wvel,p->DXN,p->DYN,p->DZN);
+    aij(p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data());
 }
 
 void ifou::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, field& wvel, double *DX,double *DY, double *DZ)

@@ -186,7 +186,7 @@ void reefmg::topology(lexer *p, ghostcell *pgc)
     //  grids behave instead of costing iterations.
     if(!mg.setup(pgc->mpi_comm,npx,npy,cx,cy,
                  p->knox,p->knoy,p->knoz,p->gknox,p->gknoy,p->N13,
-                 p->DXN+p->marge-1, p->DYN+p->marge-1))
+                 p->DXN.data()+p->origin_i+p->marge-1, p->DYN.data()+p->origin_j+p->marge-1))
     {
         if(p->mpirank==0)
         cout<<"REEFMG "<<mg.err()<<endl;
@@ -285,7 +285,7 @@ void reefmg::start_solver44(lexer *p, ghostcell *pgc, double *f, vec &rhs, matri
 
     if(!pot.setup(pgc->mpi_comm,npx,npy,cx,cy,
                   p->knox,p->knoy,p->knoz,p->gknox,p->gknoy,0,
-                  p->DXN+p->marge-1, p->DYN+p->marge-1))
+                  p->DXN.data()+p->origin_i+p->marge-1, p->DYN.data()+p->origin_j+p->marge-1))
     {
         if(p->mpirank==0)
         cout<<"REEFMG potential: "<<pot.err()<<endl;

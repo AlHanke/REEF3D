@@ -175,7 +175,7 @@ void sixdof_obj::ray_cast_io_zcorr(lexer *p, fdm *a, ghostcell *pgc, int ts, int
 			Rz = u*Az + v*Bz + w*Cz;
 			
 			
-            for(k=0;k<p->knoz;++k)
+            KLOOP
             {
 				if(p->ZP[KP]<Rz)
 				cutr(i,j,k) += 1;

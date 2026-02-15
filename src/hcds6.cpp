@@ -85,20 +85,20 @@ void hcds6::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel
 {
     if(ipol==1)
     ULOOP
-    a->F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel,p->DXP,p->DYN,p->DZN,p->DXN,p->DYP,p->DZP);
+    a->F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data(),p->DXN.data(),p->DYP.data(),p->DZP.data());
 
     if(p->j_dir==1)
     if(ipol==2)
     VLOOP
-    a->G(i,j,k)+=aij(p,a,b,2,uvel,vvel,wvel,p->DXN,p->DYP,p->DZN,p->DXP,p->DYN,p->DZP);
+    a->G(i,j,k)+=aij(p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data(),p->DXP.data(),p->DYN.data(),p->DZP.data());
 
     if(ipol==3)
     WLOOP
-    a->H(i,j,k)+=aij(p,a,b,3,uvel,vvel,wvel,p->DXN,p->DYN,p->DZP,p->DXP,p->DYP,p->DZN);
+    a->H(i,j,k)+=aij(p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data(),p->DXP.data(),p->DYP.data(),p->DZN.data());
 
     if(ipol==4)
     LOOP
-    a->L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel,p->DXN,p->DYN,p->DZN,p->DXP,p->DYP,p->DZP);
+    a->L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data(),p->DXP.data(),p->DYP.data(),p->DZP.data());
 }
 
 double hcds6::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, field& wvel, double *DX,double *DY, double *DZ, double *DXX,double *DYY, double *DZZ)
