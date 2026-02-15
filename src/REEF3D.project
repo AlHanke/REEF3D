@@ -2794,10 +2794,8 @@
         <File Name="gc_startV.cpp"/>
         <File Name="gc_dirichlet-para-reflect.cpp"/>
         <File Name="gc_dirichlet-ortho-reflect.cpp"/>
-        <File Name="gc_nhpress.cpp"/>
         <File Name="gc_periodic.cpp"/>
         <File Name="gc_heat.cpp"/>
-        <File Name="gc_debug.cpp"/>
         <File Name="gc_fivec.cpp"/>
         <File Name="gc_epol1.cpp"/>
         <File Name="gc_epol2.cpp"/>
@@ -2806,18 +2804,12 @@
         <File Name="gc_epol4a.cpp"/>
         <File Name="gc_distro.cpp"/>
         <File Name="gc_dirichlet-ortho.cpp"/>
-        <File Name="gc_dirichlet-para.cpp"/>
-        <File Name="gc_extend.cpp"/>
         <File Name="gc_imagepoint.cpp"/>
         <File Name="gc_noslip.cpp"/>
         <File Name="gc_potential.cpp"/>
         <File Name="gc_start.cpp"/>
-        <File Name="gc_atmosphere.cpp"/>
         <File Name="gc_outflow.cpp"/>
-        <File Name="gc_gravity_press.cpp"/>
-        <File Name="gc_lsm.cpp"/>
         <File Name="gc_neumann.cpp"/>
-        <File Name="gc_sommerfeld.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Flag">
         <File Name="gc_nhflow_ioflag.cpp"/>
