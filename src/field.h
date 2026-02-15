@@ -23,21 +23,11 @@ Author: Hans Bihs
 #ifndef FIELD_H_
 #define FIELD_H_
 
-class lexer;
-class fdm;
-
-using namespace std;
-
-class field
+#include "field_base.h"
+class field : public field_base<double>
 {
 public:
-	virtual double& operator()(int, int, int)=0;
-    virtual void fillBoundary()=0;
-    virtual void FillDomainBoundary()=0;
-    virtual amrex::MultiFab& GetMultiFab()=0;
-    virtual void setVal(double)=0;
-protected:
-	double *V;
+    virtual ~field() = default;
 };
 
 #endif
