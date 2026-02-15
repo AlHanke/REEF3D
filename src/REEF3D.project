@@ -1282,7 +1282,6 @@
             <File Name="ini_psi.cpp"/>
             <File Name="ini_press.cpp"/>
             <File Name="ini_phi.cpp"/>
-            <File Name="ini_para.cpp"/>
             <File Name="ini_hydrostatic.cpp"/>
             <File Name="ini_droplet.cpp"/>
           </VirtualDirectory>
