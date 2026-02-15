@@ -36,7 +36,7 @@ public:
     virtual ~field() = default;
 
 #if USE_AMREX
-    virtual void FillDomainBoundary() = 0;
+    virtual void FillDomainBoundary(int gcv) = 0;
 #endif
 };
 
