@@ -38,11 +38,6 @@ void ghostcell::dgcpol3(lexer* p, field& f)
         dj=p->dgc3[n][4];
         dk=p->dgc3[n][5];
 
-        bc=p->dgc3[n][6];
-
-        if(bc==1)
-            f(i+di,j+dj,k+dk) = f(i,j,k);
-        else if(bc==2)
-            f(i+di,j+dj,k+dk) = 0.0;
+        f(i+di,j+dj,k+dk) = f(i,j,k);
     }
 }
