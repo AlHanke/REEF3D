@@ -56,11 +56,11 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     amrex_distribution_mapping.resize(nlevs);
     amr_cell_mf.resize(nlevs);
 
-    flag1_imf.resize(nlevs);
-    flag2_imf.resize(nlevs);
-    flag3_imf.resize(nlevs);
-    flag4_imf.resize(nlevs);
-    flag7_imf.resize(nlevs);
+    flag1_iMF.resize(nlevs);
+    flag2_iMF.resize(nlevs);
+    flag3_iMF.resize(nlevs);
+    flag4_iMF.resize(nlevs);
+    flag7_iMF.resize(nlevs);
 
     int is_periodic[AMREX_SPACEDIM] = {p->periodic1, p->periodic2, p->periodic3};
 
@@ -68,14 +68,14 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     {
         RealBox real_box;
         Box domain;
-        if (lev == 0)
+        if (lev == 0) // Overall problem domain
         {
             real_box.setLo(RealVect(AMREX_D_DECL(p->global_xmin, p->global_ymin, p->global_zmin)));
             real_box.setHi(RealVect(AMREX_D_DECL(p->global_xmax, p->global_ymax, p->global_zmax)));
             domain.setSmall(IntVect(AMREX_D_DECL(0, 0, 0)));
             domain.setBig(IntVect(AMREX_D_DECL(p->gknox-1, p->gknoy-1, p->gknoz-1)));
         }
-        else
+        else // Local refinement areas
         {
             // AMR levels not implemented yet
             real_box.setLo(RealVect(AMREX_D_DECL(0, 0, 0)));
@@ -86,6 +86,7 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 
         amrex_geometry[lev] = Geometry(domain, &real_box, CoordSys::CoordType::cartesian, is_periodic);
 
+        // Gather global box information from all ranks to construct BoxArray and DistributionMapping
         int local_data[6] = {p->origin_i, p->origin_j, p->origin_k, p->origin_i + p->knox - 1, p->origin_j + p->knoy - 1, p->origin_k + p->knoz - 1};
 
         int all_data[p->M10][6];
@@ -106,11 +107,11 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 
         amr_cell_mf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 0, p->margin);
 
-        flag1_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
-        flag2_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
-        flag3_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
-        flag4_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
-        flag7_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
+        flag1_iMF[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
+        flag2_iMF[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
+        flag3_iMF[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
+        flag4_iMF[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
+        flag7_iMF[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
     }
 
     amrex::MFIter::allowMultipleMFIters(true);

@@ -47,28 +47,35 @@ public:
     grid_amrex() = default;
     virtual ~grid_amrex() = default;
 
+    void define_inflow_outflow_ba();
+
     // AMReX Geometry
     amrex::Vector<amrex::Geometry> amrex_geometry;
     amrex::Vector<amrex::BoxArray> amrex_box_array;
     amrex::Vector<amrex::DistributionMapping> amrex_distribution_mapping;
+
+    // Looping structures
+    amrex::Vector<amrex::MultiFab> amr_cell_mf;
+    std::unique_ptr<amrex::MFIter> default_cell_mfi;
+    amrex::MFIter* amr_cell_mfi = nullptr;
+
+    // Inflow and outflow areas
     amrex::Vector<amrex::iMultiFab> inflow_ba;
     amrex::Vector<amrex::Vector<amrex::IntVect>> inflow_ijk;
     amrex::Vector<amrex::iMultiFab> outflow_ba;
     amrex::Vector<amrex::Vector<amrex::IntVect>> outflow_ijk;
-    amrex::Vector<amrex::MultiFab> amr_cell_mf;
-    std::unique_ptr<amrex::MFIter> default_cell_mfi;
-    amrex::MFIter* amr_cell_mfi = nullptr;
-    amrex::Vector<amrex::iMultiFab> flag1_imf;
-    amrex::Vector<amrex::iMultiFab> flag2_imf;
-    amrex::Vector<amrex::iMultiFab> flag3_imf;
-    amrex::Vector<amrex::iMultiFab> flag4_imf;
-    amrex::Vector<amrex::iMultiFab> flag7_imf;
+
+    // Flags using iMultiFab
+    amrex::Vector<amrex::iMultiFab> flag1_iMF;
+    amrex::Vector<amrex::iMultiFab> flag2_iMF;
+    amrex::Vector<amrex::iMultiFab> flag3_iMF;
+    amrex::Vector<amrex::iMultiFab> flag4_iMF;
+    amrex::Vector<amrex::iMultiFab> flag7_iMF;
 
     int level;
     const int nlevs = 1;
     const int ncomp = 1;
     int bc_type[6] = {0,0,0,0,0,0};
-    void define_inflow_outflow_ba();
 
 protected:
     void setup_amrex_geometry(lexer* p, ghostcell* pgc);
