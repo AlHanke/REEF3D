@@ -39,8 +39,6 @@ public:
 
     void FillBoundary() override;
 
-    void FillDomainBoundary(int gcv) override {};
-
 protected:
     fieldint_amrex(lexer* p);
 

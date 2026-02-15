@@ -28,6 +28,7 @@ class field : public field_base<double>
 {
 public:
     virtual ~field() = default;
+    virtual void FillDomainBoundary(int gcv) = 0;
 };
 
 #endif
