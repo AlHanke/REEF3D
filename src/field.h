@@ -34,6 +34,10 @@ public:
     field(lexer* p) : field_base<double>(p) {};
 #endif
     virtual ~field() = default;
+
+#if USE_AMREX
+    virtual void FillDomainBoundary() = 0;
+#endif
 };
 
 #endif
