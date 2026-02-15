@@ -61,7 +61,7 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     ray_cast(p,a,pgc);
 
 	reini_RK2(p,a,pgc,a->fb);
-    pgc->start4a(p,a->fb,50);
+    pgc->start4(p,a->fb,50);
     
     // Calculate geometrical properties
 	geometry_parameters(p,a,pgc);
@@ -72,7 +72,7 @@ void sixdof_obj::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
 	// Recalculate distances
 	ray_cast(p,a,pgc);
 	reini_RK2(p,a,pgc,a->fb);
-    pgc->start4a(p,a->fb,50);
+    pgc->start4(p,a->fb,50);
     
     // Initialise global variables
 	update_fbvel(p,pgc);

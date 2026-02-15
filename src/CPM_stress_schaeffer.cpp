@@ -56,8 +56,8 @@ void CPM::stress_schaeffer(lexer *p, ghostcell *pgc, sediment_fdm *s)
         //cout<<"Tau: "<<Tau(i,j,k)<<" Ts: "<<Ts(i,j,k)<<" MAXfunc: "<<MAX(Tc-Ts(i,j,k),epsilon*(1.0-Ts(i,j,k)))<<endl;
     }
 
-    pgc->start4a(p,Tau,1);
-    pgc->start4a(p,Ts,1);*/
+    pgc->start4(p,Tau,1);
+    pgc->start4(p,Ts,1);*/
 }
 /*
 

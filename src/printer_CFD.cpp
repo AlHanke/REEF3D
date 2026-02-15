@@ -348,7 +348,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
 {
     if(p->P10!=vtk3D::type::none)
     {
-        pgc->start4a(p,a->test,1);
+        pgc->start4(p,a->test,1);
         pgc->start1(p,a->u,110);
         pgc->start2(p,a->v,111);
         pgc->start3(p,a->w,112);
@@ -898,6 +898,6 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
         pgc->start2(p,a->v,115);
         pgc->start3(p,a->w,116);
 
-        pgc->start4a(p,a->topo,150);
+        pgc->start4(p,a->topo,150);
     }
 }
