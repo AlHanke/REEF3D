@@ -39,9 +39,6 @@ ddweno_nug_sf::~ddweno_nug_sf()
 
 double ddweno_nug_sf::ddwenox(fdm* a, field &f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
     uf=0;
     
     int check=0;
@@ -51,7 +48,7 @@ double ddweno_nug_sf::ddwenox(fdm* a, field &f, double uw)
 	if(uw>0.0)
 	{
     if(modus==0)
-	iqmin0(a,f);
+	iqmin(f);
     
     if(modus==1)
 	iqmax1(a,f);
@@ -75,7 +72,7 @@ double ddweno_nug_sf::ddwenox(fdm* a, field &f, double uw)
 	if(uw<0.0)
 	{
     if(modus==0)
-	iqmax0(a,f);
+	iqmax(f);
     
     if(modus==1)
 	iqmax1(a,f);
@@ -102,9 +99,6 @@ double ddweno_nug_sf::ddwenox(fdm* a, field &f, double uw)
 
 double ddweno_nug_sf::ddwenoy(fdm* a, field &f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
     vf=0;
     
 	grad=0.0;
@@ -112,7 +106,7 @@ double ddweno_nug_sf::ddwenoy(fdm* a, field &f, double uw)
 	if(uw>0.0)
 	{
     if(modus==0)
-	jqmin0(a,f);
+	jqmin(f);
     
     if(modus==1)
 	jqmin1(a,f);
@@ -136,7 +130,7 @@ double ddweno_nug_sf::ddwenoy(fdm* a, field &f, double uw)
 	if(uw<0.0)
 	{
     if(modus==0)
-	jqmax0(a,f);
+	jqmax(f);
     
     if(modus==1)
 	jqmax1(a,f);
@@ -162,9 +156,6 @@ double ddweno_nug_sf::ddwenoy(fdm* a, field &f, double uw)
 
 double ddweno_nug_sf::ddwenoz(fdm* a, field &f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
     wf=0;
 
 	grad=0.0;
@@ -172,7 +163,7 @@ double ddweno_nug_sf::ddwenoz(fdm* a, field &f, double uw)
 	if(uw>0.0)
 	{
     if(modus==0)
-	kqmin0(a,f);
+	kqmin(f);
     
     if(modus==1)
 	kqmin1(a,f);
@@ -197,7 +188,7 @@ double ddweno_nug_sf::ddwenoz(fdm* a, field &f, double uw)
 	if(uw<0.0)
 	{
     if(modus==0)
-	kqmax0(a,f);
+	kqmax(f);
     
     if(modus==1)
 	kqmax1(a,f);
@@ -220,79 +211,25 @@ double ddweno_nug_sf::ddwenoz(fdm* a, field &f, double uw)
     
 	return grad;
 }
-
-void ddweno_nug_sf::iqmin0(fdm* a, field &f)
-{   
-    q1 = (f(i-2,j,k) - f(i-3,j,k))/DX[IM3];
-	q2 = (f(i-1,j,k) - f(i-2,j,k))/DX[IM2];
-	q3 = (f(i,j,k)   - f(i-1,j,k))/DX[IM1];
-	q4 = (f(i+1,j,k) - f(i,j,k)  )/DX[IP];
-	q5 = (f(i+2,j,k) - f(i+1,j,k))/DX[IP1];
-}
-
-void ddweno_nug_sf::jqmin0(fdm* a, field &f)
-{
-    q1 = (f(i,j-2,k) - f(i,j-3,k))/DY[JM3];
-	q2 = (f(i,j-1,k) - f(i,j-2,k))/DY[JM2];
-	q3 = (f(i,j,k)   - f(i,j-1,k))/DY[JM1];
-	q4 = (f(i,j+1,k) - f(i,j,k)  )/DY[JP];
-	q5 = (f(i,j+2,k) - f(i,j+1,k))/DY[JP1];
-}
-
-void ddweno_nug_sf::kqmin0(fdm* a, field &f)
-{
-    q1 = (f(i,j,k-2) - f(i,j,k-3))/DZ[KM3];
-	q2 = (f(i,j,k-1) - f(i,j,k-2))/DZ[KM2];
-	q3 = (f(i,j,k)   - f(i,j,k-1))/DZ[KM1];
-	q4 = (f(i,j,k+1) - f(i,j,k)  )/DZ[KP];
-	q5 = (f(i,j,k+2) - f(i,j,k+1))/DZ[KP1];
-}
-
-void ddweno_nug_sf::iqmax0(fdm* a, field &f)
-{
-    q1 = (f(i-1,j,k) - f(i-2,j,k))/DX[IM2];
-    q2 = (f(i,j,k)   - f(i-1,j,k))/DX[IM1];
-    q3 = (f(i+1,j,k) - f(i,j,k)  )/DX[IP];
-    q4 = (f(i+2,j,k) - f(i+1,j,k))/DX[IP1];
-    q5 = (f(i+3,j,k) - f(i+2,j,k))/DX[IP2];
-}
-
-void ddweno_nug_sf::jqmax0(fdm* a, field &f)
-{
-    q1 = (f(i,j-1,k) - f(i,j-2,k))/DY[JM2];
-    q2 = (f(i,j,k)   - f(i,j-1,k))/DY[JM1];
-    q3 = (f(i,j+1,k) - f(i,j,k)  )/DY[JP];
-    q4 = (f(i,j+2,k) - f(i,j+1,k))/DY[JP1];
-    q5 = (f(i,j+3,k) - f(i,j+2,k))/DY[JP2];
-}
-
-void ddweno_nug_sf::kqmax0(fdm* a, field &f)
-{
-    q1 = (f(i,j,k-1) - f(i,j,k-2))/DZ[KM2];
-    q2 = (f(i,j,k)   - f(i,j,k-1))/DZ[KM1];
-    q3 = (f(i,j,k+1) - f(i,j,k)  )/DZ[KP];
-    q4 = (f(i,j,k+2) - f(i,j,k+1))/DZ[KP1];
-    q5 = (f(i,j,k+3) - f(i,j,k+2))/DZ[KP2];
-}
     
 void ddweno_nug_sf::iqmin1(fdm* a, field &f)
 {   
     q1=q2=q3=q4=q5=0.0;
     
     if(a->solid(i-2,j,k)>0.0 && a->topo(i-2,j,k)>0.0 && a->solid(i-3,j,k)>0.0 && a->topo(i-3,j,k)>0.0)
-	q1 = (f(i-2,j,k) - f(i-3,j,k))/DX[IM3];
+	q1 = (f(i-2,j,k) - f(i-3,j,k))/p->DXP[IM3];
     
     if(a->solid(i-1,j,k)>0.0 && a->topo(i-1,j,k)>0.0 && a->solid(i-2,j,k)>0.0 && a->topo(i-2,j,k)>0.0)
-	q2 = (f(i-1,j,k) - f(i-2,j,k))/DX[IM2];
+	q2 = (f(i-1,j,k) - f(i-2,j,k))/p->DXP[IM2];
     
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i-1,j,k)>0.0 && a->topo(i-1,j,k)>0.0)
-	q3 = (f(i,j,k)   - f(i-1,j,k))/DX[IM1];
+	q3 = (f(i,j,k)   - f(i-1,j,k))/p->DXP[IM1];
     
     if(a->solid(i+1,j,k)>0.0 && a->topo(i+1,j,k)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
-	q4 = (f(i+1,j,k) - f(i,j,k)  )/DX[IP];
+	q4 = (f(i+1,j,k) - f(i,j,k)  )/p->DXP[IP];
     
     if(a->solid(i+2,j,k)>0.0 && a->topo(i+2,j,k)>0.0 && a->solid(i+1,j,k)>0.0 && a->topo(i+1,j,k)>0.0)
-	q5 = (f(i+2,j,k) - f(i+1,j,k))/DX[IP1];
+	q5 = (f(i+2,j,k) - f(i+1,j,k))/p->DXP[IP1];
 
 }
 
@@ -301,19 +238,19 @@ void ddweno_nug_sf::jqmin1(fdm* a, field &f)
     q1=q2=q3=q4=q5=0.0;
     
     if(a->solid(i,j-2,k)>0.0 && a->topo(i,j-2,k)>0.0 && a->solid(i,j-3,k)>0.0 && a->topo(i,j-3,k)>0.0)
-	q1 = (f(i,j-2,k) - f(i,j-3,k))/DY[JM3];
+	q1 = (f(i,j-2,k) - f(i,j-3,k))/p->DYP[JM3];
     
     if(a->solid(i,j-1,k)>0.0 && a->topo(i,j-1,k)>0.0 && a->solid(i,j-2,k)>0.0 && a->topo(i,j-2,k)>0.0)
-	q2 = (f(i,j-1,k) - f(i,j-2,k))/DY[JM2];
+	q2 = (f(i,j-1,k) - f(i,j-2,k))/p->DYP[JM2];
     
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i-1,j,k)>0.0 && a->topo(i-1,j,k)>0.0)
-	q3 = (f(i,j,k)   - f(i,j-1,k))/DY[JM1];
+	q3 = (f(i,j,k)   - f(i,j-1,k))/p->DYP[JM1];
     
     if(a->solid(i,j+1,k)>0.0 && a->topo(i,j+1,k)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
-	q4 = (f(i,j+1,k) - f(i,j,k)  )/DY[JP];
+	q4 = (f(i,j+1,k) - f(i,j,k)  )/p->DYP[JP];
     
     if(a->solid(i,j+2,k)>0.0 && a->topo(i,j+2,k)>0.0 && a->solid(i,j+1,k)>0.0 && a->topo(i,j+1,k)>0.0)
-	q5 = (f(i,j+2,k) - f(i,j+1,k))/DY[JP1];
+	q5 = (f(i,j+2,k) - f(i,j+1,k))/p->DYP[JP1];
 }
 
 void ddweno_nug_sf::kqmin1(fdm* a, field &f)
@@ -321,19 +258,19 @@ void ddweno_nug_sf::kqmin1(fdm* a, field &f)
     q1=q2=q3=q4=q5=0.0;
     
     if(a->solid(i,j,k-2)>0.0 && a->topo(i,j,k-2)>0.0 && a->solid(i,j,k-3)>0.0 && a->topo(i,j,k-3)>0.0)
-	q1 = (f(i,j,k-2) - f(i,j,k-3))/DZ[KM3];
+	q1 = (f(i,j,k-2) - f(i,j,k-3))/p->DZP[KM3];
     
     if(a->solid(i,j,k-1)>0.0 && a->topo(i,j,k-1)>0.0 && a->solid(i,j,k-2)>0.0 && a->topo(i,j,k-2)>0.0)
-	q2 = (f(i,j,k-1) - f(i,j,k-2))/DZ[KM2];
+	q2 = (f(i,j,k-1) - f(i,j,k-2))/p->DZP[KM2];
     
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i,j,k-1)>0.0 && a->topo(i,j,k-1)>0.0)
-	q3 = (f(i,j,k)   - f(i,j,k-1))/DZ[KM1];
+	q3 = (f(i,j,k)   - f(i,j,k-1))/p->DZP[KM1];
     
     if(a->solid(i,j,k+1)>0.0 && a->topo(i,j,k+1)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
-	q4 = (f(i,j,k+1) - f(i,j,k)  )/DZ[KP];
+	q4 = (f(i,j,k+1) - f(i,j,k)  )/p->DZP[KP];
     
     if(a->solid(i,j,k+2)>0.0 && a->topo(i,j,k+2)>0.0 && a->solid(i,j,k+1)>0.0 && a->topo(i,j,k+1)>0.0)
-	q5 = (f(i,j,k+2) - f(i,j,k+1))/DZ[KP1];
+	q5 = (f(i,j,k+2) - f(i,j,k+1))/p->DZP[KP1];
 }
 
 void ddweno_nug_sf::iqmax1(fdm* a, field &f)
@@ -341,19 +278,19 @@ void ddweno_nug_sf::iqmax1(fdm* a, field &f)
     q1=q2=q3=q4=q5=0.0;
     
     if(a->solid(i-1,j,k)>0.0 && a->topo(i-1,j,k)>0.0 && a->solid(i-2,j,k)>0.0 && a->topo(i-2,j,k)>0.0)
-	q1 = (f(i-1,j,k) - f(i-2,j,k))/DX[IM2];
+	q1 = (f(i-1,j,k) - f(i-2,j,k))/p->DXP[IM2];
     
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i-1,j,k)>0.0 && a->topo(i-1,j,k)>0.0)
-    q2 = (f(i,j,k)   - f(i-1,j,k))/DX[IM1];
+    q2 = (f(i,j,k)   - f(i-1,j,k))/p->DXP[IM1];
     
     if(a->solid(i+1,j,k)>0.0 && a->topo(i+1,j,k)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
-    q3 = (f(i+1,j,k) - f(i,j,k)  )/DX[IP];
+    q3 = (f(i+1,j,k) - f(i,j,k)  )/p->DXP[IP];
     
     if(a->solid(i+2,j,k)>0.0 && a->topo(i+2,j,k)>0.0 && a->solid(i+1,j,k)>0.0 && a->topo(i+1,j,k)>0.0)
-    q4 = (f(i+2,j,k) - f(i+1,j,k))/DX[IP1];
+    q4 = (f(i+2,j,k) - f(i+1,j,k))/p->DXP[IP1];
     
     if(a->solid(i+3,j,k)>0.0 && a->topo(i+3,j,k)>0.0 && a->solid(i+2,j,k)>0.0 && a->topo(i+2,j,k)>0.0)
-    q5 = (f(i+3,j,k) - f(i+2,j,k))/DX[IP2];
+    q5 = (f(i+3,j,k) - f(i+2,j,k))/p->DXP[IP2];
 }
 
 void ddweno_nug_sf::jqmax1(fdm* a, field &f)
@@ -361,19 +298,19 @@ void ddweno_nug_sf::jqmax1(fdm* a, field &f)
     q1=q2=q3=q4=q5=0.0;
     
     if(a->solid(i,j-1,k)>0.0 && a->topo(i,j-1,k)>0.0 && a->solid(i,j-2,k)>0.0 && a->topo(i,j-2,k)>0.0)
-	q1 = (f(i,j-1,k) - f(i,j-2,k))/DY[JM2];
+	q1 = (f(i,j-1,k) - f(i,j-2,k))/p->DYP[JM2];
     
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i,j-1,k)>0.0 && a->topo(i,j-1,k)>0.0)
-    q2 = (f(i,j,k)   - f(i,j-1,k))/DY[JM1];
+    q2 = (f(i,j,k)   - f(i,j-1,k))/p->DYP[JM1];
     
     if(a->solid(i,j+1,k)>0.0 && a->topo(i,j+1,k)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
-    q3 = (f(i,j+1,k) - f(i,j,k)  )/DY[JP];
+    q3 = (f(i,j+1,k) - f(i,j,k)  )/p->DYP[JP];
     
     if(a->solid(i,j+2,k)>0.0 && a->topo(i,j+2,k)>0.0 && a->solid(i,j+1,k)>0.0 && a->topo(i,j+1,k)>0.0)
-    q4 = (f(i,j+2,k) - f(i,j+1,k))/DY[JP1];
+    q4 = (f(i,j+2,k) - f(i,j+1,k))/p->DYP[JP1];
     
     if(a->solid(i,j+3,k)>0.0 && a->topo(i,j+3,k)>0.0 && a->solid(i,j+2,k)>0.0 && a->topo(i,j+2,k)>0.0)
-    q5 = (f(i,j+3,k) - f(i,j+2,k))/DY[JP2];
+    q5 = (f(i,j+3,k) - f(i,j+2,k))/p->DYP[JP2];
 }
 
 void ddweno_nug_sf::kqmax1(fdm* a, field &f)
@@ -381,19 +318,19 @@ void ddweno_nug_sf::kqmax1(fdm* a, field &f)
     q1=q2=q3=q4=q5=0.0;
     
     if(a->solid(i,j,k-1)>0.0 && a->topo(i,j,k-1)>0.0 && a->solid(i,j,k-2)>0.0 && a->topo(i,j,k-2)>0.0)
-	q1 = (f(i,j,k-1) - f(i,j,k-2))/DZ[KM2];
+	q1 = (f(i,j,k-1) - f(i,j,k-2))/p->DZP[KM2];
     
     if(a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0 && a->solid(i,j,k-1)>0.0 && a->topo(i,j,k-1)>0.0)
-    q2 = (f(i,j,k)   - f(i,j,k-1))/DZ[KM1];
+    q2 = (f(i,j,k)   - f(i,j,k-1))/p->DZP[KM1];
     
     if(a->solid(i,j,k+1)>0.0 && a->topo(i,j,k+1)>0.0 && a->solid(i,j,k)>0.0 && a->topo(i,j,k)>0.0)
-    q3 = (f(i,j,k+1) - f(i,j,k)  )/DZ[KP];
+    q3 = (f(i,j,k+1) - f(i,j,k)  )/p->DZP[KP];
     
     if(a->solid(i,j,k+2)>0.0 && a->topo(i,j,k+2)>0.0 && a->solid(i,j,k+1)>0.0 && a->topo(i,j,k+1)>0.0)
-    q4 = (f(i,j,k+2) - f(i,j,k+1))/DZ[KP1];
+    q4 = (f(i,j,k+2) - f(i,j,k+1))/p->DZP[KP1];
     
     if(a->solid(i,j,k+3)>0.0 && a->topo(i,j,k+3)>0.0 && a->solid(i,j,k+2)>0.0 && a->topo(i,j,k+2)>0.0)
-    q5 = (f(i,j,k+3) - f(i,j,k+2))/DZ[KP2];
+    q5 = (f(i,j,k+3) - f(i,j,k+2))/p->DZP[KP2];
 }
 
 void ddweno_nug_sf::iqmin2(fdm* a, field &f)
@@ -401,19 +338,19 @@ void ddweno_nug_sf::iqmin2(fdm* a, field &f)
     q1=q2=q3=q4=q5=0.0;
    
     if(a->fbh4(i-2,j,k)  < 0.5 && a->fbh4(i-3,j,k)  < 0.5)
-    q1 = (f(i-2,j,k) - f(i-3,j,k))/DX[IM3];
+    q1 = (f(i-2,j,k) - f(i-3,j,k))/p->DXP[IM3];
     
     if(a->fbh4(i-1,j,k)  < 0.5 && a->fbh4(i-2,j,k)  < 0.5)
-	q2 = (f(i-1,j,k) - f(i-2,j,k))/DX[IM2];
+	q2 = (f(i-1,j,k) - f(i-2,j,k))/p->DXP[IM2];
     
     if(a->fbh4(i,j,k)  < 0.5 && a->fbh4(i-1,j,k)  < 0.5)
-	q3 = (f(i,j,k)   - f(i-1,j,k))/DX[IM1];
+	q3 = (f(i,j,k)   - f(i-1,j,k))/p->DXP[IM1];
     
     if(a->fbh4(i+1,j,k)  < 0.5 && a->fbh4(i,j,k)  < 0.5)
-	q4 = (f(i+1,j,k) - f(i,j,k)  )/DX[IP];
+	q4 = (f(i+1,j,k) - f(i,j,k)  )/p->DXP[IP];
     
     if(a->fbh4(i+2,j,k)  < 0.5 && a->fbh4(i+1,j,k)  < 0.5)
-	q5 = (f(i+2,j,k) - f(i+1,j,k))/DX[IP1];
+	q5 = (f(i+2,j,k) - f(i+1,j,k))/p->DXP[IP1];
 }
 
 void ddweno_nug_sf::jqmin2(fdm* a, field &f)
@@ -421,19 +358,19 @@ void ddweno_nug_sf::jqmin2(fdm* a, field &f)
     q1=q2=q3=q4=q5=0.0;
     
     if(a->fbh4(i,j-2,k)  < 0.5 && a->fbh4(i,j-3,k)  < 0.5)
-    q1 = (f(i,j-2,k) - f(i,j-3,k))/DY[JM3];
+    q1 = (f(i,j-2,k) - f(i,j-3,k))/p->DYP[JM3];
     
     if(a->fbh4(i,j-1,k)  < 0.5 && a->fbh4(i,j-2,k)  < 0.5)
-	q2 = (f(i,j-1,k) - f(i,j-2,k))/DY[JM2];
+	q2 = (f(i,j-1,k) - f(i,j-2,k))/p->DYP[JM2];
     
     if(a->fbh4(i,j,k)  < 0.5 && a->fbh4(i,j-1,k)  < 0.5)
-	q3 = (f(i,j,k)   - f(i,j-1,k))/DY[JM1];
+	q3 = (f(i,j,k)   - f(i,j-1,k))/p->DYP[JM1];
     
     if(a->fbh4(i,j+1,k)  < 0.5 && a->fbh4(i,j,k)  < 0.5)
-	q4 = (f(i,j+1,k) - f(i,j,k)  )/DY[JP];
+	q4 = (f(i,j+1,k) - f(i,j,k)  )/p->DYP[JP];
     
     if(a->fbh4(i,j+2,k)  < 0.5 && a->fbh4(i,j+1,k)  < 0.5)
-	q5 = (f(i,j+2,k) - f(i,j+1,k))/DY[JP1];
+	q5 = (f(i,j+2,k) - f(i,j+1,k))/p->DYP[JP1];
 }
 
 void ddweno_nug_sf::kqmin2(fdm* a, field &f)
@@ -441,19 +378,19 @@ void ddweno_nug_sf::kqmin2(fdm* a, field &f)
     q1=q2=q3=q4=q5=0.0;
     
     if(a->fbh4(i,j,k-2)  < 0.5 && a->fbh4(i,j,k-3)  < 0.5)
-    q1 = (f(i,j,k-2) - f(i,j,k-3))/DZ[KM3];
+    q1 = (f(i,j,k-2) - f(i,j,k-3))/p->DZP[KM3];
     
     if(a->fbh4(i,j,k-1)  < 0.5 && a->fbh4(i,j,k-2)  < 0.5)
-	q2 = (f(i,j,k-1) - f(i,j,k-2))/DZ[KM2];
+	q2 = (f(i,j,k-1) - f(i,j,k-2))/p->DZP[KM2];
     
     if(a->fbh4(i,j,k)  < 0.5 && a->fbh4(i,j,k-1)  < 0.5)
-	q3 = (f(i,j,k)   - f(i,j,k-1))/DZ[KM1];
+	q3 = (f(i,j,k)   - f(i,j,k-1))/p->DZP[KM1];
     
     if(a->fbh4(i,j,k+1)  < 0.5 && a->fbh4(i,j,k)  < 0.5)
-	q4 = (f(i,j,k+1) - f(i,j,k)  )/DZ[KP];
+	q4 = (f(i,j,k+1) - f(i,j,k)  )/p->DZP[KP];
     
     if(a->fbh4(i,j,k+2)  < 0.5 && a->fbh4(i,j,k+1)  < 0.5)
-	q5 = (f(i,j,k+2) - f(i,j,k+1))/DZ[KP1];
+	q5 = (f(i,j,k+2) - f(i,j,k+1))/p->DZP[KP1];
 }
 
 void ddweno_nug_sf::iqmax2(fdm* a, field &f)
@@ -461,19 +398,19 @@ void ddweno_nug_sf::iqmax2(fdm* a, field &f)
     q1=q2=q3=q4=q5=0.0;
     
     if(a->fbh4(i-1,j,k)  < 0.5 && a->fbh4(i-2,j,k)  < 0.5)
-    q1 = (f(i-1,j,k) - f(i-2,j,k))/DX[IM2];
+    q1 = (f(i-1,j,k) - f(i-2,j,k))/p->DXP[IM2];
     
     if(a->fbh4(i,j,k)  < 0.5 && a->fbh4(i-1,j,k)  < 0.5)
-    q2 = (f(i,j,k)   - f(i-1,j,k))/DX[IM1];
+    q2 = (f(i,j,k)   - f(i-1,j,k))/p->DXP[IM1];
     
     if(a->fbh4(i+1,j,k)  < 0.5 && a->fbh4(i,j,k)  < 0.5)
-    q3 = (f(i+1,j,k) - f(i,j,k)  )/DX[IP];
+    q3 = (f(i+1,j,k) - f(i,j,k)  )/p->DXP[IP];
     
     if(a->fbh4(i+2,j,k)  < 0.5 && a->fbh4(i+1,j,k)  < 0.5)
-    q4 = (f(i+2,j,k) - f(i+1,j,k))/DX[IP1];
+    q4 = (f(i+2,j,k) - f(i+1,j,k))/p->DXP[IP1];
     
     if(a->fbh4(i+3,j,k)  < 0.5 && a->fbh4(i+2,j,k)  < 0.5)
-    q5 = (f(i+3,j,k) - f(i+2,j,k))/DX[IP2];
+    q5 = (f(i+3,j,k) - f(i+2,j,k))/p->DXP[IP2];
 }
 
 void ddweno_nug_sf::jqmax2(fdm* a, field &f)
@@ -481,19 +418,19 @@ void ddweno_nug_sf::jqmax2(fdm* a, field &f)
     q1=q2=q3=q4=q5=0.0;
     
     if(fabs(a->fb(i,j-1,k))  > 0.6*p->DXM && fabs(a->fb(i,j-2,k))  > 0.6*p->DXM)
-    q1 = (f(i,j-1,k) - f(i,j-2,k))/DY[JM2];
+    q1 = (f(i,j-1,k) - f(i,j-2,k))/p->DYP[JM2];
     
     if(fabs(a->fb(i,j,k))  > 0.6*p->DXM && fabs(a->fb(i,j-1,k))  > 0.6*p->DXM)
-    q2 = (f(i,j,k)   - f(i,j-1,k))/DY[JM1];
+    q2 = (f(i,j,k)   - f(i,j-1,k))/p->DYP[JM1];
     
     if(fabs(a->fb(i,j+1,k))  > 0.6*p->DXM && fabs(a->fb(i,j,k))  > 0.6*p->DXM)
-    q3 = (f(i,j+1,k) - f(i,j,k)  )/DY[JP];
+    q3 = (f(i,j+1,k) - f(i,j,k)  )/p->DYP[JP];
     
     if(fabs(a->fb(i,j+2,k))  > 0.6*p->DXM && fabs(a->fb(i,j+1,k))  > 0.6*p->DXM)
-    q4 = (f(i,j+2,k) - f(i,j+1,k))/DY[JP1];
+    q4 = (f(i,j+2,k) - f(i,j+1,k))/p->DYP[JP1];
     
     if(fabs(a->fb(i,j+3,k))  > 0.6*p->DXM && fabs(a->fb(i,j+2,k))  > 0.6*p->DXM)
-    q5 = (f(i,j+3,k) - f(i,j+2,k))/DY[JP2];
+    q5 = (f(i,j+3,k) - f(i,j+2,k))/p->DYP[JP2];
 }
 
 void ddweno_nug_sf::kqmax2(fdm* a, field &f)
@@ -501,72 +438,72 @@ void ddweno_nug_sf::kqmax2(fdm* a, field &f)
     q1=q2=q3=q4=q5=0.0;
     
     if(a->fbh4(i,j-1,k)  < 0.5 && a->fbh4(i,j-2,k)  < 0.5)
-    q1 = (f(i,j,k-1) - f(i,j,k-2))/DZ[KM2];
+    q1 = (f(i,j,k-1) - f(i,j,k-2))/p->DZP[KM2];
     
     if(a->fbh4(i,j,k)  < 0.5 && a->fbh4(i,j-1,k)  < 0.5)
-    q2 = (f(i,j,k)   - f(i,j,k-1))/DZ[KM1];
+    q2 = (f(i,j,k)   - f(i,j,k-1))/p->DZP[KM1];
     
     if(a->fbh4(i,j+1,k)  < 0.5 && a->fbh4(i,j,k)  < 0.5)
-    q3 = (f(i,j,k+1) - f(i,j,k)  )/DZ[KP];
+    q3 = (f(i,j,k+1) - f(i,j,k)  )/p->DZP[KP];
     
     if(a->fbh4(i,j+2,k)  < 0.5 && a->fbh4(i,j+1,k)  < 0.5)
-    q4 = (f(i,j,k+2) - f(i,j,k+1))/DZ[KP1];
+    q4 = (f(i,j,k+2) - f(i,j,k+1))/p->DZP[KP1];
     
     if(a->fbh4(i,j+3,k)  < 0.5 && a->fbh4(i,j+2,k)  < 0.5)
-    q5 = (f(i,j,k+3) - f(i,j,k+2))/DZ[KP2];
+    q5 = (f(i,j,k+3) - f(i,j,k+2))/p->DZP[KP2];
 }
 
 
 void ddweno_nug_sf::iqmin3(fdm* a, field &f)
 {   
-    q1 = a->fbh5(i-3,j,k)*(f(i-2,j,k) - f(i-3,j,k))/DX[IM3];
-	q2 = a->fbh5(i-2,j,k)*(f(i-1,j,k) - f(i-2,j,k))/DX[IM2];
-	q3 = a->fbh5(i-1,j,k)*(f(i,j,k)   - f(i-1,j,k))/DX[IM1];
-	q4 = a->fbh5(i,j,k)*(f(i+1,j,k) - f(i,j,k)  )/DX[IP];
-	q5 = a->fbh5(i+1,j,k)*(f(i+2,j,k) - f(i+1,j,k))/DX[IP1];
+    q1 = a->fbh5(i-3,j,k)*(f(i-2,j,k) - f(i-3,j,k))/p->DXP[IM3];
+	q2 = a->fbh5(i-2,j,k)*(f(i-1,j,k) - f(i-2,j,k))/p->DXP[IM2];
+	q3 = a->fbh5(i-1,j,k)*(f(i,j,k)   - f(i-1,j,k))/p->DXP[IM1];
+	q4 = a->fbh5(i,j,k)*(f(i+1,j,k) - f(i,j,k)  )/p->DXP[IP];
+	q5 = a->fbh5(i+1,j,k)*(f(i+2,j,k) - f(i+1,j,k))/p->DXP[IP1];
 }
 
 void ddweno_nug_sf::jqmin3(fdm* a, field &f)
 {
-    q1 = a->fbh5(i,j-3,k)*(f(i,j-2,k) - f(i,j-3,k))/DY[JM3];
-	q2 = a->fbh5(i,j-2,k)*(f(i,j-1,k) - f(i,j-2,k))/DY[JM2];
-	q3 = a->fbh5(i,j-1,k)*(f(i,j,k)   - f(i,j-1,k))/DY[JM1];
-	q4 = a->fbh5(i,j,k)*(f(i,j+1,k) - f(i,j,k)  )/DY[JP];
-	q5 = a->fbh5(i,j+1,k)*(f(i,j+2,k) - f(i,j+1,k))/DY[JP1];
+    q1 = a->fbh5(i,j-3,k)*(f(i,j-2,k) - f(i,j-3,k))/p->DYP[JM3];
+	q2 = a->fbh5(i,j-2,k)*(f(i,j-1,k) - f(i,j-2,k))/p->DYP[JM2];
+	q3 = a->fbh5(i,j-1,k)*(f(i,j,k)   - f(i,j-1,k))/p->DYP[JM1];
+	q4 = a->fbh5(i,j,k)*(f(i,j+1,k) - f(i,j,k)  )/p->DYP[JP];
+	q5 = a->fbh5(i,j+1,k)*(f(i,j+2,k) - f(i,j+1,k))/p->DYP[JP1];
 }
 
 void ddweno_nug_sf::kqmin3(fdm* a, field &f)
 {
-    q1 = a->fbh5(i,j,k-3)*(f(i,j,k-2) - f(i,j,k-3))/DZ[KM3];
-	q2 = a->fbh5(i,j,k-2)*(f(i,j,k-1) - f(i,j,k-2))/DZ[KM2];
-	q3 = a->fbh5(i,j,k-1)*(f(i,j,k)   - f(i,j,k-1))/DZ[KM1];
-	q4 = a->fbh5(i,j,k)*(f(i,j,k+1) - f(i,j,k)  )/DZ[KP];
-	q5 = a->fbh5(i,j,k+1)*(f(i,j,k+2) - f(i,j,k+1))/DZ[KP1];
+    q1 = a->fbh5(i,j,k-3)*(f(i,j,k-2) - f(i,j,k-3))/p->DZP[KM3];
+	q2 = a->fbh5(i,j,k-2)*(f(i,j,k-1) - f(i,j,k-2))/p->DZP[KM2];
+	q3 = a->fbh5(i,j,k-1)*(f(i,j,k)   - f(i,j,k-1))/p->DZP[KM1];
+	q4 = a->fbh5(i,j,k)*(f(i,j,k+1) - f(i,j,k)  )/p->DZP[KP];
+	q5 = a->fbh5(i,j,k+1)*(f(i,j,k+2) - f(i,j,k+1))/p->DZP[KP1];
 }
 
 void ddweno_nug_sf::iqmax3(fdm* a, field &f)
 {
-    q1 = a->fbh5(i-1,j,k)*(f(i-1,j,k) - f(i-2,j,k))/DX[IM2];
-    q2 = a->fbh5(i,j,k)*(f(i,j,k)   - f(i-1,j,k))/DX[IM1];
-    q3 = a->fbh5(i+1,j,k)*(f(i+1,j,k) - f(i,j,k)  )/DX[IP];
-    q4 = a->fbh5(i+2,j,k)*(f(i+2,j,k) - f(i+1,j,k))/DX[IP1];
-    q5 = a->fbh5(i+3,j,k)*(f(i+3,j,k) - f(i+2,j,k))/DX[IP2];
+    q1 = a->fbh5(i-1,j,k)*(f(i-1,j,k) - f(i-2,j,k))/p->DXP[IM2];
+    q2 = a->fbh5(i,j,k)*(f(i,j,k)   - f(i-1,j,k))/p->DXP[IM1];
+    q3 = a->fbh5(i+1,j,k)*(f(i+1,j,k) - f(i,j,k)  )/p->DXP[IP];
+    q4 = a->fbh5(i+2,j,k)*(f(i+2,j,k) - f(i+1,j,k))/p->DXP[IP1];
+    q5 = a->fbh5(i+3,j,k)*(f(i+3,j,k) - f(i+2,j,k))/p->DXP[IP2];
 }
 
 void ddweno_nug_sf::jqmax3(fdm* a, field &f)
 {
-    q1 = a->fbh5(i,j-1,k)*(f(i,j-1,k) - f(i,j-2,k))/DY[JM2];
-    q2 = a->fbh5(i,j,k)*(f(i,j,k)   - f(i,j-1,k))/DY[JM1];
-    q3 = a->fbh5(i,j+1,k)*(f(i,j+1,k) - f(i,j,k)  )/DY[JP];
-    q4 = a->fbh5(i,j+2,k)*(f(i,j+2,k) - f(i,j+1,k))/DY[JP1];
-    q5 = a->fbh5(i,j+3,k)*(f(i,j+3,k) - f(i,j+2,k))/DY[JP2];
+    q1 = a->fbh5(i,j-1,k)*(f(i,j-1,k) - f(i,j-2,k))/p->DYP[JM2];
+    q2 = a->fbh5(i,j,k)*(f(i,j,k)   - f(i,j-1,k))/p->DYP[JM1];
+    q3 = a->fbh5(i,j+1,k)*(f(i,j+1,k) - f(i,j,k)  )/p->DYP[JP];
+    q4 = a->fbh5(i,j+2,k)*(f(i,j+2,k) - f(i,j+1,k))/p->DYP[JP1];
+    q5 = a->fbh5(i,j+3,k)*(f(i,j+3,k) - f(i,j+2,k))/p->DYP[JP2];
 }
 
 void ddweno_nug_sf::kqmax3(fdm* a, field &f)
 {
-    q1 = a->fbh5(i,j,k-1)*(f(i,j,k-1) - f(i,j,k-2))/DZ[KM2];
-    q2 = a->fbh5(i,j,k)*(f(i,j,k)   - f(i,j,k-1))/DZ[KM1];
-    q3 = a->fbh5(i,j,k+1)*(f(i,j,k+1) - f(i,j,k)  )/DZ[KP];
-    q4 = a->fbh5(i,j,k+2)*(f(i,j,k+2) - f(i,j,k+1))/DZ[KP1];
-    q5 = a->fbh5(i,j,k+3)*(f(i,j,k+3) - f(i,j,k+2))/DZ[KP2];
+    q1 = a->fbh5(i,j,k-1)*(f(i,j,k-1) - f(i,j,k-2))/p->DZP[KM2];
+    q2 = a->fbh5(i,j,k)*(f(i,j,k)   - f(i,j,k-1))/p->DZP[KM1];
+    q3 = a->fbh5(i,j,k+1)*(f(i,j,k+1) - f(i,j,k)  )/p->DZP[KP];
+    q4 = a->fbh5(i,j,k+2)*(f(i,j,k+2) - f(i,j,k+1))/p->DZP[KP1];
+    q5 = a->fbh5(i,j,k+3)*(f(i,j,k+3) - f(i,j,k+2))/p->DZP[KP2];
 }
