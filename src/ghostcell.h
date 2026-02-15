@@ -266,8 +266,6 @@ private:
     void gcsl_potentialbc(slice&,int);
     void gcsl_sommerfeld(slice&,int);
 
-    void imagepoint(lexer*,field&,double&,double&,double,int);
-
     // 3D BC decision
     void gcdistro1(lexer*, field&, int, int, int, int, double, int, int, int);
     void gcdistro2(lexer*, field&, int, int, int, int, double, int, int, int);
@@ -295,6 +293,8 @@ private:
     int gcsleval1(lexer*,int,int,int);
     int gcsleval2(lexer*,int,int,int);
     int gcsleval4(lexer*,int,int,int);
+
+    void imagepoint(lexer*,field&,double&,double&,double,int);
 
     MPI_Comm cart_comm = MPI_COMM_NULL;
     int neighbors[6] = {MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL,
