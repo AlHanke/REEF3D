@@ -143,7 +143,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
     }
 
     gcparax(p,walldist,4);
-    gcparacox(p,walldist,4);
+    gcparacox(p,walldist);
 
     // calculate global position of gcb cell
     count=0;
@@ -194,5 +194,5 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
     reini.start(a,p,walldist,this,pflow);
 
     gcparax(p,walldist,4);
-    gcparacox(p,walldist,4);
+    gcparacox(p,walldist);
 }
