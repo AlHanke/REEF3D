@@ -113,10 +113,10 @@ void heat_AB::diff_update(lexer *p, fdm *a, ghostcell *pgc)
 
 void heat_AB::clearrhs(lexer *p, fdm *a, ghostcell *pgc)
 {
+    a->L.setVal(0.0);
     int n=0;
 	LOOP
 	{
-    a->L(i,j,k)=0.0;
 	a->rhsvec.V[n]=0.0;
 	++n;
 	}

@@ -33,11 +33,8 @@ void force::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
     eta(i,j,k) = 0.125*(a->solid(i,j,k) + a->solid(i+1,j,k) + a->solid(i,j+1,k) + a->solid(i+1,j+1,k)
                       + a->solid(i,j,k+1) + a->solid(i+1,j,k+1) + a->solid(i,j+1,k+1) + a->solid(i+1,j+1,k+1));
 	
-    NDBASELOOP
-    vertice(i,j,k)=-1;
-
-    NDBASELOOP
-    nodeflag(i,j,k)=0;
+    vertice.setVal(-1,true);
+    nodeflag.setVal(0,true);
 	
 
     BASELOOP

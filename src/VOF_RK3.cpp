@@ -71,8 +71,7 @@ void VOF_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcel
 // Step 1
     starttime=pgc->timer();
 
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pconvec->start(p,a,a->phi,4,a->u,a->v,a->w);
 
@@ -86,8 +85,7 @@ void VOF_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcel
 
 // Step 2
 
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pconvec->start(p,a,ark1,4,a->u,a->v,a->w);
 
@@ -102,8 +100,7 @@ void VOF_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcel
 
 // Step 3
 
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pconvec->start(p,a,ark2,4,a->u,a->v,a->w);
 
@@ -257,8 +254,7 @@ void VOF_RK3::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec,
 
     for(int qn=0; qn<iter; ++qn)
     {
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
     ppconvec->start(p,a,F,4,uc,vc,wc);
 

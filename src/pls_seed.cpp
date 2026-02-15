@@ -30,8 +30,7 @@ void particle_pls::seed(lexer* p, fdm* a, ghostcell* pgc, double fraction,double
 {
     field4 partcount(p);
 
-    LOOP
-    partcount(i,j,k)=0.0;
+    partcount.setVal(0.0);
 
     reseeded=0;
 

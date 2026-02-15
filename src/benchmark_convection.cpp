@@ -28,10 +28,9 @@ Author: Hans Bihs
 
 benchmark_convection::benchmark_convection(lexer *p, fdm *a)
 {
-	LOOP
-	a->phi(i,j,k)=0.0;
+    a->phi.setVal(0.0);
 
-	LOOP
+    LOOP
 	{
 		if(p->pos_x()>0.5 && p->pos_x()<1.5)
 		a->phi(i,j,k) = 1.0;
