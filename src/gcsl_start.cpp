@@ -173,16 +173,16 @@ void ghostcell::gcsl_start4Vint(lexer *p, int *f, int gcv)
     SLICELOOP4
     {
         if(p->flagslice4[Im1Jm1]<0 && p->flagslice4[Im1J]<0 && p->flagslice4[IJm1]<0)
-        f[Im1Jm1] = f[IJ];
+            f[Im1Jm1] = f[IJ];
 
         if(p->flagslice4[Im1Jp1]<0 && p->flagslice4[Im1J]<0 && p->flagslice4[IJp1]<0)
-        f[Im1Jp1] = f[IJ];
+            f[Im1Jp1] = f[IJ];
 
         if(p->flagslice4[Ip1Jm1]<0 && p->flagslice4[Ip1J]<0 && p->flagslice4[IJm1]<0)
-        f[Ip1Jm1] = f[IJ];
+            f[Ip1Jm1] = f[IJ];
 
         if(p->flagslice4[Ip1Jp1]<0 && p->flagslice4[Ip1J]<0 && p->flagslice4[IJp1]<0)
-        f[Ip1Jp1] = f[IJ];
+            f[Ip1Jp1] = f[IJ];
     }
 
     //  MPI Boundary Swap
