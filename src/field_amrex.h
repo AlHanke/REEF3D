@@ -49,6 +49,8 @@ public:
 
     void FillBoundary() override;
 
+    void FillDomainBoundaryValue(double value, int dir, bool high) override;
+
 protected:
     field_amrex(lexer* p, unsigned int data_location);
 
