@@ -73,7 +73,7 @@ protected:
     void FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision);
 
 private:
-    void ShiftBoundaryFaces(amrex::MultiFab& mf_in, int p_level)
+    void ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in, int p_level)
     {
         int dir = -1;
         if (const_params.data_location == amrex_bc_func::DataLocation::FACE_X) dir = 0;
@@ -249,13 +249,13 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
     const int z_pos = 6; // Dir::Z_POS (6)
     // Face indices in bc_values: 0=X-, 1=X+, 2=Y-, 3=Y+, 4=Z-, 5=Z+
 
-    for (int n = 0; n < mf[p->level].nComp(); ++n)
+    LevelLOOP
     {
-        for (int lev = 0; lev < p->nlevs; ++lev)
+        for (int n = 0; n < mf[p->level].nComp(); ++n)
         {
-            if (BCRecs[lev].size() <= n) continue;
+            if (BCRecs[p->level].size() <= n) continue;
 
-            auto& bc = BCRecs[lev][n];
+            auto& bc = BCRecs[p->level][n];
 
             int bc_code_1 = const_params.bc_values[0];
             auto label_1 = bc_decision.evaluate(gcv, bc_code_1, x_neg);
@@ -325,10 +325,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
                                         BCRecs[p->level], 0);
         }
 
-        if (const_params.data_location != amrex_bc_func::DataLocation::CELL_CENTERED)
-        {
-            ShiftBoundaryFaces(mf[p->level], p->level);
-        }
+        ShiftBigBoundaryFaceInward(mf[p->level], p->level);
     }
 }
 
