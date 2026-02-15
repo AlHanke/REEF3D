@@ -31,7 +31,7 @@ Author: Hans Bihs
 
 iowave::iowave(lexer *p, ghostcell *pgc, patchBC_interface *ppBC) : wave_interface(p,pgc),flowfile_in(p,pgc),epsi(3.0*p->DXM),psi(0.6*p->DXM),
                                           eta(p),relax1_wg(p),relax1_nb(p),relax2_wg(p),relax2_nb(p),relax4_wg(p),relax4_nb(p),wgflag(p),
-                                          vofheight(p),vofgen(p),genheight(p)
+                                          vofheight(p),vofgen(p),genheight(p),wsfmax(p)
 {
     pBC = ppBC;
 
@@ -181,8 +181,6 @@ iowave::iowave(lexer *p, ghostcell *pgc, patchBC_interface *ppBC) : wave_interfa
     p->Iarray(gcgen2, gcgen2_count, 4);
     p->Iarray(gcgen3, gcgen3_count, 4);
     p->Iarray(gcgen4, gcgen4_count, 4);
-	
-	p->Darray(wsfmax,p->knox,p->knoy);
 
     u_switch=1;
     v_switch=1;

@@ -155,7 +155,7 @@ public:
     void gcparacoxV1(lexer*, double*, int);
     void gcperiodicx(lexer*, field&, int);
     void gcsync();
-    void verticalmax(lexer*,fdm*,double**);
+    void verticalmax(lexer*,fdm*,slice&);
     double timer();
 
     //Collective Communication
