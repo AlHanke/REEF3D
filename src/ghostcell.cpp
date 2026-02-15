@@ -95,13 +95,9 @@ void ghostcell::gc_ini(lexer* p)
         gclabel_wtopo=4;
     }
 
-    gclabel_k=4;
-    gclabel_e=4;
-
     gclabel_u_orth=1;
     gclabel_v_orth=1;
     gclabel_w_orth=1;
-    gclabel_vel=5;    
 
     // for reflective BC
     if(p->B23==2)
@@ -115,11 +111,9 @@ void ghostcell::gc_ini(lexer* p)
         gclabel_w_orth=11;
     }
 
-    gclabel_lsm=4;
-
-    awa_lable=0;
+    awa_label=false;
     if(p->B99>=3)
-        awa_lable=1;
+        awa_label=true;
 
 
     if(p->B75==1)
@@ -141,14 +135,14 @@ void ghostcell::gc_ini(lexer* p)
         gclabel_w_out=6;
     }
 
-    gclabel_outflow=1;
+    gclabel_outflow=true;
     if(p->B60==3||p->B60==4)
-        gclabel_outflow=0;
+        gclabel_outflow=false;
 
     gclabel_u_in=1;
     gclabel_v_in=1;
     gclabel_w_in=1;
-    gclabel_lsm_in=gclabel_lsm;
+    gclabel_lsm_in=4;
 
     if(p->I230>0 || p->B98>=3 || p->B60>0)
     {
@@ -158,31 +152,20 @@ void ghostcell::gc_ini(lexer* p)
         gclabel_lsm_in=0;
     }
 
-    if(p->B98>=3)
-    {
-        gclabel_u_in=0;
-        gclabel_v_in=0;
-        gclabel_w_in=0;
-        gclabel_lsm_in=0;
-    }
-
     // pressure bc labels
-    gclabel_press=4;
-    gclabel_press_in=gclabel_press;
-
+    gclabel_press_in=4;
     if(p->B76==2 || p->B76==3)
         gclabel_press_in=0;
 
     // pressure inflow
-    pressin_lable=0;
+    pressin_label=false;
     if(p->B76!=1)
-        pressin_lable=1;
+        pressin_label=true;
 
     // pressure outflow
-    pressout_lable=0;
+    pressout_label=false;
     if(p->B77==1 || p->B77==10)
-        pressout_lable=1;
-
+        pressout_label=true;
 
     // sflow slip/no-slip
     if(p->A217==1 && p->A10==2)
@@ -199,7 +182,6 @@ void ghostcell::gc_ini(lexer* p)
     for(m=0;m<15;m++)
     {
         y[m]=0.0;
-        x[m]=0.0;
     }
 }
 
