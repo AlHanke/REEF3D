@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Hans Bihs, Alexander Hanke
 --------------------------------------------------------------------*/
 
 #ifndef LOOPING_H_
@@ -28,39 +28,61 @@ Author: Hans Bihs
 #include"looping2D.h"
 #include"iterators2D.h"
 #include"iterators1D.h"
+#include <AMReX_MFIter.H>
+#include <AMReX_MultiFab.H>
 
 // LOOPs
-#define ILOOP for(i=0; i<p->knox; ++i)
-#define JLOOP for(j=0; j<p->knoy; ++j)
-#define KLOOP for(k=0; k<p->knoz; ++k)
+#define LevelLOOP \
+    for (struct { lexer* ctx; bool active; } \
+             _level_guard{p, true}; \
+         _level_guard.active; \
+         _level_guard.ctx->level = 0, _level_guard.active = false) \
+        for (_level_guard.ctx->level = 0; \
+             _level_guard.ctx->level < _level_guard.ctx->nlevs; \
+             ++_level_guard.ctx->level)
+#define TileLOOP \
+    for (amrex::MFIter _tile_mfi(p->amr_mf[p->level]); _tile_mfi.isValid(); ++_tile_mfi) \
+        for (struct { lexer* ctx; amrex::MFIter* saved; } \
+                 _guard{p, std::exchange(p->amr_mfi, &_tile_mfi)}; \
+             _guard.ctx != nullptr; \
+             _guard.ctx->amr_mfi = (_guard.saved ? _guard.saved : _guard.ctx->default_mfi.get()), \
+             _guard.ctx = nullptr)
 
-#define ITLOOP for(i=0; i<p->knox+1; ++i)
-#define JTLOOP for(j=0; j<p->knoy+1; ++j)
-#define KTLOOP for(k=0; k<p->knoz+1; ++k)
+#define imax_amrex (amrex::ubound(p->amr_mfi->validbox()).x - amrex::lbound(p->amr_mfi->validbox()).x)
+#define jmax_amrex (amrex::ubound(p->amr_mfi->validbox()).y - amrex::lbound(p->amr_mfi->validbox()).y)
+#define kmax_amrex (amrex::ubound(p->amr_mfi->validbox()).z - amrex::lbound(p->amr_mfi->validbox()).z)
 
-#define ITPLOOP for(i=-1; i<p->knox; ++i)
-#define JTPLOOP for(j=-1; j<p->knoy; ++j)
-#define KTPLOOP for(k=-1; k<p->knoz; ++k)
+#define ILOOP for (i = 0; i <= imax_amrex; ++i)
+#define JLOOP for (j = 0; j <= jmax_amrex; ++j)
+#define KLOOP for (k = 0; k <= kmax_amrex; ++k)
 
-#define IBLOOP for(i=-1; i<p->knox+1; ++i)
-#define JBLOOP for(j=-1; j<p->knoy+1; ++j)
-#define KBLOOP for(k=-1; k<p->knoz+1; ++k)
+#define ITLOOP for(i = 0; i <= imax_amrex+1; ++i)
+#define JTLOOP for(j = 0; j <= jmax_amrex+1; ++j)
+#define KTLOOP for(k = 0; k <= kmax_amrex+1; ++k)
 
-#define IMALOOP for(i=-p->margin; i<p->knox+p->margin; ++i)
-#define JMALOOP for(j=-p->margin; j<p->knoy+p->margin; ++j)
-#define KMALOOP for(k=-p->margin; k<p->knoz+p->margin; ++k)
+#define ITPLOOP for(i = -1; i <= imax_amrex; ++i)
+#define JTPLOOP for(j = -1; j <= jmax_amrex; ++j)
+#define KTPLOOP for(k = -1; k <= kmax_amrex; ++k)
 
-#define IFLEXLOOP for(i=0; i<p->knox-ulast; ++i)
-#define JFLEXLOOP for(j=0; j<p->knoy-vlast; ++j)
-#define KFLEXLOOP for(k=0; k<p->knoz-wlast; ++k)
+#define IBLOOP for(i = -1; i <= imax_amrex+1; ++i)
+#define JBLOOP for(j = -1; j <= jmax_amrex+1; ++j)
+#define KBLOOP for(k = -1; k <= kmax_amrex+1; ++k)
 
-#define IULOOP for(i=0; i<p->knox-p->ulast; ++i)
-#define JVLOOP for(j=0; j<p->knoy-p->vlast; ++j)
-#define KWLOOP for(k=0; k<p->knoz-p->wlast; ++k)
+#define IMALOOP for(i = -p->margin; i <= imax_amrex + p->margin; ++i)
+#define JMALOOP for(j = -p->margin; j <= jmax_amrex + p->margin; ++j)
+#define KMALOOP for(k = -p->margin; k <= kmax_amrex + p->margin; ++k)
+
+#define IFLEXLOOP for(i = 0; i <= imax_amrex - ulast; ++i)
+#define JFLEXLOOP for(j = 0; j <= jmax_amrex - vlast; ++j)
+#define KFLEXLOOP for(k = 0; k <= kmax_amrex - wlast; ++k)
+
+#define IULOOP for(i = 0; i <= imax_amrex - p->ulast; ++i)
+#define JVLOOP for(j = 0; j <= jmax_amrex - p->vlast; ++j)
+#define KWLOOP for(k = 0; k <= kmax_amrex - p->wlast; ++k)
 
 #define FILOOP ILOOP
 #define FJLOOP JLOOP
-#define FKLOOP for(k=0; k<p->knoz+1; ++k)
+#define FKLOOP for(k = 0; k <= kmax_amrex + 1; ++k)
 
 #define ETALOC  for(k=a->etaloc(i,j); k<a->etaloc(i,j)+1; ++k)
 #define FETALOC for(k=c->etaloc(i,j); k<c->etaloc(i,j)+1; ++k)
@@ -89,14 +111,15 @@ Author: Hans Bihs
 #define FSWDCHECK   if(p->flag7[FIJK]<=0 || p->wet[IJ]==0)
 
 // COMBINDED LOOPS
+#define MultiGridLOOP LevelLOOP TileLOOP
 #define IJKLOOP ILOOP JLOOP KLOOP
 #define KJILOOP KLOOP JLOOP ILOOP
 
 // MAIN LOOPS
-#define PLAINLOOP IJKLOOP
+#define PLAINLOOP MultiGridLOOP IJKLOOP
 #define LOOP PLAINLOOP PCHECK
 #define BASELOOP PLAINLOOP PBASECHECK
-#define BASEREVLOOP KJILOOP PBASECHECK
+#define BASEREVLOOP MultiGridLOOP KJILOOP PBASECHECK
 #define TPLOOP KTPLOOP JTPLOOP ITPLOOP
 
 #define ALOOP PLAINLOOP PSOLIDCHECK
@@ -105,31 +128,31 @@ Author: Hans Bihs
 #define MALOOP IMALOOP JMALOOP KMALOOP
 
 // BOUNDARY LOOPS
-#define BLOOP IBLOOP JBLOOP KBLOOP
-#define BBASELOOP IBLOOP JBLOOP KBLOOP PBASECHECK
+#define BLOOP MultiGridLOOP IBLOOP JBLOOP KBLOOP
+#define BBASELOOP MultiGridLOOP IBLOOP JBLOOP KBLOOP PBASECHECK
 
 // FLUID LOOPS
-#define ULOOP IULOOP JLOOP KLOOP UCHECK
-#define VLOOP ILOOP JVLOOP KLOOP VCHECK
-#define WLOOP ILOOP JLOOP KWLOOP WCHECK
+#define ULOOP MultiGridLOOP IULOOP JLOOP KLOOP UCHECK
+#define VLOOP MultiGridLOOP ILOOP JVLOOP KLOOP VCHECK
+#define WLOOP MultiGridLOOP ILOOP JLOOP KWLOOP WCHECK
 
-#define UFLUIDLOOP IULOOP JLOOP KLOOP UFLUIDCHECK
-#define VFLUIDLOOP ILOOP JVLOOP KLOOP VFLUIDCHECK
-#define WFLUIDLOOP ILOOP JLOOP KWLOOP WFLUIDCHECK
+#define UFLUIDLOOP MultiGridLOOP IULOOP JLOOP KLOOP UFLUIDCHECK
+#define VFLUIDLOOP MultiGridLOOP ILOOP JVLOOP KLOOP VFLUIDCHECK
+#define WFLUIDLOOP MultiGridLOOP ILOOP JLOOP KWLOOP WFLUIDCHECK
 #define FLUIDLOOP PLAINLOOP PFLUIDCHECK
 
 // SOLVER LOOPS
-#define FLEXLOOP IFLEXLOOP JFLEXLOOP KFLEXLOOP FLEXCHECK
+#define FLEXLOOP MultiGridLOOP IFLEXLOOP JFLEXLOOP KFLEXLOOP FLEXCHECK
 
 // FNPF LOOPS
-#define FKJILOOP FKLOOP JLOOP ILOOP
-#define FLOOP ILOOP JLOOP FKLOOP FPCHECK
-#define FBASELOOP ILOOP JLOOP FKLOOP
-#define FILOOP4 ILOOP JLOOP ETALOC PFLUIDCHECK
-#define FFILOOP4 ILOOP JLOOP FETALOC FPCHECK
+#define FKJILOOP MultiGridLOOP FKLOOP JLOOP ILOOP
+#define FLOOP MultiGridLOOP ILOOP JLOOP FKLOOP FPCHECK
+#define FBASELOOP MultiGridLOOP ILOOP JLOOP FKLOOP
+#define FILOOP4 MultiGridLOOP ILOOP JLOOP ETALOC PFLUIDCHECK
+#define FFILOOP4 MultiGridLOOP ILOOP JLOOP FETALOC FPCHECK
 
 // FORCE LOOP
-#define NDBASELOOP ITPLOOP JTPLOOP KTPLOOP
+#define NDBASELOOP MultiGridLOOP ITPLOOP JTPLOOP KTPLOOP
 
 #define NETLOOP for (int n=0; n<p->net_count; ++n)
 
