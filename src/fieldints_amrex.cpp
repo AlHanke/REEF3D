@@ -31,11 +31,10 @@ fieldint1::fieldint1(lexer *p) : fieldint_amrex(p)
     mf.resize(p->nlevs);
     for(p->level=0; p->level<p->nlevs; ++p->level)
     {
-        mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], num_components, p->margin);
+        mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
         mf[p->level].setVal(0);
     }
-    initialize_bc();
     for(p->level=0; p->level<p->nlevs; ++p->level)
         FillBoundary();
 }
@@ -45,11 +44,10 @@ fieldint2::fieldint2(lexer *p) : fieldint_amrex(p)
     mf.resize(p->nlevs);
     for(p->level=0; p->level<p->nlevs; ++p->level)
     {
-        mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], num_components, p->margin);
+        mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
         mf[p->level].setVal(0);
     }
-    initialize_bc();
     for(p->level=0; p->level<p->nlevs; ++p->level)
         FillBoundary();
 }
@@ -59,11 +57,10 @@ fieldint3::fieldint3(lexer *p) : fieldint_amrex(p)
     mf.resize(p->nlevs);
     for(p->level=0; p->level<p->nlevs; ++p->level)
     {
-        mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], num_components, p->margin);
+        mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
         mf[p->level].setVal(0);
     }
-    initialize_bc();
     for(p->level=0; p->level<p->nlevs; ++p->level)
         FillBoundary();
 }
@@ -73,11 +70,10 @@ fieldint4::fieldint4(lexer *p) : fieldint_amrex(p)
     mf.resize(p->nlevs);
     for(p->level=0; p->level<p->nlevs; ++p->level)
     {
-        mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], num_components, p->margin);
+        mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
         mf[p->level].setVal(0);
     }
-    initialize_bc();
     for(p->level=0; p->level<p->nlevs; ++p->level)
         FillBoundary();
 }
