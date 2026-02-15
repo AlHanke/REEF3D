@@ -142,7 +142,7 @@ public:
     void gcparaxV(lexer*, double*, int);
     void gcparaxintV(lexer*, int*, int);
     void gcparaxV1(lexer*, double*, int);
-	void gcparacox(lexer*, field&, int);
+	void gcparacox(lexer*, field&);
     void gcparacoxV(lexer*, double*, int);
     void gcparacoxV1(lexer*, double*, int);
     void gcperiodicx(lexer*, field&, int);
