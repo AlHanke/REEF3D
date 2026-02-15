@@ -55,17 +55,17 @@ void grid::gridspacing(ghostcell *pgc)
 {
     resize_class resizer;
 
-    resizer.Darray(XP,knox+1+4*marge);
-    resizer.Darray(YP,knoy+1+4*marge);
-    resizer.Darray(ZP,knoz+1+4*marge);
+    resizer.Darray(XP,knox+1+2*marge);
+    resizer.Darray(YP,knoy+1+2*marge);
+    resizer.Darray(ZP,knoz+1+2*marge);
 
-    resizer.Darray(DXN,knox+1+4*marge);
-    resizer.Darray(DYN,knoy+1+4*marge);
-    resizer.Darray(DZN,knoz+1+4*marge);
+    resizer.Darray(DXN,knox+1+2*marge);
+    resizer.Darray(DYN,knoy+1+2*marge);
+    resizer.Darray(DZN,knoz+1+2*marge);
 
-    resizer.Darray(DXP,knox+1+4*marge);
-    resizer.Darray(DYP,knoy+1+4*marge);
-    resizer.Darray(DZP,knoz+1+4*marge);
+    resizer.Darray(DXP,knox+1+2*marge);
+    resizer.Darray(DYP,knoy+1+2*marge);
+    resizer.Darray(DZP,knoz+1+2*marge);
 
     resizer.Darray(ZSN,imax*jmax*(kmax+1));
     resizer.Darray(ZSP,imax*jmax*kmax);
@@ -145,6 +145,4 @@ void grid::gridspacing(ghostcell *pgc)
     DXM = pgc->globalmin(DXM);
     DXD = pgc->globalmin(DXD);
     DYD = pgc->globalmin(DYD);
-
-    
 }
