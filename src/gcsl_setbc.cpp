@@ -36,13 +36,13 @@ void ghostcell::gcsl_setbc1(lexer *p)
 
         if(bc==21)
         {
-            if(cs==1 && i+p->origin_i==0)
+            if(cs==X_NEG && i+p->origin_i==0)
                 p->gcbsl1[n][4]=p->bcside1;
-            else if(cs==4 && i+p->origin_i==p->gknox-2)
+            else if(cs==X_POS && i+p->origin_i==p->gknox-2)
                 p->gcbsl1[n][4]=p->bcside4;
-            else if(cs==3 && j+p->origin_j==0)
+            else if(cs==Y_NEG && j+p->origin_j==0)
                 p->gcbsl1[n][4]=p->bcside3;
-            else if(cs==2 && j+p->origin_j==p->gknoy-1)
+            else if(cs==Y_POS && j+p->origin_j==p->gknoy-1)
                 p->gcbsl1[n][4]=p->bcside2;
         }
     }
@@ -61,13 +61,13 @@ void ghostcell::gcsl_setbc2(lexer *p)
 
         if(bc==21)
         {
-            if(cs==1 && i+p->origin_i==0)
+            if(cs==X_NEG && i+p->origin_i==0)
                 p->gcbsl2[n][4]=p->bcside1;
-            else if(cs==4 && i+p->origin_i==p->gknox-1)
+            else if(cs==X_POS && i+p->origin_i==p->gknox-1)
                 p->gcbsl2[n][4]=p->bcside4;
-            else if(cs==3 && j+p->origin_j==0)
+            else if(cs==Y_NEG && j+p->origin_j==0)
                 p->gcbsl2[n][4]=p->bcside3;
-            else if(cs==2 && j+p->origin_j==p->gknoy-2)
+            else if(cs==Y_POS && j+p->origin_j==p->gknoy-2)
                 p->gcbsl2[n][4]=p->bcside2;
         }
     }
@@ -86,13 +86,13 @@ void ghostcell::gcsl_setbc4(lexer *p)
 
         if(bc==21)
         {
-            if(cs==1 && i+p->origin_i==0)
+            if(cs==X_NEG && i+p->origin_i==0)
                 p->gcbsl4[n][4]=p->bcside1;
-            else if(cs==4 && i+p->origin_i==p->gknox-1)
+            else if(cs==X_POS && i+p->origin_i==p->gknox-1)
                 p->gcbsl4[n][4]=p->bcside4;
-            else if(cs==3 && j+p->origin_j==0)
+            else if(cs==Y_NEG && j+p->origin_j==0)
                 p->gcbsl4[n][4]=p->bcside3;
-            else if(cs==2 && j+p->origin_j==p->gknoy-1)
+            else if(cs==Y_POS && j+p->origin_j==p->gknoy-1)
                 p->gcbsl4[n][4]=p->bcside2;
         }
     }
@@ -199,9 +199,9 @@ void ghostcell::gcsl_setbcio(lexer *p)
         cs = p->gcbsl4[n][3];
         bc = p->gcbsl4[n][4];
 
-        if((bc==1 || bc==6) && cs==1)
+        if((bc==1 || bc==6) && cs==X_NEG)
             p->IOSL[Im1J]=1;
-        else if((bc==2 || bc==7 || bc==8) && cs==4)
+        else if((bc==2 || bc==7 || bc==8) && cs==X_POS)
             p->IOSL[Ip1J]=2;
     }
 }
