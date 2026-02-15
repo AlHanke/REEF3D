@@ -3249,7 +3249,6 @@
           <File Name="ioflow_turbulence.cpp"/>
           <File Name="ioflow_relax.cpp"/>
           <File Name="ioflow_pressure.cpp"/>
-          <File Name="ioflow_periodic.cpp"/>
           <File Name="ioflow_outflow.cpp"/>
           <File Name="ioflow_ini.cpp"/>
           <File Name="ioflow_inflow.cpp"/>
