@@ -32,32 +32,32 @@ ghostcell::bc_labels ghostcell::gcsleval2(int gcv, int bc, int cs)
 
     // Wall
     // Inflow & Parallel
-    else if((bc==1 || bc==6 || bc==7 || bc==21) && (cs==X_NEG || cs==X_POS || cs==Z_NEG || cs==Z_POS) && gcv==11)
+    else if((bc==INFLOW || bc==WAVEGEN || bc==NUMBEACH || bc==WALL) && (cs==X_NEG || cs==X_POS || cs==Z_NEG || cs==Z_POS) && gcv==11)
         return gclabel_v;
 
     // Orthogonal
-    else if((bc==3 || bc==7 || bc==21) && (cs==Y_POS || cs==Y_NEG) && gcv==11)
+    else if((bc==SYMMETRY || bc==NUMBEACH || bc==WALL) && (cs==Y_POS || cs==Y_NEG) && gcv==11)
         return bc_labels::NOSLIP;
 
     // Outflow
-    else if(bc==2 && (cs==Y_POS || cs==Y_NEG) && gcv==11)
+    else if(bc==OUTFLOW && (cs==Y_POS || cs==Y_NEG) && gcv==11)
         return bc_labels::NEUMANN;
 
     // Symmetry
-    else if(bc==3 && (cs==X_NEG || cs==X_POS || cs==Z_NEG || cs==Z_POS) && gcv==11)
+    else if(bc==SYMMETRY && (cs==X_NEG || cs==X_POS || cs==Z_NEG || cs==Z_POS) && gcv==11)
         return bc_labels::NEUMANN;
 
     // Hy
-    else if((bc==1 || bc==6) && (gcv==52 || gcv==54))
+    else if((bc==INFLOW || bc==WAVEGEN) && (gcv==52 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if((bc==2 || bc==7) && (gcv==51 || gcv==54))
+    else if((bc==OUTFLOW || bc==NUMBEACH) && (gcv==51 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if(bc==7 && (p->B99==3 || p->B99==4))
+    else if(bc==NUMBEACH && (p->B99==3 || p->B99==4))
         return bc_labels::NEUMANN;
 
-    else if((bc==3 || bc==21) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if((bc==SYMMETRY || bc==WALL) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
 
     // Patch

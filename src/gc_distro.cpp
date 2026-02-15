@@ -41,7 +41,7 @@ void ghostcell::gcdistro(field &f, int ii, int jj, int kk, double dist, bc_label
         case bc_labels::NOSLIP:
             noslip(f,cs);
             break;
-        case bc_labels::OUTFLOW:
+        case bc_labels::OUTFLOWBC:
             outflow(f,cs);
             break;
         case bc_labels::POTENTIAL:
@@ -83,7 +83,7 @@ void ghostcell::gcsldistro(lexer *p, slice &f, int ii, int jj, bc_labels bc_labe
     case bc_labels::NOSLIP:
         gcsl_noslip(f,cs);
         break;
-    case bc_labels::OUTFLOW:
+    case bc_labels::OUTFLOWBC:
         gcsl_outflow(f,cs);
         break;
     case bc_labels::SOMMERFELD:
