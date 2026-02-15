@@ -28,11 +28,11 @@ Author: Hans Bihs
 #include"flux_face_FOU.h"
 #include"flux_face_FOU_vrans.h"
 
-weno_nug_func::weno_nug_func(lexer* p):epsilon(0.0),psi(1.0e-6)
+weno_nug_func::weno_nug_func(lexer* pp):epsilon(0.0),psi(1.0e-6)
 {
-    ini(p);
+    ini(pp);
     
-    pp=p;
+    p=pp;
 }
 
 weno_nug_func::~weno_nug_func()
@@ -41,31 +41,29 @@ weno_nug_func::~weno_nug_func()
 
 void weno_nug_func::ini(lexer* p)
 {
-    if(iniflag==0)
+    if(!iniflag)
     {
         p->Darray(qfx,p->knox+2*marge,2,6,2);
         p->Darray(qfy,p->knoy+2*marge,2,6,2);
         p->Darray(qfz,p->knoz+2*marge,2,6,2);
-    
+
         p->Darray(cfx,p->knox+2*marge,2,6);
         p->Darray(cfy,p->knoy+2*marge,2,6);
         p->Darray(cfz,p->knoz+2*marge,2,6);
-    
+
         p->Darray(isfx,p->knox+2*marge,2,6,3);
         p->Darray(isfy,p->knoy+2*marge,2,6,3);
         p->Darray(isfz,p->knoz+2*marge,2,6,3);
-    
-    precalc_qf(p);
-    precalc_cf(p);
-    precalc_isf(p);
-               
-    iniflag=1;    
-    }              
-                      
-}
 
+        precalc_qf(p);
+        precalc_cf(p);
+        precalc_isf(p);
+
+        iniflag=true;
+    }
+}
 
 double ****weno_nug_func::qfx,****weno_nug_func::qfy,****weno_nug_func::qfz;
 double ***weno_nug_func::cfx,***weno_nug_func::cfy,***weno_nug_func::cfz;
 double ****weno_nug_func::isfx,****weno_nug_func::isfy,****weno_nug_func::isfz;
-int weno_nug_func::iniflag(0);
+bool weno_nug_func::iniflag(false);

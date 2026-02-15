@@ -28,6 +28,7 @@ Author: Hans Bihs
 class lexer;
 class fdm;
 class field;
+class slice;
 
 using namespace std;
 
@@ -68,7 +69,7 @@ public:
     static double ***cfx,***cfy,***cfz;
     static double ****isfx,****isfy,****isfz;
     
-	static int iniflag;
+	static bool iniflag;
     
     
     
@@ -83,12 +84,21 @@ public:
     double w1z,w2z,w3z;
     
     int uf,vf,wf;
+protected:
+    void iqmin(field&);
+    void jqmin(field&);
+    void kqmin(field&);
+    void iqmax(field&);
+    void jqmax(field&);
+    void kqmax(field&);
+
+    void isqmin(slice&);
+    void jsqmin(slice&);
+    void isqmax(slice&);
+    void jsqmax(slice&);
 
 private:
-    lexer *pp;
-
-    
-    
+    lexer *p;
 };
 
 #endif
