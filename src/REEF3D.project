@@ -2799,7 +2799,6 @@
         <File Name="gc_heat.cpp"/>
         <File Name="gc_debug.cpp"/>
         <File Name="gc_fivec.cpp"/>
-        <File Name="gc_kinematic_bed.cpp"/>
         <File Name="gc_epol1.cpp"/>
         <File Name="gc_epol2.cpp"/>
         <File Name="gc_epol3.cpp"/>
@@ -2809,7 +2808,6 @@
         <File Name="gc_dirichlet-para.cpp"/>
         <File Name="gc_extend.cpp"/>
         <File Name="gc_imagepoint.cpp"/>
-        <File Name="gc_neumann_all.cpp"/>
         <File Name="gc_noslip.cpp"/>
         <File Name="gc_potential.cpp"/>
         <File Name="gc_start.cpp"/>

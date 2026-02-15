@@ -223,12 +223,12 @@ public:
     void fivec2D(lexer*,double*,sliceint&);
     void fivec_vel(lexer*,double*,sliceint&);
     void fivec2D_vel(lexer*,double*,sliceint&);
-    void gc_periodic(lexer*,field&,int,int);
+    void gc_periodic(field&,int);
 
     //NHFLOW
     void gciobc_update(lexer*,fdm_nhf*);
 
-    void dirichlet_ortho(lexer*,field&,double,int,int,int);
+    void dirichlet_ortho(field&,double,int);
 
 private:
     void Sendrecv_double(int,int,int,int,int,int);
@@ -240,23 +240,21 @@ private:
     void gcwait(lexer*);
 
     // boundary conditions
-    void atmosphere(lexer*,field&,int,int,int);
-    void dirichlet_ortho_reflect(lexer*,field&,double,int,int,int);
-    void dirichlet_para(lexer*,field&,double,int,int,int);
-    void dirichlet_para_reflect(lexer*,field&,double,int,int,int);
-    void extend(lexer*,field&,double,int,int,int);
-    void gcb_debug(field&,int,int,int);
-    void gravity_press(lexer*,field&,double,int,int,int);
-    void heatbc(lexer*,field&,int,int,int);
-    void kinematic_bed(lexer*,field&,double,int,int,int);
-    void lsm(lexer*,field&,double,int,int,int);
-    void neumann(field&,int,int,int);
-    void neumann_all(field&,int,int,int);
-    void nhpress(lexer*,field&,double,int,int,int);
-    void noslip(field&,double,int,int,int);
-    void outflow(lexer*,field&,int,int,int);
-    void potentialbc(lexer*,field&,int,int);
-    void sommerfeld(lexer*,field&,int,int,int);
+    void atmosphere(field&);
+    void dirichlet_ortho_reflect(field&,double,int);
+    void dirichlet_para(field&,double,int);
+    void dirichlet_para_reflect(field&,double,int);
+    void extend(field&,int);
+    void gcb_debug(field&,int);
+    void gravity_press(field&,int);
+    void heatbc(field&,int);
+    void lsm(field&,int);
+    void neumann(field&,int);
+    void nhpress(field&,int);
+    void noslip(field&,int);
+    void outflow(field&,int);
+    void potentialbc(field&,int);
+    void sommerfeld(field&,int);
 
     // Slice BCs
     void gcsl_neumann(slice&,int,int,int);

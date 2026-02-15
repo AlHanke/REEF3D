@@ -17,130 +17,85 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
+Author: Hans Bihs, Alexander Hanke
 --------------------------------------------------------------------*/
 
-#include"lexer.h"
-#include"fdm.h"
 #include"ghostcell.h"
+#include"lexer.h"
 #include"field.h"
-#include"vec.h"
-#include"cpt.h"
 
-void ghostcell::extend(lexer *p,field& f,double dist,int gcv, int bc, int cs)
+void ghostcell::extend(field &f, int cs)
 {
     weight=1.0;
-    
-    double dx;
-    
-    if(cs==1||cs==4)
-    dx = p->DXP[IP];
-    
-    if(cs==2||cs==3)
-    dx = p->DYP[JP];
-    
-    if(cs==5||cs==6)
-    dx = p->DZP[KP];
 
-//fill pos[]
+    double dx;
+    if(cs==1 || cs==4)
+        dx = p->DXP[IP];
+    else if(cs==2 || cs==3)
+        dx = p->DYP[JP];
+    else if(cs==5 || cs==6)
+        dx = p->DZP[KP];
+
+    //fill pos[]
     int orderext=2;
 
-    if(bc_label==35)
-    orderext=2;
-	
+    for(m=0; m<=orderext-3; m++)
+        pos[m]=-dx*double(orderext-m-2);
 
-	for(m=0;m<=orderext-3;m++)
-	pos[m]=-dx*double(orderext-m-2);
+    pos[orderext-2]=0.0;
+    pos[orderext-1]=dx;
 
-	pos[orderext-2]=0.0;
-	pos[orderext-1]=dx;
+    double x[margin];
+    for(m=0; m<margin; m++)
+        x[m]=dx*double(m+2);
 
-	for(m=0;m<margin;m++)
-	x[m]=dx*double(m+2);
-	
-	
+    //fill y[]
+    for(m=0; m<orderext; m++)
+    {
+        if(cs==1 )
+            y[m] = f(i+orderext-m-1,j,k);
+        else if(cs==2)
+            y[m] = f(i,j-orderext+m+1,k);
+        else if(cs==3)
+            y[m] = f(i,j+orderext-m-1,k);
+        else if(cs==4)
+            y[m] = f(i-orderext+m+1,j,k);
+        else if(cs==5)
+            y[m] = f(i,j,k+orderext-m-1);
+        else if(cs==6)
+            y[m] = f(i,j,k-orderext+m+1);
+    }
 
-//fill y[]
+    for(q=0; q<margin; ++q)
+    {
+        y[orderext+q]=0.0;
 
-	//Inflow
-	if(cs==1 )
-	for(m=0;m<orderext;m++)
-	y[m]=f(i+orderext-m-1,j,k);
+        for(m=0; m<orderext; m++)
+        {
+            weight=1.0;
+            for(n=0; n<orderext; ++n)
+            {
+                if(m!=n)
+                    weight*=(x[q]-pos[n])/(pos[m]-pos[n]+1.0e-20);
+            }
+            y[orderext+q]+=weight*y[m];
+        }
+    }
 
-	//left
-	if(cs==2)
-	for(m=0;m<orderext;m++)
-	y[m]=f(i,j-orderext+m+1,k);
-
-	//right
-	if(cs==3)
-	for(m=0;m<orderext;m++)
-	y[m]=f(i,j+orderext-m-1,k);
-
-	//outlflow
-	if(cs==4)
-	for(m=0;m<orderext;m++)
-	y[m]=f(i-orderext+m+1,j,k);
-
-	//bottom
-	if(cs==5)
-	for(m=0;m<orderext;m++)
-	y[m]=f(i,j,k+orderext-m-1);
-
-	//top
-	if(cs==6)
-	for(m=0;m<orderext;m++)
-	y[m]=f(i,j,k-orderext+m+1);
-	
-	
-	for(q=0; q<margin; ++q)
-	{
-	    y[orderext+q]=0.0;
-
-		for(m=0;m<orderext;m++)
-		{
-			weight=1.0;
-			for(n=0;n<orderext;++n)
-			{
-			if(m!=n)
-			weight*=(x[q]-pos[n])/(pos[m]-pos[n]+1.0e-20);
-			}
-		y[orderext+q]+=weight*y[m];
-		}
-	}
-
-// write extrapolated ghost cell values into f()
-
-	//inflow
-	if(cs==1)
-	for(q=0;q<margin;++q)
-	f(i-q-1,j,k)=y[orderext+q];
-
-	//left
-	if(cs==2)
-	for(q=0;q<margin;++q)
-	f(i,j+q+1,k)=y[orderext+q];
-
-	//right
-	if(cs==3)
-	for(q=0;q<margin;++q)
-	f(i,j-q-1,k)=y[orderext+q];
-
-	//outflow
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j,k)=y[orderext+q];
-
-	//bottom
-	if(cs==5)
-	{
-	for(q=0;q<margin;++q)
-	f(i,j,k-q-1)=y[orderext+q];
-	
-	//cout<<" LSM: "<<f(i,j,k+1)<<" "<<f(i,j,k)<<" "<<y[2]<<" "<<y[3]<<" "<<y[4]<<endl;
-	}
-
-	//top
-	if(cs==6)
-	for(q=0;q<margin;++q)
-	f(i,j,k+q+1)=y[orderext+q];
+    // write extrapolated ghost cell values into f()
+     for(q=0; q<margin; ++q)
+    {
+        if(cs==1)
+            f(i-q-1,j,k) = y[orderext+q];
+        else if(cs==2)
+            f(i,j+q+1,k) = y[orderext+q];
+        else if(cs==3)
+            f(i,j-q-1,k) = y[orderext+q];
+        else if(cs==4)
+            f(i+q+1,j,k) = y[orderext+q];
+        else if(cs==5)
+            f(i,j,k-q-1) = y[orderext+q];
+        else if(cs==6)
+            f(i,j,k+q+1) = y[orderext+q];
+    }
 }
