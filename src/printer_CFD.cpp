@@ -353,9 +353,9 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
         pgc->start2(p,a->v,111);
         pgc->start3(p,a->w,112);
 
-        pgc->gcparacox(p,a->phi,50);
+        pgc->gcparacox(p,a->phi);
 
-        pgc->gcparacox(p,a->topo,150);
+        pgc->gcparacox(p,a->topo);
 
         pgc->gcperiodicx(p,a->press,4);
 

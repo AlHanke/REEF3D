@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"field.h"
 
-void ghostcell::gcparacox(lexer* p, field& f, int gcv)
+void ghostcell::gcparacox(lexer* p, field& f)
 {
     //  FILL SEND
     for(q=0;q<p->gcparaco1_count;++q)

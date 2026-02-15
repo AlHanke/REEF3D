@@ -31,7 +31,7 @@ void ghostcell::start1(lexer *p, field& f, int gcv)
     {
         starttime=timer();
         gcparax(p,f,1);
-        gcparacox(p,f,gcv);
+        gcparacox(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -60,7 +60,7 @@ void ghostcell::start1(lexer *p, field& f, int gcv)
         dgcpol1(p,f,gcv);
 
     if(do_comms)
-        gcparacox(p,f,gcv);
+        gcparacox(p,f);
 }
 
 void ghostcell::start2(lexer *p, field& f, int gcv)
@@ -70,7 +70,7 @@ void ghostcell::start2(lexer *p, field& f, int gcv)
     {
         starttime=timer();
         gcparax(p,f,2);
-        gcparacox(p,f,gcv);
+        gcparacox(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -102,7 +102,7 @@ void ghostcell::start2(lexer *p, field& f, int gcv)
         dgcpol2(p,f,gcv);
 
     if(do_comms)
-        gcparacox(p,f,gcv);
+        gcparacox(p,f);
 }
 
 void ghostcell::start3(lexer *p, field& f, int gcv)
@@ -112,7 +112,7 @@ void ghostcell::start3(lexer *p, field& f, int gcv)
     {
         starttime=timer();
         gcparax(p,f,3);
-        gcparacox(p,f,gcv);
+        gcparacox(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -140,7 +140,7 @@ void ghostcell::start3(lexer *p, field& f, int gcv)
         dgcpol3(p,f,gcv);
 
     if(do_comms)
-        gcparacox(p,f,gcv);
+        gcparacox(p,f);
 }
 
 void ghostcell::start4(lexer *p, field &f, int gcv)
@@ -150,7 +150,7 @@ void ghostcell::start4(lexer *p, field &f, int gcv)
     {
         starttime=timer();
         gcparax(p,f,4);
-        gcparacox(p,f,gcv);
+        gcparacox(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -178,7 +178,7 @@ void ghostcell::start4(lexer *p, field &f, int gcv)
         dgcpol4(p,f,gcv);
 
     if(do_comms)
-        gcparacox(p,f,gcv);
+        gcparacox(p,f);
 }
 
 void ghostcell::start4a(lexer *p, field& f, int gcv)
@@ -188,7 +188,7 @@ void ghostcell::start4a(lexer *p, field& f, int gcv)
     {
         starttime=timer();
         gcparax4a(p,f,5);
-        gcparacox(p,f,gcv);
+        gcparacox(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -213,7 +213,7 @@ void ghostcell::start4a(lexer *p, field& f, int gcv)
         gc_periodic(f, 3);
 
     if(do_comms)
-        gcparacox(p,f,gcv);
+        gcparacox(p,f);
 }
 
 void ghostcell::start4a_sum(lexer *p, field& f, int gcv)
@@ -247,5 +247,5 @@ void ghostcell::start4a_sum(lexer *p, field& f, int gcv)
         gc_periodic(f, 3);
 
     if(do_comms)
-        gcparacox(p,f,gcv);
+        gcparacox(p,f);
 }
