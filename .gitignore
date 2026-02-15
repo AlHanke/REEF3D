@@ -19,3 +19,5 @@ build
 *.json
 # MacOS files
 .DS_Store
+# AMReX files
+ThirdParty/amrex*
