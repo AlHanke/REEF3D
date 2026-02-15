@@ -44,13 +44,6 @@ public:
 	 double ddwenox(fdm*, field&, double);
 	 double ddwenoy(fdm*, field&, double);
 	 double ddwenoz(fdm*, field&, double);
-
-	void iqmin0(fdm*, field&);
-	void jqmin0(fdm*, field&);
-	void kqmin0(fdm*, field&);
-	void iqmax0(fdm*, field&);
-	void jqmax0(fdm*, field&);
-	void kqmax0(fdm*, field&);
     
     void iqmin1(fdm*, field&);
 	void jqmin1(fdm*, field&);
@@ -74,7 +67,6 @@ public:
 	void kqmax3(fdm*, field&);
 
     double grad;
-    double *DX,*DY,*DZ;
     
     int check1,check2,check3;
     
