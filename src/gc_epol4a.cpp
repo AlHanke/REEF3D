@@ -23,59 +23,18 @@ Author: Hans Bihs, Alexander Hanke
 #include"ghostcell.h"
 #include<math.h>
 
-ghostcell::bc_labels ghostcell::gceval4a(lexer *p, int gcv, int bc, int cs)
+ghostcell::bc_labels ghostcell::gceval4a(lexer *p, int gcv, int bc)
 {
-    // fb
-    if(gcv==50)
+    if(gcv==1 || gcv==50 || gcv==150 || gcv==154)
         return bc_labels::NEUMANN;
 
-    //topo
-    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==21 || bc==22) && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==151 || gcv==152 || gcv==153))
-        return bc_labels::NEUMANN;
-
-    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==21 || bc==22) && (cs!=dir_labels::Z_NEG && cs!=dir_labels::Z_POS) && (gcv==151 || gcv==152 || gcv==153))
+    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==21 || bc==22) && (gcv==151 || gcv==152 || gcv==153))
         return bc_labels::NEUMANN;
 
     else if(bc==1 && gcv==152)
         return bc_labels::NEUMANN;
 
     else if(bc==2 && gcv==151)
-        return bc_labels::NEUMANN;
-
-    else if(gcv==150 || gcv==154)
-     return bc_labels::NEUMANN;
-
-    //topo for bedload
-    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==21 || bc==22) && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==161 || gcv==162 || gcv==163))
-     return bc_labels::NEUMANN;
-
-    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==21 || bc==22) && (cs!=dir_labels::Z_NEG && cs!=dir_labels::Z_POS) && (gcv==161 || gcv==162 || gcv==163))
-     return bc_labels::NEUMANN;
-
-    else if(bc==1 && gcv==162)
-        return bc_labels::NEUMANN;
-
-    else if(bc==2 && gcv==161)
-        return bc_labels::NEUMANN;
-
-    // Level Set
-    else if((bc==5 || bc==6 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
-        return bc_labels::NEUMANN;
-
-    else if(bc==3 && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
-        return bc_labels::NEUMANN;
-
-    else if(bc==1 && (gcv==52 || gcv==54))
-        return bc_labels::NEUMANN;
-
-    else if(bc==2 && (gcv==51 || gcv==54))
-        return bc_labels::NEUMANN;
-
-    else if(gcv==50)
-        return bc_labels::NEUMANN;
-
-    // porosity
-    else if(gcv==1)
         return bc_labels::NEUMANN;
 
     else
@@ -86,5 +45,5 @@ void ghostcell::gcdistro4a(field& f, int ii, int jj, int kk, int cs, int bc, dou
 {
     cs = abs(cs);
 
-    gcdistro(f,ii,jj,kk,dist,gceval4a(p,gcv,bc,cs),cs);
+    gcdistro(f,ii,jj,kk,dist,gceval4a(p,gcv,bc),cs);
 }

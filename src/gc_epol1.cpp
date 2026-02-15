@@ -37,11 +37,8 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
     else if((bc==5 || (bc==7 && !awa_label) || bc==21 || bc==22) && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==110)
         return bc_labels::NOSLIP;
 
-    else if(((bc==7 && !awa_label) || bc==21 || bc==22) && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==117)
-        return bc_labels::NEUMANN;
-
     // Topo
-    else if(bc==5 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==1 || gcv==10 || gcv==114 || gcv==117))
+    else if(bc==5 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==1 || gcv==10 || gcv==114))
         return gclabel_utopo;
 
     else if((bc==5 || bc==21 || bc==22) && gcv==14)
