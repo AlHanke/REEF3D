@@ -557,15 +557,24 @@ public:
         Field4Params m_params{};
     };
 
-    struct MyExtBCFillFieldParams {
+    struct ConstMyExtBCFillFieldParams {
         AMREX_GPU_HOST_DEVICE
-        MyExtBCFillFieldParams() noexcept = default;
+        ConstMyExtBCFillFieldParams() noexcept = default;
 
-        // Add any parameters needed for BC decision making
+        //Const parameters needed for BC decision making
         const amrex::Array<int,6> bc_values = {};
         const amrex::Array<amrex::Real,6> heat_values = {};
         const int margin = 3;
         const bool y_dimension_exists = true;
+    };
+    struct MyExtBCFillFieldParams {
+        AMREX_GPU_HOST_DEVICE
+        MyExtBCFillFieldParams() noexcept = default;
+
+        //Const parameters needed for BC decision making
+        double Ui = 0.0;
+        double Uo = 0.0;
+        double dt = 0.0;
     };
     template <typename BCDecision>
     struct MyExtBCFillField {
@@ -573,10 +582,10 @@ public:
         MyExtBCFillField() = delete;
 
         AMREX_GPU_HOST_DEVICE
-        MyExtBCFillField(const MyExtBCFillFieldParams params, const int gcv,
-                const BCDecision& decision,
+        MyExtBCFillField(const ConstMyExtBCFillFieldParams const_params, const MyExtBCFillFieldParams params,
+                const int gcv, const BCDecision& decision,
                 const amrex::Box* boxes, const int num_boxes)
-            : m_params(params), m_gcv(gcv), m_bc_decision(decision), m_boxes(boxes), m_num_boxes(num_boxes) {}
+            : m_const_params(const_params), m_params(params), m_gcv(gcv), m_bc_decision(decision), m_boxes(boxes), m_num_boxes(num_boxes) {}
 
         AMREX_GPU_DEVICE
         void operator() (const amrex::IntVect& iv, amrex::Array4<amrex::Real> const& dest,
@@ -587,7 +596,7 @@ public:
         {
             amrex::ignore_unused(time, bcr, bcomp, orig_comp);
 
-            if (!m_params.y_dimension_exists && iv[1] != 0)
+            if (!m_const_params.y_dimension_exists && iv[1] != 0)
                 return;
 
             BoundaryConditionTypeLabel label = BoundaryConditionTypeLabel::NONE;
@@ -602,7 +611,7 @@ public:
                 int face = detect_face(iv, box);
                 if (face > 0)
                 {
-                    int bc_code = m_params.bc_values[face-1];
+                    int bc_code = m_const_params.bc_values[face-1];
                     if (bc_code == 0)
                         continue;
                     cs = cs_from_face(face);
@@ -671,17 +680,17 @@ public:
                         break;
                     case BoundaryConditionTypeLabel::HEATBC:
                         if(cs==static_cast<int>(Dir::X_NEG))
-                            dest(iv, dcomp+n) = m_params.heat_values[0];
+                            dest(iv, dcomp+n) = m_const_params.heat_values[0];
                         else if(cs==static_cast<int>(Dir::X_POS))
-                            dest(iv, dcomp+n) = m_params.heat_values[1];
+                            dest(iv, dcomp+n) = m_const_params.heat_values[1];
                         else if(cs==static_cast<int>(Dir::Y_NEG))
-                            dest(iv, dcomp+n) = m_params.heat_values[2];
+                            dest(iv, dcomp+n) = m_const_params.heat_values[2];
                         else if(cs==static_cast<int>(Dir::Y_POS))
-                            dest(iv, dcomp+n) = m_params.heat_values[3];
+                            dest(iv, dcomp+n) = m_const_params.heat_values[3];
                         else if(cs==static_cast<int>(Dir::Z_NEG))
-                            dest(iv, dcomp+n) = m_params.heat_values[4];
+                            dest(iv, dcomp+n) = m_const_params.heat_values[4];
                         else if(cs==static_cast<int>(Dir::Z_POS))
-                            dest(iv, dcomp+n) = m_params.heat_values[5];
+                            dest(iv, dcomp+n) = m_const_params.heat_values[5];
                         break;
                 }
             }
@@ -716,7 +725,7 @@ public:
                 {
                     int face = face_for_dir(dir, false);
                     face_out = face;
-                    int bc_code = m_params.bc_values[face-1];
+                    int bc_code = m_const_params.bc_values[face-1];
                     if (bc_code == 0) continue;
                     return m_bc_decision.evaluate(m_gcv, bc_code, cs_from_face(face));
                 }
@@ -724,7 +733,7 @@ public:
                 {
                     int face = face_for_dir(dir, true);
                     face_out = face;
-                    int bc_code = m_params.bc_values[face-1];
+                    int bc_code = m_const_params.bc_values[face-1];
                     if (bc_code == 0) continue;
                     return m_bc_decision.evaluate(m_gcv, bc_code, cs_from_face(face));
                 }
@@ -756,14 +765,14 @@ public:
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool is_within_margin(const amrex::IntVect& iv, const amrex::Box& box, int face) const
         {
-            if (face <= 0 || m_params.margin <= 0)
+            if (face <= 0 || m_const_params.margin <= 0)
                 return false;
 
             int dir = (face < 3) ? 0 : (face < 5 ? 1 : 2);
             bool high = (face % 2) == 0;
             int boundary = high ? box.bigEnd(dir) : box.smallEnd(dir);
             int dist = high ? iv[dir] - boundary : boundary - iv[dir];
-            return (dist >= 1) && (dist <= m_params.margin);
+            return (dist >= 1) && (dist <= m_const_params.margin);
         }
 
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -784,6 +793,7 @@ public:
                 return high ? 6 : 5;
         }
 
+        const ConstMyExtBCFillFieldParams m_const_params{};
         const MyExtBCFillFieldParams m_params{};
         BCDecision m_bc_decision;
         const amrex::Box* m_boxes = nullptr;
