@@ -50,42 +50,42 @@ void fsi_strip::interpolate_vel(lexer* p, fdm* a, ghostcell* pgc, field& uvel, f
                 jj = p->posc_j(coordI(1));
                 kk = p->posc_k(coordI(2));
                 
-                dx = p->DXN[ii + marge];
-                dy = p->DYN[jj + marge];
-                dz = p->DZN[kk + marge];
+                dx = p->DXN[IIP];
+                dy = p->DYN[JJP];
+                dz = p->DZN[KKP];
 
-                for (int i_it = ii - 2; i_it <= ii + 2; i_it++)
+                for (int i = ii - 2; i <= ii + 2; i++)
                 {
-                    for (int j_it = jj - 2; j_it <= jj + 2; j_it++)
+                    for (int j = jj - 2; j <= jj + 2; j++)
                     {
-                        for (int k_it = kk - 2; k_it <= kk + 2; k_it++)
+                        for (int k = kk - 2; k <= kk + 2; k++)
                         {
-                            dist = (p->XN[i_it + 1 + marge] - coordI(0))/dx;
+                            dist = (p->XN[IP1] - coordI(0))/dx;
                             D = kernel_roma(dist);
-                            dist = (p->YP[j_it + marge] - coordI(1))/dy;
+                            dist = (p->YP[JP] - coordI(1))/dy;
                             D *= kernel_roma(dist);
-                            dist = (p->ZP[k_it + marge] - coordI(2))/dz;
+                            dist = (p->ZP[KP] - coordI(2))/dz;
                             D *= kernel_roma(dist);
                             
-                            lagrangeVel[eI](0,pI) += uvel(i_it,j_it,k_it)*D;
+                            lagrangeVel[eI](0,pI) += uvel(i,j,k)*D;
 
-                            dist = (p->XP[i_it + marge] - coordI(0))/dx;
+                            dist = (p->XP[IP] - coordI(0))/dx;
                             D = kernel_roma(dist);
-                            dist = (p->YN[j_it + 1 + marge] - coordI(1))/dy;
+                            dist = (p->YN[JP1] - coordI(1))/dy;
                             D *= kernel_roma(dist);
-                            dist = (p->ZP[k_it + marge] - coordI(2))/dz;
+                            dist = (p->ZP[KP] - coordI(2))/dz;
                             D *= kernel_roma(dist);
                                 
-                            lagrangeVel[eI](1,pI) += vvel(i_it,j_it,k_it)*D;
+                            lagrangeVel[eI](1,pI) += vvel(i,j,k)*D;
                             
-                            dist = (p->XP[i_it + marge] - coordI(0))/dx;
+                            dist = (p->XP[IP] - coordI(0))/dx;
                             D = kernel_roma(dist);
-                            dist = (p->YP[j_it + marge] - coordI(1))/dy;
+                            dist = (p->YP[JP] - coordI(1))/dy;
                             D *= kernel_roma(dist);
-                            dist = (p->ZN[k_it + 1 + marge] - coordI(2))/dz;
+                            dist = (p->ZN[KP1] - coordI(2))/dz;
                             D *= kernel_roma(dist);
                              
-                            lagrangeVel[eI](2,pI) += wvel(i_it,j_it,k_it)*D;
+                            lagrangeVel[eI](2,pI) += wvel(i,j,k)*D;
                         }
                     }
                 }
