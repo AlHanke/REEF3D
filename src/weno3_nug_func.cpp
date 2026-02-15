@@ -37,17 +37,17 @@ void weno3_nug_func::ini(lexer* p)
 {
     if(!iniflag)
     {
-        qfx.resize(p->knox+2*marge);
-        qfy.resize(p->knoy+2*marge);
-        qfz.resize(p->knoz+2*marge);
+        qfx.resize(max_i);
+        qfy.resize(max_j);
+        qfz.resize(max_k);
 
-        cfx.resize(p->knox+2*marge);
-        cfy.resize(p->knoy+2*marge);
-        cfz.resize(p->knoz+2*marge);
+        cfx.resize(max_i);
+        cfy.resize(max_j);
+        cfz.resize(max_k);
 
-        isfx.resize(p->knox+2*marge);
-        isfy.resize(p->knoy+2*marge);
-        isfz.resize(p->knoz+2*marge);
+        isfx.resize(max_i);
+        isfy.resize(max_j);
+        isfz.resize(max_k);
 
         precalc_qf(p);
         precalc_cf(p);

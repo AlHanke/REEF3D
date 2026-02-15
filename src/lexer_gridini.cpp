@@ -25,12 +25,28 @@ Author: Hans Bihs, Alexander Hanke
 
 void lexer::gridini(ghostcell *pgc)
 {
-    if(G2==1)
-    grid::sigma_coord_ini();
-
-    grid::gridspacing(pgc);
-
+    #if USE_AMREX
     setup_amrex_geometry(this,pgc);
+    #endif
+
+    grid::gridspacing(this, pgc);
+    #if USE_AMREX
+    if(nlevs > 1)
+    {
+        if(G2==1)
+        {
+            std::cerr << "Error: G2=1 is not supported for nlevs > 1" << std::endl;
+            pgc->final(true);
+        }
+
+        update_cell_coordinates();
+        update_cell_spacing();
+    }
+    #endif
+
+    #if USE_AMREX
+    define_inflow_outflow_ba();
+    #endif
 }
 
 void lexer::flagini()
