@@ -563,14 +563,18 @@ public:
         ConstMyExtBCFillFieldParams() noexcept = default;
         ConstMyExtBCFillFieldParams(const amrex::Array<int,6>& bc_values_in,
                                 const amrex::Array<amrex::Real,6>& heat_values_in,
-                                int margin_in, bool y_dimension_exists_in)
-            : bc_values(bc_values_in), heat_values(heat_values_in), margin(margin_in), y_dimension_exists(y_dimension_exists_in) {}
+                                int margin_in, int orderdir_in, bool y_dimension_exists_in,
+                                double gamma_in)
+            : bc_values(bc_values_in), heat_values(heat_values_in), margin(margin_in),
+              orderdir(orderdir_in), y_dimension_exists(y_dimension_exists_in), gamma(gamma_in) {}
 
         //Const parameters needed for BC decision making
         const amrex::Array<int,6> bc_values = {};
         const amrex::Array<amrex::Real,6> heat_values = {};
-        const int margin = 3;
+        const int margin = 0;
+        const int orderdir = 3;
         const bool y_dimension_exists = true;
+        const double gamma = 0;
     };
     struct MyExtBCFillFieldParams {
         AMREX_GPU_HOST_DEVICE
@@ -675,17 +679,17 @@ public:
                         break;
                     case BoundaryConditionTypeLabel::OUTFLOWBC:
                         if(cs==static_cast<int>(Dir::X_NEG))
-                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(0))*p->Uo*(dest(interior+amrex::IntVect({1,0,0}), dcomp+n)-dest(interior, dcomp+n));
+                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(0))*m_params.Uo*(dest(interior+amrex::IntVect(1,0,0), dcomp+n)-dest(interior, dcomp+n));
                         else if(cs==static_cast<int>(Dir::X_POS))
-                            dest(iv, dcomp+n) = MAX(amrex::Real(0), dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(0))*p->Uo*(dest(interior, dcomp+n)-dest(interior+amrex::IntVect({-1,0,0}), dcomp+n)));
+                            dest(iv, dcomp+n) = MAX(amrex::Real(0), dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(0))*m_params.Uo*(dest(interior, dcomp+n)-dest(interior+amrex::IntVect(-1,0,0), dcomp+n)));
                         else if(cs==static_cast<int>(Dir::Y_NEG))
-                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(1))*p->Uo*(dest(interior+amrex::IntVect({0,1,0}), dcomp+n)-dest(interior, dcomp+n));
+                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(1))*m_params.Uo*(dest(interior+amrex::IntVect(0,1,0), dcomp+n)-dest(interior, dcomp+n));
                         else if(cs==static_cast<int>(Dir::Y_POS))
-                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(1))*p->Uo*(dest(interior, dcomp+n)-dest(interior+amrex::IntVect({0,0,-1}), dcomp+n));
+                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(1))*m_params.Uo*(dest(interior, dcomp+n)-dest(interior+amrex::IntVect(0,0,-1), dcomp+n));
                         else if(cs==static_cast<int>(Dir::Z_NEG))
-                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(2))*p->Uo*(dest(interior+amrex::IntVect({0,0,1}), dcomp+n)-dest(interior, dcomp+n));
+                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(2))*m_params.Uo*(dest(interior+amrex::IntVect(0,0,1), dcomp+n)-dest(interior, dcomp+n));
                         else if(cs==static_cast<int>(Dir::Z_POS))
-                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(2))*p->Uo*(dest(interior, dcomp+n)-dest(interior+amrex::IntVect({0,0,-1}), dcomp+n));
+                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(2))*m_params.Uo*(dest(interior, dcomp+n)-dest(interior+amrex::IntVect(0,0,-1), dcomp+n));
                         break;
                     case BoundaryConditionTypeLabel::POTENTIAL:
                         if(cs==static_cast<int>(Dir::X_NEG))
