@@ -559,15 +559,15 @@ public:
     };
 
     template <typename BCDecision>
-    struct MyExtBCFill {
+    struct MyExtBCFillField {
         AMREX_GPU_HOST_DEVICE
-        MyExtBCFill() = delete;
+        MyExtBCFillField() = delete;
 
         AMREX_GPU_HOST_DEVICE
-        MyExtBCFill(const amrex::Array<int,6>& values, int gcv, int margin, bool y_dimension_exists,
+        MyExtBCFillField(const amrex::Array<int,6>& bc_values, const amrex::Array<int,6>& heat_values, int gcv, int margin, bool y_dimension_exists,
                 const BCDecision& decision,
                 const amrex::Box* boxes, int num_boxes)
-            : bc_values(values), m_gcv(gcv), m_margin(margin), m_y_dimension_exists(y_dimension_exists), m_bc_decision(decision), m_boxes(boxes), m_num_boxes(num_boxes) {}
+            : m_bc_values(bc_values), m_heat_values(heat_values), m_gcv(gcv), m_margin(margin), m_y_dimension_exists(y_dimension_exists), m_bc_decision(decision), m_boxes(boxes), m_num_boxes(num_boxes) {}
 
         AMREX_GPU_DEVICE
         void operator() (const amrex::IntVect& iv, amrex::Array4<amrex::Real> const& dest,
@@ -582,6 +582,7 @@ public:
             const amrex::Box* matched_box = nullptr;
             int face_for_bc = 0;
             bool is_corner = false;
+            int cs = 0;
 
             for (int idx = 0; idx < m_num_boxes; ++idx)
             {
@@ -589,10 +590,10 @@ public:
                 int face = detect_face(iv, box);
                 if (face > 0)
                 {
-                    int bc_code = bc_values[face-1];
+                    int bc_code = m_bc_values[face-1];
                     if (bc_code == 0)
                         continue;
-                    int cs = cs_from_face(face);
+                    cs = cs_from_face(face);
                     label = m_bc_decision.evaluate(m_gcv, bc_code, cs);
                     if (label != BoundaryConditionTypeLabel::NONE)
                     {
@@ -647,9 +648,6 @@ public:
                     case BoundaryConditionTypeLabel::OUTFLOWBC:
                         // ToDo
                         break;
-                    case BoundaryConditionTypeLabel::SOMMERFELD:
-                        // ToDo
-                        break;
                     case BoundaryConditionTypeLabel::POTENTIAL:
                         // ToDo
                         break;
@@ -659,17 +657,19 @@ public:
                     case BoundaryConditionTypeLabel::DIRICHLET_PARA_REFLECT:
                         // ToDo
                         break;
-                    case BoundaryConditionTypeLabel::NEUMANN_X:
-                        // ToDo
-                        break;
-                    case BoundaryConditionTypeLabel::NEUMANN_HX:
-                        // ToDo
-                        break;
-                    case BoundaryConditionTypeLabel::NEUMANN_HY:
-                        // ToDo
-                        break;
                     case BoundaryConditionTypeLabel::HEATBC:
-                        // ToDo
+                        if(cs==Dir::X_NEG)
+                            dest(iv, dcomp+n) = m_heat_values[0];
+                        else if(cs==Dir::X_POS)
+                            dest(iv, dcomp+n) = m_heat_values[1];
+                        else if(cs==Dir::Y_NEG)
+                            dest(iv, dcomp+n) = m_heat_values[2];
+                        else if(cs==Dir::Y_POS)
+                            dest(iv, dcomp+n) = m_heat_values[3];
+                        else if(cs==Dir::Z_NEG)
+                            dest(iv, dcomp+n) = m_heat_values[4];
+                        else if(cs==Dir::Z_POS)
+                            dest(iv, dcomp+n) = m_heat_values[5];
                         break;
                 }
             }
@@ -704,7 +704,7 @@ public:
                 {
                     int face = face_for_dir(dir, false);
                     face_out = face;
-                    int bc_code = bc_values[face-1];
+                    int bc_code = m_bc_values[face-1];
                     if (bc_code == 0) continue;
                     return m_bc_decision.evaluate(m_gcv, bc_code, cs_from_face(face));
                 }
@@ -712,7 +712,7 @@ public:
                 {
                     int face = face_for_dir(dir, true);
                     face_out = face;
-                    int bc_code = bc_values[face-1];
+                    int bc_code = m_bc_values[face-1];
                     if (bc_code == 0) continue;
                     return m_bc_decision.evaluate(m_gcv, bc_code, cs_from_face(face));
                 }
@@ -772,7 +772,8 @@ public:
                 return high ? 6 : 5;
         }
 
-        amrex::Array<int,2*AMREX_SPACEDIM> bc_values{};
+        amrex::Array<int,2*AMREX_SPACEDIM> m_bc_values{};
+        amrex::Array<int,2*AMREX_SPACEDIM> m_heat_values{};
         BCDecision m_bc_decision;
         const amrex::Box* m_boxes = nullptr;
         int m_num_boxes = 0;
