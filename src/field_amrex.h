@@ -27,6 +27,7 @@ Author: Alexander Hanke
 #include "field.h"
 #include "lexer.h"
 #include <AMReX_MultiFab.H>
+#include <AMReX_BCRec.H>
 
 class field_amrex : public field
 {
@@ -37,11 +38,16 @@ public:
 
     void FillBoundary() override;
 
+    void FillDomainBoundary() override;
+
 protected:
     field_amrex(lexer* p);
 
+    void initialize_bc();
+
     lexer *pp;
     amrex::MultiFab mf;
+    amrex::Vector<amrex::BCRec> bc;
     const int num_components = 1;
 };
 

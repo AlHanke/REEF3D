@@ -35,6 +35,10 @@ public:
 #endif
     virtual ~field() = default;
 
+#if USE_AMREX
+    virtual void FillDomainBoundary() = 0;
+#endif
+
 #if not USE_AMREX
     void CopyFrom(const field& src) {V = src.V; cache_addressing();};
 #endif
