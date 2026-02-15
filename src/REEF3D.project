@@ -2844,18 +2844,10 @@
           <File Name="grid.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Field">
-          <File Name="field1.cpp"/>
-          <File Name="field2.cpp"/>
-          <File Name="field3.cpp"/>
-          <File Name="field4.cpp"/>
           <File Name="field_amrex.cpp"/>
           <File Name="fields_amrex.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Fieldint">
-          <File Name="fieldint2.cpp"/>
-          <File Name="fieldint1.cpp"/>
-          <File Name="fieldint3.cpp"/>
-          <File Name="fieldint4.cpp"/>
           <File Name="fieldint_amrex.cpp"/>
           <File Name="fieldints_amrex.cpp"/>
         </VirtualDirectory>
