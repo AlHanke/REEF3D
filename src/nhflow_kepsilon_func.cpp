@@ -96,7 +96,7 @@ void nhflow_kepsilon_func::eddyvisc(lexer* p, fdm_nhf *d, ghostcell* pgc, vrans*
 
 		if(p->A564==1)
 		GC4LOOP
-		if(p->gcb4[n][4]==21 || p->gcb4[n][4]==22 || p->gcb4[n][4]==5)
+		if(p->gcb4[n][4]==21)
 		{
 		i = p->gcb4[n][0];
 		j = p->gcb4[n][1];

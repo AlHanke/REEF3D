@@ -42,9 +42,6 @@ double roughness::ks_val(lexer *p, fdm *a, int cs, int bc)
     else if(cs==6 && p->B56>0.0)
     ks=p->B56;
 
-    if(bc==5)
-    ks=p->S21*p->S20;
-
     if(p->S10>0 && p->S28==0 && (a->topo(i-1,j,k)<0.0 || a->topo(i+1,j,k-1)<0.0 || a->topo(i,j-1,k)<0.0 || a->topo(i,j+1,k)<0.0 || a->topo(i,j,k-1)<0.0))
     ks=p->S20;
     else if(p->S10>0 && p->S28==1 && (a->topo(i-1,j,k)<0.0 || a->topo(i+1,j,k-1)<0.0 || a->topo(i,j-1,k)<0.0 || a->topo(i,j+1,k)<0.0 || a->topo(i,j,k-1)<0.0))
