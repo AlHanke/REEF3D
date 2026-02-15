@@ -288,55 +288,6 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     }
 }
 
-void iowave::iogcb_update(lexer *p, fdm *a, ghostcell *pgc)
-{
-    int count1,count2;
-
-    count1=0;
-    count2=0;
-    GC4LOOP
-    {
-        if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
-            ++count1;
-        else if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7)
-            ++count2;
-    }
-
-    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6);
-    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6);
-
-    count1=0;
-    count2=0;
-    GC4LOOP
-    {
-        if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
-        {
-            p->gcin[count1][0]=p->gcb4[n][0];
-            p->gcin[count1][1]=p->gcb4[n][1];
-            p->gcin[count1][2]=p->gcb4[n][2];
-            p->gcin[count1][3]=p->gcb4[n][3];
-            ++count1;
-        }
-        else if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7)
-        {
-            p->gcout[count2][0]=p->gcb4[n][0];
-            p->gcout[count2][1]=p->gcb4[n][1];
-            p->gcout[count2][2]=p->gcb4[n][2];
-            p->gcout[count2][3]=p->gcb4[n][3];
-            ++count2;
-        }
-    }
-
-    p->gcin_count=count1;
-    p->gcout_count=count2;
-
-    if(p->I10==1)
-    velini(p,a,pgc);
-
-    if(p->B98==4)
-    gen_ini(p,a,pgc);
-}
-
 void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
 {
     int count1,count2,count3,count4;
