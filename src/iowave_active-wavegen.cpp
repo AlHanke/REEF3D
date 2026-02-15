@@ -105,7 +105,6 @@ void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
         if(p->pos_z()>p->phimean)
         z=(fabs(p->phimean-p->pos_z()));
 
-        if(p->B98==4)
         Uc=eta_R*sqrt(9.81/p->wd);
 
 
@@ -145,18 +144,15 @@ void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
         ++count;
     }
 
-    if(p->B98==3||p->B98==4||p->B99==3||p->B99==4||p->B99==5)
+    for(n=0;n<p->gcin_count;++n)
+    for(int q=0;q<4;++q)
     {
-        for(int q=0;q<4;++q)
-        for(n=0;n<p->gcin_count;++n)
-        {
-            i=p->gcin[n][0]+q;
-            j=p->gcin[n][1];
-            k=p->gcin[n][2];
+        i=p->gcin[n][0]+q;
+        j=p->gcin[n][1];
+        k=p->gcin[n][2];
 
-            if(a->phi(i,j,k)<0.0)
-            a->eddyv(i,j,k)=MIN(a->eddyv(i,j,k),1.0e-4);
-        }
-        pgc->start4(p,a->eddyv,24);
+        if(a->phi(i,j,k)<0.0)
+        a->eddyv(i,j,k)=MIN(a->eddyv(i,j,k),1.0e-4);
     }
+    pgc->start4(p,a->eddyv,24);
 }
