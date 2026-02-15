@@ -34,13 +34,13 @@ using namespace std;
 class roughness : virtual public increment
 {
 public:
-    roughness(lexer*);
-	virtual ~roughness();
+    roughness(lexer*) {};
+    virtual ~roughness() = default;
 
-	double ks_val(lexer*, fdm*,int,int,int,int,int);
+    double ks_val(lexer*, fdm*, int, int);
 
 private:
-	double ks;
+    double ks;
 
 };
 
