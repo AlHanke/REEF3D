@@ -618,7 +618,6 @@ public:
             // AMReX typically invokes for specific fill regions.
             // MyExtBCFillField needs to decide which BC applies.
 
-            // Replicate detect_face logic but relative to Domain
             int face = 0;
             int edge = 0;
             if(iv[2] < dom.smallEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
@@ -709,82 +708,27 @@ public:
                     switch (edge)
                     {
                         case 1:
-                            if(bcr[bcrec_idx].lo(0) == bcr[bcrec_idx].lo(2) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(0)) == BoundaryConditionTypeLabel::NEUMANN)
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            break;
                         case 2:
-                            if(bcr[bcrec_idx].lo(0) == bcr[bcrec_idx].hi(2) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(0)) == BoundaryConditionTypeLabel::NEUMANN)
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
+                            if(m_const_params.bc_values[0] == static_cast<int>(Gbc::WAVEGEN) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(0)) == BoundaryConditionTypeLabel::NONE && (m_const_params.data_location == DataLocation::FACE_X || m_const_params.data_location == DataLocation::FACE_Z))
                                 label = BoundaryConditionTypeLabel::NOSLIP;
+                            else
+                                label = BoundaryConditionTypeLabel::NEUMANN;
                             break;
                         case 3:
-                            if(bcr[bcrec_idx].hi(0) == bcr[bcrec_idx].lo(2) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(0)) == BoundaryConditionTypeLabel::NEUMANN)
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            break;
                         case 4:
-                            if(bcr[bcrec_idx].hi(0) == bcr[bcrec_idx].hi(2) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(0)) == BoundaryConditionTypeLabel::NEUMANN)
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
+                            if(m_const_params.bc_values[1] == static_cast<int>(Gbc::NUMBEACH) && (m_const_params.data_location == DataLocation::FACE_X || m_const_params.data_location == DataLocation::FACE_Z))
                                 label = BoundaryConditionTypeLabel::NOSLIP;
-                            break;
-                        case 5:
-                            if(bcr[bcrec_idx].lo(1) == bcr[bcrec_idx].lo(0) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(1)) == BoundaryConditionTypeLabel::NEUMANN)
-                                label = BoundaryConditionTypeLabel::NEUMANN;
                             else
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            break;
-                        case 6:
-                            if(bcr[bcrec_idx].lo(1) == bcr[bcrec_idx].hi(0) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(1)) == BoundaryConditionTypeLabel::NEUMANN)
                                 label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            break;
-                        case 7:
-                            if(bcr[bcrec_idx].hi(1) == bcr[bcrec_idx].lo(0) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(1)) == BoundaryConditionTypeLabel::NEUMANN)
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            break;
-                        case 8:
-                            if(bcr[bcrec_idx].hi(1) == bcr[bcrec_idx].hi(0) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(1)) == BoundaryConditionTypeLabel::NEUMANN)
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            break;
-                        case 9:
-                            if(bcr[bcrec_idx].lo(2) == bcr[bcrec_idx].lo(1) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(2)) == BoundaryConditionTypeLabel::NEUMANN)
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            break;
-                        case 10:
-                            if(bcr[bcrec_idx].lo(2) == bcr[bcrec_idx].hi(1) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(2)) == BoundaryConditionTypeLabel::NEUMANN)
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            break;
-                        case 11:
-                            if(bcr[bcrec_idx].hi(2) == bcr[bcrec_idx].lo(1) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(2)) == BoundaryConditionTypeLabel::NEUMANN)
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            break;
-                        case 12:
-                            if(bcr[bcrec_idx].hi(2) == bcr[bcrec_idx].hi(1) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(2)) == BoundaryConditionTypeLabel::NEUMANN)
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
-                                label = BoundaryConditionTypeLabel::NOSLIP;
                             break;
                         case 0:
                             if(is_corner_layer1(iv, dom))
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            else
                                 label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        default:
+                            label = BoundaryConditionTypeLabel::NEUMANN;
                             break;
                     }
                 }
