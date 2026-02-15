@@ -47,17 +47,17 @@ public:
     virtual ~grid_amrex() = default;
 
     // AMReX Geometry
-    std::vector<amrex::Geometry> amrex_geometry;
-    std::vector<amrex::BoxArray> amrex_box_array;
-    std::vector<amrex::DistributionMapping> amrex_distribution_mapping;
-    std::vector<amrex::MultiFab> amr_mf;
+    amrex::Vector<amrex::Geometry> amrex_geometry;
+    amrex::Vector<amrex::BoxArray> amrex_box_array;
+    amrex::Vector<amrex::DistributionMapping> amrex_distribution_mapping;
+    amrex::Vector<amrex::MultiFab> amr_mf;
     std::unique_ptr<amrex::MFIter> default_mfi;
     amrex::MFIter* amr_mfi = nullptr;
-    std::vector<amrex::iMultiFab> flag1_imf;
-    std::vector<amrex::iMultiFab> flag2_imf;
-    std::vector<amrex::iMultiFab> flag3_imf;
-    std::vector<amrex::iMultiFab> flag4_imf;
-    std::vector<amrex::iMultiFab> flag7_imf;
+    amrex::Vector<amrex::iMultiFab> flag1_imf;
+    amrex::Vector<amrex::iMultiFab> flag2_imf;
+    amrex::Vector<amrex::iMultiFab> flag3_imf;
+    amrex::Vector<amrex::iMultiFab> flag4_imf;
+    amrex::Vector<amrex::iMultiFab> flag7_imf;
 
     int level;
     const int nlevs = 1;

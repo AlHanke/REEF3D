@@ -81,7 +81,7 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
         int all_data[p->M10][6];
         MPI_Allgather(local_data, 6, MPI_INT, all_data, 6, MPI_INT, pgc->mpi_comm);
 
-        std::vector<Box> all_boxes(p->M10);
+        amrex::Vector<Box> all_boxes(p->M10);
         Vector<int> pmap(p->M10);
         for (int rank = 0; rank < p->M10; ++rank)
         {
