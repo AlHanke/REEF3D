@@ -37,6 +37,11 @@ Author: Hans Bihs
 #include"grid.h"
 #include "control.h"
 
+// AMReX includes
+#include <AMReX_Geometry.H>
+#include <AMReX_BoxArray.H>
+#include <AMReX_DistributionMapping.H>
+
 class weno_nug_func;
 class ghostcell;
 
@@ -72,6 +77,11 @@ public:
 
 
 //-----data-----------------------
+
+    // AMReX Geometry
+    amrex::Geometry amrex_geometry;
+    amrex::BoxArray amrex_box_array;
+    amrex::DistributionMapping amrex_distribution_mapping;
 
 	//REEF3D
 
@@ -284,6 +294,9 @@ public:
     double *sig;
     double *sigx,*sigy,*sigz,*sigt;
     double *sigxx;
+
+private:
+    void setup_amrex_geometry(ghostcell*);
 };
 
 #endif
