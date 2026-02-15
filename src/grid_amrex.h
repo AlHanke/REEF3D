@@ -50,9 +50,9 @@ public:
     amrex::Vector<amrex::Geometry> amrex_geometry;
     amrex::Vector<amrex::BoxArray> amrex_box_array;
     amrex::Vector<amrex::DistributionMapping> amrex_distribution_mapping;
-    amrex::Vector<amrex::MultiFab> amr_mf;
-    std::unique_ptr<amrex::MFIter> default_mfi;
-    amrex::MFIter* amr_mfi = nullptr;
+    amrex::Vector<amrex::MultiFab> amr_cell_mf;
+    std::unique_ptr<amrex::MFIter> default_cell_mfi;
+    amrex::MFIter* amr_cell_mfi = nullptr;
     amrex::Vector<amrex::iMultiFab> flag1_imf;
     amrex::Vector<amrex::iMultiFab> flag2_imf;
     amrex::Vector<amrex::iMultiFab> flag3_imf;

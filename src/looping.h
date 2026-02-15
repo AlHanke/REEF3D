@@ -41,16 +41,16 @@ Author: Hans Bihs, Alexander Hanke
              _level_guard.ctx->level < _level_guard.ctx->nlevs; \
              ++_level_guard.ctx->level)
 #define TileLOOP \
-    for (amrex::MFIter _tile_mfi(p->amr_mf[p->level]); _tile_mfi.isValid(); ++_tile_mfi) \
+    for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]); _tile_mfi.isValid(); ++_tile_mfi) \
         for (struct { lexer* ctx; amrex::MFIter* saved; } \
-                 _guard{p, std::exchange(p->amr_mfi, &_tile_mfi)}; \
+                 _guard{p, std::exchange(p->amr_cell_mfi, &_tile_mfi)}; \
              _guard.ctx != nullptr; \
-             _guard.ctx->amr_mfi = (_guard.saved ? _guard.saved : _guard.ctx->default_mfi.get()), \
+             _guard.ctx->amr_cell_mfi = (_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), \
              _guard.ctx = nullptr)
 
-#define imax_amrex (amrex::ubound(p->amr_mfi->validbox()).x - amrex::lbound(p->amr_mfi->validbox()).x)
-#define jmax_amrex (amrex::ubound(p->amr_mfi->validbox()).y - amrex::lbound(p->amr_mfi->validbox()).y)
-#define kmax_amrex (amrex::ubound(p->amr_mfi->validbox()).z - amrex::lbound(p->amr_mfi->validbox()).z)
+#define imax_amrex (amrex::ubound(p->amr_cell_mfi->validbox()).x - amrex::lbound(p->amr_cell_mfi->validbox()).x)
+#define jmax_amrex (amrex::ubound(p->amr_cell_mfi->validbox()).y - amrex::lbound(p->amr_cell_mfi->validbox()).y)
+#define kmax_amrex (amrex::ubound(p->amr_cell_mfi->validbox()).z - amrex::lbound(p->amr_cell_mfi->validbox()).z)
 
 #define ILOOP for (i = 0; i <= imax_amrex; ++i)
 #define JLOOP for (j = 0; j <= jmax_amrex; ++j)
@@ -68,9 +68,9 @@ Author: Hans Bihs, Alexander Hanke
 #define JBLOOP for(j = -1; j <= jmax_amrex+1; ++j)
 #define KBLOOP for(k = -1; k <= kmax_amrex+1; ++k)
 
-#define IMALOOP for(i = -p->amr_mf[p->level].nGrow(0); i <= imax_amrex + p->amr_mf[p->level].nGrow(0); ++i)
-#define JMALOOP for(j = -p->amr_mf[p->level].nGrow(1); j <= jmax_amrex + p->amr_mf[p->level].nGrow(1); ++j)
-#define KMALOOP for(k = -p->amr_mf[p->level].nGrow(2); k <= kmax_amrex + p->amr_mf[p->level].nGrow(2); ++k)
+#define IMALOOP for(i = -p->amr_cell_mf[p->level].nGrow(0); i <= imax_amrex + p->amr_cell_mf[p->level].nGrow(0); ++i)
+#define JMALOOP for(j = -p->amr_cell_mf[p->level].nGrow(1); j <= jmax_amrex + p->amr_cell_mf[p->level].nGrow(1); ++j)
+#define KMALOOP for(k = -p->amr_cell_mf[p->level].nGrow(2); k <= kmax_amrex + p->amr_cell_mf[p->level].nGrow(2); ++k)
 
 #define IFLEXLOOP for(i = 0; i <= imax_amrex - ulast; ++i)
 #define JFLEXLOOP for(j = 0; j <= jmax_amrex - vlast; ++j)
