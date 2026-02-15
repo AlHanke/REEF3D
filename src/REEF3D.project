@@ -2700,7 +2700,6 @@
         <File Name="gc_potential.cpp"/>
         <File Name="gc_start.cpp"/>
         <File Name="gc_outflow.cpp"/>
-        <File Name="gc_lsm.cpp"/>
         <File Name="gc_neumann.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Flag">

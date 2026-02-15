@@ -55,9 +55,6 @@ void ghostcell::gcdistro(field& f, int ii, int jj, int kk, double dist, bc_label
         case bc_labels::DIRICHLET_PARA_REFLECT:
             dirichlet_para_reflect(f,dist,cs);
             break;
-        case bc_labels::LSM:
-            lsm(f,cs);
-            break;
         case bc_labels::HEATBC:
             heatbc(f,cs);
             break;

@@ -226,7 +226,7 @@ public:
 
 private:
     enum bc_labels { NONE=0, DIRICHLET_ORTH=1, DIRICHLET_PARA=2, NEUMANN=4, NOSLIP=5, OUTFLOW=6, SOMMERFELD=7, POTENTIAL=8,
-         DIRICHLET_ORTH_REFLECT=11, DIRICHLET_PARA_REFLECT=12, NEUMANN_X=14, LSM=22, NEUMANN_HX=41, NEUMANN_HY=42,
+         DIRICHLET_ORTH_REFLECT=11, DIRICHLET_PARA_REFLECT=12, NEUMANN_X=14, NEUMANN_HX=41, NEUMANN_HY=42,
          HEATBC=61 };
     enum dir_labels { X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2, Z_NEG=5, Z_POS=6 };
 
@@ -268,7 +268,6 @@ private:
     void heatbc(field&,int);
     void potentialbc(field&,int);
     void outflow(field&,int);
-    void lsm(field&,int);
     void dirichlet_para(field&,double,int);
     void dirichlet_para_reflect(field&,double,int);
     void dirichlet_ortho_reflect(field&,double,int);
