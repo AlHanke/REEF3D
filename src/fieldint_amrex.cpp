@@ -38,17 +38,7 @@ fieldint_amrex::fieldint_amrex(lexer* p)
 
 int& fieldint_amrex::operator()(int ii, int jj, int kk) noexcept
 {
-    using namespace amrex;
-
-    IntVect cell_index{AMREX_D_DECL(ii + p->origin_i, jj + p->origin_j, kk + p->origin_k)};
-
-    for (MFIter mfi(mf[p->level]); mfi.isValid(); ++mfi)
-    {
-        const Box& box = mfi.fabbox();
-        const auto cell_index = box.smallEnd() + IntVect{AMREX_D_DECL(ii + p->margin, jj + p->margin, kk + p->margin)};
-        return mf[p->level].array(mfi)(cell_index, 0);
-    }
-    // return (mf[p->level][*(p->amr_mfi)].array()(amrex::IntVect{AMREX_D_DECL(ii, jj, kk)} + amrex::IntVect{amrex::lbound(p->amr_mfi->validbox())}, 0));
+    return (mf[p->level][*(p->amr_mfi)].array()(amrex::IntVect{AMREX_D_DECL(ii, jj, kk)} + amrex::IntVect{amrex::lbound(p->amr_mfi->validbox())}, 0));
 }
 
 void fieldint_amrex::setVal(int val, bool includeGhost)
