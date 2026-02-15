@@ -3078,7 +3078,6 @@
           <File Name="iowave.cpp"/>
           <VirtualDirectory Name="SFLOW">
             <File Name="iowave_sflow_wavegen.cpp"/>
-            <File Name="iowave_sflow_waterlevel.cpp"/>
             <File Name="iowave_sflow_relax.cpp"/>
             <File Name="iowave_sflow_precalc_ini.cpp"/>
             <File Name="iowave_sflow_precalc.cpp"/>
