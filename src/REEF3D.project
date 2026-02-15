@@ -1008,6 +1008,7 @@
           <File Name="field4.h"/>
           <File Name="field_amrex.h"/>
           <File Name="fields_amrex.h"/>
+          <File Name="amrex_bc_func.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Fieldint">
           <File Name="fieldint.h"/>
