@@ -224,12 +224,6 @@ public:
 	void gcdistro3(lexer*, field&, int, int, int, int, double, int, int, int);
 	void gcdistro4(lexer*, field&, int, int, int, int, double, int, int, int);
 	void gcdistro4a(lexer*, field&, int, int, int, int, double, int, int, int);
-    
-	int gceval1(lexer*,int,int,int);
-	int gceval2(lexer*,int,int,int);
-	int gceval3(lexer*,int,int,int);
-	int gceval4(lexer*,int,int,int);
-	int gceval4a(lexer*,int,int,int);
     void fivec(lexer*,double*,sliceint&);
     void fivec2D(lexer*,double*,sliceint&);
     void fivec_vel(lexer*,double*,sliceint&);
@@ -252,6 +246,16 @@ private:
     void Sendrecv_3D(const void*[6],int[6],void*[6],int[6],MPI_Datatype);
     
     void gcwait(lexer*);   
+
+    bc_labels gceval1(lexer*,int,int,int);
+    bc_labels gceval2(lexer*,int,int,int);
+    bc_labels gceval3(lexer*,int,int,int);
+    bc_labels gceval4(lexer*,int,int,int);
+    bc_labels gceval4a(lexer*,int,int,int);
+
+    bc_labels gcsleval1(int,int,int);
+    bc_labels gcsleval2(int,int,int);
+    bc_labels gcsleval4(int,int,int);
 
     // boundary conditions
     void heatbc(field&,int);
@@ -292,23 +296,23 @@ private:
     int ndims;
 
 	int margin, paramargin;
-	double y[15],x[15],pos[15];
+	double y[15],pos[15];
 	int m,q,qq,qn,g;
-	int bc_label;
 	double wallvalue,x_ip,val_ip,gamma;
 	int orderdir;
 	double weight;
     int count;
     double starttime,endtime;
     int ys;
-    int gcval_topodist;
-	int gclabel_outflow;
-    int gclabel_u, gclabel_v, gclabel_w, gclabel_k, gclabel_e;
-    int gclabel_utopo, gclabel_vtopo, gclabel_wtopo;
-    int gclabel_u_orth,gclabel_v_orth,gclabel_w_orth,gclabel_press,gclabel_lsm;
-    int gclabel_u_in,gclabel_v_in,gclabel_w_in,gclabel_press_in,gclabel_lsm_in;
-	int gclabel_u_out, gclabel_v_out, gclabel_w_out;
-	int gclabel_vel;
+
+    bc_labels gcval_topodist;
+	bool gclabel_outflow;
+    bc_labels gclabel_u, gclabel_v, gclabel_w;
+    bc_labels gclabel_utopo, gclabel_vtopo, gclabel_wtopo;
+    bc_labels gclabel_u_orth,gclabel_v_orth,gclabel_w_orth;
+    bc_labels gclabel_u_in,gclabel_v_in,gclabel_w_in,gclabel_press_in,gclabel_lsm_in;
+	bc_labels gclabel_u_out, gclabel_v_out, gclabel_w_out;
+    bool awa_lable,pressout_lable,pressin_lable;
 
 // PARALLEL
 	double *send1,*send2,*send3,*send4,*send5,*send6;
@@ -317,7 +321,6 @@ private:
 	int *irecv1,*irecv2,*irecv3,*irecv4,*irecv5,*irecv6;
 	double recvsum,recvmin,recvmax;
 	int recvisum,recvimin,recvimax;
-	int awa_lable,pressout_lable,pressin_lable;
     
     int nb0[6],stag[6],rtag[6];
     

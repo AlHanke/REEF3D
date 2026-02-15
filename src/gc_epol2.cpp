@@ -22,98 +22,83 @@ Author: Hans Bihs
 
 #include"ghostcell.h"
 
-int ghostcell::gceval2(lexer *p, int gcv, int bc, int cs)
+ghostcell::bc_labels ghostcell::gceval2(lexer *p, int gcv, int bc, int cs)
 {
-//	Velocities
+    // Velocities
     if(gcv==50)
-	return 4;
+        return bc_labels::NEUMANN;
 
     // Parallel
-	//Wall
-	if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==11||gcv==2))
-	return gclabel_v;
-	
-	if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==111))
-	return 5;
-	
-	if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==115))
-	return gclabel_v;
-    
-    if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==118))
-	return 4;
-    
+    //Wall
+    else if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==11||gcv==2))
+        return gclabel_v;
+
+    else if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==111))
+        return bc_labels::NOSLIP;
+
+    else if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==115))
+        return gclabel_v;
+
+    else if((bc==21||bc==22||bc==7||bc==6)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==118))
+        return bc_labels::NEUMANN;
+
     // Topo
-    if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==11||gcv==2))
-	return gclabel_vtopo;
-	
-	if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==111))
-	return 5;
-	
-	if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==115))
-	return gclabel_vtopo;
-    
-    if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==118))
-	return 4;
-	
-	else
-	if((bc==21||bc==22||bc==5) && gcv==15)
-	return 4;
-	
+    else if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==11||gcv==2))
+        return gclabel_vtopo;
+
+    else if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==111))
+        return bc_labels::NOSLIP;
+
+    else if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==115))
+        return gclabel_vtopo;
+
+    else if((bc==5)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==118))
+        return bc_labels::NEUMANN;
+
+    else if((bc==21||bc==22||bc==5) && gcv==15)
+        return bc_labels::NEUMANN;
+
     // Orthogonal
-	else
-	if((bc==21||bc==22||bc==5||bc==7)&&(cs==2||cs==3)&&(gcv==11||gcv==2))
-	return gclabel_v_orth;
+    else if((bc==21||bc==22||bc==5||bc==7)&&(cs==2||cs==3)&&(gcv==11||gcv==2))
+        return gclabel_v_orth;
 
-	else
-	if((bc==21||bc==22||bc==5||bc==7)&&(cs==2||cs==3)&&gcv==8)
-	return gclabel_vel;
-	
+    else if((bc==21||bc==22||bc==5||bc==7)&&(cs==2||cs==3)&&gcv==8)
+        return bc_labels::NOSLIP;
 
-//Inflow
+    //Inflow
+    else if((bc==6  && (gcv==11||gcv==2||gcv==8)))
+        return gclabel_v_in;
+
+    //Outflow
+    else if((bc==2 && gclabel_outflow==1) && (gcv==11||gcv==2) && (cs==1||cs==4||cs==5||cs==6))
+        return bc_labels::NEUMANN;
+
+    else if((bc==2 && gclabel_outflow==1) && (gcv==11||gcv==2) && (cs==2||cs==3))
+        return gclabel_v_out;
+
+    //Patch
+    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==11||gcv==2||gcv==8))
+        return bc_labels::NEUMANN;
+
+    //Free Surface
+    else if(bc==3 && (cs==1||cs==4||cs==5||cs==6) && (gcv==11||gcv==18 || gcv==2))
+        return bc_labels::NEUMANN;
+
+    else if(bc==3 && (cs==2||cs==3)&&(gcv==11||gcv==18 || gcv==2))
+        return bc_labels::DIRICHLET_ORTH;
+
+    else if((bc==9) && cs==6 && (gcv==11||gcv==18 || gcv==2))
+        return bc_labels::NEUMANN;
+
+    // 6DOF
+    else if(bc==41||bc==42||bc==43)
+        return bc_labels::NHPRESS;
+
+    else if(gcv==999)
+        return bc_labels::DEBUG;
+
     else
-	if((bc==6  && (gcv==11||gcv==2||gcv==8)))
-	return gclabel_v_in;
-	
-//Outflow
-	else
-	if((bc==2 && gclabel_outflow==1) && (gcv==11||gcv==2) && (cs==1||cs==4||cs==5||cs==6))
-	return 4;
-	
-	else
-	if((bc==2 && gclabel_outflow==1) && (gcv==11||gcv==2) && (cs==2||cs==3))
-	return gclabel_v_out;
-    
-//Patch    
-    else
-	if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==11||gcv==2||gcv==8))
-	return 4;
-
-
-//Free Surface
-	else
-	if(bc==3 && (cs==1||cs==4||cs==5||cs==6) && (gcv==11||gcv==18 || gcv==2))
-	return 4;
-
-	else
-	if(bc==3 && (cs==2||cs==3)&&(gcv==11||gcv==18 || gcv==2))
-	return 1;
-	
-	else
-	if((bc==9) && cs==6 && (gcv==11||gcv==18 || gcv==2))
-	return 4;
-	
-// 6DOF
-	else
-	if(bc==41||bc==42||bc==43)
-	return 9;
-
-
-     else
-	if(gcv==999)
-	return 99;
-
-	else
-	return 0;
+        return bc_labels::NONE;
 }
 
 
