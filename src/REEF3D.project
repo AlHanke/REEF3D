@@ -1121,6 +1121,7 @@
           <File Name="fieldint3.h"/>
           <File Name="fieldint4.h"/>
         </VirtualDirectory>
+        <File Name="field_base.h"/>
         <VirtualDirectory Name="Geotopo">
           <File Name="geotopo.h"/>
         </VirtualDirectory>
