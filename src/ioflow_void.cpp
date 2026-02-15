@@ -68,231 +68,41 @@ void ioflow_v::rkinflow(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, fi
 
 void ioflow_v::velocity_inlet(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, field &w)
 {
-//  velocity inlet
-    GC1LOOP
+    if(p->W11==1 && p->bc_type[0] == 1)
     {
-        if(p->W11==1)
-        if(p->gcb1[n][3]==1 && p->gcb1[n][4]==1)
-        {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
-
-            u(i-1,j,k) = p->W11_u;
-            u(i-2,j,k) = p->W11_u;
-            u(i-3,j,k) = p->W11_u;
-        }
-
-        if(p->W12==1)
-        if(p->gcb1[n][3]==2 && p->gcb1[n][4]==1)
-        {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
-
-            u(i,j+1,k) = p->W12_u;
-            u(i,j+2,k) = p->W12_u;
-            u(i,j+3,k) = p->W12_u;
-        }
-
-        if(p->W13==3)
-        if(p->gcb1[n][3]==3 && p->gcb1[n][4]==1)
-        {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
-
-            u(i,j-1,k) = p->W13_u;
-            u(i,j-2,k) = p->W13_u;
-            u(i,j-3,k) = p->W13_u;
-        }
-
-        if(p->W14==1)
-        if(p->gcb1[n][3]==4 && p->gcb1[n][4]==1)
-        {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
-
-            u(i+1,j,k) = p->W14_u;
-            u(i+2,j,k) = p->W14_u;
-            u(i+3,j,k) = p->W14_u;
-        }
-
-        if(p->W15==1)
-        if(p->gcb1[n][3]==5 && p->gcb1[n][4]==1)
-        {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
-
-            u(i,j,k-1) = p->W15_u;
-            u(i,j,k-2) = p->W15_u;
-            u(i,j,k-3) = p->W15_u;
-        }
-
-        if(p->W16==1)
-        if(p->gcb1[n][3]==6 && p->gcb1[n][4]==1)
-        {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
-
-            u(i,j,k) = p->W16_u;
-            u(i,j,k+1) = p->W16_u;
-            u(i,j,k+2) = p->W16_u;
-            u(i,j,k+3) = p->W16_u;
-        }
+        u.FillDomainBoundaryValue(p->W11_u, 0, false);
+        v.FillDomainBoundaryValue(p->W11_v, 0, false);
+        w.FillDomainBoundaryValue(p->W11_w, 0, false);
     }
-
-    GC2LOOP
+    if(p->W14==1 && p->bc_type[1] == 1)
     {
-        if(p->W11==1)
-        if(p->gcb2[n][3]==1 && p->gcb2[n][4]==1)
-        {
-            i=p->gcb2[n][0];
-            j=p->gcb2[n][1];
-            k=p->gcb2[n][2];
-
-            v(i-1,j,k) = p->W11_v;
-            v(i-2,j,k) = p->W11_v;
-            v(i-3,j,k) = p->W11_v;
-        }
-
-        if(p->W12==1)
-        if(p->gcb2[n][3]==2 && p->gcb2[n][4]==1)
-        {
-            i=p->gcb2[n][0];
-            j=p->gcb2[n][1];
-            k=p->gcb2[n][2];
-
-            v(i,j+1,k) = p->W12_v;
-            v(i,j+2,k) = p->W12_v;
-            v(i,j+3,k) = p->W12_v;
-        }
-
-        if(p->W13==3)
-        if(p->gcb2[n][3]==3 && p->gcb2[n][4]==1)
-        {
-            i=p->gcb2[n][0];
-            j=p->gcb2[n][1];
-            k=p->gcb2[n][2];
-
-            v(i,j-1,k) = p->W13_v;
-            v(i,j-2,k) = p->W13_v;
-            v(i,j-3,k) = p->W13_v;
-        }
-
-        if(p->W14==1)
-        if(p->gcb2[n][3]==4 && p->gcb2[n][4]==1)
-        {
-            i=p->gcb2[n][0];
-            j=p->gcb2[n][1];
-            k=p->gcb2[n][2];
-
-            v(i+1,j,k) = p->W14_v;
-            v(i+2,j,k) = p->W14_v;
-            v(i+3,j,k) = p->W14_v;
-        }
-
-        if(p->W15==1)
-        if(p->gcb2[n][3]==5 && p->gcb2[n][4]==1)
-        {
-            i=p->gcb2[n][0];
-            j=p->gcb2[n][1];
-            k=p->gcb2[n][2];
-
-            v(i,j,k-1) = p->W15_v;
-            v(i,j,k-2) = p->W15_v;
-            v(i,j,k-3) = p->W15_v;
-        }
-
-        if(p->W16==1)
-        if(p->gcb2[n][3]==6 && p->gcb2[n][4]==1)
-        {
-            i=p->gcb2[n][0];
-            j=p->gcb2[n][1];
-            k=p->gcb2[n][2];
-
-            v(i,j,k+1) = p->W16_v;
-            v(i,j,k+2) = p->W16_v;
-            v(i,j,k+3) = p->W16_v;
-        }
+        u.FillDomainBoundaryValue(p->W14_u, 0, true);
+        v.FillDomainBoundaryValue(p->W14_v, 0, true);
+        w.FillDomainBoundaryValue(p->W14_w, 0, true);
     }
-
-    GC3LOOP
+    if(p->W13==3 && p->bc_type[2] == 1)
     {
-        if(p->W11==1)
-        if(p->gcb3[n][3]==1 && p->gcb3[n][4]==1)
-        {
-            i=p->gcb3[n][0];
-            j=p->gcb3[n][1];
-            k=p->gcb3[n][2];
-
-            w(i-1,j,k) = p->W11_w;
-            w(i-2,j,k) = p->W11_w;
-            w(i-3,j,k) = p->W11_w;
-        }
-
-        if(p->W12==1)
-        if(p->gcb3[n][3]==2 && p->gcb3[n][4]==1)
-        {
-            i=p->gcb3[n][0];
-            j=p->gcb3[n][1];
-            k=p->gcb3[n][2];
-
-            w(i,j+1,k) = p->W12_w;
-            w(i,j+2,k) = p->W12_w;
-            w(i,j+3,k) = p->W12_w;
-        }
-
-        if(p->W13==3)
-        if(p->gcb3[n][3]==3 && p->gcb3[n][4]==1)
-        {
-            i=p->gcb3[n][0];
-            j=p->gcb3[n][1];
-            k=p->gcb3[n][2];
-
-            w(i,j-1,k) = p->W13_w;
-            w(i,j-2,k) = p->W13_w;
-            w(i,j-3,k) = p->W13_w;
-        }
-
-        if(p->W14==1)
-        if(p->gcb3[n][3]==4 && p->gcb3[n][4]==1)
-        {
-            i=p->gcb3[n][0];
-            j=p->gcb3[n][1];
-            k=p->gcb3[n][2];
-
-            w(i+1,j,k) = p->W14_w;
-            w(i+2,j,k) = p->W14_w;
-            w(i+3,j,k) = p->W14_w;
-        }
-
-        if(p->W15==1)
-        if(p->gcb3[n][3]==5 && p->gcb3[n][4]==1)
-        {
-            i=p->gcb3[n][0];
-            j=p->gcb3[n][1];
-            k=p->gcb3[n][2];
-
-            w(i,j,k-1) = p->W15_w;
-            w(i,j,k-2) = p->W15_w;
-            w(i,j,k-3) = p->W15_w;
-        }
-
-        if(p->W16==1)
-        if(p->gcb3[n][3]==6 && p->gcb3[n][4]==1)
-        {
-            i=p->gcb3[n][0];
-            j=p->gcb3[n][1];
-            k=p->gcb3[n][2];
-
-            w(i,j,k+1) = p->W16_w;
-            w(i,j,k+2) = p->W16_w;
-            w(i,j,k+3) = p->W16_w;
-        }
+        u.FillDomainBoundaryValue(p->W13_u, 1, false);
+        v.FillDomainBoundaryValue(p->W13_v, 1, false);
+        w.FillDomainBoundaryValue(p->W13_w, 1, false);
+    }
+    if(p->W12==1 && p->bc_type[3] == 1)
+    {
+        u.FillDomainBoundaryValue(p->W12_u, 1, true);
+        v.FillDomainBoundaryValue(p->W12_v, 1, true);
+        w.FillDomainBoundaryValue(p->W12_w, 1, true);
+    }
+    if(p->W15==1 && p->bc_type[4] == 1)
+    {
+        u.FillDomainBoundaryValue(p->W15_u, 2, false);
+        v.FillDomainBoundaryValue(p->W15_v, 2, false);
+        w.FillDomainBoundaryValue(p->W15_w, 2, false);
+    }
+    if(p->W16==1 && p->bc_type[5] == 1)
+    {
+        u.FillDomainBoundaryValue(p->W16_u, 2, true);
+        v.FillDomainBoundaryValue(p->W16_v, 2, true);
+        w.FillDomainBoundaryValue(p->W16_w, 2, true);
     }
 }
 
