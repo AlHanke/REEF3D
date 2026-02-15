@@ -27,8 +27,7 @@ Author: Hans Bihs
 
 void grid_helper::fillgcb4_wall(lexer *p)
 {
-    int q,n;
-
+    int n;
 
     fieldint4 cval(p);
 
@@ -36,17 +35,16 @@ void grid_helper::fillgcb4_wall(lexer *p)
 
     BASELOOP
     {
-    cval(i,j,k)=count;
+        cval(i,j,k)=count;
 
-    ++count;
+        ++count;
     }
 
     GC4LOOP
     {
-    i=p->gcb4[n][0];
-    j=p->gcb4[n][1];
-    k=p->gcb4[n][2];
-    p->gcb4[n][5]=cval(i,j,k);
+        i=p->gcb4[n][0];
+        j=p->gcb4[n][1];
+        k=p->gcb4[n][2];
+        p->gcb4[n][5]=cval(i,j,k);
     }
-
 }
