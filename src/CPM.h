@@ -30,7 +30,7 @@ CPM : Continuum Particle Method
 #include"increment.h"
 #include"part.h"
 #include"slice4.h"
-#include"field4a.h"
+#include"field4.h"
 #include"boundarycheck.h"
 #include"vtp3D.h"
 
@@ -108,8 +108,8 @@ private:
 
     slice4 bedch;
 
-    field4a Tau,Ts,press,test;
-    field4a cellSum;
+    field4 Tau,Ts,press,test;
+    field4 cellSum;
 
     // relax
     void relax_ini(lexer*);
@@ -129,8 +129,8 @@ private:
     int printcount;
     double printtime;
 
-    field4a dPx,dPy,dPz;
-    field4a dTx,dTy,dTz;
+    field4 dPx,dPy,dPz;
+    field4 dTx,dTy,dTz;
 
     double *tan_betaQ73,*betaQ73,*dist_Q73;
 

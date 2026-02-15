@@ -26,7 +26,6 @@ Author: Hans Bihs
 #include"sediment.h"
 #include"sliceint4.h"
 #include"slice4.h"
-#include"field4a.h"
 #include"increment.h"
 
 class bedload;
