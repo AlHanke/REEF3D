@@ -22,9 +22,8 @@ Author: Hans Bihs
 
 #include"ghostcell.h"
 #include"lexer.h"
-#include"fdm.h"
 
-void ghostcell::flagbase(lexer *p, fdm *a)
+void ghostcell::flagbase(lexer *p)
 {
     int bc=0;
 
@@ -207,4 +206,3 @@ void ghostcell::flagbase(lexer *p, fdm *a)
         p->flag5[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1+q]=-6;
     }
 }
-
