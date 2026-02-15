@@ -27,7 +27,6 @@ Author: Hans Bihs
 #include"gradient.h"
 #include"resize.h"
 #include"fieldint4.h"
-#include"fieldint5.h"
 #include"field4.h"
 #include"vtp3D.h"
 
@@ -53,7 +52,7 @@ private:
     void pvtp(lexer*,int);
     char name[200];
     int offset[200];
-    fieldint5 vertice, nodeflag;
+    fieldint4 vertice, nodeflag;
 
     field4 d0;
     fieldint4 wallf;
