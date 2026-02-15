@@ -3064,7 +3064,6 @@
           <File Name="iowave_precalc_decomp_time.cpp"/>
           <File Name="iowave_precalc_decomp_space.cpp"/>
           <File Name="iowave_precalc_decomp_relax.cpp"/>
-          <File Name="iowave_precalc_decomp_dirichlet.cpp"/>
           <File Name="iowave_precalc.cpp"/>
           <File Name="iowave_ini.cpp"/>
           <File Name="iowave_inflow.cpp"/>
