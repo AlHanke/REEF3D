@@ -40,6 +40,13 @@ namespace amrex {
     class DistributionMapping;
 }
 
+/*!
+    * @brief grid_amrex is a class that incorporates AMReX data structures and functionalities for handling the computational grid in REEF3D.
+    * It inherits from the grid class and extends it with AMReX-specific members and methods.
+    * The class includes methods for defining inflow and outflow boundary areas, setting up AMReX geometry, and managing AMReX MultiFabs and iMultiFabs for cell-centered data and flags.
+    * It also includes members for storing AMReX Geometry, BoxArray, and DistributionMapping for each level of the AMR hierarchy.
+    * The class is designed to facilitate the integration of AMReX's capabilities for handling complex grid structures and parallel computations within the REEF3D framework.
+*/
 class grid_amrex : public grid
 {
 public:
@@ -48,11 +55,11 @@ public:
 
     void define_inflow_outflow_ba();
 
-    // AMReX Geometry
-    amrex::Vector<amrex::Geometry> amrex_geometry;
-    amrex::Vector<amrex::BoxArray> amrex_box_array;
-    amrex::Vector<amrex::DistributionMapping> amrex_distribution_mapping;
-    amrex::Vector<amrex::Vector<std::pair<amrex::RealVect,amrex::RealVect>>> amrex_refined_grid_coords;
+    // AMReX Data structures
+    amrex::Vector<amrex::Geometry> amrex_geometry; // Phyiscal domain and coordinate system
+    amrex::Vector<amrex::BoxArray> amrex_box_array; // BoxArray defines the index space decomposition of the domain into boxes
+    amrex::Vector<amrex::DistributionMapping> amrex_distribution_mapping; // DistributionMapping defines the mapping of boxes in the BoxArray to MPI ranks
+    amrex::Vector<amrex::Vector<std::pair<amrex::RealVect,amrex::RealVect>>> amrex_refined_grid_coords; // Input: Coordinates of the refined grid boxes for each level
 
     // Looping structures
     amrex::Vector<amrex::MultiFab> amr_cell_mf;

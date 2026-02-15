@@ -27,6 +27,12 @@ Authors: Hans Bihs, Alexander Hanke
 
 class ghostcell;
 
+/*!
+    * @brief The grid class is responsible for defining the computational grid in REEF3D, including the grid spacing.
+    * It provides methods for initializing the grid, calculating grid spacing, and managing boundary conditions.
+    * The class includes members for storing nodal and cell-centered coordinates, grid spacing.
+    * It also includes methods for assigning margins and initializing sigma coordinates for vertical grids.
+*/
 class grid : virtual public increment
 {
 public:
@@ -43,9 +49,9 @@ public:
     double *XP,*YP,*ZP; // Cell center coordinates
     double *DXN,*DYN,*DZN; // Nodal grid spacing
     double *DXP,*DYP,*DZP; // Cell center grid spacing
-    double *ZSN,*ZSP;
-    double DXM,DYD,DXD;
-    double DYM,DZM;
+    double *ZSN,*ZSP; // Sigma coordinates (z direction)
+    double DXM; // Average grid spacing (all directions)
+    double DXD,DYD; // Average grid spacing in x and y direction
 
     double *RN,*SN,*TN; // Temporary arrays
     double *RP,*SP,*TP; // Temporary arrays
@@ -54,33 +60,34 @@ public:
     double *DRDXP,*DSDYP,*DTDZP;
 
     // boundary conditions
-    int *IO,*IOSL;
+    int *IO,*IOSL; // 0: no BC, 1: inflow, 2: outflow
     int *DF,*DF1,*DF2,*DF3;
     int *DFBED;
 
-    bool i_dir,j_dir,k_dir;
-    double x_dir,y_dir,z_dir;
+    bool i_dir,j_dir,k_dir; // existance of directions
+    double x_dir,y_dir,z_dir; // existance of directions
 
-    int **gcin, **gcout;
-    int gcin_count, gcout_count;
+    int **gcin, **gcout; // inflow and outflow ghost cell coordinates (i,j,k) and direction
+    int gcin_count, gcout_count; // number of inflow and outflow ghost cells
 
     // maxcoor
     double xcoormax,xcoormin,ycoormax,ycoormin,zcoormax,zcoormin;
     double maxlength;
 
-    int knox,knoy,knoz;
     const int margin = 3;
 
-    double originx,originy,originz;
-    double endx,endy,endz;
-    double global_xmin,global_ymin,global_zmin;
-    double global_xmax,global_ymax,global_zmax;
-    int origin_i, origin_j, origin_k;
-    int gknox,gknoy,gknoz;
+    double originx,originy,originz; // physical coordinates of the rank's origin (i=0,j=0,k=0)
+    double endx,endy,endz; // physical coordinates of the rank's end point (i=knox,j=knoy,k=knoz)
+    double global_xmin,global_ymin,global_zmin; // global minimum coordinates
+    double global_xmax,global_ymax,global_zmax; // global maximum coordinates
 
-    int imin,imax,jmin,jmax,kmin,kmax,kmaxF;
+    int origin_i, origin_j, origin_k; // grid indices corresponding to the rank's origin (i=0,j=0,k=0)
+    int knox,knoy,knoz; // local grid size (excluding margins)
+    int gknox,gknoy,gknoz; // global grid size (excluding margins)
 
-    double dx,dy,dz;
+    int imin,imax,jmin,jmax,kmin,kmax,kmaxF; // grid index limits (including margins) for array access
+
+    double dx;
 };
 
 #endif

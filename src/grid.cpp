@@ -48,6 +48,12 @@ void grid::sigma_coord_ini()
     ZN[KP] = (ZN[KP]-ZN0temp)/L;
 }
 
+/*!
+    * @brief The gridspacing method calculates the grid spacing for the computational grid in REEF3D.
+    * It initializes the cell-centered coordinates (XP, YP, ZP) and the grid spacing (DXN, DYN, DZN for nodal spacing and DXP, DYP, DZP for cell-centered spacing).
+    * It also calculates the average grid spacing (DXM) and the minimum grid spacing in x and y directions (DXD, DYD).
+    * The method uses a resize_class to allocate memory for the necessary arrays and performs global reductions to compute the average and minimum grid spacings across all MPI ranks.
+*/
 void grid::gridspacing(ghostcell *pgc)
 {
     resize_class resizer;
