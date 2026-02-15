@@ -28,7 +28,7 @@ class field_base
 {
 public:
     virtual ~field_base() = default;
-    virtual T& operator()(int ii, int jj, int kk) = 0;
+    virtual T& operator()(int ii, int jj, int kk, bool addOrigin=true) = 0;
     virtual void setVal(T val, bool includeGhost = false) = 0;
 
     virtual void FillBoundary() = 0;

@@ -33,7 +33,7 @@ class fieldint_amrex : public fieldint
 public:
     virtual ~fieldint_amrex() = default;
 
-    int& operator()(int ii, int jj, int kk) override;
+    int& operator()(int ii, int jj, int kk, bool addOrigin = true) override;
 
     void setVal(int val, bool includeGhost = false) override;
 
