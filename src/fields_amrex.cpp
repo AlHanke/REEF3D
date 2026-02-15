@@ -105,7 +105,7 @@ field4::field4(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::CELL_CENT
     params.H66 = p->H66;
     params.pressout_label = (p->B77 == 1 || p->B77 == 10);
     params.pressin_label = (p->B76 != 1);
-    params.awa_label = (p->B99 >= 3);
+    params.awa_label = field_amrex_detail::compute_awa_label(p);
     params.gclabel_lsm_in_neumann = !(p->I230 > 0 || p->B98 >= 3 || p->B60 > 0);
     params.gclabel_press_in_neumann = (p->B76 != 2 && p->B76 != 3);
 }
