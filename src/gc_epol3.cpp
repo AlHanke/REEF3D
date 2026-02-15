@@ -31,76 +31,70 @@ ghostcell::bc_labels ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
 
     // Parallel
     // Wall
-    else if((bc==21||bc==22||(bc==7&&awa_lable==0))&&(cs==2||cs==3||cs==1||cs==4)&&(gcv==12||gcv==3))
+    else if((bc==21 || bc==22 || (bc==7 && awa_lable==0)) && (cs==2 || cs==3 || cs==1 || cs==4) && (gcv==12 || gcv==3))
         return gclabel_w;
 
-    else if((bc==21||bc==22||(bc==7&&awa_lable==0))&&(cs==2||cs==3||cs==1||cs==4)&&(gcv==112))
+    else if((bc==21 || bc==22 || (bc==7 && awa_lable==0)) && (cs==2 || cs==3 || cs==1 || cs==4) && (gcv==112))
         return bc_labels::NOSLIP;
 
-    else if((bc==21||bc==22||(bc==7&&awa_lable==0))&&(cs==2||cs==3||cs==1||cs==4)&&(gcv==116))
+    else if((bc==21 || bc==22 || (bc==7 && awa_lable==0)) && (cs==2 || cs==3 || cs==1 || cs==4) && (gcv==116))
         return gclabel_w;
 
-    else if((bc==21||bc==22||(bc==7&&awa_lable==0))&&(cs==2||cs==3||cs==1||cs==4)&&(gcv==119))
+    else if((bc==21 || bc==22 || (bc==7 && awa_lable==0)) && (cs==2 || cs==3 || cs==1 || cs==4) && (gcv==119))
         return bc_labels::NEUMANN;
 
     // Topo
-    else if((bc==5)&&(cs==2||cs==3||cs==1||cs==4)&&(gcv==12||gcv==3))
+    else if((bc==5) && (cs==2 || cs==3 || cs==1 || cs==4) && (gcv==12 || gcv==3))
         return gclabel_wtopo;
 
-    else if((bc==5)&&(cs==2||cs==3||cs==1||cs==4)&&(gcv==112))
+    else if((bc==5) && (cs==2 || cs==3 || cs==1 || cs==4) && (gcv==112))
         return bc_labels::NOSLIP;
 
-    else if((bc==5)&&(cs==2||cs==3||cs==1||cs==4)&&(gcv==116))
+    else if((bc==5) && (cs==2 || cs==3 || cs==1 || cs==4) && (gcv==116))
         return gclabel_wtopo;
 
-    else if((bc==5)&&(cs==2||cs==3||cs==1||cs==4)&&(gcv==119))
+    else if((bc==5) && (cs==2 || cs==3 || cs==1 || cs==4) && (gcv==119))
         return bc_labels::NEUMANN;
 
-    else if((bc==21||bc==22||bc==5) && gcv==16)
+    else if((bc==21 || bc==22 || bc==5) && gcv==16)
         return bc_labels::NEUMANN;
 
     // Othogonal
-    else if((bc==21||bc==22||bc==5||(bc==7&&awa_lable==0))&&(cs==6)&&(gcv==12||gcv==3))
+    else if((bc==21 || bc==22 || bc==5 || (bc==7 && awa_lable==0)) && (cs==6 || (cs==5 && (p->A10==5 || p->A10==6))) && (gcv==12 || gcv==3))
         return gclabel_w_orth;
 
-    else if((bc==21||bc==22||bc==5||(bc==7&&awa_lable==0))&&(cs==5)&&(gcv==12||gcv==3)&&p->A10==6)
-        return gclabel_w_orth;
-
-    else if((bc==21||bc==22||bc==5||(bc==7&&awa_lable==0))&&(cs==5)&&(gcv==12||gcv==3)&&p->A10==5)
-        return gclabel_w_orth;
-
-    else if((bc==21||bc==22||bc==5||(bc==7&&awa_lable==0))&&(cs==5||cs==6)&&gcv==9)
+    else if((bc==21 || bc==22 || bc==5 || (bc==7 && awa_lable==0)) && (cs==5 || cs==6) && gcv==9)
         return bc_labels::NOSLIP;
 
     //Inflow
-    else if((bc==6 && (gcv==12||gcv==3||gcv==9)))
+    else if((bc==6 && (gcv==12 || gcv==3 || gcv==9)))
         return gclabel_w_in;
 
     //Outflow
-    else if((bc==2 && gclabel_outflow==1) && (gcv==12||gcv==3) && (cs==2||cs==3||cs==1||cs==4))
+    else if((bc==2 && gclabel_outflow==1) && (gcv==12 || gcv==3) && (cs==2 || cs==3 || cs==1 || cs==4))
         return bc_labels::NEUMANN;
 
-    else if((bc==2 && gclabel_outflow==1) && (gcv==12||gcv==3) && (cs==5||cs==6))
+    else if((bc==2 && gclabel_outflow==1) && (gcv==12 || gcv==3) && (cs==5 || cs==6))
         return gclabel_w_out;
 
     //Patch
-    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==12||gcv==3||gcv==9))
+    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==12 || gcv==3 || gcv==9))
         return bc_labels::NEUMANN;
 
     //Free Surface
-    else if((bc==3) && (cs==2||cs==3||cs==1||cs==4) && (gcv==12||gcv==19 || gcv==3))
+    else if((bc==3) && (cs==2 || cs==3 || cs==1 || cs==4) && (gcv==12 || gcv==19 || gcv==3))
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==5||cs==6)&&(gcv==12||gcv==19 || gcv==3) && p->A10!=3 && p->A10!=5)
+    else if(bc==3 && (cs==5 || cs==6) && (gcv==12 || gcv==19 || gcv==3) && p->A10!=3 && p->A10!=5)
         return bc_labels::NOSLIP;
 
-    else if(bc==3 && (cs==5||cs==6)&&(gcv==12||gcv==19 || gcv==3) && p->A10==3)
+    else if(bc==3 && (cs==5 || cs==6) && (gcv==12 || gcv==19 || gcv==3) && p->A10==3)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==5||cs==6)&&(gcv==12||gcv==19||gcv==3||gcv==112) && p->A10==5)
+    else if(bc==3 && (cs==5 || cs==6) && (gcv==12 || gcv==19 || gcv==3 || gcv==112) && p->A10==5)
         return bc_labels::NHPRESS;
 
-    else if(bc==9 && cs==6 && (gcv==12||gcv==19 || gcv==3))
+    else if(bc==9 && cs==6 && (gcv==12 || gcv==19 || gcv==3))
         return bc_labels::NEUMANN;
 
     else if(bc==21 && cs==5 && gcv==17)
@@ -110,7 +104,7 @@ ghostcell::bc_labels ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // 6DOF
-    else if(bc==41||bc==42||bc==43)
+    else if(bc==41 || bc==42 || bc==43)
         return bc_labels::NHPRESS;
 
     else if(gcv==999)
