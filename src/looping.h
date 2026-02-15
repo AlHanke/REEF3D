@@ -274,21 +274,8 @@ Authors: Hans Bihs, Alexander Hanke
 #define GCDF4CHECK if(p->gcdf4[n][3]>0)
 #define GCDF4LOOP GCDF4 GCDF4CHECK
 
-#define GC4A for(n=0;n<p->gcb4a_count;++n)
-#define GCB4ACHECK if(p->gcb4a[n][3]>0)
-#define GC4ALOOP GC4A GCB4ACHECK
-
-#define QGC4A for(q=0;q<p->gcb4a_count;++q)
-#define QGCB4ACHECK if(p->gcb4a[q][3]>0)
-#define QGC4ALOOP QGC4A QGCB4ACHECK
-
 #define QQGC4A for(qq=0;qq<p->gcb4a_count;++qq)
 #define QQGCB4ACHECK if(p->gcb4a[qq][3]>0)
 #define QQGC4ALOOP QQGC4A QQGCB4ACHECK
-
-#define GC6LOOP   for(n=0;n<p->gcb_fix;++n)
-#define QGC6LOOP  for(q=0;q<p->gcb_fix;++q)
-#define QQGC6LOOP for(qq=0;qq<p->gcb_fix;++qq)
-#define GGC6LOOP  for(g=0;g<p->gcb_fix;++g)
 
 #endif
