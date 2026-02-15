@@ -101,18 +101,15 @@ public:
     void rownum4_update(lexer*,fieldint&);
     void rownum7_update(lexer*,int*);
 
-	void sizeM_update(lexer*,fdm*);
+	void sizeM_update(lexer*);
+    void sizeS_update(lexer*);
 
     void fdm2D_update(fdm2D*);
     void fdm_fnpf_update(fdm_fnpf*);
     void fdm_nhf_update(fdm_nhf*);
     void fdm_update(fdm*);
     
-    void gcb_velflagio(lexer*, fdm*);
-
-// 2D CPT_
-
-    void sizeS_update(lexer*);
+    void gcb_velflagio(lexer*);
     
 // Forcing CFD
     void solid_forcing(lexer*,fdm*,double,field&,field&,field&,field&,field&,field&);
