@@ -45,7 +45,7 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     amrex_geometry.resize(nlevs);
     amrex_box_array.resize(nlevs);
     amrex_distribution_mapping.resize(nlevs);
-    amr_mf.resize(nlevs);
+    amr_cell_mf.resize(nlevs);
 
     flag1_imf.resize(nlevs);
     flag2_imf.resize(nlevs);
@@ -95,7 +95,7 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
         amrex_box_array[lev] = BoxArray(all_boxes.data(), all_boxes.size());
         amrex_distribution_mapping[lev] = DistributionMapping(pmap);
 
-        amr_mf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 0, p->margin);
+        amr_cell_mf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 0, p->margin);
 
         flag1_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
         flag2_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
@@ -106,7 +106,7 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 
     amrex::MFIter::allowMultipleMFIters(true);
     level = 0;
-    default_mfi = std::make_unique<amrex::MFIter>(amr_mf[level], false);
-    amr_mfi = default_mfi.get();
+    default_cell_mfi = std::make_unique<amrex::MFIter>(amr_cell_mf[level], false);
+    amr_cell_mfi = default_cell_mfi.get();
 }
 #endif
