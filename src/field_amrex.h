@@ -27,6 +27,8 @@ Author: Alexander Hanke
 #include "field.h"
 #include "lexer.h"
 #include <AMReX_MultiFab.H>
+#include <AMReX_BCRec.H>
+#include <AMReX_Array.H>
 #include <vector>
 
 class field_amrex : public field
@@ -47,6 +49,9 @@ protected:
 
     lexer *p;
     std::vector<amrex::MultiFab> mf;
+    std::vector<amrex::Vector<amrex::BCRec>> BCRecs;
+private:
+    const amrex::Array<int,2*AMREX_SPACEDIM>face_bc_values;
 };
 
 #endif
