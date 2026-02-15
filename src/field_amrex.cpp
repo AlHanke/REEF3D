@@ -47,7 +47,7 @@ field_amrex::field_amrex(lexer* p, amrex_bc_func::DataLocation data_location): c
 
 double& field_amrex::operator()(int ii, int jj, int kk, bool addOrigin)
 {
-    return (mf[p->level][*(p->amr_cell_mfi)].array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + (addOrigin?amrex::IntVect(amrex::lbound(p->amr_cell_mfi->validbox())):amrex::IntVect()), 0));
+    return (mf[p->level][*(p->amr_cell_mfi)].array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + (addOrigin?amrex::IntVect(amrex::lbound(p->amr_cell_mfi->tilebox())):amrex::IntVect()), 0));
 }
 
 void field_amrex::setVal(double val, bool includeGhost)
