@@ -63,65 +63,66 @@ void field_amrex::FillBoundary()
 
 void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
 {
-    amrex::Box dom = p->amrex_geometry[p->level].Domain();
-    TileLOOP
+    LevelLOOP
     {
-        const amrex::Box& validbox = p->amr_cell_mfi->validbox();
-        amrex::Box gbx = validbox;
-        bool apply = false;
+        amrex::Box dom = p->amrex_geometry[p->level].Domain();
+        TileLOOP
+        {
+            const amrex::Box& validbox = p->amr_cell_mfi->validbox();
+            amrex::Box gbx = validbox;
+            bool apply = false;
 
-        // Apply boundary condition at x_min
-        if ((validbox.smallEnd(0) == dom.smallEnd(0)) && (dir == 0 && !high))
-        {
-            gbx.grow(0, p->margin);
-            gbx.setBig(0, dom.smallEnd(0) - 1);
-            apply = true;
-        }
-        // Apply boundary condition at x_max
-        if ((validbox.bigEnd(0) == dom.bigEnd(0)) && (dir == 0 && high))
-        {
-            gbx.grow(0, p->margin);
-            gbx.setSmall(0, dom.bigEnd(0) + 1);
-            apply = true;
-        }
+            amrex::IntVect ng(p->margin);
+            if (!const_params.y_dimension_exists) ng[1] = 0;
+            gbx.grow(ng);
 
-        // Apply boundary condition at y_min
-        if ((validbox.smallEnd(1) == dom.smallEnd(1)) && (dir == 1 && !high))
-        {
-            gbx.grow(1, p->margin);
-            gbx.setBig(1, dom.smallEnd(1) - 1);
-            apply = true;
-        }
-        // Apply boundary condition at y_max
-        if ((validbox.bigEnd(1) == dom.bigEnd(1)) && (dir == 1 && high))
-        {
-            gbx.grow(1, p->margin);
-            gbx.setSmall(1, dom.bigEnd(1) + 1);
-            apply = true;
-        }
-
-        // Apply boundary condition at z_min
-        if ((validbox.smallEnd(2) == dom.smallEnd(2)) && (dir == 2 && !high))
-        {
-            gbx.grow(2, p->margin);
-            gbx.setBig(2, dom.smallEnd(2) - 1);
-            apply = true;
-        }
-        // Apply boundary condition at z_max
-        if ((validbox.bigEnd(2) == dom.bigEnd(2)) && (dir == 2 && high))
-        {
-            gbx.grow(2, p->margin);
-            gbx.setSmall(2, dom.bigEnd(2) + 1);
-            apply = true;
-        }
-
-        if (apply)
-        {
-            auto arr = mf[p->level][*(p->amr_cell_mfi)].array();
-            amrex::ParallelFor(gbx, [=] AMREX_GPU_DEVICE (int i, int j, int k)
+            // Apply boundary condition at x_min
+            if ((validbox.smallEnd(0) == dom.smallEnd(0)) && (dir == 0 && !high))
             {
-                arr(i, j, k) = value;
-            });
+                gbx.setBig(0, dom.smallEnd(0) - 1);
+                apply = true;
+            }
+            // Apply boundary condition at x_max
+            if ((validbox.bigEnd(0) == dom.bigEnd(0)) && (dir == 0 && high))
+            {
+                gbx.setSmall(0, dom.bigEnd(0) + 1);
+                apply = true;
+            }
+
+            // Apply boundary condition at y_min
+            if ((validbox.smallEnd(1) == dom.smallEnd(1)) && (dir == 1 && !high))
+            {
+                gbx.setBig(1, dom.smallEnd(1) - 1);
+                apply = true;
+            }
+            // Apply boundary condition at y_max
+            if ((validbox.bigEnd(1) == dom.bigEnd(1)) && (dir == 1 && high))
+            {
+                gbx.setSmall(1, dom.bigEnd(1) + 1);
+                apply = true;
+            }
+
+            // Apply boundary condition at z_min
+            if ((validbox.smallEnd(2) == dom.smallEnd(2)) && (dir == 2 && !high))
+            {
+                gbx.setBig(2, dom.smallEnd(2) - 1);
+                apply = true;
+            }
+            // Apply boundary condition at z_max
+            if ((validbox.bigEnd(2) == dom.bigEnd(2)) && (dir == 2 && high))
+            {
+                gbx.setSmall(2, dom.bigEnd(2) + 1);
+                apply = true;
+            }
+
+            if (apply)
+            {
+                auto arr = mf[p->level][*(p->amr_cell_mfi)].array();
+                amrex::ParallelFor(gbx, [=] AMREX_GPU_DEVICE (int i, int j, int k)
+                {
+                    arr(i, j, k) = value;
+                });
+            }
         }
     }
 }
