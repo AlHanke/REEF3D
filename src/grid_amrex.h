@@ -53,6 +53,7 @@ public:
     amrex::Vector<amrex::Geometry> amrex_geometry;
     amrex::Vector<amrex::BoxArray> amrex_box_array;
     amrex::Vector<amrex::DistributionMapping> amrex_distribution_mapping;
+    amrex::Vector<amrex::Vector<std::pair<amrex::RealVect,amrex::RealVect>>> amrex_refined_grid_coords;
 
     // Looping structures
     amrex::Vector<amrex::MultiFab> amr_cell_mf;
@@ -74,6 +75,7 @@ public:
 
     int level;
     const int nlevs = 1;
+    static constexpr int ref_ratio = 2;
     const int ncomp = 1;
     int bc_type[6] = {0,0,0,0,0,0};
 
