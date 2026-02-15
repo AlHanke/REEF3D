@@ -46,10 +46,10 @@ void grid_helper::make_dgc(lexer* p)
     p->dgc3_count=1;
     p->dgc4_count=1;
 
-    p->Iarray(p->dgc1,p->dgc1_count,8);
-    p->Iarray(p->dgc2,p->dgc2_count,8);
-    p->Iarray(p->dgc3,p->dgc3_count,8);
-    p->Iarray(p->dgc4,p->dgc4_count,8);
+    p->Iarray(p->dgc1,p->dgc1_count,6);
+    p->Iarray(p->dgc2,p->dgc2_count,6);
+    p->Iarray(p->dgc3,p->dgc3_count,6);
+    p->Iarray(p->dgc4,p->dgc4_count,6);
 
 
     p->Iarray(hgc,imax*jmax*kmax);
