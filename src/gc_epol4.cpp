@@ -206,14 +206,11 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Potential Ini
-    else if(bc==gbc_labels::WALL && gcv==49)
+    else if((bc==gbc_labels::WALL || bc==gbc_labels::SYMMETRY) && gcv==49)
         return bc_labels::NEUMANN;
 
     else if((bc==gbc_labels::INFLOW || bc==gbc_labels::OUTFLOW || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==49)
         return bc_labels::POTENTIAL;
-
-    else if(bc==gbc_labels::SYMMETRY && gcv==49)
-        return bc_labels::NEUMANN;
 
     // Potential Waves
     else if((bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL) && cs!=dir_labels::Z_NEG && gcv==250)
