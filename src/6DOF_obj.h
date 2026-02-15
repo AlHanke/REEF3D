@@ -218,7 +218,7 @@ private:
     reinidisc *prdisc;
     net_interface *pnetinter;
     
-	field4a f, frk1, L, dt; 
+	field4 f, frk1, L, dt;
     int reiniter;
     
     

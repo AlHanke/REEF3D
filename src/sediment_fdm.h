@@ -28,7 +28,6 @@ Author: Hans Bihs
 #include"slice1.h"
 #include"slice2.h"
 #include"slice4.h"
-#include"field4a.h"
 
 using namespace std;
 
