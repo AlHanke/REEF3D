@@ -29,6 +29,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"ioflow.h"
 #include"picard_f.h"
+#include"picard_lsm.h"
 #include"picard_void.h"
 #include"reini_RK3.h"
 #include<sys/stat.h>
@@ -55,11 +56,12 @@ directreini::directreini(lexer* p, fdm *a):gradient(p),vertice(p), nodeflag(p),d
 
 	gcval_ro=1;
 
-	if(p->F46==1)
-	ppicard = new picard_f(p);
-
-	if(p->F46!=1)
-	ppicard = new picard_void(p);
+    if(p->F46==2)
+        ppicard = new picard_f(p);
+    else if(p->F46==3)
+        ppicard = new picard_lsm(p);
+    else
+        ppicard = new picard_void(p);
 
 	ppreini = new reini_RK3(p,1);
 	
@@ -83,7 +85,7 @@ void directreini::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
 	d0(i,j,k)=b(i,j,k);
 	pgc->start4(p,d0,gcval_phi);
 
-    ppicard->volcalc(p,a,pgc,a->phi);
+    ppicard->volcalc(p,a,pgc,b);
     pgc->start4(p,b,gcval_phi);
 	
 	
@@ -105,7 +107,7 @@ void directreini::start(fdm* a,lexer* p,field& b, ghostcell* pgc,ioflow* pflow)
     finalize(p,a);
 //---------------
 
-	ppicard->correct_ls(p,a,pgc,a->phi);
+	ppicard->correct_ls(p,a,pgc,b);
 
 	p->reinitime=pgc->timer()-starttime;
 }

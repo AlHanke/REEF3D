@@ -27,6 +27,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"ioflow.h"
 #include"picard_f.h"
+#include"picard_lsm.h"
 #include"picard_void.h"
 #include"reinidisc_f.h"
 #include"reinidisc_fsf.h"
@@ -55,8 +56,10 @@ reini_RK3::reini_RK3(lexer* p, int type) : frk1(p), frk2(p), dt(p)
 
     gcval_ro=1;
 
-    if(p->F46==1)
+    if(p->F46==2)
         ppicard = new picard_f(p);
+    else if(p->F46==3)
+        ppicard = new picard_lsm(p);
     else
         ppicard = new picard_void(p);
 
@@ -83,7 +86,7 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
     else if(p->count>0)
         gcval = gcval_phi;
 
-    ppicard->volcalc(p,a,pgc,a->phi);
+    ppicard->volcalc(p,a,pgc,f);
 
     if(p->count==0)
     {
@@ -127,7 +130,7 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
         pgc->start4(p,f,gcval);
     }
 
-    ppicard->correct_ls(p,a,pgc,a->phi);
+    ppicard->correct_ls(p,a,pgc,f);
 
     p->reinitime+=pgc->timer()-starttime;
 }
