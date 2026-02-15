@@ -24,12 +24,10 @@ Author: Hans Bihs
 #include"slice.h"
 #include"lexer.h"
 
-void ghostcell::gcsl_potentialbc(lexer *p, slice& f, int bc, int cs)
+void ghostcell::gcsl_potentialbc(lexer *p, slice& f, int cs)
 {
     if(cs==1)
-	f(i-1,j) =  -p->Ui*p->DXP[IP] + f(i,j);
-
-	if(cs==4)
-	f(i+1,j) =  p->Uo*p->DXP[IP] + f(i,j);
+	    f(i-1,j) =  -p->Ui*p->DXP[IP] + f(i,j);
+	else if(cs==4)
+	    f(i+1,j) =  p->Uo*p->DXP[IP] + f(i,j);
 }
-

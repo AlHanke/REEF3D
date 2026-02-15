@@ -21,74 +21,62 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"ghostcell.h"
-#include"fdm2D.h"
 #include"slice.h"
-#include"vec2D.h"
 
-void ghostcell::gcsl_neumann(slice& f, int gcv, int bc, int cs)
+void ghostcell::gcsl_neumann(slice& f, int cs)
 {
-	if(cs==1)
-	for(q=0;q<margin;++q)
-	f(i-q-1,j)=f(i,j);
-
-	if(cs==2)
-	for(q=0;q<margin;++q)
-	f(i,j+q+1)=f(i,j);
-
-	if(cs==3)
-	for(q=0;q<margin;++q)
-	f(i,j-q-1)=f(i,j);
-
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j)=f(i,j);
+    for(q=0;q<margin;++q)
+    {
+        if(cs==1)
+            f(i-q-1,j)=f(i,j);
+        else if(cs==2)
+            f(i,j+q+1)=f(i,j);
+        else if(cs==3)
+            f(i,j-q-1)=f(i,j);
+        else if(cs==4)
+            f(i+q+1,j)=f(i,j);
+    }
 }
 
-void ghostcell::gcsl_neumann_x(slice& f, int gcv, int bc, int cs)
+void ghostcell::gcsl_neumann_x(slice& f, int cs)
 {
-	if(cs==1)
-	for(q=0;q<margin;++q)
-	f(i-q-1,j)=f(i,j);
-
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j)=f(i,j);
+    for(q=0;q<margin;++q)
+    {
+        if(cs==1)
+            f(i-q-1,j)=f(i,j);
+        else if(cs==4)
+            f(i+q+1,j)=f(i,j);
+    }
 }
 
-void ghostcell::gcsl_neumann_hx(slice& f, int gcv, int bc, int cs)
+void ghostcell::gcsl_neumann_hx(slice& f, int cs)
 {
 	if(cs==1)
-	for(q=0;q<margin-1;++q)
-	f(i-q-2,j)=f(i,j);
-
-	if(cs==2)
-	for(q=0;q<margin;++q)
-	f(i,j+q+1)=f(i,j);
-
-	if(cs==3)
-	for(q=0;q<margin;++q)
-	f(i,j-q-1)=f(i,j);
-
-	if(cs==4)
-	for(q=0;q<margin-1;++q)
-	f(i+q+2,j)=f(i,j);
+        for(q=0;q<margin-1;++q)
+            f(i-q-2,j)=f(i,j);
+	else if(cs==2)
+        for(q=0;q<margin;++q)
+            f(i,j+q+1)=f(i,j);
+	else if(cs==3)
+        for(q=0;q<margin;++q)
+            f(i,j-q-1)=f(i,j);
+	else if(cs==4)
+        for(q=0;q<margin-1;++q)
+            f(i+q+2,j)=f(i,j);
 }
 
-void ghostcell::gcsl_neumann_hy(slice& f, int gcv, int bc, int cs)
+void ghostcell::gcsl_neumann_hy(slice& f, int cs)
 {
 	if(cs==1)
-	for(q=0;q<margin-1;++q)
-	f(i-q-1,j)=f(i,j);
-
-	if(cs==2)
-	for(q=0;q<margin-1;++q)
-	f(i,j+q+2)=f(i,j);
-
-	if(cs==3)
-	for(q=0;q<margin-1;++q)
-	f(i,j-q-2)=f(i,j);
-
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j)=f(i,j);
+        for(q=0;q<margin-1;++q)
+            f(i-q-1,j)=f(i,j);
+	else if(cs==2)
+        for(q=0;q<margin-1;++q)
+            f(i,j+q+2)=f(i,j);
+	else if(cs==3)
+        for(q=0;q<margin-1;++q)
+            f(i,j-q-2)=f(i,j);
+	else if(cs==4)
+        for(q=0;q<margin;++q)
+            f(i+q+1,j)=f(i,j);
 }
