@@ -20,43 +20,30 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"grid.h"
+#include"grid_helper.h"
 #include"lexer.h"
-#include"ghostcell.h"
+#include"fieldint4.h"
 
-grid::grid(lexer *p)
+void grid_helper::fillgcb4_wall(lexer *p)
 {
-    imin=p->imin;
-    imax=p->imax;
-    jmin=p->jmin;
-    jmax=p->jmax;
-    kmin=p->kmin;
-    kmax=p->kmax;
-}
+    int q,n;
 
-grid::~grid()
-{
-}
+    fieldint4 cval(p);
 
-void grid::make_dgc(lexer* p)
-{
-    p->dgc1_count=1;
-    p->dgc2_count=1;
-    p->dgc3_count=1;
-    p->dgc4_count=1;
+    int count=0;
 
-    p->Iarray(p->dgc1,p->dgc1_count,6);
-    p->Iarray(p->dgc2,p->dgc2_count,6);
-    p->Iarray(p->dgc3,p->dgc3_count,6);
-    p->Iarray(p->dgc4,p->dgc4_count,6);
+    BASELOOP
+    {
+        cval(i,j,k)=count;
 
-    p->Iarray(hgc,imax*jmax*kmax);
+        ++count;
+    }
 
-    for(i=0;i<imax*jmax*kmax;++i)
-        hgc[i]=0;
-}
-
-void grid::unmake_dgc(lexer* p)
-{
-    p->del_Iarray(hgc,imax*jmax*kmax);
+    GC4LOOP
+    {
+        i=p->gcb4[n][0];
+        j=p->gcb4[n][1];
+        k=p->gcb4[n][2];
+        p->gcb4[n][5]=cval(i,j,k);
+    }
 }

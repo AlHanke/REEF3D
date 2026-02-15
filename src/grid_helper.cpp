@@ -10,7 +10,7 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTIBILITY or
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 for more details.
 
@@ -20,52 +20,39 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#ifndef GRID_H_
-#define GRID_H_
+#include"grid_helper.h"
+#include"lexer.h"
+#include"ghostcell.h"
 
-#include"increment.h"
-
-class lexer;
-
-using namespace std;
-
-class grid :  public increment
+grid_helper::grid_helper(lexer *p)
 {
-public:
+    imin=p->imin;
+    imax=p->imax;
+    jmin=p->jmin;
+    jmax=p->jmax;
+    kmin=p->kmin;
+    kmax=p->kmax;
+}
 
-	grid (lexer *);
-	virtual ~grid();
-    
-    // gcb
-    void fillgcb1(lexer*);
-    void fillgcb2(lexer*);
-    void fillgcb3(lexer*);
-    
-    void fillgcb4_wall(lexer*);
+grid_helper::~grid_helper()
+{
+    delete[] hgc;
+}
 
-    // dgc
-    void make_dgc(lexer*);
-    void unmake_dgc(lexer*);
-    void fill_dgc1(lexer*);
-    void fill_dgc2(lexer*);
-    void fill_dgc3(lexer*);
-    void fill_dgc4(lexer*);
-    
-    int imin,imax,jmax,jmin,kmin,kmax;
-    
-private:
-	int di,dj,dk;
-	int qn;
-    
-    int *hgc;
-	
-};
+void grid_helper::make_dgc(lexer* p)
+{
+    p->dgc1_count=1;
+    p->dgc2_count=1;
+    p->dgc3_count=1;
+    p->dgc4_count=1;
 
-#endif
+    p->Iarray(p->dgc1,p->dgc1_count,6);
+    p->Iarray(p->dgc2,p->dgc2_count,6);
+    p->Iarray(p->dgc3,p->dgc3_count,6);
+    p->Iarray(p->dgc4,p->dgc4_count,6);
 
+    p->Iarray(hgc,imax*jmax*kmax);
 
-
-
-
-
-
+    for(i=0;i<imax*jmax*kmax;++i)
+        hgc[i]=0;
+}

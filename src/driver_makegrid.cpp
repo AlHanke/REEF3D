@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
-#include"grid.h"
+#include"grid_helper.h"
 
 void driver::makegrid(lexer *p, ghostcell *pgc)
 {	
@@ -43,8 +43,8 @@ void driver::makegrid(lexer *p, ghostcell *pgc)
     
     p->vecsize(pgc);
     
-    // grid
-    grid gridgen(p);
+    // grid_helper
+    grid_helper gridgen(p);
     
     gridgen.fillgcb1(p);
     gridgen.fillgcb2(p);
@@ -58,8 +58,6 @@ void driver::makegrid(lexer *p, ghostcell *pgc)
     gridgen.fill_dgc2(p);
     gridgen.fill_dgc3(p);
     gridgen.fill_dgc4(p);
-    
-    gridgen.unmake_dgc(p);
 }
 	
 void driver::makegrid_cds()
