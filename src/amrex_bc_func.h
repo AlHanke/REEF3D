@@ -40,8 +40,8 @@ public:
         MyExtBCFill() = default;
 
         AMREX_GPU_HOST_DEVICE
-        MyExtBCFill(const amrex::Array<int,6>& values, const amrex::Box* boxes, int num_boxes)
-            : bc_values(values), m_boxes(boxes), m_num_boxes(num_boxes) {}
+        MyExtBCFill(const amrex::Array<int,6>& values, const int gcv, const amrex::Box* boxes, int num_boxes)
+            : bc_values(values), m_gcv(gcv), m_boxes(boxes), m_num_boxes(num_boxes) {}
 
         AMREX_GPU_DEVICE
         void operator() (const amrex::IntVect& iv, amrex::Array4<amrex::Real> const& dest,
@@ -51,8 +51,6 @@ public:
                         const int orig_comp) const
         {
             amrex::ignore_unused(time, orig_comp);
-
-            const amrex::Box dom = geom.Domain();
 
             bool should_fill = false;
             int face_for_bc = 0;
@@ -77,6 +75,7 @@ public:
             }
 
             amrex::IntVect interior = iv;
+            const amrex::Box dom = geom.Domain();
             for(int dir=0; dir<AMREX_SPACEDIM; ++dir)
             {
                 if(interior[dir] < dom.smallEnd(dir))
@@ -150,6 +149,7 @@ public:
         amrex::Array<int,2*AMREX_SPACEDIM> bc_values{};
         const amrex::Box* m_boxes = nullptr;
         int m_num_boxes = 0;
+        int m_gcv = 0;
     };
 };
 
