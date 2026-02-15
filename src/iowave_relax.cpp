@@ -486,11 +486,3 @@ void iowave::turb_relax(lexer *p, fdm *a, ghostcell *pgc, field &f)
 
     p->wavecalctime+=pgc->timer()-starttime;
 }
-
-void iowave::fi_relax(lexer *p, ghostcell *pgc, field& f, field& phi)
-{
-}
-
-void iowave::visc_relax(lexer *p, ghostcell *pgc, slice& f)
-{
-}
