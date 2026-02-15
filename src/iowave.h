@@ -56,7 +56,6 @@ public:
     void rkinflow(lexer*,fdm*,ghostcell*,field&,field&,field&) override;
     void fsfrkin(lexer*,fdm*,ghostcell*,field&) override;
     void fsfrkout(lexer*,fdm*,ghostcell*,field&) override;
-    void iogcb_update(lexer*,fdm*,ghostcell*) override;
     void isource(lexer*,fdm*,ghostcell*,vrans*) override;
     void jsource(lexer*,fdm*,ghostcell*,vrans*) override;
     void ksource(lexer*,fdm*,ghostcell*,vrans*) override;
