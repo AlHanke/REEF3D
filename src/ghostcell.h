@@ -290,9 +290,9 @@ private:
     void gcsldistro4int(sliceint&, int, int, int);
     void gcsldistro4Vint(lexer*, int*, int, int, int);
 
-    int gcsleval1(lexer*,int,int,int);
-    int gcsleval2(lexer*,int,int,int);
-    int gcsleval4(lexer*,int,int,int);
+    int gcsleval1(int,int,int);
+    int gcsleval2(int,int,int);
+    int gcsleval4(int,int,int);
 
     void imagepoint(lexer*,field&,double&,double&,double,int);
 
@@ -304,23 +304,24 @@ private:
 
     const int margin;
     int paramargin;
-    double y[15],x[15],pos[15];
+    double y[15],pos[15];
     int m,q,qq,qn,g;
-    int bc_label;
     double wallvalue,x_ip,val_ip,gamma;
     int orderdir;
     double weight;
     int count;
     double starttime,endtime;
     int ys;
+
+    int bc_label;
     int gcval_topodist;
-    int gclabel_outflow;
-    int gclabel_u, gclabel_v, gclabel_w, gclabel_k, gclabel_e;
+    bool gclabel_outflow;
+    int gclabel_u, gclabel_v, gclabel_w;
     int gclabel_utopo, gclabel_vtopo, gclabel_wtopo;
-    int gclabel_u_orth,gclabel_v_orth,gclabel_w_orth,gclabel_press,gclabel_lsm;
+    int gclabel_u_orth,gclabel_v_orth,gclabel_w_orth;
     int gclabel_u_in,gclabel_v_in,gclabel_w_in,gclabel_press_in,gclabel_lsm_in;
     int gclabel_u_out, gclabel_v_out, gclabel_w_out;
-    int gclabel_vel;
+    bool awa_label,pressout_label,pressin_label;
 
     // PARALLEL
     double *send1,*send2,*send3,*send4,*send5,*send6;
@@ -329,7 +330,6 @@ private:
     int *irecv1,*irecv2,*irecv3,*irecv4,*irecv5,*irecv6;
     double recvsum,recvmin,recvmax;
     int recvisum,recvimin,recvimax;
-    int awa_lable,pressout_lable,pressin_lable;
 
     int nb0[6],stag[6],rtag[6];
 
