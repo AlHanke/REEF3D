@@ -224,11 +224,6 @@ void sediment_f::sediment_logic(lexer *p, ghostcell *pgc, turbulence *pturb)
     if(p->S85==1)
     pbeddir = new bedload_direction_f(p);
     
-	
-	p->gcin4a_count=p->gcin_count;
-	p->gcout4a_count=p->gcout_count;
-	
-    
     prelax = new topo_relax(p);
     
     pbedshear  = new bedshear(p,pturb);

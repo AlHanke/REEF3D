@@ -65,7 +65,7 @@ private:
 
 	double *sj,*rj,*r0,*vj,*tj,*pj,*ph,*sh,*x,*rhs,*aii;
 	
-	int *sizeM,*range;
+	int *range;
 
 	const double epsi;
 
