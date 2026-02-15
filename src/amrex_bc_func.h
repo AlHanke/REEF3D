@@ -44,6 +44,7 @@ public:
 private:
     enum class Gbc : int { INFLOW = 1, OUTFLOW = 2, SYMMETRY = 3, WAVEGEN = 6, NUMBEACH = 7, WALL = 21 };
     enum class Dir : int { X_NEG = 1, X_POS = 4, Y_NEG = 3, Y_POS = 2, Z_NEG = 5, Z_POS = 6 };
+    enum class DataLocation : unsigned int { CELL_CENTERED = 0, FACE_X = 1, FACE_Y = 2, FACE_Z = 3 };
 public:
     struct Field1BcDecision {
         struct Field1Params {
@@ -564,9 +565,10 @@ public:
         ConstMyExtBCFillFieldParams(const amrex::Array<int,6>& bc_values_in,
                                 const amrex::Array<amrex::Real,6>& heat_values_in,
                                 int margin_in, int orderdir_in, bool y_dimension_exists_in,
-                                double gamma_in)
+                                double gamma_in, unsigned int data_location_in)
             : bc_values(bc_values_in), heat_values(heat_values_in), margin(margin_in),
-              orderdir(orderdir_in), y_dimension_exists(y_dimension_exists_in), gamma(gamma_in) {}
+              orderdir(orderdir_in), y_dimension_exists(y_dimension_exists_in), gamma(gamma_in),
+              data_location(data_location_in) {}
 
         //Const parameters needed for BC decision making
         const amrex::Array<int,6> bc_values = {};
@@ -575,6 +577,7 @@ public:
         const int orderdir = 3;
         const bool y_dimension_exists = true;
         const double gamma = 0;
+        const unsigned int data_location = static_cast<unsigned int>(DataLocation::CELL_CENTERED);
     };
     struct MyExtBCFillFieldParams {
         AMREX_GPU_HOST_DEVICE

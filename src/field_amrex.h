@@ -51,7 +51,7 @@ public:
     void FillBoundary() override;
 
 protected:
-    field_amrex(lexer* p);
+    field_amrex(lexer* p, unsigned int data_location);
 
     lexer *p = nullptr;
     amrex::Vector<amrex::MultiFab> mf = {};
