@@ -650,12 +650,15 @@ public:
                 if(interior[dir] < dom.smallEnd(dir))
                     interior[dir] = dom.smallEnd(dir);
                 else if(interior[dir] > dom.bigEnd(dir))
+                {
                     interior[dir] = dom.bigEnd(dir);
+                    if(m_const_params.data_location == dir +1)
+                        interior[dir] -= 1;
+                }
             }
 
             if (!is_corner && !is_within_margin(iv, *matched_box, face_for_bc))
                 return;
-
             for(int n=0; n<numcomp; ++n)
             {
                 switch (label)
