@@ -23,6 +23,7 @@ Author: Alexander Hanke
 #if USE_AMREX
 #include "field_amrex.h"
 #include "lexer.h"
+#include "amrex_bc_func.h"
 #include <AMReX_BCUtil.H>
 #include <AMReX_BCRec.H>
 #include <AMReX_Geometry.H>
@@ -30,10 +31,18 @@ Author: Alexander Hanke
 #include <AMReX_MultiFab.H>
 #include <AMReX_DistributionMapping.H>
 
-field_amrex::field_amrex(lexer* p)
+#include <AMReX_FillPatchUtil.H>
+#include <AMReX_PhysBCFunct.H>
+#include <AMReX_Interpolater.H>
+
+field_amrex::field_amrex(lexer* p): face_bc_values{p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6}
 {
     field_amrex::p = p;
     mf.resize(p->nlevs);
+
+    BCRecs.resize(p->nlevs);
+    for (auto& bc_rec : BCRecs)
+        bc_rec.resize(p->ncomp);
 }
 
 double& field_amrex::operator()(int ii, int jj, int kk) noexcept
@@ -53,6 +62,19 @@ void field_amrex::FillBoundary()
 
 void field_amrex::FillDomainBoundary()
 {
-    // amrex::FillDomainBoundary(mf[p->level], p->amrex_geometry[p->level], p->amrex_bc[pp->level]);
+    amrex::Vector<amrex::Box> loc_boxes;
+    for (amrex::MFIter mfi(mf[p->level]); mfi.isValid(); ++mfi) {
+        loc_boxes.push_back(mfi.validbox());
+    }
+
+    amrex::Gpu::DeviceVector<amrex::Box> device_boxes(loc_boxes.size());
+    amrex::Gpu::copy(amrex::Gpu::hostToDevice, loc_boxes.begin(), loc_boxes.end(), device_boxes.begin());
+
+    amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFill> bf(amrex_bc_func::MyExtBCFill{face_bc_values, device_boxes.data(), static_cast<int>(device_boxes.size())});
+
+    amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFill>> physbcf(p->amrex_geometry[p->level], BCRecs[p->level], bf);
+    amrex::FillPatchSingleLevel(mf[p->level], amrex::Real(p->simtime),
+                                {&(mf[p->level])}, {amrex::Real(p->simtime)},
+                                0, 0, mf[p->level].nComp(), p->amrex_geometry[p->level], physbcf, 0);
 }
 #endif
