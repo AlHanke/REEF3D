@@ -49,6 +49,7 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     bc_type[5] = p->bcside6;
 
     using namespace amrex;
+    // Initialize AMReX geometry data structures
 
     amrex_geometry.resize(nlevs);
     amrex_box_array.resize(nlevs);
@@ -130,6 +131,7 @@ void grid_amrex::define_inflow_outflow_ba()
     for (int lev = 0; lev < nlevs; lev++)
     {
         amrex::BoxList bl_in, bl_out;
+        amrex::BoxList original_bl_in, original_bl_out;
         amrex::Vector<int> owner_map_in, owner_map_out;
         const amrex::DistributionMapping& dmap = amrex_distribution_mapping[lev];
 
@@ -151,6 +153,7 @@ void grid_amrex::define_inflow_outflow_ba()
                     {
                         bl_in.push_back(b_small);
                         owner_map_in.push_back(owner);
+                        original_bl_in.push_back(b);
                     }
 
                     // Outflow at small end
@@ -158,6 +161,7 @@ void grid_amrex::define_inflow_outflow_ba()
                     {
                         bl_out.push_back(b_small);
                         owner_map_out.push_back(owner);
+                        original_bl_out.push_back(b);
                     }
                 }
 
@@ -171,6 +175,7 @@ void grid_amrex::define_inflow_outflow_ba()
                     {
                         bl_in.push_back(b_big);
                         owner_map_in.push_back(owner);
+                        original_bl_in.push_back(b);
                     }
 
                     // Outflow at big end
@@ -178,6 +183,7 @@ void grid_amrex::define_inflow_outflow_ba()
                     {
                         bl_out.push_back(b_big);
                         owner_map_out.push_back(owner);
+                        original_bl_out.push_back(b);
                     }
                 }
             }
@@ -193,7 +199,7 @@ void grid_amrex::define_inflow_outflow_ba()
             amrex::Box b = mfi.validbox();
             for (amrex::IntVect iv = b.smallEnd(); iv <= b.bigEnd(); b.next(iv))
             {
-                inflow_ijk[lev].push_back(iv-b.smallEnd());
+                inflow_ijk[lev].push_back(iv-original_bl_in.data()[mfi.index()].smallEnd());
             }
         }
         inflow_ijk[lev].shrink_to_fit();
@@ -208,7 +214,7 @@ void grid_amrex::define_inflow_outflow_ba()
             amrex::Box b = mfi.validbox();
             for (amrex::IntVect iv = b.smallEnd(); iv <= b.bigEnd(); b.next(iv))
             {
-                outflow_ijk[lev].push_back(iv-b.smallEnd());
+                outflow_ijk[lev].push_back(iv-original_bl_out.data()[mfi.index()].smallEnd());
             }
         }
         outflow_ijk[lev].shrink_to_fit();
