@@ -309,8 +309,7 @@ private:
 
     double zloc1,zloc2,zloc3,zloc4,zcoor;
 
-    
-	double **wsfmax;
+    slice4 wsfmax;
     double time_n,time_0,time_1;
 
     int u_switch,v_switch,w_switch,p_switch,h_switch,f_switch;
