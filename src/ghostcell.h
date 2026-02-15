@@ -310,7 +310,6 @@ private:
     bc_labels gcval_topodist;
 	bool gclabel_outflow;
     bc_labels gclabel_u, gclabel_v, gclabel_w;
-    bc_labels gclabel_utopo, gclabel_vtopo, gclabel_wtopo;
     bc_labels gclabel_u_orth,gclabel_v_orth,gclabel_w_orth;
     bc_labels gclabel_u_in,gclabel_v_in,gclabel_w_in,gclabel_press_in,gclabel_lsm_in;
 	bc_labels gclabel_u_out, gclabel_v_out, gclabel_w_out;
