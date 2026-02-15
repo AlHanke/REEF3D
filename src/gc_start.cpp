@@ -48,13 +48,13 @@ void ghostcell::start1(lexer *p, field& f, int gcv)
     gcperiodicx(p,f,1);
 
     if(p->periodic1==1)
-        gc_periodic(p, f, 1, 1);
+        gc_periodic(f, 1);
 
     if(p->periodic2==1)
-        gc_periodic(p, f, 1, 2);
+        gc_periodic(f, 2);
 
     if(p->periodic3==1)
-        gc_periodic(p, f, 1, 3);
+        gc_periodic(f, 3);
 
     if(p->Y40==1  || p->Y40==3)
         dgcpol1(p,f,gcv);
@@ -89,13 +89,13 @@ void ghostcell::start2(lexer *p, field& f, int gcv)
         gcperiodicx(p,f,2);
 
         if(p->periodic1==1)
-            gc_periodic(p, f, 2, 1);
+            gc_periodic(f, 1);
 
         if(p->periodic2==1)
-            gc_periodic(p, f, 2, 2);
+            gc_periodic(f, 2);
 
         if(p->periodic3==1)
-            gc_periodic(p, f, 2, 3);
+            gc_periodic(f, 3);
     }
 
     if(p->Y40==1  || p->Y40==3)
@@ -128,13 +128,13 @@ void ghostcell::start3(lexer *p, field& f, int gcv)
     gcperiodicx(p,f,3);
 
     if(p->periodic1==1)
-        gc_periodic(p, f, 3, 1);
+        gc_periodic(f, 1);
 
     if(p->periodic2==1)
-        gc_periodic(p, f, 3, 2);
+        gc_periodic(f, 2);
 
     if(p->periodic3==1)
-        gc_periodic(p, f, 3, 3);
+        gc_periodic(f, 3);
 
     if(p->Y40==1  || p->Y40==3)
         dgcpol3(p,f,gcv);
@@ -166,13 +166,13 @@ void ghostcell::start4(lexer *p, field &f, int gcv)
     gcperiodicx(p,f,4);
 
     if(p->periodic1==1)
-        gc_periodic(p, f, 4, 1);
+        gc_periodic(f, 1);
 
     if(p->periodic2==1)
-        gc_periodic(p, f, 4, 2);
+        gc_periodic(f, 2);
 
     if(p->periodic3==1)
-        gc_periodic(p, f, 4, 3);
+        gc_periodic(f, 3);
 
     if(p->Y40==1  || p->Y40==3)
         dgcpol4(p,f,gcv);
@@ -204,13 +204,13 @@ void ghostcell::start4a(lexer *p, field& f, int gcv)
     gcperiodicx(p,f,4);
 
     if(p->periodic1==1)
-        gc_periodic(p, f, 4, 1);
+        gc_periodic(f, 1);
 
     if(p->periodic2==1)
-        gc_periodic(p, f, 4, 2);
+        gc_periodic(f, 2);
 
     if(p->periodic3==1)
-        gc_periodic(p, f, 4, 3);
+        gc_periodic(f, 3);
 
     if(do_comms)
         gcparacox(p,f,gcv);
@@ -238,13 +238,13 @@ void ghostcell::start4a_sum(lexer *p, field& f, int gcv)
     gcperiodicx(p,f,4);
 
     if(p->periodic1==1)
-        gc_periodic(p, f, 4, 1);
+        gc_periodic(f, 1);
 
     if(p->periodic2==1)
-        gc_periodic(p, f, 4, 2);
+        gc_periodic(f, 2);
 
     if(p->periodic3==1)
-        gc_periodic(p, f, 4, 3);
+        gc_periodic(f, 3);
 
     if(do_comms)
         gcparacox(p,f,gcv);

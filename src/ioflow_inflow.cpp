@@ -241,7 +241,7 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
         }
 
         if(a->phi(i,j,k)<-epsi2*p->DXM)
-        pgc->dirichlet_ortho(p,u,p->DXM,10,1,1);
+        pgc->dirichlet_ortho(u,p->DXM,1);
 		
     }
 	
@@ -304,7 +304,7 @@ void ioflow_f::inflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
         u(i-1,j,k)=u(i-2,j,k)=u(i-3,j,k)=0.0;
 
         if(a->phi(i-1,j,k)<-epsi2*p->DXM)
-        pgc->dirichlet_ortho(p,u,p->DXM,10,1,1);
+        pgc->dirichlet_ortho(u,p->DXM,1);
     }
 	
 	for(n=0;n<p->gcin_count;n++)
