@@ -66,10 +66,10 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     //Free Surface
-    else if(bc==3 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==1 || gcv==10 || gcv==17))
+    else if(bc==3 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==1 || gcv==10))
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && (gcv==1 || gcv==10 || gcv==17))
+    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && (gcv==1 || gcv==10))
         return gclabel_u_orth;
 
     else
