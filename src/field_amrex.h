@@ -44,10 +44,19 @@ class field_amrex : public field
 public:
     virtual ~field_amrex() = default;
 
+    /*!
+     * @copydoc field_base::operator()
+     */
     double& operator()(int ii, int jj, int kk, bool addOrigin = true) noexcept override final;
 
+    /*!
+     * @copydoc field_base::setVal()
+     */
     void setVal(double val, bool includeGhost = false) override final;
 
+    /*!
+     * @copydoc field_base::FillBoundary()
+     */
     void FillBoundary() override;
 
     void FillDomainBoundaryValue(double value, int dir, bool high) override;
