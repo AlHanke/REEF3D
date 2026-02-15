@@ -32,6 +32,7 @@ Author: Alexander Hanke
 #include <AMReX_BCRec.H>
 #include <AMReX_BC_TYPES.H>
 #include <AMReX_BoxArray.H>
+#include <AMReX_BoxList.H>
 #include <AMReX_DistributionMapping.H>
 #include <AMReX_MFIter.H>
 #include <AMReX_MultiFab.H>
@@ -114,4 +115,101 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     level = 0;
     default_cell_mfi = std::make_unique<amrex::MFIter>(amr_cell_mf[level], false);
     amr_cell_mfi = default_cell_mfi.get();
+
+    define_inflow_outflow_ba();
+}
+
+void grid_amrex::define_inflow_outflow_ba()
+{
+    // Intialize inflow and outflow areas
+    inflow_ba.resize(nlevs);
+    outflow_ba.resize(nlevs);
+    inflow_ijk.resize(nlevs);
+    outflow_ijk.resize(nlevs);
+    for (int lev = 0; lev < nlevs; lev++)
+    {
+        amrex::BoxList bl_in, bl_out;
+        amrex::Vector<int> owner_map_in, owner_map_out;
+        const amrex::DistributionMapping& dmap = amrex_distribution_mapping[lev];
+
+        amrex::Box domain = amrex_geometry[lev].Domain();
+        for (int i = 0; i < amrex_box_array[lev].size(); ++i)
+        {
+            amrex::Box b = amrex_box_array[lev][i];
+            int owner = dmap[i];
+
+            for (int dir = 0; dir < 3; dir++) // x,y,z directions
+            {
+                if (b.smallEnd(dir) == domain.smallEnd(dir))
+                {
+                    amrex::Box b_small = b;
+                    b_small.setBig(dir, domain.smallEnd(dir));
+
+                    // Inflow at small end
+                    if(bc_type[2*dir]==1 || bc_type[2*dir]==6)
+                    {
+                        bl_in.push_back(b_small);
+                        owner_map_in.push_back(owner);
+                    }
+
+                    // Outflow at small end
+                    if (bc_type[2*dir]==2 || bc_type[2*dir]==7)
+                    {
+                        bl_out.push_back(b_small);
+                        owner_map_out.push_back(owner);
+                    }
+                }
+
+                if (b.bigEnd(dir) == domain.bigEnd(dir))
+                {
+                    amrex::Box b_big = b;
+                    b_big.setSmall(dir, domain.bigEnd(dir));
+
+                    // Inflow at big end
+                    if(bc_type[2*dir+1]==1 || bc_type[2*dir+1]==6)
+                    {
+                        bl_in.push_back(b_big);
+                        owner_map_in.push_back(owner);
+                    }
+
+                    // Outflow at big end
+                    if (bc_type[2*dir+1]==2 || bc_type[2*dir+1]==7)
+                    {
+                        bl_out.push_back(b_big);
+                        owner_map_out.push_back(owner);
+                    }
+                }
+            }
+        }
+
+        amrex::BoxArray ba_in(bl_in);
+        amrex::DistributionMapping dm_in(owner_map_in);
+        inflow_ba[lev].define(ba_in, dm_in, 1, 0);
+        inflow_ba[lev].setVal(1);
+        inflow_ijk[lev].resize(0);
+        for(amrex::MFIter mfi(inflow_ba[lev]); mfi.isValid(); ++mfi)
+        {
+            amrex::Box b = mfi.validbox();
+            for (amrex::IntVect iv = b.smallEnd(); iv <= b.bigEnd(); b.next(iv))
+            {
+                inflow_ijk[lev].push_back(iv-b.smallEnd());
+            }
+        }
+        inflow_ijk[lev].shrink_to_fit();
+
+        amrex::BoxArray ba_out(bl_out);
+        amrex::DistributionMapping dm_out(owner_map_out);
+        outflow_ba[lev].define(ba_out, dm_out, 1, 0);
+        outflow_ba[lev].setVal(1);
+        outflow_ijk[lev].resize(0);
+        for(amrex::MFIter mfi(outflow_ba[lev]); mfi.isValid(); ++mfi)
+        {
+            amrex::Box b = mfi.validbox();
+            for (amrex::IntVect iv = b.smallEnd(); iv <= b.bigEnd(); b.next(iv))
+            {
+                outflow_ijk[lev].push_back(iv-b.smallEnd());
+            }
+        }
+        outflow_ijk[lev].shrink_to_fit();
+    }
 }
