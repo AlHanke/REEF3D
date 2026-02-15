@@ -269,14 +269,10 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
 
             int bc_code_3 = const_params.bc_values[2];
             auto label_3 = bc_decision.evaluate(gcv, bc_code_3, y_neg);
-            if(!const_params.y_dimension_exists)
-            label_3 = amrex_bc_func::BoundaryConditionTypeLabel::NOSLIP;
             bc.setLo(1, static_cast<int>(label_3));
 
             int bc_code_4 = const_params.bc_values[3];
             auto label_4 = bc_decision.evaluate(gcv, bc_code_4, y_pos);
-            if(!const_params.y_dimension_exists)
-            label_4 = amrex_bc_func::BoundaryConditionTypeLabel::NOSLIP;
             bc.setHi(1, static_cast<int>(label_4));
 
             int bc_code_5 = const_params.bc_values[4];
