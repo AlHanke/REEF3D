@@ -31,7 +31,7 @@ public:
     virtual T& operator()(int ii, int jj, int kk) = 0;
     virtual void setVal(T val, bool includeGhost = false) = 0;
 
-    virtual void fillBoundary() = 0;
+    virtual void FillBoundary() = 0;
     virtual void FillDomainBoundary() = 0;
 };
 

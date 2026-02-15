@@ -54,7 +54,7 @@ void fieldint_amrex::setVal(int val, bool includeGhost)
     mf[pp->level].setVal(val, (includeGhost ? pp->margin : 0));
 }
 
-void fieldint_amrex::fillBoundary()
+void fieldint_amrex::FillBoundary()
 {
     mf[pp->level].FillBoundary(pp->amrex_geometry[pp->level].periodicity());
 }

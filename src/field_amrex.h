@@ -37,7 +37,7 @@ public:
 
     void setVal(double val, bool includeGhost = false) override;
 
-    void fillBoundary() override;
+    void FillBoundary() override;
 
     void FillDomainBoundary() override;
 

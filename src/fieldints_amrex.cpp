@@ -35,7 +35,7 @@ fieldint1::fieldint1(lexer *p) : fieldint_amrex(p)
         mf[p->level].setVal(0);
     }
     for(p->level=0; p->level<p->nlevs; ++p->level)
-        fillBoundary();
+        FillBoundary();
 }
 
 fieldint2::fieldint2(lexer *p) : fieldint_amrex(p)
@@ -48,7 +48,7 @@ fieldint2::fieldint2(lexer *p) : fieldint_amrex(p)
         mf[p->level].setVal(0);
     }
     for(p->level=0; p->level<p->nlevs; ++p->level)
-        fillBoundary();
+        FillBoundary();
 }
 
 fieldint3::fieldint3(lexer *p) : fieldint_amrex(p)
@@ -61,7 +61,7 @@ fieldint3::fieldint3(lexer *p) : fieldint_amrex(p)
         mf[p->level].setVal(0);
     }
     for(p->level=0; p->level<p->nlevs; ++p->level)
-        fillBoundary();
+        FillBoundary();
 }
 
 fieldint4::fieldint4(lexer *p) : fieldint_amrex(p)
@@ -74,5 +74,5 @@ fieldint4::fieldint4(lexer *p) : fieldint_amrex(p)
         mf[p->level].setVal(0);
     }
     for(p->level=0; p->level<p->nlevs; ++p->level)
-        fillBoundary();
+        FillBoundary();
 }
