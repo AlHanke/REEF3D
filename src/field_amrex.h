@@ -230,22 +230,60 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
 {
     amrex_bc_func::MyExtBCFillFieldParams params(p->Ui, p->Uo, p->dt);
 
+    // Update BCRecs (and local references)
+    // Note: Assuming nComp is handled by resizing BCRecs correctly in constructor
+    const int x_neg = 1; // Dir::X_NEG (1) in amrex_bc_func::Dir
+    const int x_pos = 4; // Dir::X_POS (4)
+    const int y_neg = 3; // Dir::Y_NEG (3)
+    const int y_pos = 2; // Dir::Y_POS (2)
+    const int z_neg = 5; // Dir::Z_NEG (5)
+    const int z_pos = 6; // Dir::Z_POS (6)
+    // Face indices in bc_values: 0=X-, 1=X+, 2=Y-, 3=Y+, 4=Z-, 5=Z+
+
+    for (int n = 0; n < mf[p->level].nComp(); ++n)
+    {
+        for (int lev = 0; lev < p->nlevs; ++lev)
+        {
+            if (BCRecs[lev].size() <= n) continue;
+
+            auto& bc = BCRecs[lev][n];
+
+            int bc_code_1 = const_params.bc_values[0];
+            auto label_1 = bc_decision.evaluate(gcv, bc_code_1, x_neg);
+            bc.setLo(0, static_cast<int>(label_1));
+
+            int bc_code_2 = const_params.bc_values[1];
+            auto label_2 = bc_decision.evaluate(gcv, bc_code_2, x_pos);
+            bc.setHi(0, static_cast<int>(label_2));
+
+            int bc_code_3 = const_params.bc_values[2];
+            auto label_3 = bc_decision.evaluate(gcv, bc_code_3, y_neg);
+            if(!const_params.y_dimension_exists)
+            label_3 = amrex_bc_func::BoundaryConditionTypeLabel::NOSLIP;
+            bc.setLo(1, static_cast<int>(label_3));
+
+            int bc_code_4 = const_params.bc_values[3];
+            auto label_4 = bc_decision.evaluate(gcv, bc_code_4, y_pos);
+            if(!const_params.y_dimension_exists)
+            label_4 = amrex_bc_func::BoundaryConditionTypeLabel::NOSLIP;
+            bc.setHi(1, static_cast<int>(label_4));
+
+            int bc_code_5 = const_params.bc_values[4];
+            auto label_5 = bc_decision.evaluate(gcv, bc_code_5, z_neg);
+            bc.setLo(2, static_cast<int>(label_5));
+
+            int bc_code_6 = const_params.bc_values[5];
+            auto label_6 = bc_decision.evaluate(gcv, bc_code_6, z_pos);
+            bc.setHi(2, static_cast<int>(label_6));
+        }
+    }
+
     LevelLOOP
     {
         if(p->level==0)
         {
-            amrex::Vector<amrex::Box> loc_boxes;
-            for (amrex::MFIter mfi(mf[p->level]); mfi.isValid(); ++mfi)
-            {
-                loc_boxes.push_back(mfi.validbox());
-            }
-
-            amrex::Gpu::DeviceVector<amrex::Box> device_boxes(loc_boxes.size());
-            amrex::Gpu::copy(amrex::Gpu::hostToDevice, loc_boxes.begin(), loc_boxes.end(), device_boxes.begin());
-
             amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> bf(
-                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params, gcv, bc_decision,
-                                                        device_boxes.data(), static_cast<int>(device_boxes.size())});
+                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params});
 
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> physbcf(
                 p->amrex_geometry[p->level], BCRecs[p->level], bf);
@@ -256,34 +294,14 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
         }
         else
         {
-            amrex::Vector<amrex::Box> cloc_boxes;
-            for (amrex::MFIter mfi(mf[p->level-1]); mfi.isValid(); ++mfi)
-            {
-                cloc_boxes.push_back(mfi.validbox());
-            }
-
-            amrex::Gpu::DeviceVector<amrex::Box> cdevice_boxes(cloc_boxes.size());
-            amrex::Gpu::copy(amrex::Gpu::hostToDevice, cloc_boxes.begin(), cloc_boxes.end(), cdevice_boxes.begin());
-
             amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> cbf(
-                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params, gcv, bc_decision,
-                                                        cdevice_boxes.data(), static_cast<int>(cdevice_boxes.size())});
+                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params});
 
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> cphysbcf(
                 p->amrex_geometry[p->level-1], BCRecs[p->level-1], cbf);
 
-            amrex::Vector<amrex::Box> floc_boxes;
-            for (amrex::MFIter mfi(mf[p->level]); mfi.isValid(); ++mfi)
-            {
-                floc_boxes.push_back(mfi.validbox());
-            }
-
-            amrex::Gpu::DeviceVector<amrex::Box> fdevice_boxes(floc_boxes.size());
-            amrex::Gpu::copy(amrex::Gpu::hostToDevice, floc_boxes.begin(), floc_boxes.end(), fdevice_boxes.begin());
-
             amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> fbf(
-                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params, gcv, bc_decision,
-                                                        fdevice_boxes.data(), static_cast<int>(fdevice_boxes.size())});
+                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params});
 
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> fphysbcf(
                 p->amrex_geometry[p->level], BCRecs[p->level], fbf);
