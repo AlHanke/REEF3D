@@ -140,28 +140,9 @@ ghostcell::bc_labels ghostcell::gcsleval4(int gcv, int bc, int cs)
         return bc_labels::NONE;
 }
 
-void ghostcell::gcsldistro4(lexer *p, slice &f, int ii, int jj, int nn, int gcv, int bc, int cs)
+void ghostcell::gcsldistro4(lexer *p, slice &f, int ii, int jj, int gcv, int bc, int cs)
 {
-    i=ii;
-	j=jj;
-	n=nn;
-	
-	bc_label=gcsleval4(p,gcv,bc,cs);
-
-	if(bc_label==4)
-	gcsl_neumann(f,gcv,bc,cs);
-    
-    if(bc_label==14)
-	gcsl_neumann_x(f,gcv,bc,cs);
-    
-    if(bc_label==5)
-	gcsl_noslip(f,gcv,bc,cs);
-    
-    if(bc_label==7)
-	gcsl_potentialbc(p,f,bc,cs);
-    
-    if(bc_label==8)
-	gcsl_sommerfeld(p,f,gcv,bc,cs);
+    gcsldistro(p,f,ii,jj,gcsleval4(gcv,bc,cs),cs);
 }
 
 
