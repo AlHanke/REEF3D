@@ -68,8 +68,7 @@ void VOF_AB::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcell
 // Step 1
     starttime=pgc->timer();
 
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pconvec->start(p,a,a->phi,4,a->u,a->v,a->w);
 
@@ -227,8 +226,7 @@ void VOF_AB::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec, 
 
     for(int qn=0; qn<iter; ++qn)
     {
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
     ppconvec->start(p,a,F,4,uc,vc,wc);
 
