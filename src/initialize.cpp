@@ -29,37 +29,32 @@ initialize::initialize(lexer* p)
 {
 }
 
-initialize::~initialize()
+void initialize::start(lexer* p, fdm* a, ghostcell* pgc)
 {
-}
+    pgc->flagbase(p);
 
-void initialize::start(fdm* a, lexer* p, ghostcell* pgc)
-{
     inifdm(p,a,pgc);
     nodecalc(p,a);
     maxcoor(p,a,pgc);
-    paraini(p,a,pgc);
 
     p->phimean=p->F56;
 
     if(p->F60>-1.0e20)
-    p->phimean=p->F60;
+        p->phimean=p->F60;
 
     if(p->F40>0)
-    iniphi(p,a,pgc);
+        iniphi(p,a,pgc);
 
     if(p->F80>0 && p->F80<4)
-    inivof(a,p,pgc);
+        inivof(a,p,pgc);
     else if(p->F80==4)
-    inivofPLIC(a,p,pgc);
+        inivofPLIC(a,p,pgc);
 
     if(p->F70>0 && p->F80>0 && p->F80<4)
-    inivof_box(p,a,pgc);
+        inivof_box(p,a,pgc);
 
     if(p->S10>0 || p->toporead==1)
-    topoini(p,a,pgc);
-
-    pgc->flagbase(p);
+        topoini(p,a,pgc);
 }
 
 void initialize::inifdm(lexer* p, fdm* a, ghostcell* pgc)
@@ -99,7 +94,6 @@ void initialize::inifdm(lexer* p, fdm* a, ghostcell* pgc)
         a->porosity(i,j,k)=1.0;
     }
 
-    pgc->start4(p,a->ro,1);
     pgc->start4(p,a->ro,1);
     pgc->start4(p,a->visc,1);
     pgc->start4(p,a->eddyv,1);
@@ -176,7 +170,7 @@ void initialize::maxcoor(lexer* p, fdm* a, ghostcell* pgc)
     p->zcoormin=pgc->globalmin(p->zcoormin);
 
     if(p->F42>=0.0)
-    p->maxlength = p->F42;
+        p->maxlength = p->F42;
 }
 
 int initialize::conv(double a)
@@ -191,9 +185,9 @@ int initialize::conv(double a)
     b=c;
 
     if(diff>0.5)
-    b=c+1;
+        b=c+1;
     else if(diff<=-0.5)
-    b=c-1;
+        b=c-1;
 
     return b;
 }
