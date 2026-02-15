@@ -40,7 +40,7 @@ void komega_bc::bckomega_start(fdm *a, lexer *p, field &kin, field &eps, int gcv
     if(gcval==20)
     {
         QGC4LOOP
-        if(p->gcb4[q][4]==5 || p->gcb4[q][4]==21 || p->gcb4[q][4]==22 || p->gcb4[q][4]==41 || p->gcb4[q][4]==42 || p->gcb4[q][4]==43)
+        if(p->gcb4[q][4]==21)
             wall_law_kin(a,p,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
 
         QGCDF4LOOP
@@ -54,7 +54,7 @@ void komega_bc::bckomega_start(fdm *a, lexer *p, field &kin, field &eps, int gcv
     if(gcval==30)
     {
         QGC4LOOP
-        if(p->gcb4[q][4]==5 || p->gcb4[q][4]==21 || p->gcb4[q][4]==22 || p->gcb4[q][4]==41 || p->gcb4[q][4]==42 || p->gcb4[q][4]==43  || (p->gcb4[q][4]==3 && p->gcb4[q][3]==6))
+        if(p->gcb4[q][4]==21 || (p->gcb4[q][4]==3 && p->gcb4[q][3]==6))
             wall_law_omega(a,p,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
 
         QGCDF4LOOP
@@ -87,7 +87,7 @@ void komega_bc::wall_law_kin(fdm *a, lexer *p, field &kin, field &eps, int ii, i
     vvel=0.5*(a->v(i,j,k)+a->v(i,j-1,k));
     wvel=0.5*(a->w(i,j,k)+a->w(i,j,k-1));
 
-    if((bc==5 || (a->topo(i-1,j,k)<0.0 || a->topo(i+1,j,k)<0.0 || a->topo(i,j-1,k)<0.0 || a->topo(i,j+1,k)<0.0 || a->topo(i,j,k-1)<0.0)) && p->S10>0)
+    if((a->topo(i-1,j,k)<0.0 || a->topo(i+1,j,k)<0.0 || a->topo(i,j-1,k)<0.0 || a->topo(i,j+1,k)<0.0 || a->topo(i,j,k-1)<0.0) && p->S10>0)
     {
         zval = a->bed(i,j) + p->T44*p->DZN[KP];
 

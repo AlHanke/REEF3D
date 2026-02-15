@@ -46,7 +46,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
         jc=p->gcb4[n][1];
         kc=p->gcb4[n][2];
 
-        if(p->gcb4[n][4]==5 || p->gcb4[n][4]==21 || p->gcb4[n][4]==22)
+        if( p->gcb4[n][4]==21)
         {
             if(p->gcb4[n][3]==1)
             {
@@ -149,7 +149,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
     count=0;
     GC4LOOP
     {
-        if(p->gcb4[n][4]==5 || p->gcb4[n][4]==21 || p->gcb4[n][4]==22)
+        if(p->gcb4[n][4]==21)
         {
             i=p->gcb4[n][0];
             j=p->gcb4[n][1];

@@ -42,17 +42,11 @@ void ghostcell::flagbase(lexer *p)
         bc=2;
         else if(p->gcb4[n][4]==3)
         bc=3;
-        else if(p->gcb4[n][4]==5)
-        bc=5;
         else if(p->gcb4[n][4]==6)
         bc=6;
         else if(p->gcb4[n][4]==7)
         bc=7;
-        else if(p->gcb4[n][4]==8)
-        bc=7;
         else if(p->gcb4[n][4]==21)
-        bc=21;
-        else if(p->gcb4[n][4]==22)
         bc=21;
 
         for(q=0;q<p->margin;++q)

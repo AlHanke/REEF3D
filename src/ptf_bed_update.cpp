@@ -47,7 +47,7 @@ void ptf_bed_update::bedbc(lexer *p, fdm *a, ghostcell *pgc, field &Fi)
     double Fval;
     
     GC4LOOP
-    if(p->gcb4[n][3]==5 && (p->gcb4[n][4]==5 || p->gcb4[n][4]==21))
+    if(p->gcb4[n][3]==5 &&  p->gcb4[n][4]==21)
     {
         i = p->gcb4[n][0];
         j = p->gcb4[n][1];

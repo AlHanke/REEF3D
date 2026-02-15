@@ -66,7 +66,7 @@ void sloshing_force::force(lexer *p, fdm *a, ghostcell *pgc)
     Fx_l=Fx_r=Fz=M=0.0;
     
     GC4LOOP
-    if(p->gcb4[n][4]==21 || p->gcb4[n][4]==22)
+    if(p->gcb4[n][4]==21)
     {
         i=p->gcb4[n][0];
         j=p->gcb4[n][1];
