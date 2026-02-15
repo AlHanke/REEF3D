@@ -673,14 +673,14 @@ public:
             {
                 switch (label)
                 {
-                    case BoundaryConditionTypeLabel::DIRICHLET_ORTH:
-                        // ToDo
-                        break;
                     case BoundaryConditionTypeLabel::NEUMANN:
                     default:
                         dest(iv, dcomp+n) = dest(interior, dcomp+n);
                         break;
                     case BoundaryConditionTypeLabel::NOSLIP:
+                    case BoundaryConditionTypeLabel::DIRICHLET_ORTH:
+                    case BoundaryConditionTypeLabel::DIRICHLET_ORTH_REFLECT:
+                    case BoundaryConditionTypeLabel::DIRICHLET_PARA_REFLECT:
                         dest(iv, dcomp+n) = amrex::Real(0);
                         break;
                     case BoundaryConditionTypeLabel::OUTFLOWBC:
@@ -702,12 +702,6 @@ public:
                             dest(iv, dcomp+n) = m_params.Ui * geom.CellSize(0) + dest(interior, dcomp+n);
                         else if(cs==static_cast<int>(Dir::X_POS))
                             dest(iv, dcomp+n) = m_params.Uo * geom.CellSize(0) + dest(interior, dcomp+n);
-                        break;
-                    case BoundaryConditionTypeLabel::DIRICHLET_ORTH_REFLECT:
-                        // ToDo
-                        break;
-                    case BoundaryConditionTypeLabel::DIRICHLET_PARA_REFLECT:
-                        // ToDo
                         break;
                     case BoundaryConditionTypeLabel::HEATBC:
                         if(cs==static_cast<int>(Dir::X_NEG))
