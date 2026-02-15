@@ -44,7 +44,7 @@ void mgcslice4::gcb_seed(lexer *p)
         ++count;
     }
 	
-	p->Iresize(p->gcbsl4,p->gcbsl4_count, count, 6, 6); 
+	p->Iresize(p->gcbsl4,p->gcbsl4_count, count, 5, 5);
 	
     // find gcbsl
 	count=0;
