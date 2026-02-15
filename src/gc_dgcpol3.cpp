@@ -24,28 +24,25 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"field.h"
 
-void ghostcell::dgcpol3(lexer* p,field& f,int gcv)
+void ghostcell::dgcpol3(lexer* p, field& f)
 {
     int di,dj,dk,bc;
-    
+
     for(n=0;n<p->dgc3_count;++n)
     {
         i=p->dgc3[n][0];
         j=p->dgc3[n][1];
         k=p->dgc3[n][2];
-        
-        
+
         di=p->dgc3[n][3];
         dj=p->dgc3[n][4];
         dk=p->dgc3[n][5];
-        
-        bc=p->dgc3[n][6];
-        
-        if(bc==1)
-        f(i+di,j+dj,k+dk) = f(i,j,k);  
 
-        if(bc==2)
-        f(i+di,j+dj,k+dk) = 0.0;        
-        
+        bc=p->dgc3[n][6];
+
+        if(bc==1)
+            f(i+di,j+dj,k+dk) = f(i,j,k);
+        else if(bc==2)
+            f(i+di,j+dj,k+dk) = 0.0;
     }
 }

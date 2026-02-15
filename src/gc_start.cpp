@@ -56,8 +56,8 @@ void ghostcell::start1(lexer *p, field& f, int gcv)
     if(p->periodic3==1)
         gc_periodic(f, 3);
 
-    if(p->Y40==1  || p->Y40==3)
-        dgcpol1(p,f,gcv);
+    if(p->Y40==1 || p->Y40==3)
+        dgcpol1(p,f);
 
     if(do_comms)
         gcparacox(p,f);
@@ -98,8 +98,8 @@ void ghostcell::start2(lexer *p, field& f, int gcv)
             gc_periodic(f, 3);
     }
 
-    if(p->Y40==1  || p->Y40==3)
-        dgcpol2(p,f,gcv);
+    if(p->Y40==1 || p->Y40==3)
+        dgcpol2(p,f);
 
     if(do_comms)
         gcparacox(p,f);
@@ -136,8 +136,8 @@ void ghostcell::start3(lexer *p, field& f, int gcv)
     if(p->periodic3==1)
         gc_periodic(f, 3);
 
-    if(p->Y40==1  || p->Y40==3)
-        dgcpol3(p,f,gcv);
+    if(p->Y40==1 || p->Y40==3)
+        dgcpol3(p,f);
 
     if(do_comms)
         gcparacox(p,f);
@@ -174,8 +174,8 @@ void ghostcell::start4(lexer *p, field &f, int gcv)
     if(p->periodic3==1)
         gc_periodic(f, 3);
 
-    if(p->Y40==1  || p->Y40==3)
-        dgcpol4(p,f,gcv);
+    if(p->Y40==1 || p->Y40==3)
+        dgcpol4(p,f);
 
     if(do_comms)
         gcparacox(p,f);
