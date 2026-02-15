@@ -134,7 +134,7 @@ public:
 
     // IBM
     void flagfield(lexer*);
-    void flagbase(lexer*,fdm*);
+    void flagbase(lexer*);
 
     // PARALLEL
     void gcparax(lexer*, field&, int);
