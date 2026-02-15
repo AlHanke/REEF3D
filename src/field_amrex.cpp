@@ -24,6 +24,7 @@ Author: Alexander Hanke
 #include "lexer.h"
 #include <AMReX_MultiFab.H>
 #include <AMReX_Array4.H>
+#include <AMReX_BCUtil.H>
 
 field_amrex::field_amrex(lexer* p)
 {
@@ -58,4 +59,33 @@ double& field_amrex::operator()(int ii, int jj, int kk)
 void field_amrex::fillBoundary()
 {
     mf.FillBoundary(pp->amrex_geometry.periodicity());
+}
+
+void field_amrex::FillDomainBoundary()
+{
+    amrex::FillDomainBoundary(mf, pp->amrex_geometry, bc);
+}
+
+void field_amrex::initialize_bc()
+{
+    using namespace amrex;
+
+    bc.resize(mf.n_comp);
+    for (int n = 0; n < mf.nComp(); ++n)
+    {
+        for (int idim = 0; idim < AMREX_SPACEDIM; ++idim)
+        {
+            if (pp->amrex_geometry.isPeriodic(idim))
+            {
+                bc[n].setLo(idim, BCType::int_dir); // interior
+                bc[n].setHi(idim, BCType::int_dir);
+            }
+            else
+            {
+                // ToDo: Fix this
+                bc[n].setLo(idim, BCType::bogus);
+                bc[n].setHi(idim, BCType::bogus);
+            }
+        }
+    }
 }

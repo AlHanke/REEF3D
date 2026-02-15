@@ -24,6 +24,7 @@ Author: Alexander Hanke
 #include"lexer.h"
 #include <AMReX_MultiFab.H>
 #include <AMReX_BoxArray.H>
+#include <AMReX_BC_TYPES.H>
 
 field1::field1(lexer *p) : field_amrex(p)
 {
@@ -32,6 +33,7 @@ field1::field1(lexer *p) : field_amrex(p)
     mf.define(box, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
+    initialize_bc();
     fillBoundary();
 }
 
@@ -42,6 +44,7 @@ field2::field2(lexer *p) : field_amrex(p)
     mf.define(box, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
+    initialize_bc();
     fillBoundary();
 }
 
@@ -52,6 +55,7 @@ field3::field3(lexer *p) : field_amrex(p)
     mf.define(box, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
+    initialize_bc();
     fillBoundary();
 }
 
@@ -62,5 +66,6 @@ field4::field4(lexer *p) : field_amrex(p)
     mf.define(box, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
+    initialize_bc();
     fillBoundary();
 }
