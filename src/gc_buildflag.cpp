@@ -22,9 +22,8 @@ Author: Hans Bihs
 
 #include"ghostcell.h"
 #include"lexer.h"
-#include"fdm.h"
 
-void ghostcell::gcb_velflagio(lexer *p, fdm *a)
+void ghostcell::gcb_velflagio(lexer *p)
 {
     GC1LOOP
     {
