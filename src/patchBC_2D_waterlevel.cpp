@@ -32,7 +32,7 @@ void patchBC_2D::patchBC_waterlevel2D(lexer *p, fdm2D *b, ghostcell *pgc, slice 
     // waterlevel
     for(qq=0;qq<obj_count;++qq)
     if(patch[qq]->hydroFSF_flag)
-        patch[qq]->waterlevel = patchBC_hydrograph_FSF_ipol(p,pgc,qq,patch[qq]->ID);
+        patch[qq]->waterlevel = patchBC_hydrograph_FSF_ipol(p,qq,patch[qq]->ID);
 
     // waterlevel
     for(qq=0;qq<obj_count;++qq)

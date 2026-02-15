@@ -30,70 +30,61 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
     // count gcbs
     for(int qn=0;qn<p->B440;++qn)
     {
-            int count=0;
-        
-            istart = p->posc_i(p->B440_xs[qn]);
-            iend = p->posc_i(p->B440_xe[qn]);
-            
-            jstart = p->posc_j(p->B440_ys[qn]);
-            jend = p->posc_j(p->B440_ye[qn]);
-            
-            for(n=0;n<p->gcb4_count;++n)
-            {
+        int count=0;
+
+        istart = p->posc_i(p->B440_xs[qn]);
+        iend = p->posc_i(p->B440_xe[qn]);
+
+        jstart = p->posc_j(p->B440_ys[qn]);
+        jend = p->posc_j(p->B440_ye[qn]);
+
+        for(n=0;n<p->gcb4_count;++n)
+        {
             i=p->gcb4[n][0];
             j=p->gcb4[n][1];
             k=p->gcb4[n][2];
-            
-                if(i>=istart && i<iend && j>=jstart && j<jend && p->gcb4[n][3]==p->B440_face[qn] && (p->gcb4[n][4]==21||p->gcb4[n][4]==22))
-                {
+
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcb4[n][3]==p->B440_face[qn] && (p->gcb4[n][4]==21||p->gcb4[n][4]==22))
                 ++count;
-                }
-            }
-        
-        
+        }
+
         for(qq=0;qq<obj_count;++qq)
         {
-        if(patch[qq]->ID==p->B440_ID[qn])
-        patch[qq]->gcb_count += count;
+            if(patch[qq]->ID==p->B440_ID[qn])
+            patch[qq]->gcb_count += count;
         }
     }
 
     for(int qn=0;qn<p->B441;++qn)
     {
-            int count=0;
-        
-            istart = p->posc_i(p->B441_xs[qn]);
-            iend = p->posc_i(p->B441_xe[qn]);
-            
-            jstart = p->posc_j(p->B441_ys[qn]);
-            jend = p->posc_j(p->B441_ye[qn]);
-            
-            kstart = p->posc_k(p->B441_zs[qn]);
-            kend = p->posc_k(p->B441_ze[qn]);
-            
-            
-            for(n=0;n<p->gcb4_count;++n)
-            {
+        int count=0;
+
+        istart = p->posc_i(p->B441_xs[qn]);
+        iend = p->posc_i(p->B441_xe[qn]);
+
+        jstart = p->posc_j(p->B441_ys[qn]);
+        jend = p->posc_j(p->B441_ye[qn]);
+
+        kstart = p->posc_k(p->B441_zs[qn]);
+        kend = p->posc_k(p->B441_ze[qn]);
+
+        for(n=0;n<p->gcb4_count;++n)
+        {
             i=p->gcb4[n][0];
             j=p->gcb4[n][1];
             k=p->gcb4[n][2];
-            
-                if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend && p->gcb4[n][3]==p->B441_face[qn] && (p->gcb4[n][4]==21||p->gcb4[n][4]==22))
-                {
+
+            if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend && p->gcb4[n][3]==p->B441_face[qn] && p->gcb4[n][4]==21)
                 ++count;
-                }
-            }
-    
-        
+        }
+
         for(qq=0;qq<obj_count;++qq)
         {
             if(patch[qq]->ID==p->B441_ID[qn])
                 patch[qq]->gcb_count += count;
         }
-    
     }
-    
-    
+
     // circle
     double r;
     for(int qn=0;qn<p->B442;++qn)
@@ -135,11 +126,11 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
 
         for(qq=0;qq<obj_count;++qq)
         {
-        if(patch[qq]->ID==p->B442_ID[qn])
-        patch[qq]->gcb_count += count;
+            if(patch[qq]->ID==p->B442_ID[qn])
+            patch[qq]->gcb_count += count;
         }
     }
-    
+
     // allocate arrays in patch_obj
     for(q=0; q<obj_count;++q)
     patch[q]->patch_obj_gcb_generate(p);

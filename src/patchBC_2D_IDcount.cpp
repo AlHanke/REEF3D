@@ -26,48 +26,38 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"patch_obj.h"
 
-
 void patchBC_2D::patchBC_IDcount(lexer *p, ghostcell *pgc)
 {
-    int check;
-
     geo_count = p->B440;
 
     p->Iarray(ID_array,geo_count);
 
     // ini ID array
     count=0;
-    check=0;
+    bool check=false;
 
     if(p->B440>0 && check==0)
     {
-    ID_array[0] = p->B440_ID[0];
-    count=1;
-    check=1;
+        ID_array[0] = p->B440_ID[0];
+        count=1;
+        check=true;
     }
 
     // fill ID array
     for(n=0; n<p->B440;++n)
     {
-        check=1;
+        check=true;
         for(int qn=0;qn<count;++qn)
-        {
-
         if(ID_array[qn]==p->B440_ID[n])
-        check=0;
-        }
+            check=false;
 
 
-        if(check==1)
+        if(check)
         {
-        ID_array[count] = p->B440_ID[n];
-        ++count;
+            ID_array[count] = p->B440_ID[n];
+            ++count;
         }
     }
 
-
-
     obj_count=count;
-
 }
-
