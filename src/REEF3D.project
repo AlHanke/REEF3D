@@ -2848,7 +2848,6 @@
         <File Name="gc_noslip.cpp"/>
         <File Name="gc_potential.cpp"/>
         <File Name="gc_start.cpp"/>
-        <File Name="gc_atmosphere.cpp"/>
         <File Name="gc_outflow.cpp"/>
         <File Name="gc_gravity_press.cpp"/>
         <File Name="gc_lsm.cpp"/>
