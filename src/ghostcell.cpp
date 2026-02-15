@@ -25,7 +25,11 @@ Authors: Hans Bihs, Alexander Hanke
 #include"fdm.h"
 #include"fdm_fnpf.h"
 #include"fdm_nhf.h"
-#include <HYPRE_utilities.h>
+#if USE_AMREX
+    #include <AMReX.H>
+#else
+    #include <HYPRE_utilities.h>
+#endif
 #include<sstream>
 
 ghostcell::ghostcell(int& argc, char **argv, lexer *p) : margin(p->margin)
@@ -36,7 +40,17 @@ ghostcell::ghostcell(int& argc, char **argv, lexer *p) : margin(p->margin)
     MPI_Comm_rank(mpi_comm,&p->mpirank);
     MPI_Comm_size(mpi_comm,&p->mpi_size);
 
-    HYPRE_Initialize();
+    #if USE_AMREX
+        amrex::Initialize(argc,argv,mpi_comm);
+
+        if(AMREX_SPACEDIM != 3)
+        {
+            std::cerr << "Error: AMReX must be configured for 3D (AMREX_SPACEDIM=3)" << std::endl;
+            exit(1);
+        }
+    #else
+        HYPRE_Initialize();
+    #endif
 
     ghostcell::p=p;
 
@@ -180,7 +194,11 @@ void ghostcell::fdm_update(fdm *aa)
 
 void ghostcell::final(bool error)
 {
-    HYPRE_Finalize();
+    #if USE_AMREX
+        amrex::Finalize();
+    #else
+        HYPRE_Finalize();
+    #endif
     if(cart_comm != MPI_COMM_NULL)
         MPI_Comm_free(&cart_comm);
     if(mpi_comm != MPI_COMM_NULL)
