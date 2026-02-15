@@ -60,7 +60,7 @@ void field_amrex::FillBoundary()
     mf[p->level].FillBoundary(p->amrex_geometry[p->level].periodicity());
 }
 
-void field_amrex::FillDomainBoundary()
+void field_amrex::FillDomainBoundary(int gcv)
 {
     amrex::Vector<amrex::Box> loc_boxes;
     for (amrex::MFIter mfi(mf[p->level]); mfi.isValid(); ++mfi) {
@@ -70,9 +70,10 @@ void field_amrex::FillDomainBoundary()
     amrex::Gpu::DeviceVector<amrex::Box> device_boxes(loc_boxes.size());
     amrex::Gpu::copy(amrex::Gpu::hostToDevice, loc_boxes.begin(), loc_boxes.end(), device_boxes.begin());
 
-    amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFill> bf(amrex_bc_func::MyExtBCFill{face_bc_values, device_boxes.data(), static_cast<int>(device_boxes.size())});
+    amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFill> bf(amrex_bc_func::MyExtBCFill{face_bc_values, gcv, device_boxes.data(), static_cast<int>(device_boxes.size())});
 
     amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFill>> physbcf(p->amrex_geometry[p->level], BCRecs[p->level], bf);
+
     amrex::FillPatchSingleLevel(mf[p->level], amrex::Real(p->simtime),
                                 {&(mf[p->level])}, {amrex::Real(p->simtime)},
                                 0, 0, mf[p->level].nComp(), p->amrex_geometry[p->level], physbcf, 0);
