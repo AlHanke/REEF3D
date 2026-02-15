@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
+#if USE_AMREX
 #ifndef GRID_AMREX_H_
 #define GRID_AMREX_H_
 
@@ -91,4 +92,5 @@ protected:
     void setup_amrex_geometry(lexer* p, ghostcell* pgc);
 };
 
+#endif
 #endif

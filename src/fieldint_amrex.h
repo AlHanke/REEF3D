@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
+#if USE_AMREX
 #ifndef FIELDINT_AMREX_H_
 #define FIELDINT_AMREX_H_
 
@@ -50,4 +51,5 @@ protected:
     amrex::Vector<amrex::iMultiFab> mf = {};
 };
 
+#endif
 #endif

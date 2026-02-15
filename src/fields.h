@@ -20,38 +20,38 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
-#if USE_AMREX
-#ifndef FIELDINTS_AMReX_H_
-#define FIELDINTS_AMReX_H_
+#if (not USE_AMREX)
+#ifndef FIELDS_H_
+#define FIELDS_H_
 
-#include"fieldint_amrex.h"
+#include "field.h"
 
-class fieldint1 : public fieldint_amrex
+class field1 : public field
 {
 public:
-    fieldint1 (lexer*);
-    virtual ~fieldint1() = default;
+    field1 (lexer* p) : field(p) {};
+    virtual ~field1() = default;
 };
 
-class fieldint2 : public fieldint_amrex
+class field2 : public field
 {
 public:
-    fieldint2 (lexer*);
-    virtual ~fieldint2() = default;
+    field2 (lexer* p) : field(p) {};
+    virtual ~field2() = default;
 };
 
-class fieldint3 : public fieldint_amrex
+class field3 : public field
 {
 public:
-    fieldint3 (lexer*);
-    virtual ~fieldint3() = default;
+    field3 (lexer* p) : field(p) {};
+    virtual ~field3() = default;
 };
 
-class fieldint4 : public fieldint_amrex
+class field4 : public field
 {
 public:
-    fieldint4 (lexer*);
-    virtual ~fieldint4() = default;
+    field4 (lexer* p) : field(p) {};
+    virtual ~field4() = default;
 };
 
 #endif

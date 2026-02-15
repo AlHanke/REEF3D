@@ -59,7 +59,9 @@ Authors: Hans Bihs, Alexander Hanke (@AlHanke)
 #include<sstream>
 #include<cstdio>
 #include<cstring>
-#include <AMReX_PlotFileUtil.H>
+#if USE_AMREX
+    #include <AMReX_PlotFileUtil.H>
+#endif
 
 printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc)
 {
@@ -366,7 +368,9 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             else if(p->P15==2)
                 num = p->count;
 
+        #if USE_AMREX
         if(p->nlevs==1)
+        #endif
         {
             outputFormat->extent(p,pgc);
 
@@ -895,6 +899,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
 
             writeFile(name, total_size);
         }
+        #if USE_AMREX
         else
         {
             // 1. Define variable names
@@ -1072,6 +1077,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                                         p->amrex_geometry, p->simtime,
                                         level_steps, ref_ratio);
         }
+        #endif
 
         ++p->printcount;
 

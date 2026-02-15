@@ -23,11 +23,24 @@ Author: Hans Bihs
 #ifndef FIELDINT_H_
 #define FIELDINT_H_
 
+#if not USE_AMREX
+#include "lexer.h"
+#include <vector>
+#endif
+
 #include"field_base.h"
 class fieldint : public field_base<int>
 {
 public:
     virtual ~fieldint() = default;
+    #if not USE_AMREX
+    fieldint(lexer* p) : p(p), data((p->imax-p->imin)*(p->jmax-p->jmin)*(p->kmax-p->kmin), 0.0) {};
+    int& operator()(int ii, int jj, int kk) override {return data[(ii-p->imin)*p->jmax*p->kmax + (jj-p->jmin)*p->kmax + kk-p->kmin];};
+    void setVal(int val, bool includeGhost = false ) override {int i,j,k;if(includeGhost){MALOOP{operator()(i,j,k) = val;}}else{LOOP{operator()(i,j,k) = val;}}};
+private:
+    lexer* p;
+    std::vector<int> data;
+    #endif
 };
 
 #endif

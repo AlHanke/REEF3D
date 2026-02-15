@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
+#if USE_AMREX
 #include "grid_amrex.h"
 #include "lexer.h"
 #include "ghostcell.h"
@@ -344,3 +345,5 @@ void grid_amrex::update_cell_spacing()
         }
     }
 }
+
+#endif

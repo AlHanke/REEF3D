@@ -23,9 +23,15 @@ Authors: Hans Bihs, Alexander Hanke (@AlHanke)
 #ifndef ITERATORS1D_H_
 #define ITERATORS1D_H_
 
-#define ORIGIN_I (amrex::lbound(p->amr_cell_mfi->tilebox()).x + max_i*level)
-#define ORIGIN_J (amrex::lbound(p->amr_cell_mfi->tilebox()).y + max_j*level)
-#define ORIGIN_K (amrex::lbound(p->amr_cell_mfi->tilebox()).z + max_k*level)
+#if USE_AMREX
+    #define ORIGIN_I (amrex::lbound(p->amr_cell_mfi->tilebox()).x + max_i*level)
+    #define ORIGIN_J (amrex::lbound(p->amr_cell_mfi->tilebox()).y + max_j*level)
+    #define ORIGIN_K (amrex::lbound(p->amr_cell_mfi->tilebox()).z + max_k*level)
+#else
+    #define ORIGIN_I p->origin_i
+    #define ORIGIN_J p->origin_j
+    #define ORIGIN_K p->origin_k
+#endif
 
 #define ZEROIP (0 + marge + ORIGIN_I)
 #define ZEROJP (0 + marge + ORIGIN_J)

@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
+#if USE_AMREX
 #ifndef FIELD_AMREX_H_
 #define FIELD_AMREX_H_
 
@@ -338,4 +339,5 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
     }
 }
 
+#endif
 #endif

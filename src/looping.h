@@ -28,61 +28,75 @@ Author: Hans Bihs, Alexander Hanke (@AlHanke)
 #include"looping2D.h"
 #include"iterators2D.h"
 #include"iterators1D.h"
-#include <AMReX_MFIter.H>
-#include <AMReX_MultiFab.H>
+#if USE_AMREX
+    #include <AMReX_MFIter.H>
+    #include <AMReX_MultiFab.H>
 
-// LOOPs
-#define LevelLOOP \
-    for (struct { lexer* ctx; bool active; } \
-             _level_guard{p, true}; \
-         _level_guard.active; \
-         _level_guard.ctx->level = 0, _level_guard.active = false) \
-        for (_level_guard.ctx->level = 0; \
-             _level_guard.ctx->level < _level_guard.ctx->nlevs; \
-             ++_level_guard.ctx->level)
-#define TileLOOP \
-    for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*, amrex::TilingIfNotGPU()*//*enable if necessary*/); _tile_mfi.isValid(); ++_tile_mfi) \
-        for (struct { lexer* ctx; amrex::MFIter* saved; } \
-                 _guard{p, std::exchange(p->amr_cell_mfi, &_tile_mfi)}; \
-             _guard.ctx != nullptr; \
-             _guard.ctx->amr_cell_mfi = (_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), \
-             _guard.ctx = nullptr)
+    // LOOPs
+    #define LevelLOOP \
+        for (struct { lexer* ctx; bool active; } \
+                _level_guard{p, true}; \
+            _level_guard.active; \
+            _level_guard.ctx->level = 0, _level_guard.active = false) \
+            for (_level_guard.ctx->level = 0; \
+                _level_guard.ctx->level < _level_guard.ctx->nlevs; \
+                ++_level_guard.ctx->level)
+    #define TileLOOP \
+        for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*, amrex::TilingIfNotGPU()*//*enable if necessary*/); _tile_mfi.isValid(); ++_tile_mfi) \
+            for (struct { lexer* ctx; amrex::MFIter* saved; } \
+                    _guard{p, std::exchange(p->amr_cell_mfi, &_tile_mfi)}; \
+                _guard.ctx != nullptr; \
+                _guard.ctx->amr_cell_mfi = (_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), \
+                _guard.ctx = nullptr)
 
-#define imax_amrex (amrex::ubound(p->amr_cell_mfi->tilebox()).x - amrex::lbound(p->amr_cell_mfi->tilebox()).x)
-#define jmax_amrex (amrex::ubound(p->amr_cell_mfi->tilebox()).y - amrex::lbound(p->amr_cell_mfi->tilebox()).y)
-#define kmax_amrex (amrex::ubound(p->amr_cell_mfi->tilebox()).z - amrex::lbound(p->amr_cell_mfi->tilebox()).z)
+    #define IMAX_LOOP (amrex::ubound(p->amr_cell_mfi->tilebox()).x - amrex::lbound(p->amr_cell_mfi->tilebox()).x)
+    #define JMAX_LOOP (amrex::ubound(p->amr_cell_mfi->tilebox()).y - amrex::lbound(p->amr_cell_mfi->tilebox()).y)
+    #define KMAX_LOOP (amrex::ubound(p->amr_cell_mfi->tilebox()).z - amrex::lbound(p->amr_cell_mfi->tilebox()).z)
+    #define MARGIN_I p->amr_cell_mf[p->level].nGrow(0)
+    #define MARGIN_J p->amr_cell_mf[p->level].nGrow(1)
+    #define MARGIN_K p->amr_cell_mf[p->level].nGrow(2)
+#else
+    #define LevelLOOP
+    #define TileLOOP
+    #define IMAX_LOOP p->knox-1
+    #define JMAX_LOOP p->knoy-1
+    #define KMAX_LOOP p->knoz-1
+    #define MARGIN_I p->margin
+    #define MARGIN_J p->margin
+    #define MARGIN_K p->margin
+#endif
 
-#define ILOOP for (i = 0; i <= imax_amrex; ++i)
-#define JLOOP for (j = 0; j <= jmax_amrex; ++j)
-#define KLOOP for (k = 0; k <= kmax_amrex; ++k)
+#define ILOOP for (i = 0; i <= IMAX_LOOP; ++i)
+#define JLOOP for (j = 0; j <= JMAX_LOOP; ++j)
+#define KLOOP for (k = 0; k <= KMAX_LOOP; ++k)
 
-#define ITLOOP for(i = 0; i <= imax_amrex+1; ++i)
-#define JTLOOP for(j = 0; j <= jmax_amrex+1; ++j)
-#define KTLOOP for(k = 0; k <= kmax_amrex+1; ++k)
+#define ITLOOP for(i = 0; i <= IMAX_LOOP+1; ++i)
+#define JTLOOP for(j = 0; j <= JMAX_LOOP+1; ++j)
+#define KTLOOP for(k = 0; k <= KMAX_LOOP+1; ++k)
 
-#define ITPLOOP for(i = -1; i <= imax_amrex; ++i)
-#define JTPLOOP for(j = -1; j <= jmax_amrex; ++j)
-#define KTPLOOP for(k = -1; k <= kmax_amrex; ++k)
+#define ITPLOOP for(i = -1; i <= IMAX_LOOP; ++i)
+#define JTPLOOP for(j = -1; j <= JMAX_LOOP; ++j)
+#define KTPLOOP for(k = -1; k <= KMAX_LOOP; ++k)
 
-#define IBLOOP for(i = -1; i <= imax_amrex+1; ++i)
-#define JBLOOP for(j = -1; j <= jmax_amrex+1; ++j)
-#define KBLOOP for(k = -1; k <= kmax_amrex+1; ++k)
+#define IBLOOP for(i = -1; i <= IMAX_LOOP+1; ++i)
+#define JBLOOP for(j = -1; j <= JMAX_LOOP+1; ++j)
+#define KBLOOP for(k = -1; k <= KMAX_LOOP+1; ++k)
 
-#define IMALOOP for(i = -p->amr_cell_mf[p->level].nGrow(0); i <= imax_amrex + p->amr_cell_mf[p->level].nGrow(0); ++i)
-#define JMALOOP for(j = -p->amr_cell_mf[p->level].nGrow(1); j <= jmax_amrex + p->amr_cell_mf[p->level].nGrow(1); ++j)
-#define KMALOOP for(k = -p->amr_cell_mf[p->level].nGrow(2); k <= kmax_amrex + p->amr_cell_mf[p->level].nGrow(2); ++k)
+#define IMALOOP for(i = -MARGIN_I; i <= IMAX_LOOP + MARGIN_I; ++i)
+#define JMALOOP for(j = -MARGIN_J; j <= JMAX_LOOP + MARGIN_J; ++j)
+#define KMALOOP for(k = -MARGIN_K; k <= KMAX_LOOP + MARGIN_K; ++k)
 
-#define IFLEXLOOP for(i = 0; i <= imax_amrex - ulast; ++i)
-#define JFLEXLOOP for(j = 0; j <= jmax_amrex - vlast; ++j)
-#define KFLEXLOOP for(k = 0; k <= kmax_amrex - wlast; ++k)
+#define IFLEXLOOP for(i = 0; i <= IMAX_LOOP - ulast; ++i)
+#define JFLEXLOOP for(j = 0; j <= JMAX_LOOP - vlast; ++j)
+#define KFLEXLOOP for(k = 0; k <= KMAX_LOOP - wlast; ++k)
 
-#define IULOOP for(i = 0; i <= imax_amrex - p->ulast; ++i)
-#define JVLOOP for(j = 0; j <= jmax_amrex - p->vlast; ++j)
-#define KWLOOP for(k = 0; k <= kmax_amrex - p->wlast; ++k)
+#define IULOOP for(i = 0; i <= IMAX_LOOP - p->ulast; ++i)
+#define JVLOOP for(j = 0; j <= JMAX_LOOP - p->vlast; ++j)
+#define KWLOOP for(k = 0; k <= KMAX_LOOP - p->wlast; ++k)
 
 #define FILOOP ILOOP
 #define FJLOOP JLOOP
-#define FKLOOP for(k = 0; k <= kmax_amrex + 1; ++k)
+#define FKLOOP for(k = 0; k <= KMAX_LOOP + 1; ++k)
 
 #define ETALOC  for(k=a->etaloc(i,j); k<a->etaloc(i,j)+1; ++k)
 #define FETALOC for(k=c->etaloc(i,j); k<c->etaloc(i,j)+1; ++k)

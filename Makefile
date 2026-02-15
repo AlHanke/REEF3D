@@ -7,10 +7,16 @@ GIT_BRANCH   := $(shell git rev-parse --abbrev-ref HEAD)
 GIT_VERSION  := "$(shell git describe --dirty --always --tags)"
 HYPRE_DIR    := /usr/local/hypre
 EIGEN_DIR    := ThirdParty/eigen-3.3.8
-AMREX_LIBRARY_HOME := ThirdParty/amrex-26.01
 CXXFLAGS     := -std=c++17 -DVERSION=\"$(GIT_VERSION)\" -DBRANCH=\"$(GIT_BRANCH)\"
-LDFLAGS      := -L ${HYPRE_DIR}/lib/ -lHYPRE -L $(AMREX_LIBRARY_HOME)/lib -lamrex -L /opt/homebrew/lib/gcc/current -lgfortran
-INCLUDE      := -I ${HYPRE_DIR}/include -I ${EIGEN_DIR} -DEIGEN_MPL2_ONLY -I $(AMREX_LIBRARY_HOME)/include
+LDFLAGS      := -L ${HYPRE_DIR}/lib/ -lHYPRE
+INCLUDE      := -I ${HYPRE_DIR}/include -I ${EIGEN_DIR} -DEIGEN_MPL2_ONLY
+USE_AMREX ?= 0
+ifeq ($(USE_AMREX),1)
+AMREX_LIBRARY_HOME := ThirdParty/amrex-26.01
+CXXFLAGS	 += -DUSE_AMREX=$(USE_AMREX)
+LDFLAGS      += -L $(AMREX_LIBRARY_HOME)/lib -lamrex -L /opt/homebrew/lib/gcc/current -lgfortran
+INCLUDE      += -I $(AMREX_LIBRARY_HOME)/include
+endif
 SRC          := $(wildcard src/*.cpp)
 OBJECTS      := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 DEPENDENCIES := $(OBJECTS:.o=.d)

@@ -74,27 +74,27 @@ void grid::gridspacing(lexer* p, ghostcell *pgc)
     increment::max_k = gknoz + 2*marge;
 
     // x direction
-    std::vector<int> transfer_number(amrex::ParallelDescriptor::NProcs(), 0);
+    std::vector<int> transfer_number(p->mpi_size, 0);
     int local_size = knox;
     if(p->nb1==-2) local_size += marge;
     if(p->nb4==-2) local_size += marge+1;
     if(p->nb3!=-2 || p->nb5!=-2) local_size = 0;
-    MPI_Allgather(&local_size, 1, MPI_INT, transfer_number.data(), 1, MPI_INT, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgather(&local_size, 1, MPI_INT, transfer_number.data(), 1, MPI_INT, pgc->mpi_comm);
 
-    std::vector<int> offsets(amrex::ParallelDescriptor::NProcs(), 0);
+    std::vector<int> offsets(p->mpi_size, 0);
     int local_offset = marge + p->origin_i;
     if(p->nb1==-2) local_offset -= marge;
-    MPI_Allgather(&local_offset, 1, MPI_INT, offsets.data(), 1, MPI_INT, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgather(&local_offset, 1, MPI_INT, offsets.data(), 1, MPI_INT, pgc->mpi_comm);
 
     std::vector<double> temp(max_i+1,0);
     int local_start = marge;
     if(p->nb1==-2) local_start -= marge;
 
-    MPI_Allgatherv(XN.data()+local_start, local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgatherv(XN.data()+local_start, local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, pgc->mpi_comm);
     XN.clear(); XN.resize(max_i+1,0);
     std::copy(temp.begin(), temp.end(), XN.begin());
 
-    MPI_Allgatherv(RN+local_start, local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgatherv(RN+local_start, local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, pgc->mpi_comm);
     delete [] RN; RN = new double[max_i+1];
     std::copy(temp.begin(), temp.end(), RN);
 
@@ -103,21 +103,21 @@ void grid::gridspacing(lexer* p, ghostcell *pgc)
     if(p->nb3==-2) local_size += marge;
     if(p->nb2==-2) local_size += marge+1;
     if(p->nb1!=-2 || p->nb5!=-2) local_size = 0;
-    MPI_Allgather(&local_size, 1, MPI_INT, transfer_number.data(), 1, MPI_INT, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgather(&local_size, 1, MPI_INT, transfer_number.data(), 1, MPI_INT, pgc->mpi_comm);
 
     local_offset = marge + p->origin_j;
     if(p->nb3==-2) local_offset -= marge;
-    MPI_Allgather(&local_offset, 1, MPI_INT, offsets.data(), 1, MPI_INT, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgather(&local_offset, 1, MPI_INT, offsets.data(), 1, MPI_INT, pgc->mpi_comm);
 
     temp.clear();
     temp.resize(max_j+1,0);
     local_start = marge;
     if(p->nb3==-2) local_start -= marge;
-    MPI_Allgatherv(YN.data(), local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgatherv(YN.data(), local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, pgc->mpi_comm);
     YN.clear(); YN.resize(max_j+1,0);
     std::copy(temp.begin(), temp.end(), YN.begin());
 
-    MPI_Allgatherv(SN+local_start, local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgatherv(SN+local_start, local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, pgc->mpi_comm);
     delete [] SN; SN = new double[max_j+1];
     std::copy(temp.begin(), temp.end(), SN);
 
@@ -126,22 +126,22 @@ void grid::gridspacing(lexer* p, ghostcell *pgc)
     if(p->nb5==-2) local_size += marge;
     if(p->nb6==-2) local_size += marge+1;
     if(p->nb1!=-2 || p->nb3!=-2) local_size = 0;
-    MPI_Allgather(&local_size, 1, MPI_INT, transfer_number.data(), 1, MPI_INT, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgather(&local_size, 1, MPI_INT, transfer_number.data(), 1, MPI_INT, pgc->mpi_comm);
 
     local_offset = marge + p->origin_k;
     if(p->nb5==-2) local_offset -= marge;
-    MPI_Allgather(&local_offset, 1, MPI_INT, offsets.data(), 1, MPI_INT, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgather(&local_offset, 1, MPI_INT, offsets.data(), 1, MPI_INT, pgc->mpi_comm);
 
     temp.clear();
     temp.resize(max_k+1,0);
     local_start = marge;
     if(p->nb5==-2) local_start -= marge;
 
-    MPI_Allgatherv(ZN.data(), local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgatherv(ZN.data(), local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, pgc->mpi_comm);
     ZN.clear(); ZN.resize(max_k+1,0);
     std::copy(temp.begin(), temp.end(), ZN.begin());
 
-    MPI_Allgatherv(TN+local_start, local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, amrex::ParallelDescriptor::Communicator());
+    MPI_Allgatherv(TN+local_start, local_size, MPI_DOUBLE, temp.data(), transfer_number.data(), offsets.data(), MPI_DOUBLE, pgc->mpi_comm);
     delete [] TN; TN = new double[max_k+1];
     std::copy(temp.begin(), temp.end(), TN);
 

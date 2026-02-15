@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
+#if USE_AMREX
 #include "field_amrex.h"
 #include "lexer.h"
 #include "amrex_bc_func.h"
@@ -130,3 +131,4 @@ void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
         }
     }
 }
+#endif

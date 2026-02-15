@@ -24,12 +24,28 @@ Author: Hans Bihs
 #define FIELD_H_
 
 #include "field_base.h"
+
+#if not USE_AMREX
+#include "lexer.h"
+#include <vector>
+#include <algorithm>
+#endif
+
 class field : public field_base<double>
 {
 public:
     virtual ~field() = default;
+    #if USE_AMREX
     virtual void FillDomainBoundary(int gcv) = 0;
     virtual void FillDomainBoundaryValue(double value, int dir, bool high) = 0;
+    #else
+    field(lexer* p) : p(p), data((p->imax-p->imin)*(p->jmax-p->jmin)*(p->kmax-p->kmin), 0.0) {};
+    double& operator()(int ii, int jj, int kk) override final {return data[(ii-p->imin)*p->jmax*p->kmax + (jj-p->jmin)*p->kmax + kk-p->kmin];};
+    void setVal(double val, bool includeGhost = false ) override final {int i,j,k;if(includeGhost){std::fill(data.begin(),data.end(),val);}else{LOOP{operator()(i,j,k) = val;}}};
+private:
+    lexer* p;
+    std::vector<double> data;
+    #endif
 };
 
 #endif

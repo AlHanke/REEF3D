@@ -23,7 +23,9 @@ Author: Alexander Hanke (@AlHanke)
 #ifndef FIELD_BASE_H_
 #define FIELD_BASE_H_
 
-#include <AMReX_IntVect.H>
+#if USE_AMREX
+    #include <AMReX_IntVect.H>
+#endif
 
 /*!
  * @brief Base class for field representations in REEF3D.
@@ -54,6 +56,15 @@ public:
     virtual T& operator()(int ii, int jj, int kk) = 0;
 
     /*!
+     * @brief Sets all elements in the field to a specific value.
+     *
+     * @param val The value to set the field elements to.
+     * @param includeGhost Flag to indicate if ghost cells/boundary layers should also be set to this value. Defaults to false.
+     */
+    virtual void setVal(T val, bool includeGhost = false) = 0;
+
+    #if USE_AMREX
+    /*!
      * @brief Accesses an element in the field for a component.
      *
      * Provides a reference to the element at the specified 3D index for a component.
@@ -65,20 +76,13 @@ public:
     virtual T& operator()(const amrex::IntVect& iv, int comp = 0) = 0;
 
     /*!
-     * @brief Sets all elements in the field to a specific value.
-     *
-     * @param val The value to set the field elements to.
-     * @param includeGhost Flag to indicate if ghost cells/boundary layers should also be set to this value. Defaults to false.
-     */
-    virtual void setVal(T val, bool includeGhost = false) = 0;
-
-    /*!
      * @brief Updates the boundary conditions for the field.
      *
      * This method handles the synchronization of ghost cells based valid internal values.
      * Will be deprecated in future versions in favor of AMReX specific boundary exchange methods.
      */
     virtual void FillBoundary() = 0;
+    #endif
 };
 
 #endif

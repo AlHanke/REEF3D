@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
+#if USE_AMREX
 #include "fieldints_amrex.h"
 #include "lexer.h"
 #include <AMReX_iMultiFab.H>
@@ -60,3 +61,5 @@ fieldint4::fieldint4(lexer *p) : fieldint_amrex(p)
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
     }
 }
+
+#endif

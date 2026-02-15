@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
+#if USE_AMREX
 #include "fieldint_amrex.h"
 #include "lexer.h"
 #include <AMReX_BCUtil.H>
@@ -54,3 +55,5 @@ void fieldint_amrex::FillBoundary()
 {
     mf[p->level].FillBoundary(p->amrex_geometry[p->level].periodicity());
 }
+
+#endif

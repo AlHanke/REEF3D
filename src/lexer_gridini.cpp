@@ -25,9 +25,12 @@ Author: Hans Bihs, Alexander Hanke (@AlHanke)
 
 void lexer::gridini(ghostcell *pgc)
 {
+    #if USE_AMREX
     setup_amrex_geometry(this,pgc);
+    #endif
 
     gridspacing(this, pgc);
+    #if USE_AMREX
     if(nlevs > 1)
     {
         if(G2==1)
@@ -39,9 +42,12 @@ void lexer::gridini(ghostcell *pgc)
         update_cell_coordinates();
         update_cell_spacing();
     }
+    #endif
 
     gcd_ini(this,pgc);
+    #if USE_AMREX
     define_inflow_outflow_ba();
+    #endif
 }
 
 void lexer::flagini()

@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
+#if USE_AMREX
 #ifndef AMREX_BC_FUNC_H_
 #define AMREX_BC_FUNC_H_
 
@@ -804,4 +805,5 @@ public:
     };
 };
 
+#endif
 #endif

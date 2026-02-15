@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
+#if USE_AMREX
 #ifndef FIELDS_AMReX_H_
 #define FIELDS_AMReX_H_
 
@@ -65,4 +66,5 @@ private:
     amrex_bc_func::Field4BcDecision::Field4Params params;
 };
 
+#endif
 #endif

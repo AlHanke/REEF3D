@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke (@AlHanke)
 --------------------------------------------------------------------*/
 
+#if USE_AMREX
 #include "fields_amrex.h"
 #include "lexer.h"
 #include <AMReX_MultiFab.H>
@@ -129,3 +130,5 @@ void field4::FillDomainBoundary(int gcv)
 {
     FillDomainBoundaryImpl(gcv, amrex_bc_func::Field4BcDecision(params));
 }
+
+#endif

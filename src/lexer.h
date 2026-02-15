@@ -34,7 +34,11 @@ Author: Hans Bihs
 #include<fstream>
 #include"looping.h"
 #include<vector>
-#include "grid_amrex.h"
+#if USE_AMREX
+    #include "grid_amrex.h"
+#else
+    #include "grid.h"
+#endif
 #include "control.h"
 
 class weno_nug_func;
@@ -42,7 +46,12 @@ class ghostcell;
 
 using namespace std;
 
-class lexer : virtual public resize_class, public position, public interpolation, public grid_amrex, public control
+class lexer : virtual public resize_class, public position, public interpolation, public control,
+#if USE_AMREX
+    public grid_amrex
+#else
+    public grid
+#endif
 {
 public:
 
