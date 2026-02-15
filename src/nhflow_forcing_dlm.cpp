@@ -43,9 +43,9 @@ void nhflow_forcing::dlm_forcing(lexer *p, fdm_nhf *d, ghostcell *pgc,
         jj = p->posc_j(EL_Y[n][q]);
         kk = p->posc_sig(ii, jj, EL_Z[n][q]);
 
-        dx = p->DXN[ii + marge];
-        dy = p->DYN[jj + marge];
-        dz = p->DZN[kk + marge]*WL(ii,jj);
+        dx = p->DXN[IIP];
+        dy = p->DYN[JJP];
+        dz = p->DZN[KKP]*WL(ii,jj);
 
         for (i = ii - 2; i <= ii + 2; ++i)
         for (j = jj - 2; j <= jj + 2; ++j)
