@@ -42,7 +42,7 @@ ghostcell::bc_labels ghostcell::gcsleval1(int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
     //Outflow
     else if((bc==2)&&(cs==1||cs==4) && (gcv==10||gcv==20||gcv==1))
-        return bc_labels::OUTFLOW;
+        return bc_labels::OUTFLOWBC;
     //Symmetry
     else if(bc==3 && (cs==2||cs==3||cs==5||cs==6) && (gcv==10||gcv==20||gcv==1))
         return bc_labels::NEUMANN;

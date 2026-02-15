@@ -105,15 +105,15 @@ void ghostcell::gc_ini(lexer* p)
     }
     else if(p->B75==2)
     {
-        gclabel_u_out=bc_labels::OUTFLOW;
-        gclabel_v_out=bc_labels::OUTFLOW;
-        gclabel_w_out=bc_labels::OUTFLOW;
+        gclabel_u_out=bc_labels::OUTFLOWBC;
+        gclabel_v_out=bc_labels::OUTFLOWBC;
+        gclabel_w_out=bc_labels::OUTFLOWBC;
     }
     else if(p->B75==3)
     {
         gclabel_u_out=bc_labels::NONE;
-        gclabel_v_out=bc_labels::OUTFLOW;
-        gclabel_w_out=bc_labels::OUTFLOW;
+        gclabel_v_out=bc_labels::OUTFLOWBC;
+        gclabel_w_out=bc_labels::OUTFLOWBC;
     }
 
     gclabel_outflow=true;
