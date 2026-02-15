@@ -36,13 +36,13 @@ void ghostcell::gcsl_sommerfeld(slice &f, int cs)
 
     for(q=0;q<margin;++q)
     {
-        if(cs==1)
+        if(cs==X_NEG)
             f(i-q-1,j) = f(i,j) - p->dt*sqrt(gravity*(p->wd+f(i,j)))*dfx1;
-        else if(cs==2)
+        else if(cs==Y_POS)
             f(i,j+q+1) = f(i,j) - p->dt*sqrt(gravity*(p->wd+f(i,j)))*dfy2;
-        else if(cs==3)
+        else if(cs==Y_NEG)
             f(i,j-q-1) = f(i,j) - p->dt*sqrt(gravity*(p->wd+f(i,j)))*dfy3;
-        else if(cs==4)
+        else if(cs==X_POS)
             f(i+q+1,j) = f(i,j) - p->dt*sqrt(gravity*(p->wd+f(i,j)))*dfx4;
     }
 }

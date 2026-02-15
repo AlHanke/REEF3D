@@ -26,8 +26,8 @@ Author: Hans Bihs
 
 void ghostcell::potentialbc(field &f, int cs)
 {
-    if(cs==1)
+    if(cs==dir_labels::X_NEG)
 	    f(i-1,j,k) =  p->Ui*p->DXP[IP] + f(i,j,k);
-	else if(cs==4)
+	else if(cs==dir_labels::X_POS)
 	    f(i+1,j,k) =  p->Uo*p->DXP[IP] + f(i,j,k);
 }

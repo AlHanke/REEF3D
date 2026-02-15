@@ -72,7 +72,7 @@ ghostcell::bc_labels ghostcell::gcsleval4(int gcv, int bc, int cs)
         return bc_labels::POTENTIAL;
 
     // Fifsf 60 - 3D
-    else if(((cs==1 && p->B98<=2) || cs==2 || cs==3 || (cs==4 && p->B99<=2)) && gcv==60)
+    else if(((cs==X_NEG && p->B98<=2) || cs==Y_POS || cs==Y_NEG || (cs==X_POS && p->B99<=2)) && gcv==60)
         return bc_labels::NEUMANN;
 
     // eta 150
@@ -95,7 +95,7 @@ ghostcell::bc_labels ghostcell::gcsleval4(int gcv, int bc, int cs)
         return bc_labels::NEUMANN_X;
 
     // Fifsf 160 - 2D
-    else if(((cs==1 && p->B98<=2) || (cs==4 && p->B99<=2)) && gcv==160)
+    else if(((cs==X_NEG && p->B98<=2) || (cs==X_POS && p->B99<=2)) && gcv==160)
         return bc_labels::NEUMANN_X;
 
     else

@@ -270,6 +270,8 @@ private:
          GRAVITY_PRESS=10, DIRICHLET_ORTH_REFLECT=11, DIRICHLET_PARA_REFLECT=12, NEUMANN_X=14, ATMOSPHERE=21, LSM=22, NEUMANN_HX=41, NEUMANN_HY=42,
          HEATBC=61, DEBUG=99 };
 
+    enum dir_labels { X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2, Z_NEG=5, Z_POS=6 };
+
     // 3D BC decision
     void gcdistro1(field&, int, int, int, int, int, double, int);
     void gcdistro2(field&, int, int, int, int, int, double, int);

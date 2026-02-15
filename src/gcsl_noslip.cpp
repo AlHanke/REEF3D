@@ -27,13 +27,13 @@ void ghostcell::gcsl_noslip(slice &f, int cs)
 {
     for(q=0;q<margin;++q)
     {
-        if(cs==1)
+        if(cs==X_NEG)
             f(i-q-1,j)=0.0;
-        else if(cs==2)
+        else if(cs==Y_POS)
             f(i,j+q+1)=0.0;
-        else if(cs==3)
+        else if(cs==Y_NEG)
             f(i,j-q-1)=0.0;
-        else if(cs==4)
+        else if(cs==X_POS)
             f(i+q+1,j)=0.0;
     }
 }

@@ -21,24 +21,23 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"ghostcell.h"
-#include"lexer.h"
 #include"field.h"
 
 void ghostcell::lsm(field &f, int cs)
 {
     for(q=1;q<=margin;++q)
     {
-        if(cs==1)
+        if(cs==dir_labels::X_NEG)
             f(i-q,j,k) = double(q+1)*f(i,j,k) - double(q)*f(i+1,j,k);
-        else if(cs==2)
-            f(i,j+q,k) = double(q+1)*f(i,j,k) - double(q)*f(i,j-1,k);
-        else if(cs==3)
-            f(i,j-q,k) = double(q+1)*f(i,j,k) - double(q)*f(i,j+1,k);
-        else if(cs==4)
+        else if(cs==dir_labels::X_POS)
             f(i+q,j,k) = double(q+1)*f(i,j,k) - double(q)*f(i-1,j,k);
-        else if(cs==5)
+        else if(cs==dir_labels::Y_NEG)
+            f(i,j-q,k) = double(q+1)*f(i,j,k) - double(q)*f(i,j+1,k);
+        else if(cs==dir_labels::Y_POS)
+            f(i,j+q,k) = double(q+1)*f(i,j,k) - double(q)*f(i,j-1,k);
+        else if(cs==dir_labels::Z_NEG)
             f(i,j,k-q) = double(q+1)*f(i,j,k) - double(q)*f(i,j,k+1);
-        else if(cs==6)
+        else if(cs==dir_labels::Z_POS)
             f(i,j,k+q) = double(q+1)*f(i,j,k) - double(q)*f(i,j,k-1);
     }
 }
