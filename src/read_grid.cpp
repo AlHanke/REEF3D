@@ -371,13 +371,13 @@ void lexer::read_grid()
     Iarray(gcslparaco3, gcslparaco3_count,4);
     Iarray(gcslparaco4, gcslparaco4_count,4);
 
-    Darray(XN,knox+1+2*marge);
-    Darray(YN,knoy+1+2*marge);
-    Darray(ZN,knoz+1+2*marge);
+    XN.resize(knox+2*marge+1,0);
+    YN.resize(knoy+2*marge+1,0);
+    ZN.resize(knoz+2*marge+1,0);
 
-    Darray(RN,knox+1+2*marge);
-    Darray(SN,knoy+1+2*marge);
-    Darray(TN,knoz+1+2*marge);
+    Darray(RN,knox+2*marge+1);
+    Darray(SN,knoy+2*marge+1);
+    Darray(TN,knoz+2*marge+1);
 
 
     // ---------------------------------------------------------------------------------------------------------------------
@@ -393,41 +393,41 @@ void lexer::read_grid()
     }
 
     // Nodes XYZ
-    for(i=-marge;i<knox+1+marge;++i)
+    for(i=-marge;i<knox+marge+1;++i)
     {
         grid.read((char*)&ddn, sizeof (double));
-        XN[IP]=ddn;
+        XN[i + marge]=ddn;
     }
 
     for(j=-marge;j<knoy+1+marge;++j)
     {
         grid.read((char*)&ddn, sizeof (double));
-        YN[JP]=ddn;
+        YN[j + marge]=ddn;
     }
 
     for(k=-marge;k<knoz+1+marge;++k)
     {
         grid.read((char*)&ddn, sizeof (double));
-        ZN[KP]=ddn;
+        ZN[k + marge]=ddn;
     }
 
     // Nodes RST
     for(i=-marge;i<knox+1+marge;++i)
     {
         grid.read((char*)&ddn, sizeof (double));
-        RN[IP]=ddn;
+        RN[i + marge]=ddn;
     }
 
     for(j=-marge;j<knoy+1+marge;++j)
     {
         grid.read((char*)&ddn, sizeof (double));
-        SN[JP]=ddn;
+        SN[j + marge]=ddn;
     }
 
     for(k=-marge;k<knoz+1+marge;++k)
     {
         grid.read((char*)&ddn, sizeof (double));
-        TN[KP]=ddn;
+        TN[k + marge]=ddn;
     }
 
     //  Solid

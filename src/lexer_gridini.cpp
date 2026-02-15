@@ -25,13 +25,23 @@ Author: Hans Bihs, Alexander Hanke
 
 void lexer::gridini(ghostcell *pgc)
 {
-    if(G2==1)
-    sigma_coord_ini();
-
-    gridspacing(pgc);
-    gcd_ini(pgc);
-
     setup_amrex_geometry(this,pgc);
+
+    gridspacing(this, pgc);
+    if(nlevs > 1)
+    {
+        if(G2==1)
+        {
+            std::cerr << "Error: G2=1 is not supported for nlevs > 1" << std::endl;
+            pgc->final(true);
+        }
+
+        update_cell_coordinates();
+        update_cell_spacing();
+    }
+
+    gcd_ini(this,pgc);
+    define_inflow_outflow_ba();
 }
 
 void lexer::flagini()
@@ -144,7 +154,7 @@ int lexer::conv(double a)
 	return b;
 }
 
-void lexer::gcd_ini(ghostcell *pgc)
+void lexer::gcd_ini(lexer* p, ghostcell *pgc)
 {
     for(int q=0;q<gcb4_count;++q)
     {

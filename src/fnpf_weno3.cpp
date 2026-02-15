@@ -32,7 +32,7 @@ fnpf_weno3::fnpf_weno3(lexer* p) :  ddweno3_f_nug(p)
     
     fnpf_discrete_weights dw(p);
 
-    dw.ck_weights(p, ckz, p->ZN, p->knoz+1, 1, 4, 6);
+    dw.ck_weights(p, ckz, p->ZN.data(), p->knoz+1, 1, 4, 6);
 }
 
 fnpf_weno3::~fnpf_weno3()

@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Authors: Hans Bihs, Alexander Hanke
+Authors: Alexander Hanke, Hans Bihs
 --------------------------------------------------------------------*/
 
 #ifndef GRID_H_
@@ -25,6 +25,9 @@ Authors: Hans Bihs, Alexander Hanke
 
 #include "increment.h"
 
+#include <vector>
+
+class lexer;
 class ghostcell;
 
 /*!
@@ -42,19 +45,18 @@ public:
     void assign_margin();
     void sigma_coord_ini();
 
-    void gridspacing(ghostcell *pgc);
+    void gridspacing(lexer* p, ghostcell *pgc);
 
     // Non-Uniform Mesh
-    double *XN,*YN,*ZN; // Nodal coordinates
-    double *XP,*YP,*ZP; // Cell center coordinates
-    double *DXN,*DYN,*DZN; // Nodal grid spacing
-    double *DXP,*DYP,*DZP; // Cell center grid spacing
+    std::vector<double> XN, YN, ZN; // Nodal coordinates
+    std::vector<double> XP, YP, ZP; // Cell center coordinates
+    std::vector<double> DXN, DYN, DZN; // Nodal grid spacing
+    std::vector<double> DXP, DYP, DZP; // Cell center grid spacing
     double *ZSN,*ZSP; // Sigma coordinates (z direction)
     double DXM; // Average grid spacing (all directions)
     double DXD,DYD; // Average grid spacing in x and y direction
 
     double *RN,*SN,*TN; // Temporary arrays
-    double *RP,*SP,*TP; // Temporary arrays
     double DRM,DSM,DTM;
     double *DRDXN,*DSDYN,*DTDZN;
     double *DRDXP,*DSDYP,*DTDZP;

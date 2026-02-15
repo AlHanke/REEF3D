@@ -43,9 +43,9 @@ void nhflow_scalar_iweno::start(lexer* p, fdm_nhf *d, double *F, int ipol, doubl
 {
     uf=vf=wf=0;
 
-    DX=p->DXP;
-    DY=p->DYP;
-    DZ=p->DZP;
+    DX=p->DXP.data();
+    DY=p->DYP.data();
+    DZ=p->DZP.data();
     
 
 	count=0;

@@ -149,8 +149,6 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     level = 0;
     default_cell_mfi = std::make_unique<amrex::MFIter>(amr_cell_mf[level], false);
     amr_cell_mfi = default_cell_mfi.get();
-
-    define_inflow_outflow_ba();
 }
 
 void grid_amrex::define_inflow_outflow_ba()
@@ -250,5 +248,99 @@ void grid_amrex::define_inflow_outflow_ba()
             }
         }
         outflow_ijk[lev].shrink_to_fit();
+    }
+}
+
+void grid_amrex::update_cell_coordinates()
+{
+    increment::max_i = (gknox + 2*marge)*pow(ref_ratio,nlevs-1);
+    increment::max_j = (gknoy + 2*marge)*pow(ref_ratio,nlevs-1);
+    increment::max_k = (gknoz + 2*marge)*pow(ref_ratio,nlevs-1);
+
+    XN.resize((max_i+1)*nlevs,0);
+    YN.resize((max_j+1)*nlevs,0);
+    ZN.resize((max_k+1)*nlevs,0);
+
+    // Refine the coordinates from level n-1 to level n by inserting midpoints
+    for (int lev = 1; lev < nlevs; ++lev)
+    {
+        for (int i = 0; i < (gknox + 2*marge)*pow(ref_ratio,lev-1) + 1; ++i)
+        {
+            int idx = 2*i + lev*max_i;
+            XN[idx] = XN[i + (lev-1)*max_i];
+            idx += 1;
+            XN[idx] = XN[i + (lev-1)*max_i]+0.5*(XN[i+1 + (lev-1)*max_i]-XN[i + (lev-1)*max_i]);
+        }
+        for (int j = 0; j < (gknoy + 2*marge)*pow(ref_ratio,lev-1) +1; ++j)
+        {
+            int idx = 2*j + lev*max_j;
+            YN[idx] = YN[j + (lev-1)*max_j];
+            idx += 1;
+            YN[idx] = YN[j + (lev-1)*max_j]+0.5*(YN[j+1 + (lev-1)*max_j]-YN[j + (lev-1)*max_j]);
+        }
+        for (int k = 0; k < (gknoz + 2*marge)*pow(ref_ratio,lev-1) + 1; ++k)
+        {
+            int idx = 2*k + lev*max_k;
+            ZN[idx] = ZN[k + (lev-1)*max_k];
+            idx += 1;
+            ZN[idx] = ZN[k + (lev-1)*max_k]+0.5*(ZN[k+1 + (lev-1)*max_k]-ZN[k + (lev-1)*max_k]);
+        }
+    }
+
+    XP.resize((max_i)*nlevs,0);
+    YP.resize((max_j)*nlevs,0);
+    ZP.resize((max_k)*nlevs,0);
+
+    // Compute cell-centered coordinates as midpoints between node-centered coordinates
+    for (int lev = 1; lev < nlevs; ++lev)
+    {
+        for (int i = 0; i < (gknox + 2*marge)*pow(ref_ratio,lev); ++i)
+        {
+            int idx = i + lev*max_i;
+            XP[idx] = 0.5*(XN[idx]+XN[idx+1]);
+        }
+        for (int j = 0; j < (gknoy + 2*marge)*pow(ref_ratio,lev); ++j)
+        {
+            int idx = j + lev*max_j;
+            YP[idx] = 0.5*(YN[idx]+YN[idx+1]);
+        }
+        for (int k = 0; k < (gknoz + 2*marge)*pow(ref_ratio,lev); ++k)
+        {
+            int idx = k + lev*max_k;
+            ZP[idx] = 0.5*(ZN[idx]+ZN[idx+1]);
+        }
+    }
+}
+
+void grid_amrex::update_cell_spacing()
+{
+    DXN.resize((max_i)*nlevs,0);
+    DYN.resize((max_j)*nlevs,0);
+    DZN.resize((max_k)*nlevs,0);
+    DXP.resize((max_i)*nlevs,0);
+    DYP.resize((max_j)*nlevs,0);
+    DZP.resize((max_k)*nlevs,0);
+
+    // Compute cell-centered coordinates as midpoints between node-centered coordinates
+    for (int lev = 1; lev < nlevs; ++lev)
+    {
+        for (int i = 0; i < (gknox + 2*marge)*pow(ref_ratio,lev); ++i)
+        {
+            int idx = i + lev*max_i;
+            DXN[idx] = XN[idx+1]-XN[idx];
+            DXP[idx] = XP[idx+1]-XP[idx];
+        }
+        for (int j = 0; j < (gknoy + 2*marge)*pow(ref_ratio,lev); ++j)
+        {
+            int idx = j + lev*max_j;
+            DYN[idx] = YN[idx+1]-YN[idx];
+            DYP[idx] = YP[idx+1]-YP[idx];
+        }
+        for (int k = 0; k < (gknoz + 2*marge)*pow(ref_ratio,lev); ++k)
+        {
+            int idx = k + lev*max_k;
+            DZN[idx] = ZN[idx+1]-ZN[idx];
+            DZP[idx] = ZP[idx+1]-ZP[idx];
+        }
     }
 }
