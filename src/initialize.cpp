@@ -59,32 +59,14 @@ void initialize::start(lexer* p, fdm* a, ghostcell* pgc)
 
 void initialize::inifdm(lexer* p, fdm* a, ghostcell* pgc)
 {
-    ULOOP
-    a->u(i,j,k)=0.0;
-
-    VLOOP
-    a->v(i,j,k)=0.0;
-
-    WLOOP
-    a->w(i,j,k)=0.0;
-
     LOOP
     {
-        a->F(i,j,k)=0.0;
-        a->G(i,j,k)=0.0;
-        a->H(i,j,k)=0.0;
-
         a->press(i,j,k)=p->I55;
-
-        a->Fi(i,j,k)=0.0;
 
         a->ro(i,j,k)=p->W1;
         a->visc(i,j,k)=p->W2;
-        a->eddyv(i,j,k)=0.0;
         a->phi(i,j,k)=1.0;
         a->vof(i,j,k)=1.0;
-
-        a->conc(i,j,k)=0.0;
     }
 
     ALOOP
@@ -94,14 +76,14 @@ void initialize::inifdm(lexer* p, fdm* a, ghostcell* pgc)
         a->porosity(i,j,k)=1.0;
     }
 
+    pgc->start4(p,a->press,1);
     pgc->start4(p,a->ro,1);
     pgc->start4(p,a->visc,1);
-    pgc->start4(p,a->eddyv,1);
-    pgc->start4(p,a->porosity,1);
-    pgc->start4(p,a->press,1);
+    pgc->start4(p,a->phi,50);
+    pgc->start4(p,a->vof,50);
     pgc->start4(p,a->fb,150);
     pgc->start4(p,a->topo,150);
-    pgc->start4(p,a->phi,50);
+    pgc->start4(p,a->porosity,1);
 }
 
 void initialize::nodecalc(lexer* p, fdm* a)
