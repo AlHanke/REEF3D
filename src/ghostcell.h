@@ -317,7 +317,7 @@ private:
     bc_labels gclabel_u_orth,gclabel_v_orth,gclabel_w_orth;
     bc_labels gclabel_u_in,gclabel_v_in,gclabel_w_in,gclabel_press_in,gclabel_lsm_in;
 	bc_labels gclabel_u_out, gclabel_v_out, gclabel_w_out;
-    bool awa_lable,pressout_lable,pressin_lable;
+    bool awa_label,pressout_label,pressin_label;
 
 // PARALLEL
 	double *send1,*send2,*send3,*send4,*send5,*send6;
