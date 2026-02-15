@@ -39,11 +39,7 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else if((bc==gbc_labels::OUTFLOW || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || (gcv==52 && p->B77==1) || gcv==54))
         return bc_labels::NEUMANN;
 
-    // inflow
-    else if((bc==gbc_labels::INFLOW || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==52 || gcv==54))
-        return gclabel_lsm_in;
-
-    else if(bc==gbc_labels::WAVEGEN && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if(bc==gbc_labels::WAVEGEN && (gcv==51 || gcv==53))
         return gclabel_lsm_in;
 
     else if(((bc==gbc_labels::OUTFLOW && !pressout_label) || bc==gbc_labels::SYMMETRY || (bc==gbc_labels::WAVEGEN && !pressin_label) || (bc==gbc_labels::NUMBEACH && !awa_label) ||  bc==gbc_labels::WALL || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
