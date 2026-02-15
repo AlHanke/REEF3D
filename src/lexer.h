@@ -123,9 +123,9 @@ public:
 
 
     //GHOSTCELL
-	int **gcb1,**gcb2,**gcb3,**gcb4,**gcb4a;
+	int **gcb1,**gcb2,**gcb3,**gcb4;
 	int **gcin, **gcout;
-	double *gcd1,*gcd2,*gcd3,*gcd4,*gcd4a;
+	double *gcd1,*gcd2,*gcd3,*gcd4;
     
     int gcdf1_count,gcdf2_count,gcdf3_count,gcdf4_count;
     int **gcdf1,**gcdf2,**gcdf3,**gcdf4;
@@ -133,7 +133,7 @@ public:
     int **gcsldfeta4,**gcsldfbed4;
 
 	int gcin_count, gcout_count;
-	int gcb1_count,gcb2_count,gcb3_count,gcb4_count,gcb4a_count;
+	int gcb1_count,gcb2_count,gcb3_count,gcb4_count;
 	int gcpara_sum;
 	int solid_gcb_est, topo_gcb_est, solid_gcbextra_est, topo_gcbextra_est, tot_gcbextra_est;
     int bcside1,bcside2,bcside3,bcside4,bcside5,bcside6;

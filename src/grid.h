@@ -40,7 +40,6 @@ public:
     void fillgcb1(lexer*);
     void fillgcb2(lexer*);
     void fillgcb3(lexer*);
-    void fillgcb4a(lexer*);
     
     void fillgcb4_wall(lexer*);
 

@@ -59,7 +59,6 @@ public:
 	void start2(lexer*,field&, int);
 	void start3(lexer*,field&, int);
 	void start4(lexer*,field&, int);
-	void start4a(lexer*,field&, int);
     void start4_sum(lexer*,field&, int);
     
     void start1V(lexer*,double*,int);
@@ -245,7 +244,6 @@ private:
     void gcdistro2(field&, int, int, int, int, int, double, int);
     void gcdistro3(field&, int, int, int, int, int, double, int);
     void gcdistro4(field&, int, int, int, int, int, double, int);
-    void gcdistro4a(field&, int, int, int, int, int, double, int);
 
     void gcsldistro1(lexer*, slice&, int, int, int, int, int);
 	void gcsldistro2(lexer*, slice&, int, int, int, int, int);
@@ -259,7 +257,6 @@ private:
     bc_labels gceval2(lexer*,int,int,int);
     bc_labels gceval3(lexer*,int,int,int);
     bc_labels gceval4(lexer*,int,int,int);
-    bc_labels gceval4a(lexer*,int,int);
 
     bc_labels gcsleval1(int,int,int);
     bc_labels gcsleval2(int,int,int);

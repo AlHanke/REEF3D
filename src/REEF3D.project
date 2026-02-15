@@ -2689,7 +2689,6 @@
         <File Name="gc_epol2.cpp"/>
         <File Name="gc_epol3.cpp"/>
         <File Name="gc_epol4.cpp"/>
-        <File Name="gc_epol4a.cpp"/>
         <File Name="gc_distro.cpp"/>
         <File Name="gc_dirichlet-ortho.cpp"/>
         <File Name="gc_imagepoint.cpp"/>
@@ -2837,7 +2836,6 @@
         </VirtualDirectory>
         <VirtualDirectory Name="Grid">
           <File Name="grid_gcb4.cpp"/>
-          <File Name="grid_gcb4a.cpp"/>
           <File Name="grid_gcb3.cpp"/>
           <File Name="grid_gcb2.cpp"/>
           <File Name="grid_gcb1.cpp"/>
