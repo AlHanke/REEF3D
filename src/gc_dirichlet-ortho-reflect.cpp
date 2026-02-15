@@ -69,10 +69,24 @@ void ghostcell::dirichlet_ortho_reflect(field& f, double dist, int cs)
 
     if(ys==1 && dist<gamma*dx)
     {
-        imagepoint(p,f,x_ip,val_ip,dx,cs);
+        double y1 = 0.0;
 
-        pos[orderdir-2] = x_ip;
-        y[orderdir-2] = val_ip;
+        //fill y[]
+        if(cs==dir_labels::X_NEG)
+            y1=f(i+1,j,k);
+        else if(cs==dir_labels::X_POS)
+            y1=f(i-1,j,k);
+        else if(cs==dir_labels::Y_NEG)
+            y1=f(i,j+1,k);
+        else if(cs==dir_labels::Y_POS)
+            y1=f(i,j-1,k);
+        else if(cs==dir_labels::Z_NEG)
+            y1=f(i,j,k+1);
+        else if(cs==dir_labels::Z_POS)
+            y1=f(i,j,k-1);
+
+        pos[orderdir-2] = -(gamma*dx);
+        y[orderdir-2] = (1.0-gamma)*f(i,j,k) + gamma*y1;
     }
 
     for(q=0; q<margin; ++q)

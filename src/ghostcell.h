@@ -283,8 +283,6 @@ private:
     void gcsl_outflow(slice&,int);
     void gcsl_potentialbc(lexer*,slice&,int);
 
-    void imagepoint(lexer*,field&,double&,double&,double,int);
-
     MPI_Comm cart_comm = MPI_COMM_NULL;
     int neighbors[6] = {MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL,
                         MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL};
