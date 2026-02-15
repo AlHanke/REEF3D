@@ -125,11 +125,10 @@ void ghostcell::gcsldistro1(lexer *p, slice &f, int ii, int jj, int nn, int gcv,
     
 }
 
-void ghostcell::gcsldistro1int(lexer *p, sliceint &f, int ii, int jj, int nn, int gcv, int bc, int cs)
+void ghostcell::gcsldistro1int(sliceint &f, int ii, int jj, int cs)
 {
     i=ii;
-	j=jj;
-	n=nn;
+    j=jj;
 
-	gcsl_neumann_int(f,gcv,bc,cs);    
+    gcsl_neumann_int(f,cs);
 }
