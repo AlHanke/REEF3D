@@ -20,28 +20,20 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"fdm2D.h"
 #include"ghostcell.h"
-#include"field.h"
 #include"slice.h"
-#include"vec2D.h"
 
-void ghostcell::gcsl_noslip(slice &f, int gcv, int bc, int cs)
+void ghostcell::gcsl_noslip(slice &f, int cs)
 {
-	if(cs==1)
-	for(q=0;q<margin;++q)
-	f(i-q-1,j)=0.0;
-
-	if(cs==2)
-	for(q=0;q<margin;++q)
-	f(i,j+q+1)=0.0;
-
-	if(cs==3)
-	for(q=0;q<margin;++q)
-	f(i,j-q-1)=0.0;
-
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j)=0.0;
+    for(q=0;q<margin;++q)
+    {
+        if(cs==1)
+            f(i-q-1,j)=0.0;
+        else if(cs==2)
+            f(i,j+q+1)=0.0;
+        else if(cs==3)
+            f(i,j-q-1)=0.0;
+        else if(cs==4)
+            f(i+q+1,j)=0.0;
+    }
 }
-

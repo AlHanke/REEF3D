@@ -20,64 +20,52 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"lexer.h"
 #include"ghostcell.h"
-#include"field.h"
+#include"lexer.h"
 #include"sliceint.h"
 
-void ghostcell::gcsl_neumann_int(sliceint &f, int gcv, int bc, int cs)
+void ghostcell::gcsl_neumann_int(sliceint &f, int cs)
 {
-	if(cs==1)
-	for(q=0;q<margin;++q)
-	f(i-q-1,j)=f(i,j);
-
-	if(cs==2)
-	for(q=0;q<margin;++q)
-	f(i,j+q+1)=f(i,j);
-
-	if(cs==3)
-	for(q=0;q<margin;++q)
-	f(i,j-q-1)=f(i,j);
-
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j)=f(i,j);
-
-}
-
-void ghostcell::gcsl_neumann_V_int(lexer *p,int *f, int gcv, int bc, int cs)
-{
-	if(cs==1)
-	for(q=0;q<margin;++q)
+    for(q=0;q<margin;++q)
     {
-	f[Im1J]=f[IJ];
-    f[Im2J]=f[IJ];
-    f[Im3J]=f[IJ];
+        if(cs==1)
+            f(i-q-1,j)=f(i,j);
+        else if(cs==2)
+            f(i,j+q+1)=f(i,j);
+        else if(cs==3)
+            f(i,j-q-1)=f(i,j);
+        else if(cs==4)
+            f(i+q+1,j)=f(i,j);
     }
-
-	if(cs==2)
-	for(q=0;q<margin;++q)
-	{
-	f[IJp1]=f[IJ];
-    f[IJp2]=f[IJ];
-    f[IJp3]=f[IJ];
-    }
-
-	if(cs==3)
-	for(q=0;q<margin;++q)
-	{
-	f[IJm1]=f[IJ];
-    f[IJm2]=f[IJ];
-    f[IJm3]=f[IJ];
-    }
-
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	{
-	f[Ip1J]=f[IJ];
-    f[Ip2J]=f[IJ];
-    f[Ip3J]=f[IJ];
-    }
-
 }
 
+void ghostcell::gcsl_neumann_V_int(int *f, int cs)
+{
+    for(q=0;q<margin;++q)
+    {
+        if(cs==1)
+        {
+            f[Im1J]=f[IJ];
+            f[Im2J]=f[IJ];
+            f[Im3J]=f[IJ];
+        }
+        else if(cs==2)
+        {
+            f[IJp1]=f[IJ];
+            f[IJp2]=f[IJ];
+            f[IJp3]=f[IJ];
+        }
+        else if(cs==3)
+        {
+            f[IJm1]=f[IJ];
+            f[IJm2]=f[IJ];
+            f[IJm3]=f[IJ];
+        }
+        else if(cs==4)
+        {
+            f[Ip1J]=f[IJ];
+            f[Ip2J]=f[IJ];
+            f[Ip3J]=f[IJ];
+        }
+    }
+}
