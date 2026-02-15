@@ -592,6 +592,9 @@ public:
         {
             amrex::ignore_unused(time, bcr, bcomp, orig_comp);
 
+            if (!m_params.y_dimension_exists && iv[1] != 0)
+                return;
+
             BoundaryConditionTypeLabel label = BoundaryConditionTypeLabel::NONE;
             const amrex::Box* matched_box = nullptr;
             int face_for_bc = 0;
