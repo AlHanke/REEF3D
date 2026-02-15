@@ -30,33 +30,33 @@ int position::posf_i(double xs)
     is = 0;
     ie = p->knox;
     
-    
+    int i;
     count=0;
     do{
-    iloc = ihalf(is,ie);
+    i = ihalf(is,ie);
     
     if(count%3==0)
-    iloc+=1;
+    i+=1;
     
         // matching criterion
-        if(xs<p->XP[iloc+marge] && xs>=p->XP[iloc-1+marge])
+        if(xs<p->XP[IP] && xs>=p->XP[IM1])
         {
-            ii = iloc-1;
+            ii = i-1;
             
          stop=1;
          break;   
         }
         
-        if(xs>=p->XP[iloc+marge] && xs<p->XP[iloc+1+marge])
+        if(xs>=p->XP[IP] && xs<p->XP[IP1])
         {
-            ii = iloc;
+            ii = i;
    
          stop=1;
          break;   
         }
         
         // out of bounds
-        if(xs<p->XP[0+marge])
+        if(xs<p->XP[ZEROP])
         {
             ii = -1;
 
@@ -74,11 +74,11 @@ int position::posf_i(double xs)
         }
         
         // further division
-        if(xs<p->XP[iloc+marge] && xs<p->XP[iloc-1+marge])
-        ie=iloc;
+        if(xs<p->XP[IP] && xs<p->XP[IM1])
+        ie=i;
         
-        if(xs>p->XP[iloc+marge] && xs>p->XP[iloc+1+marge])
-        is=iloc;
+        if(xs>p->XP[IP] && xs>p->XP[IP1])
+        is=i;
         
         ++count;
     }while(stop==0 && count<1000);
