@@ -29,110 +29,110 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Level Set
-    else if((bc==3 || bc==7 || bc==21 || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if((bc==gbc_labels::SYMMETRY || bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if((bc==1 || bc==6 || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==52 || gcv==54))
+    else if((bc==gbc_labels::INFLOW || bc==gbc_labels::WAVEGEN || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==52 || gcv==54))
         return bc_labels::NEUMANN;
 
     // outflow
-    else if((bc==2 || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || (gcv==52 && p->B77==1) || gcv==54))
+    else if((bc==gbc_labels::OUTFLOW || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || (gcv==52 && p->B77==1) || gcv==54))
         return bc_labels::NEUMANN;
 
     // inflow
-    else if((bc==1 || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==52 || gcv==54))
+    else if((bc==gbc_labels::INFLOW || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==52 || gcv==54))
         return gclabel_lsm_in;
 
-    else if(bc==6 && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if(bc==gbc_labels::WAVEGEN && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return gclabel_lsm_in;
 
     // Pressure
-    else if((bc==3 || bc==21 || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
+    else if((bc==gbc_labels::SYMMETRY || bc==gbc_labels::WALL || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // wavegen
-    else if(((bc==6 && !pressin_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
+    else if(((bc==gbc_labels::WAVEGEN && !pressin_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // awa beach
-    else if(((bc==7 && !awa_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
+    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // inflow
-    else if(((bc==1 && !pressin_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
+    else if(((bc==gbc_labels::INFLOW && !pressin_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return gclabel_press_in;
 
     // outflow
-    else if(((bc==2 && !pressout_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
+    else if(((bc==gbc_labels::OUTFLOW && !pressout_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // Turbulence kin
-    else if(bc==21 && gcv==20)
+    else if(bc==gbc_labels::WALL && gcv==20)
         return bc_labels::NEUMANN;
 
-    else if((bc==2 || bc==3) && (cs!=dir_labels::Z_POS || bc!=3) && gcv==20)
+    else if((bc==gbc_labels::OUTFLOW || bc==gbc_labels::SYMMETRY) && (cs!=dir_labels::Z_POS || bc!=gbc_labels::SYMMETRY) && gcv==20)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && cs==dir_labels::Z_POS && gcv==20)
+    else if(bc==gbc_labels::SYMMETRY && cs==dir_labels::Z_POS && gcv==20)
         return bc_labels::NOSLIP;
 
-    else if((bc==6 || bc==7) && gcv==20)
+    else if((bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==20)
         return bc_labels::NOSLIP;
 
     // Turbulence eps
-    else if((bc==6 || bc==7 || bc==21) && gcv==30)
+    else if((bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL) && gcv==30)
         return bc_labels::NEUMANN;
 
-    else if((bc==2 || bc==3) && gcv==30)
+    else if((bc==gbc_labels::OUTFLOW || bc==gbc_labels::SYMMETRY) && gcv==30)
         return bc_labels::NEUMANN;
 
-    else if(bc==1 && (gcv==30 || gcv==72 || gcv==74))
+    else if(bc==gbc_labels::INFLOW && (gcv==30 || gcv==72 || gcv==74))
         return bc_labels::NEUMANN;
 
     // Turbulence eddyv
-    else if((bc==1 || bc==2 || bc==3 ||bc==21) && gcv==24)
+    else if((bc==gbc_labels::INFLOW || bc==gbc_labels::OUTFLOW || bc==gbc_labels::SYMMETRY || bc==gbc_labels::WALL) && gcv==24)
         return bc_labels::NEUMANN;
 
-    else if((bc!=3 || cs!=dir_labels::Z_POS) && gcv==24)
+    else if((bc!=gbc_labels::SYMMETRY || cs!=dir_labels::Z_POS) && gcv==24)
         return bc_labels::NEUMANN;
 
-    else if((bc==6 || bc==7) && gcv==24)
+    else if((bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==24)
         return bc_labels::NOSLIP;
 
     // VOF
-    else if((bc==3 || bc==6 || bc==7 || bc==21) && (gcv==71 || gcv==72 || gcv==73 || gcv==74))
+    else if((bc==gbc_labels::SYMMETRY || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL) && (gcv==71 || gcv==72 || gcv==73 || gcv==74))
         return bc_labels::NEUMANN;
 
-    else if(bc==2 && (gcv==71 || gcv==74))
+    else if(bc==gbc_labels::OUTFLOW && (gcv==71 || gcv==74))
         return bc_labels::NEUMANN;
 
     // Pk Velocity
-    else if(bc==21 && (gcv==101 || gcv==102 || gcv==103))
+    else if(bc==gbc_labels::WALL && (gcv==101 || gcv==102 || gcv==103))
         return bc_labels::NOSLIP;
 
     // Outflow, Inflow
-    else if((bc==1 || bc==2 || bc==6 || bc==7) && (gcv==101 || gcv==102 || gcv==103))
+    else if((bc==gbc_labels::INFLOW || bc==gbc_labels::OUTFLOW || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && (gcv==101 || gcv==102 || gcv==103))
         return bc_labels::NEUMANN;
 
     // Free Surface Uvel
-    else if(bc==3 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==101)
+    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==101)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==101)
+    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==101)
         return bc_labels::NOSLIP;
 
     // Free Surface Vvel
-    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==102)
+    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==102)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && gcv==102)
+    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && gcv==102)
         return bc_labels::NOSLIP;
 
     // Free Surface Wvel
-    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::X_POS) && gcv==103)
+    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::X_NEG || cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::X_POS) && gcv==103)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==103)
+    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==103)
         return bc_labels::NOSLIP;
 
     // Heat
@@ -144,20 +144,20 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Potential Ini
-    else if((bc==21 || bc==3) && gcv==49)
+    else if((bc==gbc_labels::WALL || bc==gbc_labels::SYMMETRY) && gcv==49)
         return bc_labels::NEUMANN;
 
-    else if((bc==1 || bc==2 || bc==6 || bc==7) && gcv==49)
+    else if((bc==gbc_labels::INFLOW || bc==gbc_labels::OUTFLOW || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==49)
         return bc_labels::POTENTIAL;
 
     // Potential Waves
-    else if((bc==7 || bc==21) && cs!=dir_labels::Z_NEG && gcv==250)
+    else if((bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL) && cs!=dir_labels::Z_NEG && gcv==250)
         return bc_labels::NEUMANN;
 
-    else if((bc==1 || bc==2 || bc==6 || bc==7) && gcv==250)
+    else if((bc==gbc_labels::INFLOW || bc==gbc_labels::OUTFLOW || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==250)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && cs!=dir_labels::Z_POS && gcv==250)
+    else if(bc==gbc_labels::SYMMETRY && cs!=dir_labels::Z_POS && gcv==250)
         return bc_labels::NEUMANN;
 
     else
