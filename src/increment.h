@@ -40,6 +40,5 @@ class increment
 	static int pip;
     static int marge;
 	static fdm *aa;
-    static fdm2D *bb;
 };
 #endif

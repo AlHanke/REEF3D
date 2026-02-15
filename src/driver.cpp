@@ -134,7 +134,6 @@ void driver::sflow_driver()
 	cout<<"initialize fdm"<<endl;
 
     b=new fdm2D(p);
-    bb=b;
     
     pgc->fdm2D_update(b);
 
