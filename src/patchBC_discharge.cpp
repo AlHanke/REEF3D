@@ -41,7 +41,7 @@ void patchBC::patchBC_discharge(lexer *p, fdm* a, ghostcell *pgc)
     // discharge
     for(qq=0;qq<obj_count;++qq)
     if(patch[qq]->hydroQ_flag)
-        patch[qq]->Q = patchBC_hydrograph_Q_ipol(p,pgc,qq,patch[qq]->ID);
+        patch[qq]->Q = patchBC_hydrograph_Q_ipol(p,qq,patch[qq]->ID);
 
     // Q calc
     for(qq=0;qq<obj_count;++qq)

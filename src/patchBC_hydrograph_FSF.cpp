@@ -20,12 +20,11 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"patchBC.h"
+#include"patchBC_interface.h"
 #include"lexer.h"
-#include"ghostcell.h"
 #include"patch_obj.h"
 
-void patchBC::patchBC_hydrograph_FSF_read(lexer *p, ghostcell *pgc, int qq, int ID)
+void patchBC_interface::patchBC_hydrograph_FSF_read(lexer *p, int qq, int ID)
 {
     char name[100];
     double val;
@@ -68,7 +67,7 @@ void patchBC::patchBC_hydrograph_FSF_read(lexer *p, ghostcell *pgc, int qq, int 
     hg.close();
 }
 
-double patchBC::patchBC_hydrograph_FSF_ipol(lexer *p, ghostcell *pgc, int qq, int ID)
+double patchBC_interface::patchBC_hydrograph_FSF_ipol(lexer *p, int qq, int ID)
 {
     double val;
 
