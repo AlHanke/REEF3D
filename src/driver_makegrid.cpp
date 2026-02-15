@@ -62,6 +62,5 @@ void driver::makegrid(lexer *p, ghostcell *pgc)
 
 void driver::makegrid_cds()
 {
-    pgc->sizeM_update(p,a);
+    pgc->sizeM_update(p);
 }
-
