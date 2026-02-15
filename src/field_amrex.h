@@ -44,7 +44,7 @@ class field_amrex : public field
 public:
     virtual ~field_amrex() = default;
 
-    double& operator()(int ii, int jj, int kk) noexcept override final;
+    double& operator()(int ii, int jj, int kk, bool addOrigin = true) noexcept override final;
 
     void setVal(double val, bool includeGhost = false) override final;
 
