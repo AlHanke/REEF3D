@@ -26,9 +26,6 @@ Author: Hans Bihs
 
 void ghostcell::dirichlet_para_reflect(field& f, double dist, int cs)
 {
-    wallvalue=0.0;
-    weight=1.0;
-
     double dx;
     if(cs==dir_labels::X_NEG || cs==dir_labels::X_POS)
         dx = p->DXP[IP];
@@ -65,7 +62,7 @@ void ghostcell::dirichlet_para_reflect(field& f, double dist, int cs)
             y[m] = f(i,j,k-orderdir+m+1);
     }
 
-    y[orderdir]=wallvalue;
+    y[orderdir]=0.0;
 
     if(ys==1 && dist<gamma*dx)
     {
@@ -97,10 +94,8 @@ void ghostcell::dirichlet_para_reflect(field& f, double dist, int cs)
         {
             weight=0.0;
             for(n=0;n<orderdir;++n)
-            {
                 if(m==n && q+m==2)
                     weight = -1.0;
-            }
             y[orderdir+q+1]+=weight*y[m];
         }
     }
@@ -109,16 +104,16 @@ void ghostcell::dirichlet_para_reflect(field& f, double dist, int cs)
     for(q=0; q<margin; ++q)
     {
         if(cs==dir_labels::X_NEG)
-            f(i-q-1,j,k) = y[orderdir+q-1+1+ys];
+            f(i-q-1,j,k) = y[orderdir+q+ys];
         else if(cs==dir_labels::X_POS)
-            f(i+q+1,j,k) = y[orderdir+q-1+1+ys];
+            f(i+q+1,j,k) = y[orderdir+q+ys];
         else if(cs==dir_labels::Y_NEG)
-            f(i,j-q-1,k) = y[orderdir+q-1+1+ys];
+            f(i,j-q-1,k) = y[orderdir+q+ys];
         else if(cs==dir_labels::Y_POS)
-            f(i,j+q+1,k) = y[orderdir+q-1+1+ys];
+            f(i,j+q+1,k) = y[orderdir+q+ys];
         else if(cs==dir_labels::Z_NEG)
-            f(i,j,k-q-1) = y[orderdir+q-1+1+ys];
+            f(i,j,k-q-1) = y[orderdir+q+ys];
         else if(cs==dir_labels::Z_POS)
-            f(i,j,k+q+1) = y[orderdir+q-1+1+ys];
+            f(i,j,k+q+1) = y[orderdir+q+ys];
     }
 }
