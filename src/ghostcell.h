@@ -228,6 +228,7 @@ private:
     enum bc_labels { NONE=0, DIRICHLET_ORTH=1, DIRICHLET_PARA=2, EXTEND=3, NEUMANN=4, NOSLIP=5, OUTFLOW=6, SOMMERFELD=7, POTENTIAL=8, NHPRESS=9,
          GRAVITY_PRESS=10, DIRICHLET_ORTH_REFLECT=11, DIRICHLET_PARA_REFLECT=12, NEUMANN_X=14, ATMOSPHERE=21, LSM=22, NEUMANN_HX=41, NEUMANN_HY=42,
          HEATBC=61, DEBUG=99 };
+    enum dir_labels { X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2, Z_NEG=5, Z_POS=6 };
 
     void Sendrecv_double(int,int,int,int,int,int);
     void Sendrecv_int(int,int,int,int,int,int);
