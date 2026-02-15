@@ -43,23 +43,10 @@ void lexer::flagini2D()
 
 void lexer::gridini2D()
 {
-    Iarray(sizeS1, 5);
-    Iarray(sizeS2, 5);
     Iarray(sizeS4, 5);
-
-    for(int n=0;n<5;++n)
-    {
-    sizeS1[n]=0;
-    sizeS2[n]=0;
-    sizeS4[n]=0;
-    }	
-    
     Iarray(IOSL,imax*jmax);
     
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
-    IOSL[(i-imin)*jmax + j-jmin] = 0;
-	
+        IOSL[(i-imin)*jmax + j-jmin] = 0;
 }
-
-
