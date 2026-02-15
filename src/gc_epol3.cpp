@@ -156,36 +156,33 @@ void ghostcell::gcdistro3(lexer *p,field& f, int ii, int jj, int kk, int nn, dou
 	bc_label=gceval3(p,gcv,bc,cs);
 
 	if(bc_label==1)
-	dirichlet_ortho(p,f,dist,gcv,bc,cs);
+	dirichlet_ortho(f,dist,cs);
 
 	if(bc_label==2)
-	dirichlet_para(p,f,dist,gcv,bc,cs);
+	dirichlet_para(f,dist,cs);
 
 	if(bc_label==3)
-	extend(p,f,dist,gcv,bc,cs);
+	extend(f,cs);
 
 	if(bc_label==4)
-	neumann(f,gcv,bc,cs);
+	neumann(f,cs);
 
 	if(bc_label==5)
-	noslip(f,dist,gcv,bc,cs);
+	noslip(f,cs);
 	
 	if(bc_label==6)
-	outflow(p,f,gcv,bc,cs);
+	outflow(f,cs);
     
     if(bc_label==7)
-	sommerfeld(p,f,gcv,bc,cs);
-    
-    if(bc_label==8)
-	kinematic_bed(p,f,dist,gcv,bc,cs);
-
+	sommerfeld(f,cs);
+	
     if(bc_label==11)
-	dirichlet_ortho_reflect(p,f,dist,gcv,bc,cs);
+	dirichlet_ortho_reflect(f,dist,cs);
 
 	if(bc_label==12)
-	dirichlet_para_reflect(p,f,dist,gcv,bc,cs);
+	dirichlet_para_reflect(f,dist,cs);
     
     if(bc_label==99)
-	gcb_debug(f,gcv,bc,cs);
+	gcb_debug(f,cs);
 }
 
