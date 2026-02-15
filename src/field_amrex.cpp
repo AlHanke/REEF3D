@@ -33,6 +33,7 @@ Author: Alexander Hanke
 field_amrex::field_amrex(lexer* p)
 {
     field_amrex::p = p;
+    mf.resize(p->nlevs);
 }
 
 double& field_amrex::operator()(int ii, int jj, int kk) noexcept
@@ -52,6 +53,6 @@ void field_amrex::FillBoundary()
 
 void field_amrex::FillDomainBoundary()
 {
-    amrex::FillDomainBoundary(mf[pp->level], pp->amrex_geometry[pp->level], pp->amrex_bc[pp->level]);
+    // amrex::FillDomainBoundary(mf[p->level], p->amrex_geometry[p->level], p->amrex_bc[pp->level]);
 }
 #endif
