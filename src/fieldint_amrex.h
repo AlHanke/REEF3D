@@ -27,7 +27,7 @@ Author: Alexander Hanke
 #include "fieldint.h"
 #include "lexer.h"
 #include <AMReX_iMultiFab.H>
-#include <vector>
+#include <AMReX_Vector.H>
 
 class fieldint_amrex : public fieldint
 {
@@ -44,7 +44,7 @@ protected:
     fieldint_amrex(lexer* p);
 
     lexer *p;
-    std::vector<amrex::iMultiFab> mf;
+    amrex::Vector<amrex::iMultiFab> mf;
 };
 
 #endif
