@@ -27,6 +27,7 @@ Author: Hans Bihs
 
 void iowave::ini(lexer *p, fdm* a, ghostcell* pgc)
 {
+    gcio_update(p,a,pgc);
     // relax_ini OR dirichlet_ini
     wavegen_precalc_ini(p,pgc);
     wavegen_precalc_relax_func(p,pgc);
@@ -47,6 +48,7 @@ void iowave::ini(lexer *p, fdm* a, ghostcell* pgc)
 
 void iowave::ini_ptf(lexer *p, fdm *a, ghostcell *pgc)
 {
+    gcio_update(p,a,pgc);
     wavegen_precalc_ini(p,pgc);
     wavegen_precalc_relax_func_nhflow(p,pgc);
 
