@@ -36,11 +36,9 @@ void lexer::read_grid()
     int iin;
     double ddn;
 
-    gcwall_count=0;
+    int gcwall_count=0;
     gcin_count=0;
     gcout_count=0;
-    gcfsf_count=0;
-    gcbed_count=0;
     gcpara1_count=0;
     gcpara2_count=0;
     gcpara3_count=0;
@@ -303,10 +301,10 @@ void lexer::read_grid()
 
     topo_gcb_est*=4;
 
-    gcb1_count=gcb2_count=gcb3_count=gcb4_count=gcb4a_count=gcb_fix=gcb_solid=gcb_topo=gcb_fb=gcwall_count;
+    gcb1_count=gcb2_count=gcb3_count=gcb4_count=gcb4a_count=gcwall_count;
 
     gcpara_sum=gcpara1_count+gcpara2_count+gcpara3_count+gcpara4_count+gcpara5_count+gcpara6_count;
-    gcparaco_sum=gcparaco1_count+gcparaco2_count+gcparaco3_count+gcparaco4_count+gcparaco5_count+gcparaco6_count;
+    gcparaco1_count+gcparaco2_count+gcparaco3_count+gcparaco4_count+gcparaco5_count+gcparaco6_count;
 
     grid::assign_margin();
 
@@ -375,11 +373,10 @@ void lexer::read_grid()
 
 
     // Slice allocation
-    gcbsl1_count=gcbsl2_count=gcbsl3_count=gcbsl4_count=gcbsl4a_count=1;
+    gcbsl1_count=gcbsl2_count=gcbsl4_count=gcbsl4a_count=1;
 
     Iarray(gcbsl1, gcbsl1_count,6);
     Iarray(gcbsl2, gcbsl2_count,6);
-    Iarray(gcbsl3, gcbsl3_count,6);
     Iarray(gcbsl4, gcbsl4_count,6);
     Iarray(gcbsl4a, gcbsl4a_count,6);
 
@@ -488,14 +485,8 @@ void lexer::read_grid()
             ++gcout_count;
     }
 
-    gcin4a_count=gcin_count;
-    gcout4a_count=gcout_count;
-
-    Iarray(gcin, gcin_count,6);
-    Iarray(gcout, gcout_count,6);
-
-    Iarray(gcin4a, gcin_count,6);
-    Iarray(gcout4a, gcout_count,6);
+    Iarray(gcin, gcin_count,4);
+    Iarray(gcout, gcout_count,4);
 
 //  Para Surfaces
     for(i=0; i<gcpara1_count; ++i)
@@ -900,9 +891,6 @@ void lexer::read_grid()
         grid.read((char*)&ddn, sizeof (double));
         data[(i-imin)*jmax + (j-jmin)]=ddn;
     }
-
-    gcin4a_count=gcin_count;
-    gcout4a_count=gcout_count;
 
     grid.close();
 }
