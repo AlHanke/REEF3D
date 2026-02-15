@@ -24,11 +24,11 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"slice.h"
 
-int ghostcell::gcsleval2(int gcv, int bc, int cs)
+ghostcell::bc_labels ghostcell::gcsleval2(int gcv, int bc, int cs)
 {
     // general Neuman
     if(gcv==40 || gcv==50 || gcv==1)
-        return 4;
+        return bc_labels::NEUMANN;
 
     //Wall
     // Parallel
@@ -37,52 +37,52 @@ int ghostcell::gcsleval2(int gcv, int bc, int cs)
 
     // Orthogonal
     else if((bc==21 || bc==22 || bc==5 || bc==7) && (cs==2 || cs==3) && (gcv==11 || gcv==21 || gcv==2))
-        return 5;
+        return bc_labels::NOSLIP;
 
     //Inflow
     else if((bc==1) && (gcv==11 || gcv==21 || gcv==2) && (cs==1 || cs==4 || cs==5 || cs==6))
-        return 4;
+        return bc_labels::NEUMANN;
 
     //Patch
     else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==11 || gcv==2 || gcv==21 || gcv==8))
-        return 4;
+        return bc_labels::NEUMANN;
 
     //Outflow
     else if((bc==2) && (cs==2 || cs==3) && (gcv==11 || gcv==21 || gcv==2))
-        return 4;
+        return bc_labels::NEUMANN;
 
     // Symmetry
     else if(bc==3 && (cs==1 || cs==4 || cs==5 || cs==6) && (gcv==11 || gcv==21|| gcv==2))
-        return 4;
+        return bc_labels::NEUMANN;
 
     else if(bc==3 && (cs==2 || cs==3) && (gcv==11 || gcv==21|| gcv==2))
-        return 5;
+        return bc_labels::NOSLIP;
 
     //Hy
     else if((bc==1 || bc==6) && (gcv==52 || gcv==54))
-        return 4;
+        return bc_labels::NEUMANN;
 
     else if((bc==2 || bc==7) && (gcv==51 || gcv==54))
-        return 4;
+        return bc_labels::NEUMANN;
 
     else if(bc==8 && p->B99==3)
-        return 4;
+        return bc_labels::NEUMANN;
 
     else if(bc==8 && p->B99==4)
-        return 4;
+        return bc_labels::NEUMANN;
 
     else if((bc==21 || bc==3) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
-        return 4;
+        return bc_labels::NEUMANN;
 
     //Patch Hy
     else if((bc==221 || bc==211 || bc==121 || bc==111) && (gcv==55 || gcv==51 || gcv==52 || gcv==53 || gcv==54))
-        return 42;
+        return bc_labels::NEUMANN_HY;
 
     else if((bc==222 || bc==212 || bc==122 || bc==112) && (gcv==55 || gcv==51 || gcv==52 || gcv==53 || gcv==54))
-        return 4;
+        return bc_labels::NEUMANN;
 
     else
-        return 0;
+        return bc_labels::NONE;
 }
 
 void ghostcell::gcsldistro2(lexer *p, slice &f, int ii, int jj, int nn, int gcv, int bc, int cs)
@@ -93,15 +93,15 @@ void ghostcell::gcsldistro2(lexer *p, slice &f, int ii, int jj, int nn, int gcv,
 
     bc_label=gcsleval2(gcv,bc,cs);
 
-    if(bc_label==4)
+    if(bc_label==bc_labels::NEUMANN)
         gcsl_neumann(f,cs);
-    else if(bc_label==42)
+    else if(bc_label==bc_labels::NEUMANN_HY)
         gcsl_neumann_hy(f,cs);
-    else if(bc_label==5)
+    else if(bc_label==bc_labels::NOSLIP)
         gcsl_noslip(f,cs);
-    else if(bc_label==7)
+    else if(bc_label==bc_labels::OUTFLOW)
         gcsl_outflow(f,cs);
-    else if(bc_label==8)
+    else if(bc_label==bc_labels::SOMMERFELD)
         gcsl_sommerfeld(f,cs);
 }
 
