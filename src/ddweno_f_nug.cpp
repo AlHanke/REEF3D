@@ -37,16 +37,13 @@ ddweno_f_nug::~ddweno_f_nug()
 
 double ddweno_f_nug::ddwenox(field& f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
     uf=0;
     
 	grad=0.0;
 
 	if(uw>=0.0)
 	{
-	iqmin(p,f);
+	iqmin(f);
 	is_min_x();
 	weight_min_x();
 
@@ -59,7 +56,7 @@ double ddweno_f_nug::ddwenox(field& f, double uw)
 
 	if(uw<0.0)
 	{
-	iqmax(p,f);
+	iqmax(f);
 	is_max_x();
 	weight_max_x();
     
@@ -76,16 +73,13 @@ double ddweno_f_nug::ddwenox(field& f, double uw)
 
 double ddweno_f_nug::ddwenoy(field& f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
     vf=0;
     
 	grad=0.0;
 
 	if(uw>=0.0)
 	{
-	jqmin(p,f);
+	jqmin(f);
 	is_min_y();
 	weight_min_y();
 	
@@ -98,7 +92,7 @@ double ddweno_f_nug::ddwenoy(field& f, double uw)
 
 	if(uw<0.0)
 	{
-	jqmax(p,f);
+	jqmax(f);
 	is_max_y();
 	weight_max_y();
 	
@@ -114,9 +108,6 @@ double ddweno_f_nug::ddwenoy(field& f, double uw)
 
 double ddweno_f_nug::ddwenoz(field& f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
     wf=0;
     
     
@@ -124,7 +115,7 @@ double ddweno_f_nug::ddwenoz(field& f, double uw)
 
 	if(uw>=0.0)
 	{
-	kqmin(p,f);
+	kqmin(f);
 	is_min_z();
 	weight_min_z();
 
@@ -138,7 +129,7 @@ double ddweno_f_nug::ddwenoz(field& f, double uw)
 
 	if(uw<0.0)
 	{
-	kqmax(p,f);
+	kqmax(f);
 	is_max_z();
 	weight_max_z();
     
@@ -156,16 +147,13 @@ double ddweno_f_nug::ddwenoz(field& f, double uw)
 
 double ddweno_f_nug::dswenox(slice& f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
     uf=0;
     
 	grad=0.0;
 
 	if(uw>=0.0)
 	{
-	isqmin(p,f);
+	isqmin(f);
 	is_min_x();
 	weight_min_x();
 
@@ -178,7 +166,7 @@ double ddweno_f_nug::dswenox(slice& f, double uw)
 
 	if(uw<0.0)
 	{
-	isqmax(p,f);
+	isqmax(f);
 	is_max_x();
 	weight_max_x();
     
@@ -196,16 +184,13 @@ double ddweno_f_nug::dswenox(slice& f, double uw)
 
 double ddweno_f_nug::dswenoy(slice& f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
     vf=0;
     
 	grad=0.0;
 
 	if(uw>=0.0)
 	{
-	jsqmin(p,f);
+	jsqmin(f);
 	is_min_y();
 	weight_min_y();
 	
@@ -218,7 +203,7 @@ double ddweno_f_nug::dswenoy(slice& f, double uw)
 
 	if(uw<0.0)
 	{
-	jsqmax(p,f);
+	jsqmax(f);
 	is_max_y();
 	weight_max_y();
 	
@@ -230,98 +215,4 @@ double ddweno_f_nug::dswenoy(slice& f, double uw)
 	}
 
 	return grad;
-}
-
-
-
-void ddweno_f_nug::iqmin(lexer *p,field& f)
-{	
-	q1 = (f(i-2,j,k)-f(i-3,j,k))/DX[IM3];
-	q2 = (f(i-1,j,k)-f(i-2,j,k))/DX[IM2];
-	q3 = (f(i,j,k)-f(i-1,j,k))/DX[IM1];
-	q4 = (f(i+1,j,k)-f(i,j,k))/DX[IP];
-	q5 = (f(i+2,j,k)-f(i+1,j,k))/DX[IP1];
-}
-
-void ddweno_f_nug::jqmin(lexer *p,field& f)
-{
-	q1 = (f(i,j-2,k)-f(i,j-3,k))/DY[JM3];
-	q2 = (f(i,j-1,k)-f(i,j-2,k))/DY[JM2];
-	q3 = (f(i,j,k)-f(i,j-1,k))/DY[JM1];
-	q4 = (f(i,j+1,k)-f(i,j,k))/DY[JP];
-	q5 = (f(i,j+2,k)-f(i,j+1,k))/DY[JP1];
-}
-
-void ddweno_f_nug::kqmin(lexer *p,field& f)
-{
-	q1 = (f(i,j,k-2)-f(i,j,k-3))/DZ[KM3];
-	q2 = (f(i,j,k-1)-f(i,j,k-2))/DZ[KM2];
-	q3 = (f(i,j,k)-f(i,j,k-1))/DZ[KM1];
-	q4 = (f(i,j,k+1)-f(i,j,k))/DZ[KP];
-	q5 = (f(i,j,k+2)-f(i,j,k+1))/DZ[KP1];
-}
-
-void ddweno_f_nug::iqmax(lexer *p,field& f)
-{
-    q1 = (f(i-1,j,k)-f(i-2,j,k))/DX[IM2];
-	q2 = (f(i,j,k)-f(i-1,j,k))/DX[IM1];
-	q3 = (f(i+1,j,k)-f(i,j,k))/DX[IP];
-	q4 = (f(i+2,j,k)-f(i+1,j,k))/DX[IP1];
-	q5 = (f(i+3,j,k)-f(i+2,j,k))/DX[IP2];
-}
-
-void ddweno_f_nug::jqmax(lexer *p,field& f)
-{
-	q1 = (f(i,j-1,k)-f(i,j-2,k))/DY[JM2];
-	q2 = (f(i,j,k)-f(i,j-1,k))/DY[JM1];
-	q3 = (f(i,j+1,k)-f(i,j,k))/DY[JP];
-	q4 = (f(i,j+2,k)-f(i,j+1,k))/DY[JP1];
-	q5 = (f(i,j+3,k)-f(i,j+2,k))/DY[JP2];
-}
-
-void ddweno_f_nug::kqmax(lexer *p,field& f)
-{
-	q1 = (f(i,j,k-1)-f(i,j,k-2))/DZ[KM2];
-	q2 = (f(i,j,k)-f(i,j,k-1))/DZ[KM1];
-	q3 = (f(i,j,k+1)-f(i,j,k))/DZ[KP];
-	q4 = (f(i,j,k+2)-f(i,j,k+1))/DZ[KP1];
-	q5 = (f(i,j,k+3)-f(i,j,k+2))/DZ[KP2];
-}
-
-
-
-void ddweno_f_nug::isqmin(lexer *p,slice& f)
-{	
-	q1 = (f(i-2,j)-f(i-3,j))/DX[IM3];
-	q2 = (f(i-1,j)-f(i-2,j))/DX[IM2];
-	q3 = (f(i,j)-f(i-1,j))/DX[IM1];
-	q4 = (f(i+1,j)-f(i,j))/DX[IP];
-	q5 = (f(i+2,j)-f(i+1,j))/DX[IP1];
-}
-
-void ddweno_f_nug::jsqmin(lexer *p,slice& f)
-{
-	q1 = (f(i,j-2)-f(i,j-3))/DY[JM3];
-	q2 = (f(i,j-1)-f(i,j-2))/DY[JM2];
-	q3 = (f(i,j)-f(i,j-1))/DY[JM1];
-	q4 = (f(i,j+1)-f(i,j))/DY[JP];
-	q5 = (f(i,j+2)-f(i,j+1))/DY[JP1];
-}
-
-void ddweno_f_nug::isqmax(lexer *p,slice& f)
-{
-    q1 = (f(i-1,j)-f(i-2,j))/DX[IM2];
-	q2 = (f(i,j)-f(i-1,j))/DX[IM1];
-	q3 = (f(i+1,j)-f(i,j))/DX[IP];
-	q4 = (f(i+2,j)-f(i+1,j))/DX[IP1];
-	q5 = (f(i+3,j)-f(i+2,j))/DX[IP2];
-}
-
-void ddweno_f_nug::jsqmax(lexer *p,slice& f)
-{
-	q1 = (f(i,j-1)-f(i,j-2))/DY[JM2];
-	q2 = (f(i,j)-f(i,j-1))/DY[JM1];
-	q3 = (f(i,j+1)-f(i,j))/DY[JP];
-	q4 = (f(i,j+2)-f(i,j+1))/DY[JP1];
-	q5 = (f(i,j+3)-f(i,j+2))/DY[JP2];
 }
