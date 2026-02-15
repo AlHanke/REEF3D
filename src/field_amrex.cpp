@@ -35,7 +35,7 @@ Author: Alexander Hanke
 #include <AMReX_PhysBCFunct.H>
 #include <AMReX_Interpolater.H>
 
-field_amrex::field_amrex(lexer* p): params({p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
+field_amrex::field_amrex(lexer* p): const_params({p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
                                            {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T}, p->margin, p->j_dir)
 {
     field_amrex::p = p;
