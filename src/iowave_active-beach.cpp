@@ -38,11 +38,11 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
 
     // get the fsf elevation
     LOOP
-    wsfmax[i][j]=-1.0e20;
+    wsfmax(i,j)=-1.0e20;
 
     LOOP
     if(a->phi(i,j,k)>=0.0 && a->phi(i,j,k+1)<0.0)
-    wsfmax[i][j]=MAX(wsfmax[i][j],-(a->phi(i,j,k)*p->DZP[KP])/(a->phi(i,j,k+1)-a->phi(i,j,k)) + p->pos_z());
+    wsfmax(i,j)=MAX(wsfmax(i,j),-(a->phi(i,j,k)*p->DZP[KP])/(a->phi(i,j,k+1)-a->phi(i,j,k)) + p->pos_z());
 
     for(int qn=0; qn<p->mz;++qn)
     pgc->verticalmax(p,a,wsfmax);
@@ -58,7 +58,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         if(p->gcslawa1[n][2]==4)
         ii=1;
 
-        wsf=wsfmax[i+ii][j];
+        wsf=wsfmax(i+ii,j);
 
 
         eta_T = 0.0;
@@ -211,7 +211,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         if(p->gcslawa2[n][3]==2)
         jj=1;
 
-        wsf=wsfmax[i][j+jj];
+        wsf=wsfmax(i,j+jj);
 
         eta_T = 0.0;
         eta_M = wsf-p->wd;
@@ -336,7 +336,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         if(p->gcslout[n][3]==2)
         bb=1;
 
-        wsf=wsfmax[i][j];
+        wsf=wsfmax(i,j);
 
         p->fsfout=wsf;
 

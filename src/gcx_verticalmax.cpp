@@ -22,8 +22,9 @@ Author: Hans Bihs
 
 #include"ghostcell.h"
 #include"lexer.h"
+#include"slice.h"
 
-void ghostcell::verticalmax(lexer *p, fdm* a, double **vmax)
+void ghostcell::verticalmax(lexer *p, fdm* a, slice& vmax)
 {
     //  FILL SEND
     count=0;
@@ -35,7 +36,7 @@ void ghostcell::verticalmax(lexer *p, fdm* a, double **vmax)
 
         if(p->gcpara5[q][5]==1)
         {
-            send5[count]=vmax[i][j];
+            send5[count]=vmax(i,j);
             ++count;
         }
 
@@ -49,7 +50,7 @@ void ghostcell::verticalmax(lexer *p, fdm* a, double **vmax)
 
         if(p->gcpara6[q][5]==1)
         {
-            send6[count]=vmax[i][j];
+            send6[count]=vmax(i,j);
             ++count;
         }
     }
@@ -65,7 +66,7 @@ void ghostcell::verticalmax(lexer *p, fdm* a, double **vmax)
 
         if(p->gcpara5[q][5]==1)
         {
-            vmax[i][j]=MAX(vmax[i][j],recv5[count]);
+            vmax(i,j)=MAX(vmax(i,j),recv5[count]);
             ++count;
         }
     }
@@ -78,7 +79,7 @@ void ghostcell::verticalmax(lexer *p, fdm* a, double **vmax)
 
         if(p->gcpara6[q][5]==1)
         {
-            vmax[i][j]=MAX(vmax[i][j],recv6[count]);
+            vmax(i,j)=MAX(vmax(i,j),recv6[count]);
             ++count;
         }
     }
