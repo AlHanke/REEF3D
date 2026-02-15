@@ -31,7 +31,7 @@ void CPM::press_lithostatic(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
     ALOOP
     press(i,j,k) = 0.0;
     
-    pgc->start4a(p,press,1);
+    pgc->start4(p,press,1);
     
     ILOOP
     JLOOP
@@ -47,5 +47,5 @@ void CPM::press_lithostatic(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
     }
 
     
-    pgc->start4a(p,press,1);
+    pgc->start4(p,press,1);
 }

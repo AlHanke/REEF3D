@@ -40,10 +40,10 @@ void vrans_veg::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     a->porosity(i,j,k)=1.0;
 	}
 	
-	pgc->start4a(p,a->porosity,1);
-	pgc->start4a(p,N,1);
-	pgc->start4a(p,D,1);
-	pgc->start4a(p,Cd,1);
+	pgc->start4(p,a->porosity,1);
+	pgc->start4(p,N,1);
+	pgc->start4(p,D,1);
+	pgc->start4(p,Cd,1);
 	
 	
 	
@@ -139,17 +139,17 @@ void vrans_veg::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
         a->porosity(i,j,k) = 0.5*a->porosity(i,j,k) + 0.5*(1.0/6.0)*(a->porosity(i,j,k) + a->porosity(i,j,k) + a->porosity(i,j,k) + a->porosity(i,j,k) + a->porosity(i,j,k) + a->porosity(i,j,k)); 
         }
         
-        pgc->start4a(p,a->porosity,1);
-        pgc->start4a(p,N,1);
-        pgc->start4a(p,D,1);
-        pgc->start4a(p,Cd,1);
+        pgc->start4(p,a->porosity,1);
+        pgc->start4(p,N,1);
+        pgc->start4(p,D,1);
+        pgc->start4(p,Cd,1);
     }
 
     
-    pgc->start4a(p,a->porosity,1);
-	pgc->start4a(p,N,1);
-	pgc->start4a(p,D,1);
-	pgc->start4a(p,Cd,1);
+    pgc->start4(p,a->porosity,1);
+	pgc->start4(p,N,1);
+	pgc->start4(p,D,1);
+	pgc->start4(p,Cd,1);
     
     
     

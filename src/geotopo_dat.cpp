@@ -35,7 +35,7 @@ void geotopo::dat(lexer* p, fdm* a, ghostcell* pgc)
     ALOOP
     a->topo(i,j,k)=-p->S57+p->ZP[KP];
     
-    pgc->start4a(p,a->topo,150);
+    pgc->start4(p,a->topo,150);
     
     p->del_Darray(p->flag_topo,p->imax*p->jmax*p->kmax);
     

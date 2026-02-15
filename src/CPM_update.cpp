@@ -35,6 +35,6 @@ void CPM::update(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, field &por, 
         d50(i,j,k)=p->S20;
     }
 
-    pgc->start4a(p,por,1);
-    pgc->start4a(p,d50,1);
+    pgc->start4(p,por,1);
+    pgc->start4(p,d50,1);
 }

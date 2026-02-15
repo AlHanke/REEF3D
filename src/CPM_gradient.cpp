@@ -37,9 +37,9 @@ void CPM::stress_gradient(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
         dTz(i,j,k) = HS*((Tau(i,j,k+1) - Tau(i,j,k-1))/(p->DZP[KM1]+p->DZP[KP]));
     }
     
-    pgc->start4a(p,dTx,1);
-    pgc->start4a(p,dTy,1);
-    pgc->start4a(p,dTz,1);
+    pgc->start4(p,dTx,1);
+    pgc->start4(p,dTy,1);
+    pgc->start4(p,dTz,1);
     
     // Smoothing
     /*ALOOP
@@ -49,9 +49,9 @@ void CPM::stress_gradient(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
         dTz(i,j,k) = 0.5* dTx(i,j,k) + (1.0/12.0)*(dTz(i-1,j,k)+dTz(i+1,j,k)+dTz(i,j-1,k)+dTz(i,j+1,k)+dTz(i,j,k-1)+dTz(i,j,k+1));
     }
 
-    pgc->start4a(p,dTx,1);
-    pgc->start4a(p,dTy,1);
-    pgc->start4a(p,dTz,1);*/
+    pgc->start4(p,dTx,1);
+    pgc->start4(p,dTy,1);
+    pgc->start4(p,dTz,1);*/
 }
 
 void CPM::pressure_gradient(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
@@ -68,7 +68,7 @@ void CPM::pressure_gradient(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
                    + (press(i,j,k+1) - press(i,j,k-1))/(p->DZP[KM1]+p->DZP[KP]);
     }
 
-    pgc->start4a(p,dPx,1);
-    pgc->start4a(p,dPy,1);
-    pgc->start4a(p,dPz,1);
+    pgc->start4(p,dPx,1);
+    pgc->start4(p,dPy,1);
+    pgc->start4(p,dPz,1);
 }
