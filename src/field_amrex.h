@@ -62,6 +62,73 @@ protected:
     void FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision);
 
 private:
+    void ShiftBoundaryFaces(amrex::MultiFab& mf_in, int p_level)
+    {
+        int dir = -1;
+        if (const_params.data_location == 1) dir = 0;
+        else if (const_params.data_location == 2) dir = 1;
+        else if (const_params.data_location == 3) dir = 2;
+
+        if (dir == -1) return;
+
+        const auto& geom = p->amrex_geometry[p_level];
+        const int domain_hi = geom.Domain().bigEnd(dir);
+
+        for (amrex::MFIter mfi(mf_in); mfi.isValid(); ++mfi)
+        {
+            const amrex::Box& valid_box = mfi.validbox();
+
+            // Check if this box touches the high boundary in the specific direction
+            if (valid_box.bigEnd(dir) == domain_hi)
+            {
+                const amrex::Box& box = mfi.fabbox();
+                amrex::Array4<amrex::Real> const& arr = mf_in.array(mfi);
+
+                int start = domain_hi;
+                int end = box.bigEnd(dir) - 1;
+
+                // Define a box collapsed to the start plane for iteration
+                amrex::Box para_box = box;
+                para_box.setSmall(dir, start);
+                para_box.setBig(dir, start);
+
+                if (dir == 0)
+                {
+                    amrex::ParallelFor(para_box, mf_in.nComp(),
+                    [=] AMREX_GPU_DEVICE (int /*i dummy*/, int j, int k, int n)
+                    {
+                        for (int i = start; i <= end; ++i)
+                        {
+                            arr(i, j, k, n) = arr(i + 1, j, k, n);
+                        }
+                    });
+                }
+                else if (dir == 1)
+                {
+                    amrex::ParallelFor(para_box, mf_in.nComp(),
+                    [=] AMREX_GPU_DEVICE (int i, int /*j dummy*/, int k, int n)
+                    {
+                        for (int j = start; j <= end; ++j)
+                        {
+                            arr(i, j, k, n) = arr(i, j + 1, k, n);
+                        }
+                    });
+                }
+                else // dir == 2
+                {
+                    amrex::ParallelFor(para_box, mf_in.nComp(),
+                    [=] AMREX_GPU_DEVICE (int i, int j, int /*k dummy*/, int n)
+                    {
+                        for (int k = start; k <= end; ++k)
+                        {
+                            arr(i, j, k, n) = arr(i, j, k + 1, n);
+                        }
+                    });
+                }
+            }
+        }
+    }
+
     const amrex_bc_func::ConstMyExtBCFillFieldParams const_params = {};
 };
 
@@ -162,6 +229,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
     amrex_bc_func::MyExtBCFillFieldParams params(p->Ui, p->Uo, p->dt);
 
     LevelLOOP
+    {
         if(p->level==0)
         {
             amrex::Vector<amrex::Box> loc_boxes;
@@ -231,6 +299,12 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
                                         &mapper, // spatial interpolater
                                         BCRecs[p->level], 0);
         }
+
+        if (const_params.data_location != 0)
+        {
+            ShiftBoundaryFaces(mf[p->level], p->level);
+        }
+    }
 }
 
 #endif
