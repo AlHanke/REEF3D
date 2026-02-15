@@ -116,7 +116,7 @@ void ghostcell::gcsldistro1(lexer *p, slice &f, int ii, int jj, int nn, int gcv,
         gcsl_sommerfeld(f,cs);
 }
 
-void ghostcell::gcsldistro1int(lexer *p, sliceint &f, int ii, int jj, int nn, int gcv, int bc, int cs)
+void ghostcell::gcsldistro1int(sliceint &f, int ii, int jj, int cs)
 {
     i=ii;
     j=jj;
