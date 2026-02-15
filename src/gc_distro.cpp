@@ -42,8 +42,6 @@ void ghostcell::gcdistro(field &f, int ii, int jj, int kk, double dist, bc_label
             extend(f,cs);
             break;
         case bc_labels::NEUMANN:
-        case bc_labels::NEUMANN_ALL:
-        case bc_labels::NEUMANN_ALL2:
             neumann(f,cs);
             break;
         case bc_labels::NOSLIP:

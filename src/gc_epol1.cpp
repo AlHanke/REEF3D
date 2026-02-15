@@ -31,67 +31,55 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
 
     // Parallel
     // Wall
-    else if((bc==21 || bc==22 || (bc==7 && !awa_label)) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==10 || gcv==1))
+    else if(((bc==7 && !awa_label) || bc==21 || bc==22) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==1 || gcv==10 || gcv==114))
         return gclabel_u;
 
-    else if((bc==21 || bc==22 || (bc==7 && !awa_label)) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==110))
+    else if((bc==5 || (bc==7 && !awa_label) || bc==21 || bc==22) && (cs==2 || cs==3 || cs==5 || cs==6) && gcv==110)
         return bc_labels::NOSLIP;
 
-    else if((bc==21 || bc==22 || (bc==7 && !awa_label)) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==114))
-        return gclabel_u;
-
-    else if((bc==21 || bc==22 || (bc==7 && !awa_label)) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==117))
+    else if(((bc==7 && !awa_label) || bc==21 || bc==22) && (cs==2 || cs==3 || cs==5 || cs==6) && gcv==117)
         return bc_labels::NEUMANN;
 
     // Topo
-    else if((bc==5) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==10 || gcv==1))
+    else if(bc==5 && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==1 || gcv==10 || gcv==114 || gcv==117))
         return gclabel_utopo;
 
-    else if((bc==5) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==110))
-        return bc_labels::NOSLIP;
-
-    else if((bc==5) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==114))
-        return gclabel_utopo;
-
-    else if((bc==5) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==117))
-        return gclabel_utopo;
-
-    else if((bc==21 || bc==22 || bc==5) && gcv==14)
+    else if((bc==5 || bc==21 || bc==22) && gcv==14)
         return bc_labels::NEUMANN;
 
     // Orthogonal
-    else if((bc==21 || bc==22 || bc==5) && (cs==1 || cs==4) && (gcv==10 || gcv==1))
+    else if((bc==5 || bc==21 || bc==22) && (cs==1 || cs==4) && (gcv==1 || gcv==10))
         return gclabel_u_orth;
 
-    else if((bc==21 || bc==22 || bc==5) && (cs==1 || cs==4) && gcv==7)
+    else if((bc==5 || bc==21 || bc==22) && (cs==1 || cs==4) && gcv==7)
         return bc_labels::NOSLIP;
 
     // Inflow
-    else if((bc==6 && (cs==1 || cs==4) && (gcv==10 || gcv==1 || gcv==7)))
+    else if(bc==6 && (cs==1 || cs==4) && (gcv==1 || gcv==7 || gcv==10))
         return gclabel_u_in;
 
     // Patch
-    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==10 || gcv==1 || gcv==7))
+    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==1 || gcv==7 || gcv==10))
         return bc_labels::NEUMANN;
 
     // Outflow
-    else if((bc==2 && gclabel_outflow==1) && (gcv==10 || gcv==1) && (cs==2 || cs==3 || cs==5 || cs==6))
+    else if(bc==2 && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==1 || gcv==10) && gclabel_outflow)
         return bc_labels::NEUMANN;
 
-    else if((bc==2 && gclabel_outflow==1) && (gcv==10 || gcv==1) && (cs==1 || cs==4))
+    else if(bc==2 && (cs==1 || cs==4) && (gcv==1 || gcv==10) && gclabel_outflow)
         return gclabel_u_out;
 
-    else if(((bc==8 || bc==7) && gclabel_outflow==1) && (gcv==10 || gcv==1) && (cs==1 || cs==4) && p->I10==1)
+    else if((bc==7 || bc==8) && (cs==1 || cs==4) && (gcv==1 || gcv==10) && gclabel_outflow && p->I10==1)
         return bc_labels::NEUMANN;
 
     // Free Surface
-    else if(bc==3 && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==10 || gcv==17 || gcv==1))
+    else if(bc==3 && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==1 || gcv==10 || gcv==17))
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==1 || cs==4) && (gcv==10 || gcv==17 || gcv==1))
+    else if(bc==3 && (cs==1 || cs==4) && (gcv==1 || gcv==10 || gcv==17))
         return gclabel_u_orth;
 
-    else if((bc==9) && cs==6 && (gcv==10 || gcv==17 || gcv==1))
+    else if(bc==9 && cs==6 && (gcv==1 || gcv==10 || gcv==17))
         return bc_labels::NEUMANN;
 
     // 6DOF
