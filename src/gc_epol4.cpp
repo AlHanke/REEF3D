@@ -325,39 +325,39 @@ void ghostcell::gcdistro4(lexer *p, field &f, int ii, int jj, int kk, int nn, do
 	n=nn;
 
 	bc_label=gceval4(p,gcv,bc,cs);
-
-    if(bc_label==22)
-	lsm(p,f,dist,gcv,bc,cs);
     
 	if(bc_label==3)
-	extend(p,f,dist,gcv,bc,cs);
+	extend(f,cs);
 
 	if(bc_label==4)
-	neumann(f,gcv,bc,cs);
+	neumann(f,cs);
     
     if(bc_label==5)
-	noslip(f,dist,gcv,bc,cs);
+	noslip(f,cs);
 
 	if(bc_label==6)
-	extend(p,f,dist,gcv,bc,cs);
+	extend(f,cs);
 
 	if(bc_label==7)
-	potentialbc(p,f,bc,cs);
+	potentialbc(f,cs);
 
 	if(bc_label==10)
-	gravity_press(p,f,dist,gcv,bc,cs);
+	gravity_press(f,cs);
     
     if(bc_label==11)
-    nhpress(p,f,dist,gcv,bc,cs);
+    nhpress(f,cs);
 
 	if(bc_label==21)
-	atmosphere(p,f,gcv,bc,cs);
+	atmosphere(f);
+
+    if(bc_label==22)
+	lsm(f,cs);
     
     if(bc_label==61)
-	heatbc(p,f,gcv,bc,cs);
+	heatbc(f,cs);
     
     if(bc_label==99)
-	gcb_debug(f,gcv,bc,cs);
+	gcb_debug(f,cs);
 }
 
 

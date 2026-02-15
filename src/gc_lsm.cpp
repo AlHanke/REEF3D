@@ -20,35 +20,25 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"lexer.h"
 #include"ghostcell.h"
+#include"lexer.h"
 #include"field.h"
-#include"fdm.h"
 
-void ghostcell::lsm(lexer *p,field& f,double dist,int gcv, int bc, int cs)
+void ghostcell::lsm(field &f, int cs)
 {
-	if(cs==1)
-	for(q=1;q<=margin;++q)
-	f(i-q,j,k) = double(q+1)*f(i,j,k) - double(q)*f(i+1,j,k);
-
-	if(cs==2)
-	for(q=1;q<=margin;++q)
-	f(i,j+q,k) = double(q+1)*f(i,j,k) - double(q)*f(i,j-1,k);
-
-	if(cs==3)
-	for(q=1;q<=margin;++q)
-	f(i,j-q,k) = double(q+1)*f(i,j,k) - double(q)*f(i,j+1,k);
-
-	if(cs==4)
-	for(q=1;q<=margin;++q)
-	f(i+q,j,k) = double(q+1)*f(i,j,k) - double(q)*f(i-1,j,k);
-
-	if(cs==5)
-	for(q=1;q<=margin;++q)
-	f(i,j,k-q) = double(q+1)*f(i,j,k) - double(q)*f(i,j,k+1);
-
-	if(cs==6)
-	for(q=1;q<=margin;++q)
-	f(i,j,k+q) = double(q+1)*f(i,j,k) - double(q)*f(i,j,k-1);
+    for(q=1;q<=margin;++q)
+    {
+        if(cs==1)
+            f(i-q,j,k) = double(q+1)*f(i,j,k) - double(q)*f(i+1,j,k);
+        else if(cs==2)
+            f(i,j+q,k) = double(q+1)*f(i,j,k) - double(q)*f(i,j-1,k);
+        else if(cs==3)
+            f(i,j-q,k) = double(q+1)*f(i,j,k) - double(q)*f(i,j+1,k);
+        else if(cs==4)
+            f(i+q,j,k) = double(q+1)*f(i,j,k) - double(q)*f(i-1,j,k);
+        else if(cs==5)
+            f(i,j,k-q) = double(q+1)*f(i,j,k) - double(q)*f(i,j,k+1);
+        else if(cs==6)
+            f(i,j,k+q) = double(q+1)*f(i,j,k) - double(q)*f(i,j,k-1);
+    }
 }
-
