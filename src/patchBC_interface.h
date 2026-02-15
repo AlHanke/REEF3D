@@ -55,7 +55,12 @@ public:
 
     patch_obj **patch;
     int obj_count;
+protected:
+    void patchBC_hydrograph_Q_read(lexer*, int, int);
+    double patchBC_hydrograph_Q_ipol(lexer*, int, int);
 
+    void patchBC_hydrograph_FSF_read(lexer*, int, int);
+    double patchBC_hydrograph_FSF_ipol(lexer*, int, int);
 };
 
 #endif

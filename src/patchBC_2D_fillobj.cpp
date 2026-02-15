@@ -55,9 +55,6 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
         }
     }
 
-    for(qq=0;qq<obj_count;++qq)
-        patch[qq]->waterlevel_flag=false;
-
     // waterlevel
     for(int qn=0;qn<p->B413;++qn)
     {
@@ -144,7 +141,7 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
             patch[qq]->gcb_uflag=2;
 
             // read hydrograph
-            patchBC_hydrograph_Q_read(p,pgc,qq,patch[qq]->ID);
+            patchBC_hydrograph_Q_read(p,qq,patch[qq]->ID);
         }
     }
 
@@ -160,7 +157,7 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
             patch[qq]->gcb_phiflag=2;
 
             // read hydrograph
-            patchBC_hydrograph_FSF_read(p,pgc,qq,patch[qq]->ID);
+            patchBC_hydrograph_FSF_read(p,qq,patch[qq]->ID);
         }
     }
 
@@ -202,7 +199,6 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
         else if(patch[qq]->gcb_uflag==1 && patch[qq]->gcb_pressflag==1 && patch[qq]->gcb_phiflag==1)
             patch[qq]->gcb_flag = 111;
     }
-
 
     // fill gcbs
     for(qq=0;qq<obj_count;++qq)
