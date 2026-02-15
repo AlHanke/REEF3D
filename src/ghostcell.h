@@ -288,14 +288,11 @@ private:
     int ndims;
 
 	int margin, paramargin;
-	double y[15],pos[15];
-	int m,q,qq,qn,g;
-	double wallvalue,x_ip,val_ip,gamma;
+	int m,q,qq;
+	double gamma;
 	int orderdir;
-	double weight;
     int count;
     double starttime,endtime;
-    int ys;
 
     bc_labels gcval_topodist;
 	bool gclabel_outflow;
