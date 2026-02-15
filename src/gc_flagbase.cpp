@@ -36,7 +36,6 @@ void ghostcell::flagbase(lexer *p)
         j=p->gcb4[n][1];
         k=p->gcb4[n][2];
 
-
         if(p->gcb4[n][4]==1)
         bc=1;
         else if(p->gcb4[n][4]==2)
