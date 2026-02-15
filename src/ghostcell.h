@@ -225,9 +225,9 @@ public:
     void dirichlet_ortho(field&,double,int);
 
 private:
-    enum bc_labels { NONE=0, DIRICHLET_ORTH=1, DIRICHLET_PARA=2, NEUMANN=4, NOSLIP=5, OUTFLOW=6, SOMMERFELD=7, POTENTIAL=8, NHPRESS=9,
+    enum bc_labels { NONE=0, DIRICHLET_ORTH=1, DIRICHLET_PARA=2, NEUMANN=4, NOSLIP=5, OUTFLOW=6, SOMMERFELD=7, POTENTIAL=8,
          GRAVITY_PRESS=10, DIRICHLET_ORTH_REFLECT=11, DIRICHLET_PARA_REFLECT=12, NEUMANN_X=14, ATMOSPHERE=21, LSM=22, NEUMANN_HX=41, NEUMANN_HY=42,
-         HEATBC=61, DEBUG=99 };
+         HEATBC=61 };
     enum dir_labels { X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2, Z_NEG=5, Z_POS=6 };
 
     void Sendrecv_double(int,int,int,int,int,int);
@@ -268,9 +268,7 @@ private:
     void heatbc(field&,int);
     void atmosphere(field&);
     void gravity_press(field&,int);
-    void nhpress(field&,int);
     void potentialbc(field&,int);
-    void gcb_debug(field&,int);
     void outflow(field&,int);
     void sommerfeld(field&,int);
     void lsm(field&,int);

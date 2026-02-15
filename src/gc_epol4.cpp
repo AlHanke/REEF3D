@@ -152,9 +152,6 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::X_POS) && gcv==12)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==12 && p->A10==5)
-        return bc_labels::NEUMANN;
-
     // VOF
     else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && (gcv==71 || gcv==72 || gcv==73 || gcv==74))
         return bc_labels::NEUMANN;
@@ -231,16 +228,6 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
 
     else if(bc==3 && cs!=dir_labels::Z_POS && gcv==250)
         return bc_labels::NEUMANN;
-
-    else if(gcv==999)
-        return bc_labels::DEBUG;
-
-    // NHFLOW
-    else if(((bc==2 && !pressout_label) || bc==3 || bc==5 || bc==6 || (bc==7 && !awa_label) || bc==21 || bc==22 || bc==111 || bc==112 || bc==211 || bc==212) && cs!=dir_labels::Z_POS && gcv==540)
-        return bc_labels::NEUMANN;
-
-    else if(bc==3 && cs==dir_labels::Z_POS && gcv==540)
-        return bc_labels::NHPRESS;
 
     else
         return bc_labels::NONE;

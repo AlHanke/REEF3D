@@ -79,13 +79,6 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
     else if(bc==9 && cs==dir_labels::Z_POS && (gcv==1 || gcv==10 || gcv==17))
         return bc_labels::NEUMANN;
 
-    // 6DOF
-    else if(bc==41 || bc==42 || bc==43)
-        return bc_labels::NHPRESS;
-
-    else if(gcv==999)
-        return bc_labels::DEBUG;
-
     else
         return bc_labels::NONE;
 }
