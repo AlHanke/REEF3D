@@ -674,10 +674,24 @@ public:
                         dest(iv, dcomp+n) = amrex::Real(0);
                         break;
                     case BoundaryConditionTypeLabel::OUTFLOWBC:
-                        // ToDo
+                        if(cs==static_cast<int>(Dir::X_NEG))
+                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(0))*p->Uo*(dest(interior+amrex::IntVect({1,0,0}), dcomp+n)-dest(interior, dcomp+n));
+                        else if(cs==static_cast<int>(Dir::X_POS))
+                            dest(iv, dcomp+n) = MAX(amrex::Real(0), dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(0))*p->Uo*(dest(interior, dcomp+n)-dest(interior+amrex::IntVect({-1,0,0}), dcomp+n)));
+                        else if(cs==static_cast<int>(Dir::Y_NEG))
+                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(1))*p->Uo*(dest(interior+amrex::IntVect({0,1,0}), dcomp+n)-dest(interior, dcomp+n));
+                        else if(cs==static_cast<int>(Dir::Y_POS))
+                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(1))*p->Uo*(dest(interior, dcomp+n)-dest(interior+amrex::IntVect({0,0,-1}), dcomp+n));
+                        else if(cs==static_cast<int>(Dir::Z_NEG))
+                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(2))*p->Uo*(dest(interior+amrex::IntVect({0,0,1}), dcomp+n)-dest(interior, dcomp+n));
+                        else if(cs==static_cast<int>(Dir::Z_POS))
+                            dest(iv, dcomp+n) = dest(interior, dcomp+n) - (m_params.dt/geom.CellSize(2))*p->Uo*(dest(interior, dcomp+n)-dest(interior+amrex::IntVect({0,0,-1}), dcomp+n));
                         break;
                     case BoundaryConditionTypeLabel::POTENTIAL:
-                        // ToDo
+                        if(cs==static_cast<int>(Dir::X_NEG))
+                            dest(iv, dcomp+n) = m_params.Ui * geom.CellSize(0) + dest(interior, dcomp+n);
+                        else if(cs==static_cast<int>(Dir::X_POS))
+                            dest(iv, dcomp+n) = m_params.Uo * geom.CellSize(0) + dest(interior, dcomp+n);
                         break;
                     case BoundaryConditionTypeLabel::DIRICHLET_ORTH_REFLECT:
                         // ToDo
