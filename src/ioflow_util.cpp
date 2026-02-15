@@ -81,23 +81,9 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     
     if(p->I10==1 && p->count==0)
         velini(p,a,pgc);
-    
-    // 4a ---------------
-    
-    count1=0;
-    count2=0;
-    int qq;
-    QQGC4ALOOP
-    {
-        if(p->gcb4a[qq][4]==1 || p->gcb4a[qq][4]==6)
-            ++count1;
 
-        if(p->gcb4a[qq][4]==2 || p->gcb4a[qq][4]==7)
-            ++count2;
-    }
-    
+
     // IO update
-    
     
     GC4LOOP
     {
