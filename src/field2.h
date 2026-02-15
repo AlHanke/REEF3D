@@ -36,9 +36,6 @@ public:
 	virtual ~field2();
 
     double& operator()(int, int , int) override;
-	double& operator[](int) override;
-    void resize(lexer*) override;
-    void dealloc(lexer*) override;
 
 	int di,dj,dk;
 	int imin,imax,jmax,jmin,kmin,kmax;

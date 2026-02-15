@@ -49,20 +49,6 @@ void field4a::fieldalloc(lexer* p)
 	p->Darray(V,gridsize);
 }
 
-void field4a::dealloc(lexer* p)
-{
-	delete [ ] V;
-}
-
-void field4a::resize(lexer* p)
-{
-}
-
-double & field4a::operator[](int n)
-{
-	return V[n];
-}
-
 double & field4a::operator()(int ii, int jj, int kk)
 {			
 	return V[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin];

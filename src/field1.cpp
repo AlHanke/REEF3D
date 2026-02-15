@@ -50,19 +50,6 @@ void field1::fieldalloc(lexer* p)
 	p->Darray(V,gridsize);
 }
 
-void field1::resize(lexer* p)
-{
-}
-
-void field1::dealloc(lexer* p)
-{
-	delete [ ] V;
-}
-
-double & field1::operator[](int n)
-{
-	return V[n];
-}
 double & field1::operator()(int ii, int jj, int kk)
 {
 	return V[(ii-imin)*jmax*kmax + (jj-jmin)*kmax + kk-kmin];

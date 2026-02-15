@@ -122,14 +122,14 @@ void fnpf_breaking::breaking_kennedy(lexer *p, fdm_fnpf *c, ghostcell *pgc, slic
     LOOP
     {
     if(c->breaking(i,j)>0)
-    c->test[IJK] = 1.0;
+    c->test(i,j,k) = 1.0;
     
     else
-    c->test[IJK] = 0.0;
+    c->test(i,j,k) = 0.0;
     }*/
     
     LOOP
-    c->test[IJK] = c->vb(i,j);
+    c->test(i,j,k) = c->vb(i,j);
     
     count=pgc->globalisum(count);
     
