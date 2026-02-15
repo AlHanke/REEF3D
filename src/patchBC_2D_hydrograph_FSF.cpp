@@ -31,10 +31,9 @@ void patchBC_2D::patchBC_hydrograph_FSF_read(lexer *p, ghostcell *pgc, int qq, i
     double val;
     int count;
 
-
     sprintf(name,"hydrograph_FSF_%i.dat",ID);
 
-// open file------------
+    // open file------------
     ifstream hg(name, ios_base::in);
 
     if(!hg)
@@ -45,12 +44,11 @@ void patchBC_2D::patchBC_hydrograph_FSF_read(lexer *p, ghostcell *pgc, int qq, i
     count=0;
     while(!hg.eof())
     {
-    hg>>val;
-    ++count;
+        hg>>val;
+        ++count;
     }
 
     hg.close();
-
 
     count/=2;
 
@@ -63,8 +61,8 @@ void patchBC_2D::patchBC_hydrograph_FSF_read(lexer *p, ghostcell *pgc, int qq, i
     count=0;
     while(!hg.eof())
     {
-    hg>>patch[qq]->hydroFSF[count][0]>>patch[qq]->hydroFSF[count][1];
-    ++count;
+        hg>>patch[qq]->hydroFSF[count][0]>>patch[qq]->hydroFSF[count][1];
+        ++count;
     }
 
     hg.close();
@@ -76,15 +74,13 @@ double patchBC_2D::patchBC_hydrograph_FSF_ipol(lexer *p, ghostcell *pgc, int qq,
 
     for(int n=0;n<patch[qq]->hydroFSF_count-1;++n)
     if(p->simtime>=patch[qq]->hydroFSF[n][0] && p->simtime<patch[qq]->hydroFSF[n+1][0])
-    {
-    val = ((patch[qq]->hydroFSF[n+1][1]-patch[qq]->hydroFSF[n][1])/(patch[qq]->hydroFSF[n+1][0]-patch[qq]->hydroFSF[n][0]))*(p->simtime-patch[qq]->hydroFSF[n][0]) + patch[qq]->hydroFSF[n][1];
-    }
+        val = ((patch[qq]->hydroFSF[n+1][1]-patch[qq]->hydroFSF[n][1])/(patch[qq]->hydroFSF[n+1][0]-patch[qq]->hydroFSF[n][0]))*(p->simtime-patch[qq]->hydroFSF[n][0]) + patch[qq]->hydroFSF[n][1];
 
     if(p->count==0 )
-    val = patch[qq]->hydroFSF[0][1];
+        val = patch[qq]->hydroFSF[0][1];
 
     if(p->simtime>=patch[qq]->hydroFSF[patch[qq]->hydroFSF_count-1][0])
-    val=patch[qq]->hydroFSF[patch[qq]->hydroFSF_count-1][1];
+        val=patch[qq]->hydroFSF[patch[qq]->hydroFSF_count-1][1];
 
     return val;
 }

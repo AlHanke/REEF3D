@@ -51,8 +51,6 @@ public:
     void patchBC_pressure2D_vgrad(lexer*, fdm2D*, slice&, slice&) override final;
     void patchBC_waterlevel2D(lexer*, fdm2D*, ghostcell*, slice&) override final;
 
-    void patchBC_loop2D(lexer*, fdm2D*, int&, int&, int&, int&) override final;
-
 private:
     // ini
     void patchBC_gcb_count(lexer *p, ghostcell *pgc);

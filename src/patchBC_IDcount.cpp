@@ -25,7 +25,6 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"patch_obj.h"
 
-
 void patchBC::patchBC_IDcount(lexer *p, ghostcell *pgc)
 {
     bool check;
