@@ -173,7 +173,7 @@ public:
 	int mx,my,mz;
 	int mpi_size;
 	
-	int ulast,vlast,wlast,flast,ulastsflow;
+	int ulast,vlast,wlast,flast;
 	int* ictrl;
 	double* dctrl;
 	int ctrlsize;
