@@ -26,7 +26,6 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include<fstream>
 
-
 double iowave::hydrograph_ipol(lexer *p, fdm* a, ghostcell* pgc, double ** hydro, int hydrocount)
 {
 	double val;

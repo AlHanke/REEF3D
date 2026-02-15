@@ -31,23 +31,20 @@ void iowave::inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field&
 {
     if(p->I230==0)
     {
-    if(p->B98==0 || (p->W10>0.0 && p->B98==2))
-    inflow_plain(p,a,pgc,u,v,w);
-
-    
-	if(p->B98==3)
-	dirichlet_wavegen(p,a,pgc,u,v,w);
-	
-	if(p->B98==4)
-	active_wavegen(p,a,pgc,u,v,w);
+        if(p->B98==0 || (p->W10>0.0 && p->B98==2))
+        inflow_plain(p,a,pgc,u,v,w);
+        else if(p->B98==3)
+        dirichlet_wavegen(p,a,pgc,u,v,w);
+        else if(p->B98==4)
+        active_wavegen(p,a,pgc,u,v,w);
 	}
-    
+
 	if(p->B99==3||p->B99==4||p->B99==5)
 	active_beach(p,a,pgc,u,v,w);
-    
+
     if(p->I230>0)
     ff_inflow(p,a,pgc,u,v,w);
-    
+
     pBC->patchBC_ioflow(p,a,pgc,u,v,w);
 }
 
@@ -55,18 +52,18 @@ void iowave::rkinflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, fiel
 {
     for(n=0;n<p->gcin_count;n++)
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
-    
-    u(i-1,j,k) = u(i-2,j,k) = u(i-3,j,k) = a->u(i-1,j,k);
-    v(i-1,j,k) = v(i-2,j,k) = v(i-3,j,k) = a->v(i-1,j,k);
-    w(i-1,j,k) = w(i-2,j,k) = w(i-3,j,k) = a->w(i-1,j,k);
+        i=p->gcin[n][0];
+        j=p->gcin[n][1];
+        k=p->gcin[n][2];
+
+        u(i-1,j,k) = u(i-2,j,k) = u(i-3,j,k) = a->u(i-1,j,k);
+        v(i-1,j,k) = v(i-2,j,k) = v(i-3,j,k) = a->v(i-1,j,k);
+        w(i-1,j,k) = w(i-2,j,k) = w(i-3,j,k) = a->w(i-1,j,k);
     }
-    
+
     if(p->B99==3||p->B99==4||p->B99==5)
 	active_beach(p,a,pgc,u,v,w);
-    
+
     pBC->patchBC_rkioflow(p,a,pgc,u,v,w);
 }
 
@@ -74,9 +71,9 @@ void iowave::inflow_plain(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
 {
     for(n=0;n<p->gcin_count;n++)
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
+        i=p->gcin[n][0];
+        j=p->gcin[n][1];
+        k=p->gcin[n][2];
 
         u(i-1,j,k)=p->Ui;
         u(i-2,j,k)=p->Ui;
@@ -89,15 +86,14 @@ void iowave::inflow_plain(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
 		w(i-1,j,k)=0.0;
         w(i-2,j,k)=0.0;
         w(i-3,j,k)=0.0;
-        
+
         // Air inflow
         if(p->W50_air==1 && a->phi(i,j,k)<-0.6*p->DXM)
         {
-        u(i-1,j,k)+=p->W50;
-        u(i-2,j,k)+=p->W50;
-        u(i-3,j,k)+=p->W50;
+            u(i-1,j,k)+=p->W50;
+            u(i-2,j,k)+=p->W50;
+            u(i-3,j,k)+=p->W50;
         }
-    
     }
 }
 
