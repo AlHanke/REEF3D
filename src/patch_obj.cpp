@@ -31,42 +31,35 @@ patch_obj::patch_obj(lexer *p, int ID_ini)
 
     gcb_count=0;
 
-
     // BC options ini
 
-    Q_flag=0;
+    Q_flag=false;
     Q=0.0;
     Uq=0.0;
 
-    velocity_flag=0;
-    velocity=0.0;
-
-    pressure_flag=0;
+    pressure_flag=false;
     pio_flag=0;
     pressure=0.0;
 
-    waterlevel_flag=0;
+    waterlevel_flag=false;
     waterlevel=0.0;
 
-    Uio_flag=0;
+    Uio_flag=false;
     Uio=0.0;
 
-    velcomp_flag=0;
+    velcomp_flag=false;
     U=V=W=0.0;
 
-    flowangle_flag=0;
     alpha=0.0;
     cosalpha=0.0;
     sinalpha=1.0;
 
-    flownormal_flag=0;
     Nx=Ny=Nz=0.0;
 
-    hydroQ_flag=0;
-    hydroFSF_flag=0;
+    hydroQ_flag=false;
+    hydroFSF_flag=false;
 
     counter=0;
-
 
     // measurements
 
@@ -81,7 +74,6 @@ patch_obj::patch_obj(lexer *p, int ID_ini)
     gcb_phiflag=1;
 
     gcb_flag=111;
-
 }
 
 patch_obj::~patch_obj()

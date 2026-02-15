@@ -28,40 +28,32 @@ Author: Hans Bihs
 
 void patchBC_2D::patchBC_gcb_count(lexer *p, ghostcell *pgc)
 {
-// count gcbs
+    // count gcbs
     for(int qn=0;qn<p->B440;++qn)
     {
-            int count=0;
+        int count=0;
 
-            istart = p->posc_i(p->B440_xs[qn]);
-            iend = p->posc_i(p->B440_xe[qn]);
+        istart = p->posc_i(p->B440_xs[qn]);
+        iend = p->posc_i(p->B440_xe[qn]);
 
-            jstart = p->posc_j(p->B440_ys[qn]);
-            jend = p->posc_j(p->B440_ye[qn]);
+        jstart = p->posc_j(p->B440_ys[qn]);
+        jend = p->posc_j(p->B440_ye[qn]);
 
-            //if(qn==1)
-            //cout<<p->mpirank<<" istart: "<<istart<<" iend: "<<iend<<" jstart: "<<jstart<<" jend: "<<jend<<" xs: "<<p->B440_xs[qn]<<" xe: "<<p->B440_xe[qn]<<endl;
-
-            for(n=0;n<p->gcbsl4_count;++n)
-            {
+        for(n=0;n<p->gcbsl4_count;++n)
+        {
             i=p->gcbsl4[n][0];
             j=p->gcbsl4[n][1];
 
-                if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[n][3]==p->B440_face[qn] && (p->gcbsl4[n][4]==21||p->gcbsl4[n][4]==22))
-                {
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[n][3]==p->B440_face[qn] && (p->gcbsl4[n][4]==21||p->gcbsl4[n][4]==22))
                 ++count;
-                }
-            }
+        }
 
         for(qq=0;qq<obj_count;++qq)
         if(patch[qq]->ID==p->B440_ID[qn])
-        patch[qq]->gcb_count += count;
-
+            patch[qq]->gcb_count += count;
     }
 
     // allocate arrays in patch_obj
     for(q=0; q<obj_count;++q)
-    patch[q]->patch_obj_gcb_generate(p);
-
+        patch[q]->patch_obj_gcb_generate(p);
 }
-

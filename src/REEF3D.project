@@ -3019,7 +3019,6 @@
         <VirtualDirectory Name="PatchBC 2D">
           <File Name="patchBC_2D_waterlevel.cpp"/>
           <File Name="patchBC_2D_pressure.cpp"/>
-          <File Name="patchBC_2D_loop.cpp"/>
           <File Name="patchBC_2D_inflow.cpp"/>
           <File Name="patchBC_2D_IDcount.cpp"/>
           <File Name="patchBC_2D_hydrograph_Q.cpp"/>
@@ -3033,7 +3032,6 @@
           <File Name="patchBC_gcb_convert.cpp"/>
           <File Name="patchBC_waterlevel.cpp"/>
           <File Name="patchBC_pressure.cpp"/>
-          <File Name="patchBC_loop.cpp"/>
           <File Name="patchBC_inflow.cpp"/>
           <File Name="patchBC_IDcount.cpp"/>
           <File Name="patchBC_hydrograph_Q.cpp"/>
