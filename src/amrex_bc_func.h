@@ -24,9 +24,12 @@ Author: Alexander Hanke
 #define AMREX_BC_FUNC_H_
 
 #include <AMReX_BCRec.H>
+#include <AMReX_Array.H>
 #include <AMReX_Array4.H>
 #include <AMReX_Geometry.H>
 #include <AMReX_GpuQualifiers.H>
+#include <initializer_list>
+#include <type_traits>
 
 class amrex_bc_func
 {
@@ -554,13 +557,16 @@ public:
         Field4Params m_params{};
     };
 
+    template <typename BCDecision>
     struct MyExtBCFill {
         AMREX_GPU_HOST_DEVICE
-        MyExtBCFill() = default;
+        MyExtBCFill() = delete;
 
         AMREX_GPU_HOST_DEVICE
-        MyExtBCFill(const amrex::Array<int,6>& values, const int gcv, const amrex::Box* boxes, int num_boxes)
-            : bc_values(values), m_gcv(gcv), m_boxes(boxes), m_num_boxes(num_boxes) {}
+        MyExtBCFill(const amrex::Array<int,6>& values, int gcv, int margin, bool y_dimension_exists,
+                const BCDecision& decision,
+                const amrex::Box* boxes, int num_boxes)
+            : bc_values(values), m_gcv(gcv), m_margin(margin), m_y_dimension_exists(y_dimension_exists), m_bc_decision(decision), m_boxes(boxes), m_num_boxes(num_boxes) {}
 
         AMREX_GPU_DEVICE
         void operator() (const amrex::IntVect& iv, amrex::Array4<amrex::Real> const& dest,
@@ -569,32 +575,49 @@ public:
                         const amrex::BCRec* bcr, const int bcomp,
                         const int orig_comp) const
         {
-            amrex::ignore_unused(time, orig_comp);
+            amrex::ignore_unused(time, bcr, bcomp, orig_comp);
 
-            bool should_fill = false;
+            BoundaryConditionTypeLabel label = BoundaryConditionTypeLabel::NONE;
+            const amrex::Box* matched_box = nullptr;
             int face_for_bc = 0;
+            bool is_corner = false;
 
-            // Check against local boxes
-            for (int i = 0; i < m_num_boxes; ++i)
+            for (int idx = 0; idx < m_num_boxes; ++idx)
             {
-                const amrex::Box& box = m_boxes[i];
-                int f = detect_face(iv, box);
-                if (f > 0)
+                const amrex::Box& box = m_boxes[idx];
+                int face = detect_face(iv, box);
+                if (face > 0)
                 {
-                    // Face projection of a local box -> Fill
-                    should_fill = true;
-                    face_for_bc = f;
-                    break;
+                    int bc_code = bc_values[face-1];
+                    if (bc_code == 0)
+                        continue;
+                    int cs = cs_from_face(face);
+                    label = m_bc_decision.evaluate(m_gcv, bc_code, cs);
+                    if (label != BoundaryConditionTypeLabel::NONE)
+                    {
+                        matched_box = &box;
+                        face_for_bc = face;
+                        break;
+                    }
                 }
                 else if (is_corner_layer1(iv, box))
                 {
-                    // Corner of a local box, layer 1 -> Fill
-                    should_fill = true;
+                    // label = evaluate_corner(iv, box, face_for_bc);
+                    // if (label != BoundaryConditionTypeLabel::NONE)
+                    // {
+                        matched_box = &box;
+                        is_corner = true;
+                        label = BoundaryConditionTypeLabel::NEUMANN
+                        break;
+                    // }
                 }
             }
 
-            amrex::IntVect interior = iv;
+            if (label == BoundaryConditionTypeLabel::NONE || matched_box == nullptr)
+                return;
+
             const amrex::Box dom = geom.Domain();
+            amrex::IntVect interior = iv;
             for(int dir=0; dir<AMREX_SPACEDIM; ++dir)
             {
                 if(interior[dir] < dom.smallEnd(dir))
@@ -603,28 +626,99 @@ public:
                     interior[dir] = dom.bigEnd(dir);
             }
 
-            if (should_fill)
+            if (!is_corner && !is_within_margin(iv, *matched_box, face_for_bc))
+                return;
+
+            for(int n=0; n<numcomp; ++n)
             {
-                bool bc_active = true;
-                if (face_for_bc > 0) {
-                    if (bc_values[face_for_bc-1] == 0) bc_active = false;
-                }
-
-                if (bc_active)
+                switch (label)
                 {
-                    for(int n=0; n<numcomp; ++n)
-                    {
-                        const amrex::BCRec& bc = bcr[bcomp + n];
-                        amrex::ignore_unused(bc);
-
-                        // Neumann
+                    case BoundaryConditionTypeLabel::DIRICHLET_ORTH:
+                        // ToDo
+                        break;
+                    case BoundaryConditionTypeLabel::NEUMANN:
+                    default:
                         dest(iv, dcomp+n) = dest(interior, dcomp+n);
-                    }
+                        break;
+                    case BoundaryConditionTypeLabel::NOSLIP:
+                        dest(iv, dcomp+n) = amrex::Real(0);
+                        break;
+                    case BoundaryConditionTypeLabel::OUTFLOWBC:
+                        // ToDo
+                        break;
+                    case BoundaryConditionTypeLabel::SOMMERFELD:
+                        // ToDo
+                        break;
+                    case BoundaryConditionTypeLabel::POTENTIAL:
+                        // ToDo
+                        break;
+                    case BoundaryConditionTypeLabel::DIRICHLET_ORTH_REFLECT:
+                        // ToDo
+                        break;
+                    case BoundaryConditionTypeLabel::DIRICHLET_PARA_REFLECT:
+                        // ToDo
+                        break;
+                    case BoundaryConditionTypeLabel::NEUMANN_X:
+                        // ToDo
+                        break;
+                    case BoundaryConditionTypeLabel::NEUMANN_HX:
+                        // ToDo
+                        break;
+                    case BoundaryConditionTypeLabel::NEUMANN_HY:
+                        // ToDo
+                        break;
+                    case BoundaryConditionTypeLabel::HEATBC:
+                        // ToDo
+                        break;
                 }
             }
         }
 
     private:
+        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+        int detect_face(const amrex::IntVect& iv, const amrex::Box& dom) const
+        {
+            if(iv[0] < dom.smallEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                return 1;
+            else if(iv[0] > dom.bigEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                return 2;
+            else if(iv[1] < dom.smallEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                return 3;
+            else if(iv[1] > dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                return 4;
+            else if(iv[2] < dom.smallEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
+                return 5;
+            else if(iv[2] > dom.bigEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
+                return 6;
+            else
+                return 0;
+        }
+
+        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+        BoundaryConditionTypeLabel evaluate_corner(const amrex::IntVect& iv, const amrex::Box& box, int& face_out) const
+        {
+            for (int dir = 0; dir < AMREX_SPACEDIM; ++dir)
+            {
+                if (iv[dir] < box.smallEnd(dir))
+                {
+                    int face = face_for_dir(dir, false);
+                    face_out = face;
+                    int bc_code = bc_values[face-1];
+                    if (bc_code == 0) continue;
+                    return m_bc_decision.evaluate(m_gcv, bc_code, cs_from_face(face));
+                }
+                else if (iv[dir] > box.bigEnd(dir))
+                {
+                    int face = face_for_dir(dir, true);
+                    face_out = face;
+                    int bc_code = bc_values[face-1];
+                    if (bc_code == 0) continue;
+                    return m_bc_decision.evaluate(m_gcv, bc_code, cs_from_face(face));
+                }
+            }
+            return BoundaryConditionTypeLabel::NONE;
+        }
+
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool is_corner_layer1(const amrex::IntVect& iv, const amrex::Box& box) const
         {
@@ -647,28 +741,43 @@ public:
         }
 
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        int detect_face(const amrex::IntVect& iv, const amrex::Box& dom) const
+        bool is_within_margin(const amrex::IntVect& iv, const amrex::Box& box, int face) const
         {
-            if(iv[0] < dom.smallEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                return 1;
-            else if(iv[0] > dom.bigEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                return 2;
-            else if(iv[1] < dom.smallEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                return 3;
-            else if(iv[1] > dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                return 4;
-            else if(iv[2] < dom.smallEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
-                return 5;
-            else if(iv[2] > dom.bigEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
-                return 6;
+            if (face <= 0 || m_margin <= 0)
+                return false;
+
+            int dir = (face < 3) ? 0 : (face < 5 ? 1 : 2);
+            bool high = (face % 2) == 0;
+            int boundary = high ? box.bigEnd(dir) : box.smallEnd(dir);
+            int dist = high ? iv[dir] - boundary : boundary - iv[dir];
+            return (dist >= 1) && (dist <= m_margin);
+        }
+
+        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+        int cs_from_face(int face) const
+        {
+            constexpr int map[] = {0, 1, 4, 3, 2, 5, 6};
+            return map[face];
+        }
+
+        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+        int face_for_dir(int dir, bool high) const
+        {
+            if (dir == 0)
+                return high ? 2 : 1;
+            else if (dir == 1)
+                return high ? 4 : 3;
             else
-                return 0;
+                return high ? 6 : 5;
         }
 
         amrex::Array<int,2*AMREX_SPACEDIM> bc_values{};
+        BCDecision m_bc_decision;
         const amrex::Box* m_boxes = nullptr;
         int m_num_boxes = 0;
         int m_gcv = 0;
+        int m_margin = 0;
+        bool m_y_dimension_exists = true;
     };
 };
 
