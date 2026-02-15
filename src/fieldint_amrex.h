@@ -43,8 +43,8 @@ public:
 protected:
     fieldint_amrex(lexer* p);
 
-    lexer *p;
-    amrex::Vector<amrex::iMultiFab> mf;
+    lexer *p = nullptr;
+    amrex::Vector<amrex::iMultiFab> mf = {};
 };
 
 #endif
