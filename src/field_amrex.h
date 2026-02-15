@@ -58,6 +58,7 @@ protected:
     amrex::Vector<amrex::Vector<amrex::BCRec>> BCRecs;
 private:
     const amrex::Array<int,2*AMREX_SPACEDIM>face_bc_values;
+    const amrex::Array<int,2*AMREX_SPACEDIM>face_heat_values;
 
 protected:
     template <typename BCDecision>
@@ -170,11 +171,11 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             amrex::Gpu::DeviceVector<amrex::Box> device_boxes(loc_boxes.size());
             amrex::Gpu::copy(amrex::Gpu::hostToDevice, loc_boxes.begin(), loc_boxes.end(), device_boxes.begin());
 
-            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFill<BCDecision>> bf(
-                amrex_bc_func::MyExtBCFill<BCDecision>{face_bc_values, gcv, p->margin, static_cast<bool>(p->j_dir), bc_decision,
+            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> bf(
+                amrex_bc_func::MyExtBCFillField<BCDecision>{face_bc_values, face_heat_values, gcv, p->margin, static_cast<bool>(p->j_dir), bc_decision,
                                                         device_boxes.data(), static_cast<int>(device_boxes.size())});
 
-            amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFill<BCDecision>>> physbcf(
+            amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> physbcf(
                 p->amrex_geometry[p->level], BCRecs[p->level], bf);
 
             amrex::FillPatchSingleLevel(mf[p->level], amrex::Real(p->simtime),
@@ -192,11 +193,11 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             amrex::Gpu::DeviceVector<amrex::Box> cdevice_boxes(cloc_boxes.size());
             amrex::Gpu::copy(amrex::Gpu::hostToDevice, cloc_boxes.begin(), cloc_boxes.end(), cdevice_boxes.begin());
 
-            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFill<BCDecision>> cbf(
-                amrex_bc_func::MyExtBCFill<BCDecision>{face_bc_values, gcv, p->margin, static_cast<bool>(p->j_dir), bc_decision,
+            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> cbf(
+                amrex_bc_func::MyExtBCFillField<BCDecision>{face_bc_values, face_heat_values, gcv, p->margin, static_cast<bool>(p->j_dir), bc_decision,
                                                         cdevice_boxes.data(), static_cast<int>(cdevice_boxes.size())});
 
-            amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFill<BCDecision>>> cphysbcf(
+            amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> cphysbcf(
                 p->amrex_geometry[p->level-1], BCRecs[p->level-1], cbf);
 
             amrex::Vector<amrex::Box> floc_boxes;
@@ -208,11 +209,11 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             amrex::Gpu::DeviceVector<amrex::Box> fdevice_boxes(floc_boxes.size());
             amrex::Gpu::copy(amrex::Gpu::hostToDevice, floc_boxes.begin(), floc_boxes.end(), fdevice_boxes.begin());
 
-            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFill<BCDecision>> fbf(
-                amrex_bc_func::MyExtBCFill<BCDecision>{face_bc_values, gcv, p->margin, static_cast<bool>(p->j_dir), bc_decision,
+            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> fbf(
+                amrex_bc_func::MyExtBCFillField<BCDecision>{face_bc_values, face_heat_values, gcv, p->margin, static_cast<bool>(p->j_dir), bc_decision,
                                                         fdevice_boxes.data(), static_cast<int>(fdevice_boxes.size())});
 
-            amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFill<BCDecision>>> fphysbcf(
+            amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> fphysbcf(
                 p->amrex_geometry[p->level], BCRecs[p->level], fbf);
 
             amrex::CellConservativeLinear mapper;
