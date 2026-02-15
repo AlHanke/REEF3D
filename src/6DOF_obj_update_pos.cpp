@@ -87,6 +87,6 @@ void sixdof_obj::update_trimesh_3D(lexer *p, fdm *a, ghostcell *pgc, bool finali
 	ray_cast(p,a,pgc);
 	reini_RK2(p,a,pgc,a->fb);
     
-    pgc->start4a(p,a->fb,50);   
+    pgc->start4(p,a->fb,50);
 }
 

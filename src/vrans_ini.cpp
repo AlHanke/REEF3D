@@ -39,10 +39,10 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
 	beta(i,j,k)=0.0;
 	}
 	
-	pgc->start4a(p,a->porosity,1);
-	pgc->start4a(p,a->porpart,1);
-	pgc->start4a(p,alpha,1);
-	pgc->start4a(p,beta,1);
+	pgc->start4(p,a->porosity,1);
+	pgc->start4(p,a->porpart,1);
+	pgc->start4(p,alpha,1);
+	pgc->start4(p,beta,1);
 	
 	
 	// Box
@@ -174,10 +174,10 @@ void vrans_f::initialize_cfd(lexer *p, fdm *a, ghostcell *pgc)
     }
     
     
-    pgc->start4a(p,a->porosity,1);
-	pgc->start4a(p,a->porpart,1);
-	pgc->start4a(p,alpha,1);
-	pgc->start4a(p,beta,1);
+    pgc->start4(p,a->porosity,1);
+	pgc->start4(p,a->porpart,1);
+	pgc->start4(p,alpha,1);
+	pgc->start4(p,beta,1);
     
     
     // Sediment

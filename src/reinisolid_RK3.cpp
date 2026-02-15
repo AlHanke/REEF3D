@@ -63,7 +63,7 @@ void reinisolid_RK3::start(lexer *p, fdm *a, ghostcell *pgc, field &f)
 { 
     gcval=gcval_topo;
 
-	pgc->start4a(p,f,gcval);
+	pgc->start4(p,f,gcval);
 	
 	if(p->count==0)
 	{
@@ -71,7 +71,7 @@ void reinisolid_RK3::start(lexer *p, fdm *a, ghostcell *pgc, field &f)
 	cout<<"initializing solid..."<<endl<<endl;
 	reiniter=2*int(p->maxlength/(p->F43*p->DXM));
     gcval=gcval_initopo;
-	pgc->start4a(p,f,gcval);
+	pgc->start4(p,f,gcval);
     }
 
 	if(p->count>0)
@@ -86,7 +86,7 @@ void reinisolid_RK3::start(lexer *p, fdm *a, ghostcell *pgc, field &f)
 	ALOOP
 	frk1(i,j,k) = f(i,j,k) + dt(i,j,k)*L(i,j,k);
 
-	pgc->start4a(p,frk1,gcval);
+	pgc->start4(p,frk1,gcval);
     
     
     // Step 2
@@ -95,7 +95,7 @@ void reinisolid_RK3::start(lexer *p, fdm *a, ghostcell *pgc, field &f)
 	ALOOP
 	frk2(i,j,k)=  0.75*f(i,j,k) + 0.25*frk1(i,j,k) + 0.25*dt(i,j,k)*L(i,j,k);
 
-	pgc->start4a(p,frk2,gcval);
+	pgc->start4(p,frk2,gcval);
     
 
     // Step 3
@@ -104,7 +104,7 @@ void reinisolid_RK3::start(lexer *p, fdm *a, ghostcell *pgc, field &f)
 	ALOOP
 	f(i,j,k) = (1.0/3.0)*f(i,j,k) + (2.0/3.0)*frk2(i,j,k) + (2.0/3.0)*dt(i,j,k)*L(i,j,k);
 
-	pgc->start4a(p,f,gcval);
+	pgc->start4(p,f,gcval);
 	}
 }
 
