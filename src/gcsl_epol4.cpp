@@ -195,7 +195,7 @@ void ghostcell::gcsldistro4(lexer *p, slice &f, int ii, int jj, int nn, int gcv,
         gcsl_sommerfeld(f,cs);
 }
 
-void ghostcell::gcsldistro4int(lexer *p, sliceint &f, int ii, int jj, int nn, int gcv, int bc, int cs)
+void ghostcell::gcsldistro4int(sliceint &f, int ii, int jj, int cs)
 {
     i=ii;
     j=jj;
@@ -203,7 +203,7 @@ void ghostcell::gcsldistro4int(lexer *p, sliceint &f, int ii, int jj, int nn, in
     gcsl_neumann_int(f,cs);
 }
 
-void ghostcell::gcsldistro4Vint(lexer *p, int *f, int ii, int jj, int nn, int gcv, int bc, int cs)
+void ghostcell::gcsldistro4Vint(lexer *p, int *f, int ii, int jj, int cs)
 {
     i=ii;
     j=jj;
