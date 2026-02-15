@@ -23,7 +23,7 @@ Author: Hans Bihs
 #ifndef PATCHBC_INTERFACE_H_
 #define PATCHBC_INTERFACE_H_
 
-#include"increment.h"
+#include"patch_obj.h"
 
 class lexer;
 class fdm;
@@ -32,14 +32,9 @@ class ghostcell;
 class field;
 class slice;
 
-#include"patch_obj.h"
-
-using namespace std;
-
 class patchBC_interface
 {
 public:
-
     virtual void patchBC_ini(lexer*, ghostcell*)=0;
 
     // BC update
@@ -57,8 +52,6 @@ public:
     virtual void patchBC_pressure2D_ugrad(lexer*, fdm2D*, slice&, slice&)=0;
     virtual void patchBC_pressure2D_vgrad(lexer*, fdm2D*, slice&, slice&)=0;
     virtual void patchBC_waterlevel2D(lexer*, fdm2D*, ghostcell*, slice&)=0;
-
-    virtual void patchBC_loop2D(lexer*, fdm2D*, int&, int&, int&, int&)=0;
 
     patch_obj **patch;
     int obj_count;

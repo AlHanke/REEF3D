@@ -59,45 +59,38 @@ public:
     B217=0;        // int patchBC inflow normals
     */
 
-    int Q_flag;
+    bool Q_flag;
     double Q, Uq;
 
-    int velocity_flag;
-    double velocity;
-
-    int pressure_flag;
+    bool pressure_flag;
     double pressure;
 
-    int waterlevel_flag;
+    bool waterlevel_flag;
     double waterlevel;
 
-    int Uio_flag;
+    bool Uio_flag;
     double Uio;
 
-    int velcomp_flag;
+    bool velcomp_flag;
     double U,V,W;
 
-    int flowangle_flag;
     double alpha;
     double sinalpha,cosalpha;
 
-    int flownormal_flag;
     double Nx,Ny,Nz;
 
     int pio_flag;
 
-    int hydroQ_flag;
+    bool hydroQ_flag;
     double **hydroQ;
     int hydroQ_count,hydroQ_iter;
 
-    int hydroFSF_flag;
+    bool hydroFSF_flag;
     double **hydroFSF;
     int hydroFSF_count,hydroFSF_iter;
 
     // measurement
     double Q0,U0,A0,h0;
-
-
 };
 
 #endif

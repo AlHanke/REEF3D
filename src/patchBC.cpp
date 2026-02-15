@@ -35,11 +35,12 @@ patchBC::patchBC(lexer *p, ghostcell *pgc)
 
     for(int qn=0; qn<obj_count;++qn)
         patch[qn] = new patch_obj(p,ID_array[qn]);
+
+    delete [] ID_array;
 }
 
 patchBC::~patchBC()
 {
-    delete [] ID_array;
     delete [] patch;
 }
 
