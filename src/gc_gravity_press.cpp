@@ -25,29 +25,21 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 
-void ghostcell::gravity_press(lexer *p,field& f, double dist, int gcv, int bc, int cs)
+void ghostcell::gravity_press(field& f, int cs)
 {
-	if(cs==1)
-	for(q=0;q<margin;++q)
-	f(i-q-1,j,k)=f(i,j,k) -  (p->DXM*(double(q)+1.0))*p->W20*a->ro(i,j,k);
-
-	if(cs==2)
-	for(q=0;q<margin;++q)
-	f(i,j+q+1,k)=f(i,j,k) +  (p->DXM*(double(q)+1.0))*p->W21*a->ro(i,j,k);
-
-	if(cs==3)
-	for(q=0;q<margin;++q)
-	f(i,j-q-1,k)=f(i,j,k) -  (p->DXM*(double(q)+1.0))*p->W21*a->ro(i,j,k);
-
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j,k)=f(i,j,k) +  (p->DXM*(double(q)+1.0))*p->W20*a->ro(i,j,k);
-
-	if(cs==5)
-	for(q=0;q<margin;++q)
-	f(i,j,k-q-1)=f(i,j,k) - 0.5*(p->DXM*(double(q)+1.0))*p->W22*a->ro(i,j,k);
-
-	if(cs==6)
-	for(q=0;q<margin;++q)
-	f(i,j,k+q+1)=f(i,j,k) +  (p->DXM*(double(q)+1.0))*p->W22*a->ro(i,j,k);
+    for(q=0; q<margin; ++q)
+    {
+        if(cs==1)
+            f(i-q-1,j,k)=f(i,j,k) - (p->DXM*(double(q)+1.0))*p->W20*a->ro(i,j,k);
+        else if(cs==2)
+            f(i,j+q+1,k)=f(i,j,k) + (p->DXM*(double(q)+1.0))*p->W21*a->ro(i,j,k);
+        else if(cs==3)
+            f(i,j-q-1,k)=f(i,j,k) - (p->DXM*(double(q)+1.0))*p->W21*a->ro(i,j,k);
+        else if(cs==4)
+            f(i+q+1,j,k)=f(i,j,k) + (p->DXM*(double(q)+1.0))*p->W20*a->ro(i,j,k);
+        else if(cs==5)
+            f(i,j,k-q-1)=f(i,j,k) - 0.5*(p->DXM*(double(q)+1.0))*p->W22*a->ro(i,j,k);
+        else if(cs==6)
+            f(i,j,k+q+1)=f(i,j,k) + (p->DXM*(double(q)+1.0))*p->W22*a->ro(i,j,k);
+    }
 }

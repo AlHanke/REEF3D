@@ -24,31 +24,21 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"field.h"
 
-void ghostcell::noslip(field& f, double dist, int gcv, int bc, int cs)
+void ghostcell::noslip(field& f, int cs)
 {
-	if(cs==1)
-	for(q=0;q<margin;++q)
-	f(i-q-1,j,k)=0.0;
-
-	if(cs==2 && p->j_dir==1)
-	for(q=0;q<margin;++q)
-	f(i,j+q+1,k)=0.0;
-
-	if(cs==3 && p->j_dir==1)
-	for(q=0;q<margin;++q)
-	f(i,j-q-1,k)=0.0;
-
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j,k)=0.0;
-
-	if(cs==5)
-	for(q=0;q<margin;++q)
-	f(i,j,k-q-1)=0.0;
-
-	if(cs==6)
-	for(q=0;q<margin;++q)
-	f(i,j,k+q+1)=0.0;
-
+    for(q=0; q<margin; ++q)
+    {
+        if(cs==1)
+            f(i-q-1,j,k)=0.0;
+        else if(cs==2 && p->j_dir==1)
+            f(i,j+q+1,k)=0.0;
+        else if(cs==3 && p->j_dir==1)
+            f(i,j-q-1,k)=0.0;
+        else if(cs==4)
+            f(i+q+1,j,k)=0.0;
+        else if(cs==5)
+            f(i,j,k-q-1)=0.0;
+        else if(cs==6)
+            f(i,j,k+q+1)=0.0;
+    }
 }
-

@@ -2838,7 +2838,6 @@
         <File Name="gc_heat.cpp"/>
         <File Name="gc_debug.cpp"/>
         <File Name="gc_fivec.cpp"/>
-        <File Name="gc_kinematic_bed.cpp"/>
         <File Name="gc_epol1.cpp"/>
         <File Name="gc_epol2.cpp"/>
         <File Name="gc_epol3.cpp"/>

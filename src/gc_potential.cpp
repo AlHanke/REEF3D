@@ -24,12 +24,10 @@ Author: Hans Bihs
 #include"field.h"
 #include"lexer.h"
 
-void ghostcell::potentialbc(lexer *p, field& f, int bc, int cs)
+void ghostcell::potentialbc(field& f, int cs)
 {
     if(cs==1)
-	f(i-1,j,k) =  p->Ui*p->DXP[IP] + f(i,j,k);
-
-	if(cs==4)
-	f(i+1,j,k) =  p->Uo*p->DXP[IP] + f(i,j,k);
+	    f(i-1,j,k) =  p->Ui*p->DXP[IP] + f(i,j,k);
+	else if(cs==4)
+	    f(i+1,j,k) =  p->Uo*p->DXP[IP] + f(i,j,k);
 }
-

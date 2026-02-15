@@ -20,18 +20,17 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"lexer.h"
 #include"ghostcell.h"
+#include"lexer.h"
 #include"field.h"
 
-void ghostcell::atmosphere(lexer *p, field& f, int gcv, int bc, int cs)
+void ghostcell::atmosphere(field& f)
 {
-    if(p->B30==3)
-	for(q=0;q<margin;++q)
-	f(i,j,k+q+1)=p->B31;
-    
-    if(p->B30!=3)
-	for(q=0;q<margin;++q)
-	f(i,j,k+q+1)=f(i,j,k);
+    for(q=0;q<margin;++q)
+    {
+        if(p->B30==3)
+            f(i,j,k+q+1)=p->B31;
+        else
+            f(i,j,k+q+1)=f(i,j,k);
+    }
 }
-

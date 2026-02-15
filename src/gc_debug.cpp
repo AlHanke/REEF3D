@@ -22,32 +22,22 @@ Author: Hans Bihs
 
 #include"ghostcell.h"
 #include"field.h"
-#include"vec.h"
-#include"fdm.h"
 
-void ghostcell::gcb_debug(field& f, int gcv, int bc, int cs)
+void ghostcell::gcb_debug(field& f, int cs)
 {
-	if(cs==1)
-	for(q=0;q<margin;++q)
-	f(i-q-1,j,k)=1.0;
-
-	if(cs==2)
-	for(q=0;q<margin;++q)
-	f(i,j+q+1,k)=1.0;
-
-	if(cs==3)
-	for(q=0;q<margin;++q)
-	f(i,j-q-1,k)=1.0;
-
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j,k)=1.0;
-
-	if(cs==5)
-	for(q=0;q<margin;++q)
-	f(i,j,k-q-1)=1.0;
-
-	if(cs==6)
-	for(q=0;q<margin;++q)
-	f(i,j,k+q+1)=1.0;
+    for(q=0; q<margin; ++q)
+    {
+        if(cs==1)
+            f(i-q-1,j,k)=1.0;
+        else if(cs==2)
+            f(i,j+q+1,k)=1.0;
+        else if(cs==3)
+            f(i,j-q-1,k)=1.0;
+        else if(cs==4)
+            f(i+q+1,j,k)=1.0;
+        else if(cs==5)
+            f(i,j,k-q-1)=1.0;
+        else if(cs==6)
+            f(i,j,k+q+1)=1.0;
+    }
 }
