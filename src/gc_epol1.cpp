@@ -92,43 +92,7 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NONE;
 }
 
-void ghostcell::gcdistro1(lexer *p,field& f, int ii, int jj, int kk, int nn, double dist,  int gcv, int bc, int cs)
+void ghostcell::gcdistro1(field& f, int ii, int jj, int kk, int cs, int bc, double dist, int gcv)
 {
-    i=ii;
-	j=jj;
-	k=kk;
-	n=nn;
-
-	bc_label=gceval1(p,gcv,bc,cs);
-
-	if(bc_label==1)
-	dirichlet_ortho(p,f,dist,gcv,bc,cs);
-
-	if(bc_label==2)
-	dirichlet_para(p,f,dist,gcv,bc,cs);
-
-	if(bc_label==3)
-	extend(p,f,dist,gcv,bc,cs);
-
-	if(bc_label==4)
-	neumann(f,gcv,bc,cs);
-
-	if(bc_label==5)
-	noslip(f,dist,gcv,bc,cs);
-	
-	if(bc_label==6)
-	outflow(p,f,gcv,bc,cs);
-    
-    if(bc_label==7)
-	sommerfeld(p,f,gcv,bc,cs);
-	
-    if(bc_label==11)
-	dirichlet_ortho_reflect(p,f,dist,gcv,bc,cs);
-
-	if(bc_label==12)
-	dirichlet_para_reflect(p,f,dist,gcv,bc,cs);
-    
-    if(bc_label==99)
-	gcb_debug(f,gcv,bc,cs);
+    gcdistro(f,ii,jj,kk,dist,gceval1(p,gcv,bc,cs),cs);
 }
-

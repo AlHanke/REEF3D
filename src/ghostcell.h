@@ -183,11 +183,6 @@ public:
     void gcsl_start4int(lexer*,sliceint&, int);
     void gcsl_start4Vint(lexer*,int*, int);
 
-    void gcsldistro1(lexer*, slice&,int, int, int, int, int, int);
-	void gcsldistro2(lexer*, slice&,int, int, int, int, int, int);
-	void gcsldistro4(lexer*, slice&,int, int, int, int, int, int);
-	void gcsldistro4a(lexer*, slice&,int, int, int, int, int, int);
-
     void gcsldistro1int(sliceint&, int, int, int);
     void gcsldistro2int(sliceint&, int, int, int);
     void gcsldistro4int(sliceint&, int, int, int);
@@ -219,11 +214,6 @@ public:
     void gcslparaxijk(lexer*, double*, int);
     void gcslparaxijk_single(lexer*, double*, int);
 
-	void gcdistro1(lexer*, field&, int, int, int, int, double, int, int, int);
-	void gcdistro2(lexer*, field&, int, int, int, int, double, int, int, int);
-	void gcdistro3(lexer*, field&, int, int, int, int, double, int, int, int);
-	void gcdistro4(lexer*, field&, int, int, int, int, double, int, int, int);
-	void gcdistro4a(lexer*, field&, int, int, int, int, double, int, int, int);
     void fivec(lexer*,double*,sliceint&);
     void fivec2D(lexer*,double*,sliceint&);
     void fivec_vel(lexer*,double*,sliceint&);
@@ -246,6 +236,22 @@ private:
     void Sendrecv_3D(const void*[6],int[6],void*[6],int[6],MPI_Datatype);
     
     void gcwait(lexer*);   
+
+    void gc_periodic(lexer*,field&,int);
+
+    void gcdistro1(field&, int, int, int, int, int, double, int);
+    void gcdistro2(field&, int, int, int, int, int, double, int);
+    void gcdistro3(field&, int, int, int, int, int, double, int);
+    void gcdistro4(field&, int, int, int, int, int, double, int);
+    void gcdistro4a(field&, int, int, int, int, int, double, int);
+
+    void gcsldistro1(lexer*, slice&, int, int, int, int, int);
+	void gcsldistro2(lexer*, slice&, int, int, int, int, int);
+	void gcsldistro4(lexer*, slice&, int, int, int, int, int);
+	void gcsldistro4a(lexer*, slice&, int, int, int, int, int);
+
+    void gcdistro(field&, int, int, int, double, bc_labels, int);
+    void gcsldistro(lexer*, slice&, int, int, bc_labels, int);
 
     bc_labels gceval1(lexer*,int,int,int);
     bc_labels gceval2(lexer*,int,int,int);
