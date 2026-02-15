@@ -88,10 +88,10 @@ public:
 
     void startintV(lexer*,int*,int);
 
-    void dgcpol1(lexer*,field&,int);
-    void dgcpol2(lexer*,field&,int);
-    void dgcpol3(lexer*,field&,int);
-    void dgcpol4(lexer*,field&,int);
+    void dgcpol1(lexer*,field&);
+    void dgcpol2(lexer*,field&);
+    void dgcpol3(lexer*,field&);
+    void dgcpol4(lexer*,field&);
 
     // particle
     void parapls(lexer*,double**,double**,int*,int*);
