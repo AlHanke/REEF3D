@@ -78,7 +78,7 @@ void sixdof_obj::ray_cast_direct(lexer *p, fdm *a, ghostcell *pgc, int ts, int t
     && Cy>=p->global_ymin && Cy<=p->global_ymax
     && Cz>=p->global_zmin && Cz<=p->global_zmax)
     checkin=1;
-        
+
     if(checkin==1)
     {
     xs = MIN3(Ax,Bx,Cx);

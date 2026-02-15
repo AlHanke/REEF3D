@@ -76,9 +76,9 @@ void iweno_hj_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, fiel
 
 void iweno_hj_nug::wenoloop1(lexer *p, fdm *a, field& f, int ipol, field& uvel, field& vvel, field& wvel)
 {
-    DX=p->DXN;
-    DY=p->DYP;
-    DZ=p->DZP;
+    DX=p->DXN.data();
+    DY=p->DYP.data();
+    DZ=p->DZP.data();
     
     uf=1;
     
@@ -149,9 +149,9 @@ void iweno_hj_nug::wenoloop1(lexer *p, fdm *a, field& f, int ipol, field& uvel, 
 void iweno_hj_nug::wenoloop2(lexer *p, fdm *a, field& f, int ipol, field& uvel, field& vvel, field& wvel)
 {
     
-    DX=p->DXP;
-    DY=p->DYN;
-    DZ=p->DZP;
+    DX=p->DXP.data();
+    DY=p->DYN.data();
+    DZ=p->DZP.data();
     
     vf=1;
     
@@ -221,9 +221,9 @@ void iweno_hj_nug::wenoloop2(lexer *p, fdm *a, field& f, int ipol, field& uvel, 
 
 void iweno_hj_nug::wenoloop3(lexer *p, fdm *a, field& f, int ipol, field& uvel, field& vvel, field& wvel)
 {
-    DX=p->DXP;
-    DY=p->DYP;
-    DZ=p->DZN;
+    DX=p->DXP.data();
+    DY=p->DYP.data();
+    DZ=p->DZN.data();
     
     wf=1;
     
@@ -293,9 +293,9 @@ void iweno_hj_nug::wenoloop3(lexer *p, fdm *a, field& f, int ipol, field& uvel, 
 
 void iweno_hj_nug::wenoloop4(lexer *p, fdm *a, field& f, int ipol, field& uvel, field& vvel, field& wvel)
 {
-    DX=p->DXP;
-    DY=p->DYP;
-    DZ=p->DZP;
+    DX=p->DXP.data();
+    DY=p->DYP.data();
+    DZ=p->DZP.data();
     
     uf=vf=wf=0;
     

@@ -186,7 +186,7 @@ void sixdof_obj::ray_cast_y(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
             distcheck=0;
 
             if(distcheck==1)
-			for(j=0;j<p->knoy;++j)
+            JLOOP
 			a->fb(i,j,k)=MIN(fabs(Ry-p->YP[JP]),fabs(a->fb(i,j,k)));
 			}
 		}

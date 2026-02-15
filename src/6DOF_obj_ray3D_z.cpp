@@ -186,7 +186,7 @@ void sixdof_obj::ray_cast_z(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
             distcheck=0;
             
             if(distcheck==1)
-            for(k=0;k<p->knoz;++k)
+            KLOOP
             a->fb(i,j,k)=MIN(fabs(Rz-p->ZP[KP]),a->fb(i,j,k));
             }
 		

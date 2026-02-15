@@ -28,6 +28,7 @@ void weno3_nug_func::precalc_qf(lexer* p)
 {
     
 // XN
+    MultiGridLOOP
     IBLOOP
     {
     // imin
@@ -51,8 +52,8 @@ void weno3_nug_func::precalc_qf(lexer* p)
                     
     qfx[IP][0][3][1] = (p->XN[IP2]-p->XN[IP1])/(p->XN[IP2]-p->XN[IP]);
     }
-    
-    
+
+    MultiGridLOOP
     JBLOOP
     {
     // imin
@@ -76,8 +77,8 @@ void weno3_nug_func::precalc_qf(lexer* p)
                     
     qfy[JP][0][3][1] = (p->YN[JP2]-p->YN[JP1])/(p->YN[JP2]-p->YN[JP]);
     }
-                     
-    
+
+    MultiGridLOOP
     KBLOOP
     {
     // imin
@@ -104,6 +105,7 @@ void weno3_nug_func::precalc_qf(lexer* p)
     
 //-------------------------------------------------------------------------
 // XP
+    MultiGridLOOP
     IBLOOP
     {
     // imin
@@ -127,8 +129,8 @@ void weno3_nug_func::precalc_qf(lexer* p)
                     
     qfx[IP][1][3][1] = (p->XP[IP2]-p->XP[IP1])/(p->XP[IP2]-p->XP[IP]);
     }
-    
-    
+
+    MultiGridLOOP
     JBLOOP
     {
     // imin
@@ -152,8 +154,8 @@ void weno3_nug_func::precalc_qf(lexer* p)
                     
     qfy[JP][1][3][1] = (p->YP[JP2]-p->YP[JP1])/(p->YP[JP2]-p->YP[JP]);
     }
-                     
-    
+
+    MultiGridLOOP
     KBLOOP
     {
     // imin
@@ -177,9 +179,4 @@ void weno3_nug_func::precalc_qf(lexer* p)
                     
     qfz[KP][1][3][1] = (p->ZP[KP2]-p->ZP[KP1])/(p->ZP[KP2]-p->ZP[KP]);
     }
-    
 }
-
-
-
-

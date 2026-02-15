@@ -28,6 +28,7 @@ void weno3_nug_func::precalc_isf(lexer* p)
 {
     
 // XN
+    MultiGridLOOP
     IBLOOP
     {
     // imin
@@ -49,6 +50,7 @@ void weno3_nug_func::precalc_isf(lexer* p)
     }
      
 // YN
+    MultiGridLOOP
     JBLOOP
     {
     // imin
@@ -70,6 +72,7 @@ void weno3_nug_func::precalc_isf(lexer* p)
     }
     
 // ZN
+    MultiGridLOOP
     KBLOOP
     {
     // imin
@@ -93,6 +96,7 @@ void weno3_nug_func::precalc_isf(lexer* p)
 // ---------------------------------------------------------------------
 
 // XP
+    MultiGridLOOP
     IBLOOP
     {
     // imin
@@ -114,6 +118,7 @@ void weno3_nug_func::precalc_isf(lexer* p)
     }
      
 // YP
+    MultiGridLOOP
     JBLOOP
     {
     // imin
@@ -135,6 +140,7 @@ void weno3_nug_func::precalc_isf(lexer* p)
     }
     
 // ZP
+    MultiGridLOOP
     KBLOOP
     {
     // imin

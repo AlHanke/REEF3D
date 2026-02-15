@@ -30,6 +30,7 @@ void weno3_nug_func::precalc_cf(lexer* p)
     // [knox][XN/XP][q_j][coeff]
      
 // XN
+    MultiGridLOOP
     IBLOOP
     {
     // imin
@@ -42,7 +43,8 @@ void weno3_nug_func::precalc_cf(lexer* p)
 
     cfx[IP][0][3] = (p->XN[IP3]-p->XN[IP1])/(p->XN[IP3]-p->XN[IP]);
     }
-                          
+
+    MultiGridLOOP
     JBLOOP
     {
     // imin
@@ -56,7 +58,7 @@ void weno3_nug_func::precalc_cf(lexer* p)
     cfy[JP][0][3] = (p->YN[JP3]-p->YN[JP1])/(p->YN[JP3]-p->YN[JP]);
     }
     
-    
+    MultiGridLOOP
     KBLOOP
     {
     // imin
@@ -73,7 +75,7 @@ void weno3_nug_func::precalc_cf(lexer* p)
     
 //-------------------------------------------------------------------------
 // XP
-
+    MultiGridLOOP
     IBLOOP
     {
     // imin
@@ -86,7 +88,8 @@ void weno3_nug_func::precalc_cf(lexer* p)
 
     cfx[IP][1][3] = (p->XP[IP3]-p->XP[IP1])/(p->XP[IP3]-p->XP[IP]);
     }
-                          
+
+    MultiGridLOOP
     JBLOOP
     {
     // imin
@@ -99,8 +102,8 @@ void weno3_nug_func::precalc_cf(lexer* p)
 
     cfy[JP][1][3] = (p->YP[JP3]-p->YP[JP1])/(p->YP[JP3]-p->YP[JP]);
     }
-    
-    
+
+    MultiGridLOOP
     KBLOOP
     {
     // imin
@@ -114,7 +117,3 @@ void weno3_nug_func::precalc_cf(lexer* p)
     cfz[KP][1][3] = (p->ZP[KP3]-p->ZP[KP1])/(p->ZP[KP3]-p->ZP[KP]);
     }
 }
-
-
-
-

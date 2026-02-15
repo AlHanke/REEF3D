@@ -184,7 +184,7 @@ void sixdof_obj::ray_cast_x(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
             distcheck=0;
 
             if(distcheck==1)
-			for(i=0;i<p->knox;++i)
+            ILOOP
 			a->fb(i,j,k)=MIN(fabs(Rx-p->XP[IP]),fabs(a->fb(i,j,k)));
 			}
 		}
