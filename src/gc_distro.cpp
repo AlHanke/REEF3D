@@ -49,9 +49,6 @@ void ghostcell::gcdistro(field& f, int ii, int jj, int kk, double dist, bc_label
         case bc_labels::POTENTIAL:
             potentialbc(f,cs);
             break;
-        case bc_labels::GRAVITY_PRESS:
-            gravity_press(f,cs);
-            break;
         case bc_labels::DIRICHLET_ORTH_REFLECT:
             dirichlet_ortho_reflect(f,dist,cs);
             break;
