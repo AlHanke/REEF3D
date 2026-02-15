@@ -24,12 +24,9 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"field.h"
 
-void ghostcell::gcperiodicx(lexer* p, field& f, int gcv)
+void ghostcell::gcperiodicx(lexer *p, field &f, int gcv)
 {
     paramargin=margin;
-
-    int aa,bb,cc;
-    aa=bb=cc=0;
 
     //  FILL SEND
     count=0;
@@ -80,7 +77,7 @@ void ghostcell::gcperiodicx(lexer* p, field& f, int gcv)
     count=0;
     for(q=p->periodicX4;q<p->gcpara4_count;++q)
     {
-        i=p->gcpara4[q][0]+1-aa;
+        i=p->gcpara4[q][0]+1;
         j=p->gcpara4[q][1];
         k=p->gcpara4[q][2];
 
@@ -96,7 +93,7 @@ void ghostcell::gcperiodicx(lexer* p, field& f, int gcv)
     for(q=p->periodicX2;q<p->gcpara2_count;++q)
     {
         i=p->gcpara2[q][0];
-        j=p->gcpara2[q][1]+1-bb;
+        j=p->gcpara2[q][1]+1;
         k=p->gcpara2[q][2];
 
         if(p->gcpara2[q][2+gcv]>=1)
@@ -112,7 +109,7 @@ void ghostcell::gcperiodicx(lexer* p, field& f, int gcv)
     {
         i=p->gcpara6[q][0];
         j=p->gcpara6[q][1];
-        k=p->gcpara6[q][2]+1-cc;
+        k=p->gcpara6[q][2]+1;
 
         if(p->gcpara6[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)
@@ -181,7 +178,7 @@ void ghostcell::gcperiodicx(lexer* p, field& f, int gcv)
     count=0;
     for(q=p->periodicX4;q<p->gcpara4_count;++q)
     {
-        i=p->gcpara4[q][0]-aa;
+        i=p->gcpara4[q][0];
         j=p->gcpara4[q][1];
         k=p->gcpara4[q][2];
 
@@ -198,7 +195,7 @@ void ghostcell::gcperiodicx(lexer* p, field& f, int gcv)
     for(q=p->periodicX2;q<p->gcpara2_count;++q)
     {
         i=p->gcpara2[q][0];
-        j=p->gcpara2[q][1]-bb;
+        j=p->gcpara2[q][1];
         k=p->gcpara2[q][2];
 
         if(p->gcpara2[q][2+gcv]>=1)
@@ -215,7 +212,7 @@ void ghostcell::gcperiodicx(lexer* p, field& f, int gcv)
     {
         i=p->gcpara6[q][0];
         j=p->gcpara6[q][1];
-        k=p->gcpara6[q][2]-cc;
+        k=p->gcpara6[q][2];
 
         if(p->gcpara6[q][2+gcv]>=1)
         for(n=0;n<paramargin;++n)

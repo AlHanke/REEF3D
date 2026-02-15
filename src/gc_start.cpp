@@ -75,7 +75,6 @@ void ghostcell::start2(lexer *p, field& f, int gcv)
         p->xtime+=endtime-starttime;
     }
 
-
     if(p->j_dir==1)
     {
         starttime=timer();
