@@ -27,7 +27,7 @@ Author: Alexander Hanke
 #include <AMReX_BoxArray.H>
 #include <AMReX_BC_TYPES.H>
 
-field1::field1(lexer *p) : field_amrex(p, 1)
+field1::field1(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_X)
 {
     LevelLOOP
     {
@@ -48,7 +48,7 @@ field1::field1(lexer *p) : field_amrex(p, 1)
     params.i10_enabled = field_amrex_detail::compute_i10_enabled(p);
 }
 
-field2::field2(lexer *p) : field_amrex(p, 2)
+field2::field2(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Y)
 {
     LevelLOOP
     {
@@ -68,7 +68,7 @@ field2::field2(lexer *p) : field_amrex(p, 2)
     params.gclabel_outflow = field_amrex_detail::compute_gclabel_outflow(p);
 }
 
-field3::field3(lexer *p) : field_amrex(p, 3)
+field3::field3(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Z)
 {
     LevelLOOP
     {
@@ -88,7 +88,7 @@ field3::field3(lexer *p) : field_amrex(p, 3)
     params.A10 = p->A10;
 }
 
-field4::field4(lexer *p) : field_amrex(p, 4)
+field4::field4(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::CELL_CENTERED)
 {
     LevelLOOP
     {

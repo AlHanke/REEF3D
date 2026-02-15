@@ -41,10 +41,10 @@ public:
     enum class BoundaryConditionTypeLabel : int { NONE = 0, DIRICHLET_ORTH = 1, NEUMANN = 4, NOSLIP = 5, OUTFLOWBC = 6, SOMMERFELD = 7,
                                         POTENTIAL = 8, DIRICHLET_ORTH_REFLECT = 11, DIRICHLET_PARA_REFLECT = 12,
                                         NEUMANN_X = 14, NEUMANN_HX = 41, NEUMANN_HY = 42, HEATBC = 61 };
-private:
-    enum class Gbc : int { INFLOW = 1, OUTFLOW = 2, SYMMETRY = 3, WAVEGEN = 6, NUMBEACH = 7, WALL = 21 };
-    enum class Dir : int { X_NEG = 1, X_POS = 4, Y_NEG = 3, Y_POS = 2, Z_NEG = 5, Z_POS = 6 };
     enum class DataLocation : unsigned int { CELL_CENTERED = 0, FACE_X = 1, FACE_Y = 2, FACE_Z = 3 };
+    enum class Gbc : int { INFLOW = 1, OUTFLOW = 2, SYMMETRY = 3, WAVEGEN = 6, NUMBEACH = 7, WALL = 21 };
+private:
+    enum class Dir : int { X_NEG = 1, X_POS = 4, Y_NEG = 3, Y_POS = 2, Z_NEG = 5, Z_POS = 6 };
 public:
     struct Field1BcDecision {
         struct Field1Params {
@@ -564,7 +564,7 @@ public:
         ConstMyExtBCFillFieldParams() noexcept = default;
         ConstMyExtBCFillFieldParams(const amrex::Array<int,6>& bc_values_in,
                                 const amrex::Array<amrex::Real,6>& heat_values_in,
-                                bool y_dimension_exists_in, unsigned int data_location_in)
+                                bool y_dimension_exists_in, amrex_bc_func::DataLocation data_location_in)
             : bc_values(bc_values_in), heat_values(heat_values_in),
               y_dimension_exists(y_dimension_exists_in), data_location(data_location_in) {}
 
@@ -572,7 +572,7 @@ public:
         const amrex::Array<int,6> bc_values = {};
         const amrex::Array<amrex::Real,6> heat_values = {};
         const bool y_dimension_exists = true;
-        const unsigned int data_location = static_cast<unsigned int>(DataLocation::CELL_CENTERED);
+        const DataLocation data_location = DataLocation::CELL_CENTERED;
     };
     struct MyExtBCFillFieldParams {
         AMREX_GPU_HOST_DEVICE
@@ -667,7 +667,7 @@ public:
                 else if(interior[dir] > dom.bigEnd(dir))
                 {
                     interior[dir] = dom.bigEnd(dir);
-                    if(m_const_params.data_location == dir +1)
+                    if(m_const_params.data_location == static_cast<amrex_bc_func::DataLocation>(dir+1))
                         interior[dir] -= 1;
                 }
             }
