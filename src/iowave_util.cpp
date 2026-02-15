@@ -50,9 +50,9 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     count2=0;
     GC4LOOP
     {
-    i = p->gcb4[n][0];
-    j = p->gcb4[n][1];
-    k = p->gcb4[n][2];
+        i = p->gcb4[n][0];
+        j = p->gcb4[n][1];
+        k = p->gcb4[n][2];
         
         if((p->gcb4[n][4]==1 || p->gcb4[n][4]==6) && p->flagsf4[IJK]>0)
         ++count1;
@@ -61,8 +61,6 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         ++count2;
     }
 	
-	//cout<<p->mpirank<<"  gcin_count: "<<p->gcin_count<<" count1: "<<count1<<"  gcout_count: "<<p->gcout_count<<" count2: "<<count2<<endl;
-	
 	p->Iresize(p->gcin,p->gcin_count, count1, 6, 6); 
 	p->Iresize(p->gcout,p->gcout_count, count2, 6, 6); 
 
@@ -70,26 +68,26 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     count2=0;
     GC4LOOP
     {
-    i = p->gcb4[n][0];
-    j = p->gcb4[n][1];
-    k = p->gcb4[n][2];
+        i = p->gcb4[n][0];
+        j = p->gcb4[n][1];
+        k = p->gcb4[n][2];
     
         if((p->gcb4[n][4]==1 || p->gcb4[n][4]==6) && p->flagsf4[IJK]>0)
         {
-        p->gcin[count1][0]=p->gcb4[n][0];
-        p->gcin[count1][1]=p->gcb4[n][1];
-        p->gcin[count1][2]=p->gcb4[n][2];
-        p->gcin[count1][3]=p->gcb4[n][3];
-        ++count1;
+            p->gcin[count1][0]=p->gcb4[n][0];
+            p->gcin[count1][1]=p->gcb4[n][1];
+            p->gcin[count1][2]=p->gcb4[n][2];
+            p->gcin[count1][3]=p->gcb4[n][3];
+            ++count1;
         }
 
         if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8) && p->flagsf4[IJK]>0)
         {
-        p->gcout[count2][0]=p->gcb4[n][0];
-        p->gcout[count2][1]=p->gcb4[n][1];
-        p->gcout[count2][2]=p->gcb4[n][2];
-        p->gcout[count2][3]=p->gcb4[n][3];
-        ++count2;
+            p->gcout[count2][0]=p->gcb4[n][0];
+            p->gcout[count2][1]=p->gcb4[n][1];
+            p->gcout[count2][2]=p->gcb4[n][2];
+            p->gcout[count2][3]=p->gcb4[n][3];
+            ++count2;
         }
     }
 
@@ -233,20 +231,20 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     
         if((p->gcb4[n][4]==1 || p->gcb4[n][4]==6) && p->flagsf4[IJK]>0)
         {
-        p->gcin[count1][0]=p->gcb4[n][0];
-        p->gcin[count1][1]=p->gcb4[n][1];
-        p->gcin[count1][2]=p->gcb4[n][2];
-        p->gcin[count1][3]=p->gcb4[n][3];
-        ++count1;
+            p->gcin[count1][0]=p->gcb4[n][0];
+            p->gcin[count1][1]=p->gcb4[n][1];
+            p->gcin[count1][2]=p->gcb4[n][2];
+            p->gcin[count1][3]=p->gcb4[n][3];
+            ++count1;
         }
 
         if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8) && p->flagsf4[IJK]>0)
         {
-        p->gcout[count2][0]=p->gcb4[n][0];
-        p->gcout[count2][1]=p->gcb4[n][1];
-        p->gcout[count2][2]=p->gcb4[n][2];
-        p->gcout[count2][3]=p->gcb4[n][3];
-        ++count2;
+            p->gcout[count2][0]=p->gcb4[n][0];
+            p->gcout[count2][1]=p->gcb4[n][1];
+            p->gcout[count2][2]=p->gcb4[n][2];
+            p->gcout[count2][3]=p->gcb4[n][3];
+            ++count2;
         }
     }
 
@@ -359,12 +357,10 @@ void iowave::iogcb_update(lexer *p, fdm *a, ghostcell *pgc)
     GC4LOOP
     {
         if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
-        ++count1;
-
-        if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
-        ++count2;
+            ++count1;
+        else if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
+            ++count2;
     }
-	
 	
 	p->Iresize(p->gcin,p->gcin_count, count1, 6, 6); 
 	p->Iresize(p->gcout,p->gcout_count, count2, 6, 6); 
@@ -375,20 +371,19 @@ void iowave::iogcb_update(lexer *p, fdm *a, ghostcell *pgc)
     {
         if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
         {
-        p->gcin[count1][0]=p->gcb4[n][0];
-        p->gcin[count1][1]=p->gcb4[n][1];
-        p->gcin[count1][2]=p->gcb4[n][2];
-        p->gcin[count1][3]=p->gcb4[n][3];
-        ++count1;
+            p->gcin[count1][0]=p->gcb4[n][0];
+            p->gcin[count1][1]=p->gcb4[n][1];
+            p->gcin[count1][2]=p->gcb4[n][2];
+            p->gcin[count1][3]=p->gcb4[n][3];
+            ++count1;
         }
-
-        if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
+        else if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
         {
-        p->gcout[count2][0]=p->gcb4[n][0];
-        p->gcout[count2][1]=p->gcb4[n][1];
-        p->gcout[count2][2]=p->gcb4[n][2];
-        p->gcout[count2][3]=p->gcb4[n][3];
-        ++count2;
+            p->gcout[count2][0]=p->gcb4[n][0];
+            p->gcout[count2][1]=p->gcb4[n][1];
+            p->gcout[count2][2]=p->gcb4[n][2];
+            p->gcout[count2][3]=p->gcb4[n][3];
+            ++count2;
         }
     }
 
@@ -396,13 +391,13 @@ void iowave::iogcb_update(lexer *p, fdm *a, ghostcell *pgc)
     p->gcout_count=count2;
 	
 	if(p->I10==1)
-    velini(p,a,pgc);
+        velini(p,a,pgc);
 	
 	if(p->B98==4)
-	gen_ini(p,a,pgc);
+	    gen_ini(p,a,pgc);
 	
 	if(p->B99==3||p->B99==4||p->B99==5)
-	awa_ini(p,a,pgc);
+	    awa_ini(p,a,pgc);
 }
 
 void iowave::awa_ini(lexer *p, fdm *a, ghostcell *pgc)
@@ -414,7 +409,7 @@ void iowave::awa_ini(lexer *p, fdm *a, ghostcell *pgc)
     for(n=0;n<p->gcb4_count;++n)
     {
         if(p->gcb4[n][4]==7 || p->gcb4[n][4]==8)
-        ++count;
+            ++count;
     }
 	
 	p->Iresize(gcawa1, gcawa1_count,count, 4, 4); 
@@ -435,14 +430,14 @@ void iowave::awa_ini(lexer *p, fdm *a, ghostcell *pgc)
 			flag=1;
 			for(q=0;q<count1;++q)
 			if(gcawa1[q][0]==p->gcb1[n][0] && gcawa1[q][1]==p->gcb1[n][1] && gcawa1[q][2]==p->gcb1[n][3])
-			flag=0;
+			    flag=0;
 			
 				if(flag==1)
 				{
-				gcawa1[count1][0]=p->gcb1[n][0];
-				gcawa1[count1][1]=p->gcb1[n][1];
-				gcawa1[count1][2]=p->gcb1[n][3];
-				++count1;
+                    gcawa1[count1][0]=p->gcb1[n][0];
+                    gcawa1[count1][1]=p->gcb1[n][1];
+                    gcawa1[count1][2]=p->gcb1[n][3];
+                    ++count1;
 				}
         }
     }
