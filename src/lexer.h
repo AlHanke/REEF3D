@@ -65,7 +65,7 @@ public:
     void lexer_read(ghostcell*);
     void flagini();
 	void gridini(ghostcell*);
-    void gcd_ini(ghostcell*);
+    void gcd_ini(lexer*, ghostcell*);
     void makeflag(int*);
 
 	void read_grid();

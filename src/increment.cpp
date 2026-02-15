@@ -25,7 +25,6 @@ Author: Hans Bihs
 increment::increment()
 {
 	pip=0;
-    marge=5;
 }
 
 increment::~increment()
@@ -33,4 +32,6 @@ increment::~increment()
 }
 
 int increment::i,increment::j,increment::k,increment::n,increment::h,increment::innercounter,increment::pip;
-int increment::marge;
+const int increment::marge(5);
+int increment::max_i, increment::max_j, increment::max_k;
+int increment::level;

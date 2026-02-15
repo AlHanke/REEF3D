@@ -56,6 +56,9 @@ public:
 
     void define_inflow_outflow_ba();
 
+    void update_cell_coordinates();
+    void update_cell_spacing();
+
     // AMReX Data structures
     amrex::Vector<amrex::Geometry> amrex_geometry; // Phyiscal domain and coordinate system
     amrex::Vector<amrex::BoxArray> amrex_box_array; // BoxArray defines the index space decomposition of the domain into boxes
@@ -80,8 +83,7 @@ public:
     amrex::Vector<amrex::iMultiFab> flag4_iMF;
     amrex::Vector<amrex::iMultiFab> flag7_iMF;
 
-    int level;
-    const int nlevs = 1;
+    const int nlevs = 1; // Number of AMR levels
     const int ref_ratio = 2;
     const int ncomp = 1;
     int bc_type[6] = {0,0,0,0,0,0};

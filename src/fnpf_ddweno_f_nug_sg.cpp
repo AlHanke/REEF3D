@@ -40,9 +40,9 @@ fnpf_ddweno_f_nug::~fnpf_ddweno_f_nug()
 
 double fnpf_ddweno_f_nug::dswenox(slice& f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
+    DX = p->DXP.data();
+    DY = p->DYP.data();
+    DZ = p->DZP.data();
     uf=0;
     
 	grad=0.0;
@@ -80,9 +80,9 @@ double fnpf_ddweno_f_nug::dswenox(slice& f, double uw)
 
 double fnpf_ddweno_f_nug::dswenoy(slice& f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
+    DX = p->DXP.data();
+    DY = p->DYP.data();
+    DZ = p->DZP.data();
     vf=0;
     
 	grad=0.0;

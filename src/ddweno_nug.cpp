@@ -37,9 +37,9 @@ ddweno_nug::~ddweno_nug()
 
 double ddweno_nug::ddwenox(fdm* a, field &f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
+    DX = p->DXP.data();
+    DY = p->DYP.data();
+    DZ = p->DZP.data();
     uf=0;
     
     int check=0;
@@ -81,9 +81,9 @@ double ddweno_nug::ddwenox(fdm* a, field &f, double uw)
 
 double ddweno_nug::ddwenoy(fdm* a, field &f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
+    DX = p->DXP.data();
+    DY = p->DYP.data();
+    DZ = p->DZP.data();
     vf=0;
     
 	grad=0.0;
@@ -119,9 +119,9 @@ double ddweno_nug::ddwenoy(fdm* a, field &f, double uw)
 
 double ddweno_nug::ddwenoz(fdm* a, field &f, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
+    DX = p->DXP.data();
+    DY = p->DYP.data();
+    DZ = p->DZP.data();
     wf=0;
 
 	grad=0.0;

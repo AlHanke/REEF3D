@@ -86,7 +86,7 @@ public:
 
 private:
 
-    
+    lexer* p;
     
     
 };

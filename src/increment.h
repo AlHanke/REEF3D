@@ -35,6 +35,8 @@ class increment
 	static int i,j,k,n,h;
 	static int innercounter;
 	static int pip;
-    static int marge;
+    const static int marge;
+    static int max_i, max_j, max_k;
+    static int level;
 };
 #endif

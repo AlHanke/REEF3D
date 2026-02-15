@@ -56,7 +56,7 @@ int position::posf_i(double xs)
         }
         
         // out of bounds
-        if(xs<p->XP[ZEROP])
+        if(xs<p->XP[ZEROIP])
         {
             ii = -1;
 
