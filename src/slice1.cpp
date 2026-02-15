@@ -93,11 +93,6 @@ void slice1::fieldgcalloc(lexer* p)
 	p->Darray(gcfeld,gcfeldsize,4,4);
 }
 
-double & slice1::operator[](int n)
-{
-	return V[n];
-}
-
 double & slice1::operator()(int ii, int jj)
 {			
 	if(pp->mgcsl1[(ii-imin)*jmax + (jj-jmin)]<2)

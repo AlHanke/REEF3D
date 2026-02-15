@@ -36,7 +36,6 @@ public:
 	virtual ~slice1();
 
     double& operator()(int, int) override;
-	double& operator[](int) override;
     void ggcpol(lexer*) override;
     void resize(lexer*) override;
     void dealloc(lexer*) override;
