@@ -59,15 +59,12 @@ void initialize::start(lexer* p, fdm* a, ghostcell* pgc)
 
 void initialize::inifdm(lexer* p, fdm* a, ghostcell* pgc)
 {
-    LOOP
-    {
-        a->press(i,j,k)=p->I55;
+    a->press.setVal(p->I55);
 
-        a->ro(i,j,k)=p->W1;
-        a->visc(i,j,k)=p->W2;
-        a->phi(i,j,k)=1.0;
-        a->vof(i,j,k)=1.0;
-    }
+    a->ro.setVal(p->W1);
+    a->visc.setVal(p->W2);
+    a->phi.setVal(1.0);
+    a->vof.setVal(1.0);
 
     ALOOP
     {

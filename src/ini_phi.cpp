@@ -29,8 +29,7 @@ Author: Hans Bihs
 
 void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)
 {
-    LOOP
-    a->phi(i,j,k)=-1.0;
+    a->phi.setVal(-1.0);
 
     pgc->start4(p,a->phi,50);
 

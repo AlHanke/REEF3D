@@ -378,8 +378,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     
     //-------------------------------------------
     // FSF
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pfsfdisc->start(p,a,frk1,4,urk1,vrk1,wrk1);
 
@@ -581,8 +580,7 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     face_density(p,a,pgc,rox_rk2,roy_rk2,roz_rk2);
     //-------------------------------------------
     // FSF
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pfsfdisc->start(p,a,frk2,4,urk2,vrk2,wrk2);
 
