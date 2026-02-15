@@ -63,7 +63,6 @@ public:
 	void control_calc();
 	void gridsize();
 	void vecsize(ghostcell*);
-    void gcbextra_est(ghostcell*);
 	void vellast();
 	void lexer_ini();
 	int conv(double);
@@ -100,23 +99,16 @@ public:
 
     //GHOSTCELL
 	int **gcb1,**gcb2,**gcb3,**gcb4,**gcb4a;
-	int **gcin, **gcout, **gcpress;
-	int **gcin4a, **gcout4a;
 	double *gcd1,*gcd2,*gcd3,*gcd4,*gcd4a;
-	double **gcn;
-	int gcextra1,gcextra2,gcextra3,gcextra4,gcextra4a,gcextra6;
 
     int gcdf1_count,gcdf2_count,gcdf3_count,gcdf4_count;
     int **gcdf1,**gcdf2,**gcdf3,**gcdf4;
     int gcsldfeta4_count,gcsldfbed4_count;
     int **gcsldfeta4,**gcsldfbed4;
 
-	int gcwall_count, gcin_count, gcout_count, gcpress_count, gcfsf_count, gcbed_count;
-	int gcin4a_count, gcout4a_count;
 	int gcb1_count,gcb2_count,gcb3_count,gcb4_count,gcb4a_count;
-	int gcpara_sum, gcparaco_sum;
-	int gcb_fix,gcb_solid,gcb_topo,gcb_fb, solid_gcb_est, topo_gcb_est, solid_gcbextra_est, topo_gcbextra_est, tot_gcbextra_est;
-	int gcb_sediment_est, gcb_floating_est;
+	int gcpara_sum;
+	int solid_gcb_est, topo_gcb_est, solid_gcbextra_est, topo_gcbextra_est, tot_gcbextra_est;
     int bcside1,bcside2,bcside3,bcside4,bcside5,bcside6;
 
     // serial periodic BC
@@ -152,52 +144,44 @@ public:
     int gcslparaco1_count, gcslparaco2_count, gcslparaco3_count, gcslparaco4_count;
 	int nb1,nb2,nb3,nb4,nb5,nb6;
 	int mx,my,mz;
-	int mpi_edgenum,mpi_nodes,mpi_size;
-	int *mpi_index, *mpi_edges;
+	int mpi_size;
 
-	int ulast,vlast,wlast,flast,ulastsflow;
-	int velcorr;
-	int stencil;
+	int ulast,vlast,wlast,flast;
 
 	// Solver
     int *range_col4,*range_row4,*range_col7,*range_row7;
-	int *sizeM1,*sizeM2,*sizeM3,*sizeM4,*sizeM4a,*sizeM6,*sizeM9;
-    int *sizeS1,*sizeS2,*sizeS4;
-	int mglevel_max,*MGL;
+    int *sizeM4;
+    int *sizeS4;
 
 	// SMO
 	int veclength;
-    int C4_size,C4a_size,C6_size;
-    int C1_2D_size,C2_2D_size,C4_2D_size;
-    int M_size,M_2D_size;
 
     //SLICE
     int *flagslice1,*flagslice2,*flagslice4;
-    int *mgcsl1,*mgcsl2,*mgcsl3,*mgcsl4,*mgcsl4a;
-    int ***gcslorig1,***gcslorig2,***gcslorig3,***gcslorig4,***gcslorig4a;
-	int gcsldirsize1,gcsldirsize2,gcsldirsize3,gcsldirsize4,gcsldirsize4a;
+    int *mgcsl1,*mgcsl2,*mgcsl4;
+    int ***gcslorig1,***gcslorig2,***gcslorig4;
+	int gcsldirsize1,gcsldirsize2,gcsldirsize4;
 
-    int slicenum,vec2Dlength;
+    int vec2Dlength;
 
     int pointnum2D,cellnum2D,cellnumtot2D,polygon_sum;
 
     // SLICE ghostcell
-    int gcbsl1_count,gcbsl2_count,gcbsl3_count,gcbsl4_count,gcbsl4a_count;
+    int gcbsl1_count,gcbsl2_count,gcbsl4_count,gcbsl4a_count;
     int gcslin_count,gcslout_count;
     int gcslawa1_count,gcslawa2_count;
-    int **gcbsl1,**gcbsl2,**gcbsl3,**gcbsl4,**gcbsl4a;
+    int **gcbsl1,**gcbsl2,**gcbsl4,**gcbsl4a;
 	int **gcslin, **gcslout;
     int **gcslawa1, **gcslawa2;
 
-    int gcsl_extra1,gcsl_extra2,gcsl_extra3,gcsl_extra4,gcsl_extra4a;
+    int gcsl_extra1,gcsl_extra2,gcsl_extra4;
 
-	int **dgcsl1,**dgcsl2,**dgcsl3,**dgcsl4;
-	int dgcsl1_count,dgcsl2_count,dgcsl3_count,dgcsl4_count;
+	int **dgcsl1,**dgcsl2,**dgcsl4;
+	int dgcsl1_count,dgcsl2_count,dgcsl4_count;
 
-    int **ggcsl1,**ggcsl2,**ggcsl3,**ggcsl4,**ggcsl4a;
-    int *ggcslmem1,*ggcslmem2,*ggcslmem3,*ggcslmem4,*ggcslmem4a;
-    int ggcslcount1,ggcslcount2,ggcslcount3,ggcslcount4,ggcslcount4a;
-    int ggcslsize1,ggcslsize2,ggcslsize3,ggcslsize4,ggcslsize4a;
+    int **ggcsl1,**ggcsl2,**ggcsl4;
+    int ggcslcount1,ggcslcount2,ggcslcount4;
+    int ggcslsize1,ggcslsize2,ggcslsize4;
 
     // SLICE parallel
 	int** gcslpara1;
@@ -222,7 +206,6 @@ public:
 	double ufbi,vfbi,wfbi;
 	double pfbi,qfbi,rfbi;
 	double xg,yg,zg;
-	double xgn,ygn,zgn;
 	double phi_fb,theta_fb,psi_fb;
 	double ufbmax, vfbmax, wfbmax;
     int mooring_count, net_count;
