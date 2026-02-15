@@ -663,99 +663,14 @@ public:
             {
                 switch (label)
                 {
-                    case BoundaryConditionTypeLabel::DIRICHLET_ORTH:
-                    {
-                        int orderdir = m_const_params.orderdir;
-                        amrex::Real dx;
-                        if (cs == static_cast<int>(Dir::X_NEG) || cs == static_cast<int>(Dir::X_POS)) dx = geom.CellSize(0);
-                        else if (cs == static_cast<int>(Dir::Y_NEG) || cs == static_cast<int>(Dir::Y_POS)) dx = geom.CellSize(1);
-                        else dx = geom.CellSize(2);
-
-                        amrex::Real dist = 0.5 * dx;
-                        int ys = 1;
-                        if (dist > dx * (1.0 - 1.0e-9) && dist < dx * (1.0 + 1.0e-9))
-                            ys = 0;
-
-                        amrex::Real pos[20];
-                        amrex::Real y_arr[20];
-
-                        for (int m = 0; m <= orderdir - 3; m++)
-                            pos[m] = -dx * double(orderdir - m - 2);
-
-                        pos[orderdir - 2] = 0.0;
-                        pos[orderdir - 1] = dist;
-
-                        amrex::IntVect iv_int = iv;
-                        int q = 0;
-                        if (cs == static_cast<int>(Dir::X_NEG)) {
-                            iv_int[0] = dom.smallEnd(0);
-                            q = iv_int[0] - iv[0] - 1;
-                        } else if (cs == static_cast<int>(Dir::X_POS)) {
-                            iv_int[0] = dom.bigEnd(0);
-                            q = iv[0] - iv_int[0] - 1;
-                        } else if (cs == static_cast<int>(Dir::Y_NEG)) {
-                            iv_int[1] = dom.smallEnd(1);
-                            q = iv_int[1] - iv[1] - 1;
-                        } else if (cs == static_cast<int>(Dir::Y_POS)) {
-                            iv_int[1] = dom.bigEnd(1);
-                            q = iv[1] - iv_int[1] - 1;
-                        } else if (cs == static_cast<int>(Dir::Z_NEG)) {
-                            iv_int[2] = dom.smallEnd(2);
-                            q = iv_int[2] - iv[2] - 1;
-                        } else if (cs == static_cast<int>(Dir::Z_POS)) {
-                            iv_int[2] = dom.bigEnd(2);
-                            q = iv[2] - iv_int[2] - 1;
-                        }
-
-                        for (int m = 0; m <= orderdir - 2; m++)
-                        {
-                            amrex::IntVect offset = amrex::IntVect::TheZeroVector();
-                            int off_val = orderdir - m - 2;
-                            if (cs == static_cast<int>(Dir::X_NEG)) offset[0] = off_val;
-                            else if (cs == static_cast<int>(Dir::X_POS)) offset[0] = -off_val;
-                            else if (cs == static_cast<int>(Dir::Y_NEG)) offset[1] = off_val;
-                            else if (cs == static_cast<int>(Dir::Y_POS)) offset[1] = -off_val;
-                            else if (cs == static_cast<int>(Dir::Z_NEG)) offset[2] = off_val;
-                            else if (cs == static_cast<int>(Dir::Z_POS)) offset[2] = -off_val;
-
-                            y_arr[m] = dest(iv_int + offset, dcomp + n);
-                        }
-                        y_arr[orderdir - 1] = 0.0;
-
-                        if (ys == 1 && dist < m_const_params.gamma * dx)
-                        {
-                            amrex::IntVect offset_y1 = amrex::IntVect::TheZeroVector();
-                            if (cs == static_cast<int>(Dir::X_NEG)) offset_y1[0] = 1;
-                            else if (cs == static_cast<int>(Dir::X_POS)) offset_y1[0] = -1;
-                            else if (cs == static_cast<int>(Dir::Y_NEG)) offset_y1[1] = 1;
-                            else if (cs == static_cast<int>(Dir::Y_POS)) offset_y1[1] = -1;
-                            else if (cs == static_cast<int>(Dir::Z_NEG)) offset_y1[2] = 1;
-                            else if (cs == static_cast<int>(Dir::Z_POS)) offset_y1[2] = -1;
-
-                            amrex::Real y1 = dest(iv_int + offset_y1, dcomp + n);
-
-                            pos[orderdir - 2] = -(m_const_params.gamma * dx);
-                            y_arr[orderdir - 2] = (1.0 - m_const_params.gamma) * y_arr[orderdir - 2] + m_const_params.gamma * y1;
-                        }
-
-                        amrex::Real x_val = dx * double(q + 2 - ys);
-                        amrex::Real val = 0.0;
-                        for (int m = 0; m < orderdir; m++)
-                        {
-                            amrex::Real weight = 1.0;
-                            for (int k_idx = 0; k_idx < orderdir; ++k_idx)
-                                if (m != k_idx)
-                                    weight *= (x_val - pos[k_idx]) / (pos[m] - pos[k_idx] + 1.0e-20);
-                            val += weight * y_arr[m];
-                        }
-                        dest(iv, dcomp + n) = val;
-                        break;
-                    }
                     case BoundaryConditionTypeLabel::NEUMANN:
                     default:
                         dest(iv, dcomp+n) = dest(interior, dcomp+n);
                         break;
                     case BoundaryConditionTypeLabel::NOSLIP:
+                    case BoundaryConditionTypeLabel::DIRICHLET_ORTH:
+                    case BoundaryConditionTypeLabel::DIRICHLET_ORTH_REFLECT:
+                    case BoundaryConditionTypeLabel::DIRICHLET_PARA_REFLECT:
                         dest(iv, dcomp+n) = amrex::Real(0);
                         break;
                     case BoundaryConditionTypeLabel::OUTFLOWBC:
@@ -778,76 +693,6 @@ public:
                         else if(cs==static_cast<int>(Dir::X_POS))
                             dest(iv, dcomp+n) = m_params.Uo * geom.CellSize(0) + dest(interior, dcomp+n);
                         break;
-                    case BoundaryConditionTypeLabel::DIRICHLET_ORTH_REFLECT:
-                    case BoundaryConditionTypeLabel::DIRICHLET_PARA_REFLECT:
-                    {
-                        int orderdir = m_const_params.orderdir;
-                        amrex::Real dx;
-                        if (cs == static_cast<int>(Dir::X_NEG) || cs == static_cast<int>(Dir::X_POS)) dx = geom.CellSize(0);
-                        else if (cs == static_cast<int>(Dir::Y_NEG) || cs == static_cast<int>(Dir::Y_POS)) dx = geom.CellSize(1);
-                        else dx = geom.CellSize(2);
-
-                        amrex::Real dist = 0.5 * dx;
-                        int ys = 1;
-                        if (dist > dx * (1.0 - 1.0e-9) && dist < dx * (1.0 + 1.0e-9))
-                            ys = 0;
-
-                        amrex::Real y_arr[20];
-                        int shift = (label == BoundaryConditionTypeLabel::DIRICHLET_ORTH_REFLECT) ? 2 : 1;
-
-                        amrex::IntVect iv_int = iv;
-                        int q = 0;
-                        if (cs == static_cast<int>(Dir::X_NEG)) {
-                            iv_int[0] = dom.smallEnd(0);
-                            q = iv_int[0] - iv[0] - 1;
-                        } else if (cs == static_cast<int>(Dir::X_POS)) {
-                            iv_int[0] = dom.bigEnd(0);
-                            q = iv[0] - iv_int[0] - 1;
-                        } else if (cs == static_cast<int>(Dir::Y_NEG)) {
-                            iv_int[1] = dom.smallEnd(1);
-                            q = iv_int[1] - iv[1] - 1;
-                        } else if (cs == static_cast<int>(Dir::Y_POS)) {
-                            iv_int[1] = dom.bigEnd(1);
-                            q = iv[1] - iv_int[1] - 1;
-                        } else if (cs == static_cast<int>(Dir::Z_NEG)) {
-                            iv_int[2] = dom.smallEnd(2);
-                            q = iv_int[2] - iv[2] - 1;
-                        } else if (cs == static_cast<int>(Dir::Z_POS)) {
-                            iv_int[2] = dom.bigEnd(2);
-                            q = iv[2] - iv_int[2] - 1;
-                        }
-
-                        for (int m = 0; m <= orderdir - shift; m++)
-                        {
-                            amrex::IntVect offset = amrex::IntVect::TheZeroVector();
-                            int off_val = orderdir - m - shift;
-                            if (cs == static_cast<int>(Dir::X_NEG)) offset[0] = off_val;
-                            else if (cs == static_cast<int>(Dir::X_POS)) offset[0] = -off_val;
-                            else if (cs == static_cast<int>(Dir::Y_NEG)) offset[1] = off_val;
-                            else if (cs == static_cast<int>(Dir::Y_POS)) offset[1] = -off_val;
-                            else if (cs == static_cast<int>(Dir::Z_NEG)) offset[2] = off_val;
-                            else if (cs == static_cast<int>(Dir::Z_POS)) offset[2] = -off_val;
-
-                            y_arr[m] = dest(iv_int + offset, dcomp + n);
-                        }
-                        y_arr[orderdir - shift + 1] = 0.0;
-
-                        if (ys == 1 && dist < m_const_params.gamma * dx)
-                        {
-                            int y1_idx = orderdir - shift - 1;
-                            int f_i_idx = orderdir - shift;
-
-                            y_arr[orderdir - 2] = (1.0 - m_const_params.gamma) * y_arr[f_i_idx] + m_const_params.gamma * y_arr[y1_idx];
-                        }
-
-                        int idx = orderdir - q - ys;
-                        if (idx >= 0 && idx < 20) {
-                            dest(iv, dcomp + n) = -y_arr[idx];
-                        } else {
-                            dest(iv, dcomp + n) = 0.0;
-                        }
-                        break;
-                    }
                     case BoundaryConditionTypeLabel::HEATBC:
                         if(cs==static_cast<int>(Dir::X_NEG))
                             dest(iv, dcomp+n) = m_const_params.heat_values[0];
