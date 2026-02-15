@@ -27,7 +27,6 @@ Author: Alexander Hanke
 #include "grid.h"
 
 // AMReX includes
-#include <AMReX_BCRec.H>
 #include <AMReX_MFIter.H>
 #include <AMReX_MultiFab.H>
 #include <AMReX_iMultiFab.H>
@@ -52,7 +51,6 @@ public:
     std::vector<amrex::Geometry> amrex_geometry;
     std::vector<amrex::BoxArray> amrex_box_array;
     std::vector<amrex::DistributionMapping> amrex_distribution_mapping;
-    std::vector<amrex::Vector<amrex::BCRec>> amrex_bc;
     std::vector<amrex::MultiFab> amr_mf;
     std::unique_ptr<amrex::MFIter> default_mfi;
     amrex::MFIter* amr_mfi = nullptr;
