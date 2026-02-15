@@ -170,8 +170,6 @@ private:
     void velini(lexer*,fdm*,ghostcell*);
     void pressure_outlet(lexer*,fdm*,ghostcell*);
     void pressure_inlet(lexer*,fdm*,ghostcell*);
-    void pressure_wall(lexer*,fdm*,ghostcell*);
-    void pressure_bed(lexer*,fdm*,ghostcell*);
     double local_fsf(lexer*,fdm*,ghostcell*);
 
     void gen_ini(lexer*,fdm*,ghostcell*);
