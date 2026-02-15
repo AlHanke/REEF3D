@@ -3112,8 +3112,6 @@
           <File Name="patchBC_2D_pressure.cpp"/>
           <File Name="patchBC_2D_inflow.cpp"/>
           <File Name="patchBC_2D_IDcount.cpp"/>
-          <File Name="patchBC_2D_hydrograph_Q.cpp"/>
-          <File Name="patchBC_2D_hydrograph_FSF.cpp"/>
           <File Name="patchBC_2D_gcb_count.cpp"/>
           <File Name="patchBC_2D_fillobj.cpp"/>
           <File Name="patchBC_2D_discharge.cpp"/>
@@ -3125,12 +3123,14 @@
           <File Name="patchBC_pressure.cpp"/>
           <File Name="patchBC_inflow.cpp"/>
           <File Name="patchBC_IDcount.cpp"/>
-          <File Name="patchBC_hydrograph_Q.cpp"/>
-          <File Name="patchBC_hydrograph_FSF.cpp"/>
           <File Name="patchBC_gcb_count.cpp"/>
           <File Name="patchBC_fillobj.cpp"/>
           <File Name="patchBC_discharge.cpp"/>
           <File Name="patchBC.cpp"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="PatchBC shared">
+          <File Name="patchBC_hydrograph_Q.cpp"/>
+          <File Name="patchBC_hydrograph_FSF.cpp"/>
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="ioCoupling">
