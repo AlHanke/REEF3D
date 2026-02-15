@@ -249,32 +249,7 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NONE;
 }
 
-void ghostcell::gcdistro4(lexer *p, field &f, int ii, int jj, int kk, int nn, double dist, int gcv, int bc, int cs)
+void ghostcell::gcdistro4(field &f, int ii, int jj, int kk, int cs, int bc, double dist, int gcv)
 {
-    i=ii;
-    j=jj;
-    k=kk;
-
-    bc_label=gceval4(p,gcv,bc,cs);
-
-    if(bc_label==bc_labels::EXTEND)
-        extend(f,cs);
-    else if(bc_label==bc_labels::NEUMANN)
-        neumann(f,cs);
-    else if(bc_label==bc_labels::NOSLIP)
-        noslip(f,cs);
-    else if(bc_label==bc_labels::POTENTIAL)
-        potentialbc(f,cs);
-    else if(bc_label==bc_labels::GRAVITY_PRESS)
-        gravity_press(f,cs);
-    else if(bc_label==bc_labels::NHPRESS)
-        nhpress(f,cs);
-    else if(bc_label==bc_labels::ATMOSPHERE)
-        atmosphere(f);
-    else if(bc_label==bc_labels::LSM)
-        lsm(f,cs);
-    else if(bc_label==bc_labels::HEATBC)
-        heatbc(f,cs);
-    else if(bc_label==bc_labels::DEBUG)
-        gcb_debug(f,cs);
+    gcdistro(f,ii,jj,kk,dist,gceval4(p,gcv,bc,cs),cs);
 }
