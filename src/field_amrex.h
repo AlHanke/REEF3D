@@ -314,7 +314,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
                 p->amrex_geometry[p->level], BCRecs[p->level], fbf);
 
             amrex::CellConservativeLinear mapper;
-            const amrex::IntVect ratio = 2 * amrex::IntVect::TheUnitVector();
+            const amrex::IntVect ratio = p->ref_ratio * amrex::IntVect::TheUnitVector();
 
             amrex::FillPatchTwoLevels(mf[p->level], amrex::Real(p->simtime),
                                         {&(mf[p->level-1])}, {amrex::Real(p->simtime)},

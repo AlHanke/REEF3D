@@ -38,6 +38,12 @@ ghostcell::ghostcell(int& argc, char **argv, lexer *p) : margin(p->margin)
 
     amrex::Initialize(argc,argv,mpi_comm);
 
+    if(AMREX_SPACEDIM != 3)
+    {
+        std::cerr << "Error: AMReX must be configured for 3D (AMREX_SPACEDIM=3)" << std::endl;
+        exit(1);
+    }
+
     ghostcell::p=p;
 
     if(p->mpi_size==1)

@@ -61,48 +61,80 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     flag4_iMF.resize(nlevs);
     flag7_iMF.resize(nlevs);
 
-    int is_periodic[AMREX_SPACEDIM] = {p->periodic1, p->periodic2, p->periodic3};
+    IntVect ref_vec = ref_ratio * IntVect::TheUnitVector();
+    if(!j_dir)
+        ref_vec[1] = 1;
 
     for (int lev = 0; lev < nlevs; lev++)
     {
-        RealBox real_box;
-        Box domain;
         if (lev == 0) // Overall problem domain
         {
+            RealBox real_box;
             real_box.setLo(RealVect(AMREX_D_DECL(p->global_xmin, p->global_ymin, p->global_zmin)));
             real_box.setHi(RealVect(AMREX_D_DECL(p->global_xmax, p->global_ymax, p->global_zmax)));
+            Box domain;
             domain.setSmall(IntVect(AMREX_D_DECL(0, 0, 0)));
             domain.setBig(IntVect(AMREX_D_DECL(p->gknox-1, p->gknoy-1, p->gknoz-1)));
+            int is_periodic[AMREX_SPACEDIM] = {p->periodic1, p->periodic2, p->periodic3};
+            amrex_geometry[lev] = Geometry(domain, &real_box, CoordSys::CoordType::cartesian, is_periodic);
+
+            // Gather global box information from all ranks to construct BoxArray and DistributionMapping
+            int local_data[6] = {p->origin_i, p->origin_j, p->origin_k, p->origin_i + p->knox - 1, p->origin_j + p->knoy - 1, p->origin_k + p->knoz - 1};
+
+            int all_data[p->M10][6];
+            MPI_Allgather(local_data, 6, MPI_INT, all_data, 6, MPI_INT, pgc->mpi_comm);
+
+            amrex::Vector<Box> all_boxes(p->M10);
+            Vector<int> pmap(p->M10);
+            for (int rank = 0; rank < p->M10; ++rank)
+            {
+                IntVect lo(AMREX_D_DECL(all_data[rank][0], all_data[rank][1], all_data[rank][2]));
+                IntVect hi(AMREX_D_DECL(all_data[rank][3], all_data[rank][4], all_data[rank][5]));
+                all_boxes[rank] = Box(lo, hi);
+                pmap[rank] = rank;
+            }
+
+            amrex_box_array[lev] = BoxArray(all_boxes.data(), all_boxes.size());
+            if(amrex_box_array[lev].minimalBox() != amrex_geometry[lev].Domain())
+            {
+                std::cerr << "BoxArray based on grid data does not match the overall problem domain. Check grid parameters." << std::endl;
+                exit(1);
+            }
+
+            amrex_distribution_mapping[lev] = DistributionMapping(pmap);
         }
         else // Local refinement areas
         {
-            // AMR levels not implemented yet
-            real_box.setLo(RealVect(AMREX_D_DECL(0, 0, 0)));
-            real_box.setHi(RealVect(AMREX_D_DECL(1, 1, 1)));
-            domain.setSmall(IntVect(AMREX_D_DECL(0, 0, 0)));
-            domain.setBig(IntVect(AMREX_D_DECL(1, 1, 1)));
+            std::cerr << "Error: Only single level (no refinement) is currently supported. Exiting." << std::endl;
+            exit(1);
+
+            amrex_geometry[lev] = amrex::refine(amrex_geometry[lev-1], ref_vec);
+
+            const double epsion = 1.e-12;
+            amrex::BoxList BoxList_lev_n;
+            for (const auto &coord_pair : amrex_refined_grid_coords[lev-1])
+            {
+                // Convert physical coordinates to Level n-1 cell indices
+                // Subtract a small epsilon from hi to ensure the index stays within the intended boundary
+                amrex::Real lo_phys[3] = {coord_pair.first[0], coord_pair.first[1], coord_pair.first[2]};
+                amrex::IntVect lo_idx = amrex_geometry[lev-1].CellIndex(lo_phys);
+                amrex::Real hi_phys[3] = {coord_pair.second[0] - epsion, coord_pair.second[1] - epsion, coord_pair.second[2] - epsion};
+                amrex::IntVect hi_idx = amrex_geometry[lev-1].CellIndex(hi_phys);
+                amrex::Box ref_region_lev_n(lo_idx, hi_idx);
+                if(!amrex_box_array[lev-1].contains(ref_region_lev_n))
+                {
+                    std::cerr << "Refinement region ("<<coord_pair.first[0]<<","<<coord_pair.first[0]<<","<<coord_pair.first[0]<<") to ("<<coord_pair.second[0]<<","<<coord_pair.second[0]<<","<<coord_pair.second[0]<<") at level " << lev << " is not fully contained within the coarser level " << lev-1 << " BoxArray. Check refined grid coordinates." << std::endl;
+                    exit(1);
+                }
+                // Refine the Level n-1 box to Level n index space
+                amrex::Box domain_patch = amrex::refine(ref_region_lev_n, ref_vec);
+                BoxList_lev_n.push_back(domain_patch);
+            }
+
+            amrex_box_array[lev] = amrex::BoxArray(BoxList_lev_n);
+
+            amrex_distribution_mapping[lev] = DistributionMapping(amrex_box_array[lev]);
         }
-
-        amrex_geometry[lev] = Geometry(domain, &real_box, CoordSys::CoordType::cartesian, is_periodic);
-
-        // Gather global box information from all ranks to construct BoxArray and DistributionMapping
-        int local_data[6] = {p->origin_i, p->origin_j, p->origin_k, p->origin_i + p->knox - 1, p->origin_j + p->knoy - 1, p->origin_k + p->knoz - 1};
-
-        int all_data[p->M10][6];
-        MPI_Allgather(local_data, 6, MPI_INT, all_data, 6, MPI_INT, pgc->mpi_comm);
-
-        amrex::Vector<Box> all_boxes(p->M10);
-        Vector<int> pmap(p->M10);
-        for (int rank = 0; rank < p->M10; ++rank)
-        {
-            IntVect lo(AMREX_D_DECL(all_data[rank][0], all_data[rank][1], all_data[rank][2]));
-            IntVect hi(AMREX_D_DECL(all_data[rank][3], all_data[rank][4], all_data[rank][5]));
-            all_boxes[rank] = Box(lo, hi);
-            pmap[rank] = rank;
-        }
-
-        amrex_box_array[lev] = BoxArray(all_boxes.data(), all_boxes.size());
-        amrex_distribution_mapping[lev] = DistributionMapping(pmap);
 
         amr_cell_mf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 0, p->margin);
 
