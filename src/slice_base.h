@@ -47,8 +47,9 @@ public:
     virtual T& operator()(int, int) = 0;
     inline T& operator[](int n) noexcept {return V[n];};
 
-    T *V;
 protected:
+    T *V;
+
     const int imin,imax,jmin,jmax;
 };
 
