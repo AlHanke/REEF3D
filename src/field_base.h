@@ -23,6 +23,8 @@ Author: Alexander Hanke
 #ifndef FIELD_BASE_H_
 #define FIELD_BASE_H_
 
+#include <AMReX_IntVect.H>
+
 /*!
  * @brief Base class for field representations in REEF3D.
  *
@@ -41,14 +43,26 @@ public:
      * @brief Accesses an element in the field.
      *
      * Provides a reference to the element at the specified 3D index (ii, jj, kk).
+     * The origin of the tilebox is added to the indices to ensure correct access to the underlying data structure.
+     * Component zero is assumed for this access method.
      *
-     * @param ii The index in the x-direction.
-     * @param jj The index in the y-direction.
-     * @param kk The index in the z-direction.
-     * @param addOrigin Flag to indicate if the local origin should be added to the indices. Defaults to true.
+     * @param ii The local index in the x-direction.
+     * @param jj The local index in the y-direction.
+     * @param kk The local index in the z-direction.
      * @return T& Reference to the element at the specified location.
      */
-    virtual T& operator()(int ii, int jj, int kk, bool addOrigin=true) = 0;
+    virtual T& operator()(int ii, int jj, int kk) = 0;
+
+    /*!
+     * @brief Accesses an element in the field for a component.
+     *
+     * Provides a reference to the element at the specified 3D index for a component.
+     *
+     * @param iv The global index.
+     * @param comp The component index (default is 0).
+     * @return T& Reference to the element at the specified location.
+     */
+    virtual T& operator()(const amrex::IntVect& iv, int comp = 0) = 0;
 
     /*!
      * @brief Sets all elements in the field to a specific value.
