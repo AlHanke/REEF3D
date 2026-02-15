@@ -2950,9 +2950,6 @@
         <VirtualDirectory Name="Fieldint">
           <File Name="ArrayWrapper3D.cpp"/>
         </VirtualDirectory>
-        <VirtualDirectory Name="Increment">
-          <File Name="increment.cpp"/>
-        </VirtualDirectory>
         <VirtualDirectory Name="Geotopo">
           <File Name="geotopo.cpp"/>
           <File Name="geotopo_dat.cpp"/>
