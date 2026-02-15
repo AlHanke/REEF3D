@@ -28,7 +28,7 @@ void ghostcell::gc_periodic(field &f, int cs)
 {
     double val1,val2,val3;
 
-    if(cs==1)
+    if(cs==X_NEG)
     {
         JLOOP
         KLOOP
@@ -61,7 +61,7 @@ void ghostcell::gc_periodic(field &f, int cs)
             f(i+3,j,k) = val3;
         }
     }
-    else if(cs==2)
+    else if(cs==Y_POS)
     {
         ILOOP
         KLOOP
@@ -94,7 +94,7 @@ void ghostcell::gc_periodic(field &f, int cs)
             f(i,j+3,k) = val3;
         }
     }
-    else if(cs==3)
+    else if(cs==Y_NEG)
     {
         ILOOP
         JLOOP

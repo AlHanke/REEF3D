@@ -27,15 +27,15 @@ void ghostcell::gcsl_outflow(slice& f, int cs)
 {
     for(q=0;q<margin;++q)
     {
-        if(cs==1)
+        if(cs==X_NEG)
             f(i-q-1,j)=f(i,j);
-        else if(cs==2)
+        else if(cs==Y_POS)
             f(i,j+q+1)=f(i,j);
-        else if(cs==3)
+        else if(cs==Y_NEG)
             f(i,j-q-1)=f(i,j);
     }
 
-	if(cs==4)
+	if(cs==X_POS)
     {
         f(i+1,j) = MAX(0.0, f(i,j));
 

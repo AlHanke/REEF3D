@@ -26,8 +26,8 @@ Author: Hans Bihs
 
 void ghostcell::gcsl_potentialbc(slice &f, int cs)
 {
-    if(cs==1)
+    if(cs==X_NEG)
 	    f(i-1,j) =  -p->Ui*p->DXP[IP] + f(i,j);
-	else if(cs==4)
+	else if(cs==X_POS)
 	    f(i+1,j) =  p->Uo*p->DXP[IP] + f(i,j);
 }

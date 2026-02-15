@@ -27,13 +27,13 @@ void ghostcell::gcsl_neumann(slice &f, int cs)
 {
     for(q=0;q<margin;++q)
     {
-        if(cs==1)
+        if(cs==X_NEG)
             f(i-q-1,j)=f(i,j);
-        else if(cs==2)
+        else if(cs==Y_POS)
             f(i,j+q+1)=f(i,j);
-        else if(cs==3)
+        else if(cs==Y_NEG)
             f(i,j-q-1)=f(i,j);
-        else if(cs==4)
+        else if(cs==X_POS)
             f(i+q+1,j)=f(i,j);
     }
 }
@@ -42,41 +42,41 @@ void ghostcell::gcsl_neumann_x(slice &f, int cs)
 {
     for(q=0;q<margin;++q)
     {
-        if(cs==1)
+        if(cs==X_NEG)
             f(i-q-1,j)=f(i,j);
-        else if(cs==4)
+        else if(cs==X_POS)
             f(i+q+1,j)=f(i,j);
     }
 }
 
 void ghostcell::gcsl_neumann_hx(slice &f, int cs)
 {
-	if(cs==1)
+	if(cs==X_NEG)
         for(q=0;q<margin-1;++q)
             f(i-q-2,j)=f(i,j);
-	else if(cs==2)
+	else if(cs==Y_POS)
         for(q=0;q<margin;++q)
             f(i,j+q+1)=f(i,j);
-	else if(cs==3)
+	else if(cs==Y_NEG)
         for(q=0;q<margin;++q)
             f(i,j-q-1)=f(i,j);
-	else if(cs==4)
+	else if(cs==X_POS)
         for(q=0;q<margin-1;++q)
             f(i+q+2,j)=f(i,j);
 }
 
 void ghostcell::gcsl_neumann_hy(slice &f, int cs)
 {
-	if(cs==1)
+	if(cs==X_NEG)
         for(q=0;q<margin-1;++q)
             f(i-q-1,j)=f(i,j);
-	else if(cs==2)
+	else if(cs==Y_POS)
         for(q=0;q<margin-1;++q)
             f(i,j+q+2)=f(i,j);
-	else if(cs==3)
+	else if(cs==Y_NEG)
         for(q=0;q<margin-1;++q)
             f(i,j-q-2)=f(i,j);
-	else if(cs==4)
+	else if(cs==X_POS)
         for(q=0;q<margin;++q)
             f(i+q+1,j)=f(i,j);
 }
