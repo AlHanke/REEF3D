@@ -29,7 +29,7 @@ Author: Hans Bihs
 void patchBC_2D::patchBC_pressure2D(lexer*, ghostcell*, slice &press)
 {
     for(qq=0;qq<obj_count;++qq)
-    if(patch[qq]->pressure_flag==1)
+    if(patch[qq]->pressure_flag)
     for(n=0;n<patch[qq]->gcb_count;++n)
     {
     i=patch[qq]->gcb[n][0];
