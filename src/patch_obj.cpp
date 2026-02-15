@@ -86,13 +86,14 @@ patch_obj::patch_obj(lexer *p, int ID_ini)
 
 patch_obj::~patch_obj()
 {
+    for(int n=0; n<gcb_count; ++n)
+    {
+        delete [] gcb[n];
+    }
+    delete [] gcb;
 }
 
-void patch_obj::patch_obj_ini(lexer *p, ghostcell *pgc)
-{
-}
-
-void patch_obj::patch_obj_gcb_generate(lexer *p, ghostcell *pgc)
+void patch_obj::patch_obj_gcb_generate(lexer *p)
 {
     p->Iarray(gcb,gcb_count,4);
 }
