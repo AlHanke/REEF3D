@@ -174,7 +174,7 @@ void sixdof_obj::ray_cast_io_x(lexer *p, fdm *a, ghostcell *pgc, int ts, int te)
 			
 			Rx = u*Ax + v*Bx + w*Cx;
             
-			for(i=0;i<p->knox;++i)
+            ILOOP
              {
 				if(p->XP[IP]<Rx)
 				cutr(i,j,k) += 1;

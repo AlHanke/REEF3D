@@ -36,9 +36,9 @@ ddweno_nug_sig::~ddweno_nug_sig()
 
 double ddweno_nug_sig::ddwenox(double *F, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
+    DX = p->DXP.data();
+    DY = p->DYP.data();
+    DZ = p->DZP.data();
     uf=0;
     
     int check=0;
@@ -82,9 +82,9 @@ double ddweno_nug_sig::ddwenox(double *F, double uw)
 
 double ddweno_nug_sig::ddwenoy(double *F, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
+    DX = p->DXP.data();
+    DY = p->DYP.data();
+    DZ = p->DZP.data();
     vf=0;
     
 	grad=0.0;
@@ -122,9 +122,9 @@ double ddweno_nug_sig::ddwenoy(double *F, double uw)
 
 double ddweno_nug_sig::ddwenoz(double *F, double uw)
 {
-    DX = p->DXP;
-    DY = p->DYP;
-    DZ = p->DZP;
+    DX = p->DXP.data();
+    DY = p->DYP.data();
+    DZ = p->DZP.data();
     wf=0;
 
 	grad=0.0;

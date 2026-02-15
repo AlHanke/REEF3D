@@ -36,6 +36,11 @@ public:
     static inline int k = 0;
     static inline int n = 0;
 
+    static inline int max_i = 0;
+    static inline int max_j = 0;
+    static inline int max_k = 0;
+    static inline int level = 0;
+
     static constexpr int marge = 5;
 };
 #endif

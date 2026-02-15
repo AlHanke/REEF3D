@@ -175,7 +175,7 @@ void sixdof_obj::ray_cast_io_ycorr(lexer *p, fdm *a, ghostcell *pgc, int ts, int
 			Ry = u*Ay + v*By + w*Cy;
 			
             
-			for(j=0;j<p->knoy;++j)
+            JLOOP
             {
 				if(p->YP[JP]<Ry)
 				cutr(i,j,k) += 1;
