@@ -29,26 +29,23 @@ void ioflow_f::turbulence_io(lexer *p, fdm* a, ghostcell* pgc)
 {
     for(n=0;n<p->gcin_count;n++)
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
-
+        i=p->gcin[n][0];
+        j=p->gcin[n][1];
+        k=p->gcin[n][2];
 
         if(a->phi(i-1,j,k)<-1.0*p->F45*p->DXM)
         {
-        a->u(i-1,j,k)=a->u(i,j,k);
-        a->u(i-2,j,k)=a->u(i,j,k);
-        a->u(i-3,j,k)=a->u(i,j,k);
+            a->u(i-1,j,k)=a->u(i,j,k);
+            a->u(i-2,j,k)=a->u(i,j,k);
+            a->u(i-3,j,k)=a->u(i,j,k);
 
-        a->v(i-1,j,k)=a->v(i,j,k);
-        a->v(i-2,j,k)=a->v(i,j,k);
-        a->v(i-3,j,k)=a->v(i,j,k);
+            a->v(i-1,j,k)=a->v(i,j,k);
+            a->v(i-2,j,k)=a->v(i,j,k);
+            a->v(i-3,j,k)=a->v(i,j,k);
 
-        a->w(i-1,j,k)=a->w(i,j,k);
-        a->w(i-2,j,k)=a->w(i,j,k);
-        a->w(i-3,j,k)=a->w(i,j,k);
+            a->w(i-1,j,k)=a->w(i,j,k);
+            a->w(i-2,j,k)=a->w(i,j,k);
+            a->w(i-3,j,k)=a->w(i,j,k);
         }
     }
 }
-
-
