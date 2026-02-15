@@ -41,20 +41,19 @@ grid::~grid()
 void grid::make_dgc(lexer* p)
 {
     p->dgc1_count=1;
-	p->dgc2_count=1;
-	p->dgc3_count=1;
-	p->dgc4_count=1;
-	
-	p->Iarray(p->dgc1,p->dgc1_count,8);
-	p->Iarray(p->dgc2,p->dgc2_count,8);
-	p->Iarray(p->dgc3,p->dgc3_count,8);
-	p->Iarray(p->dgc4,p->dgc4_count,8);
-    
-    
+    p->dgc2_count=1;
+    p->dgc3_count=1;
+    p->dgc4_count=1;
+
+    p->Iarray(p->dgc1,p->dgc1_count,6);
+    p->Iarray(p->dgc2,p->dgc2_count,6);
+    p->Iarray(p->dgc3,p->dgc3_count,6);
+    p->Iarray(p->dgc4,p->dgc4_count,6);
+
     p->Iarray(hgc,imax*jmax*kmax);
-    
+
     for(i=0;i<imax*jmax*kmax;++i)
-    hgc[i]=0;
+        hgc[i]=0;
 }
 
 void grid::unmake_dgc(lexer* p)
