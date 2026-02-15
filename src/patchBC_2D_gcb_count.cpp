@@ -61,7 +61,7 @@ void patchBC_2D::patchBC_gcb_count(lexer *p, ghostcell *pgc)
 
     // allocate arrays in patch_obj
     for(q=0; q<obj_count;++q)
-    patch[q]->patch_obj_gcb_generate(p,pgc);
+    patch[q]->patch_obj_gcb_generate(p);
 
 }
 
