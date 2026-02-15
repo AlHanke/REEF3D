@@ -52,7 +52,7 @@ public:
     virtual ~field_base() = default;
 
 #if USE_AMREX
-    virtual T& operator()(int, int, int) noexcept = 0;
+    virtual T& operator()(int ii, int jj, int kk, bool addOrigin=true) noexcept = 0;
     virtual void setVal(T val, bool includeGhost = false) = 0;
 #else
     inline T& operator()(int ii, int jj, int kk) noexcept {return V[(ii-imin)*jkmax + (jj-jmin)*kmax + kk-kmin];};
