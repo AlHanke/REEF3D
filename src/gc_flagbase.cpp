@@ -22,9 +22,8 @@ Author: Hans Bihs
 
 #include"ghostcell.h"
 #include"lexer.h"
-#include"fdm.h"
 
-void ghostcell::flagbase(lexer *p, fdm *a)
+void ghostcell::flagbase(lexer *p)
 {
     int bc=0;
 
