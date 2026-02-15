@@ -38,7 +38,7 @@ fieldint_amrex::fieldint_amrex(lexer* p)
 
 int& fieldint_amrex::operator()(int ii, int jj, int kk, bool addOrigin) noexcept
 {
-    return (mf[p->level][*(p->amr_cell_mfi)].array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + (addOrigin?amrex::IntVect(amrex::lbound(p->amr_cell_mfi->validbox())):amrex::IntVect()), 0));
+    return (mf[p->level][*(p->amr_cell_mfi)].array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + (addOrigin?amrex::IntVect(amrex::lbound(p->amr_cell_mfi->tilebox())):amrex::IntVect()), 0));
 }
 
 void fieldint_amrex::setVal(int val, bool includeGhost)

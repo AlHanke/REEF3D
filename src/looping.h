@@ -46,16 +46,16 @@ Author: Hans Bihs, Alexander Hanke
                 _level_guard.ctx->level < _level_guard.ctx->nlevs; \
                 ++_level_guard.ctx->level)
     #define TileLOOP \
-        for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]); _tile_mfi.isValid(); ++_tile_mfi) \
+        for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*, amrex::TilingIfNotGPU()*//*enable if necessary*/); _tile_mfi.isValid(); ++_tile_mfi) \
             for (struct { lexer* ctx; amrex::MFIter* saved; } \
                     _guard{p, std::exchange(p->amr_cell_mfi, &_tile_mfi)}; \
                 _guard.ctx != nullptr; \
                 _guard.ctx->amr_cell_mfi = (_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), \
                 _guard.ctx = nullptr)
 
-    #define IMAX_LOOP (amrex::ubound(p->amr_cell_mfi->validbox()).x - amrex::lbound(p->amr_cell_mfi->validbox()).x)
-    #define JMAX_LOOP (amrex::ubound(p->amr_cell_mfi->validbox()).y - amrex::lbound(p->amr_cell_mfi->validbox()).y)
-    #define KMAX_LOOP (amrex::ubound(p->amr_cell_mfi->validbox()).z - amrex::lbound(p->amr_cell_mfi->validbox()).z)
+    #define IMAX_LOOP (amrex::ubound(p->amr_cell_mfi->tilebox()).x - amrex::lbound(p->amr_cell_mfi->tilebox()).x)
+    #define JMAX_LOOP (amrex::ubound(p->amr_cell_mfi->tilebox()).y - amrex::lbound(p->amr_cell_mfi->tilebox()).y)
+    #define KMAX_LOOP (amrex::ubound(p->amr_cell_mfi->tilebox()).z - amrex::lbound(p->amr_cell_mfi->tilebox()).z)
     #define MARGIN_I p->amr_cell_mf[p->level].nGrow(0)
     #define MARGIN_J p->amr_cell_mf[p->level].nGrow(1)
     #define MARGIN_K p->amr_cell_mf[p->level].nGrow(2)
