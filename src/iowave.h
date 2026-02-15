@@ -78,11 +78,8 @@ public:
     void W_relax(lexer*,ghostcell*,double*,double*) override;
     void P_relax(lexer*,ghostcell*,double*) override;
     void WL_relax(lexer*,ghostcell*,slice&,slice&) override;
-    void fi_relax(lexer*,ghostcell*,field&,field&) override;
-    void fivec_relax(lexer*, ghostcell*, double*) override;
     void fifsf_relax(lexer*, ghostcell*, slice&) override;
     void test_relax(lexer*, ghostcell*, slice&)override;
-    void visc_relax(lexer*, ghostcell*, slice&) override;
     void eta_relax(lexer*,ghostcell*,slice&) override;
     void um_relax(lexer*,ghostcell*,slice&,slice&,slice&) override;
     void vm_relax(lexer*,ghostcell*,slice&,slice&,slice&) override;
@@ -95,9 +92,9 @@ public:
     void wavegen_2D_precalc_ini(lexer*,ghostcell*) override;
 
     void discharge2D(lexer*,fdm2D*,ghostcell*) override;
-    void waterlevel2D(lexer*,fdm2D*,ghostcell*,slice&) override;
-    void Qin2D(lexer*,fdm2D*,ghostcell*) override;
-    void Qout2D(lexer*,fdm2D*,ghostcell*) override;
+    void waterlevel2D(lexer*,fdm2D*,ghostcell*,slice&) override {};
+    void Qin2D(lexer*,fdm2D*,ghostcell*) override {};
+    void Qout2D(lexer*,fdm2D*,ghostcell*) override {};
     void inflow2D(lexer*,fdm2D*,ghostcell*,slice&,slice&,slice&,slice&) override;
     void rkinflow2D(lexer*,fdm2D*,ghostcell*,slice&,slice&,slice&,slice&) override;
     void isource2D(lexer*,fdm2D*,ghostcell*) override;
@@ -218,15 +215,14 @@ private:
 
     void timeseries(lexer*,ghostcell*);
 
-private:
     slice4 eta;
-    
+
     slice1 relax1_wg, relax1_nb;
     slice2 relax2_wg, relax2_nb;
     slice4 relax4_wg, relax4_nb;
     sliceint4 wgflag;
-	
-	double rb1(lexer*,double);
+
+    double rb1(lexer*,double);
     double rb3(lexer*,double);
 
     double rb1_ext(lexer*,int);

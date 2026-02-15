@@ -193,7 +193,6 @@ void driver::driver_ini_fnpf()
     ppfsg->inidisc(p,c,pgc,pflow,psolv);    // ini wetdry and coastline
     
     pflow->eta_relax(p,pgc,c->eta);
-    pflow->fivec_relax(p,pgc,c->Fi);
     pflow->fifsf_relax(p,pgc,c->Fifsf);
     pgc->gcsl_start4(p,c->eta,50);
     pgc->gcsl_start4(p,c->Fifsf,50);

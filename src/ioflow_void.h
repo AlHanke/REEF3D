@@ -68,10 +68,7 @@ public:
     void W_relax(lexer*,ghostcell*,double*,double*) override {};
     void P_relax(lexer*,ghostcell*,double*) override {};
     void WL_relax(lexer*,ghostcell*,slice&,slice&) override {};
-    void fi_relax(lexer*,ghostcell*,field&,field&) override {};
-    void fivec_relax(lexer*, ghostcell*, double*) override {};
     void fifsf_relax(lexer*, ghostcell*, slice&) override {};
-    void visc_relax(lexer*, ghostcell*, slice&) override {};
     void eta_relax(lexer*,ghostcell*,slice&) override {};
     void um_relax(lexer*,ghostcell*,slice&,slice&,slice&) override {};
     void vm_relax(lexer*,ghostcell*,slice&,slice&,slice&) override {};
