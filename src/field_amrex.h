@@ -52,7 +52,7 @@ public:
     void FillDomainBoundaryValue(double value, int dir, bool high) override;
 
 protected:
-    field_amrex(lexer* p, unsigned int data_location);
+    field_amrex(lexer* p, amrex_bc_func::DataLocation data_location);
 
     lexer *p = nullptr;
     amrex::Vector<amrex::MultiFab> mf = {};
@@ -66,9 +66,9 @@ private:
     void ShiftBoundaryFaces(amrex::MultiFab& mf_in, int p_level)
     {
         int dir = -1;
-        if (const_params.data_location == 1) dir = 0;
-        else if (const_params.data_location == 2) dir = 1;
-        else if (const_params.data_location == 3) dir = 2;
+        if (const_params.data_location == amrex_bc_func::DataLocation::FACE_X) dir = 0;
+        else if (const_params.data_location == amrex_bc_func::DataLocation::FACE_Y) dir = 1;
+        else if (const_params.data_location == amrex_bc_func::DataLocation::FACE_Z) dir = 2;
 
         if (dir == -1) return;
 
@@ -322,7 +322,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
                                         BCRecs[p->level], 0);
         }
 
-        if (const_params.data_location != 0)
+        if (const_params.data_location != amrex_bc_func::DataLocation::CELL_CENTERED)
         {
             ShiftBoundaryFaces(mf[p->level], p->level);
         }
