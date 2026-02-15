@@ -701,14 +701,14 @@ public:
                     {
                         case 1:
                         case 2:
-                            if(m_const_params.bc_values[0] == static_cast<int>(Gbc::WAVEGEN) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(0)) == BoundaryConditionTypeLabel::NONE && (m_const_params.data_location == DataLocation::FACE_X || m_const_params.data_location == DataLocation::FACE_Z))
+                            if(((m_const_params.bc_values[0] == static_cast<int>(Gbc::WAVEGEN) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(0)) == BoundaryConditionTypeLabel::NONE) || (m_const_params.bc_values[0] == static_cast<int>(Gbc::INFLOW) && ((edge==1 && m_const_params.bc_values[4] == static_cast<int>(Gbc::WALL)) || (edge==2 && m_const_params.bc_values[5] == static_cast<int>(Gbc::WALL))))) && (m_const_params.data_location == DataLocation::FACE_X || m_const_params.data_location == DataLocation::FACE_Z))
                                 label = BoundaryConditionTypeLabel::NOSLIP;
                             else
                                 label = BoundaryConditionTypeLabel::NEUMANN;
                             break;
                         case 3:
                         case 4:
-                            if(m_const_params.bc_values[1] == static_cast<int>(Gbc::NUMBEACH) && (m_const_params.data_location == DataLocation::FACE_X || m_const_params.data_location == DataLocation::FACE_Z))
+                            if((m_const_params.bc_values[1] == static_cast<int>(Gbc::NUMBEACH) || (m_const_params.bc_values[1] == static_cast<int>(Gbc::OUTFLOW) && ((edge==3 && m_const_params.bc_values[4] == static_cast<int>(Gbc::WALL)) || (edge==4 && m_const_params.bc_values[5] == static_cast<int>(Gbc::WALL))))) && (m_const_params.data_location == DataLocation::FACE_X || m_const_params.data_location == DataLocation::FACE_Z))
                                 label = BoundaryConditionTypeLabel::NOSLIP;
                             else
                                 label = BoundaryConditionTypeLabel::NEUMANN;
