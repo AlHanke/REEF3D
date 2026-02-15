@@ -23,9 +23,6 @@ Author: Hans Bihs
 #ifndef INCREMENT_H_
 #define INCREMENT_H_
 
-class fdm;
-class fdm2D;
-
 #include"looping.h"
 
 using namespace std;
@@ -39,7 +36,5 @@ class increment
 	static int innercounter;
 	static int pip;
     static int marge;
-	static fdm *aa;
-    static fdm2D *bb;
 };
 #endif
