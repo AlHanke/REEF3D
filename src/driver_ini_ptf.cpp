@@ -88,7 +88,6 @@ cout<<"starting driver_ini_PTF"<<endl;
     ptstep->ini(a,p,pgc);
     pptf->ini(p,a,pgc,pflow,preini);  // --- 
     pflow->eta_relax(p,pgc,a->eta);
-    pflow->fi_relax(p,pgc,a->Fi,a->phi);
 
     pgc->start4(p,a->Fi,250);
     

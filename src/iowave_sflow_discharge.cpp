@@ -69,11 +69,3 @@ void iowave::discharge2D(lexer *p, fdm2D* b, ghostcell* pgc)
     pBC->patchBC_discharge2D(p,b,pgc,b->P,b->Q,b->eta,b->bed);
     
 }
-
-void iowave::Qin2D(lexer *p, fdm2D* b, ghostcell* pgc)
-{
-}
-
-void iowave::Qout2D(lexer *p, fdm2D* b, ghostcell* pgc)
-{
-}
