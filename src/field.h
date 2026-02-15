@@ -32,6 +32,7 @@ class field
 {
 public:
 	virtual double& operator()(int, int, int)=0;
+    virtual void fillBoundary()=0;
 protected:
 	double *V;
 };
