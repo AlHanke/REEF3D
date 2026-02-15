@@ -28,7 +28,6 @@ Author: Alexander Hanke
 
 fieldint1::fieldint1(lexer *p) : fieldint_amrex(p)
 {
-    mf.resize(p->nlevs);
     for(p->level=0; p->level<p->nlevs; ++p->level)
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);
@@ -41,7 +40,6 @@ fieldint1::fieldint1(lexer *p) : fieldint_amrex(p)
 
 fieldint2::fieldint2(lexer *p) : fieldint_amrex(p)
 {
-    mf.resize(p->nlevs);
     for(p->level=0; p->level<p->nlevs; ++p->level)
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);
@@ -54,7 +52,6 @@ fieldint2::fieldint2(lexer *p) : fieldint_amrex(p)
 
 fieldint3::fieldint3(lexer *p) : fieldint_amrex(p)
 {
-    mf.resize(p->nlevs);
     for(p->level=0; p->level<p->nlevs; ++p->level)
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);
@@ -67,7 +64,6 @@ fieldint3::fieldint3(lexer *p) : fieldint_amrex(p)
 
 fieldint4::fieldint4(lexer *p) : fieldint_amrex(p)
 {
-    mf.resize(p->nlevs);
     for(p->level=0; p->level<p->nlevs; ++p->level)
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->n_comp, p->margin);

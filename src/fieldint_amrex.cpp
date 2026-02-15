@@ -32,31 +32,32 @@ Author: Alexander Hanke
 
 fieldint_amrex::fieldint_amrex(lexer* p)
 {
-    pp = p;
+    fieldint_amrex::p = p;
+    mf.resize(p->nlevs);
 }
 
 int& fieldint_amrex::operator()(int ii, int jj, int kk) noexcept
 {
     using namespace amrex;
 
-    IntVect cell_index{AMREX_D_DECL(ii + pp->origin_i, jj + pp->origin_j, kk + pp->origin_k)};
+    IntVect cell_index{AMREX_D_DECL(ii + p->origin_i, jj + p->origin_j, kk + p->origin_k)};
 
-    for (MFIter mfi(mf[pp->level]); mfi.isValid(); ++mfi)
+    for (MFIter mfi(mf[p->level]); mfi.isValid(); ++mfi)
     {
         const Box& box = mfi.fabbox();
-        const auto cell_index = box.smallEnd() + IntVect{AMREX_D_DECL(ii + pp->margin, jj + pp->margin, kk + pp->margin)};
-        return mf[pp->level].array(mfi)(cell_index, 0);
+        const auto cell_index = box.smallEnd() + IntVect{AMREX_D_DECL(ii + p->margin, jj + p->margin, kk + p->margin)};
+        return mf[p->level].array(mfi)(cell_index, 0);
     }
-    // return (mf[pp->level][*(pp->amr_mfi)].array()(amrex::IntVect{AMREX_D_DECL(ii, jj, kk)} + amrex::IntVect{amrex::lbound(pp->amr_mfi->validbox())}, 0));
+    // return (mf[p->level][*(p->amr_mfi)].array()(amrex::IntVect{AMREX_D_DECL(ii, jj, kk)} + amrex::IntVect{amrex::lbound(p->amr_mfi->validbox())}, 0));
 }
 
 void fieldint_amrex::setVal(int val, bool includeGhost)
 {
-    mf[pp->level].setVal(val, includeGhost ? mf[pp->level].nGrowVect() : amrex::IntVect{0});
+    mf[p->level].setVal(val, includeGhost ? mf[p->level].nGrowVect() : amrex::IntVect{0});
 }
 
 void fieldint_amrex::FillBoundary()
 {
-    mf[pp->level].FillBoundary(pp->amrex_geometry[pp->level].periodicity());
+    mf[p->level].FillBoundary(p->amrex_geometry[p->level].periodicity());
 }
 #endif
