@@ -2843,16 +2843,12 @@
         <File Name="gc_epol4a.cpp"/>
         <File Name="gc_distro.cpp"/>
         <File Name="gc_dirichlet-ortho.cpp"/>
-        <File Name="gc_dirichlet-para.cpp"/>
         <File Name="gc_imagepoint.cpp"/>
         <File Name="gc_noslip.cpp"/>
         <File Name="gc_potential.cpp"/>
         <File Name="gc_start.cpp"/>
         <File Name="gc_outflow.cpp"/>
-        <File Name="gc_gravity_press.cpp"/>
-        <File Name="gc_lsm.cpp"/>
         <File Name="gc_neumann.cpp"/>
-        <File Name="gc_sommerfeld.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Flag">
         <File Name="gc_nhflow_ioflag.cpp"/>

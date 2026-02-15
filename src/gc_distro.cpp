@@ -34,9 +34,6 @@ void ghostcell::gcdistro(field& f, int ii, int jj, int kk, double dist, bc_label
         case bc_labels::DIRICHLET_ORTH:
             dirichlet_ortho(f,dist,cs);
             break;
-        case bc_labels::DIRICHLET_PARA:
-            dirichlet_para(f,dist,cs);
-            break;
         case bc_labels::NEUMANN:
             neumann(f,cs);
             break;
@@ -46,23 +43,14 @@ void ghostcell::gcdistro(field& f, int ii, int jj, int kk, double dist, bc_label
         case bc_labels::OUTFLOW:
             outflow(f,cs);
             break;
-        case bc_labels::SOMMERFELD:
-            sommerfeld(f,cs);
-            break;
         case bc_labels::POTENTIAL:
             potentialbc(f,cs);
-            break;
-        case bc_labels::GRAVITY_PRESS:
-            gravity_press(f,cs);
             break;
         case bc_labels::DIRICHLET_ORTH_REFLECT:
             dirichlet_ortho_reflect(f,dist,cs);
             break;
         case bc_labels::DIRICHLET_PARA_REFLECT:
             dirichlet_para_reflect(f,dist,cs);
-            break;
-        case bc_labels::LSM:
-            lsm(f,cs);
             break;
         case bc_labels::HEATBC:
             heatbc(f,cs);
