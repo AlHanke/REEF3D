@@ -23,60 +23,60 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include<math.h>
 
-int ghostcell::gceval4a(lexer *p, int gcv, int bc, int cs)
+ghostcell::bc_labels ghostcell::gceval4a(lexer *p, int gcv, int bc, int cs)
 {
     // fb
     if(gcv==50)
-        return 75;
+        return bc_labels::NEUMANN_ALL2;
 
     //topo
     else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs==5 || cs==6) && (gcv==151 || gcv==152 || gcv==153))
-        return 75;
+        return bc_labels::NEUMANN_ALL2;
 
     else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs!=5 && cs!=6) && (gcv==151 || gcv==152 || gcv==153))
-        return 74;
+        return bc_labels::NEUMANN_ALL;
 
     else if((bc==2 && gcv==151) || (bc==1 && gcv==152))
-        return 74;
+        return bc_labels::NEUMANN_ALL;
 
     else if(gcv==150 || gcv==154)
-     return 74;
+     return bc_labels::NEUMANN_ALL;
 
     else if(gcv==159)
-        return 3;
+        return bc_labels::EXTEND;
 
     // topo for bedload
     else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs==5 || cs==6) && (gcv==161 || gcv==162 || gcv==163))
-     return 75;
+     return bc_labels::NEUMANN_ALL2;
 
     else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs!=5 && cs!=6) && (gcv==161 || gcv==162 || gcv==163))
-     return 74;
+     return bc_labels::NEUMANN_ALL;
 
     else if((bc==2 && gcv==161) || (bc==1 && gcv==162))
-        return 74;
+        return bc_labels::NEUMANN_ALL;
 
     // Level Set
     else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==6 || bc==7 || bc==8 || bc==9) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
-        return 74;
+        return bc_labels::NEUMANN_ALL;
 
     else if(bc==3 && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
-        return 74;
+        return bc_labels::NEUMANN_ALL;
 
     else if(bc==1 && (gcv==52 || gcv==54))
-        return 74;
+        return bc_labels::NEUMANN_ALL;
 
     else if(bc==2 && (gcv==51 || gcv==54))
-        return 74;
+        return bc_labels::NEUMANN_ALL;
 
     else if(gcv==50)
-        return 74;
+        return bc_labels::NEUMANN_ALL;
 
     // porosity
     else if(gcv==1)
-        return 75;
+        return bc_labels::NEUMANN_ALL2;
 
     else
-        return 0;
+        return bc_labels::NONE;
 }
 
 void ghostcell::gcdistro4a(lexer *p, field &f, int ii, int jj, int kk, int nn, double dist, int gcv, int bc, int cs)
@@ -89,8 +89,8 @@ void ghostcell::gcdistro4a(lexer *p, field &f, int ii, int jj, int kk, int nn, d
 
     bc_label=gceval4a(p,gcv,bc,cs);
 
-    if(bc_label==74 || bc_label==75)
+    if(bc_label==bc_labels::NEUMANN_ALL || bc_label==bc_labels::NEUMANN_ALL2)
         neumann(f,cs);
-    else if(bc_label==79)
+    else if(bc_label==bc_labels::EXTEND)
         extend(f,cs);
 }

@@ -56,59 +56,59 @@ void ghostcell::gc_ini(lexer* p)
 
     if(p->B20==1)
     {
-        gclabel_u=4;
-        gclabel_v=4;
-        gclabel_w=4;
+        gclabel_u=bc_labels::NEUMANN;
+        gclabel_v=bc_labels::NEUMANN;
+        gclabel_w=bc_labels::NEUMANN;
 
-        gclabel_utopo=4;
-        gclabel_vtopo=4;
-        gclabel_wtopo=4;
+        gclabel_utopo=bc_labels::NEUMANN;
+        gclabel_vtopo=bc_labels::NEUMANN;
+        gclabel_wtopo=bc_labels::NEUMANN;
     }
     else if(p->B20==2)
     {
-        gclabel_u=5;
-        gclabel_v=5;
-        gclabel_w=5;
+        gclabel_u=bc_labels::NOSLIP;
+        gclabel_v=bc_labels::NOSLIP;
+        gclabel_w=bc_labels::NOSLIP;
 
-        gclabel_utopo=5;
-        gclabel_vtopo=5;
-        gclabel_wtopo=5;
+        gclabel_utopo=bc_labels::NOSLIP;
+        gclabel_vtopo=bc_labels::NOSLIP;
+        gclabel_wtopo=bc_labels::NOSLIP;
     }
     else if(p->B20==3)
     {
-        gclabel_u=2;
-        gclabel_v=2;
-        gclabel_w=2;
+        gclabel_u=bc_labels::DIRICHLET_PARA;
+        gclabel_v=bc_labels::DIRICHLET_PARA;
+        gclabel_w=bc_labels::DIRICHLET_PARA;
 
-        gclabel_utopo=2;
-        gclabel_vtopo=2;
-        gclabel_wtopo=2;
+        gclabel_utopo=bc_labels::DIRICHLET_PARA;
+        gclabel_vtopo=bc_labels::DIRICHLET_PARA;
+        gclabel_wtopo=bc_labels::DIRICHLET_PARA;
     }
     else if(p->B20==4)
     {
-        gclabel_u=5;
-        gclabel_v=5;
-        gclabel_w=5;
+        gclabel_u=bc_labels::NOSLIP;
+        gclabel_v=bc_labels::NOSLIP;
+        gclabel_w=bc_labels::NOSLIP;
 
-        gclabel_utopo=4;
-        gclabel_vtopo=4;
-        gclabel_wtopo=4;
+        gclabel_utopo=bc_labels::NEUMANN;
+        gclabel_vtopo=bc_labels::NEUMANN;
+        gclabel_wtopo=bc_labels::NEUMANN;
     }
 
-    gclabel_u_orth=1;
-    gclabel_v_orth=1;
-    gclabel_w_orth=1;
+    gclabel_u_orth=bc_labels::DIRICHLET_ORTH;
+    gclabel_v_orth=bc_labels::DIRICHLET_ORTH;
+    gclabel_w_orth=bc_labels::DIRICHLET_ORTH;
 
     // for reflective BC
     if(p->B23==2)
     {
-        gclabel_u=12;
-        gclabel_v=12;
-        gclabel_w=12;
+        gclabel_u=bc_labels::DIRICHLET_PARA_REFLECT;
+        gclabel_v=bc_labels::DIRICHLET_PARA_REFLECT;
+        gclabel_w=bc_labels::DIRICHLET_PARA_REFLECT;
 
-        gclabel_u_orth=11;
-        gclabel_v_orth=11;
-        gclabel_w_orth=11;
+        gclabel_u_orth=bc_labels::DIRICHLET_ORTH_REFLECT;
+        gclabel_v_orth=bc_labels::DIRICHLET_ORTH_REFLECT;
+        gclabel_w_orth=bc_labels::DIRICHLET_ORTH_REFLECT;
     }
 
     awa_label=false;
@@ -118,44 +118,44 @@ void ghostcell::gc_ini(lexer* p)
 
     if(p->B75==1)
     {
-        gclabel_u_out=4;
-        gclabel_v_out=4;
-        gclabel_w_out=4;
+        gclabel_u_out=bc_labels::NEUMANN;
+        gclabel_v_out=bc_labels::NEUMANN;
+        gclabel_w_out=bc_labels::NEUMANN;
     }
     else if(p->B75==2)
     {
-        gclabel_u_out=6;
-        gclabel_v_out=6;
-        gclabel_w_out=6;
+        gclabel_u_out=bc_labels::OUTFLOW;
+        gclabel_v_out=bc_labels::OUTFLOW;
+        gclabel_w_out=bc_labels::OUTFLOW;
     }
     else if(p->B75==3)
     {
-        gclabel_u_out=0;
-        gclabel_v_out=6;
-        gclabel_w_out=6;
+        gclabel_u_out=bc_labels::NONE;
+        gclabel_v_out=bc_labels::OUTFLOW;
+        gclabel_w_out=bc_labels::OUTFLOW;
     }
 
     gclabel_outflow=true;
     if(p->B60==3||p->B60==4)
         gclabel_outflow=false;
 
-    gclabel_u_in=1;
-    gclabel_v_in=1;
-    gclabel_w_in=1;
-    gclabel_lsm_in=4;
+    gclabel_u_in=bc_labels::DIRICHLET_ORTH;
+    gclabel_v_in=bc_labels::DIRICHLET_ORTH;
+    gclabel_w_in=bc_labels::DIRICHLET_ORTH;
+    gclabel_lsm_in=bc_labels::NEUMANN;
 
     if(p->I230>0 || p->B98>=3 || p->B60>0)
     {
-        gclabel_u_in=0;
-        gclabel_v_in=0;
-        gclabel_w_in=0;
-        gclabel_lsm_in=0;
+        gclabel_u_in=bc_labels::NONE;
+        gclabel_v_in=bc_labels::NONE;
+        gclabel_w_in=bc_labels::NONE;
+        gclabel_lsm_in=bc_labels::NONE;
     }
 
     // pressure bc labels
-    gclabel_press_in=4;
+    gclabel_press_in=bc_labels::NEUMANN;
     if(p->B76==2 || p->B76==3)
-        gclabel_press_in=0;
+        gclabel_press_in=bc_labels::NONE;
 
     // pressure inflow
     pressin_label=false;
@@ -170,13 +170,13 @@ void ghostcell::gc_ini(lexer* p)
     // sflow slip/no-slip
     if(p->A217==1 && p->A10==2)
     {
-        gclabel_u=4;
-        gclabel_v=4;
+        gclabel_u=bc_labels::NEUMANN;
+        gclabel_v=bc_labels::NEUMANN;
     }
     else if(p->A217==2 && p->A10==2)
     {
-        gclabel_u=5;
-        gclabel_v=5;
+        gclabel_u=bc_labels::NOSLIP;
+        gclabel_v=bc_labels::NOSLIP;
     }
 
     for(m=0;m<15;m++)
