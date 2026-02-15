@@ -227,8 +227,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 //--------------------------------------------------------
     
     // FSF
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pfsfdisc->start(p,a,frk1,4,urk1,vrk1,wrk1);
 

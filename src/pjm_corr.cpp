@@ -153,8 +153,7 @@ void pjm_corr::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &
         ++count;
     }
 
-    LOOP
-    pcorr(i,j,k)=0.0;
+    pcorr.setVal(0.0);
 
     pgc->start4(p,pcorr,1);
 

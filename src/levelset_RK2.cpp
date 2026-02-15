@@ -105,8 +105,7 @@ void levelset_RK2::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
 // Step 1
     starttime=pgc->timer();
 
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pconvec->start(p,a,ls,4,a->u,a->v,a->w);
 
@@ -119,8 +118,7 @@ void levelset_RK2::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
 	pgc->start4(p,ark1,gcval_phi);
 
 // Step 2
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pconvec->start(p,a,ark1,4,a->u,a->v,a->w);
 

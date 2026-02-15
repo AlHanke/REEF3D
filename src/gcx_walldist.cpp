@@ -32,11 +32,9 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
     double xc,yc,zc;
     double xdist,ydist,zdist;
 
-    MALOOP
-        walldist(i,j,k)=0.0;
+    walldist.setVal(0.0,true);
 
-    LOOP
-        walldist(i,j,k)=1.0e9;
+    walldist.setVal(1.0e9);
 
     gcparax(p,walldist,4);
 

@@ -55,8 +55,7 @@ void sixdof_cfd::setup(lexer *p, fdm *a, ghostcell *pgc)
     WLOOP
     a->fbh3(i,j,k) = 0.0;
 
-    LOOP
-    a->fbh4(i,j,k) = 0.0;
+    a->fbh4.setVal(0.0);
 
     pgc->start1(p,a->fbh1,10);
     pgc->start2(p,a->fbh2,11);
