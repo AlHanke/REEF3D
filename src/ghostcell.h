@@ -255,17 +255,16 @@ private:
     void sommerfeld(field&,int);
 
     // Slice BCs
-    void gcsl_neumann(slice&,int,int,int);
-    void gcsl_neumann_hx(slice&,int,int,int);
-    void gcsl_neumann_hy(slice&,int,int,int);
-    void gcsl_neumann_x(slice&,int,int,int);
-    void gcsl_neumann_int(sliceint&,int,int,int);
-    void gcsl_neumann_V_int(lexer*,int*,int,int,int);
-    void gcsl_noslip(slice&,int,int,int);
-    void gcsl_sommerfeld(lexer*,slice&,int,int,int);
-    void gcsl_outflow(lexer*,slice&,int,int,int);
-    void gcsl_outflow_fsf(lexer*,slice&,int,int,int);
-    void gcsl_potentialbc(lexer*,slice&,int,int);
+    void gcsl_neumann(slice&,int);
+    void gcsl_neumann_hx(slice&,int);
+    void gcsl_neumann_hy(slice&,int);
+    void gcsl_neumann_x(slice&,int);
+    void gcsl_neumann_int(sliceint&,int);
+    void gcsl_neumann_V_int(int*,int);
+	void gcsl_noslip(slice&,int);
+    void gcsl_outflow(slice&,int);
+    void gcsl_potentialbc(slice&,int);
+    void gcsl_sommerfeld(slice&,int);
 
     void imagepoint(lexer*,field&,double&,double&,double,int);
 

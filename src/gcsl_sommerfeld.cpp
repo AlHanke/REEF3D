@@ -20,13 +20,13 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"lexer.h"
 #include"ghostcell.h"
-#include"field.h"
+#include"lexer.h"
 #include"slice.h"
 
-void ghostcell::gcsl_sommerfeld(lexer *p, slice& f, int gcv, int bc, int cs)
+void ghostcell::gcsl_sommerfeld(slice &f, int cs)
 {
+    const double gravity=9.81;
     double dfx1,dfx4,dfy2,dfy3;
     
     dfx1 = (f(i+1,j)-f(i,j))/p->DXM;
@@ -34,21 +34,15 @@ void ghostcell::gcsl_sommerfeld(lexer *p, slice& f, int gcv, int bc, int cs)
     dfy2 = (f(i,j)-f(i,j-1))/p->DXM;
     dfy3 = (f(i,j+1)-f(i,j))/p->DXM;
 
-            
-	if(cs==1)
-	for(q=0;q<margin;++q)
-	f(i-q-1,j) = f(i,j) - p->dt*sqrt(9.81*(p->wd+f(i,j)))*dfx1;
-
-	if(cs==2)
-	for(q=0;q<margin;++q)
-	f(i,j+q+1) = f(i,j) - p->dt*sqrt(9.81*(p->wd+f(i,j)))*dfy2;
-
-	if(cs==3)
-	for(q=0;q<margin;++q)
-	f(i,j-q-1) = f(i,j) - p->dt*sqrt(9.81*(p->wd+f(i,j)))*dfy3;
-
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j) = f(i,j) - p->dt*sqrt(9.81*(p->wd+f(i,j)))*dfx4;
-
+    for(q=0;q<margin;++q)
+    {
+        if(cs==1)
+            f(i-q-1,j) = f(i,j) - p->dt*sqrt(gravity*(p->wd+f(i,j)))*dfx1;
+        else if(cs==2)
+            f(i,j+q+1) = f(i,j) - p->dt*sqrt(gravity*(p->wd+f(i,j)))*dfy2;
+        else if(cs==3)
+            f(i,j-q-1) = f(i,j) - p->dt*sqrt(gravity*(p->wd+f(i,j)))*dfy3;
+        else if(cs==4)
+            f(i+q+1,j) = f(i,j) - p->dt*sqrt(gravity*(p->wd+f(i,j)))*dfx4;
+    }
 }
