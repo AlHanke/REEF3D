@@ -24,7 +24,7 @@ Author: Hans Bihs
 #define REINISOLID_RK3_H_
 
 #include"reinitopo.h"
-#include"field4a.h"
+#include"field4.h"
 #include"increment.h"
 
 class reinidisc;
@@ -39,7 +39,7 @@ public:
 	virtual ~reinisolid_RK3();
 	void start(lexer*,fdm*,ghostcell*,field&) override;
 
-	field4a f,frk1,frk2,L,dt;
+	field4 f,frk1,frk2,L,dt;
 
 private:
 	reinidisc *prdisc;

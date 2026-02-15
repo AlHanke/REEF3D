@@ -65,9 +65,9 @@ public:
 	field4 phi;
 	field4 conc;
     field4 test;
-	field4a topo,solid;
-	field4a fb;
-	field4a porosity,porpart;
+	field4 topo,solid;
+	field4 fb;
+	field4 porosity,porpart;
 	field4 walld;
 	 
 	fieldint4 nodeval;

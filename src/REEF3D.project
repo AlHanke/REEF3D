@@ -1006,7 +1006,6 @@
           <File Name="field2.h"/>
           <File Name="field3.h"/>
           <File Name="field4.h"/>
-          <File Name="field4a.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Fieldint">
           <File Name="fieldint.h"/>
@@ -2849,7 +2848,6 @@
           <File Name="field1.cpp"/>
           <File Name="field2.cpp"/>
           <File Name="field3.cpp"/>
-          <File Name="field4a.cpp"/>
           <File Name="field4.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Fieldint">

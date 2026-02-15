@@ -25,7 +25,7 @@ Author: Hans Bihs, Alexander Hanke
 
 #include"sediment.h"
 #include"increment.h"
-#include"field4a.h"
+#include"field4.h"
 
 class bedload;
 class bedconc;
@@ -167,8 +167,8 @@ private:
 
     ofstream sedlogout;
 
-    field4a por;
-    field4a d50;
+    field4 por;
+    field4 d50;
 };
 
 #endif
