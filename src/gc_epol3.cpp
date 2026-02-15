@@ -31,24 +31,20 @@ ghostcell::bc_labels ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
 
     // Parallel
     // Wall
-    else if(((bc==7 && !awa_label) || bc==21 || bc==22) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Y_POS) && (gcv==12 || gcv==116))
+    else if(((bc==7 && !awa_label) || bc==21) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Y_POS) && (gcv==12 || gcv==116))
         return gclabel_w;
 
-    else if((bc==5 || (bc==7 && !awa_label) || bc==21 || bc==22) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Y_POS) && gcv==112)
+    else if(((bc==7 && !awa_label) || bc==21) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Y_POS) && gcv==112)
         return bc_labels::NOSLIP;
 
-    // Topo
-    else if(bc==5 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Y_POS) && (gcv==12 || gcv==116))
-        return gclabel_wtopo;
-
-    else if((bc==5 || bc==21 || bc==22) && gcv==16)
+    else if(bc==21 && gcv==16)
         return bc_labels::NEUMANN;
 
     // Othogonal
-    else if(((bc==7 && !awa_label) || bc==5 || bc==21 || bc==22) && (cs==dir_labels::Z_POS || (cs==dir_labels::Z_NEG && p->A10==6)) && (gcv==12))
+    else if(((bc==7 && !awa_label) || bc==21) && (cs==dir_labels::Z_POS || (cs==dir_labels::Z_NEG && p->A10==6)) && (gcv==12))
         return gclabel_w_orth;
 
-    else if(((bc==7 && !awa_label) || bc==5 || bc==21 || bc==22) && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==9)
+    else if(((bc==7 && !awa_label) || bc==21) && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==9)
         return bc_labels::NOSLIP;
 
     //Inflow
@@ -74,9 +70,6 @@ ghostcell::bc_labels ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NOSLIP;
 
     else if(bc==3 && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==12 || gcv==19) && p->A10==3)
-        return bc_labels::NEUMANN;
-
-    else if(bc==9 && cs==dir_labels::Z_POS && (gcv==12 || gcv==19))
         return bc_labels::NEUMANN;
 
     else
