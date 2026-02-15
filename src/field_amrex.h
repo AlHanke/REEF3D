@@ -42,7 +42,7 @@ public:
 
     void FillBoundary() override;
 
-    void FillDomainBoundary() override;
+    void FillDomainBoundary(int gcv) override;
 
 protected:
     field_amrex(lexer* p);
