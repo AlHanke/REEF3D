@@ -23,11 +23,11 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"lexer.h"
 
-int ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
+ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
 {
     // Velocities
     if(gcv==50)
-        return 4;
+        return bc_labels::NEUMANN;
 
     // Parallel
     // Wall
@@ -35,20 +35,20 @@ int ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
         return gclabel_u;
 
     else if((bc==21 || bc==22 || (bc==7 && !awa_label)) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==110))
-        return 5;
+        return bc_labels::NOSLIP;
 
     else if((bc==21 || bc==22 || (bc==7 && !awa_label)) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==114))
         return gclabel_u;
 
     else if((bc==21 || bc==22 || (bc==7 && !awa_label)) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==117))
-        return 4;
+        return bc_labels::NEUMANN;
 
     // Topo
     else if((bc==5) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==10 || gcv==1))
         return gclabel_utopo;
 
     else if((bc==5) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==110))
-        return 5;
+        return bc_labels::NOSLIP;
 
     else if((bc==5) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==114))
         return gclabel_utopo;
@@ -57,14 +57,14 @@ int ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
         return gclabel_utopo;
 
     else if((bc==21 || bc==22 || bc==5) && gcv==14)
-        return 4;
+        return bc_labels::NEUMANN;
 
     // Orthogonal
     else if((bc==21 || bc==22 || bc==5) && (cs==1 || cs==4) && (gcv==10 || gcv==1))
         return gclabel_u_orth;
 
     else if((bc==21 || bc==22 || bc==5) && (cs==1 || cs==4) && gcv==7)
-        return 5;
+        return bc_labels::NOSLIP;
 
     // Inflow
     else if((bc==6 && (cs==1 || cs==4) && (gcv==10 || gcv==1 || gcv==7)))
@@ -72,37 +72,37 @@ int ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
 
     // Patch
     else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==10 || gcv==1 || gcv==7))
-        return 4;
+        return bc_labels::NEUMANN;
 
     // Outflow
     else if((bc==2 && gclabel_outflow==1) && (gcv==10 || gcv==1) && (cs==2 || cs==3 || cs==5 || cs==6))
-        return 4;
+        return bc_labels::NEUMANN;
 
     else if((bc==2 && gclabel_outflow==1) && (gcv==10 || gcv==1) && (cs==1 || cs==4))
         return gclabel_u_out;
 
     else if(((bc==8 || bc==7) && gclabel_outflow==1) && (gcv==10 || gcv==1) && (cs==1 || cs==4) && p->I10==1)
-        return 4;
+        return bc_labels::NEUMANN;
 
     // Free Surface
     else if(bc==3 && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==10 || gcv==17 || gcv==1))
-        return 4;
+        return bc_labels::NEUMANN;
 
     else if(bc==3 && (cs==1 || cs==4) && (gcv==10 || gcv==17 || gcv==1))
         return gclabel_u_orth;
 
     else if((bc==9) && cs==6 && (gcv==10 || gcv==17 || gcv==1))
-        return 4;
+        return bc_labels::NEUMANN;
 
     // 6DOF
     else if(bc==41 || bc==42 || bc==43)
-        return 9;
+        return bc_labels::NHPRESS;
 
     else if(gcv==999)
-        return 99;
+        return bc_labels::DEBUG;
 
     else
-        return 0;
+        return bc_labels::NONE;
 }
 
 void ghostcell::gcdistro1(lexer *p, field &f, int ii, int jj, int kk, int nn, double dist, int gcv, int bc, int cs)
@@ -113,24 +113,24 @@ void ghostcell::gcdistro1(lexer *p, field &f, int ii, int jj, int kk, int nn, do
 
     bc_label=gceval1(p,gcv,bc,cs);
 
-    if(bc_label==1)
+    if(bc_label==bc_labels::DIRICHLET_ORTH)
         dirichlet_ortho(f,dist,cs);
-    else if(bc_label==2)
+    else if(bc_label==bc_labels::DIRICHLET_PARA)
         dirichlet_para(f,dist,cs);
-    else if(bc_label==3)
+    else if(bc_label==bc_labels::EXTEND)
         extend(f,cs);
-    else if(bc_label==4)
+    else if(bc_label==bc_labels::NEUMANN)
         neumann(f,cs);
-    else if(bc_label==5)
+    else if(bc_label==bc_labels::NOSLIP)
         noslip(f,cs);
-    else if(bc_label==6)
+    else if(bc_label==bc_labels::OUTFLOW)
         outflow(f,cs);
-    else if(bc_label==7)
+    else if(bc_label==bc_labels::SOMMERFELD)
         sommerfeld(f,cs);
-    else if(bc_label==11)
+    else if(bc_label==bc_labels::DIRICHLET_ORTH_REFLECT)
         dirichlet_ortho_reflect(f,dist,cs);
-    else if(bc_label==12)
+    else if(bc_label==bc_labels::DIRICHLET_PARA_REFLECT)
         dirichlet_para_reflect(f,dist,cs);
-    else if(bc_label==99)
+    else if(bc_label==bc_labels::DEBUG)
         gcb_debug(f,cs);
 }

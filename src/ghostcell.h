@@ -266,6 +266,10 @@ private:
     void gcsl_potentialbc(slice&,int);
     void gcsl_sommerfeld(slice&,int);
 
+    enum bc_labels { NONE=0, DIRICHLET_ORTH=1, DIRICHLET_PARA=2, EXTEND=3, NEUMANN=4, NOSLIP=5, OUTFLOW=6, SOMMERFELD=7, POTENTIAL=8, NHPRESS=9,
+         GRAVITY_PRESS=10, DIRICHLET_ORTH_REFLECT=11, DIRICHLET_PARA_REFLECT=12, NEUMANN_X=14, ATMOSPHERE=21, LSM=22, NEUMANN_HX=41, NEUMANN_HY=42,
+         HEATBC=61, NEUMANN_ALL=74, NEUMANN_ALL2=75, DEBUG=99 };
+
     // 3D BC decision
     void gcdistro1(lexer*, field&, int, int, int, int, double, int, int, int);
     void gcdistro2(lexer*, field&, int, int, int, int, double, int, int, int);
@@ -273,11 +277,11 @@ private:
     void gcdistro4(lexer*, field&, int, int, int, int, double, int, int, int);
     void gcdistro4a(lexer*, field&, int, int, int, int, double, int, int, int);
 
-    int gceval1(lexer*,int,int,int);
-    int gceval2(lexer*,int,int,int);
-    int gceval3(lexer*,int,int,int);
-    int gceval4(lexer*,int,int,int);
-    int gceval4a(lexer*,int,int,int);
+    bc_labels gceval1(lexer*,int,int,int);
+    bc_labels gceval2(lexer*,int,int,int);
+    bc_labels gceval3(lexer*,int,int,int);
+    bc_labels gceval4(lexer*,int,int,int);
+    bc_labels gceval4a(lexer*,int,int,int);
 
     // 2D BC decision
     void gcsldistro1(lexer*, slice&, int, int, int, int, int, int);
@@ -285,14 +289,14 @@ private:
     void gcsldistro4(lexer*, slice&, int, int, int, int, int, int);
     void gcsldistro4a(lexer*, slice&, int, int, int, int, int, int);
 
-     void gcsldistro1int(sliceint&, int, int, int);
+    void gcsldistro1int(sliceint&, int, int, int);
     void gcsldistro2int(sliceint&, int, int, int);
     void gcsldistro4int(sliceint&, int, int, int);
     void gcsldistro4Vint(lexer*, int*, int, int, int);
 
-    int gcsleval1(int,int,int);
-    int gcsleval2(int,int,int);
-    int gcsleval4(int,int,int);
+    bc_labels gcsleval1(int,int,int);
+    bc_labels gcsleval2(int,int,int);
+    bc_labels gcsleval4(int,int,int);
 
     void imagepoint(lexer*,field&,double&,double&,double,int);
 
@@ -313,14 +317,14 @@ private:
     double starttime,endtime;
     int ys;
 
-    int bc_label;
-    int gcval_topodist;
+    bc_labels bc_label; 
+    bc_labels gcval_topodist;
     bool gclabel_outflow;
-    int gclabel_u, gclabel_v, gclabel_w;
-    int gclabel_utopo, gclabel_vtopo, gclabel_wtopo;
-    int gclabel_u_orth,gclabel_v_orth,gclabel_w_orth;
-    int gclabel_u_in,gclabel_v_in,gclabel_w_in,gclabel_press_in,gclabel_lsm_in;
-    int gclabel_u_out, gclabel_v_out, gclabel_w_out;
+    bc_labels gclabel_u, gclabel_v, gclabel_w;
+    bc_labels gclabel_utopo, gclabel_vtopo, gclabel_wtopo;
+    bc_labels gclabel_u_orth,gclabel_v_orth,gclabel_w_orth;
+    bc_labels gclabel_u_in,gclabel_v_in,gclabel_w_in,gclabel_press_in,gclabel_lsm_in;
+    bc_labels gclabel_u_out, gclabel_v_out, gclabel_w_out;
     bool awa_label,pressout_label,pressin_label;
 
     // PARALLEL
