@@ -25,21 +25,18 @@ Author: Hans Bihs
 
 ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
 {
-    if(gcv==1 || gcv==50 || gcv==150 || gcv==151 || gcv==152 || gcv==153 || gcv==154)
+    if(gcv==1 || gcv==30 || gcv==50 || gcv==60 || gcv==80 || gcv==81 || gcv==150 || gcv==151 || gcv==152 || gcv==153 || gcv==154)
         return bc_labels::NEUMANN;
 
     //Level Set
-    else if((bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
-        return bc_labels::NEUMANN;
-
-    else if((bc==gbc_labels::SYMMETRY || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if((bc==gbc_labels::SYMMETRY || bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
 
     else if((bc==gbc_labels::INFLOW || bc==gbc_labels::WAVEGEN || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==52 || gcv==54))
         return bc_labels::NEUMANN;
 
     // outflow
-    else if((bc==gbc_labels::OUTFLOW || bc==111 || bc==121 || bc==211 || bc==221) && ((gcv==51) || (gcv==52 && p->B77==1) || gcv==54))
+    else if((bc==gbc_labels::OUTFLOW || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || (gcv==52 && p->B77==1) || gcv==54))
         return bc_labels::NEUMANN;
 
     // inflow
@@ -49,32 +46,19 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else if(bc==gbc_labels::WAVEGEN && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return gclabel_lsm_in;
 
-    // Pressure
-    else if((bc==gbc_labels::SYMMETRY || bc==gbc_labels::WALL || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
-        return bc_labels::NEUMANN;
-
-    // wavegen
-    else if(((bc==gbc_labels::WAVEGEN && !pressin_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
-        return bc_labels::NEUMANN;
-
-    // awa beach
-    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
+    else if(((bc==gbc_labels::OUTFLOW && !pressout_label) || bc==gbc_labels::SYMMETRY || (bc==gbc_labels::WAVEGEN && !pressin_label) || (bc==gbc_labels::NUMBEACH && !awa_label) ||  bc==gbc_labels::WALL || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // inflow
     else if(((bc==gbc_labels::INFLOW && !pressin_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return gclabel_press_in;
 
-    // outflow
-    else if(((bc==gbc_labels::OUTFLOW && !pressout_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
-        return bc_labels::NEUMANN;
-
     // ro
     else if((bc!=5 && bc!=21) && cs!=dir_labels::Z_NEG && gcv==2)
         return bc_labels::NEUMANN;
 
     // Turbulence kin
-    else if(bc==gbc_labels::WALL && gcv==20)
+    else if(bc==gbc_labels::WALL && (gcv==20 || gcv==24))
         return bc_labels::NEUMANN;
 
     else if((bc==gbc_labels::OUTFLOW || bc==gbc_labels::SYMMETRY) && (cs!=dir_labels::Z_POS || bc!=3) && gcv==20)
@@ -86,62 +70,19 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else if((bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==20)
         return bc_labels::NOSLIP;
 
-    // Turbulence eps
-    else if((bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL) && gcv==30)
-        return bc_labels::NEUMANN;
-
-    else if((bc==gbc_labels::OUTFLOW || bc==gbc_labels::SYMMETRY) && gcv==30)
-        return bc_labels::NEUMANN;
-
-    else if(bc==gbc_labels::INFLOW && (gcv==30 || gcv==72 || gcv==74))
-        return bc_labels::NEUMANN;
-
-    // Turbulence eddyv
-    else if(bc==gbc_labels::WALL && gcv==24)
+    else if(bc==gbc_labels::INFLOW && (gcv==72 || gcv==74))
         return bc_labels::NEUMANN;
 
     else if((bc==gbc_labels::INFLOW || bc==gbc_labels::OUTFLOW || bc==gbc_labels::SYMMETRY) && gcv==24)
         return bc_labels::NEUMANN;
 
-    else if(bc==gbc_labels::INFLOW && gcv==24)
+    else if((bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==24)
         return bc_labels::NOSLIP;
 
     else if(bc==gbc_labels::SYMMETRY && cs==dir_labels::Z_POS && gcv==24)
         return bc_labels::NOSLIP;
 
-    else if((bc!=3 || cs!=dir_labels::Z_POS) && gcv==24)
-        return bc_labels::NEUMANN;
-
-    else if((bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==24)
-        return bc_labels::NOSLIP;
-
-    // omega (sigma coordinate)
-    // Parallel
-    // Wall
-    else if((bc==gbc_labels::WALL || (bc==gbc_labels::NUMBEACH && !awa_label)) && (cs==dir_labels::X_NEG || cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::X_POS) && gcv==12)
-        return bc_labels::NEUMANN;
-
-    // Othogonal
-    else if((bc==gbc_labels::WALL || (bc==gbc_labels::NUMBEACH && !awa_label)) && cs==dir_labels::Z_POS && gcv==12)
-        return bc_labels::NOSLIP;
-
-    //Inflow
-    else if(bc==gbc_labels::WAVEGEN && gcv==12)
-        return bc_labels::NEUMANN;
-
-    //Outflow
-    else if(bc==gbc_labels::OUTFLOW && gclabel_outflow && (cs==dir_labels::X_NEG || cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::X_POS) && (gcv==3 || gcv==12))
-        return bc_labels::NEUMANN;
-
-    else if(bc==gbc_labels::OUTFLOW && gclabel_outflow && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==12)
-        return bc_labels::NOSLIP;
-
-    //Patch
-    else if((bc==111 || bc==112 || bc==121 || bc==122) && gcv==12)
-        return bc_labels::NEUMANN;
-
-    //Free Surface
-    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::X_NEG || cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::X_POS) && gcv==12)
+    else if((bc!=gbc_labels::SYMMETRY || cs!=dir_labels::Z_POS) && gcv==24)
         return bc_labels::NEUMANN;
 
     // VOF
@@ -183,20 +124,10 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==103)
         return bc_labels::NOSLIP;
 
-    // Suspended Sediment
-    else if(gcv==60)
-        return bc_labels::NEUMANN;
-
     // Heat
     else if(((p->H61==1 && cs==dir_labels::X_NEG) || (p->H62==1 && cs==dir_labels::Y_POS) || (p->H63==1 && cs==dir_labels::Y_NEG) ||
              (p->H64==1 && cs==dir_labels::X_POS) || (p->H65==1 && cs==dir_labels::Z_NEG) || (p->H66==1 && cs==dir_labels::Z_POS)) && gcv==80)
         return bc_labels::HEATBC;
-
-    else if(gcv==80)
-        return bc_labels::NEUMANN;
-
-    else if(gcv==81)
-        return bc_labels::NEUMANN;
 
     // Potential Ini
     else if((bc==gbc_labels::WALL || bc==gbc_labels::SYMMETRY) && gcv==49)
