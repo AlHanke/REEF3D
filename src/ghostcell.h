@@ -287,7 +287,7 @@ private:
     bc_labels gceval2(lexer*,int,int,int);
     bc_labels gceval3(lexer*,int,int,int);
     bc_labels gceval4(lexer*,int,int,int);
-    bc_labels gceval4a(lexer*,int,int,int);
+    bc_labels gceval4a(lexer*,int,int);
 
     // 2D BC decision
     void gcsldistro1(lexer*, slice&, int, int, int, int, int);

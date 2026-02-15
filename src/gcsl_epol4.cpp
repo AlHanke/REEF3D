@@ -37,10 +37,6 @@ ghostcell::bc_labels ghostcell::gcsleval4(int gcv, int bc, int cs)
     else if(bc==1 && gcv==12)
         return bc_labels::NOSLIP;
 
-    // pressure 40
-    else if((bc==1 || bc==2 || bc==3 || bc==6 || bc==8 || bc==21 || bc==111 || bc==112 || bc==211 || bc==212) && (gcv==41 || gcv==42 || gcv==43 || gcv==44))
-        return bc_labels::NEUMANN;
-
     // Patch eta / Hx / Hy
     else if((bc==221 || bc==211 || bc==121 || bc==111) && (gcv==50 || gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
@@ -76,21 +72,6 @@ ghostcell::bc_labels ghostcell::gcsleval4(int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // eta 150
-    else if((bc==1 || bc==6) && (gcv==152 || gcv==154))
-        return bc_labels::NEUMANN_X;
-
-    else if((bc==2 || bc==7) && (gcv==151 || gcv==154))
-        return bc_labels::NEUMANN_X;
-
-    else if(bc==8 && (gcv==151 || gcv==152 || gcv==153 || gcv==154) &&p->B99==3)
-        return bc_labels::NEUMANN_X;
-
-    else if(bc==8 && (gcv==151 || gcv==152 || gcv==153 || gcv==154) &&p->B99==4)
-        return bc_labels::SOMMERFELD;
-
-    else if((bc==3 || bc==21) && (gcv==151 || gcv==152 || gcv==153 || gcv==154))
-        return bc_labels::NEUMANN_X;
-
     else if(gcv==155)
         return bc_labels::NEUMANN_X;
 
