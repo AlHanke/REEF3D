@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Hans Bihs, Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"lexer.h"
@@ -30,7 +30,8 @@ Author: Hans Bihs
 #include <AMReX_BoxArray.H>
 #include <AMReX_DistributionMapping.H>
 #include <AMReX_MFIter.H>
-#include <array>
+#include <AMReX_MultiFab.H>
+#include <AMReX_iMultiFab.H>
 
 void lexer::gridini(ghostcell *pgc)
 {
@@ -47,34 +48,72 @@ void lexer::setup_amrex_geometry(ghostcell *pgc)
 {
     using namespace amrex;
 
-    Box domain_box(IntVect(AMREX_D_DECL(0, 0, 0)),
-                   IntVect(AMREX_D_DECL(gknox-1, gknoy-1, gknoz-1)));
+    amrex_geometry.resize(nlevs);
+    amrex_box_array.resize(nlevs);
+    amrex_distribution_mapping.resize(nlevs);
+    amr_mf.resize(nlevs);
 
-    RealBox physical_domain(AMREX_D_DECL(global_xmin, global_ymin, global_zmin),
-                            AMREX_D_DECL(global_xmax, global_ymax, global_zmax));
+    flag1_imf.resize(nlevs);
+    flag2_imf.resize(nlevs);
+    flag3_imf.resize(nlevs);
+    flag4_imf.resize(nlevs);
+    flag7_imf.resize(nlevs);
 
-    std::array<int,AMREX_SPACEDIM> is_periodic = {periodic1, periodic2, periodic3};
+    for (int lev = 0; lev < nlevs; lev++)
+    {
+        RealBox real_box;
+        Box domain;
+        if (lev == 0)
+        {
+            real_box.setLo(RealVect(AMREX_D_DECL(global_xmin, global_ymin, global_zmin)));
+            real_box.setHi(RealVect(AMREX_D_DECL(global_xmax, global_ymax, global_zmax)));
+            domain.setSmall(IntVect(AMREX_D_DECL(0, 0, 0)));
+            domain.setBig(IntVect(AMREX_D_DECL(gknox-1, gknoy-1, gknoz-1)));
+        }
+        else
+        {
+            // AMR levels not implemented yet
+            real_box.setLo(RealVect(AMREX_D_DECL(0, 0, 0)));
+            real_box.setHi(RealVect(AMREX_D_DECL(1, 1, 1)));
+            domain.setSmall(IntVect(AMREX_D_DECL(0, 0, 0)));
+            domain.setBig(IntVect(AMREX_D_DECL(1, 1, 1)));
+        }
 
-    amrex_geometry = Geometry(domain_box, physical_domain, CoordSys::CoordType::cartesian, is_periodic);
+        int is_periodic[AMREX_SPACEDIM] = {periodic1, periodic2, periodic3};
 
-    int local_data[6] = {origin_i, origin_j, origin_k, origin_i + knox - 1, origin_j + knoy - 1, origin_k + knoz - 1};
+        amrex_geometry[lev] = Geometry(domain, &real_box, CoordSys::CoordType::cartesian, is_periodic);
 
-    int all_data[M10][6];
-    MPI_Allgather(local_data, 6, MPI_INT, all_data, 6, MPI_INT, pgc->mpi_comm);
+        int local_data[6] = {origin_i, origin_j, origin_k, origin_i + knox - 1, origin_j + knoy - 1, origin_k + knoz - 1};
 
-    std::vector<Box> all_boxes(M10);
-    Vector<int> pmap(M10);
-    for (int rank = 0; rank < M10; ++rank) {
-        IntVect lo(AMREX_D_DECL(all_data[rank][0], all_data[rank][1], all_data[rank][2]));
-        IntVect hi(AMREX_D_DECL(all_data[rank][3], all_data[rank][4], all_data[rank][5]));
-        all_boxes[rank] = Box(lo, hi);
-        pmap[rank] = rank;
+        int all_data[M10][6];
+        MPI_Allgather(local_data, 6, MPI_INT, all_data, 6, MPI_INT, pgc->mpi_comm);
+
+        std::vector<Box> all_boxes(M10);
+        Vector<int> pmap(M10);
+        for (int rank = 0; rank < M10; ++rank)
+        {
+            IntVect lo(AMREX_D_DECL(all_data[rank][0], all_data[rank][1], all_data[rank][2]));
+            IntVect hi(AMREX_D_DECL(all_data[rank][3], all_data[rank][4], all_data[rank][5]));
+            all_boxes[rank] = Box(lo, hi);
+            pmap[rank] = rank;
+        }
+
+        amrex_box_array[lev] = BoxArray(all_boxes.data(), all_boxes.size());
+        amrex_distribution_mapping[lev] = DistributionMapping(pmap);
+
+        amr_mf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 0, margin);
+
+        flag1_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, margin);
+        flag2_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, margin);
+        flag3_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, margin);
+        flag4_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, margin);
+        flag7_imf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, margin);
     }
 
-    amrex_box_array = BoxArray(all_boxes.data(), all_boxes.size());
-    amrex_distribution_mapping = DistributionMapping(pmap);
-
-    MFIter::allowMultipleMFIters(true);
+    amrex::MFIter::allowMultipleMFIters(true);
+    level = 0;
+    default_mfi = std::make_unique<amrex::MFIter>(amr_mf[level], false);
+    amr_mfi = default_mfi.get();
 }
 
 void lexer::flagini()
