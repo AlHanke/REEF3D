@@ -60,7 +60,7 @@ void fieldint_amrex::FillBoundary()
     mf[p->level].FillBoundary(p->amrex_geometry[p->level].periodicity());
 }
 
-void fieldint_amrex::FillDomainBoundary()
+void fieldint_amrex::FillDomainBoundary(int gcv)
 {
     // amrex::FillDomainBoundary(mf[p->level], p->amrex_geometry[p->level], bc[p->level]);
 }

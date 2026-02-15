@@ -32,7 +32,7 @@ public:
     virtual void setVal(T val, bool includeGhost = false) = 0;
 
     virtual void FillBoundary() = 0;
-    virtual void FillDomainBoundary() = 0;
+    virtual void FillDomainBoundary(int gcv) = 0;
 };
 
 #endif
