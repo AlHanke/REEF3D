@@ -374,13 +374,13 @@ void lexer::read_grid()
     Iarray(gcslparaco3, gcslparaco3_count,4);
     Iarray(gcslparaco4, gcslparaco4_count,4);
 
-    Darray(XN,knox+1+4*marge);
-    Darray(YN,knoy+1+4*marge);
-    Darray(ZN,knoz+1+4*marge);
+    Darray(XN,knox+1+2*marge);
+    Darray(YN,knoy+1+2*marge);
+    Darray(ZN,knoz+1+2*marge);
 
-    Darray(RN,knox+1+4*marge);
-    Darray(SN,knoy+1+4*marge);
-    Darray(TN,knoz+1+4*marge);
+    Darray(RN,knox+1+2*marge);
+    Darray(SN,knoy+1+2*marge);
+    Darray(TN,knoz+1+2*marge);
 
 
     // ---------------------------------------------------------------------------------------------------------------------

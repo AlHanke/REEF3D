@@ -52,29 +52,29 @@ void grid::gridspacing(ghostcell *pgc)
 {
     resize_class resizer;
 
-    resizer.Darray(XP,knox+1+4*marge);
-    resizer.Darray(YP,knoy+1+4*marge);
-    resizer.Darray(ZP,knoz+1+4*marge);
+    resizer.Darray(XP,knox+1+2*marge);
+    resizer.Darray(YP,knoy+1+2*marge);
+    resizer.Darray(ZP,knoz+1+2*marge);
 
-    resizer.Darray(RP,knox+1+4*marge);
-    resizer.Darray(SP,knoy+1+4*marge);
-    resizer.Darray(TP,knoz+1+4*marge);
+    resizer.Darray(RP,knox+1+2*marge);
+    resizer.Darray(SP,knoy+1+2*marge);
+    resizer.Darray(TP,knoz+1+2*marge);
 
-    resizer.Darray(DXN,knox+1+4*marge);
-    resizer.Darray(DYN,knoy+1+4*marge);
-    resizer.Darray(DZN,knoz+1+4*marge);
+    resizer.Darray(DXN,knox+1+2*marge);
+    resizer.Darray(DYN,knoy+1+2*marge);
+    resizer.Darray(DZN,knoz+1+2*marge);
 
-    resizer.Darray(DXP,knox+1+4*marge);
-    resizer.Darray(DYP,knoy+1+4*marge);
-    resizer.Darray(DZP,knoz+1+4*marge);
+    resizer.Darray(DXP,knox+1+2*marge);
+    resizer.Darray(DYP,knoy+1+2*marge);
+    resizer.Darray(DZP,knoz+1+2*marge);
 
-    resizer.Darray(DRDXN,knox+1+4*marge);
-    resizer.Darray(DSDYN,knoy+1+4*marge);
-    resizer.Darray(DTDZN,knoz+1+4*marge);
+    resizer.Darray(DRDXN,knox+1+2*marge);
+    resizer.Darray(DSDYN,knoy+1+2*marge);
+    resizer.Darray(DTDZN,knoz+1+2*marge);
 
-    resizer.Darray(DRDXP,knox+1+4*marge);
-    resizer.Darray(DSDYP,knoy+1+4*marge);
-    resizer.Darray(DTDZP,knoz+1+4*marge);
+    resizer.Darray(DRDXP,knox+1+2*marge);
+    resizer.Darray(DSDYP,knoy+1+2*marge);
+    resizer.Darray(DTDZP,knoz+1+2*marge);
 
     resizer.Darray(ZSN,imax*jmax*(kmax+1));
     resizer.Darray(ZSP,imax*jmax*kmax);
@@ -191,10 +191,10 @@ void grid::gridspacing(ghostcell *pgc)
     DTDZP[KP] =  (-TP[KP2] + 8.0*TP[KP1] - 8.0*TP[KM1] + TP[KM2])
                 /(-ZP[KP2] + 8.0*ZP[KP1] - 8.0*ZP[KM1] + ZP[KM2]);
 
-    resizer.del_Darray(RN,knox+1+4*marge);
-    resizer.del_Darray(SN,knoy+1+4*marge);
-    resizer.del_Darray(TN,knoz+1+4*marge);
-    resizer.del_Darray(RP,knox+1+4*marge);
-    resizer.del_Darray(SP,knoy+1+4*marge);
-    resizer.del_Darray(TP,knoz+1+4*marge);
+    resizer.del_Darray(RN,knox+1+2*marge);
+    resizer.del_Darray(SN,knoy+1+2*marge);
+    resizer.del_Darray(TN,knoz+1+2*marge);
+    resizer.del_Darray(RP,knox+1+2*marge);
+    resizer.del_Darray(SP,knoy+1+2*marge);
+    resizer.del_Darray(TP,knoz+1+2*marge);
 }
