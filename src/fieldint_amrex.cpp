@@ -24,8 +24,11 @@ Author: Alexander Hanke
 #include "fieldint_amrex.h"
 #include "lexer.h"
 #include <AMReX_BCUtil.H>
+#include <AMReX_BCRec.H>
+#include <AMReX_Geometry.H>
 #include <AMReX_MFIter.H>
 #include <AMReX_iMultiFab.H>
+#include <AMReX_DistributionMapping.H>
 
 fieldint_amrex::fieldint_amrex(lexer* p)
 {
@@ -55,33 +58,5 @@ void fieldint_amrex::setVal(int val, bool includeGhost)
 void fieldint_amrex::FillBoundary()
 {
     mf[pp->level].FillBoundary(pp->amrex_geometry[pp->level].periodicity());
-}
-
-void fieldint_amrex::initialize_bc()
-{
-    using namespace amrex;
-
-    bc.resize(pp->nlevs);
-    for(pp->level=0; pp->level<pp->nlevs; ++pp->level)
-    {
-        bc[pp->level].resize(mf[pp->level].n_comp);
-        for (int n = 0; n < mf[pp->level].nComp(); ++n)
-        {
-            for (int idim = 0; idim < AMREX_SPACEDIM; ++idim)
-            {
-                if (pp->amrex_geometry[pp->level].isPeriodic(idim))
-                {
-                    bc[pp->level][n].setLo(idim, BCType::int_dir); // interior
-                    bc[pp->level][n].setHi(idim, BCType::int_dir);
-                }
-                else
-                {
-                    // ToDo: Fix this
-                    bc[pp->level][n].setLo(idim, BCType::bogus);
-                    bc[pp->level][n].setHi(idim, BCType::bogus);
-                }
-            }
-        }
-    }
 }
 #endif

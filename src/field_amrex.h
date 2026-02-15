@@ -26,7 +26,6 @@ Author: Alexander Hanke
 
 #include "field.h"
 #include "lexer.h"
-#include <AMReX_BCRec.H>
 #include <AMReX_MultiFab.H>
 #include <vector>
 
@@ -46,12 +45,8 @@ public:
 protected:
     field_amrex(lexer* p);
 
-    void initialize_bc();
-
     lexer *pp;
     std::vector<amrex::MultiFab> mf;
-    std::vector<amrex::Vector<amrex::BCRec>> bc;
-    const int num_components = 1;
 };
 
 #endif
