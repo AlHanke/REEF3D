@@ -199,7 +199,7 @@ public:
     static double ***cfx,***cfy,***cfz;
     static double ****isfx,****isfy,****isfz;
     
-	static int iniflag;
+	static bool iniflag;
     
     
     
