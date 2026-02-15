@@ -23,6 +23,15 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"ghostcell.h"
 
+#include <AMReX_Geometry.H>
+#include <AMReX_RealBox.H>
+#include <AMReX_Box.H>
+#include <AMReX_IntVect.H>
+#include <AMReX_BoxArray.H>
+#include <AMReX_DistributionMapping.H>
+#include <AMReX_MFIter.H>
+#include <array>
+
 void lexer::gridini(ghostcell *pgc)
 {
     if(G2==1)
@@ -31,6 +40,42 @@ void lexer::gridini(ghostcell *pgc)
     grid::gridspacing(pgc);
 
     gcd_ini(pgc);
+
+    setup_amrex_geometry(pgc);
+}
+
+void lexer::setup_amrex_geometry(ghostcell *pgc)
+{
+    using namespace amrex;
+
+    Box domain_box(IntVect(AMREX_D_DECL(0, 0, 0)),
+                   IntVect(AMREX_D_DECL(gknox-1, gknoy-1, gknoz-1)));
+
+    RealBox physical_domain(AMREX_D_DECL(global_xmin, global_ymin, global_zmin),
+                            AMREX_D_DECL(global_xmax, global_ymax, global_zmax));
+
+    std::array<int,AMREX_SPACEDIM> is_periodic = {periodic1, periodic2, periodic3};
+
+    amrex_geometry = Geometry(domain_box, physical_domain, CoordSys::CoordType::cartesian, is_periodic);
+
+    int local_data[6] = {origin_i, origin_j, origin_k, origin_i + knox - 1, origin_j + knoy - 1, origin_k + knoz - 1};
+
+    int all_data[M10][6];
+    MPI_Allgather(local_data, 6, MPI_INT, all_data, 6, MPI_INT, pgc->mpi_comm);
+
+    std::vector<Box> all_boxes(M10);
+    Vector<int> pmap(M10);
+    for (int rank = 0; rank < M10; ++rank) {
+        IntVect lo(AMREX_D_DECL(all_data[rank][0], all_data[rank][1], all_data[rank][2]));
+        IntVect hi(AMREX_D_DECL(all_data[rank][3], all_data[rank][4], all_data[rank][5]));
+        all_boxes[rank] = Box(lo, hi);
+        pmap[rank] = rank;
+    }
+
+    amrex_box_array = BoxArray(all_boxes.data(), all_boxes.size());
+    amrex_distribution_mapping = DistributionMapping(pmap);
+
+    MFIter::allowMultipleMFIters(true);
 }
 
 void lexer::flagini()
