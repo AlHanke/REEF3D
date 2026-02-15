@@ -27,53 +27,59 @@ ghostcell::bc_labels ghostcell::gceval4a(lexer *p, int gcv, int bc, int cs)
 {
     // fb
     if(gcv==50)
-        return bc_labels::NEUMANN_ALL2;
+        return bc_labels::NEUMANN;
 
     //topo
-    else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs==5 || cs==6) && (gcv==151 || gcv==152 || gcv==153))
-        return bc_labels::NEUMANN_ALL2;
+    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==21 || bc==22) && (cs==5 || cs==6) && (gcv==151 || gcv==152 || gcv==153))
+        return bc_labels::NEUMANN;
 
-    else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs!=5 && cs!=6) && (gcv==151 || gcv==152 || gcv==153))
-        return bc_labels::NEUMANN_ALL;
+    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==21 || bc==22) && (cs!=5 && cs!=6) && (gcv==151 || gcv==152 || gcv==153))
+        return bc_labels::NEUMANN;
 
-    else if((bc==2 && gcv==151) || (bc==1 && gcv==152))
-        return bc_labels::NEUMANN_ALL;
+    else if(bc==1 && gcv==152)
+        return bc_labels::NEUMANN;
+
+    else if(bc==2 && gcv==151)
+        return bc_labels::NEUMANN;
 
     else if(gcv==150 || gcv==154)
-     return bc_labels::NEUMANN_ALL;
+     return bc_labels::NEUMANN;
 
     else if(gcv==159)
         return bc_labels::EXTEND;
 
     // topo for bedload
-    else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs==5 || cs==6) && (gcv==161 || gcv==162 || gcv==163))
-     return bc_labels::NEUMANN_ALL2;
+    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==21 || bc==22) && (cs==5 || cs==6) && (gcv==161 || gcv==162 || gcv==163))
+     return bc_labels::NEUMANN;
 
-    else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs!=5 && cs!=6) && (gcv==161 || gcv==162 || gcv==163))
-     return bc_labels::NEUMANN_ALL;
+    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==21 || bc==22) && (cs!=5 && cs!=6) && (gcv==161 || gcv==162 || gcv==163))
+     return bc_labels::NEUMANN;
 
-    else if((bc==2 && gcv==161) || (bc==1 && gcv==162))
-        return bc_labels::NEUMANN_ALL;
+    else if(bc==1 && gcv==162)
+        return bc_labels::NEUMANN;
+
+    else if(bc==2 && gcv==161)
+        return bc_labels::NEUMANN;
 
     // Level Set
-    else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==6 || bc==7 || bc==8 || bc==9) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
-        return bc_labels::NEUMANN_ALL;
+    else if((bc==5 || bc==6 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+        return bc_labels::NEUMANN;
 
     else if(bc==3 && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
-        return bc_labels::NEUMANN_ALL;
+        return bc_labels::NEUMANN;
 
     else if(bc==1 && (gcv==52 || gcv==54))
-        return bc_labels::NEUMANN_ALL;
+        return bc_labels::NEUMANN;
 
     else if(bc==2 && (gcv==51 || gcv==54))
-        return bc_labels::NEUMANN_ALL;
+        return bc_labels::NEUMANN;
 
     else if(gcv==50)
-        return bc_labels::NEUMANN_ALL;
+        return bc_labels::NEUMANN;
 
     // porosity
     else if(gcv==1)
-        return bc_labels::NEUMANN_ALL2;
+        return bc_labels::NEUMANN;
 
     else
         return bc_labels::NONE;

@@ -27,54 +27,44 @@ Author: Hans Bihs
 ghostcell::bc_labels ghostcell::gcsleval2(int gcv, int bc, int cs)
 {
     // general Neuman
-    if(gcv==40 || gcv==50 || gcv==1)
+    if(gcv==1 || gcv==40 || gcv==50)
         return bc_labels::NEUMANN;
 
-    //Wall
-    // Parallel
-    if((bc==21 || bc==22 || bc==7 || bc==6 || bc==5 || bc==1) && (cs==1 || cs==4 || cs==5 || cs==6) && (gcv==11 || gcv==21 || gcv==2))
+    // Wall
+    // Inflow & Parallel
+    else if((bc==1 || bc==5 || bc==6 || bc==7 || bc==21 || bc==5 || bc==22) && (cs==1 || cs==4 || cs==5 || cs==6) && (gcv==2 || gcv==11 || gcv==21))
         return gclabel_v;
 
     // Orthogonal
-    else if((bc==21 || bc==22 || bc==5 || bc==7) && (cs==2 || cs==3) && (gcv==11 || gcv==21 || gcv==2))
+    else if((bc==3 || bc==5 || bc==7 || bc==21 || bc==5 || bc==22) && (cs==2 || cs==3) && (gcv==2 || gcv==11 || gcv==21))
         return bc_labels::NOSLIP;
 
-    //Inflow
-    else if((bc==1) && (gcv==11 || gcv==21 || gcv==2) && (cs==1 || cs==4 || cs==5 || cs==6))
-        return bc_labels::NEUMANN;
-
-    //Patch
-    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==11 || gcv==2 || gcv==21 || gcv==8))
-        return bc_labels::NEUMANN;
-
-    //Outflow
-    else if((bc==2) && (cs==2 || cs==3) && (gcv==11 || gcv==21 || gcv==2))
+    // Outflow
+    else if(bc==2 && (cs==2 || cs==3) && (gcv==2 || gcv==11 || gcv==21))
         return bc_labels::NEUMANN;
 
     // Symmetry
-    else if(bc==3 && (cs==1 || cs==4 || cs==5 || cs==6) && (gcv==11 || gcv==21|| gcv==2))
+    else if(bc==3 && (cs==1 || cs==4 || cs==5 || cs==6) && (gcv==2 || gcv==11 || gcv==21))
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==2 || cs==3) && (gcv==11 || gcv==21|| gcv==2))
-        return bc_labels::NOSLIP;
-
-    //Hy
+    // Hy
     else if((bc==1 || bc==6) && (gcv==52 || gcv==54))
         return bc_labels::NEUMANN;
 
     else if((bc==2 || bc==7) && (gcv==51 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if(bc==8 && p->B99==3)
+    else if(bc==8 && (p->B99==3 || p->B99==4))
         return bc_labels::NEUMANN;
 
-    else if(bc==8 && p->B99==4)
+    else if((bc==3 || bc==21) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if((bc==21 || bc==3) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    // Patch
+    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==2 || gcv==8 || gcv==11 || gcv==21))
         return bc_labels::NEUMANN;
 
-    //Patch Hy
+    // Patch Hy
     else if((bc==221 || bc==211 || bc==121 || bc==111) && (gcv==55 || gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN_HY;
 
