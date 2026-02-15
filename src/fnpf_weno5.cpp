@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 fnpf_weno5::fnpf_weno5(lexer* p) :  ddweno_f_nug(p)
 {
-    p->Darray(ckz,p->knoz+1+4*marge,5);
+    p->Darray(ckz,p->knoz+1+2*marge,5);
     
     fnpf_discrete_weights dw(p);
 
