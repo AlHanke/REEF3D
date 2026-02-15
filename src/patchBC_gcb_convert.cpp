@@ -29,7 +29,7 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
 {
     // ----------------------------------------------------
     // line
-    for(qn=0;qn<p->B440;++qn)
+    for(int qn=0;qn<p->B440;++qn)
     {
         {
             istart = p->posc_i(p->B440_xs[qn]);
@@ -114,8 +114,7 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
 
     // ----------------------------------------------------
     // box
-    count=0;
-    for(qn=0;qn<p->B441;++qn)
+    for(int qn=0;qn<p->B441;++qn)
     {
         {
             istart = p->posc_i(p->B441_xs[qn]);
@@ -205,7 +204,7 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
     // circle
     double r;
 
-    for(qn=0;qn<p->B442;++qn)
+    for(int qn=0;qn<p->B442;++qn)
     {
         // 1
         for(n=0;n<p->gcb1_count;++n)

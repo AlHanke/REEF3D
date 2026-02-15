@@ -28,7 +28,7 @@ Author: Hans Bihs
 void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
 {
     // count gcbs
-    for(qn=0;qn<p->B440;++qn)
+    for(int qn=0;qn<p->B440;++qn)
     {
         int count=0;
 
@@ -55,7 +55,7 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
         }
     }
 
-    for(qn=0;qn<p->B441;++qn)
+    for(int qn=0;qn<p->B441;++qn)
     {
         int count=0;
 
@@ -89,7 +89,7 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
 
     // circle
     double r;
-    for(qn=0;qn<p->B442;++qn)
+    for(int qn=0;qn<p->B442;++qn)
     {
         int count=0;
         for(n=0;n<p->gcb4_count;++n)
