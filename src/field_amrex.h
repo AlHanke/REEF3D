@@ -41,6 +41,8 @@ public:
 
     amrex::MultiFab& GetMultiFab() override { return mf; }
 
+    void setVal(double val) override { mf.setVal(val,0); }
+
 protected:
     field_amrex(lexer* p);
 

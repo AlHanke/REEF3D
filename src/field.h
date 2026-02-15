@@ -35,6 +35,7 @@ public:
     virtual void fillBoundary()=0;
     virtual void FillDomainBoundary()=0;
     virtual amrex::MultiFab& GetMultiFab()=0;
+    virtual void setVal(double)=0;
 protected:
 	double *V;
 };
