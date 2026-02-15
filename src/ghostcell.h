@@ -269,7 +269,6 @@ private:
     void gravity_press(field&,int);
     void potentialbc(field&,int);
     void outflow(field&,int);
-    void sommerfeld(field&,int);
     void lsm(field&,int);
     void dirichlet_para(field&,double,int);
     void dirichlet_para_reflect(field&,double,int);

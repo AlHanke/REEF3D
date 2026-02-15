@@ -2703,7 +2703,6 @@
         <File Name="gc_gravity_press.cpp"/>
         <File Name="gc_lsm.cpp"/>
         <File Name="gc_neumann.cpp"/>
-        <File Name="gc_sommerfeld.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Flag">
         <File Name="gc_nhflow_ioflag.cpp"/>
