@@ -45,9 +45,6 @@ ghostcell::bc_labels ghostcell::gceval4a(lexer *p, int gcv, int bc, int cs)
     else if(gcv==150 || gcv==154)
      return bc_labels::NEUMANN;
 
-    else if(gcv==159)
-        return bc_labels::EXTEND;
-
     //topo for bedload
     else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==21 || bc==22) && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==161 || gcv==162 || gcv==163))
      return bc_labels::NEUMANN;
