@@ -31,10 +31,10 @@ ghostcell::bc_labels ghostcell::gcsleval1(int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
     //Wall
     // Parallel
-    if((bc==21||bc==22||bc==7||bc==5)&&(cs==2||cs==3||cs==5||cs==6)&&(gcv==10||gcv==1||gcv==20))
+    if((bc==21||bc==22||bc==7)&&(cs==2||cs==3||cs==5||cs==6)&&(gcv==10||gcv==1||gcv==20))
         return gclabel_u;
     // Orthogonal
-    else if((bc==21||bc==22||bc==5||(bc==7&&!awa_label))&&(cs==1||cs==4)&&(gcv==10||gcv==20||gcv==1))
+    else if((bc==21||bc==22||(bc==7&&!awa_label))&&(cs==1||cs==4)&&(gcv==10||gcv==20||gcv==1))
         return bc_labels::NOSLIP;
     //Inflow: none
     //Patch

@@ -86,7 +86,7 @@ void directreini::wallf_update(lexer *p, fdm *a, ghostcell *pgc)
 	wallf(i,j,k)=0;
 	
 	GC4LOOP
-	if(p->gcb4[n][4]==21 || p->gcb4[q][4]==22 || p->gcb4[n][4]==5)
+	if(p->gcb4[n][4]==21)
 	{
 	i = p->gcb4[n][0];
 	j = p->gcb4[n][1];

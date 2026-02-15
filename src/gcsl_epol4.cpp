@@ -127,7 +127,7 @@ ghostcell::bc_labels ghostcell::gcsleval4(int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Potential Ini
-    else if((bc==21||bc==22||bc==5||bc==41||bc==42||bc==43||bc==9)&&(gcv==49))
+    else if((bc==21||bc==22||bc==9)&&(gcv==49))
         return bc_labels::NEUMANN;
 
     else if((bc==2||bc==1||bc==6||bc==7||bc==8)&&(gcv==49))

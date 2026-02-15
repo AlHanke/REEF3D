@@ -480,7 +480,7 @@ void lexer::read_grid()
         if(surfgroup==1 || surfgroup==6)
             ++gcin_count;
 
-        if(surfgroup==2 || surfgroup==7 || surfgroup==8)
+        if(surfgroup==2 || surfgroup==7)
             ++gcout_count;
     }
 

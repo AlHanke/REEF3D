@@ -32,11 +32,11 @@ ghostcell::bc_labels ghostcell::gcsleval2(int gcv, int bc, int cs)
 
     //Wall
     // Parallel
-    if((bc==21||bc==22||bc==7||bc==6||bc==5||bc==1)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==11||gcv==21||gcv==2))
+    if((bc==21||bc==22||bc==7||bc==6||bc==1)&&(cs==1||cs==4||cs==5||cs==6)&&(gcv==11||gcv==21||gcv==2))
         return gclabel_v;
 
     // Orthogonal
-    else if((bc==21||bc==22||bc==5||bc==7)&&(cs==2||cs==3)&&(gcv==11||gcv==21||gcv==2))
+    else if((bc==21||bc==22||bc==7)&&(cs==2||cs==3)&&(gcv==11||gcv==21||gcv==2))
         return bc_labels::NOSLIP;
 
     //Inflow
