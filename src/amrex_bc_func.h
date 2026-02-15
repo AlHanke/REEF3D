@@ -565,10 +565,7 @@ public:
         //Const parameters needed for BC decision making
         const amrex::Array<int,6> bc_values = {};
         const amrex::Array<amrex::Real,6> heat_values = {};
-        const int margin = 0;
-        const int orderdir = 3;
         const bool y_dimension_exists = true;
-        const double gamma = 0;
         const unsigned int data_location = static_cast<unsigned int>(DataLocation::CELL_CENTERED);
     };
     struct MyExtBCFillFieldParams {
@@ -586,10 +583,8 @@ public:
         MyExtBCFillField() = delete;
 
         AMREX_GPU_HOST_DEVICE
-        MyExtBCFillField(const ConstMyExtBCFillFieldParams const_params, const MyExtBCFillFieldParams params,
-                const int gcv, const BCDecision& decision,
-                const amrex::Box* boxes, const int num_boxes)
-            : m_const_params(const_params), m_params(params), m_gcv(gcv), m_bc_decision(decision), m_boxes(boxes), m_num_boxes(num_boxes) {}
+        MyExtBCFillField(const ConstMyExtBCFillFieldParams const_params, const MyExtBCFillFieldParams params)
+            : m_const_params(const_params), m_params(params) {}
 
         AMREX_GPU_DEVICE
         void operator() (const amrex::IntVect& iv, amrex::Array4<amrex::Real> const& dest,
@@ -598,52 +593,64 @@ public:
                         const amrex::BCRec* bcr, const int bcomp,
                         const int orig_comp) const
         {
-            amrex::ignore_unused(time, bcr, bcomp, orig_comp);
+            amrex::ignore_unused(time, orig_comp);
 
-            if (!m_const_params.y_dimension_exists && iv[1] != 0)
-                return;
-
-            BoundaryConditionTypeLabel label = BoundaryConditionTypeLabel::NONE;
-            const amrex::Box* matched_box = nullptr;
-            int face_for_bc = 0;
-            bool is_corner = false;
-            int cs = 0;
-
-            for (int idx = 0; idx < m_num_boxes; ++idx)
+            if(!m_const_params.y_dimension_exists && iv[1]!=0)
             {
-                const amrex::Box& box = m_boxes[idx];
-                int face = detect_face(iv, box);
-                if (face > 0)
-                {
-                    int bc_code = m_const_params.bc_values[face-1];
-                    if (bc_code == 0)
-                        continue;
-                    cs = cs_from_face(face);
-                    label = m_bc_decision.evaluate(m_gcv, bc_code, cs);
-                    if (label != BoundaryConditionTypeLabel::NONE)
-                    {
-                        matched_box = &box;
-                        face_for_bc = face;
-                        break;
-                    }
-                }
-                else if (is_corner_layer1(iv, box))
-                {
-                    // label = evaluate_corner(iv, box, face_for_bc);
-                    // if (label != BoundaryConditionTypeLabel::NONE)
-                    // {
-                        matched_box = &box;
-                        is_corner = true;
-                        label = BoundaryConditionTypeLabel::NEUMANN;
-                        break;
-                    // }
-                }
+                for(int n=0; n<numcomp; ++n)
+                    dest(iv, dcomp+n) = amrex::Real(0);
+                return;
             }
 
-            if (label == BoundaryConditionTypeLabel::NONE || matched_box == nullptr)
-                return;
-
             const amrex::Box dom = geom.Domain();
+
+            // Determine primary face/direction
+            // Note: This logic assumes simple orthogonal exterior check.
+            // Only one direction is picked for BC application if in corner?
+            // AMReX typically invokes for specific fill regions.
+            // MyExtBCFillField needs to decide which BC applies.
+
+            // Replicate detect_face logic but relative to Domain
+            int face = 0;
+            int edge = 0;
+            if(iv[2] < dom.smallEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
+                face = 5; // Z Min
+            else if(iv[2] > dom.bigEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
+                face = 6; // Z Max
+            else if(iv[0] < dom.smallEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                face = 1; // X Min
+            else if(iv[0] > dom.bigEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                face = 2; // X Max
+            else if(iv[1] < dom.smallEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                face = 3; // Y Min
+            else if(iv[1] > dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                face = 4; // Y Max
+            else if(iv[0] < dom.smallEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] < dom.smallEnd(2))
+                edge = 1; // X Min, Z Min
+            else if(iv[0] < dom.smallEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] > dom.bigEnd(2))
+                edge = 2; // X Min, Z Max
+            else if(iv[0] > dom.bigEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] < dom.smallEnd(2))
+                edge = 3; // X Max, Z Min
+            else if(iv[0] > dom.bigEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] > dom.bigEnd(2))
+                edge = 4; // X Max, Z Max
+            else if(iv[1] < dom.smallEnd(1) && iv[0] < dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                edge = 5; // Y Min, X Min
+            else if(iv[1] < dom.smallEnd(1) && iv[0] > dom.bigEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                edge = 6; // Y Min, X Max
+            else if(iv[1] > dom.bigEnd(1) && iv[0] < dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                edge = 7; // Y Max, X Min
+            else if(iv[1] >  dom.bigEnd(1) && iv[0] > dom.bigEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+                edge = 8; // Y Max, X Max
+            else if(iv[2] < dom.smallEnd(2) && iv[1] < dom.smallEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
+                edge = 9; // Z Min, Y Min
+            else if(iv[2] < dom.smallEnd(2) && iv[1] > dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
+                edge = 10; // Z Min, Y Max
+            else if(iv[2] > dom.bigEnd(2) && iv[1] < dom.smallEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
+                edge = 11; // Z Max, Y Min
+            else if(iv[2] > dom.bigEnd(2) && iv[1] > dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
+                edge = 12; // Z Max, Y Max
+
+            // Compute interior coordinate
             amrex::IntVect interior = iv;
             for(int dir=0; dir<AMREX_SPACEDIM; ++dir)
             {
@@ -657,12 +664,127 @@ public:
                 }
             }
 
-            if (!is_corner && !is_within_margin(iv, *matched_box, face_for_bc))
-                return;
             for(int n=0; n<numcomp; ++n)
             {
+                BoundaryConditionTypeLabel label = BoundaryConditionTypeLabel::NONE;
+                int cs = 0;
+
+                // Map face to Dirk/CS and get label from BCRec
+                // Face mapping: 1->X_NEG(1), 2->X_POS(4), 3->Y_NEG(3), 4->Y_POS(2), 5->Z_NEG(5), 6->Z_POS(6)
+                const int bcrec_idx = bcomp + n;
+                switch(face) {
+                    case 1:
+                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(0));
+                        cs = static_cast<int>(Dir::X_NEG);
+                        break;
+                    case 2:
+                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(0));
+                        cs = static_cast<int>(Dir::X_POS);
+                        break;
+                    case 3:
+                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(1));
+                        cs = static_cast<int>(Dir::Y_NEG);
+                        break;
+                    case 4:
+                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(1));
+                        cs = static_cast<int>(Dir::Y_POS);
+                        break;
+                    case 5:
+                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(2));
+                        cs = static_cast<int>(Dir::Z_NEG);
+                        break;
+                    case 6:
+                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(2));
+                        cs = static_cast<int>(Dir::Z_POS);
+                        break;
+                    case 0:
+                    switch (edge)
+                    {
+                        case 1:
+                            if(bcr[bcrec_idx].lo(0) == bcr[bcrec_idx].lo(2) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(0)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 2:
+                            if(bcr[bcrec_idx].lo(0) == bcr[bcrec_idx].hi(2) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(0)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 3:
+                            if(bcr[bcrec_idx].hi(0) == bcr[bcrec_idx].lo(2) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(0)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 4:
+                            if(bcr[bcrec_idx].hi(0) == bcr[bcrec_idx].hi(2) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(0)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 5:
+                            if(bcr[bcrec_idx].lo(1) == bcr[bcrec_idx].lo(0) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(1)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 6:
+                            if(bcr[bcrec_idx].lo(1) == bcr[bcrec_idx].hi(0) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(1)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 7:
+                            if(bcr[bcrec_idx].hi(1) == bcr[bcrec_idx].lo(0) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(1)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 8:
+                            if(bcr[bcrec_idx].hi(1) == bcr[bcrec_idx].hi(0) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(1)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 9:
+                            if(bcr[bcrec_idx].lo(2) == bcr[bcrec_idx].lo(1) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(2)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 10:
+                            if(bcr[bcrec_idx].lo(2) == bcr[bcrec_idx].hi(1) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(2)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 11:
+                            if(bcr[bcrec_idx].hi(2) == bcr[bcrec_idx].lo(1) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(2)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 12:
+                            if(bcr[bcrec_idx].hi(2) == bcr[bcrec_idx].hi(1) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(2)) == BoundaryConditionTypeLabel::NEUMANN)
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            else
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            break;
+                        case 0:
+                            if(is_corner_layer1(iv, dom))
+                                label = BoundaryConditionTypeLabel::NOSLIP;
+                            else
+                                label = BoundaryConditionTypeLabel::NEUMANN;
+                            break;
+                    }
+                }
+
                 switch (label)
                 {
+                    case BoundaryConditionTypeLabel::NONE:
+                        break;
                     case BoundaryConditionTypeLabel::NEUMANN:
                     default:
                         dest(iv, dcomp+n) = dest(interior, dcomp+n);
@@ -713,107 +835,28 @@ public:
 
     private:
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        int detect_face(const amrex::IntVect& iv, const amrex::Box& dom) const
+        bool is_corner_layer1(const amrex::IntVect& iv, const amrex::Box& box) const
         {
-            if(iv[2] < dom.smallEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1))
-                return 5;
-            else if(iv[2] > dom.bigEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1))
-                return 6;
-            else if(iv[0] < dom.smallEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                return 1;
-            else if(iv[0] > dom.bigEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                return 2;
-            else if(iv[1] < dom.smallEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                return 3;
-            else if(iv[1] > dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                return 4;
-            else
-                return 0;
-        }
-
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        BoundaryConditionTypeLabel evaluate_corner(const amrex::IntVect& iv, const amrex::Box& box, int& face_out) const
-        {
-            for (int dir = 0; dir < AMREX_SPACEDIM; ++dir)
+            int max_dist = 0;
+            for(int dir=0; dir<AMREX_SPACEDIM; ++dir)
             {
+                int d = 0;
                 if (iv[dir] < box.smallEnd(dir))
                 {
-                    int face = face_for_dir(dir, false);
-                    face_out = face;
-                    int bc_code = m_const_params.bc_values[face-1];
-                    if (bc_code == 0) continue;
-                    return m_bc_decision.evaluate(m_gcv, bc_code, cs_from_face(face));
+                    d = box.smallEnd(dir) - iv[dir];
                 }
                 else if (iv[dir] > box.bigEnd(dir))
                 {
-                    int face = face_for_dir(dir, true);
-                    face_out = face;
-                    int bc_code = m_const_params.bc_values[face-1];
-                    if (bc_code == 0) continue;
-                    return m_bc_decision.evaluate(m_gcv, bc_code, cs_from_face(face));
-                }
-            }
-            return BoundaryConditionTypeLabel::NONE;
-        }
-
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        bool is_corner_layer1(const amrex::IntVect& iv, const amrex::Box& box) const
-        {
-            int outside_dims = 0;
-            int max_dist = 0;
-            for(int dir=0; dir<AMREX_SPACEDIM; ++dir) {
-                int d = 0;
-                if (iv[dir] < box.smallEnd(dir)) {
-                    d = box.smallEnd(dir) - iv[dir];
-                    outside_dims++;
-                }
-                else if (iv[dir] > box.bigEnd(dir)) {
                     d = iv[dir] - box.bigEnd(dir);
-                    outside_dims++;
                 }
                 if (d > max_dist) max_dist = d;
             }
 
-            return (outside_dims >= 2) && (max_dist == 1);
-        }
-
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        bool is_within_margin(const amrex::IntVect& iv, const amrex::Box& box, int face) const
-        {
-            if (face <= 0 || m_const_params.margin <= 0)
-                return false;
-
-            int dir = (face < 3) ? 0 : (face < 5 ? 1 : 2);
-            bool high = (face % 2) == 0;
-            int boundary = high ? box.bigEnd(dir) : box.smallEnd(dir);
-            int dist = high ? iv[dir] - boundary : boundary - iv[dir];
-            return (dist >= 1) && (dist <= m_const_params.margin);
-        }
-
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        int cs_from_face(int face) const
-        {
-            constexpr int map[] = {0, 1, 4, 3, 2, 5, 6};
-            return map[face];
-        }
-
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        int face_for_dir(int dir, bool high) const
-        {
-            if (dir == 0)
-                return high ? 2 : 1;
-            else if (dir == 1)
-                return high ? 4 : 3;
-            else
-                return high ? 6 : 5;
+            return (max_dist == 1);
         }
 
         const ConstMyExtBCFillFieldParams m_const_params{};
         const MyExtBCFillFieldParams m_params{};
-        BCDecision m_bc_decision;
-        const amrex::Box* m_boxes = nullptr;
-        const int m_num_boxes = 0;
-        const int m_gcv = 0;
     };
 };
 
