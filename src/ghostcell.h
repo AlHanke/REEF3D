@@ -285,10 +285,10 @@ private:
     void gcsldistro4(lexer*, slice&, int, int, int, int, int, int);
     void gcsldistro4a(lexer*, slice&, int, int, int, int, int, int);
 
-    void gcsldistro1int(lexer*, sliceint&, int, int, int, int, int, int);
-    void gcsldistro2int(lexer*, sliceint&, int, int, int, int, int, int);
-    void gcsldistro4int(lexer*, sliceint&, int, int, int, int, int, int);
-    void gcsldistro4Vint(lexer*, int*, int, int, int, int, int, int);
+     void gcsldistro1int(sliceint&, int, int, int);
+    void gcsldistro2int(sliceint&, int, int, int);
+    void gcsldistro4int(sliceint&, int, int, int);
+    void gcsldistro4Vint(lexer*, int*, int, int, int);
 
     int gcsleval1(lexer*,int,int,int);
     int gcsleval2(lexer*,int,int,int);
