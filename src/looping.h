@@ -274,8 +274,4 @@ Authors: Hans Bihs, Alexander Hanke
 #define GCDF4CHECK if(p->gcdf4[n][3]>0)
 #define GCDF4LOOP GCDF4 GCDF4CHECK
 
-#define QQGC4A for(qq=0;qq<p->gcb4a_count;++qq)
-#define QQGCB4ACHECK if(p->gcb4a[qq][3]>0)
-#define QQGC4ALOOP QQGC4A QQGCB4ACHECK
-
 #endif

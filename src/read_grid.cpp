@@ -301,7 +301,7 @@ void lexer::read_grid()
 
     topo_gcb_est*=4;
 
-    gcb1_count=gcb2_count=gcb3_count=gcb4_count=gcb4a_count=gcwall_count;
+    gcb1_count=gcb2_count=gcb3_count=gcb4_count=gcwall_count;
 
     gcpara_sum=gcpara1_count+gcpara2_count+gcpara3_count+gcpara4_count+gcpara5_count+gcpara6_count;
     gcparaco1_count+gcparaco2_count+gcparaco3_count+gcparaco4_count+gcparaco5_count+gcparaco6_count;
@@ -348,13 +348,11 @@ void lexer::read_grid()
         Iarray(gcb2, gcb2_count,6);
         Iarray(gcb3, gcb3_count,6);
         Iarray(gcb4, gcb4_count,6);
-        Iarray(gcb4a, gcb4a_count,6);
 
         Darray(gcd1, gcb1_count);
         Darray(gcd2, gcb2_count);
         Darray(gcd3, gcb3_count);
         Darray(gcd4, gcb4_count);
-        Darray(gcd4a, gcb4a_count);
     }
 
     Iarray(gcpara1, gcpara1_count,16);
