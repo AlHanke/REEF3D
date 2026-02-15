@@ -53,20 +53,3 @@ void lexer::assign_margin()
 	jmin=-margin;
 	kmin=-margin;
 }
-
-int lexer::maxparacount()
-{
-        maxpara=0;
-
-        maxpara=MAX(gcpara1_count,gcpara2_count);
-
-        maxpara=MAX(maxpara,gcpara3_count);
-        maxpara=MAX(maxpara,gcpara4_count);
-        maxpara=MAX(maxpara,gcpara5_count);
-        maxpara=MAX(maxpara,gcpara6_count);
-
-        return maxpara;
-}
-
-
-

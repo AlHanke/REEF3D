@@ -39,7 +39,6 @@ public:
 	virtual ~reinisolid_RK3();
 	void start(lexer*,fdm*,ghostcell*,field&) override;
 
-	int *sizeM;
 	field4a f,frk1,frk2,L,dt;
 
 private:

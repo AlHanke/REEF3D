@@ -68,8 +68,6 @@ void lexer::lexer_ini()
     wd=0.0;
     wC=0.0;
 	
-	velcorr=1;
-	
 	ufbmax=0.0;
 	vfbmax=0.0;
 	wfbmax=0.0;

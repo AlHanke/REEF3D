@@ -102,7 +102,6 @@ private:
     
 // -------------
 	
-	int *sizeM;
 
 	int numiter,count,q;
 	double resi,y,residual;

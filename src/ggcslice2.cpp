@@ -27,7 +27,7 @@ Author: Hans Bihs
 void mgcslice2::make_ggc(lexer* p)
 {
 	p->ggcslsize2=1;
-	p->Iarray(p->ggcsl2,p->ggcslsize2,3);
+	p->Iarray(p->ggcsl2,p->ggcslsize2,2);
 }
 
 void mgcslice2::fill_ggc(lexer* p)
@@ -35,7 +35,8 @@ void mgcslice2::fill_ggc(lexer* p)
 	int q,qq,n,nn,a;
 	int check;
 	
-	p->Iarray(p->ggcslmem2,imax*jmax);
+    int *ggcslmem2;
+	p->Iarray(ggcslmem2,imax*jmax);
 
 //--------------------------
 //WALL1
@@ -47,19 +48,19 @@ void mgcslice2::fill_ggc(lexer* p)
 
 		if(p->gcbsl2[n][3]==1)
 		for(q=0;q<p->margin;++q)
-        p->ggcslmem2[(i-imin-q-1)*jmax + (j-jmin)]+=1;
+            ggcslmem2[(i-imin-q-1)*jmax + (j-jmin)]+=1;
 
 		if(p->gcbsl2[n][3]==4)
 		for(q=0;q<p->margin;++q)
-		p->ggcslmem2[(i-imin+q+1)*jmax + (j-jmin)]+=1;
+		    ggcslmem2[(i-imin+q+1)*jmax + (j-jmin)]+=1;
 
 		if(p->gcbsl2[n][3]==3)
 		for(q=0;q<p->margin;++q)
-        p->ggcslmem2[(i-imin)*jmax + (j-jmin-q-1)]+=1;
+            ggcslmem2[(i-imin)*jmax + (j-jmin-q-1)]+=1;
 
 		if(p->gcbsl2[n][3]==2)
 		for(q=0;q<p->margin;++q)
-		p->ggcslmem2[(i-imin)*jmax + (j-jmin+q+1)]+=1;
+		    ggcslmem2[(i-imin)*jmax + (j-jmin+q+1)]+=1;
 
 	}
 
@@ -69,13 +70,13 @@ void mgcslice2::fill_ggc(lexer* p)
 	for(i=0;i<imax;++i)
 	for(j=0;j<jmax;++j)
 	{
-        if(p->ggcslmem2[a]>1)
+        if(ggcslmem2[a]>1)
         ++p->ggcslcount2;
 
 	++a;
 	}
 	
-	p->Iresize(p->ggcsl2,p->ggcslsize2,p->ggcslcount2*p->margin, 3, 3);
+	p->Iresize(p->ggcsl2,p->ggcslsize2,p->ggcslcount2*p->margin, 2, 2);
 	p->ggcslsize2=p->ggcslcount2*p->margin;
 
 //--------------------------
@@ -88,11 +89,11 @@ void mgcslice2::fill_ggc(lexer* p)
 
 		if(p->gcbsl2[qq][3]==1)
 		for(q=0;q<p->margin;++q)
-		if(p->ggcslmem2[(i-imin-q-1)*jmax + (j-jmin)]>1)
+		if(ggcslmem2[(i-imin-q-1)*jmax + (j-jmin)]>1)
         {
-            if(p->ggcslmem2[(i-imin-q-1)*jmax + (j-jmin)]<10)
+            if(ggcslmem2[(i-imin-q-1)*jmax + (j-jmin)]<10)
             {
-             p->ggcslmem2[(i-imin-q-1)*jmax + (j-jmin)]=n+10;
+                ggcslmem2[(i-imin-q-1)*jmax + (j-jmin)]=n+10;
 			 p->ggcsl2[n][0]=i-q-1;
 			 p->ggcsl2[n][1]=j;
 			 ++n;
@@ -101,11 +102,11 @@ void mgcslice2::fill_ggc(lexer* p)
 
         if(p->gcbsl2[qq][3]==4)
         for(q=0;q<p->margin;++q)
-		if(p->ggcslmem2[(i-imin+q+1)*jmax + (j-jmin)]>1)
+		if(ggcslmem2[(i-imin+q+1)*jmax + (j-jmin)]>1)
         {
-            if(p->ggcslmem2[(i-imin+q+1)*jmax + (j-jmin)]<10)
+            if(ggcslmem2[(i-imin+q+1)*jmax + (j-jmin)]<10)
             {
-            p->ggcslmem2[(i-imin+q+1)*jmax + (j-jmin)]=n+10;
+                ggcslmem2[(i-imin+q+1)*jmax + (j-jmin)]=n+10;
 			p->ggcsl2[n][0]=i+q+1;
 			p->ggcsl2[n][1]=j;
 			++n;
@@ -114,11 +115,11 @@ void mgcslice2::fill_ggc(lexer* p)
 
         if(p->gcbsl2[qq][3]==3)
         for(q=0;q<p->margin;++q)
-		if(p->ggcslmem2[(i-imin)*jmax + (j-jmin-q-1)]>1)
+		if(ggcslmem2[(i-imin)*jmax + (j-jmin-q-1)]>1)
         {
-            if(p->ggcslmem2[(i-imin)*jmax + (j-jmin-q-1)]<10)
+            if(ggcslmem2[(i-imin)*jmax + (j-jmin-q-1)]<10)
             {
-            p->ggcslmem2[(i-imin)*jmax + (j-jmin-q-1)]=n+10;
+                ggcslmem2[(i-imin)*jmax + (j-jmin-q-1)]=n+10;
 			p->ggcsl2[n][0]=i;
 			p->ggcsl2[n][1]=j-q-1;
 			++n;
@@ -127,11 +128,11 @@ void mgcslice2::fill_ggc(lexer* p)
 
 		if(p->gcbsl2[qq][3]==2)
 		for(q=0;q<p->margin;++q)
-		if(p->ggcslmem2[(i-imin)*jmax + (j-jmin+q+1)]>1)
+		if(ggcslmem2[(i-imin)*jmax + (j-jmin+q+1)]>1)
         {
-            if(p->ggcslmem2[(i-imin)*jmax + (j-jmin+q+1)]<10)
+            if(ggcslmem2[(i-imin)*jmax + (j-jmin+q+1)]<10)
             {
-            p->ggcslmem2[(i-imin)*jmax + (j-jmin+q+1)]=n+10;
+                ggcslmem2[(i-imin)*jmax + (j-jmin+q+1)]=n+10;
 			p->ggcsl2[n][0]=i;
 			p->ggcsl2[n][1]=j+q+1;
 			++n;
@@ -141,7 +142,7 @@ void mgcslice2::fill_ggc(lexer* p)
 	p->ggcslcount2=n;
 
 
-	p->del_Iarray(p->ggcslmem2,imax*jmax);
+	p->del_Iarray(ggcslmem2,imax*jmax);
 }
 
 

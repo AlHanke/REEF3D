@@ -58,7 +58,6 @@ void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         p->gcin[count1][1]=p->gcb4[n][1];
         p->gcin[count1][2]=p->gcb4[n][2];
         p->gcin[count1][3]=p->gcb4[n][3];
-        p->gcin[count1][4]=p->gcb4[n][5];
         ++count1;
         }
 
@@ -68,7 +67,6 @@ void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         p->gcout[count2][1]=p->gcb4[n][1];
         p->gcout[count2][2]=p->gcb4[n][2];
         p->gcout[count2][3]=p->gcb4[n][3];
-        p->gcout[count2][4]=p->gcb4[n][5];
         ++count2;
         }
     }

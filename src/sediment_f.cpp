@@ -37,10 +37,6 @@ sediment_f::sediment_f(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb, patc
     pBC = ppBC;
     
     sediment_logic(p,a,pgc,pturb);
-
-	p->gcin4a_count=p->gcin_count;
-	p->gcout4a_count=p->gcout_count;
-	
     
     volume_token=0;
     

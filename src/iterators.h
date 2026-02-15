@@ -23,16 +23,8 @@ Author: Hans Bihs
 #ifndef ITERATORS_H_
 #define ITERATORS_H_
 
-#define NLOOP1 for(n=p->sizeM1[0]; n<p->sizeM1[1]; ++n)
-#define NLOOP2 for(n=p->sizeM2[0]; n<p->sizeM2[1]; ++n)
-#define NLOOP3 for(n=p->sizeM3[0]; n<p->sizeM3[1]; ++n)
 #define NLOOP4 for(n=p->sizeM4[0]; n<p->sizeM4[1]; ++n)
-#define NLOOP4A for(n=p->sizeM4a[0]; n<p->sizeM4a[1]; ++n)	
-#define NLOOP6 for(n=p->sizeM6[0]; n<p->sizeM6[1]; ++n)
-#define NLOOP9 for(n=p->sizeM9[0]; n<p->sizeM9[1]; ++n)
-#define NLOOP for(n=sizeM[0]; n<sizeM[1]; ++n)
 #define VECLOOP for(n=0; n<p->veclength; ++n)
-
 
 #define PORVAL1 (0.5*(a->porosity(i+1,j,k) + a->porosity(i,j,k)))
 #define PORVAL2 (0.5*(a->porosity(i,j+1,k) + a->porosity(i,j,k)))
