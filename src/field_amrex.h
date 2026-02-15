@@ -196,7 +196,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             amrex::Gpu::copy(amrex::Gpu::hostToDevice, cloc_boxes.begin(), cloc_boxes.end(), cdevice_boxes.begin());
 
             amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> cbf(
-                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, gcv, bc_decision,
+                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params, gcv, bc_decision,
                                                         cdevice_boxes.data(), static_cast<int>(cdevice_boxes.size())});
 
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> cphysbcf(
@@ -212,7 +212,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             amrex::Gpu::copy(amrex::Gpu::hostToDevice, floc_boxes.begin(), floc_boxes.end(), fdevice_boxes.begin());
 
             amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> fbf(
-                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, gcv, bc_decision,
+                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params, gcv, bc_decision,
                                                         fdevice_boxes.data(), static_cast<int>(fdevice_boxes.size())});
 
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> fphysbcf(
