@@ -69,14 +69,14 @@ void initialize::start(fdm* a, lexer* p, ghostcell* pgc)
 
 void initialize::inifdm(lexer* p, fdm* a, ghostcell* pgc)
 {	
-		ULOOP
-		a->u(i,j,k)=0.0;
+    ULOOP
+    a->u(i,j,k)=0.0;
 
-		VLOOP
-		a->v(i,j,k)=0.0;
+    VLOOP
+    a->v(i,j,k)=0.0;
 
-		WLOOP
-        a->w(i,j,k)=0.0;
+    WLOOP
+    a->w(i,j,k)=0.0;
 
 	LOOP
 	{
