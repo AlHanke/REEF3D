@@ -82,8 +82,8 @@ void directreini::constraint(lexer *p, fdm* a, ghostcell *pgc, field& b)
 void directreini::wallf_update(lexer *p, fdm *a, ghostcell *pgc)
 {
 	int n;
-	LOOP
-	wallf(i,j,k)=0;
+
+    wallf.setVal(0);
 	
 	GC4LOOP
 	if(p->gcb4[n][4]==21)

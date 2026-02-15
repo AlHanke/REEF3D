@@ -38,8 +38,7 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
     WLOOP
     a->fbh3(i,j,k) = 0.0;
 
-    LOOP
-    a->fbh4(i,j,k) = 0.0;
+    a->fbh4.setVal(0.0);
 
     start1(p,a->fbh1,10);
     start2(p,a->fbh2,11);

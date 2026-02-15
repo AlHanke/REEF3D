@@ -27,11 +27,8 @@ Author: Hans Bihs
 
 void particle_pls::setup(lexer* p, fdm* a, ghostcell* pgc)
 {
-	LOOP
-	{
-		posnum(i,j,k)=0.0;
-		negnum(i,j,k)=0.0;
-	}
+    posnum.setVal(0.0);
+    negnum.setVal(0.0);
 	
 	pgc->start4(p,posnum,1);
 	pgc->start4(p,negnum,1);

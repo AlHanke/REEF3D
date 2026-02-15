@@ -245,8 +245,7 @@ void potential_water::laplace(lexer *p, fdm *a, field &phi)
 
 void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
 {
-    LOOP
-    bc(i,j,k)=0;
+    bc.setVal(0);
     
     LOOP
     {

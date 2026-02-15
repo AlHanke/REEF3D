@@ -34,8 +34,7 @@ double vofdiff, xdiff;
 p->phimean=p->F56;
 
 
-    LOOP
-	a->vof(i,j,k)=0.0;
+	a->vof.setVal(0.0);
 
 
 	LOOP
