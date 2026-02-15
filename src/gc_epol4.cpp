@@ -54,19 +54,19 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // wavegen
-    else if(((bc==6 && !pressin_lable) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
+    else if(((bc==6 && !pressin_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // awa beach
-    else if(((bc==7 && !awa_lable) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
+    else if(((bc==7 && !awa_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // inflow
-    else if(((bc==1 && !pressin_lable) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
+    else if(((bc==1 && !pressin_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return gclabel_press_in;
 
     // outflow
-    else if(((bc==2 && !pressout_lable) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
+    else if(((bc==2 && !pressout_label) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // amtosphere
@@ -126,11 +126,11 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     // omega (sigma coordinate)
     // Parallel
     // Wall
-    else if((bc==5 || bc==21 || bc==22 || (bc==7 && !awa_lable)) && (cs==1 || cs==2 || cs==3 || cs==4) && gcv==12)
+    else if((bc==5 || bc==21 || bc==22 || (bc==7 && !awa_label)) && (cs==1 || cs==2 || cs==3 || cs==4) && gcv==12)
         return bc_labels::NEUMANN;
 
     // Othogonal
-    else if((bc==5 || bc==21 || bc==22 || (bc==7 && !awa_lable)) && cs==6 && gcv==12)
+    else if((bc==5 || bc==21 || bc==22 || (bc==7 && !awa_label)) && cs==6 && gcv==12)
         return bc_labels::NOSLIP;
 
     //Inflow
@@ -239,7 +239,7 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::DEBUG;
 
     // NHFLOW
-    else if(((bc==2 && !pressout_lable) || bc==3 || bc==5 || bc==6 || (bc==7 && !awa_lable) || bc==21 || bc==22 || bc==111 || bc==112 || bc==211 || bc==212) && cs!=6 && gcv==540)
+    else if(((bc==2 && !pressout_label) || bc==3 || bc==5 || bc==6 || (bc==7 && !awa_label) || bc==21 || bc==22 || bc==111 || bc==112 || bc==211 || bc==212) && cs!=6 && gcv==540)
         return bc_labels::NEUMANN;
 
     else if(bc==3 && cs==6 && gcv==540)

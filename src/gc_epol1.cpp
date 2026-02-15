@@ -31,13 +31,13 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
 
     // Parallel
     //Wall
-    else if(((bc==7 && !awa_lable) || bc==21 || bc==22) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==1 || gcv==10 || gcv==114))
+    else if(((bc==7 && !awa_label) || bc==21 || bc==22) && (cs==2 || cs==3 || cs==5 || cs==6) && (gcv==1 || gcv==10 || gcv==114))
         return gclabel_u;
 
-    else if((bc==5 || (bc==7 && !awa_lable) || bc==21 || bc==22) && (cs==2 || cs==3 || cs==5 || cs==6) && gcv==110)
+    else if((bc==5 || (bc==7 && !awa_label) || bc==21 || bc==22) && (cs==2 || cs==3 || cs==5 || cs==6) && gcv==110)
         return bc_labels::NOSLIP;
 
-    else if(((bc==7 && !awa_lable) || bc==21 || bc==22) && (cs==2 || cs==3 || cs==5 || cs==6) && gcv==117)
+    else if(((bc==7 && !awa_label) || bc==21 || bc==22) && (cs==2 || cs==3 || cs==5 || cs==6) && gcv==117)
         return bc_labels::NEUMANN;
 
     // Topo

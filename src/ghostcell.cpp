@@ -108,9 +108,9 @@ void ghostcell::gc_ini(lexer* p)
         gclabel_w_orth=bc_labels::DIRICHLET_ORTH_REFLECT;
     }
 
-    awa_lable=false;
+    awa_label=false;
     if(p->B99>=3)
-    awa_lable=true;
+    awa_label=true;
 
 
     if(p->B75==1)
@@ -155,14 +155,14 @@ void ghostcell::gc_ini(lexer* p)
     gclabel_press_in=bc_labels::NONE;
 
     // pressure inflow
-    pressin_lable=false;
+    pressin_label=false;
     if(p->B76!=1)
-    pressin_lable=true;
+    pressin_label=true;
 
     // pressure outflow
-    pressout_lable=false;
+    pressout_label=false;
     if(p->B77==1 || p->B77==10)
-    pressout_lable=true;
+    pressout_label=true;
 
     // sflow slip/no-slip
     if(p->A217==1 && p->A10==2)
