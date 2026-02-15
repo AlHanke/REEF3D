@@ -68,9 +68,9 @@ Author: Hans Bihs, Alexander Hanke
 #define JBLOOP for(j = -1; j <= jmax_amrex+1; ++j)
 #define KBLOOP for(k = -1; k <= kmax_amrex+1; ++k)
 
-#define IMALOOP for(i = -p->margin; i <= imax_amrex + p->margin; ++i)
-#define JMALOOP for(j = -p->margin; j <= jmax_amrex + p->margin; ++j)
-#define KMALOOP for(k = -p->margin; k <= kmax_amrex + p->margin; ++k)
+#define IMALOOP for(i = -p->amr_mf[p->level].nGrow(0); i <= imax_amrex + p->amr_mf[p->level].nGrow(0); ++i)
+#define JMALOOP for(j = -p->amr_mf[p->level].nGrow(1); j <= jmax_amrex + p->amr_mf[p->level].nGrow(1); ++j)
+#define KMALOOP for(k = -p->amr_mf[p->level].nGrow(2); k <= kmax_amrex + p->amr_mf[p->level].nGrow(2); ++k)
 
 #define IFLEXLOOP for(i = 0; i <= imax_amrex - ulast; ++i)
 #define JFLEXLOOP for(j = 0; j <= jmax_amrex - vlast; ++j)
