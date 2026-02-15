@@ -32,12 +32,8 @@ void fsf_vtp::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
     TPLOOP
 	eta(i,j,k) = (p->ipol4phi(a,a->phi));
 
-	
-    NDBASELOOP
-    vertice(i,j,k)=-1;
-
-    NDBASELOOP
-    nodeflag(i,j,k)=0;
+    vertice.setVal(-1,true);
+    nodeflag.setVal(0,true);
 
     BASELOOP
     {

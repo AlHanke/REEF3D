@@ -157,9 +157,9 @@ void VOF_PLIC::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostce
     
     //-------------------------------------------
     // FSF
+    a->L.setVal(0.0);
     LOOP
     {
-	a->L(i,j,k)=0.0;
     VoF(i,j,k)=a->vof(i,j,k);
     }
 /*

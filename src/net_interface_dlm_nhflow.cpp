@@ -38,11 +38,9 @@ void net_interface::dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int nNet)
     const EigenMat& lagrangePoints = pnet[nNet]->getLagrangePoints();
     const EigenMat& lagrangeForces = pnet[nNet]->getLagrangeForces();
 
-    LOOP
-    kernel_x(i,j,k) = 0.0;
+    kernel_x.setVal(0.0);
 
-    LOOP
-    kernel_y(i,j,k) = 0.0;
+    kernel_y.setVal(0.0);
 
     LOOP
     kernel_z(i,j,k) = 0.0;

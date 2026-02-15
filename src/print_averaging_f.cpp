@@ -42,11 +42,8 @@ print_averaging_f::print_averaging_f(lexer *p, fdm* a, ghostcell *pgc) : um(p),v
     WLOOP
     wm(i,j,k) = 0.0;
     
-    LOOP
-    {
-    pm(i,j,k) = 0.0;
-    Tm(i,j,k) = 0.0;
-    }
+    pm.setVal(0.0);
+    Tm.setVal(0.0);
     
     stime = p->P22;
 }

@@ -39,8 +39,7 @@ double dx=p->DXM;
 double r;
 
 
-    LOOP
-	T(i,j,k)=p->H50_2;
+	T.setVal(p->H50_2);
 
     double psi=1.0e-20;
 

@@ -58,15 +58,13 @@ void VOF_PLIC::symmetric_scheme2D_FCRK3
     {
         sweep=S_2D[sSweep][nSweep];
         
-        LOOP
-        {   
-            Vn_p(i,j,k)=0.0;
-            Vn_m(i,j,k)=0.0;
-            Vx_p(i,j,k)=0.0;
-            Vx_m(i,j,k)=0.0;
-            Vz_p(i,j,k)=0.0;
-            Vz_m(i,j,k)=0.0;
-        }
+        Vn_p.setVal(0.0);
+        Vn_m.setVal(0.0);
+        Vx_p.setVal(0.0);
+        Vx_m.setVal(0.0);
+        Vz_p.setVal(0.0);
+        Vz_m.setVal(0.0);
+
         pgc->start4(p,Vn_p,1);
         pgc->start4(p,Vn_m,1);
         pgc->start4(p,Vx_p,1);

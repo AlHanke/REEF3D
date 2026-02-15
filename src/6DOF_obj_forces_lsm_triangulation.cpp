@@ -35,11 +35,8 @@ void sixdof_obj::triangulation(lexer *p,fdm* a, ghostcell *pgc, field& f)
     eta(i,j,k) = 0.125*(a->fb(i,j,k) + a->fb(i+1,j,k) + a->fb(i,j+1,k) + a->fb(i+1,j+1,k)
                       + a->fb(i,j,k+1) + a->fb(i+1,j,k+1) + a->fb(i,j+1,k+1) + a->fb(i+1,j+1,k+1));
 	
-    NDBASELOOP
-    vertice(i,j,k)=-1;
-
-    NDBASELOOP
-    nodeflag(i,j,k)=0;
+    vertice.setVal(-1,true);
+    nodeflag.setVal(0,true);
 	
     BASELOOP
     {

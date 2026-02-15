@@ -71,11 +71,8 @@ void VOF_PLIC::updatePhasemarkers( lexer* p, fdm* a, ghostcell* pgc,field& voffi
 
 void VOF_PLIC::updatePhasemarkersCompression( lexer* p, fdm* a, ghostcell* pgc,field& voffield)
 {
-    LOOP
-    {
-        a->phasemarker(i,j,k)=0.0;
-        compressvol(i,j,k)=0.0;
-    }
+    a->phasemarker.setVal(0.0);
+    compressvol.setVal(0.0);
     LOOP
     {
         if(voffield(i,j,k)>corr_thres)
@@ -208,11 +205,8 @@ void VOF_PLIC::updatePhasemarkersCompression( lexer* p, fdm* a, ghostcell* pgc,f
     pgc->start4(p,a->phasemarker,1);
     pgc->start4(p,voffield,1);
     
-    LOOP
-    {
-        a->phasemarker(i,j,k)=0.0;
-        compressvol(i,j,k)=0.0;
-    }
+    a->phasemarker.setVal(0.0);
+    compressvol.setVal(0.0);
     LOOP
     {
         if(voffield(i,j,k)>corr_thres)

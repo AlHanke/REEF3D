@@ -36,8 +36,7 @@ benchmark_vortex3D::benchmark_vortex3D(lexer *p, fdm *a)
 	zc = 0.35;
     radius = 0.15;
 
-    LOOP
-    a->vof(i,j,k)=0.0;
+    a->vof.setVal(0.0);
 
 	LOOP
 	{

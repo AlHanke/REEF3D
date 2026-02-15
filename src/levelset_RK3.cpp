@@ -111,8 +111,7 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
 // Step 1
     starttime=pgc->timer();
 
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pconvec->start(p,a,ls,4,a->u,a->v,a->w);
 	
@@ -128,8 +127,7 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
     
     
 // Step 2
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pconvec->start(p,a,ark1,4,a->u,a->v,a->w);
 
@@ -144,8 +142,7 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
     pgc->solid_forcing_lsm(p,a,ark2);
     
 // Step 3
-    LOOP
-	a->L(i,j,k)=0.0;
+	a->L.setVal(0.0);
 
 	pconvec->start(p,a,ark2,4,a->u,a->v,a->w);
 
