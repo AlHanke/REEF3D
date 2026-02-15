@@ -258,7 +258,7 @@ private:
     bc_labels gceval2(lexer*,int,int,int);
     bc_labels gceval3(lexer*,int,int,int);
     bc_labels gceval4(lexer*,int,int,int);
-    bc_labels gceval4a(lexer*,int,int,int);
+    bc_labels gceval4a(lexer*,int,int);
 
     bc_labels gcsleval1(int,int,int);
     bc_labels gcsleval2(int,int,int);
