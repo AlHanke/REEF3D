@@ -27,24 +27,24 @@ Author: Hans Bihs
 ghostcell::bc_labels ghostcell::gcsleval2(int gcv, int bc, int cs)
 {
     // general Neuman
-    if(gcv==1 || gcv==40 || gcv==50)
+    if(gcv==1 || gcv==50)
         return bc_labels::NEUMANN;
 
     // Wall
     // Inflow & Parallel
-    else if((bc==1 || bc==5 || bc==6 || bc==7 || bc==21 || bc==5 || bc==22) && (cs==X_NEG || cs==X_POS || cs==Z_NEG || cs==Z_POS) && (gcv==2 || gcv==11 || gcv==21))
+    else if((bc==1 || bc==5 || bc==6 || bc==7 || bc==21 || bc==5 || bc==22) && (cs==X_NEG || cs==X_POS || cs==Z_NEG || cs==Z_POS) && gcv==11)
         return gclabel_v;
 
     // Orthogonal
-    else if((bc==3 || bc==5 || bc==7 || bc==21 || bc==5 || bc==22) && (cs==Y_POS || cs==Y_NEG) && (gcv==2 || gcv==11 || gcv==21))
+    else if((bc==3 || bc==5 || bc==7 || bc==21 || bc==5 || bc==22) && (cs==Y_POS || cs==Y_NEG) && gcv==11)
         return bc_labels::NOSLIP;
 
     // Outflow
-    else if(bc==2 && (cs==Y_POS || cs==Y_NEG) && (gcv==2 || gcv==11 || gcv==21))
+    else if(bc==2 && (cs==Y_POS || cs==Y_NEG) && gcv==11)
         return bc_labels::NEUMANN;
 
     // Symmetry
-    else if(bc==3 && (cs==X_NEG || cs==X_POS || cs==Z_NEG || cs==Z_POS) && (gcv==2 || gcv==11 || gcv==21))
+    else if(bc==3 && (cs==X_NEG || cs==X_POS || cs==Z_NEG || cs==Z_POS) && gcv==11)
         return bc_labels::NEUMANN;
 
     // Hy
@@ -61,14 +61,14 @@ ghostcell::bc_labels ghostcell::gcsleval2(int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Patch
-    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==2 || gcv==8 || gcv==11 || gcv==21))
+    else if((bc==111 || bc==112 || bc==121 || bc==122) && gcv==11)
         return bc_labels::NEUMANN;
 
     // Patch Hy
-    else if((bc==221 || bc==211 || bc==121 || bc==111) && (gcv==55 || gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if((bc==221 || bc==211 || bc==121 || bc==111) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN_HY;
 
-    else if((bc==222 || bc==212 || bc==122 || bc==112) && (gcv==55 || gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if((bc==222 || bc==212 || bc==122 || bc==112) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
 
     else
