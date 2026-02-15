@@ -45,9 +45,14 @@ public:
     virtual ~field_amrex() = default;
 
     /*!
-     * @copydoc field_base::operator()
+     * @copydoc field_base::operator()(int, int, int)
      */
-    double& operator()(int ii, int jj, int kk, bool addOrigin = true) noexcept override final;
+    inline double& operator()(int ii, int jj, int kk) noexcept override final;
+
+    /*!
+     * @copydoc field_base::operator()(amrex::IntVect, int)
+     */
+    inline double& operator()(const amrex::IntVect& iv, int comp = 0) noexcept override final;
 
     /*!
      * @copydoc field_base::setVal()

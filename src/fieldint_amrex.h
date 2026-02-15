@@ -34,11 +34,15 @@ class fieldint_amrex : public fieldint
 public:
     virtual ~fieldint_amrex() = default;
 
-    int& operator()(int ii, int jj, int kk, bool addOrigin = true) noexcept override final;
+    inline int& operator()(int ii, int jj, int kk) noexcept override final;
+
+    inline int& operator()(const amrex::IntVect& iv, int comp = 0) noexcept override final;
 
     void setVal(int val, bool includeGhost = false) override final;
 
     void FillBoundary() override;
+
+    amrex::iMultiFab& GetMultiFab() {return mf[p->level];};
 
 protected:
     fieldint_amrex(lexer* p);
