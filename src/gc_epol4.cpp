@@ -168,9 +168,6 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else if((bc==1 || bc==2 || bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && gcv==70)
         return bc_labels::NEUMANN;
 
-    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && gcv==75)
-        return bc_labels::EXTEND;
-
     // Pk Velocity
     else if((bc==5 || bc==21 || bc==22 || bc==41) && (gcv==101 || gcv==102 || gcv==103))
         return bc_labels::NOSLIP;
