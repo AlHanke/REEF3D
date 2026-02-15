@@ -271,11 +271,13 @@ private:
          HEATBC=61, NEUMANN_ALL=74, NEUMANN_ALL2=75, DEBUG=99 };
 
     // 3D BC decision
-    void gcdistro1(lexer*, field&, int, int, int, int, double, int, int, int);
-    void gcdistro2(lexer*, field&, int, int, int, int, double, int, int, int);
-    void gcdistro3(lexer*, field&, int, int, int, int, double, int, int, int);
-    void gcdistro4(lexer*, field&, int, int, int, int, double, int, int, int);
-    void gcdistro4a(lexer*, field&, int, int, int, int, double, int, int, int);
+    void gcdistro1(field&, int, int, int, int, int, double, int);
+    void gcdistro2(field&, int, int, int, int, int, double, int);
+    void gcdistro3(field&, int, int, int, int, int, double, int);
+    void gcdistro4(field&, int, int, int, int, int, double, int);
+    void gcdistro4a(field&, int, int, int, int, int, double, int);
+
+    void gcdistro(field&, int, int, int, double, bc_labels, int);
 
     bc_labels gceval1(lexer*,int,int,int);
     bc_labels gceval2(lexer*,int,int,int);
@@ -284,15 +286,17 @@ private:
     bc_labels gceval4a(lexer*,int,int,int);
 
     // 2D BC decision
-    void gcsldistro1(lexer*, slice&, int, int, int, int, int, int);
-    void gcsldistro2(lexer*, slice&, int, int, int, int, int, int);
-    void gcsldistro4(lexer*, slice&, int, int, int, int, int, int);
-    void gcsldistro4a(lexer*, slice&, int, int, int, int, int, int);
+    void gcsldistro1(lexer*, slice&, int, int, int, int, int);
+    void gcsldistro2(lexer*, slice&, int, int, int, int, int);
+    void gcsldistro4(lexer*, slice&, int, int, int, int, int);
+    void gcsldistro4a(lexer*, slice&, int, int, int, int, int);
 
     void gcsldistro1int(sliceint&, int, int, int);
     void gcsldistro2int(sliceint&, int, int, int);
     void gcsldistro4int(sliceint&, int, int, int);
     void gcsldistro4Vint(lexer*, int*, int, int, int);
+
+    void gcsldistro(lexer*, slice&, int, int, bc_labels, int);
 
     bc_labels gcsleval1(int,int,int);
     bc_labels gcsleval2(int,int,int);
