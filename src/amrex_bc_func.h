@@ -867,7 +867,11 @@ public:
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         int detect_face(const amrex::IntVect& iv, const amrex::Box& dom) const
         {
-            if(iv[0] < dom.smallEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
+            if(iv[2] < dom.smallEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1))
+                return 5;
+            else if(iv[2] > dom.bigEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1))
+                return 6;
+            else if(iv[0] < dom.smallEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
                 return 1;
             else if(iv[0] > dom.bigEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
                 return 2;
@@ -875,10 +879,6 @@ public:
                 return 3;
             else if(iv[1] > dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
                 return 4;
-            else if(iv[2] < dom.smallEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
-                return 5;
-            else if(iv[2] > dom.bigEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
-                return 6;
             else
                 return 0;
         }
