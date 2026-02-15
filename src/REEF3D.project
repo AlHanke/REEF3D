@@ -1021,12 +1021,10 @@
           <File Name="geotopo.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Increment">
-          <File Name="looping_part.h"/>
           <File Name="iterators1D.h"/>
           <File Name="increment.h"/>
           <File Name="looping.h"/>
           <File Name="iterators.h"/>
-          <File Name="boundcheck.h"/>
           <File Name="definitions.h"/>
           <File Name="looping2D.h"/>
           <File Name="iterators2D.h"/>
