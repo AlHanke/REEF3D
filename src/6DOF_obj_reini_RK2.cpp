@@ -55,7 +55,7 @@ void sixdof_obj::reini_RK2(lexer* p, fdm* a, ghostcell* pgc, field &f)
 		ALOOP
 		frk1(i,j,k) = f(i,j,k) + dt(i,j,k)*L(i,j,k);
 
-         pgc->start4a(p,frk1,50);
+         pgc->start4(p,frk1,50);
         
         
         // Step 2
@@ -64,7 +64,7 @@ void sixdof_obj::reini_RK2(lexer* p, fdm* a, ghostcell* pgc, field &f)
 		ALOOP
 		f(i,j,k) = 0.5*f(i,j,k) + 0.5*frk1(i,j,k) + 0.5*dt(i,j,k)*L(i,j,k);
 
-        pgc->start4a(p,f,50);
+        pgc->start4(p,f,50);
 	}
 		
 }

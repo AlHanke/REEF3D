@@ -38,10 +38,10 @@ void vrans_f::sedpart_update(lexer *p, fdm *a, ghostcell *pgc, field &por, field
 	}
     
     
-    pgc->start4a(p,a->porosity,1);
-	pgc->start4a(p,a->porpart,1);
-	pgc->start4a(p,alpha,1);
-	pgc->start4a(p,beta,1);
+    pgc->start4(p,a->porosity,1);
+	pgc->start4(p,a->porpart,1);
+	pgc->start4(p,alpha,1);
+	pgc->start4(p,beta,1);
     
 }
 
@@ -62,10 +62,10 @@ void vrans_f::sed_update(lexer *p, fdm *a, ghostcell *pgc)
 	beta(i,j,k)=0.0;
 	}
 	
-	pgc->start4a(p,a->porosity,1);
-	pgc->start4a(p,a->porpart,1);
-	pgc->start4a(p,alpha,1);
-	pgc->start4a(p,beta,1);
+	pgc->start4(p,a->porosity,1);
+	pgc->start4(p,a->porpart,1);
+	pgc->start4(p,alpha,1);
+	pgc->start4(p,beta,1);
 	
 	
 	// Topo
@@ -79,9 +79,9 @@ void vrans_f::sed_update(lexer *p, fdm *a, ghostcell *pgc)
 	}
     
     
-    pgc->start4a(p,a->porosity,1);
-	pgc->start4a(p,a->porpart,1);
-	pgc->start4a(p,alpha,1);
-	pgc->start4a(p,beta,1);
+    pgc->start4(p,a->porosity,1);
+	pgc->start4(p,a->porpart,1);
+	pgc->start4(p,alpha,1);
+	pgc->start4(p,beta,1);
 }
 

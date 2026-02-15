@@ -106,7 +106,7 @@ void driver::driver_ini_cfd()
                 psed->relax(p,pgc);
             preto->start(p,a,pgc,a->topo);
             psed->update_cfd(p,a,pgc,pflow,preto);
-            pgc->start4a(p,a->topo,150);
+            pgc->start4(p,a->topo,150);
         }
     
         // Solid Forcing

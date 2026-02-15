@@ -214,14 +214,13 @@ void ghostcell::start4a(lexer *p, field& f, int gcv)
         gcparacox(p,f);
 }
 
-void ghostcell::start4a_sum(lexer *p, field& f, int gcv)
+void ghostcell::start4_sum(lexer *p, field& f, int gcv)
 {
     //  MPI Boundary Swap
     if(do_comms)
     {
         starttime=timer();
-        gcparax4a_sum(p,f,5);
-        //gcparacox4a_sum(p,f,5);
+        gcparax4_sum(p,f,5);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
