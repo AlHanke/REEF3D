@@ -34,9 +34,6 @@ void ghostcell::gcdistro(field& f, int ii, int jj, int kk, double dist, bc_label
         case bc_labels::DIRICHLET_ORTH:
             dirichlet_ortho(f,dist,cs);
             break;
-        case bc_labels::DIRICHLET_PARA:
-            dirichlet_para(f,dist,cs);
-            break;
         case bc_labels::NEUMANN:
             neumann(f,cs);
             break;
