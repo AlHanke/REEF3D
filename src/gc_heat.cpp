@@ -28,17 +28,17 @@ void ghostcell::heatbc(field& f, int cs)
 {
     for(q=0;q<margin;++q)
     {
-        if(cs==1)
+        if(cs==dir_labels::X_NEG)
             f(i-q-1,j,k)=p->H61_T;
-        else if(cs==2)
-            f(i,j+q+1,k)=p->H62_T;
-        else if(cs==3)
-            f(i,j-q-1,k)=p->H63_T;
-        else if(cs==4)
+        else if(cs==dir_labels::X_POS)
             f(i+q+1,j,k)=p->H64_T;
-        else if(cs==5)
+        else if(cs==dir_labels::Y_NEG)
+            f(i,j-q-1,k)=p->H63_T;
+        else if(cs==dir_labels::Y_POS)
+            f(i,j+q+1,k)=p->H62_T;
+        else if(cs==dir_labels::Z_NEG)
             f(i,j,k-q-1)=p->H65_T;
-        else if(cs==6)
+        else if(cs==dir_labels::Z_POS)
 	        f(i,j,k+q+1)=p->H66_T;
     }
 }

@@ -30,11 +30,11 @@ void ghostcell::dirichlet_para_reflect(field& f, double dist, int cs)
     weight=1.0;
 
     double dx;
-    if(cs==1 || cs==4)
+    if(cs==dir_labels::X_NEG || cs==dir_labels::X_POS)
         dx = p->DXP[IP];
-    else if(cs==2 || cs==3)
+    else if(cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG)
         dx = p->DYP[JP];
-    else if(cs==5 || cs==6)
+    else if(cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS)
         dx = p->DZP[KP];
 
     ys=1;
@@ -51,17 +51,17 @@ void ghostcell::dirichlet_para_reflect(field& f, double dist, int cs)
     //fill y[]
     for(m=0; m<=orderdir-1; m++)
     {
-        if(cs==1 )
+        if(cs==dir_labels::X_NEG )
             y[m] = f(i+orderdir-m-1,j,k);
-        else if(cs==2)
-            y[m] = f(i,j-orderdir+m+1,k);
-        else if(cs==3)
-            y[m] = f(i,j+orderdir-m-1,k);
-        else if(cs==4)
+        else if(cs==dir_labels::X_POS)
             y[m] = f(i-orderdir+m+1,j,k);
-        else if(cs==5)
+        else if(cs==dir_labels::Y_NEG)
+            y[m] = f(i,j+orderdir-m-1,k);
+        else if(cs==dir_labels::Y_POS)
+            y[m] = f(i,j-orderdir+m+1,k);
+        else if(cs==dir_labels::Z_NEG)
             y[m] = f(i,j,k+orderdir-m-1);
-        else if(cs==6)
+        else if(cs==dir_labels::Z_POS)
             y[m] = f(i,j,k-orderdir+m+1);
     }
 
@@ -94,17 +94,17 @@ void ghostcell::dirichlet_para_reflect(field& f, double dist, int cs)
     // write extrapolated ghost cell values into f()
     for(q=0; q<margin; ++q)
     {
-        if(cs==1)
+        if(cs==dir_labels::X_NEG)
             f(i-q-1,j,k) = y[orderdir+q-1+1+ys];
-        else if(cs==2)
-            f(i,j+q+1,k) = y[orderdir+q-1+1+ys];
-        else if(cs==3)
-            f(i,j-q-1,k) = y[orderdir+q-1+1+ys];
-        else if(cs==4)
+        else if(cs==dir_labels::X_POS)
             f(i+q+1,j,k) = y[orderdir+q-1+1+ys];
-        else if(cs==5)
+        else if(cs==dir_labels::Y_NEG)
+            f(i,j-q-1,k) = y[orderdir+q-1+1+ys];
+        else if(cs==dir_labels::Y_POS)
+            f(i,j+q+1,k) = y[orderdir+q-1+1+ys];
+        else if(cs==dir_labels::Z_NEG)
             f(i,j,k-q-1) = y[orderdir+q-1+1+ys];
-        else if(cs==6)
+        else if(cs==dir_labels::Z_POS)
             f(i,j,k+q+1) = y[orderdir+q-1+1+ys];
     }
 }

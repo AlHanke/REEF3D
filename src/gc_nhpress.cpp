@@ -25,7 +25,7 @@ Author: Hans Bihs
 
 void ghostcell::nhpress(field& f, int cs)
 {
-    if(cs==6)
+    if(cs==dir_labels::Z_POS)
         for(q=0; q<margin; ++q)
             f(i,j,k+q+1) = 0.0;
 }

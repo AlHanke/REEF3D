@@ -30,33 +30,33 @@ ghostcell::bc_labels ghostcell::gceval2(lexer *p, int gcv, int bc, int cs)
 
     // Parallel
     //Wall
-    else if((bc==6 || bc==7 || bc==21 || bc==22) && (cs==1 || cs==4 || cs==5 || cs==6) && (gcv==2 || gcv==11))
+    else if((bc==6 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==2 || gcv==11))
         return gclabel_v;
 
-    else if((bc==5 || bc==6 || bc==7 || bc==21 || bc==22) && (cs==1 || cs==4 || cs==5 || cs==6) && gcv==111)
+    else if((bc==5 || bc==6 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==111)
         return bc_labels::NOSLIP;
 
-    else if((bc==6 || bc==7 || bc==21 || bc==22) && (cs==1 || cs==4 || cs==5 || cs==6) && gcv==115)
+    else if((bc==6 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==115)
         return gclabel_v;
 
-    else if((bc==6 || bc==7 || bc==21 || bc==22) && (cs==1 || cs==4 || cs==5 || cs==6) && gcv==118)
+    else if((bc==6 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==118)
         return bc_labels::NEUMANN;
 
     // Topo
-    else if(bc==5 && (cs==1 || cs==4 || cs==5 || cs==6) && (gcv==2 || gcv==11 || gcv==115))
+    else if(bc==5 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==2 || gcv==11 || gcv==115))
         return gclabel_vtopo;
 
-    else if(bc==5 && (cs==1 || cs==4 || cs==5 || cs==6) && gcv==118)
+    else if(bc==5 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==118)
         return bc_labels::NEUMANN;
 
     else if((bc==5 || bc==21 || bc==22) && gcv==15)
         return bc_labels::NEUMANN;
 
     // Orthogonal
-    else if((bc==5 || bc==7 || bc==21 || bc==22) && (cs==2 || cs==3) && (gcv==2 || gcv==11))
+    else if((bc==5 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && (gcv==2 || gcv==11))
         return gclabel_v_orth;
 
-    else if((bc==5 || bc==7 || bc==21 || bc==22) && (cs==2 || cs==3) && gcv==8)
+    else if((bc==5 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && gcv==8)
         return bc_labels::NOSLIP;
 
     //Inflow
@@ -64,10 +64,10 @@ ghostcell::bc_labels ghostcell::gceval2(lexer *p, int gcv, int bc, int cs)
         return gclabel_v_in;
 
     //Outflow
-    else if(bc==2 && (cs==1 || cs==4 || cs==5 || cs==6) && (gcv==2 || gcv==11) && gclabel_outflow)
+    else if(bc==2 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==2 || gcv==11) && gclabel_outflow)
         return bc_labels::NEUMANN;
 
-    else if(bc==2 && (cs==2 || cs==3) && (gcv==2 || gcv==11) && gclabel_outflow)
+    else if(bc==2 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && (gcv==2 || gcv==11) && gclabel_outflow)
         return gclabel_v_out;
 
     //Patch
@@ -75,13 +75,13 @@ ghostcell::bc_labels ghostcell::gceval2(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     //Free Surface
-    else if(bc==3 && (cs==1 || cs==4 || cs==5 || cs==6) && (gcv==2 || gcv==11 || gcv==18))
+    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==2 || gcv==11 || gcv==18))
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==2 || cs==3) && (gcv==2 || gcv==11 || gcv==18))
+    else if(bc==3 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && (gcv==2 || gcv==11 || gcv==18))
         return bc_labels::DIRICHLET_ORTH;
 
-    else if(bc==9 && cs==6 && (gcv==2 || gcv==11 || gcv==18))
+    else if(bc==9 && cs==dir_labels::Z_POS && (gcv==2 || gcv==11 || gcv==18))
         return bc_labels::NEUMANN;
 
     // 6DOF
