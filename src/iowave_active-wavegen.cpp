@@ -33,11 +33,11 @@ void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
 
     // get the fsf elevation
     LOOP
-    wsfmax[i][j]=-1.0e20;
+    wsfmax(i,j)=-1.0e20;
 
     LOOP
     if(a->phi(i,j,k)>=0.0 && a->phi(i,j,k+1)<0.0)
-    wsfmax[i][j]=MAX(wsfmax[i][j],-(a->phi(i,j,k)*p->DZP[KP])/(a->phi(i,j,k+1)-a->phi(i,j,k)) + p->pos_z());
+    wsfmax(i,j)=MAX(wsfmax(i,j),-(a->phi(i,j,k)*p->DZP[KP])/(a->phi(i,j,k+1)-a->phi(i,j,k)) + p->pos_z());
 
     for(int qn=0; qn<p->mz;++qn)
     pgc->verticalmax(p,a,wsfmax);
@@ -85,7 +85,7 @@ void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
         
         // fsf deviation
 
-        wsf=wsfmax[i][j];
+        wsf=wsfmax(i,j);
 
         eta_T = wave_eta(p,pgc,x,0.0);
         eta_M = wsf-p->wd;
