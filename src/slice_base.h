@@ -45,7 +45,6 @@ public:
     slice_base& operator=(slice_base&&) = delete;
 
     virtual T& operator()(int, int) = 0;
-    inline T& operator[](int n) noexcept {return V[n];};
 
 protected:
     T *V;
