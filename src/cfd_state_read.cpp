@@ -85,7 +85,7 @@ void cfd_state::read(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb, sedime
     a->topo(i,j,k)=double(ffn);
     }
     
-    pgc->start4a(p,a->topo,150);
+    pgc->start4(p,a->topo,150);
 
     
     ULOOP
@@ -185,7 +185,7 @@ void cfd_state::read(lexer *p, fdm *a, ghostcell *pgc, turbulence *pturb, sedime
 	pgc->start4(p,a->phi,gcval_phi);
 	pturb->gcupdate(p,a,pgc);
 	pgc->start4(p,a->eddyv,24);
-	pgc->start4a(p,a->topo,gcval_topo);
+	pgc->start4(p,a->topo,gcval_topo);
 	pgc->start4(p,a->conc,40);
 	
 	result.close();

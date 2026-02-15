@@ -103,10 +103,10 @@ void initialize::inifdm(lexer* p, fdm* a, ghostcell* pgc)
     pgc->start4(p,a->ro,1);
     pgc->start4(p,a->visc,1);
     pgc->start4(p,a->eddyv,1);
-    pgc->start4a(p,a->porosity,1);
-    pgc->start4a(p,a->press,1);
-    pgc->start4a(p,a->fb,150);
-    pgc->start4a(p,a->topo,150);
+    pgc->start4(p,a->porosity,1);
+    pgc->start4(p,a->press,1);
+    pgc->start4(p,a->fb,150);
+    pgc->start4(p,a->topo,150);
     pgc->start4(p,a->phi,50);
 }
 

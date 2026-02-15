@@ -72,7 +72,7 @@ void sediment_f::topo_zh_update(lexer *p, fdm *a,ghostcell *pgc, sediment_fdm *s
     SLICELOOP4
 	a->bed(i,j)=s->bedzh(i,j);
     
-	pgc->start4a(p,a->topo,150);
+	pgc->start4(p,a->topo,150);
     
     pgc->gcsl_start4(p,a->bed,50);
     

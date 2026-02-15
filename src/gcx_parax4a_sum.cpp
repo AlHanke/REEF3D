@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"field.h"
 
-void ghostcell::gcparax4a_sum(lexer* p, field& f,int gcv)
+void ghostcell::gcparax4_sum(lexer* p, field& f,int gcv)
 {
     paramargin=margin;
 
