@@ -20,55 +20,43 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
-#include"fieldints_amrex.h"
-#include"lexer.h"
+#include "fieldints_amrex.h"
+#include "lexer.h"
 #include <AMReX_iMultiFab.H>
 #include <AMReX_BoxArray.H>
 
 fieldint1::fieldint1(lexer *p) : fieldint_amrex(p)
 {
-    for(p->level=0; p->level<p->nlevs; ++p->level)
+    LevelLOOP
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
-        mf[p->level].setVal(0);
     }
-    for(p->level=0; p->level<p->nlevs; ++p->level)
-        FillBoundary();
 }
 
 fieldint2::fieldint2(lexer *p) : fieldint_amrex(p)
 {
-    for(p->level=0; p->level<p->nlevs; ++p->level)
+    LevelLOOP
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
-        mf[p->level].setVal(0);
     }
-    for(p->level=0; p->level<p->nlevs; ++p->level)
-        FillBoundary();
 }
 
 fieldint3::fieldint3(lexer *p) : fieldint_amrex(p)
 {
-    for(p->level=0; p->level<p->nlevs; ++p->level)
+    LevelLOOP
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
-        mf[p->level].setVal(0);
     }
-    for(p->level=0; p->level<p->nlevs; ++p->level)
-        FillBoundary();
 }
 
 fieldint4::fieldint4(lexer *p) : fieldint_amrex(p)
 {
-    for(p->level=0; p->level<p->nlevs; ++p->level)
+    LevelLOOP
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
-        mf[p->level].setVal(0);
     }
-    for(p->level=0; p->level<p->nlevs; ++p->level)
-        FillBoundary();
 }

@@ -20,19 +20,18 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
-#include"fields_amrex.h"
-#include"lexer.h"
+#include "fields_amrex.h"
+#include "lexer.h"
 #include <AMReX_MultiFab.H>
 #include <AMReX_BoxArray.H>
 #include <AMReX_BC_TYPES.H>
 
 field1::field1(lexer *p) : field_amrex(p)
 {
-    for(p->level=0; p->level<p->nlevs; ++p->level)
+    LevelLOOP
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
         // box = amrex::convert(p->amrex_box_array[p->level], amrex::IntVect{AMREX_D_DECL(1,0,0)});
-        // box.growHi(0, -1);
         // box.grow(amrex::IntVect{AMREX_D_DECL(-1,0,0)});
         mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, mf[p->level].nGrow());
@@ -43,11 +42,10 @@ field1::field1(lexer *p) : field_amrex(p)
 
 field2::field2(lexer *p) : field_amrex(p)
 {
-    for(p->level=0; p->level<p->nlevs; ++p->level)
+    LevelLOOP
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
         // box = amrex::convert(p->amrex_box_array[p->level], amrex::IntVect{AMREX_D_DECL(0,1,0)});
-        // box.growHi(1, -1);
         // box.grow(amrex::IntVect{AMREX_D_DECL(0,-1,0)});
         mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, mf[p->level].nGrow());
@@ -58,11 +56,10 @@ field2::field2(lexer *p) : field_amrex(p)
 
 field3::field3(lexer *p) : field_amrex(p)
 {
-    for(p->level=0; p->level<p->nlevs; ++p->level)
+    LevelLOOP
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
         // box = amrex::convert(p->amrex_box_array[p->level], amrex::IntVect{AMREX_D_DECL(0,0,1)});
-        // box.growHi(2, -1);
         // box.grow(amrex::IntVect{AMREX_D_DECL(0,0,-1)});
         mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, mf[p->level].nGrow());
@@ -73,10 +70,9 @@ field3::field3(lexer *p) : field_amrex(p)
 
 field4::field4(lexer *p) : field_amrex(p)
 {
-    for(p->level=0; p->level<p->nlevs; ++p->level)
+    LevelLOOP
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
-        // box = amrex::convert(p->amrex_box_array, amrex::IntVect{AMREX_D_DECL(0,0,0)});
         mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, mf[p->level].nGrow());
     }
