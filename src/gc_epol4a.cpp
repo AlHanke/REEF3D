@@ -25,75 +25,58 @@ Author: Hans Bihs
 
 int ghostcell::gceval4a(lexer *p, int gcv, int bc, int cs)
 {
+    // fb
+    if(gcv==50)
+        return 75;
 
-	//topo
-	if((bc==21||bc==22||bc==5||bc==3||bc==6||bc==7||bc==8)&&(cs==5||cs==6)&&(gcv==151 || gcv==152 || gcv==153))
-	return 75;
+    //topo
+    else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs==5 || cs==6) && (gcv==151 || gcv==152 || gcv==153))
+        return 75;
 
-	else
-	if((bc==21||bc==22||bc==5||bc==3||bc==6||bc==7||bc==8)&&(cs!=5&&cs!=6)&&(gcv==151 || gcv==152 || gcv==153))
-	return 74;
+    else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs!=5 && cs!=6) && (gcv==151 || gcv==152 || gcv==153))
+        return 74;
 
-	else
-	if((bc==2&&gcv==151) || (bc==1&&gcv==152))
-	return 74;
+    else if((bc==2 && gcv==151) || (bc==1 && gcv==152))
+        return 74;
 
-	else
-	if(gcv==150 || gcv==154)
-	return 74;
-    
+    else if(gcv==150 || gcv==154)
+     return 74;
+
+    else if(gcv==159)
+        return 3;
+
+    // topo for bedload
+    else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs==5 || cs==6) && (gcv==161 || gcv==162 || gcv==163))
+     return 75;
+
+    else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==6 || bc==7 || bc==8) && (cs!=5 && cs!=6) && (gcv==161 || gcv==162 || gcv==163))
+     return 74;
+
+    else if((bc==2 && gcv==161) || (bc==1 && gcv==162))
+        return 74;
+
+    // Level Set
+    else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==6 || bc==7 || bc==8 || bc==9) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+        return 74;
+
+    else if(bc==3 && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+        return 74;
+
+    else if(bc==1 && (gcv==52 || gcv==54))
+        return 74;
+
+    else if(bc==2 && (gcv==51 || gcv==54))
+        return 74;
+
+    else if(gcv==50)
+        return 74;
+
+    // porosity
+    else if(gcv==1)
+        return 75;
+
     else
-	if(gcv==159)
-	return 79;
-
-	//topo for bedload
-	else
-	if((bc==21||bc==22||bc==5||bc==3||bc==6||bc==7||bc==8)&&(cs==5||cs==6)&&(gcv==161 || gcv==162 || gcv==163))
-	return 75;
-
-	else
-	if((bc==21||bc==22||bc==5||bc==3||bc==6||bc==7||bc==8)&&(cs!=5&&cs!=6)&&(gcv==161 || gcv==162 || gcv==163))
-	return 74;
-
-	else
-	if((bc==2&&gcv==161) || (bc==1&&gcv==162))
-	return 74;
-	
-	// fb
-	else
-	if(gcv==50)
-	return 75;
-    
-    
-//Level Set	
-    
-    else
-	if((bc==21||bc==22||bc==5||bc==41||bc==6||bc==7||bc==8||bc==9) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
-	return 74;
-    
-	else
-	if((bc==3) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
-	return 74;
-
-	else
-	if(bc==1&&(gcv==52 || gcv==54))
-	return 74;
-
-	else
-	if((bc==2)&&(gcv==51 || gcv==54))
-	return 74;
-
-	else
-	if(gcv==50)
-	return 74;
-	
-	// porosity
-	else
-	if(gcv==1)
-	return 75;
-
-	else
-	return 0;
+        return 0;
 }
 
 void ghostcell::gcdistro4a(lexer *p, field &f, int ii, int jj, int kk, int nn, double dist, int gcv, int bc, int cs)
