@@ -93,10 +93,10 @@ void mgcslice4::fill_ggc(lexer* p)
         {
             if(ggcslmem4[(i-imin-q-1)*jmax + (j-jmin)]<10)
             {
-             ggcslmem4[(i-imin-q-1)*jmax + (j-jmin)]=n+10;
-			 p->ggcsl4[n][0]=i-q-1;
-			 p->ggcsl4[n][1]=j;
-			 ++n;
+                ggcslmem4[(i-imin-q-1)*jmax + (j-jmin)]=n+10;
+                p->ggcsl4[n][0]=i-q-1;
+                p->ggcsl4[n][1]=j;
+                ++n;
             }
         }
 
@@ -107,9 +107,9 @@ void mgcslice4::fill_ggc(lexer* p)
             if(ggcslmem4[(i-imin+q+1)*jmax + (j-jmin)]<10)
             {
                 ggcslmem4[(i-imin+q+1)*jmax + (j-jmin)]=n+10;
-			p->ggcsl4[n][0]=i+q+1;
-			p->ggcsl4[n][1]=j;
-			++n;
+                p->ggcsl4[n][0]=i+q+1;
+                p->ggcsl4[n][1]=j;
+                ++n;
             }
         }
 
@@ -120,9 +120,9 @@ void mgcslice4::fill_ggc(lexer* p)
             if(ggcslmem4[(i-imin)*jmax + (j-jmin-q-1)]<10)
             {
                 ggcslmem4[(i-imin)*jmax + (j-jmin-q-1)]=n+10;
-			p->ggcsl4[n][0]=i;
-			p->ggcsl4[n][1]=j-q-1;
-			++n;
+                p->ggcsl4[n][0]=i;
+                p->ggcsl4[n][1]=j-q-1;
+                ++n;
             }
         }
 
@@ -133,9 +133,9 @@ void mgcslice4::fill_ggc(lexer* p)
             if(ggcslmem4[(i-imin)*jmax + (j-jmin+q+1)]<10)
             {
                 ggcslmem4[(i-imin)*jmax + (j-jmin+q+1)]=n+10;
-			p->ggcsl4[n][0]=i;
-			p->ggcsl4[n][1]=j+q+1;
-			++n;
+                p->ggcsl4[n][0]=i;
+                p->ggcsl4[n][1]=j+q+1;
+                ++n;
             }
         }
 	}
@@ -145,5 +145,3 @@ void mgcslice4::fill_ggc(lexer* p)
     //cout<<p->mpirank<<"  ggcslcount: "<<p->ggcslcount4<<endl;
 	p->del_Iarray(ggcslmem4,imax*jmax);
 }
-
-

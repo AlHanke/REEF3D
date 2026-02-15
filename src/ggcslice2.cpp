@@ -38,8 +38,8 @@ void mgcslice2::fill_ggc(lexer* p)
     int *ggcslmem2;
 	p->Iarray(ggcslmem2,imax*jmax);
 
-//--------------------------
-//WALL1
+    //--------------------------
+    //WALL1
 
 	GCSL2LOOP
 	{
@@ -64,23 +64,23 @@ void mgcslice2::fill_ggc(lexer* p)
 
 	}
 
-// count entries
-	p->ggcslcount2=0;
-	a=0;
-	for(i=0;i<imax;++i)
-	for(j=0;j<jmax;++j)
-	{
+    // count entries
+    p->ggcslcount2=0;
+    a=0;
+    for(i=0;i<imax;++i)
+    for(j=0;j<jmax;++j)
+    {
         if(ggcslmem2[a]>1)
-        ++p->ggcslcount2;
+            ++p->ggcslcount2;
 
-	++a;
-	}
-	
+        ++a;
+    }
+
 	p->Iresize(p->ggcsl2,p->ggcslsize2,p->ggcslcount2*p->margin, 2, 2);
 	p->ggcslsize2=p->ggcslcount2*p->margin;
 
-//--------------------------
-//WALL2
+    //--------------------------
+    //WALL2
 	n=0;
 	QQGCSL2LOOP
 	{
@@ -94,9 +94,9 @@ void mgcslice2::fill_ggc(lexer* p)
             if(ggcslmem2[(i-imin-q-1)*jmax + (j-jmin)]<10)
             {
                 ggcslmem2[(i-imin-q-1)*jmax + (j-jmin)]=n+10;
-			 p->ggcsl2[n][0]=i-q-1;
-			 p->ggcsl2[n][1]=j;
-			 ++n;
+                p->ggcsl2[n][0]=i-q-1;
+                p->ggcsl2[n][1]=j;
+                ++n;
             }
         }
 
@@ -107,9 +107,9 @@ void mgcslice2::fill_ggc(lexer* p)
             if(ggcslmem2[(i-imin+q+1)*jmax + (j-jmin)]<10)
             {
                 ggcslmem2[(i-imin+q+1)*jmax + (j-jmin)]=n+10;
-			p->ggcsl2[n][0]=i+q+1;
-			p->ggcsl2[n][1]=j;
-			++n;
+                p->ggcsl2[n][0]=i+q+1;
+                p->ggcsl2[n][1]=j;
+                ++n;
             }
         }
 
@@ -120,9 +120,9 @@ void mgcslice2::fill_ggc(lexer* p)
             if(ggcslmem2[(i-imin)*jmax + (j-jmin-q-1)]<10)
             {
                 ggcslmem2[(i-imin)*jmax + (j-jmin-q-1)]=n+10;
-			p->ggcsl2[n][0]=i;
-			p->ggcsl2[n][1]=j-q-1;
-			++n;
+                p->ggcsl2[n][0]=i;
+                p->ggcsl2[n][1]=j-q-1;
+                ++n;
             }
         }
 
@@ -133,9 +133,9 @@ void mgcslice2::fill_ggc(lexer* p)
             if(ggcslmem2[(i-imin)*jmax + (j-jmin+q+1)]<10)
             {
                 ggcslmem2[(i-imin)*jmax + (j-jmin+q+1)]=n+10;
-			p->ggcsl2[n][0]=i;
-			p->ggcsl2[n][1]=j+q+1;
-			++n;
+                p->ggcsl2[n][0]=i;
+                p->ggcsl2[n][1]=j+q+1;
+                ++n;
             }
         }
 	}
@@ -144,5 +144,3 @@ void mgcslice2::fill_ggc(lexer* p)
 
 	p->del_Iarray(ggcslmem2,imax*jmax);
 }
-
-
