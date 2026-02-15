@@ -94,17 +94,15 @@ void sixdof_obj::ray_cast_2D_io_x(lexer* p, ghostcell* pgc,int ts,int te)
         zs = MIN3(Az,Bz,Cz);
         ze = MAX3(Az,Bz,Cz);
         
-        js = p->posc_j(ys);
-        je = p->posc_j(ye);
+        int jj = p->posc_j(ys);
+        ys = MIN3(Ay,By,Cy) - epsi*p->DYP[JJP];
+        jj = p->posc_j(ye);
+        ye = MAX3(Ay,By,Cy) + epsi*p->DYP[JJP];
         
-        ks = p->posc_k(zs);
-        ke = p->posc_k(ze);	
-	
-        ys = MIN3(Ay,By,Cy) - epsi*p->DYP[js + marge];
-        ye = MAX3(Ay,By,Cy) + epsi*p->DYP[je + marge];
-        
-        zs = MIN3(Az,Bz,Cz) - epsi*p->DZP[ks + marge];
-        ze = MAX3(Az,Bz,Cz) + epsi*p->DZP[ke + marge];
+        int kk = p->posc_k(zs);
+        zs = MIN3(Az,Bz,Cz) - epsi*p->DZP[KKP];
+        kk = p->posc_k(ze);
+        ze = MAX3(Az,Bz,Cz) + epsi*p->DZP[KKP];
 
         js = p->posc_j(ys);
         je = p->posc_j(ye);

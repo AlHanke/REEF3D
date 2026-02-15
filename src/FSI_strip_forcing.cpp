@@ -78,63 +78,63 @@ void fsi_strip::distribute_forces(lexer *p, fdm *a, ghostcell *pgc, field& fx, f
             jj = p->posc_j(coordI(1));
             kk = p->posc_k(coordI(2));
 
-            dx = p->DXN[ii + marge];
-            dy = p->DYN[jj + marge];
-            dz = p->DZN[kk + marge];
+            dx = p->DXN[IIP];
+            dy = p->DYN[JJP];
+            dz = p->DZN[KKP];
 
-            for (int i_it = ii - 2; i_it <= ii + 2; i_it++)
+            for (int i = ii - 2; i <= ii + 2; i++)
             {
-                for (int j_it = jj - 2; j_it <= jj + 2; j_it++)
+                for (int j = jj - 2; j <= jj + 2; j++)
                 {
-                    for (int k_it = kk - 2; k_it <= kk + 2; k_it++)
+                    for (int k = kk - 2; k <= kk + 2; k++)
                     {
                         dV = areaI*dx_body;
 
-                        dist = (p->XN[i_it + 1 + marge] - coordI(0))/dx;
+                        dist = (p->XN[IP1] - coordI(0))/dx;
                         D = kernel_roma(dist);
-                        dist = (p->YP[j_it + marge] - coordI(1))/dy;
+                        dist = (p->YP[JP] - coordI(1))/dy;
                         D *= kernel_roma(dist);
-                        dist = (p->ZP[k_it + marge] - coordI(2))/dz;
+                        dist = (p->ZP[KP] - coordI(2))/dz;
                         D *= kernel_roma(dist);
                         
-                        fx(i_it,j_it,k_it) += forceI(0)*D*dV/(dx*dy*dz);
+                        fx(i,j,k) += forceI(0)*D*dV/(dx*dy*dz);
       
 
-                        dist = (p->XP[i_it + marge] - coordI(0))/dx;
+                        dist = (p->XP[IP] - coordI(0))/dx;
                         D = kernel_roma(dist);
-                        dist = (p->YN[j_it + 1 + marge] - coordI(1))/dy;
+                        dist = (p->YN[JP1] - coordI(1))/dy;
                         D *= kernel_roma(dist);
-                        dist = (p->ZP[k_it + marge] - coordI(2))/dz;
+                        dist = (p->ZP[KP] - coordI(2))/dz;
                         D *= kernel_roma(dist);
                         
-                        fy(i_it,j_it,k_it) += forceI(1)*D*dV/(dx*dy*dz);
+                        fy(i,j,k) += forceI(1)*D*dV/(dx*dy*dz);
                 
 
-                        dist = (p->XP[i_it + marge] - coordI(0))/dx;
+                        dist = (p->XP[IP] - coordI(0))/dx;
                         D = kernel_roma(dist);
-                        dist = (p->YP[j_it + marge] - coordI(1))/dy;
+                        dist = (p->YP[JP] - coordI(1))/dy;
                         D *= kernel_roma(dist);
-                        dist = (p->ZN[k_it + 1 + marge] - coordI(2))/dz;
+                        dist = (p->ZN[KP1] - coordI(2))/dz;
                         D *= kernel_roma(dist);
                         
-                        fz(i_it,j_it,k_it) += forceI(2)*D*dV/(dx*dy*dz);
+                        fz(i,j,k) += forceI(2)*D*dV/(dx*dy*dz);
                         
                         
                         // RANS turbulence forcing
                         if(p->T10==2)
-                        if(i_it>=0 && j_it>=0 && k_it>=0 && i_it<p->knox && j_it<p->knoy && k_it<p->knoz)
+                        if(i>=0 && j>=0 && k>=0 && i<p->knox && j<p->knoy && k<p->knoz)
                         {
-                        dist = (p->XP[i_it + marge] - coordI(0))/dx;
+                        dist = (p->XP[IP] - coordI(0))/dx;
                         D = kernel_roma(dist);
-                        dist = (p->YP[j_it + marge] - coordI(1))/dy;
+                        dist = (p->YP[JP] - coordI(1))/dy;
                         D *= kernel_roma(dist);
-                        dist = (p->ZN[k_it + marge] - coordI(2))/dz;
+                        dist = (p->ZN[KP] - coordI(2))/dz;
                         D *= kernel_roma(dist);
                         
-                        kin = pturb->kinval(i_it,j_it,k_it);
+                        kin = pturb->kinval(i,j,k);
                         eps_star = turb_force_fac*D*pow((kin>(0.0)?(kin):(0.0)),0.5) /(0.4*0.33*(dx+dy+dz)*pow(p->cmu, 0.25));
                         
-                        eps0(i_it,j_it,k_it) += eps_star;
+                        eps0(i,j,k) += eps_star;
                         }
                     }
                 }

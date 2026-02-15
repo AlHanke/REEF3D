@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini, ioflow *pflow,  field& walldist)
 {
-    int ic,jc,kc;
+    int ii,jj,kk;
     double xc,yc,zc;
     double xdist,ydist,zdist;
 
@@ -42,22 +42,22 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
 
     GC4LOOP
     {
-        ic=p->gcb4[n][0];
-        jc=p->gcb4[n][1];
-        kc=p->gcb4[n][2];
+        ii=p->gcb4[n][0];
+        jj=p->gcb4[n][1];
+        kk=p->gcb4[n][2];
 
         if( p->gcb4[n][4]==21)
         {
             if(p->gcb4[n][3]==1)
             {
-                xc = p->XN[ic + marge];
-                yc = p->YP[jc + marge];
-                zc = p->ZP[kc + marge];
+                xc = p->XN[IIP];
+                yc = p->YP[JJP];
+                zc = p->ZP[KKP];
 
-                for(i=ic;i<p->knox;++i)
+                for(i=ii;i<p->knox;++i)
                 {
-                    j=jc;
-                    k=kc;
+                    j=jj;
+                    k=kk;
                     xdist = fabs(xc - p->XP[IP]);
                     PCHECK
                         walldist(i,j,k)=MIN(walldist(i,j,k),xdist);
@@ -65,14 +65,14 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
             }
             else if(p->gcb4[n][3]==3)
             {
-                xc = p->XP[ic + marge];
-                yc = p->YN[jc + marge];
-                zc = p->ZP[kc + marge];
+                xc = p->XP[IIP];
+                yc = p->YN[JJP];
+                zc = p->ZP[KKP];
 
-                for(j=jc;j<p->knoy;++j)
+                for(j=jj;j<p->knoy;++j)
                 {
-                    i=ic;
-                    k=kc;
+                    i=ii;
+                    k=kk;
                     ydist = fabs(yc - p->YP[JP]);
                     PCHECK
                         walldist(i,j,k)=MIN(walldist(i,j,k),ydist);
@@ -80,14 +80,14 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
             }
             else if(p->gcb4[n][3]==5)
             {
-                xc = p->XP[ic + marge];
-                yc = p->YP[jc + marge];
-                zc = p->ZN[kc + marge];
+                xc = p->XP[IIP];
+                yc = p->YP[JJP];
+                zc = p->ZN[KKP];
 
-                for(k=kc;k<p->knoz;++k)
+                for(k=kk;k<p->knoz;++k)
                 {
-                    i=ic;
-                    j=jc;
+                    i=ii;
+                    j=jj;
                     zdist = fabs(zc - p->ZP[KP]);
                     PCHECK
                         walldist(i,j,k)=MIN(walldist(i,j,k),zdist);
@@ -95,14 +95,14 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
             }
             else if(p->gcb4[n][3]==4)
             {
-                xc = p->XN[ic + 1 + marge];
-                yc = p->YP[jc + marge];
-                zc = p->ZP[kc + marge];
+                xc = p->XN[IIP1];
+                yc = p->YP[JJP];
+                zc = p->ZP[KKP];
 
-                for(i=0;i<=ic;++i)
+                for(i=0;i<=ii;++i)
                 {
-                    j=jc;
-                    k=kc;
+                    j=jj;
+                    k=kk;
                     xdist = fabs(xc - p->XP[IP]);
                     PCHECK
                         walldist(i,j,k)=MIN(walldist(i,j,k),xdist);
@@ -110,14 +110,14 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
             }
             else if(p->gcb4[n][3]==2)
             {
-                xc = p->XP[ic + marge];
-                yc = p->YN[jc + 1 + marge];
-                zc = p->ZP[kc + marge];
+                xc = p->XP[IIP];
+                yc = p->YN[JJP1];
+                zc = p->ZP[KKP];
 
-                for(j=0;j<=jc;++j)
+                for(j=0;j<=jj;++j)
                 {
-                    i=ic;
-                    k=kc;
+                    i=ii;
+                    k=kk;
                     ydist = fabs(yc - p->YP[JP]);
                     PCHECK
                         walldist(i,j,k)=MIN(walldist(i,j,k),ydist);
@@ -125,14 +125,14 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
             }
             else if(p->gcb4[n][3]==6)
             {
-                xc = p->XP[ic + marge];
-                yc = p->YP[jc + marge];
-                zc = p->ZN[kc + 1 + marge];
+                xc = p->XP[IIP];
+                yc = p->YP[JJP];
+                zc = p->ZN[KKP1];
 
-                for(k=0;k<=kc;++k)
+                for(k=0;k<=kk;++k)
                 {
-                    i=ic;
-                    j=jc;
+                    i=ii;
+                    j=jj;
                     zdist = fabs(zc - p->ZP[KP]);
                     PCHECK
                         walldist(i,j,k)=MIN(walldist(i,j,k),zdist);

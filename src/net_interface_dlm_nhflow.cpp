@@ -60,9 +60,9 @@ void net_interface::dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int nNet)
             jj = p->posc_j(coordI(1));
             kk = p->posc_sig(ii, jj, coordI(2));
 
-            dx = p->DXN[ii + marge];
-            dy = p->DYN[jj + marge];
-            dz = p->DZN[kk + marge]*d->WL(ii,jj);
+            dx = p->DXN[IIP];
+            dy = p->DYN[JJP];
+            dz = p->DZN[KKP]*d->WL(ii,jj);
 
             for (int i_it = ii - 2; i_it <= ii + 2; i_it++)
             {
