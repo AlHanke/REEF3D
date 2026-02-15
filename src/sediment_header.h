@@ -31,6 +31,7 @@ Author: Hans Bihs
 
 #include"reinitopo_RK3.h"
 #include"reinitopo_void.h"
+#include"reinisolid_RK3.h"
 
 #include"sediment_part.h"
 

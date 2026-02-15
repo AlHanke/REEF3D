@@ -24,13 +24,8 @@ Authors: Hans Bihs, Tobias Martin
 #define SIXDOF_OBJ_H_
 
 #include"ddweno_f_nug.h"
-#include"field1.h"
-#include"field2.h"
-#include"field3.h"
-#include"field4.h"
-#include"field4a.h"
-#include"field5.h"
-#include"fieldint5.h"
+#include"field_header.h"
+#include"fieldint4.h"
 #include"slice4.h"
 #include"sliceint5.h"
 #include"vtp3D.h"
@@ -206,7 +201,7 @@ private:
     void reini_RK2(lexer*, fdm*, ghostcell*, field&);
     
     // Raycast 3D
-    fieldint5 cutl,cutr,fbio;
+    fieldint4 cutl,cutr,fbio;
     double **tri_x,**tri_y,**tri_z,**tri_x0,**tri_y0,**tri_z0;
     int *tri_switch,*tri_switch_id,*tri_switch_local,*tri_switch_local_id;
     int tricount_local,*tricount_local_list,*tricount_local_displ;
@@ -336,8 +331,8 @@ private:
     double at,bt,ct,st;
     char name[100];
 	
-	fieldint5 vertice, nodeflag;
-    field5 eta;
+	fieldint4 vertice, nodeflag;
+    field4 eta;
     
     int triangle_token,printnormal_count;
     
