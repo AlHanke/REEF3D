@@ -250,36 +250,49 @@ public:
 	int gceval3(lexer*,int,int,int);
 	int gceval4(lexer*,int,int,int);
 	int gceval4a(lexer*,int,int,int);
-
-	void dirichlet_para(lexer*,field&,double,int,int,int);
-	void dirichlet_ortho(lexer*,field&,double,int,int,int);
-    void dirichlet_para_reflect(lexer*,field&,double,int,int,int);
-	void dirichlet_ortho_reflect(lexer*,field&,double,int,int,int);
-	void neumann(field&,int,int,int);
-    void gcb_debug(field&,int,int,int);
-	void extend(lexer*,field&,double,int,int,int);
-	void outflow(lexer*,field&,int,int,int);
-    void sommerfeld(lexer*,field&,int,int,int);
-    void potentialbc(lexer*,field&,int,int);
-    void neumann_all(field&,int,int,int);
-    void lsm(lexer*,field&,double,int,int,int);
-    void noslip(field&,double,int,int,int);
-    void imagepoint(lexer*,field&, double&, double&,double,int);
-	void atmosphere(lexer*,field&,int,int,int);
-    void heatbc(lexer*,field&,int,int,int);
-	void gravity_press(lexer*,field&,double,int,int,int);
-    void nhpress(lexer*,field&,double,int,int,int);
-    void kinematic_bed(lexer*,field&,double,int,int,int);
     void fivec(lexer*,double*,sliceint&);
     void fivec2D(lexer*,double*,sliceint&);
     void fivec_vel(lexer*,double*,sliceint&);
     void fivec2D_vel(lexer*,double*,sliceint&);
-    void gc_periodic(lexer*,field&,int,int);
     
     //NHFLOW
     void gciobc_update(lexer*, fdm_nhf*);
 
+    void dirichlet_ortho(field&,double,int);
+
 private:
+
+    void Sendrecv_double(int,int,int,int,int,int);
+    void Sendrecv_int(int,int,int,int,int,int);
+    void Sendrecv_1D(const void*[6],int[6],void*[6],int[6],MPI_Datatype);
+    void Sendrecv_2D(const void*[6],int[6],void*[6],int[6],MPI_Datatype);
+    void Sendrecv_3D(const void*[6],int[6],void*[6],int[6],MPI_Datatype);
+    
+    void gcwait(lexer*);   
+
+    // boundary conditions
+    void heatbc(field&,int);
+    void atmosphere(field&);
+    void gravity_press(field&,int);
+    void nhpress(field&,int);
+    void potentialbc(field&,int);
+    void gcb_debug(field&,int);
+    void extend(field&,int);
+    void outflow(field&,int);
+    void sommerfeld(field&,int);
+    void neumann_all(field&,int);
+    void lsm(field&,int);
+    void dirichlet_para(field&,double,int);
+    void dirichlet_para_reflect(field&,double,int);
+    void dirichlet_ortho_reflect(field&,double,int);
+    void neumann(field&,int);
+    void noslip(field&,int);
+
+    MPI_Comm cart_comm = MPI_COMM_NULL;
+    int neighbors[6] = {MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL,
+                        MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL};
+    bool do_comms = true;
+    int ndims;
 
 	int margin, paramargin;
 	double y[15],x[15],pos[15];
@@ -301,21 +314,6 @@ private:
 	int gclabel_vel;
 
 // PARALLEL
-    void Sendrecv_double(int,int,int,int,int,int);
-    void Sendrecv_int(int,int,int,int,int,int);
-    void Sendrecv_1D(const void*[6],int[6],void*[6],int[6],MPI_Datatype);
-    void Sendrecv_2D(const void*[6],int[6],void*[6],int[6],MPI_Datatype);
-    void Sendrecv_3D(const void*[6],int[6],void*[6],int[6],MPI_Datatype);
-    
-    void gcwait(lexer*);
-
-    MPI_Comm cart_comm = MPI_COMM_NULL;
-    int neighbors[6] = {MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL,
-                        MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL};
-    bool do_comms = true;
-    
-    int ndims;
-
 	double *send1,*send2,*send3,*send4,*send5,*send6;
 	double *recv1,*recv2,*recv3,*recv4,*recv5,*recv6;
 	int *isend1,*isend2,*isend3,*isend4,*isend5,*isend6;

@@ -20,35 +20,25 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"lexer.h"
 #include"ghostcell.h"
+#include"lexer.h"
 #include"field.h"
-#include"vec.h"
-#include"fdm.h"
 
-void ghostcell::heatbc(lexer *p, field& f, int gcv, int bc, int cs)
+void ghostcell::heatbc(field& f, int cs)
 {
-	if(cs==1)
-	for(q=0;q<margin;++q)
-	f(i-q-1,j,k)=p->H61_T;
-
-	if(cs==2)
-	for(q=0;q<margin;++q)
-	f(i,j+q+1,k)=p->H62_T;
-
-	if(cs==3)
-	for(q=0;q<margin;++q)
-	f(i,j-q-1,k)=p->H63_T;
-
-	if(cs==4)
-	for(q=0;q<margin;++q)
-	f(i+q+1,j,k)=p->H64_T;
-
-	if(cs==5)
-	for(q=0;q<margin;++q)
-	f(i,j,k-q-1)=p->H65_T;
-
-	if(cs==6)
-	for(q=0;q<margin;++q)
-	f(i,j,k+q+1)=p->H66_T;
+    for(q=0;q<margin;++q)
+    {
+        if(cs==1)
+            f(i-q-1,j,k)=p->H61_T;
+        else if(cs==2)
+            f(i,j+q+1,k)=p->H62_T;
+        else if(cs==3)
+            f(i,j-q-1,k)=p->H63_T;
+        else if(cs==4)
+            f(i+q+1,j,k)=p->H64_T;
+        else if(cs==5)
+            f(i,j,k-q-1)=p->H65_T;
+        else if(cs==6)
+	        f(i,j,k+q+1)=p->H66_T;
+    }
 }
