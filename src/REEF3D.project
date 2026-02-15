@@ -3144,7 +3144,7 @@
             <File Name="ioflow_sflow_waterlevel.cpp"/>
             <File Name="ioflow_sflow_velsource.cpp"/>
             <File Name="ioflow_sflow_discharge.cpp"/>
-            <File Name="inflow_sflow_inflow.cpp"/>
+            <File Name="ioflow_sflow_inflow.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="NHFLOW">
             <File Name="ioflow_nhflow_waterlevel.cpp"/>
@@ -3165,7 +3165,7 @@
           <File Name="ioflow_inflow.cpp"/>
           <File Name="ioflow_f.cpp"/>
           <File Name="ioflow_discharge.cpp"/>
-          <File Name="inflow_hydrograph.cpp"/>
+          <File Name="ioflow_hydrograph.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Gravity">
           <File Name="ioflow_gravity.cpp"/>
