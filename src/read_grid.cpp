@@ -809,7 +809,6 @@ void lexer::read_grid()
 
         gcslparaco1[i][0]=isurf;
         gcslparaco1[i][1]=jsurf;
-        gcslparaco1[i][3]=side1;
     }
 
     for(i=0; i<gcslparaco2_count; ++i)
@@ -825,7 +824,6 @@ void lexer::read_grid()
 
         gcslparaco2[i][0]=isurf;
         gcslparaco2[i][1]=jsurf;
-        gcslparaco2[i][3]=side1;
     }
 
     for(i=0; i<gcslparaco3_count; ++i)
@@ -841,7 +839,6 @@ void lexer::read_grid()
 
         gcslparaco3[i][0]=isurf;
         gcslparaco3[i][1]=jsurf;
-        gcslparaco3[i][3]=side1;
     }
 
     for(i=0; i<gcslparaco4_count; ++i)
@@ -857,7 +854,6 @@ void lexer::read_grid()
 
         gcslparaco4[i][0]=isurf;
         gcslparaco4[i][1]=jsurf;
-        gcslparaco4[i][3]=side1;
     }
 
 
