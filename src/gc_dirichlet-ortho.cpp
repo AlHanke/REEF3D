@@ -26,9 +26,6 @@ Author: Hans Bihs
 
 void ghostcell::dirichlet_ortho(field& f, double dist, int cs)
 {
-    wallvalue=0.0;
-    weight=1.0;
-
     double dx;
     if(cs==dir_labels::X_NEG || cs==dir_labels::X_POS)
         dx = p->DXP[IP];
@@ -69,7 +66,7 @@ void ghostcell::dirichlet_ortho(field& f, double dist, int cs)
             y[m] = f(i,j,k-orderdir+m+2);
     }
 
-    y[orderdir-1]=wallvalue;
+    y[orderdir-1]=0.0;
 
     if(ys==1 && dist<gamma*dx)
     {
@@ -91,6 +88,7 @@ void ghostcell::dirichlet_ortho(field& f, double dist, int cs)
         y[orderdir-2] = (1.0-gamma)*f(i,j,k) + gamma*y1;
     }
 
+    double weight;
     for(q=0; q<margin; ++q)
     {
         y[orderdir+q]=0.0;
@@ -99,10 +97,8 @@ void ghostcell::dirichlet_ortho(field& f, double dist, int cs)
         {
             weight=1.0;
             for(n=0;n<orderdir;++n)
-            {
                 if(m!=n)
                     weight*=(x[q]-pos[n])/(pos[m]-pos[n]+1.0e-20);
-            }
             y[orderdir+q]+=weight*y[m];
         }
     }
