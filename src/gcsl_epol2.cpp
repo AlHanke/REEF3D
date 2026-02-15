@@ -32,19 +32,19 @@ ghostcell::bc_labels ghostcell::gcsleval2(int gcv, int bc, int cs)
 
     // Wall
     // Inflow & Parallel
-    else if((bc==1 || bc==5 || bc==6 || bc==7 || bc==21 || bc==5 || bc==22) && (cs==1 || cs==4 || cs==5 || cs==6) && (gcv==2 || gcv==11 || gcv==21))
+    else if((bc==1 || bc==5 || bc==6 || bc==7 || bc==21 || bc==5 || bc==22) && (cs==X_NEG || cs==X_POS || cs==Z_NEG || cs==Z_POS) && (gcv==2 || gcv==11 || gcv==21))
         return gclabel_v;
 
     // Orthogonal
-    else if((bc==3 || bc==5 || bc==7 || bc==21 || bc==5 || bc==22) && (cs==2 || cs==3) && (gcv==2 || gcv==11 || gcv==21))
+    else if((bc==3 || bc==5 || bc==7 || bc==21 || bc==5 || bc==22) && (cs==Y_POS || cs==Y_NEG) && (gcv==2 || gcv==11 || gcv==21))
         return bc_labels::NOSLIP;
 
     // Outflow
-    else if(bc==2 && (cs==2 || cs==3) && (gcv==2 || gcv==11 || gcv==21))
+    else if(bc==2 && (cs==Y_POS || cs==Y_NEG) && (gcv==2 || gcv==11 || gcv==21))
         return bc_labels::NEUMANN;
 
     // Symmetry
-    else if(bc==3 && (cs==1 || cs==4 || cs==5 || cs==6) && (gcv==2 || gcv==11 || gcv==21))
+    else if(bc==3 && (cs==X_NEG || cs==X_POS || cs==Z_NEG || cs==Z_POS) && (gcv==2 || gcv==11 || gcv==21))
         return bc_labels::NEUMANN;
 
     // Hy

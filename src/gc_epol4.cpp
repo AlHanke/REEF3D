@@ -71,17 +71,17 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::ATMOSPHERE;
 
     // ro
-    else if((bc!=5 && bc!=21) && cs!=5 && gcv==2)
+    else if((bc!=5 && bc!=21) && cs!=dir_labels::Z_NEG && gcv==2)
         return bc_labels::NEUMANN;
 
     // Turbulence kin
     else if((bc==5 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && gcv==20)
         return bc_labels::NEUMANN;
 
-    else if((bc==2 || bc==3) && (cs!=6 || bc!=3) && gcv==20)
+    else if((bc==2 || bc==3) && (cs!=dir_labels::Z_POS || bc!=3) && gcv==20)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && cs==6 && gcv==20)
+    else if(bc==3 && cs==dir_labels::Z_POS && gcv==20)
         return bc_labels::NOSLIP;
 
     else if((bc==6 || bc==7 || bc==8) && gcv==20)
@@ -107,10 +107,10 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else if(bc==1 && gcv==24)
         return bc_labels::NOSLIP;
 
-    else if(bc==3 && cs==6 && gcv==24)
+    else if(bc==3 && cs==dir_labels::Z_POS && gcv==24)
         return bc_labels::NOSLIP;
 
-    else if((bc!=3 || cs!=6) && gcv==24)
+    else if((bc!=3 || cs!=dir_labels::Z_POS) && gcv==24)
         return bc_labels::NEUMANN;
 
     else if((bc==6 || bc==7 || bc==8) && gcv==24)
@@ -119,11 +119,11 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     // omega sigma coordinate
     // Parallel
     // Wall
-    else if((bc==5 || bc==21 || bc==22 || (bc==7 && !awa_label)) && (cs==1 || cs==2 || cs==3 || cs==4) && gcv==12)
+    else if((bc==5 || bc==21 || bc==22 || (bc==7 && !awa_label)) && (cs==dir_labels::X_NEG || cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::X_POS) && gcv==12)
         return bc_labels::NEUMANN;
 
     // Othogonal
-    else if((bc==5 || bc==21 || bc==22 || (bc==7 && !awa_label)) && cs==6 && gcv==12)
+    else if((bc==5 || bc==21 || bc==22 || (bc==7 && !awa_label)) && cs==dir_labels::Z_POS && gcv==12)
         return bc_labels::NOSLIP;
 
     // Inflow
@@ -131,10 +131,10 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Outflow
-    else if(bc==2 && gclabel_outflow && (cs==1 || cs==2 || cs==3 || cs==4) && (gcv==3 || gcv==12))
+    else if(bc==2 && gclabel_outflow && (cs==dir_labels::X_NEG || cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::X_POS) && (gcv==3 || gcv==12))
         return bc_labels::NEUMANN;
 
-    else if(bc==2 && gclabel_outflow && (cs==5 || cs==6) && gcv==12)
+    else if(bc==2 && gclabel_outflow && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==12)
         return bc_labels::NOSLIP;
 
     // Patch
@@ -142,10 +142,10 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Free Surface
-    else if(bc==3 && (cs==1 || cs==2 || cs==3 || cs==4) && gcv==12)
+    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::X_POS) && gcv==12)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==5 || cs==6) && gcv==12 && p->A10==5)
+    else if(bc==3 && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==12 && p->A10==5)
         return bc_labels::NEUMANN;
 
     // VOF
@@ -173,29 +173,29 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Free Surface Uvel
-    else if(bc==3 && (cs==2 || cs==3 || cs==5 || cs==6) && gcv==101)
+    else if(bc==3 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==101)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==1 || cs==4) && gcv==101)
+    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==101)
         return bc_labels::NOSLIP;
 
     // Free Surface Vvel
-    else if(bc==3 && (cs==1 || cs==4 || cs==5 || cs==6) && gcv==102)
+    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==102)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==2 || cs==3) && gcv==102)
+    else if(bc==3 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && gcv==102)
         return bc_labels::NOSLIP;
 
     // Free Surface Wvel
-    else if(bc==3 && (cs==1 || cs==2 || cs==3 || cs==4) && gcv==103)
+    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::X_POS) && gcv==103)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==5 || cs==6) && gcv==103)
+    else if(bc==3 && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==103)
         return bc_labels::NOSLIP;
 
     // Heat
-    else if(((p->H61==1 && cs==1) || (p->H62==1 && cs==2) || (p->H63==1 && cs==3) ||
-             (p->H64==1 && cs==4) || (p->H65==1 && cs==5) || (p->H66==1 && cs==6)) && gcv==80)
+    else if(((p->H61==1 && cs==dir_labels::X_NEG) || (p->H62==1 && cs==dir_labels::Y_POS) || (p->H63==1 && cs==dir_labels::Y_NEG) ||
+             (p->H64==1 && cs==dir_labels::X_POS) || (p->H65==1 && cs==dir_labels::Z_NEG) || (p->H66==1 && cs==dir_labels::Z_POS)) && gcv==80)
         return bc_labels::HEATBC;
 
     else if(gcv==80 || gcv==81)
@@ -212,23 +212,23 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Potential Waves
-    else if((bc==5 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && cs!=5 && gcv==250)
+    else if((bc==5 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && cs!=dir_labels::Z_NEG && gcv==250)
         return bc_labels::NEUMANN;
 
     else if((bc==1 || bc==2 || bc==6 || bc==7) && gcv==250)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && cs!=6 && gcv==250)
+    else if(bc==3 && cs!=dir_labels::Z_POS && gcv==250)
         return bc_labels::NEUMANN;
 
     else if(gcv==999)
         return bc_labels::DEBUG;
 
     // NHFLOW
-    else if(((bc==2 && !pressout_label) || bc==3 || bc==5 || bc==6 || (bc==7 && !awa_label) || bc==21 || bc==22 || bc==111 || bc==112 || bc==211 || bc==212) && cs!=6 && gcv==540)
+    else if(((bc==2 && !pressout_label) || bc==3 || bc==5 || bc==6 || (bc==7 && !awa_label) || bc==21 || bc==22 || bc==111 || bc==112 || bc==211 || bc==212) && cs!=dir_labels::Z_POS && gcv==540)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && cs==6 && gcv==540)
+    else if(bc==3 && cs==dir_labels::Z_POS && gcv==540)
         return bc_labels::NHPRESS;
 
     else

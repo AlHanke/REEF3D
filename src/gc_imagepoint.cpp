@@ -30,17 +30,17 @@ void ghostcell::imagepoint(lexer *p, field& f, double &x_ip, double& val_ip, dou
     y0 = f(i,j,k); // x_j
 
     //fill y[]
-    if(cs==1)
+    if(cs==dir_labels::X_NEG)
         y1=f(i+1,j,k);
-    else if(cs==2)
-        y1=f(i,j-1,k);
-    else if(cs==3)
-        y1=f(i,j+1,k);
-    else if(cs==4)
+    else if(cs==dir_labels::X_POS)
         y1=f(i-1,j,k);
-    else if(cs==5)
+    else if(cs==dir_labels::Y_NEG)
+        y1=f(i,j+1,k);
+    else if(cs==dir_labels::Y_POS)
+        y1=f(i,j-1,k);
+    else if(cs==dir_labels::Z_NEG)
         y1=f(i,j,k+1);
-    else if(cs==6)
+    else if(cs==dir_labels::Z_POS)
         y1=f(i,j,k-1);
 
     x_ip = -(gamma*dx);
