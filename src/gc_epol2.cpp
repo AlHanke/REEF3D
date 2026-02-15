@@ -30,66 +30,54 @@ ghostcell::bc_labels ghostcell::gceval2(lexer *p, int gcv, int bc, int cs)
 
     // Parallel
     // Wall
-    else if((bc==6 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==2 || gcv==11))
+    else if((bc==6 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==11 || gcv==115))
         return gclabel_v;
 
     else if((bc==5 || bc==6 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==111)
         return bc_labels::NOSLIP;
 
-    else if((bc==6 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==115)
-        return gclabel_v;
-
-    else if((bc==6 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==118)
-        return bc_labels::NEUMANN;
-
     // Topo
-    else if(bc==5 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==2 || gcv==11 || gcv==115))
+    else if(bc==5 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==11 || gcv==115))
         return gclabel_vtopo;
-
-    else if(bc==5 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==118)
-        return bc_labels::NEUMANN;
 
     else if((bc==5 || bc==21 || bc==22) && gcv==15)
         return bc_labels::NEUMANN;
 
     // Orthogonal
-    else if((bc==5 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && (gcv==2 || gcv==11))
+    else if((bc==5 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && gcv==11)
         return gclabel_v_orth;
 
     else if((bc==5 || bc==7 || bc==21 || bc==22) && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && gcv==8)
         return bc_labels::NOSLIP;
 
     // Inflow
-    else if(bc==6 && (gcv==2 || gcv==8 || gcv==11))
+    else if(bc==6 && (gcv==8 || gcv==11))
         return gclabel_v_in;
 
     // Outflow
-    else if(bc==2 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==2 || gcv==11) && gclabel_outflow)
+    else if(bc==2 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==11 && gclabel_outflow)
         return bc_labels::NEUMANN;
 
-    else if(bc==2 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && (gcv==2 || gcv==11) && gclabel_outflow)
+    else if(bc==2 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && gcv==11 && gclabel_outflow)
         return gclabel_v_out;
 
     // Patch
-    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==2 || gcv==8 || gcv==11))
+    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==8 || gcv==11))
         return bc_labels::NEUMANN;
 
     // Free Surface
-    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==2 || gcv==11 || gcv==18))
+    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==11)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && (gcv==2 || gcv==11 || gcv==18))
+    else if(bc==3 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && gcv==11)
         return bc_labels::DIRICHLET_ORTH;
 
-    else if(bc==9 && cs==dir_labels::Z_POS && (gcv==2 || gcv==11 || gcv==18))
+    else if(bc==9 && cs==dir_labels::Z_POS && gcv==11)
         return bc_labels::NEUMANN;
 
     // 6DOF
     else if(bc==41 || bc==42 || bc==43)
         return bc_labels::NHPRESS;
-
-    else if(gcv==999)
-        return bc_labels::DEBUG;
 
     else
         return bc_labels::NONE;

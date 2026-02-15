@@ -27,20 +27,20 @@ Author: Hans Bihs
 ghostcell::bc_labels ghostcell::gcsleval1(int gcv, int bc, int cs)
 {
     // general Neuman
-    if(gcv==1 || gcv==40 || gcv==50)
+    if(gcv==1 || gcv==50)
         return bc_labels::NEUMANN;
     // Wall
     // Parallel
-    else if((bc==5 || bc==7 || bc==21 || bc==22) && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && (gcv==1 || gcv==10 || gcv==20))
+    else if((bc==5 || bc==7 || bc==21 || bc==22) && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && (gcv==1 || gcv==10))
         return gclabel_u;
     // Orthogonal
-    else if((bc==3 || bc==5 || (bc==7 && !awa_label) || bc==21 || bc==22) && (cs==X_NEG || cs==X_POS) && (gcv==1 || gcv==10 || gcv==20))
+    else if((bc==3 || bc==5 || (bc==7 && !awa_label) || bc==21 || bc==22) && (cs==X_NEG || cs==X_POS) && (gcv==1 || gcv==10))
         return bc_labels::NOSLIP;
     // Outflow
-    else if(bc==2 && (cs==X_NEG || cs==X_POS) && (gcv==1 || gcv==10 || gcv==20))
+    else if(bc==2 && (cs==X_NEG || cs==X_POS) && (gcv==1 || gcv==10))
         return bc_labels::OUTFLOW;
     // Symmetry
-    else if(bc==3 && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && (gcv==1 || gcv==10 || gcv==20))
+    else if(bc==3 && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && (gcv==1 || gcv==10))
         return bc_labels::NEUMANN;
     // Hx
     else if((bc==1 || bc==6) && (gcv==52 || gcv==54))
@@ -58,7 +58,7 @@ ghostcell::bc_labels ghostcell::gcsleval1(int gcv, int bc, int cs)
     else if((bc==3 || bc==21) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
     // Patch
-    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==1 || gcv==7 || gcv==10 || gcv==20))
+    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==1 || gcv==10))
         return bc_labels::NEUMANN;
     // Patch Hx
     else if((bc==221 || bc==211 || bc==121 || bc==111) && (gcv==50 || gcv==51 || gcv==52 || gcv==53 || gcv==54))
