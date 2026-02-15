@@ -25,7 +25,7 @@ Author: Hans Bihs
 
 ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
 {
-    if(gcv==1 || gcv==30 || gcv==50 || gcv==60 || gcv==80 || gcv==150 || gcv==151 || gcv==152 || gcv==153 || gcv==154)
+    if(gcv==1 || gcv==30 || gcv==50 || gcv==60 || gcv==71 || gcv==72 || gcv==73 || gcv==74 || gcv==80 || gcv==150 || gcv==151 || gcv==152 || gcv==153 || gcv==154)
         return bc_labels::NEUMANN;
 
     //Level Set
@@ -39,11 +39,7 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else if((bc==gbc_labels::OUTFLOW || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || (gcv==52 && p->B77==1) || gcv==54))
         return bc_labels::NEUMANN;
 
-    // inflow
-    else if((bc==gbc_labels::INFLOW || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==52 || gcv==54))
-        return gclabel_lsm_in;
-
-    else if(bc==gbc_labels::WAVEGEN && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if(bc==gbc_labels::WAVEGEN && (gcv==51 || gcv==53))
         return gclabel_lsm_in;
 
     else if(((bc==gbc_labels::OUTFLOW && !pressout_label) || bc==gbc_labels::SYMMETRY || (bc==gbc_labels::WAVEGEN && !pressin_label) || (bc==gbc_labels::NUMBEACH && !awa_label) ||  bc==gbc_labels::WALL || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
@@ -75,22 +71,6 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
 
     else if((bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==24)
         return bc_labels::NOSLIP;
-
-    else if(bc==gbc_labels::SYMMETRY && cs==dir_labels::Z_POS && gcv==24)
-        return bc_labels::NOSLIP;
-
-    else if((bc!=gbc_labels::SYMMETRY || cs!=dir_labels::Z_POS) && gcv==24)
-        return bc_labels::NEUMANN;
-
-    // VOF
-    else if(bc==gbc_labels::INFLOW && (gcv==72 || gcv==74))
-        return bc_labels::NEUMANN;
-
-    else if((bc==gbc_labels::SYMMETRY || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL) && (gcv==71 || gcv==72 || gcv==73 || gcv==74))
-        return bc_labels::NEUMANN;
-
-    else if(bc==gbc_labels::OUTFLOW && (gcv==71 || gcv==74))
-        return bc_labels::NEUMANN;
 
     // Pk Velocity
     else if(bc==gbc_labels::WALL && (gcv==101 || gcv==102 || gcv==103))
