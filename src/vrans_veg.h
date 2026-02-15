@@ -28,7 +28,7 @@ Author: Hans Bihs
 #include"field1.h"
 #include"field2.h"
 #include"field3.h"
-#include"field4a.h"
+#include"field4.h"
 
 using namespace std;
 
@@ -58,7 +58,7 @@ public:
 	
 private:
 	
-	field4a N,D,Cd;
+	field4 N,D,Cd;
     field1 un,unn;
     field2 vn,vnn;
     field3 wn,wnn;

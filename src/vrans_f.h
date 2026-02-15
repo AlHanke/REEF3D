@@ -25,7 +25,7 @@ Author: Hans Bihs
 
 #include"vrans.h"
 #include"increment.h"
-#include"field4a.h"
+#include"field4.h"
 
 using namespace std;
 
@@ -55,7 +55,7 @@ public:
 	
 private:
 	
-	field4a alpha,beta;
+	field4 alpha,beta;
 	
 	double Apor(double,double,double,double);
 	double Bpor(double,double,double);
