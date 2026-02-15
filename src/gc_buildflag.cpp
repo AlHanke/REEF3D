@@ -29,76 +29,71 @@ void ghostcell::gcb_velflagio(lexer *p)
     {
         if(p->gcb1[n][4]==1)
         {
-        i=p->gcb1[n][0];
-        j=p->gcb1[n][1];
-        k=p->gcb1[n][2];
-        
-        p->flag1[Im1JK] = INFLOW_FLAG;
-        p->flag1[Im2JK] = INFLOW_FLAG;
-        p->flag1[Im3JK] = INFLOW_FLAG;
+            i=p->gcb1[n][0];
+            j=p->gcb1[n][1];
+            k=p->gcb1[n][2];
+
+            p->flag1[Im1JK] = INFLOW_FLAG;
+            p->flag1[Im2JK] = INFLOW_FLAG;
+            p->flag1[Im3JK] = INFLOW_FLAG;
         }
-        
-        if(p->gcb1[n][4]==2)
+        else if(p->gcb1[n][4]==2)
         {
-        i=p->gcb1[n][0];
-        j=p->gcb1[n][1];
-        k=p->gcb1[n][2];
-        
-        p->flag1[Ip1JK] = OUTFLOW_FLAG;
-        p->flag1[Ip2JK] = OUTFLOW_FLAG;
-        p->flag1[Ip3JK] = OUTFLOW_FLAG;
-        }    
+            i=p->gcb1[n][0];
+            j=p->gcb1[n][1];
+            k=p->gcb1[n][2];
+
+            p->flag1[Ip1JK] = OUTFLOW_FLAG;
+            p->flag1[Ip2JK] = OUTFLOW_FLAG;
+            p->flag1[Ip3JK] = OUTFLOW_FLAG;
+        }
     }
-    
-    
+
     GC2LOOP
     {
         if(p->gcb2[n][4]==1)
         {
-        i=p->gcb2[n][0];
-        j=p->gcb2[n][1];
-        k=p->gcb2[n][2];
-        
-        p->flag2[Im1JK] = INFLOW_FLAG;
-        p->flag2[Im2JK] = INFLOW_FLAG;
-        p->flag2[Im3JK] = INFLOW_FLAG;
+            i=p->gcb2[n][0];
+            j=p->gcb2[n][1];
+            k=p->gcb2[n][2];
+
+            p->flag2[Im1JK] = INFLOW_FLAG;
+            p->flag2[Im2JK] = INFLOW_FLAG;
+            p->flag2[Im3JK] = INFLOW_FLAG;
         }
-        
-        if(p->gcb2[n][4]==2)
+        else if(p->gcb2[n][4]==2)
         {
-        i=p->gcb2[n][0];
-        j=p->gcb2[n][1];
-        k=p->gcb2[n][2];
-        
-        p->flag2[Ip1JK] = OUTFLOW_FLAG;
-        p->flag2[Ip2JK] = OUTFLOW_FLAG;
-        p->flag2[Ip3JK] = OUTFLOW_FLAG;
-        }    
+            i=p->gcb2[n][0];
+            j=p->gcb2[n][1];
+            k=p->gcb2[n][2];
+
+            p->flag2[Ip1JK] = OUTFLOW_FLAG;
+            p->flag2[Ip2JK] = OUTFLOW_FLAG;
+            p->flag2[Ip3JK] = OUTFLOW_FLAG;
+        }
     }
-    
-    
+
     GC3LOOP
     {
         if(p->gcb3[n][4]==1)
         {
-        i=p->gcb3[n][0];
-        j=p->gcb3[n][1];
-        k=p->gcb3[n][2];
-        
-        p->flag3[Im1JK] = INFLOW_FLAG;
-        p->flag3[Im2JK] = INFLOW_FLAG;
-        p->flag3[Im3JK] = INFLOW_FLAG;
+            i=p->gcb3[n][0];
+            j=p->gcb3[n][1];
+            k=p->gcb3[n][2];
+
+            p->flag3[Im1JK] = INFLOW_FLAG;
+            p->flag3[Im2JK] = INFLOW_FLAG;
+            p->flag3[Im3JK] = INFLOW_FLAG;
         }
-        
-        if(p->gcb3[n][4]==2)
+        else if(p->gcb3[n][4]==2)
         {
-        i=p->gcb3[n][0];
-        j=p->gcb3[n][1];
-        k=p->gcb3[n][2];
-        
-        p->flag3[Ip1JK] = OUTFLOW_FLAG;
-        p->flag3[Ip2JK] = OUTFLOW_FLAG;
-        p->flag3[Ip3JK] = OUTFLOW_FLAG;
-        }    
+            i=p->gcb3[n][0];
+            j=p->gcb3[n][1];
+            k=p->gcb3[n][2];
+
+            p->flag3[Ip1JK] = OUTFLOW_FLAG;
+            p->flag3[Ip2JK] = OUTFLOW_FLAG;
+            p->flag3[Ip3JK] = OUTFLOW_FLAG;
+        }
     }
 }
