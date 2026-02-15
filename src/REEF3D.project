@@ -2682,7 +2682,6 @@
         <File Name="gc_startV.cpp"/>
         <File Name="gc_dirichlet-para-reflect.cpp"/>
         <File Name="gc_dirichlet-ortho-reflect.cpp"/>
-        <File Name="gc_periodic.cpp"/>
         <File Name="gc_heat.cpp"/>
         <File Name="gc_fivec.cpp"/>
         <File Name="gc_epol1.cpp"/>
