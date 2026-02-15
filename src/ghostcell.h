@@ -227,7 +227,7 @@ public:
 private:
     enum bc_labels { NONE=0, DIRICHLET_ORTH=1, DIRICHLET_PARA=2, EXTEND=3, NEUMANN=4, NOSLIP=5, OUTFLOW=6, SOMMERFELD=7, POTENTIAL=8, NHPRESS=9,
          GRAVITY_PRESS=10, DIRICHLET_ORTH_REFLECT=11, DIRICHLET_PARA_REFLECT=12, NEUMANN_X=14, ATMOSPHERE=21, LSM=22, NEUMANN_HX=41, NEUMANN_HY=42,
-         HEATBC=61, NEUMANN_ALL=74, NEUMANN_ALL2=75, DEBUG=99 };
+         HEATBC=61, DEBUG=99 };
 
     void Sendrecv_double(int,int,int,int,int,int);
     void Sendrecv_int(int,int,int,int,int,int);
@@ -273,7 +273,6 @@ private:
     void extend(field&,int);
     void outflow(field&,int);
     void sommerfeld(field&,int);
-    void neumann_all(field&,int);
     void lsm(field&,int);
     void dirichlet_para(field&,double,int);
     void dirichlet_para_reflect(field&,double,int);
