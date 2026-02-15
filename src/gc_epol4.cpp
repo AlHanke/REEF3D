@@ -29,44 +29,44 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     //Level Set
-    else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==42 || bc==43 || bc==7 || bc==8 || bc==9 || bc==221 || bc==211 || bc==121 || bc==111) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if((bc==5 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43 || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if((bc==3 || bc==221 || bc==211 || bc==121 || bc==111) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if((bc==3 || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if((bc==1 || bc==6 || bc==221 || bc==211 || bc==121 || bc==111) && (gcv==52 || gcv==54))
+    else if((bc==1 || bc==6 || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==52 || gcv==54))
         return bc_labels::NEUMANN;
 
     // outflow
-    else if((bc==2 || bc==221 || bc==211 || bc==121 || bc==111) && (gcv==51 || gcv==54 || (gcv==52 && p->B77==1)))
+    else if((bc==2 || bc==111 || bc==121 || bc==211 || bc==221) && ((gcv==51) || (gcv==52 && p->B77==1) || gcv==54))
         return bc_labels::NEUMANN;
 
     // inflow
-    else if((bc==1 || bc==221 || bc==211 || bc==121 || bc==111) && (gcv==52 || gcv==54))
+    else if((bc==1 || bc==111 || bc==121 || bc==211 || bc==221) && (gcv==52 || gcv==54))
         return gclabel_lsm_in;
 
-    else if((bc==6 ) && (gcv==51 || gcv==52 || gcv==53 || gcv==54) )
+    else if(bc==6 && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return gclabel_lsm_in;
 
     // Pressure
-    else if((bc==21 || bc==22 || bc==5 || bc==3 || bc==211 || bc==212 || bc==112 || bc==111) && gcv==40)
+    else if((bc==3 || bc==5 || bc==21 || bc==22 || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // wavegen
-    else if(((bc==6&& !pressin_lable) || bc==211 || bc==212 || bc==112 || bc==111) && gcv==40)
+    else if(((bc==6 && !pressin_lable) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // awa beach
-    else if(((bc==7 && awa_lable==0) || bc==211 || bc==212 || bc==112 || bc==111) && gcv==40)
+    else if(((bc==7 && !awa_lable) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // inflow
-    else if(((bc==1&& !pressin_lable) || bc==211 || bc==212 || bc==112 || bc==111) && gcv==40)
+    else if(((bc==1 && !pressin_lable) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return gclabel_press_in;
 
     // outflow
-    else if(( (bc==2&& !pressout_lable) ||bc==211 || bc==212 || bc==112 || bc==111) && gcv==40)
+    else if(((bc==2 && !pressout_lable) || bc==111 || bc==112 || bc==211 || bc==212) && gcv==40)
         return bc_labels::NEUMANN;
 
     // amtosphere
@@ -78,46 +78,46 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // ro
-    else if(gcv==2 && (cs!=5 && bc!=5 && bc!=21))
+    else if((bc!=5 && bc!=21) && cs!=5 && gcv==2)
         return bc_labels::NEUMANN;
 
     // Turbulence kin
-    else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==42 || bc==43 || bc==9) && gcv==20)
+    else if((bc==5 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && gcv==20)
         return bc_labels::NEUMANN;
 
-    else if((bc==3 || bc==2) && (cs!=6 || bc!=3)  && gcv==20)
+    else if((bc==2 || bc==3) && (cs!=6 || bc!=3) && gcv==20)
         return bc_labels::NEUMANN;
 
-    else if((cs==6 && bc==3) && gcv==20)
+    else if(bc==3 && cs==6 && gcv==20)
         return bc_labels::NOSLIP;
 
     else if((bc==6 || bc==7 || bc==8) && gcv==20)
         return bc_labels::NOSLIP;
 
     // Turbulence eps
-    else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==42 || bc==43 || bc==6 || bc==7 || bc==8 || bc==9) && gcv==30)
+    else if((bc==5 || bc==6 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && gcv==30)
         return bc_labels::NEUMANN;
 
-    else if((bc==3 || bc==2) && gcv==30)
+    else if((bc==2 || bc==3) && gcv==30)
         return bc_labels::NEUMANN;
 
     else if(bc==1 && gcv==30)
         return bc_labels::NEUMANN;
 
     // Turbulence eddyv
-    else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==42 || bc==43 || bc==9) && (gcv==24))
+    else if((bc==5 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && gcv==24)
         return bc_labels::NEUMANN;
 
-    else if((bc==3 || bc==2 || bc==1) && (gcv==24))
+    else if((bc==1 || bc==2 || bc==3) && gcv==24)
         return bc_labels::NEUMANN;
 
     else if(bc==1 && gcv==24)
         return bc_labels::NOSLIP;
 
-    else if((cs==6 && bc==3) && (gcv==24))
+    else if(bc==3 && cs==6 && gcv==24)
         return bc_labels::NOSLIP;
 
-    else if((cs!=6 || bc!=3) && (gcv==24))
+    else if((bc!=3 || cs!=6) && gcv==24)
         return bc_labels::NEUMANN;
 
     else if((bc==6 || bc==7 || bc==8) && gcv==24)
@@ -126,57 +126,57 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     // omega (sigma coordinate)
     // Parallel
     // Wall
-    else if((bc==21 || bc==22 || bc==5 || (bc==7 && awa_lable==0)) && (cs==2 || cs==3 || cs==1 || cs==4) && (gcv==12))
+    else if((bc==5 || bc==21 || bc==22 || (bc==7 && !awa_lable)) && (cs==1 || cs==2 || cs==3 || cs==4) && gcv==12)
         return bc_labels::NEUMANN;
 
     // Othogonal
-    else if((bc==21 || bc==22 || bc==5 || (bc==7 && awa_lable==0)) && (cs==6) && (gcv==12))
+    else if((bc==5 || bc==21 || bc==22 || (bc==7 && !awa_lable)) && cs==6 && gcv==12)
         return bc_labels::NOSLIP;
 
     //Inflow
-    else if((bc==6 && gcv==12))
+    else if(bc==6 && gcv==12)
         return bc_labels::NEUMANN;
 
     //Outflow
-    else if((bc==2 && gclabel_outflow==1) && (gcv==12 || gcv==3) && (cs==2 || cs==3 || cs==1 || cs==4))
+    else if(bc==2 && gclabel_outflow && (cs==1 || cs==2 || cs==3 || cs==4) && (gcv==3 || gcv==12))
         return bc_labels::NEUMANN;
 
-    else if((bc==2 && gclabel_outflow==1) && (gcv==12) && (cs==5 || cs==6))
+    else if(bc==2 && gclabel_outflow && (cs==5 || cs==6) && gcv==12)
         return bc_labels::NOSLIP;
 
     //Patch
-    else if((bc==111 || bc==112 || bc==121 || bc==122) && (gcv==12))
+    else if((bc==111 || bc==112 || bc==121 || bc==122) && gcv==12)
         return bc_labels::NEUMANN;
 
     //Free Surface
-    else if((bc==3) && (cs==2 || cs==3 || cs==1 || cs==4) && (gcv==12))
+    else if(bc==3 && (cs==1 || cs==2 || cs==3 || cs==4) && gcv==12)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs==5 || cs==6) && (gcv==12) && p->A10==5)
+    else if(bc==3 && (cs==5 || cs==6) && gcv==12 && p->A10==5)
         return bc_labels::NEUMANN;
 
     // VOF
-    else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==42 || bc==43 || bc==3 || bc==6 || bc==7 || bc==8 || bc==9) && (gcv==71 || gcv==72 || gcv==73 || gcv==74))
+    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && (gcv==71 || gcv==72 || gcv==73 || gcv==74))
         return bc_labels::NEUMANN;
 
     else if(bc==1 && (gcv==72 || gcv==74))
         return bc_labels::NEUMANN;
 
-    else if((bc==2) && (gcv==71 || gcv==74))
+    else if(bc==2 && (gcv==71 || gcv==74))
         return bc_labels::NEUMANN;
 
-    else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==42 || bc==43 || bc==1 || bc==2 || bc==3 || bc==6 || bc==7 || bc==8 || bc==9) && gcv==70)
+    else if((bc==1 || bc==2 || bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && gcv==70)
         return bc_labels::NEUMANN;
 
-    else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==42 || bc==43 || bc==3 || bc==6 || bc==7 || bc==8 || bc==9) && gcv==75)
+    else if((bc==3 || bc==5 || bc==6 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && gcv==75)
         return bc_labels::EXTEND;
 
     // Pk Velocity
-    else if((bc==21 || bc==22 || bc==5 || bc==41) && (gcv==101 || gcv==102 || gcv==103))
+    else if((bc==5 || bc==21 || bc==22 || bc==41) && (gcv==101 || gcv==102 || gcv==103))
         return bc_labels::NOSLIP;
 
     //Outflow, Inflow
-    else if((bc==2 || bc==1 || bc==7 || bc==8 || bc==6) && (gcv==101 || gcv==102 || gcv==103))
+    else if((bc==1 || bc==2 || bc==6 || bc==7 || bc==8) && (gcv==101 || gcv==102 || gcv==103))
         return bc_labels::NEUMANN;
 
     // Free Surface Uvel
@@ -194,7 +194,7 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NOSLIP;
 
     // Free Surface Wvel
-    else if(bc==3 && (cs==1 || cs==4 || cs==2 || cs==3) && gcv==103)
+    else if(bc==3 && (cs==1 || cs==2 || cs==3 || cs==4) && gcv==103)
         return bc_labels::NEUMANN;
 
     else if(bc==3 && (cs==5 || cs==6) && gcv==103)
@@ -205,8 +205,8 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Heat
-    else if(gcv==80 && ((p->H61==1 && cs==1) || (p->H62==1 && cs==2) || (p->H63==1 && cs==3)
-                     || (p->H64==1 && cs==4) || (p->H65==1 && cs==5) || (p->H66==1 && cs==6)))
+    else if(((p->H61==1 && cs==1) || (p->H62==1 && cs==2) || (p->H63==1 && cs==3) ||
+             (p->H64==1 && cs==4) || (p->H65==1 && cs==5) || (p->H66==1 && cs==6)) && gcv==80)
         return bc_labels::HEATBC;
 
     else if(gcv==80)
@@ -216,30 +216,30 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Potential Ini
-    else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==42 || bc==43 || bc==9) && (gcv==49))
+    else if((bc==5 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && gcv==49)
         return bc_labels::NEUMANN;
 
-    else if((bc==2 || bc==1 || bc==6 || bc==7 || bc==8) && (gcv==49))
+    else if((bc==1 || bc==2 || bc==6 || bc==7 || bc==8) && gcv==49)
         return bc_labels::POTENTIAL;
 
     else if(bc==3 && gcv==49)
         return bc_labels::NEUMANN;
 
     // Potential Waves
-    else if((bc==21 || bc==22 || bc==5 || bc==41 || bc==42 || bc==43 || bc==7 || bc==8 || bc==9) && (cs!=5) && (gcv==250))
-    return bc_labels::NEUMANN;
-
-    else if((bc==2 || bc==1 || bc==7 || bc==6) && (gcv==250))
+    else if((bc==5 || bc==7 || bc==8 || bc==9 || bc==21 || bc==22 || bc==41 || bc==42 || bc==43) && cs!=5 && gcv==250)
         return bc_labels::NEUMANN;
 
-    else if(bc==3 && (cs!=6) && gcv==250)
+    else if((bc==1 || bc==2 || bc==6 || bc==7) && gcv==250)
+        return bc_labels::NEUMANN;
+
+    else if(bc==3 && cs!=6 && gcv==250)
         return bc_labels::NEUMANN;
 
     else if(gcv==999)
         return bc_labels::DEBUG;
 
     // NHFLOW
-    else if((bc==21 || bc==22 || bc==5 || bc==3 || (bc==2&& !pressout_lable) || bc==6 || (bc==7 && awa_lable==0) || bc==211 || bc==212 || bc==112 || bc==111) && cs!=6 && gcv==540)
+    else if(((bc==2 && !pressout_lable) || bc==3 || bc==5 || bc==6 || (bc==7 && !awa_lable) || bc==21 || bc==22 || bc==111 || bc==112 || bc==211 || bc==212) && cs!=6 && gcv==540)
         return bc_labels::NEUMANN;
 
     else if(bc==3 && cs==6 && gcv==540)

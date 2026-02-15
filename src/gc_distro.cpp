@@ -76,10 +76,6 @@ void ghostcell::gcdistro(field& f, int ii, int jj, int kk, double dist, bc_label
         case bc_labels::HEATBC:
             heatbc(f,cs);
             break;
-        case bc_labels::NEUMANN_ALL:
-        case bc_labels::NEUMANN_ALL2:
-            neumann_all(f,cs);
-            break;
         case bc_labels::DEBUG:
             gcb_debug(f,cs);
             break;

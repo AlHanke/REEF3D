@@ -2848,7 +2848,6 @@
         <File Name="gc_dirichlet-para.cpp"/>
         <File Name="gc_extend.cpp"/>
         <File Name="gc_imagepoint.cpp"/>
-        <File Name="gc_neumann_all.cpp"/>
         <File Name="gc_noslip.cpp"/>
         <File Name="gc_potential.cpp"/>
         <File Name="gc_start.cpp"/>
