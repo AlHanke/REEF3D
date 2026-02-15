@@ -39,6 +39,13 @@ Author: Alexander Hanke
 
 void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 {
+    bc_type[0] = p->bcside1;
+    bc_type[1] = p->bcside4;
+    bc_type[2] = p->bcside3;
+    bc_type[3] = p->bcside2;
+    bc_type[4] = p->bcside5;
+    bc_type[5] = p->bcside6;
+
     using namespace amrex;
 
     amrex_geometry.resize(nlevs);
