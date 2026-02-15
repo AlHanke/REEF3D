@@ -44,7 +44,7 @@ public:
 protected:
     fieldint_amrex(lexer* p);
 
-    lexer *pp;
+    lexer *p;
     std::vector<amrex::iMultiFab> mf;
 };
 
