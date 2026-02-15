@@ -26,9 +26,9 @@ Author: Hans Bihs
 void ghostcell::sizeS_update(lexer* p)
 {
     count=0;
-	SLICELOOP4
-	++count;
-	
-	p->sizeS4[0]=0;
-	p->sizeS4[1]=count;
+    SLICELOOP4
+        ++count;
+
+    p->sizeS4[0]=0;
+    p->sizeS4[1]=count;
 }

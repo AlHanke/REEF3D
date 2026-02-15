@@ -22,14 +22,13 @@ Author: Hans Bihs
 
 #include"ghostcell.h"
 #include"lexer.h"
-#include"fdm.h"
 
-void ghostcell::sizeM_update(lexer* p, fdm* a)
+void ghostcell::sizeM_update(lexer* p)
 {
-	count=0;
-	LOOP
-	++count;
-	
-	p->sizeM4[0]=0;
-	p->sizeM4[1]=count;
+    count=0;
+    LOOP
+        ++count;
+
+    p->sizeM4[0]=0;
+    p->sizeM4[1]=count;
 }
