@@ -103,7 +103,6 @@ void lexer::read_grid()
     grid.read((char*)&ddn, sizeof (double));
     DZM=ddn;
 
-
     grid.read((char*)&ddn, sizeof (double));
     originx=ddn;
     grid.read((char*)&ddn, sizeof (double));
@@ -204,7 +203,6 @@ void lexer::read_grid()
     nb5=iin;
     grid.read((char*)&iin, sizeof (int));
     nb6=iin;
-
 
     grid.read((char*)&iin, sizeof (int));
     mx=iin;
@@ -329,10 +327,10 @@ void lexer::read_grid()
     Iarray(flagslice4,imax*jmax);
 
     for(i=0;i<imax*jmax*kmax;++i)
-        flag4[i]=-1;
+    flag4[i]=-1;
 
     for(i=0;i<imax*jmax*kmax;++i)
-        flag_solid[i]=0.0;
+    flag_solid[i]=0.0;
 
     for(i=0;i<imax*jmax;++i)
     {
@@ -367,7 +365,6 @@ void lexer::read_grid()
     Iarray(gcparaco4, gcparaco4_count,3);
     Iarray(gcparaco5, gcparaco5_count,3);
     Iarray(gcparaco6, gcparaco6_count,3);
-
 
     // Slice allocation
     gcbsl1_count=gcbsl2_count=gcbsl4_count=gcbsl4a_count=1;
@@ -443,9 +440,6 @@ void lexer::read_grid()
         flag_topo[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]=ddn;
     }
 
-    // Porous Structure
-
-
     //  GC Surfaces
     gcin_count=0;
     gcout_count=0;
@@ -474,15 +468,14 @@ void lexer::read_grid()
 
         if(surfgroup==1 || surfgroup==6)
             ++gcin_count;
-
-        if(surfgroup==2 || surfgroup==7)
+        else if(surfgroup==2 || surfgroup==7)
             ++gcout_count;
     }
 
     Iarray(gcin, gcin_count,4);
     Iarray(gcout, gcout_count,4);
 
-//  Para Surfaces
+    //  Para Surfaces
     for(i=0; i<gcpara1_count; ++i)
     {
         grid.read((char*)&iin, sizeof (int));
@@ -585,7 +578,7 @@ void lexer::read_grid()
         gcpara6[i][3]=1;
     }
 
-//  Para Corners
+    //  Para Corners
     for(i=0; i<gcparaco1_count; ++i)
     {
         grid.read((char*)&iin, sizeof (int));
@@ -852,7 +845,6 @@ void lexer::read_grid()
         gcslparaco4[i][0]=isurf;
         gcslparaco4[i][1]=jsurf;
     }
-
 
     // bed
     for(i=0; i<knox; ++i)
