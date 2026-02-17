@@ -271,18 +271,20 @@ void lexer::read_grid()
     tot_gcbextra_est=iin;
 
     grid.read((char*)&iin, sizeof (int));
-    grid.read((char*)&iin, sizeof (int));
     cms_flag=iin;
-    grid.read((char*)&iin, sizeof (int));
-    grid.read((char*)&iin, sizeof (int));
-    grid.read((char*)&iin, sizeof (int));
-    
+ 
     grid.read((char*)&ddn, sizeof (double));
     global_orig_x=ddn;
     grid.read((char*)&ddn, sizeof (double));
     global_orig_y=ddn;
     grid.read((char*)&ddn, sizeof (double));
     alpha_grid=ddn;
+
+    // Refinement
+    grid.read((char*)&iin, sizeof (int));
+    #if USE_AMREX
+    nlevs = iin;
+    #endif
 
     // ---------------------------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------------------------
@@ -801,6 +803,34 @@ void lexer::read_grid()
         grid.read((char*)&ddn, sizeof (double));
         data[(i-imin)*jmax + (j-jmin)]=ddn;
     }
+
+    #if USE_AMREX
+    if(nlevs>1)
+    {
+        amrex_refined_grid_coords.resize(nlevs-1);
+        for (int lev = 0; lev < nlevs-1; ++lev)
+        {
+            grid.read((char*)&iin, sizeof (int));
+            int number_of_boxes = iin;
+            amrex_refined_grid_coords[lev].resize(number_of_boxes);
+            for (int box = 0; box < number_of_boxes; ++box)
+            {
+                grid.read((char*)&ddn, sizeof (double));
+                amrex_refined_grid_coords[lev][box].first[0] = ddn;
+                grid.read((char*)&ddn, sizeof (double));
+                amrex_refined_grid_coords[lev][box].first[1] = ddn;
+                grid.read((char*)&ddn, sizeof (double));
+                amrex_refined_grid_coords[lev][box].first[2] = ddn;
+                grid.read((char*)&ddn, sizeof (double));
+                amrex_refined_grid_coords[lev][box].second[0] = ddn;
+                grid.read((char*)&ddn, sizeof (double));
+                amrex_refined_grid_coords[lev][box].second[1] = ddn;
+                grid.read((char*)&ddn, sizeof (double));
+                amrex_refined_grid_coords[lev][box].second[2] = ddn;
+            }
+        }
+    }
+    #endif
 
     grid.close();
 }
