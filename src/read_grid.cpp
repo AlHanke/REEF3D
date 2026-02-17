@@ -211,10 +211,6 @@ void lexer::read_grid()
     mz=iin;
 
     grid.read((char*)&iin, sizeof (int));
-    grid.read((char*)&iin, sizeof (int));
-    grid.read((char*)&iin, sizeof (int));
-
-    grid.read((char*)&iin, sizeof (int));
     bcside1=iin;
     grid.read((char*)&iin, sizeof (int));
     bcside2=iin;
@@ -286,12 +282,6 @@ void lexer::read_grid()
     global_orig_y=ddn;
     grid.read((char*)&ddn, sizeof (double));
     alpha_grid=ddn;
-    
-    grid.read((char*)&ddn, sizeof (double));
-    grid.read((char*)&ddn, sizeof (double));
-    grid.read((char*)&ddn, sizeof (double));
-
-
 
     // ---------------------------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------------------------
@@ -578,15 +568,6 @@ void lexer::read_grid()
         grid.read((char*)&iin, sizeof (int));
         ksurf=iin;
 
-        grid.read((char*)&iin, sizeof (int));
-        side1=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        side2=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        paraconum=iin;
-
         gcparaco1[i][0]=isurf;
         gcparaco1[i][1]=jsurf;
         gcparaco1[i][2]=ksurf;
@@ -602,15 +583,6 @@ void lexer::read_grid()
 
         grid.read((char*)&iin, sizeof (int));
         ksurf=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        side1=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        side2=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        paraconum=iin;
 
         gcparaco2[i][0]=isurf;
         gcparaco2[i][1]=jsurf;
@@ -628,15 +600,6 @@ void lexer::read_grid()
         grid.read((char*)&iin, sizeof (int));
         ksurf=iin;
 
-        grid.read((char*)&iin, sizeof (int));
-        side1=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        side2=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        paraconum=iin;
-
         gcparaco3[i][0]=isurf;
         gcparaco3[i][1]=jsurf;
         gcparaco3[i][2]=ksurf;
@@ -652,15 +615,6 @@ void lexer::read_grid()
 
         grid.read((char*)&iin, sizeof (int));
         ksurf=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        side1=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        side2=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        paraconum=iin;
 
         gcparaco4[i][0]=isurf;
         gcparaco4[i][1]=jsurf;
@@ -678,15 +632,6 @@ void lexer::read_grid()
         grid.read((char*)&iin, sizeof (int));
         ksurf=iin;
 
-        grid.read((char*)&iin, sizeof (int));
-        side1=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        side2=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        paraconum=iin;
-
         gcparaco5[i][0]=isurf;
         gcparaco5[i][1]=jsurf;
         gcparaco5[i][2]=ksurf;
@@ -702,15 +647,6 @@ void lexer::read_grid()
 
         grid.read((char*)&iin, sizeof (int));
         ksurf=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        side1=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        side2=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        paraconum=iin;
 
         gcparaco6[i][0]=isurf;
         gcparaco6[i][1]=jsurf;
@@ -782,9 +718,6 @@ void lexer::read_grid()
         grid.read((char*)&iin, sizeof (int));
         jsurf=iin;
 
-        grid.read((char*)&iin, sizeof (int));
-        side1=iin;
-
         gcslparaco1[i][0]=isurf;
         gcslparaco1[i][1]=jsurf;
     }
@@ -796,9 +729,6 @@ void lexer::read_grid()
 
         grid.read((char*)&iin, sizeof (int));
         jsurf=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        side1=iin;
 
         gcslparaco2[i][0]=isurf;
         gcslparaco2[i][1]=jsurf;
@@ -812,9 +742,6 @@ void lexer::read_grid()
         grid.read((char*)&iin, sizeof (int));
         jsurf=iin;
 
-        grid.read((char*)&iin, sizeof (int));
-        side1=iin;
-
         gcslparaco3[i][0]=isurf;
         gcslparaco3[i][1]=jsurf;
     }
@@ -826,9 +753,6 @@ void lexer::read_grid()
 
         grid.read((char*)&iin, sizeof (int));
         jsurf=iin;
-
-        grid.read((char*)&iin, sizeof (int));
-        side1=iin;
 
         gcslparaco4[i][0]=isurf;
         gcslparaco4[i][1]=jsurf;
