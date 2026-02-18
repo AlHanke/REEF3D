@@ -184,7 +184,6 @@ void driver::driver_ini_fnpf()
     
     ppfsg->ini_wetdry(p,c,pgc);    // ini wetdry and coastline
     
-    pflow->gcio_update(p,a,pgc);
     pflow->ini_fnpf(p,c,pgc);  // including fullini
 
     ppfsg->ini(p,c,pgc,pflow,preini);  // --- 
