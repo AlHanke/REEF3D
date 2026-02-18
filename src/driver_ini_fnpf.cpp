@@ -173,11 +173,10 @@ void driver::driver_ini_fnpf()
     
     // ini
     ppfsg->ini_wetdry(p,c,pgc);    // ini wetdry and coastline
-    pflow->gcio_update(p,a,pgc);
-    
+
     // iowave ini - including fullini
     pflow->ini_fnpf(p,c,pgc);  
-    
+
     
     // ini wetdry and coastline
     ppfsg->inidisc_step2(p,c,pgc,pflow,psolv);   // RK
