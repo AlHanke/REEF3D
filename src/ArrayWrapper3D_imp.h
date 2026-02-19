@@ -24,29 +24,88 @@ Author: Alexander Hanke
 #define ARRAYWRAPPER3D_IMP_H_
 
 #include "ArrayWrapper3D.h"
+#if USE_AMREX
+#include "lexer.h"
+#endif
 
-inline int &ArrayWrapper3D::operator()(int i, int j, int k) noexcept
+inline int &ArrayWrapper3D::operator() (int i, int j, int k) noexcept
 {
+    #if USE_AMREX
+    const auto lo = amrex::lbound(p->amr_cell_mfi->tilebox());
+    return data[p->level][*(p->amr_cell_mfi)].array()(lo.x + i, lo.y + j, lo.z + k, 0);
+    #else
     // Origin and strides are folded into m_base by cache_addressing(), so this
     // touches no lexer member. Equivalent to data[IJK].
     return m_base[i*m_js + j*m_ks + k];
+    #endif
 }
 
 inline const int &ArrayWrapper3D::operator()(int i, int j, int k) const noexcept
 {
+    #if USE_AMREX
+    const auto lo = amrex::lbound(p->amr_cell_mfi->tilebox());
+    return data[p->level][*(p->amr_cell_mfi)].const_array()(lo.x + i, lo.y + j, lo.z + k, 0);
+    #else
     // Origin and strides are folded into m_base by cache_addressing(), so this
     // touches no lexer member. Equivalent to data[IJK].
     return m_base[i*m_js + j*m_ks + k];
+    #endif
 }
 
-inline int &ArrayWrapper3D::operator[](int index) noexcept
+inline int &ArrayWrapper3D::operator[] (int index) noexcept
 {
+    #if USE_AMREX
+    // kz() is p->kmaxF for the vertical-node layout and p->kmax otherwise,
+    // matching the stride the caller's flat index was built with (FIJK vs IJK).
+    const int k_max = kz();
+    const int jk = p->jmax * k_max;
+
+    const int ii_encoded = index / jk;
+    const int rem = index - ii_encoded * jk;
+    const int jj_encoded = rem / k_max;
+    const int kk_encoded = rem - jj_encoded * k_max;
+
+    const int i = ii_encoded + p->imin;
+    const int j = jj_encoded + p->jmin;
+    const int k = kk_encoded + p->kmin;
+
+    const auto lo = amrex::lbound(p->amr_cell_mfi->tilebox());
+    const int ii = lo.x + i;
+    const int jj = lo.y + j;
+    const int kk = lo.z + k;
+
+    return data[p->level][*(p->amr_cell_mfi)].array()(ii, jj, kk, 0);
+    #else
     return data.data()[index];
+    #endif
 }
 
-inline const int &ArrayWrapper3D::operator[](int index) const noexcept
+inline const int &ArrayWrapper3D::operator[] (int index) const noexcept
 {
+    #if USE_AMREX
+    // kz() is p->kmaxF for the vertical-node layout and p->kmax otherwise,
+    // matching the stride the caller's flat index was built with (FIJK vs IJK).
+    const int k_max = kz();
+    const int jk = p->jmax * k_max;
+
+    const int ii_encoded = index / jk;
+    const int rem = index - ii_encoded * jk;
+    const int jj_encoded = rem / k_max;
+    const int kk_encoded = rem - jj_encoded * k_max;
+
+    const int i = ii_encoded + p->imin;
+    const int j = jj_encoded + p->jmin;
+    const int k = kk_encoded + p->kmin;
+
+    const auto lo = amrex::lbound(p->amr_cell_mfi->tilebox());
+    const int ii = lo.x + i;
+    const int jj = lo.y + j;
+    const int kk = lo.z + k;
+
+    return data[p->level][*(p->amr_cell_mfi)].const_array()(ii, jj, kk, 0);
+    #else
     return data.data()[index];
+    #endif
 }
 
 #endif
