@@ -21,6 +21,7 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"lexer.h"
+#include<algorithm>
 #include<iostream>
 #include<fstream>
 #include<sys/stat.h>
@@ -297,7 +298,8 @@ void lexer::read_grid()
 
     grid::assign_margin();
 
-    Iarray(flag4,imax*jmax*kmax);
+    flag4_grid = std::unique_ptr<int[]>(new int[imax*jmax*kmax]);
+    std::fill_n(flag4_grid.get(), imax*jmax*kmax, -1);
 
     //if(solidread==1)
     flag_solid = std::make_unique<int[]>(imax*jmax*kmax);
@@ -315,9 +317,6 @@ void lexer::read_grid()
     Iarray(flagslice1,imax*jmax);
     Iarray(flagslice2,imax*jmax);
     Iarray(flagslice4,imax*jmax);
-
-    for(i=0;i<imax*jmax*kmax;++i)
-    flag4[i]=-1;
 
     for(i=0;i<imax*jmax;++i)
     {
@@ -379,7 +378,7 @@ void lexer::read_grid()
     for(k=0; k<knoz; ++k)
     {
         grid.read((char*)&iin, sizeof (int));
-        flag4[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]=iin;
+        flag4_grid[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]=iin;
     }
 
     // Nodes XYZ
