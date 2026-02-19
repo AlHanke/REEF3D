@@ -25,21 +25,29 @@ Author: Hans Bihs
 
 void ghostcell::flagfield(lexer *p)
 {
-    for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
+    p->level = 0;
+    TILE_LOOP
+    MALOOP
     {
-        if(p->flag4[i]==1)
+        if(p->flag4(i,j,k)==1)
         {
-            p->flag4[i]=WATER_FLAG;
+            p->flag4(i,j,k)=WATER_FLAG;
         }
-        else if(p->flag4[i]==-1)
+        else if(p->flag4(i,j,k)==-1)
         {
-            p->flag4[i]=OBJ_FLAG;
+            p->flag4(i,j,k)=OBJ_FLAG;
         }
     }
 
+    #if USE_AMREX
+    p->flag4.fillBoundary();
+    #else
     flagx(p,p->flag4);
+    #endif
 
+    p->level = 0;
     if(p->Y60==1)
+    TILE_LOOP
     IJKLOOP
     PCHECK
     {
@@ -59,11 +67,13 @@ void ghostcell::flagfield(lexer *p)
             p->flag4[IJK]=OBJ_FLAG;
     }
 
-    for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
+    p->level = 0;
+    TILE_LOOP
+    MALOOP
     {
-        p->flag1[i]=p->flag4[i];
-        p->flag2[i]=p->flag4[i];
-        p->flag3[i]=p->flag4[i];
+        p->flag1(i,j,k)=p->flag4(i,j,k);
+        p->flag2(i,j,k)=p->flag4(i,j,k);
+        p->flag3(i,j,k)=p->flag4(i,j,k);
     }
 
     GC4LOOP
@@ -96,7 +106,14 @@ void ghostcell::flagfield(lexer *p)
             p->flag3[IJK]=OBJ_FLAG;
     }
 
+    #if USE_AMREX
+    p->flag1.fillHigherLevels();
+    p->flag2.fillHigherLevels();
+    p->flag3.fillHigherLevels();
+    p->flag4.fillHigherLevels();
+    #else
     flagx(p,p->flag1);
     flagx(p,p->flag2);
     flagx(p,p->flag3);
+    #endif
 }
