@@ -143,7 +143,11 @@ void driver::loop_cfd(fdm* a)
         p->reinitime=0.0;
         p->wavecalctime=0.0;
 
+        #if USE_AMREX
+        a->press.FillBoundary();
+        #else
         pgc->gcparax(p,a->press,4);
+        #endif
 
         stop(p,a,pgc);
     }
