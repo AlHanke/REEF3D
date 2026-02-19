@@ -27,11 +27,20 @@ Author: Hans Bihs
 
 void ioflow_f::outflow_plain(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
 {
-    for(n=0;n<p->gcout_count;n++)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->outflow_ijk[p->level])
+    {
+        i=iv[0]-1;
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcout_count;++n)
     {
         i=p->gcout[n][0]-1;
         j=p->gcout[n][1];
         k=p->gcout[n][2];
+    #endif
 
         u(i+1,j,k)=p->Uo;
         u(i+2,j,k)=p->Uo;
@@ -51,17 +60,27 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
     double ratio;
 
     // water depth
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(n=0; n<p->outflow_ijk[p->level].size(); n++)
+    {
+        auto iv = p->outflow_ijk[p->level][n];
+        i=iv[0]-1;
+        j=iv[1];
+        k=iv[2];
+    #else
     for(n=0;n<p->gcout_count;++n)
     {
         i=p->gcout[n][0]-1;
         j=p->gcout[n][1];
         k=p->gcout[n][2];
+    #endif
 
         if(a->phi(i,j,k)>0.0)
         {
             hmin=MIN(hmin,p->ZN[KP]);
             hmax=MAX(hmax,p->ZN[KP1]);
-            dmax=MAX(dmax,walldout[n]);
+            dmax=MAX(dmax,walldout[p->level][n]);
         }
     }
     hmax=pgc->globalmax(hmax);
@@ -84,13 +103,23 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
     shearvel= sqrt(fabs(tau/1000.0));
 
 
-    for(n=0;n<p->gcout_count;n++)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(n=0; n<p->outflow_ijk[p->level].size(); n++)
+    {
+        auto iv = p->outflow_ijk[p->level][n];
+        i=iv[0]-1;
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcout_count;++n)
     {
         i=p->gcout[n][0]-1;
         j=p->gcout[n][1];
         k=p->gcout[n][2];
+    #endif
 
-        u(i+1,j,k)=u(i+2,j,k)=u(i+3,j,k)= shearvel*2.5*log(MAX(30.0*MIN(walldout[n],dmax)/ks,1.0));
+        u(i+1,j,k)=u(i+2,j,k)=u(i+3,j,k)= shearvel*2.5*log(MAX(30.0*MIN(walldout[p->level][n],dmax)/ks,1.0));
     }
 
 
@@ -108,11 +137,20 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
         else if(p->B60==3 || p->B60==4)
             ratio = hydrograph_ipol(p,pgc,hydro_out,hydro_out_count)/p->Qo;
 
+        LEVEL_LOOP
+        #if USE_AMREX
+        for(auto iv : p->outflow_ijk[p->level])
+        {
+            i=iv[0]-1;
+            j=iv[1];
+            k=iv[2];
+        #else
         for(n=0;n<p->gcout_count;++n)
         {
             i=p->gcout[n][0]-1;
             j=p->gcout[n][1];
             k=p->gcout[n][2];
+        #endif
 
             u(i+1,j,k)*=ratio;
             u(i+2,j,k)*=ratio;
@@ -121,11 +159,20 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
     }
 
     if(p->B61==4 && p->count>0)
-    for(n=0;n<p->gcout_count;n++)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->outflow_ijk[p->level])
+    {
+        i=iv[0]-1;
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcout_count;++n)
     {
         i=p->gcout[n][0]-1;
         j=p->gcout[n][1];
         k=p->gcout[n][2];
+    #endif
 
         if(a->phi(i,j,k)<-1.0*p->F45*p->DXM)
         {
@@ -138,11 +185,20 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
 
 void ioflow_f::outflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
 {
-    for(n=0;n<p->gcout_count;n++)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->outflow_ijk[p->level])
+    {
+        i=iv[0]-1;
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcout_count;++n)
     {
         i=p->gcout[n][0]-1;
         j=p->gcout[n][1];
         k=p->gcout[n][2];
+    #endif
 
         if(a->phi(i,j,k)>=-epsi1*p->DXM)
         {
@@ -172,11 +228,20 @@ void ioflow_f::outflow_corresponding(lexer *p, fdm* a, ghostcell* pgc, field& u,
 {
     double factor=1.0, uout;
 
-    for(n=0;n<p->gcout_count;n++)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->outflow_ijk[p->level])
+    {
+        i=iv[0]-1;
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcout_count;++n)
     {
         i=p->gcout[n][0]-1;
         j=p->gcout[n][1];
         k=p->gcout[n][2];
+    #endif
 
         factor = p->W10/p->Qo;
 

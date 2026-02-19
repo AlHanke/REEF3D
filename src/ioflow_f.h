@@ -27,6 +27,8 @@ Author: Hans Bihs
 #include"resize.h"
 #include"increment.h"
 
+#include <vector>
+
 using namespace std;
 
 class ioflow_f : public ioflow,private resize_class,public increment
@@ -156,8 +158,7 @@ private:
     int n,count;
     double area,Ai,Ao,Hi,Ho,Ui,fac;
     double zval;
-    double *walldin,*walldout;
-    int walldin_size,walldout_size;
+    std::vector<std::vector<double>> walldin,walldout;
     double hval;
     int hcount;
 

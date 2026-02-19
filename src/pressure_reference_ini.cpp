@@ -31,8 +31,13 @@ void pressure_reference::reference_ini(lexer*p, fdm* a, ghostcell *pgc)
     int gcinglobal=0;
     int gcoutglobal=0;
 
+    #if USE_AMREX
+    gcinglobal=pgc->globalisum(p->inflow_ijk[0].size());
+    gcoutglobal=pgc->globalisum(p->outflow_ijk[0].size());
+    #else
     gcinglobal=pgc->globalisum(p->gcin_count);
     gcoutglobal=pgc->globalisum(p->gcout_count);
+    #endif
 
     // ini gage location
     if(((p->B32==0 && p->B30==1) || p->B30==2 || p->B30==3))
@@ -42,11 +47,19 @@ void pressure_reference::reference_ini(lexer*p, fdm* a, ghostcell *pgc)
 
         //find active smallest xy inlet location
         if(gcinglobal>0)
-        for(n=0;n<p->gcin_count;n++)
+        #if USE_AMREX
+        for(auto iv : p->inflow_ijk[p->level])
+        {
+            i=iv[0];
+            j=iv[1];
+            k=iv[2];
+        #else
+        for(n=0;n<p->gcin_count;++n)
         {
             i=p->gcin[n][0];
             j=p->gcin[n][1];
             k=p->gcin[n][2];
+        #endif
 
             xmin = MIN(xmin,p->XP[IP]);
             ymin = MIN(ymin,p->YP[JP]);
@@ -77,11 +90,19 @@ void pressure_reference::reference_ini(lexer*p, fdm* a, ghostcell *pgc)
 
         //find active smallest xy inlet location
         if(gcoutglobal>0)
-        for(n=0;n<p->gcout_count;n++)
+        #if USE_AMREX
+        for(auto iv : p->outflow_ijk[p->level])
+        {
+            i=iv[0];
+            j=iv[1];
+            k=iv[2];
+        #else
+        for(n=0;n<p->gcout_count;++n)
         {
             i=p->gcout[n][0];
             j=p->gcout[n][1];
             k=p->gcout[n][2];
+        #endif
 
             xmax = MAX(xmax,p->XP[IP]);
             ymin = MIN(ymin,p->YP[JP]);

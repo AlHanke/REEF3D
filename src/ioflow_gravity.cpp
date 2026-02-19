@@ -42,6 +42,9 @@ ioflow_gravity::ioflow_gravity(lexer *p, ghostcell *pgc, patchBC_interface *ppBC
 
 void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 {
+    #if USE_AMREX
+    p->define_inflow_outflow_ba();
+    #else
     int count1,count2,n;
 
     count1=0;
@@ -69,6 +72,7 @@ void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 
     p->gcin_count=count1;
     p->gcout_count=count2;
+    #endif
 }
 
 void ioflow_gravity::discharge(lexer *p, fdm* a, ghostcell* pgc)

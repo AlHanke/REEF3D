@@ -51,19 +51,27 @@ void iowave::discharge(lexer *p, fdm* a, ghostcell* pgc)
 
 void iowave::Qin(lexer *p, fdm* a, ghostcell* pgc)
 {
-    area=0.0;
     Ai=0.0;
     p->Qi=0.0;
     p->Ui=0.0;
 
     // in
-    for(n=0;n<p->gcin_count;n++)
-    if(p->gcin[n][3]>0)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->inflow_ijk[p->level])
     {
-        area=0.0;
+        i=iv[0];
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcin_count;++n)
+    {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
         k=p->gcin[n][2];
+    #endif
+
+        area=0.0;
 
         if(a->phi(i,j,k)>-0.5*p->DZN[KP]-1.0e-20 && a->topo(i,j,k)>0.0)
         {
@@ -106,13 +114,21 @@ void iowave::Qout(lexer *p, fdm* a, ghostcell* pgc)
     p->Uo=0.0;
 
     // out
-    for(n=0;n<p->gcout_count;n++)
-    if(p->gcout[n][3]>0)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->outflow_ijk[p->level])
     {
-        area=0.0;
+        i=iv[0];
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcout_count;++n)
+    {
         i=p->gcout[n][0];
         j=p->gcout[n][1];
         k=p->gcout[n][2];
+    #endif
+        area=0.0;
 
         if(a->phi(i,j,k)>-0.5*p->DZN[KP]-1.0e-20 && a->topo(i,j,k)>0.0)
         {
@@ -153,11 +169,20 @@ void iowave::turbulence_io(lexer *p, fdm* a, ghostcell* pgc)
 {
     if(p->B98>=3 || p->B99>=3)
     {
-        for(n=0;n<p->gcin_count;n++)
+        LEVEL_LOOP
+        #if USE_AMREX
+        for(auto iv : p->inflow_ijk[p->level])
+        {
+            i=iv[0];
+            j=iv[1];
+            k=iv[2];
+        #else
+        for(n=0;n<p->gcin_count;++n)
         {
             i=p->gcin[n][0];
             j=p->gcin[n][1];
             k=p->gcin[n][2];
+        #endif
 
             if(a->phi(i-1,j,k)<-1.0*p->F45*p->DXM)
             {
