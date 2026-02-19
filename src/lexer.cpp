@@ -20,26 +20,20 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"lexer.h"
+#include "lexer.h"
 
-lexer::lexer() : cmu(0.09), position(this), interpolation(this), coordinates(this)
+lexer::lexer() : coordinates(this), interpolation(this), position(this),
+                 cmu(0.09), sigT(0.9), mpirank(0)
 {
-    sigT=0.9;
-    
-	control::ini_default();
+    control::ini_default();
 
     solveriter=0;
-	mpirank=0;
 
-	simtime=0.0;
-	poissontime=0.0;
-	pressval=0;
+    simtime=0.0;
+    poissontime=0.0;
+    pressval=0;
     alpha=0.0;
     solidread=toporead=porousread=0;
     net_count=0;
     mooring_count=0;
-}
-
-lexer::~lexer()
-{
 }

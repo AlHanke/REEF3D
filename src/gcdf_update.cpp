@@ -46,12 +46,11 @@ void ghostcell::set_DF(lexer *p, fdm *a)
 
 void ghostcell::gcdf_update(lexer *p, fdm *a)
 {
-    double psi;
-
     // -----------------------------------------------------------
     // FLAG
     if(p->G5==1)
     {
+        double psi;
         BASELOOP
         {
             if (p->j_dir==0)
