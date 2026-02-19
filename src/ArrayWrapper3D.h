@@ -23,7 +23,12 @@ Author: Alexander Hanke
 #ifndef ARRAYWRAPPER3D_H_
 #define ARRAYWRAPPER3D_H_
 
+#if USE_AMREX
+#include <AMReX_iMultiFab.H>
+#include <AMReX_Vector.H>
+#else
 #include <vector>
+#endif
 
 class lexer;
 
@@ -67,6 +72,11 @@ public:
 
     operator int *();
 
+    #if USE_AMREX
+    void fillBoundary();
+    void fillHigherLevels();
+    #endif
+
 private:
     /// Vertical extent for this wrapper's data location: p->kmaxF for the
     /// vertical-node layout (7), p->kmax otherwise. Resolved on demand rather
@@ -76,19 +86,25 @@ private:
     /// its initialiser list).
     int kz() const noexcept;
 
+    #if not USE_AMREX
     /// Recomputes the cached addressing below from @p data and the lexer grid
     /// metrics. Must be called after anything that resizes @p data.
     void cache_addressing() noexcept;
+    #endif
 
     lexer *p = nullptr;
 
     unsigned int data_location = 0;
 
+    #if USE_AMREX
+    amrex::Vector<amrex::iMultiFab> data;
+    #else
     std::vector<int> data;
 
     int* m_base = nullptr; ///< origin-folded base: m_base[i*m_js + j*m_ks + k]
     long m_js   = 0;       ///< i-stride (jmax*kmax); long on purpose, see cache_addressing
     long m_ks   = 0;       ///< j-stride (kmax);      long on purpose, see cache_addressing
+    #endif
 };
 
 #endif
