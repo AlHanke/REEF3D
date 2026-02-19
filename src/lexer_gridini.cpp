@@ -54,26 +54,24 @@ void lexer::flagini()
 {
     control_calc();
 	gridsize();
-	
-	Iarray(flag1,imax*jmax*kmax);
-	Iarray(flag2,imax*jmax*kmax);
-	Iarray(flag3,imax*jmax*kmax);
-    Iarray(flag5,imax*jmax*kmax);
 
-    Iarray(flagsf1,imax*jmax*kmax);
-	Iarray(flagsf2,imax*jmax*kmax);
-	Iarray(flagsf3,imax*jmax*kmax);
-	Iarray(flagsf4,imax*jmax*kmax);
+    flag4.resize();
 
-    for(i=0; i<knox; ++i)
-    for(j=0; j<knoy; ++j)
-    for(k=0; k<knoz; ++k)
-    {
-    flagsf1[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]=1;
-    flagsf2[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]=1;
-    flagsf3[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]=1;
-    flagsf4[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]=1;
-    }
+    lexer* p = this;
+    p->level = 0;
+    TILE_LOOP
+    IJKLOOP
+    flag4[IJK] = flag4_grid[IJK];
+
+    flag1.resize();
+    flag2.resize();
+    flag3.resize();
+    flag5.resize();
+
+    flagsf1.resize(1);
+    flagsf2.resize(1);
+    flagsf3.resize(1);
+    flagsf4.resize(1);
 
     // boundary conditions
     Iarray(IO,imax*jmax*kmax);
@@ -87,7 +85,7 @@ void lexer::flagini()
 
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
-    DFBED[(i-imin)*jmax + j-jmin] = 1;
+    DFBED[IJ] = 1;
 
     // flag
 	makeflag(flag1);
@@ -97,16 +95,16 @@ void lexer::flagini()
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
     for(k=-margin; k<knoz+margin; ++k)
-    IO[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin] = 0;
+    IO[IJK] = 0;
 
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
-    IOSL[(i-imin)*jmax + j-jmin] = 0;
+    IOSL[IJ] = 0;
 
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
     for(k=-margin; k<knoz+margin; ++k)
-    DF[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin] = 1;
+    DF[IJK] = 1;
 	
 	x_dir=y_dir=z_dir=1.0;
 	

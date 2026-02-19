@@ -22,12 +22,12 @@ Author: Hans Bihs
 
 #include"lexer.h"
 
-lexer::lexer() : cmu(0.09), position(this), interpolation(this)
+lexer::lexer() : position(this), interpolation(this),
+                 flag1(this), flag2(this), flag3(this), flag4(this), flag5(this),
+                 flagsf1(this), flagsf2(this), flagsf3(this), flagsf4(this),
+                 cmu(0.09), sigT(0.9), mpirank(0)
 {
-    sigT=0.9;
-    
-	ini_default(this);
-    mpirank=0;
+    ini_default(this);
 }
 
 lexer::~lexer()
