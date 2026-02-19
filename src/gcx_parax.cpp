@@ -20,6 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#if not USE_AMREX
+
 #include"ghostcell.h"
 #include"lexer.h"
 #include"field.h"
@@ -218,3 +220,5 @@ void ghostcell::gcparax(lexer* p, field& f, int gcv)
         }
     }
 }
+
+#endif
