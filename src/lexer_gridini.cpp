@@ -36,6 +36,8 @@ void lexer::flagini()
     control_calc();
 	gridsize();
 
+    lexer *p = this;
+
 	Iarray(flag1,imax*jmax*kmax);
 	Iarray(flag2,imax*jmax*kmax);
 	Iarray(flag3,imax*jmax*kmax);
@@ -58,16 +60,16 @@ void lexer::flagini()
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
     for(k=-margin; k<knoz+margin; ++k)
-    IO[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin] = 0;
+    IO[IJK] = 0;
 
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
-    IOSL[(i-imin)*jmax + j-jmin] = 0;
+    IOSL[IJ] = 0;
 
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
     for(k=-margin; k<knoz+margin; ++k)
-    DF[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin] = 1;
+    DF[IJK] = 1;
 
 	if(B98>=3)
 	for(n=0;n<gcb4_count;++n)
