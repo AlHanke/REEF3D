@@ -362,14 +362,12 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
         pgc->gcperiodicx(p,a->press,4);
 
         int num=0;
-            if(p->P15==1)
-                num = p->printcount;
-            else if(p->P15==2)
-                num = p->count;
+        if(p->P15==1)
+            num = p->printcount;
+        else if(p->P15==2)
+            num = p->count;
 
-        #if USE_AMREX
-        if(p->nlevs==1)
-        #endif
+        #if not USE_AMREX
         {
             outputFormat->extent(p,pgc);
 
@@ -898,8 +896,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
 
             writeFile(name, total_size);
         }
-        #if USE_AMREX
-        else
+        #else
         {
             // 1. Define variable names
             amrex::Vector<std::string> varnames = {"u", "v", "w", "pressure", "phi", "elevation"};
