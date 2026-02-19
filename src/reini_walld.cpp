@@ -148,7 +148,11 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
 
     reiniter = pgc->globalimax(reiniter);
 
+    #if USE_AMREX
+    f.FillBoundary();
+    #else
     pgc->gcparax(p,f,4);
+    #endif
 
     for(int q=0;q<reiniter;++q)
     {
@@ -183,6 +187,10 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
                 f(i,j,k) = 0.5*p->DZN[KP];
         }
 
+        #if USE_AMREX
+        f.FillBoundary();
+        #else
         pgc->gcparax(p,f,4);
+        #endif
     }
 }

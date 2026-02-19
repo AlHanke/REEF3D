@@ -36,7 +36,11 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
 
     walldist.setVal(1.0e9);
 
+    #if USE_AMREX
+    walldist.FillBoundary();
+    #else
     gcparax(p,walldist,4);
+    #endif
 
     GC4LOOP
     {
@@ -140,7 +144,11 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
         }
     }
 
+    #if USE_AMREX
+    walldist.FillBoundary();
+    #else
     gcparax(p,walldist,4);
+    #endif
     gcparacox(p,walldist);
 
     // calculate global position of gcb cell
@@ -191,6 +199,10 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
 
     reini.start(a,p,walldist,this,pflow);
 
+    #if USE_AMREX
+    walldist.FillBoundary();
+    #else
     gcparax(p,walldist,4);
+    #endif
     gcparacox(p,walldist);
 }
