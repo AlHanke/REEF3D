@@ -27,6 +27,9 @@ Author: Hans Bihs
 void ghostcell::start1(lexer *p, field& f, int gcv)
 {
     //  MPI Boundary Swap
+    #if USE_AMREX
+    f.FillDomainBoundary(gcv);
+    #else
     if(do_comms)
     {
         starttime=timer();
@@ -61,11 +64,15 @@ void ghostcell::start1(lexer *p, field& f, int gcv)
 
     if(do_comms)
         gcparacox(p,f);
+    #endif
 }
 
 void ghostcell::start2(lexer *p, field& f, int gcv)
 {
     //  MPI Boundary Swap
+    #if USE_AMREX
+    f.FillDomainBoundary(gcv);
+    #else
     if(do_comms)
     {
         starttime=timer();
@@ -101,11 +108,15 @@ void ghostcell::start2(lexer *p, field& f, int gcv)
 
     if(do_comms)
         gcparacox(p,f);
+    #endif
 }
 
 void ghostcell::start3(lexer *p, field& f, int gcv)
 {
     //  MPI Boundary Swap
+    #if USE_AMREX
+    f.FillDomainBoundary(gcv);
+    #else
     if(do_comms)
     {
         starttime=timer();
@@ -139,11 +150,15 @@ void ghostcell::start3(lexer *p, field& f, int gcv)
 
     if(do_comms)
         gcparacox(p,f);
+    #endif
 }
 
-void ghostcell::start4(lexer *p, field &f, int gcv)
+void ghostcell::start4(lexer *p, field& f, int gcv)
 {
     //  MPI Boundary Swap
+    #if USE_AMREX
+    f.FillDomainBoundary(gcv);
+    #else
     if(do_comms)
     {
         starttime=timer();
@@ -177,6 +192,7 @@ void ghostcell::start4(lexer *p, field &f, int gcv)
 
     if(do_comms)
         gcparacox(p,f);
+    #endif
 }
 
 void ghostcell::start4_sum(lexer *p, field& f, int gcv)

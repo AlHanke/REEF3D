@@ -134,7 +134,9 @@ public:
     void flagbase(lexer*);
 
     // PARALLEL
+    #if not USE_AMREX
     void gcparax(lexer*, field&, int);
+    #endif
     void gcparaxint(lexer*, fieldint&, int);
     void gcparaxijk(lexer*, double*, int);
     void gcparaxijk_single(lexer*, double*, int);
