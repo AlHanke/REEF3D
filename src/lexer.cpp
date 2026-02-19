@@ -21,8 +21,11 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include "lexer.h"
+#include "definitions.h"
 
 lexer::lexer() : coordinates(this), interpolation(this), position(this),
+                 flag1(this,DataLocation::FACE_X), flag2(this,DataLocation::FACE_Y), flag3(this,DataLocation::FACE_Z),
+                 flag4(this,DataLocation::CELL_CENTERED), flag5(this,DataLocation::CELL_CENTERED),
                  mpirank(0)
 {
     control::ini_default();

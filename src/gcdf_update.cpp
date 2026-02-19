@@ -51,7 +51,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     if(p->G5==1)
     {
         double psi;
-        BASELOOP
+        IJKLOOP
+        PBASECHECK
         {
             if (p->j_dir==0)
                 psi = -p->X41*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
@@ -68,7 +69,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
 
         flagx(p,p->flag4);
 
-        BASELOOP
+        IJKLOOP
+        PBASECHECK
         {
             p->flag1[IJK]=p->flag4[IJK];
             p->flag2[IJK]=p->flag4[IJK];
@@ -98,7 +100,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     count=0;
 
     // gcdf count
-    BASELOOP
+    IJKLOOP
+    PBASECHECK
     if(p->DF[IJK]>0)
     {
         if(p->DF[Im1JK]<0)
@@ -130,7 +133,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     // assign gcdf entries
     count=0;
 
-    BASELOOP
+    IJKLOOP
+    PBASECHECK
     if(p->DF[IJK]>0)
     {
         if(p->DF[Im1JK]<0)
@@ -252,7 +256,8 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf
 
     count = 0;
 
-    BASELOOP
+    IJKLOOP
+    PBASECHECK
     if(flagsf(i,j,k)>0)
     {
         if(flagsf(i-1,j,k)<0)
@@ -284,7 +289,8 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf
     // assign gcdf entries
     count=0;
 
-    BASELOOP
+    IJKLOOP
+    PBASECHECK
     if(flagsf(i,j,k)>0)
     {
         if(flagsf(i-1,j,k)<0)

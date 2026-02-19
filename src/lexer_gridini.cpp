@@ -56,10 +56,16 @@ void lexer::flagini()
 
     lexer *p = this;
 
-	Iarray(flag1,imax*jmax*kmax);
-	Iarray(flag2,imax*jmax*kmax);
-	Iarray(flag3,imax*jmax*kmax);
-    Iarray(flag5,imax*jmax*kmax);
+    flag4.resize();
+    IJKLOOP
+    flag4[IJK] = flag4_grid[IJK];
+
+    flag4_grid.reset(); // transported into flag4; not needed afterwards
+
+    flag1.resize();
+    flag2.resize();
+    flag3.resize();
+    flag5.resize();
 
     // boundary conditions
     Iarray(IO,imax*jmax*kmax);
