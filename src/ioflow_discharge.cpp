@@ -56,13 +56,22 @@ void ioflow_f::Qin(lexer *p, fdm* a, ghostcell* pgc)
     p->Ui=0.0;
 
     // in
-    for(n=0;n<p->gcin_count;n++)
-    if(p->gcin[n][3]>0)
+    #if USE_AMREX
+    for(n=0; n<p->inflow_ijk[p->level].size(); n++)
     {
-        area=0.0;
+        auto iv = p->inflow_ijk[p->level][n];
+        i=iv[0];
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcin_count;++n)
+    {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
         k=p->gcin[n][2];
+    #endif
+
+        area=0.0;
 
         if(a->phi(i,j,k)>-0.5*p->DZN[KP]-1.0e-20 && a->topo(i,j,k)>0.0)
         {
@@ -101,13 +110,22 @@ void ioflow_f::Qout(lexer *p, fdm* a, ghostcell* pgc)
     p->Uo=0.0;
 
     // out
-    for(n=0;n<p->gcout_count;n++)
-    if(p->gcout[n][3]>0)
+    #if USE_AMREX
+    for(n=0; n<p->outflow_ijk[p->level].size(); n++)
     {
-        area=0.0;
+        auto iv = p->outflow_ijk[p->level][n];
+        i=iv[0];
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcout_count;++n)
+    {
         i=p->gcout[n][0];
         j=p->gcout[n][1];
         k=p->gcout[n][2];
+    #endif
+
+        area=0.0;
 
         if(a->phi(i,j,k)>-0.5*p->DZN[KP]-1.0e-20 && a->topo(i,j,k)>0.0)
         {

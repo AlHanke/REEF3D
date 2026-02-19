@@ -36,11 +36,20 @@ void iowave::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
 
 void iowave::fsfrkout(lexer *p, fdm *a, ghostcell *pgc, field& f)
 {
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->outflow_ijk[p->level])
+    {
+        i=iv[0];
+        j=iv[1];
+        k=iv[2];
+    #else
     for(n=0;n<p->gcout_count;++n)
     {
         i=p->gcout[n][0];
         j=p->gcout[n][1];
         k=p->gcout[n][2];
+    #endif
 
         f(i+1,j,k)=a->phi(i+1,j,k);
         f(i+2,j,k)=a->phi(i+2,j,k);
@@ -50,11 +59,20 @@ void iowave::fsfrkout(lexer *p, fdm *a, ghostcell *pgc, field& f)
 
 void iowave::fsfrkin(lexer *p, fdm *a, ghostcell *pgc, field& f)
 {
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->inflow_ijk[p->level])
+    {
+        i=iv[0];
+        j=iv[1];
+        k=iv[2];
+    #else
     for(n=0;n<p->gcin_count;++n)
     {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
         k=p->gcin[n][2];
+    #endif
 
         f(i-1,j,k)=a->phi(i-1,j,k);
         f(i-2,j,k)=a->phi(i-2,j,k);

@@ -30,12 +30,6 @@ ioflow_f::ioflow_f(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)
 {
     pBC = ppBC;
 
-    walldin_size=1;
-    walldout_size=1;
-
-    p->Darray(walldin, walldin_size);
-    p->Darray(walldout, walldout_size);
-
     p->Darray(betaB71,p->B71);
 
     p->Darray(tan_betaB71,p->B71);
@@ -84,8 +78,6 @@ ioflow_f::ioflow_f(lexer *p, ghostcell *pgc, patchBC_interface *ppBC)
 
 ioflow_f::~ioflow_f()
 {
-    delete [] walldin;
-    delete [] walldout;
     delete [] betaB71;
     delete [] tan_betaB71;
     delete [] dist_B71;

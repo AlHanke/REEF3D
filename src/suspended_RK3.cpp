@@ -154,12 +154,20 @@ void suspended_RK3::bcsusp_start(lexer* p, fdm* a,ghostcell *pgc, sediment_fdm *
     double zcoor;
     double adist;
     
-    for(n=0;n<p->gcin_count;++n)
-    if(p->gcin[n][3]>0)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->inflow_ijk[p->level])
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
+        i=iv[0];
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcin_count;++n)
+    {
+        i=p->gcin[n][0];
+        j=p->gcin[n][1];
+        k=p->gcin[n][2];
+    #endif
     
     adist=0.05*s->waterlevel(i,j);
     

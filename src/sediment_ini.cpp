@@ -172,28 +172,34 @@ void sediment_f::ini_guard(lexer *p, ghostcell *pgc)
 {
     SLICELOOP4
     s->guard(i,j)=1.0;
-    
+
     if(p->S78==1)
     {
+        LEVEL_LOOP
+        #if USE_AMREX
+        for(auto iv : p->inflow_ijk[p->level])
+        {
+            i=iv[0];
+            j=iv[1];
+        #else
         for(n=0;n<p->gcin_count;++n)
         {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
+            i=p->gcin[n][0];
+            j=p->gcin[n][1];
+        #endif
 
-        s->guard(i,j)=0.0;
+            s->guard(i,j)=0.0;
         }
-            
+
         for(int qq=0;qq<pBC->obj_count;++qq)
         for(n=0;n<pBC->patch[qq]->gcb_count;++n)
         {
-        i=pBC->patch[qq]->gcb[n][0];
-        j=pBC->patch[qq]->gcb[n][1];
-            
-            
-        s->guard(i,j)=0.0;
+            i=pBC->patch[qq]->gcb[n][0];
+            j=pBC->patch[qq]->gcb[n][1];
+
+            s->guard(i,j)=0.0;
         }
     }
-    
-    
+
     pgc->gcsl_start4(p,s->guard,1);
 }

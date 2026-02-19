@@ -28,7 +28,6 @@ Author: Hans Bihs
 
 void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
 {
-    int ii;
     double fac,fac1,epsi,H;
     double eta_R,Uc,Un,Vc,Wc,eta_T,eta_M,wsf;
 
@@ -45,11 +44,20 @@ void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
 
     // wavegen
     count=0;
-    for(n=0;n<p->gcin_count;n++)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->inflow_ijk[p->level])
+    {
+        i=iv[0];
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcin_count;++n)
     {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
         k=p->gcin[n][2];
+    #endif
 
         uvel=uval[count]*ramp(p);
         vvel=vval[count]*ramp(p);
@@ -140,12 +148,23 @@ void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
         ++count;
     }
 
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->inflow_ijk[p->level])
+    #else
     for(n=0;n<p->gcin_count;++n)
+    #endif
     for(int q=0;q<4;++q)
     {
+        #if USE_AMREX
+        i=iv[0]+q;
+        j=iv[1];
+        k=iv[2];
+        #else
         i=p->gcin[n][0]+q;
         j=p->gcin[n][1];
         k=p->gcin[n][2];
+        #endif
 
         if(a->phi(i,j,k)<0.0)
         a->eddyv(i,j,k)=MIN(a->eddyv(i,j,k),1.0e-4);
