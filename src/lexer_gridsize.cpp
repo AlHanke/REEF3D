@@ -31,7 +31,7 @@ void lexer::gridsize()
     for(i=0; i<knox; ++i)
     for(j=0; j<knoy; ++j)
     for(k=0; k<knoz+flast; ++k)
-    if(flag4[IJK]>0)
+    if(flag4_grid[IJK]>0)
         ++cellnum;
     // --------
 

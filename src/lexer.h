@@ -44,6 +44,7 @@ Author: Hans Bihs
 #include <iomanip>
 #include <iostream>
 #include <math.h>
+#include <memory>
 #include <vector>
 
 class ghostcell;
@@ -94,7 +95,10 @@ public:
     int cellnumtot;
     int N4,N4_row;
     int N7,N7_row;
-    int *flag1,*flag2,*flag3,*flag4,*flag5,*flag7;
+    int *flag7;
+
+    std::unique_ptr<int[]> flag4_grid;
+    ArrayWrapper3D flag1,flag2,flag3,flag4,flag5;
 
     // flag
     std::unique_ptr<int[]> flag_solid, flag_topo;

@@ -28,15 +28,20 @@ void ghostcell::flagfield(lexer *p)
     for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
     {
         if(p->flag4[i]==1)
+        {
             p->flag4[i]=WATER_FLAG;
+        }
         else if(p->flag4[i]==-1)
+        {
             p->flag4[i]=OBJ_FLAG;
+        }
     }
 
     flagx(p,p->flag4);
 
     if(p->Y60==1)
-    LOOP
+    IJKLOOP
+    PCHECK
     {
         if(p->i_dir==1)
         if(p->flag4[Im1JK]<0
