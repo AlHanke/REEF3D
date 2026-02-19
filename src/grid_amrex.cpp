@@ -38,6 +38,7 @@ Author: Alexander Hanke (@AlHanke)
 #include <AMReX_MFIter.H>
 #include <AMReX_MultiFab.H>
 #include <AMReX_iMultiFab.H>
+#include <limits>
 
 void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 {
@@ -50,6 +51,8 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 
     using namespace amrex;
     // Initialize AMReX geometry data structures
+
+    if(p->mpirank==0) std::cout<<"Number of AMR levels: "<<nlevs<<std::endl;
 
     amrex_geometry.resize(nlevs);
     amrex_box_array.resize(nlevs);
@@ -106,8 +109,6 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
         }
         else // Local refinement areas
         {
-            std::cerr << "Error: Only single level (no refinement) is currently supported. Exiting." << std::endl;
-            exit(1);
 
             amrex_geometry[lev] = amrex::refine(amrex_geometry[lev-1], ref_vec);
 
@@ -136,7 +137,12 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 
             amrex_distribution_mapping[lev] = DistributionMapping(amrex_box_array[lev]);
         }
+    }
 
+    create_amrex_box_array_and_distribution_mapping_level_n();
+
+    for (int lev = 0; lev < nlevs; lev++)
+    {
         amr_cell_mf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 0, p->margin);
 
         flag1_iMF[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
@@ -150,6 +156,163 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     level = 0;
     default_cell_mfi = std::make_unique<amrex::MFIter>(amr_cell_mf[level], false);
     amr_cell_mfi = default_cell_mfi.get();
+}
+
+/*!
+ * @brief Update the BoxArrays and DistributionMappings for finer leves
+ * Ensures that all finer level BoxArrays are properly nested within the coarser level BoxArrays.
+*/
+void grid_amrex::create_amrex_box_array_and_distribution_mapping_level_n()
+{
+    if (nlevs <= 1)
+        return;
+
+    amrex::IntVect ref_vec = ref_ratio * amrex::IntVect::TheUnitVector();
+    if(!j_dir)
+        ref_vec[1] = 1;
+
+    amrex::Vector<amrex::Vector<amrex::Box>> level_boxes(nlevs);
+    for (int lev = 0; lev < nlevs; ++lev)
+    {
+        level_boxes[lev].reserve(amrex_box_array[lev].size());
+        for (int i = 0; i < amrex_box_array[lev].size(); ++i)
+            level_boxes[lev].push_back(amrex_box_array[lev][i]);
+    }
+
+    for (int lev = nlevs - 1; lev >= 1; --lev)
+    {
+        amrex::Box domain_fine = amrex_geometry[lev].Domain();
+
+        for (std::size_t i = 0; i < level_boxes[lev].size(); ++i)
+            level_boxes[lev][i] &= domain_fine;
+
+        for (std::size_t i = 0; i < level_boxes[lev].size(); ++i)
+        {
+            if (!level_boxes[lev][i].ok())
+            {
+                level_boxes[lev].erase(level_boxes[lev].begin() + static_cast<long>(i));
+                if (i > 0)
+                    --i;
+                continue;
+            }
+
+            bool restart_i = false;
+            for (std::size_t j = i + 1; j < level_boxes[lev].size();)
+            {
+                amrex::Box overlap = level_boxes[lev][i] & level_boxes[lev][j];
+                if (!overlap.ok())
+                {
+                    ++j;
+                    continue;
+                }
+
+                if (level_boxes[lev][i].contains(level_boxes[lev][j]))
+                {
+                    level_boxes[lev].erase(level_boxes[lev].begin() + static_cast<long>(j));
+                    continue;
+                }
+
+                if (level_boxes[lev][j].contains(level_boxes[lev][i]))
+                {
+                    level_boxes[lev].erase(level_boxes[lev].begin() + static_cast<long>(i));
+                    restart_i = true;
+                    break;
+                }
+
+                int best_dir = -1;
+                bool best_shrink_low = false;
+                long long best_trim = std::numeric_limits<long long>::max();
+
+                for (int dir = 0; dir < AMREX_SPACEDIM; ++dir)
+                {
+                    int shrink_low_to = level_boxes[lev][i].bigEnd(dir) + 1;
+                    if (shrink_low_to <= level_boxes[lev][j].bigEnd(dir))
+                    {
+                        long long trim = static_cast<long long>(shrink_low_to - level_boxes[lev][j].smallEnd(dir));
+                        if (trim > 0 && trim < best_trim)
+                        {
+                            best_trim = trim;
+                            best_dir = dir;
+                            best_shrink_low = true;
+                        }
+                    }
+
+                    int shrink_high_to = level_boxes[lev][i].smallEnd(dir) - 1;
+                    if (shrink_high_to >= level_boxes[lev][j].smallEnd(dir))
+                    {
+                        long long trim = static_cast<long long>(level_boxes[lev][j].bigEnd(dir) - shrink_high_to);
+                        if (trim > 0 && trim < best_trim)
+                        {
+                            best_trim = trim;
+                            best_dir = dir;
+                            best_shrink_low = false;
+                        }
+                    }
+                }
+
+                if (best_dir < 0)
+                {
+                    level_boxes[lev].erase(level_boxes[lev].begin() + static_cast<long>(j));
+                    continue;
+                }
+
+                if (best_shrink_low)
+                    level_boxes[lev][j].setSmall(best_dir, level_boxes[lev][i].bigEnd(best_dir) + 1);
+                else
+                    level_boxes[lev][j].setBig(best_dir, level_boxes[lev][i].smallEnd(best_dir) - 1);
+
+                if (!level_boxes[lev][j].ok())
+                {
+                    level_boxes[lev].erase(level_boxes[lev].begin() + static_cast<long>(j));
+                    continue;
+                }
+
+                ++j;
+            }
+
+            if (restart_i)
+            {
+                if (i > 0)
+                    --i;
+                else
+                    i = 0;
+            }
+        }
+
+        amrex::Box domain_coarse = amrex_geometry[lev-1].Domain();
+        for (const auto& fine_box : level_boxes[lev])
+        {
+            amrex::Box parent_box = amrex::coarsen(fine_box, ref_vec);
+            parent_box &= domain_coarse;
+            if (!parent_box.ok())
+                continue;
+
+            bool contained = false;
+            for (const auto& coarse_box : level_boxes[lev-1])
+            {
+                if (coarse_box.contains(parent_box))
+                {
+                    contained = true;
+                    break;
+                }
+            }
+
+            if (!contained)
+                level_boxes[lev-1].push_back(parent_box);
+        }
+    }
+
+    for (int lev = 1; lev < nlevs; ++lev)
+    {
+        amrex::BoxList box_list;
+        for (const auto& box : level_boxes[lev])
+        {
+            if (box.ok())
+                box_list.push_back(box);
+        }
+        amrex_box_array[lev] = amrex::BoxArray(box_list);
+        amrex_distribution_mapping[lev] = amrex::DistributionMapping(amrex_box_array[lev]);
+    }
 }
 
 void grid_amrex::define_inflow_outflow_ba()
