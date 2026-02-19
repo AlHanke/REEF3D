@@ -29,6 +29,9 @@ Author: Hans Bihs
 
 void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 {
+    #if USE_AMREX
+    p->define_inflow_outflow_ba();
+    #else
     int count1,count2;
 
     count1=0;
@@ -77,6 +80,7 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 
     p->gcin_count=count1;
     p->gcout_count=count2;
+    #endif
 
     if(p->I10==1 && p->count==0)
     velini(p,a,pgc);
@@ -280,31 +284,60 @@ void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
 void ioflow_f::inflow_walldist(lexer *p, fdm *a, ghostcell *pgc, convection *pconvec, reini *preini, ioflow *pflow)
 {
-    p->del_Darray(walldin, walldin_size);
-    p->del_Darray(walldout, walldout_size);
-
-    walldin_size=p->gcin_count;
-    walldout_size=p->gcout_count;
-
-    p->Darray(walldin, walldin_size);
-    p->Darray(walldout, walldout_size);
-
-
-    for(n=0;n<p->gcin_count;++n)
+    #if USE_AMREX
+    walldin.resize(p->nlevs);
+    #else
+    walldin.resize(1);
+    #endif
+    LEVEL_LOOP
     {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-        walldin[n] = a->walld(i,j,k);
+        #if USE_AMREX
+        walldin[p->level].resize(p->inflow_ijk[p->level].size());
+        for(n=0; n<p->inflow_ijk[p->level].size(); n++)
+        {
+            auto iv = p->inflow_ijk[p->level][n];
+            i=iv[0];
+            j=iv[1];
+            k=iv[2];
+        #else
+        walldin[p->level].resize(p->gcin_count);
+        for(n=0;n<p->gcin_count;++n)
+        {
+            i=p->gcin[n][0];
+            j=p->gcin[n][1];
+            k=p->gcin[n][2];
+        #endif
+
+            walldin[p->level][n] = a->walld(i,j,k);
+        }
     }
 
-    for(n=0;n<p->gcout_count;++n)
+    #if USE_AMREX
+    walldout.resize(p->nlevs);
+    #else
+    walldout.resize(1);
+    #endif
+    LEVEL_LOOP
     {
-        i=p->gcout[n][0];
-        j=p->gcout[n][1];
-        k=p->gcout[n][2];
+        #if USE_AMREX
+        walldout[p->level].resize(p->outflow_ijk[p->level].size());
+        for(n=0; n<p->outflow_ijk[p->level].size(); n++)
+        {
+            auto iv = p->outflow_ijk[p->level][n];
+            i=iv[0];
+            j=iv[1];
+            k=iv[2];
+        #else
+        walldout[p->level].resize(p->gcout_count);
+        for(n=0;n<p->gcout_count;++n)
+        {
+            i=p->gcout[n][0];
+            j=p->gcout[n][1];
+            k=p->gcout[n][2];
+        #endif
 
-        walldout[n] = a->walld(i,j,k);
+            walldout[p->level][n] = a->walld(i,j,k);
+        }
     }
 }
 

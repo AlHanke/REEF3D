@@ -43,6 +43,9 @@ int iowave::iozonecheck(lexer *p, fdm*a)
 
 void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 {
+    #if USE_AMREX
+    p->define_inflow_outflow_ba();
+    #else
     int count1=0;
     int count2=0;
     GC4LOOP
@@ -88,6 +91,7 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 
     p->gcin_count=count1;
     p->gcout_count=count2;
+    #endif
 
     if(p->I10==1)
     velini(p,a,pgc);

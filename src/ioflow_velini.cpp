@@ -35,11 +35,20 @@ void ioflow_f::velini(lexer *p, fdm *a, ghostcell *pgc)
     p->Qo=0.0;
 
     // in
-    for(n=0;n<p->gcin_count;n++)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->inflow_ijk[p->level])
+    {
+        i=iv[0];
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcin_count;++n)
     {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
         k=p->gcin[n][2];
+    #endif
 
         if(a->phi(i-1,j,k)>=0.0)
         {
@@ -77,11 +86,20 @@ void ioflow_f::velini(lexer *p, fdm *a, ghostcell *pgc)
     ULOOP
     a->u(i,j,k)=p->Ui;
 
-    for(n=0;n<p->gcin_count;n++)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->inflow_ijk[p->level])
+    {
+        i=iv[0];
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcin_count;++n)
     {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
         k=p->gcin[n][2];
+    #endif
 
         a->u(i-1,j,k)=p->Ui;
         a->u(i-2,j,k)=p->Ui;
