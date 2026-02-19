@@ -1012,6 +1012,9 @@
           <File Name="amrex_bc_func.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Fieldint">
+          <File Name="ArrayWrapper_int.h"/>
+          <File Name="ArrayWrapper_double.h"/>
+          <File Name="ArrayWrapper_base.h"/>
           <File Name="fieldint.h"/>
           <File Name="fieldints.h"/>
           <File Name="fieldint_amrex.h"/>
@@ -2852,6 +2855,8 @@
         <VirtualDirectory Name="Field">
           <File Name="field_amrex.cpp"/>
           <File Name="fields_amrex.cpp"/>
+          <File Name="ArrayWrapper_int.cpp"/>
+          <File Name="ArrayWrapper_double.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Fieldint">
           <File Name="fieldint_amrex.cpp"/>
