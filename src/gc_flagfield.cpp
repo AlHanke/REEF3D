@@ -25,18 +25,30 @@ Author: Hans Bihs
 
 void ghostcell::flagfield(lexer *p)
 {
+    p->level = 0;
     for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
     {
         if(p->flag4[i]==1)
+        {
             p->flag4[i]=WATER_FLAG;
+        }
         else if(p->flag4[i]==-1)
+        {
             p->flag4[i]=OBJ_FLAG;
+        }
     }
 
+    #if USE_AMREX
+    p->flag4.fillBoundary();
+    #else
     flagx(p,p->flag4);
+    #endif
 
+    p->level = 0;
     if(p->Y60==1)
-    LOOP
+    TILE_LOOP
+    IJKLOOP
+    PCHECK
     {
         if(p->i_dir==1)
         if(p->flag4[Im1JK]<0
@@ -54,6 +66,7 @@ void ghostcell::flagfield(lexer *p)
             p->flag4[IJK]=OBJ_FLAG;
     }
 
+    p->level = 0;
     for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
     {
         p->flag1[i]=p->flag4[i];
@@ -90,4 +103,9 @@ void ghostcell::flagfield(lexer *p)
         if(p->gcb4[n][3]==6 && (p->periodic3!=1 || k+p->origin_k<p->gknoz-1))
             p->flag3[IJK]=OBJ_FLAG;
     }
+
+    p->flag1.fillHigherLevels();
+    p->flag2.fillHigherLevels();
+    p->flag3.fillHigherLevels();
+    p->flag4.fillHigherLevels();
 }

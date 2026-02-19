@@ -24,23 +24,15 @@ Author: Hans Bihs
 
 void lexer::gridsize()
 {
-    int ii,jj;
     // -------
+    level=0;
     cellnum=0;
-
     for(i=0; i<knox; ++i)
     for(j=0; j<knoy; ++j)
     for(k=0; k<knoz+flast; ++k)
-    if(flag4[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]>0)
+    if(flag4_grid[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]>0)
         ++cellnum;
     // --------
-
-    Iarray(sizeM4, 5);
-
-    for(int n=0;n<5;++n)
-    {
-        sizeM4[n]=0;
-    }
 
     Iarray(range_row4, M10+5);
     Iarray(range_col4, M10+5);

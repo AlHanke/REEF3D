@@ -41,6 +41,8 @@ Author: Hans Bihs
 #else
     #include "grid.h"
 #endif
+#include "control.h"
+#include "ArrayWrapper_int.h"
 
 class weno_nug_func;
 class ghostcell;
@@ -91,9 +93,12 @@ public:
     int N4,N4_row,N4_col;
     int N7,N7_row,N7_col;
 	int surf_tot;
-	int *flag1,*flag2,*flag3,*flag4,*flag5,*flag7;
-    int *flagsf1,*flagsf2,*flagsf3,*flagsf4;
+	int *flag7;
 
+    int *flag4_grid;
+    ArrayWrapper_int flag1,flag2,flag3,flag4,flag5;
+    ArrayWrapper_int flagsf1,flagsf2,flagsf3,flagsf4;
+    
     // flag
     double *flag_solid,*flag_topo;
     double *data;
@@ -158,7 +163,7 @@ public:
 
 	// Solver
     int *range_col4,*range_row4,*range_col7,*range_row7;
-    int *sizeM4;
+    int sizeM4[2] = {0,0};
     int *sizeS4;
 
 	// SMO

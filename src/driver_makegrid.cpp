@@ -29,6 +29,17 @@ Author: Hans Bihs
 void driver::makegrid(lexer *p, ghostcell *pgc)
 {
     // flag
+    #if USE_AMREX
+    p->flagsf1.fillBoundary();
+    p->flagsf2.fillBoundary();
+    p->flagsf3.fillBoundary();
+    p->flagsf4.fillBoundary();
+
+    p->flag1.fillBoundary();
+    p->flag2.fillBoundary();
+    p->flag3.fillBoundary();
+    p->flag4.fillBoundary();
+    #else
     pgc->flagx(p,p->flagsf1);
     pgc->flagx(p,p->flagsf2);
     pgc->flagx(p,p->flagsf3);
@@ -38,6 +49,7 @@ void driver::makegrid(lexer *p, ghostcell *pgc)
     pgc->flagx(p,p->flag2);
     pgc->flagx(p,p->flag3);
     pgc->flagx(p,p->flag4);
+    #endif
     pgc->gcxupdate(p);
 
     p->vecsize(pgc);
