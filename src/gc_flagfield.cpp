@@ -25,6 +25,7 @@ Author: Hans Bihs
 
 void ghostcell::flagfield(lexer *p)
 {
+    p->level = 0;
     for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
     {
         if(p->flag4[i]==1)
@@ -37,9 +38,15 @@ void ghostcell::flagfield(lexer *p)
         }
     }
 
+    #if USE_AMREX
+    p->flag4.fillBoundary();
+    #else
     flagx(p,p->flag4);
+    #endif
 
+    p->level = 0;
     if(p->Y60==1)
+    TILE_LOOP
     IJKLOOP
     PCHECK
     {
@@ -59,6 +66,7 @@ void ghostcell::flagfield(lexer *p)
             p->flag4[IJK]=OBJ_FLAG;
     }
 
+    p->level = 0;
     for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
     {
         p->flag1[i]=p->flag4[i];
@@ -96,7 +104,14 @@ void ghostcell::flagfield(lexer *p)
             p->flag3[IJK]=OBJ_FLAG;
     }
 
+    #if USE_AMREX
+    p->flag1.fillHigherLevels();
+    p->flag2.fillHigherLevels();
+    p->flag3.fillHigherLevels();
+    p->flag4.fillHigherLevels();
+    #else
     flagx(p,p->flag1);
     flagx(p,p->flag2);
     flagx(p,p->flag3);
+    #endif
 }

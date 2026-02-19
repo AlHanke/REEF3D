@@ -51,6 +51,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     if(p->G5==1)
     {
         double psi;
+        p->level = 0;
+        TILE_LOOP
         IJKLOOP
         PBASECHECK
         {
@@ -59,16 +61,21 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             else if (p->j_dir==1)
                 psi = -p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
 
-
-            if( (a->solid(i,j,k)>=psi || p->solidread==0) && (a->topo(i,j,k)>=psi || p->toporead==0))
+            if((a->solid(i,j,k)>=psi || p->solidread==0) && (a->topo(i,j,k)>=psi || p->toporead==0))
                 p->flag4[IJK]=WATER_FLAG;
 
-            if( (a->solid(i,j,k)<psi && p->solidread==1) || (a->topo(i,j,k)<psi && p->toporead==1))
+            if((a->solid(i,j,k)<psi && p->solidread==1) || (a->topo(i,j,k)<psi && p->toporead==1))
                 p->flag4[IJK]=-10;
         }
 
+        #if USE_AMREX
+        p->flag4.fillBoundary();
+        #else
         flagx(p,p->flag4);
+        #endif
 
+        p->level = 0;
+        TILE_LOOP
         IJKLOOP
         PBASECHECK
         {
@@ -86,9 +93,20 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
                 p->flag3[IJK]=-10;
         }
 
+        #if USE_AMREX
+        p->flag1.fillBoundary();
+        p->flag2.fillBoundary();
+        p->flag3.fillBoundary();
+        #else
         flagx(p,p->flag1);
         flagx(p,p->flag2);
         flagx(p,p->flag3);
+        #endif
+
+        p->flag1.fillHigherLevels();
+        p->flag2.fillHigherLevels();
+        p->flag3.fillHigherLevels();
+        p->flag4.fillHigherLevels();
     }
 
     // -----------------------------------------------------------
@@ -100,6 +118,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     count=0;
 
     // gcdf count
+    p->level = 0;
+    TILE_LOOP
     IJKLOOP
     PBASECHECK
     if(p->DF[IJK]>0)
@@ -133,6 +153,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     // assign gcdf entries
     count=0;
 
+    p->level = 0;
+    TILE_LOOP
     IJKLOOP
     PBASECHECK
     if(p->DF[IJK]>0)
@@ -256,6 +278,8 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf
 
     count = 0;
 
+    p->level = 0;
+    TILE_LOOP
     IJKLOOP
     PBASECHECK
     if(flagsf(i,j,k)>0)
@@ -289,6 +313,8 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf
     // assign gcdf entries
     count=0;
 
+    p->level = 0;
+    TILE_LOOP
     IJKLOOP
     PBASECHECK
     if(flagsf(i,j,k)>0)
