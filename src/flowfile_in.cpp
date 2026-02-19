@@ -111,11 +111,20 @@ void flowfile_in::ff_inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
 {
     double uval,vval,wval,pval;
 
-    for(n=0;n<p->gcin_count;n++)
+    LEVEL_LOOP
+    #if USE_AMREX
+    for(auto iv : p->inflow_ijk[p->level])
+    {
+        i=iv[0];
+        j=iv[1];
+        k=iv[2];
+    #else
+    for(n=0;n<p->gcin_count;++n)
     {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
         k=p->gcin[n][2];
+    #endif
 
         // U
         if(k<maxk && a->phi(i-1,j,k)>=0.6*p->DXM)
@@ -167,7 +176,7 @@ void flowfile_in::ff_waterlevel(lexer *p, fdm* a, ghostcell* pgc, field& ls)
     double lsval;
     double xp,yp,zp;
 
-    for(n=0;n<p->gcin_count;n++)
+    for(n=0;n<p->gcin_count;++n)
     {
         i=p->gcin[n][0];
         j=p->gcin[n][1];
