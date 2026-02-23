@@ -65,7 +65,7 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     flag4_iMF.resize(nlevs);
     flag7_iMF.resize(nlevs);
 
-    IntVect ref_vec = ref_ratio * IntVect::TheUnitVector();
+    ref_vec = ref_ratio * IntVect::TheUnitVector();
     if(!j_dir)
         ref_vec[1] = 1;
 
@@ -133,13 +133,15 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
                 BoxList_lev_n.push_back(domain_patch);
             }
 
+            BoxList_lev_n.removeEmpty();
             amrex_box_array[lev] = amrex::BoxArray(BoxList_lev_n);
+            amrex_box_array[lev].removeOverlap();
 
             amrex_distribution_mapping[lev] = DistributionMapping(amrex_box_array[lev]);
         }
     }
 
-    create_amrex_box_array_and_distribution_mapping_level_n();
+    create_amrex_box_array_and_distribution_mapping_level_n(p);
 
     for (int lev = 0; lev < nlevs; lev++)
     {
@@ -162,7 +164,7 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
  * @brief Update the BoxArrays and DistributionMappings for finer leves
  * Ensures that all finer level BoxArrays are properly nested within the coarser level BoxArrays.
 */
-void grid_amrex::create_amrex_box_array_and_distribution_mapping_level_n()
+void grid_amrex::create_amrex_box_array_and_distribution_mapping_level_n(lexer* p)
 {
     if (nlevs <= 1)
         return;
