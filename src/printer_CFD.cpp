@@ -1066,7 +1066,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             // 3. Generate filename
             std::string plotfilename = amrex::Concatenate("REEF3D_CFD_PLT/plt", num, 7);
             amrex::Vector<int> level_steps(p->nlevs, p->count); // Assuming no subcycling for simplicity; adjust if you have subcycling
-            amrex::Vector<amrex::IntVect> ref_ratio(p->nlevs-1, 2*amrex::IntVect::TheUnitVector());
+            amrex::Vector<amrex::IntVect> ref_ratio(p->nlevs-1, p->ref_vec);
 
             // 4. Use AMReX utility to write the hierarchical data
             amrex::WriteMultiLevelPlotfile(plotfilename, p->nlevs, GetVecOfConstPtrs(plot_mfs_data), varnames,
