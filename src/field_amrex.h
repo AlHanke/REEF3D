@@ -36,6 +36,7 @@ Author: Alexander Hanke (@AlHanke)
 #include <AMReX_Vector.H>
 #include <AMReX_FillPatchUtil.H>
 #include <AMReX_PhysBCFunct.H>
+#include <AMReX_Interpolater.H>
 #include <utility>
 #include <vector>
 
@@ -318,8 +319,8 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> fphysbcf(
                 p->amrex_geometry[p->level], BCRecs[p->level], fbf);
 
-            amrex::CellConservativeLinear mapper;
-            const amrex::IntVect ratio = p->ref_ratio * amrex::IntVect::TheUnitVector();
+            amrex::Interpolater* mapper = &amrex::cell_cons_interp;
+            const amrex::IntVect ref_vec = p->ref_vec;
 
             amrex::FillPatchTwoLevels(mf[p->level], amrex::Real(p->simtime),
                                         {&(mf[p->level-1])}, {amrex::Real(p->simtime)},
@@ -327,8 +328,8 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
                                         0, 0, mf[p->level].nComp(), p->amrex_geometry[p->level-1], p->amrex_geometry[p->level],
                                         cphysbcf, 0,
                                         fphysbcf, 0, // second one?
-                                        ratio, // refinement ratio
-                                        &mapper, // spatial interpolater
+                                        ref_vec, // refinement ratio
+                                        mapper, // spatial interpolater
                                         BCRecs[p->level], 0);
         }
 

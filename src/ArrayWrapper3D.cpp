@@ -135,7 +135,7 @@ void ArrayWrapper3D::fillBoundary()
 
 void ArrayWrapper3D::fillHigherLevels()
 {
-    const amrex::IntVect ratio = p->ref_ratio * amrex::IntVect::TheUnitVector();
+    const amrex::IntVect ratio = p->ref_vec;
     const int ratio_x = ratio[0];
     const int ratio_y = ratio[1];
     const int ratio_z = ratio[2];
