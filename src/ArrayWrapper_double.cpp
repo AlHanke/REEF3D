@@ -85,7 +85,7 @@ void ArrayWrapper_double::fillBoundary()
 
 void ArrayWrapper_double::fillHigherLevels()
 {
-    const amrex::IntVect ratio = p->ref_ratio * amrex::IntVect::TheUnitVector();
+    const amrex::IntVect ratio = p->ref_vec;
 
     for (int lev = 1; lev < p->nlevs; ++lev)
     {
