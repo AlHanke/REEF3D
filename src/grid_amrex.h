@@ -84,6 +84,7 @@ public:
     amrex::Vector<amrex::iMultiFab> flag7_iMF;
 
     int nlevs = 1; // Number of AMR levels
+    amrex::IntVect ref_vec;
     const int ref_ratio = 2;
     const int ncomp = 1;
     int bc_type[6] = {0,0,0,0,0,0};
@@ -91,7 +92,7 @@ public:
 protected:
     void setup_amrex_geometry(lexer* p, ghostcell* pgc);
 private:
-    void create_amrex_box_array_and_distribution_mapping_level_n();
+    void create_amrex_box_array_and_distribution_mapping_level_n(lexer* p);
 };
 
 #endif
