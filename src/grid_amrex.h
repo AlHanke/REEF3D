@@ -32,6 +32,8 @@ Author: Alexander Hanke (@AlHanke)
 #include <AMReX_iMultiFab.H>
 #include <AMReX_Vector.H>
 
+#include <memory>
+
 class lexer;
 class ghostcell;
 
@@ -92,7 +94,7 @@ public:
 protected:
     void setup_amrex_geometry(lexer* p, ghostcell* pgc);
 private:
-    void create_amrex_box_array_and_distribution_mapping_level_n(lexer* p);
+    void create_amrex_box_array_and_distribution_mapping_level_n();
 };
 
 #endif
