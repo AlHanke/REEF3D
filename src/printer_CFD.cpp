@@ -633,7 +633,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             //----------------------------------------------------------------------------
 
             //  Velocities
-            iin=3*sizeof(int)*p->pointnum;
+            iin=3*sizeof(float)*p->pointnum;
             memcpy(&buffer[file_offset],&iin,sizeof(int));
             file_offset+=sizeof(int);
             TPLOOP
@@ -899,7 +899,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
         #else
         {
             // 1. Define variable names
-            amrex::Vector<std::string> varnames = {"u", "v", "w", "pressure", "phi", "elevation"};
+            amrex::Vector<std::string> varnames = {"velocity_x", "velocity_y", "velocity_z", "pressure", "phi", "elevation"};
             if(p->P23==1)
             varnames.push_back("test");
             if(p->P24==1 && p->F300==0)
