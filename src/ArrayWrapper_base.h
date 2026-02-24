@@ -33,6 +33,7 @@ public:
 
     virtual T& operator[] (int index) = 0;
     virtual operator T* () = 0;
+    virtual void setVal(T val, bool includeGhost = false);
 
     virtual void fillBoundary() {}; // Only needed for AMReX MultiFabs, can be a no-op for other implementations
     virtual void fillHigherLevels() {}; // Only needed for AMReX MultiFabs, can be a no-op for other implementations

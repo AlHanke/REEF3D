@@ -76,6 +76,19 @@ ArrayWrapper_double::operator double* ()
     #endif
 }
 
+void ArrayWrapper_double::setVal(double val, bool includeGhost)
+{
+    #if USE_AMREX
+    LEVEL_LOOP
+    {
+        data[p->level].setVal(val, (includeGhost ? p->margin : 0));
+    }
+    #else
+    p->level = 0;
+    std::fill(data[p->level].begin(), data[p->level].end(), val);
+    #endif
+}
+
 #if USE_AMREX
 void ArrayWrapper_double::fillBoundary()
 {

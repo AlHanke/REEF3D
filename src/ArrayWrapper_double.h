@@ -44,6 +44,7 @@ public:
 
     double& operator[] (int index) override;
     operator double* () override;
+    void setVal(double val, bool includeGhost = false) override;
 
     #if USE_AMREX
     void fillBoundary() override;

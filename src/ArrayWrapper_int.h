@@ -43,6 +43,7 @@ public:
 
     int& operator[] (int index) override;
     operator int* () override;
+    void setVal(int val, bool includeGhost = false) override;
 
     #if USE_AMREX
     void fillBoundary() override;
