@@ -41,6 +41,7 @@ public:
 
     int& operator[] (int index);
     operator int* ();
+    void setVal(int val, bool includeGhost = false);
 
     #if USE_AMREX
     void fillBoundary();

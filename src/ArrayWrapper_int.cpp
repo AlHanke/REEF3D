@@ -76,6 +76,19 @@ ArrayWrapper_int::operator int* ()
     #endif
 }
 
+void ArrayWrapper_int::setVal(int val, bool includeGhost)
+{
+    #if USE_AMREX
+    LEVEL_LOOP
+    {
+        data[p->level].setVal(val, (includeGhost ? p->margin : 0));
+    }
+    #else
+    p->level = 0;
+    std::fill(data[p->level].begin(), data[p->level].end(), val);
+    #endif
+}
+
 #if USE_AMREX
 void ArrayWrapper_int::fillBoundary()
 {
