@@ -48,11 +48,17 @@ int& fieldint_amrex::operator()(const amrex::IntVect& iv, int comp) noexcept
 
 void fieldint_amrex::setVal(int val, bool includeGhost)
 {
-    mf[p->level].setVal(val, includeGhost ? mf[p->level].nGrowVect() : amrex::IntVect{0});
+    LEVEL_LOOP
+    {
+        mf[p->level].setVal(val, includeGhost ? mf[p->level].nGrowVect() : amrex::IntVect{0});
+    }
 }
 
 void fieldint_amrex::FillBoundary()
 {
-    mf[p->level].FillBoundary(p->amrex_geometry[p->level].periodicity());
+    LEVEL_LOOP
+    {
+        mf[p->level].FillBoundary(p->amrex_geometry[p->level].periodicity());
+    }
 }
 #endif
