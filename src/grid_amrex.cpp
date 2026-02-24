@@ -38,7 +38,77 @@ Author: Alexander Hanke (@AlHanke)
 #include <AMReX_MFIter.H>
 #include <AMReX_MultiFab.H>
 #include <AMReX_iMultiFab.H>
-#include <limits>
+#include <AMReX_AmrMesh.H>
+#include <AMReX_TagBox.H>
+#include <AMReX_Array.H>
+#include <AMReX_ParallelDescriptor.H>
+
+namespace
+{
+class reef3d_amrmesh_helper final : public amrex::AmrMesh
+{
+public:
+    reef3d_amrmesh_helper(
+        const amrex::Geometry& level_0_geom,
+        const int max_level,
+        const amrex::IntVect& level_ref_ratio,
+        const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords)
+        : amrex::AmrMesh(level_0_geom, make_amr_info(max_level, level_ref_ratio))
+        , refined_grid_coords_(refined_grid_coords)
+    {
+    }
+
+private:
+    static amrex::AmrInfo make_amr_info(const int max_level, const amrex::IntVect& level_ref_ratio)
+    {
+        amrex::AmrInfo amr_info;
+        amr_info.max_level = max_level;
+        amr_info.check_input = false;
+        amr_info.refine_grid_layout = true;
+        amr_info.n_proper = 1;
+        amr_info.n_error_buf.assign(max_level + 1, amrex::IntVect::TheZeroVector());
+        amr_info.ref_ratio.assign(max_level, level_ref_ratio);
+        amr_info.blocking_factor.assign(max_level + 1, amrex::IntVect::TheUnitVector());
+        amr_info.max_grid_size.assign(max_level + 1, amrex::IntVect(AMREX_D_DECL(1048576, 1048576, 1048576)));
+        return amr_info;
+    }
+
+    void ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real /*time*/, int /*ngrow*/) override
+    {
+        tags.setVal(amrex::TagBox::CLEAR);
+
+        if (lev < 0 || lev >= static_cast<int>(refined_grid_coords_.size()))
+            return;
+
+        constexpr amrex::Real coord_eps = static_cast<amrex::Real>(1.e-12);
+        amrex::BoxList refined_regions;
+
+        for (const auto& coord_pair : refined_grid_coords_[lev])
+        {
+            amrex::Real lo_phys[3] = {coord_pair.first[0], coord_pair.first[1], coord_pair.first[2]};
+            amrex::IntVect lo_idx = Geom(lev).CellIndex(lo_phys);
+
+            amrex::Real hi_phys[3] = {coord_pair.second[0] - coord_eps, coord_pair.second[1] - coord_eps, coord_pair.second[2] - coord_eps};
+            amrex::IntVect hi_idx = Geom(lev).CellIndex(hi_phys);
+
+            amrex::Box tagged_box(lo_idx, hi_idx);
+            tagged_box &= Geom(lev).Domain();
+
+            if (tagged_box.ok())
+                refined_regions.push_back(tagged_box);
+        }
+
+        if (refined_regions.isEmpty())
+            return;
+
+        amrex::BoxArray tag_ba(refined_regions);
+        tag_ba.removeOverlap();
+        tags.setVal(tag_ba, amrex::TagBox::SET);
+    }
+
+    const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords_;
+};
+}
 
 void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 {
@@ -66,8 +136,12 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     flag7_iMF.resize(nlevs);
 
     ref_vec = ref_ratio * IntVect::TheUnitVector();
+    if(!i_dir)
+        ref_vec[0] = 1;
     if(!j_dir)
         ref_vec[1] = 1;
+    if(!k_dir)
+        ref_vec[2] = 1;
 
     for (int lev = 0; lev < nlevs; lev++)
     {
@@ -107,41 +181,13 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 
             amrex_distribution_mapping[lev] = DistributionMapping(pmap);
         }
-        else // Local refinement areas
+        else
         {
-
             amrex_geometry[lev] = amrex::refine(amrex_geometry[lev-1], ref_vec);
-
-            const double epsion = 1.e-12;
-            amrex::BoxList BoxList_lev_n;
-            for (const auto &coord_pair : amrex_refined_grid_coords[lev-1])
-            {
-                // Convert physical coordinates to Level n-1 cell indices
-                // Subtract a small epsilon from hi to ensure the index stays within the intended boundary
-                amrex::Real lo_phys[3] = {coord_pair.first[0], coord_pair.first[1], coord_pair.first[2]};
-                amrex::IntVect lo_idx = amrex_geometry[lev-1].CellIndex(lo_phys);
-                amrex::Real hi_phys[3] = {coord_pair.second[0] - epsion, coord_pair.second[1] - epsion, coord_pair.second[2] - epsion};
-                amrex::IntVect hi_idx = amrex_geometry[lev-1].CellIndex(hi_phys);
-                amrex::Box ref_region_lev_n(lo_idx, hi_idx);
-                if(!amrex_box_array[lev-1].contains(ref_region_lev_n))
-                {
-                    std::cerr << "Refinement region ("<<coord_pair.first[0]<<","<<coord_pair.first[0]<<","<<coord_pair.first[0]<<") to ("<<coord_pair.second[0]<<","<<coord_pair.second[0]<<","<<coord_pair.second[0]<<") at level " << lev << " is not fully contained within the coarser level " << lev-1 << " BoxArray. Check refined grid coordinates." << std::endl;
-                    exit(1);
-                }
-                // Refine the Level n-1 box to Level n index space
-                amrex::Box domain_patch = amrex::refine(ref_region_lev_n, ref_vec);
-                BoxList_lev_n.push_back(domain_patch);
-            }
-
-            BoxList_lev_n.removeEmpty();
-            amrex_box_array[lev] = amrex::BoxArray(BoxList_lev_n);
-            amrex_box_array[lev].removeOverlap();
-
-            amrex_distribution_mapping[lev] = DistributionMapping(amrex_box_array[lev]);
         }
     }
 
-    create_amrex_box_array_and_distribution_mapping_level_n(p);
+    create_amrex_box_array_and_distribution_mapping_level_n();
 
     for (int lev = 0; lev < nlevs; lev++)
     {
@@ -164,156 +210,48 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
  * @brief Update the BoxArrays and DistributionMappings for finer leves
  * Ensures that all finer level BoxArrays are properly nested within the coarser level BoxArrays.
 */
-void grid_amrex::create_amrex_box_array_and_distribution_mapping_level_n(lexer* p)
+void grid_amrex::create_amrex_box_array_and_distribution_mapping_level_n()
 {
     if (nlevs <= 1)
         return;
 
-    amrex::IntVect ref_vec = ref_ratio * amrex::IntVect::TheUnitVector();
-    if(!j_dir)
-        ref_vec[1] = 1;
-
-    amrex::Vector<amrex::Vector<amrex::Box>> level_boxes(nlevs);
-    for (int lev = 0; lev < nlevs; ++lev)
+    if (static_cast<int>(amrex_refined_grid_coords.size()) < nlevs - 1)
     {
-        level_boxes[lev].reserve(amrex_box_array[lev].size());
-        for (int i = 0; i < amrex_box_array[lev].size(); ++i)
-            level_boxes[lev].push_back(amrex_box_array[lev][i]);
+        std::cerr << "Insufficient amrex_refined_grid_coords entries for " << nlevs << " AMR levels." << std::endl;
+        exit(1);
     }
 
-    for (int lev = nlevs - 1; lev >= 1; --lev)
-    {
-        amrex::Box domain_fine = amrex_geometry[lev].Domain();
-
-        for (std::size_t i = 0; i < level_boxes[lev].size(); ++i)
-            level_boxes[lev][i] &= domain_fine;
-
-        for (std::size_t i = 0; i < level_boxes[lev].size(); ++i)
-        {
-            if (!level_boxes[lev][i].ok())
-            {
-                level_boxes[lev].erase(level_boxes[lev].begin() + static_cast<long>(i));
-                if (i > 0)
-                    --i;
-                continue;
-            }
-
-            bool restart_i = false;
-            for (std::size_t j = i + 1; j < level_boxes[lev].size();)
-            {
-                amrex::Box overlap = level_boxes[lev][i] & level_boxes[lev][j];
-                if (!overlap.ok())
-                {
-                    ++j;
-                    continue;
-                }
-
-                if (level_boxes[lev][i].contains(level_boxes[lev][j]))
-                {
-                    level_boxes[lev].erase(level_boxes[lev].begin() + static_cast<long>(j));
-                    continue;
-                }
-
-                if (level_boxes[lev][j].contains(level_boxes[lev][i]))
-                {
-                    level_boxes[lev].erase(level_boxes[lev].begin() + static_cast<long>(i));
-                    restart_i = true;
-                    break;
-                }
-
-                int best_dir = -1;
-                bool best_shrink_low = false;
-                long long best_trim = std::numeric_limits<long long>::max();
-
-                for (int dir = 0; dir < AMREX_SPACEDIM; ++dir)
-                {
-                    int shrink_low_to = level_boxes[lev][i].bigEnd(dir) + 1;
-                    if (shrink_low_to <= level_boxes[lev][j].bigEnd(dir))
-                    {
-                        long long trim = static_cast<long long>(shrink_low_to - level_boxes[lev][j].smallEnd(dir));
-                        if (trim > 0 && trim < best_trim)
-                        {
-                            best_trim = trim;
-                            best_dir = dir;
-                            best_shrink_low = true;
-                        }
-                    }
-
-                    int shrink_high_to = level_boxes[lev][i].smallEnd(dir) - 1;
-                    if (shrink_high_to >= level_boxes[lev][j].smallEnd(dir))
-                    {
-                        long long trim = static_cast<long long>(level_boxes[lev][j].bigEnd(dir) - shrink_high_to);
-                        if (trim > 0 && trim < best_trim)
-                        {
-                            best_trim = trim;
-                            best_dir = dir;
-                            best_shrink_low = false;
-                        }
-                    }
-                }
-
-                if (best_dir < 0)
-                {
-                    level_boxes[lev].erase(level_boxes[lev].begin() + static_cast<long>(j));
-                    continue;
-                }
-
-                if (best_shrink_low)
-                    level_boxes[lev][j].setSmall(best_dir, level_boxes[lev][i].bigEnd(best_dir) + 1);
-                else
-                    level_boxes[lev][j].setBig(best_dir, level_boxes[lev][i].smallEnd(best_dir) - 1);
-
-                if (!level_boxes[lev][j].ok())
-                {
-                    level_boxes[lev].erase(level_boxes[lev].begin() + static_cast<long>(j));
-                    continue;
-                }
-
-                ++j;
-            }
-
-            if (restart_i)
-            {
-                if (i > 0)
-                    --i;
-                else
-                    i = 0;
-            }
-        }
-
-        amrex::Box domain_coarse = amrex_geometry[lev-1].Domain();
-        for (const auto& fine_box : level_boxes[lev])
-        {
-            amrex::Box parent_box = amrex::coarsen(fine_box, ref_vec);
-            parent_box &= domain_coarse;
-            if (!parent_box.ok())
-                continue;
-
-            bool contained = false;
-            for (const auto& coarse_box : level_boxes[lev-1])
-            {
-                if (coarse_box.contains(parent_box))
-                {
-                    contained = true;
-                    break;
-                }
-            }
-
-            if (!contained)
-                level_boxes[lev-1].push_back(parent_box);
-        }
-    }
+    reef3d_amrmesh_helper amr_mesh_helper(amrex_geometry[0], nlevs - 1, ref_vec, amrex_refined_grid_coords);
+    amr_mesh_helper.SetGeometry(0, amrex_geometry[0]);
+    amr_mesh_helper.SetBoxArray(0, amrex_box_array[0]);
+    amr_mesh_helper.SetDistributionMap(0, amrex_distribution_mapping[0]);
+    amr_mesh_helper.SetFinestLevel(0);
 
     for (int lev = 1; lev < nlevs; ++lev)
     {
-        amrex::BoxList box_list;
-        for (const auto& box : level_boxes[lev])
+        amr_mesh_helper.SetGeometry(lev, amrex_geometry[lev]);
+
+        amrex::Vector<amrex::BoxArray> new_grids(nlevs);
+        int new_finest = lev - 1;
+        amr_mesh_helper.MakeNewGrids(lev - 1, 0.0, new_finest, new_grids);
+
+        if (new_finest < lev || new_grids[lev].empty())
         {
-            if (box.ok())
-                box_list.push_back(box);
+            std::cerr << "Failed to build AMR level " << lev << " from amrex_refined_grid_coords using AMReX proper nesting." << std::endl;
+            exit(1);
         }
-        amrex_box_array[lev] = amrex::BoxArray(box_list);
-        amrex_distribution_mapping[lev] = amrex::DistributionMapping(amrex_box_array[lev]);
+
+        amrex_box_array[lev] = new_grids[lev];
+
+        const int nprocs = amrex::ParallelDescriptor::NProcs();
+        if (nprocs > 1)
+            amr_mesh_helper.ChopGrids(lev, amrex_box_array[lev], nprocs);
+
+        amrex_distribution_mapping[lev] = amr_mesh_helper.MakeDistributionMap(lev, amrex_box_array[lev]);
+
+        amr_mesh_helper.SetBoxArray(lev, amrex_box_array[lev]);
+        amr_mesh_helper.SetDistributionMap(lev, amrex_distribution_mapping[lev]);
+        amr_mesh_helper.SetFinestLevel(lev);
     }
 }
 
