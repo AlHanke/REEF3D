@@ -26,27 +26,18 @@ Author: Hans Bihs
 #include"benchmark.h"
 #include"increment.h"
 
-class fdm;
 class lexer;
-class convection;
+class fdm;
 class ghostcell;
-
-using namespace std;
+class convection;
 
 class benchmark_vortex final : public benchmark, public increment
 {
-
 public:
-    benchmark_vortex(lexer*,fdm*);
-	virtual ~benchmark_vortex();
+    benchmark_vortex(lexer*,fdm*,ghostcell*);
+	virtual ~benchmark_vortex() = default;
 
 	void start(lexer*, fdm*, ghostcell*, convection*) override final;
-
-
 };
 
 #endif
-
-
-
-
