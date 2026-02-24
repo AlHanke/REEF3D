@@ -38,17 +38,24 @@ void weno_nug_func::ini(lexer* p)
 {
     if(!iniflag)
     {
-        p->Darray(qfx,max_i,2,6,2);
-        p->Darray(qfy,max_j,2,6,2);
-        p->Darray(qfz,max_k,2,6,2);
+        const int nlev_mult =
+        #if USE_AMREX
+            p->nlevs;
+        #else
+            1;
+        #endif
 
-        p->Darray(cfx,max_i,2,6);
-        p->Darray(cfy,max_j,2,6);
-        p->Darray(cfz,max_k,2,6);
+        p->Darray(qfx,max_i*nlev_mult,2,6,2);
+        p->Darray(qfy,max_j*nlev_mult,2,6,2);
+        p->Darray(qfz,max_k*nlev_mult,2,6,2);
 
-        p->Darray(isfx,max_i,2,6,3);
-        p->Darray(isfy,max_j,2,6,3);
-        p->Darray(isfz,max_k,2,6,3);
+        p->Darray(cfx,max_i*nlev_mult,2,6);
+        p->Darray(cfy,max_j*nlev_mult,2,6);
+        p->Darray(cfz,max_k*nlev_mult,2,6);
+
+        p->Darray(isfx,max_i*nlev_mult,2,6,3);
+        p->Darray(isfy,max_j*nlev_mult,2,6,3);
+        p->Darray(isfz,max_k*nlev_mult,2,6,3);
 
         precalc_qf(p);
         precalc_cf(p);
