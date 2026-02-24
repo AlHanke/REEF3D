@@ -26,110 +26,46 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"convection.h"
 
-benchmark_vortex::benchmark_vortex(lexer *p, fdm *a)
+benchmark_vortex::benchmark_vortex(lexer *p, fdm *a, ghostcell* pgc)
 {
-    double xc,yc,radius;
-	double dist,sign;
-    double H;
+    if(p->global_xmin!=0.0 || p->global_xmax!=1.0 || p->j_dir || p->global_zmin!=0.0 || p->global_zmax!=1.0)
+    {
+        if(p->mpirank==0)
+        std::cerr<<"Warning: benchmark_vortex2D is designed for a unit square domain [0,1]^2. Current domain is ["<<p->global_xmin<<","<<p->global_xmax<<"] x ["<<p->global_zmin<<","<<p->global_zmax<<"].\nAbborting..."<<std::endl;
+        pgc->final(true);
+    }
 
-    xc = 0.5;
-    yc = 0.75;
-    radius = 0.15;
+    const double xc = 0.5;
+    const double zc = 0.75;
+    const double radius = 0.15;
+
+    a->phi.setVal(-1.0);
+    a->vof.setVal(0.0);
 
     LOOP
     {
-        a->phi(i,j,k)=-0.5;
-        a->vof(i,j,k)=0.0;
+        const double dx = p->pos_x() - xc;
+        const double dz = p->pos_z() - zc;
+        const double dist = sqrt(dx*dx + dz*dz);
+        double sign = dist>radius ? -1.0 : 1.0; // Inside the radius is positive, outside is negative
+
+        a->phi(i,j,k)=sign*dist;
+
+        if(sign==1.0)
+        {
+            a->vof(i,j,k) = 1.0;
+        }
     }
-    
-/*  
-	LOOP
-	{
-    r = sqrt( pow(p->pos_x()-xc,2.0) + pow(p->pos_y()-yc,2.0));
-	if(r<=radius)
-	a->phi(i,j,k)=-1.0;
-	}
-	
-	*/
-	LOOP
-	{
-		
-	dist = sqrt( pow(p->pos_x()-xc,2.0) + pow(p->pos_y()-yc,2.0));
-	
-	if(dist<=radius)
-	sign=1.0;
-	
-	if(dist>radius)
-	sign=-1.0;
-	
-	a->phi(i,j,k)=sign*dist;	
-	}
-	
-    /*
-	if(p->F151==1)
-	LOOP
-    a->phi(i,j,k)*=-1.0;
-
-    LOOP
-	{
-		if(a->phi(i,j,k)>=p->F45*p->DXM)
-		H=1.0;
-
-		if(a->phi(i,j,k)<-p->F45*p->DXM)
-		H=0.0;
-
-		if(fabs(a->phi(i,j,k))<=p->F45*p->DXM)
-		H=0.5*(1.0 + a->phi(i,j,k)/p->F45*p->DXM + (1.0/PI)*sin((PI*a->phi(i,j,k))/p->F45*p->DXM));
-
-		a->ro(i,j,k)= p->W1*H + p->W3*(1.0-H);
-		a->visc(i,j,k)= p->W2*H + p->W4*(1.0-H);
-	} */
-
-
-    LOOP
-	{
-		a->vof(i,j,k) = 0.0;
-		
-		double r = sqrt(pow(p->pos_x() - xc, 2.0) + pow(p->pos_z() - yc, 2.0));
-		if (r <= radius)
-		{
-			a->vof(i,j,k) = 1.0;
-		}
-	}
-
-    
-    
-}
-
-benchmark_vortex::~benchmark_vortex()
-{
 }
 
 void benchmark_vortex::start(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec )
 {
-    /*double xc,yc;
-
-    ULOOP
+    if(p->simtime >= 6.0)
     {
-    xc = p->pos_x() + 0.5*p->DXM;
-    yc = p->pos_y();
-     
-        a->u(i,j,k) = -pow(sin(PI*xc),2.0) * sin(2.0*PI*yc) * cos((PI*p->simtime)/8.0);
+        if(p->mpirank==0)
+        std::cout<<"benchmark_vortex2D has completed."<<std::endl;
+        pgc->final(false);
     }
-
-    VLOOP
-    {
-    xc = p->pos_x();
-    yc = p->pos_y() + 0.5*p->DXM;
-
-        a->v(i,j,k) = pow(sin(PI*yc),2.0) * sin(2.0*PI*xc) * cos((PI*p->simtime)/8.0);
-    }
-
-    pgc->start1(p,a->u,10);
-    pgc->start2(p,a->v,11);
-    */
-    
-    
 
     LOOP
     {
@@ -145,16 +81,9 @@ void benchmark_vortex::start(lexer* p, fdm *a, ghostcell *pgc, convection *pconv
             a->v(i,j,k) = 0.0;
             a->w(i,j,k) = -2.0*cos(PI*p->pos_x())*pow(sin(PI*p->pos_z()),2)*sin(PI*p->pos_x());
         }
-        else
-        {
-            a->u(i,j,k) = 0.0;
-            a->v(i,j,k) = 0.0;
-            a->w(i,j,k) = 0.0;
-        }
     }
 
     pgc->start1(p,a->u,10);
     pgc->start2(p,a->v,11);
-	pgc->start2(p,a->w,12);
-
+    pgc->start3(p,a->w,12);
 }
