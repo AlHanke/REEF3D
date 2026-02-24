@@ -34,17 +34,24 @@ void weno_nug_func::ini(lexer* p)
 {
     if(!iniflag)
     {
-        qfx.resize(max_i);
-        qfy.resize(max_j);
-        qfz.resize(max_k);
+        const int nlev_mult =
+        #if USE_AMREX
+            p->nlevs;
+        #else
+            1;
+        #endif
 
-        cfx.resize(max_i);
-        cfy.resize(max_j);
-        cfz.resize(max_k);
+        qfx.resize(max_i*nlev_mult);
+        qfy.resize(max_j*nlev_mult);
+        qfz.resize(max_k*nlev_mult);
 
-        isfx.resize(max_i);
-        isfy.resize(max_j);
-        isfz.resize(max_k);
+        cfx.resize(max_i*nlev_mult);
+        cfy.resize(max_j*nlev_mult);
+        cfz.resize(max_k*nlev_mult);
+
+        isfx.resize(max_i*nlev_mult);
+        isfy.resize(max_j*nlev_mult);
+        isfz.resize(max_k*nlev_mult);
 
         precalc_qf(p);
         precalc_cf(p);
