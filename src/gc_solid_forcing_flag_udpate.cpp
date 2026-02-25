@@ -46,7 +46,11 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
     if(a->fb(i,j,k)<0.0)
     p->DF[IJK]=-1;
     
+    #if USE_AMREX
+    p->DF.fillBoundary();
+    #else
     startintV(p,p->DF,1);
+    #endif
     
     
     // 1
@@ -73,9 +77,13 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
     if(p->DF[IJK]>0 && p->DF[IJKp1]<0)
     p->DF3[IJK]=-1;
     
-    
+    #if USE_AMREX
+    p->DF1.fillBoundary();
+    p->DF2.fillBoundary();
+    p->DF3.fillBoundary();
+    #else
     gcparaxintV(p, p->DF1, 1);
     gcparaxintV(p, p->DF2, 1);
     gcparaxintV(p, p->DF3, 1);
-
+    #endif
 }
