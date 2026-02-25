@@ -99,6 +99,7 @@ public:
 
     std::unique_ptr<int[]> flag4_grid;
     ArrayWrapper3D flag1,flag2,flag3,flag4,flag5;
+    ArrayWrapper3D DF,DF1,DF2,DF3;
 
     // flag
     std::unique_ptr<int[]> flag_solid, flag_topo;

@@ -73,10 +73,10 @@ void lexer::flagini()
     // boundary conditions
     Iarray(IO,imax*jmax*kmax);
     Iarray(IOSL,imax*jmax);
-    Iarray(DF,imax*jmax*kmax);
-    Iarray(DF1,imax*jmax*kmax);
-    Iarray(DF2,imax*jmax*kmax);
-    Iarray(DF3,imax*jmax*kmax);
+    DF.resize(1);
+    DF1.resize();
+    DF2.resize();
+    DF3.resize();
     Iarray(DFF,imax*jmax*(kmax+1));
 
     // flag
@@ -92,11 +92,6 @@ void lexer::flagini()
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
     IOSL[IJ] = 0;
-
-    for(i=-margin; i<knox+margin; ++i)
-    for(j=-margin; j<knoy+margin; ++j)
-    for(k=-margin; k<knoz+margin; ++k)
-    DF[IJK] = 1;
 
 	if(B98>=3)
 	for(n=0;n<gcb4_count;++n)
