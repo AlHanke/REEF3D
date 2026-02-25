@@ -38,10 +38,14 @@ void ghostcell::set_DF(lexer *p, fdm *a)
         else if(p->X10>0 && a->fb(i,j,k)<0.0)
             df = -1;
 
-        p->DF[IJK] = df;
+        p->DF(i,j,k) = df;
     }
 
+    #if USE_AMREX
+    p->DF.fillBoundary();
+    #else
     flagx(p,p->DF);
+    #endif
 }
 
 void ghostcell::gcdf_update(lexer *p, fdm *a)
