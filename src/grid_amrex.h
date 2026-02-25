@@ -78,13 +78,6 @@ public:
     amrex::Vector<amrex::iMultiFab> outflow_ba;
     amrex::Vector<amrex::Vector<amrex::IntVect>> outflow_ijk;
 
-    // Flags using iMultiFab
-    amrex::Vector<amrex::iMultiFab> flag1_iMF;
-    amrex::Vector<amrex::iMultiFab> flag2_iMF;
-    amrex::Vector<amrex::iMultiFab> flag3_iMF;
-    amrex::Vector<amrex::iMultiFab> flag4_iMF;
-    amrex::Vector<amrex::iMultiFab> flag7_iMF;
-
     int nlevs = 1; // Number of AMR levels
     amrex::IntVect ref_vec;
     static constexpr int ref_ratio = 2;
