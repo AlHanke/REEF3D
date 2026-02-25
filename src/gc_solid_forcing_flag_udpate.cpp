@@ -62,7 +62,13 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
         p->DF3[IJK]=df;
     }
 
+    #if USE_AMREX
+    p->DF1.fillBoundary();
+    p->DF2.fillBoundary();
+    p->DF3.fillBoundary();
+    #else
     gcparaxintV(p, p->DF1, 1);
     gcparaxintV(p, p->DF2, 1);
     gcparaxintV(p, p->DF3, 1);
+    #endif
 }
