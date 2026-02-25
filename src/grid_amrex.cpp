@@ -129,12 +129,6 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     amrex_distribution_mapping.resize(nlevs);
     amr_cell_mf.resize(nlevs);
 
-    flag1_iMF.resize(nlevs);
-    flag2_iMF.resize(nlevs);
-    flag3_iMF.resize(nlevs);
-    flag4_iMF.resize(nlevs);
-    flag7_iMF.resize(nlevs);
-
     ref_vec = ref_ratio * IntVect::TheUnitVector();
     if(!i_dir)
         ref_vec[0] = 1;
@@ -189,15 +183,15 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 
     create_amrex_box_array_and_distribution_mapping_level_n();
 
+    if (p->mpirank == 0)
+    {
+        for (int lev = 0; lev < nlevs; ++lev)
+            std::cout << "AMReX level " << lev << " cells: " << amrex_box_array[lev].numPts() << std::endl;
+    }
+
     for (int lev = 0; lev < nlevs; lev++)
     {
         amr_cell_mf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 0, p->margin);
-
-        flag1_iMF[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
-        flag2_iMF[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
-        flag3_iMF[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
-        flag4_iMF[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
-        flag7_iMF[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
     }
 
     amrex::MFIter::allowMultipleMFIters(true);
