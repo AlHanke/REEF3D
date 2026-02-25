@@ -51,10 +51,15 @@ int& ArrayWrapper_int::operator[] (int index)
 {
     #if USE_AMREX
     const int jk = p->jmax * p->kmax;
-    const int i = index / jk;
-    const int rem = index - i * jk;
-    const int j = rem / p->kmax;
-    const int k = rem - j * p->kmax;
+
+    const int ii_encoded = index / jk;
+    const int rem = index - ii_encoded * jk;
+    const int jj_encoded = rem / p->kmax;
+    const int kk_encoded = rem - jj_encoded * p->kmax;
+
+    const int i = ii_encoded + p->imin;
+    const int j = jj_encoded + p->jmin;
+    const int k = kk_encoded + p->kmin;
 
     const auto lo = amrex::lbound(p->amr_cell_mfi->tilebox());
     const int ii = lo.x + i;
@@ -99,39 +104,33 @@ void ArrayWrapper_int::fillBoundary()
 void ArrayWrapper_int::fillHigherLevels()
 {
     const amrex::IntVect ratio = p->ref_vec;
+    const int ratio_x = ratio[0];
+    const int ratio_y = ratio[1];
+    const int ratio_z = ratio[2];
 
     for (int lev = 1; lev < p->nlevs; ++lev)
     {
         const auto& crse_mf = data[lev-1];
         auto& fine_mf = data[lev];
 
-        for (amrex::MFIter fmfi(fine_mf); fmfi.isValid(); ++fmfi)
+        amrex::BoxArray coarsened_fine_ba = amrex::coarsen(fine_mf.boxArray(), ratio);
+
+        amrex::iMultiFab coarse_on_fine_layout(coarsened_fine_ba, fine_mf.DistributionMap(), 1, 0);
+        coarse_on_fine_layout.ParallelCopy(crse_mf, 0, 0, 1);
+
+        for (amrex::MFIter mfi(fine_mf); mfi.isValid(); ++mfi)
         {
-            const amrex::Box& fine_valid_box = fmfi.validbox();
-            const amrex::Box coarse_target_box = amrex::coarsen(fine_valid_box, ratio);
+            const amrex::Box& fine_valid_box = mfi.validbox();
+            auto const& fine_arr = fine_mf.array(mfi);
+            auto const& crse_arr = coarse_on_fine_layout.const_array(mfi);
 
-            auto const& fine_arr = fine_mf.array(fmfi);
-
-            for (amrex::MFIter cmfi(crse_mf); cmfi.isValid(); ++cmfi)
+            amrex::ParallelFor(fine_valid_box, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
             {
-                const amrex::Box overlap_coarse_box = coarse_target_box & cmfi.validbox();
-                if (!overlap_coarse_box.ok())
-                {
-                    continue;
-                }
-
-                const amrex::Box overlap_fine_box = amrex::refine(overlap_coarse_box, ratio) & fine_valid_box;
-                auto const& crse_arr = crse_mf.const_array(cmfi);
-                const int ref_ratio = p->ref_ratio;
-
-                amrex::ParallelFor(overlap_fine_box, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
-                {
-                    const int ic = amrex::coarsen(i, ref_ratio);
-                    const int jc = amrex::coarsen(j, ref_ratio);
-                    const int kc = amrex::coarsen(k, ref_ratio);
-                    fine_arr(i, j, k, 0) = crse_arr(ic, jc, kc, 0);
-                });
-            }
+                const int ic = amrex::coarsen(i, ratio_x);
+                const int jc = amrex::coarsen(j, ratio_y);
+                const int kc = amrex::coarsen(k, ratio_z);
+                fine_arr(i, j, k, 0) = crse_arr(ic, jc, kc, 0);
+            });
         }
 
         fine_mf.FillBoundary();
