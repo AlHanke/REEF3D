@@ -26,6 +26,7 @@ Author: Hans Bihs
 lexer::lexer() : coordinates(this), interpolation(this), position(this),
                  flag1(this,DataLocation::FACE_X), flag2(this,DataLocation::FACE_Y), flag3(this,DataLocation::FACE_Z),
                  flag4(this,DataLocation::CELL_CENTERED), flag5(this,DataLocation::CELL_CENTERED),
+                 DF(this), DF1(this), DF2(this), DF3(this),
                  mpirank(0)
 {
     control::ini_default();

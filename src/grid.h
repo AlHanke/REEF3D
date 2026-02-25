@@ -62,7 +62,6 @@ public:
 
     // boundary conditions
     int *IO,*IOSL; // 0: no BC, 1: inflow, 2: outflow
-    int *DF,*DF1,*DF2,*DF3;
 
     bool i_dir,j_dir,k_dir; // existance of directions
 
