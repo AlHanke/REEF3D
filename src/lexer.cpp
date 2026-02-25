@@ -25,6 +25,7 @@ Author: Hans Bihs
 lexer::lexer() : position(this), interpolation(this), coordinates(this),
                  flag1(this), flag2(this), flag3(this), flag4(this), flag5(this),
                  flagsf1(this), flagsf2(this), flagsf3(this), flagsf4(this),
+                 DF(this), DF1(this), DF2(this), DF3(this),
                  cmu(0.09), sigT(0.9), mpirank(0)
 {
     sigT=0.9;

@@ -98,6 +98,7 @@ public:
     int *flag4_grid;
     ArrayWrapper_int flag1,flag2,flag3,flag4,flag5;
     ArrayWrapper_int flagsf1,flagsf2,flagsf3,flagsf4;
+    ArrayWrapper_int DF,DF1,DF2,DF3;
     
     // flag
     double *flag_solid,*flag_topo;
