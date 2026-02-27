@@ -101,6 +101,12 @@ levelset_RK3::~levelset_RK3()
 
 void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcell* pgc,ioflow* pflow, reini* preini, field &ls)
 {
+	#if USE_AMREX
+    const int max_level = p->nlevs - 1;
+    #else
+    const int max_level = 0;
+    #endif
+
     pflow->fsfinflow(p,a,pgc);
     pflow->fsfrkin(p,a,pgc,ark1);
     pflow->fsfrkin(p,a,pgc,ark2);
@@ -115,10 +121,16 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
 
 	pconvec->start(p,a,ls,4,a->u,a->v,a->w);
 	
-
-	LOOP
-	ark1(i,j,k) = ls(i,j,k)
+	for(int lev=max_level; lev>=0; --lev)
+	{
+		p->level = lev;
+		TILE_LOOP
+		IJKLOOP
+		PCHECK
+		ark1(i,j,k) = ls(i,j,k)
 				+ p->dt*a->L(i,j,k);
+	}
+	p->level = 0;
 	
 	pflow->phi_relax(p,pgc,ark1);
 	
@@ -131,10 +143,17 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
 
 	pconvec->start(p,a,ark1,4,a->u,a->v,a->w);
 
-	LOOP
-	ark2(i,j,k) =     0.75*ls(i,j,k)
+	for(int lev=max_level; lev>=0; --lev)
+	{
+		p->level = lev;
+		TILE_LOOP
+		IJKLOOP
+		PCHECK
+		ark2(i,j,k) =     0.75*ls(i,j,k)
 				   + 0.25*ark1(i,j,k)
 				   + 0.25*p->dt*a->L(i,j,k);
+	}
+	p->level = 0;
 				
 	pflow->phi_relax(p,pgc,ark2);
 	
@@ -146,10 +165,17 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
 
 	pconvec->start(p,a,ark2,4,a->u,a->v,a->w);
 
-	LOOP
-	ls(i,j,k) =      (1.0/3.0)*ls(i,j,k)
+	for(int lev=max_level; lev>=0; --lev)
+	{
+		p->level = lev;
+		TILE_LOOP
+		IJKLOOP
+		PCHECK
+		ls(i,j,k) =      (1.0/3.0)*ls(i,j,k)
 				  + (2.0/3.0)*ark2(i,j,k)
 				  + (2.0/3.0)*p->dt*a->L(i,j,k);
+	}
+	p->level = 0;
 
     pflow->phi_relax(p,pgc,ls);
 	pgc->start4(p,ls,gcval_phi);

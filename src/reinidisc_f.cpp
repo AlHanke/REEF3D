@@ -34,23 +34,56 @@ reinidisc_f::~reinidisc_f()
 }
 
 void reinidisc_f::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, int ipol)
-{	
+{
+    #if USE_AMREX
+    const int max_level = p->nlevs - 1;
+    #else
+    const int max_level = 0;
+    #endif
+
 	if(ipol==4)
     {
-        BASELOOP
-        L(i,j,k) = 0.0;
+		for(int lev=max_level; lev>=0; --lev)
+		{
+			p->level = lev;
+			TILE_LOOP
+			IJKLOOP
+			PBASECHECK
+				L(i,j,k) = 0.0;
+		}
 
-        BASELOOP
-        disc(p,a,pgc,f,L);
+		for(int lev=max_level; lev>=0; --lev)
+		{
+			p->level = lev;
+			TILE_LOOP
+			IJKLOOP
+			PBASECHECK
+				disc(p,a,pgc,f,L);
+		}
+
+		p->level = 0;
     }
-	
-	if(ipol==5)
+	else if(ipol==5)
     {
-        BASELOOP
-        L(i,j,k) = 0.0;
+		for(int lev=max_level; lev>=0; --lev)
+		{
+			p->level = lev;
+			TILE_LOOP
+			IJKLOOP
+			PBASECHECK
+				L(i,j,k) = 0.0;
+		}
         
-        BASELOOP
-        disc(p,a,pgc,f,L);
+		for(int lev=max_level; lev>=0; --lev)
+		{
+			p->level = lev;
+			TILE_LOOP
+			IJKLOOP
+			PBASECHECK
+				disc(p,a,pgc,f,L);
+		}
+
+		p->level = 0;
     }
 }
 
