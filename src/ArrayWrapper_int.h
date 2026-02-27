@@ -48,6 +48,10 @@ public:
     #if USE_AMREX
     void fillBoundary() override;
     void fillHigherLevels() override;
+    amrex::iMultiFab& GetMultiFab();
+    const amrex::iMultiFab& GetMultiFab() const;
+    amrex::iMultiFab& GetMultiFab(int level);
+    const amrex::iMultiFab& GetMultiFab(int level) const;
     #endif
 
 private:
