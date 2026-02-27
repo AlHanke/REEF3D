@@ -75,13 +75,6 @@ void lexer::lexer_ini()
 	pfbi=qfbi=rfbi=0.0;
 }
 
-void lexer::makeflag( int *field)
-{
-    int n;
-	for(n=0;n<imax*jmax*kmax;++n)
-	field[n]=OBJ_FLAG;
-}
-
 void control::parse(lexer* p)
 {
     if(B98==1)
