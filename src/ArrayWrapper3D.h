@@ -61,6 +61,10 @@ public:
     #if USE_AMREX
     void fillBoundary();
     void fillHigherLevels();
+    inline amrex::iMultiFab& GetMultiFab();
+    inline const amrex::iMultiFab& GetMultiFab() const;
+    inline amrex::iMultiFab& GetMultiFab(int level) {return data[level];};
+    inline const amrex::iMultiFab& GetMultiFab(int level) const {return data[level];};
     #endif
 
 private:
