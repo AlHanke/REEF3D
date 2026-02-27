@@ -65,9 +65,9 @@ void lexer::flagini()
 
     flag4_grid.reset(); // transported into flag4; not needed afterwards
 
-    flag1.resize();
-    flag2.resize();
-    flag3.resize();
+    flag1.resize(OBJ_FLAG);
+    flag2.resize(OBJ_FLAG);
+    flag3.resize(OBJ_FLAG);
     flag5.resize();
 
     // boundary conditions
@@ -77,11 +77,6 @@ void lexer::flagini()
     DF1.resize();
     DF2.resize();
     DF3.resize();
-
-    // flag
-	makeflag(flag1);
-	makeflag(flag2);
-	makeflag(flag3);
 
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
