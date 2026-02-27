@@ -108,4 +108,17 @@ inline const int &ArrayWrapper3D::operator[] (int index) const noexcept
     #endif
 }
 
+#if USE_AMREX
+
+amrex::iMultiFab& ArrayWrapper3D::GetMultiFab()
+{
+    return data[p->level];
+}
+
+const amrex::iMultiFab& ArrayWrapper3D::GetMultiFab() const
+{
+    return data[p->level];
+}
+#endif
+
 #endif
