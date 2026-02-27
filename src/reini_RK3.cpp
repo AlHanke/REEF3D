@@ -99,29 +99,56 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
     pflow->fsfrkout(p,a,pgc,frk1);
     pflow->fsfrkout(p,a,pgc,frk2);
 
+    #if USE_AMREX
+    const int max_level = p->nlevs - 1;
+    #else
+    const int max_level = 0;
+    #endif
+
     for(int q=0;q<reiniter;++q)
     {
         // Step 1
         prdisc->start(p,a,pgc,f,a->L,4);
 
-        BASELOOP
-            frk1(i,j,k) = f(i,j,k) + dt(i,j,k)*a->L(i,j,k);
+        for(int lev=max_level; lev>=0; --lev)
+        {
+            p->level = lev;
+            TILE_LOOP
+            IJKLOOP
+            PBASECHECK
+                frk1(i,j,k) = f(i,j,k) + dt(i,j,k)*a->L(i,j,k);
+        }
+        p->level = 0;
 
         pgc->start4(p,frk1,gcval);
 
         // Step 2
         prdisc->start(p,a,pgc,frk1,a->L,4);
 
-        BASELOOP
-            frk2(i,j,k) = 0.75*f(i,j,k) + 0.25*frk1(i,j,k) + 0.25*dt(i,j,k)*a->L(i,j,k);
+        for(int lev=max_level; lev>=0; --lev)
+        {
+            p->level = lev;
+            TILE_LOOP
+            IJKLOOP
+            PBASECHECK
+                frk2(i,j,k) = 0.75*f(i,j,k) + 0.25*frk1(i,j,k) + 0.25*dt(i,j,k)*a->L(i,j,k);
+        }
+        p->level = 0;
 
         pgc->start4(p,frk2,gcval);
 
         // Step 3
         prdisc->start(p,a,pgc,frk2,a->L,4);
 
-        BASELOOP
-            f(i,j,k) = (1.0/3.0)*f(i,j,k) + (2.0/3.0)*frk2(i,j,k) + (2.0/3.0)*dt(i,j,k)*a->L(i,j,k);
+        for(int lev=max_level; lev>=0; --lev)
+        {
+            p->level = lev;
+            TILE_LOOP
+            IJKLOOP
+            PBASECHECK
+                f(i,j,k) = (1.0/3.0)*f(i,j,k) + (2.0/3.0)*frk2(i,j,k) + (2.0/3.0)*dt(i,j,k)*a->L(i,j,k);
+        }
+        p->level = 0;
 
         pgc->start4(p,f,gcval);
     }
@@ -138,11 +165,24 @@ void reini_RK3::step(lexer* p)
 
 void reini_RK3::time_preproc(lexer* p)
 {
-    LOOP
+    #if USE_AMREX
+    const int max_level = p->nlevs - 1;
+    #else
+    const int max_level = 0;
+    #endif
+
+    for(int lev=max_level; lev>=0; --lev)
     {
-        if(p->j_dir==0)
-            dt(i,j,k) = p->F43*MIN(p->DXP[IP],p->DZP[KP]);
-        else if(p->j_dir==1)
-            dt(i,j,k) = p->F43*MIN3(p->DXP[IP],p->DYP[JP],p->DZP[KP]);
+        p->level = lev;
+        TILE_LOOP
+        IJKLOOP
+        PCHECK
+        {
+            if(p->j_dir==0)
+                dt(i,j,k) = p->F43*MIN(p->DXP[IP],p->DZP[KP]);
+            else if(p->j_dir==1)
+                dt(i,j,k) = p->F43*MIN3(p->DXP[IP],p->DYP[JP],p->DZP[KP]);
+        }
     }
+    p->level = 0;
 }
