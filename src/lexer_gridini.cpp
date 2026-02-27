@@ -63,9 +63,9 @@ void lexer::flagini()
     IJKLOOP
     flag4[IJK] = flag4_grid[IJK];
 
-    flag1.resize();
-    flag2.resize();
-    flag3.resize();
+    flag1.resize(OBJ_FLAG);
+    flag2.resize(OBJ_FLAG);
+    flag3.resize(OBJ_FLAG);
     flag5.resize();
 
     flagsf1.resize(1);
@@ -86,11 +86,6 @@ void lexer::flagini()
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
     DFBED[IJ] = 1;
-
-    // flag
-	makeflag(flag1);
-	makeflag(flag2);
-	makeflag(flag3);
 
     for(i=-margin; i<knox+margin; ++i)
     for(j=-margin; j<knoy+margin; ++j)
