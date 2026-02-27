@@ -101,6 +101,26 @@ void ArrayWrapper_int::fillBoundary()
     data[p->level].FillBoundary();
 }
 
+amrex::iMultiFab& ArrayWrapper_int::GetMultiFab()
+{
+    return data[p->level];
+}
+
+const amrex::iMultiFab& ArrayWrapper_int::GetMultiFab() const
+{
+    return data[p->level];
+}
+
+amrex::iMultiFab& ArrayWrapper_int::GetMultiFab(int level)
+{
+    return data[level];
+}
+
+const amrex::iMultiFab& ArrayWrapper_int::GetMultiFab(int level) const
+{
+    return data[level];
+}
+
 void ArrayWrapper_int::fillHigherLevels()
 {
     const amrex::IntVect ratio = p->ref_vec;
