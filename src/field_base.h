@@ -39,6 +39,10 @@ template <typename T>
 class field_base
 {
 public:
+    field_base() = default;
+    field_base(const field_base&) = delete;
+    field_base(field_base&&) = delete;
+    field_base& operator=(const field_base&) = delete;
     virtual ~field_base() = default;
 
     /*!
