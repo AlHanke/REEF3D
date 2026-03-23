@@ -26,23 +26,19 @@ Author: Hans Bihs
 #include"flux.h"
 #include"increment.h"
 
-using namespace std;
-
 class flux_face_CDS2_2D final : public flux, public increment
 {
 public:
 
-	flux_face_CDS2_2D (lexer *p);
-	virtual ~flux_face_CDS2_2D();
+	flux_face_CDS2_2D (lexer*);
+	virtual ~flux_face_CDS2_2D() = default;
 
-	void u_flux(fdm* a,int,field&,double&,double&) override final;
-	void v_flux(fdm* a,int,field&,double&,double&) override final;
-	void w_flux(fdm* a,int,field&,double&,double&) override final;
-
+	void u_flux(fdm*,int,field&,double&,double&) override final;
+	void v_flux(fdm*,int,field&,double&,double&) override final;
+	void w_flux(fdm*,int,field&,double&,double&) override final;
     
 private:
     lexer *p;
-
 };
 
 #endif
