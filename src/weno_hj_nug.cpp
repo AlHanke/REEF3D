@@ -35,19 +35,19 @@ weno_hj_nug::weno_hj_nug(lexer* p):weno_nug_func(p),tttw(13.0/12.0),fourth(1.0/4
     if(p->j_dir==0)
     {
     if(p->B200==0 && p->S10!=2)
-    pflux = new flux_HJ_CDS2_2D(p);
+    pflux = new flux_HJ_CDS2_2D;
     
     if(p->B200>=1 || p->S10==2)
-    pflux = new flux_HJ_CDS2_vrans_2D(p);
+    pflux = new flux_HJ_CDS2_vrans_2D;
     }
     
     if(p->j_dir==1)
     {
     if(p->B200==0 && p->S10!=2)
-    pflux = new flux_HJ_CDS2(p);
+    pflux = new flux_HJ_CDS2;
     
     if(p->B200>=1 || p->S10==2)
-    pflux = new flux_HJ_CDS2_vrans(p);
+    pflux = new flux_HJ_CDS2_vrans;
     }
 }
 

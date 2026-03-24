@@ -26,19 +26,79 @@ Author: Hans Bihs
 #include"flux.h"
 #include"increment.h"
 
+#include"field.h"
+
 class flux_face_CDS2_2D final : public flux, public increment
 {
 public:
+    flux_face_CDS2_2D() = default;
+    virtual ~flux_face_CDS2_2D() = default;
 
-	flux_face_CDS2_2D (lexer*);
-	virtual ~flux_face_CDS2_2D() = default;
+    inline void u_flux(fdm*, int ipol, field& uvel, double &uflux1, double &uflux2) override final
+    { u_flux_impl(ipol, uvel, uflux1, uflux2); }
+    inline void v_flux(fdm*,int, field&, double &vflux1, double &vflux2) override final
+    { vflux1 = 0.0; vflux2 = 0.0; }
+    inline void w_flux(fdm*, int ipol, field& wvel, double &wflux1, double &wflux2) override final
+    { w_flux_impl(ipol, wvel, wflux1, wflux2); }
 
-	void u_flux(fdm*,int,field&,double&,double&) override final;
-	void v_flux(fdm*,int,field&,double&,double&) override final;
-	void w_flux(fdm*,int,field&,double&,double&) override final;
-    
+    #if USE_AMREX
+    inline void u_flux(fdm*, int ipol, const amrex::Array4<const amrex::Real>& uvel, double &uflux1, double &uflux2) override final
+    { u_flux_impl(ipol, uvel, uflux1, uflux2); }
+    inline void v_flux(fdm*,int, const amrex::Array4<const amrex::Real>&, double &vflux1, double &vflux2) override final
+    { vflux1 = 0.0; vflux2 = 0.0; }
+    inline void w_flux(fdm*, int ipol, const amrex::Array4<const amrex::Real>& wvel, double &wflux1, double &wflux2) override final
+    { w_flux_impl(ipol, wvel, wflux1, wflux2); }
+    #endif
+
 private:
-    lexer *p;
+    template<typename GenericField>
+    inline void u_flux_impl(int ipol, GenericField& uvel, double &uflux1, double &uflux2)
+    {
+        if(ipol==1)
+        {
+            uflux1 = 0.5*(uvel(i,j,k)+uvel(i-1,j,k));
+            uflux2 = 0.5*(uvel(i,j,k)+uvel(i+1,j,k));
+        }
+        else if(ipol==2)
+        {
+            uflux1 = uvel(i-1,j,k);
+            uflux2 = uvel(i,j,k);
+        }
+        else if(ipol==3)
+        {
+            uflux1 = 0.5*(uvel(i-1,j,k)+uvel(i-1,j,k+1));
+            uflux2 = 0.5*(uvel(i,j,k)+uvel(i,j,k+1));
+        }
+        else if(ipol==4)
+        {
+            uflux1 = uvel(i-1,j,k);
+            uflux2 = uvel(i,j,k);
+        }
+    }
+    template<typename GenericField>
+    inline void w_flux_impl(int ipol, GenericField& wvel, double &wflux1, double &wflux2)
+    {
+        if(ipol==1)
+        {
+            wflux1 = 0.5*(wvel(i,j,k-1)+wvel(i+1,j,k-1));
+            wflux2 = 0.5*(wvel(i,j,k)+wvel(i+1,j,k));
+        }
+        else if(ipol==2)
+        {
+            wflux1 = wvel(i,j,k-1);
+            wflux2 = wvel(i,j,k);
+        }
+        else if(ipol==3)
+        {
+            wflux1 = 0.5*(wvel(i,j,k)+wvel(i,j,k-1));
+            wflux2 = 0.5*(wvel(i,j,k)+wvel(i,j,k+1));
+        }
+        else if(ipol==4)
+        {
+            wflux1 = wvel(i,j,k-1);
+            wflux2 = wvel(i,j,k);
+        }
+    }
 };
 
 #endif
