@@ -22,54 +22,45 @@ Author: Hans Bihs
 
 #include"weno3_nug_func.h"
 #include"lexer.h"
-#include"fdm.h"
-#include"flux_face_CDS2.h"
-#include"flux_face_CDS2_vrans.h"
-#include"flux_face_FOU.h"
-#include"flux_face_FOU_vrans.h"
 
 weno3_nug_func::weno3_nug_func(lexer* p):epsilon(0.0),psi(1.0e-6)
 {
     ini(p);
-    this->p=p;
-}
-
-weno3_nug_func::~weno3_nug_func()
-{
+    weno3_nug_func::p=p;
 }
 
 void weno3_nug_func::ini(lexer* p)
 {
-    if(iniflag==0)
+    if(!iniflag)
     {
-    const int nlev_mult =
-#if USE_AMREX
-        p->nlevs;
-#else
-        1;
-#endif
+        const int nlev_mult =
+        #if USE_AMREX
+                p->nlevs;
+        #else
+                1;
+        #endif
 
-    p->Darray(qfx,max_i*nlev_mult,2,4,2);
-    p->Darray(qfy,max_j*nlev_mult,2,4,2);
-    p->Darray(qfz,max_k*nlev_mult,2,4,2);
-    
-    p->Darray(cfx,max_i*nlev_mult,2,4);
-    p->Darray(cfy,max_j*nlev_mult,2,4);
-    p->Darray(cfz,max_k*nlev_mult,2,4);
-    
-    p->Darray(isfx,max_i*nlev_mult,2,4);
-    p->Darray(isfy,max_j*nlev_mult,2,4);
-    p->Darray(isfz,max_k*nlev_mult,2,4);
-    
-    precalc_qf(p);
-    precalc_cf(p);
-    precalc_isf(p);
-    
-    iniflag=1;
+        p->Darray(qfx,max_i*nlev_mult,2,4,2);
+        p->Darray(qfy,max_j*nlev_mult,2,4,2);
+        p->Darray(qfz,max_k*nlev_mult,2,4,2);
+
+        p->Darray(cfx,max_i*nlev_mult,2,4);
+        p->Darray(cfy,max_j*nlev_mult,2,4);
+        p->Darray(cfz,max_k*nlev_mult,2,4);
+
+        p->Darray(isfx,max_i*nlev_mult,2,4);
+        p->Darray(isfy,max_j*nlev_mult,2,4);
+        p->Darray(isfz,max_k*nlev_mult,2,4);
+
+        precalc_qf(p);
+        precalc_cf(p);
+        precalc_isf(p);
+
+        iniflag=true;
     }
 }
 
 double ****weno3_nug_func::qfx,****weno3_nug_func::qfy,****weno3_nug_func::qfz;
 double ***weno3_nug_func::cfx,***weno3_nug_func::cfy,***weno3_nug_func::cfz;
 double ***weno3_nug_func::isfx,***weno3_nug_func::isfy,***weno3_nug_func::isfz;
-int weno3_nug_func::iniflag(0);
+bool weno3_nug_func::iniflag(false);
