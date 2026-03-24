@@ -102,11 +102,6 @@ void weno_flux::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& 
     if(ipol==4)
     LOOP
     a->L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel);
-
-    if(ipol==5)
-    LOOP
-    a->L(i,j,k)+=aij(p,a,b,5,uvel,vvel,wvel);
-
 }
 
 double weno_flux::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, field& wvel)
