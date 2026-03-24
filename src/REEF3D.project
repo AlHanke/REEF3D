@@ -1464,11 +1464,9 @@
             <File Name="weno_nug_func_precalc_isf.cpp"/>
             <File Name="weno_nug_func_precalc_cf.cpp"/>
             <File Name="weno_nug_func.cpp"/>
-            <File Name="weno3_nug_func_precalc_weights.cpp"/>
             <File Name="weno3_nug_func_precalc_qf.cpp"/>
             <File Name="weno3_nug_func_precalc_isf.cpp"/>
             <File Name="weno3_nug_func_precalc_cf.cpp"/>
-            <File Name="weno3_nug_func_is.cpp"/>
             <File Name="weno3_nug_func.cpp"/>
             <File Name="ddweno_nug_sig.cpp"/>
             <File Name="ddweno_nug_sf.cpp"/>
