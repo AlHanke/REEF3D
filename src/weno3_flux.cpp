@@ -41,14 +41,14 @@ weno3_flux::weno3_flux(lexer* p) : weno3_nug_func(p)
             if(p->D11==1)
             pflux = new flux_face_FOU_2D(p);
             else if(p->D11==2)
-            pflux = new flux_face_CDS2_2D(p);
+            pflux = new flux_face_CDS2_2D;
         }
         else if(p->B269>=1 || p->S10==2)
         {
             if(p->D11==1)
             pflux = new flux_face_FOU_vrans_2D(p);
             else if(p->D11==2)
-            pflux = new flux_face_CDS2_vrans_2D(p);
+            pflux = new flux_face_CDS2_vrans_2D;
         }
     }
     else if(p->j_dir==1)
@@ -58,14 +58,14 @@ weno3_flux::weno3_flux(lexer* p) : weno3_nug_func(p)
             if(p->D11==1)
             pflux = new flux_face_FOU(p);
             else if(p->D11==2)
-            pflux = new flux_face_CDS2(p);
+            pflux = new flux_face_CDS2;
         }
         else if(p->B269>=1 || p->S10==2)
         {
             if(p->D11==1)
             pflux = new flux_face_FOU_vrans(p);
             else if(p->D11==2)
-            pflux = new flux_face_CDS2_vrans(p);
+            pflux = new flux_face_CDS2_vrans;
         }
     }
 }

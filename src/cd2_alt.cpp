@@ -29,10 +29,10 @@ Author: Hans Bihs
 cds2_alt::cds2_alt (lexer *p)
 {
     if(p->B269==0 && p->S10!=2)
-    pflux = new flux_HJ_CDS2(p);
+    pflux = new flux_HJ_CDS2;
     
     if(p->B269>=1 || p->S10==2)
-    pflux = new flux_HJ_CDS2_vrans(p);
+    pflux = new flux_HJ_CDS2_vrans;
 }
 
 cds2_alt::~cds2_alt()
