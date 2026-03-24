@@ -101,10 +101,6 @@ void ifou::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel,
     if(ipol==4)
     LOOP
     aij(p,a,b,4,uvel,vvel,wvel,p->DXN,p->DYN,p->DZN);
-
-    if(ipol==5)
-    LOOP
-    aij(p,a,b,5,uvel,vvel,wvel,p->DXN,p->DYN,p->DZN);
 }
 
 void ifou::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, field& wvel, double *DX,double *DY, double *DZ)

@@ -72,9 +72,6 @@ void iweno_hj_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, fiel
 
     if(ipol==4)
     wenoloop4(p,a,b,ipol,uvel,vvel,wvel);
-
-    if(ipol==5)
-    wenoloop4(p,a,b,ipol,uvel,vvel,wvel);
 }
 
 void iweno_hj_nug::wenoloop1(lexer *p, fdm *a, field& f, int ipol, field& uvel, field& vvel, field& wvel)
