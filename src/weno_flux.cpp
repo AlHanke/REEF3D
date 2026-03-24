@@ -45,7 +45,7 @@ weno_flux::weno_flux(lexer* p):tttw(13.0/12.0),fourth(1.0/4.0),third(1.0/3.0),
         pflux = new flux_face_FOU_2D(p);
         
         if(p->D11==2)
-        pflux = new flux_face_CDS2_2D(p);
+        pflux = new flux_face_CDS2_2D;
     }
     
     if(p->B200>=1 || p->S10==2)
@@ -54,7 +54,7 @@ weno_flux::weno_flux(lexer* p):tttw(13.0/12.0),fourth(1.0/4.0),third(1.0/3.0),
         pflux = new flux_face_FOU_vrans_2D(p);
         
         if(p->D11==2)
-        pflux = new flux_face_CDS2_vrans_2D(p);
+        pflux = new flux_face_CDS2_vrans_2D;
     }
     }
     
@@ -75,7 +75,7 @@ weno_flux::weno_flux(lexer* p):tttw(13.0/12.0),fourth(1.0/4.0),third(1.0/3.0),
         pflux = new flux_face_FOU_vrans(p);
         
         if(p->D11==2)
-        pflux = new flux_face_CDS2_vrans(p);
+        pflux = new flux_face_CDS2_vrans;
     }
     }
 }
