@@ -23,20 +23,25 @@ Author: Hans Bihs
 #ifndef FLUX_H_
 #define FLUX_H_
 
+#if USE_AMREX
+#include <AMReX_Array4.H>
+#endif
+
 class fdm;
-class lexer;
 class field;
 
-using namespace std;
-
-class flux 
+class flux
 {
 public:
+    virtual void u_flux(fdm*,int,field&,double&,double&) = 0;
+    virtual void v_flux(fdm*,int,field&,double&,double&) = 0;
+    virtual void w_flux(fdm*,int,field&,double&,double&) = 0;
 
-    virtual void u_flux(fdm*,int,field&,double&,double&)=0;
-	virtual void v_flux(fdm*,int,field&,double&,double&)=0;
-	virtual void w_flux(fdm*,int,field&,double&,double&)=0;
-
+    #if USE_AMREX
+    virtual void u_flux(fdm*,int,const amrex::Array4<const amrex::Real>&,double&,double&) = 0;
+    virtual void v_flux(fdm*,int,const amrex::Array4<const amrex::Real>&,double&,double&) = 0;
+    virtual void w_flux(fdm*,int,const amrex::Array4<const amrex::Real>&,double&,double&) = 0;
+    #endif
 };
 
 #endif

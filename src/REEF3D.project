@@ -1424,18 +1424,10 @@
             <File Name="linear_regression_cont.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="Flux">
-            <File Name="flux_HJ_CDS2_vrans_2D.cpp"/>
-            <File Name="flux_HJ_CDS2_vrans.cpp"/>
-            <File Name="flux_HJ_CDS2_2D.cpp"/>
-            <File Name="flux_HJ_CDS2.cpp"/>
             <File Name="flux_face_FOU_vrans_2D.cpp"/>
             <File Name="flux_face_FOU_vrans.cpp"/>
             <File Name="flux_face_FOU_2D.cpp"/>
             <File Name="flux_face_FOU.cpp"/>
-            <File Name="flux_face_CDS2_vrans_2D.cpp"/>
-            <File Name="flux_face_CDS2_vrans.cpp"/>
-            <File Name="flux_face_CDS2_2D.cpp"/>
-            <File Name="flux_face_CDS2.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="Fluid Update">
             <File Name="fluid_update_void.cpp"/>
