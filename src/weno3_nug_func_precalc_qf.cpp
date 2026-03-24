@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"weno3_nug_func.h"
 #include"lexer.h"
-#include"fdm.h"
 
 void weno3_nug_func::precalc_qf(lexer* p)
 {
