@@ -230,7 +230,7 @@ void VOF_AB::compression(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec, 
     LOOP
 	a->L(i,j,k)=0.0;
 
-    ppconvec->start(p,a,F,5,uc,vc,wc);
+    ppconvec->start(p,a,F,4,uc,vc,wc);
 
 
     LOOP

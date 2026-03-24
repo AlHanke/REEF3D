@@ -82,10 +82,6 @@ void weno3_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& v
     if(ipol==4)
     LOOP
     a->L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel,p->DXN,p->DYN,p->DZN);
-    
-    if(ipol==5)
-    LOOP
-    a->L(i,j,k)+=aij(p,a,b,5,uvel,vvel,wvel,p->DXN,p->DYN,p->DZN);
 }
 
 double weno3_hj::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, field& wvel, double *DXD,double *DYD, double *DZD)
