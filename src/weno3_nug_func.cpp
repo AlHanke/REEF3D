@@ -22,15 +22,11 @@ Author: Hans Bihs
 
 #include "weno3_nug_func.h"
 #include "lexer.h"
-#include "fdm.h"
-#include "flux_face_CDS2.h"
-#include "flux_face_CDS2_vrans.h"
-#include "flux_face_FOU.h"
-#include "flux_face_FOU_vrans.h"
 
-weno3_nug_func::weno3_nug_func(lexer* p):epsilon(0.0),psi(1.0e-6)
+weno3_nug_func::weno3_nug_func(lexer* p)
 {
     ini(p);
+    weno3_nug_func::p=p;
 }
 
 void weno3_nug_func::ini(lexer* p)
