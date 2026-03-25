@@ -198,11 +198,9 @@ public:
     static double ****qfx,****qfy,****qfz;
     static double ***cfx,***cfy,***cfz;
     static double ****isfx,****isfy,****isfz;
-    
-	static bool iniflag;
-    
-    
-    
+
+    static bool iniflag;
+
     double q1,q2,q3,q4,q5;
 
     const double epsilon,psi;
