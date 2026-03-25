@@ -12,7 +12,7 @@ LDFLAGS      := -L ${HYPRE_DIR}/lib/ -lHYPRE
 INCLUDE      := -I ${HYPRE_DIR}/include -I ${EIGEN_DIR} -DEIGEN_MPL2_ONLY
 USE_AMREX ?= 0
 ifeq ($(USE_AMREX),1)
-AMREX_LIBRARY_HOME := ThirdParty/amrex-26.01
+AMREX_LIBRARY_HOME := ThirdParty/amrex-26.04
 CXXFLAGS	 += -DUSE_AMREX=$(USE_AMREX)
 LDFLAGS      += -L $(AMREX_LIBRARY_HOME)/lib -lamrex -L /opt/homebrew/lib/gcc/current -lgfortran
 INCLUDE      += -I $(AMREX_LIBRARY_HOME)/include
