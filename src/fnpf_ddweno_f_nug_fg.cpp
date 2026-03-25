@@ -27,7 +27,6 @@ Author: Hans Bihs
 #include"slice.h"
 #include"ghostcell.h"
 #include"vec.h"
-#include"cpt.h"
 
 double fnpf_ddweno_f_nug::ddwenox(field& f, double uw)
 {
