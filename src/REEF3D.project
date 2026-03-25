@@ -47,7 +47,6 @@
       <VirtualDirectory Name="Sparse Matrix">
         <File Name="vec.h"/>
         <File Name="matrix_diag.h"/>
-        <File Name="cpt.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Hypre">
         <File Name="hypre_struct.h"/>
@@ -426,7 +425,6 @@
           <VirtualDirectory Name="Sparse Matrix">
             <File Name="vec2D.h"/>
             <File Name="matrix2D.h"/>
-            <File Name="cpt2D.h"/>
           </VirtualDirectory>
           <VirtualDirectory Name="HYPRE">
             <File Name="hypre_struct2D.h"/>
@@ -1225,7 +1223,6 @@
       <VirtualDirectory Name="Sparse Matrix">
         <File Name="vec.cpp"/>
         <File Name="matrix_diag.cpp"/>
-        <File Name="cpt.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Hypre SStruct">
         <File Name="hypre_sstruct_solve.cpp"/>
@@ -1700,7 +1697,6 @@
           <VirtualDirectory Name="Sparse Matrix">
             <File Name="vec2D.cpp"/>
             <File Name="matrix2D.cpp"/>
-            <File Name="cpt2D.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="HYPRE Struct 2D">
             <File Name="hypre_struct2D_solve.cpp"/>

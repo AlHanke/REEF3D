@@ -27,7 +27,6 @@ Author: Hans Bihs
 #include"increment.h"
 
 class flux;
-class cpt;
 
 using namespace std;
 
