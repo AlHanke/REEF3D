@@ -27,6 +27,9 @@ Author: Hans Bihs
 #include "lexer.h"
 #include <array>
 #include <vector>
+#if USE_AMREX
+#include <AMReX_GPU.H>
+#endif
 
 class weno3_nug_func : public increment
 {
@@ -113,6 +116,142 @@ public:
         const double c0=cfz[KP][wf][2], c1=cfz[KP][wf][3], a=c0/s1sq+c1/s2sq;
         w1z=c0/(epsilon+s1sq*a); w2z=c1/(epsilon+s2sq*a);
     }
+
+    // ------------------------------------------------------------------
+    // Stateless face-flux kernels and divergence helpers.
+    // All temporaries are local — no member state is read or written,
+    // making these suitable for use in GPU device code.
+    // fx_at / fy_at / fz_at compute the WENO flux at a single face.
+    // fx_div / fy_div / fz_div combine both faces into the divergence
+    // contribution vel_hi*f_hi - vel_lo*f_lo without mutating i/j/k.
+    // ------------------------------------------------------------------
+    #if USE_AMREX
+        #define WENO3_NUG_GPU_ AMREX_GPU_HOST_DEVICE
+    #else
+        #define WENO3_NUG_GPU_
+    #endif
+
+    template<typename F>
+    WENO3_NUG_GPU_
+    static inline double fx_at(const F& b, int i, int j, int k, double advec,
+                                int ip, int uf, double eps, double ps)
+    {
+        if(advec>0.0)
+        {
+            const double q1=b(i-1,j,k), q2=b(i,j,k), q3=b(i+1,j,k);
+            const double d1=q3-q2, d2=q2-q1;
+            const double is1=isfx[ip][uf][0]*(d1*d1), is2=isfx[ip][uf][1]*(d2*d2);
+            const double s1sq=(is1+ps)*(is1+ps), s2sq=(is2+ps)*(is2+ps);
+            const double c0=cfx[ip][uf][0], c1=cfx[ip][uf][1], a=c0/s1sq+c1/s2sq;
+            const double w1=c0/(eps+s1sq*a), w2=c1/(eps+s2sq*a);
+            return w1*(qfx[ip][uf][0][0]*q2+qfx[ip][uf][0][1]*q3)
+                 + w2*(qfx[ip][uf][1][0]*q2-qfx[ip][uf][1][1]*q1);
+        }
+        else if(advec<0.0)
+        {
+            const double q1=b(i,j,k), q2=b(i+1,j,k), q3=b(i+2,j,k);
+            const double d1=q3-q2, d2=q2-q1;
+            const double is1=isfx[ip][uf][2]*(d1*d1), is2=isfx[ip][uf][3]*(d2*d2);
+            const double s1sq=(is1+ps)*(is1+ps), s2sq=(is2+ps)*(is2+ps);
+            const double c0=cfx[ip][uf][2], c1=cfx[ip][uf][3], a=c0/s1sq+c1/s2sq;
+            const double w1=c0/(eps+s1sq*a), w2=c1/(eps+s2sq*a);
+            return w1*(qfx[ip][uf][2][0]*q2-qfx[ip][uf][2][1]*q3)
+                 + w2*(qfx[ip][uf][3][0]*q1+qfx[ip][uf][3][1]*q2);
+        }
+        return 0.0;
+    }
+
+    template<typename F>
+    WENO3_NUG_GPU_
+    static inline double fy_at(const F& b, int i, int j, int k, double advec,
+                                int jp, int vf, double eps, double ps)
+    {
+        if(advec>0.0)
+        {
+            const double q1=b(i,j-1,k), q2=b(i,j,k), q3=b(i,j+1,k);
+            const double d1=q3-q2, d2=q2-q1;
+            const double is1=isfy[jp][vf][0]*(d1*d1), is2=isfy[jp][vf][1]*(d2*d2);
+            const double s1sq=(is1+ps)*(is1+ps), s2sq=(is2+ps)*(is2+ps);
+            const double c0=cfy[jp][vf][0], c1=cfy[jp][vf][1], a=c0/s1sq+c1/s2sq;
+            const double w1=c0/(eps+s1sq*a), w2=c1/(eps+s2sq*a);
+            return w1*(qfy[jp][vf][0][0]*q2+qfy[jp][vf][0][1]*q3)
+                 + w2*(qfy[jp][vf][1][0]*q2-qfy[jp][vf][1][1]*q1);
+        }
+        else if(advec<0.0)
+        {
+            const double q1=b(i,j,k), q2=b(i,j+1,k), q3=b(i,j+2,k);
+            const double d1=q3-q2, d2=q2-q1;
+            const double is1=isfy[jp][vf][2]*(d1*d1), is2=isfy[jp][vf][3]*(d2*d2);
+            const double s1sq=(is1+ps)*(is1+ps), s2sq=(is2+ps)*(is2+ps);
+            const double c0=cfy[jp][vf][2], c1=cfy[jp][vf][3], a=c0/s1sq+c1/s2sq;
+            const double w1=c0/(eps+s1sq*a), w2=c1/(eps+s2sq*a);
+            return w1*(qfy[jp][vf][2][0]*q2-qfy[jp][vf][2][1]*q3)
+                 + w2*(qfy[jp][vf][3][0]*q1+qfy[jp][vf][3][1]*q2);
+        }
+        return 0.0;
+    }
+
+    template<typename F>
+    WENO3_NUG_GPU_
+    static inline double fz_at(const F& b, int i, int j, int k, double advec,
+                                int kp, int wf, double eps, double ps)
+    {
+        if(advec>0.0)
+        {
+            const double q1=b(i,j,k-1), q2=b(i,j,k), q3=b(i,j,k+1);
+            const double d1=q3-q2, d2=q2-q1;
+            const double is1=isfz[kp][wf][0]*(d1*d1), is2=isfz[kp][wf][1]*(d2*d2);
+            const double s1sq=(is1+ps)*(is1+ps), s2sq=(is2+ps)*(is2+ps);
+            const double c0=cfz[kp][wf][0], c1=cfz[kp][wf][1], a=c0/s1sq+c1/s2sq;
+            const double w1=c0/(eps+s1sq*a), w2=c1/(eps+s2sq*a);
+            return w1*(qfz[kp][wf][0][0]*q2+qfz[kp][wf][0][1]*q3)
+                 + w2*(qfz[kp][wf][1][0]*q2-qfz[kp][wf][1][1]*q1);
+        }
+        else if(advec<0.0)
+        {
+            const double q1=b(i,j,k), q2=b(i,j,k+1), q3=b(i,j,k+2);
+            const double d1=q3-q2, d2=q2-q1;
+            const double is1=isfz[kp][wf][2]*(d1*d1), is2=isfz[kp][wf][3]*(d2*d2);
+            const double s1sq=(is1+ps)*(is1+ps), s2sq=(is2+ps)*(is2+ps);
+            const double c0=cfz[kp][wf][2], c1=cfz[kp][wf][3], a=c0/s1sq+c1/s2sq;
+            const double w1=c0/(eps+s1sq*a), w2=c1/(eps+s2sq*a);
+            return w1*(qfz[kp][wf][2][0]*q2-qfz[kp][wf][2][1]*q3)
+                 + w2*(qfz[kp][wf][3][0]*q1+qfz[kp][wf][3][1]*q2);
+        }
+        return 0.0;
+    }
+
+    template<typename F>
+    WENO3_NUG_GPU_
+    static inline double fx_div(const F& b, int i, int j, int k,
+                                 double vel_lo, double vel_hi,
+                                 int ip, int uf, double eps, double ps)
+    {
+        return vel_hi * fx_at(b, i,   j, k, vel_hi, ip,   uf, eps, ps)
+             - vel_lo * fx_at(b, i-1, j, k, vel_lo, ip-1, uf, eps, ps);
+    }
+
+    template<typename F>
+    WENO3_NUG_GPU_
+    static inline double fy_div(const F& b, int i, int j, int k,
+                                 double vel_lo, double vel_hi,
+                                 int jp, int vf, double eps, double ps)
+    {
+        return vel_hi * fy_at(b, i, j,   k, vel_hi, jp,   vf, eps, ps)
+             - vel_lo * fy_at(b, i, j-1, k, vel_lo, jp-1, vf, eps, ps);
+    }
+
+    template<typename F>
+    WENO3_NUG_GPU_
+    static inline double fz_div(const F& b, int i, int j, int k,
+                                 double vel_lo, double vel_hi,
+                                 int kp, int wf, double eps, double ps)
+    {
+        return vel_hi * fz_at(b, i, j, k,   vel_hi, kp,   wf, eps, ps)
+             - vel_lo * fz_at(b, i, j, k-1, vel_lo, kp-1, wf, eps, ps);
+    }
+
+#undef WENO3_NUG_GPU_
 
     static inline std::vector<std::array<std::array<std::array<double, 2>, 4>, 2>> qfx, qfy, qfz;
     static inline std::vector<std::array<std::array<double, 4>, 2>> cfx, cfy, cfz;
