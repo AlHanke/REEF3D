@@ -32,7 +32,6 @@ class slice;
 class lexer;
 class ghostcell;
 class vec;
-class cpt;
 
 using namespace std;
 
