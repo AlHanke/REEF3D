@@ -37,16 +37,7 @@ public:
     void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    double aij(lexer*, fdm*, field&, int,field&,field&,field&,double*,double*,double*);
-
-    double fx(lexer*, field&, double);
-    double fy(lexer*, field&, double);
-    double fz(lexer*, field&, double);
-
-    double L,grad;
-
-    double gradx, grady, gradz;
-    double fu1,fv1,fw1,fu2,fv2,fw2;
+    template<typename GenericField> inline double aij(lexer*, fdm*, GenericField&, int, GenericField&, GenericField&, GenericField&, double*, double*, double*);
 
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 
