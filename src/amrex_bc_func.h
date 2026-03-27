@@ -578,8 +578,8 @@ public:
     struct MyExtBCFillFieldParams {
         AMREX_GPU_HOST_DEVICE
         MyExtBCFillFieldParams() noexcept = default;
-        MyExtBCFillFieldParams(double Ui_in, double Uo_in, double dt_in)
-            : Ui(Ui_in), Uo(Uo_in), dt(dt_in) {}
+        MyExtBCFillFieldParams(double Ui_in, double Uo_in, double dt_in, const amrex::Array<int,6>& face_labels_in)
+            : Ui(Ui_in), Uo(Uo_in), dt(dt_in), face_labels(face_labels_in) {}
 
         double Ui = 0.0;
         double Uo = 0.0;
