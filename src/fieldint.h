@@ -35,7 +35,8 @@ public:
     virtual ~fieldint() = default;
     #if not USE_AMREX
     fieldint(lexer* p) : p(p), data((p->imax-p->imin)*(p->jmax-p->jmin)*(p->kmax-p->kmin), 0.0) {};
-    int& operator()(int ii, int jj, int kk) override {return data[(ii-p->imin)*p->jmax*p->kmax + (jj-p->jmin)*p->kmax + kk-p->kmin];};
+    inline int& operator()(int ii, int jj, int kk) override final {return data[(ii-p->imin)*p->jmax*p->kmax + (jj-p->jmin)*p->kmax + kk-p->kmin];};
+    inline const int& operator()(int ii, int jj, int kk) const override final {return data[(ii-p->imin)*p->jmax*p->kmax + (jj-p->jmin)*p->kmax + kk-p->kmin];};
     void setVal(int val, bool includeGhost = false ) override {int i,j,k;if(includeGhost){MALOOP{operator()(i,j,k) = val;}}else{LOOP{operator()(i,j,k) = val;}}};
 private:
     lexer* p;

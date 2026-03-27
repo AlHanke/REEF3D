@@ -64,7 +64,8 @@ public:
     virtual void FillDomainBoundaryValue(double value, int dir, bool high) = 0;
     #else
     field(lexer* p) : p(p), data((p->imax-p->imin)*(p->jmax-p->jmin)*(p->kmax-p->kmin), 0.0) {};
-    double& operator()(int ii, int jj, int kk) override final {return data[(ii-p->imin)*p->jmax*p->kmax + (jj-p->jmin)*p->kmax + kk-p->kmin];};
+    inline double& operator()(int ii, int jj, int kk) override final {return data[(ii-p->imin)*p->jmax*p->kmax + (jj-p->jmin)*p->kmax + kk-p->kmin];};
+    inline const double& operator()(int ii, int jj, int kk) const override final {return data[(ii-p->imin)*p->jmax*p->kmax + (jj-p->jmin)*p->kmax + kk-p->kmin];};
     void setVal(double val, bool includeGhost = false ) override final {int i,j,k;if(includeGhost){std::fill(data.begin(),data.end(),val);}else{LOOP{operator()(i,j,k) = val;}}};
 private:
     lexer* p;

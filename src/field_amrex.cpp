@@ -30,13 +30,17 @@ Author: Alexander Hanke
 #include <AMReX_MFIter.H>
 #include <AMReX_MultiFab.H>
 #include <AMReX_DistributionMapping.H>
-
 #include <AMReX_FillPatchUtil.H>
 #include <AMReX_PhysBCFunct.H>
 #include <AMReX_Interpolater.H>
 
-field_amrex::field_amrex(lexer* p, amrex_bc_func::DataLocation data_location): const_params{{p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
-                                           {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T}, bool(p->j_dir), data_location}
+// ---------------------------------------------------------------------------
+// Owning constructor
+// ---------------------------------------------------------------------------
+field_amrex::field_amrex(lexer* p, amrex_bc_func::DataLocation data_location)
+    : const_params{{p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
+                   {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T},
+                   bool(p->j_dir), data_location}
 {
     field_amrex::p = p;
     mf.resize(p->nlevs);
@@ -44,18 +48,12 @@ field_amrex::field_amrex(lexer* p, amrex_bc_func::DataLocation data_location): c
     BCRecs.resize(p->nlevs);
     for (auto& bc_rec : BCRecs)
         bc_rec.resize(p->ncomp);
+    // m_comp stays 0; m_shared_mf stays nullptr; m_alias stays empty
 }
 
-double& field_amrex::operator()(int ii, int jj, int kk)
-{
-    return (mf[p->level][*(p->amr_cell_mfi)].array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + amrex::IntVect(amrex::lbound(p->amr_cell_mfi->tilebox())), 0));
-}
-
-double& field_amrex::operator()(const amrex::IntVect& iv, int comp)
-{
-    return (mf[p->level][*(p->amr_cell_mfi)].array()(iv, comp));
-}
-
+// ---------------------------------------------------------------------------
+// setVal
+// ---------------------------------------------------------------------------
 void field_amrex::setVal(double val, bool includeGhost)
 {
     LEVEL_LOOP
@@ -64,6 +62,9 @@ void field_amrex::setVal(double val, bool includeGhost)
     }
 }
 
+// ---------------------------------------------------------------------------
+// FillBoundary (MPI ghost exchange, component-restricted)
+// ---------------------------------------------------------------------------
 void field_amrex::FillBoundary()
 {
     LEVEL_LOOP
@@ -72,6 +73,9 @@ void field_amrex::FillBoundary()
     }
 }
 
+// ---------------------------------------------------------------------------
+// FillDomainBoundaryValue
+// ---------------------------------------------------------------------------
 void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
 {
     LEVEL_LOOP
@@ -87,44 +91,20 @@ void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
             if (!const_params.y_dimension_exists) ng[1] = 0;
             gbx.grow(ng);
 
-            // Apply boundary condition at x_min
             if ((validbox.smallEnd(0) == dom.smallEnd(0)) && (dir == 0 && !high))
-            {
-                gbx.setBig(0, dom.smallEnd(0) - 1);
-                apply = true;
-            }
-            // Apply boundary condition at x_max
+            { gbx.setBig(0, dom.smallEnd(0) - 1); apply = true; }
             if ((validbox.bigEnd(0) == dom.bigEnd(0)) && (dir == 0 && high))
-            {
-                gbx.setSmall(0, dom.bigEnd(0) + 1);
-                apply = true;
-            }
+            { gbx.setSmall(0, dom.bigEnd(0) + 1); apply = true; }
 
-            // Apply boundary condition at y_min
             if ((validbox.smallEnd(1) == dom.smallEnd(1)) && (dir == 1 && !high))
-            {
-                gbx.setBig(1, dom.smallEnd(1) - 1);
-                apply = true;
-            }
-            // Apply boundary condition at y_max
+            { gbx.setBig(1, dom.smallEnd(1) - 1); apply = true; }
             if ((validbox.bigEnd(1) == dom.bigEnd(1)) && (dir == 1 && high))
-            {
-                gbx.setSmall(1, dom.bigEnd(1) + 1);
-                apply = true;
-            }
+            { gbx.setSmall(1, dom.bigEnd(1) + 1); apply = true; }
 
-            // Apply boundary condition at z_min
             if ((validbox.smallEnd(2) == dom.smallEnd(2)) && (dir == 2 && !high))
-            {
-                gbx.setBig(2, dom.smallEnd(2) - 1);
-                apply = true;
-            }
-            // Apply boundary condition at z_max
+            { gbx.setBig(2, dom.smallEnd(2) - 1); apply = true; }
             if ((validbox.bigEnd(2) == dom.bigEnd(2)) && (dir == 2 && high))
-            {
-                gbx.setSmall(2, dom.bigEnd(2) + 1);
-                apply = true;
-            }
+            { gbx.setSmall(2, dom.bigEnd(2) + 1); apply = true; }
 
             if (apply)
             {

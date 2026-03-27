@@ -29,41 +29,49 @@ Author: Alexander Hanke
 class field1 : public field_amrex
 {
 public:
-    field1 (lexer*);
+    field1(lexer*);
     virtual ~field1() = default;
     void FillDomainBoundary(int gcv) override;
+    void UpdateBCRecs(int gcv) override;
 private:
     amrex_bc_func::Field1BcDecision::Field1Params params;
+    void init_params(lexer*);
 };
 
 class field2 : public field_amrex
 {
 public:
-    field2 (lexer*);
+    field2(lexer*);
     virtual ~field2() = default;
     void FillDomainBoundary(int gcv) override;
+    void UpdateBCRecs(int gcv) override;
 private:
     amrex_bc_func::Field2BcDecision::Field2Params params;
+    void init_params(lexer*);
 };
 
 class field3 : public field_amrex
 {
 public:
-    field3 (lexer*);
+    field3(lexer*);
     virtual ~field3() = default;
     void FillDomainBoundary(int gcv) override;
+    void UpdateBCRecs(int gcv) override;
 private:
     amrex_bc_func::Field3BcDecision::Field3Params params;
+    void init_params(lexer*);
 };
 
 class field4 : public field_amrex
 {
 public:
-    field4 (lexer*);
+    field4(lexer*);
     virtual ~field4() = default;
     void FillDomainBoundary(int gcv) override;
+    void UpdateBCRecs(int gcv) override;
 private:
     amrex_bc_func::Field4BcDecision::Field4Params params;
+    void init_params(lexer*);
 };
 
 #endif

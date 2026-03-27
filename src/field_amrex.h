@@ -48,12 +48,34 @@ public:
     /*!
      * @copydoc field_base::operator()(int, int, int)
      */
-    inline double& operator()(int ii, int jj, int kk) override;
+    inline double& operator()(int ii, int jj, int kk) final
+    {
+        return (mf[p->level][*(p->amr_cell_mfi)].array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + amrex::IntVect(p->amr_tile_lo), 0));
+    }
+
+    /*!
+     * @copydoc field_base::operator()(int, int, int) const
+     */
+    inline const double& operator()(int ii, int jj, int kk) const final
+    {
+        return (mf[p->level][*(p->amr_cell_mfi)].const_array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + amrex::IntVect(p->amr_tile_lo), 0));
+    }
 
     /*!
      * @copydoc field_base::operator()(amrex::IntVect, int)
      */
-    inline double& operator()(const amrex::IntVect& iv, int comp = 0) override;
+    inline double& operator()(const amrex::IntVect& iv, int comp = 0) final
+    {
+        return (mf[p->level][*(p->amr_cell_mfi)].array()(iv, comp));
+    }
+
+    /*!
+     * @copydoc field_base::operator()(amrex::IntVect, int) const
+     */
+    inline const double& operator()(const amrex::IntVect& iv, int comp = 0) const final
+    {
+        return (mf[p->level][*(p->amr_cell_mfi)].const_array()(iv, comp));
+    }
 
     /*!
      * @copydoc field_base::setVal()
@@ -72,16 +94,38 @@ public:
     inline amrex::MultiFab& GetMultiFab(int lev) {return mf[lev];};
     inline const amrex::MultiFab& GetMultiFab(int lev) const {return mf[lev];};
 
+
+    /// Returns the stagger type of this field.
+    amrex_bc_func::DataLocation dataLocation() const
+    { return const_params.data_location; }
+
+    // -----------------------------------------------------------------
+    // Per-field BCRec update (host side only — no FillPatch).
+    // Must be overridden by field1/2/3/4 to use their specific BCDecision.
+    // -----------------------------------------------------------------
+    virtual void UpdateBCRecs(int gcv) = 0;
+
 protected:
+    /// Owning constructor: the field allocates and owns its own MultiFab storage.
     field_amrex(lexer* p, amrex_bc_func::DataLocation data_location);
 
     lexer *p = nullptr;
-    amrex::Vector<amrex::MultiFab> mf = {};
+    amrex::Vector<amrex::MultiFab> mf = {};          ///< owned storage (empty in view mode)
     amrex::Vector<amrex::Vector<amrex::BCRec>> BCRecs = {};
 
-protected:
+    int m_last_gcv = -1;  ///< gcv from last UpdateBCRecs call; -1 means BCRecs are stale
+
+    /// Cached face BC labels — derived from BCRecs[0][0] and updated only when gcv changes.
+    /// Eliminates 6 BCRec reads per FillDomainBoundaryImpl call on the hot path.
+    amrex::Array<int, 6> m_cached_face_labels = {};
+
     template <typename BCDecision>
     void FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision);
+
+    /// Updates BCRecs for all levels using @p bc_decision (host side only).
+    /// Called from FillDomainBoundaryImpl and from UpdateBCRecs overrides.
+    template <typename BCDecision>
+    void UpdateBCRecsImpl(int gcv, const BCDecision& bc_decision);
 
 private:
     void ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in, int p_level)
@@ -154,6 +198,9 @@ private:
     const amrex_bc_func::ConstMyExtBCFillFieldParams const_params = {};
 };
 
+// =========================================================================
+// Namespace with BC decision helper utilities (used by field1-4 constructors)
+// =========================================================================
 namespace field_amrex_detail
 {
     using Label = amrex_bc_func::BoundaryConditionTypeLabel;
@@ -245,57 +292,74 @@ namespace field_amrex_detail
     }
 }
 
+// =========================================================================
+// UpdateBCRecsImpl — host-side BCRec population (defined inline in header
+// because it is templated on BCDecision)
+// =========================================================================
+template <typename BCDecision>
+void field_amrex::UpdateBCRecsImpl(int gcv, const BCDecision& bc_decision)
+{
+    // Direction integer codes used by the BC decision infrastructure
+    const int x_neg = 1;  // Dir::X_NEG
+    const int x_pos = 4;  // Dir::X_POS
+    const int y_neg = 3;  // Dir::Y_NEG
+    const int y_pos = 2;  // Dir::Y_POS
+    const int z_neg = 5;  // Dir::Z_NEG
+    const int z_pos = 6;  // Dir::Z_POS
+
+    LEVEL_LOOP
+    {
+        if (BCRecs[p->level].empty()) continue;
+
+        auto& bc = BCRecs[p->level][0];
+
+        bc.setLo(0, static_cast<int>(bc_decision.evaluate(gcv, const_params.bc_values[0], x_neg)));
+        bc.setHi(0, static_cast<int>(bc_decision.evaluate(gcv, const_params.bc_values[1], x_pos)));
+        bc.setLo(1, static_cast<int>(bc_decision.evaluate(gcv, const_params.bc_values[2], y_neg)));
+        bc.setHi(1, static_cast<int>(bc_decision.evaluate(gcv, const_params.bc_values[3], y_pos)));
+        bc.setLo(2, static_cast<int>(bc_decision.evaluate(gcv, const_params.bc_values[4], z_neg)));
+        bc.setHi(2, static_cast<int>(bc_decision.evaluate(gcv, const_params.bc_values[5], z_pos)));
+    }
+    m_last_gcv = gcv;
+}
+
+// =========================================================================
+// FillDomainBoundaryImpl — direct domain BC fill (no MPI exchange here)
+//
+// Level 0: iterate only the 6 ghost-cell slabs (X+/-, Y+/-, Z+/-) and call
+//   MyExtBCFillField directly — no PhysBCFunct/GpuBndryFuncFab overhead,
+//   no double-fill, no interior-cell processing.  MPI exchange is done
+//   separately by FillBoundary() / start*MPI calls.
+//
+// Level > 0: unchanged FillPatchTwoLevels path (handles MPI + interpolation).
+// =========================================================================
 template <typename BCDecision>
 void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
 {
+    if (gcv != m_last_gcv)
+    {
+        UpdateBCRecsImpl(gcv, bc_decision);
+        // Cache face labels — BCRecs[0][0] is the same for all levels; only
+        // changes when gcv changes, so avoid re-reading on every call.
+        if (!BCRecs.empty() && !BCRecs[0].empty())
+        {
+            const auto& bc = BCRecs[0][0];
+            m_cached_face_labels[0] = bc.lo(2);  // Z_NEG
+            m_cached_face_labels[1] = bc.hi(2);  // Z_POS
+            m_cached_face_labels[2] = bc.lo(0);  // X_NEG
+            m_cached_face_labels[3] = bc.hi(0);  // X_POS
+            m_cached_face_labels[4] = bc.lo(1);  // Y_NEG
+            m_cached_face_labels[5] = bc.hi(1);  // Y_POS
+        }
+    }
+
+    // Build functor on the stack — cheap (~100 B copy).
+    // Ui/Uo/dt are time-varying and always read fresh from lexer.
     amrex_bc_func::MyExtBCFillFieldParams params;
     params.Ui = p->Ui;
     params.Uo = p->Uo;
     params.dt = p->dt;
-
-    // Update BCRecs (and local references)
-    // Note: Assuming nComp is handled by resizing BCRecs correctly in constructor
-    const int x_neg = 1; // Dir::X_NEG (1) in amrex_bc_func::Dir
-    const int x_pos = 4; // Dir::X_POS (4)
-    const int y_neg = 3; // Dir::Y_NEG (3)
-    const int y_pos = 2; // Dir::Y_POS (2)
-    const int z_neg = 5; // Dir::Z_NEG (5)
-    const int z_pos = 6; // Dir::Z_POS (6)
-    // Face indices in bc_values: 0=X-, 1=X+, 2=Y-, 3=Y+, 4=Z-, 5=Z+
-
-    LEVEL_LOOP
-    {
-        for (int n = 0; n < mf[p->level].nComp(); ++n)
-        {
-            if (BCRecs[p->level].size() <= n) continue;
-
-            auto& bc = BCRecs[p->level][n];
-
-            int bc_code_1 = const_params.bc_values[0];
-            auto label_1 = bc_decision.evaluate(gcv, bc_code_1, x_neg);
-            bc.setLo(0, static_cast<int>(label_1));
-
-            int bc_code_2 = const_params.bc_values[1];
-            auto label_2 = bc_decision.evaluate(gcv, bc_code_2, x_pos);
-            bc.setHi(0, static_cast<int>(label_2));
-
-            int bc_code_3 = const_params.bc_values[2];
-            auto label_3 = bc_decision.evaluate(gcv, bc_code_3, y_neg);
-            bc.setLo(1, static_cast<int>(label_3));
-
-            int bc_code_4 = const_params.bc_values[3];
-            auto label_4 = bc_decision.evaluate(gcv, bc_code_4, y_pos);
-            bc.setHi(1, static_cast<int>(label_4));
-
-            int bc_code_5 = const_params.bc_values[4];
-            auto label_5 = bc_decision.evaluate(gcv, bc_code_5, z_neg);
-            bc.setLo(2, static_cast<int>(label_5));
-
-            int bc_code_6 = const_params.bc_values[5];
-            auto label_6 = bc_decision.evaluate(gcv, bc_code_6, z_pos);
-            bc.setHi(2, static_cast<int>(label_6));
-        }
-    }
+    params.face_labels = m_cached_face_labels;
 
     LEVEL_LOOP
     {
@@ -313,6 +377,8 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
         }
         else
         {
+            // Multi-level: FillPatchTwoLevels handles MPI exchange and
+            // coarse-to-fine interpolation; keep the existing PhysBCFunct path.
             amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> cbf(
                 amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params});
 
