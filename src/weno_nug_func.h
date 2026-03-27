@@ -213,7 +213,7 @@ public:
 
     int uf,vf,wf;
 protected:
-    template<typename GenericField> inline void iqmin(GenericField& f) noexcept
+    template<typename GenericField> inline void iqmin(const GenericField& f) noexcept
     {
         const double v0=f(i-3,j,k), v1=f(i-2,j,k), v2=f(i-1,j,k),
                      v3=f(i,j,k),   v4=f(i+1,j,k), v5=f(i+2,j,k);
@@ -223,7 +223,7 @@ protected:
         q4 = (v4-v3)/p->DXP[IP];
         q5 = (v5-v4)/p->DXP[IP1];
     }
-    template<typename GenericField> inline void iqmax(GenericField& f) noexcept
+    template<typename GenericField> inline void iqmax(const GenericField& f) noexcept
     {
         const double v0=f(i-2,j,k), v1=f(i-1,j,k), v2=f(i,j,k),
                      v3=f(i+1,j,k), v4=f(i+2,j,k), v5=f(i+3,j,k);
@@ -234,7 +234,7 @@ protected:
         q5 = (v5-v4)/p->DXP[IP2];
     }
 
-    template<typename GenericField> inline void jqmin(GenericField& f) noexcept
+    template<typename GenericField> inline void jqmin(const GenericField& f) noexcept
     {
         const double v0=f(i,j-3,k), v1=f(i,j-2,k), v2=f(i,j-1,k),
                      v3=f(i,j,k),   v4=f(i,j+1,k), v5=f(i,j+2,k);
@@ -244,7 +244,7 @@ protected:
         q4 = (v4-v3)/p->DYP[JP];
         q5 = (v5-v4)/p->DYP[JP1];
     }
-    template<typename GenericField> inline void jqmax(GenericField& f) noexcept
+    template<typename GenericField> inline void jqmax(const GenericField& f) noexcept
     {
         const double v0=f(i,j-2,k), v1=f(i,j-1,k), v2=f(i,j,k),
                      v3=f(i,j+1,k), v4=f(i,j+2,k), v5=f(i,j+3,k);
@@ -255,7 +255,7 @@ protected:
         q5 = (v5-v4)/p->DYP[JP2];
     }
 
-    template<typename GenericField> inline void kqmin(GenericField& f) noexcept
+    template<typename GenericField> inline void kqmin(const GenericField& f) noexcept
     {
         const double v0=f(i,j,k-3), v1=f(i,j,k-2), v2=f(i,j,k-1),
                      v3=f(i,j,k),   v4=f(i,j,k+1), v5=f(i,j,k+2);
@@ -265,7 +265,7 @@ protected:
         q4 = (v4-v3)/p->DZP[KP];
         q5 = (v5-v4)/p->DZP[KP1];
     }
-    template<typename GenericField> inline void kqmax(GenericField& f) noexcept
+    template<typename GenericField> inline void kqmax(const GenericField& f) noexcept
     {
         const double v0=f(i,j,k-2), v1=f(i,j,k-1), v2=f(i,j,k),
                      v3=f(i,j,k+1), v4=f(i,j,k+2), v5=f(i,j,k+3);

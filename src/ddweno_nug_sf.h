@@ -33,7 +33,7 @@ public:
     ddweno_nug_sf(lexer *p) : weno_nug_func(p) {ddweno_nug_sf::p=p;};
     virtual ~ddweno_nug_sf() = default;
 
-    template<typename GenericField> inline double ddwenox(GenericField &f, double uw)
+    template<typename GenericField> inline double ddwenox(const GenericField &f, double uw)
     {
         uf=0;
 
@@ -69,7 +69,7 @@ public:
         }
     }
 
-    template<typename GenericField> inline double ddwenoy(GenericField &f, double uw)
+    template<typename GenericField> inline double ddwenoy(const GenericField &f, double uw)
     {
         vf=0;
 
@@ -101,7 +101,7 @@ public:
         }
     }
 
-    template<typename GenericField> inline double ddwenoz(GenericField &f, double uw)
+    template<typename GenericField> inline double ddwenoz(const GenericField &f, double uw)
     {
         wf=0;
 

@@ -70,7 +70,7 @@ weno3_flux::weno3_flux(lexer* p) : weno3_nug_func(p)
     }
 }
 
-void weno3_flux::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+inline void weno3_flux::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     uf=vf=wf=0;
 
@@ -100,7 +100,7 @@ void weno3_flux::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field&
 }
 
 template<typename GenericField>
-inline double weno3_flux::aij(lexer* p, fdm* a, GenericField& b, int ipol, GenericField& uvel, GenericField& vvel, GenericField& wvel, double *DX, double *DY, double *DZ)
+inline double weno3_flux::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX, double *DY, double *DZ)
 {
     pflux->u_flux(a,ipol,uvel,ivel1,ivel2);
     pflux->v_flux(a,ipol,vvel,jvel1,jvel2);
