@@ -28,7 +28,11 @@ void ghostcell::start1(lexer *p, field& f, int gcv)
 {
     //  MPI Boundary Swap
     #if USE_AMREX
+    starttime=timer();
     f.FillDomainBoundary(gcv);
+    endtime=timer();
+    p->xtime+=endtime-starttime;
+    p->gctime+=endtime-starttime;
     #else
     if(do_comms)
     {
@@ -62,7 +66,11 @@ void ghostcell::start2(lexer *p, field& f, int gcv)
 {
     //  MPI Boundary Swap
     #if USE_AMREX
+    starttime=timer();
     f.FillDomainBoundary(gcv);
+    endtime=timer();
+    p->xtime+=endtime-starttime;
+    p->gctime+=endtime-starttime;
     #else
     if(do_comms)
     {
@@ -97,7 +105,11 @@ void ghostcell::start3(lexer *p, field& f, int gcv)
 {
     //  MPI Boundary Swap
     #if USE_AMREX
+    starttime=timer();
     f.FillDomainBoundary(gcv);
+    endtime=timer();
+    p->xtime+=endtime-starttime;
+    p->gctime+=endtime-starttime;
     #else
     if(do_comms)
     {
@@ -130,7 +142,11 @@ void ghostcell::start4(lexer *p, field& f, int gcv)
 {
     //  MPI Boundary Swap
     #if USE_AMREX
+    starttime=timer();
     f.FillDomainBoundary(gcv);
+    endtime=timer();
+    p->xtime+=endtime-starttime;
+    p->gctime+=endtime-starttime;
     #else
     if(do_comms)
     {
