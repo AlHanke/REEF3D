@@ -130,17 +130,16 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 //--------------------------------------------------------
 
     // FSF
+    a->L.setVal(0.0);
     LOOP
     {
-	a->L(i,j,k)=0.0;
     ls(i,j,k)=a->phi(i,j,k);
     }
 
 	pfsfdisc->start(p,a,ls,4,a->u,a->v,a->w);
 	
 	LOOP
-	frk1(i,j,k) = ls(i,j,k)
-				+ p->dt*a->L(i,j,k);
+	frk1(i,j,k) = ls(i,j,k) + p->dt*a->L(i,j,k);
 	
 	pflow->phi_relax(p,pgc,frk1);
 	
@@ -226,7 +225,6 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     
     pupdate->start(p,a,pgc,urk1,vrk1,wrk1);
 
-    
 //Step 2
 //--------------------------------------------------------
 	
@@ -326,7 +324,6 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 	pgc->start3(p,wrk2,gcval_w);
     
     pupdate->start(p,a,pgc,urk2,vrk2,wrk2);
-
     
 //Step 3
 //--------------------------------------------------------
