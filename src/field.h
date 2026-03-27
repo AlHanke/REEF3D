@@ -25,6 +25,28 @@ Author: Hans Bihs
 
 #include "field_base.h"
 
+#if USE_AMREX
+    #include "AMReX_Array4.H"
+    struct LocalArr4Const {
+        amrex::Array4<amrex::Real const> arr;
+        int ox, oy, oz; // = tile_lo.{x,y,z}
+        AMREX_FORCE_INLINE LocalArr4Const(amrex::Array4<amrex::Real const> a, int x, int y, int z) noexcept
+            : arr(a), ox(x), oy(y), oz(z) {}
+        AMREX_FORCE_INLINE double operator()(int i, int j, int k) const noexcept {
+            return arr(i + ox, j + oy, k + oz);
+        }
+    };
+    struct LocalArr4 {
+        amrex::Array4<amrex::Real> arr;
+        int ox, oy, oz; // = tile_lo.{x,y,z}
+        AMREX_FORCE_INLINE LocalArr4(amrex::Array4<amrex::Real> a, int x, int y, int z) noexcept
+            : arr(a), ox(x), oy(y), oz(z) {}
+        AMREX_FORCE_INLINE double& operator()(int i, int j, int k) const noexcept {
+            return arr(i + ox, j + oy, k + oz);
+        }
+    };
+#endif
+
 class field : public field_base<double>
 {
 public:
