@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Hans Bihs, Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"weno3_flux.h"
@@ -99,136 +99,20 @@ void weno3_flux::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field&
     }
 }
 
-inline double weno3_flux::aij(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel, double *DX, double *DY, double *DZ)
+template<typename GenericField>
+inline double weno3_flux::aij(lexer* p, fdm* a, GenericField& b, int ipol, GenericField& uvel, GenericField& vvel, GenericField& wvel, double *DX, double *DY, double *DZ)
 {
     pflux->u_flux(a,ipol,uvel,ivel1,ivel2);
     pflux->v_flux(a,ipol,vvel,jvel1,jvel2);
     pflux->w_flux(a,ipol,wvel,kvel1,kvel2);
 
-    i -= 1;
-    fu1 = fx(p,b,ivel1);
-    i += 1;
-
-    fu2 = fx(p,b,ivel2);
+    const double du = fx_div(b,i,j,k,ivel1,ivel2,IP,uf,epsilon,psi);
+    const double dw = fz_div(b,i,j,k,kvel1,kvel2,KP,wf,epsilon,psi);
 
     if(p->j_dir==1)
     {
-        j -=1 ;
-        fv1 = fy(p,b,jvel1);
-        j += 1;
-
-        fv2 = fy(p,b,jvel2);
+        const double dv = fy_div(b,i,j,k,jvel1,jvel2,JP,vf,epsilon,psi);
+        return -(du/DX[IP] + dv/DY[JP] + dw/DZ[KP]);
     }
-    else
-    {
-        fv1 = fv2 = 0.0;
-    }
-
-    k -= 1;
-    fw1 = fz(p,b,kvel1);
-    k += 1;
-
-    fw2 = fz(p,b,kvel2);
-
-    L = - ((ivel2*fu2-ivel1*fu1)/DX[IP])
-        - ((jvel2*fv2-jvel1*fv1)/DY[JP])
-        - ((kvel2*fw2-kvel1*fw1)/DZ[KP]);
-
-    return L;
-}
-
-inline double weno3_flux::fx(lexer *p, field& b, double advec)
-{
-    grad = 0.0;
-
-    if(advec>0.0)
-    {
-        q1 = b(i-1,j,k);
-        q2 = b(i,j,k);
-        q3 = b(i+1,j,k);
-
-        is_min_x();
-        weight_min_x();
-
-        grad = w1x*(qfx[IP][uf][0][0]*q2 + qfx[IP][uf][0][1]*q3)
-             + w2x*(qfx[IP][uf][1][0]*q2 - qfx[IP][uf][1][1]*q1);
-    }
-    else if(advec<0.0)
-    {
-        q1 = b(i,j,k);
-        q2 = b(i+1,j,k);
-        q3 = b(i+2,j,k);
-
-        is_max_x();
-        weight_max_x();
-
-        grad = w1x*(qfx[IP][uf][2][0]*q2 - qfx[IP][uf][2][1]*q3)
-             + w2x*(qfx[IP][uf][3][0]*q1 + qfx[IP][uf][3][1]*q2);
-    }
-
-    return grad;
-}
-
-inline double weno3_flux::fy(lexer *p, field& b, double advec)
-{
-    grad = 0.0;
-
-    if(advec>0.0)
-    {
-        q1 = b(i,j-1,k);
-        q2 = b(i,j,k);
-        q3 = b(i,j+1,k);
-
-        is_min_y();
-        weight_min_y();
-
-        grad = w1y*(qfy[JP][vf][0][0]*q2 + qfy[JP][vf][0][1]*q3)
-             + w2y*(qfy[JP][vf][1][0]*q2 - qfy[JP][vf][1][1]*q1);
-    }
-    else if(advec<0.0)
-    {
-        q1 = b(i,j,k);
-        q2 = b(i,j+1,k);
-        q3 = b(i,j+2,k);
-
-        is_max_y();
-        weight_max_y();
-
-        grad = w1y*(qfy[JP][vf][2][0]*q2 - qfy[JP][vf][2][1]*q3)
-             + w2y*(qfy[JP][vf][3][0]*q1 + qfy[JP][vf][3][1]*q2);
-    }
-
-    return grad;
-}
-
-inline double weno3_flux::fz(lexer *p, field& b, double advec)
-{
-    grad = 0.0;
-
-    if(advec>0.0)
-    {
-        q1 = b(i,j,k-1);
-        q2 = b(i,j,k);
-        q3 = b(i,j,k+1);
-
-        is_min_z();
-        weight_min_z();
-
-        grad = w1z*(qfz[KP][wf][0][0]*q2 + qfz[KP][wf][0][1]*q3)
-             + w2z*(qfz[KP][wf][1][0]*q2 - qfz[KP][wf][1][1]*q1);
-    }
-    else if(advec<0.0)
-    {
-        q1 = b(i,j,k);
-        q2 = b(i,j,k+1);
-        q3 = b(i,j,k+2);
-
-        is_max_z();
-        weight_max_z();
-
-        grad = w1z*(qfz[KP][wf][2][0]*q2 - qfz[KP][wf][2][1]*q3)
-             + w2z*(qfz[KP][wf][3][0]*q1 + qfz[KP][wf][3][1]*q2);
-    }
-
-    return grad;
+    return -(du/DX[IP] + dw/DZ[KP]);
 }
