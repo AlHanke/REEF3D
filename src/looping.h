@@ -31,6 +31,127 @@ Authors: Hans Bihs, Alexander Hanke
 #if USE_AMREX
     #include <AMReX_MFIter.H>
     #include <AMReX_MultiFab.H>
+    #include <AMReX_GpuLaunchFunctsC.H>
+
+    // -------------------------------------------------------------------------
+    // FIELDLOOP — iterate all AMReX levels over a mutable field, expose const
+    // fields as named MultiFab refs and Array4 locals (both at tile scope),
+    // then launch a ParallelFor with the given body.
+    //
+    //   mut          – mutable field; shadowed by an Array4 of the same name so
+    //                  'mut(i,j,k)' writes inside the lambda.
+    //   const_decls  – semicolon-separated FIELD_CONST / FIELD_CONST_MEMBER calls.
+    //   body         – expression evaluated per (i,j,k); must end with ';'.
+    //
+    // Helpers for const_decls:
+    //   FIELD_CONST(name)            – simple field; creates _fl_mf_name ref and
+    //                                  shadows 'name' with a const Array4.
+    //   FIELD_CONST_MEMBER(ptr,mbr)  – ptr->mbr field; creates _fl_mf_a_mbr ref
+    //                                  and 'a_mbr' const Array4; body uses a_mbr(i,j,k).
+    //
+    // Example:
+    //   FIELDLOOP(ark2,
+    //       FIELD_CONST(ls); FIELD_CONST(ark1); FIELD_CONST_MEMBER(a, L),
+    //       ark2(i,j,k) = 0.75*ls(i,j,k) + 0.25*ark1(i,j,k) + 0.25*dt*a_L(i,j,k);)
+    // -------------------------------------------------------------------------
+    #ifdef AMREX_USE_OMP
+    #  define _FL_OMP _Pragma("omp parallel if (amrex::Gpu::notInLaunchRegion())")
+    #else
+    #  define _FL_OMP
+    #endif
+
+    #define FIELD_CONST(name) \
+        const auto& _fl_mf_##name = (name).GetMultiFab(_fl_lev); \
+        const auto& name = _fl_mf_##name[_fl_mfi].const_array();
+
+    #define FIELD_CONST_MEMBER(ptr, member) \
+        const auto& _fl_mf_a_##member = (ptr)->member.GetMultiFab(_fl_lev); \
+        const auto& member_##member = _fl_mf_a_##member[_fl_mfi].const_array();
+
+    #define _FIELDLOOP_IMPL(mut_expr, mut_name, const_decls, body) \
+        for (int _fl_lev = p->nlevs - 1; _fl_lev >= 0; --_fl_lev) \
+        { \
+            auto& _fl_mf = (mut_expr).GetMultiFab(_fl_lev); \
+            _FL_OMP \
+            for (amrex::MFIter _fl_mfi(_fl_mf, amrex::TilingIfNotGPU()); \
+                 _fl_mfi.isValid(); ++_fl_mfi) \
+            { \
+                const amrex::Box& _fl_bx = _fl_mfi.tilebox(); \
+                auto const& mut_name = _fl_mf[_fl_mfi].array(); \
+                const_decls; \
+                amrex::ParallelFor(_fl_bx, \
+                    [=] AMREX_GPU_DEVICE (int i, int j, int k) { body }); \
+            } \
+        }
+
+    #define FIELDLOOP(mut, const_decls, body) \
+        _FIELDLOOP_IMPL(mut, mut, const_decls, body)
+
+    #define FIELDLOOP_MEMBER(ptr, member, const_decls, body) \
+        _FIELDLOOP_IMPL((ptr)->member, member, const_decls, body)
+
+    // -------------------------------------------------------------------------
+    // FIELDLOOP_INC — like FIELDLOOP but also maintains increment::i/j/k inside
+    // the lambda and exposes const fields as LocalArr4Const (offset-aware) so
+    // that legacy helpers using increment::i/j/k work on GPU/CPU uniformly.
+    //
+    // Differences from FIELDLOOP:
+    //   • sets p->level = lev per level (and resets to 0 after the loop)
+    //   • calls p->set_tile_mfi per tile (and restores default after the loop)
+    //   • computes ox/oy/oz = tilebox.smallEnd for offset subtraction
+    //   • const_decls should use FIELD_CONST_INC / FIELD_CONST_MEMBER_INC
+    //   • lambda sets increment::i/j/k = i-ox / j-oy / k-oz before body
+    //
+    // Helpers for const_decls (require field.h to be included at call site):
+    //   FIELD_CONST_INC(name)            – simple field → LocalArr4Const 'name'
+    //   FIELD_CONST_MEMBER_INC(ptr,mbr)  – ptr->mbr    → LocalArr4Const 'a_mbr'
+    //
+    // Example:
+    //   FIELDLOOP_INC(a->L,
+    //       FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_MEMBER_INC(a, H),
+    //       L(i,j,k) += aij(p, a, b, 4, uvel, a_H, ...);)
+    // -------------------------------------------------------------------------
+    #define FIELD_CONST_INC(name) \
+        const auto& _fl_mf_##name = (name).GetMultiFab(_fl_lev); \
+        const LocalArr4Const name(_fl_mf_##name[_fl_mfi].const_array(), ox, oy, oz);
+
+    #define FIELD_CONST_MEMBER_INC(ptr, member) \
+        const auto& _fl_mf_a_##member = (ptr)->member.GetMultiFab(_fl_lev); \
+        const LocalArr4Const member_##member(_fl_mf_a_##member[_fl_mfi].const_array(), ox, oy, oz);
+
+    #define _FIELDLOOP_INC_IMPL(mut_expr, mut_name, const_decls, body) \
+        for (int _fl_lev = p->nlevs - 1; _fl_lev >= 0; --_fl_lev) \
+        { \
+            p->level = _fl_lev; \
+            auto& _fl_mf = (mut_expr).GetMultiFab(_fl_lev); \
+            _FL_OMP \
+            for (amrex::MFIter _fl_mfi(_fl_mf, amrex::TilingIfNotGPU()); \
+                 _fl_mfi.isValid(); ++_fl_mfi) \
+            { \
+                const amrex::Box& _fl_bx = _fl_mfi.tilebox(); \
+                const int ox = _fl_bx.smallEnd(0); \
+                const int oy = _fl_bx.smallEnd(1); \
+                const int oz = _fl_bx.smallEnd(2); \
+                p->set_tile_mfi(&_fl_mfi); \
+                auto const& mut_name = _fl_mf[_fl_mfi].array(); \
+                const_decls; \
+                amrex::ParallelFor(_fl_bx, \
+                    [=] AMREX_GPU_DEVICE (int i, int j, int k) { \
+                        increment::i = i - ox; \
+                        increment::j = j - oy; \
+                        increment::k = k - oz; \
+                        body \
+                    }); \
+            } \
+        } \
+        p->level = 0; \
+        p->set_tile_mfi(p->default_cell_mfi.get());
+
+    #define FIELDLOOP_INC(mut, const_decls, body) \
+        _FIELDLOOP_INC_IMPL(mut, mut, const_decls, body)
+
+    #define FIELDLOOP_INC_MEMBER(ptr, member, const_decls, body) \
+        _FIELDLOOP_INC_IMPL((ptr)->member, member, const_decls, body)
 
     // LOOPs
     #define LEVEL_LOOP \
@@ -56,6 +177,20 @@ Authors: Hans Bihs, Alexander Hanke
     #define MARGIN_J p->amr_cell_mf[p->level].nGrow(1)
     #define MARGIN_K p->amr_cell_mf[p->level].nGrow(2)
 #else
+    // Non-AMReX FIELDLOOP: simple fields are used directly from the body.
+    // ptr->member fields get a local alias so a_member(i,j,k) works in both modes.
+    #define FIELD_CONST(name)
+    #define FIELD_CONST_MEMBER(ptr, member)           auto& a_##member = (ptr)->member;
+    #define FIELDLOOP(mut, const_decls, body)         { const_decls; PLAINLOOP PCHECK body }
+    #define FIELDLOOP_MEMBER(ptr, member, const_decls, body) \
+        { auto& member = (ptr)->member; const_decls; PLAINLOOP PCHECK body }
+
+    #define FIELD_CONST_INC(name)
+    #define FIELD_CONST_MEMBER_INC(ptr, member)       auto& a_##member = (ptr)->member;
+    #define FIELDLOOP_INC(mut, const_decls, body)     { const_decls; PLAINLOOP PCHECK body }
+    #define FIELDLOOP_INC_MEMBER(ptr, member, const_decls, body) \
+        { auto& member = (ptr)->member; const_decls; PLAINLOOP PCHECK body }
+
     #define LEVEL_LOOP
     #define TILE_LOOP
     #define IMAX_LOOP p->knox-1
