@@ -25,31 +25,18 @@ Author: Hans Bihs
 
 #include"reinidisc.h"
 #include"ddweno_nug_sf.h"
-#include"field.h"
-
-class picard;
 
 using namespace std;
 
 class reinidisc_f final : public reinidisc, public ddweno_nug_sf
 {
 public:
-	reinidisc_f(lexer* p);
-	virtual ~reinidisc_f();
-	void start(lexer*, fdm*, ghostcell*, field&, field&, int) override final;
-	
+    reinidisc_f(lexer*);
+    virtual ~reinidisc_f() = default;
+    void start(lexer*, fdm*, ghostcell*, field&, field&, int) override final;
+
 private:
-	void disc(lexer*, fdm*, ghostcell*, field&, field&);
-	
-	double xmin,xplus,ymin,yplus,zmin,zplus;
-	double dxmin,dxplus,dymin,dyplus,dzmin,dzplus;
-	double uwx,uwy,uwz,ddt;
-	double lsv,dv,lsSig;
-	
-	double dx, dy, dz, dnorm, sign;
-	double sx,sy,sz,snorm,op;
-	
-	double deltax,denom;
+    template<typename GenericField, typename GenericFieldConst> void disc(lexer*, GenericFieldConst&, GenericField&, const bool);
 };
 
 #endif
