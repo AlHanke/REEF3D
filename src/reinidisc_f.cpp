@@ -20,140 +20,93 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
 #include"reinidisc_f.h"
+#include"lexer.h"
+#include"field.h"
 
-reinidisc_f::reinidisc_f(lexer *p) :  ddweno_nug_sf(p)
+reinidisc_f::reinidisc_f(lexer *p) : ddweno_nug_sf(p)
 {
 }
 
-reinidisc_f::~reinidisc_f()
+void reinidisc_f::start(lexer *p, fdm*, ghostcell *pgc, field &f, field &L, int ipol)
 {
-}
-
-void reinidisc_f::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, int ipol)
-{
-    #if USE_AMREX
-    const int max_level = p->nlevs - 1;
-    #else
-    const int max_level = 0;
-    #endif
-
-	if(ipol==4)
+    if(ipol==4 || ipol==5)
     {
-		for(int lev=max_level; lev>=0; --lev)
-		{
-			p->level = lev;
-			TILE_LOOP
-			IJKLOOP
-			PBASECHECK
-				L(i,j,k) = 0.0;
-		}
+        const bool is3D = (p->j_dir == 1);
 
-		for(int lev=max_level; lev>=0; --lev)
-		{
-			p->level = lev;
-			TILE_LOOP
-			IJKLOOP
-			PBASECHECK
-				disc(p,a,pgc,f,L);
-		}
+        L.setVal(0.0);
 
-		p->level = 0;
-    }
-	else if(ipol==5)
-    {
-		for(int lev=max_level; lev>=0; --lev)
-		{
-			p->level = lev;
-			TILE_LOOP
-			IJKLOOP
-			PBASECHECK
-				L(i,j,k) = 0.0;
-		}
-        
-		for(int lev=max_level; lev>=0; --lev)
-		{
-			p->level = lev;
-			TILE_LOOP
-			IJKLOOP
-			PBASECHECK
-				disc(p,a,pgc,f,L);
-		}
+        #if USE_AMREX
+        const int max_level = p->nlevs - 1;
+        #else
+        const int max_level = 0;
+        #endif
 
-		p->level = 0;
+        for(int lev = max_level; lev >= 0; --lev)
+        {
+            p->level = lev;
+            TILE_LOOP
+            IJKLOOP
+            PBASECHECK
+                disc(p,f,L,is3D);
+        }
+        p->level = 0;
     }
 }
 
-void reinidisc_f::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L)
+template<typename GenericField, typename GenericFieldConst>
+inline void reinidisc_f::disc(lexer *p, GenericFieldConst &f, GenericField &L, const bool is3D)
 {
-	dx=0.0;
-	dy=0.0;
-	dz=0.0;
-	lsv=f(i,j,k);
-    lsSig=lsv/sqrt(lsv*lsv);
+    double dx = 0.0;
+    double dy = 0.0;
+    double dz = 0.0;
+    const double lsv = f(i,j,k);
+    const double lsv2 = lsv*lsv;
+    const double lsSig = (fabs(lsv) < 1.0e-8) ? 1.0 : lsv/sqrt(lsv2);
 
-    if(fabs(lsv)<1.0e-8)
-    lsSig=1.0;
+// x
+    const double xmin = (lsv-f(i-1,j,k))/p->DXP[IM1];
+    const double xplus = (f(i+1,j,k)-lsv)/p->DXP[IP];
 
-// x	
-	xmin=(lsv-f(i-1,j,k))/p->DXP[IM1];
-	xplus=(f(i+1,j,k)-lsv)/p->DXP[IP];
-	
-	if(xmin*lsSig>0.0 && xplus*lsSig>-xmin*lsSig)
-	dx=ddwenox(f,1.0);
-
-	if(xplus*lsSig<0.0 && xmin*lsSig<-xplus*lsSig)
-	dx=ddwenox(f,-1.0);
-
-	if(xplus*lsSig>0.0 && xmin*lsSig<0.0)
-	dx=0.0;
+    if(xmin*lsSig>0.0 && xplus*lsSig>-xmin*lsSig)
+    dx = ddwenox(f,1.0);
+    if(xplus*lsSig<0.0 && xmin*lsSig<-xplus*lsSig)
+    dx = ddwenox(f,-1.0);
+    if(xplus*lsSig>0.0 && xmin*lsSig<0.0)
+    dx = 0.0;
 
 // y
-    if(p->j_dir==1)
+    if(is3D)
     {
-	ymin=(lsv-f(i,j-1,k))/p->DYP[JM1];
-	yplus=(f(i,j+1,k)-lsv)/p->DYP[JP];
-	
-	if(ymin*lsSig>0.0 && yplus*lsSig>-ymin*lsSig)
-	dy=ddwenoy(f,1.0);
+        const double ymin = (lsv-f(i,j-1,k))/p->DYP[JM1];
+        const double yplus = (f(i,j+1,k)-lsv)/p->DYP[JP];
 
-	if(yplus*lsSig<0.0 && ymin*lsSig<-yplus*lsSig)
-	dy=ddwenoy(f,-1.0);
-
-	if(yplus*lsSig>0.0 && ymin*lsSig<0.0)
-	dy=0.0;
+        if(ymin*lsSig>0.0 && yplus*lsSig>-ymin*lsSig)
+        dy = ddwenoy(f,1.0);
+        if(yplus*lsSig<0.0 && ymin*lsSig<-yplus*lsSig)
+        dy = ddwenoy(f,-1.0);
+        if(yplus*lsSig>0.0 && ymin*lsSig<0.0)
+        dy = 0.0;
     }
 
 // z
-	zmin=(lsv-f(i,j,k-1))/p->DZP[KM1];
-	zplus=(f(i,j,k+1)-lsv)/p->DZP[KP];
-	
-	if(zmin*lsSig>0.0 && zplus*lsSig>-zmin*lsSig)
-	dz=ddwenoz(f,1.0);
+    const double zmin = (lsv-f(i,j,k-1))/p->DZP[KM1];
+    const double zplus = (f(i,j,k+1)-lsv)/p->DZP[KP];
 
-	if(zplus*lsSig<0.0 && zmin*lsSig<-zplus*lsSig)
-	dz=ddwenoz(f,-1.0);
+    if(zmin*lsSig>0.0 && zplus*lsSig>-zmin*lsSig)
+    dz = ddwenoz(f,1.0);
+    if(zplus*lsSig<0.0 && zmin*lsSig<-zplus*lsSig)
+    dz = ddwenoz(f,-1.0);
+    if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
+    dz = 0.0;
 
-	if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
-	dz=0.0;	
+    const double dnorm = sqrt(dx*dx + dy*dy + dz*dz);
 
+    const double deltax = (is3D) ? (1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]) : (1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
 
-	dnorm=sqrt(dx*dx + dy*dy + dz*dz);
-	
-    if(p->j_dir==0)
-    deltax = (1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-	
-    if(p->j_dir==1)
-    deltax = (1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
-    
-    sign=lsv/sqrt(lsv*lsv+ dnorm*dnorm*deltax*deltax);
-    
-    if(sign!=sign)
-    sign=1.0;
-    
+    double sign = lsv/sqrt(lsv2 + dnorm*dnorm*deltax*deltax);
+    if(sign != sign)
+    sign = 1.0;
 
-	L(i,j,k) = -(sign*dnorm - sign);
+    L(i,j,k) = -(sign*dnorm - sign);
 }
