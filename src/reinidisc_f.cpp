@@ -55,7 +55,7 @@ void reinidisc_f::start(lexer *p, fdm*, ghostcell *pgc, field &f, field &L, int 
 }
 
 template<typename GenericField, typename GenericFieldConst>
-inline void reinidisc_f::disc(lexer *p, GenericFieldConst &f, GenericField &L, const bool is3D)
+inline void reinidisc_f::disc(lexer *p, const GenericFieldConst &f, GenericField &L, const bool is3D)
 {
     double dx = 0.0;
     double dy = 0.0;
