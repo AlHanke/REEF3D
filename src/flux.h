@@ -23,26 +23,23 @@ Author: Hans Bihs
 #ifndef FLUX_H_
 #define FLUX_H_
 
-#if USE_AMREX
-#include <AMReX_Array4.H>
-#endif
-
 class fdm;
 class field;
+struct LocalArr4Const;
 
 class flux
 {
 public:
     virtual ~flux() = default;
 
-    virtual void u_flux(fdm*,int,field&,double&,double&) = 0;
-    virtual void v_flux(fdm*,int,field&,double&,double&) = 0;
-    virtual void w_flux(fdm*,int,field&,double&,double&) = 0;
+    virtual void u_flux(fdm*,int,const field&,double&,double&) = 0;
+    virtual void v_flux(fdm*,int,const field&,double&,double&) = 0;
+    virtual void w_flux(fdm*,int,const field&,double&,double&) = 0;
 
     #if USE_AMREX
-    virtual void u_flux(fdm*,int,const amrex::Array4<const amrex::Real>&,double&,double&) = 0;
-    virtual void v_flux(fdm*,int,const amrex::Array4<const amrex::Real>&,double&,double&) = 0;
-    virtual void w_flux(fdm*,int,const amrex::Array4<const amrex::Real>&,double&,double&) = 0;
+    virtual void u_flux(fdm*,int,const LocalArr4Const&,double&,double&) = 0;
+    virtual void v_flux(fdm*,int,const LocalArr4Const&,double&,double&) = 0;
+    virtual void w_flux(fdm*,int,const LocalArr4Const&,double&,double&) = 0;
     #endif
 };
 
