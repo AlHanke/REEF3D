@@ -1474,7 +1474,6 @@
             <File Name="weno3_nug_func_precalc_cf.cpp"/>
             <File Name="weno3_nug_func.cpp"/>
             <File Name="ddweno_nug_sig.cpp"/>
-            <File Name="ddweno_nug_sf.cpp"/>
             <File Name="ddweno_nug.cpp"/>
             <File Name="ddweno_f_nug.cpp"/>
             <File Name="ddweno3_f_nug.cpp"/>
