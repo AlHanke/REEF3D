@@ -213,55 +213,67 @@ public:
 
     int uf,vf,wf;
 protected:
-    inline void iqmin(field& f)
+    template<typename GenericField> inline void iqmin(GenericField& f) noexcept
     {
-        q1 = (f(i-2,j,k)-f(i-3,j,k))/p->DXP[IM3];
-        q2 = (f(i-1,j,k)-f(i-2,j,k))/p->DXP[IM2];
-        q3 = (f(i,j,k)-f(i-1,j,k))/p->DXP[IM1];
-        q4 = (f(i+1,j,k)-f(i,j,k))/p->DXP[IP];
-        q5 = (f(i+2,j,k)-f(i+1,j,k))/p->DXP[IP1];
+        const double v0=f(i-3,j,k), v1=f(i-2,j,k), v2=f(i-1,j,k),
+                     v3=f(i,j,k),   v4=f(i+1,j,k), v5=f(i+2,j,k);
+        q1 = (v1-v0)/p->DXP[IM3];
+        q2 = (v2-v1)/p->DXP[IM2];
+        q3 = (v3-v2)/p->DXP[IM1];
+        q4 = (v4-v3)/p->DXP[IP];
+        q5 = (v5-v4)/p->DXP[IP1];
     }
-    inline void iqmax(field& f)
+    template<typename GenericField> inline void iqmax(GenericField& f) noexcept
     {
-        q1 = (f(i-1,j,k)-f(i-2,j,k))/p->DXP[IM2];
-        q2 = (f(i,j,k)-f(i-1,j,k))/p->DXP[IM1];
-        q3 = (f(i+1,j,k)-f(i,j,k))/p->DXP[IP];
-        q4 = (f(i+2,j,k)-f(i+1,j,k))/p->DXP[IP1];
-        q5 = (f(i+3,j,k)-f(i+2,j,k))/p->DXP[IP2];
-    }
-
-    inline void jqmin(field& f)
-    {
-        q1 = (f(i,j-2,k)-f(i,j-3,k))/p->DYP[JM3];
-        q2 = (f(i,j-1,k)-f(i,j-2,k))/p->DYP[JM2];
-        q3 = (f(i,j,k)  -f(i,j-1,k))/p->DYP[JM1];
-        q4 = (f(i,j+1,k)-f(i,j,k)  )/p->DYP[JP];
-        q5 = (f(i,j+2,k)-f(i,j+1,k))/p->DYP[JP1];
-    }
-    inline void jqmax(field& f)
-    {
-        q1 = (f(i,j-1,k)-f(i,j-2,k))/p->DYP[JM2];
-        q2 = (f(i,j,k)-f(i,j-1,k))/p->DYP[JM1];
-        q3 = (f(i,j+1,k)-f(i,j,k))/p->DYP[JP];
-        q4 = (f(i,j+2,k)-f(i,j+1,k))/p->DYP[JP1];
-        q5 = (f(i,j+3,k)-f(i,j+2,k))/p->DYP[JP2];
+        const double v0=f(i-2,j,k), v1=f(i-1,j,k), v2=f(i,j,k),
+                     v3=f(i+1,j,k), v4=f(i+2,j,k), v5=f(i+3,j,k);
+        q1 = (v1-v0)/p->DXP[IM2];
+        q2 = (v2-v1)/p->DXP[IM1];
+        q3 = (v3-v2)/p->DXP[IP];
+        q4 = (v4-v3)/p->DXP[IP1];
+        q5 = (v5-v4)/p->DXP[IP2];
     }
 
-    inline void kqmin(field& f)
+    template<typename GenericField> inline void jqmin(GenericField& f) noexcept
     {
-        q1 = (f(i,j,k-2)-f(i,j,k-3))/p->DZP[KM3];
-        q2 = (f(i,j,k-1)-f(i,j,k-2))/p->DZP[KM2];
-        q3 = (f(i,j,k)-f(i,j,k-1))/p->DZP[KM1];
-        q4 = (f(i,j,k+1)-f(i,j,k))/p->DZP[KP];
-        q5 = (f(i,j,k+2)-f(i,j,k+1))/p->DZP[KP1];
+        const double v0=f(i,j-3,k), v1=f(i,j-2,k), v2=f(i,j-1,k),
+                     v3=f(i,j,k),   v4=f(i,j+1,k), v5=f(i,j+2,k);
+        q1 = (v1-v0)/p->DYP[JM3];
+        q2 = (v2-v1)/p->DYP[JM2];
+        q3 = (v3-v2)/p->DYP[JM1];
+        q4 = (v4-v3)/p->DYP[JP];
+        q5 = (v5-v4)/p->DYP[JP1];
     }
-    inline void kqmax(field& f)
+    template<typename GenericField> inline void jqmax(GenericField& f) noexcept
     {
-        q1 = (f(i,j,k-1)-f(i,j,k-2))/p->DZP[KM2];
-        q2 = (f(i,j,k)-f(i,j,k-1))/p->DZP[KM1];
-        q3 = (f(i,j,k+1)-f(i,j,k))/p->DZP[KP];
-        q4 = (f(i,j,k+2)-f(i,j,k+1))/p->DZP[KP1];
-        q5 = (f(i,j,k+3)-f(i,j,k+2))/p->DZP[KP2];
+        const double v0=f(i,j-2,k), v1=f(i,j-1,k), v2=f(i,j,k),
+                     v3=f(i,j+1,k), v4=f(i,j+2,k), v5=f(i,j+3,k);
+        q1 = (v1-v0)/p->DYP[JM2];
+        q2 = (v2-v1)/p->DYP[JM1];
+        q3 = (v3-v2)/p->DYP[JP];
+        q4 = (v4-v3)/p->DYP[JP1];
+        q5 = (v5-v4)/p->DYP[JP2];
+    }
+
+    template<typename GenericField> inline void kqmin(GenericField& f) noexcept
+    {
+        const double v0=f(i,j,k-3), v1=f(i,j,k-2), v2=f(i,j,k-1),
+                     v3=f(i,j,k),   v4=f(i,j,k+1), v5=f(i,j,k+2);
+        q1 = (v1-v0)/p->DZP[KM3];
+        q2 = (v2-v1)/p->DZP[KM2];
+        q3 = (v3-v2)/p->DZP[KM1];
+        q4 = (v4-v3)/p->DZP[KP];
+        q5 = (v5-v4)/p->DZP[KP1];
+    }
+    template<typename GenericField> inline void kqmax(GenericField& f) noexcept
+    {
+        const double v0=f(i,j,k-2), v1=f(i,j,k-1), v2=f(i,j,k),
+                     v3=f(i,j,k+1), v4=f(i,j,k+2), v5=f(i,j,k+3);
+        q1 = (v1-v0)/p->DZP[KM2];
+        q2 = (v2-v1)/p->DZP[KM1];
+        q3 = (v3-v2)/p->DZP[KP];
+        q4 = (v4-v3)/p->DZP[KP1];
+        q5 = (v5-v4)/p->DZP[KP2];
     }
 
     inline void isqmin(slice& f)
