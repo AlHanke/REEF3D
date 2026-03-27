@@ -131,7 +131,7 @@ public:
 
     template<typename GenericField>
     WENO3_NUG_GPU_
-    static inline double fx_at(GenericField& b, int i, int j, int k, double advec,
+    static inline double fx_at(const GenericField& b, int i, int j, int k, double advec,
                                 int ip, int uf, double eps, double ps)
     {
         if(advec>0.0)
@@ -161,7 +161,7 @@ public:
 
     template<typename GenericField>
     WENO3_NUG_GPU_
-    static inline double fy_at(GenericField& b, int i, int j, int k, double advec,
+    static inline double fy_at(const GenericField& b, int i, int j, int k, double advec,
                                 int jp, int vf, double eps, double ps)
     {
         if(advec>0.0)
@@ -191,7 +191,7 @@ public:
 
     template<typename GenericField>
     WENO3_NUG_GPU_
-    static inline double fz_at(GenericField& b, int i, int j, int k, double advec,
+    static inline double fz_at(const GenericField& b, int i, int j, int k, double advec,
                                 int kp, int wf, double eps, double ps)
     {
         if(advec>0.0)
@@ -221,7 +221,7 @@ public:
 
     template<typename GenericField>
     WENO3_NUG_GPU_
-    static inline double fx_div(GenericField& b, int i, int j, int k,
+    static inline double fx_div(const GenericField& b, int i, int j, int k,
                                  double vel_lo, double vel_hi,
                                  int ip, int uf, double eps, double ps)
     {
@@ -231,7 +231,7 @@ public:
 
     template<typename GenericField>
     WENO3_NUG_GPU_
-    static inline double fy_div(GenericField& b, int i, int j, int k,
+    static inline double fy_div(const GenericField& b, int i, int j, int k,
                                  double vel_lo, double vel_hi,
                                  int jp, int vf, double eps, double ps)
     {
@@ -241,7 +241,7 @@ public:
 
     template<typename GenericField>
     WENO3_NUG_GPU_
-    static inline double fz_div(GenericField& b, int i, int j, int k,
+    static inline double fz_div(const GenericField& b, int i, int j, int k,
                                  double vel_lo, double vel_hi,
                                  int kp, int wf, double eps, double ps)
     {

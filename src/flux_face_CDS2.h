@@ -34,19 +34,19 @@ public:
     flux_face_CDS2() = default;
     virtual ~flux_face_CDS2() = default;
 
-    inline void u_flux(fdm*, int ipol, field& uvel, double &uflux1, double &uflux2) final
+    inline void u_flux(fdm*, int ipol, const field& uvel, double &uflux1, double &uflux2) final
     { u_flux_impl(ipol, uvel, uflux1, uflux2); }
-    inline void v_flux(fdm*, int ipol, field& vvel, double &vflux1, double &vflux2) final
+    inline void v_flux(fdm*, int ipol, const field& vvel, double &vflux1, double &vflux2) final
     { v_flux_impl(ipol, vvel, vflux1, vflux2); }
-    inline void w_flux(fdm*, int ipol, field& wvel, double &wflux1, double &wflux2) final
+    inline void w_flux(fdm*, int ipol, const field& wvel, double &wflux1, double &wflux2) final
     { w_flux_impl(ipol, wvel, wflux1, wflux2); }
 
     #if USE_AMREX
-    inline void u_flux(fdm*, int ipol, const amrex::Array4<const amrex::Real>& uvel, double &uflux1, double &uflux2) final
+    inline void u_flux(fdm*, int ipol, const LocalArr4Const& uvel, double &uflux1, double &uflux2) final
     { u_flux_impl(ipol, uvel, uflux1, uflux2); }
-    inline void v_flux(fdm*, int ipol, const amrex::Array4<const amrex::Real>& vvel, double &vflux1, double &vflux2) final
+    inline void v_flux(fdm*, int ipol, const LocalArr4Const& vvel, double &vflux1, double &vflux2) final
     { v_flux_impl(ipol, vvel, vflux1, vflux2); }
-    inline void w_flux(fdm*, int ipol, const amrex::Array4<const amrex::Real>& wvel, double &wflux1, double &wflux2) final
+    inline void w_flux(fdm*, int ipol, const LocalArr4Const& wvel, double &wflux1, double &wflux2) final
     { w_flux_impl(ipol, wvel, wflux1, wflux2); }
     #endif
 

@@ -37,7 +37,7 @@ public:
     void start(lexer*,fdm*,field&,int,field&,field&,field&) final;
 
 private:
-    template<typename GenericField> inline double aij(lexer*, fdm*, GenericField&, int, GenericField&, GenericField&, GenericField&, double*, double*, double*);
+    template<typename GenericField> inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
 
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 
