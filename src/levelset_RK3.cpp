@@ -44,64 +44,53 @@ Author: Hans Bihs
 #include"heat.h"
 #include"concentration.h"
 
-levelset_RK3::levelset_RK3(lexer* p, fdm *a, ghostcell* pgc, heat *&pheat, concentration *&pconc):gradient(p),ark1(p),ark2(p)
+levelset_RK3::levelset_RK3(lexer* p, fdm *a, ghostcell* pgc, heat *&pheat, concentration *&pconc):gradient(p), ark1(p), ark2(p)
 {
     if(p->F50==1)
-	gcval_phi=51;
+    gcval_phi=51;
+    else if(p->F50==2)
+    gcval_phi=52;
+    else if(p->F50==3)
+    gcval_phi=53;
+    else if(p->F50==4)
+    gcval_phi=54;
 
-	if(p->F50==2)
-	gcval_phi=52;
-
-	if(p->F50==3)
-	gcval_phi=53;
-
-	if(p->F50==4)
-	gcval_phi=54;
-
-	if(p->F30>0 && p->H10==0 && p->W30==0 && p->F300==0 && p->W90==0)
-	pupdate = new fluid_update_fsf(p,a,pgc);
-	
-	if(p->F30>0 && p->H10==0 && p->W30==1 && p->F300==0 && p->W90==0)
-	pupdate = new fluid_update_fsf_comp(p,a,pgc);
-	
-	if(p->F30>0 && p->H10>0 && p->W90==0 && p->F300==0 && p->H3==1)
-	pupdate = new fluid_update_fsf_heat(p,a,pgc,pheat);
-    
+    if(p->F30>0 && p->H10==0 && p->W30==0 && p->F300==0 && p->W90==0)
+    pupdate = new fluid_update_fsf(p,a,pgc);
+    if(p->F30>0 && p->H10==0 && p->W30==1 && p->F300==0 && p->W90==0)
+    pupdate = new fluid_update_fsf_comp(p,a,pgc);
+    if(p->F30>0 && p->H10>0 && p->W90==0 && p->F300==0 && p->H3==1)
+    pupdate = new fluid_update_fsf_heat(p,a,pgc,pheat);
     if(p->F30>0 && p->H10>0 && p->W90==0 && p->F300==0 && p->H3==2)
     pupdate = new fluid_update_fsf_heat_Bouss(p,a,pgc,pheat);
-    
     if(p->F30>0 && p->C10>0 && p->W90==0 && p->F300==0)
     pupdate = new fluid_update_fsf_concentration(p,a,pgc,pconc);
-    
     if(p->F30>0 && p->H10==0 && p->W30==0 && p->F300==0 && p->W90>0)
     pupdate = new fluid_update_rheology(p);
-    
     if(p->F300>0)
-	pupdate = new fluid_update_void();
-    
+    pupdate = new fluid_update_void();
 
-	if(p->F46==2)
-	ppicard = new picard_f(p);
+    if(p->F46==2)
+    ppicard = new picard_f(p);
+    else if(p->F46==3)
+    ppicard = new picard_lsm(p);
+    else
+    ppicard = new picard_void(p);
 
-	if(p->F46==3)
-	ppicard = new picard_lsm(p);
-
-	if(p->F46!=2 && p->F46!=3)
-	ppicard = new picard_void(p);
-    
-    
     gcval_u=10;
-	gcval_v=11;
-	gcval_w=12;
+    gcval_v=11;
+    gcval_w=12;
 }
 
 levelset_RK3::~levelset_RK3()
 {
+    delete pupdate;
+    delete ppicard;
 }
 
-void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, ghostcell* pgc,ioflow* pflow, reini* preini, field &ls)
+void levelset_RK3::start(fdm* a, lexer* p, convection* pconvec, solver*, ghostcell* pgc, ioflow* pflow, reini* preini, field &ls)
 {
-	#if USE_AMREX
+    #if USE_AMREX
     const int max_level = p->nlevs - 1;
     #else
     const int max_level = 0;
@@ -117,7 +106,7 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
 // Step 1
     starttime=pgc->timer();
 
-	a->L.setVal(0.0);
+    a->L.setVal(0.0);
 
 	pconvec->start(p,a,ls,4,a->u,a->v,a->w);
 	
@@ -190,8 +179,8 @@ void levelset_RK3::start(fdm* a,lexer* p, convection* pconvec,solver* psolv, gho
     
 	pupdate->start(p,a,pgc,a->u,a->v,a->w);
 
-	if(p->mpirank==0 && (p->count%p->P12==0))
-	cout<<"lsmtime: "<<setprecision(3)<<p->lsmtime<<endl;
+    if(p->mpirank==0 && (p->count%p->P12==0))
+    cout<<"lsmtime: "<<setprecision(3)<<p->lsmtime<<endl;
 }
 
 void levelset_RK3::update(lexer *p, fdm *a, ghostcell *pgc, field &f)
