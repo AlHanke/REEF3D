@@ -26,11 +26,8 @@ Author: Hans Bihs
 #include"increment.h"
 #include"weno_nug_func.h"
 
-class fdm;
-class field;
 class lexer;
-class ghostcell;
-class vec;
+class field;
 
 using namespace std;
 
@@ -38,40 +35,109 @@ class ddweno_nug_sf : public weno_nug_func
 {
 public:
 
-	 ddweno_nug_sf(lexer*);
-	 ~ddweno_nug_sf();
+    ddweno_nug_sf(lexer*);
+    virtual ~ddweno_nug_sf() = default;
 
-	 double ddwenox(fdm*, field&, double);
-	 double ddwenoy(fdm*, field&, double);
-	 double ddwenoz(fdm*, field&, double);
-    
-    void iqmin1(fdm*, field&);
-	void jqmin1(fdm*, field&);
-	void kqmin1(fdm*, field&);
-	void iqmax1(fdm*, field&);
-	void jqmax1(fdm*, field&);
-	void kqmax1(fdm*, field&);
-    
-    void iqmin2(fdm*, field&);
-	void jqmin2(fdm*, field&);
-	void kqmin2(fdm*, field&);
-	void iqmax2(fdm*, field&);
-	void jqmax2(fdm*, field&);
-	void kqmax2(fdm*, field&);
-    
-    void iqmin3(fdm*, field&);
-	void jqmin3(fdm*, field&);
-	void kqmin3(fdm*, field&);
-	void iqmax3(fdm*, field&);
-	void jqmax3(fdm*, field&);
-	void kqmax3(fdm*, field&);
+    template<typename GenericField> inline double ddwenox(GenericField &f, double uw)
+    {
+        uf=0;
 
-    double grad;
-    
-    int check1,check2,check3;
-    
-    int modus;
-    
+        if(uw>0.0)
+        {
+            iqmin(f);
+
+            is_min_x();
+            weight_min_x();
+
+            return w1x*(q4 + qfx[IP][uf][0][0]*(q3-q4) - qfx[IP][uf][0][1]*(q5-q4))
+
+                + w2x*(q3 + qfx[IP][uf][1][0]*(q4-q3) - qfx[IP][uf][1][1]*(q2-q3))
+
+                + w3x*(q2 + qfx[IP][uf][2][0]*(q1-q2) + qfx[IP][uf][2][1]*(q3-q2));
+        }
+        else if(uw<0.0)
+        {
+            iqmax(f);
+
+            is_max_x();
+            weight_max_x();
+
+            return w1x*(q4 + qfx[IP][uf][3][0]*(q3-q4) + qfx[IP][uf][3][1]*(q5-q4))
+
+                + w2x*(q3 + qfx[IP][uf][4][0]*(q2-q3) - qfx[IP][uf][4][1]*(q4-q3))
+
+                + w3x*(q2 + qfx[IP][uf][5][0]*(q3-q2) - qfx[IP][uf][5][1]*(q1-q2));
+        }
+        else
+        {
+            return 0.0;
+        }
+    }
+
+    template<typename GenericField> inline double ddwenoy(GenericField &f, double uw)
+    {
+        vf=0;
+
+        if(uw>0.0)
+        {
+            jqmin(f);
+
+            is_min_y();
+            weight_min_y();
+
+            return w1y*(q4 + qfy[JP][vf][0][0]*(q3-q4) - qfy[JP][vf][0][1]*(q5-q4))
+                + w2y*(q3 + qfy[JP][vf][1][0]*(q4-q3) - qfy[JP][vf][1][1]*(q2-q3))
+                + w3y*(q2 + qfy[JP][vf][2][0]*(q1-q2) + qfy[JP][vf][2][1]*(q3-q2));
+        }
+        else if(uw<0.0)
+        {
+            jqmax(f);
+
+            is_max_y();
+            weight_max_y();
+
+            return w1y*(q4 + qfy[JP][vf][3][0]*(q3-q4) + qfy[JP][vf][3][1]*(q5-q4))
+                + w2y*(q3 + qfy[JP][vf][4][0]*(q2-q3) - qfy[JP][vf][4][1]*(q4-q3))
+                + w3y*(q2 + qfy[JP][vf][5][0]*(q3-q2) - qfy[JP][vf][5][1]*(q1-q2));
+        }
+        else
+        {
+            return 0.0;
+        }
+    }
+
+    template<typename GenericField> inline double ddwenoz(GenericField &f, double uw)
+    {
+        wf=0;
+
+        if(uw>0.0)
+        {
+            kqmin(f);
+
+            is_min_z();
+            weight_min_z();
+
+            return w1z*(q4 + qfz[KP][wf][0][0]*(q3-q4) - qfz[KP][wf][0][1]*(q5-q4))
+                + w2z*(q3 + qfz[KP][wf][1][0]*(q4-q3) - qfz[KP][wf][1][1]*(q2-q3))
+                + w3z*(q2 + qfz[KP][wf][2][0]*(q1-q2) + qfz[KP][wf][2][1]*(q3-q2));
+        }
+        else if(uw<0.0)
+        {
+            kqmax(f);
+
+            is_max_z();
+            weight_max_z();
+
+            return w1z*(q4 + qfz[KP][wf][3][0]*(q3-q4) + qfz[KP][wf][3][1]*(q5-q4))
+                + w2z*(q3 + qfz[KP][wf][4][0]*(q2-q3) - qfz[KP][wf][4][1]*(q4-q3))
+                + w3z*(q2 + qfz[KP][wf][5][0]*(q3-q2) - qfz[KP][wf][5][1]*(q1-q2));
+        }
+        else
+        {
+            return 0.0;
+        }
+    }
+
 private:
     lexer *p;
 };
