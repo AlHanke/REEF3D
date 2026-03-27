@@ -77,6 +77,11 @@ public:
     virtual T& operator()(int ii, int jj, int kk) noexcept = 0;
 
     /*!
+     * @copydoc operator()(int, int, int)
+     */
+    virtual const T& operator()(int ii, int jj, int kk) const = 0;
+
+    /*!
      * @brief Sets all elements in the field to a specific value.
      *
      * @param val The value to set the field elements to.
@@ -85,6 +90,7 @@ public:
     virtual void setVal(T val, bool includeGhost = false) = 0;
 #else
     inline T& operator()(int ii, int jj, int kk) noexcept {return V[(ii-imin)*jkmax + (jj-jmin)*kmax + kk-kmin];};
+    inline const T& operator()(int ii, int jj, int kk) const noexcept {return V[(ii-imin)*jkmax + (jj-jmin)*kmax + kk-kmin];};
     void setVal(T val, bool includeGhost = false) {int i,j,k; if(includeGhost){std::fill(V.begin(),V.end(),val);} else{LOOP{operator()(i,j,k) = val;}}};
 #endif
 
@@ -99,6 +105,11 @@ public:
      * @return T& Reference to the element at the specified location.
      */
     virtual T& operator()(const amrex::IntVect& iv, int comp = 0) noexcept = 0;
+
+    /*!
+     * @copydoc operator()(const amrex::IntVect&, int)
+     */
+    virtual const T& operator()(const amrex::IntVect& iv, int comp = 0) const = 0;
 
     /*!
      * @brief Updates the boundary conditions for the field.

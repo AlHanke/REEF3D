@@ -34,13 +34,29 @@ class fieldint_amrex : public fieldint
 public:
     virtual ~fieldint_amrex() = default;
 
-    inline int& operator()(int ii, int jj, int kk) noexcept override final;
+    inline int& operator()(int ii, int jj, int kk) noexcept override final
+    {
+        return (mf[p->level][*(p->amr_cell_mfi)].array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + amrex::IntVect(amrex::IntVect(p->amr_tile_lo)), 0));
+    }
 
-    inline int& operator()(const amrex::IntVect& iv, int comp = 0) noexcept override final;
+    inline const int& operator()(int ii, int jj, int kk) const noexcept override final
+    {
+        return (mf[p->level][*(p->amr_cell_mfi)].const_array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + amrex::IntVect(amrex::IntVect(p->amr_tile_lo)), 0));
+    }
+
+    inline int& operator()(const amrex::IntVect& iv, int comp = 0) noexcept override final
+    {
+        return (mf[p->level][*(p->amr_cell_mfi)].array()(iv, comp));
+    }
+
+    inline const int& operator()(const amrex::IntVect& iv, int comp = 0) const noexcept override final
+    {
+        return (mf[p->level][*(p->amr_cell_mfi)].const_array()(iv, comp));
+    }
 
     void setVal(int val, bool includeGhost = false) override final;
 
-    void FillBoundary() override;
+    void FillBoundary() override final;
 
     inline amrex::iMultiFab& GetMultiFab() {return mf[p->level];};
     inline const amrex::iMultiFab& GetMultiFab() const {return mf[p->level];};
