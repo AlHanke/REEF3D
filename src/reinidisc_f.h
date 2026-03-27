@@ -36,7 +36,7 @@ public:
     void start(lexer*, fdm*, ghostcell*, field&, field&, int) override final;
 
 private:
-    template<typename GenericField, typename GenericFieldConst> void disc(lexer*, GenericFieldConst&, GenericField&, const bool);
+    template<typename GenericField, typename GenericFieldConst> void disc(lexer*, const GenericFieldConst&, GenericField&, const bool);
 };
 
 #endif
