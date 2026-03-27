@@ -103,10 +103,10 @@ void reinidisc_f::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L)
 	xplus=(f(i+1,j,k)-lsv)/p->DXP[IP];
 	
 	if(xmin*lsSig>0.0 && xplus*lsSig>-xmin*lsSig)
-	dx=ddwenox(a,f,1.0);
+	dx=ddwenox(f,1.0);
 
 	if(xplus*lsSig<0.0 && xmin*lsSig<-xplus*lsSig)
-	dx=ddwenox(a,f,-1.0);
+	dx=ddwenox(f,-1.0);
 
 	if(xplus*lsSig>0.0 && xmin*lsSig<0.0)
 	dx=0.0;
@@ -118,10 +118,10 @@ void reinidisc_f::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L)
 	yplus=(f(i,j+1,k)-lsv)/p->DYP[JP];
 	
 	if(ymin*lsSig>0.0 && yplus*lsSig>-ymin*lsSig)
-	dy=ddwenoy(a,f,1.0);
+	dy=ddwenoy(f,1.0);
 
 	if(yplus*lsSig<0.0 && ymin*lsSig<-yplus*lsSig)
-	dy=ddwenoy(a,f,-1.0);
+	dy=ddwenoy(f,-1.0);
 
 	if(yplus*lsSig>0.0 && ymin*lsSig<0.0)
 	dy=0.0;
@@ -132,10 +132,10 @@ void reinidisc_f::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L)
 	zplus=(f(i,j,k+1)-lsv)/p->DZP[KP];
 	
 	if(zmin*lsSig>0.0 && zplus*lsSig>-zmin*lsSig)
-	dz=ddwenoz(a,f,1.0);
+	dz=ddwenoz(f,1.0);
 
 	if(zplus*lsSig<0.0 && zmin*lsSig<-zplus*lsSig)
-	dz=ddwenoz(a,f,-1.0);
+	dz=ddwenoz(f,-1.0);
 
 	if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
 	dz=0.0;	
