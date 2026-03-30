@@ -58,7 +58,8 @@ void field_amrex::setVal(double val, bool includeGhost)
 {
     LEVEL_LOOP
     {
-        mf[p->level].setVal(val, includeGhost ? mf[p->level].nGrowVect() : amrex::IntVect{0});
+        const auto ngrow = includeGhost ? get_mf(p->level).nGrowVect() : amrex::IntVect{0};
+        get_mf(p->level).setVal(val, m_comp, 1, ngrow);
     }
 }
 
@@ -69,7 +70,8 @@ void field_amrex::FillBoundary()
 {
     LEVEL_LOOP
     {
-        mf[p->level].FillBoundary(p->amrex_geometry[p->level].periodicity());
+        get_mf(p->level).FillBoundary(m_comp, 1,
+                                       p->amrex_geometry[p->level].periodicity());
     }
 }
 
@@ -108,10 +110,11 @@ void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
 
             if (apply)
             {
-                auto arr = mf[p->level][*(p->amr_cell_mfi)].array();
+                auto arr = get_array(p->level, *(p->amr_cell_mfi));
+                const int comp = m_comp;
                 amrex::ParallelFor(gbx, [=] AMREX_GPU_DEVICE (int i, int j, int k)
                 {
-                    arr(i, j, k) = value;
+                    arr(i, j, k, comp) = value;
                 });
             }
         }
