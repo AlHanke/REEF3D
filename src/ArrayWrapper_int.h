@@ -39,7 +39,7 @@ public:
 
     void resize(int default_value = 0);
 
-    int& operator[] (int index);
+    inline int& operator[] (int index);
     operator int* ();
     void setVal(int val, bool includeGhost = false);
 
