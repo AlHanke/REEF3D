@@ -50,7 +50,8 @@ public:
      */
     inline double& operator()(int ii, int jj, int kk) noexcept override final
     {
-        return (mf[p->level][*(p->amr_cell_mfi)].array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + amrex::IntVect(p->amr_tile_lo), 0));
+        refresh_cache_if_needed();
+        return m_cached_arr4(ii + m_cached_ox, jj + m_cached_oy, kk + m_cached_oz, m_comp);
     }
 
     /*!
@@ -58,7 +59,8 @@ public:
      */
     inline const double& operator()(int ii, int jj, int kk) const noexcept override final
     {
-        return (mf[p->level][*(p->amr_cell_mfi)].const_array()(amrex::IntVect(AMREX_D_DECL(ii, jj, kk)) + amrex::IntVect(p->amr_tile_lo), 0));
+        refresh_const_cache_if_needed();
+        return m_cached_const_arr4(ii + m_cached_const_ox, jj + m_cached_const_oy, kk + m_cached_const_oz, m_comp);
     }
 
     /*!
@@ -66,7 +68,8 @@ public:
      */
     inline double& operator()(const amrex::IntVect& iv, int comp = 0) noexcept override final
     {
-        return (mf[p->level][*(p->amr_cell_mfi)].array()(iv, comp));
+        refresh_cache_if_needed();
+        return m_cached_arr4(iv, comp);
     }
 
     /*!
@@ -74,7 +77,8 @@ public:
      */
     inline const double& operator()(const amrex::IntVect& iv, int comp = 0) const noexcept override final
     {
-        return (mf[p->level][*(p->amr_cell_mfi)].const_array()(iv, comp));
+        refresh_const_cache_if_needed();
+        return m_cached_const_arr4(iv, comp);
     }
 
     /*!
@@ -89,10 +93,10 @@ public:
 
     void FillDomainBoundaryValue(double value, int dir, bool high) override;
 
-    inline amrex::MultiFab& GetMultiFab() {return mf[p->level];};
-    inline const amrex::MultiFab& GetMultiFab() const {return mf[p->level];};
-    inline amrex::MultiFab& GetMultiFab(int lev) {return mf[lev];};
-    inline const amrex::MultiFab& GetMultiFab(int lev) const {return mf[lev];};
+    inline amrex::MultiFab& GetMultiFab() {return get_mf(p->level);};
+    inline const amrex::MultiFab& GetMultiFab() const {return get_mf_const(p->level);};
+    inline amrex::MultiFab& GetMultiFab(int level) {return get_mf(level);};
+    inline const amrex::MultiFab& GetMultiFab(int level) const {return get_mf_const(level);};
 
 
     /// Returns the stagger type of this field.
@@ -113,6 +117,27 @@ protected:
     amrex::Vector<amrex::MultiFab> mf = {};          ///< owned storage (empty in view mode)
     amrex::Vector<amrex::Vector<amrex::BCRec>> BCRecs = {};
 
+    int m_comp = 0;                                  ///< component index within get_mf()
+    amrex::Vector<amrex::MultiFab>* m_shared_mf = nullptr; ///< non-owning ptr (view mode only)
+
+    // Array4 cache — refreshed once per tile; amortises Array4 construction and
+    // tilebox lbound lookup across all cell accesses within the same tile.
+    amrex::Array4<amrex::Real> m_cached_arr4 = {};
+    int m_cached_ox      = 0;
+    int m_cached_oy      = 0;
+    int m_cached_oz      = 0;
+    int m_cached_mfi_idx = -1;
+    int m_cached_level   = -1;
+    int m_cached_til_idx = -1;
+
+    mutable amrex::Array4<const amrex::Real> m_cached_const_arr4 = {};
+    mutable int m_cached_const_ox      = 0;
+    mutable int m_cached_const_oy      = 0;
+    mutable int m_cached_const_oz      = 0;
+    mutable int m_cached_const_mfi_idx = -1;
+    mutable int m_cached_const_level   = -1;
+    mutable int m_cached_const_til_idx = -1;
+
     int m_last_gcv = -1;  ///< gcv from last UpdateBCRecs call; -1 means BCRecs are stale
 
     /// Cached face BC labels — derived from BCRecs[0][0] and updated only when gcv changes.
@@ -128,6 +153,79 @@ protected:
     void UpdateBCRecsImpl(int gcv, const BCDecision& bc_decision);
 
 private:
+
+    /// Refreshes m_cached_arr4 and the tile lbound offset when the current tile or
+    /// level has changed.  Called once per operator() invocation; the branch is
+    /// almost-always-not-taken (one FAB change per tile loop iteration).
+    /// Tile bounds are pre-computed by TILE_LOOP via set_tile_mfi — no
+    /// tilebox() or lbound() calls needed here.
+    AMREX_FORCE_INLINE void refresh_cache_if_needed()
+    {
+        const int cur_lev = p->level;
+        const int cur_idx = p->amr_fab_mfi_idx;
+        const int cur_tile_index = p->amr_local_tile_idx;
+        if (cur_lev != m_cached_level || cur_idx != m_cached_mfi_idx)
+        {
+            m_cached_arr4    = get_array(cur_lev,*(p->amr_cell_mfi));
+            m_cached_ox      = p->amr_tile_lo.x;
+            m_cached_oy      = p->amr_tile_lo.y;
+            m_cached_oz      = p->amr_tile_lo.z;
+            m_cached_mfi_idx = cur_idx;
+            m_cached_level   = cur_lev;
+            m_cached_til_idx = cur_tile_index;
+        }
+
+        if(cur_tile_index != m_cached_til_idx)
+        {
+            m_cached_ox      = p->amr_tile_lo.x;
+            m_cached_oy      = p->amr_tile_lo.y;
+            m_cached_oz      = p->amr_tile_lo.z;
+            m_cached_til_idx = cur_tile_index;
+        }
+    }
+
+    /// Refreshes m_cached_const_arr4 when the current tile or level changes.
+    AMREX_FORCE_INLINE void refresh_const_cache_if_needed() const
+    {
+        const int cur_lev = p->level;
+        const int cur_idx = p->amr_fab_mfi_idx;
+        const int cur_tile_index = p->amr_local_tile_idx;
+        if (cur_lev != m_cached_const_level || cur_idx != m_cached_const_mfi_idx)
+        {
+            m_cached_const_arr4    = get_array_const(cur_lev,*(p->amr_cell_mfi));
+            m_cached_const_ox      = p->amr_tile_lo.x;
+            m_cached_const_oy      = p->amr_tile_lo.y;
+            m_cached_const_oz      = p->amr_tile_lo.z;
+            m_cached_const_mfi_idx = cur_idx;
+            m_cached_const_level   = cur_lev;
+            m_cached_const_til_idx = cur_tile_index;
+        }
+
+        if(cur_tile_index != m_cached_const_til_idx)
+        {
+            m_cached_const_ox      = p->amr_tile_lo.x;
+            m_cached_const_oy      = p->amr_tile_lo.y;
+            m_cached_const_oz      = p->amr_tile_lo.z;
+            m_cached_const_til_idx = cur_tile_index;
+        }
+    }
+
+    /// Returns the storage MultiFab for @p level (shared in view mode, owned otherwise).
+    AMREX_FORCE_INLINE amrex::MultiFab& get_mf(int level) noexcept
+    { return m_shared_mf ? (*m_shared_mf)[level] : mf[level]; }
+
+    /// Const overload — used by the const cache refresh to access data without mutation.
+    AMREX_FORCE_INLINE const amrex::MultiFab& get_mf_const(int level) const noexcept
+    { return m_shared_mf ? (*m_shared_mf)[level] : mf[level]; }
+
+    /// Returns the Array4 for the current tile of @p level.
+    AMREX_FORCE_INLINE amrex::Array4<amrex::Real> get_array(int level, amrex::MFIter& mfi) noexcept
+    { return get_mf(level).array(mfi); }
+
+    /// Const overload — used by the const cache refresh to access data without mutation.
+    AMREX_FORCE_INLINE const amrex::Array4<const amrex::Real> get_array_const(int level, amrex::MFIter& mfi) const noexcept
+    { return get_mf_const(level).const_array(mfi); }
+
     void ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in, int p_level)
     {
         int dir = -1;
@@ -359,6 +457,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
 
     LEVEL_LOOP
     {
+        auto& mf_lev = get_mf(p->level);
         if(p->level==0)
         {
             amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> bf(
@@ -367,12 +466,13 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> physbcf(
                 p->amrex_geometry[p->level], BCRecs[p->level], bf);
 
-            amrex::FillPatchSingleLevel(mf[p->level], amrex::Real(p->simtime),
-                                        {&(mf[p->level])}, {amrex::Real(p->simtime)},
-                                        0, 0, mf[p->level].nComp(), p->amrex_geometry[p->level], physbcf, 0);
+            amrex::FillPatchSingleLevel(mf_lev, amrex::Real(p->simtime),
+                                        {&(mf_lev)}, {amrex::Real(p->simtime)},
+                                        0, 0, mf_lev.nComp(), p->amrex_geometry[p->level], physbcf, 0);
         }
         else
         {
+            auto& mf_coarse = get_mf(p->level-1);
             // Multi-level: FillPatchTwoLevels handles MPI exchange and
             // coarse-to-fine interpolation; keep the existing PhysBCFunct path.
             amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> cbf(
@@ -390,10 +490,10 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             amrex::Interpolater* mapper = &amrex::cell_cons_interp;
             const amrex::IntVect ref_vec = p->ref_vec;
 
-            amrex::FillPatchTwoLevels(mf[p->level], amrex::Real(p->simtime),
-                                        {&(mf[p->level-1])}, {amrex::Real(p->simtime)},
-                                        {&(mf[p->level])}, {amrex::Real(p->simtime)},
-                                        0, 0, mf[p->level].nComp(), p->amrex_geometry[p->level-1], p->amrex_geometry[p->level],
+            amrex::FillPatchTwoLevels(mf_lev, amrex::Real(p->simtime),
+                                        {&(mf_coarse)}, {amrex::Real(p->simtime)},
+                                        {&(mf_lev)}, {amrex::Real(p->simtime)},
+                                        0, 0, mf_lev.nComp(), p->amrex_geometry[p->level-1], p->amrex_geometry[p->level],
                                         cphysbcf, 0,
                                         fphysbcf, 0, // second one?
                                         ref_vec, // refinement ratio
@@ -401,7 +501,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
                                         BCRecs[p->level], 0);
         }
 
-        ShiftBigBoundaryFaceInward(mf[p->level], p->level);
+        ShiftBigBoundaryFaceInward(mf_lev, p->level);
     }
 }
 
