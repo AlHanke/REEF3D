@@ -75,19 +75,23 @@ public:
     // Tile bounds — set once per tile by set_tile_mfi; shared with field_amrex cache.
     amrex::Dim3 amr_tile_lo    = {0, 0, 0};
     amrex::Dim3 amr_tile_hi    = {0, 0, 0};
-    int amr_fab_mfi_idx        = -1;
+    int amr_fab_mfi_idx        = -1; // Index of current MFIter
+    int amr_local_tile_idx     = -1; // Local tile index within the current MFIter
 
     /// Set the active MFIter, compute and cache the tile's lo/hi bounds and FAB
     /// index, then return the previously active MFIter (for guard-struct restore).
     /// Called exactly once per tile loop iteration by TILE_LOOP.
-    inline amrex::MFIter* set_tile_mfi(amrex::MFIter* mfi)
+    inline amrex::MFIter* set_tile_mfi(amrex::MFIter* mfi) noexcept
     {
         amrex::MFIter* old = amr_cell_mfi;
         amr_cell_mfi = mfi;
+
         const amrex::Box tb = mfi->tilebox();
-        amr_tile_lo      = amrex::lbound(tb);
-        amr_tile_hi      = amrex::ubound(tb);
-        amr_fab_mfi_idx = mfi->index();
+        amr_tile_lo         = amrex::lbound(tb);
+        amr_tile_hi         = amrex::ubound(tb);
+        amr_fab_mfi_idx     = mfi->index();
+        amr_local_tile_idx  = mfi->LocalTileIndex();
+
         return old;
     }
 
