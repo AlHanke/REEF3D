@@ -303,4 +303,6 @@ public:
     double *sigxx;
 };
 
+#include "ArrayWrapper_int_imp.h"
+
 #endif

@@ -20,45 +20,24 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
-#ifndef ARRAYWRAPPER_INT_H_
-#define ARRAYWRAPPER_INT_H_
+#ifndef ARRAYWRAPPER_INT_IMP_H_
+#define ARRAYWRAPPER_INT_IMP_H_
 
 #if USE_AMREX
-#include <AMReX_iMultiFab.H>
-#else
-#include <vector>
-#endif
 
-class lexer;
+#include "ArrayWrapper_int.h"
+#include "lexer.h"
 
-class ArrayWrapper_int
+amrex::iMultiFab& ArrayWrapper_int::GetMultiFab()
 {
-public:
-    ArrayWrapper_int(lexer* p);
-    virtual ~ArrayWrapper_int() = default;
+    return data[p->level];
+}
 
-    void resize(int default_value = 0);
+const amrex::iMultiFab& ArrayWrapper_int::GetMultiFab() const
+{
+    return data[p->level];
+}
 
-    inline int& operator[] (int index);
-    operator int* ();
-    void setVal(int val, bool includeGhost = false);
-
-    #if USE_AMREX
-    void fillBoundary();
-    void fillHigherLevels();
-    inline amrex::iMultiFab& GetMultiFab();
-    inline const amrex::iMultiFab& GetMultiFab() const;
-    inline amrex::iMultiFab& GetMultiFab(int level) {return data[level];};
-    inline const amrex::iMultiFab& GetMultiFab(int level) const {return data[level];};
-    #endif
-
-private:
-    #if USE_AMREX
-    std::vector<amrex::iMultiFab> data;
-    #else
-    std::vector<std::vector<int>> data;
-    #endif
-    lexer* p;
-};
+#endif
 
 #endif
