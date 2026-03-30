@@ -42,7 +42,10 @@ public:
 
     void FillBoundary() override;
 
-    amrex::iMultiFab& GetMultiFab() {return mf[p->level];};
+    inline amrex::iMultiFab& GetMultiFab() {return mf[p->level];};
+    inline const amrex::iMultiFab& GetMultiFab() const {return mf[p->level];};
+    inline amrex::iMultiFab& GetMultiFab(int level) {return mf[level];};
+    inline const amrex::iMultiFab& GetMultiFab(int level) const {return mf[p->level];};
 
 protected:
     fieldint_amrex(lexer* p);
