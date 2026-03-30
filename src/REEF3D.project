@@ -1013,6 +1013,7 @@
         </VirtualDirectory>
         <VirtualDirectory Name="Fieldint">
           <File Name="ArrayWrapper_int.h"/>
+          <File Name="ArrayWrapper_int_imp.h"/>
           <File Name="ArrayWrapper_double.h"/>
           <File Name="ArrayWrapper_base.h"/>
           <File Name="fieldint.h"/>
