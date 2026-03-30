@@ -39,15 +39,15 @@ public:
     ArrayWrapper_int(lexer* p);
     virtual ~ArrayWrapper_int() = default;
 
-    void resize(int default_value = 0) override;
+    void resize(int default_value = 0) override final;
 
-    int& operator[] (int index) override;
-    operator int* () override;
-    void setVal(int val, bool includeGhost = false) override;
+    inline int& operator[] (int index) override final;
+    operator int* () override final;
+    void setVal(int val, bool includeGhost = false) override final;
 
     #if USE_AMREX
-    void fillBoundary() override;
-    void fillHigherLevels() override;
+    void fillBoundary() override final;
+    void fillHigherLevels() override final;
     amrex::iMultiFab& GetMultiFab();
     const amrex::iMultiFab& GetMultiFab() const;
     amrex::iMultiFab& GetMultiFab(int level);

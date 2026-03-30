@@ -40,15 +40,15 @@ public:
     ArrayWrapper_double(lexer* p);
     virtual ~ArrayWrapper_double() = default;
 
-    void resize(double default_value = 0.0) override;
+    void resize(double default_value = 0.0) override final;
 
-    double& operator[] (int index) override;
-    operator double* () override;
-    void setVal(double val, bool includeGhost = false) override;
+    double& operator[] (int index) override final;
+    operator double* () override final;
+    void setVal(double val, bool includeGhost = false) override final;
 
     #if USE_AMREX
-    void fillBoundary() override;
-    void fillHigherLevels() override;
+    void fillBoundary() override final;
+    void fillHigherLevels() override final;
     #endif
 
 private:
