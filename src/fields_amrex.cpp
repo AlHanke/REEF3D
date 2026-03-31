@@ -54,6 +54,12 @@ field1::field1(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_X)
     init_params(p);
 }
 
+field1::field1(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp)
+    : field_amrex(p, shared_mf, comp, amrex_bc_func::DataLocation::FACE_X)
+{
+    init_params(p);
+}
+
 void field1::FillDomainBoundary(int gcv)
 {
     FillDomainBoundaryImpl(gcv, amrex_bc_func::Field1BcDecision(params));
@@ -87,6 +93,12 @@ field2::field2(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Y)
         mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, mf[p->level].nGrow());
     }
+    init_params(p);
+}
+
+field2::field2(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp)
+    : field_amrex(p, shared_mf, comp, amrex_bc_func::DataLocation::FACE_Y)
+{
     init_params(p);
 }
 
@@ -126,6 +138,11 @@ field3::field3(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Z)
     init_params(p);
 }
 
+field3::field3(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp)
+    : field_amrex(p, shared_mf, comp, amrex_bc_func::DataLocation::FACE_Z)
+{
+    init_params(p);
+}
 
 void field3::FillDomainBoundary(int gcv)
 {
@@ -165,6 +182,12 @@ field4::field4(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::CELL_CENT
         mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, mf[p->level].nGrow());
     }
+    init_params(p);
+}
+
+field4::field4(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp)
+    : field_amrex(p, shared_mf, comp, amrex_bc_func::DataLocation::CELL_CENTERED)
+{
     init_params(p);
 }
 

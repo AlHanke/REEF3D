@@ -30,6 +30,7 @@ class field1 : public field_amrex
 {
 public:
     field1(lexer*);
+    field1(lexer*, amrex::Vector<amrex::MultiFab>* shared_mf, int comp);
     virtual ~field1() = default;
     void FillDomainBoundary(int gcv) override;
     void UpdateBCRecs(int gcv) override;
@@ -42,6 +43,7 @@ class field2 : public field_amrex
 {
 public:
     field2(lexer*);
+    field2(lexer*, amrex::Vector<amrex::MultiFab>* shared_mf, int comp);
     virtual ~field2() = default;
     void FillDomainBoundary(int gcv) override;
     void UpdateBCRecs(int gcv) override;
@@ -54,6 +56,7 @@ class field3 : public field_amrex
 {
 public:
     field3(lexer*);
+    field3(lexer*, amrex::Vector<amrex::MultiFab>* shared_mf, int comp);
     virtual ~field3() = default;
     void FillDomainBoundary(int gcv) override;
     void UpdateBCRecs(int gcv) override;
@@ -66,6 +69,7 @@ class field4 : public field_amrex
 {
 public:
     field4(lexer*);
+    field4(lexer*, amrex::Vector<amrex::MultiFab>* shared_mf, int comp);
     virtual ~field4() = default;
     void FillDomainBoundary(int gcv) override;
     void UpdateBCRecs(int gcv) override;

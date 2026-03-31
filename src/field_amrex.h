@@ -37,6 +37,7 @@ Author: Alexander Hanke
 #include <AMReX_FillPatchUtil.H>
 #include <AMReX_PhysBCFunct.H>
 #include <AMReX_Interpolater.H>
+#include <initializer_list>
 #include <utility>
 #include <vector>
 
@@ -51,7 +52,7 @@ public:
     inline double& operator()(int ii, int jj, int kk) noexcept override final
     {
         refresh_cache_if_needed();
-        return m_cached_arr4(ii + m_cached_ox, jj + m_cached_oy, kk + m_cached_oz, m_comp);
+        return m_cached_arr4(ii + m_cached_ox, jj + m_cached_oy, kk + m_cached_oz, 0);
     }
 
     /*!
@@ -60,7 +61,7 @@ public:
     inline const double& operator()(int ii, int jj, int kk) const noexcept override final
     {
         refresh_const_cache_if_needed();
-        return m_cached_const_arr4(ii + m_cached_const_ox, jj + m_cached_const_oy, kk + m_cached_const_oz, m_comp);
+        return m_cached_const_arr4(ii + m_cached_const_ox, jj + m_cached_const_oy, kk + m_cached_const_oz, 0);
     }
 
     /*!
@@ -93,10 +94,13 @@ public:
 
     void FillDomainBoundaryValue(double value, int dir, bool high) override;
 
-    inline amrex::MultiFab& GetMultiFab() {return get_mf(p->level);};
-    inline const amrex::MultiFab& GetMultiFab() const {return get_mf_const(p->level);};
-    inline amrex::MultiFab& GetMultiFab(int level) {return get_mf(level);};
-    inline const amrex::MultiFab& GetMultiFab(int level) const {return get_mf_const(level);};
+    inline amrex::MultiFab& GetMultiFab() noexcept {return get_mf(p->level);};
+    inline const amrex::MultiFab& GetMultiFab() const noexcept {return get_mf_const(p->level);};
+    inline amrex::MultiFab& GetMultiFab(int level) noexcept {return get_mf(level);};
+    inline const amrex::MultiFab& GetMultiFab(int level) const noexcept {return get_mf_const(level);};
+
+    /// Returns the shared MultiFab vector pointer (non-null in view mode only).
+    amrex::Vector<amrex::MultiFab>* get_shared_mf_vec() noexcept { return m_shared_mf; }
 
 
     /// Returns the stagger type of this field.
@@ -113,12 +117,17 @@ protected:
     /// Owning constructor: the field allocates and owns its own MultiFab storage.
     field_amrex(lexer* p, amrex_bc_func::DataLocation data_location);
 
+    /// View constructor: the field is a non-owning view into @p shared_mf at
+    /// component @p comp.  The caller must ensure @p shared_mf outlives this object.
+    field_amrex(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp,
+                amrex_bc_func::DataLocation data_location);
+
     lexer *p = nullptr;
     amrex::Vector<amrex::MultiFab> mf = {};          ///< owned storage (empty in view mode)
     amrex::Vector<amrex::Vector<amrex::BCRec>> BCRecs = {};
 
-    int m_comp = 0;                                  ///< component index within get_mf()
     amrex::Vector<amrex::MultiFab>* m_shared_mf = nullptr; ///< non-owning ptr (view mode only)
+    amrex::Vector<amrex::MultiFab> m_alias = {}; ///< 1-component aliases for GetMultiFab() and get_alias() in view mode; empty in owning mode
 
     // Array4 cache — refreshed once per tile; amortises Array4 construction and
     // tilebox lbound lookup across all cell accesses within the same tile.
@@ -208,12 +217,20 @@ private:
         }
     }
 
-    /// Returns the storage MultiFab for @p level (shared in view mode, owned otherwise).
+    /// Returns the 1-component alias for @p level (alias in view mode, owned otherwise).
     AMREX_FORCE_INLINE amrex::MultiFab& get_mf(int level) noexcept
+    { return m_shared_mf ? m_alias[level] : mf[level]; }
+
+    /// Const overload — Returns the 1-component alias for @p level (alias in view mode, owned otherwise).
+    AMREX_FORCE_INLINE const amrex::MultiFab& get_mf_const(int level) const noexcept
+    { return m_shared_mf ? m_alias[level] : mf[level]; }
+
+    /// Returns the storage MultiFab for @p level (shared in view mode, owned otherwise).
+    AMREX_FORCE_INLINE amrex::MultiFab& get_mf_shared(int level) noexcept
     { return m_shared_mf ? (*m_shared_mf)[level] : mf[level]; }
 
     /// Const overload — used by the const cache refresh to access data without mutation.
-    AMREX_FORCE_INLINE const amrex::MultiFab& get_mf_const(int level) const noexcept
+    AMREX_FORCE_INLINE const amrex::MultiFab& get_mf_const_shared(int level) const noexcept
     { return m_shared_mf ? (*m_shared_mf)[level] : mf[level]; }
 
     /// Returns the Array4 for the current tile of @p level.
@@ -493,9 +510,9 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
                                         {&(mf_lev)}, {amrex::Real(p->simtime)},
                                         0, 0, mf_lev.nComp(), p->amrex_geometry[p->level-1], p->amrex_geometry[p->level],
                                         cphysbcf, 0,
-                                        fphysbcf, 0, // second one?
-                                        ref_vec, // refinement ratio
-                                        mapper, // spatial interpolater
+                                        fphysbcf, 0,
+                                        ref_vec,
+                                        mapper,
                                         BCRecs[p->level], 0);
         }
 
