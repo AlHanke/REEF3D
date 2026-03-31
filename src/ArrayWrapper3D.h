@@ -27,6 +27,7 @@ Author: Alexander Hanke
 
 #if USE_AMREX
 #include <AMReX_iMultiFab.H>
+#include <AMReX_MFIter.H>
 #include <AMReX_Vector.H>
 #else
 #include <vector>
@@ -77,8 +78,8 @@ public:
     #if USE_AMREX
     void fillBoundary();
     void fillHigherLevels();
-    inline amrex::iMultiFab& GetMultiFab();
-    inline const amrex::iMultiFab& GetMultiFab() const;
+    amrex::iMultiFab& GetMultiFab();
+    const amrex::iMultiFab& GetMultiFab() const;
     inline amrex::iMultiFab& GetMultiFab(int level) {return data[level];};
     inline const amrex::iMultiFab& GetMultiFab(int level) const {return data[level];};
     #endif
@@ -102,7 +103,26 @@ private:
     DataLocation data_location = DataLocation::CELL_CENTERED;
 
     #if USE_AMREX
+    AMREX_FORCE_INLINE void refresh_cache_if_needed() noexcept;
+    AMREX_FORCE_INLINE void refresh_const_cache_if_needed() const noexcept;
+
     amrex::Vector<amrex::iMultiFab> data;
+
+    amrex::Array4<int> m_cached_arr4 = {};
+    int m_cached_ox      = 0;
+    int m_cached_oy      = 0;
+    int m_cached_oz      = 0;
+    int m_cached_mfi_idx = -1;
+    int m_cached_level   = -1;
+    int m_cached_til_idx = -1;
+
+    mutable amrex::Array4<const int> m_cached_const_arr4 = {};
+    mutable int m_cached_const_ox      = 0;
+    mutable int m_cached_const_oy      = 0;
+    mutable int m_cached_const_oz      = 0;
+    mutable int m_cached_const_mfi_idx = -1;
+    mutable int m_cached_const_level   = -1;
+    mutable int m_cached_const_til_idx = -1;
     #else
     std::vector<int> data;
 
