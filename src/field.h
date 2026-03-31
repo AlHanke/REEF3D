@@ -26,6 +26,10 @@ Author: Hans Bihs
 #include "field_base.h"
 
 #if USE_AMREX
+    namespace amrex
+    {
+        class MultiFab;
+    }
     #include "AMReX_Array4.H"
     struct LocalArr4Const {
         amrex::Array4<amrex::Real const> arr;
@@ -60,6 +64,10 @@ public:
 #if USE_AMREX
     virtual void FillDomainBoundary(int gcv) = 0;
     virtual void FillDomainBoundaryValue(double value, int dir, bool high) = 0;
+    virtual amrex::MultiFab& GetMultiFab() = 0;
+    virtual const amrex::MultiFab& GetMultiFab() const = 0;
+    virtual amrex::MultiFab& GetMultiFab(int) = 0;
+    virtual const amrex::MultiFab& GetMultiFab(int) const = 0;
 #endif
 };
 
