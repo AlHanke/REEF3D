@@ -40,7 +40,8 @@ Author: Alexander Hanke
 field_amrex::field_amrex(lexer* p, amrex_bc_func::DataLocation data_location)
     : const_params{{p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
                    {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T},
-                   bool(p->j_dir), data_location}
+                   bool(p->j_dir), data_location},
+      m_shared_mf(nullptr)
 {
     field_amrex::p = p;
     mf.resize(p->nlevs);
@@ -48,7 +49,29 @@ field_amrex::field_amrex(lexer* p, amrex_bc_func::DataLocation data_location)
     BCRecs.resize(p->nlevs);
     for (auto& bc_rec : BCRecs)
         bc_rec.resize(p->ncomp);
-    // m_comp stays 0; m_shared_mf stays nullptr; m_alias stays empty
+}
+
+// ---------------------------------------------------------------------------
+// View constructor — non-owning view into shared_mf at component comp
+// ---------------------------------------------------------------------------
+field_amrex::field_amrex(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp,
+                         amrex_bc_func::DataLocation data_location)
+    : const_params{{p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
+                   {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T},
+                   bool(p->j_dir), data_location},
+      m_shared_mf(shared_mf)
+{
+    field_amrex::p = p;
+    // mf stays empty — storage is owned by the caller via shared_mf
+
+    BCRecs.resize(p->nlevs);
+    for (auto& bc_rec : BCRecs)
+        bc_rec.resize(p->ncomp);
+
+    // Build 1-component aliases for GetMultiFab() and get_alias()
+    m_alias.resize(p->nlevs);
+    for (int lev = 0; lev < m_alias.size(); ++lev)
+        m_alias[lev] = amrex::MultiFab((*shared_mf)[lev], amrex::make_alias, comp, 1);
 }
 
 // ---------------------------------------------------------------------------
@@ -59,7 +82,7 @@ void field_amrex::setVal(double val, bool includeGhost)
     const int ngrow = includeGhost ? p->margin : 0;
     LEVEL_LOOP
     {
-        get_mf(p->level).setVal(val, m_comp, 1, ngrow);
+        get_mf(p->level).setVal(val, 0, 1, ngrow);
     }
 }
 
@@ -70,7 +93,7 @@ void field_amrex::FillBoundary()
 {
     LEVEL_LOOP
     {
-        get_mf(p->level).FillBoundary(m_comp, 1,
+        get_mf(p->level).FillBoundary(0, 1,
                                        p->amrex_geometry[p->level].periodicity());
     }
 }
@@ -111,10 +134,9 @@ void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
             if (apply)
             {
                 auto arr = get_array(p->level, *(p->amr_cell_mfi));
-                const int comp = m_comp;
                 amrex::ParallelFor(gbx, [=] AMREX_GPU_DEVICE (int i, int j, int k)
                 {
-                    arr(i, j, k, comp) = value;
+                    arr(i, j, k) = value;
                 });
             }
         }
