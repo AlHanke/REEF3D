@@ -94,10 +94,10 @@ public:
 
     void FillDomainBoundaryValue(double value, int dir, bool high) override;
 
-    inline amrex::MultiFab& GetMultiFab() noexcept {return get_mf(p->level);};
-    inline const amrex::MultiFab& GetMultiFab() const noexcept {return get_mf_const(p->level);};
-    inline amrex::MultiFab& GetMultiFab(int level) noexcept {return get_mf(level);};
-    inline const amrex::MultiFab& GetMultiFab(int level) const noexcept {return get_mf_const(level);};
+    inline amrex::MultiFab& GetMultiFab() noexcept override final {return get_mf(p->level);};
+    inline const amrex::MultiFab& GetMultiFab() const noexcept override final {return get_mf_const(p->level);};
+    inline amrex::MultiFab& GetMultiFab(int level) noexcept override final {return get_mf(level);};
+    inline const amrex::MultiFab& GetMultiFab(int level) const noexcept override final {return get_mf_const(level);};
 
     /// Returns the shared MultiFab vector pointer (non-null in view mode only).
     amrex::Vector<amrex::MultiFab>* get_shared_mf_vec() noexcept { return m_shared_mf; }
