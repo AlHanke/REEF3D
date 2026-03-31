@@ -26,13 +26,14 @@ Author: Alexander Hanke
 #include "ArrayWrapper3D.h"
 #if USE_AMREX
 #include "lexer.h"
+#include <cassert>
 #endif
 
 inline int &ArrayWrapper3D::operator() (int i, int j, int k) noexcept
 {
     #if USE_AMREX
-    const auto lo = amrex::lbound(p->amr_cell_mfi->tilebox());
-    return data[p->level][*(p->amr_cell_mfi)].array()(lo.x + i, lo.y + j, lo.z + k, 0);
+    refresh_cache_if_needed();
+    return m_cached_arr4(m_cached_ox + i, m_cached_oy + j, m_cached_oz + k, 0);
     #else
     // Origin and strides are folded into m_base by cache_addressing(), so this
     // touches no lexer member. Equivalent to data[IJK].
@@ -43,8 +44,8 @@ inline int &ArrayWrapper3D::operator() (int i, int j, int k) noexcept
 inline const int &ArrayWrapper3D::operator()(int i, int j, int k) const noexcept
 {
     #if USE_AMREX
-    const auto lo = amrex::lbound(p->amr_cell_mfi->tilebox());
-    return data[p->level][*(p->amr_cell_mfi)].const_array()(lo.x + i, lo.y + j, lo.z + k, 0);
+    refresh_const_cache_if_needed();
+    return m_cached_const_arr4(m_cached_const_ox + i, m_cached_const_oy + j, m_cached_const_oz + k, 0);
     #else
     // Origin and strides are folded into m_base by cache_addressing(), so this
     // touches no lexer member. Equivalent to data[IJK].
@@ -55,23 +56,19 @@ inline const int &ArrayWrapper3D::operator()(int i, int j, int k) const noexcept
 inline int &ArrayWrapper3D::operator[] (int index) noexcept
 {
     #if USE_AMREX
-    const int jk = p->jmax * p->kmax;
+    assert(p->level == 0
+           && "ArrayWrapper3D::operator[] should only be used at level 0 when AMReX is enabled");
+    refresh_cache_if_needed();
 
-    const int ii_encoded = index / jk;
-    const int rem = index - ii_encoded * jk;
+    const int jk_max = p->jmax * p->kmax;
+    const int ii_encoded = index / jk_max;
+    const int rem = index - ii_encoded * jk_max;
     const int jj_encoded = rem / p->kmax;
     const int kk_encoded = rem - jj_encoded * p->kmax;
 
-    const int i = ii_encoded + p->imin;
-    const int j = jj_encoded + p->jmin;
-    const int k = kk_encoded + p->kmin;
-
-    const auto lo = amrex::lbound(p->amr_cell_mfi->tilebox());
-    const int ii = lo.x + i;
-    const int jj = lo.y + j;
-    const int kk = lo.z + k;
-
-    return data[p->level][*(p->amr_cell_mfi)].array()(ii, jj, kk, 0);
+    return m_cached_arr4(m_cached_ox + ii_encoded + p->imin,
+                            m_cached_oy + jj_encoded + p->jmin,
+                            m_cached_oz + kk_encoded + p->kmin, 0);
     #else
     return data.data()[index];
     #endif
@@ -80,23 +77,19 @@ inline int &ArrayWrapper3D::operator[] (int index) noexcept
 inline const int &ArrayWrapper3D::operator[] (int index) const noexcept
 {
     #if USE_AMREX
-    const int jk = p->jmax * p->kmax;
+    assert(p->level == 0
+           && "ArrayWrapper3D::operator[] should only be used at level 0 when AMReX is enabled");
+    refresh_const_cache_if_needed();
 
-    const int ii_encoded = index / jk;
-    const int rem = index - ii_encoded * jk;
+    const int jk_max = p->jmax * p->kmax;
+    const int ii_encoded = index / jk_max;
+    const int rem = index - ii_encoded * jk_max;
     const int jj_encoded = rem / p->kmax;
     const int kk_encoded = rem - jj_encoded * p->kmax;
 
-    const int i = ii_encoded + p->imin;
-    const int j = jj_encoded + p->jmin;
-    const int k = kk_encoded + p->kmin;
-
-    const auto lo = amrex::lbound(p->amr_cell_mfi->tilebox());
-    const int ii = lo.x + i;
-    const int jj = lo.y + j;
-    const int kk = lo.z + k;
-
-    return data[p->level][*(p->amr_cell_mfi)].const_array()(ii, jj, kk, 0);
+    return m_cached_const_arr4(m_cached_const_ox + ii_encoded + p->imin,
+                               m_cached_const_oy + jj_encoded + p->jmin,
+                               m_cached_const_oz + kk_encoded + p->kmin, 0);
     #else
     return data.data()[index];
     #endif
@@ -106,12 +99,60 @@ inline const int &ArrayWrapper3D::operator[] (int index) const noexcept
 
 amrex::iMultiFab& ArrayWrapper3D::GetMultiFab()
 {
-    return data[p->level];
+    return GetMultiFab(p->level);
 }
 
 const amrex::iMultiFab& ArrayWrapper3D::GetMultiFab() const
 {
-    return data[p->level];
+    return GetMultiFab(p->level);
+}
+
+AMREX_FORCE_INLINE void ArrayWrapper3D::refresh_cache_if_needed() noexcept
+{
+    const int cur_lev = p->level;
+    const int cur_idx = p->amr_fab_mfi_idx;
+    const int cur_tile_index = p->amr_local_tile_idx;
+    if (cur_lev != m_cached_level || cur_idx != m_cached_mfi_idx)
+    {
+        m_cached_arr4    = data[cur_lev].array(*(p->amr_cell_mfi));
+        m_cached_ox      = p->amr_tile_lo.x;
+        m_cached_oy      = p->amr_tile_lo.y;
+        m_cached_oz      = p->amr_tile_lo.z;
+        m_cached_mfi_idx = cur_idx;
+        m_cached_level   = cur_lev;
+        m_cached_til_idx = cur_tile_index;
+    }
+    if (cur_tile_index != m_cached_til_idx)
+    {
+        m_cached_ox      = p->amr_tile_lo.x;
+        m_cached_oy      = p->amr_tile_lo.y;
+        m_cached_oz      = p->amr_tile_lo.z;
+        m_cached_til_idx = cur_tile_index;
+    }
+}
+
+AMREX_FORCE_INLINE void ArrayWrapper3D::refresh_const_cache_if_needed() const noexcept
+{
+    const int cur_lev = p->level;
+    const int cur_idx = p->amr_fab_mfi_idx;
+    const int cur_tile_index = p->amr_local_tile_idx;
+    if (cur_lev != m_cached_const_level || cur_idx != m_cached_const_mfi_idx)
+    {
+        m_cached_const_arr4    = data[cur_lev].const_array(*(p->amr_cell_mfi));
+        m_cached_const_ox      = p->amr_tile_lo.x;
+        m_cached_const_oy      = p->amr_tile_lo.y;
+        m_cached_const_oz      = p->amr_tile_lo.z;
+        m_cached_const_mfi_idx = cur_idx;
+        m_cached_const_level   = cur_lev;
+        m_cached_const_til_idx = cur_tile_index;
+    }
+    if (cur_tile_index != m_cached_const_til_idx)
+    {
+        m_cached_const_ox      = p->amr_tile_lo.x;
+        m_cached_const_oy      = p->amr_tile_lo.y;
+        m_cached_const_oz      = p->amr_tile_lo.z;
+        m_cached_const_til_idx = cur_tile_index;
+    }
 }
 #endif
 
