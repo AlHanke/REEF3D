@@ -62,6 +62,10 @@ public:
     #if USE_AMREX
     virtual void FillDomainBoundary(int gcv) = 0;
     virtual void FillDomainBoundaryValue(double value, int dir, bool high) = 0;
+    virtual amrex::MultiFab& GetMultiFab() = 0;
+    virtual const amrex::MultiFab& GetMultiFab() const = 0;
+    virtual amrex::MultiFab& GetMultiFab(int) = 0;
+    virtual const amrex::MultiFab& GetMultiFab(int) const = 0;
     #else
     field(lexer* p) : p(p), data((p->imax-p->imin)*(p->jmax-p->jmin)*(p->kmax-p->kmin), 0.0) {};
     inline double& operator()(int ii, int jj, int kk) override final {return data[(ii-p->imin)*p->jmax*p->kmax + (jj-p->jmin)*p->kmax + kk-p->kmin];};
