@@ -27,6 +27,7 @@ Author: Alexander Hanke
 
 #if USE_AMREX
 #include <AMReX_iMultiFab.H>
+#include <AMReX_MFIter.H>
 #else
 #include <vector>
 #endif
@@ -41,7 +42,16 @@ public:
 
     void resize(int default_value = 0) override final;
 
-    inline int& operator[] (int index) override final;
+    inline int& operator[] (int index) noexcept override final;
+
+    #if USE_AMREX
+    inline int& operator() (int i, int j, int k) noexcept
+    {
+        refresh_cache_if_needed();
+        return m_cached_arr4(m_cached_ox + i, m_cached_oy + j, m_cached_oz + k, 0);
+    };
+    #endif
+
     operator int* () override final;
     void setVal(int val, bool includeGhost = false) override final;
 
@@ -55,12 +65,21 @@ public:
     #endif
 
 private:
+    void refresh_cache_if_needed() noexcept;
+    lexer* p;
     #if USE_AMREX
     std::vector<amrex::iMultiFab> data;
+
+    amrex::Array4<int> m_cached_arr4 = {};
+    int m_cached_ox      = 0;
+    int m_cached_oy      = 0;
+    int m_cached_oz      = 0;
+    int m_cached_mfi_idx = -1;
+    int m_cached_level   = -1;
+    int m_cached_til_idx = -1;
     #else
     std::vector<std::vector<int>> data;
     #endif
-    lexer* p;
 };
 
 #endif

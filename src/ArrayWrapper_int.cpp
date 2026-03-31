@@ -47,31 +47,6 @@ void ArrayWrapper_int::resize(int default_value)
     }
 };
 
-int& ArrayWrapper_int::operator[] (int index)
-{
-    #if USE_AMREX
-    const int jk = p->jmax * p->kmax;
-
-    const int ii_encoded = index / jk;
-    const int rem = index - ii_encoded * jk;
-    const int jj_encoded = rem / p->kmax;
-    const int kk_encoded = rem - jj_encoded * p->kmax;
-
-    const int i = ii_encoded + p->imin;
-    const int j = jj_encoded + p->jmin;
-    const int k = kk_encoded + p->kmin;
-
-    const auto lo = amrex::lbound(p->amr_cell_mfi->tilebox());
-    const int ii = lo.x + i;
-    const int jj = lo.y + j;
-    const int kk = lo.z + k;
-
-    return data[p->level][*(p->amr_cell_mfi)].array()(ii, jj, kk, 0);
-    #else
-    return data[p->level][index];
-    #endif
-}
-
 ArrayWrapper_int::operator int* ()
 {
     #if USE_AMREX
