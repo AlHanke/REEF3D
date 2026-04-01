@@ -52,7 +52,7 @@ Authors: Hans Bihs, Alexander Hanke
     //   FIELD_CONST(name)            – simple field; creates _fl_mf_name ref and
     //                                  shadows 'name' with a const Array4.
     //   FIELD_CONST_MEMBER(ptr,mbr)  – ptr->mbr field; creates _fl_mf_a_mbr ref
-    //                                  and 'a_mbr' const Array4; body uses a_mbr(i,j,k).
+    //                                  and 'member_mbr' const Array4; body uses member_mbr(i,j,k).
     //
     // Example:
     //   FIELDLOOP(ark2,
@@ -184,13 +184,13 @@ Authors: Hans Bihs, Alexander Hanke
     // Non-AMReX FIELDLOOP: simple fields are used directly from the body.
     // ptr->member fields get a local alias so a_member(i,j,k) works in both modes.
     #define FIELD_CONST(name)
-    #define FIELD_CONST_MEMBER(ptr, member)           auto& a_##member = (ptr)->member;
+    #define FIELD_CONST_MEMBER(ptr, member)           auto& member_##member = (ptr)->member;
     #define FIELDLOOP(mut, const_decls, body)         { const_decls; PLAINLOOP PCHECK body }
     #define FIELDLOOP_MEMBER(ptr, member, const_decls, body) \
         { auto& member = (ptr)->member; const_decls; PLAINLOOP PCHECK body }
 
     #define FIELD_CONST_INC(name)
-    #define FIELD_CONST_MEMBER_INC(ptr, member)       auto& a_##member = (ptr)->member;
+    #define FIELD_CONST_MEMBER_INC(ptr, member)       auto& member_##member = (ptr)->member;
     #define FIELDLOOP_INC(mut, const_decls, body)     { const_decls; PLAINLOOP PCHECK body }
     #define FIELDLOOP_INC_MEMBER(ptr, member, const_decls, body) \
         { auto& member = (ptr)->member; const_decls; PLAINLOOP PCHECK body }
