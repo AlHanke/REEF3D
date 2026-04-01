@@ -100,6 +100,9 @@ Authors: Hans Bihs, Alexander Hanke
     // the lambda and exposes const fields as LocalArr4Const (offset-aware) so
     // that legacy helpers using increment::i/j/k work on GPU/CPU uniformly.
     //
+    // Warning: mut is expecting access using global indices (i,j,k)
+    //   since it is not wrapped in a LocalArr4.
+    //
     // Differences from FIELDLOOP:
     //   • sets p->level = lev per level (and resets to 0 after the loop)
     //   • calls p->set_tile_mfi per tile (and restores default after the loop)
