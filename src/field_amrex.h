@@ -476,15 +476,15 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
     params.dt = p->dt;
     params.face_labels = m_cached_face_labels;
 
+    amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> bf(
+                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params});
+
     LEVEL_LOOP
     {
         auto& mf_lev = get_mf(p->level);
         if(p->level==0)
         {
             mf_lev.FillBoundary(0, 1, p->amrex_geometry[p->level].periodicity());
-
-            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> bf(
-                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params});
 
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> physbcf(
                 p->amrex_geometry[p->level], BCRecs[p->level], bf);
@@ -496,17 +496,12 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             auto& mf_coarse = get_mf(p->level-1);
             // Multi-level: FillPatchTwoLevels handles MPI exchange and
             // coarse-to-fine interpolation; keep the existing PhysBCFunct path.
-            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> cbf(
-                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params});
 
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> cphysbcf(
-                p->amrex_geometry[p->level-1], BCRecs[p->level-1], cbf);
-
-            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> fbf(
-                amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params});
+                p->amrex_geometry[p->level-1], BCRecs[p->level-1], bf);
 
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> fphysbcf(
-                p->amrex_geometry[p->level], BCRecs[p->level], fbf);
+                p->amrex_geometry[p->level], BCRecs[p->level], bf);
 
             amrex::Interpolater* mapper = &amrex::cell_cons_interp;
             const amrex::IntVect ref_vec = p->ref_vec;
