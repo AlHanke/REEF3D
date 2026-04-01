@@ -48,14 +48,14 @@ void reinidisc_f::start(lexer *p, fdm*, ghostcell *pgc, field &f, field &L, int 
             TILE_LOOP
             IJKLOOP
             PBASECHECK
-                disc(p,f,L,is3D);
+                disc(p,L,f,is3D);
         }
         p->level = 0;
     }
 }
 
 template<typename GenericField, typename GenericFieldConst>
-inline void reinidisc_f::disc(lexer *p, const GenericFieldConst &f, GenericField &L, const bool is3D)
+inline void reinidisc_f::disc(lexer *p, GenericField &L, const GenericFieldConst &f, const bool is3D)
 {
     double dx = 0.0;
     double dy = 0.0;
