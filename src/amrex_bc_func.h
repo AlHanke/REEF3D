@@ -679,107 +679,54 @@ public:
                 return;
             }
 
-            // Edge or corner — use original detection and dispatch logic.
-            int face = 0;
-            int edge = 0;
-            if(iv[2] < dom.smallEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
-                face = 5; // Z Min
-            else if(iv[2] > dom.bigEnd(2) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
-                face = 6; // Z Max
-            else if(iv[0] < dom.smallEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                face = 1; // X Min
-            else if(iv[0] > dom.bigEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                face = 2; // X Max
-            else if(iv[1] < dom.smallEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                face = 3; // Y Min
-            else if(iv[1] > dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                face = 4; // Y Max
-            else if(iv[0] < dom.smallEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] < dom.smallEnd(2))
-                edge = 1; // X Min, Z Min
-            else if(iv[0] < dom.smallEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] > dom.bigEnd(2))
-                edge = 2; // X Min, Z Max
-            else if(iv[0] > dom.bigEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] < dom.smallEnd(2))
-                edge = 3; // X Max, Z Min
-            else if(iv[0] > dom.bigEnd(0) && iv[1] >= dom.smallEnd(1) && iv[1] <= dom.bigEnd(1) && iv[2] > dom.bigEnd(2))
-                edge = 4; // X Max, Z Max
-            else if(iv[1] < dom.smallEnd(1) && iv[0] < dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                edge = 5; // Y Min, X Min
-            else if(iv[1] < dom.smallEnd(1) && iv[0] > dom.bigEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                edge = 6; // Y Min, X Max
-            else if(iv[1] > dom.bigEnd(1) && iv[0] < dom.smallEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                edge = 7; // Y Max, X Min
-            else if(iv[1] >  dom.bigEnd(1) && iv[0] > dom.bigEnd(0) && iv[0] <= dom.bigEnd(0) && iv[2] >= dom.smallEnd(2) && iv[2] <= dom.bigEnd(2))
-                edge = 8; // Y Max, X Max
-            else if(iv[2] < dom.smallEnd(2) && iv[1] < dom.smallEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
-                edge = 9; // Z Min, Y Min
-            else if(iv[2] < dom.smallEnd(2) && iv[1] > dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
-                edge = 10; // Z Min, Y Max
-            else if(iv[2] > dom.bigEnd(2) && iv[1] < dom.smallEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
-                edge = 11; // Z Max, Y Min
-            else if(iv[2] > dom.bigEnd(2) && iv[1] > dom.bigEnd(1) && iv[0] >= dom.smallEnd(0) && iv[0] <= dom.bigEnd(0))
-                edge = 12; // Z Max, Y Max
+            // Edge or corner — dispatch using the already-computed out_x/out_y/out_z,
+            // avoiding redundant domain-bounds re-checks (~30 comparisons eliminated).
+            //
+            // Behavior map (output-identical to the original if/else chain):
+            //   X+Z edge (out_x!=0, out_z!=0, out_y==0)    → conditional NOSLIP/NEUMANN
+            //   Y+X_MAX edge (out_y!=0, out_x>0, out_z==0) → is_corner_layer1 (preserves
+            //                                                  original detection-bug behavior)
+            //   true corner (all three non-zero)            → is_corner_layer1
+            //   everything else (Y+X_NEG, Z+Y edges)       → NEUMANN
+            const bool is_face_xz = (m_const_params.data_location == DataLocation::FACE_X
+                                  || m_const_params.data_location == DataLocation::FACE_Z);
+            const bool is_xz_edge = (out_x != 0 && out_z != 0 && out_y == 0);
+            const bool use_corner_logic = (!is_xz_edge)
+                                       && ((out_y != 0 && out_x > 0 && out_z == 0)    // Y+X_MAX (original detection bug preserved)
+                                        || (out_x != 0 && out_y != 0 && out_z != 0)); // true corner
 
-            for(int n=0; n<numcomp; ++n)
+            for (int n = 0; n < numcomp; ++n)
             {
-                BoundaryConditionTypeLabel label = BoundaryConditionTypeLabel::NONE;
-                int cs = 0;
+                BoundaryConditionTypeLabel label = BoundaryConditionTypeLabel::NEUMANN;
 
-                const int bcrec_idx = bcomp + n;
-                switch(face) {
-                    case 1:
-                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(0));
-                        cs = static_cast<int>(Dir::X_NEG);
-                        break;
-                    case 2:
-                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(0));
-                        cs = static_cast<int>(Dir::X_POS);
-                        break;
-                    case 3:
-                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(1));
-                        cs = static_cast<int>(Dir::Y_NEG);
-                        break;
-                    case 4:
-                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(1));
-                        cs = static_cast<int>(Dir::Y_POS);
-                        break;
-                    case 5:
-                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(2));
-                        cs = static_cast<int>(Dir::Z_NEG);
-                        break;
-                    case 6:
-                        label = static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].hi(2));
-                        cs = static_cast<int>(Dir::Z_POS);
-                        break;
-                    case 0:
-                    switch (edge)
+                if (is_xz_edge && is_face_xz)
+                {
+                    const int z_side_idx = (out_z == -1) ? 4 : 5; // 4=Z_NEG, 5=Z_POS
+                    if (out_x == -1) // X_NEG + Z edges
                     {
-                        case 1:
-                        case 2:
-                            if(((m_const_params.bc_values[0] == static_cast<int>(Gbc::WAVEGEN) && static_cast<BoundaryConditionTypeLabel>(bcr[bcrec_idx].lo(0)) == BoundaryConditionTypeLabel::NONE) || (m_const_params.bc_values[0] == static_cast<int>(Gbc::INFLOW) && ((edge==1 && m_const_params.bc_values[4] == static_cast<int>(Gbc::WALL)) || (edge==2 && m_const_params.bc_values[5] == static_cast<int>(Gbc::WALL))))) && (m_const_params.data_location == DataLocation::FACE_X || m_const_params.data_location == DataLocation::FACE_Z))
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            else
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            break;
-                        case 3:
-                        case 4:
-                            if((m_const_params.bc_values[1] == static_cast<int>(Gbc::NUMBEACH) || (m_const_params.bc_values[1] == static_cast<int>(Gbc::OUTFLOW) && ((edge==3 && m_const_params.bc_values[4] == static_cast<int>(Gbc::WALL)) || (edge==4 && m_const_params.bc_values[5] == static_cast<int>(Gbc::WALL))))) && (m_const_params.data_location == DataLocation::FACE_X || m_const_params.data_location == DataLocation::FACE_Z))
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            else
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            break;
-                        case 0:
-                            if(is_corner_layer1(iv, dom))
-                                label = BoundaryConditionTypeLabel::NEUMANN;
-                            else
-                                label = BoundaryConditionTypeLabel::NOSLIP;
-                            break;
-                        default:
-                            label = BoundaryConditionTypeLabel::NEUMANN;
-                            break;
+                        if ((m_const_params.bc_values[0] == static_cast<int>(Gbc::WAVEGEN)
+                             && static_cast<BoundaryConditionTypeLabel>(bcr[bcomp+n].lo(0)) == BoundaryConditionTypeLabel::NONE)
+                         || (m_const_params.bc_values[0] == static_cast<int>(Gbc::INFLOW)
+                             && m_const_params.bc_values[z_side_idx] == static_cast<int>(Gbc::WALL)))
+                            label = BoundaryConditionTypeLabel::NOSLIP;
+                    }
+                    else // X_POS + Z edges
+                    {
+                        if (m_const_params.bc_values[1] == static_cast<int>(Gbc::NUMBEACH)
+                         || (m_const_params.bc_values[1] == static_cast<int>(Gbc::OUTFLOW)
+                             && m_const_params.bc_values[z_side_idx] == static_cast<int>(Gbc::WALL)))
+                            label = BoundaryConditionTypeLabel::NOSLIP;
                     }
                 }
+                else if (use_corner_logic)
+                {
+                    label = is_corner_layer1(iv, dom)
+                            ? BoundaryConditionTypeLabel::NEUMANN
+                            : BoundaryConditionTypeLabel::NOSLIP;
+                }
+                // else: NEUMANN already set above
 
-                apply_label(label, cs, dest, iv, interior, dcomp+n, geom);
+                apply_label(label, 0, dest, iv, interior, dcomp+n, geom);
             }
         }
 
