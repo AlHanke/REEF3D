@@ -32,21 +32,11 @@ void reinidisc_f::start(lexer *p, fdm*, ghostcell *pgc, field &f, field &L, int 
 
         L.setVal(0.0);
 
-        #if USE_AMREX
-        const int max_level = p->nlevs - 1;
-        #else
-        const int max_level = 0;
-        #endif
-
-        for(int lev = max_level; lev >= 0; --lev)
-        {
-            p->level = lev;
-            TILE_LOOP
-            IJKLOOP
-            PBASECHECK
-                L(i,j,k) = disc(p,f,is3D);
-        }
-        p->level = 0;
+        FIELDLOOP_INC(
+            L,
+            FIELD_CONST_INC(f),
+            L(i,j,k) = disc(p,f,is3D);
+        )
     }
 }
 
