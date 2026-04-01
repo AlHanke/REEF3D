@@ -477,15 +477,15 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
         auto& mf_lev = get_mf(p->level);
         if(p->level==0)
         {
+            mf_lev.FillBoundary(0, 1, p->amrex_geometry[p->level].periodicity());
+
             amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> bf(
                 amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params});
 
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> physbcf(
                 p->amrex_geometry[p->level], BCRecs[p->level], bf);
 
-            amrex::FillPatchSingleLevel(mf_lev, amrex::Real(p->simtime),
-                                        {&(mf_lev)}, {amrex::Real(p->simtime)},
-                                        0, 0, mf_lev.nComp(), p->amrex_geometry[p->level], physbcf, 0);
+            physbcf(mf_lev, 0, mf_lev.nComp(), mf_lev.nGrowVect(), amrex::Real(p->simtime), 0);
         }
         else
         {
