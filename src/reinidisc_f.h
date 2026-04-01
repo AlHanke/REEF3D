@@ -31,12 +31,12 @@ using namespace std;
 class reinidisc_f : public reinidisc, public ddweno_nug_sf
 {
 public:
-    reinidisc_f(lexer*);
+    reinidisc_f(lexer* p) : ddweno_nug_sf(p) {};
     virtual ~reinidisc_f() = default;
-    void start(lexer*, fdm*, ghostcell*, field&, field&, int) override;
+    void start(lexer*, fdm*, ghostcell*, field&, field&, int) noexcept override final;
 
 private:
-    template<typename GenericFieldConst> double disc(lexer*, const GenericFieldConst&, const bool);
+    template<typename GenericFieldConst> double disc(lexer*, const GenericFieldConst&, const bool) noexcept ;
 };
 
 #endif
