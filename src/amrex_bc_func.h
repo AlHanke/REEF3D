@@ -42,9 +42,9 @@ public:
                                         POTENTIAL = 8, DIRICHLET_ORTH_REFLECT = 11, DIRICHLET_PARA_REFLECT = 12,
                                         NEUMANN_X = 14, NEUMANN_HX = 41, NEUMANN_HY = 42, HEATBC = 61 };
     enum class DataLocation : unsigned int { CELL_CENTERED = 0, FACE_X = 1, FACE_Y = 2, FACE_Z = 3 };
-    enum class Gbc : int { INFLOW = 1, OUTFLOW = 2, SYMMETRY = 3, WAVEGEN = 6, NUMBEACH = 7, WALL = 21 };
+    enum Gbc : int { INFLOW = 1, OUTFLOW = 2, SYMMETRY = 3, WAVEGEN = 6, NUMBEACH = 7, WALL = 21 };
 private:
-    enum class Dir : int { X_NEG = 1, X_POS = 4, Y_NEG = 3, Y_POS = 2, Z_NEG = 5, Z_POS = 6 };
+    enum Dir : int { X_NEG = 1, X_POS = 4, Y_NEG = 3, Y_POS = 2, Z_NEG = 5, Z_POS = 6 };
 public:
     struct Field1BcDecision {
         struct Field1Params {
@@ -74,36 +74,36 @@ public:
             if (gcv == 50)
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            const bool is_parallel_wall = ((bc == static_cast<int>(Gbc::NUMBEACH) && !m_params.awa_label) || bc == static_cast<int>(Gbc::WALL));
+            const bool is_parallel_wall = ((bc == Gbc::NUMBEACH && !m_params.awa_label) || bc == Gbc::WALL);
             if (is_parallel_wall && is_cs_yz(cs) && matches_gcv(gcv, {1, 10, 114}))
                 return m_params.gclabel_u;
 
             if (is_parallel_wall && is_cs_yz(cs) && gcv == 110)
                 return BoundaryConditionTypeLabel::NOSLIP;
 
-            if (bc == static_cast<int>(Gbc::WALL) && gcv == 14)
+            if (bc == Gbc::WALL && gcv == 14)
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            if ((bc == static_cast<int>(Gbc::SYMMETRY) || bc == static_cast<int>(Gbc::WALL)) && is_cs_x(cs) && matches_gcv(gcv, {1, 10}))
+            if ((bc == Gbc::SYMMETRY || bc == Gbc::WALL) && is_cs_x(cs) && matches_gcv(gcv, {1, 10}))
                 return m_params.orth_label;
 
-            if (bc == static_cast<int>(Gbc::WAVEGEN) && is_cs_x(cs) && matches_gcv(gcv, {1, 7, 10}))
+            if (bc == Gbc::WAVEGEN && is_cs_x(cs) && matches_gcv(gcv, {1, 7, 10}))
                 return m_params.inflow_label;
 
-            if (bc == static_cast<int>(Gbc::WALL) && is_cs_x(cs) && gcv == 7)
+            if (bc == Gbc::WALL && is_cs_x(cs) && gcv == 7)
                 return BoundaryConditionTypeLabel::NOSLIP;
 
             if (matches_patch_bc(bc) && matches_gcv(gcv, {1, 7, 10}))
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            if (((bc == static_cast<int>(Gbc::OUTFLOW) && m_params.gclabel_outflow) || bc == static_cast<int>(Gbc::SYMMETRY))
+            if (((bc == Gbc::OUTFLOW && m_params.gclabel_outflow) || bc == Gbc::SYMMETRY)
                 && is_cs_yz(cs) && matches_gcv(gcv, {1, 10}))
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            if (bc == static_cast<int>(Gbc::OUTFLOW) && m_params.gclabel_outflow && is_cs_x(cs) && matches_gcv(gcv, {1, 10}))
+            if (bc == Gbc::OUTFLOW && m_params.gclabel_outflow && is_cs_x(cs) && matches_gcv(gcv, {1, 10}))
                 return m_params.outflow_label;
 
-            if (bc == static_cast<int>(Gbc::NUMBEACH) && m_params.gclabel_outflow && m_params.i10_enabled && is_cs_x(cs) && matches_gcv(gcv, {1, 10}))
+            if (bc == Gbc::NUMBEACH && m_params.gclabel_outflow && m_params.i10_enabled && is_cs_x(cs) && matches_gcv(gcv, {1, 10}))
                 return BoundaryConditionTypeLabel::NEUMANN;
 
             return BoundaryConditionTypeLabel::NONE;
@@ -113,14 +113,14 @@ public:
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool is_cs_yz(int cs) const
         {
-            return cs == static_cast<int>(Dir::Y_POS) || cs == static_cast<int>(Dir::Y_NEG)
-                || cs == static_cast<int>(Dir::Z_NEG) || cs == static_cast<int>(Dir::Z_POS);
+            return cs == Dir::Y_POS || cs == Dir::Y_NEG
+                || cs == Dir::Z_NEG || cs == Dir::Z_POS;
         }
 
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool is_cs_x(int cs) const
         {
-            return cs == static_cast<int>(Dir::X_NEG) || cs == static_cast<int>(Dir::X_POS);
+            return cs == Dir::X_NEG || cs == Dir::X_POS;
         }
 
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -168,38 +168,38 @@ public:
             if (gcv == 50)
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            const bool is_wavegen_numbeach_wall = (bc == static_cast<int>(Gbc::WAVEGEN) || bc == static_cast<int>(Gbc::NUMBEACH) || bc == static_cast<int>(Gbc::WALL));
+            const bool is_wavegen_numbeach_wall = (bc == Gbc::WAVEGEN || bc == Gbc::NUMBEACH || bc == Gbc::WALL);
             if (is_wavegen_numbeach_wall && is_cs_xz(cs) && matches_gcv(gcv, {11, 115}))
                 return m_params.gclabel_v;
 
             if (is_wavegen_numbeach_wall && is_cs_xz(cs) && gcv == 111)
                 return BoundaryConditionTypeLabel::NOSLIP;
 
-            if (bc == static_cast<int>(Gbc::WALL) && gcv == 15)
+            if (bc == Gbc::WALL && gcv == 15)
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            if (matches_any(bc, {static_cast<int>(Gbc::NUMBEACH), static_cast<int>(Gbc::WALL)}) && is_cs_y(cs) && gcv == 11)
+            if (matches_any(bc, {Gbc::NUMBEACH, Gbc::WALL}) && is_cs_y(cs) && gcv == 11)
                 return m_params.orth_label;
 
-            if (matches_any(bc, {static_cast<int>(Gbc::NUMBEACH), static_cast<int>(Gbc::WALL)}) && is_cs_y(cs) && gcv == 8)
+            if (matches_any(bc, {Gbc::NUMBEACH, Gbc::WALL}) && is_cs_y(cs) && gcv == 8)
                 return BoundaryConditionTypeLabel::NOSLIP;
 
-            if (bc == static_cast<int>(Gbc::WAVEGEN) && matches_gcv(gcv, {8, 11}))
+            if (bc == Gbc::WAVEGEN && matches_gcv(gcv, {8, 11}))
                 return m_params.inflow_label;
 
-            if (bc == static_cast<int>(Gbc::OUTFLOW) && m_params.gclabel_outflow && is_cs_xz(cs) && gcv == 11)
+            if (bc == Gbc::OUTFLOW && m_params.gclabel_outflow && is_cs_xz(cs) && gcv == 11)
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            if (bc == static_cast<int>(Gbc::OUTFLOW) && m_params.gclabel_outflow && is_cs_y(cs) && gcv == 11)
+            if (bc == Gbc::OUTFLOW && m_params.gclabel_outflow && is_cs_y(cs) && gcv == 11)
                 return m_params.outflow_label;
 
             if (matches_patch_bc(bc) && matches_gcv(gcv, {8, 11}))
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            if (bc == static_cast<int>(Gbc::SYMMETRY) && is_cs_xz(cs) && gcv == 11)
+            if (bc == Gbc::SYMMETRY && is_cs_xz(cs) && gcv == 11)
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            if (bc == static_cast<int>(Gbc::SYMMETRY) && is_cs_y(cs) && gcv == 11)
+            if (bc == Gbc::SYMMETRY && is_cs_y(cs) && gcv == 11)
                 return BoundaryConditionTypeLabel::DIRICHLET_ORTH;
 
             return BoundaryConditionTypeLabel::NONE;
@@ -209,19 +209,19 @@ public:
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool is_cs_x(int cs) const
         {
-            return cs == static_cast<int>(Dir::X_NEG) || cs == static_cast<int>(Dir::X_POS);
+            return cs == Dir::X_NEG || cs == Dir::X_POS;
         }
 
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool is_cs_y(int cs) const
         {
-            return cs == static_cast<int>(Dir::Y_POS) || cs == static_cast<int>(Dir::Y_NEG);
+            return cs == Dir::Y_POS || cs == Dir::Y_NEG;
         }
 
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool is_cs_xz(int cs) const
         {
-            return is_cs_x(cs) || cs == static_cast<int>(Dir::Z_NEG) || cs == static_cast<int>(Dir::Z_POS);
+            return is_cs_x(cs) || cs == Dir::Z_NEG || cs == Dir::Z_POS;
         }
 
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -279,39 +279,39 @@ public:
             if (gcv == 50)
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            const bool is_parallel_wall = ((bc == static_cast<int>(Gbc::NUMBEACH) && !m_params.awa_label) || bc == static_cast<int>(Gbc::WALL));
+            const bool is_parallel_wall = ((bc == Gbc::NUMBEACH && !m_params.awa_label) || bc == Gbc::WALL);
             if (is_parallel_wall && is_cs_xy(cs) && matches_gcv(gcv, {12, 116}))
                 return m_params.gclabel_w;
 
             if (is_parallel_wall && is_cs_xy(cs) && gcv == 112)
                 return BoundaryConditionTypeLabel::NOSLIP;
 
-            if (bc == static_cast<int>(Gbc::WALL) && gcv == 16)
+            if (bc == Gbc::WALL && gcv == 16)
                 return BoundaryConditionTypeLabel::NEUMANN;
 
             if (is_parallel_wall && is_cs_z(cs) && gcv == 9)
                 return BoundaryConditionTypeLabel::NOSLIP;
 
-            if (is_parallel_wall && matches_gcv(gcv, {12}) && (cs == static_cast<int>(Dir::Z_POS)
-                || (cs == static_cast<int>(Dir::Z_NEG) && m_params.A10 == 6)))
+            if (is_parallel_wall && matches_gcv(gcv, {12}) && (cs == Dir::Z_POS
+                || (cs == Dir::Z_NEG && m_params.A10 == 6)))
                 return m_params.orth_label;
 
-            if (bc == static_cast<int>(Gbc::WAVEGEN) && matches_gcv(gcv, {9, 12}))
+            if (bc == Gbc::WAVEGEN && matches_gcv(gcv, {9, 12}))
                 return m_params.inflow_label;
 
-            if (bc == static_cast<int>(Gbc::OUTFLOW) && m_params.gclabel_outflow && is_cs_xy(cs) && gcv == 12)
+            if (bc == Gbc::OUTFLOW && m_params.gclabel_outflow && is_cs_xy(cs) && gcv == 12)
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            if (bc == static_cast<int>(Gbc::OUTFLOW) && m_params.gclabel_outflow && is_cs_z(cs) && gcv == 12)
+            if (bc == Gbc::OUTFLOW && m_params.gclabel_outflow && is_cs_z(cs) && gcv == 12)
                 return m_params.outflow_label;
 
             if (matches_patch_bc(bc) && matches_gcv(gcv, {9, 12}))
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            if (bc == static_cast<int>(Gbc::SYMMETRY) && is_cs_xy(cs) && matches_gcv(gcv, {12, 19}))
+            if (bc == Gbc::SYMMETRY && is_cs_xy(cs) && matches_gcv(gcv, {12, 19}))
                 return BoundaryConditionTypeLabel::NEUMANN;
 
-            if (bc == static_cast<int>(Gbc::SYMMETRY) && is_cs_z(cs) && matches_gcv(gcv, {12, 19}))
+            if (bc == Gbc::SYMMETRY && is_cs_z(cs) && matches_gcv(gcv, {12, 19}))
                 return (m_params.A10 == 3 ? BoundaryConditionTypeLabel::NEUMANN : BoundaryConditionTypeLabel::NOSLIP);
 
             return BoundaryConditionTypeLabel::NONE;
@@ -321,14 +321,14 @@ public:
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool is_cs_xy(int cs) const
         {
-            return cs == static_cast<int>(Dir::X_NEG) || cs == static_cast<int>(Dir::X_POS)
-                || cs == static_cast<int>(Dir::Y_NEG) || cs == static_cast<int>(Dir::Y_POS);
+            return cs == Dir::X_NEG || cs == Dir::X_POS
+                || cs == Dir::Y_NEG || cs == Dir::Y_POS;
         }
 
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool is_cs_z(int cs) const
         {
-            return cs == static_cast<int>(Dir::Z_NEG) || cs == static_cast<int>(Dir::Z_POS);
+            return cs == Dir::Z_NEG || cs == Dir::Z_POS;
         }
 
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -387,22 +387,22 @@ public:
 
             if (gcv == 2)
             {
-                if (bc != 5 && bc != static_cast<int>(Gbc::WALL) && cs != static_cast<int>(Dir::Z_NEG))
+                if (bc != Gbc::WALL && cs != Dir::Z_NEG)
                     return BoundaryConditionTypeLabel::NEUMANN;
                 return BoundaryConditionTypeLabel::NONE;
             }
 
             if (gcv == 40)
             {
-                if ((bc == static_cast<int>(Gbc::OUTFLOW) && !m_params.pressout_label)
-                    || bc == static_cast<int>(Gbc::SYMMETRY)
-                    || (bc == static_cast<int>(Gbc::WAVEGEN) && !m_params.pressin_label)
-                    || (bc == static_cast<int>(Gbc::NUMBEACH) && !m_params.awa_label)
-                    || bc == static_cast<int>(Gbc::WALL)
+                if ((bc == Gbc::OUTFLOW && !m_params.pressout_label)
+                    || bc == Gbc::SYMMETRY
+                    || (bc == Gbc::WAVEGEN && !m_params.pressin_label)
+                    || (bc == Gbc::NUMBEACH && !m_params.awa_label)
+                    || bc == Gbc::WALL
                     || matches_patch_bc(bc))
                     return BoundaryConditionTypeLabel::NEUMANN;
 
-                if ((bc == static_cast<int>(Gbc::INFLOW) && !m_params.pressin_label)
+                if ((bc == Gbc::INFLOW && !m_params.pressin_label)
                     || matches_patch_bc(bc))
                     return m_params.gclabel_press_in_neumann ? BoundaryConditionTypeLabel::NEUMANN : BoundaryConditionTypeLabel::NONE;
 
@@ -411,39 +411,39 @@ public:
 
             if (gcv == 51 || gcv == 52 || gcv == 53 || gcv == 54)
             {
-                if ((bc == static_cast<int>(Gbc::SYMMETRY) || bc == static_cast<int>(Gbc::NUMBEACH) || bc == static_cast<int>(Gbc::WALL))
+                if ((bc == Gbc::SYMMETRY || bc == Gbc::NUMBEACH || bc == Gbc::WALL)
                     || matches_patch_bc(bc))
                     return BoundaryConditionTypeLabel::NEUMANN;
 
-                if (((bc == static_cast<int>(Gbc::INFLOW) || bc == static_cast<int>(Gbc::WAVEGEN))
+                if (((bc == Gbc::INFLOW || bc == Gbc::WAVEGEN)
                     || matches_patch_bc(bc))
                     && matches_gcv(gcv, {52, 54}))
                     return BoundaryConditionTypeLabel::NEUMANN;
 
-                if ((bc == static_cast<int>(Gbc::OUTFLOW))
+                if ((bc == Gbc::OUTFLOW)
                     || matches_patch_bc(bc))
                 {
                     if (gcv == 51 || (gcv == 52 && m_params.B77 == 1) || gcv == 54)
                         return BoundaryConditionTypeLabel::NEUMANN;
                 }
 
-                if (bc == static_cast<int>(Gbc::WAVEGEN) && matches_gcv(gcv, {51, 53}))
+                if (bc == Gbc::WAVEGEN && matches_gcv(gcv, {51, 53}))
                     return m_params.gclabel_lsm_in_neumann ? BoundaryConditionTypeLabel::NEUMANN : BoundaryConditionTypeLabel::NONE;
 
                 return BoundaryConditionTypeLabel::NONE;
             }
 
-            const bool is_symm = (bc == static_cast<int>(Gbc::SYMMETRY));
-            const bool is_wavegen = (bc == static_cast<int>(Gbc::WAVEGEN));
-            const bool is_numbeach = (bc == static_cast<int>(Gbc::NUMBEACH));
-            const bool is_inflow = (bc == static_cast<int>(Gbc::INFLOW));
-            const bool is_outflow = (bc == static_cast<int>(Gbc::OUTFLOW));
-            const bool is_wall = (bc == static_cast<int>(Gbc::WALL));
+            const bool is_symm = (bc == Gbc::SYMMETRY);
+            const bool is_wavegen = (bc == Gbc::WAVEGEN);
+            const bool is_numbeach = (bc == Gbc::NUMBEACH);
+            const bool is_inflow = (bc == Gbc::INFLOW);
+            const bool is_outflow = (bc == Gbc::OUTFLOW);
+            const bool is_wall = (bc == Gbc::WALL);
 
             switch (gcv)
             {
                 case 20:
-                    if (is_symm && cs == static_cast<int>(Dir::Z_POS))
+                    if (is_symm && cs == Dir::Z_POS)
                         return BoundaryConditionTypeLabel::NOSLIP;
                     if (is_wavegen || is_numbeach)
                         return BoundaryConditionTypeLabel::NOSLIP;
@@ -469,19 +469,19 @@ public:
                         return BoundaryConditionTypeLabel::POTENTIAL;
                     return BoundaryConditionTypeLabel::NONE;
                 case 250:
-                    if ((is_numbeach || is_wall) && cs != static_cast<int>(Dir::Z_NEG))
+                    if ((is_numbeach || is_wall) && cs != Dir::Z_NEG)
                         return BoundaryConditionTypeLabel::NEUMANN;
                     if (is_inflow || is_outflow || is_wavegen || is_numbeach)
                         return BoundaryConditionTypeLabel::NEUMANN;
-                    if (is_symm && cs != static_cast<int>(Dir::Z_POS))
+                    if (is_symm && cs != Dir::Z_POS)
                         return BoundaryConditionTypeLabel::NEUMANN;
                     return BoundaryConditionTypeLabel::NONE;
                 case 101:
                     if (is_wall)
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == static_cast<int>(Dir::X_NEG) || cs == static_cast<int>(Dir::X_POS)))
+                    if (is_symm && (cs == Dir::X_NEG || cs == Dir::X_POS))
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == static_cast<int>(Dir::Y_POS) || cs == static_cast<int>(Dir::Y_NEG) || cs == static_cast<int>(Dir::Z_NEG) || cs == static_cast<int>(Dir::Z_POS)))
+                    if (is_symm && (cs == Dir::Y_POS || cs == Dir::Y_NEG || cs == Dir::Z_NEG || cs == Dir::Z_POS))
                         return BoundaryConditionTypeLabel::NEUMANN;
                     if (is_inflow || is_outflow || is_wavegen || is_numbeach)
                         return BoundaryConditionTypeLabel::NEUMANN;
@@ -489,9 +489,9 @@ public:
                 case 102:
                     if (is_wall)
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == static_cast<int>(Dir::Y_POS) || cs == static_cast<int>(Dir::Y_NEG)))
+                    if (is_symm && (cs == Dir::Y_POS || cs == Dir::Y_NEG))
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == static_cast<int>(Dir::X_NEG) || cs == static_cast<int>(Dir::X_POS) || cs == static_cast<int>(Dir::Z_NEG) || cs == static_cast<int>(Dir::Z_POS)))
+                    if (is_symm && (cs == Dir::X_NEG || cs == Dir::X_POS || cs == Dir::Z_NEG || cs == Dir::Z_POS))
                         return BoundaryConditionTypeLabel::NEUMANN;
                     if (is_inflow || is_outflow || is_wavegen || is_numbeach)
                         return BoundaryConditionTypeLabel::NEUMANN;
@@ -499,9 +499,9 @@ public:
                 case 103:
                     if (is_wall)
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == static_cast<int>(Dir::Z_NEG) || cs == static_cast<int>(Dir::Z_POS)))
+                    if (is_symm && (cs == Dir::Z_NEG || cs == Dir::Z_POS))
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == static_cast<int>(Dir::X_NEG) || cs == static_cast<int>(Dir::Y_POS) || cs == static_cast<int>(Dir::Y_NEG) || cs == static_cast<int>(Dir::X_POS)))
+                    if (is_symm && (cs == Dir::X_NEG || cs == Dir::Y_POS || cs == Dir::Y_NEG || cs == Dir::X_POS))
                         return BoundaryConditionTypeLabel::NEUMANN;
                     if (is_inflow || is_outflow || is_wavegen || is_numbeach)
                         return BoundaryConditionTypeLabel::NEUMANN;
@@ -541,17 +541,17 @@ public:
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool heat_match(int cs) const
         {
-            if (m_params.H61 == 1 && cs == static_cast<int>(Dir::X_NEG))
+            if (m_params.H61 == 1 && cs == Dir::X_NEG)
                 return true;
-            if (m_params.H62 == 1 && cs == static_cast<int>(Dir::Y_POS))
+            if (m_params.H62 == 1 && cs == Dir::Y_POS)
                 return true;
-            if (m_params.H63 == 1 && cs == static_cast<int>(Dir::Y_NEG))
+            if (m_params.H63 == 1 && cs == Dir::Y_NEG)
                 return true;
-            if (m_params.H64 == 1 && cs == static_cast<int>(Dir::X_POS))
+            if (m_params.H64 == 1 && cs == Dir::X_POS)
                 return true;
-            if (m_params.H65 == 1 && cs == static_cast<int>(Dir::Z_NEG))
+            if (m_params.H65 == 1 && cs == Dir::Z_NEG)
                 return true;
-            if (m_params.H66 == 1 && cs == static_cast<int>(Dir::Z_POS))
+            if (m_params.H66 == 1 && cs == Dir::Z_POS)
                 return true;
             return false;
         }
@@ -640,12 +640,12 @@ public:
                 // Pure face cell.  Encode face as an index matching face_labels:
                 //   0=Z_NEG  1=Z_POS  2=X_NEG  3=X_POS  4=Y_NEG  5=Y_POS
                 int face_idx, cs;
-                if      (out_z == -1) { face_idx = 0; cs = static_cast<int>(Dir::Z_NEG); }
-                else if (out_z ==  1) { face_idx = 1; cs = static_cast<int>(Dir::Z_POS); }
-                else if (out_x == -1) { face_idx = 2; cs = static_cast<int>(Dir::X_NEG); }
-                else if (out_x ==  1) { face_idx = 3; cs = static_cast<int>(Dir::X_POS); }
-                else if (out_y == -1) { face_idx = 4; cs = static_cast<int>(Dir::Y_NEG); }
-                else                  { face_idx = 5; cs = static_cast<int>(Dir::Y_POS); }
+                if      (out_z == -1) { face_idx = 0; cs = Dir::Z_NEG; }
+                else if (out_z ==  1) { face_idx = 1; cs = Dir::Z_POS; }
+                else if (out_x == -1) { face_idx = 2; cs = Dir::X_NEG; }
+                else if (out_x ==  1) { face_idx = 3; cs = Dir::X_POS; }
+                else if (out_y == -1) { face_idx = 4; cs = Dir::Y_NEG; }
+                else                  { face_idx = 5; cs = Dir::Y_POS; }
 
                 // Path B: single-component fields (the common case) read their
                 // label from the inline face_labels array stored in the functor,
@@ -693,20 +693,20 @@ public:
 
                 if (is_xz_edge && is_face_xz)
                 {
-                    const int z_side_idx = (out_z == -1) ? 4 : 5; // 4=Z_NEG, 5=Z_POS
+                    const int z_side_idx = (out_z == -1) ? Dir::Z_NEG-1 : Dir::Z_POS-1; // 4=Z_NEG, 5=Z_POS
                     if (out_x == -1) // X_NEG + Z edges
                     {
-                        if ((m_const_params.bc_values[0] == static_cast<int>(Gbc::WAVEGEN)
+                        if ((m_const_params.bc_values[0] == Gbc::WAVEGEN
                              && static_cast<BoundaryConditionTypeLabel>(bcr[bcomp+n].lo(0)) == BoundaryConditionTypeLabel::NONE)
-                         || (m_const_params.bc_values[0] == static_cast<int>(Gbc::INFLOW)
-                             && m_const_params.bc_values[z_side_idx] == static_cast<int>(Gbc::WALL)))
+                         || (m_const_params.bc_values[0] == Gbc::INFLOW
+                             && m_const_params.bc_values[z_side_idx] == Gbc::WALL))
                             label = BoundaryConditionTypeLabel::NOSLIP;
                     }
                     else // X_POS + Z edges
                     {
-                        if (m_const_params.bc_values[1] == static_cast<int>(Gbc::NUMBEACH)
-                         || (m_const_params.bc_values[1] == static_cast<int>(Gbc::OUTFLOW)
-                             && m_const_params.bc_values[z_side_idx] == static_cast<int>(Gbc::WALL)))
+                        if (m_const_params.bc_values[1] == Gbc::NUMBEACH
+                         || (m_const_params.bc_values[1] == Gbc::OUTFLOW
+                             && m_const_params.bc_values[z_side_idx] == Gbc::WALL))
                             label = BoundaryConditionTypeLabel::NOSLIP;
                     }
                 }
@@ -745,37 +745,37 @@ public:
                     dest(iv, comp) = amrex::Real(0);
                     break;
                 case BoundaryConditionTypeLabel::OUTFLOWBC:
-                    if(cs==static_cast<int>(Dir::X_NEG))
+                    if(cs==Dir::X_NEG)
                         dest(iv, comp) = dest(interior, comp) - (m_params.dt/geom.CellSize(0))*m_params.Uo*(dest(interior+amrex::IntVect(1,0,0), comp)-dest(interior, comp));
-                    else if(cs==static_cast<int>(Dir::X_POS))
+                    else if(cs==Dir::X_POS)
                         dest(iv, comp) = MAX(amrex::Real(0), dest(interior, comp) - (m_params.dt/geom.CellSize(0))*m_params.Uo*(dest(interior, comp)-dest(interior+amrex::IntVect(-1,0,0), comp)));
-                    else if(cs==static_cast<int>(Dir::Y_NEG))
+                    else if(cs==Dir::Y_NEG)
                         dest(iv, comp) = dest(interior, comp) - (m_params.dt/geom.CellSize(1))*m_params.Uo*(dest(interior+amrex::IntVect(0,1,0), comp)-dest(interior, comp));
-                    else if(cs==static_cast<int>(Dir::Y_POS))
+                    else if(cs==Dir::Y_POS)
                         dest(iv, comp) = dest(interior, comp) - (m_params.dt/geom.CellSize(1))*m_params.Uo*(dest(interior, comp)-dest(interior+amrex::IntVect(0,0,-1), comp));
-                    else if(cs==static_cast<int>(Dir::Z_NEG))
+                    else if(cs==Dir::Z_NEG)
                         dest(iv, comp) = dest(interior, comp) - (m_params.dt/geom.CellSize(2))*m_params.Uo*(dest(interior+amrex::IntVect(0,0,1), comp)-dest(interior, comp));
-                    else if(cs==static_cast<int>(Dir::Z_POS))
+                    else if(cs==Dir::Z_POS)
                         dest(iv, comp) = dest(interior, comp) - (m_params.dt/geom.CellSize(2))*m_params.Uo*(dest(interior, comp)-dest(interior+amrex::IntVect(0,0,-1), comp));
                     break;
                 case BoundaryConditionTypeLabel::POTENTIAL:
-                    if(cs==static_cast<int>(Dir::X_NEG))
+                    if(cs==Dir::X_NEG)
                         dest(iv, comp) = m_params.Ui * geom.CellSize(0) + dest(interior, comp);
-                    else if(cs==static_cast<int>(Dir::X_POS))
+                    else if(cs==Dir::X_POS)
                         dest(iv, comp) = m_params.Uo * geom.CellSize(0) + dest(interior, comp);
                     break;
                 case BoundaryConditionTypeLabel::HEATBC:
-                    if(cs==static_cast<int>(Dir::X_NEG))
+                    if(cs==Dir::X_NEG)
                         dest(iv, comp) = m_const_params.heat_values[0];
-                    else if(cs==static_cast<int>(Dir::X_POS))
+                    else if(cs==Dir::X_POS)
                         dest(iv, comp) = m_const_params.heat_values[1];
-                    else if(cs==static_cast<int>(Dir::Y_NEG))
+                    else if(cs==Dir::Y_NEG)
                         dest(iv, comp) = m_const_params.heat_values[2];
-                    else if(cs==static_cast<int>(Dir::Y_POS))
+                    else if(cs==Dir::Y_POS)
                         dest(iv, comp) = m_const_params.heat_values[3];
-                    else if(cs==static_cast<int>(Dir::Z_NEG))
+                    else if(cs==Dir::Z_NEG)
                         dest(iv, comp) = m_const_params.heat_values[4];
-                    else if(cs==static_cast<int>(Dir::Z_POS))
+                    else if(cs==Dir::Z_POS)
                         dest(iv, comp) = m_const_params.heat_values[5];
                     break;
             }
