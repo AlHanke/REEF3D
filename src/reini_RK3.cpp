@@ -99,56 +99,40 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
     pflow->fsfrkout(p,a,pgc,frk1);
     pflow->fsfrkout(p,a,pgc,frk2);
 
-    #if USE_AMREX
-    const int max_level = p->nlevs - 1;
-    #else
-    const int max_level = 0;
-    #endif
-
     for(int q=0;q<reiniter;++q)
     {
         // Step 1
         prdisc->start(p,a,pgc,f,a->L,4);
 
-        for(int lev=max_level; lev>=0; --lev)
-        {
-            p->level = lev;
-            TILE_LOOP
-            IJKLOOP
-            PBASECHECK
-                frk1(i,j,k) = f(i,j,k) + dt(i,j,k)*a->L(i,j,k);
-        }
-        p->level = 0;
+        FIELDLOOP(
+            frk1,
+            FIELD_CONST(f); FIELD_CONST(dt); FIELD_CONST_MEMBER(a, L),
+            frk1(i,j,k) = f(i,j,k) + dt(i,j,k)*member_L(i,j,k);
+        )
+
+
 
         pgc->start4(p,frk1,gcval);
 
         // Step 2
         prdisc->start(p,a,pgc,frk1,a->L,4);
 
-        for(int lev=max_level; lev>=0; --lev)
-        {
-            p->level = lev;
-            TILE_LOOP
-            IJKLOOP
-            PBASECHECK
-                frk2(i,j,k) = 0.75*f(i,j,k) + 0.25*frk1(i,j,k) + 0.25*dt(i,j,k)*a->L(i,j,k);
-        }
-        p->level = 0;
+        FIELDLOOP(
+            frk2,
+            FIELD_CONST(f); FIELD_CONST(frk1); FIELD_CONST(dt); FIELD_CONST_MEMBER(a, L),
+            frk2(i,j,k) = 0.75*f(i,j,k) + 0.25*frk1(i,j,k) + 0.25*dt(i,j,k)*member_L(i,j,k);
+        )
 
         pgc->start4(p,frk2,gcval);
 
         // Step 3
         prdisc->start(p,a,pgc,frk2,a->L,4);
 
-        for(int lev=max_level; lev>=0; --lev)
-        {
-            p->level = lev;
-            TILE_LOOP
-            IJKLOOP
-            PBASECHECK
-                f(i,j,k) = (1.0/3.0)*f(i,j,k) + (2.0/3.0)*frk2(i,j,k) + (2.0/3.0)*dt(i,j,k)*a->L(i,j,k);
-        }
-        p->level = 0;
+        FIELDLOOP(
+            f,
+            FIELD_CONST(frk2); FIELD_CONST(dt); FIELD_CONST_MEMBER(a, L),
+            f(i,j,k) = (1.0/3.0)*f(i,j,k) + (2.0/3.0)*frk2(i,j,k) + (2.0/3.0)*dt(i,j,k)*member_L(i,j,k);
+        )
 
         pgc->start4(p,f,gcval);
     }
