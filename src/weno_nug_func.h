@@ -45,7 +45,7 @@ public:
 
     // IS ----
     // x
-    inline void is_min_x()
+    inline void is_min_x() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -58,7 +58,7 @@ public:
         is2x = isfx[IP][uf][1][0]*dq23*dq23 + isfx[IP][uf][1][1]*(dq43)*(dq23) + isfx[IP][uf][1][2]*dq43*dq43;
         is3x = isfx[IP][uf][2][0]*dq12*dq12 + isfx[IP][uf][2][1]*(dq32)*(dq12) + isfx[IP][uf][2][2]*dq32*dq32;
     }
-    inline void is_max_x()
+    inline void is_max_x() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -73,7 +73,7 @@ public:
     }
 
     // y
-    inline void is_min_y()
+    inline void is_min_y() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -86,7 +86,7 @@ public:
         is2y = isfy[JP][vf][1][0]*dq23*dq23 + isfy[JP][vf][1][1]*(dq43)*(dq23) + isfy[JP][vf][1][2]*dq43*dq43;
         is3y = isfy[JP][vf][2][0]*dq12*dq12 + isfy[JP][vf][2][1]*(dq32)*(dq12) + isfy[JP][vf][2][2]*dq32*dq32;
     }
-    inline void is_max_y()
+    inline void is_max_y() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -101,7 +101,7 @@ public:
     }
 
     // z
-    inline void is_min_z()
+    inline void is_min_z() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -114,7 +114,7 @@ public:
         is2z = isfz[KP][wf][1][0]*dq23*dq23 + isfz[KP][wf][1][1]*(dq43)*(dq23) + isfz[KP][wf][1][2]*dq43*dq43;
         is3z = isfz[KP][wf][2][0]*dq12*dq12 + isfz[KP][wf][2][1]*(dq32)*(dq12) + isfz[KP][wf][2][2]*dq32*dq32;
     }
-    inline void is_max_z()
+    inline void is_max_z() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -130,80 +130,101 @@ public:
 
     // Weights ----
     // x
-    inline void weight_min_x()
+    inline void weight_min_x() noexcept
     {
         const double is1x_psi = is1x + psi;
         const double is2x_psi = is2x + psi;
         const double is3x_psi = is3x + psi;
 
-        w1x = cfx[IP][uf][0]/(epsilon + (is1x_psi*is1x_psi)*(cfx[IP][uf][0]/(is1x_psi*is1x_psi) + cfx[IP][uf][1]/(is2x_psi*is2x_psi) + cfx[IP][uf][2]/(is3x_psi*is3x_psi)));
-        w2x = cfx[IP][uf][1]/(epsilon + (is2x_psi*is2x_psi)*(cfx[IP][uf][0]/(is1x_psi*is1x_psi) + cfx[IP][uf][1]/(is2x_psi*is2x_psi) + cfx[IP][uf][2]/(is3x_psi*is3x_psi)));
-        w3x = cfx[IP][uf][2]/(epsilon + (is3x_psi*is3x_psi)*(cfx[IP][uf][0]/(is1x_psi*is1x_psi) + cfx[IP][uf][1]/(is2x_psi*is2x_psi) + cfx[IP][uf][2]/(is3x_psi*is3x_psi)));
+        const double a1x = cfx[IP][uf][0]/(is1x_psi*is1x_psi);
+        const double a2x = cfx[IP][uf][1]/(is2x_psi*is2x_psi);
+        const double a3x = cfx[IP][uf][2]/(is3x_psi*is3x_psi);
+        const double sumx = a1x + a2x + a3x;
+        w1x = cfx[IP][uf][0]/(epsilon + is1x_psi*is1x_psi*sumx);
+        w2x = cfx[IP][uf][1]/(epsilon + is2x_psi*is2x_psi*sumx);
+        w3x = cfx[IP][uf][2]/(epsilon + is3x_psi*is3x_psi*sumx);
     }
-    inline void weight_max_x()
+    inline void weight_max_x() noexcept
     {
         const double is1x_psi = is1x + psi;
         const double is2x_psi = is2x + psi;
         const double is3x_psi = is3x + psi;
 
-        w1x = cfx[IP][uf][3]/(epsilon + (is1x_psi*is1x_psi)*(cfx[IP][uf][3]/(is1x_psi*is1x_psi) + cfx[IP][uf][4]/(is2x_psi*is2x_psi) + cfx[IP][uf][5]/(is3x_psi*is3x_psi)));
-        w2x = cfx[IP][uf][4]/(epsilon + (is2x_psi*is2x_psi)*(cfx[IP][uf][3]/(is1x_psi*is1x_psi) + cfx[IP][uf][4]/(is2x_psi*is2x_psi) + cfx[IP][uf][5]/(is3x_psi*is3x_psi)));
-        w3x = cfx[IP][uf][5]/(epsilon + (is3x_psi*is3x_psi)*(cfx[IP][uf][3]/(is1x_psi*is1x_psi) + cfx[IP][uf][4]/(is2x_psi*is2x_psi) + cfx[IP][uf][5]/(is3x_psi*is3x_psi)));
+        const double a1x = cfx[IP][uf][3]/(is1x_psi*is1x_psi);
+        const double a2x = cfx[IP][uf][4]/(is2x_psi*is2x_psi);
+        const double a3x = cfx[IP][uf][5]/(is3x_psi*is3x_psi);
+        const double sumx = a1x + a2x + a3x;
+        w1x = cfx[IP][uf][3]/(epsilon + is1x_psi*is1x_psi*sumx);
+        w2x = cfx[IP][uf][4]/(epsilon + is2x_psi*is2x_psi*sumx);
+        w3x = cfx[IP][uf][5]/(epsilon + is3x_psi*is3x_psi*sumx);
     }
 
     // y
-    inline void weight_min_y()
+    inline void weight_min_y() noexcept
     {
         const double is1y_psi = is1y + psi;
         const double is2y_psi = is2y + psi;
         const double is3y_psi = is3y + psi;
 
-        w1y = cfy[JP][vf][0]/(epsilon + (is1y_psi*is1y_psi)*(cfy[JP][vf][0]/(is1y_psi*is1y_psi) + cfy[JP][vf][1]/(is2y_psi*is2y_psi) + cfy[JP][vf][2]/(is3y_psi*is3y_psi)));
-        w2y = cfy[JP][vf][1]/(epsilon + (is2y_psi*is2y_psi)*(cfy[JP][vf][0]/(is1y_psi*is1y_psi) + cfy[JP][vf][1]/(is2y_psi*is2y_psi) + cfy[JP][vf][2]/(is3y_psi*is3y_psi)));
-        w3y = cfy[JP][vf][2]/(epsilon + (is3y_psi*is3y_psi)*(cfy[JP][vf][0]/(is1y_psi*is1y_psi) + cfy[JP][vf][1]/(is2y_psi*is2y_psi) + cfy[JP][vf][2]/(is3y_psi*is3y_psi)));
+        const double a1y = cfy[JP][vf][0]/(is1y_psi*is1y_psi);
+        const double a2y = cfy[JP][vf][1]/(is2y_psi*is2y_psi);
+        const double a3y = cfy[JP][vf][2]/(is3y_psi*is3y_psi);
+        const double sumy = a1y + a2y + a3y;
+        w1y = cfy[JP][vf][0]/(epsilon + is1y_psi*is1y_psi*sumy);
+        w2y = cfy[JP][vf][1]/(epsilon + is2y_psi*is2y_psi*sumy);
+        w3y = cfy[JP][vf][2]/(epsilon + is3y_psi*is3y_psi*sumy);
     }
-    inline void weight_max_y()
+    inline void weight_max_y() noexcept
     {
         const double is1y_psi = is1y + psi;
         const double is2y_psi = is2y + psi;
         const double is3y_psi = is3y + psi;
 
-        w1y = cfy[JP][vf][3]/(epsilon + (is1y_psi*is1y_psi)*(cfy[JP][vf][3]/(is1y_psi*is1y_psi) + cfy[JP][vf][4]/(is2y_psi*is2y_psi) + cfy[JP][vf][5]/(is3y_psi*is3y_psi)));
-        w2y = cfy[JP][vf][4]/(epsilon + (is2y_psi*is2y_psi)*(cfy[JP][vf][3]/(is1y_psi*is1y_psi) + cfy[JP][vf][4]/(is2y_psi*is2y_psi) + cfy[JP][vf][5]/(is3y_psi*is3y_psi)));
-        w3y = cfy[JP][vf][5]/(epsilon + (is3y_psi*is3y_psi)*(cfy[JP][vf][3]/(is1y_psi*is1y_psi) + cfy[JP][vf][4]/(is2y_psi*is2y_psi) + cfy[JP][vf][5]/(is3y_psi*is3y_psi)));
+        const double a1y = cfy[JP][vf][3]/(is1y_psi*is1y_psi);
+        const double a2y = cfy[JP][vf][4]/(is2y_psi*is2y_psi);
+        const double a3y = cfy[JP][vf][5]/(is3y_psi*is3y_psi);
+        const double sumy = a1y + a2y + a3y;
+        w1y = cfy[JP][vf][3]/(epsilon + is1y_psi*is1y_psi*sumy);
+        w2y = cfy[JP][vf][4]/(epsilon + is2y_psi*is2y_psi*sumy);
+        w3y = cfy[JP][vf][5]/(epsilon + is3y_psi*is3y_psi*sumy);
     }
 
     // z
-    inline void weight_min_z()
+    inline void weight_min_z() noexcept
     {
         const double is1z_psi = is1z + psi;
         const double is2z_psi = is2z + psi;
         const double is3z_psi = is3z + psi;
 
-        w1z = cfz[KP][wf][0]/(epsilon + (is1z_psi*is1z_psi)*(cfz[KP][wf][0]/(is1z_psi*is1z_psi) + cfz[KP][wf][1]/(is2z_psi*is2z_psi) + cfz[KP][wf][2]/(is3z_psi*is3z_psi)));
-        w2z = cfz[KP][wf][1]/(epsilon + (is2z_psi*is2z_psi)*(cfz[KP][wf][0]/(is1z_psi*is1z_psi) + cfz[KP][wf][1]/(is2z_psi*is2z_psi) + cfz[KP][wf][2]/(is3z_psi*is3z_psi)));
-        w3z = cfz[KP][wf][2]/(epsilon + (is3z_psi*is3z_psi)*(cfz[KP][wf][0]/(is1z_psi*is1z_psi) + cfz[KP][wf][1]/(is2z_psi*is2z_psi) + cfz[KP][wf][2]/(is3z_psi*is3z_psi)));
+        const double a1z = cfz[KP][wf][0]/(is1z_psi*is1z_psi);
+        const double a2z = cfz[KP][wf][1]/(is2z_psi*is2z_psi);
+        const double a3z = cfz[KP][wf][2]/(is3z_psi*is3z_psi);
+        const double sumz = a1z + a2z + a3z;
+        w1z = cfz[KP][wf][0]/(epsilon + is1z_psi*is1z_psi*sumz);
+        w2z = cfz[KP][wf][1]/(epsilon + is2z_psi*is2z_psi*sumz);
+        w3z = cfz[KP][wf][2]/(epsilon + is3z_psi*is3z_psi*sumz);
     }
-    inline void weight_max_z()
+    inline void weight_max_z() noexcept
     {
         const double is1z_psi = is1z + psi;
         const double is2z_psi = is2z + psi;
         const double is3z_psi = is3z + psi;
 
-        w1z = cfz[KP][wf][3]/(epsilon + (is1z_psi*is1z_psi)*(cfz[KP][wf][3]/(is1z_psi*is1z_psi) + cfz[KP][wf][4]/(is2z_psi*is2z_psi) + cfz[KP][wf][5]/(is3z_psi*is3z_psi)));
-        w2z = cfz[KP][wf][4]/(epsilon + (is2z_psi*is2z_psi)*(cfz[KP][wf][3]/(is1z_psi*is1z_psi) + cfz[KP][wf][4]/(is2z_psi*is2z_psi) + cfz[KP][wf][5]/(is3z_psi*is3z_psi)));
-        w3z = cfz[KP][wf][5]/(epsilon + (is3z_psi*is3z_psi)*(cfz[KP][wf][3]/(is1z_psi*is1z_psi) + cfz[KP][wf][4]/(is2z_psi*is2z_psi) + cfz[KP][wf][5]/(is3z_psi*is3z_psi)));
+        const double a1z = cfz[KP][wf][3]/(is1z_psi*is1z_psi);
+        const double a2z = cfz[KP][wf][4]/(is2z_psi*is2z_psi);
+        const double a3z = cfz[KP][wf][5]/(is3z_psi*is3z_psi);
+        const double sumz = a1z + a2z + a3z;
+        w1z = cfz[KP][wf][3]/(epsilon + is1z_psi*is1z_psi*sumz);
+        w2z = cfz[KP][wf][4]/(epsilon + is2z_psi*is2z_psi*sumz);
+        w3z = cfz[KP][wf][5]/(epsilon + is3z_psi*is3z_psi*sumz);
     }
 
     static double ****qfx,****qfy,****qfz;
     static double ***cfx,***cfy,***cfz;
     static double ****isfx,****isfy,****isfz;
 
-    static bool iniflag;
-
     double q1,q2,q3,q4,q5;
 
-    const double epsilon,psi;
     double is1x,is2x,is3x;
     double is1y,is2y,is3y;
     double is1z,is2z,is3z;
@@ -310,7 +331,10 @@ protected:
         q5 = (f(i,j+3)-f(i,j+2))/p->DYP[JP2];
     }
 
+    static constexpr double psi = 1.0e-6;
 private:
+    static constexpr double epsilon = 0.0;
+    static bool iniflag;
     lexer *p;
 };
 
