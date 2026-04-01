@@ -24,11 +24,9 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"field.h"
 
-reinidisc_f::reinidisc_f(lexer *p) : ddweno_nug_sf(p)
-{
-}
+reinidisc_f::reinidisc_f(lexer *p) : ddweno_nug_sf(p) {}
 
-void reinidisc_f::start(lexer *p, fdm*, ghostcell *pgc, field &f, field &L, int ipol)
+void reinidisc_f::start(lexer *p, fdm*, ghostcell*, field &f, field &L, int ipol) noexcept
 {
     if(ipol==4 || ipol==5)
     {
@@ -55,58 +53,52 @@ void reinidisc_f::start(lexer *p, fdm*, ghostcell *pgc, field &f, field &L, int 
 }
 
 template<typename GenericFieldConst>
-inline double reinidisc_f::disc(lexer *p, const GenericFieldConst &f, const bool is3D)
+inline double reinidisc_f::disc(lexer *p, const GenericFieldConst &f, const bool is3D) noexcept
 {
     double dx = 0.0;
     double dy = 0.0;
     double dz = 0.0;
     const double lsv = f(i,j,k);
     const double lsv2 = lsv*lsv;
-    const double lsSig = (fabs(lsv) < 1.0e-8) ? 1.0 : lsv/sqrt(lsv2);
+    const double lsSig = (fabs(lsv) < 1.0e-8) ? 1.0 : std::copysign(1.0, lsv);
 
 // x
     const double xmin = (lsv-f(i-1,j,k))/p->DXP[IM1];
     const double xplus = (f(i+1,j,k)-lsv)/p->DXP[IP];
+    const double xmin_s = xmin * lsSig;
+    const double xplus_s = xplus * lsSig;
 
-    if(xmin*lsSig>0.0 && xplus*lsSig>-xmin*lsSig)
-    dx = ddwenox(f,1.0);
-    if(xplus*lsSig<0.0 && xmin*lsSig<-xplus*lsSig)
-    dx = ddwenox(f,-1.0);
-    if(xplus*lsSig>0.0 && xmin*lsSig<0.0)
-    dx = 0.0;
+    if     (xmin_s>0.0 && xplus_s>-xmin_s) dx = ddwenox(f,1.0);
+    else if(xplus_s<0.0 && xmin_s<-xplus_s) dx = ddwenox(f,-1.0);
 
 // y
     if(is3D)
     {
         const double ymin = (lsv-f(i,j-1,k))/p->DYP[JM1];
         const double yplus = (f(i,j+1,k)-lsv)/p->DYP[JP];
+        const double ymin_s = ymin * lsSig;
+        const double yplus_s = yplus * lsSig;
 
-        if(ymin*lsSig>0.0 && yplus*lsSig>-ymin*lsSig)
-        dy = ddwenoy(f,1.0);
-        if(yplus*lsSig<0.0 && ymin*lsSig<-yplus*lsSig)
-        dy = ddwenoy(f,-1.0);
-        if(yplus*lsSig>0.0 && ymin*lsSig<0.0)
-        dy = 0.0;
+        if     (ymin_s>0.0 && yplus_s>-ymin_s) dy = ddwenoy(f,1.0);
+        else if(yplus_s<0.0 && ymin_s<-yplus_s) dy = ddwenoy(f,-1.0);
     }
 
 // z
     const double zmin = (lsv-f(i,j,k-1))/p->DZP[KM1];
     const double zplus = (f(i,j,k+1)-lsv)/p->DZP[KP];
+    const double zmin_s = zmin * lsSig;
+    const double zplus_s = zplus * lsSig;
 
-    if(zmin*lsSig>0.0 && zplus*lsSig>-zmin*lsSig)
-    dz = ddwenoz(f,1.0);
-    if(zplus*lsSig<0.0 && zmin*lsSig<-zplus*lsSig)
-    dz = ddwenoz(f,-1.0);
-    if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
-    dz = 0.0;
+    if     (zmin_s>0.0 && zplus_s>-zmin_s) dz = ddwenoz(f,1.0);
+    else if(zplus_s<0.0 && zmin_s<-zplus_s) dz = ddwenoz(f,-1.0);
 
     const double dnorm = sqrt(dx*dx + dy*dy + dz*dz);
 
     const double deltax = (is3D) ? (1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]) : (1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
 
     double sign = lsv/sqrt(lsv2 + dnorm*dnorm*deltax*deltax);
-    if(sign != sign)
+    if(std::isnan(sign))
     sign = 1.0;
 
-    return -(sign*dnorm - sign);
+    return sign * (1.0 - dnorm);
 }
