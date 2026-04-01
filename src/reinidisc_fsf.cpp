@@ -41,133 +41,137 @@ void reinidisc_fsf::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, 
     const int max_level = 0;
     #endif
 
-	if(ipol==4)
+    const bool is3D = (p->j_dir == 1);
+
+    if(ipol==4)
     {
-		for(int lev=max_level; lev>=0; --lev)
-		{
-			p->level = lev;
-			TILE_LOOP
-			IJKLOOP
-			PBASECHECK
-				L(i,j,k) = 0.0;
-		}
-        
-        n=0;
-		for(int lev=max_level; lev>=0; --lev)
+        for(int lev=max_level; lev>=0; --lev)
         {
-			p->level = lev;
-			TILE_LOOP
-			IJKLOOP
-			PCHECK
-			{
-				disc(p,a,pgc,f,L);
-				++n;
-			}
+            p->level = lev;
+            TILE_LOOP
+            IJKLOOP
+            PBASECHECK
+                L(i,j,k) = 0.0;
         }
 
-		p->level = 0;
+        n=0;
+        for(int lev=max_level; lev>=0; --lev)
+        {
+            p->level = lev;
+            TILE_LOOP
+            IJKLOOP
+            PCHECK
+            {
+                L(i,j,k) = disc(p,a,pgc,f,is3D);
+                ++n;
+            }
+        }
+
+        p->level = 0;
     }
-	else if(ipol==5)
+    else if(ipol==5)
     {
-		for(int lev=max_level; lev>=0; --lev)
-		{
-			p->level = lev;
-			TILE_LOOP
-			IJKLOOP
-			PBASECHECK
-				L(i,j,k) = 0.0;
-		}
-        
-        n=0;
-		for(int lev=max_level; lev>=0; --lev)
+        for(int lev=max_level; lev>=0; --lev)
         {
-			p->level = lev;
-			TILE_LOOP
-			IJKLOOP
-			PSOLIDCHECK
-			{
-				disc(p,a,pgc,f,L);
-				++n;
-			}
+            p->level = lev;
+            TILE_LOOP
+            IJKLOOP
+            PBASECHECK
+                L(i,j,k) = 0.0;
         }
 
-		p->level = 0;
+        n=0;
+        for(int lev=max_level; lev>=0; --lev)
+        {
+            p->level = lev;
+            TILE_LOOP
+            IJKLOOP
+            PSOLIDCHECK
+            {
+                L(i,j,k) = disc(p,a,pgc,f,is3D);
+                ++n;
+            }
+        }
+
+        p->level = 0;
     }
 }
 
-void reinidisc_fsf::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L)
-{	
-    L(i,j,k)=0.0;
-    
-	if((f(i,j,k)>=0.0 && f(i+1,j,k)>=0.0 && f(i-1,j,k)>=0.0 && f(i,j+1,k)>=0.0 && f(i,j-1,k)>=0.0 && f(i,j,k+1)>=0.0 && f(i,j,k-1)>=0.0) 
-	|| (f(i,j,k)<0.0  && f(i+1,j,k)<0.0  && f(i-1,j,k)<0.0  && f(i,j+1,k)<0.0  && f(i,j-1,k)<0.0   && f(i,j,k+1)<0.0  && f(i,j,k-1)<0.0)
-    ) 
-	{
-	dx=0.0;
-	dy=0.0;
-	dz=0.0;
-	lsv=f(i,j,k);
-    lsSig=lsv/sqrt(lsv*lsv);
-
-    if(fabs(lsv)<1.0e-8)
-    lsSig=1.0;
-
-// x
-	xmin=(lsv-f(i-1,j,k))/p->DXP[IM1];
-	xplus=(f(i+1,j,k)-lsv)/p->DXP[IP];
-	
-	if(xmin*lsSig>0.0 && xplus*lsSig>-xmin*lsSig)
-	dx=ddwenox(a,f,1.0);
-
-	if(xplus*lsSig<0.0 && xmin*lsSig<-xplus*lsSig)
-	dx=ddwenox(a,f,-1.0);
-
-	if(xplus*lsSig>0.0 && xmin*lsSig<0.0)
-	dx=0.0;
-
-// y
-    if(p->j_dir==1)
+double reinidisc_fsf::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, bool is3D)
+{
+    if((f(i,j,k)>=0.0 && f(i+1,j,k)>=0.0 && f(i-1,j,k)>=0.0 && f(i,j+1,k)>=0.0 && f(i,j-1,k)>=0.0 && f(i,j,k+1)>=0.0 && f(i,j,k-1)>=0.0)
+    || (f(i,j,k)<0.0  && f(i+1,j,k)<0.0  && f(i-1,j,k)<0.0  && f(i,j+1,k)<0.0  && f(i,j-1,k)<0.0   && f(i,j,k+1)<0.0  && f(i,j,k-1)<0.0))
     {
-	ymin=(lsv-f(i,j-1,k))/p->DYP[JM1];
-	yplus=(f(i,j+1,k)-lsv)/p->DYP[JP];
-	
-	if(ymin*lsSig>0.0 && yplus*lsSig>-ymin*lsSig)
-	dy=ddwenoy(a,f,1.0);
+        dx=0.0;
+        dy=0.0;
+        dz=0.0;
+        lsv=f(i,j,k);
+        lsSig=lsv/sqrt(lsv*lsv);
 
-	if(yplus*lsSig<0.0 && ymin*lsSig<-yplus*lsSig)
-	dy=ddwenoy(a,f,-1.0);
+        if(fabs(lsv)<1.0e-8)
+        lsSig=1.0;
 
-	if(yplus*lsSig>0.0 && ymin*lsSig<0.0)
-	dy=0.0;
+    // x
+        xmin=(lsv-f(i-1,j,k))/p->DXP[IM1];
+        xplus=(f(i+1,j,k)-lsv)/p->DXP[IP];
+
+        if(xmin*lsSig>0.0 && xplus*lsSig>-xmin*lsSig)
+        dx=ddwenox(a,f,1.0);
+
+        if(xplus*lsSig<0.0 && xmin*lsSig<-xplus*lsSig)
+        dx=ddwenox(a,f,-1.0);
+
+        if(xplus*lsSig>0.0 && xmin*lsSig<0.0)
+        dx=0.0;
+
+    // y
+        if(is3D)
+        {
+            ymin=(lsv-f(i,j-1,k))/p->DYP[JM1];
+            yplus=(f(i,j+1,k)-lsv)/p->DYP[JP];
+
+            if(ymin*lsSig>0.0 && yplus*lsSig>-ymin*lsSig)
+            dy=ddwenoy(a,f,1.0);
+
+            if(yplus*lsSig<0.0 && ymin*lsSig<-yplus*lsSig)
+            dy=ddwenoy(a,f,-1.0);
+
+            if(yplus*lsSig>0.0 && ymin*lsSig<0.0)
+            dy=0.0;
+        }
+
+    // z
+        zmin=(lsv-f(i,j,k-1))/p->DZP[KM1];
+        zplus=(f(i,j,k+1)-lsv)/p->DZP[KP];
+
+        if(zmin*lsSig>0.0 && zplus*lsSig>-zmin*lsSig)
+        dz=ddwenoz(a,f,1.0);
+
+        if(zplus*lsSig<0.0 && zmin*lsSig<-zplus*lsSig)
+        dz=ddwenoz(a,f,-1.0);
+
+        if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
+        dz=0.0;
+
+
+        dnorm=sqrt(dx*dx + dy*dy + dz*dz);
+
+
+        if(is3D)
+        deltax = (1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
+        else
+        deltax = (1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
+
+        sign=lsv/sqrt(lsv*lsv + dnorm*dnorm*deltax*deltax);
+
+        if(sign!=sign)
+        sign=1.0;
+
+        return -(sign*dnorm - sign);
+    }
+    else
+    {
+        return 0.0;
     }
 
-// z
-	zmin=(lsv-f(i,j,k-1))/p->DZP[KM1];
-	zplus=(f(i,j,k+1)-lsv)/p->DZP[KP];
-	
-	if(zmin*lsSig>0.0 && zplus*lsSig>-zmin*lsSig)
-	dz=ddwenoz(a,f,1.0);
-
-	if(zplus*lsSig<0.0 && zmin*lsSig<-zplus*lsSig)
-	dz=ddwenoz(a,f,-1.0);
-
-	if(zplus*lsSig>0.0 && zmin*lsSig<0.0)
-	dz=0.0;	
-					
-
-	dnorm=sqrt(dx*dx + dy*dy + dz*dz);
-    
-    if(p->j_dir==0)
-    deltax = (1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-	
-    if(p->j_dir==1)
-    deltax = (1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
-	
-	sign=lsv/sqrt(lsv*lsv + dnorm*dnorm*deltax*deltax);
-    
-    if(sign!=sign)
-    sign=1.0;
-    
-	L(i,j,k) = -(sign*dnorm - sign);
-    }
 }
