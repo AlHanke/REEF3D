@@ -239,22 +239,38 @@ Authors: Hans Bihs, Alexander Hanke
 // CONDITIONS
 #define FLEXCHECK   if(flag[IJK]>0)
 #if USE_AMREX
-    #define UCHECK      if(p->flag1(i,j,k)>0)
-    #define UFLUIDCHECK if(p->flag1(i,j,k)>=AIR_FLAG)
-    #define USCHECK     if(p->flag1(i,j,k)<0)
-    #define VCHECK      if(p->flag2(i,j,k)>0)
-    #define VFLUIDCHECK if(p->flag2(i,j,k)>=AIR_FLAG)
-    #define VSCHECK     if(p->flag2(i,j,k)<0)
-    #define WCHECK      if(p->flag3(i,j,k)>0)
-    #define WFLUIDCHECK if(p->flag3(i,j,k)>=AIR_FLAG)
-    #define WSCHECK     if(p->flag3(i,j,k)<0)
-    #define PCHECK      if(p->flag4(i,j,k)>0)
-    #define SCHECK      if(p->flag4(i,j,k)<0)
-    #define PFLUIDCHECK if(p->flag4(i,j,k)>=AIR_FLAG)
-    #define PAIR_CHECK  if(p->flag4(i,j,k)==AIR_FLAG)
-    #define SFLUIDCHECK if(p->flag4(i,j,k)<AIR_FLAG)
-    #define PSOLIDCHECK if(p->flag4(i,j,k)>SOLID_FLAG)
-    #define PBASECHECK  if(p->flag4(i,j,k)>OBJ_FLAG)
+    // #define UCHECK      if(p->flag1(i,j,k)>0)
+    // #define UFLUIDCHECK if(p->flag1(i,j,k)>=AIR_FLAG)
+    // #define USCHECK     if(p->flag1(i,j,k)<0)
+    // #define VCHECK      if(p->flag2(i,j,k)>0)
+    // #define VFLUIDCHECK if(p->flag2(i,j,k)>=AIR_FLAG)
+    // #define VSCHECK     if(p->flag2(i,j,k)<0)
+    // #define WCHECK      if(p->flag3(i,j,k)>0)
+    // #define WFLUIDCHECK if(p->flag3(i,j,k)>=AIR_FLAG)
+    // #define WSCHECK     if(p->flag3(i,j,k)<0)
+    // #define PCHECK      if(p->flag4(i,j,k)>0)
+    // #define SCHECK      if(p->flag4(i,j,k)<0)
+    // #define PFLUIDCHECK if(p->flag4(i,j,k)>=AIR_FLAG)
+    // #define PAIR_CHECK  if(p->flag4(i,j,k)==AIR_FLAG)
+    // #define SFLUIDCHECK if(p->flag4(i,j,k)<AIR_FLAG)
+    // #define PSOLIDCHECK if(p->flag4(i,j,k)>SOLID_FLAG)
+    // #define PBASECHECK  if(p->flag4(i,j,k)>OBJ_FLAG)
+    #define UCHECK
+    #define UFLUIDCHECK
+    #define USCHECK
+    #define VCHECK
+    #define VFLUIDCHECK
+    #define VSCHECK
+    #define WCHECK
+    #define WFLUIDCHECK
+    #define WSCHECK
+    #define PCHECK
+    #define SCHECK
+    #define PFLUIDCHECK
+    #define PAIR_CHECK
+    #define SFLUIDCHECK
+    #define PSOLIDCHECK
+    #define PBASECHECK
 #else
     #define UCHECK      if(p->flag1[IJK]>0)
     #define UFLUIDCHECK if(p->flag1[IJK]>=AIR_FLAG)
