@@ -77,25 +77,37 @@ inline void weno3_flux::start(lexer* p, fdm* a, field& b, int ipol, field& uvel,
     if(ipol==1)
     {
         uf=1;
-        ULOOP
-        a->F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data());
+        FIELDLOOP_INC_MEMBER(
+            a,F,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data());
+        )
     }
     else if(ipol==2 && p->j_dir==1)
     {
         vf=1;
-        VLOOP
-        a->G(i,j,k)+=aij(p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data());
+        FIELDLOOP_INC_MEMBER(
+            a,G,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            G(i,j,k)+=aij(p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data());
+        )
     }
     else if(ipol==3)
     {
         wf=1;
-        WLOOP
-        a->H(i,j,k)+=aij(p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data());
+        FIELDLOOP_INC_MEMBER(
+            a,H,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            H(i,j,k)+=aij(p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data());
+        )
     }
     else if(ipol==4)
     {
-        LOOP
-        a->L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data());
+        FIELDLOOP_INC_MEMBER(
+            a,L,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            L(i,j,k) += aij(p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data());
+        )
     }
 }
 
