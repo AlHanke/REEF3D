@@ -67,11 +67,11 @@ Authors: Hans Bihs, Alexander Hanke
 
     #define FIELD_CONST(name) \
         const auto& _fl_mf_##name = (name).GetMultiFab(_fl_lev); \
-        const auto& name = _fl_mf_##name[_fl_mfi].const_array();
+        const auto& name = _fl_mf_##name.const_array(_fl_mfi);
 
     #define FIELD_CONST_MEMBER(ptr, member) \
         const auto& _fl_mf_a_##member = (ptr)->member.GetMultiFab(_fl_lev); \
-        const auto& member_##member = _fl_mf_a_##member[_fl_mfi].const_array();
+        const auto& member_##member = _fl_mf_a_##member.const_array(_fl_mfi);
 
     #define _FIELDLOOP_IMPL(mut_expr, mut_name, const_decls, body) \
         for (int _fl_lev = p->nlevs - 1; _fl_lev >= 0; --_fl_lev) \
@@ -82,7 +82,7 @@ Authors: Hans Bihs, Alexander Hanke
                  _fl_mfi.isValid(); ++_fl_mfi) \
             { \
                 const amrex::Box& _fl_bx = _fl_mfi.tilebox(); \
-                auto const& mut_name = _fl_mf[_fl_mfi].array(); \
+                auto const& mut_name = _fl_mf.array(_fl_mfi); \
                 const_decls; \
                 amrex::ParallelFor(_fl_bx, \
                     [=] AMREX_GPU_DEVICE (int i, int j, int k) { body }); \
@@ -121,11 +121,11 @@ Authors: Hans Bihs, Alexander Hanke
     // -------------------------------------------------------------------------
     #define FIELD_CONST_INC(name) \
         const auto& _fl_mf_##name = (name).GetMultiFab(_fl_lev); \
-        const LocalArr4Const name(_fl_mf_##name[_fl_mfi].const_array(), ox, oy, oz);
+        const LocalArr4Const name(_fl_mf_##name.const_array(_fl_mfi), ox, oy, oz);
 
     #define FIELD_CONST_MEMBER_INC(ptr, member) \
         const auto& _fl_mf_a_##member = (ptr)->member.GetMultiFab(_fl_lev); \
-        const LocalArr4Const member_##member(_fl_mf_a_##member[_fl_mfi].const_array(), ox, oy, oz);
+        const LocalArr4Const member_##member(_fl_mf_a_##member.const_array(_fl_mfi), ox, oy, oz);
 
     #define _FIELDLOOP_INC_IMPL(mut_expr, mut_name, const_decls, body) \
         for (int _fl_lev = p->nlevs - 1; _fl_lev >= 0; --_fl_lev) \
@@ -141,7 +141,7 @@ Authors: Hans Bihs, Alexander Hanke
                 const int oy = _fl_bx.smallEnd(1); \
                 const int oz = _fl_bx.smallEnd(2); \
                 p->set_tile_mfi(&_fl_mfi); \
-                auto const& mut_name = _fl_mf[_fl_mfi].array(); \
+                auto const& mut_name = _fl_mf.array(_fl_mfi); \
                 const_decls; \
                 amrex::ParallelFor(_fl_bx, \
                     [=] AMREX_GPU_DEVICE (int i, int j, int k) { \
