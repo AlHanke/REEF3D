@@ -52,7 +52,7 @@ momentum_FC3::momentum_FC3(lexer *p, fdm *a, ghostcell *pgc, convection *pconvec
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver, ioflow *pioflow,
                                                     heat *&pheat, concentration *&pconc, reini *ppreini,
                                                     fsi *ppfsi)
-                                                    :momentum_forcing(p),bcmom(p),udiff(p),vdiff(p),wdiff(p),urk1(p),urk2(p),vrk1(p),
+                                                    :bcmom(p),udiff(p),vdiff(p),wdiff(p),urk1(p),urk2(p),vrk1(p),
                                                     vrk2(p),wrk1(p),wrk2(p),ls(p),frk1(p),frk2(p),fx(p),fy(p),fz(p)
 {
 	gcval_u=10;

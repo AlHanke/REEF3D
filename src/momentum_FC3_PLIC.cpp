@@ -48,7 +48,7 @@ momentum_FC3_PLIC::momentum_FC3_PLIC(lexer *p, fdm *a, ghostcell *pgc, convectio
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver, ioflow *pioflow,
                                                     heat *&pheat, concentration *&pconc, reini *ppreini,
                                                     fsi *ppfsi)
-                                                    :momentum_forcing(p),bcmom(p),udiff(p),vdiff(p),wdiff(p),urk1(p),urk2(p),vrk1(p),vrk2(p),wrk1(p),wrk2(p),
+                                                    :bcmom(p),udiff(p),vdiff(p),wdiff(p),urk1(p),urk2(p),vrk1(p),vrk2(p),wrk1(p),wrk2(p),
                                                     VoF(p),vof_rk1(p),vof_rk2(p),fx(p),fy(p),fz(p)
                                                     
 {

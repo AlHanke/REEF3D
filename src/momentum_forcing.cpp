@@ -27,10 +27,6 @@ Author: Hans Bihs
 #include"6DOF.h"
 #include"FSI.h"
 
-momentum_forcing::momentum_forcing(lexer* p)
-{
-}
-
 void momentum_forcing::momentum_forcing_start(fdm* a, lexer* p, ghostcell *pgc, sixdof* p6dof, fsi* pfsi,
                                               field &u, field &v, field &w, field &fx, field &fy, field &fz, int iter, double alpha, bool final)
 {
