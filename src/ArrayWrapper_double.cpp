@@ -61,7 +61,7 @@ double& ArrayWrapper_double::operator[] (int index)
     const int jj = lo.y + j;
     const int kk = lo.z + k;
 
-    return data[p->level][*(p->amr_cell_mfi)].array()(ii, jj, kk, 0);
+    return data[p->level].array(*(p->amr_cell_mfi))(ii, jj, kk, 0);
     #else
     return data[p->level][index];
     #endif
