@@ -38,7 +38,7 @@ using namespace std;
 class momentum_forcing : public increment
 {
 public:
-    momentum_forcing(lexer*);
+    momentum_forcing() = default;
     virtual ~momentum_forcing() = default;
     void momentum_forcing_start(fdm*,lexer*,ghostcell*, sixdof*, fsi*,
                                 field&,field&,field&,field&,field&,field&,int,double,bool);
