@@ -59,7 +59,7 @@ momentum_FCLS3::momentum_FCLS3(lexer *p, fdm *a, ghostcell *pgc, convection *pco
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver, ioflow *pioflow,
                                                     heat *&pheat, concentration *&pconc, reini *ppreini,
                                                     fsi *ppfsi) :
-                                                    momentum_forcing(p),bcmom(p),urk(p),vrk(p),wrk(p),
+                                                    bcmom(p),urk(p),vrk(p),wrk(p),
                                                     Cu(p),Cv(p),Cw(p),Cf(p),fx(p),fy(p),fz(p)
 {
     

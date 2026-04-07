@@ -52,7 +52,7 @@ momentum_RKLS3::momentum_RKLS3
     solver *ppoissonsolver, 
     ioflow *pioflow,
     fsi *ppfsi
-):momentum_forcing(p),bcmom(p),urk(p),vrk(p),wrk(p),Cu(p),Cv(p),Cw(p),Du(p),Dv(p),Dw(p),fx(p),fy(p),fz(p)
+):bcmom(p),urk(p),vrk(p),wrk(p),Cu(p),Cv(p),Cw(p),Du(p),Dv(p),Dw(p),fx(p),fy(p),fz(p)
 {
 	gcval_u=10;
 	gcval_v=11;
