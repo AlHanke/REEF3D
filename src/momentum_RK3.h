@@ -37,7 +37,6 @@ class turbulence;
 class solver;
 class poisson;
 class fluid_update;
-class nhflow;
 class sixdof;
 class fsi;
 
@@ -46,39 +45,33 @@ using namespace std;
 class momentum_RK3 : public momentum, public momentum_forcing, public bcmom
 {
 public:
-	momentum_RK3(lexer*, fdm*, convection*, diffusion*, pressure*, poisson*, 
+    momentum_RK3(lexer*, fdm*, convection*, diffusion*, pressure*, poisson*,
                 turbulence*, solver*, solver*, ioflow*, fsi*);
-	virtual ~momentum_RK3();
-	void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*) override;
-
-    field1 udiff,urk1,urk2,fx;
-	field2 vdiff,vrk1,vrk2,fy;
-	field3 wdiff,wrk1,wrk2,fz;
+    virtual ~momentum_RK3();
+    void start(lexer*, fdm*, ghostcell*, vrans*, sixdof*) override final;
 
 private:
-    fluid_update *pupdate;
-    
-	void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-    
-	int gcval_u, gcval_v, gcval_w;
-	double starttime;
-    
-    double alpha[3];
-    double beta[3];
-    int loop;
+    void irhs(lexer*,fdm*);
+    void jrhs(lexer*,fdm*);
+    void krhs(lexer*,fdm*);
 
-	convection *pconvec;
-	diffusion *pdiff;
-	pressure *ppress;
-	poisson *ppois;
-	turbulence *pturb;
-	solver *psolv;
+    field1 udiff,urk1,urk2,fx;
+    field2 vdiff,vrk1,vrk2,fy;
+    field3 wdiff,wrk1,wrk2,fz;
+
+    fluid_update *pupdate;
+
+    convection *pconvec;
+    diffusion *pdiff;
+    pressure *ppress;
+    poisson *ppois;
+    turbulence *pturb;
+    solver *psolv;
     solver *ppoissonsolv;
-	ioflow *pflow;
-    nhflow *pnh;
+    ioflow *pflow;
     fsi *pfsi;
+
+    static constexpr int gcval_u=10, gcval_v=11, gcval_w=12;
 };
 
 #endif
