@@ -291,6 +291,19 @@ private:
                                            amrex_bc_func::DataLocation data_location,
                                            const amrex::Geometry& geom);
 
+    /// Fills ghost-cell slabs on all 6 domain faces via direct ParallelFor calls.
+    /// Shared by FillDomainBoundaryImpl (single-component, scomp=0) and
+    /// FillDomainBoundaryBatch (multi-component, scomp=batch offset).
+    template<typename BCDecision>
+    static void fill_boundary_slabs(
+        amrex::MultiFab& mf_lev,
+        int scomp,
+        int ncomp,
+        const amrex::BCRec* bcrec_d,
+        const amrex_bc_func::MyExtBCFillField<BCDecision>& fill,
+        const amrex::GeometryData& geom_data,
+        const amrex::Box& dom);
+
     /// Build a flat BCRec vector for @p lev by taking the first BCRec from
     /// each field in @p fields, in order.
     static amrex::Vector<amrex::BCRec>
@@ -303,73 +316,6 @@ private:
             if (!f->BCRecs[lev].empty())
                 result.push_back(f->BCRecs[lev][0]);
         return result;
-    }
-
-    void ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in, int p_level)
-    {
-        int dir = -1;
-        if (const_params.data_location == amrex_bc_func::DataLocation::FACE_X) dir = 0;
-        else if (const_params.data_location == amrex_bc_func::DataLocation::FACE_Y) dir = 1;
-        else if (const_params.data_location == amrex_bc_func::DataLocation::FACE_Z) dir = 2;
-
-        if (dir == -1) return;
-
-        const auto& geom = p->amrex_geometry[p_level];
-        const int domain_hi = geom.Domain().bigEnd(dir);
-
-        for (amrex::MFIter mfi(mf_in); mfi.isValid(); ++mfi)
-        {
-            const amrex::Box& valid_box = mfi.validbox();
-
-            // Check if this box touches the high boundary in the specific direction
-            if (valid_box.bigEnd(dir) == domain_hi)
-            {
-                const amrex::Box& box = mfi.fabbox();
-                amrex::Array4<amrex::Real> const& arr = mf_in.array(mfi);
-
-                int start = domain_hi;
-                int end = box.bigEnd(dir) - 1;
-
-                // Define a box collapsed to the start plane for iteration
-                amrex::Box para_box = box;
-                para_box.setSmall(dir, start);
-                para_box.setBig(dir, start);
-
-                if (dir == 0)
-                {
-                    amrex::ParallelFor(para_box, mf_in.nComp(),
-                    [=] AMREX_GPU_DEVICE (int /*i dummy*/, int j, int k, int n)
-                    {
-                        for (int i = start; i <= end; ++i)
-                        {
-                            arr(i, j, k, n) = arr(i + 1, j, k, n);
-                        }
-                    });
-                }
-                else if (dir == 1)
-                {
-                    amrex::ParallelFor(para_box, mf_in.nComp(),
-                    [=] AMREX_GPU_DEVICE (int i, int /*j dummy*/, int k, int n)
-                    {
-                        for (int j = start; j <= end; ++j)
-                        {
-                            arr(i, j, k, n) = arr(i, j + 1, k, n);
-                        }
-                    });
-                }
-                else // dir == 2
-                {
-                    amrex::ParallelFor(para_box, mf_in.nComp(),
-                    [=] AMREX_GPU_DEVICE (int i, int j, int /*k dummy*/, int n)
-                    {
-                        for (int k = start; k <= end; ++k)
-                        {
-                            arr(i, j, k, n) = arr(i, j, k + 1, n);
-                        }
-                    });
-                }
-            }
-        }
     }
 
     const amrex_bc_func::ConstMyExtBCFillFieldParams const_params = {};
@@ -501,6 +447,96 @@ void field_amrex::UpdateBCRecsImpl(int gcv, const BCDecision& bc_decision)
 }
 
 // =========================================================================
+// fill_boundary_slabs — fills the 6 ghost-cell face slabs via ParallelFor.
+// Extracted from FillDomainBoundaryImpl and FillDomainBoundaryBatch to
+// eliminate the duplicated per-face slab logic.
+// =========================================================================
+template<typename BCDecision>
+void field_amrex::fill_boundary_slabs(
+    amrex::MultiFab& mf_lev,
+    int scomp,
+    int ncomp,
+    const amrex::BCRec* bcrec_d,
+    const amrex_bc_func::MyExtBCFillField<BCDecision>& fill,
+    const amrex::GeometryData& geom_data,
+    const amrex::Box& dom)
+{
+    for (amrex::MFIter mfi(mf_lev); mfi.isValid(); ++mfi)
+    {
+        const amrex::Box& fabbox = mfi.fabbox();
+        if (dom.contains(fabbox)) continue;
+
+        auto arr = mf_lev.array(mfi);
+
+        // X-lo slab
+        if (fabbox.smallEnd(0) < dom.smallEnd(0))
+        {
+            const amrex::Box slab(fabbox.smallEnd(),
+                amrex::IntVect(dom.smallEnd(0)-1, fabbox.bigEnd(1), fabbox.bigEnd(2)));
+            amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
+                fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
+                     amrex::Real(0), bcrec_d, 0, 0);
+            });
+        }
+        // X-hi slab
+        if (fabbox.bigEnd(0) > dom.bigEnd(0))
+        {
+            const amrex::Box slab(
+                amrex::IntVect(dom.bigEnd(0)+1, fabbox.smallEnd(1), fabbox.smallEnd(2)),
+                fabbox.bigEnd());
+            amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
+                fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
+                     amrex::Real(0), bcrec_d, 0, 0);
+            });
+        }
+        // Y-lo slab
+        if (fabbox.smallEnd(1) < dom.smallEnd(1))
+        {
+            const amrex::Box slab(
+                amrex::IntVect(fabbox.smallEnd(0), fabbox.smallEnd(1), fabbox.smallEnd(2)),
+                amrex::IntVect(fabbox.bigEnd(0), dom.smallEnd(1)-1, fabbox.bigEnd(2)));
+            amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
+                fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
+                     amrex::Real(0), bcrec_d, 0, 0);
+            });
+        }
+        // Y-hi slab
+        if (fabbox.bigEnd(1) > dom.bigEnd(1))
+        {
+            const amrex::Box slab(
+                amrex::IntVect(fabbox.smallEnd(0), dom.bigEnd(1)+1, fabbox.smallEnd(2)),
+                amrex::IntVect(fabbox.bigEnd(0), fabbox.bigEnd(1), fabbox.bigEnd(2)));
+            amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
+                fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
+                     amrex::Real(0), bcrec_d, 0, 0);
+            });
+        }
+        // Z-lo slab
+        if (fabbox.smallEnd(2) < dom.smallEnd(2))
+        {
+            const amrex::Box slab(
+                amrex::IntVect(fabbox.smallEnd(0), fabbox.smallEnd(1), fabbox.smallEnd(2)),
+                amrex::IntVect(fabbox.bigEnd(0), fabbox.bigEnd(1), dom.smallEnd(2)-1));
+            amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
+                fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
+                     amrex::Real(0), bcrec_d, 0, 0);
+            });
+        }
+        // Z-hi slab
+        if (fabbox.bigEnd(2) > dom.bigEnd(2))
+        {
+            const amrex::Box slab(
+                amrex::IntVect(fabbox.smallEnd(0), fabbox.smallEnd(1), dom.bigEnd(2)+1),
+                fabbox.bigEnd());
+            amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
+                fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
+                     amrex::Real(0), bcrec_d, 0, 0);
+            });
+        }
+    }
+}
+
+// =========================================================================
 // FillDomainBoundaryImpl — direct domain BC fill (no MPI exchange here)
 //
 // Level 0: iterate only the 6 ghost-cell slabs (X+/-, Y+/-, Z+/-) and call
@@ -557,82 +593,9 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             // deterministic so the repeated writes are idempotent.
             const amrex::GeometryData geom_data = p->amrex_geometry[p->level].data();
             const amrex::Box          dom       = p->amrex_geometry[p->level].Domain();
-            const amrex::BCRec* bcrec_d = m_d_bcrec_lev0.data();
 
-            for (amrex::MFIter mfi(mf_lev); mfi.isValid(); ++mfi)
-            {
-                const amrex::Box& fabbox = mfi.fabbox();
-                if (dom.contains(fabbox)) continue;
-
-                auto arr   = mf_lev.array(mfi);
-                const int ncomp = mf_lev.nComp();
-
-                // X-lo slab
-                if (fabbox.smallEnd(0) < dom.smallEnd(0))
-                {
-                    const amrex::Box slab(fabbox.smallEnd(),
-                        amrex::IntVect(dom.smallEnd(0)-1, fabbox.bigEnd(1), fabbox.bigEnd(2)));
-                    amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
-                        fill(amrex::IntVect(i,j,k), arr, 0, ncomp, geom_data,
-                             amrex::Real(0), bcrec_d, 0, 0);
-                    });
-                }
-                // X-hi slab
-                if (fabbox.bigEnd(0) > dom.bigEnd(0))
-                {
-                    const amrex::Box slab(
-                        amrex::IntVect(dom.bigEnd(0)+1, fabbox.smallEnd(1), fabbox.smallEnd(2)),
-                        fabbox.bigEnd());
-                    amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
-                        fill(amrex::IntVect(i,j,k), arr, 0, ncomp, geom_data,
-                             amrex::Real(0), bcrec_d, 0, 0);
-                    });
-                }
-                // Y-lo slab
-                if (fabbox.smallEnd(1) < dom.smallEnd(1))
-                {
-                    const amrex::Box slab(
-                        amrex::IntVect(fabbox.smallEnd(0), fabbox.smallEnd(1), fabbox.smallEnd(2)),
-                        amrex::IntVect(fabbox.bigEnd(0), dom.smallEnd(1)-1, fabbox.bigEnd(2)));
-                    amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
-                        fill(amrex::IntVect(i,j,k), arr, 0, ncomp, geom_data,
-                             amrex::Real(0), bcrec_d, 0, 0);
-                    });
-                }
-                // Y-hi slab
-                if (fabbox.bigEnd(1) > dom.bigEnd(1))
-                {
-                    const amrex::Box slab(
-                        amrex::IntVect(fabbox.smallEnd(0), dom.bigEnd(1)+1, fabbox.smallEnd(2)),
-                        amrex::IntVect(fabbox.bigEnd(0), fabbox.bigEnd(1), fabbox.bigEnd(2)));
-                    amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
-                        fill(amrex::IntVect(i,j,k), arr, 0, ncomp, geom_data,
-                             amrex::Real(0), bcrec_d, 0, 0);
-                    });
-                }
-                // Z-lo slab
-                if (fabbox.smallEnd(2) < dom.smallEnd(2))
-                {
-                    const amrex::Box slab(
-                        amrex::IntVect(fabbox.smallEnd(0), fabbox.smallEnd(1), fabbox.smallEnd(2)),
-                        amrex::IntVect(fabbox.bigEnd(0), fabbox.bigEnd(1), dom.smallEnd(2)-1));
-                    amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
-                        fill(amrex::IntVect(i,j,k), arr, 0, ncomp, geom_data,
-                             amrex::Real(0), bcrec_d, 0, 0);
-                    });
-                }
-                // Z-hi slab
-                if (fabbox.bigEnd(2) > dom.bigEnd(2))
-                {
-                    const amrex::Box slab(
-                        amrex::IntVect(fabbox.smallEnd(0), fabbox.smallEnd(1), dom.bigEnd(2)+1),
-                        fabbox.bigEnd());
-                    amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
-                        fill(amrex::IntVect(i,j,k), arr, 0, ncomp, geom_data,
-                             amrex::Real(0), bcrec_d, 0, 0);
-                    });
-                }
-            }
+            fill_boundary_slabs(mf_lev, 0, mf_lev.nComp(), m_d_bcrec_lev0.data(),
+                                fill, geom_data, dom);
         }
         else
         {
@@ -660,7 +623,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
                                         BCRecs[p->level], 0);
         }
 
-        ShiftBigBoundaryFaceInward(mf_lev, p->level);
+        ShiftBigBoundaryFaceInward(mf_lev, const_params.data_location, p->amrex_geometry[p->level]);
     }
 }
 
@@ -707,17 +670,22 @@ inline void field_amrex::FillDomainBoundaryBatch(
 
         if (p->level == 0)
         {
-            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<PhantomDecision>> bf(
-                amrex_bc_func::MyExtBCFillField<PhantomDecision>{const_params, params});
+            // face_labels is left default: ncomp > 1 falls through to BCRec pointer reads.
+            const auto fill = amrex_bc_func::MyExtBCFillField<PhantomDecision>{const_params, params};
 
-            amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<PhantomDecision>>> physbcf(
-                p->amrex_geometry[p->level], combined, bf);
+            const amrex::GeometryData geom_data = p->amrex_geometry[0].data();
+            const amrex::Box          dom       = p->amrex_geometry[0].Domain();
 
-            // FillBoundary (MPI halo exchange) was already performed by the
-            // preceding FillBoundaryBatch call; calling FillPatchSingleLevel here
-            // would repeat it.  Call physbcf directly to apply only the domain BCs.
-            physbcf(shared_mf[p->level], scomp, ncomp,
-                    shared_mf[p->level].nGrowVect(), amrex::Real(p->simtime), 0);
+            // Upload combined BCRecs (ncomp entries) to device for the ParallelFor lambdas.
+            amrex::Gpu::DeviceVector<amrex::BCRec> d_bcrec_batch(combined.size());
+            amrex::Gpu::copy(amrex::Gpu::hostToDevice,
+                             combined.begin(), combined.end(),
+                             d_bcrec_batch.begin());
+            const amrex::BCRec* bcrec_d = d_bcrec_batch.data();
+
+            auto& mf_lev = shared_mf[p->level];
+            fill_boundary_slabs(mf_lev, scomp, ncomp, bcrec_d, fill, geom_data, dom);
+            amrex::Gpu::streamSynchronize();
         }
         else
         {
