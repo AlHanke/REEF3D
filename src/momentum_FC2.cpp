@@ -207,7 +207,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 	
     p->wtime=pgc->timer()-starttime;
     
-    momentum_forcing_start(a, p, pgc, p6dof, pfsi,
+    momentum_forcing_start(p, a, pgc, p6dof, pfsi,
                            urk1, vrk1, wrk1, fx, fy, fz, 0, 1.0, false);
     
     pflow->pressure_io(p,a,pgc);
@@ -303,7 +303,7 @@ void momentum_FC2::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 	
     p->wtime+=pgc->timer()-starttime;
     
-    momentum_forcing_start(a, p, pgc, p6dof, pfsi,
+    momentum_forcing_start(p, a, pgc, p6dof, pfsi,
                            a->u, a->v, a->w, fx, fy, fz, 1, 0.5, true);
 
 	pflow->pressure_io(p,a,pgc);
