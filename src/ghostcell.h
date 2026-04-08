@@ -25,6 +25,8 @@ Author: Hans Bihs
 
 #include<mpi.h>
 #include"increment.h"
+#include"lexer.h"
+#include<algorithm>
 #if USE_AMREX
 #include"field_amrex.h"
 #include<initializer_list>
@@ -126,7 +128,6 @@ public:
     void solid_forcing_lsm(lexer*,fdm*,field&);
     void solid_forcing_eta(lexer*,slice&);
     void solid_forcing_bed(lexer*,slice&);
-    double Hsolidface(lexer*, fdm*, int,int,int);
 
 // 6DOF update gcdf
     void gcdf_update(lexer*,fdm*);
@@ -288,6 +289,35 @@ private:
     void gcsl_sommerfeld(lexer*,slice&,int);
     void gcsl_outflow(slice&,int);
     void gcsl_potentialbc(lexer*,slice&,int);
+
+    // Helper functions
+    template<typename GenericFieldConst> inline double Hsolidface(lexer *p, GenericFieldConst& solid, GenericFieldConst& topo, int aa, int bb, int cc)
+    {
+        if(p->topoforcing==0 && p->solidread==0)
+        return 0.0;
+
+        double psi;
+        if(!p->j_dir)
+        psi = p->X41*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
+        else
+        psi = p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
+
+        double phival_sf;
+        if(p->topoforcing>0 && p->solidread==0)
+        phival_sf = 0.5*(topo(i,j,k) + topo(i+aa,j+bb,k+cc));
+        else if(p->topoforcing==0 && p->solidread>0)
+        phival_sf = 0.5*(solid(i,j,k) + solid(i+aa,j+bb,k+cc));
+        else if(p->topoforcing>0 && p->solidread>0)
+        phival_sf = std::min(0.5*(solid(i,j,k) + solid(i+aa,j+bb,k+cc)), 0.5*(topo(i,j,k) + topo(i+aa,j+bb,k+cc)));
+        // else == if(p->topoforcing==0 && p->solidread==0) is covered in the beginning of the function
+
+        if(-phival_sf > psi)
+        return 1.0;
+        else if(-phival_sf < -psi)
+        return 0.0;
+        else
+        return 0.5*(1.0 + -phival_sf/psi + (1.0/PI)*sin((PI * -phival_sf)/psi));
+    }
 
     MPI_Comm cart_comm = MPI_COMM_NULL;
     int neighbors[6] = {MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL,

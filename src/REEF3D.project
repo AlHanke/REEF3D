@@ -2817,7 +2817,6 @@
         <File Name="gc_solid_forcing_eta.cpp"/>
         <File Name="gc_solid_forcing_lsm.cpp"/>
         <File Name="gcdf_update.cpp"/>
-        <File Name="gc_solid_forcing_interface.cpp"/>
         <File Name="gc_solid_forcing_ini.cpp"/>
         <File Name="gc_solid_forcing.cpp"/>
       </VirtualDirectory>
