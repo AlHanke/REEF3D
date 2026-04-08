@@ -64,3 +64,32 @@ void ghostcell::solid_forcing_ini(lexer *p, fdm *a)
         a->fbh5(i,j,k) =  1.0-MIN(dirac,1.0);
     }
 }
+
+template<typename GenericFieldConst>
+inline double ghostcell::Hsolidface(lexer *p, GenericFieldConst& solid, GenericFieldConst& topo, int aa, int bb, int cc)
+{
+    if(p->topoforcing==0 && p->solidread==0)
+    return 0.0;
+
+    double psi;
+    if(!p->j_dir)
+    psi = p->X41*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
+    else
+    psi = p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
+
+    double phival_sf;
+    if(p->topoforcing>0 && p->solidread==0)
+    phival_sf = 0.5*(topo(i,j,k) + topo(i+aa,j+bb,k+cc));
+    else if(p->topoforcing==0 && p->solidread>0)
+    phival_sf = 0.5*(solid(i,j,k) + solid(i+aa,j+bb,k+cc));
+    else if(p->topoforcing>0 && p->solidread>0)
+    phival_sf = std::min(0.5*(solid(i,j,k) + solid(i+aa,j+bb,k+cc)), 0.5*(topo(i,j,k) + topo(i+aa,j+bb,k+cc)));
+    // else == if(p->topoforcing==0 && p->solidread==0) is covered in the beginning of the function
+
+    if(-phival_sf > psi)
+    return 1.0;
+    else if(-phival_sf < -psi)
+    return 0.0;
+    else
+    return 0.5*(1.0 + -phival_sf/psi + (1.0/PI)*sin((PI * -phival_sf)/psi));
+}
