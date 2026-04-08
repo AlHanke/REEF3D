@@ -171,11 +171,6 @@ void ghostcell::gc_ini(lexer* p)
     }
 }
 
-void ghostcell::fdm2D_update(fdm2D *bb)
-{
-    b=bb;
-}
-
 void ghostcell::fdm_fnpf_update(fdm_fnpf *cc)
 {
     c=cc;
@@ -184,11 +179,6 @@ void ghostcell::fdm_fnpf_update(fdm_fnpf *cc)
 void ghostcell::fdm_nhf_update(fdm_nhf *dd)
 {
     d=dd;
-}
-
-void ghostcell::fdm_update(fdm *aa)
-{
-    a=aa;
 }
 
 void ghostcell::final(bool error)

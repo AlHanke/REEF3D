@@ -114,10 +114,8 @@ public:
 	void sizeM_update(lexer*);
     void sizeS_update(lexer*);
 
-    void fdm2D_update(fdm2D*);
     void fdm_fnpf_update(fdm_fnpf*);
     void fdm_nhf_update(fdm_nhf*);
-    void fdm_update(fdm*);
     
     void gcb_velflagio(lexer*);
     
@@ -365,8 +363,6 @@ private:
     double value;
 
     lexer *p;
-    fdm *a;
-    fdm2D *b;
     fdm_fnpf *c;
     fdm_nhf *d;
 };
