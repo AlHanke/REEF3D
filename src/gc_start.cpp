@@ -23,6 +23,9 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"lexer.h"
 #include"field.h"
+#if USE_AMREX
+#include "field_amrex.h"
+#endif
 
 void ghostcell::start1(lexer *p, field& f, int gcv)
 {
@@ -210,6 +213,22 @@ void ghostcell::start4(lexer *p, field& f, int gcv)
         gcparacox(p,f);
     #endif
 }
+
+#if USE_AMREX
+void ghostcell::startBatch(lexer* p,
+                           amrex::Vector<amrex::MultiFab>& shared_mf,
+                           int scomp,
+                           std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs)
+{
+    starttime=timer();
+    field_amrex::FillBoundaryBatch(p, shared_mf, scomp,
+                                   static_cast<int>(fields_and_gcvs.size()));
+    p->xtime+=timer()-starttime;
+    starttime=timer();
+    field_amrex::FillDomainBoundaryBatch(p, shared_mf, scomp, fields_and_gcvs);
+    p->gctime+=timer()-starttime;
+}
+#endif
 
 void ghostcell::start4_sum(lexer *p, field& f, int gcv)
 {
