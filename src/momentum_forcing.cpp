@@ -33,14 +33,9 @@ void momentum_forcing::momentum_forcing_start(fdm* a, lexer* p, ghostcell *pgc, 
     double starttime=pgc->timer();
 
     // Forcing
-    ULOOP
-    fx(i,j,k) = 0.0;
-
-    VLOOP
-    fy(i,j,k) = 0.0;
-
-    WLOOP
-    fz(i,j,k) = 0.0;
+    fx.setVal(0.0);
+    fy.setVal(0.0);
+    fz.setVal(0.0);
 
     pgc->start1(p,fx,10);
     pgc->start2(p,fy,11);
@@ -54,32 +49,38 @@ void momentum_forcing::momentum_forcing_start(fdm* a, lexer* p, ghostcell *pgc, 
 
     ULOOP
     {
-        u(i,j,k) += alpha*p->dt*CPOR1*fx(i,j,k);
+        const double val = alpha*CPOR1*fx(i,j,k);
+
+        u(i,j,k) += val*p->dt;
 
         if(p->count<10)
-        a->maxF = MAX(fabs(alpha*CPOR1*fx(i,j,k)), a->maxF);
+        a->maxF = MAX(fabs(val), a->maxF);
 
-        p->fbmax = MAX(fabs(alpha*CPOR1*fx(i,j,k)), p->fbmax);
+        p->fbmax = MAX(fabs(val), p->fbmax);
     }
 
     VLOOP
     {
-        v(i,j,k) += alpha*p->dt*CPOR2*fy(i,j,k);
+        const double val = alpha*CPOR2*fy(i,j,k);
+
+        v(i,j,k) += val*p->dt;
 
         if(p->count<10)
-        a->maxG = MAX(fabs(alpha*CPOR2*fy(i,j,k)), a->maxG);
+        a->maxG = MAX(fabs(val), a->maxG);
 
-        p->fbmax = MAX(fabs(alpha*CPOR2*fy(i,j,k)), p->fbmax);
+        p->fbmax = MAX(fabs(val), p->fbmax);
     }
 
     WLOOP
     {
-        w(i,j,k) += alpha*p->dt*CPOR3*fz(i,j,k);
+        const double val = alpha*CPOR3*fz(i,j,k);
+
+        w(i,j,k) += val*p->dt;
 
         if(p->count<10)
-        a->maxH = MAX(fabs(alpha*CPOR3*fz(i,j,k)), a->maxH);
+        a->maxH = MAX(fabs(val), a->maxH);
 
-        p->fbmax = MAX(fabs(alpha*CPOR3*fz(i,j,k)), p->fbmax);
+        p->fbmax = MAX(fabs(val), p->fbmax);
     }
 
     p->fbtime+=pgc->timer()-starttime;
