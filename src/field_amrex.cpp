@@ -99,6 +99,20 @@ void field_amrex::FillBoundary()
 }
 
 // ---------------------------------------------------------------------------
+// FillBoundaryBatch — one FillBoundary call for a component range
+// ---------------------------------------------------------------------------
+void field_amrex::FillBoundaryBatch(lexer* p,
+                                     amrex::Vector<amrex::MultiFab>& shared_mf,
+                                     int scomp, int ncomp)
+{
+    LEVEL_LOOP
+    {
+        shared_mf[p->level].FillBoundary(scomp, ncomp,
+                                          p->amrex_geometry[p->level].periodicity());
+    }
+}
+
+// ---------------------------------------------------------------------------
 // FillDomainBoundaryValue
 // ---------------------------------------------------------------------------
 void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
@@ -142,4 +156,70 @@ void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
         }
     }
 }
+
+// ---------------------------------------------------------------------------
+// ShiftBigBoundaryFaceInward (static)
+// ---------------------------------------------------------------------------
+void field_amrex::ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in,
+                                              amrex_bc_func::DataLocation data_location,
+                                              const amrex::Geometry& geom)
+{
+    int dir = -1;
+    if      (data_location == amrex_bc_func::DataLocation::FACE_X) dir = 0;
+    else if (data_location == amrex_bc_func::DataLocation::FACE_Y) dir = 1;
+    else if (data_location == amrex_bc_func::DataLocation::FACE_Z) dir = 2;
+
+    if (dir == -1) return;
+
+    const int domain_hi = geom.Domain().bigEnd(dir);
+
+#ifdef AMREX_USE_OMP
+#pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
+#endif
+    for (amrex::MFIter mfi(mf_in); mfi.isValid(); ++mfi)
+    {
+        const amrex::Box& valid_box = mfi.validbox();
+
+        if (valid_box.bigEnd(dir) != domain_hi) continue;
+
+        const amrex::Box& box = mfi.fabbox();
+        amrex::Array4<amrex::Real> const& arr = mf_in.array(mfi);
+
+        int start = domain_hi;
+        int end   = box.bigEnd(dir) - 1;
+
+        amrex::Box para_box = box;
+        para_box.setSmall(dir, start);
+        para_box.setBig(dir, start);
+
+        if (dir == 0)
+        {
+            amrex::ParallelFor(para_box, mf_in.nComp(),
+            [=] AMREX_GPU_DEVICE (int /*i*/, int j, int k, int n)
+            {
+                for (int i = start; i <= end; ++i)
+                    arr(i, j, k, n) = arr(i + 1, j, k, n);
+            });
+        }
+        else if (dir == 1)
+        {
+            amrex::ParallelFor(para_box, mf_in.nComp(),
+            [=] AMREX_GPU_DEVICE (int i, int /*j*/, int k, int n)
+            {
+                for (int j = start; j <= end; ++j)
+                    arr(i, j, k, n) = arr(i, j + 1, k, n);
+            });
+        }
+        else
+        {
+            amrex::ParallelFor(para_box, mf_in.nComp(),
+            [=] AMREX_GPU_DEVICE (int i, int j, int /*k*/, int n)
+            {
+                for (int k = start; k <= end; ++k)
+                    arr(i, j, k, n) = arr(i, j, k + 1, n);
+            });
+        }
+    }
+}
+
 #endif

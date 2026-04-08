@@ -23,8 +23,15 @@ Author: Hans Bihs
 #ifndef GHOSTCELL_H_
 #define GHOSTCELL_H_
 
-#include "increment.h"
-#include <mpi.h>
+#if USE_AMREX
+#include"field_amrex.h"
+#endif
+#include"increment.h"
+#include<mpi.h>
+#if USE_AMREX
+#include<initializer_list>
+#include<utility>
+#endif
 #include <vector>
 
 class convection;
@@ -66,6 +73,10 @@ public:
     void start3(lexer*,field&,int);
     void start4(lexer*,field&,int);
     void start4_sum(lexer*,field&,int);
+    #if USE_AMREX
+    void startBatch(lexer*, amrex::Vector<amrex::MultiFab>&, int scomp,
+                    std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs);
+    #endif
 
     void start1V(lexer*,double*,int);
     void start2V(lexer*,double*,int);
