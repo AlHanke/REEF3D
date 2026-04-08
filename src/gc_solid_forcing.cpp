@@ -28,15 +28,9 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
                               field& fx, field &fy, field &fz)
 {
     // Reset heaviside field
-    ULOOP
-    a->fbh1(i,j,k) = 0.0;
-
-    VLOOP
-    a->fbh2(i,j,k) = 0.0;
-
-    WLOOP
-    a->fbh3(i,j,k) = 0.0;
-
+    a->fbh1.setVal(0.0);
+    a->fbh2.setVal(0.0);
+    a->fbh3.setVal(0.0);
     a->fbh4.setVal(0.0);
 
     start1(p,a->fbh1,10);
