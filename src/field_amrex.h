@@ -42,6 +42,22 @@ Author: Alexander Hanke
 #include <utility>
 #include <vector>
 
+#if USE_AMREX
+// Create and zero-initialise the combined MultiFab for all fdm fields.
+static amrex::Vector<amrex::MultiFab> make_mf(lexer* p, int ncomp)
+{
+    amrex::Vector<amrex::MultiFab> result(p->nlevs);
+    for (int lev = 0; lev < p->nlevs; ++lev)
+    {
+        result[lev].define(p->amrex_box_array[lev],
+                           p->amrex_distribution_mapping[lev],
+                           ncomp, p->margin);
+        result[lev].setVal(0, 0, ncomp, p->margin);
+    }
+    return result;
+}
+#endif
+
 class field_amrex : public field
 {
 public:
@@ -113,6 +129,29 @@ public:
     // Must be overridden by field1/2/3/4 to use their specific BCDecision.
     // -----------------------------------------------------------------
     virtual void UpdateBCRecs(int gcv) = 0;
+
+    // -----------------------------------------------------------------
+    // Batch operations — fill ghost cells for multiple fields that share
+    // the same underlying MultiFab in a single AMReX call.
+    // -----------------------------------------------------------------
+
+    /// Fill ghost cells (MPI exchange) for a component range of @p shared_mf
+    /// in one FillBoundary call instead of one per field.
+    static void FillBoundaryBatch(lexer* p,
+                                  amrex::Vector<amrex::MultiFab>& shared_mf,
+                                  int scomp, int ncomp);
+
+    /// Fill domain boundary conditions for multiple fields that share
+    /// @p shared_mf in a single FillPatchSingleLevel / FillPatchTwoLevels call.
+    /// Each field must be in view mode (constructed with the view constructor)
+    /// and must point to @p shared_mf.
+    /// @p scomp is the first component in @p shared_mf belonging to this batch.
+    /// Each element of @p fields_and_gcvs is a {field_ptr, gcv} pair so that
+    /// each field can be filled with its own ghost-cell variable index.
+    static void FillDomainBoundaryBatch(lexer* p,
+                                        amrex::Vector<amrex::MultiFab>& shared_mf,
+                                        int scomp,
+                                        std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs);
 
 protected:
     /// Owning constructor: the field allocates and owns its own MultiFab storage.
@@ -248,6 +287,25 @@ private:
     /// Const overload — used by the const cache refresh to access data without mutation.
     AMREX_FORCE_INLINE const amrex::Array4<const amrex::Real> get_array_const(int level, amrex::MFIter& mfi) const noexcept
     { return get_mf_const(level).const_array(mfi); }
+
+    /// Shifts face data inward at the high-end boundary for face-staggered fields.
+    static void ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in,
+                                           amrex_bc_func::DataLocation data_location,
+                                           const amrex::Geometry& geom);
+
+    /// Build a flat BCRec vector for @p lev by taking the first BCRec from
+    /// each field in @p fields, in order.
+    static amrex::Vector<amrex::BCRec>
+    make_combined_bcrecs(int lev,
+                         std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs)
+    {
+        amrex::Vector<amrex::BCRec> result;
+        result.reserve(fields_and_gcvs.size());
+        for (const auto& [f, gcv] : fields_and_gcvs)
+            if (!f->BCRecs[lev].empty())
+                result.push_back(f->BCRecs[lev][0]);
+        return result;
+    }
 
     void ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in, int p_level)
     {
@@ -609,6 +667,100 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
         }
 
         ShiftBigBoundaryFaceInward(mf_lev, p->level);
+    }
+}
+
+// =========================================================================
+// FillDomainBoundaryBatch — one FillPatch for all fields in the batch.
+// The BCDecision type is used only to satisfy the MyExtBCFillField template;
+// actual per-component BC behaviour is encoded in the BCRecs populated by
+// each field's UpdateBCRecs() call, so any BCDecision type is equivalent.
+// Use Field4BcDecision as a concrete, always-available phantom type.
+// =========================================================================
+inline void field_amrex::FillDomainBoundaryBatch(
+    lexer* p,
+    amrex::Vector<amrex::MultiFab>& shared_mf,
+    int scomp,
+    std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs)
+{
+    // Step 1 — populate each field's BCRecs on the host using its own gcv
+    for (auto& [f, gcv] : fields_and_gcvs)
+        if (f->m_last_gcv != gcv)
+            f->UpdateBCRecs(gcv);
+
+    const int ncomp = static_cast<int>(fields_and_gcvs.size());
+
+    // Step 2 — build a const_params representative for this group
+    // (bc_values, heat_values, y_dimension, data_location are the same for every
+    //  field in a stagger group since they all come from the same lexer p)
+    amrex_bc_func::ConstMyExtBCFillFieldParams const_params{
+        {p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
+        {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T},
+        bool(p->j_dir), amrex_bc_func::DataLocation::CELL_CENTERED};
+
+    amrex_bc_func::MyExtBCFillFieldParams params;
+    params.Ui = p->Ui;
+    params.Uo = p->Uo;
+    params.dt = p->dt;
+
+    // Step 3 — one FillPatch call per level covering [scomp, scomp+ncomp)
+    using PhantomDecision = amrex_bc_func::Field4BcDecision;
+
+    LEVEL_LOOP
+    {
+        // Build combined BCRecs (ncomp entries) from each field's pre-populated BCRecs
+        auto combined      = make_combined_bcrecs(p->level, fields_and_gcvs);
+
+        if (p->level == 0)
+        {
+            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<PhantomDecision>> bf(
+                amrex_bc_func::MyExtBCFillField<PhantomDecision>{const_params, params});
+
+            amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<PhantomDecision>>> physbcf(
+                p->amrex_geometry[p->level], combined, bf);
+
+            // FillBoundary (MPI halo exchange) was already performed by the
+            // preceding FillBoundaryBatch call; calling FillPatchSingleLevel here
+            // would repeat it.  Call physbcf directly to apply only the domain BCs.
+            physbcf(shared_mf[p->level], scomp, ncomp,
+                    shared_mf[p->level].nGrowVect(), amrex::Real(p->simtime), 0);
+        }
+        else
+        {
+            auto combined_prev = make_combined_bcrecs(p->level - 1, fields_and_gcvs);
+
+            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<PhantomDecision>> cbf(
+                amrex_bc_func::MyExtBCFillField<PhantomDecision>{const_params, params});
+
+            amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<PhantomDecision>>> cphysbcf(
+                p->amrex_geometry[p->level-1], combined_prev, cbf);
+
+            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<PhantomDecision>> fbf(
+                amrex_bc_func::MyExtBCFillField<PhantomDecision>{const_params, params});
+
+            amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<PhantomDecision>>> fphysbcf(
+                p->amrex_geometry[p->level], combined, fbf);
+
+            amrex::Interpolater* mapper = &amrex::cell_cons_interp;
+            const amrex::IntVect ref_vec = p->ref_vec;
+
+            amrex::FillPatchTwoLevels(shared_mf[p->level], amrex::Real(p->simtime),
+                                      {&shared_mf[p->level-1]}, {amrex::Real(p->simtime)},
+                                      {&shared_mf[p->level]},   {amrex::Real(p->simtime)},
+                                      scomp, scomp, ncomp,
+                                      p->amrex_geometry[p->level-1], p->amrex_geometry[p->level],
+                                      cphysbcf, 0,
+                                      fphysbcf, 0,
+                                      ref_vec, mapper,
+                                      combined, 0);
+        }
+
+        // Shift face data at the high-end boundary per-field using each
+        // field's own stagger type and its 1-component alias.
+        for (auto& [f, gcv] : fields_and_gcvs)
+            ShiftBigBoundaryFaceInward(f->GetMultiFab(),
+                                       f->dataLocation(),
+                                       p->amrex_geometry[p->level]);
     }
 }
 
