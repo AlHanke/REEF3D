@@ -232,9 +232,15 @@ Authors: Hans Bihs, Alexander Hanke
 #define JFLEXLOOP for(j = 0; j <= JMAX_LOOP - vlast; ++j)
 #define KFLEXLOOP for(k = 0; k <= KMAX_LOOP - wlast; ++k)
 
-#define IULOOP for(i = 0; i <= IMAX_LOOP - p->ulast; ++i)
-#define JVLOOP for(j = 0; j <= JMAX_LOOP - p->vlast; ++j)
-#define KWLOOP for(k = 0; k <= KMAX_LOOP - p->wlast; ++k)
+#if USE_AMREX
+    #define IULOOP for(i = 0; i <= IMAX_LOOP - (p->amr_tile_hi.x == p->amrex_geometry[p->level].Domain().bigEnd(0) ? 1 : 0); ++i)
+    #define JVLOOP for(j = 0; j <= JMAX_LOOP - (p->amr_tile_hi.y == p->amrex_geometry[p->level].Domain().bigEnd(1) ? 1 : 0); ++j)
+    #define KWLOOP for(k = 0; k <= KMAX_LOOP - (p->amr_tile_hi.z == p->amrex_geometry[p->level].Domain().bigEnd(2) ? 1 : 0); ++k)
+#else
+    #define IULOOP for(i = 0; i <= IMAX_LOOP - p->ulast; ++i)
+    #define JVLOOP for(j = 0; j <= JMAX_LOOP - p->vlast; ++j)
+    #define KWLOOP for(k = 0; k <= KMAX_LOOP - p->wlast; ++k)
+#endif
 
 #define FILOOP ILOOP
 #define FJLOOP JLOOP
