@@ -20,40 +20,30 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Authors: Hans Bihs, Tobias Martin, Ahmet Soydan
 --------------------------------------------------------------------*/
 
-#include"ghostcell.h"
-#include"lexer.h"
-#include"fdm.h"
+#include "ghostcell.h"
+#include "lexer.h"
+#include "fdm.h"
 #include "heaviside_ls.h"
 
 double ghostcell::Hsolidface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
-    double psi, H, phival_sf,dirac;
-    
-    //cout<<"p->topoforcing: "<<p->topoforcing<<" p->toporead: "<<p->toporead<<endl;
-    
-    if (p->j_dir==0)
-    psi = p->X41*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-	
-    if (p->j_dir==1)
+    if(p->topoforcing==0 && p->solidread==0)
+    return 0.0;
+
+    double psi;
+    if(!p->j_dir)
+    psi = p->X41*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
+    else
     psi = p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
 
-    // Construct solid heaviside function
-
-    if(p->topoforcing>0 && p->solidread>0)
-    phival_sf = MIN(0.5*(a->solid(i,j,k) + a->solid(i+aa,j+bb,k+cc)), 0.5*(a->topo(i,j,k) + a->topo(i+aa,j+bb,k+cc))); 
-    
+    double phival_sf;
     if(p->topoforcing>0 && p->solidread==0)
-    phival_sf = 0.5*(a->topo(i,j,k) + a->topo(i+aa,j+bb,k+cc)); 
-    
-    if(p->topoforcing==0 && p->solidread>0)
+    phival_sf = 0.5*(a->topo(i,j,k) + a->topo(i+aa,j+bb,k+cc));
+    else if(p->topoforcing==0 && p->solidread>0)
     phival_sf = 0.5*(a->solid(i,j,k) + a->solid(i+aa,j+bb,k+cc));
-    
-	
-    H = heaviside_ls(-phival_sf, psi);
+    else if(p->topoforcing>0 && p->solidread>0)
+    phival_sf = MIN(0.5*(a->solid(i,j,k) + a->solid(i+aa,j+bb,k+cc)), 0.5*(a->topo(i,j,k) + a->topo(i+aa,j+bb,k+cc)));
+    // else == if(p->topoforcing==0 && p->solidread==0) is covered in the beginning of the function
 
-    
-    if(p->topoforcing==0 && p->solidread==0)
-    H = 0.0;
-    
-    return H;
+    return heaviside_ls(-phival_sf, psi);
 }
