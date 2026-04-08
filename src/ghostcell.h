@@ -26,7 +26,10 @@ Author: Hans Bihs
 #if USE_AMREX
 #include"field_amrex.h"
 #endif
+#include"heaviside_ls.h"
 #include"increment.h"
+#include"lexer.h"
+#include<algorithm>
 #include<mpi.h>
 #if USE_AMREX
 #include<initializer_list>
@@ -135,7 +138,6 @@ public:
     void solid_forcing_lsm(lexer*,fdm*,field&);
     void solid_forcing_eta(lexer*,slice&);
     void solid_forcing_bed(lexer*,slice&);
-    double Hsolidface(lexer*, fdm*, int,int,int);
 
     // 6DOF update gcdf
     void gcdf_update(lexer*,fdm*);
@@ -309,6 +311,30 @@ private:
     bc_labels gcsleval1(int,int,int);
     bc_labels gcsleval2(int,int,int);
     bc_labels gcsleval4(int,int,int);
+
+    // Helper functions
+    template<typename GenericFieldConst> inline double Hsolidface(lexer *p, GenericFieldConst& solid, GenericFieldConst& topo, int aa, int bb, int cc)
+    {
+        if(p->topoforcing==0 && p->solidread==0)
+        return 0.0;
+
+        double psi;
+        if(!p->j_dir)
+        psi = p->X41*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
+        else
+        psi = p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
+
+        double phival_sf;
+        if(p->topoforcing>0 && p->solidread==0)
+        phival_sf = 0.5*(topo(i,j,k) + topo(i+aa,j+bb,k+cc));
+        else if(p->topoforcing==0 && p->solidread>0)
+        phival_sf = 0.5*(solid(i,j,k) + solid(i+aa,j+bb,k+cc));
+        else if(p->topoforcing>0 && p->solidread>0)
+        phival_sf = std::min(0.5*(solid(i,j,k) + solid(i+aa,j+bb,k+cc)), 0.5*(topo(i,j,k) + topo(i+aa,j+bb,k+cc)));
+        // else == if(p->topoforcing==0 && p->solidread==0) is covered in the beginning of the function
+
+        return heaviside_ls(-phival_sf, psi);
+    }
 
     template<typename FlagT, typename GcdfT>
     void gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf_count);

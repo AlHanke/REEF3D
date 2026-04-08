@@ -31,16 +31,16 @@ void ghostcell::solid_forcing_ini(lexer *p, fdm *a)
 
     // Initialise floating fields
     ULOOP
-    a->fbh1(i,j,k) = Hsolidface(p,a,1,0,0);
+    a->fbh1(i,j,k) = Hsolidface(p,a->solid,a->topo,1,0,0);
 
     VLOOP
-    a->fbh2(i,j,k) = Hsolidface(p,a,0,1,0);
+    a->fbh2(i,j,k) = Hsolidface(p,a->solid,a->topo,0,1,0);
 
     WLOOP
-    a->fbh3(i,j,k) = Hsolidface(p,a,0,0,1);
+    a->fbh3(i,j,k) = Hsolidface(p,a->solid,a->topo,0,0,1);
 
     LOOP
-    a->fbh4(i,j,k) = Hsolidface(p,a,0,0,0);
+    a->fbh4(i,j,k) = Hsolidface(p,a->solid,a->topo,0,0,0);
 
     start1(p,a->fbh1,10);
     start2(p,a->fbh2,11);
