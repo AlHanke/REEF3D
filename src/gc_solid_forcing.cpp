@@ -79,13 +79,13 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
             a->fbh4(i,j,k) = std::min(a->fbh4(i,j,k) + H, 1.0);
         }
 
-        if(!p->j_dir)
-        psi = 1.1*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-        else
-        psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-
         LOOP
         {
+            if(!p->j_dir)
+            psi = 1.1*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
+            else
+            psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
+
             if(fabs(std::min(a->solid(i,j,k),a->topo(i,j,k)))<psi)
             dirac = (0.5/psi)*(1.0 + cos((PI*(std::min(a->solid(i,j,k),a->topo(i,j,k))))/psi));
             else
@@ -208,13 +208,13 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
             a->fbh4(i,j,k) = std::min(a->fbh4(i,j,k) + H, 1.0);
         }
 
-        if(!p->j_dir)
-        psi = 1.1*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-        else
-        psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-
         LOOP
         {
+            if(!p->j_dir)
+            psi = 1.1*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
+            else
+            psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
+
             if(fabs(std::min(a->solid(i,j,k),a->topo(i,j,k)))<psi)
             dirac = (0.5/psi)*(1.0 + cos((PI*(std::min(a->solid(i,j,k),a->topo(i,j,k))))/psi));
             else
