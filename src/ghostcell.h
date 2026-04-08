@@ -25,6 +25,11 @@ Author: Hans Bihs
 
 #include<mpi.h>
 #include"increment.h"
+#if USE_AMREX
+#include"field_amrex.h"
+#include<initializer_list>
+#include<utility>
+#endif
 
 class fdm;
 class fdm2D;
@@ -60,6 +65,10 @@ public:
     void start3(lexer*,field&, int);
     void start4(lexer*,field&, int);
     void start4_sum(lexer*,field&, int);
+    #if USE_AMREX
+    void startBatch(lexer*, amrex::Vector<amrex::MultiFab>&, int scomp,
+                    std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs);
+    #endif
 
     void start1V(lexer*,double*,int);
     void start2V(lexer*,double*,int);
