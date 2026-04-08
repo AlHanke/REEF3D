@@ -178,7 +178,7 @@ void momentum_RKLS3::start(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans, sixd
         p->wtime+=pgc->timer()-starttime;
 
         // Forcing
-        momentum_forcing_start(a, p, pgc, p6dof, pfsi,
+        momentum_forcing_start(p, a, pgc, p6dof, pfsi,
                            urk,vrk,wrk, fx, fy, fz, loop, 2.0*alpha(loop), final);
                            
         // Direct Forcing

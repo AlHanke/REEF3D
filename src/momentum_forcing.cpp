@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"6DOF.h"
 #include"FSI.h"
 
-void momentum_forcing::momentum_forcing_start(fdm* a, lexer* p, ghostcell *pgc, sixdof* p6dof, fsi* pfsi,
+void momentum_forcing::momentum_forcing_start(lexer* p, fdm* a, ghostcell *pgc, sixdof* p6dof, fsi* pfsi,
                                               field &u, field &v, field &w, field &fx, field &fy, field &fz, int iter, double alpha, bool final)
 {
     double starttime=pgc->timer();
