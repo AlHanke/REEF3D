@@ -24,21 +24,17 @@ Author: Hans Bihs
 #define INCREMENT_H_
 
 class fdm;
-class fdm2D;
 
-#include"looping.h"
-
-using namespace std;
+#include "looping.h"
 
 class increment
 {
 	public:
-	increment();
-	virtual ~increment();
-	static int i,j,k,n,h;
-	static int innercounter;
+	increment() = default;
+	virtual ~increment() = default;
+	static int i,j,k,n;
 	static int pip;
-    const static int marge;
+    constexpr static int marge = 5;
     static int max_i, max_j, max_k;
     static int level;
 	static fdm *aa;
