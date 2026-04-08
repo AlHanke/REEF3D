@@ -134,8 +134,6 @@ void driver::sflow_driver()
 	cout<<"initialize fdm"<<endl;
 
     b=new fdm2D(p);
-    
-    pgc->fdm2D_update(b);
 
     psflow = new sflow_f(p,b,pgc,pBC);
 
@@ -173,8 +171,6 @@ void driver::ptf_driver()
 
     a=new fdm(p);
 
-    pgc->fdm_update(a);
-
     logic_ptf();
 
     driver_ini_ptf();
@@ -208,8 +204,6 @@ void driver::cfd_driver()
 	cout<<"initialize fdm "<<endl;
 
     a=new fdm(p);
-
-    pgc->fdm_update(a);
 
     logic_cfd();
 
