@@ -123,7 +123,6 @@ public:
     void solid_forcing_eta(lexer*,slice&);
     void solid_forcing_bed(lexer*,slice&);
     double Hsolidface(lexer*, fdm*, int,int,int);
-    double Hsolidface_t(lexer*, fdm*, int,int,int);
 
     // 6DOF update gcdf
     void gcdf_update(lexer*,fdm*);
