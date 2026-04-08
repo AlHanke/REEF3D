@@ -20,15 +20,18 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"momentum_forcing.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
-#include"6DOF.h"
-#include"FSI.h"
+#include "momentum_forcing.h"
+#include "lexer.h"
+#include "fdm.h"
+#include "ghostcell.h"
+#include "6DOF.h"
+#include "FSI.h"
+#include "field1.h"
+#include "field2.h"
+#include "field3.h"
 
 void momentum_forcing::momentum_forcing_start(lexer* p, fdm* a, ghostcell *pgc, sixdof* p6dof, fsi* pfsi,
-                                              field &u, field &v, field &w, field &fx, field &fy, field &fz, int iter, double alpha, bool final)
+                                              field1 &u, field2 &v, field3 &w, field1 &fx, field2 &fy, field3 &fz, int iter, double alpha, bool final)
 {
     double starttime=pgc->timer();
 
