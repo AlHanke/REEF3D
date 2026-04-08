@@ -311,28 +311,8 @@ private:
     bc_labels gcsleval4(int,int,int);
 
     // Helper functions
-    template<typename GenericFieldConst> inline double Hsolidface(lexer *p, GenericFieldConst& solid, GenericFieldConst& topo, int aa, int bb, int cc)
-    {
-        if(p->topoforcing==0 && p->solidread==0)
-        return 0.0;
-
-        double psi;
-        if(!p->j_dir)
-        psi = p->X41*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
-        else
-        psi = p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-
-        double phival_sf;
-        if(p->topoforcing>0 && p->solidread==0)
-        phival_sf = 0.5*(topo(i,j,k) + topo(i+aa,j+bb,k+cc));
-        else if(p->topoforcing==0 && p->solidread>0)
-        phival_sf = 0.5*(solid(i,j,k) + solid(i+aa,j+bb,k+cc));
-        else if(p->topoforcing>0 && p->solidread>0)
-        phival_sf = std::min(0.5*(solid(i,j,k) + solid(i+aa,j+bb,k+cc)), 0.5*(topo(i,j,k) + topo(i+aa,j+bb,k+cc)));
-        // else == if(p->topoforcing==0 && p->solidread==0) is covered in the beginning of the function
-
-        return heaviside_ls(-phival_sf, psi);
-    }
+    template<typename GenericField> inline void normal_vector_solid_topo(lexer* p, GenericField& solid, GenericField& topo, double& Hx, double& Hy, double& Hz, double& H, double& dirac, bool onlyHeaviside, double& nx, double& ny, double& nz, double& phix, double& phiy, double& phiz);
+    template<typename GenericFieldConst> inline double Hsolidface(lexer *p, GenericFieldConst& solid, GenericFieldConst& topo, int aa, int bb, int cc);
 
     template<typename FlagT, typename GcdfT>
     void gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf_count);
