@@ -22,16 +22,6 @@ Author: Hans Bihs
 
 #include"increment.h"
 
-increment::increment()
-{
-	pip=0;
-}
-
-increment::~increment()
-{
-}
-
-int increment::i,increment::j,increment::k,increment::n,increment::h,increment::innercounter,increment::pip;
-const int increment::marge(5);
+int increment::i,increment::j,increment::k,increment::n,increment::pip(0);
 int increment::max_i, increment::max_j, increment::max_k;
-int increment::level;
+int increment::level(0);
