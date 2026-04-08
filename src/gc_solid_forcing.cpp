@@ -51,7 +51,7 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
     {
         ULOOP
         {
-            H = Hsolidface(p,a,1,0,0);
+            H = Hsolidface(p,a->solid,a->topo,1,0,0);
 
             fx(i,j,k) += H*(uf - uvel(i,j,k))/(alpha*p->dt);
             a->fbh1(i,j,k) = std::min(a->fbh1(i,j,k) + H, 1.0);
@@ -59,7 +59,7 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
 
         VLOOP
         {
-            H = Hsolidface(p,a,0,1,0);
+            H = Hsolidface(p,a->solid,a->topo,0,1,0);
 
             fy(i,j,k) += H*(vf - vvel(i,j,k))/(alpha*p->dt);
             a->fbh2(i,j,k) = std::min(a->fbh2(i,j,k) + H, 1.0);
@@ -67,7 +67,7 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
 
         WLOOP
         {
-            H = Hsolidface(p,a,0,0,1);
+            H = Hsolidface(p,a->solid,a->topo,0,0,1);
 
             fz(i,j,k) += H*(wf - wvel(i,j,k))/(alpha*p->dt);
             a->fbh3(i,j,k) = std::min(a->fbh3(i,j,k) + H, 1.0);
@@ -75,7 +75,7 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
 
         LOOP
         {
-            H = Hsolidface(p,a,0,0,0);
+            H = Hsolidface(p,a->solid,a->topo,0,0,0);
             a->fbh4(i,j,k) = std::min(a->fbh4(i,j,k) + H, 1.0);
         }
 
@@ -119,7 +119,7 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
 
             nx /= norm > 1.0e-20 ? norm : 1.0e20;
 
-            H = Hsolidface(p,a,1,0,0);
+            H = Hsolidface(p,a->solid,a->topo,1,0,0);
 
             // Level set function
             phival_sf = std::min(0.5*(a->solid(i,j,k) + a->solid(i+1,j,k)), 0.5*(a->topo(i,j,k) + a->topo(i+1,j,k)));
@@ -153,7 +153,7 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
 
             ny /= norm > 1.0e-20 ? norm : 1.0e20;
 
-            H = Hsolidface(p,a,0,1,0);
+            H = Hsolidface(p,a->solid,a->topo,0,1,0);
 
             //Level set function
             phival_sf = std::min(0.5*(a->solid(i,j,k) + a->solid(i,j+1,k)), 0.5*(a->topo(i,j,k) + a->topo(i,j+1,k)));
@@ -187,7 +187,7 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
 
             nz /= norm > 1.0e-20 ? norm : 1.0e20;
 
-            H = Hsolidface(p,a,0,0,1);
+            H = Hsolidface(p,a->solid,a->topo,0,0,1);
 
             // Level set function
             phival_sf = std::min(0.5*(a->solid(i,j,k) + a->solid(i,j,k+1)), 0.5*(a->topo(i,j,k) + a->topo(i,j,k+1)));
@@ -204,7 +204,7 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
 
         LOOP
         {
-            H = Hsolidface(p,a,0,0,0);
+            H = Hsolidface(p,a->solid,a->topo,0,0,0);
             a->fbh4(i,j,k) = std::min(a->fbh4(i,j,k) + H, 1.0);
         }
 
