@@ -47,15 +47,15 @@ void ghostcell::solid_forcing_ini(lexer *p, fdm *a)
     start3(p,a->fbh3,12);
     start4(p,a->fbh4,40);
 
-    double psi;
-    if(!p->j_dir)
-    psi = 1.1*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-    else
-    psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-
     double dirac;
     LOOP
     {
+        double psi;
+        if(!p->j_dir)
+        psi = 1.1*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
+        else
+        psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
+
         if(fabs(MIN(a->solid(i,j,k),a->topo(i,j,k)))<psi)
         dirac = (0.5/psi)*(1.0 + cos((PI*(MIN(a->solid(i,j,k),a->topo(i,j,k))))/psi));
         else
