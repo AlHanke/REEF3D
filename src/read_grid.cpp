@@ -817,6 +817,7 @@ void lexer::read_grid()
                 amrex_refined_grid_coords[lev][box].second[2] = ddn;
             }
         }
+        if(nlevs>max_nlevs) nlevs=max_nlevs;
     }
     #endif
 
