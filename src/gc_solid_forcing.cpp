@@ -23,213 +23,222 @@ Authors: Hans Bihs, Tobias Martin, Ahmet Soydan
 #include"ghostcell.h"
 #include"lexer.h"
 #include"fdm.h"
+#include"field.h"
 
 void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field &vvel, field& wvel,
                               field& fx, field &fy, field &fz)
 {
     // Reset heaviside field
-    a->fbh1.setVal(0.0);
-    a->fbh2.setVal(0.0);
-    a->fbh3.setVal(0.0);
-    a->fbh4.setVal(0.0);
-
-    start1(p,a->fbh1,10);
-    start2(p,a->fbh2,11);
-    start3(p,a->fbh3,12);
-    start4(p,a->fbh4,40);
+    a->fbh1.setVal(0.0, true);
+    a->fbh2.setVal(0.0, true);
+    a->fbh3.setVal(0.0, true);
+    a->fbh4.setVal(0.0, true);
 
     // Calculate forcing fields
-    double H;
     const double uf = 0.0;
     const double vf = 0.0;
     const double wf = 0.0;
-    double nx, ny, nz, norm;
-    double psi, phival_sf;
-    double dirac;
 
-    if(p->B21==0)
-    {
-        ULOOP
-        {
-            H = Hsolidface(p,a->solid,a->topo,1,0,0);
+    const double inv_alpha_dt = 1.0 / (alpha * p->dt);
+    const bool onlyHeaviside = p->B21==0;
+    // slip & no-slip are versions of B21==1 and do not differ
 
-            fx(i,j,k) += H*(uf - uvel(i,j,k))/(alpha*p->dt);
-            a->fbh1(i,j,k) = std::min(a->fbh1(i,j,k) + H, 1.0);
-        }
-
-        VLOOP
-        {
-            H = Hsolidface(p,a->solid,a->topo,0,1,0);
-
-            fy(i,j,k) += H*(vf - vvel(i,j,k))/(alpha*p->dt);
-            a->fbh2(i,j,k) = std::min(a->fbh2(i,j,k) + H, 1.0);
-        }
-
-        WLOOP
-        {
-            H = Hsolidface(p,a->solid,a->topo,0,0,1);
-
-            fz(i,j,k) += H*(wf - wvel(i,j,k))/(alpha*p->dt);
-            a->fbh3(i,j,k) = std::min(a->fbh3(i,j,k) + H, 1.0);
-        }
-
-        LOOP
-        {
-            H = Hsolidface(p,a->solid,a->topo,0,0,0);
-            a->fbh4(i,j,k) = std::min(a->fbh4(i,j,k) + H, 1.0);
-        }
-
-        LOOP
-        {
-            if(!p->j_dir)
-            psi = 1.1*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
-            else
-            psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-
-            if(fabs(std::min(a->solid(i,j,k),a->topo(i,j,k)))<psi)
-            dirac = (0.5/psi)*(1.0 + cos((PI*(std::min(a->solid(i,j,k),a->topo(i,j,k))))/psi));
-            else
-            dirac = 0.0;
-
-            a->fbh5(i,j,k) = 1.0-std::min(dirac,1.0);
-        }
-    }
     // ---------------------------------------------------
     // Construct solid heaviside function | slip & no-slip
     // ---------------------------------------------------
-    else if((p->B20==1 || p->B20==2) && p->B21==1)
-    {
-        ULOOP
-        {
-            // Normal vectors calculation
-            if(0.5*(a->solid(i,j,k) + a->solid(i+1,j,k)) >= 0.5*(a->topo(i,j,k) + a->topo(i+1,j,k)))
-            {
-                nx = -(a->topo(i+1,j,k) - a->topo(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->topo(i,j+1,k) - a->topo(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->topo(i,j,k+1) - a->topo(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
-            else
-            {
-                nx = -(a->solid(i+1,j,k) - a->solid(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->solid(i,j+1,k) - a->solid(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->solid(i,j,k+1) - a->solid(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
+    FIELDLOOP_INC_EXT(
+        fx,
+        FIELD_MUT(fy)
+        FIELD_MUT(fz)
+        FIELD_MUT_MEMBER(a,fbh1)
+        FIELD_MUT_MEMBER(a,fbh2)
+        FIELD_MUT_MEMBER(a,fbh3)
+        FIELD_MUT_MEMBER(a,fbh4)
+        FIELD_MUT_MEMBER(a,fbh5)
+        FIELD_CONST(uvel)
+        FIELD_CONST(vvel)
+        FIELD_CONST(wvel)
+        FIELD_CONST_MEMBER_INC(a,solid) FIELD_CONST_MEMBER_INC(a,topo),
+        FIELD_MUT_AVGDOWN(fy) FIELD_MUT_AVGDOWN(fz)
+        FIELD_MUT_MEMBER_AVGDOWN(a,fbh1) FIELD_MUT_MEMBER_AVGDOWN(a,fbh2) FIELD_MUT_MEMBER_AVGDOWN(a,fbh3)
+        FIELD_MUT_MEMBER_AVGDOWN(a,fbh4) FIELD_MUT_MEMBER_AVGDOWN(a,fbh5),
 
-            norm = sqrt(nx*nx + ny*ny + nz*nz);
+        // Normal vectors, heaviside, phi calculation
+        double nx; double ny; double nz; double Hx; double Hy; double Hz; double H; double dirac; double phix; double phiy; double phiz;
+        normal_vector_solid_topo(p, member_solid, member_topo, Hx, Hy, Hz, H, dirac, onlyHeaviside, nx, ny, nz, phix, phiy, phiz);
 
-            nx /= norm > 1.0e-20 ? norm : 1.0e20;
+        // Construct the field around the solid body to adjust the tangential velocity and calculate forcing
+        if(phix<=0.0)
+        fx(i,j,k) += Hx*(uf - uvel(i,j,k))*inv_alpha_dt;
+        else
+        fx(i,j,k) += fabs(nx)*Hx*(uf - uvel(i,j,k))*inv_alpha_dt;
 
-            H = Hsolidface(p,a->solid,a->topo,1,0,0);
+        if(phiy<=0.0)
+        fy(i,j,k) += Hy*(vf - vvel(i,j,k))*inv_alpha_dt;
+        else
+        fy(i,j,k) += fabs(ny)*Hy*(vf - vvel(i,j,k))*inv_alpha_dt;
 
-            // Level set function
-            phival_sf = std::min(0.5*(a->solid(i,j,k) + a->solid(i+1,j,k)), 0.5*(a->topo(i,j,k) + a->topo(i+1,j,k)));
+        if(phiz<=0.0)
+        fz(i,j,k) += Hz*(wf - wvel(i,j,k))*inv_alpha_dt;
+        else
+        fz(i,j,k) += fabs(nz)*Hz*(wf - wvel(i,j,k))*inv_alpha_dt;
 
-            // Construct the field around the solid body to adjust the tangential velocity and calculate forcing
-            if(phival_sf<=0.0)
-            fx(i,j,k) += H*(uf - uvel(i,j,k))/(alpha*p->dt);
-            else
-            fx(i,j,k) += fabs(nx)*H*(uf - uvel(i,j,k))/(alpha*p->dt);
+        member_fbh1(i,j,k) = std::min(member_fbh1(i,j,k) + Hx, 1.0);
+        member_fbh2(i,j,k) = std::min(member_fbh2(i,j,k) + Hy, 1.0);
+        member_fbh3(i,j,k) = std::min(member_fbh3(i,j,k) + Hz, 1.0);
 
-            a->fbh1(i,j,k) = std::min(a->fbh1(i,j,k) + H, 1.0);
-        }
+        member_fbh4(i,j,k) = std::min(member_fbh4(i,j,k) + H, 1.0);
 
-        VLOOP
-        {
-            // Normal vectors calculation
-            if(0.5*(a->solid(i,j,k) + a->solid(i,j+1,k)) >= 0.5*(a->topo(i,j,k) + a->topo(i,j+1,k)))
-            {
-                nx = -(a->topo(i+1,j,k) - a->topo(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->topo(i,j+1,k) - a->topo(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->topo(i,j,k+1) - a->topo(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
-            else
-            {
-                nx = -(a->solid(i+1,j,k) - a->solid(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->solid(i,j+1,k) - a->solid(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->solid(i,j,k+1) - a->solid(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
+        member_fbh5(i,j,k) = 1.0-std::min(dirac,1.0);
+    )
 
-            norm = sqrt(nx*nx + ny*ny + nz*nz);
-
-            ny /= norm > 1.0e-20 ? norm : 1.0e20;
-
-            H = Hsolidface(p,a->solid,a->topo,0,1,0);
-
-            //Level set function
-            phival_sf = std::min(0.5*(a->solid(i,j,k) + a->solid(i,j+1,k)), 0.5*(a->topo(i,j,k) + a->topo(i,j+1,k)));
-
-            //Construct the field around the solid body to adjust the tangential velocity and calculate forcing
-            if(phival_sf<=0.0)
-            fy(i,j,k) += H*(vf - vvel(i,j,k))/(alpha*p->dt);
-            else
-            fy(i,j,k) += fabs(ny)*H*(vf - vvel(i,j,k))/(alpha*p->dt);
-
-            a->fbh2(i,j,k) = std::min(a->fbh2(i,j,k) + H , 1.0);
-        }
-
-        WLOOP
-        {
-            // Normal vectors calculation
-            if(0.5*(a->solid(i,j,k) + a->solid(i,j,k+1)) >= 0.5*(a->topo(i,j,k) + a->topo(i,j,k+1)))
-            {
-                nx = -(a->topo(i+1,j,k) - a->topo(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->topo(i,j+1,k) - a->topo(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->topo(i,j,k+1) - a->topo(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
-            else
-            {
-                nx = -(a->solid(i+1,j,k) - a->solid(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->solid(i,j+1,k) - a->solid(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->solid(i,j,k+1) - a->solid(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
-
-            norm = sqrt(nx*nx + ny*ny + nz*nz);
-
-            nz /= norm > 1.0e-20 ? norm : 1.0e20;
-
-            H = Hsolidface(p,a->solid,a->topo,0,0,1);
-
-            // Level set function
-            phival_sf = std::min(0.5*(a->solid(i,j,k) + a->solid(i,j,k+1)), 0.5*(a->topo(i,j,k) + a->topo(i,j,k+1)));
-
-            // Construct the field around the solid body to adjust the tangential velocity and calculate forcing
-
-            if(phival_sf<=0.0)
-            fz(i,j,k) += H*(wf - wvel(i,j,k))/(alpha*p->dt);
-            else
-            fz(i,j,k) += fabs(nz)*H*(wf - wvel(i,j,k))/(alpha*p->dt);
-
-            a->fbh3(i,j,k) = std::min(a->fbh3(i,j,k) + H , 1.0);
-        }
-
-        LOOP
-        {
-            H = Hsolidface(p,a->solid,a->topo,0,0,0);
-            a->fbh4(i,j,k) = std::min(a->fbh4(i,j,k) + H, 1.0);
-        }
-
-        LOOP
-        {
-            if(!p->j_dir)
-            psi = 1.1*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
-            else
-            psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-
-            if(fabs(std::min(a->solid(i,j,k),a->topo(i,j,k)))<psi)
-            dirac = (0.5/psi)*(1.0 + cos((PI*(std::min(a->solid(i,j,k),a->topo(i,j,k))))/psi));
-            else
-            dirac = 0.0;
-
-            a->fbh5(i,j,k) =  1.0-std::min(dirac,1.0);
-        }
-    }
-
+#if USE_AMREX
+    // fbh1/2/3 are contiguous at comps 9-12 in a->m_mf — one batched exchange
+    startBatch(p, a->m_mf, 9,
+        {{static_cast<field_amrex*>(&a->fbh1), 10},
+         {static_cast<field_amrex*>(&a->fbh2), 11},
+         {static_cast<field_amrex*>(&a->fbh3), 12},
+         {static_cast<field_amrex*>(&a->fbh4), 40}});
+#else
     start1(p,a->fbh1,10);
     start2(p,a->fbh2,11);
     start3(p,a->fbh3,12);
     start4(p,a->fbh4,40);
-
+#endif
     start1(p,fx,10);
     start2(p,fy,11);
     start3(p,fz,12);
+}
+
+static inline double heaviside_smooth(double negphi, double psi)
+{
+    if(negphi > psi)  return 1.0;
+    if(negphi < -psi) return 0.0;
+    return 0.5*(1.0 + negphi/psi + (1.0/PI)*sin((PI*negphi)/psi));
+}
+
+template<typename GenericField>
+inline void ghostcell::normal_vector_solid_topo(lexer* p, GenericField& solid, GenericField& topo, double& Hx, double& Hy, double& Hz, double& H, double& dirac, bool onlyHeaviside, double& nx, double& ny, double& nz, double& phix, double& phiy, double& phiz)
+{
+    const double solid_ijk = solid(i,j,k);
+    const double topo_ijk = topo(i,j,k);
+    const double solid_ipjk = solid(i+1,j,k);
+    const double solid_ijpk = solid(i,j+1,k);
+    const double solid_ijkp = solid(i,j,k+1);
+    const double topo_ipjk = topo(i+1,j,k);
+    const double topo_ijpk = topo(i,j+1,k);
+    const double topo_ijkp = topo(i,j,k+1);
+
+    // Phi calculation – set to zero if onlyHeaviside==true
+    phix = std::min(0.5*(solid_ijk + solid_ipjk), 0.5*(topo_ijk + topo_ipjk));
+    phiy = std::min(0.5*(solid_ijk + solid_ijpk), 0.5*(topo_ijk + topo_ijpk));
+    phiz = std::min(0.5*(solid_ijk + solid_ijkp), 0.5*(topo_ijk + topo_ijkp));
+
+    double phival = std::min(solid_ijk, topo_ijk);
+
+    // Heaviside function
+    if(p->topoforcing==0 && p->solidread==0)
+    {
+        Hx = 0.0;
+        Hy = 0.0;
+        Hz = 0.0;
+
+        H = 0.0;
+    }
+    else
+    {
+        double psi;
+        if(!p->j_dir)
+        psi = p->X41*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
+        else
+        psi = p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
+
+        double phival_x;
+        double phival_y;
+        double phival_z;
+        if(p->topoforcing>0 && p->solidread==0)
+        {
+            phival_x = 0.5*(topo_ijk + topo_ipjk);
+            phival_y = 0.5*(topo_ijk + topo_ijpk);
+            phival_z = 0.5*(topo_ijk + topo_ijkp);
+
+            phival = topo_ijk;
+        }
+        else if(p->topoforcing==0 && p->solidread>0)
+        {
+            phival_x = 0.5*(solid_ijk + solid_ipjk);
+            phival_y = 0.5*(solid_ijk + solid_ijpk);
+            phival_z = 0.5*(solid_ijk + solid_ijkp);
+
+            phival = solid_ijk;
+        }
+        else if(p->topoforcing>0 && p->solidread>0)
+        {
+            phival_x = phix;
+            phival_y = phiy;
+            phival_z = phiz;
+        }
+
+        Hx = heaviside_smooth(-phival_x, psi);
+        Hy = heaviside_smooth(-phival_y, psi);
+        Hz = heaviside_smooth(-phival_z, psi);
+        H  = heaviside_smooth(-phival,   psi);
+    }
+
+    // Dirac function
+    {
+        double psi;
+        if(!p->j_dir)
+        psi = 1.1*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
+        else
+        psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
+
+        if(fabs(phival)<psi)
+        dirac = (0.5/psi)*(1.0 + cos((PI*phival)/psi));
+        else
+        dirac = 0.0;
+    }
+
+    // Normal vector calculation
+    if((phix <= 0.0 && phiy <= 0.0 && phiz <= 0.0) || onlyHeaviside)
+    {
+        nx = 0.0;
+        ny = 0.0;
+        nz = 0.0;
+
+        phix = 0.0;
+        phiy = 0.0;
+        phiz = 0.0;
+    }
+    else
+    {
+        const double solid_imjk = solid(i-1,j,k);
+        const double solid_ijmk = solid(i,j-1,k);
+        const double solid_ijkm = solid(i,j,k-1);
+        const double topo_imjk = topo(i-1,j,k);
+        const double topo_ijmk = topo(i,j-1,k);
+        const double topo_ijkm = topo(i,j,k-1);
+        const double two_dx = 2*p->DXN[IP];
+        const double two_dy = 2*p->DYN[JP];
+        const double two_dz = 2*p->DZN[KP];
+
+        // Solid gradient at (i,j,k) — central differences
+        const double gsx = -(solid_ipjk - solid_imjk)/two_dx;
+        const double gsy = -(solid_ijpk - solid_ijmk)/two_dy;
+        const double gsz = -(solid_ijkp - solid_ijkm)/two_dz;
+        const double norms = sqrt(gsx*gsx + gsy*gsy + gsz*gsz);
+        const double inv_ns = 1.0 / (norms > 1.0e-20 ? norms : 1.0e20);
+
+        // Topo gradient at (i,j,k) — central differences
+        const double gtx = -(topo_ipjk - topo_imjk)/two_dx;
+        const double gty = -(topo_ijpk - topo_ijmk)/two_dy;
+        const double gtz = -(topo_ijkp - topo_ijkm)/two_dz;
+        const double normt = sqrt(gtx*gtx + gty*gty + gtz*gtz);
+        const double inv_nt = 1.0 / (normt > 1.0e-20 ? normt : 1.0e20);
+
+        // Select per face: use topo gradient when solid face average is shallower
+        nx = (0.5*(solid_ijk+solid_ipjk) >= 0.5*(topo_ijk+topo_ipjk)) ? gtx*inv_nt : gsx*inv_ns;
+        ny = (0.5*(solid_ijk+solid_ijpk) >= 0.5*(topo_ijk+topo_ijpk)) ? gty*inv_nt : gsy*inv_ns;
+        nz = (0.5*(solid_ijk+solid_ijkp) >= 0.5*(topo_ijk+topo_ijkp)) ? gtz*inv_nt : gsz*inv_ns;
+    }
 }

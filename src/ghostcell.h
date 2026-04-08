@@ -289,33 +289,8 @@ private:
     void gcsl_potentialbc(lexer*,slice&,int);
 
     // Helper functions
-    template<typename GenericFieldConst> inline double Hsolidface(lexer *p, GenericFieldConst& solid, GenericFieldConst& topo, int aa, int bb, int cc)
-    {
-        if(p->topoforcing==0 && p->solidread==0)
-        return 0.0;
-
-        double psi;
-        if(!p->j_dir)
-        psi = p->X41*(1.0/2.0)*(p->DXN[IP]+p->DZN[KP]);
-        else
-        psi = p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-
-        double phival_sf;
-        if(p->topoforcing>0 && p->solidread==0)
-        phival_sf = 0.5*(topo(i,j,k) + topo(i+aa,j+bb,k+cc));
-        else if(p->topoforcing==0 && p->solidread>0)
-        phival_sf = 0.5*(solid(i,j,k) + solid(i+aa,j+bb,k+cc));
-        else if(p->topoforcing>0 && p->solidread>0)
-        phival_sf = std::min(0.5*(solid(i,j,k) + solid(i+aa,j+bb,k+cc)), 0.5*(topo(i,j,k) + topo(i+aa,j+bb,k+cc)));
-        // else == if(p->topoforcing==0 && p->solidread==0) is covered in the beginning of the function
-
-        if(-phival_sf > psi)
-        return 1.0;
-        else if(-phival_sf < -psi)
-        return 0.0;
-        else
-        return 0.5*(1.0 + -phival_sf/psi + (1.0/PI)*sin((PI * -phival_sf)/psi));
-    }
+    template<typename GenericField> inline void normal_vector_solid_topo(lexer* p, GenericField& solid, GenericField& topo, double& Hx, double& Hy, double& Hz, double& H, double& dirac, bool onlyHeaviside, double& nx, double& ny, double& nz, double& phix, double& phiy, double& phiz);
+    template<typename GenericFieldConst> inline double Hsolidface(lexer *p, GenericFieldConst& solid, GenericFieldConst& topo, int aa, int bb, int cc);
 
     MPI_Comm cart_comm = MPI_COMM_NULL;
     int neighbors[6] = {MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL,
