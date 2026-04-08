@@ -23,17 +23,16 @@ Author: Hans Bihs
 #ifndef MOMENTUM_FORCING_H_
 #define MOMENTUM_FORCING_H_
 
-#include"increment.h"
-#include<vector>
+#include "increment.h"
 
 class lexer;
 class fdm;
 class ghostcell;
-class field;
+class field1;
+class field2;
+class field3;
 class sixdof;
 class fsi;
-
-using namespace std;
 
 class momentum_forcing : public increment
 {
@@ -41,7 +40,7 @@ public:
     momentum_forcing() = default;
     virtual ~momentum_forcing() = default;
     void momentum_forcing_start(lexer*,fdm*,ghostcell*,sixdof*,fsi*,
-                                field&,field&,field&,field&,field&,field&,int,double,bool);
+                                field1&,field2&,field3&,field1&,field2&,field3&,int,double,bool);
 
 private:
     static constexpr int gcval_u=10, gcval_v=11, gcval_w=12;
