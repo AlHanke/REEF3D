@@ -36,13 +36,10 @@ void momentum_forcing::momentum_forcing_start(lexer* p, fdm* a, ghostcell *pgc, 
     double starttime=pgc->timer();
 
     // Forcing
-    fx.setVal(0.0);
-    fy.setVal(0.0);
-    fz.setVal(0.0);
+    fx.setVal(0.0, true);
+    fy.setVal(0.0, true);
+    fz.setVal(0.0, true);
 
-    pgc->start1(p,fx,10);
-    pgc->start2(p,fy,11);
-    pgc->start3(p,fz,12);
 
     pgc->solid_forcing(p,a,alpha,u,v,w,fx,fy,fz);
 
