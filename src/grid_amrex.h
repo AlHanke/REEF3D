@@ -68,7 +68,7 @@ public:
     amrex::Vector<amrex::Vector<std::pair<amrex::RealVect,amrex::RealVect>>> amrex_refined_grid_coords; // Input: Coordinates of the refined grid boxes for each level, index is offset by 1 (i.e. amrex_refined_grid_coords[0] is for level 1, etc.)
 
     // Looping structures
-    amrex::Vector<amrex::MultiFab> amr_cell_mf;
+    amrex::Vector<amrex::iMultiFab> amr_cell_mf;
     std::unique_ptr<amrex::MFIter> default_cell_mfi;
     amrex::MFIter* amr_cell_mfi = nullptr;
 
