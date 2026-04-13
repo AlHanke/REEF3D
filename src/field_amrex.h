@@ -25,23 +25,22 @@ Author: Alexander Hanke
 
 #include "field.h"
 #include "lexer.h"
-#include <AMReX_MultiFab.H>
 #include <AMReX_BCRec.H>
+#include <AMReX_MultiFab.H>
+#include <vector>
 
 class field_amrex : public field
 {
 public:
     virtual ~field_amrex() = default;
 
-    double& operator()(int, int, int) override;
+    double& operator()(int ii, int jj, int kk) override;
+
+    void setVal(double val, bool includeGhost = false) override;
 
     void fillBoundary() override;
 
     void FillDomainBoundary() override;
-
-    amrex::MultiFab& GetMultiFab() override { return mf; }
-
-    void setVal(double val) override { mf.setVal(val,0); }
 
 protected:
     field_amrex(lexer* p);
@@ -49,8 +48,8 @@ protected:
     void initialize_bc();
 
     lexer *pp;
-    amrex::MultiFab mf;
-    amrex::Vector<amrex::BCRec> bc;
+    std::vector<amrex::MultiFab> mf;
+    std::vector<amrex::Vector<amrex::BCRec>> bc;
     const int num_components = 1;
 };
 

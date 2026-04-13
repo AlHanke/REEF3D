@@ -22,8 +22,9 @@ Author: Alexander Hanke
 
 #include "fieldint_amrex.h"
 #include "lexer.h"
-#include <AMReX_MultiFab.H>
-#include <AMReX_Array4.H>
+#include <AMReX_BCUtil.H>
+#include <AMReX_MFIter.H>
+#include <AMReX_iMultiFab.H>
 
 fieldint_amrex::fieldint_amrex(lexer* p)
 {
@@ -36,25 +37,54 @@ int& fieldint_amrex::operator()(int ii, int jj, int kk)
 
     IntVect cell_index{AMREX_D_DECL(ii + pp->origin_i, jj + pp->origin_j, kk + pp->origin_k)};
 
-    for (MFIter mfi(mf); mfi.isValid(); ++mfi)
+    for (MFIter mfi(mf[pp->level]); mfi.isValid(); ++mfi)
     {
-        // const Box& box = mfi.fabbox();
-        // FArrayBox& fab = mf[mfi];
-        // Array4<int> const& a = fab.array();
-        // const auto cell_index = box.smallEnd() + IntVect{AMREX_D_DECL(ii + pp->margin, jj + pp->margin, kk + pp->margin)};
-        // if(cell_index != IntVect{AMREX_D_DECL(ii + pp->origin_i, jj + pp->origin_j, kk + pp->origin_k)})
-        //     Abort("fieldint_amrex::operator(): indices don't match.");
-        // const auto hi = ubound(box);
-        // return a(cell_index, 0);
-        if (!mfi.fabbox().contains(cell_index)) continue;
-        Array4<int> arr = mf.array(mfi);
-        return arr(cell_index, 0);
+        const Box& box = mfi.fabbox();
+        const auto cell_index = box.smallEnd() + IntVect{AMREX_D_DECL(ii + pp->margin, jj + pp->margin, kk + pp->margin)};
+        return mf[pp->level].array(mfi)(cell_index, 0);
     }
+    // return (mf[pp->level][*(pp->amr_mfi)].array()(amrex::IntVect{AMREX_D_DECL(ii, jj, kk)} + amrex::IntVect{amrex::lbound(pp->amr_mfi->validbox())}, 0));
+}
 
-    Abort("fieldint_amrex::operator(): index outside owned boxes.");
+void fieldint_amrex::setVal(int val, bool includeGhost)
+{
+    mf[pp->level].setVal(val, (includeGhost ? pp->margin : 0));
 }
 
 void fieldint_amrex::fillBoundary()
 {
-    mf.FillBoundary(pp->amrex_geometry.periodicity());
+    mf[pp->level].FillBoundary(pp->amrex_geometry[pp->level].periodicity());
+}
+
+void fieldint_amrex::FillDomainBoundary()
+{
+    // amrex::FillDomainBoundary(mf[pp->level], pp->amrex_geometry[pp->level], bc[pp->level]);
+}
+
+void fieldint_amrex::initialize_bc()
+{
+    using namespace amrex;
+
+    bc.resize(pp->nlevs);
+    for(pp->level=0; pp->level<pp->nlevs; ++pp->level)
+    {
+        bc[pp->level].resize(mf[pp->level].n_comp);
+        for (int n = 0; n < mf[pp->level].nComp(); ++n)
+        {
+            for (int idim = 0; idim < AMREX_SPACEDIM; ++idim)
+            {
+                if (pp->amrex_geometry[pp->level].isPeriodic(idim))
+                {
+                    bc[pp->level][n].setLo(idim, BCType::int_dir); // interior
+                    bc[pp->level][n].setHi(idim, BCType::int_dir);
+                }
+                else
+                {
+                    // ToDo: Fix this
+                    bc[pp->level][n].setLo(idim, BCType::bogus);
+                    bc[pp->level][n].setHi(idim, BCType::bogus);
+                }
+            }
+        }
+    }
 }
