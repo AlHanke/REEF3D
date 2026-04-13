@@ -24,54 +24,35 @@ Author: Hans Bihs
 #include"lexer.h"
 
 fdm::fdm(lexer *p) :
-            u(p),F(p),Fext(p),
-            v(p),G(p),Gext(p),
-            w(p),H(p),Hext(p),
-            press(p),
-            Fi(p),
-            eddyv(p),
-            L(p),
-            ro(p),visc(p),
-            phi(p),
-            vof(p),vof_nt(p),vof_nb(p),vof_st(p),vof_sb(p),phasemarker(p),
-            vof_nte(p),vof_ntw(p),vof_nbe(p),vof_nbw(p),vof_ste(p),vof_stw(p),vof_sbe(p),vof_sbw(p),
-            conc(p),
-            topo(p),solid(p),
-            test(p),
-            fb(p),fbh1(p),fbh2(p),fbh3(p),fbh4(p),fbh5(p),
-            porosity(p),porpart(p),
-            walld(p),
-            nodeval(p),nodeval2D(p),etaloc(p),
-            eta(p),eta_n(p),depth(p),WL(p),
-            Fifsf(p),K(p),
-            P(p),Q(p),bed(p),
-            rhsvec(p),M(p),
-            nX(p),nY(p),nZ(p),Alpha(p)
-            
+    u(p), F(p), Fext(p),
+    v(p), G(p), Gext(p),
+    w(p), H(p), Hext(p),
+    press(p),
+    Fi(p),
+    eddyv(p),
+    L(p),
+    ro(p), visc(p),
+    phi(p),
+    vof(p), vof_nt(p), vof_nb(p), vof_st(p), vof_sb(p), phasemarker(p),
+    vof_nte(p), vof_ntw(p), vof_nbe(p), vof_nbw(p), vof_ste(p), vof_stw(p), vof_sbe(p), vof_sbw(p),
+    conc(p),
+    topo(p), solid(p),
+    test(p),
+    fb(p), fbh1(p), fbh2(p), fbh3(p), fbh4(p), fbh5(p),
+    porosity(p), porpart(p),
+    walld(p),
+    nodeval(p), nodeval2D(p), etaloc(p),
+    eta(p), eta_n(p), depth(p), WL(p),
+    Fifsf(p), K(p),
+    P(p), Q(p), bed(p),
+    rhsvec(p), M(p),
+    nX(p), nY(p), nZ(p), Alpha(p)
 {
-	maxF=0.0;
-	maxG=0.0; 
-	maxH=0.0;
-    
-	gi=p->W20;
-	gj=p->W21;
-	gk=p->W22;
+    maxF = 0.0;
+    maxG = 0.0;
+    maxH = 0.0;
+
+    gi = p->W20;
+    gj = p->W21;
+    gk = p->W22;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
