@@ -29,20 +29,15 @@ Author: Hans Bihs
 
 void initialize::inivofPLIC(fdm*a, lexer* p, ghostcell* pgc)
 {
+    double dx=p->DXM;
+    double r;
+    double vofdiff, xdiff;
 
-double dx=p->DXM;
-double r;
-double vofdiff, xdiff;
-
-    LOOP
-    {
-	a->vof(i,j,k)=0.0;
-    a->nZ(i,j,k)=1E06;
-    a->nY(i,j,k)=1E06;
-    a->nZ(i,j,k)=1E06;
-    a->Alpha(i,j,k)=1E06;
-    
-    }
+    a->vof.setVal(0.0);
+    a->nZ.setVal(1E06);
+    a->nY.setVal(1E06);
+    a->nZ.setVal(1E06);
+    a->Alpha.setVal(1E06);
     
     pgc->start4(p,a->vof,1);
 
@@ -57,42 +52,43 @@ double vofdiff, xdiff;
         }
     }
 
-if(p->F57_1>1E-20||p->F57_2>1E-20||p->F57_3>1E-20||p->F57_4>1E-20)
-{
-	LOOP
-	if(p->F57_1*p->XP[IP]+ p->F57_2*p->YP[JP]+ p->F57_3*p->ZP[KP] < p->F57_4)
-        a->vof(i,j,k)=1.0;
-}
-
-if(p->F58_4>1E-20)
-{
-    LOOP
-        {
-        r = sqrt( pow(p->XP[IP]-p->F58_1,2.0)+pow(p->YP[JP]-p->F58_2,2.0)+pow(p->ZP[KP]-p->F58_3,2.0));
-
-        if(r<=p->F58_4)
-        a->vof(i,j,k)=1.0;
-        }
-}
-
-if(p->F60>-1.0e20)
-{   p->phimean=p->F60;
-    LOOP
+    if(p->F57_1>1E-20||p->F57_2>1E-20||p->F57_3>1E-20||p->F57_4>1E-20)
     {
-        if(p->pos_z()+0.5*p->DZN[KP]<p->F60)
+        LOOP
+        if(p->F57_1*p->XP[IP]+ p->F57_2*p->YP[JP]+ p->F57_3*p->ZP[KP] < p->F57_4)
             a->vof(i,j,k)=1.0;
-        else if(p->pos_z()-0.5*p->DZN[KP]>p->F60)
+    }
+
+    if(p->F58_4>1E-20)
+    {
+        LOOP
         {
-            a->vof(i,j,k)=0.0;
-        }
-        else
-        {
-            a->vof(i,j,k)=(p->F60-(p->pos_z()-0.5*p->DZN[KP]))/p->DZN[KP];
+            r = sqrt( pow(p->XP[IP]-p->F58_1,2.0)+pow(p->YP[JP]-p->F58_2,2.0)+pow(p->ZP[KP]-p->F58_3,2.0));
+
+            if(r<=p->F58_4)
+            a->vof(i,j,k)=1.0;
         }
     }
-}
 
-  /*  if((p->F60>-1.0e20 || p->F56>-1.0e20) && p->F62>-1.0e-20&& p->F63>-1.0e-20  )
+    if(p->F60>-1.0e20)
+    {
+        p->phimean=p->F60;
+        LOOP
+        {
+            if(p->pos_z()+0.5*p->DZN[KP]<p->F60)
+                a->vof(i,j,k)=1.0;
+            else if(p->pos_z()-0.5*p->DZN[KP]>p->F60)
+            {
+                a->vof(i,j,k)=0.0;
+            }
+            else
+            {
+                a->vof(i,j,k)=(p->F60-(p->pos_z()-0.5*p->DZN[KP]))/p->DZN[KP];
+            }
+        }
+    }
+
+    /* if((p->F60>-1.0e20 || p->F56>-1.0e20) && p->F62>-1.0e-20&& p->F63>-1.0e-20  )
     {
         vofdiff=p->F62-p->phimean;
         xdiff=p->xcoormax-p->F63;
@@ -101,131 +97,130 @@ if(p->F60>-1.0e20)
         if(p->pos_x() > p->F63)
         a->vof(i,j,k)=(vofdiff/xdiff)*(p->pos_x()-p->F63) + p->phimean    - p->pos_z() ;
     }*/
-if(p->F100>0)
-{
-    double FSpos_pp,FSpos_pm,FSpos_mp,FSpos_mm,FSpos_c;
-    double C_p,C_m;
-    double No_z,No_y,No_x,St_loc,R_0,nsum,R_m;
-    St_loc=p->F101_e;
-    No_x=p->F101_nx;
-    No_y=p->F101_ny;
-    No_z=p->F101_nz;
-    nsum=sqrt(No_x*No_x+No_y*No_y+No_z*No_z);
-    No_x=No_x/nsum;
-    No_y=No_y/nsum;
-    No_z=No_z/nsum;
-    if(p->F100==1)
+    if(p->F100>0)
     {
-        R_0=No_x*St_loc;
-        LOOP
+        double FSpos_pp,FSpos_pm,FSpos_mp,FSpos_mm,FSpos_c;
+        double C_p,C_m;
+        double No_z,No_y,No_x,St_loc,R_0,nsum,R_m;
+        St_loc=p->F101_e;
+        No_x=p->F101_nx;
+        No_y=p->F101_ny;
+        No_z=p->F101_nz;
+        nsum=sqrt(No_x*No_x+No_y*No_y+No_z*No_z);
+        No_x=No_x/nsum;
+        No_y=No_y/nsum;
+        No_z=No_z/nsum;
+        if(p->F100==1)
         {
-            FSpos_c=St_loc-No_y*p->pos_y()-No_z*p->pos_z();
-            FSpos_pp=St_loc-No_y*(p->pos_y()+0.5*p->DYN[JP])-No_z*(p->pos_z()+0.5*p->DZN[KP]);
-            FSpos_pm=St_loc-No_y*(p->pos_y()+0.5*p->DYN[JP])-No_z*(p->pos_z()-0.5*p->DZN[KP]);
-            FSpos_mp=St_loc-No_y*(p->pos_y()-0.5*p->DYN[JP])-No_z*(p->pos_z()+0.5*p->DZN[KP]);
-            FSpos_mm=St_loc-No_y*(p->pos_y()-0.5*p->DYN[JP])-No_z*(p->pos_z()-0.5*p->DZN[KP]);
-            C_p=p->pos_x()+0.5*p->DXN[IP];
-            C_m=p->pos_x()-0.5*p->DXN[IP];
-        
-            if((C_m<=FSpos_c&&FSpos_c<=C_p)||(C_m<=FSpos_pp&&FSpos_pp<=C_p)||(C_m<=FSpos_pm&&FSpos_pm<=C_p)||(C_m<=FSpos_mp&&FSpos_mp<=C_p)||(C_m<=FSpos_mm&&FSpos_mm<=C_m))
+            R_0=No_x*St_loc;
+            LOOP
             {
-                R_m=R_0-No_x*p->pos_x()-No_y*p->pos_y()-No_z*p->pos_z();
-                a->vof(i,j,k)=VforPLIC(No_x,No_y,No_z,p->DXN[IP],p->DYN[JP],p->DZN[KP],R_m);
-            }
-            else
-            {
-                if(p->pos_x()<=FSpos_c)
+                FSpos_c=St_loc-No_y*p->pos_y()-No_z*p->pos_z();
+                FSpos_pp=St_loc-No_y*(p->pos_y()+0.5*p->DYN[JP])-No_z*(p->pos_z()+0.5*p->DZN[KP]);
+                FSpos_pm=St_loc-No_y*(p->pos_y()+0.5*p->DYN[JP])-No_z*(p->pos_z()-0.5*p->DZN[KP]);
+                FSpos_mp=St_loc-No_y*(p->pos_y()-0.5*p->DYN[JP])-No_z*(p->pos_z()+0.5*p->DZN[KP]);
+                FSpos_mm=St_loc-No_y*(p->pos_y()-0.5*p->DYN[JP])-No_z*(p->pos_z()-0.5*p->DZN[KP]);
+                C_p=p->pos_x()+0.5*p->DXN[IP];
+                C_m=p->pos_x()-0.5*p->DXN[IP];
+
+                if((C_m<=FSpos_c&&FSpos_c<=C_p)||(C_m<=FSpos_pp&&FSpos_pp<=C_p)||(C_m<=FSpos_pm&&FSpos_pm<=C_p)||(C_m<=FSpos_mp&&FSpos_mp<=C_p)||(C_m<=FSpos_mm&&FSpos_mm<=C_m))
                 {
-                    if(No_x>=0.0)
-                        a->vof(i,j,k)=1.0;
-                    else
-                        a->vof(i,j,k)=0.0;
+                    R_m=R_0-No_x*p->pos_x()-No_y*p->pos_y()-No_z*p->pos_z();
+                    a->vof(i,j,k)=VforPLIC(No_x,No_y,No_z,p->DXN[IP],p->DYN[JP],p->DZN[KP],R_m);
                 }
                 else
                 {
-                    if(No_x>=0.0)
-                        a->vof(i,j,k)=0.0;
+                    if(p->pos_x()<=FSpos_c)
+                    {
+                        if(No_x>=0.0)
+                            a->vof(i,j,k)=1.0;
+                        else
+                            a->vof(i,j,k)=0.0;
+                    }
                     else
-                        a->vof(i,j,k)=1.0;
+                    {
+                        if(No_x>=0.0)
+                            a->vof(i,j,k)=0.0;
+                        else
+                            a->vof(i,j,k)=1.0;
+                    }
+                }
+            }
+        }
+        else if(p->F100==2)
+        {
+            R_0=No_y*St_loc;
+            LOOP
+            {
+                FSpos_c=St_loc-No_x*p->pos_x()-No_z*p->pos_z();
+                FSpos_pp=St_loc-No_x*(p->pos_x()+0.5*p->DXN[IP])-No_z*(p->pos_z()+0.5*p->DZN[KP]);
+                FSpos_mp=St_loc-No_x*(p->pos_x()-0.5*p->DXN[IP])-No_z*(p->pos_z()+0.5*p->DZN[KP]);
+                FSpos_pm=St_loc-No_x*(p->pos_x()+0.5*p->DXN[IP])-No_z*(p->pos_z()-0.5*p->DZN[KP]);
+                FSpos_mm=St_loc-No_x*(p->pos_x()-0.5*p->DXN[IP])-No_z*(p->pos_z()-0.5*p->DZN[KP]);
+                C_p=p->pos_y()+0.5*p->DYN[JP];
+                C_m=p->pos_y()-0.5*p->DYN[JP];
+
+                if((C_m<=FSpos_c&&FSpos_c<=C_p)||(C_m<=FSpos_pp&&FSpos_pp<=C_p)||(C_m<=FSpos_pm&&FSpos_pm<=C_p)||(C_m<=FSpos_mp&&FSpos_mp<=C_p)||(C_m<=FSpos_mm&&FSpos_mm<=C_m))
+                {
+                    R_m=R_0-No_x*p->pos_x()-No_y*p->pos_y()-No_z*p->pos_z();
+                    a->vof(i,j,k)=VforPLIC(No_x,No_y,No_z,p->DXN[IP],p->DYN[JP],p->DZN[KP],R_m);
+                }
+                else
+                {
+                    if(p->pos_y()<=FSpos_c)
+                    {
+                        if(No_y>=0.0)
+                            a->vof(i,j,k)=1.0;
+                        else
+                            a->vof(i,j,k)=0.0;
+                    }
+                    else
+                    {
+                        if(No_y>=0.0)
+                            a->vof(i,j,k)=0.0;
+                        else
+                            a->vof(i,j,k)=1.0;
+                    }
+                }
+            }
+        }
+        else
+        {
+            R_0=No_z*St_loc;
+            LOOP
+            {
+                FSpos_c=St_loc-No_x*p->pos_x()-No_y*p->pos_y();
+                FSpos_pp=St_loc-No_x*(p->pos_x()+0.5*p->DXN[IP])-No_y*(p->pos_y()+0.5*p->DYN[JP]);
+                FSpos_mp=St_loc-No_x*(p->pos_x()-0.5*p->DXN[IP])-No_y*(p->pos_y()+0.5*p->DYN[JP]);
+                FSpos_pm=St_loc-No_x*(p->pos_x()+0.5*p->DXN[IP])-No_y*(p->pos_y()-0.5*p->DYN[JP]);
+                FSpos_mm=St_loc-No_x*(p->pos_x()-0.5*p->DXN[IP])-No_y*(p->pos_y()-0.5*p->DYN[JP]);
+                C_p=p->pos_z()+0.5*p->DZN[KP];
+                C_m=p->pos_z()-0.5*p->DZN[KP];
+                if((C_m<=FSpos_c&&FSpos_c<=C_p)||(C_m<=FSpos_pp&&FSpos_pp<=C_p)||(C_m<=FSpos_pm&&FSpos_pm<=C_p)||(C_m<=FSpos_mp&&FSpos_mp<=C_p)||(C_m<=FSpos_mm&&FSpos_mm<=C_m))
+                {
+                    R_m=R_0-No_x*p->pos_x()-No_y*p->pos_y()-No_z*p->pos_z();
+                    a->vof(i,j,k)=VforPLIC(No_x,No_y,No_z,p->DXN[IP],p->DYN[JP],p->DZN[KP],R_m);
+                }
+                else
+                {
+                    if(p->pos_z()<=FSpos_c)
+                    {
+                        if(No_z>=0.0)
+                            a->vof(i,j,k)=1.0;
+                        else
+                            a->vof(i,j,k)=0.0;
+                    }
+                    else
+                    {
+                        if(No_z>=0.0)
+                            a->vof(i,j,k)=0.0;
+                        else
+                            a->vof(i,j,k)=1.0;
+                    }
                 }
             }
         }
     }
-    else if(p->F100==2)
-    {
-        R_0=No_y*St_loc;
-        LOOP
-        {
-            FSpos_c=St_loc-No_x*p->pos_x()-No_z*p->pos_z();
-            FSpos_pp=St_loc-No_x*(p->pos_x()+0.5*p->DXN[IP])-No_z*(p->pos_z()+0.5*p->DZN[KP]);
-            FSpos_mp=St_loc-No_x*(p->pos_x()-0.5*p->DXN[IP])-No_z*(p->pos_z()+0.5*p->DZN[KP]);
-            FSpos_pm=St_loc-No_x*(p->pos_x()+0.5*p->DXN[IP])-No_z*(p->pos_z()-0.5*p->DZN[KP]);
-            FSpos_mm=St_loc-No_x*(p->pos_x()-0.5*p->DXN[IP])-No_z*(p->pos_z()-0.5*p->DZN[KP]);
-            C_p=p->pos_y()+0.5*p->DYN[JP];
-            C_m=p->pos_y()-0.5*p->DYN[JP];
-            
-            if((C_m<=FSpos_c&&FSpos_c<=C_p)||(C_m<=FSpos_pp&&FSpos_pp<=C_p)||(C_m<=FSpos_pm&&FSpos_pm<=C_p)||(C_m<=FSpos_mp&&FSpos_mp<=C_p)||(C_m<=FSpos_mm&&FSpos_mm<=C_m))
-            {
-                R_m=R_0-No_x*p->pos_x()-No_y*p->pos_y()-No_z*p->pos_z();
-                a->vof(i,j,k)=VforPLIC(No_x,No_y,No_z,p->DXN[IP],p->DYN[JP],p->DZN[KP],R_m);
-            }
-            else
-            {
-                if(p->pos_y()<=FSpos_c)
-                {
-                    if(No_y>=0.0)
-                        a->vof(i,j,k)=1.0;
-                    else
-                        a->vof(i,j,k)=0.0;
-                }
-                else
-                {
-                    if(No_y>=0.0)
-                        a->vof(i,j,k)=0.0;
-                    else
-                        a->vof(i,j,k)=1.0;
-                }
-            }
-        }
-    }
-    else
-    {
-        R_0=No_z*St_loc;
-        LOOP
-        {
-            FSpos_c=St_loc-No_x*p->pos_x()-No_y*p->pos_y();
-            FSpos_pp=St_loc-No_x*(p->pos_x()+0.5*p->DXN[IP])-No_y*(p->pos_y()+0.5*p->DYN[JP]);
-            FSpos_mp=St_loc-No_x*(p->pos_x()-0.5*p->DXN[IP])-No_y*(p->pos_y()+0.5*p->DYN[JP]);
-            FSpos_pm=St_loc-No_x*(p->pos_x()+0.5*p->DXN[IP])-No_y*(p->pos_y()-0.5*p->DYN[JP]);
-            FSpos_mm=St_loc-No_x*(p->pos_x()-0.5*p->DXN[IP])-No_y*(p->pos_y()-0.5*p->DYN[JP]);
-            C_p=p->pos_z()+0.5*p->DZN[KP];
-            C_m=p->pos_z()-0.5*p->DZN[KP];
-            if((C_m<=FSpos_c&&FSpos_c<=C_p)||(C_m<=FSpos_pp&&FSpos_pp<=C_p)||(C_m<=FSpos_pm&&FSpos_pm<=C_p)||(C_m<=FSpos_mp&&FSpos_mp<=C_p)||(C_m<=FSpos_mm&&FSpos_mm<=C_m))
-            {
-                R_m=R_0-No_x*p->pos_x()-No_y*p->pos_y()-No_z*p->pos_z();
-                a->vof(i,j,k)=VforPLIC(No_x,No_y,No_z,p->DXN[IP],p->DYN[JP],p->DZN[KP],R_m);
-            }
-            else
-            {
-                if(p->pos_z()<=FSpos_c)
-                {
-                    if(No_z>=0.0)
-                        a->vof(i,j,k)=1.0;
-                    else
-                        a->vof(i,j,k)=0.0;
-                }
-                else
-                {
-                    if(No_z>=0.0)
-                        a->vof(i,j,k)=0.0;
-                    else
-                        a->vof(i,j,k)=1.0;
-                }
-            }
-        }
-    }
-    
-}
 	double H=0.0;
 
 	LOOP
@@ -243,7 +238,7 @@ if(p->F100>0)
     //a->phi(i,j,k) = a->vof(i,j,k);
 
 	pgc->start4(p,a->vof,50);
-   // pgc->start4(p,a->phi,50);
+    // pgc->start4(p,a->phi,50);
 	pgc->start4(p,a->ro,1);
 	pgc->start4(p,a->visc,1);
 }
