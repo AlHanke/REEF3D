@@ -91,11 +91,6 @@ levelset_RK3::~levelset_RK3()
 
 void levelset_RK3::start(fdm* a, lexer* p, convection* pconvec, solver*, ghostcell* pgc, ioflow* pflow, reini* preini, particle_corr* ppart, field &ls)
 {
-    #if USE_AMREX
-    const int max_level = p->nlevs - 1;
-    #else
-    const int max_level = 0;
-    #endif
 
     pflow->fsfinflow(p,a,pgc);
     pflow->fsfrkin(p,a,pgc,ark1);
@@ -104,86 +99,59 @@ void levelset_RK3::start(fdm* a, lexer* p, convection* pconvec, solver*, ghostce
     pflow->fsfrkout(p,a,pgc,ark2);
     ppicard->volcalc(p,a,pgc,ls);
 
+    const double dt = p->dt;
+
 // Step 1
     starttime=pgc->timer();
 
     a->L.setVal(0.0);
 
-	pconvec->start(p,a,ls,4,a->u,a->v,a->w);
-	
-	for(int lev=max_level; lev>=0; --lev)
-	{
-		p->level = lev;
-		TILE_LOOP
-		IJKLOOP
-		PCHECK
-		ark1(i,j,k) = ls(i,j,k)
-				+ p->dt*a->L(i,j,k);
-	}
-	p->level = 0;
-	
-	pflow->phi_relax(p,pgc,ark1);
-	
-	pgc->start4(p,ark1,gcval_phi);
+    pconvec->start(p,a,ls,4,a->u,a->v,a->w);
+
+    LOOP
+    ark1(i,j,k) = ls(i,j,k) + dt*a->L(i,j,k);
+
+    pflow->phi_relax(p,pgc,ark1);
+
+    pgc->start4(p,ark1,gcval_phi);
     pgc->solid_forcing_lsm(p,a,ark1);
-    
-    
+
 // Step 2
-	a->L.setVal(0.0);
+    a->L.setVal(0.0);
 
-	pconvec->start(p,a,ark1,4,a->u,a->v,a->w);
+    pconvec->start(p,a,ark1,4,a->u,a->v,a->w);
 
-	for(int lev=max_level; lev>=0; --lev)
-	{
-		p->level = lev;
-		TILE_LOOP
-		IJKLOOP
-		PCHECK
-		ark2(i,j,k) =     0.75*ls(i,j,k)
-				   + 0.25*ark1(i,j,k)
-				   + 0.25*p->dt*a->L(i,j,k);
-	}
-	p->level = 0;
-				
-	pflow->phi_relax(p,pgc,ark2);
-	
-	pgc->start4(p,ark2,gcval_phi);
+    LOOP
+    ark2(i,j,k) = 0.75*ls(i,j,k) + 0.25*ark1(i,j,k) + 0.25*dt*a->L(i,j,k);
+
+    pflow->phi_relax(p,pgc,ark2);
+
+    pgc->start4(p,ark2,gcval_phi);
     pgc->solid_forcing_lsm(p,a,ark2);
-    
+
 // Step 3
-	a->L.setVal(0.0);
+    a->L.setVal(0.0);
 
-	pconvec->start(p,a,ark2,4,a->u,a->v,a->w);
+    pconvec->start(p,a,ark2,4,a->u,a->v,a->w);
 
-	for(int lev=max_level; lev>=0; --lev)
-	{
-		p->level = lev;
-		TILE_LOOP
-		IJKLOOP
-		PCHECK
-		ls(i,j,k) =      (1.0/3.0)*ls(i,j,k)
-				  + (2.0/3.0)*ark2(i,j,k)
-				  + (2.0/3.0)*p->dt*a->L(i,j,k);
-	}
-	p->level = 0;
+    LOOP
+    ls(i,j,k) = (1.0/3.0)*ls(i,j,k) + (2.0/3.0)*ark2(i,j,k) + (2.0/3.0)*dt*a->L(i,j,k);
 
     pflow->phi_relax(p,pgc,ls);
-	pgc->start4(p,ls,gcval_phi);
+
+    pgc->start4(p,ls,gcval_phi);
     pgc->solid_forcing_lsm(p,a,ls);
-    
 
     ppart->start(p,a,pgc,pflow);
-    
-	
-	p->lsmtime=pgc->timer()-starttime;
-    
-	preini->start(a,p,ls,pgc,pflow);
-    
+
+    p->lsmtime=pgc->timer()-starttime;
+
+    preini->start(a,p,ls,pgc,pflow);
 
     ppicard->correct_ls(p,a,pgc,ls);
-	ppart->picardmove(p,a,pgc);
-    
-	pupdate->start(p,a,pgc,a->u,a->v,a->w);
+    ppart->picardmove(p,a,pgc);
+
+    pupdate->start(p,a,pgc,a->u,a->v,a->w);
 
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<"lsmtime: "<<setprecision(3)<<p->lsmtime<<endl;
