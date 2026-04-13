@@ -183,15 +183,15 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 
     create_amrex_box_array_and_distribution_mapping_level_n();
 
-    if (p->mpirank == 0)
-    {
-        for (int lev = 0; lev < nlevs; ++lev)
-            std::cout << "AMReX level " << lev << " cells: " << amrex_box_array[lev].numPts() << std::endl;
-    }
-
     for (int lev = 0; lev < nlevs; lev++)
     {
         amr_cell_mf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 0, p->margin);
+    }
+
+    for (int lev = 0; lev < nlevs; ++lev)
+    {
+        if (p->mpirank == 0)
+            std::cout << "AMReX level " << lev << " cells: " << amrex_box_array[lev].numPts() << std::endl;
     }
 
     amrex::MFIter::allowMultipleMFIters(true);
