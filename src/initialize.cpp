@@ -102,13 +102,11 @@ void initialize::nodecalc(lexer* p, fdm* a)
     p->level = 0;
     TILE_LOOP
     IJKLOOP
-    PCHECK
     ++p->cellnum;
 
     p->level = 0;
     TILE_LOOP
     IJKLOOP
-    PCHECK
     ++p->tpcellnum;
 
     // 2D
