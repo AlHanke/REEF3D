@@ -27,13 +27,13 @@ Author: Hans Bihs
 #define PORVALNH2  (0.5*(d->POR[IJK] + d->POR[IJp1K]))
 #define PORVALNH2m  (0.5*(d->POR[IJK] + d->POR[IJm1K]))
 
-#define CPORNH  (1.0/(1.0 + (p->B260*(1.0-PORVALNH)/(PORVALNH*PORVALNH))))
+#define CPORNH  (p->B260==0.0 ? 1.0 : (1.0/(1.0 + (p->B260*(1.0-PORVALNH)/(PORVALNH*PORVALNH)))))
 
-#define CPORNH1m  (1.0/(1.0 + (p->B260*(1.0-PORVALNH1m)/(PORVALNH1m*PORVALNH1m))))
-#define CPORNH1  (1.0/(1.0 + (p->B260*(1.0-PORVALNH1)/(PORVALNH1*PORVALNH1))))
+#define CPORNH1m  (p->B260==0.0 ? 1.0 : (1.0/(1.0 + (p->B260*(1.0-PORVALNH1m)/(PORVALNH1m*PORVALNH1m)))))
+#define CPORNH1  (p->B260==0.0 ? 1.0 : (1.0/(1.0 + (p->B260*(1.0-PORVALNH1)/(PORVALNH1*PORVALNH1)))))
 
-#define CPORNH2m  (1.0/(1.0 + (p->B260*(1.0-PORVALNH2m)/(PORVALNH2m*PORVALNH2m))))
-#define CPORNH2  (1.0/(1.0 + (p->B260*(1.0-PORVALNH2)/(PORVALNH2*PORVALNH2))))
+#define CPORNH2m  ((p->B260==0.0 ? 1.0 : 1.0/(1.0 + (p->B260*(1.0-PORVALNH2m)/(PORVALNH2m*PORVALNH2m)))))
+#define CPORNH2  (p->B260==0.0 ? 1.0 : (1.0/(1.0 + (p->B260*(1.0-PORVALNH2)/(PORVALNH2*PORVALNH2)))))
 
 /*
 #define PORVALNH  1.0
