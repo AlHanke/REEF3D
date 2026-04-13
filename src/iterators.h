@@ -35,38 +35,38 @@ Author: Hans Bihs
 #define PORVAL4py a->porosity(i,j+1,k)
 #define PORVAL4pz a->porosity(i,j,k+1)
 
-#define CPOR4px   (1.0/(1.0+(p->B260*(PORVAL4px<1.0?1.0:0.0))))
-#define CPOR4py   (1.0/(1.0+(p->B260*(PORVAL4py<1.0?1.0:0.0))))
-#define CPOR4pz   (1.0/(1.0+(p->B260*(PORVAL4pz<1.0?1.0:0.0))))
+#define CPOR4px   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL4px<1.0?1.0:0.0))))
+#define CPOR4py   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL4py<1.0?1.0:0.0))))
+#define CPOR4pz   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL4pz<1.0?1.0:0.0))))
 
-#define CPOR1   (1.0/(1.0+(p->B260*(PORVAL1<1.0?1.0:0.0))))
-#define CPOR2   (1.0/(1.0+(p->B260*(PORVAL2<1.0?1.0:0.0))))
-#define CPOR3   (1.0/(1.0+(p->B260*(PORVAL3<1.0?1.0:0.0))))
-#define CPOR4   (1.0/(1.0+(p->B260*(PORVAL4<1.0?1.0:0.0))))
+#define CPOR1   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL1<1.0?1.0:0.0))))
+#define CPOR2   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL2<1.0?1.0:0.0))))
+#define CPOR3   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL3<1.0?1.0:0.0))))
+#define CPOR4   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL4<1.0?1.0:0.0))))
 
 #define PORVAL1m (0.5*(a->porosity(i,j,k) + a->porosity(i-1,j,k)))
 #define PORVAL2m (0.5*(a->porosity(i,j,k) + a->porosity(i,j-1,k)))
 #define PORVAL3m (0.5*(a->porosity(i,j,k) + a->porosity(i,j,k-1)))
 
-#define CPOR1m   (1.0/(1.0+(p->B260*(PORVAL1m<1.0?1.0:0.0))))
-#define CPOR2m   (1.0/(1.0+(p->B260*(PORVAL2m<1.0?1.0:0.0))))
-#define CPOR3m   (1.0/(1.0+(p->B260*(PORVAL3m<1.0?1.0:0.0))))
+#define CPOR1m   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL1m<1.0?1.0:0.0))))
+#define CPOR2m   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL2m<1.0?1.0:0.0))))
+#define CPOR3m   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL3m<1.0?1.0:0.0))))
 
 #define PORVAL1p (0.5*(a->porosity(i+2,j,k) + a->porosity(i+1,j,k)))
 #define PORVAL2p (0.5*(a->porosity(i,j+2,k) + a->porosity(i,j+1,k)))
 #define PORVAL3p (0.5*(a->porosity(i,j,k+2) + a->porosity(i,j,k+1)))
 
-#define CPOR1p   (1.0/(1.0+(p->B260*(PORVAL1p<1.0?1.0:0.0))))
-#define CPOR2p   (1.0/(1.0+(p->B260*(PORVAL2p<1.0?1.0:0.0))))
-#define CPOR3p   (1.0/(1.0+(p->B260*(PORVAL3p<1.0?1.0:0.0))))
+#define CPOR1p   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL1p<1.0?1.0:0.0))))
+#define CPOR2p   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL2p<1.0?1.0:0.0))))
+#define CPOR3p   (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVAL3p<1.0?1.0:0.0))))
 
 
 #define PORVALNH d->porosity[IJK]
 #define PORVALNHm d->porosity[IJK]
 #define PORVALNHp d->porosity[IJK]
-#define CPORNH  (1.0/(1.0+(p->B260*(PORVALNH<1.0?1.0:0.0))))
-#define CPORNHm (1.0/(1.0+(p->B260*(PORVALNHm<1.0?1.0:0.0))))
-#define CPORNHp (1.0/(1.0+(p->B260*(PORVALNHp<1.0?1.0:0.0))))
+#define CPORNH  (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVALNH<1.0?1.0:0.0))))
+#define CPORNHm (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVALNHm<1.0?1.0:0.0))))
+#define CPORNHp (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(PORVALNHp<1.0?1.0:0.0))))
 
 
 //-----------------------------------------------------------
