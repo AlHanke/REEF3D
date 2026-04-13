@@ -26,24 +26,29 @@ Author: Alexander Hanke
 
 #include "fieldint.h"
 #include "lexer.h"
+#include <AMReX_BCRec.H>
 #include <AMReX_iMultiFab.H>
+#include <vector>
 
 class fieldint_amrex : public fieldint
 {
 public:
     virtual ~fieldint_amrex() = default;
 
-    int& operator()(int, int, int) noexcept override final;
+    int& operator()(int ii, int jj, int kk) noexcept override final;
 
     void setVal(int val, bool includeGhost = false) override final;
 
-    void FillBoundary();
+    void FillBoundary() override;
 
 protected:
     fieldint_amrex(lexer* p);
 
+    void initialize_bc();
+
     lexer *pp;
-    amrex::iMultiFab mf;
+    std::vector<amrex::iMultiFab> mf;
+    std::vector<amrex::Vector<amrex::BCRec>> bc;
     const int num_components = 1;
 };
 
