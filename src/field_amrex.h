@@ -151,7 +151,8 @@ public:
     static void FillDomainBoundaryBatch(lexer* p,
                                         amrex::Vector<amrex::MultiFab>& shared_mf,
                                         int scomp,
-                                        std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs);
+                                        std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs,
+                                        amrex::Gpu::DeviceVector<amrex::BCRec>& d_bcrec_cache);
 
 protected:
     /// Owning constructor: the field allocates and owns its own MultiFab storage.
@@ -583,7 +584,9 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
     params.face_labels = m_cached_face_labels;
 
     const auto fill = amrex_bc_func::MyExtBCFillField<BCDecision>{const_params, params};
-    amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> bf(fill);
+    // bf (GpuBndryFuncFab) is only needed for level > 0 (FillPatchTwoLevels path).
+    // For single-level runs it is never used, so construction is deferred into the
+    // else branch below to avoid the overhead on every start1/2/3/4 call.
 
     LEVEL_LOOP
     {
@@ -608,6 +611,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             auto& mf_coarse = get_mf(p->level-1);
             // Multi-level: FillPatchTwoLevels handles MPI exchange and
             // coarse-to-fine interpolation; keep the existing PhysBCFunct path.
+            amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>> bf(fill);
 
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> cphysbcf(
                 p->amrex_geometry[p->level-1], BCRecs[p->level-1], bf);
@@ -644,7 +648,8 @@ inline void field_amrex::FillDomainBoundaryBatch(
     lexer* p,
     amrex::Vector<amrex::MultiFab>& shared_mf,
     int scomp,
-    std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs)
+    std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs,
+    amrex::Gpu::DeviceVector<amrex::BCRec>& d_bcrec_cache)
 {
     // Step 1 — populate each field's BCRecs on the host using its own gcv
     for (auto& [f, gcv] : fields_and_gcvs)
@@ -682,12 +687,13 @@ inline void field_amrex::FillDomainBoundaryBatch(
             const amrex::GeometryData geom_data = p->amrex_geometry[0].data();
             const amrex::Box          dom       = p->amrex_geometry[0].Domain();
 
-            // Upload combined BCRecs (ncomp entries) to device for the ParallelFor lambdas.
-            amrex::Gpu::DeviceVector<amrex::BCRec> d_bcrec_batch(combined.size());
+            // Reuse the caller-owned device buffer — resize only when the batch
+            // size changes (no-op for the common steady-state case).
+            d_bcrec_cache.resize(ncomp);
             amrex::Gpu::copy(amrex::Gpu::hostToDevice,
                              combined.begin(), combined.end(),
-                             d_bcrec_batch.begin());
-            const amrex::BCRec* bcrec_d = d_bcrec_batch.data();
+                             d_bcrec_cache.begin());
+            const amrex::BCRec* bcrec_d = d_bcrec_cache.data();
 
             auto& mf_lev = shared_mf[p->level];
             fill_boundary_slabs(mf_lev, scomp, ncomp, bcrec_d, fill, geom_data, dom);

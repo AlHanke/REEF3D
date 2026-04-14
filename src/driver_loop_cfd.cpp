@@ -71,13 +71,15 @@ void driver::loop_cfd(fdm* a)
             if(p->B90>0 && p->B92>11)
             cout<<"t/T: "<<p->simtime/p->wTp<<endl;
         }
-
+        double temp_time0a = pgc->timer();
         pflow->flowfile(p,a,pgc,pturb);
 
         pflow->wavegen_precalc(p,pgc);
 
 
+        double temp_time0c = pgc->timer();
         pfsf->start(a,p, pfsfdisc,psolv,pgc,pflow,preini,ppls,a->phi);
+        double temp_time0d = pgc->timer();
         pturb->start(a,p,pturbdisc,pturbdiff,psolv,pgc,pflow,pvrans);
         pheat->start(a,p,pheatdisc,pdiff,psolv,pgc,pflow);
         pconc->start(a,p,pconcdisc,pconcdiff,pturb,psolv,pgc,pflow);
@@ -85,26 +87,35 @@ void driver::loop_cfd(fdm* a)
 
         psed->start_susp(p,a,pgc,pflow,psolv);
         psed->start_cfd(p,a,pgc,pflow,preto,psolv);
+        double temp_time0b = pgc->timer();
         
+        double temp_time1 = pgc->timer();
         pflow->u_relax(p,a,pgc,a->u);
         pflow->v_relax(p,a,pgc,a->v);
         pflow->w_relax(p,a,pgc,a->w);
+        double flow_relax_time = pgc->timer();
         pfsf->update(p,a,pgc,a->phi);
+        double fsf_update_time = pgc->timer();
         pmom->start(p,a,pgc,pvrans,p6dof);
+        double momentum_time = pgc->timer();
         pbench->start(p,a,pgc,pconvec);
 
         //save previous timestep
+        double temp_time2 = pgc->timer();
         pturb->ktimesave(p,a,pgc);
         pturb->etimesave(p,a,pgc);
         pflow->veltimesave(p,a,pgc,pvrans);
         psed->ctimesave(p,a);
+        double save_time = pgc->timer();
 
         //timestep control
         p->simtime+=p->dt;
         ptstep->start(a,p,pgc,pturb);
 
         // printer
+        double temp_time3 = pgc->timer();
         pprint->start(p,a,pgc,pturb,pheat,pflow,pdata,pconc,pmp,psed);
+        double print_time = pgc->timer();
 
         // Shell-Printout
         if(p->mpirank==0)
@@ -130,6 +141,23 @@ void driver::loop_cfd(fdm* a)
                 cout<<"Xtime: "<<setprecision(3)<<p->xtime<<"\t average Xtime: "<<setprecision(3)<<p->Xmeantime<<endl;
                 cout<<"total time: "<<setprecision(6)<<p->totaltime<<"   average time: "<<setprecision(3)<<p->meantime<<endl;
                 cout<<"timer per step: "<<setprecision(3)<<p->itertime<<endl;
+
+                const int precision = 6;
+                const double t1 = temp_time0b-temp_time0a;
+                const double t2 = flow_relax_time-temp_time1;
+                const double t3 = fsf_update_time-flow_relax_time;
+                const double t4 = momentum_time-fsf_update_time;
+                const double t5 = save_time-temp_time2;
+                const double t6 = print_time-temp_time3;
+                const double t7 = temp_time0d-temp_time0c;
+                const double iter_time_woutprint = p->itertime - t6;
+                cout<<"precalc time: "<<setprecision(precision)<<t1<<":"<<t1/iter_time_woutprint*100<<endl;
+                cout<<"fsf start time: "<<setprecision(precision)<<t7<<":"<<t7/iter_time_woutprint*100<<endl;
+                cout<<"flow relax time: "<<setprecision(precision)<<t2<<":"<<t2/iter_time_woutprint*100<<endl;
+                cout<<"fsf update time: "<<setprecision(precision)<<t3<<":"<<t3/iter_time_woutprint*100<<endl;
+                cout<<"momentum time: "<<setprecision(precision)<<t4<<":"<<t4/iter_time_woutprint*100<<endl;
+                cout<<"save time: "<<setprecision(precision)<<t5<<":"<<t5/iter_time_woutprint*100<<endl;
+                cout<<"print time: "<<setprecision(precision)<<t6<<endl;
             }
 
             // Write log files

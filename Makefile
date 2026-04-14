@@ -10,7 +10,7 @@ EIGEN_DIR    := ThirdParty/eigen-3.3.8
 CXXFLAGS     := -std=c++17 -DVERSION=\"$(GIT_VERSION)\" -DBRANCH=\"$(GIT_BRANCH)\"
 LDFLAGS      := -L ${HYPRE_DIR}/lib/ -lHYPRE
 INCLUDE      := -I ${HYPRE_DIR}/include -I ${EIGEN_DIR} -DEIGEN_MPL2_ONLY
-USE_AMREX ?= 0
+USE_AMREX ?= 1
 ifeq ($(USE_AMREX),1)
 AMREX_LIBRARY_HOME := ThirdParty/amrex-26.04
 CXXFLAGS	 += -DUSE_AMREX=$(USE_AMREX)
