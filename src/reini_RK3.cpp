@@ -79,6 +79,7 @@ reini_RK3::~reini_RK3()
 
 void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
 {
+    double picardtime, flowtime, rdisctime, calctime, gctime, temptime, picardtime2;
     starttime=pgc->timer();
 
     if(p->count==0)
@@ -87,6 +88,8 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
         gcval = gcval_phi;
 
     ppicard->volcalc(p,a,pgc,f);
+
+    picardtime=pgc->timer();
 
     if(p->count==0)
     {
@@ -103,6 +106,8 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
     pflow->fsfrkout(p,a,pgc,frk1);
     pflow->fsfrkout(p,a,pgc,frk2);
 
+    flowtime=pgc->timer();
+
     // Convergence threshold: stop when max|sign(phi0)*(|grad phi|-1)| < tol.
     // The RHS L computed by prdisc is dimensionless; 1e-4 means the level set
     // deviates from a signed-distance function by less than 0.01% per iteration.
@@ -114,15 +119,19 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
         // Step 1
         prdisc->start(p,a,pgc,f,a->L,4);
 
+        if(q==0) rdisctime=pgc->timer();
+
         FIELDLOOP(
             frk1,
             FIELD_CONST(f); FIELD_CONST(dt); FIELD_CONST_MEMBER(a, L),
             frk1(i,j,k) = f(i,j,k) + dt(i,j,k)*member_L(i,j,k);
         )
 
-
+        if(q==0) calctime=pgc->timer();
 
         pgc->start4(p,frk1,gcval);
+
+        if(q==0) gctime=pgc->timer();
 
         // Step 2
         prdisc->start(p,a,pgc,frk1,a->L,4);
@@ -166,9 +175,24 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
         }
     }
 
+    temptime=pgc->timer();
+
     ppicard->correct_ls(p,a,pgc,f);
 
+    picardtime2=pgc->timer();
+
     p->reinitime+=pgc->timer()-starttime;
+    if(p->mpirank==0 && p->count>0 && p->count%p->P12==0)
+    {
+        std::cout<<"\nReini RK3\n"
+        <<"  Time for Picard iteration: "<<(picardtime-starttime)*1000.0<<" ms\n"
+        <<"  Time for flow calculations: "<<(flowtime-picardtime)*1000.0<<" ms\n"
+        <<"  Time for reinitialization discretization: "<<(rdisctime-picardtime)*1000.0<<" ms\n"
+        <<"  Time for RK3 calculations: "<<(calctime-rdisctime)*1000.0<<" ms\n"
+        <<"  Time for ghost cell updates: "<<(gctime-calctime)*1000.0<<" ms\n"
+        <<"  Time for correct_ls: "<<(temptime-picardtime2)*1000.0<<" ms\n"
+        <<"  Picard iterations: "<<iters_done<<" / "<<reiniter<<"\n"<<std::endl;
+    }
 }
 
 inline void reini_RK3::step(lexer* p)
