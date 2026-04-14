@@ -100,9 +100,10 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
             a->fbh5(i,j,k) = 1.0-std::min(dirac,1.0);
         }
     }
-    // ----------------------------------------------
-    // Construct solid heaviside function | no-slip
-    else if(p->B20==2 && p->B21==1)
+    // ---------------------------------------------------
+    // Construct solid heaviside function | slip & no-slip
+    // ---------------------------------------------------
+    else if((p->B20==1 || p->B20==2) && p->B21==1)
     {
         ULOOP
         {
@@ -226,135 +227,6 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
             dirac = 0.0;
 
             a->fbh5(i,j,k) =  1.0-std::min(dirac,1.0);
-        }
-    }
-    // ----------------------------------------------
-    // Construct solid heaviside function | slip
-    // ----------------------------------------------
-    else if(p->B20==1 && p->B21==1)
-    {
-        ULOOP
-        {
-            // Normal vectors calculation
-            if(0.5*(a->solid(i,j,k) + a->solid(i+1,j,k)) >= 0.5*(a->topo(i,j,k) + a->topo(i+1,j,k)))
-            {
-                nx = -(a->topo(i+1,j,k) - a->topo(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->topo(i,j+1,k) - a->topo(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->topo(i,j,k+1) - a->topo(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
-            else
-            {
-                nx = -(a->solid(i+1,j,k) - a->solid(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->solid(i,j+1,k) - a->solid(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->solid(i,j,k+1) - a->solid(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
-
-            norm = sqrt(nx*nx + ny*ny + nz*nz);
-
-            nx /= norm > 1.0e-20 ? norm : 1.0e20;
-
-            H = Hsolidface(p,a,1,0,0);
-
-            // Level set function
-            phival_sf = std::min(0.5*(a->solid(i,j,k) + a->solid(i+1,j,k)), 0.5*(a->topo(i,j,k) + a->topo(i+1,j,k)));
-
-            // Construct the field around the solid body to adjust the tangential velocity and calculate forcing
-            if(phival_sf<=0.0)
-            fx(i,j,k) += H*(uf - uvel(i,j,k))/(alpha*p->dt);
-            else
-            fx(i,j,k) += fabs(nx)*H*(uf - uvel(i,j,k))/(alpha*p->dt);
-
-            a->fbh1(i,j,k) = std::min(a->fbh1(i,j,k) + H, 1.0);
-        }
-
-        VLOOP
-        {
-            // Normal vectors calculation
-            if(0.5*(a->solid(i,j,k) + a->solid(i,j+1,k)) >= 0.5*(a->topo(i,j,k) + a->topo(i,j+1,k)))
-            {
-                nx = -(a->topo(i+1,j,k) - a->topo(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->topo(i,j+1,k) - a->topo(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->topo(i,j,k+1) - a->topo(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
-            else
-            {
-                nx = -(a->solid(i+1,j,k) - a->solid(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->solid(i,j+1,k) - a->solid(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->solid(i,j,k+1) - a->solid(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
-
-            norm = sqrt(nx*nx + ny*ny + nz*nz);
-
-            ny /= norm > 1.0e-20 ? norm : 1.0e20;
-
-            H = Hsolidface(p,a,0,1,0);
-
-            //Level set function
-            phival_sf = std::min(0.5*(a->solid(i,j,k) + a->solid(i,j+1,k)), 0.5*(a->topo(i,j,k) + a->topo(i,j+1,k)));
-
-            //Construct the field around the solid body to adjust the tangential velocity and calculate forcing
-            if(phival_sf<=0.0)
-            fy(i,j,k) += H*(vf - vvel(i,j,k))/(alpha*p->dt);
-            else
-            fy(i,j,k) += fabs(ny)*H*(vf - vvel(i,j,k))/(alpha*p->dt);
-
-            a->fbh2(i,j,k) = std::min(a->fbh2(i,j,k) + H , 1.0);
-        }
-
-        WLOOP
-        {
-            // Normal vectors calculation
-            if(0.5*(a->solid(i,j,k) + a->solid(i,j,k+1)) >= 0.5*(a->topo(i,j,k) + a->topo(i,j,k+1)))
-            {
-                nx = -(a->topo(i+1,j,k) - a->topo(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->topo(i,j+1,k) - a->topo(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->topo(i,j,k+1) - a->topo(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
-            else
-            {
-                nx = -(a->solid(i+1,j,k) - a->solid(i-1,j,k))/(2.0*p->DXN[IP]);
-                ny = -(a->solid(i,j+1,k) - a->solid(i,j-1,k))/(2.0*p->DYN[JP]);
-                nz = -(a->solid(i,j,k+1) - a->solid(i,j,k-1))/(2.0*p->DZN[KP]);
-            }
-
-            norm = sqrt(nx*nx + ny*ny + nz*nz);
-
-            nz /= norm > 1.0e-20 ? norm : 1.0e20;
-
-            H = Hsolidface(p,a,0,0,1);
-
-            // Level set function
-            phival_sf = std::min(0.5*(a->solid(i,j,k) + a->solid(i,j,k+1)), 0.5*(a->topo(i,j,k) + a->topo(i,j,k+1)));
-
-            // Construct the field around the solid body to adjust the tangential velocity and calculate forcing
-
-            if(phival_sf<=0.0)
-            fz(i,j,k) += H*(wf - wvel(i,j,k))/(alpha*p->dt);
-            else
-            fz(i,j,k) += fabs(nz)*H*(wf - wvel(i,j,k))/(alpha*p->dt);
-
-            a->fbh3(i,j,k) = std::min(a->fbh3(i,j,k) + H , 1.0);
-        }
-
-        LOOP
-        {
-            H = Hsolidface(p,a,0,0,0);
-            a->fbh4(i,j,k) = std::min(a->fbh4(i,j,k) + H, 1.0);
-        }
-
-        if(!p->j_dir)
-        psi = 1.1*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-        else
-        psi = 1.1*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
-
-        LOOP
-        {
-            if(fabs(std::min(a->solid(i,j,k),a->topo(i,j,k)))<psi)
-            dirac = (0.5/psi)*(1.0 + cos((PI*(std::min(a->solid(i,j,k),a->topo(i,j,k))))/psi));
-            else
-            dirac = 0.0;
-
-            a->fbh5(i,j,k) = 1.0-std::min(dirac,1.0);
         }
     }
 
