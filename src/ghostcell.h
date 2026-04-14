@@ -362,5 +362,11 @@ private:
     lexer *p;
     fdm_fnpf *c;
     fdm_nhf *d;
+
+    #if USE_AMREX
+    // Persistent device-side BCRec buffer reused across startBatch calls to
+    // avoid a GPU allocation + host-to-device copy on every invocation.
+    amrex::Gpu::DeviceVector<amrex::BCRec> m_d_bcrec_batch;
+    #endif
 };
 #endif

@@ -30,27 +30,28 @@ void reinidisc_f::start(lexer *p, fdm*, ghostcell*, field &f, field &L, int ipol
 {
     if(ipol==4 || ipol==5)
     {
-        const bool is3D = (p->j_dir == 1);
-
         L.setVal(0.0);
 
-        FIELDLOOP_INC(
-            L,
-            FIELD_CONST_INC(f),
-            L(i,j,k) = disc(p,f,is3D);
-        )
+        if(p->j_dir == 1)
+        {
+            FIELDLOOP_INC(L, FIELD_CONST_INC(f), L(i,j,k) = disc<true>(p,f);)
+        }
+        else
+        {
+            FIELDLOOP_INC(L, FIELD_CONST_INC(f), L(i,j,k) = disc<false>(p,f);)
+        }
     }
 }
 
-template<typename GenericFieldConst>
-inline double reinidisc_f::disc(lexer *p, const GenericFieldConst &f, const bool is3D) noexcept
+template<bool Is3D, typename GenericFieldConst>
+inline double reinidisc_f::disc(lexer *p, const GenericFieldConst &f) noexcept
 {
     double dx = 0.0;
     double dy = 0.0;
     double dz = 0.0;
     const double lsv = f(i,j,k);
     const double lsv2 = lsv*lsv;
-    const double lsSig = (fabs(lsv) < 1.0e-8) ? 1.0 : std::copysign(1.0, lsv);
+    const double lsSig = (lsv2 < 1.0e-16) ? 1.0 : std::copysign(1.0, lsv);
 
 // x
     const double xmin = (lsv-f(i-1,j,k))/p->DXP[IM1];
@@ -62,7 +63,7 @@ inline double reinidisc_f::disc(lexer *p, const GenericFieldConst &f, const bool
     else if(xplus_s<0.0 && xmin_s<-xplus_s) dx = ddwenox(f,-1.0);
 
 // y
-    if(is3D)
+    if constexpr (Is3D)
     {
         const double ymin = (lsv-f(i,j-1,k))/p->DYP[JM1];
         const double yplus = (f(i,j+1,k)-lsv)/p->DYP[JP];
@@ -82,13 +83,14 @@ inline double reinidisc_f::disc(lexer *p, const GenericFieldConst &f, const bool
     if     (zmin_s>0.0 && zplus_s>-zmin_s) dz = ddwenoz(f,1.0);
     else if(zplus_s<0.0 && zmin_s<-zplus_s) dz = ddwenoz(f,-1.0);
 
-    const double dnorm = sqrt(dx*dx + dy*dy + dz*dz);
+    const double dnorm2 = dx*dx + dy*dy + dz*dz;
+    const double dnorm  = sqrt(dnorm2);
 
-    const double deltax = (is3D) ? (1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]) : (1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
+    const double deltax = Is3D ? (1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP])
+                               : (1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
 
-    double sign = lsv/sqrt(lsv2 + dnorm*dnorm*deltax*deltax);
-    if(std::isnan(sign))
-    sign = 1.0;
+    const double denom2 = lsv2 + dnorm2 * deltax * deltax;
+    const double sign   = (denom2 > 0.0) ? lsv / sqrt(denom2) : lsSig;
 
     return sign * (1.0 - dnorm);
 }

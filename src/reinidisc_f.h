@@ -26,8 +26,6 @@ Author: Hans Bihs
 #include"reinidisc.h"
 #include"ddweno_nug_sf.h"
 
-using namespace std;
-
 class reinidisc_f final : public reinidisc, public ddweno_nug_sf
 {
 public:
@@ -36,7 +34,7 @@ public:
     void start(lexer*, fdm*, ghostcell*, field&, field&, int) noexcept override final;
 
 private:
-    template<typename GenericFieldConst> double disc(lexer*, const GenericFieldConst&, const bool) noexcept ;
+    template<bool Is3D, typename GenericFieldConst> double disc(lexer*, const GenericFieldConst&) noexcept;
 };
 
 #endif
