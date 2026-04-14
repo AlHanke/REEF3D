@@ -36,6 +36,7 @@ Author: Alexander Hanke
 
 class lexer;
 class ghostcell;
+// class fdm;
 
 namespace amrex {
     class Geometry;
@@ -57,6 +58,7 @@ public:
     virtual ~grid_amrex() = default;
 
     void define_inflow_outflow_ba();
+    // void regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* a);
 
     void update_cell_coordinates();
     void update_cell_spacing();

@@ -34,6 +34,7 @@ Authors: Hans Bihs, Alexander Hanke
     #include <AMReX_MFIter.H>
     #include <AMReX_MultiFab.H>
     #include <AMReX_GpuLaunchFunctsC.H>
+    #include <AMReX_MultiFabUtil.H>
 #endif
 
 // LOOPs
@@ -73,27 +74,56 @@ Authors: Hans Bihs, Alexander Hanke
         const auto& _fl_mf_a_##member = (ptr)->member.GetMultiFab(_fl_lev); \
         const auto& member_##member = _fl_mf_a_##member.const_array(_fl_mfi);
 
-    #define _FIELDLOOP_IMPL(mut_expr, mut_name, const_decls, body) \
+    #define FIELD_MUT(name) \
+        auto& _fl_mf_##name = (name).GetMultiFab(_fl_lev); \
+        auto const& name = _fl_mf_##name.array(_fl_mfi);
+
+    #define FIELD_MUT_MEMBER(ptr, member) \
+        auto& _fl_mf_a_##member = (ptr)->member.GetMultiFab(_fl_lev); \
+        auto const& member_##member = _fl_mf_a_##member.array(_fl_mfi);
+
+    #define FIELD_MUT_AVGDOWN(name) \
+        amrex::average_down((name).GetMultiFab(_fl_lev+1), (name).GetMultiFab(_fl_lev), 0, 0, p->ref_vec);
+
+    #define FIELD_MUT_MEMBER_AVGDOWN(ptr, member) \
+        amrex::average_down((ptr)->member.GetMultiFab(_fl_lev+1), (ptr)->member.GetMultiFab(_fl_lev), 0, 0, p->ref_vec);
+
+    #define _FIELDLOOP_IMPL(mut_expr, mut_name, const_decls, avgdown_decls, body) \
         for (int _fl_lev = p->nlevs - 1; _fl_lev >= 0; --_fl_lev) \
         { \
             auto& _fl_mf = (mut_expr).GetMultiFab(_fl_lev); \
+            const auto& _covered_mf = p->amr_cell_mf[_fl_lev]; \
             _FL_OMP \
             for (amrex::MFIter _fl_mfi(_fl_mf, amrex::TilingIfNotGPU()); \
                  _fl_mfi.isValid(); ++_fl_mfi) \
             { \
                 const amrex::Box& _fl_bx = _fl_mfi.tilebox(); \
                 auto const& mut_name = _fl_mf.array(_fl_mfi); \
+                const auto& _covered_array = _covered_mf.const_array(_fl_mfi); \
                 const_decls; \
                 amrex::ParallelFor(_fl_bx, \
-                    [=] AMREX_GPU_DEVICE (int i, int j, int k) { body }); \
+                    [=] AMREX_GPU_DEVICE (int i, int j, int k) { \
+                        if (_covered_array(i,j,k) == 0) { \
+                        body \
+                }}); \
+            } \
+            if(_fl_lev != p->nlevs - 1) { \
+                amrex::average_down(mut_expr.GetMultiFab(_fl_lev+1), (mut_expr).GetMultiFab(_fl_lev), 0, 0, p->ref_vec); \
+                avgdown_decls; \
             } \
         }
 
     #define FIELDLOOP(mut, const_decls, body) \
-        _FIELDLOOP_IMPL(mut, mut, const_decls, body)
+        _FIELDLOOP_IMPL(mut, mut, const_decls, , body)
 
     #define FIELDLOOP_MEMBER(ptr, member, const_decls, body) \
-        _FIELDLOOP_IMPL((ptr)->member, member, const_decls, body)
+        _FIELDLOOP_IMPL((ptr)->member, member, const_decls, , body)
+
+    #define FIELDLOOP_EXT(mut, const_decls, avgdown_decls, body) \
+        _FIELDLOOP_IMPL(mut, mut, const_decls, avgdown_decls, body)
+
+    #define FIELDLOOP_MEMBER_EXT(ptr, member, const_decls, avgdown_decls, body) \
+        _FIELDLOOP_IMPL((ptr)->member, member, const_decls, avgdown_decls, body)
 
     // -------------------------------------------------------------------------
     // FIELDLOOP_INC — like FIELDLOOP but also maintains increment::i/j/k inside
@@ -127,11 +157,20 @@ Authors: Hans Bihs, Alexander Hanke
         const auto& _fl_mf_a_##member = (ptr)->member.GetMultiFab(_fl_lev); \
         const LocalArr4Const member_##member(_fl_mf_a_##member.const_array(_fl_mfi), ox, oy, oz);
 
-    #define _FIELDLOOP_INC_IMPL(mut_expr, mut_name, const_decls, body) \
+    #define FIELD_MUT_INC(name) \
+        auto& _fl_mf_##name = (name).GetMultiFab(_fl_lev); \
+        LocalArr4 name(_fl_mf_##name.array(_fl_mfi), ox, oy, oz);
+
+    #define FIELD_MUT_MEMBER_INC(ptr, member) \
+        auto& _fl_mf_a_##member = (ptr)->member.GetMultiFab(_fl_lev); \
+        LocalArr4 member_##member(_fl_mf_a_##member.array(_fl_mfi), ox, oy, oz);
+
+    #define _FIELDLOOP_INC_IMPL(mut_expr, mut_name, const_decls, avgdown_decls, body) \
         for (int _fl_lev = p->nlevs - 1; _fl_lev >= 0; --_fl_lev) \
         { \
             p->level = _fl_lev; \
             auto& _fl_mf = (mut_expr).GetMultiFab(_fl_lev); \
+            const auto& _covered_mf = p->amr_cell_mf[_fl_lev]; \
             _FL_OMP \
             for (amrex::MFIter _fl_mfi(_fl_mf, amrex::TilingIfNotGPU()); \
                  _fl_mfi.isValid(); ++_fl_mfi) \
@@ -142,24 +181,36 @@ Authors: Hans Bihs, Alexander Hanke
                 const int oz = _fl_bx.smallEnd(2); \
                 p->set_tile_mfi(&_fl_mfi); \
                 auto const& mut_name = _fl_mf.array(_fl_mfi); \
+                const auto& _covered_array = _covered_mf.const_array(_fl_mfi); \
                 const_decls; \
                 amrex::ParallelFor(_fl_bx, \
                     [=] AMREX_GPU_DEVICE (int i, int j, int k) { \
+                        if (_covered_array(i,j,k) == 0) { \
                         increment::i = i - ox; \
                         increment::j = j - oy; \
                         increment::k = k - oz; \
                         body \
-                    }); \
+                    }}); \
+            } \
+            if(_fl_lev != p->nlevs - 1) { \
+                amrex::average_down(mut_expr.GetMultiFab(_fl_lev+1), (mut_expr).GetMultiFab(_fl_lev), 0, 0, p->ref_vec); \
+                avgdown_decls; \
             } \
         } \
         p->level = 0; \
         p->set_tile_mfi(p->default_cell_mfi.get());
 
     #define FIELDLOOP_INC(mut, const_decls, body) \
-        _FIELDLOOP_INC_IMPL(mut, mut, const_decls, body)
+        _FIELDLOOP_INC_IMPL(mut, mut, const_decls, , body)
 
     #define FIELDLOOP_INC_MEMBER(ptr, member, const_decls, body) \
-        _FIELDLOOP_INC_IMPL((ptr)->member, member, const_decls, body)
+        _FIELDLOOP_INC_IMPL((ptr)->member, member, const_decls, , body)
+
+    #define FIELDLOOP_INC_EXT(mut, const_decls, avgdown_decls, body) \
+        _FIELDLOOP_INC_IMPL(mut, mut, const_decls, avgdown_decls, body)
+
+    #define FIELDLOOP_INC_MEMBER_EXT(ptr, member, const_decls, avgdown_decls, body) \
+        _FIELDLOOP_INC_IMPL((ptr)->member, member, const_decls, avgdown_decls, body)
 
     #define LEVEL_LOOP \
         for (struct { lexer* ctx; bool active; } \
@@ -188,15 +239,29 @@ Authors: Hans Bihs, Alexander Hanke
     // ptr->member fields get a local alias so a_member(i,j,k) works in both modes.
     #define FIELD_CONST(name)
     #define FIELD_CONST_MEMBER(ptr, member)           auto& member_##member = (ptr)->member;
-    #define FIELDLOOP(mut, const_decls, body)         { const_decls; PLAINLOOP PCHECK body }
+    #define FIELD_MUT(name)
+    #define FIELD_MUT_MEMBER(ptr, member)             auto& member_##member = (ptr)->member;
+    #define FIELD_MUT_AVGDOWN(name)
+    #define FIELD_MUT_MEMBER_AVGDOWN(ptr, member)
+    #define FIELDLOOP(mut, const_decls, body)         { const_decls; PLAINLOOP PCHECK {body} }
     #define FIELDLOOP_MEMBER(ptr, member, const_decls, body) \
-        { auto& member = (ptr)->member; const_decls; PLAINLOOP PCHECK body }
+        { auto& member = (ptr)->member; const_decls; PLAINLOOP PCHECK {body} }
+    #define FIELDLOOP_EXT(mut, const_decls, avgdown_decls, body) \
+        { const_decls; PLAINLOOP PCHECK body }
+    #define FIELDLOOP_MEMBER_EXT(ptr, member, const_decls, avgdown_decls, body) \
+        { auto& member = (ptr)->member; const_decls; PLAINLOOP PCHECK {body} }
 
     #define FIELD_CONST_INC(name)
     #define FIELD_CONST_MEMBER_INC(ptr, member)       auto& member_##member = (ptr)->member;
-    #define FIELDLOOP_INC(mut, const_decls, body)     { const_decls; PLAINLOOP PCHECK body }
+    #define _FIELDLOOP_INC_IMPL(const_decls, body) \
+        { const_decls; const int ox = 0; const int oy = 0; const int oz = 0; PLAINLOOP PCHECK {body} }
+    #define FIELDLOOP_INC(mut, const_decls, body)     { _FIELDLOOP_INC_IMPL(const_decls, body) }
     #define FIELDLOOP_INC_MEMBER(ptr, member, const_decls, body) \
-        { auto& member = (ptr)->member; const_decls; PLAINLOOP PCHECK body }
+        { auto& member = (ptr)->member; _FIELDLOOP_INC_IMPL(const_decls, body) }
+    #define FIELDLOOP_INC_EXT(mut, const_decls, avgdown_decls, body) \
+        { _FIELDLOOP_INC_IMPL(const_decls, body) }
+    #define FIELDLOOP_INC_MEMBER_EXT(ptr, member, const_decls, avgdown_decls, body) \
+        { auto& member = (ptr)->member; _FIELDLOOP_INC_IMPL(const_decls, body) }
 
     #define LEVEL_LOOP
     #define TILE_LOOP

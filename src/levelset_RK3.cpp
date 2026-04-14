@@ -100,28 +100,46 @@ void levelset_RK3::start(fdm* a, lexer* p, convection* pconvec, solver*, ghostce
 
     const double dt = p->dt;
 
+    double setValtime, pconvectime, calctime, phirelaxtime, gctime, solidforcetime, reinitime, picardtime, update_time;
+    double temptime;
+
 // Step 1
     starttime=pgc->timer();
 
     a->L.setVal(0.0);
 
+    setValtime=pgc->timer();
+
     pconvec->start(p,a,ls,4,a->u,a->v,a->w);
 
-    LOOP
-    ark1(i,j,k) = ls(i,j,k) + dt*a->L(i,j,k);
+    pconvectime=pgc->timer();
+    FIELDLOOP(
+        ark1,
+        FIELD_CONST(ls); FIELD_CONST_MEMBER(a, L),
+        ark1(i,j,k) = ls(i,j,k) + dt*member_L(i,j,k);
+    )
+    calctime=pgc->timer();
 
     pflow->phi_relax(p,pgc,ark1);
 
+    phirelaxtime=pgc->timer();
+
     pgc->start4(p,ark1,gcval_phi);
+    gctime=pgc->timer();
+
     pgc->solid_forcing_lsm(p,a,ark1);
+    solidforcetime=pgc->timer();
 
 // Step 2
     a->L.setVal(0.0);
 
     pconvec->start(p,a,ark1,4,a->u,a->v,a->w);
 
-    LOOP
-    ark2(i,j,k) = 0.75*ls(i,j,k) + 0.25*ark1(i,j,k) + 0.25*dt*a->L(i,j,k);
+    FIELDLOOP(
+        ark2,
+        FIELD_CONST(ls); FIELD_CONST(ark1); FIELD_CONST_MEMBER(a, L),
+        ark2(i,j,k) = 0.75*ls(i,j,k) + 0.25*ark1(i,j,k) + 0.25*dt*member_L(i,j,k);
+    )
 
     pflow->phi_relax(p,pgc,ark2);
 
@@ -133,8 +151,11 @@ void levelset_RK3::start(fdm* a, lexer* p, convection* pconvec, solver*, ghostce
 
     pconvec->start(p,a,ark2,4,a->u,a->v,a->w);
 
-    LOOP
-    ls(i,j,k) = (1.0/3.0)*ls(i,j,k) + (2.0/3.0)*ark2(i,j,k) + (2.0/3.0)*dt*a->L(i,j,k);
+    FIELDLOOP(
+        ls,
+        FIELD_CONST(ark2) FIELD_CONST_MEMBER(a, L),
+        ls(i,j,k) = (1.0/3.0)*ls(i,j,k) + (2.0/3.0)*ark2(i,j,k) + (2.0/3.0)*dt*member_L(i,j,k);
+    )
 
     pflow->phi_relax(p,pgc,ls);
 
@@ -143,14 +164,32 @@ void levelset_RK3::start(fdm* a, lexer* p, convection* pconvec, solver*, ghostce
 
     p->lsmtime=pgc->timer()-starttime;
 
+    temptime=pgc->timer();
+
     preini->start(a,p,ls,pgc,pflow);
 
-    ppicard->correct_ls(p,a,pgc,ls);
-    
-	pupdate->start(p,a,pgc,a->u,a->v,a->w);
+    reinitime=pgc->timer();
 
+    ppicard->correct_ls(p,a,pgc,ls);
+    picardtime=pgc->timer();
+	pupdate->start(p,a,pgc,a->u,a->v,a->w);
+    update_time=pgc->timer();
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<"lsmtime: "<<setprecision(3)<<p->lsmtime<<endl;
+
+    if(p->mpirank==0 && p->count%p->P12==0 && p->count>0)
+    {
+        const int precision = 5;
+        std::cout<<"\n"
+        <<"Timing for level set RK3 step "<<p->count<<"\n"
+        <<"\tsteptime:     "<<std::setprecision(precision)<<gctime-starttime<<"\n"
+        <<"\tsetValtime:  "<<std::setprecision(precision)<<setValtime-starttime<<"\n"
+        <<"\tpconvectime: "<<std::setprecision(precision)<<pconvectime-setValtime<<"\n"
+        <<"\tcalctime:    "<<std::setprecision(precision)<<calctime-pconvectime<<"\n"
+        <<"\tgctime:      "<<std::setprecision(precision)<<gctime-phirelaxtime<<"\n\n"
+        <<"\treinitime:   "<<std::setprecision(precision)<<reinitime-temptime<<"\n"
+        <<"\tupdate_time: "<<std::setprecision(precision)<<update_time-picardtime<<"\n"<<std::endl;
+    }
 }
 
 void levelset_RK3::update(lexer *p, fdm *a, ghostcell *pgc, field &f)
