@@ -98,7 +98,13 @@ public:
 
     std::unique_ptr<int[]> flag4_grid;
     ArrayWrapper3D flag1,flag2,flag3,flag4,flag5;
-    ArrayWrapper3D DF,DF1,DF2,DF3;
+    ArrayWrapper3D DF;
+#if USE_AMREX
+    /// Shared 3-component iMultiFab backing DF1 (comp 0), DF2 (comp 1), DF3 (comp 2).
+    /// Declared before DF1/DF2/DF3 so it is constructed first.
+    amrex::Vector<amrex::iMultiFab> m_df123;
+#endif
+    ArrayWrapper3D DF1,DF2,DF3;
 
     // flag
     std::unique_ptr<int[]> flag_solid, flag_topo;

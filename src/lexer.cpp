@@ -26,7 +26,12 @@ Author: Hans Bihs
 lexer::lexer() : coordinates(this), interpolation(this), position(this),
                  flag1(this,DataLocation::FACE_X), flag2(this,DataLocation::FACE_Y), flag3(this,DataLocation::FACE_Z),
                  flag4(this,DataLocation::CELL_CENTERED), flag5(this,DataLocation::CELL_CENTERED),
-                 DF(this), DF1(this), DF2(this), DF3(this),
+                 DF(this),
+                 #if USE_AMREX
+                 DF1(this, &m_df123, 0), DF2(this, &m_df123, 1), DF3(this, &m_df123, 2),
+                 #else
+                 DF1(this), DF2(this), DF3(this),
+                 #endif
                  mpirank(0)
 {
     control::ini_default();
