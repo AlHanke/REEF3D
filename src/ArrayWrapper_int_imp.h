@@ -39,7 +39,7 @@ inline int& ArrayWrapper_int::operator[] (int index) noexcept
 
         return m_cached_arr4(m_cached_ox + ii_encoded + p->imin,
                              m_cached_oy + jj_encoded + p->jmin,
-                             m_cached_oz + kk_encoded + p->kmin, 0);
+                             m_cached_oz + kk_encoded + p->kmin, m_comp);
         #else
         return data[p->level][index];
         #endif
@@ -49,12 +49,12 @@ inline int& ArrayWrapper_int::operator[] (int index) noexcept
 
 amrex::iMultiFab& ArrayWrapper_int::GetMultiFab()
 {
-    return data[p->level];
+    return GetMultiFab(p->level);
 }
 
 const amrex::iMultiFab& ArrayWrapper_int::GetMultiFab() const
 {
-    return data[p->level];
+    return GetMultiFab(p->level);
 }
 
 AMREX_FORCE_INLINE void ArrayWrapper_int::refresh_cache_if_needed() noexcept
@@ -64,7 +64,8 @@ AMREX_FORCE_INLINE void ArrayWrapper_int::refresh_cache_if_needed() noexcept
     const int cur_tile_index = p->amr_local_tile_idx;
     if (cur_lev != m_cached_level || cur_idx != m_cached_mfi_idx)
     {
-        m_cached_arr4    = data[cur_lev].array(*(p->amr_cell_mfi));
+        amrex::iMultiFab& active_mf = GetMultiFab();
+        m_cached_arr4    = active_mf.array(*(p->amr_cell_mfi));
         m_cached_ox      = p->amr_tile_lo.x;
         m_cached_oy      = p->amr_tile_lo.y;
         m_cached_oz      = p->amr_tile_lo.z;
