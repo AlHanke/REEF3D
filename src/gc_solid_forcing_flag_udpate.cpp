@@ -63,9 +63,7 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
     }
 
     #if USE_AMREX
-    p->DF1.fillBoundary();
-    p->DF2.fillBoundary();
-    p->DF3.fillBoundary();
+    ArrayWrapper3D::FillBoundaryBatch(p, p->m_df123, 0, 3);
     #else
     gcparaxintV(p, p->DF1, 1);
     gcparaxintV(p, p->DF2, 1);
