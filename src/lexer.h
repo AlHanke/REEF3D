@@ -94,7 +94,13 @@ public:
     int *flag4_grid;
     ArrayWrapper_int flag1,flag2,flag3,flag4,flag5;
     ArrayWrapper_int flagsf1,flagsf2,flagsf3,flagsf4;
-    ArrayWrapper_int DF,DF1,DF2,DF3;
+    ArrayWrapper_int DF;
+#if USE_AMREX
+    /// Shared 3-component iMultiFab backing DF1 (comp 0), DF2 (comp 1), DF3 (comp 2).
+    /// Declared before DF1/DF2/DF3 so it is constructed first.
+    amrex::Vector<amrex::iMultiFab> m_df123;
+#endif
+    ArrayWrapper_int DF1,DF2,DF3;
     
     // flag
     double *flag_solid,*flag_topo;

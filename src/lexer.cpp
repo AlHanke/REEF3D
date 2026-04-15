@@ -25,7 +25,12 @@ Author: Hans Bihs
 lexer::lexer() : position(this), interpolation(this),
                  flag1(this), flag2(this), flag3(this), flag4(this), flag5(this),
                  flagsf1(this), flagsf2(this), flagsf3(this), flagsf4(this),
-                 DF(this), DF1(this), DF2(this), DF3(this),
+                 DF(this),
+                 #if USE_AMREX
+                 DF1(this, &m_df123, 0), DF2(this, &m_df123, 1), DF3(this, &m_df123, 2),
+                 #else
+                 DF1(this), DF2(this), DF3(this),
+                 #endif
                  cmu(0.09), sigT(0.9), mpirank(0)
 {
     ini_default(this);
