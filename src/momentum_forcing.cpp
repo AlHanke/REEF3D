@@ -89,5 +89,4 @@ void momentum_forcing::momentum_forcing_start(lexer* p, fdm* a, ghostcell *pgc, 
     // ghostcell update
     pgc->solid_forcing_flag_update(p,a);
     pgc->gcdf_update(p,a);
-    pgc->gcb_velflagio(p);
 }
