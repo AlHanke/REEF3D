@@ -74,6 +74,15 @@ void lexer::flagini()
     Iarray(IO,imax*jmax*kmax);
     Iarray(IOSL,imax*jmax);
     DF.resize(1);
+#if USE_AMREX
+    m_df123.resize(nlevs);
+    for (int lev = 0; lev < nlevs; ++lev)
+    {
+        m_df123[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 3, margin);
+        m_df123[lev].setVal(0);
+    }
+#endif
+    // DF1/DF2/DF3: view mode under USE_AMREX (resize() is a no-op; data lives in m_df123)
     DF1.resize();
     DF2.resize();
     DF3.resize();
