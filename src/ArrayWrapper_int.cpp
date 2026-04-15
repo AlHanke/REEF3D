@@ -27,9 +27,17 @@ ArrayWrapper_int::ArrayWrapper_int(lexer* p) : p(p)
 {
 }
 
+#if USE_AMREX
+ArrayWrapper_int::ArrayWrapper_int(lexer* p, amrex::Vector<amrex::iMultiFab>* shared, int comp)
+    : p(p), m_shared(shared), m_comp(comp)
+{
+}
+#endif
+
 void ArrayWrapper_int::resize(int default_value)
 {
     #if USE_AMREX
+    if (m_shared) return; // view mode: shared MultiFab is resized by the owner
     data.resize(p->nlevs);
     #else
     data.resize(1);
@@ -50,7 +58,7 @@ void ArrayWrapper_int::resize(int default_value)
 ArrayWrapper_int::operator int* ()
 {
     #if USE_AMREX
-    return data[p->level][*(p->amr_cell_mfi)].dataPtr(0);
+    return GetMultiFab(p->level)[*(p->amr_cell_mfi)].dataPtr(m_comp);
     #else
     return data[p->level].data();
     #endif
@@ -61,7 +69,8 @@ void ArrayWrapper_int::setVal(int val, bool includeGhost)
     #if USE_AMREX
     LEVEL_LOOP
     {
-        data[p->level].setVal(val, (includeGhost ? p->margin : 0));
+        const int ng = includeGhost ? p->margin : 0;
+        GetMultiFab(p->level).setVal(val, m_comp, 1, ng);
     }
     #else
     p->level = 0;
@@ -73,7 +82,14 @@ void ArrayWrapper_int::setVal(int val, bool includeGhost)
 void ArrayWrapper_int::fillBoundary()
 {
     LEVEL_LOOP
-    data[p->level].FillBoundary();
+    GetMultiFab(p->level).FillBoundary(m_comp, 1);
+}
+
+void ArrayWrapper_int::FillBoundaryBatch(lexer* p, amrex::Vector<amrex::iMultiFab>& shared,
+                                         int scomp, int ncomp)
+{
+    for (int lev = 0; lev < p->nlevs; ++lev)
+        shared[lev].FillBoundary(scomp, ncomp);
 }
 
 void ArrayWrapper_int::fillHigherLevels()
@@ -85,13 +101,13 @@ void ArrayWrapper_int::fillHigherLevels()
 
     for (int lev = 1; lev < p->nlevs; ++lev)
     {
-        const auto& crse_mf = data[lev-1];
-        auto& fine_mf = data[lev];
+        const auto& crse_mf = GetMultiFab(lev-1);
+        auto& fine_mf = GetMultiFab(lev);
 
         amrex::BoxArray coarsened_fine_ba = amrex::coarsen(fine_mf.boxArray(), ratio);
 
         amrex::iMultiFab coarse_on_fine_layout(coarsened_fine_ba, fine_mf.DistributionMap(), 1, 0);
-        coarse_on_fine_layout.ParallelCopy(crse_mf, 0, 0, 1);
+        coarse_on_fine_layout.ParallelCopy(crse_mf, m_comp, 0, 1);
 
         for (amrex::MFIter mfi(fine_mf); mfi.isValid(); ++mfi)
         {
@@ -104,7 +120,7 @@ void ArrayWrapper_int::fillHigherLevels()
                 const int ic = amrex::coarsen(i, ratio_x);
                 const int jc = amrex::coarsen(j, ratio_y);
                 const int kc = amrex::coarsen(k, ratio_z);
-                fine_arr(i, j, k, 0) = crse_arr(ic, jc, kc, 0);
+                fine_arr(i, j, k, m_comp) = crse_arr(ic, jc, kc, 0);
             });
         }
 

@@ -45,11 +45,20 @@ public:
     inline int& operator[] (int index) noexcept override final;
 
     #if USE_AMREX
+    /// View constructor: non-owning view into component @p comp of @p shared.
+    /// The caller must ensure @p shared outlives this object.
+    ArrayWrapper_int(lexer* p, amrex::Vector<amrex::iMultiFab>* shared, int comp);
+
     inline int& operator() (int i, int j, int k) noexcept
     {
         refresh_cache_if_needed();
-        return m_cached_arr4(m_cached_ox + i, m_cached_oy + j, m_cached_oz + k, 0);
+        return m_cached_arr4(m_cached_ox + i, m_cached_oy + j, m_cached_oz + k, m_comp);
     };
+
+    /// Batch FillBoundary: fills @p ncomp components starting at @p scomp of
+    /// @p shared in a single MPI collective instead of one per component.
+    static void FillBoundaryBatch(lexer* p, amrex::Vector<amrex::iMultiFab>& shared,
+                                  int scomp, int ncomp);
     #endif
 
     operator int* () override final;
@@ -60,8 +69,8 @@ public:
     void fillHigherLevels() override final;
     inline amrex::iMultiFab& GetMultiFab();
     inline const amrex::iMultiFab& GetMultiFab() const;
-    inline amrex::iMultiFab& GetMultiFab(int level) {return data[level];};
-    inline const amrex::iMultiFab& GetMultiFab(int level) const {return data[level];};
+    inline amrex::iMultiFab& GetMultiFab(int level) {return m_shared ? (*m_shared)[level] : data[level];};
+    inline const amrex::iMultiFab& GetMultiFab(int level) const {return m_shared ? (*m_shared)[level] : data[level];};
     #endif
 
 private:
@@ -69,6 +78,9 @@ private:
     lexer* p;
     #if USE_AMREX
     std::vector<amrex::iMultiFab> data;
+
+    amrex::Vector<amrex::iMultiFab>* m_shared = nullptr; ///< non-owning ptr (view mode only)
+    int m_comp = 0;                                       ///< component in m_shared
 
     amrex::Array4<int> m_cached_arr4 = {};
     int m_cached_ox      = 0;
