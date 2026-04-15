@@ -28,23 +28,18 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
 {   
     // Update DF
     LOOP
-    p->DF[IJK]=1;
-    
-    if(p->solidread>0)
-    LOOP
-    if(a->solid(i,j,k)<0.0)
-    p->DF[IJK]=-1;
-    
-    
-    if(p->toporead>0)
-    LOOP
-    if(a->topo(i,j,k)<0.0)
-    p->DF[IJK]=-1;
-    
-    if(p->X10>0)
-    LOOP
-    if(a->fb(i,j,k)<0.0)
-    p->DF[IJK]=-1;
+    {
+        int df=1;
+
+        if(p->solidread>0 && a->solid(i,j,k)<0.0)
+            df=-1;
+        else if(p->toporead>0 && a->topo(i,j,k)<0.0)
+            df=-1;
+        else if(p->X10>0 && a->fb(i,j,k)<0.0)
+            df=-1;
+
+        p->DF[IJK]=df;
+    }
     
     #if USE_AMREX
     p->DF.fillBoundary();
@@ -55,27 +50,36 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
     
     // 1
     ULOOP
-    p->DF1[IJK]=p->DF[IJK];
-    
-    ULOOP
-    if(p->DF[IJK]>0 && p->DF[Ip1JK]<0)
-    p->DF1[IJK]=-1;
+    {
+        int df=p->DF[IJK];
+
+        if(df>0 && p->DF[Ip1JK]<0)
+            df=-1;
+
+        p->DF1[IJK]=df;
+    }
     
     // 2
     VLOOP
-    p->DF2[IJK]=p->DF[IJK];
-    
-    VLOOP
-    if(p->DF[IJK]>0 && p->DF[IJp1K]<0)
-    p->DF2[IJK]=-1;
+    {
+        int df=p->DF[IJK];
+
+        if(df>0 && p->DF[IJp1K]<0)
+            df=-1;
+
+        p->DF2[IJK]=df;
+    }
     
     // 3
     WLOOP
-    p->DF3[IJK]=p->DF[IJK];
-    
-    WLOOP
-    if(p->DF[IJK]>0 && p->DF[IJKp1]<0)
-    p->DF3[IJK]=-1;
+    {
+        int df=p->DF[IJK];
+
+        if(df>0 && p->DF[IJKp1]<0)
+            df=-1;
+
+        p->DF3[IJK]=df;
+    }
     
     #if USE_AMREX
     p->DF1.fillBoundary();
