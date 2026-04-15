@@ -103,6 +103,12 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
     pflow->fsfrkout(p,a,pgc,frk1);
     pflow->fsfrkout(p,a,pgc,frk2);
 
+    // Convergence threshold: stop when max|sign(phi0)*(|grad phi|-1)| < tol.
+    // The RHS L computed by prdisc is dimensionless; 1e-4 means the level set
+    // deviates from a signed-distance function by less than 0.01% per iteration.
+    static constexpr double reini_conv_tol = 1.0e-4;
+
+    int iters_done = reiniter;
     for(int q=0;q<reiniter;++q)
     {
         // Step 1
@@ -132,6 +138,19 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
         // Step 3
         prdisc->start(p,a,pgc,frk2,a->L,4);
 
+        // Check convergence on the step-3 RHS before applying the update.
+        // If L_inf is already below tolerance on iteration q>0 the update would
+        // be negligible, so we can skip it and exit early.
+        double L_inf = 0.0;
+        #if USE_AMREX
+        for (int lev = 0; lev < p->nlevs; ++lev)
+            L_inf = std::max(L_inf, a->L.GetMultiFab(lev).norm0(0, 0, true));
+        #else
+        LOOP
+            L_inf = MAX(L_inf, fabs(a->L(i,j,k)));
+        #endif
+        L_inf = pgc->globalmax(L_inf);
+
         FIELDLOOP(
             f,
             FIELD_CONST(frk2); FIELD_CONST(dt); FIELD_CONST_MEMBER(a, L),
@@ -139,6 +158,12 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
         )
 
         pgc->start4(p,f,gcval);
+
+        if (q > 0 && L_inf < reini_conv_tol)
+        {
+            iters_done = q + 1;
+            break;
+        }
     }
 
     ppicard->correct_ls(p,a,pgc,f);
