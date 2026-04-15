@@ -105,9 +105,16 @@ void ghostcell::solid_forcing(lexer *p, fdm *a, double alpha, field& uvel, field
     start3(p,a->fbh3,12);
     start4(p,a->fbh4,40);
 #endif
+#if USE_AMREX
+    startBatch(p, *static_cast<field_amrex*>(&fx)->get_shared_mf_vec(), 0,
+        {{static_cast<field_amrex*>(&fx), 10},
+         {static_cast<field_amrex*>(&fy), 11},
+         {static_cast<field_amrex*>(&fz), 12}});
+#else
     start1(p,fx,10);
     start2(p,fy,11);
     start3(p,fz,12);
+#endif
 }
 
 static inline double heaviside_smooth(double negphi, double psi)
