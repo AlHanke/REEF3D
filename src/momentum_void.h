@@ -25,17 +25,12 @@ Author: Hans Bihs
 
 #include"momentum.h"
 
-using namespace std;
-
 class momentum_void : public momentum
 {
 public:
-	momentum_void();
-	virtual ~momentum_void();
-	void start(lexer*, fdm*, ghostcell*,vrans*,sixdof*) override;
-
-private:
+    momentum_void() = default;
+    virtual ~momentum_void() = default;
+    void start(lexer*, fdm*, ghostcell*,vrans*,sixdof*) override {};
 };
 
 #endif
-
