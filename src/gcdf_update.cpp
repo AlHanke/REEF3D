@@ -97,6 +97,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
                 p->flag3[IJK]=-10;
         }
 
+        gcb_velflagio(p);
+
         #if USE_AMREX
         p->flag1.fillBoundary();
         p->flag2.fillBoundary();
