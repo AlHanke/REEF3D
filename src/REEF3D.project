@@ -158,6 +158,7 @@
             <File Name="kepsilon_bc.h"/>
           </VirtualDirectory>
           <VirtualDirectory Name="IO">
+            <File Name="les_io.h"/>
             <File Name="rans_io.h"/>
           </VirtualDirectory>
           <VirtualDirectory Name="EARSM">
@@ -448,6 +449,7 @@
         </VirtualDirectory>
         <VirtualDirectory Name="Sediment"/>
         <VirtualDirectory Name="Print">
+          <File Name="sflow_print_wsf_theory.h"/>
           <File Name="sflow_vtp_fsf.h"/>
           <File Name="sflow_print_bed.h"/>
           <File Name="sflow_print_bedline_y.h"/>
@@ -884,6 +886,11 @@
           <File Name="sandslide_pde.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Suspended">
+          <VirtualDirectory Name="SFLOW">
+            <File Name="sflow_suspended_void.h"/>
+            <File Name="sflow_suspended_RK2.h"/>
+            <File Name="sflow_suspended.h"/>
+          </VirtualDirectory>
           <VirtualDirectory Name="NHFLOW">
             <File Name="nhflow_suspended_IM1.h"/>
             <File Name="nhflow_suspended_void.h"/>
