@@ -31,21 +31,21 @@ ghostcell::bc_labels ghostcell::gcsleval4(int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // vertical w
-    else if(bc!=1 && (gcv==12 || gcv==24))
+    else if(bc!=INFLOW && (gcv==12 || gcv==24))
         return bc_labels::NEUMANN;
 
-    else if(bc==1 && gcv==12)
+    else if(bc==INFLOW && gcv==12)
         return bc_labels::NOSLIP;
 
     // pressure 40
-    else if((bc==1 || bc==2 || bc==3 || bc==6 || bc==7 || bc==21 || bc==111 || bc==112 || bc==211 || bc==212) && gcv==44)
+    else if((bc==INFLOW || bc==OUTFLOW || bc==SYMMETRY || bc==WAVEGEN || bc==NUMBEACH || bc==WALL || bc==111 || bc==112 || bc==211 || bc==212) && gcv==44)
         return bc_labels::NEUMANN;
 
     // Potential Ini
-    else if((bc==3 || bc==21) && gcv==49)
+    else if((bc==SYMMETRY || bc==WALL) && gcv==49)
         return bc_labels::NEUMANN;
 
-    else if((bc==1 || bc==2 || bc==6 || bc==7) && gcv==49)
+    else if((bc==INFLOW || bc==OUTFLOW || bc==WAVEGEN || bc==NUMBEACH) && gcv==49)
         return bc_labels::POTENTIAL;
 
     //Patch eta / Hx / Hy
@@ -53,46 +53,46 @@ ghostcell::bc_labels ghostcell::gcsleval4(int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // eta
-    else if((bc==1 || bc==6) && (gcv==52 || gcv==54)  && (p->B98<3 || p->A515<=2))
+    else if((bc==INFLOW || bc==WAVEGEN) && (gcv==52 || gcv==54)  && (p->B98<3 || p->A515<=2))
         return bc_labels::NEUMANN;
 
-    else if(bc==2 && (gcv==51 || gcv==54))
+    else if(bc==OUTFLOW && (gcv==51 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if((bc==3 || bc==21) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if((bc==SYMMETRY || bc==WALL) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if(bc==7 && (gcv==51 || gcv==54 || p->B99==0 || p->B99==1 || ((gcv==52 || gcv==53) && p->B99==3)))
+    else if(bc==NUMBEACH && (gcv==51 || gcv==54 || p->B99==0 || p->B99==1 || ((gcv==52 || gcv==53) && p->B99==3)))
         return bc_labels::NEUMANN;
 
-    else if(bc==7 && (gcv==51 || gcv==52 || gcv==53 || gcv==54) && p->B99==4)
+    else if(bc==NUMBEACH && (gcv==51 || gcv==52 || gcv==53 || gcv==54) && p->B99==4)
         return bc_labels::SOMMERFELD;
 
     // Fifsf 60 - 3D
-    else if(((cs==1 && p->B98<=2) || cs==2 || cs==3 || (cs==4 && p->B99<=2)) && gcv==60)
+    else if(((cs==X_NEG && p->B98<=2) || cs==Y_POS || cs==Y_NEG || (cs==X_POS && p->B99<=2)) && gcv==60)
         return bc_labels::NEUMANN;
 
     // eta 150
-    else if((bc==1 || bc==6) && (gcv==152 || gcv==154))
+    else if((bc==INFLOW || bc==WAVEGEN) && (gcv==152 || gcv==154))
         return bc_labels::NEUMANN_X;
 
-    else if((bc==2 || bc==7) && (gcv==151 || gcv==154))
+    else if((bc==OUTFLOW || bc==NUMBEACH) && (gcv==151 || gcv==154))
         return bc_labels::NEUMANN_X;
 
-    else if(bc==7 && (gcv==151 || gcv==152 || gcv==153 || gcv==154) &&p->B99==3)
+    else if(bc==NUMBEACH && (gcv==151 || gcv==152 || gcv==153 || gcv==154) &&p->B99==3)
         return bc_labels::NEUMANN_X;
 
-    else if(bc==7 && (gcv==151 || gcv==152 || gcv==153 || gcv==154) &&p->B99==4)
+    else if(bc==NUMBEACH && (gcv==151 || gcv==152 || gcv==153 || gcv==154) &&p->B99==4)
         return bc_labels::SOMMERFELD;
 
-    else if((bc==3 || bc==21) && (gcv==151 || gcv==152 || gcv==153 || gcv==154))
+    else if((bc==SYMMETRY || bc==WALL) && (gcv==151 || gcv==152 || gcv==153 || gcv==154))
         return bc_labels::NEUMANN_X;
 
     else if(gcv==155)
         return bc_labels::NEUMANN_X;
 
     // Fifsf 160 - 2D
-    else if(((cs==1 && p->B98<=2) || (cs==4 && p->B99<=2)) && gcv==160)
+    else if(((cs==X_NEG && p->B98<=2) || (cs==X_POS && p->B99<=2)) && gcv==160)
         return bc_labels::NEUMANN_X;
 
     else
