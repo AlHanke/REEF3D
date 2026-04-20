@@ -25,17 +25,12 @@ Author: Hans Bihs
 
 class lexer;
 class fdm;
-class fieldint;
 class field;
-
-using namespace std;
 
 class convection
 {
 public:
-
-virtual void start(lexer*,fdm*,field&,int,field&,field&,field&)=0;
-
+    virtual void start(lexer*,fdm*,field&,int,field&,field&,field&)=0;
 };
 
 #endif

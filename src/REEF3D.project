@@ -1378,7 +1378,7 @@
             <File Name="hires.cpp"/>
             <File Name="hcds6.cpp"/>
             <File Name="fou.cpp"/>
-            <File Name="discrete_void.cpp"/>
+            <File Name="convection_void.cpp"/>
             <File Name="cicsam.cpp"/>
             <File Name="cds4.cpp"/>
             <File Name="cds2.cpp"/>
