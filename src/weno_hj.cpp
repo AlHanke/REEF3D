@@ -28,260 +28,186 @@ Author: Hans Bihs
 #include"flux_HJ_CDS2_2D.h"
 #include"flux_HJ_CDS2_vrans_2D.h"
 
-weno_hj::weno_hj(lexer* p):tttw(13.0/12.0),fourth(1.0/4.0),third(1.0/3.0),
-			sevsix(7.0/6.0),elvsix(11.0/6.0),sixth(1.0/6.0),fivsix(5.0/6.0),tenth(1.0/10.0),
-			sixten(6.0/10.0),treten(3.0/10.0),epsilon(0.000001)
+weno_hj::weno_hj(lexer* p)
 {
     if(p->j_dir==0)
     {
-    if(p->B200==0 && p->S10!=2)
-    pflux = new flux_HJ_CDS2_2D;
-    
-    if(p->B200>=1 || p->S10==2)
-    pflux = new flux_HJ_CDS2_vrans_2D;
-    }
-    
-    if(p->j_dir==1)
-    {
-    if(p->B200==0 && p->S10!=2)
-    pflux = new flux_HJ_CDS2;
-    
-    if(p->B200>=1 || p->S10==2)
-    pflux = new flux_HJ_CDS2_vrans;
-    }
-}
+        if(p->B200>=1 || p->S10==2)
+        pflux = new flux_HJ_CDS2_vrans_2D;
 
-weno_hj::~weno_hj()
-{
+        else
+        pflux = new flux_HJ_CDS2_2D;
+    }
+    else if(p->j_dir==1)
+    {
+        if(p->B200>=1 || p->S10==2)
+        pflux = new flux_HJ_CDS2_vrans;
+
+        else
+        pflux = new flux_HJ_CDS2;
+    }
 }
 
 void weno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
-	
     if(ipol==1)
-	{
-		n=0;
-		ULOOP
-		{
-		a->F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel);
-		++n;
-		}
-	}
-    
-    if(p->j_dir==1)
-    if(ipol==2)
-	{
-		n=0;
-		VLOOP
-		{
-		a->G(i,j,k)+=aij(p,a,b,2,uvel,vvel,wvel);
-		++n;
-		}
-	}
-
-    if(ipol==3)
-	{
-		n=0;
-		WLOOP
-		{
-		a->H(i,j,k)+=aij(p,a,b,3,uvel,vvel,wvel);
-		++n;
-		}
-	}
-
-    if(ipol==4)
-	{
-		n=0;
-		LOOP
-		{
-		a->L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel);
-		++n;
-		}
-	}
+    {
+        n=0;
+        FIELDLOOP_INC_MEMBER(a,F,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel); ++n;
+        )
+    }
+    else if(ipol==2 && p->j_dir==1)
+    {
+        n=0;
+        FIELDLOOP_INC_MEMBER(a,G,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            G(i,j,k)+=aij(p,a,b,2,uvel,vvel,wvel); ++n;
+        )
+    }
+    else if(ipol==3)
+    {
+        n=0;
+        FIELDLOOP_INC_MEMBER(a,H,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            H(i,j,k)+=aij(p,a,b,3,uvel,vvel,wvel); ++n;
+        )
+    }
+    else if(ipol==4)
+    {
+        n=0;
+        FIELDLOOP_INC_MEMBER(a,L,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel); ++n;
+        )
+    }
 }
 
-double weno_hj::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, field& wvel)
+template<typename GenericField>
+inline double weno_hj::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel)
 {
+    double iadvec, ivel2, jadvec, jvel2, kadvec, kvel2;
 
-		pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
-        pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
-        pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
-		
-		L = -iadvec*ddx(p,a,b) - jadvec*ddy(p,a,b)  - kadvec*ddz(p,a,b);
+    pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
+    pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
+    pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
 
-		return L;
+    return - iadvec*ddx(p,a,b,iadvec)
+           - jadvec*ddy(p,a,b,jadvec)
+           - kadvec*ddz(p,a,b,kadvec);
 }
 
-double weno_hj::ddx(lexer* p,fdm* a, field& b)
+template<typename GenericField>
+inline double weno_hj::ddx(lexer* p, fdm* a, const GenericField& b, double advec)
 {
-    grad = 0.0;
-	
-	if(iadvec>0.0)
-	{
-	iqmin(b,p->DXM);
-	is();
-	alpha();
-	weight();
-	
-	grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
-	      + w2*(-q2*sixth + q3*fivsix + q4*third)
-		  + w3*( q3*third + q4*fivsix - q5*sixth));
-	}
-	
+    if(advec==0.0) return 0.0;
 
-	if(iadvec<0.0)
-	{
-	iqmax(b,p->DXM);
-	is();
-	alpha();
-	weight();
-	
-	grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
-	      + w2*(-q2*sixth + q3*fivsix + q4*third)
-		  + w3*( q3*third + q4*fivsix - q5*sixth));
-	}
+    double q1,q2,q3,q4,q5;
 
-	return grad;
+    if(advec>0.0)
+    {
+        q1 = (b(i-2,j,k) - b(i-3,j,k))/p->DXM;
+        q2 = (b(i-1,j,k) - b(i-2,j,k))/p->DXM;
+        q3 = (b(i,j,k)   - b(i-1,j,k))/p->DXM;
+        q4 = (b(i+1,j,k) - b(i,j,k)  )/p->DXM;
+        q5 = (b(i+2,j,k) - b(i+1,j,k))/p->DXM;
+    }
+    else
+    {
+        q1 = (b(i+3,j,k) - b(i+2,j,k))/p->DXM;
+        q2 = (b(i+2,j,k) - b(i+1,j,k))/p->DXM;
+        q3 = (b(i+1,j,k) - b(i,j,k)  )/p->DXM;
+        q4 = (b(i,j,k)   - b(i-1,j,k))/p->DXM;
+        q5 = (b(i-1,j,k) - b(i-2,j,k))/p->DXM;
+    }
+
+    const double is1 = tttw*pow(q1-2.0*q2+q3, 2.0) + fourth*pow(q1-4.0*q2+3.0*q3, 2.0);
+    const double is2 = tttw*pow(q2-2.0*q3+q4, 2.0) + fourth*pow(q2-q4, 2.0);
+    const double is3 = tttw*pow(q3-2.0*q4+q5, 2.0) + fourth*pow(3.0*q3-4.0*q4+q5, 2.0);
+    const double a1 = tenth/pow(epsilon+is1, 2.0);
+    const double a2 = sixten/pow(epsilon+is2, 2.0);
+    const double a3 = treten/pow(epsilon+is3, 2.0);
+    const double asum = a1+a2+a3;
+    const double w1=a1/asum, w2=a2/asum, w3=a3/asum;
+
+    return w1*( q1*third - q2*sevsix + q3*elvsix)
+         + w2*(-q2*sixth + q3*fivsix + q4*third)
+         + w3*( q3*third + q4*fivsix - q5*sixth);
 }
 
-double weno_hj::ddy(lexer* p,fdm* a, field& b)
+template<typename GenericField>
+inline double weno_hj::ddy(lexer* p, fdm* a, const GenericField& b, double advec)
 {
-    grad = 0.0;
-	
-	if(jadvec>0.0)
-	{
-	jqmin(b,p->DYM);
-	is();
-	alpha();
-	weight();
-	
-	grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
-	      + w2*(-q2*sixth + q3*fivsix + q4*third)
-		  + w3*( q3*third + q4*fivsix - q5*sixth));
-	
-	}
-	
+    if(advec==0.0) return 0.0;
 
-	if(jadvec<0.0)
-	{
-	jqmax(b,p->DYM);
-	is();
-	alpha();
-	weight();
-	
-	grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
-	      + w2*(-q2*sixth + q3*fivsix + q4*third)
-		  + w3*( q3*third + q4*fivsix - q5*sixth));
-	
-	}
-	
-	return grad;
+    double q1,q2,q3,q4,q5;
+
+    if(advec>0.0)
+    {
+        q1 = (b(i,j-2,k) - b(i,j-3,k))/p->DYM;
+        q2 = (b(i,j-1,k) - b(i,j-2,k))/p->DYM;
+        q3 = (b(i,j,k)   - b(i,j-1,k))/p->DYM;
+        q4 = (b(i,j+1,k) - b(i,j,k)  )/p->DYM;
+        q5 = (b(i,j+2,k) - b(i,j+1,k))/p->DYM;
+    }
+    else
+    {
+        q1 = (b(i,j+3,k) - b(i,j+2,k))/p->DYM;
+        q2 = (b(i,j+2,k) - b(i,j+1,k))/p->DYM;
+        q3 = (b(i,j+1,k) - b(i,j,k)  )/p->DYM;
+        q4 = (b(i,j,k)   - b(i,j-1,k))/p->DYM;
+        q5 = (b(i,j-1,k) - b(i,j-2,k))/p->DYM;
+    }
+
+    const double is1 = tttw*pow(q1-2.0*q2+q3, 2.0) + fourth*pow(q1-4.0*q2+3.0*q3, 2.0);
+    const double is2 = tttw*pow(q2-2.0*q3+q4, 2.0) + fourth*pow(q2-q4, 2.0);
+    const double is3 = tttw*pow(q3-2.0*q4+q5, 2.0) + fourth*pow(3.0*q3-4.0*q4+q5, 2.0);
+    const double a1 = tenth/pow(epsilon+is1, 2.0);
+    const double a2 = sixten/pow(epsilon+is2, 2.0);
+    const double a3 = treten/pow(epsilon+is3, 2.0);
+    const double asum = a1+a2+a3;
+    const double w1=a1/asum, w2=a2/asum, w3=a3/asum;
+
+    return w1*( q1*third - q2*sevsix + q3*elvsix)
+         + w2*(-q2*sixth + q3*fivsix + q4*third)
+         + w3*( q3*third + q4*fivsix - q5*sixth);
 }
 
-double weno_hj::ddz(lexer* p,fdm* a, field& b)
+template<typename GenericField>
+inline double weno_hj::ddz(lexer* p, fdm* a, const GenericField& b, double advec)
 {
-    grad = 0.0;
-	
-	if(kadvec>0.0)
-	{
-	kqmin(b,p->DZM);
-	is();
-	alpha();
-	weight();
-	
-	grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
-	      + w2*(-q2*sixth + q3*fivsix + q4*third)
-		  + w3*( q3*third + q4*fivsix - q5*sixth));
-	}
-	 
-	
-	if(kadvec<0.0)
-	{
-	kqmax(b,p->DZM);
-	is();
-	alpha();
-	weight();
-	
-	grad = (w1*( q1*third - q2*sevsix + q3*elvsix)
-	      + w2*(-q2*sixth + q3*fivsix + q4*third)
-		  + w3*( q3*third + q4*fivsix - q5*sixth));
-	}
-	
-	return grad;
-}
+    if(advec==0.0) return 0.0;
 
-void weno_hj::iqmin(field& f, double DXM)
-{	
-	q1 = (f(i-2,j,k) - f(i-3,j,k))/DXM;
-	q2 = (f(i-1,j,k) - f(i-2,j,k))/DXM;
-	q3 = (f(i,j,k)   - f(i-1,j,k))/DXM;
-	q4 = (f(i+1,j,k) - f(i,j,k)  )/DXM;
-	q5 = (f(i+2,j,k) - f(i+1,j,k))/DXM;
-}
+    double q1,q2,q3,q4,q5;
 
-void weno_hj::jqmin(field& f, double DYM)
-{	
-	q1 = (f(i,j-2,k) - f(i,j-3,k))/DYM;
-	q2 = (f(i,j-1,k) - f(i,j-2,k))/DYM;
-	q3 = (f(i,j,k)   - f(i,j-1,k))/DYM;
-	q4 = (f(i,j+1,k) - f(i,j,k)  )/DYM;
-	q5 = (f(i,j+2,k) - f(i,j+1,k))/DYM;
-}
+    if(advec>0.0)
+    {
+        q1 = (b(i,j,k-2) - b(i,j,k-3))/p->DZM;
+        q2 = (b(i,j,k-1) - b(i,j,k-2))/p->DZM;
+        q3 = (b(i,j,k)   - b(i,j,k-1))/p->DZM;
+        q4 = (b(i,j,k+1) - b(i,j,k)  )/p->DZM;
+        q5 = (b(i,j,k+2) - b(i,j,k+1))/p->DZM;
+    }
+    else
+    {
+        q1 = (b(i,j,k+3) - b(i,j,k+2))/p->DZM;
+        q2 = (b(i,j,k+2) - b(i,j,k+1))/p->DZM;
+        q3 = (b(i,j,k+1) - b(i,j,k)  )/p->DZM;
+        q4 = (b(i,j,k)   - b(i,j,k-1))/p->DZM;
+        q5 = (b(i,j,k-1) - b(i,j,k-2))/p->DZM;
+    }
 
-void weno_hj::kqmin(field& f, double DZM)
-{	
-	q1 = (f(i,j,k-2) - f(i,j,k-3))/DZM;
-	q2 = (f(i,j,k-1) - f(i,j,k-2))/DZM;
-	q3 = (f(i,j,k)   - f(i,j,k-1))/DZM;
-	q4 = (f(i,j,k+1) - f(i,j,k)  )/DZM;
-	q5 = (f(i,j,k+2) - f(i,j,k+1))/DZM;
-}
+    const double is1 = tttw*pow(q1-2.0*q2+q3, 2.0) + fourth*pow(q1-4.0*q2+3.0*q3, 2.0);
+    const double is2 = tttw*pow(q2-2.0*q3+q4, 2.0) + fourth*pow(q2-q4, 2.0);
+    const double is3 = tttw*pow(q3-2.0*q4+q5, 2.0) + fourth*pow(3.0*q3-4.0*q4+q5, 2.0);
+    const double a1 = tenth/pow(epsilon+is1, 2.0);
+    const double a2 = sixten/pow(epsilon+is2, 2.0);
+    const double a3 = treten/pow(epsilon+is3, 2.0);
+    const double asum = a1+a2+a3;
+    const double w1=a1/asum, w2=a2/asum, w3=a3/asum;
 
-void weno_hj::iqmax(field& f, double DXM)
-{	
-	q1 = (f(i+3,j,k) - f(i+2,j,k))/DXM;
-	q2 = (f(i+2,j,k) - f(i+1,j,k))/DXM;
-	q3 = (f(i+1,j,k) - f(i,j,k)  )/DXM;
-	q4 = (f(i,j,k)   - f(i-1,j,k))/DXM;
-	q5 = (f(i-1,j,k) - f(i-2,j,k))/DXM;
+    return w1*( q1*third - q2*sevsix + q3*elvsix)
+         + w2*(-q2*sixth + q3*fivsix + q4*third)
+         + w3*( q3*third + q4*fivsix - q5*sixth);
 }
-
-void weno_hj::jqmax(field& f, double DYM)
-{	
-	q1 = (f(i,j+3,k) - f(i,j+2,k))/DYM;
-	q2 = (f(i,j+2,k) - f(i,j+1,k))/DYM;
-	q3 = (f(i,j+1,k) - f(i,j,k)  )/DYM;
-	q4 = (f(i,j,k)   - f(i,j-1,k))/DYM;
-	q5 = (f(i,j-1,k) - f(i,j-2,k))/DYM;
-}
-
-void weno_hj::kqmax(field& f, double DZM)
-{
-	q1 = (f(i,j,k+3) - f(i,j,k+2))/DZM;
-	q2 = (f(i,j,k+2) - f(i,j,k+1))/DZM;
-	q3 = (f(i,j,k+1) - f(i,j,k)  )/DZM;
-	q4 = (f(i,j,k)   - f(i,j,k-1))/DZM;
-	q5 = (f(i,j,k-1) - f(i,j,k-2))/DZM;
-}
-
-void weno_hj::is()
-{
-	is1 = tttw*pow(q1-2.0*q2+q3, 2.0) + fourth*pow(q1-4.0*q2+3.0*q3, 2.0);
-	is2 = tttw*pow(q2-2.0*q3+q4, 2.0) + fourth*pow(q2-q4, 2.0);
-	is3 = tttw*pow(q3-2.0*q4+q5, 2.0) + fourth*pow(3.0*q3-4.0*q4+q5, 2.0);
-}
-
-void weno_hj::alpha()
-{
-	alpha1=tenth/pow(epsilon+is1,2.0);
-	alpha2=sixten/pow(epsilon+is2,2.0);
-	alpha3=treten/pow(epsilon+is3,2.0);
-}
-
-void weno_hj::weight()
-{
-	w1=alpha1/(alpha1+alpha2+alpha3);
-	w2=alpha2/(alpha1+alpha2+alpha3);
-	w3=alpha3/(alpha1+alpha2+alpha3);
-}
-
