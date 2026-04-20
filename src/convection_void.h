@@ -26,20 +26,13 @@ Author: Hans Bihs
 #include"convection.h"
 #include"increment.h"
 
-using namespace std;
-
 class convection_void final : public convection, public increment
 {
-
 public:
+    convection_void(lexer*) {};
+    virtual ~convection_void() = default;
 
-	convection_void (lexer *);
-	virtual ~convection_void();
-
-	void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
-
-private:
-
+    void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 };
 
 #endif
