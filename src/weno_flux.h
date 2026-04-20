@@ -28,47 +28,29 @@ Author: Hans Bihs
 
 class flux;
 
-using namespace std;
-
 class weno_flux final : public convection, public increment
 {
 public:
-	weno_flux(lexer*);
-	virtual ~weno_flux();
+    weno_flux(lexer*);
+    virtual ~weno_flux() = default;
 
-	void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
+    void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    double aij(lexer*, fdm*, field&, int,field&,field&,field&);
-    
-	double fx(lexer*, fdm*, field&, field&, int, double);
-	double fy(lexer*, fdm*, field&, field&, int, double);
-	double fz(lexer*, fdm*, field&, field&, int, double);
-	void iqmin(lexer*, fdm*, field&, field&, int);
-	void jqmin(lexer*, fdm*, field&, field&, int);
-	void kqmin(lexer*, fdm*, field&, field&, int);
-	void iqmax(lexer*, fdm*, field&, field&, int);
-	void jqmax(lexer*, fdm*, field&, field&, int);
-	void kqmax(lexer*, fdm*, field&, field&, int);
+    template<typename GenericField>
+    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&);
 
-	double L,grad;
-	const double tttw,fourth,third,sevsix,elvsix,sixth,fivsix,tenth;
-	const double sixten,treten;
-	const double epsilon;
-	double is1,is2,is3;
-	double alpha1,alpha2,alpha3;
-	double w1,w2,w3;
-	double q1,q2,q3,q4,q5;
-	double gradx, grady, gradz;
-	double fu1,fv1,fw1,fu2,fv2,fw2;
-    
-    double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
+    template<typename GenericField>
+    inline double fx(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int di=0);
+    template<typename GenericField>
+    inline double fy(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int dj=0);
+    template<typename GenericField>
+    inline double fz(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int dk=0);
 
+    static constexpr double tttw = 13.0/12.0, fourth=0.4, third=1.0/3.0, sevsix=7.0/6.0, elvsix=11.0/6.0, sixth=1.0/6.0, fivsix=5.0/6.0, tenth=0.1;
+    static constexpr double sixten = 0.6, treten = 0.3;
+    static constexpr double epsilon = 0.000001;
 
-	void is(field&);
-	void alpha();
-	void weight();
-    
     flux *pflux;
 };
 
