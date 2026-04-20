@@ -28,42 +28,25 @@ Author: Hans Bihs
 
 class flux;
 
-using namespace std;
-
 class weno3_hj final : public convection, public weno3_nug_func
 {
 public:
-	weno3_hj(lexer*);
-	virtual ~weno3_hj();
+    weno3_hj(lexer*);
+    virtual ~weno3_hj() = default;
 
-	void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
+    void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    double aij(lexer*, fdm*, field&, int,field&,field&,field&,double*,double*,double*);
-    
-	double fx(lexer*, fdm*, field&, field&, int, double);
-	double fy(lexer*, fdm*, field&, field&, int, double);
-	double fz(lexer*, fdm*, field&, field&, int, double);
-	void iqmin(lexer*, fdm*, field&, field&, int);
-	void jqmin(lexer*, fdm*, field&, field&, int);
-	void kqmin(lexer*, fdm*, field&, field&, int);
-	void iqmax(lexer*, fdm*, field&, field&, int);
-	void jqmax(lexer*, fdm*, field&, field&, int);
-	void kqmax(lexer*, fdm*, field&, field&, int);
+    template<typename GenericField>
+    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
 
+    template<typename GenericField>
+    double fx(lexer*, fdm*, const GenericField&, const double*, double);
+    template<typename GenericField>
+    double fy(lexer*, fdm*, const GenericField&, const double*, double);
+    template<typename GenericField>
+    double fz(lexer*, fdm*, const GenericField&, const double*, double);
 
-	double L,grad;
-    
-    double q4,q5;
-
-	double gradx, grady, gradz;
-	double fu1,fv1,fw1,fu2,fv2,fw2;
-    
-    double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
-    double iadvec,jadvec,kadvec;
-    
-    double *DX,*DY,*DZ;
-    
     flux *pflux;
 };
 
