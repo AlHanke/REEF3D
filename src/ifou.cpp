@@ -32,111 +32,115 @@ Author: Hans Bihs
 #include"flux_face_FOU_2D.h"
 #include"flux_face_FOU_vrans_2D.h"
 
-ifou::ifou (lexer *p)
+ifou::ifou(lexer *p)
 {
     if(p->j_dir==0)
     {
-    if(p->B200==0)
-    {
-        if(p->D11==1)
-        pflux = new flux_face_FOU_2D(p);
-        
-        if(p->D11==2)
-        pflux = new flux_face_CDS2_2D;
-    }
-    
-    if(p->B200>=1 || p->S10==2)
-    {
-        if(p->D11==1)
-        pflux = new flux_face_FOU_vrans_2D(p);
-        
-        if(p->D11==2)
-        pflux = new flux_face_CDS2_vrans_2D;
-    }
-    }
-    
-    if(p->j_dir==1)
-    {
-    if(p->B200==0)
-    {
-        if(p->D11==1)
-        pflux = new flux_face_FOU(p);
-        
-        if(p->D11==2)
-        pflux = new flux_face_CDS2;
-    }
-    
-    if(p->B200>=1 || p->S10==2)
-    {
-        if(p->D11==1)
-        pflux = new flux_face_FOU_vrans(p);
-        
-        if(p->D11==2)
-        pflux = new flux_face_CDS2_vrans;
-    }
-    }
-}
+        if(p->B200>=1 || p->S10==2)
+        {
+            if(p->D11==1)
+            pflux = new flux_face_FOU_vrans_2D(p);
 
-ifou::~ifou()
-{
+            else if(p->D11==2)
+            pflux = new flux_face_CDS2_vrans_2D;
+        }
+        else
+        {
+            if(p->D11==1)
+            pflux = new flux_face_FOU_2D(p);
+
+            else if(p->D11==2)
+            pflux = new flux_face_CDS2_2D;
+        }
+    }
+    else if(p->j_dir==1)
+    {
+        if(p->B200>=1 || p->S10==2)
+        {
+            if(p->D11==1)
+            pflux = new flux_face_FOU_vrans(p);
+
+            else if(p->D11==2)
+            pflux = new flux_face_CDS2_vrans;
+        }
+        else
+        {
+            if(p->D11==1)
+            pflux = new flux_face_FOU(p);
+
+            else if(p->D11==2)
+            pflux = new flux_face_CDS2;
+        }
+    }
 }
 
 void ifou::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     count=0;
-
     if(ipol==1)
-    ULOOP
-    aij(p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data());
-    
-    if(p->j_dir==1)
-    if(ipol==2)
-    VLOOP
-    aij(p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data());
-
-    if(ipol==3)
-    WLOOP
-    aij(p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data());
-
-    if(ipol==4)
-    LOOP
-    aij(p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data());
+    {
+        FIELDLOOP_INC_MEMBER(a,F,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            aij(p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data());
+        )
+    }
+    else if(ipol==2 && p->j_dir==1)
+    {
+        FIELDLOOP_INC_MEMBER(a,G,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            aij(p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data());
+        )
+    }
+    else if(ipol==3)
+    {
+        FIELDLOOP_INC_MEMBER(a,H,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            aij(p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data());
+        )
+    }
+    else if(ipol==4)
+    {
+        FIELDLOOP_INC_MEMBER(a,L,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            aij(p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data());
+        )
+    }
 }
 
-void ifou::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, field& wvel, double *DX,double *DY, double *DZ)
+template<typename GenericField>
+void ifou::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX, double *DY, double *DZ)
 {
-	udir=vdir=wdir=0.0;
-    
+    double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
     pflux->u_flux(a,ipol,uvel,ivel1,ivel2);
     pflux->v_flux(a,ipol,vvel,jvel1,jvel2);
     pflux->w_flux(a,ipol,wvel,kvel1,kvel2);
 
-	if(0.5*(ivel1+ivel2)>=0.0)
+    double udir,vdir,wdir;
+    udir=vdir=wdir=0.0;
+    if(0.5*(ivel1+ivel2)>=0.0)
     udir=1.0;
-    
+
     if(0.5*(jvel1+jvel2)>=0.0)
     vdir=1.0;
-    
+
     if(0.5*(kvel1+kvel2)>=0.0)
     wdir=1.0;
 
-	 
-	 a->M.p[count] = udir*ivel2/DX[IM1] - (1.0-udir)*ivel1/DX[IP]
-					+ (vdir*jvel2/DY[JM1] - (1.0-vdir)*jvel1/DY[JP])*p->y_dir
-					+ wdir*kvel2/DZ[KM1] - (1.0-wdir)*kvel1/DZ[KP];
-	 
-	 a->M.s[count] = -udir*ivel1/DX[IM1];
-	 a->M.n[count] =  (1.0-udir)*ivel2/DX[IP];
-	 
-	 a->M.e[count] = -vdir*jvel1/DY[JM1]*p->y_dir;
-	 a->M.w[count] =  (1.0-vdir)*jvel2/DY[JP]*p->y_dir;
-	 
-	 a->M.b[count] = -wdir*kvel1/DZ[KM1];
-	 a->M.t[count] =  (1.0-wdir)*kvel2/DZ[KP];
-     
-	 ++count;
+    a->M.p[count] = udir*ivel2/DX[IM1] - (1.0-udir)*ivel1/DX[IP]
+                  + p->j_dir?(vdir*jvel2/DY[JM1] - (1.0-vdir)*jvel1/DY[JP]):0.0
+                  + wdir*kvel2/DZ[KM1] - (1.0-wdir)*kvel1/DZ[KP];
+
+    a->M.s[count] = -udir*ivel1/DX[IM1];
+    a->M.n[count] =  (1.0-udir)*ivel2/DX[IP];
+
+    if(p->j_dir)
+    {
+        a->M.e[count] = -vdir*jvel1/DY[JM1]*p->y_dir;
+        a->M.w[count] =  (1.0-vdir)*jvel2/DY[JP]*p->y_dir;
+    }
+
+    a->M.b[count] = -wdir*kvel1/DZ[KM1];
+    a->M.t[count] =  (1.0-wdir)*kvel2/DZ[KP];
+
+    ++count;
 }
-
-
-
-
