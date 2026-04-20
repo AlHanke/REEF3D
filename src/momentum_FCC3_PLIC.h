@@ -39,7 +39,6 @@ class turbulence;
 class solver;
 class poisson;
 class fluid_update;
-class nhflow;
 class reini;
 class picard;
 class heat;
@@ -53,71 +52,69 @@ using namespace std;
 class momentum_FCC3_PLIC final : public momentum, public momentum_forcing, public bcmom
 {
 public:
-	momentum_FCC3_PLIC(lexer*, fdm*, ghostcell*, convection*, diffusion*, pressure*, poisson*, 
+    momentum_FCC3_PLIC(lexer*, fdm*, ghostcell*, convection*, diffusion*, pressure*, poisson*,
                 turbulence*, solver*, solver*, ioflow*, heat*&, concentration*&, reini*, fsi*);
-	virtual ~momentum_FCC3_PLIC();
-	void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*) override final;
-    void utimesave(lexer*, fdm*, ghostcell*);
-    void vtimesave(lexer*, fdm*, ghostcell*);
-    void wtimesave(lexer*, fdm*, ghostcell*);
+    virtual ~momentum_FCC3_PLIC();
+    void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*) override final;
+private:
+    void irhs(lexer*,fdm*);
+    void jrhs(lexer*,fdm*);
+    void krhs(lexer*,fdm*);
 
+    void clear_FGH(lexer*,fdm*);
+    void face_density(lexer*,fdm*,ghostcell*,field1&,field2&,field3&);
+
+    inline double vel_limiter(lexer*,field&,field&,field&,field&);
+    inline double ro_filter(lexer*,field&);
+
+    #if USE_AMREX
+    // Shared MultiFabs for the RK velocity temp fields, declared before the
+    // field members so they are constructed first (declaration order).
+    // Component layout: 0:u-type  1:v-type  2:w-type
+    amrex::Vector<amrex::MultiFab> m_rk1; ///< urk1(0) vrk1(1) wrk1(2)
+    amrex::Vector<amrex::MultiFab> m_rk2; ///< urk2(0) vrk2(1) wrk2(2)
+    amrex::Vector<amrex::MultiFab> m_f; ///< fx(0) fy(1) fz(2)
+    #endif
     field1 ur,udiff,urk1,urk2,fx;
-	field2 vr,vdiff,vrk1,vrk2,fy;
-	field3 wr,wdiff,wrk1,wrk2,fz;
-    
+    field2 vr,vdiff,vrk1,vrk2,fy;
+    field3 wr,wdiff,wrk1,wrk2,fz;
+
     field1 Mx,rox;
     field2 My,roy;
     field3 Mz,roz;
-    
+
     field1 Mx_rk1,Mx_rk2;
-	field2 My_rk1,My_rk2;
-	field3 Mz_rk1,Mz_rk2;
-    
+    field2 My_rk1,My_rk2;
+    field3 Mz_rk1,Mz_rk2;
+
     field1 rox_rk1,rox_rk2;
-	field2 roy_rk1,roy_rk2;
-	field3 roz_rk1,roz_rk2;
-    
+    field2 roy_rk1,roy_rk2;
+    field3 roz_rk1,roz_rk2;
+
     field4 ls,frk1,frk2;
     field4 VoF,vof_rk1,vof_rk2,vof_rk3;
 
-private:
-    fluid_update *pupdate;
-    picard *ppicard;
-    
-	void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	
-    void clear_FGH(lexer*,fdm*);
-    void face_density(lexer*,fdm*,ghostcell*,field&,field&,field&);
-    
-    
-    double vel_limiter(lexer*,fdm*,field&,field&,field&,field&);
-    double ro_filter(lexer*,fdm*,field&);
-
-    
-	int gcval_u, gcval_v, gcval_w;
-    int gcval_phi, gcval_ro, gcval_visc, gcval_vof;
-    double val;
-	double starttime;
     double ro_threshold;
 
-	convection *pconvec;
-	diffusion *pdiff;
-	pressure *ppress;
-	poisson *ppois;
-	turbulence *pturb;
-	solver *psolv;
+    fluid_update *pupdate;
+    picard *ppicard;
+
+    convection *pconvec;
+    diffusion *pdiff;
+    pressure *ppress;
+    poisson *ppois;
+    turbulence *pturb;
+    solver *psolv;
     solver *ppoissonsolv;
-	ioflow *pflow;
-    nhflow *pnh;
+    ioflow *pflow;
     reini *preini;
     density *pd;
     sixdof *p6dof;
     fsi *pfsi;
     VOF_PLIC *pplic;
-    
-    
+
+    static constexpr int gcval_u=10, gcval_v=11, gcval_w=12;
+    int gcval_phi, gcval_ro, gcval_visc, gcval_vof;
 };
 
 #endif
