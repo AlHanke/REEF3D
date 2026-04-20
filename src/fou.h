@@ -28,26 +28,17 @@ Author: Hans Bihs
 
 class flux;
 
-using namespace std;
-
 class fou final : public convection, public increment
 {
-
 public:
+    fou(lexer*);
+    virtual ~fou() = default;
 
-	fou (lexer *);
-	virtual ~fou();
-
-	void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
+    void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    double aij(lexer*, fdm*, field&, int,field&,field&,field&,double*,double*,double*);
-
-	double dx,dy,dz;
-	double udir,vdir,wdir;
-	double L;
-
-    double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
+    template<typename GenericField>
+    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
 
     flux *pflux;
 };
