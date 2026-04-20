@@ -38,7 +38,6 @@ class turbulence;
 class solver;
 class poisson;
 class fluid_update;
-class nhflow;
 class sixdof;
 class fsi;
 
@@ -47,40 +46,44 @@ using namespace std;
 class momentum_RK3CN final : public momentum, public momentum_forcing, public bcmom
 {
 public:
-	momentum_RK3CN(lexer*, fdm*, convection*, diffusion*, pressure*, poisson*, turbulence*, solver*, solver*, ioflow*, fsi*);
-	virtual ~momentum_RK3CN();
-	void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*) override final;
-
-    field1 udiff,urk1,urk2,fx;
-	field2 vdiff,vrk1,vrk2,fy;
-	field3 wdiff,wrk1,wrk2,fz;
-    field4 dro;
+    momentum_RK3CN(lexer*, fdm*, convection*, diffusion*, pressure*, poisson*, turbulence*, solver*, solver*, ioflow*, fsi*);
+    virtual ~momentum_RK3CN();
+    void start(lexer*, fdm*, ghostcell*, vrans*, sixdof*) override final;
 
 private:
-        fluid_update *pupdate;
-    
-	void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-        void addirhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-        void addjrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-        void addkrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	
-        void timecheck(lexer*,fdm*,ghostcell*,field&,field&,field&);
-    
-	int gcval_u, gcval_v, gcval_w;
-	double starttime;
+    inline void irhs(lexer*,fdm*);
+    inline void jrhs(lexer*,fdm*);
+    inline void krhs(lexer*,fdm*);
+    inline void addirhs(lexer*,fdm*,double);
+    inline void addjrhs(lexer*,fdm*,double);
+    inline void addkrhs(lexer*,fdm*,double);
 
-	convection *pconvec;
-	diffusion *pdiff;
-	pressure *ppress;
-	poisson *ppois;
-	turbulence *pturb;
-	solver *psolv;
+    #if USE_AMREX
+    // Shared MultiFabs for the RK velocity temp fields, declared before the
+    // field members so they are constructed first (declaration order).
+    // Component layout: 0:u-type  1:v-type  2:w-type
+    amrex::Vector<amrex::MultiFab> m_rk1; ///< urk1(0) vrk1(1) wrk1(2)
+    amrex::Vector<amrex::MultiFab> m_rk2; ///< urk2(0) vrk2(1) wrk2(2)
+    amrex::Vector<amrex::MultiFab> m_f; ///< fx(0) fy(1) fz(2)
+    #endif
+    field1 udiff,urk1,urk2,fx;
+    field2 vdiff,vrk1,vrk2,fy;
+    field3 wdiff,wrk1,wrk2,fz;
+    field4 dro;
+
+    fluid_update *pupdate;
+
+    convection *pconvec;
+    diffusion *pdiff;
+    pressure *ppress;
+    poisson *ppois;
+    turbulence *pturb;
+    solver *psolv;
     solver *ppoissonsolv;
-	ioflow *pflow;
-    nhflow *pnh;
+    ioflow *pflow;
     fsi *pfsi;
+
+    static constexpr int gcval_u=10, gcval_v=11, gcval_w=12;
 };
 
 #endif
