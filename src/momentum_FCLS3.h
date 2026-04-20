@@ -57,44 +57,50 @@ public:
 
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 
-	momentum_FCLS3(lexer*, fdm*, ghostcell*, convection*, convection*, diffusion*, pressure*, poisson*, 
+    momentum_FCLS3(lexer*, fdm*, ghostcell*, convection*, convection*, diffusion*, pressure*, poisson*,
                 turbulence*, solver*, solver*, ioflow*, heat*&, concentration*&, reini*, fsi*);
-	virtual ~momentum_FCLS3();
-	void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*) override;
-    
+    virtual ~momentum_FCLS3();
+    void start(lexer*, fdm*, ghostcell*, vrans*, sixdof*) override final;
+
 private:
 
-    void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);    
-    
+    void irhs(lexer*,fdm*);
+    void jrhs(lexer*,fdm*);
+    void krhs(lexer*,fdm*);
+
+    #if USE_AMREX
+    // Shared MultiFabs for the RK velocity temp fields, declared before the
+    // field members so they are constructed first (declaration order).
+    // Component layout: 0:u-type  1:v-type  2:w-type
+    amrex::Vector<amrex::MultiFab> m_rk; ///< urk(0) vrk(1) wrk(2)
+    amrex::Vector<amrex::MultiFab> m_f; ///< fx(0) fy(1) fz(2)
+    #endif
     field1 urk, Cu, fx;
-	field2 vrk, Cv, fy;
-	field3 wrk, Cw,  fz;
-    
+    field2 vrk, Cv, fy;
+    field3 wrk, Cw, fz;
+
     field4 Cf;
 
-	convection *pconvec;
+    convection *pconvec;
     convection *pfsfdisc;
-	diffusion *pdiff;
-	diffusion *pdiff_e;
-	pressure *ppress;
-	poisson *ppois;
-	density *pdensity;
+    diffusion *pdiff;
+    diffusion *pdiff_e;
+    pressure *ppress;
+    poisson *ppois;
+    density *pdensity;
     turbulence *pturb;
-	solver *psolv;
+    solver *psolv;
     solver *ppoissonsolv;
      reini *preini;
-	ioflow *pflow; 
-    fsi *pfsi;   
+    ioflow *pflow;
+    fsi *pfsi;
     fluid_update *pupdate;
     picard *ppicard;
-    
-	int gcval_u, gcval_v, gcval_w, gcval_phi;
 
     Eigen::Vector3d alpha, gamma, zeta;
 
-	double starttime;
+    static constexpr int gcval_u=10, gcval_v=11, gcval_w=12;
+    int gcval_phi;
 };
 
 #endif

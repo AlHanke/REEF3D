@@ -49,42 +49,42 @@ using namespace std;
 class momentum_RKLS3_df : public momentum, public bcmom
 {
 public:
-
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 
-	momentum_RKLS3_df(lexer*, fdm*, ghostcell*, convection*, diffusion*, pressure*, poisson*, turbulence*, solver*, solver*, ioflow*);
-	virtual ~momentum_RKLS3_df();
-	void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*) override;
+    momentum_RKLS3_df(lexer*, fdm*, ghostcell*, convection*, diffusion*, pressure*, poisson*, turbulence*, solver*, solver*, ioflow*);
+    virtual ~momentum_RKLS3_df() = default;
+    void start(lexer*, fdm*, ghostcell*, vrans*, sixdof*) override final {};
 
-	void starti(lexer*, fdm*, ghostcell*, sixdof*, vrans*, fsi*);
+    void starti(lexer*, fdm*, ghostcell*, sixdof*, vrans*, fsi*);
 
 private:
+    void irhs(lexer*,fdm*);
+    void jrhs(lexer*,fdm*);
+    void krhs(lexer*,fdm*);
 
-    double Hsolidface(lexer*, fdm*, int, int, int);
-	
-    void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);    
-    
-    field1 urk, Cu, Du, fx;
-	field2 vrk, Cv, Dv, fy;
-	field3 wrk, Cw, Dw, fz;
+    #if USE_AMREX
+    // Shared MultiFabs for the RK velocity temp fields, declared before the
+    // field members so they are constructed first (declaration order).
+    // Component layout: 0:u-type  1:v-type  2:w-type
+    amrex::Vector<amrex::MultiFab> m_rk; ///< urk(0) vrk(1) wrk(2)
+    amrex::Vector<amrex::MultiFab> m_f; ///< fx(0) fy(1) fz(2)
+    #endif
+    field1 urk, Cu, fx;
+    field2 vrk, Cv, fy;
+    field3 wrk, Cw, fz;
 
-	convection *pconvec;
-	diffusion *pdiff;
-	pressure *ppress;
-	poisson *ppois;
+    convection *pconvec;
+    diffusion *pdiff;
+    pressure *ppress;
+    poisson *ppois;
     turbulence *pturb;
-	solver *psolv;
+    solver *psolv;
     solver *ppoissonsolv;
-	ioflow *pflow;    
-    
-	int gcval_u, gcval_v, gcval_w;
+    ioflow *pflow;
 
     Eigen::Vector3d alpha, gamma, zeta;
 
-	double starttime;
+    static constexpr int gcval_u=10, gcval_v=11, gcval_w=12;
 };
 
 #endif
-

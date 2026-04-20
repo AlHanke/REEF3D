@@ -37,7 +37,6 @@ class turbulence;
 class solver;
 class poisson;
 class fluid_update;
-class nhflow;
 class sixdof;
 class fsi;
 class heat;
@@ -49,37 +48,43 @@ using namespace std;
 class momentum_RK3_PLIC : public momentum, public momentum_forcing, public bcmom
 {
 public:
-	momentum_RK3_PLIC(lexer*, fdm*,ghostcell*, convection*, diffusion*, pressure*, poisson*, 
+    momentum_RK3_PLIC(lexer*, fdm*,ghostcell*, convection*, diffusion*, pressure*, poisson*,
                 turbulence*, solver*, solver*, ioflow*,heat*&,concentration*&,fsi*);
-	virtual ~momentum_RK3_PLIC();
-	void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*) override;
-
-    field1 udiff,urk1,urk2,fx;
-	field2 vdiff,vrk1,vrk2,fy;
-	field3 wdiff,wrk1,wrk2,fz;
+    virtual ~momentum_RK3_PLIC();
+    void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*) override;
 
 private:
-    fluid_update *pupdate;
-    
-	void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
+    void irhs(lexer*,fdm*);
+    void jrhs(lexer*,fdm*);
+    void krhs(lexer*,fdm*);
     void clear_FGH(lexer*,fdm*);
-    
-	int gcval_u, gcval_v, gcval_w;
-	double starttime;
 
-	convection *pconvec;
-	diffusion *pdiff;
-	pressure *ppress;
-	poisson *ppois;
-	turbulence *pturb;
-	solver *psolv;
+    #if USE_AMREX
+    // Shared MultiFabs for the RK velocity temp fields, declared before the
+    // field members so they are constructed first (declaration order).
+    // Component layout: 0:u-type  1:v-type  2:w-type
+    amrex::Vector<amrex::MultiFab> m_rk1; ///< urk1(0) vrk1(1) wrk1(2)
+    amrex::Vector<amrex::MultiFab> m_rk2; ///< urk2(0) vrk2(1) wrk2(2)
+    amrex::Vector<amrex::MultiFab> m_f; ///< fx(0) fy(1) fz(2)
+    #endif
+    field1 udiff,urk1,urk2,fx;
+    field2 vdiff,vrk1,vrk2,fy;
+    field3 wdiff,wrk1,wrk2,fz;
+
+    fluid_update *pupdate;
+
+    convection *pconvec;
+    diffusion *pdiff;
+    pressure *ppress;
+    poisson *ppois;
+    turbulence *pturb;
+    solver *psolv;
     solver *ppoissonsolv;
-	ioflow *pflow;
-    nhflow *pnh;
+    ioflow *pflow;
     fsi *pfsi;
     VOF_PLIC *pplic;
+
+    static constexpr int gcval_u=10, gcval_v=11, gcval_w=12;
 };
 
 #endif
