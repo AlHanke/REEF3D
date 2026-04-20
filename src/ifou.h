@@ -28,33 +28,21 @@ Author: Hans Bihs
 
 class flux;
 
-using namespace std;
-
 class ifou : public convection,  public increment
 {
-
 public:
+    ifou(lexer*);
+    virtual ~ifou() = default;
 
-	ifou (lexer *);
-	virtual ~ifou();
-
-	void start(lexer*,fdm*,field&,int,field&,field&,field&) override;
+    void start(lexer*,fdm*,field&,int,field&,field&,field&) final;
 
 private:
-    double udir,vdir,wdir;
-    double r, phi,denom;
-	double dx,dy,dz;
-	double L;
-	int count,rocount,countN,coliN;
-	int *range;
-    
-    double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
+    template<typename GenericField>
+    void aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*,double*,double*);
 
-	void aij(lexer*, fdm*, field&, int,field&,field&,field&,double*,double*,double*);
+    int count;
 
     flux *pflux;
-
 };
 
 #endif
-

@@ -28,56 +28,69 @@ Author: Hans Bihs
 
 class flux;
 
-using namespace std;
-
 class iweno_hj_nug : public convection, public weno_nug_func
 {
 public:
-	iweno_hj_nug (lexer*);
-	virtual ~iweno_hj_nug();
+    iweno_hj_nug (lexer*);
+    virtual ~iweno_hj_nug() = default;
 
-	void start(lexer*,fdm*,field&,int,field&,field&,field&) override;
+    void start(lexer*,fdm*,field&,int,field&,field&,field&) final;
 
 private:
-    void wenoloop1(lexer*,fdm*,field&,int,field&,field&,field&);
-    void wenoloop2(lexer*,fdm*,field&,int,field&,field&,field&);
-    void wenoloop3(lexer*,fdm*,field&,int,field&,field&,field&);
-    void wenoloop4(lexer*,fdm*,field&,int,field&,field&,field&);
+    template<typename GenericField>
+    void wenoloop1(lexer*,fdm*,const GenericField&,int,const GenericField&,const GenericField&,const GenericField&);
+    template<typename GenericField>
+    void wenoloop2(lexer*,fdm*,const GenericField&,int,const GenericField&,const GenericField&,const GenericField&);
+    template<typename GenericField>
+    void wenoloop3(lexer*,fdm*,const GenericField&,int,const GenericField&,const GenericField&,const GenericField&);
+    template<typename GenericField>
+    void wenoloop4(lexer*,fdm*,const GenericField&,int,const GenericField&,const GenericField&,const GenericField&);
 
-	void aij(fdm*, field&,field&,field&,field&);
-	void aij_south(lexer*,fdm*,field&, field&);
-	void aij_north(lexer*,fdm*,field&, field&);
-	void aij_east(lexer*,fdm*,field&, field&);
-	void aij_west(lexer*,fdm*,field&, field&);
-	void aij_top(lexer*,fdm*,field&, field&);
-	void aij_bottom(lexer*,fdm*,field&, field&);
-    
-    void iqmin(lexer*, fdm*, field&);
-	void jqmin(lexer*, fdm*, field&);
-	void kqmin(lexer*, fdm*, field&);
-	void iqmax(lexer*, fdm*, field&);
-	void jqmax(lexer*, fdm*, field&);
-	void kqmax(lexer*, fdm*, field&);
+    template<typename CF, typename MF>
+    void aij_south(lexer*,fdm*,const CF&, MF&);
+    template<typename CF, typename MF>
+    void aij_north(lexer*,fdm*,const CF&, MF&);
+    template<typename CF, typename MF>
+    void aij_east(lexer*,fdm*,const CF&, MF&);
+    template<typename CF, typename MF>
+    void aij_west(lexer*,fdm*,const CF&, MF&);
+    template<typename CF, typename MF>
+    void aij_top(lexer*,fdm*,const CF&, MF&);
+    template<typename CF, typename MF>
+    void aij_bottom(lexer*,fdm*,const CF&, MF&);
 
-	const double tttw,fourth,third,sevsix,elvsix,sixth,fivsix,tenth;
-	const double sixten,treten,epsi,deltin;
+    template<typename GenericField>
+    void iqmin(lexer*, fdm*, const GenericField&);
+    template<typename GenericField>
+    void jqmin(lexer*, fdm*, const GenericField&);
+    template<typename GenericField>
+    void kqmin(lexer*, fdm*, const GenericField&);
+    template<typename GenericField>
+    void iqmax(lexer*, fdm*, const GenericField&);
+    template<typename GenericField>
+    void jqmax(lexer*, fdm*, const GenericField&);
+    template<typename GenericField>
+    void kqmax(lexer*, fdm*, const GenericField&);
+
+    const double tttw,fourth,third,sevsix,elvsix,sixth,fivsix,tenth;
+    const double sixten,treten,epsi,deltin;
 
 
-	double is1,is2,is3;
-	double alpha1,alpha2,alpha3;
-	double w1,w2,w3;
-	double umin, umax, uplus;
-	int count;
+    double is1,is2,is3;
+    double alpha1,alpha2,alpha3;
+    double w1,w2,w3;
+    double umin, umax, uplus;
+    int count;
 
-    
-    
+
+
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
     double iadvec,jadvec,kadvec;
-    
+
     flux *pflux;
-    
+
     double *DX,*DY,*DZ;
-    
+
 
 
 };

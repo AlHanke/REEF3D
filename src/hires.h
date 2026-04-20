@@ -29,30 +29,20 @@ Author: Hans Bihs
 class flux;
 class fluxlim;
 
-using namespace std;
-
 class hires : public convection, public increment
 {
-
 public:
+    hires(lexer*,int);
+    virtual ~hires() = default;
 
-	hires (lexer*,int);
-	virtual ~hires();
+    void start(lexer*,fdm*,field&,int,field&,field&,field&) final;
 
-	void start(lexer*,fdm*,field&,int,field&,field&,field&) override;
-	
 private:
-    double aij(lexer*, fdm*, field&, int,field&,field&,field&,double*,double*,double*);
-	
-	double udir,vdir,wdir;
+    template<typename GenericField>
+    inline double aij(lexer*,fdm*,const GenericField&,int,const GenericField&,const GenericField&,const GenericField&,double*,double*,double*);
 
-	double dx,dy,dz;
-	double L;
-    
-    double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
-	
-	fluxlim *plim;
-    
+    fluxlim *plim;
+
     flux *pflux;
 };
 

@@ -295,7 +295,6 @@
             <File Name="iweno_hj_nug.h"/>
             <File Name="iweno_hj_df_nug.h"/>
             <File Name="iweno_hj.h"/>
-            <File Name="ihires.h"/>
             <File Name="ifou.h"/>
             <File Name="hric_mod.h"/>
             <File Name="hric.h"/>
