@@ -28,26 +28,18 @@ Author: Elyas Larkermani
 
 class flux;
 
-using namespace std;
-
-class hcds6 final : public convection,  public increment
+class hcds6 final : public convection, public increment
 {
-
 public:
+    hcds6(lexer*);
+    virtual ~hcds6() = default;
 
-	hcds6 (lexer *);
-	virtual ~hcds6();
-
-	void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
+    void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    double aij(lexer*, fdm*, field&, int,field&,field&,field&,double*,double*,double*,double*,double*,double*);
+    template<typename GenericField>
+    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*, double*, double*, double*);
 
-	double dx,dy,dz;
-	double L;
-    double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
-
-    
     flux *pflux;
 };
 

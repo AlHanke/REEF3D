@@ -28,30 +28,20 @@ Author: Hans Bihs
 
 class flux;
 
-using namespace std;
-
-class cicsam final : public convection,  public increment
+class cicsam final : public convection, public increment
 {
-
 public:
+    cicsam(lexer*);
+    virtual ~cicsam() = default;
 
-	cicsam (lexer *);
-	virtual ~cicsam();
-
-	void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
+    void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    double aij(lexer*, fdm*, field&, int,field&,field&,field&);
-	
-	double cface(lexer*,fdm*,field&,int,int,double);
+    template<typename GenericField>
+    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&);
 
-	double dx,dy,dz;
-    double fx2,fy2,fz2;
-    double fx1,fy1,fz1;
-	double ul,ur,vl,vr,wl,wr;
-	double L,phi;
-
-    double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
+    template<typename GenericField>
+    double cface(lexer*,fdm*,const GenericField&,int,int,double);
 
     flux *pflux;
 };
