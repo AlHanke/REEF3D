@@ -35,7 +35,6 @@ class turbulence;
 class solver;
 class poisson;
 class fluid_update;
-class nhflow;
 class heat;
 class concentration;
 class sixdof;
@@ -51,50 +50,53 @@ using namespace std;
 
 class momentum_FC3_PLIC final : public momentum, public momentum_forcing, public bcmom
 {
-    
+
 public:
-	momentum_FC3_PLIC(lexer*, fdm*, ghostcell*, convection*, diffusion*, pressure*, poisson*, 
+    momentum_FC3_PLIC(lexer*, fdm*, ghostcell*, convection*, diffusion*, pressure*, poisson*,
                 turbulence*, solver*, solver*, ioflow*, heat*&, concentration*&, reini*, fsi*);
-	virtual ~momentum_FC3_PLIC();
-	void start(lexer*, fdm*, ghostcell*, vrans*,sixdof*) override final;
-    void utimesave(lexer*, fdm*, ghostcell*);
-    void vtimesave(lexer*, fdm*, ghostcell*);
-    void wtimesave(lexer*, fdm*, ghostcell*);
+    virtual ~momentum_FC3_PLIC();
+    void start(lexer*, fdm*, ghostcell*, vrans*, sixdof*) override final;
 
-    field1 udiff,urk1,urk2,fx;
-	field2 vdiff,vrk1,vrk2,fy;
-	field3 wdiff,wrk1,wrk2,fz;
-    field4 VoF, vof_rk1, vof_rk2;
-    
 private:
-    fluid_update *pupdate;
-    
-	void irhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void jrhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
-	void krhs(lexer*,fdm*,ghostcell*,field&,field&,field&,field&,double);
+    void irhs(lexer*,fdm*);
+    void jrhs(lexer*,fdm*);
+    void krhs(lexer*,fdm*);
     void clear_FGH(lexer*,fdm*);
-	
-	int gcval_u, gcval_v, gcval_w;
-    int gcval_vof, gcval_phi,gcval_ro,gcval_visc;
-	double starttime;
 
-	convection *pconvec;
+    #if USE_AMREX
+    // Shared MultiFabs for the RK velocity temp fields, declared before the
+    // field members so they are constructed first (declaration order).
+    // Component layout: 0:u-type  1:v-type  2:w-type
+    amrex::Vector<amrex::MultiFab> m_rk1; ///< urk1(0) vrk1(1) wrk1(2)
+    amrex::Vector<amrex::MultiFab> m_rk2; ///< urk2(0) vrk2(1) wrk2(2)
+    amrex::Vector<amrex::MultiFab> m_f; ///< fx(0) fy(1) fz(2)
+    #endif
+    field1 udiff,urk1,urk2,fx;
+    field2 vdiff,vrk1,vrk2,fy;
+    field3 wdiff,wrk1,wrk2,fz;
+    field4 VoF, vof_rk1, vof_rk2;
+
+    fluid_update *pupdate;
+
+    convection *pconvec;
     convection *pfsfdisc;
-	diffusion *pdiff;
-	pressure *ppress;
-	poisson *ppois;
-	turbulence *pturb;
-	solver *psolv;
+    diffusion *pdiff;
+    pressure *ppress;
+    poisson *ppois;
+    turbulence *pturb;
+    solver *psolv;
     solver *ppoissonsolv;
-	ioflow *pflow;
-    nhflow *pnh;
+    ioflow *pflow;
     sixdof *p6dof;
     fsi *pfsi;
     VOF_PLIC *pplic;
     reini *preini;
     density *pd;
     picard *ppicard;
-    
+
+    static constexpr int gcval_u=10, gcval_v=11, gcval_w=12;
+    static constexpr int gcval_vof=1, gcval_ro=1, gcval_visc=1;
+    int gcval_phi;
 };
 
 #endif
