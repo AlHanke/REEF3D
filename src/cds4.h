@@ -28,25 +28,18 @@ Author: Hans Bihs
 
 class flux;
 
-using namespace std;
-
-class cds4 : public convection,  public increment
+class cds4 : public convection, public increment
 {
-
 public:
+    cds4(lexer*);
+    virtual ~cds4() = default;
 
-	cds4 (lexer *);
-	virtual ~cds4();
-
-	void start(lexer*,fdm*,field&,int,field&,field&,field&) override;
+    void start(lexer*,fdm*,field&,int,field&,field&,field&) final;
 
 private:
-    double aij(lexer*, fdm*, field&, int,field&,field&,field&);
+    template<typename GenericField>
+    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&);
 
-	double dx,dy,dz;
-	double L;
-    double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
-    
     flux *pflux;
 };
 

@@ -26,56 +26,60 @@ Author: Hans Bihs
 #include"flux_HJ_CDS2.h"
 #include"flux_HJ_CDS2_vrans.h"
 
-cds2_alt::cds2_alt (lexer *p)
+cds2_alt::cds2_alt(lexer *p)
 {
-    if(p->B269==0 && p->S10!=2)
-    pflux = new flux_HJ_CDS2;
-    
     if(p->B269>=1 || p->S10==2)
     pflux = new flux_HJ_CDS2_vrans;
+
+    else
+    pflux = new flux_HJ_CDS2;
 }
 
-cds2_alt::~cds2_alt()
-{
-}
-
-void cds2_alt::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+inline void cds2_alt::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     if(ipol==1)
-    ULOOP
-    a->F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data());
-
-    if(ipol==2)
-    VLOOP
-    a->G(i,j,k)+=aij(p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data());
-
-    if(ipol==3)
-    WLOOP
-    a->H(i,j,k)+=aij(p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data());
-
-    if(ipol==4)
-    LOOP
-    a->L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data());
-
+    {
+        FIELDLOOP_INC_MEMBER(a,F,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data());
+        )
+    }
+    else if(ipol==2)
+    {
+        FIELDLOOP_INC_MEMBER(a,G,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            G(i,j,k)+=aij(p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data());
+        )
+    }
+    else if(ipol==3)
+    {
+        FIELDLOOP_INC_MEMBER(a,H,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            H(i,j,k)+=aij(p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data());
+        )
+    }
+    else if(ipol==4)
+    {
+        FIELDLOOP_INC_MEMBER(a,L,
+            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+            L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data());
+        )
+    }
 }
 
-double cds2_alt::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, field& wvel, double *DX,double *DY, double *DZ)
-{		
-		dx=dy=dz=0.0;	
+template<typename GenericField>
+inline double cds2_alt::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX, double *DY, double *DZ)
+{
+    double iadvec, jadvec, kadvec, temp;
+    pflux->u_flux(a,ipol,uvel,iadvec,temp);
+    pflux->v_flux(a,ipol,vvel,jadvec,temp);
+    pflux->w_flux(a,ipol,wvel,kadvec,temp);
 
-		pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
-        pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
-        pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
-		
-        
-		dx = iadvec*(0.5*(b(i,j,k) + b(i+1,j,k))  -  0.5*(b(i-1,j,k) +  b(i,j,k)))/DX[IP];
-		
-		dy = jadvec*(0.5*(b(i,j,k) + b(i,j+1,k))  -  0.5*(b(i,j-1,k) +  b(i,j,k)))/DY[JP];
-	        
-		dz = kadvec*(0.5*(b(i,j,k) + b(i,j,k+1))  -  0.5*(b(i,j,k-1) +  b(i,j,k)))/DZ[KP];
+    const double dx = iadvec*(0.5*(b(i,j,k) + b(i+1,j,k))  -  0.5*(b(i-1,j,k) +  b(i,j,k)))/DX[IP];
 
-		L = -dx-dy-dz;
+    const double dy = jadvec*(0.5*(b(i,j,k) + b(i,j+1,k))  -  0.5*(b(i,j-1,k) +  b(i,j,k)))/DY[JP];
 
-		return L;
+    const double dz = kadvec*(0.5*(b(i,j,k) + b(i,j,k+1))  -  0.5*(b(i,j,k-1) +  b(i,j,k)))/DZ[KP];
+
+    return -dx-dy-dz;
 }
-

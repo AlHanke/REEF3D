@@ -28,27 +28,19 @@ Author: Hans Bihs
 
 class flux;
 
-using namespace std;
-
-class cds2 : public convection,  public increment
+class cds2 : public convection, public increment
 {
-
 public:
+    cds2(lexer*);
+    virtual ~cds2() = default;
 
-	cds2 (lexer *);
-	virtual ~cds2();
-
-	void start(lexer*,fdm*,field&,int,field&,field&,field&) override;
+    void start(lexer*,fdm*,field&,int,field&,field&,field&) final;
 
 private:
-    double aij(lexer*, fdm*, field&, int,field&,field&,field&,double*,double*,double*);
+    template<typename GenericField>
+    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
 
-	double dx,dy,dz;
-	double L;
-    double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
-    
     flux *pflux;
 };
 
 #endif
-

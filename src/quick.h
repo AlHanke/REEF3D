@@ -28,27 +28,17 @@ Author: Hans Bihs
 
 class flux;
 
-using namespace std;
-
 class quick : public convection,  public increment
 {
-
 public:
+    quick(lexer*);
+    virtual ~quick() = default;
 
-	quick (lexer *);
-	virtual ~quick();
-
-	void start(lexer*,fdm*, field&,int,field&,field&,field&) override;
+    void start(lexer*,fdm*, field&,int,field&,field&,field&) final;
 
 private:
-    double aij(lexer*, fdm*, field&, int,field&,field&,field&);
-    
-
-	double dx,dy,dz;
-	double ul,ur,vl,vr,wl,wr;
-	double L;
-
-    double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
+    template<typename GenericField>
+    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&);
 
     flux *pflux;
 };
