@@ -26,24 +26,21 @@ Author: Hans Bihs
 #include"fluxlim.h"
 #include"increment.h"
 
-using namespace std;
+class lexer;
 
 class minmod : public fluxlim, public increment
 {
-
 public:
+    minmod(lexer*) {};
+    virtual ~minmod() = default;
 
-	minmod (lexer *);
-	virtual ~minmod();
-
-	double iphi(field&,int,int,int,int) override;
-	double jphi(field&,int,int,int,int) override;
-	double kphi(field&,int,int,int,int) override;
-
-private:
-    double r, phi,denom;
-	double dx,dy,dz;
-	double L;
+protected:
+    inline double phi_impl(double vn1, double vn2, double vq1, double vq2, double) override final
+    {
+        double denom = vq1 - vq2;
+        double r = (vn1 - vn2) / (fabs(denom)>1.0e-10 ? denom : 1.0e20);
+        return std::max(0.0, std::min(1.0, r));
+    };
 };
 
 #endif

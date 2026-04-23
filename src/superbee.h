@@ -26,22 +26,23 @@ Author: Hans Bihs
 #include"fluxlim.h"
 #include"increment.h"
 
-using namespace std;
-
 class superbee : public fluxlim, public increment
 {
 public:
-	superbee (lexer *);
-	virtual ~superbee();
+    superbee(lexer*) {};
+    virtual ~superbee() = default;
 
-	double iphi(field&,int,int,int,int) override;
-	double jphi(field&,int,int,int,int) override;
-	double kphi(field&,int,int,int,int) override;
+protected:
+    inline double phi_impl(double vn1, double vn2, double vq1, double vq2, double) override final
+    {
+        double denom = vq1 - vq2;
+        double r = (vn1 - vn2) / (fabs(denom)>1.0e-10 ? denom : 1.0e20);
 
-private:
-    double r, phi,denom;
-	double dx,dy,dz;
-	double L;
+        if(r<0.0)        return 0.0;
+        else if(r<0.5)   return 2.0*r;
+        else if(r<1.0)   return 1.0;
+        else             return std::min(std::min(r,2.0), 2.0/(1.0+r));
+    };
 };
 
 #endif

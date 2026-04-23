@@ -26,22 +26,19 @@ Author: Hans Bihs
 #include"fluxlim.h"
 #include"increment.h"
 
-using namespace std;
-
 class vanleer : public fluxlim, public increment
 {
 public:
-	vanleer (lexer *);
-	virtual ~vanleer();
+    vanleer(lexer*) {};
+    virtual ~vanleer() = default;
 
-	double iphi(field&,int,int,int,int) override;
-	double jphi(field&,int,int,int,int) override;
-	double kphi(field&,int,int,int,int) override;
-
-private:
-    double r, phi,denom;
-	double dx,dy,dz;
-	double L;
+protected:
+    inline double phi_impl(double vn1, double vn2, double vq1, double vq2, double) override final
+    {
+        double denom = vq1 - vq2;
+        double r = (vn1 - vn2) / (denom + 1.0e-20);
+        return (r + fabs(r)) / (1.0 + fabs(r));
+    };
 };
 
 #endif
