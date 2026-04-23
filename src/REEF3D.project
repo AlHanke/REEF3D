@@ -1492,16 +1492,6 @@
             <File Name="quick.cpp"/>
             <File Name="iweno_hj_nug.cpp"/>
             <File Name="weno_hj_nug.cpp"/>
-            <VirtualDirectory Name="Limiter">
-              <File Name="vanleer.cpp"/>
-              <File Name="vanalbada.cpp"/>
-              <File Name="umist.cpp"/>
-              <File Name="tvdvof.cpp"/>
-              <File Name="superbee.cpp"/>
-              <File Name="smart.cpp"/>
-              <File Name="minmod.cpp"/>
-              <File Name="limo3.cpp"/>
-            </VirtualDirectory>
           </VirtualDirectory>
         </VirtualDirectory>
         <VirtualDirectory Name="Turbulence">
