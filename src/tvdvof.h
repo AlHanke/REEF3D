@@ -26,26 +26,21 @@ Author: Hans Bihs
 #include"fluxlim.h"
 #include"increment.h"
 
-using namespace std;
-
 class tvdvof final : public fluxlim, public increment
 {
 
 public:
 
-	tvdvof (lexer *);
-	virtual ~tvdvof();
+    tvdvof(lexer*) {};
+    virtual ~tvdvof() = default;
 
-	double iphi(field&,int,int,int,int) override final;
-	double jphi(field&,int,int,int,int) override final;
-	double kphi(field&,int,int,int,int) override final;
-
-private:
-
-    double ul,ur,vl,vr,wl,wr;
-    double rp,rn, phi,denom;
-	double dx,dy,dz;
-	double L;
+protected:
+    inline double phi_impl(double vn1, double, double, double, double vcell) override final
+    {
+        const double rp = vcell;
+        const double rn = vn1;
+        return std::min(std::max(1.0 - pow(std::max(pow(1.0-4.0*rp*(1.0-rp),2.0), 1.0-(1.0-4.0*rn*(1.0-rn))),2.0), 0.0), 1.0);
+    };
 };
 
 #endif
