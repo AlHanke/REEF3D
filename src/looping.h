@@ -37,7 +37,7 @@ Authors: Hans Bihs, Alexander Hanke (@AlHanke)
 
 // LOOPs
 #if USE_AMREX
-    #define LevelLOOP \
+    #define LEVEL_LOOP \
         for (struct { lexer* ctx; bool active; } \
                 _level_guard{p, true}; \
             _level_guard.active; \
@@ -45,7 +45,7 @@ Authors: Hans Bihs, Alexander Hanke (@AlHanke)
             for (_level_guard.ctx->level = 0; \
                 _level_guard.ctx->level < _level_guard.ctx->nlevs; \
                 ++_level_guard.ctx->level)
-    #define TileLOOP \
+    #define TILE_LOOP \
         for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*, amrex::TilingIfNotGPU()*//*enable if necessary*/); _tile_mfi.isValid(); ++_tile_mfi) \
             for (struct { lexer* ctx; amrex::MFIter* saved; } \
                     _guard{p, std::exchange(p->amr_cell_mfi, &_tile_mfi)}; \
@@ -60,8 +60,8 @@ Authors: Hans Bihs, Alexander Hanke (@AlHanke)
     #define MARGIN_J p->amr_cell_mf[p->level].nGrow(1)
     #define MARGIN_K p->amr_cell_mf[p->level].nGrow(2)
 #else
-    #define LevelLOOP
-    #define TileLOOP
+    #define LEVEL_LOOP
+    #define TILE_LOOP
     #define IMAX_LOOP p->knox-1
     #define JMAX_LOOP p->knoy-1
     #define KMAX_LOOP p->knoz-1
@@ -164,7 +164,7 @@ Authors: Hans Bihs, Alexander Hanke (@AlHanke)
 #define CPOR3p   (1.0/(1.0+(p->B260*(PORVAL3p<1.0?1.0:0.0))))
 
 // COMBINDED LOOPS
-#define MultiGridLOOP LevelLOOP TileLOOP
+#define MultiGridLOOP LEVEL_LOOP TILE_LOOP
 #define IJKLOOP ILOOP JLOOP KLOOP
 #define KJILOOP KLOOP JLOOP ILOOP
 
