@@ -68,10 +68,10 @@ void field_amrex::FillBoundary()
 
 void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
 {
-    LevelLOOP
+    LEVEL_LOOP
     {
         amrex::Box dom = p->amrex_geometry[p->level].Domain();
-        TileLOOP
+        TILE_LOOP
         {
             const amrex::Box& validbox = p->amr_cell_mfi->validbox();
             amrex::Box gbx = validbox;

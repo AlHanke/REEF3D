@@ -63,7 +63,7 @@ public:
     amrex::Vector<amrex::Geometry> amrex_geometry; // Phyiscal domain and coordinate system
     amrex::Vector<amrex::BoxArray> amrex_box_array; // BoxArray defines the index space decomposition of the domain into boxes
     amrex::Vector<amrex::DistributionMapping> amrex_distribution_mapping; // DistributionMapping defines the mapping of boxes in the BoxArray to MPI ranks
-    amrex::Vector<amrex::Vector<std::pair<amrex::RealVect,amrex::RealVect>>> amrex_refined_grid_coords; // Input: Coordinates of the refined grid boxes for each level
+    amrex::Vector<amrex::Vector<std::pair<amrex::RealVect,amrex::RealVect>>> amrex_refined_grid_coords; // Input: Coordinates of the refined grid boxes for each level, index is offset by 1 (i.e. amrex_refined_grid_coords[0] is for level 1, etc.)
 
     // Looping structures
     amrex::Vector<amrex::MultiFab> amr_cell_mf;
@@ -83,7 +83,7 @@ public:
     amrex::Vector<amrex::iMultiFab> flag4_iMF;
     amrex::Vector<amrex::iMultiFab> flag7_iMF;
 
-    const int nlevs = 1; // Number of AMR levels
+    int nlevs = 1; // Number of AMR levels
     static constexpr int ref_ratio = 2;
     const int ncomp = 1;
     int bc_type[6] = {0,0,0,0,0,0};

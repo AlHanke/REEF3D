@@ -950,7 +950,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             // for each level in gamr->amr_data_mf[lev]
             amrex::Vector<amrex::MultiFab> plot_mfs_data;
             plot_mfs_data.reserve(p->nlevs);
-            LevelLOOP
+            LEVEL_LOOP
             {
                 amrex::MultiFab combined_mf(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], varnames.size(), 0);
                 int comp = 0;
