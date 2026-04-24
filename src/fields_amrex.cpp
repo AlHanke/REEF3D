@@ -29,7 +29,7 @@ Author: Alexander Hanke (@AlHanke)
 
 field1::field1(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_X)
 {
-    LevelLOOP
+    LEVEL_LOOP
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
         // box = amrex::convert(p->amrex_box_array[p->level], amrex::IntVect{AMREX_D_DECL(1,0,0)});
@@ -50,7 +50,7 @@ field1::field1(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_X)
 
 field2::field2(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Y)
 {
-    LevelLOOP
+    LEVEL_LOOP
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
         // box = amrex::convert(p->amrex_box_array[p->level], amrex::IntVect{AMREX_D_DECL(0,1,0)});
@@ -70,7 +70,7 @@ field2::field2(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Y)
 
 field3::field3(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Z)
 {
-    LevelLOOP
+    LEVEL_LOOP
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
         // box = amrex::convert(p->amrex_box_array[p->level], amrex::IntVect{AMREX_D_DECL(0,0,1)});
@@ -90,7 +90,7 @@ field3::field3(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Z)
 
 field4::field4(lexer *p) : field_amrex(p, amrex_bc_func::DataLocation::CELL_CENTERED)
 {
-    LevelLOOP
+    LEVEL_LOOP
     {
         amrex::BoxArray box = p->amrex_box_array[p->level];
         mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);

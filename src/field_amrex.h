@@ -256,7 +256,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
     const int z_pos = 6; // Dir::Z_POS (6)
     // Face indices in bc_values: 0=X-, 1=X+, 2=Y-, 3=Y+, 4=Z-, 5=Z+
 
-    LevelLOOP
+    LEVEL_LOOP
     {
         for (int n = 0; n < mf[p->level].nComp(); ++n)
         {
@@ -290,7 +290,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
         }
     }
 
-    LevelLOOP
+    LEVEL_LOOP
     {
         if(p->level==0)
         {
