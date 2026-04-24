@@ -28,7 +28,7 @@ Author: Alexander Hanke (@AlHanke)
 
 fieldint1::fieldint1(lexer *p) : fieldint_amrex(p)
 {
-    LevelLOOP
+    LEVEL_LOOP
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
@@ -37,7 +37,7 @@ fieldint1::fieldint1(lexer *p) : fieldint_amrex(p)
 
 fieldint2::fieldint2(lexer *p) : fieldint_amrex(p)
 {
-    LevelLOOP
+    LEVEL_LOOP
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
@@ -46,7 +46,7 @@ fieldint2::fieldint2(lexer *p) : fieldint_amrex(p)
 
 fieldint3::fieldint3(lexer *p) : fieldint_amrex(p)
 {
-    LevelLOOP
+    LEVEL_LOOP
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
@@ -55,7 +55,7 @@ fieldint3::fieldint3(lexer *p) : fieldint_amrex(p)
 
 fieldint4::fieldint4(lexer *p) : fieldint_amrex(p)
 {
-    LevelLOOP
+    LEVEL_LOOP
     {
         mf[p->level].define(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
         mf[p->level].setVal(0, 0, mf[p->level].n_comp, p->margin);
