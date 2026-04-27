@@ -58,7 +58,7 @@ void ghostcell::gc_ini(lexer* p)
         gclabel_v=bc_labels::NEUMANN;
         gclabel_w=bc_labels::NEUMANN;
     }
-    else if(p->B20==2)
+    else if(p->B20==2 || p->B20==4)
     {
         gclabel_u=bc_labels::NOSLIP;
         gclabel_v=bc_labels::NOSLIP;
@@ -69,12 +69,6 @@ void ghostcell::gc_ini(lexer* p)
         gclabel_u=bc_labels::DIRICHLET_ORTH;
         gclabel_v=bc_labels::DIRICHLET_ORTH;
         gclabel_w=bc_labels::DIRICHLET_ORTH;
-    }
-    else if(p->B20==4)
-    {
-        gclabel_u=bc_labels::NOSLIP;
-        gclabel_v=bc_labels::NOSLIP;
-        gclabel_w=bc_labels::NOSLIP;
     }
 
     gclabel_u_orth=bc_labels::DIRICHLET_ORTH;
