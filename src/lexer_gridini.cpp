@@ -24,9 +24,12 @@ Author: Hans Bihs, Alexander Hanke
 #include"ghostcell.h"
 
 #include <AMReX_Geometry.H>
+#include <AMReX_BoxArray.H>
 #include <AMReX_RealBox.H>
 #include <AMReX_Box.H>
 #include <AMReX_IntVect.H>
+#include <AMReX_BCRec.H>
+#include <AMReX_BC_TYPES.H>
 #include <AMReX_BoxArray.H>
 #include <AMReX_DistributionMapping.H>
 #include <AMReX_MFIter.H>
@@ -51,6 +54,7 @@ void lexer::setup_amrex_geometry(ghostcell *pgc)
     amrex_geometry.resize(nlevs);
     amrex_box_array.resize(nlevs);
     amrex_distribution_mapping.resize(nlevs);
+    amrex_bc.resize(nlevs);
     amr_mf.resize(nlevs);
 
     flag1_imf.resize(nlevs);
@@ -58,6 +62,95 @@ void lexer::setup_amrex_geometry(ghostcell *pgc)
     flag3_imf.resize(nlevs);
     flag4_imf.resize(nlevs);
     flag7_imf.resize(nlevs);
+
+
+    int bc_values[6] = {BCType::bogus};
+    switch (bcside1)
+    {
+        case 1:
+            bc_values[0] = PhysBCType::inflow;
+            break;
+        case 3:
+            bc_values[0] = BCType::reflect_even;
+            break;
+        case 6:
+            bc_values[0] = BCType::user_1;
+            break;
+        case 7:
+            bc_values[0] = BCType::user_2;
+            break;
+        case 21: default:
+            bc_values[0] = B20 == 1 ? PhysBCType::slipwall : PhysBCType::noslipwall;
+            break;
+    }
+    switch (bcside4)
+    {
+        case 2:
+            bc_values[1] = PhysBCType::outflow;
+            break;
+        case 3:
+            bc_values[1] = BCType::reflect_even;
+            break;
+        case 6:
+            bc_values[1] = BCType::user_1;
+            break;
+        case 7:
+            bc_values[1] = BCType::user_2;
+            break;
+        case 21: default:
+            bc_values[1] = B20 == 1 ? PhysBCType::slipwall : PhysBCType::noslipwall;
+            break;
+    }
+    switch (bcside3)
+    {
+        case 3:
+            bc_values[2] = BCType::reflect_even;
+            break;
+        case 6:
+            bc_values[2] = BCType::user_1;
+            break;
+        case 7:
+            bc_values[2] = BCType::user_2;
+            break;
+        case 21: default:
+            bc_values[2] = B20 == 1 ? PhysBCType::slipwall : PhysBCType::noslipwall;
+            break;
+    }
+    switch (bcside2)
+    {
+        case 3:
+            bc_values[3] = BCType::reflect_even;
+            break;
+        case 6:
+            bc_values[3] = BCType::user_1;
+            break;
+        case 7:
+            bc_values[3] = BCType::user_2;
+            break;
+        case 21: default:
+            bc_values[3] = B20 == 1 ? PhysBCType::slipwall : PhysBCType::noslipwall;
+            break;
+    }
+    switch (bcside5)
+    {
+        case 3:
+            bc_values[4] = BCType::reflect_even;
+            break;
+        case 21: default:
+            bc_values[4] = B20 == 1 ? PhysBCType::slipwall : PhysBCType::noslipwall;
+            break;
+    }
+    switch (bcside6)
+    {
+        case 3:
+            bc_values[5] = BCType::reflect_even;
+            break;
+        case 21: default:
+            bc_values[5] = B20 == 1 ? PhysBCType::slipwall : PhysBCType::noslipwall;
+            break;
+    }
+
+    int is_periodic[AMREX_SPACEDIM] = {periodic1, periodic2, periodic3};
 
     for (int lev = 0; lev < nlevs; lev++)
     {
@@ -79,8 +172,6 @@ void lexer::setup_amrex_geometry(ghostcell *pgc)
             domain.setBig(IntVect(AMREX_D_DECL(1, 1, 1)));
         }
 
-        int is_periodic[AMREX_SPACEDIM] = {periodic1, periodic2, periodic3};
-
         amrex_geometry[lev] = Geometry(domain, &real_box, CoordSys::CoordType::cartesian, is_periodic);
 
         int local_data[6] = {origin_i, origin_j, origin_k, origin_i + knox - 1, origin_j + knoy - 1, origin_k + knoz - 1};
@@ -100,6 +191,39 @@ void lexer::setup_amrex_geometry(ghostcell *pgc)
 
         amrex_box_array[lev] = BoxArray(all_boxes.data(), all_boxes.size());
         amrex_distribution_mapping[lev] = DistributionMapping(pmap);
+
+        amrex_bc[lev].resize(n_comp);
+        for (int n = 0; n < n_comp; ++n)
+        {
+            for (int idim = 0; idim < AMREX_SPACEDIM; ++idim)
+            {
+                if (amrex_geometry[lev].Domain().smallEnd(idim) == amrex_geometry[0].Domain().smallEnd(idim))
+                {
+                    if (amrex_geometry[lev].isPeriodic(idim))
+                        amrex_bc[lev][n].setLo(idim, BCType::int_dir);
+                    else
+                        amrex_bc[lev][n].setLo(idim, bc_values[2*idim]);
+                }
+                else
+                    amrex_bc[lev][n].setLo(idim, BCType::int_dir);
+
+                if (amrex_geometry[lev].Domain().bigEnd(idim) == amrex_geometry[0].Domain().bigEnd(idim))
+                {
+                    if (amrex_geometry[lev].isPeriodic(idim))
+                        amrex_bc[lev][n].setHi(idim, BCType::int_dir);
+                    else
+                        amrex_bc[lev][n].setHi(idim, bc_values[2*idim + 1]);
+                }
+                else
+                    amrex_bc[lev][n].setHi(idim, BCType::int_dir);
+
+                if (lev == 0 && amrex_geometry[lev].isPeriodic(idim))
+                {
+                    amrex_bc[lev][n].setLo(idim, BCType::int_dir);
+                    amrex_bc[lev][n].setHi(idim, BCType::int_dir);
+                }
+            }
+        }
 
         amr_mf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 0, margin);
 
