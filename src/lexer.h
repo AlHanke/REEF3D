@@ -34,13 +34,14 @@ Author: Hans Bihs
 #include<fstream>
 #include"looping.h"
 #include<vector>
+#include"grid.h"
 
 class weno_nug_func;
 class ghostcell;
 
 using namespace std;
 
-class lexer : public increment, public resize_class, public position, public interpolation
+class lexer : virtual public resize_class, public position, public interpolation, public grid
 {
 public:
 
@@ -53,25 +54,19 @@ public:
     void flagini();
 	void gridini(ghostcell*);
     void gcd_ini(ghostcell*);
-    void gridini_patchBC();
     void makeflag(int*);
-    void sigma_coord_ini();
 	
 	void read_grid();
 	void read_control();
 	void control_calc();
 	void ini_default();
-	void assign_margin();
 	void ctrlsend();
 	void ctrlrecv();
 	void gridsize();
 	void vecsize(ghostcell*);
 	void vellast();
-	void indices_minmax();
 	void lexer_ini();
-    void lexer_gridspacing(ghostcell*);
 	void parse();
-	void fieldlogic();
 	int conv(double);
     
     // 2D
@@ -83,32 +78,15 @@ public:
 //-----data-----------------------
 
 	//REEF3D
-	double dx,dy,dz;
-    double *xpoint,*ypoint,*zpoint;
-    double *xnode,*ynode,*znode;
     
-    
-	int imin,imax,jmin,jmax,kmin,kmax;
-    int kmaxF;
 	int pointnum,cellnum,tpcellnum;
 	int cellnum1,cellnum2,cellnum3;
     int pointnumtot,cellnumtot;
     int N4,N4_row,N4_col;
     int N7,N7_row,N7_col;
-	double originx,originy,originz;
-    double endx,endy,endz;
-	double global_xmin,global_ymin,global_zmin;
-	double global_xmax,global_ymax,global_zmax;
-	int origin_i, origin_j, origin_k;
-	int gknox,gknoy,gknoz;
 	int surf_tot;
 	int *flag1,*flag2,*flag3,*flag4,*flag5,*flag7,*flag;
     int *flagsf1,*flagsf2,*flagsf3,*flagsf4;
-    
-    // boundary conditions
-    int *IO,*IOSL;
-    int *DF,*DF1,*DF2,*DF3;
-    int *DFBED;
     
     // flag
     double *flag_solid,*flag_topo;
@@ -116,15 +94,12 @@ public:
 	double *topobed,*solidbed,*bed,*depth;
     int *wet,*wet_n;
     int *deep;
-	int i_dir,j_dir,k_dir;
-	double x_dir,y_dir,z_dir;
     int gcbextra;
     int solidread,toporead,porousread,topoforcing;
 
 
     //GHOSTCELL
 	int **gcb1,**gcb2,**gcb3,**gcb4;
-	int **gcin, **gcout;
 	double *gcd1,*gcd2,*gcd3,*gcd4;
     
     int gcdf1_count,gcdf2_count,gcdf3_count,gcdf4_count;
@@ -132,7 +107,6 @@ public:
     int gcsldfeta4_count,gcsldfbed4_count;
     int **gcsldfeta4,**gcsldfbed4;
 
-	int gcin_count, gcout_count;
 	int gcb1_count,gcb2_count,gcb3_count,gcb4_count;
 	int gcpara_sum;
 	int solid_gcb_est, topo_gcb_est, solid_gcbextra_est, topo_gcbextra_est, tot_gcbextra_est;
@@ -748,11 +722,6 @@ public:
     double alpha;
     double pressgage;
 
-	// maxcoor
-	double xcoormax,xcoormin,ycoormax,ycoormin,zcoormax,zcoormin;
-	double maxlength;
-
-
 	// wave coefficients
 	double wT,wV,wH,wA,wL,wd,ww,wk,wC;
 	double wHs,wAs,wwp,ww_s,ww_e,wTp,wLp;
@@ -763,39 +732,12 @@ public:
     double psi,psi0;
 	int pressval;
 
-// Boundary
-    //int **boundary;
-
-	static int knox,knoy,knoz;
-	static int margin;
-
-	static int xtp,ytp,ztp;
-	static int xmax,ymax,zmax;
-
 // PARALELL
     int mpirank;
 	int gcx_1range1[7],gcx_3range1[7];
 	int gcx_1range2[7],gcx_3range2[7];
 	int gcx_1range3[7],gcx_3range3[7];
 	int gcx_1range4[7],gcx_3range4[7];
-	
-// Non-Uniform Mesh    
-    double *XN,*YN,*ZN;
-    double *XP,*YP,*ZP;
-    double *DXN,*DYN,*DZN;
-    double *DXP,*DYP,*DZP;
-    double *ZSN,*ZSP;
-    double DXM,DYD,DXD;
-    double DYM,DZM;
-    
-    double *RN,*SN,*TN;
-    double *RP,*SP,*TP;
-    double *DRN,*DSN,*DTN;
-    double *DRP,*DSP,*DTP;
-    double DRM,DSM,DTM;
-    double DX,DY,DZ;
-    double *DRDXN,*DSDYN,*DTDZN;
-    double *DRDXP,*DSDYP,*DTDZP;
     
     weno_nug_func *wenofunc;
     

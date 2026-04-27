@@ -39,17 +39,3 @@ void lexer::control_calc()
 	Xmeantime=Xtotaltime=0.0;
 	gcmeantime=gctotaltime=0.0;
 }
-
-void lexer::assign_margin()
-{	
-    margin=3;
-    
-	imax=knox+2*margin;
-	jmax=knoy+2*margin;
-	kmax=knoz+2*margin;
-    kmaxF=knoz+1+2*margin;
-	
-	imin=-margin;
-	jmin=-margin;
-	kmin=-margin;
-}

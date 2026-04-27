@@ -27,8 +27,8 @@ void lexer::gridini(ghostcell *pgc)
 {        
     if(G2==1)
     sigma_coord_ini();
-    
-    lexer_gridspacing(pgc);
+
+    gridspacing(pgc);
 	parse();	
     gcd_ini(pgc);
 }
@@ -123,10 +123,6 @@ void lexer::flagini()
     Iarray(gcsldfeta4,gcsldfeta4_count,6);
 }
 
-void lexer::gridini_patchBC()
-{
-}
-
 int lexer::conv(double a)
 {
 	int b,c;
@@ -167,16 +163,4 @@ void lexer::gcd_ini(ghostcell *pgc)
             gcd4[q] = 0.5*DZP[KP];
         }
     }
-}
-
-void lexer::sigma_coord_ini()
-{
-    double L, ZN0temp;
-    
-    L = ZN[knoz+marge] - ZN[0+marge];
-    
-    ZN0temp = ZN[0+marge];
-    
-    for(k=-marge;k<knoz+marge;++k)
-    ZN[KP] = (ZN[KP]-ZN0temp)/L;
 }
