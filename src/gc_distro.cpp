@@ -32,13 +32,13 @@ void ghostcell::gcdistro(field &f, int ii, int jj, int kk, double dist, bc_label
 
     switch(bc_label)
     {
-        case bc_labels::DIRICHLET_ORTH:
-            dirichlet_ortho(f,dist,cs);
-            break;
         case bc_labels::NEUMANN:
             neumann(f,cs);
             break;
         case bc_labels::NOSLIP:
+        case bc_labels::DIRICHLET_ORTH:
+        case bc_labels::DIRICHLET_ORTH_REFLECT:
+        case bc_labels::DIRICHLET_PARA_REFLECT:
             noslip(f,cs);
             break;
         case bc_labels::OUTFLOWBC:
@@ -46,12 +46,6 @@ void ghostcell::gcdistro(field &f, int ii, int jj, int kk, double dist, bc_label
             break;
         case bc_labels::POTENTIAL:
             potentialbc(f,cs);
-            break;
-        case bc_labels::DIRICHLET_ORTH_REFLECT:
-            dirichlet_ortho_reflect(f,dist,cs);
-            break;
-        case bc_labels::DIRICHLET_PARA_REFLECT:
-            dirichlet_para_reflect(f,dist,cs);
             break;
         case bc_labels::HEATBC:
             heatbc(f,cs);
@@ -81,6 +75,7 @@ void ghostcell::gcsldistro(lexer *p, slice &f, int ii, int jj, bc_labels bc_labe
         gcsl_neumann_hy(f,cs);
         break;
     case bc_labels::NOSLIP:
+    case bc_labels::DIRICHLET_ORTH:
         gcsl_noslip(f,cs);
         break;
     case bc_labels::OUTFLOWBC:
