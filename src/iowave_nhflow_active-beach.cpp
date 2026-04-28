@@ -114,16 +114,16 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
 		
 		
         aa=bb=0;
-		if(p->gcslout[n][3]==1)
+		if(p->gcslout[n][2]==1)
 		aa=-1;
 		
-		if(p->gcslout[n][3]==4)
+		if(p->gcslout[n][2]==4)
 		aa=1;
 		
-		if(p->gcslout[n][3]==3)
+		if(p->gcslout[n][2]==3)
 		bb=-1;
 		
-		if(p->gcslout[n][3]==2)
+		if(p->gcslout[n][2]==2)
 		bb=1;
  
         
@@ -192,17 +192,17 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
 		
 		aa=bb=0;
 		
-		if(p->gcslout[n][3]==1)
+		if(p->gcslout[n][2]==1)
 		aa=-1;
 		
-		if(p->gcslout[n][3]==4)
+		if(p->gcslout[n][2]==4)
 		aa=1;
 		
-		if(p->gcslout[n][3]==3)
+		if(p->gcslout[n][2]==3)
 		bb=-1;
 		
-		if(p->gcslout[n][3]==2)
-		bb=1;         
+		if(p->gcslout[n][2]==2)
+		bb=1;
         
         eta_T = 0.0;
         eta_M = d->eta(i,j); 
