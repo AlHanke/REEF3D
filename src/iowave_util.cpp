@@ -57,8 +57,8 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         ++count2;
     }
 
-    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6);
-    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6);
+    p->Iresize(p->gcin,p->gcin_count, count1, 4, 4);
+    p->Iresize(p->gcout,p->gcout_count, count2, 4, 4);
 
     count1=0;
     count2=0;
@@ -183,8 +183,8 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         ++count2;
     }
 
-    p->Iresize(p->gcin,p->gcin_count, count1, 6, 6);
-    p->Iresize(p->gcout,p->gcout_count, count2, 6, 6);
+    p->Iresize(p->gcin,p->gcin_count, count1, 4, 4);
+    p->Iresize(p->gcout,p->gcout_count, count2, 4, 4);
 
     count1=0;
     count2=0;
