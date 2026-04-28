@@ -364,9 +364,6 @@ void lexer::read_grid()
     Iarray(gcbsl4, gcbsl4_count,5);
     Iarray(gcbsl4a, gcbsl4a_count,5);
 
-    Iarray(gcslin, gcin_count,6);
-    Iarray(gcslout, gcout_count,6);
-
     Iarray(gcslpara1, gcslpara1_count,2);
     Iarray(gcslpara2, gcslpara2_count,2);
     Iarray(gcslpara3, gcslpara3_count,2);
