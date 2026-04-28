@@ -116,11 +116,11 @@ void ghostcell::gcsl_setbcio(lexer *p)
             ++p->gcslout_count;
     }
 
-    p->Iarray(p->gcslin,p->gcslin_count,6);
-    p->Iarray(p->gcslout,p->gcslout_count,6);
+    p->Iarray(p->gcslin,p->gcslin_count,2);
+    p->Iarray(p->gcslout,p->gcslout_count,3);
 
-    p->Iarray(p->gcslawa1,p->gcslout_count,6);
-    p->Iarray(p->gcslawa2,p->gcslout_count,6);
+    p->Iarray(p->gcslawa1,p->gcslout_count,3);
+    p->Iarray(p->gcslawa2,p->gcslout_count,3);
 
     int count1=0;
     int count2=0;
@@ -136,9 +136,6 @@ void ghostcell::gcsl_setbcio(lexer *p)
         {
             p->gcslin[count1][0]=i;
             p->gcslin[count1][1]=j;
-            p->gcslin[count1][3]=cs;
-            p->gcslin[count1][4]=bc;
-            p->gcslin[count1][5]=1;
             ++count1;
         }
         else if(bc==OUTFLOW || bc==NUMBEACH)
@@ -146,8 +143,6 @@ void ghostcell::gcsl_setbcio(lexer *p)
             p->gcslout[count2][0]=i;
             p->gcslout[count2][1]=j;
             p->gcslout[count2][2]=cs;
-            p->gcslout[count2][4]=bc;
-            p->gcslout[count2][5]=1;
             ++count2;
         }
     }
