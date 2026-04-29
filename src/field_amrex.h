@@ -35,7 +35,7 @@ public:
 
     double& operator()(int, int, int) noexcept override final;
 
-    void fillBoundary();
+    void FillBoundary() override;
 
 protected:
     field_amrex(lexer* p);
