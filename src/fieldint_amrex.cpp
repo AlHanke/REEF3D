@@ -55,7 +55,7 @@ int& fieldint_amrex::operator()(int ii, int jj, int kk) noexcept
     Abort("fieldint_amrex::operator(): index outside owned boxes.");
 }
 
-void fieldint_amrex::fillBoundary()
+void fieldint_amrex::FillBoundary()
 {
     mf.FillBoundary(pp->amrex_geometry.periodicity());
 }

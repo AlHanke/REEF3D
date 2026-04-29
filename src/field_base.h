@@ -155,6 +155,10 @@ protected:
     std::vector<T> V;
 #endif
 
+#if USE_AMREX
+    virtual void FillBoundary() = 0;
+#endif
+
 #if not USE_AMREX
 private:
     const int imin,jmin,kmin,kmax,jkmax;
