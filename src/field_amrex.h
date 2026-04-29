@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
 REEF3D
-Copyright 2008-2026 Hans Bihs
+Copyright 2008-2025 Hans Bihs
 
 This file is part of REEF3D.
 
@@ -10,37 +10,40 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ANY WARRANTY; without even the implied warranty of MERCHANTIBILITY or
 FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
-#ifndef FIELD_H_
-#define FIELD_H_
+#if USE_AMREX
+#ifndef FIELD_AMREX_H_
+#define FIELD_AMREX_H_
 
-#include "field_base.h"
+#include "field.h"
+#include "lexer.h"
+#include <AMReX_MultiFab.H>
 
-class field : public field_base<double>
+class field_amrex : public field
 {
 public:
-#if USE_AMREX
-    field() = default;
-#else
-    field(lexer* p) : field_base<double>(p) {}
-#endif
-    virtual ~field() = default;
+    virtual ~field_amrex() = default;
 
-#if not USE_AMREX
-    void CopyFrom(const field& src) {V = src.V; cache_addressing();};
+    double& operator()(int, int, int) noexcept override final;
+
+    void fillBoundary();
 
 protected:
-    field(lexer* p, int kz, std::size_t slack) : field_base<double>(p, kz, slack) {}
-#endif
+    field_amrex(lexer* p);
+
+    lexer *pp;
+    amrex::MultiFab mf;
+    const int num_components = 1;
 };
 
+#endif
 #endif
