@@ -12,7 +12,7 @@ EIGEN_DIR    := ThirdParty/eigen-5.0.0
 CXXFLAGS     := -std=c++20 -DVERSION=\"$(GIT_VERSION)\" -DBRANCH=\"$(GIT_BRANCH)\"
 LDFLAGS      := -L ${HYPRE_DIR}/lib/ -lHYPRE
 INCLUDE      := -I ${HYPRE_DIR}/include -I ${EIGEN_DIR} -DEIGEN_MPL2_ONLY
-USE_AMREX ?= 0
+USE_AMREX ?= 1
 ifeq ($(USE_AMREX),1)
 AMREX_LIBRARY_HOME := ThirdParty/amrex-26.09
 CXXFLAGS	 += -DUSE_AMREX=$(USE_AMREX)
@@ -27,7 +27,7 @@ DEPENDENCIES := $(OBJECTS:.o=.d)
 
 .DEFAULT_GOAL := release
 
-all: CXXFLAGS += -O3 -w
+all: CXXFLAGS += -O3 -w -g
 all: CXXFLAGS += -DBUILD=\"all\"
 all: $(APP)
 
