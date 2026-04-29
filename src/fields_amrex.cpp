@@ -33,7 +33,7 @@ field1::field1(lexer *p) : field_amrex(p)
     mf.define(box, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
-    fillBoundary();
+    FillBoundary();
 }
 
 field2::field2(lexer *p) : field_amrex(p)
@@ -43,7 +43,7 @@ field2::field2(lexer *p) : field_amrex(p)
     mf.define(box, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
-    fillBoundary();
+    FillBoundary();
 }
 
 field3::field3(lexer *p) : field_amrex(p)
@@ -53,7 +53,7 @@ field3::field3(lexer *p) : field_amrex(p)
     mf.define(box, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
-    fillBoundary();
+    FillBoundary();
 }
 
 field4::field4(lexer *p) : field_amrex(p)
@@ -63,6 +63,6 @@ field4::field4(lexer *p) : field_amrex(p)
     mf.define(box, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
-    fillBoundary();
+    FillBoundary();
 }
 #endif

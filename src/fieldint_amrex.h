@@ -35,7 +35,7 @@ public:
 
     int& operator()(int, int, int) noexcept override final;
 
-    void fillBoundary();
+    void FillBoundary();
 
 protected:
     fieldint_amrex(lexer* p);
