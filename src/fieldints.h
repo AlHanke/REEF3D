@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
 REEF3D
-Copyright 2008-2025 Hans Bihs
+Copyright 2008-2026 Hans Bihs
 
 This file is part of REEF3D.
 
@@ -10,7 +10,7 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTIBILITY or
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 for more details.
 
@@ -20,38 +20,38 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
-#if USE_AMREX
-#ifndef FIELDS_AMReX_H_
-#define FIELDS_AMReX_H_
+#if not USE_AMREX
+#ifndef FIELDINTS_H_
+#define FIELDINTS_H_
 
-#include"field_amrex.h"
+#include "fieldint.h"
 
-class field1 : public field_amrex
+class fieldint1 : public fieldint
 {
 public:
-    field1(lexer*);
-    virtual ~field1() = default;
+    fieldint1(lexer* p) : fieldint(p) {};
+    virtual ~fieldint1() = default;
 };
 
-class field2 : public field_amrex
+class fieldint2 : public fieldint
 {
 public:
-    field2(lexer*);
-    virtual ~field2() = default;
+    fieldint2(lexer* p) : fieldint(p) {};
+    virtual ~fieldint2() = default;
 };
 
-class field3 : public field_amrex
+class fieldint3 : public fieldint
 {
 public:
-    field3(lexer*);
-    virtual ~field3() = default;
+    fieldint3(lexer* p) : fieldint(p) {};
+    virtual ~fieldint3() = default;
 };
 
-class field4 : public field_amrex
+class fieldint4 : public fieldint
 {
 public:
-    field4(lexer*);
-    virtual ~field4() = default;
+    fieldint4(lexer* p) : fieldint(p) {};
+    virtual ~fieldint4() = default;
 };
 
 #endif
