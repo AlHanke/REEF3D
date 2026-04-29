@@ -23,16 +23,21 @@ Author: Alexander Hanke
 #ifndef FIELD_BASE_H_
 #define FIELD_BASE_H_
 
+#if not USE_AMREX
 #include "lexer.h"
 #include "looping.h"
 #include <algorithm>
 #include <cstddef>
 #include <vector>
+#endif
 
 template<typename T>
 class field_base
 {
 public:
+#if USE_AMREX
+    field_base() = default;
+#else
     field_base(lexer *p) :
         V(static_cast<std::size_t>(p->imax)*p->jmax*p->kmax, T{}),
         imin(p->imin), jmin(p->jmin),
@@ -40,7 +45,7 @@ public:
         jkmax(p->jmax*p->kmax),
         p(p)
     {cache_addressing();};
-
+#endif
     field_base(const field_base&) = delete;
     field_base& operator=(const field_base&) = delete;
     field_base(field_base&&) = delete;
@@ -48,6 +53,9 @@ public:
 
     virtual ~field_base() = default;
 
+#if USE_AMREX
+    virtual T& operator()(int, int, int) noexcept = 0;
+#else
     /*!
      * @brief Width of the cached strides. Long for every payload, deliberately.
      *
@@ -145,7 +153,9 @@ protected:
     }
 
     std::vector<T> V;
+#endif
 
+#if not USE_AMREX
 private:
     const int imin,jmin,kmin,kmax,jkmax;
     lexer *p;
@@ -153,6 +163,7 @@ private:
     T*       m_base = nullptr;
     stride_t m_js   = 0;
     stride_t m_ks   = 0;
+#endif
 };
 
 #endif
