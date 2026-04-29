@@ -1097,6 +1097,7 @@
         <File Name="field_base.h"/>
         <VirtualDirectory Name="Field">
           <File Name="field.h"/>
+          <File Name="fields.h"/>
           <File Name="field1.h"/>
           <File Name="field2.h"/>
           <File Name="field3.h"/>
@@ -1108,6 +1109,7 @@
           <File Name="ArrayWrapper3D.h"/>
           <File Name="ArrayWrapper3D_imp.h"/>
           <File Name="fieldint.h"/>
+          <File Name="fieldints.h"/>
           <File Name="fieldint_amrex.h"/>
           <File Name="fieldints_amrex.h"/>
           <File Name="fieldint1.h"/>
