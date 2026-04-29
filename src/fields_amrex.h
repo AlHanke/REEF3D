@@ -24,34 +24,41 @@ Author: Alexander Hanke
 #ifndef FIELDS_AMReX_H_
 #define FIELDS_AMReX_H_
 
-#include"field_amrex.h"
+#include "field_amrex.h"
 
-class field1_amrex : public field_amrex
+class field1 : public field_amrex
 {
 public:
-    field1_amrex(lexer*);
-    virtual ~field1_amrex() = default;
+    field1(lexer*);
+    virtual ~field1() = default;
 };
 
-class field2_amrex : public field_amrex
+class field2 : public field_amrex
 {
 public:
-    field2_amrex(lexer*);
-    virtual ~field2_amrex() = default;
+    field2(lexer*);
+    virtual ~field2() = default;
 };
 
-class field3_amrex : public field_amrex
+class field3 : public field_amrex
 {
 public:
-    field3_amrex(lexer*);
-    virtual ~field3_amrex() = default;
+    field3(lexer*);
+    virtual ~field3() = default;
 };
 
-class field4_amrex : public field_amrex
+class field4 : public field_amrex
 {
 public:
-    field4_amrex(lexer*);
-    virtual ~field4_amrex() = default;
+    field4(lexer*);
+    virtual ~field4() = default;
+};
+
+class field7 : public field_amrex
+{
+public:
+    field7(lexer*);
+    virtual ~field7() = default;
 };
 
 #endif

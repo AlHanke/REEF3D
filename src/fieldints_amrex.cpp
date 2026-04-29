@@ -57,4 +57,14 @@ fieldint4::fieldint4(lexer *p) : fieldint_amrex(p)
     mf.setVal(0);
     fillBoundary();
 }
+
+fieldint7::fieldint7(lexer *p) : fieldint_amrex(p)
+{
+    amrex::BoxArray box = p->amrex_box_array;
+    box = amrex::convert(p->amrex_box_array, amrex::IntVect{AMREX_D_DECL(0,0,1)});
+    mf.define(box, p->amrex_distribution_mapping, num_components, p->margin);
+    mf.setVal(0, 0, mf.n_comp, p->margin);
+    mf.setVal(0);
+    fillBoundary();
+}
 #endif

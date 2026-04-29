@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
 REEF3D
-Copyright 2008-2025 Hans Bihs
+Copyright 2008-2026 Hans Bihs
 
 This file is part of REEF3D.
 
@@ -10,7 +10,7 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTIBILITY or
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 for more details.
 
@@ -20,44 +20,51 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
-#if USE_AMREX
-#ifndef FIELDINTS_AMReX_H_
-#define FIELDINTS_AMReX_H_
+#if not USE_AMREX
+#ifndef FIELDINTS_H_
+#define FIELDINTS_H_
 
-#include "fieldint_amrex.h"
+#include "fieldint.h"
 
-class fieldint1 final : public fieldint_amrex
+class fieldint1 final : public fieldint
 {
 public:
-    fieldint1(lexer*);
+    fieldint1(lexer* p) : fieldint(p) {};
     virtual ~fieldint1() = default;
 };
 
-class fieldint2 final : public fieldint_amrex
+class fieldint2 final : public fieldint
 {
 public:
-    fieldint2(lexer*);
+    fieldint2(lexer* p) : fieldint(p) {};
     virtual ~fieldint2() = default;
 };
 
-class fieldint3 final : public fieldint_amrex
+class fieldint3 final : public fieldint
 {
 public:
-    fieldint3(lexer*);
+    fieldint3(lexer* p) : fieldint(p) {};
     virtual ~fieldint3() = default;
 };
 
-class fieldint4 final : public fieldint_amrex
+class fieldint4 final : public fieldint
 {
 public:
-    fieldint4(lexer*);
+    fieldint4(lexer* p) : fieldint(p) {};
     virtual ~fieldint4() = default;
 };
 
-class fieldint7 final : public fieldint_amrex
+/*!
+ * @brief Integer counterpart of field7.
+ *
+ * Sigma-grid vertical-node layout, stride p->kmaxF, addressed with the FIJK
+ * family. See field7.h for what the slack plane is for.
+ */
+class fieldint7 final : public fieldint
 {
 public:
-    fieldint7(lexer*);
+    fieldint7(lexer* p) : fieldint(p, p->kmaxF,
+                                   static_cast<std::size_t>(p->imax)*p->jmax) {};
     virtual ~fieldint7() = default;
 };
 
