@@ -28,7 +28,11 @@ Author: Hans Bihs
 class field : public field_base<double>
 {
 public:
+#if USE_AMREX
+    field() = default;
+#else
     field(lexer* p) : field_base<double>(p) {};
+#endif
     virtual ~field() = default;
 };
 

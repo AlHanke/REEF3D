@@ -23,13 +23,18 @@ Author: Hans Bihs, Alexander Hanke
 #ifndef FIELD_BASE_H_
 #define FIELD_BASE_H_
 
-#include "lexer.h"
-#include <vector>
+#if not USE_AMREX
+    #include "lexer.h"
+    #include <vector>
+#endif
 
 template<typename T>
 class field_base
 {
 public:
+#if USE_AMREX
+    field_base() = default;
+#else
     field_base(lexer* p) :
         imin(p->imin), imax(p->imax),
         jmin(p->jmin),
@@ -38,20 +43,27 @@ public:
         p(p),
         V(imax*jkmax, T{})
     {};
+#endif
     field_base(const field_base&) = delete;
     field_base& operator=(const field_base&) = delete;
     field_base(field_base&&) = delete;
     field_base& operator=(field_base&&) = delete;
     virtual ~field_base() = default;
 
+#if USE_AMREX
+    virtual T& operator()(int, int, int) noexcept = 0;
+#else
     inline T& operator()(int ii, int jj, int kk) noexcept {return V[(ii-imin)*jkmax + (jj-jmin)*kmax + kk-kmin];};
+#endif
 
+#if not USE_AMREX
 private:
     const int imin,imax,jmin,kmin,kmax,jkmax;
     lexer *p;
 
 protected:
     std::vector<T> V;
+#endif
 };
 
 #endif
