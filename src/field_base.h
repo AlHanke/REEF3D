@@ -56,6 +56,10 @@ public:
     inline T& operator()(int ii, int jj, int kk) noexcept {return V[(ii-imin)*jkmax + (jj-jmin)*kmax + kk-kmin];};
 #endif
 
+#if USE_AMREX
+    virtual void FillBoundary() = 0;
+#endif
+
 #if not USE_AMREX
 private:
     const int imin,imax,jmin,kmin,kmax,jkmax;
