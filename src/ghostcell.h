@@ -237,8 +237,6 @@ private:
     void gcwait(lexer*);
 
     // boundary conditions
-    void dirichlet_ortho_reflect(field&,double,int);
-    void dirichlet_para_reflect(field&,double,int);
     void heatbc(field&,int);
     void neumann(field&,int);
     void noslip(field&,int);
