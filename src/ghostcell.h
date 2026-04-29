@@ -266,8 +266,6 @@ private:
     void heatbc(field&,int);
     void potentialbc(field&,int);
     void outflow(field&,int);
-    void dirichlet_para_reflect(field&,double,int);
-    void dirichlet_ortho_reflect(field&,double,int);
     void neumann(field&,int);
     void noslip(field&,int);
 
