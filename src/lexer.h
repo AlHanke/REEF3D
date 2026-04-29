@@ -27,7 +27,11 @@ Author: Hans Bihs
 #include "ArrayWrapper3D.h"
 #include "control.h"
 #include "coordinates.h"
-#include "grid.h"
+#if USE_AMREX
+    #include "grid_amrex.h"
+#else
+    #include "grid.h"
+#endif
 #include "increment.h"
 #include "interpolation.h"
 #include "looping.h"
@@ -64,7 +68,11 @@ class lexer
     : public virtual resize_class,
       public control,
       public coordinates,
-      public grid,
+      #if USE_AMREX
+          public grid_amrex,
+      #else
+          public grid,
+      #endif
       public interpolation,
       public position
 {
@@ -93,25 +101,6 @@ public:
     void gridini2D();
 
 //-----data-----------------------
-
-    // AMReX Geometry
-    std::vector<amrex::Geometry> amrex_geometry;
-    std::vector<amrex::BoxArray> amrex_box_array;
-    std::vector<amrex::DistributionMapping> amrex_distribution_mapping;
-    std::vector<amrex::Vector<amrex::BCRec>> amrex_bc;
-    const int n_comp = 1;
-    std::vector<amrex::MultiFab> amr_mf;
-    std::unique_ptr<amrex::MFIter> default_mfi;
-    amrex::MFIter* amr_mfi = nullptr;
-    std::vector<amrex::iMultiFab> flag1_imf;
-    std::vector<amrex::iMultiFab> flag2_imf;
-    std::vector<amrex::iMultiFab> flag3_imf;
-    std::vector<amrex::iMultiFab> flag4_imf;
-    std::vector<amrex::iMultiFab> flag7_imf;
-
-    int level;
-    const int nlevs = 1;
-
     //REEF3D
 
     int pointnum,cellnum,tpcellnum;
@@ -297,9 +286,6 @@ public:
     double *sig;
     double *sigx,*sigy,*sigz,*sigt;
     double *sigxx;
-
-private:
-    void setup_amrex_geometry(ghostcell*);
 };
 
 #include "ArrayWrapper2D_imp.h"
