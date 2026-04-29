@@ -37,7 +37,7 @@ public:
 
     void setVal(int val, bool includeGhost = false) override final;
 
-    void fillBoundary();
+    void FillBoundary();
 
 protected:
     fieldint_amrex(lexer* p);

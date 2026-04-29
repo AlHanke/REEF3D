@@ -31,7 +31,7 @@ fieldint1::fieldint1(lexer *p) : fieldint_amrex(p)
     mf.define(p->amrex_box_array, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
-    fillBoundary();
+    FillBoundary();
 }
 
 fieldint2::fieldint2(lexer *p) : fieldint_amrex(p)
@@ -39,7 +39,7 @@ fieldint2::fieldint2(lexer *p) : fieldint_amrex(p)
     mf.define(p->amrex_box_array, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
-    fillBoundary();
+    FillBoundary();
 }
 
 fieldint3::fieldint3(lexer *p) : fieldint_amrex(p)
@@ -47,7 +47,7 @@ fieldint3::fieldint3(lexer *p) : fieldint_amrex(p)
     mf.define(p->amrex_box_array, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
-    fillBoundary();
+    FillBoundary();
 }
 
 fieldint4::fieldint4(lexer *p) : fieldint_amrex(p)
@@ -55,7 +55,7 @@ fieldint4::fieldint4(lexer *p) : fieldint_amrex(p)
     mf.define(p->amrex_box_array, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
-    fillBoundary();
+    FillBoundary();
 }
 
 fieldint7::fieldint7(lexer *p) : fieldint_amrex(p)
@@ -65,6 +65,6 @@ fieldint7::fieldint7(lexer *p) : fieldint_amrex(p)
     mf.define(box, p->amrex_distribution_mapping, num_components, p->margin);
     mf.setVal(0, 0, mf.n_comp, p->margin);
     mf.setVal(0);
-    fillBoundary();
+    FillBoundary();
 }
 #endif

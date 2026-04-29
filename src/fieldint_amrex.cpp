@@ -60,7 +60,7 @@ void fieldint_amrex::setVal(int val, bool includeGhost)
     mf.setVal(val, includeGhost ? mf.nGrowVect() : amrex::IntVect{0});
 }
 
-void fieldint_amrex::fillBoundary()
+void fieldint_amrex::FillBoundary()
 {
     mf.FillBoundary(pp->amrex_geometry.periodicity());
 }
