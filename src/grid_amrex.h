@@ -64,7 +64,7 @@ public:
 
     int level;
     const int nlevs = 1;
-    const int n_comp = 1;
+    const int ncomp = 1;
     int bc_type[6] = {0,0,0,0,0,0};
 
 protected:
