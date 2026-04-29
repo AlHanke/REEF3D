@@ -38,19 +38,6 @@ Author: Hans Bihs
 #include "position.h"
 #include "resize.h"
 
-// AMReX includes
-#include <AMReX_BCRec.H>
-#include <AMReX_MFIter.H>
-#include <AMReX_MultiFab.H>
-#include <AMReX_iMultiFab.H>
-#include <AMReX_Vector.H>
-
-namespace amrex {
-    class Geometry;
-    class BoxArray;
-    class DistributionMapping;
-}
-
 #include <array>
 #include <cstdlib>
 #include <fstream>
