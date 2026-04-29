@@ -23,19 +23,24 @@ Author: Alexander Hanke
 #ifndef FIELD_BASE_H_
 #define FIELD_BASE_H_
 
+#if not USE_AMREX
 #include "lexer.h"
 #include "looping.h"
 
 #include <algorithm>
 #include <cstddef>
 #include <vector>
+#endif
 
 template<typename T>
 class field_base
 {
 public:
+#if USE_AMREX
+    field_base() = default;
+#else
     field_base(lexer *p) : field_base(p, p->kmax, 0) {};
-
+#endif
     field_base(const field_base&) = delete;
     field_base& operator=(const field_base&) = delete;
     field_base(field_base&&) = delete;
@@ -43,6 +48,9 @@ public:
 
     virtual ~field_base() = default;
 
+#if USE_AMREX
+    virtual T& operator()(int, int, int) noexcept = 0;
+#else
     /*!
      * @brief Width of the cached strides. Long for every payload, deliberately.
      *
@@ -165,12 +173,16 @@ protected:
 
     lexer *p;
 
+#endif
+
+#if not USE_AMREX
 private:
     const int imin,jmin,kmin,kmax,jkmax;
 
     T*       m_base = nullptr;
     stride_t m_js   = 0;
     stride_t m_ks   = 0;
+#endif
 };
 
 #endif
