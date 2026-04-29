@@ -26,7 +26,7 @@ Author: Alexander Hanke
 #include <AMReX_MultiFab.H>
 #include <AMReX_BoxArray.H>
 
-field1_amrex::field1_amrex(lexer *p) : field_amrex(p)
+field1::field1(lexer *p) : field_amrex(p)
 {
     amrex::BoxArray box = p->amrex_box_array;
     // box = amrex::convert(p->amrex_box_array, amrex::IntVect{AMREX_D_DECL(1,0,0)});
@@ -36,7 +36,7 @@ field1_amrex::field1_amrex(lexer *p) : field_amrex(p)
     fillBoundary();
 }
 
-field2_amrex::field2_amrex(lexer *p) : field_amrex(p)
+field2::field2(lexer *p) : field_amrex(p)
 {
     amrex::BoxArray box = p->amrex_box_array;
     // box = amrex::convert(p->amrex_box_array, amrex::IntVect{AMREX_D_DECL(0,1,0)});
@@ -46,7 +46,7 @@ field2_amrex::field2_amrex(lexer *p) : field_amrex(p)
     fillBoundary();
 }
 
-field3_amrex::field3_amrex(lexer *p) : field_amrex(p)
+field3::field3(lexer *p) : field_amrex(p)
 {
     amrex::BoxArray box = p->amrex_box_array;
     // box = amrex::convert(p->amrex_box_array, amrex::IntVect{AMREX_D_DECL(0,0,1)});
@@ -56,7 +56,7 @@ field3_amrex::field3_amrex(lexer *p) : field_amrex(p)
     fillBoundary();
 }
 
-field4_amrex::field4_amrex(lexer *p) : field_amrex(p)
+field4::field4(lexer *p) : field_amrex(p)
 {
     amrex::BoxArray box = p->amrex_box_array;
     // box = amrex::convert(p->amrex_box_array, amrex::IntVect{AMREX_D_DECL(0,0,0)});
