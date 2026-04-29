@@ -28,7 +28,11 @@ Author: Hans Bihs
 class fieldint : public field_base<int>
 {
 public:
+#if USE_AMREX
+    fieldint() = default;
+#else
     fieldint(lexer* p) : field_base<int>(p) {}
+#endif
     virtual ~fieldint() = default;
 
 protected:
