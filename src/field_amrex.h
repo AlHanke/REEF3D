@@ -36,6 +36,8 @@ public:
 
     double& operator()(int, int, int) noexcept override final;
 
+    void setVal(double val, bool includeGhost = false) override final;
+
     void FillBoundary() override;
 
     void FillDomainBoundary() override;
