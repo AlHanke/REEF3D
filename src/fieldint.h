@@ -28,7 +28,7 @@ Author: Hans Bihs
 class fieldint : public field_base<int>
 {
 public:
-    fieldint(lexer* p) : field_base<int>(p) {}
+    fieldint(lexer* p) : field_base<int>(p) {};
     virtual ~fieldint() = default;
 };
 
