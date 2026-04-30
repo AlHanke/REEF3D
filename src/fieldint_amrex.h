@@ -35,6 +35,8 @@ public:
 
     int& operator()(int, int, int) noexcept override final;
 
+    void setVal(int val, bool includeGhost = false) override final;
+
     void FillBoundary();
 
 protected:
