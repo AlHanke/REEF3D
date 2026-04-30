@@ -26,6 +26,7 @@ Author: Alexander Hanke, Hans Bihs
 #if not USE_AMREX
     #include "lexer.h"
     #include <vector>
+    #include <algorithm>
 #endif
 
 template<typename T>
@@ -52,8 +53,10 @@ public:
 
 #if USE_AMREX
     virtual T& operator()(int, int, int) noexcept = 0;
+    virtual void setVal(T val, bool includeGhost = false) = 0;
 #else
     inline T& operator()(int ii, int jj, int kk) noexcept {return V[(ii-imin)*jkmax + (jj-jmin)*kmax + kk-kmin];};
+    void setVal(T val, bool includeGhost = false) {int i,j,k; if(includeGhost){std::fill(V.begin(),V.end(),val);} else{LOOP{operator()(i,j,k) = val;}}};
 #endif
 
 #if USE_AMREX
