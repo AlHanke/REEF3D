@@ -56,6 +56,11 @@ double& field_amrex::operator()(int ii, int jj, int kk) noexcept
     Abort("field_amrex::operator(): index outside owned boxes.");
 }
 
+void field_amrex::setVal(double val, bool includeGhost)
+{
+    mf.setVal(val, includeGhost ? mf.nGrowVect() : amrex::IntVect{0});
+}
+
 void field_amrex::FillBoundary()
 {
     mf.FillBoundary(pp->amrex_geometry.periodicity());
