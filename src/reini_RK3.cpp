@@ -147,19 +147,6 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
         // Step 3
         prdisc->start(p,a,pgc,frk2,a->L,4);
 
-        // Check convergence on the step-3 RHS before applying the update.
-        // If L_inf is already below tolerance on iteration q>0 the update would
-        // be negligible, so we can skip it and exit early.
-        double L_inf = 0.0;
-        #if USE_AMREX
-        for (int lev = 0; lev < p->nlevs; ++lev)
-            L_inf = std::max(L_inf, a->L.GetMultiFab(lev).norm0(0, 0, true));
-        #else
-        LOOP
-            L_inf = MAX(L_inf, fabs(a->L(i,j,k)));
-        #endif
-        L_inf = pgc->globalmax(L_inf);
-
         FIELDLOOP(
             f,
             FIELD_CONST(frk2); FIELD_CONST(dt); FIELD_CONST_MEMBER(a, L),
@@ -168,10 +155,27 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
 
         pgc->start4(p,f,gcval);
 
-        if (q > 0 && L_inf < reini_conv_tol)
+        if (q > 0)
         {
-            iters_done = q + 1;
-            break;
+            // Check convergence on the step-3 RHS before applying the update.
+            // If L_inf is already below tolerance on iteration q>0 the update would
+            // be negligible, so we can skip it and exit early.
+            // Skip the MPI reduction on the first iteration — the result is never
+            // used for the early-exit check (which requires q > 0).
+            double L_inf = 0.0;
+            #if USE_AMREX
+            for (int lev = 0; lev < p->nlevs; ++lev)
+                L_inf = std::max(L_inf, a->L.GetMultiFab(lev).norm0(0, 0, true));
+            #else
+            LOOP
+                L_inf = std::max(L_inf, fabs(a->L(i,j,k)));
+            #endif
+            L_inf = pgc->globalmax(L_inf);
+            if (L_inf < reini_conv_tol)
+            {
+                iters_done = q + 1;
+                break;
+            }
         }
     }
 
@@ -182,7 +186,7 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
     picardtime2=pgc->timer();
 
     p->reinitime+=pgc->timer()-starttime;
-    if(p->mpirank==0 && p->count>0 && p->count%p->P12==0)
+    if(p->mpirank==0 && p->count%p->P12==0)
     {
         std::cout<<"\nReini RK3\n"
         <<"  Time for Picard iteration: "<<(picardtime-starttime)*1000.0<<" ms\n"
