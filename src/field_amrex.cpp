@@ -44,7 +44,7 @@ field_amrex::field_amrex(lexer* p, amrex_bc_func::DataLocation data_location)
       m_shared_mf(nullptr)
 {
     field_amrex::p = p;
-    mf.resize(p->nlevs);
+    mf = make_mf(p, p->ncomp);
 
     BCRecs.resize(p->nlevs);
     for (auto& bc_rec : BCRecs)

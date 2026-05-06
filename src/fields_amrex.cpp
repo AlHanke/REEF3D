@@ -23,8 +23,6 @@ Author: Alexander Hanke
 #if USE_AMREX
 #include "fields_amrex.h"
 #include "lexer.h"
-#include <AMReX_MultiFab.H>
-#include <AMReX_BoxArray.H>
 #include <AMReX_BC_TYPES.H>
 
 // ===========================================================================
@@ -45,12 +43,6 @@ void field1::init_params(lexer* p)
 
 field1::field1(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_X)
 {
-    LEVEL_LOOP
-    {
-        amrex::BoxArray box = p->amrex_box_array[p->level];
-        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
-        mf[p->level].setVal(0, 0, mf[p->level].n_comp, mf[p->level].nGrow());
-    }
     init_params(p);
 }
 
@@ -87,12 +79,6 @@ void field2::init_params(lexer* p)
 
 field2::field2(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Y)
 {
-    LEVEL_LOOP
-    {
-        amrex::BoxArray box = p->amrex_box_array[p->level];
-        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
-        mf[p->level].setVal(0, 0, mf[p->level].n_comp, mf[p->level].nGrow());
-    }
     init_params(p);
 }
 
@@ -129,12 +115,6 @@ void field3::init_params(lexer* p)
 
 field3::field3(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Z)
 {
-    LEVEL_LOOP
-    {
-        amrex::BoxArray box = p->amrex_box_array[p->level];
-        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
-        mf[p->level].setVal(0, 0, mf[p->level].n_comp, mf[p->level].nGrow());
-    }
     init_params(p);
 }
 
@@ -176,12 +156,6 @@ void field4::init_params(lexer* p)
 
 field4::field4(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::CELL_CENTERED)
 {
-    LEVEL_LOOP
-    {
-        amrex::BoxArray box = p->amrex_box_array[p->level];
-        mf[p->level].define(box, p->amrex_distribution_mapping[p->level], p->ncomp, p->margin);
-        mf[p->level].setVal(0, 0, mf[p->level].n_comp, mf[p->level].nGrow());
-    }
     init_params(p);
 }
 
