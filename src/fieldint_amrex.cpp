@@ -33,7 +33,7 @@ Author: Alexander Hanke
 fieldint_amrex::fieldint_amrex(lexer* p)
 {
     fieldint_amrex::p = p;
-    mf.resize(p->nlevs);
+    mf = make_imf(p, p->ncomp);
 }
 
 void fieldint_amrex::setVal(int val, bool includeGhost)
