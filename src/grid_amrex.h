@@ -33,6 +33,9 @@ Author: Alexander Hanke
 #include <AMReX_Vector.H>
 
 #include <memory>
+#include <vector>
+#include <utility>
+#include <algorithm>
 
 class lexer;
 class ghostcell;
@@ -61,6 +64,31 @@ public:
     // void regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* a);
 
     void update_cell_coordinates();
+
+    // Registry for all owning MultiFab/iMultiFab vectors so they can be
+    // resized collectively during AMR regrid.
+    struct MFEntry  { amrex::Vector<amrex::MultiFab>*  mf; int ncomp; };
+    struct IMFEntry { amrex::Vector<amrex::iMultiFab>* mf; int ncomp; };
+    std::vector<MFEntry>  mf_registry;
+    std::vector<IMFEntry> imf_registry;
+
+    void register_mf (amrex::Vector<amrex::MultiFab>*  mf, int ncomp) { mf_registry .push_back({mf, ncomp}); }
+    void register_imf(amrex::Vector<amrex::iMultiFab>* mf, int ncomp) { imf_registry.push_back({mf, ncomp});}
+
+    void deregister_mf(amrex::Vector<amrex::MultiFab>* mf)
+    {
+        auto it = std::remove_if(mf_registry.begin(), mf_registry.end(),
+                                 [mf](const MFEntry& entry) { return entry.mf == mf; });
+        mf_registry.erase(it, mf_registry.end());
+    }
+    void deregister_imf(amrex::Vector<amrex::iMultiFab>* mf)
+    {
+        auto it = std::remove_if(imf_registry.begin(), imf_registry.end(),
+                                 [mf](const IMFEntry& entry) { return entry.mf == mf; });
+        imf_registry.erase(it, imf_registry.end());
+    }
+
+    void resize_registered_mf(int old_nlevs, int new_nlevs);
     void update_cell_spacing();
 
     // AMReX Data structures
