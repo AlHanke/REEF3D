@@ -38,13 +38,18 @@ ArrayWrapper3D::ArrayWrapper3D(lexer *pp, amrex::Vector<amrex::iMultiFab> *share
 
 ArrayWrapper3D::~ArrayWrapper3D()
 {
-    // out-of-line: the USE_AMREX path gives this a body (deregister_imf)
+    #if USE_AMREX
+    if (p && !m_shared && !data.empty())
+        p->deregister_imf(&data);
+    #endif
 }
 
 void ArrayWrapper3D::resize(int default_value)
 {
     #if USE_AMREX
     if (m_shared) return; // view mode: shared MultiFab is resized by the owner
+    if (data.empty())
+        p->register_imf(&data, 1);
     data.resize(p->nlevs);
     LEVEL_LOOP
     {
