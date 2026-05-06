@@ -27,6 +27,14 @@ ArrayWrapper_int::ArrayWrapper_int(lexer* p) : p(p)
 {
 }
 
+ArrayWrapper_int::~ArrayWrapper_int()
+{
+    #if USE_AMREX
+    if (p && !m_shared && !data.empty())
+        p->deregister_imf(&data);
+    #endif
+}
+
 #if USE_AMREX
 ArrayWrapper_int::ArrayWrapper_int(lexer* p, amrex::Vector<amrex::iMultiFab>* shared, int comp)
     : p(p), m_shared(shared), m_comp(comp)
@@ -38,6 +46,8 @@ void ArrayWrapper_int::resize(int default_value)
 {
     #if USE_AMREX
     if (m_shared) return; // view mode: shared MultiFab is resized by the owner
+    if (data.empty())
+        p->register_imf(&data, 1);
     data.resize(p->nlevs);
     #else
     data.resize(1);

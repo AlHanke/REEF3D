@@ -53,7 +53,7 @@ momentum_RKLS3_df::momentum_RKLS3_df
     ioflow *pioflow
 ):bcmom(p),
     #if USE_AMREX
-    m_rk(make_mf(p,3)), m_f(make_mf(p,3)),
+    m_rk(make_mf(p,3,&m_rk)), m_f(make_mf(p,3,&m_f)),
     urk(p,&m_rk,0), fx(p,&m_f,0),
     vrk(p,&m_rk,1), fy(p,&m_f,1),
     wrk(p,&m_rk,2), fz(p,&m_f,2),

@@ -29,7 +29,8 @@ Author: Alexander Hanke
 #include <AMReX_iMultiFab.H>
 #include <AMReX_Vector.H>
 
-static amrex::Vector<amrex::iMultiFab> make_imf(lexer* p, int ncomp)
+static amrex::Vector<amrex::iMultiFab> make_imf(lexer* p, int ncomp,
+                                                 amrex::Vector<amrex::iMultiFab>* dest)
 {
     amrex::Vector<amrex::iMultiFab> result(p->nlevs);
     for (int lev = 0; lev < p->nlevs; ++lev)
@@ -39,13 +40,14 @@ static amrex::Vector<amrex::iMultiFab> make_imf(lexer* p, int ncomp)
                            ncomp, p->margin);
         result[lev].setVal(0, 0, ncomp, p->margin);
     }
+    p->register_imf(dest, ncomp);
     return result;
 }
 
 class fieldint_amrex : public fieldint
 {
 public:
-    virtual ~fieldint_amrex() = default;
+    virtual ~fieldint_amrex();
 
     inline int& operator()(int ii, int jj, int kk) noexcept override final
     {

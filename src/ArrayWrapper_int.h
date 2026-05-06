@@ -36,7 +36,7 @@ class ArrayWrapper_int
 {
 public:
     ArrayWrapper_int(lexer* p);
-    virtual ~ArrayWrapper_int() = default;
+    virtual ~ArrayWrapper_int();
 
     void resize(int default_value = 0);
 
@@ -77,7 +77,7 @@ private:
     #if USE_AMREX
     void refresh_cache_if_needed() noexcept;
 
-    std::vector<amrex::iMultiFab> data;
+    amrex::Vector<amrex::iMultiFab> data;
 
     amrex::Vector<amrex::iMultiFab>* m_shared = nullptr; ///< non-owning ptr (view mode only)
     int m_comp = 0;                                       ///< component in m_shared

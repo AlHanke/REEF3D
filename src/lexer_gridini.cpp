@@ -22,6 +22,9 @@ Authors: Hans Bihs, Alexander Hanke
 
 #include"lexer.h"
 #include"ghostcell.h"
+#if USE_AMREX
+#include "fieldint_amrex.h"
+#endif
 
 void lexer::gridini(ghostcell *pgc)
 {
@@ -78,12 +81,7 @@ void lexer::flagini()
     Iarray(IOSL,imax*jmax);
     DF.resize(1);
 #if USE_AMREX
-    m_df123.resize(nlevs);
-    for (int lev = 0; lev < nlevs; ++lev)
-    {
-        m_df123[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 3, margin);
-        m_df123[lev].setVal(0);
-    }
+    m_df123 = make_imf(this, 3, &m_df123);
 #endif
     // DF1/DF2/DF3: view mode under USE_AMREX (resize() is a no-op; data lives in m_df123)
     DF1.resize();

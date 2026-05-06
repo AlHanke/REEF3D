@@ -44,11 +44,17 @@ field_amrex::field_amrex(lexer* p, amrex_bc_func::DataLocation data_location)
       m_shared_mf(nullptr)
 {
     field_amrex::p = p;
-    mf = make_mf(p, p->ncomp);
+    mf = make_mf(p, p->ncomp, &mf);
 
     BCRecs.resize(p->nlevs);
     for (auto& bc_rec : BCRecs)
         bc_rec.resize(p->ncomp);
+}
+
+field_amrex::~field_amrex()
+{
+    if (p && m_shared_mf == nullptr && !mf.empty())
+        p->deregister_mf(&mf);
 }
 
 // ---------------------------------------------------------------------------

@@ -61,7 +61,7 @@ momentum_FCC3::momentum_FCC3(lexer *p, fdm *a, ghostcell *pgc, convection *pconv
                                                     fsi *ppfsi)
                                                     :bcmom(p),
                                                     #if USE_AMREX
-                                                    m_rk1(make_mf(p,3)), m_rk2(make_mf(p,3)), m_f(make_mf(p,3)),
+                                                    m_rk1(make_mf(p,3,&m_rk1)), m_rk2(make_mf(p,3,&m_rk2)), m_f(make_mf(p,3,&m_f)),
                                                     urk1(p,&m_rk1,0), urk2(p,&m_rk2,0), fx(p,&m_f,0),
                                                     vrk1(p,&m_rk1,1), vrk2(p,&m_rk2,1), fy(p,&m_f,1),
                                                     wrk1(p,&m_rk1,2), wrk2(p,&m_rk2,2), fz(p,&m_f,2),

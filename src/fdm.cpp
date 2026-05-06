@@ -26,7 +26,7 @@ Author: Hans Bihs
 fdm::fdm(lexer *p) :
 #if USE_AMREX
     // --- single shared MultiFab for all 48 fields ---
-    m_mf(make_mf(p, 48)),
+    m_mf(make_mf(p, 48, &m_mf)),
     // --- velocity vector (0-2) ---
     u(p, &m_mf,  0), v(p, &m_mf,  1), w(p, &m_mf,  2),
     // --- flux vector (3-5) ---
@@ -95,6 +95,10 @@ fdm::fdm(lexer *p) :
     nX(p), nY(p), nZ(p), Alpha(p)
 #endif
 {
+#if USE_AMREX
+    p->register_mf(&m_mf, 48);
+#endif
+
     maxF = 0.0;
     maxG = 0.0;
     maxH = 0.0;
