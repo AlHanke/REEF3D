@@ -2918,7 +2918,6 @@
         <VirtualDirectory Name="Fieldint">
           <File Name="ArrayWrapper3D.cpp"/>
           <File Name="fieldint_amrex.cpp"/>
-          <File Name="fieldints_amrex.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Geotopo">
           <File Name="geotopo.cpp"/>
