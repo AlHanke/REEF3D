@@ -38,7 +38,10 @@ ArrayWrapper3D::ArrayWrapper3D(lexer *pp, amrex::Vector<amrex::iMultiFab> *share
 
 ArrayWrapper3D::~ArrayWrapper3D()
 {
-    // out-of-line: the USE_AMREX path gives this a body (deregister_imf)
+    #if USE_AMREX
+    if (p && !m_shared && !data.empty())
+        p->deregister_imf(&data);
+    #endif
 }
 
 int ArrayWrapper3D::kz() const noexcept
@@ -51,10 +54,16 @@ void ArrayWrapper3D::resize(int default_value)
 {
     #if USE_AMREX
     if (m_shared) return; // view mode: shared MultiFab is resized by the owner
+    if (data.empty())
+        p->register_imf(&data, 1);
     // NODE_Z needs a z-nodal BoxArray: one z-plane more
     // than there are cells. amrex::convert shares the underlying box list, so
     // box count, ordering and the DistributionMap are preserved and the
     // existing MFIter walks it unchanged.
+    //
+    // register_imf carries no data location yet, so the registry would redefine
+    // this on the cell-centred BoxArray at the first regrid. Nothing addresses
+    // location 7 under AMReX until that registration becomes location-aware.
     data.resize(p->nlevs);
     LEVEL_LOOP
     {
