@@ -54,7 +54,7 @@ momentum_FC2::momentum_FC2(lexer *p, fdm *a, ghostcell *pgc, convection *pconvec
                                                     fsi *ppfsi)
                                                     :bcmom(p),
                                                     #if USE_AMREX
-                                                    m_rk1(make_mf(p,3)), m_f(make_mf(p,3)),
+                                                    m_rk1(make_mf(p,3,&m_rk1)), m_f(make_mf(p,3,&m_f)),
                                                     urk1(p,&m_rk1,0), fx(p,&m_f,0),
                                                     vrk1(p,&m_rk1,1), fy(p,&m_f,1),
                                                     wrk1(p,&m_rk1,2), fz(p,&m_f,2),

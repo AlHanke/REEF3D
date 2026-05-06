@@ -44,6 +44,7 @@ Author: Alexander Hanke
 #include <AMReX_Array.H>
 #include <AMReX_ParallelDescriptor.H>
 #include <AMReX_MultiFabUtil.H>
+#include <AMReX_FillPatchUtil.H>
 
 namespace
 {
@@ -744,6 +745,79 @@ void grid_amrex::update_cell_spacing()
             int idx = k + lev*max_k;
             DZN[idx] = ZN[idx+1]-ZN[idx];
             DZP[idx] = ZP[idx+1]-ZP[idx];
+        }
+    }
+}
+
+void grid_amrex::resize_registered_mf(int old_nlevs, int new_nlevs)
+{
+    if (new_nlevs <= old_nlevs)
+        return;
+
+    for (auto& e : mf_registry)
+    {
+        e.mf->resize(new_nlevs);
+
+        // Construct BCRecs once (independent of lev)
+        amrex::Vector<amrex::BCRec> bcrecs(e.ncomp);
+        for (auto& bc : bcrecs)
+            for (int dim = 0; dim < AMREX_SPACEDIM; ++dim)
+            {
+                bc.setLo(dim, amrex::BCType::foextrap);
+                bc.setHi(dim, amrex::BCType::foextrap);
+            }
+        amrex::PhysBCFunctNoOp null_bc;
+
+        for (int lev = old_nlevs; lev < new_nlevs; ++lev)
+        {
+            (*e.mf)[lev].define(amrex_box_array[lev],
+                                amrex_distribution_mapping[lev],
+                                e.ncomp, margin);
+
+            // Fill with piecewise-constant interpolation from the next coarser level.
+            amrex::InterpFromCoarseLevel(
+                (*e.mf)[lev], 0.0,
+                (*e.mf)[lev-1], 0, 0, e.ncomp,
+                amrex_geometry[lev-1], amrex_geometry[lev],
+                null_bc, 0, null_bc, 0,
+                ref_vec, &amrex::pc_interp,
+                bcrecs, 0);
+        }
+    }
+
+    for (auto& e : imf_registry)
+    {
+        e.mf->resize(new_nlevs);
+        for (int lev = old_nlevs; lev < new_nlevs; ++lev)
+        {
+            (*e.mf)[lev].define(amrex_box_array[lev],
+                                amrex_distribution_mapping[lev],
+                                e.ncomp, margin);
+
+            // Injection (piecewise-constant) from the next coarser level.
+            // Build a temporary iMultiFab on the coarsened fine BoxArray so we can
+            // ParallelCopy coarse data onto the fine distribution, then inject.
+            const amrex::iMultiFab& coarse_imf = (*e.mf)[lev-1];
+            amrex::iMultiFab&       fine_imf   = (*e.mf)[lev];
+            const amrex::IntVect    ratio       = ref_vec;
+            const int               icomp       = e.ncomp;
+
+            amrex::BoxArray coarsened_ba = amrex::coarsen(fine_imf.boxArray(), ratio);
+            amrex::iMultiFab tmp(coarsened_ba, fine_imf.DistributionMap(), icomp, 0);
+            tmp.ParallelCopy(coarse_imf, 0, 0, icomp,
+                             coarse_imf.nGrowVect(), amrex::IntVect::TheZeroVector());
+
+            for (amrex::MFIter mfi(fine_imf); mfi.isValid(); ++mfi)
+            {
+                const amrex::Box fine_box              = mfi.validbox();
+                amrex::Array4<int>       fine_arr      = fine_imf.array(mfi);
+                amrex::Array4<int const> tmp_arr       = tmp.const_array(mfi);
+                amrex::ParallelFor(fine_box, icomp,
+                    [=] AMREX_GPU_HOST_DEVICE (int i, int j, int k, int n) noexcept
+                    {
+                        fine_arr(i, j, k, n) = tmp_arr(i/ratio[0], j/ratio[1], k/ratio[2], n);
+                    });
+            }
         }
     }
 }

@@ -43,8 +43,9 @@ Author: Alexander Hanke
 #include <vector>
 
 #if USE_AMREX
-// Create and zero-initialise the combined MultiFab for all fdm fields.
-static amrex::Vector<amrex::MultiFab> make_mf(lexer* p, int ncomp)
+// Create and zero-initialise a MultiFab vector, then register it for AMR regrid.
+static amrex::Vector<amrex::MultiFab> make_mf(lexer* p, int ncomp,
+                                               amrex::Vector<amrex::MultiFab>* dest)
 {
     amrex::Vector<amrex::MultiFab> result(p->nlevs);
     for (int lev = 0; lev < p->nlevs; ++lev)
@@ -54,6 +55,7 @@ static amrex::Vector<amrex::MultiFab> make_mf(lexer* p, int ncomp)
                            ncomp, p->margin);
         result[lev].setVal(0, 0, ncomp, p->margin);
     }
+    p->register_mf(dest, ncomp);
     return result;
 }
 #endif
@@ -61,7 +63,7 @@ static amrex::Vector<amrex::MultiFab> make_mf(lexer* p, int ncomp)
 class field_amrex : public field
 {
 public:
-    virtual ~field_amrex() = default;
+    virtual ~field_amrex();
 
     /*!
      * @copydoc field_base::operator()(int, int, int)
