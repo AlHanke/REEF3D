@@ -29,28 +29,28 @@ Author: Alexander Hanke
 class fieldint1 : public fieldint_amrex
 {
 public:
-    fieldint1(lexer*);
+    fieldint1(lexer *p) : fieldint_amrex(p) {};
     virtual ~fieldint1() = default;
 };
 
 class fieldint2 : public fieldint_amrex
 {
 public:
-    fieldint2(lexer*);
+    fieldint2(lexer *p) : fieldint_amrex(p) {};
     virtual ~fieldint2() = default;
 };
 
 class fieldint3 : public fieldint_amrex
 {
 public:
-    fieldint3(lexer*);
+    fieldint3(lexer *p) : fieldint_amrex(p) {};
     virtual ~fieldint3() = default;
 };
 
 class fieldint4 : public fieldint_amrex
 {
 public:
-    fieldint4(lexer*);
+    fieldint4(lexer *p) : fieldint_amrex(p) {};
     virtual ~fieldint4() = default;
 };
 
