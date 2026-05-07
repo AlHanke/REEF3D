@@ -821,4 +821,12 @@ void grid_amrex::resize_registered_mf(int old_nlevs, int new_nlevs)
         }
     }
 }
+
+void grid_amrex::extend_registered_fields(int new_nlevs)
+{
+    for (auto* field : field_registry)
+        if (field)
+            field->extend_levels(new_nlevs);
+}
+
 #endif

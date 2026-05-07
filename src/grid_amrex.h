@@ -88,6 +88,16 @@ public:
         imf_registry.erase(it, imf_registry.end());
     }
 
+    // Registry for field_amrex objects so they can extend BCRecs/m_alias on regrid
+    std::vector<class field_amrex*> field_registry;
+    void register_field(class field_amrex* f) { field_registry.push_back(f); }
+    void extend_registered_fields(int new_nlevs);
+    void deregister_field(class field_amrex* f)
+    {
+        auto it = std::remove(field_registry.begin(), field_registry.end(), f);
+        field_registry.erase(it, field_registry.end());
+    }
+
     void resize_registered_mf(int old_nlevs, int new_nlevs);
     void update_cell_spacing();
 
