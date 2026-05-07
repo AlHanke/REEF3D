@@ -121,6 +121,8 @@ public:
     /// Returns the shared MultiFab vector pointer (non-null in view mode only).
     amrex::Vector<amrex::MultiFab>* get_shared_mf_vec() noexcept { return m_shared_mf; }
 
+    /// Extend BCRecs and m_alias when new AMR levels are added during regrid.
+    void extend_levels(int new_nlevs);
 
     /// Returns the stagger type of this field.
     amrex_bc_func::DataLocation dataLocation() const

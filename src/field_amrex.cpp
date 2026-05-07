@@ -49,12 +49,36 @@ field_amrex::field_amrex(lexer* p, amrex_bc_func::DataLocation data_location)
     BCRecs.resize(p->nlevs);
     for (auto& bc_rec : BCRecs)
         bc_rec.resize(p->ncomp);
+
+    p->register_field(this);
 }
 
 field_amrex::~field_amrex()
 {
     if (p && m_shared_mf == nullptr && !mf.empty())
         p->deregister_mf(&mf);
+
+    if (p != nullptr)
+    p->deregister_field(this);
+}
+
+void field_amrex::extend_levels(int new_nlevs)
+{
+    const int old_nlevs = BCRecs.size();
+    if (new_nlevs <= old_nlevs) return;
+
+    // Extend BCRecs with new empty vectors
+    BCRecs.resize(new_nlevs);
+    for (int lev = old_nlevs; lev < new_nlevs; ++lev)
+        BCRecs[lev].resize(p->ncomp);
+
+    // Extend m_alias (view mode only)
+    if (m_shared_mf)
+    {
+        m_alias.resize(new_nlevs);
+        for (int lev = old_nlevs; lev < new_nlevs; ++lev)
+            m_alias[lev] = amrex::MultiFab((*m_shared_mf)[lev], amrex::make_alias, 0, 1);
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -78,6 +102,8 @@ field_amrex::field_amrex(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, in
     m_alias.resize(p->nlevs);
     for (int lev = 0; lev < m_alias.size(); ++lev)
         m_alias[lev] = amrex::MultiFab((*shared_mf)[lev], amrex::make_alias, comp, 1);
+
+    p->register_field(this);
 }
 
 // ---------------------------------------------------------------------------
