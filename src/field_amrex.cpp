@@ -77,8 +77,22 @@ void field_amrex::extend_levels(int new_nlevs)
     {
         m_alias.resize(new_nlevs);
         for (int lev = old_nlevs; lev < new_nlevs; ++lev)
-            m_alias[lev] = amrex::MultiFab((*m_shared_mf)[lev], amrex::make_alias, 0, 1);
+            m_alias[lev] = amrex::MultiFab((*m_shared_mf)[lev], amrex::make_alias, m_comp, 1);
     }
+}
+
+void field_amrex::rebuild_alias_level(int lev)
+{
+    // Always invalidate the Array4 cache — the underlying MultiFab storage at lev
+    // has been replaced (owning mode) or is about to be re-aliased (view mode).
+    m_cached_level         = -1;
+    m_cached_mfi_idx       = -1;
+    m_cached_const_level   = -1;
+    m_cached_const_mfi_idx = -1;
+
+    if (!m_shared_mf) return;  // owning mode: nothing more to do
+    if (lev < 0 || lev >= (int)m_alias.size()) return;
+    m_alias[lev] = amrex::MultiFab((*m_shared_mf)[lev], amrex::make_alias, m_comp, 1);
 }
 
 // ---------------------------------------------------------------------------
@@ -92,6 +106,7 @@ field_amrex::field_amrex(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, in
       m_shared_mf(shared_mf)
 {
     field_amrex::p = p;
+    m_comp = comp;
     // mf stays empty — storage is owned by the caller via shared_mf
 
     BCRecs.resize(p->nlevs);

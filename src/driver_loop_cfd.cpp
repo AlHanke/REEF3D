@@ -117,6 +117,8 @@ void driver::loop_cfd(fdm* a)
         pprint->start(p,a,pgc,pturb,pheat,pflow,pdata,pconc,pmp,psed);
         double print_time = pgc->timer();
 
+        p->regrid(a);
+
         // Shell-Printout
         if(p->mpirank==0)
         {

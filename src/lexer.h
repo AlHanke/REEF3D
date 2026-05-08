@@ -47,6 +47,7 @@ Author: Hans Bihs
 #include <memory>
 #include <vector>
 
+class fdm;
 class ghostcell;
 class weno_nug_func;
 
@@ -73,6 +74,7 @@ public:
     void lexer_read(ghostcell*);
     void flagini();
     void gridini(ghostcell*);
+    void regrid(fdm* a);
 
     void read_grid();
     void control_calc();
