@@ -22,6 +22,7 @@ Authors: Hans Bihs, Alexander Hanke
 
 #include"lexer.h"
 #include"ghostcell.h"
+#include"fdm.h"
 #if USE_AMREX
 #include "fieldint_amrex.h"
 #endif
@@ -131,4 +132,15 @@ int lexer::conv(double a)
 	b=c-1;
 
 	return b;
+}
+
+void lexer::regrid(fdm* a)
+{
+    #if USE_AMREX
+    grid_amrex::regrid_amrex_box_array_and_distribution_mapping(this, a);
+    grid_amrex::update_cell_coordinates();
+    grid_amrex::update_cell_spacing();
+    grid_amrex::update_registered_weno(nlevs);
+    grid_amrex::define_inflow_outflow_ba();
+    #endif
 }
