@@ -98,6 +98,25 @@ public:
         field_registry.erase(it, field_registry.end());
     }
 
+    // Registry for WENO non-uniform-grid objects so their precomputed tables
+    // are reallocated and recalculated alongside coordinate arrays on regrid.
+    std::vector<class weno3_nug_func*> weno3_registry;
+    std::vector<class weno_nug_func*>  weno5_registry;
+
+    void register_weno3(class weno3_nug_func* w) { weno3_registry.push_back(w); }
+    void register_weno5(class weno_nug_func*  w) { weno5_registry.push_back(w); }
+    void deregister_weno3(class weno3_nug_func* w)
+    {
+        auto it = std::remove(weno3_registry.begin(), weno3_registry.end(), w);
+        weno3_registry.erase(it, weno3_registry.end());
+    }
+    void deregister_weno5(class weno_nug_func* w)
+    {
+        auto it = std::remove(weno5_registry.begin(), weno5_registry.end(), w);
+        weno5_registry.erase(it, weno5_registry.end());
+    }
+    void update_registered_weno(int new_nlevs);
+
     void resize_registered_mf(int old_nlevs, int new_nlevs);
     void update_cell_spacing();
 
