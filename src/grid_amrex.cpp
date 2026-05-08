@@ -25,6 +25,8 @@ Author: Alexander Hanke
 #include "lexer.h"
 #include "ghostcell.h"
 // #include "fdm.h"
+#include "weno3_nug_func.h"
+#include "weno_nug_func.h"
 
 #include <AMReX_Geometry.H>
 #include <AMReX_BoxArray.H>
@@ -827,6 +829,20 @@ void grid_amrex::extend_registered_fields(int new_nlevs)
     for (auto* field : field_registry)
         if (field)
             field->extend_levels(new_nlevs);
+}
+
+void grid_amrex::update_registered_weno(int new_nlevs)
+{
+    for (auto* w : weno3_registry)
+        if (w) { w->iniflag = false; }
+    for (auto* w : weno5_registry)
+        if (w) { w->iniflag = false; }
+
+    lexer* p = static_cast<lexer*>(this);
+    for (auto* w : weno3_registry)
+        if (w) w->rebuild_levels(p, new_nlevs);
+    for (auto* w : weno5_registry)
+        if (w) w->rebuild_levels(p, new_nlevs);
 }
 
 #endif

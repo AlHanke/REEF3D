@@ -35,13 +35,16 @@ class weno3_nug_func : public increment
 {
 public:
     weno3_nug_func(lexer*);
-    virtual ~weno3_nug_func() = default;
+    virtual ~weno3_nug_func();
 
     void precalc_qf(lexer*);
     void precalc_cf(lexer*);
     void precalc_isf(lexer*);
 
     void ini(lexer*);
+    #if USE_AMREX
+    void rebuild_levels(lexer* p, int new_nlevs);
+    #endif
 
     inline void is_min_x()
     {
@@ -269,9 +272,14 @@ public:
 
     int uf,vf,wf;
 private:
+    int i_size, j_size, k_size;
     lexer* p;
 
     static inline bool iniflag = false;
+
+    #if USE_AMREX
+    friend class grid_amrex;
+    #endif
 };
 
 #endif

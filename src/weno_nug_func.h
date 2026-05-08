@@ -36,13 +36,16 @@ class weno_nug_func : public increment
 {
 public:
     weno_nug_func(lexer*);
-    virtual ~weno_nug_func() = default;
+    virtual ~weno_nug_func();
 
     void precalc_qf(lexer*);
     void precalc_cf(lexer*);
     void precalc_isf(lexer*);
 
     void ini(lexer*);
+    #if USE_AMREX
+    void rebuild_levels(lexer* p, int new_nlevs);
+    #endif
 
     // IS ----
     // x
@@ -336,7 +339,12 @@ protected:
 private:
     static inline bool iniflag = false;
 
+    int i_size, j_size, k_size;
     lexer *p;
+
+    #if USE_AMREX
+    friend class grid_amrex;
+    #endif
 };
 
 #endif

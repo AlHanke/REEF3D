@@ -28,6 +28,16 @@ weno_nug_func::weno_nug_func(lexer* p)
     ini(p);
 
     weno_nug_func::p=p;
+    #if USE_AMREX
+    p->register_weno5(this);
+    #endif
+}
+
+weno_nug_func::~weno_nug_func()
+{
+    #if USE_AMREX
+    p->deregister_weno5(this);
+    #endif
 }
 
 void weno_nug_func::ini(lexer* p)
@@ -41,17 +51,21 @@ void weno_nug_func::ini(lexer* p)
             1;
         #endif
 
-        qfx.resize(max_i*nlev_mult);
-        qfy.resize(max_j*nlev_mult);
-        qfz.resize(max_k*nlev_mult);
+        i_size = max_i * nlev_mult;
+        j_size = max_j * nlev_mult;
+        k_size = max_k * nlev_mult;
 
-        cfx.resize(max_i*nlev_mult);
-        cfy.resize(max_j*nlev_mult);
-        cfz.resize(max_k*nlev_mult);
+        qfx.resize(i_size);
+        qfy.resize(j_size);
+        qfz.resize(k_size);
 
-        isfx.resize(max_i*nlev_mult);
-        isfy.resize(max_j*nlev_mult);
-        isfz.resize(max_k*nlev_mult);
+        cfx.resize(i_size);
+        cfy.resize(j_size);
+        cfz.resize(k_size);
+
+        isfx.resize(i_size);
+        isfy.resize(j_size);
+        isfz.resize(k_size);
 
         precalc_qf(p);
         precalc_cf(p);
@@ -60,3 +74,37 @@ void weno_nug_func::ini(lexer* p)
         iniflag = true;
     }
 }
+
+#if USE_AMREX
+void weno_nug_func::rebuild_levels(lexer* p, int new_nlevs)
+{
+    if(!iniflag)
+    {
+        qfx.clear(); qfy.clear(); qfz.clear();
+        cfx.clear(); cfy.clear(); cfz.clear();
+        isfx.clear(); isfy.clear(); isfz.clear();
+
+        i_size = max_i * new_nlevs;
+        j_size = max_j * new_nlevs;
+        k_size = max_k * new_nlevs;
+
+        qfx.resize(i_size);
+        qfy.resize(j_size);
+        qfz.resize(k_size);
+
+        cfx.resize(i_size);
+        cfy.resize(j_size);
+        cfz.resize(k_size);
+
+        isfx.resize(i_size);
+        isfy.resize(j_size);
+        isfz.resize(k_size);
+
+        precalc_qf(p);
+        precalc_cf(p);
+        precalc_isf(p);
+
+        iniflag=true;
+    }
+}
+#endif
