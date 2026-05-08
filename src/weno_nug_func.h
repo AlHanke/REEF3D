@@ -42,6 +42,9 @@ public:
     void precalc_isf(lexer*);
 
     void ini(lexer*);
+    #if USE_AMREX
+    void rebuild_levels(lexer* p, int new_nlevs);
+    #endif
 
     // IS ----
     // x
@@ -334,7 +337,12 @@ protected:
     static constexpr double psi = 1.0e-6;
 private:
     static bool iniflag;
+    int i_size, j_size, k_size;
     lexer *p;
+
+    #if USE_AMREX
+    friend class grid_amrex;
+    #endif
 };
 
 #endif
