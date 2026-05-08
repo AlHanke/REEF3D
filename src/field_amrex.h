@@ -124,6 +124,10 @@ public:
     /// Extend BCRecs and m_alias when new AMR levels are added during regrid.
     void extend_levels(int new_nlevs);
 
+    /// Rebuild the view-mode alias for @p lev after the underlying shared MultiFab
+    /// has been redefined (same-count or level-decrease regrid).  No-op for owning-mode fields.
+    void rebuild_alias_level(int lev);
+
     /// Returns the stagger type of this field.
     amrex_bc_func::DataLocation dataLocation() const
     { return const_params.data_location; }
@@ -191,6 +195,8 @@ protected:
     mutable int m_cached_const_mfi_idx = -1;
     mutable int m_cached_const_level   = -1;
     mutable int m_cached_const_til_idx = -1;
+
+    int m_comp = 0;       ///< component index within m_shared_mf (view mode only)
 
     int m_last_gcv = -1;  ///< gcv from last UpdateBCRecs call; -1 means BCRecs are stale
 

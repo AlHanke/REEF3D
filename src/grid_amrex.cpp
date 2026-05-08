@@ -24,7 +24,7 @@ Author: Alexander Hanke
 #include "grid_amrex.h"
 #include "lexer.h"
 #include "ghostcell.h"
-// #include "fdm.h"
+#include "fdm.h"
 #include "weno3_nug_func.h"
 #include "weno_nug_func.h"
 
@@ -114,200 +114,200 @@ private:
     const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords_;
 };
 
-// /*!
-//  * @brief Dynamic AMR mesh that combines static coordinate-based refinement regions
-//  * (preserving all boxes produced by reef3d_amrmesh_helper) with physics-driven
-//  * refinement from a level-set field and a Courant-number ceiling derived from the
-//  * velocity field.
-//  *
-//  * Refinement criteria applied in ErrorEst (union — no boxes are ever removed):
-//  *  1. Static regions: every box specified in @p refined_grid_coords is always tagged.
-//  *  2. Interface regions: cells where |phi| < @p phi_band_width are tagged.
-//  *
-//  * Two independent caps apply to the maximum refinement level:
-//  *  - @p max_nlevs is a hard ceiling: the effective max level is always
-//  *    min(max_level, max_nlevs - 1), enforced before any other logic runs.
-//  *  - The Courant criterion limits HOW FAR interface-based tagging may go:
-//  *      Co_0 = dt * max(|u|/dx0, |v|/dy0, |w|/dz0) at level 0.
-//  *      At level lev: Co_lev = Co_0 * ref_ratio^lev.
-//  *      Interface tagging is only applied for lev < courant_max_level_, where
-//  *      courant_max_level_ is the largest level satisfying Co_lev <= @p cfl_max,
-//  *      itself already bounded by max_nlevs - 1.
-//  *  - Static-region tagging is always applied regardless of either cap.
-//  */
-// class reef3d_amrmesh_adaptive final : public amrex::AmrMesh
-// {
-// public:
-//     /// @param max_nlevs  Hard cap on the total number of AMR levels (including
-//     ///                   level 0).  @p max_level is silently clamped to
-//     ///                   max_nlevs - 1 before it is used anywhere in this class.
-//     reef3d_amrmesh_adaptive(
-//         const amrex::Geometry& level_0_geom,
-//         const int max_level,
-//         const int max_nlevs,
-//         const amrex::IntVect& level_ref_ratio,
-//         const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords,
-//         const amrex::Vector<amrex::MultiFab*>& phi_mf,
-//         const amrex::Vector<amrex::MultiFab*>& u_mf,
-//         const amrex::Vector<amrex::MultiFab*>& v_mf,
-//         const amrex::Vector<amrex::MultiFab*>& w_mf,
-//         amrex::Real phi_band_width,
-//         amrex::Real dt,
-//         amrex::Real cfl_max = amrex::Real(1.0))
-//         : amrex::AmrMesh(level_0_geom,
-//                          make_amr_info(std::min(max_level, max_nlevs - 1), level_ref_ratio))
-//         , refined_grid_coords_(refined_grid_coords)
-//         , phi_mf_(phi_mf)
-//         , u_mf_(u_mf)
-//         , v_mf_(v_mf)
-//         , w_mf_(w_mf)
-//         , phi_band_width_(phi_band_width)
-//         , courant_max_level_(
-//             compute_courant_max_level(std::min(max_level, max_nlevs - 1), level_ref_ratio,
-//                                       level_0_geom, u_mf, v_mf, w_mf, dt, cfl_max))
-//     {
-//     }
+/*!
+ * @brief Dynamic AMR mesh that combines static coordinate-based refinement regions
+ * (preserving all boxes produced by reef3d_amrmesh_helper) with physics-driven
+ * refinement from a level-set field and a Courant-number ceiling derived from the
+ * velocity field.
+ *
+ * Refinement criteria applied in ErrorEst (union — no boxes are ever removed):
+ *  1. Static regions: every box specified in @p refined_grid_coords is always tagged.
+ *  2. Interface regions: cells where |phi| < @p phi_band_width are tagged.
+ *
+ * Two independent caps apply to the maximum refinement level:
+ *  - @p max_nlevs is a hard ceiling: the effective max level is always
+ *    min(max_level, max_nlevs - 1), enforced before any other logic runs.
+ *  - The Courant criterion limits HOW FAR interface-based tagging may go:
+ *      Co_0 = dt * max(|u|/dx0, |v|/dy0, |w|/dz0) at level 0.
+ *      At level lev: Co_lev = Co_0 * ref_ratio^lev.
+ *      Interface tagging is only applied for lev < courant_max_level_, where
+ *      courant_max_level_ is the largest level satisfying Co_lev <= @p cfl_max,
+ *      itself already bounded by max_nlevs - 1.
+ *  - Static-region tagging is always applied regardless of either cap.
+ */
+class reef3d_amrmesh_adaptive final : public amrex::AmrMesh
+{
+public:
+    /// @param max_nlevs  Hard cap on the total number of AMR levels (including
+    ///                   level 0).  @p max_level is silently clamped to
+    ///                   max_nlevs - 1 before it is used anywhere in this class.
+    reef3d_amrmesh_adaptive(
+        const amrex::Geometry& level_0_geom,
+        const int max_level,
+        const int max_nlevs,
+        const amrex::IntVect& level_ref_ratio,
+        const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords,
+        const amrex::Vector<amrex::MultiFab*>& phi_mf,
+        const amrex::Vector<amrex::MultiFab*>& u_mf,
+        const amrex::Vector<amrex::MultiFab*>& v_mf,
+        const amrex::Vector<amrex::MultiFab*>& w_mf,
+        amrex::Real phi_band_width,
+        amrex::Real dt,
+        amrex::Real cfl_max = amrex::Real(1.0))
+        : amrex::AmrMesh(level_0_geom,
+                         make_amr_info(std::min(max_level, max_nlevs - 1), level_ref_ratio))
+        , refined_grid_coords_(refined_grid_coords)
+        , phi_mf_(phi_mf)
+        , u_mf_(u_mf)
+        , v_mf_(v_mf)
+        , w_mf_(w_mf)
+        , phi_band_width_(phi_band_width)
+        , courant_max_level_(
+            compute_courant_max_level(std::min(max_level, max_nlevs - 1), level_ref_ratio,
+                                      level_0_geom, u_mf, v_mf, w_mf, dt, cfl_max))
+    {
+    }
 
-//     /// Returns the number of AMR levels (including level 0) that are safe to
-//     /// use under the Courant criterion and the max_nlevs cap.
-//     /// The caller should use this to update nlevs before running MakeNewGrids.
-//     int computedNlevs() const { return courant_max_level_ + 1; }
+    /// Returns the number of AMR levels (including level 0) that are safe to
+    /// use under the Courant criterion and the max_nlevs cap.
+    /// The caller should use this to update nlevs before running MakeNewGrids.
+    int computedNlevs() const { return courant_max_level_ + 1; }
 
-// private:
-//     static amrex::AmrInfo make_amr_info(int max_level, const amrex::IntVect& level_ref_ratio)
-//     {
-//         amrex::AmrInfo amr_info;
-//         amr_info.max_level = max_level;
-//         amr_info.check_input = false;
-//         amr_info.refine_grid_layout = true;
-//         amr_info.n_proper = 1;
-//         amr_info.n_error_buf.assign(max_level + 1, amrex::IntVect::TheZeroVector());
-//         amr_info.ref_ratio.assign(max_level, level_ref_ratio);
-//         amr_info.blocking_factor.assign(max_level + 1, amrex::IntVect::TheUnitVector());
-//         amr_info.max_grid_size.assign(max_level + 1, amrex::IntVect(AMREX_D_DECL(1048576, 1048576, 1048576)));
-//         return amr_info;
-//     }
+private:
+    static amrex::AmrInfo make_amr_info(int max_level, const amrex::IntVect& level_ref_ratio)
+    {
+        amrex::AmrInfo amr_info;
+        amr_info.max_level = max_level;
+        amr_info.check_input = false;
+        amr_info.refine_grid_layout = true;
+        amr_info.n_proper = 1;
+        amr_info.n_error_buf.assign(max_level + 1, amrex::IntVect::TheZeroVector());
+        amr_info.ref_ratio.assign(max_level, level_ref_ratio);
+        amr_info.blocking_factor.assign(max_level + 1, amrex::IntVect::TheUnitVector());
+        amr_info.max_grid_size.assign(max_level + 1, amrex::IntVect(AMREX_D_DECL(1048576, 1048576, 1048576)));
+        return amr_info;
+    }
 
-//     /// Computes the maximum AMR level at which the Courant number stays <= @p cfl_max.
-//     ///
-//     /// The coarsest-level velocity field is used; this is conservative because
-//     /// the Courant number is monotonically increasing with refinement level.
-//     /// The effective refinement ratio is taken as the largest component of
-//     /// @p ref_ratio (worst-case growth direction).
-//     static int compute_courant_max_level(
-//         int max_level,
-//         const amrex::IntVect& ref_ratio,
-//         const amrex::Geometry& geom_lev0,
-//         const amrex::Vector<amrex::MultiFab*>& u_mf,
-//         const amrex::Vector<amrex::MultiFab*>& v_mf,
-//         const amrex::Vector<amrex::MultiFab*>& w_mf,
-//         amrex::Real dt,
-//         amrex::Real cfl_max)
-//     {
-//         // Max absolute velocity at the coarsest level (infinity-norm per component).
-//         const amrex::Real u_max = (u_mf.empty() || !u_mf[0]) ? amrex::Real(0) : u_mf[0]->norm0(0);
-//         const amrex::Real v_max = (v_mf.empty() || !v_mf[0]) ? amrex::Real(0) : v_mf[0]->norm0(0);
-//         const amrex::Real w_max = (w_mf.empty() || !w_mf[0]) ? amrex::Real(0) : w_mf[0]->norm0(0);
+    /// Computes the maximum AMR level at which the Courant number stays <= @p cfl_max.
+    ///
+    /// The coarsest-level velocity field is used; this is conservative because
+    /// the Courant number is monotonically increasing with refinement level.
+    /// The effective refinement ratio is taken as the largest component of
+    /// @p ref_ratio (worst-case growth direction).
+    static int compute_courant_max_level(
+        int max_level,
+        const amrex::IntVect& ref_ratio,
+        const amrex::Geometry& geom_lev0,
+        const amrex::Vector<amrex::MultiFab*>& u_mf,
+        const amrex::Vector<amrex::MultiFab*>& v_mf,
+        const amrex::Vector<amrex::MultiFab*>& w_mf,
+        amrex::Real dt,
+        amrex::Real cfl_max)
+    {
+        // Max absolute velocity at the coarsest level (infinity-norm per component).
+        const amrex::Real u_max = (u_mf.empty() || !u_mf[0]) ? amrex::Real(0) : u_mf[0]->norm0(0);
+        const amrex::Real v_max = (v_mf.empty() || !v_mf[0]) ? amrex::Real(0) : v_mf[0]->norm0(0);
+        const amrex::Real w_max = (w_mf.empty() || !w_mf[0]) ? amrex::Real(0) : w_mf[0]->norm0(0);
 
-//         const amrex::Real* dx0 = geom_lev0.CellSize();
+        const amrex::Real* dx0 = geom_lev0.CellSize();
 
-//         // Co_0 = dt * max(|u|/dx, |v|/dy, |w|/dz) at level 0.
-//         amrex::Real co0 = amrex::Real(0);
-//         if (dx0[0] > 0) co0 = std::max(co0, u_max / dx0[0]);
-//         if (dx0[1] > 0) co0 = std::max(co0, v_max / dx0[1]);
-//         if (dx0[2] > 0) co0 = std::max(co0, w_max / dx0[2]);
-//         co0 *= dt;
+        // Co_0 = dt * max(|u|/dx, |v|/dy, |w|/dz) at level 0.
+        amrex::Real co0 = amrex::Real(0);
+        if (dx0[0] > 0) co0 = std::max(co0, u_max / dx0[0]);
+        if (dx0[1] > 0) co0 = std::max(co0, v_max / dx0[1]);
+        if (dx0[2] > 0) co0 = std::max(co0, w_max / dx0[2]);
+        co0 *= dt;
 
-//         // No meaningful flow — all requested levels are safe.
-//         if (co0 <= amrex::Real(0)) return max_level;
+        // No meaningful flow — all requested levels are safe.
+        if (co0 <= amrex::Real(0)) return max_level;
 
-//         // Largest ref_ratio component drives the fastest Courant growth.
-//         int ref_eff = 2;
-//         for (int d = 0; d < AMREX_SPACEDIM; ++d)
-//             ref_eff = std::max(ref_eff, ref_ratio[d]);
+        // Largest ref_ratio component drives the fastest Courant growth.
+        int ref_eff = 2;
+        for (int d = 0; d < AMREX_SPACEDIM; ++d)
+            ref_eff = std::max(ref_eff, ref_ratio[d]);
 
-//         // Even level 0 violates the CFL condition.
-//         if (co0 >= cfl_max) return 0;
+        // Even level 0 violates the CFL condition.
+        if (co0 >= cfl_max) return 0;
 
-//         // Co_0 * ref_eff^lev <= cfl_max  =>  lev <= log(cfl_max/co0) / log(ref_eff)
-//         const int max_safe = static_cast<int>(
-//             std::floor(std::log(static_cast<double>(cfl_max / co0))
-//                        / std::log(static_cast<double>(ref_eff))));
+        // Co_0 * ref_eff^lev <= cfl_max  =>  lev <= log(cfl_max/co0) / log(ref_eff)
+        const int max_safe = static_cast<int>(
+            std::floor(std::log(static_cast<double>(cfl_max / co0))
+                       / std::log(static_cast<double>(ref_eff))));
 
-//         return std::min(max_safe, max_level);
-//     }
+        return std::min(max_safe, max_level);
+    }
 
-//     void ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real /*time*/, int /*ngrow*/) override
-//     {
-//         tags.setVal(amrex::TagBox::CLEAR);
+    void ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real /*time*/, int /*ngrow*/) override
+    {
+        tags.setVal(amrex::TagBox::CLEAR);
 
-//         // 1. Static refinement regions — identical to reef3d_amrmesh_helper so
-//         //    that every box it would produce is preserved by this class.
-//         if (lev >= 0 && lev < static_cast<int>(refined_grid_coords_.size()))
-//         {
-//             constexpr amrex::Real coord_eps = static_cast<amrex::Real>(1.e-12);
-//             amrex::BoxList refined_regions;
+        // 1. Static refinement regions — identical to reef3d_amrmesh_helper so
+        //    that every box it would produce is preserved by this class.
+        if (lev >= 0 && lev < static_cast<int>(refined_grid_coords_.size()))
+        {
+            constexpr amrex::Real coord_eps = static_cast<amrex::Real>(1.e-12);
+            amrex::BoxList refined_regions;
 
-//             for (const auto& coord_pair : refined_grid_coords_[lev])
-//             {
-//                 amrex::Real lo_phys[3] = {coord_pair.first[0], coord_pair.first[1], coord_pair.first[2]};
-//                 amrex::IntVect lo_idx = Geom(lev).CellIndex(lo_phys);
+            for (const auto& coord_pair : refined_grid_coords_[lev])
+            {
+                amrex::Real lo_phys[3] = {coord_pair.first[0], coord_pair.first[1], coord_pair.first[2]};
+                amrex::IntVect lo_idx = Geom(lev).CellIndex(lo_phys);
 
-//                 amrex::Real hi_phys[3] = {coord_pair.second[0] - coord_eps,
-//                                           coord_pair.second[1] - coord_eps,
-//                                           coord_pair.second[2] - coord_eps};
-//                 amrex::IntVect hi_idx = Geom(lev).CellIndex(hi_phys);
+                amrex::Real hi_phys[3] = {coord_pair.second[0] - coord_eps,
+                                          coord_pair.second[1] - coord_eps,
+                                          coord_pair.second[2] - coord_eps};
+                amrex::IntVect hi_idx = Geom(lev).CellIndex(hi_phys);
 
-//                 amrex::Box tagged_box(lo_idx, hi_idx);
-//                 tagged_box &= Geom(lev).Domain();
+                amrex::Box tagged_box(lo_idx, hi_idx);
+                tagged_box &= Geom(lev).Domain();
 
-//                 if (tagged_box.ok())
-//                     refined_regions.push_back(tagged_box);
-//             }
+                if (tagged_box.ok())
+                    refined_regions.push_back(tagged_box);
+            }
 
-//             if (!refined_regions.isEmpty())
-//             {
-//                 amrex::BoxArray tag_ba(refined_regions);
-//                 tag_ba.removeOverlap();
-//                 tags.setVal(tag_ba, amrex::TagBox::SET);
-//             }
-//         }
+            if (!refined_regions.isEmpty())
+            {
+                amrex::BoxArray tag_ba(refined_regions);
+                tag_ba.removeOverlap();
+                tags.setVal(tag_ba, amrex::TagBox::SET);
+            }
+        }
 
-//         // 2. Level-set interface refinement.
-//         //    Only applied when the resulting finer level (lev+1) is within the
-//         //    Courant-number ceiling and phi data exists at this level.
-//         if (lev < courant_max_level_
-//             && lev < static_cast<int>(phi_mf_.size())
-//             && phi_mf_[lev] != nullptr
-//             && !phi_mf_[lev]->empty())
-//         {
-//             const amrex::Real band = phi_band_width_;
-//             const amrex::MultiFab& phi = *phi_mf_[lev];
+        // 2. Level-set interface refinement.
+        //    Only applied when the resulting finer level (lev+1) is within the
+        //    Courant-number ceiling and phi data exists at this level.
+        if (lev < courant_max_level_
+            && lev < static_cast<int>(phi_mf_.size())
+            && phi_mf_[lev] != nullptr
+            && !phi_mf_[lev]->empty())
+        {
+            const amrex::Real band = phi_band_width_;
+            const amrex::MultiFab& phi = *phi_mf_[lev];
 
-//             for (amrex::MFIter mfi(phi); mfi.isValid(); ++mfi)
-//             {
-//                 const amrex::Box& bx = mfi.validbox();
-//                 const auto phi_arr   = phi.const_array(mfi);
-//                 auto tag_arr         = tags.array(mfi);
+            for (amrex::MFIter mfi(phi); mfi.isValid(); ++mfi)
+            {
+                const amrex::Box& bx = mfi.validbox();
+                const auto phi_arr   = phi.const_array(mfi);
+                auto tag_arr         = tags.array(mfi);
 
-//                 amrex::ParallelFor(bx,
-//                     [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
-//                     {
-//                         if (std::abs(phi_arr(i, j, k, 0)) < band)
-//                             tag_arr(i, j, k) = amrex::TagBox::SET;
-//                     });
-//             }
-//         }
-//     }
+                amrex::ParallelFor(bx,
+                    [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
+                    {
+                        if (std::abs(phi_arr(i, j, k, 0)) < band)
+                            tag_arr(i, j, k) = amrex::TagBox::SET;
+                    });
+            }
+        }
+    }
 
-//     const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords_;
-//     const amrex::Vector<amrex::MultiFab*>& phi_mf_;
-//     const amrex::Vector<amrex::MultiFab*>& u_mf_;
-//     const amrex::Vector<amrex::MultiFab*>& v_mf_;
-//     const amrex::Vector<amrex::MultiFab*>& w_mf_;
-//     const amrex::Real phi_band_width_;
-//     const int courant_max_level_;
-// };
+    const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords_;
+    const amrex::Vector<amrex::MultiFab*>& phi_mf_;
+    const amrex::Vector<amrex::MultiFab*>& u_mf_;
+    const amrex::Vector<amrex::MultiFab*>& v_mf_;
+    const amrex::Vector<amrex::MultiFab*>& w_mf_;
+    const amrex::Real phi_band_width_;
+    const int courant_max_level_;
+};
 }
 
 void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
@@ -468,104 +468,149 @@ void grid_amrex::create_amrex_box_array_and_distribution_mapping_level_n()
     }
 }
 
-// /*!
-//  * @brief Adaptive regrid: update BoxArrays and DistributionMappings for all finer
-//  * levels using physics-driven refinement.
-//  *
-//  * Mirrors create_amrex_box_array_and_distribution_mapping_level_n() but drives
-//  * ErrorEst through reef3d_amrmesh_adaptive, which adds interface-based tagging
-//  * (|phi| < p->psi) on top of the static coordinate regions, subject to a
-//  * Courant-number ceiling computed from the current velocity field and p->dt.
-//  *
-//  * Level 0 BoxArray / DistributionMapping and all Geometry objects are assumed
-//  * to be already set up (e.g. by setup_amrex_geometry).
-//  *
-//  * @param p  lexer — provides dt, psi (interface half-width), max_nlevs, ref_vec.
-//  * @param a  fdm   — provides phi, u, v, w MultiFabs at each AMR level.
-//  */
-// void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* a)
-// {
-//     // Build non-owning pointer vectors so reef3d_amrmesh_adaptive can read
-//     // the per-level MultiFabs without copying them.
-//     amrex::Vector<amrex::MultiFab*> phi_mfs(nlevs), u_mfs(nlevs), v_mfs(nlevs), w_mfs(nlevs);
-//     for (int lev = 0; lev < nlevs; ++lev)
-//     {
-//         phi_mfs[lev] = &a->phi.GetMultiFab(lev);
-//         u_mfs[lev]   = &a->u.GetMultiFab(lev);
-//         v_mfs[lev]   = &a->v.GetMultiFab(lev);
-//         w_mfs[lev]   = &a->w.GetMultiFab(lev);
-//     }
+/*!
+ * @brief Adaptive regrid: update BoxArrays and DistributionMappings for all finer
+ * levels using physics-driven refinement.
+ *
+ * Mirrors create_amrex_box_array_and_distribution_mapping_level_n() but drives
+ * ErrorEst through reef3d_amrmesh_adaptive, which adds interface-based tagging
+ * (|phi| < p->psi) on top of the static coordinate regions, subject to a
+ * Courant-number ceiling computed from the current velocity field and p->dt.
+ *
+ * Level 0 BoxArray / DistributionMapping and all Geometry objects are assumed
+ * to be already set up (e.g. by setup_amrex_geometry).
+ *
+ * @param p  lexer — provides dt, psi (interface half-width), max_nlevs, ref_vec.
+ * @param a  fdm   — provides phi, u, v, w MultiFabs at each AMR level.
+ */
+void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* a)
+{
+    const int old_nlevs = nlevs;
 
-//     reef3d_amrmesh_adaptive amr_mesh_adaptive(
-//         amrex_geometry[0],
-//         nlevs - 1,
-//         max_nlevs,
-//         ref_vec,
-//         amrex_refined_grid_coords,
-//         phi_mfs,
-//         u_mfs,
-//         v_mfs,
-//         w_mfs,
-//         static_cast<amrex::Real>(p->psi),
-//         static_cast<amrex::Real>(p->dt));
+    // Build non-owning pointer vectors from CURRENT (old) levels only.
+    // For any new level that gets added, phi_mf_[lev] will be null — the
+    // null-check in reef3d_amrmesh_adaptive::ErrorEst skips phi tagging safely.
+    amrex::Vector<amrex::MultiFab*> phi_mfs(old_nlevs), u_mfs(old_nlevs),
+                                    v_mfs(old_nlevs), w_mfs(old_nlevs);
+    for (int lev = 0; lev < old_nlevs; ++lev)
+    {
+        phi_mfs[lev] = &a->phi.GetMultiFab(lev);
+        u_mfs[lev]   = &a->u.GetMultiFab(lev);
+        v_mfs[lev]   = &a->v.GetMultiFab(lev);
+        w_mfs[lev]   = &a->w.GetMultiFab(lev);
+    }
 
-//     // Let the adaptive mesh determine the safe number of levels and update nlevs.
-//     // This can only reduce nlevs (courant_max_level_ <= nlevs - 1 by construction).
-//     const int new_nlevs = amr_mesh_adaptive.computedNlevs();
-//     if (new_nlevs < nlevs)
-//     {
-//         if (p->mpirank == 0)
-//             std::cout << "AMReX adaptive regrid: reducing levels from " << nlevs
-//                       << " to " << new_nlevs << " (Courant criterion)" << std::endl;
-//         const int old_nlevs = nlevs;
-//         nlevs = new_nlevs;
-//         amrex_geometry.resize(nlevs);
-//         amrex_box_array.resize(nlevs);
-//         amrex_distribution_mapping.resize(nlevs);
-//         amr_cell_mf.resize(nlevs);
-//         phi_mfs.resize(nlevs);
-//         u_mfs.resize(nlevs);
-//         v_mfs.resize(nlevs);
-//         w_mfs.resize(nlevs);
-//         for (int lev = old_nlevs; lev < nlevs; ++lev)
-//         {
-//             amrex::InterpFromCoarseLevel
-//             phi_mfs[lev].
-//         }
-//     }
+    // Construct with max_nlevs-1 (not nlevs-1) so the mesh can detect that
+    // additional levels are needed, not just reduce the existing count.
+    reef3d_amrmesh_adaptive amr_mesh_adaptive(
+        amrex_geometry[0],
+        max_nlevs - 1,
+        max_nlevs,
+        ref_vec,
+        amrex_refined_grid_coords,
+        phi_mfs,
+        u_mfs,
+        v_mfs,
+        w_mfs,
+        static_cast<amrex::Real>(p->psi),
+        static_cast<amrex::Real>(p->dt));
 
-//     amr_mesh_adaptive.SetGeometry(0, amrex_geometry[0]);
-//     amr_mesh_adaptive.SetBoxArray(0, amrex_box_array[0]);
-//     amr_mesh_adaptive.SetDistributionMap(0, amrex_distribution_mapping[0]);
-//     amr_mesh_adaptive.SetFinestLevel(0);
+    // Courant-based ceiling: cap how many levels are physically safe.
+    const int courant_cap = amr_mesh_adaptive.computedNlevs();
+    const int max_probe   = std::min(courant_cap, max_nlevs);
 
-//     for (int lev = 1; lev < nlevs; ++lev)
-//     {
-//         amr_mesh_adaptive.SetGeometry(lev, amrex_geometry[lev]);
+    // Pre-extend geometry for levels that might be added so MakeNewGrids can
+    // use them. BA/DM are grown too so AmrMesh internals can write to them.
+    amrex_geometry.resize(max_probe);
+    for (int lev = old_nlevs; lev < max_probe; ++lev)
+        amrex_geometry[lev] = amrex::refine(amrex_geometry[lev-1], ref_vec);
 
-//         amrex::Vector<amrex::BoxArray> new_grids(nlevs);
-//         int new_finest = lev - 1;
-//         amr_mesh_adaptive.MakeNewGrids(lev - 1, static_cast<amrex::Real>(p->simtime), new_finest, new_grids);
+    amrex_box_array.resize(max_probe);
+    amrex_distribution_mapping.resize(max_probe);
 
-//         if (new_finest < lev || new_grids[lev].empty())
-//         {
-//             std::cerr << "Failed to build adaptive AMR level " << lev << " during regrid." << std::endl;
-//             exit(1);
-//         }
+    // Register level 0 (BoxArray / DistributionMapping are unchanged).
+    amr_mesh_adaptive.SetGeometry(0, amrex_geometry[0]);
+    amr_mesh_adaptive.SetBoxArray(0, amrex_box_array[0]);
+    amr_mesh_adaptive.SetDistributionMap(0, amrex_distribution_mapping[0]);
+    amr_mesh_adaptive.SetFinestLevel(0);
 
-//         amrex_box_array[lev] = new_grids[lev];
+    // Probe each candidate level; stop as soon as no cells are tagged.
+    int actual_finest = 0;
+    const int nprocs  = amrex::ParallelDescriptor::NProcs();
+    for (int lev = 1; lev < max_probe; ++lev)
+    {
+        amr_mesh_adaptive.SetGeometry(lev, amrex_geometry[lev]);
 
-//         const int nprocs = amrex::ParallelDescriptor::NProcs();
-//         if (nprocs > 1)
-//             amr_mesh_adaptive.ChopGrids(lev, amrex_box_array[lev], nprocs);
+        amrex::Vector<amrex::BoxArray> new_grids(max_probe);
+        int new_finest = lev - 1;
+        amr_mesh_adaptive.MakeNewGrids(lev - 1, static_cast<amrex::Real>(p->simtime),
+                                       new_finest, new_grids);
 
-//         amrex_distribution_mapping[lev] = amr_mesh_adaptive.MakeDistributionMap(lev, amrex_box_array[lev]);
+        if (new_finest < lev || new_grids[lev].empty())
+            break;  // no tagging at this level — no finer levels either
 
-//         amr_mesh_adaptive.SetBoxArray(lev, amrex_box_array[lev]);
-//         amr_mesh_adaptive.SetDistributionMap(lev, amrex_distribution_mapping[lev]);
-//         amr_mesh_adaptive.SetFinestLevel(lev);
-//     }
-// }
+        amrex_box_array[lev] = new_grids[lev];
+
+        if (nprocs > 1)
+            amr_mesh_adaptive.ChopGrids(lev, amrex_box_array[lev], nprocs);
+
+        amrex_distribution_mapping[lev] =
+            amr_mesh_adaptive.MakeDistributionMap(lev, amrex_box_array[lev]);
+
+        amr_mesh_adaptive.SetBoxArray(lev, amrex_box_array[lev]);
+        amr_mesh_adaptive.SetDistributionMap(lev, amrex_distribution_mapping[lev]);
+        amr_mesh_adaptive.SetFinestLevel(lev);
+        actual_finest = lev;
+    }
+
+    const int new_nlevs = actual_finest + 1;
+
+    if (new_nlevs != old_nlevs && p->mpirank == 0)
+        std::cout << "AMReX adaptive regrid: levels " << old_nlevs
+                  << " -> " << new_nlevs << std::endl;
+
+    // Rebuild all registered MultiFabs and field aliases for pre-existing non-zero
+    // levels whose BoxArrays may have changed (happens on every regrid call).
+    // Level 0 is always fixed; only levels 1..min(old,new)-1 can change.
+    const auto ghost_vec = amrex::IntVect(p->margin, p->margin, p->margin);
+    const int rebuild_hi = std::min(old_nlevs, new_nlevs) - 1;
+    for (int lev = 1; lev <= rebuild_hi; ++lev)
+    {
+        redefine_registered_mf_level(lev);
+        rebuild_registered_field_aliases_level(lev);
+        amr_cell_mf[lev].define(amrex_box_array[lev],
+                                amrex_distribution_mapping[lev], 1, p->margin);
+    }
+
+    // Add new levels when the level count increased.
+    if (new_nlevs > old_nlevs)
+    {
+        resize_registered_mf(old_nlevs, new_nlevs);
+        extend_registered_fields(new_nlevs);
+
+        amr_cell_mf.resize(new_nlevs);
+        for (int lev = old_nlevs; lev < new_nlevs; ++lev)
+            amr_cell_mf[lev].define(amrex_box_array[lev],
+                                    amrex_distribution_mapping[lev], 1, p->margin);
+    }
+
+    // Recompute fine-mask for all active levels whenever box arrays changed.
+    if (new_nlevs >= 2)
+    {
+        amr_cell_mf[new_nlevs - 1].setVal(0);
+        for (int lev = new_nlevs - 2; lev >= 0; --lev)
+            amr_cell_mf[lev] = amrex::makeFineMask(
+                amr_cell_mf[lev], amr_cell_mf[lev+1],
+                ghost_vec, ref_vec, amrex_geometry[lev].periodicity(), 1, 0);
+    }
+
+    nlevs = new_nlevs;
+    output_amrex_level_info();
+
+    level = 0;
+    default_cell_mfi = std::make_unique<amrex::MFIter>(amr_cell_mf[level], false);
+    amr_cell_mfi = default_cell_mfi.get();
+}
 
 void grid_amrex::define_inflow_outflow_ba()
 {
@@ -761,16 +806,24 @@ void grid_amrex::update_cell_spacing()
     }
 }
 
-void grid_amrex::resize_registered_mf(int old_nlevs, int new_nlevs)
+void grid_amrex::fill_registered_mf_level(int lev)
 {
-    if (new_nlevs <= old_nlevs)
-        return;
-
     for (auto& e : mf_registry)
     {
-        e.mf->resize(new_nlevs);
+        if ((int)e.mf->size() <= lev) continue;
 
-        // Construct BCRecs once (independent of lev)
+        const amrex::MultiFab& coarse_mf = (*e.mf)[lev-1];
+        amrex::MultiFab&       fine_mf   = (*e.mf)[lev];
+
+        // Preserve existing fine-level data before redefining the MultiFab.
+        amrex::MultiFab old_mf;
+        if (fine_mf.nComp() > 0)
+            old_mf = std::move(fine_mf);
+
+        fine_mf.define(amrex_box_array[lev],
+                            amrex_distribution_mapping[lev],
+                            e.ncomp, margin);
+
         amrex::Vector<amrex::BCRec> bcrecs(e.ncomp);
         for (auto& bc : bcrecs)
             for (int dim = 0; dim < AMREX_SPACEDIM; ++dim)
@@ -780,58 +833,86 @@ void grid_amrex::resize_registered_mf(int old_nlevs, int new_nlevs)
             }
         amrex::PhysBCFunctNoOp null_bc;
 
-        for (int lev = old_nlevs; lev < new_nlevs; ++lev)
-        {
-            (*e.mf)[lev].define(amrex_box_array[lev],
-                                amrex_distribution_mapping[lev],
-                                e.ncomp, margin);
+        amrex::InterpFromCoarseLevel(
+            fine_mf, 0.0,
+            coarse_mf, 0, 0, e.ncomp,
+            amrex_geometry[lev-1], amrex_geometry[lev],
+            null_bc, 0, null_bc, 0,
+            ref_vec, &amrex::pc_interp,
+            bcrecs, 0);
 
-            // Fill with piecewise-constant interpolation from the next coarser level.
-            amrex::InterpFromCoarseLevel(
-                (*e.mf)[lev], 0.0,
-                (*e.mf)[lev-1], 0, 0, e.ncomp,
-                amrex_geometry[lev-1], amrex_geometry[lev],
-                null_bc, 0, null_bc, 0,
-                ref_vec, &amrex::pc_interp,
-                bcrecs, 0);
+        // Overwrite interpolated cells with pre-existing fine-level data.
+        if (old_mf.nComp() > 0)
+        {
+            fine_mf.ParallelCopy(old_mf, 0, 0, e.ncomp,
+                                      old_mf.nGrowVect(),
+                                      amrex::IntVect::TheZeroVector());
+            fine_mf.FillBoundary(amrex_geometry[lev].periodicity());
         }
     }
 
     for (auto& e : imf_registry)
     {
-        e.mf->resize(new_nlevs);
-        for (int lev = old_nlevs; lev < new_nlevs; ++lev)
+        if ((int)e.mf->size() <= lev) continue;
+
+        const amrex::iMultiFab& coarse_imf = (*e.mf)[lev-1];
+        amrex::iMultiFab&       fine_imf   = (*e.mf)[lev];
+
+        // Preserve existing fine-level data before redefining the iMultiFab.
+        amrex::iMultiFab old_imf;
+        if (fine_imf.nComp() > 0)
+            old_imf = std::move(fine_imf);
+
+        fine_imf.define(amrex_box_array[lev],
+                            amrex_distribution_mapping[lev],
+                            e.ncomp, margin);
+
+        // Injection (piecewise-constant) from the next coarser level.
+        // Build a temporary iMultiFab on the coarsened fine BoxArray so we can
+        // ParallelCopy coarse data onto the fine distribution, then inject.
+        const amrex::IntVect    ratio       = ref_vec;
+        const int               icomp       = e.ncomp;
+
+        amrex::BoxArray coarsened_ba = amrex::coarsen(fine_imf.boxArray(), ratio);
+        amrex::iMultiFab tmp(coarsened_ba, fine_imf.DistributionMap(), icomp, 0);
+        tmp.ParallelCopy(coarse_imf, 0, 0, icomp,
+                         coarse_imf.nGrowVect(), amrex::IntVect::TheZeroVector());
+
+        for (amrex::MFIter mfi(fine_imf); mfi.isValid(); ++mfi)
         {
-            (*e.mf)[lev].define(amrex_box_array[lev],
-                                amrex_distribution_mapping[lev],
-                                e.ncomp, margin);
+            const amrex::Box fine_box         = mfi.validbox();
+            amrex::Array4<int>       fine_arr = fine_imf.array(mfi);
+            amrex::Array4<int const> tmp_arr  = tmp.const_array(mfi);
+            amrex::ParallelFor(fine_box, icomp,
+                [=] AMREX_GPU_HOST_DEVICE (int i, int j, int k, int n) noexcept
+                {
+                    fine_arr(i, j, k, n) = tmp_arr(i/ratio[0], j/ratio[1], k/ratio[2], n);
+                });
+        }
 
-            // Injection (piecewise-constant) from the next coarser level.
-            // Build a temporary iMultiFab on the coarsened fine BoxArray so we can
-            // ParallelCopy coarse data onto the fine distribution, then inject.
-            const amrex::iMultiFab& coarse_imf = (*e.mf)[lev-1];
-            amrex::iMultiFab&       fine_imf   = (*e.mf)[lev];
-            const amrex::IntVect    ratio       = ref_vec;
-            const int               icomp       = e.ncomp;
-
-            amrex::BoxArray coarsened_ba = amrex::coarsen(fine_imf.boxArray(), ratio);
-            amrex::iMultiFab tmp(coarsened_ba, fine_imf.DistributionMap(), icomp, 0);
-            tmp.ParallelCopy(coarse_imf, 0, 0, icomp,
-                             coarse_imf.nGrowVect(), amrex::IntVect::TheZeroVector());
-
-            for (amrex::MFIter mfi(fine_imf); mfi.isValid(); ++mfi)
-            {
-                const amrex::Box fine_box              = mfi.validbox();
-                amrex::Array4<int>       fine_arr      = fine_imf.array(mfi);
-                amrex::Array4<int const> tmp_arr       = tmp.const_array(mfi);
-                amrex::ParallelFor(fine_box, icomp,
-                    [=] AMREX_GPU_HOST_DEVICE (int i, int j, int k, int n) noexcept
-                    {
-                        fine_arr(i, j, k, n) = tmp_arr(i/ratio[0], j/ratio[1], k/ratio[2], n);
-                    });
-            }
+        // Overwrite injected cells with pre-existing fine-level data.
+        if (old_imf.nComp() > 0)
+        {
+            fine_imf.ParallelCopy(old_imf, 0, 0, icomp,
+                                  old_imf.nGrowVect(),
+                                  amrex::IntVect::TheZeroVector());
+            fine_imf.FillBoundary(amrex_geometry[lev].periodicity());
         }
     }
+}
+
+void grid_amrex::resize_registered_mf(int old_nlevs, int new_nlevs)
+{
+    if (new_nlevs <= old_nlevs)
+        return;
+
+    for (auto& e : mf_registry)
+        e.mf->resize(new_nlevs);
+    for (auto& e : imf_registry)
+        e.mf->resize(new_nlevs);
+
+    for (int lev = old_nlevs; lev < new_nlevs; ++lev)
+        fill_registered_mf_level(lev);
 }
 
 void grid_amrex::extend_registered_fields(int new_nlevs)
@@ -839,6 +920,18 @@ void grid_amrex::extend_registered_fields(int new_nlevs)
     for (auto* field : field_registry)
         if (field)
             field->extend_levels(new_nlevs);
+}
+
+void grid_amrex::redefine_registered_mf_level(int lev)
+{
+    fill_registered_mf_level(lev);
+}
+
+void grid_amrex::rebuild_registered_field_aliases_level(int lev)
+{
+    for (auto* field : field_registry)
+        if (field)
+            field->rebuild_alias_level(lev);  // no-op + cache invalidation for owning mode
 }
 
 void grid_amrex::update_registered_weno(int new_nlevs)
