@@ -257,7 +257,10 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
 
     count=0;
 
-    BASELOOP
+    p->level = 0;
+    TILE_LOOP
+    IJKLOOP
+    PBASECHECK
     {
         cval(i,j,k)=count;
 
@@ -284,6 +287,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
 
     // -----------------------
     // flagsf1
+
+    count=0;
 
     p->level = 0;
     TILE_LOOP
@@ -389,6 +394,9 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
 
     // -----------------------
     // flagsf2
+
+    count=0;
+
     p->level = 0;
     TILE_LOOP
     IJKLOOP
@@ -493,6 +501,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
 
     // -----------------------
     // flagsf3
+
+    count=0;
 
     p->level = 0;
     TILE_LOOP

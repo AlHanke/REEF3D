@@ -39,7 +39,7 @@ Author: Alexander Hanke
 
 class lexer;
 class ghostcell;
-// class fdm;
+class fdm;
 
 namespace amrex {
     class Geometry;
@@ -61,7 +61,7 @@ public:
     virtual ~grid_amrex() = default;
 
     void define_inflow_outflow_ba();
-    // void regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* a);
+    void regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* a);
 
     void update_cell_coordinates();
 
@@ -118,6 +118,13 @@ public:
     void update_registered_weno(int new_nlevs);
 
     void resize_registered_mf(int old_nlevs, int new_nlevs);
+    void fill_registered_mf_level(int lev);
+    /// Redefine all registered MultiFabs at @p lev with the current BoxArray and
+    /// DistributionMapping, filling data via coarse-level interpolation.
+    /// Called for existing non-zero levels whose box arrays change during regrid.
+    void redefine_registered_mf_level(int lev);
+    /// Rebuild view-mode aliases at @p lev for all registered field_amrex objects.
+    void rebuild_registered_field_aliases_level(int lev);
     void update_cell_spacing();
 
     // AMReX Data structures
@@ -169,7 +176,7 @@ public:
 protected:
     void setup_amrex_geometry(lexer* p, ghostcell* pgc);
 
-    const int max_nlevs = 5;
+    static constexpr inline int max_nlevs = 10;
 private:
     void create_amrex_box_array_and_distribution_mapping_level_n();
     void output_amrex_level_info();
