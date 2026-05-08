@@ -224,7 +224,10 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
 
     count=0;
 
-    BASELOOP
+    p->level = 0;
+    TILE_LOOP
+    IJKLOOP
+    PBASECHECK
     {
         cval(i,j,k)=count;
 
