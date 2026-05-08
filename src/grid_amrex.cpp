@@ -322,8 +322,6 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     using namespace amrex;
     // Initialize AMReX geometry data structures
 
-    if(p->mpirank==0) std::cout<<"Number of AMR levels: "<<nlevs<<std::endl;
-
     amrex_geometry.resize(nlevs);
     amrex_box_array.resize(nlevs);
     amrex_distribution_mapping.resize(nlevs);
@@ -397,16 +395,28 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
             amr_cell_mf[lev] = amrex::makeFineMask(amr_cell_mf[lev], amr_cell_mf[lev+1], ghost_vec, ref_vec, amrex_geometry[lev].periodicity(), 1, 0);
     }
 
-    for (int lev = 0; lev < nlevs; ++lev)
-    {
-        if (p->mpirank == 0)
-            std::cout << "AMReX level " << lev << " cells: " << amrex_box_array[lev].numPts() << std::endl;
-    }
+    output_amrex_level_info();
 
     amrex::MFIter::allowMultipleMFIters(true);
     level = 0;
     default_cell_mfi = std::make_unique<amrex::MFIter>(amr_cell_mf[level], false);
     set_tile_mfi(default_cell_mfi.get());
+}
+
+void grid_amrex::output_amrex_level_info()
+{
+    if (amrex::ParallelDescriptor::MyProc() == 0)
+    {
+        std::cout<<"Number of AMR levels: "<<nlevs<<std::endl;
+    }
+
+    for (int lev = 0; lev < nlevs; ++lev)
+    {
+        if (amrex::ParallelDescriptor::MyProc() == 0)
+        {
+            std::cout << "AMReX level " << lev << " cells: " << amrex_box_array[lev].numPts() << std::endl;
+        }
+    }
 }
 
 /*!
