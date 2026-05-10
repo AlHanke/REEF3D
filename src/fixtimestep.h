@@ -23,8 +23,8 @@ Author: Hans Bihs
 #ifndef FIXTIMESTEP_H_
 #define FIXTIMESTEP_H_
 
-#include"timestep.h"
-#include"increment.h"
+#include "timestep.h"
+#include "increment.h"
 
 class turbulence;
 
@@ -33,13 +33,10 @@ using namespace std;
 class fixtimestep final : public timestep, public increment
 {
 public:
-	fixtimestep(lexer*);
-	virtual ~fixtimestep();
-	void start(fdm*,lexer*,ghostcell*,turbulence*) override final;
-	void ini(fdm*,lexer*,ghostcell*) override final;
-
-
+    fixtimestep(lexer*);
+    virtual ~fixtimestep() = default;
+    void start(fdm*,lexer*,ghostcell*,turbulence*) override final;
+    void ini(fdm*,lexer*,ghostcell*) override final;
 };
 
 #endif
-
