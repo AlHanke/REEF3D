@@ -23,22 +23,16 @@ Author: Hans Bihs
 #ifndef TIMESTEP_H_
 #define TIMESTEP_H_
 
-class fdm;
 class lexer;
+class fdm;
 class ghostcell;
 class turbulence;
-
-using namespace std;
 
 class timestep
 {
 public:
-    virtual void start(fdm*, lexer*,ghostcell*,turbulence*)=0;
-	virtual void ini(fdm*,lexer*,ghostcell*)=0;
-
-
-
+    virtual void start(fdm*,lexer*,ghostcell*,turbulence*)=0;
+    virtual void ini(fdm*,lexer*,ghostcell*)=0;
 };
 
 #endif
-
