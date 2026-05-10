@@ -23,40 +23,18 @@ Author: Hans Bihs
 #ifndef IETIMESTEP_H_
 #define IETIMESTEP_H_
 
-#include"timestep.h"
-#include"increment.h"
-
-class turbulence;
+#include "timestep.h"
+#include "increment.h"
 
 using namespace std;
 
 class ietimestep final : public timestep, public increment
 {
 public:
-	ietimestep(lexer*);
-	virtual ~ietimestep();
-	void start(fdm*,lexer*,ghostcell*,turbulence*) override final;
-	void ini(fdm*,lexer*,ghostcell*) override final;
-
-
-private:
-	double max(double,double,double);
-	double max(double,double);
-	double min(double,double,double);
-	double min(double,double);
-
-	double visccrit,sqd,wallu,wallv,wallw;
-	double uplus;
-	double cu,cv,cw,ck,ce,cb;
-	double velmax;
-	const double epsi;
-	double isor,jsor,ksor;
-	double irsm,jrsm,krsm;
-	const double c0_orig;
-    double dx;
-
-
+    ietimestep(lexer*);
+    virtual ~ietimestep() = default;
+    void start(fdm*,lexer*,ghostcell*,turbulence*) override final;
+    void ini(fdm*,lexer*,ghostcell*) override final;
 };
 
 #endif
-
