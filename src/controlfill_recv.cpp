@@ -1029,6 +1029,10 @@ void control::ctrlrecv()
     ii++;
     G41 = ictrl[ii];
     ii++;
+    G50 = dctrl[dd];
+    dd++;
+    G51 = dctrl[dd];
+    dd++;
 
     H1 = dctrl[dd];
     dd++;
