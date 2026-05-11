@@ -50,70 +50,6 @@ Author: Alexander Hanke
 
 namespace
 {
-class reef3d_amrmesh_helper final : public amrex::AmrMesh
-{
-public:
-    reef3d_amrmesh_helper(
-        const amrex::Geometry& level_0_geom,
-        const int max_level,
-        const amrex::IntVect& level_ref_ratio,
-        const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords)
-        : amrex::AmrMesh(level_0_geom, make_amr_info(max_level, level_ref_ratio))
-        , refined_grid_coords_(refined_grid_coords)
-    {
-    }
-
-private:
-    static amrex::AmrInfo make_amr_info(const int max_level, const amrex::IntVect& level_ref_ratio)
-    {
-        amrex::AmrInfo amr_info;
-        amr_info.max_level = max_level;
-        amr_info.check_input = false;
-        amr_info.refine_grid_layout = true;
-        amr_info.n_proper = 2;
-        amr_info.n_error_buf.assign(max_level + 1, amrex::IntVect::TheZeroVector());
-        amr_info.ref_ratio.assign(max_level, level_ref_ratio);
-        amr_info.blocking_factor.assign(max_level + 1, amrex::IntVect::TheUnitVector());
-        amr_info.max_grid_size.assign(max_level + 1, amrex::IntVect(AMREX_D_DECL(1048576, 1048576, 1048576)));
-        return amr_info;
-    }
-
-    void ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real /*time*/, int /*ngrow*/) override
-    {
-        tags.setVal(amrex::TagBox::CLEAR);
-
-        if (lev < 0 || lev >= static_cast<int>(refined_grid_coords_.size()))
-            return;
-
-        constexpr amrex::Real coord_eps = static_cast<amrex::Real>(1.e-12);
-        amrex::BoxList refined_regions;
-
-        for (const auto& coord_pair : refined_grid_coords_[lev])
-        {
-            amrex::Real lo_phys[3] = {coord_pair.first[0], coord_pair.first[1], coord_pair.first[2]};
-            amrex::IntVect lo_idx = Geom(lev).CellIndex(lo_phys);
-
-            amrex::Real hi_phys[3] = {coord_pair.second[0] - coord_eps, coord_pair.second[1] - coord_eps, coord_pair.second[2] - coord_eps};
-            amrex::IntVect hi_idx = Geom(lev).CellIndex(hi_phys);
-
-            amrex::Box tagged_box(lo_idx, hi_idx);
-            tagged_box &= Geom(lev).Domain();
-
-            if (tagged_box.ok())
-                refined_regions.push_back(tagged_box);
-        }
-
-        if (refined_regions.isEmpty())
-            return;
-
-        amrex::BoxArray tag_ba(refined_regions);
-        tag_ba.removeOverlap();
-        tags.setVal(tag_ba, amrex::TagBox::SET);
-    }
-
-    const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords_;
-};
-
 /*!
  * @brief Dynamic AMR mesh that combines static coordinate-based refinement regions
  * (preserving all boxes produced by reef3d_amrmesh_helper) with physics-driven
@@ -138,32 +74,25 @@ private:
 class reef3d_amrmesh_adaptive final : public amrex::AmrMesh
 {
 public:
-    /// @param max_nlevs  Hard cap on the total number of AMR levels (including
-    ///                   level 0).  @p max_level is silently clamped to
-    ///                   max_nlevs - 1 before it is used anywhere in this class.
     reef3d_amrmesh_adaptive(
         const amrex::Geometry& level_0_geom,
         const int max_level,
-        const int max_nlevs,
         const amrex::IntVect& level_ref_ratio,
         const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords,
-        const amrex::Vector<amrex::MultiFab*>& phi_mf,
-        const amrex::Vector<amrex::MultiFab*>& u_mf,
-        const amrex::Vector<amrex::MultiFab*>& v_mf,
-        const amrex::Vector<amrex::MultiFab*>& w_mf,
-        amrex::Real phi_band_width,
-        amrex::Real dt,
+        const amrex::Vector<amrex::MultiFab*>& phi_mf = {},
+        const amrex::Vector<amrex::MultiFab*>& u_mf = {},
+        const amrex::Vector<amrex::MultiFab*>& v_mf = {},
+        const amrex::Vector<amrex::MultiFab*>& w_mf = {},
+        amrex::Real phi_band_width = {},
+        amrex::Real dt = {},
         amrex::Real cfl_max = amrex::Real(1.0))
         : amrex::AmrMesh(level_0_geom,
-                         make_amr_info(std::min(max_level, max_nlevs - 1), level_ref_ratio))
+                         make_amr_info(max_level, level_ref_ratio))
         , refined_grid_coords_(refined_grid_coords)
         , phi_mf_(phi_mf)
-        , u_mf_(u_mf)
-        , v_mf_(v_mf)
-        , w_mf_(w_mf)
         , phi_band_width_(phi_band_width)
         , courant_max_level_(
-            compute_courant_max_level(std::min(max_level, max_nlevs - 1), level_ref_ratio,
+            compute_courant_max_level(max_level, level_ref_ratio,
                                       level_0_geom, u_mf, v_mf, w_mf, dt, cfl_max))
     {
     }
@@ -183,7 +112,7 @@ private:
         amr_info.n_proper = 2;
         amr_info.n_error_buf.assign(max_level + 1, amrex::IntVect::TheZeroVector());
         amr_info.ref_ratio.assign(max_level, level_ref_ratio);
-        amr_info.blocking_factor.assign(max_level + 1, amrex::IntVect::TheUnitVector());
+        amr_info.blocking_factor.assign(max_level + 1, level_ref_ratio);
         amr_info.max_grid_size.assign(max_level + 1, amrex::IntVect(AMREX_D_DECL(1048576, 1048576, 1048576)));
         return amr_info;
     }
@@ -240,10 +169,11 @@ private:
     void ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real /*time*/, int /*ngrow*/) override
     {
         tags.setVal(amrex::TagBox::CLEAR);
+        if (lev < 0) return;
 
         // 1. Static refinement regions — identical to reef3d_amrmesh_helper so
         //    that every box it would produce is preserved by this class.
-        if (lev >= 0 && lev < static_cast<int>(refined_grid_coords_.size()))
+        if (lev < static_cast<int>(refined_grid_coords_.size()))
         {
             constexpr amrex::Real coord_eps = static_cast<amrex::Real>(1.e-12);
             amrex::BoxList refined_regions;
@@ -302,9 +232,6 @@ private:
 
     const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords_;
     const amrex::Vector<amrex::MultiFab*>& phi_mf_;
-    const amrex::Vector<amrex::MultiFab*>& u_mf_;
-    const amrex::Vector<amrex::MultiFab*>& v_mf_;
-    const amrex::Vector<amrex::MultiFab*>& w_mf_;
     const amrex::Real phi_band_width_;
     const int courant_max_level_;
 };
@@ -434,7 +361,7 @@ void grid_amrex::create_amrex_box_array_and_distribution_mapping_level_n()
         exit(1);
     }
 
-    reef3d_amrmesh_helper amr_mesh_helper(amrex_geometry[0], nlevs - 1, ref_vec, amrex_refined_grid_coords);
+    reef3d_amrmesh_adaptive amr_mesh_helper(amrex_geometry[0], nlevs - 1, ref_vec, amrex_refined_grid_coords);
     amr_mesh_helper.SetGeometry(0, amrex_geometry[0]);
     amr_mesh_helper.SetBoxArray(0, amrex_box_array[0]);
     amr_mesh_helper.SetDistributionMap(0, amrex_distribution_mapping[0]);
@@ -505,7 +432,6 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
     reef3d_amrmesh_adaptive amr_mesh_adaptive(
         amrex_geometry[0],
         max_nlevs - 1,
-        max_nlevs,
         ref_vec,
         amrex_refined_grid_coords,
         phi_mfs,
