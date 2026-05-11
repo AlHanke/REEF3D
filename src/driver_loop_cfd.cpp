@@ -116,7 +116,7 @@ void driver::loop_cfd(fdm* a)
         pprint->start(p,a,pgc,pturb,pheat,pflow,pdata,pconc,pmp,psed);
         double print_time = pgc->timer();
 
-        p->regrid(a);
+        p->regrid(a,preini,p6dof);
 
         //timestep control
         ptstep->start(a,p,pgc,pturb);

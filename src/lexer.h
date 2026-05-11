@@ -49,6 +49,8 @@ Author: Hans Bihs
 
 class fdm;
 class ghostcell;
+class reini;
+class sixdof;
 class weno_nug_func;
 
 using namespace std;
@@ -74,7 +76,7 @@ public:
     void lexer_read(ghostcell*);
     void flagini();
     void gridini(ghostcell*);
-    void regrid(fdm* a);
+    void regrid(fdm*,reini*,sixdof*);
 
     void read_grid();
     void control_calc();
