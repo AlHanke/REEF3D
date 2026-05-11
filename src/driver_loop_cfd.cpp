@@ -108,9 +108,8 @@ void driver::loop_cfd(fdm* a)
         psed->ctimesave(p,a);
         double save_time = pgc->timer();
 
-        //timestep control
+        //time advancement
         p->simtime+=p->dt;
-        ptstep->start(a,p,pgc,pturb);
 
         // printer
         double temp_time3 = pgc->timer();
@@ -118,6 +117,9 @@ void driver::loop_cfd(fdm* a)
         double print_time = pgc->timer();
 
         p->regrid(a);
+
+        //timestep control
+        ptstep->start(a,p,pgc,pturb);
 
         // Shell-Printout
         if(p->mpirank==0)
