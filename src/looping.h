@@ -103,7 +103,7 @@ Authors: Hans Bihs, Alexander Hanke
                 const_decls; \
                 amrex::ParallelFor(_fl_bx, \
                     [=] AMREX_GPU_DEVICE (int i, int j, int k) { \
-                        if (_covered_array(i,j,k) == 0) { \
+                        { \
                         body \
                 }}); \
             } \
@@ -185,7 +185,7 @@ Authors: Hans Bihs, Alexander Hanke
                 const_decls; \
                 amrex::ParallelFor(_fl_bx, \
                     [=] AMREX_GPU_DEVICE (int i, int j, int k) { \
-                        if (_covered_array(i,j,k) == 0) { \
+                        { \
                         increment::i = i - ox; \
                         increment::j = j - oy; \
                         increment::k = k - oz; \
