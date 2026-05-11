@@ -285,6 +285,7 @@ public:
     int G1,G2,G5;
     int G10,G11,G12,G20,G21,G22,G30;
     int G40,G41;
+    double G50, G51;
 
     // Heat Options
     double H1,H2;
