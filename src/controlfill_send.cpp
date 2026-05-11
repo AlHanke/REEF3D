@@ -1023,6 +1023,10 @@ void control::ctrlsend()
     ii++;
     ictrl[ii] = G41;
     ii++;
+    dctrl[dd] = G50;
+    dd++;
+    dctrl[dd] = G51;
+    dd++;
 
     dctrl[dd] = H1;
     dd++;

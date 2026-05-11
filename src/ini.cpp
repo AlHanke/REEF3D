@@ -514,6 +514,8 @@ void control::ini_default()
 	G30=3;			// int extrapolated ghost cells
     G40=3;         // int reini scheme for topo/solid/floating
     G41=2;          // int reini iterations
+    G50=-1.0;      // double phi cell band for AMR refinement (disabled when <= 0)
+    G51=-1.0;      // double fb cell band  for AMR refinement (disabled when <= 0)
 
 	// Heat
 	H1=1.4e-7;      // thermal diffusivity water
