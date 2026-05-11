@@ -28,6 +28,12 @@ Author: Hans Bihs
 
 #include"vtks.h"
 
+#if USE_AMREX
+#include <AMReX_MultiFab.H>
+#include <AMReX_Vector.H>
+#include <string>
+#endif
+
 class turbulence;
 class heat;
 class suspended;
@@ -69,6 +75,9 @@ public:
 private:
     void print3D(lexer*,fdm*,ghostcell*,turbulence*,heat*,expdata*,concentration*,multiphase*,sediment*);
     void parallel(lexer*,fdm*,ghostcell*,turbulence*,heat*,expdata*,concentration*,multiphase*,sediment*,int);
+#if USE_AMREX
+    void print2D_amrex(lexer*, const amrex::Vector<amrex::MultiFab>&, const amrex::Vector<std::string>&, int);
+#endif
 
     vtk3D *outputFormat;
     bool initial_print = true;
