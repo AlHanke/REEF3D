@@ -472,6 +472,9 @@ void driver::logic_cfd()
 	if(p->N10>=30 && p->N10<40)
 	ppoissonsolv = new hypre_sstruct(p,a,pgc);
 
+	if(p->N10==40 || p->N10==41)
+	ppoissonsolv = new hypre_ssamg(p,a,pgc);
+
 //VRANS
     if(p->B200==0)
 	pvrans = new vrans_v(p,pgc);

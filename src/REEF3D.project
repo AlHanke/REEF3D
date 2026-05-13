@@ -52,6 +52,7 @@
         <File Name="hypre_struct.h"/>
         <File Name="hypre_sstruct.h"/>
         <File Name="hypre_aij.h"/>
+        <File Name="hypre_ssamg.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="CG">
         <File Name="bicgstab_ijk_2D.h"/>
@@ -1282,6 +1283,13 @@
         <File Name="hypre_aij_F_grid.cpp"/>
         <File Name="hypre_aij_F_fill.cpp"/>
         <File Name="hypre_aij.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="Hypre SSAMG">
+        <File Name="hypre_ssamg_createsolves.cpp"/>
+        <File Name="hypre_ssamg_fill.cpp"/>
+        <File Name="hypre_ssamg_grid.cpp"/>
+        <File Name="hypre_ssamg_solve.cpp"/>
+        <File Name="hypre_ssamg.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="CG">
         <File Name="bicgstab_ijk_2D.cpp"/>

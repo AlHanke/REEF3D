@@ -20,16 +20,33 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#ifndef SOLVER_HEADER_H_
-#define SOLVER_HEADER_H_
-
-#include"solver_void.h"
-#include"bicgstab_ijk.h"
-#include"bicgstab_ijk_2D.h"
-
-#include"hypre_aij.h"
-#include"hypre_struct.h"
-#include"hypre_sstruct.h"
 #include"hypre_ssamg.h"
+#include"lexer.h"
 
-#endif
+void hypre_ssamg::solve(lexer *p)
+{
+    p->solveriter = 0;
+
+    // N10==40: standalone SSAMG
+    if (p->N10 == 40)
+    {
+        HYPRE_SStructSSAMGSetup(ssamg, A, b, x);
+        HYPRE_SStructSSAMGSolve(ssamg, A, b, x);
+
+        HYPRE_SStructSSAMGGetNumIterations(ssamg, &num_iterations);
+        HYPRE_SStructSSAMGGetFinalRelativeResidualNorm(ssamg, &final_res_norm);
+    }
+
+    // N10==41: PCG outer solver with SSAMG preconditioner
+    if (p->N10 == 41)
+    {
+        HYPRE_SStructPCGSetup(pcg_solver, A, b, x);
+        HYPRE_SStructPCGSolve(pcg_solver, A, b, x);
+
+        HYPRE_SStructPCGGetNumIterations(pcg_solver, &num_iterations);
+        HYPRE_SStructPCGGetFinalRelativeResidualNorm(pcg_solver, &final_res_norm);
+    }
+
+    p->solveriter = num_iterations;
+    p->final_res  = final_res_norm;
+}
