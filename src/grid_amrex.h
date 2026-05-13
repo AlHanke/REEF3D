@@ -131,6 +131,8 @@ public:
     amrex::Vector<amrex::Geometry> amrex_geometry; // Phyiscal domain and coordinate system
     amrex::Vector<amrex::BoxArray> amrex_box_array; // BoxArray defines the index space decomposition of the domain into boxes
     amrex::Vector<amrex::DistributionMapping> amrex_distribution_mapping; // DistributionMapping defines the mapping of boxes in the BoxArray to MPI ranks
+    amrex::Vector<amrex::BoxArray> amrex_slice_box_array; // BoxArray for slice planes
+    amrex::Vector<amrex::DistributionMapping> amrex_slice_distribution_mapping; // DistributionMapping for slice planes
     amrex::Vector<amrex::Vector<std::pair<amrex::RealVect,amrex::RealVect>>> amrex_refined_grid_coords; // Input: Coordinates of the refined grid boxes for each level, index is offset by 1 (i.e. amrex_refined_grid_coords[0] is for level 1, etc.)
 
     // Looping structures
@@ -179,6 +181,7 @@ protected:
     static constexpr int max_nlevs = 3;
 private:
     void create_amrex_box_array_and_distribution_mapping_level_n();
+    void create_slice_BoxArray_and_DistributionMapping(int lev);
     void output_amrex_level_info();
 };
 
