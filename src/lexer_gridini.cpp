@@ -27,6 +27,7 @@ Authors: Hans Bihs, Alexander Hanke
 #include "fieldint_amrex.h"
 #include "reini.h"
 #include "6DOF.h"
+#include "fdm.h"
 #endif
 
 void lexer::gridini(ghostcell *pgc)
@@ -136,7 +137,7 @@ int lexer::conv(double a)
 	return b;
 }
 
-void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof)
+void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow* pflow)
 {
     #if USE_AMREX
     grid_amrex::regrid_amrex_box_array_and_distribution_mapping(this, a);
@@ -144,5 +145,6 @@ void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof)
     grid_amrex::update_cell_spacing();
     grid_amrex::update_registered_weno(nlevs);
     grid_amrex::define_inflow_outflow_ba();
+    preini->start(a,this,a->phi,pgc,pflow);
     #endif
 }
