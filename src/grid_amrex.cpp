@@ -964,4 +964,24 @@ void grid_amrex::update_registered_weno(int new_nlevs)
         if (w) w->rebuild_levels(p, new_nlevs);
 }
 
+void grid_amrex::create_slice_BoxArray_and_DistributionMapping(int lev)
+{
+    amrex::BoxList bl_slice;
+
+    for (int i = 0; i < amrex_box_array[lev].size(); ++i)
+    {
+        amrex::Box b = amrex_box_array[lev][i];
+
+        b.setSmall(2, 0);
+        b.setBig(2, 0);
+        bl_slice.push_back(b);
+    }
+    bl_slice.simplify(true);
+
+    amrex::BoxArray ba_slice(bl_slice);
+    amrex::DistributionMapping dm_slice(ba_slice);
+    amrex_slice_box_array[lev] = ba_slice;
+    amrex_slice_distribution_mapping[lev] = dm_slice;
+}
+
 #endif
