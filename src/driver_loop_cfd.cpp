@@ -116,7 +116,10 @@ void driver::loop_cfd(fdm* a)
         pprint->start(p,a,pgc,pturb,pheat,pflow,pdata,pconc,pmp,psed);
         double print_time = pgc->timer();
 
-        p->regrid(a,preini,p6dof);
+        // DIAGNOSTIC (Step 1 of plan fluffy-oasis): gate regrid to every 50 steps
+        // to isolate per-step BoxArray churn + pc_interp dissipation. Revert when done.
+        if (p->count % 50 == 0)
+            p->regrid(a,preini,p6dof,pgc,pflow);
 
         //timestep control
         ptstep->start(a,p,pgc,pturb);

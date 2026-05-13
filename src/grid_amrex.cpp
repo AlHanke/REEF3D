@@ -63,12 +63,6 @@ namespace
  * Two independent caps apply to the maximum refinement level:
  *  - @p max_nlevs is a hard ceiling: the effective max level is always
  *    min(max_level, max_nlevs - 1), enforced before any other logic runs.
- *  - The Courant criterion limits HOW FAR interface-based tagging may go:
- *      Co_0 = dt * max(|u|/dx0, |v|/dy0, |w|/dz0) at level 0.
- *      At level lev: Co_lev = Co_0 * ref_ratio^lev.
- *      Interface tagging is only applied for lev < courant_max_level_, where
- *      courant_max_level_ is the largest level satisfying Co_lev <= @p cfl_max,
- *      itself already bounded by max_nlevs - 1.
  *  - Static-region tagging is always applied regardless of either cap.
  */
 class reef3d_amrmesh_adaptive final : public amrex::AmrMesh
@@ -80,9 +74,6 @@ public:
         const amrex::IntVect& level_ref_ratio,
         const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords,
         const amrex::Vector<amrex::MultiFab*>& phi_mf = {},
-        const amrex::Vector<amrex::MultiFab*>& u_mf = {},
-        const amrex::Vector<amrex::MultiFab*>& v_mf = {},
-        const amrex::Vector<amrex::MultiFab*>& w_mf = {},
         amrex::Real phi_band_width = {},
         amrex::Real dt = {},
         amrex::Real cfl_max = amrex::Real(1.0))
@@ -91,16 +82,8 @@ public:
         , refined_grid_coords_(refined_grid_coords)
         , phi_mf_(phi_mf)
         , phi_band_width_(phi_band_width)
-        , courant_max_level_(
-            compute_courant_max_level(max_level, level_ref_ratio,
-                                      level_0_geom, u_mf, v_mf, w_mf, dt, cfl_max))
     {
     }
-
-    /// Returns the number of AMR levels (including level 0) that are safe to
-    /// use under the Courant criterion and the max_nlevs cap.
-    /// The caller should use this to update nlevs before running MakeNewGrids.
-    int computedNlevs() const { return courant_max_level_ + 1; }
 
 private:
     static amrex::AmrInfo make_amr_info(int max_level, const amrex::IntVect& level_ref_ratio)
@@ -115,55 +98,6 @@ private:
         amr_info.blocking_factor.assign(max_level + 1, level_ref_ratio);
         amr_info.max_grid_size.assign(max_level + 1, amrex::IntVect(AMREX_D_DECL(1048576, 1048576, 1048576)));
         return amr_info;
-    }
-
-    /// Computes the maximum AMR level at which the Courant number stays <= @p cfl_max.
-    ///
-    /// The coarsest-level velocity field is used; this is conservative because
-    /// the Courant number is monotonically increasing with refinement level.
-    /// The effective refinement ratio is taken as the largest component of
-    /// @p ref_ratio (worst-case growth direction).
-    static int compute_courant_max_level(
-        int max_level,
-        const amrex::IntVect& ref_ratio,
-        const amrex::Geometry& geom_lev0,
-        const amrex::Vector<amrex::MultiFab*>& u_mf,
-        const amrex::Vector<amrex::MultiFab*>& v_mf,
-        const amrex::Vector<amrex::MultiFab*>& w_mf,
-        amrex::Real dt,
-        amrex::Real cfl_max)
-    {
-        // Max absolute velocity at the coarsest level (infinity-norm per component).
-        const amrex::Real u_max = (u_mf.empty() || !u_mf[0]) ? amrex::Real(0) : u_mf[0]->norm0(0);
-        const amrex::Real v_max = (v_mf.empty() || !v_mf[0]) ? amrex::Real(0) : v_mf[0]->norm0(0);
-        const amrex::Real w_max = (w_mf.empty() || !w_mf[0]) ? amrex::Real(0) : w_mf[0]->norm0(0);
-
-        const amrex::Real* dx0 = geom_lev0.CellSize();
-
-        // Co_0 = dt * max(|u|/dx, |v|/dy, |w|/dz) at level 0.
-        amrex::Real co0 = amrex::Real(0);
-        if (dx0[0] > 0) co0 = std::max(co0, u_max / dx0[0]);
-        if (dx0[1] > 0) co0 = std::max(co0, v_max / dx0[1]);
-        if (dx0[2] > 0) co0 = std::max(co0, w_max / dx0[2]);
-        co0 *= dt;
-
-        // No meaningful flow — all requested levels are safe.
-        if (co0 <= amrex::Real(0)) return max_level;
-
-        // Largest ref_ratio component drives the fastest Courant growth.
-        int ref_eff = 2;
-        for (int d = 0; d < AMREX_SPACEDIM; ++d)
-            ref_eff = std::max(ref_eff, ref_ratio[d]);
-
-        // Even level 0 violates the CFL condition.
-        if (co0 >= cfl_max) return 0;
-
-        // Co_0 * ref_eff^lev <= cfl_max  =>  lev <= log(cfl_max/co0) / log(ref_eff)
-        const int max_safe = static_cast<int>(
-            std::floor(std::log(static_cast<double>(cfl_max / co0))
-                       / std::log(static_cast<double>(ref_eff))));
-
-        return std::min(max_safe, max_level);
     }
 
     void ErrorEst(int lev, amrex::TagBoxArray& tags, amrex::Real /*time*/, int /*ngrow*/) override
@@ -205,27 +139,90 @@ private:
 
         // 2. Level-set interface refinement.
         //    Only applied when the resulting finer level (lev+1) is within the
-        //    Courant-number ceiling and phi data exists at this level.
-        if (lev < courant_max_level_
-            && lev < static_cast<int>(phi_mf_.size())
-            && phi_mf_[lev] != nullptr
-            && !phi_mf_[lev]->empty())
+        //    Courant-number ceiling and phi data exists at level 0.
+        //    When phi_mf_[lev] has a stale BA (as during MakeNewGrids recursion),
+        //    we cascade-interpolate upward from level 0 (whose BA never changes
+        //    during regrid) to build phi on the correct BA/DM for this level.
+        if (!phi_mf_.empty() && phi_mf_[0] != nullptr && !phi_mf_[0]->empty() && lev < static_cast<int>(phi_mf_.size()))
         {
             const amrex::Real band = phi_band_width_;
-            const amrex::MultiFab& phi = *phi_mf_[lev];
+            const amrex::MultiFab* phi_ptr = nullptr;
 
-            for (amrex::MFIter mfi(phi); mfi.isValid(); ++mfi)
+            // Direct use when BA matches (first regrid from a stable cycle).
+            if (lev < static_cast<int>(phi_mf_.size())
+                && phi_mf_[lev] != nullptr
+                && !phi_mf_[lev]->empty()
+                && phi_mf_[lev]->boxArray() == boxArray(lev))
             {
-                const amrex::Box& bx = mfi.validbox();
-                const auto phi_arr   = phi.const_array(mfi);
-                auto tag_arr         = tags.array(mfi);
+                phi_ptr = phi_mf_[lev];
+            }
 
-                amrex::ParallelFor(bx,
-                    [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
+            // Cascade interpolation from level 0 when phi at this level is
+            // unavailable or on a stale BA. reserve() prevents reallocation so
+            // cur_coarse pointer stays valid across iterations.
+            std::vector<amrex::MultiFab> interp_chain;
+            if (phi_ptr == nullptr)
+            {
+                amrex::Vector<amrex::BCRec> bcrecs(1);
+                for (auto& bc : bcrecs)
+                    for (int d = 0; d < AMREX_SPACEDIM; ++d)
+                    { bc.setLo(d, amrex::BCType::foextrap); bc.setHi(d, amrex::BCType::foextrap); }
+                amrex::PhysBCFunctNoOp null_bc;
+
+                interp_chain.reserve(lev);
+                const amrex::MultiFab* cur_coarse = phi_mf_[0];
+
+                for (int cl = 0; cl < lev; ++cl)
+                {
+                    // Final step lands on boxArray(lev)/DistributionMap(lev) so
+                    // the resulting MF has the same BA/DM as tags — no mismatch.
+                    amrex::BoxArray fine_ba = (cl + 1 == lev)
+                        ? boxArray(lev)
+                        : amrex::refine(cur_coarse->boxArray(), refRatio(cl));
+                    amrex::DistributionMapping fine_dm = (cl + 1 == lev)
+                        ? DistributionMap(lev)
+                        : amrex::DistributionMapping(fine_ba);
+
+                    interp_chain.emplace_back(fine_ba, fine_dm, 1, 0);
+                    amrex::InterpFromCoarseLevel(
+                        interp_chain.back(), 0.0, *cur_coarse, 0, 0, 1,
+                        Geom(cl), Geom(cl + 1),
+                        null_bc, 0, null_bc, 0,
+                        refRatio(cl), &amrex::cell_cons_interp, bcrecs, 0);
+
+                    // Copy existing phi data at this intermediate level on top of
+                    // the interpolated values so that known fine-level data is used.
+                    const int fine_lev = cl + 1;
+                    if (fine_lev < static_cast<int>(phi_mf_.size())
+                        && phi_mf_[fine_lev] != nullptr
+                        && !phi_mf_[fine_lev]->empty())
                     {
-                        if (std::abs(phi_arr(i, j, k, 0)) < band)
-                            tag_arr(i, j, k) = amrex::TagBox::SET;
-                    });
+                        interp_chain.back().ParallelCopy(
+                            *phi_mf_[fine_lev], 0, 0, 1,
+                            phi_mf_[fine_lev]->nGrowVect(),
+                            amrex::IntVect::TheZeroVector());
+                    }
+
+                    cur_coarse = &interp_chain.back();
+                }
+                phi_ptr = cur_coarse;
+            }
+
+            if (phi_ptr != nullptr)
+            {
+                for (amrex::MFIter mfi(*phi_ptr); mfi.isValid(); ++mfi)
+                {
+                    const amrex::Box& bx = mfi.validbox();
+                    const auto phi_arr   = phi_ptr->const_array(mfi);
+                    auto tag_arr         = tags.array(mfi);
+
+                    amrex::ParallelFor(bx,
+                        [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
+                        {
+                            if (std::abs(phi_arr(i, j, k, 0)) < band)
+                                tag_arr(i, j, k) = amrex::TagBox::SET;
+                        });
+                }
             }
         }
     }
@@ -233,7 +230,6 @@ private:
     const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords_;
     const amrex::Vector<amrex::MultiFab*>& phi_mf_;
     const amrex::Real phi_band_width_;
-    const int courant_max_level_;
 };
 }
 
@@ -417,14 +413,10 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
     // Build non-owning pointer vectors from CURRENT (old) levels only.
     // For any new level that gets added, phi_mf_[lev] will be null — the
     // null-check in reef3d_amrmesh_adaptive::ErrorEst skips phi tagging safely.
-    amrex::Vector<amrex::MultiFab*> phi_mfs(old_nlevs), u_mfs(old_nlevs),
-                                    v_mfs(old_nlevs), w_mfs(old_nlevs);
+    amrex::Vector<amrex::MultiFab*> phi_mfs(old_nlevs);
     for (int lev = 0; lev < old_nlevs; ++lev)
     {
         phi_mfs[lev] = &a->phi.GetMultiFab(lev);
-        u_mfs[lev]   = &a->u.GetMultiFab(lev);
-        v_mfs[lev]   = &a->v.GetMultiFab(lev);
-        w_mfs[lev]   = &a->w.GetMultiFab(lev);
     }
 
     // Construct with max_nlevs-1 (not nlevs-1) so the mesh can detect that
@@ -435,24 +427,20 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         ref_vec,
         amrex_refined_grid_coords,
         phi_mfs,
-        u_mfs,
-        v_mfs,
-        w_mfs,
         static_cast<amrex::Real>(p->psi),
         static_cast<amrex::Real>(p->dt));
 
-    // Courant-based ceiling: cap how many levels are physically safe.
-    const int courant_cap = amr_mesh_adaptive.computedNlevs();
-    const int max_probe   = std::min(courant_cap, max_nlevs);
+    // Extend geometry/BA/DM vectors to full max_nlevs so MakeNewGrids can
+    // recurse through all levels without hitting unregistered geometry.
+    const int max_probe = max_nlevs;
+    if(p->mpirank == 0) std::cout<< "Probing up to " << max_probe << std::endl;
 
-    // Pre-extend geometry for levels that might be added so MakeNewGrids can
-    // use them. BA/DM are grown too so AmrMesh internals can write to them.
-    amrex_geometry.resize(max_probe);
-    for (int lev = old_nlevs; lev < max_probe; ++lev)
+    amrex_geometry.resize(max_nlevs);
+    for (int lev = old_nlevs; lev < max_nlevs; ++lev)
         amrex_geometry[lev] = amrex::refine(amrex_geometry[lev-1], ref_vec);
 
-    amrex_box_array.resize(max_probe);
-    amrex_distribution_mapping.resize(max_probe);
+    amrex_box_array.resize(max_nlevs);
+    amrex_distribution_mapping.resize(max_nlevs);
 
     // Register level 0 (BoxArray / DistributionMapping are unchanged).
     amr_mesh_adaptive.SetGeometry(0, amrex_geometry[0]);
@@ -460,14 +448,19 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
     amr_mesh_adaptive.SetDistributionMap(0, amrex_distribution_mapping[0]);
     amr_mesh_adaptive.SetFinestLevel(0);
 
+    // Register all geometries upfront so MakeNewGrids can recurse to max_level
+    // safely (it calls Geom(lev) for domain-clipping at each recursion depth).
+    for (int lev = 1; lev < max_nlevs; ++lev)
+        amr_mesh_adaptive.SetGeometry(lev, amrex_geometry[lev]);
+
     // Probe each candidate level; stop as soon as no cells are tagged.
     int actual_finest = 0;
     const int nprocs  = amrex::ParallelDescriptor::NProcs();
     for (int lev = 1; lev < max_probe; ++lev)
     {
-        amr_mesh_adaptive.SetGeometry(lev, amrex_geometry[lev]);
+        if(p->mpirank == 0) std::cout << "Level " << lev << std::endl;
 
-        amrex::Vector<amrex::BoxArray> new_grids(max_probe);
+        amrex::Vector<amrex::BoxArray> new_grids(max_nlevs);
         int new_finest = lev - 1;
         amr_mesh_adaptive.MakeNewGrids(lev - 1, static_cast<amrex::Real>(p->simtime),
                                        new_finest, new_grids);
@@ -487,6 +480,7 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         amr_mesh_adaptive.SetDistributionMap(lev, amrex_distribution_mapping[lev]);
         amr_mesh_adaptive.SetFinestLevel(lev);
         actual_finest = lev;
+        if(p->mpirank == 0) std::cout << "Level " << lev << " tagged cells: " << amrex_box_array[lev].numPts() << std::endl;
     }
 
     const int new_nlevs = actual_finest + 1;
@@ -764,7 +758,7 @@ void grid_amrex::fill_registered_mf_level(int lev)
             coarse_mf, 0, 0, e.ncomp,
             amrex_geometry[lev-1], amrex_geometry[lev],
             null_bc, 0, null_bc, 0,
-            ref_vec, &amrex::pc_interp,
+            ref_vec, &amrex::cell_cons_interp,
             bcrecs, 0);
 
         // Overwrite interpolated cells with pre-existing fine-level data.

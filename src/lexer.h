@@ -49,6 +49,7 @@ Author: Hans Bihs
 
 class fdm;
 class ghostcell;
+class ioflow;
 class reini;
 class sixdof;
 class weno_nug_func;
@@ -76,7 +77,7 @@ public:
     void lexer_read(ghostcell*);
     void flagini();
     void gridini(ghostcell*);
-    void regrid(fdm*,reini*,sixdof*);
+    void regrid(fdm*,reini*,sixdof*,ghostcell*,ioflow*);
 
     void read_grid();
     void control_calc();
