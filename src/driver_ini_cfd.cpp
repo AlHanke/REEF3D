@@ -199,6 +199,8 @@ void driver::driver_ini_cfd()
 
     pgc->start4(p,a->press,40);
 
+    p->regrid(a,preini,p6dof,pgc,pflow);
+
     pprint->start(p,a,pgc,pturb,pheat,pflow,pdata,pconc,pmp,psed);
 
     // ini variables

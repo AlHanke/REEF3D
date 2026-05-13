@@ -49,6 +49,7 @@ class ghostcell;
 class fdm;
 class reini;
 class sixdof;
+class ioflow;
 
 using namespace std;
 
@@ -70,7 +71,7 @@ public:
     void lexer_read(ghostcell*);
     void flagini();
 	void gridini(ghostcell*);
-    void regrid(fdm* a, reini* preini, sixdof* p6dof);
+    void regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow* pflow);
     void gcd_ini(lexer*, ghostcell*);
 
 	void read_grid();

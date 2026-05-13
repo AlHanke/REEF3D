@@ -176,7 +176,7 @@ public:
 protected:
     void setup_amrex_geometry(lexer* p, ghostcell* pgc);
 
-    static constexpr inline int max_nlevs = 10;
+    static constexpr inline int max_nlevs = 3;
 private:
     void create_amrex_box_array_and_distribution_mapping_level_n();
     void output_amrex_level_info();
