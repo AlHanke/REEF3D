@@ -25,7 +25,7 @@ Author: Hans Bihs
 
 int position::posc_i(double xs)
 {
-    const int org_i = p->origin_i;
+    const int org_i = p->amr_tile_lo.x;
     stop=0;
     count=0;
 
@@ -93,7 +93,7 @@ int position::posc_i(double xs)
 
 int position::posc_j(double ys)
 {
-    const int org_j = p->origin_j;
+    const int org_j = p->amr_tile_lo.y;
     stop=0;
 
     js = 0;
@@ -159,7 +159,7 @@ int position::posc_j(double ys)
 
 int position::posc_k(double zs)
 {
-    const int org_k = p->origin_k;
+    const int org_k = p->amr_tile_lo.z;
     stop=0;
 
     ks = 0;
