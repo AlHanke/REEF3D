@@ -197,7 +197,7 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
     amrex::MFIter::allowMultipleMFIters(true);
     level = 0;
     default_cell_mfi = std::make_unique<amrex::MFIter>(amr_cell_mf[level], false);
-    amr_cell_mfi = default_cell_mfi.get();
+    set_tile_mfi(default_cell_mfi.get());
 }
 
 /*!
