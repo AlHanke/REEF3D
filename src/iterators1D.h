@@ -24,9 +24,9 @@ Authors: Hans Bihs, Alexander Hanke
 #define ITERATORS1D_H_
 
 #if USE_AMREX
-    #define ORIGIN_I (amrex::lbound(p->amr_cell_mfi->tilebox()).x + max_i*level + marge*int(pow(p->ref_ratio,level)))
-    #define ORIGIN_J (amrex::lbound(p->amr_cell_mfi->tilebox()).y + max_j*level + marge*int(pow(p->ref_ratio,level)))
-    #define ORIGIN_K (amrex::lbound(p->amr_cell_mfi->tilebox()).z + max_k*level + marge*int(pow(p->ref_ratio,level)))
+    #define ORIGIN_I (p->amr_tile_lo.x + max_i*level + marge*int(pow(p->ref_ratio,level)))
+    #define ORIGIN_J (p->amr_tile_lo.y + max_j*level + marge*int(pow(p->ref_ratio,level)))
+    #define ORIGIN_K (p->amr_tile_lo.z + max_k*level + marge*int(pow(p->ref_ratio,level)))
 #else
     #define ORIGIN_I (p->origin_i + marge)
     #define ORIGIN_J (p->origin_j + marge)
