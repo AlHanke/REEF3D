@@ -202,7 +202,6 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             p->gcdf4[count][1]=j;
             p->gcdf4[count][2]=k;
             p->gcdf4[count][3]=1;
-            p->gcdf4[count][4]=48;
             ++count;
         }
 
@@ -212,7 +211,6 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             p->gcdf4[count][1]=j;
             p->gcdf4[count][2]=k;
             p->gcdf4[count][3]=4;
-            p->gcdf4[count][4]=48;
             ++count;
         }
 
@@ -222,7 +220,6 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             p->gcdf4[count][1]=j;
             p->gcdf4[count][2]=k;
             p->gcdf4[count][3]=3;
-            p->gcdf4[count][4]=48;
             ++count;
         }
 
@@ -232,7 +229,6 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             p->gcdf4[count][1]=j;
             p->gcdf4[count][2]=k;
             p->gcdf4[count][3]=2;
-            p->gcdf4[count][4]=48;
             ++count;
         }
 
@@ -242,7 +238,6 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             p->gcdf4[count][1]=j;
             p->gcdf4[count][2]=k;
             p->gcdf4[count][3]=5;
-            p->gcdf4[count][4]=48;
             ++count;
         }
 
@@ -252,7 +247,6 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             p->gcdf4[count][1]=j;
             p->gcdf4[count][2]=k;
             p->gcdf4[count][3]=6;
-            p->gcdf4[count][4]=48;
             ++count;
         }
     }
