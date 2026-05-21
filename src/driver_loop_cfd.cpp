@@ -102,8 +102,8 @@ void driver::loop_cfd(fdm* a)
 
         //save previous timestep
         double temp_time2 = pgc->timer();
-        pturb->ktimesave(p,a,pgc);
-        pturb->etimesave(p,a,pgc);
+        pturb->ktimesave(p);
+        pturb->etimesave(p);
         pflow->veltimesave(p,a,pgc,pvrans);
         psed->ctimesave(p,a);
         double save_time = pgc->timer();

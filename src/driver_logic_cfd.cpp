@@ -235,7 +235,7 @@ void driver::logic_cfd()
   
 //turbulence model
 	if(p->T10==0)
-	pturb = new kepsilon_void(p,a,pgc);
+	pturb = new kepsilon_void();
 
 	//ke
 	if(p->T10==1 || p->T10==21)

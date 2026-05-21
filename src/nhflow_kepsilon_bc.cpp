@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"lexer.h"
  
-nhflow_kepsilon_bc::nhflow_kepsilon_bc(lexer *p) : roughness(p)
+nhflow_kepsilon_bc::nhflow_kepsilon_bc(lexer *p) : roughness()
 {
     kappa=0.4;
 }

@@ -19,19 +19,15 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
 --------------------------------------------------------------------*/
 
-#include"kepsilon_bc.h"
-#include"fdm.h"
-#include"lexer.h"
+#include "kepsilon_bc.h"
+#include "fdm.h"
+#include "lexer.h"
 
-kepsilon_bc::kepsilon_bc(lexer* p):roughness(p),kappa(0.4)
+kepsilon_bc::kepsilon_bc(lexer* p) : roughness()
 {
 }
 
-kepsilon_bc::~kepsilon_bc()
-{
-}
-
-void kepsilon_bc::bckeps_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
+void kepsilon_bc::bckeps_start(fdm* a,lexer* p, field& kin,field& eps,int gcval)
 {
     int q;
 
@@ -39,7 +35,7 @@ void kepsilon_bc::bckeps_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
     {
         QGC4LOOP
         if(p->gcb4[q][4]==21)
-            wall_law_kin(p,a,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
+            wall_law_kin(p,a,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5]);
 
         n=0;
         LOOP
@@ -83,12 +79,11 @@ void kepsilon_bc::bckeps_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
             ++n;
         }
     }
-
-    if(gcval==30)
+    else if(gcval==30)
     {
         QGC4LOOP
         if(p->gcb4[q][4]==21 || (p->gcb4[q][4]==3 && p->gcb4[q][4]==6))
-            wall_law_eps(p,a,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
+            wall_law_eps(p,a,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5]);
 
         n=0;
         LOOP
@@ -133,18 +128,17 @@ void kepsilon_bc::bckeps_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
         }
     }
 }
+
 // ****************************
 // WALL KIN
 // ****************************
-void kepsilon_bc::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii, int jj, int kk, int cs, int bc, int id, double dist)
+void kepsilon_bc::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii, int jj, int kk, int cs, int bc, int id)
 {
-    double uvel,vvel,wvel;
-    double zval;
-
     i=ii;
     j=jj;
     k=kk;
 
+    double dist;
     if(cs==1 || cs==4)
         dist = 0.5*p->DXN[IP];
     else if(cs==2 || cs==3)
@@ -154,9 +148,9 @@ void kepsilon_bc::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii,
 
     ks=ks_val(p,a,cs,bc);
 
-    uvel=0.5*(a->u(i,j,k)+a->u(i-1,j,k));
-    vvel=0.5*(a->v(i,j,k)+a->v(i,j-1,k));
-    wvel=0.5*(a->w(i,j,k)+a->w(i,j,k-1));
+    double uvel=0.5*(a->u(i,j,k)+a->u(i-1,j,k));
+    double vvel=0.5*(a->v(i,j,k)+a->v(i,j-1,k));
+    double wvel=0.5*(a->w(i,j,k)+a->w(i,j,k-1));
 
     u_abs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
 
@@ -171,12 +165,13 @@ void kepsilon_bc::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii,
     a->rhsvec.V[id] += (tau*u_abs)/dist;
 }
 
-void kepsilon_bc::wall_law_eps(lexer* p, fdm* a, field& kin, field& eps, int ii, int jj, int kk, int cs, int bc, int id, double dist)
+void kepsilon_bc::wall_law_eps(lexer* p, fdm* a, field& kin, field& eps, int ii, int jj, int kk, int cs, int bc, int id)
 {
     i=ii;
     j=jj;
     k=kk;
 
+    double dist;
     if(cs==1 || cs==4)
         dist = 0.5*p->DXN[IP];
     else if(cs==2 || cs==3)

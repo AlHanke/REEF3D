@@ -97,7 +97,7 @@ void driver::logic_ptf()
 	#endif
     
 //  Voids
-	pturb = new kepsilon_void(p,a,pgc);
+	pturb = new kepsilon_void();
     
     pdata = new expdata_void(p,a,pgc);
     

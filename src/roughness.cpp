@@ -20,13 +20,13 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"roughness.h"
-#include"lexer.h"
-#include"fdm.h"
+#include "roughness.h"
+#include "lexer.h"
+#include "fdm.h"
 
 double roughness::ks_val(lexer *p, fdm* a, int cs, int bc)
 {
-    ks=p->B50;
+    double ks=p->B50;
 
     if(cs==1 && p->B51>0.0)
     ks=p->B51;

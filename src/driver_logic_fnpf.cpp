@@ -84,7 +84,7 @@ void driver::logic_fnpf()
 	#endif
     
 //  Voids
-	pturb = new kepsilon_void(p,a,pgc);
+	pturb = new kepsilon_void();
     
     pdata = new expdata_void(p,a,pgc);
     

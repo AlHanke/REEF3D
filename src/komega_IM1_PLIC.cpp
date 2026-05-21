@@ -84,12 +84,12 @@ void komega_IM1_PLIC::start(fdm* a, lexer* p, convection* pconvec, diffusion* pd
 	pgc->start4(p,a->eddyv,24);
 }
 
-void komega_IM1_PLIC::ktimesave(lexer *p, fdm* a, ghostcell *pgc)
+void komega_IM1_PLIC::ktimesave(lexer *p)
 {
 
 }
 
-void komega_IM1_PLIC::etimesave(lexer *p, fdm* a, ghostcell *pgc)
+void komega_IM1_PLIC::etimesave(lexer *p)
 {
  
 }
