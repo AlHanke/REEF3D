@@ -27,13 +27,18 @@ Author: Hans Bihs
 
 class increment
 {
-	public:
-	increment() = default;
-	virtual ~increment() = default;
-	static int i,j,k,n;
-	static int pip;
+public:
+    increment() = default;
+    virtual ~increment() = default;
+    inline static int i = 0;
+    inline static int j = 0;
+    inline static int k = 0;
+    inline static int n = 0;
+    inline static int pip = 0;
     constexpr static int marge = 5;
-    static int max_i, max_j, max_k;
-    static int level;
+    inline static int max_i = 0;
+    inline static int max_j = 0;
+    inline static int max_k = 0;
+    inline static int level = 0;
 };
 #endif
