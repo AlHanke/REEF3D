@@ -109,10 +109,12 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         flagx(p,p->flag3);
         #endif
 
+        #if USE_AMREX
         p->flag1.fillHigherLevels();
         p->flag2.fillHigherLevels();
         p->flag3.fillHigherLevels();
         p->flag4.fillHigherLevels();
+        #endif
     }
 
     // -----------------------------------------------------------

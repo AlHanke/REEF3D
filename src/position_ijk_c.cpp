@@ -25,7 +25,12 @@ Author: Hans Bihs
 
 int position::posc_i(double xs)
 {
+    #if USE_AMREX
     const int org_i = p->amr_tile_lo.x;
+    #else
+    const int org_i = p->origin_i;
+    #endif
+
     stop=0;
     count=0;
 
@@ -93,7 +98,12 @@ int position::posc_i(double xs)
 
 int position::posc_j(double ys)
 {
+    #if USE_AMREX
     const int org_j = p->amr_tile_lo.y;
+    #else
+    const int org_j = p->origin_j;
+    #endif
+
     stop=0;
 
     js = 0;
@@ -159,7 +169,12 @@ int position::posc_j(double ys)
 
 int position::posc_k(double zs)
 {
+    #if USE_AMREX
     const int org_k = p->amr_tile_lo.z;
+    #else
+    const int org_k = p->origin_k;
+    #endif
+
     stop=0;
 
     ks = 0;
