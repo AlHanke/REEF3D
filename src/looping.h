@@ -83,10 +83,10 @@ Authors: Hans Bihs, Alexander Hanke
         auto const& member_##member = _fl_mf_a_##member.array(_fl_mfi);
 
     #define FIELD_MUT_AVGDOWN(name) \
-        amrex::average_down((name).GetMultiFab(_fl_lev+1), (name).GetMultiFab(_fl_lev), 0, 0, p->ref_vec);
+        amrex::average_down((name).GetMultiFab(_fl_lev+1), (name).GetMultiFab(_fl_lev), 0, 1, p->ref_vec);
 
     #define FIELD_MUT_MEMBER_AVGDOWN(ptr, member) \
-        amrex::average_down((ptr)->member.GetMultiFab(_fl_lev+1), (ptr)->member.GetMultiFab(_fl_lev), 0, 0, p->ref_vec);
+        amrex::average_down((ptr)->member.GetMultiFab(_fl_lev+1), (ptr)->member.GetMultiFab(_fl_lev), 0, 1, p->ref_vec);
 
     #define _FIELDLOOP_IMPL(mut_expr, mut_name, const_decls, avgdown_decls, body) \
         for (int _fl_lev = p->nlevs - 1; _fl_lev >= 0; --_fl_lev) \
@@ -108,7 +108,7 @@ Authors: Hans Bihs, Alexander Hanke
                 }}); \
             } \
             if(_fl_lev != p->nlevs - 1) { \
-                amrex::average_down(mut_expr.GetMultiFab(_fl_lev+1), (mut_expr).GetMultiFab(_fl_lev), 0, 0, p->ref_vec); \
+                amrex::average_down(mut_expr.GetMultiFab(_fl_lev+1), (mut_expr).GetMultiFab(_fl_lev), 0, 1, p->ref_vec); \
                 avgdown_decls; \
             } \
         }
@@ -193,7 +193,7 @@ Authors: Hans Bihs, Alexander Hanke
                     }}); \
             } \
             if(_fl_lev != p->nlevs - 1) { \
-                amrex::average_down(mut_expr.GetMultiFab(_fl_lev+1), (mut_expr).GetMultiFab(_fl_lev), 0, 0, p->ref_vec); \
+                amrex::average_down(mut_expr.GetMultiFab(_fl_lev+1), (mut_expr).GetMultiFab(_fl_lev), 0, 1, p->ref_vec); \
                 avgdown_decls; \
             } \
         } \
