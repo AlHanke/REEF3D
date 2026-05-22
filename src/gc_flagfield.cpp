@@ -104,8 +104,10 @@ void ghostcell::flagfield(lexer *p)
             p->flag3[IJK]=OBJ_FLAG;
     }
 
+    #if USE_AMREX
     p->flag1.fillHigherLevels();
     p->flag2.fillHigherLevels();
     p->flag3.fillHigherLevels();
     p->flag4.fillHigherLevels();
+    #endif
 }
