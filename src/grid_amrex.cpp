@@ -92,10 +92,9 @@ private:
         amr_info.max_level = max_level;
         amr_info.check_input = false;
         amr_info.refine_grid_layout = true;
-        amr_info.n_proper = 2;
+        amr_info.n_proper = 1;
         amr_info.n_error_buf.assign(max_level + 1, amrex::IntVect::TheZeroVector());
         amr_info.ref_ratio.assign(max_level, level_ref_ratio);
-        amr_info.blocking_factor.assign(max_level + 1, level_ref_ratio);
         amr_info.max_grid_size.assign(max_level + 1, amrex::IntVect(AMREX_D_DECL(1048576, 1048576, 1048576)));
         return amr_info;
     }
