@@ -99,7 +99,7 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
         pgc->start4(p,f,gcval_iniphi);
     }
     else if(p->count>0)
-        step(p);
+        reiniter=p->F44;
 
     pflow->fsfrkin(p,a,pgc,frk1);
     pflow->fsfrkin(p,a,pgc,frk2);
@@ -107,6 +107,8 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
     pflow->fsfrkout(p,a,pgc,frk2);
 
     flowtime=pgc->timer();
+
+    time_preproc(p);
 
     // Convergence threshold: stop when max|sign(phi0)*(|grad phi|-1)| < tol.
     // The RHS L computed by prdisc is dimensionless; 1e-4 means the level set
@@ -199,20 +201,17 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
     }
 }
 
-inline void reini_RK3::step(lexer* p)
-{
-    reiniter=p->F44;
-}
-
 void reini_RK3::time_preproc(lexer* p)
 {
     #if USE_AMREX
     const int max_level = p->nlevs - 1;
+    const int min_level = p->count>0 ? 1 : 0;
     #else
     const int max_level = 0;
+    const int min_level = 0;
     #endif
 
-    for(int lev=max_level; lev>=0; --lev)
+    for(int lev=max_level; lev>=min_level; --lev)
     {
         p->level = lev;
         TILE_LOOP

@@ -38,8 +38,8 @@ public:
     reini_RK3(lexer*,int);
     virtual ~reini_RK3();
     void start(fdm*,lexer*,field&,ghostcell*,ioflow*) override final;
+
 private:
-    void step(lexer*);
     void time_preproc(lexer*);
 
     field4 frk1,frk2,dt;
