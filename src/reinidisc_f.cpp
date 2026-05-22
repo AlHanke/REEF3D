@@ -20,9 +20,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"reinidisc_f.h"
-#include"lexer.h"
-#include"field.h"
+#include "reinidisc_f.h"
+#include "lexer.h"
+#include "field.h"
 
 reinidisc_f::reinidisc_f(lexer *p) : ddweno_nug_sf(p) {}
 
@@ -34,11 +34,25 @@ void reinidisc_f::start(lexer *p, fdm*, ghostcell*, field &f, field &L, int ipol
 
         if(p->j_dir == 1)
         {
-            FIELDLOOP_INC(L, FIELD_CONST_INC(f), L(i,j,k) = disc<true>(p,f);)
+            FIELDLOOP_INC(L, FIELD_CONST_INC(f),
+                {
+                    #if USE_AMREX
+                    if(!_covered_array(i,j,k))
+                    #endif
+                    L(i,j,k) = disc<true>(p,f);
+                }
+            )
         }
         else
         {
-            FIELDLOOP_INC(L, FIELD_CONST_INC(f), L(i,j,k) = disc<false>(p,f);)
+            FIELDLOOP_INC(L, FIELD_CONST_INC(f),
+                {
+                    #if USE_AMREX
+                    if(!_covered_array(i,j,k))
+                    #endif
+                    L(i,j,k) = disc<false>(p,f);
+                }
+            )
         }
     }
 }

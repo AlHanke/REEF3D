@@ -23,8 +23,8 @@ Author: Hans Bihs
 #ifndef REINIDISC_F_H_
 #define REINIDISC_F_H_
 
-#include"reinidisc.h"
-#include"ddweno_nug_sf.h"
+#include "reinidisc.h"
+#include "ddweno_nug_sf.h"
 
 class reinidisc_f final : public reinidisc, public ddweno_nug_sf
 {
