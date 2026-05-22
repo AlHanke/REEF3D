@@ -30,6 +30,7 @@ int position::posc_i(double xs)
     #else
     const int org_i = p->origin_i;
     #endif
+
     stop=0;
     count=0;
 
@@ -102,6 +103,7 @@ int position::posc_j(double ys)
     #else
     const int org_j = p->origin_j;
     #endif
+
     stop=0;
 
     js = 0;
@@ -172,6 +174,7 @@ int position::posc_k(double zs)
     #else
     const int org_k = p->origin_k;
     #endif
+
     stop=0;
 
     ks = 0;
