@@ -23,8 +23,8 @@ Author: Hans Bihs
 #ifndef MULTIPHASE_FLUID_UPDATE_RHEOLOGY_H_
 #define MULTIPHASE_FLUID_UPDATE_RHEOLOGY_H_
 
-#include"multiphase_fluid_update.h"
-#include"increment.h"
+#include "multiphase_fluid_update.h"
+#include "increment.h"
 
 class rheology;
 
@@ -36,20 +36,17 @@ public:
     multiphase_fluid_update_rheology(lexer*);
     virtual ~multiphase_fluid_update_rheology();
 
-	void start(lexer*, fdm*, ghostcell*,field&,field&,field&,field&,field&) override final;
+    void start(lexer*, fdm*, ghostcell*,field&,field&,field&,field&,field&) override final;
 
 private:
     rheology *prheo;
-    
+
     static int iocheck,iter;
-    int gcval_ro,gcval_visc;
-	int n;
-	const double visc3,visc2,ro1,ro2,ro3;
+    int n;
+    const double visc3,visc2,ro1,ro2,ro3;
     double visc1;
-	double eps12,eps13,eps23;
+    double eps12,eps13,eps23;
     double epsi;
 };
 
 #endif
-
-
