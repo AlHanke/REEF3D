@@ -74,14 +74,16 @@ public:
         const amrex::IntVect& level_ref_ratio,
         const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords,
         const amrex::Vector<amrex::MultiFab*>& phi_mf = {},
+        const amrex::Vector<amrex::MultiFab*>& fb_mf = {},
         amrex::Real phi_band_width = {},
-        amrex::Real dt = {},
-        amrex::Real cfl_max = amrex::Real(1.0))
+        amrex::Real fb_band_width = {})
         : amrex::AmrMesh(level_0_geom,
                          make_amr_info(max_level, level_ref_ratio))
         , refined_grid_coords_(refined_grid_coords)
         , phi_mf_(phi_mf)
+        , fb_mf_(fb_mf)
         , phi_band_width_(phi_band_width)
+        , fb_band_width_(fb_band_width)
     {
     }
 
@@ -136,13 +138,13 @@ private:
             }
         }
 
-        // 2. Level-set interface refinement.
+        // 2. Fluid-air level-set interface refinement.
         //    Only applied when the resulting finer level (lev+1) is within the
         //    Courant-number ceiling and phi data exists at level 0.
         //    When phi_mf_[lev] has a stale BA (as during MakeNewGrids recursion),
         //    we cascade-interpolate upward from level 0 (whose BA never changes
         //    during regrid) to build phi on the correct BA/DM for this level.
-        if (!phi_mf_.empty() && phi_mf_[0] != nullptr && !phi_mf_[0]->empty() && lev < static_cast<int>(phi_mf_.size()))
+        if (phi_band_width_>0 && !phi_mf_.empty() && phi_mf_[0] != nullptr && !phi_mf_[0]->empty() && lev < static_cast<int>(phi_mf_.size()))
         {
             const amrex::Real band = phi_band_width_;
             const amrex::MultiFab* phi_ptr = nullptr;
@@ -224,11 +226,102 @@ private:
                 }
             }
         }
+
+        // 3. Fluid-6DOF level-set interface refinement.
+        //    Only applied when the resulting finer level (lev+1) is within the
+        //    Courant-number ceiling and phi data exists at level 0.
+        //    When phi_mf_[lev] has a stale BA (as during MakeNewGrids recursion),
+        //    we cascade-interpolate upward from level 0 (whose BA never changes
+        //    during regrid) to build phi on the correct BA/DM for this level.
+        if (fb_band_width_>0 && !fb_mf_.empty() && fb_mf_[0] != nullptr && !fb_mf_[0]->empty() && lev < static_cast<int>(fb_mf_.size()) && lev == 0)
+        {
+            const amrex::Real band = fb_band_width_;
+            const amrex::MultiFab* fb_ptr = nullptr;
+
+            // Direct use when BA matches (first regrid from a stable cycle).
+            if (lev < static_cast<int>(fb_mf_.size())
+                && fb_mf_[lev] != nullptr
+                && !fb_mf_[lev]->empty()
+                && fb_mf_[lev]->boxArray() == boxArray(lev))
+            {
+                fb_ptr = fb_mf_[lev];
+            }
+
+            // Cascade interpolation from level 0 when fb at this level is
+            // unavailable or on a stale BA. reserve() prevents reallocation so
+            // cur_coarse pointer stays valid across iterations.
+            std::vector<amrex::MultiFab> interp_chain;
+            if (fb_ptr == nullptr)
+            {
+                amrex::Vector<amrex::BCRec> bcrecs(1);
+                for (auto& bc : bcrecs)
+                    for (int d = 0; d < AMREX_SPACEDIM; ++d)
+                    { bc.setLo(d, amrex::BCType::foextrap); bc.setHi(d, amrex::BCType::foextrap); }
+                amrex::PhysBCFunctNoOp null_bc;
+
+                interp_chain.reserve(lev);
+                const amrex::MultiFab* cur_coarse = fb_mf_[0];
+
+                for (int cl = 0; cl < lev; ++cl)
+                {
+                    // Final step lands on boxArray(lev)/DistributionMap(lev) so
+                    // the resulting MF has the same BA/DM as tags — no mismatch.
+                    amrex::BoxArray fine_ba = (cl + 1 == lev)
+                        ? boxArray(lev)
+                        : amrex::refine(cur_coarse->boxArray(), refRatio(cl));
+                    amrex::DistributionMapping fine_dm = (cl + 1 == lev)
+                        ? DistributionMap(lev)
+                        : amrex::DistributionMapping(fine_ba);
+
+                    interp_chain.emplace_back(fine_ba, fine_dm, 1, 0);
+                    amrex::InterpFromCoarseLevel(
+                        interp_chain.back(), 0.0, *cur_coarse, 0, 0, 1,
+                        Geom(cl), Geom(cl + 1),
+                        null_bc, 0, null_bc, 0,
+                        refRatio(cl), &amrex::cell_cons_interp, bcrecs, 0);
+
+                    // Copy existing fb data at this intermediate level on top of
+                    // the interpolated values so that known fine-level data is used.
+                    const int fine_lev = cl + 1;
+                    if (fine_lev < static_cast<int>(fb_mf_.size())
+                        && fb_mf_[fine_lev] != nullptr
+                        && !fb_mf_[fine_lev]->empty())
+                    {
+                        interp_chain.back().ParallelCopy(
+                            *fb_mf_[fine_lev], 0, 0, 1,
+                            fb_mf_[fine_lev]->nGrowVect(),
+                            amrex::IntVect::TheZeroVector());
+                    }
+
+                    cur_coarse = &interp_chain.back();
+                }
+                fb_ptr = cur_coarse;
+            }
+
+            if (fb_ptr != nullptr)
+            {
+                for (amrex::MFIter mfi(*fb_ptr); mfi.isValid(); ++mfi)
+                {
+                    const amrex::Box& bx = mfi.validbox();
+                    const auto fb_arr   = fb_ptr->const_array(mfi);
+                    auto tag_arr         = tags.array(mfi);
+
+                    amrex::ParallelFor(bx,
+                        [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
+                        {
+                            if (std::abs(fb_arr(i, j, k, 0)) < band)
+                                tag_arr(i, j, k) = amrex::TagBox::SET;
+                        });
+                }
+            }
+        }
     }
 
     const amrex::Vector<amrex::Vector<std::pair<amrex::RealVect, amrex::RealVect>>>& refined_grid_coords_;
     const amrex::Vector<amrex::MultiFab*>& phi_mf_;
+    const amrex::Vector<amrex::MultiFab*>& fb_mf_;
     const amrex::Real phi_band_width_;
+    const amrex::Real fb_band_width_;
 };
 }
 
@@ -413,11 +506,14 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
     // For any new level that gets added, phi_mf_[lev] will be null — the
     // null-check in reef3d_amrmesh_adaptive::ErrorEst skips phi tagging safely.
     amrex::Vector<amrex::MultiFab*> phi_mfs(old_nlevs);
+    amrex::Vector<amrex::MultiFab*> fb_mfs(old_nlevs);
     for (int lev = 0; lev < old_nlevs; ++lev)
     {
         phi_mfs[lev] = &a->phi.GetMultiFab(lev);
+        fb_mfs[lev] = &a->fb.GetMultiFab(lev);
     }
 
+    i=j=k=0;
     // Construct with max_nlevs-1 (not nlevs-1) so the mesh can detect that
     // additional levels are needed, not just reduce the existing count.
     reef3d_amrmesh_adaptive amr_mesh_adaptive(
@@ -426,8 +522,9 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         ref_vec,
         amrex_refined_grid_coords,
         phi_mfs,
-        static_cast<amrex::Real>(p->psi),
-        static_cast<amrex::Real>(p->dt));
+        fb_mfs,
+        static_cast<amrex::Real>(p->F45*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP])),
+        static_cast<amrex::Real>(0/*1.6*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP])*/));
 
     // Extend geometry/BA/DM vectors to full max_nlevs so MakeNewGrids can
     // recurse through all levels without hitting unregistered geometry.
