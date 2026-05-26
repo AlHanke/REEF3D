@@ -23,33 +23,21 @@ Author: Hans Bihs
 #ifndef FLUID_UPDATE_FSF_H_
 #define FLUID_UPDATE_FSF_H_
 
-#include"fluid_update.h"
-#include"increment.h"
+#include "fluid_update.h"
+#include "increment.h"
 
-class fdm;
-class lexer;
-class ghostcell;
-
-using namespace std;
-
-class fluid_update_fsf final : public fluid_update, increment
+class fluid_update_fsf final : public fluid_update, public increment
 {
 public:
     fluid_update_fsf(lexer*, fdm*, ghostcell*);
-	virtual ~fluid_update_fsf();
+    virtual ~fluid_update_fsf() = default;
 
-	void start(lexer*, fdm*, ghostcell*, field&, field&, field&) override final;
+    void start(lexer*, fdm*, ghostcell*, field&, field&, field&) override final;
 
 private:
     static int iocheck,iter;
-    int gcval_ro,gcval_visc;
-	int n;
-	const double dx,visc_air,visc_water,visc_body,ro_air,ro_water;
-    const double visc_sed, ro_sed;
-    double epsi,chi;
-
+    const double ro_water,visc_water,ro_air,visc_air;
+    const double ro_sed,visc_sed;
 };
 
 #endif
-
-

@@ -23,22 +23,16 @@ Author: Hans Bihs
 #ifndef FLUID_UPDATE_VOID_H_
 #define FLUID_UPDATE_VOID_H_
 
-#include"fluid_update.h"
-#include"increment.h"
+#include "fluid_update.h"
+#include "increment.h"
 
-class fdm;
-class lexer;
-class ghostcell;
-
-using namespace std;
-
-class fluid_update_void final : public fluid_update, increment
+class fluid_update_void final : public fluid_update, public increment
 {
 public:
-    fluid_update_void();
-	virtual ~fluid_update_void();
+    fluid_update_void() = default;
+	virtual ~fluid_update_void() = default;
 
-	void start(lexer*, fdm*, ghostcell*, field&, field&, field&) override final;
+	void start(lexer*, fdm*, ghostcell*, field&, field&, field&) override final {};
 };
 
 #endif

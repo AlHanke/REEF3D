@@ -1418,7 +1418,6 @@
             <File Name="flux_face_CDS2.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="Fluid Update">
-            <File Name="fluid_update_void.cpp"/>
             <File Name="fluid_update_vof.cpp"/>
             <File Name="fluid_update_rheology.cpp"/>
             <File Name="fluid_update_fsf_heat_Bouss.cpp"/>
