@@ -23,49 +23,42 @@ Author: Hans Bihs
 #ifndef FLUID_UPDATE_FSF_HEAT_BOUSS_H_
 #define FLUID_UPDATE_FSF_HEAT_BOUSS_H_
 
-#include"fluid_update.h"
-#include"increment.h"
+#include "fluid_update.h"
+#include "increment.h"
 
-class fdm;
 class lexer;
+class fdm;
 class ghostcell;
 class heat;
 
 using namespace std;
 
-class fluid_update_fsf_heat_Bouss final : public fluid_update, increment
+class fluid_update_fsf_heat_Bouss final : public fluid_update, public increment
 {
 public:
     fluid_update_fsf_heat_Bouss(lexer*, fdm*, ghostcell*, heat*&);
-	virtual ~fluid_update_fsf_heat_Bouss();
+    virtual ~fluid_update_fsf_heat_Bouss() = default;
 
-	void start(lexer*, fdm*, ghostcell*, field&, field&, field&) override final;
+    void start(lexer*, fdm*, ghostcell*, field&, field&, field&) override final;
 
 private:
-    void material(lexer*, fdm*, ghostcell*);
-    double material_ipol(double**,int,double);
-
     static int iocheck,iter;
-    int gcval_ro,gcval_visc;
-	const double dx;
+    const double dx;
     double epsi;
-	double visc_1,visc_2,ro_1,ro_2,alpha_air,alpha_water;
-	double **water_density;
-	double **water_viscosity;
-	double **air_density;
-	double **air_viscosity;
+    double visc_1,visc_2,ro_1,ro_2,alpha_air,alpha_water;
+    double **water_density;
+    double **water_viscosity;
+    double **air_density;
+    double **air_viscosity;
 
-	int water_density_num;
-	int water_viscosity_num;
-	int air_density_num;
-	int air_viscosity_num;
-    
+    int water_density_num;
+    int water_viscosity_num;
+    int air_density_num;
+    int air_viscosity_num;
+
     double T0_1,T0_2;
 
-	heat *pheat;
-
+    heat *pheat;
 };
 
 #endif
-
-

@@ -23,8 +23,8 @@ Author: Hans Bihs
 #ifndef FLUID_UPDATE_FSF_COMP_H_
 #define FLUID_UPDATE_FSF_COMP_H_
 
-#include"fluid_update.h"
-#include"increment.h"
+#include "fluid_update.h"
+#include "increment.h"
 
 class fdm;
 class lexer;
@@ -32,23 +32,19 @@ class ghostcell;
 
 using namespace std;
 
-class fluid_update_fsf_comp final : public fluid_update, increment
+class fluid_update_fsf_comp final : public fluid_update, public increment
 {
 public:
     fluid_update_fsf_comp(lexer*, fdm*, ghostcell*);
-	virtual ~fluid_update_fsf_comp();
+    virtual ~fluid_update_fsf_comp() = default;
 
-	void start(lexer*, fdm*, ghostcell*, field&, field&, field&) override final;
+    void start(lexer*, fdm*, ghostcell*, field&, field&, field&) override final;
 
 private:
     static int iocheck,iter;
-    int gcval_ro,gcval_visc;
-	int n;
-	double ro_air,epsi;
-	const double dx,visc_air,visc_water,ro_water;
-
+    int n;
+    double ro_air,epsi;
+    const double visc_air,visc_water,ro_water;
 };
 
 #endif
-
-

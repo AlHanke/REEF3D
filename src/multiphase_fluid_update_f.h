@@ -23,8 +23,8 @@ Author: Hans Bihs
 #ifndef MULTIPHASE_FLUID_UPDATE_F_H_
 #define MULTIPHASE_FLUID_UPDATE_F_H_
 
-#include"multiphase_fluid_update.h"
-#include"increment.h"
+#include "multiphase_fluid_update.h"
+#include "increment.h"
 
 using namespace std;
 
@@ -32,19 +32,16 @@ class multiphase_fluid_update_f final : public multiphase_fluid_update, incremen
 {
 public:
     multiphase_fluid_update_f(lexer*, fdm*, ghostcell*);
-	virtual ~multiphase_fluid_update_f();
+    virtual ~multiphase_fluid_update_f() = default;
 
-	void start(lexer*, fdm*, ghostcell*,field&,field&,field&,field&,field&) override final;
+    void start(lexer*, fdm*, ghostcell*,field&,field&,field&,field&,field&) override final;
 
 private:
     static int iocheck,iter;
-    int gcval_ro,gcval_visc;
-	int n;
-	const double visc3,visc2,visc1,ro1,ro2,ro3;
-	double eps12,eps13,eps23;
+    int n;
+    const double visc3,visc2,visc1,ro1,ro2,ro3;
+    double eps12,eps13,eps23;
     double epsi;
 };
 
 #endif
-
-

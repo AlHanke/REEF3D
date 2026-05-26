@@ -23,8 +23,8 @@ Author: Hans Bihs
 #ifndef FLUID_UPDATE_FSF_CONCENTRATION_H_
 #define FLUID_UPDATE_FSF_CONCENTRATION_H_
 
-#include"fluid_update.h"
-#include"increment.h"
+#include "fluid_update.h"
+#include "increment.h"
 
 class fdm;
 class lexer;
@@ -33,27 +33,21 @@ class concentration;
 
 using namespace std;
 
-class fluid_update_fsf_concentration final : public fluid_update, increment
+class fluid_update_fsf_concentration final : public fluid_update, public increment
 {
 public:
     fluid_update_fsf_concentration(lexer*, fdm*, ghostcell*, concentration*&);
-	virtual ~fluid_update_fsf_concentration();
+    virtual ~fluid_update_fsf_concentration() = default;
 
-	void start(lexer*, fdm*, ghostcell*, field&, field&, field&) override final;
+    void start(lexer*, fdm*, ghostcell*, field&, field&, field&) override final;
 
 private:
-
     static int iocheck,iter;
-    int gcval_ro,gcval_visc;
-	const double dx;
     double epsi;
-	double visc_air,visc_water,ro_air,ro_water;
-	double ro_conc, visc_conc;
+    double visc_air,visc_water,ro_air,ro_water;
+    double ro_conc, visc_conc;
 
-	concentration *pconcentration;
-
+    concentration *pconcentration;
 };
 
 #endif
-
-

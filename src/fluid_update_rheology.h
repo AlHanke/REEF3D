@@ -23,15 +23,15 @@ Author: Hans Bihs
 #ifndef FLUID_UPDATE_RHEOLOGY_H_
 #define FLUID_UPDATE_RHEOLOGY_H_
 
-#include"fluid_update.h"
-#include"increment.h"
+#include "fluid_update.h"
+#include "increment.h"
 
 class lexer;
 class fdm;
 class ghostcell;
 class rheology;
 
-class fluid_update_rheology : public fluid_update, increment
+class fluid_update_rheology : public fluid_update, public increment
 {
 public:
     fluid_update_rheology(lexer*);
@@ -49,7 +49,6 @@ private:
     double epsi;
 
     int iocheck;
-
 };
 
 #endif
