@@ -1150,7 +1150,6 @@
           <File Name="sliceint1.h"/>
           <File Name="sliceint2.h"/>
           <File Name="sliceint4.h"/>
-          <File Name="sliceint4a.h"/>
           <File Name="sliceint5.h"/>
         </VirtualDirectory>
       </VirtualDirectory>
