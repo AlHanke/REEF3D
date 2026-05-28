@@ -114,6 +114,8 @@ void printer_CFD::parallel(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, 
     if(p->P29==1)
     result<<"<PDataArray type=\"Float32\" Name=\"walldist\"/>\n";
 
+    result<<"<PDataArray type=\"UInt8\" Name=\"vtkGhostType\"/>\n";
+
     result<<"</PPointData>\n";
 
     result<<"<PCellData>\n";
