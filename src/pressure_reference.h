@@ -23,43 +23,26 @@ Author: Hans Bihs
 #ifndef PRESSURE_REFERENCE_F_H_
 #define PRESSURE_REFERENCE_F_H_
 
-#include"density.h"
-#include"increment.h"
+#include "increment.h"
 
-class fdm;
 class lexer;
+class fdm;
 class ghostcell;
-
-
-using namespace std;
 
 class pressure_reference : virtual public increment
 {
-
 public:
     pressure_reference(lexer*);
-	virtual ~pressure_reference();
-    
+    virtual ~pressure_reference() = default;
+
+protected:
     void reference_start(lexer*,fdm*,ghostcell*);
     void reference_ini(lexer*,fdm*,ghostcell*);
 
 private:
-	void gage_fixed(lexer*,fdm*,ghostcell*);
+    void gage_fixed(lexer*,fdm*,ghostcell*);
     void gage_fsf(lexer*,fdm*,ghostcell*);
     void fsf_normalize(lexer*,fdm*,ghostcell*);
-    void atmosphere(lexer*,fdm*,ghostcell*);
-    
-    double gageval;
-	
-	double H,H_fb,roval,phival;
-	int ii,jj,kk;
-    double r,s;
-    int count;
-
 };
 
 #endif
-
-
-
-
