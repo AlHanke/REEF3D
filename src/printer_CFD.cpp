@@ -59,6 +59,7 @@ Authors: Hans Bihs, Alexander Hanke
 #include<sstream>
 #include<cstdio>
 #include<cstring>
+#include<stdint.h>
 #if USE_AMREX
     #include <AMReX_PlotFileUtil.H>
     #include <AMReX_ParallelDescriptor.H>
@@ -495,6 +496,8 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                     offset[n]=offset[n-1]+sizeof(float)*p->pointnum+sizeof(int);
                     ++n;
                 }
+                offset[n]=offset[n-1]+sizeof(uint8_t)*p->pointnum+sizeof(int);
+                ++n;
                 // end point data
                 // VOF_C
                 if(p->P72==1)
@@ -618,6 +621,8 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                 result<<"<DataArray type=\"Float32\" Name=\"walldist\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
                 ++n;
             }
+            result<<"<DataArray type=\"UInt8\" Name=\"vtkGhostType\" format=\"appended\" offset=\""<<offset[n]<<"\"/>\n";
+            ++n;
             result<<"</PointData>\n";
             result<<"<CellData>\n";
             if(p->P72==1)
@@ -877,6 +882,24 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                     memcpy(&buffer[file_offset],&ffn,sizeof(float));
                     file_offset+=sizeof(float);
                 }
+            }
+
+            //  vtkGhostType
+            iin=sizeof(uint8_t)*p->pointnum;
+            memcpy(&buffer[file_offset],&iin,sizeof(int));
+            file_offset+=sizeof(int);
+            TPLOOP
+            {
+                uint8_t ghost_type = 0;
+                if(p->origin_i!=0 && i==0)
+                    ghost_type = 1; // Left ghost
+                if(p->origin_j!=0 && j==0)
+                    ghost_type = 1; // Front ghost
+                if(p->origin_k!=0 && k==0)
+                    ghost_type = 1; // Bottom ghost
+
+                memcpy(&buffer[file_offset],&ghost_type,sizeof(uint8_t));
+                file_offset+=sizeof(uint8_t);
             }
 
             //  VOF_C
