@@ -523,7 +523,7 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         amrex_refined_grid_coords,
         phi_mfs,
         fb_mfs,
-        static_cast<amrex::Real>(p->F45*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP])),
+        static_cast<amrex::Real>(0/*p->F45*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP])*/),
         static_cast<amrex::Real>(0/*1.6*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP])*/));
 
     // Extend geometry/BA/DM vectors to full max_nlevs so MakeNewGrids can
