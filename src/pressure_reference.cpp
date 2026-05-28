@@ -20,33 +20,19 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"pressure_reference.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
+#include "pressure_reference.h"
+#include "lexer.h"
 
-pressure_reference::pressure_reference(lexer* p) 
-{
-
-}
-
-pressure_reference::~pressure_reference()
+pressure_reference::pressure_reference(lexer *p)
 {
 }
 
-void pressure_reference::reference_start(lexer*p, fdm* a, ghostcell *pgc)
+void pressure_reference::reference_start(lexer *p, fdm *a, ghostcell *pgc)
 {
     if(p->B30==1)
     gage_fixed(p,a,pgc);
-    
-    if(p->B30==2)
+    else if(p->B30==2)
     gage_fsf(p,a,pgc);
-    
-    if(p->B30==4)
+    else if(p->B30==4)
     fsf_normalize(p,a,pgc);
-    
 }
-
-
-
-

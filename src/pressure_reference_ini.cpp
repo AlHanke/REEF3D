@@ -128,7 +128,7 @@ void pressure_reference::reference_ini(lexer*p, fdm* a, ghostcell *pgc)
     //atmospheric reference pressure
     if(p->B30==3)
     {
-        gageval = -1.0e20;
+        double gageval = -1.0e20;
 
         if(p->B32_x>=p->originx && p->B32_x<p->endx)
         if(p->B32_y>=p->originy && p->B32_y<p->endy)
