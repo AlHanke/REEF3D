@@ -25,6 +25,7 @@ Author: Hans Bihs
 
 #include "solver.h"
 #include "increment.h"
+#include "fieldint4.h"
 #include "vec.h"
 #include <_hypre_utilities.h>
 #include <HYPRE_sstruct_ls.h>
@@ -129,7 +130,7 @@ private:
 
     int solve_type,precon_type;
 
-    int *CVAL4;
+    fieldint4 CVAL4;
 };
 
 #endif

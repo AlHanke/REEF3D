@@ -27,12 +27,9 @@ Author: Hans Bihs
 #include "field.h"
 #include "vec.h"
 
-hypre_struct::hypre_struct(lexer* p,ghostcell *pgc, int solve_input, int precon_input)
+hypre_struct::hypre_struct(lexer* p, ghostcell *pgc, int solve_input, int precon_input) : CVAL4(p)
 {
     int vecsize=p->knox*p->knoy*p->knoz;
-
-    p->Iarray(CVAL4,p->imax*p->jmax*(p->kmax+2));
-
     if(p->A10==3)
     vecsize=p->knox*p->knoy*(p->knoz+1);
 
@@ -49,7 +46,7 @@ hypre_struct::hypre_struct(lexer* p,ghostcell *pgc, int solve_input, int precon_
     count=0;
     LOOP
     {
-        CVAL4[IJK]=count;
+        CVAL4(i,j,k)=count;
         ++count;
     }
 
