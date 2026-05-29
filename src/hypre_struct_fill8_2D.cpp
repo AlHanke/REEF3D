@@ -32,7 +32,7 @@ void hypre_struct::fill_matrix8_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
     count=0;
     LOOP
     {
-        CVAL4[IJK]=count;
+        CVAL4(i,j,k)=count;
         ++count;
     }
 
@@ -46,7 +46,7 @@ void hypre_struct::fill_matrix8_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
     {
         FPWDCHECK
         {
-            n=CVAL4[IJK];
+            n=CVAL4(i,j,k);
 
             values[count]=M.p[n];
             ++count;
@@ -112,7 +112,7 @@ void hypre_struct::fill_matrix8_2Dvert(lexer* p, ghostcell* pgc, double *f, vec 
     {
         FPWDCHECK
         {
-            n=CVAL4[IJK];
+            n=CVAL4(i,j,k);
             values[count] = rhs.V[n];
 
             if(values[count] != values[count])
@@ -138,7 +138,7 @@ void hypre_struct::fill_matrix8_perm_2Dvert(lexer* p, ghostcell* pgc, double *f,
     count=0;
     LOOP
     {
-        CVAL4[IJK]=count;
+        CVAL4(i,j,k)=count;
         ++count;
     }
 
@@ -152,7 +152,7 @@ void hypre_struct::fill_matrix8_perm_2Dvert(lexer* p, ghostcell* pgc, double *f,
     {
         FPWDCHECK
         {
-            n=CVAL4[IJK];
+            n=CVAL4(i,j,k);
 
             values[count]=M.p[n];
             ++count;
@@ -218,7 +218,7 @@ void hypre_struct::fill_matrix8_perm_2Dvert(lexer* p, ghostcell* pgc, double *f,
     {
         FPWDCHECK
         {
-            n=CVAL4[IJK];
+            n=CVAL4(i,j,k);
             values[count] = rhs.V[n];
 
             if(values[count] != values[count])
