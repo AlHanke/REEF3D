@@ -47,8 +47,7 @@ pjm_corr::pjm_corr(lexer* p, fdm *a, ghostcell *pgc, heat *&pheat, concentration
         {
             if(p->Q10==0)
             pd = new density_f(p);
-
-            if(p->Q10==1)
+            else if(p->Q10==1)
             pd = new density_f(p);
         }
 
@@ -62,33 +61,27 @@ pjm_corr::pjm_corr(lexer* p, fdm *a, ghostcell *pgc, heat *&pheat, concentration
         pd = new density_conc(p,pconc);
     }
 
-    if(p->F80>0 && p->H10==0 && p->W30==0  && p->F300==0 && p->W90==0)
+    if(p->F80>0 && p->H10==0 && p->W30==0 && p->F300==0 && p->W90==0)
     pd = new density_vof(p);
 
-    if(p->F30>0 && p->H10==0 && p->W30==0  && p->F300==0 && p->W90>0)
+    if(p->F30>0 && p->H10==0 && p->W30==0 && p->F300==0 && p->W90>0)
     pd = new density_rheo(p);
 
-    if(p->F300>=1)
+    if(p->F300>0)
     pd = new density_rheo(p);
-
-
-    gcval_press=40;
-
-    gcval_u=7;
-    gcval_v=8;
-    gcval_w=9;
 }
 
 pjm_corr::~pjm_corr()
 {
+    delete pd;
 }
 
-void pjm_corr::start(fdm* a,lexer*p, poisson* ppois,solver* psolv, ghostcell* pgc, ioflow *pflow, field& uvel, field& vvel, field& wvel, double alpha)
+void pjm_corr::start(fdm* a, lexer*p, poisson* ppois, solver* psolv, ghostcell* pgc, ioflow *pflow, field& uvel, field& vvel, field& wvel, double alpha)
 {
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<".";
 
-    starttime=pgc->timer();
+    double starttime=pgc->timer();
 
     vel_setup(p,a,pgc,uvel,vvel,wvel,alpha);
     rhs(p,a,pgc,uvel,vvel,wvel,alpha);
@@ -97,6 +90,7 @@ void pjm_corr::start(fdm* a,lexer*p, poisson* ppois,solver* psolv, ghostcell* pg
 
     psolv->start(p,a,pgc,pcorr,a->rhsvec,5);
 
+    constexpr int gcval_press = 40;
     pgc->start4(p,pcorr,gcval_press);
     presscorr(p,a,uvel,vvel,wvel,pcorr,alpha);
     reference_start(p,a,pgc);
@@ -114,26 +108,23 @@ void pjm_corr::start(fdm* a,lexer*p, poisson* ppois,solver* psolv, ghostcell* pg
     cout<<"piter: "<<p->solveriter<<"  ptime: "<<setprecision(3)<<p->poissontime<<endl;
 }
 
-void pjm_corr::ucorr(lexer* p, fdm* a, field& uvel,double alpha)
+void pjm_corr::ucorr(lexer* p, fdm* a, field& uvel, double alpha)
 {
     ULOOP
-    uvel(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*((pcorr(i+1,j,k)-pcorr(i,j,k))
-    /(p->DXP[IP]*pd->roface(p,a,1,0,0)));
+    uvel(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*((pcorr(i+1,j,k)-pcorr(i,j,k))/(p->DXP[IP]*pd->roface(p,a,1,0,0)));
 }
 
-void pjm_corr::vcorr(lexer* p, fdm* a, field& vvel,double alpha)
+void pjm_corr::vcorr(lexer* p, fdm* a, field& vvel, double alpha)
 {
     if(p->j_dir==1)
     VLOOP
-    vvel(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*((pcorr(i,j+1,k)-pcorr(i,j,k))
-    /(p->DYP[JP]*pd->roface(p,a,0,1,0)));
+    vvel(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*((pcorr(i,j+1,k)-pcorr(i,j,k))/(p->DYP[JP]*pd->roface(p,a,0,1,0)));
 }
 
 void pjm_corr::wcorr(lexer* p, fdm* a, field& wvel,double alpha)
 {
     WLOOP
-    wvel(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*((pcorr(i,j,k+1)-pcorr(i,j,k))
-    /(p->DZP[KP]*pd->roface(p,a,0,0,1)));
+    wvel(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*((pcorr(i,j,k+1)-pcorr(i,j,k))/(p->DZP[KP]*pd->roface(p,a,0,0,1)));
 }
 
 void pjm_corr::presscorr(lexer* p, fdm* a, field& uvel, field& vvel, field& wvel, field& pcorr, double alpha)
@@ -142,11 +133,11 @@ void pjm_corr::presscorr(lexer* p, fdm* a, field& uvel, field& vvel, field& wvel
     a->press(i,j,k) += pcorr(i,j,k);
 }
 
-void pjm_corr::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w,double alpha)
+void pjm_corr::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w, double alpha)
 {
     double uvel,vvel,wvel;
 
-    count=0;
+    int count=0;
     LOOP
     {
         a->rhsvec.V[count]=0.0;
@@ -160,41 +151,44 @@ void pjm_corr::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &
     count=0;
     LOOP
     {
-        a->rhsvec.V[count] =  -(u(i,j,k) - u(i-1,j,k))/(alpha*p->dt*p->DXN[IP])
-                            -(p->j_dir ? (v(i,j,k) - v(i,j-1,k))/(alpha*p->dt*p->DYN[JP]) : 0.0)
-                            -(w(i,j,k) - w(i,j,k-1))/(alpha*p->dt*p->DZN[KP]);
+        a->rhsvec.V[count] = -(u(i,j,k) - u(i-1,j,k))/(alpha*p->dt*p->DXN[IP])
+                             -(p->j_dir?(v(i,j,k) - v(i,j-1,k))/(alpha*p->dt*p->DYN[JP]):0.0)
+                             -(w(i,j,k) - w(i,j,k-1))/(alpha*p->dt*p->DZN[KP]);
 
         ++count;
     }
 }
 
-void pjm_corr::vel_setup(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w,double alpha)
+void pjm_corr::vel_setup(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w, double alpha)
 {
+    constexpr int gcval_u=7;
+    constexpr int gcval_v=8;
+    constexpr int gcval_w=9;
     pgc->start1(p,u,gcval_u);
     pgc->start2(p,v,gcval_v);
     pgc->start3(p,w,gcval_w);
 }
 
-void pjm_corr::upgrad(lexer*p,fdm* a, slice &eta, slice &eta_n)
+void pjm_corr::upgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
     ULOOP
     a->F(i,j,k) -= PORVAL1*(a->press(i+1,j,k)-a->press(i,j,k))/(p->DXP[IP]*pd->roface(p,a,1,0,0));
 }
 
-void pjm_corr::vpgrad(lexer*p,fdm* a, slice &eta, slice &eta_n)
+void pjm_corr::vpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
-    if(p->j_dir==1)
+    if(p->j_dir)
     VLOOP
     a->G(i,j,k) -= PORVAL2*(a->press(i,j+1,k)-a->press(i,j,k))/(p->DYP[JP]*pd->roface(p,a,0,1,0));
 }
 
-void pjm_corr::wpgrad(lexer*p,fdm* a, slice &eta, slice &eta_n)
+void pjm_corr::wpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
     WLOOP
     a->H(i,j,k) -= PORVAL3*(a->press(i,j,k+1)-a->press(i,j,k))/(p->DZP[KP]*pd->roface(p,a,0,0,1));
 }
 
-void pjm_corr::ini(lexer*p,fdm* a, ghostcell *pgc)
+void pjm_corr::ini(lexer*p, fdm* a, ghostcell *pgc)
 {
     reference_ini(p,a,pgc);
 }

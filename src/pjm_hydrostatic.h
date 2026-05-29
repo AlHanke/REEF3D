@@ -34,22 +34,22 @@ using namespace std;
 
 class pjm_hydrostatic final : public pressure, public increment
 {
-
 public:
+    pjm_hydrostatic(lexer* p, fdm *a, heat*&, concentration*&);
+    virtual ~pjm_hydrostatic();
 
-	pjm_hydrostatic(lexer* p, fdm *a, heat*&, concentration*&);
-	virtual ~pjm_hydrostatic();
-
-	void start(fdm*,lexer*, poisson*, solver*, ghostcell*, ioflow*, field&, field&, field&,double) override final;
+    void start(fdm*,lexer*, poisson*, solver*, ghostcell*, ioflow*, field&, field&, field&,double) override final;
     void ini(lexer*,fdm*,ghostcell*) override final;
-	void rhs(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
-	void vel_setup(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
-	void ucorr(lexer*,fdm*,field&,double) override final;
+    void rhs(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
+    void vel_setup(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
+    void upgrad(lexer*,fdm*,slice&,slice&) override final;
+    void vpgrad(lexer*,fdm*,slice&,slice&) override final;
+    void wpgrad(lexer*,fdm*,slice&,slice&) override final;
+
+protected:
+    void ucorr(lexer*,fdm*,field&,double) override final;
 	void vcorr(lexer*,fdm*,field&,double) override final;
 	void wcorr(lexer*,fdm*,field&,double) override final;
-	void upgrad(lexer*,fdm*,slice&,slice&) override final;
-	void vpgrad(lexer*,fdm*,slice&,slice&) override final;
-    void wpgrad(lexer*,fdm*,slice&,slice&) override final;
 
 private:    
     void debug(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
@@ -62,7 +62,4 @@ private:
     concentration *pconc;
 };
 
-
-
 #endif
-

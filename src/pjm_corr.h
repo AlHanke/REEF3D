@@ -23,9 +23,9 @@ Author: Hans Bihs
 #ifndef PJM_CORR_H_
 #define PJM_CORR_H_
 
-#include"pressure.h"
-#include"pressure_reference.h"
-#include"field4.h"
+#include "pressure.h"
+#include "pressure_reference.h"
+#include "field4.h"
 
 class heat;
 class concentration;
@@ -35,37 +35,28 @@ using namespace std;
 
 class pjm_corr final : public pressure, public pressure_reference
 {
-
 public:
+    pjm_corr(lexer*,fdm*,ghostcell*,heat*&,concentration*&);
+    virtual ~pjm_corr();
 
-	pjm_corr(lexer*, fdm*, ghostcell*, heat*&, concentration*&);
-	virtual ~pjm_corr();
-
-	void start(fdm*,lexer* p, poisson*, solver*, ghostcell*, ioflow*, field&, field&, field&,double) override final;
+    void start(fdm*,lexer*,poisson*,solver*,ghostcell*,ioflow*,field&,field&,field&,double) override final;
     void ini(lexer*,fdm*,ghostcell*) override final;
-	void rhs(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
-	void vel_setup(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
-    void presscorr(lexer*p,fdm *a,field&,field&,field&,field&, double);
-	void ucorr(lexer*p,fdm*,field&,double) override final;
-	void vcorr(lexer*p,fdm*,field&,double) override final;
-	void wcorr(lexer*p,fdm*,field&,double) override final;
-	void upgrad(lexer*,fdm*,slice&,slice&) override final;
-	void vpgrad(lexer*,fdm*,slice&,slice&) override final;
+    void upgrad(lexer*,fdm*,slice&,slice&) override final;
+    void vpgrad(lexer*,fdm*,slice&,slice&) override final;
     void wpgrad(lexer*,fdm*,slice&,slice&) override final;
 
-    field4 pcorr;
+protected:
+    void ucorr(lexer*,fdm*,field&,double) override final;
+    void vcorr(lexer*,fdm*,field&,double) override final;
+    void wcorr(lexer*,fdm*,field&,double) override final;
 
 private:
-	double starttime,endtime;
-	int count, gcval_press;
-	int gcval_u, gcval_v, gcval_w;
-	
-	void debug(lexer*,fdm*);
-    
+    void vel_setup(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
+    void rhs(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
+    void presscorr(lexer*,fdm*,field&,field&,field&,field&,double);
+    field4 pcorr;
+
     density *pd;
 };
 
-
-
 #endif
-
