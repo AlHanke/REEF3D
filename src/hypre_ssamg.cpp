@@ -31,9 +31,7 @@ hypre_ssamg::hypre_ssamg(lexer *p, fdm *a, ghostcell *pgc)
 {
     int vecsize = p->knox * p->knoy * p->knoz;
 
-    p->Iarray(ilower, 3);
-    p->Iarray(iupper, 3);
-    p->Darray(values, vecsize * 7);
+    values.resize(vecsize * 7);
 
     make_grid_7p(p, a, pgc);
 }
