@@ -36,9 +36,12 @@ grid_helper::grid_helper(lexer *p)
 
 grid_helper::~grid_helper()
 {
+    #if not USE_AMREX
     delete[] hgc;
+    #endif
 }
 
+#if not USE_AMREX
 void grid_helper::make_dgc(lexer* p)
 {
     p->dgc1_count=1;
@@ -57,3 +60,4 @@ void grid_helper::make_dgc(lexer* p)
     for(i=0;i<imax*jmax*kmax;++i)
     hgc[i]=0;
 }
+#endif

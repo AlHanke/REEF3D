@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#if not USE_AMREX
 #include"ghostcell.h"
 #include"lexer.h"
 #include"field.h"
@@ -41,3 +42,4 @@ void ghostcell::dgcpol1(lexer* p, field& f)
         f(i+di,j+dj,k+dk) = f(i,j,k);
     }
 }
+#endif

@@ -140,8 +140,10 @@ public:
     int periodic1,periodic2,periodic3;
     int periodicX1,periodicX2,periodicX3,periodicX4,periodicX5,periodicX6;
 
+    #if not USE_AMREX
     int **dgc1,**dgc2,**dgc3,**dgc4;
     int dgc1_count,dgc2_count,dgc3_count,dgc4_count;
+    #endif
 
     // PARALLEL
     std::vector<std::array<int,7>> gcpara1;
