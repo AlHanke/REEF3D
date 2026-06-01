@@ -20,19 +20,15 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"hypre_ssamg.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
-#include"field.h"
-#include"vec.h"
+#include "hypre_ssamg.h"
+#include "lexer.h"
+#include "fdm.h"
+#include "ghostcell.h"
+#include "field.h"
+#include "vec.h"
 
 hypre_ssamg::hypre_ssamg(lexer *p, fdm *a, ghostcell *pgc)
 {
-    int vecsize = p->knox * p->knoy * p->knoz;
-
-    values.resize(vecsize * 7);
-
     make_grid_7p(p, a, pgc);
 }
 

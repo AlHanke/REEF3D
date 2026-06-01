@@ -20,10 +20,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"hypre_ssamg.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
+#include "hypre_ssamg.h"
+#include "lexer.h"
+#include "fdm.h"
+#include "ghostcell.h"
 
 void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
 {
@@ -93,20 +93,6 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
     HYPRE_SStructVectorSetObjectType(x, object_type);
     HYPRE_SStructVectorInitialize(b);
     HYPRE_SStructVectorInitialize(x);
-}
-
-// HYPRE_SStructGridSetAMRRefSlaves / SetAMRRefInterp are declared in the HYPRE
-// header but have no implementation in any public HYPRE release.  These stubs
-// are kept as placeholders; the coarse-fine coupling is handled instead by
-// amr_graph_entries() via HYPRE_SStructGraphAddEntries (Figure 16 approach).
-void hypre_ssamg::set_amr_ref_slaves(lexer* p)
-{
-    (void)p;
-}
-
-void hypre_ssamg::set_amr_ref_interp(lexer* p)
-{
-    (void)p;
 }
 
 // Explicit inter-part graph entries for the coarse-fine interface (the literal

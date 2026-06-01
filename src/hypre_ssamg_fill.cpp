@@ -20,11 +20,11 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"hypre_ssamg.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
-#include"fieldint4.h"
+#include "hypre_ssamg.h"
+#include "lexer.h"
+#include "fdm.h"
+#include "ghostcell.h"
+#include "fieldint4.h"
 
 void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
 {

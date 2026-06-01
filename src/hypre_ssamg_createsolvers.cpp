@@ -20,9 +20,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"hypre_ssamg.h"
-#include"lexer.h"
-#include"ghostcell.h"
+#include "hypre_ssamg.h"
+#include "lexer.h"
+#include "ghostcell.h"
 
 void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
 {
