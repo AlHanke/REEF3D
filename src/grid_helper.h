@@ -41,11 +41,13 @@ public:
     void fillgcb4_wall(lexer*);
 
     // dgc
+    #if not USE_AMREX
     void make_dgc(lexer*);
     void fill_dgc1(lexer*);
     void fill_dgc2(lexer*);
     void fill_dgc3(lexer*);
     void fill_dgc4(lexer*);
+    #endif
 
 private:
     int imin,imax,jmax,jmin,kmin,kmax;

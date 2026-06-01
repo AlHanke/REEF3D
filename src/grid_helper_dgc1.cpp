@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
+#if not USE_AMREX
 #include"grid_helper.h"
 #include"lexer.h"
 
@@ -424,3 +425,4 @@ void grid_helper::fill_dgc1(lexer* p)
         }
     }
 }
+#endif
