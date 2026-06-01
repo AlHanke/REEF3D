@@ -23,22 +23,19 @@ Author: Hans Bihs
 #ifndef HYPRE_SSAMG_H_
 #define HYPRE_SSAMG_H_
 
-#include"solver.h"
-#include"increment.h"
-#include"vec.h"
-#include<_hypre_utilities.h>
-#include<HYPRE_sstruct_ls.h>
-#include<HYPRE_parcsr_ls.h>
-#include<HYPRE_krylov.h>
-#include<HYPRE.h>
-#include<vector>
-
-using namespace std;
+#include "solver.h"
+#include "increment.h"
+#include "vec.h"
+#include <_hypre_utilities.h>
+#include <HYPRE_sstruct_ls.h>
+#include <HYPRE_parcsr_ls.h>
+#include <HYPRE_krylov.h>
+#include <HYPRE.h>
+#include <vector>
 
 class hypre_ssamg final : public solver, public increment
 {
 public:
-
     hypre_ssamg(lexer*, fdm*, ghostcell*);
     virtual ~hypre_ssamg();
 
@@ -60,12 +57,9 @@ public:
     void create_solver(lexer*, ghostcell*);
     void delete_solver(lexer*, ghostcell*);
 
-    void set_amr_ref_slaves(lexer*);
-    void set_amr_ref_interp(lexer*);
     void amr_graph_entries(lexer*, ghostcell*);
 
 private:
-
     HYPRE_SStructGrid     grid;
     HYPRE_SStructGraph    graph;
     HYPRE_SStructStencil  stencil;
