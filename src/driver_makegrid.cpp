@@ -43,12 +43,14 @@ void driver::makegrid(lexer *p, ghostcell *pgc)
 
     gridgen.fillgcb4_wall(p);
 
+    #if not USE_AMREX
     gridgen.make_dgc(p);
 
     gridgen.fill_dgc1(p);
     gridgen.fill_dgc2(p);
     gridgen.fill_dgc3(p);
     gridgen.fill_dgc4(p);
+    #endif
 }
 
 void driver::makegrid_cds()
