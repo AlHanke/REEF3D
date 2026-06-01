@@ -20,8 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"hypre_ssamg.h"
-#include"lexer.h"
+#include "hypre_ssamg.h"
+#include "lexer.h"
 
 void hypre_ssamg::solve(lexer *p)
 {
@@ -36,9 +36,8 @@ void hypre_ssamg::solve(lexer *p)
         HYPRE_SStructSSAMGGetNumIterations(ssamg, &num_iterations);
         HYPRE_SStructSSAMGGetFinalRelativeResidualNorm(ssamg, &final_res_norm);
     }
-
     // N10==41: PCG outer solver with SSAMG preconditioner
-    if (p->N10 == 41)
+    else if (p->N10 == 41)
     {
         HYPRE_SStructPCGSetup(pcg_solver, A, b, x);
         HYPRE_SStructPCGSolve(pcg_solver, A, b, x);
