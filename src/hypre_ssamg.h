@@ -31,6 +31,7 @@ Author: Hans Bihs
 #include<HYPRE_parcsr_ls.h>
 #include<HYPRE_krylov.h>
 #include<HYPRE.h>
+#include<vector>
 
 using namespace std;
 
@@ -59,6 +60,10 @@ public:
     void create_solver(lexer*, ghostcell*);
     void delete_solver(lexer*, ghostcell*);
 
+    void set_amr_ref_slaves(lexer*);
+    void set_amr_ref_interp(lexer*);
+    void amr_graph_entries(lexer*, ghostcell*);
+
 private:
 
     HYPRE_SStructGrid     grid;
@@ -78,8 +83,8 @@ private:
     int numvar;
     int object_type;
 
-    int *ilower, *iupper;
-    double *values;
+    int ilower[3], iupper[3];
+    std::vector<double> values;
     int num_iterations;
     double final_res_norm;
     int stencil_indices[7];

@@ -47,8 +47,15 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
     // BoomerAMG closes the coarse-level problem
     HYPRE_SStructSSAMGSetCoarseSolverType(ssamg, 1);
 
-    // non-Galerkin RAP keeps compact stencil on coarse levels
-    HYPRE_SStructSSAMGSetNonGalerkinRAP(ssamg, 1);
+    // Galerkin RAP works for both single-level and multi-level grids.
+    // Non-Galerkin RAP keeps a compact stencil on coarse levels but crashes
+    // with a single SStruct part (no inter-part graph entries): the internal
+    // IJMatrix is left uninitialised and assembly faults.  Re-enable once
+    // multi-level AMR is confirmed working.
+    // if (numparts > 1)
+    //     HYPRE_SStructSSAMGSetNonGalerkinRAP(ssamg, 1);
+    // else
+        HYPRE_SStructSSAMGSetNonGalerkinRAP(ssamg, 0);
 
     HYPRE_SStructSSAMGSetLogging(ssamg, 0);
     HYPRE_SStructSSAMGSetPrintLevel(ssamg, 0);
