@@ -101,10 +101,12 @@ public:
 
     void startintV(lexer*,int*,int);
 
+    #if not USE_AMREX
     void dgcpol1(lexer*,field&);
     void dgcpol2(lexer*,field&);
     void dgcpol3(lexer*,field&);
     void dgcpol4(lexer*,field&);
+    #endif
 
     // particle
     void parapls(lexer*,double**,double**,int*,int*);
