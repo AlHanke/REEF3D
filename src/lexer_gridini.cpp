@@ -78,8 +78,8 @@ void lexer::flagini()
     flag5.resize();
 
     // boundary conditions
-    Iarray(IO,imax*jmax*kmax);
-    Iarray(IOSL,imax*jmax);
+    IO.resize(0);
+    IOSL.resize(0);
     DF.resize(1);
 #if USE_AMREX
     m_df123 = make_imf(this, 3, &m_df123);
@@ -89,15 +89,6 @@ void lexer::flagini()
     DF2.resize();
     DF3.resize();
     Iarray(DFF,imax*jmax*(kmax+1));
-
-    for(i=-margin; i<knox+margin; ++i)
-    for(j=-margin; j<knoy+margin; ++j)
-    for(k=-margin; k<knoz+margin; ++k)
-    IO[IJK] = 0;
-
-    for(i=-margin; i<knox+margin; ++i)
-    for(j=-margin; j<knoy+margin; ++j)
-    IOSL[IJ] = 0;
 
 	if(B98>=3)
 	for(n=0;n<gcb4_count;++n)
@@ -147,5 +138,16 @@ void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow*
     grid_amrex::update_registered_weno(nlevs);
     grid_amrex::define_inflow_outflow_ba();
     preini->start(a,this,a->phi,pgc,pflow);
+    lexer* p = this;
+    int counter = 0;
+    PLAINLOOP
+    {
+        counter++;
+    }
+    veclength += counter - cellnum;
+    cellnum = counter;
+    a->rhsvec.resize(veclength);
+    a->M.resize(veclength);
+
     #endif
 }

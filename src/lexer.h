@@ -110,6 +110,8 @@ public:
     amrex::Vector<amrex::iMultiFab> m_df123;
 #endif
     ArrayWrapper3D DF1,DF2,DF3;
+    // boundary conditions
+    ArrayWrapper3D IO,IOSL; // 0: no BC, 1: inflow, 2: outflow
 
     // flag
     std::unique_ptr<int[]> flag_solid, flag_topo;
