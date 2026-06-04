@@ -182,7 +182,6 @@ Authors: Hans Bihs, Alexander Hanke
 #define NLOOP6 for(n=p->sizeM6[0]; n<p->sizeM6[1]; ++n)
 #define NLOOP9 for(n=p->sizeM9[0]; n<p->sizeM9[1]; ++n)
 #define NLOOP for(n=sizeM[0]; n<sizeM[1]; ++n)
-#define VECLOOP for(n=0; n<p->veclength; ++n)
 
 //MAX, MIN, SIGN
 #define MAX(aAa,bBb) ((aAa)>(bBb)?(aAa):(bBb))
