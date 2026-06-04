@@ -572,8 +572,8 @@ void reefmg::fine_apply(const sc_level &L,const double *x,double *y)
         //  both give bit-identical results.
         if(r0>=0)
         {
-            const double *P=M.p+r0, *Nn=M.n+r0, *S=M.s+r0, *W=M.w+r0, *E=M.e+r0;
-            const double *T=M.t+r0, *B=M.b+r0;
+            const double *P=M.p.data()+r0, *Nn=M.n.data()+r0, *S=M.s.data()+r0, *W=M.w.data()+r0, *E=M.e.data()+r0;
+            const double *T=M.t.data()+r0, *B=M.b.data()+r0;
             const double *xc=x+col, *xn=xc+sx, *xs=xc-sx, *xw=xc+sy, *xe=xc-sy;
             double *yc=y+col;
 
