@@ -38,6 +38,8 @@ Author: Hans Bihs
 #include"density_vof.h"
 #include"density_rheo.h"
 #include"density_pst.h"
+#include<algorithm>
+#include<cstddef>
 
 pjm_corr::pjm_corr(lexer* p, fdm *a, ghostcell *pgc, heat *&pheat, concentration *&pconc) : pcorr(p), pressure_reference(p)
 {
@@ -100,6 +102,71 @@ void pjm_corr::start(fdm* a, lexer*p, poisson* ppois, solver* psolv, ghostcell* 
     vcorr(p,a,vvel,alpha);
     wcorr(p,a,wvel,alpha);
 
+    // --- DIAGNOSTIC: per-level discrete divergence after the velocity
+    // correction, split into far-field vs coarse/fine-zone cells. Remove once
+    // the C-F interface reconciliation is settled.
+    #if USE_AMREX
+    for(int lev=0; lev<p->nlevs; ++lev)
+    {
+        const amrex::Box      dom = p->amrex_geometry[lev].Domain();
+        const amrex::BoxArray ba  = p->amr_cell_mf[lev].boxArray();
+
+        // fine side: neighbour lies inside this level's domain but outside its boxes
+        auto is_cf=[&](int ii,int jj,int kk){ amrex::IntVect iv(ii,jj,kk); return dom.contains(iv) && !ba.contains(iv); };
+
+        // coarse side: this cell (or a neighbour) is covered by the next finer level
+        const bool has_finer = (lev < p->nlevs-1);
+        amrex::BoxArray ba_fine;
+        if(has_finer) ba_fine = p->amr_cell_mf[lev+1].boxArray();
+        const int rr = p->ref_ratio;
+        auto covered=[&](int ii,int jj,int kk){ return has_finer && ba_fine.contains(amrex::IntVect(ii*rr,jj*rr,kk*rr)); };
+
+        double dmax_far=0.0, dmax_cf=0.0;
+        int fi=-1,fj=-1,fk=-1; // location of the far-field max on this rank
+        p->level=lev;
+        for(amrex::MFIter mfi(p->amr_cell_mf[lev]); mfi.isValid(); ++mfi)
+        {
+            amrex::MFIter *saved=p->set_tile_mfi(&mfi);
+            KJILOOP
+            PCHECK
+            {
+                const double dv = (uvel(i,j,k)-uvel(i-1,j,k))/p->DXN[IP]
+                                + (p->j_dir?(vvel(i,j,k)-vvel(i,j-1,k))/p->DYN[JP]:0.0)
+                                + (wvel(i,j,k)-wvel(i,j,k-1))/p->DZN[KP];
+
+                const int gi=p->amr_tile_lo.x+i, gj=p->amr_tile_lo.y+j, gk=p->amr_tile_lo.z+k;
+
+                const bool nearcf =
+                       is_cf(gi-1,gj,gk)||is_cf(gi+1,gj,gk)
+                     ||is_cf(gi,gj-1,gk)||is_cf(gi,gj+1,gk)
+                     ||is_cf(gi,gj,gk-1)||is_cf(gi,gj,gk+1)
+                     ||covered(gi,gj,gk)
+                     ||covered(gi-1,gj,gk)||covered(gi+1,gj,gk)
+                     ||covered(gi,gj-1,gk)||covered(gi,gj+1,gk)
+                     ||covered(gi,gj,gk-1)||covered(gi,gj,gk+1);
+
+                if(nearcf) dmax_cf =MAX(dmax_cf, fabs(dv));
+                else if(fabs(dv)>dmax_far) { dmax_far=fabs(dv); fi=gi; fj=gj; fk=gk; }
+            }
+            p->set_tile_mfi(saved?saved:p->default_cell_mfi.get());
+        }
+        p->level=0;
+        p->set_tile_mfi(p->default_cell_mfi.get());
+
+        const double gmax_far=pgc->globalmax(dmax_far);
+        const double gmax_cf =pgc->globalmax(dmax_cf);
+
+        if(p->mpirank==0)
+        cout<<"\n  [div] level "<<lev<<"  far-field max|div|: "<<gmax_far
+            <<"   C-F-zone max|div|: "<<gmax_cf<<endl;
+
+        if(dmax_far==gmax_far && gmax_far>0.0)
+        cout<<"        far-field max at global (i,j,k)=("<<fi<<","<<fj<<","<<fk
+            <<")  domain hi=("<<dom.bigEnd(0)<<","<<dom.bigEnd(1)<<","<<dom.bigEnd(2)
+            <<")  rank "<<p->mpirank<<endl;
+    }
+    #endif
+
     p->poissoniter=p->solveriter;
 
     p->poissontime=pgc->timer()-starttime;
@@ -137,18 +204,11 @@ void pjm_corr::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &
 {
     double uvel,vvel,wvel;
 
-    int count=0;
-    LOOP
-    {
-        a->rhsvec.V[count]=0.0;
-        ++count;
-    }
+    std::fill(a->rhsvec.V.begin(),a->rhsvec.V.end(),0.0);
 
-    pcorr.setVal(0.0);
+    pcorr.setVal(0.0,true);
 
-    pgc->start4(p,pcorr,1);
-
-    count=0;
+    size_t count=0;
     LOOP
     {
         a->rhsvec.V[count] = -(u(i,j,k) - u(i-1,j,k))/(alpha*p->dt*p->DXN[IP])

@@ -528,21 +528,53 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
 
     // Extend geometry/BA/DM vectors to full max_nlevs so MakeNewGrids can
     // recurse through all levels without hitting unregistered geometry.
-    const int max_probe = max_nlevs;
+    // Limit probing to avoid container-overflow issues in fine-level error estimation.
+    const int max_probe = std::min(2, max_nlevs);  // Limit to level 1 (avoid level 2+ probing)
     if(p->mpirank == 0) std::cout<< "Probing up to " << max_probe << std::endl;
 
     amrex_geometry.resize(max_nlevs);
     for (int lev = old_nlevs; lev < max_nlevs; ++lev)
         amrex_geometry[lev] = amrex::refine(amrex_geometry[lev-1], ref_vec);
 
-    amrex_box_array.resize(max_nlevs);
-    amrex_distribution_mapping.resize(max_nlevs);
+    // Initialize BoxArray and DistributionMapping vectors properly.
+    // Ensure level 0 entries exist with valid (possibly empty) values.
+    if (amrex_box_array.empty())
+        amrex_box_array.push_back(amrex::BoxArray());
+    if (amrex_distribution_mapping.empty())
+        amrex_distribution_mapping.push_back(amrex::DistributionMapping());
 
     // Register level 0 (BoxArray / DistributionMapping are unchanged).
     amr_mesh_adaptive.SetGeometry(0, amrex_geometry[0]);
     amr_mesh_adaptive.SetBoxArray(0, amrex_box_array[0]);
     amr_mesh_adaptive.SetDistributionMap(0, amrex_distribution_mapping[0]);
     amr_mesh_adaptive.SetFinestLevel(0);
+
+    // Create a dummy BoxArray and DistributionMapping for probe-only levels.
+    // This allows ErrorEst to safely reference higher levels during MakeNewGrids
+    // without triggering AMReX container-overflow errors.
+    amrex::BoxArray dummy_ba(amrex::Box::TheUnitBox());
+    amrex::DistributionMapping dummy_dm(dummy_ba);
+
+    for (int lev = 1; lev < max_nlevs; ++lev)
+    {
+        if ((int)amrex_box_array.size() <= lev)
+            amrex_box_array.push_back(dummy_ba);
+        if ((int)amrex_distribution_mapping.size() <= lev)
+            amrex_distribution_mapping.push_back(dummy_dm);
+    }
+
+    // Pre-allocate all registered MultiFabs to max_nlevs with dummy BoxArrays
+    // so ErrorEst callbacks can safely access them during probing.
+    for (auto& e : mf_registry)
+    {
+        while ((int)e.mf->size() < max_nlevs)
+            e.mf->emplace_back(dummy_ba, dummy_dm, e.ncomp, 0);
+    }
+    for (auto& e : imf_registry)
+    {
+        while ((int)e.mf->size() < max_nlevs)
+            e.mf->emplace_back(dummy_ba, dummy_dm, e.ncomp, 0);
+    }
 
     // Register all geometries upfront so MakeNewGrids can recurse to max_level
     // safely (it calls Geom(lev) for domain-clipping at each recursion depth).
@@ -555,6 +587,18 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
     for (int lev = 1; lev < max_probe; ++lev)
     {
         if(p->mpirank == 0) std::cout << "Level " << lev << std::endl;
+
+        // Ensure vectors have space for this level before accessing.
+        while ((int)amrex_box_array.size() <= lev)
+            amrex_box_array.push_back(amrex::BoxArray());
+        while ((int)amrex_distribution_mapping.size() <= lev)
+            amrex_distribution_mapping.push_back(amrex::DistributionMapping());
+
+        // Skip probing if the refined grid domain would exceed a practical limit.
+        // This prevents overflow issues in AMReX's error estimation at very fine levels.
+        amrex::IntVect domain_cells = amrex_geometry[lev].Domain().length();
+        if (domain_cells[0] <= 2 || domain_cells[1] <= 2 || domain_cells[2] <= 2)
+            break;  // Grid is too fine to subdivide further
 
         amrex::Vector<amrex::BoxArray> new_grids(max_nlevs);
         int new_finest = lev - 1;
@@ -585,6 +629,25 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         std::cout << "AMReX adaptive regrid: levels " << old_nlevs
                   << " -> " << new_nlevs << std::endl;
 
+    // Clear any unused levels above new_nlevs to avoid accessing invalid BoxArrays/DMs.
+    // This must be done BEFORE trimming vectors so AMReX cleanup can happen properly.
+    for (int lev = new_nlevs; lev < (int)amrex_box_array.size(); ++lev)
+    {
+        amrex_box_array[lev] = amrex::BoxArray();
+        amrex_distribution_mapping[lev] = amrex::DistributionMapping();
+    }
+
+    // Trim vectors to only include levels that were actually created by tagging.
+    amrex_geometry.resize(new_nlevs);
+    amrex_box_array.resize(new_nlevs);
+    amrex_distribution_mapping.resize(new_nlevs);
+
+    // Trim registered MultiFabs back to actual level count to avoid dangling dummy MFs.
+    for (auto& e : mf_registry)
+        e.mf->resize(new_nlevs);
+    for (auto& e : imf_registry)
+        e.mf->resize(new_nlevs);
+
     // Rebuild all registered MultiFabs and field aliases for pre-existing non-zero
     // levels whose BoxArrays may have changed (happens on every regrid call).
     // Level 0 is always fixed; only levels 1..min(old,new)-1 can change.
@@ -611,8 +674,13 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
     }
 
     // Recompute fine-mask for all active levels whenever box arrays changed.
+    // Only process levels that were actually created (0 to new_nlevs-1).
     if (new_nlevs >= 2)
     {
+        // Ensure amr_cell_mf is sized correctly for the new level count
+        if ((int)amr_cell_mf.size() < new_nlevs)
+            amr_cell_mf.resize(new_nlevs);
+
         amr_cell_mf[new_nlevs - 1].setVal(0);
         for (int lev = new_nlevs - 2; lev >= 0; --lev)
             amr_cell_mf[lev] = amrex::makeFineMask(
@@ -805,25 +873,43 @@ void grid_amrex::update_cell_spacing()
         {
             int idx = i + lev*max_i;
             DXN[idx] = XN[idx+1]-XN[idx];
-            DXP[idx] = XP[idx+1]-XP[idx];
+            if (i + 1 < (gknox + 2*marge)*pow(ref_ratio,lev))
+                DXP[idx] = XP[idx+1]-XP[idx];
         }
+        if ((gknox + 2*marge)*pow(ref_ratio,lev) > 0)
+            DXP[(gknox + 2*marge)*pow(ref_ratio,lev)-1 + lev*max_i] = DXN[(gknox + 2*marge)*pow(ref_ratio,lev)-1 + lev*max_i];
         for (int j = 0; j < (gknoy + 2*marge)*pow(ref_ratio,lev); ++j)
         {
             int idx = j + lev*max_j;
             DYN[idx] = YN[idx+1]-YN[idx];
-            DYP[idx] = YP[idx+1]-YP[idx];
+            if (j + 1 < (gknoy + 2*marge)*pow(ref_ratio,lev))
+                DYP[idx] = YP[idx+1]-YP[idx];
         }
+        if ((gknoy + 2*marge)*pow(ref_ratio,lev) > 0)
+            DYP[(gknoy + 2*marge)*pow(ref_ratio,lev)-1 + lev*max_j] = DYN[(gknoy + 2*marge)*pow(ref_ratio,lev)-1 + lev*max_j];
         for (int k = 0; k < (gknoz + 2*marge)*pow(ref_ratio,lev); ++k)
         {
             int idx = k + lev*max_k;
             DZN[idx] = ZN[idx+1]-ZN[idx];
-            DZP[idx] = ZP[idx+1]-ZP[idx];
+            if (k + 1 < (gknoz + 2*marge)*pow(ref_ratio,lev))
+                DZP[idx] = ZP[idx+1]-ZP[idx];
         }
+        if ((gknoz + 2*marge)*pow(ref_ratio,lev) > 0)
+            DZP[(gknoz + 2*marge)*pow(ref_ratio,lev)-1 + lev*max_k] = DZN[(gknoz + 2*marge)*pow(ref_ratio,lev)-1 + lev*max_k];
     }
 }
 
 void grid_amrex::fill_registered_mf_level(int lev)
 {
+    // Ensure the BoxArray for this level is valid before using it
+    if ((int)amrex_box_array.size() <= lev || amrex_box_array[lev].empty())
+    {
+        if(amrex::ParallelDescriptor::MyProc() == 0)
+            std::cerr << "WARNING: fill_registered_mf_level called with invalid BoxArray at level "
+                      << lev << std::endl;
+        return;
+    }
+
     for (auto& e : mf_registry)
     {
         if ((int)e.mf->size() <= lev) continue;

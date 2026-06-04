@@ -33,6 +33,7 @@ lexer::lexer() : coordinates(this), interpolation(this), position(this),
                  DF1(this), DF2(this), DF3(this),
                  #endif
                  DFF(this,DataLocation::NODE_Z),
+                 IO(this), IOSL(this),
                  mpirank(0)
 {
     control::ini_default();

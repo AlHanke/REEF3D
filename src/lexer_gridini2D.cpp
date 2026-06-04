@@ -26,14 +26,10 @@ void lexer::flagini2D()
 {
     control_calc();
 
-	grid2Dsize();
+    grid2Dsize();
 }
 
 void lexer::gridini2D()
 {
-    Iarray(IOSL,imax*jmax);
-    
-    for(i=-margin; i<knox+margin; ++i)
-    for(j=-margin; j<knoy+margin; ++j)
-        IOSL[(i-imin)*jmax + j-jmin] = 0;
+    IOSL.resize();
 }

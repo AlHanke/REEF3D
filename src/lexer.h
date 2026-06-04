@@ -111,6 +111,8 @@ public:
 #endif
     ArrayWrapper3D DF1,DF2,DF3;
     ArrayWrapper3D DFF;
+    // boundary conditions
+    ArrayWrapper3D IO,IOSL; // 0: no BC, 1: inflow, 2: outflow
 
     // flag
     std::unique_ptr<double[]> grid_solid, grid_topo;
