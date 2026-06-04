@@ -50,6 +50,16 @@ void driver::driver_ini_cfd()
     if(p->mpirank==0)
     cout<<"number of cells: "<<p->cellnumtot<<endl;
 
+    int counter = 0;
+    PLAINLOOP
+    {
+        counter++;
+    }
+    p->veclength += counter - p->cellnum;
+    p->cellnum = counter;
+    a->rhsvec.resize(p->veclength);
+    a->M.resize(p->veclength);
+
     log_ini();
 
     if(p->mpirank==0)
