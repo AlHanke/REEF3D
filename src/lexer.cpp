@@ -32,6 +32,7 @@ lexer::lexer() : coordinates(this), interpolation(this), position(this),
                  #else
                  DF1(this), DF2(this), DF3(this),
                  #endif
+                 IO(this), IOSL(this),
                  mpirank(0)
 {
     control::ini_default();

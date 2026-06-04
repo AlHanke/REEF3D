@@ -174,14 +174,20 @@ void grid::gridspacing(lexer* p, ghostcell *pgc)
     DZN[k] = ZN[k+1]-ZN[k];
 
     // dxn
-    for(i=0;i<max_i;++i)
+    for(i=0;i<max_i-1;++i)
     DXP[i] = XP[i+1] - XP[i];
+    if(max_i > 0)
+        DXP[max_i-1] = DXN[max_i-1];
 
-    for(j=0;j<max_j;++j)
+    for(j=0;j<max_j-1;++j)
     DYP[j] = YP[j+1] - YP[j];
+    if(max_j > 0)
+        DYP[max_j-1] = DYN[max_j-1];
 
-    for(k=0;k<max_k;++k)
+    for(k=0;k<max_k-1;++k)
     DZP[k] = ZP[k+1] - ZP[k];
+    if(max_k > 0)
+        DZP[max_k-1] = DZN[max_k-1];
 
     // Average grid spacing
     DXM = DXD = DYD = 0.0;
