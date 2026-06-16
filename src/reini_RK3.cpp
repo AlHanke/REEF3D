@@ -184,17 +184,17 @@ void reini_RK3::start(fdm *a, lexer *p, field &f, ghostcell *pgc, ioflow* pflow)
     picardtime2=pgc->timer();
 
     p->reinitime+=pgc->timer()-starttime;
-    if(p->mpirank==0 && p->count%p->P12==0)
-    {
-        std::cout<<"\nReini RK3\n"
-        <<"  Time for Picard iteration: "<<(picardtime-starttime)*1000.0<<" ms\n"
-        <<"  Time for flow calculations: "<<(flowtime-picardtime)*1000.0<<" ms\n"
-        <<"  Time for reinitialization discretization: "<<(rdisctime-picardtime)*1000.0<<" ms\n"
-        <<"  Time for RK3 calculations: "<<(calctime-rdisctime)*1000.0<<" ms\n"
-        <<"  Time for ghost cell updates: "<<(gctime-calctime)*1000.0<<" ms\n"
-        <<"  Time for correct_ls: "<<(temptime-picardtime2)*1000.0<<" ms\n"
-        <<"  Picard iterations: "<<iters_done<<" / "<<reiniter<<"\n"<<std::endl;
-    }
+    // if(p->mpirank==0 && p->count%p->P12==0)
+    // {
+    //     std::cout<<"\nReini RK3\n"
+    //     <<"  Time for Picard iteration: "<<(picardtime-starttime)*1000.0<<" ms\n"
+    //     <<"  Time for flow calculations: "<<(flowtime-picardtime)*1000.0<<" ms\n"
+    //     <<"  Time for reinitialization discretization: "<<(rdisctime-picardtime)*1000.0<<" ms\n"
+    //     <<"  Time for RK3 calculations: "<<(calctime-rdisctime)*1000.0<<" ms\n"
+    //     <<"  Time for ghost cell updates: "<<(gctime-calctime)*1000.0<<" ms\n"
+    //     <<"  Time for correct_ls: "<<(temptime-picardtime2)*1000.0<<" ms\n"
+    //     <<"  Picard iterations: "<<iters_done<<" / "<<reiniter<<"\n"<<std::endl;
+    // }
 }
 
 void reini_RK3::time_preproc(lexer* p)

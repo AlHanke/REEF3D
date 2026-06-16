@@ -177,19 +177,19 @@ void levelset_RK3::start(fdm* a, lexer* p, convection* pconvec, solver*, ghostce
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<"lsmtime: "<<setprecision(3)<<p->lsmtime<<endl;
 
-    if(p->mpirank==0 && p->count%p->P12==0 && p->count>0)
-    {
-        const int precision = 5;
-        std::cout<<"\n"
-        <<"Timing for level set RK3 step "<<p->count<<"\n"
-        <<"\tsteptime:     "<<std::setprecision(precision)<<gctime-starttime<<"\n"
-        <<"\tsetValtime:  "<<std::setprecision(precision)<<setValtime-starttime<<"\n"
-        <<"\tpconvectime: "<<std::setprecision(precision)<<pconvectime-setValtime<<"\n"
-        <<"\tcalctime:    "<<std::setprecision(precision)<<calctime-pconvectime<<"\n"
-        <<"\tgctime:      "<<std::setprecision(precision)<<gctime-phirelaxtime<<"\n\n"
-        <<"\treinitime:   "<<std::setprecision(precision)<<reinitime-temptime<<"\n"
-        <<"\tupdate_time: "<<std::setprecision(precision)<<update_time-picardtime<<"\n"<<std::endl;
-    }
+    // if(p->mpirank==0 && p->count%p->P12==0 && p->count>0)
+    // {
+    //     const int precision = 5;
+    //     std::cout<<"\n"
+    //     <<"Timing for level set RK3 step "<<p->count<<"\n"
+    //     <<"\tsteptime:     "<<std::setprecision(precision)<<gctime-starttime<<"\n"
+    //     <<"\tsetValtime:  "<<std::setprecision(precision)<<setValtime-starttime<<"\n"
+    //     <<"\tpconvectime: "<<std::setprecision(precision)<<pconvectime-setValtime<<"\n"
+    //     <<"\tcalctime:    "<<std::setprecision(precision)<<calctime-pconvectime<<"\n"
+    //     <<"\tgctime:      "<<std::setprecision(precision)<<gctime-phirelaxtime<<"\n\n"
+    //     <<"\treinitime:   "<<std::setprecision(precision)<<reinitime-temptime<<"\n"
+    //     <<"\tupdate_time: "<<std::setprecision(precision)<<update_time-picardtime<<"\n"<<std::endl;
+    // }
 }
 
 void levelset_RK3::update(lexer *p, fdm *a, ghostcell *pgc, field &f)

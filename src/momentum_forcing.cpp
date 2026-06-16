@@ -106,17 +106,17 @@ void momentum_forcing::momentum_forcing_start(lexer* p, fdm* a, ghostcell *pgc, 
 
     double gc_update_time = pgc->timer();
 
-    if(p->mpirank==0 && p->count>0 && p->count%p->P12==0 && iter==0)
-    {
-        const int precision = 5;
-        const double total_time = gc_update_time - starttime;
-        std::cout<<"\nTiming for momentum forcing iteration "<<iter<<"\n"
-        <<"\tset zero:    "<<std::setprecision(precision)<<setzero_time-starttime<<":"<<100.0*(setzero_time-starttime)/total_time<<"\n"
-        <<"\tstart:       "<<std::setprecision(precision)<<gc_time-setzero_time<<":"<<100.0*(gc_time-setzero_time)/total_time<<"\n"
-        <<"\tforcing:      "<<std::setprecision(precision)<<gc_forcing_time-gc_time<<":"<<100.0*(gc_forcing_time-gc_time)/total_time<<"\n"
-        <<"\tsixdof:       "<<std::setprecision(precision)<<sixdof_time-gc_forcing_time<<":"<<100.0*(sixdof_time-gc_forcing_time)/total_time<<"\n"
-        <<"\tcompute time: "<<std::setprecision(precision)<<compute_time-starttime<<":"<<100.0*(compute_time-starttime)/total_time<<"\n"
-        <<"\tapply time:   "<<std::setprecision(precision)<<apply_time-compute_time<<":"<<100.0*(apply_time-compute_time)/total_time<<"\n"
-        <<"\tgc update:   "<<std::setprecision(precision)<<gc_update_time-apply_time<<":"<<100.0*(gc_update_time-apply_time)/total_time<<std::endl;
-    }
+    // if(p->mpirank==0 && p->count>0 && p->count%p->P12==0 && iter==0)
+    // {
+    //     const int precision = 5;
+    //     const double total_time = gc_update_time - starttime;
+    //     std::cout<<"\nTiming for momentum forcing iteration "<<iter<<"\n"
+    //     <<"\tset zero:    "<<std::setprecision(precision)<<setzero_time-starttime<<":"<<100.0*(setzero_time-starttime)/total_time<<"\n"
+    //     <<"\tstart:       "<<std::setprecision(precision)<<gc_time-setzero_time<<":"<<100.0*(gc_time-setzero_time)/total_time<<"\n"
+    //     <<"\tforcing:      "<<std::setprecision(precision)<<gc_forcing_time-gc_time<<":"<<100.0*(gc_forcing_time-gc_time)/total_time<<"\n"
+    //     <<"\tsixdof:       "<<std::setprecision(precision)<<sixdof_time-gc_forcing_time<<":"<<100.0*(sixdof_time-gc_forcing_time)/total_time<<"\n"
+    //     <<"\tcompute time: "<<std::setprecision(precision)<<compute_time-starttime<<":"<<100.0*(compute_time-starttime)/total_time<<"\n"
+    //     <<"\tapply time:   "<<std::setprecision(precision)<<apply_time-compute_time<<":"<<100.0*(apply_time-compute_time)/total_time<<"\n"
+    //     <<"\tgc update:   "<<std::setprecision(precision)<<gc_update_time-apply_time<<":"<<100.0*(gc_update_time-apply_time)/total_time<<std::endl;
+    // }
 }
