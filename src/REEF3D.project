@@ -1165,6 +1165,7 @@
       </VirtualDirectory>
       <File Name="lexer.h"/>
       <File Name="driver.h"/>
+      <File Name="bvh.h"/>
       <VirtualDirectory Name="Control">
         <File Name="control.h"/>
       </VirtualDirectory>
