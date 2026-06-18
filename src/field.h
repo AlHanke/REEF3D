@@ -49,6 +49,15 @@ Author: Hans Bihs
             return arr(i + ox, j + oy, k + oz);
         }
     };
+    struct LocalArr4IntConst {
+        amrex::Array4<int const> arr;
+        int ox, oy, oz;
+        AMREX_FORCE_INLINE LocalArr4IntConst(amrex::Array4<int const> a, int x, int y, int z) noexcept
+            : arr(a), ox(x), oy(y), oz(z) {}
+        AMREX_FORCE_INLINE int operator()(int i, int j, int k) const noexcept {
+            return arr(i + ox, j + oy, k + oz);
+        }
+    };
 #endif
 
 class field : public field_base<double>
