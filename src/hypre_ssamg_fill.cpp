@@ -37,7 +37,7 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
         ++count;
     }
 
-    nentries = 7;
+    nentries = stencil_size;
     for (j = 0; j < nentries; j++)
         stencil_indices[j] = j;
 
@@ -192,7 +192,7 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
         }
     }
 
-    HYPRE_SStructMatrixSetBoxValues(A, part, ilower, iupper, variable, nentries, stencil_indices, values.data());
+    HYPRE_SStructMatrixSetBoxValues(A, 0, ilower, iupper, variable, nentries, stencil_indices, values.data());
     HYPRE_SStructMatrixAssemble(A);
 
     // initial guess vector x
@@ -207,7 +207,7 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
         ++count;
     }
 
-    HYPRE_SStructVectorSetBoxValues(x, part, ilower, iupper, variable, values.data());
+    HYPRE_SStructVectorSetBoxValues(x, 0, ilower, iupper, variable, values.data());
     HYPRE_SStructVectorAssemble(x);
 
     // RHS vector b
@@ -225,7 +225,7 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
         ++count;
     }
 
-    HYPRE_SStructVectorSetBoxValues(b, part, ilower, iupper, variable, values.data());
+    HYPRE_SStructVectorSetBoxValues(b, 0, ilower, iupper, variable, values.data());
     HYPRE_SStructVectorAssemble(b);
 #endif
 }
@@ -263,7 +263,7 @@ void hypre_ssamg::fillbackvec4(lexer* p, field& f, int var)
         }
     }
 #else
-    HYPRE_SStructVectorGetBoxValues(x, part, ilower, iupper, variable, values.data());
+    HYPRE_SStructVectorGetBoxValues(x, 0, ilower, iupper, variable, values.data());
 
     count = 0;
     KJILOOP
