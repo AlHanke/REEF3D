@@ -23,32 +23,20 @@ Author: Hans Bihs
 #ifndef DENSITY_F_H_
 #define DENSITY_F_H_
 
-#include"density.h"
-#include"increment.h"
+#include "density.h"
+#include "increment.h"
 
-class fdm;
 class lexer;
-
-
-using namespace std;
+class fdm;
 
 class density_f final : public density, virtual public increment
 {
 
 public:
     density_f(lexer*);
-	virtual ~density_f();
+    virtual ~density_f() = default;
 
-	double roface(lexer*,fdm*,int,int,int) override final;
-	
-	double H,H_fb,roval,phival;
-	int ii,jj,kk;
-    double r,s;
-
+    double roface(lexer*,fdm*,int,int,int) override final;
 };
 
 #endif
-
-
-
-
