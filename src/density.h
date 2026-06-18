@@ -23,21 +23,15 @@ Author: Hans Bihs
 #ifndef DENSITY_H_
 #define DENSITY_H_
 
-class fdm;
 class lexer;
-
-using namespace std;
+class fdm;
 
 class density
 {
-
 public:
-	virtual double roface(lexer*,fdm*,int,int,int)=0;
+    virtual ~density() = default;
 
+    virtual double roface(lexer*,fdm*,int,int,int)=0;
 };
 
 #endif
-
-
-
-
