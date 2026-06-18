@@ -27,13 +27,24 @@ Author: Hans Bihs
 
 void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
 {
+    // Grid setup
+    #if USE_AMREX
     numparts   = p->nlevs;
-    part       = 0;
-    dimensions = p->j_dir ? 3 : 2;
-    variable   = 0;
-    numvar     = 1;
-    object_type = HYPRE_SSTRUCT;
+    #else
+    numparts   = 1;
+    #endif
+    dimensions = 3;
+    HYPRE_SStructGridCreate(pgc->mpi_comm, dimensions, numparts, &grid);
 
+    // Variables
+    numvar = 1;
+    vartypes[0] = HYPRE_SSTRUCT_VARIABLE_CELL;
+
+    for (int lev = 0; lev < numparts; ++lev)
+        HYPRE_SStructGridSetVariables(grid, lev, numvar, vartypes);
+
+
+    // Extends
     ilower[0] = p->origin_i;
     ilower[1] = p->origin_j;
     ilower[2] = p->origin_k;
@@ -42,17 +53,11 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
     iupper[1] = p->knoy + p->origin_j - 1;
     iupper[2] = p->knoz + p->origin_k - 1;
 
-    vartypes[0] = HYPRE_SSTRUCT_VARIABLE_CELL;
-
-    HYPRE_SStructGridCreate(pgc->mpi_comm, dimensions, numparts, &grid);
-
     HYPRE_SStructGridSetExtents(grid, 0, ilower, iupper);
-    HYPRE_SStructGridSetVariables(grid, 0, numvar, vartypes);
 
 #if USE_AMREX
     for (int lev = 1; lev < p->nlevs; ++lev)
     {
-        HYPRE_SStructGridSetVariables(grid, lev, numvar, vartypes);
         for (int b = 0; b < (int)p->amrex_box_array[lev].size(); ++b)
         {
             if (p->amrex_distribution_mapping[lev][b] != p->mpirank) continue;
@@ -62,15 +67,16 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
             HYPRE_SStructGridSetExtents(grid, lev, lo, hi);
         }
     }
-
 #endif
 
     HYPRE_SStructGridAssemble(grid);
 
-    // 7-point stencil: centre + ±x ±y ±z
-    int offsets[7][3] = {{0,0,0}, {-1,0,0}, {1,0,0}, {0,-1,0}, {0,1,0}, {0,0,-1}, {0,0,1}};
 
-    HYPRE_SStructStencilCreate(dimensions, 7, &stencil);
+    // 7-point stencil: centre + ±x ±y ±z
+    int offsets[stencil_size][3] = {{0,0,0}, {-1,0,0}, {1,0,0}, {0,-1,0}, {0,1,0}, {0,0,-1}, {0,0,1}};
+    variable = 0;
+
+    HYPRE_SStructStencilCreate(dimensions, stencil_size, &stencil);
     for (int entry = 0; entry < 7; ++entry)
         HYPRE_SStructStencilSetEntry(stencil, entry, offsets[entry], variable);
 
