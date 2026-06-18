@@ -157,6 +157,10 @@ Authors: Hans Bihs, Alexander Hanke
         const auto& _fl_mf_a_##member = (ptr)->member.GetMultiFab(_fl_lev); \
         const LocalArr4Const member_##member(_fl_mf_a_##member.const_array(_fl_mfi), ox, oy, oz);
 
+    #define FIELD_CONST_MEMBER_INC_INT(ptr, member) \
+        const auto& _fl_mf_a_##member = (ptr)->member.GetMultiFab(_fl_lev); \
+        const LocalArr4IntConst member_##member(_fl_mf_a_##member.const_array(_fl_mfi), ox, oy, oz);
+
     #define FIELD_MUT_INC(name) \
         auto& _fl_mf_##name = (name).GetMultiFab(_fl_lev); \
         LocalArr4 name(_fl_mf_##name.array(_fl_mfi), ox, oy, oz);
