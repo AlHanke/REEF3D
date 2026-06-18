@@ -71,7 +71,6 @@ private:
     HYPRE_SStructVariable vartypes[1];
 
     int numparts;
-    int part;
     int dimensions;
     int variable;
     int numvar;
@@ -85,6 +84,8 @@ private:
     int nentries;
 
     int numiter, count, q;
+
+    static constexpr int stencil_size = 7; // 7-point stencil
 };
 
 #endif
