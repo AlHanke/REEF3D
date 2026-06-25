@@ -23,6 +23,7 @@ Author: Hans Bihs
 #include "density_f.h"
 #include "lexer.h"
 #include "fdm.h"
+#include "heaviside_ls.h"
 
 density_f::density_f(lexer* p)
 { 
@@ -33,13 +34,7 @@ double density_f::roface(lexer *p, fdm *a, int aa, int bb, int cc)
     const double phival = 0.5*(a->phi(i,j,k) + a->phi(i+aa,j+bb,k+cc));
     const double psi = p->psi;
 
-    double H;
-    if(phival>psi)
-    H=1.0;
-    else if(phival<-psi)
-    H=0.0;
-    else
-    H=0.5*(1.0 + phival/psi + (1.0/PI)*sin((PI*phival)/psi));
+    double H = heaviside_ls(phival, psi);
 
     return p->W1*H + p->W3*(1.0-H);
 }

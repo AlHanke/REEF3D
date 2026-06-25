@@ -26,6 +26,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ioflow.h"
 #include"vrans.h"
+#include "heaviside_ls.h"
 
 komega_func::komega_func(lexer* p, fdm* a, ghostcell *pgc) : rans_io(p,a),komega_bc(p)
 {

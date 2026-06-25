@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
+#include"heaviside_ls.h"
 
 void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
 {
@@ -112,12 +113,7 @@ void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
         // inteface H
         epsi = p->F45*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
 
-        if(a->phi(i,j,k)>epsi)
-        H=1.0;
-        if(a->phi(i,j,k)<-epsi)
-        H=0.0;
-        if(fabs(a->phi(i,j,k))<=epsi)
-        H=0.5*(1.0 + a->phi(i,j,k)/epsi + (1.0/PI)*sin((PI*a->phi(i,j,k))/epsi));
+        H = heaviside_ls(a->phi(i,j,k),epsi);
 
 
         if(z<=eta_M)

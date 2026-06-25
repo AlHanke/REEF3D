@@ -25,6 +25,7 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"ghostcell.h"
 #include"nhflow_reinidisc_fsf.h"
+#include"heaviside_ls.h"
 
 double vrans_nhflow_f::Hporface(lexer *p, fdm_nhf *d, int aa, int bb, int cc)
 {
@@ -39,17 +40,6 @@ double vrans_nhflow_f::Hporface(lexer *p, fdm_nhf *d, int aa, int bb, int cc)
 
     // Construct solid heaviside function
     phival_sf = d->PORSTRUC[IJK];
-    
-	
-    if(-phival_sf > psi)
-    H = 1.0;
 
-    if(-phival_sf < -psi)
-    H = 0.0;
-
-    if(fabs(phival_sf)<=psi)
-    H = 0.5*(1.0 + -phival_sf/psi + (1.0/PI)*sin((PI*-phival_sf)/psi));
-        
-
-    return H;
+    return heaviside_ls(-phival_sf, psi);
 }

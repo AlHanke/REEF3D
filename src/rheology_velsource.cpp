@@ -23,6 +23,7 @@ Authors: Hans Bihs, Alexander Hanke
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h" 
+#include"heaviside_ls.h"
 #include<algorithm>
 
 void rheology_f::u_source(lexer *p, fdm *a)
@@ -48,7 +49,7 @@ void rheology_f::u_source(lexer *p, fdm *a)
         
         phival = 0.5*(a->phi(i,j,k)+a->phi(i+1,j,k));
 
-        H = heaviside(phival);
+        H = heaviside_ls(phival,epsi);
         
         a->rhsvec.V[count] -= H*f*(tau/(p->DZN[KP]*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k))));
 
@@ -79,7 +80,7 @@ void rheology_f::u_source(lexer *p, fdm *a)
         
         phival = 0.5*(a->phi(i,j,k)+a->phi(i+1,j,k));
 
-        H = heaviside(phival);
+        H = heaviside_ls(phival,epsi);
         
         a->rhsvec.V[count] += H*((tau02-tau01)/(p->DXN[IP]*0.5*(a->ro(i,j,k)+a->ro(i+1,j,k)))); // *f ?
 
@@ -112,7 +113,7 @@ void rheology_f::u_source(lexer *p, fdm *a)
 
         phival = 0.5*(a->phi(i,j,k)+a->phi(i+1,j,k));
         
-        H = heaviside(phival);
+        H = heaviside_ls(phival,epsi);
                  
         a->rhsvec.V[count] += H*tanphi*(fxx*dpdx + fxy*dpdy + fxz*dpdz)/(0.5*(a->ro(i,j,k)+a->ro(i+1,j,k)));
 
@@ -143,7 +144,7 @@ void rheology_f::v_source(lexer *p, fdm *a)
         
         phival = 0.5*(a->phi(i,j,k)+a->phi(i,j+1,k));
         
-        H = heaviside(phival);
+        H = heaviside_ls(phival,epsi);
         
         a->rhsvec.V[count] -= H*f*(tau0/(p->DYN[JP]*0.5*(a->ro(i,j,k)+a->ro(i,j+1,k))));
         
@@ -172,7 +173,7 @@ void rheology_f::v_source(lexer *p, fdm *a)
 
         phival = 0.5*(a->phi(i,j,k)+a->phi(i,j+1,k));
         
-        H = heaviside(phival);
+        H = heaviside_ls(phival,epsi);
                  
         a->rhsvec.V[count] += H*tanphi*(fyx*dpdx + fyy*dpdy + fyz*dpdz)/(0.5*(a->ro(i,j,k)+a->ro(i,j+1,k)));
 
@@ -200,7 +201,7 @@ void rheology_f::w_source(lexer *p, fdm *a)
         
         phival = 0.5*(a->phi(i,j,k)+a->phi(i,j,k+1));
 
-        H = heaviside(phival);
+        H = heaviside_ls(phival,epsi);
         
         a->rhsvec.V[count] -= H*f*(tau0/(0.5*(p->DZN[KP]*a->ro(i,j,k)+a->ro(i,j,k+1))));
 
@@ -231,7 +232,7 @@ void rheology_f::w_source(lexer *p, fdm *a)
         
         phival = 0.5*(a->phi(i,j,k)+a->phi(i,j,k+1));
 
-        H = heaviside(phival);
+        H = heaviside_ls(phival,epsi);
         
         a->rhsvec.V[count] += H*((tau02-tau01)/(p->DXM*0.5*(a->ro(i,j,k)+a->ro(i,j,k+1)))); // PFo: Missing "*f" ?
 
@@ -262,7 +263,7 @@ void rheology_f::w_source(lexer *p, fdm *a)
 
         phival = 0.5*(a->phi(i,j,k)+a->phi(i,j,k+1));
         
-        H = heaviside(phival);
+        H = heaviside_ls(phival,epsi);
                          
         a->rhsvec.V[count] += H*tanphi*(fzx*dpdx + fzy*dpdy + fzz*dpdz)/(0.5*(a->ro(i,j,k)+a->ro(i,j,k+1)));
 

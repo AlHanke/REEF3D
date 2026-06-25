@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
+#include"heaviside_ls.h"
 #include<sys/stat.h>
 #include<sys/types.h>
 
@@ -108,14 +109,7 @@ void gage_discharge_x::start(lexer *p, fdm *a, ghostcell *pgc)
         {
             epsi = 1.6*p->DXN[KP];
             
-            if(a->phi(i,j,k)>epsi)
-            H=1.0;
-
-            if(a->phi(i,j,k)<-epsi)
-            H=0.0;
-
-            if(fabs(a->phi(i,j,k))<=epsi)
-            H=0.5*(1.0 + a->phi(i,j,k)/epsi + (1.0/PI)*sin((PI*a->phi(i,j,k))/epsi));
+            H = heaviside_ls(a->phi(i,j,k),epsi);
 
             area=H*p->DYN[JP]*p->DZN[KP];
 

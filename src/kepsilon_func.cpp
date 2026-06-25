@@ -25,6 +25,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"vrans.h"
+#include"heaviside_ls.h"
 
 kepsilon_func::kepsilon_func(lexer* p, fdm* a, ghostcell *pgc) : rans_io(p,a), kepsilon_bc(p)
 {
