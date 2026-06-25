@@ -124,6 +124,7 @@ public:
     double maxF,maxG,maxH;
     double wd_criterion;
 	
+    #if USE_AMREX
 	double t1,t2,t3,t4,t5;
     field1 u0,du0;
     field2 v0,dv0;
@@ -137,6 +138,9 @@ public:
     field2 v2,dv2;
     field3 w2,dw2;
     field4 pcorr2,div2,phi2,ro2;
+    field4 press0;
+    #endif
+    field4 grav_pot;
 };
 
 #endif

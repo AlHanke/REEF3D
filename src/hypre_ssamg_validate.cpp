@@ -48,9 +48,11 @@ Author: Hans Bihs
 //                     or a miscounted C-F coupling.
 //   2. symmetry      global  yT A x - xT A y  (0 for a symmetric operator). Away from the
 //                     C-F interface the operator must be symmetric; the conservative C-F
-//                     coupling is deliberately not. On the ParCSR (nlevs>1) path the
+//                     coupling is deliberately not. On the ParCSR object_type path the
 //                     per-row  Ax - A^T x  localises the asymmetry: it must vanish on
-//                     interior rows and be confined to the C-F ring.
+//                     interior rows and be confined to the C-F ring. The SStruct
+//                     object_type (SSAMG / SStruct-GMRES, single- or multi-part) has no
+//                     transpose matvec, so only the global asymmetry is reported there.
 
 void hypre_ssamg::validate_operator(lexer* p, fdm* a, ghostcell* pgc)
 {
@@ -64,12 +66,16 @@ void hypre_ssamg::validate_operator(lexer* p, fdm* a, ghostcell* pgc)
         HYPRE_SStructVectorInitialize(v);
     };
 
-    // y = A x  (transpose: y = A^T x, ParCSR path only). For the ParCSR object the
+    // y = A x  (transpose: y = A^T x, ParCSR path only). Gate on object_type, not on
+    // nlevs: the matrix may be assembled as SStruct even for a multi-part grid (SSAMG /
+    // SStruct-GMRES). HYPRE_SStructMatrixMatvec applies the full operator, structured
+    // stencil plus the non-stencil C-F graph entries, on single- and multi-part grids
+    // alike. Only the ParCSR object exposes a transpose matvec; for the ParCSR object the
     // structured side of y is stale after the par matvec, so gather it back -- the same
     // refresh solve() performs after the par solve.
     auto matvec = [&](HYPRE_SStructVector xv, HYPRE_SStructVector yv, bool transpose)
     {
-        if (p->nlevs > 1)
+        if (object_type == HYPRE_PARCSR)
         {
             HYPRE_ParCSRMatrix pA; HYPRE_ParVector px, py;
             HYPRE_SStructMatrixGetObject(A,  (void**) &pA);
@@ -81,6 +87,8 @@ void hypre_ssamg::validate_operator(lexer* p, fdm* a, ghostcell* pgc)
         }
         else
         {
+            // No transpose matvec exists for an SStruct object; callers guard the
+            // transpose request on object_type == HYPRE_PARCSR.
             HYPRE_SStructMatrixMatvec(1.0, A, xv, 0.0, yv);
         }
     };
@@ -110,6 +118,12 @@ void hypre_ssamg::validate_operator(lexer* p, fdm* a, ghostcell* pgc)
     auto is_cf = [&](int lev, int i, int j, int k)
     { return cfset.count({lev, i, j, k}) != 0; };
 
+    // Covered coarse cells are emitted as identity rows (see fill_matrix4); they are not
+    // part of the composite solution, so exclude them from the test vectors and the bucket
+    // tallies. amr_cell_mf is 0 on covered cells for lev < nlevs-1 (finest is a blanket 0).
+    auto is_covered = [&](int lev, const amrex::Array4<const int>& cov, int i, int j, int k)
+    { return lev < p->nlevs - 1 && cov(i, j, k) == 0; };
+
     // A row is a boundary row if a stencil face was dropped: either a neighbour is
     // non-fluid (flag4<0: air/inflow/outflow/solid) or the cell sits on a domain edge.
     // The domain-edge test matters because lateral-wall ghost flag4 can be >=0 (mirror),
@@ -133,19 +147,22 @@ void hypre_ssamg::validate_operator(lexer* p, fdm* a, ghostcell* pgc)
         for (int lev = 0; lev < p->nlevs; ++lev)
         {
             const auto& flag4_mf = p->flag4.GetMultiFab(lev);
+            const auto& cover_mf = p->amr_cell_mf[lev];
             for (amrex::MFIter mfi(flag4_mf); mfi.isValid(); ++mfi)
             {
                 const amrex::Box& bx = mfi.validbox();
                 int lo[3] = {bx.smallEnd(0), bx.smallEnd(1), bx.smallEnd(2)};
                 int hi[3] = {bx.bigEnd(0),   bx.bigEnd(1),   bx.bigEnd(2)};
-                const auto fa = flag4_mf.const_array(mfi);
+                const auto fa  = flag4_mf.const_array(mfi);
+                const auto cov = cover_mf.const_array(mfi);
 
                 std::vector<double> vals(bx.numPts());
                 int cnt = 0;
                 for (int kk = lo[2]; kk <= hi[2]; ++kk)
                 for (int jj = lo[1]; jj <= hi[1]; ++jj)
                 for (int ii = lo[0]; ii <= hi[0]; ++ii)
-                    vals[cnt++] = (fa(ii,jj,kk) >= AIR_FLAG) ? gen() : 0.0;
+                    vals[cnt++] = (fa(ii,jj,kk) >= AIR_FLAG && !is_covered(lev,cov,ii,jj,kk))
+                                ? gen() : 0.0;
 
                 HYPRE_SStructVectorSetBoxValues(v, lev, lo, hi, variable, vals.data());
             }
@@ -169,12 +186,14 @@ void hypre_ssamg::validate_operator(lexer* p, fdm* a, ghostcell* pgc)
         for (int lev = 0; lev < p->nlevs; ++lev)
         {
             const auto& flag4_mf = p->flag4.GetMultiFab(lev);
+            const auto& cover_mf = p->amr_cell_mf[lev];
             for (amrex::MFIter mfi(flag4_mf); mfi.isValid(); ++mfi)
             {
                 const amrex::Box& bx = mfi.validbox();
                 int lo[3] = {bx.smallEnd(0), bx.smallEnd(1), bx.smallEnd(2)};
                 int hi[3] = {bx.bigEnd(0),   bx.bigEnd(1),   bx.bigEnd(2)};
-                const auto fa = flag4_mf.const_array(mfi);
+                const auto fa  = flag4_mf.const_array(mfi);
+                const auto cov = cover_mf.const_array(mfi);
 
                 std::vector<double> y(bx.numPts());
                 HYPRE_SStructVectorGetBoxValues(yv, lev, lo, hi, variable, y.data());
@@ -186,6 +205,7 @@ void hypre_ssamg::validate_operator(lexer* p, fdm* a, ghostcell* pgc)
                 {
                     const double val = std::fabs(y[cnt++]);
                     if (fa(ii,jj,kk) < AIR_FLAG) continue;   // identity row, skip
+                    if (is_covered(lev,cov,ii,jj,kk)) continue; // covered identity row, skip
 
                     if (is_cf(lev, ii, jj, kk))
                     {
@@ -264,8 +284,15 @@ void hypre_ssamg::validate_operator(lexer* p, fdm* a, ghostcell* pgc)
             std::cout << "  [matcheck] symmetry  yT A x - xT A y = " << (gs1 - gs2)
                       << "  (rel " << std::fabs(gs1 - gs2) / denom << ")" << std::endl;
 
-        // per-row localisation  Ax - A^T x  (ParCSR transpose only)
-        if (p->nlevs > 1)
+        // per-row localisation  Ax - A^T x  (ParCSR transpose only). The SStruct object
+        // has no transpose matvec, so skip it there and report the limitation instead.
+        if (p->nlevs > 1 && object_type != HYPRE_PARCSR)
+        {
+            if (rank == 0)
+                std::cout << "  [matcheck] per-row Ax-A^T x skipped "
+                             "(SStruct object_type has no transpose matvec)" << std::endl;
+        }
+        else if (p->nlevs > 1)
         {
             HYPRE_SStructVector ATx;
             vcreate(ATx);
@@ -276,12 +303,14 @@ void hypre_ssamg::validate_operator(lexer* p, fdm* a, ghostcell* pgc)
             for (int lev = 0; lev < p->nlevs; ++lev)
             {
                 const auto& flag4_mf = p->flag4.GetMultiFab(lev);
+                const auto& cover_mf = p->amr_cell_mf[lev];
                 for (amrex::MFIter mfi(flag4_mf); mfi.isValid(); ++mfi)
                 {
                     const amrex::Box& bx = mfi.validbox();
                     int lo[3] = {bx.smallEnd(0), bx.smallEnd(1), bx.smallEnd(2)};
                     int hi[3] = {bx.bigEnd(0),   bx.bigEnd(1),   bx.bigEnd(2)};
-                    const auto fa = flag4_mf.const_array(mfi);
+                    const auto fa  = flag4_mf.const_array(mfi);
+                    const auto cov = cover_mf.const_array(mfi);
                     const int nc = bx.numPts();
 
                     std::vector<double> Ax(nc), ATxv(nc);
@@ -296,6 +325,7 @@ void hypre_ssamg::validate_operator(lexer* p, fdm* a, ghostcell* pgc)
                         const double d = std::fabs(Ax[cnt] - ATxv[cnt]);
                         ++cnt;
                         if (fa(ii,jj,kk) < AIR_FLAG) continue;
+                        if (is_covered(lev,cov,ii,jj,kk)) continue;
 
                         if (is_cf(lev, ii, jj, kk))            d_cf  = std::max(d_cf,  d);
                         else if (is_boundary(lev,fa,ii,jj,kk)) d_bnd = std::max(d_bnd, d);
@@ -446,7 +476,9 @@ void hypre_ssamg::matvec_into(lexer* p, fdm* a, ghostcell* pgc, field& out, fiel
     HYPRE_SStructVectorAssemble(xv);
     HYPRE_SStructVectorAssemble(yv);
 
-    if (p->nlevs > 1)
+    // Gate on object_type, not nlevs: a multi-part grid assembled as SStruct (SSAMG /
+    // SStruct-GMRES) must use the structured matvec, which covers the C-F graph entries.
+    if (object_type == HYPRE_PARCSR)
     {
         HYPRE_ParCSRMatrix pA; HYPRE_ParVector px, py;
         HYPRE_SStructMatrixGetObject(A,  (void**) &pA);

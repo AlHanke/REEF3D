@@ -282,7 +282,6 @@ public:
 
     // free surface
     double psi;
-    double psi_lev[8] = {}; // per-AMR-level interface half-width (psi_lev[0]=psi); level-aware roface
 
 // PARALELL
     int mpirank;

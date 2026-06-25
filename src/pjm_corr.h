@@ -52,9 +52,10 @@ protected:
     void wcorr(lexer*,fdm*,field&,double) override final;
 
 private:
+    void velcorr(lexer*, fdm*, ghostcell*, field&, field&, field&, solver*, double);
     void vel_setup(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
     void rhs(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
-    void presscorr(lexer*,fdm*,field&,field&,field&,field&,double);
+    void presscorr(lexer*,fdm*);
 
     // Projection-consistency probe (env REEF_PROJ_CHECK): applies the full velocity
     // correction to a zero base, then checks L*pcorr + R(dU) ~ 0 per cell. Non-zero
