@@ -138,7 +138,9 @@ public:
     field2 v2,dv2;
     field3 w2,dw2;
     field4 pcorr2,div2,phi2,ro2;
+    field4 press0;
     #endif
+    field4 grav_pot;
 };
 
 #endif

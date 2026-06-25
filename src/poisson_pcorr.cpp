@@ -33,6 +33,7 @@ Author: Hans Bihs
 #include "density_vof.h"
 #include "density_rheo.h"
 #include "density_pst.h"
+#include <cstdlib>
 
 poisson_pcorr::poisson_pcorr(lexer *p, heat *&pheat, concentration *&pconc)
 {
@@ -109,9 +110,74 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
         ++n;
     }
 
+    const bool wallfold = (std::getenv("REEF_NO_WALLFOLD")==nullptr); // TEST: set env to disable solidnb fold
+#if USE_AMREX
+    const bool symfold = (std::getenv("REEF_SYM_FOLD")!=nullptr);
+#endif
     n=0;
     LOOP
     {
+        // ---- Solid-wall faces (Option B): fold into the diagonal (homogeneous Neumann) every
+        // face whose neighbour is a SOLID. This ties the matrix coupling structure to the velocity
+        // DOFs (the correction skips non-DOF faces), giving D(1/rho)G = L at walls and leaving every
+        // retained coupling a real velocity face with two valid pressure cells. Folding zeroes
+        // M.face, so the open-boundary Dirichlet/outflow branches below no-op on already-folded faces.
+        //
+        // "Solid" is read from the NEIGHBOUR cell flag4, NOT the face flag1/2/3: a low face carries
+        // the neighbour's flag (flag1(i-1)=flag4(i-1)), but a HIGH face is forced to -10 regardless
+        // of neighbour type, so flag1/2/3 cannot tell a solid wall from the free surface. flag4 can.
+        //
+        // EXCLUDED, kept Dirichlet: AIR_FLAG -- the free surface is also a non-DOF face, but its
+        // atmospheric Dirichlet pressure is the ONLY anchor of this closed domain; folding it leaves
+        // an all-Neumann (singular) operator and the solve diverges. Also INFLOW/OUTFLOW/IO==2.
+        // (Domain solid walls currently carry the AIR_FLAG ghost too, so they stay Dirichlet here;
+        //  giving them a real solid flag is the remaining step to fold them as well.)
+        auto solidnb = [&](int f, int io){ return wallfold && f<0 && f!=AIR_FLAG && f!=INFLOW_FLAG && f!=OUTFLOW_FLAG && io!=2; };
+
+        if(solidnb(p->flag4(i-1,j,k), p->IO(i-1,j,k))) { a->M.p[n] += a->M.s[n]; a->M.s[n] = 0.0; }
+        if(solidnb(p->flag4(i+1,j,k), p->IO(i+1,j,k))) { a->M.p[n] += a->M.n[n]; a->M.n[n] = 0.0; }
+
+        if(is3D)
+        {
+            if(solidnb(p->flag4(i,j-1,k), p->IO(i,j-1,k))) { a->M.p[n] += a->M.e[n]; a->M.e[n] = 0.0; }
+            if(solidnb(p->flag4(i,j+1,k), p->IO(i,j+1,k))) { a->M.p[n] += a->M.w[n]; a->M.w[n] = 0.0; }
+        }
+
+        if(solidnb(p->flag4(i,j,k-1), p->IO(i,j,k-1))) { a->M.p[n] += a->M.b[n]; a->M.b[n] = 0.0; }
+        if(solidnb(p->flag4(i,j,k+1), p->IO(i,j,k+1))) { a->M.p[n] += a->M.t[n]; a->M.t[n] = 0.0; }
+
+#if USE_AMREX
+        // ---- TEST (env REEF_SYM_FOLD): geometry-based fold. Fold every face that sits on the
+        // level's DOMAIN BOUNDARY into the diagonal (homogeneous Neumann), so symmetry planes get
+        // the same pcorr BC as solid walls WITHOUT relabeling flag4. The free surface is interior
+        // (never on the domain boundary) so it is untouched and keeps its Dirichlet anchor.
+        // Periodic boundaries and outflow are excluded. Already-folded faces (solid bottom) no-op
+        // since M.face is 0. Global index = local + amr_tile_lo, compared to the level's Domain().
+        if(symfold)
+        {
+            const auto dom = p->amrex_geometry[p->level].Domain();
+            const int gi=i+p->amr_tile_lo.x, gj=j+p->amr_tile_lo.y, gk=k+p->amr_tile_lo.z;
+
+            if(gi==dom.smallEnd(0) && p->periodic1==0 && p->flag4(i-1,j,k)!=OUTFLOW_FLAG && p->IO(i-1,j,k)!=2)
+            { a->M.p[n] += a->M.s[n]; a->M.s[n] = 0.0; }
+            if(gi==dom.bigEnd(0)   && p->periodic1==0 && p->flag4(i+1,j,k)!=OUTFLOW_FLAG && p->IO(i+1,j,k)!=2)
+            { a->M.p[n] += a->M.n[n]; a->M.n[n] = 0.0; }
+
+            if(is3D)
+            {
+                if(gj==dom.smallEnd(1) && p->periodic2==0 && p->flag4(i,j-1,k)!=OUTFLOW_FLAG && p->IO(i,j-1,k)!=2)
+                { a->M.p[n] += a->M.e[n]; a->M.e[n] = 0.0; }
+                if(gj==dom.bigEnd(1)   && p->periodic2==0 && p->flag4(i,j+1,k)!=OUTFLOW_FLAG && p->IO(i,j+1,k)!=2)
+                { a->M.p[n] += a->M.w[n]; a->M.w[n] = 0.0; }
+            }
+
+            if(gk==dom.smallEnd(2) && p->periodic3==0 && p->flag4(i,j,k-1)!=OUTFLOW_FLAG && p->IO(i,j,k-1)!=2)
+            { a->M.p[n] += a->M.b[n]; a->M.b[n] = 0.0; }
+            if(gk==dom.bigEnd(2)   && p->periodic3==0 && p->flag4(i,j,k+1)!=OUTFLOW_FLAG && p->IO(i,j,k+1)!=2)
+            { a->M.p[n] += a->M.t[n]; a->M.t[n] = 0.0; }
+        }
+#endif
+
         // ---- x direction
         // inflow
         if(p->flag4(i-1,j,k)<0 && (i+p->origin_i>0 || p->periodic1==0))

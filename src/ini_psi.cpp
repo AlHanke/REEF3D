@@ -62,19 +62,15 @@ void initialize::inipsi(lexer* p, fdm *a, ghostcell* pgc)
     // density consistency across the C-F interface). psi is set from level-0 mean spacing, so
     // scale it down per level by that level's cell-size ratio. Level 0 (and single-level runs)
     // keep the exact original value.
-    for(int lev=0; lev<8; ++lev) p->psi_lev[lev]=p->psi;
     #if USE_AMREX
-    for(int lev=0; lev<p->nlevs && lev<8; ++lev)
-    {
-        double ratio;
-        if(p->j_dir==0)
-            ratio=0.5*(1.0/double(p->ref_vec[0]) + 1.0/double(p->ref_vec[2]))/1.0;
-        else
-            ratio=(1.0/double(p->ref_vec[0]) + 1.0/double(p->ref_vec[1]) + 1.0/double(p->ref_vec[2]))/3.0;
-        // ratio is the per-step mean cell-size shrink; apply lev times
-        double f=1.0; for(int n=0;n<lev;++n) f*=ratio;
-        p->psi_lev[lev]=p->psi*f;
-    }
-    #endif
+    double ratio;
+    if(p->j_dir==0)
+        ratio=0.5*(1.0/double(p->ref_vec[0]) + 1.0/double(p->ref_vec[2]))/1.0;
+    else
+        ratio=(1.0/double(p->ref_vec[0]) + 1.0/double(p->ref_vec[1]) + 1.0/double(p->ref_vec[2]))/3.0;
+    double f=1.0; for(int n=0;n<p->nlevs-1;++n) f*=ratio;
+    p->psi *= f; // scale down the level-0 psi to match the finest level's cell size
 
+    p->psi *= 0.5; // temp
+    #endif
 }

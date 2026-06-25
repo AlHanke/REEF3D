@@ -118,6 +118,8 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     double rk3_step3_w_time = 0.0;
     double rk3_step3_corr_time = 0.0;
 
+    a->test.setVal(0.0,true);
+
     double block_start = pgc->timer();
     pflow->discharge(p,a,pgc);
     pflow->inflow(p,a,pgc,a->u,a->v,a->w);

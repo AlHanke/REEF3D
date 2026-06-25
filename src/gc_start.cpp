@@ -176,6 +176,10 @@ void ghostcell::start4(lexer *p, field& f, int gcv)
     f.FillDomainBoundary(gcv);
     endtime=timer();
     p->xtime+=endtime-starttime;
+    for(int lev=p->nlevs-2; lev>=0; --lev)
+    {
+        amrex::average_down(f.GetMultiFab(lev+1), f.GetMultiFab(lev), 0, 1, p->ref_vec);
+    }
     p->gctime+=endtime-starttime;
     #else
     if(do_comms)

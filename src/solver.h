@@ -23,6 +23,8 @@ Author: Hans Bihs
 #ifndef SOLVER_H_
 #define SOLVER_H_
 
+#include <set>
+
 class lexer;
 class fdm;
 class fdm_fnpf;
@@ -52,10 +54,34 @@ public:
     virtual void cf_velocity_correction(lexer*, fdm*, ghostcell*,
                                         field&, field&, field&, field&, double) {}
 
+    // Slave the fine-level normal velocity on coarse-fine faces to the coarse value, so the
+    // predictor never injects a C-F leak the projection then cannot fully remove. Run on the
+    // PREDICTOR velocity (before the rhs divergence). Default no-op; hypre_ssamg overrides.
+    virtual void cf_velocity_fill_from_coarse(lexer*, fdm*, ghostcell*,
+                                              field&, field&, field&) {}
+
     // out = A * in, using the assembled pressure matrix (incl. C-F couplings). Default
     // no-op; hypre_ssamg overrides it. Used by the projection-consistency probe to compare
     // L*pcorr against the discrete divergence of the velocity correction.
     virtual void matvec_into(lexer*, fdm*, ghostcell*, field& /*out*/, field& /*in*/) {}
+
+    struct cf_mask
+    {
+        int level;
+        int i,j,k;
+        int axis;
+
+        bool operator<(const cf_mask& o) const
+        {
+            if (level != o.level) return level < o.level;
+            if (i     != o.i)     return i     < o.i;
+            if (j     != o.j)     return j     < o.j;
+            if (k     != o.k)     return k     < o.k;
+            return axis < o.axis;
+        }
+    };
+
+    std::set<cf_mask> cf_masks; // C-F high-faces skipped by the interior velocity loop (velcorr_amrex)
 };
 
 #endif

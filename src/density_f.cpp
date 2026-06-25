@@ -32,7 +32,7 @@ density_f::density_f(lexer* p)
 double density_f::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
     const double phival = 0.5*(a->phi(i,j,k) + a->phi(i+aa,j+bb,k+cc));
-    const double psi = p->psi_lev[p->level]; // level-aware interface half-width (see ini_psi)
+    const double psi = p->psi;
 
     double H = heaviside_ls(phival, psi);
 
