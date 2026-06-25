@@ -26,6 +26,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ioflow.h"
 #include"vrans.h"
+#include "heaviside_ls.h"
 
 komega_func::komega_func(lexer* p, fdm* a, ghostcell *pgc) : rans_io(p,a),komega_bc(p)
 {
@@ -103,14 +104,7 @@ void komega_func::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
             if(p->j_dir==0)
             epsi = p->T38*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]); 
         
-			if(a->phi(i,j,k)>epsi)
-			H=1.0;
-
-			if(a->phi(i,j,k)<-epsi)
-			H=0.0;
-
-			if(fabs(a->phi(i,j,k))<=epsi)
-			H=0.5*(1.0 + a->phi(i,j,k)/epsi + (1.0/PI)*sin((PI*a->phi(i,j,k))/epsi));
+			H = heaviside_ls(a->phi(i,j,k),epsi);
 			
 			factor = H*p->T31 + (1.0-H)*p->T32;
 			

@@ -26,6 +26,7 @@ Authors: Hans Bihs, Fabian Knoblauch
 #include "lexer.h"
 #include "fdm.h"
 #include "ghostcell.h"
+#include "heaviside_ls.h"
 
 fluid_update_vof::fluid_update_vof(lexer *p, fdm* a, ghostcell* pgc) :
                                                 visc_air(p->W4),visc_water(p->W2),ro_air(p->W3),ro_water(p->W1),visc_body(p->X44)
@@ -51,20 +52,9 @@ void fluid_update_vof::start(lexer *p, fdm* a, ghostcell* pgc,field& uvel, field
         {
             phival = a->phi(i,j,k);
 
-            if(phival>p->psi)
-                H=1.0;
-            else if(phival<-p->psi)
-                H=0.0;
-            else
-                H=0.5*(1.0 + phival/(p->psi) + (1.0/PI)*sin((PI*phival)/(p->psi)));
+            H = heaviside_ls(phival, p->psi);
 
-            psiro = p->psi;
-            if(phival>psiro)
-                Hro=1.0;
-            else if(phival<-psiro)
-                Hro=0.0;
-            else
-                Hro=0.5*(1.0 + phival/(psiro) + (1.0/PI)*sin((PI*phival)/(psiro)));
+            Hro = heaviside_ls(phival, p->psi);
         }
         else if(p->F92>1)
         {

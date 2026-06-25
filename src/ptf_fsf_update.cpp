@@ -26,6 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"ioflow.h"
 #include"slice.h"
+#include"heaviside_ls.h"
 
 ptf_fsf_update::ptf_fsf_update(lexer *p, fdm *a, ghostcell *pgc)
 {
@@ -199,14 +200,7 @@ void ptf_fsf_update::velcalc(lexer *p, fdm *a, ghostcell *pgc, field &f)
 
         phival = 0.5*(a->phi(i,j,k) + a->phi(i+1,j,k));
 
-        if(phival>epsi)
-		H=1.0;
-
-		if(phival<-epsi)
-		H=0.0;
-
-		if(fabs(phival)<=epsi)
-		H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
+        H = heaviside_ls(phival,epsi);
 
     a->u(i,j,k) = H*(f(i+1,j,k)-f(i,j,k))/p->DXP[IP];
 
@@ -222,14 +216,7 @@ void ptf_fsf_update::velcalc(lexer *p, fdm *a, ghostcell *pgc, field &f)
 
         phival = 0.5*(a->phi(i,j,k) + a->phi(i,j+1,k));
 
-        if(phival>epsi)
-		H=1.0;
-
-		if(phival<-epsi)
-		H=0.0;
-
-		if(fabs(phival)<=epsi)
-		H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
+        H = heaviside_ls(phival,epsi);
 
 	a->v(i,j,k) = H*(f(i,j+1,k)-f(i,j,k))/p->DYP[JP];
 
@@ -243,14 +230,7 @@ void ptf_fsf_update::velcalc(lexer *p, fdm *a, ghostcell *pgc, field &f)
 
         phival = 0.5*(a->phi(i,j,k) + a->phi(i,j,k+1));
 
-        if(phival>epsi)
-		H=1.0;
-
-		if(phival<-epsi)
-		H=0.0;
-
-		if(fabs(phival)<=epsi)
-		H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
+        H = heaviside_ls(phival,epsi);
 
 	a->w(i,j,k) = H*(f(i,j,k+1)-f(i,j,k))/p->DZP[KP];
 

@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include "lexer.h"
 #include "fdm.h"
 #include "ghostcell.h"
+#include "heaviside_ls.h"
 
 using std::cout;
 using std::endl;
@@ -45,12 +46,7 @@ void fluid_update_fsf::start(lexer *p, fdm* a, ghostcell* pgc, field &u, field &
 
     BASELOOP
     {
-        if(a->phi(i,j,k)>p->psi)
-        H=1.0;
-        else if(a->phi(i,j,k)<-p->psi)
-        H=0.0;
-        else
-        H=0.5*(1.0 + a->phi(i,j,k)/p->psi + (1.0/PI)*sin((PI*a->phi(i,j,k))/p->psi));
+        H = heaviside_ls(a->phi(i,j,k), p->psi);
 
         a->ro(i,j,k)   = ro_water*H   + ro_air*(1.0-H);
         a->visc(i,j,k) = visc_water*H + visc_air*(1.0-H);
@@ -76,12 +72,7 @@ void fluid_update_fsf::start(lexer *p, fdm* a, ghostcell* pgc, field &u, field &
     if(p->Q10==1)
     BASELOOP
     {
-        if(a->topo(i,j,k)>p->psi)
-        H=1.0;
-        else if(a->topo(i,j,k)<-p->psi)
-        H=0.0;
-        else
-        H=0.5*(1.0 + a->topo(i,j,k)/p->psi + (1.0/PI)*sin((PI*a->topo(i,j,k))/p->psi));
+        H = heaviside_ls(a->topo(i,j,k), p->psi);
 
         a->ro(i,j,k)   = a->ro(i,j,k)*H +   ro_sed*(1.0-H);
         a->visc(i,j,k) = a->visc(i,j,k)*H + visc_sed*(1.0-H);

@@ -25,6 +25,7 @@ Author: Hans Bihs
 #include"fdm_nhf.h"
 #include"ghostcell.h"
 #include"nhflow_reinidisc_fsf.h"
+#include"heaviside_ls.h"
 
 double nhflow_forcing::Hsolidface(lexer *p, fdm_nhf *d, int aa, int bb, int cc)
 {
@@ -44,14 +45,7 @@ double nhflow_forcing::Hsolidface(lexer *p, fdm_nhf *d, int aa, int bb, int cc)
     phival_sf = d->SOLID[IJK];
     
 	
-    if(-phival_sf > psi)
-    H = 1.0;
-
-    if(-phival_sf < -psi)
-    H = 0.0;
-
-    if(fabs(phival_sf)<=psi)
-    H = 0.5*(1.0 + -phival_sf/psi + (1.0/PI)*sin((PI*-phival_sf)/psi));
+    H = heaviside_ls(-phival_sf,psi);
         
 
     return H;

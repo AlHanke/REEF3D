@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
+#include"heaviside_ls.h"
 
 picard_lsm::picard_lsm(lexer *p) : gradient(p), epsi(p->F45*p->DXM)
 {
@@ -41,14 +42,7 @@ void picard_lsm::volcalc(lexer *p, fdm *a, ghostcell *pgc, field& b)
 
     LOOP
 	{
-		if(b(i,j,k)>epsi)
-		H=1.0;
-
-		if(b(i,j,k)<-epsi)
-		H=0.0;
-
-		if(fabs(b(i,j,k))<=epsi)
-		H=0.5*(1.0 + b(i,j,k)/epsi + (1.0/PI)*sin((PI*b(i,j,k))/epsi));
+        H = heaviside_ls(b(i,j,k),epsi);
 
 		vol1+=pow(p->DXM, 3.0)*H;
 	}
@@ -70,14 +64,7 @@ void picard_lsm::volcalc2(lexer *p, fdm *a, ghostcell *pgc, field& b)
 
     LOOP
 	{
-		if(b(i,j,k)>epsi)
-		H=1.0;
-
-		if(b(i,j,k)<-epsi)
-		H=0.0;
-
-		if(fabs(b(i,j,k))<=epsi)
-		H=0.5*(1.0 + b(i,j,k)/epsi + (1.0/PI)*sin((PI*b(i,j,k))/epsi));
+        H = heaviside_ls(b(i,j,k),epsi);
 
 		vol2+=pow(p->DXM, 3.0)*H;
 	}
