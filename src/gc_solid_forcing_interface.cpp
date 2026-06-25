@@ -23,6 +23,7 @@ Authors: Hans Bihs, Tobias Martin, Ahmet Soydan
 #include"ghostcell.h"
 #include"lexer.h"
 #include"fdm.h"
+#include "heaviside_ls.h"
 
 double ghostcell::Hsolidface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
@@ -48,14 +49,7 @@ double ghostcell::Hsolidface(lexer *p, fdm *a, int aa, int bb, int cc)
     phival_sf = 0.5*(a->solid(i,j,k) + a->solid(i+aa,j+bb,k+cc));
     
 	
-    if (-phival_sf > psi)
-    H = 1.0;
-    
-    else if (-phival_sf < -psi)
-    H = 0.0;
-
-    else
-    H = 0.5*(1.0 + -phival_sf/psi + (1.0/PI)*sin((PI*-phival_sf)/psi));
+    H = heaviside_ls(-phival_sf, psi);
 
     
     if(p->topoforcing==0 && p->solidread==0)
@@ -78,20 +72,7 @@ double ghostcell::Hsolidface_t(lexer *p, fdm *a, int aa, int bb, int cc)
     // Construct solid heaviside function
     phival_sf = MIN(0.5*(a->solid(i,j,k) + a->solid(i+aa,j+bb,k+cc)), 0.5*(a->topo(i,j,k) + a->topo(i+aa,j+bb,k+cc))); 
 	
-    if (-phival_sf > psi)
-    {
-        H = 1.0;
-    }
-    
-    else if (-phival_sf < -psi)
-    {
-        H = 0.0;
-    }
-    
-    else
-    {
-        H = 0.5*(1.0 + -phival_sf/psi + (1.0/PI)*sin((PI*-phival_sf)/psi));
-    }
+    H = heaviside_ls(-phival_sf, psi);
 	
     return H;
 }

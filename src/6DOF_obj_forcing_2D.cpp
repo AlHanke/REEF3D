@@ -23,6 +23,7 @@ Authors: Tobias Martin, Hans Bihs
 #include"6DOF_obj.h"
 #include"lexer.h"
 #include"ghostcell.h"
+#include"heaviside_ls.h"
 
 void sixdof_obj::updateForcing_box(lexer *p, ghostcell *pgc, slice &press)
 {
@@ -115,21 +116,12 @@ void sixdof_obj::updateForcing_oned(lexer *p, ghostcell *pgc, slice &press)
 
 double sixdof_obj::Hsolidface_2D(lexer *p, int aa, int bb)
 {
-    double psi, H, phival_fb;
+    double psi, phival_fb;
 
     psi = p->X41*(1.0/2.0)*(p->DXN[IP] + p->DYN[JP]); 
 
     // Construct solid heaviside function
     phival_fb = 0.5*(fs(i,j) + fs(i+aa,j+bb));
-    
-    if (-phival_fb > psi)
-    H = 1.0;
-    
-    else if (-phival_fb < -psi)
-    H = 0.0;
-
-    else
-    H = 0.5*(1.0 + -phival_fb/psi + (1.0/PI)*sin((PI*-phival_fb)/psi));
         
-    return H;
+    return heaviside_ls(-phival_fb, psi);
 }

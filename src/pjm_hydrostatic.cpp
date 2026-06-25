@@ -37,6 +37,7 @@ Author: Hans Bihs
 #include"density_vof.h"
 #include"density_rheo.h"
 #include"density_pst.h"
+#include"heaviside_ls.h"
  
 pjm_hydrostatic::pjm_hydrostatic(lexer* p, fdm *a, heat *&pheat, concentration *&ppconc)
 {
@@ -142,14 +143,7 @@ void pjm_hydrostatic::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, 
     {
     phival = a->phi(i,j,k);
 
-    if(phival>psi)
-    H=1.0;
-
-    if(phival<-psi)
-    H=0.0;
-
-    if(fabs(phival)<=psi)
-    H=0.5*(1.0 + phival/psi + (1.0/PI)*sin((PI*phival)/psi));
+    H = heaviside_ls(phival,psi);
     
     roval = p->W1*H + p->W3*(1.0-H);
     

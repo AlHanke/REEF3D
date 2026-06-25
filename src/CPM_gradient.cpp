@@ -25,12 +25,13 @@ Authors: Hans Bihs, Alexander Hanke
 #include"fdm.h"
 #include"ghostcell.h"
 #include"sediment_fdm.h"
+#include"heaviside_ls.h"
 
 void CPM::stress_gradient(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s)
 {
     ALOOP
     {
-        HS = heaviside(a->topo(i,j,k));
+        HS = heaviside_ls(a->topo(i,j,k),epsi);
         
         dTx(i,j,k) = HS*((Tau(i+1,j,k) - Tau(i-1,j,k))/(p->DXP[IM1]+p->DXP[IP]));
         dTy(i,j,k) = HS*((Tau(i,j+1,k) - Tau(i,j-1,k))/(p->DYP[JM1]+p->DYP[JP]));
