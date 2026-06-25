@@ -1027,6 +1027,7 @@ void control::ini_default()
     Y3=0;
     Y4=0;
     Y5=0;
+    Y9=1;
     Y40=3;
     Y50=0;
 	Y60=1;  // int require

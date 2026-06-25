@@ -146,7 +146,7 @@ pjm_corr::~pjm_corr()
     delete pd;
 }
 
-void pjm_corr::start(fdm* a, lexer*p, poisson* ppois, solver* psolv, ghostcell* pgc, ioflow *pflow, field& uvel, field& vvel, field& wvel, double alpha)
+void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell* pgc, ioflow *pflow, field& uvel, field& vvel, field& wvel, double alpha)
 {
     if(p->mpirank==0 && (p->count%p->P12==0))
     cout<<".";
@@ -163,6 +163,13 @@ void pjm_corr::start(fdm* a, lexer*p, poisson* ppois, solver* psolv, ghostcell* 
     #if USE_AMREX
     if(p->nlevs > 1)
     {
+        // C-F-aware predictor: slave the fine HIGH C-F normal faces to the clean coarse predictor
+        // velocity BEFORE the reflux, so the predictor never hands the projection a leaked C-F
+        // velocity it cannot fully remove. psolv here is ppoissonsolv (hypre_ssamg), which owns
+        // cf_links. Gated on Y9 so it toggles with the well-balanced setup under test.
+        if(p->Y9)
+        psolv->cf_velocity_fill_from_coarse(p,a,pgc,uvel,vvel,wvel);
+
         cf_average_down_velocity(p,uvel,vvel,wvel);
 
         // average_down updated COARSE valid cells under the fine patch; refresh the halos so a
@@ -177,28 +184,36 @@ void pjm_corr::start(fdm* a, lexer*p, poisson* ppois, solver* psolv, ghostcell* 
     ppois->start(p,a,pcorr);
 
     psolv->start(p,a,pgc,pcorr,a->rhsvec,5);
+    for (p->level=p->nlevs-2; p->level>=0; --p->level)
+    {
+        amrex::average_down(pcorr.GetMultiFab(p->level+1), pcorr.GetMultiFab(p->level), 0, 1, p->ref_vec);
+    }
 
     constexpr int gcval_press = 40;
     pgc->start4(p,pcorr,gcval_press);
-    presscorr(p,a,uvel,vvel,wvel,pcorr,alpha);
+    #if USE_AMREX
+    LEVEL_LOOP
+    {
+        auto const& test_mf = a->test.GetMultiFab();
+        for (amrex::MFIter mfi(a->test.GetMultiFab()); mfi.isValid(); ++mfi)
+        {
+            const amrex::Box& bx = mfi.tilebox();
+            auto const& cc_arr = a->test.GetMultiFab().array(mfi);
+            auto const& p_fc = pcorr.GetMultiFab().const_array(mfi);
+
+            amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
+            {
+                cc_arr(i,j,k,0) += p_fc(i,j,k);
+            });
+        }
+    }
+    #endif
+    // amrex::MultiFab::Copy(a->test.GetMultiFab(), pcorr.GetMultiFab(), 0, 0, 1, 0);
+    presscorr(p,a);
     reference_start(p,a,pgc);
     pgc->start4(p,a->press,gcval_press);
 
-    ucorr(p,a,uvel,alpha);
-    vcorr(p,a,vvel,alpha);
-    wcorr(p,a,wvel,alpha);
-
-    // C-F interface correction (gradient/G side): correct the fine C-F sub-faces with the
-    // centre-distance gradient to the real coarse pcorr, then reflux the coarse velocity under
-    // each fine patch to the area-summed fine flux. Together with the predictor average-down
-    // this makes D(1/rho)G = L at the interface.
-    #if USE_AMREX
-    if(p->nlevs > 1)
-    {
-        psolv->cf_velocity_correction(p,a,pgc,pcorr,uvel,vvel,wvel,alpha);
-        cf_average_down_velocity(p,uvel,vvel,wvel);
-    }
-    #endif
+    velcorr(p,a,pgc,uvel,vvel,wvel,psolv,alpha);
 
     if(std::getenv("REEF_PROJ_CHECK"))
     projection_consistency_check(p,a,pgc,psolv,alpha);
@@ -224,13 +239,73 @@ void pjm_corr::vcorr(lexer* p, fdm* a, field& vvel, double alpha)
     vvel(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*((pcorr(i,j+1,k)-pcorr(i,j,k))/(p->DYP[JP]*pd->roface(p,a,0,1,0)));
 }
 
-void pjm_corr::wcorr(lexer* p, fdm* a, field& wvel,double alpha)
+void pjm_corr::wcorr(lexer* p, fdm* a, field& wvel, double alpha)
 {
     WLOOP
     wvel(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*((pcorr(i,j,k+1)-pcorr(i,j,k))/(p->DZP[KP]*pd->roface(p,a,0,0,1)));
 }
 
-void pjm_corr::presscorr(lexer* p, fdm* a, field& uvel, field& vvel, field& wvel, field& pcorr, double alpha)
+void pjm_corr::velcorr(lexer* p, fdm* a, ghostcell* pgc, field& uvel, field& vvel, field& wvel, solver* psolv, double alpha)
+{
+    #if USE_AMREX
+    if(p->nlevs <= 1)
+    #endif
+    {
+        ucorr(p,a,uvel,alpha);
+        vcorr(p,a,vvel,alpha);
+        wcorr(p,a,wvel,alpha);
+        return;
+    }
+
+    #if USE_AMREX
+    // cf_masks holds AMReX GLOBAL cell indices (built from cf_links), but the LOOP i,j,k are
+    // tile-local -- the field accessors add amr_tile_lo internally (operator()(i,j,k) ->
+    // arr(i+amr_tile_lo.x,...)). Translate with the SAME offset before the mask lookup, else the
+    // wrong cells get masked. A masked face is a C-F high face written by cf_velocity_correction.
+    ULOOP
+    {
+        const int gi=i+p->amr_tile_lo.x, gj=j+p->amr_tile_lo.y, gk=k+p->amr_tile_lo.z;
+        double dp = pcorr(i+1,j,k)-pcorr(i,j,k);
+        if(!psolv->cf_masks.contains({p->level,gi,gj,gk,0}))
+        uvel(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*(dp/(p->DXP[IP]*pd->roface(p,a,1,0,0)));
+    }
+
+    if(p->j_dir==1)
+    VLOOP
+    {
+        const int gi=i+p->amr_tile_lo.x, gj=j+p->amr_tile_lo.y, gk=k+p->amr_tile_lo.z;
+        double dp = pcorr(i,j+1,k)-pcorr(i,j,k);
+        if(!psolv->cf_masks.contains({p->level,gi,gj,gk,1}))
+        vvel(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*(dp/(p->DYP[JP]*pd->roface(p,a,0,1,0)));
+    }
+
+    WLOOP
+    {
+        const int gi=i+p->amr_tile_lo.x, gj=j+p->amr_tile_lo.y, gk=k+p->amr_tile_lo.z;
+        double dp = pcorr(i,j,k+1)-pcorr(i,j,k);
+        if(!psolv->cf_masks.contains({p->level,gi,gj,gk,2}))
+        wvel(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*(dp/(p->DZP[KP]*pd->roface(p,a,0,0,1)));
+    }
+
+    // C-F interface correction (gradient/G side): correct the fine C-F sub-faces with the
+    // centre-distance gradient to the real coarse pcorr, then reflux the coarse velocity under
+    // each fine patch to the area-summed fine flux. Together with the predictor average-down
+    // this makes D(1/rho)G = L at the interface.
+    if(p->nlevs > 1)
+    {
+        psolv->cf_velocity_correction(p,a,pgc,pcorr,uvel,vvel,wvel,alpha);
+        cf_average_down_velocity(p,uvel,vvel,wvel);
+
+        // NOTE: a post-projection cf_velocity_fill_from_coarse was tried here and REMOVED -- it
+        // overwrote the divergence-free projected velocity at the fine C-F faces with the coarse
+        // value, which is NOT the matrix-consistent gradient. That broke D.G=L (projcheck residual
+        // localised to fine C-F cells with V*div~0 but Lp!=0) and seeded a slow instability.
+        // The PREDICTOR-side fill (in start(), before the rhs) is the consistent one; keep that.
+    }
+    #endif
+}
+
+void pjm_corr::presscorr(lexer* p, fdm* a)
 {
     LOOP
     a->press(i,j,k) += pcorr(i,j,k);
@@ -258,17 +333,12 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
     w0.setVal(0.0,true);
     Lp.setVal(0.0,true);
 
-    ucorr(p,a,u0,alpha);
-    vcorr(p,a,v0,alpha);
-    wcorr(p,a,w0,alpha);
-
-    #if USE_AMREX
-    if(p->nlevs > 1)
-    {
-        psolv->cf_velocity_correction(p,a,pgc,pcorr,u0,v0,w0,alpha);
-        cf_average_down_velocity(p,u0,v0,w0);
-    }
-    #endif
+    // Mirror production (start) exactly: velcorr already runs the masked interior correction
+    // AND the C-F correction + reflux (cf_velocity_correction, cf_average_down_velocity) internally,
+    // so it must be called ONCE. (Previously this was followed by a second cf_velocity_correction +
+    // cf_average_down_velocity, which double-corrected the C-F faces and reported a spurious ~6x
+    // inflated V*div -- a diagnostic artifact, not an operator inconsistency.)
+    velcorr(p,a,pgc,u0,v0,w0,psolv,alpha);
 
     // Same halo fill the production rhs sees, so D matches the assembled L across boxes/levels.
     vel_setup(p,a,pgc,u0,v0,w0,alpha);
@@ -293,16 +363,74 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
         return false;
     };
 
+    // Covered coarse cell: its refined footprint intersects the next finer level's grids.
+    // These are emitted as identity rows (not part of the composite solution; the fine level
+    // is authoritative), so they must be excluded from the projection residual buckets.
+    // NOTE: ci,cj,ck arrive as TILE-LOCAL LOOP indices; amrex_box_array is in GLOBAL indices,
+    // so add amr_tile_lo (the same offset velcorr applies for cf_masks) before the test --
+    // otherwise covered cells in tiles with a nonzero origin are missed and show up as a
+    // spurious interior residual (an identity row evaluated as if it were solved).
+    auto is_covered = [&](int lev, int ci, int cj, int ck) -> bool
+    {
+        #if USE_AMREX
+        if(lev < p->nlevs-1)
+        {
+            const int gi=ci+p->amr_tile_lo.x, gj=cj+p->amr_tile_lo.y, gk=ck+p->amr_tile_lo.z;
+            amrex::Box foot(amrex::IntVect(gi,gj,gk), amrex::IntVect(gi,gj,gk));
+            foot.refine(p->ref_vec);
+            return p->amrex_box_array[lev+1].intersects(foot);
+        }
+        #endif
+        return false;
+    };
+
     double r_int = 0.0, r_bnd = 0.0;
     double wi_res = 0.0; int wi_lev = -1, wi[3] = {-1,-1,-1}, wi_flag = 0; bool wi_cov = false;
     double wb_res = 0.0; int wb_lev = -1, wb[3] = {-1,-1,-1}, wb_flag = 0;
+
+    // Neighbourhood dump at the worst interior cell (REEF_PROJ_PROBE): the per-axis residual
+    // split (Lp vs V*div), this cell's pcorr/Lp, and for each of the 6 neighbours its flag4 and
+    // whether it is COVERED (refined footprint under the next finer patch). Pinpoints whether the
+    // AMR-introduced inconsistency comes from a patch-adjacent face.
+    const bool projprobe = (std::getenv("REEF_PROJ_PROBE") != nullptr);
+    double wi_div = 0.0, wi_Lp = 0.0, wi_pc = 0.0;
+    double wi_dax[3] = {0,0,0};   // per-axis V*div contribution (x,y,z) -- which face carries the residual
+    double wi_pcn[6] = {0,0,0,0,0,0};
+    int    wi_fln[6] = {0,0,0,0,0,0};
+    bool   wi_covn[6] = {false,false,false,false,false,false};
+    auto nb_covered = [&](int lev, int ci, int cj, int ck) -> bool
+    {
+        #if USE_AMREX
+        if(lev < p->nlevs-1)
+        {
+            const int gi=ci+p->amr_tile_lo.x, gj=cj+p->amr_tile_lo.y, gk=ck+p->amr_tile_lo.z;
+            amrex::Box foot(amrex::IntVect(gi,gj,gk), amrex::IntVect(gi,gj,gk));
+            foot.refine(p->ref_vec);
+            return p->amrex_box_array[lev+1].intersects(foot);
+        }
+        #endif
+        return false;
+    };
+
     LOOP
     {
+        if(is_covered(p->level,i,j,k)) continue;   // identity row, not part of the solution
+
         const double div = -(u0(i,j,k) - u0(i-1,j,k))/(alpha*p->dt*p->DXN[IP])
                            -(p->j_dir?(v0(i,j,k) - v0(i,j-1,k))/(alpha*p->dt*p->DYN[JP]):0.0)
                            -(w0(i,j,k) - w0(i,j,k-1))/(alpha*p->dt*p->DZN[KP]);
 
-        const double res = std::fabs(Lp(i,j,k) + div);
+        // matvec_into applies the assembled, volume-weighted operator, so Lp = V_lev*L_phys*pcorr.
+        // The divergence term is physical (unweighted), so weight it by the same V_lev to compare
+        // like with like: a consistent projection gives V_lev*(L_phys*pcorr + div) = 0.
+        double V_lev = 1.0;
+        #if USE_AMREX
+        V_lev = p->amrex_geometry[p->level].CellSize(0)
+              * (p->j_dir ? p->amrex_geometry[p->level].CellSize(1) : 1.0)
+              * p->amrex_geometry[p->level].CellSize(2);
+        #endif
+
+        const double res = std::fabs(Lp(i,j,k) + V_lev*div);
 
         const bool boundary =
                p->flag4(i-1,j,k) < 0 || p->flag4(i+1,j,k) < 0
@@ -315,7 +443,13 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
             if(res > wb_res)
             {
                 wb_res = res; wb_lev = p->level;
-                wb[0]=i; wb[1]=j; wb[2]=k; wb_flag = p->flag4(i,j,k);
+                // store GLOBAL indices (cf_tag / the print test amrex_box_array in global space)
+                #if USE_AMREX
+                wb[0]=i+p->amr_tile_lo.x; wb[1]=j+p->amr_tile_lo.y; wb[2]=k+p->amr_tile_lo.z;
+                #else
+                wb[0]=i+p->origin_i; wb[1]=j+p->origin_j; wb[2]=k+p->origin_k;
+                #endif
+                wb_flag = p->flag4(i,j,k);
             }
         }
         else
@@ -324,17 +458,30 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
             if(res > wi_res)
             {
                 wi_res = res; wi_lev = p->level;
-                wi[0]=i; wi[1]=j; wi[2]=k; wi_flag = p->flag4(i,j,k);
-                // covered: this cell's refined footprint intersects the next finer level's grids.
+                // store GLOBAL indices (cf_tag / the print test amrex_box_array in global space)
                 #if USE_AMREX
-                wi_cov = false;
-                if(p->level < p->nlevs-1)
-                {
-                    amrex::Box foot(amrex::IntVect(i,j,k), amrex::IntVect(i,j,k));
-                    foot.refine(p->ref_vec);
-                    wi_cov = p->amrex_box_array[p->level+1].intersects(foot);
-                }
+                wi[0]=i+p->amr_tile_lo.x; wi[1]=j+p->amr_tile_lo.y; wi[2]=k+p->amr_tile_lo.z;
+                #else
+                wi[0]=i+p->origin_i; wi[1]=j+p->origin_j; wi[2]=k+p->origin_k;
                 #endif
+                wi_flag = p->flag4(i,j,k);
+                wi_cov = is_covered(p->level,i,j,k);   // always false now (covered cells skipped)
+                if(projprobe)
+                {
+                    wi_div = V_lev*div; wi_Lp = Lp(i,j,k); wi_pc = pcorr(i,j,k);
+                    wi_dax[0] = -V_lev*(u0(i,j,k) - u0(i-1,j,k))/(alpha*p->dt*p->DXN[IP]);
+                    wi_dax[1] = p->j_dir ? -V_lev*(v0(i,j,k) - v0(i,j-1,k))/(alpha*p->dt*p->DYN[JP]) : 0.0;
+                    wi_dax[2] = -V_lev*(w0(i,j,k) - w0(i,j,k-1))/(alpha*p->dt*p->DZN[KP]);
+                    wi_pcn[0]=pcorr(i-1,j,k); wi_pcn[1]=pcorr(i+1,j,k);
+                    wi_pcn[2]=pcorr(i,j-1,k); wi_pcn[3]=pcorr(i,j+1,k);
+                    wi_pcn[4]=pcorr(i,j,k-1); wi_pcn[5]=pcorr(i,j,k+1);
+                    wi_fln[0]=p->flag4(i-1,j,k); wi_fln[1]=p->flag4(i+1,j,k);
+                    wi_fln[2]=p->flag4(i,j-1,k); wi_fln[3]=p->flag4(i,j+1,k);
+                    wi_fln[4]=p->flag4(i,j,k-1); wi_fln[5]=p->flag4(i,j,k+1);
+                    wi_covn[0]=nb_covered(p->level,i-1,j,k); wi_covn[1]=nb_covered(p->level,i+1,j,k);
+                    wi_covn[2]=nb_covered(p->level,i,j-1,k); wi_covn[3]=nb_covered(p->level,i,j+1,k);
+                    wi_covn[4]=nb_covered(p->level,i,j,k-1); wi_covn[5]=nb_covered(p->level,i,j,k+1);
+                }
             }
         }
     }
@@ -345,9 +492,28 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
     std::cout<<"\n  [projcheck] max|L*pcorr + R(dU)|  interior="<<g_int
              <<"  boundary="<<g_bnd<<std::endl;
     if(wi_lev>=0 && wi_res==g_int)
+    {
     std::cout<<"  [projcheck] worst interior res="<<wi_res<<" at lev="<<wi_lev
              <<" ("<<wi[0]<<","<<wi[1]<<","<<wi[2]<<")  flag4="<<wi_flag
              <<"  covered="<<wi_cov<<"  cf="<<cf_tag(wi_lev,wi[0],wi[1],wi[2])<<std::endl;
+    if(projprobe)
+    {
+        std::cout<<"  [projprobe] Lp="<<wi_Lp<<"  V*div="<<wi_div<<"  (res=|Lp+V*div|)"
+                 <<"  pcorr c="<<wi_pc<<std::endl;
+        std::cout<<"  [projprobe] V*div split  x="<<wi_dax[0]<<"  y="<<wi_dax[1]
+                 <<"  z="<<wi_dax[2]<<"  (residual axis = the covered/C-F face)"<<std::endl;
+        std::cout<<"  [projprobe] pcorr  x-/x+="<<wi_pcn[0]<<"/"<<wi_pcn[1]
+                 <<"  y-/y+="<<wi_pcn[2]<<"/"<<wi_pcn[3]
+                 <<"  z-/z+="<<wi_pcn[4]<<"/"<<wi_pcn[5]<<std::endl;
+        std::cout<<"  [projprobe] flag4  x-/x+="<<wi_fln[0]<<"/"<<wi_fln[1]
+                 <<"  y-/y+="<<wi_fln[2]<<"/"<<wi_fln[3]
+                 <<"  z-/z+="<<wi_fln[4]<<"/"<<wi_fln[5]<<std::endl;
+        std::cout<<"  [projprobe] covered x-/x+="<<wi_covn[0]<<"/"<<wi_covn[1]
+                 <<"  y-/y+="<<wi_covn[2]<<"/"<<wi_covn[3]
+                 <<"  z-/z+="<<wi_covn[4]<<"/"<<wi_covn[5]
+                 <<"  (a covered neighbour => patch-adjacent face)"<<std::endl;
+    }
+    }
     if(wb_lev>=0 && wb_res==g_bnd)
     std::cout<<"  [projcheck] worst boundary res="<<wb_res<<" at lev="<<wb_lev
              <<" ("<<wb[0]<<","<<wb[1]<<","<<wb[2]<<")  flag4="<<wb_flag
@@ -385,21 +551,44 @@ void pjm_corr::vel_setup(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, f
 
 void pjm_corr::upgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
+    double dp = 0.0;
+    const bool relPressure = p->Y9;
     ULOOP
-    a->F(i,j,k) -= PORVAL1*(a->press(i+1,j,k)-a->press(i,j,k))/(p->DXP[IP]*pd->roface(p,a,1,0,0));
+    {
+        dp = a->press(i+1,j,k)-a->press(i,j,k);
+        // if(relPressure) dp -= a->press0(i+1,j,k)-a->press0(i,j,k);
+        a->F(i,j,k) -= PORVAL1*dp/(p->DXP[IP]*pd->roface(p,a,1,0,0));
+        if(relPressure) a->F(i,j,k) += PORVAL1*(a->grav_pot(i+1,j,k)-a->grav_pot(i,j,k))/p->DXP[IP];
+    }
 }
 
 void pjm_corr::vpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
     if(p->j_dir)
-    VLOOP
-    a->G(i,j,k) -= PORVAL2*(a->press(i,j+1,k)-a->press(i,j,k))/(p->DYP[JP]*pd->roface(p,a,0,1,0));
+    {
+        double dp = 0.0;
+        const bool relPressure = p->Y9;
+        VLOOP
+        {
+            dp = a->press(i,j+1,k)-a->press(i,j,k);
+            // if(relPressure) dp -= a->press0(i,j+1,k)-a->press0(i,j,k);
+            a->G(i,j,k) -= PORVAL2*dp/(p->DYP[JP]*pd->roface(p,a,0,1,0));
+            if(relPressure) a->G(i,j,k) += PORVAL2*(a->grav_pot(i,j+1,k)-a->grav_pot(i,j,k))/p->DYP[JP];
+        }
+    }
 }
 
 void pjm_corr::wpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
+    double dp = 0.0;
+    const bool relPressure = p->Y9;
     WLOOP
-    a->H(i,j,k) -= PORVAL3*(a->press(i,j,k+1)-a->press(i,j,k))/(p->DZP[KP]*pd->roface(p,a,0,0,1));
+    {
+        dp = a->press(i,j,k+1)-a->press(i,j,k);
+        // if(relPressure) dp -= a->press0(i,j,k+1)-a->press0(i,j,k);
+        a->H(i,j,k) -= PORVAL3*dp/(p->DZP[KP]*pd->roface(p,a,0,0,1));
+        if(relPressure) a->H(i,j,k) += PORVAL3*(a->grav_pot(i,j,k+1)-a->grav_pot(i,j,k))/p->DZP[KP];
+    }
 }
 
 void pjm_corr::ini(lexer*p, fdm* a, ghostcell *pgc)
