@@ -81,6 +81,13 @@ void initialize::inifdm(lexer* p, fdm* a, ghostcell* pgc)
     pgc->start4(p,a->fb,150);
     pgc->start4(p,a->topo,150);
     pgc->start4(p,a->porosity,1);
+
+    LEVEL_LOOP
+    TILE_LOOP
+    MALOOP
+    {
+        a->grav_pot(i,j,k) = p->W20*p->pos_x() + p->W21*p->pos_y() + p->W22*p->pos_z();
+    }
 }
 
 void initialize::nodecalc(lexer* p, fdm* a)

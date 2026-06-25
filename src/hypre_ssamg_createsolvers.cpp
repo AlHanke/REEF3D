@@ -26,30 +26,42 @@ Author: Hans Bihs
 
 void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
 {
-    // ---- Multi-level: ParCSR BiCGSTAB + BoomerAMG --------------------------------
+    // ---- Multi-level: ParCSR PCG + BoomerAMG -------------------------------------
     // SSAMG cannot set up on a multi-part grid, so for nlevs>1 the matrix is assembled
-    // as ParCSR (see make_grid_7p) and solved with BiCGSTAB preconditioned by one
-    // BoomerAMG V-cycle. BiCGSTAB (not PCG) because the coarse-fine coupling makes the
-    // operator non-symmetric. par_A/par_b/par_x are extracted after assembly in
-    // fill_matrix4; the solver/precond are set up against them in solve().
+    // as ParCSR (see make_grid_7p) and solved with PCG preconditioned by one BoomerAMG
+    // V-cycle. PCG (not BiCGSTAB) because the volume-weighted C-F coupling now makes the
+    // operator symmetric (see fill_matrix4). The system is singular (all-Neumann: the
+    // constant nullspace), so two things must be tamed:
+    //   * the BoomerAMG preconditioner must be SPD for PCG -> symmetric smoother
+    //     (RelaxType 6, symmetric hybrid GS) and a symmetric V-cycle.
+    //   * BoomerAMG's default coarsest-grid solver is Gaussian elimination, which is
+    //     singular on the all-Neumann coarse grid and returns garbage. Stop coarsening
+    //     early (MaxCoarseSize) and relax the coarsest grid instead of direct-solving it
+    //     (CycleRelaxType ..., 3). The RHS is projected onto the compatible subspace in
+    //     fill_matrix4, so a min-norm solution exists.
+    // par_A/par_b/par_x are extracted after assembly in fill_matrix4; the solver/precond
+    // are set up against them in solve().
     #if USE_AMREX
     if (p->nlevs > 1)
     {
         HYPRE_BoomerAMGCreate(&par_precond);
         HYPRE_BoomerAMGSetPrintLevel(par_precond, 0);
         HYPRE_BoomerAMGSetCoarsenType(par_precond, 22);
-        HYPRE_BoomerAMGSetRelaxType(par_precond, 3);
+        HYPRE_BoomerAMGSetRelaxType(par_precond, 6);     // symmetric hybrid GS (SPD precond)
         HYPRE_BoomerAMGSetNumSweeps(par_precond, 1);
+        HYPRE_BoomerAMGSetMaxCoarseSize(par_precond, 200); // stop before the coarse grid is singular
+        HYPRE_BoomerAMGSetCycleRelaxType(par_precond, 6, 3); // relax (not GE) on the coarsest level
         HYPRE_BoomerAMGSetTol(par_precond, 0.0);
         HYPRE_BoomerAMGSetMaxIter(par_precond, 1);
 
-        HYPRE_ParCSRBiCGSTABCreate(pgc->mpi_comm, &par_solver);
-        HYPRE_BiCGSTABSetMaxIter(par_solver, p->N46);
-        HYPRE_BiCGSTABSetTol(par_solver, p->N44);
-        HYPRE_BiCGSTABSetAbsoluteTol(par_solver, 1e-12);
-        HYPRE_BiCGSTABSetPrintLevel(par_solver, 0);
-        HYPRE_BiCGSTABSetLogging(par_solver, 1);
-        HYPRE_BiCGSTABSetPrecond(par_solver,
+        HYPRE_ParCSRPCGCreate(pgc->mpi_comm, &par_solver);
+        HYPRE_PCGSetMaxIter(par_solver, p->N46);
+        HYPRE_PCGSetTol(par_solver, p->N44);
+        HYPRE_PCGSetAbsoluteTol(par_solver, 1e-12);
+        HYPRE_PCGSetTwoNorm(par_solver, 1);              // true 2-norm residual (singular-safe stop)
+        HYPRE_PCGSetPrintLevel(par_solver, 0);
+        HYPRE_PCGSetLogging(par_solver, 1);
+        HYPRE_PCGSetPrecond(par_solver,
             (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSolve,
             (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSetup,
             par_precond);
@@ -100,22 +112,21 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
         HYPRE_SStructSSAMGSetNonZeroGuess(ssamg);
     }
 
-    // N10==41: PCG outer solver with SSAMG preconditioner (one V-cycle per iteration)
+    // N10==41: GMRES outer solver with SSAMG preconditioner (one V-cycle per iteration)
     if (p->N10 == 41)
     {
         HYPRE_SStructSSAMGSetMaxIter(ssamg, 1);
         HYPRE_SStructSSAMGSetTol(ssamg, 0.0);
         HYPRE_SStructSSAMGSetZeroGuess(ssamg);
 
-        HYPRE_SStructPCGCreate(pgc->mpi_comm, &pcg_solver);
-        HYPRE_SStructPCGSetMaxIter(pcg_solver, p->N46);
-        HYPRE_SStructPCGSetTol(pcg_solver, p->N44);
-        HYPRE_SStructPCGSetTwoNorm(pcg_solver, 1);
-        HYPRE_SStructPCGSetRelChange(pcg_solver, 0);
-        HYPRE_SStructPCGSetLogging(pcg_solver, 1);
-        HYPRE_SStructPCGSetPrintLevel(pcg_solver, 0);
+        HYPRE_SStructGMRESCreate(pgc->mpi_comm, &gmres_solver);
+        HYPRE_SStructGMRESSetMaxIter(gmres_solver, p->N46);
+        HYPRE_SStructGMRESSetKDim(gmres_solver, 30);
+        HYPRE_SStructGMRESSetTol(gmres_solver, p->N44);
+        HYPRE_SStructGMRESSetPrintLevel(gmres_solver, 0);
+        HYPRE_SStructGMRESSetLogging(gmres_solver, 1);
 
-        HYPRE_SStructPCGSetPrecond(pcg_solver,
+        HYPRE_SStructGMRESSetPrecond(gmres_solver,
             HYPRE_SStructSSAMGSolve,
             HYPRE_SStructSSAMGSetup,
             ssamg);
@@ -127,14 +138,14 @@ void hypre_ssamg::delete_solver(lexer *p, ghostcell *pgc)
     #if USE_AMREX
     if (p->nlevs > 1)
     {
-        HYPRE_ParCSRBiCGSTABDestroy(par_solver);
+        HYPRE_ParCSRPCGDestroy(par_solver);
         HYPRE_BoomerAMGDestroy(par_precond);
         return;
     }
     #endif
 
     if (p->N10 == 41)
-        HYPRE_SStructPCGDestroy(pcg_solver);
+        HYPRE_SStructGMRESDestroy(gmres_solver);
 
     HYPRE_SStructSSAMGDestroy(ssamg);
 }

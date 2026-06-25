@@ -25,7 +25,7 @@ Author: Hans Bihs
 
 void ghostcell::flagfield(lexer *p)
 {
-    p->level = 0;
+    LEVEL_LOOP
     TILE_LOOP
     MALOOP
     {
@@ -115,5 +115,29 @@ void ghostcell::flagfield(lexer *p)
     flagx(p,p->flag1);
     flagx(p,p->flag2);
     flagx(p,p->flag3);
+    #endif
+
+    #if USE_AMREX
+    // // Bottom solid-wall ghosts -> OBJ_FLAG. The -1->OBJ conversion above runs before
+    // // fillBoundary(), which overwrites the domain-boundary ghost ring, leaving the bottom wall
+    // // ghost as an AIR-like -1. Re-tag ONLY the z-low (bottom) ghost ring -- the single true solid
+    // // wall of this domain. The lateral/top boundaries are symmetry planes (not solid: must keep
+    // // their own flag), and the free surface is internal (air inside Domain(), kept Dirichlet as
+    // // the pressure anchor). poisson_pcorr::start then folds these OBJ bottom faces (Neumann) via
+    // // solidnb. INFLOW/OUTFLOW and already-solid (<=SOLID_FLAG) ghosts are preserved.
+    // LEVEL_LOOP
+    // {
+    //     const auto dom = p->amrex_geometry[p->level].Domain();
+    //     TILE_LOOP
+    //     for (i = -margin; i <= (p->amr_tile_hi.x - p->amr_tile_lo.x)+margin; ++i)
+    //     for (j = -margin; j <= (p->amr_tile_hi.y - p->amr_tile_lo.y)+margin; ++j)
+    //     for (k = -margin; k <= (p->amr_tile_hi.z - p->amr_tile_lo.z)+margin; ++k)
+    //     {
+    //         const int gk = k + p->amr_tile_lo.z;
+    //         const int f  = p->flag4(i,j,k);
+    //         if(gk<dom.smallEnd(2) && f<0 && f!=INFLOW_FLAG && f!=OUTFLOW_FLAG && f>SOLID_FLAG)
+    //             p->flag4(i,j,k)=OBJ_FLAG;
+    //     }
+    // }
     #endif
 }

@@ -85,7 +85,7 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
 
 
     // Single level -> SSAMG (native SStruct). Multi level -> assemble as ParCSR so the
-    // graph-coupled multi-part operator can be solved with BiCGSTAB+BoomerAMG (SSAMG
+    // graph-coupled multi-part operator can be solved with PCG+BoomerAMG (SSAMG
     // setup truncates on multi-part grids).
     #if USE_AMREX
     object_type = (p->nlevs > 1) ? HYPRE_PARCSR : HYPRE_SSTRUCT;
@@ -104,6 +104,7 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
     // level iterations (as fine cell toward the coarser level, then as coarse cell
     // toward the finer one), so these must persist so the entry indices stay contiguous.
     cf_links.clear();
+    cf_masks.clear();
     std::set<std::array<int,stencil_size>>     added;   // (from_part, from_ijk, to_ijk)
     std::map<std::array<int,4>,int> nnz;     // (from_part, from_ijk) -> #non-stencil so far
 
@@ -204,6 +205,9 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
             const int k = nnz[ck]++;
             cf_links.push_back({from_part, {f[0], f[1], f[2]},
                                 to_part,   {t[0], t[1], t[2]}, axis, high, stencil_size + k, 0.0});
+
+            if(high)
+            cf_masks.insert({from_part, from[0], from[1], from[2], axis});
         };
 
         for (const auto& [coarse_box, fine_box, dir] : cf_pairs)

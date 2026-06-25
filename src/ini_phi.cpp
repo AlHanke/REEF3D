@@ -124,6 +124,40 @@ void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)
 
     pgc->start4(p,a->ro,1);
     pgc->start4(p,a->visc,1);
+
+    // p->level=0;
+    // if(p->mpirank==0)std::cout<<"psi: "<<p->psi<<std::endl;
+    // for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*,amrex::TilingIfNotGPU()*/); _tile_mfi.isValid(); ++_tile_mfi) for (struct { lexer* ctx; amrex::MFIter* saved; } _guard{p, p->set_tile_mfi(&_tile_mfi)}; _guard.ctx != nullptr; _guard.ctx->set_tile_mfi(_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), _guard.ctx = nullptr)
+    // IJKLOOP
+    // {
+    //     if(k==8&&i==4&&p->mpirank==0)
+    //     {
+    //         std::cout<<"L0: j: "<<j<<" rho: "<<std::setprecision(6)<<a->ro(i,j,k)<<" phi: "<<a->phi(i,j,k)<<" press: "<<a->press(i,j,k)<<std::endl;
+    //     }
+    // }
+    // p->level=1;
+    // int count=0;
+    // double temp=0.0, temp2=0.0, temp3=0.0;
+    // for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*,amrex::TilingIfNotGPU()*/); _tile_mfi.isValid(); ++_tile_mfi) for (struct { lexer* ctx; amrex::MFIter* saved; } _guard{p, p->set_tile_mfi(&_tile_mfi)}; _guard.ctx != nullptr; _guard.ctx->set_tile_mfi(_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), _guard.ctx = nullptr)
+    // IJKLOOP
+    // {
+    //     if(k+p->amr_tile_lo.z>=16&&k+p->amr_tile_lo.z<=17&&i+p->amr_tile_lo.x==8)
+    //     {
+    //         temp+=a->ro(i,j,k);
+    //         temp2+=a->phi(i,j,k);
+    //         temp3+=a->press(i,j,k);
+    //         count++;
+    //         if(count==4)
+    //         {
+    //             std::cout<<"L1: j: "<<4+int(j/2)<<" rho average: "<<std::setprecision(6)<<temp/4.0<<" phi: "<<temp2/4.0<<" press: "<<temp3/4.0<<std::endl;
+    //             count=0;
+    //             temp=0.0;
+    //             temp2=0.0;
+    //             temp3=0.0;
+    //         }
+    //     }
+    // }
+    // p->level=0;
 }
 
 void initialize::iniphi_io(fdm*a, lexer* p, ghostcell* pgc)

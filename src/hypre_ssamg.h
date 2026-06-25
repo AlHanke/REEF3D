@@ -59,6 +59,9 @@ public:
     void cf_velocity_correction(lexer*, fdm*, ghostcell*,
                                 field&, field&, field&, field&, double) override;
 
+    void cf_velocity_fill_from_coarse(lexer*, fdm*, ghostcell*,
+                                      field&, field&, field&) override;
+
     // Operator pre-checks (env REEF_MAT_CHECK): apply the assembled matrix A to test
     // vectors and report on the result. (1) rowsum A*1: ~0 on clean interior rows, the
     // retained BC coefficient on boundary rows. (2) symmetry: global yT A x - xT A y, plus
@@ -80,13 +83,14 @@ private:
     HYPRE_SStructMatrix   A;
     HYPRE_SStructVector   b;
     HYPRE_SStructVector   x;
-    HYPRE_SStructSolver   pcg_solver;
+    HYPRE_SStructSolver   gmres_solver;
     HYPRE_SStructSolver   ssamg;
     HYPRE_SStructVariable vartypes[1];
 
     // Multi-level (nlevs>1) path: the SStruct matrix is assembled as ParCSR and solved
-    // with BiCGSTAB + BoomerAMG (SSAMG cannot set up on multi-part grids; the C-F
-    // coupling also makes the operator non-symmetric, hence BiCGSTAB not PCG).
+    // with PCG + BoomerAMG (SSAMG cannot set up on multi-part grids). The volume-weighted
+    // C-F coupling makes the operator symmetric, so PCG (not BiCGSTAB); the singular
+    // all-Neumann system is handled by RHS projection + a non-singular AMG coarse solve.
     HYPRE_ParCSRMatrix    par_A;
     HYPRE_ParVector       par_b;
     HYPRE_ParVector       par_x;

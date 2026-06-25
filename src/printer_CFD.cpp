@@ -959,6 +959,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                 //pturb
                 varnames.push_back("eddyv");
             }
+            // varnames.push_back("grav_pot");
             /*
             pmean
             pheat
@@ -967,6 +968,47 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             pdata
             pconc
             */
+
+            // p->level=0;
+            // if(p->mpirank==0)std::cout<<"psi: "<<p->psi<<std::endl;
+            // for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*,amrex::TilingIfNotGPU()*/); _tile_mfi.isValid(); ++_tile_mfi) for (struct { lexer* ctx; amrex::MFIter* saved; } _guard{p, p->set_tile_mfi(&_tile_mfi)}; _guard.ctx != nullptr; _guard.ctx->set_tile_mfi(_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), _guard.ctx = nullptr)
+            // IJKLOOP
+            // {
+            //     if(k==8&&i==4&&p->mpirank==0)
+            //     {
+            //         std::cout<<"L0: j: "<<j<<" rho: "<<std::setprecision(6)<<a->ro(i,j,k)<<" phi: "<<a->phi(i,j,k)<<" press: "<<a->press(i,j,k)<<std::endl;
+            //     }
+            // }
+            // p->level=1;
+            // int count=0;
+            // double temp=0.0, temp2=0.0, temp3=0.0;
+            // for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*,amrex::TilingIfNotGPU()*/); _tile_mfi.isValid(); ++_tile_mfi) for (struct { lexer* ctx; amrex::MFIter* saved; } _guard{p, p->set_tile_mfi(&_tile_mfi)}; _guard.ctx != nullptr; _guard.ctx->set_tile_mfi(_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), _guard.ctx = nullptr)
+            // IJKLOOP
+            // {
+            //     if(k+p->amr_tile_lo.z>=16&&k+p->amr_tile_lo.z<=17&&i+p->amr_tile_lo.x==8)
+            //     {
+            //         temp+=a->ro(i,j,k);
+            //         temp2+=a->phi(i,j,k);
+            //         temp3+=a->press(i,j,k);
+            //         count++;
+            //         if(count==4)
+            //         {
+            //             std::cout<<"L1: j: "<<4+int(j/2)<<" rho average: "<<std::setprecision(6)<<temp/4.0<<" phi: "<<temp2/4.0<<" press: "<<temp3/4.0<<std::endl;
+            //             count=0;
+            //             temp=0.0;
+            //             temp2=0.0;
+            //             temp3=0.0;
+            //         }
+            //     }
+            // }
+            // p->level=0;
+
+            // i=j=0;
+            // if(p->mpirank==0)
+            // TILE_LOOP
+            // KLOOP
+            // std::cout<<"k: "<<k<<" pcorr: "<<std::setprecision(12)<<a->test(i,j,k)<<std::endl;
+
 
             // 2. Prepare a Vector of MultiFabs spanning all levels
             // Assuming you have consolidated your variables into a single MultiFab with N components
@@ -1004,7 +1046,25 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                     });
                 }
                 comp = 3; // After processing u,v,w
-                amrex::MultiFab::Copy(combined_mf, a->press.GetMultiFab(), 0, comp, 1, 0);
+                // amrex::MultiFab::Copy(combined_mf, a->press.GetMultiFab(), 0, comp, 1, 0);
+                for (amrex::MFIter mfi(combined_mf); mfi.isValid(); ++mfi)
+                {
+                    const amrex::Box& bx = mfi.tilebox();
+                    auto const& cc_arr = combined_mf.array(mfi);
+                    auto const& p_fc = a->press.GetMultiFab().const_array(mfi);
+                    auto const& p0_fc = a->press0.GetMultiFab().const_array(mfi);
+                    auto const& phi_fc = a->phi.GetMultiFab().const_array(mfi);
+                    auto const& rho_fc = a->ro.GetMultiFab().const_array(mfi);
+
+                    amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
+                    {
+                        // cc_arr(i,j,k,comp) = p_fc(i,j,k) - (phi_fc(i,j,k)*rho_fc(i,j,k)*fabs(p->W22));
+                        // increment::k = k-bx.smallEnd(2);
+                        // cc_arr(i,j,k,comp) = p_fc(i,j,k) - ((p->phimean-p->pos_z())*rho_fc(i,j,k)*fabs(p->W22));
+                        cc_arr(i,j,k,comp) = p_fc(i,j,k) - p0_fc(i,j,k);
+                        // cc_arr(i,j,k,comp) = p_fc(i,j,k);
+                    });
+                }
                 comp++;
                 amrex::MultiFab::Copy(combined_mf, a->phi.GetMultiFab(), 0, comp, 1, 0);
                 comp++;
@@ -1085,6 +1145,8 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                     amrex::MultiFab::Copy(combined_mf, a->eddyv.GetMultiFab(), 0, comp, 1, 0);
                     comp++;
                 }
+                // amrex::MultiFab::Copy(combined_mf, a->grav_pot.GetMultiFab(), 0, comp, 1, 0);
+                // comp++;
 
                 plot_mfs_data.push_back(std::move(combined_mf));
             }
