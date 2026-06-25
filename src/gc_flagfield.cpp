@@ -26,15 +26,16 @@ Author: Hans Bihs
 void ghostcell::flagfield(lexer *p)
 {
     p->level = 0;
-    for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
+    TILE_LOOP
+    MALOOP
     {
-        if(p->flag4[i]==1)
+        if(p->flag4(i,j,k)==1)
         {
-            p->flag4[i]=WATER_FLAG;
+            p->flag4(i,j,k)=WATER_FLAG;
         }
-        else if(p->flag4[i]==-1)
+        else if(p->flag4(i,j,k)==-1)
         {
-            p->flag4[i]=OBJ_FLAG;
+            p->flag4(i,j,k)=OBJ_FLAG;
         }
     }
 
@@ -67,11 +68,12 @@ void ghostcell::flagfield(lexer *p)
     }
 
     p->level = 0;
-    for(i=0;i<p->imax*p->jmax*p->kmax; ++i)
+    TILE_LOOP
+    MALOOP
     {
-        p->flag1[i]=p->flag4[i];
-        p->flag2[i]=p->flag4[i];
-        p->flag3[i]=p->flag4[i];
+        p->flag1(i,j,k)=p->flag4(i,j,k);
+        p->flag2(i,j,k)=p->flag4(i,j,k);
+        p->flag3(i,j,k)=p->flag4(i,j,k);
     }
 
     GC4LOOP
