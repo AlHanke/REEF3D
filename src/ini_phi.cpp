@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
+#include"heaviside_ls.h"
 #include<utility>
 
 void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)
@@ -116,14 +117,7 @@ void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)
     double H=0.0;
     BASELOOP
     {
-        if(a->phi(i,j,k) > (p->psi))
-            H=1.0;
-
-        else if(a->phi(i,j,k) < -(p->psi))
-            H=0.0;
-
-        else if(fabs(a->phi(i,j,k)) <= (p->psi))
-            H=0.5*(1.0 + a->phi(i,j,k)/(p->psi) + (1.0/PI)*sin((PI*a->phi(i,j,k))/(p->psi)));
+        H = heaviside_ls(a->phi(i,j,k), p->psi);
 
         a->ro(i,j,k)=p->W1*H + p->W3*(1.0-H);
         a->visc(i,j,k)= p->W2*H + p->W4*(1.0-H);

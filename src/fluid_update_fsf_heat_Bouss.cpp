@@ -25,6 +25,7 @@ Author: Hans Bihs
 #include "fdm.h"
 #include "ghostcell.h"
 #include "heat.h"
+#include "heaviside_ls.h"
 
 fluid_update_fsf_heat_Bouss::fluid_update_fsf_heat_Bouss(lexer *p, fdm* a, ghostcell* pgc, heat *&ppheat) : dx(p->DXM)
 {
@@ -110,12 +111,7 @@ void fluid_update_fsf_heat_Bouss::start(lexer *p, fdm* a, ghostcell* pgc, field 
             }
         }
 
-        if(a->phi(i,j,k)>epsi)
-        H=1.0;
-        else if(a->phi(i,j,k)<-epsi)
-        H=0.0;
-        else
-        H=0.5*(1.0 + a->phi(i,j,k)/epsi + (1.0/PI)*sin((PI*a->phi(i,j,k))/epsi));
+        H = heaviside_ls(a->phi(i,j,k), epsi);
 
         a->ro(i,j,k) =     ro_1*H +   ro_2*(1.0-H);
         a->visc(i,j,k) = visc_1*H + visc_2*(1.0-H);

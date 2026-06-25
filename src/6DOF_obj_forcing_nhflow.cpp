@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm_nhf.h"
 #include"ghostcell.h"
+#include"heaviside_ls.h"
 #include"vrans.h"
 
 void sixdof_obj::update_forcing_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, 
@@ -176,7 +177,7 @@ void sixdof_obj::update_forcing_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc,
     
 double sixdof_obj::Hsolidface_nhflow(lexer *p, fdm_nhf *d, int aa, int bb, int cc)
 {
-    double psi, H, phival_fb,dirac;
+    double psi, phival_fb,dirac;
     
     if(p->j_dir==0)
     psi = p->A526*(1.0/1.0)*(p->DXN[IP] + 0.0*p->DZN[KP]*p->WL[IJ]);
@@ -188,21 +189,12 @@ double sixdof_obj::Hsolidface_nhflow(lexer *p, fdm_nhf *d, int aa, int bb, int c
     // Construct solid heaviside function
     phival_fb = d->FB[IJK];
     
-    if(-phival_fb > psi)
-    H = 1.0;
-
-    if(-phival_fb < -psi)
-    H = 0.0;
-
-    if(fabs(phival_fb)<=psi)
-    H = 0.5*(1.0 + (-phival_fb)/psi + (1.0/PI)*sin((PI*(-phival_fb))/psi));
-    
-    return H;
+    return heaviside_ls(-phival_fb, psi);
 }
 
 double sixdof_obj::Dsolidface_nhflow(lexer *p, fdm_nhf *d, int aa, int bb, int cc)
 {
-    double psi, H, phival_fb,dirac;
+    double psi, phival_fb,dirac;
     
     if(p->j_dir==0)
     psi = 2.0*p->A526*(1.0/1.0)*(p->DXN[IP] + 0.0*p->DZN[KP]*p->WL[IJ]);
@@ -214,16 +206,7 @@ double sixdof_obj::Dsolidface_nhflow(lexer *p, fdm_nhf *d, int aa, int bb, int c
     // Construct solid heaviside function
     phival_fb = d->FB[IJK];
     
-    /*if(-phival_fb > psi)
-    H = 1.0;
-
-    if(-phival_fb < -psi)
-    H = 0.0;
-
-    if(fabs(phival_fb)<=psi)
-    H = 0.5*(1.0 + (-phival_fb)/psi + (1.0/PI)*sin((PI*(-phival_fb))/psi));
-    
-    return H;*/
+    // return heaviside_ls(-phival_fb, psi);
 
     if(fabs(phival_fb)<psi)
     dirac = (0.5/psi)*(1.0 + cos((PI*phival_fb)/psi));
@@ -337,7 +320,7 @@ void sixdof_obj::update_forcing_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc,
     
 double sixdof_obj::Hsolidface_nhflow(lexer *p, fdm_nhf *d, int aa, int bb, int cc)
 {
-    double psi, H, phival_fb,dirac;
+    double psi, phival_fb,dirac;
     
     if(p->j_dir==0)
     psi = p->A526*(1.0/1.0)*(p->DXN[IP] + 0.0*p->DZN[KP]*p->WL[IJ]);
@@ -349,17 +332,7 @@ double sixdof_obj::Hsolidface_nhflow(lexer *p, fdm_nhf *d, int aa, int bb, int c
     // Construct solid heaviside function
     phival_fb = d->FB[IJK];
     
-    if(-phival_fb > psi)
-    H = 1.0;
-
-    if(-phival_fb < -psi)
-    H = 0.0;
-
-    if(fabs(phival_fb)<=psi)
-    H = 0.5*(1.0 + (-phival_fb)/psi + (1.0/PI)*sin((PI*(-phival_fb))/psi));
-
-
-    return H;
+    return heaviside_ls(-phival_fb, psi);
 }
     */
     

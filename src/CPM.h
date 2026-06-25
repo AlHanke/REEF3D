@@ -118,7 +118,6 @@ private:
     double r1(lexer*, double, double);
     double distcalc(lexer*, double , double, double , double, double);
     
-    double heaviside(double);
     double epsi,HS;
 
     void print_vtp(lexer*,sediment_fdm*);

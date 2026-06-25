@@ -25,6 +25,7 @@ Author: Hans Bihs
 #include "fdm.h"
 #include "ghostcell.h"
 #include "concentration.h"
+#include "heaviside_ls.h"
 
 fluid_update_fsf_concentration::fluid_update_fsf_concentration(lexer *p, fdm* a, ghostcell* pgc, concentration *&ppconcentration)
 {
@@ -54,12 +55,7 @@ void fluid_update_fsf_concentration::start(lexer *p, fdm* a, ghostcell* pgc, fie
 
     LOOP
     {
-        if(a->phi(i,j,k)>epsi)
-        H=1.0;
-        else if(a->phi(i,j,k)<-epsi)
-        H=0.0;
-        else
-        H=0.5*(1.0 + a->phi(i,j,k)/epsi + (1.0/PI)*sin((PI*a->phi(i,j,k))/epsi));
+        H = heaviside_ls(a->phi(i,j,k),epsi);
 
         conc=pconcentration->val(i,j,k);
 
