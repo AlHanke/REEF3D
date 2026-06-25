@@ -1049,6 +1049,9 @@
         <VirtualDirectory Name="Interpolation">
           <File Name="interpolation.h"/>
         </VirtualDirectory>
+        <VirtualDirectory Name="Shared functions">
+          <File Name="heaviside_ls.h"/>
+        </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="Geometry">
         <VirtualDirectory Name="Geo_Func">
