@@ -553,21 +553,41 @@ void pjm_corr::vel_setup(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, f
 
 void pjm_corr::upgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
+    double dp = 0.0;
+    const bool relPressure = p->Y9;
     ULOOP
-    a->F(i,j,k) -= PORVAL1*(a->press(i+1,j,k)-a->press(i,j,k))/(p->DXP[IP]*pd->roface(p,a,1,0,0));
+    {
+        dp = a->press(i+1,j,k)-a->press(i,j,k);
+        a->F(i,j,k) -= PORVAL1*dp/(p->DXP[IP]*pd->roface(p,a,1,0,0));
+        if(relPressure) a->F(i,j,k) += PORVAL1*(a->grav_pot(i+1,j,k)-a->grav_pot(i,j,k))/p->DXP[IP];
+    }
 }
 
 void pjm_corr::vpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
     if(p->j_dir)
-    VLOOP
-    a->G(i,j,k) -= PORVAL2*(a->press(i,j+1,k)-a->press(i,j,k))/(p->DYP[JP]*pd->roface(p,a,0,1,0));
+    {
+        double dp = 0.0;
+        const bool relPressure = p->Y9;
+        VLOOP
+        {
+            dp = a->press(i,j+1,k)-a->press(i,j,k);
+            a->G(i,j,k) -= PORVAL2*dp/(p->DYP[JP]*pd->roface(p,a,0,1,0));
+            if(relPressure) a->G(i,j,k) += PORVAL2*(a->grav_pot(i,j+1,k)-a->grav_pot(i,j,k))/p->DYP[JP];
+        }
+    }
 }
 
 void pjm_corr::wpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
+    double dp = 0.0;
+    const bool relPressure = p->Y9;
     WLOOP
-    a->H(i,j,k) -= PORVAL3*(a->press(i,j,k+1)-a->press(i,j,k))/(p->DZP[KP]*pd->roface(p,a,0,0,1));
+    {
+        dp = a->press(i,j,k+1)-a->press(i,j,k);
+        a->H(i,j,k) -= PORVAL3*dp/(p->DZP[KP]*pd->roface(p,a,0,0,1));
+        if(relPressure) a->H(i,j,k) += PORVAL3*(a->grav_pot(i,j,k+1)-a->grav_pot(i,j,k))/p->DZP[KP];
+    }
 }
 
 void pjm_corr::ini(lexer*p, fdm* a, ghostcell *pgc)
