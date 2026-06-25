@@ -439,10 +439,12 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 void momentum_FC3::irhs(lexer *p, fdm *a)
 {
     n=0;
+    const bool relPressure = p->Y9;
     ULOOP
     {
         a->maxF=std::max(fabs(a->rhsvec.V[n] + a->gi),a->maxF);
-        a->F(i,j,k) += (a->rhsvec.V[n] + a->gi + p->W29_x + a->Fext(i,j,k))*PORVAL1;
+        const double gi = relPressure ? 0.0 : a->gi;
+        a->F(i,j,k) += (a->rhsvec.V[n] + gi + p->W29_x + a->Fext(i,j,k))*PORVAL1;
 
         a->rhsvec.V[n] = 0.0;
         a->Fext(i,j,k) = 0.0;
@@ -453,10 +455,12 @@ void momentum_FC3::irhs(lexer *p, fdm *a)
 void momentum_FC3::jrhs(lexer *p, fdm *a)
 {
     n=0;
+    const bool relPressure = p->Y9;
     VLOOP
     {
         a->maxG=std::max(fabs(a->rhsvec.V[n] + a->gj),a->maxG);
-        a->G(i,j,k) += (a->rhsvec.V[n] + a->gj + p->W29_y + a->Gext(i,j,k))*PORVAL2;
+        const double gj = relPressure ? 0.0 : a->gj;
+        a->G(i,j,k) += (a->rhsvec.V[n] + gj + p->W29_y + a->Gext(i,j,k))*PORVAL2;
 
         a->rhsvec.V[n] = 0.0;
         a->Gext(i,j,k) = 0.0;
@@ -467,10 +471,12 @@ void momentum_FC3::jrhs(lexer *p, fdm *a)
 void momentum_FC3::krhs(lexer *p, fdm *a)
 {
     n=0;
+    const bool relPressure = p->Y9;
     WLOOP
     {
         a->maxH=std::max(fabs(a->rhsvec.V[n] + a->gk),a->maxH);
-        a->H(i,j,k) += (a->rhsvec.V[n] + a->gk + p->W29_z + a->Hext(i,j,k))*PORVAL3;
+        const double gk = relPressure ? 0.0 : a->gk;
+        a->H(i,j,k) += (a->rhsvec.V[n] + gk + p->W29_z + a->Hext(i,j,k))*PORVAL3;
 
         a->rhsvec.V[n] = 0.0;
         a->Hext(i,j,k) = 0.0;
