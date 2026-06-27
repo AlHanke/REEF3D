@@ -28,7 +28,6 @@ Authors: Tobias Martin, Hans Bihs
 #include"bcmom.h"
 #include"convection.h"
 #include"diffusion.h"
-#include"density_df.h"
 #include"ediff2.h"
 #include"pressure.h"
 #include"poisson.h"
