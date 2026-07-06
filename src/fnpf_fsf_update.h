@@ -31,7 +31,6 @@ class ghostcell;
 class ioflow;
 class slice;
 class field;
-class vec;
 
 using namespace std;
 

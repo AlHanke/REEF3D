@@ -24,7 +24,6 @@ Authors: Tobias Martin, Hans Bihs
 #define NET_SHEET_H_
 
 #include"net.h"
-#include"vec.h"
 #include<fstream>
 #include<iostream>
 #include<vector>

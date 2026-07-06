@@ -29,7 +29,6 @@ Author: Hans Bihs
 class lexer;
 class ghostcell;
 class field;
-class vec;
 class fdm_fnpf;
 class fnpf_ddx;
 class fnpf_convection;
