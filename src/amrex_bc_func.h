@@ -565,15 +565,16 @@ public:
         ConstMyExtBCFillFieldParams() noexcept = default;
         ConstMyExtBCFillFieldParams(const amrex::Array<int,6>& bc_values_in,
                                 const amrex::Array<amrex::Real,6>& heat_values_in,
-                                bool y_dimension_exists_in, amrex_bc_func::DataLocation data_location_in)
+                                bool y_dimension_exists_in, amrex_bc_func::DataLocation data_location_in, bool ghost_transverse_in)
             : bc_values(bc_values_in), heat_values(heat_values_in),
-              y_dimension_exists(y_dimension_exists_in), data_location(data_location_in) {}
+              y_dimension_exists(y_dimension_exists_in), data_location(data_location_in), ghost_transverse(ghost_transverse_in) {}
 
         //Const parameters needed for BC decision making
         const amrex::Array<int,6> bc_values = {};
         const amrex::Array<amrex::Real,6> heat_values = {};
         const bool y_dimension_exists = true;
         const DataLocation data_location = DataLocation::CELL_CENTERED;
+        const bool ghost_transverse = true; // REEF_CF_GHOST_TRANSVERSE
     };
     struct MyExtBCFillFieldParams {
         AMREX_GPU_HOST_DEVICE

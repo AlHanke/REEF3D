@@ -41,7 +41,7 @@ Author: Alexander Hanke
 field_amrex::field_amrex(lexer* p, amrex_bc_func::DataLocation data_location)
     : const_params({p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
                    {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T},
-                   p->j_dir, data_location),
+                   p->j_dir, data_location, p->Y11==1),
       m_shared_mf(nullptr)
 {
     field_amrex::p = p;
@@ -103,7 +103,7 @@ field_amrex::field_amrex(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, in
                          amrex_bc_func::DataLocation data_location)
     : const_params{{p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
                    {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T},
-                   bool(p->j_dir), data_location},
+                   bool(p->j_dir), data_location, p->Y11==1},
       m_shared_mf(shared_mf)
 {
     field_amrex::p = p;
@@ -370,11 +370,15 @@ void field_amrex::FillCoarseFineNormalGhost()
 // and only one axis' value can be stored — the last written wins (a cell-ghost limitation;
 // full generality would need a sole-writer face correction as cf_velocity_correction does).
 // =========================================================================
-void field_amrex::FillCoarseFineCellGhost()
+void field_amrex::FillCoarseFineCellGhost(bool transverse)
 {
     // REEF_CF_PROJECTION_GROUP member (3) — the fine-side (2/(1+r)) and coarse-side
     // (2r/(1+r)) prolongations here must match the matrix C-F coupling in
     // hypre_ssamg::amr_cf_coefficients (canonical note there). Change one -> change all.
+    // transverse=true (gcv 42, PREDICTOR fields only) additionally reconstructs the coarse
+    // value at the fine ghost's TRANSVERSE sub-position instead of using the raw coarse cell,
+    // so a field varying transverse to the C-F face keeps its correct normal gradient. Never
+    // used for pcorr (would desync from the matrix flux); see FillCoarseFineCellGhost doc.
     if (const_params.data_location != amrex_bc_func::DataLocation::CELL_CENTERED) return;
     if (p->nlevs <= 1) return;
 
@@ -429,7 +433,26 @@ void field_amrex::FillCoarseFineCellGhost()
 
                         const amrex::IntVect b  = (side == 0) ? g + e : g - e;   // interior boundary cell
                         const double         pb = farr(b);
-                        const double         pc = carr(amrex::coarsen(g, rv));
+                        const amrex::IntVect cc = amrex::coarsen(g, rv);
+                        double               pc = carr(cc);
+
+                        // Transverse-linear reconstruction: evaluate the coarse field at the fine
+                        // ghost's sub-position within its coarse cell, so a field varying transverse
+                        // to `dir` keeps the correct normal gradient (raw carr(cc) is transverse-
+                        // piecewise-constant -> spurious normal gradient = the geyser). Central slope
+                        // per transverse axis (cmf carries a 2-cell ghost, so cc +/- et is addressable).
+                        if (transverse)
+                            for (int t = 0; t < 3; ++t)
+                            {
+                                if (t == dir) continue;
+                                if (t == 1 && p->j_dir != 1) continue;
+                                const amrex::IntVect et = amrex::IntVect::TheDimensionVector(t);
+                                const double slope = 0.5 * (carr(cc + et) - carr(cc - et));
+                                const int    sub   = g[t] - cc[t] * rv[t];          // 0 .. r-1
+                                const double off   = (double(sub) + 0.5) / double(rv[t]) - 0.5; // (-1/2,1/2)
+                                pc += slope * off;
+                            }
+
                         farr(i,j,k) = pb + s * (pc - pb);
                     });
                 }
@@ -438,6 +461,12 @@ void field_amrex::FillCoarseFineCellGhost()
     }
 
     // --- Pass 2: coarse-side covered ring -------------------------------------------
+    // Only the matrix-consistent (pcorr) path needs the coarse-side d_cf prolongation of the
+    // covered ring. The transverse predictor path (gcv 42) must NOT touch covered coarse cells:
+    // they are owned by average_down / REEF_COVERED_PRESS_RECON (or skipped via skip_covered),
+    // and the d_cf overwrite here re-injects a spurious offset (breaks the hydrostatic balance).
+    if (transverse) return;
+
     for (int lev = 0; lev < p->nlevs - 1; ++lev)
     {
         amrex::MultiFab& coarse_mf = GetMultiFab(lev);

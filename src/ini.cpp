@@ -1033,6 +1033,7 @@ void control::ini_default()
     Y9=1;
     Y10=0;
     Y10_band=1.5;
+    Y11=1;
     Y40=3;
     Y50=0;
 	Y60=1;  // int require

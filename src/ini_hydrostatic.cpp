@@ -137,8 +137,23 @@ void initialize::hydrostatic(lexer *p, fdm *a, ghostcell *pgc)
         };
         hydro_imb_report("post-build");
 
-        pgc->start4(p,a->press,40,false);   // fill halos / C-F ghosts; NO average_down (keeps the
-        pgc->start4(p,a->press0,40,false);  // coarse hydrostatic column self-consistent at surface)
+        // REEF_COVERED_PRESS_RECON: match the per-step fix in pjm_corr::start -- overwrite covered
+        // coarse press with the fine average so the iter-1 predictor already sees a horizontally
+        // consistent covered column (the per-column hydrostatic offset otherwise seeds the geyser
+        // from step 1). average_down writes only covered cells; uncovered columns untouched.
+        if(std::getenv("REEF_COVERED_PRESS_RECON") && p->nlevs>1)
+            for(int lev=p->nlevs-2; lev>=0; --lev)
+            {
+                amrex::average_down(a->press.GetMultiFab(lev+1),  a->press.GetMultiFab(lev),  0,1,p->ref_vec);
+                amrex::average_down(a->press0.GetMultiFab(lev+1), a->press0.GetMultiFab(lev), 0,1,p->ref_vec);
+            }
+
+        // gcv 42 = transverse-linear C-F ghost (REEF_CF_GHOST_TRANSVERSE): reconstruct the coarse
+        // press at the fine ghost's transverse position so the C-F ghost fill no longer breaks the
+        // hydrostatic balance (post-start4 |imb| 0.22 -> ~0). Single-level falls back to gcv 40.
+        const int gcv_h = (p->nlevs>1 && p->Y11==1) ? 42 : 40;
+        pgc->start4(p,a->press,gcv_h,false);   // fill halos / C-F ghosts; NO average_down (keeps the
+        pgc->start4(p,a->press0,gcv_h,false);  // coarse hydrostatic column self-consistent at surface)
 
         hydro_imb_report("post-start4");
 

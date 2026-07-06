@@ -589,6 +589,7 @@ void hypre_ssamg::cf_velocity_correction(lexer* p, fdm* a, ghostcell* pgc,
     // Measures the post-correction discrete divergence of each fine interface cell, split by
     // link type (high/low/both) and lateral wall distance, and reports the global worst cell.
     const bool dbg = (std::getenv("REEF_CF_DIV") != nullptr);
+    const bool cf_count = (std::getenv("REEF_CF_COUNT") != nullptr);
     double g_hi = 0.0, g_lo = 0.0, g_both = 0.0;   // max|D.u| by link type (interface cells)
     double g_wall = 0.0, g_inner = 0.0;             // max|D.u| by lateral wall distance (<=1 cell)
     double l_worst = 0.0; int l_lev = -1, l_ijk[3] = {-1,-1,-1}; bool l_hi = false, l_lo = false;
@@ -702,6 +703,10 @@ void hypre_ssamg::cf_velocity_correction(lexer* p, fdm* a, ghostcell* pgc,
                 if      (axis == 0) u_arr(face) -= delta;
                 else if (axis == 1) v_arr(face) -= delta;
                 else                w_arr(face) -= delta;
+
+                // REEF_CF_COUNT: register this C-F face write in the shared per-face counter so
+                // velcorr can flag any face also written by the interior loop (count==2).
+                if (cf_count) ++cf_wcount[{lev, face[0], face[1], face[2], axis}];
             }
 
             if (dbg)
