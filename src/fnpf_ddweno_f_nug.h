@@ -23,55 +23,45 @@ Author: Hans Bihs
 #ifndef FNPF_DDWENO_F_NUG_H_
 #define FNPF_DDWENO_F_NUG_H_
 
-#include"increment.h"
 #include"weno_nug_func.h"
 
+class lexer;
 class fdm_fnpf;
 class field;
 class slice;
-class lexer;
-class ghostcell;
 
 using namespace std;
 
 class fnpf_ddweno_f_nug : public weno_nug_func
 {
 public:
+    fnpf_ddweno_f_nug(lexer*,fdm_fnpf*);
+    ~fnpf_ddweno_f_nug();
 
-	 fnpf_ddweno_f_nug(lexer*,fdm_fnpf*);
-	 ~fnpf_ddweno_f_nug();
-    
     // field
     double ddwenox(field&, double);
     double ddwenoy(field&, double);
     double ddwenoz(field&, double);
-     
-    void iqmin(field&);
-    void jqmin(field&);
-    void kqmin(field&);
-	void iqmax(field&);
-	void jqmax(field&);
-	void kqmax(field&);
-     
+
     // slice
     double dswenox(slice&, double);
     double dswenoy(slice&, double);
 
-    void isqmin(slice&);
-	void jsqmin(slice&);
-	void isqmax(slice&);
-	void jsqmax(slice&);
-    
-    void is_wd_x_min();
-    void is_wd_x_max();
-    void is_wd_y_min();
-    void is_wd_y_max();
-
-    
-    double grad;
-    double *DX,*DY,*DZ;
-    
 private:
+    inline void iqmin(field&);
+    inline void jqmin(field&);
+    inline void kqmin(field&);
+    inline void iqmax(field&);
+    inline void jqmax(field&);
+    inline void kqmax(field&);
+
+    inline void isqmin(slice&);
+    inline void jsqmin(slice&);
+    inline void isqmax(slice&);
+    inline void jsqmax(slice&);
+
+    double *DX,*DY,*DZ;
+
     lexer *p;
     fdm_fnpf *c;
 };
