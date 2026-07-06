@@ -21,15 +21,13 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"fnpf_ddweno_f_nug.h"
-#include"fdm_fnpf.h"
 #include"lexer.h"
 #include"field.h"
 #include"slice.h"
 
-fnpf_ddweno_f_nug::fnpf_ddweno_f_nug(lexer* pp,fdm_fnpf *cc):weno_nug_func(pp)
+fnpf_ddweno_f_nug::fnpf_ddweno_f_nug(lexer* pp):weno_nug_func(pp)
 {
     p=pp;
-    c=cc;
 }
 
 fnpf_ddweno_f_nug::~fnpf_ddweno_f_nug()
