@@ -24,6 +24,8 @@ Author: Hans Bihs
 #define SOLVER_H_
 
 #include <set>
+#include <map>
+#include <array>
 
 class lexer;
 class fdm;
@@ -90,6 +92,15 @@ public:
     };
 
     std::set<cf_mask> cf_masks; // C-F high-faces skipped by the interior velocity loop (velcorr_amrex)
+
+    // Diagnostic (env REEF_CF_COUNT): per-face projection-write counter. Key = global
+    // {level, face_i, face_j, face_k, axis}. Incremented once by the interior velcorr loop
+    // and once by cf_velocity_correction for every face each pass writes. In a correct
+    // projection every face is written exactly once; count==2 marks a double-write (interior
+    // loop failed to skip a C-F high face -> cf_masks offset bug), count==0 on a C-F face
+    // marks a missing correction (link-construction bug). Populated/printed only when the env
+    // var is set; velcorr clears it at the start of each call.
+    std::map<std::array<int,5>,int> cf_wcount;
 };
 
 #endif

@@ -41,6 +41,7 @@ Author: Alexander Hanke
 #include <initializer_list>
 #include <utility>
 #include <vector>
+#include <cstdlib>
 
 #if USE_AMREX
 // Create and zero-initialise a MultiFab vector, then register it for AMR regrid.
@@ -150,8 +151,14 @@ public:
     /// makes the assembled operator equal G_v^T W G_v across the interface (G_v = the
     /// gradient pjm_corr applies), restoring the projection's gauge invariance. Replaces
     /// cell_cons_interp on the C-F ring only. No-op for face fields and single-level runs.
-    /// Called from FillDomainBoundaryImpl when gcv==41.
-    void FillCoarseFineCellGhost();
+    /// Called from FillDomainBoundaryImpl when gcv==41 (d_cf, matrix-consistent, for pcorr) or
+    /// gcv==42 (transverse-linear, for the PREDICTOR fields press/phi). transverse=true adds the
+    /// coarse field's transverse slope at the fine ghost's sub-position so a field varying
+    /// TRANSVERSE to the C-F face (hydrostatic press varies in z; a lateral x-edge ghost) is
+    /// reconstructed correctly -- the raw carr(coarsen(g)) is transverse-piecewise-constant and
+    /// injects a spurious normal gradient (the submerged-patch geyser). pcorr keeps transverse=false
+    /// so the corrector still matches the SSAMG matrix flux (projcheck stays clean).
+    void FillCoarseFineCellGhost(bool transverse=false);
 
     /// @copydoc field::average_down_level
     /// Dispatches on const_params.data_location: CELL_CENTERED uses amrex::average_down;
@@ -591,7 +598,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
     // gcv 41 (matrix-consistent C-F pressure fill) has physical-boundary BCs identical
     // to the pressure Neumann gcv 40; only the coarse-fine ghost ring differs, handled by
     // FillCoarseFineCellGhost() below. Use 40 for the domain-boundary BCRec update.
-    const int bc_gcv = (gcv == 41) ? 40 : gcv;
+    const int bc_gcv = (gcv == 41 || gcv == 42) ? 40 : gcv;
 
     if (bc_gcv != m_last_gcv)
     {
@@ -682,8 +689,22 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
     // REEF_CF_PROJECTION_GROUP member (4) — gcv 41 gates the matrix-consistent C-F cell
     // ghost fill. The 41->40 domain-BC translation above must stay paired with this call;
     // canonical note in hypre_ssamg::amr_cf_coefficients.
-    if (gcv == 41)
-        FillCoarseFineCellGhost();
+    //
+    // REEF_PHI_CF_DCF (Option 2, plan Part 1/C7 item 2): extend the same d_cf-consistent
+    // fine C-F ghost fill to the level-set gcvals (51-54). The generic cell_cons_interp ring
+    // fill leaves a small phi offset at the C-F ghost (probe metric (C) max|dphi|~0.05) which
+    // the steep two-fluid Heaviside amplifies into an O(W1-W3) roface mismatch across the
+    // C-F face when the density band cuts the interface. Adopting the d_cf convention here
+    // makes the fine-side face density consistent with the coarse cell (drives (C) droface->0).
+    // No-op for the fully-refined case (band interior to fine level: phi linear + H saturated
+    // => d_cf and cell_cons coincide). Pass 2's coarse-covered overwrite is wiped by start4's
+    // subsequent average_down, so covered coarse phi stays the fine average (metric (A)=0).
+    const bool phi_gcv = (gcv >= 51 && gcv <= 54);
+    // phi (51-54): with REEF_CF_GHOST_TRANSVERSE use the transverse-linear ghost (density = H(phi)
+    // reads it -- same lateral C-F inconsistency as press for variable density); else fall back to
+    // the plain d_cf ghost when REEF_PHI_CF_DCF is set. press/pcorr: gcv 41 (d_cf), gcv 42 (transverse).
+    if (gcv == 41 || gcv == 42 || (const_params.ghost_transverse && phi_gcv))
+        FillCoarseFineCellGhost(gcv == 42 || (const_params.ghost_transverse && phi_gcv));
 }
 
 // =========================================================================
@@ -713,7 +734,7 @@ inline void field_amrex::FillDomainBoundaryBatch(
     amrex_bc_func::ConstMyExtBCFillFieldParams const_params{
         {p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
         {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T},
-        bool(p->j_dir), amrex_bc_func::DataLocation::CELL_CENTERED};
+        bool(p->j_dir), amrex_bc_func::DataLocation::CELL_CENTERED, p->Y11==1};
 
     amrex_bc_func::MyExtBCFillFieldParams params;
     params.Ui = p->Ui;
