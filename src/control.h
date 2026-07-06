@@ -538,6 +538,7 @@ public:
     int Y9;
     int Y10;
     double Y10_band;
+    int Y11;
 
     int* ictrl;
     double* dctrl;

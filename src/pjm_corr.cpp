@@ -108,6 +108,64 @@ static void cf_average_down_velocity(lexer* p, field& u, field& v, field& w)
     }
 }
 
+// REEF_CF_COUNT report: every projected face must be written exactly once. Summarise the
+// shared per-face counter, list the double-written faces (count>=2 = interior loop failed to
+// skip a C-F high face -> cf_masks offset bug), and dump the 6-face count signature of the
+// known worst cells so a count==0 side reveals a missing correction (link-construction bug).
+static void velcorr_face_count_report(lexer* p, solver* psolv)
+{
+    long n1=0, n2=0, nbig=0;
+    for(const auto& kv : psolv->cf_wcount)
+    {
+        if(kv.second==1)      ++n1;
+        else if(kv.second==2) ++n2;
+        else                  ++nbig;
+    }
+    printf("  [cf-count] faces written once=%ld  TWICE=%ld  (>2)=%ld\n", n1, n2, nbig);
+
+    int shown=0;
+    for(const auto& kv : psolv->cf_wcount)
+        if(kv.second>=2 && shown<24)
+        {
+            const auto& k=kv.first;
+            printf("  [cf-count] MULTI face lev=%d (%d,%d,%d) axis=%d  count=%d\n",
+                   k[0],k[1],k[2],k[3],k[4],kv.second);
+            ++shown;
+        }
+
+    // 6-face signature (x-,x+,y-,y+,z-,z+) of the known worst cells on fine level 1.
+    const int tgt[2][4] = {{1,8,8,16},{1,31,8,23}};
+    for(int t=0;t<2;++t)
+    {
+        const int lev=tgt[t][0], ci=tgt[t][1], cj=tgt[t][2], ck=tgt[t][3];
+        auto cnt=[&](int fi,int fj,int fk,int ax)->int{
+            auto it=psolv->cf_wcount.find({lev,fi,fj,fk,ax});
+            return it==psolv->cf_wcount.end() ? 0 : it->second; };
+        printf("  [cf-count] cell lev=%d (%d,%d,%d)  x-=%d x+=%d  y-=%d y+=%d  z-=%d z+=%d\n",
+               lev,ci,cj,ck,
+               cnt(ci-1,cj,ck,0), cnt(ci,cj,ck,0),
+               cnt(ci,cj-1,ck,1), cnt(ci,cj,ck,1),
+               cnt(ci,cj,ck-1,2), cnt(ci,cj,ck,2));
+    }
+}
+
+// REEF_COVERED_PRESS_RECON: overwrite covered coarse press with the fine average (fine is
+// authoritative). The per-column hydrostatic build (ini_hydrostatic) leaves each coarse column a
+// slightly different constant offset -- invisible to wpgrad (vertical) but a spurious HORIZONTAL
+// gradient upgrad/vpgrad turn into the geyser. Averaging the fine solution onto covered coarse
+// cells enforces horizontal consistency AND feeds a clean fine C-F press ghost. Re-enables what
+// start4(...,false) disables; average_down writes ONLY covered cells (uncovered have no fine
+// coverage), so the uncovered coarse column is untouched. Call BEFORE start4 so the C-F ghost fill
+// picks up the corrected covered values.
+#if USE_AMREX
+static void covered_press_avgdown(lexer* p, field& press)
+{
+    if(p->nlevs<=1) return;
+    for(int lev=p->nlevs-2; lev>=0; --lev)
+        amrex::average_down(press.GetMultiFab(lev+1), press.GetMultiFab(lev), 0, 1, p->ref_vec);
+}
+#endif
+
 // True if the cell (tile-local i,j,k on p->level) is COVERED by the next finer level -- its
 // refined footprint intersects level+1's grids. Covered coarse cells are fine-authoritative,
 // so their predictor pressure-gradient force is spurious (option REEF_SKIP_COVERED_PGRAD).
@@ -181,8 +239,13 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
     // field_amrex::FillDomainBoundaryImpl). Canonical note in hypre_ssamg::amr_cf_coefficients.
     #if USE_AMREX
     const int gcval_press = (p->nlevs > 1) ? 41 : 40;
+    // Predictor press ghost: gcv 42 = transverse-linear C-F ghost (REEF_CF_GHOST_TRANSVERSE),
+    // so the next predictor's -grad(press) has no spurious lateral C-F gradient. pcorr stays 41
+    // (matrix-consistent d_cf) so the projection/projcheck is untouched.
+    const int gcval_press_pred = (p->nlevs > 1 && p->Y11==1) ? 42 : gcval_press;
     #else
     const int gcval_press = 40;
+    const int gcval_press_pred = gcval_press;
     #endif
     pgc->start4(p,pcorr,gcval_press,false);
     #if USE_AMREX
@@ -205,8 +268,11 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
     // amrex::MultiFab::Copy(a->test.GetMultiFab(), pcorr.GetMultiFab(), 0, 0, 1, 0);
     presscorr(p,a);
     reference_start(p,a,pgc);
-    pgc->start4(p,a->press,gcval_press,false);   // no average_down: keep coarse press self-consistent
-                                                 // (avg-down breaks the hydrostatic grad at surface)
+    #if USE_AMREX
+    if(std::getenv("REEF_COVERED_PRESS_RECON")) covered_press_avgdown(p,a->press);
+    #endif
+    pgc->start4(p,a->press,gcval_press_pred,false);   // no average_down: keep coarse press self-consistent
+                                                      // (avg-down breaks the hydrostatic grad at surface)
 
     velcorr(p,a,pgc,uvel,vvel,wvel,psolv,alpha);
 
@@ -258,6 +324,12 @@ void pjm_corr::velcorr(lexer* p, fdm* a, ghostcell* pgc, field& uvel, field& vve
     }
 
     #if USE_AMREX
+    // Diagnostic per-face write counter (env REEF_CF_COUNT): count every face the interior
+    // loop writes; cf_velocity_correction counts the C-F faces it writes into the same shared
+    // map. A face with total count!=1 is a masking (==2) or missing-link (==0) bug.
+    static const bool cf_count = (std::getenv("REEF_CF_COUNT") != nullptr);
+    if(cf_count) psolv->cf_wcount.clear();
+
     // cf_masks holds AMReX GLOBAL cell indices (built from cf_links), but the LOOP i,j,k are
     // tile-local -- the field accessors add amr_tile_lo internally (operator()(i,j,k) ->
     // arr(i+amr_tile_lo.x,...)). Translate with the SAME offset before the mask lookup, else the
@@ -267,7 +339,10 @@ void pjm_corr::velcorr(lexer* p, fdm* a, ghostcell* pgc, field& uvel, field& vve
         const int gi=i+p->amr_tile_lo.x, gj=j+p->amr_tile_lo.y, gk=k+p->amr_tile_lo.z;
         double dp = pcorr(i+1,j,k)-pcorr(i,j,k);
         if(!psolv->cf_masks.contains({p->level,gi,gj,gk,0}))
-        uvel(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*(dp/(p->DXP[IP]*pd->roface(p,a,1,0,0)));
+        {
+            uvel(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*(dp/(p->DXP[IP]*pd->roface(p,a,1,0,0)));
+            if(cf_count) ++psolv->cf_wcount[{p->level,gi,gj,gk,0}];
+        }
     }
 
     if(p->j_dir==1)
@@ -276,7 +351,10 @@ void pjm_corr::velcorr(lexer* p, fdm* a, ghostcell* pgc, field& uvel, field& vve
         const int gi=i+p->amr_tile_lo.x, gj=j+p->amr_tile_lo.y, gk=k+p->amr_tile_lo.z;
         double dp = pcorr(i,j+1,k)-pcorr(i,j,k);
         if(!psolv->cf_masks.contains({p->level,gi,gj,gk,1}))
-        vvel(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*(dp/(p->DYP[JP]*pd->roface(p,a,0,1,0)));
+        {
+            vvel(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*(dp/(p->DYP[JP]*pd->roface(p,a,0,1,0)));
+            if(cf_count) ++psolv->cf_wcount[{p->level,gi,gj,gk,1}];
+        }
     }
 
     WLOOP
@@ -284,7 +362,10 @@ void pjm_corr::velcorr(lexer* p, fdm* a, ghostcell* pgc, field& uvel, field& vve
         const int gi=i+p->amr_tile_lo.x, gj=j+p->amr_tile_lo.y, gk=k+p->amr_tile_lo.z;
         double dp = pcorr(i,j,k+1)-pcorr(i,j,k);
         if(!psolv->cf_masks.contains({p->level,gi,gj,gk,2}))
-        wvel(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*(dp/(p->DZP[KP]*pd->roface(p,a,0,0,1)));
+        {
+            wvel(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*(dp/(p->DZP[KP]*pd->roface(p,a,0,0,1)));
+            if(cf_count) ++psolv->cf_wcount[{p->level,gi,gj,gk,2}];
+        }
     }
 
     // C-F interface correction (gradient/G side): correct the fine C-F sub-faces with the
@@ -294,6 +375,9 @@ void pjm_corr::velcorr(lexer* p, fdm* a, ghostcell* pgc, field& uvel, field& vve
     if(p->nlevs > 1)
     {
         psolv->cf_velocity_correction(p,a,pgc,pcorr,uvel,vvel,wvel,alpha);
+
+        if(cf_count) velcorr_face_count_report(p,psolv);
+
         cf_average_down_velocity(p,uvel,vvel,wvel);
 
         // NOTE: a post-projection cf_velocity_fill_from_coarse was tried here and REMOVED -- it
@@ -600,15 +684,65 @@ void pjm_corr::upgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
     double dp = 0.0;
     const bool relPressure = p->Y9;
     const bool skip_covered = (std::getenv("REEF_SKIP_COVERED_PGRAD") != nullptr);
+
+    // REEF_HYDRO_PROBE (horizontal x): at rest the horizontal predictor force must be ~0 EVERYWHERE
+    // (no horizontal gravity, no horizontal hydrostatic pressure gradient). Any nonzero |F_imb| is a
+    // pure artifact; its location (surface / C-F / deep) localises the horizontal injection driving umax.
+    const bool hydro_probe = (std::getenv("REEF_HYDRO_PROBE") != nullptr) && relPressure;
+    double hp_w=0.0; int hp_l=-1, hp_i[3]={-1,-1,-1}; double hp_rof=0,hp_pg=0,hp_gg=0,hp_ps=0,hp_pn=0;
+    double hp_prs=0,hp_prn=0; int hp_cs=0,hp_cn=0;   // press(self,i+1) + covered flags
+    double hp_deep=0.0; int hp_dl=-1, hp_di[3]={-1,-1,-1};
+
     ULOOP
     {
         #if USE_AMREX
-        if(skip_covered && cell_is_covered(p,i,j,k)) continue;
+        // skip the predictor pgrad on any face touching a covered cell (self OR neighbour): those
+        // faces are C-F/fine-authoritative and overwritten by reflux, and the covered press is
+        // horizontally inconsistent (per-column hydrostatic offset). Neighbour term added 2026-07-06.
+        if(skip_covered && (cell_is_covered(p,i,j,k) || cell_is_covered(p,i+1,j,k))) continue;
         #endif
         dp = a->press(i+1,j,k)-a->press(i,j,k);
         // if(relPressure) dp -= a->press0(i+1,j,k)-a->press0(i,j,k);
         a->F(i,j,k) -= PORVAL1*dp/(p->DXP[IP]*pd->roface(p,a,1,0,0));
         if(relPressure) a->F(i,j,k) += PORVAL1*(a->grav_pot(i+1,j,k)-a->grav_pot(i,j,k))/p->DXP[IP];
+
+        if(hydro_probe)
+        {
+            #if USE_AMREX
+            const double rof = pd->roface(p,a,1,0,0);
+            const double pg  = dp/(p->DXP[IP]*rof);
+            const double gg  = (a->grav_pot(i+1,j,k)-a->grav_pot(i,j,k))/p->DXP[IP];
+            const double imb = std::fabs(PORVAL1*(-pg + gg));
+            const double phis=a->phi(i,j,k), phin=a->phi(i+1,j,k);
+            if(imb > hp_w)
+            {
+                hp_w=imb; hp_l=p->level;
+                hp_i[0]=i+p->amr_tile_lo.x; hp_i[1]=j+p->amr_tile_lo.y; hp_i[2]=k+p->amr_tile_lo.z;
+                hp_rof=rof; hp_pg=pg; hp_gg=gg; hp_ps=phis; hp_pn=phin;
+                hp_prs=a->press(i,j,k); hp_prn=a->press(i+1,j,k);
+                #if USE_AMREX
+                hp_cs=cell_is_covered(p,i,j,k)?1:0; hp_cn=cell_is_covered(p,i+1,j,k)?1:0;
+                #endif
+            }
+            if(std::min(std::fabs(phis),std::fabs(phin)) > 0.1 && imb > hp_deep)
+            {
+                hp_deep=imb; hp_dl=p->level;
+                hp_di[0]=i+p->amr_tile_lo.x; hp_di[1]=j+p->amr_tile_lo.y; hp_di[2]=k+p->amr_tile_lo.z;
+            }
+            #endif
+        }
+    }
+
+    if(hydro_probe && p->mpirank==0)
+    {
+        std::cout<<"  [hydroprobe-u] worst |F_imb|="<<hp_w<<" at lev="<<hp_l
+                 <<" ("<<hp_i[0]<<","<<hp_i[1]<<","<<hp_i[2]<<")  roface="<<hp_rof
+                 <<" pgrad/rof="<<hp_pg<<" gpot_grad="<<hp_gg
+                 <<" phi[self,i+1]="<<hp_ps<<","<<hp_pn
+                 <<" press[self,i+1]="<<hp_prs<<","<<hp_prn
+                 <<" covered[self,i+1]="<<hp_cs<<","<<hp_cn<<std::endl;
+        std::cout<<"  [hydroprobe-u] worst DEEP |F_imb|="<<hp_deep<<" at lev="<<hp_dl
+                 <<" ("<<hp_di[0]<<","<<hp_di[1]<<","<<hp_di[2]<<")  (should be ~0)"<<std::endl;
     }
 }
 
@@ -619,15 +753,53 @@ void pjm_corr::vpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
         double dp = 0.0;
         const bool relPressure = p->Y9;
         const bool skip_covered = (std::getenv("REEF_SKIP_COVERED_PGRAD") != nullptr);
+
+        // REEF_HYDRO_PROBE (horizontal y): mirror of upgrad; at rest |G_imb| must be ~0 everywhere.
+        const bool hydro_probe = (std::getenv("REEF_HYDRO_PROBE") != nullptr) && relPressure;
+        double hp_w=0.0; int hp_l=-1, hp_i[3]={-1,-1,-1}; double hp_rof=0,hp_pg=0,hp_gg=0,hp_ps=0,hp_pn=0;
+        double hp_deep=0.0; int hp_dl=-1, hp_di[3]={-1,-1,-1};
+
         VLOOP
         {
             #if USE_AMREX
-            if(skip_covered && cell_is_covered(p,i,j,k)) continue;
+            if(skip_covered && (cell_is_covered(p,i,j,k) || cell_is_covered(p,i,j+1,k))) continue;
             #endif
             dp = a->press(i,j+1,k)-a->press(i,j,k);
             // if(relPressure) dp -= a->press0(i,j+1,k)-a->press0(i,j,k);
             a->G(i,j,k) -= PORVAL2*dp/(p->DYP[JP]*pd->roface(p,a,0,1,0));
             if(relPressure) a->G(i,j,k) += PORVAL2*(a->grav_pot(i,j+1,k)-a->grav_pot(i,j,k))/p->DYP[JP];
+
+            if(hydro_probe)
+            {
+                #if USE_AMREX
+                const double rof = pd->roface(p,a,0,1,0);
+                const double pg  = dp/(p->DYP[JP]*rof);
+                const double gg  = (a->grav_pot(i,j+1,k)-a->grav_pot(i,j,k))/p->DYP[JP];
+                const double imb = std::fabs(PORVAL2*(-pg + gg));
+                const double phis=a->phi(i,j,k), phin=a->phi(i,j+1,k);
+                if(imb > hp_w)
+                {
+                    hp_w=imb; hp_l=p->level;
+                    hp_i[0]=i+p->amr_tile_lo.x; hp_i[1]=j+p->amr_tile_lo.y; hp_i[2]=k+p->amr_tile_lo.z;
+                    hp_rof=rof; hp_pg=pg; hp_gg=gg; hp_ps=phis; hp_pn=phin;
+                }
+                if(std::min(std::fabs(phis),std::fabs(phin)) > 0.1 && imb > hp_deep)
+                {
+                    hp_deep=imb; hp_dl=p->level;
+                    hp_di[0]=i+p->amr_tile_lo.x; hp_di[1]=j+p->amr_tile_lo.y; hp_di[2]=k+p->amr_tile_lo.z;
+                }
+                #endif
+            }
+        }
+
+        if(hydro_probe && p->mpirank==0)
+        {
+            std::cout<<"  [hydroprobe-v] worst |G_imb|="<<hp_w<<" at lev="<<hp_l
+                     <<" ("<<hp_i[0]<<","<<hp_i[1]<<","<<hp_i[2]<<")  roface="<<hp_rof
+                     <<" pgrad/rof="<<hp_pg<<" gpot_grad="<<hp_gg
+                     <<" phi[self,j+1]="<<hp_ps<<","<<hp_pn<<std::endl;
+            std::cout<<"  [hydroprobe-v] worst DEEP |G_imb|="<<hp_deep<<" at lev="<<hp_dl
+                     <<" ("<<hp_di[0]<<","<<hp_di[1]<<","<<hp_di[2]<<")  (should be ~0)"<<std::endl;
         }
     }
 }
@@ -650,7 +822,7 @@ void pjm_corr::wpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
     WLOOP
     {
         #if USE_AMREX
-        if(skip_covered && cell_is_covered(p,i,j,k)) continue;
+        if(skip_covered && (cell_is_covered(p,i,j,k) || cell_is_covered(p,i,j,k+1))) continue;
         #endif
         dp = a->press(i,j,k+1)-a->press(i,j,k);
         // if(relPressure) dp -= a->press0(i,j,k+1)-a->press0(i,j,k);
