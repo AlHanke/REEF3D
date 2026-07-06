@@ -23,11 +23,8 @@ Author: Hans Bihs
 #ifndef REINIDISC_FSF_H_
 #define REINIDISC_FSF_H_
 
-#include"reinidisc.h"
-#include"ddweno_nug.h"
-#include"vec.h"
-
-class picard;
+#include "reinidisc.h"
+#include "ddweno_nug.h"
 
 using namespace std;
 

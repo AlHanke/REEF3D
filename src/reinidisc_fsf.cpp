@@ -20,11 +20,11 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
-#include"reinidisc_fsf.h"
-#include<cstdlib>
+#include "reinidisc_fsf.h"
+#include "lexer.h"
+#include "fdm.h"
+#include "ghostcell.h"
+#include <cstdlib>
 
 reinidisc_fsf::reinidisc_fsf(lexer *p) :  ddweno_nug(p)
 {
@@ -48,14 +48,7 @@ void reinidisc_fsf::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, 
 
     if(ipol==4)
     {
-        for(int lev=max_level; lev>=0; --lev)
-        {
-            p->level = lev;
-            TILE_LOOP
-            IJKLOOP
-            PBASECHECK
-                L(i,j,k) = 0.0;
-        }
+        L.setVal(0.0,true);
 
         n=0;
         for(int lev=max_level; lev>=0; --lev)
@@ -74,14 +67,7 @@ void reinidisc_fsf::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, 
     }
     else if(ipol==5)
     {
-        for(int lev=max_level; lev>=0; --lev)
-        {
-            p->level = lev;
-            TILE_LOOP
-            IJKLOOP
-            PBASECHECK
-                L(i,j,k) = 0.0;
-        }
+        L.setVal(0.0,true);
 
         n=0;
         for(int lev=max_level; lev>=0; --lev)
@@ -126,7 +112,7 @@ double reinidisc_fsf::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, bool is3D
         if(fabs(lsv)<1.0e-8)
         lsSig=1.0;
 
-    // x
+        // x
         xmin=(lsv-f(i-1,j,k))/p->DXP[IM1];
         xplus=(f(i+1,j,k)-lsv)/p->DXP[IP];
 
@@ -139,7 +125,7 @@ double reinidisc_fsf::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, bool is3D
         if(xplus*lsSig>0.0 && xmin*lsSig<0.0)
         dx=0.0;
 
-    // y
+        // y
         if(is3D)
         {
             ymin=(lsv-f(i,j-1,k))/p->DYP[JM1];
@@ -155,7 +141,7 @@ double reinidisc_fsf::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, bool is3D
             dy=0.0;
         }
 
-    // z
+        // z
         zmin=(lsv-f(i,j,k-1))/p->DZP[KM1];
         zplus=(f(i,j,k+1)-lsv)/p->DZP[KP];
 
@@ -188,5 +174,4 @@ double reinidisc_fsf::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, bool is3D
     {
         return 0.0;
     }
-
 }
