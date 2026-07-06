@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"fnpf_weno5.h"
 #include"lexer.h"
-#include"vec.h"
 #include"field.h"
 #include"fnpf_discrete_weights.h"
 

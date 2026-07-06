@@ -24,7 +24,6 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"field.h"
 #include"slice.h"
-#include"vec.h"
 
 fnpf_cds6::fnpf_cds6(lexer* p)
 {

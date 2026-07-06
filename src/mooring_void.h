@@ -25,7 +25,6 @@ Author: Tobias Martin
 
 #include"mooring.h"
 
-#include"vec.h"
 #include<fstream>
 #include<iostream>
 #include<vector>
