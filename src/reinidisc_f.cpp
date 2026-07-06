@@ -27,9 +27,8 @@ Author: Hans Bihs
 
 reinidisc_f::reinidisc_f(lexer *p) : ddweno_nug_sf(p)
 {
-    const char* fb = std::getenv("REEF_REINI_FREEZE_BAND");
-    freeze_band = (fb != nullptr);
-    freeze_fac  = (fb && std::atof(fb) > 0.0) ? std::atof(fb) : 1.0;
+    freeze_band = p->Y10;
+    freeze_fac  = p->Y10_band;
 }
 
 void reinidisc_f::start(lexer *p, fdm*, ghostcell*, field &f, field &L, int ipol) noexcept

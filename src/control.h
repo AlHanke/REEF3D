@@ -535,6 +535,8 @@ public:
     // Test options
     int Y1,Y2,Y3,Y4,Y5;
     int Y9;
+    int Y10;
+    double Y10_band;
 
     int* ictrl;
     double* dctrl;
