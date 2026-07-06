@@ -31,7 +31,6 @@ class field;
 class slice;
 class lexer;
 class ghostcell;
-class vec;
 
 using namespace std;
 

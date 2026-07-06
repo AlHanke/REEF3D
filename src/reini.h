@@ -28,7 +28,6 @@ class lexer;
 class ghostcell;
 class ioflow;
 class field;
-class vec;
 
 using namespace std;
 

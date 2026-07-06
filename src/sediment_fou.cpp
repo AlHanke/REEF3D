@@ -23,7 +23,6 @@ Author: Hans Bihs
 #include"sediment_fou.h"
 #include"lexer.h"
 #include"slice.h"
-#include"vec.h"
 #include"fnpf_discrete_weights.h"
 
 sediment_fou::sediment_fou(lexer* p) 

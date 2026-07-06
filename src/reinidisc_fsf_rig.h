@@ -25,7 +25,6 @@ Author: Hans Bihs
 
 #include"reinidisc.h"
 #include"ddweno_nug.h"
-#include"vec.h"
 
 class picard;
 

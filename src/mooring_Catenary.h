@@ -24,7 +24,6 @@ Author: Tobias Martin
 #define MOORING_CATENARY_H_
 
 #include"mooring.h"
-#include"vec.h"
 #include<fstream>
 #include<iostream>
 #include<vector>

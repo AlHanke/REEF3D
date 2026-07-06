@@ -26,7 +26,6 @@ Author: Hans Bihs
 #include"field.h"
 #include"slice.h"
 #include"ghostcell.h"
-#include"vec.h"
 
 fnpf_ddweno_f_nug::fnpf_ddweno_f_nug(lexer* pp,fdm_fnpf *cc):weno_nug_func(pp)
 {

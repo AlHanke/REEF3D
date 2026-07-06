@@ -27,7 +27,6 @@ class lexer;
 class field;
 class slice;
 class sliceint;
-class vec;
 
 using namespace std;
 

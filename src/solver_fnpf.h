@@ -28,7 +28,6 @@ class fdm;
 class fdm_fnpf;
 class ghostcell;
 class field;
-class vec;
 class matrix_diag;
 
 using namespace std;

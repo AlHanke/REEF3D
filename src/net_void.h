@@ -24,7 +24,6 @@ Authors: Tobias Martin, Hans Bihs
 #define NET_VOID_H_
 
 #include"net.h"
-#include"vec.h"
 #include<fstream>
 #include<iostream>
 #include<vector>

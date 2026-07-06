@@ -23,7 +23,6 @@ Author: Hans Bihs
 #include"sediment_cds_hj.h"
 #include"lexer.h"
 #include"slice.h"
-#include"vec.h"
 #include"fnpf_discrete_weights.h"
 
 sediment_cds_hj::sediment_cds_hj(lexer* p) 

@@ -27,7 +27,6 @@ class lexer;
 class fdm;
 class ghostcell;
 class field;
-class vec;
 class convection;
 class reini;
 class vrans;
