@@ -45,7 +45,7 @@ public:
 
 private:
     double **ckz;
-
+    double grad;
 
 };
 
