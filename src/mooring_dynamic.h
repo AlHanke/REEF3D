@@ -26,7 +26,6 @@ Author: Tobias Martin
 #include"mooring.h"
 #include"beam.h"
 #include"mooring_Catenary.h"
-#include"vec.h"
 #include<fstream>
 #include<iostream>
 #include<vector>

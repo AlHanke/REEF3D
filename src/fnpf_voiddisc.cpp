@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"fnpf_voiddisc.h"
 #include"lexer.h"
-#include"vec.h"
 
 fnpf_voiddisc::fnpf_voiddisc(lexer* p)
 {

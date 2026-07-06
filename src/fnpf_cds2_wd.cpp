@@ -25,7 +25,6 @@ Author: Hans Bihs
 #include"fdm_fnpf.h"
 #include"field.h"
 #include"slice.h"
-#include"vec.h"
 
 fnpf_cds2_wd::fnpf_cds2_wd(lexer* p, fdm_fnpf *cc)
 {

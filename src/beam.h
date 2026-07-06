@@ -30,7 +30,6 @@ Author: Tobias Martin
 #ifndef BEAM_H_
 #define BEAM_H_
 
-#include"vec.h"
 #include"boundarycheck.h"
 #include<iostream>
 #include<vector>

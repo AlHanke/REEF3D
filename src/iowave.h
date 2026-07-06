@@ -33,7 +33,6 @@ Author: Hans Bihs
 #include"slice4.h"
 #include"sliceint4.h"
 
-class vec;
 class fdm_fnpf;
 class patchBC_interface;
 class linear_regression_cont;

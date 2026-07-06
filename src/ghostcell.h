@@ -38,7 +38,6 @@ class lexer;
 class reini;
 class slice;
 class sliceint;
-class vec;
 class vec2D;
 
 using namespace std;

@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"fnpf_weno5_wd.h"
 #include"lexer.h"
-#include"vec.h"
 #include"fnpf_discrete_weights.h"
 
 fnpf_weno5_wd::fnpf_weno5_wd(lexer *p,fdm_fnpf *c) :  fnpf_ddweno_f_nug(p,c)

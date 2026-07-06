@@ -23,7 +23,6 @@ Author: Hans Bihs
 #include"fnpf_wenoflux.h"
 #include"lexer.h"
 #include"slice.h"
-#include"vec.h"
 #include"fnpf_discrete_weights.h"
 
 fnpf_wenoflux::fnpf_wenoflux(lexer* p) :  weno_nug_func(p)

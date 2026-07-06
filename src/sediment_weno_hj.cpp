@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"sediment_weno_hj.h"
 #include"lexer.h"
-#include"vec.h"
 #include"fnpf_discrete_weights.h"
 
 sediment_weno_hj::sediment_weno_hj(lexer* p) :  ddweno_f_nug(p)

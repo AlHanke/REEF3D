@@ -30,7 +30,6 @@ class fdm;
 class field;
 class lexer;
 class ghostcell;
-class vec;
 
 using namespace std;
 
