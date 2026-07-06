@@ -26,7 +26,6 @@ Author: Hans Bihs
 #include"weno_nug_func.h"
 
 class lexer;
-class fdm_fnpf;
 class field;
 class slice;
 
@@ -35,7 +34,7 @@ using namespace std;
 class fnpf_ddweno_f_nug : public weno_nug_func
 {
 public:
-    fnpf_ddweno_f_nug(lexer*,fdm_fnpf*);
+    fnpf_ddweno_f_nug(lexer*);
     ~fnpf_ddweno_f_nug();
 
     // field
@@ -63,7 +62,6 @@ private:
     double *DX,*DY,*DZ;
 
     lexer *p;
-    fdm_fnpf *c;
 };
 
 #endif
