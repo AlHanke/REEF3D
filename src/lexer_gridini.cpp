@@ -132,33 +132,96 @@ int lexer::conv(double a)
 void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow* pflow)
 {
     #if USE_AMREX
-    // changed = false;
-    // // DIAGNOSTIC (Step 1 of plan fluffy-oasis): gate regrid to every 10 steps
-    // // to isolate per-step BoxArray churn + pc_interp dissipation. Revert when done.
-    // if (count % 10000 == 0)
-    // {
-    //     grid_amrex::regrid_amrex_box_array_and_distribution_mapping(this, a); // Bug with higher levels of static refinement
-    //     grid_amrex::update_cell_coordinates();
-    //     grid_amrex::update_cell_spacing();
-    //     grid_amrex::update_registered_weno(nlevs);
-    //     grid_amrex::define_inflow_outflow_ba();
-    //     preini->start(a,this,a->phi,pgc,pflow);
-    //     lexer* p = this;
-    //     int counter = 0;
-    //     PLAINLOOP
-    //     {
-    //         counter++;
-    //     }
-    //     veclength += counter - cellnum;
-    //     cellnum = counter;
-    //     a->rhsvec.resize(veclength);
-    //     a->M.resize(veclength);
-    //     LEVEL_LOOP
-    //     TILE_LOOP
-    //     MALOOP
-    //     {
-    //         a->grav_pot(i,j,k) = p->W20*p->pos_x() + p->W21*p->pos_y() + p->W22*p->pos_z();
-    //     }
-    // }
+    changed = false;
+    // DIAGNOSTIC (Step 1 of plan fluffy-oasis): gate regrid to every 10 steps
+    // to isolate per-step BoxArray churn + pc_interp dissipation. Revert when done.
+    if (count % 10 == 0)
+    {
+        // Localisation probe: max|field| over valid cells per level at each sub-step of
+        // regrid, so a blow-up can be traced to the exact stage that injects it (rebuild
+        // vs reinit vs ghost restore). norm0 does its own MPI reduce. REEF_REGRID_PROBE.
+        auto probe = [&](const char* tag)
+        {
+            if (!std::getenv("REEF_REGRID_PROBE")) return;
+            double mu=0,mv=0,mw=0,mp=0,mphi=0;
+            for (int lev=0; lev<nlevs; ++lev)
+            {
+                mu   = std::max(mu,   a->u.GetMultiFab(lev).norm0());
+                mv   = std::max(mv,   a->v.GetMultiFab(lev).norm0());
+                mw   = std::max(mw,   a->w.GetMultiFab(lev).norm0());
+                mp   = std::max(mp,   a->press.GetMultiFab(lev).norm0());
+                mphi = std::max(mphi, a->phi.GetMultiFab(lev).norm0());
+            }
+            if (mpirank==0)
+                std::cout << "  [regridprobe] count=" << count << " nlevs=" << nlevs
+                          << " " << tag << "  |u|=" << mu << " |v|=" << mv << " |w|=" << mw
+                          << " |press|=" << mp << " |phi|=" << mphi << std::endl;
+        };
+
+        probe("entry");
+        grid_amrex::regrid_amrex_box_array_and_distribution_mapping(this, a); // Bug with higher levels of static refinement
+        grid_amrex::update_cell_coordinates();
+        grid_amrex::update_cell_spacing();
+        grid_amrex::update_registered_weno(nlevs);
+        grid_amrex::define_inflow_outflow_ba();
+
+        // Re-establish the flag semantics for the re-chopped grid. The field rebuild inside
+        // regrid_amrex_box_array_and_distribution_mapping reallocates the registered flag
+        // MultiFabs (flag1-4): valid cells are restored from the old data, but the ghost ring
+        // is left at setVal(0) (an INVALID flag) and flag1/2/3 are not re-derived. gridini runs
+        // flagini()+flagfield() once at setup and the grid never changed thereafter; regrid must
+        // repeat flagfield() so the WATER/OBJ conversion, wall tagging (flag1/2/3 via gcb4),
+        // fillBoundary and the C-F fillHigherLevels() are rebuilt. Without it the projection has
+        // no wall BCs on the new grid -> it cannot balance the gravity predictor -> velocity
+        // leaks and grows (post-mom |u| jumps from 0 to O(1) at rest). gcd_ini refreshes the
+        // ghost-cell distances gcd4 that flagfield/BCs use, against the rebuilt spacing.
+        pgc->flagfield(this);
+        probe("post-rebuild");
+
+        // Restore phi's ghost band BEFORE reinit reads it. The field rebuild inside
+        // regrid_amrex_box_array_and_distribution_mapping drops phi's physical/coarse-fine
+        // ghosts (FillBoundary fills same-level/periodic only), and reini_RK3::start's first
+        // prdisc->start reads phi(i+-1) with no preceding fill when count>0 -- so stale ghost
+        // junk would be swept into valid phi by the redistance stencil. gcval_phi = 50+F50
+        // matches reini_RK3's level-set boundary variant (F50==1->51 ... 4->54). At count==0
+        // reinit self-fills phi's ghost (gcval_iniphi), so this is a no-op there.
+        pgc->start4(this,a->phi,50+F50);
+        probe("post-phi-ghost");
+
+        preini->start(a,this,a->phi,pgc,pflow);
+        probe("post-reinit");
+        lexer* p = this;
+        int counter = 0;
+        PLAINLOOP
+        {
+            counter++;
+        }
+        veclength += counter - cellnum;
+        cellnum = counter;
+        a->rhsvec.resize(veclength);
+        a->M.resize(veclength);
+        LEVEL_LOOP
+        TILE_LOOP
+        MALOOP
+        {
+            a->grav_pot(i,j,k) = p->W20*p->pos_x() + p->W21*p->pos_y() + p->W22*p->pos_z();
+        }
+
+        // Restore the ghost band dropped by the field rebuild inside
+        // regrid_amrex_box_array_and_distribution_mapping. fill_registered_mf_level
+        // reallocates each registered MultiFab and reloads only the valid region
+        // (InterpFromCoarseLevel / ParallelCopy fill zero ghost cells; the trailing
+        // FillBoundary fills same-level and periodic ghosts only). Physical-boundary
+        // and coarse-fine ghost cells are owned by ghostcell::start1-4 (FillDomainBoundary),
+        // which regrid never calls -- so without this the freshly-allocated ghost band
+        // is read as garbage by the next predictor (exceeding velocities) or, if a
+        // rebalance follows immediately, by its grad(press)/roface stencil (HYPRE Inf/NaN).
+        // phi is handled separately (pre-reinit fill above + preini->start's own re-sync).
+        pgc->start1(p,a->u,10);
+        pgc->start2(p,a->v,11);
+        pgc->start3(p,a->w,12);
+        pgc->start4(p,a->press,40,false);
+        probe("post-ghost-restore (exit)");
+    }
     #endif
 }
