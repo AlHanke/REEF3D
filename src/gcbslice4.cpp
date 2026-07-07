@@ -21,19 +21,17 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"mgcslice4.h"
-#include"ghostcell.h"
 #include"lexer.h"
-#include"fdm.h"
 
 void mgcslice4::gcb_seed(lexer *p)
-{	
+{
     // count gcbsl
-	count=0;
-	SLICELOOP4
-    {   
+    count=0;
+    SLICELOOP4
+    {
         if(p->flagslice4[Im1J]<0)
         ++count;
-	
+
         if(p->flagslice4[IJp1]<0)
         ++count;
 
@@ -43,50 +41,49 @@ void mgcslice4::gcb_seed(lexer *p)
         if(p->flagslice4[Ip1J]<0)
         ++count;
     }
-	
-	p->Iresize(p->gcbsl4,p->gcbsl4_count, count, 5, 5);
-	
+
+    p->Iresize(p->gcbsl4,p->gcbsl4_count, count, 5, 5);
+
     // find gcbsl
-	count=0;
-	SLICELOOP4
+    count=0;
+    SLICELOOP4
     {
         if(p->flagslice4[Im1J]<0)
         {
-        p->gcbsl4[count][0]=i;
-        p->gcbsl4[count][1]=j;
-        p->gcbsl4[count][3]=1;
-        p->gcbsl4[count][4]=21;
-        ++count;
+            p->gcbsl4[count][0]=i;
+            p->gcbsl4[count][1]=j;
+            p->gcbsl4[count][3]=1;
+            p->gcbsl4[count][4]=21;
+            ++count;
         }
 
         if(p->flagslice4[IJp1]<0)
         {
-        p->gcbsl4[count][0]=i;
-        p->gcbsl4[count][1]=j;
-        p->gcbsl4[count][3]=2;
-        p->gcbsl4[count][4]=21;
-        ++count;
+            p->gcbsl4[count][0]=i;
+            p->gcbsl4[count][1]=j;
+            p->gcbsl4[count][3]=2;
+            p->gcbsl4[count][4]=21;
+            ++count;
         }
 
         if(p->flagslice4[IJm1]<0)
         {
-        p->gcbsl4[count][0]=i;
-        p->gcbsl4[count][1]=j;
-        p->gcbsl4[count][3]=3;
-        p->gcbsl4[count][4]=21;
-        ++count;
+            p->gcbsl4[count][0]=i;
+            p->gcbsl4[count][1]=j;
+            p->gcbsl4[count][3]=3;
+            p->gcbsl4[count][4]=21;
+            ++count;
         }
 
         if(p->flagslice4[Ip1J]<0)
         {
-        p->gcbsl4[count][0]=i;
-        p->gcbsl4[count][1]=j;
-        p->gcbsl4[count][3]=4;
-        p->gcbsl4[count][4]=21;
-        ++count;
+            p->gcbsl4[count][0]=i;
+            p->gcbsl4[count][1]=j;
+            p->gcbsl4[count][3]=4;
+            p->gcbsl4[count][4]=21;
+            ++count;
         }
-
     }
     p->gcbsl4_count=count;
-	
+
 }

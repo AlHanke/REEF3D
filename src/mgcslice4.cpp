@@ -22,12 +22,10 @@ Author: Hans Bihs
 
 #include"mgcslice4.h"
 #include"lexer.h"
-#include"ghostcell.h"
-
 
 mgcslice4::mgcslice4(lexer *p)
 {
-	imin=p->imin;
+    imin=p->imin;
     imax=p->imax;
     jmin=p->jmin;
     jmax=p->jmax;
