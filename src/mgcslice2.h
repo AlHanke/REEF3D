@@ -26,35 +26,25 @@ Author: Hans Bihs
 #include"increment.h"
 
 class lexer;
-class ghostcell;
 
 using namespace std;
 
 class mgcslice2 :  public increment
 {
 public:
-
-	mgcslice2 (lexer *);
-	virtual ~mgcslice2();
+    mgcslice2(lexer*);
+    virtual ~mgcslice2();
 
     //mgcslice2
 	void makemgc(lexer*);
     
     void gcb_seed(lexer*);
-	
-	int imin,imax,jmax,jmin,kmin,kmax;
-	
+
 private:
-	int di,dj;
-	int qn;
+    int di,dj;
+    int qn;
     int count;
-	
+    int imin,imax,jmin,jmax;
 };
 
 #endif
-
-
-
-
-
-

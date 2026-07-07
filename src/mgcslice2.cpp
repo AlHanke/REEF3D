@@ -22,12 +22,10 @@ Author: Hans Bihs
 
 #include"mgcslice2.h"
 #include"lexer.h"
-#include"ghostcell.h"
-
 
 mgcslice2::mgcslice2(lexer *p)
 {
-	imin=p->imin;
+    imin=p->imin;
     imax=p->imax;
     jmin=p->jmin;
     jmax=p->jmax;
@@ -39,16 +37,14 @@ mgcslice2::~mgcslice2()
 
 void mgcslice2::makemgc(lexer* p)
 {
-    
-//flag2
+    //flag2
     for(i=0;i<p->imax*p->jmax; ++i)
-	{
-	p->flagslice2[i]=p->flagslice4[i];
-	}
+    {
+        p->flagslice2[i]=p->flagslice4[i];
+    }
 
     SLICELOOP4
     {
-
         if(p->flagslice4[IJp1]<0)
         p->flagslice2[IJ]=p->flagslice4[IJp1];
     }
