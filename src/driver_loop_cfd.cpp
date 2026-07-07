@@ -43,6 +43,26 @@ void driver::loop_cfd(fdm* a)
 {
     if(p->mpirank==0)
     cout<<"starting mainloop.CFD"<<endl;
+
+    // Per-stage velocity growth probe (REEF_STEP_PROBE): max|u/v/w| over valid cells
+    // per level at named points in the step, to localise which stage first grows the
+    // velocity after the init regrid (predictor vs projection vs free surface).
+    auto stepprobe = [&](const char* tag)
+    {
+        #if USE_AMREX
+        if(!std::getenv("REEF_STEP_PROBE")) return;
+        double mu=0,mv=0,mw=0;
+        for(int lev=0; lev<p->nlevs; ++lev)
+        {
+            mu = std::max(mu, a->u.GetMultiFab(lev).norm0());
+            mv = std::max(mv, a->v.GetMultiFab(lev).norm0());
+            mw = std::max(mw, a->w.GetMultiFab(lev).norm0());
+        }
+        if(p->mpirank==0)
+            std::cout<<"  [stepprobe] count="<<p->count<<" "<<tag
+                     <<"  |u|="<<mu<<" |v|="<<mv<<" |w|="<<mw<<std::endl;
+        #endif
+    };
     
     //vec_test(p,a,pgc,a->test);
     //pos_test(p,a,pgc);
@@ -95,7 +115,9 @@ void driver::loop_cfd(fdm* a)
         pflow->v_relax(p,a,pgc,a->v);
         pflow->w_relax(p,a,pgc,a->w);
         double flow_relax_time = pgc->timer();
+        stepprobe("pre-fsf");
         pfsf->update(p,a,pgc,a->phi);
+        stepprobe("post-fsf");
         double fsf_update_time = pgc->timer();
         // B5: re-equilibrate press against the post-reinit density before the predictor. Must use
         // ppoissonsolv (the pressure/hypre_ssamg solver that owns cf_links/cf_masks/matvec), NOT
@@ -109,7 +131,9 @@ void driver::loop_cfd(fdm* a)
         // dynamic pressure -> valid only for the at-rest hydrostatic test; the production fix must
         // split press into a rebuilt hydrostatic reference + solved dynamic part.
         if(std::getenv("REEF_HYDRO_REBUILD")) pini->hydrostatic(p,a,pgc);
+        stepprobe("pre-mom");
         pmom->start(p,a,pgc,pvrans,p6dof);
+        stepprobe("post-mom");
         double momentum_time = pgc->timer();
         pbench->start(p,a,pgc,pconvec);
 

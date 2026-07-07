@@ -83,31 +83,31 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
             }
         }
 
-        double maxrs = 0.0;
-        for (int lev = 0; lev < p->nlevs; ++lev)
-        {
-            const auto& cmf  = cval4.GetMultiFab(lev);
-            const auto& f4mf = p->flag4.GetMultiFab(lev);
-            for (amrex::MFIter mfi(cmf); mfi.isValid(); ++mfi)
-            {
-                const amrex::Box& bx = mfi.validbox();
-                const auto ca = cmf.const_array(mfi);
-                const auto fa = f4mf.const_array(mfi);
-                amrex::LoopOnCpu(bx, [&](int ii, int jj, int kk) noexcept
-                {
-                    if (fa(ii, jj, kk) < AIR_FLAG) return;
-                    const int n = ca(ii, jj, kk);
-                    const double rs = a->M.p[n] + a->M.n[n] + a->M.s[n]
-                                    + a->M.w[n] + a->M.e[n]
-                                    + a->M.t[n] + a->M.b[n] + cfsum[n];
-                    maxrs = std::max(maxrs, std::fabs(rs));
-                });
-            }
-        }
-        const double g_maxrs = pgc->globalmax(maxrs);
-        if (p->mpirank == 0)
-            std::cout << "\n  [rowsum] max|stencil+cflink| = " << g_maxrs
-                      << "  (interior ~0, wall-BC cells show wall coeff)" << std::endl;
+        // double maxrs = 0.0;
+        // for (int lev = 0; lev < p->nlevs; ++lev)
+        // {
+        //     const auto& cmf  = cval4.GetMultiFab(lev);
+        //     const auto& f4mf = p->flag4.GetMultiFab(lev);
+        //     for (amrex::MFIter mfi(cmf); mfi.isValid(); ++mfi)
+        //     {
+        //         const amrex::Box& bx = mfi.validbox();
+        //         const auto ca = cmf.const_array(mfi);
+        //         const auto fa = f4mf.const_array(mfi);
+        //         amrex::LoopOnCpu(bx, [&](int ii, int jj, int kk) noexcept
+        //         {
+        //             if (fa(ii, jj, kk) < AIR_FLAG) return;
+        //             const int n = ca(ii, jj, kk);
+        //             const double rs = a->M.p[n] + a->M.n[n] + a->M.s[n]
+        //                             + a->M.w[n] + a->M.e[n]
+        //                             + a->M.t[n] + a->M.b[n] + cfsum[n];
+        //             maxrs = std::max(maxrs, std::fabs(rs));
+        //         });
+        //     }
+        // }
+        // const double g_maxrs = pgc->globalmax(maxrs);
+        // if (p->mpirank == 0)
+        //     std::cout << "\n  [rowsum] max|stencil+cflink| = " << g_maxrs
+        //               << "  (interior ~0, wall-BC cells show wall coeff)" << std::endl;
     }
 
     // RHS nullspace projection (multi-level all-Neumann composite operator). The symmetric
@@ -193,6 +193,34 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
             int lo[3] = {bx.smallEnd(0), bx.smallEnd(1), bx.smallEnd(2)};
             int hi[3] = {bx.bigEnd(0),   bx.bigEnd(1),   bx.bigEnd(2)};
             const int ncells = bx.numPts();
+
+            // Non-finite pinpoint: report the first solved cell whose matrix row,
+            // initial guess, or RHS is Inf/NaN, with level + index + which quantity,
+            // so a HYPRE "INFs/NaNs in input" abort can be traced to its source field.
+            if (std::getenv("REEF_HYPRE_FINITE_CHECK"))
+            {
+                for (int kk = lo[2]; kk <= hi[2]; ++kk)
+                for (int jj = lo[1]; jj <= hi[1]; ++jj)
+                for (int ii = lo[0]; ii <= hi[0]; ++ii)
+                {
+                    if (!is_solved(ii, jj, kk)) continue;
+                    const int n = cval_arr(ii, jj, kk);
+                    const double vals[9] = { a->M.p[n], a->M.s[n], a->M.n[n],
+                                             a->M.e[n], a->M.w[n], a->M.b[n], a->M.t[n],
+                                             field_arr(ii, jj, kk), a->rhsvec.V[n] };
+                    const char* nm[9] = {"M.p","M.s","M.n","M.e","M.w","M.b","M.t",
+                                         "x(guess)","rhs"};
+                    for (int q = 0; q < 9; ++q)
+                        if (!std::isfinite(vals[q]))
+                        {
+                            std::cout << "  [finitecheck] rank " << p->mpirank
+                                      << " lev " << lev << " (" << ii << "," << jj << "," << kk
+                                      << ") n=" << n << "  " << nm[q] << "=" << vals[q]
+                                      << "  flag4=" << flag_arr(ii, jj, kk) << std::endl;
+                            break;
+                        }
+                }
+            }
 
             // Matrix A: 7 stencil entries per cell
             values.resize(ncells * 7);
@@ -442,7 +470,7 @@ void hypre_ssamg::amr_cf_coefficients(lexer* p, fdm* a, ghostcell* pgc, fieldint
     std::map<std::array<int,3>, std::vector<int>> faces; // (n,axis,side) -> link ids
     for (int id = 0; id < (int)cf_links.size(); ++id)
     {
-        if (info[id].n < 0) continue; // defensive: not owned here
+        if (info[id].n < 0) continue; // defensive: not resolvable in this rank's cval4
         faces[{info[id].n, info[id].axis, info[id].high ? 1 : 0}].push_back(id);
     }
 
@@ -503,61 +531,6 @@ void hypre_ssamg::amr_cf_coefficients(lexer* p, fdm* a, ghostcell* pgc, fieldint
         }
         a->M.p[r0.n] += (r0.old - new_total); // diagonal: T_old -> conservative T_cf
         slot(r0.n, r0.axis, r0.high) = 0.0;
-    }
-
-    // --- Row-decomposition dump (env REEF_CF_DUMP) -----------------------------------
-    // For every C-F "from" cell that is also a wall/boundary cell, print the 7 stencil
-    // entries + the sum of its cf_link coeffs + the total rowsum. A conservative row sums
-    // to ~0; only the broken rows (|rowsum|>1e-3) are printed, so the corner imbalance and
-    // which term carries it (diagonal vs an off-diagonal vs the cf coupling) are visible.
-    if (std::getenv("REEF_CF_DUMP"))
-    {
-        std::map<std::array<int,4>,double> cfsum;
-        for (const auto& L : cf_links)
-            cfsum[{L.from_part, L.from_ijk[0], L.from_ijk[1], L.from_ijk[2]}] += L.coeff;
-
-        for (int lev = 0; lev < p->nlevs; ++lev)
-        {
-            const auto& cval_mf = cval4.GetMultiFab(lev);
-            const auto& flag_mf = p->flag4.GetMultiFab(lev);
-            const amrex::Box dom = p->amrex_geometry[lev].Domain();
-            for (amrex::MFIter mfi(cval_mf); mfi.isValid(); ++mfi)
-            {
-                const amrex::Box& bx = mfi.validbox();
-                const auto ca = cval_mf.const_array(mfi);
-                const auto fa = flag_mf.const_array(mfi);
-                for (int kk = bx.smallEnd(2); kk <= bx.bigEnd(2); ++kk)
-                for (int jj = bx.smallEnd(1); jj <= bx.bigEnd(1); ++jj)
-                for (int ii = bx.smallEnd(0); ii <= bx.bigEnd(0); ++ii)
-                {
-                    const auto it = cfsum.find({lev, ii, jj, kk});
-                    if (it == cfsum.end()) continue;              // not a C-F from-cell
-
-                    const bool wall =
-                           ii==dom.smallEnd(0) || ii==dom.bigEnd(0)
-                        || kk==dom.smallEnd(2) || kk==dom.bigEnd(2)
-                        || (p->j_dir && (jj==dom.smallEnd(1) || jj==dom.bigEnd(1)))
-                        || fa(ii-1,jj,kk)<0 || fa(ii+1,jj,kk)<0
-                        || fa(ii,jj,kk-1)<0 || fa(ii,jj,kk+1)<0
-                        || (p->j_dir && (fa(ii,jj-1,kk)<0 || fa(ii,jj+1,kk)<0));
-                    if (!wall) continue;
-
-                    const int n = ca(ii, jj, kk);
-                    const double cfs = it->second;
-                    const double rs = a->M.p[n] + a->M.s[n] + a->M.n[n] + a->M.e[n]
-                                    + a->M.w[n] + a->M.b[n] + a->M.t[n] + cfs;
-                    if (std::fabs(rs) < 1e-3) continue;           // only the broken rows
-
-                    std::cout << "  [cfdump] lev=" << lev
-                              << " (" << ii << "," << jj << "," << kk << ") flag=" << fa(ii,jj,kk)
-                              << "  p=" << a->M.p[n]
-                              << " xs=" << a->M.s[n] << " xn=" << a->M.n[n]
-                              << " ye=" << a->M.e[n] << " yw=" << a->M.w[n]
-                              << " zb=" << a->M.b[n] << " zt=" << a->M.t[n]
-                              << " cf=" << cfs << "  rowsum=" << rs << std::endl;
-                }
-            }
-        }
     }
 #endif
 }
