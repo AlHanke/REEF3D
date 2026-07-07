@@ -208,6 +208,7 @@ void driver::driver_ini_cfd()
     pgc->start4(p,a->press,40,false);   // no average_down: keep coarse hydrostatic press consistent
 
     p->regrid(a,preini,p6dof,pgc,pflow);
+    // ppress->rebalance(p,a,pgc,ppois,psolv,pflow);
 
     if(p->I12>=1)
     pini->hydrostatic(p,a,pgc);

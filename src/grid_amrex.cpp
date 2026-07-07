@@ -430,6 +430,10 @@ void grid_amrex::output_amrex_level_info()
         if (amrex::ParallelDescriptor::MyProc() == 0)
         {
             std::cout << "AMReX level " << lev << " cells: " << amrex_box_array[lev].numPts() << std::endl;
+            // #ifndef NDEBUG
+            // std::cout << "BoxArray: " << amrex_box_array[lev] << std::endl;
+            // std::cout << "DistributionMapping: " << amrex_distribution_mapping[lev] << std::endl;
+            // #endif
         }
     }
 }
@@ -608,19 +612,51 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         if (new_finest < lev || new_grids[lev].empty())
             break;  // no tagging at this level — no finer levels either
 
-        if(amrex_box_array[lev] != new_grids[lev]) changed = true;
+        // Compare the NEW (post-chop) BoxArray against the existing one. Save the old
+        // BoxArray first so the comparison is against what we actually had, not the
+        // value we are about to overwrite.
+        const amrex::BoxArray old_ba = amrex_box_array[lev];
 
         amrex_box_array[lev] = new_grids[lev];
 
         if (nprocs > 1)
             amr_mesh_adaptive.ChopGrids(lev, amrex_box_array[lev], nprocs);
 
-        auto temp_dm = amrex_distribution_mapping[lev];
+        const bool ba_same = (old_ba == amrex_box_array[lev]);
+        if(!ba_same) changed = true;
 
-        amrex_distribution_mapping[lev] =
-            amr_mesh_adaptive.MakeDistributionMap(lev, amrex_box_array[lev]);
-
-        if (temp_dm != amrex_distribution_mapping[lev]) changed = true;
+        // DIAGNOSTIC (REEF_FORCE_RANK_FLIP): force a PURE rank change with the BoxArray
+        // unchanged, to isolate whether a rank flip alone breaks the C-F projection.
+        // Cyclically shift every box's owner by +1 (mod nprocs) and install that DM even
+        // when ba_same, so the patch lands on a different rank with identical geometry.
+        // Run with REEF_PROJ_CHECK=1: if projcheck jumps to ~4e-3 the C-F path has a
+        // genuine cross-rank bug (ordering/staleness); if it stays ~1e-19 the rank change
+        // is transparent and the dm-preservation fix merely avoids rebuild churn.
+        if(ba_same && std::getenv("REEF_FORCE_RANK_FLIP") && nprocs > 1)
+        {
+            amrex::Vector<int> pmap(amrex_box_array[lev].size());
+            for(int b = 0; b < (int)pmap.size(); ++b)
+                pmap[b] = (amrex_distribution_mapping[lev][b] + 1) % nprocs;
+            amrex_distribution_mapping[lev] = amrex::DistributionMapping(pmap);
+            if(p->mpirank == 0)
+                std::cout << "  [rankflip] lev " << lev << " forced +1 owner shift" << std::endl;
+            changed = true;
+        }
+        // Preserve the existing DistributionMapping when the BoxArray is unchanged. The
+        // fine patch is a single box owned by one rank; MakeDistributionMap reassigns that
+        // box (knapsack/SFC over box index) and can move it to a DIFFERENT rank even when
+        // the box itself is identical. That flip changes which rank owns the fine side of
+        // every C-F link, and the composite-solve C-F coupling then assembles inconsistently
+        // across the new coarse/fine rank pairing -> projcheck residual ~4e-3 at the C-F ->
+        // the projection injects velocity from rest. Only rebuild the DM when the boxes
+        // actually changed (or the current DM no longer matches the BoxArray size).
+        else if(!ba_same
+           || amrex_distribution_mapping[lev].size() != amrex_box_array[lev].size())
+        {
+            amrex_distribution_mapping[lev] =
+                amr_mesh_adaptive.MakeDistributionMap(lev, amrex_box_array[lev]);
+            changed = true;
+        }
 
         amr_mesh_adaptive.SetBoxArray(lev, amrex_box_array[lev]);
         amr_mesh_adaptive.SetDistributionMap(lev, amrex_distribution_mapping[lev]);
@@ -655,10 +691,19 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         e.mf->resize(new_nlevs);
 
     // Rebuild all registered MultiFabs and field aliases for pre-existing non-zero
-    // levels whose BoxArrays may have changed (happens on every regrid call).
+    // levels whose BoxArrays actually changed. Guarding on `changed` makes the
+    // zero-tagging case a true no-op: fill_registered_mf_level reallocates each
+    // registered MF and reloads only the valid region (InterpFromCoarseLevel/
+    // ParallelCopy fill no ghost cells; FillBoundary does not touch physical or
+    // coarse-fine ghosts). Those halos are owned by ghostcell::start1-4, which
+    // regrid does not call -- so an unconditional rebuild leaves fresh, unfilled
+    // ghost bands that the next predictor/rebalance reads as garbage.
     // Level 0 is always fixed; only levels 1..min(old,new)-1 can change.
     const auto ghost_vec = amrex::IntVect(p->margin, p->margin, p->margin);
     const int rebuild_hi = std::min(old_nlevs, new_nlevs) - 1;
+    if(p->mpirank==0 && changed)
+        std::cout << "Rebuilding registered MultiFabs and field aliases for levels 1.." << rebuild_hi << std::endl;
+    if (changed)
     for (int lev = 1; lev <= rebuild_hi; ++lev)
     {
         redefine_registered_mf_level(lev);
@@ -932,6 +977,15 @@ void grid_amrex::fill_registered_mf_level(int lev)
                             amrex_distribution_mapping[lev],
                             e.ncomp, margin);
 
+        // AMReX define()s Fabs to signalling NaN. InterpFromCoarseLevel/ParallelCopy
+        // below fill only the valid region, and the trailing FillBoundary fills only
+        // same-level/periodic ghosts -- the physical and coarse-fine ghost rings stay
+        // NaN until ghostcell::start1-4 runs, and start1-3 do not fill a staggered
+        // field's C-F face. A predictor divergence reading that NaN velocity ghost at a
+        // patch low-i C-F face poisons the Poisson RHS (rhs=nan at a rest-state cell).
+        // Zero the whole MF first so any ghost not reached by start1-4 is a finite 0.
+        fine_mf.setVal(0.0);
+
         amrex::Vector<amrex::BCRec> bcrecs(e.ncomp);
         for (auto& bc : bcrecs)
             for (int dim = 0; dim < AMREX_SPACEDIM; ++dim)
@@ -997,10 +1051,17 @@ void grid_amrex::fill_registered_mf_level(int lev)
         }
 
         // Overwrite interpolated cells with pre-existing fine-level data.
+        // src_nghost MUST be zero: copy only from the source's VALID cells. When the
+        // BoxArray is re-chopped, a destination valid cell near a moved box seam is
+        // covered both by its true owner's valid cell and (within margin) by a
+        // neighbouring old box's ghost cell. Feeding source ghosts (old_mf.nGrowVect())
+        // makes ParallelCopy's duplicate-source resolution last-writer-wins, so valid
+        // cells get clobbered by stale ghost values (extrapolated/coarse/boundary junk)
+        // -> exceeding velocities on the first regrid. Valid->valid only is exact.
         if (old_mf.nComp() > 0)
         {
             fine_mf.ParallelCopy(old_mf, 0, 0, e.ncomp,
-                                      old_mf.nGrowVect(),
+                                      amrex::IntVect::TheZeroVector(),
                                       amrex::IntVect::TheZeroVector());
             fine_mf.FillBoundary(amrex_geometry[lev].periodicity());
         }
@@ -1021,6 +1082,31 @@ void grid_amrex::fill_registered_mf_level(int lev)
         fine_imf.define(amrex_box_array[lev],
                             amrex_distribution_mapping[lev],
                             e.ncomp, margin);
+
+        // Zero all cells first (see the MF path): the injection + ParallelCopy below
+        // fill only the valid region, so an unfilled ghost would otherwise carry an
+        // undefined int flag that flag-driven loops read at the C-F ring.
+        fine_imf.setVal(0);
+
+        // Preserve the DOMAIN-EXTERIOR ghost ring (true physical walls) across the rebuild.
+        // Every other cell is refilled below/after: valid cells by the coarse injection and the
+        // valid->valid old copy; interior coarse-fine ghosts by flagfield's fillHigherLevels;
+        // same-level/periodic ghosts by FillBoundary. But NOTHING refills the physical-boundary
+        // ghost -- fillHigherLevels deliberately skips it ("must keep their OBJ_FLAG",
+        // ArrayWrapper3D.cpp) assuming it survives, and the setVal(0) above just wiped it.
+        // Left at 0, poisson_pcorr's wall fold/Dirichlet branches (all gated on flag4<0) never
+        // fire on the fine patch's lateral domain boundary -> a stencil entry points out of the
+        // patch, HYPRE drops it, the row is inconsistent and the projection injects velocity
+        // (N61 blow-up). A ghost-INCLUSIVE ParallelCopy of the old data restores those exterior
+        // ghosts; the seam-clobber caveat that forces src_nghost=0 on the valid copy below does
+        // not apply here because every valid cell is subsequently re-set by the injection + copy.
+        // (Moving-patch caveat: a patch that regrids to touch the domain boundary at a location
+        //  the old patch did not will still leave those new exterior ghosts at 0; the lateral
+        //  wall flag is spatially uniform, so a broadcast fallback can be added if that arises.)
+        if (old_imf.nComp() > 0)
+            fine_imf.ParallelCopy(old_imf, 0, 0, e.ncomp,
+                                  old_imf.nGrowVect(), fine_imf.nGrowVect(),
+                                  amrex_geometry[lev].periodicity());
 
         // Injection (piecewise-constant) from the next coarser level.
         // Build a temporary iMultiFab on the coarsened fine BoxArray so we can
@@ -1046,10 +1132,13 @@ void grid_amrex::fill_registered_mf_level(int lev)
         }
 
         // Overwrite injected cells with pre-existing fine-level data.
+        // src_nghost = 0: valid->valid only (see the MF path above -- source ghosts
+        // would clobber valid cells at re-chopped box seams via ParallelCopy's
+        // last-writer-wins duplicate resolution).
         if (old_imf.nComp() > 0)
         {
             fine_imf.ParallelCopy(old_imf, 0, 0, icomp,
-                                  old_imf.nGrowVect(),
+                                  amrex::IntVect::TheZeroVector(),
                                   amrex::IntVect::TheZeroVector());
             fine_imf.FillBoundary(amrex_geometry[lev].periodicity());
         }
