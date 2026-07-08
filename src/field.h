@@ -84,9 +84,8 @@ public:
     /// Cell-centred fields use amrex::average_down; FACE_X/Y/Z fields use a face-based
     /// reflux (amrex::average_down_faces) so the staggered velocity is not corrupted.
     virtual void average_down_level(lexer* p, int lev) = 0;
-#endif
-
-#if not USE_AMREX
+    virtual void CopyFrom(const field& src) = 0;
+#else
     void CopyFrom(const field& src) {V = src.V; cache_addressing();};
 #endif
 };
