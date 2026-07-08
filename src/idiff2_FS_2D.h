@@ -30,31 +30,24 @@ using namespace std;
 
 class idiff2_FS_2D final : public diffusion, public increment
 {
-
 public:
+    idiff2_FS_2D(lexer*);
+    virtual ~idiff2_FS_2D();
 
-	idiff2_FS_2D(lexer*);
-	virtual ~idiff2_FS_2D();
+    void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, double, double) override final;
+    void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, double, double) override final;
+    void idiff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, double, double) override final {};
 
-	void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, double, double) override final;
-	void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, double, double) override final;
-    void idiff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, double, double) override final;
-    
     void diff_u(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double) override final;
-	void diff_v(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double) override final;
-	void diff_w(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double) override final;
+    void diff_v(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double) override final {};
+    void diff_w(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double) override final;
 
 private:
-
-	double D;
-	double time,starttime,endtime;
-	int count,q;
-	int gcval_u,gcval_v,gcval_w;
-	double b_ijk,ev_ijk,visc_ijk;
-	double b_im_j_k, b_ip_j_k, b_i_jm_k, b_i_jp_k, b_i_j_km, b_i_j_kp;
-	double ev_im_j_k, ev_ip_j_k, ev_i_jm_k, ev_i_jp_k, ev_i_j_km, ev_i_j_kp;
-	double visc_im_j_k, visc_ip_j_k, visc_i_jm_k, visc_i_jp_k, visc_i_j_km, visc_i_j_kp;
-	
+    double time,starttime;
+    static constexpr int gcval_u = 10, gcval_v = 11, gcval_w = 12;
+    double b_ijk,ev_ijk,visc_ijk;
+    double b_im_j_k, b_ip_j_k, b_i_jm_k, b_i_jp_k, b_i_j_km, b_i_j_kp;
+    double ev_im_j_k, ev_ip_j_k, ev_i_jm_k, ev_i_jp_k, ev_i_j_km, ev_i_j_kp;
+    double visc_im_j_k, visc_ip_j_k, visc_i_jm_k, visc_i_jp_k, visc_i_j_km, visc_i_j_kp;
 };
 #endif
-
