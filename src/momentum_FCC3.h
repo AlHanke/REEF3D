@@ -61,34 +61,37 @@ private:
     void krhs(lexer*,fdm*);
 
     void clear_FGH(lexer*,fdm*);
-    void face_density(lexer*,fdm*,ghostcell*,field&,field&,field&);
+    void face_density(lexer*,fdm*,ghostcell*,field1&,field2&,field3&);
 
-    inline double vel_limiter(lexer*,field&,field&,field&,field&);
-    inline double ro_filter(lexer*,field&);
+    template<typename GenericField>
+    inline double vel_limiter(lexer*,const GenericField&,const GenericField&,const GenericField&,const GenericField&);
 
     #if USE_AMREX
     // Shared MultiFabs for the RK velocity temp fields, declared before the
     // field members so they are constructed first (declaration order).
     // Component layout: 0:u-type  1:v-type  2:w-type
+    amrex::Vector<amrex::MultiFab> m_r; ///< ur(0) vr(1) wr(2)
     amrex::Vector<amrex::MultiFab> m_rk1; ///< urk1(0) vrk1(1) wrk1(2)
     amrex::Vector<amrex::MultiFab> m_rk2; ///< urk2(0) vrk2(1) wrk2(2)
     amrex::Vector<amrex::MultiFab> m_f; ///< fx(0) fy(1) fz(2)
+    amrex::Vector<amrex::MultiFab> m_M; ///< Mx(0) My(1) Mz(2)
+    amrex::Vector<amrex::MultiFab> m_M_rk1; ///< Mx_rk1(0) My_rk1(1) Mz_rk1(2)
+    amrex::Vector<amrex::MultiFab> m_M_rk2; ///< Mx_rk2(0) My_rk2(1) Mz_rk2(2)
+    amrex::Vector<amrex::MultiFab> m_ro; ///< rox(0) roy(1) roz(2)
+    amrex::Vector<amrex::MultiFab> m_ro_rk1; ///< rox_rk1(0) roy_rk1(1) roz_rk1(2)
+    amrex::Vector<amrex::MultiFab> m_ro_rk2; ///< rox_rk2(0) roy_rk2(1) roz_rk2(2)
     #endif
     field1 ur,udiff,urk1,urk2,fx;
     field2 vr,vdiff,vrk1,vrk2,fy;
     field3 wr,wdiff,wrk1,wrk2,fz;
 
-    field1 Mx,rox;
-    field2 My,roy;
-    field3 Mz,roz;
+    field1 Mx,Mx_rk1,Mx_rk2;
+    field2 My,My_rk1,My_rk2;
+    field3 Mz,Mz_rk1,Mz_rk2;
 
-    field1 Mx_rk1,Mx_rk2;
-    field2 My_rk1,My_rk2;
-    field3 Mz_rk1,Mz_rk2;
-
-    field1 rox_rk1,rox_rk2;
-    field2 roy_rk1,roy_rk2;
-    field3 roz_rk1,roz_rk2;
+    field1 rox,rox_rk1,rox_rk2;
+    field2 roy,roy_rk1,roy_rk2;
+    field3 roz,roz_rk1,roz_rk2;
 
     field4 ls,frk1,frk2;
 
