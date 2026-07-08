@@ -82,6 +82,22 @@ void field_amrex::extend_levels(int new_nlevs)
     }
 }
 
+void field_amrex::CopyFrom(const field& src)
+{
+    const field_amrex* src_amrex = dynamic_cast<const field_amrex*>(&src);
+    if (!src_amrex)
+        throw std::runtime_error("field_amrex::CopyFrom: source field is not of type field_amrex");
+
+    if (p->nlevs != src_amrex->p->nlevs)
+        throw std::runtime_error("field_amrex::CopyFrom: source and destination fields have different number of levels");
+
+    for (int lev = 0; lev < p->nlevs; ++lev)
+    {
+        get_mf(lev).copy(src_amrex->get_mf_const(lev), 0, 0, 1, 0, 0);
+    }
+}
+
+
 void field_amrex::rebuild_alias_level(int lev)
 {
     // Always invalidate the Array4 cache — the underlying MultiFab storage at lev

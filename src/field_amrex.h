@@ -197,6 +197,8 @@ public:
                                         std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs,
                                         amrex::Gpu::DeviceVector<amrex::BCRec>& d_bcrec_cache);
 
+    void CopyFrom(const field& src) override;
+
 protected:
     /// Owning constructor: the field allocates and owns its own MultiFab storage.
     field_amrex(lexer* p, amrex_bc_func::DataLocation data_location);
