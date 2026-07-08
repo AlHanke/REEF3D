@@ -54,26 +54,42 @@ Author: Hans Bihs
 #include"density_vof.h"
 #include"density_rheo.h"
 
+#define _POR1 const double cpor1 = (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(0.5*(member_porosity(i+1,j,k) + member_porosity(i,j,k))<1.0?1.0:0.0))));
+#define _POR2 const double cpor2 = (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(0.5*(member_porosity(i,j+1,k) + member_porosity(i,j,k))<1.0?1.0:0.0))));
+#define _POR3 const double cpor3 = (p->B260==0.0 ? 1.0 : 1.0/(1.0+(p->B260*(0.5*(member_porosity(i,j,k+1) + member_porosity(i,j,k))<1.0?1.0:0.0))));
+#define _POR123 _POR1 _POR2 _POR3
+
 momentum_FCC3::momentum_FCC3(lexer *p, fdm *a, ghostcell *pgc, convection *pconvection, convection *ppfsfdisc, diffusion *pdiffusion, pressure* ppressure, poisson* ppoisson,
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver, ioflow *pioflow,
                                                     heat *&pheat, concentration *&pconc, reini *ppreini,
                                                     fsi *ppfsi)
                                                     :bcmom(p),
                                                     #if USE_AMREX
-                                                    m_rk1(make_mf(p,3,&m_rk1)), m_rk2(make_mf(p,3,&m_rk2)), m_f(make_mf(p,3,&m_f)),
-                                                    urk1(p,&m_rk1,0), urk2(p,&m_rk2,0), fx(p,&m_f,0),
-                                                    vrk1(p,&m_rk1,1), vrk2(p,&m_rk2,1), fy(p,&m_f,1),
-                                                    wrk1(p,&m_rk1,2), wrk2(p,&m_rk2,2), fz(p,&m_f,2),
+                                                    m_r(make_mf(p,3,&m_r)), m_rk1(make_mf(p,3,&m_rk1)), m_rk2(make_mf(p,3,&m_rk2)), m_f(make_mf(p,3,&m_f)),
+                                                    ur(p,&m_r,0), urk1(p,&m_rk1,0), urk2(p,&m_rk2,0), fx(p,&m_f,0),
+                                                    vr(p,&m_r,1), vrk1(p,&m_rk1,1), vrk2(p,&m_rk2,1), fy(p,&m_f,1),
+                                                    wr(p,&m_r,2), wrk1(p,&m_rk1,2), wrk2(p,&m_rk2,2), fz(p,&m_f,2),
+                                                    m_M(make_mf(p,3,&m_M)), m_M_rk1(make_mf(p,3,&m_M_rk1)), m_M_rk2(make_mf(p,3,&m_M_rk2)),
+                                                    Mx(p,&m_M,0), Mx_rk1(p,&m_M_rk1,0), Mx_rk2(p,&m_M_rk2,0),
+                                                    My(p,&m_M,1), My_rk1(p,&m_M_rk1,1), My_rk2(p,&m_M_rk2,1),
+                                                    Mz(p,&m_M,2), Mz_rk1(p,&m_M_rk1,2), Mz_rk2(p,&m_M_rk2,2),
+                                                    m_ro(make_mf(p,3,&m_ro)), m_ro_rk1(make_mf(p,3,&m_ro_rk1)), m_ro_rk2(make_mf(p,3,&m_ro_rk2)),
+                                                    rox(p,&m_ro,0), rox_rk1(p,&m_ro_rk1,0), rox_rk2(p,&m_ro_rk2,0),
+                                                    roy(p,&m_ro,1), roy_rk1(p,&m_ro_rk1,1), roy_rk2(p,&m_ro_rk2,1),
+                                                    roz(p,&m_ro,2), roz_rk1(p,&m_ro_rk1,2), roz_rk2(p,&m_ro_rk2,2),
                                                     #else
-                                                    urk1(p),urk2(p),vrk1(p),
-                                                    vrk2(p),wrk1(p),wrk2(p),
-                                                    fx(p),fy(p),fz(p),
+                                                    ur(p),urk1(p),urk2(p),fx(p),
+                                                    vr(p),vrk1(p),vrk2(p),fy(p),
+                                                    wr(p),wrk1(p),wrk2(p),fz(p),
+                                                    Mx(p),Mx_rk1(p),Mx_rk2(p),
+                                                    My(p),My_rk1(p),My_rk2(p),
+                                                    Mz(p),Mz_rk1(p),Mz_rk2(p),
+                                                    rox(p),rox_rk1(p),rox_rk2(p),
+                                                    roy(p),roy_rk1(p),roy_rk2(p),
+                                                    roz(p),roz_rk1(p),roz_rk2(p),
                                                     #endif
                                                     udiff(p),vdiff(p),wdiff(p),
-                                                    ur(p),vr(p),wr(p),ls(p),frk1(p),frk2(p),
-                                                    Mx(p),rox(p),My(p),roy(p),Mz(p),roz(p),
-                                                    Mx_rk1(p),Mx_rk2(p),My_rk1(p),My_rk2(p),Mz_rk1(p),Mz_rk2(p),
-                                                    rox_rk1(p),rox_rk2(p),roy_rk1(p),roy_rk2(p),roz_rk1(p),roz_rk2(p),
+                                                    ls(p),frk1(p),frk2(p),
                                                     ro_threshold(p->F91*p->W1 + p->W3)
 
 {
@@ -169,24 +185,26 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     face_density(p,a,pgc,rox,roy,roz);
     //-------------------------------------------
     // FSF
-    LOOP
-    {
-        a->L(i,j,k)=0.0;
-        ls(i,j,k)=a->phi(i,j,k);
-    }
+    a->L.setVal(0.0);
+    // LOOP
+    // ls(i,j,k)=a->phi(i,j,k);
+    ls.CopyFrom(a->phi);
 
     pfsfdisc->start(p,a,ls,4,a->u,a->v,a->w);
 
-    LOOP
-    frk1(i,j,k) = ls(i,j,k)
-                + p->dt*a->L(i,j,k);
+    // LOOP
+    // frk1(i,j,k) = ls(i,j,k) + p->dt*a->L(i,j,k);
+    FIELDLOOP(frk1, FIELD_CONST_MEMBER(a,L) FIELD_CONST(ls),
+        frk1(i,j,k) = ls(i,j,k) + p->dt*member_L(i,j,k);
+    )
 
     pflow->phi_relax(p,pgc,frk1);
 
     pgc->start4(p,frk1,gcval_phi);
 
-    LOOP
-    a->phi(i,j,k) = frk1(i,j,k);
+    // LOOP
+    // a->phi(i,j,k) = frk1(i,j,k);
+    a->phi.CopyFrom(frk1);
 
     pgc->start4(p,a->phi,gcval_phi);
 
@@ -212,91 +230,148 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     pconvec->start(p,a,a->v,2,a->u,a->v,a->w);
     pconvec->start(p,a,a->w,3,a->u,a->v,a->w);
 
-    ULOOP
-    urk1(i,j,k) = a->u(i,j,k)
-                + p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // urk1(i,j,k) = a->u(i,j,k) + p->dt*CPOR1*a->F(i,j,k);
 
-    VLOOP
-    vrk1(i,j,k) = a->v(i,j,k)
-                + p->dt*CPOR2*a->G(i,j,k);
+    // VLOOP
+    // vrk1(i,j,k) = a->v(i,j,k) + p->dt*CPOR2*a->G(i,j,k);
 
-    WLOOP
-    wrk1(i,j,k) = a->w(i,j,k)
-                + p->dt*CPOR3*a->H(i,j,k);
+    // WLOOP
+    // wrk1(i,j,k) = a->w(i,j,k) + p->dt*CPOR3*a->H(i,j,k);
+
+    FIELDLOOP(
+        urk1, FIELD_CONST_MEMBER(a, u) FIELD_CONST_MEMBER(a, F)
+        FIELD_MUT(vrk1) FIELD_CONST_MEMBER(a, v) FIELD_CONST_MEMBER(a, G)
+        FIELD_MUT(wrk1) FIELD_CONST_MEMBER(a, w) FIELD_CONST_MEMBER(a, H)
+        FIELD_CONST_MEMBER(a, porosity),
+        _POR123
+
+        urk1(i,j,k) = udiff(i,j,k) + p->dt*cpor1*member_F(i,j,k);
+        vrk1(i,j,k) = vdiff(i,j,k) + p->dt*cpor2*member_G(i,j,k);
+        wrk1(i,j,k) = wdiff(i,j,k) + p->dt*cpor3*member_H(i,j,k);
+    )
 
     clear_FGH(p,a);
 
     // get M form M = rho * U
-    ULOOP
-    Mx(i,j,k) = rox(i,j,k)*a->u(i,j,k);
+    // ULOOP
+    // Mx(i,j,k) = rox(i,j,k)*a->u(i,j,k);
 
-    VLOOP
-    My(i,j,k) = roy(i,j,k)*a->v(i,j,k);
+    // VLOOP
+    // My(i,j,k) = roy(i,j,k)*a->v(i,j,k);
 
-    WLOOP
-    Mz(i,j,k) = roz(i,j,k)*a->w(i,j,k);
+    // WLOOP
+    // Mz(i,j,k) = roz(i,j,k)*a->w(i,j,k);
 
+    FIELDLOOP(
+        Mx, FIELD_CONST(rox) FIELD_CONST_MEMBER(a, u)
+        FIELD_MUT(My) FIELD_CONST(roy) FIELD_CONST_MEMBER(a, v)
+        FIELD_MUT(Mz) FIELD_CONST(roz) FIELD_CONST_MEMBER(a, w),
+        Mx(i,j,k) = rox(i,j,k)*member_u(i,j,k);
+        My(i,j,k) = roy(i,j,k)*member_v(i,j,k);
+        Mz(i,j,k) = roz(i,j,k)*member_w(i,j,k);
+    )
+
+    #if USE_AMREX
+    pgc->startBatch(p, m_M, 0, {{&Mx,gcval_u},{&My,gcval_v},{&Mz,gcval_w}});
+    #else
     pgc->start1(p,Mx,gcval_u);
     pgc->start2(p,My,gcval_v);
     pgc->start3(p,Mz,gcval_w);
+    #endif
 
     // advect M
     pconvec->start(p,a,Mx,1,a->u,a->v,a->w);
     pconvec->start(p,a,My,2,a->u,a->v,a->w);
     pconvec->start(p,a,Mz,3,a->u,a->v,a->w);
 
-    ULOOP
-    Mx_rk1(i,j,k) = Mx(i,j,k)
-                + p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // Mx_rk1(i,j,k) = Mx(i,j,k) + p->dt*CPOR1*a->F(i,j,k);
 
-    VLOOP
-    My_rk1(i,j,k) = My(i,j,k)
-                + p->dt*CPOR2*a->G(i,j,k);
+    // VLOOP
+    // My_rk1(i,j,k) = My(i,j,k) + p->dt*CPOR2*a->G(i,j,k);
 
-    WLOOP
-    Mz_rk1(i,j,k) = Mz(i,j,k)
-                + p->dt*CPOR3*a->H(i,j,k);
+    // WLOOP
+    // Mz_rk1(i,j,k) = Mz(i,j,k) + p->dt*CPOR3*a->H(i,j,k);
 
-        // clear_FGH
+    FIELDLOOP(
+        Mx_rk1, FIELD_CONST_MEMBER(a, F)
+        FIELD_MUT(My_rk1)FIELD_CONST_MEMBER(a, G)
+        FIELD_MUT(Mz_rk1) FIELD_CONST_MEMBER(a, H)
+        FIELD_CONST_MEMBER(a, porosity),
+        _POR123
+
+        Mx_rk1(i,j,k) = Mx(i,j,k) + p->dt*cpor1*member_F(i,j,k);
+        My_rk1(i,j,k) = My(i,j,k) + p->dt*cpor2*member_G(i,j,k);
+        Mz_rk1(i,j,k) = Mz(i,j,k) + p->dt*cpor3*member_H(i,j,k);
+    )
+
+    // clear_FGH
     clear_FGH(p,a);
 
     // advect rho
+    #if USE_AMREX
+    pgc->startBatch(p, m_ro, 0, {{&rox,gcval_u},{&roy,gcval_v},{&roz,gcval_w}});
+    #else
     pgc->start1(p,rox,gcval_u);
     pgc->start2(p,roy,gcval_v);
     pgc->start3(p,roz,gcval_w);
+    #endif
 
     pconvec->start(p,a,rox,1,a->u,a->v,a->w);
     pconvec->start(p,a,roy,2,a->u,a->v,a->w);
     pconvec->start(p,a,roz,3,a->u,a->v,a->w);
 
-    ULOOP
-    rox_rk1(i,j,k) = rox(i,j,k)
-                + p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // rox_rk1(i,j,k) = rox(i,j,k) + p->dt*CPOR1*a->F(i,j,k);
 
-    VLOOP
-    roy_rk1(i,j,k) = roy(i,j,k)
-                + p->dt*CPOR2*a->G(i,j,k);
+    // VLOOP
+    // roy_rk1(i,j,k) = roy(i,j,k) + p->dt*CPOR2*a->G(i,j,k);
 
-    WLOOP
-    roz_rk1(i,j,k) = roz(i,j,k)
-                + p->dt*CPOR3*a->H(i,j,k);
+    // WLOOP
+    // roz_rk1(i,j,k) = roz(i,j,k) + p->dt*CPOR3*a->H(i,j,k);
 
-        // clear_FGH
+    FIELDLOOP(
+        rox_rk1, FIELD_CONST_MEMBER(a, F)
+        FIELD_MUT(roy_rk1)FIELD_CONST_MEMBER(a, G)
+        FIELD_MUT(roz_rk1) FIELD_CONST_MEMBER(a, H)
+        FIELD_CONST_MEMBER(a, porosity),
+        _POR123
+
+        rox_rk1(i,j,k) = rox(i,j,k) + p->dt*cpor1*member_F(i,j,k);
+        roy_rk1(i,j,k) = roy(i,j,k) + p->dt*cpor2*member_G(i,j,k);
+        roz_rk1(i,j,k) = roz(i,j,k) + p->dt*cpor3*member_H(i,j,k);
+    )
+
+    // clear_FGH
     clear_FGH(p,a);
 
     // reconstruct U
-    ULOOP
-    ur(i,j,k) = vel_limiter(p,urk1,Mx_rk1,rox_rk1,rox);
+    // ULOOP
+    // ur(i,j,k) = vel_limiter(p,urk1,Mx_rk1,rox_rk1,rox);
 
-    VLOOP
-    vr(i,j,k) = vel_limiter(p,vrk1,My_rk1,roy_rk1,roy);
+    // VLOOP
+    // vr(i,j,k) = vel_limiter(p,vrk1,My_rk1,roy_rk1,roy);
 
-    WLOOP
-    wr(i,j,k) = vel_limiter(p,wrk1,Mz_rk1,roz_rk1,roz);
+    // WLOOP
+    // wr(i,j,k) = vel_limiter(p,wrk1,Mz_rk1,roz_rk1,roz);
 
+    FIELDLOOP_INC(
+        ur, FIELD_CONST_INC(urk1) FIELD_CONST_INC(Mx_rk1) FIELD_CONST_INC(rox_rk1) FIELD_CONST_INC(rox)
+        FIELD_MUT(vr) FIELD_CONST_INC(vrk1) FIELD_CONST_INC(My_rk1) FIELD_CONST_INC(roy_rk1) FIELD_CONST_INC(roy)
+        FIELD_MUT(wr) FIELD_CONST_INC(wrk1) FIELD_CONST_INC(Mz_rk1) FIELD_CONST_INC(roz_rk1) FIELD_CONST_INC(roz),
+        ur(i,j,k) = vel_limiter(p, urk1, Mx_rk1, rox_rk1, rox);
+        vr(i,j,k) = vel_limiter(p, vrk1, My_rk1, roy_rk1, roy);
+        wr(i,j,k) = vel_limiter(p, wrk1, Mz_rk1, roz_rk1, roz);
+    )
+
+    #if USE_AMREX
+    pgc->startBatch(p, m_r, 0, {{&ur,gcval_u},{&vr,gcval_v},{&wr,gcval_w}});
+    #else
     pgc->start1(p,ur,gcval_u);
     pgc->start2(p,vr,gcval_v);
     pgc->start3(p,wr,gcval_w);
+    #endif
 
     //-------------------------------------------
     // U
@@ -309,9 +384,14 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     irhs(p,a);
     pdiff->diff_u(p,a,pgc,psolv,udiff,ur,a->u,a->v,a->w,1.0);
 
-    ULOOP
-    urk1(i,j,k) = udiff(i,j,k)
-                + p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // urk1(i,j,k) = udiff(i,j,k) + p->dt*CPOR1*a->F(i,j,k);
+
+    FIELDLOOP(urk1,
+        FIELD_CONST(udiff); FIELD_CONST_MEMBER(a, F); FIELD_CONST_MEMBER(a, porosity),
+        _POR1
+        urk1(i,j,k) = udiff(i,j,k) + p->dt*cpor1*member_F(i,j,k);
+    )
 
     p->utime=pgc->timer()-starttime;
 
@@ -326,9 +406,14 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     jrhs(p,a);
     pdiff->diff_v(p,a,pgc,psolv,vdiff,vr,a->u,a->v,a->w,1.0);
 
-    VLOOP
-    vrk1(i,j,k) = vdiff(i,j,k)
-                + p->dt*CPOR2*a->G(i,j,k);
+    // VLOOP
+    // vrk1(i,j,k) = vdiff(i,j,k) + p->dt*CPOR2*a->G(i,j,k);
+
+    FIELDLOOP(vrk1,
+        FIELD_CONST(vdiff); FIELD_CONST_MEMBER(a, G); FIELD_CONST_MEMBER(a, porosity),
+        _POR2
+        vrk1(i,j,k) = vdiff(i,j,k) + p->dt*cpor2*member_G(i,j,k);
+    )
 
     p->vtime=pgc->timer()-starttime;
 
@@ -343,9 +428,14 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     krhs(p,a);
     pdiff->diff_w(p,a,pgc,psolv,wdiff,wr,a->u,a->v,a->w,1.0);
 
-    WLOOP
-    wrk1(i,j,k) = wdiff(i,j,k)
-                + p->dt*CPOR3*a->H(i,j,k);
+    // WLOOP
+    // wrk1(i,j,k) = wdiff(i,j,k) + p->dt*CPOR3*a->H(i,j,k);
+
+    FIELDLOOP(wrk1,
+        FIELD_CONST(wdiff); FIELD_CONST_MEMBER(a, H); FIELD_CONST_MEMBER(a, porosity),
+        _POR3
+        wrk1(i,j,k) = wdiff(i,j,k) + p->dt*cpor3*member_H(i,j,k);
+    )
 
     p->wtime=pgc->timer()-starttime;
 
@@ -396,16 +486,20 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     pfsfdisc->start(p,a,frk1,4,urk1,vrk1,wrk1);
 
     LOOP
-    frk2(i,j,k) = 0.75*ls(i,j,k)
-                   + 0.25*frk1(i,j,k)
-                   + 0.25*p->dt*a->L(i,j,k);
+    frk2(i,j,k) = 0.75*ls(i,j,k) + 0.25*frk1(i,j,k) + 0.25*p->dt*a->L(i,j,k);
+
+    FIELDLOOP(
+        frk2, FIELD_CONST(ls) FIELD_CONST(frk1) FIELD_CONST_MEMBER(a,L),
+        frk2(i,j,k) = 0.75*ls(i,j,k) + 0.25*frk1(i,j,k) + 0.25*p->dt*member_L(i,j,k);
+    )
 
     pflow->phi_relax(p,pgc,frk2);
 
     pgc->start4(p,frk2,gcval_phi);
 
-    LOOP
-    a->phi(i,j,k) =  frk2(i,j,k);
+    // LOOP
+    // a->phi(i,j,k) =  frk2(i,j,k);
+    a->phi.CopyFrom(frk2);
 
     pgc->start4(p,a->phi,gcval_phi);
 
@@ -422,92 +516,146 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     pconvec->start(p,a,vrk1,2,urk1,vrk1,wrk1);
     pconvec->start(p,a,wrk1,3,urk1,vrk1,wrk1);
 
-    ULOOP
-    urk2(i,j,k) = 0.75*a->u(i,j,k) + 0.25*urk1(i,j,k)
-                + 0.25*p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // urk2(i,j,k) = 0.75*a->u(i,j,k) + 0.25*urk1(i,j,k) + 0.25*p->dt*CPOR1*a->F(i,j,k);
 
-    VLOOP
-    vrk2(i,j,k) = 0.75*a->v(i,j,k) + 0.25*vrk1(i,j,k)
-                + 0.25*p->dt*CPOR2*a->G(i,j,k);
+    // VLOOP
+    // vrk2(i,j,k) = 0.75*a->v(i,j,k) + 0.25*vrk1(i,j,k) + 0.25*p->dt*CPOR2*a->G(i,j,k);
 
-    WLOOP
-    wrk2(i,j,k) = 0.75*a->w(i,j,k) + 0.25*wrk1(i,j,k)
-                + 0.25*p->dt*CPOR3*a->H(i,j,k);
+    // WLOOP
+    // wrk2(i,j,k) = 0.75*a->w(i,j,k) + 0.25*wrk1(i,j,k) + 0.25*p->dt*CPOR3*a->H(i,j,k);
 
-        // clear_FGH
+    FIELDLOOP(
+        urk2, FIELD_CONST_MEMBER(a, u) FIELD_CONST(urk1) FIELD_CONST_MEMBER(a, F)
+        FIELD_MUT(vrk2) FIELD_CONST_MEMBER(a, v) FIELD_CONST(vrk1) FIELD_CONST_MEMBER(a, G)
+        FIELD_MUT(wrk2) FIELD_CONST_MEMBER(a, w) FIELD_CONST(wrk1) FIELD_CONST_MEMBER(a, H)
+        FIELD_CONST_MEMBER(a, porosity),
+        _POR123
+        urk2(i,j,k) = 0.75*member_u(i,j,k) + 0.25*urk1(i,j,k) + 0.25*p->dt*cpor1*member_F(i,j,k);
+        vrk2(i,j,k) = 0.75*member_v(i,j,k) + 0.25*vrk1(i,j,k) + 0.25*p->dt*cpor2*member_G(i,j,k);
+        wrk2(i,j,k) = 0.75*member_w(i,j,k) + 0.25*wrk1(i,j,k) + 0.25*p->dt*cpor3*member_H(i,j,k);
+    )
+
+    // clear_FGH
     clear_FGH(p,a);
 
     // get M form M = rho * U
-    ULOOP
-    Mx_rk1(i,j,k) = rox_rk1(i,j,k)*urk1(i,j,k);
+    // ULOOP
+    // Mx_rk1(i,j,k) = rox_rk1(i,j,k)*urk1(i,j,k);
 
-    VLOOP
-    My_rk1(i,j,k) = roy_rk1(i,j,k)*vrk1(i,j,k);
+    // VLOOP
+    // My_rk1(i,j,k) = roy_rk1(i,j,k)*vrk1(i,j,k);
 
-    WLOOP
-    Mz_rk1(i,j,k) = roz_rk1(i,j,k)*wrk1(i,j,k);
+    // WLOOP
+    // Mz_rk1(i,j,k) = roz_rk1(i,j,k)*wrk1(i,j,k);
 
+    FIELDLOOP(
+        Mx_rk1, FIELD_CONST(rox_rk1) FIELD_CONST(urk1)
+        FIELD_MUT(My_rk1) FIELD_CONST(roy_rk1) FIELD_CONST(vrk1)
+        FIELD_MUT(Mz_rk1) FIELD_CONST(roz_rk1) FIELD_CONST(wrk1),
+        Mx_rk1(i,j,k) = rox_rk1(i,j,k)*urk1(i,j,k);
+        My_rk1(i,j,k) = roy_rk1(i,j,k)*vrk1(i,j,k);
+        Mz_rk1(i,j,k) = roz_rk1(i,j,k)*wrk1(i,j,k);
+    )
+
+    #if USE_AMREX
+    pgc->startBatch(p, m_M_rk1, 0, {{&Mx_rk1,gcval_u},{&My_rk1,gcval_v},{&Mz_rk1,gcval_w}});
+    #else
     pgc->start1(p,Mx_rk1,gcval_u);
     pgc->start2(p,My_rk1,gcval_v);
     pgc->start3(p,Mz_rk1,gcval_w);
+    #endif
 
     // advect M
     pconvec->start(p,a,Mx_rk1,1,urk1,vrk1,wrk1);
     pconvec->start(p,a,My_rk1,2,urk1,vrk1,wrk1);
     pconvec->start(p,a,Mz_rk1,3,urk1,vrk1,wrk1);
 
-    ULOOP
-    Mx_rk2(i,j,k) = 0.75*Mx(i,j,k) + 0.25*Mx_rk1(i,j,k)
-                + 0.25*p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // Mx_rk2(i,j,k) = 0.75*Mx(i,j,k) + 0.25*Mx_rk1(i,j,k) + 0.25*p->dt*CPOR1*a->F(i,j,k);
 
-    VLOOP
-    My_rk2(i,j,k) = 0.75*My(i,j,k) + 0.25*My_rk1(i,j,k)
-                + 0.25*p->dt*CPOR2*a->G(i,j,k);
+    // VLOOP
+    // My_rk2(i,j,k) = 0.75*My(i,j,k) + 0.25*My_rk1(i,j,k) + 0.25*p->dt*CPOR2*a->G(i,j,k);
 
-    WLOOP
-    Mz_rk2(i,j,k) = 0.75*Mz(i,j,k) + 0.25*Mz_rk1(i,j,k)
-                + 0.25*p->dt*CPOR3*a->H(i,j,k);
+    // WLOOP
+    // Mz_rk2(i,j,k) = 0.75*Mz(i,j,k) + 0.25*Mz_rk1(i,j,k) + 0.25*p->dt*CPOR3*a->H(i,j,k);
 
-        // clear_FGH
+    FIELDLOOP(
+        Mx_rk2, FIELD_CONST(Mx) FIELD_CONST(Mx_rk1) FIELD_CONST_MEMBER(a, F)
+        FIELD_MUT(My_rk2) FIELD_CONST(My) FIELD_CONST(My_rk1) FIELD_CONST_MEMBER(a, G)
+        FIELD_MUT(Mz_rk2) FIELD_CONST(Mz) FIELD_CONST(Mz_rk1) FIELD_CONST_MEMBER(a, H)
+        FIELD_CONST_MEMBER(a, porosity),
+        _POR123
+        Mx_rk2(i,j,k) = 0.75*Mx(i,j,k) + 0.25*Mx_rk1(i,j,k) + 0.25*p->dt*cpor1*member_F(i,j,k);
+        My_rk2(i,j,k) = 0.75*My(i,j,k) + 0.25*My_rk1(i,j,k) + 0.25*p->dt*cpor2*member_G(i,j,k);
+        Mz_rk2(i,j,k) = 0.75*Mz(i,j,k) + 0.25*Mz_rk1(i,j,k) + 0.25*p->dt*cpor3*member_H(i,j,k);
+    )
+
+    // clear_FGH
     clear_FGH(p,a);
 
     // advect rho
+    #if USE_AMREX
+    pgc->startBatch(p, m_ro_rk1, 0, {{&rox_rk1,gcval_u},{&roy_rk1,gcval_v},{&roz_rk1,gcval_w}});
+    #else
     pgc->start1(p,rox_rk1,gcval_u);
     pgc->start2(p,roy_rk1,gcval_v);
     pgc->start3(p,roz_rk1,gcval_w);
+    #endif
 
     pconvec->start(p,a,rox_rk1,1,urk1,vrk1,wrk1);
     pconvec->start(p,a,roy_rk1,2,urk1,vrk1,wrk1);
     pconvec->start(p,a,roz_rk1,3,urk1,vrk1,wrk1);
 
-    ULOOP
-    rox_rk2(i,j,k) = 0.75*rox(i,j,k) + 0.25*rox_rk1(i,j,k)
-                + 0.25*p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // rox_rk2(i,j,k) = 0.75*rox(i,j,k) + 0.25*rox_rk1(i,j,k) + 0.25*p->dt*CPOR1*a->F(i,j,k);
 
-    VLOOP
-    roy_rk2(i,j,k) = 0.75*roy(i,j,k) + 0.25*roy_rk1(i,j,k)
-                + 0.25*p->dt*CPOR1*a->G(i,j,k);
+    // VLOOP
+    // roy_rk2(i,j,k) = 0.75*roy(i,j,k) + 0.25*roy_rk1(i,j,k) + 0.25*p->dt*CPOR1*a->G(i,j,k);
 
-    WLOOP
-    roz_rk2(i,j,k) = 0.75*roz(i,j,k) + 0.25*roz_rk1(i,j,k)
-                + 0.25*p->dt*CPOR1*a->H(i,j,k);
+    // WLOOP
+    // roz_rk2(i,j,k) = 0.75*roz(i,j,k) + 0.25*roz_rk1(i,j,k) + 0.25*p->dt*CPOR1*a->H(i,j,k);
 
-        // clear_FGH
+    FIELDLOOP(
+        rox_rk2, FIELD_CONST(rox) FIELD_CONST(rox_rk1) FIELD_CONST_MEMBER(a, F)
+        FIELD_MUT(roy_rk2) FIELD_CONST(roy) FIELD_CONST(roy_rk1) FIELD_CONST_MEMBER(a, G)
+        FIELD_MUT(roz_rk2) FIELD_CONST(roz) FIELD_CONST(roz_rk1) FIELD_CONST_MEMBER(a, H)
+        FIELD_CONST_MEMBER(a, porosity),
+        _POR123
+        rox_rk2(i,j,k) = 0.75*rox(i,j,k) + 0.25*rox_rk1(i,j,k) + 0.25*p->dt*cpor1*member_F(i,j,k);
+        roy_rk2(i,j,k) = 0.75*roy(i,j,k) + 0.25*roy_rk1(i,j,k) + 0.25*p->dt*cpor2*member_G(i,j,k);
+        roz_rk2(i,j,k) = 0.75*roz(i,j,k) + 0.25*roz_rk1(i,j,k) + 0.25*p->dt*cpor3*member_H(i,j,k);
+    )
+
+    // clear_FGH
     clear_FGH(p,a);
 
     // reconstruct U
-    ULOOP
-    ur(i,j,k) = vel_limiter(p,urk2,Mx_rk2,rox_rk2,rox_rk1);
+    // ULOOP
+    // ur(i,j,k) = vel_limiter(p,urk2,Mx_rk2,rox_rk2,rox_rk1);
 
-    VLOOP
-    vr(i,j,k) = vel_limiter(p,vrk2,My_rk2,roy_rk2,roy_rk1);
+    // VLOOP
+    // vr(i,j,k) = vel_limiter(p,vrk2,My_rk2,roy_rk2,roy_rk1);
 
-    WLOOP
-    wr(i,j,k) = vel_limiter(p,wrk2,Mz_rk2,roz_rk2,roz_rk1);
+    // WLOOP
+    // wr(i,j,k) = vel_limiter(p,wrk2,Mz_rk2,roz_rk2,roz_rk1);
 
+    FIELDLOOP_INC(
+        ur, FIELD_CONST_INC(urk2) FIELD_CONST_INC(Mx_rk2) FIELD_CONST_INC(rox_rk2) FIELD_CONST_INC(rox_rk1)
+        FIELD_MUT(vr) FIELD_CONST_INC(vrk2) FIELD_CONST_INC(My_rk2) FIELD_CONST_INC(roy_rk2) FIELD_CONST_INC(roy_rk1)
+        FIELD_MUT(wr) FIELD_CONST_INC(wrk2) FIELD_CONST_INC(Mz_rk2) FIELD_CONST_INC(roz_rk2) FIELD_CONST_INC(roz_rk1),
+        ur(i,j,k) = vel_limiter(p, urk2, Mx_rk2, rox_rk2, rox_rk1);
+        vr(i,j,k) = vel_limiter(p, vrk2, My_rk2, roy_rk2, roy_rk1);
+        wr(i,j,k) = vel_limiter(p, wrk2, Mz_rk2, roz_rk2, roz_rk1);
+    )
+
+    #if USE_AMREX
+    pgc->startBatch(p, m_r, 0, {{&ur,gcval_u},{&vr,gcval_v},{&wr,gcval_w}});
+    #else
     pgc->start1(p,ur,gcval_u);
     pgc->start2(p,vr,gcval_v);
     pgc->start3(p,wr,gcval_w);
+    #endif
 
     //-------------------------------------------
     // U
@@ -520,9 +668,14 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     irhs(p,a);
     pdiff->diff_u(p,a,pgc,psolv,udiff,ur,urk1,vrk1,wrk1,0.25);
 
-    ULOOP
-    urk2(i,j,k) = udiff(i,j,k)
-                + 0.25*p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // urk2(i,j,k) = udiff(i,j,k) + 0.25*p->dt*CPOR1*a->F(i,j,k);
+
+    FIELDLOOP(
+        urk2, FIELD_CONST(udiff) FIELD_CONST_MEMBER(a, F) FIELD_CONST_MEMBER(a, porosity),
+        _POR1
+        urk2(i,j,k) = udiff(i,j,k) + 0.25*p->dt*cpor1*member_F(i,j,k);
+    )
 
     p->utime+=pgc->timer()-starttime;
 
@@ -537,9 +690,14 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     jrhs(p,a);
     pdiff->diff_v(p,a,pgc,psolv,vdiff,vr,urk1,vrk1,wrk1,0.25);
 
-    VLOOP
-    vrk2(i,j,k) = vdiff(i,j,k)
-                + 0.25*p->dt*CPOR2*a->G(i,j,k);
+    // VLOOP
+    // vrk2(i,j,k) = vdiff(i,j,k) + 0.25*p->dt*CPOR2*a->G(i,j,k);
+
+    FIELDLOOP(
+        vrk2, FIELD_CONST(vdiff) FIELD_CONST_MEMBER(a, G) FIELD_CONST_MEMBER(a, porosity),
+        _POR2
+        vrk2(i,j,k) = vdiff(i,j,k) + 0.25*p->dt*cpor2*member_G(i,j,k);
+    )
 
     p->vtime+=pgc->timer()-starttime;
 
@@ -554,9 +712,14 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     krhs(p,a);
     pdiff->diff_w(p,a,pgc,psolv,wdiff,wr,urk1,vrk1,wrk1,0.25);
 
-    WLOOP
-    wrk2(i,j,k) = wdiff(i,j,k)
-                + 0.25*p->dt*CPOR3*a->H(i,j,k);
+    // WLOOP
+    // wrk2(i,j,k) = wdiff(i,j,k) + 0.25*p->dt*CPOR3*a->H(i,j,k);
+
+    FIELDLOOP(
+        wrk2, FIELD_CONST(wdiff) FIELD_CONST_MEMBER(a, H) FIELD_CONST_MEMBER(a, porosity),
+        _POR3
+        wrk2(i,j,k) = wdiff(i,j,k) + 0.25*p->dt*cpor3*member_H(i,j,k);
+    )
 
     p->wtime+=pgc->timer()-starttime;
 
@@ -604,16 +767,20 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
 
     pfsfdisc->start(p,a,frk2,4,urk2,vrk2,wrk2);
 
-    LOOP
-    ls(i,j,k) =  (1.0/3.0)*ls(i,j,k)
-                  + (2.0/3.0)*frk2(i,j,k)
-                  + (2.0/3.0)*p->dt*a->L(i,j,k);
+    // LOOP
+    // ls(i,j,k) =  (1.0/3.0)*ls(i,j,k) + (2.0/3.0)*frk2(i,j,k) + (2.0/3.0)*p->dt*a->L(i,j,k);
+
+    FIELDLOOP(
+        ls, FIELD_CONST(frk2) FIELD_CONST_MEMBER(a,L),
+        ls(i,j,k) =  (1.0/3.0)*ls(i,j,k) + (2.0/3.0)*frk2(i,j,k) + (2.0/3.0)*p->dt*member_L(i,j,k);
+    )
 
     pflow->phi_relax(p,pgc,ls);
     pgc->start4(p,a->phi,gcval_phi);
 
-    LOOP
-    a->phi(i,j,k) =  ls(i,j,k);
+    // LOOP
+    // a->phi(i,j,k) = ls(i,j,k);
+    a->phi.CopyFrom(ls);
 
     pgc->start4(p,a->phi,gcval_phi);
 
@@ -630,93 +797,146 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     pconvec->start(p,a,vrk2,2,urk2,vrk2,wrk2);
     pconvec->start(p,a,wrk2,3,urk2,vrk2,wrk2);
 
-    ULOOP
-    a->u(i,j,k) = (1.0/3.0)*a->u(i,j,k) + (2.0/3.0)*urk2(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // a->u(i,j,k) = (1.0/3.0)*a->u(i,j,k) + (2.0/3.0)*urk2(i,j,k) + (2.0/3.0)*p->dt*CPOR1*a->F(i,j,k);
 
-    VLOOP
-    a->v(i,j,k) = (1.0/3.0)*a->v(i,j,k) + (2.0/3.0)*vrk2(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR2*a->G(i,j,k);
+    // VLOOP
+    // a->v(i,j,k) = (1.0/3.0)*a->v(i,j,k) + (2.0/3.0)*vrk2(i,j,k) + (2.0/3.0)*p->dt*CPOR2*a->G(i,j,k);
 
-    WLOOP
-    a->w(i,j,k) = (1.0/3.0)*a->w(i,j,k) + (2.0/3.0)*wrk2(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR3*a->H(i,j,k);
+    // WLOOP
+    // a->w(i,j,k) = (1.0/3.0)*a->w(i,j,k) + (2.0/3.0)*wrk2(i,j,k) + (2.0/3.0)*p->dt*CPOR3*a->H(i,j,k);
 
-        // clear_FGH
+    FIELDLOOP_MEMBER(
+        a, u, FIELD_CONST(urk2) FIELD_CONST_MEMBER(a, F)
+        FIELD_MUT_MEMBER(a,v) FIELD_CONST(vrk2) FIELD_CONST_MEMBER(a, G)
+        FIELD_MUT_MEMBER(a,w) FIELD_CONST(wrk2) FIELD_CONST_MEMBER(a, H)
+        FIELD_CONST_MEMBER(a, porosity),
+        _POR123
+        u(i,j,k) = (1.0/3.0)*u(i,j,k) + (2.0/3.0)*urk2(i,j,k) + (2.0/3.0)*p->dt*cpor1*member_F(i,j,k);
+        member_v(i,j,k) = (1.0/3.0)*member_v(i,j,k) + (2.0/3.0)*vrk2(i,j,k) + (2.0/3.0)*p->dt*cpor2*member_G(i,j,k);
+        member_w(i,j,k) = (1.0/3.0)*member_w(i,j,k) + (2.0/3.0)*wrk2(i,j,k) + (2.0/3.0)*p->dt*cpor3*member_H(i,j,k);
+    )
+
+    // clear_FGH
     clear_FGH(p,a);
 
     // get M form M = rho * U
-    ULOOP
-    Mx_rk2(i,j,k) = rox_rk2(i,j,k)*urk2(i,j,k);
+    // ULOOP
+    // Mx_rk2(i,j,k) = rox_rk2(i,j,k)*urk2(i,j,k);
 
-    VLOOP
-    My_rk2(i,j,k) = roy_rk2(i,j,k)*vrk2(i,j,k);
+    // VLOOP
+    // My_rk2(i,j,k) = roy_rk2(i,j,k)*vrk2(i,j,k);
 
-    WLOOP
-    Mz_rk2(i,j,k) = roz_rk2(i,j,k)*wrk2(i,j,k);
+    // WLOOP
+    // Mz_rk2(i,j,k) = roz_rk2(i,j,k)*wrk2(i,j,k);
 
+    FIELDLOOP(
+        Mx_rk2, FIELD_CONST(rox_rk2) FIELD_CONST(urk2)
+        FIELD_MUT(My_rk2) FIELD_CONST(roy_rk2) FIELD_CONST(vrk2)
+        FIELD_MUT(Mz_rk2) FIELD_CONST(roz_rk2) FIELD_CONST(wrk2),
+        Mx_rk2(i,j,k) = rox_rk2(i,j,k)*urk2(i,j,k);
+        My_rk2(i,j,k) = roy_rk2(i,j,k)*vrk2(i,j,k);
+        Mz_rk2(i,j,k) = roz_rk2(i,j,k)*wrk2(i,j,k);
+    )
+
+    #if USE_AMREX
+    pgc->startBatch(p, m_M_rk2, 0, {{&Mx_rk2,gcval_u},{&My_rk2,gcval_v},{&Mz_rk2,gcval_w}});
+    #else
     pgc->start1(p,Mx_rk2,gcval_u);
     pgc->start2(p,My_rk2,gcval_v);
     pgc->start3(p,Mz_rk2,gcval_w);
+    #endif
 
     // advect M
     pconvec->start(p,a,Mx_rk2,1,urk2,vrk2,wrk2);
     pconvec->start(p,a,My_rk2,2,urk2,vrk2,wrk2);
     pconvec->start(p,a,Mz_rk2,3,urk1,vrk1,wrk1);
 
-    ULOOP
-    Mx(i,j,k) = (1.0/3.0)*Mx(i,j,k) + (2.0/3.0)*Mx_rk2(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // Mx(i,j,k) = (1.0/3.0)*Mx(i,j,k) + (2.0/3.0)*Mx_rk2(i,j,k) + (2.0/3.0)*p->dt*CPOR1*a->F(i,j,k);
 
-    VLOOP
-    My(i,j,k) = (1.0/3.0)*My(i,j,k) + (2.0/3.0)*My_rk2(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR3*a->G(i,j,k);
+    // VLOOP
+    // My(i,j,k) = (1.0/3.0)*My(i,j,k) + (2.0/3.0)*My_rk2(i,j,k) + (2.0/3.0)*p->dt*CPOR3*a->G(i,j,k);
 
-    WLOOP
-    Mz(i,j,k) = (1.0/3.0)*Mz(i,j,k) + (2.0/3.0)*Mz_rk2(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR3*a->H(i,j,k);
+    // WLOOP
+    // Mz(i,j,k) = (1.0/3.0)*Mz(i,j,k) + (2.0/3.0)*Mz_rk2(i,j,k) + (2.0/3.0)*p->dt*CPOR3*a->H(i,j,k);
 
-        // clear_FGH
+    FIELDLOOP(
+        Mx, FIELD_CONST(Mx_rk2) FIELD_CONST_MEMBER(a, F)
+        FIELD_MUT(My) FIELD_CONST(My_rk2) FIELD_CONST_MEMBER(a, G)
+        FIELD_MUT(Mz) FIELD_CONST(Mz_rk2) FIELD_CONST_MEMBER(a, H)
+        FIELD_CONST_MEMBER(a, porosity),
+        _POR123
+        Mx(i,j,k) = (1.0/3.0)*Mx(i,j,k) + (2.0/3.0)*Mx_rk2(i,j,k) + (2.0/3.0)*p->dt*cpor1*member_F(i,j,k);
+        My(i,j,k) = (1.0/3.0)*My(i,j,k) + (2.0/3.0)*My_rk2(i,j,k) + (2.0/3.0)*p->dt*cpor2*member_G(i,j,k);
+        Mz(i,j,k) = (1.0/3.0)*Mz(i,j,k) + (2.0/3.0)*Mz_rk2(i,j,k) + (2.0/3.0)*p->dt*cpor3*member_H(i,j,k);
+    )
+
+    // clear_FGH
     clear_FGH(p,a);
 
     // advect rho
-
+    #if USE_AMREX
+    pgc->startBatch(p, m_ro_rk2, 0, {{&rox_rk2,gcval_u},{&roy_rk2,gcval_v},{&roz_rk2,gcval_w}});
+    #else
     pgc->start1(p,rox_rk2,gcval_u);
     pgc->start2(p,roy_rk2,gcval_v);
     pgc->start3(p,roz_rk2,gcval_w);
+    #endif
 
     pconvec->start(p,a,rox_rk2,1,urk2,vrk2,wrk2);
     pconvec->start(p,a,roy_rk2,2,urk2,vrk2,wrk2);
     pconvec->start(p,a,roz_rk2,3,urk2,vrk2,wrk2);
 
-    ULOOP
-    rox(i,j,k) = (1.0/3.0)*rox(i,j,k) + (2.0/3.0)*rox_rk2(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // rox(i,j,k) = (1.0/3.0)*rox(i,j,k) + (2.0/3.0)*rox_rk2(i,j,k) + (2.0/3.0)*p->dt*CPOR1*a->F(i,j,k);
 
-    VLOOP
-    roy(i,j,k) = (1.0/3.0)*roy(i,j,k) + (2.0/3.0)*roy_rk2(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR2*a->G(i,j,k);
+    // VLOOP
+    // roy(i,j,k) = (1.0/3.0)*roy(i,j,k) + (2.0/3.0)*roy_rk2(i,j,k) + (2.0/3.0)*p->dt*CPOR2*a->G(i,j,k);
 
-    WLOOP
-    roz(i,j,k) = (1.0/3.0)*roz(i,j,k) + (2.0/3.0)*roz_rk2(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR3*a->H(i,j,k);
+    // WLOOP
+    // roz(i,j,k) = (1.0/3.0)*roz(i,j,k) + (2.0/3.0)*roz_rk2(i,j,k) + (2.0/3.0)*p->dt*CPOR3*a->H(i,j,k);
 
-        // clear_FGH
+    FIELDLOOP(
+        rox, FIELD_CONST(rox_rk2) FIELD_CONST_MEMBER(a, F)
+        FIELD_MUT(roy) FIELD_CONST(roy_rk2) FIELD_CONST_MEMBER(a, G)
+        FIELD_MUT(roz) FIELD_CONST(roz_rk2) FIELD_CONST_MEMBER(a, H)
+        FIELD_CONST_MEMBER(a, porosity),
+        _POR123
+        rox(i,j,k) = (1.0/3.0)*rox(i,j,k) + (2.0/3.0)*rox_rk2(i,j,k) + (2.0/3.0)*p->dt*cpor1*member_F(i,j,k);
+        roy(i,j,k) = (1.0/3.0)*roy(i,j,k) + (2.0/3.0)*roy_rk2(i,j,k) + (2.0/3.0)*p->dt*cpor2*member_G(i,j,k);
+        roz(i,j,k) = (1.0/3.0)*roz(i,j,k) + (2.0/3.0)*roz_rk2(i,j,k) + (2.0/3.0)*p->dt*cpor3*member_H(i,j,k);
+    )
+
+    // clear_FGH
     clear_FGH(p,a);
 
     // reconstruct U
-    ULOOP
-    ur(i,j,k) = vel_limiter(p,a->u,Mx,rox,rox_rk2);
+    // ULOOP
+    // ur(i,j,k) = vel_limiter(p,a->u,Mx,rox,rox_rk2);
 
-    VLOOP
-    vr(i,j,k) = vel_limiter(p,a->v,My,roy,roy_rk2);
+    // VLOOP
+    // vr(i,j,k) = vel_limiter(p,a->v,My,roy,roy_rk2);
 
-    WLOOP
-    wr(i,j,k) = vel_limiter(p,a->w,Mz,roz,roz_rk2);
+    // WLOOP
+    // wr(i,j,k) = vel_limiter(p,a->w,Mz,roz,roz_rk2);
 
+    FIELDLOOP_INC(
+        ur, FIELD_CONST_MEMBER_INC(a, u) FIELD_CONST_INC(Mx) FIELD_CONST_INC(rox) FIELD_CONST_INC(rox_rk2)
+        FIELD_MUT(vr) FIELD_CONST_MEMBER_INC(a, v) FIELD_CONST_INC(My) FIELD_CONST_INC(roy) FIELD_CONST_INC(roy_rk2)
+        FIELD_MUT(wr) FIELD_CONST_MEMBER_INC(a, w) FIELD_CONST_INC(Mz) FIELD_CONST_INC(roz) FIELD_CONST_INC(roz_rk2),
+        ur(i,j,k) = vel_limiter(p, member_u, Mx, rox, rox_rk2);
+        vr(i,j,k) = vel_limiter(p, member_v, My, roy, roy_rk2);
+        wr(i,j,k) = vel_limiter(p, member_w, Mz, roz, roz_rk2);
+    )
+
+    #if USE_AMREX
+    pgc->startBatch(p, m_r, 0, {{&ur,gcval_u},{&vr,gcval_v},{&wr,gcval_w}});
+    #else
     pgc->start1(p,ur,gcval_u);
     pgc->start2(p,vr,gcval_v);
     pgc->start3(p,wr,gcval_w);
+    #endif
 
     //-------------------------------------------
     // U
@@ -729,9 +949,14 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     irhs(p,a);
     pdiff->diff_u(p,a,pgc,psolv,udiff,ur,urk2,vrk2,wrk2,2.0/3.0);
 
-    ULOOP
-    a->u(i,j,k) = udiff(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR1*a->F(i,j,k);
+    // ULOOP
+    // a->u(i,j,k) = udiff(i,j,k) + (2.0/3.0)*p->dt*CPOR1*a->F(i,j,k);
+
+    FIELDLOOP_MEMBER(
+        a, u, FIELD_CONST(udiff) FIELD_CONST_MEMBER(a, F) FIELD_CONST_MEMBER(a, porosity),
+        _POR1
+        u(i,j,k) = udiff(i,j,k) + (2.0/3.0)*p->dt*cpor1*member_F(i,j,k);
+    )
 
     p->utime+=pgc->timer()-starttime;
 
@@ -746,9 +971,14 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     jrhs(p,a);
     pdiff->diff_v(p,a,pgc,psolv,vdiff,vr,urk2,vrk2,wrk2,2.0/3.0);
 
-    VLOOP
-    a->v(i,j,k) = vdiff(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR2*a->G(i,j,k);
+    // VLOOP
+    // a->v(i,j,k) = vdiff(i,j,k) + (2.0/3.0)*p->dt*CPOR2*a->G(i,j,k);
+
+    FIELDLOOP_MEMBER(
+        a, v, FIELD_CONST(vdiff) FIELD_CONST_MEMBER(a, G) FIELD_CONST_MEMBER(a, porosity),
+        _POR2
+        v(i,j,k) = vdiff(i,j,k) + (2.0/3.0)*p->dt*cpor2*member_G(i,j,k);
+    )
 
     p->vtime+=pgc->timer()-starttime;
 
@@ -763,9 +993,14 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
     krhs(p,a);
     pdiff->diff_w(p,a,pgc,psolv,wdiff,wr,urk2,vrk2,wrk2,2.0/3.0);
 
-    WLOOP
-    a->w(i,j,k) = wdiff(i,j,k)
-                + (2.0/3.0)*p->dt*CPOR3*a->H(i,j,k);
+    // WLOOP
+    // a->w(i,j,k) = wdiff(i,j,k) + (2.0/3.0)*p->dt*CPOR3*a->H(i,j,k);
+
+    FIELDLOOP_MEMBER(
+        a, w, FIELD_CONST(wdiff) FIELD_CONST_MEMBER(a, H) FIELD_CONST_MEMBER(a, porosity),
+        _POR3
+        w(i,j,k) = wdiff(i,j,k) + (2.0/3.0)*p->dt*cpor3*member_H(i,j,k);
+    )
 
     p->wtime+=pgc->timer()-starttime;
 
@@ -806,10 +1041,12 @@ void momentum_FCC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdo
 void momentum_FCC3::irhs(lexer *p, fdm *a)
 {
     n=0;
+    const bool relPressure = p->Y9;
+    const double gi = relPressure ? 0.0 : a->gi;
     ULOOP
     {
-        a->maxF=std::max(fabs(a->rhsvec.V[n] + a->gi),a->maxF);
-        a->F(i,j,k) += (a->rhsvec.V[n] + a->gi + p->W29_x + a->Fext(i,j,k))*PORVAL1;
+        a->maxF=std::max(fabs(a->rhsvec.V[n] + gi),a->maxF);
+        a->F(i,j,k) += (a->rhsvec.V[n] + gi + p->W29_x + a->Fext(i,j,k))*PORVAL1;
 
         a->rhsvec.V[n] = 0.0;
         a->Fext(i,j,k) = 0.0;
@@ -820,10 +1057,12 @@ void momentum_FCC3::irhs(lexer *p, fdm *a)
 void momentum_FCC3::jrhs(lexer *p, fdm *a)
 {
     n=0;
+    const bool relPressure = p->Y9;
+    const double gj = relPressure ? 0.0 : a->gj;
     VLOOP
     {
-        a->maxG=std::max(fabs(a->rhsvec.V[n] + a->gj),a->maxG);
-        a->G(i,j,k) += (a->rhsvec.V[n] + a->gj + p->W29_y + a->Gext(i,j,k))*PORVAL2;
+        a->maxG=std::max(fabs(a->rhsvec.V[n] + gj),a->maxG);
+        a->G(i,j,k) += (a->rhsvec.V[n] + gj + p->W29_y + a->Gext(i,j,k))*PORVAL2;
 
         a->rhsvec.V[n] = 0.0;
         a->Gext(i,j,k) = 0.0;
@@ -834,10 +1073,12 @@ void momentum_FCC3::jrhs(lexer *p, fdm *a)
 void momentum_FCC3::krhs(lexer *p, fdm *a)
 {
     n=0;
+    const bool relPressure = p->Y9;
+    const double gk = relPressure ? 0.0 : a->gk;
     WLOOP
     {
-        a->maxH=std::max(fabs(a->rhsvec.V[n] + a->gk),a->maxH);
-        a->H(i,j,k) += (a->rhsvec.V[n] + a->gk + p->W29_z + a->Hext(i,j,k))*PORVAL3;
+        a->maxH=std::max(fabs(a->rhsvec.V[n] + gk),a->maxH);
+        a->H(i,j,k) += (a->rhsvec.V[n] + gk + p->W29_z + a->Hext(i,j,k))*PORVAL3;
 
         a->rhsvec.V[n] = 0.0;
         a->Hext(i,j,k) = 0.0;
@@ -852,7 +1093,7 @@ void momentum_FCC3::clear_FGH(lexer *p, fdm *a)
     a->H.setVal(0.0);
 }
 
-void momentum_FCC3::face_density(lexer *p, fdm *a, ghostcell *pgc, field &rox, field &roy, field &roz)
+void momentum_FCC3::face_density(lexer *p, fdm *a, ghostcell *pgc, field1 &rox, field2 &roy, field3 &roz)
 {
     ULOOP
     rox(i,j,k) = pd->roface(p,a,1,0,0);
@@ -868,22 +1109,23 @@ void momentum_FCC3::face_density(lexer *p, fdm *a, ghostcell *pgc, field &rox, f
     pgc->start3(p,roz,50);
 }
 
-inline double momentum_FCC3::vel_limiter(lexer *p, field &vel, field &M, field &ro, field &ro_n)
+template<typename GenericField>
+inline double momentum_FCC3::vel_limiter(lexer *p, const GenericField &vel, const GenericField &M, const GenericField &_ro, const GenericField &ro_n)
 {
-    if(ro(i,j,k)>=ro_threshold)
-    return M(i,j,k)/ro(i,j,k);
+    auto ro_filter = [] (lexer* p, double ro)
+    {
+        if(ro<p->W3)
+            return p->W3;
+        else
+            return ro;
+    };
 
-    else if(ro(i,j,k)>p->W3 && ro(i,j,k)<ro_threshold && ro(i,j,k)<ro_n(i,j,k))
-    return (M(i,j,k)/ro_filter(p,ro))*(ro_filter(p,ro)/ro_threshold) + vel(i,j,k)*(ro_threshold-ro_filter(p,ro))/ro_threshold;
+    const double ro = _ro(i,j,k);
 
+    if(ro>=ro_threshold)
+        return M(i,j,k)/ro;
+    else if(ro>p->W3 && ro<ro_threshold && ro<ro_n(i,j,k))
+        return (M(i,j,k)/ro_filter(p,ro))*(ro_filter(p,ro)/ro_threshold) + vel(i,j,k)*(ro_threshold-ro_filter(p,ro))/ro_threshold;
     else
-    return vel(i,j,k);
-}
-
-inline double momentum_FCC3::ro_filter(lexer *p, field &ro)
-{
-    if(ro(i,j,k)<p->W3)
-    return p->W3;
-    else
-    return ro(i,j,k);
+        return vel(i,j,k);
 }
