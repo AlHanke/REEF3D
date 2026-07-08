@@ -577,9 +577,19 @@ void driver::logic_cfd()
 
     // Solver
     if(p->j_dir)
-    psolv = new bicgstab_ijk(p,a,pgc);
+    {
+        if(p->N10==40 || p->N10==41)
+        psolv = new hypre_ssamg(p,a,pgc);
+        else
+        psolv = new bicgstab_ijk(p,a,pgc);
+    }
     else
-    psolv = new bicgstab_ijk_2D(p,a,pgc);
+    {
+        if(p->N10==40 || p->N10==41)
+        psolv = new hypre_ssamg(p,a,pgc);
+        else
+        psolv = new bicgstab_ijk_2D(p,a,pgc);
+    }
 
     // Poison Solver
     switch (p->N10)
