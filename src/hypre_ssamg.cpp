@@ -37,13 +37,13 @@ hypre_ssamg::~hypre_ssamg()
     destroy_grid();
 }
 
-void hypre_ssamg::start(lexer *p, fdm *a, ghostcell *pgc, field &f, vec &rhsvec, int var)
+void hypre_ssamg::start(lexer *p, fdm *a, ghostcell *pgc, field &f, vec&, int var)
 {
     if (var == 4 || var == 5)
-        start_solver5(p, a, pgc, f, rhsvec, var);
+        start_solver5(p, a, pgc, f, var);
 }
 
-void hypre_ssamg::start_solver5(lexer *p, fdm *a, ghostcell *pgc, field &f, vec &rhsvec, int var)
+void hypre_ssamg::start_solver5(lexer *p, fdm *a, ghostcell *pgc, field &f, int var)
 {
     numiter = 0;
     p->solveriter = 0;

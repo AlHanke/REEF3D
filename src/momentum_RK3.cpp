@@ -39,6 +39,43 @@ Author: Hans Bihs
 #include <iomanip>
 #include <cstdlib>
 
+#if USE_AMREX
+#include <AMReX_MultiFab.H>
+// Bug #2 velocity-pattern probe (env REEF_VELPAT): dump w along a z-column through the patch top at
+// a fixed (i,j) on the fine level, so the divergence-free CHECKERBOARD in urk2 is directly visible
+// (divergence probes are blind to it). Compare flip vs noflip: flip shows w alternating sign cell to
+// cell near k=22/23 (patch top HIGH C-F), noflip stays smooth. Strip once bug #2 closes.
+static void velpat_probe(lexer* p, fdm* a, field& w, const char* tag)
+{
+    if(!(std::getenv("REEF_VELPAT") && p->nlevs>1)) return;
+    const int lev=1, gi=38, gj=34, k0=13, k1=27;
+    auto& w_mf=w.GetMultiFab(lev);
+    auto& pr_mf=a->press.GetMultiFab(lev);
+    for(amrex::MFIter mfi(w_mf); mfi.isValid(); ++mfi)
+    {
+        const amrex::Box& vbx=mfi.validbox();
+        // laterally the OWNER of (gi,gj); dump the FULL fab z-range (valid + ghost) so the
+        // patch-top C-F ghost band (k>23) is visible -- that is where the checkerboard hides.
+        if(gi<vbx.smallEnd(0)||gi>vbx.bigEnd(0)||gj<vbx.smallEnd(1)||gj>vbx.bigEnd(1)) continue;
+        const amrex::Box& fbx=mfi.fabbox();
+        const auto wa=w_mf.const_array(mfi);
+        const auto pa=pr_mf.const_array(mfi);
+        const auto Ha=a->H.GetMultiFab(lev).const_array(mfi);   // w-momentum RHS accumulator
+        const auto ra=a->ro.GetMultiFab(lev).const_array(mfi);  // cell density (from level-set)
+        const auto ga=a->grav_pot.GetMultiFab(lev).const_array(mfi); // W22*pos_z (regrid-rebuilt)
+        for(int k=k0;k<=k1;++k)
+            if(k>=fbx.smallEnd(2)&&k<=fbx.bigEnd(2))
+                std::cout<<"  [velpat] "<<tag<<" rank"<<p->mpirank<<" ("<<gi<<","<<gj<<","<<k<<")"
+                         <<(k>vbx.bigEnd(2)||k<vbx.smallEnd(2)?"G":" ")  // G = ghost cell
+                         <<" w="<<wa(gi,gj,k)<<" H="<<Ha(gi,gj,k)
+                         <<" ro="<<ra(gi,gj,k)<<" gpot="<<ga(gi,gj,k)
+                         <<" press="<<pa(gi,gj,k)<<std::endl;
+    }
+}
+#else
+static void velpat_probe(lexer*, fdm*, field&, const char*) {}
+#endif
+
 momentum_RK3::momentum_RK3(lexer *p, fdm *a, convection *pconvection, diffusion *pdiffusion, pressure* ppressure, poisson* ppoisson,
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver,
                                                     ioflow *pioflow, fsi *ppfsi)
@@ -380,7 +417,9 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
                            urk2, vrk2, wrk2, fx, fy, fz, 1, 0.25, false);
 
     pflow->pressure_io(p,a,pgc);
+    velpat_probe(p,a,wrk2,"s2-pre-proj");
     ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk2, vrk2, wrk2, 0.25);
+    velpat_probe(p,a,wrk2,"s2-post-proj");
 
     pflow->u_relax(p,a,pgc,urk2);
     pflow->v_relax(p,a,pgc,vrk2);
@@ -396,6 +435,7 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pgc->start2(p,vrk2,gcval_v);
     pgc->start3(p,wrk2,gcval_w);
     #endif
+    velpat_probe(p,a,wrk2,"s2-post-gc");
     rk3_step2_corr_time = pgc->timer() - block_start;
 
 //Step 3
@@ -507,12 +547,16 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     p->wtime+=pgc->timer()-starttime;
     rk3_step3_w_time = p->wtime - rk3_step1_w_time - rk3_step2_w_time;
 
+    velpat_probe(p,a,a->w,"s3-pred");   // raw stage-3 predictor output (before forcing/projection)
+
     block_start = pgc->timer();
     momentum_forcing_start(p, a, pgc, p6dof, pfsi,
                            a->u, a->v, a->w, fx, fy, fz, 2, 2.0/3.0, true);
 
     pflow->pressure_io(p,a,pgc);
+    velpat_probe(p,a,a->w,"s3-pre-proj");
     ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow,a->u,a->v,a->w,2.0/3.0);
+    velpat_probe(p,a,a->w,"s3-post-proj");
 
         if(pcorr_max>0)
         {
@@ -633,10 +677,19 @@ void momentum_RK3::krhs(lexer *p, fdm *a)
 {
     n=0;
     const bool relPressure = p->Y9;
+    const bool krhs_probe = (std::getenv("REEF_KRHS_PROBE")!=nullptr);
     WLOOP
     {
         const double gk = relPressure ? 0.0 : a->gk;
         a->maxH=std::max(fabs(a->rhsvec.V[n] + gk),a->maxH);
+#if USE_AMREX
+        if(krhs_probe && p->level==1 && i+p->amr_tile_lo.x==38 && j+p->amr_tile_lo.y==34
+           && k+p->amr_tile_lo.z>=20 && k+p->amr_tile_lo.z<=23)
+            std::cout<<"  [krhsprobe] rank"<<p->mpirank<<" ("<<i+p->amr_tile_lo.x<<","
+                     <<j+p->amr_tile_lo.y<<","<<k+p->amr_tile_lo.z<<") n="<<n
+                     <<" H_before="<<a->H(i,j,k)<<" rhsvec="<<a->rhsvec.V[n]
+                     <<" gk="<<gk<<" W29z="<<p->W29_z<<" Hext="<<a->Hext(i,j,k)<<std::endl;
+#endif
         a->H(i,j,k) += (a->rhsvec.V[n] + gk + p->W29_z + a->Hext(i,j,k))*PORVAL3;
 
         a->rhsvec.V[n] = 0.0;
