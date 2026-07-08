@@ -50,13 +50,28 @@ public:
     void startV(lexer*, ghostcell*, double*, vec&, matrix_diag&, int) override final {};
     void startM(lexer*, ghostcell*, double*, double*, double*, int) override final {};
 
-    void start_solver5(lexer*, fdm*, ghostcell*, field&, int);
+    void start_solver123(lexer*, fdm*, ghostcell*, field&, int);
+    void start_solver45(lexer*, fdm*, ghostcell*, field&, int);
 
     void solve(lexer*);
 
     void fill_matrix4(lexer*, fdm*, ghostcell*, field&);
     void amr_cf_coefficients(lexer*, fdm*, ghostcell*, fieldint4&);
     void fillbackvec4(lexer*, field&, int);
+
+    // Momentum diffusion (implicit Helmholtz) solve on the staggered velocity systems.
+    // var 1/2/3 -> u/v/w. Single-level only: the velocity fields are cell-centred MultiFabs
+    // sharing pressure's 7-point grid, so make_grid_7p is reused. The matrix/RHS come straight
+    // from a->M/a->rhsvec as written by idiff2_FS* (single ULOOP/VLOOP/WLOOP pass over
+    // flag1/2/3>0), so the numbering is rebuilt with the SAME loop into a sentinel cval field.
+    // No C-F coupling / no nullspace projection (Helmholtz is non-singular, diagonally dominant).
+    void fill_matrix_vel(lexer*, fdm*, ghostcell*, field&, int var);
+    void fillbackvec_vel(lexer*, field&, int var);
+
+    // Sentinel row numbering for the velocity systems: -1 on un-numbered cells, else the
+    // sequential index matching idiff2_FS*'s ULOOP(var1)/VLOOP(var2)/WLOOP(var3) fill of
+    // a->M/a->rhsvec. Rebuilt identically in fill and fillback so the solved-cell mask agrees.
+    void number_velocity(lexer*, fieldint4&, int var);
 
     void cf_velocity_correction(lexer*, fdm*, ghostcell*,
                                 field&, field&, field&, field&, double) override;
@@ -116,7 +131,7 @@ private:
     int stencil_indices[7];
     int nentries;
 
-    int numiter, count, q;
+    int count, q;
 
     static constexpr int stencil_size = 7; // 7-point stencil
 
