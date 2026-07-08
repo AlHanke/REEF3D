@@ -1450,7 +1450,6 @@
             <File Name="idiff2_PLIC_2Du.cpp"/>
             <File Name="idiff2_FSw_2D.cpp"/>
             <File Name="idiff2_FSw.cpp"/>
-            <File Name="idiff2_FSv_2D.cpp"/>
             <File Name="idiff2_FSv.cpp"/>
             <File Name="idiff2_FSu_2D.cpp"/>
             <File Name="idiff2_FSu.cpp"/>
