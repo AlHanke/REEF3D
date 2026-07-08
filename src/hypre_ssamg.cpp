@@ -39,13 +39,18 @@ hypre_ssamg::~hypre_ssamg()
 
 void hypre_ssamg::start(lexer *p, fdm *a, ghostcell *pgc, field &f, vec&, int var)
 {
-    if (var == 4 || var == 5)
-        start_solver5(p, a, pgc, f, var);
+    if(var==1)
+        start_solver123(p, a, pgc, f, var);
+    else if(var==2)
+        start_solver123(p, a, pgc, f, var);
+    else if(var==3)
+        start_solver123(p, a, pgc, f, var);
+    else if (var == 4 || var == 5)
+        start_solver45(p, a, pgc, f, var);
 }
 
-void hypre_ssamg::start_solver5(lexer *p, fdm *a, ghostcell *pgc, field &f, int var)
+void hypre_ssamg::start_solver45(lexer *p, fdm *a, ghostcell *pgc, field &f, int var)
 {
-    numiter = 0;
     p->solveriter = 0;
 
     #if USE_AMREX
@@ -66,6 +71,8 @@ void hypre_ssamg::start_solver5(lexer *p, fdm *a, ghostcell *pgc, field &f, int 
     p->final_res  = final_res_norm;
 
     fillbackvec4(p, f, var);
+
+    std::fill(a->rhsvec.V.begin(), a->rhsvec.V.end(), 0.0);
 
     delete_solver(p, pgc);
 }
