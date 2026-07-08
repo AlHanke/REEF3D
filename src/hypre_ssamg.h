@@ -50,7 +50,7 @@ public:
     void startV(lexer*, ghostcell*, double*, vec&, matrix_diag&, int) override final {};
     void startM(lexer*, ghostcell*, double*, double*, double*, int) override final {};
 
-    void start_solver5(lexer*, fdm*, ghostcell*, field&, vec&, int);
+    void start_solver5(lexer*, fdm*, ghostcell*, field&, int);
 
     void solve(lexer*);
 

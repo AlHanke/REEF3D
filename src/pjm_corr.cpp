@@ -179,6 +179,68 @@ static inline bool cell_is_covered(lexer* p, int ci, int cj, int ck)
 }
 #endif
 
+// Bug #2 probe helper (env REEF_PREDDIV): per-level max|D.u*| of the (predictor) velocity, tagged
+// by RK stage (alpha 1.0/0.25/0.667) and a call-site tag. At the worst cell it dumps the pressure
+// 7-pt stencil + staggered face velocities + flags, so the injecting term can be identified and
+// compared flip vs noflip. No-op unless REEF_PREDDIV is set and nlevs>1. Strip once bug #2 closes.
+static void preddiv_probe(lexer* p, fdm* a, ghostcell* pgc,
+                          field& uvel, field& vvel, field& wvel, double alpha, const char* tag)
+{
+#if USE_AMREX
+    if(!(std::getenv("REEF_PREDDIV") && p->nlevs>1)) return;
+    for(int lev=0; lev<p->nlevs; ++lev)
+    {
+        const double dx=p->amrex_geometry[lev].CellSize(0);
+        const double dy=p->amrex_geometry[lev].CellSize(1);
+        const double dz=p->amrex_geometry[lev].CellSize(2);
+        auto& u_mf=uvel.GetMultiFab(lev);
+        auto& v_mf=vvel.GetMultiFab(lev);
+        auto& w_mf=wvel.GetMultiFab(lev);
+        auto& pr_mf=a->press.GetMultiFab(lev);
+        const auto& f_mf=p->flag4.GetMultiFab(lev);
+        double dmax=0.0; int wi=-1,wj=-1,wk=-1;
+        double pst[7]={0,0,0,0,0,0,0}, ust[2]={0,0}, wst[2]={0,0}; int fst[3]={0,0,0};
+        for(amrex::MFIter mfi(u_mf); mfi.isValid(); ++mfi)
+        {
+            const amrex::Box& bx=mfi.validbox();
+            const auto ua=u_mf.const_array(mfi);
+            const auto va=v_mf.const_array(mfi);
+            const auto wa=w_mf.const_array(mfi);
+            const auto pa=pr_mf.const_array(mfi);
+            const auto fa=f_mf.const_array(mfi);
+            for(int kk=bx.smallEnd(2);kk<=bx.bigEnd(2);++kk)
+            for(int jj=bx.smallEnd(1);jj<=bx.bigEnd(1);++jj)
+            for(int ii=bx.smallEnd(0);ii<=bx.bigEnd(0);++ii)
+            {
+                if(fa(ii,jj,kk)<AIR_FLAG) continue;
+                double d=(ua(ii,jj,kk)-ua(ii-1,jj,kk))/dx+(wa(ii,jj,kk)-wa(ii,jj,kk-1))/dz;
+                if(p->j_dir) d+=(va(ii,jj,kk)-va(ii,jj-1,kk))/dy;
+                if(std::fabs(d)>dmax)
+                {
+                    dmax=std::fabs(d); wi=ii; wj=jj; wk=kk;
+                    pst[0]=pa(ii,jj,kk);
+                    pst[1]=pa(ii-1,jj,kk); pst[2]=pa(ii+1,jj,kk);
+                    pst[3]=pa(ii,jj-1,kk); pst[4]=pa(ii,jj+1,kk);
+                    pst[5]=pa(ii,jj,kk-1); pst[6]=pa(ii,jj,kk+1);
+                    ust[0]=ua(ii-1,jj,kk); ust[1]=ua(ii,jj,kk);
+                    wst[0]=wa(ii,jj,kk-1); wst[1]=wa(ii,jj,kk);
+                    fst[0]=fa(ii,jj,kk); fst[1]=fa(ii,jj,kk-1); fst[2]=fa(ii,jj,kk+1);
+                }
+            }
+        }
+        const double gd=pgc->globalmax(dmax);
+        if(p->mpirank==0)
+            std::cout<<"  [preddiv] "<<tag<<" stage(alpha="<<alpha<<") lev="<<lev<<" max|D.u*|="<<gd<<std::endl;
+        if(dmax==gd && wi>=0)   // the rank holding the global worst dumps its stencil
+            std::cout<<"  [preddiv] "<<tag<<" lev="<<lev<<" worst@("<<wi<<","<<wj<<","<<wk<<") rank="<<p->mpirank
+                     <<"  press c="<<pst[0]<<" x-/x+="<<pst[1]<<"/"<<pst[2]
+                     <<" y-/y+="<<pst[3]<<"/"<<pst[4]<<" z-/z+="<<pst[5]<<"/"<<pst[6]
+                     <<"  w z-/z+="<<wst[0]<<"/"<<wst[1]<<"  u x-/x+="<<ust[0]<<"/"<<ust[1]
+                     <<"  flag c/z-/z+="<<fst[0]<<"/"<<fst[1]<<"/"<<fst[2]<<std::endl;
+    }
+#endif
+}
+
 pjm_corr::pjm_corr(lexer* p, fdm *a, ghostcell *pgc, heat *&pheat, concentration *&pconc) : pcorr(p), pressure_reference(p)
 {
     if(p->F80==0 && p->F300==0 && p->W90==0)
@@ -225,13 +287,32 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
 
     vel_setup(p,a,pgc,uvel,vvel,wvel,alpha);
 
+    // Bug #2 probe (env REEF_PREDDIV): the predictor divergence D.u* per level, measured BEFORE
+    // and AFTER cf_predictor_sync, so we can see whether cf_predictor_sync's fill-from-coarse +
+    // reflux is what injects the stage-3 checkerboard (the fine cell shows w z-/z+ = -/+0.872 with a
+    // SMOOTH pressure, so it is a velocity mode, not -grad(press)). If "pre-sync" is clean and
+    // "post-sync" is huge, cf_predictor_sync is the seeder.
+    preddiv_probe(p,a,pgc,uvel,vvel,wvel,alpha,"pre-sync");
     cf_predictor_sync(p,a,pgc,uvel,vvel,wvel,psolv,alpha);
+    preddiv_probe(p,a,pgc,uvel,vvel,wvel,alpha,"post-sync");
 
     rhs(p,a,pgc,uvel,vvel,wvel,alpha);
 
     ppois->start(p,a,pcorr);
 
     psolv->start(p,a,pgc,pcorr,a->rhsvec,5);
+
+    // Clear the pressure divergence RHS out of the shared a->rhsvec buffer now that the solve
+    // has consumed it. a->rhsvec is filled here by LOOP order (rhs(): -div(u)/(alpha*dt)) but is
+    // ALSO read by the momentum predictor (momentum_RK3::irhs/jrhs/krhs) by ULOOP/VLOOP/WLOOP
+    // order. Those enumerations only coincide when the cell layout is stable; after an AMR
+    // regrid/rank-change they desync, so the next stage's krhs reads a DIFFERENT cell's leftover
+    // divergence (~ -div/(alpha*dt), O(100) at a surface/C-F cell) and injects it into a->H --
+    // a spurious vertical force that seeds a w checkerboard and blows the run up (N61). The term
+    // is ~0 at rest with a matched layout (why single-rank/no-flip is stable), so zeroing it here
+    // removes the cross-wired read with no effect on the well-behaved path. (Diffusion, when on,
+    // does not rely on this: rhs() above already overwrote any diffusion RHS left in a->rhsvec.)
+    std::fill(a->rhsvec.V.begin(), a->rhsvec.V.end(), 0.0);
 
     // REEF_CF_PROJECTION_GROUP member (5) — selects the matrix-consistent C-F ghost fill.
     // gcv 41: two-point d_cf prolongation so the velocity/pressure-gradient corrector matches
@@ -275,6 +356,53 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
                                                       // (avg-down breaks the hydrostatic grad at surface)
 
     velcorr(p,a,pgc,uvel,vvel,wvel,psolv,alpha);
+
+#if USE_AMREX
+    // Bug #2 probe (env REEF_PCORR_LEVEL): per-level max|pcorr| after the solve and per-level
+    // max|D.u| of the corrected velocity, tagged by RK stage (alpha 1.0/0.25/0.667 = stage 1/2/3).
+    // Localises the flip-amplified runaway: which LEVEL's pcorr grows, and at which stage. If the
+    // coarse (lev0) pcorr blows up while the fine (lev1) stays bounded, the coarse solve is being
+    // polluted by the fine->coarse reflux; if lev1 leads, the fine low-face correction is the seed.
+    if(std::getenv("REEF_PCORR_LEVEL") && p->nlevs>1)
+    {
+        for(int lev=0; lev<p->nlevs; ++lev)
+        {
+            double pmax=0.0, dmax=0.0; int di=-1,dj=-1,dk=-1;
+            const double dx=p->amrex_geometry[lev].CellSize(0);
+            const double dy=p->amrex_geometry[lev].CellSize(1);
+            const double dz=p->amrex_geometry[lev].CellSize(2);
+            auto& pc_mf=pcorr.GetMultiFab(lev);
+            auto& u_mf=uvel.GetMultiFab(lev);
+            auto& v_mf=vvel.GetMultiFab(lev);
+            auto& w_mf=wvel.GetMultiFab(lev);
+            const auto& f_mf=p->flag4.GetMultiFab(lev);
+            for(amrex::MFIter mfi(pc_mf); mfi.isValid(); ++mfi)
+            {
+                const amrex::Box& bx=mfi.validbox();
+                const auto pa=pc_mf.const_array(mfi);
+                const auto ua=u_mf.const_array(mfi);
+                const auto va=v_mf.const_array(mfi);
+                const auto wa=w_mf.const_array(mfi);
+                const auto fa=f_mf.const_array(mfi);
+                for(int kk=bx.smallEnd(2);kk<=bx.bigEnd(2);++kk)
+                for(int jj=bx.smallEnd(1);jj<=bx.bigEnd(1);++jj)
+                for(int ii=bx.smallEnd(0);ii<=bx.bigEnd(0);++ii)
+                {
+                    if(fa(ii,jj,kk)<AIR_FLAG) continue;
+                    pmax=std::max(pmax,std::fabs(pa(ii,jj,kk)));
+                    double d=(ua(ii,jj,kk)-ua(ii-1,jj,kk))/dx+(wa(ii,jj,kk)-wa(ii,jj,kk-1))/dz;
+                    if(p->j_dir) d+=(va(ii,jj,kk)-va(ii,jj-1,kk))/dy;
+                    if(std::fabs(d)>dmax){dmax=std::fabs(d);di=ii;dj=jj;dk=kk;}
+                }
+            }
+            const double gp=pgc->globalmax(pmax), gd=pgc->globalmax(dmax);
+            if(p->mpirank==0)
+                std::cout<<"  [pcorrlev] stage(alpha="<<alpha<<") lev="<<lev
+                         <<"  max|pcorr|="<<gp<<"  max|D.u|="<<gd
+                         <<"  @("<<di<<","<<dj<<","<<dk<<")"<<std::endl;
+        }
+    }
+#endif
 
     if(std::getenv("REEF_PROJ_CHECK"))
     projection_consistency_check(p,a,pgc,psolv,alpha);
