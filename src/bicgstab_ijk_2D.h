@@ -26,58 +26,56 @@ Author: Hans Bihs
 #include"solver.h"
 #include"increment.h"
 
-using namespace std;
+class ArrayWrapper3D;
 
+using namespace std;
 
 class bicgstab_ijk_2D final : public solver, public increment
 {
 public:
-	bicgstab_ijk_2D(lexer*,fdm*,ghostcell*);
+    bicgstab_ijk_2D(lexer*, fdm*, ghostcell*);
 
-	virtual ~bicgstab_ijk_2D();
+    virtual ~bicgstab_ijk_2D();
 
-	void start(lexer*,fdm*, ghostcell*, field&, vec&, int) override final;
-    void startf(lexer*, ghostcell*, field&, vec&, matrix_diag&, int) override final;
+    void start(lexer*, fdm*, ghostcell*, field&, vec&, int) override final;
+    void startf(lexer*, ghostcell*, field&, vec&, matrix_diag&, int) override final {};
     void startF(lexer*, ghostcell*, double*, vec&, matrix_diag&, int) override final;
     void startV(lexer*, ghostcell*, double*, vec&, matrix_diag&, int) override final;
-    void startM(lexer*, ghostcell*, double*, double*, double*, int) override final;
-    
-	void solve(lexer*, ghostcell*, vec&, matrix_diag&, int, int&,int,double);
-	
-	void fillxvec(lexer*,fdm*,field&,vec&);
-	void finalize(lexer*,fdm*,field&);
+    void startM(lexer*, ghostcell*, double*, double*, double*, int) override final {};
 
-	void fillxvecV(lexer*,double*,vec&);
-	void finalizeV(lexer*,double*);
-    
-    void fillxvecF(lexer*,double*,vec&);
-	void finalizeF(lexer*,double*);
+    void solve(lexer*, ghostcell*, vec&, matrix_diag&, int, int&,int,double);
 
-	double res_calc(lexer*,ghostcell*, double*, matrix_diag&);
-	void matvec_axb(lexer*, double*, double*, matrix_diag&);
-	void matvec_std(lexer*, double*, double*, matrix_diag&);
-    
-    void precon_setup(lexer*,ghostcell*, matrix_diag&);
-    void precon_solve(lexer*,ghostcell*,double*,double*, matrix_diag&);
-	
+    void fillxvec(lexer*, fdm*, field&, vec&);
+    void finalize(lexer*, fdm*, field&);
+
+    void fillxvecV(lexer*, double*, vec&);
+    void finalizeV(lexer*, double*);
+
+    void fillxvecF(lexer*, double*, vec&);
+    void finalizeF(lexer*, double*);
+
+    double res_calc(lexer*, ghostcell*, double*, matrix_diag&);
+    void matvec_axb(lexer*, double*, double*, matrix_diag&);
+    void matvec_std(lexer*, double*, double*, matrix_diag&);
+
+    void precon_setup(lexer*, ghostcell*, matrix_diag&);
+    void precon_solve(lexer*, ghostcell*, double*, double*, matrix_diag&);
 
 private:
+    double *sj,*rj,*r0,*vj,*tj,*pj,*ph,*sh,*x,*rhs,*aii;
 
-	double *sj,*rj,*r0,*vj,*tj,*pj,*ph,*sh,*x,*rhs,*aii;
-	
-	int *range;
+    int *range;
 
-	const double epsi;
+    static constexpr double epsi = 1e-19;
 
-	int count;
-	int margin;
+    int count;
+    int margin;
     int ulast,vlast,wlast;
-    int *flag;
+    ArrayWrapper3D *flag;
     double stop_crit;
-	
-	double alpha,beta,w1,w2,w,residual,norm_vj,norm_r0,norm_sj,norm_rj ;
+
+    double alpha,beta,w1,w2,w,residual,norm_vj,norm_r0,norm_sj,norm_rj ;
     double r_j1, r_j, sigma ;
-    
 };
 
 #endif

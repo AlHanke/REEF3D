@@ -324,7 +324,7 @@ Authors: Hans Bihs, Alexander Hanke
 #define FETALOC for(k=c->etaloc(i,j); k<c->etaloc(i,j)+1; ++k)
 
 // CONDITIONS
-#define FLEXCHECK   if(flag[IJK]>0)
+#define FLEXCHECK   if((*flag)[IJK]>0)
 #if USE_AMREX
     #define UCHECK      if(p->flag1(i,j,k)>0)
     #define UFLUIDCHECK if(p->flag1(i,j,k)>=AIR_FLAG)

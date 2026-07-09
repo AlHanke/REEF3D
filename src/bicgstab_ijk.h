@@ -28,6 +28,7 @@ Author: Hans Bihs
 
 using namespace std;
 
+class ArrayWrapper3D;
 
 class bicgstab_ijk final : public solver, public increment
 {
@@ -71,7 +72,7 @@ private:
 	int count;
 	int margin;
     int ulast,vlast,wlast;
-    int *flag;
+    ArrayWrapper3D *flag;
     double stop_crit;
 	
 	double alpha,beta,w1,w2,w,residual,norm_vj,norm_r0,norm_sj,norm_rj ;
