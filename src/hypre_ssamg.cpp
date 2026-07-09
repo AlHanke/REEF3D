@@ -34,6 +34,7 @@ hypre_ssamg::hypre_ssamg(lexer *p, fdm *a, ghostcell *pgc)
 
 hypre_ssamg::~hypre_ssamg()
 {
+    delete_solver();
     destroy_grid();
 }
 
@@ -61,7 +62,15 @@ void hypre_ssamg::start_solver45(lexer *p, fdm *a, ghostcell *pgc, field &f, int
     }
     #endif
 
-    create_solver(p, pgc);
+    #if USE_AMREX
+    if(!solver_created || created_nlevs != p->nlevs)
+    #else
+    if(!solver_created)
+    #endif
+    {
+        delete_solver();
+        create_solver(p, pgc);
+    }
 
     fill_matrix4(p, a, pgc, f);
 
@@ -73,6 +82,4 @@ void hypre_ssamg::start_solver45(lexer *p, fdm *a, ghostcell *pgc, field &f, int
     fillbackvec4(p, f, var);
 
     std::fill(a->rhsvec.V.begin(), a->rhsvec.V.end(), 0.0);
-
-    delete_solver(p, pgc);
 }
