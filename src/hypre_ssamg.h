@@ -95,7 +95,7 @@ public:
     void destroy_grid();
 
     void create_solver(lexer*, ghostcell*);
-    void delete_solver(lexer*, ghostcell*);
+    void delete_solver();
 
 private:
     HYPRE_SStructGrid     grid;
@@ -104,8 +104,8 @@ private:
     HYPRE_SStructMatrix   A;
     HYPRE_SStructVector   b;
     HYPRE_SStructVector   x;
-    HYPRE_SStructSolver   gmres_solver;
-    HYPRE_SStructSolver   ssamg;
+    HYPRE_SStructSolver   gmres_solver = nullptr;
+    HYPRE_SStructSolver   ssamg = nullptr;
     HYPRE_SStructVariable vartypes[1];
 
     // Multi-level (nlevs>1) path: the SStruct matrix is assembled as ParCSR and solved
@@ -115,8 +115,12 @@ private:
     HYPRE_ParCSRMatrix    par_A;
     HYPRE_ParVector       par_b;
     HYPRE_ParVector       par_x;
-    HYPRE_Solver          par_solver;
-    HYPRE_Solver          par_precond;
+    HYPRE_Solver          par_solver = nullptr;
+    HYPRE_Solver          par_precond = nullptr;
+
+    bool solver_created = false;
+    bool gmres_created = false;
+    int created_nlevs = -1;
 
     int numparts;
     int dimensions;
