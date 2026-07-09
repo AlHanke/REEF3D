@@ -29,7 +29,7 @@ void hypre_ssamg::solve(lexer *p)
 
     // Multi-level: PCG + BoomerAMG on the assembled ParCSR operator (SSAMG cannot set up
     // on multi-part grids; the operator is symmetric, so PCG). Single level keeps SSAMG.
-    if (p->nlevs > 1)
+    if (created_nlevs > 1)
     {
         HYPRE_ParCSRPCGSetup(par_solver, par_A, par_b, par_x);
         HYPRE_ParCSRPCGSolve(par_solver, par_A, par_b, par_x);

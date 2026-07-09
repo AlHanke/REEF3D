@@ -53,7 +53,15 @@ void hypre_ssamg::start_solver123(lexer *p, fdm *a, ghostcell *pgc, field &f, in
     }
     #endif
 
-    create_solver(p, pgc);
+    #if USE_AMREX
+    if(!solver_created || created_nlevs != p->nlevs)
+    #else
+    if(!solver_created)
+    #endif
+    {
+        delete_solver();
+        create_solver(p, pgc);
+    }
 
     fill_matrix_vel(p, a, pgc, f, var);
 
@@ -65,8 +73,6 @@ void hypre_ssamg::start_solver123(lexer *p, fdm *a, ghostcell *pgc, field &f, in
     fillbackvec_vel(p, f, var);
 
     std::fill(a->rhsvec.V.begin(), a->rhsvec.V.end(), 0.0);
-
-    delete_solver(p, pgc);
 }
 
 void hypre_ssamg::number_velocity(lexer *p, fieldint4 &cval, int var)

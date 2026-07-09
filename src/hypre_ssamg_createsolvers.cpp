@@ -65,6 +65,14 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
             (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSolve,
             (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSetup,
             par_precond);
+
+        // Record the creation state on the multi-level path too. Without this the early
+        // return leaves created_nlevs at its stale value (-1) and solver_created false, so
+        // solve() takes the created_nlevs<=1 branch and calls HYPRE_SStructGMRESSetup on the
+        // never-created single-level gmres_solver (nullptr) -> segfault. delete_solver() also
+        // keys off created_nlevs>1 to free the right objects.
+        solver_created = true;
+        created_nlevs  = p->nlevs;
         return;
     }
     #endif
@@ -111,9 +119,8 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
         HYPRE_SStructSSAMGSetTol(ssamg, p->N44);
         HYPRE_SStructSSAMGSetNonZeroGuess(ssamg);
     }
-
     // N10==41: GMRES outer solver with SSAMG preconditioner (one V-cycle per iteration)
-    if (p->N10 == 41)
+    else if (p->N10 == 41)
     {
         HYPRE_SStructSSAMGSetMaxIter(ssamg, 1);
         HYPRE_SStructSSAMGSetTol(ssamg, 0.0);
@@ -130,13 +137,20 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
             HYPRE_SStructSSAMGSolve,
             HYPRE_SStructSSAMGSetup,
             ssamg);
+
+        gmres_created = true;
     }
+
+    solver_created = true;
+    #if USE_AMREX
+    created_nlevs = p->nlevs;
+    #endif
 }
 
-void hypre_ssamg::delete_solver(lexer *p, ghostcell *pgc)
+void hypre_ssamg::delete_solver()
 {
     #if USE_AMREX
-    if (p->nlevs > 1)
+    if (created_nlevs > 1)
     {
         HYPRE_ParCSRPCGDestroy(par_solver);
         HYPRE_BoomerAMGDestroy(par_precond);
@@ -144,7 +158,7 @@ void hypre_ssamg::delete_solver(lexer *p, ghostcell *pgc)
     }
     #endif
 
-    if (p->N10 == 41)
+    if (gmres_created)
         HYPRE_SStructGMRESDestroy(gmres_solver);
 
     HYPRE_SStructSSAMGDestroy(ssamg);
