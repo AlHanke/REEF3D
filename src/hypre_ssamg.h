@@ -130,8 +130,6 @@ private:
 
     int ilower[3], iupper[3];
     std::vector<double> values;
-    int num_iterations;
-    double final_res_norm;
     int stencil_indices[7];
     int nentries;
 

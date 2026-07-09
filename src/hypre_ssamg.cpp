@@ -76,9 +76,6 @@ void hypre_ssamg::start_solver45(lexer *p, fdm *a, ghostcell *pgc, field &f, int
 
     solve(p);
 
-    p->solveriter = num_iterations;
-    p->final_res  = final_res_norm;
-
     fillbackvec4(p, f, var);
 
     std::fill(a->rhsvec.V.begin(), a->rhsvec.V.end(), 0.0);

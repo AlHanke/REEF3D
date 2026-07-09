@@ -26,6 +26,7 @@ Author: Alexander Hanke
 void hypre_ssamg::solve(lexer *p)
 {
     p->solveriter = 0;
+    HYPRE_Int iters; HYPRE_Real relres;
 
     // Multi-level: PCG + BoomerAMG on the assembled ParCSR operator (SSAMG cannot set up
     // on multi-part grids; the operator is symmetric, so PCG). Single level keeps SSAMG.
@@ -34,8 +35,8 @@ void hypre_ssamg::solve(lexer *p)
         HYPRE_ParCSRPCGSetup(par_solver, par_A, par_b, par_x);
         HYPRE_ParCSRPCGSolve(par_solver, par_A, par_b, par_x);
 
-        HYPRE_PCGGetNumIterations(par_solver, &num_iterations);
-        HYPRE_PCGGetFinalRelativeResidualNorm(par_solver, &final_res_norm);
+        HYPRE_PCGGetNumIterations(par_solver, &iters);
+        HYPRE_PCGGetFinalRelativeResidualNorm(par_solver, &relres);
 
         // object_type==HYPRE_PARCSR: refresh the SStruct vector's structured data from
         // the solved ParVector so fillbackvec4's GetBoxValues sees the solution.
@@ -47,8 +48,8 @@ void hypre_ssamg::solve(lexer *p)
         HYPRE_SStructSSAMGSetup(ssamg, A, b, x);
         HYPRE_SStructSSAMGSolve(ssamg, A, b, x);
 
-        HYPRE_SStructSSAMGGetNumIterations(ssamg, &num_iterations);
-        HYPRE_SStructSSAMGGetFinalRelativeResidualNorm(ssamg, &final_res_norm);
+        HYPRE_SStructSSAMGGetNumIterations(ssamg, &iters);
+        HYPRE_SStructSSAMGGetFinalRelativeResidualNorm(ssamg, &relres);
     }
     // N10==41: GMRES + SSAMG preconditioner
     else
@@ -56,10 +57,10 @@ void hypre_ssamg::solve(lexer *p)
         HYPRE_SStructGMRESSetup(gmres_solver, A, b, x);
         HYPRE_SStructGMRESSolve(gmres_solver, A, b, x);
 
-        HYPRE_SStructGMRESGetNumIterations(gmres_solver, &num_iterations);
-        HYPRE_SStructGMRESGetFinalRelativeResidualNorm(gmres_solver, &final_res_norm);
+        HYPRE_SStructGMRESGetNumIterations(gmres_solver, &iters);
+        HYPRE_SStructGMRESGetFinalRelativeResidualNorm(gmres_solver, &relres);
     }
 
-    p->solveriter = num_iterations;
-    p->final_res  = final_res_norm;
+    p->solveriter = int(iters);
+    p->final_res  = double(relres);
 }
