@@ -96,8 +96,14 @@ private:
         amr_info.refine_grid_layout = true;
         amr_info.n_proper = 1;
         amr_info.n_error_buf.assign(max_level + 1, amrex::IntVect::TheZeroVector());
-        amr_info.ref_ratio.assign(max_level, level_ref_ratio);
+        amr_info.ref_ratio.assign(max_level + 1, level_ref_ratio);
         amr_info.max_grid_size.assign(max_level + 1, amrex::IntVect(AMREX_D_DECL(1048576, 1048576, 1048576)));
+        // Default blocking_factor is 8; on a pseudo-2D domain (1 cell in y, 2 after one
+        // refinement) no level-1 grid can satisfy it, so MakeNewGrids returns empty and no
+        // refinement ever happens. 1 per direction lifts the constraint (tune upward per
+        // direction for 3D box-size/performance if needed).
+        // Note: Adding blocking_factor breaks static pressure test.
+        // amr_info.blocking_factor.assign(max_level + 1, level_ref_ratio);
         return amr_info;
     }
 
@@ -600,8 +606,14 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
 
         // Skip probing if the refined grid domain would exceed a practical limit.
         // This prevents overflow issues in AMReX's error estimation at very fine levels.
+        // Only consider directions that are genuinely resolved at level 0: a pseudo-2D run
+        // has 1 cell in the thin direction (2 after one refinement), which must NOT trip the
+        // "too fine to subdivide" break, or refinement never happens in 2D.
         amrex::IntVect domain_cells = amrex_geometry[lev].Domain().length();
-        if (domain_cells[0] <= 2 || domain_cells[1] <= 2 || domain_cells[2] <= 2)
+        amrex::IntVect dom0_cells   = amrex_geometry[0].Domain().length();
+        if ((dom0_cells[0] > 1 && domain_cells[0] <= 2)
+         || (dom0_cells[1] > 1 && domain_cells[1] <= 2)
+         || (dom0_cells[2] > 1 && domain_cells[2] <= 2))
             break;  // Grid is too fine to subdivide further
 
         amrex::Vector<amrex::BoxArray> new_grids(max_nlevs);
