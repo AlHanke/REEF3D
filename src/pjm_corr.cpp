@@ -537,7 +537,12 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
     LOOP
     pcorr(i,j,k) = cos(PI*p->pos_x())*cos(PI*p->pos_z())
                  * (p->j_dir ? cos(PI*p->pos_y()) : 1.0);
-    pgc->start4(p,pcorr,40);
+    #if USE_AMREX
+    const int gcval_press = (p->nlevs > 1) ? 41 : 40;
+    #else
+    const int gcval_press = 40;
+    #endif
+    pgc->start4(p,pcorr,gcval_press);   // match production: gcv 41 does the stagger-correct C-F ghost
 
     field4 u0(p), v0(p), w0(p), Lp(p);
     u0.setVal(0.0,true);
