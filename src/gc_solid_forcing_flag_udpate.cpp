@@ -37,7 +37,7 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
         if(df>0 && p->DF(i+1,j,k)<0)
             df=-1;
 
-        p->DF1[IJK]=df;
+        p->DF1(i,j,k)=df;
     }
 
     // 2
@@ -48,7 +48,7 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
         if(df>0 && p->DF(i,j+1,k)<0)
             df=-1;
 
-        p->DF2[IJK]=df;
+        p->DF2(i,j,k)=df;
     }
 
     // 3
@@ -59,7 +59,7 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
         if(df>0 && p->DF(i,j,k+1)<0)
             df=-1;
 
-        p->DF3[IJK]=df;
+        p->DF3(i,j,k)=df;
     }
 
     #if USE_AMREX
