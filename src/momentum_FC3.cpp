@@ -46,6 +46,9 @@ Author: Hans Bihs
 #include"picard_void.h"
 #include"heat.h"
 #include"concentration.h"
+#if USE_AMREX
+#include"amrex_solver.h"
+#endif
 
 momentum_FC3::momentum_FC3(lexer *p, fdm *a, ghostcell *pgc, convection *pconvection, convection *ppfsfdisc, diffusion *pdiffusion, pressure* ppressure, poisson* ppoisson,
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver, ioflow *pioflow,
@@ -113,12 +116,19 @@ momentum_FC3::momentum_FC3(lexer *p, fdm *a, ghostcell *pgc, convection *pconvec
     ppicard = new picard_lsm(p);
     else
     ppicard = new picard_void(p);
+
+    #if USE_AMREX
+    amrex_solve = new amrex_solver(p);
+    #endif
 }
 
 momentum_FC3::~momentum_FC3()
 {
     delete pupdate;
     delete ppicard;
+    #if USE_AMREX
+    delete amrex_solve;
+    #endif
 }
 
 void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof)
@@ -156,7 +166,9 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pturb->isource(p,a);
     pflow->isource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
+    #if !USE_AMREX
     ppress->upgrad(p,a,a->eta,a->eta_n);
+    #endif
     irhs(p,a);
     pconvec->start(p,a,a->u,1,a->u,a->v,a->w);
     pdiff->diff_u(p,a,pgc,psolv,udiff,a->u,a->u,a->v,a->w,1.0);
@@ -173,7 +185,9 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pturb->jsource(p,a);
     pflow->jsource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+    #if !USE_AMREX
     ppress->vpgrad(p,a,a->eta,a->eta_n);
+    #endif
     jrhs(p,a);
     pconvec->start(p,a,a->v,2,a->u,a->v,a->w);
     pdiff->diff_v(p,a,pgc,psolv,vdiff,a->v,a->u,a->v,a->w,1.0);
@@ -190,7 +204,9 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pturb->ksource(p,a);
     pflow->ksource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
+    #if !USE_AMREX
     ppress->wpgrad(p,a,a->eta,a->eta_n);
+    #endif
     krhs(p,a);
     pconvec->start(p,a,a->w,3,a->u,a->v,a->w);
     pdiff->diff_w(p,a,pgc,psolv,wdiff,a->w,a->u,a->v,a->w,1.0);
@@ -205,7 +221,11 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
                            urk1, vrk1, wrk1, fx, fy, fz, 0, 1.0, false);
 
     pflow->pressure_io(p,a,pgc);
+    #if USE_AMREX
+    amrex_solve->start(p,a,pgc,urk1,vrk1,wrk1,a->phi,1.0);
+    #else
     ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk1, vrk1, wrk1, 1.0);
+    #endif
 
     pflow->u_relax(p,a,pgc,urk1);
     pflow->v_relax(p,a,pgc,vrk1);
@@ -253,7 +273,9 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pturb->isource(p,a);
     pflow->isource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
+    #if !USE_AMREX
     ppress->upgrad(p,a,a->eta,a->eta_n);
+    #endif
     irhs(p,a);
     pconvec->start(p,a,urk1,1,urk1,vrk1,wrk1);
     pdiff->diff_u(p,a,pgc,psolv,udiff,urk1,urk1,vrk1,wrk1,0.25);
@@ -270,7 +292,9 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pturb->jsource(p,a);
     pflow->jsource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+    #if !USE_AMREX
     ppress->vpgrad(p,a,a->eta,a->eta_n);
+    #endif
     jrhs(p,a);
     pconvec->start(p,a,vrk1,2,urk1,vrk1,wrk1);
     pdiff->diff_v(p,a,pgc,psolv,vdiff,vrk1,urk1,vrk1,wrk1,0.25);
@@ -287,7 +311,9 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pturb->ksource(p,a);
     pflow->ksource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
+    #if !USE_AMREX
     ppress->wpgrad(p,a,a->eta,a->eta_n);
+    #endif
     krhs(p,a);
     pconvec->start(p,a,wrk1,3,urk1,vrk1,wrk1);
     pdiff->diff_w(p,a,pgc,psolv,wdiff,wrk1,urk1,vrk1,wrk1,0.25);
@@ -304,7 +330,11 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     
     
     pflow->pressure_io(p,a,pgc);
+    #if USE_AMREX
+    amrex_solve->start(p,a,pgc,urk2,vrk2,wrk2,a->phi,0.25);
+    #else
     ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk2, vrk2, wrk2, 0.25);
+    #endif
 
     pflow->u_relax(p,a,pgc,urk2);
     pflow->v_relax(p,a,pgc,vrk2);
@@ -352,7 +382,9 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pturb->isource(p,a);
     pflow->isource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->u,gcval_u);
+    #if !USE_AMREX
     ppress->upgrad(p,a,a->eta,a->eta_n);
+    #endif
     irhs(p,a);
     pconvec->start(p,a,urk2,1,urk2,vrk2,wrk2);
     pdiff->diff_u(p,a,pgc,psolv,udiff,urk2,urk2,vrk2,wrk2,2.0/3.0);
@@ -369,7 +401,9 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pturb->jsource(p,a);
     pflow->jsource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+    #if !USE_AMREX
     ppress->vpgrad(p,a,a->eta,a->eta_n);
+    #endif
     jrhs(p,a);
     pconvec->start(p,a,vrk2,2,urk2,vrk2,wrk2);
     pdiff->diff_v(p,a,pgc,psolv,vdiff,vrk2,urk2,vrk2,wrk2,2.0/3.0);
@@ -386,7 +420,9 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pturb->ksource(p,a);
     pflow->ksource(p,a,pgc,pvrans);
     bcmom_start(a,p,pgc,pturb,a->w,gcval_w);
+    #if !USE_AMREX
     ppress->wpgrad(p,a,a->eta,a->eta_n);
+    #endif
     krhs(p,a);
     pconvec->start(p,a,wrk2,3,urk2,vrk2,wrk2);
     pdiff->diff_w(p,a,pgc,psolv,wdiff,wrk2,urk2,vrk2,wrk2,2.0/3.0);
@@ -401,7 +437,11 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
                            a->u, a->v, a->w, fx, fy, fz, 2, 2.0/3.0, true);
 
     pflow->pressure_io(p,a,pgc);
+    #if USE_AMREX
+    amrex_solve->start(p,a,pgc,a->u,a->v,a->w,a->phi,2.0/3.0);
+    #else
     ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, a->u, a->v, a->w, 2.0/3.0);
+    #endif
 
     pflow->u_relax(p,a,pgc,a->u);
     pflow->v_relax(p,a,pgc,a->v);

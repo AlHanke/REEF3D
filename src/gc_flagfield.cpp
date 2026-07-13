@@ -118,26 +118,60 @@ void ghostcell::flagfield(lexer *p)
     #endif
 
     #if USE_AMREX
-    // Bottom solid-wall ghosts -> OBJ_FLAG. The -1->OBJ conversion above runs before
-    // fillBoundary(), which overwrites the domain-boundary ghost ring, leaving the bottom wall
-    // ghost as an AIR-like -1 on the coarse level -- and fillHigherLevels leaves the FINE-level
-    // exterior ghost at 0 (uninitialised). poisson_pcorr's wall fold needs flag4<0, so both an
-    // AIR-like -1 AND a 0 ghost skip the fold, leaving a spurious floor coupling in the matrix
-    // (projcheck operator residual O(1e-3) at fine floor cells). Re-tag ONLY the z-low (bottom)
-    // ghost ring -- the single true solid wall of this domain. Condition catches BOTH f==0 (fine)
-    // and f<0 air-like (coarse); the lateral/top boundaries are symmetry planes (kept), the free
-    // surface is internal (kept Dirichlet), INFLOW/OUTFLOW and already-solid are preserved.
+    // Domain-boundary ghost flag4 on every level -> OBJ_FLAG at CLOSED walls. The -1->OBJ
+    // conversion above runs before fillBoundary(), which overwrites the domain-boundary ghost
+    // ring, leaving the ghost AIR-like (-1) on the coarse level -- and fillHigherLevels leaves the
+    // FINE-level exterior ghost at 0 (uninitialised). poisson_pcorr's wall-Neumann fold (solidnb)
+    // only fires for a solid flag4<0, so a 0 (fine) OR air-like -1 (coarse) ghost at a closed
+    // boundary SKIPS the fold, leaving a dangling coupling HYPRE drops -> a non-conservative row ->
+    // projection blow-up. Static built all its walls at init (via the full flag machinery) so was
+    // immune; an adaptive regrid only re-derives the fine level through fillHigherLevels, so its
+    // lateral/top walls arrive as 0 -- the "AMR stop after 1 iteration".
+    //
+    // Re-tag every CLOSED, non-periodic domain-boundary ghost. A solid WALL (bcside==21) and a
+    // SYMMETRY plane (bcside==3) both take homogeneous Neumann on the pressure matrix, so both map
+    // to OBJ_FLAG; INFLOW (1,6) / OUTFLOW (2,7) are excluded (they carry INFLOW/OUTFLOW_FLAG and a
+    // different BC). Velocity BCs are unaffected -- they come from the bcside-driven BCRec fill in
+    // start1/2/3, not flag4. Face->bcside map (lexer, per grid_amrex bc_type): x-/x+ =1/4,
+    // y-/y+ =3/2, z-/z+ =5/6. Already-solid, water/interior, INFLOW and OUTFLOW cells are preserved.
+    // CRITICAL level-0 caveat: the z-low (bottom) wall is re-tagged on EVERY level (it is a true
+    // solid wall and the coarse bottom arrives as air-like -1). The lateral/top walls, however, are
+    // re-tagged on the FINE levels ONLY. On the coarse level the free-surface Dirichlet anchor is
+    // COVERED away wherever a finer level refines the interface (identity rows), so the lateral/top
+    // walls staying air/Dirichlet are what keep the coarse pressure operator non-singular; forcing
+    // them Neumann there makes the (surface-covered) coarse solve singular -> the solver diverges
+    // (pres ~1e10) and the run overflows. The fine level carries the free surface itself, so its
+    // walls are safely homogeneous Neumann.
+    auto closed_bc = [](int bc){ return bc!=1 && bc!=2 && bc!=6 && bc!=7; }; // wall(21)/symmetry(3): fold
+    const bool xlo_c = closed_bc(p->bcside1) && p->periodic1==0;
+    const bool xhi_c = closed_bc(p->bcside4) && p->periodic1==0;
+    const bool ylo_c = closed_bc(p->bcside3) && p->periodic2==0;
+    const bool yhi_c = closed_bc(p->bcside2) && p->periodic2==0;
+    const bool zlo_c = closed_bc(p->bcside5) && p->periodic3==0;
+    const bool zhi_c = closed_bc(p->bcside6) && p->periodic3==0;
+
     LEVEL_LOOP
     {
+        const bool fine = (p->level > 0);
         const auto dom = p->amrex_geometry[p->level].Domain();
         TILE_LOOP
         for (i = -margin; i <= (p->amr_tile_hi.x - p->amr_tile_lo.x)+margin; ++i)
         for (j = -margin; j <= (p->amr_tile_hi.y - p->amr_tile_lo.y)+margin; ++j)
         for (k = -margin; k <= (p->amr_tile_hi.z - p->amr_tile_lo.z)+margin; ++k)
         {
+            const int f = p->flag4(i,j,k);
+            if(f==INFLOW_FLAG || f==OUTFLOW_FLAG || f<=SOLID_FLAG || f>=WATER_FLAG) continue;
+
+            const int gi = i + p->amr_tile_lo.x;
+            const int gj = j + p->amr_tile_lo.y;
             const int gk = k + p->amr_tile_lo.z;
-            const int f  = p->flag4(i,j,k);
-            if(gk<dom.smallEnd(2) && f!=INFLOW_FLAG && f!=OUTFLOW_FLAG && f>SOLID_FLAG && f<WATER_FLAG)
+
+            const bool wall =
+                   (gk<dom.smallEnd(2) && zlo_c)                                    // z-low: ALL levels
+                || (fine && ( (gi<dom.smallEnd(0) && xlo_c) || (gi>dom.bigEnd(0) && xhi_c)
+                           || (gj<dom.smallEnd(1) && ylo_c) || (gj>dom.bigEnd(1) && yhi_c)
+                           || (gk>dom.bigEnd(2) && zhi_c) ));                       // lateral/top: FINE only
+            if(wall)
                 p->flag4(i,j,k)=OBJ_FLAG;
         }
     }

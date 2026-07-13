@@ -44,6 +44,9 @@ class heat;
 class concentration;
 class sixdof;
 class fsi;
+#if USE_AMREX
+class amrex_solver;
+#endif
 
 using namespace std;
 
@@ -73,6 +76,9 @@ private:
     field3 wdiff,wrk1,wrk2,fz;
     field4 ls,frk1,frk2;
 
+    #if USE_AMREX
+    amrex_solver *amrex_solve;
+    #endif
     convection *pconvec;
     convection *pfsfdisc;
     diffusion *pdiff;
