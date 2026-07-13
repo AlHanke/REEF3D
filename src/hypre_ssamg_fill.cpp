@@ -49,6 +49,48 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
         stencil_indices[j] = j;
 
 #if USE_AMREX
+    // REEF_CONTAINMENT_CHECK: verify the density transition (|phi| < psi) is fully inside the fine
+    // level. The band tags |phi| < 2*psi (ini_psi: psi = F45/3*(dx+dy+dz); band = 2*that), so every
+    // UNCOVERED coarse fluid cell should have |phi| >= 2*psi -- and certainly >= psi -- i.e. sit in a
+    // pure phase. If the smallest |phi| over uncovered coarse cells drops below psi, the smeared
+    // density jump reaches the coarse level (NOT contained): gridding/proper-nesting eroded the
+    // patch, the regrid lagged the interface, or the band is too narrow.
+    if (std::getenv("REEF_CONTAINMENT_CHECK") && p->nlevs > 1)
+    {
+        const double psi = p->psi;
+        for (int lev = 0; lev < p->nlevs - 1; ++lev)
+        {
+            const auto& cover = p->amr_cell_mf[lev];
+            const auto& phimf = a->phi.GetMultiFab(lev);
+            const auto& fmf   = p->flag4.GetMultiFab(lev);
+            double loc_min = 1e300; int mi=-1, mj=-1, mk=-1;
+            for (amrex::MFIter mfi(cover); mfi.isValid(); ++mfi)
+            {
+                const amrex::Box& bx = mfi.validbox();
+                const auto cov = cover.const_array(mfi);
+                const auto ph  = phimf.const_array(mfi);
+                const auto fa  = fmf.const_array(mfi);
+                for (int kk=bx.smallEnd(2); kk<=bx.bigEnd(2); ++kk)
+                for (int jj=bx.smallEnd(1); jj<=bx.bigEnd(1); ++jj)
+                for (int ii=bx.smallEnd(0); ii<=bx.bigEnd(0); ++ii)
+                {
+                    if (fa(ii,jj,kk) < AIR_FLAG) continue;   // not fluid
+                    if (cov(ii,jj,kk) == 0)      continue;   // covered -> fine authoritative
+                    const double aph = std::fabs(ph(ii,jj,kk));
+                    if (aph < loc_min) { loc_min=aph; mi=ii; mj=jj; mk=kk; }
+                }
+            }
+            const double g_min = -pgc->globalmax(-loc_min);
+            if (p->mpirank == 0)
+                std::cout << "  [contain] lev=" << lev << "  psi=" << psi << "  band=" << 2*psi
+                          << "  min|phi| over uncovered fluid=" << g_min
+                          << (g_min >= psi ? "  -> jump CONTAINED" : "  -> NOT CONTAINED") << std::endl;
+            if (loc_min == g_min && mi >= 0)
+                std::cout << "    [contain] closest uncovered cell lev=" << lev << " ("
+                          << mi << "," << mj << "," << mk << ") |phi|=" << g_min << std::endl;
+        }
+    }
+
     // Correct the coarse-fine interface coefficients in a->M and fill cf_links[].coeff.
     // This rescales the (fine-spacing) interface entries poisson_pcorr already wrote to
     // the true C-F centre distance, redistributes the coarse flux over the fine
@@ -83,31 +125,86 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
             }
         }
 
-        // double maxrs = 0.0;
-        // for (int lev = 0; lev < p->nlevs; ++lev)
-        // {
-        //     const auto& cmf  = cval4.GetMultiFab(lev);
-        //     const auto& f4mf = p->flag4.GetMultiFab(lev);
-        //     for (amrex::MFIter mfi(cmf); mfi.isValid(); ++mfi)
-        //     {
-        //         const amrex::Box& bx = mfi.validbox();
-        //         const auto ca = cmf.const_array(mfi);
-        //         const auto fa = f4mf.const_array(mfi);
-        //         amrex::LoopOnCpu(bx, [&](int ii, int jj, int kk) noexcept
-        //         {
-        //             if (fa(ii, jj, kk) < AIR_FLAG) return;
-        //             const int n = ca(ii, jj, kk);
-        //             const double rs = a->M.p[n] + a->M.n[n] + a->M.s[n]
-        //                             + a->M.w[n] + a->M.e[n]
-        //                             + a->M.t[n] + a->M.b[n] + cfsum[n];
-        //             maxrs = std::max(maxrs, std::fabs(rs));
-        //         });
-        //     }
-        // }
-        // const double g_maxrs = pgc->globalmax(maxrs);
-        // if (p->mpirank == 0)
-        //     std::cout << "\n  [rowsum] max|stencil+cflink| = " << g_maxrs
-        //               << "  (interior ~0, wall-BC cells show wall coeff)" << std::endl;
+        // REEF_ROWSUM_PROBE: report the worst |stencil+cflink| rowsum and, at that cell,
+        // dump every cf_link originating from it (to_ijk / axis / high / coeff). A duplicated
+        // fine->coarse link shows up as >1 link for the same (axis,side) and a rowsum imbalance
+        // of ~one face coefficient. Compare single-box vs multi-box to localise the multi-box
+        // C-F operator inconsistency.
+        if (std::getenv("REEF_ROWSUM_PROBE"))
+        {
+            // cf_links census (this rank): count fine->coarse links per axis and the max
+            // from-index each axis reaches, to reveal whether the x-pos edge (x=79) has links.
+            int fc_axis[3]={0,0,0}, fc_maxfrom[3]={-1,-1,-1}, fc_x79=0;
+            for (const auto& L : cf_links)
+            {
+                if (L.to_part >= L.from_part) continue; // fine->coarse only
+                if (L.axis>=0 && L.axis<3)
+                {
+                    ++fc_axis[L.axis];
+                    fc_maxfrom[L.axis] = std::max(fc_maxfrom[L.axis], L.from_ijk[L.axis]);
+                }
+                if (L.axis==0 && L.from_ijk[0]==79) ++fc_x79;
+            }
+            std::cout << "  [cflinks] rank=" << p->mpirank
+                      << "  fine->coarse per-axis x/y/z=" << fc_axis[0] << "/" << fc_axis[1] << "/" << fc_axis[2]
+                      << "  max from-index x/y/z=" << fc_maxfrom[0] << "/" << fc_maxfrom[1] << "/" << fc_maxfrom[2]
+                      << "  links@x=79: " << fc_x79 << std::endl;
+
+            double maxrs = 0.0; int w_lev=-1, w_ijk[3]={-1,-1,-1};
+            double w_stncl=0.0, w_cf=0.0;
+            for (int lev = 0; lev < p->nlevs; ++lev)
+            {
+                const auto& cmf  = cval4.GetMultiFab(lev);
+                const auto& f4mf = p->flag4.GetMultiFab(lev);
+                for (amrex::MFIter mfi(cmf); mfi.isValid(); ++mfi)
+                {
+                    const amrex::Box& bx = mfi.validbox();
+                    const auto ca = cmf.const_array(mfi);
+                    const auto fa = f4mf.const_array(mfi);
+                    for (int kk=bx.smallEnd(2); kk<=bx.bigEnd(2); ++kk)
+                    for (int jj=bx.smallEnd(1); jj<=bx.bigEnd(1); ++jj)
+                    for (int ii=bx.smallEnd(0); ii<=bx.bigEnd(0); ++ii)
+                    {
+                        if (fa(ii,jj,kk) < AIR_FLAG) continue;
+                        const int n = ca(ii,jj,kk);
+                        const double stncl = a->M.p[n] + a->M.n[n] + a->M.s[n]
+                                           + a->M.w[n] + a->M.e[n] + a->M.t[n] + a->M.b[n];
+                        const double rs = stncl + cfsum[n];
+                        if (std::fabs(rs) > maxrs)
+                        {
+                            maxrs = std::fabs(rs); w_lev=lev;
+                            w_ijk[0]=ii; w_ijk[1]=jj; w_ijk[2]=kk;
+                            w_stncl=stncl; w_cf=cfsum[n];
+                        }
+                    }
+                }
+            }
+            const double g_maxrs = pgc->globalmax(maxrs);
+            if (p->mpirank == 0)
+                std::cout << "\n  [rowsum] max|stencil+cflink| = " << g_maxrs
+                          << "  (interior ~0, wall-BC cells show wall coeff)" << std::endl;
+            // The rank holding the global worst dumps its cell + originating cf_links.
+            if (w_lev >= 0 && maxrs == g_maxrs)
+            {
+                int nlinks = 0;
+                std::cout << "  [rowsum] worst lev=" << w_lev
+                          << " (" << w_ijk[0] << "," << w_ijk[1] << "," << w_ijk[2] << ")"
+                          << "  stencilsum=" << w_stncl << "  cflinksum=" << w_cf
+                          << "  rank=" << p->mpirank << std::endl;
+                for (const auto& L : cf_links)
+                {
+                    if (L.from_part != w_lev) continue;
+                    if (L.from_ijk[0]!=w_ijk[0] || L.from_ijk[1]!=w_ijk[1] || L.from_ijk[2]!=w_ijk[2]) continue;
+                    ++nlinks;
+                    std::cout << "  [rowsum]   link#" << nlinks
+                              << " -> part=" << L.to_part
+                              << " to=(" << L.to_ijk[0] << "," << L.to_ijk[1] << "," << L.to_ijk[2] << ")"
+                              << " axis=" << L.axis << " high=" << L.high
+                              << " coeff=" << L.coeff << " entry=" << L.entry << std::endl;
+                }
+                std::cout << "  [rowsum]   total cf_links from this cell = " << nlinks << std::endl;
+            }
+        }
     }
 
     // RHS nullspace projection (multi-level all-Neumann composite operator). The symmetric
@@ -158,6 +255,45 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
                       << (project ? "  -- projected out" : "") << std::endl;
     }
 
+    // REEF_BAND_PIN (diagnostic gate): pin one DOF on the finest level to a homogeneous Dirichlet
+    // datum (p=0). The thin adaptive interface band is a near-singular Neumann operator -- the
+    // "band-drift" mode (band pressure shifting as a whole relative to the anchored coarse) has a
+    // tiny eigenvalue, so GMRES converges the residual but the solution grows ~1e10 along it. One
+    // pin on the (connected) band removes that mode. Deterministic pick: the globally-lowest-index
+    // fluid cell on the finest level, so the choice is rank- and layout-independent. This confirms
+    // the diagnosis; the permanent fix is the covered-cell restriction coupling (no pin). NOTE:
+    // assumes the fine region is a single connected component -- a fragmented band needs one pin
+    // per component.
+    const bool band_pin = (std::getenv("REEF_BAND_PIN") != nullptr) && (p->nlevs > 1);
+    int pin_lev = -1, pin_ijk[3] = {-1, -1, -1};
+    if (band_pin)
+    {
+        const int flev = p->nlevs - 1;                 // finest level carries the band
+        const auto& cmf = cval4.GetMultiFab(flev);
+        const auto& fmf = p->flag4.GetMultiFab(flev);
+        double local_key = 1e300; int loc[3] = {-1, -1, -1};
+        for (amrex::MFIter mfi(cmf); mfi.isValid(); ++mfi)
+        {
+            const amrex::Box& bx = mfi.validbox();
+            const auto fa = fmf.const_array(mfi);
+            for (int kk = bx.smallEnd(2); kk <= bx.bigEnd(2); ++kk)
+            for (int jj = bx.smallEnd(1); jj <= bx.bigEnd(1); ++jj)
+            for (int ii = bx.smallEnd(0); ii <= bx.bigEnd(0); ++ii)
+            {
+                if (fa(ii, jj, kk) < AIR_FLAG) continue;
+                const double key = (double(ii) * 8192.0 + double(jj)) * 8192.0 + double(kk);
+                if (key < local_key) { local_key = key; loc[0]=ii; loc[1]=jj; loc[2]=kk; }
+            }
+        }
+        const double gkey = -pgc->globalmax(-local_key);   // global min key (collective on all ranks)
+        if (loc[0] >= 0 && local_key == gkey)
+        {
+            pin_lev = flev; pin_ijk[0]=loc[0]; pin_ijk[1]=loc[1]; pin_ijk[2]=loc[2];
+            std::cout << "  [bandpin] pin lev=" << flev << " (" << loc[0] << "," << loc[1]
+                      << "," << loc[2] << ")=0  rank=" << p->mpirank << std::endl;
+        }
+    }
+
     for (int lev = 0; lev < p->nlevs; ++lev)
     {
         auto& cval4_mf      = cval4.GetMultiFab(lev);
@@ -186,6 +322,10 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
 
             auto is_solved = [&](int ii, int jj, int kk)
             {
+                // Pinned cell -> not solved: emitted as an identity row (x=b=0 => p=0), a single
+                // Dirichlet datum that removes the band-drift near-null mode (REEF_BAND_PIN).
+                if (band_pin && lev == pin_lev
+                    && ii == pin_ijk[0] && jj == pin_ijk[1] && kk == pin_ijk[2]) return false;
                 return flag_arr(ii, jj, kk) >= AIR_FLAG
                     && !(has_cover && cover_arr(ii, jj, kk) == 0);
             };
@@ -288,11 +428,16 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
     // that owns the "from" cell recorded the link, so no ownership re-check is needed.
     for (const auto& L : cf_links)
     {
+        // The pinned cell is a pure identity row: zero its outgoing C-F entries too, else the
+        // non-stencil couplings would re-populate the row that is_solved emitted as identity.
+        const bool pinned = (band_pin && L.from_part == pin_lev
+            && L.from_ijk[0]==pin_ijk[0] && L.from_ijk[1]==pin_ijk[1] && L.from_ijk[2]==pin_ijk[2]);
+
         int    idx[3] = {L.from_ijk[0], L.from_ijk[1], L.from_ijk[2]};
         int    ent    = L.entry;
         const int lev   = L.from_part;
         const auto V_lev = p->amrex_geometry[lev].CellSizeArray()[0] * (p->j_dir ? p->amrex_geometry[lev].CellSizeArray()[1] : 1.0) * p->amrex_geometry[lev].CellSizeArray()[2];
-        double val    = L.coeff * V_lev;
+        double val    = pinned ? 0.0 : L.coeff * V_lev;
         HYPRE_SStructMatrixSetValues(A, L.from_part, idx, variable, 1, &ent, &val);
     }
 
@@ -660,13 +805,13 @@ void hypre_ssamg::cf_velocity_correction(lexer* p, fdm* a, ghostcell* pgc,
                 // and in projcheck (analytic pcorr -- identify by pc/pf matching projprobe).
                 if (std::getenv("REEF_CF_FACE_PROBE"))
                 {
-                    const bool corner = (fiv[0]==8 && fiv[1]==8 && fiv[2]==23);
-                    const bool sample = ((fiv[0]==12 || fiv[0]==16) && fiv[1]==8 && fiv[2]==23
-                                         && axis==2 && high);
-                    if (corner || sample)
-                        std::cout << "  [cffaceprobe] " << (corner ? "CORNER " : "sample ")
-                                  << "fiv=(" << fiv[0] << "," << fiv[1] << "," << fiv[2] << ")"
+                    // Target the projcheck worst cell (79,0,1) and its immediate x-neighbours,
+                    // dumping EVERY C-F link that touches them (any axis/side) + the corrected face.
+                    const bool tgt = (fiv[1]==0 && fiv[2]==1 && (fiv[0]>=78 && fiv[0]<=80));
+                    if (tgt)
+                        std::cout << "  [cffaceprobe] fiv=(" << fiv[0] << "," << fiv[1] << "," << fiv[2] << ")"
                                   << " axis=" << axis << " high=" << high
+                                  << "  corrected_face=(" << face[0] << "," << face[1] << "," << face[2] << ")"
                                   << "  |L.coeff|=" << absnew << "  dx=" << dx[axis]
                                   << "  pc=" << pc << " pf=" << pf << " grad=" << grad
                                   << "  delta=" << delta

@@ -95,7 +95,7 @@ private:
         amr_info.check_input = false;
         amr_info.refine_grid_layout = true;
         amr_info.n_proper = 1;
-        amr_info.n_error_buf.assign(max_level + 1, amrex::IntVect::TheZeroVector());
+        amr_info.n_error_buf.assign(max_level + 1, 2*amrex::IntVect::TheUnitVector());
         amr_info.ref_ratio.assign(max_level + 1, level_ref_ratio);
         amr_info.max_grid_size.assign(max_level + 1, amrex::IntVect(AMREX_D_DECL(1048576, 1048576, 1048576)));
         // Default blocking_factor is 8; on a pseudo-2D domain (1 cell in y, 2 after one
@@ -533,7 +533,13 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         amrex_refined_grid_coords,
         phi_mfs,
         fb_mfs,
-        static_cast<amrex::Real>(0/*p->F45*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP])*/),
+        // Tag band 2*psi puts the C-F ring right at the edge of the Heaviside
+        // zone, where the pressure curvature from the density transition makes
+        // the (density-blind) C-F interpolation inject flux errors into the
+        // projection. REEF_TAG_BAND overrides the factor (default 2) for
+        // experiments; larger values push the C-F into uniform-density fluid.
+        static_cast<amrex::Real>((std::getenv("REEF_TAG_BAND") ? std::atof(std::getenv("REEF_TAG_BAND")) : 2.0)
+                                 *p->F45*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP])),
         static_cast<amrex::Real>(0/*1.6*(1.0/3.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP])*/));
 
     // Extend geometry/BA/DM vectors to full max_nlevs so MakeNewGrids can
