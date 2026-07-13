@@ -209,6 +209,7 @@ void driver::driver_ini_cfd()
 
     p->regrid(a,preini,p6dof,pgc,pflow);
     // ppress->rebalance(p,a,pgc,ppois,psolv,pflow);
+    ptstep->start(a,p,pgc,pturb);
 
     if(p->I12>=1)
     pini->hydrostatic(p,a,pgc);

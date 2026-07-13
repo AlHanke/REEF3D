@@ -62,7 +62,9 @@ int ghostcell::globalimax(int sendimax)
 
 double ghostcell::timesync(double t)
 {
-    MPI_Bcast(&t,1,MPI_DOUBLE,0,mpi_comm);
+    // AMR requires a global minimum time step across all ranks, not just rank 0.
+    // The smaller dt is only computed if a fine level exists on a rank, so the global minimum must be computed across all ranks.
+    MPI_Allreduce(MPI_IN_PLACE,&t,1,MPI_DOUBLE,MPI_MIN,mpi_comm);
     return t;
 }
 
