@@ -1173,8 +1173,8 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                                         geoms, p->simtime,
                                         level_steps, ref_ratio);
 
-            if (!p->j_dir)
-                print2D_amrex(p, plot_mfs_data, varnames, num);
+            // if (!p->j_dir)
+            //     print2D_amrex(p, plot_mfs_data, varnames, num);
         }
         #endif
 

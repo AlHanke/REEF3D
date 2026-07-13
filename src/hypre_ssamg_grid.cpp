@@ -133,24 +133,87 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
             {
                 if (!in_domain(halo)) continue;
 
+                // Identify the face normal as the single thin direction. In pseudo-2D the
+                // inactive y-direction is a singleton cell, so an x- or z-normal halo is thin
+                // in BOTH its normal and y -> n_thin would be 2 and the face (e.g. the x-pos
+                // C-F interface) would be wrongly skipped. Exclude the inactive y-axis from the
+                // count so pseudo-2D x/z faces are detected as thin-in-one.
                 int normal = -1, n_thin = 0;
                 for (int i = 0; i < 3; ++i)
+                {
+                    if (i == 1 && !p->j_dir) continue;   // y inactive (pseudo-2D): not a face normal
                     if (halo.smallEnd(i) == halo.bigEnd(i)) { normal = i; ++n_thin; }
+                }
                 if (n_thin != 1) continue;
 
                 halo &= amrex::grow(fine_ba[b], normal, 1);
 
-                const auto box_c = amrex::coarsen(halo, rr);
-                const auto box_f = amrex::refine(box_c, rr);
-
-                for (int i = 0; i < 3; ++i)
+                // A genuine coarse-fine ghost cell lies over coarse (uncovered) territory. Where
+                // this fine box's halo shell overlaps ANOTHER fine box at the same level the seam
+                // is fine-fine, not coarse-fine: HYPRE's intra-part 7-point stencil already
+                // couples the two fine boxes there, so emitting a C-F coupling would zero that
+                // stencil slot (amr_cf_coefficients) and decouple the boxes across the seam,
+                // injecting a spurious pressure jump / stray interface velocity. Restrict the halo
+                // to the part not covered by fine_ba so only real C-F faces produce cf_pairs.
+                for (const amrex::Box& halo_cf : fine_ba.complementIn(halo))
                 {
-                    for (auto& [idx, overlap] : fine_ba.intersections(amrex::adjCellHi(box_f, i, 1)))
-                        cf_pairs.emplace_back(box_c, overlap, 2*i+1);
-                    for (auto& [idx, overlap] : fine_ba.intersections(amrex::adjCellLo(box_f, i, 1)))
-                        cf_pairs.emplace_back(box_c, overlap, 2*i);
+                    const auto box_c = amrex::coarsen(halo_cf, rr);
+                    const auto box_f = amrex::refine(box_c, rr);
+
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        for (auto& [idx, overlap] : fine_ba.intersections(amrex::adjCellHi(box_f, i, 1)))
+                            cf_pairs.emplace_back(box_c, overlap, 2*i+1);
+                        for (auto& [idx, overlap] : fine_ba.intersections(amrex::adjCellLo(box_f, i, 1)))
+                            cf_pairs.emplace_back(box_c, overlap, 2*i);
+                    }
                 }
             }
+        }
+
+        // REEF_GRID_DEBUG: dump the fine box layout, the halo faces each box produces, and the
+        // cf_pairs dir-histogram, so a missing C-F face (e.g. the x-pos edge yielding no links)
+        // can be traced to the halo/in_domain/complementIn step. Rank 0 only.
+        if (std::getenv("REEF_GRID_DEBUG") && p->mpirank == 0)
+        {
+            std::cout << "\n  [griddbg] lev=" << lev << " base_hi=("
+                      << base_hi[0] << "," << base_hi[1] << "," << base_hi[2] << ")"
+                      << "  nfineboxes=" << fine_ba.size() << std::endl;
+            for (int b = 0; b < (int)fine_ba.size(); ++b)
+            {
+                const auto& fb = fine_ba[b];
+                std::cout << "  [griddbg] box " << b << " ["
+                          << fb.smallEnd(0) << ".." << fb.bigEnd(0) << " , "
+                          << fb.smallEnd(1) << ".." << fb.bigEnd(1) << " , "
+                          << fb.smallEnd(2) << ".." << fb.bigEnd(2) << "]" << std::endl;
+                for (auto halo : amrex::boxDiff(amrex::grow(fb, 1), fb))
+                {
+                    const bool ind = in_domain(halo);
+                    int normal=-1, n_thin=0;
+                    for (int i=0;i<3;++i)
+                    {
+                        if (i==1 && !p->j_dir) continue;
+                        if (halo.smallEnd(i)==halo.bigEnd(i)) { normal=i; ++n_thin; }
+                    }
+                    int ncomp = 0;
+                    if (ind && n_thin==1)
+                    {
+                        amrex::Box h2 = halo & amrex::grow(fb, normal, 1);
+                        ncomp = (int)fine_ba.complementIn(h2).size();
+                    }
+                    std::cout << "  [griddbg]   halo ["
+                              << halo.smallEnd(0) << ".." << halo.bigEnd(0) << " , "
+                              << halo.smallEnd(1) << ".." << halo.bigEnd(1) << " , "
+                              << halo.smallEnd(2) << ".." << halo.bigEnd(2) << "]"
+                              << " in_domain=" << ind << " normal=" << normal
+                              << " n_thin=" << n_thin << " complementIn_pieces=" << ncomp << std::endl;
+                }
+            }
+            int dirh[6]={0,0,0,0,0,0};
+            for (const auto& cp : cf_pairs) { int d=std::get<2>(cp); if(d>=0&&d<6) ++dirh[d]; }
+            std::cout << "  [griddbg] cf_pairs by dir (x-,x+,y-,y+,z-,z+)= "
+                      << dirh[0] << " " << dirh[1] << " " << dirh[2] << " "
+                      << dirh[3] << " " << dirh[4] << " " << dirh[5] << std::endl;
         }
 
         // --- Add the coarse-fine couplings as non-stencil graph entries ---------
@@ -206,8 +269,24 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
             cf_links.push_back({from_part, {f[0], f[1], f[2]},
                                 to_part,   {t[0], t[1], t[2]}, axis, high, stencil_size + k, 0.0});
 
-            if(high)
-            cf_masks.insert({from_part, from[0], from[1], from[2], axis});
+            // Mask the fine C-F face out of the interior velcorr loop so cf_velocity_correction
+            // is its SOLE writer. HIGH fine->coarse link: the fine cell's own high face (cell
+            // `from`, +axis). LOW fine->coarse link: the fine cell's low face = cell (from-e)'s
+            // +axis face. The low case matters on a phi-following STAIRCASE patch, where from-e is
+            // a valid in-patch fine cell the interior loop would otherwise ALSO write (count==2
+            // double-correction -> D.G != L). Harmless at a flat edge (from-e is out-of-patch, so
+            // the interior loop never visits it). Only fine->coarse links (from_part>to_part) are
+            // corrected by cf_velocity_correction, so only those are masked.
+            if(from_part > to_part)
+            {
+                if(high)
+                    cf_masks.insert({from_part, from[0], from[1], from[2], axis});
+                else
+                {
+                    int e[3] = {0,0,0}; e[axis] = 1;
+                    cf_masks.insert({from_part, from[0]-e[0], from[1]-e[1], from[2]-e[2], axis});
+                }
+            }
         };
 
         for (const auto& [coarse_box, fine_box, dir] : cf_pairs)

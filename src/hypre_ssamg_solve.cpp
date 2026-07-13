@@ -28,15 +28,16 @@ void hypre_ssamg::solve(lexer *p)
     p->solveriter = 0;
     HYPRE_Int iters; HYPRE_Real relres;
 
-    // Multi-level: PCG + BoomerAMG on the assembled ParCSR operator (SSAMG cannot set up
-    // on multi-part grids; the operator is symmetric, so PCG). Single level keeps SSAMG.
+    // Multi-level: GMRES + BoomerAMG on the assembled ParCSR operator (SSAMG cannot set up
+    // on multi-part grids; the near-singular all-Neumann operator needs GMRES, not PCG).
+    // Single level keeps SSAMG.
     if (created_nlevs > 1)
     {
-        HYPRE_ParCSRPCGSetup(par_solver, par_A, par_b, par_x);
-        HYPRE_ParCSRPCGSolve(par_solver, par_A, par_b, par_x);
+        HYPRE_ParCSRGMRESSetup(par_solver, par_A, par_b, par_x);
+        HYPRE_ParCSRGMRESSolve(par_solver, par_A, par_b, par_x);
 
-        HYPRE_PCGGetNumIterations(par_solver, &iters);
-        HYPRE_PCGGetFinalRelativeResidualNorm(par_solver, &relres);
+        HYPRE_GMRESGetNumIterations(par_solver, &iters);
+        HYPRE_GMRESGetFinalRelativeResidualNorm(par_solver, &relres);
 
         // object_type==HYPRE_PARCSR: refresh the SStruct vector's structured data from
         // the solved ParVector so fillbackvec4's GetBoxValues sees the solution.

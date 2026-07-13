@@ -26,19 +26,21 @@ Author: Alexander Hanke
 
 void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
 {
-    // ---- Multi-level: ParCSR PCG + BoomerAMG -------------------------------------
+    // ---- Multi-level: ParCSR GMRES + BoomerAMG -----------------------------------
     // SSAMG cannot set up on a multi-part grid, so for nlevs>1 the matrix is assembled
-    // as ParCSR (see make_grid_7p) and solved with PCG preconditioned by one BoomerAMG
-    // V-cycle. PCG (not BiCGSTAB) because the volume-weighted C-F coupling now makes the
-    // operator symmetric (see fill_matrix4). The system is singular (all-Neumann: the
-    // constant nullspace), so two things must be tamed:
-    //   * the BoomerAMG preconditioner must be SPD for PCG -> symmetric smoother
-    //     (RelaxType 6, symmetric hybrid GS) and a symmetric V-cycle.
+    // as ParCSR (see make_grid_7p) and solved with GMRES preconditioned by one BoomerAMG
+    // V-cycle. GMRES (not PCG) because the all-Neumann operator is singular (constant
+    // nullspace) and, on a thin adaptive interface band anchored only by the free-surface
+    // Dirichlet line, becomes near-singular/ill-conditioned -- PCG+BoomerAMG diverged there
+    // (pres ~1e10). GMRES needs no SPD preconditioner and tolerates the near-singular
+    // operator via its Krylov least-squares minimisation. Two BoomerAMG cautions remain:
     //   * BoomerAMG's default coarsest-grid solver is Gaussian elimination, which is
     //     singular on the all-Neumann coarse grid and returns garbage. Stop coarsening
     //     early (MaxCoarseSize) and relax the coarsest grid instead of direct-solving it
     //     (CycleRelaxType ..., 3). The RHS is projected onto the compatible subspace in
     //     fill_matrix4, so a min-norm solution exists.
+    //   * the symmetric smoother (RelaxType 6) is retained -- harmless for GMRES and keeps
+    //     the V-cycle well behaved.
     // par_A/par_b/par_x are extracted after assembly in fill_matrix4; the solver/precond
     // are set up against them in solve().
     #if USE_AMREX
@@ -47,21 +49,21 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
         HYPRE_BoomerAMGCreate(&par_precond);
         HYPRE_BoomerAMGSetPrintLevel(par_precond, 0);
         HYPRE_BoomerAMGSetCoarsenType(par_precond, 22);
-        HYPRE_BoomerAMGSetRelaxType(par_precond, 6);     // symmetric hybrid GS (SPD precond)
+        HYPRE_BoomerAMGSetRelaxType(par_precond, 6);     // symmetric hybrid GS
         HYPRE_BoomerAMGSetNumSweeps(par_precond, 1);
         HYPRE_BoomerAMGSetMaxCoarseSize(par_precond, 200); // stop before the coarse grid is singular
         HYPRE_BoomerAMGSetCycleRelaxType(par_precond, 6, 3); // relax (not GE) on the coarsest level
         HYPRE_BoomerAMGSetTol(par_precond, 0.0);
         HYPRE_BoomerAMGSetMaxIter(par_precond, 1);
 
-        HYPRE_ParCSRPCGCreate(pgc->mpi_comm, &par_solver);
-        HYPRE_PCGSetMaxIter(par_solver, p->N46);
-        HYPRE_PCGSetTol(par_solver, p->N44);
-        HYPRE_PCGSetAbsoluteTol(par_solver, 1e-12);
-        HYPRE_PCGSetTwoNorm(par_solver, 1);              // true 2-norm residual (singular-safe stop)
-        HYPRE_PCGSetPrintLevel(par_solver, 0);
-        HYPRE_PCGSetLogging(par_solver, 1);
-        HYPRE_PCGSetPrecond(par_solver,
+        HYPRE_ParCSRGMRESCreate(pgc->mpi_comm, &par_solver);
+        HYPRE_GMRESSetMaxIter(par_solver, p->N46);
+        HYPRE_GMRESSetKDim(par_solver, 30);              // restart dimension
+        HYPRE_GMRESSetTol(par_solver, p->N44);
+        HYPRE_GMRESSetAbsoluteTol(par_solver, 1e-12);
+        HYPRE_GMRESSetPrintLevel(par_solver, 0);
+        HYPRE_GMRESSetLogging(par_solver, 1);
+        HYPRE_GMRESSetPrecond(par_solver,
             (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSolve,
             (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSetup,
             par_precond);
@@ -152,7 +154,7 @@ void hypre_ssamg::delete_solver()
     #if USE_AMREX
     if (created_nlevs > 1)
     {
-        HYPRE_ParCSRPCGDestroy(par_solver);
+        HYPRE_ParCSRGMRESDestroy(par_solver);
         HYPRE_BoomerAMGDestroy(par_precond);
         return;
     }
