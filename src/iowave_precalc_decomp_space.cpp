@@ -65,10 +65,9 @@ void iowave::wavegen_precalc_space(lexer *p, ghostcell *pgc)
         zloc1 = p->pos1_z();
 
         if(zloc1<=p->phimean)
-        z=-(fabs(p->phimean-zloc1));
-
-        if(zloc1>p->phimean)
-        z=(fabs(p->phimean-zloc1));
+            z=-(fabs(p->phimean-zloc1));
+        else
+            z=(fabs(p->phimean-zloc1));
 
         if(zloc1>p->phimean+p->wA)
         z = 0.5*(eta(i,j)+eta(i+1,j));
@@ -100,10 +99,9 @@ void iowave::wavegen_precalc_space(lexer *p, ghostcell *pgc)
         zloc2 = p->pos2_z();
 
         if(zloc2<=p->phimean)
-        z=-(fabs(p->phimean-zloc2));
-
-        if(zloc2>p->phimean)
-        z=(fabs(p->phimean-zloc2));
+            z=-(fabs(p->phimean-zloc2));
+        else
+            z=(fabs(p->phimean-zloc2));
 
         if(zloc2>p->phimean+p->wA)
         z = 0.5*(eta(i,j)+eta(i,j+1));
@@ -135,10 +133,9 @@ void iowave::wavegen_precalc_space(lexer *p, ghostcell *pgc)
         zloc3 = p->pos3_z();
 
         if(zloc3<=p->phimean)
-        z=-(fabs(p->phimean-zloc3));
-
-        if(zloc3>p->phimean)
-        z=(fabs(p->phimean-zloc3));
+            z=-(fabs(p->phimean-zloc3));
+        else
+            z=(fabs(p->phimean-zloc3));
 
         if(zloc3>p->phimean+p->wA)
         z = eta(i,j);
@@ -171,10 +168,9 @@ void iowave::wavegen_precalc_space(lexer *p, ghostcell *pgc)
         zloc4 = p->pos_z();
 
         if(zloc4<=p->phimean)
-        z=-(fabs(p->phimean-zloc4));
-
-        if(zloc4>p->phimean)
-        z=(fabs(p->phimean-zloc4));
+            z=-(fabs(p->phimean-zloc4));
+        else
+            z=(fabs(p->phimean-zloc4));
 
         // Wave Generation
         if(p->B98==2)
