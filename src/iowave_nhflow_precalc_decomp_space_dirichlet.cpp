@@ -41,7 +41,7 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
 		db = distbeach(p);
 		
 		// Wave Generation
-        if(p->B98==3 && h_switch==1)
+        if(p->B98==3 && h_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -72,7 +72,7 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
         z=p->ZSP[IJK]-p->phimean;
 
 		// Wave Generation
-		if(p->B98>=3 && u_switch==1)
+		if(p->B98>=3 && u_switch)
         {
                 for(qn=0;qn<wave_comp;++qn)
                 {
@@ -100,7 +100,7 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
         z=p->ZSP[IJK]-p->phimean;
         
 		// Wave Generation		
-		if(p->B98>=3 && v_switch==1)
+		if(p->B98>=3 && v_switch)
         {
                 for(qn=0;qn<wave_comp;++qn)
                 {
@@ -128,7 +128,7 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
         z=p->ZSP[IJK]-p->phimean;
         
 		// Wave Generation
-		if(p->B98>=3 && w_switch==1)
+		if(p->B98>=3 && w_switch)
         {
                 for(qn=0;qn<wave_comp;++qn)
                 {

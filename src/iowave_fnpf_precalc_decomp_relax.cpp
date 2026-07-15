@@ -51,7 +51,7 @@ void iowave::wavegen_precalc_decomp_relax_fnpf(lexer *p, ghostcell *pgc)
 		db = distbeach(p);
 
 
-        if(p->B98==2 && h_switch==1)
+        if(p->B98==2 && h_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -78,7 +78,7 @@ void iowave::wavegen_precalc_decomp_relax_fnpf(lexer *p, ghostcell *pgc)
 		db = distbeach(p);
 		
 		// Wave Generation
-        if(p->B98==2 && f_switch==1)
+        if(p->B98==2 && f_switch)
         {
             // Zone 1
             if(dg<1.0e20)
