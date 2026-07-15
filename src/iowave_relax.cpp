@@ -102,7 +102,7 @@ void iowave::u_relax(lexer *p, fdm *a, ghostcell *pgc, field& uvel)
         }*/
 
         // Wave Generation
-        if(p->B98==2 && u_switch==1)
+        if(p->B98==2 && u_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -199,7 +199,7 @@ void iowave::v_relax(lexer *p, fdm *a, ghostcell *pgc, field& vvel)
                 z = 0.5*(eta(i,j)+eta(i+1,j));
         }*/
         // Wave Generation
-        if(p->B98==2 && v_switch==1)
+        if(p->B98==2 && v_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -294,7 +294,7 @@ void iowave::w_relax(lexer *p, fdm *a, ghostcell *pgc, field& wvel)
         }*/
 
         // Wave Generation
-        if(p->B98==2 && w_switch==1)
+        if(p->B98==2 && w_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -355,7 +355,7 @@ void iowave::phi_relax(lexer *p, ghostcell *pgc, field& f)
         z=(fabs(p->phimean-p->pos_z()));
 
         // Wave Generation
-        if(p->B98==2 && h_switch==1)
+        if(p->B98==2 && h_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -415,7 +415,7 @@ void iowave::vof_relax(lexer *p, fdm* a, ghostcell *pgc, field& f)
         db = distbeach(p);
 
         // Wave Generation
-        if(p->B98==2 && h_switch==1)
+        if(p->B98==2 && h_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -476,7 +476,7 @@ void iowave::turb_relax(lexer *p, fdm *a, ghostcell *pgc, field &f)
         H=0.5*(1.0 + phival/epsi + (1.0/PI)*sin((PI*phival)/epsi));
 
         // Wave Generation
-        if(p->B98==2 && u_switch==1)
+        if(p->B98==2 && u_switch)
         {
             // Zone 1
             if(dg<1.0e20)

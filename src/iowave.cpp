@@ -182,52 +182,52 @@ iowave::iowave(lexer *p, ghostcell *pgc, patchBC_interface *ppBC) : wave_interfa
     p->Iarray(gcgen3, gcgen3_count, 4);
     p->Iarray(gcgen4, gcgen4_count, 4);
 
-    u_switch=1;
-    v_switch=1;
-    w_switch=1;
-    p_switch=1;
-    h_switch=1;
-    f_switch=0;
+    u_switch = true;
+    v_switch = true;
+    w_switch = true;
+    p_switch = true;
+    h_switch = true;
+    f_switch = false;
 
     if(p->B92==21 || p->B92==22 || p->B92==23)
     {
-        u_switch=1;
-        v_switch=1;
-        w_switch=0;
-        p_switch=0;
-        h_switch=0;
-        f_switch=0;
+        u_switch = true;
+        v_switch = true;
+        w_switch = false;
+        p_switch = false;
+        h_switch = false;
+        f_switch = false;
 
         if(p->B115==1)
-        w_switch=1;
+        w_switch = true;
     }
     else if(p->B92==20)
     {
-        u_switch=1;
-        v_switch=1;
-        w_switch=0;
-        p_switch=0;
-        h_switch=1;
-        f_switch=1;
+        u_switch = true;
+        v_switch = true;
+        w_switch = false;
+        p_switch = false;
+        h_switch = true;
+        f_switch = true;
     }
 
     if(p->A10==3)
     {
-        u_switch=0;
-        v_switch=0;
-        w_switch=0;
-        p_switch=0;
-        h_switch=1;
-        f_switch=1;
+        u_switch = false;
+        v_switch = false;
+        w_switch = false;
+        p_switch = false;
+        h_switch = true;
+        f_switch = true;
 
         if(p->B92==21 || p->B92==22 || p->B92==23)
         {
-            u_switch=0;
-            v_switch=0;
-            w_switch=0;
-            p_switch=0;
-            h_switch=0;
-            f_switch=1;
+            u_switch = false;
+            v_switch = false;
+            w_switch = false;
+            p_switch = false;
+            h_switch = false;
+            f_switch = true;
         }
     }
 

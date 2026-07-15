@@ -52,7 +52,7 @@ void iowave::wavegen_precalc_decomp_relax(lexer *p, ghostcell *pgc)
 		dg = distgen(p);
 		
 		// Wave Generation
-        if(p->B98==2 && h_switch==1)
+        if(p->B98==2 && h_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -91,7 +91,7 @@ void iowave::wavegen_precalc_decomp_relax(lexer *p, ghostcell *pgc)
         z = 0.5*(eta(i,j)+eta(i+1,j));
 		
 		// Wave Generation
-		if(p->B98==2 && u_switch==1)
+		if(p->B98==2 && u_switch)
         {
             
             // Zone 1
@@ -135,7 +135,7 @@ void iowave::wavegen_precalc_decomp_relax(lexer *p, ghostcell *pgc)
         z = 0.5*(eta(i,j)+eta(i,j+1));
 
 		// Wave Generation
-		if(p->B98==2 && v_switch==1)
+		if(p->B98==2 && v_switch)
         {
             // Zone 1
             if(dg<dist1)
@@ -177,7 +177,7 @@ void iowave::wavegen_precalc_decomp_relax(lexer *p, ghostcell *pgc)
 
 
 		// Wave Generation
-		if(p->B98==2 && w_switch==1)
+		if(p->B98==2 && w_switch)
         {
             // Zone 1
             if(dg<dist1)
@@ -208,7 +208,7 @@ void iowave::wavegen_precalc_decomp_relax(lexer *p, ghostcell *pgc)
         z=(fabs(p->phimean-p->pos_z()));
 		
 		// Wave Generation
-        if(p->B98==2 && h_switch==1)
+        if(p->B98==2 && h_switch)
         {
             // Zone 1
             if(dg<dist1)
@@ -235,7 +235,7 @@ void iowave::wavegen_precalc_decomp_relax(lexer *p, ghostcell *pgc)
         z=(fabs(p->phimean-p->pos_z()));
 		
 		// Wave Generation
-        if(p->B98==2 && h_switch==1)
+        if(p->B98==2 && h_switch)
         {
             // Zone 1
             if(dg<dist1)
@@ -278,7 +278,7 @@ void iowave::wavegen_precalc_decomp_relax(lexer *p, ghostcell *pgc)
         z = eta(i,j);
 		
 		// Wave Generation		
-		if(p->B98==2 && u_switch==1)
+		if(p->B98==2 && u_switch)
         {  
             // Zone 1
             if(dg<dist1)
