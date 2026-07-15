@@ -46,6 +46,42 @@ public:
     enum Gbc : int { INFLOW = 1, OUTFLOW = 2, SYMMETRY = 3, WAVEGEN = 6, NUMBEACH = 7, WALL = 21 };
 private:
     enum Dir : int { X_NEG = 1, X_POS = 4, Y_NEG = 3, Y_POS = 2, Z_NEG = 5, Z_POS = 6 };
+
+    AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+    static bool is_cs_x(int cs)
+    {
+        return cs == Dir::X_NEG || cs == Dir::X_POS;
+    }
+
+    AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+    static bool is_cs_y(int cs)
+    {
+        return cs == Dir::Y_POS || cs == Dir::Y_NEG;
+    }
+
+    AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+    static bool is_cs_z(int cs)
+    {
+        return cs == Dir::Z_NEG || cs == Dir::Z_POS;
+    }
+
+    AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+    static bool is_cs_xy(int cs)
+    {
+        return is_cs_x(cs) || is_cs_y(cs);
+    }
+
+    AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+    static bool is_cs_xz(int cs)
+    {
+        return is_cs_x(cs) || is_cs_z(cs);
+    }
+
+    AMREX_GPU_DEVICE AMREX_FORCE_INLINE
+    static bool is_cs_yz(int cs)
+    {
+        return is_cs_y(cs) || is_cs_z(cs);
+    }
 public:
     struct Field1BcDecision {
         struct Field1Params {
@@ -111,19 +147,6 @@ public:
         }
 
     private:
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        bool is_cs_yz(int cs) const
-        {
-            return cs == Dir::Y_POS || cs == Dir::Y_NEG
-                || cs == Dir::Z_NEG || cs == Dir::Z_POS;
-        }
-
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        bool is_cs_x(int cs) const
-        {
-            return cs == Dir::X_NEG || cs == Dir::X_POS;
-        }
-
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool matches_patch_bc(int bc) const
         {
@@ -207,23 +230,6 @@ public:
         }
 
     private:
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        bool is_cs_x(int cs) const
-        {
-            return cs == Dir::X_NEG || cs == Dir::X_POS;
-        }
-
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        bool is_cs_y(int cs) const
-        {
-            return cs == Dir::Y_POS || cs == Dir::Y_NEG;
-        }
-
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        bool is_cs_xz(int cs) const
-        {
-            return is_cs_x(cs) || cs == Dir::Z_NEG || cs == Dir::Z_POS;
-        }
 
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool matches_patch_bc(int bc) const
@@ -319,19 +325,6 @@ public:
         }
 
     private:
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        bool is_cs_xy(int cs) const
-        {
-            return cs == Dir::X_NEG || cs == Dir::X_POS
-                || cs == Dir::Y_NEG || cs == Dir::Y_POS;
-        }
-
-        AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-        bool is_cs_z(int cs) const
-        {
-            return cs == Dir::Z_NEG || cs == Dir::Z_POS;
-        }
-
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool matches_patch_bc(int bc) const
         {
@@ -480,9 +473,9 @@ public:
                 case 101:
                     if (is_wall)
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == Dir::X_NEG || cs == Dir::X_POS))
+                    if (is_symm && is_cs_x(cs))
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == Dir::Y_POS || cs == Dir::Y_NEG || cs == Dir::Z_NEG || cs == Dir::Z_POS))
+                    if (is_symm && is_cs_yz(cs))
                         return BoundaryConditionTypeLabel::NEUMANN;
                     if (is_inflow || is_outflow || is_wavegen || is_numbeach)
                         return BoundaryConditionTypeLabel::NEUMANN;
@@ -490,9 +483,9 @@ public:
                 case 102:
                     if (is_wall)
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == Dir::Y_POS || cs == Dir::Y_NEG))
+                    if (is_symm && is_cs_y(cs))
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == Dir::X_NEG || cs == Dir::X_POS || cs == Dir::Z_NEG || cs == Dir::Z_POS))
+                    if (is_symm && is_cs_xz(cs))
                         return BoundaryConditionTypeLabel::NEUMANN;
                     if (is_inflow || is_outflow || is_wavegen || is_numbeach)
                         return BoundaryConditionTypeLabel::NEUMANN;
@@ -500,9 +493,9 @@ public:
                 case 103:
                     if (is_wall)
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == Dir::Z_NEG || cs == Dir::Z_POS))
+                    if (is_symm && is_cs_z(cs))
                         return BoundaryConditionTypeLabel::NOSLIP;
-                    if (is_symm && (cs == Dir::X_NEG || cs == Dir::Y_POS || cs == Dir::Y_NEG || cs == Dir::X_POS))
+                    if (is_symm && is_cs_xy(cs))
                         return BoundaryConditionTypeLabel::NEUMANN;
                     if (is_inflow || is_outflow || is_wavegen || is_numbeach)
                         return BoundaryConditionTypeLabel::NEUMANN;
