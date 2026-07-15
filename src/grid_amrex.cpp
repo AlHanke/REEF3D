@@ -27,6 +27,7 @@ Author: Alexander Hanke
 #include "fdm.h"
 #include "weno3_nug_func.h"
 #include "weno_nug_func.h"
+#include "slice_amrex_prim.h"
 
 #include <AMReX_Geometry.H>
 #include <AMReX_BoxArray.H>
@@ -759,6 +760,9 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
 
     nlevs = new_nlevs;
     output_amrex_level_info();
+
+    for (auto e : slice_registry)
+        e->regrid();
 
     level = 0;
     default_cell_mfi = std::make_unique<amrex::MFIter>(amr_cell_mf[level], false);
