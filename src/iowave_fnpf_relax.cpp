@@ -35,7 +35,7 @@ void iowave::fifsf_relax(lexer *p, ghostcell *pgc, slice& f)
         db = distbeach(p);
         
 		// Wave Generation
-		if(p->B98==2 && f_switch==1)
+		if(p->B98==2 && f_switch)
         {
             if(dg<1.0e20)
             {
@@ -74,7 +74,7 @@ void iowave::fivec_relax(lexer *p, ghostcell *pgc, double *f)
         z=p->ZSN[FIJK]-p->phimean;
         /*
 		// Wave Generation
-		if(p->B98==2 && f_switch==1)
+		if(p->B98==2 && f_switch)
         {
             if(dg<1.0e20)
             {
@@ -108,7 +108,7 @@ void iowave::test_relax(lexer *p, ghostcell *pgc, slice& f)
         db = distbeach(p);
         
 		// Wave Generation
-		/*if(p->B98==2 && f_switch==1)
+		/*if(p->B98==2 && f_switch)
         {
             if(dg<1.0e20)
             {

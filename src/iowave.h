@@ -305,7 +305,7 @@ private:
     slice4 wsfmax;
     double time_n,time_0,time_1;
 
-    int u_switch,v_switch,w_switch,p_switch,h_switch,f_switch;
+    bool u_switch,v_switch,w_switch,p_switch,h_switch,f_switch;
 
     double **hydro_in,**hydro_out;
     int hydro_in_count,hydro_out_count;

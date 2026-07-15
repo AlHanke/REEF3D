@@ -40,7 +40,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         db = distbeach(p);
 		
 		// Wave Generation
-        if(p->B98==2 && h_switch==1)
+        if(p->B98==2 && h_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -67,7 +67,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         z = 0.5*(eta(i,j)+eta(i+1,j));
 		
 		// Wave Generation
-		if(p->B98==2 && u_switch==1)
+		if(p->B98==2 && u_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -102,7 +102,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         z = 0.5*(eta(i,j)+eta(i,j+1));
 
 		// Wave Generation
-		if(p->B98==2 && v_switch==1)
+		if(p->B98==2 && v_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -162,7 +162,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         db = distbeach(p);
 
 		// Wave Generation
-        if(p->B98==2 && h_switch==1)
+        if(p->B98==2 && h_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -186,7 +186,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         db = distbeach(p);
 
 		// Wave Generation
-        if(p->B98==2 && h_switch==1)
+        if(p->B98==2 && h_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -213,7 +213,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         z=p->ZSN[FIJK]-p->phimean;
         
 		// Wave Generation
-		if(p->B98==2 && f_switch==1)
+		if(p->B98==2 && f_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -250,7 +250,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         }
 		
 		// Wave Generation		
-		if(p->B98==2 && f_switch==1)
+		if(p->B98==2 && f_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -279,7 +279,7 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         z = eta(i,j);
 		
 		// Wave Generation
-		if(p->B98==2 && f_switch==1)
+		if(p->B98==2 && f_switch)
         {
             // Zone 1
             if(dg<1.0e20)

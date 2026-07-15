@@ -41,7 +41,7 @@ void iowave::wavegen_precalc_decomp_space_dirichlet_fnpf(lexer *p, ghostcell *pg
 		db = distbeach(p);
 		
 		// Wave Generation
-        if(p->B98==3 && h_switch==1)
+        if(p->B98==3 && h_switch)
         {
             // Zone 1
                 for(qn=0;qn<wave_comp;++qn)
@@ -69,7 +69,7 @@ void iowave::wavegen_precalc_decomp_space_dirichlet_fnpf(lexer *p, ghostcell *pg
         z = eta(i,j);
 		
 		// Wave Generation
-        if(p->B98==3 && h_switch==1)
+        if(p->B98==3 && h_switch)
         {
             // Zone 1
             if(dg<dist1)

@@ -45,7 +45,7 @@ void iowave::wavegen_2D_precalc(lexer *p, fdm2D *b, ghostcell *pgc)
 		db = distbeach(p);
 		
 		// Wave Generation
-        if(p->B98==2 && h_switch==1)
+        if(p->B98==2 && h_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -76,7 +76,7 @@ void iowave::wavegen_2D_precalc(lexer *p, fdm2D *b, ghostcell *pgc)
         u_val/=double(p->B160+1);
 		
 		// Wave Generation
-		if(p->B98==2 && u_switch==1)
+		if(p->B98==2 && u_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -108,7 +108,7 @@ void iowave::wavegen_2D_precalc(lexer *p, fdm2D *b, ghostcell *pgc)
         v_val/=double(p->B160+1);
         
 		// Wave Generation
-		if(p->B98==2 && v_switch==1)
+		if(p->B98==2 && v_switch)
         {
             // Zone 1
             if(dg<1.0e20)
@@ -141,7 +141,7 @@ void iowave::wavegen_2D_precalc(lexer *p, fdm2D *b, ghostcell *pgc)
         
         
 		// Wave Generation
-		if(p->B98==2 && w_switch==1)
+		if(p->B98==2 && w_switch)
         {
             // Zone 1
             if(dg<1.0e20)
