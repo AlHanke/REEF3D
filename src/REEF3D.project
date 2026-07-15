@@ -1145,10 +1145,13 @@
             <File Name="mgcslice1.h"/>
           </VirtualDirectory>
           <File Name="slice.h"/>
+          <File Name="slice_amrex.h"/>
+          <File Name="amrex_bc_func2D.h"/>
           <File Name="slice1.h"/>
           <File Name="slice2.h"/>
           <File Name="slice4.h"/>
           <File Name="slices.h"/>
+          <File Name="slices_amrex.h"/>
           <File Name="ArrayWrapper2D.h"/>
           <File Name="ArrayWrapper2D_imp.h"/>
         </VirtualDirectory>
@@ -1157,6 +1160,7 @@
           <File Name="solid.h"/>
         </VirtualDirectory>
         <File Name="slice_base.h"/>
+        <File Name="slice_amrex_prim.h"/>
         <VirtualDirectory Name="Sliceint">
           <File Name="sliceint.h"/>
           <File Name="sliceint1.h"/>
