@@ -40,6 +40,7 @@ Author: Alexander Hanke
 class lexer;
 class ghostcell;
 class fdm;
+class slice_amrex_prim;
 
 namespace amrex {
     class Geometry;
@@ -86,6 +87,14 @@ public:
         auto it = std::remove_if(imf_registry.begin(), imf_registry.end(),
                                  [mf](const IMFEntry& entry) { return entry.mf == mf; });
         imf_registry.erase(it, imf_registry.end());
+    }
+
+    std::vector<slice_amrex_prim*> slice_registry;
+    void register_slice(slice_amrex_prim* s) { slice_registry.push_back(s); }
+    void deregister_slice(slice_amrex_prim* s)
+    {
+        auto it = std::remove(slice_registry.begin(), slice_registry.end(), s);
+        slice_registry.erase(it, slice_registry.end());
     }
 
     // Registry for field_amrex objects so they can extend BCRecs/m_alias on regrid
