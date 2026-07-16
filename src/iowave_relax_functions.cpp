@@ -238,19 +238,18 @@ double iowave::rb3(lexer *p, double x)
 
 double iowave::ramp(lexer *p)
 {
-    double f=1.0;
-
     if(p->B101==1 && p->simtime<p->B102*p->wT)
     {
-    f = p->simtime/(p->B102*p->wT) - (1.0/PI)*sin(PI*(p->simtime/(p->B102*p->wT)));
+        return p->simtime/(p->B102*p->wT) - (1.0/PI)*sin(PI*(p->simtime/(p->B102*p->wT)));
     }
-    
-    if(p->B101==2 && p->simtime<p->B102)
+    else if(p->B101==2 && p->simtime<p->B102)
     {
-    f = p->simtime/(p->B102) - (1.0/PI)*sin(PI*(p->simtime/(p->B102)));
+        return p->simtime/(p->B102) - (1.0/PI)*sin(PI*(p->simtime/(p->B102)));
     }
-
-    return f;
+    else
+    {
+        return 1.0;
+    }
 }
 
 double iowave::ramp_corr(lexer *p)
@@ -261,7 +260,7 @@ double iowave::ramp_corr(lexer *p)
     
     if( p->simtime<duration)
     {
-    f = p->simtime/(duration) - (1.0/PI)*sin(PI*(p->simtime/(duration)));
+        f = p->simtime/(duration) - (1.0/PI)*sin(PI*(p->simtime/(duration)));
     }
 
     return f;
