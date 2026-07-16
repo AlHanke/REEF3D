@@ -76,7 +76,14 @@ private:
     void print3D(lexer*,fdm*,ghostcell*,turbulence*,heat*,expdata*,concentration*,multiphase*,sediment*);
     void parallel(lexer*,fdm*,ghostcell*,turbulence*,heat*,expdata*,concentration*,multiphase*,sediment*,int);
 #if USE_AMREX
-    void print2D_amrex(lexer*, const amrex::Vector<amrex::MultiFab>&, const amrex::Vector<std::string>&, int);
+    // cell-based 2D plane output: native AMReX plotfile format with spacedim=2
+    void print2D_plotfile_amrex(lexer*, const amrex::Vector<amrex::MultiFab>&, const amrex::Vector<std::string>&, int);
+    // point-interpolated output: per-level Partitions of .vtr pieces in a
+    // vtkPartitionedDataSetCollection (.vtpc); plane2D drops the y direction
+    void print_interp_amrex(lexer*, fdm*, const amrex::Vector<amrex::MultiFab>&, const amrex::Vector<std::string>&, int, bool plane2D);
+    // same output as .vtu pieces in a vtkMultiBlockDataSet (.vtm) — the legacy
+    // composite format, whose reader supports read-time data-array selection
+    void print_interp_amrex_vtm(lexer*, fdm*, const amrex::Vector<amrex::MultiFab>&, const amrex::Vector<std::string>&, int, bool plane2D);
 #endif
 
     vtk3D *outputFormat;
