@@ -37,7 +37,6 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
-        db = distbeach(p);
 
         // Wave Generation
         if(p->B98==2 && h_switch)
@@ -87,7 +86,6 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         xg = xgen2(p);
         yg = ygen2(p);
         dg = distgen(p);
-        db = distbeach(p);
 
         zloc2 = p->pos2_z();
         fsfloc = 0.5*(eta(i,j)+eta(i,j+1)) + p->phimean;
@@ -120,7 +118,6 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
-        db = distbeach(p);
 
         zloc3 = p->pos3_z();
         fsfloc = eta(i,j) + p->phimean;
