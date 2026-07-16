@@ -60,10 +60,9 @@ void iowave::u_relax(lexer *p, fdm *a, ghostcell *pgc, field& uvel)
         if(phival>=0.0)
         {
             if(p->pos_z()<=p->phimean)
-            z=-(fabs(p->phimean-p->pos_z()));
-
-            if(p->pos_z()>p->phimean)
-            z=(fabs(p->phimean-p->pos_z()));
+                z=-(fabs(p->phimean-p->pos_z()));
+            else
+                z=(fabs(p->phimean-p->pos_z()));
         }
 
         if(phival<0.0)
@@ -390,7 +389,6 @@ void iowave::vof_relax(lexer *p, fdm* a, ghostcell *pgc, field& f)
             vofheight(i,j)+=f(i,j,k)*p->DZN[KP];
         }
     }
-    count=0;
 
     SLICELOOP4
     {
@@ -421,17 +419,13 @@ void iowave::vof_relax(lexer *p, fdm* a, ghostcell *pgc, field& f)
             if(dg<1.0e20)
             {
                 if(p->pos_z()+0.5*p->DZN[KP]<=genheight(i,j))
-                f(i,j,k)=1.0;
-            
+                    f(i,j,k)=1.0;
                 else if(p->pos_z()-0.5*p->DZN[KP]>=genheight(i,j))
-                f(i,j,k)=0.0;
-            
+                    f(i,j,k)=0.0;
                 else
                 {
                         f(i,j,k)=(genheight(i,j)-(p->pos_z()-0.5*p->DZN[KP]))/p->DZN[KP];
                 }
-
-                ++count;
             }
         }
 
