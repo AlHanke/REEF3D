@@ -1347,6 +1347,9 @@
           <VirtualDirectory Name="Printer CFD">
             <File Name="printer_CFD_parallel.cpp"/>
             <File Name="printer_CFD.cpp"/>
+            <File Name="printer_CFD_plt2D.cpp"/>
+            <File Name="printer_CFD_vtm.cpp"/>
+            <File Name="printer_CFD_vtpc.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="Porous Geometry">
             <File Name="print_porous_vtp.cpp"/>

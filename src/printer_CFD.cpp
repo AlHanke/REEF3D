@@ -1017,7 +1017,10 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             plot_mfs_data.reserve(p->nlevs);
             LEVEL_LOOP
             {
-                amrex::MultiFab combined_mf(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], varnames.size(), 0);
+                // 1 ghost layer: the interpolated writers average cell scalars to nodes,
+                // which needs the BC/C-F-filled ghost values of the state fields
+                amrex::MultiFab combined_mf(p->amrex_box_array[p->level], p->amrex_distribution_mapping[p->level], varnames.size(), 1);
+                combined_mf.setVal(0.0); // velocity-component ghosts are not filled below; keep them defined
                 int comp = 0;
                 for (amrex::MFIter mfi(combined_mf); mfi.isValid(); ++mfi)
                 {
@@ -1046,10 +1049,10 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                     });
                 }
                 comp = 3; // After processing u,v,w
-                // amrex::MultiFab::Copy(combined_mf, a->press.GetMultiFab(), 0, comp, 1, 0);
+                // amrex::MultiFab::Copy(combined_mf, a->press.GetMultiFab(), 0, comp, 1, 1);
                 for (amrex::MFIter mfi(combined_mf); mfi.isValid(); ++mfi)
                 {
-                    const amrex::Box& bx = mfi.tilebox();
+                    const amrex::Box& bx = amrex::grow(mfi.validbox(),1);
                     auto const& cc_arr = combined_mf.array(mfi);
                     auto const& p_fc = a->press.GetMultiFab().const_array(mfi);
                     auto const& p0_fc = a->press0.GetMultiFab().const_array(mfi);
@@ -1063,11 +1066,11 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                     });
                 }
                 comp++;
-                amrex::MultiFab::Copy(combined_mf, a->phi.GetMultiFab(), 0, comp, 1, 0);
+                amrex::MultiFab::Copy(combined_mf, a->phi.GetMultiFab(), 0, comp, 1, 1);
                 comp++;
                 for (amrex::MFIter mfi(combined_mf); mfi.isValid(); ++mfi)
                 {
-                    const amrex::Box& bx = mfi.tilebox();
+                    const amrex::Box& bx = amrex::grow(mfi.validbox(),1);
                     auto const& cc_arr = combined_mf.array(mfi);
 
                     const auto dz = p->amrex_geometry[p->level].CellSize(2);
@@ -1080,47 +1083,47 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                 comp++;
                 if(p->P23==1)
                 {
-                    amrex::MultiFab::Copy(combined_mf, a->test.GetMultiFab(), 0, comp, 1, 0);
+                    amrex::MultiFab::Copy(combined_mf, a->test.GetMultiFab(), 0, comp, 1, 1);
                     comp++;
                 }
                 if(p->P24==1 && p->F300==0)
                 {
-                    amrex::MultiFab::Copy(combined_mf, a->ro.GetMultiFab(), 0, comp, 1, 0);
+                    amrex::MultiFab::Copy(combined_mf, a->ro.GetMultiFab(), 0, comp, 1, 1);
                     comp++;
                 }
                 if(p->P25==1)
                 {
-                    amrex::MultiFab::Copy(combined_mf, a->solid.GetMultiFab(), 0, comp, 1, 0);
+                    amrex::MultiFab::Copy(combined_mf, a->solid.GetMultiFab(), 0, comp, 1, 1);
                     comp++;
                 }
                 if(p->P26==1)
                 {
-                    amrex::MultiFab::Copy(combined_mf, a->conc.GetMultiFab(), 0, comp, 1, 0);
+                    amrex::MultiFab::Copy(combined_mf, a->conc.GetMultiFab(), 0, comp, 1, 1);
                     comp++;
                 }
                 if(p->P27==1)
                 {
-                    amrex::MultiFab::Copy(combined_mf, a->topo.GetMultiFab(), 0, comp, 1, 0);
+                    amrex::MultiFab::Copy(combined_mf, a->topo.GetMultiFab(), 0, comp, 1, 1);
                     comp++;
                 }
                 if(p->P28==1)
                 {
-                    amrex::MultiFab::Copy(combined_mf, a->fb.GetMultiFab(), 0, comp, 1, 0);
+                    amrex::MultiFab::Copy(combined_mf, a->fb.GetMultiFab(), 0, comp, 1, 1);
                     comp++;
                 }
                 if(p->P29==1)
                 {
-                    amrex::MultiFab::Copy(combined_mf, a->walld.GetMultiFab(), 0, comp, 1, 0);
+                    amrex::MultiFab::Copy(combined_mf, a->walld.GetMultiFab(), 0, comp, 1, 1);
                     comp++;
                 }
                 if(p->P71==1)
                 {
-                    amrex::MultiFab::Copy(combined_mf, a->visc.GetMultiFab(), 0, comp, 1, 0);
+                    amrex::MultiFab::Copy(combined_mf, a->visc.GetMultiFab(), 0, comp, 1, 1);
                     comp++;
                 }
                 if(p->P72==1)
                 {
-                    amrex::MultiFab::Copy(combined_mf, a->vof.GetMultiFab(), 0, comp, 1, 0);
+                    amrex::MultiFab::Copy(combined_mf, a->vof.GetMultiFab(), 0, comp, 1, 1);
                     comp++;
                 }
                 if(p->P76==1)
@@ -1133,17 +1136,22 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                 ;
                 if(p->A10==4)
                 {
-                    amrex::MultiFab::Copy(combined_mf, a->Fi.GetMultiFab(), 0, comp, 1, 0);
+                    amrex::MultiFab::Copy(combined_mf, a->Fi.GetMultiFab(), 0, comp, 1, 1);
                     comp++;
                 }
                 if(p->T10!=0)
                 {
                     //pturb
-                    amrex::MultiFab::Copy(combined_mf, a->eddyv.GetMultiFab(), 0, comp, 1, 0);
+                    amrex::MultiFab::Copy(combined_mf, a->eddyv.GetMultiFab(), 0, comp, 1, 1);
                     comp++;
                 }
-                // amrex::MultiFab::Copy(combined_mf, a->grav_pot.GetMultiFab(), 0, comp, 1, 0);
+                // amrex::MultiFab::Copy(combined_mf, a->grav_pot.GetMultiFab(), 0, comp, 1, 1);
                 // comp++;
+
+                // interior ghosts must equal the neighbor's valid data for seam-consistent
+                // node interpolation; some state fields (e.g. ro) have stale rank-ghosts at
+                // print time. Physical-boundary and C-F ring ghosts keep the copied values.
+                combined_mf.FillBoundary(p->amrex_geometry[p->level].periodicity());
 
                 plot_mfs_data.push_back(std::move(combined_mf));
             }
@@ -1173,8 +1181,19 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                                         geoms, p->simtime,
                                         level_steps, ref_ratio);
 
-            // if (!p->j_dir)
-            //     print2D_amrex(p, plot_mfs_data, varnames, num);
+            // 5. Point-interpolated output with per-level structure, plus the 2D-plane
+            //    variants for pseudo-2D runs. Two formats: .vtpc (vtkPartitionedDataSet-
+            //    Collection, VTK's successor to multiblock) and .vtm (legacy multiblock,
+            //    whose ParaView reader still supports read-time array selection).
+            //    TODO: replace with a user-selectable toggle
+            print_interp_amrex(p, a, plot_mfs_data, varnames, num, false);
+            print_interp_amrex_vtm(p, a, plot_mfs_data, varnames, num, false);
+            if (!p->j_dir)
+            {
+                print2D_plotfile_amrex(p, plot_mfs_data, varnames, num);
+                print_interp_amrex(p, a, plot_mfs_data, varnames, num, true);
+                print_interp_amrex_vtm(p, a, plot_mfs_data, varnames, num, true);
+            }
         }
         #endif
 
@@ -1187,173 +1206,3 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
         pgc->start4(p,a->topo,150);
     }
 }
-
-#if USE_AMREX
-void printer_CFD::print2D_amrex(lexer* p,
-                                  const amrex::Vector<amrex::MultiFab>& plot_mfs,
-                                  const amrex::Vector<std::string>& varnames,
-                                  int num)
-{
-    struct Cell2D
-    {
-        double x0, z0, dx, dz;
-        std::vector<double> vals;
-    };
-    std::vector<Cell2D> cells;
-    const int nvar = (int)varnames.size();
-
-    // Collect uncovered j=0 cells, finest level first so fine data shadows coarse
-    for (int lev = p->nlevs - 1; lev >= 0; lev--)
-    {
-        const amrex::Geometry& geom = p->amrex_geometry[lev];
-        const double* prob_lo = geom.ProbLo();
-        const double* cell_dx = geom.CellSize();
-
-        for (amrex::MFIter mfi(p->amr_cell_mf[lev]); mfi.isValid(); ++mfi)
-        {
-            const amrex::Box& bx = mfi.validbox();
-            auto const& mask     = p->amr_cell_mf[lev].const_array(mfi);
-            auto const& data     = plot_mfs[lev].const_array(mfi);
-
-            amrex::Loop(bx, [&](int i, int j, int k)
-            {
-                if (j != 0 || mask(i, j, k) != 0) return;
-                Cell2D c;
-                c.x0 = prob_lo[0] + i * cell_dx[0];
-                c.z0 = prob_lo[2] + k * cell_dx[2];
-                c.dx = cell_dx[0];
-                c.dz = cell_dx[2];
-                c.vals.resize(nvar);
-                for (int n = 0; n < nvar; n++)
-                    c.vals[n] = data(i, j, k, n);
-                cells.push_back(c);
-            });
-        }
-    }
-
-    if (p->mpirank == 0)
-        amrex::UtilCreateDirectory("REEF3D_CFD_PLT2D", 0755);
-    amrex::ParallelDescriptor::Barrier();
-
-    const int ncells = (int)cells.size();
-
-    char vtu_name[300];
-    snprintf(vtu_name, sizeof(vtu_name), "REEF3D_CFD_PLT2D/plt%07d_%04d.vtu", num, p->mpirank);
-
-    std::ofstream vtu(vtu_name);
-    vtu << std::scientific;
-    vtu << "<?xml version=\"1.0\"?>\n"
-           "<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n"
-           "  <UnstructuredGrid>\n"
-           "    <FieldData>\n"
-           "      <DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\" format=\"ascii\">\n"
-           "        " << p->simtime << "\n"
-           "      </DataArray>\n"
-           "    </FieldData>\n"
-           "    <Piece NumberOfPoints=\"" << ncells * 4 << "\" NumberOfCells=\"" << ncells << "\">\n";
-
-    vtu << "      <Points>\n"
-           "        <DataArray type=\"Float64\" NumberOfComponents=\"3\" format=\"ascii\">\n";
-    for (const auto& c : cells)
-    {
-        double x1 = c.x0 + c.dx, z1 = c.z0 + c.dz;
-        vtu << "          " << c.x0 << " 0 " << c.z0 << "\n"
-            << "          " << x1   << " 0 " << c.z0 << "\n"
-            << "          " << x1   << " 0 " << z1   << "\n"
-            << "          " << c.x0 << " 0 " << z1   << "\n";
-    }
-    vtu << "        </DataArray>\n"
-           "      </Points>\n";
-
-    vtu << "      <Cells>\n"
-           "        <DataArray type=\"Int32\" Name=\"connectivity\" format=\"ascii\">\n          ";
-    for (int ci = 0; ci < ncells; ci++)
-        vtu << ci*4 << " " << ci*4+1 << " " << ci*4+2 << " " << ci*4+3 << "  ";
-    vtu << "\n        </DataArray>\n"
-           "        <DataArray type=\"Int32\" Name=\"offsets\" format=\"ascii\">\n          ";
-    for (int ci = 0; ci < ncells; ci++)
-        vtu << (ci + 1) * 4 << " ";
-    vtu << "\n        </DataArray>\n"
-           "        <DataArray type=\"UInt8\" Name=\"types\" format=\"ascii\">\n          ";
-    for (int ci = 0; ci < ncells; ci++)
-        vtu << "9 ";  // VTK_QUAD
-    vtu << "\n        </DataArray>\n"
-           "      </Cells>\n";
-
-    vtu << "      <CellData>\n";
-    for (int n = 0; n < nvar; n++)
-    {
-        vtu << "        <DataArray type=\"Float64\" Name=\"" << varnames[n] << "\" format=\"ascii\">\n          ";
-        for (const auto& c : cells)
-            vtu << c.vals[n] << " ";
-        vtu << "\n        </DataArray>\n";
-    }
-    vtu << "      </CellData>\n"
-           "    </Piece>\n"
-           "  </UnstructuredGrid>\n"
-           "</VTKFile>\n";
-    vtu.close();
-
-    // Rank 0 writes the parallel index file
-    if (p->mpirank == 0)
-    {
-        const int nranks = amrex::ParallelDescriptor::NProcs();
-        char pvtu_name[300];
-        snprintf(pvtu_name, sizeof(pvtu_name), "REEF3D_CFD_PLT2D/plt%07d.pvtu", num);
-        std::ofstream pvtu(pvtu_name);
-        pvtu << "<?xml version=\"1.0\"?>\n"
-                "<VTKFile type=\"PUnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n"
-                "  <PUnstructuredGrid GhostLevel=\"0\">\n"
-                "    <PFieldData>\n"
-                "      <PDataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\"/>\n"
-                "    </PFieldData>\n"
-                "    <PPoints>\n"
-                "      <PDataArray type=\"Float64\" NumberOfComponents=\"3\"/>\n"
-                "    </PPoints>\n"
-                "    <PCellData>\n";
-        for (const auto& vname : varnames)
-            pvtu << "      <PDataArray type=\"Float64\" Name=\"" << vname << "\"/>\n";
-        pvtu << "    </PCellData>\n";
-        for (int r = 0; r < nranks; r++)
-        {
-            char piece[200];
-            snprintf(piece, sizeof(piece), "plt%07d_%04d.vtu", num, r);
-            pvtu << "    <Piece Source=\"" << piece << "\"/>\n";
-        }
-        pvtu << "  </PUnstructuredGrid>\n"
-                "</VTKFile>\n";
-        pvtu.close();
-
-        // Maintain a PVD collection file so ParaView maps each pvtu to its simulation time
-        constexpr const char pvd_footer[] = "  </Collection>\n</VTKFile>\n";
-        constexpr std::streamoff pvd_footer_len = sizeof(pvd_footer) - 1;
-
-        char pvd_path[300];
-        snprintf(pvd_path, sizeof(pvd_path), "REEF3D_CFD_PLT2D/plt2D.pvd");
-
-        char pvtu_rel[200];
-        snprintf(pvtu_rel, sizeof(pvtu_rel), "plt%07d.pvtu", num);
-
-        char new_entry[300];
-        snprintf(new_entry, sizeof(new_entry),
-                 "    <DataSet timestep=\"%.17g\" part=\"0\" file=\"%s\"/>\n",
-                 p->simtime, pvtu_rel);
-
-        std::fstream pvd;
-        if (std::ifstream(pvd_path).good())
-        {
-            pvd.open(pvd_path, std::ios::in | std::ios::out | std::ios::binary);
-            pvd.seekp(-pvd_footer_len, std::ios::end);
-        }
-        else
-        {
-            pvd.open(pvd_path, std::ios::out | std::ios::binary);
-            pvd << "<?xml version=\"1.0\"?>\n"
-                   "<VTKFile type=\"Collection\" version=\"0.1\" byte_order=\"LittleEndian\">\n"
-                   "  <Collection>\n";
-        }
-        pvd << new_entry << pvd_footer;
-        pvd.close();
-    }
-}
-#endif
