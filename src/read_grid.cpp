@@ -363,12 +363,11 @@ void lexer::read_grid()
     Iarray(gcparaco6, gcparaco6_count,3);
 
     // Slice allocation
-    gcbsl1_count=gcbsl2_count=gcbsl4_count=gcbsl4a_count=1;
+    gcbsl1_count=gcbsl2_count=gcbsl4_count=1;
 
     Iarray(gcbsl1, gcbsl1_count,5);
     Iarray(gcbsl2, gcbsl2_count,5);
     Iarray(gcbsl4, gcbsl4_count,5);
-    Iarray(gcbsl4a, gcbsl4a_count,5);
 
     Iarray(gcslpara1, gcslpara1_count,2);
     Iarray(gcslpara2, gcslpara2_count,2);
