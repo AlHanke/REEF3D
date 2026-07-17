@@ -38,13 +38,13 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
         
 		
     // UVEL
-    for(n=0;n<p->gcslawa1_count;++n)
+    GCSLAWA1
     {
-		i=p->gcslawa1[n][0];
-		j=p->gcslawa1[n][1];
+		i=p->gcslawa1[n].i;
+		j=p->gcslawa1[n].j;
 		
 		ii=0;
-		if(p->gcslawa1[n][2]==4)
+		if(p->gcslawa1[n].cs==4)
 		ii=1;
 			
 		eta_T = 0.0;
@@ -68,22 +68,22 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
 		fac1=0.0;
 		
 		aa=bb=0;
-		if(p->gcslawa1[n][2]==1)
+		if(p->gcslawa1[n].cs==1)
         {
 		aa=-1;
 		fx*=-1.0;
         }
         
-		if(p->gcslawa1[n][2]==4)
+		if(p->gcslawa1[n].cs==4)
 		aa=1;
 		
-		if(p->gcslawa1[n][2]==3)
+		if(p->gcslawa1[n].cs==3)
         {
 		bb=-1;
         fx*=-0.0;
         }
 		
-		if(p->gcslawa1[n][2]==2)
+		if(p->gcslawa1[n].cs==2)
         {
 		bb=1;
         fx*=-1.0;
@@ -133,14 +133,14 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
 //-----------------------------------------------		
 		// VVEL
 		
-		for(n=0;n<p->gcslawa2_count;++n)
+		GCSLAWA2
 		{
-		i=p->gcslawa2[n][0];
-		j=p->gcslawa2[n][1];
+		i=p->gcslawa2[n].i;
+		j=p->gcslawa2[n].j;
 		
 		
 		jj=0;
-		if(p->gcslawa2[n][2]==2)
+		if(p->gcslawa2[n].cs==2)
 		jj=1;
 		
 
@@ -163,22 +163,22 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
 		fac1=0.0;
 		
 		aa=bb=0;
-		if(p->gcslawa2[n][2]==1)
+		if(p->gcslawa2[n].cs==1)
         {
 		aa=-1;
         fy*=1.0;
         }
 		
-		if(p->gcslawa2[n][2]==4)
+		if(p->gcslawa2[n].cs==4)
 		aa=1;
 		
-		if(p->gcslawa2[n][2]==3)
+		if(p->gcslawa2[n].cs==3)
         {
 		bb=-1;
         fy*=-1.0;
         }
 		
-		if(p->gcslawa2[n][2]==2)
+		if(p->gcslawa2[n].cs==2)
         {
 		bb=1;
         fy*=-1.0;

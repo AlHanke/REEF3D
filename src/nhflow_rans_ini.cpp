@@ -154,7 +154,7 @@ void nhflow_rans_io::flowdepth_inflow(lexer* p, fdm_nhf *d, ghostcell* pgc)
     
     double counter = 0.0;
     
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
     i=p->gcin[n][0];
     j=p->gcin[n][1];

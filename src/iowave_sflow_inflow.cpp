@@ -42,10 +42,10 @@ void iowave::inflow2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice &Q, sl
 
 void iowave::rkinflow2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice &Q, slice &U, slice &V)
 {
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-    i=p->gcslin[n][0];
-    j=p->gcslin[n][1];
+    i=p->gcslin[n].i;
+    j=p->gcslin[n].j;
 
 
         P(i-1,j)=U(i-1,j);
@@ -62,10 +62,10 @@ void iowave::rkinflow2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice &Q, 
 
 void iowave::inflow2D_plain(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice &Q, slice &eta)
 {
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-    i=p->gcslin[n][0];
-    j=p->gcslin[n][1];
+    i=p->gcslin[n].i;
+    j=p->gcslin[n].j;
 
         P(i-1,j)=p->Ui;
         P(i-2,j)=p->Ui;

@@ -33,10 +33,10 @@ void iowave::discharge2D(lexer *p, fdm2D* b, ghostcell* pgc)
     p->Qi=0.0;
     p->Ui=0.0;
     
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-		i=p->gcslin[n][0];
-		j=p->gcslin[n][1];
+		i=p->gcslin[n].i;
+		j=p->gcslin[n].j;
         
         area = b->hp(i,j)*p->DXM;
         
