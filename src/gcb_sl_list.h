@@ -24,27 +24,34 @@ Author: Alexander Hanke
 #define GCB_SL_LIST_H_
 
 // =====================================================================
-// Ghost-cell boundary list entries.
+// gcb_list_t — a ghost-cell boundary list, one std::vector of entries per
+// AMR level. Templated on the entry type, so the same container serves
+// multiple dimensionalities and usecases:
 //
-// A gcb list used to be an int** with a hand-managed row count: gcbsl1[n][2]
-// was the face direction, gcbsl1[n][3] the boundary condition, and knowing
-// that was the reader's problem. The entry types below give those columns
-// names, so the same std::vector serves every dimensionality and usecase:
+//   gcb_sl_cs_bc_list = gcb_list_t<gcb_sl_cs_bc>  2D slice lists: gcbsl1/2/4
+//   gcb_list          = gcb_list_t<gcb_field>     3D field lists: gcb1/2/3/4
 //
-//   gcb_sl_cs_bc_list = std::vector<gcb_sl_cs_bc>  2D slice lists: gcbsl1/2/4
-//   gcb_list          = std::vector<gcb_field>     3D field lists: gcb1/2/3/4
+//   gcb_sl_in_list  = gcb_list_t<gcb_sl_0>  2D slice inflow list: gcbslin
+//   gcb_sl_out_list = gcb_list_t<gcb_sl_cs> 2D slice outflow list: gcbslout
 //
-//   gcb_sl_list     = std::vector<gcb_sl>     2D slice inflow list: gcbslin
-//   gcb_sl_cs_list  = std::vector<gcb_sl_cs>  2D slice outflow list: gcbslout
-//
-// Nothing inspects the entry generically, so the only thing that varies is
+// The container never inspects the entry, so the only thing that varies is
 // the payload (gcb_field carries k, gcb_sl does not). Loop macros and any
 // code that only reads .i/.j/.cs/.bc work against either.
+//
+// Level selection is DELIBERATELY explicit: operator[] takes the level, it
+// does not read p->level itself. A gcb list is a per-level container, not a
+// field, so picking the list is a caller decision — patchBC_2D_fillobj, for
+// one, pins p->level=0 because patch BCs are a level-0 concept, and that has
+// to stay visible at the call site. An implicit p->level here would turn a
+// wrong-level access into silently mis-written ghost cells with no
+// diagnostic. The GCSLB1/QGCSLB1/QQGCSLB1 macros in looping2D.h carry
+// p->level for the loops that do want the current level.
 //
 // This header must not reference lexer: it is included into lexer.h before
 // the lexer class is formed.
 // =====================================================================
 
+#include <cassert>
 #include <vector>
 
 // One slice inflow ghost-cell boundary entry. Replaces the old int[2] row,
@@ -85,18 +92,59 @@ struct gcb_field
     int bc = 21;   ///< boundary condition flag; 21 = default wall
 };
 
-// Number of entries, as int — the loop macros compare against an int
-// counter, and the dev target builds with -Wsign-conversion.
 template<typename ENTRY>
-inline int gcb_ssize(const std::vector<ENTRY> &list) noexcept
+class gcb_list_t
 {
-    return static_cast<int>(list.size());
-}
+public:
+    using entry_type = ENTRY;
+    using level_type = std::vector<ENTRY>;
 
-using gcb_sl_cs_bc_list = std::vector<gcb_sl_cs_bc>;   ///< 2D: gcbsl1/2/4
-using gcb_list          = std::vector<gcb_field>;      ///< 3D: gcb1/2/3/4
+    // Unchecked in release: the assert is the bounds check, and -DNDEBUG
+    // (the release target) removes it entirely. std::vector::at() would not
+    // optimize away at -O3 — the compiler cannot prove lev is in range, so
+    // the compare and the throw path survive.
+    level_type& operator[](int lev) noexcept
+    {
+        assert(lev >= 0 && lev < static_cast<int>(m_lev.size())
+               && "gcb_list_t: level out of range");
+        return m_lev[static_cast<size_t>(lev)];
+    }
 
-using gcb_sl_list    = std::vector<gcb_sl>;      ///< 2D: gcbslin
-using gcb_sl_cs_list = std::vector<gcb_sl_cs>;   ///< 2D: gcbslout
+    const level_type& operator[](int lev) const noexcept
+    {
+        assert(lev >= 0 && lev < static_cast<int>(m_lev.size())
+               && "gcb_list_t: level out of range");
+        return m_lev[static_cast<size_t>(lev)];
+    }
+
+    // Number of entries on a level, as int — the loop macros compare against
+    // an int counter, and the dev target builds with -Wsign-conversion.
+    int ssize(int lev) const noexcept
+    {
+        return static_cast<int>((*this)[lev].size());
+    }
+
+    void resize_levels(int nlevs)
+    {
+        assert(nlevs > 0 && "gcb_list_t: need at least one level");
+        m_lev.resize(static_cast<size_t>(nlevs));
+    }
+
+    int nlevels() const noexcept { return static_cast<int>(m_lev.size()); }
+
+private:
+    // Born with one empty level. A list can be legitimately empty and still be
+    // read: makegrid2D_basic (FNPF) seeds only mgcslice4, yet gcsl_setbcio
+    // still runs GCSL1LOOP/GCSL2LOOP over gcbsl1/gcbsl2 — which correctly find
+    // nothing. This is the invariant the old Iarray(gcbsl1,1,5) in read_grid
+    // provided; without it those loops index level 0 of an empty container.
+    std::vector<level_type> m_lev = std::vector<level_type>(1);
+};
+
+using gcb_sl_cs_bc_list = gcb_list_t<gcb_sl_cs_bc>;   ///< 2D: gcbsl1/2/4
+using gcb_list    = gcb_list_t<gcb_field>;      ///< 3D: gcb1/2/3/4
+
+using gcb_sl_list = gcb_list_t<gcb_sl>;      ///< 2D: gcbslin
+using gcb_sl_cs_list = gcb_list_t<gcb_sl_cs>;  ///< 2D: gcbslout
 
 #endif

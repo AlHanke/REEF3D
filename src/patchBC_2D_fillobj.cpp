@@ -215,12 +215,13 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
         jend = p->posc_j(p->B440_ye[qn]);
 
         // 4
-        for(n=0;n<gcb_ssize(p->gcbsl4);++n)
+        p->level = 0;
+        GCSLB4
         {
-            i=p->gcbsl4[n].i;
-            j=p->gcbsl4[n].j;
+            i=p->gcbsl4[p->level][n].i;
+            j=p->gcbsl4[p->level][n].j;
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[n].cs==p->B440_face[qn] && p->gcbsl4[n].bc==21)
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[p->level][n].cs==p->B440_face[qn] && p->gcbsl4[p->level][n].bc==21)
             {
                 for(qq=0;qq<obj_count;++qq)
                 if(patch[qq]->ID==p->B440_ID[qn])
@@ -231,41 +232,43 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
                     ++patch[qq]->counter;
 
                     // convert gcb
-                    p->gcbsl4[n].bc=patch[qq]->gcb_flag;
+                    p->gcbsl4[p->level][n].bc=patch[qq]->gcb_flag;
                 }
             }
         }
 
         // 1
-        for(n=0;n<gcb_ssize(p->gcbsl1);++n)
+        p->level = 0;
+        GCSLB1
         {
-            i=p->gcbsl1[n].i;
-            j=p->gcbsl1[n].j;
+            i=p->gcbsl1[p->level][n].i;
+            j=p->gcbsl1[p->level][n].j;
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl1[n].cs==p->B440_face[qn] && p->gcbsl1[n].bc==21)
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl1[p->level][n].cs==p->B440_face[qn] && p->gcbsl1[p->level][n].bc==21)
             {
                 for(qq=0;qq<obj_count;++qq)
                 if(patch[qq]->ID==p->B440_ID[qn])
                 {
                     // convert gcb
-                    p->gcbsl1[n].bc=patch[qq]->gcb_flag;
+                    p->gcbsl1[p->level][n].bc=patch[qq]->gcb_flag;
                 }
             }
         }
 
         // 2
-        for(n=0;n<gcb_ssize(p->gcbsl2);++n)
+        p->level = 0;
+        GCSLB2
         {
-            i=p->gcbsl2[n].i;
-            j=p->gcbsl2[n].j;
+            i=p->gcbsl2[p->level][n].i;
+            j=p->gcbsl2[p->level][n].j;
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl2[n].cs==p->B440_face[qn] && p->gcbsl2[n].bc==21)
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl2[p->level][n].cs==p->B440_face[qn] && p->gcbsl2[p->level][n].bc==21)
             {
                 for(qq=0;qq<obj_count;++qq)
                 if(patch[qq]->ID==p->B440_ID[qn])
                 {
                     // convert gcb
-                    p->gcbsl2[n].bc=patch[qq]->gcb_flag;
+                    p->gcbsl2[p->level][n].bc=patch[qq]->gcb_flag;
                 }
             }
         }
