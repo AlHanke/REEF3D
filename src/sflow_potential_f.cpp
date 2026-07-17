@@ -236,41 +236,41 @@ void sflow_potential_f::ini_bc(lexer *p, fdm2D *b, ghostcell *pgc)
     GCSL4LOOP
     {
     
-        if(p->gcbsl4[n][4]==1)
+        if(p->gcbsl4[n][3]==1)
         {
             i = p->gcbsl4[n][0];
             j = p->gcbsl4[n][1];
        
-            if(p->gcbsl4[n][3]==1)
+            if(p->gcbsl4[n][2]==1)
             bc(i-1,j)=1;
             
-            if(p->gcbsl4[n][3]==3)
+            if(p->gcbsl4[n][2]==3)
             bc(i,j-1)=1;
             
-            if(p->gcbsl4[n][3]==2)
+            if(p->gcbsl4[n][2]==2)
             bc(i,j+1)=1;
             
-            if(p->gcbsl4[n][3]==4)
+            if(p->gcbsl4[n][2]==4)
             bc(i+1,j)=1;
             
         }
         
-        if(p->gcbsl4[n][4]==2)
+        if(p->gcbsl4[n][3]==2)
         {
             i=p->gcbsl4[n][0]; 
             j=p->gcbsl4[n][1];
       
        
-            if(p->gcbsl4[n][3]==1)
+            if(p->gcbsl4[n][2]==1)
             bc(i-1,j)=2;
             
-            if(p->gcbsl4[n][3]==3)
+            if(p->gcbsl4[n][2]==3)
             bc(i,j-1)=2;
             
-            if(p->gcbsl4[n][3]==2)
+            if(p->gcbsl4[n][2]==2)
             bc(i,j+1)=2;
             
-            if(p->gcbsl4[n][3]==4)
+            if(p->gcbsl4[n][2]==4)
             bc(i+1,j)=2;
  
         }

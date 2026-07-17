@@ -220,7 +220,7 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
             i=p->gcbsl4[n][0];
             j=p->gcbsl4[n][1];
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[n][3]==p->B440_face[qn] && p->gcbsl4[n][4]==21)
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[n][2]==p->B440_face[qn] && p->gcbsl4[n][3]==21)
             {
                 for(qq=0;qq<obj_count;++qq)
                 if(patch[qq]->ID==p->B440_ID[qn])
@@ -231,7 +231,7 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
                     ++patch[qq]->counter;
 
                     // convert gcb
-                    p->gcbsl4[n][4]=patch[qq]->gcb_flag;
+                    p->gcbsl4[n][3]=patch[qq]->gcb_flag;
                 }
             }
         }
@@ -242,13 +242,13 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
             i=p->gcbsl1[n][0];
             j=p->gcbsl1[n][1];
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl1[n][3]==p->B440_face[qn] && p->gcbsl1[n][4]==21)
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl1[n][2]==p->B440_face[qn] && p->gcbsl1[n][3]==21)
             {
                 for(qq=0;qq<obj_count;++qq)
                 if(patch[qq]->ID==p->B440_ID[qn])
                 {
                     // convert gcb
-                    p->gcbsl1[n][4]=patch[qq]->gcb_flag;
+                    p->gcbsl1[n][3]=patch[qq]->gcb_flag;
                 }
             }
         }
@@ -259,13 +259,13 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
             i=p->gcbsl2[n][0];
             j=p->gcbsl2[n][1];
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl2[n][3]==p->B440_face[qn] && p->gcbsl2[n][4]==21)
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl2[n][2]==p->B440_face[qn] && p->gcbsl2[n][3]==21)
             {
                 for(qq=0;qq<obj_count;++qq)
                 if(patch[qq]->ID==p->B440_ID[qn])
                 {
                     // convert gcb
-                    p->gcbsl2[n][4]=patch[qq]->gcb_flag;
+                    p->gcbsl2[n][3]=patch[qq]->gcb_flag;
                 }
             }
         }
