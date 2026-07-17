@@ -26,10 +26,57 @@ void lexer::flagini2D()
 {
     control_calc();
 
+    sliceflagini();
+
     grid2Dsize();
 }
 
 void lexer::gridini2D()
 {
     IOSL.resize();
+}
+
+void lexer::sliceflagini()
+{
+    flagslice1.resize();
+    flagslice2.resize();
+    flagslice4.resize();
+
+    lexer *p = this;
+
+    p->level = 0;
+    // TILE_LOOP
+    ILOOP
+    JLOOP
+    {
+        flagslice4(i,j)=flagslice4_grid[IJ];
+        flagslice1(i,j)=flagslice4(i,j);
+        flagslice2(i,j)=flagslice4(i,j);
+    }
+    flagslice4_grid.reset(); // transported into flagslice4; not needed afterwards
+
+    const bool is3D = p->j_dir;
+    p->level = 0;
+    TILE_LOOP
+    ILOOP
+    JLOOP
+    PSLICECHECK4
+    {
+        if(flagslice4(i+1,j)<0)
+        flagslice1(i,j)=flagslice4(i+1,j);
+
+        if(is3D)
+        {
+            if(flagslice4(i,j+1)<0)
+            flagslice2(i,j)=flagslice4(i,j+1);
+        }
+        else
+        flagslice2(i,j)=-10;
+    }
+
+    #if USE_AMREX
+    flagslice1.fillHigherLevels();
+    flagslice2.fillHigherLevels();
+    flagslice4.fillHigherLevels();
+    #endif
 }

@@ -100,11 +100,10 @@ driver::driver(int& argc, char **argv)
     // sigma grid - NHFLOW
     if(p->A10==5)
     {
-        BASELOOP
-        if(p->flagslice4[IJ]<0)
-        p->flag4[IJK]=-10;
-
         p->flagini();
+        BASELOOP
+        if(p->flagslice4(i,j)<0)
+        p->flag4(i,j,k)=-10;
         pgc->flagfield(p);
         makegrid_sigma(p,pgc);
         makegrid2D(p,pgc);

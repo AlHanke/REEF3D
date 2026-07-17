@@ -24,10 +24,17 @@ Author: Hans Bihs
 #define LOOPING2D_H_
 
 // SLICE CONDITIONS
-#define PSLICECHECK1  if(p->flagslice1[IJ]>0)
-#define PSLICECHECK2  if(p->flagslice2[IJ]>0)
-#define PSLICECHECK4  if(p->flagslice4[IJ]>0)
-#define SSLICECHECK4  if(p->flagslice4[IJ]<0)
+#if USE_AMREX
+    #define PSLICECHECK1  if(p->flagslice1(i,j)>0)
+    #define PSLICECHECK2  if(p->flagslice2(i,j)>0)
+    #define PSLICECHECK4  if(p->flagslice4(i,j)>0)
+    #define SSLICECHECK4  if(p->flagslice4(i,j)<0)
+#else
+    #define PSLICECHECK1  if(p->flagslice1[IJ]>0)
+    #define PSLICECHECK2  if(p->flagslice2[IJ]>0)
+    #define PSLICECHECK4  if(p->flagslice4[IJ]>0)
+    #define SSLICECHECK4  if(p->flagslice4[IJ]<0)
+#endif
 
 #define WETDRYCHK if(p->wet[IJ]>0)
 #define SEDSLICECHECK if(s->DFBED[IJ]>0)
@@ -42,12 +49,12 @@ Author: Hans Bihs
 #define WETDRYDEEPBREAK if(p->wet[IJ]==1 && p->deep[IJ]==1 && d->breaking(i,j)==0)
 
 // SLICE BASE LOOPS
-#define SLICEBASELOOP ILOOP JLOOP
+#define SLICEBASELOOP MultiGridLOOP ILOOP JLOOP
 #define JILOOP JLOOP ILOOP
 
 // SLICE LOOPS
-#define SLICELOOP1 IULOOP JLOOP  PSLICECHECK1
-#define SLICELOOP2 ILOOP JVLOOP  PSLICECHECK2
+#define SLICELOOP1 MultiGridLOOP IULOOP JLOOP  PSLICECHECK1
+#define SLICELOOP2 MultiGridLOOP ILOOP JVLOOP  PSLICECHECK2
 #define SLICELOOP4 SLICEBASELOOP  PSLICECHECK4
 
 #define SEDSLICELOOP SLICEBASELOOP  PSLICECHECK4 SEDSLICECHECK
