@@ -314,16 +314,9 @@ void lexer::read_grid()
     Iarray(deep,imax*jmax);
     Darray(WL,imax*jmax);
     data = std::make_unique<double[]>(imax*jmax*kmax);
-    Iarray(flagslice1,imax*jmax);
-    Iarray(flagslice2,imax*jmax);
-    Iarray(flagslice4,imax*jmax);
 
-    for(i=0;i<imax*jmax;++i)
-    {
-        flagslice1[i]=-10;
-        flagslice2[i]=-10;
-        flagslice4[i]=-10;
-    }
+    flagslice4_grid = std::unique_ptr<int[]>(new int[imax*jmax]);
+    std::fill_n(flagslice4_grid.get(), imax*jmax, -10);
 
     if(gcb4_count>0)
     {
@@ -659,7 +652,7 @@ void lexer::read_grid()
     for(j=0; j<knoy; ++j)
     {
         grid.read((char*)&iin, sizeof (int));
-        flagslice4[(i-imin)*jmax + (j-jmin)]=iin;
+        flagslice4_grid[(i-imin)*jmax + (j-jmin)]=iin;
     }
 
     //  Paraslice Surfaces

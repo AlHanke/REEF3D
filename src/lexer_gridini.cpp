@@ -106,6 +106,8 @@ void lexer::flagini()
     gcsldfeta4_count=1;
 
     gcsldfeta4.resize(gcsldfeta4_count);
+
+    sliceflagini();
 }
 
 int lexer::conv(double a)
