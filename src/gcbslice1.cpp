@@ -22,66 +22,77 @@ Author: Hans Bihs
 
 #include"mgcslice1.h"
 #include"lexer.h"
+#include<vector>
 
 void mgcslice1::gcb_seed(lexer *p)
 {
     // count gcbsl
-    count=0;
+    #if USE_AMREX
+    const int nlevs = p->nlevs;
+    #else
+    const int nlevs = 1;
+    #endif
+
+    std::vector<int> count_vec(nlevs,0);
+
     SLICELOOP1
     {
-        if(p->flagslice1[Im1J]<0)
-        ++count;
+        if(p->flagslice1(i-1,j)<0)
+        ++count_vec[p->level];
 
-        if(p->flagslice1[IJp1]<0)
-        ++count;
+        if(p->flagslice1(i,j+1)<0)
+        ++count_vec[p->level];
 
-        if(p->flagslice1[IJm1]<0)
-        ++count;
+        if(p->flagslice1(i,j-1)<0)
+        ++count_vec[p->level];
 
-        if(p->flagslice1[Ip1J]<0)
-        ++count;
+        if(p->flagslice1(i+1,j)<0)
+        ++count_vec[p->level];
     }
 
-    p->gcbsl1.assign(count, {});
+    p->gcbsl1.resize_levels(nlevs);
+
+    for(int lev=0; lev<nlevs; ++lev)
+    p->gcbsl1[lev].assign(count_vec[lev], {});
 
     // find gcbsl
-    count=0;
+    count_vec.assign(count_vec.size(), 0);
     SLICELOOP1
     {
-        if(p->flagslice1[Im1J]<0)
+        if(p->flagslice1(i-1,j)<0)
         {
-            auto &gcb = p->gcbsl1[count];
+            auto &gcb = p->gcbsl1[p->level][count_vec[p->level]];
             gcb.i=i;
             gcb.j=j;
             gcb.cs=X_NEG;
-            ++count;
+            ++count_vec[p->level];
         }
 
-        if(p->flagslice1[IJp1]<0)
+        if(p->flagslice1(i,j+1)<0)
         {
-            auto &gcb = p->gcbsl1[count];
+            auto &gcb = p->gcbsl1[p->level][count_vec[p->level]];
             gcb.i=i;
             gcb.j=j;
             gcb.cs=Y_POS;
-            ++count;
+            ++count_vec[p->level];
         }
 
-        if(p->flagslice1[IJm1]<0)
+        if(p->flagslice1(i,j-1)<0)
         {
-            auto &gcb = p->gcbsl1[count];
+            auto &gcb = p->gcbsl1[p->level][count_vec[p->level]];
             gcb.i=i;
             gcb.j=j;
             gcb.cs=Y_NEG;
-            ++count;
+            ++count_vec[p->level];
         }
 
-        if(p->flagslice1[Ip1J]<0)
+        if(p->flagslice1(i+1,j)<0)
         {
-            auto &gcb = p->gcbsl1[count];
+            auto &gcb = p->gcbsl1[p->level][count_vec[p->level]];
             gcb.i=i;
             gcb.j=j;
             gcb.cs=X_POS;
-            ++count;
+            ++count_vec[p->level];
         }
     }
 }
