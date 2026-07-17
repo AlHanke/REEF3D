@@ -32,8 +32,8 @@ void iowave::wavegen_precalc_decomp_space_dirichlet_fnpf(lexer *p, ghostcell *pg
     count=0;
     GCSLIN
     {
-    i=p->gcslin[n].i;
-    j=p->gcslin[n].j;
+    i=p->gcslin[p->level][n].i;
+    j=p->gcslin[p->level][n].j;
     
         xg = xgen(p);
         yg = ygen(p);
@@ -58,8 +58,8 @@ void iowave::wavegen_precalc_decomp_space_dirichlet_fnpf(lexer *p, ghostcell *pg
     count=0;
     GCSLIN
     {
-    i=p->gcslin[n].i;
-    j=p->gcslin[n].j;
+    i=p->gcslin[p->level][n].i;
+    j=p->gcslin[p->level][n].j;
     
         xg = xgen(p);
         yg = ygen(p);

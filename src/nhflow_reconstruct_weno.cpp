@@ -76,10 +76,10 @@ void nhflow_reconstruct_weno::reconstruct_2D_x(lexer* p, ghostcell *pgc, fdm_nhf
     if(p->B98>2)
     {   
     GCSLIN
-    for(i=p->gcslin[n].i;i<p->gcslin[n].i+5;++i)
+    for(i=p->gcslin[p->level][n].i;i<p->gcslin[p->level][n].i+5;++i)
     {
         // i
-        j=p->gcslin[n].j;
+        j=p->gcslin[p->level][n].j;
         
         dfdx_plus = (f(i+1,j) - f(i,j))/p->DXP[IP];
         dfdx_min  = (f(i,j) - f(i-1,j))/p->DXP[IM1];
@@ -92,9 +92,9 @@ void nhflow_reconstruct_weno::reconstruct_2D_x(lexer* p, ghostcell *pgc, fdm_nhf
     
     // reconstruct
     GCSLIN
-    for(i=p->gcslin[n].i;i<p->gcslin[n].i+4;++i)
+    for(i=p->gcslin[p->level][n].i;i<p->gcslin[p->level][n].i+4;++i)
     {
-    j=p->gcslin[n].j;
+    j=p->gcslin[p->level][n].j;
 
         
         fs(i,j) = f(i,j)   + 0.5*p->DXP[IM1]*dfdx(i,j); 

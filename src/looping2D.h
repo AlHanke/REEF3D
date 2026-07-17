@@ -106,10 +106,10 @@ Author: Hans Bihs
 // Inflow / outflow / active-wave-absorption lists, built in
 // ghostcell::gcsl_setbcio. gcslin/gcslout come from gcbsl4, gcslawa1 from
 // gcbsl1, gcslawa2 from gcbsl2.
-#define GCSLIN for(n=0;n<static_cast<int>(p->gcslin.size());++n)
-#define GCSLOUT for(n=0;n<static_cast<int>(p->gcslout.size());++n)
-#define GCSLAWA1 for(n=0;n<static_cast<int>(p->gcslawa1.size());++n)
-#define GCSLAWA2 for(n=0;n<static_cast<int>(p->gcslawa2.size());++n)
+#define GCSLIN for(n=0;n<p->gcslin.ssize(p->level);++n)
+#define GCSLOUT for(n=0;n<p->gcslout.ssize(p->level);++n)
+#define GCSLAWA1 for(n=0;n<p->gcslawa1.ssize(p->level);++n)
+#define GCSLAWA2 for(n=0;n<p->gcslawa2.ssize(p->level);++n)
 
 
 #define GCSLDFETA4 for(n=0;n<p->gcsldfeta4_count;++n)

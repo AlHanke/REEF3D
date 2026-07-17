@@ -274,8 +274,8 @@ void sflow_pjm_corr_lin::upgrad(lexer*p, fdm2D* b, slice &eta, slice &eta_n)
     if(p->B77==10)
     GCSLOUT
     {
-        i=p->gcslout[n].i-1;
-        j=p->gcslout[n].j;
+        i=p->gcslout[p->level][n].i-1;
+        j=p->gcslout[p->level][n].j;
 
         WETDRY1
         {

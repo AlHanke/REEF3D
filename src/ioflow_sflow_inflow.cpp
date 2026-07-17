@@ -31,8 +31,8 @@ void ioflow_f::inflow2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice &Q, 
 {
     GCSLIN
     {
-        i=p->gcslin[n].i;
-        j=p->gcslin[n].j;
+        i=p->gcslin[p->level][n].i;
+        j=p->gcslin[p->level][n].j;
 
         if(p->wet[IJ]==1)
         {
@@ -60,8 +60,8 @@ void ioflow_f::rkinflow2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice &Q
 {
     GCSLIN
     {
-        i=p->gcslin[n].i;
-        j=p->gcslin[n].j;
+        i=p->gcslin[p->level][n].i;
+        j=p->gcslin[p->level][n].j;
 
         P(i-1,j)=U(i-1,j);
         P(i-2,j)=U(i-2,j);
