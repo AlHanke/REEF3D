@@ -112,8 +112,8 @@ void iowave::fsfinflow_nhflow(lexer *p, fdm_nhf* d, ghostcell* pgc, slice &WL)
     if(p->B98>=3)
     GCSLIN
     {
-    i=p->gcslin[n].i;
-    j=p->gcslin[n].j;
+    i=p->gcslin[p->level][n].i;
+    j=p->gcslin[p->level][n].j;
     
     WL(i-1,j) = eta(i,j) + d->depth(i,j);
     WL(i-2,j) = eta(i,j) + d->depth(i,j);

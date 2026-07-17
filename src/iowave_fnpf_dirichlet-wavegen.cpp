@@ -33,8 +33,8 @@ void iowave::dirichlet_wavegen_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, doubl
     count=0;
     GCSLIN
     {
-        i=p->gcslin[n].i;
-        j=p->gcslin[n].j;
+        i=p->gcslin[p->level][n].i;
+        j=p->gcslin[p->level][n].j;
         
         if(h_switch)
         {
@@ -79,8 +79,8 @@ void iowave::dirichlet_wavegen_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, doubl
     count=0;
     GCSLIN
     {
-        i=p->gcslin[n].i;
-        j=p->gcslin[n].j;
+        i=p->gcslin[p->level][n].i;
+        j=p->gcslin[p->level][n].j;
         
         FKLOOP
         FPCHECK
@@ -97,8 +97,8 @@ void iowave::dirichlet_wavegen_fnpf(lexer *p, fdm_fnpf *c, ghostcell* pgc, doubl
     count=0;
     GCSLIN
     {
-        i=p->gcslin[n].i;
-        j=p->gcslin[n].j;
+        i=p->gcslin[p->level][n].i;
+        j=p->gcslin[p->level][n].j;
         
         FKLOOP
         FPCHECK
