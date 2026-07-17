@@ -37,10 +37,10 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
     
 		
 		// UVEL
-		for(n=0;n<p->gcslout_count;++n)
+		GCSLOUT
 		{
-		i=p->gcslout[n][0];
-		j=p->gcslout[n][1];
+		i=p->gcslout[n].i;
+		j=p->gcslout[n].j;
 		
 		eta_T = 0.0;
 		eta_M = d->eta(i,j); 
@@ -97,10 +97,10 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
 //-----------------------------------------------		
 		// VVEL
 		
-		for(n=0;n<p->gcslout_count;++n)
+		GCSLOUT
 		{
-		i=p->gcslout[n][0];
-		j=p->gcslout[n][1];
+		i=p->gcslout[n].i;
+		j=p->gcslout[n].j;
 		
 		eta_T = 0.0;
 		eta_M = d->eta(i,j); 
@@ -114,16 +114,16 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
 		
 		
         aa=bb=0;
-		if(p->gcslout[n][2]==1)
+		if(p->gcslout[n].cs==1)
 		aa=-1;
 		
-		if(p->gcslout[n][2]==4)
+		if(p->gcslout[n].cs==4)
 		aa=1;
 		
-		if(p->gcslout[n][2]==3)
+		if(p->gcslout[n].cs==3)
 		bb=-1;
 		
-		if(p->gcslout[n][2]==2)
+		if(p->gcslout[n].cs==2)
 		bb=1;
  
         
@@ -185,23 +185,23 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
 		
 		//-----------------------------------------------		
 		// PRESSURE
-		for(n=0;n<p->gcslout_count;n++)
+		GCSLOUT
 		{
-		i=p->gcslout[n][0];
-		j=p->gcslout[n][1];
+		i=p->gcslout[n].i;
+		j=p->gcslout[n].j;
 		
 		aa=bb=0;
 		
-		if(p->gcslout[n][2]==1)
+		if(p->gcslout[n].cs==1)
 		aa=-1;
 		
-		if(p->gcslout[n][2]==4)
+		if(p->gcslout[n].cs==4)
 		aa=1;
 		
-		if(p->gcslout[n][2]==3)
+		if(p->gcslout[n].cs==3)
 		bb=-1;
 		
-		if(p->gcslout[n][2]==2)
+		if(p->gcslout[n].cs==2)
 		bb=1;
         
         eta_T = 0.0;

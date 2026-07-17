@@ -102,28 +102,11 @@ void ghostcell::gcsl_setbcio(lexer *p)
 {
     int cs,bc;
 
-    p->gcslin_count=p->gcslout_count=0;
-    GCSL4LOOP
-    {
-        i = p->gcbsl4[p->level][n].i;
-        j = p->gcbsl4[p->level][n].j;
-        cs = p->gcbsl4[p->level][n].cs;
-        bc = p->gcbsl4[p->level][n].bc;
-
-        if(bc==INFLOW || bc==WAVEGEN)
-            ++p->gcslin_count;
-        else if(bc==OUTFLOW || bc==NUMBEACH)
-            ++p->gcslout_count;
-    }
-
-    p->Iarray(p->gcslin,p->gcslin_count,2);
-    p->Iarray(p->gcslout,p->gcslout_count,3);
-
-    p->Iarray(p->gcslawa1,p->gcslout_count,3);
-    p->Iarray(p->gcslawa2,p->gcslout_count,3);
-
-    int count1=0;
-    int count2=0;
+    // Each list now grows from its own source list. The old code sized
+    // gcslawa1/gcslawa2 with Iarray off gcslout_count, which is gcbsl4's
+    // outflow count — they are built from gcbsl1/gcbsl2.
+    p->gcslin.clear();
+    p->gcslout.clear();
 
     GCSL4LOOP
     {
@@ -133,21 +116,13 @@ void ghostcell::gcsl_setbcio(lexer *p)
         bc = p->gcbsl4[p->level][n].bc;
 
         if(bc==INFLOW || bc==WAVEGEN)
-        {
-            p->gcslin[count1][0]=i;
-            p->gcslin[count1][1]=j;
-            ++count1;
-        }
+        p->gcslin.push_back({i,j});
+
         else if(bc==OUTFLOW || bc==NUMBEACH)
-        {
-            p->gcslout[count2][0]=i;
-            p->gcslout[count2][1]=j;
-            p->gcslout[count2][2]=cs;
-            ++count2;
-        }
+        p->gcslout.push_back({i,j,cs});
     }
 
-    count2=0;
+    p->gcslawa1.clear();
     GCSL1LOOP
     {
         i = p->gcbsl1[p->level][n].i;
@@ -156,16 +131,10 @@ void ghostcell::gcsl_setbcio(lexer *p)
         bc = p->gcbsl1[p->level][n].bc;
 
         if(bc==OUTFLOW || bc==NUMBEACH)
-        {
-            p->gcslawa1[count2][0]=i;
-            p->gcslawa1[count2][1]=j;
-            p->gcslawa1[count2][2]=cs;
-            ++count2;
-        }
+        p->gcslawa1.push_back({i,j,cs});
     }
-    p->gcslawa1_count=count2;
 
-    count2=0;
+    p->gcslawa2.clear();
     GCSL2LOOP
     {
         i = p->gcbsl2[p->level][n].i;
@@ -174,14 +143,8 @@ void ghostcell::gcsl_setbcio(lexer *p)
         bc = p->gcbsl2[p->level][n].bc;
 
         if(bc==OUTFLOW || bc==NUMBEACH)
-        {
-            p->gcslawa2[count2][0]=i;
-            p->gcslawa2[count2][1]=j;
-            p->gcslawa2[count2][2]=cs;
-            ++count2;
-        }
+        p->gcslawa2.push_back({i,j,cs});
     }
-    p->gcslawa2_count=count2;
 
     // IOSL
     SLICEBASELOOP

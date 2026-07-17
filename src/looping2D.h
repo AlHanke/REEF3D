@@ -103,6 +103,14 @@ Author: Hans Bihs
 #define QQGCSLB4CHECK if(p->gcbsl4[p->level][qq].cs>0)
 #define QQGCSL4LOOP QQGCSLB4 QQGCSLB4CHECK
 
+// Inflow / outflow / active-wave-absorption lists, built in
+// ghostcell::gcsl_setbcio. gcslin/gcslout come from gcbsl4, gcslawa1 from
+// gcbsl1, gcslawa2 from gcbsl2.
+#define GCSLIN for(n=0;n<static_cast<int>(p->gcslin.size());++n)
+#define GCSLOUT for(n=0;n<static_cast<int>(p->gcslout.size());++n)
+#define GCSLAWA1 for(n=0;n<static_cast<int>(p->gcslawa1.size());++n)
+#define GCSLAWA2 for(n=0;n<static_cast<int>(p->gcslawa2.size());++n)
+
 
 #define GCSLDFETA4 for(n=0;n<p->gcsldfeta4_count;++n)
 #define GCSLDFETA4CHECK if(p->gcsldfeta4[n][2]>0)

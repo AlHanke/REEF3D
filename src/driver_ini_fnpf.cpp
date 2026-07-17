@@ -123,18 +123,18 @@ void driver::driver_ini_fnpf()
     
     pgc->gcsl_start4int(p,c->bc,50);
    
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-    i=p->gcslin[n][0];
-    j=p->gcslin[n][1];
+    i=p->gcslin[n].i;
+    j=p->gcslin[n].j;
 
     c->bc(i-1,j) = 1;
     }
     
-    for(n=0;n<p->gcslout_count;n++)
+    GCSLOUT
     {
-    i=p->gcslout[n][0];
-    j=p->gcslout[n][1];
+    i=p->gcslout[n].i;
+    j=p->gcslout[n].j;
     
     c->bc(i+1,j) = 2;
     }

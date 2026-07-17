@@ -30,10 +30,10 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
     int qn;
 
     count=0;
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-    i=p->gcslin[n][0];
-    j=p->gcslin[n][1];
+    i=p->gcslin[n].i;
+    j=p->gcslin[n].j;
     
         xg = xgen(p);
         yg = ygen(p);
@@ -58,10 +58,10 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
         
 // U
     count=0;
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-    i=p->gcslin[n][0];
-    j=p->gcslin[n][1];
+    i=p->gcslin[n].i;
+    j=p->gcslin[n].j;
     
     xg = xgen1(p);
     yg = ygen1(p);
@@ -86,10 +86,10 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
 
 
     count=0;
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-    i=p->gcslin[n][0];
-    j=p->gcslin[n][1];
+    i=p->gcslin[n].i;
+    j=p->gcslin[n].j;
     
     xg = xgen2(p);
     yg = ygen2(p);
@@ -114,10 +114,10 @@ void iowave::nhflow_wavegen_precalc_decomp_space_dirichlet(lexer *p, ghostcell *
 
 
     count=0;
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-    i=p->gcslin[n][0];
-    j=p->gcslin[n][1];
+    i=p->gcslin[n].i;
+    j=p->gcslin[n].j;
     
     xg = xgen(p);
     yg = ygen(p);

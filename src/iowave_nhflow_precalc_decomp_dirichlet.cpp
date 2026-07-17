@@ -30,10 +30,10 @@ void iowave::nhflow_wavegen_precalc_decomp_dirichlet(lexer *p, ghostcell *pgc)
         
     // ETA
         count=0;
-        for(n=0;n<p->gcslin_count;n++)
+        GCSLIN
         {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
 
         eta(i,j) = 0.0;
             

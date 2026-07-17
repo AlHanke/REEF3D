@@ -29,10 +29,10 @@ Author: Hans Bihs
 
 void ioflow_f::inflow2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice &Q, slice &bed, slice &eta)
 {
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
 
         if(p->wet[IJ]==1)
         {
@@ -58,10 +58,10 @@ void ioflow_f::inflow2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice &Q, 
 
 void ioflow_f::rkinflow2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice &Q, slice &U, slice &V)
 {
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
 
         P(i-1,j)=U(i-1,j);
         P(i-2,j)=U(i-2,j);
