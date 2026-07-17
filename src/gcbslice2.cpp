@@ -42,7 +42,7 @@ void mgcslice2::gcb_seed(lexer *p)
         ++count;
     }
 
-    p->Iresize(p->gcbsl2,p->gcbsl2_count, count, 4, 4);
+    p->gcbsl2.assign(count, {});
 
     // find gcbsl
     count=0;
@@ -50,39 +50,38 @@ void mgcslice2::gcb_seed(lexer *p)
     {
         if(p->flagslice2[Im1J]<0)
         {
-            p->gcbsl2[count][0]=i;
-            p->gcbsl2[count][1]=j;
-            p->gcbsl2[count][2]=1;
-            p->gcbsl2[count][3]=21;
+            auto &gcb = p->gcbsl2[count];
+            gcb.i=i;
+            gcb.j=j;
+            gcb.cs=X_NEG;
             ++count;
         }
 
         if(p->flagslice2[IJp1]<0)
         {
-            p->gcbsl2[count][0]=i;
-            p->gcbsl2[count][1]=j;
-            p->gcbsl2[count][2]=2;
-            p->gcbsl2[count][3]=21;
+            auto &gcb = p->gcbsl2[count];
+            gcb.i=i;
+            gcb.j=j;
+            gcb.cs=Y_POS;
             ++count;
         }
 
         if(p->flagslice2[IJm1]<0)
         {
-            p->gcbsl2[count][0]=i;
-            p->gcbsl2[count][1]=j;
-            p->gcbsl2[count][2]=3;
-            p->gcbsl2[count][3]=21;
+            auto &gcb = p->gcbsl2[count];
+            gcb.i=i;
+            gcb.j=j;
+            gcb.cs=Y_NEG;
             ++count;
         }
 
         if(p->flagslice2[Ip1J]<0)
         {
-            p->gcbsl2[count][0]=i;
-            p->gcbsl2[count][1]=j;
-            p->gcbsl2[count][2]=4;
-            p->gcbsl2[count][3]=21;
+            auto &gcb = p->gcbsl2[count];
+            gcb.i=i;
+            gcb.j=j;
+            gcb.cs=X_POS;
             ++count;
         }
     }
-    p->gcbsl2_count=count;
 }

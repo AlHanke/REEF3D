@@ -40,8 +40,8 @@ public:
     void gcb_seed(lexer*);
 
 private:
+    enum {X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2};
     int di,dj;
-    int qn;
     int count;
     int imin,imax,jmin,jmax;
 };

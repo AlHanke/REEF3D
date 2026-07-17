@@ -286,18 +286,18 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
 
         GCSL1LOOP
         {
-        i = p->gcbsl1[n][0];
-        j = p->gcbsl1[n][1];
+            i = p->gcbsl1[n].i;
+            j = p->gcbsl1[n].j;
                 
         
-            if(p->gcbsl1[n][3]==1)
+            if(p->gcbsl1[n].bc==1)
             {
             b->hx(i-1,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hx(i-2,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hx(i-3,j) = MAX(p->wd - b->bed(i,j),0.0);
             }
             
-            if(p->gcbsl1[n][3]==2)
+            if(p->gcbsl1[n].bc==2)
             {
             b->hx(i+1,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hx(i+2,j) = MAX(p->wd - b->bed(i,j),0.0);
@@ -307,17 +307,17 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
 
         GCSL2LOOP
         {
-        i = p->gcbsl2[n][0];
-        j = p->gcbsl2[n][1];
+        i = p->gcbsl2[n].i;
+        j = p->gcbsl2[n].j;
 
-            if(p->gcbsl2[n][3]==1)
+            if(p->gcbsl2[n].bc==1)
             {
             b->hy(i-1,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hy(i-2,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hy(i-3,j) = MAX(p->wd - b->bed(i,j),0.0);
             }
             
-            if(p->gcbsl2[n][3]==2)
+            if(p->gcbsl2[n].bc==2)
             {
             b->hy(i+1,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hy(i+2,j) = MAX(p->wd - b->bed(i,j),0.0);
@@ -330,11 +330,11 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
     {
         GCSL1LOOP
         {
-        i = p->gcbsl1[n][0];
-        j = p->gcbsl1[n][1];
+        i = p->gcbsl1[n].i;
+        j = p->gcbsl1[n].j;
                 
         
-            if(p->gcbsl1[n][3]==1)
+            if(p->gcbsl1[n].bc==1)
             {
             b->hx(i-1,j) = MAX(p->F61 - b->bed(i,j),0.0);
             b->hx(i-2,j) = MAX(p->F61 - b->bed(i,j),0.0);
@@ -344,10 +344,10 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
 
         GCSL2LOOP
         {
-        i = p->gcbsl2[n][0];
-        j = p->gcbsl2[n][1];
+        i = p->gcbsl2[n].i;
+        j = p->gcbsl2[n].j;
 
-            if(p->gcbsl2[n][3]==1)
+            if(p->gcbsl2[n].bc==1)
             {
             b->hy(i-1,j) = MAX(p->F61 - b->bed(i,j),0.0);
             b->hy(i-2,j) = MAX(p->F61 - b->bed(i,j),0.0);
@@ -363,10 +363,10 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
     {
         GCSL1LOOP
         {
-        i = p->gcbsl1[n][0];
-        j = p->gcbsl1[n][1];
+        i = p->gcbsl1[n].i;
+        j = p->gcbsl1[n].j;
                 
-            if(p->gcbsl1[n][3]==2)
+            if(p->gcbsl1[n].bc==2)
             {
             b->hx(i+1,j) = MAX(p->F62 - b->bed(i,j),0.0);
             b->hx(i+2,j) = MAX(p->F62 - b->bed(i,j),0.0);
@@ -376,10 +376,10 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
 
         GCSL2LOOP
         {
-        i = p->gcbsl2[n][0];
-        j = p->gcbsl2[n][1];
+        i = p->gcbsl2[n].i;
+        j = p->gcbsl2[n].j;
             
-            if(p->gcbsl2[n][3]==2)
+            if(p->gcbsl2[n].bc==2)
             {
             b->hy(i+1,j) = MAX(p->F62 - b->bed(i,j),0.0);
             b->hy(i+2,j) = MAX(p->F62 - b->bed(i,j),0.0);
