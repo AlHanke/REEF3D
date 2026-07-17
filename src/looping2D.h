@@ -97,18 +97,6 @@ Author: Hans Bihs
 #define QQGCSL4LOOP QQGCSLB4 QQGCSLB4CHECK
 
 
-#define GCSLB4A for(n=0;n<p->gcbsl4a_count;++n)
-#define GCSLB4ACHECK if(p->gcbsl4a[n][3]>0)
-#define GCSL4ALOOP GCSLB4A GCSLB4ACHECK
-
-#define QGCSLB4A for(q=0;q<p->gcbsl4a_count;++q)
-#define QGCSLB4ACHECK if(p->gcbsl4a[q][3]>0)
-#define QGCSL4ALOOP QGCSLB4A QGCSLB4ACHECK
-
-#define QQGCSLB4A for(qq=0;qq<p->gcbsl4a_count;++qq)
-#define QQGCSLB4ACHECK if(p->gcbsl4a[qq][3]>0)
-#define QQGCSL4ALOOP QQGCSLB4A QQGCSLB4ACHECK
-
 #define GCSLDFETA4 for(n=0;n<p->gcsldfeta4_count;++n)
 #define GCSLDFETA4CHECK if(p->gcsldfeta4[n][3]>0)
 #define GCSLDFETA4LOOP GCSLDFETA4 GCSLDFETA4CHECK

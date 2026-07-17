@@ -165,10 +165,10 @@ public:
     int pointnum2D,cellnum2D,cellnumtot2D,polygon_sum;
 
     // SLICE ghostcell
-    int gcbsl1_count,gcbsl2_count,gcbsl4_count,gcbsl4a_count;
+    int gcbsl1_count,gcbsl2_count,gcbsl4_count;
     int gcslin_count,gcslout_count;
     int gcslawa1_count,gcslawa2_count;
-    int **gcbsl1,**gcbsl2,**gcbsl4,**gcbsl4a;
+    int **gcbsl1,**gcbsl2,**gcbsl4;
 	int **gcslin, **gcslout;
     int **gcslawa1, **gcslawa2;
 
