@@ -37,6 +37,7 @@ Author: Hans Bihs
 #endif
 #include <vector>
 
+class ArrayWrapper2D;
 class convection;
 class fdm;
 class fdm2D;
@@ -218,7 +219,7 @@ public:
     void gcslparax_fh(lexer*, slice&);
     void gcslparax_int(lexer*, sliceint&);
 
-    void gcslflagx(lexer*, int*);
+    void gcslflagx(lexer*, ArrayWrapper2D&);
     void gcslparaxijk(lexer*, double*);
     void gcslparaxijk_single(lexer*, double*);
 

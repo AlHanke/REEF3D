@@ -91,6 +91,7 @@ public:
     void grid2Dsize();
     void flagini2D();
     void gridini2D();
+    void sliceflagini();
 
 //-----data-----------------------
     //REEF3D
@@ -185,7 +186,8 @@ public:
     int veclength;
 
     //SLICE
-    int *flagslice1,*flagslice2,*flagslice4;
+    ArrayWrapper2D flagslice1,flagslice2,flagslice4;
+    std::unique_ptr<int[]> flagslice4_grid;
 
     int vec2Dlength;
 

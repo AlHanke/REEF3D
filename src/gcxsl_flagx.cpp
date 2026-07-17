@@ -22,15 +22,17 @@ Author: Hans Bihs
 
 #include"ghostcell.h"
 #include"lexer.h"
-#include"fdm.h"
 
-void ghostcell::gcslflagx(lexer* p, int *flag)
+void ghostcell::gcslflagx(lexer* p, ArrayWrapper2D &flag)
 {
+    #if USE_AMREX
+    flag.fillBoundary();
+    #else
     count=0;
     for(n=0;n<p->gcslpara1_count;++n)
     {
-    i=p->gcslpara1[n][0];
-    j=p->gcslpara1[n][1];
+        i=p->gcslpara1[n][0];
+        j=p->gcslpara1[n][1];
 
         isend1[count]=flag[IJ];
         ++count;
@@ -39,8 +41,8 @@ void ghostcell::gcslflagx(lexer* p, int *flag)
     count=0;
     for(n=0;n<p->gcslpara2_count;++n)
     {
-    i=p->gcslpara2[n][0];
-    j=p->gcslpara2[n][1];
+        i=p->gcslpara2[n][0];
+        j=p->gcslpara2[n][1];
 
         isend2[count]=flag[IJ];
         ++count;
@@ -49,8 +51,8 @@ void ghostcell::gcslflagx(lexer* p, int *flag)
     count=0;
     for(n=0;n<p->gcslpara3_count;++n)
     {
-    i=p->gcslpara3[n][0];
-    j=p->gcslpara3[n][1];
+        i=p->gcslpara3[n][0];
+        j=p->gcslpara3[n][1];
 
         isend3[count]=flag[IJ];
         ++count;
@@ -59,8 +61,8 @@ void ghostcell::gcslflagx(lexer* p, int *flag)
     count=0;
     for(n=0;n<p->gcslpara4_count;++n)
     {
-    i=p->gcslpara4[n][0];
-    j=p->gcslpara4[n][1];
+        i=p->gcslpara4[n][0];
+        j=p->gcslpara4[n][1];
 
         isend4[count]=flag[IJ];
         ++count;
@@ -68,13 +70,13 @@ void ghostcell::gcslflagx(lexer* p, int *flag)
 
     Sendrecv_int(p->gcslpara1_count, p->gcslpara2_count, p->gcslpara3_count, p->gcslpara4_count, 0, 0);
 
-//  Unpack
+    //  Unpack
 
     count=0;
     for(n=0;n<p->gcslpara1_count;++n)
     {
-    i=p->gcslpara1[n][0];
-    j=p->gcslpara1[n][1];
+        i=p->gcslpara1[n][0];
+        j=p->gcslpara1[n][1];
 
         flag[Im1J]=irecv1[count];
         ++count;
@@ -83,8 +85,8 @@ void ghostcell::gcslflagx(lexer* p, int *flag)
     count=0;
     for(n=0;n<p->gcslpara2_count;++n)
     {
-    i=p->gcslpara2[n][0];
-    j=p->gcslpara2[n][1];
+        i=p->gcslpara2[n][0];
+        j=p->gcslpara2[n][1];
 
         flag[IJp1]=irecv2[count];
         ++count;
@@ -93,8 +95,8 @@ void ghostcell::gcslflagx(lexer* p, int *flag)
     count=0;
     for(n=0;n<p->gcslpara3_count;++n)
     {
-    i=p->gcslpara3[n][0];
-    j=p->gcslpara3[n][1];
+        i=p->gcslpara3[n][0];
+        j=p->gcslpara3[n][1];
 
         flag[IJm1]=irecv3[count];
         ++count;
@@ -103,10 +105,11 @@ void ghostcell::gcslflagx(lexer* p, int *flag)
     count=0;
     for(n=0;n<p->gcslpara4_count;++n)
     {
-    i=p->gcslpara4[n][0];
-    j=p->gcslpara4[n][1];
+        i=p->gcslpara4[n][0];
+        j=p->gcslpara4[n][1];
 
         flag[Ip1J]=irecv4[count];
         ++count;
     }
+    #endif
 }
