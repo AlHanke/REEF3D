@@ -31,19 +31,19 @@ void ghostcell::gcsl_setbc1(lexer *p)
     {
         i = p->gcbsl1[n][0];
         j = p->gcbsl1[n][1];
-        cs = p->gcbsl1[n][3];
-        bc = p->gcbsl1[n][4];
+        cs = p->gcbsl1[n][2];
+        bc = p->gcbsl1[n][3];
 
         if(bc==WALL)
         {
             if(cs==X_NEG && i+p->origin_i==0)
-                p->gcbsl1[n][4]=p->bcside1;
+                p->gcbsl1[n][3]=p->bcside1;
             else if(cs==X_POS && i+p->origin_i==p->gknox-2)
-                p->gcbsl1[n][4]=p->bcside4;
+                p->gcbsl1[n][3]=p->bcside4;
             else if(cs==Y_NEG && j+p->origin_j==0)
-                p->gcbsl1[n][4]=p->bcside3;
+                p->gcbsl1[n][3]=p->bcside3;
             else if(cs==Y_POS && j+p->origin_j==p->gknoy-1)
-                p->gcbsl1[n][4]=p->bcside2;
+                p->gcbsl1[n][3]=p->bcside2;
         }
     }
 }
@@ -56,19 +56,19 @@ void ghostcell::gcsl_setbc2(lexer *p)
     {
         i = p->gcbsl2[n][0];
         j = p->gcbsl2[n][1];
-        cs = p->gcbsl2[n][3];
-        bc = p->gcbsl2[n][4];
+        cs = p->gcbsl2[n][2];
+        bc = p->gcbsl2[n][3];
 
         if(bc==WALL)
         {
             if(cs==X_NEG && i+p->origin_i==0)
-                p->gcbsl2[n][4]=p->bcside1;
+                p->gcbsl2[n][3]=p->bcside1;
             else if(cs==X_POS && i+p->origin_i==p->gknox-1)
-                p->gcbsl2[n][4]=p->bcside4;
+                p->gcbsl2[n][3]=p->bcside4;
             else if(cs==Y_NEG && j+p->origin_j==0)
-                p->gcbsl2[n][4]=p->bcside3;
+                p->gcbsl2[n][3]=p->bcside3;
             else if(cs==Y_POS && j+p->origin_j==p->gknoy-2)
-                p->gcbsl2[n][4]=p->bcside2;
+                p->gcbsl2[n][3]=p->bcside2;
         }
     }
 }
@@ -81,19 +81,19 @@ void ghostcell::gcsl_setbc4(lexer *p)
     {
         i = p->gcbsl4[n][0];
         j = p->gcbsl4[n][1];
-        cs = p->gcbsl4[n][3];
-        bc = p->gcbsl4[n][4];
+        cs = p->gcbsl4[n][2];
+        bc = p->gcbsl4[n][3];
 
         if(bc==WALL)
         {
             if(cs==X_NEG && i+p->origin_i==0)
-                p->gcbsl4[n][4]=p->bcside1;
+                p->gcbsl4[n][3]=p->bcside1;
             else if(cs==X_POS && i+p->origin_i==p->gknox-1)
-                p->gcbsl4[n][4]=p->bcside4;
+                p->gcbsl4[n][3]=p->bcside4;
             else if(cs==Y_NEG && j+p->origin_j==0)
-                p->gcbsl4[n][4]=p->bcside3;
+                p->gcbsl4[n][3]=p->bcside3;
             else if(cs==Y_POS && j+p->origin_j==p->gknoy-1)
-                p->gcbsl4[n][4]=p->bcside2;
+                p->gcbsl4[n][3]=p->bcside2;
         }
     }
 }
@@ -107,8 +107,8 @@ void ghostcell::gcsl_setbcio(lexer *p)
     {
         i = p->gcbsl4[n][0];
         j = p->gcbsl4[n][1];
-        cs = p->gcbsl4[n][3];
-        bc = p->gcbsl4[n][4];
+        cs = p->gcbsl4[n][2];
+        bc = p->gcbsl4[n][3];
 
         if(bc==INFLOW || bc==WAVEGEN)
             ++p->gcslin_count;
@@ -129,8 +129,8 @@ void ghostcell::gcsl_setbcio(lexer *p)
     {
         i = p->gcbsl4[n][0];
         j = p->gcbsl4[n][1];
-        cs = p->gcbsl4[n][3];
-        bc = p->gcbsl4[n][4];
+        cs = p->gcbsl4[n][2];
+        bc = p->gcbsl4[n][3];
 
         if(bc==INFLOW || bc==WAVEGEN)
         {
@@ -152,8 +152,8 @@ void ghostcell::gcsl_setbcio(lexer *p)
     {
         i = p->gcbsl1[n][0];
         j = p->gcbsl1[n][1];
-        cs = p->gcbsl1[n][3];
-        bc = p->gcbsl1[n][4];
+        cs = p->gcbsl1[n][2];
+        bc = p->gcbsl1[n][3];
 
         if(bc==OUTFLOW || bc==NUMBEACH)
         {
@@ -170,8 +170,8 @@ void ghostcell::gcsl_setbcio(lexer *p)
     {
         i = p->gcbsl2[n][0];
         j = p->gcbsl2[n][1];
-        cs = p->gcbsl2[n][3];
-        bc = p->gcbsl2[n][4];
+        cs = p->gcbsl2[n][2];
+        bc = p->gcbsl2[n][3];
 
         if(bc==OUTFLOW || bc==NUMBEACH)
         {
@@ -191,8 +191,8 @@ void ghostcell::gcsl_setbcio(lexer *p)
     {
         i = p->gcbsl4[n][0];
         j = p->gcbsl4[n][1];
-        cs = p->gcbsl4[n][3];
-        bc = p->gcbsl4[n][4];
+        cs = p->gcbsl4[n][2];
+        bc = p->gcbsl4[n][3];
 
         if((bc==INFLOW || bc==WAVEGEN) && cs==X_NEG)
             p->IOSL[Im1J]=1;
