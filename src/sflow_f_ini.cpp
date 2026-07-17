@@ -256,8 +256,8 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
         // fix inflow fsf
         GCSLIN
         {
-        i=p->gcslin[n].i;
-        j=p->gcslin[n].j;
+        i=p->gcslin[p->level][n].i;
+        j=p->gcslin[p->level][n].j;
 
         b->eta(i-1,j) = 0.0;
         b->eta(i-2,j) = 0.0;
@@ -271,8 +271,8 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
         // fix outflow fsf
         GCSLOUT
         {
-        i=p->gcslout[n].i;
-        j=p->gcslout[n].j;
+        i=p->gcslout[p->level][n].i;
+        j=p->gcslout[p->level][n].j;
 
         b->eta(i+1,j) = 0.0;
         b->eta(i+2,j) = 0.0;
@@ -389,8 +389,8 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
         
         GCSLOUT
         {
-        i=p->gcslout[n].i;
-        j=p->gcslout[n].j;
+        i=p->gcslout[p->level][n].i;
+        j=p->gcslout[p->level][n].j;
         
         b->eta(i,j) = p->F62-p->wd;
         b->eta(i+1,j) = p->F62-p->wd;

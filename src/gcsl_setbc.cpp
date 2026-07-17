@@ -102,11 +102,19 @@ void ghostcell::gcsl_setbcio(lexer *p)
 {
     int cs,bc;
 
-    // Each list now grows from its own source list. The old code sized
-    // gcslawa1/gcslawa2 with Iarray off gcslout_count, which is gcbsl4's
-    // outflow count — they are built from gcbsl1/gcbsl2.
-    p->gcslin.clear();
-    p->gcslout.clear();
+    // Each list sizes itself from its own source list. gcslawa1/gcslawa2 are
+    // built from gcbsl1/gcbsl2, so they must not be sized off gcbsl4's
+    // outflow count.
+    p->gcslin.resize_levels(p->gcbsl4.nlevels());
+    p->gcslout.resize_levels(p->gcbsl4.nlevels());
+
+    // gcslawa1/gcslawa2 is not used by FNPF so gcbsl1 & gcbsl2 not being build
+    // is not a problem.
+    p->gcslawa1.resize_levels(p->gcbsl1.nlevels());
+    p->gcslawa2.resize_levels(p->gcbsl2.nlevels());
+
+    p->gcslin[p->level].clear();
+    p->gcslout[p->level].clear();
 
     GCSL4LOOP
     {
@@ -116,13 +124,13 @@ void ghostcell::gcsl_setbcio(lexer *p)
         bc = p->gcbsl4[p->level][n].bc;
 
         if(bc==INFLOW || bc==WAVEGEN)
-        p->gcslin.push_back({i,j});
+        p->gcslin[p->level].push_back({i,j});
 
         else if(bc==OUTFLOW || bc==NUMBEACH)
-        p->gcslout.push_back({i,j,cs});
+        p->gcslout[p->level].push_back({i,j,cs});
     }
 
-    p->gcslawa1.clear();
+    p->gcslawa1[p->level].clear();
     GCSL1LOOP
     {
         i = p->gcbsl1[p->level][n].i;
@@ -131,10 +139,10 @@ void ghostcell::gcsl_setbcio(lexer *p)
         bc = p->gcbsl1[p->level][n].bc;
 
         if(bc==OUTFLOW || bc==NUMBEACH)
-        p->gcslawa1.push_back({i,j,cs});
+        p->gcslawa1[p->level].push_back({i,j,cs});
     }
 
-    p->gcslawa2.clear();
+    p->gcslawa2[p->level].clear();
     GCSL2LOOP
     {
         i = p->gcbsl2[p->level][n].i;
@@ -143,7 +151,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
         bc = p->gcbsl2[p->level][n].bc;
 
         if(bc==OUTFLOW || bc==NUMBEACH)
-        p->gcslawa2.push_back({i,j,cs});
+        p->gcslawa2[p->level].push_back({i,j,cs});
     }
 
     // IOSL

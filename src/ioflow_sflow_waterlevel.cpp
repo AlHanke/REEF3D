@@ -81,8 +81,8 @@ void ioflow_f::waterlevel2D(lexer *p, fdm2D *b, ghostcell* pgc, slice &eta)
         if(p->F50==2 || p->F50==3)
         GCSLOUT
         {
-        i=p->gcslout[n].i;
-        j=p->gcslout[n].j;
+        i=p->gcslout[p->level][n].i;
+        j=p->gcslout[p->level][n].j;
         
             if(p->wet[IJ]==1)
             {

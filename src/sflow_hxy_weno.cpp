@@ -59,8 +59,8 @@ void sflow_hxy_weno::start(lexer* p, slice& hx, slice& hy, slice& depth, int *we
     if(p->F50==1 || p->F50==4)
     GCSLOUT
     {
-    i=p->gcslout[n].i;
-    j=p->gcslout[n].j;
+    i=p->gcslout[p->level][n].i;
+    j=p->gcslout[p->level][n].j;
     
         if(wet[IJ]==1)
         {

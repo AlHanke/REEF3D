@@ -101,8 +101,8 @@ void sflow_eta::wetdry(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &P,
     {
         GCSLIN
         {
-        i=p->gcslin[n].i;
-        j=p->gcslin[n].j;
+        i=p->gcslin[p->level][n].i;
+        j=p->gcslin[p->level][n].j;
         }
     }
 }

@@ -37,8 +37,8 @@ ptf_laplace_cds2::ptf_laplace_cds2(lexer *p, fdm *a, ghostcell *pgc) : bc(p)
     if(p->B98>=3)
     GCSLIN
     {
-    i=p->gcslin[n].i;
-    j=p->gcslin[n].j;
+    i=p->gcslin[p->level][n].i;
+    j=p->gcslin[p->level][n].j;
 
     bc(i-1,j) = 1;
     }
@@ -46,8 +46,8 @@ ptf_laplace_cds2::ptf_laplace_cds2(lexer *p, fdm *a, ghostcell *pgc) : bc(p)
     if(p->B99>=3)
     GCSLOUT
     {
-    i=p->gcslout[n].i;
-    j=p->gcslout[n].j;
+    i=p->gcslout[p->level][n].i;
+    j=p->gcslout[p->level][n].j;
 
     bc(i+1,j) = 2;
     }

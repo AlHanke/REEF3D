@@ -124,8 +124,8 @@ void iowave::fnpf_precalc_dirichlet_ini(lexer *p, ghostcell *pgc)
     
     GCSLIN
     {
-    i=p->gcslin[n].i;
-    j=p->gcslin[n].j;
+    i=p->gcslin[p->level][n].i;
+    j=p->gcslin[p->level][n].j;
         FKLOOP
         ++ept_count;
     }

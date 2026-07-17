@@ -62,8 +62,8 @@ void ioflow_f::Qin2D(lexer *p, fdm2D* b, ghostcell* pgc)
     GCSLIN
     {
     area=0.0;
-    i=p->gcslin[n].i;
-    j=p->gcslin[n].j;
+    i=p->gcslin[p->level][n].i;
+    j=p->gcslin[p->level][n].j;
     
         if(p->wet[IJ]==1)
         {
@@ -110,8 +110,8 @@ void ioflow_f::Qout2D(lexer *p, fdm2D* b, ghostcell* pgc)
     GCSLOUT
     {
     area=0.0;
-    i=p->gcslout[n].i;
-    j=p->gcslout[n].j;
+    i=p->gcslout[p->level][n].i;
+    j=p->gcslout[p->level][n].j;
         
         if(p->wet[IJ]==1)
         {

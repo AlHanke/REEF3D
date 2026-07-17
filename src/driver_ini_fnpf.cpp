@@ -125,16 +125,16 @@ void driver::driver_ini_fnpf()
    
     GCSLIN
     {
-    i=p->gcslin[n].i;
-    j=p->gcslin[n].j;
+    i=p->gcslin[p->level][n].i;
+    j=p->gcslin[p->level][n].j;
 
     c->bc(i-1,j) = 1;
     }
     
     GCSLOUT
     {
-    i=p->gcslout[n].i;
-    j=p->gcslout[n].j;
+    i=p->gcslout[p->level][n].i;
+    j=p->gcslout[p->level][n].j;
     
     c->bc(i+1,j) = 2;
     }
