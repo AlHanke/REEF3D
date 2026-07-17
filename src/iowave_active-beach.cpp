@@ -50,13 +50,13 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
 
 
     // UVEL
-    for(n=0;n<p->gcslawa1_count;++n)
+    GCSLAWA1
     {
-        i=p->gcslawa1[n][0];
-        j=p->gcslawa1[n][1];
+        i=p->gcslawa1[n].i;
+        j=p->gcslawa1[n].j;
 
         ii=0;
-        if(p->gcslawa1[n][2]==4)
+        if(p->gcslawa1[n].cs==4)
         ii=1;
 
         wsf=wsfmax(i+ii,j);
@@ -74,16 +74,16 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
 
 
         aa=bb=0;
-        if(p->gcslawa1[n][2]==1)
+        if(p->gcslawa1[n].cs==1)
         aa=-1;
 
-        if(p->gcslawa1[n][2]==4)
+        if(p->gcslawa1[n].cs==4)
         aa=1;
 
-        if(p->gcslawa1[n][2]==3)
+        if(p->gcslawa1[n].cs==3)
         bb=-1;
 
-        if(p->gcslawa1[n][2]==2)
+        if(p->gcslawa1[n].cs==2)
         bb=1;
 
         if(p->B99==3)
@@ -195,14 +195,14 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
 //-----------------------------------------------
     // VVEL
 
-    for(n=0;n<p->gcslawa2_count;++n)
+    GCSLAWA2
     {
-        i=p->gcslawa2[n][0];
-        j=p->gcslawa2[n][1];
+        i=p->gcslawa2[n].i;
+        j=p->gcslawa2[n].j;
 
 
         jj=0;
-        if(p->gcslawa2[n][3]==2)
+        if(p->gcslawa2[n].cs==2)
         jj=1;
 
         wsf=wsfmax(i,j+jj);
@@ -218,16 +218,16 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         fac1=0.0;
 
         aa=bb=0;
-        if(p->gcslawa2[n][2]==1)
+        if(p->gcslawa2[n].cs==1)
         aa=-1;
 
-        if(p->gcslawa2[n][2]==4)
+        if(p->gcslawa2[n].cs==4)
         aa=1;
 
-        if(p->gcslawa2[n][2]==3)
+        if(p->gcslawa2[n].cs==3)
         bb=-1;
 
-        if(p->gcslawa2[n][2]==2)
+        if(p->gcslawa2[n].cs==2)
         bb=1;
 
 
@@ -304,23 +304,23 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
 
     //-----------------------------------------------
     // PRESSURE
-    for(n=0;n<p->gcslout_count;n++)
+    GCSLOUT
     {
-        i=p->gcslout[n][0];
-        j=p->gcslout[n][1];
+        i=p->gcslout[n].i;
+        j=p->gcslout[n].j;
 
         aa=bb=0;
 
-        if(p->gcslout[n][2]==1)
+        if(p->gcslout[n].cs==1)
         aa=-1;
 
-        if(p->gcslout[n][2]==4)
+        if(p->gcslout[n].cs==4)
         aa=1;
 
-        if(p->gcslout[n][2]==3)
+        if(p->gcslout[n].cs==3)
         bb=-1;
 
-        if(p->gcslout[n][2]==2)
+        if(p->gcslout[n].cs==2)
         bb=1;
 
         wsf=wsfmax(i,j);

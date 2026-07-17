@@ -30,10 +30,10 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
     int qn;
 
     count=0;
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
 
         xg = xgen(p);
         yg = ygen(p);
@@ -58,10 +58,10 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
     pgc->gcsl_start4(p,eta,50);
 
     count=0;
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
 
         xg = xgen1(p);
         yg = ygen1(p);
@@ -94,10 +94,10 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
 
 
     count=0;
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
 
         xg = xgen2(p);
         yg = ygen2(p);
@@ -129,10 +129,10 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
     }
 
     count=0;
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
 
         xg = xgen(p);
         yg = ygen(p);
@@ -165,10 +165,10 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
 
     count=0;
     if(f_switch)
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
 
         xg = xgen1(p);
         yg = ygen1(p);

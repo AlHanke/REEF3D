@@ -94,10 +94,10 @@ void fnpf_fsf_update::velcalc_sig(lexer *p, fdm_fnpf *c, ghostcell *pgc, double 
     
     /*
     if(p->B98>=3)
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
         
         FKLOOP
         FPCHECK

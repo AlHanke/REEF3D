@@ -195,13 +195,12 @@ public:
     int pointnum2D,cellnum2D,cellnumtot2D,polygon_sum;
 
     // SLICE ghostcell
-    int gcslin_count,gcslout_count;
-    int gcslawa1_count,gcslawa2_count;
     gcb_sl_cs_bc_list gcbsl1;
     gcb_sl_cs_bc_list gcbsl2;
     gcb_sl_cs_bc_list gcbsl4;
-    int **gcslin, **gcslout;
-    int **gcslawa1, **gcslawa2;
+    std::vector<gcb_sl> gcslin;
+    std::vector<gcb_sl_cs> gcslout;
+    std::vector<gcb_sl_cs> gcslawa1, gcslawa2;
 
     std::vector<std::array<int,3>> dgcsl1, dgcsl2, dgcsl4;
     int dgcsl1_count,dgcsl2_count,dgcsl4_count;
