@@ -35,8 +35,8 @@ void iowave::nhflow_active_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, double 
         if(p->B92<20 || p->B92>29)
         GCSLIN
         {
-        i=p->gcslin[n].i;
-        j=p->gcslin[n].j;
+        i=p->gcslin[p->level][n].i;
+        j=p->gcslin[p->level][n].j;
         
             if(p->A515==1)
             etaval = d->eta(i,j);
@@ -68,8 +68,8 @@ void iowave::nhflow_active_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, double 
         if(p->B92>=20 && p->B92<=29)
         GCSLIN
         {
-        i=p->gcslin[n].i;
-        j=p->gcslin[n].j;
+        i=p->gcslin[p->level][n].i;
+        j=p->gcslin[p->level][n].j;
         
             if(p->A515==1)
             etaval = d->eta(i,j);
