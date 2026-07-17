@@ -35,19 +35,19 @@ ptf_laplace_cds2::ptf_laplace_cds2(lexer *p, fdm *a, ghostcell *pgc) : bc(p)
     pgc->gcsl_start4int(p,bc,50);
 
     if(p->B98>=3)
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-    i=p->gcslin[n][0];
-    j=p->gcslin[n][1];
+    i=p->gcslin[n].i;
+    j=p->gcslin[n].j;
 
     bc(i-1,j) = 1;
     }
 
     if(p->B99>=3)
-    for(n=0;n<p->gcslout_count;n++)
+    GCSLOUT
     {
-    i=p->gcslout[n][0];
-    j=p->gcslout[n][1];
+    i=p->gcslout[n].i;
+    j=p->gcslout[n].j;
 
     bc(i+1,j) = 2;
     }

@@ -122,10 +122,10 @@ void sflow_eta::depth_update(lexer *p, fdm2D *b , ghostcell *pgc, slice &P, slic
     
     
     if(p->F50==2 || p->F50==3)
-    for(n=0;n<p->gcslout_count;n++)
+    GCSLOUT
     {
-    i=p->gcslout[n][0];
-    j=p->gcslout[n][1];
+    i=p->gcslout[n].i;
+    j=p->gcslout[n].j;
     
     if(p->wet[IJ]==1)
     eta(i,j) = wsfout-p->wd;

@@ -36,10 +36,10 @@ void iowave::inflow_fnpf(lexer *p, fdm_fnpf *c, ghostcell *pgc, double *Fi, doub
 
 void iowave::rkinflow_fnpf(lexer *p, fdm_fnpf*, ghostcell *pgc, slice &frk, slice &f)
 {
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
         
         frk(i-1,j) = f(i-1,j);
         frk(i-2,j) = f(i-2,j);

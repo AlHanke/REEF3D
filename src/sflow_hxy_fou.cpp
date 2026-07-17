@@ -59,10 +59,10 @@ void sflow_hxy_fou::start(lexer* p, slice& hx, slice& hy, slice& depth, int *wet
 	}
     
     if(p->F50==1 || p->F50==4)
-    for(n=0;n<p->gcslout_count;n++)
+    GCSLOUT
     {
-    i=p->gcslout[n][0];
-    j=p->gcslout[n][1];
+    i=p->gcslout[n].i;
+    j=p->gcslout[n].j;
     
 
         if(wet[IJ]==1)

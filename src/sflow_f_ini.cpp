@@ -254,10 +254,10 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
     b->hy(i,j) = MAX(0.5*(b->eta(i,j+1)+b->eta(i,j)) + p->wd - 0.5*(b->bed(i,j+1)+b->bed(i,j)),0.0);
 
         // fix inflow fsf
-        for(n=0;n<p->gcslin_count;n++)
+        GCSLIN
         {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
 
         b->eta(i-1,j) = 0.0;
         b->eta(i-2,j) = 0.0;
@@ -269,10 +269,10 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
         }
         
         // fix outflow fsf
-        for(n=0;n<p->gcslout_count;n++)
+        GCSLOUT
         {
-        i=p->gcslout[n][0];
-        j=p->gcslout[n][1];
+        i=p->gcslout[n].i;
+        j=p->gcslout[n].j;
 
         b->eta(i+1,j) = 0.0;
         b->eta(i+2,j) = 0.0;
@@ -387,10 +387,10 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
             }
         }
         
-        for(n=0;n<p->gcslout_count;n++)
+        GCSLOUT
         {
-        i=p->gcslout[n][0];
-        j=p->gcslout[n][1];
+        i=p->gcslout[n].i;
+        j=p->gcslout[n].j;
         
         b->eta(i,j) = p->F62-p->wd;
         b->eta(i+1,j) = p->F62-p->wd;

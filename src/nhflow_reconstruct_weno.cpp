@@ -75,11 +75,11 @@ void nhflow_reconstruct_weno::reconstruct_2D_x(lexer* p, ghostcell *pgc, fdm_nhf
     // Dirichlet Wave Generation
     if(p->B98>2)
     {   
-    for(n=0;n<p->gcslin_count;n++)
-    for(i=p->gcslin[n][0];i<p->gcslin[n][0]+5;++i)
+    GCSLIN
+    for(i=p->gcslin[n].i;i<p->gcslin[n].i+5;++i)
     {
         // i
-        j=p->gcslin[n][1];
+        j=p->gcslin[n].j;
         
         dfdx_plus = (f(i+1,j) - f(i,j))/p->DXP[IP];
         dfdx_min  = (f(i,j) - f(i-1,j))/p->DXP[IM1];
@@ -91,10 +91,10 @@ void nhflow_reconstruct_weno::reconstruct_2D_x(lexer* p, ghostcell *pgc, fdm_nhf
     pgc->gcsl_start1(p,dfdx,1);
     
     // reconstruct
-    for(n=0;n<p->gcslin_count;n++)
-    for(i=p->gcslin[n][0];i<p->gcslin[n][0]+4;++i)
+    GCSLIN
+    for(i=p->gcslin[n].i;i<p->gcslin[n].i+4;++i)
     {
-    j=p->gcslin[n][1];
+    j=p->gcslin[n].j;
 
         
         fs(i,j) = f(i,j)   + 0.5*p->DXP[IM1]*dfdx(i,j); 

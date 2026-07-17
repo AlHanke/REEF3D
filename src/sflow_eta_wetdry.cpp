@@ -99,10 +99,10 @@ void sflow_eta::wetdry(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &P,
     // gcslin update
     if(p->count<=1)
     {
-        for(n=0;n<p->gcslin_count;n++)
+        GCSLIN
         {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
         }
     }
 }

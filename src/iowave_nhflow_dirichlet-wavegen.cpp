@@ -34,10 +34,10 @@ void iowave::nhflow_dirichlet_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, doub
         
         // wave theory
         if(p->B92<20 || p->B92>29)
-        for(n=0;n<p->gcslin_count;n++)
+        GCSLIN
         {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
         
             if(p->A515==1)
             etaval = d->eta(i,j);
@@ -67,10 +67,10 @@ void iowave::nhflow_dirichlet_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, doub
         
         // wave maker
         if(p->B92>=20 && p->B92<=29)
-        for(n=0;n<p->gcslin_count;n++)
+        GCSLIN
         {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
         
             if(p->A515==1)
             etaval = d->eta(i,j);

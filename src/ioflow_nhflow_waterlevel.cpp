@@ -32,10 +32,10 @@ void ioflow_f::fsfinflow_nhflow(lexer *p, fdm_nhf* d, ghostcell* pgc, slice &WL)
      // fsf out
     p->phiout=0.0;
     count=0;
-    for(n=0;n<p->gcslout_count;n++)
+    GCSLOUT
     {
-        i=p->gcslout[n][0];
-        j=p->gcslout[n][1];
+        i=p->gcslout[n].i;
+        j=p->gcslout[n].j;
         
         p->phiout+=d->eta(i,j);
         
@@ -55,10 +55,10 @@ void ioflow_f::fsfinflow_nhflow(lexer *p, fdm_nhf* d, ghostcell* pgc, slice &WL)
     double eta_in;
     count=0;
     zval=0.0;
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
 
         zval+=d->eta(i,j);
         ++count;
@@ -74,10 +74,10 @@ void ioflow_f::fsfinflow_nhflow(lexer *p, fdm_nhf* d, ghostcell* pgc, slice &WL)
     
     // -------------------------------------
     // set fsf  inflow
-    for(n=0;n<p->gcslin_count;n++)
+    GCSLIN
     {
-        i=p->gcslin[n][0];
-        j=p->gcslin[n][1];
+        i=p->gcslin[n].i;
+        j=p->gcslin[n].j;
 
         if(p->F50==2 || p->F50==4)
         if(p->wet[IJ]==1)
@@ -119,10 +119,10 @@ void ioflow_f::fsfinflow_nhflow(lexer *p, fdm_nhf* d, ghostcell* pgc, slice &WL)
     
     //cout<<"wsfout: "<<wsfout<<" phiout: "<< p->phiout<<endl;
     
-    for(n=0;n<p->gcslout_count;n++)
+    GCSLOUT
     {
-        i=p->gcslout[n][0];
-        j=p->gcslout[n][1];
+        i=p->gcslout[n].i;
+        j=p->gcslout[n].j;
         
         if(p->F50==2 || p->F50==4)
         if(p->wet[IJ]==1)
