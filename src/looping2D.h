@@ -65,42 +65,42 @@ Author: Hans Bihs
 
 // GCBSL
 
-#define GCSLB1 for(n=0;n<gcb_ssize(p->gcbsl1);++n)
-#define GCSLB1CHECK if(p->gcbsl1[n].cs>0)
+#define GCSLB1 for(n=0;n<p->gcbsl1.ssize(p->level);++n)
+#define GCSLB1CHECK if(p->gcbsl1[p->level][n].cs>0)
 #define GCSL1LOOP GCSLB1 GCSLB1CHECK
 
-#define QGCSLB1 for(q=0;q<gcb_ssize(p->gcbsl1);++q)
-#define QGCSLB1CHECK if(p->gcbsl1[q].cs>0)
+#define QGCSLB1 for(q=0;q<p->gcbsl1.ssize(p->level);++q)
+#define QGCSLB1CHECK if(p->gcbsl1[p->level][q].cs>0)
 #define QGCSL1LOOP QGCSLB1 QGCSLB1CHECK
 
-#define QQGCSLB1 for(qq=0;qq<gcb_ssize(p->gcbsl1);++qq)
-#define QQGCSLB1CHECK if(p->gcbsl1[qq].cs>0)
+#define QQGCSLB1 for(qq=0;qq<p->gcbsl1.ssize(p->level);++qq)
+#define QQGCSLB1CHECK if(p->gcbsl1[p->level][qq].cs>0)
 #define QQGCSL1LOOP QQGCSLB1 QQGCSLB1CHECK
 
 
-#define GCSLB2 for(n=0;n<gcb_ssize(p->gcbsl2);++n)
-#define GCSLB2CHECK if(p->gcbsl2[n].cs>0)
+#define GCSLB2 for(n=0;n<p->gcbsl2.ssize(p->level);++n)
+#define GCSLB2CHECK if(p->gcbsl2[p->level][n].cs>0)
 #define GCSL2LOOP GCSLB2 GCSLB2CHECK
 
-#define QGCSLB2 for(q=0;q<gcb_ssize(p->gcbsl2);++q)
-#define QGCSLB2CHECK if(p->gcbsl2[q].cs>0)
+#define QGCSLB2 for(q=0;q<p->gcbsl2.ssize(p->level);++q)
+#define QGCSLB2CHECK if(p->gcbsl2[p->level][q].cs>0)
 #define QGCSL2LOOP QGCSLB2 QGCSLB2CHECK
 
-#define QQGCSLB2 for(qq=0;qq<gcb_ssize(p->gcbsl2);++qq)
-#define QQGCSLB2CHECK if(p->gcbsl2[qq].cs>0)
+#define QQGCSLB2 for(qq=0;qq<p->gcbsl2.ssize(p->level);++qq)
+#define QQGCSLB2CHECK if(p->gcbsl2[p->level][qq].cs>0)
 #define QQGCSL2LOOP QQGCSLB2 QQGCSLB2CHECK
 
 
-#define GCSLB4 for(n=0;n<gcb_ssize(p->gcbsl4);++n)
-#define GCSLB4CHECK if(p->gcbsl4[n].cs>0)
+#define GCSLB4 for(n=0;n<p->gcbsl4.ssize(p->level);++n)
+#define GCSLB4CHECK if(p->gcbsl4[p->level][n].cs>0)
 #define GCSL4LOOP GCSLB4 GCSLB4CHECK
 
-#define QGCSLB4 for(q=0;q<gcb_ssize(p->gcbsl4);++q)
-#define QGCSLB4CHECK if(p->gcbsl4[q].cs>0)
+#define QGCSLB4 for(q=0;q<p->gcbsl4.ssize(p->level);++q)
+#define QGCSLB4CHECK if(p->gcbsl4[p->level][q].cs>0)
 #define QGCSL4LOOP QGCSLB4 QGCSLB4CHECK
 
-#define QQGCSLB4 for(qq=0;qq<gcb_ssize(p->gcbsl4);++qq)
-#define QQGCSLB4CHECK if(p->gcbsl4[qq].cs>0)
+#define QQGCSLB4 for(qq=0;qq<p->gcbsl4.ssize(p->level);++qq)
+#define QQGCSLB4CHECK if(p->gcbsl4[p->level][qq].cs>0)
 #define QQGCSL4LOOP QQGCSLB4 QQGCSLB4CHECK
 
 

@@ -22,6 +22,7 @@ Author: Hans Bihs
 
 #include"mgcslice1.h"
 #include"lexer.h"
+#include<cassert>
 
 mgcslice1::mgcslice1(lexer *p)
 {
