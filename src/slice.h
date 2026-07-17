@@ -30,6 +30,8 @@ class slice : public slice_base<double>
 public:
     slice(lexer* p) : slice_base<double>(p) {};
     virtual ~slice() = default;
+protected:
+    enum {X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2};
 };
 
 #endif
