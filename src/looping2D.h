@@ -66,41 +66,41 @@ Author: Hans Bihs
 // GCBSL
 
 #define GCSLB1 for(n=0;n<p->gcbsl1_count;++n)
-#define GCSLB1CHECK if(p->gcbsl1[n][3]>0)
+#define GCSLB1CHECK if(p->gcbsl1[n][2]>0)
 #define GCSL1LOOP GCSLB1 GCSLB1CHECK
 
 #define QGCSLB1 for(q=0;q<p->gcbsl1_count;++q)
-#define QGCSLB1CHECK if(p->gcbsl1[q][3]>0)
+#define QGCSLB1CHECK if(p->gcbsl1[q][2]>0)
 #define QGCSL1LOOP QGCSLB1 QGCSLB1CHECK
 
 #define QQGCSLB1 for(qq=0;qq<p->gcbsl1_count;++qq)
-#define QQGCSLB1CHECK if(p->gcbsl1[qq][3]>0)
+#define QQGCSLB1CHECK if(p->gcbsl1[qq][2]>0)
 #define QQGCSL1LOOP QQGCSLB1 QQGCSLB1CHECK
 
 
 #define GCSLB2 for(n=0;n<p->gcbsl2_count;++n)
-#define GCSLB2CHECK if(p->gcbsl2[n][3]>0)
+#define GCSLB2CHECK if(p->gcbsl2[n][2]>0)
 #define GCSL2LOOP GCSLB2 GCSLB2CHECK
 
 #define QGCSLB2 for(q=0;q<p->gcbsl2_count;++q)
-#define QGCSLB2CHECK if(p->gcbsl2[q][3]>0)
+#define QGCSLB2CHECK if(p->gcbsl2[q][2]>0)
 #define QGCSL2LOOP QGCSLB2 QGCSLB2CHECK
 
 #define QQGCSLB2 for(qq=0;qq<p->gcbsl2_count;++qq)
-#define QQGCSLB2CHECK if(p->gcbsl2[qq][3]>0)
+#define QQGCSLB2CHECK if(p->gcbsl2[qq][2]>0)
 #define QQGCSL2LOOP QQGCSLB2 QQGCSLB2CHECK
 
 
 #define GCSLB4 for(n=0;n<p->gcbsl4_count;++n)
-#define GCSLB4CHECK if(p->gcbsl4[n][3]>0)
+#define GCSLB4CHECK if(p->gcbsl4[n][2]>0)
 #define GCSL4LOOP GCSLB4 GCSLB4CHECK
 
 #define QGCSLB4 for(q=0;q<p->gcbsl4_count;++q)
-#define QGCSLB4CHECK if(p->gcbsl4[q][3]>0)
+#define QGCSLB4CHECK if(p->gcbsl4[q][2]>0)
 #define QGCSL4LOOP QGCSLB4 QGCSLB4CHECK
 
 #define QQGCSLB4 for(qq=0;qq<p->gcbsl4_count;++qq)
-#define QQGCSLB4CHECK if(p->gcbsl4[qq][3]>0)
+#define QQGCSLB4CHECK if(p->gcbsl4[qq][2]>0)
 #define QQGCSL4LOOP QQGCSLB4 QQGCSLB4CHECK
 
 

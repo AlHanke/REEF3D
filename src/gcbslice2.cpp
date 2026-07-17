@@ -42,7 +42,7 @@ void mgcslice2::gcb_seed(lexer *p)
         ++count;
     }
 
-    p->Iresize(p->gcbsl2,p->gcbsl2_count, count, 5, 5);
+    p->Iresize(p->gcbsl2,p->gcbsl2_count, count, 4, 4);
 
     // find gcbsl
     count=0;
@@ -52,8 +52,8 @@ void mgcslice2::gcb_seed(lexer *p)
         {
             p->gcbsl2[count][0]=i;
             p->gcbsl2[count][1]=j;
-            p->gcbsl2[count][3]=1;
-            p->gcbsl2[count][4]=21;
+            p->gcbsl2[count][2]=1;
+            p->gcbsl2[count][3]=21;
             ++count;
         }
 
@@ -61,8 +61,8 @@ void mgcslice2::gcb_seed(lexer *p)
         {
             p->gcbsl2[count][0]=i;
             p->gcbsl2[count][1]=j;
-            p->gcbsl2[count][3]=2;
-            p->gcbsl2[count][4]=21;
+            p->gcbsl2[count][2]=2;
+            p->gcbsl2[count][3]=21;
             ++count;
         }
 
@@ -70,8 +70,8 @@ void mgcslice2::gcb_seed(lexer *p)
         {
             p->gcbsl2[count][0]=i;
             p->gcbsl2[count][1]=j;
-            p->gcbsl2[count][3]=3;
-            p->gcbsl2[count][4]=21;
+            p->gcbsl2[count][2]=3;
+            p->gcbsl2[count][3]=21;
             ++count;
         }
 
@@ -79,8 +79,8 @@ void mgcslice2::gcb_seed(lexer *p)
         {
             p->gcbsl2[count][0]=i;
             p->gcbsl2[count][1]=j;
-            p->gcbsl2[count][3]=4;
-            p->gcbsl2[count][4]=21;
+            p->gcbsl2[count][2]=4;
+            p->gcbsl2[count][3]=21;
             ++count;
         }
     }

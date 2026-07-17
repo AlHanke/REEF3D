@@ -290,14 +290,14 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
         j = p->gcbsl1[n][1];
                 
         
-            if(p->gcbsl1[n][4]==1)
+            if(p->gcbsl1[n][3]==1)
             {
             b->hx(i-1,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hx(i-2,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hx(i-3,j) = MAX(p->wd - b->bed(i,j),0.0);
             }
             
-            if(p->gcbsl1[n][4]==2)
+            if(p->gcbsl1[n][3]==2)
             {
             b->hx(i+1,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hx(i+2,j) = MAX(p->wd - b->bed(i,j),0.0);
@@ -310,14 +310,14 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
         i = p->gcbsl2[n][0];
         j = p->gcbsl2[n][1];
 
-            if(p->gcbsl2[n][4]==1)
+            if(p->gcbsl2[n][3]==1)
             {
             b->hy(i-1,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hy(i-2,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hy(i-3,j) = MAX(p->wd - b->bed(i,j),0.0);
             }
             
-            if(p->gcbsl2[n][4]==2)
+            if(p->gcbsl2[n][3]==2)
             {
             b->hy(i+1,j) = MAX(p->wd - b->bed(i,j),0.0);
             b->hy(i+2,j) = MAX(p->wd - b->bed(i,j),0.0);
@@ -334,7 +334,7 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
         j = p->gcbsl1[n][1];
                 
         
-            if(p->gcbsl1[n][4]==1)
+            if(p->gcbsl1[n][3]==1)
             {
             b->hx(i-1,j) = MAX(p->F61 - b->bed(i,j),0.0);
             b->hx(i-2,j) = MAX(p->F61 - b->bed(i,j),0.0);
@@ -347,7 +347,7 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
         i = p->gcbsl2[n][0];
         j = p->gcbsl2[n][1];
 
-            if(p->gcbsl2[n][4]==1)
+            if(p->gcbsl2[n][3]==1)
             {
             b->hy(i-1,j) = MAX(p->F61 - b->bed(i,j),0.0);
             b->hy(i-2,j) = MAX(p->F61 - b->bed(i,j),0.0);
@@ -366,7 +366,7 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
         i = p->gcbsl1[n][0];
         j = p->gcbsl1[n][1];
                 
-            if(p->gcbsl1[n][4]==2)
+            if(p->gcbsl1[n][3]==2)
             {
             b->hx(i+1,j) = MAX(p->F62 - b->bed(i,j),0.0);
             b->hx(i+2,j) = MAX(p->F62 - b->bed(i,j),0.0);
@@ -379,7 +379,7 @@ void sflow_f::ini_fsf(lexer *p, fdm2D* b, ghostcell* pgc)
         i = p->gcbsl2[n][0];
         j = p->gcbsl2[n][1];
             
-            if(p->gcbsl2[n][4]==2)
+            if(p->gcbsl2[n][3]==2)
             {
             b->hy(i+1,j) = MAX(p->F62 - b->bed(i,j),0.0);
             b->hy(i+2,j) = MAX(p->F62 - b->bed(i,j),0.0);
