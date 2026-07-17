@@ -188,10 +188,10 @@ void sflow_turb_kw_IM1::ustar_update(lexer* p, fdm2D *b, ghostcell *pgc)
 	wallf(i,j)=0;
 	
 	GCSL4LOOP
-	if(p->gcbsl4[n][3]==21)
+	if(p->gcbsl4[n].bc==21)
 	{
-	i = p->gcbsl4[n][0];
-	j = p->gcbsl4[n][1];
+	i = p->gcbsl4[n].i;
+	j = p->gcbsl4[n].j;
 	
 	wallf(i,j)=1;
 	}

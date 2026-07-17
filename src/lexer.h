@@ -27,6 +27,7 @@ Author: Hans Bihs
 #include "ArrayWrapper3D.h"
 #include "control.h"
 #include "coordinates.h"
+#include "gcb_sl_list.h"
 #if USE_AMREX
     #include "grid_amrex.h"
 #else
@@ -194,10 +195,11 @@ public:
     int pointnum2D,cellnum2D,cellnumtot2D,polygon_sum;
 
     // SLICE ghostcell
-    int gcbsl1_count,gcbsl2_count,gcbsl4_count;
     int gcslin_count,gcslout_count;
     int gcslawa1_count,gcslawa2_count;
-    int **gcbsl1,**gcbsl2,**gcbsl4;
+    gcb_sl_cs_bc_list gcbsl1;
+    gcb_sl_cs_bc_list gcbsl2;
+    gcb_sl_cs_bc_list gcbsl4;
     int **gcslin, **gcslout;
     int **gcslawa1, **gcslawa2;
 
