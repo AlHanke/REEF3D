@@ -190,8 +190,8 @@ void ghostcell::gcsl_start4Vint(lexer *p, int *f, int gcv)
 void ghostcell::gcsl_start4a(lexer *p, slice &f, int gcv)
 {
     starttime=timer();
-    QQGCSL4ALOOP
-        gcsldistro4a(p,f,p->gcbsl4a[qq][0], p->gcbsl4a[qq][1], gcv, p->gcbsl4a[qq][4], p->gcbsl4a[qq][3]);
+    QQGCSL4LOOP
+        gcsldistro4a(p,f,p->gcbsl4[qq][0], p->gcbsl4[qq][1], gcv, p->gcbsl4[qq][4], p->gcbsl4[qq][3]);
     endtime=timer();
     p->gctime+=endtime-starttime;
 
