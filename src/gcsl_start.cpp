@@ -29,7 +29,7 @@ void ghostcell::gcsl_start1(lexer *p, slice &f, int gcv)
     starttime=timer();
 
     QQGCSL1LOOP
-        gcsldistro1(p,f,p->gcbsl1[qq].i, p->gcbsl1[qq].j, gcv, p->gcbsl1[qq].bc, p->gcbsl1[qq].cs);
+        gcsldistro1(p,f,p->gcbsl1[p->level][qq].i, p->gcbsl1[p->level][qq].j, gcv, p->gcbsl1[p->level][qq].bc, p->gcbsl1[p->level][qq].cs);
 
     endtime=timer();
     p->gctime+=endtime-starttime;
@@ -53,7 +53,7 @@ void ghostcell::gcsl_start2(lexer *p, slice &f, int gcv)
     starttime=timer();
 
     QQGCSL2LOOP
-        gcsldistro2(p,f,p->gcbsl2[qq].i, p->gcbsl2[qq].j, gcv, p->gcbsl2[qq].bc, p->gcbsl2[qq].cs);
+        gcsldistro2(p,f,p->gcbsl2[p->level][qq].i, p->gcbsl2[p->level][qq].j, gcv, p->gcbsl2[p->level][qq].bc, p->gcbsl2[p->level][qq].cs);
 
     endtime=timer();
     p->gctime+=endtime-starttime;
@@ -76,7 +76,7 @@ void ghostcell::gcsl_start4(lexer *p, slice &f, int gcv)
 {
     starttime=timer();
     QQGCSL4LOOP
-        gcsldistro4(p,f,p->gcbsl4[qq].i,p->gcbsl4[qq].j, gcv, p->gcbsl4[qq].bc, p->gcbsl4[qq].cs);
+        gcsldistro4(p,f,p->gcbsl4[p->level][qq].i,p->gcbsl4[p->level][qq].j, gcv, p->gcbsl4[p->level][qq].bc, p->gcbsl4[p->level][qq].cs);
     endtime=timer();
     p->gctime+=endtime-starttime;
     
@@ -100,7 +100,7 @@ void ghostcell::gcsl_start1int(lexer *p, sliceint &f, int gcv)
 {
     starttime=timer();
     QQGCSL1LOOP
-        gcsldistro1int(f,p->gcbsl1[qq].i,p->gcbsl1[qq].j, p->gcbsl1[qq].cs);
+        gcsldistro1int(f,p->gcbsl1[p->level][qq].i,p->gcbsl1[p->level][qq].j, p->gcbsl1[p->level][qq].cs);
     endtime=timer();
     p->gctime+=endtime-starttime;
 
@@ -119,7 +119,7 @@ void ghostcell::gcsl_start2int(lexer *p, sliceint &f, int gcv)
 {
     starttime=timer();
     QQGCSL2LOOP
-        gcsldistro2int(f,p->gcbsl2[qq].i,p->gcbsl2[qq].j, p->gcbsl2[qq].cs);
+        gcsldistro2int(f,p->gcbsl2[p->level][qq].i,p->gcbsl2[p->level][qq].j, p->gcbsl2[p->level][qq].cs);
     endtime=timer();
     p->gctime+=endtime-starttime;
 
@@ -138,7 +138,7 @@ void ghostcell::gcsl_start4int(lexer *p, sliceint &f, int gcv)
 {
     starttime=timer();
     QQGCSL4LOOP
-        gcsldistro4int(f,p->gcbsl4[qq].i,p->gcbsl4[qq].j, p->gcbsl4[qq].cs);
+        gcsldistro4int(f,p->gcbsl4[p->level][qq].i,p->gcbsl4[p->level][qq].j, p->gcbsl4[p->level][qq].cs);
     endtime=timer();
     p->gctime+=endtime-starttime;
 
@@ -157,7 +157,7 @@ void ghostcell::gcsl_start4Vint(lexer *p, int *f, int gcv)
 {
     starttime=timer();
     QQGCSL4LOOP
-        gcsldistro4Vint(p,f,p->gcbsl4[qq].i,p->gcbsl4[qq].j, p->gcbsl4[qq].cs);
+        gcsldistro4Vint(p,f,p->gcbsl4[p->level][qq].i,p->gcbsl4[p->level][qq].j, p->gcbsl4[p->level][qq].cs);
     endtime=timer();
     p->gctime+=endtime-starttime;
 
@@ -191,7 +191,7 @@ void ghostcell::gcsl_start4a(lexer *p, slice &f, int gcv)
 {
     starttime=timer();
     QQGCSL4LOOP
-        gcsldistro4a(p,f,p->gcbsl4[qq].i, p->gcbsl4[qq].j, gcv, p->gcbsl4[qq].bc, p->gcbsl4[qq].cs);
+        gcsldistro4a(p,f,p->gcbsl4[p->level][qq].i, p->gcbsl4[p->level][qq].j, gcv, p->gcbsl4[p->level][qq].bc, p->gcbsl4[p->level][qq].cs);
     endtime=timer();
     p->gctime+=endtime-starttime;
 
