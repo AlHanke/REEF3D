@@ -86,7 +86,7 @@ void ArrayWrapper2D::setVal(int val, bool includeGhost)
 ArrayWrapper2D::operator int *()
 {
     #if USE_AMREX
-    return m_view[p->level][*(p->amr_cell_mfi)].dataPtr(0);
+    return m_view[p->level].atLocalIdx(p->amr_local_fab_idx).dataPtr(0);
     #else
     return data.data(); // unshifted: callers index this with IJ, not with i/j
     #endif
