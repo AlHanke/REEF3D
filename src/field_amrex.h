@@ -268,7 +268,7 @@ private:
         const int cur_tile_index = p->amr_local_tile_idx;
         if (cur_lev != m_cached_level || cur_idx != m_cached_mfi_idx)
         {
-            m_cached_arr4    = get_array(cur_lev,*(p->amr_cell_mfi));
+            m_cached_arr4    = get_array(cur_lev,p->amr_local_fab_idx);
             m_cached_ox      = p->amr_tile_lo.x;
             m_cached_oy      = p->amr_tile_lo.y;
             m_cached_oz      = p->amr_tile_lo.z;
@@ -293,7 +293,7 @@ private:
         const int cur_tile_index = p->amr_local_tile_idx;
         if (cur_lev != m_cached_const_level || cur_idx != m_cached_const_mfi_idx)
         {
-            m_cached_const_arr4    = get_array_const(cur_lev,*(p->amr_cell_mfi));
+            m_cached_const_arr4    = get_array_const(cur_lev,p->amr_local_fab_idx);
             m_cached_const_ox      = p->amr_tile_lo.x;
             m_cached_const_oy      = p->amr_tile_lo.y;
             m_cached_const_oz      = p->amr_tile_lo.z;
@@ -327,12 +327,17 @@ private:
     { return m_shared_mf ? (*m_shared_mf)[level] : mf[level]; }
 
     /// Returns the Array4 for the current tile of @p level.
-    AMREX_FORCE_INLINE amrex::Array4<amrex::Real> get_array(int level, amrex::MFIter& mfi) noexcept
-    { return get_mf(level).array(mfi); }
+    /// Indexed by MFIter::LocalIndex() rather than by the MFIter itself, so the
+    /// fetch works from a restored TileCtx with no live iterator. Valid because
+    /// every field MultiFab shares amrex_distribution_mapping[level] with the
+    /// amr_cell_mf that TILE_LOOP iterates — the DM equality that
+    /// FabArray::fabPtr(const MFIter&) asserts holds here by construction.
+    AMREX_FORCE_INLINE amrex::Array4<amrex::Real> get_array(int level, int local_fab_idx) noexcept
+    { return get_mf(level).atLocalIdx(local_fab_idx).array(); }
 
     /// Const overload — used by the const cache refresh to access data without mutation.
-    AMREX_FORCE_INLINE const amrex::Array4<const amrex::Real> get_array_const(int level, amrex::MFIter& mfi) const noexcept
-    { return get_mf_const(level).const_array(mfi); }
+    AMREX_FORCE_INLINE const amrex::Array4<const amrex::Real> get_array_const(int level, int local_fab_idx) const noexcept
+    { return get_mf_const(level).atLocalIdx(local_fab_idx).const_array(); }
 
     /// Shifts face data inward at the high-end boundary for face-staggered fields.
     static void ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in,

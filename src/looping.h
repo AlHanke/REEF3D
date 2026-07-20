@@ -229,12 +229,18 @@ Authors: Hans Bihs, Alexander Hanke
             for (_level_guard.ctx->level = 0; \
                 _level_guard.ctx->level < _level_guard.ctx->nlevs; \
                 ++_level_guard.ctx->level)
+    // The guard saves the displaced context BY VALUE. It used to save a raw
+    // MFIter*, which is only sound while the iterator that owns it is alive —
+    // a TileCtx has no such lifetime coupling, so nesting is safe by construction
+    // and the "saved ? saved : default" fallback is no longer needed.
+    // Restores via apply_tile_ctx, not set_tile_ctx: p->level belongs to
+    // LEVEL_LOOP and must survive the tile loop untouched.
     #define TILE_LOOP \
         for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level],amrex::TilingIfNotGPU()); _tile_mfi.isValid(); ++_tile_mfi) \
-            for (struct { lexer* ctx; amrex::MFIter* saved; } \
+            for (struct { lexer* ctx; lexer::TileCtx saved; } \
                     _guard{p, p->set_tile_mfi(&_tile_mfi)}; \
                 _guard.ctx != nullptr; \
-                _guard.ctx->set_tile_mfi(_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), \
+                _guard.ctx->apply_tile_ctx(_guard.saved), \
                 _guard.ctx = nullptr)
 
     #define IMAX_LOOP (p->amr_tile_hi.x - p->amr_tile_lo.x)

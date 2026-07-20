@@ -108,7 +108,7 @@ AMREX_FORCE_INLINE void ArrayWrapper2D::refresh_cache_if_needed() noexcept
     const int cur_tile = p->amr_local_tile_idx;
     if(cur_lev != m_cached_level || cur_idx != m_cached_mfi_idx)
     {
-        m_cached_arr4    = GetMultiFab(cur_lev).array(*(p->amr_cell_mfi));
+        m_cached_arr4    = GetMultiFab(cur_lev).atLocalIdx(p->amr_local_fab_idx).array();
         m_cached_ox      = p->amr_tile_lo.x;
         m_cached_oy      = p->amr_tile_lo.y;
         m_cached_mfi_idx = cur_idx;
@@ -130,7 +130,7 @@ AMREX_FORCE_INLINE void ArrayWrapper2D::refresh_const_cache_if_needed() const no
     const int cur_tile = p->amr_local_tile_idx;
     if(cur_lev != m_cached_const_level || cur_idx != m_cached_const_mfi_idx)
     {
-        m_cached_const_arr4    = GetMultiFab(cur_lev).const_array(*(p->amr_cell_mfi));
+        m_cached_const_arr4    = GetMultiFab(cur_lev).atLocalIdx(p->amr_local_fab_idx).const_array();
         m_cached_const_ox      = p->amr_tile_lo.x;
         m_cached_const_oy      = p->amr_tile_lo.y;
         m_cached_const_mfi_idx = cur_idx;

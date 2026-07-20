@@ -25,6 +25,7 @@ Author: Alexander Hanke
 #define GRID_AMREX_H_
 
 #include "grid.h"
+#include "tile_ctx.h"
 
 // AMReX includes
 #include <AMReX_MFIter.H>
@@ -147,30 +148,195 @@ public:
     // Looping structures
     amrex::Vector<amrex::iMultiFab> amr_cell_mf;
     std::unique_ptr<amrex::MFIter> default_cell_mfi;
-    amrex::MFIter* amr_cell_mfi = nullptr;
 
     // Tile bounds — set once per tile by set_tile_mfi; shared with field_amrex cache.
     amrex::Dim3 amr_tile_lo    = {0, 0, 0};
     amrex::Dim3 amr_tile_hi    = {0, 0, 0};
     int amr_fab_mfi_idx        = -1; // Index of current MFIter
+    int amr_local_fab_idx      = -1; // Local FAB index within the current MFIter
     int amr_local_tile_idx     = -1; // Local tile index within the current MFIter
+    int amr_tile_ctx_id        = TILE_CTX_DEFAULT; // Dense id of the installed tile
 
-    /// Set the active MFIter, compute and cache the tile's lo/hi bounds and FAB
-    /// index, then return the previously active MFIter (for guard-struct restore).
-    /// Called exactly once per tile loop iteration by TILE_LOOP.
-    inline amrex::MFIter* set_tile_mfi(amrex::MFIter* mfi) noexcept
+    // Tile context table, rebuilt by build_tile_ctx_table on every decomposition
+    // change. tile_ctx_table is indexed by the dense id; the offsets are the
+    // prefix sums that turn (level, LocalIndex, LocalTileIndex) into that id.
+    std::vector<TileCtx>           tile_ctx_table;
+    std::vector<TileCtx>           tile_ctx_default;      // per level, untiled whole box
+    std::vector<int>               tile_ctx_level_offset; // size nlevs+1
+    std::vector<std::vector<int>>  tile_ctx_fab_offset;   // [lev][local fab] -> first id
+
+    mutable long amr_default_ctx_records = 0; // see tile_ctx_default_records()
+
+    /// Snapshot of a tile's addressing context — defined in tile_ctx.h, which is
+    /// shared with the containers that carry contexts (see gcb_sl_list.h) and so
+    /// cannot depend on this header. Aliased here because the capture/restore API
+    /// lives on this class and callers name it as lexer::TileCtx.
+    using TileCtx = ::TileCtx;
+
+    /// Bumped on every regrid; stamped into each TileCtx so that snapshots which
+    /// outlived the decomposition they were taken from can be detected.
+    int amr_grid_gen = 0;
+
+    /// Dense id of the currently installed tile, or TILE_CTX_DEFAULT when none
+    /// is (i.e. outside any TILE_LOOP). This is the value a producer stores per
+    /// entry; see tile_ctx_by_id for the consumer side.
+    ///
+    /// Read, never derived. An id computed from amr_local_fab_idx /
+    /// amr_local_tile_idx would silently alias the untiled default context onto
+    /// tile 0 of box 0 — see TILE_CTX_DEFAULT in tile_ctx.h.
+    inline int tile_ctx_id() const noexcept
     {
-        amrex::MFIter* old = amr_cell_mfi;
-        amr_cell_mfi = mfi;
+        if (amr_tile_ctx_id == TILE_CTX_DEFAULT)
+            ++amr_default_ctx_records;
+        return amr_tile_ctx_id;
+    }
 
-        const amrex::Box tb = mfi->tilebox();
-        amr_tile_lo         = amrex::lbound(tb);
-        amr_tile_hi         = amrex::ubound(tb);
-        amr_fab_mfi_idx     = mfi->index();
-        amr_local_tile_idx  = mfi->LocalTileIndex();
+    /// Resolve a stored id. TILE_CTX_DEFAULT yields the level's untiled
+    /// whole-box context, so consumers need no special case for entries that
+    /// were recorded outside a tile loop.
+    inline const TileCtx& tile_ctx_by_id(int id, int lev) const noexcept
+    {
+        if (id == TILE_CTX_DEFAULT)
+        {
+            AMREX_ASSERT(lev >= 0 && lev < int(tile_ctx_default.size()));
+            return tile_ctx_default[size_t(lev)];
+        }
 
+        AMREX_ASSERT(id >= 0 && id < int(tile_ctx_table.size()));
+        return tile_ctx_table[size_t(id)];
+    }
+
+    /// How many times tile_ctx_id() has handed out TILE_CTX_DEFAULT — i.e. how
+    /// often a producer recorded indices while no tile context was installed.
+    /// Those indices are relative to box 0 of the rank and are only addressable
+    /// at all if the rank owns one box; replaying the context reproduces the
+    /// producer's addressing faithfully, which is self-consistent but not
+    /// correct. A non-zero count is a list of sites to audit, not a failure.
+    long tile_ctx_default_records() const noexcept { return amr_default_ctx_records; }
+    void reset_tile_ctx_default_records() noexcept { amr_default_ctx_records = 0; }
+
+    /// Capture the currently active tile context for later restore.
+    inline TileCtx tile_ctx() const noexcept
+    {
+        TileCtx c;
+        c.lo             = amr_tile_lo;
+        c.hi             = amr_tile_hi;
+        c.level          = level;
+        c.local_fab_idx  = amr_local_fab_idx;
+        c.fab_idx        = amr_fab_mfi_idx;
+        c.local_tile_idx = amr_local_tile_idx;
+        c.gen            = amr_grid_gen;
+        c.id             = amr_tile_ctx_id;
+        return c;
+    }
+
+    /// Extract the tile context an MFIter currently points at. The level is the
+    /// ambient one: an MFIter carries no level of its own, TILE_LOOP runs it
+    /// inside the level set by LEVEL_LOOP.
+    ///
+    /// The id is a prefix sum over this rank's FABs, so it is a pure function of
+    /// (level, LocalIndex, LocalTileIndex) — two producers iterating in
+    /// different orders still agree. Valid only for an MFIter tiled the same way
+    /// the table was built (TilingIfNotGPU); an untiled iterator gets
+    /// TILE_CTX_DEFAULT, which is what default_cell_mfi must resolve to.
+    inline TileCtx tile_ctx(const amrex::MFIter& mfi) const noexcept
+    {
+        const amrex::Box tb = mfi.tilebox();
+
+        TileCtx c;
+        c.lo             = amrex::lbound(tb);
+        c.hi             = amrex::ubound(tb);
+        c.level          = level;
+        c.local_fab_idx  = mfi.LocalIndex();
+        c.fab_idx        = mfi.index();
+        c.local_tile_idx = mfi.LocalTileIndex();
+        c.gen            = amr_grid_gen;
+        c.id             = tile_ctx_id_of(mfi);
+        return c;
+    }
+
+    /// Prefix-sum id of an MFIter's current tile, or TILE_CTX_DEFAULT if the
+    /// table is not built yet (early setup) or the iterator is untiled.
+    inline int tile_ctx_id_of(const amrex::MFIter& mfi) const noexcept
+    {
+        if (level < 0 || level >= int(tile_ctx_fab_offset.size()))
+            return TILE_CTX_DEFAULT;
+
+        const auto& fab_off = tile_ctx_fab_offset[size_t(level)];
+        const int   li      = mfi.LocalIndex();
+
+        if (li < 0 || li + 1 >= int(fab_off.size()))
+            return TILE_CTX_DEFAULT;
+
+        // An untiled iterator reports 1 tile for a FAB the table split into
+        // several; it is not a member of the enumeration and must not get an id.
+        if (mfi.numLocalTiles() != fab_off[size_t(li) + 1] - fab_off[size_t(li)])
+            return TILE_CTX_DEFAULT;
+
+        return tile_ctx_level_offset[size_t(level)] + fab_off[size_t(li)]
+             + mfi.LocalTileIndex();
+    }
+
+    /// Enumerate every tile of every level and assign dense ids, plus one
+    /// untiled whole-box default context per level. Must be rebuilt whenever the
+    /// decomposition changes — call sites are the initial grid setup and the end
+    /// of regrid_amrex_box_array_and_distribution_mapping, alongside the
+    /// amr_grid_gen bump.
+    void build_tile_ctx_table();
+
+    /// The single writer of the tile addressing state. Every field accessor
+    /// resolves (i,j,k) through these members, so a context established by any
+    /// route must set all of them — keeping one writer is what stops a later
+    /// added member from being set on one path and left stale on the other.
+    ///
+    /// Deliberately does NOT write 'level': level is loop state owned by
+    /// LEVEL_LOOP, not part of a tile's addressing, and TILE_LOOP's guard must be
+    /// able to restore the tile geometry on exit without disturbing it. Only
+    /// set_tile_ctx — reinstating a context detached from its loop — sets it.
+    inline void apply_tile_ctx(const TileCtx& c) noexcept
+    {
+        amr_tile_lo        = c.lo;
+        amr_tile_hi        = c.hi;
+        amr_local_fab_idx  = c.local_fab_idx;
+        amr_fab_mfi_idx    = c.fab_idx;
+        amr_local_tile_idx = c.local_tile_idx;
+        amr_tile_ctx_id    = c.id;
+    }
+
+    /// Install the tile an MFIter currently points at, returning the context it
+    /// displaced so a guard can restore it. Called exactly once per tile loop
+    /// iteration by TILE_LOOP. The returned context is a value, so it stays valid
+    /// after the MFIter that produced it has advanced or gone out of scope.
+    inline TileCtx set_tile_mfi(amrex::MFIter* mfi) noexcept
+    {
+        const TileCtx old = tile_ctx();
+        apply_tile_ctx(tile_ctx(*mfi));
         return old;
     }
+
+    /// Re-establish a captured tile context outside of TILE_LOOP, so that
+    /// tile-local (i,j,k) recorded under that tile resolve correctly again.
+    /// Sets 'level' too: local_fab_idx indexes a per-level FAB vector, so a
+    /// context applied at the wrong level silently reads a different level's FAB.
+    ///
+    /// Unlike set_tile_mfi, this reinstates a context that may be arbitrarily old,
+    /// so it is the path that has to check the context is still addressable.
+    inline void set_tile_ctx(const TileCtx& c) noexcept
+    {
+        AMREX_ASSERT(c.gen == amr_grid_gen);
+        AMREX_ASSERT(c.local_fab_idx >= 0);
+
+        level = c.level;
+        apply_tile_ctx(c);
+    }
+
+    /// Restore the default whole-box context after a set_tile_ctx sequence.
+    inline void reset_tile_ctx() noexcept
+    {
+        level = 0;
+        set_tile_mfi(default_cell_mfi.get());
+    }
+
 
     // Inflow and outflow areas
     amrex::Vector<amrex::iMultiFab> inflow_ba;

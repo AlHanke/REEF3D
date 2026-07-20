@@ -186,7 +186,8 @@ void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
         amrex::Box dom = p->amrex_geometry[p->level].Domain();
         TILE_LOOP
         {
-            const amrex::Box& validbox = p->amr_cell_mfi->validbox();
+            // Valid box of the current FAB: index() is by definition its BoxArray subscript.
+            const amrex::Box validbox = p->amr_cell_mf[p->level].boxArray()[p->amr_fab_mfi_idx];
             amrex::Box gbx = validbox;
             bool apply = false;
 
@@ -211,7 +212,7 @@ void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
 
             if (apply)
             {
-                auto arr = get_array(p->level, *(p->amr_cell_mfi));
+                auto arr = get_array(p->level, p->amr_local_fab_idx);
                 amrex::ParallelFor(gbx, [=] AMREX_GPU_DEVICE (int i, int j, int k)
                 {
                     arr(i, j, k) = value;

@@ -1170,6 +1170,7 @@
           <File Name="sliceint4.h"/>
         </VirtualDirectory>
         <File Name="gcb_sl_list.h"/>
+        <File Name="tile_ctx.h"/>
       </VirtualDirectory>
       <File Name="lexer.h"/>
       <File Name="driver.h"/>
