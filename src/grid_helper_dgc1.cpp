@@ -30,31 +30,31 @@ void grid_helper::fill_dgc1(lexer* p)
 
     QGC1LOOP
     {
-        i=p->gcb1[q][0];
-        j=p->gcb1[q][1];
-        k=p->gcb1[q][2];
+        i=p->gcb1[q].i;
+        j=p->gcb1[q].j;
+        k=p->gcb1[q].k;
 
-        if(p->gcb1[q][3]==1)
+        if(p->gcb1[q].cs==1)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin-n-1)*jmax*kmax + (j-jmin)*kmax + k-kmin]+=1;
 
-        else if(p->gcb1[q][3]==4)
+        else if(p->gcb1[q].cs==4)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin+n+1)*jmax*kmax + (j-jmin)*kmax + k-kmin]+=1;
 
-        else if(p->gcb1[q][3]==3)
+        else if(p->gcb1[q].cs==3)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin-n-1)*kmax + k-kmin]+=1;
 
-        else if(p->gcb1[q][3]==2)
+        else if(p->gcb1[q].cs==2)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin+n+1)*kmax + k-kmin]+=1;
 
-        else if(p->gcb1[q][3]==5)
+        else if(p->gcb1[q].cs==5)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin-n-1]+=1;
 
-        else if(p->gcb1[q][3]==6)
+        else if(p->gcb1[q].cs==6)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin+n+1]+=1;
     }

@@ -320,7 +320,6 @@ void lexer::read_grid()
 
     if(gcb4_count>0)
     {
-        Iarray(gcb1, gcb1_count,6);
         Iarray(gcb2, gcb2_count,6);
         Iarray(gcb3, gcb3_count,6);
         Iarray(gcb4, gcb4_count,6);
