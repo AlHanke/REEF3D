@@ -23,7 +23,6 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"fieldint4.h"
 
 void ghostcell::set_DF(lexer *p, fdm *a)
 {
@@ -159,66 +158,88 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     }
 
     // assign gcdf entries
+    //
+    // (i,j,k) recorded here are TILE-LOCAL — they are offsets from the producing
+    // tile's amr_tile_lo. Consumers run outside TILE_LOOP, where the default
+    // whole-box context is active, so each entry also records the dense id
+    // (column 6) of the tile it was written under. Without it the indices resolve
+    // against the wrong origin as soon as tiling produces more than one tile per
+    // box. TILE_CTX_DEFAULT here would mean the entry was produced outside a tile
+    // loop; it is not, but the id records that faithfully either way.
     count=0;
 
     p->level = 0;
     TILE_LOOP
-    IJKLOOP
-    PBASECHECK
-    if(p->DF(i,j,k)>0)
     {
-        if(p->DF(i-1,j,k)<0)
-        {
-            p->gcdf4[count][0]=i;
-            p->gcdf4[count][1]=j;
-            p->gcdf4[count][2]=k;
-            p->gcdf4[count][3]=1;
-            ++count;
-        }
+        #if USE_AMREX
+        const int tilehandle = p->tile_ctx_id();
+        #else
+        const int tilehandle = 0;
+        #endif
 
-        if(p->DF(i+1,j,k)<0)
+        IJKLOOP
+        PBASECHECK
+        if(p->DF(i,j,k)>0)
         {
-            p->gcdf4[count][0]=i;
-            p->gcdf4[count][1]=j;
-            p->gcdf4[count][2]=k;
-            p->gcdf4[count][3]=4;
-            ++count;
-        }
+            if(p->DF(i-1,j,k)<0)
+            {
+                p->gcdf4[count][0]=i;
+                p->gcdf4[count][1]=j;
+                p->gcdf4[count][2]=k;
+                p->gcdf4[count][3]=1;
+                p->gcdf4[count][5]=tilehandle;
+                ++count;
+            }
 
-        if(p->DF(i,j-1,k)<0)
-        {
-            p->gcdf4[count][0]=i;
-            p->gcdf4[count][1]=j;
-            p->gcdf4[count][2]=k;
-            p->gcdf4[count][3]=3;
-            ++count;
-        }
+            if(p->DF(i+1,j,k)<0)
+            {
+                p->gcdf4[count][0]=i;
+                p->gcdf4[count][1]=j;
+                p->gcdf4[count][2]=k;
+                p->gcdf4[count][3]=4;
+                p->gcdf4[count][5]=tilehandle;
+                ++count;
+            }
 
-        if(p->DF(i,j+1,k)<0)
-        {
-            p->gcdf4[count][0]=i;
-            p->gcdf4[count][1]=j;
-            p->gcdf4[count][2]=k;
-            p->gcdf4[count][3]=2;
-            ++count;
-        }
+            if(p->DF(i,j-1,k)<0)
+            {
+                p->gcdf4[count][0]=i;
+                p->gcdf4[count][1]=j;
+                p->gcdf4[count][2]=k;
+                p->gcdf4[count][3]=3;
+                p->gcdf4[count][5]=tilehandle;
+                ++count;
+            }
 
-        if(p->DF(i,j,k-1)<0)
-        {
-            p->gcdf4[count][0]=i;
-            p->gcdf4[count][1]=j;
-            p->gcdf4[count][2]=k;
-            p->gcdf4[count][3]=5;
-            ++count;
-        }
+            if(p->DF(i,j+1,k)<0)
+            {
+                p->gcdf4[count][0]=i;
+                p->gcdf4[count][1]=j;
+                p->gcdf4[count][2]=k;
+                p->gcdf4[count][3]=2;
+                p->gcdf4[count][5]=tilehandle;
+                ++count;
+            }
 
-        if(p->DF(i,j,k+1)<0)
-        {
-            p->gcdf4[count][0]=i;
-            p->gcdf4[count][1]=j;
-            p->gcdf4[count][2]=k;
-            p->gcdf4[count][3]=6;
-            ++count;
+            if(p->DF(i,j,k-1)<0)
+            {
+                p->gcdf4[count][0]=i;
+                p->gcdf4[count][1]=j;
+                p->gcdf4[count][2]=k;
+                p->gcdf4[count][3]=5;
+                p->gcdf4[count][5]=tilehandle;
+                ++count;
+            }
+
+            if(p->DF(i,j,k+1)<0)
+            {
+                p->gcdf4[count][0]=i;
+                p->gcdf4[count][1]=j;
+                p->gcdf4[count][2]=k;
+                p->gcdf4[count][3]=6;
+                p->gcdf4[count][5]=tilehandle;
+                ++count;
+            }
         }
     }
 
@@ -236,6 +257,12 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         ++count;
     }
 
+    // NOTE: gcb4 gets no tile handle. Unlike gcdf4, its (i,j,k) are not produced
+    // by a TILE_LOOP at all — they are read from the grid file in read_grid.cpp
+    // (gcb4[i][0..2]=isurf/jsurf/ksurf) in the legacy imin/jmin-relative index
+    // space. Giving it a handle needs a cell->tile lookup plus a decision on how
+    // legacy indices map onto the AMReX decomposition, which is a separate change.
+    // This lookup therefore remains wrong under multi-tile AMReX, exactly as before.
     GC4LOOP
     {
         i=p->gcb4[n][0];
@@ -247,11 +274,13 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
 
     GCDF4LOOP
     {
+        GCDF4_TILE(n);
         i=p->gcdf4[n][0];
         j=p->gcdf4[n][1];
         k=p->gcdf4[n][2];
         p->gcdf4[n][4]=cval(i,j,k);
     }
+    GC_TILE_RESET;
 
     // flagsf1/2/3's replacements are the staggered-face versions of DF (same
     // convention as flag1-3 vs flag4): open unless the face's neighbor cell is
@@ -321,67 +350,81 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf
         gcdf_count=count;
     }
 
-    // assign gcdf entries
+    // assign gcdf entries (tile-local i,j,k + tile handle, see gcdf4 above)
     count=0;
 
     p->level = 0;
     TILE_LOOP
-    IJKLOOP
-    PBASECHECK
-    if(flagsf(i,j,k)>0)
     {
-        if(flagsf(i-1,j,k)<0)
-        {
-            gcdf[count][0]=i;
-            gcdf[count][1]=j;
-            gcdf[count][2]=k;
-            gcdf[count][3]=1;
-            ++count;
-        }
+        #if USE_AMREX
+        const int tilehandle = p->tile_ctx_id();
+        #else
+        const int tilehandle = 0;
+        #endif
 
-        if(flagsf(i+1,j,k)<0)
+        IJKLOOP
+        PBASECHECK
+        if(flagsf(i,j,k)>0)
         {
-            gcdf[count][0]=i;
-            gcdf[count][1]=j;
-            gcdf[count][2]=k;
-            gcdf[count][3]=4;
-            ++count;
-        }
+            if(flagsf(i-1,j,k)<0)
+            {
+                gcdf[count][0]=i;
+                gcdf[count][1]=j;
+                gcdf[count][2]=k;
+                gcdf[count][3]=1;
+                gcdf[count][4]=tilehandle;
+                ++count;
+            }
 
-        if(flagsf(i,j-1,k)<0)
-        {
-            gcdf[count][0]=i;
-            gcdf[count][1]=j;
-            gcdf[count][2]=k;
-            gcdf[count][3]=3;
-            ++count;
-        }
+            if(flagsf(i+1,j,k)<0)
+            {
+                gcdf[count][0]=i;
+                gcdf[count][1]=j;
+                gcdf[count][2]=k;
+                gcdf[count][3]=4;
+                gcdf[count][4]=tilehandle;
+                ++count;
+            }
 
-        if(flagsf(i,j+1,k)<0)
-        {
-            gcdf[count][0]=i;
-            gcdf[count][1]=j;
-            gcdf[count][2]=k;
-            gcdf[count][3]=2;
-            ++count;
-        }
+            if(flagsf(i,j-1,k)<0)
+            {
+                gcdf[count][0]=i;
+                gcdf[count][1]=j;
+                gcdf[count][2]=k;
+                gcdf[count][3]=3;
+                gcdf[count][4]=tilehandle;
+                ++count;
+            }
 
-        if(flagsf(i,j,k-1)<0)
-        {
-            gcdf[count][0]=i;
-            gcdf[count][1]=j;
-            gcdf[count][2]=k;
-            gcdf[count][3]=5;
-            ++count;
-        }
+            if(flagsf(i,j+1,k)<0)
+            {
+                gcdf[count][0]=i;
+                gcdf[count][1]=j;
+                gcdf[count][2]=k;
+                gcdf[count][3]=2;
+                gcdf[count][4]=tilehandle;
+                ++count;
+            }
 
-        if(flagsf(i,j,k+1)<0)
-        {
-            gcdf[count][0]=i;
-            gcdf[count][1]=j;
-            gcdf[count][2]=k;
-            gcdf[count][3]=6;
-            ++count;
+            if(flagsf(i,j,k-1)<0)
+            {
+                gcdf[count][0]=i;
+                gcdf[count][1]=j;
+                gcdf[count][2]=k;
+                gcdf[count][3]=5;
+                gcdf[count][4]=tilehandle;
+                ++count;
+            }
+
+            if(flagsf(i,j,k+1)<0)
+            {
+                gcdf[count][0]=i;
+                gcdf[count][1]=j;
+                gcdf[count][2]=k;
+                gcdf[count][3]=6;
+                gcdf[count][4]=tilehandle;
+                ++count;
+            }
         }
     }
 }

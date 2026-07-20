@@ -48,12 +48,14 @@ void strain::wallf_update(lexer *p, fdm *a, ghostcell *pgc, fieldint &wallf)
     
     QGCDF4LOOP
     {
+        GCDF4_TILE(q);
         i = p->gcdf4[q][0];
         j = p->gcdf4[q][1];
         k = p->gcdf4[q][2];
         
         wallf(i,j,k)=1;
     }
+    GC_TILE_RESET;
 }
 
 double strain::sij(lexer *p, fdm *a, int ii, int jj)

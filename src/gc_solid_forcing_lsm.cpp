@@ -29,6 +29,7 @@ void ghostcell::solid_forcing_lsm(lexer *p, fdm*, field &f)
     if(p->X48==1)
     GCDF4LOOP
     {
+        GCDF4_TILE(n);
         i=p->gcdf4[n][0];
         j=p->gcdf4[n][1];
         k=p->gcdf4[n][2];
@@ -64,4 +65,5 @@ void ghostcell::solid_forcing_lsm(lexer *p, fdm*, field &f)
             f(i,j,k+2)=f(i,j,k);
         }
     }
+    GC_TILE_RESET;
 }
