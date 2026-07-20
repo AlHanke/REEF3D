@@ -99,6 +99,8 @@ void nhflow_komega_func::eddyvisc(lexer* p, fdm_nhf *d, ghostcell* pgc, vrans* p
 		GC4LOOP
 		if(p->gcb4[p->level][n].bc==21)
 		{
+		    GCB4_TILE(n);
+
 		i = p->gcb4[p->level][n].i;
 		j = p->gcb4[p->level][n].j;
 		k = p->gcb4[p->level][n].k;
@@ -107,6 +109,7 @@ void nhflow_komega_func::eddyvisc(lexer* p, fdm_nhf *d, ghostcell* pgc, vrans* p
 						  /((EPS[IJK])>(1.0e-20)?(EPS[IJK]):(1.0e20)),0.0),fabs(p->T35*KIN[IJK])/strainterm(p,d)),
 						  0.00001*d->VISC[IJK]);
 		}
+        GC_TILE_RESET;
 	}
     
     // URANS

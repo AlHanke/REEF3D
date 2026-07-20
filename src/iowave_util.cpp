@@ -50,6 +50,7 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     int count2=0;
     GC4LOOP
     {
+        GCB4_TILE(n);
 
         i = p->gcb4[p->level][n].i;
         j = p->gcb4[p->level][n].j;
@@ -60,6 +61,7 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         else if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
         ++count2;
     }
+    GC_TILE_RESET;
 
     p->Iresize(p->gcin,p->gcin_count, count1, 4, 4);
     p->Iresize(p->gcout,p->gcout_count, count2, 4, 4);
@@ -68,6 +70,8 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     count2=0;
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         i = p->gcb4[p->level][n].i;
         j = p->gcb4[p->level][n].j;
         k = p->gcb4[p->level][n].k;
@@ -89,6 +93,7 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
             ++count2;
         }
     }
+    GC_TILE_RESET;
 
     p->gcin_count=count1;
     p->gcout_count=count2;
@@ -106,6 +111,8 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         if(p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6)
         {
             i = p->gcb4[p->level][n].i;
@@ -153,6 +160,7 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
             }
         }
     }
+    GC_TILE_RESET;
 
     for(int qq=0;qq<pBC->obj_count;++qq)
     for(n=0;n<pBC->patch[qq]->gcb_count;++n)
@@ -178,6 +186,8 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     int count2=0;
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         i = p->gcb4[p->level][n].i;
         j = p->gcb4[p->level][n].j;
         k = p->gcb4[p->level][n].k;
@@ -187,6 +197,7 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         else if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
         ++count2;
     }
+    GC_TILE_RESET;
 
     p->Iresize(p->gcin,p->gcin_count, count1, 4, 4);
     p->Iresize(p->gcout,p->gcout_count, count2, 4, 4);
@@ -195,6 +206,7 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     count2=0;
     GC4LOOP
     {
+        GCB4_TILE(n);
 
         i = p->gcb4[p->level][n].i;
         j = p->gcb4[p->level][n].j;
@@ -217,6 +229,7 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
             ++count2;
         }
     }
+    GC_TILE_RESET;
 
     p->gcin_count=count1;
     p->gcout_count=count2;
@@ -227,6 +240,8 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         if(p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6)
         {
             i = p->gcb4[p->level][n].i;
@@ -275,6 +290,7 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
             }
         }
     }
+    GC_TILE_RESET;
 
     for(int qq=0;qq<pBC->obj_count;++qq)
     for(n=0;n<pBC->patch[qq]->gcb_count;++n)
@@ -383,6 +399,8 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
     count4=0;
     for(n=0;n<p->gcb4.ssize(p->level);++n)
     {
+        GCB4_TILE(n);
+
         if(p->gcb4[p->level][n].bc==1||p->gcb4[p->level][n].bc==6)
         {
             flag=true;
@@ -399,6 +417,7 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
             }
         }
     }
+    GC_TILE_RESET;
 }
 
 void iowave::veltimesave(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)

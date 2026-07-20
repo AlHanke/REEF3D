@@ -586,6 +586,9 @@ Authors: Hans Bihs, Alexander Hanke
     #define GCDF2_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf2[idx][6], p->level))
     #define GCDF3_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf3[idx][6], p->level))
     #define GCDF4_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf4[idx][6], p->level))
+    // Same for gcb4, whose entries are gcb_field_cs_bc_row rather than int rows.
+    // Spelled as an index like the gcdf ones so the consumer loops read alike.
+    #define GCB4_TILE(idx)  p->set_tile_ctx(p->tile_ctx_by_id(p->gcb4[p->level][idx].ctx_id, p->level))
     #define GC_TILE_RESET   p->reset_tile_ctx()
 
     // Same, for the gcb_list_t entry structs (gcb_sl, gcb_sl_cs, gcb_sl_cs_bc,
@@ -599,6 +602,7 @@ Authors: Hans Bihs, Alexander Hanke
     #define GCDF2_TILE(idx) ((void)0)
     #define GCDF3_TILE(idx) ((void)0)
     #define GCDF4_TILE(idx) ((void)0)
+    #define GCB4_TILE(idx)  ((void)0)
     #define GC_TILE_RESET   ((void)0)
     #define GCB_TILE(entry, lev) ((void)0)
 #endif
