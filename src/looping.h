@@ -489,16 +489,16 @@ Authors: Hans Bihs, Alexander Hanke
 #define MIN3(aAa,bBb,cCc) (((aAa)<(bBb)?(aAa):(bBb))<cCc?((aAa)<(bBb)?(aAa):(bBb)):cCc)
 
 //GCB
-#define GCB1 for(n=0;n<static_cast<int>(p->gcb1.size());++n)
-#define GCB1CHECK if(p->gcb1[n].cs>0)
+#define GCB1 for(n=0;n<p->gcb1.ssize(p->level);++n)
+#define GCB1CHECK if(p->gcb1[p->level][n].cs>0)
 #define GC1LOOP GCB1 GCB1CHECK
 
-#define QGCB1 for(q=0;q<static_cast<int>(p->gcb1.size());++q)
-#define QGCB1CHECK if(p->gcb1[q].cs>0)
+#define QGCB1 for(q=0;q<p->gcb1.ssize(p->level);++q)
+#define QGCB1CHECK if(p->gcb1[p->level][q].cs>0)
 #define QGC1LOOP QGCB1 QGCB1CHECK
 
-#define QQGCB1 for(qq=0;qq<static_cast<int>(p->gcb1.size());++qq)
-#define QQGCB1CHECK if(p->gcb1[qq].cs>0)
+#define QQGCB1 for(qq=0;qq<p->gcb1.ssize(p->level);++qq)
+#define QQGCB1CHECK if(p->gcb1[p->level][qq].cs>0)
 #define QQGC1LOOP QQGCB1 QQGCB1CHECK
 
 #define GCB2 for(n=0;n<p->gcb2_count;++n)
@@ -601,6 +601,26 @@ Authors: Hans Bihs, Alexander Hanke
     #define GCDF4_TILE(idx) ((void)0)
     #define GC_TILE_RESET   ((void)0)
     #define GCB_TILE(entry, lev) ((void)0)
+#endif
+
+// Propagate a context to an entry DERIVED from another entry — gcslin/gcslout
+// from gcbsl4, gcslawa1/2 from gcbsl1/2. A derived entry names the same cell as
+// its source, so it inherits the source's tile rather than capturing one: the
+// derivation loops run outside any TILE_LOOP, where tile_ctx_id() would only
+// report TILE_CTX_DEFAULT.
+//
+// Needed as a macro because the aggregate differs between builds — a brace list
+// carrying ctx_id would not compile without AMReX — so derived entries are
+// pushed with the plain payload and given their context afterwards.
+
+#if USE_AMREX
+    #define GCB_SET_TILE(entry) (entry).ctx_id = p->tile_ctx_id()
+    #define GCB_COPY_TILE(dst, src) (dst).ctx_id = (src).ctx_id
+    #define GCB_APPLY_TILE(entry, lev) p->apply_tile_ctx(p->tile_ctx_by_id((entry).ctx_id, lev))
+#else
+    #define GCB_SET_TILE(entry) ((void)0)
+    #define GCB_COPY_TILE(dst, src) ((void)0)
+    #define GCB_APPLY_TILE(entry) ((void)0)
 #endif
 
 #endif

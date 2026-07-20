@@ -113,7 +113,8 @@ public:
 #endif
     ArrayWrapper3D DF1,DF2,DF3;
     // boundary conditions
-    ArrayWrapper3D IO,IOSL; // 0: no BC, 1: inflow, 2: outflow
+    ArrayWrapper3D IO; // 0: no BC, 1: inflow, 2: outflow
+    ArrayWrapper2D IOSL;
 
     // flag
     std::unique_ptr<int[]> flag_solid, flag_topo;
@@ -127,7 +128,7 @@ public:
     int cms_flag;
 
     //GHOSTCELL
-    std::vector<gcb_field_cs_bc_row> gcb1;
+    gcb_list gcb1;
     int **gcb2,**gcb3,**gcb4;
 
     int gcdf1_count,gcdf2_count,gcdf3_count,gcdf4_count;
