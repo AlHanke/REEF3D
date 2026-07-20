@@ -68,6 +68,8 @@ void sloshing_force::force(lexer *p, fdm *a, ghostcell *pgc)
     GC4LOOP
     if(p->gcb4[p->level][n].bc==21)
     {
+        GCB4_TILE(n);
+
         i=p->gcb4[p->level][n].i;
         j=p->gcb4[p->level][n].j;
         k=p->gcb4[p->level][n].k;
@@ -97,6 +99,7 @@ void sloshing_force::force(lexer *p, fdm *a, ghostcell *pgc)
         }
         
     }
+    GC_TILE_RESET;
     
     
     Fx_l = pgc->globalsum(Fx_l);

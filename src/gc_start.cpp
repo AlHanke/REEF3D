@@ -198,8 +198,13 @@ void ghostcell::start4(lexer *p, field& f, int gcv, bool do_avgdown)
 
     starttime=timer();
     QQGC4LOOP
-    if((p->gcb1[p->level][qq].cs!=2 && p->gcb1[p->level][qq].cs!=3) || p->j_dir==1)
-        gcdistro4(f, p->gcb4[p->level][qq].i, p->gcb4[p->level][qq].j, p->gcb4[p->level][qq].k, p->gcb4[p->level][qq].cs, p->gcb4[p->level][qq].bc, gcv);
+    {
+        GCB4_TILE(qq);
+
+        if((p->gcb1[p->level][qq].cs!=2 && p->gcb1[p->level][qq].cs!=3) || p->j_dir==1)
+            gcdistro4(f, p->gcb4[p->level][qq].i, p->gcb4[p->level][qq].j, p->gcb4[p->level][qq].k, p->gcb4[p->level][qq].cs, p->gcb4[p->level][qq].bc, gcv);
+    }
+    GC_TILE_RESET;
     endtime=timer();
     p->gctime+=endtime-starttime;
 
@@ -252,7 +257,12 @@ void ghostcell::start4_sum(lexer *p, field& f, int gcv)
 
     starttime=timer();
     QQGC4LOOP
+    {
+        GCB4_TILE(qq);
+
         gcdistro4(f, p->gcb4[p->level][qq].i, p->gcb4[p->level][qq].j, p->gcb4[p->level][qq].k, p->gcb4[p->level][qq].cs, p->gcb4[p->level][qq].bc, gcv);
+    }
+    GC_TILE_RESET;
     endtime=timer();
     p->gctime+=endtime-starttime;
 

@@ -217,6 +217,8 @@ void nhflow_rans_io::plain_wallfunc(lexer* p, fdm_nhf *d, ghostcell* pgc)
 	GC4LOOP
 	if(p->gcb4[p->level][n].bc==21)
 	{
+	    GCB4_TILE(n);
+
 		i=p->gcb4[p->level][n].i;
 		j=p->gcb4[p->level][n].j;
 		k=p->gcb4[p->level][n].k;
@@ -241,6 +243,7 @@ void nhflow_rans_io::plain_wallfunc(lexer* p, fdm_nhf *d, ghostcell* pgc)
         a->eddyv(i,j,k) = kin(i,j,k)/eps(i,j,k);
         }
 	}
+	GC_TILE_RESET;
 
 	pgc->start4(p,kin,20);
 	pgc->start4(p,eps,30);

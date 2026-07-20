@@ -111,6 +111,8 @@ void initialize::inivof_io(fdm*a, lexer* p, ghostcell* pgc)
     if(p->F61>-1.0e20)
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         if(p->gcb4[p->level][n].bc==1)
         {
         i=p->gcb4[p->level][n].i;
@@ -122,10 +124,13 @@ void initialize::inivof_io(fdm*a, lexer* p, ghostcell* pgc)
         a->vof(i-3,j,k)=p->F61-p->pos_z();
         }
     }
+    GC_TILE_RESET;
 
     if(p->F62>-1.0e20)
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         if(p->gcb4[p->level][n].bc==2)
         {
         i=p->gcb4[p->level][n].i;
@@ -137,6 +142,7 @@ void initialize::inivof_io(fdm*a, lexer* p, ghostcell* pgc)
         a->vof(i+3,j,k)=p->F62-p->pos_z();
         }
     }
+    GC_TILE_RESET;
 }
 
 void initialize::inivof_box(lexer* p, fdm *a, ghostcell* pgc)

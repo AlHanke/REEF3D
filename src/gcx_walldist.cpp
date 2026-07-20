@@ -44,6 +44,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
 
     GC4LOOP
     {
+        GCB4_TILE(n);
 
         ii=p->gcb4[p->level][n].i;
         jj=p->gcb4[p->level][n].j;
@@ -144,6 +145,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
 
         }
     }
+    GC_TILE_RESET;
 
     #if USE_AMREX
     walldist.FillBoundary();
@@ -156,6 +158,8 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
     count=0;
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         if(p->gcb4[p->level][n].bc==21)
         {
             i=p->gcb4[p->level][n].i;
@@ -195,6 +199,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
                 walldist(i,j,k+1)=walldist(i,j,k);
         }
     }
+    GC_TILE_RESET;
 
     reini_walld reini(p,a);
 

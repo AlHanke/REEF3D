@@ -162,6 +162,8 @@ void ghostcell::gcb4_generate(lexer *p)
                 e.k  = k;
                 e.cs = cs_list[d];
                 e.bc = nb_out[d] ? bcs[cs_list[d]] : WALL_BC;
+                GCB_SET_TILE(e);
+
                 ++count;
             }
         }

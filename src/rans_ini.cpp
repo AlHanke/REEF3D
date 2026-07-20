@@ -99,6 +99,8 @@ void rans_io::plain_wallfunc(lexer* p, fdm*a, ghostcell* pgc)
 	GC4LOOP
 	if(p->gcb4[p->level][n].bc==21)
 	{
+	    GCB4_TILE(n);
+
 		i=p->gcb4[p->level][n].i;
 		j=p->gcb4[p->level][n].j;
 		k=p->gcb4[p->level][n].k;
@@ -123,6 +125,7 @@ void rans_io::plain_wallfunc(lexer* p, fdm*a, ghostcell* pgc)
         a->eddyv(i,j,k) = kin(i,j,k)/eps(i,j,k);
         }
 	}
+	GC_TILE_RESET;
 
 	pgc->start4(p,kin,20);
 	pgc->start4(p,eps,30);
@@ -135,6 +138,8 @@ void rans_io::inflow(lexer* p, fdm*a, ghostcell* pgc)
         GC4LOOP
         if(p->gcb4[p->level][n].bc==1)
         {
+            GCB4_TILE(n);
+
 		i=p->gcb4[p->level][n].i;
 		j=p->gcb4[p->level][n].j;
 		k=p->gcb4[p->level][n].k;
@@ -147,10 +152,13 @@ void rans_io::inflow(lexer* p, fdm*a, ghostcell* pgc)
 		kin(i-2,j,k)=kin(i,j,k);
 		kin(i-3,j,k)=kin(i,j,k);
         }
+        GC_TILE_RESET;
         
         GC4LOOP
         if(p->gcb4[p->level][n].bc==2)
         {
+            GCB4_TILE(n);
+
 		i=p->gcb4[p->level][n].i;
 		j=p->gcb4[p->level][n].j;
 		k=p->gcb4[p->level][n].k;
@@ -163,6 +171,7 @@ void rans_io::inflow(lexer* p, fdm*a, ghostcell* pgc)
 		kin(i+2,j,k)=kin(i,j,k);
 		kin(i+3,j,k)=kin(i,j,k);
         }
+        GC_TILE_RESET;
 }
 
 void rans_io::tau_calc(fdm* a, lexer* p, double maxwdist)
