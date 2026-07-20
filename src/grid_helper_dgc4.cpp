@@ -30,6 +30,7 @@ void grid_helper::fill_dgc4(lexer* p)
 
     QGC4LOOP
     {
+        GCB4_TILE(q);
 
         i=p->gcb4[p->level][q].i;
         j=p->gcb4[p->level][q].j;
@@ -59,6 +60,7 @@ void grid_helper::fill_dgc4(lexer* p)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin+n+1]+=1;
     }
+    GC_TILE_RESET;
 
     count=0;
     LOOP

@@ -46,6 +46,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
     QQGC4LOOP
     if(p->gcb4[p->level][qq].bc==21)
     {
+        GCB4_TILE(qq);
 
         i=p->gcb4[p->level][qq].i;
         j=p->gcb4[p->level][qq].j;
@@ -88,10 +89,13 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
             f(i,j,k+3)=-0.5*p->DZN[KP] - 2.0*p->DZN[KP];
         }
     }
+    GC_TILE_RESET;
 
     QQGC4LOOP
     if(p->gcb4[p->level][qq].bc==1|| p->gcb4[p->level][qq].bc==2|| p->gcb4[p->level][qq].bc==3)
     {
+        GCB4_TILE(qq);
+
         i=p->gcb4[p->level][qq].i;
         j=p->gcb4[p->level][qq].j;
         k=p->gcb4[p->level][qq].k;
@@ -134,6 +138,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
             f(i,j,k+3) = f(i,j,k);
         }
     }
+    GC_TILE_RESET;
 
     double dx;
     dt=1e9;
@@ -175,6 +180,8 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
         QQGC4LOOP
         if(p->gcb4[p->level][qq].bc==21)
         {
+            GCB4_TILE(qq);
+
             i=p->gcb4[p->level][qq].i;
             j=p->gcb4[p->level][qq].j;
             k=p->gcb4[p->level][qq].k;
@@ -187,6 +194,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
             else if(p->gcb4[p->level][qq].cs==5 || p->gcb4[p->level][qq].cs==6)
                 f(i,j,k) = 0.5*p->DZN[KP];
         }
+        GC_TILE_RESET;
 
         #if USE_AMREX
         f.FillBoundary();

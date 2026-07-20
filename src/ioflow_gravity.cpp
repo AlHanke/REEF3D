@@ -52,6 +52,8 @@ void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     count2=0;
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         if(p->gcb4[p->level][n].bc==1)
         {
             p->gcin[count1][0]=p->gcb4[p->level][n].i;
@@ -70,6 +72,7 @@ void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
             ++count2;
         }
     }
+    GC_TILE_RESET;
 
     p->gcin_count=count1;
     p->gcout_count=count2;

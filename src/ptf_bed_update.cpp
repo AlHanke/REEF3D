@@ -49,6 +49,8 @@ void ptf_bed_update::bedbc(lexer *p, fdm *a, ghostcell *pgc, field &Fi)
     GC4LOOP
     if(p->gcb4[p->level][n].cs==5 &&  p->gcb4[p->level][n].bc==21)
     {
+        GCB4_TILE(n);
+
         i = p->gcb4[p->level][n].i;
         j = p->gcb4[p->level][n].j;
         k = p->gcb4[p->level][n].k;
@@ -61,6 +63,7 @@ void ptf_bed_update::bedbc(lexer *p, fdm *a, ghostcell *pgc, field &Fi)
         Fi(i,j,k-2) = Fi(i,j,k) + 0.0*p->DXM*Fval;
         Fi(i,j,k-3) = Fi(i,j,k) + 0.0*p->DXM*Fval;
     }
+    GC_TILE_RESET;
 }
 
 

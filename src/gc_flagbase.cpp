@@ -32,6 +32,7 @@ void ghostcell::flagbase(lexer *p)
 
     GC4LOOP
     {
+        GCB4_TILE(n);
 
         i=p->gcb4[p->level][n].i;
         j=p->gcb4[p->level][n].j;
@@ -66,6 +67,7 @@ void ghostcell::flagbase(lexer *p)
             p->flag5[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1+q] = bc;
         }
     }
+    GC_TILE_RESET;
 
     for(n=0;n<p->gcpara1_count;++n)
     {

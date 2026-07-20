@@ -255,6 +255,8 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
 
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         if(p->gcb4[p->level][n].bc==1)
         {
             i=p->gcb4[p->level][n].i;
@@ -295,5 +297,6 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
  
         }
     }
+    GC_TILE_RESET;
     
 }

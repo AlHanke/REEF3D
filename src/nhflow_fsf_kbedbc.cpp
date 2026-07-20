@@ -35,6 +35,8 @@ void nhflow_fsf_f::kinematic_bed(lexer *p, fdm_nhf *d, double *U, double *V, dou
     GC4LOOP
     if(p->gcb4[p->level][n].cs==5 && p->gcb4[p->level][n].bc==21)
     {
+        GCB4_TILE(n);
+
     i=p->gcb4[p->level][n].i;
     j=p->gcb4[p->level][n].j;
     k=p->gcb4[p->level][n].k;
@@ -71,5 +73,6 @@ void nhflow_fsf_f::kinematic_bed(lexer *p, fdm_nhf *d, double *U, double *V, dou
         d->Wt[IJKm3] = wval;
         
     }
+    GC_TILE_RESET;
 }
 

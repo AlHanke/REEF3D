@@ -92,4 +92,5 @@ void grid_helper::fillgcb1(lexer *p)
         gcb.cs=-abs(gcb.cs);
     }
 
+    GC_TILE_RESET;
 }

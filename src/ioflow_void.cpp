@@ -445,6 +445,8 @@ void ioflow_v::pressure_io(lexer *p, fdm *a, ghostcell* pgc)
     GC4LOOP
     if(p->gcb4[p->level][n].bc==2)
     {
+        GCB4_TILE(n);
+
         i=p->gcb4[p->level][n].i;
         j=p->gcb4[p->level][n].j;
         k=p->gcb4[p->level][n].k;
@@ -475,6 +477,7 @@ void ioflow_v::pressure_io(lexer *p, fdm *a, ghostcell* pgc)
             a->press(i+3,j,k)=pval;
         }
     }
+    GC_TILE_RESET;
 
     pBC->patchBC_pressure(p,a,pgc,a->press);
 }

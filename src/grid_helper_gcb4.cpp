@@ -42,9 +42,12 @@ void grid_helper::fillgcb4_wall(lexer *p)
 
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         i=p->gcb4[p->level][n].i;
         j=p->gcb4[p->level][n].j;
         k=p->gcb4[p->level][n].k;
         p->gcb4[p->level][n].row=cval(i,j,k);
     }
+    GC_TILE_RESET;
 }

@@ -95,6 +95,7 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
             // 4
             for(n=0;n<p->gcb4.ssize(p->level);++n)
             {
+                GCB4_TILE(n);
 
                 i=p->gcb4[p->level][n].i;
                 j=p->gcb4[p->level][n].j;
@@ -110,6 +111,7 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
                     }
                 }
             }
+            GC_TILE_RESET;
         }
     }
 
@@ -184,6 +186,8 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
             // 4
             for(n=0;n<p->gcb4.ssize(p->level);++n)
             {
+                GCB4_TILE(n);
+
                 i=p->gcb4[p->level][n].i;
                 j=p->gcb4[p->level][n].j;
                 k=p->gcb4[p->level][n].k;
@@ -198,6 +202,7 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
                     }
                 }
             }
+            GC_TILE_RESET;
         }
     }
 
@@ -378,6 +383,8 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
         // 4
         for(n=0;n<p->gcb4.ssize(p->level);++n)
         {
+            GCB4_TILE(n);
+
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;
             k=p->gcb4[p->level][n].k;
@@ -430,5 +437,6 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
                 }
             }
         }
+        GC_TILE_RESET;
     }
 }

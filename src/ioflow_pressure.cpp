@@ -170,6 +170,8 @@ void ioflow_f::pressure_wall(lexer *p, fdm *a, ghostcell *pgc)
     GC4LOOP
     if(p->gcb4[p->level][n].cs!=5 && p->gcb4[p->level][n].cs!=6 && (p->gcb4[p->level][n].bc ==3 || p->gcb4[p->level][n].bc ==21 || p->gcb4[p->level][n].bc ==22))
     {
+        GCB4_TILE(n);
+
         i=p->gcb4[p->level][n].i;
         j=p->gcb4[p->level][n].j;
         k=p->gcb4[p->level][n].k;
@@ -204,6 +206,7 @@ void ioflow_f::pressure_wall(lexer *p, fdm *a, ghostcell *pgc)
             }
         }
     }
+    GC_TILE_RESET;
 }
 
 void ioflow_f::pressure_bed(lexer *p, fdm *a, ghostcell *pgc)
@@ -213,6 +216,8 @@ void ioflow_f::pressure_bed(lexer *p, fdm *a, ghostcell *pgc)
     GC4LOOP
     if(p->gcb4[p->level][n].cs==5)
     {
+        GCB4_TILE(n);
+
         i=p->gcb4[p->level][n].i;
         j=p->gcb4[p->level][n].j;
         k=p->gcb4[p->level][n].k;
@@ -226,6 +231,7 @@ void ioflow_f::pressure_bed(lexer *p, fdm *a, ghostcell *pgc)
             a->press(i,j,k-3)=pval;
         }
     }
+    GC_TILE_RESET;
 }
 
 double ioflow_f::local_fsf(lexer *p, fdm *a, ghostcell *pgc)
