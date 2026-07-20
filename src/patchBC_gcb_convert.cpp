@@ -41,17 +41,17 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
             // 1
             GCB1
             {
-                i=p->gcb1[n].i;
-                j=p->gcb1[n].j;
-                k=p->gcb1[n].k;
+                i=p->gcb1[p->level][n].i;
+                j=p->gcb1[p->level][n].j;
+                k=p->gcb1[p->level][n].k;
 
-                if(i>=istart && i<iend && j>=jstart && j<jend && p->gcb1[n].cs==p->B440_face[qn] && p->gcb1[n].bc==21)
+                if(i>=istart && i<iend && j>=jstart && j<jend && p->gcb1[p->level][n].cs==p->B440_face[qn] && p->gcb1[p->level][n].bc==21)
                 {
                     for(qq=0;qq<obj_count;++qq)
                     if(patch[qq]->ID==p->B440_ID[qn])
                     {
                         // convert gcb
-                        p->gcb1[n].bc=patch[qq]->gcb_flag;
+                        p->gcb1[p->level][n].bc=patch[qq]->gcb_flag;
                     }
                 }
             }
@@ -129,17 +129,17 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
             // 1
             for(n=0;n<p->gcb1_count;++n)
             {
-                i=p->gcb1[n].i;
-                j=p->gcb1[n].j;
-                k=p->gcb1[n].k;
+                i=p->gcb1[p->level][n].i;
+                j=p->gcb1[p->level][n].j;
+                k=p->gcb1[p->level][n].k;
 
-                if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend && p->gcb1[n].cs==p->B441_face[qn] && p->gcb1[n].bc==21)
+                if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend && p->gcb1[p->level][n].cs==p->B441_face[qn] && p->gcb1[p->level][n].bc==21)
                 {
                     for(qq=0;qq<obj_count;++qq)
                     if(patch[qq]->ID==p->B441_ID[qn])
                     {
                         // convert gcb
-                        p->gcb1[n].bc=patch[qq]->gcb_flag;
+                        p->gcb1[p->level][n].bc=patch[qq]->gcb_flag;
                     }
                 }
             }
@@ -209,22 +209,22 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
         // 1
         for(n=0;n<p->gcb1_count;++n)
         {
-            i=p->gcb1[n].i;
-            j=p->gcb1[n].j;
-            k=p->gcb1[n].k;
+            i=p->gcb1[p->level][n].i;
+            j=p->gcb1[p->level][n].j;
+            k=p->gcb1[p->level][n].k;
 
             // x-dir
             if(p->B442_face[qn]==1 || p->B442_face[qn]==4)
             {
                 r = sqrt(pow(p->YP[JP]-p->B442_ym[qn],2.0)+pow(p->ZP[KP]-p->B442_zm[qn],2.0));
 
-                if(r<=p->B442_r[qn] && p->pos_x()>p->B442_xm[qn]-p->DXN[IP] && p->pos_x()<=p->B442_xm[qn]+p->DXN[IP] && p->gcb1[n].cs==p->B442_face[qn] && p->gcb1[n].bc==21)
+                if(r<=p->B442_r[qn] && p->pos_x()>p->B442_xm[qn]-p->DXN[IP] && p->pos_x()<=p->B442_xm[qn]+p->DXN[IP] && p->gcb1[p->level][n].cs==p->B442_face[qn] && p->gcb1[p->level][n].bc==21)
                 {
                     for(qq=0;qq<obj_count;++qq)
                     if(patch[qq]->ID==p->B442_ID[qn])
                     {
                         // convert gcb
-                        p->gcb1[n].bc=patch[qq]->gcb_flag;
+                        p->gcb1[p->level][n].bc=patch[qq]->gcb_flag;
                     }
                 }
             }
@@ -234,13 +234,13 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
             {
                 r = sqrt(pow(p->XN[IP1]-p->B442_xm[qn],2.0)+pow(p->ZP[KP]-p->B442_zm[qn],2.0));
 
-                if(r<=p->B442_r[qn] && p->pos_y()>p->B442_ym[qn]-p->DYP[JP] && p->pos_y()<=p->B442_ym[qn]+p->DYP[JP] && p->gcb1[n].cs==p->B442_face[qn] && p->gcb1[n].bc==21)
+                if(r<=p->B442_r[qn] && p->pos_y()>p->B442_ym[qn]-p->DYP[JP] && p->pos_y()<=p->B442_ym[qn]+p->DYP[JP] && p->gcb1[p->level][n].cs==p->B442_face[qn] && p->gcb1[p->level][n].bc==21)
                 {
                     for(qq=0;qq<obj_count;++qq)
                     if(patch[qq]->ID==p->B442_ID[qn])
                     {
                         // convert gcb
-                        p->gcb1[n].bc=patch[qq]->gcb_flag;
+                        p->gcb1[p->level][n].bc=patch[qq]->gcb_flag;
                     }
                 }
             }
@@ -250,13 +250,13 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
             {
                 r = sqrt(pow(p->XN[IP1]-p->B442_xm[qn],2.0)+pow(p->YP[JP]-p->B442_ym[qn],2.0));
 
-                if(r<=p->B442_r[qn] && p->pos_z()>p->B442_zm[qn]-p->DZP[KP] && p->pos_z()<=p->B442_zm[qn]+p->DZP[KP] && p->gcb1[n].cs==p->B442_face[qn] && p->gcb1[n].bc==21)
+                if(r<=p->B442_r[qn] && p->pos_z()>p->B442_zm[qn]-p->DZP[KP] && p->pos_z()<=p->B442_zm[qn]+p->DZP[KP] && p->gcb1[p->level][n].cs==p->B442_face[qn] && p->gcb1[p->level][n].bc==21)
                 {
                     for(qq=0;qq<obj_count;++qq)
                     if(patch[qq]->ID==p->B442_ID[qn])
                     {
                         // convert gcb
-                        p->gcb1[n].bc=patch[qq]->gcb_flag;
+                        p->gcb1[p->level][n].bc=patch[qq]->gcb_flag;
                     }
                 }
             }

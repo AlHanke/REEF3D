@@ -65,6 +65,7 @@ void mgcslice2::gcb_seed(lexer *p)
             gcb.i=i;
             gcb.j=j;
             gcb.cs=X_NEG;
+            GCB_SET_TILE(gcb);
             ++count_vec[p->level];
         }
 
@@ -74,6 +75,7 @@ void mgcslice2::gcb_seed(lexer *p)
             gcb.i=i;
             gcb.j=j;
             gcb.cs=Y_POS;
+            GCB_SET_TILE(gcb);
             ++count_vec[p->level];
         }
 
@@ -83,6 +85,7 @@ void mgcslice2::gcb_seed(lexer *p)
             gcb.i=i;
             gcb.j=j;
             gcb.cs=Y_NEG;
+            GCB_SET_TILE(gcb);
             ++count_vec[p->level];
         }
 
@@ -92,6 +95,7 @@ void mgcslice2::gcb_seed(lexer *p)
             gcb.i=i;
             gcb.j=j;
             gcb.cs=X_POS;
+            GCB_SET_TILE(gcb);
             ++count_vec[p->level];
         }
     }

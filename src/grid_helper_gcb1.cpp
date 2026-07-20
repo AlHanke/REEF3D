@@ -22,19 +22,32 @@ Author: Hans Bihs
 
 #include"grid_helper.h"
 #include"lexer.h"
+#include <cassert>
 
 void grid_helper::fillgcb1(lexer *p)
 {
-    int q;
+    #if USE_AMREX
+    const int nlevs = p->nlevs;
+    #else
+    const int nlevs = 1;
+    #endif
 
-    p->Iarray(fgc,imax*jmax*kmax,6);
+    int q,n;
+
+    ArrayWrapper3D fgc(p);
+    fgc.resize(0);
 
     p->gcb1_count=p->gcb4_count;
-    p->gcb1.assign(p->gcb1_count, {});
+
+    assert(nlevs==1 && "Error: fillgcb1() should only be called when nlevs==1");
+
+    p->gcb1.resize_levels(nlevs);
+    for(int lev=0; lev<nlevs; ++lev)
+    p->gcb1[lev].assign(p->gcb1_count, {});
 
     QGCB1
     {
-        auto &gcb = p->gcb1[q];
+        auto &gcb = p->gcb1[p->level][q];
 
         gcb.i=p->gcb4[q][0];
         gcb.j=p->gcb4[q][1];
@@ -45,22 +58,27 @@ void grid_helper::fillgcb1(lexer *p)
 
     QGC1LOOP
     {
-        auto &gcb = p->gcb1[q];
+        auto &gcb = p->gcb1[p->level][q];
 
         i=gcb.i;
         j=gcb.j;
         k=gcb.k;
 
-        fgc[IJK][gcb.cs-1]=1;
+        GCB_APPLY_TILE(gcb);
+
+        if(gcb.cs==X_POS)
+        fgc(i,j,k)=1;
     }
 
     QGC1LOOP
     {
-        auto &gcb = p->gcb1[q];
+        auto &gcb = p->gcb1[p->level][q];
 
         i=gcb.i;
         j=gcb.j;
         k=gcb.k;
+
+        GCB_APPLY_TILE(gcb);
 
         if(gcb.cs==X_POS && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
         gcb.i-=1;
@@ -68,18 +86,15 @@ void grid_helper::fillgcb1(lexer *p)
 
     QGC1LOOP
     {
-        auto &gcb = p->gcb1[q];
+        auto &gcb = p->gcb1[p->level][q];
 
         i=gcb.i;
         j=gcb.j;
         k=gcb.k;
 
-        if(gcb.cs!=X_POS && fgc[IJK][3]==1 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
+        GCB_APPLY_TILE(gcb);
+
+        if(gcb.cs!=X_POS && fgc(i,j,k)==1 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
         gcb.cs=-abs(gcb.cs);
     }
-
-    for(int n=0; n<imax*jmax*kmax;n++)
-    delete[] fgc[n];
-
-    delete[] fgc;
 }
