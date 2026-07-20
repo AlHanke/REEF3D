@@ -127,7 +127,8 @@ public:
     int cms_flag;
 
     //GHOSTCELL
-    int **gcb1,**gcb2,**gcb3,**gcb4;
+    std::vector<gcb_field_cs_bc_row> gcb1;
+    int **gcb2,**gcb3,**gcb4;
 
     int gcdf1_count,gcdf2_count,gcdf3_count,gcdf4_count;
     std::vector<std::array<int, 5>> gcdf1, gcdf2, gcdf3;

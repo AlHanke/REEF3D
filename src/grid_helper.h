@@ -50,6 +50,7 @@ public:
     #endif
 
 private:
+    enum {X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2, Z_NEG=5, Z_POS=6};
     int imin,imax,jmax,jmin,kmin,kmax;
 
     int *hgc;

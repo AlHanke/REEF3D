@@ -489,16 +489,16 @@ Authors: Hans Bihs, Alexander Hanke
 #define MIN3(aAa,bBb,cCc) (((aAa)<(bBb)?(aAa):(bBb))<cCc?((aAa)<(bBb)?(aAa):(bBb)):cCc)
 
 //GCB
-#define GCB1 for(n=0;n<p->gcb1_count;++n)
-#define GCB1CHECK if(p->gcb1[n][3]>0)
+#define GCB1 for(n=0;n<static_cast<int>(p->gcb1.size());++n)
+#define GCB1CHECK if(p->gcb1[n].cs>0)
 #define GC1LOOP GCB1 GCB1CHECK
 
-#define QGCB1 for(q=0;q<p->gcb1_count;++q)
-#define QGCB1CHECK if(p->gcb1[q][3]>0)
+#define QGCB1 for(q=0;q<static_cast<int>(p->gcb1.size());++q)
+#define QGCB1CHECK if(p->gcb1[q].cs>0)
 #define QGC1LOOP QGCB1 QGCB1CHECK
 
-#define QQGCB1 for(qq=0;qq<p->gcb1_count;++qq)
-#define QQGCB1CHECK if(p->gcb1[qq][3]>0)
+#define QQGCB1 for(qq=0;qq<static_cast<int>(p->gcb1.size());++qq)
+#define QQGCB1CHECK if(p->gcb1[qq].cs>0)
 #define QQGC1LOOP QQGCB1 QQGCB1CHECK
 
 #define GCB2 for(n=0;n<p->gcb2_count;++n)

@@ -34,6 +34,10 @@ enum {
     OBJ_FLAG = -20
 };
 
+enum {X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2, Z_NEG=5, Z_POS=6};
+
+enum {BC_INFLOW=1, BC_OUTFLOW=2, BC_SYMMETRY=3, BC_WAVEGEN=6, BC_NUMBEACH=7, BC_WALL=21};
+
 inline constexpr double PI = 3.14159265359;
 inline constexpr double EE = 2.71828182846;
 
