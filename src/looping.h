@@ -570,4 +570,37 @@ Authors: Hans Bihs, Alexander Hanke
 #define GCDF4CHECK if(p->gcdf4[n][3]>0)
 #define GCDF4LOOP GCDF4 GCDF4CHECK
 
+// Tile context restore for the gcdf tables.
+//
+// gcdf entries store TILE-LOCAL (i,j,k) plus the dense id (column 6) of the
+// tile they were recorded under. Any loop that dereferences a gcdf entry's
+// (i,j,k) — via a field accessor, DXN[IP], etc. — runs outside TILE_LOOP and
+// must re-establish that tile first, otherwise the indices resolve against the
+// default whole-box origin. Emit GCDF4_TILE(idx) as the first statement of the
+// loop body and GC_TILE_RESET after the loop.
+// An id of TILE_CTX_DEFAULT resolves to the level's whole-box context, so
+// entries recorded outside a tile loop replay exactly as they were written.
+// No-ops without AMReX, where (i,j,k) are already rank-global.
+#if USE_AMREX
+    #define GCDF1_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf1[idx][6], p->level))
+    #define GCDF2_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf2[idx][6], p->level))
+    #define GCDF3_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf3[idx][6], p->level))
+    #define GCDF4_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf4[idx][6], p->level))
+    #define GC_TILE_RESET   p->reset_tile_ctx()
+
+    // Same, for the gcb_list_t entry structs (gcb_sl, gcb_sl_cs, gcb_sl_cs_bc,
+    // gcb_field — see gcb_sl_list.h). Takes the entry rather than an index, so
+    // it works against any of them, and an explicit level, because a gcb list is
+    // a per-level container whose level is a caller decision. The level is only
+    // consulted for TILE_CTX_DEFAULT entries; a real id carries its own.
+    #define GCB_TILE(entry, lev) p->set_tile_ctx(p->tile_ctx_by_id((entry).ctx_id, lev))
+#else
+    #define GCDF1_TILE(idx) ((void)0)
+    #define GCDF2_TILE(idx) ((void)0)
+    #define GCDF3_TILE(idx) ((void)0)
+    #define GCDF4_TILE(idx) ((void)0)
+    #define GC_TILE_RESET   ((void)0)
+    #define GCB_TILE(entry, lev) ((void)0)
+#endif
+
 #endif
