@@ -117,6 +117,8 @@ void komega_func_PLIC::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
 		GC4LOOP
 		if(p->gcb4[p->level][n].bc==21)
 		{
+		    GCB4_TILE(n);
+
 		i = p->gcb4[p->level][n].i;
 		j = p->gcb4[p->level][n].j;
 		k = p->gcb4[p->level][n].k;
@@ -125,6 +127,7 @@ void komega_func_PLIC::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
 						  /((eps(i,j,k))>(1.0e-20)?(eps(i,j,k)):(1.0e20)),0.0),fabs(p->T35*kin(i,j,k))/strainterm(p,a)),
 						  0.0001*a->visc(i,j,k));
 		}
+		GC_TILE_RESET;
         
         GCDF4LOOP
 		{

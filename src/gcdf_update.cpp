@@ -261,11 +261,14 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     // the same way the gcdf4 loop below does.
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         i=p->gcb4[p->level][n].i;
         j=p->gcb4[p->level][n].j;
         k=p->gcb4[p->level][n].k;
         p->gcb4[p->level][n].row=cval(i,j,k);
     }
+    GC_TILE_RESET;
 
 
     GCDF4LOOP

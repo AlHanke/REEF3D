@@ -40,6 +40,7 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
 
         for(n=0;n<p->gcb4.ssize(p->level);++n)
         {
+            GCB4_TILE(n);
 
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;
@@ -48,6 +49,7 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
             if(i>=istart && i<iend && j>=jstart && j<jend && p->gcb4[p->level][n].cs==p->B440_face[qn] && p->gcb4[p->level][n].bc==21)
                 ++count;
         }
+        GC_TILE_RESET;
 
         for(qq=0;qq<obj_count;++qq)
         {
@@ -71,6 +73,8 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
 
         for(n=0;n<p->gcb4.ssize(p->level);++n)
         {
+            GCB4_TILE(n);
+
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;
             k=p->gcb4[p->level][n].k;
@@ -78,6 +82,7 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
             if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend && p->gcb4[p->level][n].cs==p->B441_face[qn] && p->gcb4[p->level][n].bc==21)
                 ++count;
         }
+        GC_TILE_RESET;
 
         for(qq=0;qq<obj_count;++qq)
         {
@@ -93,6 +98,8 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
         int count=0;
         for(n=0;n<p->gcb4.ssize(p->level);++n)
         {
+            GCB4_TILE(n);
+
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;
             k=p->gcb4[p->level][n].k;
@@ -124,6 +131,7 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
                     ++count;
             }
         }
+        GC_TILE_RESET;
 
         for(qq=0;qq<obj_count;++qq)
         {

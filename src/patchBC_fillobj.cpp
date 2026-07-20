@@ -208,6 +208,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
 
         for(n=0;n<p->gcb4.ssize(p->level);++n)
         {
+            GCB4_TILE(n);
 
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;
@@ -230,6 +231,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
                 }
             }
         }
+        GC_TILE_RESET;
     }
 
     // box
@@ -248,6 +250,8 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
 
         for(n=0;n<p->gcb4.ssize(p->level);++n)
         {
+            GCB4_TILE(n);
+
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;
             k=p->gcb4[p->level][n].k;
@@ -269,6 +273,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
                 }
             }
         }
+        GC_TILE_RESET;
     }
 
     // circle
@@ -279,6 +284,8 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
         int count=0;
         for(n=0;n<p->gcb4.ssize(p->level);++n)
         {
+            GCB4_TILE(n);
+
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;
             k=p->gcb4[p->level][n].k;
@@ -349,6 +356,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
                 }
             }
         }
+        GC_TILE_RESET;
 
         for(qq=0;qq<obj_count;++qq)
             if(patch[qq]->ID==p->B442_ID[qn])

@@ -152,6 +152,8 @@ void VOF_PLIC::iniphi_io(fdm*a, lexer* p, ghostcell* pgc)
     if(p->F61>-1.0e20)
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         if(p->gcb4[p->level][n].bc==1)
         {
         i=p->gcb4[p->level][n].i;
@@ -164,10 +166,13 @@ void VOF_PLIC::iniphi_io(fdm*a, lexer* p, ghostcell* pgc)
         }
     p->phiin=p->F61;
     }
+    GC_TILE_RESET;
 
     if(p->F62>-1.0e20)
     GC4LOOP
     {
+        GCB4_TILE(n);
+
         if(p->gcb4[p->level][n].bc==2)
         {
         i=p->gcb4[p->level][n].i;
@@ -179,6 +184,7 @@ void VOF_PLIC::iniphi_io(fdm*a, lexer* p, ghostcell* pgc)
         a->phi(i+3,j,k)=p->F62-p->pos_z();
         }
     } 
+    GC_TILE_RESET;
 }
 
 void VOF_PLIC::iniphi_box(lexer* p, fdm *a, ghostcell* pgc)
