@@ -109,7 +109,7 @@ void ioflow_v::velocity_inlet(lexer *p, fdm* a, ghostcell* pgc, field &u, field 
     #else
     GC1LOOP
     {
-        auto &gcb = p->gcb1[n];
+        auto &gcb = p->gcb1[p->level][n];
         i=gcb.i;
         j=gcb.j;
         k=gcb.k;

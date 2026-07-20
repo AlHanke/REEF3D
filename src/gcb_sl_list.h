@@ -48,8 +48,47 @@ Author: Alexander Hanke
 // p->level for the loops that do want the current level.
 //
 // This header must not reference lexer: it is included into lexer.h before
-// the lexer class is formed.
+// the lexer class is formed. tile_ctx.h is deliberately free of that
+// dependency for the same reason.
+//
+// ---------------------------------------------------------------------
+// Tile context on every entry
+// ---------------------------------------------------------------------
+// Under AMReX the i/j/k on these entries are TILE-LOCAL — offsets from the
+// amr_tile_lo of the tile that recorded them. They are only meaningful while
+// that tile's context is installed. Entries are produced inside a TILE_LOOP
+// and consumed by loops that run outside one, where the default whole-box
+// context is active, so the indices would otherwise resolve against the wrong
+// origin as soon as tiling yields more than one tile per box.
+//
+// Each entry therefore records the dense id of the tile it was written under:
+//
+//   producer:  e.ctx_id = p->tile_ctx_id();          // inside the TILE_LOOP
+//   consumer:  GCB_TILE(e, lev);                     // before touching i/j/k
+//              ...
+//              GC_TILE_RESET;                        // after the loop
+//
+// An id, not a TileCtx: there are far fewer tiles than entries, so the shared
+// table in grid_amrex costs 48 bytes per tile while each entry pays 4. The id
+// is a prefix sum over (level, LocalIndex, LocalTileIndex), so producers that
+// iterate in different orders still agree on it.
+//
+// TILE_CTX_DEFAULT means the entry was recorded with no tile installed. That is
+// not an error — tile_ctx_by_id resolves it to the level's whole-box context,
+// so such an entry replays exactly as it was written — but it is worth knowing
+// about: see grid_amrex::tile_ctx_default_records().
+//
+// Restoring a context also reinstates its level, which must agree with the
+// gcb_list_t bucket the entry lives in: the list's level selects the list,
+// the context's level makes the FAB indices inside it resolvable.
+//
+// The member is AMReX-only. It cannot be written without AMReX anyway —
+// tile_ctx_id() lives on grid_amrex — so producers and consumers are already
+// guarded (GCB_TILE and GC_TILE_RESET compile to nothing there), and this way
+// the non-AMReX build pays no per-entry cost for a concept it does not have.
 // =====================================================================
+
+#include "tile_ctx.h"
 
 #include <cassert>
 #include <vector>
@@ -60,6 +99,10 @@ struct gcb_sl
 {
     int i = 0;
     int j = 0;
+
+    #if USE_AMREX
+    int ctx_id = TILE_CTX_DEFAULT;   ///< tile that i/j are relative to
+    #endif
 };
 
 // One slice outflow ghost-cell boundary entry. Replaces the old int[3] row,
@@ -69,6 +112,10 @@ struct gcb_sl_cs
     int i  = 0;
     int j  = 0;
     int cs = 0;    ///< face direction: X_NEG=1, Y_POS=2, Y_NEG=3, X_POS=4
+
+    #if USE_AMREX
+    int ctx_id = TILE_CTX_DEFAULT;   ///< tile that i/j are relative to
+    #endif
 };
 
 // One slice ghost-cell boundary entry. Replaces the old int[4] row, whose
@@ -79,6 +126,10 @@ struct gcb_sl_cs_bc
     int j  = 0;
     int cs = 0;    ///< face direction: X_NEG=1, Y_POS=2, Y_NEG=3, X_POS=4
     int bc = 21;   ///< boundary condition flag; 21 = default wall
+
+    #if USE_AMREX
+    int ctx_id = TILE_CTX_DEFAULT;   ///< tile that i/j are relative to
+    #endif
 };
 
 // One field ghost-cell boundary entry. Replaces the old int[5] row, whose
@@ -91,6 +142,10 @@ struct gcb_field_cs_bc_row
     int cs = 0;    ///< face direction: X_NEG=1, Y_POS=2, Y_NEG=3, X_POS=4, Z_POS=5, Z_NEG=6
     int bc = 21;   ///< boundary condition flag; 21 = default wall
     int row = -1;   ///< row in the matrix for cval, or -1 if not used
+
+    #if USE_AMREX
+    int ctx_id = TILE_CTX_DEFAULT;   ///< tile that i/j/k are relative to
+    #endif
 };
 
 template<typename ENTRY>

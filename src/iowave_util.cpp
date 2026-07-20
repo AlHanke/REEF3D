@@ -318,18 +318,18 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
     count1=0;
     GCB1
     {
-        if(p->gcb1[n].bc==1||p->gcb1[n].bc==6)
+        if(p->gcb1[p->level][n].bc==1||p->gcb1[p->level][n].bc==6)
         {
             flag=true;
             for(q=0;q<count1;++q)
-            if(gcgen1[q][0]==p->gcb1[n].i && gcgen1[q][1]==p->gcb1[n].j && gcgen1[q][2]==p->gcb1[n].cs)
+            if(gcgen1[q][0]==p->gcb1[p->level][n].i && gcgen1[q][1]==p->gcb1[p->level][n].j && gcgen1[q][2]==p->gcb1[p->level][n].cs)
             flag=false;
 
             if(flag)
             {
-                gcgen1[count1][0]=p->gcb1[n].i;
-                gcgen1[count1][1]=p->gcb1[n].j;
-                gcgen1[count1][2]=p->gcb1[n].cs;
+                gcgen1[count1][0]=p->gcb1[p->level][n].i;
+                gcgen1[count1][1]=p->gcb1[p->level][n].j;
+                gcgen1[count1][2]=p->gcb1[p->level][n].cs;
                 ++count1;
             }
         }
