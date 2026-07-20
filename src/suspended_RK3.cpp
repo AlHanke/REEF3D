@@ -137,6 +137,7 @@ void suspended_RK3::bcsusp_start(lexer* p, fdm* a,ghostcell *pgc, sediment_fdm *
             
         GCDF4LOOP
         {
+            GCDF4_TILE(n);
             i=p->gcdf4[n][0];
             j=p->gcdf4[n][1];
             k=p->gcdf4[n][2];
@@ -146,6 +147,7 @@ void suspended_RK3::bcsusp_start(lexer* p, fdm* a,ghostcell *pgc, sediment_fdm *
             conc(i,j,k-2) =  conc(i,j,k);
             conc(i,j,k-3) =  conc(i,j,k);
         }
+        GC_TILE_RESET;
     
     
     // Inflow
@@ -201,6 +203,7 @@ void suspended_RK3::fillconc(lexer* p, fdm* a, sediment_fdm *s)
     if(p->S34==1)
     GCDF4LOOP
     {
+        GCDF4_TILE(n);
         i=p->gcdf4[n][0];
         j=p->gcdf4[n][1];
         k=p->gcdf4[n][2];
@@ -214,6 +217,7 @@ void suspended_RK3::fillconc(lexer* p, fdm* a, sediment_fdm *s)
         //if(s->conc(i,j)>s->cbe(i,j))
         //cout<<"conc: "<<s->conc(i,j)<<" cbe: "<<s->cbe(i,j)<<endl;
     }
+    GC_TILE_RESET;
 
     
     if(p->S34==2)

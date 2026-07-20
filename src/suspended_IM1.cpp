@@ -180,6 +180,7 @@ void suspended_IM1::fillconc(lexer* p, fdm* a, ghostcell *pgc, sediment_fdm *s)
 {
     GCDF4LOOP
     {
+        GCDF4_TILE(n);
         i=p->gcdf4[n][0];
         j=p->gcdf4[n][1];
         k=p->gcdf4[n][2];
@@ -190,6 +191,7 @@ void suspended_IM1::fillconc(lexer* p, fdm* a, ghostcell *pgc, sediment_fdm *s)
         if(p->S61==2)
         s->cb(i,j) = Rouse_formula(p,a,s,a->conc(i,j,k));
     }
+    GC_TILE_RESET;
     
     pgc->gcsl_start4(p,s->cb,1);
 }

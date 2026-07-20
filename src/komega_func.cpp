@@ -120,6 +120,7 @@ void komega_func::eddyvisc(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 
         GCDF4LOOP
         {
+            GCDF4_TILE(n);
             i = p->gcdf4[n][0];
             j = p->gcdf4[n][1];
             k = p->gcdf4[n][2];
@@ -128,6 +129,7 @@ void komega_func::eddyvisc(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
                             /((eps(i,j,k))>(1.0e-20)?(eps(i,j,k)):(1.0e20)),0.0),fabs(p->T35*kin(i,j,k))/strainterm(p,a)),
                             0.0001*a->visc(i,j,k));
         }
+        GC_TILE_RESET;
     }
 
     // URANS
