@@ -33,11 +33,11 @@ void nhflow_fsf_f::kinematic_bed(lexer *p, fdm_nhf *d, double *U, double *V, dou
   
     // Kinematic Bed BC
     GC4LOOP
-    if(p->gcb4[n][3]==5 && p->gcb4[n][4]==21)
+    if(p->gcb4[p->level][n].cs==5 && p->gcb4[p->level][n].bc==21)
     {
-    i=p->gcb4[n][0];
-    j=p->gcb4[n][1];
-    k=p->gcb4[n][2];
+    i=p->gcb4[p->level][n].i;
+    j=p->gcb4[p->level][n].j;
+    k=p->gcb4[p->level][n].k;
     
     Pval = U[IJK];
     Qval = V[IJK];

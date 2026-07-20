@@ -210,9 +210,9 @@ void initialize::hydrostatic(lexer *p, fdm *a, ghostcell *pgc)
 	if(p->I12==2 && p->I30==0)
     GC4LOOP
 	{
-        i = p->gcb4[n][0];
-        j = p->gcb4[n][1];
-        k = p->gcb4[n][2];
+        i = p->gcb4[p->level][n].i;
+        j = p->gcb4[p->level][n].j;
+        k = p->gcb4[p->level][n].k;
 
         a->press(i,j,k) = a->phi(i,j,k)*a->ro(i,j,k)*fabs(p->W22) + p->I55;
 	}

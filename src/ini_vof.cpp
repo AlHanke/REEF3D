@@ -111,11 +111,11 @@ void initialize::inivof_io(fdm*a, lexer* p, ghostcell* pgc)
     if(p->F61>-1.0e20)
     GC4LOOP
     {
-        if(p->gcb4[n][4]==1)
+        if(p->gcb4[p->level][n].bc==1)
         {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
 
         a->vof(i-1,j,k)=p->F61-p->pos_z();
         a->vof(i-2,j,k)=p->F61-p->pos_z();
@@ -126,11 +126,11 @@ void initialize::inivof_io(fdm*a, lexer* p, ghostcell* pgc)
     if(p->F62>-1.0e20)
     GC4LOOP
     {
-        if(p->gcb4[n][4]==2)
+        if(p->gcb4[p->level][n].bc==2)
         {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
 
         a->vof(i+1,j,k)=p->F62-p->pos_z();
         a->vof(i+2,j,k)=p->F62-p->pos_z();

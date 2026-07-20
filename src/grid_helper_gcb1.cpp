@@ -47,13 +47,7 @@ void grid_helper::fillgcb1(lexer *p)
 
     QGCB1
     {
-        auto &gcb = p->gcb1[p->level][q];
-
-        gcb.i=p->gcb4[q][0];
-        gcb.j=p->gcb4[q][1];
-        gcb.k=p->gcb4[q][2];
-        gcb.cs=p->gcb4[q][3];
-        gcb.bc=p->gcb4[q][4];
+        p->gcb1[p->level][q] = p->gcb4[p->level][q];
     }
 
     QGC1LOOP
@@ -64,7 +58,7 @@ void grid_helper::fillgcb1(lexer *p)
         j=gcb.j;
         k=gcb.k;
 
-        GCB_APPLY_TILE(gcb);
+        GCB_APPLY_TILE(gcb, p->level);
 
         if(gcb.cs==X_POS)
         fgc(i,j,k)=1;
@@ -78,7 +72,7 @@ void grid_helper::fillgcb1(lexer *p)
         j=gcb.j;
         k=gcb.k;
 
-        GCB_APPLY_TILE(gcb);
+        GCB_APPLY_TILE(gcb, p->level);
 
         if(gcb.cs==X_POS && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
         gcb.i-=1;
@@ -92,9 +86,10 @@ void grid_helper::fillgcb1(lexer *p)
         j=gcb.j;
         k=gcb.k;
 
-        GCB_APPLY_TILE(gcb);
+        GCB_APPLY_TILE(gcb, p->level);
 
         if(gcb.cs!=X_POS && fgc(i,j,k)==1 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
         gcb.cs=-abs(gcb.cs);
     }
+
 }

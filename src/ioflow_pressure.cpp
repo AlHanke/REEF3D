@@ -168,35 +168,35 @@ void ioflow_f::pressure_wall(lexer *p, fdm *a, ghostcell *pgc)
     double pval=0.0;
 
     GC4LOOP
-    if(p->gcb4[n][3]!=5 && p->gcb4[n][3]!=6 && (p->gcb4[n][4] ==3 || p->gcb4[n][4] ==21 || p->gcb4[n][4] ==22))
+    if(p->gcb4[p->level][n].cs!=5 && p->gcb4[p->level][n].cs!=6 && (p->gcb4[p->level][n].bc ==3 || p->gcb4[p->level][n].bc ==21 || p->gcb4[p->level][n].bc ==22))
     {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
 
         if(a->phi(i,j,k)>0.0 || p->I56==0)
         {
             pval=a->phi(i,j,k)*a->ro(i,j,k)*fabs(p->W22);
 
-            if(p->gcb4[n][3]==1)
+            if(p->gcb4[p->level][n].cs==1)
             {
                 a->press(i-1,j,k)=pval;
                 a->press(i-2,j,k)=pval;
                 a->press(i-3,j,k)=pval;
             }
-            else if(p->gcb4[n][3]==2)
+            else if(p->gcb4[p->level][n].cs==2)
             {
                 a->press(i,j+1,k)=pval;
                 a->press(i,j+2,k)=pval;
                 a->press(i,j+3,k)=pval;
             }
-            else if(p->gcb4[n][3]==3)
+            else if(p->gcb4[p->level][n].cs==3)
             {
                 a->press(i,j-1,k)=pval;
                 a->press(i,j-2,k)=pval;
                 a->press(i,j-3,k)=pval;
             }
-            else if(p->gcb4[n][3]==4)
+            else if(p->gcb4[p->level][n].cs==4)
             {
                 a->press(i+1,j,k)=pval;
                 a->press(i+2,j,k)=pval;
@@ -211,11 +211,11 @@ void ioflow_f::pressure_bed(lexer *p, fdm *a, ghostcell *pgc)
     double pval=0.0;
 
     GC4LOOP
-    if(p->gcb4[n][3]==5)
+    if(p->gcb4[p->level][n].cs==5)
     {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
 
         if(a->phi(i,j,k)>0.0)
         {

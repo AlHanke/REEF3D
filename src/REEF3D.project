@@ -2816,6 +2816,7 @@
         <File Name="gc_buildflag.cpp"/>
         <File Name="gc_flagbase.cpp"/>
         <File Name="gc_flagfield.cpp"/>
+        <File Name="gc_gcb4_generate.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Parallel">
         <File Name="gcx_ini_cart_topology.cpp"/>

@@ -32,36 +32,37 @@ void ghostcell::flagbase(lexer *p)
 
     GC4LOOP
     {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
 
-        if(p->gcb4[n][4]==1)
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
+
+        if(p->gcb4[p->level][n].bc==1)
         bc=1;
-        else if(p->gcb4[n][4]==2)
+        else if(p->gcb4[p->level][n].bc==2)
         bc=2;
-        else if(p->gcb4[n][4]==3)
+        else if(p->gcb4[p->level][n].bc==3)
         bc=3;
-        else if(p->gcb4[n][4]==6)
+        else if(p->gcb4[p->level][n].bc==6)
         bc=6;
-        else if(p->gcb4[n][4]==7)
+        else if(p->gcb4[p->level][n].bc==7)
         bc=7;
-        else if(p->gcb4[n][4]==21)
+        else if(p->gcb4[p->level][n].bc==21)
         bc=21;
 
         for(q=0;q<p->margin;++q)
         {
-            if(p->gcb4[n][3]==1)
+            if(p->gcb4[p->level][n].cs==1)
             p->flag5[(i-p->imin-1-q)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin] = bc;
-            else if(p->gcb4[n][3]==2)
+            else if(p->gcb4[p->level][n].cs==2)
             p->flag5[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1+q)*p->kmax + k-p->kmin] = bc;
-            else if(p->gcb4[n][3]==3)
+            else if(p->gcb4[p->level][n].cs==3)
             p->flag5[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1-q)*p->kmax + k-p->kmin] = bc;
-            else if(p->gcb4[n][3]==4)
+            else if(p->gcb4[p->level][n].cs==4)
             p->flag5[(i-p->imin+1+q)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin] = bc;
-            else if(p->gcb4[n][3]==5)
+            else if(p->gcb4[p->level][n].cs==5)
             p->flag5[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1-q] = bc;
-            else if(p->gcb4[n][3]==6)
+            else if(p->gcb4[p->level][n].cs==6)
             p->flag5[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1+q] = bc;
         }
     }
