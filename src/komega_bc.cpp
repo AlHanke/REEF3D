@@ -35,8 +35,10 @@ void komega_bc::bckomega_start(fdm *a, lexer *p, field &kin, field &eps, int gcv
     if(gcval==20)
     {
         QGC4LOOP
-        if(p->gcb4[q][4]==21)
-            wall_law_kin(p,a,kin,eps, p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5]);
+        {
+            if(p->gcb4[p->level][q].bc==21)
+                wall_law_kin(p,a,kin,eps, p->gcb4[p->level][q].i, p->gcb4[p->level][q].j, p->gcb4[p->level][q].k, p->gcb4[p->level][q].cs, p->gcb4[p->level][q].bc, p->gcb4[p->level][q].row);
+        }
 
         QGCDF4LOOP
         {
@@ -51,8 +53,10 @@ void komega_bc::bckomega_start(fdm *a, lexer *p, field &kin, field &eps, int gcv
     else if(gcval==30)
     {
         QGC4LOOP
-        if(p->gcb4[q][4]==21 || (p->gcb4[q][4]==3 && p->gcb4[q][3]==6))
-            wall_law_omega(p,a,kin,eps, p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5]);
+        {
+            if(p->gcb4[p->level][q].bc==21 || (p->gcb4[p->level][q].bc==3 && p->gcb4[p->level][q].cs==6))
+                wall_law_omega(p,a,kin,eps, p->gcb4[p->level][q].i, p->gcb4[p->level][q].j, p->gcb4[p->level][q].k, p->gcb4[p->level][q].cs, p->gcb4[p->level][q].bc, p->gcb4[p->level][q].row);
+        }
 
         QGCDF4LOOP
         {

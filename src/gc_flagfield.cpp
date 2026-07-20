@@ -67,6 +67,13 @@ void ghostcell::flagfield(lexer *p)
             p->flag4[IJK]=OBJ_FLAG;
     }
 
+    // gcb4 is derived from flag4, not read from the grid file. It has to be
+    // rebuilt here rather than once at setup: the loops below consume it, and
+    // regrid re-chops the decomposition the entries' indices are relative to.
+    // Placed after the OBJ_FLAG conversion and FillBoundary above (so the
+    // domain-exterior ghost ring reads OBJ_FLAG) and before the tagging below.
+    gcb4_generate(p);
+
     p->level = 0;
     TILE_LOOP
     MALOOP
@@ -78,31 +85,32 @@ void ghostcell::flagfield(lexer *p)
 
     GC4LOOP
     {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
 
-        if(p->gcb4[n][3]==4 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
+        if(p->gcb4[p->level][n].cs==4 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
             p->flag1[IJK]=OBJ_FLAG;
     }
 
     GC4LOOP
     {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
 
-        if(p->gcb4[n][3]==2 && (p->periodic2!=1 || j+p->origin_j<p->gknoy-1))
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
+
+        if(p->gcb4[p->level][n].cs==2 && (p->periodic2!=1 || j+p->origin_j<p->gknoy-1))
             p->flag2[IJK]=OBJ_FLAG;
     }
 
     GC4LOOP
     {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
 
-        if(p->gcb4[n][3]==6 && (p->periodic3!=1 || k+p->origin_k<p->gknoz-1))
+        if(p->gcb4[p->level][n].cs==6 && (p->periodic3!=1 || k+p->origin_k<p->gknoz-1))
             p->flag3[IJK]=OBJ_FLAG;
     }
 

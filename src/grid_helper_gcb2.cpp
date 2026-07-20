@@ -38,8 +38,13 @@ void grid_helper::fillgcb2(lexer *p)
 
     QGCB4
     {
-        for(n=0;n<5;++n)
-        p->gcb2[q][n]=p->gcb4[q][n];
+        const auto &src = p->gcb4[p->level][q];
+
+        p->gcb2[q][0]=src.i;
+        p->gcb2[q][1]=src.j;
+        p->gcb2[q][2]=src.k;
+        p->gcb2[q][3]=src.cs;
+        p->gcb2[q][4]=src.bc;
     }
 
     QGC2LOOP

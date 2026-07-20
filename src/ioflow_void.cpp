@@ -443,11 +443,11 @@ void ioflow_v::pressure_io(lexer *p, fdm *a, ghostcell* pgc)
     double pval=0.0;
 
     GC4LOOP
-    if(p->gcb4[n][4]==2)
+    if(p->gcb4[p->level][n].bc==2)
     {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
         pval=0.0;
 
         if(p->B77==1)

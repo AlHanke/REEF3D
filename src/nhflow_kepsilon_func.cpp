@@ -96,11 +96,11 @@ void nhflow_kepsilon_func::eddyvisc(lexer* p, fdm_nhf *d, ghostcell* pgc, vrans*
 
 		if(p->A564==1)
 		GC4LOOP
-		if(p->gcb4[n][4]==21)
+		if(p->gcb4[p->level][n].bc==21)
 		{
-		i = p->gcb4[n][0];
-		j = p->gcb4[n][1];
-		k = p->gcb4[n][2];
+		i = p->gcb4[p->level][n].i;
+		j = p->gcb4[p->level][n].j;
+		k = p->gcb4[p->level][n].k;
 
 		d->EV0[IJK] = p->cmu*MAX(MIN(MAX(KIN[IJK]*KIN[IJK]
 						  /((EPS[IJK])>(1.0e-20)?(EPS[IJK]):(1.0e20)),0.0),fabs(p->T35*KIN[IJK])/strainterm(p,d)),

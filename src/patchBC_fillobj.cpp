@@ -206,13 +206,14 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
         jstart = p->posc_j(p->B440_ys[qn]);
         jend = p->posc_j(p->B440_ye[qn]);
 
-        for(n=0;n<p->gcb4_count;++n)
+        for(n=0;n<p->gcb4.ssize(p->level);++n)
         {
-            i=p->gcb4[n][0];
-            j=p->gcb4[n][1];
-            k=p->gcb4[n][2];
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcb4[n][3]==p->B440_face[qn] && p->gcb4[n][4]==21)
+            i=p->gcb4[p->level][n].i;
+            j=p->gcb4[p->level][n].j;
+            k=p->gcb4[p->level][n].k;
+
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcb4[p->level][n].cs==p->B440_face[qn] && p->gcb4[p->level][n].bc==21)
             {
 
                 for(qq=0;qq<obj_count;++qq)
@@ -225,7 +226,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
                     ++patch[qq]->counter;
 
                     // convert gcb
-                    p->gcb4[n][4]=patch[qq]->gcb_flag;
+                    p->gcb4[p->level][n].bc=patch[qq]->gcb_flag;
                 }
             }
         }
@@ -245,13 +246,13 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
         kend = p->posc_k(p->B441_ze[qn]);
 
 
-        for(n=0;n<p->gcb4_count;++n)
+        for(n=0;n<p->gcb4.ssize(p->level);++n)
         {
-            i=p->gcb4[n][0];
-            j=p->gcb4[n][1];
-            k=p->gcb4[n][2];
+            i=p->gcb4[p->level][n].i;
+            j=p->gcb4[p->level][n].j;
+            k=p->gcb4[p->level][n].k;
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend && p->gcb4[n][3]==p->B441_face[qn] && p->gcb4[n][4]==21)
+            if(i>=istart && i<iend && j>=jstart && j<jend && k>=kstart && k<kend && p->gcb4[p->level][n].cs==p->B441_face[qn] && p->gcb4[p->level][n].bc==21)
             {
 
                 for(qq=0;qq<obj_count;++qq)
@@ -264,7 +265,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
                     ++patch[qq]->counter;
 
                     // convert gcb
-                    p->gcb4[n][4]=patch[qq]->gcb_flag;
+                    p->gcb4[p->level][n].bc=patch[qq]->gcb_flag;
                 }
             }
         }
@@ -276,18 +277,18 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
     for(int qn=0;qn<p->B442;++qn)
     {
         int count=0;
-        for(n=0;n<p->gcb4_count;++n)
+        for(n=0;n<p->gcb4.ssize(p->level);++n)
         {
-            i=p->gcb4[n][0];
-            j=p->gcb4[n][1];
-            k=p->gcb4[n][2];
+            i=p->gcb4[p->level][n].i;
+            j=p->gcb4[p->level][n].j;
+            k=p->gcb4[p->level][n].k;
 
             // x-dir
             if(p->B442_face[qn]==1 || p->B442_face[qn]==4)
             {
                 r = sqrt(pow(p->YP[JP]-p->B442_ym[qn],2.0)+pow(p->ZP[KP]-p->B442_zm[qn],2.0));
 
-                if(r<=p->B442_r[qn] && p->pos_x()>p->B442_xm[qn]-p->DXP[IP] && p->pos_x()<=p->B442_xm[qn]+p->DXP[IP] && p->gcb4[n][3]==p->B442_face[qn] && p->gcb4[n][4]==21)
+                if(r<=p->B442_r[qn] && p->pos_x()>p->B442_xm[qn]-p->DXP[IP] && p->pos_x()<=p->B442_xm[qn]+p->DXP[IP] && p->gcb4[p->level][n].cs==p->B442_face[qn] && p->gcb4[p->level][n].bc==21)
                 {
                     for(qq=0;qq<obj_count;++qq)
                     if(patch[qq]->ID==p->B442_ID[qn])
@@ -299,7 +300,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
                         ++patch[qq]->counter;
 
                         // convert gcb
-                        p->gcb4[n][4]=patch[qq]->gcb_flag;
+                        p->gcb4[p->level][n].bc=patch[qq]->gcb_flag;
                     }
                 }
             }
@@ -309,7 +310,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
             {
                 r = sqrt(pow(p->XP[IP]-p->B442_xm[qn],2.0)+pow(p->ZP[KP]-p->B442_zm[qn],2.0));
 
-                if(r<=p->B442_r[qn] && p->pos_y()>p->B442_ym[qn]-p->DYP[JP] && p->pos_y()<=p->B442_ym[qn]+p->DYP[JP] && p->gcb4[n][3]==p->B442_face[qn] && p->gcb4[n][4]==21)
+                if(r<=p->B442_r[qn] && p->pos_y()>p->B442_ym[qn]-p->DYP[JP] && p->pos_y()<=p->B442_ym[qn]+p->DYP[JP] && p->gcb4[p->level][n].cs==p->B442_face[qn] && p->gcb4[p->level][n].bc==21)
                 {
                     for(qq=0;qq<obj_count;++qq)
                     if(patch[qq]->ID==p->B442_ID[qn])
@@ -321,7 +322,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
                         ++patch[qq]->counter;
 
                         // convert gcb
-                        p->gcb4[n][4]=patch[qq]->gcb_flag;
+                        p->gcb4[p->level][n].bc=patch[qq]->gcb_flag;
                     }
                 }
             }
@@ -331,7 +332,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
             {
                 r = sqrt(pow(p->XP[IP]-p->B442_xm[qn],2.0)+pow(p->YP[JP]-p->B442_ym[qn],2.0));
 
-                if(r<=p->B442_r[qn] && p->pos_z()>p->B442_zm[qn]-p->DZP[KP] && p->pos_z()<=p->B442_zm[qn]+p->DZP[KP] && p->gcb4[n][3]==p->B442_face[qn] && p->gcb4[n][4]==21)
+                if(r<=p->B442_r[qn] && p->pos_z()>p->B442_zm[qn]-p->DZP[KP] && p->pos_z()<=p->B442_zm[qn]+p->DZP[KP] && p->gcb4[p->level][n].cs==p->B442_face[qn] && p->gcb4[p->level][n].bc==21)
                 {
                     for(qq=0;qq<obj_count;++qq)
                     if(patch[qq]->ID==p->B442_ID[qn])
@@ -343,7 +344,7 @@ void patchBC::patchBC_fillobj(lexer *p, ghostcell *pgc)
                         ++patch[qq]->counter;
 
                         // convert gcb
-                        p->gcb4[n][4]=patch[qq]->gcb_flag;
+                        p->gcb4[p->level][n].bc=patch[qq]->gcb_flag;
                     }
                 }
             }
