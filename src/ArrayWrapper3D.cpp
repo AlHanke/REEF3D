@@ -92,7 +92,7 @@ void ArrayWrapper3D::setVal(int val, bool includeGhost)
 ArrayWrapper3D::operator int *()
 {
     #if USE_AMREX
-    return GetMultiFab(p->level)[*(p->amr_cell_mfi)].dataPtr(m_comp);
+    return GetMultiFab(p->level).atLocalIdx(p->amr_local_fab_idx).dataPtr(m_comp);
     #else
     return data.data(); // unshifted: callers index this with IJK, not with i/j/k
     #endif

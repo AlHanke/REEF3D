@@ -117,7 +117,8 @@ AMREX_FORCE_INLINE void ArrayWrapper3D::refresh_cache_if_needed() const noexcept
         // array() on a const FabArray only yields Array4<const int>, so the fab is
         // un-consted here. Writes through the cache are only reachable via the
         // non-const operators, which require a non-const ArrayWrapper3D.
-        m_cached_arr4    = const_cast<amrex::iMultiFab&>(GetMultiFab(cur_lev)).array(*(p->amr_cell_mfi));
+        m_cached_arr4    = const_cast<amrex::iMultiFab&>(GetMultiFab(cur_lev))
+                               .atLocalIdx(p->amr_local_fab_idx).array();
         m_cached_ox      = p->amr_tile_lo.x;
         m_cached_oy      = p->amr_tile_lo.y;
         m_cached_oz      = p->amr_tile_lo.z;
