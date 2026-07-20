@@ -22,7 +22,6 @@ Author: Hans Bihs
 
 #include"grid_helper.h"
 #include"lexer.h"
-#include"ghostcell.h"
 
 void grid_helper::fillgcb2(lexer *p)
 {

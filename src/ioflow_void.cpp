@@ -109,73 +109,48 @@ void ioflow_v::velocity_inlet(lexer *p, fdm* a, ghostcell* pgc, field &u, field 
     #else
     GC1LOOP
     {
-        if(p->W11==1)
-        if(p->gcb1[n][3]==1)
-        {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
+        auto &gcb = p->gcb1[n];
+        i=gcb.i;
+        j=gcb.j;
+        k=gcb.k;
 
+        if(p->W11==1 && gcb.cs==1)
+        {
             u(i-1,j,k) = p->W11_u;
             u(i-2,j,k) = p->W11_u;
             u(i-3,j,k) = p->W11_u;
         }
 
-        if(p->W12==1)
-        if(p->gcb1[n][3]==2)
+        if(p->W12==1 && gcb.cs==2)
         {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
-
             u(i,j+1,k) = p->W12_u;
             u(i,j+2,k) = p->W12_u;
             u(i,j+3,k) = p->W12_u;
         }
 
-        if(p->W13==1)
-        if(p->gcb1[n][3]==3)
+        if(p->W13==1 && gcb.cs==3)
         {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
-
             u(i,j-1,k) = p->W13_u;
             u(i,j-2,k) = p->W13_u;
             u(i,j-3,k) = p->W13_u;
         }
 
-        if(p->W14==1)
-        if(p->gcb1[n][3]==4)
+        if(p->W14==1 && gcb.cs==4)
         {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
-
             u(i+1,j,k) = p->W14_u;
             u(i+2,j,k) = p->W14_u;
             u(i+3,j,k) = p->W14_u;
         }
 
-        if(p->W15==1)
-        if(p->gcb1[n][3]==5)
+        if(p->W15==1 && gcb.cs==5)
         {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
-
             u(i,j,k-1) = p->W15_u;
             u(i,j,k-2) = p->W15_u;
             u(i,j,k-3) = p->W15_u;
         }
 
-        if(p->W16==1)
-        if(p->gcb1[n][3]==6)
+        if(p->W16==1 && gcb.cs==6)
         {
-            i=p->gcb1[n][0];
-            j=p->gcb1[n][1];
-            k=p->gcb1[n][2];
-
             u(i,j,k) = p->W16_u;
             u(i,j,k+1) = p->W16_u;
             u(i,j,k+2) = p->W16_u;
