@@ -124,10 +124,15 @@ void ghostcell::gcsl_setbcio(lexer *p)
         bc = p->gcbsl4[p->level][n].bc;
 
         if(bc==INFLOW || bc==WAVEGEN)
-        p->gcslin[p->level].push_back({i,j});
-
+        {
+            auto &e = p->gcslin[p->level].emplace_back(gcb_sl{i,j});
+            GCB_COPY_TILE(e, p->gcbsl4[p->level][n]);
+        }
         else if(bc==OUTFLOW || bc==NUMBEACH)
-        p->gcslout[p->level].push_back({i,j,cs});
+        {
+            auto &e = p->gcslout[p->level].emplace_back(gcb_sl_cs{i,j,cs});
+            GCB_COPY_TILE(e, p->gcbsl4[p->level][n]);
+        }
     }
 
     p->gcslawa1[p->level].clear();
@@ -139,7 +144,10 @@ void ghostcell::gcsl_setbcio(lexer *p)
         bc = p->gcbsl1[p->level][n].bc;
 
         if(bc==OUTFLOW || bc==NUMBEACH)
-        p->gcslawa1[p->level].push_back({i,j,cs});
+        {
+            auto &e = p->gcslawa1[p->level].emplace_back(gcb_sl_cs{i,j,cs});
+            GCB_COPY_TILE(e, p->gcbsl1[p->level][n]);
+        }
     }
 
     p->gcslawa2[p->level].clear();
@@ -151,23 +159,33 @@ void ghostcell::gcsl_setbcio(lexer *p)
         bc = p->gcbsl2[p->level][n].bc;
 
         if(bc==OUTFLOW || bc==NUMBEACH)
-        p->gcslawa2[p->level].push_back({i,j,cs});
+        {
+            auto &e = p->gcslawa2[p->level].emplace_back(gcb_sl_cs{i,j,cs});
+            GCB_COPY_TILE(e, p->gcbsl2[p->level][n]);
+        }
     }
 
     // IOSL
-    SLICEBASELOOP
-    p->IOSL[IJ]=0;
+    p->IOSL.setVal(0, true);
 
+    // IOSL is an ArrayWrapper2D: operator() resolves through the
+    // installed tile context, so unlike the derivation loops above this one has
+    // to reinstate the tile each entry was recorded under. Safe against
+    // GCSL4LOOP's bound (which re-reads p->level, and set_tile_ctx writes it)
+    // because the entry's context level is the level its list is stored under.
     GCSL4LOOP
     {
+        GCB_TILE(p->gcbsl4[p->level][n], p->level);
+
         i = p->gcbsl4[p->level][n].i;
         j = p->gcbsl4[p->level][n].j;
         cs = p->gcbsl4[p->level][n].cs;
         bc = p->gcbsl4[p->level][n].bc;
 
         if((bc==INFLOW || bc==WAVEGEN) && cs==X_NEG)
-            p->IOSL[Im1J]=1;
+            p->IOSL(i-1,j)=1;
         else if((bc==OUTFLOW || bc==NUMBEACH) && cs==X_POS)
-            p->IOSL[Ip1J]=2;
+            p->IOSL(i+1,j)=2;
     }
+    GC_TILE_RESET;
 }

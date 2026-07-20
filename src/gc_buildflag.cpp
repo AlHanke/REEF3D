@@ -27,21 +27,21 @@ void ghostcell::gcb_velflagio(lexer *p)
 {
     GC1LOOP
     {
-        if(p->gcb1[n].bc==INFLOW)
+        if(p->gcb1[p->level][n].bc==INFLOW)
         {
-            i=p->gcb1[n].i;
-            j=p->gcb1[n].j;
-            k=p->gcb1[n].k;
+            i=p->gcb1[p->level][n].i;
+            j=p->gcb1[p->level][n].j;
+            k=p->gcb1[p->level][n].k;
 
             p->flag1[Im1JK] = INFLOW_FLAG;
             p->flag1[Im2JK] = INFLOW_FLAG;
             p->flag1[Im3JK] = INFLOW_FLAG;
         }
-        else if(p->gcb1[n].bc==OUTFLOW)
+        else if(p->gcb1[p->level][n].bc==OUTFLOW)
         {
-            i=p->gcb1[n].i;
-            j=p->gcb1[n].j;
-            k=p->gcb1[n].k;
+            i=p->gcb1[p->level][n].i;
+            j=p->gcb1[p->level][n].j;
+            k=p->gcb1[p->level][n].k;
 
             p->flag1[Ip1JK] = OUTFLOW_FLAG;
             p->flag1[Ip2JK] = OUTFLOW_FLAG;

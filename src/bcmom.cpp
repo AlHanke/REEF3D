@@ -44,8 +44,8 @@ void bcmom::wall_laws(lexer* p, fdm* a, field& b, int gcval)
         if(gcval==10)
         {
             QGC1LOOP
-            if(p->gcb1[q].bc==21 && p->gcb1[q].cs!=1 && p->gcb1[q].cs!=4)
-                wall_law_u(p,a,b,p->gcb1[q].i, p->gcb1[q].j, p->gcb1[q].k, p->gcb1[q].cs, p->gcb1[q].bc);
+            if(p->gcb1[p->level][q].bc==21 && p->gcb1[p->level][q].cs!=1 && p->gcb1[p->level][q].cs!=4)
+                wall_law_u(p,a,b,p->gcb1[p->level][q].i, p->gcb1[p->level][q].j, p->gcb1[p->level][q].k, p->gcb1[p->level][q].cs, p->gcb1[p->level][q].bc);
 
             QGCDF1LOOP
                 wall_law_u(p,a,b,p->gcdf1[q][0], p->gcdf1[q][1], p->gcdf1[q][2], p->gcdf1[q][3], 48);

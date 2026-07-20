@@ -65,6 +65,9 @@ void mgcslice4::gcb_seed(lexer *p)
             gcb.i=i;
             gcb.j=j;
             gcb.cs=X_NEG;
+            #if USE_AMREX
+            gcb.ctx_id = p->tile_ctx_id();
+            #endif
             ++count_vec[p->level];
         }
 
@@ -74,6 +77,9 @@ void mgcslice4::gcb_seed(lexer *p)
             gcb.i=i;
             gcb.j=j;
             gcb.cs=Y_POS;
+            #if USE_AMREX
+            gcb.ctx_id = p->tile_ctx_id();
+            #endif
             ++count_vec[p->level];
         }
 
@@ -83,6 +89,9 @@ void mgcslice4::gcb_seed(lexer *p)
             gcb.i=i;
             gcb.j=j;
             gcb.cs=Y_NEG;
+            #if USE_AMREX
+            gcb.ctx_id = p->tile_ctx_id();
+            #endif
             ++count_vec[p->level];
         }
 
@@ -92,6 +101,9 @@ void mgcslice4::gcb_seed(lexer *p)
             gcb.i=i;
             gcb.j=j;
             gcb.cs=X_POS;
+            #if USE_AMREX
+            gcb.ctx_id = p->tile_ctx_id();
+            #endif
             ++count_vec[p->level];
         }
     }
