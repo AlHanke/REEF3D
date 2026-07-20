@@ -39,7 +39,11 @@ void komega_bc::bckomega_start(fdm *a, lexer *p, field &kin, field &eps, int gcv
             wall_law_kin(p,a,kin,eps, p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5]);
 
         QGCDF4LOOP
+        {
+            GCDF4_TILE(q);
             wall_law_kin(p,a,kin,eps, p->gcdf4[q][0], p->gcdf4[q][1], p->gcdf4[q][2], p->gcdf4[q][3], 48, p->gcdf4[q][5]);
+        }
+        GC_TILE_RESET;
 
         if(p->S10==2 || p->B200==1 || p->B200==2)
             vrans_wall_law_kin(p,a,kin,eps);
@@ -51,7 +55,11 @@ void komega_bc::bckomega_start(fdm *a, lexer *p, field &kin, field &eps, int gcv
             wall_law_omega(p,a,kin,eps, p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5]);
 
         QGCDF4LOOP
+        {
+            GCDF4_TILE(q);
             wall_law_omega(p,a,kin,eps, p->gcdf4[q][0], p->gcdf4[q][1], p->gcdf4[q][2], p->gcdf4[q][3], 48, p->gcdf4[q][5]);
+        }
+        GC_TILE_RESET;
 
         if(p->S10==2 || p->B200==1 || p->B200==2)
             vrans_wall_law_omega(p,a,kin,eps);

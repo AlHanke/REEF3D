@@ -100,7 +100,7 @@ void komega_func_PLIC::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
 		eddyv0(i,j,k) = MAX(MIN(MAX(kin(i,j,k)
 						  /((eps(i,j,k))>(1.0e-20)?(eps(i,j,k)):(1.0e20)),0.0),fabs(p->T31*kin(i,j,k))/strainterm(p,a)),
 						  0.0001*a->visc(i,j,k));
-		
+
     
     // URANS
 	if(p->T10==22)

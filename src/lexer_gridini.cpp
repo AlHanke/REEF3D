@@ -98,6 +98,8 @@ void lexer::flagini()
     // gcdf
     gcdf1_count=gcdf2_count=gcdf3_count=gcdf4_count=1;
 
+    // 6 columns: [0..2] tile-local i,j,k  [3] side  [4] cval/matrix row
+    //            [5] dense tile id, see grid_amrex::tile_ctx_by_id
     gcdf1.resize(gcdf1_count);
     gcdf2.resize(gcdf2_count);
     gcdf3.resize(gcdf3_count);
@@ -223,6 +225,7 @@ void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow*
         pgc->start2(p,a->v,11);
         pgc->start3(p,a->w,12);
         pgc->start4(p,a->press,40,false);
+        // pgc->gcdf_update(p,a);
         probe("post-ghost-restore (exit)");
     }
     #endif
