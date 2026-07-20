@@ -66,30 +66,30 @@ void sloshing_force::force(lexer *p, fdm *a, ghostcell *pgc)
     Fx_l=Fx_r=Fz=M=0.0;
     
     GC4LOOP
-    if(p->gcb4[n][4]==21)
+    if(p->gcb4[p->level][n].bc==21)
     {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
         
         dist_x = p->B192_3 - p->pos_x();
         dist_z = p->pos_z() - p->B192_4;
         
-        if(p->gcb4[n][3]==1)
+        if(p->gcb4[p->level][n].cs==1)
         {
         if(i+p->origin_i==0)
         Fx_l-=p->DXM*p->DXM*a->press(i,j,k);
         M+=p->DXM*p->DXM*a->press(i,j,k)*dist_z;
         }
         
-        if(p->gcb4[n][3]==4)
+        if(p->gcb4[p->level][n].cs==4)
         {
         if(i+p->origin_i==p->gknox-1)
         Fx_r+=p->DXM*p->DXM*a->press(i,j,k);
         M-=p->DXM*p->DXM*a->press(i,j,k)*dist_z;
         }
         
-        if(p->gcb4[n][3]==5)
+        if(p->gcb4[p->level][n].cs==5)
         {
         if(+p->origin_k==0)
         Fz+=p->DXM*p->DXM*a->press(i,j,k);

@@ -418,47 +418,47 @@ void nhflow_potential_f::ini_bc(lexer *p, fdm_nhf *d, ghostcell *pgc)
     
     GC4LOOP
     {
-        if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
+        if(p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6)
         {
-            i=p->gcb4[n][0]; 
-            j=p->gcb4[n][1];
-            k=p->gcb4[n][2];  
+            i=p->gcb4[p->level][n].i;
+            j=p->gcb4[p->level][n].j;
+            k=p->gcb4[p->level][n].k;
             
             WETDRY
             {
-            if(p->gcb4[n][3]==1)
+            if(p->gcb4[p->level][n].cs==1)
             BC[Im1JK]=1;
             
-            if(p->gcb4[n][3]==3)
+            if(p->gcb4[p->level][n].cs==3)
             BC[IJm1K]=1;
             
-            if(p->gcb4[n][3]==2)
+            if(p->gcb4[p->level][n].cs==2)
             BC[IJp1K]=1;
             
-            if(p->gcb4[n][3]==4)
+            if(p->gcb4[p->level][n].cs==4)
             BC[Ip1JK]=1;
             }
  
         }
         
-        if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7)
+        if(p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7)
         {
-            i=p->gcb4[n][0]; 
-            j=p->gcb4[n][1];
-            k=p->gcb4[n][2];  
+            i=p->gcb4[p->level][n].i;
+            j=p->gcb4[p->level][n].j;
+            k=p->gcb4[p->level][n].k;
             
             WETDRY
             {
-            if(p->gcb4[n][3]==1)
+            if(p->gcb4[p->level][n].cs==1)
             BC[Im1JK]=2;
             
-            if(p->gcb4[n][3]==3)
+            if(p->gcb4[p->level][n].cs==3)
             BC[IJm1K]=2;
             
-            if(p->gcb4[n][3]==2)
+            if(p->gcb4[p->level][n].cs==2)
             BC[IJp1K]=2;
             
-            if(p->gcb4[n][3]==4)
+            if(p->gcb4[p->level][n].cs==4)
             BC[Ip1JK]=2;
             }
  

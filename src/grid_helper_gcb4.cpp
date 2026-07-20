@@ -42,9 +42,9 @@ void grid_helper::fillgcb4_wall(lexer *p)
 
     GC4LOOP
     {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
-        p->gcb4[n][5]=cval(i,j,k);
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
+        p->gcb4[p->level][n].row=cval(i,j,k);
     }
 }

@@ -31,11 +31,11 @@ void nhflow_fsf_f::kinematic_fsf(lexer *p, fdm_nhf *d, double *U, double *V, dou
     double Pval,Qval;
     
     GC4LOOP
-    if(p->gcb4[n][3]==6 && p->gcb4[n][4]==3)
+    if(p->gcb4[p->level][n].cs==6 && p->gcb4[p->level][n].bc==3)
     {
-    i=p->gcb4[n][0];
-    j=p->gcb4[n][1];
-    k=p->gcb4[n][2];
+    i=p->gcb4[p->level][n].i;
+    j=p->gcb4[p->level][n].j;
+    k=p->gcb4[p->level][n].k;
     
     wval = 0.0;
     

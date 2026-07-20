@@ -52,21 +52,21 @@ void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     count2=0;
     GC4LOOP
     {
-        if(p->gcb4[n][4]==1)
+        if(p->gcb4[p->level][n].bc==1)
         {
-            p->gcin[count1][0]=p->gcb4[n][0];
-            p->gcin[count1][1]=p->gcb4[n][1];
-            p->gcin[count1][2]=p->gcb4[n][2];
-            p->gcin[count1][3]=p->gcb4[n][3];
+            p->gcin[count1][0]=p->gcb4[p->level][n].i;
+            p->gcin[count1][1]=p->gcb4[p->level][n].j;
+            p->gcin[count1][2]=p->gcb4[p->level][n].k;
+            p->gcin[count1][3]=p->gcb4[p->level][n].cs;
             ++count1;
         }
 
-        if(p->gcb4[n][4]==2)
+        if(p->gcb4[p->level][n].bc==2)
         {
-            p->gcout[count2][0]=p->gcb4[n][0];
-            p->gcout[count2][1]=p->gcb4[n][1];
-            p->gcout[count2][2]=p->gcb4[n][2];
-            p->gcout[count2][3]=p->gcb4[n][3];
+            p->gcout[count2][0]=p->gcb4[p->level][n].i;
+            p->gcout[count2][1]=p->gcb4[p->level][n].j;
+            p->gcout[count2][2]=p->gcb4[p->level][n].k;
+            p->gcout[count2][3]=p->gcb4[p->level][n].cs;
             ++count2;
         }
     }

@@ -146,6 +146,7 @@ public:
 
     // IBM
     void flagfield(lexer*);
+    void gcb4_generate(lexer*);
     void flagbase(lexer*);
 
     // PARALLEL

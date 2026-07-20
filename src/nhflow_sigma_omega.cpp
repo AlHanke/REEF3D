@@ -50,11 +50,11 @@ void nhflow_sigma::omega_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL,
     
       
     GC4LOOP
-    if(p->gcb4[n][3]==6 && p->gcb4[n][4]==3)
+    if(p->gcb4[p->level][n].cs==6 && p->gcb4[p->level][n].bc==3)
     {
-    i=p->gcb4[n][0];
-    j=p->gcb4[n][1];
-    k=p->gcb4[n][2];
+    i=p->gcb4[p->level][n].i;
+    j=p->gcb4[p->level][n].j;
+    k=p->gcb4[p->level][n].k;
     
         k+=1;
         d->omegaF[FIJK] =  0.0;
@@ -64,11 +64,11 @@ void nhflow_sigma::omega_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL,
     }
     
     GC4LOOP
-    if(p->gcb4[n][3]==5 && p->gcb4[n][4]==21)
+    if(p->gcb4[p->level][n].cs==5 && p->gcb4[p->level][n].bc==21)
     {
-    i=p->gcb4[n][0];
-    j=p->gcb4[n][1];
-    k=p->gcb4[n][2];
+    i=p->gcb4[p->level][n].i;
+    j=p->gcb4[p->level][n].j;
+    k=p->gcb4[p->level][n].k;
         
         d->omegaF[FIJK] =  0.0;
         d->omegaF[FIJKm1] =  0.0;

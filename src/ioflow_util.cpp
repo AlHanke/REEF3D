@@ -38,14 +38,15 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     count2=0;
     GC4LOOP
     {
-        i = p->gcb4[n][0];
-        j = p->gcb4[n][1];
-        k = p->gcb4[n][2];
 
-        if((p->gcb4[n][4]==1 || p->gcb4[n][4]==6) && p->DF(i,j,k)>0)
+        i = p->gcb4[p->level][n].i;
+        j = p->gcb4[p->level][n].j;
+        k = p->gcb4[p->level][n].k;
+
+        if((p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6) && p->DF(i,j,k)>0)
         ++count1;
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7) && p->DF(i,j,k)>0)
+        if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
         ++count2;
     }
 
@@ -56,24 +57,24 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     count2=0;
     GC4LOOP
     {
-        i = p->gcb4[n][0];
-        j = p->gcb4[n][1];
-        k = p->gcb4[n][2];
+        i = p->gcb4[p->level][n].i;
+        j = p->gcb4[p->level][n].j;
+        k = p->gcb4[p->level][n].k;
 
-        if(p->gcb4[n][4]==1 && p->DF(i,j,k)>0)
+        if(p->gcb4[p->level][n].bc==1 && p->DF(i,j,k)>0)
         {
-            p->gcin[count1][0]=p->gcb4[n][0];
-            p->gcin[count1][1]=p->gcb4[n][1];
-            p->gcin[count1][2]=p->gcb4[n][2];
-            p->gcin[count1][3]=p->gcb4[n][3];
+            p->gcin[count1][0]=p->gcb4[p->level][n].i;
+            p->gcin[count1][1]=p->gcb4[p->level][n].j;
+            p->gcin[count1][2]=p->gcb4[p->level][n].k;
+            p->gcin[count1][3]=p->gcb4[p->level][n].cs;
             ++count1;
         }
-        else if(p->gcb4[n][4]==2 && p->DF(i,j,k)>0)
+        else if(p->gcb4[p->level][n].bc==2 && p->DF(i,j,k)>0)
         {
-            p->gcout[count2][0]=p->gcb4[n][0];
-            p->gcout[count2][1]=p->gcb4[n][1];
-            p->gcout[count2][2]=p->gcb4[n][2];
-            p->gcout[count2][3]=p->gcb4[n][3];
+            p->gcout[count2][0]=p->gcb4[p->level][n].i;
+            p->gcout[count2][1]=p->gcb4[p->level][n].j;
+            p->gcout[count2][2]=p->gcb4[p->level][n].k;
+            p->gcout[count2][3]=p->gcb4[p->level][n].cs;
             ++count2;
         }
     }
@@ -90,50 +91,50 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 
     GC4LOOP
     {
-        if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
+        if(p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6)
         {
-            i = p->gcb4[n][0];
-            j = p->gcb4[n][1];
-            k = p->gcb4[n][2];
+            i = p->gcb4[p->level][n].i;
+            j = p->gcb4[p->level][n].j;
+            k = p->gcb4[p->level][n].k;
 
             if(p->DF(i,j,k)>0)
             {
                 // inflow
-                if(p->gcb4[n][3]==1)
+                if(p->gcb4[p->level][n].cs==1)
                     p->IO[Im1JK] = 1;
-                else if(p->gcb4[n][3]==4)
+                else if(p->gcb4[p->level][n].cs==4)
                     p->IO[Ip1JK] = 1;
-                else if(p->gcb4[n][3]==3)
+                else if(p->gcb4[p->level][n].cs==3)
                     p->IO[IJm1K] = 1;
-                else if(p->gcb4[n][3]==2)
+                else if(p->gcb4[p->level][n].cs==2)
                     p->IO[IJp1K] = 1;
-                else if(p->gcb4[n][3]==5)
+                else if(p->gcb4[p->level][n].cs==5)
                     p->IO[IJKm1] = 1;
-                else if(p->gcb4[n][3]==6)
+                else if(p->gcb4[p->level][n].cs==6)
                     p->IO[IJKp1] = 1;
             }
         }
 
-        if(p->gcb4[n][4]==2 || p->gcb4[n][4]==7)
+        if(p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7)
         {
-            i = p->gcb4[n][0];
-            j = p->gcb4[n][1];
-            k = p->gcb4[n][2];
+            i = p->gcb4[p->level][n].i;
+            j = p->gcb4[p->level][n].j;
+            k = p->gcb4[p->level][n].k;
 
             if(p->DF(i,j,k)>0)
             {
                 // outflow
-                if(p->gcb4[n][3]==1)
+                if(p->gcb4[p->level][n].cs==1)
                     p->IO[Im1JK] = 2;
-                else if(p->gcb4[n][3]==4)
+                else if(p->gcb4[p->level][n].cs==4)
                     p->IO[Ip1JK] = 2;
-                else if(p->gcb4[n][3]==3)
+                else if(p->gcb4[p->level][n].cs==3)
                     p->IO[IJm1K] = 2;
-                else if(p->gcb4[n][3]==2)
+                else if(p->gcb4[p->level][n].cs==2)
                     p->IO[IJp1K] = 2;
-                else if(p->gcb4[n][3]==5)
+                else if(p->gcb4[p->level][n].cs==5)
                     p->IO[IJKm1] = 2;
-                else if(p->gcb4[n][3]==6)
+                else if(p->gcb4[p->level][n].cs==6)
                     p->IO[IJKp1] = 2;
             }
         }
@@ -165,14 +166,15 @@ void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     count2=0;
     GC4LOOP
     {
-        i = p->gcb4[n][0];
-        j = p->gcb4[n][1];
-        k = p->gcb4[n][2];
 
-        if((p->gcb4[n][4]==1 || p->gcb4[n][4]==6) && p->DF(i,j,k)>0 && p->wet[IJ]==1)
+        i = p->gcb4[p->level][n].i;
+        j = p->gcb4[p->level][n].j;
+        k = p->gcb4[p->level][n].k;
+
+        if((p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6) && p->DF(i,j,k)>0 && p->wet[IJ]==1)
         ++count1;
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7) && p->DF(i,j,k)>0)
+        if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
         ++count2;
     }
 
@@ -183,25 +185,25 @@ void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     count2=0;
     GC4LOOP
     {
-        i = p->gcb4[n][0];
-        j = p->gcb4[n][1];
-        k = p->gcb4[n][2];
+        i = p->gcb4[p->level][n].i;
+        j = p->gcb4[p->level][n].j;
+        k = p->gcb4[p->level][n].k;
 
-        if((p->gcb4[n][4]==1 || p->gcb4[n][4]==6) && p->DF(i,j,k)>0 && p->wet[IJ]==1)
+        if((p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6) && p->DF(i,j,k)>0 && p->wet[IJ]==1)
         {
-            p->gcin[count1][0]=p->gcb4[n][0];
-            p->gcin[count1][1]=p->gcb4[n][1];
-            p->gcin[count1][2]=p->gcb4[n][2];
-            p->gcin[count1][3]=p->gcb4[n][3];
+            p->gcin[count1][0]=p->gcb4[p->level][n].i;
+            p->gcin[count1][1]=p->gcb4[p->level][n].j;
+            p->gcin[count1][2]=p->gcb4[p->level][n].k;
+            p->gcin[count1][3]=p->gcb4[p->level][n].cs;
             ++count1;
         }
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7) && p->DF(i,j,k)>0)
+        if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
         {
-            p->gcout[count2][0]=p->gcb4[n][0];
-            p->gcout[count2][1]=p->gcb4[n][1];
-            p->gcout[count2][2]=p->gcb4[n][2];
-            p->gcout[count2][3]=p->gcb4[n][3];
+            p->gcout[count2][0]=p->gcb4[p->level][n].i;
+            p->gcout[count2][1]=p->gcb4[p->level][n].j;
+            p->gcout[count2][2]=p->gcb4[p->level][n].k;
+            p->gcout[count2][3]=p->gcb4[p->level][n].cs;
             ++count2;
         }
     }
@@ -215,50 +217,50 @@ void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
     GC4LOOP
     {
-        if(p->gcb4[n][4]==1 || p->gcb4[n][4]==6)
+        if(p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6)
         {
-            i = p->gcb4[n][0];
-            j = p->gcb4[n][1];
-            k = p->gcb4[n][2];
+            i = p->gcb4[p->level][n].i;
+            j = p->gcb4[p->level][n].j;
+            k = p->gcb4[p->level][n].k;
 
             if(p->DF(i,j,k)>0)
             {
                 // inflow
-                if(p->gcb4[n][3]==1)
+                if(p->gcb4[p->level][n].cs==1)
                 p->IO[Im1JK] = 1;
-                else if(p->gcb4[n][3]==4)
+                else if(p->gcb4[p->level][n].cs==4)
                 p->IO[Ip1JK] = 1;
-                else if(p->gcb4[n][3]==3)
+                else if(p->gcb4[p->level][n].cs==3)
                 p->IO[IJm1K] = 1;
-                else if(p->gcb4[n][3]==2)
+                else if(p->gcb4[p->level][n].cs==2)
                 p->IO[IJp1K] = 1;
-                else if(p->gcb4[n][3]==5)
+                else if(p->gcb4[p->level][n].cs==5)
                 p->IO[IJKm1] = 1;
-                else if(p->gcb4[n][3]==6)
+                else if(p->gcb4[p->level][n].cs==6)
                 p->IO[IJKp1] = 1;
             }
         }
 
-        if((p->gcb4[n][4]==2 || p->gcb4[n][4]==7))
+        if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7))
         {
-            i = p->gcb4[n][0];
-            j = p->gcb4[n][1];
-            k = p->gcb4[n][2];
+            i = p->gcb4[p->level][n].i;
+            j = p->gcb4[p->level][n].j;
+            k = p->gcb4[p->level][n].k;
 
             if(p->DF(i,j,k)>0)
             {
                 // outflow
-                if(p->gcb4[n][3]==1)
+                if(p->gcb4[p->level][n].cs==1)
                 p->IO[Im1JK] = 2;
-                else if(p->gcb4[n][3]==4)
+                else if(p->gcb4[p->level][n].cs==4)
                 p->IO[Ip1JK] = 2;
-                else if(p->gcb4[n][3]==3)
+                else if(p->gcb4[p->level][n].cs==3)
                 p->IO[IJm1K] = 2;
-                else if(p->gcb4[n][3]==2)
+                else if(p->gcb4[p->level][n].cs==2)
                 p->IO[IJp1K] = 2;
-                else if(p->gcb4[n][3]==5)
+                else if(p->gcb4[p->level][n].cs==5)
                 p->IO[IJKm1] = 2;
-                else if(p->gcb4[n][3]==6)
+                else if(p->gcb4[p->level][n].cs==6)
                 p->IO[IJKp1] = 2;
             }
         }

@@ -47,11 +47,11 @@ void ptf_bed_update::bedbc(lexer *p, fdm *a, ghostcell *pgc, field &Fi)
     double Fval;
     
     GC4LOOP
-    if(p->gcb4[n][3]==5 &&  p->gcb4[n][4]==21)
+    if(p->gcb4[p->level][n].cs==5 &&  p->gcb4[p->level][n].bc==21)
     {
-        i = p->gcb4[n][0];
-        j = p->gcb4[n][1];
-        k = p->gcb4[n][2];
+        i = p->gcb4[p->level][n].i;
+        j = p->gcb4[p->level][n].j;
+        k = p->gcb4[p->level][n].k;
         
         Fval = ((a->depth(i+1,j)-a->depth(i-1,j))/(p->DXP[IP]+p->DXP[IM1]))*((Fi(i+1,j,k)-Fi(i-1,j,k))/(p->DXP[IP]+p->DXP[IM1]))
              + ((a->depth(i,j+1)-a->depth(i,j-1))/(p->DYP[JP]+p->DYP[JM1]))*((Fi(i,j+1,k)-Fi(i,j-1,k))/(p->DYP[JP]+p->DYP[JM1]));

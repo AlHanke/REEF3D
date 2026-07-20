@@ -30,31 +30,32 @@ void grid_helper::fill_dgc4(lexer* p)
 
     QGC4LOOP
     {
-        i=p->gcb4[q][0];
-        j=p->gcb4[q][1];
-        k=p->gcb4[q][2];
 
-        if(p->gcb4[q][3]==1)
+        i=p->gcb4[p->level][q].i;
+        j=p->gcb4[p->level][q].j;
+        k=p->gcb4[p->level][q].k;
+
+        if(p->gcb4[p->level][q].cs==1)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin-n-1)*jmax*kmax + (j-jmin)*kmax + k-kmin]+=1;
 
-        else if(p->gcb4[q][3]==4)
+        else if(p->gcb4[p->level][q].cs==4)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin+n+1)*jmax*kmax + (j-jmin)*kmax + k-kmin]+=1;
 
-        else if(p->gcb4[q][3]==3)
+        else if(p->gcb4[p->level][q].cs==3)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin-n-1)*kmax + k-kmin]+=1;
 
-        else if(p->gcb4[q][3]==2)
+        else if(p->gcb4[p->level][q].cs==2)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin+n+1)*kmax + k-kmin]+=1;
 
-        else if(p->gcb4[q][3]==5)
+        else if(p->gcb4[p->level][q].cs==5)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin-n-1]+=1;
 
-        else if(p->gcb4[q][3]==6)
+        else if(p->gcb4[p->level][q].cs==6)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin+n+1]+=1;
     }

@@ -37,11 +37,11 @@ void strain::wallf_update(lexer *p, fdm *a, ghostcell *pgc, fieldint &wallf)
     wallf.setVal(0);
     
     GC4LOOP
-    if((p->gcb4[n][4]==21 || p->gcb4[n][4]==6 || p->gcb4[n][4]==7))
+    if((p->gcb4[p->level][n].bc==21 || p->gcb4[p->level][n].bc==6 || p->gcb4[p->level][n].bc==7))
     {
-        i = p->gcb4[n][0];
-        j = p->gcb4[n][1];
-        k = p->gcb4[n][2];
+        i = p->gcb4[p->level][n].i;
+        j = p->gcb4[p->level][n].j;
+        k = p->gcb4[p->level][n].k;
         
         wallf(i,j,k)=1;
     }
