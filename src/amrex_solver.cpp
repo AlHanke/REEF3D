@@ -211,12 +211,12 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
     // velocity so their divergence contribution vanishes.
     MultiGridLOOP
     {
-        auto const& bx = beta[p->level][0].array(*p->amr_cell_mfi);
-        auto const& by = beta[p->level][1].array(*p->amr_cell_mfi);
-        auto const& bz = beta[p->level][2].array(*p->amr_cell_mfi);
-        auto const& uf = umac[p->level][0].array(*p->amr_cell_mfi);
-        auto const& vf = umac[p->level][1].array(*p->amr_cell_mfi);
-        auto const& wf = umac[p->level][2].array(*p->amr_cell_mfi);
+        auto const& bx = beta[p->level][0].atLocalIdx(p->amr_local_fab_idx).array();
+        auto const& by = beta[p->level][1].atLocalIdx(p->amr_local_fab_idx).array();
+        auto const& bz = beta[p->level][2].atLocalIdx(p->amr_local_fab_idx).array();
+        auto const& uf = umac[p->level][0].atLocalIdx(p->amr_local_fab_idx).array();
+        auto const& vf = umac[p->level][1].atLocalIdx(p->amr_local_fab_idx).array();
+        auto const& wf = umac[p->level][2].atLocalIdx(p->amr_local_fab_idx).array();
 
         const int oi = p->amr_tile_lo.x;
         const int oj = p->amr_tile_lo.y;
@@ -625,9 +625,9 @@ void amrex_solver::ucorr(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v,
     // and the flag checks skip solid/ghost faces, mirroring pjm's u/v/wcorr
     MultiGridLOOP
     {
-        auto const& fx = flux[p->level][0].const_array(*p->amr_cell_mfi);
-        auto const& fy = flux[p->level][1].const_array(*p->amr_cell_mfi);
-        auto const& fz = flux[p->level][2].const_array(*p->amr_cell_mfi);
+        auto const& fx = flux[p->level][0].atLocalIdx(p->amr_local_fab_idx).const_array();
+        auto const& fy = flux[p->level][1].atLocalIdx(p->amr_local_fab_idx).const_array();
+        auto const& fz = flux[p->level][2].atLocalIdx(p->amr_local_fab_idx).const_array();
 
         const int oi = p->amr_tile_lo.x;
         const int oj = p->amr_tile_lo.y;

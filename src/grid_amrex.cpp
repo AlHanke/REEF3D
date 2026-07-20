@@ -421,8 +421,69 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 
     amrex::MFIter::allowMultipleMFIters(true);
     level = 0;
+    build_tile_ctx_table();
     default_cell_mfi = std::make_unique<amrex::MFIter>(amr_cell_mf[level], false);
     set_tile_mfi(default_cell_mfi.get());
+}
+
+void grid_amrex::build_tile_ctx_table()
+{
+    const int saved_level = level;
+
+    tile_ctx_table.clear();
+    tile_ctx_default.assign(size_t(nlevs), TileCtx{});
+    tile_ctx_level_offset.assign(size_t(nlevs) + 1, 0);
+    tile_ctx_fab_offset.assign(size_t(nlevs), {});
+
+    // Pass 1 — count tiles per local FAB and prefix-sum them into ids.
+    // The tiling MUST match what TILE_LOOP uses: LocalTileIndex() and
+    // numLocalTiles() are relative to the tiling the MFIter was built with, so a
+    // table built with different parameters would number a different partition.
+    for (int lev = 0; lev < nlevs; ++lev)
+    {
+        const int nlocal = amr_cell_mf[lev].local_size();
+        auto& fab_off = tile_ctx_fab_offset[size_t(lev)];
+        fab_off.assign(size_t(nlocal) + 1, 0);
+
+        for (amrex::MFIter mfi(amr_cell_mf[lev], amrex::TilingIfNotGPU());
+             mfi.isValid(); ++mfi)
+            ++fab_off[size_t(mfi.LocalIndex()) + 1];
+
+        for (int n = 0; n < nlocal; ++n)
+            fab_off[size_t(n) + 1] += fab_off[size_t(n)];
+
+        tile_ctx_level_offset[size_t(lev) + 1] =
+            tile_ctx_level_offset[size_t(lev)] + fab_off[size_t(nlocal)];
+    }
+
+    tile_ctx_table.assign(size_t(tile_ctx_level_offset[size_t(nlevs)]), TileCtx{});
+
+    // Pass 2 — fill. tile_ctx(mfi) derives the id from the offsets built above,
+    // so this must not run before pass 1 completes.
+    for (int lev = 0; lev < nlevs; ++lev)
+    {
+        level = lev;
+
+        for (amrex::MFIter mfi(amr_cell_mf[lev], amrex::TilingIfNotGPU());
+             mfi.isValid(); ++mfi)
+        {
+            const TileCtx c = tile_ctx(mfi);
+            AMREX_ASSERT(c.id >= 0 && c.id < int(tile_ctx_table.size()));
+            tile_ctx_table[size_t(c.id)] = c;
+        }
+
+        // The untiled whole-box context this level falls back to outside any
+        // TILE_LOOP. Deliberately kept out of the id space (see TILE_CTX_DEFAULT).
+        amrex::MFIter dmfi(amr_cell_mf[lev], false);
+        if (dmfi.isValid())
+        {
+            TileCtx d = tile_ctx(dmfi);
+            d.id = TILE_CTX_DEFAULT;
+            tile_ctx_default[size_t(lev)] = d;
+        }
+    }
+
+    level = saved_level;
 }
 
 void grid_amrex::output_amrex_level_info()
@@ -765,8 +826,17 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         e->regrid();
 
     level = 0;
+
+    // Every TileCtx captured before this point names a box in the old
+    // decomposition. Invalidate them: set_tile_ctx asserts on a stale gen, and
+    // the ids stored in the gcdf*/gcb* tables are rebuilt by their producers.
+    // The bump must precede build_tile_ctx_table so the rebuilt contexts are
+    // stamped with the new generation.
+    ++amr_grid_gen;
+
+    build_tile_ctx_table();
     default_cell_mfi = std::make_unique<amrex::MFIter>(amr_cell_mf[level], false);
-    amr_cell_mfi = default_cell_mfi.get();
+    set_tile_mfi(default_cell_mfi.get());
 }
 
 void grid_amrex::define_inflow_outflow_ba()
