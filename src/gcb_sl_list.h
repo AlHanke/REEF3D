@@ -29,7 +29,7 @@ Author: Alexander Hanke
 // multiple dimensionalities and usecases:
 //
 //   gcb_sl_cs_bc_list = gcb_list_t<gcb_sl_cs_bc>  2D slice lists: gcbsl1/2/4
-//   gcb_list          = gcb_list_t<gcb_field>     3D field lists: gcb1/2/3/4
+//   gcb_list    = gcb_list_t<gcb_field_cs_bc_row> 3D field lists: gcb1/2/3/4
 //
 //   gcb_sl_in_list  = gcb_list_t<gcb_sl_0>  2D slice inflow list: gcbslin
 //   gcb_sl_out_list = gcb_list_t<gcb_sl_cs> 2D slice outflow list: gcbslout
@@ -83,13 +83,14 @@ struct gcb_sl_cs_bc
 
 // One field ghost-cell boundary entry. Replaces the old int[5] row, whose
 // [0]/[1]/[2]/[3]/[4] were i/j/k/cs/bc.
-struct gcb_field
+struct gcb_field_cs_bc_row
 {
     int i  = 0;
     int j  = 0;
     int k  = 0;
     int cs = 0;    ///< face direction: X_NEG=1, Y_POS=2, Y_NEG=3, X_POS=4, Z_POS=5, Z_NEG=6
     int bc = 21;   ///< boundary condition flag; 21 = default wall
+    int row = -1;   ///< row in the matrix for cval, or -1 if not used
 };
 
 template<typename ENTRY>
@@ -142,7 +143,7 @@ private:
 };
 
 using gcb_sl_cs_bc_list = gcb_list_t<gcb_sl_cs_bc>;   ///< 2D: gcbsl1/2/4
-using gcb_list    = gcb_list_t<gcb_field>;      ///< 3D: gcb1/2/3/4
+using gcb_list    = gcb_list_t<gcb_field_cs_bc_row>;  ///< 3D: gcb1/2/3/4
 
 using gcb_sl_list = gcb_list_t<gcb_sl>;      ///< 2D: gcbslin
 using gcb_sl_cs_list = gcb_list_t<gcb_sl_cs>;  ///< 2D: gcbslout

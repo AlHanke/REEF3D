@@ -22,54 +22,60 @@ Author: Hans Bihs
 
 #include"grid_helper.h"
 #include"lexer.h"
-#include"ghostcell.h"
 
 void grid_helper::fillgcb1(lexer *p)
 {
-    int q,n;
+    int q;
 
     p->Iarray(fgc,imax*jmax*kmax,6);
 
-    if(p->gcb1_count!=p->gcb4_count)
+    p->gcb1_count=p->gcb4_count;
+    p->gcb1.assign(p->gcb1_count, {});
+
+    QGCB1
     {
-        p->Iresize(p->gcb1,p->gcb1_count, p->gcb4_count, 6, 6);
+        auto &gcb = p->gcb1[q];
 
-        p->gcb1_count=p->gcb4_count;
-    }
-
-    QGCB4
-    {
-        for(n=0;n<5;++n)
-        p->gcb1[q][n]=p->gcb4[q][n];
-    }
-
-    QGC1LOOP
-    {
-        i=p->gcb1[q][0];
-        j=p->gcb1[q][1];
-        k=p->gcb1[q][2];
-
-        fgc[IJK][p->gcb1[q][3]-1]=1;
+        gcb.i=p->gcb4[q][0];
+        gcb.j=p->gcb4[q][1];
+        gcb.k=p->gcb4[q][2];
+        gcb.cs=p->gcb4[q][3];
+        gcb.bc=p->gcb4[q][4];
     }
 
     QGC1LOOP
     {
-        i=p->gcb1[q][0];
-        j=p->gcb1[q][1];
-        k=p->gcb1[q][2];
+        auto &gcb = p->gcb1[q];
 
-        if(p->gcb1[q][3]==4 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
-        p->gcb1[q][0]-=1;
+        i=gcb.i;
+        j=gcb.j;
+        k=gcb.k;
+
+        fgc[IJK][gcb.cs-1]=1;
     }
 
     QGC1LOOP
     {
-        i=p->gcb1[q][0];
-        j=p->gcb1[q][1];
-        k=p->gcb1[q][2];
+        auto &gcb = p->gcb1[q];
 
-        if(p->gcb1[q][3]!=4 && fgc[IJK][3]==1 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
-        p->gcb1[q][3]=-fabs(p->gcb1[q][3]);
+        i=gcb.i;
+        j=gcb.j;
+        k=gcb.k;
+
+        if(gcb.cs==X_POS && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
+        gcb.i-=1;
+    }
+
+    QGC1LOOP
+    {
+        auto &gcb = p->gcb1[q];
+
+        i=gcb.i;
+        j=gcb.j;
+        k=gcb.k;
+
+        if(gcb.cs!=X_POS && fgc[IJK][3]==1 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
+        gcb.cs=-abs(gcb.cs);
     }
 
     for(int n=0; n<imax*jmax*kmax;n++)
