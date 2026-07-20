@@ -34,6 +34,8 @@ enum {
     OBJ_FLAG = -20
 };
 
+enum {X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2, Z_NEG=5, Z_POS=6};
+
 inline constexpr double PI = 3.14159265359;
 inline constexpr double EE = 2.71828182846;
 
