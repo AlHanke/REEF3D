@@ -257,18 +257,14 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         ++count;
     }
 
-    // NOTE: gcb4 gets no tile handle. Unlike gcdf4, its (i,j,k) are not produced
-    // by a TILE_LOOP at all — they are read from the grid file in read_grid.cpp
-    // (gcb4[i][0..2]=isurf/jsurf/ksurf) in the legacy imin/jmin-relative index
-    // space. Giving it a handle needs a cell->tile lookup plus a decision on how
-    // legacy indices map onto the AMReX decomposition, which is a separate change.
-    // This lookup therefore remains wrong under multi-tile AMReX, exactly as before.
+    // gcb4 entries carry the tile they were generated under, so this resolves
+    // the same way the gcdf4 loop below does.
     GC4LOOP
     {
-        i=p->gcb4[n][0];
-        j=p->gcb4[n][1];
-        k=p->gcb4[n][2];
-        p->gcb4[n][5]=cval(i,j,k);
+        i=p->gcb4[p->level][n].i;
+        j=p->gcb4[p->level][n].j;
+        k=p->gcb4[p->level][n].k;
+        p->gcb4[p->level][n].row=cval(i,j,k);
     }
 
 

@@ -525,16 +525,16 @@ Authors: Hans Bihs, Alexander Hanke
 #define QQGCB3CHECK if(p->gcb3[qq][3]>0)
 #define QQGC3LOOP QQGCB3 QQGCB3CHECK
 
-#define GCB4 for(n=0;n<p->gcb4_count;++n)
-#define GCB4CHECK if(p->gcb4[n][3]>0)
+#define GCB4 for(n=0;n<p->gcb4.ssize(p->level);++n)
+#define GCB4CHECK if(p->gcb4[p->level][n].cs>0)
 #define GC4LOOP GCB4 GCB4CHECK
 
-#define QGCB4 for(q=0;q<p->gcb4_count;++q)
-#define QGCB4CHECK if(p->gcb4[q][3]>0)
+#define QGCB4 for(q=0;q<p->gcb4.ssize(p->level);++q)
+#define QGCB4CHECK if(p->gcb4[p->level][q].cs>0)
 #define QGC4LOOP QGCB4 QGCB4CHECK
 
-#define QQGCB4 for(qq=0;qq<p->gcb4_count;++qq)
-#define QQGCB4CHECK if(p->gcb4[qq][3]>0)
+#define QQGCB4 for(qq=0;qq<p->gcb4.ssize(p->level);++qq)
+#define QQGCB4CHECK if(p->gcb4[p->level][qq].cs>0)
 #define QQGC4LOOP QQGCB4 QQGCB4CHECK
 
 //df
@@ -620,7 +620,7 @@ Authors: Hans Bihs, Alexander Hanke
 #else
     #define GCB_SET_TILE(entry) ((void)0)
     #define GCB_COPY_TILE(dst, src) ((void)0)
-    #define GCB_APPLY_TILE(entry) ((void)0)
+    #define GCB_APPLY_TILE(entry, lev) ((void)0)
 #endif
 
 #endif

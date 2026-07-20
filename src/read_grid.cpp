@@ -322,7 +322,8 @@ void lexer::read_grid()
     {
         Iarray(gcb2, gcb2_count,6);
         Iarray(gcb3, gcb3_count,6);
-        Iarray(gcb4, gcb4_count,6);
+                                      // gcb4 itself is a gcb_list, generated in
+                                      // ghostcell::gcb4_generate, not allocated here
     }
 
     gcpara1.resize(gcpara1_count);
@@ -408,6 +409,13 @@ void lexer::read_grid()
     }
 
     //  GC Surfaces
+    //
+    //  The cell-centred list itself is no longer taken from the file — it is
+    //  generated from flag4 by ghostcell::gcb4_generate, which is the only form
+    //  that survives a regrid and addresses cells the way AMReX owns them. The
+    //  block is still read for two reasons: this is a sequential binary stream,
+    //  so skipping it would desync every later read, and gcin/gcout are sized
+    //  from its surfgroups here.
     gcin_count=0;
     gcout_count=0;
     for(i=0; i<gcb4_count; ++i)
@@ -426,12 +434,6 @@ void lexer::read_grid()
 
         grid.read((char*)&iin, sizeof (int));
         surfgroup=iin;
-
-        gcb4[i][0]=isurf;
-        gcb4[i][1]=jsurf;
-        gcb4[i][2]=ksurf;
-        gcb4[i][3]=surfside;
-        gcb4[i][4]=surfgroup;
 
         if(surfgroup==1 || surfgroup==6)
             ++gcin_count;

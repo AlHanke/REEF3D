@@ -97,11 +97,11 @@ void rans_io::plain_wallfunc(lexer* p, fdm*a, ghostcell* pgc)
 	}
 
 	GC4LOOP
-	if(p->gcb4[n][4]==21)
+	if(p->gcb4[p->level][n].bc==21)
 	{
-		i=p->gcb4[n][0];
-		j=p->gcb4[n][1];
-		k=p->gcb4[n][2];
+		i=p->gcb4[p->level][n].i;
+		j=p->gcb4[p->level][n].j;
+		k=p->gcb4[p->level][n].k;
 
         kin(i,j,k)=kinbed;
 
@@ -133,11 +133,11 @@ void rans_io::plain_wallfunc(lexer* p, fdm*a, ghostcell* pgc)
 void rans_io::inflow(lexer* p, fdm*a, ghostcell* pgc)
 {
         GC4LOOP
-        if(p->gcb4[n][4]==1)
+        if(p->gcb4[p->level][n].bc==1)
         {
-		i=p->gcb4[n][0];
-		j=p->gcb4[n][1];
-		k=p->gcb4[n][2];
+		i=p->gcb4[p->level][n].i;
+		j=p->gcb4[p->level][n].j;
+		k=p->gcb4[p->level][n].k;
 
 		eps(i-1,j,k)=eps(i,j,k);
 		eps(i-2,j,k)=eps(i,j,k);
@@ -149,11 +149,11 @@ void rans_io::inflow(lexer* p, fdm*a, ghostcell* pgc)
         }
         
         GC4LOOP
-        if(p->gcb4[n][4]==2)
+        if(p->gcb4[p->level][n].bc==2)
         {
-		i=p->gcb4[n][0];
-		j=p->gcb4[n][1];
-		k=p->gcb4[n][2];
+		i=p->gcb4[p->level][n].i;
+		j=p->gcb4[p->level][n].j;
+		k=p->gcb4[p->level][n].k;
 
 		eps(i+1,j,k)=eps(i,j,k);
 		eps(i+2,j,k)=eps(i,j,k);

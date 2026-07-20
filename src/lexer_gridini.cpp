@@ -89,11 +89,6 @@ void lexer::flagini()
     DF2.resize();
     DF3.resize();
 
-	if(B98>=3)
-	for(n=0;n<gcb4_count;++n)
-	if(gcb4[n][4]==6)
-	gcb4[n][4]=1;
-
     // gcdf
     gcdf1_count=gcdf2_count=gcdf3_count=gcdf4_count=1;
 

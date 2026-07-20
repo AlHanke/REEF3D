@@ -255,42 +255,42 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
 
     GC4LOOP
     {
-        if(p->gcb4[n][4]==1)
+        if(p->gcb4[p->level][n].bc==1)
         {
-            i=p->gcb4[n][0]; 
-            j=p->gcb4[n][1];
-            k=p->gcb4[n][2];  
+            i=p->gcb4[p->level][n].i;
+            j=p->gcb4[p->level][n].j;
+            k=p->gcb4[p->level][n].k;
        
-            if(p->gcb4[n][3]==1)
+            if(p->gcb4[p->level][n].cs==1)
             bc(i-1,j,k)=1;
             
-            if(p->gcb4[n][3]==3)
+            if(p->gcb4[p->level][n].cs==3)
             bc(i,j-1,k)=1;
             
-            if(p->gcb4[n][3]==2)
+            if(p->gcb4[p->level][n].cs==2)
             bc(i,j+1,k)=1;
             
-            if(p->gcb4[n][3]==4)
+            if(p->gcb4[p->level][n].cs==4)
             bc(i+1,j,k)=1;
  
         }
         
-        if(p->gcb4[n][4]==2)
+        if(p->gcb4[p->level][n].bc==2)
         {
-            i=p->gcb4[n][0]; 
-            j=p->gcb4[n][1];
-            k=p->gcb4[n][2];  
+            i=p->gcb4[p->level][n].i;
+            j=p->gcb4[p->level][n].j;
+            k=p->gcb4[p->level][n].k;
        
-            if(p->gcb4[n][3]==1)
+            if(p->gcb4[p->level][n].cs==1)
             bc(i-1,j,k)=2;
             
-            if(p->gcb4[n][3]==3)
+            if(p->gcb4[p->level][n].cs==3)
             bc(i,j-1,k)=2;
             
-            if(p->gcb4[n][3]==2)
+            if(p->gcb4[p->level][n].cs==2)
             bc(i,j+1,k)=2;
             
-            if(p->gcb4[n][3]==4)
+            if(p->gcb4[p->level][n].cs==4)
             bc(i+1,j,k)=2;
  
         }
