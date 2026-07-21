@@ -65,6 +65,14 @@ public:
     // L*pcorr against the discrete divergence of the velocity correction.
     virtual void matvec_into(lexer*, fdm*, ghostcell*, field& /*out*/, field& /*in*/) {}
 
+    // Save (save=true) / restore (save=false) the fine LOW C-F normal-face velocities -- the
+    // ghost faces (fiv-e) that cf_velocity_correction writes. A start1/2/3 between save and
+    // restore (FillPatchTwoLevels + FillCoarseFineNormalGhost) overwrites them with coarse
+    // interpolation, wiping the matrix-consistent correction; restore re-asserts it so the
+    // fine cell's divergence stays the adjoint of its matrix row. Default no-op; hypre_ssamg
+    // overrides (it owns cf_links).
+    virtual void cf_lowface_save_restore(lexer*, field&, field&, field&, bool /*save*/) {}
+
     struct cf_mask
     {
         int level;

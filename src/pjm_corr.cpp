@@ -107,6 +107,18 @@ static void cf_average_down_velocity(lexer* p, field& u, field& v, field& w)
         }
     }
 }
+
+// True if the cell (tile-local i,j,k on p->level) is COVERED by the next finer level -- its
+// refined footprint intersects level+1's grids. Covered coarse cells are fine-authoritative,
+// so their predictor pressure-gradient force is spurious (option REEF_SKIP_COVERED_PGRAD).
+static inline bool cell_is_covered(lexer* p, int ci, int cj, int ck)
+{
+    if(p->level >= p->nlevs-1) return false;
+    const int gi=ci+p->amr_tile_lo.x, gj=cj+p->amr_tile_lo.y, gk=ck+p->amr_tile_lo.z;
+    amrex::Box foot(amrex::IntVect(gi,gj,gk), amrex::IntVect(gi,gj,gk));
+    foot.refine(p->ref_vec);
+    return p->amrex_box_array[p->level+1].intersects(foot);
+}
 #endif
 
 pjm_corr::pjm_corr(lexer* p, fdm *a, ghostcell *pgc, heat *&pheat, concentration *&pconc) : pcorr(p), pressure_reference(p)
@@ -155,42 +167,24 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
 
     vel_setup(p,a,pgc,uvel,vvel,wvel,alpha);
 
-    // Composite predictor divergence (D side): make the PREDICTOR normal velocity single-valued
-    // at the C-F interface -- set each covered coarse face = area-average of the fine faces
-    // across it, so the coarse cell's divergence (rhs below) uses the summed fine flux, exactly
-    // the flux L's coarse row couples to (conservative M_cf*V_c = M_fc*V_f). This makes the
-    // discrete divergence D the adjoint of the gradient G the matrix used, so D(1/rho)G = L.
-    #if USE_AMREX
-    if(p->nlevs > 1)
-    {
-        // C-F-aware predictor: slave the fine HIGH C-F normal faces to the clean coarse predictor
-        // velocity BEFORE the reflux, so the predictor never hands the projection a leaked C-F
-        // velocity it cannot fully remove. psolv here is ppoissonsolv (hypre_ssamg), which owns
-        // cf_links. Gated on Y9 so it toggles with the well-balanced setup under test.
-        if(p->Y9)
-        psolv->cf_velocity_fill_from_coarse(p,a,pgc,uvel,vvel,wvel);
-
-        cf_average_down_velocity(p,uvel,vvel,wvel);
-
-        // average_down updated COARSE valid cells under the fine patch; refresh the halos so a
-        // neighbour rank's rhs reads the single-valued interface velocity (not the stale
-        // pre-average value).
-        vel_setup(p,a,pgc,uvel,vvel,wvel,alpha);
-    }
-    #endif
+    cf_predictor_sync(p,a,pgc,uvel,vvel,wvel,psolv,alpha);
 
     rhs(p,a,pgc,uvel,vvel,wvel,alpha);
 
     ppois->start(p,a,pcorr);
 
     psolv->start(p,a,pgc,pcorr,a->rhsvec,5);
-    for (p->level=p->nlevs-2; p->level>=0; --p->level)
-    {
-        amrex::average_down(pcorr.GetMultiFab(p->level+1), pcorr.GetMultiFab(p->level), 0, 1, p->ref_vec);
-    }
 
-    constexpr int gcval_press = 40;
-    pgc->start4(p,pcorr,gcval_press);
+    // REEF_CF_PROJECTION_GROUP member (5) — selects the matrix-consistent C-F ghost fill.
+    // gcv 41: two-point d_cf prolongation so the velocity/pressure-gradient corrector matches
+    // the SSAMG C-F stencil. Domain BCs are identical to the pressure Neumann gcv 40 (see
+    // field_amrex::FillDomainBoundaryImpl). Canonical note in hypre_ssamg::amr_cf_coefficients.
+    #if USE_AMREX
+    const int gcval_press = (p->nlevs > 1) ? 41 : 40;
+    #else
+    const int gcval_press = 40;
+    #endif
+    pgc->start4(p,pcorr,gcval_press,false);
     #if USE_AMREX
     LEVEL_LOOP
     {
@@ -211,7 +205,8 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
     // amrex::MultiFab::Copy(a->test.GetMultiFab(), pcorr.GetMultiFab(), 0, 0, 1, 0);
     presscorr(p,a);
     reference_start(p,a,pgc);
-    pgc->start4(p,a->press,gcval_press);
+    pgc->start4(p,a->press,gcval_press,false);   // no average_down: keep coarse press self-consistent
+                                                 // (avg-down breaks the hydrostatic grad at surface)
 
     velcorr(p,a,pgc,uvel,vvel,wvel,psolv,alpha);
 
@@ -226,6 +221,11 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
     cout<<"piter: "<<p->solveriter<<"  pres: "<<setprecision(3)<<p->final_res<<"  ptime: "<<setprecision(3)<<p->poissontime<<endl;
 }
 
+// REEF_CF_PROJECTION_GROUP member (6a) — u/v/wcorr apply the fine-spacing gradient
+// (pcorr(i+1)-pcorr(i))/(DXP*roface). At the C-F interface the ghost pcorr(i+1) is set by
+// FillCoarseFineCellGhost so this DXP-spacing difference equals the SSAMG d_cf flux; the
+// high C-F faces themselves are sole-written by cf_velocity_correction. Keep DXP/roface here
+// consistent with the group (canonical note in hypre_ssamg::amr_cf_coefficients).
 void pjm_corr::ucorr(lexer* p, fdm* a, field& uvel, double alpha)
 {
     ULOOP
@@ -340,8 +340,17 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
     // inflated V*div -- a diagnostic artifact, not an operator inconsistency.)
     velcorr(p,a,pgc,u0,v0,w0,psolv,alpha);
 
+    // DIAGNOSTIC (REEF_CF_LOWFACE_RESTORE): the open question is whether preserving the
+    // velcorr-corrected fine LOW C-F faces through the start1/2/3 below would make the projection
+    // consistent. Save them now, let vel_setup clobber them, then restore -- if projcheck drops to
+    // ~1e-16 at the C-F cell the hypothesis holds and this save/restore is the production fix.
+    const bool lowface_restore = (std::getenv("REEF_CF_LOWFACE_RESTORE") != nullptr);
+    if(lowface_restore) psolv->cf_lowface_save_restore(p,u0,v0,w0,true);
+
     // Same halo fill the production rhs sees, so D matches the assembled L across boxes/levels.
     vel_setup(p,a,pgc,u0,v0,w0,alpha);
+
+    if(lowface_restore) psolv->cf_lowface_save_restore(p,u0,v0,w0,false);
 
     psolv->matvec_into(p,a,pgc,Lp,pcorr);
 
@@ -398,6 +407,13 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
     double wi_pcn[6] = {0,0,0,0,0,0};
     int    wi_fln[6] = {0,0,0,0,0,0};
     bool   wi_covn[6] = {false,false,false,false,false,false};
+    // Per-face density the CORRECTOR/interior-matrix used (pd->roface) + the phi driving it.
+    // Interior faces cancel identically (poisson_pcorr M_f and velcorr both divide by the SAME
+    // roface), so a nonzero residual localises to the C-F face; these expose the density and the
+    // phi contrast there so it can be compared with the matrix C-F coupling (|L.coeff|, whose
+    // implied density is printed by REEF_CF_FACE_PROBE in cf_velocity_correction).
+    double wi_rof[6] = {0,0,0,0,0,0};   // roface at (x-,x+,y-,y+,z-,z+)
+    double wi_phis = 0.0, wi_phin[6] = {0,0,0,0,0,0};
     auto nb_covered = [&](int lev, int ci, int cj, int ck) -> bool
     {
         #if USE_AMREX
@@ -481,6 +497,13 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
                     wi_covn[0]=nb_covered(p->level,i-1,j,k); wi_covn[1]=nb_covered(p->level,i+1,j,k);
                     wi_covn[2]=nb_covered(p->level,i,j-1,k); wi_covn[3]=nb_covered(p->level,i,j+1,k);
                     wi_covn[4]=nb_covered(p->level,i,j,k-1); wi_covn[5]=nb_covered(p->level,i,j,k+1);
+                    wi_rof[0]=pd->roface(p,a,-1,0,0); wi_rof[1]=pd->roface(p,a,1,0,0);
+                    wi_rof[2]=pd->roface(p,a,0,-1,0); wi_rof[3]=pd->roface(p,a,0,1,0);
+                    wi_rof[4]=pd->roface(p,a,0,0,-1); wi_rof[5]=pd->roface(p,a,0,0,1);
+                    wi_phis=a->phi(i,j,k);
+                    wi_phin[0]=a->phi(i-1,j,k); wi_phin[1]=a->phi(i+1,j,k);
+                    wi_phin[2]=a->phi(i,j-1,k); wi_phin[3]=a->phi(i,j+1,k);
+                    wi_phin[4]=a->phi(i,j,k-1); wi_phin[5]=a->phi(i,j,k+1);
                 }
             }
         }
@@ -512,6 +535,24 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
                  <<"  y-/y+="<<wi_covn[2]<<"/"<<wi_covn[3]
                  <<"  z-/z+="<<wi_covn[4]<<"/"<<wi_covn[5]
                  <<"  (a covered neighbour => patch-adjacent face)"<<std::endl;
+        // High precision: cout carries a sticky setprecision(3) from the piter/umax prints, which
+        // rounds roface (~998, but in-band it departs from W1 by O(0.1-10)) to a flat "998" and
+        // hides the real face-to-face variation. Print roface AND W1-roface (the departure from
+        // pure water) at full precision, then restore the stream precision.
+        const std::streamsize oldprec = std::cout.precision();
+        std::cout<<std::setprecision(10);
+        std::cout<<"  [projprobe] roface x-/x+="<<wi_rof[0]<<"/"<<wi_rof[1]
+                 <<"  y-/y+="<<wi_rof[2]<<"/"<<wi_rof[3]
+                 <<"  z-/z+="<<wi_rof[4]<<"/"<<wi_rof[5]
+                 <<"  (corrector face density; compare vs |L.coeff| on the C-F face)"<<std::endl;
+        std::cout<<"  [projprobe] W1-roface x-/x+="<<(p->W1-wi_rof[0])<<"/"<<(p->W1-wi_rof[1])
+                 <<"  y-/y+="<<(p->W1-wi_rof[2])<<"/"<<(p->W1-wi_rof[3])
+                 <<"  z-/z+="<<(p->W1-wi_rof[4])<<"/"<<(p->W1-wi_rof[5])
+                 <<"  (0 = pure water; nonzero = in the density band)"<<std::endl;
+        std::cout<<"  [projprobe] phi c="<<wi_phis<<"  x-/x+="<<wi_phin[0]<<"/"<<wi_phin[1]
+                 <<"  y-/y+="<<wi_phin[2]<<"/"<<wi_phin[3]
+                 <<"  z-/z+="<<wi_phin[4]<<"/"<<wi_phin[5]<<std::endl;
+        std::cout<<std::setprecision(oldprec);
     }
     }
     if(wb_lev>=0 && wb_res==g_bnd)
@@ -549,12 +590,21 @@ void pjm_corr::vel_setup(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, f
     pgc->start3(p,w,gcval_w);
 }
 
+// REEF_CF_PROJECTION_GROUP member (6b) — u/v/wpgrad build the predictor pressure force
+// (press(i+1)-press(i))/(DXP*roface). At the C-F interface press's ghost ring is filled by
+// FillCoarseFineCellGhost (gcv 41), so the coarse and fine predictor gradients see the
+// d_cf-consistent value; without it the fine block gets a spurious hydrostatic force. Keep
+// DXP/roface consistent with the group (canonical note in hypre_ssamg::amr_cf_coefficients).
 void pjm_corr::upgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
     double dp = 0.0;
     const bool relPressure = p->Y9;
+    const bool skip_covered = (std::getenv("REEF_SKIP_COVERED_PGRAD") != nullptr);
     ULOOP
     {
+        #if USE_AMREX
+        if(skip_covered && cell_is_covered(p,i,j,k)) continue;
+        #endif
         dp = a->press(i+1,j,k)-a->press(i,j,k);
         // if(relPressure) dp -= a->press0(i+1,j,k)-a->press0(i,j,k);
         a->F(i,j,k) -= PORVAL1*dp/(p->DXP[IP]*pd->roface(p,a,1,0,0));
@@ -568,8 +618,12 @@ void pjm_corr::vpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
     {
         double dp = 0.0;
         const bool relPressure = p->Y9;
+        const bool skip_covered = (std::getenv("REEF_SKIP_COVERED_PGRAD") != nullptr);
         VLOOP
         {
+            #if USE_AMREX
+            if(skip_covered && cell_is_covered(p,i,j,k)) continue;
+            #endif
             dp = a->press(i,j+1,k)-a->press(i,j,k);
             // if(relPressure) dp -= a->press0(i,j+1,k)-a->press0(i,j,k);
             a->G(i,j,k) -= PORVAL2*dp/(p->DYP[JP]*pd->roface(p,a,0,1,0));
@@ -582,16 +636,181 @@ void pjm_corr::wpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
     double dp = 0.0;
     const bool relPressure = p->Y9;
+
+    // REEF_HYDRO_PROBE: at-rest vertical hydrostatic imbalance = wpgrad's contribution to H.
+    // = -grad_z(press)/roface + grad_z(grav_pot); must be ~0 everywhere when well-balanced.
+    // Report the global-worst cell + its components/phi, AND the worst among DEEP cells (away
+    // from the surface). If the imbalance concentrates at surface cells on the fine patch and is
+    // ~0 deep, the well-balancing breaks specifically at the surface-crossing C-F interface.
+    const bool hydro_probe = (std::getenv("REEF_HYDRO_PROBE") != nullptr) && relPressure;
+    const bool skip_covered = (std::getenv("REEF_SKIP_COVERED_PGRAD") != nullptr);
+    double hp_w=0.0; int hp_l=-1, hp_i[3]={-1,-1,-1}; double hp_rof=0,hp_pg=0,hp_gg=0,hp_ps=0,hp_pn=0;
+    double hp_deep=0.0; int hp_dl=-1, hp_di[3]={-1,-1,-1};
+
     WLOOP
     {
+        #if USE_AMREX
+        if(skip_covered && cell_is_covered(p,i,j,k)) continue;
+        #endif
         dp = a->press(i,j,k+1)-a->press(i,j,k);
         // if(relPressure) dp -= a->press0(i,j,k+1)-a->press0(i,j,k);
         a->H(i,j,k) -= PORVAL3*dp/(p->DZP[KP]*pd->roface(p,a,0,0,1));
         if(relPressure) a->H(i,j,k) += PORVAL3*(a->grav_pot(i,j,k+1)-a->grav_pot(i,j,k))/p->DZP[KP];
+
+        if(hydro_probe)
+        {
+            #if USE_AMREX
+            const double rof = pd->roface(p,a,0,0,1);
+            const double pg  = dp/(p->DZP[KP]*rof);
+            const double gg  = (a->grav_pot(i,j,k+1)-a->grav_pot(i,j,k))/p->DZP[KP];
+            const double imb = std::fabs(PORVAL3*(-pg + gg));
+            const double phis=a->phi(i,j,k), phin=a->phi(i,j,k+1);
+            if(imb > hp_w)
+            {
+                hp_w=imb; hp_l=p->level;
+                hp_i[0]=i+p->amr_tile_lo.x; hp_i[1]=j+p->amr_tile_lo.y; hp_i[2]=k+p->amr_tile_lo.z;
+                hp_rof=rof; hp_pg=pg; hp_gg=gg; hp_ps=phis; hp_pn=phin;
+            }
+            // DEEP = both faces well away from the surface (|phi| > 0.1 m ~ 2 coarse cells)
+            if(std::min(std::fabs(phis),std::fabs(phin)) > 0.1 && imb > hp_deep)
+            {
+                hp_deep=imb; hp_dl=p->level;
+                hp_di[0]=i+p->amr_tile_lo.x; hp_di[1]=j+p->amr_tile_lo.y; hp_di[2]=k+p->amr_tile_lo.z;
+            }
+            #endif
+        }
+    }
+
+    if(hydro_probe && p->mpirank==0)
+    {
+        std::cout<<"  [hydroprobe-w] worst |H_imb|="<<hp_w<<" at lev="<<hp_l
+                 <<" ("<<hp_i[0]<<","<<hp_i[1]<<","<<hp_i[2]<<")  roface="<<hp_rof
+                 <<" pgrad/rof="<<hp_pg<<" gpot_grad="<<hp_gg
+                 <<" phi[self,k+1]="<<hp_ps<<","<<hp_pn<<std::endl;
+        std::cout<<"  [hydroprobe-w] worst DEEP |H_imb|="<<hp_deep<<" at lev="<<hp_dl
+                 <<" ("<<hp_di[0]<<","<<hp_di[1]<<","<<hp_di[2]<<")  (should be ~0)"<<std::endl;
     }
 }
 
 void pjm_corr::ini(lexer*p, fdm* a, ghostcell *pgc)
 {
     reference_ini(p,a,pgc);
+}
+
+// Composite predictor divergence (D side): make the PREDICTOR normal velocity single-valued
+// at the C-F interface -- set each covered coarse face = area-average of the fine faces across
+// it, so the coarse cell's divergence (rhs) uses the summed fine flux, exactly the flux L's
+// coarse row couples to (conservative M_cf*V_c = M_fc*V_f). This makes the discrete divergence D
+// the adjoint of the gradient G the matrix used, so D(1/rho)G = L. No-op for nlevs<=1.
+void pjm_corr::cf_predictor_sync(lexer* p, fdm* a, ghostcell* pgc, field& uvel, field& vvel, field& wvel, solver* psolv, double alpha)
+{
+    #if USE_AMREX
+    if(p->nlevs > 1)
+    {
+        // C-F-aware predictor: slave the fine HIGH C-F normal faces to the clean coarse predictor
+        // velocity BEFORE the reflux, so the predictor never hands the projection a leaked C-F
+        // velocity it cannot fully remove. psolv here is ppoissonsolv (hypre_ssamg), which owns
+        // cf_links. Gated on Y9 so it toggles with the well-balanced setup under test.
+        if(p->Y9)
+        psolv->cf_velocity_fill_from_coarse(p,a,pgc,uvel,vvel,wvel);
+
+        cf_average_down_velocity(p,uvel,vvel,wvel);
+
+        // average_down updated COARSE valid cells under the fine patch; refresh the halos so a
+        // neighbour rank's rhs reads the single-valued interface velocity (not the stale
+        // pre-average value).
+        vel_setup(p,a,pgc,uvel,vvel,wvel,alpha);
+    }
+    #endif
+}
+
+// B5 (PLAN_Rebalance_PhiSync.md): re-equilibrate press against the CURRENT density after reinit
+// moved phi. The predictor buoyancy force b = -grad(press)/rho_f + grad(grav_pot) (Y9 form, the
+// same expressions as u/v/wpgrad) is no longer zero because press still matches the pre-reinit
+// density. b splits into a curl-free part (removable by a pressure re-solve) and a rotational
+// part (grad(1/rho) x grad(p), unreachable by any pressure). One projection of the pure-buoyancy
+// predictor from rest -- utmp = alpha*dt*b -- and keeping only the pressure update (press +=
+// pcorr, NO velcorr) removes the curl-free part to solver tolerance. The rotational remainder is
+// the A-family follow-up. Velocity is untouched: this is a pressure re-initialisation, not a
+// time step. Structurally identical to start() with the "velocity" being the buoyancy source.
+void pjm_corr::rebalance(lexer*p, fdm* a, ghostcell *pgc, poisson* ppois, solver* psolv, ioflow* pflow)
+{
+    if(std::getenv("REEF_REBALANCE") == nullptr)
+    return;
+
+    // Y9 (relative-pressure / well-balanced) form only in this pass. The non-Y9 form is the same
+    // construction with the body-force gravity a->gi/gj/gk (added in momentum irhs/jrhs/krhs)
+    // replacing the grav_pot gradient. TODO: implement the non-Y9 branch.
+    if(!p->Y9)
+    {
+        if(p->mpirank==0 && p->count<=1)
+        cout<<"  [rebalance] skipped: only the Y9 (relPressure) form is implemented"<<endl;
+        return;
+    }
+
+    const double starttime = pgc->timer();
+
+    // Optional extra passes for measurement only (REEF_REBALANCE_PASSES, default 1). Pass 1
+    // removes the entire curl-free part; further passes only expose the rotational floor.
+    const int passes = (std::getenv("REEF_REBALANCE_PASSES") ? std::atoi(std::getenv("REEF_REBALANCE_PASSES")) : 1);
+
+    // alpha cancels: utmp = alpha*dt*b and rhs() divides the divergence by alpha*dt, so the RHS
+    // is div(b) independent of alpha. Use 1.0 -- rebalance is a standalone re-init, not an RK stage.
+    const double alpha = 1.0;
+
+    // Face temporaries for the buoyancy predictor. Self-allocating (own MultiFab), like the
+    // projection-consistency probe's field4 locals; do NOT reuse a->F/G/H (momentum-stage state).
+    field1 utmp(p);
+    field2 vtmp(p);
+    field3 wtmp(p);
+
+    for(int pass=0; pass<passes; ++pass)
+    {
+        utmp.setVal(0.0,true);
+        vtmp.setVal(0.0,true);
+        wtmp.setVal(0.0,true);
+
+        // b at rest = the u/v/wpgrad force (grad(press)/rho_f + grav_pot gradient). Kept in lockstep
+        // with those methods; utmp = alpha*dt*b is exactly the at-rest predictor with no convec/diff.
+        ULOOP
+        utmp(i,j,k) = alpha*p->dt*PORVAL1*
+            ( -(a->press(i+1,j,k)-a->press(i,j,k))/(p->DXP[IP]*pd->roface(p,a,1,0,0))
+              +(a->grav_pot(i+1,j,k)-a->grav_pot(i,j,k))/p->DXP[IP] );
+
+        if(p->j_dir==1)
+        VLOOP
+        vtmp(i,j,k) = alpha*p->dt*PORVAL2*
+            ( -(a->press(i,j+1,k)-a->press(i,j,k))/(p->DYP[JP]*pd->roface(p,a,0,1,0))
+              +(a->grav_pot(i,j+1,k)-a->grav_pot(i,j,k))/p->DYP[JP] );
+
+        WLOOP
+        wtmp(i,j,k) = alpha*p->dt*PORVAL3*
+            ( -(a->press(i,j,k+1)-a->press(i,j,k))/(p->DZP[KP]*pd->roface(p,a,0,0,1))
+              +(a->grav_pot(i,j,k+1)-a->grav_pot(i,j,k))/p->DZP[KP] );
+
+        // Same pipeline as start(), minus velcorr: halo fill -> composite C-F sync -> divergence
+        // rhs -> assemble matrix with the CURRENT roface -> solve -> press += pcorr.
+        vel_setup(p,a,pgc,utmp,vtmp,wtmp,alpha);
+        cf_predictor_sync(p,a,pgc,utmp,vtmp,wtmp,psolv,alpha);
+        rhs(p,a,pgc,utmp,vtmp,wtmp,alpha);   // also zeroes pcorr
+
+        ppois->start(p,a,pcorr);
+        psolv->start(p,a,pgc,pcorr,a->rhsvec,5);
+
+        #if USE_AMREX
+        const int gcval_press = (p->nlevs > 1) ? 41 : 40;
+        #else
+        const int gcval_press = 40;
+        #endif
+        pgc->start4(p,pcorr,gcval_press,false);
+
+        presscorr(p,a);                      // press += pcorr  (NO velcorr)
+        reference_start(p,a,pgc);
+        pgc->start4(p,a->press,gcval_press,false);
+    }
+
+    // Not added to p->poissontime -- momentum's start() overwrites it this step; report separately.
+    if(p->mpirank==0 && (p->count%p->P12==0))
+    cout<<"  [rebalance] piter: "<<p->solveriter<<"  pres: "<<setprecision(3)<<p->final_res
+        <<"  ptime: "<<setprecision(3)<<pgc->timer()-starttime<<endl;
 }

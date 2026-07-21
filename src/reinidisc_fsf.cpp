@@ -24,9 +24,13 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 #include"reinidisc_fsf.h"
+#include<cstdlib>
 
 reinidisc_fsf::reinidisc_fsf(lexer *p) :  ddweno_nug(p)
 {
+    const char* fb = std::getenv("REEF_REINI_FREEZE_BAND");
+    freeze_band = (fb != nullptr);
+    freeze_fac  = (fb && std::atof(fb) > 0.0) ? std::atof(fb) : 1.0;
 }
 
 reinidisc_fsf::~reinidisc_fsf()
@@ -99,6 +103,18 @@ void reinidisc_fsf::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, 
 
 double reinidisc_fsf::disc(lexer *p, fdm *a, ghostcell *pgc, field &f, bool is3D)
 {
+    // REEF_REINI_FREEZE_BAND: freeze the density band during per-step reinit. density =
+    // heaviside_ls(phi,psi) depends on phi only for |phi|<psi (heaviside_ls saturates outside),
+    // so reinit restoring |grad phi|=1 inside the band shifts rho every step and closes a
+    // velocity<->reinit feedback loop (tighter reinit made umax WORSE, not better). Returning 0
+    // here leaves band cells un-reinitialised, so rho follows the (barely-moving) advected phi
+    // and the loop opens. count>0 only: the count==0 SDF initialisation still needs the full
+    // band reinit (F40=0 leaves init broken). Caveat: band phi is no longer a clean SDF, so any
+    // curvature/surface-tension consumer of band phi loses accuracy -- acceptable for the
+    // at-rest/mild case under test; the robust variant is a |grad phi|-normalised Heaviside.
+    if(freeze_band && p->count>0 && fabs(f(i,j,k)) < freeze_fac*p->psi)
+    return 0.0;
+
     if((f(i,j,k)>=0.0 && f(i+1,j,k)>=0.0 && f(i-1,j,k)>=0.0 && f(i,j+1,k)>=0.0 && f(i,j-1,k)>=0.0 && f(i,j,k+1)>=0.0 && f(i,j,k-1)>=0.0)
     || (f(i,j,k)<0.0  && f(i+1,j,k)<0.0  && f(i-1,j,k)<0.0  && f(i,j+1,k)<0.0  && f(i,j-1,k)<0.0   && f(i,j,k+1)<0.0  && f(i,j,k-1)<0.0))
     {

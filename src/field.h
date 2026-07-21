@@ -25,6 +25,8 @@ Author: Hans Bihs
 
 #include "field_base.h"
 
+class lexer;
+
 #if USE_AMREX
     namespace amrex
     {
@@ -77,6 +79,11 @@ public:
     virtual const amrex::MultiFab& GetMultiFab() const = 0;
     virtual amrex::MultiFab& GetMultiFab(int) = 0;
     virtual const amrex::MultiFab& GetMultiFab(int) const = 0;
+
+    /// Stagger-correct fine->coarse average down between level @p lev+1 and @p lev.
+    /// Cell-centred fields use amrex::average_down; FACE_X/Y/Z fields use a face-based
+    /// reflux (amrex::average_down_faces) so the staggered velocity is not corrupted.
+    virtual void average_down_level(lexer* p, int lev) = 0;
 #endif
 
 #if not USE_AMREX

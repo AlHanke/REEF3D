@@ -131,22 +131,33 @@ int lexer::conv(double a)
 void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow* pflow)
 {
     #if USE_AMREX
-    // grid_amrex::regrid_amrex_box_array_and_distribution_mapping(this, a); // Bug with higher levels of static refinement
-    // grid_amrex::update_cell_coordinates();
-    // grid_amrex::update_cell_spacing();
-    // grid_amrex::update_registered_weno(nlevs);
-    // grid_amrex::define_inflow_outflow_ba();
-    // preini->start(a,this,a->phi,pgc,pflow);
-    // lexer* p = this;
-    // int counter = 0;
-    // PLAINLOOP
+    // changed = false;
+    // // DIAGNOSTIC (Step 1 of plan fluffy-oasis): gate regrid to every 10 steps
+    // // to isolate per-step BoxArray churn + pc_interp dissipation. Revert when done.
+    // if (count % 10000 == 0)
     // {
-    //     counter++;
+    //     grid_amrex::regrid_amrex_box_array_and_distribution_mapping(this, a); // Bug with higher levels of static refinement
+    //     grid_amrex::update_cell_coordinates();
+    //     grid_amrex::update_cell_spacing();
+    //     grid_amrex::update_registered_weno(nlevs);
+    //     grid_amrex::define_inflow_outflow_ba();
+    //     preini->start(a,this,a->phi,pgc,pflow);
+    //     lexer* p = this;
+    //     int counter = 0;
+    //     PLAINLOOP
+    //     {
+    //         counter++;
+    //     }
+    //     veclength += counter - cellnum;
+    //     cellnum = counter;
+    //     a->rhsvec.resize(veclength);
+    //     a->M.resize(veclength);
+    //     LEVEL_LOOP
+    //     TILE_LOOP
+    //     MALOOP
+    //     {
+    //         a->grav_pot(i,j,k) = p->W20*p->pos_x() + p->W21*p->pos_y() + p->W22*p->pos_z();
+    //     }
     // }
-    // veclength += counter - cellnum;
-    // cellnum = counter;
-    // a->rhsvec.resize(veclength);
-    // a->M.resize(veclength);
-
     #endif
 }
