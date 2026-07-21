@@ -445,7 +445,7 @@ void grid_amrex::build_tile_ctx_table()
         auto& fab_off = tile_ctx_fab_offset[size_t(lev)];
         fab_off.assign(size_t(nlocal) + 1, 0);
 
-        for (amrex::MFIter mfi(amr_cell_mf[lev], amrex::TilingIfNotGPU());
+        for (amrex::MFIter mfi(amr_cell_mf[lev], MFIter_TILING);
              mfi.isValid(); ++mfi)
             ++fab_off[size_t(mfi.LocalIndex()) + 1];
 
@@ -464,7 +464,7 @@ void grid_amrex::build_tile_ctx_table()
     {
         level = lev;
 
-        for (amrex::MFIter mfi(amr_cell_mf[lev], amrex::TilingIfNotGPU());
+        for (amrex::MFIter mfi(amr_cell_mf[lev], MFIter_TILING);
              mfi.isValid(); ++mfi)
         {
             const TileCtx c = tile_ctx(mfi);
