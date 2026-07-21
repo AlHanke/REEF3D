@@ -41,6 +41,12 @@ public:
 private:
     double disc(lexer*, fdm*, ghostcell*, field&, bool);
 
+    // REEF_REINI_FREEZE_BAND: skip the per-step reinit update for density-band cells
+    // (|phi| < freeze_fac*psi) to break the velocity<->reinit feedback loop. Cached from
+    // the env once (disc runs per-cell). freeze_fac = numeric value of the env (default 1).
+    bool freeze_band;
+    double freeze_fac;
+
     double xmin,xplus,ymin,yplus,zmin,zplus;
     double dxmin,dxplus,dymin,dyplus,dzmin,dzplus;
     double uwx,uwy,uwz,ddt;

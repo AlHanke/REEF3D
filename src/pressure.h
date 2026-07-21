@@ -42,6 +42,7 @@ public:
 	virtual void upgrad(lexer*,fdm*,slice&,slice&)=0;
 	virtual void vpgrad(lexer*,fdm*,slice&,slice&)=0;
 	virtual void wpgrad(lexer*,fdm*,slice&,slice&)=0;
+    virtual void rebalance(lexer*, fdm*, ghostcell*, poisson*, solver*, ioflow*) {};
 protected:
     virtual void ucorr(lexer*p,fdm*,field&,double)=0;
 	virtual void vcorr(lexer*p,fdm*,field&,double)=0;

@@ -1058,11 +1058,8 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
 
                     amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
                     {
-                        // cc_arr(i,j,k,comp) = p_fc(i,j,k) - (phi_fc(i,j,k)*rho_fc(i,j,k)*fabs(p->W22));
-                        // increment::k = k-bx.smallEnd(2);
-                        // cc_arr(i,j,k,comp) = p_fc(i,j,k) - ((p->phimean-p->pos_z())*rho_fc(i,j,k)*fabs(p->W22));
-                        cc_arr(i,j,k,comp) = p_fc(i,j,k) - p0_fc(i,j,k);
-                        // cc_arr(i,j,k,comp) = p_fc(i,j,k);
+                        // cc_arr(i,j,k,comp) = p_fc(i,j,k) - p0_fc(i,j,k);
+                        cc_arr(i,j,k,comp) = p_fc(i,j,k);
                     });
                 }
                 comp++;

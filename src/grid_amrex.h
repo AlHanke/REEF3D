@@ -67,13 +67,13 @@ public:
 
     // Registry for all owning MultiFab/iMultiFab vectors so they can be
     // resized collectively during AMR regrid.
-    struct MFEntry  { amrex::Vector<amrex::MultiFab>*  mf; int ncomp; };
-    struct IMFEntry { amrex::Vector<amrex::iMultiFab>* mf; int ncomp; };
+    struct MFEntry  { amrex::Vector<amrex::MultiFab>*  mf; int ncomp; int location; };
+    struct IMFEntry { amrex::Vector<amrex::iMultiFab>* mf; int ncomp; int location; };
     std::vector<MFEntry>  mf_registry;
     std::vector<IMFEntry> imf_registry;
 
-    void register_mf (amrex::Vector<amrex::MultiFab>*  mf, int ncomp) { mf_registry .push_back({mf, ncomp}); }
-    void register_imf(amrex::Vector<amrex::iMultiFab>* mf, int ncomp) { imf_registry.push_back({mf, ncomp});}
+    void register_mf (amrex::Vector<amrex::MultiFab>*  mf, int ncomp, int location=0) { mf_registry .push_back({mf, ncomp, location}); }
+    void register_imf(amrex::Vector<amrex::iMultiFab>* mf, int ncomp, int location=0) { imf_registry.push_back({mf, ncomp, location});}
 
     void deregister_mf(amrex::Vector<amrex::MultiFab>* mf)
     {
@@ -174,6 +174,8 @@ public:
     static constexpr int ref_ratio = 2;
     const int ncomp = 1;
     int bc_type[6] = {0,0,0,0,0,0};
+
+    bool changed = false;
 
 protected:
     void setup_amrex_geometry(lexer* p, ghostcell* pgc);

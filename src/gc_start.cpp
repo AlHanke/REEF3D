@@ -168,7 +168,7 @@ void ghostcell::start3(lexer *p, field& f, int gcv)
     #endif
 }
 
-void ghostcell::start4(lexer *p, field& f, int gcv)
+void ghostcell::start4(lexer *p, field& f, int gcv, bool do_avgdown)
 {
     //  MPI Boundary Swap
     #if USE_AMREX
@@ -176,9 +176,14 @@ void ghostcell::start4(lexer *p, field& f, int gcv)
     f.FillDomainBoundary(gcv);
     endtime=timer();
     p->xtime+=endtime-starttime;
+    // average_down overwrites covered coarse cells with the fine average. For the hydrostatic
+    // pressure this mixes the fine roface/dz basis into the coarse column, breaking the coarse
+    // grad(press) at the covered/non-covered surface boundary (the well-balancing seed). Callers
+    // that need the coarse field kept self-consistent (press/press0) pass do_avgdown=false.
+    if(do_avgdown)
     for(int lev=p->nlevs-2; lev>=0; --lev)
     {
-        amrex::average_down(f.GetMultiFab(lev+1), f.GetMultiFab(lev), 0, 1, p->ref_vec);
+        f.average_down_level(p, lev);
     }
     p->gctime+=endtime-starttime;
     #else

@@ -23,6 +23,7 @@ Author: Hans Bihs
 #include"driver.h"
 #include"lexer.h"
 #include"fdm.h"
+#include <cstdlib>
 #include"ghostcell.h"
 #include"freesurface_header.h"
 #include"turbulence_header.h"
@@ -96,6 +97,18 @@ void driver::loop_cfd(fdm* a)
         double flow_relax_time = pgc->timer();
         pfsf->update(p,a,pgc,a->phi);
         double fsf_update_time = pgc->timer();
+        // B5: re-equilibrate press against the post-reinit density before the predictor. Must use
+        // ppoissonsolv (the pressure/hypre_ssamg solver that owns cf_links/cf_masks/matvec), NOT
+        // the generic psolv -- the projection's C-F coupling and solve group 5 live there.
+        ppress->rebalance(p,a,pgc,ppois,ppoissonsolv,pflow);
+
+        // EXPERIMENT (REEF_HYDRO_REBUILD): the level set is re-distanced in pfsf->update above, so
+        // roface changes while press still holds last step's value -> the predictor hydrostatic
+        // gradient is stale -> a per-step surface seed the multi-level coupling amplifies. Rebuild
+        // the hydrostatic press against the current phi so grad(press)=W22*roface here. NOTE: wipes
+        // dynamic pressure -> valid only for the at-rest hydrostatic test; the production fix must
+        // split press into a rebuilt hydrostatic reference + solved dynamic part.
+        if(std::getenv("REEF_HYDRO_REBUILD")) pini->hydrostatic(p,a,pgc);
         pmom->start(p,a,pgc,pvrans,p6dof);
         double momentum_time = pgc->timer();
         pbench->start(p,a,pgc,pconvec);
@@ -116,10 +129,8 @@ void driver::loop_cfd(fdm* a)
         pprint->start(p,a,pgc,pturb,pheat,pflow,pdata,pconc,pmp,psed);
         double print_time = pgc->timer();
 
-        // DIAGNOSTIC (Step 1 of plan fluffy-oasis): gate regrid to every 10 steps
-        // to isolate per-step BoxArray churn + pc_interp dissipation. Revert when done.
-        if (p->count % 10 == 0)
-            p->regrid(a,preini,p6dof,pgc,pflow);
+        p->regrid(a,preini,p6dof,pgc,pflow);
+        // ppress->rebalance(p,a,pgc,ppois,psolv,pflow);
 
         //timestep control
         ptstep->start(a,p,pgc,pturb);

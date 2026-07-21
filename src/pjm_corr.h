@@ -45,6 +45,7 @@ public:
     void upgrad(lexer*,fdm*,slice&,slice&) override final;
     void vpgrad(lexer*,fdm*,slice&,slice&) override final;
     void wpgrad(lexer*,fdm*,slice&,slice&) override final;
+    void rebalance(lexer*, fdm*, ghostcell*, poisson*, solver*, ioflow*) override final;
 
 protected:
     void ucorr(lexer*,fdm*,field&,double) override final;
@@ -54,6 +55,10 @@ protected:
 private:
     void velcorr(lexer*, fdm*, ghostcell*, field&, field&, field&, solver*, double);
     void vel_setup(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
+    // Composite predictor divergence fix (multi-level only): make the predictor normal
+    // velocity single-valued at the C-F interface before the rhs divergence. Shared by
+    // start() (real projection) and rebalance() (pressure re-init) so they cannot drift.
+    void cf_predictor_sync(lexer*,fdm*,ghostcell*,field&,field&,field&,solver*,double);
     void rhs(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
     void presscorr(lexer*,fdm*);
 
