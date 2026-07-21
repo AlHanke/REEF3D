@@ -26,11 +26,11 @@ Author: Hans Bihs
 #include"solver.h"
 #include"increment.h"
 #include"vec.h"
-#include"_hypre_utilities.h"
-#include"HYPRE_sstruct_ls.h"
-#include"HYPRE_parcsr_ls.h"
-#include"HYPRE_krylov.h"
-#include"HYPRE.h"
+#include<_hypre_utilities.h>
+#include<HYPRE_sstruct_ls.h>
+#include<HYPRE_parcsr_ls.h>
+#include<HYPRE_krylov.h>
+#include<HYPRE.h>
 
 using namespace std;
 
