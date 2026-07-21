@@ -971,7 +971,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
 
             // p->level=0;
             // if(p->mpirank==0)std::cout<<"psi: "<<p->psi<<std::endl;
-            // for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*,amrex::TilingIfNotGPU()*/); _tile_mfi.isValid(); ++_tile_mfi) for (struct { lexer* ctx; amrex::MFIter* saved; } _guard{p, p->set_tile_mfi(&_tile_mfi)}; _guard.ctx != nullptr; _guard.ctx->set_tile_mfi(_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), _guard.ctx = nullptr)
+            // for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*,MFIter_TILING*/); _tile_mfi.isValid(); ++_tile_mfi) for (struct { lexer* ctx; amrex::MFIter* saved; } _guard{p, p->set_tile_mfi(&_tile_mfi)}; _guard.ctx != nullptr; _guard.ctx->set_tile_mfi(_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), _guard.ctx = nullptr)
             // IJKLOOP
             // {
             //     if(k==8&&i==4&&p->mpirank==0)
@@ -982,7 +982,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             // p->level=1;
             // int count=0;
             // double temp=0.0, temp2=0.0, temp3=0.0;
-            // for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*,amrex::TilingIfNotGPU()*/); _tile_mfi.isValid(); ++_tile_mfi) for (struct { lexer* ctx; amrex::MFIter* saved; } _guard{p, p->set_tile_mfi(&_tile_mfi)}; _guard.ctx != nullptr; _guard.ctx->set_tile_mfi(_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), _guard.ctx = nullptr)
+            // for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level]/*,MFIter_TILING*/); _tile_mfi.isValid(); ++_tile_mfi) for (struct { lexer* ctx; amrex::MFIter* saved; } _guard{p, p->set_tile_mfi(&_tile_mfi)}; _guard.ctx != nullptr; _guard.ctx->set_tile_mfi(_guard.saved ? _guard.saved : _guard.ctx->default_cell_mfi.get()), _guard.ctx = nullptr)
             // IJKLOOP
             // {
             //     if(k+p->amr_tile_lo.z>=16&&k+p->amr_tile_lo.z<=17&&i+p->amr_tile_lo.x==8)
