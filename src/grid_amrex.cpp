@@ -608,13 +608,19 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         if (new_finest < lev || new_grids[lev].empty())
             break;  // no tagging at this level — no finer levels either
 
+        if(amrex_box_array[lev] != new_grids[lev]) changed = true;
+
         amrex_box_array[lev] = new_grids[lev];
 
         if (nprocs > 1)
             amr_mesh_adaptive.ChopGrids(lev, amrex_box_array[lev], nprocs);
 
+        auto temp_dm = amrex_distribution_mapping[lev];
+
         amrex_distribution_mapping[lev] =
             amr_mesh_adaptive.MakeDistributionMap(lev, amrex_box_array[lev]);
+
+        if (temp_dm != amrex_distribution_mapping[lev]) changed = true;
 
         amr_mesh_adaptive.SetBoxArray(lev, amrex_box_array[lev]);
         amr_mesh_adaptive.SetDistributionMap(lev, amrex_distribution_mapping[lev]);
@@ -935,13 +941,60 @@ void grid_amrex::fill_registered_mf_level(int lev)
             }
         amrex::PhysBCFunctNoOp null_bc;
 
-        amrex::InterpFromCoarseLevel(
-            fine_mf, 0.0,
-            coarse_mf, 0, 0, e.ncomp,
-            amrex_geometry[lev-1], amrex_geometry[lev],
-            null_bc, 0, null_bc, 0,
-            ref_vec, &amrex::cell_cons_interp,
-            bcrecs, 0);
+        if (e.location >= 1 && e.location <= 3)
+        {
+            // Face-centred field (location 1/2/3 = FACE_X/Y/Z). The staggered velocity is held
+            // in a cell-centred MultiFab with vel(cell i) == the high face == face(i+e), so a
+            // cell_cons_interp would mis-place the C-F normal velocity by ~half a fine cell.
+            // Convert to a face-typed temporary, prolong with face_linear_interp (the staggered,
+            // divergence-aware interpolation), then copy back to cell-centred storage.
+            // Assumes every component of this MF shares the same face direction.
+            const int dir = e.location - 1;
+            const amrex::IntVect ev = amrex::IntVect::TheDimensionVector(dir);
+
+            amrex::MultiFab cface(amrex::convert(coarse_mf.boxArray(), ev),
+                                  coarse_mf.DistributionMap(), e.ncomp, coarse_mf.nGrow());
+            amrex::MultiFab fface(amrex::convert(amrex_box_array[lev], ev),
+                                  amrex_distribution_mapping[lev], e.ncomp, 0);
+
+            // cell-centred storage -> coarse face temp (face f = vel(f-e))
+            for (amrex::MFIter mfi(cface); mfi.isValid(); ++mfi)
+            {
+                const amrex::Box& fbx = mfi.validbox();
+                auto       cf = cface.array(mfi);
+                const auto cc = coarse_mf.const_array(mfi);
+                amrex::LoopOnCpu(fbx, e.ncomp, [&] (int i, int j, int k, int n) noexcept
+                { cf(i,j,k,n) = cc(i-ev[0], j-ev[1], k-ev[2], n); });
+            }
+
+            amrex::InterpFromCoarseLevel(
+                fface, 0.0,
+                cface, 0, 0, e.ncomp,
+                amrex_geometry[lev-1], amrex_geometry[lev],
+                null_bc, 0, null_bc, 0,
+                ref_vec, &amrex::face_linear_interp,
+                bcrecs, 0);
+
+            // fine face temp -> cell-centred storage (vel(i) = face(i+e))
+            for (amrex::MFIter mfi(fine_mf); mfi.isValid(); ++mfi)
+            {
+                const amrex::Box& bx = mfi.validbox();
+                auto       fc = fine_mf.array(mfi);
+                const auto ff = fface.const_array(mfi);
+                amrex::LoopOnCpu(bx, e.ncomp, [&] (int i, int j, int k, int n) noexcept
+                { fc(i,j,k,n) = ff(i+ev[0], j+ev[1], k+ev[2], n); });
+            }
+        }
+        else
+        {
+            amrex::InterpFromCoarseLevel(
+                fine_mf, 0.0,
+                coarse_mf, 0, 0, e.ncomp,
+                amrex_geometry[lev-1], amrex_geometry[lev],
+                null_bc, 0, null_bc, 0,
+                ref_vec, &amrex::cell_cons_interp,
+                bcrecs, 0);
+        }
 
         // Overwrite interpolated cells with pre-existing fine-level data.
         if (old_mf.nComp() > 0)

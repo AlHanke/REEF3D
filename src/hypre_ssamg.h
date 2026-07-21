@@ -35,6 +35,8 @@ class fieldint4;
 #include <HYPRE_krylov.h>
 #include <HYPRE.h>
 #include <vector>
+#include <map>
+#include <array>
 
 class hypre_ssamg final : public solver, public increment
 {
@@ -71,7 +73,11 @@ public:
     // out = A * in on the assembled operator (handles SStruct and ParCSR object types).
     void matvec_into(lexer*, fdm*, ghostcell*, field& out, field& in) override;
 
+    // Save/restore the fine LOW C-F normal-face velocities around a start1/2/3 (see solver.h).
+    void cf_lowface_save_restore(lexer*, field&, field&, field&, bool save) override;
+
     void make_grid_7p(lexer*, fdm*, ghostcell*);
+    void destroy_grid();
 
     void create_solver(lexer*, ghostcell*);
     void delete_solver(lexer*, ghostcell*);
@@ -131,6 +137,9 @@ private:
         double coeff;
     };
     std::vector<cf_link> cf_links;
+
+    // Scratch for cf_lowface_save_restore: (lev, face_i, face_j, face_k, axis) -> saved velocity.
+    std::map<std::array<int,5>,double> cf_lowface_store;
 };
 
 #endif

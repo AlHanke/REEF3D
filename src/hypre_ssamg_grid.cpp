@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include "hypre_ssamg.h"
@@ -267,4 +267,13 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
     HYPRE_SStructVectorSetObjectType(x, object_type);
     HYPRE_SStructVectorInitialize(b);
     HYPRE_SStructVectorInitialize(x);
+}
+
+void hypre_ssamg::destroy_grid()
+{
+    HYPRE_SStructStencilDestroy(stencil);
+    HYPRE_SStructGraphDestroy(graph);
+    HYPRE_SStructMatrixDestroy(A);
+    HYPRE_SStructVectorDestroy(b);
+    HYPRE_SStructVectorDestroy(x);
 }

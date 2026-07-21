@@ -24,6 +24,14 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"lexer.h"
 #include"ghostcell.h"
+#include"heaviside_ls.h"
+#if USE_AMREX
+#include "density_f.h"
+#include <AMReX_MultiFab.H>
+#include <AMReX_MultiFabUtil.H>
+#include <cstdlib>
+#include <iostream>
+#endif
 
 void initialize::hydrostatic(lexer *p, fdm *a, ghostcell *pgc)
 {
@@ -37,84 +45,148 @@ void initialize::hydrostatic(lexer *p, fdm *a, ghostcell *pgc)
     maxh=p->phimean;
 	
 	if(p->I12==1 && (p->I30==0||p->B90==0))
-    BASELOOP
-    a->press(i,j,k) = (p->phimean-p->pos_z())*a->ro(i,j,k)*fabs(p->W22);
-
-	if(p->I12==2 && (p->I30==0||p->B90==0))
-    BASELOOP
-    a->press(i,j,k) = a->phi(i,j,k)*a->ro(i,j,k)*fabs(p->W22);
-	
-	if(p->I12==3 && (p->I30==0||p->B90==0))
-    BASELOOP
-    a->press(i,j,k) = (maxh-p->pos_z())*a->ro(i,j,k)*fabs(p->W22);
-
-    if(p->I12==4 && p->Y9==1)
+    {
+        BASELOOP
+        a->press(i,j,k) = (p->phimean-p->pos_z())*a->ro(i,j,k)*fabs(p->W22);
+    }
+	else if(p->I12==2 && (p->I30==0||p->B90==0))
+    {
+        BASELOOP
+        a->press(i,j,k) = a->phi(i,j,k)*a->ro(i,j,k)*fabs(p->W22);
+    }
+	else if(p->I12==3 && (p->I30==0||p->B90==0))
+    {
+        BASELOOP
+        a->press(i,j,k) = (maxh-p->pos_z())*a->ro(i,j,k)*fabs(p->W22);
+    }
+    else if(p->I12==4 && p->Y9==1)
     {
         #if USE_AMREX
         const double psi = p->psi;
-        auto Hface = [&](double phiv)->double {
-            if(phiv> psi) return 1.0;
-            if(phiv<-psi) return 0.0;
-            return 0.5*(1.0 + phiv/psi + (1.0/PI)*sin((PI*phiv)/psi));
-        };
+        auto dens = density_f(p);
 
-        // LEVEL_LOOP
-        // // TILE_LOOP
-        // ILOOP
-        // JLOOP
-        // {
-        //     // anchor the bottom cell on the analytic value (absolute level is irrelevant to velcorr)
-        //     k=0;
-        //     a->press0(i,j,k) = a->press(i,j,k) = a->phi(i,j,k)*a->ro(i,j,k)*fabs(p->W22);
-
-        //     // integrate the DISCRETE balance upward: press(k+1) = press(k) + W22*DZP*roface
-        //     for(k=0; k<KMAX_LOOP; ++k)
-        //     {
-        //         const double phiface = 0.5*(a->phi(i,j,k) + a->phi(i,j,k+1));
-        //         const double H       = Hface(phiface);
-        //         const double roface  = p->W1*H + p->W3*(1.0-H);   // matches density_f::roface
-        //         a->press0(i,j,k+1) = a->press(i,j,k+1)    = a->press(i,j,k) + p->W22*p->DZP[KP]*roface;
-        //     }
-        // }
-
-        BASELOOP
+        // Column-by-column hydrostatic build. Each (i,j) column is anchored at its tile-bottom
+        // cell with the analytic absolute value, then integrated UPWARD using the SAME face
+        // density momentum/wpgrad use (dens.roface, field phi). That makes grad(press) == W22*roface
+        // at every face, so the predictor hydrostatic force is zero -- including the surface band.
+        // (The previous version built press from a per-cell analytic unit-gradient extrapolation,
+        // whose face density disagreed with roface where the reinitialised phi is not exactly
+        // unit-gradient -> a ~0.18 surface seed the multi-level coupling then amplified.)
+        LEVEL_LOOP
+        TILE_LOOP
+        ILOOP
+        JLOOP
         {
             const double dz  = p->amrex_geometry[p->level].CellSize(2);
             const double zlo = p->amrex_geometry[p->level].ProbLo(2);
-            const int    gk  = k + p->amr_tile_lo.z;     // GLOBAL k on this level
 
-            const double zc   = p->pos_z();              // this cell's centre z
-            const double phic = a->phi(i,j,k);           // signed distance, dphi/dz = -1
-
-            // reference = column bottom cell (gk=0): deep water, roface==W1, analytic==discrete
-            const double zc0  = zlo + 0.5*dz;
-            const double phi0 = phic + (zc - zc0);       // phi at bottom via unit gradient
-            double press = phi0*p->W1*fabs(p->W22) + p->I55;
-
-            // discrete balance, face by face, up to this cell -- all evaluated ANALYTICALLY
-            // (no field reads off-tile), so it is order-independent across tiles and levels
-            for(int m=0; m<gk; ++m)
+            // --- absolute anchor for the tile-bottom cell (k=0 local) --------------------------
+            // Integrate from the global column bottom with analytic unit-gradient phi (no off-tile
+            // field reads -> order-independent). Exact in deep water; any small extrapolation error
+            // near the surface only shifts the column's constant offset, which wpgrad never sees.
+            k = 0;
             {
-                const double zf  = zlo + double(m+1)*dz;     // face between cells m and m+1
-                const double phif= phic + (zc - zf);         // phi at that face, unit gradient
-                const double H   = Hface(phif);
-                const double rof = p->W1*H + p->W3*(1.0-H);  // == density_f::roface there
-                press += p->W22*dz*rof;                      // W22 < 0
+                const int    gk   = k + p->amr_tile_lo.z;    // GLOBAL k on this level
+                const double zc   = p->pos_z();              // tile-bottom cell centre z
+                const double phic = a->phi(i,j,k);
+                const double zc0  = zlo + 0.5*dz;
+                const double phi0 = phic + (zc - zc0);       // phi at global bottom, unit gradient
+                double press = phi0*p->W1*fabs(p->W22) + p->I55;
+                for(int m=0; m<gk; ++m)
+                {
+                    const double zf  = zlo + double(m+1)*dz;
+                    const double phif= phic + (zc - zf);
+                    const double H   = heaviside_ls(phif,psi);
+                    const double rof = p->W1*H + p->W3*(1.0-H);
+                    press += p->W22*dz*rof;                  // W22 < 0
+                }
+                a->press0(i,j,k) = a->press(i,j,k) = press;
             }
 
-            a->press0(i,j,k) = a->press(i,j,k) = press;
+            // --- field-consistent upward integration (matches wpgrad's roface exactly) ---------
+            for(k=0; k<KMAX_LOOP; ++k)
+            {
+                const double rof = dens.roface(p,a,0,0,1);   // face between cells k and k+1
+                a->press0(i,j,k+1) = a->press(i,j,k+1)
+                    = a->press(i,j,k) + p->W22*p->DZP[KP]*rof;
+            }
         }
 
-        pgc->start4(p,a->press,40);   // fill halos / C-F ghosts on every level
-        pgc->start4(p,a->press0,40);
+        // REEF_HYDRO_PROBE: measure the wpgrad-style vertical imbalance of the just-built press,
+        // BEFORE and AFTER start4. If post-build ~0 but post-start4 != 0, the C-F interpolation in
+        // start4 (FillPatchTwoLevels) is what breaks the hydrostatic balance, not the build.
+        auto hydro_imb_report = [&](const char* tag)
+        {
+            if(!std::getenv("REEF_HYDRO_PROBE")) return;
+            double worst=0.0; int wl=-1,wi[3]={-1,-1,-1}; double wpg=0,wrof=0;
+            LEVEL_LOOP TILE_LOOP ILOOP JLOOP
+            for(k=0;k<KMAX_LOOP;++k)
+            {
+                const double rof = dens.roface(p,a,0,0,1);
+                const double dp  = a->press(i,j,k+1)-a->press(i,j,k);
+                const double gg  = (a->grav_pot(i,j,k+1)-a->grav_pot(i,j,k))/p->DZP[KP];
+                const double imb = std::fabs(-dp/(p->DZP[KP]*rof) + gg);
+                if(imb>worst){ worst=imb; wl=p->level;
+                    wi[0]=i+p->amr_tile_lo.x; wi[1]=j+p->amr_tile_lo.y; wi[2]=k+p->amr_tile_lo.z;
+                    wpg=dp/(p->DZP[KP]*rof); wrof=rof; }
+            }
+            if(p->mpirank==0)
+                std::cout<<"  [hydrobuild "<<tag<<"] worst |imb|="<<worst<<" at lev="<<wl
+                         <<" ("<<wi[0]<<","<<wi[1]<<","<<wi[2]<<")  pgrad/rof="<<wpg
+                         <<" roface="<<wrof<<std::endl;
+        };
+        hydro_imb_report("post-build");
+
+        pgc->start4(p,a->press,40,false);   // fill halos / C-F ghosts; NO average_down (keeps the
+        pgc->start4(p,a->press0,40,false);  // coarse hydrostatic column self-consistent at surface)
+
+        hydro_imb_report("post-start4");
+
+        // REEF_HYDRO_INIT_PROBE: do coarse and fine hydrostatic press AGREE where they overlap?
+        // Average the fine press down onto the covered coarse cells and compare with the directly
+        // computed coarse press. The per-level dz quadrature of the SMOOTHED density (Hface over
+        // psi) is dz-dependent across the surface, so a nonzero diff localised at the surface
+        // (phi~0) confirms the levels carry inconsistent hydrostatic pressure there -- which the
+        // C-F coupling then reconciles, breaking the fine surface balance.
+        if(std::getenv("REEF_HYDRO_INIT_PROBE") && p->nlevs>1)
+        {
+            auto& cmf = a->press.GetMultiFab(0);
+            amrex::MultiFab avgf(cmf.boxArray(), cmf.DistributionMap(), 1, 0);
+            amrex::MultiFab::Copy(avgf, cmf, 0, 0, 1, 0);
+            amrex::average_down(a->press.GetMultiFab(1), avgf, 0, 1, p->ref_vec);
+
+            auto& phimf = a->phi.GetMultiFab(0);
+            double worst=0.0; int wi[3]={-1,-1,-1}; double w_pc=0,w_pa=0,w_phi=0;
+            for(amrex::MFIter mfi(cmf); mfi.isValid(); ++mfi)
+            {
+                const amrex::Box& bx = mfi.validbox();
+                const auto pc = cmf.const_array(mfi);
+                const auto pa = avgf.const_array(mfi);
+                const auto ph = phimf.const_array(mfi);
+                for(int kk=bx.smallEnd(2); kk<=bx.bigEnd(2); ++kk)
+                for(int jj=bx.smallEnd(1); jj<=bx.bigEnd(1); ++jj)
+                for(int ii=bx.smallEnd(0); ii<=bx.bigEnd(0); ++ii)
+                {
+                    const double d = std::fabs(pc(ii,jj,kk) - pa(ii,jj,kk));
+                    if(d > worst)
+                    { worst=d; wi[0]=ii; wi[1]=jj; wi[2]=kk;
+                      w_pc=pc(ii,jj,kk); w_pa=pa(ii,jj,kk); w_phi=ph(ii,jj,kk); }
+                }
+            }
+            if(p->mpirank==0)
+                std::cout<<"  [hydroinit] worst |press_coarse - avg(press_fine)|="<<worst
+                         <<" at coarse ("<<wi[0]<<","<<wi[1]<<","<<wi[2]<<")"
+                         <<"  press_c="<<w_pc<<" avgfine="<<w_pa<<" phi="<<w_phi
+                         <<"  (nonzero @ surface => dz-inconsistent hydrostatic init)"<<std::endl;
+        }
         #endif
     }
 
     if(p->I56==1)
     BASELOOP
     {
-    if(a->phi(i,j,k)<0.0)
-    a->press(i,j,k)=0.0;
+        if(a->phi(i,j,k)<0.0)
+        a->press(i,j,k)=0.0;
     }
 	
     BASELOOP
@@ -123,21 +195,10 @@ void initialize::hydrostatic(lexer *p, fdm *a, ghostcell *pgc)
 	if(p->I12==2 && p->I30==0)
     GC4LOOP
 	{
-	i = p->gcb4[n][0];
-	j = p->gcb4[n][1];
-	k = p->gcb4[n][2];
-	
-    a->press(i,j,k) = a->phi(i,j,k)*a->ro(i,j,k)*fabs(p->W22) + p->I55;
+        i = p->gcb4[n][0];
+        j = p->gcb4[n][1];
+        k = p->gcb4[n][2];
+
+        a->press(i,j,k) = a->phi(i,j,k)*a->ro(i,j,k)*fabs(p->W22) + p->I55;
 	}
-
-    
-    
-    
-	
-
 }
-
-
-
-
-

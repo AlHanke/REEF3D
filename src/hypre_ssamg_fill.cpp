@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include "hypre_ssamg.h"
@@ -359,6 +359,28 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
 void hypre_ssamg::amr_cf_coefficients(lexer* p, fdm* a, ghostcell* pgc, fieldint4& cval4)
 {
 #if USE_AMREX
+    // ==================================================================================
+    // REEF_CF_PROJECTION_GROUP  (grep this tag to find every coupled member)
+    // ----------------------------------------------------------------------------------
+    // The coarse-fine pressure projection is consistent (assembled operator A == G_v^T W G_v,
+    // so the pressure gauge is invariant and NO reference pin / hydrostatic init is required)
+    // only if EVERY method in this group encodes the SAME C-F face discretization:
+    //   * normal centre distance  d_cf = 0.5*(dx_f + dx_c)   [fine scale 2/(1+r), coarse 2r/(1+r)]
+    //   * fine-side face density (roface) and porosity
+    //   * conservative volume weighting  (M_cf*V_c == M_fc*V_f, i.e. coeff_cf = coeff_fc/volratio)
+    // Change any one of these conventions and you MUST change the others in lockstep, or the
+    // fine block floats off its gauge -> spurious velocity / wrong pressure level.
+    // See AMR_HYDROSTATIC_FIX_RECORD.md for the derivation and the gauge-check evidence.
+    //
+    // Members:
+    //   1. hypre_ssamg::amr_cf_coefficients     (this file)        matrix C-F coupling            -> defines G_A
+    //   2. hypre_ssamg::cf_velocity_correction  (this file)        sole-writer fine C-F vel faces -> G_v (corrector)
+    //   3. field_amrex::FillCoarseFineCellGhost (field_amrex.cpp)  C-F ghost ring (predictor/pcorr) -> G_v
+    //   4. field_amrex::FillDomainBoundaryImpl  (field_amrex.h)    gcv==41 gate that invokes (3)
+    //   5. pjm_corr::start  (gcval_press select) (pjm_corr.cpp)    picks gcv 41 when nlevs>1
+    //   6. pjm_corr u/v/wcorr + u/v/wpgrad        (pjm_corr.cpp)    consumers: fine-spacing DXP & roface
+    // ==================================================================================
+
     // Guard on nlevs only (global): the Allgather below is collective, so a rank owning no
     // C-F links must still reach it (its loops simply do nothing).
     if (p->nlevs <= 1) return;
@@ -545,6 +567,9 @@ void hypre_ssamg::cf_velocity_correction(lexer* p, fdm* a, ghostcell* pgc,
                                          double alpha)
 {
 #if USE_AMREX
+    // REEF_CF_PROJECTION_GROUP member (2) — keep the C-F d_cf / fine-density / volume
+    // convention in sync with the rest of the group; canonical note in amr_cf_coefficients.
+    //
     // C-F consistent gradient correction (the G side of the composite projection). The matrix
     // coupled each fine interface cell to the real coarse cell over the C-F centre distance
     // dcf = 0.5*(dx_f+dx_c); the interior ucorr/vcorr/wcorr instead used the interpolated
@@ -858,6 +883,52 @@ void hypre_ssamg::cf_velocity_correction(lexer* p, fdm* a, ghostcell* pgc,
                           << "  y-/y+=" << cw_fln[2] << "/" << cw_fln[3]
                           << "  z-/z+=" << cw_fln[4] << "/" << cw_fln[5]
                           << "  (wall-normal face velocity must be 0 for no-slip)" << std::endl;
+            }
+        }
+    }
+#endif
+}
+
+void hypre_ssamg::cf_lowface_save_restore(lexer* p, field& u, field& v, field& w, bool save)
+{
+#if USE_AMREX
+    // The fine cell's LOW C-F normal face is the ghost face (fiv-e). cf_velocity_correction writes
+    // the matrix-consistent gradient there; a subsequent start1/2/3 (FillPatchTwoLevels +
+    // FillCoarseFineNormalGhost) overwrites it with coarse interpolation, breaking D.u = -L.pcorr
+    // at the fine cell. Save these faces before such a start and restore them after, so the
+    // correction survives into the divergence/advection that consumes it.
+    if (p->nlevs <= 1) return;
+
+    if (save) cf_lowface_store.clear();
+
+    field* vfld[3] = {&u, &v, &w};
+
+    for (int lev = 1; lev < p->nlevs; ++lev)
+    {
+        for (const auto& L : cf_links)
+        {
+            if (L.from_part != lev)         continue; // fine cell on this level
+            if (L.to_part   >= L.from_part) continue; // fine->coarse couplings only
+            if (L.high)                     continue; // LOW faces only (HIGH are valid fine faces)
+
+            const int axis = L.axis;
+            amrex::IntVect e(0,0,0); e[axis] = 1;
+            const amrex::IntVect face(L.from_ijk[0]-e[0], L.from_ijk[1]-e[1], L.from_ijk[2]-e[2]);
+
+            auto& mf = vfld[axis]->GetMultiFab(lev);
+            for (amrex::MFIter mfi(mf); mfi.isValid(); ++mfi)
+            {
+                if (!mfi.fabbox().contains(face)) continue;
+                auto arr = mf.array(mfi);
+                const std::array<int,5> key{lev, face[0], face[1], face[2], axis};
+                if (save)
+                    cf_lowface_store[key] = arr(face);
+                else
+                {
+                    const auto it = cf_lowface_store.find(key);
+                    if (it != cf_lowface_store.end()) arr(face) = it->second;
+                }
+                break; // face is owned by one box on this level
             }
         }
     }

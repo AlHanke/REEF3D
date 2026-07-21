@@ -73,7 +73,7 @@ void initialize::inifdm(lexer* p, fdm* a, ghostcell* pgc)
         a->porosity(i,j,k)=1.0;
     }
 
-    pgc->start4(p,a->press,1);
+    pgc->start4(p,a->press,1,false);
     pgc->start4(p,a->ro,1);
     pgc->start4(p,a->visc,1);
     pgc->start4(p,a->phi,50);
