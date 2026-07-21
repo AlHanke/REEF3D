@@ -23,8 +23,14 @@ Author: Hans Bihs
 #include "reinidisc_f.h"
 #include "lexer.h"
 #include "field.h"
+#include <cstdlib>
 
-reinidisc_f::reinidisc_f(lexer *p) : ddweno_nug_sf(p) {}
+reinidisc_f::reinidisc_f(lexer *p) : ddweno_nug_sf(p)
+{
+    const char* fb = std::getenv("REEF_REINI_FREEZE_BAND");
+    freeze_band = (fb != nullptr);
+    freeze_fac  = (fb && std::atof(fb) > 0.0) ? std::atof(fb) : 1.0;
+}
 
 void reinidisc_f::start(lexer *p, fdm*, ghostcell*, field &f, field &L, int ipol) noexcept
 {
@@ -60,6 +66,18 @@ void reinidisc_f::start(lexer *p, fdm*, ghostcell*, field &f, field &L, int ipol
 template<bool Is3D, typename GenericFieldConst>
 inline double reinidisc_f::disc(lexer *p, const GenericFieldConst &f) noexcept
 {
+    // REEF_REINI_FREEZE_BAND: freeze the density band during per-step reinit. density =
+    // heaviside_ls(phi,psi) depends on phi only for |phi|<psi (heaviside_ls saturates outside),
+    // so reinit restoring |grad phi|=1 inside the band shifts rho every step and closes a
+    // velocity<->reinit feedback loop (tighter reinit made umax WORSE, not better). Returning 0
+    // leaves band cells un-reinitialised, so rho follows the (barely-moving) advected phi and the
+    // loop opens. count>0 only: the count==0 SDF initialisation still needs the full band reinit
+    // (F40=0 leaves init broken). Caveat: band phi is no longer a clean SDF, so any curvature/
+    // surface-tension consumer of band phi loses accuracy -- acceptable for the at-rest/mild case
+    // under test; the robust variant is a |grad phi|-normalised Heaviside in density_f::roface.
+    if(freeze_band && p->count>0 && std::fabs(f(i,j,k)) < freeze_fac*p->psi)
+    return 0.0;
+
     double dx = 0.0;
     double dy = 0.0;
     double dz = 0.0;

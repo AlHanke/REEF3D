@@ -44,8 +44,12 @@ Author: Alexander Hanke
 
 #if USE_AMREX
 // Create and zero-initialise a MultiFab vector, then register it for AMR regrid.
+// location encodes the staggering (amrex_bc_func::DataLocation cast to int:
+// 0=cell, 1=FACE_X, 2=FACE_Y, 3=FACE_Z) so the regrid interpolation/average_down
+// can be stagger-correct for the velocity fields.
 static amrex::Vector<amrex::MultiFab> make_mf(lexer* p, int ncomp,
-                                               amrex::Vector<amrex::MultiFab>* dest)
+                                               amrex::Vector<amrex::MultiFab>* dest,
+                                               int location = 0)
 {
     amrex::Vector<amrex::MultiFab> result(p->nlevs);
     for (int lev = 0; lev < p->nlevs; ++lev)
@@ -55,7 +59,7 @@ static amrex::Vector<amrex::MultiFab> make_mf(lexer* p, int ncomp,
                            ncomp, p->margin);
         result[lev].setVal(0, 0, ncomp, p->margin);
     }
-    p->register_mf(dest, ncomp);
+    p->register_mf(dest, ncomp, location);
     return result;
 }
 #endif
@@ -137,6 +141,24 @@ public:
     /// coarse face velocity (the divergence-preserving prolongation). No-op for cell-centred
     /// fields and single-level runs. Called at the end of FillDomainBoundaryImpl.
     void FillCoarseFineNormalGhost();
+
+    /// Matrix-consistent coarse-fine ghost fill for cell-centred pressure (gcv 41).
+    /// Overwrites the first fine C-F ghost layer with a two-point normal prolongation
+    ///   p_ghost = p_bnd + (2/(1+r)) * (p_coarse - p_bnd),
+    /// so the fine-spacing corrector gradient (pcorr(i+1)-pcorr(i))/DXP reproduces the
+    /// SSAMG C-F stencil, which uses the centre distance d_cf = 0.5*(dx_f+dx_c). This
+    /// makes the assembled operator equal G_v^T W G_v across the interface (G_v = the
+    /// gradient pjm_corr applies), restoring the projection's gauge invariance. Replaces
+    /// cell_cons_interp on the C-F ring only. No-op for face fields and single-level runs.
+    /// Called from FillDomainBoundaryImpl when gcv==41.
+    void FillCoarseFineCellGhost();
+
+    /// @copydoc field::average_down_level
+    /// Dispatches on const_params.data_location: CELL_CENTERED uses amrex::average_down;
+    /// FACE_X/Y/Z (1/2/3) convert the staggered cell-centred storage to a face-typed
+    /// temporary (face f = vel(f-e)) and use amrex::average_down_faces, then copy the
+    /// synced coarse faces back (vel(i) = face(i+e)).
+    void average_down_level(lexer* p, int lev) override;
 
     // -----------------------------------------------------------------
     // Per-field BCRec update (host side only — no FillPatch).
@@ -566,9 +588,14 @@ void field_amrex::fill_boundary_slabs(
 template <typename BCDecision>
 void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
 {
-    if (gcv != m_last_gcv)
+    // gcv 41 (matrix-consistent C-F pressure fill) has physical-boundary BCs identical
+    // to the pressure Neumann gcv 40; only the coarse-fine ghost ring differs, handled by
+    // FillCoarseFineCellGhost() below. Use 40 for the domain-boundary BCRec update.
+    const int bc_gcv = (gcv == 41) ? 40 : gcv;
+
+    if (bc_gcv != m_last_gcv)
     {
-        UpdateBCRecsImpl(gcv, bc_decision);
+        UpdateBCRecsImpl(bc_gcv, bc_decision);
         // Cache face labels — BCRecs[0][0] is the same for all levels; only
         // changes when gcv changes, so avoid re-reading on every call.
         if (!BCRecs.empty() && !BCRecs[0].empty())
@@ -651,6 +678,12 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
     // fine cell and pulls in the covered coarse face. Overwrite the C-F normal-velocity
     // ghosts with a stagger-correct (face-linear) interpolation of the coarse face velocity.
     FillCoarseFineNormalGhost();
+
+    // REEF_CF_PROJECTION_GROUP member (4) — gcv 41 gates the matrix-consistent C-F cell
+    // ghost fill. The 41->40 domain-BC translation above must stay paired with this call;
+    // canonical note in hypre_ssamg::amr_cf_coefficients.
+    if (gcv == 41)
+        FillCoarseFineCellGhost();
 }
 
 // =========================================================================

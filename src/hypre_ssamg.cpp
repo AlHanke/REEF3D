@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include "hypre_ssamg.h"
@@ -34,12 +34,7 @@ hypre_ssamg::hypre_ssamg(lexer *p, fdm *a, ghostcell *pgc)
 
 hypre_ssamg::~hypre_ssamg()
 {
-    HYPRE_SStructVectorDestroy(x);
-    HYPRE_SStructVectorDestroy(b);
-    HYPRE_SStructMatrixDestroy(A);
-    HYPRE_SStructGraphDestroy(graph);
-    HYPRE_SStructStencilDestroy(stencil);
-    HYPRE_SStructGridDestroy(grid);
+    destroy_grid();
 }
 
 void hypre_ssamg::start(lexer *p, fdm *a, ghostcell *pgc, field &f, vec &rhsvec, int var)
@@ -52,6 +47,14 @@ void hypre_ssamg::start_solver5(lexer *p, fdm *a, ghostcell *pgc, field &f, vec 
 {
     numiter = 0;
     p->solveriter = 0;
+
+    #if USE_AMREX
+    if(p->changed)
+    {
+        destroy_grid();
+        make_grid_7p(p, a, pgc);
+    }
+    #endif
 
     create_solver(p, pgc);
 

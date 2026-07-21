@@ -43,6 +43,14 @@ public:
     void update(lexer*,fdm*,ghostcell*,field&) override final;
 
 private:
+    #if USE_AMREX
+    // REEF_PHI_CF_PROBE (Part 1/C7): post-reinit composite phi/density consistency.
+    // (A) covered-cell phi sync check; (B) C-F face roface mismatch split into ring-deep
+    // (pass/fail), ring-in-band and interior-covered buckets; (C) fine C-F ghost phi vs the
+    // d_cf matrix convention in density units (decides gcv-41-on-phi). See the .cpp header.
+    void phi_cf_probe(lexer*, fdm*, ghostcell*, field&);
+    #endif
+
     fluid_update *pupdate;
     picard *ppicard;
     

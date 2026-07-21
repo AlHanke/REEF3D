@@ -83,10 +83,10 @@ Authors: Hans Bihs, Alexander Hanke
         auto const& member_##member = _fl_mf_a_##member.array(_fl_mfi);
 
     #define FIELD_MUT_AVGDOWN(name) \
-        amrex::average_down((name).GetMultiFab(_fl_lev+1), (name).GetMultiFab(_fl_lev), 0, 1, p->ref_vec);
+        (name).average_down_level(p, _fl_lev);
 
     #define FIELD_MUT_MEMBER_AVGDOWN(ptr, member) \
-        amrex::average_down((ptr)->member.GetMultiFab(_fl_lev+1), (ptr)->member.GetMultiFab(_fl_lev), 0, 1, p->ref_vec);
+        (ptr)->member.average_down_level(p, _fl_lev);
 
     #define _FIELDLOOP_IMPL(mut_expr, mut_name, const_decls, avgdown_decls, body) \
         for (int _fl_lev = p->nlevs - 1; _fl_lev >= 0; --_fl_lev) \
@@ -108,7 +108,11 @@ Authors: Hans Bihs, Alexander Hanke
                 }}); \
             } \
             if(_fl_lev != p->nlevs - 1) { \
-                amrex::average_down(mut_expr.GetMultiFab(_fl_lev+1), (mut_expr).GetMultiFab(_fl_lev), 0, 1, p->ref_vec); \
+                /* No per-stage auto fine->coarse reflux of the mutated field: for the staggered \
+                   velocity this refluxes the un-projected predictor (and F/G/H) every RK stage, \
+                   re-injecting C-F divergence the projection must fight. Velocity reflux is owned \
+                   solely by cf_average_down_velocity in pjm_corr (post-projection). Callers that \
+                   genuinely need a reflux pass it explicitly via avgdown_decls. */ \
                 avgdown_decls; \
             } \
         }
@@ -197,7 +201,8 @@ Authors: Hans Bihs, Alexander Hanke
                     }}); \
             } \
             if(_fl_lev != p->nlevs - 1) { \
-                amrex::average_down(mut_expr.GetMultiFab(_fl_lev+1), (mut_expr).GetMultiFab(_fl_lev), 0, 1, p->ref_vec); \
+                /* Stagger-correct fine->coarse reflux (see _FIELDLOOP_IMPL). */ \
+                /*(mut_expr).average_down_level(p, _fl_lev);*/ \
                 avgdown_decls; \
             } \
         } \

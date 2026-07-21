@@ -74,7 +74,7 @@ public:
     void start1(lexer*,field&,int);
     void start2(lexer*,field&,int);
     void start3(lexer*,field&,int);
-    void start4(lexer*,field&,int);
+    void start4(lexer*,field&,int, bool do_avgdown=true);
     void start4_sum(lexer*,field&,int);
     #if USE_AMREX
     void startBatch(lexer*, amrex::Vector<amrex::MultiFab>&, int scomp,

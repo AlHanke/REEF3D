@@ -37,6 +37,7 @@ Author: Hans Bihs
 #include"nhflow.h"
 #include <iostream>
 #include <iomanip>
+#include <cstdlib>
 
 momentum_RK3::momentum_RK3(lexer *p, fdm *a, convection *pconvection, diffusion *pdiffusion, pressure* ppressure, poisson* ppoisson,
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver,
@@ -78,6 +79,13 @@ momentum_RK3::~momentum_RK3()
 
 void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof *p6dof)
 {
+    // AMR C-F low-face preservation: the post-projection velocity ghost exchange (startBatch
+    // below) overwrites the fine LOW C-F normal faces that velcorr corrected, breaking
+    // D.u = -L.pcorr at those cells. Save the corrected faces before each exchange and restore
+    // them after, so the next stage / free-surface advection sees the consistent velocity.
+    // Gated by REEF_CF_LOWFACE_RESTORE during validation; no-op for nlevs<=1 and non-ssamg solvers.
+    const bool cf_lowface_restore = (std::getenv("REEF_CF_LOWFACE_RESTORE") != nullptr);
+
     const double rk3_total_start = pgc->timer();
     double rk3_setup_time = 0.0;
     double rk3_step1_u_time = 0.0;
@@ -277,7 +285,9 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     block_start = pgc->timer();
 
     #if USE_AMREX
+    if(cf_lowface_restore) ppoissonsolv->cf_lowface_save_restore(p,urk1,vrk1,wrk1,true);
     pgc->startBatch(p, m_rk1, 0, {{&urk1,gcval_u},{&vrk1,gcval_v},{&wrk1,gcval_w}});
+    if(cf_lowface_restore) ppoissonsolv->cf_lowface_save_restore(p,urk1,vrk1,wrk1,false);
     #else
     pgc->start1(p,urk1,gcval_u);
     pgc->start2(p,vrk1,gcval_v);
@@ -378,7 +388,9 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pflow->p_relax(p,a,pgc,a->press);
 
     #if USE_AMREX
+    if(cf_lowface_restore) ppoissonsolv->cf_lowface_save_restore(p,urk2,vrk2,wrk2,true);
     pgc->startBatch(p, m_rk2, 0, {{&urk2,gcval_u},{&vrk2,gcval_v},{&wrk2,gcval_w}});
+    if(cf_lowface_restore) ppoissonsolv->cf_lowface_save_restore(p,urk2,vrk2,wrk2,false);
     #else
     pgc->start1(p,urk2,gcval_u);
     pgc->start2(p,vrk2,gcval_v);
@@ -388,6 +400,43 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 
 //Step 3
 //--------------------------------------------------------
+
+    // --- Gated warm-started pressure corrector (env REEF_PCORR_MAX, default 0 = off) ---
+    // The stage-3 predictor applies the stage-2 pressure -- one substage stale relative to the
+    // current density. At a moving free surface that press/density inconsistency leaves a
+    // rotational velocity the single projection cannot remove (AMR_CF_PROJECTION_CONSISTENCY_
+    // RECORD.md, Open item #4). Re-run the stage-3 predictor+projection from u^n with the
+    // just-solved (refreshed) a->press so grad(press)/roface balances gravity; iterate until the
+    // rest velocity falls below REEF_PCORR_TOL (or REEF_PCORR_MAX passes). Warm-started: a->press
+    // carries over, so each extra Poisson solve is a small, fast correction. urk1/vrk1/wrk1 are
+    // free after step 2 and reused here to hold u^n. Intended for the at-rest / free-surface
+    // hydrostatic problem; 6DOF/FSI re-forcing per pass is untested.
+    const int    pcorr_max = (std::getenv("REEF_PCORR_MAX") ? std::atoi(std::getenv("REEF_PCORR_MAX")) : 0);
+    const double pcorr_tol = (std::getenv("REEF_PCORR_TOL") ? std::atof(std::getenv("REEF_PCORR_TOL")) : 0.0);
+
+    if(pcorr_max>0)
+    {
+        ULOOP urk1(i,j,k)=a->u(i,j,k);   // snapshot u^n (a->u/v/w still hold it here)
+        VLOOP vrk1(i,j,k)=a->v(i,j,k);
+        WLOOP wrk1(i,j,k)=a->w(i,j,k);
+    }
+
+    for(int pcorr=0; pcorr<=pcorr_max; ++pcorr)
+    {
+        if(pcorr>0)
+        {
+            // restart the predictor from u^n; refresh halos so convection sees valid ghosts
+            ULOOP a->u(i,j,k)=urk1(i,j,k);
+            VLOOP a->v(i,j,k)=vrk1(i,j,k);
+            WLOOP a->w(i,j,k)=wrk1(i,j,k);
+            #if USE_AMREX
+            pgc->startBatch(p, a->m_mf, 0, {{&a->u,gcval_u},{&a->v,gcval_v},{&a->w,gcval_w}});
+            #else
+            pgc->start1(p,a->u,gcval_u);
+            pgc->start2(p,a->v,gcval_v);
+            pgc->start3(p,a->w,gcval_w);
+            #endif
+        }
 
     // U
     starttime=pgc->timer();
@@ -465,13 +514,26 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pflow->pressure_io(p,a,pgc);
     ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow,a->u,a->v,a->w,2.0/3.0);
 
+        if(pcorr_max>0)
+        {
+            double pcorr_um=0.0;
+            ULOOP pcorr_um=std::max(pcorr_um,fabs(a->u(i,j,k)));
+            pcorr_um=pgc->globalmax(pcorr_um);
+            if(p->mpirank==0)
+                std::cout<<"  [pcorr] pass "<<pcorr<<"  umax="<<pcorr_um<<std::endl;
+            if(pcorr>0 && pcorr_um<pcorr_tol) break;   // at-rest convergence
+        }
+    } // --- end gated warm-started pressure corrector loop ---
+
     pflow->u_relax(p,a,pgc,a->u);
     pflow->v_relax(p,a,pgc,a->v);
     pflow->w_relax(p,a,pgc,a->w);
     pflow->p_relax(p,a,pgc,a->press);
 
     #if USE_AMREX
+    if(cf_lowface_restore) ppoissonsolv->cf_lowface_save_restore(p,a->u,a->v,a->w,true);
     pgc->startBatch(p, a->m_mf, 0, {{&a->u,gcval_u},{&a->v,gcval_v},{&a->w,gcval_w}});
+    if(cf_lowface_restore) ppoissonsolv->cf_lowface_save_restore(p,a->u,a->v,a->w,false);
     #else
     pgc->start1(p,a->u,gcval_u);
     pgc->start2(p,a->v,gcval_v);

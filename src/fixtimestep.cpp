@@ -27,6 +27,7 @@ Author: Hans Bihs
 #include "turbulence.h"
 #include <algorithm>
 #include <iomanip>
+#include <cstdlib>
 
 fixtimestep::fixtimestep(lexer*)
 {
@@ -44,6 +45,29 @@ void fixtimestep::start(fdm* a, lexer* p, ghostcell* pgc, turbulence *pturb)
     p->umax=std::max(p->umax,fabs(a->u(i,j,k)));
 
     p->umax=pgc->globalmax(p->umax);
+
+    // TEMPORARY (env REEF_UMAX_LOC): locate the max|u| cell so the residual-velocity driver
+    // can be attributed (surface / C-F edge / wall / level). Reports the cell whose |u| equals
+    // the global umax, with its level, global index, phi, and lateral-wall/surface context.
+    if(std::getenv("REEF_UMAX_LOC"))
+    {
+        #if USE_AMREX
+        double loc=0.0; int llev=-1, li[3]={-1,-1,-1}; double lphi=0.0;
+        ULOOP
+        {
+            const double au=fabs(a->u(i,j,k));
+            if(au>loc)
+            {
+                loc=au; llev=p->level;
+                li[0]=i+p->amr_tile_lo.x; li[1]=j+p->amr_tile_lo.y; li[2]=k+p->amr_tile_lo.z;
+                lphi=0.5*(a->phi(i,j,k)+a->phi(i+1,j,k));
+            }
+        }
+        if(loc>=p->umax*(1.0-1e-9) && loc>0.0)
+            std::cout<<"  [umaxloc] |u|="<<loc<<" lev="<<llev
+                     <<" ("<<li[0]<<","<<li[1]<<","<<li[2]<<")  phi_face="<<lphi<<std::endl;
+        #endif
+    }
 
 
     VLOOP
