@@ -483,7 +483,7 @@ void amrex_solver::fill_rhs(lexer *p, double alpha)
         const Real dyi = dxinv[1];
         const Real dzi = dxinv[2];
 
-        for(MFIter mfi(rhs[lev],TilingIfNotGPU()); mfi.isValid(); ++mfi)
+        for(MFIter mfi(rhs[lev],MFIter_TILING); mfi.isValid(); ++mfi)
         {
             const Box& tbx = mfi.tilebox();
             auto const& r  = rhs[lev].array(mfi);

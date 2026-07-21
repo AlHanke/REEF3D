@@ -94,7 +94,7 @@ Authors: Hans Bihs, Alexander Hanke
             auto& _fl_mf = (mut_expr).GetMultiFab(_fl_lev); \
             const auto& _covered_mf = p->amr_cell_mf[_fl_lev]; \
             _FL_OMP \
-            for (amrex::MFIter _fl_mfi(_fl_mf, amrex::TilingIfNotGPU()); \
+            for (amrex::MFIter _fl_mfi(_fl_mf, MFIter_TILING); \
                  _fl_mfi.isValid(); ++_fl_mfi) \
             { \
                 const amrex::Box& _fl_bx = _fl_mfi.tilebox(); \
@@ -180,7 +180,7 @@ Authors: Hans Bihs, Alexander Hanke
             auto& _fl_mf = (mut_expr).GetMultiFab(_fl_lev); \
             const auto& _covered_mf = p->amr_cell_mf[_fl_lev]; \
             _FL_OMP \
-            for (amrex::MFIter _fl_mfi(_fl_mf, amrex::TilingIfNotGPU()); \
+            for (amrex::MFIter _fl_mfi(_fl_mf, MFIter_TILING); \
                  _fl_mfi.isValid(); ++_fl_mfi) \
             { \
                 const amrex::Box& _fl_bx = _fl_mfi.tilebox(); \
@@ -236,7 +236,7 @@ Authors: Hans Bihs, Alexander Hanke
     // Restores via apply_tile_ctx, not set_tile_ctx: p->level belongs to
     // LEVEL_LOOP and must survive the tile loop untouched.
     #define TILE_LOOP \
-        for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level],amrex::TilingIfNotGPU()); _tile_mfi.isValid(); ++_tile_mfi) \
+        for (amrex::MFIter _tile_mfi(p->amr_cell_mf[p->level],MFIter_TILING); _tile_mfi.isValid(); ++_tile_mfi) \
             for (struct { lexer* ctx; lexer::TileCtx saved; } \
                     _guard{p, p->set_tile_mfi(&_tile_mfi)}; \
                 _guard.ctx != nullptr; \
