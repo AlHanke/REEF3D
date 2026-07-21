@@ -57,7 +57,6 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
             values[count] = a->M.b[n]; ++count;
             values[count] = a->M.t[n]; ++count;
         }
-
         SFLUIDCHECK
         {
             values[count] = 1.0; ++count;
@@ -79,7 +78,6 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
     {
         PFLUIDCHECK
         values[count] = f(i, j, k);
-
         SFLUIDCHECK
         values[count] = 0.0;
 
@@ -98,7 +96,6 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
             n = cval4(i, j, k);
             values[count] = a->rhsvec.V[n];
         }
-
         SFLUIDCHECK
         values[count] = 0.0;
 
