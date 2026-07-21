@@ -41,6 +41,8 @@ enum {BC_INFLOW=1, BC_OUTFLOW=2, BC_SYMMETRY=3, BC_WAVEGEN=6, BC_NUMBEACH=7, BC_
 inline constexpr double PI = 3.14159265359;
 inline constexpr double EE = 2.71828182846;
 
+inline constexpr bool MFIter_TILING () noexcept { return false; } // amrex::TilingIfNotGPU()
+
 /// Storage layout of a field, and the `location` value carried by
 /// lexer::mf_registry / imf_registry entries (field_amrex passes
 /// static_cast<int>(DataLocation)).
