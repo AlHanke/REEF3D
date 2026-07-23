@@ -1049,26 +1049,26 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
                     });
                 }
                 comp = 3; // After processing u,v,w
-                // amrex::MultiFab::Copy(combined_mf, a->press.GetMultiFab(), 0, comp, 1, 1);
-                for (amrex::MFIter mfi(combined_mf); mfi.isValid(); ++mfi)
-                {
-                    const amrex::Box& bx = amrex::grow(mfi.validbox(),1);
-                    auto const& cc_arr = combined_mf.array(mfi);
-                    auto const& p_fc = a->press.GetMultiFab().const_array(mfi);
-                    auto const& p0_fc = a->press0.GetMultiFab().const_array(mfi);
-                    auto const& phi_fc = a->phi.GetMultiFab().const_array(mfi);
-                    auto const& rho_fc = a->ro.GetMultiFab().const_array(mfi);
+                amrex::MultiFab::Copy(combined_mf, a->press.GetMultiFab(), 0, comp, 1, 1);
+                // for (amrex::MFIter mfi(combined_mf); mfi.isValid(); ++mfi)
+                // {
+                //     const amrex::Box& bx = amrex::grow(mfi.validbox(),1);
+                //     auto const& cc_arr = combined_mf.array(mfi);
+                //     auto const& p_fc = a->press.GetMultiFab().const_array(mfi);
+                //     auto const& p0_fc = a->press0.GetMultiFab().const_array(mfi);
+                //     auto const& phi_fc = a->phi.GetMultiFab().const_array(mfi);
+                //     auto const& rho_fc = a->ro.GetMultiFab().const_array(mfi);
 
-                    amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
-                    {
-                        // cc_arr(i,j,k,comp) = p_fc(i,j,k) - p0_fc(i,j,k);
-                        cc_arr(i,j,k,comp) = p_fc(i,j,k);
-                    });
-                }
+                //     amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
+                //     {
+                //         // cc_arr(i,j,k,comp) = p_fc(i,j,k) - p0_fc(i,j,k);
+                //         cc_arr(i,j,k,comp) = p_fc(i,j,k);
+                //     });
+                // }
                 comp++;
                 amrex::MultiFab::Copy(combined_mf, a->phi.GetMultiFab(), 0, comp, 1, 1);
                 comp++;
-                for (amrex::MFIter mfi(combined_mf); mfi.isValid(); ++mfi)
+                for (amrex::MFIter mfi(combined_mf, MFIter_TILING); mfi.isValid(); ++mfi)
                 {
                     const amrex::Box& bx = amrex::grow(mfi.validbox(),1);
                     auto const& cc_arr = combined_mf.array(mfi);
@@ -1157,42 +1157,42 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             }
 
             // 3. Generate AMReX plotfile name and metadata
-            std::string plotfilename = amrex::Concatenate("REEF3D_CFD_PLT/plt", num, 7);
-            amrex::Vector<int> level_steps(p->nlevs, p->count); // Assuming no subcycling for simplicity; adjust if you have subcycling
-            amrex::Vector<amrex::IntVect> ref_ratio(p->nlevs-1, p->ref_vec);
-            amrex::Vector<amrex::Geometry> geoms(p->nlevs);
-            for (int lev = 0; lev < p->nlevs; lev++)
-            {
-                auto real_box = p->amrex_geometry[lev].ProbDomain();
-                auto lowEnd = real_box.lo();
-                auto highEnd = real_box.hi();
-                amrex::RealBox real_box_out;
-                real_box_out.setLo(0, p->coordinates::Xout(lowEnd[0], lowEnd[1]));
-                real_box_out.setLo(1, p->coordinates::Yout(lowEnd[0], lowEnd[1]));
-                real_box_out.setLo(2, lowEnd[2]);
-                real_box_out.setHi(0, p->coordinates::Xout(highEnd[0], highEnd[1]));
-                real_box_out.setHi(1, p->coordinates::Yout(highEnd[0], highEnd[1]));
-                real_box_out.setHi(2, highEnd[2]);
-                geoms[lev] = amrex::Geometry(p->amrex_geometry[lev].Domain(), real_box_out, amrex::CoordSys::CoordType::cartesian, p->amrex_geometry[lev].isPeriodic());;
-            }
+            // std::string plotfilename = amrex::Concatenate("REEF3D_CFD_PLT/plt", num, 7);
+            // amrex::Vector<int> level_steps(p->nlevs, p->count); // Assuming no subcycling for simplicity; adjust if you have subcycling
+            // amrex::Vector<amrex::IntVect> ref_ratio(p->nlevs-1, p->ref_vec);
+            // amrex::Vector<amrex::Geometry> geoms(p->nlevs);
+            // for (int lev = 0; lev < p->nlevs; lev++)
+            // {
+            //     auto real_box = p->amrex_geometry[lev].ProbDomain();
+            //     auto lowEnd = real_box.lo();
+            //     auto highEnd = real_box.hi();
+            //     amrex::RealBox real_box_out;
+            //     real_box_out.setLo(0, p->coordinates::Xout(lowEnd[0], lowEnd[1]));
+            //     real_box_out.setLo(1, p->coordinates::Yout(lowEnd[0], lowEnd[1]));
+            //     real_box_out.setLo(2, lowEnd[2]);
+            //     real_box_out.setHi(0, p->coordinates::Xout(highEnd[0], highEnd[1]));
+            //     real_box_out.setHi(1, p->coordinates::Yout(highEnd[0], highEnd[1]));
+            //     real_box_out.setHi(2, highEnd[2]);
+            //     geoms[lev] = amrex::Geometry(p->amrex_geometry[lev].Domain(), real_box_out, amrex::CoordSys::CoordType::cartesian, p->amrex_geometry[lev].isPeriodic());;
+            // }
 
             // 4. Use AMReX utility to write the hierarchical data
-            amrex::WriteMultiLevelPlotfile(plotfilename, p->nlevs, GetVecOfConstPtrs(plot_mfs_data), varnames,
-                                        geoms, p->simtime,
-                                        level_steps, ref_ratio);
+            // amrex::WriteMultiLevelPlotfile(plotfilename, p->nlevs, GetVecOfConstPtrs(plot_mfs_data), varnames,
+            //                             geoms, p->simtime,
+            //                             level_steps, ref_ratio);
 
             // 5. Point-interpolated output with per-level structure, plus the 2D-plane
             //    variants for pseudo-2D runs. Two formats: .vtpc (vtkPartitionedDataSet-
             //    Collection, VTK's successor to multiblock) and .vtm (legacy multiblock,
             //    whose ParaView reader still supports read-time array selection).
             //    TODO: replace with a user-selectable toggle
-            print_interp_amrex(p, a, plot_mfs_data, varnames, num, false);
-            print_interp_amrex_vtm(p, a, plot_mfs_data, varnames, num, false);
+            // print_interp_amrex(p, a, plot_mfs_data, varnames, num, false);
+            // print_interp_amrex_vtm(p, a, plot_mfs_data, varnames, num, false);
             if (!p->j_dir)
             {
-                print2D_plotfile_amrex(p, plot_mfs_data, varnames, num);
+                // print2D_plotfile_amrex(p, plot_mfs_data, varnames, num);
                 print_interp_amrex(p, a, plot_mfs_data, varnames, num, true);
-                print_interp_amrex_vtm(p, a, plot_mfs_data, varnames, num, true);
+                // print_interp_amrex_vtm(p, a, plot_mfs_data, varnames, num, true);
             }
         }
         #endif
