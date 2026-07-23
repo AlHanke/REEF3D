@@ -141,6 +141,20 @@ public:
     }
 
     // Weights ----
+    //
+    // The WENO-JS weights are w_i = (c_i/d_i) / sum_j(c_j/d_j), with d_i = (is_i+psi)^2.
+    // Written that way each weight costs a division, plus one more for the normalisation.
+    // Multiplying numerator and denominator through by d1*d2*d3 gives the algebraically
+    // identical form
+    //     n_i = c_i * d_j * d_k        (j,k the other two)
+    //     w_i = n_i / (n1 + n2 + n3)
+    // which needs a single division. Trades 3 divisions for 6 multiplications per call;
+    // at 6 calls per cell that is 24 divisions/cell down to 6.
+    //
+    // Range: d_i ~ (dq)^4, so n_i ~ (dq)^8. Overflow needs |dq| ~ 1e38, underflow to zero
+    // needs |dq| ~ 1e-40; neither is reachable for physical field differences. The ratio is
+    // exact in real arithmetic but rounds differently from the original, so results are
+    // close to but not bit-identical with the previous form.
     // x
     FORCE_INLINE void weight_min_x() noexcept
     {
@@ -148,13 +162,18 @@ public:
         const double is2x_psi = is2x + psi;
         const double is3x_psi = is3x + psi;
 
-        const double a1x = cfx[IP][uf][0]/(is1x_psi*is1x_psi);
-        const double a2x = cfx[IP][uf][1]/(is2x_psi*is2x_psi);
-        const double a3x = cfx[IP][uf][2]/(is3x_psi*is3x_psi);
-        const double inv_sumx = 1.0/(a1x + a2x + a3x);
-        w1x = a1x*inv_sumx;
-        w2x = a2x*inv_sumx;
-        w3x = a3x*inv_sumx;
+        const double d1x = is1x_psi*is1x_psi;
+        const double d2x = is2x_psi*is2x_psi;
+        const double d3x = is3x_psi*is3x_psi;
+
+        const double n1x = cfx[IP][uf][0]*d2x*d3x;
+        const double n2x = cfx[IP][uf][1]*d1x*d3x;
+        const double n3x = cfx[IP][uf][2]*d1x*d2x;
+
+        const double inv_sumx = 1.0/(n1x + n2x + n3x);
+        w1x = n1x*inv_sumx;
+        w2x = n2x*inv_sumx;
+        w3x = n3x*inv_sumx;
     }
     FORCE_INLINE void weight_max_x() noexcept
     {
@@ -162,13 +181,18 @@ public:
         const double is2x_psi = is2x + psi;
         const double is3x_psi = is3x + psi;
 
-        const double a1x = cfx[IP][uf][3]/(is1x_psi*is1x_psi);
-        const double a2x = cfx[IP][uf][4]/(is2x_psi*is2x_psi);
-        const double a3x = cfx[IP][uf][5]/(is3x_psi*is3x_psi);
-        const double inv_sumx = 1.0/(a1x + a2x + a3x);
-        w1x = a1x*inv_sumx;
-        w2x = a2x*inv_sumx;
-        w3x = a3x*inv_sumx;
+        const double d1x = is1x_psi*is1x_psi;
+        const double d2x = is2x_psi*is2x_psi;
+        const double d3x = is3x_psi*is3x_psi;
+
+        const double n1x = cfx[IP][uf][3]*d2x*d3x;
+        const double n2x = cfx[IP][uf][4]*d1x*d3x;
+        const double n3x = cfx[IP][uf][5]*d1x*d2x;
+
+        const double inv_sumx = 1.0/(n1x + n2x + n3x);
+        w1x = n1x*inv_sumx;
+        w2x = n2x*inv_sumx;
+        w3x = n3x*inv_sumx;
     }
 
     // y
@@ -178,13 +202,18 @@ public:
         const double is2y_psi = is2y + psi;
         const double is3y_psi = is3y + psi;
 
-        const double a1y = cfy[JP][vf][0]/(is1y_psi*is1y_psi);
-        const double a2y = cfy[JP][vf][1]/(is2y_psi*is2y_psi);
-        const double a3y = cfy[JP][vf][2]/(is3y_psi*is3y_psi);
-        const double inv_sumy = 1.0/(a1y + a2y + a3y);
-        w1y = a1y*inv_sumy;
-        w2y = a2y*inv_sumy;
-        w3y = a3y*inv_sumy;
+        const double d1y = is1y_psi*is1y_psi;
+        const double d2y = is2y_psi*is2y_psi;
+        const double d3y = is3y_psi*is3y_psi;
+
+        const double n1y = cfy[JP][vf][0]*d2y*d3y;
+        const double n2y = cfy[JP][vf][1]*d1y*d3y;
+        const double n3y = cfy[JP][vf][2]*d1y*d2y;
+
+        const double inv_sumy = 1.0/(n1y + n2y + n3y);
+        w1y = n1y*inv_sumy;
+        w2y = n2y*inv_sumy;
+        w3y = n3y*inv_sumy;
     }
     FORCE_INLINE void weight_max_y() noexcept
     {
@@ -192,13 +221,18 @@ public:
         const double is2y_psi = is2y + psi;
         const double is3y_psi = is3y + psi;
 
-        const double a1y = cfy[JP][vf][3]/(is1y_psi*is1y_psi);
-        const double a2y = cfy[JP][vf][4]/(is2y_psi*is2y_psi);
-        const double a3y = cfy[JP][vf][5]/(is3y_psi*is3y_psi);
-        const double inv_sumy = 1.0/(a1y + a2y + a3y);
-        w1y = a1y*inv_sumy;
-        w2y = a2y*inv_sumy;
-        w3y = a3y*inv_sumy;
+        const double d1y = is1y_psi*is1y_psi;
+        const double d2y = is2y_psi*is2y_psi;
+        const double d3y = is3y_psi*is3y_psi;
+
+        const double n1y = cfy[JP][vf][3]*d2y*d3y;
+        const double n2y = cfy[JP][vf][4]*d1y*d3y;
+        const double n3y = cfy[JP][vf][5]*d1y*d2y;
+
+        const double inv_sumy = 1.0/(n1y + n2y + n3y);
+        w1y = n1y*inv_sumy;
+        w2y = n2y*inv_sumy;
+        w3y = n3y*inv_sumy;
     }
 
     // z
@@ -208,13 +242,18 @@ public:
         const double is2z_psi = is2z + psi;
         const double is3z_psi = is3z + psi;
 
-        const double a1z = cfz[KP][wf][0]/(is1z_psi*is1z_psi);
-        const double a2z = cfz[KP][wf][1]/(is2z_psi*is2z_psi);
-        const double a3z = cfz[KP][wf][2]/(is3z_psi*is3z_psi);
-        const double inv_sumz = 1.0/(a1z + a2z + a3z);
-        w1z = a1z*inv_sumz;
-        w2z = a2z*inv_sumz;
-        w3z = a3z*inv_sumz;
+        const double d1z = is1z_psi*is1z_psi;
+        const double d2z = is2z_psi*is2z_psi;
+        const double d3z = is3z_psi*is3z_psi;
+
+        const double n1z = cfz[KP][wf][0]*d2z*d3z;
+        const double n2z = cfz[KP][wf][1]*d1z*d3z;
+        const double n3z = cfz[KP][wf][2]*d1z*d2z;
+
+        const double inv_sumz = 1.0/(n1z + n2z + n3z);
+        w1z = n1z*inv_sumz;
+        w2z = n2z*inv_sumz;
+        w3z = n3z*inv_sumz;
     }
     FORCE_INLINE void weight_max_z() noexcept
     {
@@ -222,13 +261,18 @@ public:
         const double is2z_psi = is2z + psi;
         const double is3z_psi = is3z + psi;
 
-        const double a1z = cfz[KP][wf][3]/(is1z_psi*is1z_psi);
-        const double a2z = cfz[KP][wf][4]/(is2z_psi*is2z_psi);
-        const double a3z = cfz[KP][wf][5]/(is3z_psi*is3z_psi);
-        const double inv_sumz = 1.0/(a1z + a2z + a3z);
-        w1z = a1z*inv_sumz;
-        w2z = a2z*inv_sumz;
-        w3z = a3z*inv_sumz;
+        const double d1z = is1z_psi*is1z_psi;
+        const double d2z = is2z_psi*is2z_psi;
+        const double d3z = is3z_psi*is3z_psi;
+
+        const double n1z = cfz[KP][wf][3]*d2z*d3z;
+        const double n2z = cfz[KP][wf][4]*d1z*d3z;
+        const double n3z = cfz[KP][wf][5]*d1z*d2z;
+
+        const double inv_sumz = 1.0/(n1z + n2z + n3z);
+        w1z = n1z*inv_sumz;
+        w2z = n2z*inv_sumz;
+        w3z = n3z*inv_sumz;
     }
 
     static inline std::vector<std::array<std::array<std::array<double, 2>, 6>, 2>> qfx, qfy, qfz;
