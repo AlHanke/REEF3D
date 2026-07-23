@@ -51,11 +51,11 @@ private:
     inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
 
     template<typename GenericField>
-    FORCE_INLINE double fx(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int di=0);
+    FORCE_INLINE double fx(lexer*, fdm*, const GenericField&, const GenericField&, double, int di=0);
     template<typename GenericField>
-    FORCE_INLINE double fy(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int dj=0);
+    FORCE_INLINE double fy(lexer*, fdm*, const GenericField&, const GenericField&, double, int dj=0);
     template<typename GenericField>
-    FORCE_INLINE double fz(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int dk=0);
+    FORCE_INLINE double fz(lexer*, fdm*, const GenericField&, const GenericField&, double, int dk=0);
 
     flux *pflux;
 };
