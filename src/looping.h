@@ -308,9 +308,18 @@ Authors: Hans Bihs, Alexander Hanke
 #define JMALOOP for(j = -MARGIN_J; j <= JMAX_LOOP + MARGIN_J; ++j)
 #define KMALOOP for(k = -MARGIN_K; k <= KMAX_LOOP + MARGIN_K; ++k)
 
-#define IFLEXLOOP for(i = 0; i <= IMAX_LOOP - ulast; ++i)
-#define JFLEXLOOP for(j = 0; j <= JMAX_LOOP - vlast; ++j)
-#define KFLEXLOOP for(k = 0; k <= KMAX_LOOP - wlast; ++k)
+// ulast/vlast/wlast select the staggered direction of the active solve; with
+// AMReX the shortening itself must be the per-tile domain-end test so the
+// solver enumerates exactly the cells the IULOOP/JVLOOP/KWLOOP assembly saw.
+#if USE_AMREX
+    #define IFLEXLOOP for(i = 0; i <= IMAX_LOOP - ((ulast && p->amr_tile_hi.x == p->amrex_geometry[p->level].Domain().bigEnd(0)) ? 1 : 0); ++i)
+    #define JFLEXLOOP for(j = 0; j <= JMAX_LOOP - ((vlast && p->amr_tile_hi.y == p->amrex_geometry[p->level].Domain().bigEnd(1)) ? 1 : 0); ++j)
+    #define KFLEXLOOP for(k = 0; k <= KMAX_LOOP - ((wlast && p->amr_tile_hi.z == p->amrex_geometry[p->level].Domain().bigEnd(2)) ? 1 : 0); ++k)
+#else
+    #define IFLEXLOOP for(i = 0; i <= IMAX_LOOP - ulast; ++i)
+    #define JFLEXLOOP for(j = 0; j <= JMAX_LOOP - vlast; ++j)
+    #define KFLEXLOOP for(k = 0; k <= KMAX_LOOP - wlast; ++k)
+#endif
 
 #if USE_AMREX
     #define IULOOP for(i = 0; i <= IMAX_LOOP - (p->amr_tile_hi.x == p->amrex_geometry[p->level].Domain().bigEnd(0) ? 1 : 0); ++i)
@@ -330,7 +339,7 @@ Authors: Hans Bihs, Alexander Hanke
 #define FETALOC for(k=c->etaloc(i,j); k<c->etaloc(i,j)+1; ++k)
 
 // CONDITIONS
-#define FLEXCHECK   if(flag[IJK]>0)
+#define FLEXCHECK   if((*flag)(i,j,k)>0)
 #if USE_AMREX
     #define UCHECK      if(p->flag1(i,j,k)>0)
     #define UFLUIDCHECK if(p->flag1(i,j,k)>=AIR_FLAG)

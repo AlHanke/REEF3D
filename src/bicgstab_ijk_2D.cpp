@@ -86,6 +86,11 @@ void bicgstab_ijk_2D::start(lexer* p, fdm* a, ghostcell* pgc, field &f, vec& rhs
     solve(p,pgc,rhsvec,a->M,var,p->solveriter,p->N46,stop_crit);
 
     finalize(p,a,f);
+
+    if(p->mpirank==0)
+    {
+        std::cout << "BICGSTAB_2D: solver iterations = " << p->solveriter<< " residual = " << residual<< std::endl;
+    }
 }
 
 void bicgstab_ijk_2D::startF(lexer* p, ghostcell* pgc, double *f, vec& rhsvec, matrix_diag &M, int var)
@@ -102,6 +107,7 @@ void bicgstab_ijk_2D::startF(lexer* p, ghostcell* pgc, double *f, vec& rhsvec, m
     solve(p,pgc,rhsvec,M,var,p->solveriter,p->N46,stop_crit);
 
     finalizeV(p,f);
+    std::fill(rhsvec.V.begin(), rhsvec.V.end(), 0.0);
 }
 
 void bicgstab_ijk_2D::startV(lexer* p, ghostcell* pgc, double *f, vec& rhsvec, matrix_diag &M, int var)
@@ -118,6 +124,7 @@ void bicgstab_ijk_2D::startV(lexer* p, ghostcell* pgc, double *f, vec& rhsvec, m
     solve(p,pgc,rhsvec,M,var,p->solveriter,p->N46,stop_crit);
 
     finalizeV(p,f);
+    std::fill(rhsvec.V.begin(), rhsvec.V.end(), 0.0);
 }
 
 void bicgstab_ijk_2D::solve(lexer* p, ghostcell* pgc, vec& rhsvec, matrix_diag &M, int var, int &solveriter, int maxiter, double stop_crit)
@@ -134,6 +141,31 @@ void bicgstab_ijk_2D::solve(lexer* p, ghostcell* pgc, vec& rhsvec, matrix_diag &
     pgc->gcparaxijk_single(p,x,var);
 
     matvec_axb(p,x,rj,M);
+
+    // REEF_BICG_PROBE: what the OPERATOR actually sees, as opposed to what
+    // fillxvec wrote. rj = rhs - A*x0. If max|rj| ~ max|M.p|*max|x| then rhs
+    // read as zero here; if max|M.n|/max|M.t| are zero the operator is acting
+    // diagonally regardless of what the assembly wrote.
+    if(std::getenv("REEF_BICG_PROBE") && p->mpirank==0)
+    {
+        double rhmax=0.0,rjmax=0.0,xmax=0.0,pmax=0.0,nmax=0.0,tmax=0.0;
+
+        n=0;
+        FLEXLOOP
+        {
+            rhmax = MAX(rhmax,fabs(rhs[IJK]));
+            rjmax = MAX(rjmax,fabs(rj[IJK]));
+            xmax  = MAX(xmax ,fabs(x[IJK]));
+            pmax  = MAX(pmax ,fabs(M.p[n]));
+            nmax  = MAX(nmax ,fabs(M.n[n]));
+            tmax  = MAX(tmax ,fabs(M.t[n]));
+            ++n;
+        }
+
+        std::cout<<"  [bicg]  in-solve max|rhs|="<<rhmax<<" max|x|="<<xmax
+                 <<" max|rj|="<<rjmax<<"  M.p="<<pmax<<" M.n="<<nmax
+                 <<" M.t="<<tmax<<std::endl;
+    }
 
     FLEXLOOP
     {
@@ -176,6 +208,10 @@ void bicgstab_ijk_2D::solve(lexer* p, ghostcell* pgc, vec& rhsvec, matrix_diag &
             residual=res_calc(p,pgc,x,M);
             ++solveriter;
 
+            if(std::getenv("REEF_BICG_PROBE") && p->mpirank==0)
+            std::cout<<"  [bicg]  RESTART (sigma breakdown) sigma="<<sigma
+                     <<" residual="<<residual<<std::endl;
+
             goto restart;
         }
 
@@ -183,6 +219,10 @@ void bicgstab_ijk_2D::solve(lexer* p, ghostcell* pgc, vec& rhsvec, matrix_diag &
         {
             residual=res_calc(p,pgc,x,M);
             ++solveriter;
+
+            if(std::getenv("REEF_BICG_PROBE") && p->mpirank==0)
+            std::cout<<"  [bicg]  RESTART (alpha stagnation) alpha="<<alpha
+                     <<" residual="<<residual<<std::endl;
 
             goto restart;
         }
@@ -250,6 +290,23 @@ void bicgstab_ijk_2D::solve(lexer* p, ghostcell* pgc, vec& rhsvec, matrix_diag &
 
             r_j1=pgc->globalsum(r_j1);
         }
+
+            if(std::getenv("REEF_BICG_PROBE") && p->mpirank==0)
+            {
+                double xmax=0.0, phmax=0.0;
+
+                FLEXLOOP
+                {
+                    xmax  = MAX(xmax ,fabs(x[IJK]));
+                    phmax = MAX(phmax,fabs(ph[IJK]));
+                }
+
+                std::cout<<"  [bicg]  iter"<<solveriter<<" alpha="<<alpha
+                         <<" sigma="<<sigma<<" norm_rj="<<norm_rj
+                         <<" norm_sj="<<norm_sj<<" (branch "
+                         <<(norm_sj>stop_crit?"A":"B")<<")  max|ph|="<<phmax
+                         <<" -> max|x|="<<xmax<<std::endl;
+            }
 
             r_j = r_j1 ;
 
@@ -344,6 +401,8 @@ void bicgstab_ijk_2D::precon_solve(lexer* p, ghostcell* pgc, double *f, double *
 
 void bicgstab_ijk_2D::fillxvec(lexer* p, fdm* a, field& f, vec &rhsvec)
 {
+    double xmax=0.0, rmax=0.0, mmax=0.0;
+
     n=0;
     FLEXLOOP
     {
@@ -351,15 +410,40 @@ void bicgstab_ijk_2D::fillxvec(lexer* p, fdm* a, field& f, vec &rhsvec)
 
         rhs[IJK] = rhsvec.V[n];
 
+        xmax = MAX(xmax,fabs(x[IJK]));
+        rmax = MAX(rmax,fabs(rhs[IJK]));
+        mmax = MAX(mmax,fabs(a->M.p[n]));
+
         ++n;
     }
+
+    // REEF_BICG_PROBE: the row set the solver CONSUMES. Must match the row set
+    // idiff2_FS* produced (same count) and finalize's (same count), or rows map
+    // to the wrong cells / read never-written zeros.
+    if(std::getenv("REEF_BICG_PROBE") && p->mpirank==0)
+    std::cout<<"  [bicg] fillxvec rows="<<n<<" max|x0|="<<xmax
+             <<" max|rhs|="<<rmax<<" max|M.p|="<<mmax<<std::endl;
 }
 
 
 void bicgstab_ijk_2D::finalize(lexer *p, fdm *a, field &f)
 {
+    double xmax=0.0;
+
+    n=0;
     FLEXLOOP
-    f(i,j,k)=x[IJK];
+    {
+        f(i,j,k)=x[IJK];
+
+        xmax = MAX(xmax,fabs(x[IJK]));
+
+        ++n;
+    }
+
+    if(std::getenv("REEF_BICG_PROBE") && p->mpirank==0)
+    std::cout<<"  [bicg] finalize rows="<<n<<" max|x|="<<xmax<<std::endl;
+
+    std::fill(a->rhsvec.V.begin(), a->rhsvec.V.end(), 0.0);
 }
 
 void bicgstab_ijk_2D::fillxvecV(lexer* p, double *f, vec &rhsvec)
