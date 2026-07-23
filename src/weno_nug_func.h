@@ -23,6 +23,14 @@ Author: Hans Bihs
 #ifndef WENO_NUG_FUNC_H_
 #define WENO_NUG_FUNC_H_
 
+#if defined(_MSC_VER)
+    #define FORCE_INLINE __forceinline
+#elif defined(__GNUC__) || defined(__clang__)
+    #define FORCE_INLINE __attribute__((always_inline)) inline
+#else
+    #define FORCE_INLINE inline
+#endif
+
 #include "increment.h"
 #include "lexer.h"
 #include "field.h"
@@ -49,7 +57,7 @@ public:
 
     // IS ----
     // x
-    inline void is_min_x() noexcept
+    FORCE_INLINE void is_min_x() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -62,7 +70,7 @@ public:
         is2x = isfx[IP][uf][1][0]*dq23*dq23 + isfx[IP][uf][1][1]*(dq43)*(dq23) + isfx[IP][uf][1][2]*dq43*dq43;
         is3x = isfx[IP][uf][2][0]*dq12*dq12 + isfx[IP][uf][2][1]*(dq32)*(dq12) + isfx[IP][uf][2][2]*dq32*dq32;
     }
-    inline void is_max_x() noexcept
+    FORCE_INLINE void is_max_x() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -77,7 +85,7 @@ public:
     }
 
     // y
-    inline void is_min_y() noexcept
+    FORCE_INLINE void is_min_y() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -90,7 +98,7 @@ public:
         is2y = isfy[JP][vf][1][0]*dq23*dq23 + isfy[JP][vf][1][1]*(dq43)*(dq23) + isfy[JP][vf][1][2]*dq43*dq43;
         is3y = isfy[JP][vf][2][0]*dq12*dq12 + isfy[JP][vf][2][1]*(dq32)*(dq12) + isfy[JP][vf][2][2]*dq32*dq32;
     }
-    inline void is_max_y() noexcept
+    FORCE_INLINE void is_max_y() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -105,7 +113,7 @@ public:
     }
 
     // z
-    inline void is_min_z() noexcept
+    FORCE_INLINE void is_min_z() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -118,7 +126,7 @@ public:
         is2z = isfz[KP][wf][1][0]*dq23*dq23 + isfz[KP][wf][1][1]*(dq43)*(dq23) + isfz[KP][wf][1][2]*dq43*dq43;
         is3z = isfz[KP][wf][2][0]*dq12*dq12 + isfz[KP][wf][2][1]*(dq32)*(dq12) + isfz[KP][wf][2][2]*dq32*dq32;
     }
-    inline void is_max_z() noexcept
+    FORCE_INLINE void is_max_z() noexcept
     {
         const double dq12 = q1 - q2;
         const double dq23 = q2 - q3;
@@ -134,7 +142,7 @@ public:
 
     // Weights ----
     // x
-    inline void weight_min_x() noexcept
+    FORCE_INLINE void weight_min_x() noexcept
     {
         const double is1x_psi = is1x + psi;
         const double is2x_psi = is2x + psi;
@@ -148,7 +156,7 @@ public:
         w2x = a2x*inv_sumx;
         w3x = a3x*inv_sumx;
     }
-    inline void weight_max_x() noexcept
+    FORCE_INLINE void weight_max_x() noexcept
     {
         const double is1x_psi = is1x + psi;
         const double is2x_psi = is2x + psi;
@@ -164,7 +172,7 @@ public:
     }
 
     // y
-    inline void weight_min_y() noexcept
+    FORCE_INLINE void weight_min_y() noexcept
     {
         const double is1y_psi = is1y + psi;
         const double is2y_psi = is2y + psi;
@@ -178,7 +186,7 @@ public:
         w2y = a2y*inv_sumy;
         w3y = a3y*inv_sumy;
     }
-    inline void weight_max_y() noexcept
+    FORCE_INLINE void weight_max_y() noexcept
     {
         const double is1y_psi = is1y + psi;
         const double is2y_psi = is2y + psi;
@@ -194,7 +202,7 @@ public:
     }
 
     // z
-    inline void weight_min_z() noexcept
+    FORCE_INLINE void weight_min_z() noexcept
     {
         const double is1z_psi = is1z + psi;
         const double is2z_psi = is2z + psi;
@@ -208,7 +216,7 @@ public:
         w2z = a2z*inv_sumz;
         w3z = a3z*inv_sumz;
     }
-    inline void weight_max_z() noexcept
+    FORCE_INLINE void weight_max_z() noexcept
     {
         const double is1z_psi = is1z + psi;
         const double is2z_psi = is2z + psi;
@@ -238,7 +246,7 @@ public:
 
     int uf,vf,wf;
 protected:
-    template<typename GenericField> inline void iqmin(const GenericField& f) noexcept
+    template<typename GenericField> FORCE_INLINE void iqmin(const GenericField& f) noexcept
     {
         const double v0=f(i-3,j,k), v1=f(i-2,j,k), v2=f(i-1,j,k),
                      v3=f(i,j,k),   v4=f(i+1,j,k), v5=f(i+2,j,k);
@@ -248,7 +256,7 @@ protected:
         q4 = (v4-v3)/p->DXP[IP];
         q5 = (v5-v4)/p->DXP[IP1];
     }
-    template<typename GenericField> inline void iqmax(const GenericField& f) noexcept
+    template<typename GenericField> FORCE_INLINE void iqmax(const GenericField& f) noexcept
     {
         const double v0=f(i-2,j,k), v1=f(i-1,j,k), v2=f(i,j,k),
                      v3=f(i+1,j,k), v4=f(i+2,j,k), v5=f(i+3,j,k);
@@ -259,7 +267,7 @@ protected:
         q5 = (v5-v4)/p->DXP[IP2];
     }
 
-    template<typename GenericField> inline void jqmin(const GenericField& f) noexcept
+    template<typename GenericField> FORCE_INLINE void jqmin(const GenericField& f) noexcept
     {
         const double v0=f(i,j-3,k), v1=f(i,j-2,k), v2=f(i,j-1,k),
                      v3=f(i,j,k),   v4=f(i,j+1,k), v5=f(i,j+2,k);
@@ -269,7 +277,7 @@ protected:
         q4 = (v4-v3)/p->DYP[JP];
         q5 = (v5-v4)/p->DYP[JP1];
     }
-    template<typename GenericField> inline void jqmax(const GenericField& f) noexcept
+    template<typename GenericField> FORCE_INLINE void jqmax(const GenericField& f) noexcept
     {
         const double v0=f(i,j-2,k), v1=f(i,j-1,k), v2=f(i,j,k),
                      v3=f(i,j+1,k), v4=f(i,j+2,k), v5=f(i,j+3,k);
@@ -280,7 +288,7 @@ protected:
         q5 = (v5-v4)/p->DYP[JP2];
     }
 
-    template<typename GenericField> inline void kqmin(const GenericField& f) noexcept
+    template<typename GenericField> FORCE_INLINE void kqmin(const GenericField& f) noexcept
     {
         const double v0=f(i,j,k-3), v1=f(i,j,k-2), v2=f(i,j,k-1),
                      v3=f(i,j,k),   v4=f(i,j,k+1), v5=f(i,j,k+2);
@@ -290,7 +298,7 @@ protected:
         q4 = (v4-v3)/p->DZP[KP];
         q5 = (v5-v4)/p->DZP[KP1];
     }
-    template<typename GenericField> inline void kqmax(const GenericField& f) noexcept
+    template<typename GenericField> FORCE_INLINE void kqmax(const GenericField& f) noexcept
     {
         const double v0=f(i,j,k-2), v1=f(i,j,k-1), v2=f(i,j,k),
                      v3=f(i,j,k+1), v4=f(i,j,k+2), v5=f(i,j,k+3);
@@ -301,7 +309,7 @@ protected:
         q5 = (v5-v4)/p->DZP[KP2];
     }
 
-    inline void isqmin(slice& f)
+    FORCE_INLINE void isqmin(slice& f)
     {
         q1 = (f(i-2,j)-f(i-3,j))/p->DXP[IM3];
         q2 = (f(i-1,j)-f(i-2,j))/p->DXP[IM2];
@@ -309,7 +317,7 @@ protected:
         q4 = (f(i+1,j)-f(i,j))/p->DXP[IP];
         q5 = (f(i+2,j)-f(i+1,j))/p->DXP[IP1];
     }
-    inline void isqmax(slice& f)
+    FORCE_INLINE void isqmax(slice& f)
     {
         q1 = (f(i-1,j)-f(i-2,j))/p->DXP[IM2];
         q2 = (f(i,j)-f(i-1,j))/p->DXP[IM1];
@@ -318,7 +326,7 @@ protected:
         q5 = (f(i+3,j)-f(i+2,j))/p->DXP[IP2];
     }
 
-    inline void jsqmin(slice& f)
+    FORCE_INLINE void jsqmin(slice& f)
     {
         q1 = (f(i,j-2)-f(i,j-3))/p->DYP[JM3];
         q2 = (f(i,j-1)-f(i,j-2))/p->DYP[JM2];
@@ -326,7 +334,7 @@ protected:
         q4 = (f(i,j+1)-f(i,j))/p->DYP[JP];
         q5 = (f(i,j+2)-f(i,j+1))/p->DYP[JP1];
     }
-    inline void jsqmax(slice& f)
+    FORCE_INLINE void jsqmax(slice& f)
     {
         q1 = (f(i,j-1)-f(i,j-2))/p->DYP[JM2];
         q2 = (f(i,j)-f(i,j-1))/p->DYP[JM1];
@@ -346,5 +354,7 @@ private:
     friend class grid_amrex;
     #endif
 };
+
+#undef FORCE_INLINE
 
 #endif
