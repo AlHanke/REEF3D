@@ -184,22 +184,22 @@ void driver::loop_cfd(fdm* a)
                 cout<<"total time: "<<setprecision(6)<<p->totaltime<<"   average time: "<<setprecision(3)<<p->meantime<<endl;
                 cout<<"timer per step: "<<setprecision(3)<<p->itertime<<endl;
 
-                // const int precision = 6;
-                // const double t1 = temp_time0b-temp_time0a;
-                // const double t2 = flow_relax_time-temp_time1;
-                // const double t3 = fsf_update_time-flow_relax_time;
-                // const double t4 = momentum_time-fsf_update_time;
-                // const double t5 = save_time-temp_time2;
-                // const double t6 = print_time-temp_time3;
-                // const double t7 = temp_time0d-temp_time0c;
-                // const double iter_time_woutprint = p->itertime - t6;
-                // cout<<"precalc time: "<<setprecision(precision)<<t1<<":"<<t1/iter_time_woutprint*100<<endl;
-                // cout<<"fsf start time: "<<setprecision(precision)<<t7<<":"<<t7/iter_time_woutprint*100<<endl;
-                // cout<<"flow relax time: "<<setprecision(precision)<<t2<<":"<<t2/iter_time_woutprint*100<<endl;
-                // cout<<"fsf update time: "<<setprecision(precision)<<t3<<":"<<t3/iter_time_woutprint*100<<endl;
-                // cout<<"momentum time: "<<setprecision(precision)<<t4<<":"<<t4/iter_time_woutprint*100<<endl;
-                // cout<<"save time: "<<setprecision(precision)<<t5<<":"<<t5/iter_time_woutprint*100<<endl;
-                // cout<<"print time: "<<setprecision(precision)<<t6<<endl;
+                const int precision = 6;
+                const double t1 = temp_time0b-temp_time0a;
+                const double t2 = flow_relax_time-temp_time1;
+                const double t3 = fsf_update_time-flow_relax_time;
+                const double t4 = momentum_time-fsf_update_time;
+                const double t5 = save_time-temp_time2;
+                const double t6 = print_time-temp_time3;
+                const double t7 = temp_time0d-temp_time0c;
+                const double iter_time_woutprint = p->itertime - t6;
+                cout<<"precalc time: "<<setprecision(precision)<<t1<<":"<<t1/iter_time_woutprint*100<<endl;
+                cout<<"fsf start time: "<<setprecision(precision)<<t7<<":"<<t7/iter_time_woutprint*100<<endl;
+                cout<<"flow relax time: "<<setprecision(precision)<<t2<<":"<<t2/iter_time_woutprint*100<<endl;
+                cout<<"fsf update time: "<<setprecision(precision)<<t3<<":"<<t3/iter_time_woutprint*100<<endl;
+                cout<<"momentum time: "<<setprecision(precision)<<t4<<":"<<t4/iter_time_woutprint*100<<endl;
+                cout<<"save time: "<<setprecision(precision)<<t5<<":"<<t5/iter_time_woutprint*100<<endl;
+                cout<<"print time: "<<setprecision(precision)<<t6<<endl;
             }
 
             // Write log files
