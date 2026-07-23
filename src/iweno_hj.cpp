@@ -56,7 +56,7 @@ iweno_hj::~iweno_hj()
 {
 }
 
-void iweno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void iweno_hj::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &vvel, field &wvel)
 {
     if(ipol==1)
     wenoloop1(p,a,b,ipol,uvel,vvel,wvel);

@@ -28,7 +28,7 @@ Author: Hans Bihs
 #include"flux_HJ_CDS2_2D.h"
 #include"flux_HJ_CDS2_vrans_2D.h"
 
-weno_hj::weno_hj(lexer* p)
+weno_hj::weno_hj(lexer *p)
 {
     if(p->j_dir==0)
     {
@@ -48,11 +48,10 @@ weno_hj::weno_hj(lexer* p)
     }
 }
 
-void weno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void weno_hj::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &vvel, field &wvel)
 {
     if(ipol==1)
     {
-        n=0;
         FIELDLOOP_INC_MEMBER(a,F,
             FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
             F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel); ++n;
@@ -60,7 +59,6 @@ void weno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vv
     }
     else if(ipol==2 && p->j_dir==1)
     {
-        n=0;
         FIELDLOOP_INC_MEMBER(a,G,
             FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
             G(i,j,k)+=aij(p,a,b,2,uvel,vvel,wvel); ++n;
@@ -68,7 +66,6 @@ void weno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vv
     }
     else if(ipol==3)
     {
-        n=0;
         FIELDLOOP_INC_MEMBER(a,H,
             FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
             H(i,j,k)+=aij(p,a,b,3,uvel,vvel,wvel); ++n;
@@ -76,7 +73,6 @@ void weno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vv
     }
     else if(ipol==4)
     {
-        n=0;
         FIELDLOOP_INC_MEMBER(a,L,
             FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
             L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel); ++n;
@@ -85,7 +81,7 @@ void weno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vv
 }
 
 template<typename GenericField>
-inline double weno_hj::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel)
+double weno_hj::aij(lexer *p, fdm *a, const GenericField &b, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel)
 {
     double iadvec, ivel2, jadvec, jvel2, kadvec, kvel2;
 
@@ -99,7 +95,7 @@ inline double weno_hj::aij(lexer* p, fdm* a, const GenericField& b, int ipol, co
 }
 
 template<typename GenericField>
-inline double weno_hj::ddx(lexer* p, fdm* a, const GenericField& b, double advec)
+double weno_hj::ddx(lexer *p, fdm *a, const GenericField &b, double advec)
 {
     if(advec==0.0) return 0.0;
 
@@ -137,7 +133,7 @@ inline double weno_hj::ddx(lexer* p, fdm* a, const GenericField& b, double advec
 }
 
 template<typename GenericField>
-inline double weno_hj::ddy(lexer* p, fdm* a, const GenericField& b, double advec)
+double weno_hj::ddy(lexer *p, fdm *a, const GenericField &b, double advec)
 {
     if(advec==0.0) return 0.0;
 
@@ -175,7 +171,7 @@ inline double weno_hj::ddy(lexer* p, fdm* a, const GenericField& b, double advec
 }
 
 template<typename GenericField>
-inline double weno_hj::ddz(lexer* p, fdm* a, const GenericField& b, double advec)
+double weno_hj::ddz(lexer *p, fdm *a, const GenericField &b, double advec)
 {
     if(advec==0.0) return 0.0;
 

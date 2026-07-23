@@ -36,41 +36,41 @@ weno3_flux::weno3_flux(lexer* p) : weno3_nug_func(p)
 {
     if(p->j_dir==0)
     {
-        if(p->B200==0)
-        {
-            if(p->D11==1)
-            pflux = new flux_face_FOU_2D(p);
-            else if(p->D11==2)
-            pflux = new flux_face_CDS2_2D;
-        }
-        else if(p->B200>=1 || p->S10==2)
+        if(p->B200>=1 || p->S10==2)
         {
             if(p->D11==1)
             pflux = new flux_face_FOU_vrans_2D(p);
             else if(p->D11==2)
             pflux = new flux_face_CDS2_vrans_2D;
         }
+        else
+        {
+            if(p->D11==1)
+            pflux = new flux_face_FOU_2D(p);
+            else if(p->D11==2)
+            pflux = new flux_face_CDS2_2D;
+        }
     }
     else if(p->j_dir==1)
     {
-        if(p->B200==0)
-        {
-            if(p->D11==1)
-            pflux = new flux_face_FOU(p);
-            else if(p->D11==2)
-            pflux = new flux_face_CDS2;
-        }
-        else if(p->B200>=1 || p->S10==2)
+        if(p->B200>=1 || p->S10==2)
         {
             if(p->D11==1)
             pflux = new flux_face_FOU_vrans(p);
             else if(p->D11==2)
             pflux = new flux_face_CDS2_vrans;
         }
+        else
+        {
+            if(p->D11==1)
+            pflux = new flux_face_FOU(p);
+            else if(p->D11==2)
+            pflux = new flux_face_CDS2;
+        }
     }
 }
 
-inline void weno3_flux::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void weno3_flux::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &vvel, field &wvel)
 {
     uf=vf=wf=0;
 
@@ -112,7 +112,7 @@ inline void weno3_flux::start(lexer* p, fdm* a, field& b, int ipol, field& uvel,
 }
 
 template<typename GenericField>
-double weno3_flux::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX, double *DY, double *DZ)
+double weno3_flux::aij(lexer *p, fdm *a, const GenericField &b, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel, double *DX, double *DY, double *DZ)
 {
     pflux->u_flux(a,ipol,uvel,ivel1,ivel2);
     pflux->v_flux(a,ipol,vvel,jvel1,jvel2);

@@ -41,11 +41,11 @@ private:
     inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&);
 
     template<typename GenericField>
-    inline double fx(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int di=0);
+    inline double fx(lexer*, const GenericField&, const GenericField&, int, double, int di=0);
     template<typename GenericField>
-    inline double fy(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int dj=0);
+    inline double fy(lexer*, const GenericField&, const GenericField&, int, double, int dj=0);
     template<typename GenericField>
-    inline double fz(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int dk=0);
+    inline double fz(lexer*, const GenericField&, const GenericField&, int, double, int dk=0);
 
     static constexpr double tttw = 13.0/12.0, fourth=0.4, third=1.0/3.0, sevsix=7.0/6.0, elvsix=11.0/6.0, sixth=1.0/6.0, fivsix=5.0/6.0, tenth=0.1;
     static constexpr double sixten = 0.6, treten = 0.3;

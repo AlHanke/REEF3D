@@ -28,7 +28,7 @@ Authors: Hans Bihs, Tobias Martin
 #include"flux_HJ_CDS2_2D.h"
 #include"flux_HJ_CDS2_vrans_2D.h"
 
-weno_hj_df_nug::weno_hj_df_nug(lexer* p) : weno_nug_func(p)
+weno_hj_df_nug::weno_hj_df_nug(lexer *p) : weno_nug_func(p)
 {
     if(p->j_dir==0)
     {
@@ -48,7 +48,7 @@ weno_hj_df_nug::weno_hj_df_nug(lexer* p) : weno_nug_func(p)
     }
 }
 
-void weno_hj_df_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void weno_hj_df_nug::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &vvel, field &wvel)
 {
     uf=vf=wf=0;
 
@@ -86,7 +86,7 @@ void weno_hj_df_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, fi
 }
 
 template<typename GenericField>
-inline double weno_hj_df_nug::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double* DX, double* DY, double* DZ)
+double weno_hj_df_nug::aij(lexer *p, fdm *a, const GenericField &b, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel, double *DX, double *DY, double *DZ)
 {
     double iadvec, ivel2, jadvec, jvel2, kadvec, kvel2;
 

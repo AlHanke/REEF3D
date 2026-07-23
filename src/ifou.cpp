@@ -74,7 +74,7 @@ ifou::ifou(lexer *p)
     }
 }
 
-void ifou::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void ifou::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &vvel, field &wvel)
 {
     count=0;
     if(ipol==1)
@@ -108,7 +108,7 @@ void ifou::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel,
 }
 
 template<typename GenericField>
-void ifou::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX, double *DY, double *DZ)
+void ifou::aij(lexer *p, fdm *a, const GenericField &b, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel, double *DX, double *DY, double *DZ)
 {
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
     pflux->u_flux(a,ipol,uvel,ivel1,ivel2);

@@ -32,7 +32,7 @@ Author: Hans Bihs
 #include"flux_face_FOU_2D.h"
 #include"flux_face_FOU_vrans_2D.h"
 
-weno_flux::weno_flux(lexer* p)
+weno_flux::weno_flux(lexer *p)
 {
     if(p->j_dir==0)
     {
@@ -74,7 +74,7 @@ weno_flux::weno_flux(lexer* p)
     }
 }
 
-inline void weno_flux::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void weno_flux::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &vvel, field &wvel)
 {
     if(ipol==1)
     {
@@ -107,7 +107,7 @@ inline void weno_flux::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, 
 }
 
 template<typename GenericField>
-inline double weno_flux::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel)
+double weno_flux::aij(lexer *p, fdm *a, const GenericField &b, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel)
 {
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 
@@ -115,18 +115,18 @@ inline double weno_flux::aij(lexer* p, fdm* a, const GenericField& b, int ipol, 
     pflux->v_flux(a,ipol,vvel,jvel1,jvel2);
     pflux->w_flux(a,ipol,wvel,kvel1,kvel2);
 
-    const double fu1 = fx(p,a,b,uvel,ipol,ivel1,-1);
-    const double fu2 = fx(p,a,b,uvel,ipol,ivel2,0);
+    const double fu1 = fx(p,b,uvel,ipol,ivel1,-1);
+    const double fu2 = fx(p,b,uvel,ipol,ivel2,0);
 
     double fv1=0.0,fv2=0.0;
     if(p->j_dir==1)
     {
-        fv1 = fy(p,a,b,vvel,ipol,jvel1,-1);
-        fv2 = fy(p,a,b,vvel,ipol,jvel2,0);
+        fv1 = fy(p,b,vvel,ipol,jvel1,-1);
+        fv2 = fy(p,b,vvel,ipol,jvel2,0);
     }
 
-    const double fw1 = fz(p,a,b,wvel,ipol,kvel1,-1);
-    const double fw2 = fz(p,a,b,wvel,ipol,kvel2,0);
+    const double fw1 = fz(p,b,wvel,ipol,kvel1,-1);
+    const double fw2 = fz(p,b,wvel,ipol,kvel2,0);
 
     return - ((ivel2*fu2-ivel1*fu1)/p->DXM)
             - ((jvel2*fv2-jvel1*fv1)/p->DYM)
@@ -134,7 +134,7 @@ inline double weno_flux::aij(lexer* p, fdm* a, const GenericField& b, int ipol, 
 }
 
 template<typename GenericField>
-inline double weno_flux::fx(lexer *p, fdm *a, const GenericField& b, const GenericField& uvel, int ipol, double advec, int di)
+double weno_flux::fx(lexer *p, const GenericField &b, const GenericField &uvel, int ipol, double advec, int di)
 {
     double q1,q2,q3,q4,q5;
 
@@ -178,7 +178,7 @@ inline double weno_flux::fx(lexer *p, fdm *a, const GenericField& b, const Gener
 }
 
 template<typename GenericField>
-inline double weno_flux::fy(lexer *p, fdm *a, const GenericField& b, const GenericField& vvel, int ipol, double advec, int dj)
+double weno_flux::fy(lexer *p, const GenericField &b, const GenericField &vvel, int ipol, double advec, int dj)
 {
     double q1,q2,q3,q4,q5;
 
@@ -222,7 +222,7 @@ inline double weno_flux::fy(lexer *p, fdm *a, const GenericField& b, const Gener
 }
 
 template<typename GenericField>
-inline double weno_flux::fz(lexer *p, fdm *a, const GenericField& b, const GenericField& wvel, int ipol, double advec, int dk)
+double weno_flux::fz(lexer *p, const GenericField &b, const GenericField &wvel, int ipol, double advec, int dk)
 {
     double q1,q2,q3,q4,q5;
 
