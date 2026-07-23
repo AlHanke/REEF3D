@@ -122,17 +122,17 @@ double weno_flux_nug::aij(lexer* p,fdm* a,const GenericField& b,int ipol, const 
 
     double fv1=0.0,fv2=0.0;
 
-    const double fu1 = fx(p,a,b,uvel,ipol,ivel1,-1);
-    const double fu2 = fx(p,a,b,uvel,ipol,ivel2,0);
+    const double fu1 = fx(p,a,b,uvel,ivel1,-1);
+    const double fu2 = fx(p,a,b,uvel,ivel2,0);
 
     if(p->j_dir==1)
     {
-        fv1 = fy(p,a,b,vvel,ipol,jvel1,-1);
-        fv2 = fy(p,a,b,vvel,ipol,jvel2,0);
+        fv1 = fy(p,a,b,vvel,jvel1,-1);
+        fv2 = fy(p,a,b,vvel,jvel2,0);
     }
 
-    const double fw1 = fz(p,a,b,wvel,ipol,kvel1,-1);
-    const double fw2 = fz(p,a,b,wvel,ipol,kvel2,0);
+    const double fw1 = fz(p,a,b,wvel,kvel1,-1);
+    const double fw2 = fz(p,a,b,wvel,kvel2,0);
 
     return - ((ivel2*fu2-ivel1*fu1)/DX[IP])
             - ((jvel2*fv2-jvel1*fv1)/DY[JP])
@@ -140,7 +140,7 @@ double weno_flux_nug::aij(lexer* p,fdm* a,const GenericField& b,int ipol, const 
 }
 
 template<typename GenericField>
-double weno_flux_nug::fx(lexer *p,fdm *a, const GenericField& b, const GenericField& uvel, int ipol, double advec, int di)
+double weno_flux_nug::fx(lexer *p,fdm *a, const GenericField& b, const GenericField& uvel, double advec, int di)
 {
     if(advec>0.0)
     {
@@ -177,7 +177,7 @@ double weno_flux_nug::fx(lexer *p,fdm *a, const GenericField& b, const GenericFi
 }
 
 template<typename GenericField>
-double weno_flux_nug::fy(lexer *p,fdm *a, const GenericField& b, const GenericField& vvel, int ipol, double advec, int dj)
+double weno_flux_nug::fy(lexer *p,fdm *a, const GenericField& b, const GenericField& vvel, double advec, int dj)
 {
     if(advec>0.0)
     {
@@ -214,7 +214,7 @@ double weno_flux_nug::fy(lexer *p,fdm *a, const GenericField& b, const GenericFi
 }
 
 template<typename GenericField>
-double weno_flux_nug::fz(lexer *p,fdm *a, const GenericField& b, const GenericField& wvel, int ipol, double advec, int dk)
+double weno_flux_nug::fz(lexer *p,fdm *a, const GenericField& b, const GenericField& wvel, double advec, int dk)
 {
     if(advec>0.0)
     {
