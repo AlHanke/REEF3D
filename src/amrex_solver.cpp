@@ -41,6 +41,7 @@ Author: Alexander Hanke
 
 #include <iostream>
 #include <iomanip>
+#include <string>
 
 // REEF_MLMG_FPE: scoped invalid-FP trap around the MLMG solve (REEF3D's grid
 // init has a benign NaN, so the global amrex.fpe_trap_invalid fires too early)
@@ -345,56 +346,103 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
     }
 
     // ---- build the composite operator and the multigrid solver ----
-    Vector<DistributionMapping> dmaps(nlev);
-    for(int lev=0; lev<nlev; ++lev)
-    dmaps[lev] = p->amrex_distribution_mapping[lev];
+    // The operator structure (grids, geometry, BC types, hidden direction) and
+    // the MLMG object depend only on the grid hierarchy, so they are rebuilt
+    // only on the first call and on regrid -- not on every RK stage. This
+    // mirrors hypre_ssamg's solver_created/created_nlevs guard. `rebuild` is
+    // already true whenever the MultiFab containers above were reallocated
+    // (grid or dmap change); the extra flags make the intent explicit and
+    // catch a stale linop even if the containers happened to match.
+    // REEF_MLMG_FORCE_REBUILD: A/B knob -- rebuild the operator every stage as
+    // before the guard, to measure the setup overhead the guard removes.
+    const bool solver_rebuild = rebuild || !solver_created || created_nlevs != nlev
+                              || std::getenv("REEF_MLMG_FORCE_REBUILD");
 
-    LPInfo info;
-    info.setAgglomeration(true);
-    info.setConsolidation(true);
-
-    // bisection knobs for multi-level debugging
-    if(std::getenv("REEF_MLMG_NOAGG"))
+    if(solver_rebuild)
     {
-        info.setAgglomeration(false);
-        info.setConsolidation(false);
-    }
-    if(const char* mc = std::getenv("REEF_MLMG_MAXCOARSE"))
-    info.setMaxCoarseningLevel(std::atoi(mc));
+        Vector<DistributionMapping> dmaps(nlev);
+        for(int lev=0; lev<nlev; ++lev)
+        dmaps[lev] = p->amrex_distribution_mapping[lev];
 
-    linop = std::make_unique<MLABecLaplacian>(sgeom, sgrids, dmaps, info);
+        LPInfo info;
+        info.setAgglomeration(true);
+        info.setConsolidation(true);
 
-    // REEF3D pressure BC (gcval 40) is Neumann on every physical boundary;
-    // the all-Neumann nullspace is handled inside MLMG
-    linop->setDomainBC({AMREX_D_DECL(LinOpBCType::Neumann, LinOpBCType::Neumann, LinOpBCType::Neumann)},
-                       {AMREX_D_DECL(LinOpBCType::Neumann, LinOpBCType::Neumann, LinOpBCType::Neumann)});
+        // REEF3D runs pseudo-2D cases with a single cell in y. AMReX coarsens
+        // isotropically, so a 1-cell direction blocks coarsening in every
+        // direction: the hierarchy collapses to a single MG level and each MLMG
+        // iteration degenerates into an unpreconditioned BiCGStab over the whole
+        // domain. Declaring the thin axis as the hidden direction sets its coarsen
+        // ratio to 1 and its min width to 0, so x and z coarsen normally.
+        // Hidden direction and semicoarsening are mutually exclusive (MLLinOp
+        // asserts on it), so only one of the two is ever enabled here.
+        const int ny = sgeom[0].Domain().length(1);
+        if(ny==1 && !std::getenv("REEF_MLMG_NOHIDDEN"))
+        info.setHiddenDirection(1);
 
-    for(int lev=0; lev<nlev; ++lev)
-    linop->setLevelBC(lev, nullptr);
+        // bisection knobs for multi-level debugging
+        if(std::getenv("REEF_MLMG_NOAGG"))
+        {
+            info.setAgglomeration(false);
+            info.setConsolidation(false);
+        }
+        if(const char* mc = std::getenv("REEF_MLMG_MAXCOARSE"))
+        info.setMaxCoarseningLevel(std::atoi(mc));
 
-    // operator is -div(beta grad) with beta = 1/ro on faces; dt stays in the
-    // RHS and in the velocity correction, matching the pjm/pjm_corr convention
-    linop->setScalars(0.0, 1.0);
+        linop = std::make_unique<MLABecLaplacian>(sgeom, sgrids, dmaps, info);
 
-    for(int lev=0; lev<nlev; ++lev)
-    {
+        // REEF3D pressure BC (gcval 40) is Neumann on every physical boundary;
+        // the all-Neumann nullspace is handled inside MLMG
+        linop->setDomainBC({AMREX_D_DECL(LinOpBCType::Neumann, LinOpBCType::Neumann, LinOpBCType::Neumann)},
+                           {AMREX_D_DECL(LinOpBCType::Neumann, LinOpBCType::Neumann, LinOpBCType::Neumann)});
+
+        for(int lev=0; lev<nlev; ++lev)
+        linop->setLevelBC(lev, nullptr);
+
+        // operator is -div(beta grad) with beta = 1/ro on faces; dt stays in the
+        // RHS and in the velocity correction, matching the pjm/pjm_corr convention
+        linop->setScalars(0.0, 1.0);
+
+        for(int lev=0; lev<nlev; ++lev)
         linop->setACoeffs(lev, 0.0);
-        linop->setBCoeffs(lev, GetArrOfConstPtrs(beta[lev]));
+
+        mlmg = std::make_unique<MLMG>(*linop);
+        mlmg->setMaxIter(p->N46);
+        // tolerance p->N44 is passed at solve time
+
+        if(const char* mv = std::getenv("REEF_MLMG_VERBOSE"))
+        {
+            mlmg->setVerbose(std::atoi(mv));
+            mlmg->setBottomVerbose(std::atoi(mv));
+        }
+        if(const char* fi = std::getenv("REEF_MLMG_FIXEDITER"))
+        mlmg->setFixedIter(std::atoi(fi));
+        if(std::getenv("REEF_MLMG_BOTTOM_SMOOTHER"))
+        mlmg->setBottomSolver(MLMG::BottomSolver::smoother);
+
+        // REEF_MLMG_BOTTOM=cg|bicgstab|hypre|smoother: the default bicgstab breaks
+        // down on the singular all-Neumann bottom problem when the coarsest grid is
+        // large (pseudo-2D ny=1 leaves the base level uncoarsenable)
+        if(const char* bs = std::getenv("REEF_MLMG_BOTTOM"))
+        {
+            const std::string s(bs);
+            if(s=="cg")            mlmg->setBottomSolver(MLMG::BottomSolver::cg);
+            else if(s=="bicgstab") mlmg->setBottomSolver(MLMG::BottomSolver::bicgstab);
+            else if(s=="smoother") mlmg->setBottomSolver(MLMG::BottomSolver::smoother);
+            else if(s=="hypre")    mlmg->setBottomSolver(MLMG::BottomSolver::hypre);
+        }
+        if(const char* bi = std::getenv("REEF_MLMG_BOTTOM_MAXITER"))
+        mlmg->setBottomMaxIter(std::atoi(bi));
+
+        solver_created = true;
+        created_nlevs  = nlev;
     }
 
-    mlmg = std::make_unique<MLMG>(*linop);
-    mlmg->setMaxIter(p->N46);
-    // tolerance p->N44 is passed at solve time
-
-    if(const char* mv = std::getenv("REEF_MLMG_VERBOSE"))
-    {
-        mlmg->setVerbose(std::atoi(mv));
-        mlmg->setBottomVerbose(std::atoi(mv));
-    }
-    if(const char* fi = std::getenv("REEF_MLMG_FIXEDITER"))
-    mlmg->setFixedIter(std::atoi(fi));
-    if(std::getenv("REEF_MLMG_BOTTOM_SMOOTHER"))
-    mlmg->setBottomSolver(MLMG::BottomSolver::smoother);
+    // Face coefficients change every solve with the moving free surface, so
+    // rebind them on the (possibly reused) operator. MLMG::solve re-averages
+    // the updated coefficients down the hierarchy via linop->prepareForSolve.
+    for(int lev=0; lev<nlev; ++lev)
+    linop->setBCoeffs(lev, GetArrOfConstPtrs(beta[lev]));
 
     // REEF_MLMG_APPLY: operator sanity probe -- L(1) must be ~0 for the
     // all-Neumann operator (zero row sums); NaN here means the operator/BC
@@ -453,6 +501,28 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
             }
             amrex::ParallelDescriptor::ReduceLongSum(nzero);
             amrex::Print()<<"CHECK zero-diagonal cells lev "<<lev<<": "<<nzero<<std::endl;
+        }
+        // flag4 census: the no-flux fold keys off flag4<=SOLID_FLAG, so a solid
+        // region carrying any other flag is silently solved as fluid
+        {
+            long nsol=0, nzero_flag=0, nair=0, nwat=0, nio=0, nother=0;
+            MultiGridLOOP
+            {
+                ILOOP JLOOP KLOOP
+                {
+                    const int f = p->flag4(i,j,k);
+                    if(f<=SOLID_FLAG)                        ++nsol;
+                    else if(f==0)                            ++nzero_flag;
+                    else if(f==AIR_FLAG)                     ++nair;
+                    else if(f>=WATER_FLAG)                   ++nwat;
+                    else if(f==INFLOW_FLAG||f==OUTFLOW_FLAG) ++nio;
+                    else                                     ++nother;
+                }
+            }
+            long c[6] = {nsol,nzero_flag,nair,nwat,nio,nother};
+            amrex::ParallelDescriptor::ReduceLongSum(c,6);
+            amrex::Print()<<"CHECK flag4 census  solid(<=-19)="<<c[0]<<"  zero="<<c[1]
+                <<"  air="<<c[2]<<"  water="<<c[3]<<"  in/out="<<c[4]<<"  other="<<c[5]<<std::endl;
         }
         for(int lev=0; lev<nlev; ++lev)
         for(int d=0; d<AMREX_SPACEDIM; ++d)

@@ -48,7 +48,7 @@ void idiff2_FS_2D::diff_u(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, field
     n=0;
     ULOOP
     {
-        if(p->DF1[IJK]<0  && p->D22==1)
+        if(p->DF1(i,j,k)<0  && p->D22==1)
         {
             a->M.p[n] = 1.0;
 
@@ -95,32 +95,47 @@ void idiff2_FS_2D::diff_u(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, field
         ++n;
     }
 
+    // REEF_BICG_PROBE: the row set PRODUCED here. rows/max|M.p| must match what
+    // the solver reports consuming; DF1 governs whether the D22 wall fold below
+    // fires at all (DF1 is still 0 until solid_forcing_flag_update has run once).
+    if(std::getenv("REEF_BICG_PROBE") && p->mpirank==0)
+    {
+        int df_pos=0, df_neg=0;
+        ULOOP
+        {
+            if(p->DF1(i,j,k)>0) ++df_pos;
+            if(p->DF1(i,j,k)<0) ++df_neg;
+        }
+        std::cout<<"  [bicg] idiff_u  rows="<<n<<"  DF1>0: "<<df_pos
+                 <<"  DF1<0: "<<df_neg<<"  (D22="<<p->D22<<")"<<std::endl;
+    }
+
     if(p->D22==1)
     {
         n=0;
         ULOOP
         {
-            if(p->DF1[IJK]>0)
+            if(p->DF1(i,j,k)>0)
             {
-                if(p->flag1[Ip1JK]<0 || p->DF1[Ip1JK]<0)
+                if(p->flag1(i+1,j,k)<0 || p->DF1(i+1,j,k)<0)
                 {
                     a->rhsvec.V[n] -= a->M.n[n]*u(i,j,k);
                     a->M.n[n] = 0.0;
                 }
 
-                if(p->flag1[Im1JK]<0 || p->DF1[Im1JK]<0)
+                if(p->flag1(i-1,j,k)<0 || p->DF1(i-1,j,k)<0)
                 {
                     a->rhsvec.V[n] -= a->M.s[n]*u(i,j,k);
                     a->M.s[n] = 0.0;
                 }
 
-                if(p->flag1[IJKp1]<0 || p->DF1[IJKp1]<0)
+                if(p->flag1(i,j,k+1)<0 || p->DF1(i,j,k+1)<0)
                 {
                     a->rhsvec.V[n] -= a->M.t[n]*u(i,j,k);
                     a->M.t[n] = 0.0;
                 }
 
-                if(p->flag1[IJKm1]<0 || p->DF1[IJKm1]<0)
+                if(p->flag1(i,j,k-1)<0 || p->DF1(i,j,k-1)<0)
                 {
                     a->rhsvec.V[n] -= a->M.b[n]*u(i,j,k);
                     a->M.b[n] = 0.0;
@@ -135,25 +150,25 @@ void idiff2_FS_2D::diff_u(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, field
         n=0;
         ULOOP
         {
-            if(p->flag1[Ip1JK]<0)
+            if(p->flag1(i+1,j,k)<0)
             {
                 a->rhsvec.V[n] -= a->M.n[n]*u(i+1,j,k);
                 a->M.n[n] = 0.0;
             }
 
-            if(p->flag1[Im1JK]<0)
+            if(p->flag1(i-1,j,k)<0)
             {
                 a->rhsvec.V[n] -= a->M.s[n]*u(i-1,j,k);
                 a->M.s[n] = 0.0;
             }
 
-            if(p->flag1[IJKp1]<0)
+            if(p->flag1(i,j,k+1)<0)
             {
                 a->rhsvec.V[n] -= a->M.t[n]*u(i,j,k+1);
                 a->M.t[n] = 0.0;
             }
 
-            if(p->flag1[IJKm1]<0)
+            if(p->flag1(i,j,k-1)<0)
             {
                 a->rhsvec.V[n] -= a->M.b[n]*u(i,j,k-1);
                 a->M.b[n] = 0.0;

@@ -105,6 +105,13 @@ private:
 
     std::unique_ptr<amrex::MLABecLaplacian> linop;
     std::unique_ptr<amrex::MLMG> mlmg;
+
+    // Operator/solver rebuild guard (mirrors hypre_ssamg): the MLABecLaplacian
+    // and MLMG only depend on the grid hierarchy, so they are rebuilt on the
+    // first call and on regrid, not on every RK stage. The face coefficients
+    // change every solve and are refreshed via setBCoeffs unconditionally.
+    bool solver_created = false; ///< linop/mlmg have been built at least once
+    int  created_nlevs = -1;     ///< #levels the current linop/mlmg were built for
 };
 
 #endif
