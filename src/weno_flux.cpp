@@ -115,18 +115,18 @@ inline double weno_flux::aij(lexer* p, fdm* a, const GenericField& b, int ipol, 
     pflux->v_flux(a,ipol,vvel,jvel1,jvel2);
     pflux->w_flux(a,ipol,wvel,kvel1,kvel2);
 
-    const double fu1 = fx(p,a,b,uvel,ipol,ivel1,-1);
-    const double fu2 = fx(p,a,b,uvel,ipol,ivel2,0);
+    const double fu1 = fx(p,b,uvel,ipol,ivel1,-1);
+    const double fu2 = fx(p,b,uvel,ipol,ivel2,0);
 
     double fv1=0.0,fv2=0.0;
     if(p->j_dir==1)
     {
-        fv1 = fy(p,a,b,vvel,ipol,jvel1,-1);
-        fv2 = fy(p,a,b,vvel,ipol,jvel2,0);
+        fv1 = fy(p,b,vvel,ipol,jvel1,-1);
+        fv2 = fy(p,b,vvel,ipol,jvel2,0);
     }
 
-    const double fw1 = fz(p,a,b,wvel,ipol,kvel1,-1);
-    const double fw2 = fz(p,a,b,wvel,ipol,kvel2,0);
+    const double fw1 = fz(p,b,wvel,ipol,kvel1,-1);
+    const double fw2 = fz(p,b,wvel,ipol,kvel2,0);
 
     return - ((ivel2*fu2-ivel1*fu1)/p->DXM)
             - ((jvel2*fv2-jvel1*fv1)/p->DYM)
@@ -134,7 +134,7 @@ inline double weno_flux::aij(lexer* p, fdm* a, const GenericField& b, int ipol, 
 }
 
 template<typename GenericField>
-inline double weno_flux::fx(lexer *p, fdm *a, const GenericField& b, const GenericField& uvel, int ipol, double advec, int di)
+inline double weno_flux::fx(lexer *p, const GenericField& b, const GenericField& uvel, int ipol, double advec, int di)
 {
     double q1,q2,q3,q4,q5;
 
@@ -156,12 +156,19 @@ inline double weno_flux::fx(lexer *p, fdm *a, const GenericField& b, const Gener
         q5 = b(i+di-1,j,k);
     }
 
-    const double is1 = tttw*pow(q1 - 2.0*q2 + q3, 2.0) + fourth*pow(q1 - 4.0*q2 + 3.0*q3, 2.0);
-    const double is2 = tttw*pow(q2 - 2.0*q3 + q4, 2.0) + fourth*pow(q2 - q4, 2.0);
-    const double is3 = tttw*pow(q3 - 2.0*q4 + q5, 2.0) + fourth*pow(3.0*q3 - 4.0*q4 + q5, 2.0);
-    const double a1 = tenth/pow(epsilon+is1,2.0);
-    const double a2 = sixten/pow(epsilon+is2,2.0);
-    const double a3 = treten/pow(epsilon+is3,2.0);
+    const double q123a = q1 - 2.0*q2 + q3;
+    const double q123b = q1 - 4.0*q2 + 3.0*q3;
+    const double q234a = q2 - 2.0*q3 + q4;
+    const double q234b = q2 - q4;
+    const double q345a = q3 - 2.0*q4 + q5;
+    const double q345b = 3.0*q3 - 4.0*q4 + q5;
+
+    const double is1 = tttw*q123a*q123a + fourth*q123b*q123b + epsilon;
+    const double is2 = tttw*q234a*q234a + fourth*q234b*q234b + epsilon;
+    const double is3 = tttw*q345a*q345a + fourth*q345b*q345b + epsilon;
+    const double a1 = tenth/(is1*is1);
+    const double a2 = sixten/(is2*is2);
+    const double a3 = treten/(is3*is3);
     const double asum = a1+a2+a3;
     const double w1=a1/asum, w2=a2/asum, w3=a3/asum;
 
@@ -171,7 +178,7 @@ inline double weno_flux::fx(lexer *p, fdm *a, const GenericField& b, const Gener
 }
 
 template<typename GenericField>
-inline double weno_flux::fy(lexer *p, fdm *a, const GenericField& b, const GenericField& vvel, int ipol, double advec, int dj)
+inline double weno_flux::fy(lexer *p, const GenericField& b, const GenericField& vvel, int ipol, double advec, int dj)
 {
     double q1,q2,q3,q4,q5;
 
@@ -193,12 +200,19 @@ inline double weno_flux::fy(lexer *p, fdm *a, const GenericField& b, const Gener
         q5 = b(i,j+dj-1,k);
     }
 
-    const double is1 = tttw*pow(q1 - 2.0*q2 + q3, 2.0) + fourth*pow(q1 - 4.0*q2 + 3.0*q3, 2.0);
-    const double is2 = tttw*pow(q2 - 2.0*q3 + q4, 2.0) + fourth*pow(q2 - q4, 2.0);
-    const double is3 = tttw*pow(q3 - 2.0*q4 + q5, 2.0) + fourth*pow(3.0*q3 - 4.0*q4 + q5, 2.0);
-    const double a1 = tenth/pow(epsilon+is1,2.0);
-    const double a2 = sixten/pow(epsilon+is2,2.0);
-    const double a3 = treten/pow(epsilon+is3,2.0);
+    const double q123a = q1 - 2.0*q2 + q3;
+    const double q123b = q1 - 4.0*q2 + 3.0*q3;
+    const double q234a = q2 - 2.0*q3 + q4;
+    const double q234b = q2 - q4;
+    const double q345a = q3 - 2.0*q4 + q5;
+    const double q345b = 3.0*q3 - 4.0*q4 + q5;
+
+    const double is1 = tttw*q123a*q123a + fourth*q123b*q123b + epsilon;
+    const double is2 = tttw*q234a*q234a + fourth*q234b*q234b + epsilon;
+    const double is3 = tttw*q345a*q345a + fourth*q345b*q345b + epsilon;
+    const double a1 = tenth/(is1*is1);
+    const double a2 = sixten/(is2*is2);
+    const double a3 = treten/(is3*is3);
     const double asum = a1+a2+a3;
     const double w1=a1/asum, w2=a2/asum, w3=a3/asum;
 
@@ -208,7 +222,7 @@ inline double weno_flux::fy(lexer *p, fdm *a, const GenericField& b, const Gener
 }
 
 template<typename GenericField>
-inline double weno_flux::fz(lexer *p, fdm *a, const GenericField& b, const GenericField& wvel, int ipol, double advec, int dk)
+inline double weno_flux::fz(lexer *p, const GenericField& b, const GenericField& wvel, int ipol, double advec, int dk)
 {
     double q1,q2,q3,q4,q5;
 
@@ -230,12 +244,19 @@ inline double weno_flux::fz(lexer *p, fdm *a, const GenericField& b, const Gener
         q5 = b(i,j,k+dk-1);
     }
 
-    const double is1 = tttw*pow(q1 - 2.0*q2 + q3, 2.0) + fourth*pow(q1 - 4.0*q2 + 3.0*q3, 2.0);
-    const double is2 = tttw*pow(q2 - 2.0*q3 + q4, 2.0) + fourth*pow(q2 - q4, 2.0);
-    const double is3 = tttw*pow(q3 - 2.0*q4 + q5, 2.0) + fourth*pow(3.0*q3 - 4.0*q4 + q5, 2.0);
-    const double a1 = tenth/pow(epsilon+is1,2.0);
-    const double a2 = sixten/pow(epsilon+is2,2.0);
-    const double a3 = treten/pow(epsilon+is3,2.0);
+    const double q123a = q1 - 2.0*q2 + q3;
+    const double q123b = q1 - 4.0*q2 + 3.0*q3;
+    const double q234a = q2 - 2.0*q3 + q4;
+    const double q234b = q2 - q4;
+    const double q345a = q3 - 2.0*q4 + q5;
+    const double q345b = 3.0*q3 - 4.0*q4 + q5;
+
+    const double is1 = tttw*q123a*q123a + fourth*q123b*q123b + epsilon;
+    const double is2 = tttw*q234a*q234a + fourth*q234b*q234b + epsilon;
+    const double is3 = tttw*q345a*q345a + fourth*q345b*q345b + epsilon;
+    const double a1 = tenth/(is1*is1);
+    const double a2 = sixten/(is2*is2);
+    const double a3 = treten/(is3*is3);
     const double asum = a1+a2+a3;
     const double w1=a1/asum, w2=a2/asum, w3=a3/asum;
 
