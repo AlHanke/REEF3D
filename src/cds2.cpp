@@ -107,7 +107,7 @@ void cds2::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &vvel,
 }
 
 template<typename GenericField>
-double cds2::aij(lexer *p, fdm *a, const GenericField &b, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel, double *DX,double *DY, double *DZ)
+double cds2::aij(lexer *p, fdm *a, const GenericField &b, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel, double *DX, double *DY, double *DZ)
 {
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
     pflux->u_flux(a,ipol,uvel,ivel1,ivel2);

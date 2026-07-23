@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 
-void convection_void::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void convection_void::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &vvel, field &wvel)
 {
     int count=0;
     LOOP

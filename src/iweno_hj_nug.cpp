@@ -49,7 +49,7 @@ iweno_hj_nug::iweno_hj_nug(lexer *p)
     }
 }
 
-void iweno_hj_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void iweno_hj_nug::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &vvel, field &wvel)
 {
     uf=vf=wf=0;
 
