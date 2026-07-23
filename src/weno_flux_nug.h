@@ -26,6 +26,16 @@ Author: Hans Bihs
 #include"convection.h"
 #include"weno_nug_func.h"
 
+// Defined after the includes: weno_nug_func.h #undef's FORCE_INLINE at its end,
+// which would otherwise remove it again before the declarations below use it.
+#if defined(_MSC_VER)
+    #define FORCE_INLINE __forceinline
+#elif defined(__GNUC__) || defined(__clang__)
+    #define FORCE_INLINE __attribute__((always_inline)) inline
+#else
+    #define FORCE_INLINE inline
+#endif
+
 class flux;
 
 class weno_flux_nug final : public convection, public weno_nug_func
@@ -41,13 +51,15 @@ private:
     inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
 
     template<typename GenericField>
-    double fx(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int di=0);
+    FORCE_INLINE double fx(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int di=0);
     template<typename GenericField>
-    double fy(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int dj=0);
+    FORCE_INLINE double fy(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int dj=0);
     template<typename GenericField>
-    double fz(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int dk=0);
+    FORCE_INLINE double fz(lexer*, fdm*, const GenericField&, const GenericField&, int, double, int dk=0);
 
     flux *pflux;
 };
+
+#undef FORCE_INLINE
 
 #endif
