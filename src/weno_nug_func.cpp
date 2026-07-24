@@ -42,40 +42,16 @@ weno_nug_func::~weno_nug_func()
 
 void weno_nug_func::ini(lexer* p)
 {
-    if(!iniflag)
-    {
-        const int nlev_mult =
-        #if USE_AMREX
-            p->nlevs;
-        #else
-            1;
-        #endif
+    const int nlev_mult =
+    #if USE_AMREX
+        p->nlevs;
+    #else
+        1;
+    #endif
 
-        i_size = max_i * nlev_mult;
-        j_size = max_j * nlev_mult;
-        k_size = max_k * nlev_mult;
-
-        qfx.resize(i_size);
-        qfy.resize(j_size);
-        qfz.resize(k_size);
-
-        cfx.resize(i_size);
-        cfy.resize(j_size);
-        cfz.resize(k_size);
-
-        isfx.resize(i_size);
-        isfy.resize(j_size);
-        isfz.resize(k_size);
-
-        precalc_qf(p);
-        precalc_cf(p);
-        precalc_isf(p);
-
-        iniflag = true;
-    }
+    rebuild_levels(p, nlev_mult);
 }
 
-#if USE_AMREX
 void weno_nug_func::rebuild_levels(lexer* p, int new_nlevs)
 {
     if(!iniflag)
@@ -107,4 +83,3 @@ void weno_nug_func::rebuild_levels(lexer* p, int new_nlevs)
         iniflag=true;
     }
 }
-#endif

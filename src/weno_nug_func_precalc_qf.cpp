@@ -78,7 +78,7 @@ void weno_nug_func::precalc_qf(lexer* p)
     MultiGridLOOP
     JBLOOP
     {
-        // imin
+        // jmin
         qfy[JP][0][0][0] = ((p->YN[JP2]-p->YN[JP1])/(p->YN[JP3]-p->YN[JP]))
                          *((p->YN[JP3]-p->YN[JP1])/(p->YN[JP2]-p->YN[JP]));
 
@@ -100,7 +100,7 @@ void weno_nug_func::precalc_qf(lexer* p)
                                 + (p->YN[JP1]-p->YN[JP])/(p->YN[JP1]-p->YN[JM2]));
 
 
-        // iplus
+        // jplus
         qfy[JP][0][3][0] = (1.0 + (p->YN[JP2]-p->YN[JP1])/(p->YN[JP3]-p->YN[JP1])
                                 + (p->YN[JP2]-p->YN[JP1])/(p->YN[JP4]-p->YN[JP1]));
 
@@ -125,7 +125,7 @@ void weno_nug_func::precalc_qf(lexer* p)
     MultiGridLOOP
     KBLOOP
     {
-        // imin
+        // kmin
         qfz[KP][0][0][0] = ((p->ZN[KP2]-p->ZN[KP1])/(p->ZN[KP3]-p->ZN[KP]))
                          * ((p->ZN[KP3]-p->ZN[KP1])/(p->ZN[KP2]-p->ZN[KP]));
 
@@ -147,7 +147,7 @@ void weno_nug_func::precalc_qf(lexer* p)
                                 + (p->ZN[KP1]-p->ZN[KP])/(p->ZN[KP1]-p->ZN[KM2]));
 
 
-        // iplus
+        // kplus
         qfz[KP][0][3][0] = (1.0 + (p->ZN[KP2]-p->ZN[KP1])/(p->ZN[KP3]-p->ZN[KP1])
                                 + (p->ZN[KP2]-p->ZN[KP1])/(p->ZN[KP4]-p->ZN[KP1]));
 
@@ -221,7 +221,7 @@ void weno_nug_func::precalc_qf(lexer* p)
     MultiGridLOOP
     JBLOOP
     {
-        // imin
+        // jmin
         qfy[JP][1][0][0] = ((p->YP[JP2]-p->YP[JP1])/(p->YP[JP3]-p->YP[JP]))
                         * ((p->YP[JP3]-p->YP[JP1])/(p->YP[JP2]-p->YP[JP]));
 
@@ -243,7 +243,7 @@ void weno_nug_func::precalc_qf(lexer* p)
                                 + (p->YP[JP1]-p->YP[JP])/(p->YP[JP1]-p->YP[JM2]));
 
 
-        // iplus
+        // jplus
         qfy[JP][1][3][0] = (1.0 + (p->YP[JP2]-p->YP[JP1])/(p->YP[JP3]-p->YP[JP1])
                                 + (p->YP[JP2]-p->YP[JP1])/(p->YP[JP4]-p->YP[JP1]));
 
@@ -268,7 +268,7 @@ void weno_nug_func::precalc_qf(lexer* p)
     MultiGridLOOP
     KBLOOP
     {
-        // imin
+        // kmin
         qfz[KP][1][0][0] = ((p->ZP[KP2]-p->ZP[KP1])/(p->ZP[KP3]-p->ZP[KP]))
                         * ((p->ZP[KP3]-p->ZP[KP1])/(p->ZP[KP2]-p->ZP[KP]));
 
@@ -290,7 +290,7 @@ void weno_nug_func::precalc_qf(lexer* p)
                                 + (p->ZP[KP1]-p->ZP[KP])/(p->ZP[KP1]-p->ZP[KM2]));
 
 
-        // iplus
+        // kplus
         qfz[KP][1][3][0] = (1.0 + (p->ZP[KP2]-p->ZP[KP1])/(p->ZP[KP3]-p->ZP[KP1])
                                 + (p->ZP[KP2]-p->ZP[KP1])/(p->ZP[KP4]-p->ZP[KP1]));
 
