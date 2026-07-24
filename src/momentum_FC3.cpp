@@ -123,6 +123,7 @@ momentum_FC3::momentum_FC3(lexer *p, fdm *a, ghostcell *pgc, convection *pconvec
     ppicard = new picard_void(p);
 
     #if USE_AMREX
+    if(!std::getenv("REEF_nMLMG"))
     amrex_solve = new amrex_solver(p);
     #endif
 }
@@ -132,6 +133,7 @@ momentum_FC3::~momentum_FC3()
     delete pupdate;
     delete ppicard;
     #if USE_AMREX
+    if(!std::getenv("REEF_nMLMG"))
     delete amrex_solve;
     #endif
 }
@@ -448,10 +450,12 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     block_start = pgc->timer();
     pflow->pressure_io(p,a,pgc);
     #if USE_AMREX
+    if(!std::getenv("REEF_nMLMG"))
     amrex_solve->start(p,a,pgc,urk1,vrk1,wrk1,frk1,1.0);
-    #else
-    ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk1, vrk1, wrk1, 1.0);
+    else
     #endif
+    ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk1, vrk1, wrk1, 1.0);
+
     rk3_step1_corr_pressure_time = pgc->timer() - block_start;
 
     fc3probe("s1 post-project  ",urk1,vrk1,wrk1);
@@ -657,10 +661,12 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     block_start = pgc->timer();
     pflow->pressure_io(p,a,pgc);
     #if USE_AMREX
+    if(!std::getenv("REEF_nMLMG"))
     amrex_solve->start(p,a,pgc,urk2,vrk2,wrk2,frk2,0.25);
-    #else
-    ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk2, vrk2, wrk2, 0.25);
+    else
     #endif
+    ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, urk2, vrk2, wrk2, 0.25);
+
     rk3_step2_corr_pressure_time = pgc->timer() - block_start;
 
     block_start = pgc->timer();
@@ -852,10 +858,12 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     block_start = pgc->timer();
     pflow->pressure_io(p,a,pgc);
     #if USE_AMREX
+    if(!std::getenv("REEF_nMLMG"))
     amrex_solve->start(p,a,pgc,a->u,a->v,a->w,a->phi,2.0/3.0);
-    #else
-    ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, a->u, a->v, a->w, 2.0/3.0);
+    else
     #endif
+    ppress->start(a,p,ppois,ppoissonsolv,pgc,pflow, a->u, a->v, a->w, 2.0/3.0);
+
     rk3_step3_corr_pressure_time = pgc->timer() - block_start;
 
     block_start = pgc->timer();
