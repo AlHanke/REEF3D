@@ -59,24 +59,29 @@ public:
     /// pressure update. u/v/w and phi need current ghost cells on entry.
     void start(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v, field3 &w, const field4 &phi, double alpha);
 
-    void setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, const field2 &v, const field3 &w, const field4 &phi);
+private:
+    void setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, const field2 &v, const field3 &w, const field4 &phi, double alpha);
 
-    /// Solves -div(1/ro grad p) = -div(umac)/(alpha*dt) for the staged umac;
-    /// returns the final relative residual and sets p->solveriter.
+    /// Solves -div(1/ro grad phi) = -div(umac) for the staged umac, where
+    /// phi = alpha*dt*p is the alpha-independent projection potential; returns
+    /// the final relative residual and sets p->solveriter.
     double solve(lexer *p);
 
-    /// Applies u += alpha*dt*flux with flux = -(1/ro)grad(pcorr) taken from the
-    /// operator's own discrete gradient (C-F consistent), refreshes ghost
-    /// cells and averages covered coarse faces down.
-    void ucorr(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v, field3 &w, double alpha);
+    /// Applies u += flux with flux = -(1/ro)grad(pcorr) taken from the
+    /// operator's own discrete gradient (C-F consistent); pcorr is the
+    /// potential phi = alpha*dt*p, so the flux already carries the alpha*dt
+    /// factor. Refreshes ghost cells and averages covered coarse faces down.
+    void ucorr(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v, field3 &w);
 
-    /// Copies the solved potential into a->press on all levels (the solve is
-    /// non-incremental, matching pjm) and refreshes the pressure ghosts.
-    void pressure_update(lexer *p, fdm *a, ghostcell *pgc);
+    /// Divides the solved potential phi by alpha*dt to recover the physical
+    /// pressure into a->press on all levels (the solve is non-incremental,
+    /// matching pjm) and refreshes the pressure ghosts.
+    void pressure_update(lexer *p, fdm *a, ghostcell *pgc, double alpha);
 
 private:
-    /// rhs = -div(umac)/(alpha*dt) per level from plain face differences.
-    void fill_rhs(lexer *p, double alpha);
+    /// rhs = -div(umac) per level from plain face differences (the alpha*dt
+    /// factor lives in the potential phi, not the RHS).
+    void fill_rhs(lexer *p);
 
     density *pd;
 
