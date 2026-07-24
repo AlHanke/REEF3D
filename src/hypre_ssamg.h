@@ -28,6 +28,7 @@ Author: Hans Bihs
 #include "vec.h"
 
 class fieldint4;
+class density;
 
 #include <_hypre_utilities.h>
 #include <HYPRE_sstruct_ls.h>
@@ -76,6 +77,12 @@ public:
     void cf_velocity_correction(lexer*, fdm*, ghostcell*,
                                 field&, field&, field&, field&, double) override;
 
+    // Self-contained multi-level pressure-projection velocity correction (see solver.h):
+    // interior gradient from a->M (via a->Mrow), free-surface Dirichlet faces from pd->roface,
+    // then cf_velocity_correction (C-F sub-faces) + cf_average_down_velocity (covered reflux).
+    void velcorr_amr(lexer*, fdm*, ghostcell*, density*,
+                     field&, field&, field&, field&, double) override;
+
     void cf_velocity_fill_from_coarse(lexer*, fdm*, ghostcell*,
                                       field&, field&, field&) override;
 
@@ -90,6 +97,11 @@ public:
 
     // Save/restore the fine LOW C-F normal-face velocities around a start1/2/3 (see solver.h).
     void cf_lowface_save_restore(lexer*, field&, field&, field&, bool save) override;
+
+    // Reflux the covered coarse faces to the fine average (fine->coarse average_down_faces,
+    // incl. the C-F interface face). Called at the tail of velcorr_amr. Moved verbatim from
+    // the pjm_corr file-static so the projection correction is self-contained in the solver.
+    void cf_average_down_velocity(lexer*, field&, field&, field&);
 
     void make_grid_7p(lexer*, fdm*, ghostcell*);
     void destroy_grid();
