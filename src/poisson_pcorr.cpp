@@ -77,9 +77,15 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
     a->M.reset();
 
     const bool is3D = p->j_dir;
+    // Row numbering: stamp a->Mrow with the LOOP index used to fill a->M / a->rhsvec.
+    // This is the single source of truth consumed by hypre_ssamg (matrix fill) and the
+    // velocity corrector -- keep it on the coefficient LOOP so index n and the a->M[n]
+    // writes below are defined in one pass and can never drift.
     n=0;
     LOOP
     {
+        a->Mrow(i,j,k) = n;
+
         a->M.p[n] = (CPOR1*PORVAL1)/(pd->roface(p,a,1,0,0)*p->DXP[IP]*p->DXN[IP])
                   + (CPOR1m*PORVAL1m)/(pd->roface(p,a,-1,0,0)*p->DXP[IM1]*p->DXN[IP])
 
@@ -114,9 +120,11 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
 #if USE_AMREX
     const bool symfold = (std::getenv("REEF_SYM_FOLD")!=nullptr);
 #endif
-    n=0;
     LOOP
     {
+        const int n = a->Mrow(i,j,k);
+        if(n < 0) continue;
+
         // ---- Solid-wall faces (Option B): fold into the diagonal (homogeneous Neumann) every
         // face whose neighbour is a SOLID. This ties the matrix coupling structure to the velocity
         // DOFs (the correction skips non-DOF faces), giving D(1/rho)G = L at walls and leaving every
@@ -253,6 +261,5 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
             a->rhsvec.V[n] -= a->M.t[n]*press(i,j,k+1);
             a->M.t[n] = 0.0;
         }
-        ++n;
     }
 }
