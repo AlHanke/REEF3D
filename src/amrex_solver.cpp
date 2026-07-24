@@ -111,7 +111,7 @@ amrex_solver::~amrex_solver()
     delete pd;
 }
 
-void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, const field2 &v, const field3 &w, const field4 &phi)
+void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, const field2 &v, const field3 &w, const field4 &phi, double alpha)
 {
     // Prerequisites: u/v/w and the level set must have current ghost cells
     // (pgc->start1/2/3/4 before calling) -- the staging below reads one ghost
@@ -183,11 +183,14 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
             rhs[lev].define(sgrids[lev], p->amrex_distribution_mapping[lev], 1, 0);
             pcorr[lev].define(sgrids[lev], p->amrex_distribution_mapping[lev], 1, 1);
 
-            // warm-start seed: the solve is non-incremental, so the current
-            // pressure is the best initial guess after an (re)allocation.
+            // warm-start seed: the solved potential is phi = alpha*dt*press
+            // (see solve/pressure_update), so scale the stored physical
+            // pressure by alpha*dt to seed it after an (re)allocation. Between
+            // stages pcorr persists as phi and needs no reseeding.
             // press lives on the REEF3D (ny=1) grids; broadcast plane 0 into
             // all solver planes (same dmap and box order, so sharing the
             // MFIter is safe).
+            const double adt = alpha*p->dt;
             pcorr[lev].setVal(0.0);
             for(MFIter mfi(pcorr[lev]); mfi.isValid(); ++mfi)
             {
@@ -196,7 +199,7 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
                 auto const& src = a->press.GetMultiFab(lev).const_array(mfi);
                 amrex::LoopOnCpu(vbx, [&] (int ii, int jj, int kk)
                 {
-                    dst(ii,jj,kk) = src(ii, (ydouble ? 0 : jj), kk);
+                    dst(ii,jj,kk) = adt*src(ii, (ydouble ? 0 : jj), kk);
                 });
             }
         }
@@ -445,6 +448,12 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
         if(std::getenv("REEF_MLMG_MAXFMGITER"))
         mlmg->setMaxFmgIter(1);
 
+        if(std::getenv("REEF_MLMG_SMOOTHCYCLE"))
+        {
+            mlmg->setPreSmooth(3);
+            mlmg->setPostSmooth(3);
+        }
+
         solver_created = true;
         created_nlevs  = nlev;
     }
@@ -550,13 +559,14 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
     }
 }
 
-void amrex_solver::fill_rhs(lexer *p, double alpha)
+void amrex_solver::fill_rhs(lexer *p)
 {
-    // rhs = -div(umac)/(alpha*dt): the operator is -div(beta grad), so the
-    // sign flips relative to div(beta grad p) = div(u)/(alpha*dt). Solid
+    // The solve variable is the projection potential phi = alpha*dt*p, which
+    // satisfies -div(beta grad phi) = -div(umac). Keeping alpha*dt out of the
+    // RHS (and out of the solution) makes phi independent of the RK stage, so
+    // the carried-over pcorr is a genuine warm start and bnorm no longer swings
+    // with alpha. The alpha*dt factor is restored in pressure_update. Solid
     // cells get rhs = 0 automatically because all their faces were zeroed.
-    const double idt = 1.0/(alpha*p->dt);
-
     for(int lev=0; lev<p->nlevs; ++lev)
     {
         const auto dxinv = p->amrex_geometry[lev].InvCellSizeArray();
@@ -574,9 +584,9 @@ void amrex_solver::fill_rhs(lexer *p, double alpha)
 
             amrex::ParallelFor(tbx, [=] AMREX_GPU_DEVICE (int ii, int jj, int kk) noexcept
             {
-                r(ii,jj,kk) = -idt*( (uf(ii+1,jj,kk)-uf(ii,jj,kk))*dxi
-                                   + (vf(ii,jj+1,kk)-vf(ii,jj,kk))*dyi
-                                   + (wf(ii,jj,kk+1)-wf(ii,jj,kk))*dzi );
+                r(ii,jj,kk) = -( (uf(ii+1,jj,kk)-uf(ii,jj,kk))*dxi
+                               + (vf(ii,jj+1,kk)-vf(ii,jj,kk))*dyi
+                               + (wf(ii,jj,kk+1)-wf(ii,jj,kk))*dzi );
             });
         }
     }
@@ -673,12 +683,14 @@ double amrex_solver::solve(lexer *p)
     return finres;
 }
 
-void amrex_solver::ucorr(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v, field3 &w, double alpha)
+void amrex_solver::ucorr(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v, field3 &w)
 {
     // flux = -(1/ro)grad(pcorr) evaluated with the operator's own discrete
     // gradient (including the asymmetric C-F stencils and the beta=0 solid
     // faces) -- the exact adjoint of the divergence the solve saw, so the
     // corrected field is discretely divergence-free on the composite grid.
+    // pcorr is the potential phi = alpha*dt*p, so this flux already carries the
+    // alpha*dt factor: the correction is u += flux, with no further scaling.
     // Zero first: with a hidden (pseudo-2D) direction MLMG does not write
     // that direction's flux, and the correction below must add 0 there.
     for(int lev=0; lev<p->nlevs; ++lev)
@@ -693,8 +705,6 @@ void amrex_solver::ucorr(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v,
     amrex::Print()<<"CHECK flux lev "<<lev<<" dir "<<d
         <<"  ["<<flux[lev][d].min(0)<<","<<flux[lev][d].max(0)<<"] nan="<<flux[lev][d].contains_nan()
         <<std::endl;
-
-    const double adt = alpha*p->dt;
 
     // REEF_MLMG_CHECK: track the largest applied velocity correction
     const bool chk = std::getenv("REEF_MLMG_CHECK") != nullptr;
@@ -719,7 +729,7 @@ void amrex_solver::ucorr(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v,
         KLOOP
         UCHECK
         {
-            const double du = adt*fx(oi+i+1, oj+j, ok+k);
+            const double du = fx(oi+i+1, oj+j, ok+k);
             u(i,j,k) += du;
             if(chk && std::fabs(du) > cmax)
             { cmax=std::fabs(du); cl=p->level; cd=0; ci=oi+i; cj=oj+j; ck=ok+k; }
@@ -729,14 +739,14 @@ void amrex_solver::ucorr(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v,
         JVLOOP
         KLOOP
         VCHECK
-        v(i,j,k) += adt*fy(oi+i, oj+j+1, ok+k);
+        v(i,j,k) += fy(oi+i, oj+j+1, ok+k);
 
         ILOOP
         JLOOP
         KWLOOP
         WCHECK
         {
-            const double dw = adt*fz(oi+i, oj+j, ok+k+1);
+            const double dw = fz(oi+i, oj+j, ok+k+1);
             w(i,j,k) += dw;
             if(chk && std::fabs(dw) > cmax)
             { cmax=std::fabs(dw); cl=p->level; cd=2; ci=oi+i; cj=oj+j; ck=ok+k; }
@@ -764,13 +774,15 @@ void amrex_solver::ucorr(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v,
     }
 }
 
-void amrex_solver::pressure_update(lexer *p, fdm *a, ghostcell *pgc)
+void amrex_solver::pressure_update(lexer *p, fdm *a, ghostcell *pgc, double alpha)
 {
-    // non-incremental solve: pcorr IS the pressure (all-Neumann solves are
-    // pinned to zero mean inside MLMG; add a reference-pressure shift here
-    // if a pressure_reference-style gauge is needed). press lives on the
-    // REEF3D grids; with y-doubling active its box is the j=0 plane of the
-    // solver box, so an index-wise copy reads back exactly that plane.
+    // non-incremental solve: pcorr is the potential phi = alpha*dt*p, so the
+    // physical pressure is phi/(alpha*dt) (all-Neumann solves are pinned to
+    // zero mean inside MLMG; add a reference-pressure shift here if a
+    // pressure_reference-style gauge is needed). press lives on the REEF3D
+    // grids; with y-doubling active its box is the j=0 plane of the solver
+    // box, so an index-wise copy reads back exactly that plane.
+    const double iadt = 1.0/(alpha*p->dt);
     for(int lev=0; lev<p->nlevs; ++lev)
     {
         auto& pr = a->press.GetMultiFab(lev);
@@ -781,7 +793,7 @@ void amrex_solver::pressure_update(lexer *p, fdm *a, ghostcell *pgc)
             auto const& src = pcorr[lev].const_array(mfi);
             amrex::LoopOnCpu(vbx, [&] (int ii, int jj, int kk)
             {
-                dst(ii,jj,kk) = src(ii,jj,kk);
+                dst(ii,jj,kk) = iadt*src(ii,jj,kk);
             });
         }
     }
@@ -805,11 +817,11 @@ void amrex_solver::start(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v,
     const double gc_time = pgc->timer() - block_start;
 
     block_start = pgc->timer();
-    setup(p,a,pgc,u,v,w,phi);
+    setup(p,a,pgc,u,v,w,phi,alpha);
     const double setup_time = pgc->timer() - block_start;
 
     block_start = pgc->timer();
-    fill_rhs(p,alpha);
+    fill_rhs(p);
     const double fill_rhs_time = pgc->timer() - block_start;
 
     const double starttime = pgc->timer();
@@ -819,11 +831,11 @@ void amrex_solver::start(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v,
     const double endtime = pgc->timer();
 
     block_start = pgc->timer();
-    pressure_update(p,a,pgc);
+    pressure_update(p,a,pgc,alpha);
     const double pressure_update_time = pgc->timer() - block_start;
 
     block_start = pgc->timer();
-    ucorr(p,a,pgc,u,v,w,alpha);
+    ucorr(p,a,pgc,u,v,w);
     const double ucorr_time = pgc->timer() - block_start;
 
     p->poissoniter = p->solveriter;
