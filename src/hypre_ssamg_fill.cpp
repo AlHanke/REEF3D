@@ -35,14 +35,12 @@ Author: Alexander Hanke
 
 void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
 {
-    fieldint4 cval4(p);
-
-    count = 0;
-    LOOP
-    {
-        cval4(i, j, k) = count;
-        ++count;
-    }
+    // Row numbering is owned by poisson_pcorr::start (single source of truth): it stamps
+    // a->Mrow(i,j,k) with the LOOP index it used to fill a->M / a->rhsvec. Alias it here so
+    // the existing cval4-based indexing (and amr_cf_coefficients) consumes that persistent
+    // field directly. Rebuilding a local LOOP numbering here risked drifting from poisson's
+    // enumeration whenever the two loop macros disagreed (interior solids, inflow/outflow).
+    fieldint4& cval4 = a->Mrow;
 
     nentries = stencil_size;
     for (j = 0; j < nentries; j++)
