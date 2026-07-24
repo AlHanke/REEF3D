@@ -72,8 +72,7 @@ fdm::fdm(lexer *p) :
     u0(p, &m_mf_diag, 0), du0(p, &m_mf_diag, 1), v0(p, &m_mf_diag, 2), dv0(p, &m_mf_diag, 3), w0(p, &m_mf_diag, 4), dw0(p, &m_mf_diag, 5), pcorr0(p, &m_mf_diag, 6), div0(p, &m_mf_diag, 7), phi0(p, &m_mf_diag, 8), ro0(p, &m_mf_diag, 9),
     u1(p, &m_mf_diag, 10), du1(p, &m_mf_diag, 11), v1(p, &m_mf_diag, 12), dv1(p, &m_mf_diag, 13), w1(p, &m_mf_diag, 14), dw1(p, &m_mf_diag, 15), pcorr1(p, &m_mf_diag, 16), div1(p, &m_mf_diag, 17), phi1(p, &m_mf_diag, 18), ro1(p, &m_mf_diag, 19),
     u2(p, &m_mf_diag, 20), du2(p, &m_mf_diag, 21), v2(p, &m_mf_diag, 22), dv2(p, &m_mf_diag, 23), w2(p, &m_mf_diag, 24), dw2(p, &m_mf_diag, 25), pcorr2(p, &m_mf_diag, 26), div2(p, &m_mf_diag, 27), phi2(p, &m_mf_diag, 28), ro2(p, &m_mf_diag, 29),
-    press0(p),
-    grav_pot(p)
+    press0(p)
 #else
     u(p), F(p), Fext(p),
     v(p), G(p), Gext(p),
@@ -97,9 +96,9 @@ fdm::fdm(lexer *p) :
     Fifsf(p), K(p),
     P(p), Q(p), bed(p),
     rhsvec(p), M(p),
-    nX(p), nY(p), nZ(p), Alpha(p),
-    grav_pot(p)
+    nX(p), nY(p), nZ(p), Alpha(p)
 #endif
+    ,grav_pot(p),Mrow(p)
 {
 #if USE_AMREX
     p->register_mf(&m_mf, 47);

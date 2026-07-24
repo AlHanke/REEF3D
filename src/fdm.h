@@ -141,6 +141,7 @@ public:
     field4 press0;
     #endif
     field4 grav_pot;
+    fieldint4 Mrow;
 };
 
 #endif
