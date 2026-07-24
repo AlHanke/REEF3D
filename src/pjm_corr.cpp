@@ -108,47 +108,6 @@ static void cf_average_down_velocity(lexer* p, field& u, field& v, field& w)
     }
 }
 
-// REEF_CF_COUNT report: every projected face must be written exactly once. Summarise the
-// shared per-face counter, list the double-written faces (count>=2 = interior loop failed to
-// skip a C-F high face -> cf_masks offset bug), and dump the 6-face count signature of the
-// known worst cells so a count==0 side reveals a missing correction (link-construction bug).
-static void velcorr_face_count_report(lexer* p, solver* psolv)
-{
-    long n1=0, n2=0, nbig=0;
-    for(const auto& kv : psolv->cf_wcount)
-    {
-        if(kv.second==1)      ++n1;
-        else if(kv.second==2) ++n2;
-        else                  ++nbig;
-    }
-    printf("  [cf-count] faces written once=%ld  TWICE=%ld  (>2)=%ld\n", n1, n2, nbig);
-
-    int shown=0;
-    for(const auto& kv : psolv->cf_wcount)
-        if(kv.second>=2 && shown<24)
-        {
-            const auto& k=kv.first;
-            printf("  [cf-count] MULTI face lev=%d (%d,%d,%d) axis=%d  count=%d\n",
-                   k[0],k[1],k[2],k[3],k[4],kv.second);
-            ++shown;
-        }
-
-    // 6-face signature (x-,x+,y-,y+,z-,z+) of the known worst cells on fine level 1.
-    const int tgt[2][4] = {{1,8,8,16},{1,31,8,23}};
-    for(int t=0;t<2;++t)
-    {
-        const int lev=tgt[t][0], ci=tgt[t][1], cj=tgt[t][2], ck=tgt[t][3];
-        auto cnt=[&](int fi,int fj,int fk,int ax)->int{
-            auto it=psolv->cf_wcount.find({lev,fi,fj,fk,ax});
-            return it==psolv->cf_wcount.end() ? 0 : it->second; };
-        printf("  [cf-count] cell lev=%d (%d,%d,%d)  x-=%d x+=%d  y-=%d y+=%d  z-=%d z+=%d\n",
-               lev,ci,cj,ck,
-               cnt(ci-1,cj,ck,0), cnt(ci,cj,ck,0),
-               cnt(ci,cj-1,ck,1), cnt(ci,cj,ck,1),
-               cnt(ci,cj,ck-1,2), cnt(ci,cj,ck,2));
-    }
-}
-
 // REEF_COVERED_PRESS_RECON: overwrite covered coarse press with the fine average (fine is
 // authoritative). The per-column hydrostatic build (ini_hydrostatic) leaves each coarse column a
 // slightly different constant offset -- invisible to wpgrad (vertical) but a spurious HORIZONTAL
@@ -404,7 +363,7 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
     }
 #endif
 
-    if(std::getenv("REEF_PROJ_CHECK"))
+    if(std::getenv("REEF_PROJ_CHECK") || std::getenv("REEF_PROJ_ADJOINT"))
     projection_consistency_check(p,a,pgc,psolv,alpha);
 
     p->poissoniter=p->solveriter;
@@ -452,68 +411,14 @@ void pjm_corr::velcorr(lexer* p, fdm* a, ghostcell* pgc, field& uvel, field& vve
     }
 
     #if USE_AMREX
-    // Diagnostic per-face write counter (env REEF_CF_COUNT): count every face the interior
-    // loop writes; cf_velocity_correction counts the C-F faces it writes into the same shared
-    // map. A face with total count!=1 is a masking (==2) or missing-link (==0) bug.
-    static const bool cf_count = (std::getenv("REEF_CF_COUNT") != nullptr);
-    if(cf_count) psolv->cf_wcount.clear();
-
-    // cf_masks holds AMReX GLOBAL cell indices (built from cf_links), but the LOOP i,j,k are
-    // tile-local -- the field accessors add amr_tile_lo internally (operator()(i,j,k) ->
-    // arr(i+amr_tile_lo.x,...)). Translate with the SAME offset before the mask lookup, else the
-    // wrong cells get masked. A masked face is a C-F high face written by cf_velocity_correction.
-    ULOOP
-    {
-        const int gi=i+p->amr_tile_lo.x, gj=j+p->amr_tile_lo.y, gk=k+p->amr_tile_lo.z;
-        double dp = pcorr(i+1,j,k)-pcorr(i,j,k);
-        if(!psolv->cf_masks.contains({p->level,gi,gj,gk,0}))
-        {
-            uvel(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*(dp/(p->DXP[IP]*pd->roface(p,a,1,0,0)));
-            if(cf_count) ++psolv->cf_wcount[{p->level,gi,gj,gk,0}];
-        }
-    }
-
-    if(p->j_dir==1)
-    VLOOP
-    {
-        const int gi=i+p->amr_tile_lo.x, gj=j+p->amr_tile_lo.y, gk=k+p->amr_tile_lo.z;
-        double dp = pcorr(i,j+1,k)-pcorr(i,j,k);
-        if(!psolv->cf_masks.contains({p->level,gi,gj,gk,1}))
-        {
-            vvel(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*(dp/(p->DYP[JP]*pd->roface(p,a,0,1,0)));
-            if(cf_count) ++psolv->cf_wcount[{p->level,gi,gj,gk,1}];
-        }
-    }
-
-    WLOOP
-    {
-        const int gi=i+p->amr_tile_lo.x, gj=j+p->amr_tile_lo.y, gk=k+p->amr_tile_lo.z;
-        double dp = pcorr(i,j,k+1)-pcorr(i,j,k);
-        if(!psolv->cf_masks.contains({p->level,gi,gj,gk,2}))
-        {
-            wvel(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*(dp/(p->DZP[KP]*pd->roface(p,a,0,0,1)));
-            if(cf_count) ++psolv->cf_wcount[{p->level,gi,gj,gk,2}];
-        }
-    }
-
-    // C-F interface correction (gradient/G side): correct the fine C-F sub-faces with the
-    // centre-distance gradient to the real coarse pcorr, then reflux the coarse velocity under
-    // each fine patch to the area-summed fine flux. Together with the predictor average-down
-    // this makes D(1/rho)G = L at the interface.
-    if(p->nlevs > 1)
-    {
-        psolv->cf_velocity_correction(p,a,pgc,pcorr,uvel,vvel,wvel,alpha);
-
-        if(cf_count) velcorr_face_count_report(p,psolv);
-
-        cf_average_down_velocity(p,uvel,vvel,wvel);
-
-        // NOTE: a post-projection cf_velocity_fill_from_coarse was tried here and REMOVED -- it
-        // overwrote the divergence-free projected velocity at the fine C-F faces with the coarse
-        // value, which is NOT the matrix-consistent gradient. That broke D.G=L (projcheck residual
-        // localised to fine C-F cells with V*div~0 but Lp!=0) and seeded a slow instability.
-        // The PREDICTOR-side fill (in start(), before the rhs) is the consistent one; keep that.
-    }
+    // Multi-level projection velocity correction is owned end-to-end by the solver
+    // (hypre_ssamg::velcorr_amr): the interior gradient is sourced from the assembled operator
+    // a->M (exact matrix adjoint, auto-zero at C-F/wall faces -> no cf_masks), the free-surface
+    // Dirichlet faces from pd->roface, then the C-F sub-face correction and the covered-coarse
+    // reflux. This replaces the former interior ULOOP/VLOOP/WLOOP + cf_masks + cf_velocity_correction
+    // + cf_average_down_velocity chain that lived here; keeping it in the solver guarantees the
+    // corrector reads the operator (a->M / cf_links / a->Mrow) while it is the pressure operator.
+    psolv->velcorr_amr(p,a,pgc,pd,pcorr,uvel,vvel,wvel,alpha);
     #endif
 }
 
@@ -614,6 +519,18 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
     double wi_res = 0.0; int wi_lev = -1, wi[3] = {-1,-1,-1}, wi_flag = 0; bool wi_cov = false;
     double wb_res = 0.0; int wb_lev = -1, wb[3] = {-1,-1,-1}, wb_flag = 0;
 
+    // REEF_PROJ_ADJOINT: prove velcorr_amr is the exact matrix adjoint where it matters most.
+    // The interior/boundary split above hides the two cases the C-F reflux can break: a C-F
+    // fine cell (all fluid neighbours -> lands in "interior") and a free-surface cell (air
+    // neighbour -> lumped with domain walls in "boundary"). Track them as their own buckets so
+    // the pass criterion (solver-tol at C-F corners AND the surface band) is read off directly.
+    const bool adjoint = (std::getenv("REEF_PROJ_ADJOINT") != nullptr);
+    double r_cf = 0.0;   int wc_lev = -1, wc[3] = {-1,-1,-1}, wc_flag = 0;
+    double r_surf = 0.0; int ws_lev = -1, ws[3] = {-1,-1,-1}, ws_flag = 0;
+    // Per-axis breakdown of the worst C-F cell: which face carries the |Lp+V*div| gap.
+    double wc_Lp = 0.0, wc_div = 0.0, wc_pc = 0.0, wc_dax[3] = {0,0,0};
+    int    wc_fln[6] = {0,0,0,0,0,0}; bool wc_covn[6] = {false,false,false,false,false,false};
+
     // Neighbourhood dump at the worst interior cell (REEF_PROJ_PROBE): the per-axis residual
     // split (Lp vs V*div), this cell's pcorr/Lp, and for each of the 6 neighbours its flag4 and
     // whether it is COVERED (refined footprint under the next finer patch). Pinpoints whether the
@@ -669,6 +586,58 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
                p->flag4(i-1,j,k) < 0 || p->flag4(i+1,j,k) < 0
             || p->flag4(i,j,k-1) < 0 || p->flag4(i,j,k+1) < 0
             || (p->j_dir && (p->flag4(i,j-1,k) < 0 || p->flag4(i,j+1,k) < 0));
+
+        if(adjoint)
+        {
+            // Global indices for cf_tag / amrex_box_array (both live in global space).
+            #if USE_AMREX
+            const int gi=i+p->amr_tile_lo.x, gj=j+p->amr_tile_lo.y, gk=k+p->amr_tile_lo.z;
+            #else
+            const int gi=i+p->origin_i, gj=j+p->origin_j, gk=k+p->origin_k;
+            #endif
+
+            // C-F bucket: either the FINE side (cf_tag: a same-level neighbour lies outside the
+            // patch) OR the COARSE side (an uncovered cell with a covered/refined face-neighbour --
+            // cf_tag cannot see this, so it otherwise hides in the interior bucket). Both are the
+            // reflux-critical faces velcorr_amr (M==0 at the seam) + cf_velocity_correction + the
+            // reflux must reproduce, or the interface injects divergence.
+            bool coarse_cf = false;
+            #if USE_AMREX
+            if(p->level < p->nlevs-1)
+                coarse_cf = nb_covered(p->level,i-1,j,k) || nb_covered(p->level,i+1,j,k)
+                         || nb_covered(p->level,i,j,k-1) || nb_covered(p->level,i,j,k+1)
+                         || (p->j_dir && (nb_covered(p->level,i,j-1,k) || nb_covered(p->level,i,j+1,k)));
+            #endif
+            if((cf_tag(p->level,gi,gj,gk) || coarse_cf) && res > r_cf)
+            {
+                r_cf = res; wc_lev = p->level; wc[0]=gi; wc[1]=gj; wc[2]=gk; wc_flag = p->flag4(i,j,k);
+                // Per-axis V*div split: the residual axis is the C-F (or refluxed) face.
+                wc_Lp = Lp(i,j,k); wc_div = V_lev*div; wc_pc = pcorr(i,j,k);
+                wc_dax[0] = -V_lev*(u0(i,j,k) - u0(i-1,j,k))/(alpha*p->dt*p->DXN[IP]);
+                wc_dax[1] = p->j_dir ? -V_lev*(v0(i,j,k) - v0(i,j-1,k))/(alpha*p->dt*p->DYN[JP]) : 0.0;
+                wc_dax[2] = -V_lev*(w0(i,j,k) - w0(i,j,k-1))/(alpha*p->dt*p->DZN[KP]);
+                wc_fln[0]=p->flag4(i-1,j,k); wc_fln[1]=p->flag4(i+1,j,k);
+                wc_fln[2]=p->flag4(i,j-1,k); wc_fln[3]=p->flag4(i,j+1,k);
+                wc_fln[4]=p->flag4(i,j,k-1); wc_fln[5]=p->flag4(i,j,k+1);
+                #if USE_AMREX
+                wc_covn[0]=nb_covered(p->level,i-1,j,k); wc_covn[1]=nb_covered(p->level,i+1,j,k);
+                wc_covn[2]=nb_covered(p->level,i,j-1,k); wc_covn[3]=nb_covered(p->level,i,j+1,k);
+                wc_covn[4]=nb_covered(p->level,i,j,k-1); wc_covn[5]=nb_covered(p->level,i,j,k+1);
+                #endif
+            }
+
+            // Surface bucket: an AIR_FLAG neighbour -> the Dirichlet face velcorr_amr corrects
+            // with the pd->roface fall-back. Separated from domain walls so a surface-only
+            // residual is not masked by the (start1/2/3-owned) wall faces in r_bnd.
+            const bool surf =
+                   p->flag4(i-1,j,k)==AIR_FLAG || p->flag4(i+1,j,k)==AIR_FLAG
+                || p->flag4(i,j,k-1)==AIR_FLAG || p->flag4(i,j,k+1)==AIR_FLAG
+                || (p->j_dir && (p->flag4(i,j-1,k)==AIR_FLAG || p->flag4(i,j+1,k)==AIR_FLAG));
+            if(surf && res > r_surf)
+            {
+                r_surf = res; ws_lev = p->level; ws[0]=gi; ws[1]=gj; ws[2]=gk; ws_flag = p->flag4(i,j,k);
+            }
+        }
 
         if(boundary)
         {
@@ -776,6 +745,33 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
     std::cout<<"  [projcheck] worst boundary res="<<wb_res<<" at lev="<<wb_lev
              <<" ("<<wb[0]<<","<<wb[1]<<","<<wb[2]<<")  flag4="<<wb_flag
              <<"  cf="<<cf_tag(wb_lev,wb[0],wb[1],wb[2])<<std::endl;
+
+    if(adjoint)
+    {
+        const double g_cf   = pgc->globalmax(r_cf);
+        const double g_surf = pgc->globalmax(r_surf);
+        if(p->mpirank==0)
+        std::cout<<"  [adjoint]  max|L*pcorr + R(dU)|  C-F="<<g_cf
+                 <<"  surface="<<g_surf<<"   (both must be ~solver tol)"<<std::endl;
+        if(wc_lev>=0 && r_cf==g_cf)
+        {
+            std::cout<<"  [adjoint]  worst C-F res="<<r_cf<<" at lev="<<wc_lev
+                     <<" ("<<wc[0]<<","<<wc[1]<<","<<wc[2]<<")  flag4="<<wc_flag<<std::endl;
+            std::cout<<"  [adjoint]  Lp="<<wc_Lp<<"  V*div="<<wc_div<<"  pcorr="<<wc_pc<<std::endl;
+            std::cout<<"  [adjoint]  V*div split  x="<<wc_dax[0]<<"  y="<<wc_dax[1]
+                     <<"  z="<<wc_dax[2]<<"   (residual axis = the C-F / refluxed face)"<<std::endl;
+            std::cout<<"  [adjoint]  flag4   x-/x+="<<wc_fln[0]<<"/"<<wc_fln[1]
+                     <<"  y-/y+="<<wc_fln[2]<<"/"<<wc_fln[3]
+                     <<"  z-/z+="<<wc_fln[4]<<"/"<<wc_fln[5]<<std::endl;
+            std::cout<<"  [adjoint]  covered x-/x+="<<wc_covn[0]<<"/"<<wc_covn[1]
+                     <<"  y-/y+="<<wc_covn[2]<<"/"<<wc_covn[3]
+                     <<"  z-/z+="<<wc_covn[4]<<"/"<<wc_covn[5]
+                     <<"   (covered neighbour => that face is the C-F/reflux face)"<<std::endl;
+        }
+        if(ws_lev>=0 && r_surf==g_surf)
+        std::cout<<"  [adjoint]  worst surface res="<<r_surf<<" at lev="<<ws_lev
+                 <<" ("<<ws[0]<<","<<ws[1]<<","<<ws[2]<<")  flag4="<<ws_flag<<std::endl;
+    }
 }
 
 void pjm_corr::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w, double alpha)

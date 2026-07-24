@@ -34,6 +34,7 @@ class ghostcell;
 class field;
 class vec;
 class matrix_diag;
+class density;
 
 using namespace std;
 
@@ -55,6 +56,16 @@ public:
     // at coarse-fine interfaces are made consistent with the matrix Laplacian.
     virtual void cf_velocity_correction(lexer*, fdm*, ghostcell*,
                                         field&, field&, field&, field&, double) {}
+
+    // Complete multi-level velocity correction owned by the solver: the interior
+    // gradient sourced from the assembled operator a->M (exact matrix adjoint), the
+    // coarse-fine sub-face correction, and the covered-coarse reflux, in one pass.
+    // Self-contained in the solver so it reads a->M / cf_links while they are the
+    // assembled pressure operator. Default no-op; hypre_ssamg overrides. pd supplies
+    // the model face density for the free-surface (Dirichlet) faces the matrix folded
+    // to the RHS. Replaces the pjm_corr interior loop + cf_masks for nlevs>1.
+    virtual void velcorr_amr(lexer*, fdm*, ghostcell*, density*,
+                             field&, field&, field&, field&, double) {}
 
     // Slave the fine-level normal velocity on coarse-fine faces to the coarse value, so the
     // predictor never injects a C-F leak the projection then cannot fully remove. Run on the

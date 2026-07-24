@@ -25,6 +25,7 @@ Author: Alexander Hanke
 #include "fdm.h"
 #include "ghostcell.h"
 #include "fieldint4.h"
+#include "density.h"
 #include <array>
 #include <cmath>
 #include <cstdlib>
@@ -32,6 +33,9 @@ Author: Alexander Hanke
 #include <map>
 #include <set>
 #include <vector>
+#if USE_AMREX
+#include <AMReX_MultiFabUtil.H>
+#endif
 
 void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
 {
@@ -1004,6 +1008,130 @@ void hypre_ssamg::cf_velocity_correction(lexer* p, fdm* a, ghostcell* pgc,
                           << "  y-/y+=" << cw_fln[2] << "/" << cw_fln[3]
                           << "  z-/z+=" << cw_fln[4] << "/" << cw_fln[5]
                           << "  (wall-normal face velocity must be 0 for no-slip)" << std::endl;
+            }
+        }
+    }
+#endif
+}
+
+void hypre_ssamg::velcorr_amr(lexer* p, fdm* a, ghostcell* pgc, density* pd,
+                              field& pcorr, field& u, field& v, field& w, double alpha)
+{
+#if USE_AMREX
+    // REEF_CF_PROJECTION_GROUP member — the complete multi-level projection velocity
+    // correction, owned by the solver so it reads the assembled operator directly.
+    //
+    // Interior faces are sourced from a->M (the exact adjoint of the divergence the solve
+    // saw): |M.slot|*DXN == CPOR*POR/(roface*DXP), bit-identical to the old ucorr/vcorr/wcorr
+    // on fluid faces, but auto-zero exactly where amr_cf_coefficients zeroed the slot (C-F
+    // seams, high AND low, at every corner) and where poisson_pcorr folded a wall face. That
+    // removes the fragile cf_masks: the skip-set IS the zero-set. a->Mrow (persistent) maps
+    // each solved cell to its row n; a->M is read live (nothing between the solve and this
+    // call rewrites it — reference_start only shifts the pressure gauge).
+    //
+    // Free surface: poisson moved the air-face coupling to the RHS (M.slot==0) but the
+    // Dirichlet correction against the pcorr ghost is real, so a neighbour == AIR_FLAG face
+    // falls back to the roface gradient form (identical to the single-level ucorr). This is
+    // the one branch that needs the model face density, hence pd. Domain walls that carry the
+    // AIR_FLAG ghost also take this branch and are then overwritten by start1/2/3, exactly as
+    // the old ucorr behaved.
+    LOOP
+    {
+        const int n = a->Mrow(i,j,k);
+        if(n < 0) continue;
+
+        // x+ (high) face -> u(i,j,k), couples cells (i,j,k) and (i+1,j,k)
+        {
+            const double dp = pcorr(i+1,j,k) - pcorr(i,j,k);
+            if(a->M.n[n] != 0.0)
+                u(i,j,k) += alpha*p->dt * a->M.n[n] * p->DXN[IP] * dp;
+            else if(p->flag4(i+1,j,k)==AIR_FLAG)
+                u(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*(dp/(p->DXP[IP]*pd->roface(p,a,1,0,0)));
+        }
+
+        // y+ (high) face -> v(i,j,k)
+        if(p->j_dir==1)
+        {
+            const double dp = pcorr(i,j+1,k) - pcorr(i,j,k);
+            if(a->M.w[n] != 0.0)
+                v(i,j,k) += alpha*p->dt * a->M.w[n] * p->DYN[JP] * dp;
+            else if(p->flag4(i,j+1,k)==AIR_FLAG)
+                v(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*(dp/(p->DYP[JP]*pd->roface(p,a,0,1,0)));
+        }
+
+        // z+ (high) face -> w(i,j,k)
+        {
+            const double dp = pcorr(i,j,k+1) - pcorr(i,j,k);
+            if(a->M.t[n] != 0.0)
+                w(i,j,k) += alpha*p->dt * a->M.t[n] * p->DZN[KP] * dp;
+            else if(p->flag4(i,j,k+1)==AIR_FLAG)
+                w(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*(dp/(p->DZP[KP]*pd->roface(p,a,0,0,1)));
+        }
+    }
+
+    // Coarse-fine interface (fine sub-faces, gradient/G side) then reflux the covered
+    // coarse faces to the area-summed fine flux: together D(1/rho)G = L at the interface.
+    cf_velocity_correction(p,a,pgc,pcorr,u,v,w,alpha);
+    cf_average_down_velocity(p,u,v,w);
+#endif
+}
+
+void hypre_ssamg::cf_average_down_velocity(lexer* p, field& u, field& v, field& w)
+{
+#if USE_AMREX
+    // Sync the coarse velocity under each fine patch with the fine solution: build face
+    // MultiFabs from the staggered velocity, average_down_faces (fine -> covered coarse faces,
+    // incl. the C-F interface face), copy the synced coarse faces back. This makes the coarse
+    // C-F face velocity equal the sum/average of the fine sub-fluxes (reflux) and the covered
+    // coarse cells equal the fine average. (Kept in sync with the pjm_corr predictor-side copy.)
+    const int jdir = p->j_dir;
+    field* vfld[AMREX_SPACEDIM] = {&u, &v, &w};
+
+    for (int lev = p->nlevs-1; lev >= 1; --lev)
+    {
+        const int clev = lev-1;
+        amrex::Array<amrex::MultiFab,AMREX_SPACEDIM> ffine, fcrse;
+
+        for (int dir = 0; dir < AMREX_SPACEDIM; ++dir)
+        {
+            const amrex::IntVect e = amrex::IntVect::TheDimensionVector(dir);
+            ffine[dir].define(amrex::convert(p->amrex_box_array[lev],  e), p->amrex_distribution_mapping[lev],  1, 0);
+            fcrse[dir].define(amrex::convert(p->amrex_box_array[clev], e), p->amrex_distribution_mapping[clev], 1, 0);
+
+            // staggered cell-centred velocity -> face MultiFab (face f = vel(f-e))
+            auto fill_face = [&] (amrex::MultiFab& fmf, int amrlev)
+            {
+                auto& v_mf = vfld[dir]->GetMultiFab(amrlev);
+                for (amrex::MFIter mfi(fmf); mfi.isValid(); ++mfi)
+                {
+                    const amrex::Box& fbx = mfi.validbox();
+                    auto       f = fmf.array(mfi);
+                    const auto vv = v_mf.const_array(mfi);
+                    amrex::LoopOnCpu(fbx, [&] (int i, int j, int k) noexcept
+                    { f(i,j,k) = vv(i-e[0], j-e[1], k-e[2]); });
+                }
+            };
+            fill_face(ffine[dir], lev);
+            fill_face(fcrse[dir], clev);   // pre-fill so uncovered coarse faces survive
+        }
+
+        const amrex::Array<const amrex::MultiFab*,AMREX_SPACEDIM> ffp{&ffine[0], &ffine[1], &ffine[2]};
+        const amrex::Array<amrex::MultiFab*,AMREX_SPACEDIM>       fcp{&fcrse[0], &fcrse[1], &fcrse[2]};
+
+        amrex::average_down_faces(ffp, fcp, p->ref_vec, p->amrex_geometry[clev]);
+
+        for (int dir = 0; dir < AMREX_SPACEDIM; ++dir)
+        {
+            if (dir==1 && jdir!=1) continue;
+            const amrex::IntVect e = amrex::IntVect::TheDimensionVector(dir);
+            auto& v_mf = vfld[dir]->GetMultiFab(clev);
+            for (amrex::MFIter mfi(v_mf); mfi.isValid(); ++mfi)
+            {
+                const amrex::Box& bx = mfi.validbox();
+                auto       vv = v_mf.array(mfi);
+                const auto f  = fcrse[dir].const_array(mfi);
+                amrex::LoopOnCpu(bx, [&] (int i, int j, int k) noexcept
+                { vv(i,j,k) = f(i+e[0], j+e[1], k+e[2]); });
             }
         }
     }
