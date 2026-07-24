@@ -35,6 +35,7 @@ Author: Alexander Hanke
 #include "density_vof.h"
 #include "density_rheo.h"
 #include "looping.h"
+#include "definitions_amrex.h"
 
 #include <AMReX_MLABecLaplacian.H>
 #include <AMReX_MLMG.H>
@@ -434,6 +435,16 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
         if(const char* bi = std::getenv("REEF_MLMG_BOTTOM_MAXITER"))
         mlmg->setBottomMaxIter(std::atoi(bi));
 
+        if(std::getenv("REEF_MLMG_BOTTOM_SIZE"))
+        {
+            mlmg->setNSolve(1);              // bottom problem on a single grid/rank
+            mlmg->setNSolveGridSize(16);
+            mlmg->setBottomTolerance(1.e-3);
+        }
+
+        if(std::getenv("REEF_MLMG_MAXFMGITER"))
+        mlmg->setMaxFmgIter(1);
+
         solver_created = true;
         created_nlevs  = nlev;
     }
@@ -783,15 +794,23 @@ void amrex_solver::start(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v,
     if(p->mpirank==0 && (p->count%p->P12==0))
     std::cout<<".";
 
+    const double total_start = pgc->timer();
+
     // mirror pjm::vel_setup: the caller updates the velocity ghosts only
     // after the projection, but the staging reads one ghost layer
+    double block_start = pgc->timer();
     pgc->start1(p,u,gcval_u);
     pgc->start2(p,v,gcval_v);
     pgc->start3(p,w,gcval_w);
+    const double gc_time = pgc->timer() - block_start;
 
+    block_start = pgc->timer();
     setup(p,a,pgc,u,v,w,phi);
+    const double setup_time = pgc->timer() - block_start;
 
+    block_start = pgc->timer();
     fill_rhs(p,alpha);
+    const double fill_rhs_time = pgc->timer() - block_start;
 
     const double starttime = pgc->timer();
 
@@ -799,14 +818,36 @@ void amrex_solver::start(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v,
 
     const double endtime = pgc->timer();
 
+    block_start = pgc->timer();
     pressure_update(p,a,pgc);
+    const double pressure_update_time = pgc->timer() - block_start;
 
+    block_start = pgc->timer();
     ucorr(p,a,pgc,u,v,w,alpha);
+    const double ucorr_time = pgc->timer() - block_start;
 
     p->poissoniter = p->solveriter;
     p->poissontime = endtime-starttime;
 
+    const double total_time = pgc->timer() - total_start;
+
     if(p->mpirank==0 && (p->count%p->P12==0))
-    std::cout<<"piter: "<<p->solveriter<<"  ptime: "<<std::setprecision(3)<<p->poissontime<<std::endl;
+    {
+        std::cout<<"piter: "<<p->solveriter<<"  ptime: "<<std::setprecision(3)<<p->poissontime<<std::endl;
+
+        if(std::getenv("REEF_MLMG_TIMING"))
+        {
+            const double denom = (total_time > 0.0) ? total_time : 1.0;
+            std::cout<<"amrex_solver runtime breakdown (s | %total):"<<std::endl;
+            std::cout<<std::setprecision(6)
+                     <<"  gc: "<<gc_time<<" | "<<(100.0*gc_time/denom)<<"%\n"
+                     <<"  setup: "<<setup_time<<" | "<<(100.0*setup_time/denom)<<"%\n"
+                     <<"  fill_rhs: "<<fill_rhs_time<<" | "<<(100.0*fill_rhs_time/denom)<<"%\n"
+                     <<"  solve: "<<p->poissontime<<" | "<<(100.0*p->poissontime/denom)<<"%\n"
+                     <<"  pressure_update: "<<pressure_update_time<<" | "<<(100.0*pressure_update_time/denom)<<"%\n"
+                     <<"  ucorr: "<<ucorr_time<<" | "<<(100.0*ucorr_time/denom)<<"%\n"
+                     <<"  total: "<<total_time<<std::endl;
+        }
+    }
 }
 #endif

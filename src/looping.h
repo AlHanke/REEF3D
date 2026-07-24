@@ -24,6 +24,7 @@ Authors: Hans Bihs, Alexander Hanke
 #define LOOPING_H_
 
 #include"definitions.h"
+#include "definitions_amrex.h"
 
 #include"looping2D.h"
 

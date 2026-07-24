@@ -17,22 +17,16 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
-#ifndef FLUID_UPDATE_H_
-#define FLUID_UPDATE_H_
+#ifndef DEFINITIONS_AMREX_H_
+#define DEFINITIONS_AMREX_H_
 
-class lexer;
-class fdm;
-class ghostcell;
-class field;
+#if USE_AMREX
+#include <AMReX_MFIter.H>
 
-class fluid_update
-{
-public:
-    virtual ~fluid_update() = default;
-    virtual void start(lexer*, fdm*, ghostcell*, field&, field&, field&)=0;
-};
+static constexpr bool MFIter_TILING () noexcept { return false; } // amrex::TilingIfNotGPU() | false
 
+#endif
 #endif
