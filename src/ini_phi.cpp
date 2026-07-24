@@ -25,6 +25,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 #include"heaviside_ls.h"
+#include "definitions_amrex.h"
 #include<utility>
 
 void initialize::iniphi(lexer* p, fdm* a, ghostcell* pgc)

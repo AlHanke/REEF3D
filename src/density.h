@@ -29,6 +29,7 @@ class fdm;
 class density
 {
 public:
+    virtual ~density() = default;
     virtual double roface(lexer*,fdm*,int,int,int)=0;
 };
 

@@ -39,8 +39,6 @@ enum {X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2, Z_NEG=5, Z_POS=6};
 inline constexpr double PI = 3.14159265359;
 inline constexpr double EE = 2.71828182846;
 
-inline constexpr bool MFIter_TILING () noexcept { return false; } // amrex::TilingIfNotGPU()
-
 /// Storage layout of a field, and the `location` value carried by
 /// lexer::mf_registry / imf_registry entries (field_amrex passes
 /// static_cast<int>(DataLocation)).

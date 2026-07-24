@@ -60,6 +60,7 @@ Authors: Hans Bihs, Alexander Hanke
 #include<cstdio>
 #include<cstring>
 #include<stdint.h>
+#include "definitions_amrex.h"
 #if USE_AMREX
     #include <AMReX_PlotFileUtil.H>
     #include <AMReX_ParallelDescriptor.H>

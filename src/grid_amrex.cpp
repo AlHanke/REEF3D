@@ -28,6 +28,7 @@ Author: Alexander Hanke
 #include "weno3_nug_func.h"
 #include "weno_nug_func.h"
 #include "slice_amrex_prim.h"
+#include "definitions_amrex.h"
 
 #include <AMReX_Geometry.H>
 #include <AMReX_BoxArray.H>
