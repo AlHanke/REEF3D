@@ -51,9 +51,7 @@ public:
     void precalc_isf(lexer*);
 
     void ini(lexer*);
-    #if USE_AMREX
     void rebuild_levels(lexer* p, int new_nlevs);
-    #endif
 
     // IS ----
     // x
