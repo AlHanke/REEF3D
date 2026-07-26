@@ -286,19 +286,19 @@ private:
     // relax pre-calc
     int wave_comp;
     int upt_count,vpt_count,wpt_count,ppt_count,ept_count;
-    double *uval,*vval,*wval,*lsval,*Fival,*Fifsfval,*Fifsfval0,*Fifsfval1,*Uinval;
-    double *UHval,*VHval,*WHval;
-    double *vofval;
+    std::vector<double> uval, vval, wval, lsval, Fival, Fifsfval, Fifsfval0, Fifsfval1, Uinval;
+    std::vector<double> UHval, VHval, WHval;
+    std::vector<double> vofval;
 
     // decomp space
-    double **etaval_S_sin,**Fifsfval_S_sin;
-    float **uval_S_sin,**vval_S_sin,**wval_S_sin,**Fival_S_sin;
-    double **etaval_S_cos,**Fifsfval_S_cos;
-    float **uval_S_cos,**vval_S_cos,**wval_S_cos,**Fival_S_cos;
+    std::vector<std::vector<double>> etaval_S_sin,Fifsfval_S_sin;
+    std::vector<std::vector<float>> uval_S_sin, vval_S_sin, wval_S_sin, Fival_S_sin;
+    std::vector<std::vector<double>> etaval_S_cos,Fifsfval_S_cos;
+    std::vector<std::vector<float>> uval_S_cos, vval_S_cos, wval_S_cos, Fival_S_cos;
     
     // decomp time
-    double *uval_T_sin,*vval_T_sin,*wval_T_sin,*etaval_T_sin,*Fival_T_sin,*Fifsfval_T_sin;
-    double *uval_T_cos,*vval_T_cos,*wval_T_cos,*etaval_T_cos,*Fival_T_cos,*Fifsfval_T_cos;
+    std::vector<double> uval_T_sin, vval_T_sin, wval_T_sin, etaval_T_sin, Fival_T_sin, Fifsfval_T_sin;
+    std::vector<double> uval_T_cos, vval_T_cos, wval_T_cos, etaval_T_cos, Fival_T_cos, Fifsfval_T_cos;
 
     double zloc1,zloc2,zloc3,zloc4,zcoor;
 

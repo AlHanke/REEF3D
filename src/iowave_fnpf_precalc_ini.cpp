@@ -82,24 +82,24 @@ void iowave::fnpf_precalc_relax_ini(lexer *p, ghostcell *pgc)
     }	
     
     // precalc array alloc
-    p->Darray(Fival,ppt_count);
-    p->Darray(Fifsfval,ept_count);
-    p->Darray(Fifsfval0,ept_count);
-    p->Darray(Fifsfval1,ept_count);
+    Fival.resize(ppt_count);
+    Fifsfval.resize(ept_count);
+    Fifsfval0.resize(ept_count);
+    Fifsfval1.resize(ept_count);
 
     if(p->B89==1) 
     {
-        p->Darray(etaval_S_sin,ept_count,wave_comp);
-        p->Darray(Fifsfval_S_sin,ept_count,wave_comp);
+        etaval_S_sin.resize(ept_count,std::vector<double>(wave_comp));
+        Fifsfval_S_sin.resize(ept_count,std::vector<double>(wave_comp));
 
-        p->Darray(etaval_S_cos,ept_count,wave_comp);
-        p->Darray(Fifsfval_S_cos,ept_count,wave_comp);
+        etaval_S_cos.resize(ept_count,std::vector<double>(wave_comp));
+        Fifsfval_S_cos.resize(ept_count,std::vector<double>(wave_comp));
 
-        p->Darray(etaval_T_sin,wave_comp);
-        p->Darray(Fifsfval_T_sin,wave_comp);
+        etaval_T_sin.resize(wave_comp);
+        Fifsfval_T_sin.resize(wave_comp);
 
-        p->Darray(etaval_T_cos,wave_comp);
-        p->Darray(Fifsfval_T_cos,wave_comp);
+        etaval_T_cos.resize(wave_comp);
+        Fifsfval_T_cos.resize(wave_comp);
     }
 }
 
@@ -142,33 +142,33 @@ void iowave::fnpf_precalc_dirichlet_ini(lexer *p, ghostcell *pgc)
     }
       
     // precalc array alloc
-    p->Darray(uval,upt_count);
-    p->Darray(Fival,ppt_count);
-    p->Darray(Uinval,ppt_count);
-    p->Darray(Fifsfval,ept_count);
-    p->Darray(Fifsfval0,ept_count);
-    p->Darray(Fifsfval1,ept_count);
+    uval.resize(upt_count);
+    Fival.resize(ppt_count);
+    Uinval.resize(ppt_count);
+    Fifsfval.resize(ept_count);
+    Fifsfval0.resize(ept_count);
+    Fifsfval1.resize(ept_count);
 
     if(p->B89==1) 
     {
-        p->Darray(etaval_S_sin,ept_count,wave_comp);
-        p->Farray(Fival_S_sin,ppt_count,wave_comp);
-        p->Darray(Fifsfval_S_sin,ept_count,wave_comp);
-        p->Farray(uval_S_sin,ppt_count,wave_comp);
+        etaval_S_sin.resize(ept_count,std::vector<double>(wave_comp));
+        Fival_S_sin.resize(ppt_count,std::vector<float>(wave_comp));
+        Fifsfval_S_sin.resize(ept_count,std::vector<double>(wave_comp));
+        uval_S_sin.resize(ppt_count,std::vector<float>(wave_comp));
 
-        p->Darray(etaval_S_cos,ept_count,wave_comp);
-        p->Farray(Fival_S_cos,ppt_count,wave_comp);
-        p->Darray(Fifsfval_S_cos,ept_count,wave_comp);
-        p->Farray(uval_S_cos,ppt_count,wave_comp);
+        etaval_S_cos.resize(ept_count,std::vector<double>(wave_comp));
+        Fival_S_cos.resize(ppt_count,std::vector<float>(wave_comp));
+        Fifsfval_S_cos.resize(ept_count,std::vector<double>(wave_comp));
+        uval_S_cos.resize(ppt_count,std::vector<float>(wave_comp));
 
-        p->Darray(etaval_T_sin,wave_comp);
-        p->Darray(Fival_T_sin,wave_comp);
-        p->Darray(Fifsfval_T_sin,wave_comp);
-        p->Darray(uval_T_sin,wave_comp);
+        etaval_T_sin.resize(wave_comp);
+        Fival_T_sin.resize(wave_comp);
+        Fifsfval_T_sin.resize(wave_comp);
+        uval_T_sin.resize(wave_comp);
 
-        p->Darray(etaval_T_cos,wave_comp);
-        p->Darray(Fival_T_cos,wave_comp);
-        p->Darray(Fifsfval_T_cos,wave_comp);
-        p->Darray(uval_T_cos,wave_comp);
+        etaval_T_cos.resize(wave_comp);
+        Fival_T_cos.resize(wave_comp);
+        Fifsfval_T_cos.resize(wave_comp);
+        uval_T_cos.resize(wave_comp);
     }
 }
