@@ -133,10 +133,10 @@ public:
 	int** gcparaco5;
 	int** gcparaco6;
 
-    int*** gcx7;
-    int* gcx7_count;
-    int*** gcxco7;
-    int* gcxco7_count;
+    std::array<std::vector<std::array<int,3>>, 4> gcx7;
+    std::array<int, 4> gcx7_count;
+    std::array<std::vector<std::array<int,3>>, 4> gcxco7;
+    std::array<int, 4> gcxco7_count;
 
 	int gcpara1_count, gcpara2_count, gcpara3_count, gcpara4_count, gcpara5_count, gcpara6_count;
 	int gcparaco1_count, gcparaco2_count, gcparaco3_count, gcparaco4_count, gcparaco5_count, gcparaco6_count;
