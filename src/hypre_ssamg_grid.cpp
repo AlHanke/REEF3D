@@ -160,13 +160,20 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
                     const auto box_c = amrex::coarsen(halo_cf, rr);
                     const auto box_f = amrex::refine(box_c, rr);
 
-                    for (int i = 0; i < 3; ++i)
-                    {
-                        for (auto& [idx, overlap] : fine_ba.intersections(amrex::adjCellHi(box_f, i, 1)))
-                            cf_pairs.emplace_back(box_c, overlap, 2*i+1);
-                        for (auto& [idx, overlap] : fine_ba.intersections(amrex::adjCellLo(box_f, i, 1)))
-                            cf_pairs.emplace_back(box_c, overlap, 2*i);
-                    }
+                    // Emit ONLY along the halo's normal axis. box_c = coarsen(halo_cf) is a single
+                    // coarse layer in `normal` (the halo is thin there -- n_thin==1), which is the
+                    // assumption `cn = coarse_box.smallEnd(normal)` (line ~309) relies on. Iterating
+                    // the transverse axes i!=normal paired box_c -- which spans MANY cells in i --
+                    // with fine cells via smallEnd(i)=0, coupling interface fine cells to a coarse
+                    // cell at the domain edge (the z=0 / x=0 corruption that broke both the matrix
+                    // C-F coupling and the velocity corrector -> spurious C-F velocity -> geyser).
+                    // A staircase interface's other-axis C-F faces are caught by their own
+                    // thin-in-that-axis halos, so no real coupling is lost.
+                    const int i = normal;
+                    for (auto& [idx, overlap] : fine_ba.intersections(amrex::adjCellHi(box_f, i, 1)))
+                        cf_pairs.emplace_back(box_c, overlap, 2*i+1);
+                    for (auto& [idx, overlap] : fine_ba.intersections(amrex::adjCellLo(box_f, i, 1)))
+                        cf_pairs.emplace_back(box_c, overlap, 2*i);
                 }
             }
         }
@@ -307,6 +314,25 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
                 const amrex::IntVect cc = amrex::coarsen(amrex::IntVect(i, j, k), rr);
                 int c[3] = {cc[0], cc[1], cc[2]};
                 c[normal] = cn; // neighbour lives on the coarse side of the interface
+
+                // VALIDATION (REEF_CF_LINK_CHECK): the coarse neighbour must differ from
+                // coarsen(fine) by exactly +-1 in the normal only. A larger jump (e.g. cn=0 while
+                // coarsen(fine)[normal]~51) means this cf_pair matched the wrong coarse layer ->
+                // the fine cell is coupled to a bogus coarse cell (broken matrix + corrector).
+                if (std::getenv("REEF_CF_LINK_CHECK"))
+                {
+                    const int dn = c[normal] - cc[normal];
+                    if (dn != 1 && dn != -1)
+                        std::cout << "  [cflinkchk] BAD pair: fine (" << i << "," << j << "," << k
+                                  << ") coarsen=(" << cc[0] << "," << cc[1] << "," << cc[2]
+                                  << ") -> coarse (" << c[0] << "," << c[1] << "," << c[2]
+                                  << ")  normal=" << normal << " cn=" << cn << " dir=" << dir
+                                  << "  coarse_box[" << coarse_box.smallEnd(normal) << ".."
+                                  << coarse_box.bigEnd(normal) << "] fine_box_n["
+                                  << fine_box.smallEnd(normal) << ".." << fine_box.bigEnd(normal)
+                                  << "]" << std::endl;
+                }
+
                 add_entry(lev, f, lev - 1, c);
             }
 
