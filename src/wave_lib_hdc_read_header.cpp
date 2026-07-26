@@ -75,10 +75,10 @@ void wave_lib_hdc::read_header(lexer *p, ghostcell *pgc)
     Nz=iin;
 
     // allocate arrays
-    p->Darray(X,Nx);
-    p->Darray(Y,Ny);
-    p->Darray(Zsig,Nz);
-    p->Darray(B,Nx,Ny);
+    X.resize(Nx);
+    Y.resize(Ny);
+    Zsig.resize(Nz);
+    B.resize(Nx, std::vector<double>(Ny));
 
     // write coordinates
     for(i=0; i<Nx; ++i)
@@ -114,7 +114,7 @@ void wave_lib_hdc::read_header(lexer *p, ghostcell *pgc)
     header.read((char*)&iin, sizeof (int));
     diter=iin;
 
-    p->Darray(simtime,numiter);
+    simtime.resize(numiter);
 
     for(n=0;n<numiter;++n)
     {

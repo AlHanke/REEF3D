@@ -21,36 +21,35 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"wave_lib_hdc.h"
-#include"lexer.h"
 
-void wave_lib_hdc::allocate_fnpf(lexer *p, ghostcell *pgc)
+void wave_lib_hdc::allocate_fnpf()
 {
-    p->Darray(E1,Nx,Ny);
-    p->Darray(E2,Nx,Ny);
-    p->Darray(E,Nx,Ny);
+    E1.resize(Nx, std::vector<double>(Ny));
+    E2.resize(Nx, std::vector<double>(Ny));
+    E.resize(Nx, std::vector<double>(Ny));
 
-    p->Darray(F1,Nx,Ny);
-    p->Darray(F2,Nx,Ny);
-    p->Darray(F,Nx,Ny);
+    F1.resize(Nx, std::vector<double>(Ny));
+    F2.resize(Nx, std::vector<double>(Ny));
+    F.resize(Nx, std::vector<double>(Ny));
 }
 
-void wave_lib_hdc::allocate_cfd(lexer *p, ghostcell *pgc)
+void wave_lib_hdc::allocate_cfd()
 {
-    p->Darray(U1,Nx,Ny,Nz);
-    p->Darray(U2,Nx,Ny,Nz);
-    p->Darray(U,Nx,Ny,Nz);
+    U1.resize(Nx, std::vector<std::vector<double>>(Ny, std::vector<double>(Nz)));
+    U2.resize(Nx, std::vector<std::vector<double>>(Ny, std::vector<double>(Nz)));
+    U.resize(Nx, std::vector<std::vector<double>>(Ny, std::vector<double>(Nz)));
 
-    p->Darray(V1,Nx,Ny,Nz);
-    p->Darray(V2,Nx,Ny,Nz);
-    p->Darray(V,Nx,Ny,Nz);
+    V1.resize(Nx, std::vector<std::vector<double>>(Ny, std::vector<double>(Nz)));
+    V2.resize(Nx, std::vector<std::vector<double>>(Ny, std::vector<double>(Nz)));
+    V.resize(Nx, std::vector<std::vector<double>>(Ny, std::vector<double>(Nz)));
 
-    p->Darray(W1,Nx,Ny,Nz);
-    p->Darray(W2,Nx,Ny,Nz);
-    p->Darray(W,Nx,Ny,Nz);
+    W1.resize(Nx, std::vector<std::vector<double>>(Ny, std::vector<double>(Nz)));
+    W2.resize(Nx, std::vector<std::vector<double>>(Ny, std::vector<double>(Nz)));
+    W.resize(Nx, std::vector<std::vector<double>>(Ny, std::vector<double>(Nz)));
 
-    p->Darray(Z,Nx,Ny,Nz);
+    Z.resize(Nx, std::vector<std::vector<double>>(Ny, std::vector<double>(Nz)));
 
-    p->Darray(E1,Nx,Ny);
-    p->Darray(E2,Nx,Ny);
-    p->Darray(E,Nx,Ny);
+    E1.resize(Nx, std::vector<double>(Ny));
+    E2.resize(Nx, std::vector<double>(Ny));
+    E.resize(Nx, std::vector<double>(Ny));
 }

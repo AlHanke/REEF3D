@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 
 
-double wave_lib_hdc::plane_interpol(lexer *p, double **F, double x, double y)
+double wave_lib_hdc::plane_interpol(lexer *p, std::vector<std::vector<double>> &F, double x, double y)
 {
     val=0.0;
 
@@ -48,7 +48,7 @@ double wave_lib_hdc::plane_interpol(lexer *p, double **F, double x, double y)
     return val;
 }
 
-double wave_lib_hdc::ccpol2D(lexer *p, double **F, double x, double y)
+double wave_lib_hdc::ccpol2D(lexer *p, std::vector<std::vector<double>> &F, double x, double y)
 {
     // wa
     if(xp>X[0] && xp<X[Nx-1])
@@ -137,7 +137,7 @@ double wave_lib_hdc::ccpol2D(lexer *p, double **F, double x, double y)
     return val;
 }
 
-double wave_lib_hdc::ccpol2DM(lexer *p, double ***F, double x, double y)
+double wave_lib_hdc::ccpol2DM(lexer *p, std::vector<std::vector<std::vector<double>>> &F, double x, double y)
 {
     // wa
     if(xp>X[0] && xp<X[Nx-1])

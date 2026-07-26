@@ -23,7 +23,7 @@ Author: Hans Bihs
 #include"wave_lib_hdc.h"
 #include"lexer.h"
 
-void wave_lib_hdc::read_result_fnpf(lexer *p, ghostcell *pgc, double **E0, double **F0, int q0)
+void wave_lib_hdc::read_result_fnpf(lexer *p, ghostcell *pgc, std::vector<std::vector<double>> &E0, std::vector<std::vector<double>> &F0, int q0)
 {
     // open
     if(file_conti==1)
