@@ -40,6 +40,8 @@ Author: Hans Bihs
 #include"control.h"
 #include"coordinates.h"
 
+#include <array>
+
 class weno_nug_func;
 class ghostcell;
 
