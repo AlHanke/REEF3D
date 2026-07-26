@@ -23,7 +23,7 @@ Author: Hans Bihs
 #include"wave_lib_hdc.h"
 #include"lexer.h"
 
-double wave_lib_hdc::space_interpol(lexer *p, double ***F, double x, double y, double z)
+double wave_lib_hdc::space_interpol(lexer *p, std::vector<std::vector<std::vector<double>>> &F, double x, double y, double z)
 {
     val=0.0;
 
@@ -69,7 +69,7 @@ double wave_lib_hdc::space_interpol(lexer *p, double ***F, double x, double y, d
     return val;
 }
 
-double wave_lib_hdc::ccpol3D(lexer *p, double ***F, double xp, double yp, double zp)
+double wave_lib_hdc::ccpol3D(lexer *p, std::vector<std::vector<std::vector<double>>> &F, double xp, double yp, double zp)
 {
     // wa
     if(xp>X[0] && xp<X[Nx-1])

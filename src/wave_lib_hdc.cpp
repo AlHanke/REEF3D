@@ -31,9 +31,9 @@ wave_lib_hdc::wave_lib_hdc(lexer *p, ghostcell *pgc) : wave_lib_parameters(p,pgc
     read_header(p,pgc);
 
     if(p->A10==3)
-    allocate_fnpf(p,pgc);
+    allocate_fnpf();
     else if(p->A10==6)
-    allocate_cfd(p,pgc);
+    allocate_cfd();
 
     // time_interpol
     if(p->mpirank==0)

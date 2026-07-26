@@ -28,6 +28,7 @@ Author: Hans Bihs
 #include"increment.h"
 
 #include<fstream>
+#include<vector>
 
 using namespace std;
 
@@ -52,8 +53,8 @@ private:
     void wave_prestep_fnpf(lexer*,ghostcell*);
 
     void read_header(lexer*,ghostcell*);
-    void read_result_cfd(lexer*,ghostcell*,double**,double***,double***,double***,int);
-    void read_result_fnpf(lexer*,ghostcell*,double**,double**,int);
+    void read_result_cfd(lexer*,ghostcell*,std::vector<std::vector<double>>&,std::vector<std::vector<std::vector<double>>>&,std::vector<std::vector<std::vector<double>>>&,std::vector<std::vector<std::vector<double>>>&,int);
+    void read_result_fnpf(lexer*,ghostcell*,std::vector<std::vector<double>>&,std::vector<std::vector<double>>&,int);
 
     void fill_conti_fnpf(lexer*,ghostcell*);
     void fill_conti_cfd(lexer*,ghostcell*);
@@ -62,18 +63,18 @@ private:
     void filename_single(lexer*,ghostcell*,int);
     void filename_continuous(lexer*,ghostcell*);
 
-    void allocate_fnpf(lexer*,ghostcell*);
-    void allocate_cfd(lexer*,ghostcell*);
+    void allocate_fnpf();
+    void allocate_cfd();
 
     void time_interpol_fnpf(lexer*);
     void time_interpol_cfd(lexer*);
 
     // interpolation
-    double ccpol3D(lexer*,double***,double,double,double);
-    double ccpol2D(lexer*,double**,double,double);
-    double ccpol2DM(lexer*,double***,double,double);
-    double space_interpol(lexer*,double***,double,double,double);
-    double plane_interpol(lexer*,double**,double,double);
+    double ccpol3D(lexer*,std::vector<std::vector<std::vector<double>>>&,double,double,double);
+    double ccpol2D(lexer*,std::vector<std::vector<double>>&,double,double);
+    double ccpol2DM(lexer*,std::vector<std::vector<std::vector<double>>>&,double,double);
+    double space_interpol(lexer*,std::vector<std::vector<std::vector<double>>>&,double,double,double);
+    double plane_interpol(lexer*,std::vector<std::vector<double>>&,double,double);
 
     int pos_i(lexer*,double);
     int pos_j(lexer*,double);
@@ -82,18 +83,18 @@ private:
     int ihalf(int,int);
 
     // arrays
-    double *X;
-    double *Y;
-    double *Zsig;
-    double ***Z;
-    double **B;
-    double *simtime;
+    std::vector<double> X;
+    std::vector<double> Y;
+    std::vector<double> Zsig;
+    std::vector<std::vector<std::vector<double>>> Z;
+    std::vector<std::vector<double>> B;
+    std::vector<double> simtime;
 
-    double ***U1,***U2,***U;
-    double ***V1,***V2,***V;
-    double ***W1,***W2,***W;
-    double **E1,**E2,**E;
-    double **F1,**F2,**F;
+    std::vector<std::vector<std::vector<double>>> U1, U2, U;
+    std::vector<std::vector<std::vector<double>>> V1, V2, V;
+    std::vector<std::vector<std::vector<double>>> W1, W2, W;
+    std::vector<std::vector<double>> E1, E2, E;
+    std::vector<std::vector<double>> F1, F2, F;
 
     // variables
     double t_start,t_end;
