@@ -660,24 +660,53 @@ void hypre_ssamg::amr_cf_coefficients(lexer* p, fdm* a, ghostcell* pgc, fieldint
     // Pass 2b -- COARSE->fine faces: make the coupling conservative. Setting
     // coeff_cf(F) = coeff_fc(F) / (vol_c/vol_f) gives M_cf*vol_c = M_fc*vol_f exactly, so
     // the C-F flux is single-valued (the coarse face density becomes the fine average).
+    // REEF_CF_COARSE_PROBE: does every coarse->fine sub-face find its matching fine->coarse
+    // coupling in the Allgathered gfc map? A miss forces coeff=0 -> the coarse cell decouples
+    // from the fine region in the matrix (Lp~0) while the reflux still moves the face (D.u!=0),
+    // which is exactly the coarse patch-corner residual the adjoint probe localised.
+    const bool cprobe = (std::getenv("REEF_CF_COARSE_PROBE") != nullptr);
+    long g_hit = 0, g_miss = 0;
+
     const double volratio = double(rr[0])*double(rr[1])*double(rr[2]);
     for (auto& [key, ids] : faces)
     {
         const rec& r0 = info[ids[0]];
         if (r0.is_fine) continue;
         double new_total = 0.0;
+        int nmiss = 0;
         for (int id : ids)
         {
             const auto& L = cf_links[id]; // from=coarse, to=fine
             const std::array<int,6> k2{L.to_ijk[0],L.to_ijk[1],L.to_ijk[2],
                                        L.from_ijk[0],L.from_ijk[1],L.from_ijk[2]};
             const auto it = gfc.find(k2);
+            if (it != gfc.end()) ++g_hit; else { ++g_miss; ++nmiss; }
             const double coeff = (it!=gfc.end() ? it->second : 0.0) / volratio;
             cf_links[id].coeff = coeff;
             new_total += coeff;
         }
         a->M.p[r0.n] += (r0.old - new_total); // diagonal: T_old -> conservative T_cf
         slot(r0.n, r0.axis, r0.high) = 0.0;
+
+        if (cprobe && nmiss > 0)
+        {
+            const auto& L0 = cf_links[ids[0]];
+            std::cout << "  [cfcoarse] MISS coarse (" << L0.from_ijk[0] << "," << L0.from_ijk[1]
+                      << "," << L0.from_ijk[2] << ") axis=" << r0.axis << " high=" << r0.high
+                      << "  fine_partners=" << ids.size() << " missing=" << nmiss
+                      << "  coeff_total=" << new_total << std::endl;
+        }
+    }
+    if (cprobe)
+    {
+        long tot_hit = g_hit, tot_miss = g_miss;
+        MPI_Allreduce(MPI_IN_PLACE, &tot_hit,  1, MPI_LONG, MPI_SUM, pgc->mpi_comm);
+        MPI_Allreduce(MPI_IN_PLACE, &tot_miss, 1, MPI_LONG, MPI_SUM, pgc->mpi_comm);
+        if (p->mpirank == 0)
+            std::cout << "  [cfcoarse] coarse->fine gfc lookups: hit=" << tot_hit
+                      << "  MISS=" << tot_miss
+                      << "  (miss => coarse row decoupled from fine -> reflux injects divergence)"
+                      << std::endl;
     }
 #endif
 }
@@ -704,6 +733,17 @@ void hypre_ssamg::cf_velocity_correction(lexer* p, fdm* a, ghostcell* pgc,
     if (p->nlevs <= 1) return;
 
     const auto& rr = p->ref_vec;
+
+    // REEF_CF_CORNER_PROBE: at each coarse C-F face, compare the matrix-adjoint coarse flux
+    // (Sum coeff_cf*(phiF-phiC)) against the reflux-implied flux (avg of the corrected fine face
+    // velocities / (alpha*dt*DXN_c)). If the ratio is ~1 the reflux already equals the coupling
+    // (a direct coarse-face correction would change nothing); a ratio != 1 is the factor the
+    // reflux is off by at that face. Keyed by coarse {to_ijk, axis, high}. Per-rank partial sums.
+    const bool corner = (std::getenv("REEF_CF_CORNER_PROBE") != nullptr);
+    const double volratio_cp = double(rr[0])*double(rr[1])*double(rr[2]);
+    std::map<std::array<int,5>, std::array<double,6>> cornacc; // {mflux, sum_ufine, count, DXN_c, sum|coeff|, sum|grad|}
+    double gmin_coeff = 1e300, gmax_coeff = 0.0;   // global |L.coeff| range over fine->coarse links
+    int craw = 0;                                  // raw pf/pc dump counter
 
     // --- TEMPORARY localization probe (REEF_CF_DIV), remove once the C-F ring is fixed ---
     // Measures the post-correction discrete divergence of each fine interface cell, split by
@@ -787,6 +827,18 @@ void hypre_ssamg::cf_velocity_correction(lexer* p, fdm* a, ghostcell* pgc,
                 const double pf = pf_arr(fiv);
                 const double pc = pc_arr(tiv);
 
+                if (corner && craw < 10)
+                {
+                    ++craw;
+                    const amrex::IntVect cfiv = amrex::coarsen(fiv, rr);
+                    std::cout << "  [cfraw] fiv=(" << fiv[0] << "," << fiv[1] << "," << fiv[2]
+                              << ") coarsen(fiv)=(" << cfiv[0] << "," << cfiv[1] << "," << cfiv[2]
+                              << ") tiv=(" << tiv[0] << "," << tiv[1] << "," << tiv[2]
+                              << ") axis=" << axis << " high=" << high
+                              << "  pf=" << pf << "  pc=" << pc
+                              << "  pc(coarsen(fiv))=" << pc_arr(cfiv) << std::endl;
+                }
+
                 amrex::IntVect e(0, 0, 0); e[axis] = 1;
 
                 // Sole-writer C-F correction. The corrected face is the fine cell's own face on
@@ -823,6 +875,20 @@ void hypre_ssamg::cf_velocity_correction(lexer* p, fdm* a, ghostcell* pgc,
                 if      (axis == 0) u_arr(face) -= delta;
                 else if (axis == 1) v_arr(face) -= delta;
                 else                w_arr(face) -= delta;
+
+                if (corner)
+                {
+                    const double ucorr = (axis==0)? u_arr(face) : (axis==1? v_arr(face) : w_arr(face));
+                    auto& acc = cornacc[{tiv[0],tiv[1],tiv[2],axis,high?1:0}];
+                    acc[0] += (absnew/volratio_cp) * (pf - pc);   // Sum coeff_cf*(phiF-phiC)
+                    acc[1] += ucorr;                              // corrected fine face vel (feeds reflux)
+                    acc[2] += 1.0;
+                    acc[3]  = p->amrex_geometry[lev-1].CellSize(axis); // coarse cell size DXN_c
+                    acc[4] += absnew;                             // |L.coeff| (matrix C-F coupling)
+                    acc[5] += std::fabs(pf - pc);                 // |phiF-phiC| gradient magnitude
+                    gmin_coeff = std::min(gmin_coeff, absnew);
+                    gmax_coeff = std::max(gmax_coeff, absnew);
+                }
 
                 // REEF_CF_COUNT: register this C-F face write in the shared per-face counter so
                 // velcorr can flag any face also written by the interior loop (count==2).
@@ -1009,6 +1075,27 @@ void hypre_ssamg::cf_velocity_correction(lexer* p, fdm* a, ghostcell* pgc,
                           << "  z-/z+=" << cw_fln[4] << "/" << cw_fln[5]
                           << "  (wall-normal face velocity must be 0 for no-slip)" << std::endl;
             }
+        }
+    }
+
+    if (corner)
+    {
+        std::cout << "  [cfcorner] |L.coeff| range over fine->coarse links on this rank:  min="
+                  << gmin_coeff << "  max=" << gmax_coeff
+                  << "   (==0 => matrix has NO C-F coupling)" << std::endl;
+        int shown = 0;
+        for (const auto& [key, acc] : cornacc)
+        {
+            const double mflux    = acc[0];                        // matrix coarse coupling flux
+            const double refl_vel = acc[1] / acc[2];               // reflux coarse face velocity
+            const double refl_flux= refl_vel / (alpha*p->dt*acc[3]); // reflux-implied coarse flux
+            const double avgcoeff = acc[4] / acc[2];               // avg |L.coeff| on this face
+            const double avggrad  = acc[5] / acc[2];               // avg |phiF-phiC|
+            if (shown++ < 12)
+                std::cout << "  [cfcorner] coarse (" << key[0] << "," << key[1] << "," << key[2]
+                          << ") axis=" << key[3] << " high=" << key[4] << " N=" << int(acc[2])
+                          << "  |coeff|=" << avgcoeff << "  |grad|=" << avggrad
+                          << "  matrix_flux=" << mflux << "  reflux_flux=" << refl_flux << std::endl;
         }
     }
 #endif
