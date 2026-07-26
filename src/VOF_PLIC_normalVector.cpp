@@ -83,9 +83,23 @@ void VOF_PLIC::ininorVecLS(lexer* p)
 	p->Darray(G, 3, 3);
 	p->Darray(invG, 3, 3);
 	
-	p->Darray(nxCoeff, p->knox, p->knoy, p->knoz, 26);
-	p->Darray(nyCoeff, p->knox, p->knoy, p->knoz, 26);
-	p->Darray(nzCoeff, p->knox, p->knoy, p->knoz, 26);
+    nxCoeff.resize(p->knox);
+    nyCoeff.resize(p->knox);
+    nzCoeff.resize(p->knox);
+
+    for (int i = 0; i < p->knox; i++)
+    {
+        nxCoeff[i].resize(p->knoy);
+        nyCoeff[i].resize(p->knoy);
+        nzCoeff[i].resize(p->knoy);
+
+        for (int j = 0; j < p->knoy; j++)
+        {
+            nxCoeff[i][j].resize(p->knoz);
+            nyCoeff[i][j].resize(p->knoz);
+            nzCoeff[i][j].resize(p->knoz);
+        }
+    }
 	
 	LOOP
 	{
