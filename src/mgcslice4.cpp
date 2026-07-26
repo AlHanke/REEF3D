@@ -39,9 +39,5 @@ mgcslice4::~mgcslice4()
 
 void mgcslice4::makemgc(lexer* p)
 {
-
 }
-
-
-
 
