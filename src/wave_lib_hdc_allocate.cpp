@@ -28,7 +28,7 @@ void wave_lib_hdc::allocate_fnpf(lexer *p, ghostcell *pgc)
     p->Darray(E1,Nx,Ny);
     p->Darray(E2,Nx,Ny);
     p->Darray(E,Nx,Ny);
-    
+
     p->Darray(F1,Nx,Ny);
     p->Darray(F2,Nx,Ny);
     p->Darray(F,Nx,Ny);
@@ -39,15 +39,17 @@ void wave_lib_hdc::allocate_cfd(lexer *p, ghostcell *pgc)
     p->Darray(U1,Nx,Ny,Nz);
     p->Darray(U2,Nx,Ny,Nz);
     p->Darray(U,Nx,Ny,Nz);
-    
+
     p->Darray(V1,Nx,Ny,Nz);
     p->Darray(V2,Nx,Ny,Nz);
     p->Darray(V,Nx,Ny,Nz);
-    
+
     p->Darray(W1,Nx,Ny,Nz);
     p->Darray(W2,Nx,Ny,Nz);
     p->Darray(W,Nx,Ny,Nz);
-    
+
+    p->Darray(Z,Nx,Ny,Nz);
+
     p->Darray(E1,Nx,Ny);
     p->Darray(E2,Nx,Ny);
     p->Darray(E,Nx,Ny);
