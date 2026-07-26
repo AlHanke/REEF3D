@@ -33,6 +33,9 @@ Authors: Tobias Martin, Fabian Knoblauch
 #include"field4.h"
 #include"interpolation.h"
 
+#include <array>
+#include <vector>
+
 class picard_f;
 class heat;
 class fluid_update;
@@ -165,7 +168,7 @@ private:
 
 	int gcval_frac;
 	double starttime; 
-    double ****nxCoeff, ****nyCoeff, ****nzCoeff;
+    std::vector<std::vector<std::vector<std::array<double, 26>>>> nxCoeff, nyCoeff, nzCoeff;
    
 	//- Sweep tracker for alternating starting point
 	int sSweep;
