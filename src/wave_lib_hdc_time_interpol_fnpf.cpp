@@ -28,11 +28,11 @@ void wave_lib_hdc::time_interpol_fnpf(lexer *p)
     for(i=0; i<Nx; ++i)
     for(j=0; j<Ny; ++j)
     E[i][j] = E1[i][j]*t1 + E2[i][j]*t2;
-    
+
     for(i=0; i<Nx; ++i)
     for(j=0; j<Ny; ++j)
     F[i][j] = F1[i][j]*t1 + F2[i][j]*t2;
-    
+
     for(i=0; i<Nx; ++i)
     for(j=0; j<Ny; ++j)
     for(k=0; k<Nz; ++k)
