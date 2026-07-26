@@ -469,8 +469,14 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
     const bool lowface_restore = (std::getenv("REEF_CF_LOWFACE_RESTORE") != nullptr);
     if(lowface_restore) psolv->cf_lowface_save_restore(p,u0,v0,w0,true);
 
+    // REEF_PROJ_NOSETUP: skip the halo fill entirely and measure D.u on the raw velcorr output.
+    // Decides whether the C-F residual is a genuine reflux/matrix disagreement (residual persists)
+    // or is injected by start1/2/3 overwriting the corrected/refluxed C-F faces (residual collapses).
+    // Only safe as a diagnostic: cross-box halos are then stale, so ignore the boundary bucket here.
+    const bool nosetup = (std::getenv("REEF_PROJ_NOSETUP") != nullptr);
+
     // Same halo fill the production rhs sees, so D matches the assembled L across boxes/levels.
-    vel_setup(p,a,pgc,u0,v0,w0,alpha);
+    if(!nosetup) vel_setup(p,a,pgc,u0,v0,w0,alpha);
 
     if(lowface_restore) psolv->cf_lowface_save_restore(p,u0,v0,w0,false);
 
