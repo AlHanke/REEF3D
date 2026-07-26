@@ -58,9 +58,7 @@ void driver::makegrid_sigma(lexer *p, ghostcell *pgc)
 // gcx
     int xz,yz;
     int maxnum;
-    
-    p->Iarray(p->gcx7_count,6);
-    p->Iarray(p->gcxco7_count,6);
+
     
 // gcx7 allocation
     xz=yz=0;
@@ -70,7 +68,8 @@ void driver::makegrid_sigma(lexer *p, ghostcell *pgc)
     
     maxnum = MAX(xz,yz);
     
-    p->Iarray(p->gcx7,4,maxnum,3);
+    for(q=0;q<p->gcx7.size();++q)
+    p->gcx7[q].resize(maxnum);
     
 // gcxco7 allocation
     xz=yz=0;
@@ -80,7 +79,8 @@ void driver::makegrid_sigma(lexer *p, ghostcell *pgc)
     
     maxnum = MAX(xz,yz);
     
-    p->Iarray(p->gcxco7,4,maxnum,3);
+    for(q=0;q<p->gcxco7.size();++q)
+    p->gcxco7[q].resize(maxnum);
 
 // ---------------
 // gcx7 
