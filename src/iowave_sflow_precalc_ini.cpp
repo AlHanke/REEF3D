@@ -98,7 +98,7 @@ void iowave::wavegen_2D_precalc_ini(lexer *p, ghostcell *pgc)
     vpt_count *= (p->B160+1);
     wpt_count *= (p->B160+1);
     
-    p->Darray(uval,upt_count);
-    p->Darray(vval,upt_count);
-    p->Darray(wval,upt_count);
+    uval.resize(upt_count);
+    vval.resize(vpt_count);
+    wval.resize(wpt_count);
 }
