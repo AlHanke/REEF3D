@@ -128,27 +128,30 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
     sgeom[0]  = p->amrex_geometry[0];
     sgrids[0] = p->amrex_box_array[0];
 
-    IntVect rr = p->ref_vec;
-    if(ydouble)
-    rr[1] = rr[0];
+    // Must be the SAME (possibly anisotropic) ratio grid_amrex refined the
+    // hierarchy with -- MLLinOp takes no ref ratio, it infers it by coarsening
+    // the fine domain until it matches the coarse one. A geometry refined 2x in
+    // a thin direction that the box arrays left at 1x never matches, the
+    // inference falls through and yields ref ratio 8 -> mlmg_lin_cc_interp aborts.
+    const IntVect rr = p->ref_vec;
 
     for(int lev=1; lev<nlev; ++lev)
     {
         sgeom[lev] = amrex::refine(sgeom[lev-1], rr);
 
-        if(ydouble)
-        {
-            const int nyf = 1 << lev;
-            BoxList bl;
-            for(int b=0; b<static_cast<int>(p->amrex_box_array[lev].size()); ++b)
-            {
-                Box bb = p->amrex_box_array[lev][b];
-                bb.setBig(1, nyf-1);
-                bl.push_back(bb);
-            }
-            sgrids[lev] = BoxArray(std::move(bl));
-        }
-        else
+        // if(ydouble)
+        // {
+        //     const int nyf = 1 << lev;
+        //     BoxList bl;
+        //     for(int b=0; b<static_cast<int>(p->amrex_box_array[lev].size()); ++b)
+        //     {
+        //         Box bb = p->amrex_box_array[lev][b];
+        //         bb.setBig(1, nyf-1);
+        //         bl.push_back(bb);
+        //     }
+        //     sgrids[lev] = BoxArray(std::move(bl));
+        // }
+        // else
         sgrids[lev] = p->amrex_box_array[lev];
     }
 
