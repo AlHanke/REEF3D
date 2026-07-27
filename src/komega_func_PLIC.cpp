@@ -132,9 +132,9 @@ void komega_func_PLIC::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
         GCDF4LOOP
 		{
 		GCDF4_TILE(n);
-		i = p->gcdf4[n].i;
-		j = p->gcdf4[n].j;
-		k = p->gcdf4[n].k;
+		i = p->gcdf4[p->level][n].i;
+		j = p->gcdf4[p->level][n].j;
+		k = p->gcdf4[p->level][n].k;
 		
 		eddyv0(i,j,k) = MAX(MIN(MAX(kin(i,j,k)
 						  /((eps(i,j,k))>(1.0e-20)?(eps(i,j,k)):(1.0e20)),0.0),fabs(p->T35*kin(i,j,k))/strainterm(p,a)),

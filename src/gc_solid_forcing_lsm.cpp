@@ -30,36 +30,36 @@ void ghostcell::solid_forcing_lsm(lexer *p, fdm*, field &f)
     GCDF4LOOP
     {
         GCDF4_TILE(n);
-        i=p->gcdf4[n].i;
-        j=p->gcdf4[n].j;
-        k=p->gcdf4[n].k;
+        i=p->gcdf4[p->level][n].i;
+        j=p->gcdf4[p->level][n].j;
+        k=p->gcdf4[p->level][n].k;
 
-        if(p->gcdf4[n].cs==1)
+        if(p->gcdf4[p->level][n].cs==1)
         {
             f(i-1,j,k)=f(i,j,k);
             f(i-2,j,k)=f(i,j,k);
         }
-        else if(p->gcdf4[n].cs==4)
+        else if(p->gcdf4[p->level][n].cs==4)
         {
             f(i+1,j,k)=f(i,j,k);
             f(i+2,j,k)=f(i,j,k);
         }
-        else if(p->gcdf4[n].cs==3)
+        else if(p->gcdf4[p->level][n].cs==3)
         {
             f(i,j-1,k)=f(i,j,k);
             f(i,j-2,k)=f(i,j,k);
         }
-        else if(p->gcdf4[n].cs==2)
+        else if(p->gcdf4[p->level][n].cs==2)
         {
             f(i,j+1,k)=f(i,j,k);
             f(i,j+2,k)=f(i,j,k);
         }
-        else if(p->gcdf4[n].cs==5)
+        else if(p->gcdf4[p->level][n].cs==5)
         {
             f(i,j,k-1)=f(i,j,k);
             f(i,j,k-2)=f(i,j,k);
         }
-        else if(p->gcdf4[n].cs==6)
+        else if(p->gcdf4[p->level][n].cs==6)
         {
             f(i,j,k+1)=f(i,j,k);
             f(i,j,k+2)=f(i,j,k);
