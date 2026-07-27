@@ -159,7 +159,9 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     if(p->gcdf4_count!=count)
     {
         p->gcdf4_count=count;
-        p->gcdf4.assign(p->gcdf4_count, {});
+        p->gcdf4.resize_levels(nlevs);
+        for(int lev=0; lev<nlevs; ++lev)
+        p->gcdf4[lev].assign(p->gcdf4_count, {});
     }
 
     // assign gcdf entries
@@ -186,74 +188,72 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         {
             if(p->DF(i-1,j,k)<0)
             {
-                p->gcdf4[count].i=i;
-                p->gcdf4[count].j=j;
-                p->gcdf4[count].k=k;
-                p->gcdf4[count].cs=1;
+                p->gcdf4[p->level][count].i=i;
+                p->gcdf4[p->level][count].j=j;
+                p->gcdf4[p->level][count].k=k;
+                p->gcdf4[p->level][count].cs=1;
                 #if USE_AMREX
-                p->gcdf4[count].ctx_id=tilehandle;
+                p->gcdf4[p->level][count].ctx_id=tilehandle;
                 #endif
                 ++count;
             }
 
             if(p->DF(i+1,j,k)<0)
             {
-                p->gcdf4[count].i=i;
-                p->gcdf4[count].j=j;
-                p->gcdf4[count].k=k;
-                p->gcdf4[count].cs=4;
+                p->gcdf4[p->level][count].i=i;
+                p->gcdf4[p->level][count].j=j;
+                p->gcdf4[p->level][count].k=k;
+                p->gcdf4[p->level][count].cs=4;
                 #if USE_AMREX
-                p->gcdf4[count].ctx_id=tilehandle;
+                p->gcdf4[p->level][count].ctx_id=tilehandle;
                 #endif
                 ++count;
             }
 
             if(p->DF(i,j-1,k)<0)
             {
-                p->gcdf4[count].i=i;
-                p->gcdf4[count].j=j;
-                p->gcdf4[count].k=k;
-                p->gcdf4[count].cs=3;
+                p->gcdf4[p->level][count].i=i;
+                p->gcdf4[p->level][count].j=j;
+                p->gcdf4[p->level][count].k=k;
+                p->gcdf4[p->level][count].cs=3;
                 #if USE_AMREX
-                p->gcdf4[count].ctx_id=tilehandle;
+                p->gcdf4[p->level][count].ctx_id=tilehandle;
                 #endif
-                ++count;
                 ++count;
             }
 
             if(p->DF(i,j+1,k)<0)
             {
-                p->gcdf4[count].i=i;
-                p->gcdf4[count].j=j;
-                p->gcdf4[count].k=k;
-                p->gcdf4[count].cs=2;
+                p->gcdf4[p->level][count].i=i;
+                p->gcdf4[p->level][count].j=j;
+                p->gcdf4[p->level][count].k=k;
+                p->gcdf4[p->level][count].cs=2;
                 #if USE_AMREX
-                p->gcdf4[count].ctx_id=tilehandle;
+                p->gcdf4[p->level][count].ctx_id=tilehandle;
                 #endif
-                ++count;
                 ++count;
             }
 
             if(p->DF(i,j,k-1)<0)
             {
-                p->gcdf4[count].i=i;
-                p->gcdf4[count].j=j;
-                p->gcdf4[count].k=k;
-                p->gcdf4[count].cs=5;
+                p->gcdf4[p->level][count].i=i;
+                p->gcdf4[p->level][count].j=j;
+                p->gcdf4[p->level][count].k=k;
+                p->gcdf4[p->level][count].cs=5;
                 #if USE_AMREX
-                p->gcdf4[count].ctx_id=tilehandle;
+                p->gcdf4[p->level][count].ctx_id=tilehandle;
                 #endif
                 ++count;
             }
 
             if(p->DF(i,j,k+1)<0)
             {
-                p->gcdf4[count].i=i;
-                p->gcdf4[count].j=j;
-                p->gcdf4[count].k=k;
-                p->gcdf4[count].cs=6;
+                p->gcdf4[p->level][count].i=i;
+                p->gcdf4[p->level][count].j=j;
+                p->gcdf4[p->level][count].k=k;
+                p->gcdf4[p->level][count].cs=6;
                 #if USE_AMREX
-                p->gcdf4[count].ctx_id=tilehandle;
+                p->gcdf4[p->level][count].ctx_id=tilehandle;
                 #endif
                 ++count;
             }
@@ -291,10 +291,10 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     GCDF4LOOP
     {
         GCDF4_TILE(n);
-        i=p->gcdf4[n].i;
-        j=p->gcdf4[n].j;
-        k=p->gcdf4[n].k;
-        p->gcdf4[n].row=cval(i,j,k);
+        i=p->gcdf4[p->level][n].i;
+        j=p->gcdf4[p->level][n].j;
+        k=p->gcdf4[p->level][n].k;
+        p->gcdf4[p->level][n].row=cval(i,j,k);
     }
     GC_TILE_RESET;
 
