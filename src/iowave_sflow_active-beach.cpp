@@ -44,7 +44,7 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
 		j=p->gcslawa1[p->level][n].j;
 		
 		ii=0;
-		if(p->gcslawa1[p->level][n].cs==4)
+		if(p->gcslawa1[p->level][n].cs==X_POS)
 		ii=1;
 			
 		eta_T = 0.0;
@@ -68,22 +68,22 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
 		fac1=0.0;
 		
 		aa=bb=0;
-		if(p->gcslawa1[p->level][n].cs==1)
+		if(p->gcslawa1[p->level][n].cs==X_NEG)
         {
 		aa=-1;
 		fx*=-1.0;
         }
         
-		if(p->gcslawa1[p->level][n].cs==4)
+		if(p->gcslawa1[p->level][n].cs==X_POS)
 		aa=1;
 		
-		if(p->gcslawa1[p->level][n].cs==3)
+		if(p->gcslawa1[p->level][n].cs==Y_NEG)
         {
 		bb=-1;
         fx*=-0.0;
         }
 		
-		if(p->gcslawa1[p->level][n].cs==2)
+		if(p->gcslawa1[p->level][n].cs==Y_POS)
         {
 		bb=1;
         fx*=-1.0;
@@ -140,7 +140,7 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
 		
 		
 		jj=0;
-		if(p->gcslawa2[p->level][n].cs==2)
+		if(p->gcslawa2[p->level][n].cs==Y_POS)
 		jj=1;
 		
 
@@ -163,22 +163,22 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
 		fac1=0.0;
 		
 		aa=bb=0;
-		if(p->gcslawa2[p->level][n].cs==1)
+		if(p->gcslawa2[p->level][n].cs==X_NEG)
         {
 		aa=-1;
         fy*=1.0;
         }
 		
-		if(p->gcslawa2[p->level][n].cs==4)
+		if(p->gcslawa2[p->level][n].cs==X_POS)
 		aa=1;
 		
-		if(p->gcslawa2[p->level][n].cs==3)
+		if(p->gcslawa2[p->level][n].cs==Y_NEG)
         {
 		bb=-1;
         fy*=-1.0;
         }
 		
-		if(p->gcslawa2[p->level][n].cs==2)
+		if(p->gcslawa2[p->level][n].cs==Y_POS)
         {
 		bb=1;
         fy*=-1.0;

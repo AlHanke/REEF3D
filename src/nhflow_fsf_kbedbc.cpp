@@ -33,7 +33,7 @@ void nhflow_fsf_f::kinematic_bed(lexer *p, fdm_nhf *d, double *U, double *V, dou
   
     // Kinematic Bed BC
     GC4LOOP
-    if(p->gcb4[p->level][n].cs==5 && p->gcb4[p->level][n].bc==21)
+    if(p->gcb4[p->level][n].cs==Z_NEG && p->gcb4[p->level][n].bc==21)
     {
         GCB4_TILE(n);
 
