@@ -344,7 +344,7 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf
 
     if(gcdf_count!=count)
     {
-        gcdf.resize(count);
+        gcdf.assign(count, {});
 
         gcdf_count=count;
     }
@@ -357,8 +357,6 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf
     {
         #if USE_AMREX
         const int tilehandle = p->tile_ctx_id();
-        #else
-        const int tilehandle = 0;
         #endif
 
         IJKLOOP
@@ -367,61 +365,73 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf
         {
             if(flagsf(i-1,j,k)<0)
             {
-                gcdf[count][0]=i;
-                gcdf[count][1]=j;
-                gcdf[count][2]=k;
-                gcdf[count][3]=1;
-                gcdf[count][4]=tilehandle;
+                gcdf[count].i=i;
+                gcdf[count].j=j;
+                gcdf[count].k=k;
+                gcdf[count].cs=1;
+                #if USE_AMREX
+                gcdf[count].ctx_id=tilehandle;
+                #endif
                 ++count;
             }
 
             if(flagsf(i+1,j,k)<0)
             {
-                gcdf[count][0]=i;
-                gcdf[count][1]=j;
-                gcdf[count][2]=k;
-                gcdf[count][3]=4;
-                gcdf[count][4]=tilehandle;
+                gcdf[count].i=i;
+                gcdf[count].j=j;
+                gcdf[count].k=k;
+                gcdf[count].cs=4;
+                #if USE_AMREX
+                gcdf[count].ctx_id=tilehandle;
+                #endif
                 ++count;
             }
 
             if(flagsf(i,j-1,k)<0)
             {
-                gcdf[count][0]=i;
-                gcdf[count][1]=j;
-                gcdf[count][2]=k;
-                gcdf[count][3]=3;
-                gcdf[count][4]=tilehandle;
+                gcdf[count].i=i;
+                gcdf[count].j=j;
+                gcdf[count].k=k;
+                gcdf[count].cs=3;
+                #if USE_AMREX
+                gcdf[count].ctx_id=tilehandle;
+                #endif
                 ++count;
             }
 
             if(flagsf(i,j+1,k)<0)
             {
-                gcdf[count][0]=i;
-                gcdf[count][1]=j;
-                gcdf[count][2]=k;
-                gcdf[count][3]=2;
-                gcdf[count][4]=tilehandle;
+                gcdf[count].i=i;
+                gcdf[count].j=j;
+                gcdf[count].k=k;
+                gcdf[count].cs=2;
+                #if USE_AMREX
+                gcdf[count].ctx_id=tilehandle;
+                #endif
                 ++count;
             }
 
             if(flagsf(i,j,k-1)<0)
             {
-                gcdf[count][0]=i;
-                gcdf[count][1]=j;
-                gcdf[count][2]=k;
-                gcdf[count][3]=5;
-                gcdf[count][4]=tilehandle;
+                gcdf[count].i=i;
+                gcdf[count].j=j;
+                gcdf[count].k=k;
+                gcdf[count].cs=5;
+                #if USE_AMREX
+                gcdf[count].ctx_id=tilehandle;
+                #endif
                 ++count;
             }
 
             if(flagsf(i,j,k+1)<0)
             {
-                gcdf[count][0]=i;
-                gcdf[count][1]=j;
-                gcdf[count][2]=k;
-                gcdf[count][3]=6;
-                gcdf[count][4]=tilehandle;
+                gcdf[count].i=i;
+                gcdf[count].j=j;
+                gcdf[count].k=k;
+                gcdf[count].cs=6;
+                #if USE_AMREX
+                gcdf[count].ctx_id=tilehandle;
+                #endif
                 ++count;
             }
         }
