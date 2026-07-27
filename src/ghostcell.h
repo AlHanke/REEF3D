@@ -318,8 +318,8 @@ private:
     template<typename GenericField> inline void normal_vector_solid_topo(lexer* p, GenericField& solid, GenericField& topo, double& Hx, double& Hy, double& Hz, double& H, double& dirac, bool onlyHeaviside, double& nx, double& ny, double& nz, double& phix, double& phiy, double& phiz);
     template<typename GenericFieldConst> inline double Hsolidface(lexer *p, GenericFieldConst& solid, GenericFieldConst& topo, int aa, int bb, int cc);
 
-    template<typename FlagT, typename GcdfT>
-    void gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf_count);
+    template<typename FlagT, typename gcb_list>
+    void gcdf_update_impl(lexer *p, FlagT &flagsf, gcb_list &gcdf, int &gcdf_count);
 
     MPI_Comm cart_comm = MPI_COMM_NULL;
     int neighbors[6] = {MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL,

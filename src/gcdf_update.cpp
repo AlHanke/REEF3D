@@ -59,9 +59,9 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         IJKLOOP
         PBASECHECK
         {
-            if (p->j_dir==0)
+            if(p->j_dir==0)
                 psi = -p->X41*(1.0/2.0)*(p->DXN[IP] + p->DZN[KP]);
-            else if (p->j_dir==1)
+            else if(p->j_dir==1)
                 psi = -p->X41*(1.0/3.0)*(p->DXN[IP]+p->DYN[JP]+p->DZN[KP]);
 
             if((a->solid(i,j,k)>=psi || p->solidread==0) && (a->topo(i,j,k)>=psi || p->toporead==0))
@@ -120,145 +120,50 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     // DF
     set_DF(p,a);
 
-    // -----------------------------------------------------------
-    // count gcdf entries
-    count=0;
-
-    #if USE_AMREX
-    const int nlevs = p->nlevs;
-    #else
-    const int nlevs = 1;
-    #endif
-
-    // gcdf count
-    p->level = 0;
-    TILE_LOOP
-    IJKLOOP
-    PBASECHECK
-    if(p->DF(i,j,k)>0)
+    // flagsf1/2/3's replacements are the staggered-face versions of DF (same
+    // convention as flag1-3 vs flag4): open unless the face's neighbor cell is
+    // blocked. Since that's a pure function of DF -- which already carries a
+    // p->margin-deep synced halo -- they're computed on the fly here instead of
+    // as separate arrays; gcdf_update_impl never reaches more than 2 cells from DF.
+    auto flagsf1 = [p](int i, int j, int k) -> int
     {
-        if(p->DF(i-1,j,k)<0)
-            ++count;
+        int v = p->DF(i,j,k);
+        return (v>0 && p->DF(i+1,j,k)<0) ? -1 : v;
+    };
 
-        if(p->DF(i+1,j,k)<0)
-            ++count;
-
-        if(p->DF(i,j-1,k)<0)
-            ++count;
-
-        if(p->DF(i,j+1,k)<0)
-            ++count;
-
-        if(p->DF(i,j,k-1)<0)
-            ++count;
-
-        if(p->DF(i,j,k+1)<0)
-            ++count;
-    }
-
-    if(p->gcdf4_count!=count)
+    auto flagsf2 = [p](int i, int j, int k) -> int
     {
-        p->gcdf4_count=count;
-        p->gcdf4.resize_levels(nlevs);
-        for(int lev=0; lev<nlevs; ++lev)
-        p->gcdf4[lev].assign(p->gcdf4_count, {});
-    }
+        int v = p->DF(i,j,k);
+        return (v>0 && p->DF(i,j+1,k)<0) ? -1 : v;
+    };
 
-    // assign gcdf entries
-    //
-    // (i,j,k) recorded here are TILE-LOCAL — they are offsets from the producing
-    // tile's amr_tile_lo. Consumers run outside TILE_LOOP, where the default
-    // whole-box context is active, so each entry also records the dense id
-    // (column 6) of the tile it was written under. Without it the indices resolve
-    // against the wrong origin as soon as tiling produces more than one tile per
-    // box. TILE_CTX_DEFAULT here would mean the entry was produced outside a tile
-    // loop; it is not, but the id records that faithfully either way.
-    count=0;
-
-    p->level = 0;
-    TILE_LOOP
+    auto flagsf3 = [p](int i, int j, int k) -> int
     {
-        #if USE_AMREX
-        const int tilehandle = p->tile_ctx_id();
-        #endif
+        int v = p->DF(i,j,k);
+        return (v>0 && p->DF(i,j,k+1)<0) ? -1 : v;
+    };
 
-        IJKLOOP
-        PBASECHECK
-        if(p->DF(i,j,k)>0)
-        {
-            if(p->DF(i-1,j,k)<0)
-            {
-                p->gcdf4[p->level][count].i=i;
-                p->gcdf4[p->level][count].j=j;
-                p->gcdf4[p->level][count].k=k;
-                p->gcdf4[p->level][count].cs=1;
-                #if USE_AMREX
-                p->gcdf4[p->level][count].ctx_id=tilehandle;
-                #endif
-                ++count;
-            }
+    // -------------------------------------------------------
+    // flagsf1
 
-            if(p->DF(i+1,j,k)<0)
-            {
-                p->gcdf4[p->level][count].i=i;
-                p->gcdf4[p->level][count].j=j;
-                p->gcdf4[p->level][count].k=k;
-                p->gcdf4[p->level][count].cs=4;
-                #if USE_AMREX
-                p->gcdf4[p->level][count].ctx_id=tilehandle;
-                #endif
-                ++count;
-            }
+    gcdf_update_impl(p, flagsf1, p->gcdf1, p->gcdf1_count);
 
-            if(p->DF(i,j-1,k)<0)
-            {
-                p->gcdf4[p->level][count].i=i;
-                p->gcdf4[p->level][count].j=j;
-                p->gcdf4[p->level][count].k=k;
-                p->gcdf4[p->level][count].cs=3;
-                #if USE_AMREX
-                p->gcdf4[p->level][count].ctx_id=tilehandle;
-                #endif
-                ++count;
-            }
+    // -----------------------
+    // flagsf2
 
-            if(p->DF(i,j+1,k)<0)
-            {
-                p->gcdf4[p->level][count].i=i;
-                p->gcdf4[p->level][count].j=j;
-                p->gcdf4[p->level][count].k=k;
-                p->gcdf4[p->level][count].cs=2;
-                #if USE_AMREX
-                p->gcdf4[p->level][count].ctx_id=tilehandle;
-                #endif
-                ++count;
-            }
+    gcdf_update_impl(p, flagsf2, p->gcdf2, p->gcdf2_count);
 
-            if(p->DF(i,j,k-1)<0)
-            {
-                p->gcdf4[p->level][count].i=i;
-                p->gcdf4[p->level][count].j=j;
-                p->gcdf4[p->level][count].k=k;
-                p->gcdf4[p->level][count].cs=5;
-                #if USE_AMREX
-                p->gcdf4[p->level][count].ctx_id=tilehandle;
-                #endif
-                ++count;
-            }
+    // -----------------------
+    // flagsf3
 
-            if(p->DF(i,j,k+1)<0)
-            {
-                p->gcdf4[p->level][count].i=i;
-                p->gcdf4[p->level][count].j=j;
-                p->gcdf4[p->level][count].k=k;
-                p->gcdf4[p->level][count].cs=6;
-                #if USE_AMREX
-                p->gcdf4[p->level][count].ctx_id=tilehandle;
-                #endif
-                ++count;
-            }
-        }
-    }
+    gcdf_update_impl(p, flagsf3, p->gcdf3, p->gcdf3_count);
+
+    // -----------------------
+    // flagsf4
+
+    gcdf_update_impl(p, p->DF, p->gcdf4, p->gcdf4_count);
+
+    // -------------------------------------------------------
 
     fieldint4 cval(p);
 
@@ -287,7 +192,6 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     }
     GC_TILE_RESET;
 
-
     GCDF4LOOP
     {
         GCDF4_TILE(n);
@@ -297,37 +201,10 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         p->gcdf4[p->level][n].row=cval(i,j,k);
     }
     GC_TILE_RESET;
-
-    // flagsf1/2/3's replacements are the staggered-face versions of DF (same
-    // convention as flag1-3 vs flag4): open unless the face's neighbor cell is
-    // blocked. Since that's a pure function of DF -- which already carries a
-    // p->margin-deep synced halo -- they're computed on the fly here instead of
-    // as separate arrays; gcdf_update_impl never reaches more than 2 cells from DF.
-    auto flagsf1 = [p](int i, int j, int k) -> int
-    {
-        int v = p->DF(i,j,k);
-        return (v>0 && p->DF(i+1,j,k)<0) ? -1 : v;
-    };
-
-    auto flagsf2 = [p](int i, int j, int k) -> int
-    {
-        int v = p->DF(i,j,k);
-        return (v>0 && p->DF(i,j+1,k)<0) ? -1 : v;
-    };
-
-    auto flagsf3 = [p](int i, int j, int k) -> int
-    {
-        int v = p->DF(i,j,k);
-        return (v>0 && p->DF(i,j,k+1)<0) ? -1 : v;
-    };
-
-    gcdf_update_impl(p, flagsf1, p->gcdf1, p->gcdf1_count);
-    gcdf_update_impl(p, flagsf2, p->gcdf2, p->gcdf2_count);
-    gcdf_update_impl(p, flagsf3, p->gcdf3, p->gcdf3_count);
 }
 
-template<typename FlagT, typename GcdfT>
-void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf_count)
+template<typename FlagT, typename gcb_list>
+void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, gcb_list &gcdf, int &gcdf_count)
 {
     #if USE_AMREX
     const int nlevs = p->nlevs;
@@ -367,14 +244,21 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf
 
     if(gcdf_count!=count)
     {
+        gcdf_count=count;
         gcdf.resize_levels(nlevs);
         for(int lev=0; lev<nlevs; ++lev)
-        gcdf[lev].assign(count, {});
-
-        gcdf_count=count;
+        gcdf[lev].assign(gcdf_count, {});
     }
 
-    // assign gcdf entries (tile-local i,j,k + tile handle, see gcdf4 above)
+    // assign gcdf entries
+    //
+    // (i,j,k) recorded here are TILE-LOCAL — they are offsets from the producing
+    // tile's amr_tile_lo. Consumers run outside TILE_LOOP, where the default
+    // whole-box context is active, so each entry also records the dense id
+    // (column 6) of the tile it was written under. Without it the indices resolve
+    // against the wrong origin as soon as tiling produces more than one tile per
+    // box. TILE_CTX_DEFAULT here would mean the entry was produced outside a tile
+    // loop; it is not, but the id records that faithfully either way.
     count=0;
 
     p->level = 0;
