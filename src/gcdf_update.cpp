@@ -124,6 +124,12 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     // count gcdf entries
     count=0;
 
+    #if USE_AMREX
+    const int nlevs = p->nlevs;
+    #else
+    const int nlevs = 1;
+    #endif
+
     // gcdf count
     p->level = 0;
     TILE_LOOP
@@ -312,6 +318,12 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
 template<typename FlagT, typename GcdfT>
 void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf_count)
 {
+    #if USE_AMREX
+    const int nlevs = p->nlevs;
+    #else
+    const int nlevs = 1;
+    #endif
+
     // -----------------------
     // flagsf
 
@@ -344,7 +356,9 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf
 
     if(gcdf_count!=count)
     {
-        gcdf.assign(count, {});
+        gcdf.resize_levels(nlevs);
+        for(int lev=0; lev<nlevs; ++lev)
+        gcdf[lev].assign(count, {});
 
         gcdf_count=count;
     }
@@ -365,72 +379,72 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf
         {
             if(flagsf(i-1,j,k)<0)
             {
-                gcdf[count].i=i;
-                gcdf[count].j=j;
-                gcdf[count].k=k;
-                gcdf[count].cs=1;
+                gcdf[p->level][count].i=i;
+                gcdf[p->level][count].j=j;
+                gcdf[p->level][count].k=k;
+                gcdf[p->level][count].cs=1;
                 #if USE_AMREX
-                gcdf[count].ctx_id=tilehandle;
+                gcdf[p->level][count].ctx_id=tilehandle;
                 #endif
                 ++count;
             }
 
             if(flagsf(i+1,j,k)<0)
             {
-                gcdf[count].i=i;
-                gcdf[count].j=j;
-                gcdf[count].k=k;
-                gcdf[count].cs=4;
+                gcdf[p->level][count].i=i;
+                gcdf[p->level][count].j=j;
+                gcdf[p->level][count].k=k;
+                gcdf[p->level][count].cs=4;
                 #if USE_AMREX
-                gcdf[count].ctx_id=tilehandle;
+                gcdf[p->level][count].ctx_id=tilehandle;
                 #endif
                 ++count;
             }
 
             if(flagsf(i,j-1,k)<0)
             {
-                gcdf[count].i=i;
-                gcdf[count].j=j;
-                gcdf[count].k=k;
-                gcdf[count].cs=3;
+                gcdf[p->level][count].i=i;
+                gcdf[p->level][count].j=j;
+                gcdf[p->level][count].k=k;
+                gcdf[p->level][count].cs=3;
                 #if USE_AMREX
-                gcdf[count].ctx_id=tilehandle;
+                gcdf[p->level][count].ctx_id=tilehandle;
                 #endif
                 ++count;
             }
 
             if(flagsf(i,j+1,k)<0)
             {
-                gcdf[count].i=i;
-                gcdf[count].j=j;
-                gcdf[count].k=k;
-                gcdf[count].cs=2;
+                gcdf[p->level][count].i=i;
+                gcdf[p->level][count].j=j;
+                gcdf[p->level][count].k=k;
+                gcdf[p->level][count].cs=2;
                 #if USE_AMREX
-                gcdf[count].ctx_id=tilehandle;
+                gcdf[p->level][count].ctx_id=tilehandle;
                 #endif
                 ++count;
             }
 
             if(flagsf(i,j,k-1)<0)
             {
-                gcdf[count].i=i;
-                gcdf[count].j=j;
-                gcdf[count].k=k;
-                gcdf[count].cs=5;
+                gcdf[p->level][count].i=i;
+                gcdf[p->level][count].j=j;
+                gcdf[p->level][count].k=k;
+                gcdf[p->level][count].cs=5;
                 #if USE_AMREX
-                gcdf[count].ctx_id=tilehandle;
+                gcdf[p->level][count].ctx_id=tilehandle;
                 #endif
                 ++count;
             }
 
             if(flagsf(i,j,k+1)<0)
             {
-                gcdf[count].i=i;
-                gcdf[count].j=j;
-                gcdf[count].k=k;
-                gcdf[count].cs=6;
+                gcdf[p->level][count].i=i;
+                gcdf[p->level][count].j=j;
+                gcdf[p->level][count].k=k;
+                gcdf[p->level][count].cs=6;
                 #if USE_AMREX
-                gcdf[count].ctx_id=tilehandle;
+                gcdf[p->level][count].ctx_id=tilehandle;
                 #endif
                 ++count;
             }
