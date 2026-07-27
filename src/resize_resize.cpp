@@ -58,53 +58,6 @@ void resize_class::Dresize(double**& field, int iold, int inew, int jold, int jn
     field = cache;
 }
 
-void resize_class::Dresize(double***& field, int iold, int inew, int jold, int jnew, int kold, int knew)
-{
-    double ***cache;
-    
-    Darray(cache,inew,jnew,knew);
-    
-    for(int i = 0; i < std::min(iold, inew); ++i)
-    {
-        for(int j = 0; j < std::min(jold,jnew); ++j)
-        {
-            for(int k = 0; k < std::min(kold,knew); ++k)
-            {
-                cache[i][j][k] = field[i][j][k];
-            }
-        }
-    }
-    
-    del_Darray(field,iold,jold,kold);
-    
-    field = cache;
-}
-
-void resize_class::Dresize(double****& field, int iold, int inew, int jold, int jnew, int kold, int knew, int lold, int lnew)
-{
-    double ****cache;
-    
-    Darray(cache,inew,jnew,knew,lnew);
-    
-    for(int i = 0; i < std::min(iold, inew); ++i)
-    {
-        for(int j = 0; j < std::min(jold,jnew); ++j)
-        {
-            for(int k = 0; k < std::min(kold,knew); ++k)
-            {
-                for(int l = 0; l < std::min(lold, lnew); ++l)
-                {
-                    cache[i][j][k][l] = field[i][j][k][l];
-                }
-            }
-        }
-    }
-    
-    del_Darray(field,iold,jold,kold,lold);
-    
-    field = cache;
-}
-
 void resize_class::Iresize(int*& field, int iold, int inew)
 {
     int *cache;
@@ -136,75 +89,6 @@ void resize_class::Iresize(int**& field, int iold, int inew, int jold, int jnew)
     }
     
     del_Iarray(field,iold,jold);
-    
-    field = cache;
-}
-
-void resize_class::Iresize(int***& field, int iold, int inew, int jold, int jnew, int kold, int knew)
-{
-    int ***cache;
-
-    Iarray(cache,inew,jnew,knew);
-
-    for(int i = 0; i < std::min(iold,inew); ++i)
-    {
-        for(int j = 0; j < std::min(jold,jnew); ++j)
-        {
-            for(int k = 0; k < std::min(kold,knew); ++k)
-            {
-                cache[i][j][k] = field[i][j][k];
-            }
-        }
-    }
-
-    del_Iarray(field,iold,jold,kold);
-
-    field = cache;
-}
-
-void resize_class::Iresize(int***& field, int iold, int inew, int *jold, int *jnew, int kold, int knew)
-{
-    int ***cache;
-    
-    Iarray(cache,inew,jnew,knew);
-    
-    for(int i = 0; i < std::min(iold,inew); ++i)
-    {
-        for(int j = 0; j < std::min(jold[i],jnew[i]); ++j)
-        {
-            for(int k = 0; k < std::min(kold,knew); ++k)
-            {
-                cache[i][j][k] = field[i][j][k];
-            }
-        }
-    }
-    
-    del_Iarray(field,iold,jold,kold);
-    
-    field = cache;
-}
-
-void resize_class::Iresize(int****& field, int iold, int inew, int jold, int jnew, int kold, int knew, int lold, int lnew)
-{
-    int ****cache;
-    
-    Iarray(cache,inew,jnew,knew,lnew);
-    
-    for(int i = 0; i < std::min(iold,inew); ++i)
-    {
-        for(int j = 0; j < std::min(jold,jnew); ++j)
-        {
-                for(int k = 0; k < std::min(kold,knew); ++k)
-            {
-                for(int l = 0; l < std::min(lold,lnew); ++l)
-                {
-                    cache[i][j][k][l] = field[i][j][k][l];
-                }
-            }
-        }
-    }
-    
-    del_Iarray(field,iold,jold,kold,lold);
     
     field = cache;
 }
