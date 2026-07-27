@@ -93,10 +93,6 @@ void lexer::flagini()
     // gcdf
     gcdf1_count=gcdf2_count=gcdf3_count=gcdf4_count=1;
 
-    // 6 columns: [0..2] tile-local i,j,k  [3] side  [4] cval/matrix row
-    //            [5] dense tile id, see grid_amrex::tile_ctx_by_id
-    gcdf4.resize(gcdf4_count);
-
     // gcsldf
     gcsldfeta4_count=1;
 

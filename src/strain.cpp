@@ -52,9 +52,9 @@ void strain::wallf_update(lexer *p, fdm *a, ghostcell *pgc, fieldint &wallf)
     QGCDF4LOOP
     {
         GCDF4_TILE(q);
-        i = p->gcdf4[q][0];
-        j = p->gcdf4[q][1];
-        k = p->gcdf4[q][2];
+        i = p->gcdf4[q].i;
+        j = p->gcdf4[q].j;
+        k = p->gcdf4[q].k;
         
         wallf(i,j,k)=1;
     }
