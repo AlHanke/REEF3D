@@ -138,9 +138,9 @@ void suspended_RK3::bcsusp_start(lexer* p, fdm* a,ghostcell *pgc, sediment_fdm *
         GCDF4LOOP
         {
             GCDF4_TILE(n);
-            i=p->gcdf4[n].i;
-            j=p->gcdf4[n].j;
-            k=p->gcdf4[n].k;
+            i=p->gcdf4[p->level][n].i;
+            j=p->gcdf4[p->level][n].j;
+            k=p->gcdf4[p->level][n].k;
             
             //conc(i,j,k) =    s->cb(i,j);
             conc(i,j,k-1) =  conc(i,j,k);
@@ -204,9 +204,9 @@ void suspended_RK3::fillconc(lexer* p, fdm* a, sediment_fdm *s)
     GCDF4LOOP
     {
         GCDF4_TILE(n);
-        i=p->gcdf4[n].i;
-        j=p->gcdf4[n].j;
-        k=p->gcdf4[n].k;
+        i=p->gcdf4[p->level][n].i;
+        j=p->gcdf4[p->level][n].j;
+        k=p->gcdf4[p->level][n].k;
         
         s->conc(i,j) = a->conc(i,j,k);
         

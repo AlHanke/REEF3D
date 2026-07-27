@@ -572,12 +572,12 @@ Authors: Hans Bihs, Alexander Hanke
 #define GCDF3CHECK if(p->gcdf3[p->level][n].cs>0)
 #define GCDF3LOOP GCDF3 GCDF3CHECK
 
-#define QGCDF4 for(q=0;q<static_cast<int>(p->gcdf4.size());++q)
-#define QGCDF4CHECK if(p->gcdf4[q].cs>0)
+#define QGCDF4 for(q=0;q<p->gcdf4.ssize(p->level);++q)
+#define QGCDF4CHECK if(p->gcdf4[p->level][q].cs>0)
 #define QGCDF4LOOP QGCDF4 QGCDF4CHECK
 
-#define GCDF4 for(n=0;n<static_cast<int>(p->gcdf4.size());++n)
-#define GCDF4CHECK if(p->gcdf4[n].cs>0)
+#define GCDF4 for(n=0;n<p->gcdf4.ssize(p->level);++n)
+#define GCDF4CHECK if(p->gcdf4[p->level][n].cs>0)
 #define GCDF4LOOP GCDF4 GCDF4CHECK
 
 // Tile context restore for the gcdf tables.
@@ -595,7 +595,7 @@ Authors: Hans Bihs, Alexander Hanke
     #define GCDF1_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf1[p->level][idx].ctx_id, p->level))
     #define GCDF2_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf2[p->level][idx].ctx_id, p->level))
     #define GCDF3_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf3[p->level][idx].ctx_id, p->level))
-    #define GCDF4_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf4[idx].ctx_id, p->level))
+    #define GCDF4_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf4[p->level][idx].ctx_id, p->level))
     // Same for gcb4, whose entries are gcb_field_cs_bc_row rather than int rows.
     // Spelled as an index like the gcdf ones so the consumer loops read alike.
     #define GCB4_TILE(idx)  p->set_tile_ctx(p->tile_ctx_by_id(p->gcb4[p->level][idx].ctx_id, p->level))
