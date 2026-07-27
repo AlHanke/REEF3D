@@ -181,9 +181,9 @@ void suspended_IM1::fillconc(lexer* p, fdm* a, ghostcell *pgc, sediment_fdm *s)
     GCDF4LOOP
     {
         GCDF4_TILE(n);
-        i=p->gcdf4[n].i;
-        j=p->gcdf4[n].j;
-        k=p->gcdf4[n].k;
+        i=p->gcdf4[p->level][n].i;
+        j=p->gcdf4[p->level][n].j;
+        k=p->gcdf4[p->level][n].k;
         
         if(p->S61==1)
         s->cb(i,j) = a->conc(i,j,k);
