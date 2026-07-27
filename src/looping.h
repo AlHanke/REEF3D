@@ -548,28 +548,28 @@ Authors: Hans Bihs, Alexander Hanke
 #define QQGC4LOOP QQGCB4 QQGCB4CHECK
 
 //df
-#define QGCDF1 for(q=0;q<p->gcdf1_count;++q)
-#define QGCDF1CHECK if(p->gcdf1[q][3]>0)
+#define QGCDF1 for(q=0;q<static_cast<int>(p->gcdf1.size());++q)
+#define QGCDF1CHECK if(p->gcdf1[q].cs>0)
 #define QGCDF1LOOP QGCDF1 QGCDF1CHECK
 
-#define GCDF1 for(n=0;n<p->gcdf1_count;++n)
-#define GCDF1CHECK if(p->gcdf1[n][3]>0)
+#define GCDF1 for(n=0;n<static_cast<int>(p->gcdf1.size());++n)
+#define GCDF1CHECK if(p->gcdf1[n].cs>0)
 #define GCDF1LOOP GCDF1 GCDF1CHECK
 
-#define QGCDF2 for(q=0;q<p->gcdf2_count;++q)
-#define QGCDF2CHECK if(p->gcdf2[q][3]>0)
+#define QGCDF2 for(q=0;q<static_cast<int>(p->gcdf2.size());++q)
+#define QGCDF2CHECK if(p->gcdf2[q].cs>0)
 #define QGCDF2LOOP QGCDF2 QGCDF2CHECK
 
-#define GCDF2 for(n=0;n<p->gcdf2_count;++n)
-#define GCDF2CHECK if(p->gcdf2[n][3]>0)
+#define GCDF2 for(n=0;n<static_cast<int>(p->gcdf2.size());++n)
+#define GCDF2CHECK if(p->gcdf2[n].cs>0)
 #define GCDF2LOOP GCDF2 GCDF2CHECK
 
-#define QGCDF3 for(q=0;q<p->gcdf3_count;++q)
-#define QGCDF3CHECK if(p->gcdf3[q][3]>0)
+#define QGCDF3 for(q=0;q<static_cast<int>(p->gcdf3.size());++q)
+#define QGCDF3CHECK if(p->gcdf3[q].cs>0)
 #define QGCDF3LOOP QGCDF3 QGCDF3CHECK
 
-#define GCDF3 for(n=0;n<p->gcdf3_count;++n)
-#define GCDF3CHECK if(p->gcdf3[n][3]>0)
+#define GCDF3 for(n=0;n<static_cast<int>(p->gcdf3.size());++n)
+#define GCDF3CHECK if(p->gcdf3[n].cs>0)
 #define GCDF3LOOP GCDF3 GCDF3CHECK
 
 #define QGCDF4 for(q=0;q<p->gcdf4_count;++q)
@@ -592,9 +592,9 @@ Authors: Hans Bihs, Alexander Hanke
 // entries recorded outside a tile loop replay exactly as they were written.
 // No-ops without AMReX, where (i,j,k) are already rank-global.
 #if USE_AMREX
-    #define GCDF1_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf1[idx][6], p->level))
-    #define GCDF2_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf2[idx][6], p->level))
-    #define GCDF3_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf3[idx][6], p->level))
+    #define GCDF1_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf1[idx].ctx_id, p->level))
+    #define GCDF2_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf2[idx].ctx_id, p->level))
+    #define GCDF3_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf3[idx].ctx_id, p->level))
     #define GCDF4_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf4[idx][6], p->level))
     // Same for gcb4, whose entries are gcb_field_cs_bc_row rather than int rows.
     // Spelled as an index like the gcdf ones so the consumer loops read alike.
