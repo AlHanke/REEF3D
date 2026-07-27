@@ -52,37 +52,37 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
         j=p->gcb4[p->level][qq].j;
         k=p->gcb4[p->level][qq].k;
 
-        if(p->gcb4[p->level][qq].cs==1)
+        if(p->gcb4[p->level][qq].cs==X_NEG)
         {
             f(i-1,j,k)=-0.5*p->DXN[IP] - 0.0*p->DXN[IP];
             f(i-2,j,k)=-0.5*p->DXN[IP] - 1.0*p->DXN[IP];
             f(i-3,j,k)=-0.5*p->DXN[IP] - 2.0*p->DXN[IP];
         }
-        else if(p->gcb4[p->level][qq].cs==4)
+        else if(p->gcb4[p->level][qq].cs==X_POS)
         {
             f(i+1,j,k)=-0.5*p->DXN[IP] - 0.0*p->DXN[IP];
             f(i+2,j,k)=-0.5*p->DXN[IP] - 1.0*p->DXN[IP];
             f(i+3,j,k)=-0.5*p->DXN[IP] - 2.0*p->DXN[IP];
         }
-        else if(p->gcb4[p->level][qq].cs==3)
+        else if(p->gcb4[p->level][qq].cs==Y_NEG)
         {
             f(i,j-1,k)=-0.5*p->DYN[JP] - 0.0*p->DYN[JP];
             f(i,j-2,k)=-0.5*p->DYN[JP] - 1.0*p->DYN[JP];
             f(i,j-3,k)=-0.5*p->DYN[JP] - 2.0*p->DYN[JP];
         }
-        else if(p->gcb4[p->level][qq].cs==2)
+        else if(p->gcb4[p->level][qq].cs==Y_POS)
         {
             f(i,j+1,k)=-0.5*p->DYN[JP] - 0.0*p->DYN[JP];
             f(i,j+2,k)=-0.5*p->DYN[JP] - 1.0*p->DYN[JP];
             f(i,j+3,k)=-0.5*p->DYN[JP] - 2.0*p->DYN[JP];
         }
-        else if(p->gcb4[p->level][qq].cs==5)
+        else if(p->gcb4[p->level][qq].cs==Z_NEG)
         {
             f(i,j,k-1)=-0.5*p->DZN[KP] - 0.0*p->DZN[KP];
             f(i,j,k-2)=-0.5*p->DZN[KP] - 1.0*p->DZN[KP];
             f(i,j,k-3)=-0.5*p->DZN[KP] - 2.0*p->DZN[KP];
         }
-        else if(p->gcb4[p->level][qq].cs==6)
+        else if(p->gcb4[p->level][qq].cs==Z_POS)
         {
             f(i,j,k+1)=-0.5*p->DZN[KP] - 0.0*p->DZN[KP];
             f(i,j,k+2)=-0.5*p->DZN[KP] - 1.0*p->DZN[KP];
@@ -101,37 +101,37 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
         k=p->gcb4[p->level][qq].k;
         n=p->gcb4[p->level][qq].row;
 
-        if(p->gcb4[p->level][qq].cs==1)
+        if(p->gcb4[p->level][qq].cs==X_NEG)
         {
             f(i-1,j,k) = f(i,j,k);
             f(i-2,j,k) = f(i,j,k);
             f(i-3,j,k) = f(i,j,k);
         }
-        else if(p->gcb4[p->level][qq].cs==4)
+        else if(p->gcb4[p->level][qq].cs==X_POS)
         {
             f(i+1,j,k) = f(i,j,k);
             f(i+2,j,k) = f(i,j,k);
             f(i+3,j,k) = f(i,j,k);
         }
-        else if(p->gcb4[p->level][qq].cs==3)
+        else if(p->gcb4[p->level][qq].cs==Y_NEG)
         {
             f(i,j-1,k) = f(i,j,k);
             f(i,j-2,k) = f(i,j,k);
             f(i,j-3,k) = f(i,j,k);
         }
-        else if(p->gcb4[p->level][qq].cs==2)
+        else if(p->gcb4[p->level][qq].cs==Y_POS)
         {
             f(i,j+1,k) = f(i,j,k);
             f(i,j+2,k) = f(i,j,k);
             f(i,j+3,k) = f(i,j,k);
         }
-        else if(p->gcb4[p->level][qq].cs==5)
+        else if(p->gcb4[p->level][qq].cs==Z_NEG)
         {
             f(i,j,k-1) = f(i,j,k);
             f(i,j,k-2) = f(i,j,k);
             f(i,j,k-3) = f(i,j,k);
         }
-        else if(p->gcb4[p->level][qq].cs==6)
+        else if(p->gcb4[p->level][qq].cs==Z_POS)
         {
             f(i,j,k+1) = f(i,j,k);
             f(i,j,k+2) = f(i,j,k);
@@ -187,11 +187,11 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
             k=p->gcb4[p->level][qq].k;
             n=p->gcb4[p->level][qq].row;
 
-            if(p->gcb4[p->level][qq].cs==1 || p->gcb4[p->level][qq].cs==4)
+            if(p->gcb4[p->level][qq].cs==X_NEG || p->gcb4[p->level][qq].cs==X_POS)
                 f(i,j,k) = 0.5*p->DXN[IP];
-            else if(p->gcb4[p->level][qq].cs==3 || p->gcb4[p->level][qq].cs==2)
+            else if(p->gcb4[p->level][qq].cs==Y_NEG || p->gcb4[p->level][qq].cs==Y_POS)
                 f(i,j,k) = 0.5*p->DYN[JP];
-            else if(p->gcb4[p->level][qq].cs==5 || p->gcb4[p->level][qq].cs==6)
+            else if(p->gcb4[p->level][qq].cs==Z_NEG || p->gcb4[p->level][qq].cs==Z_POS)
                 f(i,j,k) = 0.5*p->DZN[KP];
         }
         GC_TILE_RESET;

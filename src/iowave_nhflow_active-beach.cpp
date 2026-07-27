@@ -114,16 +114,16 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
 		
 		
         aa=bb=0;
-		if(p->gcslout[p->level][n].cs==1)
+		if(p->gcslout[p->level][n].cs==X_NEG)
 		aa=-1;
 		
-		if(p->gcslout[p->level][n].cs==4)
+		if(p->gcslout[p->level][n].cs==X_POS)
 		aa=1;
 		
-		if(p->gcslout[p->level][n].cs==3)
+		if(p->gcslout[p->level][n].cs==Y_NEG)
 		bb=-1;
 		
-		if(p->gcslout[p->level][n].cs==2)
+		if(p->gcslout[p->level][n].cs==Y_POS)
 		bb=1;
  
         
@@ -192,16 +192,16 @@ void iowave::nhflow_active_beach(lexer *p, fdm_nhf *d, ghostcell *pgc, double *U
 		
 		aa=bb=0;
 		
-		if(p->gcslout[p->level][n].cs==1)
+		if(p->gcslout[p->level][n].cs==X_NEG)
 		aa=-1;
 		
-		if(p->gcslout[p->level][n].cs==4)
+		if(p->gcslout[p->level][n].cs==X_POS)
 		aa=1;
 		
-		if(p->gcslout[p->level][n].cs==3)
+		if(p->gcslout[p->level][n].cs==Y_NEG)
 		bb=-1;
 		
-		if(p->gcslout[p->level][n].cs==2)
+		if(p->gcslout[p->level][n].cs==Y_POS)
 		bb=1;
         
         eta_T = 0.0;

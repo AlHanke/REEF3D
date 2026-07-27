@@ -35,27 +35,27 @@ void grid_helper::fill_dgc2(lexer* p)
         j=p->gcb2[p->level][q].j;
         k=p->gcb2[p->level][q].k;
 
-        if(p->gcb2[p->level][q].cs==1)
+        if(p->gcb2[p->level][q].cs==X_NEG)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin-n-1)*jmax*kmax + (j-jmin)*kmax + k-kmin]+=1;
 
-        else if(p->gcb2[p->level][q].cs==4)
+        else if(p->gcb2[p->level][q].cs==X_POS)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin+n+1)*jmax*kmax + (j-jmin)*kmax + k-kmin]+=1;
 
-        else if(p->gcb2[p->level][q].cs==3)
+        else if(p->gcb2[p->level][q].cs==Y_NEG)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin-n-1)*kmax + k-kmin]+=1;
 
-        else if(p->gcb2[p->level][q].cs==2)
+        else if(p->gcb2[p->level][q].cs==Y_POS)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin+n+1)*kmax + k-kmin]+=1;
 
-        else if(p->gcb2[p->level][q].cs==5)
+        else if(p->gcb2[p->level][q].cs==Z_NEG)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin-n-1]+=1;
 
-        else if(p->gcb2[p->level][q].cs==6)
+        else if(p->gcb2[p->level][q].cs==Z_POS)
             for(n=0;n<p->margin;++n)
                 hgc[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin+n+1]+=1;
     }
