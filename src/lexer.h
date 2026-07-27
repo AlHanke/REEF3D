@@ -137,7 +137,7 @@ public:
 
     int gcdf1_count,gcdf2_count,gcdf3_count,gcdf4_count;
     gcb_cs_list gcdf1,gcdf2,gcdf3;
-    std::vector<std::array<int, 6>> gcdf4;
+    gcb_cs_row_list gcdf4;
     int gcsldfeta4_count,gcsldfbed4_count;
     std::vector<std::array<int,3>> gcsldfeta4, gcsldfbed4;
 
