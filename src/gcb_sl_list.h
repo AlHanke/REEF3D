@@ -211,7 +211,7 @@ private:
 
 using gcb_sl_cs_bc_list = gcb_list_t<gcb_sl_cs_bc>;   ///< 2D: gcbsl1/2/4
 using gcb_list    = gcb_list_t<gcb_field_cs_bc_row>;  ///< 3D: gcb1/2/3/4
-using gcb_cs_list = std::vector<gcb_field_cs>;
+using gcb_cs_list = gcb_list_t<gcb_field_cs>;
 
 using gcb_sl_list = gcb_list_t<gcb_sl>;      ///< 2D: gcbslin
 using gcb_sl_cs_list = gcb_list_t<gcb_sl_cs>;  ///< 2D: gcbslout
