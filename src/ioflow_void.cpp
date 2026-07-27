@@ -114,42 +114,42 @@ void ioflow_v::velocity_inlet(lexer *p, fdm* a, ghostcell* pgc, field &u, field 
         j=gcb.j;
         k=gcb.k;
 
-        if(p->W11==1 && gcb.cs==1)
+        if(p->W11==1 && gcb.cs==X_NEG)
         {
             u(i-1,j,k) = p->W11_u;
             u(i-2,j,k) = p->W11_u;
             u(i-3,j,k) = p->W11_u;
         }
 
-        if(p->W12==1 && gcb.cs==2)
+        if(p->W12==1 && gcb.cs==Y_POS)
         {
             u(i,j+1,k) = p->W12_u;
             u(i,j+2,k) = p->W12_u;
             u(i,j+3,k) = p->W12_u;
         }
 
-        if(p->W13==1 && gcb.cs==3)
+        if(p->W13==1 && gcb.cs==Y_NEG)
         {
             u(i,j-1,k) = p->W13_u;
             u(i,j-2,k) = p->W13_u;
             u(i,j-3,k) = p->W13_u;
         }
 
-        if(p->W14==1 && gcb.cs==4)
+        if(p->W14==1 && gcb.cs==X_POS)
         {
             u(i+1,j,k) = p->W14_u;
             u(i+2,j,k) = p->W14_u;
             u(i+3,j,k) = p->W14_u;
         }
 
-        if(p->W15==1 && gcb.cs==5)
+        if(p->W15==1 && gcb.cs==Z_NEG)
         {
             u(i,j,k-1) = p->W15_u;
             u(i,j,k-2) = p->W15_u;
             u(i,j,k-3) = p->W15_u;
         }
 
-        if(p->W16==1 && gcb.cs==6)
+        if(p->W16==1 && gcb.cs==Z_POS)
         {
             u(i,j,k) = p->W16_u;
             u(i,j,k+1) = p->W16_u;
@@ -165,42 +165,42 @@ void ioflow_v::velocity_inlet(lexer *p, fdm* a, ghostcell* pgc, field &u, field 
         j=gcb.j;
         k=gcb.k;
 
-        if(p->W11==1 && gcb.cs==1)
+        if(p->W11==1 && gcb.cs==X_NEG)
         {
             v(i-1,j,k) = p->W11_v;
             v(i-2,j,k) = p->W11_v;
             v(i-3,j,k) = p->W11_v;
         }
 
-        if(p->W12==1 && gcb.cs==2)
+        if(p->W12==1 && gcb.cs==Y_POS)
         {
             v(i,j+1,k) = p->W12_v;
             v(i,j+2,k) = p->W12_v;
             v(i,j+3,k) = p->W12_v;
         }
 
-        if(p->W13==1 && gcb.cs==3)
+        if(p->W13==1 && gcb.cs==Y_NEG)
         {
             v(i,j-1,k) = p->W13_v;
             v(i,j-2,k) = p->W13_v;
             v(i,j-3,k) = p->W13_v;
         }
 
-        if(p->W14==1 && gcb.cs==4)
+        if(p->W14==1 && gcb.cs==X_POS)
         {
             v(i+1,j,k) = p->W14_v;
             v(i+2,j,k) = p->W14_v;
             v(i+3,j,k) = p->W14_v;
         }
 
-        if(p->W15==1 && gcb.cs==5)
+        if(p->W15==1 && gcb.cs==Z_NEG)
         {
             v(i,j,k-1) = p->W15_v;
             v(i,j,k-2) = p->W15_v;
             v(i,j,k-3) = p->W15_v;
         }
 
-        if(p->W16==1 && gcb.cs==6)
+        if(p->W16==1 && gcb.cs==Z_POS)
         {
             v(i,j,k+1) = p->W16_v;
             v(i,j,k+2) = p->W16_v;
@@ -215,42 +215,42 @@ void ioflow_v::velocity_inlet(lexer *p, fdm* a, ghostcell* pgc, field &u, field 
         j=gcb.j;
         k=gcb.k;
 
-        if(p->W11==1 && gcb.cs==1)
+        if(p->W11==1 && gcb.cs==X_NEG)
         {
             w(i-1,j,k) = p->W11_w;
             w(i-2,j,k) = p->W11_w;
             w(i-3,j,k) = p->W11_w;
         }
 
-        if(p->W12==1 && gcb.cs==2)
+        if(p->W12==1 && gcb.cs==Y_POS)
         {
             w(i,j+1,k) = p->W12_w;
             w(i,j+2,k) = p->W12_w;
             w(i,j+3,k) = p->W12_w;
         }
 
-        if(p->W13==1 && gcb.cs==3)
+        if(p->W13==1 && gcb.cs==Y_NEG)
         {
             w(i,j-1,k) = p->W13_w;
             w(i,j-2,k) = p->W13_w;
             w(i,j-3,k) = p->W13_w;
         }
 
-        if(p->W14==1 && gcb.cs==4)
+        if(p->W14==1 && gcb.cs==X_POS)
         {
             w(i+1,j,k) = p->W14_w;
             w(i+2,j,k) = p->W14_w;
             w(i+3,j,k) = p->W14_w;
         }
 
-        if(p->W15==1 && gcb.cs==5)
+        if(p->W15==1 && gcb.cs==Z_NEG)
         {
             w(i,j,k-1) = p->W15_w;
             w(i,j,k-2) = p->W15_w;
             w(i,j,k-3) = p->W15_w;
         }
 
-        if(p->W16==1 && gcb.cs==6)
+        if(p->W16==1 && gcb.cs==Z_POS)
         {
             w(i,j,k+1) = p->W16_w;
             w(i,j,k+2) = p->W16_w;

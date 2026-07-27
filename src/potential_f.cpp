@@ -337,16 +337,16 @@ void potential_f::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
             if((p->X10==0 || a->fb(i,j,k)>0.0) && ((a->solid(i,j,k)>0.0 || p->solidread==0) && (a->topo(i,j,k)>0.0 || p->toporead==0)))
             {
 
-            if(p->gcb4[p->level][n].cs==1)
+            if(p->gcb4[p->level][n].cs==X_NEG)
             bc(i-1,j,k)=1;
 
-            if(p->gcb4[p->level][n].cs==3)
+            if(p->gcb4[p->level][n].cs==Y_NEG)
             bc(i,j-1,k)=1;
 
-            if(p->gcb4[p->level][n].cs==2)
+            if(p->gcb4[p->level][n].cs==Y_POS)
             bc(i,j+1,k)=1;
 
-            if(p->gcb4[p->level][n].cs==4)
+            if(p->gcb4[p->level][n].cs==X_POS)
             bc(i+1,j,k)=1;
             }
 
@@ -361,16 +361,16 @@ void potential_f::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
             if((p->X10==0 || a->fb(i,j,k)>0.0) && ((a->solid(i,j,k)>0.0 || p->solidread==0) && (a->topo(i,j,k)>0.0 || p->toporead==0)))
             {
 
-            if(p->gcb4[p->level][n].cs==1)
+            if(p->gcb4[p->level][n].cs==X_NEG)
             bc(i-1,j,k)=2;
 
-            if(p->gcb4[p->level][n].cs==3)
+            if(p->gcb4[p->level][n].cs==Y_NEG)
             bc(i,j-1,k)=2;
 
-            if(p->gcb4[p->level][n].cs==2)
+            if(p->gcb4[p->level][n].cs==Y_POS)
             bc(i,j+1,k)=2;
 
-            if(p->gcb4[p->level][n].cs==4)
+            if(p->gcb4[p->level][n].cs==X_POS)
             bc(i+1,j,k)=2;
             }
 

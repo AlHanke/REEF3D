@@ -180,25 +180,25 @@ void ioflow_f::pressure_wall(lexer *p, fdm *a, ghostcell *pgc)
         {
             pval=a->phi(i,j,k)*a->ro(i,j,k)*fabs(p->W22);
 
-            if(p->gcb4[p->level][n].cs==1)
+            if(p->gcb4[p->level][n].cs==X_NEG)
             {
                 a->press(i-1,j,k)=pval;
                 a->press(i-2,j,k)=pval;
                 a->press(i-3,j,k)=pval;
             }
-            else if(p->gcb4[p->level][n].cs==2)
+            else if(p->gcb4[p->level][n].cs==Y_POS)
             {
                 a->press(i,j+1,k)=pval;
                 a->press(i,j+2,k)=pval;
                 a->press(i,j+3,k)=pval;
             }
-            else if(p->gcb4[p->level][n].cs==3)
+            else if(p->gcb4[p->level][n].cs==Y_NEG)
             {
                 a->press(i,j-1,k)=pval;
                 a->press(i,j-2,k)=pval;
                 a->press(i,j-3,k)=pval;
             }
-            else if(p->gcb4[p->level][n].cs==4)
+            else if(p->gcb4[p->level][n].cs==X_POS)
             {
                 a->press(i+1,j,k)=pval;
                 a->press(i+2,j,k)=pval;
@@ -214,7 +214,7 @@ void ioflow_f::pressure_bed(lexer *p, fdm *a, ghostcell *pgc)
     double pval=0.0;
 
     GC4LOOP
-    if(p->gcb4[p->level][n].cs==5)
+    if(p->gcb4[p->level][n].cs==Z_NEG)
     {
         GCB4_TILE(n);
 

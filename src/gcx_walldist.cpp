@@ -52,7 +52,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
 
         if( p->gcb4[p->level][n].bc==21)
         {
-            if(p->gcb4[p->level][n].cs==1)
+            if(p->gcb4[p->level][n].cs==X_NEG)
             {
                 xc = p->XN[IIP];
                 yc = p->YP[JJP];
@@ -67,7 +67,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
                         walldist(i,j,k)=MIN(walldist(i,j,k),xdist);
                 }
             }
-            else if(p->gcb4[p->level][n].cs==3)
+            else if(p->gcb4[p->level][n].cs==Y_NEG)
             {
                 xc = p->XP[IIP];
                 yc = p->YN[JJP];
@@ -82,7 +82,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
                         walldist(i,j,k)=MIN(walldist(i,j,k),ydist);
                 }
             }
-            else if(p->gcb4[p->level][n].cs==5)
+            else if(p->gcb4[p->level][n].cs==Z_NEG)
             {
                 xc = p->XP[IIP];
                 yc = p->YP[JJP];
@@ -97,7 +97,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
                         walldist(i,j,k)=MIN(walldist(i,j,k),zdist);
                 }
             }
-            else if(p->gcb4[p->level][n].cs==4)
+            else if(p->gcb4[p->level][n].cs==X_POS)
             {
                 xc = p->XN[IIP1];
                 yc = p->YP[JJP];
@@ -112,7 +112,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
                         walldist(i,j,k)=MIN(walldist(i,j,k),xdist);
                 }
             }
-            else if(p->gcb4[p->level][n].cs==2)
+            else if(p->gcb4[p->level][n].cs==Y_POS)
             {
                 xc = p->XP[IIP];
                 yc = p->YN[JJP1];
@@ -127,7 +127,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
                         walldist(i,j,k)=MIN(walldist(i,j,k),ydist);
                 }
             }
-            else if(p->gcb4[p->level][n].cs==6)
+            else if(p->gcb4[p->level][n].cs==Z_POS)
             {
                 xc = p->XP[IIP];
                 yc = p->YP[JJP];
@@ -166,17 +166,17 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
             j=p->gcb4[p->level][n].j;
             k=p->gcb4[p->level][n].k;
 
-            if(p->gcb4[p->level][n].cs==1)
+            if(p->gcb4[p->level][n].cs==X_NEG)
                 walldist(i-1,j,k)=-0.5*p->DXN[IP];
-            else if(p->gcb4[p->level][n].cs==4)
+            else if(p->gcb4[p->level][n].cs==X_POS)
                 walldist(i+1,j,k)=-0.5*p->DXN[IP];
-            else if(p->gcb4[p->level][n].cs==3)
+            else if(p->gcb4[p->level][n].cs==Y_NEG)
                 walldist(i,j-1,k)=-0.5*p->DYN[JP];
-            else if(p->gcb4[p->level][n].cs==2)
+            else if(p->gcb4[p->level][n].cs==Y_POS)
                 walldist(i,j+1,k)=-0.5*p->DYN[JP];
-            else if(p->gcb4[p->level][n].cs==5)
+            else if(p->gcb4[p->level][n].cs==Z_NEG)
                 walldist(i,j,k-1)=-0.5*p->DZN[KP];
-            else if(p->gcb4[p->level][n].cs==6)
+            else if(p->gcb4[p->level][n].cs==Z_POS)
                 walldist(i,j,k+1)=-0.5*p->DZN[KP];
         }
         else if(p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==3)
@@ -185,17 +185,17 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
             j=p->gcb4[p->level][n].j;
             k=p->gcb4[p->level][n].k;
 
-            if(p->gcb4[p->level][n].cs==1)
+            if(p->gcb4[p->level][n].cs==X_NEG)
                 walldist(i-1,j,k)=walldist(i,j,k);
-            else if(p->gcb4[p->level][n].cs==4)
+            else if(p->gcb4[p->level][n].cs==X_POS)
                 walldist(i+1,j,k)=walldist(i,j,k);
-            else if(p->gcb4[p->level][n].cs==3)
+            else if(p->gcb4[p->level][n].cs==Y_NEG)
                 walldist(i,j-1,k)=walldist(i,j,k);
-            else if(p->gcb4[p->level][n].cs==2)
+            else if(p->gcb4[p->level][n].cs==Y_POS)
                 walldist(i,j+1,k)=walldist(i,j,k);
-            else if(p->gcb4[p->level][n].cs==5)
+            else if(p->gcb4[p->level][n].cs==Z_NEG)
                 walldist(i,j,k-1)=walldist(i,j,k);
-            else if(p->gcb4[p->level][n].cs==6)
+            else if(p->gcb4[p->level][n].cs==Z_POS)
                 walldist(i,j,k+1)=walldist(i,j,k);
         }
     }

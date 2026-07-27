@@ -77,21 +77,21 @@ void sloshing_force::force(lexer *p, fdm *a, ghostcell *pgc)
         dist_x = p->B192_3 - p->pos_x();
         dist_z = p->pos_z() - p->B192_4;
         
-        if(p->gcb4[p->level][n].cs==1)
+        if(p->gcb4[p->level][n].cs==X_NEG)
         {
         if(i+p->origin_i==0)
         Fx_l-=p->DXM*p->DXM*a->press(i,j,k);
         M+=p->DXM*p->DXM*a->press(i,j,k)*dist_z;
         }
         
-        if(p->gcb4[p->level][n].cs==4)
+        if(p->gcb4[p->level][n].cs==X_POS)
         {
         if(i+p->origin_i==p->gknox-1)
         Fx_r+=p->DXM*p->DXM*a->press(i,j,k);
         M-=p->DXM*p->DXM*a->press(i,j,k)*dist_z;
         }
         
-        if(p->gcb4[p->level][n].cs==5)
+        if(p->gcb4[p->level][n].cs==Z_NEG)
         {
         if(+p->origin_k==0)
         Fz+=p->DXM*p->DXM*a->press(i,j,k);

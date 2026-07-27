@@ -47,7 +47,7 @@ void ptf_bed_update::bedbc(lexer *p, fdm *a, ghostcell *pgc, field &Fi)
     double Fval;
     
     GC4LOOP
-    if(p->gcb4[p->level][n].cs==5 &&  p->gcb4[p->level][n].bc==21)
+    if(p->gcb4[p->level][n].cs==Z_NEG &&  p->gcb4[p->level][n].bc==21)
     {
         GCB4_TILE(n);
 

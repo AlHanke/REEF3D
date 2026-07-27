@@ -241,16 +241,16 @@ void sflow_potential_f::ini_bc(lexer *p, fdm2D *b, ghostcell *pgc)
             i = p->gcbsl4[p->level][n].i;
             j = p->gcbsl4[p->level][n].j;
        
-            if(p->gcbsl4[p->level][n].cs==1)
+            if(p->gcbsl4[p->level][n].cs==X_NEG)
             bc(i-1,j)=1;
             
-            if(p->gcbsl4[p->level][n].cs==3)
+            if(p->gcbsl4[p->level][n].cs==Y_NEG)
             bc(i,j-1)=1;
             
-            if(p->gcbsl4[p->level][n].cs==2)
+            if(p->gcbsl4[p->level][n].cs==Y_POS)
             bc(i,j+1)=1;
             
-            if(p->gcbsl4[p->level][n].cs==4)
+            if(p->gcbsl4[p->level][n].cs==X_POS)
             bc(i+1,j)=1;
             
         }
@@ -261,16 +261,16 @@ void sflow_potential_f::ini_bc(lexer *p, fdm2D *b, ghostcell *pgc)
             j=p->gcbsl4[p->level][n].j;
       
        
-            if(p->gcbsl4[p->level][n].cs==1)
+            if(p->gcbsl4[p->level][n].cs==X_NEG)
             bc(i-1,j)=2;
             
-            if(p->gcbsl4[p->level][n].cs==3)
+            if(p->gcbsl4[p->level][n].cs==Y_NEG)
             bc(i,j-1)=2;
             
-            if(p->gcbsl4[p->level][n].cs==2)
+            if(p->gcbsl4[p->level][n].cs==Y_POS)
             bc(i,j+1)=2;
             
-            if(p->gcbsl4[p->level][n].cs==4)
+            if(p->gcbsl4[p->level][n].cs==X_POS)
             bc(i+1,j)=2;
  
         }

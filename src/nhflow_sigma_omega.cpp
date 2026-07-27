@@ -50,7 +50,7 @@ void nhflow_sigma::omega_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL,
     
       
     GC4LOOP
-    if(p->gcb4[p->level][n].cs==6 && p->gcb4[p->level][n].bc==3)
+    if(p->gcb4[p->level][n].cs==Z_POS && p->gcb4[p->level][n].bc==3)
     {
         GCB4_TILE(n);
 
@@ -67,7 +67,7 @@ void nhflow_sigma::omega_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL,
     GC_TILE_RESET;
     
     GC4LOOP
-    if(p->gcb4[p->level][n].cs==5 && p->gcb4[p->level][n].bc==21)
+    if(p->gcb4[p->level][n].cs==Z_NEG && p->gcb4[p->level][n].bc==21)
     {
         GCB4_TILE(n);
 

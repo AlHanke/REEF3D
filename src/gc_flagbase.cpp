@@ -53,17 +53,17 @@ void ghostcell::flagbase(lexer *p)
 
         for(q=0;q<p->margin;++q)
         {
-            if(p->gcb4[p->level][n].cs==1)
+            if(p->gcb4[p->level][n].cs==X_NEG)
             p->flag5[(i-p->imin-1-q)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin] = bc;
-            else if(p->gcb4[p->level][n].cs==2)
+            else if(p->gcb4[p->level][n].cs==Y_POS)
             p->flag5[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin+1+q)*p->kmax + k-p->kmin] = bc;
-            else if(p->gcb4[p->level][n].cs==3)
+            else if(p->gcb4[p->level][n].cs==Y_NEG)
             p->flag5[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin-1-q)*p->kmax + k-p->kmin] = bc;
-            else if(p->gcb4[p->level][n].cs==4)
+            else if(p->gcb4[p->level][n].cs==X_POS)
             p->flag5[(i-p->imin+1+q)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin] = bc;
-            else if(p->gcb4[p->level][n].cs==5)
+            else if(p->gcb4[p->level][n].cs==Z_NEG)
             p->flag5[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin-1-q] = bc;
-            else if(p->gcb4[p->level][n].cs==6)
+            else if(p->gcb4[p->level][n].cs==Z_POS)
             p->flag5[(i-p->imin)*p->jmax*p->kmax + (j-p->jmin)*p->kmax + k-p->kmin+1+q] = bc;
         }
     }
