@@ -31,7 +31,7 @@ void nhflow_fsf_f::kinematic_fsf(lexer *p, fdm_nhf *d, double *U, double *V, dou
     double Pval,Qval;
     
     GC4LOOP
-    if(p->gcb4[p->level][n].cs==6 && p->gcb4[p->level][n].bc==3)
+    if(p->gcb4[p->level][n].cs==Z_POS && p->gcb4[p->level][n].bc==3)
     {
         GCB4_TILE(n);
 

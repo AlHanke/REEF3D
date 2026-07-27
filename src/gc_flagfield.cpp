@@ -91,7 +91,7 @@ void ghostcell::flagfield(lexer *p)
         j=p->gcb4[p->level][n].j;
         k=p->gcb4[p->level][n].k;
 
-        if(p->gcb4[p->level][n].cs==4 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
+        if(p->gcb4[p->level][n].cs==X_POS && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
             p->flag1[IJK]=OBJ_FLAG;
     }
     GC_TILE_RESET;
@@ -104,7 +104,7 @@ void ghostcell::flagfield(lexer *p)
         j=p->gcb4[p->level][n].j;
         k=p->gcb4[p->level][n].k;
 
-        if(p->gcb4[p->level][n].cs==2 && (p->periodic2!=1 || j+p->origin_j<p->gknoy-1))
+        if(p->gcb4[p->level][n].cs==Y_POS && (p->periodic2!=1 || j+p->origin_j<p->gknoy-1))
             p->flag2[IJK]=OBJ_FLAG;
     }
     GC_TILE_RESET;
@@ -117,7 +117,7 @@ void ghostcell::flagfield(lexer *p)
         j=p->gcb4[p->level][n].j;
         k=p->gcb4[p->level][n].k;
 
-        if(p->gcb4[p->level][n].cs==6 && (p->periodic3!=1 || k+p->origin_k<p->gknoz-1))
+        if(p->gcb4[p->level][n].cs==Z_POS && (p->periodic3!=1 || k+p->origin_k<p->gknoz-1))
             p->flag3[IJK]=OBJ_FLAG;
     }
     GC_TILE_RESET;

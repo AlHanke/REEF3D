@@ -428,16 +428,16 @@ void nhflow_potential_f::ini_bc(lexer *p, fdm_nhf *d, ghostcell *pgc)
             
             WETDRY
             {
-            if(p->gcb4[p->level][n].cs==1)
+            if(p->gcb4[p->level][n].cs==X_NEG)
             BC[Im1JK]=1;
             
-            if(p->gcb4[p->level][n].cs==3)
+            if(p->gcb4[p->level][n].cs==Y_NEG)
             BC[IJm1K]=1;
             
-            if(p->gcb4[p->level][n].cs==2)
+            if(p->gcb4[p->level][n].cs==Y_POS)
             BC[IJp1K]=1;
             
-            if(p->gcb4[p->level][n].cs==4)
+            if(p->gcb4[p->level][n].cs==X_POS)
             BC[Ip1JK]=1;
             }
  
@@ -451,16 +451,16 @@ void nhflow_potential_f::ini_bc(lexer *p, fdm_nhf *d, ghostcell *pgc)
             
             WETDRY
             {
-            if(p->gcb4[p->level][n].cs==1)
+            if(p->gcb4[p->level][n].cs==X_NEG)
             BC[Im1JK]=2;
             
-            if(p->gcb4[p->level][n].cs==3)
+            if(p->gcb4[p->level][n].cs==Y_NEG)
             BC[IJm1K]=2;
             
-            if(p->gcb4[p->level][n].cs==2)
+            if(p->gcb4[p->level][n].cs==Y_POS)
             BC[IJp1K]=2;
             
-            if(p->gcb4[p->level][n].cs==4)
+            if(p->gcb4[p->level][n].cs==X_POS)
             BC[Ip1JK]=2;
             }
  

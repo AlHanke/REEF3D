@@ -122,17 +122,17 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
             if(p->DF(i,j,k)>0)
             {
                 // inflow
-                if(p->gcb4[p->level][n].cs==1)
+                if(p->gcb4[p->level][n].cs==X_NEG)
                 p->IO[Im1JK] = 1;
-                else if(p->gcb4[p->level][n].cs==4)
+                else if(p->gcb4[p->level][n].cs==X_POS)
                 p->IO[Ip1JK] = 1;
-                else if(p->gcb4[p->level][n].cs==3)
+                else if(p->gcb4[p->level][n].cs==Y_NEG)
                 p->IO[IJm1K] = 1;
-                else if(p->gcb4[p->level][n].cs==2)
+                else if(p->gcb4[p->level][n].cs==Y_POS)
                 p->IO[IJp1K] = 1;
-                else if(p->gcb4[p->level][n].cs==5)
+                else if(p->gcb4[p->level][n].cs==Z_NEG)
                 p->IO[IJKm1] = 1;
-                else if(p->gcb4[p->level][n].cs==6)
+                else if(p->gcb4[p->level][n].cs==Z_POS)
                 p->IO[IJKp1] = 1;
             }
         }
@@ -145,17 +145,17 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
             if(p->DF(i,j,k)>0)
             {
                 // outflow
-                if(p->gcb4[p->level][n].cs==1)
+                if(p->gcb4[p->level][n].cs==X_NEG)
                 p->IO[Im1JK] = 2;
-                else if(p->gcb4[p->level][n].cs==4)
+                else if(p->gcb4[p->level][n].cs==X_POS)
                 p->IO[Ip1JK] = 2;
-                else if(p->gcb4[p->level][n].cs==3)
+                else if(p->gcb4[p->level][n].cs==Y_NEG)
                 p->IO[IJm1K] = 2;
-                else if(p->gcb4[p->level][n].cs==2)
+                else if(p->gcb4[p->level][n].cs==Y_POS)
                 p->IO[IJp1K] = 2;
-                else if(p->gcb4[p->level][n].cs==5)
+                else if(p->gcb4[p->level][n].cs==Z_NEG)
                 p->IO[IJKm1] = 2;
-                else if(p->gcb4[p->level][n].cs==6)
+                else if(p->gcb4[p->level][n].cs==Z_POS)
                 p->IO[IJKp1] = 2;
             }
         }
@@ -251,17 +251,17 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
             if(p->DF(i,j,k)>0)
             {
                 // inflow
-                if(p->gcb4[p->level][n].cs==1)
+                if(p->gcb4[p->level][n].cs==X_NEG)
                 p->IO[Im1JK] = 1;
-                else if(p->gcb4[p->level][n].cs==4)
+                else if(p->gcb4[p->level][n].cs==X_POS)
                 p->IO[Ip1JK] = 1;
-                else if(p->gcb4[p->level][n].cs==3)
+                else if(p->gcb4[p->level][n].cs==Y_NEG)
                 p->IO[IJm1K] = 1;
-                else if(p->gcb4[p->level][n].cs==2)
+                else if(p->gcb4[p->level][n].cs==Y_POS)
                 p->IO[IJp1K] = 1;
-                else if(p->gcb4[p->level][n].cs==5)
+                else if(p->gcb4[p->level][n].cs==Z_NEG)
                 p->IO[IJKm1] = 1;
-                else if(p->gcb4[p->level][n].cs==6)
+                else if(p->gcb4[p->level][n].cs==Z_POS)
                 p->IO[IJKp1] = 1;
             }
         }
@@ -275,17 +275,17 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
             if(p->DF(i,j,k)>0)
             {
                 // outflow
-                if(p->gcb4[p->level][n].cs==1)
+                if(p->gcb4[p->level][n].cs==X_NEG)
                 p->IO[Im1JK] = 2;
-                else if(p->gcb4[p->level][n].cs==4)
+                else if(p->gcb4[p->level][n].cs==X_POS)
                 p->IO[Ip1JK] = 2;
-                else if(p->gcb4[p->level][n].cs==3)
+                else if(p->gcb4[p->level][n].cs==Y_NEG)
                 p->IO[IJm1K] = 2;
-                else if(p->gcb4[p->level][n].cs==2)
+                else if(p->gcb4[p->level][n].cs==Y_POS)
                 p->IO[IJp1K] = 2;
-                else if(p->gcb4[p->level][n].cs==5)
+                else if(p->gcb4[p->level][n].cs==Z_NEG)
                 p->IO[IJKm1] = 2;
-                else if(p->gcb4[p->level][n].cs==6)
+                else if(p->gcb4[p->level][n].cs==Z_POS)
                 p->IO[IJKp1] = 2;
             }
         }

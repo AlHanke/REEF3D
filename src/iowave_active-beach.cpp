@@ -56,7 +56,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         j=p->gcslawa1[p->level][n].j;
 
         ii=0;
-        if(p->gcslawa1[p->level][n].cs==4)
+        if(p->gcslawa1[p->level][n].cs==X_POS)
         ii=1;
 
         wsf=wsfmax(i+ii,j);
@@ -74,16 +74,16 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
 
 
         aa=bb=0;
-        if(p->gcslawa1[p->level][n].cs==1)
+        if(p->gcslawa1[p->level][n].cs==X_NEG)
         aa=-1;
 
-        if(p->gcslawa1[p->level][n].cs==4)
+        if(p->gcslawa1[p->level][n].cs==X_POS)
         aa=1;
 
-        if(p->gcslawa1[p->level][n].cs==3)
+        if(p->gcslawa1[p->level][n].cs==Y_NEG)
         bb=-1;
 
-        if(p->gcslawa1[p->level][n].cs==2)
+        if(p->gcslawa1[p->level][n].cs==Y_POS)
         bb=1;
 
         if(p->B99==3)
@@ -202,7 +202,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
 
 
         jj=0;
-        if(p->gcslawa2[p->level][n].cs==2)
+        if(p->gcslawa2[p->level][n].cs==Y_POS)
         jj=1;
 
         wsf=wsfmax(i,j+jj);
@@ -218,16 +218,16 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         fac1=0.0;
 
         aa=bb=0;
-        if(p->gcslawa2[p->level][n].cs==1)
+        if(p->gcslawa2[p->level][n].cs==X_NEG)
         aa=-1;
 
-        if(p->gcslawa2[p->level][n].cs==4)
+        if(p->gcslawa2[p->level][n].cs==X_POS)
         aa=1;
 
-        if(p->gcslawa2[p->level][n].cs==3)
+        if(p->gcslawa2[p->level][n].cs==Y_NEG)
         bb=-1;
 
-        if(p->gcslawa2[p->level][n].cs==2)
+        if(p->gcslawa2[p->level][n].cs==Y_POS)
         bb=1;
 
 
@@ -311,16 +311,16 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
 
         aa=bb=0;
 
-        if(p->gcslout[p->level][n].cs==1)
+        if(p->gcslout[p->level][n].cs==X_NEG)
         aa=-1;
 
-        if(p->gcslout[p->level][n].cs==4)
+        if(p->gcslout[p->level][n].cs==X_POS)
         aa=1;
 
-        if(p->gcslout[p->level][n].cs==3)
+        if(p->gcslout[p->level][n].cs==Y_NEG)
         bb=-1;
 
-        if(p->gcslout[p->level][n].cs==2)
+        if(p->gcslout[p->level][n].cs==Y_POS)
         bb=1;
 
         wsf=wsfmax(i,j);

@@ -263,16 +263,16 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
             j=p->gcb4[p->level][n].j;
             k=p->gcb4[p->level][n].k;
        
-            if(p->gcb4[p->level][n].cs==1)
+            if(p->gcb4[p->level][n].cs==X_NEG)
             bc(i-1,j,k)=1;
             
-            if(p->gcb4[p->level][n].cs==3)
+            if(p->gcb4[p->level][n].cs==Y_NEG)
             bc(i,j-1,k)=1;
             
-            if(p->gcb4[p->level][n].cs==2)
+            if(p->gcb4[p->level][n].cs==Y_POS)
             bc(i,j+1,k)=1;
             
-            if(p->gcb4[p->level][n].cs==4)
+            if(p->gcb4[p->level][n].cs==X_POS)
             bc(i+1,j,k)=1;
  
         }
@@ -283,16 +283,16 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
             j=p->gcb4[p->level][n].j;
             k=p->gcb4[p->level][n].k;
        
-            if(p->gcb4[p->level][n].cs==1)
+            if(p->gcb4[p->level][n].cs==X_NEG)
             bc(i-1,j,k)=2;
             
-            if(p->gcb4[p->level][n].cs==3)
+            if(p->gcb4[p->level][n].cs==Y_NEG)
             bc(i,j-1,k)=2;
             
-            if(p->gcb4[p->level][n].cs==2)
+            if(p->gcb4[p->level][n].cs==Y_POS)
             bc(i,j+1,k)=2;
             
-            if(p->gcb4[p->level][n].cs==4)
+            if(p->gcb4[p->level][n].cs==X_POS)
             bc(i+1,j,k)=2;
  
         }
