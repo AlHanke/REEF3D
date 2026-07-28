@@ -1192,8 +1192,8 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             if (!p->j_dir)
             {
                 // print2D_plotfile_amrex(p, plot_mfs_data, varnames, num);
-                print_interp_amrex(p, a, plot_mfs_data, varnames, num, true);
-                // print_interp_amrex_vtm(p, a, plot_mfs_data, varnames, num, true);
+                // print_interp_amrex(p, a, plot_mfs_data, varnames, num, true);
+                print_interp_amrex_vtm(p, a, plot_mfs_data, varnames, num, true);
             }
         }
         #endif
