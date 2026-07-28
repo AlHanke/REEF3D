@@ -317,7 +317,7 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
     bool flag;
 
     count=0;
-    for(n=0;n<p->gcb4.ssize(p->level);++n)
+    GCB4
     {
         if(p->gcb4[p->level][n].bc==1||p->gcb4[p->level][n].bc==6)
         ++count;
@@ -355,20 +355,20 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
 
     // 2
     count2=0;
-    for(n=0;n<p->gcb2_count;++n)
+    GCB2
     {
-        if(p->gcb2[n][4]==1||p->gcb2[n][4]==6)
+        if(p->gcb2[p->level][n].bc==1||p->gcb2[p->level][n].bc==6)
         {
             flag=true;
             for(q=0;q<count2;++q)
-            if(gcgen2[q][0]==p->gcb2[n][0] && gcgen2[q][1]==p->gcb2[n][1] && gcgen2[q][2]==p->gcb2[n][3])
+            if(gcgen2[q][0]==p->gcb2[p->level][n].i && gcgen2[q][1]==p->gcb2[p->level][n].j && gcgen2[q][2]==p->gcb2[p->level][n].cs)
             flag=false;
 
             if(flag)
             {
-                gcgen2[count2][0]=p->gcb2[n][0];
-                gcgen2[count2][1]=p->gcb2[n][1];
-                gcgen2[count2][2]=p->gcb2[n][3];
+                gcgen2[count2][0]=p->gcb2[p->level][n].i;
+                gcgen2[count2][1]=p->gcb2[p->level][n].j;
+                gcgen2[count2][2]=p->gcb2[p->level][n].cs;
                 ++count2;
             }
         }
@@ -376,20 +376,20 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
 
     // 3
     count3=0;
-    for(n=0;n<p->gcb3_count;++n)
+    GCB3
     {
-        if(p->gcb3[n][4]==1||p->gcb3[n][4]==6)
+        if(p->gcb3[p->level][n].bc==1||p->gcb3[p->level][n].bc==6)
         {
             flag=true;
             for(q=0;q<count3;++q)
-            if(gcgen3[q][0]==p->gcb3[n][0] && gcgen3[q][1]==p->gcb3[n][1] && gcgen3[q][2]==p->gcb3[n][3])
+            if(gcgen3[q][0]==p->gcb3[p->level][n].i && gcgen3[q][1]==p->gcb3[p->level][n].j && gcgen3[q][2]==p->gcb3[p->level][n].cs)
             flag=false;
 
             if(flag)
             {
-                gcgen3[count3][0]=p->gcb3[n][0];
-                gcgen3[count3][1]=p->gcb3[n][1];
-                gcgen3[count3][2]=p->gcb3[n][3];
+                gcgen3[count3][0]=p->gcb3[p->level][n].i;
+                gcgen3[count3][1]=p->gcb3[p->level][n].j;
+                gcgen3[count3][2]=p->gcb3[p->level][n].cs;
                 ++count3;
             }
         }
@@ -397,7 +397,7 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
 
     // 4
     count4=0;
-    for(n=0;n<p->gcb4.ssize(p->level);++n)
+    GCB4
     {
         GCB4_TILE(n);
 
