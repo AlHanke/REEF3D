@@ -511,28 +511,28 @@ Authors: Hans Bihs, Alexander Hanke
 #define QQGCB1CHECK if(p->gcb1[p->level][qq].cs>0)
 #define QQGC1LOOP QQGCB1 QQGCB1CHECK
 
-#define GCB2 for(n=0;n<p->gcb2_count;++n)
-#define GCB2CHECK if(p->gcb2[n][3]>0)
+#define GCB2 for(n=0;n<p->gcb2.ssize(p->level);++n)
+#define GCB2CHECK if(p->gcb2[p->level][n].cs>0)
 #define GC2LOOP GCB2 GCB2CHECK
 
-#define QGCB2 for(q=0;q<p->gcb2_count;++q)
-#define QGCB2CHECK if(p->gcb2[q][3]>0)
+#define QGCB2 for(q=0;q<p->gcb2.ssize(p->level);++q)
+#define QGCB2CHECK if(p->gcb2[p->level][q].cs>0)
 #define QGC2LOOP QGCB2 QGCB2CHECK
 
-#define QQGCB2 for(qq=0;qq<p->gcb2_count;++qq)
-#define QQGCB2CHECK if(p->gcb2[qq][3]>0)
+#define QQGCB2 for(qq=0;qq<p->gcb2.ssize(p->level);++qq)
+#define QQGCB2CHECK if(p->gcb2[p->level][qq].cs>0)
 #define QQGC2LOOP QQGCB2 QQGCB2CHECK
 
-#define GCB3 for(n=0;n<p->gcb3_count;++n)
-#define GCB3CHECK if(p->gcb3[n][3]>0)
+#define GCB3 for(n=0;n<p->gcb3.ssize(p->level);++n)
+#define GCB3CHECK if(p->gcb3[p->level][n].cs>0)
 #define GC3LOOP GCB3 GCB3CHECK
 
-#define QGCB3 for(q=0;q<p->gcb3_count;++q)
-#define QGCB3CHECK if(p->gcb3[q][3]>0)
+#define QGCB3 for(q=0;q<p->gcb3.ssize(p->level);++q)
+#define QGCB3CHECK if(p->gcb3[p->level][q].cs>0)
 #define QGC3LOOP QGCB3 QGCB3CHECK
 
-#define QQGCB3 for(qq=0;qq<p->gcb3_count;++qq)
-#define QQGCB3CHECK if(p->gcb3[qq][3]>0)
+#define QQGCB3 for(qq=0;qq<p->gcb3.ssize(p->level);++qq)
+#define QQGCB3CHECK if(p->gcb3[p->level][qq].cs>0)
 #define QQGC3LOOP QQGCB3 QQGCB3CHECK
 
 #define GCB4 for(n=0;n<p->gcb4.ssize(p->level);++n)
