@@ -63,8 +63,8 @@ cout<<"starting driver_ini_PTF"<<endl;
     // Solid
     if(p->solidread==1)
     {
-    solid solid_object(p,a,pgc);
-    solid_object.start(p,a,pgc,pflow,pconvec,preto);
+    solid solid_object;
+    solid_object.start(p,a,pgc,preto);
     }
     
     // Geotopo

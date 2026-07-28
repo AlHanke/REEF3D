@@ -23,34 +23,19 @@ Author: Hans Bihs
 #include"solid.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"ghostcell.h"
 #include"reinitopo.h"
-#include"ioflow.h"
-#include"reinitopo_RK3.h"
 
-solid::solid(lexer* p, fdm *a, ghostcell* pgc)
+void solid::start(lexer* p, fdm* a, ghostcell* pgc, reinitopo* preso)
 {
-}
+    p->level = 0;
+    // TILE_LOOP // IJK is not tile aware.
+    IJKLOOP
+    PBASECHECK
+    {
+        a->solid(i,j,k) = p->flag_solid[IJK];
+    }
 
-solid::~solid()
-{
-}
+    p->flag_solid.reset();
 
-void solid::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow, convection* pconvec, reinitopo* preso)
-{
-
-	solid_topo(p,a,pgc);
-    
     preso->start(p,a,pgc,a->solid);
 }
-
-void solid::solid_topo(lexer* p, fdm* a, ghostcell* pgc)
-{
-    BASELOOP
-    {
-    a->solid(i,j,k) = p->flag_solid[IJK];
-    }
-    
-    p->flag_solid.reset();
-}
-

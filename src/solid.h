@@ -23,35 +23,24 @@ Author: Hans Bihs
 #ifndef SOLID_H_
 #define SOLID_H_
 
-#include"increment.h"
+#include "increment.h"
 
 class lexer;
 class fdm;
 class ghostcell;
 class reinitopo;
-class convection;
-class ioflow;
-
-using namespace std;
 
 class solid : public increment
 {
 public:
-	solid(lexer*, fdm*, ghostcell*);
-	virtual ~solid();
-	void start(lexer*, fdm*, ghostcell*, ioflow*, convection*, reinitopo*);
+	solid() = default;
+    solid(const solid&) = delete;
+    solid& operator=(const solid&) = delete;
+    solid(solid&&) = delete;
+    solid& operator=(solid&&) = delete;
+	virtual ~solid() = default;
 
-private:
-
-    void solid_topo(lexer*,fdm*,ghostcell*);
-    int conv(double);
-
-    int istart, iend, jstart, jend, kstart, kend;
-    int qn;
-
-
+	void start(lexer*, fdm*, ghostcell*, reinitopo*);
 };
 
 #endif
-
-
