@@ -892,7 +892,7 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
 
     const double rk3_total_time = pgc->timer() - rk3_total_start;
 
-    if(p->mpirank==0)
+    if(p->mpirank==0 && std::getenv("REEF_timing"))
     {
         const double rk3_step1_total_time = rk3_step1_fsf_time + rk3_step1_u_time + rk3_step1_v_time + rk3_step1_w_time + rk3_step1_corr_time;
         const double rk3_step2_total_time = rk3_step2_fsf_time + rk3_step2_u_time + rk3_step2_v_time + rk3_step2_w_time + rk3_step2_corr_time;
