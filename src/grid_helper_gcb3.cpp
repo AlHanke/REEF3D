@@ -37,11 +37,7 @@ void grid_helper::fillgcb3(lexer *p)
     ArrayWrapper3D fgc(p);
     fgc.resize(0);
 
-    if(p->gcb3_count!=p->gcb4_count)
-    {
-
-        p->gcb3_count=p->gcb4_count;
-    }
+    p->gcb3_count=p->gcb4_count;
 
     assert(nlevs==1 && "Error: fillgcb3() should only be called when nlevs==1");
 
@@ -50,9 +46,7 @@ void grid_helper::fillgcb3(lexer *p)
     p->gcb3[lev].assign(p->gcb3_count, {});
 
     QGCB3
-    {
-        p->gcb3[p->level][q] = p->gcb4[p->level][q];
-    }
+    p->gcb3[p->level][q] = p->gcb4[p->level][q];
 
     QGC3LOOP
     {
