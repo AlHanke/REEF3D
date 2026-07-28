@@ -2932,7 +2932,6 @@
         </VirtualDirectory>
         <VirtualDirectory Name="Geotopo">
           <File Name="geotopo.cpp"/>
-          <File Name="geotopo_dat.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Util">
           <File Name="boundarycheck.cpp"/>
