@@ -318,13 +318,6 @@ void lexer::read_grid()
     flagslice4_grid = std::unique_ptr<int[]>(new int[imax*jmax]);
     std::fill_n(flagslice4_grid.get(), imax*jmax, -10);
 
-    if(gcb4_count>0)
-    {
-                                      // gcb2/gcb3/gcb4 are gcb_list, generated in
-                                      // grid_helper::fillgcb2/fillgcb3 and
-                                      // ghostcell::gcb4_generate, not allocated here
-    }
-
     gcpara1.resize(gcpara1_count);
     gcpara2.resize(gcpara2_count);
     gcpara3.resize(gcpara3_count);

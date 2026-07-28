@@ -166,7 +166,7 @@ void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow*
         // fillBoundary and the C-F fillHigherLevels() are rebuilt. Without it the projection has
         // no wall BCs on the new grid -> it cannot balance the gravity predictor -> velocity
         // leaks and grows (post-mom |u| jumps from 0 to O(1) at rest). gcd_ini refreshes the
-        // ghost-cell distances gcd4 that flagfield/BCs use, against the rebuilt spacing.
+        // ghost-cell distances (gcb4[].dist) that flagfield/BCs use, against the rebuilt spacing.
         pgc->flagfield(this);
         probe("post-rebuild");
 
