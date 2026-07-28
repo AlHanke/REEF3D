@@ -46,9 +46,7 @@ void grid_helper::fillgcb1(lexer *p)
     p->gcb1[lev].assign(p->gcb1_count, {});
 
     QGCB1
-    {
-        p->gcb1[p->level][q] = p->gcb4[p->level][q];
-    }
+    p->gcb1[p->level][q] = p->gcb4[p->level][q];
 
     QGC1LOOP
     {
