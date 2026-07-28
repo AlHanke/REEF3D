@@ -78,8 +78,8 @@ void driver::driver_ini_cfd()
     // Solid
     if(p->solidread==1)
     {
-        solid solid_object(p,a,pgc);
-        solid_object.start(p,a,pgc,pflow,pconvec,preso);
+        solid solid_object;
+        solid_object.start(p,a,pgc,preso);
     }
 
     // VRANS ini
