@@ -593,52 +593,52 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
                                    + rk3_step3_u_time + rk3_step3_v_time + rk3_step3_w_time + rk3_step3_corr_time;
     const double rk3_other_time = rk3_total_time - rk3_measured_time;
 
-    // if(p->mpirank==0)
-    // {
-    //     const double denom = (rk3_total_time > 0.0) ? rk3_total_time : 1.0;
-    //     std::cout<<"momentum RK3 runtime breakdown (s | %total):"<<std::endl;
-    //     std::cout<<std::setprecision(6)
-    //              <<"  setup: "<<rk3_setup_time<<" | "<<(100.0*rk3_setup_time/denom)<<std::endl
-    //              <<"  step1 U: "<<rk3_step1_u_time<<" | "<<(100.0*rk3_step1_u_time/denom)<<std::endl
-    //              <<"  step1 V: "<<rk3_step1_v_time<<" | "<<(100.0*rk3_step1_v_time/denom)<<std::endl
-    //              <<"  step1 W: "<<rk3_step1_w_time<<" | "<<(100.0*rk3_step1_w_time/denom)<<std::endl
-    //              <<"  step1 corr: "<<rk3_step1_corr_time<<" | "<<(100.0*rk3_step1_corr_time/denom)<<std::endl
-    //              <<"    step1 U source: "<<rk3_step1_u_source_time<<" | "<<(100.0*rk3_step1_u_source_time/denom)<<std::endl
-    //              <<"    step1 U bcmom: "<<rk3_step1_u_bcmom_time<<" | "<<(100.0*rk3_step1_u_bcmom_time/denom)<<std::endl
-    //              <<"    step1 U pgrad: "<<rk3_step1_u_pgrad_time<<" | "<<(100.0*rk3_step1_u_pgrad_time/denom)<<std::endl
-    //              <<"    step1 U rhs: "<<rk3_step1_u_rhs_time<<" | "<<(100.0*rk3_step1_u_rhs_time/denom)<<std::endl
-    //              <<"    step1 U convec: "<<rk3_step1_u_convec_time<<" | "<<(100.0*rk3_step1_u_convec_time/denom)<<std::endl
-    //              <<"    step1 U diff: "<<rk3_step1_u_diff_time<<" | "<<(100.0*rk3_step1_u_diff_time/denom)<<std::endl
-    //              <<"    step1 U update: "<<rk3_step1_u_update_time<<" | "<<(100.0*rk3_step1_u_update_time/denom)<<std::endl
-    //              <<"    step1 V source: "<<rk3_step1_v_source_time<<" | "<<(100.0*rk3_step1_v_source_time/denom)<<std::endl
-    //              <<"    step1 V bcmom: "<<rk3_step1_v_bcmom_time<<" | "<<(100.0*rk3_step1_v_bcmom_time/denom)<<std::endl
-    //              <<"    step1 V pgrad: "<<rk3_step1_v_pgrad_time<<" | "<<(100.0*rk3_step1_v_pgrad_time/denom)<<std::endl
-    //              <<"    step1 V rhs: "<<rk3_step1_v_rhs_time<<" | "<<(100.0*rk3_step1_v_rhs_time/denom)<<std::endl
-    //              <<"    step1 V convec: "<<rk3_step1_v_convec_time<<" | "<<(100.0*rk3_step1_v_convec_time/denom)<<std::endl
-    //              <<"    step1 V diff: "<<rk3_step1_v_diff_time<<" | "<<(100.0*rk3_step1_v_diff_time/denom)<<std::endl
-    //              <<"    step1 V update: "<<rk3_step1_v_update_time<<" | "<<(100.0*rk3_step1_v_update_time/denom)<<std::endl
-    //              <<"    step1 W source: "<<rk3_step1_w_source_time<<" | "<<(100.0*rk3_step1_w_source_time/denom)<<std::endl
-    //              <<"    step1 W bcmom: "<<rk3_step1_w_bcmom_time<<" | "<<(100.0*rk3_step1_w_bcmom_time/denom)<<std::endl
-    //              <<"    step1 W pgrad: "<<rk3_step1_w_pgrad_time<<" | "<<(100.0*rk3_step1_w_pgrad_time/denom)<<std::endl
-    //              <<"    step1 W rhs: "<<rk3_step1_w_rhs_time<<" | "<<(100.0*rk3_step1_w_rhs_time/denom)<<std::endl
-    //              <<"    step1 W convec: "<<rk3_step1_w_convec_time<<" | "<<(100.0*rk3_step1_w_convec_time/denom)<<std::endl
-    //              <<"    step1 W diff: "<<rk3_step1_w_diff_time<<" | "<<(100.0*rk3_step1_w_diff_time/denom)<<std::endl
-    //              <<"    step1 W update: "<<rk3_step1_w_update_time<<" | "<<(100.0*rk3_step1_w_update_time/denom)<<std::endl
-    //              <<"    step1 corr forcing: "<<rk3_step1_corr_forcing_time<<" | "<<(100.0*rk3_step1_corr_forcing_time/denom)<<std::endl
-    //              <<"    step1 corr pressure: "<<rk3_step1_corr_pressure_time<<" | "<<(100.0*rk3_step1_corr_pressure_time/denom)<<std::endl
-    //              <<"    step1 corr relax: "<<rk3_step1_corr_relax_time<<" | "<<(100.0*rk3_step1_corr_relax_time/denom)<<std::endl
-    //              <<"    step1 corr gc: "<<rk3_step1_corr_gc_time<<" | "<<(100.0*rk3_step1_corr_gc_time/denom)<<std::endl
-    //              <<"  step2 U: "<<rk3_step2_u_time<<" | "<<(100.0*rk3_step2_u_time/denom)<<std::endl
-    //              <<"  step2 V: "<<rk3_step2_v_time<<" | "<<(100.0*rk3_step2_v_time/denom)<<std::endl
-    //              <<"  step2 W: "<<rk3_step2_w_time<<" | "<<(100.0*rk3_step2_w_time/denom)<<std::endl
-    //              <<"  step2 corr: "<<rk3_step2_corr_time<<" | "<<(100.0*rk3_step2_corr_time/denom)<<std::endl
-    //              <<"  step3 U: "<<rk3_step3_u_time<<" | "<<(100.0*rk3_step3_u_time/denom)<<std::endl
-    //              <<"  step3 V: "<<rk3_step3_v_time<<" | "<<(100.0*rk3_step3_v_time/denom)<<std::endl
-    //              <<"  step3 W: "<<rk3_step3_w_time<<" | "<<(100.0*rk3_step3_w_time/denom)<<std::endl
-    //              <<"  step3 corr: "<<rk3_step3_corr_time<<" | "<<(100.0*rk3_step3_corr_time/denom)<<std::endl
-    //              <<"  other: "<<rk3_other_time<<" | "<<(100.0*rk3_other_time/denom)<<std::endl
-    //              <<"  total: "<<rk3_total_time<<std::endl;
-    // }
+    if(p->mpirank==0 && std::getenv("REEF_timing"))
+    {
+        const double denom = (rk3_total_time > 0.0) ? rk3_total_time : 1.0;
+        std::cout<<"momentum RK3 runtime breakdown (s | %total):"<<std::endl;
+        std::cout<<std::setprecision(6)
+                 <<"  setup: "<<rk3_setup_time<<" | "<<(100.0*rk3_setup_time/denom)<<std::endl
+                 <<"  step1 U: "<<rk3_step1_u_time<<" | "<<(100.0*rk3_step1_u_time/denom)<<std::endl
+                 <<"  step1 V: "<<rk3_step1_v_time<<" | "<<(100.0*rk3_step1_v_time/denom)<<std::endl
+                 <<"  step1 W: "<<rk3_step1_w_time<<" | "<<(100.0*rk3_step1_w_time/denom)<<std::endl
+                 <<"  step1 corr: "<<rk3_step1_corr_time<<" | "<<(100.0*rk3_step1_corr_time/denom)<<std::endl
+                 <<"    step1 U source: "<<rk3_step1_u_source_time<<" | "<<(100.0*rk3_step1_u_source_time/denom)<<std::endl
+                 <<"    step1 U bcmom: "<<rk3_step1_u_bcmom_time<<" | "<<(100.0*rk3_step1_u_bcmom_time/denom)<<std::endl
+                 <<"    step1 U pgrad: "<<rk3_step1_u_pgrad_time<<" | "<<(100.0*rk3_step1_u_pgrad_time/denom)<<std::endl
+                 <<"    step1 U rhs: "<<rk3_step1_u_rhs_time<<" | "<<(100.0*rk3_step1_u_rhs_time/denom)<<std::endl
+                 <<"    step1 U convec: "<<rk3_step1_u_convec_time<<" | "<<(100.0*rk3_step1_u_convec_time/denom)<<std::endl
+                 <<"    step1 U diff: "<<rk3_step1_u_diff_time<<" | "<<(100.0*rk3_step1_u_diff_time/denom)<<std::endl
+                 <<"    step1 U update: "<<rk3_step1_u_update_time<<" | "<<(100.0*rk3_step1_u_update_time/denom)<<std::endl
+                 <<"    step1 V source: "<<rk3_step1_v_source_time<<" | "<<(100.0*rk3_step1_v_source_time/denom)<<std::endl
+                 <<"    step1 V bcmom: "<<rk3_step1_v_bcmom_time<<" | "<<(100.0*rk3_step1_v_bcmom_time/denom)<<std::endl
+                 <<"    step1 V pgrad: "<<rk3_step1_v_pgrad_time<<" | "<<(100.0*rk3_step1_v_pgrad_time/denom)<<std::endl
+                 <<"    step1 V rhs: "<<rk3_step1_v_rhs_time<<" | "<<(100.0*rk3_step1_v_rhs_time/denom)<<std::endl
+                 <<"    step1 V convec: "<<rk3_step1_v_convec_time<<" | "<<(100.0*rk3_step1_v_convec_time/denom)<<std::endl
+                 <<"    step1 V diff: "<<rk3_step1_v_diff_time<<" | "<<(100.0*rk3_step1_v_diff_time/denom)<<std::endl
+                 <<"    step1 V update: "<<rk3_step1_v_update_time<<" | "<<(100.0*rk3_step1_v_update_time/denom)<<std::endl
+                 <<"    step1 W source: "<<rk3_step1_w_source_time<<" | "<<(100.0*rk3_step1_w_source_time/denom)<<std::endl
+                 <<"    step1 W bcmom: "<<rk3_step1_w_bcmom_time<<" | "<<(100.0*rk3_step1_w_bcmom_time/denom)<<std::endl
+                 <<"    step1 W pgrad: "<<rk3_step1_w_pgrad_time<<" | "<<(100.0*rk3_step1_w_pgrad_time/denom)<<std::endl
+                 <<"    step1 W rhs: "<<rk3_step1_w_rhs_time<<" | "<<(100.0*rk3_step1_w_rhs_time/denom)<<std::endl
+                 <<"    step1 W convec: "<<rk3_step1_w_convec_time<<" | "<<(100.0*rk3_step1_w_convec_time/denom)<<std::endl
+                 <<"    step1 W diff: "<<rk3_step1_w_diff_time<<" | "<<(100.0*rk3_step1_w_diff_time/denom)<<std::endl
+                 <<"    step1 W update: "<<rk3_step1_w_update_time<<" | "<<(100.0*rk3_step1_w_update_time/denom)<<std::endl
+                 <<"    step1 corr forcing: "<<rk3_step1_corr_forcing_time<<" | "<<(100.0*rk3_step1_corr_forcing_time/denom)<<std::endl
+                 <<"    step1 corr pressure: "<<rk3_step1_corr_pressure_time<<" | "<<(100.0*rk3_step1_corr_pressure_time/denom)<<std::endl
+                 <<"    step1 corr relax: "<<rk3_step1_corr_relax_time<<" | "<<(100.0*rk3_step1_corr_relax_time/denom)<<std::endl
+                 <<"    step1 corr gc: "<<rk3_step1_corr_gc_time<<" | "<<(100.0*rk3_step1_corr_gc_time/denom)<<std::endl
+                 <<"  step2 U: "<<rk3_step2_u_time<<" | "<<(100.0*rk3_step2_u_time/denom)<<std::endl
+                 <<"  step2 V: "<<rk3_step2_v_time<<" | "<<(100.0*rk3_step2_v_time/denom)<<std::endl
+                 <<"  step2 W: "<<rk3_step2_w_time<<" | "<<(100.0*rk3_step2_w_time/denom)<<std::endl
+                 <<"  step2 corr: "<<rk3_step2_corr_time<<" | "<<(100.0*rk3_step2_corr_time/denom)<<std::endl
+                 <<"  step3 U: "<<rk3_step3_u_time<<" | "<<(100.0*rk3_step3_u_time/denom)<<std::endl
+                 <<"  step3 V: "<<rk3_step3_v_time<<" | "<<(100.0*rk3_step3_v_time/denom)<<std::endl
+                 <<"  step3 W: "<<rk3_step3_w_time<<" | "<<(100.0*rk3_step3_w_time/denom)<<std::endl
+                 <<"  step3 corr: "<<rk3_step3_corr_time<<" | "<<(100.0*rk3_step3_corr_time/denom)<<std::endl
+                 <<"  other: "<<rk3_other_time<<" | "<<(100.0*rk3_other_time/denom)<<std::endl
+                 <<"  total: "<<rk3_total_time<<std::endl;
+    }
 }
 
 void momentum_RK3::irhs(lexer *p, fdm *a)
