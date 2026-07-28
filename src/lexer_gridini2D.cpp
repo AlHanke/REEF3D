@@ -45,7 +45,7 @@ void lexer::sliceflagini()
     lexer *p = this;
 
     p->level = 0;
-    TILE_LOOP
+    // TILE_LOOP
     IMALOOP
     JMALOOP
     {
