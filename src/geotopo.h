@@ -23,7 +23,7 @@ Author: Hans Bihs
 #ifndef GEOTOPO_H_
 #define GEOTOPO_H_
 
-#include"increment.h"
+#include "increment.h"
 
 class lexer;
 class fdm;
@@ -32,24 +32,17 @@ class reinitopo;
 class ioflow;
 class vrans;
 
-using namespace std;
-
 class geotopo : public increment
 {
 public:
-	geotopo(lexer*, fdm*, ghostcell*);
-	virtual ~geotopo();
+	geotopo() = default;
+    geotopo(const geotopo&) = delete;
+    geotopo& operator=(const geotopo&) = delete;
+    geotopo(geotopo&&) = delete;
+    geotopo& operator=(geotopo&&) = delete;
+	virtual ~geotopo() = default;
+
 	void start(lexer*, fdm*, ghostcell*, ioflow*, reinitopo*, vrans*);
-
-private:
-    void dat(lexer*,fdm*,ghostcell*);
-
-    int istart, iend, jstart, jend, kstart, kend;
-    int qn;
-
-
 };
 
 #endif
-
-

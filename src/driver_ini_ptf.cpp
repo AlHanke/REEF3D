@@ -70,7 +70,7 @@ cout<<"starting driver_ini_PTF"<<endl;
     // Geotopo
     if(p->toporead>0)
     {
-    geotopo gtopo(p,a,pgc);
+    geotopo gtopo;
     gtopo.start(p,a,pgc,pflow,preto,pvrans);
     }
 

@@ -88,7 +88,7 @@ void driver::driver_ini_cfd()
     // Geotopo
     if(p->toporead>0)
     {
-        geotopo gtopo(p,a,pgc);
+        geotopo gtopo;
         gtopo.start(p,a,pgc,pflow,preto,pvrans);
     }
 
