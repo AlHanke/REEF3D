@@ -51,21 +51,21 @@ void ghostcell::gcb_velflagio(lexer *p)
 
     GC2LOOP
     {
-        if(p->gcb2[n][4]==1)
+        if(p->gcb2[p->level][n].bc==1)
         {
-            i=p->gcb2[n][0];
-            j=p->gcb2[n][1];
-            k=p->gcb2[n][2];
+            i=p->gcb2[p->level][n].i;
+            j=p->gcb2[p->level][n].j;
+            k=p->gcb2[p->level][n].k;
 
             p->flag2[Im1JK] = INFLOW_FLAG;
             p->flag2[Im2JK] = INFLOW_FLAG;
             p->flag2[Im3JK] = INFLOW_FLAG;
         }
-        else if(p->gcb2[n][4]==2)
+        else if(p->gcb2[p->level][n].bc==2)
         {
-            i=p->gcb2[n][0];
-            j=p->gcb2[n][1];
-            k=p->gcb2[n][2];
+            i=p->gcb2[p->level][n].i;
+            j=p->gcb2[p->level][n].j;
+            k=p->gcb2[p->level][n].k;
 
             p->flag2[Ip1JK] = OUTFLOW_FLAG;
             p->flag2[Ip2JK] = OUTFLOW_FLAG;
@@ -75,21 +75,21 @@ void ghostcell::gcb_velflagio(lexer *p)
 
     GC3LOOP
     {
-        if(p->gcb3[n][4]==1)
+        if(p->gcb3[p->level][n].bc==1)
         {
-            i=p->gcb3[n][0];
-            j=p->gcb3[n][1];
-            k=p->gcb3[n][2];
+            i=p->gcb3[p->level][n].i;
+            j=p->gcb3[p->level][n].j;
+            k=p->gcb3[p->level][n].k;
 
             p->flag3[Im1JK] = INFLOW_FLAG;
             p->flag3[Im2JK] = INFLOW_FLAG;
             p->flag3[Im3JK] = INFLOW_FLAG;
         }
-        else if(p->gcb3[n][4]==2)
+        else if(p->gcb3[p->level][n].bc==2)
         {
-            i=p->gcb3[n][0];
-            j=p->gcb3[n][1];
-            k=p->gcb3[n][2];
+            i=p->gcb3[p->level][n].i;
+            j=p->gcb3[p->level][n].j;
+            k=p->gcb3[p->level][n].k;
 
             p->flag3[Ip1JK] = OUTFLOW_FLAG;
             p->flag3[Ip2JK] = OUTFLOW_FLAG;

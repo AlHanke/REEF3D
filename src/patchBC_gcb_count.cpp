@@ -38,7 +38,7 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
         jstart = p->posc_j(p->B440_ys[qn]);
         jend = p->posc_j(p->B440_ye[qn]);
 
-        for(n=0;n<p->gcb4.ssize(p->level);++n)
+        GCB4
         {
             GCB4_TILE(n);
 
@@ -71,7 +71,7 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
         kstart = p->posc_k(p->B441_zs[qn]);
         kend = p->posc_k(p->B441_ze[qn]);
 
-        for(n=0;n<p->gcb4.ssize(p->level);++n)
+        GCB4
         {
             GCB4_TILE(n);
 
@@ -96,7 +96,7 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
     for(int qn=0;qn<p->B442;++qn)
     {
         int count=0;
-        for(n=0;n<p->gcb4.ssize(p->level);++n)
+        GCB4
         {
             GCB4_TILE(n);
 

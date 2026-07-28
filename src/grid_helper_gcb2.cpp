@@ -22,62 +22,79 @@ Author: Hans Bihs
 
 #include"grid_helper.h"
 #include"lexer.h"
+#include <cassert>
 
 void grid_helper::fillgcb2(lexer *p)
 {
+    #if USE_AMREX
+    const int nlevs = p->nlevs;
+    #else
+    const int nlevs = 1;
+    #endif
+
     int q,n;
 
-    p->Iarray(fgc,imax*jmax*kmax,6);
+    ArrayWrapper3D fgc(p);
+    fgc.resize(0);
 
     if(p->gcb2_count!=p->gcb4_count)
     {
-        p->Iresize(p->gcb2,p->gcb2_count, p->gcb4_count, 6, 6);
 
         p->gcb2_count=p->gcb4_count;
     }
 
-    QGCB4
-    {
-        const auto &src = p->gcb4[p->level][q];
+    assert(nlevs==1 && "Error: fillgcb2() should only be called when nlevs==1");
 
-        p->gcb2[q][0]=src.i;
-        p->gcb2[q][1]=src.j;
-        p->gcb2[q][2]=src.k;
-        p->gcb2[q][3]=src.cs;
-        p->gcb2[q][4]=src.bc;
+    p->gcb2.resize_levels(nlevs);
+    for(int lev=0; lev<nlevs; ++lev)
+    p->gcb2[lev].assign(p->gcb2_count, {});
+
+    QGCB2
+    {
+        p->gcb2[p->level][q] = p->gcb4[p->level][q];
     }
 
     QGC2LOOP
     {
-        i=p->gcb2[q][0];
-        j=p->gcb2[q][1];
-        k=p->gcb2[q][2];
+        auto &gcb = p->gcb2[p->level][q];
 
-        fgc[IJK][p->gcb2[q][3]-1]=1;
+        i=gcb.i;
+        j=gcb.j;
+        k=gcb.k;
+
+        GCB_APPLY_TILE(gcb, p->level);
+
+        if(gcb.cs==Y_POS)
+        fgc(i,j,k)=1;
     }
 
     QGC2LOOP
     {
-        i=p->gcb2[q][0];
-        j=p->gcb2[q][1];
-        k=p->gcb2[q][2];
+        auto &gcb = p->gcb2[p->level][q];
 
-        if(p->gcb2[q][3]==2 && (p->periodic2!=1 || j+p->origin_j<p->gknoy-1))
-        p->gcb2[q][1]-=1;
+        i=gcb.i;
+        j=gcb.j;
+        k=gcb.k;
+
+        GCB_APPLY_TILE(gcb, p->level);
+
+        if(gcb.cs==Y_POS && (p->periodic2!=1 || j+p->origin_j<p->gknoy-1))
+        gcb.j-=1;
     }
 
     QGC2LOOP
     {
-        i=p->gcb2[q][0];
-        j=p->gcb2[q][1];
-        k=p->gcb2[q][2];
+        auto &gcb = p->gcb2[p->level][q];
 
-        if(p->gcb2[q][3]!=2 && fgc[IJK][1]==1 && (p->periodic2!=1 || j+p->origin_j<p->gknoy-1))
-        p->gcb2[q][3]=-fabs(p->gcb2[q][3]);
+        i=gcb.i;
+        j=gcb.j;
+        k=gcb.k;
+
+        GCB_APPLY_TILE(gcb, p->level);
+
+        if(gcb.cs!=Y_POS && fgc(i,j,k)==1 && (p->periodic2!=1 || j+p->origin_j<p->gknoy-1))
+        gcb.cs=-abs(gcb.cs);
     }
 
-    for(int n=0; n<imax*jmax*kmax;n++)
-    delete[] fgc[n];
-
-    delete[] fgc;
+    GC_TILE_RESET;
 }
