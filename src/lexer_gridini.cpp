@@ -66,7 +66,7 @@ void lexer::flagini()
     flag4.resize(-1);
 
     p->level = 0;
-    TILE_LOOP
+    // TILE_LOOP
     IJKLOOP
     flag4(i,j,k) = flag4_grid[IJK];
 
