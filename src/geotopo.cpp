@@ -20,30 +20,34 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"geotopo.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
-#include"reinitopo.h"
-#include"ioflow.h"
-
-geotopo::geotopo(lexer* p, fdm *a, ghostcell* pgc)
-{
-}
-
-geotopo::~geotopo()
-{
-}
+#include "geotopo.h"
+#include "lexer.h"
+#include "fdm.h"
+#include "ghostcell.h"
+#include "ioflow.h"
+#include "reinitopo.h"
 
 void geotopo::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow, reinitopo* preto, vrans* pvrans)
 {
-    dat(p,a,pgc);
-    
+    if(p->toporead>0)
+    {
+        p->level = 0;
+        // TILE_LOOP // IJK is not tile aware.
+        IJKLOOP
+        PBASECHECK
+        a->topo(i,j,k) = p->flag_topo[IJK];
+    }
+
+    p->flag_topo.reset();
+
+    if(p->S57>-1.0e20)
+    {
+        ALOOP
+        a->topo(i,j,k)=-p->S57+p->ZP[KP];
+    }
+
     preto->start(p,a,pgc,a->topo);
-    
+
     if(p->S10==2)
     pflow->vrans_sed_update(p,a,pgc,pvrans);
 }
-
-
-
