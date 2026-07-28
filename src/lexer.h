@@ -128,12 +128,10 @@ public:
     int cms_flag;
 
     //GHOSTCELL
-    // The cell-centred ghost-cell boundary list. Generated from flag4 by
+    // The ghost-cell boundary lists. Generated from flag4 by
     // ghostcell::gcb4_generate rather than read from the grid file, so its
-    // entries are tile-tagged and are rebuilt on every regrid. gcb2/gcb3 are
-    // still int** and are filled from it.
-    gcb_list gcb1, gcb4;
-    int **gcb2,**gcb3;
+    // entries are tile-tagged and are rebuilt on every regrid.
+    gcb_list gcb1, gcb2, gcb3, gcb4;
 
     int gcdf1_count,gcdf2_count,gcdf3_count,gcdf4_count;
     gcb_cs_list gcdf1,gcdf2,gcdf3;

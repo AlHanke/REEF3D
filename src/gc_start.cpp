@@ -97,7 +97,7 @@ void ghostcell::start2(lexer *p, field& f, int gcv)
     {
         starttime=timer();
         QQGC2LOOP
-            gcdistro2(f, p->gcb2[qq][0], p->gcb2[qq][1], p->gcb2[qq][2], p->gcb2[qq][3], p->gcb2[qq][4], gcv);
+            gcdistro2(f, p->gcb2[p->level][qq].i, p->gcb2[p->level][qq].j, p->gcb2[p->level][qq].k, p->gcb2[p->level][qq].cs, p->gcb2[p->level][qq].bc, gcv);
         endtime=timer();
         p->gctime+=endtime-starttime;
 
@@ -144,7 +144,7 @@ void ghostcell::start3(lexer *p, field& f, int gcv)
     starttime=timer();
     QQGC3LOOP
     if((p->gcb1[p->level][qq].cs!=2 && p->gcb1[p->level][qq].cs!=3) || p->j_dir==1)
-        gcdistro3(f, p->gcb3[qq][0], p->gcb3[qq][1], p->gcb3[qq][2], p->gcb3[qq][3], p->gcb3[qq][4], gcv);
+        gcdistro3(f, p->gcb3[p->level][qq].i, p->gcb3[p->level][qq].j, p->gcb3[p->level][qq].k, p->gcb3[p->level][qq].cs, p->gcb3[p->level][qq].bc, gcv);
     endtime=timer();
     p->gctime+=endtime-starttime;
 

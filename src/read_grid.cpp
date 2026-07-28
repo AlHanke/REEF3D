@@ -320,9 +320,8 @@ void lexer::read_grid()
 
     if(gcb4_count>0)
     {
-        Iarray(gcb2, gcb2_count,6);
-        Iarray(gcb3, gcb3_count,6);
-                                      // gcb4 itself is a gcb_list, generated in
+                                      // gcb2/gcb3/gcb4 are gcb_list, generated in
+                                      // grid_helper::fillgcb2/fillgcb3 and
                                       // ghostcell::gcb4_generate, not allocated here
     }
 
