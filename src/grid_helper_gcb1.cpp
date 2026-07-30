@@ -32,7 +32,7 @@ void grid_helper::fillgcb1(lexer *p)
     const int nlevs = 1;
     #endif
 
-    int q,n;
+    int q;
 
     ArrayWrapper3D fgc(p);
     fgc.resize(0);
@@ -42,6 +42,8 @@ void grid_helper::fillgcb1(lexer *p)
     p->gcb1.resize_levels(nlevs);
     LEVEL_LOOP
     {
+        LEVEL_DOMAIN_DECL(dom)
+
         p->gcb1[p->level] = p->gcb4[p->level];
 
         QGC1LOOP
@@ -68,7 +70,7 @@ void grid_helper::fillgcb1(lexer *p)
 
             GCB_APPLY_TILE(gcb, p->level);
 
-            if(gcb.cs==X_POS && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
+            if(gcb.cs==X_POS && (p->periodic1!=1 || GLOBAL_I<DOMAIN_HI(dom,0)))
             gcb.i-=1;
         }
 
@@ -82,7 +84,7 @@ void grid_helper::fillgcb1(lexer *p)
 
             GCB_APPLY_TILE(gcb, p->level);
 
-            if(gcb.cs!=X_POS && fgc(i,j,k)==1 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
+            if(gcb.cs!=X_POS && fgc(i,j,k)==1 && (p->periodic1!=1 || GLOBAL_I<DOMAIN_HI(dom,0)))
             gcb.cs=-abs(gcb.cs);
         }
     }
