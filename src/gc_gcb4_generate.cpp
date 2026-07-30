@@ -155,17 +155,6 @@ void ghostcell::gcb4_generate(lexer *p)
                     e.cs = cs_list[d];
                     e.bc = nb_out[d] ? bcs[cs_list[d]] : WALL_BC;
 
-                    // Ghost-cell distance: half the cell spacing normal to the face.
-                    // d/2 is the axis (0,1 -> x; 2,3 -> y; 4,5 -> z), matching cs_list.
-                    //
-                    // Set here rather than in a later pass because this is the only point
-                    // at which the entry's tile context and level are already installed:
-                    // DXP[IP] resolves through ORIGIN_I, which folds in both amr_tile_lo
-                    // and max_i*level, so the spacing read is this level's. A separate
-                    // pass would have to replay the context per entry to get the same
-                    // answer, and would then be undone by the next regrid's regeneration.
-                    e.dist = 0.5*(d<2 ? p->DXP[IP] : (d<4 ? p->DYP[JP] : p->DZP[KP]));
-
                     GCB_SET_TILE(e);
 
                     ++count;
