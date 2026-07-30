@@ -32,63 +32,61 @@ void grid_helper::fillgcb3(lexer *p)
     const int nlevs = 1;
     #endif
 
-    int q,n;
+    int q;
 
     ArrayWrapper3D fgc(p);
     fgc.resize(0);
 
     p->gcb3_count=p->gcb4_count;
 
-    assert(nlevs==1 && "Error: fillgcb3() should only be called when nlevs==1");
-
     p->gcb3.resize_levels(nlevs);
-    for(int lev=0; lev<nlevs; ++lev)
-    p->gcb3[lev].assign(p->gcb3_count, {});
-
-    QGCB3
-    p->gcb3[p->level][q] = p->gcb4[p->level][q];
-
-    QGC3LOOP
+    LEVEL_LOOP
     {
-        auto &gcb = p->gcb3[p->level][q];
+        LEVEL_DOMAIN_DECL(dom)
 
-        i=gcb.i;
-        j=gcb.j;
-        k=gcb.k;
+        p->gcb3[p->level] = p->gcb4[p->level];
 
-        GCB_APPLY_TILE(gcb, p->level);
+        QGC3LOOP
+        {
+            auto &gcb = p->gcb3[p->level][q];
 
-        if(gcb.cs==Z_POS)
-        fgc(i,j,k)=1;
+            i=gcb.i;
+            j=gcb.j;
+            k=gcb.k;
+
+            GCB_APPLY_TILE(gcb, p->level);
+
+            if(gcb.cs==Z_POS)
+            fgc(i,j,k)=1;
+        }
+
+        QGC3LOOP
+        {
+            auto &gcb = p->gcb3[p->level][q];
+
+            i=gcb.i;
+            j=gcb.j;
+            k=gcb.k;
+
+            GCB_APPLY_TILE(gcb, p->level);
+
+            if(gcb.cs==Z_POS && (p->periodic3!=1 || GLOBAL_K<DOMAIN_HI(dom,2)))
+            gcb.k-=1;
+        }
+
+        QGC3LOOP
+        {
+            auto &gcb = p->gcb3[p->level][q];
+
+            i=gcb.i;
+            j=gcb.j;
+            k=gcb.k;
+
+            GCB_APPLY_TILE(gcb, p->level);
+
+            if(gcb.cs!=Z_POS && fgc(i,j,k)==1 && (p->periodic3!=1 || GLOBAL_K<DOMAIN_HI(dom,2)))
+            gcb.cs=-abs(gcb.cs);
+        }
     }
-
-    QGC3LOOP
-    {
-        auto &gcb = p->gcb3[p->level][q];
-
-        i=gcb.i;
-        j=gcb.j;
-        k=gcb.k;
-
-        GCB_APPLY_TILE(gcb, p->level);
-
-        if(gcb.cs==Z_POS && (p->periodic3!=1 || k+p->origin_k<p->gknoz-1))
-        gcb.k-=1;
-    }
-
-    QGC3LOOP
-    {
-        auto &gcb = p->gcb3[p->level][q];
-
-        i=gcb.i;
-        j=gcb.j;
-        k=gcb.k;
-
-        GCB_APPLY_TILE(gcb, p->level);
-
-        if(gcb.cs!=Z_POS && fgc(i,j,k)==1 && (p->periodic3!=1 || k+p->origin_k<p->gknoz-1))
-        gcb.cs=-abs(gcb.cs);
-    }
-
     GC_TILE_RESET;
 }
