@@ -355,12 +355,12 @@ void lexer::read_grid()
         Darray(gcd4, gcb4_count);
     }
 
-    Iarray(gcpara1, gcpara1_count,16);
-    Iarray(gcpara2, gcpara2_count,16);
-    Iarray(gcpara3, gcpara3_count,16);
-    Iarray(gcpara4, gcpara4_count,16);
-    Iarray(gcpara5, gcpara5_count,16);
-    Iarray(gcpara6, gcpara6_count,16);
+    Iarray(gcpara1, gcpara1_count,7);
+    Iarray(gcpara2, gcpara2_count,7);
+    Iarray(gcpara3, gcpara3_count,7);
+    Iarray(gcpara4, gcpara4_count,7);
+    Iarray(gcpara5, gcpara5_count,7);
+    Iarray(gcpara6, gcpara6_count,7);
 
     Iarray(gcparaco1, gcparaco1_count,3);
     Iarray(gcparaco2, gcparaco2_count,3);

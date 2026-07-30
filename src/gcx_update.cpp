@@ -70,17 +70,6 @@ void ghostcell::gcxupdate(lexer* p)
 
         if(p->flag4[Im1JK]>=AIR_FLAG && p->flag4[IJK]>=AIR_FLAG)
             p->gcpara1[n][6]=1;
-
-        // 4a
-        if(p->flag4[Im1JK]<=SOLID_FLAG || p->flag4[IJK]<=SOLID_FLAG)
-            p->gcpara1[n][7]=p->Y74;
-
-        if(p->flag4[Im1JK]>SOLID_FLAG && p->flag4[IJK]>SOLID_FLAG)
-            p->gcpara1[n][7]=1;
-
-        // 6
-        p->gcpara1[n][8]=1;
-
     }
 
     for(n=0;n<p->gcpara2_count;++n)
@@ -128,16 +117,6 @@ void ghostcell::gcxupdate(lexer* p)
 
         if(p->flag4[IJp1K]>=AIR_FLAG && p->flag4[IJK]>=AIR_FLAG)
             p->gcpara2[n][6]=1;
-
-        // 4a
-        if(p->flag4[IJp1K]<=SOLID_FLAG || p->flag4[IJK]<=SOLID_FLAG)
-            p->gcpara2[n][7]=p->Y74;
-
-        if(p->flag4[IJp1K]>SOLID_FLAG && p->flag4[IJK]>SOLID_FLAG)
-            p->gcpara2[n][7]=1;
-
-        // 6
-        p->gcpara2[n][8]=1;
     }
 
     for(n=0;n<p->gcpara3_count;++n)
@@ -185,16 +164,6 @@ void ghostcell::gcxupdate(lexer* p)
 
         if(p->flag4[IJm1K]>=AIR_FLAG && p->flag4[IJK]>=AIR_FLAG)
             p->gcpara3[n][6]=1;
-
-        // 4a
-        if(p->flag4[IJm1K]<=SOLID_FLAG || p->flag4[IJK]<=SOLID_FLAG)
-            p->gcpara3[n][7]=p->Y74;
-
-        if(p->flag4[IJm1K]>SOLID_FLAG && p->flag4[IJK]>SOLID_FLAG)
-            p->gcpara3[n][7]=1;
-
-        // 6
-        p->gcpara3[n][8]=1;
     }
 
     for(n=0;n<p->gcpara4_count;++n)
@@ -242,16 +211,6 @@ void ghostcell::gcxupdate(lexer* p)
 
         if(p->flag4[Ip1JK]>=AIR_FLAG && p->flag4[IJK]>=AIR_FLAG)
             p->gcpara4[n][6]=1;
-
-        // 4a
-        if(p->flag4[Ip1JK]<=SOLID_FLAG || p->flag4[IJK]<=SOLID_FLAG)
-            p->gcpara4[n][7]=p->Y74;
-
-        if(p->flag4[Ip1JK]>SOLID_FLAG && p->flag4[IJK]>SOLID_FLAG)
-            p->gcpara4[n][7]=1;
-
-        // 6
-        p->gcpara4[n][8]=1;
     }
 
     for(n=0;n<p->gcpara5_count;++n)
@@ -299,16 +258,6 @@ void ghostcell::gcxupdate(lexer* p)
 
         if(p->flag4[IJKm1]>=AIR_FLAG && p->flag4[IJK]>=AIR_FLAG)
             p->gcpara5[n][6]=1;
-
-        // 4a
-        if(p->flag4[IJKm1]<=SOLID_FLAG || p->flag4[IJK]<=SOLID_FLAG)
-            p->gcpara5[n][7]=p->Y74;
-
-        if(p->flag4[IJKm1]>SOLID_FLAG && p->flag4[IJK]>SOLID_FLAG)
-            p->gcpara5[n][7]=1;
-
-        // 6
-        p->gcpara5[n][8]=1;
     }
 
     for(n=0;n<p->gcpara6_count;++n)
@@ -356,15 +305,5 @@ void ghostcell::gcxupdate(lexer* p)
 
         if(p->flag4[IJKp1]>=AIR_FLAG && p->flag4[IJK]>=AIR_FLAG)
             p->gcpara6[n][6]=1;
-
-        // 4a
-        if(p->flag4[IJKp1]<=SOLID_FLAG || p->flag4[IJK]<=SOLID_FLAG)
-            p->gcpara6[n][7]=p->Y74;
-
-        if(p->flag4[IJKp1]>SOLID_FLAG && p->flag4[IJK]>SOLID_FLAG)
-            p->gcpara6[n][7]=1;
-
-        // 6
-        p->gcpara6[n][8]=1;
     }
 }
