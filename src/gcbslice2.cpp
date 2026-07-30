@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include<vector>
 
+// SLICEOWNLOOP2 rather than SLICELOOP2 — see the note in gcbslice1.cpp.
 void mgcslice2::gcb_seed(lexer *p)
 {
     // count gcbsl
@@ -35,7 +36,7 @@ void mgcslice2::gcb_seed(lexer *p)
 
     std::vector<int> count_vec(nlevs,0);
 
-    SLICELOOP2
+    SLICEOWNLOOP2
     {
         if(p->flagslice2(i-1,j)<0)
         ++count_vec[p->level];
@@ -57,7 +58,7 @@ void mgcslice2::gcb_seed(lexer *p)
 
     // find gcbsl
     count_vec.assign(count_vec.size(), 0);
-    SLICELOOP2
+    SLICEOWNLOOP2
     {
         if(p->flagslice2(i-1,j)<0)
         {

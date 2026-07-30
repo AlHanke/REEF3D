@@ -145,6 +145,50 @@ public:
     amrex::Vector<amrex::DistributionMapping> amrex_slice_distribution_mapping; // DistributionMapping for slice planes
     amrex::Vector<amrex::Vector<std::pair<amrex::RealVect,amrex::RealVect>>> amrex_refined_grid_coords; // Input: Coordinates of the refined grid boxes for each level, index is offset by 1 (i.e. amrex_refined_grid_coords[0] is for level 1, etc.)
 
+    // -----------------------------------------------------------------
+    // Slice column ownership — shared by every ArrayWrapper2D.
+    //
+    // The int slices flatten the 3D BoxArray onto z-slabs, so every 3D box in a
+    // column lands on the same (i,j) and the resulting VIEW layout overlaps.
+    // Reductions over it — and any "visit each column once" loop — need a single
+    // designated owner box per column.
+    //
+    // For an int flag the payload is column-constant, so the owner can be purely
+    // geometric: the box touching the domain z-lo face. That makes the mask a
+    // function of (BoxArray, DistributionMapping, Domain) alone — identical for
+    // flagslice1/2/4 and IOSL — so it is built here once per grid generation
+    // instead of once per instance per regrid.
+    //
+    // NOT shared with slice_amrex's mask: that one is ksurf-based and follows the
+    // free surface, so it is data-dependent and has to be rebuilt whenever the
+    // surface moves. Same layout, different predicate — they must not be merged.
+    //
+    // slice_view_ba is the view layout itself (one flattened box per 3D box, on
+    // the 3D DistributionMapping), published so the slices define their m_view
+    // against the same BoxArray the mask uses — an MFIter over m_view then
+    // indexes slice_owner_mf directly.
+    amrex::Vector<amrex::BoxArray>  slice_view_ba;
+    amrex::Vector<amrex::iMultiFab> slice_owner_mf;
+
+    /// Rebuild both, for all levels. Must run after the box arrays are in place
+    /// and before anything that reads them — at setup, and on regrid ahead of the
+    /// slice_registry callbacks, which reduce through the mask.
+    void build_slice_owner();
+
+    const amrex::BoxArray& slice_view_boxarray(int lev) const
+    {
+        AMREX_ASSERT(lev >= 0 && lev < int(slice_view_ba.size()));
+        return slice_view_ba[lev];
+    }
+
+    /// 1 on the one view cell per column that counts, 0 on the duplicates.
+    const amrex::iMultiFab& slice_owner(int lev) const
+    {
+        AMREX_ASSERT(lev >= 0 && lev < int(slice_owner_mf.size()));
+        AMREX_ASSERT(slice_owner_mf[lev].ok() && "build_slice_owner not run for this grid");
+        return slice_owner_mf[lev];
+    }
+
     // Looping structures
     amrex::Vector<amrex::iMultiFab> amr_cell_mf;
     std::unique_ptr<amrex::MFIter> default_cell_mfi;
@@ -156,6 +200,16 @@ public:
     int amr_local_fab_idx      = -1; // Local FAB index within the current MFIter
     int amr_local_tile_idx     = -1; // Local tile index within the current MFIter
     int amr_tile_ctx_id        = TILE_CTX_DEFAULT; // Dense id of the installed tile
+
+    /// Whether the installed tile owns its (i,j) columns — see TileCtx::slice_owner
+    /// for the predicate. This is what PSLICEOWNER / SLICEOWNLOOP* test, so that a
+    /// slice loop emitting one record per column visits each column exactly once
+    /// even when a box is split into several tiles in z.
+    ///
+    /// Only meaningful inside a TILE_LOOP or under a context restored by
+    /// set_tile_ctx. Outside one the default context is installed, which is box 0's
+    /// — so on a rank owning several boxes the bit then answers for box 0 alone.
+    bool amr_slice_owner       = false;
 
     // Tile context table, rebuilt by build_tile_ctx_table on every decomposition
     // change. tile_ctx_table is indexed by the dense id; the offsets are the
@@ -227,6 +281,7 @@ public:
         c.local_tile_idx = amr_local_tile_idx;
         c.gen            = amr_grid_gen;
         c.id             = amr_tile_ctx_id;
+        c.slice_owner    = amr_slice_owner;
         return c;
     }
 
@@ -252,7 +307,35 @@ public:
         c.local_tile_idx = mfi.LocalTileIndex();
         c.gen            = amr_grid_gen;
         c.id             = tile_ctx_id_of(mfi);
+        c.slice_owner    = slice_owner_of(mfi, tb);
         return c;
+    }
+
+    /// The TileCtx::slice_owner predicate for an MFIter's current tile. Split out
+    /// of tile_ctx(mfi) only to keep the two conditions and their guard readable.
+    ///
+    /// mfi.index() is used as a subscript into amrex_box_array[level]: valid for
+    /// amr_cell_mf, for every registered field (they share the level's BoxArray)
+    /// and for slice_view_ba (one flattened box per 3D box, in order). Anything
+    /// else — or a call before the box arrays exist, which happens while the grid
+    /// is still being set up — yields false rather than a guess.
+    inline bool slice_owner_of(const amrex::MFIter& mfi,
+                               const amrex::Box& tb) const noexcept
+    {
+        if (level < 0 || level >= int(amrex_box_array.size())
+                      || level >= int(amrex_geometry.size()))
+            return false;
+
+        const amrex::BoxArray& ba3d = amrex_box_array[size_t(level)];
+
+        if (mfi.index() < 0 || mfi.index() >= int(ba3d.size()))
+            return false;
+
+        const amrex::Box b3  = ba3d[mfi.index()];
+        const int        zlo = amrex_geometry[size_t(level)].Domain().smallEnd(2);
+
+        return (b3.smallEnd(2) == zlo)                    // (a) owner box
+            && (amrex::lbound(tb).z == b3.smallEnd(2));   // (b) z-lowest tile of it
     }
 
     /// Prefix-sum id of an MFIter's current tile, or TILE_CTX_DEFAULT if the
@@ -301,6 +384,7 @@ public:
         amr_fab_mfi_idx    = c.fab_idx;
         amr_local_tile_idx = c.local_tile_idx;
         amr_tile_ctx_id    = c.id;
+        amr_slice_owner    = c.slice_owner;
     }
 
     /// Install the tile an MFIter currently points at, returning the context it

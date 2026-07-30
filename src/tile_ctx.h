@@ -97,11 +97,40 @@ struct TileCtx
 
     /// Dense index into grid_amrex's tile context table, or TILE_CTX_DEFAULT.
     /// This is what containers should store per entry (4 bytes) instead of a
-    /// whole TileCtx (48) — there are far fewer tiles than entries. Carried on
+    /// whole TileCtx (52) — there are far fewer tiles than entries. Carried on
     /// the struct itself so that apply_tile_ctx, the single writer of the
     /// addressing state, keeps the installed id consistent with the installed
     /// bounds; deriving one from the other after the fact is what goes wrong.
     int id = TILE_CTX_DEFAULT;
+
+    /// Slice-column ownership: true when this tile is the one that visits each
+    /// of its (i,j) columns exactly once at this level. Meaningful only inside a
+    /// TILE_LOOP or under a restored context — see grid_amrex::amr_slice_owner.
+    ///
+    /// Two conditions, and both are needed once MFIter_TILING is live:
+    ///   (a) the tile's BOX is the column owner, i.e. it touches the domain z-lo
+    ///       face. This is exactly grid_amrex::build_slice_owner's predicate, so
+    ///       bit and mask agree by construction at box granularity.
+    ///   (b) the tile is the z-LOWEST tile of that box. The default
+    ///       mfiter_tile_size (1024000, 8, 8) splits a box every 8 cells in y and
+    ///       in z; the y-split tiles have disjoint j, but every z-split tile
+    ///       repeats the same (i,j) footprint, and the slice loops never iterate
+    ///       k — so without (b) a 32-deep owner box reports its columns 4 times.
+    ///
+    /// (a) && (b) collapse to `tilebox.smallEnd(2) == domain.smallEnd(2)`. They
+    /// are computed separately in tile_ctx(mfi) so the half shared with the mask
+    /// stays visible.
+    ///
+    /// Distinct from the mask on purpose: build_slice_owner marks every cell of
+    /// the owner box, which keeps it tiling-agnostic for the untiled MFIter
+    /// reductions in ArrayWrapper2D (makeUnique/fillHoles). The loop path
+    /// is the one that needs tile granularity.
+    ///
+    /// False for iterators over a slab BoxArray: those never drive TILE_LOOP, and
+    /// false is the safe direction.
+    ///
+    /// Three bytes of tail padding follow it; the next flag is free.
+    bool slice_owner = false;
 };
 
 #else

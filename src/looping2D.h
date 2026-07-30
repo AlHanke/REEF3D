@@ -59,6 +59,37 @@ Author: Hans Bihs
 
 #define SEDSLICELOOP SLICEBASELOOP  PSLICECHECK4 SEDSLICECHECK
 
+// SLICE OWNER LOOPS — visit each (i,j) column of the level EXACTLY ONCE.
+//
+// The slice loops above do not: slice data lives on z-slabs of the 3D BoxArray,
+// so every box in a column flattens onto the same (i,j), and MultiGridLOOP walks
+// them all. With MFIter_TILING live it is worse than one visit per box — the
+// default mfiter_tile_size splits a box every 8 cells in z, and since these loops
+// never iterate k, each z-tile repeats the whole (i,j) footprint of its box.
+//
+// For a loop that WRITES a column value that is the right behaviour: the view is
+// overlapping and is only re-broadcast at the next makeUnique, so every copy has
+// to be written or a reader on a non-owner tile sees stale data. Use SLICELOOP*
+// there — this is not a stricter drop-in replacement.
+//
+// Use SLICEOWNLOOP* wherever a repeat is wrong rather than redundant: emitting one
+// record per column (mgcslice*::gcb_seed), counting, or accumulating with +=.
+//
+// PSLICEOWNER sits between the tile loop and the (i,j) sweep so a non-owner tile
+// is skipped whole. See TileCtx::slice_owner for the predicate, and
+// grid_amrex::build_slice_owner for the box-granular mask it agrees with.
+#if USE_AMREX
+    #define PSLICEOWNER if(p->amr_slice_owner)
+#else
+    #define PSLICEOWNER
+#endif
+
+#define SLICEOWNBASELOOP MultiGridLOOP PSLICEOWNER ILOOP JLOOP
+
+#define SLICEOWNLOOP1 MultiGridLOOP PSLICEOWNER IULOOP JLOOP  PSLICECHECK1
+#define SLICEOWNLOOP2 MultiGridLOOP PSLICEOWNER ILOOP  JVLOOP PSLICECHECK2
+#define SLICEOWNLOOP4 SLICEOWNBASELOOP  PSLICECHECK4
+
 #define TPSLICELOOP ITPLOOP JTPLOOP
 
 #define SLICEFLEXLOOP IFLEXLOOP JFLEXLOOP SLICEFLEXCHECK
