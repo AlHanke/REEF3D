@@ -31,6 +31,7 @@ Authors: Hans Bihs, Alexander Hanke
 #include"iterators1D.h"
 #include"iterators2D.h"
 #include"iterators3D.h"
+#include"global_index.h"
 #if USE_AMREX
     #include <AMReX_MFIter.H>
     #include <AMReX_MultiFab.H>

@@ -84,20 +84,8 @@ void ghostcell::gcb4_generate(lexer *p)
     }
 
     // Domain bounds in the global index space, and the tile origin that turns a
-    // tile-local index into a global one.
-    #if USE_AMREX
-    #define GCB4_DOM_LO(d) (dom.smallEnd(d))
-    #define GCB4_DOM_HI(d) (dom.bigEnd(d))
-    #define GCB4_GI (i + p->amr_tile_lo.x)
-    #define GCB4_GJ (j + p->amr_tile_lo.y)
-    #define GCB4_GK (k + p->amr_tile_lo.z)
-    #else
-    #define GCB4_DOM_LO(d) (0)
-    #define GCB4_DOM_HI(d) ((d)==0 ? p->gknox-1 : ((d)==1 ? p->gknoy-1 : p->gknoz-1))
-    #define GCB4_GI (i + p->origin_i)
-    #define GCB4_GJ (j + p->origin_j)
-    #define GCB4_GK (k + p->origin_k)
-    #endif
+    // tile-local index into a global one: GLOBAL_I/J/K, LEVEL_DOMAIN_DECL and
+    // DOMAIN_LO/HI, from global_index.h.
 
     // -----------------------------------------------------------------------
     // count
@@ -107,56 +95,52 @@ void ghostcell::gcb4_generate(lexer *p)
     const int nlevels = 1;
     #endif
 
-    count=0;
-
-    p->level = 0;
-    #if USE_AMREX
-    const auto dom = p->amrex_geometry[p->level].Domain();
-    #endif
-
-    TILE_LOOP
-    IJKLOOP
-    PCHECK
-    {
-        if(p->flag4(i-1,j,k)<0) ++count;
-        if(p->flag4(i+1,j,k)<0) ++count;
-        if(p->flag4(i,j-1,k)<0) ++count;
-        if(p->flag4(i,j+1,k)<0) ++count;
-        if(p->flag4(i,j,k-1)<0) ++count;
-        if(p->flag4(i,j,k+1)<0) ++count;
-    }
-
-    const int newcount = count;
-
-    // -----------------------------------------------------------------------
-    // size the lists
     p->gcb4.resize_levels(nlevels);
-    p->gcb4[p->level].assign(newcount, {});
 
-    // -----------------------------------------------------------------------
-    // fill
-
-    // p->level = 0;
     LEVEL_LOOP
     {
+        count=0;
+        TILE_LOOP
+        IJKLOOP
+        PCHECK
+        {
+            if(p->flag4(i-1,j,k)<0) ++count;
+            if(p->flag4(i+1,j,k)<0) ++count;
+            if(p->flag4(i,j-1,k)<0) ++count;
+            if(p->flag4(i,j+1,k)<0) ++count;
+            if(p->flag4(i,j,k-1)<0) ++count;
+            if(p->flag4(i,j,k+1)<0) ++count;
+        }
+
+        const int newcount = count;
+
+        // -----------------------------------------------------------------------
+        // size the lists
+        p->gcb4[p->level].assign(newcount, {});
+
+        // -----------------------------------------------------------------------
+        // fill
+
+        LEVEL_DOMAIN_DECL(dom)
+
         count = 0;
         TILE_LOOP
         {
             IJKLOOP
             PCHECK
             {
-                const int gi = GCB4_GI;
-                const int gj = GCB4_GJ;
-                const int gk = GCB4_GK;
+                const int gi = GLOBAL_I;
+                const int gj = GLOBAL_J;
+                const int gk = GLOBAL_K;
 
                 // cs, neighbour flag, and whether that neighbour is outside the domain
                 const int  cs_list[6]  = {1, 4, 3, 2, 5, 6};
                 const int  nb_flag[6]  = {p->flag4(i-1,j,k), p->flag4(i+1,j,k),
                                         p->flag4(i,j-1,k), p->flag4(i,j+1,k),
                                         p->flag4(i,j,k-1), p->flag4(i,j,k+1)};
-                const bool nb_out[6]   = {gi-1 < GCB4_DOM_LO(0), gi+1 > GCB4_DOM_HI(0),
-                                        gj-1 < GCB4_DOM_LO(1), gj+1 > GCB4_DOM_HI(1),
-                                        gk-1 < GCB4_DOM_LO(2), gk+1 > GCB4_DOM_HI(2)};
+                const bool nb_out[6]   = {gi-1 < DOMAIN_LO(dom,0), gi+1 > DOMAIN_HI(dom,0),
+                                        gj-1 < DOMAIN_LO(dom,1), gj+1 > DOMAIN_HI(dom,1),
+                                        gk-1 < DOMAIN_LO(dom,2), gk+1 > DOMAIN_HI(dom,2)};
 
                 for(int d=0; d<6; ++d)
                 {
@@ -170,20 +154,28 @@ void ghostcell::gcb4_generate(lexer *p)
                     e.k  = k;
                     e.cs = cs_list[d];
                     e.bc = nb_out[d] ? bcs[cs_list[d]] : WALL_BC;
+
+                    // Ghost-cell distance: half the cell spacing normal to the face.
+                    // d/2 is the axis (0,1 -> x; 2,3 -> y; 4,5 -> z), matching cs_list.
+                    //
+                    // Set here rather than in a later pass because this is the only point
+                    // at which the entry's tile context and level are already installed:
+                    // DXP[IP] resolves through ORIGIN_I, which folds in both amr_tile_lo
+                    // and max_i*level, so the spacing read is this level's. A separate
+                    // pass would have to replay the context per entry to get the same
+                    // answer, and would then be undone by the next regrid's regeneration.
+                    e.dist = 0.5*(d<2 ? p->DXP[IP] : (d<4 ? p->DYP[JP] : p->DZP[KP]));
+
                     GCB_SET_TILE(e);
 
                     ++count;
                 }
             }
         }
+        assert(count == newcount);
 
         if(p->level == 0)
             p->gcb4_count = newcount;
     }
 
-    #undef GCB4_DOM_LO
-    #undef GCB4_DOM_HI
-    #undef GCB4_GI
-    #undef GCB4_GJ
-    #undef GCB4_GK
 }

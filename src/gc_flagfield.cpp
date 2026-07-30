@@ -107,7 +107,7 @@ void ghostcell::flagfield(lexer *p)
     LEVEL_LOOP
     {
         const bool fine = (p->level > 0);
-        const auto dom = p->amrex_geometry[p->level].Domain();
+        LEVEL_DOMAIN_DECL(dom)
         TILE_LOOP
         for (i = -margin; i <= (p->amr_tile_hi.x - p->amr_tile_lo.x)+margin; ++i)
         for (j = -margin; j <= (p->amr_tile_hi.y - p->amr_tile_lo.y)+margin; ++j)
@@ -116,19 +116,22 @@ void ghostcell::flagfield(lexer *p)
             const int f = p->flag4(i,j,k);
             if(f==INFLOW_FLAG || f==OUTFLOW_FLAG || f<=SOLID_FLAG || f>=WATER_FLAG) continue;
 
-            const int gi = i + p->amr_tile_lo.x;
-            const int gj = j + p->amr_tile_lo.y;
-            const int gk = k + p->amr_tile_lo.z;
+            const int gi = GLOBAL_I;
+            const int gj = GLOBAL_J;
+            const int gk = GLOBAL_K;
 
             const bool wall =
-                   (gk<dom.smallEnd(2) && zlo_c)                                    // z-low: ALL levels
-                || (fine && ( (gi<dom.smallEnd(0) && xlo_c) || (gi>dom.bigEnd(0) && xhi_c)
-                           || (gj<dom.smallEnd(1) && ylo_c) || (gj>dom.bigEnd(1) && yhi_c)
-                           || (gk>dom.bigEnd(2) && zhi_c) ));                       // lateral/top: FINE only
+                   (gk<DOMAIN_LO(dom,2) && zlo_c)                                   // z-low: ALL levels
+                || (fine && ( (gi<DOMAIN_LO(dom,0) && xlo_c) || (gi>DOMAIN_HI(dom,0) && xhi_c)
+                           || (gj<DOMAIN_LO(dom,1) && ylo_c) || (gj>DOMAIN_HI(dom,1) && yhi_c)
+                           || (gk>DOMAIN_HI(dom,2) && zhi_c) ));                     // lateral/top: FINE only
             if(wall)
                 p->flag4(i,j,k)=OBJ_FLAG;
         }
     }
+    p->flag4.fillBoundary();
+    #else
+    flagx(p,p->flag4);
     #endif
 
     // gcb4 is derived from flag4, not read from the grid file. It has to be
@@ -138,7 +141,7 @@ void ghostcell::flagfield(lexer *p)
     // domain-exterior ghost ring reads OBJ_FLAG) and before the tagging below.
     gcb4_generate(p);
 
-    p->level = 0;
+    LEVEL_LOOP
     TILE_LOOP
     MALOOP
     {
@@ -147,49 +150,55 @@ void ghostcell::flagfield(lexer *p)
         p->flag3(i,j,k)=p->flag4(i,j,k);
     }
 
-    GC4LOOP
+    // Domain-high guard for the periodic directions, in the LEVEL's index space —
+    // GLOBAL_I/J/K and DOMAIN_HI from global_index.h, which documents why the legacy
+    // i+origin_i < gknox-1 form is wrong in both operands under AMReX. DOMAIN_HI is
+    // gknox-1 at level 0, so level-0 behaviour is unchanged.
+    //
+    // Belt-and-braces on the AMReX path: FillBoundary now wraps periodic directions,
+    // so a periodic domain face reads the interior value through its ghost, no entry
+    // is emitted there by gcb4_generate, and this guard never fires. If it ever does,
+    // the finding is that the periodic ghost was not filled.
+    LEVEL_LOOP
     {
-        GCB4_TILE(n);
+        // Read before any GCB4_TILE, i.e. at the loop's own level. Safe against the
+        // set_tile_ctx inside the body, which restores the entry's level — equal to
+        // the bucket the entry lives in, hence to this one.
+        LEVEL_DOMAIN_DECL(dom)
 
-        i=p->gcb4[p->level][n].i;
-        j=p->gcb4[p->level][n].j;
-        k=p->gcb4[p->level][n].k;
+        GC4LOOP
+        {
+            GCB4_TILE(n);
 
-        if(p->gcb4[p->level][n].cs==X_POS && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
-            p->flag1[IJK]=OBJ_FLAG;
+            i=p->gcb4[p->level][n].i;
+            j=p->gcb4[p->level][n].j;
+            k=p->gcb4[p->level][n].k;
+
+            if(p->gcb4[p->level][n].cs==X_POS && (p->periodic1!=1 || GLOBAL_I<DOMAIN_HI(dom,0)))
+                p->flag1(i,j,k)=OBJ_FLAG;
+
+            if(p->gcb4[p->level][n].cs==Y_POS && (p->periodic2!=1 || GLOBAL_J<DOMAIN_HI(dom,1)))
+                p->flag2(i,j,k)=OBJ_FLAG;
+
+            if(p->gcb4[p->level][n].cs==Z_POS && (p->periodic3!=1 || GLOBAL_K<DOMAIN_HI(dom,2)))
+                p->flag3(i,j,k)=OBJ_FLAG;
+        }
     }
     GC_TILE_RESET;
 
-    GC4LOOP
-    {
-        GCB4_TILE(n);
-
-        i=p->gcb4[p->level][n].i;
-        j=p->gcb4[p->level][n].j;
-        k=p->gcb4[p->level][n].k;
-
-        if(p->gcb4[p->level][n].cs==Y_POS && (p->periodic2!=1 || j+p->origin_j<p->gknoy-1))
-            p->flag2[IJK]=OBJ_FLAG;
-    }
-    GC_TILE_RESET;
-
-    GC4LOOP
-    {
-        GCB4_TILE(n);
-
-        i=p->gcb4[p->level][n].i;
-        j=p->gcb4[p->level][n].j;
-        k=p->gcb4[p->level][n].k;
-
-        if(p->gcb4[p->level][n].cs==Z_POS && (p->periodic3!=1 || k+p->origin_k<p->gknoz-1))
-            p->flag3[IJK]=OBJ_FLAG;
-    }
-    GC_TILE_RESET;
-
+    // Propagate the tagging above into the same-level ghost ring: GC4LOOP writes
+    // OBJ_FLAG only at gcb4 cells, which are valid cells, so a neighbouring box's
+    // ghost copy of a tagged cell would otherwise stay pre-tag and any stencil
+    // reading flag1/2/3 across a box seam would see the stale value.
+    //
+    // AMReX-only: ArrayWrapper3D::fillBoundary is compiled only under USE_AMREX.
+    // The legacy counterpart would be flagx(p,p->flag1) etc. — deliberately NOT
+    // added, since flagfield has never synced flag1/2/3 here in that build and this
+    // is not the place to change its behaviour untested.
     #if USE_AMREX
-    p->flag1.fillHigherLevels();
-    p->flag2.fillHigherLevels();
-    p->flag3.fillHigherLevels();
+    p->flag1.fillBoundary();
+    p->flag2.fillBoundary();
+    p->flag3.fillBoundary();
     #else
     flagx(p,p->flag1);
     flagx(p,p->flag2);

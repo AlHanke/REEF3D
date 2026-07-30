@@ -422,9 +422,50 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 
     amrex::MFIter::allowMultipleMFIters(true);
     level = 0;
+    build_slice_owner();
     build_tile_ctx_table();
     default_cell_mfi = std::make_unique<amrex::MFIter>(amr_cell_mf[level], false);
     set_tile_mfi(default_cell_mfi.get());
+}
+
+// The view layout and its column-owner mask. Both are pure functions of the
+// decomposition, so they are rebuilt wholesale on every grid change rather than
+// patched per level — see the declaration in grid_amrex.h for why ownership
+// lives here and not on the individual slices.
+//
+// Owner = the box touching the domain z-lo face. Column-constant payload, so any
+// deterministic single owner per column is correct; this one needs no reduction
+// to identify. Every cell of the owner box is marked, so the mask is unaffected
+// by how the box is later tiled.
+void grid_amrex::build_slice_owner()
+{
+    slice_view_ba.resize(nlevs);
+    slice_owner_mf.resize(nlevs);
+
+    for (int lev = 0; lev < nlevs; ++lev)
+    {
+        const auto& ba3d = amrex_box_array[lev];
+
+        amrex::BoxList bl;
+        for (int i = 0; i < ba3d.size(); ++i)
+            bl.push_back(makeSlab(ba3d[i], 2, 0));
+        slice_view_ba[lev] = amrex::BoxArray(std::move(bl));
+
+        slice_owner_mf[lev].define(slice_view_ba[lev],
+                                   amrex_distribution_mapping[lev], 1, 0);
+        slice_owner_mf[lev].setVal(0);
+
+        const int zlo = amrex_geometry[lev].Domain().smallEnd(2);
+
+        for (amrex::MFIter mfi(slice_owner_mf[lev]); mfi.isValid(); ++mfi)
+        {
+            const amrex::Box& b3 = ba3d[mfi.index()];
+            const int is_owner = (b3.smallEnd(2) == zlo);
+            auto own = slice_owner_mf[lev].array(mfi);
+            amrex::ParallelFor(mfi.validbox(),
+            [=] AMREX_GPU_DEVICE (int i, int j, int) { own(i,j,0) = is_owner; });
+        }
+    }
 }
 
 void grid_amrex::build_tile_ctx_table()
@@ -822,6 +863,11 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
 
     nlevs = new_nlevs;
     output_amrex_level_info();
+
+    // Ahead of the slice callbacks: their makeUnique/fillHoles reduce through
+    // the owner mask, so it has to describe the NEW decomposition before any of
+    // them runs.
+    build_slice_owner();
 
     for (auto e : slice_registry)
         e->regrid();
