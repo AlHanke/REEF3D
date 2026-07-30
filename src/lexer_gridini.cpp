@@ -164,9 +164,7 @@ void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow*
         // repeat flagfield() so the WATER/OBJ conversion, wall tagging (flag1/2/3 via gcb4),
         // fillBoundary and the C-F fillHigherLevels() are rebuilt. Without it the projection has
         // no wall BCs on the new grid -> it cannot balance the gravity predictor -> velocity
-        // leaks and grows (post-mom |u| jumps from 0 to O(1) at rest). The ghost-cell distances
-        // (gcb4[].dist) come with it: gcb4_generate sets them from the rebuilt spacing as it
-        // emits each entry, under that entry's own tile context and level.
+        // leaks and grows (post-mom |u| jumps from 0 to O(1) at rest).
         pgc->flagfield(this);
         probe("post-rebuild");
 
