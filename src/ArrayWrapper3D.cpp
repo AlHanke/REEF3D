@@ -102,14 +102,14 @@ ArrayWrapper3D::operator int *()
 void ArrayWrapper3D::fillBoundary()
 {
     LEVEL_LOOP
-    GetMultiFab(p->level).FillBoundary(m_comp, 1);
+    GetMultiFab(p->level).FillBoundary(m_comp, 1, p->amrex_geometry[p->level].periodicity());
 }
 
 void ArrayWrapper3D::FillBoundaryBatch(lexer* p, amrex::Vector<amrex::iMultiFab>& shared,
                                          int scomp, int ncomp)
 {
     for (int lev = 0; lev < p->nlevs; ++lev)
-        shared[lev].FillBoundary(scomp, ncomp);
+        shared[lev].FillBoundary(scomp, ncomp, p->amrex_geometry[lev].periodicity());
 }
 
 void ArrayWrapper3D::fillHigherLevels()
