@@ -57,6 +57,12 @@ Author: Alexander Hanke
 //      overlapping in (i,j) would overlap in 3D, which a BoxArray forbids. On
 //      fine levels that do not reach the bottom a column has NO owner — that is
 //      a hole, filled by injection from lev-1, same as slice_amrex::fillHoles().
+//
+//      Because that predicate is purely geometric it does not vary between
+//      instances, so the mask and the view BoxArray it is built on belong to the
+//      grid, not to a slice: grid_amrex::slice_owner(lev) /
+//      slice_view_boxarray(lev), rebuilt by build_slice_owner() on every grid
+//      change. This class consumes them.
 // =====================================================================
 
 #if USE_AMREX
@@ -118,7 +124,6 @@ public:
 private:
     #if USE_AMREX
     void define_level(int lev, bool seed_from_coarse);
-    void buildOwnerMask(int lev);
     void makeUnique(int lev);
     void fillHoles(int lev);
 
@@ -145,7 +150,9 @@ private:
     #if USE_AMREX
     amrex::Vector<amrex::iMultiFab> m_view;     ///< overlapping: what operator() reads
     amrex::Vector<amrex::iMultiFab> m_unique;   ///< removeOverlap partition: comms source
-    amrex::Vector<amrex::iMultiFab> m_owner;    ///< 1 on the one view cell per column that counts
+    // The owner mask that says which view cell per column counts is NOT held
+    // here: it is geometric, hence identical for every instance, and lives on
+    // grid_amrex as slice_owner(lev).
 
     amrex::IntVect m_ghost = amrex::IntVect(AMREX_D_DECL(0,0,0));
     int nlevs     = 0;

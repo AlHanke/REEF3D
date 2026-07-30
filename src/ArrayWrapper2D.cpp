@@ -48,7 +48,6 @@ void ArrayWrapper2D::resize(int default_value)
 
     m_view.resize(nlevs);
     m_unique.resize(nlevs);
-    m_owner.resize(nlevs);
 
     for(int lev=0; lev<nlevs; ++lev)
         define_level(lev, /*seed_from_coarse=*/false);
@@ -178,7 +177,6 @@ void ArrayWrapper2D::regrid()
     nlevs = p->nlevs;
     m_view.resize(nlevs);
     m_unique.resize(nlevs);
-    m_owner.resize(nlevs);
 
     for(int lev=0; lev<nlevs; ++lev)
         define_level(lev, /*seed_from_coarse=*/lev > 0);
@@ -189,13 +187,11 @@ void ArrayWrapper2D::regrid()
 
 void ArrayWrapper2D::define_level(int lev, bool seed_from_coarse)
 {
-    const auto& ba3d = p->amrex_box_array[lev];
     const auto& dm3d = p->amrex_distribution_mapping[lev];
 
-    amrex::BoxList bl;
-    for(int i=0; i<ba3d.size(); ++i)
-        bl.push_back(makeSlab(ba3d[i], 2, 0));
-    amrex::BoxArray ba2d_view(std::move(bl));
+    // The view layout is the grid's, not ours — sharing it is what makes an
+    // MFIter over m_view a valid index into p->slice_owner(lev).
+    const amrex::BoxArray& ba2d_view = p->slice_view_boxarray(lev);
 
     if(m_view[lev].ok()
        && m_view[lev].boxArray() == ba2d_view
@@ -223,40 +219,21 @@ void ArrayWrapper2D::define_level(int lev, bool seed_from_coarse)
 
     m_view[lev].define(ba2d_view, dm3d, 1, m_ghost);
     m_view[lev].setVal(m_default);
-    m_owner[lev].define(ba2d_view, dm3d, 1, 0);
-    m_owner[lev].setVal(0);
 
     m_view[lev].ParallelCopy(m_unique[lev], 0, 0, 1, amrex::IntVect(0), m_ghost);
-    buildOwnerMask(lev);
     makeUnique(lev);
-}
-
-// Owner = the box touching the domain z-lo face. Column-constant payload,
-// so any deterministic single owner per column is correct; this one needs
-// no reduction to identify.
-void ArrayWrapper2D::buildOwnerMask(int lev)
-{
-    const auto& ba3d = p->amrex_box_array[lev];
-    const int   zlo  = p->amrex_geometry[lev].Domain().smallEnd(2);
-
-    for(amrex::MFIter mfi(m_view[lev]); mfi.isValid(); ++mfi)
-    {
-        const amrex::Box& b3 = ba3d[mfi.index()];
-        const int is_owner = (b3.smallEnd(2) == zlo);
-        auto own = m_owner[lev].array(mfi);
-        amrex::ParallelFor(mfi.validbox(),
-        [=] AMREX_GPU_DEVICE (int i, int j, int) { own(i,j,0) = is_owner; });
-    }
 }
 
 void ArrayWrapper2D::makeUnique(int lev)
 {
+    const amrex::iMultiFab& owner = p->slice_owner(lev);
+
     // Zero non-owner duplicates so the ParallelAdd reduce counts each
     // column exactly once (see slice_amrex::makeUnique).
     for(amrex::MFIter mfi(m_view[lev]); mfi.isValid(); ++mfi)
     {
         auto view = m_view[lev].array(mfi);
-        auto own  = m_owner[lev].const_array(mfi);
+        auto own  = owner.const_array(mfi);
         amrex::ParallelFor(mfi.validbox(),
         [=] AMREX_GPU_DEVICE (int i, int j, int) { if(own(i,j,0) == 0) view(i,j,0) = 0; });
     }
@@ -278,7 +255,7 @@ void ArrayWrapper2D::fillHoles(int lev)
 
     amrex::iMultiFab count(m_unique[lev].boxArray(), m_unique[lev].DistributionMap(), 1, 0);
     count.setVal(0);
-    count.ParallelAdd(m_owner[lev]);
+    count.ParallelAdd(p->slice_owner(lev));
 
     const amrex::IntVect ratio2d(AMREX_D_DECL(p->ref_vec[0], p->ref_vec[1], 1));
     amrex::BoxArray crsnd_ba = amrex::coarsen(m_unique[lev].boxArray(), ratio2d);

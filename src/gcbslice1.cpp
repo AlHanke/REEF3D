@@ -24,6 +24,10 @@ Author: Hans Bihs
 #include"lexer.h"
 #include<vector>
 
+// SLICEOWNLOOP1, not SLICELOOP1: this emits one entry per boundary column, so a
+// column visited twice would seed a duplicate ghost-cell record. The slabs
+// overlap in z, and under MFIter_TILING a single box is split in z as well, so
+// both repeats are real. See PSLICEOWNER in looping2D.h.
 void mgcslice1::gcb_seed(lexer *p)
 {
     // count gcbsl
@@ -35,7 +39,7 @@ void mgcslice1::gcb_seed(lexer *p)
 
     std::vector<int> count_vec(nlevs,0);
 
-    SLICELOOP1
+    SLICEOWNLOOP1
     {
         if(p->flagslice1(i-1,j)<0)
         ++count_vec[p->level];
@@ -57,7 +61,7 @@ void mgcslice1::gcb_seed(lexer *p)
 
     // find gcbsl
     count_vec.assign(count_vec.size(), 0);
-    SLICELOOP1
+    SLICEOWNLOOP1
     {
         if(p->flagslice1(i-1,j)<0)
         {

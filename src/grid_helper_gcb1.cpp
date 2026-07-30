@@ -39,56 +39,52 @@ void grid_helper::fillgcb1(lexer *p)
 
     p->gcb1_count=p->gcb4_count;
 
-    assert(nlevs==1 && "Error: fillgcb1() should only be called when nlevs==1");
-
     p->gcb1.resize_levels(nlevs);
-    for(int lev=0; lev<nlevs; ++lev)
-    p->gcb1[lev].assign(p->gcb1_count, {});
-
-    QGCB1
-    p->gcb1[p->level][q] = p->gcb4[p->level][q];
-
-    QGC1LOOP
+    LEVEL_LOOP
     {
-        auto &gcb = p->gcb1[p->level][q];
+        p->gcb1[p->level] = p->gcb4[p->level];
 
-        i=gcb.i;
-        j=gcb.j;
-        k=gcb.k;
+        QGC1LOOP
+        {
+            auto &gcb = p->gcb1[p->level][q];
 
-        GCB_APPLY_TILE(gcb, p->level);
+            i=gcb.i;
+            j=gcb.j;
+            k=gcb.k;
 
-        if(gcb.cs==X_POS)
-        fgc(i,j,k)=1;
+            GCB_APPLY_TILE(gcb, p->level);
+
+            if(gcb.cs==X_POS)
+            fgc(i,j,k)=1;
+        }
+
+        QGC1LOOP
+        {
+            auto &gcb = p->gcb1[p->level][q];
+
+            i=gcb.i;
+            j=gcb.j;
+            k=gcb.k;
+
+            GCB_APPLY_TILE(gcb, p->level);
+
+            if(gcb.cs==X_POS && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
+            gcb.i-=1;
+        }
+
+        QGC1LOOP
+        {
+            auto &gcb = p->gcb1[p->level][q];
+
+            i=gcb.i;
+            j=gcb.j;
+            k=gcb.k;
+
+            GCB_APPLY_TILE(gcb, p->level);
+
+            if(gcb.cs!=X_POS && fgc(i,j,k)==1 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
+            gcb.cs=-abs(gcb.cs);
+        }
     }
-
-    QGC1LOOP
-    {
-        auto &gcb = p->gcb1[p->level][q];
-
-        i=gcb.i;
-        j=gcb.j;
-        k=gcb.k;
-
-        GCB_APPLY_TILE(gcb, p->level);
-
-        if(gcb.cs==X_POS && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
-        gcb.i-=1;
-    }
-
-    QGC1LOOP
-    {
-        auto &gcb = p->gcb1[p->level][q];
-
-        i=gcb.i;
-        j=gcb.j;
-        k=gcb.k;
-
-        GCB_APPLY_TILE(gcb, p->level);
-
-        if(gcb.cs!=X_POS && fgc(i,j,k)==1 && (p->periodic1!=1 || i+p->origin_i<p->gknox-1))
-        gcb.cs=-abs(gcb.cs);
-    }
-
     GC_TILE_RESET;
 }
