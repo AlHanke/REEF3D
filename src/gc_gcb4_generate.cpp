@@ -101,11 +101,17 @@ void ghostcell::gcb4_generate(lexer *p)
 
     // -----------------------------------------------------------------------
     // count
+    #if USE_AMREX
+    const int nlevels = p->nlevs;
+    #else
+    const int nlevels = 1;
+    #endif
+
     count=0;
 
     p->level = 0;
     #if USE_AMREX
-    const auto dom = p->amrex_geometry[0].Domain();
+    const auto dom = p->amrex_geometry[p->level].Domain();
     #endif
 
     TILE_LOOP
@@ -124,52 +130,56 @@ void ghostcell::gcb4_generate(lexer *p)
 
     // -----------------------------------------------------------------------
     // size the lists
-    p->gcb4.resize_levels(1);
-    p->gcb4[0].assign(newcount, {});
+    p->gcb4.resize_levels(nlevels);
+    p->gcb4[p->level].assign(newcount, {});
 
     // -----------------------------------------------------------------------
     // fill
-    count=0;
 
-    p->level = 0;
-    TILE_LOOP
+    // p->level = 0;
+    LEVEL_LOOP
     {
-        IJKLOOP
-        PCHECK
+        count = 0;
+        TILE_LOOP
         {
-            const int gi = GCB4_GI;
-            const int gj = GCB4_GJ;
-            const int gk = GCB4_GK;
-
-            // cs, neighbour flag, and whether that neighbour is outside the domain
-            const int  cs_list[6]  = {1, 4, 3, 2, 5, 6};
-            const int  nb_flag[6]  = {p->flag4(i-1,j,k), p->flag4(i+1,j,k),
-                                    p->flag4(i,j-1,k), p->flag4(i,j+1,k),
-                                    p->flag4(i,j,k-1), p->flag4(i,j,k+1)};
-            const bool nb_out[6]   = {gi-1 < GCB4_DOM_LO(0), gi+1 > GCB4_DOM_HI(0),
-                                    gj-1 < GCB4_DOM_LO(1), gj+1 > GCB4_DOM_HI(1),
-                                    gk-1 < GCB4_DOM_LO(2), gk+1 > GCB4_DOM_HI(2)};
-
-            for(int d=0; d<6; ++d)
+            IJKLOOP
+            PCHECK
             {
-                if(nb_flag[d] >= 0)
-                    continue;
+                const int gi = GCB4_GI;
+                const int gj = GCB4_GJ;
+                const int gk = GCB4_GK;
 
-                auto &e = p->gcb4[0][count];
+                // cs, neighbour flag, and whether that neighbour is outside the domain
+                const int  cs_list[6]  = {1, 4, 3, 2, 5, 6};
+                const int  nb_flag[6]  = {p->flag4(i-1,j,k), p->flag4(i+1,j,k),
+                                        p->flag4(i,j-1,k), p->flag4(i,j+1,k),
+                                        p->flag4(i,j,k-1), p->flag4(i,j,k+1)};
+                const bool nb_out[6]   = {gi-1 < GCB4_DOM_LO(0), gi+1 > GCB4_DOM_HI(0),
+                                        gj-1 < GCB4_DOM_LO(1), gj+1 > GCB4_DOM_HI(1),
+                                        gk-1 < GCB4_DOM_LO(2), gk+1 > GCB4_DOM_HI(2)};
 
-                e.i  = i;
-                e.j  = j;
-                e.k  = k;
-                e.cs = cs_list[d];
-                e.bc = nb_out[d] ? bcs[cs_list[d]] : WALL_BC;
-                GCB_SET_TILE(e);
+                for(int d=0; d<6; ++d)
+                {
+                    if(nb_flag[d] >= 0)
+                        continue;
 
-                ++count;
+                    auto &e = p->gcb4[p->level][count];
+
+                    e.i  = i;
+                    e.j  = j;
+                    e.k  = k;
+                    e.cs = cs_list[d];
+                    e.bc = nb_out[d] ? bcs[cs_list[d]] : WALL_BC;
+                    GCB_SET_TILE(e);
+
+                    ++count;
+                }
             }
         }
-    }
 
-    p->gcb4_count = newcount;
+        if(p->level == 0)
+            p->gcb4_count = newcount;
+    }
 
     #undef GCB4_DOM_LO
     #undef GCB4_DOM_HI
