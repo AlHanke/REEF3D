@@ -90,7 +90,7 @@ void komega_bc::wall_law_kin(lexer* p, fdm *a, field &kin, field &/*eps*/, int i
     else if(cs==5 || cs==6)
         dist = 0.5*p->DZN[KP];
 
-    ks=ks_val(p,a,cs,bc);
+    double ks = ks_val(p,a,cs,bc);
 
     double uvel=0.5*(a->u(i,j,k)+a->u(i-1,j,k));
     double vvel=0.5*(a->v(i,j,k)+a->v(i,j-1,k));
@@ -113,7 +113,7 @@ void komega_bc::wall_law_kin(lexer* p, fdm *a, field &kin, field &/*eps*/, int i
     double uplus = (1.0/kappa)*MAX(0.01,log(30.0*(dist/ks)));
     uplus = uplus>0.0 ? uplus : 1.0e20;
 
-    tau = (u_abs*u_abs)/(uplus*uplus);
+    double tau = (u_abs*u_abs)/(uplus*uplus);
 
     a->M.p[id] += (pow(p->cmu,0.75)*pow(fabs(kin(i,j,k)),0.5)*uplus)/dist;
     a->rhsvec.V[id] += (tau*u_abs)/dist;
@@ -133,7 +133,7 @@ void komega_bc::wall_law_omega(lexer* p, fdm *a, field &kin, field &/*eps*/, int
     else if(cs==5 || cs==6)
         dist = 0.5*p->DZN[KP];
 
-    eps_star = pow((kin(i,j,k)>(0.0)?(kin(i,j,k)):(0.0)),0.5) / (0.4*dist*pow(p->cmu, 0.25));
+    double eps_star = pow((kin(i,j,k)>(0.0)?(kin(i,j,k)):(0.0)),0.5) / (0.4*dist*pow(p->cmu, 0.25));
 
     a->M.p[id] += 1.0e20;
     a->rhsvec.V[id] += eps_star*1.0e20;
@@ -281,6 +281,8 @@ void komega_bc::vrans_wall_law_kin(lexer *p, fdm *a, field &kin, field &/*eps*/)
 {
     static constexpr double fac = 3.0;
 
+    double dist,ks,uplus,u_abs,tau;
+
     n=0;
     LOOP
     {
@@ -340,12 +342,13 @@ void komega_bc::vrans_wall_law_omega(lexer *p, fdm *a, field &kin, field &/*eps*
                                       || a->porosity(i,j-1,k)<0.99 || a->porosity(i,j+1,k)<0.99
                                       || a->porosity(i,j,k-1)<0.99 || a->porosity(i,j,k+1)<0.99))
         {
+            double dist;
             if(p->j_dir==0)
                 dist=(1.0/4.0)*(p->DXN[IP] + p->DZN[KP]);
             else if(p->j_dir==1)
                 dist=(1.0/6.0)*(p->DXN[IP] + p->DYN[JP] + p->DZN[KP]);
 
-            eps_star = pow((kin(i,j,k)>(0.0)?(kin(i,j,k)):(0.0)),0.5) / (0.4*dist*pow(p->cmu, 0.25));
+            double eps_star = pow((kin(i,j,k)>(0.0)?(kin(i,j,k)):(0.0)),0.5) / (0.4*dist*pow(p->cmu, 0.25));
 
             a->M.p[n] += 1.0e20;
             a->rhsvec.V[n] += eps_star*1.0e20;
