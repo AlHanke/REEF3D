@@ -23,7 +23,7 @@ Author: Hans Bihs
 #ifndef WENO3_NUG_FUNC_H_
 #define WENO3_NUG_FUNC_H_
 
-#include"increment.h"
+#include "increment.h"
 
 class lexer;
 class fdm;
@@ -35,15 +35,13 @@ class weno3_nug_func : public increment
 {
 public:
 	weno3_nug_func(lexer*);
-	virtual ~weno3_nug_func();
+	virtual ~weno3_nug_func() = default;
 
 	void precalc_qf(lexer*);
     void precalc_cf(lexer*);
     void precalc_isf(lexer*);
     
     void ini(lexer*);
-    
-
 
 	void is_min_x();
     void is_min_y();
@@ -60,15 +58,12 @@ public:
     void weight_max_x();
     void weight_max_y();
     void weight_max_z();
-    
-    
+
     static double ****qfx,****qfy,****qfz;
     static double ***cfx,***cfy,***cfz;
     static double ***isfx,***isfy,***isfz;
     
-	static int iniflag;
-    
-    
+	static inline bool iniflag = false;
     
     double q1,q2,q3;
     
@@ -81,12 +76,6 @@ public:
     double w1z,w2z,w3z;
     
     int uf,vf,wf;
-
-private:
-
-    
-    
-    
 };
 
 #endif
