@@ -45,6 +45,5 @@ private:
     int ii,jj,kk;
     int count,q;
     double fac,value;
-    static constexpr double kappa = 0.4;
 };
 #endif
