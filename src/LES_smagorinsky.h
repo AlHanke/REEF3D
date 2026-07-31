@@ -23,32 +23,27 @@ Author: Hans Bihs
 #ifndef LES_SMAGORINSKY_H_
 #define LES_SMAGORINSKY_H_
 
-#include"LES.h"
-#include"field4.h"
+#include "LES.h"
+#include "field4.h"
 
 class LES_filter;
-
-using namespace std;
 
 class LES_smagorinsky final : public LES
 {
 public:
-	LES_smagorinsky(lexer *, fdm*);
-	virtual ~LES_smagorinsky();
-	void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*) override final;
-	void ktimesave(lexer*, fdm*, ghostcell*) override final;
-	void etimesave(lexer*, fdm*, ghostcell*) override final;
+    LES_smagorinsky(lexer *, fdm*);
+    virtual ~LES_smagorinsky();
+    void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*) override final;
+    void ktimesave(lexer*) override final {};
+    void etimesave(lexer*) override final {};
 
 private:
-	int gcval_sgs;
-	double c_sgs;
-	int gcval_u1, gcval_v1, gcval_w1;
-	int gcval_u2, gcval_v2, gcval_w2;
-    
-    LES_filter *pfilter;
+    int gcval_sgs;
+    static constexpr double c_sgsp2 = 0.2*0.2;
+    int gcval_u1, gcval_v1, gcval_w1;
+    int gcval_u2, gcval_v2, gcval_w2;
 
+    LES_filter *pfilter;
 };
 
 #endif
-
-

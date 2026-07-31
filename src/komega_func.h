@@ -23,35 +23,25 @@ Author: Hans Bihs
 #ifndef KOMEGA_FUNC_H_
 #define KOMEGA_FUNC_H_
 
-#include"rans_io.h"
-#include"komega_bc.h"
-#include"ghostcell.h"
-#include"vrans.h"
-
-using namespace std;
+#include "rans_io.h"
+#include "komega_bc.h"
+#include "ghostcell.h"
+#include "vrans.h"
 
 class komega_func : public rans_io, public komega_bc
 {
 public:
-	komega_func(lexer *, fdm*, ghostcell*);
-	virtual ~komega_func();
-	void isource(lexer*,fdm*) override final;
-	void jsource(lexer*,fdm*) override final;
-	void ksource(lexer*,fdm*) override final;
-	void kinsource(lexer*,fdm*,vrans*);
-	void epssource(lexer*,fdm*,vrans*,field&);
-	void epsfsf(lexer*,fdm*,ghostcell*,ioflow*);
-	void eddyvisc(lexer*,fdm*,ghostcell*,vrans*);
-	void clearfield(lexer*,fdm*,field&);
+    komega_func(lexer*,fdm*,ghostcell*);
+    virtual ~komega_func() = default;
+    void isource(lexer*,fdm*) override final;
+    void jsource(lexer*,fdm*) override final;
+    void ksource(lexer*,fdm*) override final;
 
-	int count,q;
-	double starttime;
-    
-private:
-    double epsi;
-	double dirac,dxm;
+protected:
+    void kinsource(lexer*,fdm*,vrans*);
+    void epssource(lexer*,fdm*,vrans*,field&);
+    void epsfsf(lexer*,fdm*,ghostcell*,ioflow*);
+    void eddyvisc(lexer*,fdm*,ghostcell*,vrans*);
 };
 
 #endif
-
-

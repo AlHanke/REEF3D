@@ -34,8 +34,8 @@ public:
 	komega_IM1_PLIC(lexer *, fdm*, ghostcell*);
 	virtual ~komega_IM1_PLIC();
 	virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*);
-	virtual void ktimesave(lexer*, fdm*, ghostcell*);
-	virtual void etimesave(lexer*, fdm*, ghostcell*);
+	virtual void ktimesave(lexer*);
+	virtual void etimesave(lexer*);
 	void timesource(lexer*,fdm*,field&);
 	void clearrhs(lexer*,fdm*);
 
