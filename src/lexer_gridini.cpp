@@ -69,18 +69,6 @@ void lexer::flagini()
     for(k=-margin; k<knoz+margin; ++k)
     DF[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin] = 1;
 
-	x_dir=y_dir=z_dir=1.0;
-
-	if(i_dir==0)
-	x_dir=0.0;
-
-	if(j_dir==0)
-	y_dir=0.0;
-
-	if(k_dir==0)
-	z_dir=0.0;
-
-
 	if(B98>=3)
 	for(n=0;n<gcb4_count;++n)
 	if(gcb4[n][4]==6)

@@ -72,8 +72,8 @@ void nhflow_poisson_pcorr::start(lexer* p, fdm_nhf *d, double *P)
             d->M.p[n]  =  (1.0)/(p->W1*p->DXP[IP]*p->DXN[IP])
                         + (1.0)/(p->W1*p->DXP[IM1]*p->DXN[IP])
                         
-                        + (1.0)/(p->W1*p->DYP[JP]*p->DYN[JP])*p->y_dir
-                        + (1.0)/(p->W1*p->DYP[JM1]*p->DYN[JP])*p->y_dir
+                        + (p->j_dir ? (1.0)/(p->W1*p->DYP[JP]*p->DYN[JP])
+                        + (1.0)/(p->W1*p->DYP[JM1]*p->DYN[JP]) : 0.0)
                         
                         + (sigxyz2)/(p->W1*p->DZP[KM1]*p->DZN[KP])
                         + (sigxyz2)/(p->W1*p->DZP[KM1]*p->DZN[KM1]);
@@ -82,8 +82,8 @@ void nhflow_poisson_pcorr::start(lexer* p, fdm_nhf *d, double *P)
             d->M.n[n] = -(1.0)/(p->W1*p->DXP[IP]*p->DXN[IP]);
             d->M.s[n] = -(1.0)/(p->W1*p->DXP[IM1]*p->DXN[IP]);
 
-            d->M.w[n] = -(1.0)/(p->W1*p->DYP[JP]*p->DYN[JP])*p->y_dir;
-            d->M.e[n] = -(1.0)/(p->W1*p->DYP[JM1]*p->DYN[JP])*p->y_dir;
+            d->M.w[n] = (p->j_dir ? -(1.0)/(p->W1*p->DYP[JP]*p->DYN[JP]) : 0.0);
+            d->M.e[n] = (p->j_dir ? -(1.0)/(p->W1*p->DYP[JM1]*p->DYN[JP]) : 0.0);
 
             d->M.t[n] = - sigxyz2/(p->W1*p->DZP[KM1]*p->DZN[KP])     
                         - p->sigxx[FIJK]/(p->W1*(p->DZN[KP]+p->DZN[KM1]));
@@ -95,8 +95,8 @@ void nhflow_poisson_pcorr::start(lexer* p, fdm_nhf *d, double *P)
             d->rhsvec.V[n] += 2.0*p->sigx[FIJK]*(P[FIp1JKp1] - P[FIm1JKp1] - P[FIp1JKm1] + P[FIm1JKm1])
                             /(p->W1*(p->DXP[IP]+p->DXP[IM1])*(p->DZN[KP]+p->DZN[KM1]))
                         
-                            + 2.0*p->sigy[FIJK]*(P[FIJp1Kp1] - P[FIJm1Kp1] - P[FIJp1Km1] + P[FIJm1Km1])
-                            /(p->W1*(p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1]))*p->y_dir;
+                            + (p->j_dir ? 2.0*p->sigy[FIJK]*(P[FIJp1Kp1] - P[FIJm1Kp1] - P[FIJp1Km1] + P[FIJm1Km1])
+                            /(p->W1*(p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1])) : 0.0);
         }
         
         if(p->wet[IJ]==0 || p->deep[IJ]==0 || p->flag7[FIJK]<0)

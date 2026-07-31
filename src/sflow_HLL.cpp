@@ -69,11 +69,12 @@ void sflow_HLL::aij_U(lexer *&p,fdm2D *&b, int ipol)
     //pgc->start1V(p,b->Fx,10);
     //pgc->start2V(p,b->Fy,10);
     
+    if(p->j_dir)
     SLICELOOP4
     WETDRY
     {
-    b->F(i,j) -= ((b->Fx(i,j) - b->Fx(i-1,j))/p->DXN[IP]
-                + (b->Fy(i,j) - b->Fy(i,j-1))/p->DYN[JP])*p->y_dir;
+        b->F(i,j) -= ((b->Fx(i,j) - b->Fx(i-1,j))/p->DXN[IP]
+                    + (b->Fy(i,j) - b->Fy(i,j-1))/p->DYN[JP]);
     }    
 }
 
@@ -86,11 +87,12 @@ void sflow_HLL::aij_V(lexer *&p, fdm2D *&b, int ipol)
     //pgc->start1V(p,b->Fx,11);
     //pgc->start2V(p,b->Fy,11);
     
+    if(p->j_dir)
     SLICELOOP4
     WETDRY
     {
-    b->G(i,j) -= ((b->Fx(i,j) - b->Fx(i-1,j))/p->DXN[IP]
-                + (b->Fy(i,j) - b->Fy(i,j-1))/p->DYN[JP])*p->y_dir;
+        b->G(i,j) -= ((b->Fx(i,j) - b->Fx(i-1,j))/p->DXN[IP]
+                    + (b->Fy(i,j) - b->Fy(i,j-1))/p->DYN[JP]);
     }    
 }
 
@@ -103,11 +105,12 @@ void sflow_HLL::aij_W(lexer *&p,fdm2D *&b, int ipol)
     //pgc->start1V(p,b->Fx,12);
     //pgc->start2V(p,b->Fy,12);
     
+    if(p->j_dir)
     SLICELOOP4
     WETDRY
     {
-    b->H(i,j) -= ((b->Fx(i,j) - b->Fx(i-1,j))/p->DXN[IP]
-                + (b->Fy(i,j) - b->Fy(i,j-1))/p->DYN[JP])*p->y_dir;
+        b->H(i,j) -= ((b->Fx(i,j) - b->Fx(i-1,j))/p->DXN[IP]
+                    + (b->Fy(i,j) - b->Fy(i,j-1))/p->DYN[JP]);
     }    
 }
 

@@ -72,7 +72,7 @@ void sediment_exner::non_equillibrium_solve(lexer* p, ghostcell *pgc, sediment_f
     const double grav = 9.81;
     const double Rstar = (p->S22 - p->W1)/p->W1;
     const double Dstar = d50*pow(fabs(Rstar)*grav/(visc*visc),1.0/3.0);
-    const double ydir = p->y_dir;
+    const bool jdir = p->j_dir;
     const int itermax = 10;
 
     double uvel,vvel,umag;
@@ -105,7 +105,7 @@ void sediment_exner::non_equillibrium_solve(lexer* p, ghostcell *pgc, sediment_f
     {
         // transport direction
         uvel = 0.5*(s->P(i,j) + s->P(i-1,j));
-        vvel = 0.5*(s->Q(i,j) + s->Q(i,j-1))*ydir;
+        vvel = jdir ? 0.5*(s->Q(i,j) + s->Q(i,j-1)) : 0.0;
 
         umag = sqrt(uvel*uvel + vvel*vvel);
 

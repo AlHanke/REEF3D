@@ -120,23 +120,26 @@ void ifou::aij(lexer* p,fdm* a,field& b,int ipol, field& uvel, field& vvel, fiel
     if(0.5*(kvel1+kvel2)>=0.0)
     wdir=1.0;
 
-	 
-	 a->M.p[count] =    udir*ivel2/DX[IM1] - (1.0-udir)*ivel1/DX[IP]
-					+ (vdir*jvel2/DY[JM1] - (1.0-vdir)*jvel1/DY[JP])*p->y_dir
-					+  wdir*kvel2/DZ[KM1] - (1.0-wdir)*kvel1/DZ[KP];
-	 
-	 a->M.s[count] = -udir*ivel1/DX[IM1];
-	 a->M.n[count] =  (1.0-udir)*ivel2/DX[IP];
-	 
-	 a->M.e[count] = -vdir*jvel1/DY[JM1]*p->y_dir;
-	 a->M.w[count] =  (1.0-vdir)*jvel2/DY[JP]*p->y_dir;
-	 
-	 a->M.b[count] = -wdir*kvel1/DZ[KM1];
-	 a->M.t[count] =  (1.0-wdir)*kvel2/DZ[KP];
-     
-	 ++count;
+    a->M.p[count] =    udir*ivel2/DX[IM1] - (1.0-udir)*ivel1/DX[IP]
+                  + (p->j_dir?(vdir*jvel2/DY[JM1] - (1.0-vdir)*jvel1/DY[JP]):0.0)
+                  +  wdir*kvel2/DZ[KM1] - (1.0-wdir)*kvel1/DZ[KP];
+
+    a->M.s[count] = -udir*ivel1/DX[IM1];
+    a->M.n[count] =  (1.0-udir)*ivel2/DX[IP];
+
+    if(p->j_dir)
+    {
+        a->M.e[count] = -vdir*jvel1/DY[JM1];
+        a->M.w[count] = (1.0-vdir)*jvel2/DY[JP];
+    }
+    else
+    {
+        a->M.e[count] = 0.0;
+        a->M.w[count] = 0.0;
+    }
+
+    a->M.b[count] = -wdir*kvel1/DZ[KM1];
+    a->M.t[count] =  (1.0-wdir)*kvel2/DZ[KP];
+
+    ++count;
 }
-
-
-
-
