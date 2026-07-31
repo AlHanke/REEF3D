@@ -32,32 +32,32 @@ class kepsilon_void final : public turbulence, public increment
 {
 
 public:
-	kepsilon_void(lexer *,fdm*,ghostcell*);
-	virtual ~kepsilon_void();
+	kepsilon_void() = default;
+	virtual ~kepsilon_void() = default;
 
-	void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*) override final;
-	void ktimesave(lexer*, fdm*, ghostcell*) override final;
-	void etimesave(lexer*, fdm*, ghostcell*) override final;
+	void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*) override final {};
+	void ktimesave(lexer*) override final {};
+	void etimesave(lexer*) override final {};
 
 	void isource(lexer*, fdm*) override final;
 	void jsource(lexer*, fdm*) override final;
 	void ksource(lexer*, fdm*) override final;
 
-	void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, size_t&) override final;
-    void ini(lexer*, fdm*, ghostcell*) override final;
-    double kinval(int,int,int) override final;
-    double epsval(int,int,int) override final;
-	double ccipol_kinval(lexer*,ghostcell*,double,double,double) override final;
-	double ccipol_epsval(lexer*,ghostcell*,double,double,double) override final;
-    double ccipol_a_kinval(lexer*,ghostcell*,double,double,double) override final;
-	double ccipol_a_epsval(lexer*,ghostcell*,double,double,double) override final;
-    void kinget(int,int,int,double) override final;
-    void epsget(int,int,int,double) override final;
-	void gcupdate(lexer*, fdm*, ghostcell*) override final;
+	void print_3D(lexer*, fdm*, ghostcell*, std::vector<char>&, size_t&) override final {};
+    void ini(lexer*, fdm*, ghostcell*) override final {};
+    double kinval(int,int,int) override final {return 0.0;};
+    double epsval(int,int,int) override final {return 0.0;};
+	double ccipol_kinval(lexer*,ghostcell*,double,double,double) override final {return 0.0;};
+	double ccipol_epsval(lexer*,ghostcell*,double,double,double) override final {return 0.0;};
+    double ccipol_a_kinval(lexer*,ghostcell*,double,double,double) override final {return 0.0;};
+	double ccipol_a_epsval(lexer*,ghostcell*,double,double,double) override final {return 0.0;};
+    void kinget(int,int,int,double) override final {};
+    void epsget(int,int,int,double) override final {};
+	void gcupdate(lexer*, fdm*, ghostcell*) override final {};
 	
-    void name_ParaView_parallel(lexer*, ofstream&) override final;
-    void name_ParaView(lexer*, std::stringstream&, int*, int &) override final;
-    void offset_ParaView(lexer*, int*, int &) override final;
+    void name_ParaView_parallel(lexer*, ofstream&) override final {};
+    void name_ParaView(lexer*, std::stringstream&, int*, int &) override final {};
+    void offset_ParaView(lexer*, int*, int &) override final {};
 };
 
 #endif

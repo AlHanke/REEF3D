@@ -23,30 +23,28 @@ Author: Hans Bihs
 #ifndef KEPSILON_BC_H_
 #define KEPSILON_BC_H_
 
-#include"increment.h"
-#include"roughness.h"
+#include "increment.h"
+#include "roughness.h"
+
 class fdm;
 class lexer;
 class field;
-
-using namespace std;
 
 class kepsilon_bc : public increment, public roughness
 {
 public:
     kepsilon_bc(lexer*);
-    virtual ~kepsilon_bc();
+    virtual ~kepsilon_bc() = default;
     void bckeps_start(fdm*,lexer*,field&,field&,int);
+
+private:
     void wall_law_kin(lexer*,fdm*,field&,field&,int,int,int,int,int,int);
     void wall_law_eps(lexer*,fdm*,field&,field&,int,int,int,int,int,int);
 
-private:
     double uplus,ks_plus,dist,ks,ustar,u_abs,eps_star,tau;
     int ii,jj,kk;
     int count,q;
     double fac,value;
-    const double kappa;
-
+    static constexpr double kappa = 0.4;
 };
 #endif
-
