@@ -23,11 +23,10 @@ Author: Hans Bihs
 #ifndef WENO_NUG_FUNC_H_
 #define WENO_NUG_FUNC_H_
 
-#include"increment.h"
-
-#include"lexer.h"
-#include"field.h"
-#include"slice.h"
+#include "increment.h"
+#include "lexer.h"
+#include "field.h"
+#include "slice.h"
 
 using namespace std;
 
@@ -35,7 +34,7 @@ class weno_nug_func : public increment
 {
 public:
     weno_nug_func(lexer*);
-    virtual ~weno_nug_func();
+    virtual ~weno_nug_func() = default;
 
     void precalc_qf(lexer*);
     void precalc_cf(lexer*);
@@ -199,10 +198,6 @@ public:
     static double ***cfx,***cfy,***cfz;
     static double ****isfx,****isfy,****isfz;
     
-	static int iniflag;
-    
-    
-    
     double q1,q2,q3,q4,q5;
 
     const double epsilon,psi;
@@ -301,6 +296,8 @@ protected:
     }
 
 private:
+    static inline bool iniflag = false;
+
     lexer *p;
 };
 
