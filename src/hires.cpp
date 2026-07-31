@@ -140,7 +140,7 @@ void hires::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel
 }
 
 template<typename GenericField>
-inline double hires::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX,double *DY, double *DZ)
+double hires::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX,double *DY, double *DZ)
 {
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 

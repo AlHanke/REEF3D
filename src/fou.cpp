@@ -75,7 +75,7 @@ fou::fou(lexer *p)
     }
 }
 
-inline void fou::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void fou::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     if(ipol==1)
     {
@@ -108,7 +108,7 @@ inline void fou::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field&
 }
 
 template<typename GenericField>
-inline double fou::aij(lexer* p, fdm* a, const GenericField& f,int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX,double *DY, double *DZ)
+double fou::aij(lexer* p, fdm* a, const GenericField& f,int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX,double *DY, double *DZ)
 {
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 

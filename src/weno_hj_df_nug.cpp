@@ -86,7 +86,7 @@ void weno_hj_df_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, fi
 }
 
 template<typename GenericField>
-inline double weno_hj_df_nug::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double* DX, double* DY, double* DZ)
+double weno_hj_df_nug::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double* DX, double* DY, double* DZ)
 {
     double iadvec, ivel2, jadvec, jvel2, kadvec, kvel2;
 

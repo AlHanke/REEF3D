@@ -74,7 +74,7 @@ quick::quick(lexer *p)
     }
 }
 
-inline void quick::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void quick::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     if(ipol==1)
     {
@@ -107,7 +107,7 @@ inline void quick::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, fiel
 }
 
 template<typename GenericField>
-inline double quick::aij(lexer* p,fdm* a,const GenericField& b,int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel)
+double quick::aij(lexer* p,fdm* a,const GenericField& b,int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel)
 {
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 

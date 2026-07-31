@@ -85,7 +85,7 @@ void weno_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vv
 }
 
 template<typename GenericField>
-inline double weno_hj::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel)
+double weno_hj::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel)
 {
     double iadvec, ivel2, jadvec, jvel2, kadvec, kvel2;
 
@@ -99,7 +99,7 @@ inline double weno_hj::aij(lexer* p, fdm* a, const GenericField& b, int ipol, co
 }
 
 template<typename GenericField>
-inline double weno_hj::ddx(lexer* p, fdm* a, const GenericField& b, double advec)
+double weno_hj::ddx(lexer* p, fdm* a, const GenericField& b, double advec)
 {
     if(advec==0.0) return 0.0;
 
@@ -137,7 +137,7 @@ inline double weno_hj::ddx(lexer* p, fdm* a, const GenericField& b, double advec
 }
 
 template<typename GenericField>
-inline double weno_hj::ddy(lexer* p, fdm* a, const GenericField& b, double advec)
+double weno_hj::ddy(lexer* p, fdm* a, const GenericField& b, double advec)
 {
     if(advec==0.0) return 0.0;
 
@@ -175,7 +175,7 @@ inline double weno_hj::ddy(lexer* p, fdm* a, const GenericField& b, double advec
 }
 
 template<typename GenericField>
-inline double weno_hj::ddz(lexer* p, fdm* a, const GenericField& b, double advec)
+double weno_hj::ddz(lexer* p, fdm* a, const GenericField& b, double advec)
 {
     if(advec==0.0) return 0.0;
 

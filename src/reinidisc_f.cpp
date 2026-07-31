@@ -63,7 +63,7 @@ void reinidisc_f::start(lexer *p, fdm*, ghostcell*, field &f, field &L, int ipol
 }
 
 template<bool Is3D, typename GenericFieldConst>
-inline double reinidisc_f::disc(lexer *p, const GenericFieldConst &f) noexcept
+double reinidisc_f::disc(lexer *p, const GenericFieldConst &f) noexcept
 {
     // REEF_REINI_FREEZE_BAND: freeze the density band during per-step reinit. density =
     // heaviside_ls(phi,psi) depends on phi only for |phi|<psi (heaviside_ls saturates outside),
