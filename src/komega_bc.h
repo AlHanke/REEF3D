@@ -44,9 +44,5 @@ private:
     void wall_law_omega(lexer*,fdm*,field&,field&,int,int,int,int,int,int);
     void vrans_wall_law_kin(lexer*,fdm*,field&,field&);
     void vrans_wall_law_omega(lexer*,fdm*,field&,field&);
-
-    double uplus,ks_plus,dist,ks,ustar,u_abs,eps_star,tau;
-    int ii,jj,kk;
-    int count,q;
 };
 #endif
