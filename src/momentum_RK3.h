@@ -29,6 +29,10 @@ Author: Hans Bihs
 #include"field1.h"
 #include"field2.h"
 #include"field3.h"
+#if USE_AMREX
+#include <AMReX_MultiFab.H>
+#include <AMReX_Vector.H>
+#endif
 
 class convection;
 class diffusion;
@@ -55,6 +59,14 @@ private:
     void jrhs(lexer*,fdm*);
     void krhs(lexer*,fdm*);
 
+    #if USE_AMREX
+    // Shared MultiFabs for the RK velocity temp fields, declared before the
+    // field members so they are constructed first (declaration order).
+    // Component layout: 0:u-type  1:v-type  2:w-type
+    amrex::Vector<amrex::MultiFab> m_rk1; ///< urk1(0) vrk1(1) wrk1(2)
+    amrex::Vector<amrex::MultiFab> m_rk2; ///< urk2(0) vrk2(1) wrk2(2)
+    amrex::Vector<amrex::MultiFab> m_f; ///< fx(0) fy(1) fz(2)
+    #endif
     field1 udiff,urk1,urk2,fx;
     field2 vdiff,vrk1,vrk2,fy;
     field3 wdiff,wrk1,wrk2,fz;
