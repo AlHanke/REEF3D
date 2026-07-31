@@ -42,47 +42,7 @@ void kepsilon_bc::bckeps_start(fdm* a,lexer* p, field& kin,field& eps,int gcval)
         }
         GC_TILE_RESET;
 
-        n=0;
-        LOOP
-        {
-            if(p->flag4[Im1JK]<0)
-            {
-                a->rhsvec.V[n] -= a->M.s[n]*kin(i-1,j,k);
-                a->M.s[n] = 0.0;
-            }
-
-            if(p->flag4[Ip1JK]<0)
-            {
-                a->rhsvec.V[n] -= a->M.n[n]*kin(i+1,j,k);
-                a->M.n[n] = 0.0;
-            }
-
-            if(p->flag4[IJm1K]<0 && p->j_dir==1)
-            {
-                a->rhsvec.V[n] -= a->M.e[n]*kin(i,j-1,k);
-                a->M.e[n] = 0.0;
-            }
-
-            if(p->flag4[IJp1K]<0 && p->j_dir==1)
-            {
-                a->rhsvec.V[n] -= a->M.w[n]*kin(i,j+1,k);
-                a->M.w[n] = 0.0;
-            }
-
-            if(p->flag4[IJKm1]<0)
-            {
-                a->rhsvec.V[n] -= a->M.b[n]*kin(i,j,k-1);
-                a->M.b[n] = 0.0;
-            }
-
-            if(p->flag4[IJKp1]<0)
-            {
-                a->rhsvec.V[n] -= a->M.t[n]*kin(i,j,k+1);
-                a->M.t[n] = 0.0;
-            }
-
-            ++n;
-        }
+        bckin_matrix(p,a,kin);
     }
     else if(gcval==30)
     {
@@ -95,47 +55,7 @@ void kepsilon_bc::bckeps_start(fdm* a,lexer* p, field& kin,field& eps,int gcval)
         }
         GC_TILE_RESET;
 
-        n=0;
-        LOOP
-        {
-            if(p->flag4[Im1JK]<0)
-            {
-                a->rhsvec.V[n] -= a->M.s[n]*eps(i-1,j,k);
-                a->M.s[n] = 0.0;
-            }
-
-            if(p->flag4[Ip1JK]<0)
-            {
-                a->rhsvec.V[n] -= a->M.n[n]*eps(i+1,j,k);
-                a->M.n[n] = 0.0;
-            }
-
-            if(p->flag4[IJm1K]<0 && p->j_dir==1)
-            {
-                a->rhsvec.V[n] -= a->M.e[n]*eps(i,j-1,k);
-                a->M.e[n] = 0.0;
-            }
-
-            if(p->flag4[IJp1K]<0 && p->j_dir==1)
-            {
-                a->rhsvec.V[n] -= a->M.w[n]*eps(i,j+1,k);
-                a->M.w[n] = 0.0;
-            }
-
-            if(p->flag4[IJKm1]<0)
-            {
-                a->rhsvec.V[n] -= a->M.b[n]*eps(i,j,k-1);
-                a->M.b[n] = 0.0;
-            }
-
-            if(p->flag4[IJKp1]<0)
-            {
-                a->rhsvec.V[n] -= a->M.t[n]*eps(i,j,k+1);
-                a->M.t[n] = 0.0;
-            }
-
-            ++n;
-        }
+        bcepsilon_matrix(p,a,eps);
     }
 }
 
@@ -192,4 +112,94 @@ void kepsilon_bc::wall_law_eps(lexer* p, fdm* a, field& kin, field& eps, int ii,
     double eps_star = (pow(p->cmu, 0.75)*pow((kin(i,j,k)>(0.0)?(kin(i,j,k)):(0.0)),1.5)) / (0.4*dist);
 
     eps(i,j,k) = eps_star;
+}
+
+void kepsilon_bc::bckin_matrix(lexer *p, fdm *a, field &kin)
+{
+    n=0;
+    LOOP
+    {
+        if(p->flag4[Im1JK]<0)
+        {
+            a->rhsvec.V[n] -= a->M.s[n]*kin(i-1,j,k);
+            a->M.s[n] = 0.0;
+        }
+
+        if(p->flag4[Ip1JK]<0)
+        {
+            a->rhsvec.V[n] -= a->M.n[n]*kin(i+1,j,k);
+            a->M.n[n] = 0.0;
+        }
+
+        if(p->flag4[IJm1K]<0 && p->j_dir==1)
+        {
+            a->rhsvec.V[n] -= a->M.e[n]*kin(i,j-1,k);
+            a->M.e[n] = 0.0;
+        }
+
+        if(p->flag4[IJp1K]<0 && p->j_dir==1)
+        {
+            a->rhsvec.V[n] -= a->M.w[n]*kin(i,j+1,k);
+            a->M.w[n] = 0.0;
+        }
+
+        if(p->flag4[IJKm1]<0)
+        {
+            a->rhsvec.V[n] -= a->M.b[n]*kin(i,j,k-1);
+            a->M.b[n] = 0.0;
+        }
+
+        if(p->flag4[IJKp1]<0)
+        {
+            a->rhsvec.V[n] -= a->M.t[n]*kin(i,j,k+1);
+            a->M.t[n] = 0.0;
+        }
+
+        ++n;
+    }
+}
+
+void kepsilon_bc::bcepsilon_matrix(lexer *p, fdm *a, field &eps)
+{
+    n=0;
+    LOOP
+    {
+        if(p->flag4[Im1JK]<0)
+        {
+            a->rhsvec.V[n] -= a->M.s[n]*eps(i-1,j,k);
+            a->M.s[n] = 0.0;
+        }
+
+        if(p->flag4[Ip1JK]<0)
+        {
+            a->rhsvec.V[n] -= a->M.n[n]*eps(i+1,j,k);
+            a->M.n[n] = 0.0;
+        }
+
+        if(p->flag4[IJm1K]<0 && p->j_dir==1)
+        {
+            a->rhsvec.V[n] -= a->M.e[n]*eps(i,j-1,k);
+            a->M.e[n] = 0.0;
+        }
+
+        if(p->flag4[IJp1K]<0 && p->j_dir==1)
+        {
+            a->rhsvec.V[n] -= a->M.w[n]*eps(i,j+1,k);
+            a->M.w[n] = 0.0;
+        }
+
+        if(p->flag4[IJKm1]<0)
+        {
+            a->rhsvec.V[n] -= a->M.b[n]*eps(i,j,k-1);
+            a->M.b[n] = 0.0;
+        }
+
+        if(p->flag4[IJKp1]<0)
+        {
+            a->rhsvec.V[n] -= a->M.t[n]*eps(i,j,k+1);
+            a->M.t[n] = 0.0;
+        }
+
+        ++n;
+    }
 }
