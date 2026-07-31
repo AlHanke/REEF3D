@@ -20,8 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#ifndef IKEPSILON_H_
-#define IKEPSILON_H_
+#ifndef KEPSILON_FUNC_H_
+#define KEPSILON_FUNC_H_
 
 #include"rans_io.h"
 #include"kepsilon_bc.h"
@@ -32,22 +32,16 @@ using namespace std;
 class kepsilon_func : public rans_io, public kepsilon_bc
 {
 public:
-	kepsilon_func(lexer*,fdm*,ghostcell*);
-	virtual ~kepsilon_func();
+	kepsilon_func(lexer*,fdm*);
+	virtual ~kepsilon_func() = default;
 	void isource(lexer*,fdm*) override final;
 	void jsource(lexer*,fdm*) override final;
 	void ksource(lexer*,fdm*) override final;
 	void kinsource(lexer*,fdm*,vrans*);
 	void epssource(lexer*,fdm*,vrans*);
-	void epsfsf(lexer*,fdm*,ghostcell*);
+	void epsfsf(lexer*,fdm*);
 	void eddyvisc(fdm*,lexer*,ghostcell*,vrans*);
 	void clearfield(lexer*,fdm*,field&);
-
-	int count,q;
-	double starttime;
 };
 
 #endif
-
-
-
