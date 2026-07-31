@@ -93,7 +93,7 @@ void driver::logic_ptf()
 	plapsolv = new hypre_aij(p,a,pgc);
     
 //  Voids
-	pturb = new kepsilon_void(p,a,pgc);
+	pturb = new kepsilon_void();
     
     pdata = new expdata_void(p,a,pgc);
     

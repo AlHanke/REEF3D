@@ -26,32 +26,27 @@ Flow, Turbulence and Combustion 62, 183–200 (1999). https://doi.org/10.1023/A:
 #ifndef LES_WALE_H_
 #define LES_WALE_H_
 
-#include"LES.h"
-#include"field4.h"
+#include "LES.h"
+#include "field4.h"
 
 class LES_filter;
-
-using namespace std;
 
 class LES_WALE final : public LES
 {
 public:
-	LES_WALE(lexer *, fdm*);
-	virtual ~LES_WALE();
-	void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*) override final;
-	void ktimesave(lexer*, fdm*, ghostcell*) override final;
-	void etimesave(lexer*, fdm*, ghostcell*) override final;
+    LES_WALE(lexer *, fdm*);
+    virtual ~LES_WALE();
+    void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*) override final;
+    void ktimesave(lexer*) override final {};
+    void etimesave(lexer*) override final {};
 
 private:
-	int gcval_sgs;
-	double c_wale;
-	int gcval_u1, gcval_v1, gcval_w1;
-	int gcval_u2, gcval_v2, gcval_w2;
-    
-    LES_filter *pfilter;
+    int gcval_sgs;
+    double c_wale;
+    int gcval_u1, gcval_v1, gcval_w1;
+    int gcval_u2, gcval_v2, gcval_w2;
 
+    LES_filter *pfilter;
 };
 
 #endif
-
-

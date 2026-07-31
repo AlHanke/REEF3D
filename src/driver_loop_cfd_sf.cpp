@@ -101,8 +101,8 @@ void driver::loop_cfd_sf(fdm* a)
 
         // Save previous timestep
         pflow->veltimesave(p,a,pgc,pvrans);
-        pturb->ktimesave(p,a,pgc);
-        pturb->etimesave(p,a,pgc);
+        pturb->ktimesave(p);
+        pturb->etimesave(p);
 
         //timestep control
         p->simtime+=p->dt;

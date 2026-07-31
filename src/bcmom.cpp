@@ -25,7 +25,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"ghostcell.h"
 
-bcmom::bcmom(lexer* p): surftens(p), roughness(p), kappa(0.4)
+bcmom::bcmom(lexer* p): surftens(p), roughness(), kappa(0.4)
 {
 }
 

@@ -204,8 +204,8 @@ void driver::driver_ini_cfd()
     // ini variables
     for(int qn=0; qn<2; ++qn)
     {
-        pturb->ktimesave(p,a,pgc);
-        pturb->etimesave(p,a,pgc);
+        pturb->ktimesave(p);
+        pturb->etimesave(p);
     }
 
     p->gctime=0.0;
