@@ -26,6 +26,9 @@ Author: Hans Bihs
 #include "solver.h"
 #include "increment.h"
 #include "vec.h"
+
+class fieldint4;
+
 #include <_hypre_utilities.h>
 #include <HYPRE_sstruct_ls.h>
 #include <HYPRE_parcsr_ls.h>
@@ -50,14 +53,25 @@ public:
     void solve(lexer*);
 
     void fill_matrix4(lexer*, fdm*, ghostcell*, field&);
+    void amr_cf_coefficients(lexer*, fdm*, ghostcell*, fieldint4&);
     void fillbackvec4(lexer*, field&, int);
+
+    void cf_velocity_correction(lexer*, fdm*, ghostcell*,
+                                field&, field&, field&, field&, double) override;
+
+    // Operator pre-checks (env REEF_MAT_CHECK): apply the assembled matrix A to test
+    // vectors and report on the result. (1) rowsum A*1: ~0 on clean interior rows, the
+    // retained BC coefficient on boundary rows. (2) symmetry: global yT A x - xT A y, plus
+    // the per-row Ax - A^T x localisation on the multi-level (ParCSR) path.
+    void validate_operator(lexer*, fdm*, ghostcell*);
+
+    // out = A * in on the assembled operator (handles SStruct and ParCSR object types).
+    void matvec_into(lexer*, fdm*, ghostcell*, field& out, field& in) override;
 
     void make_grid_7p(lexer*, fdm*, ghostcell*);
 
     void create_solver(lexer*, ghostcell*);
     void delete_solver(lexer*, ghostcell*);
-
-    void amr_graph_entries(lexer*, ghostcell*);
 
 private:
     HYPRE_SStructGrid     grid;
@@ -69,6 +83,15 @@ private:
     HYPRE_SStructSolver   pcg_solver;
     HYPRE_SStructSolver   ssamg;
     HYPRE_SStructVariable vartypes[1];
+
+    // Multi-level (nlevs>1) path: the SStruct matrix is assembled as ParCSR and solved
+    // with BiCGSTAB + BoomerAMG (SSAMG cannot set up on multi-part grids; the C-F
+    // coupling also makes the operator non-symmetric, hence BiCGSTAB not PCG).
+    HYPRE_ParCSRMatrix    par_A;
+    HYPRE_ParVector       par_b;
+    HYPRE_ParVector       par_x;
+    HYPRE_Solver          par_solver;
+    HYPRE_Solver          par_precond;
 
     int numparts;
     int dimensions;
@@ -86,6 +109,24 @@ private:
     int numiter, count, q;
 
     static constexpr int stencil_size = 7; // 7-point stencil
+
+    // Coarse-fine couplings (non-stencil graph entries). Built once per regrid in
+    // make_grid_7p; .coeff is refreshed every solve during matrix preparation. The
+    // .entry index ties each coupling to its HYPRE non-stencil slot (7 + k, where k
+    // is the order the entry was added to the graph for the "from" cell), so the
+    // matrix fill must replay this list to stay consistent with the graph.
+    struct cf_link
+    {
+        int    from_part;
+        int    from_ijk[3];
+        int    to_part;
+        int    to_ijk[3];
+        int    axis;   // 0:x,1:y,2:z
+        bool   high;   // low side (s,e,b) or high side (n,w,t) of the from-cell
+        int    entry;
+        double coeff;
+    };
+    std::vector<cf_link> cf_links;
 };
 
 #endif

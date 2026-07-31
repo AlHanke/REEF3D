@@ -24,6 +24,9 @@ Author: Hans Bihs
 #include "lexer.h"
 #include "fdm.h"
 #include "ghostcell.h"
+#include <array>
+#include <map>
+#include <set>
 
 void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
 {
@@ -55,7 +58,7 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
 
     HYPRE_SStructGridSetExtents(grid, 0, ilower, iupper);
 
-#if USE_AMREX
+    #if USE_AMREX
     for (int lev = 1; lev < p->nlevs; ++lev)
     {
         for (int b = 0; b < (int)p->amrex_box_array[lev].size(); ++b)
@@ -67,7 +70,7 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
             HYPRE_SStructGridSetExtents(grid, lev, lo, hi);
         }
     }
-#endif
+    #endif
 
     HYPRE_SStructGridAssemble(grid);
 
@@ -80,13 +83,174 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
     for (int entry = 0; entry < 7; ++entry)
         HYPRE_SStructStencilSetEntry(stencil, entry, offsets[entry], variable);
 
+
+    // Single level -> SSAMG (native SStruct). Multi level -> assemble as ParCSR so the
+    // graph-coupled multi-part operator can be solved with BiCGSTAB+BoomerAMG (SSAMG
+    // setup truncates on multi-part grids).
+    #if USE_AMREX
+    object_type = (p->nlevs > 1) ? HYPRE_PARCSR : HYPRE_SSTRUCT;
+    #else
+    object_type = HYPRE_SSTRUCT;
+    #endif
+
     HYPRE_SStructGraphCreate(pgc->mpi_comm, grid, &graph);
     HYPRE_SStructGraphSetObjectType(graph, object_type);
     for (int lev = 0; lev < numparts; ++lev)
         HYPRE_SStructGraphSetStencil(graph, lev, variable, stencil);
-#if USE_AMREX
-    amr_graph_entries(p, pgc);
-#endif
+
+    #if USE_AMREX
+    // State shared across all levels: dedup guard, per-cell non-stencil counter and
+    // the coupling records. A cell on an intermediate part can receive entries in two
+    // level iterations (as fine cell toward the coarser level, then as coarse cell
+    // toward the finer one), so these must persist so the entry indices stay contiguous.
+    cf_links.clear();
+    std::set<std::array<int,stencil_size>>     added;   // (from_part, from_ijk, to_ijk)
+    std::map<std::array<int,4>,int> nnz;     // (from_part, from_ijk) -> #non-stencil so far
+
+    for (int lev = 1; lev < p->nlevs; ++lev)
+    {
+        const auto& fine_ba = p->amrex_box_array[lev];
+        const auto& rr      = p->ref_vec;
+
+        auto base_ba = p->amrex_box_array[0];
+        for (int n = 0; n < lev; ++n) base_ba.refine(rr);
+        const auto base_hi = amrex::IntVect(amrex::ubound(base_ba.minimalBox()));
+
+        auto in_domain = [&](const amrex::Box& b)
+        {
+            for (int i = 0; i < 3; ++i)
+                if (b.bigEnd(i) < 0 || b.smallEnd(i) > base_hi[i]) return false;
+
+            return true;
+        };
+
+        std::vector<std::tuple<amrex::Box, amrex::Box, int>> cf_pairs;
+
+        for (int b = 0; b < (int)fine_ba.size(); ++b)
+        {
+            for (auto halo : amrex::boxDiff(amrex::grow(fine_ba[b], 1), fine_ba[b]))
+            {
+                if (!in_domain(halo)) continue;
+
+                int normal = -1, n_thin = 0;
+                for (int i = 0; i < 3; ++i)
+                    if (halo.smallEnd(i) == halo.bigEnd(i)) { normal = i; ++n_thin; }
+                if (n_thin != 1) continue;
+
+                halo &= amrex::grow(fine_ba[b], normal, 1);
+
+                const auto box_c = amrex::coarsen(halo, rr);
+                const auto box_f = amrex::refine(box_c, rr);
+
+                for (int i = 0; i < 3; ++i)
+                {
+                    for (auto& [idx, overlap] : fine_ba.intersections(amrex::adjCellHi(box_f, i, 1)))
+                        cf_pairs.emplace_back(box_c, overlap, 2*i+1);
+                    for (auto& [idx, overlap] : fine_ba.intersections(amrex::adjCellLo(box_f, i, 1)))
+                        cf_pairs.emplace_back(box_c, overlap, 2*i);
+                }
+            }
+        }
+
+        // --- Add the coarse-fine couplings as non-stencil graph entries ---------
+        // HYPRE requires the entry to be added by the process that owns the "from"
+        // cell (part,index). Levels live on independent distribution mappings, so
+        // the fine cell and its coarse neighbour may be owned by different ranks;
+        // ownership is therefore checked per direction. A dedup set guards against
+        // the same coupling being emitted by overlapping cf_pairs (which would
+        // otherwise double-count the connection in the matrix).
+
+        auto owner_rank = [&](int level, const int iv[3]) -> int
+        {
+            const amrex::IntVect v(iv[0], iv[1], iv[2]);
+            const auto isects = p->amrex_box_array[level].intersections(amrex::Box(v, v));
+            if (isects.empty()) return -1;
+            return p->amrex_distribution_mapping[level][isects[0].first];
+        };
+
+        auto add_entry = [&](int from_part, const int from[3],
+                             int to_part,   const int to[3])
+        {
+            if (owner_rank(from_part, from) != p->mpirank) return;
+
+            const std::array<int,7> key{from_part, from[0], from[1], from[2],
+                                                   to[0],   to[1],   to[2]};
+            if (!added.insert(key).second) return;
+
+            int f[3] = {from[0], from[1], from[2]};
+            int t[3] = {to[0],   to[1],   to[2]};
+            HYPRE_SStructGraphAddEntries(graph, from_part, f, variable,
+                                                to_part,   t, variable);
+
+            int  axis = 0;
+            bool high = false;
+            amrex::IntVect fiv(from[0], from[1], from[2]);
+            amrex::IntVect tiv(to[0], to[1], to[2]);
+            if (from_part > to_part)
+            {
+                const amrex::IntVect cf = amrex::coarsen(fiv, rr);
+                for (int d = 0; d < 3; ++d) if (cf[d] != tiv[d]) axis = d;
+                high = (tiv[axis] > cf[axis]);
+            }
+            else
+            {
+                const amrex::IntVect cf = amrex::coarsen(tiv, rr);
+                for (int d = 0; d < 3; ++d) if (cf[d] != fiv[d]) axis = d;
+                high = (cf[axis] > fiv[axis]);
+            }
+
+            // Non-stencil entry index for this from-cell: stencil_size + k-th entry.
+            const std::array<int,4> ck{from_part, from[0], from[1], from[2]};
+            const int k = nnz[ck]++;
+            cf_links.push_back({from_part, {f[0], f[1], f[2]},
+                                to_part,   {t[0], t[1], t[2]}, axis, high, stencil_size + k, 0.0});
+        };
+
+        for (const auto& [coarse_box, fine_box, dir] : cf_pairs)
+        {
+            // dir encodes the coarse->fine direction as 2*axis + side, matching the
+            // 2*i+1 (high) / 2*i (low) tags set when cf_pairs is built.
+            const int  normal  = dir / 2;
+            const bool fine_hi = (dir & 1);
+
+            const int cn = coarse_box.smallEnd(normal); // single coarse layer in normal dir
+
+            // fine -> coarse: every fine cell couples to its one coarse neighbour
+            for (int k = fine_box.smallEnd(2); k <= fine_box.bigEnd(2); ++k)
+            for (int j = fine_box.smallEnd(1); j <= fine_box.bigEnd(1); ++j)
+            for (int i = fine_box.smallEnd(0); i <= fine_box.bigEnd(0); ++i)
+            {
+                const int f[3] = {i, j, k};
+                const amrex::IntVect cc = amrex::coarsen(amrex::IntVect(i, j, k), rr);
+                int c[3] = {cc[0], cc[1], cc[2]};
+                c[normal] = cn; // neighbour lives on the coarse side of the interface
+                add_entry(lev, f, lev - 1, c);
+            }
+
+            // coarse -> fine: every coarse cell couples to all fine cells across the face
+            for (int k = coarse_box.smallEnd(2); k <= coarse_box.bigEnd(2); ++k)
+            for (int j = coarse_box.smallEnd(1); j <= coarse_box.bigEnd(1); ++j)
+            for (int i = coarse_box.smallEnd(0); i <= coarse_box.bigEnd(0); ++i)
+            {
+                const int c[3] = {i, j, k};
+                const amrex::Box foot(amrex::IntVect(i, j, k), amrex::IntVect(i, j, k));
+                amrex::Box face = fine_hi ? amrex::adjCellHi(amrex::refine(foot, rr), normal, 1)
+                                          : amrex::adjCellLo(amrex::refine(foot, rr), normal, 1);
+                face &= fine_box;
+                if (face.isEmpty()) continue;
+
+                for (int fk = face.smallEnd(2); fk <= face.bigEnd(2); ++fk)
+                for (int fj = face.smallEnd(1); fj <= face.bigEnd(1); ++fj)
+                for (int fi = face.smallEnd(0); fi <= face.bigEnd(0); ++fi)
+                {
+                    const int f[3] = {fi, fj, fk};
+                    add_entry(lev - 1, c, lev, f);
+                }
+            }
+        }
+    }
+    #endif
+
     HYPRE_SStructGraphAssemble(graph);
 
     HYPRE_SStructMatrixCreate(pgc->mpi_comm, graph, &A);
@@ -99,129 +263,4 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
     HYPRE_SStructVectorSetObjectType(x, object_type);
     HYPRE_SStructVectorInitialize(b);
     HYPRE_SStructVectorInitialize(x);
-}
-
-// Explicit inter-part graph entries for the coarse-fine interface (the literal
-// Figure 16 approach).  For each coarse cell on the boundary of the covered
-// region we add a graph entry coupling it to each fine cell it shares a face
-// with, and vice versa.  This is only necessary when the AMRNEW SetAMRPart
-// machinery does not generate the inter-part connectivity automatically.
-void hypre_ssamg::amr_graph_entries(lexer* p, ghostcell* pgc)
-{
-#if USE_AMREX
-    for (int lev = 1; lev < p->nlevs; ++lev)
-    {
-        const int coarse_part = lev - 1;
-        const int fine_part   = lev;
-        const int rf0 = p->ref_vec[0];
-        const int rf1 = p->ref_vec[1];
-        const int rf2 = p->ref_vec[2];
-        const amrex::IntVect rf_iv(rf0, rf1, rf2);
-
-        struct FaceDir { int dir; int side; };
-        const FaceDir fdirs[] = {{0,0},{0,1},{1,0},{1,1},{2,0},{2,1}};
-        const int nfd = 2 * dimensions;
-
-        // Returns true if coarse cell (ci,cj,ck) is owned by this rank.
-        // Level 0 has one box per rank stored in ilower/iupper.
-        // Level > 0 uses amrex_box_array / amrex_distribution_mapping.
-        auto coarse_is_local = [&](int ci, int cj, int ck) -> bool
-        {
-            if (coarse_part == 0)
-                return (ci >= ilower[0] && ci <= iupper[0] &&
-                        cj >= ilower[1] && cj <= iupper[1] &&
-                        ck >= ilower[2] && ck <= iupper[2]);
-            for (int bb = 0; bb < (int)p->amrex_box_array[coarse_part].size(); ++bb)
-            {
-                if (p->amrex_distribution_mapping[coarse_part][bb] != p->mpirank) continue;
-                if (p->amrex_box_array[coarse_part][bb].contains(amrex::IntVect(ci,cj,ck)))
-                    return true;
-            }
-            return false;
-        };
-
-        for (int b = 0; b < (int)p->amrex_box_array[lev].size(); ++b)
-        {
-            if (p->amrex_distribution_mapping[lev][b] != p->mpirank) continue;
-            const auto& fine_box = p->amrex_box_array[lev][b];
-            const amrex::Box covered = amrex::coarsen(fine_box, rf_iv);
-
-            for (int fd = 0; fd < nfd; ++fd)
-            {
-                const int d    = fdirs[fd].dir;
-                const int side = fdirs[fd].side;
-                const int d1   = (d == 0) ? 1 : 0;
-                const int d2   = (d == 2) ? 1 : 2;
-                // Refinement factors in the two tangential directions.
-                const int rf1d = (d == 0) ? rf1 : rf0;
-                const int rf2d = (d == 2) ? rf1 : rf2;
-
-                const int coarse_d    = (side == 1) ? covered.bigEnd(d) + 1 : covered.smallEnd(d) - 1;
-                const int fine_face_d = (side == 1) ? fine_box.bigEnd(d)    : fine_box.smallEnd(d);
-
-                // Skip faces that adjoin a physical domain boundary: coarse_d
-                // would fall outside the global coarse grid and no box registers it.
-                const amrex::Box& coarse_domain = p->amrex_geometry[coarse_part].Domain();
-                if (coarse_d < coarse_domain.smallEnd(d) || coarse_d > coarse_domain.bigEnd(d))
-                    continue;
-
-                // --- fine -> coarse ---
-                // Added by the rank that owns the fine cell (this rank).
-                // coarse tangential index = fine index / refinement factor.
-                for (int a = fine_box.smallEnd(d1); a <= fine_box.bigEnd(d1); ++a)
-                for (int c = fine_box.smallEnd(d2); c <= fine_box.bigEnd(d2); ++c)
-                {
-                    int fine_idx[3], coarse_idx[3];
-                    fine_idx[d]    = fine_face_d;
-                    fine_idx[d1]   = a;
-                    fine_idx[d2]   = c;
-                    coarse_idx[d]  = coarse_d;
-                    coarse_idx[d1] = a / rf1d;
-                    coarse_idx[d2] = c / rf2d;
-
-                    HYPRE_SStructGraphAddEntries(graph,
-                        fine_part,   fine_idx,   variable,
-                        coarse_part, coarse_idx, variable);
-                }
-
-                // --- coarse -> fine ---
-                // Added only by the rank that owns the coarse cell.
-                // For each coarse cell on the boundary face of the covered region,
-                // add entries to all fine cells in its tangential footprint.
-                for (int a = covered.smallEnd(d1); a <= covered.bigEnd(d1); ++a)
-                for (int c = covered.smallEnd(d2); c <= covered.bigEnd(d2); ++c)
-                {
-                    int coarse_idx[3];
-                    coarse_idx[d]  = coarse_d;
-                    coarse_idx[d1] = a;
-                    coarse_idx[d2] = c;
-
-                    if (!coarse_is_local(coarse_idx[0], coarse_idx[1], coarse_idx[2]))
-                        continue;
-
-                    const int fi_lo = a * rf1d,      fi_hi = (a + 1) * rf1d - 1;
-                    const int fj_lo = c * rf2d,      fj_hi = (c + 1) * rf2d - 1;
-
-                    for (int fa = fi_lo; fa <= fi_hi; ++fa)
-                    {
-                        if (fa < fine_box.smallEnd(d1) || fa > fine_box.bigEnd(d1)) continue;
-                        for (int fc = fj_lo; fc <= fj_hi; ++fc)
-                        {
-                            if (fc < fine_box.smallEnd(d2) || fc > fine_box.bigEnd(d2)) continue;
-
-                            int fine_idx[3];
-                            fine_idx[d]  = fine_face_d;
-                            fine_idx[d1] = fa;
-                            fine_idx[d2] = fc;
-
-                            HYPRE_SStructGraphAddEntries(graph,
-                                coarse_part, coarse_idx, variable,
-                                fine_part,   fine_idx,   variable);
-                        }
-                    }
-                }
-            }
-        }
-    }
-#endif
 }

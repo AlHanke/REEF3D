@@ -55,7 +55,26 @@ void initialize::inipsi(lexer* p, fdm *a, ghostcell* pgc)
         p->psi = p->F45*psim/double(count);
 
     }
-    
-    //cout<<p->mpirank<<" PSI0: "<<p->psi0<<" PSI: "<<p->psi<<" DTM: "<<p->DZM<<endl;
-    
+
+    // Per-level interface half-width: the smoothed-Heaviside smearing width must scale with
+    // the local cell size, else a finer AMR level over-smears the interface (and the coarse
+    // roface no longer matches the average of the covering fine-cell roface values, breaking
+    // density consistency across the C-F interface). psi is set from level-0 mean spacing, so
+    // scale it down per level by that level's cell-size ratio. Level 0 (and single-level runs)
+    // keep the exact original value.
+    for(int lev=0; lev<8; ++lev) p->psi_lev[lev]=p->psi;
+    #if USE_AMREX
+    for(int lev=0; lev<p->nlevs && lev<8; ++lev)
+    {
+        double ratio;
+        if(p->j_dir==0)
+            ratio=0.5*(1.0/double(p->ref_vec[0]) + 1.0/double(p->ref_vec[2]))/1.0;
+        else
+            ratio=(1.0/double(p->ref_vec[0]) + 1.0/double(p->ref_vec[1]) + 1.0/double(p->ref_vec[2]))/3.0;
+        // ratio is the per-step mean cell-size shrink; apply lev times
+        double f=1.0; for(int n=0;n<lev;++n) f*=ratio;
+        p->psi_lev[lev]=p->psi*f;
+    }
+    #endif
+
 }

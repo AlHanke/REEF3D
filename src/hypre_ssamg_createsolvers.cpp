@@ -26,6 +26,38 @@ Author: Hans Bihs
 
 void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
 {
+    // ---- Multi-level: ParCSR BiCGSTAB + BoomerAMG --------------------------------
+    // SSAMG cannot set up on a multi-part grid, so for nlevs>1 the matrix is assembled
+    // as ParCSR (see make_grid_7p) and solved with BiCGSTAB preconditioned by one
+    // BoomerAMG V-cycle. BiCGSTAB (not PCG) because the coarse-fine coupling makes the
+    // operator non-symmetric. par_A/par_b/par_x are extracted after assembly in
+    // fill_matrix4; the solver/precond are set up against them in solve().
+    #if USE_AMREX
+    if (p->nlevs > 1)
+    {
+        HYPRE_BoomerAMGCreate(&par_precond);
+        HYPRE_BoomerAMGSetPrintLevel(par_precond, 0);
+        HYPRE_BoomerAMGSetCoarsenType(par_precond, 22);
+        HYPRE_BoomerAMGSetRelaxType(par_precond, 3);
+        HYPRE_BoomerAMGSetNumSweeps(par_precond, 1);
+        HYPRE_BoomerAMGSetTol(par_precond, 0.0);
+        HYPRE_BoomerAMGSetMaxIter(par_precond, 1);
+
+        HYPRE_ParCSRBiCGSTABCreate(pgc->mpi_comm, &par_solver);
+        HYPRE_BiCGSTABSetMaxIter(par_solver, p->N46);
+        HYPRE_BiCGSTABSetTol(par_solver, p->N44);
+        HYPRE_BiCGSTABSetAbsoluteTol(par_solver, 1e-12);
+        HYPRE_BiCGSTABSetPrintLevel(par_solver, 0);
+        HYPRE_BiCGSTABSetLogging(par_solver, 1);
+        HYPRE_BiCGSTABSetPrecond(par_solver,
+            (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSolve,
+            (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSetup,
+            par_precond);
+        return;
+    }
+    #endif
+
+    // ---- Single level: SSAMG (native SStruct) -----------------------------------
     // SSAMG preconditioner / standalone solver
     HYPRE_SStructSSAMGCreate(pgc->mpi_comm, &ssamg);
 
@@ -92,6 +124,15 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
 
 void hypre_ssamg::delete_solver(lexer *p, ghostcell *pgc)
 {
+    #if USE_AMREX
+    if (p->nlevs > 1)
+    {
+        HYPRE_ParCSRBiCGSTABDestroy(par_solver);
+        HYPRE_BoomerAMGDestroy(par_precond);
+        return;
+    }
+    #endif
+
     if (p->N10 == 41)
         HYPRE_SStructPCGDestroy(pcg_solver);
 

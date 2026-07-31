@@ -132,22 +132,22 @@ int lexer::conv(double a)
 void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow* pflow)
 {
     #if USE_AMREX
-    grid_amrex::regrid_amrex_box_array_and_distribution_mapping(this, a);
-    grid_amrex::update_cell_coordinates();
-    grid_amrex::update_cell_spacing();
-    grid_amrex::update_registered_weno(nlevs);
-    grid_amrex::define_inflow_outflow_ba();
-    preini->start(a,this,a->phi,pgc,pflow);
-    lexer* p = this;
-    int counter = 0;
-    PLAINLOOP
-    {
-        counter++;
-    }
-    veclength += counter - cellnum;
-    cellnum = counter;
-    a->rhsvec.resize(veclength);
-    a->M.resize(veclength);
+    // grid_amrex::regrid_amrex_box_array_and_distribution_mapping(this, a); // Bug with higher levels of static refinement
+    // grid_amrex::update_cell_coordinates();
+    // grid_amrex::update_cell_spacing();
+    // grid_amrex::update_registered_weno(nlevs);
+    // grid_amrex::define_inflow_outflow_ba();
+    // preini->start(a,this,a->phi,pgc,pflow);
+    // lexer* p = this;
+    // int counter = 0;
+    // PLAINLOOP
+    // {
+    //     counter++;
+    // }
+    // veclength += counter - cellnum;
+    // cellnum = counter;
+    // a->rhsvec.resize(veclength);
+    // a->M.resize(veclength);
 
     #endif
 }

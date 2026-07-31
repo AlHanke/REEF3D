@@ -175,19 +175,39 @@ void ArrayWrapper3D::fillHigherLevels()
         const auto& crse_mf = GetMultiFab(lev-1);
         auto& fine_mf = GetMultiFab(lev);
 
+        // Coarse data on the fine layout, carrying enough ghost cells that the COARSENED fine
+        // ghost ring is covered. The fine ghost ring at a coarse-fine interface has no
+        // same-level neighbour, so the FillBoundary() below cannot fill it; injecting the coarse
+        // value here is what gives those C-F ghosts the proper (water) flag instead of the
+        // resize(-1) default. Without it poisson_pcorr reads flag<0 across the interface, zeros
+        // the C-F face, and destroys the amr_cf coupling (-> projection divergence blow-up).
+        const int ng_f = fine_mf.nGrow();
+        int rmax = ratio_x;
+        if (ratio_y > rmax) rmax = ratio_y;
+        if (ratio_z > rmax) rmax = ratio_z;
+        const int ng_c = (ng_f + rmax - 1) / rmax;
+
         amrex::BoxArray coarsened_fine_ba = amrex::coarsen(fine_mf.boxArray(), ratio);
 
-        amrex::iMultiFab coarse_on_fine_layout(coarsened_fine_ba, fine_mf.DistributionMap(), 1, 0);
-        coarse_on_fine_layout.ParallelCopy(crse_mf, m_comp, 0, 1);
+        amrex::iMultiFab coarse_on_fine_layout(coarsened_fine_ba, fine_mf.DistributionMap(), 1, ng_c);
+        coarse_on_fine_layout.ParallelCopy(crse_mf, m_comp, 0, 1,
+                                           amrex::IntVect(0), amrex::IntVect(ng_c),
+                                           p->amrex_geometry[lev-1].periodicity());
+
+        // Only fill cells inside the physical domain: valid cells and C-F interface ghosts.
+        // Domain-exterior ghosts (true walls) must keep their OBJ_FLAG.
+        const amrex::Box fine_domain = p->amrex_geometry[lev].Domain();
 
         for (amrex::MFIter mfi(fine_mf); mfi.isValid(); ++mfi)
         {
             const amrex::Box& fine_valid_box = mfi.validbox();
+            const amrex::Box  fill_box = amrex::grow(fine_valid_box, ng_f);
             auto const& fine_arr = fine_mf.array(mfi);
             auto const& crse_arr = coarse_on_fine_layout.const_array(mfi);
 
-            amrex::ParallelFor(fine_valid_box, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
+            amrex::ParallelFor(fill_box, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
             {
+                if (!fine_domain.contains(amrex::IntVect(i, j, k))) return;
                 const int ic = amrex::coarsen(i, ratio_x);
                 const int jc = amrex::coarsen(j, ratio_y);
                 const int kc = amrex::coarsen(k, ratio_z);

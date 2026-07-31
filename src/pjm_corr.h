@@ -30,6 +30,7 @@ Author: Hans Bihs
 class heat;
 class concentration;
 class density;
+class solver;
 
 using namespace std;
 
@@ -54,6 +55,12 @@ private:
     void vel_setup(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
     void rhs(lexer*,fdm*,ghostcell*,field&,field&,field&,double);
     void presscorr(lexer*,fdm*,field&,field&,field&,field&,double);
+
+    // Projection-consistency probe (env REEF_PROJ_CHECK): applies the full velocity
+    // correction to a zero base, then checks L*pcorr + R(dU) ~ 0 per cell. Non-zero
+    // residual marks where the discrete divergence of the correction disagrees with
+    // the matrix row (the source of the growing spurious velocity).
+    void projection_consistency_check(lexer*,fdm*,ghostcell*,solver*,double);
     field4 pcorr;
 
     density *pd;
