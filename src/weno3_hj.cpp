@@ -86,7 +86,7 @@ void weno3_hj::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& v
 }
 
 template<typename GenericField>
-inline double weno3_hj::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double* DX, double* DY, double* DZ)
+double weno3_hj::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double* DX, double* DY, double* DZ)
 {
     double iadvec, ivel2, jadvec, jvel2, kadvec, kvel2;
 

@@ -74,7 +74,7 @@ hcds6::hcds6(lexer *p)
     }
 }
 
-inline void hcds6::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void hcds6::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     if(ipol==1)
     {
@@ -107,7 +107,7 @@ inline void hcds6::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, fiel
 }
 
 template<typename GenericField>
-inline double hcds6::aij(lexer* p,fdm* a,const GenericField& b,int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX,double *DY, double *DZ, double *DXX,double *DYY, double *DZZ)
+double hcds6::aij(lexer* p,fdm* a,const GenericField& b,int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX,double *DY, double *DZ, double *DXX,double *DYY, double *DZZ)
 {
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 

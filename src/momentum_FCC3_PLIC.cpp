@@ -886,7 +886,7 @@ void momentum_FCC3_PLIC::face_density(lexer *p, fdm *a, ghostcell *pgc, field1 &
     pgc->start3(p,roz,50);
 }
 
-inline double momentum_FCC3_PLIC::vel_limiter(lexer *p, field &vel, field &M, field &ro, field &ro_n)
+double momentum_FCC3_PLIC::vel_limiter(lexer *p, field &vel, field &M, field &ro, field &ro_n)
 {
     if(ro(i,j,k)>=ro_threshold)
     return M(i,j,k)/ro(i,j,k);
@@ -898,7 +898,7 @@ inline double momentum_FCC3_PLIC::vel_limiter(lexer *p, field &vel, field &M, fi
     return vel(i,j,k);
 }
 
-inline double momentum_FCC3_PLIC::ro_filter(lexer *p, field &ro)
+double momentum_FCC3_PLIC::ro_filter(lexer *p, field &ro)
 {
     if(ro(i,j,k)<p->W3)
     return p->W3;

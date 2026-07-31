@@ -74,7 +74,7 @@ weno_flux_nug::weno_flux_nug(lexer* p): weno_nug_func(p)
     }
 }
 
-inline void weno_flux_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void weno_flux_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     uf=vf=wf=0;
 
@@ -112,7 +112,7 @@ inline void weno_flux_nug::start(lexer* p, fdm* a, field& b, int ipol, field& uv
 }
 
 template<typename GenericField>
-inline double weno_flux_nug::aij(lexer* p,fdm* a,const GenericField& b,int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX,double *DY, double *DZ)
+double weno_flux_nug::aij(lexer* p,fdm* a,const GenericField& b,int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX,double *DY, double *DZ)
 {
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 

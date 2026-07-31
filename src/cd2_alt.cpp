@@ -35,7 +35,7 @@ cds2_alt::cds2_alt(lexer *p)
     pflux = new flux_HJ_CDS2;
 }
 
-inline void cds2_alt::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
+void cds2_alt::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
     if(ipol==1)
     {
@@ -68,7 +68,7 @@ inline void cds2_alt::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, f
 }
 
 template<typename GenericField>
-inline double cds2_alt::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX, double *DY, double *DZ)
+double cds2_alt::aij(lexer* p, fdm* a, const GenericField& b, int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX, double *DY, double *DZ)
 {
     double iadvec, jadvec, kadvec, temp;
     pflux->u_flux(a,ipol,uvel,iadvec,temp);
