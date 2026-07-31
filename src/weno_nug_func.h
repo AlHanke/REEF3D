@@ -27,6 +27,8 @@ Author: Hans Bihs
 #include "lexer.h"
 #include "field.h"
 #include "slice.h"
+#include <array>
+#include <vector>
 
 using namespace std;
 
@@ -194,9 +196,9 @@ public:
         w3z = cfz[KP][wf][5]/(epsilon + (is3z_psi*is3z_psi)*(cfz[KP][wf][3]/(is1z_psi*is1z_psi) + cfz[KP][wf][4]/(is2z_psi*is2z_psi) + cfz[KP][wf][5]/(is3z_psi*is3z_psi)));
     }
 
-    static double ****qfx,****qfy,****qfz;
-    static double ***cfx,***cfy,***cfz;
-    static double ****isfx,****isfy,****isfz;
+    static inline std::vector<std::array<std::array<std::array<double, 2>, 6>, 2>> qfx, qfy, qfz;
+    static inline std::vector<std::array<std::array<double, 6>, 2>> cfx, cfy, cfz;
+    static inline std::vector<std::array<std::array<std::array<double, 3>, 6>, 2>> isfx, isfy, isfz;
     
     double q1,q2,q3,q4,q5;
 
