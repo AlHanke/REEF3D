@@ -48,6 +48,5 @@ private:
     double uplus,ks_plus,dist,ks,ustar,u_abs,eps_star,tau;
     int ii,jj,kk;
     int count,q;
-    static constexpr double kappa = 0.4;
 };
 #endif
