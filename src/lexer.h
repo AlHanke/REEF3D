@@ -94,6 +94,8 @@ public:
     void gridini2D();
     void sliceflagini();
 
+    void gridhelper();
+
 //-----data-----------------------
     //REEF3D
 
