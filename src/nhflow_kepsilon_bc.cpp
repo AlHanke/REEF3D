@@ -26,7 +26,6 @@ Author: Hans Bihs
  
 nhflow_kepsilon_bc::nhflow_kepsilon_bc(lexer *p) : roughness()
 {
-    kappa=0.4;
 }
 
 nhflow_kepsilon_bc::~nhflow_kepsilon_bc()
@@ -180,7 +179,7 @@ void nhflow_kepsilon_bc::wall_law_omega(lexer *p, fdm_nhf *d, double *KIN, doubl
     
             if(check==1)
             {
-            eps_star = (pow(p->cmu, 0.75)*pow((KIN[IJK]>(0.0)?(KIN[IJK]):(0.0)),1.5)) / (0.4*dist);
+            eps_star = (pow(p->cmu, 0.75)*pow((KIN[IJK]>(0.0)?(KIN[IJK]):(0.0)),1.5)) / (kappa*dist);
             
 
             EPS[IJK] = eps_star;

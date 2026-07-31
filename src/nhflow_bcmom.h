@@ -42,7 +42,6 @@ public:
 	void roughness_w(lexer*, fdm_nhf*, double*, double*, slice&);
 
 private:
-	const double kappa;
 	double uplus,ks_plus,ks,ustar,deltaZ,z0;
 	int ii,jj,kk;
 	double value;

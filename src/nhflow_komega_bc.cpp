@@ -26,7 +26,6 @@ Author: Hans Bihs
  
 nhflow_komega_bc::nhflow_komega_bc(lexer *p) : roughness()
 {
-    kappa=0.4;
 }
 
 nhflow_komega_bc::~nhflow_komega_bc()
@@ -189,7 +188,7 @@ void nhflow_komega_bc::wall_law_omega(lexer *p, fdm_nhf *d, double *KIN, double 
     
             if(check>0)
             {
-            eps_star = pow((KIN[IJK]>(0.0)?(KIN[IJK]):(0.0)),0.5) / (0.4*dist*pow(p->cmu, 0.25));
+            eps_star = pow((KIN[IJK]>(0.0)?(KIN[IJK]):(0.0)),0.5) / (kappa*dist*pow(p->cmu, 0.25));
 
             EPS[IJK] = eps_star;
             

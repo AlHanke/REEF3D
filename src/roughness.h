@@ -35,6 +35,8 @@ public:
     virtual ~roughness() = default;
 
     double ks_val(lexer*, fdm*, int, int);
+protected:
+    static constexpr double kappa = 0.4;
 };
 
 #endif
