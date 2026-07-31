@@ -132,6 +132,12 @@ public:
     amrex_bc_func::DataLocation dataLocation() const
     { return const_params.data_location; }
 
+    /// Stagger-correct coarse-fine normal-velocity ghost fill for FACE_* fields. Overwrites
+    /// the C-F ghosts in the field's normal direction with a face-linear interpolation of the
+    /// coarse face velocity (the divergence-preserving prolongation). No-op for cell-centred
+    /// fields and single-level runs. Called at the end of FillDomainBoundaryImpl.
+    void FillCoarseFineNormalGhost();
+
     // -----------------------------------------------------------------
     // Per-field BCRec update (host side only — no FillPatch).
     // Must be overridden by field1/2/3/4 to use their specific BCDecision.
@@ -639,6 +645,12 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
 
         ShiftBigBoundaryFaceInward(mf_lev, const_params.data_location, p->amrex_geometry[p->level]);
     }
+
+    // For staggered (face) fields, FillPatchTwoLevels above used cell_cons_interp, which is
+    // stagger-blind at coarse-fine interfaces: it mis-places the normal velocity by ~half a
+    // fine cell and pulls in the covered coarse face. Overwrite the C-F normal-velocity
+    // ghosts with a stagger-correct (face-linear) interpolation of the coarse face velocity.
+    FillCoarseFineNormalGhost();
 }
 
 // =========================================================================

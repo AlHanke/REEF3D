@@ -42,8 +42,7 @@ poisson_pcorr::poisson_pcorr(lexer *p, heat *&pheat, concentration *&pconc)
         {
             if(p->Q10==0)
             pd = new density_f(p);
-
-            if(p->Q10==1)
+            else if(p->Q10==1)
             pd = new density_f(p);
         }
 
@@ -115,21 +114,21 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
     {
         // ---- x direction
         // inflow
-        if(p->flag4[Im1JK]<0 && (i+p->origin_i>0 || p->periodic1==0))
+        if(p->flag4(i-1,j,k)<0 && (i+p->origin_i>0 || p->periodic1==0))
         {
             a->rhsvec.V[n] -= a->M.s[n]*press(i-1,j,k);
             a->M.s[n] = 0.0;
         }
 
         // outflow
-        if(p->flag4[Ip1JK]<0 && (i+p->origin_i<p->gknox-1 || p->periodic1==0) && (p->IO[Ip1JK]!=2 || (p->B60!=1&&p->B99<3)))
+        if(p->flag4(i+1,j,k)<0 && (i+p->origin_i<p->gknox-1 || p->periodic1==0) && (p->IO(i+1,j,k)!=2 || (p->B60!=1&&p->B99<3)))
         {
             a->rhsvec.V[n] -= a->M.n[n]*press(i+1,j,k);
             a->M.n[n] = 0.0;
         }
 
         // controlled outflow
-        if(p->IO[Ip1JK]==2)
+        if(p->IO(i+1,j,k)==2)
         {
             if(p->B77==1)
             {
@@ -150,7 +149,7 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
         }
 
         // AWA outflow
-        if(p->flag4[Ip1JK]<0 && (i+p->origin_i<p->gknox-1 || p->periodic1==0) && (p->IO[Ip1JK]==2 && p->B90==1 && p->B99>2))
+        if(p->flag4(i+1,j,k)<0 && (i+p->origin_i<p->gknox-1 || p->periodic1==0) && (p->IO(i+1,j,k)==2 && p->B90==1 && p->B99>2))
         {
             pval = (p->fsfout - p->pos_z())*a->ro(i,j,k)*fabs(p->W22);
 
@@ -162,13 +161,13 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
         if(is3D)
         {
             // east face
-            if(p->flag4[IJm1K]<0 && (j+p->origin_j>0 || p->periodic2==0))
+            if(p->flag4(i,j-1,k)<0 && (j+p->origin_j>0 || p->periodic2==0))
             {
                 a->rhsvec.V[n] -= a->M.e[n]*press(i,j-1,k);
                 a->M.e[n] = 0.0;
             }
             // west face
-            if(p->flag4[IJp1K]<0 && (j+p->origin_j<p->gknoy-1 || p->periodic2==0))
+            if(p->flag4(i,j+1,k)<0 && (j+p->origin_j<p->gknoy-1 || p->periodic2==0))
             {
                 a->rhsvec.V[n] -= a->M.w[n]*press(i,j+1,k);
                 a->M.w[n] = 0.0;
@@ -177,13 +176,13 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
 
         // ---- z direction
         // bottom face
-        if(p->flag4[IJKm1]<0 && (k+p->origin_k>0 || p->periodic3==0))
+        if(p->flag4(i,j,k-1)<0 && (k+p->origin_k>0 || p->periodic3==0))
         {
             a->rhsvec.V[n] -= a->M.b[n]*press(i,j,k-1);
             a->M.b[n] = 0.0;
         }
         // top face
-        if(p->flag4[IJKp1]<0 && (k+p->origin_k<p->gknoz-1 || p->periodic3==0))
+        if(p->flag4(i,j,k+1)<0 && (k+p->origin_k<p->gknoz-1 || p->periodic3==0))
         {
             a->rhsvec.V[n] -= a->M.t[n]*press(i,j,k+1);
             a->M.t[n] = 0.0;
