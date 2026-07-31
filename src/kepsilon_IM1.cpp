@@ -30,7 +30,7 @@ Author: Hans Bihs
 #include"ioflow.h"
 #include"convection.h"
 
-kepsilon_IM1::kepsilon_IM1(lexer* p, fdm* a, ghostcell *pgc) : kepsilon_func(p,a,pgc),kn(p),en(p)
+kepsilon_IM1::kepsilon_IM1(lexer* p, fdm* a, ghostcell *pgc) : kepsilon_func(p,a),kn(p),en(p)
 {
 	gcval_kin=20;
 	gcval_eps=30;
@@ -45,7 +45,7 @@ void kepsilon_IM1::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff
 	wallf_update(p,a,pgc,wallf);
 
 // kin
-    starttime=pgc->timer();
+    double starttime=pgc->timer();
 	clearrhs(p,a);
     pconvec->start(p,a,kin,4,a->u,a->v,a->w);
 	pdiff->idiff_scalar(p,a,pgc,psolv,kin,a->eddyv,ke_sigma_k,1.0);
@@ -67,7 +67,7 @@ void kepsilon_IM1::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff
 	epssource(p,a,pvrans);
 	timesource(p,a,en);
 	psolv->start(p,a,pgc,eps,a->rhsvec,4);
-	epsfsf(p,a,pgc);
+	epsfsf(p,a);
 	bckeps_start(a,p,kin,eps,gcval_eps);
 	pgc->start4(p,eps,gcval_eps);
 	p->epstime=pgc->timer()-starttime;
