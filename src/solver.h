@@ -44,7 +44,18 @@ public:
     virtual void startF(lexer*, ghostcell*, double*, vec&, matrix_diag&, int)=0;
     virtual void startV(lexer*, ghostcell*, double*, vec&, matrix_diag&, int)=0;
     virtual void startM(lexer*, ghostcell*, double*, double*, double*, int)=0;
-	
+
+    // Coarse-fine consistent velocity correction (AMR pressure projection). Default
+    // is a no-op; only the multi-level capable solver (hypre_ssamg) overrides it.
+    // Applied after the per-level interior velocity correction so the face velocities
+    // at coarse-fine interfaces are made consistent with the matrix Laplacian.
+    virtual void cf_velocity_correction(lexer*, fdm*, ghostcell*,
+                                        field&, field&, field&, field&, double) {}
+
+    // out = A * in, using the assembled pressure matrix (incl. C-F couplings). Default
+    // no-op; hypre_ssamg overrides it. Used by the projection-consistency probe to compare
+    // L*pcorr against the discrete divergence of the velocity correction.
+    virtual void matvec_into(lexer*, fdm*, ghostcell*, field& /*out*/, field& /*in*/) {}
 };
 
 #endif

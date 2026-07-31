@@ -27,8 +27,22 @@ void hypre_ssamg::solve(lexer *p)
 {
     p->solveriter = 0;
 
+    // Multi-level: BiCGSTAB + BoomerAMG on the assembled ParCSR operator (SSAMG cannot
+    // set up on multi-part grids). Single level keeps native SStruct SSAMG.
+    if (p->nlevs > 1)
+    {
+        HYPRE_ParCSRBiCGSTABSetup(par_solver, par_A, par_b, par_x);
+        HYPRE_ParCSRBiCGSTABSolve(par_solver, par_A, par_b, par_x);
+
+        HYPRE_BiCGSTABGetNumIterations(par_solver, &num_iterations);
+        HYPRE_BiCGSTABGetFinalRelativeResidualNorm(par_solver, &final_res_norm);
+
+        // object_type==HYPRE_PARCSR: refresh the SStruct vector's structured data from
+        // the solved ParVector so fillbackvec4's GetBoxValues sees the solution.
+        HYPRE_SStructVectorGather(x);
+    }
     // N10==40: standalone SSAMG
-    if (p->N10 == 40)
+    else if (p->N10 == 40)
     {
         HYPRE_SStructSSAMGSetup(ssamg, A, b, x);
         HYPRE_SStructSSAMGSolve(ssamg, A, b, x);
@@ -36,8 +50,8 @@ void hypre_ssamg::solve(lexer *p)
         HYPRE_SStructSSAMGGetNumIterations(ssamg, &num_iterations);
         HYPRE_SStructSSAMGGetFinalRelativeResidualNorm(ssamg, &final_res_norm);
     }
-    // N10==41: PCG outer solver with SSAMG preconditioner
-    else if (p->N10 == 41)
+    // N10==41: PCG + SSAMG preconditioner
+    else
     {
         HYPRE_SStructPCGSetup(pcg_solver, A, b, x);
         HYPRE_SStructPCGSolve(pcg_solver, A, b, x);

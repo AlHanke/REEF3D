@@ -68,6 +68,7 @@ public:
     //  39:vof_nte  40:vof_ntw  41:vof_nbe  42:vof_nbw
     //  43:vof_ste  44:vof_stw  45:vof_sbe  46:vof_sbw
     amrex::Vector<amrex::MultiFab> m_mf; ///< all fields: 47 components
+    amrex::Vector<amrex::MultiFab> m_mf_diag;
 #endif
 
 	double gi,gj,gk;
@@ -124,6 +125,18 @@ public:
     double wd_criterion;
 	
 	double t1,t2,t3,t4,t5;
+    field1 u0,du0;
+    field2 v0,dv0;
+    field3 w0,dw0;
+    field4 pcorr0,div0,phi0,ro0;
+    field1 u1,du1;
+    field2 v1,dv1;
+    field3 w1,dw1;
+    field4 pcorr1,div1,phi1,ro1;
+    field1 u2,du2;
+    field2 v2,dv2;
+    field3 w2,dw2;
+    field4 pcorr2,div2,phi2,ro2;
 };
 
 #endif

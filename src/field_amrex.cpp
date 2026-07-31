@@ -269,4 +269,79 @@ void field_amrex::ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in,
     }
 }
 
+// =========================================================================
+// FillCoarseFineNormalGhost — stagger-correct C-F normal-velocity ghost fill.
+// FillPatchTwoLevels used cell_cons_interp (cell-centred) on the staggered face
+// velocity, which mis-places the C-F normal velocity by ~half a fine cell and
+// pulls in the covered coarse face. Here we overwrite the C-F ghosts in the
+// field's normal direction with a face-linear interpolation of the coarse face
+// velocity (the divergence-preserving prolongation). Domain-boundary ghosts
+// (BC functor) and fine-fine ghosts (FillBoundary) are left untouched.
+// =========================================================================
+void field_amrex::FillCoarseFineNormalGhost()
+{
+    int dir = -1;
+    if      (const_params.data_location == amrex_bc_func::DataLocation::FACE_X) dir = 0;
+    else if (const_params.data_location == amrex_bc_func::DataLocation::FACE_Y) dir = 1;
+    else if (const_params.data_location == amrex_bc_func::DataLocation::FACE_Z) dir = 2;
+    else return;                       // cell-centred field
+    if (p->nlevs <= 1) return;
+
+    const int r = p->ref_vec[dir];
+    const amrex::IntVect rv = p->ref_vec;
+
+    for (int lev = 1; lev < p->nlevs; ++lev)
+    {
+        amrex::MultiFab&       fine_mf = GetMultiFab(lev);
+        const amrex::Box       dom     = p->amrex_geometry[lev].Domain();
+        const amrex::BoxArray& fba     = fine_mf.boxArray();
+        const int              ngdir   = fine_mf.nGrow(dir);
+        if (ngdir <= 0) continue;
+
+        // coarse velocity on the coarsened-fine layout, with enough ghost in dir
+        amrex::BoxArray cfba = amrex::coarsen(fba, rv);
+        const int       cng  = ngdir / r + 2;
+        amrex::MultiFab cmf(cfba, fine_mf.DistributionMap(), 1, cng);
+        cmf.setVal(0.0);
+        cmf.ParallelCopy(GetMultiFab(lev-1), 0, 0, 1,
+                         amrex::IntVect(0), amrex::IntVect(cng),
+                         p->amrex_geometry[lev-1].periodicity());
+
+        for (amrex::MFIter mfi(fine_mf); mfi.isValid(); ++mfi)
+        {
+            const amrex::Box& vbx = mfi.validbox();
+            const amrex::Box& fbx = mfi.fabbox();
+            auto       farr = fine_mf.array(mfi);
+            const auto carr = cmf.const_array(mfi);
+
+            for (int side = 0; side < 2; ++side)
+            {
+                amrex::Box gbx = vbx;
+                if (side == 0) { gbx.setSmall(dir, vbx.smallEnd(dir)-ngdir); gbx.setBig(dir, vbx.smallEnd(dir)-1); }
+                else           { gbx.setSmall(dir, vbx.bigEnd(dir)+1);       gbx.setBig(dir, vbx.bigEnd(dir)+ngdir); }
+                gbx &= fbx;
+                if (gbx.isEmpty()) continue;
+
+                amrex::LoopOnCpu(gbx, [&] (int i, int j, int k) noexcept
+                {
+                    const amrex::IntVect iv(i,j,k);
+                    if (!dom.contains(iv)) return;   // domain-boundary ghost: BC functor owns it
+                    if (fba.contains(iv))  return;   // fine-fine ghost: FillBoundary owns it
+
+                    // face-linear interpolation of the coarse face velocity in `dir`.
+                    // coarse face w_coarse(kc) sits at fine-face index r*(kc+1)-1.
+                    const int    kf  = iv[dir];
+                    const int    kc  = (kf + 1) / r - 1;
+                    const double wgt = double((kf + 1) - (kc + 1) * r) / double(r);
+                    amrex::IntVect ic  = amrex::coarsen(iv, rv);
+                    amrex::IntVect ic2 = ic;
+                    ic[dir]  = kc;
+                    ic2[dir] = kc + 1;
+                    farr(i,j,k) = (1.0 - wgt) * carr(ic) + wgt * carr(ic2);
+                });
+            }
+        }
+    }
+}
+
 #endif
