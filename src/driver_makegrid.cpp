@@ -24,7 +24,6 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
-#include"grid_helper.h"
 
 void driver::makegrid(lexer *p, ghostcell *pgc)
 {
@@ -34,23 +33,7 @@ void driver::makegrid(lexer *p, ghostcell *pgc)
 
     p->vecsize(pgc);
 
-    // grid_helper
-    grid_helper gridgen(p);
-
-    gridgen.fillgcb1(p);
-    gridgen.fillgcb2(p);
-    gridgen.fillgcb3(p);
-
-    gridgen.fillgcb4_wall(p);
-
-    #if not USE_AMREX
-    gridgen.make_dgc(p);
-
-    gridgen.fill_dgc1(p);
-    gridgen.fill_dgc2(p);
-    gridgen.fill_dgc3(p);
-    gridgen.fill_dgc4(p);
-    #endif
+    p->gridhelper();
 }
 
 void driver::makegrid_cds()
