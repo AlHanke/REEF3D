@@ -46,7 +46,6 @@ private:
 	int ii,jj,kk;
 	int count,q;
 	double fac,value;
-	double kappa;
 
 };
 #endif
