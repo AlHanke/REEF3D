@@ -27,7 +27,7 @@ DEPENDENCIES := $(OBJECTS:.o=.d)
 
 .DEFAULT_GOAL := release
 
-all: CXXFLAGS += -O3 -w -g
+all: CXXFLAGS += -O3 -g -w
 all: CXXFLAGS += -DBUILD=\"all\"
 all: $(APP)
 

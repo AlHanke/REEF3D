@@ -1111,7 +1111,7 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
 
             // 4. Use AMReX utility to write the hierarchical data
             amrex::WriteMultiLevelPlotfile(plotfilename, p->nlevs, GetVecOfConstPtrs(plot_mfs_data), varnames,
-                                        geoms, p->simtime,
+                                        geoms, p->count,
                                         level_steps, ref_ratio);
 
             if (!p->j_dir)
