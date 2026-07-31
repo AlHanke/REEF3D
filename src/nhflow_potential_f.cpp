@@ -215,8 +215,8 @@ void nhflow_potential_f::laplace(lexer *p, fdm_nhf *d, ghostcell *pgc)
             d->M.p[n]  =  1.0/(p->DXP[IP]*p->DXN[IP])
                         + 1.0/(p->DXP[IM1]*p->DXN[IP])
                         
-                        + 1.0/(p->DYP[JP]*p->DYN[JP])*p->y_dir
-                        + 1.0/(p->DYP[JM1]*p->DYN[JP])*p->y_dir
+                        + (p->j_dir ? 1.0/(p->DYP[JP]*p->DYN[JP])
+                        + 1.0/(p->DYP[JM1]*p->DYN[JP]) : 0.0)
                         
                         + sigxyz2/(p->DZP[KM1]*p->DZN[KP])
                         + sigxyz2/(p->DZP[KM1]*p->DZN[KM1]);
@@ -225,8 +225,16 @@ void nhflow_potential_f::laplace(lexer *p, fdm_nhf *d, ghostcell *pgc)
             d->M.n[n] = -1.0/(p->DXP[IP]*p->DXN[IP]);
             d->M.s[n] = -1.0/(p->DXP[IM1]*p->DXN[IP]);
 
-            d->M.w[n] = -1.0/(p->DYP[JP]*p->DYN[JP])*p->y_dir;
-            d->M.e[n] = -1.0/(p->DYP[JM1]*p->DYN[JP])*p->y_dir;
+            if(p->j_dir)
+            {
+                d->M.w[n] = -1.0/(p->DYP[JP]*p->DYN[JP]);
+                d->M.e[n] = -1.0/(p->DYP[JM1]*p->DYN[JP]);
+            }
+            else
+            {
+                d->M.w[n] = 0.0;
+                d->M.e[n] = 0.0;
+            }
 
             d->M.t[n] = -sigxyz2/(p->DZP[KM1]*p->DZN[KP])     
                         - p->sigxx[FIJK]/((p->DZN[KP]+p->DZN[KM1]));
@@ -238,8 +246,8 @@ void nhflow_potential_f::laplace(lexer *p, fdm_nhf *d, ghostcell *pgc)
             d->rhsvec.V[n] =  (p->sigx[FIJK]+p->sigx[FIJKp1])*(PSI[Ip1JKp1] - PSI[Im1JKp1] - PSI[Ip1JKm1] + PSI[Im1JKm1])
                             /((p->DXP[IP]+p->DXP[IM1])*(p->DZN[KP]+p->DZN[KM1]))
                         
-                            + (p->sigx[FIJK]+p->sigx[FIJKp1])*(PSI[IJp1Kp1] - PSI[IJm1Kp1] - PSI[IJp1Km1] + PSI[IJm1Km1])
-                            /((p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1]))*p->y_dir;
+                            + (p->j_dir ? (p->sigx[FIJK]+p->sigx[FIJKp1])*(PSI[IJp1Kp1] - PSI[IJm1Kp1] - PSI[IJp1Km1] + PSI[IJm1Km1])
+                            /((p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1])) : 0.0);
 
         }
         

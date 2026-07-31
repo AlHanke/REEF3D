@@ -55,8 +55,7 @@ public:
     int *IO,*IOSL;
     int *DF,*DF1,*DF2,*DF3;
 
-    bool i_dir,j_dir,k_dir;
-    double x_dir,y_dir,z_dir;
+    bool i_dir,j_dir,k_dir; // existance of directions
 
     int **gcin, **gcout;
     int gcin_count, gcout_count;

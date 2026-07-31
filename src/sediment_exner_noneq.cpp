@@ -132,8 +132,16 @@ starttime=pgc->timer();
    	M.n[n] = Ls/(p->DXP[IP]+p->DXP[IM1]);
 	M.s[n] = -Ls/(p->DXP[IP]+p->DXP[IM1]);
 
-	M.w[n] = Ls/(p->DYP[JP]+p->DYP[JM1])*p->y_dir;
-	M.e[n] = -Ls/(p->DYP[JP]+p->DYP[JM1])*p->y_dir;
+    if(p->j_dir)
+    {
+	M.w[n] = Ls/(p->DYP[JP]+p->DYP[JM1]);
+	M.e[n] = -Ls/(p->DYP[JP]+p->DYP[JM1]);
+    }
+    else
+    {
+    M.w[n] = 0.0;
+    M.e[n] = 0.0;
+    }
     
     rhsvec.V[n] = s->qbe(i,j);
     s->qb(i,j)  = s->qbe(i,j);
