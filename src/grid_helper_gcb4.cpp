@@ -40,6 +40,7 @@ void grid_helper::fillgcb4_wall(lexer *p)
         ++count;
     }
 
+    LEVEL_LOOP
     GC4LOOP
     {
         GCB4_TILE(n);
