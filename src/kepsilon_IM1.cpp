@@ -79,13 +79,13 @@ void kepsilon_IM1::start(fdm* a, lexer* p, convection* pconvec, diffusion* pdiff
 	pgc->start4(p,a->eddyv,24);
 }
 
-void kepsilon_IM1::ktimesave(lexer *p, fdm* a, ghostcell *pgc)
+void kepsilon_IM1::ktimesave(lexer *p)
 {
     LOOP
     kn(i,j,k)=kin(i,j,k);
 }
 
-void kepsilon_IM1::etimesave(lexer *p, fdm* a, ghostcell *pgc)
+void kepsilon_IM1::etimesave(lexer *p)
 {
     LOOP
     en(i,j,k)=eps(i,j,k);

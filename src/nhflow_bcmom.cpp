@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"turbulence.h"
 
-nhflow_bcmom::nhflow_bcmom(lexer* p):roughness(p),kappa(0.4)
+nhflow_bcmom::nhflow_bcmom(lexer* p):roughness(),kappa(0.4)
 {
 }
 
