@@ -38,6 +38,10 @@ Author: Hans Bihs
 #include"looping.h"
 #include<iostream>
 #include<vector>
+#if USE_AMREX
+#include <AMReX_MultiFab.H>
+#include <AMReX_Vector.H>
+#endif
 
 class lexer;
 
@@ -48,6 +52,23 @@ class fdm : public increment
 public:
 
     fdm(lexer*);
+
+#if USE_AMREX
+    // Single MultiFab holding all 47 field components.
+    // Declared before the field members so it is constructed first
+    // (C++ initialises members in declaration order).
+    // Component layout:
+    //   0:u  1:v  2:w  3:F  4:G  5:H  6:Fext  7:Gext  8:Hext
+    //   9:fbh1  10:fbh2  11:fbh3  12:fbh4  13:fbh5
+    //  14:press  15:Fi  16:eddyv  17:L
+    //  18:ro  19:visc  20:phi  21:conc  22:test
+    //  23:topo  24:solid  25:fb  26:porosity  27:porpart  28:walld
+    //  29:nX  30:nY  31:nZ  32:Alpha  33:phasemarker
+    //  34:vof  35:vof_nt  36:vof_nb  37:vof_st  38:vof_sb
+    //  39:vof_nte  40:vof_ntw  41:vof_nbe  42:vof_nbw
+    //  43:vof_ste  44:vof_stw  45:vof_sbe  46:vof_sbw
+    amrex::Vector<amrex::MultiFab> m_mf; ///< all fields: 47 components
+#endif
 
 	double gi,gj,gk;
 
