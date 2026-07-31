@@ -24,6 +24,51 @@ Author: Hans Bihs
 #include"lexer.h"
 
 fdm::fdm(lexer *p) :
+#if USE_AMREX
+    // --- single shared MultiFab for all 47 fields ---
+    m_mf(make_mf(p, 47)),
+    // --- velocity vector (0-2) ---
+    u(p, &m_mf,  0), v(p, &m_mf,  1), w(p, &m_mf,  2),
+    // --- flux vector (3-5) ---
+    F(p, &m_mf,  3), G(p, &m_mf,  4), H(p, &m_mf,  5),
+    // --- external flux vector (6-8) ---
+    Fext(p, &m_mf,  6), Gext(p, &m_mf,  7), Hext(p, &m_mf,  8),
+    // --- 6DOF face fields (9-13) ---
+    fbh1(p, &m_mf,  9), fbh2(p, &m_mf, 10), fbh3(p, &m_mf, 11),
+    fbh4(p, &m_mf, 12), fbh5(p, &m_mf, 13),
+    // --- cell-centred scalars (14-28) ---
+    press(p, &m_mf, 14),
+    Fi(p, &m_mf, 15),
+    eddyv(p, &m_mf, 16),
+    L(p, &m_mf, 17),
+    ro(p, &m_mf, 18), visc(p, &m_mf, 19),
+    phi(p, &m_mf, 20),
+    conc(p, &m_mf, 21),
+    test(p, &m_mf, 22),
+    topo(p, &m_mf, 23), solid(p, &m_mf, 24),
+    fb(p, &m_mf, 25),
+    porosity(p, &m_mf, 26), porpart(p, &m_mf, 27),
+    walld(p, &m_mf, 28),
+    // --- integer / slice members (owning, unchanged) ---
+    nodeval(p), nodeval2D(p),
+    // --- PLIC fields (29-46) ---
+    nX(p, &m_mf, 29), nY(p, &m_mf, 30), nZ(p, &m_mf, 31), Alpha(p, &m_mf, 32),
+    phasemarker(p, &m_mf, 33),
+    vof(p, &m_mf, 34),
+    vof_nt(p, &m_mf, 35), vof_nb(p, &m_mf, 36),
+    vof_st(p, &m_mf, 37), vof_sb(p, &m_mf, 38),
+    vof_nte(p, &m_mf, 39), vof_ntw(p, &m_mf, 40),
+    vof_nbe(p, &m_mf, 41), vof_nbw(p, &m_mf, 42),
+    vof_ste(p, &m_mf, 43), vof_stw(p, &m_mf, 44),
+    vof_sbe(p, &m_mf, 45), vof_sbw(p, &m_mf, 46),
+    // --- PTF slices (declaration order) ---
+    eta(p), eta_n(p), depth(p), WL(p),
+    Fifsf(p), K(p),
+    etaloc(p),
+    P(p), Q(p),
+    bed(p),
+    rhsvec(p), M(p)
+#else
     u(p), F(p), Fext(p),
     v(p), G(p), Gext(p),
     w(p), H(p), Hext(p),
@@ -47,6 +92,7 @@ fdm::fdm(lexer *p) :
     P(p), Q(p), bed(p),
     rhsvec(p), M(p),
     nX(p), nY(p), nZ(p), Alpha(p)
+#endif
 {
     maxF = 0.0;
     maxG = 0.0;

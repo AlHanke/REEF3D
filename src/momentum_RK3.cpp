@@ -39,8 +39,18 @@ Author: Hans Bihs
 momentum_RK3::momentum_RK3(lexer *p, fdm *a, convection *pconvection, diffusion *pdiffusion, pressure* ppressure, poisson* ppoisson,
                                                     turbulence *pturbulence, solver *psolver, solver *ppoissonsolver,
                                                     ioflow *pioflow, fsi *ppfsi)
-                                                    :bcmom(p),udiff(p),vdiff(p),wdiff(p),urk1(p),urk2(p),vrk1(p),
-                                                    vrk2(p),wrk1(p),wrk2(p),fx(p),fy(p),fz(p)
+                                                    :bcmom(p),
+                                                    #if USE_AMREX
+                                                    m_rk1(make_mf(p,3)), m_rk2(make_mf(p,3)), m_f(make_mf(p,3)),
+                                                    urk1(p,&m_rk1,0), urk2(p,&m_rk2,0), fx(p,&m_f,0),
+                                                    vrk1(p,&m_rk1,1), vrk2(p,&m_rk2,1), fy(p,&m_f,1),
+                                                    wrk1(p,&m_rk1,2), wrk2(p,&m_rk2,2), fz(p,&m_f,2),
+                                                    #else
+                                                    urk1(p),urk2(p),vrk1(p),
+                                                    vrk2(p),wrk1(p),wrk2(p),
+                                                    fx(p),fy(p),fz(p),
+                                                    #endif
+                                                    udiff(p),vdiff(p),wdiff(p)
 {
     pconvec=pconvection;
     pdiff=pdiffusion;
@@ -136,9 +146,14 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pflow->w_relax(p,a,pgc,wrk1);
     pflow->p_relax(p,a,pgc,a->press);
 
+    #if USE_AMREX
+    pgc->startBatch(p, m_rk1, 0, {{&urk1,gcval_u},{&vrk1,gcval_v},{&wrk1,gcval_w}});
+    #else
     pgc->start1(p,urk1,gcval_u);
     pgc->start2(p,vrk1,gcval_v);
     pgc->start3(p,wrk1,gcval_w);
+    #endif
+
 
 //Step 2
 //--------------------------------------------------------
@@ -205,9 +220,13 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pflow->w_relax(p,a,pgc,wrk2);
     pflow->p_relax(p,a,pgc,a->press);
 
+    #if USE_AMREX
+    pgc->startBatch(p, m_rk2, 0, {{&urk2,gcval_u},{&vrk2,gcval_v},{&wrk2,gcval_w}});
+    #else
     pgc->start1(p,urk2,gcval_u);
     pgc->start2(p,vrk2,gcval_v);
     pgc->start3(p,wrk2,gcval_w);
+    #endif
 
 //Step 3
 //--------------------------------------------------------
@@ -274,9 +293,13 @@ void momentum_RK3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     pflow->w_relax(p,a,pgc,a->w);
     pflow->p_relax(p,a,pgc,a->press);
 
+    #if USE_AMREX
+    pgc->startBatch(p, a->m_mf, 0, {{&a->u,gcval_u},{&a->v,gcval_v},{&a->w,gcval_w}});
+    #else
     pgc->start1(p,a->u,gcval_u);
     pgc->start2(p,a->v,gcval_v);
     pgc->start3(p,a->w,gcval_w);
+    #endif
 }
 
 void momentum_RK3::irhs(lexer *p, fdm *a)
