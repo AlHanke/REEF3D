@@ -36,6 +36,8 @@ public:
     kepsilon_bc(lexer*);
     virtual ~kepsilon_bc() = default;
     void bckeps_start(fdm*,lexer*,field&,field&,int);
+    void bckin_matrix(lexer*,fdm*,field&);
+    void bcepsilon_matrix(lexer*,fdm*,field&);
 
 private:
     void wall_law_kin(lexer*,fdm*,field&,field&,int,int,int,int,int,int);
