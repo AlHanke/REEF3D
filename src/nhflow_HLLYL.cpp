@@ -76,7 +76,7 @@ void nhflow_HLLYL::aij_U(lexer *&p,fdm_nhf *&d, int ipol)
     WETDRY
     {
     d->F[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP] 
-                + (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir
+                + (p->j_dir ? (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP] : 0.0)
                 + (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
     }    
 }
@@ -95,7 +95,7 @@ void nhflow_HLLYL::aij_V(lexer *&p, fdm_nhf *&d, int ipol)
     WETDRY
     {
     d->G[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP] 
-                + (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir
+                + (p->j_dir ? (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP] : 0.0)
                 + (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
     }    
 }
@@ -127,7 +127,7 @@ void nhflow_HLLYL::aij_W(lexer *&p,fdm_nhf *&d, int ipol, double *WH)
     WETDRY
     {
     d->FSW[IJK] += ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP] 
-                +  (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir
+                +  (p->j_dir ? (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP] : 0.0)
                 +  (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
     } 
     
@@ -143,7 +143,7 @@ void nhflow_HLLYL::aij_W(lexer *&p,fdm_nhf *&d, int ipol, double *WH)
     WETDRY
     {
     d->FSW[IJK] += ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP] 
-                +  (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir
+                +  (p->j_dir ? (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP] : 0.0)
                 +  (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
     } 
     
@@ -159,7 +159,7 @@ void nhflow_HLLYL::aij_W(lexer *&p,fdm_nhf *&d, int ipol, double *WH)
     WETDRY
     {
     d->FSW[IJK] += ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP] 
-                +  (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir
+                +  (p->j_dir ? (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP] : 0.0)
                 +  (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
     } 
     
@@ -200,7 +200,7 @@ void nhflow_HLLYL::aij_W(lexer *&p,fdm_nhf *&d, int ipol, double *WH)
                             
                     - p->DZN[KP]*(
                             
-                    + (d->FEx[IJK] - d->FEx[Im1JK])/p->DXN[IP]  + (d->FEy[IJK] - d->FEy[IJm1K])/p->DYN[JP]*p->y_dir)
+                    + (d->FEx[IJK] - d->FEx[Im1JK])/p->DXN[IP]  + (p->j_dir ? (d->FEy[IJK] - d->FEy[IJm1K])/p->DYN[JP] : 0.0))
                             
                     + p->WL[IJ]*0.5*(p->sigx[FIJK]+p->sigx[FIJKp1])*((d->U[FIJKp1]-d->U[FIJK])/p->DZN[KP])
                             

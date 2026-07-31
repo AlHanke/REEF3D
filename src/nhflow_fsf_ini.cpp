@@ -38,7 +38,7 @@ void nhflow_fsf_f::ini(lexer* p, fdm_nhf* d, ghostcell* pgc, ioflow* pflow, doub
     pgc->gcsl_start4(p,d->detadt,1);
     
     LOOP
-    d->detadt(i,j) += -p->DZN[KP]*((d->FEx[IJK] - d->FEx[Im1JK])/p->DXN[IP]  + (d->FEy[IJK] - d->FEy[IJm1K])/p->DYN[JP]*p->y_dir);
+    d->detadt(i,j) += -p->DZN[KP]*((d->FEx[IJK] - d->FEx[Im1JK])/p->DXN[IP] + (p->j_dir ? (d->FEy[IJK] - d->FEy[IJm1K])/p->DYN[JP] : 0.0));
     
     pgc->gcsl_start4(p,d->detadt,1);
     

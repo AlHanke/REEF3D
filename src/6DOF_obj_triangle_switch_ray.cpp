@@ -180,7 +180,7 @@ void sixdof_obj::triangle_switch_ray(lexer *p, ghostcell *pgc)
             
             
             if((yc>=ys-psi && yc<=ye+psi && zc>=zs-psi && zc<=ze+psi && domdir==1)
-            || (xc>=xs-psi && xc<=xe+psi && zc>=zs-psi && zc<=ze+psi && domdir==2 && p->y_dir==1) 
+            || (xc>=xs-psi && xc<=xe+psi && zc>=zs-psi && zc<=ze+psi && domdir==2 && p->j_dir==1)
             || (xc>=xs-psi && xc<=xe+psi && yc>=ys-psi && yc<=ye+psi && domdir==3)) 
             {
             //cout<<"TRIANGLE SWITCH "<<domdir<<" | nx: "<<nx<<" ny: "<<ny<<" nz: "<<nz<<endl;

@@ -50,8 +50,8 @@ void nhflow_idiff::diff_scalar(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *pso
 	d->M.p[n]  +=        visc_IP1/(p->DXN[IP]*p->DXP[IM1])
 					+   visc_IM1/(p->DXN[IP]*p->DXP[IP])
                     
-					+   visc_JP1/(p->DYN[JP]*p->DYP[JM1])*p->y_dir
-					+   visc_JM1/(p->DYN[JP]*p->DYP[JP])*p->y_dir
+					+   (p->j_dir ? (visc_JP1/(p->DYN[JP]*p->DYP[JM1])
+					+   visc_JM1/(p->DYN[JP]*p->DYP[JP])) : 0.0)
                     
 					+   (visc_KP1*sigxyz2)/(p->DZN[KP]*p->DZP[KM1])
 					+   (visc_KM1*sigxyz2)/(p->DZN[KP]*p->DZP[KP]);
@@ -59,8 +59,11 @@ void nhflow_idiff::diff_scalar(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *pso
 	 d->M.n[n] -= visc_IP1/(p->DXP[IP]*p->DXN[IP]);
      d->M.s[n] -= visc_IM1/(p->DXP[IM1]*p->DXN[IP]);
 	 
-     d->M.w[n] -= visc_JP1/(p->DYP[JP]*p->DYN[JP])*p->y_dir;
-	 d->M.e[n] -= visc_JM1/(p->DYP[JM1]*p->DYN[JP])*p->y_dir;
+     if(p->j_dir)
+     {
+        d->M.w[n] -= visc_JP1/(p->DYP[JP]*p->DYN[JP]);
+        d->M.e[n] -= visc_JM1/(p->DYP[JM1]*p->DYN[JP]);
+     }
 	 
 	 d->M.t[n] -= (visc_KP1*sigxyz2)/(p->DZP[KP]*p->DZN[KP])     
                         + visc_KP1*p->sigxx[FIJK]/(p->DZN[KP]+p->DZN[KM1]);
@@ -71,10 +74,10 @@ void nhflow_idiff::diff_scalar(lexer *p, fdm_nhf *d, ghostcell *pgc, solver *pso
 	 
      d->rhsvec.V[n] +=  visc_IP*2.0*0.5*(p->sigx[FIJK]+p->sigx[FIJKp1])*(F[Ip1JKp1] - F[Im1JKp1] - F[Ip1JKm1] + F[Im1JKm1])
                         /((p->DXP[IP]+p->DXP[IM1])*(p->DZN[KP]+p->DZN[KM1]))
-                        
-                      + visc_IP*2.0*0.5*(p->sigy[FIJK]+p->sigy[FIJKp1])*(F[IJp1Kp1] - F[IJm1Kp1] - F[IJp1Km1] + F[IJm1Km1])
-                        /((p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1]))*p->y_dir;
-	 
-	 ++n;
-	}
+
+                      + (p->j_dir ? visc_IP*2.0*0.5*(p->sigy[FIJK]+p->sigy[FIJKp1])*(F[IJp1Kp1] - F[IJm1Kp1] - F[IJp1Km1] + F[IJm1Km1])
+                        /((p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1])) : 0.0);
+
+        ++n;
+    }
 }
