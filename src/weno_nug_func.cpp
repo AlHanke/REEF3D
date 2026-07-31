@@ -34,17 +34,17 @@ void weno_nug_func::ini(lexer* p)
 {
     if(!iniflag)
     {
-        p->Darray(qfx,p->knox+2*marge,2,6,2);
-        p->Darray(qfy,p->knoy+2*marge,2,6,2);
-        p->Darray(qfz,p->knoz+2*marge,2,6,2);
+        qfx.resize(p->knox+2*marge);
+        qfy.resize(p->knoy+2*marge);
+        qfz.resize(p->knoz+2*marge);
 
-        p->Darray(cfx,p->knox+2*marge,2,6);
-        p->Darray(cfy,p->knoy+2*marge,2,6);
-        p->Darray(cfz,p->knoz+2*marge,2,6);
+        cfx.resize(p->knox+2*marge);
+        cfy.resize(p->knoy+2*marge);
+        cfz.resize(p->knoz+2*marge);
 
-        p->Darray(isfx,p->knox+2*marge,2,6,3);
-        p->Darray(isfy,p->knoy+2*marge,2,6,3);
-        p->Darray(isfz,p->knoz+2*marge,2,6,3);
+        isfx.resize(p->knox+2*marge);
+        isfy.resize(p->knoy+2*marge);
+        isfz.resize(p->knoz+2*marge);
 
         precalc_qf(p);
         precalc_cf(p);
@@ -52,7 +52,3 @@ void weno_nug_func::ini(lexer* p)
         iniflag = true;
     }
 }
-
-double ****weno_nug_func::qfx,****weno_nug_func::qfy,****weno_nug_func::qfz;
-double ***weno_nug_func::cfx,***weno_nug_func::cfy,***weno_nug_func::cfz;
-double ****weno_nug_func::isfx,****weno_nug_func::isfy,****weno_nug_func::isfz;
