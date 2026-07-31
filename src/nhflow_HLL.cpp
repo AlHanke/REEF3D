@@ -75,9 +75,9 @@ void nhflow_HLL::aij_U(lexer *&p,fdm_nhf *&d, int ipol)
     LOOP
     WETDRY
     {
-    d->F[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP] 
-                + (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir
-                + (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
+        d->F[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP]
+                    + (p->j_dir ? (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP] : 0.0)
+                    + (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
     }    
 }
 
@@ -94,9 +94,9 @@ void nhflow_HLL::aij_V(lexer *&p, fdm_nhf *&d, int ipol)
     LOOP
     WETDRY
     {
-    d->G[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP] 
-                + (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir
-                + (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
+        d->G[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP]
+                    + (p->j_dir ? (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP] : 0.0)
+                    + (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
     }    
 }
 
@@ -113,9 +113,9 @@ void nhflow_HLL::aij_W(lexer *&p,fdm_nhf *&d, int ipol)
     LOOP
     WETDRY
     {
-    d->H[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP] 
-                + (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP]*p->y_dir
-                + (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
+        d->H[IJK] -= ((d->Fx[IJK] - d->Fx[Im1JK])/p->DXN[IP]
+                    + (p->j_dir ? (d->Fy[IJK] - d->Fy[IJm1K])/p->DYN[JP] : 0.0)
+                    + (d->Fz[IJK] - d->Fz[IJKm1])/p->DZN[KP]);
     }    
 }
 

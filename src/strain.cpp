@@ -169,11 +169,11 @@ double strain::magSqrSd(lexer *p, field &u, field &v, field &w)
 double strain::strainplain(lexer *p, fdm *a)
 {
     s11 = pudx(p,a);
-    s22 = pvdy(p,a)*p->y_dir;
+    s22 = p->j_dir ? pvdy(p,a) : 0.0;
     s33 = pwdz(p,a);
-    s12 = (pudy(p,a) + pvdx(p,a))*p->y_dir;
+    s12 = p->j_dir ? (pudy(p,a) + pvdx(p,a)) : 0.0;
     s13 = (pudz(p,a) + pwdx(p,a));
-    s23 = (pvdz(p,a) + pwdy(p,a))*p->y_dir;
+    s23 = p->j_dir ? (pvdz(p,a) + pwdy(p,a)) : 0.0;
 
     double s = 2.0*s11*s11 + 2.0*s22*s22 + 2.0*s33*s33 + s12*s12 + s13*s13 + s23*s23;
 

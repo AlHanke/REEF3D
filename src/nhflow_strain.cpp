@@ -453,11 +453,11 @@ double nhflow_strain::strainplain(lexer *p, fdm_nhf *d)
 	double s=0.0;
 /*
 	s11 = pudx(p,a);
-	s22 = pvdy(p,a)*p->y_dir;
-	s33 = pwdz(p,a);
-	s12 = (pudy(p,a) + pvdx(p,a))*p->y_dir;
-	s13 = (pudz(p,a) + pwdx(p,a));
-	s23 = (pvdz(p,a) + pwdy(p,a))*p->y_dir;
+    s22 = p->j_dir ? pvdy(p,a) : 0.0;
+    s33 = pwdz(p,a);
+    s12 = p->j_dir ? (pudy(p,a) + pvdx(p,a)) : 0.0;
+    s13 = (pudz(p,a) + pwdx(p,a));
+    s23 = p->j_dir ? (pvdz(p,a) + pwdy(p,a)) : 0.0;
 
     s=fabs(s11)+fabs(s22)+fabs(s33)+0.5*fabs(s12)+0.5*fabs(s13)+0.5*fabs(s13);
 */

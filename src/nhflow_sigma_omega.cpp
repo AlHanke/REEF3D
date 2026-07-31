@@ -45,7 +45,7 @@ void nhflow_sigma::omega_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL,
                             
                         - p->DZN[KP]*(d->detadt(i,j) 
                             
-                        + (d->FEx[IJK] - d->FEx[Im1JK])/p->DXN[IP]  + (d->FEy[IJK] - d->FEy[IJm1K])/p->DYN[JP]*p->y_dir);
+                        + (d->FEx[IJK] - d->FEx[Im1JK])/p->DXN[IP] + (p->j_dir ? (d->FEy[IJK] - d->FEy[IJm1K])/p->DYN[JP] : 0.0));
     }
     
       

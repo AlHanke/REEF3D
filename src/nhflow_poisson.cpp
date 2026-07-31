@@ -32,7 +32,7 @@ Author: Hans Bihs
 #include"density_vof.h"
 #include"vrans.h"
 
-nhflow_poisson::nhflow_poisson(lexer *p) 
+nhflow_poisson::nhflow_poisson(lexer *p)
 {
 }
 
@@ -41,9 +41,9 @@ nhflow_poisson::~nhflow_poisson()
 }
 
 void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
-{	
+{
     double ab,denom;
-    
+
     n=0;
     FBASELOOP
     {
@@ -54,27 +54,27 @@ void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
 
         d->M.w[n] = 0.0;
         d->M.e[n] = 0.0;
-        
+
         d->M.t[n] = 0.0;
         d->M.b[n] = 0.0;
-        
-    ++n;
+
+        ++n;
     }
-    
+
 	n=0;
     LOOP
 	{
         WETDRYDEEP
         {
             sigxyz2 = pow(p->sigx[FIJK],2.0) + pow(p->sigy[FIJK],2.0) + pow(p->sigz[IJ],2.0);
-            
-            
+
+
             d->M.p[n]  =  (1.0)/(p->W1*p->DXP[IP]*p->DXN[IP])
                         + (1.0)/(p->W1*p->DXP[IM1]*p->DXN[IP])
-                        
-                        + (1.0)/(p->W1*p->DYP[JP]*p->DYN[JP])*p->y_dir
-                        + (1.0)/(p->W1*p->DYP[JM1]*p->DYN[JP])*p->y_dir
-                        
+
+                        + (p->j_dir ? (1.0)/(p->W1*p->DYP[JP]*p->DYN[JP])
+                        + (1.0)/(p->W1*p->DYP[JM1]*p->DYN[JP]) : 0.0)
+
                         + (sigxyz2)/(p->W1*p->DZP[KM1]*p->DZN[KP])
                         + (sigxyz2)/(p->W1*p->DZP[KM1]*p->DZN[KM1]);
 
@@ -82,115 +82,125 @@ void nhflow_poisson::start(lexer* p, fdm_nhf *d, double *P)
             d->M.n[n] = -(1.0)/(p->W1*p->DXP[IP]*p->DXN[IP]);
             d->M.s[n] = -(1.0)/(p->W1*p->DXP[IM1]*p->DXN[IP]);
 
-            d->M.w[n] = -(1.0)/(p->W1*p->DYP[JP]*p->DYN[JP])*p->y_dir;
-            d->M.e[n] = -(1.0)/(p->W1*p->DYP[JM1]*p->DYN[JP])*p->y_dir;
+            if(p->j_dir)
+            {
+                d->M.w[n] = -(1.0)/(p->W1*p->DYP[JP]*p->DYN[JP]);
+                d->M.e[n] = -(1.0)/(p->W1*p->DYP[JM1]*p->DYN[JP]);
+            }
+            else
+            {
+                d->M.w[n] = 0.0;
+                d->M.e[n] = 0.0;
+            }
 
-            d->M.t[n] = - sigxyz2/(p->W1*p->DZP[KM1]*p->DZN[KP])     
+            d->M.t[n] = - sigxyz2/(p->W1*p->DZP[KM1]*p->DZN[KP])
                         - p->sigxx[FIJK]/(p->W1*(p->DZN[KP]+p->DZN[KM1]));
-                        
-            d->M.b[n] = - sigxyz2/(p->W1*p->DZP[KM1]*p->DZN[KM1]) 
+
+            d->M.b[n] = - sigxyz2/(p->W1*p->DZP[KM1]*p->DZN[KM1])
                         + p->sigxx[FIJK]/(p->W1*(p->DZN[KP]+p->DZN[KM1]));
-            
-            
+
+
             d->rhsvec.V[n] +=  2.0*p->sigx[FIJK]*(P[FIp1JKp1] - P[FIm1JKp1] - P[FIp1JKm1] + P[FIm1JKm1])
                             /(p->W1*(p->DXP[IP]+p->DXP[IM1])*(p->DZN[KP]+p->DZN[KM1]))
                         
-                            + 2.0*p->sigy[FIJK]*(P[FIJp1Kp1] - P[FIJm1Kp1] - P[FIJp1Km1] + P[FIJm1Km1])
-                            /(p->W1*(p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1]))*p->y_dir;
+                            + (p->j_dir ? 2.0*p->sigy[FIJK]*(P[FIJp1Kp1] - P[FIJm1Kp1] - P[FIJp1Km1] + P[FIJm1Km1])
+                            /(p->W1*(p->DYP[JP]+p->DYP[JM1])*(p->DZN[KP]+p->DZN[KM1])) : 0.0);
         }
-        
+
         if(p->wet[IJ]==0 || p->deep[IJ]==0 || p->flag7[FIJK]<0)
         {
-        d->M.p[n]  =  1.0;
+            d->M.p[n]  =  1.0;
 
 
-        d->M.n[n] = 0.0;
-        d->M.s[n] = 0.0;
+            d->M.n[n] = 0.0;
+            d->M.s[n] = 0.0;
 
-        d->M.w[n] = 0.0;
-        d->M.e[n] = 0.0;
+            d->M.w[n] = 0.0;
+            d->M.e[n] = 0.0;
 
-        d->M.t[n] = 0.0;
-        d->M.b[n] = 0.0;
-        
-        d->rhsvec.V[n] =  0.0;
+            d->M.t[n] = 0.0;
+            d->M.b[n] = 0.0;
+
+            d->rhsvec.V[n] =  0.0;
         }
 	
-	++n;
+	    ++n;
 	}
-    
+
     n=0;
 	LOOP
 	{
-        WETDRYDEEP 
+        WETDRYDEEP
         {
             // South
             if((p->flag7[FIm1JK]<0 || p->wet[Im1J]==0 || p->deep[Im1J]==0) && p->IO[Im1JK]==0)
             {
-            d->rhsvec.V[n] -= d->M.s[n]*P[FIJK];
-            d->M.s[n] = 0.0;
+                d->rhsvec.V[n] -= d->M.s[n]*P[FIJK];
+                d->M.s[n] = 0.0;
             }
-            
+
             // pjm inflow
             if((p->flag7[FIm1JK]<0 || p->wet[Im1J]==0 || p->deep[Im1J]==0) && p->IO[Im1JK]==1)
             {
                 if(p->B76==0 || p->B90==1)
                 {
-                pval=0.0;
-                d->rhsvec.V[n] -= d->M.s[n]*pval;
-                d->M.s[n] = 0.0;
+                    pval=0.0;
+
+                    d->rhsvec.V[n] -= d->M.s[n]*pval;
+                    d->M.s[n] = 0.0;
                 }
-                
+
                 if(p->B76==1 && p->B90==0)
                 {
-                d->rhsvec.V[n] -= d->M.s[n]*P[FIJK];
-                d->M.s[n] = 0.0;
+                    d->rhsvec.V[n] -= d->M.s[n]*P[FIJK];
+                    d->M.s[n] = 0.0;
                 }
             }
             
             // North
             if((p->flag7[FIp1JK]<0|| p->wet[Ip1J]==0 || p->deep[Ip1J]==0) && p->IO[Ip1JK]==0)
             {
-            d->rhsvec.V[n] -= d->M.n[n]*P[FIJK];
-            d->M.n[n] = 0.0;
+                d->rhsvec.V[n] -= d->M.n[n]*P[FIJK];
+                d->M.n[n] = 0.0;
             }
             
             if((p->flag7[FIp1JK]<0) && p->IO[Ip1JK]==2)
             {
-            pval = 0.0;
-            d->rhsvec.V[n] -= d->M.n[n]*pval;
-            d->M.n[n] = 0.0;
+                pval = 0.0;
+                d->rhsvec.V[n] -= d->M.n[n]*pval;
+                d->M.n[n] = 0.0;
             }
-            
+
             // East
             if(p->flag7[FIJm1K]<0  || p->wet[IJm1]==0 || p->deep[IJm1]==0)
             {
-            d->rhsvec.V[n] -= d->M.e[n]*P[FIJK]*p->y_dir;
-            d->M.e[n] = 0.0;
+                if(p->j_dir)
+                d->rhsvec.V[n] -= d->M.e[n]*P[FIJK];
+                d->M.e[n] = 0.0;
             }
-            
+
             // West
             if(p->flag7[FIJp1K]<0 || p->wet[IJp1]==0 || p->deep[IJp1]==0)
             {
-            d->rhsvec.V[n] -= d->M.w[n]*P[FIJK]*p->y_dir;
-            d->M.w[n] = 0.0;
+                if(p->j_dir)
+                d->rhsvec.V[n] -= d->M.w[n]*P[FIJK];
+                d->M.w[n] = 0.0;
             }
-            
+
             // BED
             if(p->flag7[FIJKm1]<0)
             {
-            d->rhsvec.V[n] -= d->M.b[n]*P[FIJK];
-            d->M.b[n] = 0.0;
+                d->rhsvec.V[n] -= d->M.b[n]*P[FIJK];
+                d->M.b[n] = 0.0;
             }
-            
+
             // FSFBC
             if(p->flag7[FIJKp2]<0 && p->flag7[FIJKp1]>0)
             {
-            d->rhsvec.V[n] -= 0.0; // fsf: p=0
-            d->M.t[n] = 0.0;
+                d->rhsvec.V[n] -= 0.0; // fsf: p=0
+                d->M.t[n] = 0.0;
             }
-            
         }
-	++n;
+	    ++n;
 	}
 }
