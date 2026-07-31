@@ -38,17 +38,17 @@ void weno_nug_func::ini(lexer* p)
 {
     if(iniflag==0)
     {
-    p->Darray(qfx,p->knox+8,2,6,2);
-    p->Darray(qfy,p->knoy+8,2,6,2);
-    p->Darray(qfz,p->knoz+8,2,6,2);
+    qfx.resize(p->knox+8);
+    qfy.resize(p->knoy+8);
+    qfz.resize(p->knoz+8);
     
-    p->Darray(cfx,p->knox+8,2,6);
-    p->Darray(cfy,p->knoy+8,2,6);
-    p->Darray(cfz,p->knoz+8,2,6);
+    cfx.resize(p->knox+8);
+    cfy.resize(p->knoy+8);
+    cfz.resize(p->knoz+8);
     
-    p->Darray(isfx,p->knox+8,2,6,3);
-    p->Darray(isfy,p->knoy+8,2,6,3);
-    p->Darray(isfz,p->knoz+8,2,6,3);
+    isfx.resize(p->knox+8);
+    isfy.resize(p->knoy+8);
+    isfz.resize(p->knoz+8);
     
     precalc_qf(p);
     precalc_cf(p);
@@ -75,7 +75,4 @@ void weno_nug_func::dsdiffy(slice &f, slice &dq)
     dq(ii,jj) = (f(ii,jj+1)-f(ii,jj))/p->DYP[jj+marge];
 }
 
-double ****weno_nug_func::qfx,****weno_nug_func::qfy,****weno_nug_func::qfz;
-double ***weno_nug_func::cfx,***weno_nug_func::cfy,***weno_nug_func::cfz;
-double ****weno_nug_func::isfx,****weno_nug_func::isfy,****weno_nug_func::isfz;
 int weno_nug_func::iniflag(0);

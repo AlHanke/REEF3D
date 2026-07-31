@@ -28,6 +28,8 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"field.h"
 #include"slice.h"
+#include <array>
+#include <vector>
 
 using namespace std;
 
@@ -140,8 +142,8 @@ public:
         // same arithmetic as before; the shared sum is formed once and the
         // coefficient row is loaded once (the member stores in between kept
         // the compiler from doing either)
-        const double *const cf = cfx[IP][uf];
-        const double c1 = cf[0], c2 = cf[1], c3 = cf[2];
+        const auto &cf = cfx[IP][uf];
+        const double c1 = cfx[IP][uf][0], c2 = cfx[IP][uf][1], c3 = cfx[IP][uf][2];
         
         const double is1x_psi = is1x + psi;
         const double is2x_psi = is2x + psi;
@@ -162,7 +164,7 @@ public:
         // same arithmetic as before; the shared sum is formed once and the
         // coefficient row is loaded once (the member stores in between kept
         // the compiler from doing either)
-        const double *const cf = cfx[IP][uf];
+        const auto &cf = cfx[IP][uf];
         const double c1 = cf[3], c2 = cf[4], c3 = cf[5];
         
         const double is1x_psi = is1x + psi;
@@ -186,7 +188,7 @@ public:
         // same arithmetic as before; the shared sum is formed once and the
         // coefficient row is loaded once (the member stores in between kept
         // the compiler from doing either)
-        const double *const cf = cfy[JP][vf];
+        const auto &cf = cfy[JP][vf];
         const double c1 = cf[0], c2 = cf[1], c3 = cf[2];
         
         const double is1y_psi = is1y + psi;
@@ -208,7 +210,7 @@ public:
         // same arithmetic as before; the shared sum is formed once and the
         // coefficient row is loaded once (the member stores in between kept
         // the compiler from doing either)
-        const double *const cf = cfy[JP][vf];
+        const auto &cf = cfy[JP][vf];
         const double c1 = cf[3], c2 = cf[4], c3 = cf[5];
         
         const double is1y_psi = is1y + psi;
@@ -232,7 +234,7 @@ public:
         // same arithmetic as before; the shared sum is formed once and the
         // coefficient row is loaded once (the member stores in between kept
         // the compiler from doing either)
-        const double *const cf = cfz[KP][wf];
+        const auto &cf = cfz[KP][wf];
         const double c1 = cf[0], c2 = cf[1], c3 = cf[2];
         
         const double is1z_psi = is1z + psi;
@@ -254,7 +256,7 @@ public:
         // same arithmetic as before; the shared sum is formed once and the
         // coefficient row is loaded once (the member stores in between kept
         // the compiler from doing either)
-        const double *const cf = cfz[KP][wf];
+        const auto &cf = cfz[KP][wf];
         const double c1 = cf[3], c2 = cf[4], c3 = cf[5];
         
         const double is1z_psi = is1z + psi;
@@ -272,9 +274,9 @@ public:
         w3z = c3/(epsilon + a3*sum);
     }
 
-    static double ****qfx,****qfy,****qfz;
-    static double ***cfx,***cfy,***cfz;
-    static double ****isfx,****isfy,****isfz;
+    static inline std::vector<std::array<std::array<std::array<double, 2>, 6>, 2>> qfx, qfy, qfz;
+    static inline std::vector<std::array<std::array<double, 6>, 2>> cfx, cfy, cfz;
+    static inline std::vector<std::array<std::array<std::array<double, 3>, 6>, 2>> isfx, isfy, isfz;
     
 	static int iniflag;
     
