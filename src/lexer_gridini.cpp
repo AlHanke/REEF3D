@@ -166,6 +166,7 @@ void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow*
         // no wall BCs on the new grid -> it cannot balance the gravity predictor -> velocity
         // leaks and grows (post-mom |u| jumps from 0 to O(1) at rest).
         pgc->flagfield(this);
+        gridhelper();
         probe("post-rebuild");
 
         // Restore phi's ghost band BEFORE reinit reads it. The field rebuild inside

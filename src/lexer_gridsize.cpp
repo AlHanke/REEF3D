@@ -21,6 +21,7 @@ Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"lexer.h"
+#include"grid_helper.h"
 
 void lexer::gridsize()
 {
@@ -70,4 +71,25 @@ void lexer::vellast()
 
     if(A10==3 || A10==5)
         flast=1;
+}
+
+void lexer::gridhelper()
+{
+    // grid_helper
+    grid_helper gridgen(this);
+
+    gridgen.fillgcb1(this);
+    gridgen.fillgcb2(this);
+    gridgen.fillgcb3(this);
+
+    gridgen.fillgcb4_wall(this);
+
+    #if not USE_AMREX
+    gridgen.make_dgc(this);
+
+    gridgen.fill_dgc1(this);
+    gridgen.fill_dgc2(this);
+    gridgen.fill_dgc3(this);
+    gridgen.fill_dgc4(this);
+    #endif
 }
