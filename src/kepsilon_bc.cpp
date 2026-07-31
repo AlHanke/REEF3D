@@ -156,20 +156,20 @@ void kepsilon_bc::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii,
     else if(cs==5 || cs==6)
         dist = 0.5*p->DZN[KP];
 
-    ks=ks_val(p,a,cs,bc);
+    double ks = ks_val(p,a,cs,bc);
 
     double uvel=0.5*(a->u(i,j,k)+a->u(i-1,j,k));
     double vvel=0.5*(a->v(i,j,k)+a->v(i,j-1,k));
     double wvel=0.5*(a->w(i,j,k)+a->w(i,j,k-1));
 
-    u_abs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
+    double u_abs = sqrt(uvel*uvel + vvel*vvel + wvel*wvel);
 
     if(30.0*dist<ks)
         dist=ks/30.0;
 
-    uplus = (1.0/kappa)*log(30.0*(dist/ks));
+    double uplus = (1.0/kappa)*log(30.0*(dist/ks));
 
-    tau=(u_abs*u_abs)/pow((uplus>0.0?uplus:(1.0e20)),2.0);
+    double tau = (u_abs*u_abs)/pow((uplus>0.0?uplus:(1.0e20)),2.0);
 
     a->M.p[id] += (pow(p->cmu,0.75)*pow(fabs(kin(i,j,k)),0.5)*uplus)/dist;
     a->rhsvec.V[id] += (tau*u_abs)/dist;
@@ -189,7 +189,7 @@ void kepsilon_bc::wall_law_eps(lexer* p, fdm* a, field& kin, field& eps, int ii,
     else if(cs==5 || cs==6)
         dist = 0.5*p->DZN[KP];
 
-    eps_star = (pow(p->cmu, 0.75)*pow((kin(i,j,k)>(0.0)?(kin(i,j,k)):(0.0)),1.5)) / (0.4*dist);
+    double eps_star = (pow(p->cmu, 0.75)*pow((kin(i,j,k)>(0.0)?(kin(i,j,k)):(0.0)),1.5)) / (0.4*dist);
 
     eps(i,j,k) = eps_star;
 }

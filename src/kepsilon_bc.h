@@ -26,11 +26,11 @@ Author: Hans Bihs
 #include "increment.h"
 #include "roughness.h"
 
-class fdm;
 class lexer;
+class fdm;
 class field;
 
-class kepsilon_bc : public increment, public roughness
+class kepsilon_bc : public roughness
 {
 public:
     kepsilon_bc(lexer*);
@@ -40,10 +40,5 @@ public:
 private:
     void wall_law_kin(lexer*,fdm*,field&,field&,int,int,int,int,int,int);
     void wall_law_eps(lexer*,fdm*,field&,field&,int,int,int,int,int,int);
-
-    double uplus,ks_plus,dist,ks,ustar,u_abs,eps_star,tau;
-    int ii,jj,kk;
-    int count,q;
-    double fac,value;
 };
 #endif
