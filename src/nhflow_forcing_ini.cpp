@@ -50,20 +50,7 @@ void nhflow_forcing::forcing_ini(lexer *p, fdm_nhf *d, ghostcell *pgc)
     
     // --------------
     // DF
-    LOOP
-    p->DF[IJK]=1;
-    
-    if(solid_flag==1)
-    LOOP
-    if(d->SOLID[IJK]<0.0)
-    p->DF[IJK]=-1;
-
-    if(floating_flag==1)
-    LOOP
-    if(d->FB[IJK]<0.0)
-    p->DF[IJK]=-1;
-    
-    pgc->startintV(p,p->DF,1);
+    set_DF(p,d,pgc);
     
     // -------------
     if(dlm_flag==1)
