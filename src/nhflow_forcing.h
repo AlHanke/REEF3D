@@ -64,6 +64,8 @@ public:
     double kernel(const double&);
     
 private:
+    void set_DF(lexer*, fdm_nhf*, ghostcell*);
+
     double *FX,*FY,*FZ;
     slice4 fe;
     double starttime;
