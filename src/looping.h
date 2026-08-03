@@ -593,13 +593,11 @@ Authors: Hans Bihs, Alexander Hanke
 // entries recorded outside a tile loop replay exactly as they were written.
 // No-ops without AMReX, where (i,j,k) are already rank-global.
 #if USE_AMREX
-    #define GCDF1_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf1[p->level][idx].ctx_id, p->level))
-    #define GCDF2_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf2[p->level][idx].ctx_id, p->level))
-    #define GCDF3_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf3[p->level][idx].ctx_id, p->level))
-    #define GCDF4_TILE(idx) p->set_tile_ctx(p->tile_ctx_by_id(p->gcdf4[p->level][idx].ctx_id, p->level))
-    // Same for gcb4, whose entries are gcb_field_cs_bc_row rather than int rows.
-    // Spelled as an index like the gcdf ones so the consumer loops read alike.
-    #define GCB4_TILE(idx)  p->set_tile_ctx(p->tile_ctx_by_id(p->gcb4[p->level][idx].ctx_id, p->level))
+    #define GCDF1_TILE(idx) GCB_TILE(p->gcdf1[p->level][idx], p->level)
+    #define GCDF2_TILE(idx) GCB_TILE(p->gcdf2[p->level][idx], p->level)
+    #define GCDF3_TILE(idx) GCB_TILE(p->gcdf3[p->level][idx], p->level)
+    #define GCDF4_TILE(idx) GCB_TILE(p->gcdf4[p->level][idx], p->level)
+    #define GCB4_TILE(idx)  GCB_TILE(p->gcb4[p->level][idx],  p->level)
     #define GC_TILE_RESET   p->reset_tile_ctx()
 
     // Same, for the gcb_list_t entry structs (gcb_sl, gcb_sl_cs, gcb_sl_cs_bc,
