@@ -159,14 +159,18 @@ void nhflow_rans_io::flowdepth_inflow(lexer* p, fdm_nhf *d, ghostcell* pgc)
     
     double counter = 0.0;
     
+    // LEVEL_LOOP
     GCSLIN
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    
+    i=p->gcslin[p->level][n].i;
+    j=p->gcslin[p->level][n].j;
+
+    GCSLIN_TILE(n);
+
     depth_inflow += d->WL(i,j);
     counter += 1.0;
     }
+    GC_TILE_RESET;
     
     depth_inflow = pgc->globalsum(depth_inflow);
     counter = pgc->globalsum(counter);
