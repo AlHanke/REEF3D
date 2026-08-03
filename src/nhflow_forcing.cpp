@@ -120,20 +120,7 @@ void nhflow_forcing::forcing(lexer *p, fdm_nhf *d, ghostcell *pgc, sixdof *p6dof
     
     
     // DF
-    LOOP
-    p->DF[IJK]=1;
-    
-    if(solid_flag==1)
-    LOOP
-    if(d->SOLID[IJK]<0.0)
-    p->DF[IJK]=-1;
-
-    if(floating_flag==1)
-    LOOP
-    if(d->FB[IJK]<0.0)
-    p->DF[IJK]=-2;
-    
-    pgc->startintV(p,p->DF,1);
+    set_DF(p,d,pgc);
     
     // WL and eta
     
@@ -294,3 +281,18 @@ void nhflow_forcing::reforcing(lexer *p, fdm_nhf *d, ghostcell *pgc, sixdof *p6d
     p->dftime+=pgc->timer()-starttime;
 }
 
+void nhflow_forcing::set_DF(lexer *p, fdm_nhf *d, ghostcell *pgc)
+{
+    LOOP
+    {
+        p->DF[IJK]=1;
+
+        if(solid_flag==1 && d->SOLID[IJK]<0.0)
+        p->DF[IJK]=-1;
+
+        if(floating_flag==1 && d->FB[IJK]<0.0)
+        p->DF[IJK]=-2;
+    }
+
+    pgc->startintV(p,p->DF,1);
+}
