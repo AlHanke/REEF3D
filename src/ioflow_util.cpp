@@ -59,11 +59,9 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     p->gcin_count=p->gcin[0].size();
     p->gcout_count=p->gcout[0].size();
 
-    if(p->I10==1 && p->count==0)
-    velini(p,a,pgc);
-
-
     // IO update
+    MALOOP
+    p->IO[IJK] = 0;
 
     GC4LOOP
     {
@@ -103,17 +101,17 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
             {
                 // outflow
                 if(p->gcb4[p->level][n].cs==X_NEG)
-                    p->IO[Im1JK] = 2;
+                p->IO[Im1JK] = 2;
                 else if(p->gcb4[p->level][n].cs==X_POS)
-                    p->IO[Ip1JK] = 2;
+                p->IO[Ip1JK] = 2;
                 else if(p->gcb4[p->level][n].cs==Y_NEG)
-                    p->IO[IJm1K] = 2;
+                p->IO[IJm1K] = 2;
                 else if(p->gcb4[p->level][n].cs==Y_POS)
-                    p->IO[IJp1K] = 2;
+                p->IO[IJp1K] = 2;
                 else if(p->gcb4[p->level][n].cs==Z_NEG)
-                    p->IO[IJKm1] = 2;
+                p->IO[IJKm1] = 2;
                 else if(p->gcb4[p->level][n].cs==Z_POS)
-                    p->IO[IJKp1] = 2;
+                p->IO[IJKp1] = 2;
             }
         }
     }
@@ -135,6 +133,9 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         else if(pBC->patch[qq]->gcb[n][3]==6)
         p->IO[IJKp1] = 1;
     }
+
+    if(p->I10==1 && p->count==0)
+    velini(p,a,pgc);
 }
 
 void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
@@ -200,8 +201,7 @@ void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
                 p->IO[IJKp1] = 1;
             }
         }
-
-        if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7))
+        else if(p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7)
         {
             i = p->gcb4[p->level][n].i;
             j = p->gcb4[p->level][n].j;
