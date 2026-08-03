@@ -28,6 +28,7 @@ Authors: Hans Bihs, Alexander Hanke
 #include "reini.h"
 #include "6DOF.h"
 #include "fdm.h"
+#include "ioflow.h"
 #endif
 
 void lexer::gridini(ghostcell *pgc)
@@ -163,7 +164,8 @@ void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow*
         // leaks and grows (post-mom |u| jumps from 0 to O(1) at rest).
         pgc->flagfield(this);
         gridhelper();
-        // rebuild gcio
+        pflow->gcio_update(this,a,pgc);
+        pflow->pressure_io(this,a,pgc);
         probe("post-rebuild");
 
         // Restore phi's ghost band BEFORE reinit reads it. The field rebuild inside
