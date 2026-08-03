@@ -159,7 +159,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     gcdf_update_impl(p, flagsf3, p->gcdf3, p->gcdf3_count);
 
     // -----------------------
-    // flagsf4
+    // DF (cell-center)
 
     gcdf_update_impl(p, p->DF, p->gcdf4, p->gcdf4_count);
 
