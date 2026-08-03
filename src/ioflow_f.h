@@ -157,6 +157,7 @@ public:
 private:
     double distcalc(lexer*,double,double,double);
     double r1(lexer*,double,double);
+    void gcio_update_impl(lexer*);
 
     int n,count;
     double area,Ai,Ao,Hi,Ho,Ui,fac;

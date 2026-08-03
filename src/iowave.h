@@ -143,6 +143,8 @@ private:
     void Qin(lexer*,fdm*,ghostcell*);
     void Qout(lexer*,fdm*,ghostcell*);
 
+    void gcio_update_impl(lexer*);
+
     void hydrograph_in_read(lexer*,fdm*,ghostcell*);
     void hydrograph_out_read(lexer*,fdm*,ghostcell*);
     double hydrograph_ipol(lexer*,ghostcell*,double**,int);
