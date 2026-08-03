@@ -29,116 +29,18 @@ Author: Hans Bihs
 
 void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 {
-    #if USE_AMREX
-    const int nlevs = p->nlevs;
-    #else
-    const int nlevs = 1;
-    #endif
-
-    p->gcin.resize_levels(nlevs);
-    p->gcout.resize_levels(nlevs);
-    int cs = 0;
-
-    LEVEL_LOOP
-    GC4LOOP
-    {
-        GCB4_TILE(n);
-
-        i = p->gcb4[p->level][n].i;
-        j = p->gcb4[p->level][n].j;
-        k = p->gcb4[p->level][n].k;
-        cs = p->gcb4[p->level][n].cs;
-
-        if((p->gcb4[p->level][n].bc==1) && p->DF(i,j,k)>0)
-        p->gcin[p->level].push_back({i, j, k, cs});
-        else if((p->gcb4[p->level][n].bc==2) && p->DF(i,j,k)>0)
-        p->gcout[p->level].push_back({i, j, k, cs});
-    }
-    GC_TILE_RESET;
-
-    p->gcin_count=p->gcin[0].size();
-    p->gcout_count=p->gcout[0].size();
-
-    // IO update
-    MALOOP
-    p->IO[IJK] = 0;
-
-    GC4LOOP
-    {
-        GCB4_TILE(n);
-
-        if(p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6)
-        {
-            i = p->gcb4[p->level][n].i;
-            j = p->gcb4[p->level][n].j;
-            k = p->gcb4[p->level][n].k;
-
-            if(p->DF(i,j,k)>0)
-            {
-                // inflow
-                if(p->gcb4[p->level][n].cs==X_NEG)
-                    p->IO[Im1JK] = 1;
-                else if(p->gcb4[p->level][n].cs==X_POS)
-                    p->IO[Ip1JK] = 1;
-                else if(p->gcb4[p->level][n].cs==Y_NEG)
-                    p->IO[IJm1K] = 1;
-                else if(p->gcb4[p->level][n].cs==Y_POS)
-                    p->IO[IJp1K] = 1;
-                else if(p->gcb4[p->level][n].cs==Z_NEG)
-                    p->IO[IJKm1] = 1;
-                else if(p->gcb4[p->level][n].cs==Z_POS)
-                    p->IO[IJKp1] = 1;
-            }
-        }
-
-        if(p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7)
-        {
-            i = p->gcb4[p->level][n].i;
-            j = p->gcb4[p->level][n].j;
-            k = p->gcb4[p->level][n].k;
-
-            if(p->DF(i,j,k)>0)
-            {
-                // outflow
-                if(p->gcb4[p->level][n].cs==X_NEG)
-                p->IO[Im1JK] = 2;
-                else if(p->gcb4[p->level][n].cs==X_POS)
-                p->IO[Ip1JK] = 2;
-                else if(p->gcb4[p->level][n].cs==Y_NEG)
-                p->IO[IJm1K] = 2;
-                else if(p->gcb4[p->level][n].cs==Y_POS)
-                p->IO[IJp1K] = 2;
-                else if(p->gcb4[p->level][n].cs==Z_NEG)
-                p->IO[IJKm1] = 2;
-                else if(p->gcb4[p->level][n].cs==Z_POS)
-                p->IO[IJKp1] = 2;
-            }
-        }
-    }
-    GC_TILE_RESET;
-
-    for(int qq=0;qq<pBC->obj_count;++qq)
-    for(n=0;n<pBC->patch[qq]->gcb_count;++n)
-    {
-        if(pBC->patch[qq]->gcb[n][3]==1)
-        p->IO[Im1JK] = 1;
-        else if(pBC->patch[qq]->gcb[n][3]==4)
-        p->IO[Ip1JK] = 1;
-        else if(pBC->patch[qq]->gcb[n][3]==3)
-        p->IO[IJm1K] = 1;
-        else if(pBC->patch[qq]->gcb[n][3]==2)
-        p->IO[IJp1K] = 1;
-        else if(pBC->patch[qq]->gcb[n][3]==5)
-        p->IO[IJKm1] = 1;
-        else if(pBC->patch[qq]->gcb[n][3]==6)
-        p->IO[IJKp1] = 1;
-    }
+    gcio_update_impl(p);
 
     if(p->I10==1 && p->count==0)
     velini(p,a,pgc);
 }
 
 void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
+{
+    gcio_update_impl(p);
+}
+
+void ioflow_f::gcio_update_impl(lexer *p)
 {
     #if USE_AMREX
     const int nlevs = p->nlevs;
