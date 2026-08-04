@@ -135,25 +135,25 @@ void sediment_exner::non_equillibrium_solve(lexer* p, ghostcell *pgc, sediment_f
         if(sgx>=0.0)
         {
         dxu = p->DXP[IM1];
-        qxu = p->DFBED[Im1J]>0?q0(i-1,j):q0(i,j);
+        qxu = s->DFBED[Im1J]>0?q0(i-1,j):q0(i,j);
         }
 
         if(sgx<0.0)
         {
         dxu = p->DXP[IP];
-        qxu = p->DFBED[Ip1J]>0?q0(i+1,j):q0(i,j);
+        qxu = s->DFBED[Ip1J]>0?q0(i+1,j):q0(i,j);
         }
 
         if(sgy>=0.0)
         {
         dyu = p->DYP[JM1];
-        qyu = p->DFBED[IJm1]>0?q0(i,j-1):q0(i,j);
+        qyu = s->DFBED[IJm1]>0?q0(i,j-1):q0(i,j);
         }
 
         if(sgy<0.0)
         {
         dyu = p->DYP[JP];
-        qyu = p->DFBED[IJp1]>0?q0(i,j+1):q0(i,j);
+        qyu = s->DFBED[IJp1]>0?q0(i,j+1):q0(i,j);
         }
 
         cx = dxu>1.0e-20?Ls*fabs(sgx)/dxu:0.0;
