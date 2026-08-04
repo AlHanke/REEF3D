@@ -64,6 +64,7 @@ public:
     slice4 MOB,tau_i;
     
     double ws;
+    int *DFBED;
 
 };
 
