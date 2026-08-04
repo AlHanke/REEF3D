@@ -29,8 +29,6 @@ void iowave::u_relax(lexer *p, fdm *a, ghostcell *pgc, field& uvel)
 {
     starttime=pgc->timer();
 
-    count=0;
-
     ULOOP
     {
         dg = distgen(p);
@@ -64,9 +62,8 @@ void iowave::u_relax(lexer *p, fdm *a, ghostcell *pgc, field& uvel)
             else
                 z=(fabs(p->phimean-p->pos_z()));
         }
-
-        if(phival<0.0)
-        z = 0.5*(eta(i,j)+eta(i+1,j));
+        else
+            z = 0.5*(eta(i,j)+eta(i+1,j));
 
 
         //PLIC version
@@ -106,9 +103,8 @@ void iowave::u_relax(lexer *p, fdm *a, ghostcell *pgc, field& uvel)
             // Zone 1
             if(dg<1.0e20)
             {
-                uvel(i,j,k) = (1.0-relax1_wg(i,j))*ramp(p)*uval[count] * H + relax1_wg(i,j)*H*uvel(i,j,k) + (1.0-G)*uvel(i,j,k);
+                uvel(i,j,k) = (1.0-relax1_wg(i,j))*ramp(p)*uval_amrex(i,j,k) * H + relax1_wg(i,j)*H*uvel(i,j,k) + (1.0-G)*uvel(i,j,k);
                 uvel(i,j,k) += (1.0-relax1_wg(i,j))*ramp(p)*p->W50*(1.0-H) + relax1_wg(i,j)*(1.0-H) *p->W50;
-                ++count;
             }
         }
 
@@ -128,7 +124,6 @@ void iowave::v_relax(lexer *p, fdm *a, ghostcell *pgc, field& vvel)
 {
     starttime=pgc->timer();
 
-    count=0;
     VLOOP
     {
         dg = distgen(p);
@@ -203,8 +198,7 @@ void iowave::v_relax(lexer *p, fdm *a, ghostcell *pgc, field& vvel)
             // Zone 1
             if(dg<1.0e20)
             {
-                vvel(i,j,k) = (1.0-relax2_wg(i,j))*ramp(p)*vval[count] * H + relax2_wg(i,j)*H*vvel(i,j,k) + (1.0-G)*vvel(i,j,k);
-                ++count;
+                vvel(i,j,k) = (1.0-relax2_wg(i,j))*ramp(p)*vval_amrex(i,j,k) * H + relax2_wg(i,j)*H*vvel(i,j,k) + (1.0-G)*vvel(i,j,k);
             }
         }
 
@@ -224,7 +218,6 @@ void iowave::w_relax(lexer *p, fdm *a, ghostcell *pgc, field& wvel)
 {
     starttime=pgc->timer();
 
-    count=0;
     WLOOP
     {
         dg = distgen(p);
@@ -298,8 +291,7 @@ void iowave::w_relax(lexer *p, fdm *a, ghostcell *pgc, field& wvel)
             // Zone 1
             if(dg<1.0e20)
             {
-                wvel(i,j,k) = (1.0-relax4_wg(i,j)) * ramp(p)* wval[count] * H + relax4_wg(i,j)*H*wvel(i,j,k) + (1.0-G)*wvel(i,j,k);
-                ++count;
+                wvel(i,j,k) = (1.0-relax4_wg(i,j)) * ramp(p)* wval_amrex(i,j,k) * H + relax4_wg(i,j)*H*wvel(i,j,k) + (1.0-G)*wvel(i,j,k);
             }
 
         }
@@ -341,7 +333,6 @@ void iowave::phi_relax(lexer *p, ghostcell *pgc, field& f)
 {
     starttime=pgc->timer();
 
-    count=0;
     LOOP
     {
         dg = distgen(p);
@@ -359,8 +350,7 @@ void iowave::phi_relax(lexer *p, ghostcell *pgc, field& f)
             // Zone 1
             if(dg<1.0e20)
             {
-                f(i,j,k) = (1.0-relax4_wg(i,j))*ramp(p) * lsval[count] + relax4_wg(i,j)*f(i,j,k);
-                ++count;
+                f(i,j,k) = (1.0-relax4_wg(i,j))*ramp(p) * lsval_amrex(i,j,k) + relax4_wg(i,j)*f(i,j,k);
             }
         }
 
