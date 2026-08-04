@@ -221,20 +221,20 @@ void bedslope::slope_cds(lexer *p, ghostcell *pgc, sediment_fdm *s)
     // ----
     
     bx0 = (s->bedzh(i+1,j)-s->bedzh(i-1,j))/(p->DXP[IP]+p->DXP[IM1]);
-    
-    if(p->DFBED[Im1J]<0)
+
+    if(s->DFBED[Im1J]<0)
     bx0 = (s->bedzh(i+1,j)-s->bedzh(i,j))/(p->DXP[IP]);
     
-    if(p->DFBED[Ip1J]<0)
+    if(s->DFBED[Ip1J]<0)
     bx0 = (s->bedzh(i,j)-s->bedzh(i-1,j))/(p->DXP[IM1]);
      
      
     by0 = (s->bedzh(i,j+1)-s->bedzh(i,j-1))/(p->DYP[JP]+p->DYP[JM1]);
     
-    if(p->DFBED[IJm1]<0)
+    if(s->DFBED[IJm1]<0)
     by0 = (s->bedzh(i,j+1)-s->bedzh(i,j))/(p->DYP[JP]);
     
-    if(p->DFBED[IJp1]<0)
+    if(s->DFBED[IJp1]<0)
     by0 = (s->bedzh(i,j)-s->bedzh(i,j-1))/(p->DYP[JM1]);
     
     
@@ -433,19 +433,19 @@ void bedslope::slope_weno_topo(lexer *p, ghostcell *pgc, sediment_fdm *s, field 
     // bed normal
 	nx0=-(topo(i+1,j,k)-topo(i-1,j,k))/(p->DXP[IP]+p->DXP[IM1]);
     
-    if(p->DFBED[Im1J]<0 || p->flag4[Im1J]<=SOLID_FLAG)
+    if(s->DFBED[Im1J]<0 || p->flag4[Im1J]<=SOLID_FLAG)
     nx0=-(topo(i+1,j,k)-topo(i,j,k))/(p->DXP[IP]);
     
-    if(p->DFBED[Ip1J]<0 || p->flag4[Ip1J]<=SOLID_FLAG)
+    if(s->DFBED[Ip1J]<0 || p->flag4[Ip1J]<=SOLID_FLAG)
     nx0=-(topo(i,j,k)-topo(i-1,j,k))/(p->DXP[IM1]);
     
     
 	ny0=-(topo(i,j+1,k)-topo(i,j-1,k))/(p->DYP[JP]+p->DYP[JM1]);
     
-    if(p->DFBED[IJm1]<0 || p->flag4[IJm1]<=SOLID_FLAG)
+    if(s->DFBED[IJm1]<0 || p->flag4[IJm1]<=SOLID_FLAG)
     ny0=-(topo(i,j+1,k)-topo(i,j,k))/(p->DYP[JP]);
     
-    if(p->DFBED[IJp1]<0 || p->flag4[IJp1]<=SOLID_FLAG)
+    if(s->DFBED[IJp1]<0 || p->flag4[IJp1]<=SOLID_FLAG)
     ny0=-(topo(i,j,k)-topo(i,j-1,k))/(p->DYP[JM1]);
     
     
