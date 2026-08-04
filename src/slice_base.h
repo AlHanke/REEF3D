@@ -34,7 +34,7 @@ public:
         V(static_cast<std::size_t>(p->imax)*p->jmax, T{}),
         imin(p->imin), jmin(p->jmin),
         jmax(p->jmax)
-    {};
+    {cache_addressing();};
 
     slice_base(const slice_base&) = delete;
     slice_base& operator=(const slice_base&) = delete;
@@ -43,12 +43,65 @@ public:
 
     virtual ~slice_base() = default;
 
-    inline T& operator()(int ii, int jj) noexcept {return V[(ii-imin)*jmax + (jj-jmin)];};
+    /// Width of the cached stride. Long for every payload — see
+    /// field_base::stride_t for the measured rationale (chiefly: every
+    /// container a loop body touches must agree on the width, or their index
+    /// computations cannot be shared).
+    using stride_t = long;
+
+    inline T& operator()(int ii, int jj) noexcept {return m_base[ii*m_js + jj];};
+    inline const T& operator()(int ii, int jj) const noexcept {return m_base[ii*m_js + jj];};
+
+    /*!
+     * @brief Lightweight, capture-by-value view: raw pointer + strides read
+     * once instead of through operator()'s `this->imin/jkmax/...` on every
+     * call. Mirrors the amrex::Array4 captured by FIELDLOOP under USE_AMREX
+     * (materialized once per tile, then indexed by value) so the same LOOP
+     * macros can be hoisted out of the loop body and stay vectorizable —
+     * see FIELD_CONST/FIELD_MUT in looping.h.
+     */
+    struct View
+    {
+        T* base;        ///< already origin-folded, see cache_addressing()
+        stride_t js;
+        inline T& operator()(int ii, int jj) const noexcept
+        { return base[ii*js + jj]; }
+    };
+
+    struct ConstView
+    {
+        const T* base;
+        stride_t js;
+        inline const T& operator()(int ii, int jj) const noexcept
+        { return base[ii*js + jj]; }
+    };
+
+    inline View view() noexcept { return View{m_base, m_js}; };
+    inline ConstView const_view() const noexcept { return ConstView{m_base, m_js}; };
 
 protected:
+    /*!
+     * @brief Precomputes the folded addressing used by the derived operator().
+     *
+     * 2D counterpart of field_base::cache_addressing — see there for the
+     * rationale. Here
+     *
+     *   V[(ii-imin)*jmax + (jj-jmin)] == m_base[ii*m_js + jj]
+     *
+     * Must be called after anything that reseats V.
+     */
+    void cache_addressing() noexcept
+    {
+        m_js   = jmax;
+        m_base = V.data() - static_cast<long>(imin)*jmax - jmin;
+    };
+
     std::vector<T> V;
 
 private:
+    T*       m_base = nullptr; ///< origin-folded base: m_base[ii*m_js + jj]
+    stride_t m_js   = 0;       ///< i-stride (jmax); long for every payload, see stride_t
+
     const int imin,jmin,jmax;
 };
 
