@@ -55,6 +55,11 @@ class ArrayWrapper3D final
 {
 public:
     explicit ArrayWrapper3D(lexer *pp, DataLocation _data_location = DataLocation::CELL_CENTERED);
+    #if USE_AMREX
+    /// View constructor: non-owning view into component @p comp of @p shared.
+    /// The caller must ensure @p shared outlives this object.
+    explicit ArrayWrapper3D(lexer *pp, amrex::Vector<amrex::iMultiFab> *shared, int comp);
+    #endif
 
     ArrayWrapper3D(const ArrayWrapper3D&)            = delete;
     ArrayWrapper3D &operator=(const ArrayWrapper3D&) = delete;
@@ -77,11 +82,17 @@ public:
 
     #if USE_AMREX
     void fillBoundary();
+    /// Batch FillBoundary: fills @p ncomp components starting at @p scomp of
+    /// @p shared in a single MPI collective instead of one per component.
+    static void FillBoundaryBatch(lexer* p, amrex::Vector<amrex::iMultiFab>& shared,
+                                  int scomp, int ncomp);
     void fillHigherLevels();
-    amrex::iMultiFab& GetMultiFab();
-    const amrex::iMultiFab& GetMultiFab() const;
-    inline amrex::iMultiFab& GetMultiFab(int level) {return data[level];};
-    inline const amrex::iMultiFab& GetMultiFab(int level) const {return data[level];};
+
+    inline amrex::iMultiFab& GetMultiFab();
+    inline const amrex::iMultiFab& GetMultiFab() const;
+
+    inline amrex::iMultiFab& GetMultiFab(int level) {return m_shared ? (*m_shared)[level] : data[level];};
+    inline const amrex::iMultiFab& GetMultiFab(int level) const {return m_shared ? (*m_shared)[level] : data[level];};
     #endif
 
 private:
@@ -109,6 +120,9 @@ private:
     AMREX_FORCE_INLINE void refresh_cache_if_needed() const noexcept;
 
     amrex::Vector<amrex::iMultiFab> data;
+
+    amrex::Vector<amrex::iMultiFab>* m_shared = nullptr; ///< non-owning ptr (view mode only)
+    int m_comp = 0;                                       ///< component in m_shared
 
     mutable amrex::Array4<int> m_cached_arr4 = {};
     mutable int m_cached_ox      = 0;
