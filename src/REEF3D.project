@@ -1141,6 +1141,8 @@
           <File Name="slice1.h"/>
           <File Name="slice2.h"/>
           <File Name="slice4.h"/>
+          <File Name="ArrayWrapper2D.h"/>
+          <File Name="ArrayWrapper2D_imp.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Solid">
           <File Name="reinisolid_RK3.h"/>
@@ -2940,6 +2942,7 @@
           <File Name="boundarycheck.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Slice">
+          <File Name="ArrayWrapper2D.cpp"/>
           <VirtualDirectory Name="MGC">
             <File Name="mgcslice4.cpp"/>
             <File Name="mgcslice2.cpp"/>
