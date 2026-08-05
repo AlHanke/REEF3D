@@ -30,6 +30,8 @@ class field : public field_base<double>
 public:
     field(lexer* p) : field_base<double>(p) {}
     virtual ~field() = default;
+
+    void CopyFrom(const field& src) {V = src.V; cache_addressing();};
 };
 
 #endif
