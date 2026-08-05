@@ -33,7 +33,7 @@ inline int &ArrayWrapper3D::operator() (int i, int j, int k) noexcept
 {
     #if USE_AMREX
     refresh_cache_if_needed();
-    return m_cached_arr4(m_cached_ox + i, m_cached_oy + j, m_cached_oz + k, 0);
+    return m_cached_arr4(m_cached_ox + i, m_cached_oy + j, m_cached_oz + k, m_comp);
     #else
     // Origin and strides are folded into m_base by cache_addressing(), so this
     // touches no lexer member. Equivalent to data[IJK].
@@ -45,7 +45,7 @@ inline const int &ArrayWrapper3D::operator()(int i, int j, int k) const noexcept
 {
     #if USE_AMREX
     refresh_cache_if_needed();
-    return m_cached_arr4(m_cached_ox + i, m_cached_oy + j, m_cached_oz + k, 0);
+    return m_cached_arr4(m_cached_ox + i, m_cached_oy + j, m_cached_oz + k, m_comp);
     #else
     // Origin and strides are folded into m_base by cache_addressing(), so this
     // touches no lexer member. Equivalent to data[IJK].
@@ -71,7 +71,7 @@ inline int &ArrayWrapper3D::operator[] (int index) noexcept
 
     return m_cached_arr4(m_cached_ox + ii_encoded + p->imin,
                             m_cached_oy + jj_encoded + p->jmin,
-                            m_cached_oz + kk_encoded + p->kmin, 0);
+                            m_cached_oz + kk_encoded + p->kmin, m_comp);
     #else
     return data.data()[index];
     #endif
@@ -95,7 +95,7 @@ inline const int &ArrayWrapper3D::operator[] (int index) const noexcept
 
     return m_cached_arr4(m_cached_ox + ii_encoded + p->imin,
                             m_cached_oy + jj_encoded + p->jmin,
-                            m_cached_oz + kk_encoded + p->kmin, 0);
+                            m_cached_oz + kk_encoded + p->kmin, m_comp);
     #else
     return data.data()[index];
     #endif
@@ -123,7 +123,7 @@ AMREX_FORCE_INLINE void ArrayWrapper3D::refresh_cache_if_needed() const noexcept
         // array() on a const FabArray only yields Array4<const int>, so the fab is
         // un-consted here. Writes through the cache are only reachable via the
         // non-const operators, which require a non-const ArrayWrapper3D.
-        m_cached_arr4    = const_cast<amrex::iMultiFab&>(data[cur_lev]).array(*(p->amr_cell_mfi));
+        m_cached_arr4    = const_cast<amrex::iMultiFab&>(GetMultiFab(cur_lev)).array(*(p->amr_cell_mfi));
         m_cached_ox      = p->amr_tile_lo.x;
         m_cached_oy      = p->amr_tile_lo.y;
         m_cached_oz      = p->amr_tile_lo.z;
