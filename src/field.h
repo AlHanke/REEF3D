@@ -31,6 +31,8 @@ public:
     field(lexer* p) : field_base<double>(p) {}
     virtual ~field() = default;
 
+    void CopyFrom(const field& src) {V = src.V; cache_addressing();};
+
 protected:
     field(lexer* p, int kz, std::size_t slack) : field_base<double>(p, kz, slack) {}
 };
