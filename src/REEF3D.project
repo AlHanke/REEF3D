@@ -1103,6 +1103,8 @@
           <File Name="field4.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Fieldint">
+          <File Name="ArrayWrapper3D.h"/>
+          <File Name="ArrayWrapper3D_imp.h"/>
           <File Name="fieldint.h"/>
           <File Name="fieldint1.h"/>
           <File Name="fieldint2.h"/>
@@ -2914,6 +2916,9 @@
             <File Name="grid_helper_gcb3.cpp"/>
             <File Name="grid_helper_gcb4.cpp"/>
           </VirtualDirectory>
+        </VirtualDirectory>
+        <VirtualDirectory Name="Fieldint">
+          <File Name="ArrayWrapper3D.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="Geotopo">
           <File Name="geotopo.cpp"/>
