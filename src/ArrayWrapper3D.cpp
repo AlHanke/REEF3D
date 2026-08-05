@@ -29,6 +29,13 @@ ArrayWrapper3D::ArrayWrapper3D(lexer *pp, DataLocation _data_location) : p(pp), 
 {
 }
 
+#if USE_AMREX
+ArrayWrapper3D::ArrayWrapper3D(lexer *pp, amrex::Vector<amrex::iMultiFab> *shared, int comp)
+    : p(pp), m_shared(shared), m_comp(comp)
+{
+}
+#endif
+
 ArrayWrapper3D::~ArrayWrapper3D()
 {
     // out-of-line: the USE_AMREX path gives this a body (deregister_imf)
@@ -43,6 +50,7 @@ int ArrayWrapper3D::kz() const noexcept
 void ArrayWrapper3D::resize(int default_value)
 {
     #if USE_AMREX
+    if (m_shared) return; // view mode: shared MultiFab is resized by the owner
     // NODE_Z needs a z-nodal BoxArray: one z-plane more
     // than there are cells. amrex::convert shares the underlying box list, so
     // box count, ordering and the DistributionMap are preserved and the
@@ -79,7 +87,8 @@ void ArrayWrapper3D::setVal(int val, bool includeGhost)
     #if USE_AMREX
     LEVEL_LOOP
     {
-        data[p->level].setVal(val, (includeGhost ? p->margin : 0));
+        const int ng = includeGhost ? p->margin : 0;
+        GetMultiFab(p->level).setVal(val, m_comp, 1, ng);
     }
     #else
     if(includeGhost)
@@ -110,7 +119,7 @@ void ArrayWrapper3D::setVal(int val, bool includeGhost)
 ArrayWrapper3D::operator int *()
 {
     #if USE_AMREX
-    return data[p->level][*(p->amr_cell_mfi)].dataPtr(0);
+    return GetMultiFab(p->level)[*(p->amr_cell_mfi)].dataPtr(m_comp);
     #else
     return data.data(); // unshifted: callers index this with IJK, not with i/j/k
     #endif
@@ -127,10 +136,17 @@ void ArrayWrapper3D::fillBoundary()
         // OverrideSync picks the canonical owner first; this is what
         // gcx_parax7co does for the legacy flat arrays.
         if (data_location == DataLocation::NODE_Z)
-            data[p->level].OverrideSync(p->amrex_geometry[p->level].periodicity());
+            GetMultiFab(p->level).OverrideSync(m_comp, 1, p->amrex_geometry[p->level].periodicity());
 
-        data[p->level].FillBoundary();
+        GetMultiFab(p->level).FillBoundary(m_comp, 1);
     }
+}
+
+void ArrayWrapper3D::FillBoundaryBatch(lexer* p, amrex::Vector<amrex::iMultiFab>& shared,
+                                         int scomp, int ncomp)
+{
+    for (int lev = 0; lev < p->nlevs; ++lev)
+        shared[lev].FillBoundary(scomp, ncomp);
 }
 
 void ArrayWrapper3D::fillHigherLevels()
@@ -147,13 +163,13 @@ void ArrayWrapper3D::fillHigherLevels()
 
     for (int lev = 1; lev < p->nlevs; ++lev)
     {
-        const auto& crse_mf = data[lev-1];
-        auto& fine_mf = data[lev];
+        const auto& crse_mf = GetMultiFab(lev-1);
+        auto& fine_mf = GetMultiFab(lev);
 
         amrex::BoxArray coarsened_fine_ba = amrex::coarsen(fine_mf.boxArray(), ratio);
 
         amrex::iMultiFab coarse_on_fine_layout(coarsened_fine_ba, fine_mf.DistributionMap(), 1, 0);
-        coarse_on_fine_layout.ParallelCopy(crse_mf, 0, 0, 1);
+        coarse_on_fine_layout.ParallelCopy(crse_mf, m_comp, 0, 1);
 
         for (amrex::MFIter mfi(fine_mf); mfi.isValid(); ++mfi)
         {
@@ -166,7 +182,7 @@ void ArrayWrapper3D::fillHigherLevels()
                 const int ic = amrex::coarsen(i, ratio_x);
                 const int jc = amrex::coarsen(j, ratio_y);
                 const int kc = amrex::coarsen(k, ratio_z);
-                fine_arr(i, j, k, 0) = crse_arr(ic, jc, kc, 0);
+                fine_arr(i, j, k, m_comp) = crse_arr(ic, jc, kc, 0);
             });
 
             if(dir != -1)
@@ -183,7 +199,7 @@ void ArrayWrapper3D::fillHigherLevels()
                     else if(dir==2) kk = -1;
                     amrex::ParallelFor(end_box, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
                     {
-                        fine_arr(i, j, k, 0) = fine_arr(i+ii, j+jj, k+kk, 0);
+                        fine_arr(i, j, k, m_comp) = fine_arr(i+ii, j+jj, k+kk, m_comp);
                     });
                 }
             }
