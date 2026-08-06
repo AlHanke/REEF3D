@@ -104,8 +104,6 @@ void field_amrex::rebuild_alias_level(int lev)
     // has been replaced (owning mode) or is about to be re-aliased (view mode).
     m_cached_level         = -1;
     m_cached_mfi_idx       = -1;
-    m_cached_const_level   = -1;
-    m_cached_const_mfi_idx = -1;
 
     if (!m_shared_mf) return;  // owning mode: nothing more to do
     if (lev < 0 || lev >= (int)m_alias.size()) return;

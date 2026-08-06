@@ -84,8 +84,8 @@ public:
      */
     inline const double& operator()(int ii, int jj, int kk) const noexcept override final
     {
-        refresh_const_cache_if_needed();
-        return m_cached_const_arr4(ii + m_cached_const_ox, jj + m_cached_const_oy, kk + m_cached_const_oz, 0);
+        refresh_cache_if_needed();
+        return m_cached_arr4(ii + m_cached_ox, jj + m_cached_oy, kk + m_cached_oz, 0);
     }
 
     /*!
@@ -102,8 +102,8 @@ public:
      */
     inline const double& operator()(const amrex::IntVect& iv, int comp = 0) const noexcept override final
     {
-        refresh_const_cache_if_needed();
-        return m_cached_const_arr4(iv, comp);
+        refresh_cache_if_needed();
+        return m_cached_arr4(iv, comp);
     }
 
     /*!
@@ -217,21 +217,13 @@ protected:
 
     // Array4 cache — refreshed once per tile; amortises Array4 construction and
     // tilebox lbound lookup across all cell accesses within the same tile.
-    amrex::Array4<amrex::Real> m_cached_arr4 = {};
-    int m_cached_ox      = 0;
-    int m_cached_oy      = 0;
-    int m_cached_oz      = 0;
-    int m_cached_mfi_idx = -1;
-    int m_cached_level   = -1;
-    int m_cached_til_idx = -1;
-
-    mutable amrex::Array4<const amrex::Real> m_cached_const_arr4 = {};
-    mutable int m_cached_const_ox      = 0;
-    mutable int m_cached_const_oy      = 0;
-    mutable int m_cached_const_oz      = 0;
-    mutable int m_cached_const_mfi_idx = -1;
-    mutable int m_cached_const_level   = -1;
-    mutable int m_cached_const_til_idx = -1;
+    mutable amrex::Array4<amrex::Real> m_cached_arr4 = {};
+    mutable int m_cached_ox      = 0;
+    mutable int m_cached_oy      = 0;
+    mutable int m_cached_oz      = 0;
+    mutable int m_cached_mfi_idx = -1;
+    mutable int m_cached_level   = -1;
+    mutable int m_cached_til_idx = -1;
 
     int m_comp = 0;       ///< component index within m_shared_mf (view mode only)
 
@@ -261,7 +253,9 @@ private:
     /// almost-always-not-taken (one FAB change per tile loop iteration).
     /// Tile bounds are pre-computed by TILE_LOOP via set_tile_mfi — no
     /// tilebox() or lbound() calls needed here.
-    AMREX_FORCE_INLINE void refresh_cache_if_needed()
+    /// Const so the const and non-const accessors share one cache; the cache
+    /// state is mutable because filling it is logically const.
+    AMREX_FORCE_INLINE void refresh_cache_if_needed() const
     {
         const int cur_lev = p->level;
         const int cur_idx = p->amr_fab_mfi_idx;
@@ -282,31 +276,6 @@ private:
             m_cached_oy      = p->amr_tile_lo.y;
             m_cached_oz      = p->amr_tile_lo.z;
             m_cached_til_idx = cur_tile_index;
-        }
-    }
-
-    /// Refreshes m_cached_const_arr4 when the current tile or level changes.
-    AMREX_FORCE_INLINE void refresh_const_cache_if_needed() const
-    {
-        const int cur_lev = p->level;
-        const int cur_idx = p->amr_fab_mfi_idx;
-        const int cur_tile_index = p->amr_local_tile_idx;
-        if (cur_lev != m_cached_const_level || cur_idx != m_cached_const_mfi_idx)
-        {
-            m_cached_const_arr4    = get_array_const(cur_lev,p->amr_local_fab_idx);
-            m_cached_const_ox      = p->amr_tile_lo.x;
-            m_cached_const_oy      = p->amr_tile_lo.y;
-            m_cached_const_oz      = p->amr_tile_lo.z;
-            m_cached_const_mfi_idx = cur_idx;
-            m_cached_const_level   = cur_lev;
-            m_cached_const_til_idx = cur_tile_index;
-        }
-        else if(cur_tile_index != m_cached_const_til_idx)
-        {
-            m_cached_const_ox      = p->amr_tile_lo.x;
-            m_cached_const_oy      = p->amr_tile_lo.y;
-            m_cached_const_oz      = p->amr_tile_lo.z;
-            m_cached_const_til_idx = cur_tile_index;
         }
     }
 
@@ -332,12 +301,12 @@ private:
     /// every field MultiFab shares amrex_distribution_mapping[level] with the
     /// amr_cell_mf that TILE_LOOP iterates — the DM equality that
     /// FabArray::fabPtr(const MFIter&) asserts holds here by construction.
-    AMREX_FORCE_INLINE amrex::Array4<amrex::Real> get_array(int level, int local_fab_idx) noexcept
-    { return get_mf(level).atLocalIdx(local_fab_idx).array(); }
-
-    /// Const overload — used by the const cache refresh to access data without mutation.
-    AMREX_FORCE_INLINE const amrex::Array4<const amrex::Real> get_array_const(int level, int local_fab_idx) const noexcept
-    { return get_mf_const(level).atLocalIdx(local_fab_idx).const_array(); }
+    /// Const so the const cache refresh can call it. array() on a const FabArray
+    /// only yields Array4<const Real>, so the MultiFab is un-consted here; writes
+    /// through the result are only reachable via the non-const operators, which
+    /// require a non-const field_amrex.
+    AMREX_FORCE_INLINE amrex::Array4<amrex::Real> get_array(int level, int local_fab_idx) const noexcept
+    { return const_cast<amrex::MultiFab&>(get_mf_const(level)).atLocalIdx(local_fab_idx).array(); }
 
     /// Shifts face data inward at the high-end boundary for face-staggered fields.
     static void ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in,
