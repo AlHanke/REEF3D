@@ -44,8 +44,8 @@ inline int &ArrayWrapper3D::operator() (int i, int j, int k) noexcept
 inline const int &ArrayWrapper3D::operator()(int i, int j, int k) const noexcept
 {
     #if USE_AMREX
-    refresh_const_cache_if_needed();
-    return m_cached_const_arr4(m_cached_const_ox + i, m_cached_const_oy + j, m_cached_const_oz + k, 0);
+    refresh_cache_if_needed();
+    return m_cached_arr4(m_cached_ox + i, m_cached_oy + j, m_cached_oz + k, 0);
     #else
     // Origin and strides are folded into m_base by cache_addressing(), so this
     // touches no lexer member. Equivalent to data[IJK].
@@ -79,7 +79,7 @@ inline const int &ArrayWrapper3D::operator[] (int index) const noexcept
     #if USE_AMREX
     assert(p->level == 0
            && "ArrayWrapper3D::operator[] should only be used at level 0 when AMReX is enabled");
-    refresh_const_cache_if_needed();
+    refresh_cache_if_needed();
 
     const int jk_max = p->jmax * p->kmax;
     const int ii_encoded = index / jk_max;
@@ -87,9 +87,9 @@ inline const int &ArrayWrapper3D::operator[] (int index) const noexcept
     const int jj_encoded = rem / p->kmax;
     const int kk_encoded = rem - jj_encoded * p->kmax;
 
-    return m_cached_const_arr4(m_cached_const_ox + ii_encoded + p->imin,
-                               m_cached_const_oy + jj_encoded + p->jmin,
-                               m_cached_const_oz + kk_encoded + p->kmin, 0);
+    return m_cached_arr4(m_cached_ox + ii_encoded + p->imin,
+                            m_cached_oy + jj_encoded + p->jmin,
+                            m_cached_oz + kk_encoded + p->kmin, 0);
     #else
     return data.data()[index];
     #endif
@@ -107,14 +107,17 @@ const amrex::iMultiFab& ArrayWrapper3D::GetMultiFab() const
     return GetMultiFab(p->level);
 }
 
-AMREX_FORCE_INLINE void ArrayWrapper3D::refresh_cache_if_needed() noexcept
+AMREX_FORCE_INLINE void ArrayWrapper3D::refresh_cache_if_needed() const noexcept
 {
     const int cur_lev = p->level;
     const int cur_idx = p->amr_fab_mfi_idx;
     const int cur_tile_index = p->amr_local_tile_idx;
     if (cur_lev != m_cached_level || cur_idx != m_cached_mfi_idx)
     {
-        m_cached_arr4    = data[cur_lev].array(*(p->amr_cell_mfi));
+        // array() on a const FabArray only yields Array4<const int>, so the fab is
+        // un-consted here. Writes through the cache are only reachable via the
+        // non-const operators, which require a non-const ArrayWrapper3D.
+        m_cached_arr4    = const_cast<amrex::iMultiFab&>(data[cur_lev]).array(*(p->amr_cell_mfi));
         m_cached_ox      = p->amr_tile_lo.x;
         m_cached_oy      = p->amr_tile_lo.y;
         m_cached_oz      = p->amr_tile_lo.z;
@@ -128,30 +131,6 @@ AMREX_FORCE_INLINE void ArrayWrapper3D::refresh_cache_if_needed() noexcept
         m_cached_oy      = p->amr_tile_lo.y;
         m_cached_oz      = p->amr_tile_lo.z;
         m_cached_til_idx = cur_tile_index;
-    }
-}
-
-AMREX_FORCE_INLINE void ArrayWrapper3D::refresh_const_cache_if_needed() const noexcept
-{
-    const int cur_lev = p->level;
-    const int cur_idx = p->amr_fab_mfi_idx;
-    const int cur_tile_index = p->amr_local_tile_idx;
-    if (cur_lev != m_cached_const_level || cur_idx != m_cached_const_mfi_idx)
-    {
-        m_cached_const_arr4    = data[cur_lev].const_array(*(p->amr_cell_mfi));
-        m_cached_const_ox      = p->amr_tile_lo.x;
-        m_cached_const_oy      = p->amr_tile_lo.y;
-        m_cached_const_oz      = p->amr_tile_lo.z;
-        m_cached_const_mfi_idx = cur_idx;
-        m_cached_const_level   = cur_lev;
-        m_cached_const_til_idx = cur_tile_index;
-    }
-    if (cur_tile_index != m_cached_const_til_idx)
-    {
-        m_cached_const_ox      = p->amr_tile_lo.x;
-        m_cached_const_oy      = p->amr_tile_lo.y;
-        m_cached_const_oz      = p->amr_tile_lo.z;
-        m_cached_const_til_idx = cur_tile_index;
     }
 }
 #endif

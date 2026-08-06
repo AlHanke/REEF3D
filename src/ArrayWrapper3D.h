@@ -80,26 +80,20 @@ private:
     DataLocation data_location = DataLocation::CELL_CENTERED;
 
     #if USE_AMREX
-    AMREX_FORCE_INLINE void refresh_cache_if_needed() noexcept;
-    AMREX_FORCE_INLINE void refresh_const_cache_if_needed() const noexcept;
+    /// Memoizes the Array4 and tile origin for the fab the lexer currently points
+    /// at. Const so both the const and non-const accessors can share one cache;
+    /// the state below is mutable because filling it is logically const.
+    AMREX_FORCE_INLINE void refresh_cache_if_needed() const noexcept;
 
     amrex::Vector<amrex::iMultiFab> data;
 
-    amrex::Array4<int> m_cached_arr4 = {};
-    int m_cached_ox      = 0;
-    int m_cached_oy      = 0;
-    int m_cached_oz      = 0;
-    int m_cached_mfi_idx = -1;
-    int m_cached_level   = -1;
-    int m_cached_til_idx = -1;
-
-    mutable amrex::Array4<const int> m_cached_const_arr4 = {};
-    mutable int m_cached_const_ox      = 0;
-    mutable int m_cached_const_oy      = 0;
-    mutable int m_cached_const_oz      = 0;
-    mutable int m_cached_const_mfi_idx = -1;
-    mutable int m_cached_const_level   = -1;
-    mutable int m_cached_const_til_idx = -1;
+    mutable amrex::Array4<int> m_cached_arr4 = {};
+    mutable int m_cached_ox      = 0;
+    mutable int m_cached_oy      = 0;
+    mutable int m_cached_oz      = 0;
+    mutable int m_cached_mfi_idx = -1;
+    mutable int m_cached_level   = -1;
+    mutable int m_cached_til_idx = -1;
     #else
     std::vector<int> data;
 
