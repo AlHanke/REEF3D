@@ -48,8 +48,8 @@ inline int &ArrayWrapper2D::operator()(int ii, int jj) noexcept
 inline const int &ArrayWrapper2D::operator()(int ii, int jj) const noexcept
 {
     #if USE_AMREX
-    refresh_const_cache_if_needed();
-    return m_cached_const_arr4(ii + m_cached_const_ox, jj + m_cached_const_oy, 0, 0);
+    refresh_cache_if_needed();
+    return m_cached_arr4(ii + m_cached_ox, jj + m_cached_oy, 0, 0);
     #else
     return m_base[ii*m_js + jj];
     #endif
@@ -77,13 +77,13 @@ inline const int &ArrayWrapper2D::operator[](int index) const noexcept
     #if USE_AMREX
     assert(p->level == 0
            && "ArrayWrapper2D::operator[] is level-0 only under AMReX");
-    refresh_const_cache_if_needed();
+    refresh_cache_if_needed();
 
     const int ii = index / p->jmax;
     const int jj = index - ii * p->jmax;
 
-    return m_cached_const_arr4(m_cached_const_ox + ii + p->imin,
-                               m_cached_const_oy + jj + p->jmin, 0, 0);
+    return m_cached_arr4(m_cached_ox + ii + p->imin,
+                         m_cached_oy + jj + p->jmin, 0, 0);
     #else
     return data.data()[index];
     #endif
@@ -101,14 +101,18 @@ const amrex::iMultiFab& ArrayWrapper2D::GetMultiFab() const
     return GetMultiFab(p->level);
 }
 
-AMREX_FORCE_INLINE void ArrayWrapper2D::refresh_cache_if_needed() noexcept
+AMREX_FORCE_INLINE void ArrayWrapper2D::refresh_cache_if_needed() const noexcept
 {
     const int cur_lev  = p->level;
     const int cur_idx  = p->amr_fab_mfi_idx;
     const int cur_tile = p->amr_local_tile_idx;
     if(cur_lev != m_cached_level || cur_idx != m_cached_mfi_idx)
     {
-        m_cached_arr4    = GetMultiFab(cur_lev).atLocalIdx(p->amr_local_fab_idx).array();
+        // array() on a const FabArray only yields Array4<const int>, so the fab is
+        // un-consted here. Writes through the cache are only reachable via the
+        // non-const operators, which require a non-const ArrayWrapper2D.
+        m_cached_arr4    = const_cast<amrex::iMultiFab&>(GetMultiFab(cur_lev))
+                               .atLocalIdx(p->amr_local_fab_idx).array();
         m_cached_ox      = p->amr_tile_lo.x;
         m_cached_oy      = p->amr_tile_lo.y;
         m_cached_mfi_idx = cur_idx;
@@ -120,28 +124,6 @@ AMREX_FORCE_INLINE void ArrayWrapper2D::refresh_cache_if_needed() noexcept
         m_cached_ox      = p->amr_tile_lo.x;
         m_cached_oy      = p->amr_tile_lo.y;
         m_cached_til_idx = cur_tile;
-    }
-}
-
-AMREX_FORCE_INLINE void ArrayWrapper2D::refresh_const_cache_if_needed() const noexcept
-{
-    const int cur_lev  = p->level;
-    const int cur_idx  = p->amr_fab_mfi_idx;
-    const int cur_tile = p->amr_local_tile_idx;
-    if(cur_lev != m_cached_const_level || cur_idx != m_cached_const_mfi_idx)
-    {
-        m_cached_const_arr4    = GetMultiFab(cur_lev).atLocalIdx(p->amr_local_fab_idx).const_array();
-        m_cached_const_ox      = p->amr_tile_lo.x;
-        m_cached_const_oy      = p->amr_tile_lo.y;
-        m_cached_const_mfi_idx = cur_idx;
-        m_cached_const_level   = cur_lev;
-        m_cached_const_til_idx = cur_tile;
-    }
-    else if(cur_tile != m_cached_const_til_idx)
-    {
-        m_cached_const_ox      = p->amr_tile_lo.x;
-        m_cached_const_oy      = p->amr_tile_lo.y;
-        m_cached_const_til_idx = cur_tile;
     }
 }
 
