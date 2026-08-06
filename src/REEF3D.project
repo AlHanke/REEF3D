@@ -1171,6 +1171,7 @@
           <File Name="sliceint2.h"/>
           <File Name="sliceint4.h"/>
         </VirtualDirectory>
+        <File Name="array_view.h"/>
         <File Name="gcb_sl_list.h"/>
         <File Name="tile_ctx.h"/>
       </VirtualDirectory>
