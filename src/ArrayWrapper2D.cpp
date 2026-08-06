@@ -182,7 +182,6 @@ void ArrayWrapper2D::regrid()
         define_level(lev, /*seed_from_coarse=*/lev > 0);
 
     m_cached_level = m_cached_mfi_idx = m_cached_til_idx = -1;
-    m_cached_const_level = m_cached_const_mfi_idx = m_cached_const_til_idx = -1;
 }
 
 void ArrayWrapper2D::define_level(int lev, bool seed_from_coarse)
