@@ -110,8 +110,8 @@ public:
 
     inline const double& operator()(int ii, int jj) const noexcept
     {
-        refresh_const_cache_if_needed();
-        return m_cached_const_arr4(ii + m_cached_const_ox, jj + m_cached_const_oy, 0, 0);
+        refresh_cache_if_needed();
+        return m_cached_arr4(ii + m_cached_ox, jj + m_cached_oy, 0, 0);
     };
 
     void regrid() override final
@@ -200,10 +200,6 @@ public:
         m_cached_level = -1;
         m_cached_mfi_idx = -1;
         m_cached_til_idx = -1;
-
-        m_cached_const_level = -1;
-        m_cached_const_mfi_idx = -1;
-        m_cached_const_til_idx = -1;
     };
 
     // -----------------------------------------------------------------
@@ -542,14 +538,21 @@ private:
         }
     }
 
-    AMREX_FORCE_INLINE void refresh_cache_if_needed()
+    /// Const so the const and non-const accessors share one cache; the cache
+    /// state is mutable because filling it is logically const.
+    AMREX_FORCE_INLINE void refresh_cache_if_needed() const
     {
         const int cur_lev = p->level;
         const int cur_idx = p->amr_fab_mfi_idx;
         const int cur_tile_index = p->amr_local_tile_idx;
         if (cur_lev != m_cached_level || cur_idx != m_cached_mfi_idx)
         {
-            m_cached_arr4    = m_view[cur_lev].atLocalIdx(p->amr_local_fab_idx).array();
+            // array() on a const FabArray only yields Array4<const Real>, so the
+            // MultiFab is un-consted here. Writes through the cache are only
+            // reachable via the non-const operator, which requires a non-const
+            // slice_amrex.
+            m_cached_arr4    = const_cast<amrex::MultiFab&>(m_view[cur_lev])
+                                   .atLocalIdx(p->amr_local_fab_idx).array();
             m_cached_ox      = p->amr_tile_lo.x;
             m_cached_oy      = p->amr_tile_lo.y;
             m_cached_mfi_idx = cur_idx;
@@ -564,42 +567,12 @@ private:
         }
     }
 
-    /// Refreshes m_cached_const_arr4 when the current tile or level changes.
-    AMREX_FORCE_INLINE void refresh_const_cache_if_needed() const
-    {
-        const int cur_lev = p->level;
-        const int cur_idx = p->amr_fab_mfi_idx;
-        const int cur_tile_index = p->amr_local_tile_idx;
-        if (cur_lev != m_cached_const_level || cur_idx != m_cached_const_mfi_idx)
-        {
-            m_cached_const_arr4    = m_view[cur_lev].atLocalIdx(p->amr_local_fab_idx).const_array();
-            m_cached_const_ox      = p->amr_tile_lo.x;
-            m_cached_const_oy      = p->amr_tile_lo.y;
-            m_cached_const_mfi_idx = cur_idx;
-            m_cached_const_level   = cur_lev;
-            m_cached_const_til_idx = cur_tile_index;
-        }
-        else if(cur_tile_index != m_cached_const_til_idx)
-        {
-            m_cached_const_ox      = p->amr_tile_lo.x;
-            m_cached_const_oy      = p->amr_tile_lo.y;
-            m_cached_const_til_idx = cur_tile_index;
-        }
-    }
-
-    amrex::Array4<amrex::Real> m_cached_arr4 = {};
-    int m_cached_ox      = 0;
-    int m_cached_oy      = 0;
-    int m_cached_mfi_idx = -1;
-    int m_cached_level   = -1;
-    int m_cached_til_idx = -1;
-
-    mutable amrex::Array4<const amrex::Real> m_cached_const_arr4 = {};
-    mutable int m_cached_const_ox      = 0;
-    mutable int m_cached_const_oy      = 0;
-    mutable int m_cached_const_mfi_idx = -1;
-    mutable int m_cached_const_level   = -1;
-    mutable int m_cached_const_til_idx = -1;
+    mutable amrex::Array4<amrex::Real> m_cached_arr4 = {};
+    mutable int m_cached_ox      = 0;
+    mutable int m_cached_oy      = 0;
+    mutable int m_cached_mfi_idx = -1;
+    mutable int m_cached_level   = -1;
+    mutable int m_cached_til_idx = -1;
 
     amrex::Vector<amrex::Vector<amrex::BCRec>> BCRecs = {};
 
