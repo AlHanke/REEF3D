@@ -30,25 +30,25 @@ double interpolation::lintsl1(slice &f, int& i,int& j, double wa, double wb)
     v1=v2=v3=v4=0.0;
     c1=c2=c3=c4=0;
 
-    if(p->flagslice1[IJ]>0)
+    if(p->flagslice1(i,j)>0)
     {
     v1=f(i,j);
     c1=1;
     }
     
-    if(p->flagslice1[IJp1]>0)
+    if(p->flagslice1(i,j+1)>0)
     {
     v2=f(i,j+1);
     c2=1;
     }
     
-    if(p->flagslice1[Ip1J]>0)
+    if(p->flagslice1(i+1,j)>0)
     {
     v3=f(i+1,j);
     c3=1;
     }
     
-    if(p->flagslice1[Ip1Jp1]>0)
+    if(p->flagslice1(i+1,j+1)>0)
     {
     v4=f(i+1,j+1);
     c4=1;
@@ -96,25 +96,25 @@ double interpolation::lintsl2(slice &f, int& i,int& j, double wa, double wb)
         v1=v2=v3=v4=0.0;
     c1=c2=c3=c4=0;
 
-    if(p->flagslice2[IJ]>0)
+    if(p->flagslice2(i,j)>0)
     {
     v1=f(i,j);
     c1=1;
     }
     
-    if(p->flagslice2[IJp1]>0)
+    if(p->flagslice2(i,j+1)>0)
     {
     v2=f(i,j+1);
     c2=1;
     }
     
-    if(p->flagslice2[Ip1J]>0)
+    if(p->flagslice2(i+1,j)>0)
     {
     v3=f(i+1,j);
     c3=1;
     }
     
-    if(p->flagslice2[Ip1Jp1]>0)
+    if(p->flagslice2(i+1,j+1)>0)
     {
     v4=f(i+1,j+1);
     c4=1;
@@ -162,25 +162,25 @@ double interpolation::lintsl4(slice& f, int& i,int& j, double wa, double wb)
     v1=v2=v3=v4=0.0;
     c1=c2=c3=c4=0;
 
-    if(p->flagslice4[IJ]>0)
+    if(p->flagslice4(i,j)>0)
     {
     v1=f(i,j);
     c1=1;
     }
     
-    if(p->flagslice4[IJp1]>0)
+    if(p->flagslice4(i,j+1)>0)
     {
     v2=f(i,j+1);
     c2=1;
     }
     
-    if(p->flagslice4[Ip1J]>0)
+    if(p->flagslice4(i+1,j)>0)
     {
     v3=f(i+1,j);
     c3=1;
     }
     
-    if(p->flagslice4[Ip1Jp1]>0)
+    if(p->flagslice4(i+1,j+1)>0)
     {
     v4=f(i+1,j+1);
     c4=1;
@@ -225,13 +225,13 @@ double interpolation::lintsl4_2D(slice& f, int& i,int& j, double wa, double wb)
     c1=c3=0;
 
 
-    if(p->flagslice4[IJ]>0)
+    if(p->flagslice4(i,j)>0)
     {
     v1=f(i,j);
     c1=1;
     }
     
-    if(p->flagslice4[Ip1J]>0)
+    if(p->flagslice4(i+1,j)>0)
     {
     v3=f(i+1,j);
     c3=1;

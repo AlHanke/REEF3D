@@ -29,9 +29,9 @@ double interpolation::sl_ipol1(slice &f)
 {
     v1=v2=0;
 
-    if(p->flagslice1[IJ]>0)
+    if(p->flagslice1(i,j)>0)
     v1=f(i,j);
-    if(p->flagslice1[IJp1]>0)
+    if(p->flagslice1(i,j+1)>0)
     v2=f(i,j+1);
 
     value = 0.5*(v1+v2);
@@ -43,9 +43,9 @@ double interpolation::sl_ipol2(slice &f)
 {
     v1=v2=0;
 
-    if(p->flagslice2[IJ]>0)
+    if(p->flagslice2(i,j)>0)
     v1=f(i,j);
-    if(p->flagslice2[Ip1J]>0)
+    if(p->flagslice2(i+1,j)>0)
     v2=f(i+1,j);
 
     value = 0.5*(v1+v2);
@@ -309,7 +309,7 @@ double interpolation::sl_ipol4eta(int *wet,slice &f, slice &bed)
 
     bedvalue = 0.5*(v1+v2);
     
-    if(wet[IJ]==0 && wet[Ip1J]==0 && p->flagslice4[IJ]==1 && p->flagslice4[Ip1J]==1)
+    if(wet[IJ]==0 && wet[Ip1J]==0 && p->flagslice4(i,j)==1 && p->flagslice4(i+1,j)==1)
     value = MIN(value, bedvalue-p->wd-p->DXM-p->A544);
     }
     
@@ -361,11 +361,11 @@ double interpolation::sl_ipol4eta(int *wet,slice &f, slice &bed)
 
     bedvalue = 0.25*(v1+v2+v3+v4);
     
-    if(wet[IJ]==0 && wet[Ip1J]==0 && wet[IJp1]==0 && wet[Ip1Jp1]==0 && p->flagslice4[IJ]==1 && p->flagslice4[Ip1J]==1 && p->flagslice4[IJp1]==1 && p->flagslice4[Ip1Jp1]==1)
+    if(wet[IJ]==0 && wet[Ip1J]==0 && wet[IJp1]==0 && wet[Ip1Jp1]==0 && p->flagslice4(i,j)==1 && p->flagslice4(i+1,j)==1 && p->flagslice4(i,j+1)==1 && p->flagslice4(i+1,j+1)==1)
     value = MIN(value, bedvalue-p->wd-p->DXM-p->A544);
     }
     
-    if(p->flagslice4[IJ]<0 || p->flagslice4[Ip1J]<0 || p->flagslice4[IJp1]<0 || p->flagslice4[Ip1Jp1]<0)
+    if(p->flagslice4(i,j)<0 || p->flagslice4(i+1,j)<0 || p->flagslice4(i,j+1)<0 || p->flagslice4(i+1,j+1)<0)
     {
     v1=v2=v3=v4=0.0;
     
@@ -501,7 +501,7 @@ double interpolation::nhf_ipol4eta(int *wet,slice &f, slice &bed)
 
     bedvalue = 0.5*(v1+v2);
     
-    if(wet[IJ]==0 && wet[Ip1J]==0 && p->flagslice4[IJ]==1 && p->flagslice4[Ip1J]==1)
+    if(wet[IJ]==0 && wet[Ip1J]==0 && p->flagslice4(i,j)==1 && p->flagslice4(i+1,j)==1)
     value = MIN(value, bedvalue-p->wd-p->DXM-wd_criterion);
     }
     
@@ -551,11 +551,11 @@ double interpolation::nhf_ipol4eta(int *wet,slice &f, slice &bed)
 
     bedvalue = 0.25*(v1+v2+v3+v4);
     
-    if(wet[IJ]==0 && wet[Ip1J]==0 && wet[IJp1]==0 && wet[Ip1Jp1]==0 && p->flagslice4[IJ]==1 && p->flagslice4[Ip1J]==1 && p->flagslice4[IJp1]==1 && p->flagslice4[Ip1Jp1]==1)
+    if(wet[IJ]==0 && wet[Ip1J]==0 && wet[IJp1]==0 && wet[Ip1Jp1]==0 && p->flagslice4(i,j)==1 && p->flagslice4(i+1,j)==1 && p->flagslice4(i,j+1)==1 && p->flagslice4(i+1,j+1)==1)
     value = MIN(value, bedvalue-p->wd-fac*p->DXM-wd_criterion);
     }
     
-    if(p->flagslice4[IJ]<0 || p->flagslice4[Ip1J]<0 || p->flagslice4[IJp1]<0 || p->flagslice4[Ip1Jp1]<0)
+    if(p->flagslice4(i,j)<0 || p->flagslice4(i+1,j)<0 || p->flagslice4(i,j+1)<0 || p->flagslice4(i+1,j+1)<0)
     {
     v1=v2=v3=v4=0.0;
     
