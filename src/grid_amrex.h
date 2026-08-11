@@ -404,12 +404,12 @@ public:
     ///
     /// Unlike set_tile_mfi, this reinstates a context that may be arbitrarily old,
     /// so it is the path that has to check the context is still addressable.
-    inline void set_tile_ctx(const TileCtx& c) noexcept
+    inline void set_tile_ctx(const TileCtx& c, const int lev) noexcept
     {
         AMREX_ASSERT(c.gen == amr_grid_gen);
+        AMREX_ASSERT(c.level == lev);
         AMREX_ASSERT(c.local_fab_idx >= 0);
 
-        level = c.level;
         apply_tile_ctx(c);
     }
 
