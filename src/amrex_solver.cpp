@@ -39,6 +39,8 @@ Author: Alexander Hanke
 
 #include <AMReX_MLABecLaplacian.H>
 #include <AMReX_MLMG.H>
+#include <AMReX_MultiFabUtil.H>
+#include <AMReX_iMultiFab.H>
 
 #include <iostream>
 #include <iomanip>
@@ -111,6 +113,120 @@ amrex_solver::~amrex_solver()
     delete pd;
 }
 
+// REEF_CF_FLUX: coarse/fine face-flux consistency probe.
+//
+// The composite projection is solvable only if the coarse face flux at every
+// coarse-fine interface equals the area-weighted average of the fine faces
+// covering it. fill_rhs builds rhs[lev] = -div(umac[lev]) from each level's own
+// staged faces and nothing enforces that agreement, so any mismatch injects a
+// source into the composite divergence that no pressure field can cancel: the
+// solve then cannot converge and level 0's bottom solve fails every V-cycle.
+//
+// Only interface-NORMAL faces are compared -- a coarse face whose two adjacent
+// coarse cells disagree on fine coverage. Faces on the physical domain boundary
+// are skipped: a fine patch abutting a wall is a BC, not a C-F coupling. Faces
+// shared by two coarse boxes are visited once per box, so `faces` is an upper
+// bound on the count; the max-norms are unaffected.
+static void reef_cf_flux_check(int nlev,
+                               const Vector<BoxArray>& sgrids,
+                               const Vector<Geometry>& sgeom,
+                               const Vector<DistributionMapping>& dmaps,
+                               const Vector<Array<MultiFab,AMREX_SPACEDIM>>& umac,
+                               const IntVect& rr)
+{
+    // faces the fine patch does not cover keep this value, so an unfilled face
+    // can never be mistaken for a perfectly matching one
+    constexpr double sentinel = 1.0e30;
+
+    for(int lev=1; lev<nlev; ++lev)
+    {
+        const BoxArray cba = amrex::coarsen(sgrids[lev], rr); // fine patch in coarse index space
+
+        // ---- fine faces averaged down to coarse resolution ----
+        Array<MultiFab,AMREX_SPACEDIM> favg;
+        for(int d=0; d<AMREX_SPACEDIM; ++d)
+        favg[d].define(amrex::convert(cba, IntVect::TheDimensionVector(d)), dmaps[lev], 1, 0);
+
+        const Array<const MultiFab*,AMREX_SPACEDIM> fptr
+            {AMREX_D_DECL(&umac[lev][0], &umac[lev][1], &umac[lev][2])};
+        const Array<MultiFab*,AMREX_SPACEDIM> cptr
+            {AMREX_D_DECL(&favg[0], &favg[1], &favg[2])};
+        amrex::average_down_faces(fptr, cptr, rr, 0);
+
+        // ---- restage them on the coarse level's own layout ----
+        Array<MultiFab,AMREX_SPACEDIM> conf;
+        for(int d=0; d<AMREX_SPACEDIM; ++d)
+        {
+            conf[d].define(amrex::convert(sgrids[lev-1], IntVect::TheDimensionVector(d)),
+                           dmaps[lev-1], 1, 0);
+            conf[d].setVal(sentinel);
+            conf[d].ParallelCopy(favg[d], 0, 0, 1);
+        }
+
+        // ---- fine-coverage mask on the coarse level (1 ghost) ----
+        iMultiFab cov(sgrids[lev-1], dmaps[lev-1], 1, 1);
+        cov.setVal(0);
+        {
+            iMultiFab ones(cba, dmaps[lev], 1, 0);
+            ones.setVal(1);
+            cov.ParallelCopy(ones, 0, 0, 1);
+        }
+        cov.FillBoundary(sgeom[lev-1].periodicity());
+
+        const Box cdom = sgeom[lev-1].Domain();
+
+        for(int d=0; d<AMREX_SPACEDIM; ++d)
+        {
+            double dmax = 0.0, cmax = 0.0;
+            long   nface = 0, nskip = 0;
+            int    bi = 0, bj = 0, bk = 0;
+
+            // conf/umac/cov share the coarse dmap and box order, so one MFIter
+            // indexes all three (the face BoxArrays are convert()s of the cell one)
+            for(MFIter mfi(conf[d]); mfi.isValid(); ++mfi)
+            {
+                const Box& fbx = mfi.validbox();
+                auto const& cf = conf[d].const_array(mfi);
+                auto const& uc = umac[lev-1][d].const_array(mfi);
+                auto const& mk = cov.const_array(mfi);
+
+                amrex::LoopOnCpu(fbx, [&] (int ii, int jj, int kk)
+                {
+                    const IntVect hi(AMREX_D_DECL(ii,jj,kk));
+                    IntVect lo = hi; lo[d] -= 1;
+
+                    if(hi[d] <= cdom.smallEnd(d) || hi[d] > cdom.bigEnd(d)) return; // domain face
+                    if(mk(lo) == mk(hi))                                    return; // not a C-F face
+                    if(cf(ii,jj,kk) >= 0.5*sentinel)         { ++nskip;      return; }
+
+                    const double diff = std::abs(cf(ii,jj,kk) - uc(ii,jj,kk));
+                    if(diff > dmax) { dmax = diff; bi = ii; bj = jj; bk = kk; }
+                    cmax = std::max(cmax, std::abs(uc(ii,jj,kk)));
+                    ++nface;
+                });
+            }
+
+            const double local_dmax = dmax;
+            double r[2] = {dmax, cmax};
+            long   c[2] = {nface, nskip};
+            ParallelDescriptor::ReduceRealMax(r,2);
+            ParallelDescriptor::ReduceLongSum(c,2);
+
+            amrex::Print()<<"CFFLUX lev "<<lev<<"->"<<lev-1<<" dir "<<d
+                <<"  faces "<<c[0]<<"  uncovered "<<c[1]
+                <<"  max|avg(fine)-coarse| "<<r[0]
+                <<"  max|coarse| "<<r[1]<<std::endl;
+
+            if(r[0] > 0.0 && local_dmax == r[0])
+            {
+                std::printf("CFFLUX   worst lev %d dir %d at (%d,%d,%d)\n", lev, d, bi, bj, bk);
+                std::fflush(stdout);
+            }
+            ParallelDescriptor::Barrier();
+        }
+    }
+}
+
 void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, const field2 &v, const field3 &w, const field4 &phi, double alpha)
 {
     // Prerequisites: u/v/w and the level set must have current ghost cells
@@ -128,30 +244,92 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
     sgeom[0]  = p->amrex_geometry[0];
     sgrids[0] = p->amrex_box_array[0];
 
-    // Must be the SAME (possibly anisotropic) ratio grid_amrex refined the
-    // hierarchy with -- MLLinOp takes no ref ratio, it infers it by coarsening
-    // the fine domain until it matches the coarse one. A geometry refined 2x in
-    // a thin direction that the box arrays left at 1x never matches, the
-    // inference falls through and yields ref ratio 8 -> mlmg_lin_cc_interp aborts.
-    const IntVect rr = p->ref_vec;
+    // Give the solver's BASE level two y-cells when y-doubling. AMReX's MG
+    // coarsening test is Box::coarsenable(refrat, min_width), and its first
+    // check is size().allGE(refrat*min_width) across ALL directions -- so a
+    // 1-cell y makes the box un-coarsenable in x and z too, semicoarsening's
+    // fallback then zeroes every ratio, and the hierarchy stops dead at one MG
+    // level (measured: "# of MG levels on the coarsest AMR level: 1", with 95%
+    // of the solve time in a bottom solve over the whole 192000-cell level 0).
+    // setHiddenDirection is the only thing that zeroes min_width, and it is
+    // unavailable here because it forces the AMR ratio anisotropic. Two y-cells
+    // clear the min_width=2 bar; semicoarsening then pins y and lets x and z
+    // coarsen normally.
+    //
+    // The extra plane is a copy, so the physical y-extent is DOUBLED rather than
+    // the mesh refined: dy stays equal to dx and dz at every level, which keeps
+    // the operator's cells isotropic and dhy comparable to dhx/dhz.
+    if(ydouble)
+    {
+        const Geometry& g0 = p->amrex_geometry[0];
+
+        Box d0 = g0.Domain();
+        d0.setSmall(1, 0);
+        d0.setBig(1, 1);
+
+        RealBox rb0 = g0.ProbDomain();
+        rb0.setHi(1, rb0.lo(1) + 2.0*g0.CellSize(1));
+
+        const int isper[AMREX_SPACEDIM] =
+            {AMREX_D_DECL(g0.isPeriodic(0), g0.isPeriodic(1), g0.isPeriodic(2))};
+        sgeom[0].define(d0, &rb0, g0.Coord(), isper);
+
+        BoxList bl0;
+        for(int b=0; b<static_cast<int>(p->amrex_box_array[0].size()); ++b)
+        {
+            Box bb = p->amrex_box_array[0][b];
+            bb.setSmall(1, 0);
+            bb.setBig(1, 1);
+            bl0.push_back(bb);
+        }
+        sgrids[0] = BoxArray(std::move(bl0));
+    }
+
+    // Solver-side refinement ratio -- geometry and box arrays MUST agree, because
+    // MLLinOp takes no ref ratio: it infers one by coarsening the fine domain
+    // until it matches the coarse one. A geometry refined 2x in a direction the
+    // box arrays left at 1x never matches, the inference falls through and
+    // yields ref ratio 8 -> mlmg_lin_cc_interp aborts.
+    //
+    // p->ref_vec is 1 in a thin direction, so a pseudo-2D hierarchy is refined
+    // ANISOTROPICALLY, (2,1,2). MLLinOp does declare that to YAFluxRegister, but
+    // FineAdd scales by the PRODUCT of the ratio components applied uniformly in
+    // every direction (AMReX_YAFluxRegister.H ~542). The weight a coarse face
+    // normal to d actually needs is the tangential fine-face count,
+    // product/ratio[d]: isotropic (2,2,2) gives 8/4 = 2 in all three directions,
+    // one uniform constant, but (2,1,2) gives 2,1,2 -- no single factor is right
+    // in all of them. reflux() is the one nlev>1-only routine with no
+    // hidden-direction handling at all, so this mis-weights the C-F flux
+    // correction on every V-cycle and the composite solve stalls.
+    //
+    // Refining the thin direction too keeps the ratio isotropic. The added
+    // y-planes are exact copies of plane 0 (see the replication loop below) and
+    // carry zero transverse velocity, so nothing physical changes; only the
+    // solver-side index space grows.
+    const IntVect rr = ydouble ? IntVect(p->ref_vec.max()) : p->ref_vec;
 
     for(int lev=1; lev<nlev; ++lev)
     {
         sgeom[lev] = amrex::refine(sgeom[lev-1], rr);
 
-        // if(ydouble)
-        // {
-        //     const int nyf = 1 << lev;
-        //     BoxList bl;
-        //     for(int b=0; b<static_cast<int>(p->amrex_box_array[lev].size()); ++b)
-        //     {
-        //         Box bb = p->amrex_box_array[lev][b];
-        //         bb.setBig(1, nyf-1);
-        //         bl.push_back(bb);
-        //     }
-        //     sgrids[lev] = BoxArray(std::move(bl));
-        // }
-        // else
+        if(ydouble)
+        {
+            // grid_amrex refined the box arrays in the active directions only and
+            // left them one cell thick in y; stretch them to the y-extent that
+            // sgeom[lev] now has, so grids and geometry agree. The base level
+            // already carries two planes, hence lev+1.
+            const int nyf = 1 << (lev+1);
+            BoxList bl;
+            for(int b=0; b<static_cast<int>(p->amrex_box_array[lev].size()); ++b)
+            {
+                Box bb = p->amrex_box_array[lev][b];
+                bb.setSmall(1, 0);
+                bb.setBig(1, nyf-1);
+                bl.push_back(bb);
+            }
+            sgrids[lev] = BoxArray(std::move(bl));
+        }
+        else
         sgrids[lev] = p->amrex_box_array[lev];
     }
 
@@ -333,9 +511,10 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
         }
     }
 
-    // ---- replicate plane 0 across the added y-planes of fine levels ----
+    // ---- replicate plane 0 across the added y-planes ----
+    // level 0 now carries two planes as well, so this starts at 0
     if(ydouble)
-    for(int lev=1; lev<nlev; ++lev)
+    for(int lev=0; lev<nlev; ++lev)
     for(int d=0; d<AMREX_SPACEDIM; ++d)
     for(MFIter mfi(beta[lev][d]); mfi.isValid(); ++mfi)
     {
@@ -351,6 +530,12 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
             }
         });
     }
+
+    // REEF_CF_FLUX=1: does the coarse face flux match the average of the fine
+    // faces at every C-F interface? A mismatch makes the composite rhs
+    // unsolvable -- see reef_cf_flux_check.
+    if(nlev > 1 && std::getenv("REEF_CF_FLUX"))
+    reef_cf_flux_check(nlev, sgrids, sgeom, p->amrex_distribution_mapping, umac, rr);
 
     // ---- build the composite operator and the multigrid solver ----
     // The operator structure (grids, geometry, BC types, hidden direction) and
@@ -374,22 +559,35 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
         LPInfo info;
         info.setAgglomeration(true);
         info.setConsolidation(true);
-        info.setSemicoarsening(true);
-        info.setMaxSemicoarseningLevel(4);
-
         // REEF3D runs pseudo-2D cases with a single cell in y. AMReX coarsens
         // isotropically, so a 1-cell direction blocks coarsening in every
         // direction: the hierarchy collapses to a single MG level and each MLMG
         // iteration degenerates into an unpreconditioned BiCGStab over the whole
-        // domain. Declaring the thin axis as the hidden direction sets its coarsen
-        // ratio to 1 and its min width to 0, so x and z coarsen normally.
-        // Hidden direction and semicoarsening are mutually exclusive (MLLinOp
-        // asserts on it), so only one of the two is ever enabled here.
+        // domain. There are two ways out and they are mutually exclusive
+        // (MLLinOp asserts), so exactly one is enabled here:
+        //
+        //  - hidden direction: sets the thin axis' coarsen ratio to 1 and its min
+        //    width to 0. Used at nlev==1, where it converges in a handful of
+        //    V-cycles. NOT usable with AMR levels: it forces the AMR ratio
+        //    anisotropic, which reflux mis-weights (see the rr comment above),
+        //    and it is what the three nlev>1-only local AMReX patches exist for.
+        //  - semicoarsening: coarsens the active directions once the thin one
+        //    bottoms out. Needs BOTH calls -- MLLinOp gates every step on
+        //    numsclevs < max_semicoarsening_level, which defaults to 0, so
+        //    setSemicoarsening alone is silently a no-op.
+        //
+        // With AMR levels the grids are y-doubled to keep the ratio isotropic, so
+        // the hidden direction is off and semicoarsening carries the hierarchy.
         const int ny = sgeom[0].Domain().length(1);
-        if(ny==1 && !std::getenv("REEF_MLMG_NOHIDDEN"))
+        if(ny==1 && !ydouble && !std::getenv("REEF_MLMG_NOHIDDEN"))
         {
             info.setHiddenDirection(1);
-            info.setSemicoarsening(false);
+        }
+        else
+        {
+            const char* msc = std::getenv("REEF_MLMG_SEMICOARSEN");
+            info.setSemicoarsening(true);
+            info.setMaxSemicoarseningLevel(msc ? std::atoi(msc) : 8);
         }
 
         // bisection knobs for multi-level debugging
