@@ -613,7 +613,7 @@ Authors: Hans Bihs, Alexander Hanke
     // it works against any of them, and an explicit level, because a gcb list is
     // a per-level container whose level is a caller decision. The level is only
     // consulted for TILE_CTX_DEFAULT entries; a real id carries its own.
-    #define GCB_TILE(entry, lev) p->set_tile_ctx(p->tile_ctx_by_id((entry).ctx_id, lev))
+    #define GCB_TILE(entry, lev) p->set_tile_ctx(p->tile_ctx_by_id((entry).ctx_id, lev),lev)
 #else
     #define GCDF1_TILE(idx) ((void)0)
     #define GCDF2_TILE(idx) ((void)0)
