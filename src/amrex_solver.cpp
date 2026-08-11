@@ -374,6 +374,8 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
         LPInfo info;
         info.setAgglomeration(true);
         info.setConsolidation(true);
+        info.setSemicoarsening(true);
+        info.setMaxSemicoarseningLevel(4);
 
         // REEF3D runs pseudo-2D cases with a single cell in y. AMReX coarsens
         // isotropically, so a 1-cell direction blocks coarsening in every
@@ -385,7 +387,10 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
         // asserts on it), so only one of the two is ever enabled here.
         const int ny = sgeom[0].Domain().length(1);
         if(ny==1 && !std::getenv("REEF_MLMG_NOHIDDEN"))
-        info.setHiddenDirection(1);
+        {
+            info.setHiddenDirection(1);
+            info.setSemicoarsening(false);
+        }
 
         // bisection knobs for multi-level debugging
         if(std::getenv("REEF_MLMG_NOAGG"))
