@@ -92,7 +92,10 @@ void driver::driver_ini_cfd()
         gtopo.start(p,a,pgc,pflow,preto,pvrans);
     }
 
-    SLICELOOP4
+    p->level=0;
+	ILOOP
+    JLOOP
+    PSLICECHECK4
     a->bed(i,j) = p->bed[IJ];
 
     // Solid Forcing
