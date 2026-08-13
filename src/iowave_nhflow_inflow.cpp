@@ -42,32 +42,35 @@ void iowave::inflow_nhflow(lexer *p, fdm_nhf *d, ghostcell* pgc, double *U, doub
 
 void iowave::rkinflow_nhflow(lexer *p, fdm_nhf *d, ghostcell* pgc, double *U, double *V, double *W, double *UH, double *VH, double *WH, slice &WL)
 {
-    for(n=0;n<p->gcin_count;n++)
+    // LEVEL_LOOP
+    GCINLOOP
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
+    i=p->gcin[n].i;
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
 
         U[Im3JK]=U[Im2JK]=U[Im1JK]=d->U[Im1JK];
         V[Im3JK]=V[Im2JK]=V[Im1JK]=d->V[Im1JK];
         W[Im3JK]=W[Im2JK]=W[Im1JK]=d->W[Im1JK];
-        
+
         UH[Im3JK]=UH[Im2JK]=UH[Im1JK]=d->UH[Im1JK];
         VH[Im3JK]=VH[Im2JK]=VH[Im1JK]=d->VH[Im1JK];
         WH[Im3JK]=WH[Im2JK]=WH[Im1JK]=d->WH[Im1JK];
     }
-    
     if(p->B99==3||p->B99==4||p->B99==5)
 	nhflow_active_beach(p,d,pgc,U,V,W,UH,VH,WH);
 }
 
 void iowave::rkinflow_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *F, double *G)
 {
-    for(n=0;n<p->gcin_count;n++)
+    // LEVEL_LOOP
+    GCINLOOP
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
+    i=p->gcin[n].i;
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
 
         F[Im3JK]=F[Im2JK]=F[Im1JK]=G[Im1JK];
     }
@@ -75,11 +78,13 @@ void iowave::rkinflow_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *F, dou
 
 void iowave::nhflow_inflow_plain(lexer *p, fdm_nhf *d, ghostcell* pgc, double *U, double *V, double *W, double *UH, double *VH, double *WH)
 {
-    for(n=0;n<p->gcin_count;n++)
+    // LEVEL_LOOP
+    GCINLOOP
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
+    i=p->gcin[n].i;
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
 
         U[Im1JK]=p->Ui;
         U[Im2JK]=p->Ui;

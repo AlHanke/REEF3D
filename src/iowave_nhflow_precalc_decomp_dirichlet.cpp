@@ -45,7 +45,8 @@ void iowave::nhflow_wavegen_precalc_decomp_dirichlet(lexer *p, ghostcell *pgc)
         
     // -------------
         count=0;
-        for(n=0;n<p->gcin_count;n++)
+        // LEVEL_LOOP
+        GCINLOOP
         {
         uval[count] = 0.0;
         vval[count] = 0.0;

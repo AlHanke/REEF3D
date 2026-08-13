@@ -120,12 +120,13 @@ void nhflow_rans_io::inflow(lexer* p, fdm_nhf *d, ghostcell* pgc)
     double evval,kinval,epsval;
     
     if(p->B60==1)
-    for(n=0;n<p->gcin_count;n++)
+    // LEVEL_LOOP
+    GCINLOOP
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
-    
+    i=p->gcin[n].i;
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
     beddist = p->ZSP[IJK] - d->bed(i,j);
     tau_calc(p,d,pgc);
     bedval_calc(p,d,pgc);

@@ -62,7 +62,6 @@ public:
     grid_amrex() = default;
     virtual ~grid_amrex() = default;
 
-    void define_inflow_outflow_ba();
     void regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* a);
 
     void update_cell_coordinates();
@@ -420,13 +419,6 @@ public:
         level = 0;
         set_tile_mfi(default_cell_mfi.get());
     }
-
-
-    // Inflow and outflow areas
-    amrex::Vector<amrex::iMultiFab> inflow_ba;
-    amrex::Vector<amrex::Vector<amrex::IntVect>> inflow_ijk;
-    amrex::Vector<amrex::iMultiFab> outflow_ba;
-    amrex::Vector<amrex::Vector<amrex::IntVect>> outflow_ijk;
 
     int nlevs = 1; // Number of AMR levels
     amrex::IntVect ref_vec;

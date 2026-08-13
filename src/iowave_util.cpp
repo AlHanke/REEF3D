@@ -43,11 +43,10 @@ int iowave::iozonecheck(lexer *p, fdm*a)
 
 void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 {
-    #if USE_AMREX
-    p->define_inflow_outflow_ba();
-    #else
-    int count1=0;
-    int count2=0;
+    p->gcin.clear();
+    p->gcout.clear();
+    int cs = 0;
+
     GC4LOOP
     {
         GCB4_TILE(n);
@@ -55,49 +54,17 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         i = p->gcb4[p->level][n].i;
         j = p->gcb4[p->level][n].j;
         k = p->gcb4[p->level][n].k;
+        cs = p->gcb4[p->level][n].cs;
 
         if((p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6) && p->DF(i,j,k)>0)
-        ++count1;
+        p->gcin.push_back({i, j, k, cs});
         else if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
-        ++count2;
+        p->gcout.push_back({i, j, k, cs});
     }
     GC_TILE_RESET;
 
-    p->Iresize(p->gcin,p->gcin_count, count1, 4, 4);
-    p->Iresize(p->gcout,p->gcout_count, count2, 4, 4);
-
-    count1=0;
-    count2=0;
-    GC4LOOP
-    {
-        GCB4_TILE(n);
-
-        i = p->gcb4[p->level][n].i;
-        j = p->gcb4[p->level][n].j;
-        k = p->gcb4[p->level][n].k;
-
-        if((p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6) && p->DF(i,j,k)>0)
-        {
-            p->gcin[count1][0]=p->gcb4[p->level][n].i;
-            p->gcin[count1][1]=p->gcb4[p->level][n].j;
-            p->gcin[count1][2]=p->gcb4[p->level][n].k;
-            p->gcin[count1][3]=p->gcb4[p->level][n].cs;
-            ++count1;
-        }
-        else if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
-        {
-            p->gcout[count2][0]=p->gcb4[p->level][n].i;
-            p->gcout[count2][1]=p->gcb4[p->level][n].j;
-            p->gcout[count2][2]=p->gcb4[p->level][n].k;
-            p->gcout[count2][3]=p->gcb4[p->level][n].cs;
-            ++count2;
-        }
-    }
-    GC_TILE_RESET;
-
-    p->gcin_count=count1;
-    p->gcout_count=count2;
-    #endif
+    p->gcin_count=p->gcin.size();
+    p->gcout_count=p->gcout.size();
 
     if(p->I10==1)
     velini(p,a,pgc);
@@ -182,8 +149,10 @@ void iowave::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 
 void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    int count1=0;
-    int count2=0;
+    p->gcin.clear();
+    p->gcout.clear();
+    int cs = 0;
+
     GC4LOOP
     {
         GCB4_TILE(n);
@@ -191,48 +160,17 @@ void iowave::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         i = p->gcb4[p->level][n].i;
         j = p->gcb4[p->level][n].j;
         k = p->gcb4[p->level][n].k;
+        cs = p->gcb4[p->level][n].cs;
 
         if((p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6) && p->DF(i,j,k)>0)
-        ++count1;
+        p->gcin.push_back({i, j, k, cs});
         else if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
-        ++count2;
+        p->gcout.push_back({i, j, k, cs});
     }
     GC_TILE_RESET;
 
-    p->Iresize(p->gcin,p->gcin_count, count1, 4, 4);
-    p->Iresize(p->gcout,p->gcout_count, count2, 4, 4);
-
-    count1=0;
-    count2=0;
-    GC4LOOP
-    {
-        GCB4_TILE(n);
-
-        i = p->gcb4[p->level][n].i;
-        j = p->gcb4[p->level][n].j;
-        k = p->gcb4[p->level][n].k;
-
-        if((p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6) && p->DF(i,j,k)>0)
-        {
-            p->gcin[count1][0]=p->gcb4[p->level][n].i;
-            p->gcin[count1][1]=p->gcb4[p->level][n].j;
-            p->gcin[count1][2]=p->gcb4[p->level][n].k;
-            p->gcin[count1][3]=p->gcb4[p->level][n].cs;
-            ++count1;
-        }
-        else if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
-        {
-            p->gcout[count2][0]=p->gcb4[p->level][n].i;
-            p->gcout[count2][1]=p->gcb4[p->level][n].j;
-            p->gcout[count2][2]=p->gcb4[p->level][n].k;
-            p->gcout[count2][3]=p->gcb4[p->level][n].cs;
-            ++count2;
-        }
-    }
-    GC_TILE_RESET;
-
-    p->gcin_count=count1;
-    p->gcout_count=count2;
+    p->gcin_count=p->gcin.size();
+    p->gcout_count=p->gcout.size();
 
     // IO update
     MALOOP

@@ -39,20 +39,13 @@ void iowave::pressure_outlet(lexer *p, fdm *a, ghostcell *pgc)
 {
     double pval=0.0;
 
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->outflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCOUTLOOP
     {
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcout_count;++n)
-    {
-        i=p->gcout[n][0];
-        j=p->gcout[n][1];
-        k=p->gcout[n][2];
-    #endif
+        i=p->gcout[n].i;
+        j=p->gcout[n].j;
+        k=p->gcout[n].k;
+
 
         pval=0.0;
 
@@ -98,20 +91,13 @@ void iowave::pressure_inlet(lexer *p, fdm *a, ghostcell *pgc)
 
     if(p->B76==0 && p->A10!=5)
     {
-        LEVEL_LOOP
-        #if USE_AMREX
-        for(auto iv : p->inflow_ijk[p->level])
+        // LEVEL_LOOP
+        GCINLOOP
         {
-            i=iv[0];
-            j=iv[1];
-            k=iv[2];
-        #else
-        for(n=0;n<p->gcin_count;++n)
-        {
-            i=p->gcin[n][0];
-            j=p->gcin[n][1];
-            k=p->gcin[n][2];
-        #endif
+            i=p->gcin[n].i;
+            j=p->gcin[n].j;
+            k=p->gcin[n].k;
+
 
             if(a->phi(i,j,k)>=0.0)
             pval=(p->phimean - p->pos_z())*a->ro(i,j,k)*fabs(p->W22);
@@ -125,20 +111,13 @@ void iowave::pressure_inlet(lexer *p, fdm *a, ghostcell *pgc)
     }
     else if(p->B76==0 && p->A10==5)
     {
-        LEVEL_LOOP
-        #if USE_AMREX
-        for(auto iv : p->inflow_ijk[p->level])
+        // LEVEL_LOOP
+        GCINLOOP
         {
-            i=iv[0];
-            j=iv[1];
-            k=iv[2];
-        #else
-        for(n=0;n<p->gcin_count;++n)
-        {
-            i=p->gcin[n][0];
-            j=p->gcin[n][1];
-            k=p->gcin[n][2];
-        #endif
+            i=p->gcin[n].i;
+            j=p->gcin[n].j;
+            k=p->gcin[n].k;
+
 
             pval = 0.0;
 

@@ -44,20 +44,13 @@ void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
 
     // wavegen
     count=0;
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->inflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcin_count;++n)
-    {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-    #endif
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
 
         uvel=uval[count]*ramp(p);
         vvel=vval[count]*ramp(p);
@@ -148,26 +141,18 @@ void iowave::active_wavegen(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
         ++count;
     }
 
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->inflow_ijk[p->level])
-    #else
-    for(n=0;n<p->gcin_count;++n)
-    #endif
-    for(int q=0;q<4;++q)
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        #if USE_AMREX
-        i=iv[0]+q;
-        j=iv[1];
-        k=iv[2];
-        #else
-        i=p->gcin[n][0]+q;
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-        #endif
+        for(int q=0;q<4;++q)
+        {
+            i=p->gcin[n].i+q;
+            j=p->gcin[n].j;
+            k=p->gcin[n].k;
 
-        if(a->phi(i,j,k)<0.0)
-        a->eddyv(i,j,k)=MIN(a->eddyv(i,j,k),1.0e-4);
+            if(a->phi(i,j,k)<0.0)
+            a->eddyv(i,j,k)=MIN(a->eddyv(i,j,k),1.0e-4);
+        }
     }
     pgc->start4(p,a->eddyv,24);
 }
