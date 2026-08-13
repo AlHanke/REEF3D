@@ -266,12 +266,12 @@ private:
     enum gbc_labels { INFLOW=1, OUTFLOW, SYMMETRY, WAVEGEN=6, NUMBEACH, WALL=21};
 
     // 3D BC decision
-    void gcdistro1(field&, int, int, int, int, int, double, int);
-    void gcdistro2(field&, int, int, int, int, int, double, int);
-    void gcdistro3(field&, int, int, int, int, int, double, int);
-    void gcdistro4(field&, int, int, int, int, int, double, int);
+    void gcdistro1(field&, int, int, int, int, int, int);
+    void gcdistro2(field&, int, int, int, int, int, int);
+    void gcdistro3(field&, int, int, int, int, int, int);
+    void gcdistro4(field&, int, int, int, int, int, int);
 
-    void gcdistro(field&, int, int, int, double, bc_labels, int);
+    void gcdistro(field&, int, int, int, bc_labels, int);
 
     bc_labels gceval1(lexer*,int,int,int);
     bc_labels gceval2(lexer*,int,int,int);
