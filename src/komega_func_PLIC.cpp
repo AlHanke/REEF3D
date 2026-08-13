@@ -182,11 +182,13 @@ void komega_func_PLIC::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
         // LEVEL_LOOP
         GCINLOOP
         {
+            GCIN_TILE(n);
+
             for(int q=0;q<5;++q)
             {
-            i=p->gcin[n].i+q;
-            j=p->gcin[n].j;
-            k=p->gcin[n].k;
+            i=p->gcin[p->level][n].i+q;
+            j=p->gcin[p->level][n].j;
+            k=p->gcin[p->level][n].k;
 
             if(a->phi(i,j,k)<0.0)
             a->eddyv(i,j,k)=MIN(a->eddyv(i,j,k),1.0e-4);
@@ -197,6 +199,7 @@ void komega_func_PLIC::eddyvisc(lexer* p, fdm* a, ghostcell* pgc, vrans* pvrans)
                               0.0001*a->visc(i,j,k));
             }
         }
+        GC_TILE_RESET;
     }
     
     // free surface eddyv minimum

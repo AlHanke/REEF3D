@@ -212,10 +212,12 @@ void nhflow_reconstruct_weno::reconstruct_3D_x(lexer* p, ghostcell *pgc, fdm_nhf
     // LEVEL_LOOP
     GCINLOOP
     {
-    j=p->gcin[n].j;
-    k=p->gcin[n].k;
+    GCIN_TILE(n);
 
-    for(i=p->gcin[n].i;i<p->gcin[n].i+5;++i)
+    j=p->gcin[p->level][n].j;
+    k=p->gcin[p->level][n].k;
+
+    for(i=p->gcin[p->level][n].i;i<p->gcin[p->level][n].i+5;++i)
     {
         dfdx_plus = (Fx[Ip1JK] - Fx[IJK])/p->DXP[IP];
         dfdx_min  = (Fx[IJK] - Fx[Im1JK])/p->DXP[IM1];
@@ -224,22 +226,27 @@ void nhflow_reconstruct_weno::reconstruct_3D_x(lexer* p, ghostcell *pgc, fdm_nhf
 
     }
     }
+    GC_TILE_RESET;
+
     pgc->start1V(p,DFDX,1);
 
     // reconstruct
     // LEVEL_LOOP
     GCINLOOP
     {
+    GCIN_TILE(n);
 
-    j=p->gcin[n].j;
-    k=p->gcin[n].k;
+    j=p->gcin[p->level][n].j;
+    k=p->gcin[p->level][n].k;
 
-    for(i=p->gcin[n].i;i<p->gcin[n].i+4;++i)
+    for(i=p->gcin[p->level][n].i;i<p->gcin[p->level][n].i+4;++i)
     {
         Fs[IJK] = (Fx[IJK]    + 0.5*p->DXP[IM1]*DFDX[IJK]);
         Fn[IJK] = (Fx[Ip1JK]  - 0.5*p->DXP[IP]*DFDX[Ip1JK]);
     }
     }
+    GC_TILE_RESET;
+
     pgc->start1V(p,Fs,1);
     pgc->start1V(p,Fn,1);
     }*/

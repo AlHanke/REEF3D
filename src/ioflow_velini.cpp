@@ -38,10 +38,11 @@ void ioflow_f::velini(lexer *p, fdm *a, ghostcell *pgc)
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         if(a->phi(i-1,j,k)>=0.0)
         {
@@ -56,6 +57,7 @@ void ioflow_f::velini(lexer *p, fdm *a, ghostcell *pgc)
             p->Qi+=area*a->u(i-1,j,k);
         }
     }
+    GC_TILE_RESET;
 
     if(p->B60==1)
     {
@@ -82,10 +84,11 @@ void ioflow_f::velini(lexer *p, fdm *a, ghostcell *pgc)
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         a->u(i-1,j,k)=p->Ui;
         a->u(i-2,j,k)=p->Ui;
@@ -99,4 +102,5 @@ void ioflow_f::velini(lexer *p, fdm *a, ghostcell *pgc)
         a->w(i-2,j,k)=0.0;
         a->w(i-3,j,k)=0.0;
     }
+    GC_TILE_RESET;
 }

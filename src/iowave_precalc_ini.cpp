@@ -172,7 +172,7 @@ void iowave::wavegen_precalc_dirichlet_ini(lexer *p, ghostcell *pgc)
     // count number of relax points
     // allocate double* array
     int temp;
-    temp = static_cast<int>(p->gcin.size());
+    temp = p->gcin.ssize(0);
 
     upt_count=vpt_count=wpt_count=ppt_count=ept_count = temp;
 

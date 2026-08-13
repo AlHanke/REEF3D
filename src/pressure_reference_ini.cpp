@@ -31,8 +31,8 @@ void pressure_reference::reference_ini(lexer*p, fdm* a, ghostcell *pgc)
     int gcinglobal=0;
     int gcoutglobal=0;
 
-    gcinglobal=pgc->globalisum(static_cast<int>(p->gcin.size()));
-    gcoutglobal=pgc->globalisum(static_cast<int>(p->gcout.size()));
+    gcinglobal=pgc->globalisum(p->gcin.ssize(0));
+    gcoutglobal=pgc->globalisum(p->gcout.ssize(0));
 
     // ini gage location
     if(((p->B32==0 && p->B30==1) || p->B30==2 || p->B30==3))
@@ -46,14 +46,17 @@ void pressure_reference::reference_ini(lexer*p, fdm* a, ghostcell *pgc)
             // LEVEL_LOOP
             GCINLOOP
             {
-                i=p->gcin[n].i;
-                j=p->gcin[n].j;
-                k=p->gcin[n].k;
+                i=p->gcin[p->level][n].i;
+                j=p->gcin[p->level][n].j;
+                k=p->gcin[p->level][n].k;
+
+                GCIN_TILE(n);
 
                 xmin = MIN(xmin,p->XP[IP]);
                 ymin = MIN(ymin,p->YP[JP]);
                 zmax = MAX(zmax,p->ZP[KP]);
             }
+            GC_TILE_RESET;
         }
 
         if(gcinglobal==0)
@@ -84,14 +87,17 @@ void pressure_reference::reference_ini(lexer*p, fdm* a, ghostcell *pgc)
             // LEVEL_LOOP
             GCOUTLOOP
             {
-                i=p->gcout[n].i;
-                j=p->gcout[n].j;
-                k=p->gcout[n].k;
+                i=p->gcout[p->level][n].i;
+                j=p->gcout[p->level][n].j;
+                k=p->gcout[p->level][n].k;
+
+                GCOUT_TILE(n);
 
                 xmax = MAX(xmax,p->XP[IP]);
                 ymin = MIN(ymin,p->YP[JP]);
                 zmax = MAX(zmax,p->ZP[KP]);
             }
+            GC_TILE_RESET;
         }
 
         if(gcinglobal==0)

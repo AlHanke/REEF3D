@@ -178,12 +178,14 @@ void sediment_f::ini_guard(lexer *p, ghostcell *pgc)
         // LEVEL_LOOP
         GCINLOOP
         {
-            i=p->gcin[n].i;
-            j=p->gcin[n].j;
+            i=p->gcin[p->level][n].i;
+            j=p->gcin[p->level][n].j;
 
+            GCIN_TILE(n);
 
             s->guard(i,j)=0.0;
         }
+        GC_TILE_RESET;
 
         for(int qq=0;qq<pBC->obj_count;++qq)
         for(n=0;n<pBC->patch[qq]->gcb_count;++n)
