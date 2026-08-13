@@ -49,12 +49,14 @@ void ioflow_f::inflow_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U, dou
 
 void ioflow_f::inflow_plain_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U, double *V, double *W, double *UH, double *VH, double *WH)
 {
-    for(n=0;n<p->gcin_count;n++)
+    // LEVEL_LOOP
+    GCINLOOP
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
-        
+    i=p->gcin[n].i;
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
+
         if(p->wet[IJ]==1 && p->DF[IJK]>0)
         {
         U[Im1JK]=p->Ui;
@@ -115,12 +117,13 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
     double ratio;
 
     // water depth
-    for(n=0;n<p->gcin_count;++n)
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-        
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
         hmin=MIN(hmin,d->WL(i,j));
         hmax=MAX(hmax,d->WL(i,j));
     }
@@ -146,23 +149,24 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
 		
 		shearvel = p->Ui/(2.5*log((11.0*H/ks)));
 
-        for(n=0;n<p->gcin_count;n++)
+        // LEVEL_LOOP
+        GCINLOOP
         {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-        
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
         zcoor = p->ZSP[IJK]-d->bed(i,j);
-        
+
         //cout<<"zcoor: "<<MAX(30.0*MIN(zcoor,dmax)/ks,1.0)<<endl;
         //cout<<"Uvel: "<<shearvel*2.5*log(MAX(30.0*MIN(zcoor,hmax)/ks,1.0))<<endl;
-            
+
             if(p->wet[IJ]==1 && p->DF[IJK]>0)
             U[Im1JK]=U[Im2JK]=U[Im3JK] = shearvel*2.5*log(MAX(30.0*MIN(zcoor,hmax)/ks,1.0));
-            
+
             if(p->wet[IJ]==0 || p->DF[IJK]<0)
             U[Im1JK]=U[Im2JK]=U[Im3JK] = 0.0;
-            
+
         }
 
 
@@ -183,25 +187,27 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
     //if(p->mpirank==0)
     //cout<<"W10: "<<p->W10<<" Qi: "<<p->Qi<<" ratio: "<<ratio<<endl;
 
-        for(n=0;n<p->gcin_count;++n)
+        // LEVEL_LOOP
+        GCINLOOP
         {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-        
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
 
         U[Im1JK]*=ratio;
         U[Im2JK]*=ratio;
         U[Im3JK]*=ratio;
         }
     }
-	
-	for(n=0;n<p->gcin_count;n++)
+
+    // LEVEL_LOOP
+    GCINLOOP
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
-    
+    i=p->gcin[n].i;
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
         V[Im1JK]=0.0;
         V[Im2JK]=0.0;
         V[Im3JK]=0.0;
@@ -236,16 +242,18 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
 
 void ioflow_f::rkinflow_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U, double *V, double *W, double *UH, double *VH, double *WH, slice &WL)
 {
-    for(n=0;n<p->gcin_count;n++)
+    // LEVEL_LOOP
+    GCINLOOP
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
+    i=p->gcin[n].i;
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
 
         U[Im3JK]=U[Im2JK]=U[Im1JK]=d->U[Im1JK];
         V[Im3JK]=V[Im2JK]=V[Im1JK]=d->V[Im1JK];
         W[Im3JK]=W[Im2JK]=W[Im1JK]=d->W[Im1JK];
-        
+
         UH[Im3JK]=UH[Im2JK]=UH[Im1JK]=d->UH[Im1JK];
         VH[Im3JK]=VH[Im2JK]=VH[Im1JK]=d->VH[Im1JK];
         WH[Im3JK]=WH[Im2JK]=WH[Im1JK]=d->WH[Im1JK];
@@ -255,12 +263,13 @@ void ioflow_f::rkinflow_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U, d
 
 void ioflow_f::rkinflow_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *F, double *G)
 {
-    for(n=0;n<p->gcin_count;n++)
+    // LEVEL_LOOP
+    GCINLOOP
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
-    
+    i=p->gcin[n].i;
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
     //cout<<G[Im1JK]<<" "<<G[IJK]<<endl;
 
         F[Im3JK]=F[Im2JK]=F[Im1JK]=G[Im1JK];

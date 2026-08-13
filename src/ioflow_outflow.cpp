@@ -27,20 +27,13 @@ Author: Hans Bihs
 
 void ioflow_f::outflow_plain(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
 {
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->outflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCOUTLOOP
     {
-        i=iv[0]-1;
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcout_count;++n)
-    {
-        i=p->gcout[n][0]-1;
-        j=p->gcout[n][1];
-        k=p->gcout[n][2];
-    #endif
+        i=p->gcout[n].i-1;
+        j=p->gcout[n].j;
+        k=p->gcout[n].k;
+
 
         u(i+1,j,k)=p->Uo;
         u(i+2,j,k)=p->Uo;
@@ -60,21 +53,13 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
     double ratio;
 
     // water depth
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(n=0; n<p->outflow_ijk[p->level].size(); n++)
+    // LEVEL_LOOP
+    GCOUTLOOP
     {
-        auto iv = p->outflow_ijk[p->level][n];
-        i=iv[0]-1;
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcout_count;++n)
-    {
-        i=p->gcout[n][0]-1;
-        j=p->gcout[n][1];
-        k=p->gcout[n][2];
-    #endif
+        i=p->gcout[n].i-1;
+        j=p->gcout[n].j;
+        k=p->gcout[n].k;
+
 
         if(a->phi(i,j,k)>0.0)
         {
@@ -102,21 +87,13 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
     shearvel= sqrt(fabs(tau/1000.0));
 
 
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(n=0; n<p->outflow_ijk[p->level].size(); n++)
+    // LEVEL_LOOP
+    GCOUTLOOP
     {
-        auto iv = p->outflow_ijk[p->level][n];
-        i=iv[0]-1;
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcout_count;++n)
-    {
-        i=p->gcout[n][0]-1;
-        j=p->gcout[n][1];
-        k=p->gcout[n][2];
-    #endif
+        i=p->gcout[n].i-1;
+        j=p->gcout[n].j;
+        k=p->gcout[n].k;
+
 
         u(i+1,j,k)=u(i+2,j,k)=u(i+3,j,k)= shearvel*2.5*log(MAX(30.0*MIN(walldout[p->level][n],dmax)/ks,1.0));
     }
@@ -134,20 +111,13 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
         else if(p->B60==3 || p->B60==4)
             ratio = hydrograph_ipol(p,pgc,hydro_out,hydro_out_count)/p->Qo;
 
-        LEVEL_LOOP
-        #if USE_AMREX
-        for(auto iv : p->outflow_ijk[p->level])
+        // LEVEL_LOOP
+        GCOUTLOOP
         {
-            i=iv[0]-1;
-            j=iv[1];
-            k=iv[2];
-        #else
-        for(n=0;n<p->gcout_count;++n)
-        {
-            i=p->gcout[n][0]-1;
-            j=p->gcout[n][1];
-            k=p->gcout[n][2];
-        #endif
+            i=p->gcout[n].i-1;
+            j=p->gcout[n].j;
+            k=p->gcout[n].k;
+
 
             u(i+1,j,k)*=ratio;
             u(i+2,j,k)*=ratio;
@@ -156,46 +126,33 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
     }
 
     if(p->B61==4 && p->count>0)
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->outflow_ijk[p->level])
     {
-        i=iv[0]-1;
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcout_count;++n)
-    {
-        i=p->gcout[n][0]-1;
-        j=p->gcout[n][1];
-        k=p->gcout[n][2];
-    #endif
-
-        if(a->phi(i,j,k)<-1.0*p->F45*p->DXM)
+        // LEVEL_LOOP
+        GCOUTLOOP
         {
-            u(i+1,j,k)=0.0;
-            u(i+2,j,k)=0.0;
-            u(i+3,j,k)=0.0;
+            i=p->gcout[n].i-1;
+            j=p->gcout[n].j;
+            k=p->gcout[n].k;
+
+            if(a->phi(i,j,k)<-1.0*p->F45*p->DXM)
+            {
+                u(i+1,j,k)=0.0;
+                u(i+2,j,k)=0.0;
+                u(i+3,j,k)=0.0;
+            }
         }
     }
 }
 
 void ioflow_f::outflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
 {
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->outflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCOUTLOOP
     {
-        i=iv[0]-1;
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcout_count;++n)
-    {
-        i=p->gcout[n][0]-1;
-        j=p->gcout[n][1];
-        k=p->gcout[n][2];
-    #endif
+        i=p->gcout[n].i-1;
+        j=p->gcout[n].j;
+        k=p->gcout[n].k;
+
 
         if(a->phi(i,j,k)>=-epsi1*p->DXM)
         {
@@ -225,20 +182,13 @@ void ioflow_f::outflow_corresponding(lexer *p, fdm* a, ghostcell* pgc, field& u,
 {
     double factor=1.0, uout;
 
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->outflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCOUTLOOP
     {
-        i=iv[0]-1;
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcout_count;++n)
-    {
-        i=p->gcout[n][0]-1;
-        j=p->gcout[n][1];
-        k=p->gcout[n][2];
-    #endif
+        i=p->gcout[n].i-1;
+        j=p->gcout[n].j;
+        k=p->gcout[n].k;
+
 
         factor = p->W10/p->Qo;
 

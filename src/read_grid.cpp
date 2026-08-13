@@ -408,8 +408,6 @@ void lexer::read_grid()
     //  block is still read for two reasons: this is a sequential binary stream,
     //  so skipping it would desync every later read, and gcin/gcout are sized
     //  from its surfgroups here.
-    gcin_count=0;
-    gcout_count=0;
     for(i=0; i<gcb4_count; ++i)
     {
         grid.read((char*)&iin, sizeof (int));
@@ -432,9 +430,6 @@ void lexer::read_grid()
         else if(surfgroup==2 || surfgroup==7)
             ++gcout_count;
     }
-
-    Iarray(gcin, gcin_count,4);
-    Iarray(gcout, gcout_count,4);
 
     //  Para Surfaces
     for(i=0; i<gcpara1_count; ++i)

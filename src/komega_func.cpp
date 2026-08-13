@@ -173,29 +173,22 @@ void komega_func::eddyvisc(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 
     if(p->B98==3 || p->B98==4 || p->B99==3 || p->B99==4 || p->B99==5)
     {
-        #if USE_AMREX
-        for(auto iv : p->inflow_ijk[p->level])
-        #else
-        for(n=0;n<p->gcin_count;++n)
-        #endif
-        for(int q=0;q<5;++q)
+        // LEVEL_LOOP
+        GCINLOOP
         {
-            #if USE_AMREX
-            i=iv[0]+q;
-            j=iv[1];
-            k=iv[2];
-            #else
-            i=p->gcin[n][0]+q;
-            j=p->gcin[n][1];
-            k=p->gcin[n][2];
-            #endif
+            for(int q=0;q<5;++q)
+            {
+                i=p->gcin[n].i+q;
+                j=p->gcin[n].j;
+                k=p->gcin[n].k;
 
-            if(a->phi(i,j,k)<0.0)
-            a->eddyv(i,j,k)=std::min(a->eddyv(i,j,k),1.0e-4);
-            else
-            a->eddyv(i,j,k) = std::max(std::min(std::max(kin(i,j,k)
-                            /((eps(i,j,k))>(1.0e-20)?(eps(i,j,k)):(1.0e20)),0.0),fabs(0.212*kin(i,j,k))/strainterm(p,a)),
-                            0.0001*a->visc(i,j,k));
+                if(a->phi(i,j,k)<0.0)
+                a->eddyv(i,j,k)=std::min(a->eddyv(i,j,k),1.0e-4);
+                else
+                a->eddyv(i,j,k) = std::max(std::min(std::max(kin(i,j,k)
+                                /((eps(i,j,k))>(1.0e-20)?(eps(i,j,k)):(1.0e20)),0.0),fabs(0.212*kin(i,j,k))/strainterm(p,a)),
+                                0.0001*a->visc(i,j,k));
+            }
         }
     }
 

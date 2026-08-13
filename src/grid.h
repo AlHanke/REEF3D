@@ -24,6 +24,7 @@ Authors: Alexander Hanke, Hans Bihs
 #define GRID_H_
 
 #include "increment.h"
+#include "gcb_sl_list.h"
 
 #include <vector>
 
@@ -65,7 +66,7 @@ public:
 
     bool i_dir,j_dir,k_dir; // existance of directions
 
-    int **gcin, **gcout; // inflow and outflow ghost cell coordinates (i,j,k) and direction
+    std::vector<gcb_field_cs> gcin, gcout; // inflow and outflow ghost cell coordinates (i,j,k) and direction
     int gcin_count, gcout_count; // number of inflow and outflow ghost cells
 
     // maxcoor
