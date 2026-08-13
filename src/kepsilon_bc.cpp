@@ -39,7 +39,7 @@ void kepsilon_bc::bckeps_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
     {
         QGC4LOOP
         if(p->gcb4[q][4]==21)
-            wall_law_kin(p,a,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
+            wall_law_kin(p,a,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5]);
 
         n=0;
         LOOP
@@ -88,7 +88,7 @@ void kepsilon_bc::bckeps_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
     {
         QGC4LOOP
         if(p->gcb4[q][4]==21 || (p->gcb4[q][4]==3 && p->gcb4[q][3]==6))
-            wall_law_eps(p,a,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5],  p->gcd4[q]);
+            wall_law_eps(p,a,kin,eps,p->gcb4[q][0], p->gcb4[q][1], p->gcb4[q][2], p->gcb4[q][3], p->gcb4[q][4], p->gcb4[q][5]);
 
         n=0;
         LOOP
@@ -136,7 +136,7 @@ void kepsilon_bc::bckeps_start(fdm* a,lexer* p,field& kin,field& eps,int gcval)
 // ****************************
 // WALL KIN
 // ****************************
-void kepsilon_bc::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii, int jj, int kk, int cs, int bc, int id, double dist)
+void kepsilon_bc::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii, int jj, int kk, int cs, int bc, int id)
 {
     double uvel,vvel,wvel;
     double zval;
@@ -145,6 +145,7 @@ void kepsilon_bc::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii,
     j=jj;
     k=kk;
 
+    double dist = 0.0;
     if(cs==1 || cs==4)
         dist = 0.5*p->DXN[IP];
     else if(cs==2 || cs==3)
@@ -171,12 +172,13 @@ void kepsilon_bc::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii,
     a->rhsvec.V[id] += (tau*u_abs)/dist;
 }
 
-void kepsilon_bc::wall_law_eps(lexer* p, fdm* a, field& kin, field& eps, int ii, int jj, int kk, int cs, int bc, int id, double dist)
+void kepsilon_bc::wall_law_eps(lexer* p, fdm* a, field& kin, field& eps, int ii, int jj, int kk, int cs, int bc, int id)
 {
     i=ii;
     j=jj;
     k=kk;
 
+    double dist = 0.0;
     if(cs==1 || cs==4)
         dist = 0.5*p->DXN[IP];
     else if(cs==2 || cs==3)
