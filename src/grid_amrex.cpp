@@ -616,11 +616,42 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
 {
     const int old_nlevs = nlevs;
 
-    // Build non-owning pointer vectors from CURRENT (old) levels only.
-    // For any new level that gets added, phi_mf_[lev] will be null — the
-    // null-check in reef3d_amrmesh_adaptive::ErrorEst skips phi tagging safely.
-    amrex::Vector<amrex::MultiFab*> phi_mfs(old_nlevs);
-    amrex::Vector<amrex::MultiFab*> fb_mfs(old_nlevs);
+    // Create a dummy BoxArray and DistributionMapping for probe-only levels.
+    // This allows ErrorEst to safely reference higher levels during MakeNewGrids
+    // without triggering AMReX container-overflow errors.
+    amrex::BoxArray dummy_ba(amrex::Box::TheUnitBox());
+    amrex::DistributionMapping dummy_dm(dummy_ba);
+
+    // Pre-allocate all registered MultiFabs to max_nlevs with dummy BoxArrays
+    // so ErrorEst callbacks can safely access them during probing.
+    // This MUST happen before the phi/fb pointers below are captured: emplace_back
+    // grows the registered amrex::Vector<MultiFab>, and a reallocation moves every
+    // element, leaving any previously-taken &GetMultiFab(lev) dangling. ErrorEst
+    // then dereferences freed storage on the very first regrid (capacity grows from
+    // nlevs to max_nlevs), which is exactly the "container overflow in fine-level
+    // error estimation" that the probe cap below used to paper over.
+    for (auto& e : mf_registry)
+    {
+        while ((int)e.mf->size() < max_nlevs)
+            e.mf->emplace_back(dummy_ba, dummy_dm, e.ncomp, 0);
+    }
+    for (auto& e : imf_registry)
+    {
+        while ((int)e.mf->size() < max_nlevs)
+            e.mf->emplace_back(dummy_ba, dummy_dm, e.ncomp, 0);
+    }
+
+    // Build non-owning pointer vectors sized to max_nlevs, not old_nlevs: ErrorEst
+    // is called at level L to tag level L+1, so probing up to max_nlevs-1 needs the
+    // vector to be indexable at every level it can be invoked on. Sizing it to
+    // old_nlevs makes the `lev < phi_mf_.size()` guard in ErrorEst fail at
+    // lev == old_nlevs-1+1, which silently suppresses all tagging above the current
+    // finest level and pins the hierarchy at one refinement level per run.
+    // Levels at or above old_nlevs stay null on purpose — they currently hold the
+    // dummy BoxArray placeholders, so ErrorEst must take its cascade-interpolation
+    // path (level 0 -> lev) rather than read them.
+    amrex::Vector<amrex::MultiFab*> phi_mfs(max_nlevs, nullptr);
+    amrex::Vector<amrex::MultiFab*> fb_mfs(max_nlevs, nullptr);
     for (int lev = 0; lev < old_nlevs; ++lev)
     {
         phi_mfs[lev] = &a->phi.GetMultiFab(lev);
@@ -628,6 +659,13 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
     }
 
     i=j=k=0;
+    // NOTE: IP/JP/KP resolve through ORIGIN_* = amr_tile_lo + max_i*level + ..., so
+    // DXN[IP] reads the CURRENT `level`'s block of the level-strided spacing array,
+    // offset by the current tile. i=j=k=0 pins the cell index but not `level` or
+    // amr_tile_lo, both of which are leftovers from whatever loop ran last. Measured
+    // level=0/tile_lo=(0,0,0) at every call site today, so the band is the level-0
+    // spacing (0.02 -> band 0.084) and identical on every regrid -- but that is a
+    // property of the call sites, not something this expression enforces.
     // Construct with max_nlevs-1 (not nlevs-1) so the mesh can detect that
     // additional levels are needed, not just reduce the existing count.
     reef3d_amrmesh_adaptive amr_mesh_adaptive(
@@ -648,8 +686,10 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
 
     // Extend geometry/BA/DM vectors to full max_nlevs so MakeNewGrids can
     // recurse through all levels without hitting unregistered geometry.
-    // Limit probing to avoid container-overflow issues in fine-level error estimation.
-    const int max_probe = std::min(2, max_nlevs);  // Limit to level 1 (avoid level 2+ probing)
+    // AmrMesh::MakeNewGrids adds at most ONE level per call, so the probe loop below
+    // needs one iteration per level of the hierarchy. Capping this at 2 pinned every
+    // run to a single refinement level no matter how much the error estimator tagged.
+    const int max_probe = max_nlevs;
     if(p->mpirank == 0) std::cout<< "Probing up to " << max_probe << std::endl;
 
     amrex_geometry.resize(max_nlevs);
@@ -669,31 +709,14 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
     amr_mesh_adaptive.SetDistributionMap(0, amrex_distribution_mapping[0]);
     amr_mesh_adaptive.SetFinestLevel(0);
 
-    // Create a dummy BoxArray and DistributionMapping for probe-only levels.
-    // This allows ErrorEst to safely reference higher levels during MakeNewGrids
-    // without triggering AMReX container-overflow errors.
-    amrex::BoxArray dummy_ba(amrex::Box::TheUnitBox());
-    amrex::DistributionMapping dummy_dm(dummy_ba);
-
+    // dummy_ba / dummy_dm and the registered-MultiFab pre-allocation are set up at
+    // the top of this function, ahead of the phi/fb pointer capture.
     for (int lev = 1; lev < max_nlevs; ++lev)
     {
         if ((int)amrex_box_array.size() <= lev)
             amrex_box_array.push_back(dummy_ba);
         if ((int)amrex_distribution_mapping.size() <= lev)
             amrex_distribution_mapping.push_back(dummy_dm);
-    }
-
-    // Pre-allocate all registered MultiFabs to max_nlevs with dummy BoxArrays
-    // so ErrorEst callbacks can safely access them during probing.
-    for (auto& e : mf_registry)
-    {
-        while ((int)e.mf->size() < max_nlevs)
-            e.mf->emplace_back(dummy_ba, dummy_dm, e.ncomp, 0);
-    }
-    for (auto& e : imf_registry)
-    {
-        while ((int)e.mf->size() < max_nlevs)
-            e.mf->emplace_back(dummy_ba, dummy_dm, e.ncomp, 0);
     }
 
     // Register all geometries upfront so MakeNewGrids can recurse to max_level
