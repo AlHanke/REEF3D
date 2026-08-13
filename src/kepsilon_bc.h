@@ -37,8 +37,8 @@ public:
     kepsilon_bc(lexer*);
     virtual ~kepsilon_bc();
     void bckeps_start(fdm*,lexer*,field&,field&,int);
-    void wall_law_kin(lexer*,fdm*,field&,field&,int,int,int,int,int,int,double);
-    void wall_law_eps(lexer*,fdm*,field&,field&,int,int,int,int,int,int,double);
+    void wall_law_kin(lexer*,fdm*,field&,field&,int,int,int,int,int,int);
+    void wall_law_eps(lexer*,fdm*,field&,field&,int,int,int,int,int,int);
 
 private:
     double uplus,ks_plus,dist,ks,ustar,u_abs,eps_star,tau;
