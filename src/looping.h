@@ -582,8 +582,8 @@ Authors: Hans Bihs, Alexander Hanke
 #define GCDF4LOOP GCDF4 GCDF4CHECK
 
 // IO
-#define GCINLOOP for(n=0;n<static_cast<int>(p->gcin.size());++n)
-#define GCOUTLOOP for(n=0;n<static_cast<int>(p->gcout.size());++n)
+#define GCINLOOP for(n=0;n<p->gcin.ssize(p->level);++n)
+#define GCOUTLOOP for(n=0;n<p->gcout.ssize(p->level);++n)
 
 // Tile context restore for the gcdf tables.
 //
@@ -602,6 +602,8 @@ Authors: Hans Bihs, Alexander Hanke
     #define GCDF3_TILE(idx) GCB_TILE(p->gcdf3[p->level][idx], p->level)
     #define GCDF4_TILE(idx) GCB_TILE(p->gcdf4[p->level][idx], p->level)
     #define GCB4_TILE(idx)  GCB_TILE(p->gcb4[p->level][idx],  p->level)
+    #define GCIN_TILE(idx)  GCB_TILE(p->gcin[p->level][idx],  p->level)
+    #define GCOUT_TILE(idx) GCB_TILE(p->gcout[p->level][idx], p->level)
     #define GCSLIN_TILE(idx)  GCB_TILE(p->gcslin[p->level][idx],  p->level)
     #define GCSLOUT_TILE(idx) GCB_TILE(p->gcslout[p->level][idx], p->level)
     #define GC_TILE_RESET   p->reset_tile_ctx()
@@ -618,6 +620,8 @@ Authors: Hans Bihs, Alexander Hanke
     #define GCDF3_TILE(idx) ((void)0)
     #define GCDF4_TILE(idx) ((void)0)
     #define GCB4_TILE(idx)  ((void)0)
+    #define GCIN_TILE(idx)  ((void)0)
+    #define GCOUT_TILE(idx) ((void)0)
     #define GCSLIN_TILE(idx)  ((void)0)
     #define GCSLOUT_TILE(idx) ((void)0)
     #define GC_TILE_RESET   ((void)0)

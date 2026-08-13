@@ -53,15 +53,17 @@ void iowave::rkinflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, fiel
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         u(i-1,j,k) = u(i-2,j,k) = u(i-3,j,k) = a->u(i-1,j,k);
         v(i-1,j,k) = v(i-2,j,k) = v(i-3,j,k) = a->v(i-1,j,k);
         w(i-1,j,k) = w(i-2,j,k) = w(i-3,j,k) = a->w(i-1,j,k);
     }
+    GC_TILE_RESET;
 
     if(p->B99==3||p->B99==4||p->B99==5)
 	active_beach(p,a,pgc,u,v,w);
@@ -74,10 +76,11 @@ void iowave::inflow_plain(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         u(i-1,j,k)=p->Ui;
         u(i-2,j,k)=p->Ui;
@@ -99,10 +102,11 @@ void iowave::inflow_plain(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
             u(i-3,j,k)+=p->W50;
         }
     }
+    GC_TILE_RESET;
 }
 
 void iowave::flowfile(lexer *p, fdm* a, ghostcell* pgc, turbulence *pturb)
 {
-    if(static_cast<int>(p->gcin.size())>0 && p->I230>0)
+    if(p->gcin.ssize(0)>0 && p->I230>0)
     flowfile_start(p,a,pgc,pturb);
 }

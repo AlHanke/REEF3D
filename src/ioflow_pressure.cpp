@@ -43,10 +43,11 @@ void ioflow_f::pressure_inlet(lexer *p, fdm *a, ghostcell *pgc)
         // LEVEL_LOOP
         GCINLOOP
         {
-            i=p->gcin[n].i;
-            j=p->gcin[n].j;
-            k=p->gcin[n].k;
+            i=p->gcin[p->level][n].i;
+            j=p->gcin[p->level][n].j;
+            k=p->gcin[p->level][n].k;
 
+            GCIN_TILE(n);
 
             if(a->phi(i,j,k)>=0.0)
             pval=(p->phimean - p->pos_z())*a->ro(i,j,k)*fabs(p->W22);
@@ -58,16 +59,18 @@ void ioflow_f::pressure_inlet(lexer *p, fdm *a, ghostcell *pgc)
             a->press(i-2,j,k)=pval;
             a->press(i-3,j,k)=pval;
         }
+        GC_TILE_RESET;
     }
     else if(p->B76==3)
     {
         // LEVEL_LOOP
         GCINLOOP
         {
-            i=p->gcin[n].i;
-            j=p->gcin[n].j;
-            k=p->gcin[n].k;
+            i=p->gcin[p->level][n].i;
+            j=p->gcin[p->level][n].j;
+            k=p->gcin[p->level][n].k;
 
+            GCIN_TILE(n);
 
             if(a->phi(i,j,k)>=0.0)
             pval=a->press(i,j,k) + p->Ui*p->DXP[IM1];
@@ -79,6 +82,7 @@ void ioflow_f::pressure_inlet(lexer *p, fdm *a, ghostcell *pgc)
             a->press(i-2,j,k)=pval;
             a->press(i-3,j,k)=pval;
         }
+        GC_TILE_RESET;
     }
 }
 
@@ -92,10 +96,11 @@ void ioflow_f::pressure_outlet(lexer *p, fdm *a, ghostcell *pgc)
     // LEVEL_LOOP
     GCOUTLOOP
     {
-        i=p->gcout[n].i-1;
-        j=p->gcout[n].j;
-        k=p->gcout[n].k;
+        i=p->gcout[p->level][n].i-1;
+        j=p->gcout[p->level][n].j;
+        k=p->gcout[p->level][n].k;
 
+        GCOUT_TILE(n);
 
         pval=0.0;
 
@@ -141,6 +146,7 @@ void ioflow_f::pressure_outlet(lexer *p, fdm *a, ghostcell *pgc)
             a->press(i+3,j,k)=pval;
         }
     }
+    GC_TILE_RESET;
 }
 
 void ioflow_f::pressure_wall(lexer *p, fdm *a, ghostcell *pgc)
