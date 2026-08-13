@@ -58,7 +58,6 @@ public:
     void lexer_read(ghostcell*);
     void flagini();
 	void gridini(ghostcell*);
-    void gcd_ini(ghostcell*);
     void makeflag(int*);
 
 	void read_grid();
@@ -101,7 +100,6 @@ public:
 
     //GHOSTCELL
 	int **gcb1,**gcb2,**gcb3,**gcb4;
-	double *gcd1,*gcd2,*gcd3,*gcd4;
 
     int gcdf1_count,gcdf2_count,gcdf3_count,gcdf4_count;
     int **gcdf1,**gcdf2,**gcdf3,**gcdf4;

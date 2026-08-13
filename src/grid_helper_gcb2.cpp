@@ -33,7 +33,6 @@ void grid_helper::fillgcb2(lexer *p)
     if(p->gcb2_count!=p->gcb4_count)
     {
         p->Iresize(p->gcb2,p->gcb2_count, p->gcb4_count, 6, 6);
-        p->Dresize(p->gcd2,p->gcb2_count, p->gcb4_count);
 
         p->gcb2_count=p->gcb4_count;
     }
@@ -42,12 +41,6 @@ void grid_helper::fillgcb2(lexer *p)
     {
         for(n=0;n<5;++n)
         p->gcb2[q][n]=p->gcb4[q][n];
-
-        if(p->gcb2[q][3]==2 || p->gcb2[q][3]==3)
-        p->gcd2[q]=p->gcd4[q];
-
-        if(p->gcb2[q][3]!=2 && p->gcb2[q][3]!=3)
-        p->gcd2[q]=p->gcd4[q];
     }
 
     QGC2LOOP
@@ -55,9 +48,6 @@ void grid_helper::fillgcb2(lexer *p)
         i=p->gcb2[q][0];
         j=p->gcb2[q][1];
         k=p->gcb2[q][2];
-
-        if(p->gcb2[q][3]==2 || p->gcb2[q][3]==3)
-        p->gcd2[q] += 0.5*p->DYP[JP];
 
         fgc[IJK][p->gcb2[q][3]-1]=1;
     }
