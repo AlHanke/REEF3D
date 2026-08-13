@@ -45,34 +45,34 @@ void bcmom::wall_laws(lexer* p, fdm* a, field& b, int gcval)
         {
             QGC1LOOP
             if(p->gcb1[q][4]==21 && p->gcb1[q][3]!=1 && p->gcb1[q][3]!=4)
-                wall_law_u(p,a,b,p->gcb1[q][0], p->gcb1[q][1], p->gcb1[q][2], p->gcb1[q][3], p->gcb1[q][4], p->gcd1[q]);
+                wall_law_u(p,a,b,p->gcb1[q][0], p->gcb1[q][1], p->gcb1[q][2], p->gcb1[q][3], p->gcb1[q][4]);
 
             QGCDF1LOOP
-                wall_law_u(p,a,b,p->gcdf1[q][0], p->gcdf1[q][1], p->gcdf1[q][2], p->gcdf1[q][3], p->gcdf1[q][4],  0.5*p->DXM);
+                wall_law_u(p,a,b,p->gcdf1[q][0], p->gcdf1[q][1], p->gcdf1[q][2], p->gcdf1[q][3], p->gcdf1[q][4]);
         }
         else if(gcval==11 && p->j_dir==1)
         {
             QGC2LOOP
             if(p->gcb2[q][4]==21 && p->gcb2[q][3]!=2 && p->gcb2[q][3]!=3)
-                wall_law_v(p,a,b,p->gcb2[q][0], p->gcb2[q][1], p->gcb2[q][2], p->gcb2[q][3], p->gcb2[q][4], p->gcd2[q]);
+                wall_law_v(p,a,b,p->gcb2[q][0], p->gcb2[q][1], p->gcb2[q][2], p->gcb2[q][3], p->gcb2[q][4]);
 
             QGCDF2LOOP
-                wall_law_v(p,a,b,p->gcdf2[q][0], p->gcdf2[q][1], p->gcdf2[q][2], p->gcdf2[q][3], p->gcdf2[q][4],  0.5*p->DXM);
+                wall_law_v(p,a,b,p->gcdf2[q][0], p->gcdf2[q][1], p->gcdf2[q][2], p->gcdf2[q][3], p->gcdf2[q][4]);
         }
         else if(gcval==12)
         {
             QGC3LOOP
             if(p->gcb3[q][4]==21 && p->gcb3[q][3]!=5 && p->gcb3[q][3]!=6)
-                wall_law_w(p,a,b,p->gcb3[q][0], p->gcb3[q][1], p->gcb3[q][2], p->gcb3[q][3], p->gcb3[q][4], p->gcd3[q]);
+                wall_law_w(p,a,b,p->gcb3[q][0], p->gcb3[q][1], p->gcb3[q][2], p->gcb3[q][3], p->gcb3[q][4]);
 
             QGCDF3LOOP
-                wall_law_w(p,a,b,p->gcdf3[q][0], p->gcdf3[q][1], p->gcdf3[q][2], p->gcdf3[q][3], p->gcdf3[q][4],  0.5*p->DXM);
+                wall_law_w(p,a,b,p->gcdf3[q][0], p->gcdf3[q][1], p->gcdf3[q][2], p->gcdf3[q][3], p->gcdf3[q][4]);
 
         }
     }
 }
 
-void bcmom::wall_law_u(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int cs, int bc, double dist)
+void bcmom::wall_law_u(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int cs, int bc)
 {
     i = ii;
     j = jj;
@@ -95,7 +95,7 @@ void bcmom::wall_law_u(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int c
     a->F(i,j,k) -= ((fabs(a->u(i,j,k))*a->u(i,j,k))/(uplus*uplus*deltaZ));
 }
 
-void bcmom::wall_law_v(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int cs, int bc, double dist)
+void bcmom::wall_law_v(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int cs, int bc)
 {
     i = ii;
     j = jj;
@@ -118,7 +118,7 @@ void bcmom::wall_law_v(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int c
     a->G(i,j,k) -= ((fabs(a->v(i,j,k))*a->v(i,j,k))/(uplus*uplus*deltaZ));
 }
 
-void bcmom::wall_law_w(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int cs, int bc, double dist)
+void bcmom::wall_law_w(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int cs, int bc)
 {
     i = ii;
     j = jj;
