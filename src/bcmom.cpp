@@ -48,7 +48,7 @@ void bcmom::wall_laws(lexer* p, fdm* a, field& b, int gcval)
                 wall_law_u(p,a,b,p->gcb1[q][0], p->gcb1[q][1], p->gcb1[q][2], p->gcb1[q][3], p->gcb1[q][4]);
 
             QGCDF1LOOP
-                wall_law_u(p,a,b,p->gcdf1[q][0], p->gcdf1[q][1], p->gcdf1[q][2], p->gcdf1[q][3], p->gcdf1[q][4]);
+                wall_law_u(p,a,b,p->gcdf1[q][0], p->gcdf1[q][1], p->gcdf1[q][2], p->gcdf1[q][3], 48);
         }
         else if(gcval==11 && p->j_dir==1)
         {
@@ -57,7 +57,7 @@ void bcmom::wall_laws(lexer* p, fdm* a, field& b, int gcval)
                 wall_law_v(p,a,b,p->gcb2[q][0], p->gcb2[q][1], p->gcb2[q][2], p->gcb2[q][3], p->gcb2[q][4]);
 
             QGCDF2LOOP
-                wall_law_v(p,a,b,p->gcdf2[q][0], p->gcdf2[q][1], p->gcdf2[q][2], p->gcdf2[q][3], p->gcdf2[q][4]);
+                wall_law_v(p,a,b,p->gcdf2[q][0], p->gcdf2[q][1], p->gcdf2[q][2], p->gcdf2[q][3], 48);
         }
         else if(gcval==12)
         {
@@ -66,7 +66,7 @@ void bcmom::wall_laws(lexer* p, fdm* a, field& b, int gcval)
                 wall_law_w(p,a,b,p->gcb3[q][0], p->gcb3[q][1], p->gcb3[q][2], p->gcb3[q][3], p->gcb3[q][4]);
 
             QGCDF3LOOP
-                wall_law_w(p,a,b,p->gcdf3[q][0], p->gcdf3[q][1], p->gcdf3[q][2], p->gcdf3[q][3], p->gcdf3[q][4]);
+                wall_law_w(p,a,b,p->gcdf3[q][0], p->gcdf3[q][1], p->gcdf3[q][2], p->gcdf3[q][3], 48);
 
         }
     }
