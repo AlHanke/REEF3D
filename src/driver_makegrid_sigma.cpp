@@ -355,8 +355,6 @@ void driver::makegrid2D_basic(lexer *p, ghostcell *pgc)
 void driver::makegrid_sigma_cds(lexer *p, ghostcell *pgc)
 {	
     p->flagini2D();
-    p->gridini2D();	
-    
-    pgc->sizeS_update(p);
+    p->gridini2D();
 }
 	
