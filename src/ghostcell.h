@@ -109,7 +109,6 @@ public:
     void rownum7_update(lexer*,int*);
 
     void sizeM_update(lexer*);
-    void sizeS_update(lexer*);
 
     void fdm2D_update(fdm2D*);
     void fdm_fnpf_update(fdm_fnpf*);
