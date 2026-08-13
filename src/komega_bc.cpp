@@ -135,39 +135,39 @@ void komega_bc::bckin_matrix(fdm *a, lexer *p, field &kin, field &eps)
     n=0;
     LOOP
     {
-        if(p->flag4[Im1JK]<0 || (p->DF[IJK]>0 && p->DF[Im1JK]<0))
+        if(p->flag4[Im1JK]<0 || (p->DF(i,j,k)>0 && p->DF(i-1,j,k)<0))
         {
             if(p->IO[Im1JK]!=1)
                 a->rhsvec.V[n] -= a->M.s[n]*kin(i,j,k);
             a->M.s[n] = 0.0;
         }
 
-        if(p->flag4[Ip1JK]<0 || (p->DF[IJK]>0 && p->DF[Ip1JK]<0))
+        if(p->flag4[Ip1JK]<0 || (p->DF(i,j,k)>0 && p->DF(i+1,j,k)<0))
         {
             if(p->IO[Ip1JK]!=1)
                 a->rhsvec.V[n] -= a->M.n[n]*kin(i,j,k);
             a->M.n[n] = 0.0;
         }
 
-        if((p->flag4[IJm1K]<0 || (p->DF[IJK]>0 && p->DF[IJm1K]<0)) && p->j_dir==1 && p->IO[IJm1K]==0)
+        if((p->flag4[IJm1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j-1,k)<0)) && p->j_dir==1 && p->IO[IJm1K]==0)
         {
             a->rhsvec.V[n] -= a->M.e[n]*kin(i,j,k);
             a->M.e[n] = 0.0;
         }
 
-        if((p->flag4[IJp1K]<0 || (p->DF[IJK]>0 && p->DF[IJp1K]<0)) && p->j_dir==1 && p->IO[IJp1K]==0)
+        if((p->flag4[IJp1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j+1,k)<0)) && p->j_dir==1 && p->IO[IJp1K]==0)
         {
             a->rhsvec.V[n] -= a->M.w[n]*kin(i,j,k);
             a->M.w[n] = 0.0;
         }
 
-        if((p->flag4[IJKm1]<0 || (p->DF[IJK]>0 && p->DF[IJKm1]<0)) && p->IO[IJKm1]==0)
+        if((p->flag4[IJKm1]<0 || (p->DF(i,j,k)>0 && p->DF(i,j,k-1)<0)) && p->IO[IJKm1]==0)
         {
             a->rhsvec.V[n] -= a->M.b[n]*kin(i,j,k);
             a->M.b[n] = 0.0;
         }
 
-        if((p->flag4[IJKp1]<0 || (p->DF[IJK]>0 && p->DF[IJKp1]<0)) && p->IO[IJKp1]==0)
+        if((p->flag4[IJKp1]<0 || (p->DF(i,j,k)>0 && p->DF(i,j,k+1)<0)) && p->IO[IJKp1]==0)
         {
             a->rhsvec.V[n] -= a->M.t[n]*kin(i,j,k);
             a->M.t[n] = 0.0;
@@ -181,7 +181,7 @@ void komega_bc::bckin_matrix(fdm *a, lexer *p, field &kin, field &eps)
     n=0;
     LOOP
     {
-        if(p->DF[IJK]<0)
+        if(p->DF(i,j,k)<0)
         {
             a->M.p[n] = 1.0;
 
@@ -207,39 +207,39 @@ void komega_bc::bcomega_matrix(fdm *a,lexer *p, field &kin, field &eps)
     LOOP
     {
 
-        if(p->flag4[Im1JK]<0 || (p->DF[IJK]>0 && p->DF[Im1JK]<0))
+        if(p->flag4[Im1JK]<0 || (p->DF(i,j,k)>0 && p->DF(i-1,j,k)<0))
         {
             if(p->IO[Im1JK]!=1)
                 a->rhsvec.V[n] -= a->M.s[n]*eps(i,j,k);
             a->M.s[n] = 0.0;
         }
 
-        if(p->flag4[Ip1JK]<0 || (p->DF[IJK]>0 && p->DF[Ip1JK]<0))
+        if(p->flag4[Ip1JK]<0 || (p->DF(i,j,k)>0 && p->DF(i+1,j,k)<0))
         {
             if(p->IO[Ip1JK]!=1)
                 a->rhsvec.V[n] -= a->M.n[n]*eps(i,j,k);
             a->M.n[n] = 0.0;
         }
 
-        if((p->flag4[IJm1K]<0 || (p->DF[IJK]>0 && p->DF[IJm1K]<0)) && p->j_dir==1 && p->IO[IJm1K]==0)
+        if((p->flag4[IJm1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j-1,k)<0)) && p->j_dir==1 && p->IO[IJm1K]==0)
         {
             a->rhsvec.V[n] -= a->M.e[n]*eps(i,j,k);
             a->M.e[n] = 0.0;
         }
 
-        if((p->flag4[IJp1K]<0 || (p->DF[IJK]>0 && p->DF[IJp1K]<0)) && p->j_dir==1 && p->IO[IJp1K]==0)
+        if((p->flag4[IJp1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j+1,k)<0)) && p->j_dir==1 && p->IO[IJp1K]==0)
         {
             a->rhsvec.V[n] -= a->M.w[n]*eps(i,j,k);
             a->M.w[n] = 0.0;
         }
 
-        if((p->flag4[IJKm1]<0 || (p->DF[IJK]>0 && p->DF[IJKm1]<0)) && p->IO[IJKm1]==0)
+        if((p->flag4[IJKm1]<0 || (p->DF(i,j,k)>0 && p->DF(i,j,k-1)<0)) && p->IO[IJKm1]==0)
         {
             a->rhsvec.V[n] -= a->M.b[n]*eps(i,j,k);
             a->M.b[n] = 0.0;
         }
 
-        if((p->flag4[IJKp1]<0 || (p->DF[IJK]>0 && p->DF[IJKp1]<0)) && p->IO[IJKp1]==0)
+        if((p->flag4[IJKp1]<0 || (p->DF(i,j,k)>0 && p->DF(i,j,k+1)<0)) && p->IO[IJKp1]==0)
         {
             a->rhsvec.V[n] -= a->M.t[n]*eps(i,j,k);
             a->M.t[n] = 0.0;
@@ -251,7 +251,7 @@ void komega_bc::bcomega_matrix(fdm *a,lexer *p, field &kin, field &eps)
     n=0;
     LOOP
     {
-        if(p->DF[IJK]<0)
+        if(p->DF(i,j,k)<0)
         {
             a->M.p[n] = 1.0;
 

@@ -55,10 +55,10 @@ void sediment_f::active_cfd(lexer *p, fdm *a, ghostcell *pgc)
     {
     k = s->bedk(i,j);
     
-    if(p->DF[IJK]>0)
+    if(p->DF(i,j,k)>0)
     s->DFBED[IJ]=1;
     
-    if(p->DF[IJK]<0)
+    if(p->DF(i,j,k)<0)
     s->DFBED[IJ]=-1;
     }
     
@@ -81,10 +81,10 @@ void sediment_f::active_ini_cfd(lexer *p, fdm *a,ghostcell *pgc)
     {
     k = s->bedk(i,j);
     
-    if(p->DF[IJK]>0)
+    if(p->DF(i,j,k)>0)
     s->DFBED[IJ]=1;
     
-    if(p->DF[IJK]<0)
+    if(p->DF(i,j,k)<0)
     s->DFBED[IJ]=-1;
     }
 }
@@ -103,10 +103,10 @@ void sediment_f::active_ini_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     k=0;
     SLICEBASELOOP
     {
-    if(p->DF[IJK]>0)
+    if(p->DF(i,j,k)>0)
     s->DFBED[IJ]=1;
     
-    if(p->DF[IJK]<0)
+    if(p->DF(i,j,k)<0)
     s->DFBED[IJ]=-1;
     }
 }
@@ -125,10 +125,10 @@ void sediment_f::active_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
     k=0;
     SLICEBASELOOP
     {
-    if(p->DF[IJK]>0)
+    if(p->DF(i,j,k)>0)
     s->DFBED[IJ]=1;
     
-    if(p->DF[IJK]<0)
+    if(p->DF(i,j,k)<0)
     s->DFBED[IJ]=-1;
     }
 }
@@ -153,10 +153,10 @@ void sediment_f::active_sflow(lexer *p, fdm2D *b, ghostcell *pgc)
     k=p->knoz-1;
     SLICEBASELOOP
     {
-    if(p->DF[IJK]>0)
+    if(p->DF(i,j,k)>0)
     s->DFBED[IJ]=1;
     
-    if(p->DF[IJK]<0)
+    if(p->DF(i,j,k)<0)
     s->DFBED[IJ]=-1;
     }
 }
@@ -175,10 +175,10 @@ void sediment_f::active_ini_sflow(lexer *p, fdm2D *b, ghostcell *pgc)
     k=p->knoz-1;
     SLICEBASELOOP
     {
-    if(p->DF[IJK]>0)
+    if(p->DF(i,j,k)>0)
     s->DFBED[IJ]=1;
     
-    if(p->DF[IJK]<0)
+    if(p->DF(i,j,k)<0)
     s->DFBED[IJ]=-1;
     }
 }
