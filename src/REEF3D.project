@@ -2829,9 +2829,6 @@
         <File Name="gcsl_noslip.cpp"/>
         <File Name="gcsl_setbc.cpp"/>
       </VirtualDirectory>
-      <VirtualDirectory Name="CDS Grid2D">
-        <File Name="gc_sizeS_update.cpp"/>
-      </VirtualDirectory>
     </VirtualDirectory>
     <VirtualDirectory Name="Main">
       <VirtualDirectory Name="Printer">

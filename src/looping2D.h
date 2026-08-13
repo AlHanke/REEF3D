@@ -54,8 +54,6 @@ Author: Hans Bihs
 
 #define TPSLICELOOP ITPLOOP JTPLOOP
 
-#define NSLICELOOP4 for(n=p->sizeS4[0]; n<p->sizeS4[1]; ++n)
-
 #define SLICEFLEXLOOP IFLEXLOOP JFLEXLOOP SLICEFLEXCHECK
 
 // GCBSL

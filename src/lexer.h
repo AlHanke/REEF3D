@@ -151,7 +151,6 @@ public:
 	// Solver
     int *range_col4,*range_row4,*range_col7,*range_row7;
     int *sizeM4;
-    int *sizeS4;
 
 	// SMO
 	int veclength;
