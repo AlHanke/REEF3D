@@ -104,7 +104,7 @@ public:
 	int **gcb1,**gcb2,**gcb3,**gcb4;
 
     int gcdf1_count,gcdf2_count,gcdf3_count,gcdf4_count;
-    std::vector<std::array<int, 5>> gcdf1, gcdf2, gcdf3;
+    std::vector<std::array<int, 4>> gcdf1, gcdf2, gcdf3;
     std::vector<std::array<int, 6>> gcdf4;
     int gcsldfeta4_count,gcsldfbed4_count;
     int **gcsldfeta4,**gcsldfbed4;
