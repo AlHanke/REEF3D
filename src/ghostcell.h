@@ -231,6 +231,8 @@ private:
     void Sendrecv_2D(const void*[6],int[6],void*[6],int[6],MPI_Datatype);
     void Sendrecv_3D(const void*[6],int[6],void*[6],int[6],MPI_Datatype);
 
+    void set_DF(lexer *p, fdm *a);
+
     void gcwait(lexer*);
 
     // boundary conditions

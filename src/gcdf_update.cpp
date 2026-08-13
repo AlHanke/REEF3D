@@ -25,6 +25,25 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"fieldint4.h"
 
+void ghostcell::set_DF(lexer *p, fdm *a)
+{
+    LOOP
+    {
+        int df = 1;
+
+        if(p->solidread>0 && a->solid(i,j,k)<0.0)
+            df = -1;
+        else if(p->toporead>0 && a->topo(i,j,k)<0.0)
+            df = -1;
+        else if(p->X10>0 && a->fb(i,j,k)<0.0)
+            df = -1;
+
+        p->DF[IJK] = df;
+    }
+
+    flagx(p,p->DF);
+}
+
 void ghostcell::gcdf_update(lexer *p, fdm *a)
 {
     double psi;
