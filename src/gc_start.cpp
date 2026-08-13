@@ -40,7 +40,7 @@ void ghostcell::start1(lexer *p, field& f, int gcv)
     starttime=timer();
     QQGC1LOOP
     if((p->gcb1[qq][3]!=2 && p->gcb1[qq][3]!=3) || p->j_dir==1)
-        gcdistro1(f, p->gcb1[qq][0], p->gcb1[qq][1], p->gcb1[qq][2], p->gcb1[qq][3], p->gcb1[qq][4], p->gcd1[qq], gcv);
+        gcdistro1(f, p->gcb1[qq][0], p->gcb1[qq][1], p->gcb1[qq][2], p->gcb1[qq][3], p->gcb1[qq][4], gcv);
     endtime=timer();
     p->gctime+=endtime-starttime;
 
@@ -79,7 +79,7 @@ void ghostcell::start2(lexer *p, field& f, int gcv)
     {
         starttime=timer();
         QQGC2LOOP
-            gcdistro2(f, p->gcb2[qq][0], p->gcb2[qq][1], p->gcb2[qq][2], p->gcb2[qq][3], p->gcb2[qq][4], p->gcd2[qq], gcv);
+            gcdistro2(f, p->gcb2[qq][0], p->gcb2[qq][1], p->gcb2[qq][2], p->gcb2[qq][3], p->gcb2[qq][4], gcv);
         endtime=timer();
         p->gctime+=endtime-starttime;
 
@@ -118,7 +118,7 @@ void ghostcell::start3(lexer *p, field& f, int gcv)
     starttime=timer();
     QQGC3LOOP
     if((p->gcb1[qq][3]!=2 && p->gcb1[qq][3]!=3) || p->j_dir==1)
-        gcdistro3(f, p->gcb3[qq][0], p->gcb3[qq][1], p->gcb3[qq][2], p->gcb3[qq][3], p->gcb3[qq][4], p->gcd3[qq], gcv);
+        gcdistro3(f, p->gcb3[qq][0], p->gcb3[qq][1], p->gcb3[qq][2], p->gcb3[qq][3], p->gcb3[qq][4], gcv);
     endtime=timer();
     p->gctime+=endtime-starttime;
 
@@ -156,7 +156,7 @@ void ghostcell::start4(lexer *p, field &f, int gcv)
     starttime=timer();
     QQGC4LOOP
     if((p->gcb1[qq][3]!=2 && p->gcb1[qq][3]!=3) || p->j_dir==1)
-        gcdistro4(f, p->gcb4[qq][0], p->gcb4[qq][1], p->gcb4[qq][2], p->gcb4[qq][3], p->gcb4[qq][4], p->gcd4[qq], gcv);
+        gcdistro4(f, p->gcb4[qq][0], p->gcb4[qq][1], p->gcb4[qq][2], p->gcb4[qq][3], p->gcb4[qq][4], gcv);
     endtime=timer();
     p->gctime+=endtime-starttime;
 
@@ -192,7 +192,7 @@ void ghostcell::start4_sum(lexer *p, field& f, int gcv)
 
     starttime=timer();
     QQGC4LOOP
-        gcdistro4(f, p->gcb4[qq][0], p->gcb4[qq][1], p->gcb4[qq][2], p->gcb4[qq][3], p->gcb4[qq][4], p->gcd4[qq], gcv);
+        gcdistro4(f, p->gcb4[qq][0], p->gcb4[qq][1], p->gcb4[qq][2], p->gcb4[qq][3], p->gcb4[qq][4], gcv);
     endtime=timer();
     p->gctime+=endtime-starttime;
 

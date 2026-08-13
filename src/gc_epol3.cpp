@@ -76,7 +76,7 @@ ghostcell::bc_labels ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NONE;
 }
 
-void ghostcell::gcdistro3(field &f, int ii, int jj, int kk, int cs, int bc, double dist, int gcv)
+void ghostcell::gcdistro3(field &f, int ii, int jj, int kk, int cs, int bc, int gcv)
 {
-    gcdistro(f,ii,jj,kk,dist,gceval3(p,gcv,bc,cs),cs);
+    gcdistro(f,ii,jj,kk,gceval3(p,gcv,bc,cs),cs);
 }
