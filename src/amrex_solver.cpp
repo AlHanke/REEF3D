@@ -237,7 +237,15 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
     const int nlev = p->nlevs;
 
     // ---- solver-side hierarchy (see header: pseudo-2D y-doubling) ----
+    // REEF_MLMG_NOYDOUBLE: A/B knob for the hidden-direction-at-nlev>1 path.
+    // It does NOT currently work: the composite solve stalls (see the semi-
+    // coarsening/hidden-direction comment in the LPInfo block below), so the
+    // knob exists to re-test it after that is fixed, not as a production
+    // setting. Forcing ydouble=false at nlev>1 aborts with
+    // "MLMG: Failed to converge after 250 iterations, resid/resid0 = 3.4e-3".
     ydouble = (p->j_dir == 0) && nlev > 1;
+    if(std::getenv("REEF_MLMG_NOYDOUBLE"))
+    ydouble = false;
 
     sgeom.resize(nlev);
     sgrids.resize(nlev);
@@ -291,16 +299,24 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
     // box arrays left at 1x never matches, the inference falls through and
     // yields ref ratio 8 -> mlmg_lin_cc_interp aborts.
     //
-    // p->ref_vec is 1 in a thin direction, so a pseudo-2D hierarchy is refined
-    // ANISOTROPICALLY, (2,1,2). MLLinOp does declare that to YAFluxRegister, but
-    // FineAdd scales by the PRODUCT of the ratio components applied uniformly in
-    // every direction (AMReX_YAFluxRegister.H ~542). The weight a coarse face
-    // normal to d actually needs is the tangential fine-face count,
-    // product/ratio[d]: isotropic (2,2,2) gives 8/4 = 2 in all three directions,
-    // one uniform constant, but (2,1,2) gives 2,1,2 -- no single factor is right
-    // in all of them. reflux() is the one nlev>1-only routine with no
-    // hidden-direction handling at all, so this mis-weights the C-F flux
-    // correction on every V-cycle and the composite solve stalls.
+    // p->ref_vec is 1 in a thin direction, so a pseudo-2D hierarchy would be
+    // refined ANISOTROPICALLY, (2,1,2), which is what setHiddenDirection needs.
+    // That path is BROKEN: forcing ydouble=false at nlev>1 stalls the composite
+    // solve at resid/resid0 ~ 3.4e-3 after 250 iterations (measured 2026-08-12,
+    // first solve of step 1). rhs and resid0 match the working y-doubled run
+    // exactly, so the staging and the RHS are fine and the operator is at fault.
+    //
+    // The cause is NOT the flux register, contrary to an earlier note here.
+    // YAFluxRegister::FineAdd scales by dt/(fine_dx[d] * prod(rr)) and sums
+    // prod(rr)/rr[d] fine faces; since fine_dx[d] = crse_dx[d]/rr[d], the total
+    // is <f>*dt/crse_dx[d] for ANY rr, isotropic or not. The weighting is
+    // dimensionally correct for (2,1,2) -- verified against
+    // AMReX_YAFluxRegister.H ~542 and AMReX_YAFluxRegister_3D_K.H. MLCellLinOp
+    // also passes AMRRefRatioVect (the IntVect, hidden dir = 1) to the register
+    // at ~714, so it is not a scalar/vector mix-up either. The real cause is
+    // still unidentified -- do not spend the search on reflux again.
+    //
+    // Refining the thin direction instead keeps the ratio isotropic and works.
     //
     // Refining the thin direction too keeps the ratio isotropic. The added
     // y-planes are exact copies of plane 0 (see the replication loop below) and
@@ -630,9 +646,17 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
         if(std::getenv("REEF_MLMG_BOTTOM_SMOOTHER"))
         mlmg->setBottomSolver(MLMG::BottomSolver::smoother);
 
-        // REEF_MLMG_BOTTOM=cg|bicgstab|hypre|smoother: the default bicgstab breaks
-        // down on the singular all-Neumann bottom problem when the coarsest grid is
-        // large (pseudo-2D ny=1 leaves the base level uncoarsenable)
+        // Bottom solver: BoomerAMG via hypre. AMReX' default bicgstab breaks down
+        // on the singular all-Neumann bottom problem, and the semicoarsened
+        // hierarchy leaves a bottom grid whose x:z aspect ratio mirrors the
+        // domain's -- exactly the anisotropy an algebraic coarsening handles and
+        // a geometric one does not. Set before the env block so REEF_MLMG_BOTTOM
+        // can still override it for bisection.
+        mlmg->setBottomSolver(MLMG::BottomSolver::hypre);
+        mlmg->setBottomTolerance(1.e-3);   // inside a V-cycle; AMReX default 1e-4
+        mlmg->setBottomMaxIter(100);
+
+        // REEF_MLMG_BOTTOM=cg|bicgstab|hypre|smoother
         if(const char* bs = std::getenv("REEF_MLMG_BOTTOM"))
         {
             const std::string s(bs);
@@ -651,13 +675,22 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
             mlmg->setBottomTolerance(1.e-3);
         }
 
-        if(std::getenv("REEF_MLMG_MAXFMGITER"))
-        mlmg->setMaxFmgIter(1);
-
-        if(std::getenv("REEF_MLMG_SMOOTHCYCLE"))
+        // F-cycles for the first iterations. AMReX defaults max_fmg_iters to 0,
+        // i.e. plain V-cycles with no F-cycle start-up; REEF_MLMG_MAXFMGITER=0
+        // restores that for comparison.
         {
-            mlmg->setPreSmooth(3);
-            mlmg->setPostSmooth(3);
+            const char* fm = std::getenv("REEF_MLMG_MAXFMGITER");
+            mlmg->setMaxFmgIter(fm ? std::atoi(fm) : 4);
+        }
+
+        // Heavier smoothing than AMReX' default nu1=nu2=2. Each V-cycle costs
+        // more, but the density jump at the free surface makes the iteration
+        // count the dominant term. REEF_MLMG_SMOOTH=2 restores the default.
+        {
+            const char* sm = std::getenv("REEF_MLMG_SMOOTH");
+            const int nu = sm ? std::atoi(sm) : 3;
+            mlmg->setPreSmooth(nu);
+            mlmg->setPostSmooth(nu);
         }
 
         solver_created = true;
