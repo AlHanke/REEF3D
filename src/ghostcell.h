@@ -290,8 +290,8 @@ private:
     bc_labels gcsleval2(int,int,int);
     bc_labels gcsleval4(int,int,int);
 
-    template<typename FlagT>
-    void gcdf_update_impl(lexer *p, FlagT &flagsf, int **&gcdf, int &gcdf_count);
+    template<typename FlagT, typename GcdfT>
+    void gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf_count);
 
     MPI_Comm cart_comm = MPI_COMM_NULL;
     int neighbors[6] = {MPI_PROC_NULL, MPI_PROC_NULL, MPI_PROC_NULL,

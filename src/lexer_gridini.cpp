@@ -97,10 +97,10 @@ void lexer::flagini()
     // gcdf
     gcdf1_count=gcdf2_count=gcdf3_count=gcdf4_count=1;
 
-    Iarray(gcdf1,gcdf1_count,6);
-    Iarray(gcdf2,gcdf2_count,6);
-    Iarray(gcdf3,gcdf3_count,6);
-    Iarray(gcdf4,gcdf4_count,6);
+    gcdf1.resize(gcdf1_count);
+    gcdf2.resize(gcdf2_count);
+    gcdf3.resize(gcdf3_count);
+    gcdf4.resize(gcdf4_count);
 
     // gcsldf
     gcsldfeta4_count=1;

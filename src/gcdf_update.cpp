@@ -113,7 +113,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
 
     if(p->gcdf4_count!=count)
     {
-        p->Iresize(p->gcdf4,p->gcdf4_count,count,6,6);
+        p->gcdf4.resize(count);
 
         p->gcdf4_count=count;
     }
@@ -241,8 +241,8 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     gcdf_update_impl(p, flagsf3, p->gcdf3, p->gcdf3_count);
 }
 
-template<typename FlagT>
-void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, int **&gcdf, int &gcdf_count)
+template<typename FlagT, typename GcdfT>
+void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, GcdfT &gcdf, int &gcdf_count)
 {
     // -----------------------
     // flagsf
@@ -273,7 +273,7 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, int **&gcdf, int &gcdf
 
     if(gcdf_count!=count)
     {
-        p->Iresize(gcdf,gcdf_count,count,6,6);
+        gcdf.resize(count);
 
         gcdf_count=count;
     }
