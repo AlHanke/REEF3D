@@ -24,7 +24,7 @@ Author: Alexander Hanke
 #include "field.h"
 #include "slice.h"
 
-void ghostcell::gcdistro(field &f, int ii, int jj, int kk, double dist, bc_labels bc_label, int cs)
+void ghostcell::gcdistro(field &f, int ii, int jj, int kk, bc_labels bc_label, int cs)
 {
     i=ii;
     j=jj;
