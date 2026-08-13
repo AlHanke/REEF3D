@@ -128,24 +128,24 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     TILE_LOOP
     IJKLOOP
     PBASECHECK
-    if(p->DF[IJK]>0)
+    if(p->DF(i,j,k)>0)
     {
-        if(p->DF[Im1JK]<0)
+        if(p->DF(i-1,j,k)<0)
             ++count;
 
-        if(p->DF[Ip1JK]<0)
+        if(p->DF(i+1,j,k)<0)
             ++count;
 
-        if(p->DF[IJm1K]<0)
+        if(p->DF(i,j-1,k)<0)
             ++count;
 
-        if(p->DF[IJp1K]<0)
+        if(p->DF(i,j+1,k)<0)
             ++count;
 
-        if(p->DF[IJKm1]<0)
+        if(p->DF(i,j,k-1)<0)
             ++count;
 
-        if(p->DF[IJKp1]<0)
+        if(p->DF(i,j,k+1)<0)
             ++count;
     }
 
@@ -163,9 +163,9 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     TILE_LOOP
     IJKLOOP
     PBASECHECK
-    if(p->DF[IJK]>0)
+    if(p->DF(i,j,k)>0)
     {
-        if(p->DF[Im1JK]<0)
+        if(p->DF(i-1,j,k)<0)
         {
             p->gcdf4[count][0]=i;
             p->gcdf4[count][1]=j;
@@ -174,7 +174,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             ++count;
         }
 
-        if(p->DF[Ip1JK]<0)
+        if(p->DF(i+1,j,k)<0)
         {
             p->gcdf4[count][0]=i;
             p->gcdf4[count][1]=j;
@@ -183,7 +183,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             ++count;
         }
 
-        if(p->DF[IJm1K]<0)
+        if(p->DF(i,j-1,k)<0)
         {
             p->gcdf4[count][0]=i;
             p->gcdf4[count][1]=j;
@@ -192,7 +192,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             ++count;
         }
 
-        if(p->DF[IJp1K]<0)
+        if(p->DF(i,j+1,k)<0)
         {
             p->gcdf4[count][0]=i;
             p->gcdf4[count][1]=j;
@@ -201,7 +201,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             ++count;
         }
 
-        if(p->DF[IJKm1]<0)
+        if(p->DF(i,j,k-1)<0)
         {
             p->gcdf4[count][0]=i;
             p->gcdf4[count][1]=j;
@@ -210,7 +210,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             ++count;
         }
 
-        if(p->DF[IJKp1]<0)
+        if(p->DF(i,j,k+1)<0)
         {
             p->gcdf4[count][0]=i;
             p->gcdf4[count][1]=j;
@@ -255,20 +255,20 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     // as separate arrays; gcdf_update_impl never reaches more than 2 cells from DF.
     auto flagsf1 = [p](int i, int j, int k) -> int
     {
-        int v = p->DF[IJK];
-        return (v>0 && p->DF[Ip1JK]<0) ? -1 : v;
+        int v = p->DF(i,j,k);
+        return (v>0 && p->DF(i+1,j,k)<0) ? -1 : v;
     };
 
     auto flagsf2 = [p](int i, int j, int k) -> int
     {
-        int v = p->DF[IJK];
-        return (v>0 && p->DF[IJp1K]<0) ? -1 : v;
+        int v = p->DF(i,j,k);
+        return (v>0 && p->DF(i,j+1,k)<0) ? -1 : v;
     };
 
     auto flagsf3 = [p](int i, int j, int k) -> int
     {
-        int v = p->DF[IJK];
-        return (v>0 && p->DF[IJKp1]<0) ? -1 : v;
+        int v = p->DF(i,j,k);
+        return (v>0 && p->DF(i,j,k+1)<0) ? -1 : v;
     };
 
     gcdf_update_impl(p, flagsf1, p->gcdf1, p->gcdf1_count);
