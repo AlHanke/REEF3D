@@ -44,9 +44,9 @@ public:
 
 private:
     void wall_laws(lexer*,fdm*,field&,int);
-    void wall_law_u(lexer*,fdm*,field&,int,int,int,int,int,double);
-    void wall_law_v(lexer*,fdm*,field&,int,int,int,int,int,double);
-    void wall_law_w(lexer*,fdm*,field&,int,int,int,int,int,double);
+    void wall_law_u(lexer*,fdm*,field&,int,int,int,int,int);
+    void wall_law_v(lexer*,fdm*,field&,int,int,int,int,int);
+    void wall_law_w(lexer*,fdm*,field&,int,int,int,int,int);
 
     const double kappa;
     double uplus,ks,deltaZ,z0;
