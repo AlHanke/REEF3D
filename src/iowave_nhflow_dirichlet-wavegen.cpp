@@ -101,10 +101,11 @@ void iowave::nhflow_dirichlet_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, doub
         // LEVEL_LOOP
         GCINLOOP
         {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
             //WETDRYDEEP
             //{
@@ -154,21 +155,26 @@ void iowave::nhflow_dirichlet_wavegen(lexer *p, fdm_nhf *d, ghostcell *pgc, doub
             
         ++count;
         }
+        GC_TILE_RESET;
+
         // ------------------
        /* if(p->B98==3||p->B98==4||p->B99==3||p->B99==4||p->B99==5)
         {
             // LEVEL_LOOP
             GCINLOOP
             {
+            GCIN_TILE(n);
+
             for(int q=0;q<4;++q)
             {
-            i=p->gcin[n].i+q;
-            j=p->gcin[n].j;
-            k=p->gcin[n].k;
+            i=p->gcin[p->level][n].i+q;
+            j=p->gcin[p->level][n].j;
+            k=p->gcin[p->level][n].k;
 
             d->EV[IJK]=MIN(d->EV[IJK],1.0e-4);
             }
             }
+            GC_TILE_RESET;
         pgc->start24V(p,d->EV,24);
         }*/
         

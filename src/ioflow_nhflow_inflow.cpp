@@ -52,9 +52,11 @@ void ioflow_f::inflow_plain_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *
     // LEVEL_LOOP
     GCINLOOP
     {
-    i=p->gcin[n].i;
-    j=p->gcin[n].j;
-    k=p->gcin[n].k;
+    i=p->gcin[p->level][n].i;
+    j=p->gcin[p->level][n].j;
+    k=p->gcin[p->level][n].k;
+
+    GCIN_TILE(n);
 
 
         if(p->wet[IJ]==1 && p->DF[IJK]>0)
@@ -101,6 +103,7 @@ void ioflow_f::inflow_plain_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *
         WH[Im2JK]=0.0;
         WH[Im3JK]=0.0;
     }
+    GC_TILE_RESET;
 }
 
 void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U, double *V, double *W, double *UH, double *VH, double *WH)
@@ -120,13 +123,16 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
+
+        GCIN_TILE(n);
 
         hmin=MIN(hmin,d->WL(i,j));
         hmax=MAX(hmax,d->WL(i,j));
     }
+    GC_TILE_RESET;
     hmax=pgc->globalmax(hmax);
     hmin=pgc->globalmin(hmin);
     dmax=pgc->globalmax(dmax);
@@ -152,9 +158,11 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
         // LEVEL_LOOP
         GCINLOOP
         {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
+
+        GCIN_TILE(n);
 
         zcoor = p->ZSP[IJK]-d->bed(i,j);
 
@@ -168,6 +176,7 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
             U[Im1JK]=U[Im2JK]=U[Im3JK] = 0.0;
 
         }
+        GC_TILE_RESET;
 
 
     // calculate discharge and correct velocities
@@ -190,23 +199,27 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
         // LEVEL_LOOP
         GCINLOOP
         {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         U[Im1JK]*=ratio;
         U[Im2JK]*=ratio;
         U[Im3JK]*=ratio;
         }
+        GC_TILE_RESET;
     }
 
     // LEVEL_LOOP
     GCINLOOP
     {
-    i=p->gcin[n].i;
-    j=p->gcin[n].j;
-    k=p->gcin[n].k;
+    i=p->gcin[p->level][n].i;
+    j=p->gcin[p->level][n].j;
+    k=p->gcin[p->level][n].k;
+
+    GCIN_TILE(n);
 
         V[Im1JK]=0.0;
         V[Im2JK]=0.0;
@@ -238,6 +251,7 @@ void ioflow_f::inflow_log_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U,
         WH[Im2JK]=0.0;
         WH[Im3JK]=0.0;
     }
+    GC_TILE_RESET;
 }
 
 void ioflow_f::rkinflow_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U, double *V, double *W, double *UH, double *VH, double *WH, slice &WL)
@@ -245,10 +259,11 @@ void ioflow_f::rkinflow_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U, d
     // LEVEL_LOOP
     GCINLOOP
     {
-    i=p->gcin[n].i;
-    j=p->gcin[n].j;
-    k=p->gcin[n].k;
+    i=p->gcin[p->level][n].i;
+    j=p->gcin[p->level][n].j;
+    k=p->gcin[p->level][n].k;
 
+    GCIN_TILE(n);
 
         U[Im3JK]=U[Im2JK]=U[Im1JK]=d->U[Im1JK];
         V[Im3JK]=V[Im2JK]=V[Im1JK]=d->V[Im1JK];
@@ -258,6 +273,7 @@ void ioflow_f::rkinflow_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *U, d
         VH[Im3JK]=VH[Im2JK]=VH[Im1JK]=d->VH[Im1JK];
         WH[Im3JK]=WH[Im2JK]=WH[Im1JK]=d->WH[Im1JK];
     }
+    GC_TILE_RESET;
 
 }
 
@@ -266,14 +282,17 @@ void ioflow_f::rkinflow_nhflow(lexer *p, fdm_nhf *d,ghostcell *pgc, double *F, d
     // LEVEL_LOOP
     GCINLOOP
     {
-    i=p->gcin[n].i;
-    j=p->gcin[n].j;
-    k=p->gcin[n].k;
+    i=p->gcin[p->level][n].i;
+    j=p->gcin[p->level][n].j;
+    k=p->gcin[p->level][n].k;
+
+    GCIN_TILE(n);
 
     //cout<<G[Im1JK]<<" "<<G[IJK]<<endl;
 
         F[Im3JK]=F[Im2JK]=F[Im1JK]=G[Im1JK];
     }
+    GC_TILE_RESET;
 }
 
 void ioflow_f::wavegen_precalc_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)

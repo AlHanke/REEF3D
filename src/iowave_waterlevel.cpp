@@ -39,15 +39,17 @@ void iowave::fsfrkout(lexer *p, fdm *a, ghostcell *pgc, field& f)
     // LEVEL_LOOP
     GCOUTLOOP
     {
-        i=p->gcout[n].i;
-        j=p->gcout[n].j;
-        k=p->gcout[n].k;
+        i=p->gcout[p->level][n].i;
+        j=p->gcout[p->level][n].j;
+        k=p->gcout[p->level][n].k;
 
+        GCOUT_TILE(n);
 
         f(i+1,j,k)=a->phi(i+1,j,k);
         f(i+2,j,k)=a->phi(i+2,j,k);
         f(i+3,j,k)=a->phi(i+3,j,k);
     }
+    GC_TILE_RESET;
 }
 
 void iowave::fsfrkin(lexer *p, fdm *a, ghostcell *pgc, field& f)
@@ -55,15 +57,17 @@ void iowave::fsfrkin(lexer *p, fdm *a, ghostcell *pgc, field& f)
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         f(i-1,j,k)=a->phi(i-1,j,k);
         f(i-2,j,k)=a->phi(i-2,j,k);
         f(i-3,j,k)=a->phi(i-3,j,k);
     }
+    GC_TILE_RESET;
 }
 
 void iowave::waterlevel_update(lexer *p,fdm *a,ghostcell *pgc)

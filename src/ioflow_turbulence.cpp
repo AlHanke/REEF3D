@@ -30,10 +30,11 @@ void ioflow_f::turbulence_io(lexer *p, fdm* a, ghostcell* pgc)
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         if(a->phi(i-1,j,k)<-1.0*p->F45*p->DXM)
         {
@@ -50,4 +51,5 @@ void ioflow_f::turbulence_io(lexer *p, fdm* a, ghostcell* pgc)
             a->w(i-3,j,k)=a->w(i,j,k);
         }
     }
+    GC_TILE_RESET;
 }

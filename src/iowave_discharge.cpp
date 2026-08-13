@@ -59,10 +59,11 @@ void iowave::Qin(lexer *p, fdm* a, ghostcell* pgc)
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         area=0.0;
 
@@ -82,6 +83,7 @@ void iowave::Qin(lexer *p, fdm* a, ghostcell* pgc)
             p->Qi+=area*a->u(i-1,j,k);
         }
     }
+    GC_TILE_RESET;
 
     Ai=pgc->globalsum(Ai);
     p->Qi=pgc->globalsum(p->Qi);
@@ -110,10 +112,11 @@ void iowave::Qout(lexer *p, fdm* a, ghostcell* pgc)
     // LEVEL_LOOP
     GCOUTLOOP
     {
-        i=p->gcout[n].i;
-        j=p->gcout[n].j;
-        k=p->gcout[n].k;
+        i=p->gcout[p->level][n].i;
+        j=p->gcout[p->level][n].j;
+        k=p->gcout[p->level][n].k;
 
+        GCOUT_TILE(n);
         area=0.0;
 
         if(a->phi(i,j,k)>-0.5*p->DZN[KP]-1.0e-20 && a->topo(i,j,k)>0.0)
@@ -132,6 +135,7 @@ void iowave::Qout(lexer *p, fdm* a, ghostcell* pgc)
             p->Qo+=area*a->u(i+1,j,k);
         }
     }
+    GC_TILE_RESET;
     Ao=pgc->globalsum(Ao);
     p->Qo=pgc->globalsum(p->Qo);
 
@@ -161,10 +165,11 @@ void iowave::turbulence_io(lexer *p, fdm* a, ghostcell* pgc)
         // LEVEL_LOOP
         GCINLOOP
         {
-            i=p->gcin[n].i;
-            j=p->gcin[n].j;
-            k=p->gcin[n].k;
+            i=p->gcin[p->level][n].i;
+            j=p->gcin[p->level][n].j;
+            k=p->gcin[p->level][n].k;
 
+            GCIN_TILE(n);
 
             if(a->phi(i-1,j,k)<-1.0*p->F45*p->DXM)
             {
@@ -181,5 +186,6 @@ void iowave::turbulence_io(lexer *p, fdm* a, ghostcell* pgc)
                 a->w(i-3,j,k)=a->w(i,j,k);
             }
         }
+        GC_TILE_RESET;
     }
 }

@@ -29,10 +29,17 @@ Author: Hans Bihs
 
 void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 {
-    p->gcin.clear();
-    p->gcout.clear();
+    #if USE_AMREX
+    const int nlevs = p->nlevs;
+    #else
+    const int nlevs = 1;
+    #endif
+
+    p->gcin.resize_levels(nlevs);
+    p->gcout.resize_levels(nlevs);
     int cs = 0;
 
+    LEVEL_LOOP
     GC4LOOP
     {
         GCB4_TILE(n);
@@ -43,14 +50,14 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         cs = p->gcb4[p->level][n].cs;
 
         if((p->gcb4[p->level][n].bc==1) && p->DF(i,j,k)>0)
-        p->gcin.push_back({i, j, k, cs});
+        p->gcin[p->level].push_back({i, j, k, cs});
         else if((p->gcb4[p->level][n].bc==2) && p->DF(i,j,k)>0)
-        p->gcout.push_back({i, j, k, cs});
+        p->gcout[p->level].push_back({i, j, k, cs});
     }
     GC_TILE_RESET;
 
-    p->gcin_count=p->gcin.size();
-    p->gcout_count=p->gcout.size();
+    p->gcin_count=p->gcin[0].size();
+    p->gcout_count=p->gcout[0].size();
 
     if(p->I10==1 && p->count==0)
     velini(p,a,pgc);
@@ -132,10 +139,17 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 
 void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    p->gcin.clear();
-    p->gcout.clear();
+    #if USE_AMREX
+    const int nlevs = p->nlevs;
+    #else
+    const int nlevs = 1;
+    #endif
+
+    p->gcin.resize_levels(nlevs);
+    p->gcout.resize_levels(nlevs);
     int cs = 0;
 
+    LEVEL_LOOP
     GC4LOOP
     {
         GCB4_TILE(n);
@@ -146,14 +160,14 @@ void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         cs = p->gcb4[p->level][n].cs;
 
         if((p->gcb4[p->level][n].bc==1) && p->DF(i,j,k)>0)
-        p->gcin.push_back({i, j, k, cs});
+        p->gcin[p->level].push_back({i, j, k, cs});
         else if((p->gcb4[p->level][n].bc==2) && p->DF(i,j,k)>0)
-        p->gcout.push_back({i, j, k, cs});
+        p->gcout[p->level].push_back({i, j, k, cs});
     }
     GC_TILE_RESET;
 
-    p->gcin_count=p->gcin.size();
-    p->gcout_count=p->gcout.size();
+    p->gcin_count=p->gcin[0].size();
+    p->gcout_count=p->gcout[0].size();
 
     // IO update
     MALOOP
@@ -240,16 +254,18 @@ void ioflow_f::inflow_walldist(lexer *p, fdm *a, ghostcell *pgc, convection *pco
     #endif
     // LEVEL_LOOP
     {
-        walldin[p->level].resize(static_cast<int>(p->gcin.size()));
+        walldin[p->level].resize(p->gcin.ssize(p->level));
         GCINLOOP
         {
-            i=p->gcin[n].i;
-            j=p->gcin[n].j;
-            k=p->gcin[n].k;
+            i=p->gcin[p->level][n].i;
+            j=p->gcin[p->level][n].j;
+            k=p->gcin[p->level][n].k;
 
+            GCIN_TILE(n);
 
             walldin[p->level][n] = a->walld(i,j,k);
         }
+        GC_TILE_RESET;
     }
 
     #if USE_AMREX
@@ -259,16 +275,18 @@ void ioflow_f::inflow_walldist(lexer *p, fdm *a, ghostcell *pgc, convection *pco
     #endif
     // LEVEL_LOOP
     {
-        walldout[p->level].resize(static_cast<int>(p->gcout.size()));
+        walldout[p->level].resize(p->gcout.ssize(p->level));
         GCOUTLOOP
         {
-            i=p->gcout[n].i;
-            j=p->gcout[n].j;
-            k=p->gcout[n].k;
+            i=p->gcout[p->level][n].i;
+            j=p->gcout[p->level][n].j;
+            k=p->gcout[p->level][n].k;
 
+            GCOUT_TILE(n);
 
             walldout[p->level][n] = a->walld(i,j,k);
         }
+        GC_TILE_RESET;
     }
 }
 

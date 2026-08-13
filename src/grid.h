@@ -65,7 +65,7 @@ public:
 
     bool i_dir,j_dir,k_dir; // existance of directions
 
-    std::vector<gcb_field_cs> gcin, gcout; // inflow and outflow ghost cell coordinates (i,j,k) and direction
+    gcb_cs_list gcin, gcout; // inflow and outflow ghost cell coordinates (i,j,k) and direction
     int gcin_count, gcout_count; // number of inflow and outflow ghost cells
 
     // maxcoor

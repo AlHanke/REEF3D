@@ -123,9 +123,11 @@ void nhflow_rans_io::inflow(lexer* p, fdm_nhf *d, ghostcell* pgc)
     // LEVEL_LOOP
     GCINLOOP
     {
-    i=p->gcin[n].i;
-    j=p->gcin[n].j;
-    k=p->gcin[n].k;
+    i=p->gcin[p->level][n].i;
+    j=p->gcin[p->level][n].j;
+    k=p->gcin[p->level][n].k;
+
+    GCIN_TILE(n);
 
     beddist = p->ZSP[IJK] - d->bed(i,j);
     tau_calc(p,d,pgc);
@@ -147,6 +149,7 @@ void nhflow_rans_io::inflow(lexer* p, fdm_nhf *d, ghostcell* pgc)
     EPS[Im2JK] = epsval;
     EPS[Im3JK] = epsval;
     }
+    GC_TILE_RESET;
 }
 
 void nhflow_rans_io::flowdepth_inflow(lexer* p, fdm_nhf *d, ghostcell* pgc)
