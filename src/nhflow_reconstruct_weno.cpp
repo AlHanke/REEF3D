@@ -208,35 +208,38 @@ void nhflow_reconstruct_weno::reconstruct_3D_x(lexer* p, ghostcell *pgc, fdm_nhf
     /*
     // Dirichlet Wave Generation
     if(p->B98>2)
-    {   
-    for(n=0;n<p->gcin_count;++n)
-    for(i=p->gcin[n][0];i<p->gcin[n][0]+5;++i)
-    {   
-        // i
-		j=p->gcin[n][1];
-		k=p->gcin[n][2];
-        
+    {
+    // LEVEL_LOOP
+    GCINLOOP
+    {
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
+    for(i=p->gcin[n].i;i<p->gcin[n].i+5;++i)
+    {
         dfdx_plus = (Fx[Ip1JK] - Fx[IJK])/p->DXP[IP];
         dfdx_min  = (Fx[IJK] - Fx[Im1JK])/p->DXP[IM1];
-        
-        DFDX[IJK] = limiter(dfdx_plus,dfdx_min);
-        
-    }
-    
-    pgc->start1V(p,DFDX,1);
-    
-    // reconstruct
-    for(n=0;n<p->gcin_count;++n)
-    for(i=p->gcin[n][0];i<p->gcin[n][0]+4;++i)
-    {
-		j=p->gcin[n][1];
-		k=p->gcin[n][2];
 
-        
-        Fs[IJK] = (Fx[IJK]    + 0.5*p->DXP[IM1]*DFDX[IJK]); 
+        DFDX[IJK] = limiter(dfdx_plus,dfdx_min);
+
+    }
+    }
+    pgc->start1V(p,DFDX,1);
+
+    // reconstruct
+    // LEVEL_LOOP
+    GCINLOOP
+    {
+
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
+    for(i=p->gcin[n].i;i<p->gcin[n].i+4;++i)
+    {
+        Fs[IJK] = (Fx[IJK]    + 0.5*p->DXP[IM1]*DFDX[IJK]);
         Fn[IJK] = (Fx[Ip1JK]  - 0.5*p->DXP[IP]*DFDX[Ip1JK]);
     }
-    
+    }
     pgc->start1V(p,Fs,1);
     pgc->start1V(p,Fn,1);
     }*/

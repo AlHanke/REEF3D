@@ -120,13 +120,14 @@ void potentialfile_in::ff_inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, fie
 {
     /*
     double uval,vval,wval,pval;
-    
-    for(n=0;n<p->gcin_count;n++)
+
+    // LEVEL_LOOP
+    GCINLOOP
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
-    
+    i=p->gcin[n].i;
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
     // U
     if(k<maxk && a->phi(i-1,j,k)>=0.6*p->DXM)
     uval = U0[0][k+dk]*t0 + U1[0][k+dk]*t1;
@@ -170,8 +171,9 @@ void potentialfile_in::ff_inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, fie
     a->press(i-2,j,k)=pval;
     a->press(i-3,j,k)=pval;
     }
-    
-    }*/
+
+    }
+    */
 }
 
 void potentialfile_in::ff_waterlevel(lexer *p, fdm* a, ghostcell* pgc, field& ls)
@@ -179,13 +181,14 @@ void potentialfile_in::ff_waterlevel(lexer *p, fdm* a, ghostcell* pgc, field& ls
     /*
     double lsval;
     double xp,yp,zp;
-   
-    for(n=0;n<p->gcin_count;n++)
+
+    // LEVEL_LOOP
+    GCINLOOP
     {
-    i=p->gcin[n][0];
-    j=p->gcin[n][1];
-    k=p->gcin[n][2];
-    
+    i=p->gcin[n].i;
+    j=p->gcin[n].j;
+    k=p->gcin[n].k;
+
     if(k<maxk)
     {
     lsval = LS0[0][k+dk]*t0 + LS1[0][k+dk]*t1;

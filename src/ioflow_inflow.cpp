@@ -59,26 +59,18 @@ void ioflow_f::inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, fiel
             outflow_corresponding(p,a,pgc,u,v,w);
 
 
-        LEVEL_LOOP
-        #if USE_AMREX
-        for(auto iv : p->inflow_ijk[p->level])
-        #else
-        for(n=0;n<p->gcin_count;++n)
-        #endif
-        for(int q=0;q<4;++q)
+        // LEVEL_LOOP
+        GCINLOOP
         {
-            #if USE_AMREX
-            i=iv[0]+q;
-            j=iv[1];
-            k=iv[2];
-            #else
-            i=p->gcin[n][0]+q;
-            j=p->gcin[n][1];
-            k=p->gcin[n][2];
-            #endif
+            for(int q=0;q<4;++q)
+            {
+                i=p->gcin[n].i+q;
+                j=p->gcin[n].j;
+                k=p->gcin[n].k;
 
-            if(a->phi(i,j,k)<0.0)
-            a->eddyv(i,j,k)=MIN(a->eddyv(i,j,k),1.0e-4);
+                if(a->phi(i,j,k)<0.0)
+                a->eddyv(i,j,k)=MIN(a->eddyv(i,j,k),1.0e-4);
+            }
         }
         pgc->start4(p,a->eddyv,24);
     }
@@ -88,20 +80,13 @@ void ioflow_f::inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, fiel
 
 void ioflow_f::inflow_plain(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
 {
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->inflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcin_count;++n)
-    {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-    #endif
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
 
         if(a->topo(i,j,k)>0.0)
         {
@@ -143,20 +128,13 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
     double ratio;
 
     // water depth
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->inflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcin_count;++n)
-    {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-    #endif
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
 
         if(a->phi(i,j,k)>0.0)
         {
@@ -187,39 +165,28 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
 
     shearvel = p->Ui/(2.5*log((11.0*H/ks)));
 
-    LEVEL_LOOP
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        #if USE_AMREX
-        for(n=0; n<p->inflow_ijk[p->level].size(); n++)
-        {
-            auto iv = p->inflow_ijk[p->level][n];
-            i=iv[0];
-            j=iv[1];
-            k=iv[2];
-        #else
-        for(n=0;n<p->gcin_count;++n)
-        {
-            i=p->gcin[n][0];
-            j=p->gcin[n][1];
-            k=p->gcin[n][2];
-        #endif
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
 
-            if(a->topo(i,j,k)>0.0)
+        if(a->topo(i,j,k)>0.0)
+        {
+            u(i-1,j,k)=u(i-2,j,k)=u(i-3,j,k)= shearvel*2.5*log(MAX(30.0*MIN(walldin[p->level][n],dmax)/ks,1.0));
+
+            // Air inflow
+            if(p->W50_air==1 && a->phi(i,j,k)<-0.6*p->DXM)
             {
-                u(i-1,j,k)=u(i-2,j,k)=u(i-3,j,k)= shearvel*2.5*log(MAX(30.0*MIN(walldin[p->level][n],dmax)/ks,1.0));
-
-                // Air inflow
-                if(p->W50_air==1 && a->phi(i,j,k)<-0.6*p->DXM)
-                {
-                    u(i-1,j,k)+=p->W50;
-                    u(i-2,j,k)+=p->W50;
-                    u(i-3,j,k)+=p->W50;
-                }
+                u(i-1,j,k)+=p->W50;
+                u(i-2,j,k)+=p->W50;
+                u(i-3,j,k)+=p->W50;
             }
-
-            if(a->topo(i,j,k)<=0.0)
-                u(i-1,j,k)=u(i-2,j,k)=u(i-3,j,k)=0.0;
         }
+
+        if(a->topo(i,j,k)<=0.0)
+            u(i-1,j,k)=u(i-2,j,k)=u(i-3,j,k)=0.0;
     }
 
     // calculate discharge and correct velocities
@@ -235,20 +202,13 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
         if(fabs(p->Qi)<1.0e-20)
             ratio=1.0;
 
-        LEVEL_LOOP
-        #if USE_AMREX
-        for(auto iv : p->inflow_ijk[p->level])
+        // LEVEL_LOOP
+        GCINLOOP
         {
-            i=iv[0];
-            j=iv[1];
-            k=iv[2];
-        #else
-        for(n=0;n<p->gcin_count;++n)
-        {
-            i=p->gcin[n][0];
-            j=p->gcin[n][1];
-            k=p->gcin[n][2];
-        #endif
+            i=p->gcin[n].i;
+            j=p->gcin[n].j;
+            k=p->gcin[n].k;
+
 
             if(a->topo(i,j,k)>0.0)
             {
@@ -260,54 +220,42 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
     }
 
     if((p->B61==4) && p->count>0)
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->inflow_ijk[p->level])
     {
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcin_count;++n)
-    {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-    #endif
-
-        if(a->phi(i-1,j,k)<-epsi1*p->DXM && a->phi(i-1,j,k)>=-epsi2*p->DXM && a->topo(i,j,k)>0.0)
+        // LEVEL_LOOP
+        GCINLOOP
         {
-            fac=1.0 - fabs(a->phi(i-1,j,k))/((epsi2-epsi1)*p->DXM);
-            u(i-1,j,k)=u(i-1,j,k)*fac;
-            u(i-2,j,k)=u(i-2,j,k)*fac;
-            u(i-3,j,k)=u(i-3,j,k)*fac;
-        }
+            i=p->gcin[n].i;
+            j=p->gcin[n].j;
+            k=p->gcin[n].k;
 
-        if(a->phi(i,j,k)<-epsi2*p->DXM && a->topo(i,j,k)>0.0)
-        {
-            u(i-1,j,k)=0.0;
-            u(i-2,j,k)=0.0;
-            u(i-3,j,k)=0.0;
-        }
 
-        if(a->phi(i,j,k)<-epsi2*p->DXM)
-            pgc->dirichlet_ortho(u,p->DXM,1);
+            if(a->phi(i-1,j,k)<-epsi1*p->DXM && a->phi(i-1,j,k)>=-epsi2*p->DXM && a->topo(i,j,k)>0.0)
+            {
+                fac=1.0 - fabs(a->phi(i-1,j,k))/((epsi2-epsi1)*p->DXM);
+                u(i-1,j,k)=u(i-1,j,k)*fac;
+                u(i-2,j,k)=u(i-2,j,k)*fac;
+                u(i-3,j,k)=u(i-3,j,k)*fac;
+            }
+
+            if(a->phi(i,j,k)<-epsi2*p->DXM && a->topo(i,j,k)>0.0)
+            {
+                u(i-1,j,k)=0.0;
+                u(i-2,j,k)=0.0;
+                u(i-3,j,k)=0.0;
+            }
+
+            if(a->phi(i,j,k)<-epsi2*p->DXM)
+                pgc->dirichlet_ortho(u,p->DXM,1);
+        }
     }
 
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->inflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcin_count;++n)
-    {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-    #endif
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
 
         v(i-1,j,k)=0.0;
         v(i-2,j,k)=0.0;
@@ -321,20 +269,13 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
 
 void ioflow_f::inflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
 {
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->inflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcin_count;++n)
-    {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-    #endif
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
 
         if(a->phi(i-1,j,k)>=0.0 && a->topo(i,j,k)>0.0)
         {
@@ -374,20 +315,13 @@ void ioflow_f::inflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
             pgc->dirichlet_ortho(u,p->DXM,1);
     }
 
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->inflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcin_count;++n)
-    {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-    #endif
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
 
         v(i-1,j,k)=0.0;
         v(i-2,j,k)=0.0;
@@ -401,20 +335,13 @@ void ioflow_f::inflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
 
 void ioflow_f::rkinflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
 {
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->inflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcin_count;++n)
-    {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-    #endif
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
 
         u(i-1,j,k) = u(i-2,j,k) = u(i-3,j,k) = a->u(i-1,j,k);
         v(i-1,j,k) = v(i-2,j,k) = v(i-3,j,k) = a->v(i-1,j,k);

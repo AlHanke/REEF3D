@@ -175,18 +175,12 @@ void sediment_f::ini_guard(lexer *p, ghostcell *pgc)
 
     if(p->S78==1)
     {
-        LEVEL_LOOP
-        #if USE_AMREX
-        for(auto iv : p->inflow_ijk[p->level])
+        // LEVEL_LOOP
+        GCINLOOP
         {
-            i=iv[0];
-            j=iv[1];
-        #else
-        for(n=0;n<p->gcin_count;++n)
-        {
-            i=p->gcin[n][0];
-            j=p->gcin[n][1];
-        #endif
+            i=p->gcin[n].i;
+            j=p->gcin[n].j;
+
 
             s->guard(i,j)=0.0;
         }

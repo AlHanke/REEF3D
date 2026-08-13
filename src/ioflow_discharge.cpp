@@ -56,20 +56,13 @@ void ioflow_f::Qin(lexer *p, fdm* a, ghostcell* pgc)
     p->Ui=0.0;
 
     // in
-    #if USE_AMREX
-    for(n=0; n<p->inflow_ijk[p->level].size(); n++)
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        auto iv = p->inflow_ijk[p->level][n];
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcin_count;++n)
-    {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-    #endif
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
 
         area=0.0;
 
@@ -110,20 +103,13 @@ void ioflow_f::Qout(lexer *p, fdm* a, ghostcell* pgc)
     p->Uo=0.0;
 
     // out
-    #if USE_AMREX
-    for(n=0; n<p->outflow_ijk[p->level].size(); n++)
+    // LEVEL_LOOP
+    GCOUTLOOP
     {
-        auto iv = p->outflow_ijk[p->level][n];
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcout_count;++n)
-    {
-        i=p->gcout[n][0];
-        j=p->gcout[n][1];
-        k=p->gcout[n][2];
-    #endif
+        i=p->gcout[n].i;
+        j=p->gcout[n].j;
+        k=p->gcout[n].k;
+
 
         area=0.0;
 

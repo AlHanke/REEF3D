@@ -45,20 +45,13 @@ void iowave::wavegen_precalc_dirichlet(lexer *p, ghostcell *pgc)
     }
 
     count=0;
-    LEVEL_LOOP
-    #if USE_AMREX
-    for(auto iv : p->inflow_ijk[p->level])
+    // LEVEL_LOOP
+    GCINLOOP
     {
-        i=iv[0];
-        j=iv[1];
-        k=iv[2];
-    #else
-    for(n=0;n<p->gcin_count;++n)
-    {
-        i=p->gcin[n][0];
-        j=p->gcin[n][1];
-        k=p->gcin[n][2];
-    #endif
+        i=p->gcin[n].i;
+        j=p->gcin[n].j;
+        k=p->gcin[n].k;
+
 
         x=xgen(p);
         y=ygen(p);
