@@ -62,16 +62,19 @@ void ioflow_f::inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, fiel
         // LEVEL_LOOP
         GCINLOOP
         {
+            GCIN_TILE(n);
+
             for(int q=0;q<4;++q)
             {
-                i=p->gcin[n].i+q;
-                j=p->gcin[n].j;
-                k=p->gcin[n].k;
+                i=p->gcin[p->level][n].i+q;
+                j=p->gcin[p->level][n].j;
+                k=p->gcin[p->level][n].k;
 
                 if(a->phi(i,j,k)<0.0)
                 a->eddyv(i,j,k)=MIN(a->eddyv(i,j,k),1.0e-4);
             }
         }
+        GC_TILE_RESET;
         pgc->start4(p,a->eddyv,24);
     }
 
@@ -83,10 +86,11 @@ void ioflow_f::inflow_plain(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         if(a->topo(i,j,k)>0.0)
         {
@@ -114,6 +118,7 @@ void ioflow_f::inflow_plain(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
         if(a->topo(i,j,k)<=0.0)
             u(i-1,j,k)=u(i-2,j,k)=u(i-3,j,k)=0.0;
     }
+    GC_TILE_RESET;
 }
 
 void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
@@ -131,10 +136,11 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         if(a->phi(i,j,k)>0.0)
         {
@@ -143,6 +149,7 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
             dmax=MAX(dmax,walldin[p->level][n]);
         }
     }
+    GC_TILE_RESET;
     hmax=pgc->globalmax(hmax);
     hmin=pgc->globalmin(hmin);
     dmax=pgc->globalmax(dmax);
@@ -168,9 +175,11 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
+
+        GCIN_TILE(n);
 
         if(a->topo(i,j,k)>0.0)
         {
@@ -188,6 +197,7 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
         if(a->topo(i,j,k)<=0.0)
             u(i-1,j,k)=u(i-2,j,k)=u(i-3,j,k)=0.0;
     }
+    GC_TILE_RESET;
 
     // calculate discharge and correct velocities
     for(int q=0; q<5; ++q)
@@ -205,10 +215,11 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
         // LEVEL_LOOP
         GCINLOOP
         {
-            i=p->gcin[n].i;
-            j=p->gcin[n].j;
-            k=p->gcin[n].k;
+            i=p->gcin[p->level][n].i;
+            j=p->gcin[p->level][n].j;
+            k=p->gcin[p->level][n].k;
 
+            GCIN_TILE(n);
 
             if(a->topo(i,j,k)>0.0)
             {
@@ -217,6 +228,7 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
                 u(i-3,j,k)*=ratio;
             }
         }
+        GC_TILE_RESET;
     }
 
     if((p->B61==4) && p->count>0)
@@ -224,10 +236,11 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
         // LEVEL_LOOP
         GCINLOOP
         {
-            i=p->gcin[n].i;
-            j=p->gcin[n].j;
-            k=p->gcin[n].k;
+            i=p->gcin[p->level][n].i;
+            j=p->gcin[p->level][n].j;
+            k=p->gcin[p->level][n].k;
 
+            GCIN_TILE(n);
 
             if(a->phi(i-1,j,k)<-epsi1*p->DXM && a->phi(i-1,j,k)>=-epsi2*p->DXM && a->topo(i,j,k)>0.0)
             {
@@ -247,15 +260,17 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
             if(a->phi(i,j,k)<-epsi2*p->DXM)
                 pgc->dirichlet_ortho(u,p->DXM,1);
         }
+        GC_TILE_RESET;
     }
 
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         v(i-1,j,k)=0.0;
         v(i-2,j,k)=0.0;
@@ -265,6 +280,7 @@ void ioflow_f::inflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, 
         w(i-2,j,k)=0.0;
         w(i-3,j,k)=0.0;
     }
+    GC_TILE_RESET;
 }
 
 void ioflow_f::inflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
@@ -272,10 +288,11 @@ void ioflow_f::inflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         if(a->phi(i-1,j,k)>=0.0 && a->topo(i,j,k)>0.0)
         {
@@ -314,14 +331,16 @@ void ioflow_f::inflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
         if(a->phi(i-1,j,k)<-epsi2*p->DXM)
             pgc->dirichlet_ortho(u,p->DXM,1);
     }
+    GC_TILE_RESET;
 
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         v(i-1,j,k)=0.0;
         v(i-2,j,k)=0.0;
@@ -331,6 +350,7 @@ void ioflow_f::inflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
         w(i-2,j,k)=0.0;
         w(i-3,j,k)=0.0;
     }
+    GC_TILE_RESET;
 }
 
 void ioflow_f::rkinflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
@@ -338,15 +358,17 @@ void ioflow_f::rkinflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, fi
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         u(i-1,j,k) = u(i-2,j,k) = u(i-3,j,k) = a->u(i-1,j,k);
         v(i-1,j,k) = v(i-2,j,k) = v(i-3,j,k) = a->v(i-1,j,k);
         w(i-1,j,k) = w(i-2,j,k) = w(i-3,j,k) = a->w(i-1,j,k);
     }
+    GC_TILE_RESET;
 
     pBC->patchBC_rkioflow(p,a,pgc,u,v,w);
 }

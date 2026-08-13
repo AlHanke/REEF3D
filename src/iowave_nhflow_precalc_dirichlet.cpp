@@ -50,10 +50,11 @@ void iowave::nhflow_precalc_dirichlet(lexer *p, fdm_nhf *d, ghostcell *pgc)
         // LEVEL_LOOP
         GCINLOOP
         {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         x=xgen(p);
         y=ygen(p);
@@ -83,6 +84,7 @@ void iowave::nhflow_precalc_dirichlet(lexer *p, fdm_nhf *d, ghostcell *pgc)
 
         ++count;
         }
+        GC_TILE_RESET;
 }
 
 

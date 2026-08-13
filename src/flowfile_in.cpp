@@ -114,10 +114,11 @@ void flowfile_in::ff_inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         // U
         if(k<maxk && a->phi(i-1,j,k)>=0.6*p->DXM)
@@ -162,6 +163,7 @@ void flowfile_in::ff_inflow(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v
             a->press(i-3,j,k)=pval;
         }
     }
+    GC_TILE_RESET;
 }
 
 void flowfile_in::ff_waterlevel(lexer *p, fdm* a, ghostcell* pgc, field& ls)
@@ -172,10 +174,11 @@ void flowfile_in::ff_waterlevel(lexer *p, fdm* a, ghostcell* pgc, field& ls)
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         if(k<maxk)
         {
@@ -186,6 +189,7 @@ void flowfile_in::ff_waterlevel(lexer *p, fdm* a, ghostcell* pgc, field& ls)
             ls(i-3,j,k)=lsval;
         }
     }
+    GC_TILE_RESET;
 }
 
 int flowfile_in::conv(double a)

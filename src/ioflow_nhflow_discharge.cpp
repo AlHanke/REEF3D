@@ -59,12 +59,14 @@ void ioflow_f::Qin_nhf(lexer *p, fdm_nhf *d, ghostcell* pgc)
     count=0;
     // LEVEL_LOOP
     GCINLOOP
-    if(p->gcin[n].cs>0)
+    if(p->gcin[p->level][n].cs>0)
     {
         area=0.0;
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
+
+        GCIN_TILE(n);
 
         area=p->DYN[JP]*p->DZN[KP]*d->WL(i-1,j);
 
@@ -76,6 +78,7 @@ void ioflow_f::Qin_nhf(lexer *p, fdm_nhf *d, ghostcell* pgc)
 
         ++count;
     }
+    GC_TILE_RESET;
 
     Ai=pgc->globalsum(Ai);
     p->Qi=pgc->globalsum(p->Qi);
@@ -104,12 +107,14 @@ void ioflow_f::Qout_nhf(lexer *p, fdm_nhf *d, ghostcell* pgc)
     // out
     // LEVEL_LOOP
     GCOUTLOOP
-    if(p->gcout[n].cs>0)
+    if(p->gcout[p->level][n].cs>0)
     {
         area=0.0;
-        i=p->gcout[n].i;
-        j=p->gcout[n].j;
-        k=p->gcout[n].k;
+        i=p->gcout[p->level][n].i;
+        j=p->gcout[p->level][n].j;
+        k=p->gcout[p->level][n].k;
+
+        GCOUT_TILE(n);
 
         if(p->wet[IJ]==1 && p->DF[IJK]>0)
         {
@@ -119,6 +124,8 @@ void ioflow_f::Qout_nhf(lexer *p, fdm_nhf *d, ghostcell* pgc)
         p->Qo+=area*d->U[IJK];
         }
     }
+    GC_TILE_RESET;
+
     Ao=pgc->globalsum(Ao);
     p->Qo=pgc->globalsum(p->Qo);
 	

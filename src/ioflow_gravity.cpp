@@ -43,10 +43,17 @@ ioflow_gravity::ioflow_gravity(lexer *p, ghostcell *pgc, patchBC_interface *ppBC
 
 void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 {
-    p->gcin.clear();
-    p->gcout.clear();
+    #if USE_AMREX
+    const int nlevs = p->nlevs;
+    #else
+    const int nlevs = 1;
+    #endif
+
+    p->gcin.resize_levels(nlevs);
+    p->gcout.resize_levels(nlevs);
     int cs = 0;
 
+    LEVEL_LOOP
     GC4LOOP
     {
         GCB4_TILE(n);
@@ -57,14 +64,14 @@ void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         cs = p->gcb4[p->level][n].cs;
 
         if(p->gcb4[p->level][n].bc==1)
-        p->gcin.push_back({i, j, k, cs});
+        p->gcin[p->level].push_back({i, j, k, cs});
         else if(p->gcb4[p->level][n].bc==2)
-        p->gcout.push_back({i, j, k, cs});
+        p->gcout[p->level].push_back({i, j, k, cs});
     }
     GC_TILE_RESET;
 
-    p->gcin_count=p->gcin.size();
-    p->gcout_count=p->gcout.size();
+    p->gcin_count=p->gcin[0].size();
+    p->gcout_count=p->gcout[0].size();
 }
 
 void ioflow_gravity::discharge(lexer *p, fdm* a, ghostcell* pgc)

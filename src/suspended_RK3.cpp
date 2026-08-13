@@ -159,9 +159,11 @@ void suspended_RK3::bcsusp_start(lexer* p, fdm* a,ghostcell *pgc, sediment_fdm *
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
+
+        GCIN_TILE(n);
 
     adist=0.05*s->waterlevel(i,j);
     
@@ -180,6 +182,7 @@ void suspended_RK3::bcsusp_start(lexer* p, fdm* a,ghostcell *pgc, sediment_fdm *
     conc(i-2,j,k) = cval;
     conc(i-3,j,k) = cval;
     }
+    GC_TILE_RESET;
     */
     
 }

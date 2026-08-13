@@ -30,15 +30,17 @@ void ioflow_f::outflow_plain(lexer *p, fdm* a, ghostcell* pgc, field& u, field& 
     // LEVEL_LOOP
     GCOUTLOOP
     {
-        i=p->gcout[n].i-1;
-        j=p->gcout[n].j;
-        k=p->gcout[n].k;
+        i=p->gcout[p->level][n].i-1;
+        j=p->gcout[p->level][n].j;
+        k=p->gcout[p->level][n].k;
 
+        GCOUT_TILE(n);
 
         u(i+1,j,k)=p->Uo;
         u(i+2,j,k)=p->Uo;
         u(i+3,j,k)=p->Uo;
     }
+    GC_TILE_RESET;
 }
 
 void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
@@ -56,10 +58,11 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
     // LEVEL_LOOP
     GCOUTLOOP
     {
-        i=p->gcout[n].i-1;
-        j=p->gcout[n].j;
-        k=p->gcout[n].k;
+        i=p->gcout[p->level][n].i-1;
+        j=p->gcout[p->level][n].j;
+        k=p->gcout[p->level][n].k;
 
+        GCOUT_TILE(n);
 
         if(a->phi(i,j,k)>0.0)
         {
@@ -68,6 +71,7 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
             dmax=MAX(dmax,walldout[p->level][n]);
         }
     }
+    GC_TILE_RESET;
     hmax=pgc->globalmax(hmax);
     hmin=pgc->globalmin(hmin);
     dmax=pgc->globalmax(dmax);
@@ -90,13 +94,15 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
     // LEVEL_LOOP
     GCOUTLOOP
     {
-        i=p->gcout[n].i-1;
-        j=p->gcout[n].j;
-        k=p->gcout[n].k;
+        i=p->gcout[p->level][n].i-1;
+        j=p->gcout[p->level][n].j;
+        k=p->gcout[p->level][n].k;
 
+        GCOUT_TILE(n);
 
         u(i+1,j,k)=u(i+2,j,k)=u(i+3,j,k)= shearvel*2.5*log(MAX(30.0*MIN(walldout[p->level][n],dmax)/ks,1.0));
     }
+    GC_TILE_RESET;
 
 
     // calculate discharge and correct velocities
@@ -114,15 +120,17 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
         // LEVEL_LOOP
         GCOUTLOOP
         {
-            i=p->gcout[n].i-1;
-            j=p->gcout[n].j;
-            k=p->gcout[n].k;
+            i=p->gcout[p->level][n].i-1;
+            j=p->gcout[p->level][n].j;
+            k=p->gcout[p->level][n].k;
 
+            GCOUT_TILE(n);
 
             u(i+1,j,k)*=ratio;
             u(i+2,j,k)*=ratio;
             u(i+3,j,k)*=ratio;
         }
+        GC_TILE_RESET;
     }
 
     if(p->B61==4 && p->count>0)
@@ -130,9 +138,11 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
         // LEVEL_LOOP
         GCOUTLOOP
         {
-            i=p->gcout[n].i-1;
-            j=p->gcout[n].j;
-            k=p->gcout[n].k;
+            i=p->gcout[p->level][n].i-1;
+            j=p->gcout[p->level][n].j;
+            k=p->gcout[p->level][n].k;
+
+            GCOUT_TILE(n);
 
             if(a->phi(i,j,k)<-1.0*p->F45*p->DXM)
             {
@@ -141,6 +151,7 @@ void ioflow_f::outflow_log(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v,
                 u(i+3,j,k)=0.0;
             }
         }
+        GC_TILE_RESET;
     }
 }
 
@@ -149,10 +160,11 @@ void ioflow_f::outflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& 
     // LEVEL_LOOP
     GCOUTLOOP
     {
-        i=p->gcout[n].i-1;
-        j=p->gcout[n].j;
-        k=p->gcout[n].k;
+        i=p->gcout[p->level][n].i-1;
+        j=p->gcout[p->level][n].j;
+        k=p->gcout[p->level][n].k;
 
+        GCOUT_TILE(n);
 
         if(a->phi(i,j,k)>=-epsi1*p->DXM)
         {
@@ -176,6 +188,7 @@ void ioflow_f::outflow_water(lexer *p, fdm* a, ghostcell* pgc, field& u, field& 
             u(i+3,j,k)=0.0;
         }
     }
+    GC_TILE_RESET;
 }
 
 void ioflow_f::outflow_corresponding(lexer *p, fdm* a, ghostcell* pgc, field& u, field& v, field& w)
@@ -185,10 +198,11 @@ void ioflow_f::outflow_corresponding(lexer *p, fdm* a, ghostcell* pgc, field& u,
     // LEVEL_LOOP
     GCOUTLOOP
     {
-        i=p->gcout[n].i-1;
-        j=p->gcout[n].j;
-        k=p->gcout[n].k;
+        i=p->gcout[p->level][n].i-1;
+        j=p->gcout[p->level][n].j;
+        k=p->gcout[p->level][n].k;
 
+        GCOUT_TILE(n);
 
         factor = p->W10/p->Qo;
 
@@ -221,4 +235,5 @@ void ioflow_f::outflow_corresponding(lexer *p, fdm* a, ghostcell* pgc, field& u,
             u(i+3,j,k)=0.0;
         }
     }
+    GC_TILE_RESET;
 }

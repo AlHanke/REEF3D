@@ -47,10 +47,11 @@ void ioflow_f::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         if(a->phi(i-1,j,k)>=0.0 && a->phi(i-1,j,k+1)<0.0)
         {
@@ -58,6 +59,7 @@ void ioflow_f::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
             ++count;
         }
     }
+    GC_TILE_RESET;
 
     count=pgc->globalisum(count);
     zval=pgc->globalsum(zval);
@@ -71,14 +73,17 @@ void ioflow_f::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
             // LEVEL_LOOP
             GCINLOOP
             {
-                i=p->gcin[n].i;
-                j=p->gcin[n].j;
-                k=p->gcin[n].k;
+                i=p->gcin[p->level][n].i;
+                j=p->gcin[p->level][n].j;
+                k=p->gcin[p->level][n].k;
+
+                GCIN_TILE(n);
 
                 a->phi(i-1,j,k)=p->phimean-p->pos_z();
                 a->phi(i-2,j,k)=p->phimean-p->pos_z();
                 a->phi(i-3,j,k)=p->phimean-p->pos_z();
             }
+            GC_TILE_RESET;
         }
         p->phimean=pgc->globalmax(p->phimean);
     }
@@ -89,10 +94,11 @@ void ioflow_f::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
     // LEVEL_LOOP
     GCOUTLOOP
     {
-        i=p->gcout[n].i;
-        j=p->gcout[n].j;
-        k=p->gcout[n].k;
+        i=p->gcout[p->level][n].i;
+        j=p->gcout[p->level][n].j;
+        k=p->gcout[p->level][n].k;
 
+        GCOUT_TILE(n);
 
         if(a->phi(i,j,k)>=0.0 && a->phi(i,j,k+1)<0.0)
         {
@@ -100,6 +106,7 @@ void ioflow_f::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
             ++count;
         }
     }
+    GC_TILE_RESET;
 
     count=pgc->globalisum(count);
     zval=pgc->globalsum(zval);
@@ -136,14 +143,17 @@ void ioflow_f::fsfinflow(lexer *p, fdm *a, ghostcell *pgc)
         // LEVEL_LOOP
         GCOUTLOOP
         {
-            i=p->gcout[n].i;
-            j=p->gcout[n].j;
-            k=p->gcout[n].k;
+            i=p->gcout[p->level][n].i;
+            j=p->gcout[p->level][n].j;
+            k=p->gcout[p->level][n].k;
+
+            GCOUT_TILE(n);
 
             a->phi(i+1,j,k)=wsfout-p->pos_z();
             a->phi(i+2,j,k)=wsfout-p->pos_z();
             a->phi(i+3,j,k)=wsfout-p->pos_z();
         }
+        GC_TILE_RESET;
     }
 
     pBC->patchBC_waterlevel(p,a,pgc,a->phi);
@@ -156,14 +166,17 @@ void ioflow_f::fsfrkout(lexer *p, fdm *a, ghostcell *pgc, field& f)
         // LEVEL_LOOP
         GCOUTLOOP
         {
-            i=p->gcout[n].i;
-            j=p->gcout[n].j;
-            k=p->gcout[n].k;
+            i=p->gcout[p->level][n].i;
+            j=p->gcout[p->level][n].j;
+            k=p->gcout[p->level][n].k;
+
+            GCOUT_TILE(n);
 
             f(i+1,j,k)=a->phi(i+1,j,k);
             f(i+2,j,k)=a->phi(i+2,j,k);
             f(i+3,j,k)=a->phi(i+3,j,k);
         }
+        GC_TILE_RESET;
     }
 
     if(p->F62>-1.0e20 && p->B77==2)
@@ -171,14 +184,17 @@ void ioflow_f::fsfrkout(lexer *p, fdm *a, ghostcell *pgc, field& f)
         // LEVEL_LOOP
         GCOUTLOOP
         {
-            i=p->gcout[n].i;
-            j=p->gcout[n].j;
-            k=p->gcout[n].k;
+            i=p->gcout[p->level][n].i;
+            j=p->gcout[p->level][n].j;
+            k=p->gcout[p->level][n].k;
+
+            GCOUT_TILE(n);
 
             f(i+1,j,k)=p->F62-p->pos_z();
             f(i+2,j,k)=p->F62-p->pos_z();
             f(i+3,j,k)=p->F62-p->pos_z();
         }
+        GC_TILE_RESET;
     }
 }
 
@@ -187,15 +203,17 @@ void ioflow_f::fsfrkin(lexer *p, fdm *a, ghostcell *pgc, field& f)
     // LEVEL_LOOP
     GCINLOOP
     {
-        i=p->gcin[n].i;
-        j=p->gcin[n].j;
-        k=p->gcin[n].k;
+        i=p->gcin[p->level][n].i;
+        j=p->gcin[p->level][n].j;
+        k=p->gcin[p->level][n].k;
 
+        GCIN_TILE(n);
 
         f(i-1,j,k)=a->phi(i-1,j,k);
         f(i-2,j,k)=a->phi(i-2,j,k);
         f(i-3,j,k)=a->phi(i-3,j,k);
     }
+    GC_TILE_RESET;
 }
 
 double ioflow_f::wave_fsf(lexer *p, ghostcell *pgc, double x)

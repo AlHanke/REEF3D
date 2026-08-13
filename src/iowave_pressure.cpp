@@ -42,10 +42,11 @@ void iowave::pressure_outlet(lexer *p, fdm *a, ghostcell *pgc)
     // LEVEL_LOOP
     GCOUTLOOP
     {
-        i=p->gcout[n].i;
-        j=p->gcout[n].j;
-        k=p->gcout[n].k;
+        i=p->gcout[p->level][n].i;
+        j=p->gcout[p->level][n].j;
+        k=p->gcout[p->level][n].k;
 
+        GCOUT_TILE(n);
 
         pval=0.0;
 
@@ -83,6 +84,7 @@ void iowave::pressure_outlet(lexer *p, fdm *a, ghostcell *pgc)
             a->press(i+3,j,k)=pval;
         }
     }
+    GC_TILE_RESET;
 }
 
 void iowave::pressure_inlet(lexer *p, fdm *a, ghostcell *pgc)
@@ -94,10 +96,11 @@ void iowave::pressure_inlet(lexer *p, fdm *a, ghostcell *pgc)
         // LEVEL_LOOP
         GCINLOOP
         {
-            i=p->gcin[n].i;
-            j=p->gcin[n].j;
-            k=p->gcin[n].k;
+            i=p->gcin[p->level][n].i;
+            j=p->gcin[p->level][n].j;
+            k=p->gcin[p->level][n].k;
 
+            GCIN_TILE(n);
 
             if(a->phi(i,j,k)>=0.0)
             pval=(p->phimean - p->pos_z())*a->ro(i,j,k)*fabs(p->W22);
@@ -108,16 +111,18 @@ void iowave::pressure_inlet(lexer *p, fdm *a, ghostcell *pgc)
             a->press(i-2,j,k)=pval;
             a->press(i-3,j,k)=pval;
         }
+        GC_TILE_RESET;
     }
     else if(p->B76==0 && p->A10==5)
     {
         // LEVEL_LOOP
         GCINLOOP
         {
-            i=p->gcin[n].i;
-            j=p->gcin[n].j;
-            k=p->gcin[n].k;
+            i=p->gcin[p->level][n].i;
+            j=p->gcin[p->level][n].j;
+            k=p->gcin[p->level][n].k;
 
+            GCIN_TILE(n);
 
             pval = 0.0;
 
@@ -125,6 +130,7 @@ void iowave::pressure_inlet(lexer *p, fdm *a, ghostcell *pgc)
             a->press(i-2,j,k)=pval;
             a->press(i-3,j,k)=pval;
         }
+        GC_TILE_RESET;
     }
 }
 
