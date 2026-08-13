@@ -581,6 +581,10 @@ Authors: Hans Bihs, Alexander Hanke
 #define GCDF4CHECK if(p->gcdf4[p->level][n].cs>0)
 #define GCDF4LOOP GCDF4 GCDF4CHECK
 
+// IO
+#define GCINLOOP for(n=0;n<static_cast<int>(p->gcin.size());++n)
+#define GCOUTLOOP for(n=0;n<static_cast<int>(p->gcout.size());++n)
+
 // Tile context restore for the gcdf tables.
 //
 // gcdf entries store TILE-LOCAL (i,j,k) plus the dense id (column 6) of the
@@ -598,6 +602,8 @@ Authors: Hans Bihs, Alexander Hanke
     #define GCDF3_TILE(idx) GCB_TILE(p->gcdf3[p->level][idx], p->level)
     #define GCDF4_TILE(idx) GCB_TILE(p->gcdf4[p->level][idx], p->level)
     #define GCB4_TILE(idx)  GCB_TILE(p->gcb4[p->level][idx],  p->level)
+    #define GCSLIN_TILE(idx)  GCB_TILE(p->gcslin[p->level][idx],  p->level)
+    #define GCSLOUT_TILE(idx) GCB_TILE(p->gcslout[p->level][idx], p->level)
     #define GC_TILE_RESET   p->reset_tile_ctx()
 
     // Same, for the gcb_list_t entry structs (gcb_sl, gcb_sl_cs, gcb_sl_cs_bc,
@@ -612,6 +618,8 @@ Authors: Hans Bihs, Alexander Hanke
     #define GCDF3_TILE(idx) ((void)0)
     #define GCDF4_TILE(idx) ((void)0)
     #define GCB4_TILE(idx)  ((void)0)
+    #define GCSLIN_TILE(idx)  ((void)0)
+    #define GCSLOUT_TILE(idx) ((void)0)
     #define GC_TILE_RESET   ((void)0)
     #define GCB_TILE(entry, lev) ((void)0)
 #endif

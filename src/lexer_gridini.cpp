@@ -50,10 +50,6 @@ void lexer::gridini(ghostcell *pgc)
         update_cell_spacing();
     }
     #endif
-
-    #if USE_AMREX
-    define_inflow_outflow_ba();
-    #endif
 }
 
 void lexer::flagini()
@@ -154,7 +150,6 @@ void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow*
         grid_amrex::update_cell_coordinates();
         grid_amrex::update_cell_spacing();
         grid_amrex::update_registered_weno(nlevs);
-        grid_amrex::define_inflow_outflow_ba();
 
         // Re-establish the flag semantics for the re-chopped grid. The field rebuild inside
         // regrid_amrex_box_array_and_distribution_mapping reallocates the registered flag
@@ -167,6 +162,7 @@ void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow*
         // leaks and grows (post-mom |u| jumps from 0 to O(1) at rest).
         pgc->flagfield(this);
         gridhelper();
+        // rebuild gcio
         probe("post-rebuild");
 
         // Restore phi's ghost band BEFORE reinit reads it. The field rebuild inside

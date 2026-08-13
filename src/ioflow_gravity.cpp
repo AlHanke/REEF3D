@@ -43,40 +43,28 @@ ioflow_gravity::ioflow_gravity(lexer *p, ghostcell *pgc, patchBC_interface *ppBC
 
 void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 {
-    #if USE_AMREX
-    p->define_inflow_outflow_ba();
-    #else
-    int count1,count2,n;
+    p->gcin.clear();
+    p->gcout.clear();
+    int cs = 0;
 
-    count1=0;
-    count2=0;
     GC4LOOP
     {
         GCB4_TILE(n);
 
-        if(p->gcb4[p->level][n].bc==1)
-        {
-            p->gcin[count1][0]=p->gcb4[p->level][n].i;
-            p->gcin[count1][1]=p->gcb4[p->level][n].j;
-            p->gcin[count1][2]=p->gcb4[p->level][n].k;
-            p->gcin[count1][3]=p->gcb4[p->level][n].cs;
-            ++count1;
-        }
+        i = p->gcb4[p->level][n].i;
+        j = p->gcb4[p->level][n].j;
+        k = p->gcb4[p->level][n].k;
+        cs = p->gcb4[p->level][n].cs;
 
-        if(p->gcb4[p->level][n].bc==2)
-        {
-            p->gcout[count2][0]=p->gcb4[p->level][n].i;
-            p->gcout[count2][1]=p->gcb4[p->level][n].j;
-            p->gcout[count2][2]=p->gcb4[p->level][n].k;
-            p->gcout[count2][3]=p->gcb4[p->level][n].cs;
-            ++count2;
-        }
+        if(p->gcb4[p->level][n].bc==1)
+        p->gcin.push_back({i, j, k, cs});
+        else if(p->gcb4[p->level][n].bc==2)
+        p->gcout.push_back({i, j, k, cs});
     }
     GC_TILE_RESET;
 
-    p->gcin_count=count1;
-    p->gcout_count=count2;
-    #endif
+    p->gcin_count=p->gcin.size();
+    p->gcout_count=p->gcout.size();
 }
 
 void ioflow_gravity::discharge(lexer *p, fdm* a, ghostcell* pgc)

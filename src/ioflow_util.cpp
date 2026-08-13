@@ -29,13 +29,10 @@ Author: Hans Bihs
 
 void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 {
-    #if USE_AMREX
-    p->define_inflow_outflow_ba();
-    #else
-    int count1,count2;
+    p->gcin.clear();
+    p->gcout.clear();
+    int cs = 0;
 
-    count1=0;
-    count2=0;
     GC4LOOP
     {
         GCB4_TILE(n);
@@ -43,50 +40,17 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         i = p->gcb4[p->level][n].i;
         j = p->gcb4[p->level][n].j;
         k = p->gcb4[p->level][n].k;
+        cs = p->gcb4[p->level][n].cs;
 
-        if((p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6) && p->DF(i,j,k)>0)
-        ++count1;
-
-        if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
-        ++count2;
+        if((p->gcb4[p->level][n].bc==1) && p->DF(i,j,k)>0)
+        p->gcin.push_back({i, j, k, cs});
+        else if((p->gcb4[p->level][n].bc==2) && p->DF(i,j,k)>0)
+        p->gcout.push_back({i, j, k, cs});
     }
     GC_TILE_RESET;
 
-    p->Iresize(p->gcin,p->gcin_count, count1, 4, 4);
-    p->Iresize(p->gcout,p->gcout_count, count2, 4, 4);
-
-    count1=0;
-    count2=0;
-    GC4LOOP
-    {
-        GCB4_TILE(n);
-
-        i = p->gcb4[p->level][n].i;
-        j = p->gcb4[p->level][n].j;
-        k = p->gcb4[p->level][n].k;
-
-        if(p->gcb4[p->level][n].bc==1 && p->DF(i,j,k)>0)
-        {
-            p->gcin[count1][0]=p->gcb4[p->level][n].i;
-            p->gcin[count1][1]=p->gcb4[p->level][n].j;
-            p->gcin[count1][2]=p->gcb4[p->level][n].k;
-            p->gcin[count1][3]=p->gcb4[p->level][n].cs;
-            ++count1;
-        }
-        else if(p->gcb4[p->level][n].bc==2 && p->DF(i,j,k)>0)
-        {
-            p->gcout[count2][0]=p->gcb4[p->level][n].i;
-            p->gcout[count2][1]=p->gcb4[p->level][n].j;
-            p->gcout[count2][2]=p->gcb4[p->level][n].k;
-            p->gcout[count2][3]=p->gcb4[p->level][n].cs;
-            ++count2;
-        }
-    }
-    GC_TILE_RESET;
-
-    p->gcin_count=count1;
-    p->gcout_count=count2;
-    #endif
+    p->gcin_count=p->gcin.size();
+    p->gcout_count=p->gcout.size();
 
     if(p->I10==1 && p->count==0)
     velini(p,a,pgc);
@@ -168,10 +132,10 @@ void ioflow_f::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
 
 void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
 {
-    int count1,count2;
+    p->gcin.clear();
+    p->gcout.clear();
+    int cs = 0;
 
-    count1=0;
-    count2=0;
     GC4LOOP
     {
         GCB4_TILE(n);
@@ -179,50 +143,17 @@ void ioflow_f::gcio_update_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc)
         i = p->gcb4[p->level][n].i;
         j = p->gcb4[p->level][n].j;
         k = p->gcb4[p->level][n].k;
+        cs = p->gcb4[p->level][n].cs;
 
-        if((p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6) && p->DF(i,j,k)>0 && p->wet[IJ]==1)
-        ++count1;
-
-        if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
-        ++count2;
+        if((p->gcb4[p->level][n].bc==1) && p->DF(i,j,k)>0)
+        p->gcin.push_back({i, j, k, cs});
+        else if((p->gcb4[p->level][n].bc==2) && p->DF(i,j,k)>0)
+        p->gcout.push_back({i, j, k, cs});
     }
     GC_TILE_RESET;
 
-    p->Iresize(p->gcin,p->gcin_count, count1, 4, 4);
-    p->Iresize(p->gcout,p->gcout_count, count2, 4, 4);
-
-    count1=0;
-    count2=0;
-    GC4LOOP
-    {
-        GCB4_TILE(n);
-
-        i = p->gcb4[p->level][n].i;
-        j = p->gcb4[p->level][n].j;
-        k = p->gcb4[p->level][n].k;
-
-        if((p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6) && p->DF(i,j,k)>0 && p->wet[IJ]==1)
-        {
-            p->gcin[count1][0]=p->gcb4[p->level][n].i;
-            p->gcin[count1][1]=p->gcb4[p->level][n].j;
-            p->gcin[count1][2]=p->gcb4[p->level][n].k;
-            p->gcin[count1][3]=p->gcb4[p->level][n].cs;
-            ++count1;
-        }
-
-        if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
-        {
-            p->gcout[count2][0]=p->gcb4[p->level][n].i;
-            p->gcout[count2][1]=p->gcb4[p->level][n].j;
-            p->gcout[count2][2]=p->gcb4[p->level][n].k;
-            p->gcout[count2][3]=p->gcb4[p->level][n].cs;
-            ++count2;
-        }
-    }
-    GC_TILE_RESET;
-
-    p->gcin_count=count1;
-    p->gcout_count=count2;
+    p->gcin_count=p->gcin.size();
+    p->gcout_count=p->gcout.size();
 
     // IO update
     MALOOP
@@ -307,24 +238,15 @@ void ioflow_f::inflow_walldist(lexer *p, fdm *a, ghostcell *pgc, convection *pco
     #else
     walldin.resize(1);
     #endif
-    LEVEL_LOOP
+    // LEVEL_LOOP
     {
-        #if USE_AMREX
-        walldin[p->level].resize(p->inflow_ijk[p->level].size());
-        for(n=0; n<p->inflow_ijk[p->level].size(); n++)
+        walldin[p->level].resize(static_cast<int>(p->gcin.size()));
+        GCINLOOP
         {
-            auto iv = p->inflow_ijk[p->level][n];
-            i=iv[0];
-            j=iv[1];
-            k=iv[2];
-        #else
-        walldin[p->level].resize(p->gcin_count);
-        for(n=0;n<p->gcin_count;++n)
-        {
-            i=p->gcin[n][0];
-            j=p->gcin[n][1];
-            k=p->gcin[n][2];
-        #endif
+            i=p->gcin[n].i;
+            j=p->gcin[n].j;
+            k=p->gcin[n].k;
+
 
             walldin[p->level][n] = a->walld(i,j,k);
         }
@@ -335,24 +257,15 @@ void ioflow_f::inflow_walldist(lexer *p, fdm *a, ghostcell *pgc, convection *pco
     #else
     walldout.resize(1);
     #endif
-    LEVEL_LOOP
+    // LEVEL_LOOP
     {
-        #if USE_AMREX
-        walldout[p->level].resize(p->outflow_ijk[p->level].size());
-        for(n=0; n<p->outflow_ijk[p->level].size(); n++)
+        walldout[p->level].resize(static_cast<int>(p->gcout.size()));
+        GCOUTLOOP
         {
-            auto iv = p->outflow_ijk[p->level][n];
-            i=iv[0];
-            j=iv[1];
-            k=iv[2];
-        #else
-        walldout[p->level].resize(p->gcout_count);
-        for(n=0;n<p->gcout_count;++n)
-        {
-            i=p->gcout[n][0];
-            j=p->gcout[n][1];
-            k=p->gcout[n][2];
-        #endif
+            i=p->gcout[n].i;
+            j=p->gcout[n].j;
+            k=p->gcout[n].k;
+
 
             walldout[p->level][n] = a->walld(i,j,k);
         }
