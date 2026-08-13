@@ -32,9 +32,9 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
     // 1
     ULOOP
     {
-        int df=p->DF[IJK];
+        int df=p->DF(i,j,k);
 
-        if(df>0 && p->DF[Ip1JK]<0)
+        if(df>0 && p->DF(i+1,j,k)<0)
             df=-1;
 
         p->DF1[IJK]=df;
@@ -43,9 +43,9 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
     // 2
     VLOOP
     {
-        int df=p->DF[IJK];
+        int df=p->DF(i,j,k);
 
-        if(df>0 && p->DF[IJp1K]<0)
+        if(df>0 && p->DF(i,j+1,k)<0)
             df=-1;
 
         p->DF2[IJK]=df;
@@ -54,9 +54,9 @@ void ghostcell::solid_forcing_flag_update(lexer *p, fdm *a)
     // 3
     WLOOP
     {
-        int df=p->DF[IJK];
+        int df=p->DF(i,j,k);
 
-        if(df>0 && p->DF[IJKp1]<0)
+        if(df>0 && p->DF(i,j,k+1)<0)
             df=-1;
 
         p->DF3[IJK]=df;
