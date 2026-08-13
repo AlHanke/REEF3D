@@ -63,7 +63,7 @@ struct MFIter_Tiling_knob
         //   true                    : always tile (what the code has been doing)
         //   false                   : one tile per box
         //   amrex::TilingIfNotGPU() : tile on the host, not inside a GPU launch region
-        return false;
+        return amrex::TilingIfNotGPU();
     }
 };
 
