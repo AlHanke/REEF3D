@@ -29,8 +29,6 @@ void lexer::gridini(ghostcell *pgc)
     grid::sigma_coord_ini();
 
     grid::gridspacing(pgc);
-
-    gcd_ini(pgc);
 }
 
 void lexer::flagini()
@@ -135,26 +133,4 @@ int lexer::conv(double a)
 	b=c-1;
 
 	return b;
-}
-
-void lexer::gcd_ini(ghostcell *pgc)
-{
-    for(int q=0;q<gcb4_count;++q)
-    {
-        if(gcb4[q][3]==1 || gcb4[q][3]==4)
-        {
-            i=gcb4[q][0];
-            gcd4[q] = 0.5*DXP[IP];
-        }
-        else if(gcb4[q][3]==2 || gcb4[q][3]==3)
-        {
-            j=gcb4[q][1];
-            gcd4[q] = 0.5*DYP[JP];
-        }
-        else if(gcb4[q][3]==5 || gcb4[q][3]==6)
-        {
-            k=gcb4[q][2];
-            gcd4[q] = 0.5*DZP[KP];
-        }
-    }
 }

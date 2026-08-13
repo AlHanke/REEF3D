@@ -346,11 +346,6 @@ void lexer::read_grid()
         Iarray(gcb2, gcb2_count,6);
         Iarray(gcb3, gcb3_count,6);
         Iarray(gcb4, gcb4_count,6);
-
-        Darray(gcd1, gcb1_count);
-        Darray(gcd2, gcb2_count);
-        Darray(gcd3, gcb3_count);
-        Darray(gcd4, gcb4_count);
     }
 
     Iarray(gcpara1, gcpara1_count,7);
