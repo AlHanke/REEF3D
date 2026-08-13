@@ -139,7 +139,7 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NONE;
 }
 
-void ghostcell::gcdistro4(field &f, int ii, int jj, int kk, int cs, int bc, double dist, int gcv)
+void ghostcell::gcdistro4(field &f, int ii, int jj, int kk, int cs, int bc, int gcv)
 {
-    gcdistro(f,ii,jj,kk,dist,gceval4(p,gcv,bc,cs),cs);
+    gcdistro(f,ii,jj,kk,gceval4(p,gcv,bc,cs),cs);
 }
