@@ -172,8 +172,22 @@ void driver::driver_ini_cfd()
         pini->iniphi_surfarea(p,a,pgc);
     }
 
-    p->regrid(a,preini,p6dof,pgc,pflow);
+    #if USE_AMREX
+    // Build the AMR hierarchy to its full depth before the run starts. A single
+    // regrid pass can only tag level L+1 from data that already lives on level L,
+    // and the freshly created level carries nothing but a coarse interpolation
+    // until fill_registered_mf_level + reini have run at the end of the pass. So
+    // iterate: each pass adds the next level, then re-tags the whole hierarchy
+    // against the real level data now present. Terminates when the level count
+    // stops growing (no more cells tagged, or max_nlevs reached), and the trailing
+    // no-growth pass leaves changed==false, so it costs a re-tag and no rebuild.
+    for(int prev_nlevs=0; p->nlevs>prev_nlevs; )
+    {
+        prev_nlevs = p->nlevs;
+        p->regrid(a,preini,p6dof,pgc,pflow);
+    }
     // ppress->rebalance(p,a,pgc,ppois,psolv,pflow);
+    #endif
     ptstep->start(a,p,pgc,pturb);
 
     pini->iniphi_io(a,p,pgc);
