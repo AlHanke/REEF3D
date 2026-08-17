@@ -60,9 +60,6 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else if(((bc==gbc_labels::SYMMETRY && cs==dir_labels::Z_POS) || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==20)
         return bc_labels::NOSLIP;
 
-    else if(bc==gbc_labels::INFLOW && (gcv==72 || gcv==74 || gcv==152))
-        return bc_labels::NEUMANN;
-
     else if((bc==gbc_labels::INFLOW || bc==gbc_labels::OUTFLOW || bc==gbc_labels::SYMMETRY || bc==gbc_labels::WALL) && gcv==24)
         return bc_labels::NEUMANN;
 
@@ -70,6 +67,9 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NOSLIP;
 
     // VOF
+    else if(bc==gbc_labels::INFLOW && (gcv==72 || gcv==74 || gcv==152))
+        return bc_labels::NEUMANN;
+
     else if((bc==gbc_labels::SYMMETRY || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL) && (gcv==71 || gcv==72 || gcv==73 || gcv==74 || gcv==151 || gcv==152 || gcv==153))
         return bc_labels::NEUMANN;
 
