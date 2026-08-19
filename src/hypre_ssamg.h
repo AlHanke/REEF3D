@@ -133,6 +133,10 @@ private:
     bool solver_created = false;
     bool gmres_created = false;
     int created_nlevs = -1;
+    // Set by make_grid_7p; cleared by create_solver. A regrid destroys A/b/x and builds a new
+    // graph, so any solver already set up against the old operator must be torn down too --
+    // BoomerAMG's hierarchy still references the freed matrix and faults in the next V-cycle.
+    bool grid_rebuilt = false;
 
     int numparts;
     int dimensions;

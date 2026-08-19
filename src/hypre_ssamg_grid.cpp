@@ -30,6 +30,8 @@ Author: Alexander Hanke
 
 void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
 {
+    grid_rebuilt = true;
+
     // Grid setup
     #if USE_AMREX
     numparts   = p->nlevs;

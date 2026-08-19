@@ -55,7 +55,14 @@ void hypre_ssamg::start_solver45(lexer *p, fdm *a, ghostcell *pgc, field &f, int
     p->solveriter = 0;
 
     #if USE_AMREX
-    if(p->changed)
+    // Rebuild on a regrid, and also whenever the assembled grid's part count no longer
+    // matches p->nlevs. p->changed is a one-shot flag that lexer::regrid CLEARS on entry:
+    // the init hierarchy build (driver_ini_cfd) runs regrid in a loop whose last, no-growth
+    // pass resets it to false, so the level 1->2 creation that happened in the previous pass
+    // is never seen here -- the solver objects are constructed by logic_cfd() BEFORE that
+    // loop, at nlevs==1. fill_matrix4/fill_matrix_vel then loop lev<p->nlevs and call
+    // HYPRE_SStructMatrixSetBoxValues on a part that was never given any extents -> segfault.
+    if(p->changed || numparts != p->nlevs)
     {
         destroy_grid();
         make_grid_7p(p, a, pgc);
@@ -63,7 +70,10 @@ void hypre_ssamg::start_solver45(lexer *p, fdm *a, ghostcell *pgc, field &f, int
     #endif
 
     #if USE_AMREX
-    if(!solver_created || created_nlevs != p->nlevs)
+    // grid_rebuilt: the solver/preconditioner is bound to the operator it was set up against.
+    // make_grid_7p destroys A/b/x, so a solver kept across a rebuild (BoomerAMG's hierarchy in
+    // particular) still points at freed matrix data -> segfault in hypre_BoomerAMGCycle.
+    if(!solver_created || created_nlevs != p->nlevs || grid_rebuilt)
     #else
     if(!solver_created)
     #endif
