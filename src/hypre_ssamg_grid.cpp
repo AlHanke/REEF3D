@@ -72,6 +72,62 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
     }
     #endif
 
+    // Periodicity -- must be set on EVERY part before Assemble.
+    //
+    // REEF3D handles periodic BCs by exchanging ghost cells, so poisson_pcorr leaves the
+    // off-diagonal coefficient intact on a cell at a periodic boundary (its neighbour is a
+    // valid fluid ghost, not a wall, so none of the fold/Dirichlet branches fire). HYPRE
+    // therefore receives a stencil entry pointing outside the part's index space and, without
+    // this call, silently DROPS it -- the wrap-around coupling vanishes from the operator and
+    // the periodic direction is solved as if it had a free (zero-Neumann-ish) boundary.
+    // hypre_struct/hypre_struct_amr already do this; the SStruct path did not.
+    //
+    // The period is the part's OWN index-space length: level 0 spans the base domain, an AMR
+    // level lev spans it refined by ref^lev, so each part gets its own value.
+    //
+    // Setting it unconditionally on every part is safe, including for interior fine patches.
+    // Periodicity here is a statement about the part's index space, not a claim that the patch
+    // sits on a physical periodic boundary: hypre resolves an out-of-part stencil entry by
+    // shifting it by +/- the period and looking for a box there. Two cases:
+    //   * the patch does NOT reach both ends of the periodic direction -- the shifted index lands
+    //     entirely outside the part's boxes, hypre finds nothing and drops the entry exactly as it
+    //     does today. Inert; no spurious wrap-around can be manufactured, because the shift is the
+    //     FULL refined domain length and only a box near the opposite extreme can match it.
+    //   * the patch DOES span the periodic direction (the common case -- a refined band following
+    //     the free surface across a periodic channel) -- the low- and high-edge boxes are wired to
+    //     each other, which is the correct coupling and the whole point of the call.
+    // The one gap is a patch that touches ONE periodic end only: its wrap-around neighbour is a
+    // COARSE cell, i.e. a C-F coupling, and the cf_links halo construction filters candidates with
+    // in_domain(), which rejects a halo sitting outside the level's domain box. So that coupling is
+    // still missed. That is a pre-existing limitation of the C-F link construction (periodic C-F
+    // interfaces are not built at all), not something this call introduces or worsens.
+    //
+    // NOTE (HYPRE docs): some hypre solvers impose power-of-two restrictions on the size of a
+    // periodic dimension. SSAMG's semi-coarsening is one -- a period that stops being even limits
+    // how far the periodic direction coarsens. This only bites the single-level SSAMG path; the
+    // nlevs>1 path assembles to ParCSR and coarsens algebraically in BoomerAMG, where the grid
+    // periodicity only shapes the assembled matrix graph.
+    {
+        HYPRE_Int periodic[3];
+
+        for (int lev = 0; lev < numparts; ++lev)
+        {
+            #if USE_AMREX
+            const amrex::IntArray amrex_periodic = p->amrex_geometry[lev].isPeriodic();
+            const amrex::Box &dom = p->amrex_geometry[lev].Domain();
+            periodic[0] = amrex_periodic[0] ? dom.length(0) : 0;
+            periodic[1] = amrex_periodic[1] ? dom.length(1) : 0;
+            periodic[2] = amrex_periodic[2] ? dom.length(2) : 0;
+            #else
+            periodic[0] = p->periodic1 > 0 ? p->gknox : 0;
+            periodic[1] = p->periodic2 > 0 ? p->gknoy : 0;
+            periodic[2] = p->periodic3 > 0 ? p->gknoz : 0;
+            #endif
+
+            HYPRE_SStructGridSetPeriodic(grid, lev, periodic);
+        }
+    }
+
     HYPRE_SStructGridAssemble(grid);
 
 
