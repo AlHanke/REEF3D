@@ -94,7 +94,12 @@ void pjm_hydrostatic::start(fdm* a,lexer*p, poisson* ppois,solver* psolv, ghostc
     rhs(p,a,pgc,uvel,vvel,wvel,alpha);
 
 	pgc->start4(p,a->press,gcval_press);
-	
+
+    // This scheme builds press analytically in rhs() and never assembles a Poisson matrix, so
+    // unlike pjm / pjm_corr there is no poisson_*::start upstream to fill the face densities.
+    // Refresh them here or the correctors below read a stale (first step: zero) array.
+    pd->update_faces(p,a);
+
 	ucorr(p,a,uvel,alpha);
 	vcorr(p,a,vvel,alpha);
 	wcorr(p,a,wvel,alpha);
@@ -111,21 +116,21 @@ void pjm_hydrostatic::ucorr(lexer* p, fdm* a, field& uvel,double alpha)
 {	
 	ULOOP
 	uvel(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*((a->press(i+1,j,k)-a->press(i,j,k))
-	/(p->DXP[IP]*pd->roface(p,a,1,0,0)));
+	/(p->DXP[IP]*a->rofx(i,j,k)));
 }
 
 void pjm_hydrostatic::vcorr(lexer* p, fdm* a, field& vvel,double alpha)
 {	
     VLOOP
     vvel(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*(a->press(i,j+1,k)-a->press(i,j,k))
-    /(p->DYP[JP]*(pd->roface(p,a,0,1,0)));
+    /(p->DYP[JP]*(a->rofy(i,j,k)));
 }
 
 void pjm_hydrostatic::wcorr(lexer* p, fdm* a, field& wvel,double alpha)
 {	
 	WLOOP
 	wvel(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*((a->press(i,j,k+1)-a->press(i,j,k))
-	/(p->DZP[KP]*pd->roface(p,a,0,0,1)));
+	/(p->DZP[KP]*a->rofz(i,j,k)));
 }
  
 void pjm_hydrostatic::rhs(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, field &w, double alpha)

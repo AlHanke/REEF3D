@@ -361,42 +361,45 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     rk3_step1_u_time = p->utime;
 
     // V
-    starttime=pgc->timer();
+    if(p->j_dir)
+    {
+        starttime=pgc->timer();
 
-    block_start = pgc->timer();
-    pturb->jsource(p,a);
-    pflow->jsource(p,a,pgc,pvrans);
-    rk3_step1_v_source_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        pturb->jsource(p,a);
+        pflow->jsource(p,a,pgc,pvrans);
+        rk3_step1_v_source_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
-    rk3_step1_v_bcmom_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+        rk3_step1_v_bcmom_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    #if !USE_AMREX
-    ppress->vpgrad(p,a,a->eta,a->eta_n);
-    #endif
-    rk3_step1_v_pgrad_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        #if !USE_AMREX
+        ppress->vpgrad(p,a,a->eta,a->eta_n);
+        #endif
+        rk3_step1_v_pgrad_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    jrhs(p,a);
-    rk3_step1_v_rhs_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        jrhs(p,a);
+        rk3_step1_v_rhs_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    pconvec->start(p,a,a->v,2,a->u,a->v,a->w);
-    rk3_step1_v_convec_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        pconvec->start(p,a,a->v,2,a->u,a->v,a->w);
+        rk3_step1_v_convec_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    pdiff->diff_v(p,a,pgc,psolv,vdiff,a->v,a->u,a->v,a->w,1.0);
-    rk3_step1_v_diff_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        pdiff->diff_v(p,a,pgc,psolv,vdiff,a->v,a->u,a->v,a->w,1.0);
+        rk3_step1_v_diff_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    VLOOP
-    vrk1(i,j,k) = vdiff(i,j,k) + p->dt*CPOR2*a->G(i,j,k);
-    rk3_step1_v_update_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        VLOOP
+        vrk1(i,j,k) = vdiff(i,j,k) + p->dt*CPOR2*a->G(i,j,k);
+        rk3_step1_v_update_time = pgc->timer() - block_start;
 
-    p->vtime=pgc->timer()-starttime;
-    rk3_step1_v_time = p->vtime;
+        p->vtime=pgc->timer()-starttime;
+        rk3_step1_v_time = p->vtime;
+        }
 
     // W
     starttime=pgc->timer();
@@ -578,42 +581,45 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     rk3_step2_u_time = p->utime - rk3_step1_u_time;
 
     // V
-    starttime=pgc->timer();
+    if(p->j_dir)
+    {
+        starttime=pgc->timer();
 
-    block_start = pgc->timer();
-    pturb->jsource(p,a);
-    pflow->jsource(p,a,pgc,pvrans);
-    rk3_step2_v_source_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        pturb->jsource(p,a);
+        pflow->jsource(p,a,pgc,pvrans);
+        rk3_step2_v_source_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
-    rk3_step2_v_bcmom_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+        rk3_step2_v_bcmom_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    #if !USE_AMREX
-    ppress->vpgrad(p,a,a->eta,a->eta_n);
-    #endif
-    rk3_step2_v_pgrad_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        #if !USE_AMREX
+        ppress->vpgrad(p,a,a->eta,a->eta_n);
+        #endif
+        rk3_step2_v_pgrad_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    jrhs(p,a);
-    rk3_step2_v_rhs_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        jrhs(p,a);
+        rk3_step2_v_rhs_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    pconvec->start(p,a,vrk1,2,urk1,vrk1,wrk1);
-    rk3_step2_v_convec_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        pconvec->start(p,a,vrk1,2,urk1,vrk1,wrk1);
+        rk3_step2_v_convec_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    pdiff->diff_v(p,a,pgc,psolv,vdiff,vrk1,urk1,vrk1,wrk1,0.25);
-    rk3_step2_v_diff_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        pdiff->diff_v(p,a,pgc,psolv,vdiff,vrk1,urk1,vrk1,wrk1,0.25);
+        rk3_step2_v_diff_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    VLOOP
-    vrk2(i,j,k) = 0.75*a->v(i,j,k) + 0.25*vdiff(i,j,k) + 0.25*p->dt*CPOR2*a->G(i,j,k);
-    rk3_step2_v_update_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        VLOOP
+        vrk2(i,j,k) = 0.75*a->v(i,j,k) + 0.25*vdiff(i,j,k) + 0.25*p->dt*CPOR2*a->G(i,j,k);
+        rk3_step2_v_update_time = pgc->timer() - block_start;
 
-    p->vtime+=pgc->timer()-starttime;
-    rk3_step2_v_time = p->vtime - rk3_step1_v_time;
+        p->vtime+=pgc->timer()-starttime;
+        rk3_step2_v_time = p->vtime - rk3_step1_v_time;
+    }
 
     // W
     starttime=pgc->timer();
@@ -775,42 +781,45 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     rk3_step3_u_time = p->utime - rk3_step1_u_time - rk3_step2_u_time;
 
     // V
-    starttime=pgc->timer();
+    if(p->j_dir)
+    {
+        starttime=pgc->timer();
 
-    block_start = pgc->timer();
-    pturb->jsource(p,a);
-    pflow->jsource(p,a,pgc,pvrans);
-    rk3_step3_v_source_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        pturb->jsource(p,a);
+        pflow->jsource(p,a,pgc,pvrans);
+        rk3_step3_v_source_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
-    rk3_step3_v_bcmom_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        bcmom_start(a,p,pgc,pturb,a->v,gcval_v);
+        rk3_step3_v_bcmom_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    #if !USE_AMREX
-    ppress->vpgrad(p,a,a->eta,a->eta_n);
-    #endif
-    rk3_step3_v_pgrad_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        #if !USE_AMREX
+        ppress->vpgrad(p,a,a->eta,a->eta_n);
+        #endif
+        rk3_step3_v_pgrad_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    jrhs(p,a);
-    rk3_step3_v_rhs_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        jrhs(p,a);
+        rk3_step3_v_rhs_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    pconvec->start(p,a,vrk2,2,urk2,vrk2,wrk2);
-    rk3_step3_v_convec_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        pconvec->start(p,a,vrk2,2,urk2,vrk2,wrk2);
+        rk3_step3_v_convec_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    pdiff->diff_v(p,a,pgc,psolv,vdiff,vrk2,urk2,vrk2,wrk2,2.0/3.0);
-    rk3_step3_v_diff_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        pdiff->diff_v(p,a,pgc,psolv,vdiff,vrk2,urk2,vrk2,wrk2,2.0/3.0);
+        rk3_step3_v_diff_time = pgc->timer() - block_start;
 
-    block_start = pgc->timer();
-    VLOOP
-    a->v(i,j,k) = (1.0/3.0)*a->v(i,j,k) + (2.0/3.0)*vdiff(i,j,k) + (2.0/3.0)*p->dt*CPOR2*a->G(i,j,k);
-    rk3_step3_v_update_time = pgc->timer() - block_start;
+        block_start = pgc->timer();
+        VLOOP
+        a->v(i,j,k) = (1.0/3.0)*a->v(i,j,k) + (2.0/3.0)*vdiff(i,j,k) + (2.0/3.0)*p->dt*CPOR2*a->G(i,j,k);
+        rk3_step3_v_update_time = pgc->timer() - block_start;
 
-    p->vtime+=pgc->timer()-starttime;
-    rk3_step3_v_time = p->vtime - rk3_step1_v_time - rk3_step2_v_time;
+        p->vtime+=pgc->timer()-starttime;
+        rk3_step3_v_time = p->vtime - rk3_step1_v_time - rk3_step2_v_time;
+    }
 
     // W
     starttime=pgc->timer();

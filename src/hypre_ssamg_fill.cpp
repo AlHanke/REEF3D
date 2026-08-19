@@ -541,7 +541,12 @@ void hypre_ssamg::amr_cf_coefficients(lexer* p, fdm* a, ghostcell* pgc, fieldint
     // so the pressure gauge is invariant and NO reference pin / hydrostatic init is required)
     // only if EVERY method in this group encodes the SAME C-F face discretization:
     //   * normal centre distance  d_cf = 0.5*(dx_f + dx_c)   [fine scale 2/(1+r), coarse 2r/(1+r)]
-    //   * fine-side face density (roface) and porosity
+    //   * fine-side face density and porosity. The density now comes from a->rofx/rofy/rofz
+    //     (density::update_faces), NOT from a per-call-site pd->roface(): with AMR levels that
+    //     array is C-F-synced via amrex::average_down_faces, so the coarse and fine sides of a
+    //     C-F face carry one number even when the smoothed Heaviside band straddles it. This
+    //     mirrors MLABecLaplacian::averageDownCoeffsToCoarseAmrLevel, which is why amrex_solver
+    //     never had the two-valued-density problem.
     //   * conservative volume weighting  (M_cf*V_c == M_fc*V_f, i.e. coeff_cf = coeff_fc/volratio)
     // Change any one of these conventions and you MUST change the others in lockstep, or the
     // fine block floats off its gauge -> spurious velocity / wrong pressure level.
@@ -553,7 +558,8 @@ void hypre_ssamg::amr_cf_coefficients(lexer* p, fdm* a, ghostcell* pgc, fieldint
     //   3. field_amrex::FillCoarseFineCellGhost (field_amrex.cpp)  C-F ghost ring (predictor/pcorr) -> G_v
     //   4. field_amrex::FillDomainBoundaryImpl  (field_amrex.h)    gcv==41 gate that invokes (3)
     //   5. pjm_corr::start  (gcval_press select) (pjm_corr.cpp)    picks gcv 41 when nlevs>1
-    //   6. pjm_corr u/v/wcorr + u/v/wpgrad        (pjm_corr.cpp)    consumers: fine-spacing DXP & roface
+    //   6. pjm_corr u/v/wcorr + u/v/wpgrad        (pjm_corr.cpp)    consumers: fine-spacing DXP & a->rof*
+    //   7. density::update_faces                  (density.cpp)      sole writer of a->rof*; the C-F sync
     // ==================================================================================
 
     // Guard on nlevs only (global): the Allgather below is collective, so a rank owning no
@@ -1133,7 +1139,7 @@ void hypre_ssamg::velcorr_amr(lexer* p, fdm* a, ghostcell* pgc, density* pd,
             if(a->M.n[n] != 0.0)
                 u(i,j,k) += alpha*p->dt * a->M.n[n] * p->DXN[IP] * dp;
             else if(p->flag4(i+1,j,k)==AIR_FLAG)
-                u(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*(dp/(p->DXP[IP]*pd->roface(p,a,1,0,0)));
+                u(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*(dp/(p->DXP[IP]*a->rofx(i,j,k)));
         }
 
         // y+ (high) face -> v(i,j,k)
@@ -1143,7 +1149,7 @@ void hypre_ssamg::velcorr_amr(lexer* p, fdm* a, ghostcell* pgc, density* pd,
             if(a->M.w[n] != 0.0)
                 v(i,j,k) += alpha*p->dt * a->M.w[n] * p->DYN[JP] * dp;
             else if(p->flag4(i,j+1,k)==AIR_FLAG)
-                v(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*(dp/(p->DYP[JP]*pd->roface(p,a,0,1,0)));
+                v(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*(dp/(p->DYP[JP]*a->rofy(i,j,k)));
         }
 
         // z+ (high) face -> w(i,j,k)
@@ -1152,7 +1158,7 @@ void hypre_ssamg::velcorr_amr(lexer* p, fdm* a, ghostcell* pgc, density* pd,
             if(a->M.t[n] != 0.0)
                 w(i,j,k) += alpha*p->dt * a->M.t[n] * p->DZN[KP] * dp;
             else if(p->flag4(i,j,k+1)==AIR_FLAG)
-                w(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*(dp/(p->DZP[KP]*pd->roface(p,a,0,0,1)));
+                w(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*(dp/(p->DZP[KP]*a->rofz(i,j,k)));
         }
     }
 
