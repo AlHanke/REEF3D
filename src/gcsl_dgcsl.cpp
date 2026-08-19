@@ -24,72 +24,57 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"slice.h"
 
-void ghostcell::dgcslpol1(lexer* p,slice& f)
+void ghostcell::dgcslpol1(lexer *p, slice &f)
 {
-
     for(n=0;n<p->dgcsl1_count;++n)
     {
-    i=p->dgcsl1[n][0];
-    j=p->dgcsl1[n][1];
+        i=p->dgcsl1[n][0];
+        j=p->dgcsl1[n][1];
 
-
-    if(p->dgcsl1[n][2]==1)
-    f(i-1,j-1) = f(i,j);
-    
-    if(p->dgcsl1[n][2]==2)
-    f(i+1,j-1) = f(i,j);
-    
-    if(p->dgcsl1[n][2]==3)
-    f(i+1,j+1) = f(i,j);
-    
-    if(p->dgcsl1[n][2]==4)
-    f(i-1,j+1) = f(i,j);
+        if(p->dgcsl1[n][2]==1)
+            f(i-1,j-1) = f(i,j);
+        else if(p->dgcsl1[n][2]==2)
+            f(i+1,j-1) = f(i,j);
+        else if(p->dgcsl1[n][2]==3)
+            f(i+1,j+1) = f(i,j);
+        else if(p->dgcsl1[n][2]==4)
+            f(i-1,j+1) = f(i,j);
     }
 }
 
-void ghostcell::dgcslpol2(lexer* p,slice& f)
+void ghostcell::dgcslpol2(lexer *p, slice &f)
 {
-
     for(n=0;n<p->dgcsl2_count;++n)
     {
-    i=p->dgcsl2[n][0];
-    j=p->dgcsl2[n][1];
+        i=p->dgcsl2[n][0];
+        j=p->dgcsl2[n][1];
 
-
-    if(p->dgcsl2[n][2]==1)
-    f(i-1,j-1) = f(i,j);
-    
-    if(p->dgcsl2[n][2]==2)
-    f(i+1,j-1) = f(i,j);
-    
-    if(p->dgcsl2[n][2]==3)
-    f(i+1,j+1) = f(i,j);
-    
-    if(p->dgcsl2[n][2]==4)
-    f(i-1,j+1) = f(i,j);
+        if(p->dgcsl2[n][2]==1)
+            f(i-1,j-1) = f(i,j);
+        else if(p->dgcsl2[n][2]==2)
+            f(i+1,j-1) = f(i,j);
+        else if(p->dgcsl2[n][2]==3)
+            f(i+1,j+1) = f(i,j);
+        else if(p->dgcsl2[n][2]==4)
+            f(i-1,j+1) = f(i,j);
     }
 }
 
-void ghostcell::dgcslpol4(lexer* p,slice& f)
+void ghostcell::dgcslpol4(lexer *p, slice &f)
 {
-
     for(n=0;n<p->dgcsl4_count;++n)
     {
-    i=p->dgcsl4[n][0];
-    j=p->dgcsl4[n][1];
+        i=p->dgcsl4[n][0];
+        j=p->dgcsl4[n][1];
 
-
-    if(p->dgcsl4[n][2]==1)
-    f(i-1,j-1) = f(i,j);
-    
-    if(p->dgcsl4[n][2]==2)
-    f(i+1,j-1) = f(i,j);
-    
-    if(p->dgcsl4[n][2]==3)
-    f(i+1,j+1) = f(i,j);
-    
-    if(p->dgcsl4[n][2]==4)
-    f(i-1,j+1) = f(i,j);
+        if(p->dgcsl4[n][2]==1)
+            f(i-1,j-1) = f(i,j);
+        else if(p->dgcsl4[n][2]==2)
+            f(i+1,j-1) = f(i,j);
+        else if(p->dgcsl4[n][2]==3)
+            f(i+1,j+1) = f(i,j);
+        else if(p->dgcsl4[n][2]==4)
+            f(i-1,j+1) = f(i,j);
     }
 }
 
