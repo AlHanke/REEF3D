@@ -1158,29 +1158,29 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             }
 
             // 3. Generate AMReX plotfile name and metadata
-            // std::string plotfilename = amrex::Concatenate("REEF3D_CFD_PLT/plt", num, 7);
-            // amrex::Vector<int> level_steps(p->nlevs, p->count); // Assuming no subcycling for simplicity; adjust if you have subcycling
-            // amrex::Vector<amrex::IntVect> ref_ratio(p->nlevs-1, p->ref_vec);
-            // amrex::Vector<amrex::Geometry> geoms(p->nlevs);
-            // for (int lev = 0; lev < p->nlevs; lev++)
-            // {
-            //     auto real_box = p->amrex_geometry[lev].ProbDomain();
-            //     auto lowEnd = real_box.lo();
-            //     auto highEnd = real_box.hi();
-            //     amrex::RealBox real_box_out;
-            //     real_box_out.setLo(0, p->coordinates::Xout(lowEnd[0], lowEnd[1]));
-            //     real_box_out.setLo(1, p->coordinates::Yout(lowEnd[0], lowEnd[1]));
-            //     real_box_out.setLo(2, lowEnd[2]);
-            //     real_box_out.setHi(0, p->coordinates::Xout(highEnd[0], highEnd[1]));
-            //     real_box_out.setHi(1, p->coordinates::Yout(highEnd[0], highEnd[1]));
-            //     real_box_out.setHi(2, highEnd[2]);
-            //     geoms[lev] = amrex::Geometry(p->amrex_geometry[lev].Domain(), real_box_out, amrex::CoordSys::CoordType::cartesian, p->amrex_geometry[lev].isPeriodic());;
-            // }
+            std::string plotfilename = amrex::Concatenate("REEF3D_CFD_PLT/plt", num, 7);
+            amrex::Vector<int> level_steps(p->nlevs, p->count); // Assuming no subcycling for simplicity; adjust if you have subcycling
+            amrex::Vector<amrex::IntVect> ref_ratio(p->nlevs-1, p->ref_vec);
+            amrex::Vector<amrex::Geometry> geoms(p->nlevs);
+            for (int lev = 0; lev < p->nlevs; lev++)
+            {
+                auto real_box = p->amrex_geometry[lev].ProbDomain();
+                auto lowEnd = real_box.lo();
+                auto highEnd = real_box.hi();
+                amrex::RealBox real_box_out;
+                real_box_out.setLo(0, p->coordinates::Xout(lowEnd[0], lowEnd[1]));
+                real_box_out.setLo(1, p->coordinates::Yout(lowEnd[0], lowEnd[1]));
+                real_box_out.setLo(2, lowEnd[2]);
+                real_box_out.setHi(0, p->coordinates::Xout(highEnd[0], highEnd[1]));
+                real_box_out.setHi(1, p->coordinates::Yout(highEnd[0], highEnd[1]));
+                real_box_out.setHi(2, highEnd[2]);
+                geoms[lev] = amrex::Geometry(p->amrex_geometry[lev].Domain(), real_box_out, amrex::CoordSys::CoordType::cartesian, p->amrex_geometry[lev].isPeriodic());;
+            }
 
             // 4. Use AMReX utility to write the hierarchical data
-            // amrex::WriteMultiLevelPlotfile(plotfilename, p->nlevs, GetVecOfConstPtrs(plot_mfs_data), varnames,
-            //                             geoms, p->simtime,
-            //                             level_steps, ref_ratio);
+            amrex::WriteMultiLevelPlotfile(plotfilename, p->nlevs, GetVecOfConstPtrs(plot_mfs_data), varnames,
+                                        geoms, p->simtime,
+                                        level_steps, ref_ratio);
 
             // 5. Point-interpolated output with per-level structure, plus the 2D-plane
             //    variants for pseudo-2D runs. Two formats: .vtpc (vtkPartitionedDataSet-
