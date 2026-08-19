@@ -76,22 +76,27 @@ void poisson_f::start(lexer* p, fdm *a, field &press)
 {
     a->M.reset();
 
+    // Face density into a->rofx/rofy/rofz, C-F-synced with AMR levels. Also serves the
+    // correctors that run after this solve (pjm / pjm_hydrostatic u/v/wcorr), so the matrix
+    // and the gradient applied against it read the same number on every face.
+    pd->update_faces(p,a);
+
     n=0;
     LOOP
     {
-        a->M.p[n] = (p->i_dir ? ((CPOR1*PORVAL1)/(pd->roface(p,a,1,0,0)*p->DXP[IP]*p->DXN[IP])
-                    + (CPOR1m*PORVAL1m)/(pd->roface(p,a,-1,0,0)*p->DXP[IM1]*p->DXN[IP])) : 0.0)
+        a->M.p[n] = (p->i_dir ? ((CPOR1*PORVAL1)/(a->rofx(i,j,k)*p->DXP[IP]*p->DXN[IP])
+                    + (CPOR1m*PORVAL1m)/(a->rofx(i-1,j,k)*p->DXP[IM1]*p->DXN[IP])) : 0.0)
 
-                    + (p->j_dir ? ((CPOR2*PORVAL2)/(pd->roface(p,a,0,1,0)*p->DYP[JP]*p->DYN[JP])
-                    + (CPOR2m*PORVAL2m)/(pd->roface(p,a,0,-1,0)*p->DYP[JM1]*p->DYN[JP])) : 0.0)
+                    + (p->j_dir ? ((CPOR2*PORVAL2)/(a->rofy(i,j,k)*p->DYP[JP]*p->DYN[JP])
+                    + (CPOR2m*PORVAL2m)/(a->rofy(i,j-1,k)*p->DYP[JM1]*p->DYN[JP])) : 0.0)
 
-                    + (p->k_dir ? ((CPOR3*PORVAL3)/(pd->roface(p,a,0,0,1)*p->DZP[KP]*p->DZN[KP])
-                    + (CPOR3m*PORVAL3m)/(pd->roface(p,a,0,0,-1)*p->DZP[KM1]*p->DZN[KP])) : 0.0);
+                    + (p->k_dir ? ((CPOR3*PORVAL3)/(a->rofz(i,j,k)*p->DZP[KP]*p->DZN[KP])
+                    + (CPOR3m*PORVAL3m)/(a->rofz(i,j,k-1)*p->DZP[KM1]*p->DZN[KP])) : 0.0);
 
         if(p->i_dir)
         {
-            a->M.n[n] = -(CPOR1*PORVAL1)/(pd->roface(p,a,1,0,0)*p->DXP[IP]*p->DXN[IP]);
-            a->M.s[n] = -(CPOR1m*PORVAL1m)/(pd->roface(p,a,-1,0,0)*p->DXP[IM1]*p->DXN[IP]);
+            a->M.n[n] = -(CPOR1*PORVAL1)/(a->rofx(i,j,k)*p->DXP[IP]*p->DXN[IP]);
+            a->M.s[n] = -(CPOR1m*PORVAL1m)/(a->rofx(i-1,j,k)*p->DXP[IM1]*p->DXN[IP]);
         }
         else
         {
@@ -101,8 +106,8 @@ void poisson_f::start(lexer* p, fdm *a, field &press)
 
         if(p->j_dir)
         {
-            a->M.w[n] = -(CPOR2*PORVAL2)/(pd->roface(p,a,0,1,0)*p->DYP[JP]*p->DYN[JP]);
-            a->M.e[n] = -(CPOR2m*PORVAL2m)/(pd->roface(p,a,0,-1,0)*p->DYP[JM1]*p->DYN[JP]);
+            a->M.w[n] = -(CPOR2*PORVAL2)/(a->rofy(i,j,k)*p->DYP[JP]*p->DYN[JP]);
+            a->M.e[n] = -(CPOR2m*PORVAL2m)/(a->rofy(i,j-1,k)*p->DYP[JM1]*p->DYN[JP]);
         }
         else
         {
@@ -112,8 +117,8 @@ void poisson_f::start(lexer* p, fdm *a, field &press)
 
         if(p->k_dir)
         {
-            a->M.t[n] = -(CPOR3*PORVAL3)/(pd->roface(p,a,0,0,1)*p->DZP[KP]*p->DZN[KP]);
-            a->M.b[n] = -(CPOR3m*PORVAL3m)/(pd->roface(p,a,0,0,-1)*p->DZP[KM1]*p->DZN[KP]);
+            a->M.t[n] = -(CPOR3*PORVAL3)/(a->rofz(i,j,k)*p->DZP[KP]*p->DZN[KP]);
+            a->M.b[n] = -(CPOR3m*PORVAL3m)/(a->rofz(i,j,k-1)*p->DZP[KM1]*p->DZN[KP]);
         }
         else
         {

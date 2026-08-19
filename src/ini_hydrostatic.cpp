@@ -65,6 +65,11 @@ void initialize::hydrostatic(lexer *p, fdm *a, ghostcell *pgc)
         const double psi = p->psi;
         auto dens = density_f(p);
 
+        // The whole point of this branch is that the column integration uses the SAME face
+        // density wpgrad does; wpgrad now reads a->rofz, so this must too. Filled here (once,
+        // outside the level/tile loops below -- update_faces has its own MultiGridLOOP).
+        dens.update_faces(p,a);
+
         // Column-by-column hydrostatic build. Each (i,j) column is anchored at its tile-bottom
         // cell with the analytic absolute value, then integrated UPWARD using the SAME face
         // density momentum/wpgrad use (dens.roface, field phi). That makes grad(press) == W22*roface
@@ -106,7 +111,7 @@ void initialize::hydrostatic(lexer *p, fdm *a, ghostcell *pgc)
             // --- field-consistent upward integration (matches wpgrad's roface exactly) ---------
             for(k=0; k<KMAX_LOOP; ++k)
             {
-                const double rof = dens.roface(p,a,0,0,1);   // face between cells k and k+1
+                const double rof = a->rofz(i,j,k);   // face between cells k and k+1
                 a->press0(i,j,k+1) = a->press(i,j,k+1)
                     = a->press(i,j,k) + p->W22*p->DZP[KP]*rof;
             }
@@ -122,7 +127,7 @@ void initialize::hydrostatic(lexer *p, fdm *a, ghostcell *pgc)
             LEVEL_LOOP TILE_LOOP ILOOP JLOOP
             for(k=0;k<KMAX_LOOP;++k)
             {
-                const double rof = dens.roface(p,a,0,0,1);
+                const double rof = a->rofz(i,j,k);
                 const double dp  = a->press(i,j,k+1)-a->press(i,j,k);
                 const double gg  = (a->grav_pot(i,j,k+1)-a->grav_pot(i,j,k))/p->DZP[KP];
                 const double imb = std::fabs(-dp/(p->DZP[KP]*rof) + gg);
