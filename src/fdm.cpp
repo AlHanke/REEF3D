@@ -98,7 +98,7 @@ fdm::fdm(lexer *p) :
     rhsvec(p), M(p),
     nX(p), nY(p), nZ(p), Alpha(p)
 #endif
-    ,grav_pot(p),Mrow(p)
+    ,grav_pot(p),rofx(p),rofy(p),rofz(p),Mrow(p)
 {
 #if USE_AMREX
     p->register_mf(&m_mf, 47);

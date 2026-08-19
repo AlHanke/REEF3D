@@ -23,14 +23,23 @@ Author: Hans Bihs
 #ifndef DENSITY_H_
 #define DENSITY_H_
 
+#include"increment.h"
+
 class lexer;
 class fdm;
 
-class density
+// virtual public increment so update_faces() can use the loop macros; every concrete
+// density already inherits increment virtually, so the base stays unambiguous.
+class density : virtual public increment
 {
 public:
     virtual ~density() = default;
     virtual double roface(lexer*,fdm*,int,int,int)=0;
+
+    /// Materialise roface() into a->rofx/rofy/rofz and, with AMR levels, make the
+    /// value single-valued across every coarse-fine face. Non-virtual: it drives the
+    /// subclass roface(), so all eight density models inherit it unchanged.
+    void update_faces(lexer*, fdm*);
 };
 
 #endif

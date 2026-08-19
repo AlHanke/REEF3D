@@ -1589,6 +1589,7 @@
             <File Name="density_f.cpp"/>
             <File Name="density_conc.cpp"/>
             <File Name="density_comp.cpp"/>
+            <File Name="density.cpp"/>
           </VirtualDirectory>
         </VirtualDirectory>
         <VirtualDirectory Name="Momentum">
