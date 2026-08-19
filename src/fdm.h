@@ -141,6 +141,18 @@ public:
     field4 press0;
     #endif
     field4 grav_pot;
+
+    // Staggered face density rho_face, cell (i,j,k) holding its HIGH face -- the same
+    // convention as u/v/w and momentum_FCC3's rox/roy/roz. Filled once per projection by
+    // density::update_faces, which also makes the value single-valued across every
+    // coarse-fine interface (AMReX MLABecLaplacian does the equivalent internally via
+    // averageDownCoeffsToCoarseAmrLevel). Consumers read these instead of recomputing
+    // pd->roface(...) from phi per call site, which is what let the coarse and fine sides
+    // of a C-F face disagree whenever the smoothed Heaviside band crossed it.
+    field1 rofx;
+    field2 rofy;
+    field3 rofz;
+
     fieldint4 Mrow;
 };
 

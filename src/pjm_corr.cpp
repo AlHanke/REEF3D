@@ -382,20 +382,20 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
 void pjm_corr::ucorr(lexer* p, fdm* a, field& uvel, double alpha)
 {
     ULOOP
-    uvel(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*((pcorr(i+1,j,k)-pcorr(i,j,k))/(p->DXP[IP]*pd->roface(p,a,1,0,0)));
+    uvel(i,j,k) -= alpha*p->dt*CPOR1*PORVAL1*((pcorr(i+1,j,k)-pcorr(i,j,k))/(p->DXP[IP]*a->rofx(i,j,k)));
 }
 
 void pjm_corr::vcorr(lexer* p, fdm* a, field& vvel, double alpha)
 {
     if(p->j_dir==1)
     VLOOP
-    vvel(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*((pcorr(i,j+1,k)-pcorr(i,j,k))/(p->DYP[JP]*pd->roface(p,a,0,1,0)));
+    vvel(i,j,k) -= alpha*p->dt*CPOR2*PORVAL2*((pcorr(i,j+1,k)-pcorr(i,j,k))/(p->DYP[JP]*a->rofy(i,j,k)));
 }
 
 void pjm_corr::wcorr(lexer* p, fdm* a, field& wvel, double alpha)
 {
     WLOOP
-    wvel(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*((pcorr(i,j,k+1)-pcorr(i,j,k))/(p->DZP[KP]*pd->roface(p,a,0,0,1)));
+    wvel(i,j,k) -= alpha*p->dt*CPOR3*PORVAL3*((pcorr(i,j,k+1)-pcorr(i,j,k))/(p->DZP[KP]*a->rofz(i,j,k)));
 }
 
 void pjm_corr::velcorr(lexer* p, fdm* a, ghostcell* pgc, field& uvel, field& vvel, field& wvel, solver* psolv, double alpha)
@@ -689,9 +689,9 @@ void pjm_corr::projection_consistency_check(lexer* p, fdm* a, ghostcell* pgc, so
                     wi_covn[0]=nb_covered(p->level,i-1,j,k); wi_covn[1]=nb_covered(p->level,i+1,j,k);
                     wi_covn[2]=nb_covered(p->level,i,j-1,k); wi_covn[3]=nb_covered(p->level,i,j+1,k);
                     wi_covn[4]=nb_covered(p->level,i,j,k-1); wi_covn[5]=nb_covered(p->level,i,j,k+1);
-                    wi_rof[0]=pd->roface(p,a,-1,0,0); wi_rof[1]=pd->roface(p,a,1,0,0);
-                    wi_rof[2]=pd->roface(p,a,0,-1,0); wi_rof[3]=pd->roface(p,a,0,1,0);
-                    wi_rof[4]=pd->roface(p,a,0,0,-1); wi_rof[5]=pd->roface(p,a,0,0,1);
+                    wi_rof[0]=a->rofx(i-1,j,k); wi_rof[1]=a->rofx(i,j,k);
+                    wi_rof[2]=a->rofy(i,j-1,k); wi_rof[3]=a->rofy(i,j,k);
+                    wi_rof[4]=a->rofz(i,j,k-1); wi_rof[5]=a->rofz(i,j,k);
                     wi_phis=a->phi(i,j,k);
                     wi_phin[0]=a->phi(i-1,j,k); wi_phin[1]=a->phi(i+1,j,k);
                     wi_phin[2]=a->phi(i,j-1,k); wi_phin[3]=a->phi(i,j+1,k);
@@ -816,6 +816,15 @@ void pjm_corr::vel_setup(lexer *p, fdm* a, ghostcell *pgc, field &u, field &v, f
 // DXP/roface consistent with the group (canonical note in hypre_ssamg::amr_cf_coefficients).
 void pjm_corr::upgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
 {
+    // Refresh the face density for the PREDICTOR. Every momentum driver calls upgrad -> vpgrad
+    // -> wpgrad in that order and unconditionally (momentum_RK3/FC2/FC3/FCC3/FCLS3 and the PLIC
+    // variants), and phi does not change between them, so one fill here covers all three. The
+    // stage's second fill happens in poisson_pcorr::start, which is what the matrix and the
+    // corrector read -- phi is unchanged in between, so the predictor and the projection see
+    // the same densities. Without this the predictor would read the array as it was left by the
+    // PREVIOUS stage's projection, i.e. a stale phi.
+    pd->update_faces(p,a);
+
     double dp = 0.0;
     const bool relPressure = p->Y9;
     const bool skip_covered = (std::getenv("REEF_SKIP_COVERED_PGRAD") != nullptr);
@@ -838,13 +847,13 @@ void pjm_corr::upgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
         #endif
         dp = a->press(i+1,j,k)-a->press(i,j,k);
         // if(relPressure) dp -= a->press0(i+1,j,k)-a->press0(i,j,k);
-        a->F(i,j,k) -= PORVAL1*dp/(p->DXP[IP]*pd->roface(p,a,1,0,0));
+        a->F(i,j,k) -= PORVAL1*dp/(p->DXP[IP]*a->rofx(i,j,k));
         if(relPressure) a->F(i,j,k) += PORVAL1*(a->grav_pot(i+1,j,k)-a->grav_pot(i,j,k))/p->DXP[IP];
 
         if(hydro_probe)
         {
             #if USE_AMREX
-            const double rof = pd->roface(p,a,1,0,0);
+            const double rof = a->rofx(i,j,k);
             const double pg  = dp/(p->DXP[IP]*rof);
             const double gg  = (a->grav_pot(i+1,j,k)-a->grav_pot(i,j,k))/p->DXP[IP];
             const double imb = std::fabs(PORVAL1*(-pg + gg));
@@ -901,13 +910,13 @@ void pjm_corr::vpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
             #endif
             dp = a->press(i,j+1,k)-a->press(i,j,k);
             // if(relPressure) dp -= a->press0(i,j+1,k)-a->press0(i,j,k);
-            a->G(i,j,k) -= PORVAL2*dp/(p->DYP[JP]*pd->roface(p,a,0,1,0));
+            a->G(i,j,k) -= PORVAL2*dp/(p->DYP[JP]*a->rofy(i,j,k));
             if(relPressure) a->G(i,j,k) += PORVAL2*(a->grav_pot(i,j+1,k)-a->grav_pot(i,j,k))/p->DYP[JP];
 
             if(hydro_probe)
             {
                 #if USE_AMREX
-                const double rof = pd->roface(p,a,0,1,0);
+                const double rof = a->rofy(i,j,k);
                 const double pg  = dp/(p->DYP[JP]*rof);
                 const double gg  = (a->grav_pot(i,j+1,k)-a->grav_pot(i,j,k))/p->DYP[JP];
                 const double imb = std::fabs(PORVAL2*(-pg + gg));
@@ -961,13 +970,13 @@ void pjm_corr::wpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
         #endif
         dp = a->press(i,j,k+1)-a->press(i,j,k);
         // if(relPressure) dp -= a->press0(i,j,k+1)-a->press0(i,j,k);
-        a->H(i,j,k) -= PORVAL3*dp/(p->DZP[KP]*pd->roface(p,a,0,0,1));
+        a->H(i,j,k) -= PORVAL3*dp/(p->DZP[KP]*a->rofz(i,j,k));
         if(relPressure) a->H(i,j,k) += PORVAL3*(a->grav_pot(i,j,k+1)-a->grav_pot(i,j,k))/p->DZP[KP];
 
         if(hydro_probe)
         {
             #if USE_AMREX
-            const double rof = pd->roface(p,a,0,0,1);
+            const double rof = a->rofz(i,j,k);
             const double pg  = dp/(p->DZP[KP]*rof);
             const double gg  = (a->grav_pot(i,j,k+1)-a->grav_pot(i,j,k))/p->DZP[KP];
             const double imb = std::fabs(PORVAL3*(-pg + gg));
@@ -1071,6 +1080,12 @@ void pjm_corr::rebalance(lexer*p, fdm* a, ghostcell *pgc, poisson* ppois, solver
     field2 vtmp(p);
     field3 wtmp(p);
 
+    // The buoyancy source below reads a->rofx/rofy/rofz BEFORE this routine's own ppois->start,
+    // and rebalance exists precisely because reinit has just moved phi -- so the array left by
+    // the previous stage's projection is stale by construction. Refresh against the CURRENT phi,
+    // which is what "re-equilibrate press against the current density" means.
+    pd->update_faces(p,a);
+
     for(int pass=0; pass<passes; ++pass)
     {
         utmp.setVal(0.0,true);
@@ -1081,18 +1096,18 @@ void pjm_corr::rebalance(lexer*p, fdm* a, ghostcell *pgc, poisson* ppois, solver
         // with those methods; utmp = alpha*dt*b is exactly the at-rest predictor with no convec/diff.
         ULOOP
         utmp(i,j,k) = alpha*p->dt*PORVAL1*
-            ( -(a->press(i+1,j,k)-a->press(i,j,k))/(p->DXP[IP]*pd->roface(p,a,1,0,0))
+            ( -(a->press(i+1,j,k)-a->press(i,j,k))/(p->DXP[IP]*a->rofx(i,j,k))
               +(a->grav_pot(i+1,j,k)-a->grav_pot(i,j,k))/p->DXP[IP] );
 
         if(p->j_dir==1)
         VLOOP
         vtmp(i,j,k) = alpha*p->dt*PORVAL2*
-            ( -(a->press(i,j+1,k)-a->press(i,j,k))/(p->DYP[JP]*pd->roface(p,a,0,1,0))
+            ( -(a->press(i,j+1,k)-a->press(i,j,k))/(p->DYP[JP]*a->rofy(i,j,k))
               +(a->grav_pot(i,j+1,k)-a->grav_pot(i,j,k))/p->DYP[JP] );
 
         WLOOP
         wtmp(i,j,k) = alpha*p->dt*PORVAL3*
-            ( -(a->press(i,j,k+1)-a->press(i,j,k))/(p->DZP[KP]*pd->roface(p,a,0,0,1))
+            ( -(a->press(i,j,k+1)-a->press(i,j,k))/(p->DZP[KP]*a->rofz(i,j,k))
               +(a->grav_pot(i,j,k+1)-a->grav_pot(i,j,k))/p->DZP[KP] );
 
         // Same pipeline as start(), minus velcorr: halo fill -> composite C-F sync -> divergence

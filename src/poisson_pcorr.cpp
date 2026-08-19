@@ -77,6 +77,18 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
     a->M.reset();
 
     const bool is3D = p->j_dir;
+
+    // Materialise rho_face into a->rofx/rofy/rofz once, instead of evaluating the density
+    // model six times per cell below. With AMR levels this is also where the C-F faces are
+    // made single-valued (density::update_faces -> amrex::average_down_faces), so the coarse
+    // and fine sides of one physical face can no longer disagree when the smoothed Heaviside
+    // band crosses the interface. Cell (i,j,k) stores its HIGH face, so a low face reads
+    // (i-1,j,k).
+    // TODO: hoist to a single per-RK-stage call once the predictor (pjm_corr u/v/wpgrad) and
+    // hypre_ssamg::velcorr_amr read the same arrays; it lives here while poisson_pcorr is the
+    // only converted consumer.
+    pd->update_faces(p,a);
+
     // Row numbering: stamp a->Mrow with the LOOP index used to fill a->M / a->rhsvec.
     // This is the single source of truth consumed by hypre_ssamg (matrix fill) and the
     // velocity corrector -- keep it on the coefficient LOOP so index n and the a->M[n]
@@ -86,23 +98,23 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
     {
         a->Mrow(i,j,k) = n;
 
-        a->M.p[n] = (CPOR1*PORVAL1)/(pd->roface(p,a,1,0,0)*p->DXP[IP]*p->DXN[IP])
-                  + (CPOR1m*PORVAL1m)/(pd->roface(p,a,-1,0,0)*p->DXP[IM1]*p->DXN[IP])
+        a->M.p[n] = (CPOR1*PORVAL1)/(a->rofx(i,j,k)*p->DXP[IP]*p->DXN[IP])
+                  + (CPOR1m*PORVAL1m)/(a->rofx(i-1,j,k)*p->DXP[IM1]*p->DXN[IP])
 
-                  +(is3D ? ((CPOR2*PORVAL2)/(pd->roface(p,a,0,1,0)*p->DYP[JP]*p->DYN[JP])
-                  + (CPOR2m*PORVAL2m)/(pd->roface(p,a,0,-1,0)*p->DYP[JM1]*p->DYN[JP])) : 0.0)
+                  +(is3D ? ((CPOR2*PORVAL2)/(a->rofy(i,j,k)*p->DYP[JP]*p->DYN[JP])
+                  + (CPOR2m*PORVAL2m)/(a->rofy(i,j-1,k)*p->DYP[JM1]*p->DYN[JP])) : 0.0)
 
-                  + (CPOR3*PORVAL3)/(pd->roface(p,a,0,0,1)*p->DZP[KP]*p->DZN[KP])
-                  + (CPOR3m*PORVAL3m)/(pd->roface(p,a,0,0,-1)*p->DZP[KM1]*p->DZN[KP]);
+                  + (CPOR3*PORVAL3)/(a->rofz(i,j,k)*p->DZP[KP]*p->DZN[KP])
+                  + (CPOR3m*PORVAL3m)/(a->rofz(i,j,k-1)*p->DZP[KM1]*p->DZN[KP]);
 
 
-        a->M.n[n] = -(CPOR1*PORVAL1)/(pd->roface(p,a,1,0,0)*p->DXP[IP]*p->DXN[IP]);
-        a->M.s[n] = -(CPOR1m*PORVAL1m)/(pd->roface(p,a,-1,0,0)*p->DXP[IM1]*p->DXN[IP]);
+        a->M.n[n] = -(CPOR1*PORVAL1)/(a->rofx(i,j,k)*p->DXP[IP]*p->DXN[IP]);
+        a->M.s[n] = -(CPOR1m*PORVAL1m)/(a->rofx(i-1,j,k)*p->DXP[IM1]*p->DXN[IP]);
 
         if(is3D)
         {
-            a->M.w[n] = -(CPOR2*PORVAL2)/(pd->roface(p,a,0,1,0)*p->DYP[JP]*p->DYN[JP]);
-            a->M.e[n] = -(CPOR2m*PORVAL2m)/(pd->roface(p,a,0,-1,0)*p->DYP[JM1]*p->DYN[JP]);
+            a->M.w[n] = -(CPOR2*PORVAL2)/(a->rofy(i,j,k)*p->DYP[JP]*p->DYN[JP]);
+            a->M.e[n] = -(CPOR2m*PORVAL2m)/(a->rofy(i,j-1,k)*p->DYP[JM1]*p->DYN[JP]);
         }
         else
         {
@@ -110,8 +122,8 @@ void poisson_pcorr::start(lexer* p, fdm *a, field &press)
             a->M.e[n] = 0.0;
         }
 
-        a->M.t[n] = -(CPOR3*PORVAL3)/(pd->roface(p,a,0,0,1)*p->DZP[KP]*p->DZN[KP]);
-        a->M.b[n] = -(CPOR3m*PORVAL3m)/(pd->roface(p,a,0,0,-1)*p->DZP[KM1]*p->DZN[KP]);
+        a->M.t[n] = -(CPOR3*PORVAL3)/(a->rofz(i,j,k)*p->DZP[KP]*p->DZN[KP]);
+        a->M.b[n] = -(CPOR3m*PORVAL3m)/(a->rofz(i,j,k-1)*p->DZP[KM1]*p->DZN[KP]);
 
         ++n;
     }
