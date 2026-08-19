@@ -75,6 +75,7 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
         // keys off created_nlevs>1 to free the right objects.
         solver_created = true;
         created_nlevs  = p->nlevs;
+        grid_rebuilt   = false;
         return;
     }
     #endif
@@ -146,6 +147,7 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
     solver_created = true;
     #if USE_AMREX
     created_nlevs = p->nlevs;
+    grid_rebuilt  = false;
     #endif
 }
 
