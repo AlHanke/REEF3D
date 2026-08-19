@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"sliceint5.h"
 
-void ghostcell::dgcslini1(lexer* p)
+void ghostcell::dgcslini1(lexer *p)
 {
     count=0;
     SLICELOOP1
@@ -33,83 +33,82 @@ void ghostcell::dgcslini1(lexer* p)
         && p->flagslice1[IJm1]<0
         && p->flagslice1[Im1Jm1]<0)
         {
-        ++count;
+            ++count;
         }
 
         if(p->flagslice1[Ip1J]<0
         && p->flagslice1[IJm1]<0
         && p->flagslice1[Ip1Jm1]<0)
         {
-        ++count;
+            ++count;
         }
-        
+
         if(p->flagslice1[Ip1J]<0
         && p->flagslice1[IJp1]<0
         && p->flagslice1[Ip1Jp1]<0)
         {
-        ++count;
+            ++count;
         }
-        
+
         if(p->flagslice1[Im1J]<0
         && p->flagslice1[IJp1]<0
         && p->flagslice1[Im1Jp1]<0)
         {
-        ++count;
+            ++count;
         }
     }
-    
+
     p->Iarray(p->dgcsl1,count,3);
-	p->dgcsl1_count=count;
-    
-        //------------
-        
-    count=0;   
+    p->dgcsl1_count=count;
+
+    //------------
+
+    count=0;
     SLICELOOP1
     {
         if(p->flagslice1[Im1J]<0
         && p->flagslice1[IJm1]<0
         && p->flagslice1[Im1Jm1]<0)
         {
-        p->dgcsl1[count][0]=i;
-        p->dgcsl1[count][1]=j;
-        p->dgcsl1[count][2]=1;
-        ++count;
+            p->dgcsl1[count][0]=i;
+            p->dgcsl1[count][1]=j;
+            p->dgcsl1[count][2]=1;
+            ++count;
         }
 
         if(p->flagslice1[Ip1J]<0
         && p->flagslice1[IJm1]<0
         && p->flagslice1[Ip1Jm1]<0)
         {
-        p->dgcsl1[count][0]=i;
-        p->dgcsl1[count][1]=j;
-        p->dgcsl1[count][2]=2;
-        ++count;
+            p->dgcsl1[count][0]=i;
+            p->dgcsl1[count][1]=j;
+            p->dgcsl1[count][2]=2;
+            ++count;
         }
-        
+
         if(p->flagslice1[Ip1J]<0
         && p->flagslice1[IJp1]<0
         && p->flagslice1[Ip1Jp1]<0)
         {
-        p->dgcsl1[count][0]=i;
-        p->dgcsl1[count][1]=j;
-        p->dgcsl1[count][2]=3;
-        ++count;
+            p->dgcsl1[count][0]=i;
+            p->dgcsl1[count][1]=j;
+            p->dgcsl1[count][2]=3;
+            ++count;
         }
-        
+
         if(p->flagslice1[Im1J]<0
         && p->flagslice1[IJp1]<0
         && p->flagslice1[Im1Jp1]<0)
         {
-        p->dgcsl1[count][0]=i;
-        p->dgcsl1[count][1]=j;
-        p->dgcsl1[count][2]=4;
-        ++count;
+            p->dgcsl1[count][0]=i;
+            p->dgcsl1[count][1]=j;
+            p->dgcsl1[count][2]=4;
+            ++count;
         }
     }
-    
 }
 
-void ghostcell::dgcslini2(lexer* p)
+void ghostcell::dgcslini2(lexer *p)
 {
    count=0;
     SLICELOOP2
@@ -118,83 +117,82 @@ void ghostcell::dgcslini2(lexer* p)
         && p->flagslice2[IJm1]<0
         && p->flagslice2[Im1Jm1]<0)
         {
-        ++count;
+            ++count;
         }
 
         if(p->flagslice2[Ip1J]<0
         && p->flagslice2[IJm1]<0
         && p->flagslice2[Ip1Jm1]<0)
         {
-        ++count;
+            ++count;
         }
-        
+
         if(p->flagslice2[Ip1J]<0
         && p->flagslice2[IJp1]<0
         && p->flagslice2[Ip1Jp1]<0)
         {
-        ++count;
+            ++count;
         }
-        
+
         if(p->flagslice2[Im1J]<0
         && p->flagslice2[IJp1]<0
         && p->flagslice2[Im1Jp1]<0)
         {
-        ++count;
+            ++count;
         }
     }
-    
+
     p->Iarray(p->dgcsl2,count,3);
-	p->dgcsl2_count=count;
-    
-        //------------
-        
-    count=0;   
+    p->dgcsl2_count=count;
+
+    //------------
+
+    count=0;
     SLICELOOP2
     {
         if(p->flagslice2[Im1J]<0
         && p->flagslice2[IJm1]<0
         && p->flagslice2[Im1Jm1]<0)
         {
-        p->dgcsl2[count][0]=i;
-        p->dgcsl2[count][1]=j;
-        p->dgcsl2[count][2]=1;
-        ++count;
+            p->dgcsl2[count][0]=i;
+            p->dgcsl2[count][1]=j;
+            p->dgcsl2[count][2]=1;
+            ++count;
         }
 
         if(p->flagslice2[Ip1J]<0
         && p->flagslice2[IJm1]<0
         && p->flagslice2[Ip1Jm1]<0)
         {
-        p->dgcsl2[count][0]=i;
-        p->dgcsl2[count][1]=j;
-        p->dgcsl2[count][2]=2;
-        ++count;
+            p->dgcsl2[count][0]=i;
+            p->dgcsl2[count][1]=j;
+            p->dgcsl2[count][2]=2;
+            ++count;
         }
-        
+
         if(p->flagslice2[Ip1J]<0
         && p->flagslice2[IJp1]<0
         && p->flagslice2[Ip1Jp1]<0)
         {
-        p->dgcsl2[count][0]=i;
-        p->dgcsl2[count][1]=j;
-        p->dgcsl2[count][2]=3;
-        ++count;
+            p->dgcsl2[count][0]=i;
+            p->dgcsl2[count][1]=j;
+            p->dgcsl2[count][2]=3;
+            ++count;
         }
-        
+
         if(p->flagslice2[Im1J]<0
         && p->flagslice2[IJp1]<0
         && p->flagslice2[Im1Jp1]<0)
         {
-        p->dgcsl2[count][0]=i;
-        p->dgcsl2[count][1]=j;
-        p->dgcsl2[count][2]=4;
-        ++count;
+            p->dgcsl2[count][0]=i;
+            p->dgcsl2[count][1]=j;
+            p->dgcsl2[count][2]=4;
+            ++count;
         }
     }
-    		
 }
 
-void ghostcell::dgcslini4(lexer* p)
+void ghostcell::dgcslini4(lexer *p)
 {
     count=0;
     SLICELOOP4
@@ -203,78 +201,77 @@ void ghostcell::dgcslini4(lexer* p)
         && p->flagslice4[IJm1]<0
         && p->flagslice4[Im1Jm1]<0)
         {
-        ++count;
+            ++count;
         }
 
         if(p->flagslice4[Ip1J]<0
         && p->flagslice4[IJm1]<0
         && p->flagslice4[Ip1Jm1]<0)
         {
-        ++count;
+            ++count;
         }
-        
+
         if(p->flagslice4[Ip1J]<0
         && p->flagslice4[IJp1]<0
         && p->flagslice4[Ip1Jp1]<0)
         {
-        ++count;
+            ++count;
         }
-        
+
         if(p->flagslice4[Im1J]<0
         && p->flagslice4[IJp1]<0
         && p->flagslice4[Im1Jp1]<0)
         {
-        ++count;
+            ++count;
         }
     }
-    
+
     p->Iarray(p->dgcsl4,count,3);
-	p->dgcsl4_count=count;
-    
-        //------------
-        
-    count=0;   
+    p->dgcsl4_count=count;
+
+    //------------
+
+    count=0;
     SLICELOOP4
     {
         if(p->flagslice4[Im1J]<0
         && p->flagslice4[IJm1]<0
         && p->flagslice4[Im1Jm1]<0)
         {
-        p->dgcsl4[count][0]=i;
-        p->dgcsl4[count][1]=j;
-        p->dgcsl4[count][2]=1;
-        ++count;
+            p->dgcsl4[count][0]=i;
+            p->dgcsl4[count][1]=j;
+            p->dgcsl4[count][2]=1;
+            ++count;
         }
 
         if(p->flagslice4[Ip1J]<0
         && p->flagslice4[IJm1]<0
         && p->flagslice4[Ip1Jm1]<0)
         {
-        p->dgcsl4[count][0]=i;
-        p->dgcsl4[count][1]=j;
-        p->dgcsl4[count][2]=2;
-        ++count;
+            p->dgcsl4[count][0]=i;
+            p->dgcsl4[count][1]=j;
+            p->dgcsl4[count][2]=2;
+            ++count;
         }
-        
+
         if(p->flagslice4[Ip1J]<0
         && p->flagslice4[IJp1]<0
         && p->flagslice4[Ip1Jp1]<0)
         {
-        p->dgcsl4[count][0]=i;
-        p->dgcsl4[count][1]=j;
-        p->dgcsl4[count][2]=3;
-        ++count;
+            p->dgcsl4[count][0]=i;
+            p->dgcsl4[count][1]=j;
+            p->dgcsl4[count][2]=3;
+            ++count;
         }
-        
+
         if(p->flagslice4[Im1J]<0
         && p->flagslice4[IJp1]<0
         && p->flagslice4[Im1Jp1]<0)
         {
-        p->dgcsl4[count][0]=i;
-        p->dgcsl4[count][1]=j;
-        p->dgcsl4[count][2]=4;
-        ++count;
+            p->dgcsl4[count][0]=i;
+            p->dgcsl4[count][1]=j;
+            p->dgcsl4[count][2]=4;
+            ++count;
         }
     }
-    
 }
