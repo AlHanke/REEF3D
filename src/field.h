@@ -72,6 +72,13 @@ public:
 #endif
     virtual ~field() = default;
 
+#if not USE_AMREX
+protected:
+    /// Forwards field_base's vertical-extent-parameterised ctor. See field7.
+    field(lexer* p, int kz, std::size_t slack) : field_base<double>(p, kz, slack) {};
+public:
+#endif
+
 #if USE_AMREX
     virtual void FillDomainBoundary(int gcv) = 0;
     virtual void FillDomainBoundaryValue(double value, int dir, bool high) = 0;

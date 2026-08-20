@@ -48,13 +48,7 @@ public:
 #if USE_AMREX
     field_base() = default;
 #else
-    field_base(lexer *p) :
-        V(static_cast<std::size_t>(p->imax)*p->jmax*p->kmax, T{}),
-        imin(p->imin), jmin(p->jmin),
-        kmin(p->kmin), kmax(p->kmax),
-        jkmax(p->jmax*p->kmax),
-        p(p)
-    {cache_addressing();};
+    field_base(lexer *p) : field_base(p, p->kmax, 0) {};
 #endif
     field_base(const field_base&) = delete;
     field_base& operator=(const field_base&) = delete;
@@ -166,6 +160,28 @@ public:
 
 protected:
     /*!
+     * @brief Vertical-extent-parameterised constructor.
+     *
+     * The whole class is agnostic about the vertical stride — cache_addressing()
+     * folds whatever @p kz is into m_ks/m_js — so a field with a different number
+     * of z-planes needs nothing but a different kz. field7 passes p->kmaxF to get
+     * the sigma-grid vertical-node layout (one plane more than p->kmax), which
+     * reproduces the FIJK addressing in iterators3D.h exactly:
+     *
+     *   V[(i-imin)*jmax*kmaxF + (j-jmin)*kmaxF + k-kmin] == m_base[i*m_js + j*m_ks + k]
+     *
+     * @p slack is extra trailing elements, for layouts whose forward-stencil
+     * macros reach past the last in-stride slot. See field7.
+     */
+    field_base(lexer *p, int kz, std::size_t slack) :
+        V(static_cast<std::size_t>(p->imax)*p->jmax*kz + slack, T{}),
+        imin(p->imin), jmin(p->jmin),
+        kmin(p->kmin), kmax(kz),
+        jkmax(p->jmax*kz),
+        p(p)
+    {cache_addressing();};
+
+    /*!
      * @brief Precomputes the folded addressing used by operator() and view().
      *
      * The origin and both strides are folded into m_base so that
@@ -219,8 +235,13 @@ protected:
 #if not USE_AMREX
 private:
     const int imin,jmin,kmin,kmax,jkmax;
+protected:
+    /// Protected rather than private so a derived field with its own vertical
+    /// extent can write a setVal over the loop macros appropriate to it — they
+    /// all read p. Declared here, between the two private blocks, so member
+    /// declaration order still matches the constructor's initialiser list.
     lexer *p;
-
+private:
     T*       m_base = nullptr;
     stride_t m_js   = 0;
     stride_t m_ks   = 0;
