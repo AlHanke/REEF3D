@@ -45,7 +45,7 @@ field_amrex::field_amrex(lexer* p, DataLocation data_location)
       m_shared_mf(nullptr)
 {
     field_amrex::p = p;
-    mf = make_mf(p, p->ncomp, &mf, static_cast<int>(data_location));
+    mf = make_mf(p, p->ncomp, &mf, data_location);
 
     BCRecs.resize(p->nlevs);
     for (auto& bc_rec : BCRecs)
@@ -153,8 +153,20 @@ void field_amrex::setVal(double val, bool includeGhost)
 // ---------------------------------------------------------------------------
 void field_amrex::FillBoundary()
 {
+    const bool nodal_z =
+        (const_params.data_location == DataLocation::NODE_Z);
+
     LEVEL_LOOP
     {
+        // A NODE_Z field's valid regions OVERLAP: the plane on a z-split box seam
+        // is valid in both neighbours, and FillBoundary does not arbitrate between
+        // two valid copies -- it only fills ghosts. OverrideSync first picks the
+        // canonical owner and broadcasts its value, so the subsequent ghost fill
+        // starts from agreed data. This is the AMReX counterpart of gcx_parax7co.
+        if (nodal_z)
+            get_mf(p->level).OverrideSync(0, 1,
+                                       p->amrex_geometry[p->level].periodicity());
+
         get_mf(p->level).FillBoundary(0, 1,
                                        p->amrex_geometry[p->level].periodicity());
     }
@@ -555,6 +567,15 @@ void field_amrex::average_down_level(lexer* p, int lev)
     if (const_params.data_location == DataLocation::CELL_CENTERED)
     {
         amrex::average_down(GetMultiFab(flev), GetMultiFab(clev), 0, 1, p->ref_vec);
+        return;
+    }
+
+    if (const_params.data_location == DataLocation::NODE_Z)
+    {
+        // Nodal restriction: coarse node <- coincident fine node. Injection, not
+        // an average -- a nodal value already lives exactly where the coarse one
+        // does, so averaging neighbours would smear it.
+        amrex::average_down_nodal(GetMultiFab(flev), GetMultiFab(clev), p->ref_vec);
         return;
     }
 

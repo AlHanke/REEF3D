@@ -631,15 +631,22 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
     // then dereferences freed storage on the very first regrid (capacity grows from
     // nlevs to max_nlevs), which is exactly the "container overflow in fine-level
     // error estimation" that the probe cap below used to paper over.
+    // Placeholders must carry the entry's own index type: a NODE_Z container
+    // whose dummy levels were cell-typed would trip AMReX's index-type checks
+    // before fill_registered_mf_level ever redefines them.
     for (auto& e : mf_registry)
     {
+        const amrex::BoxArray e_ba =
+            amrex::convert(dummy_ba, location_index_type(e.location));
         while ((int)e.mf->size() < max_nlevs)
-            e.mf->emplace_back(dummy_ba, dummy_dm, e.ncomp, 0);
+            e.mf->emplace_back(e_ba, dummy_dm, e.ncomp, 0);
     }
     for (auto& e : imf_registry)
     {
+        const amrex::BoxArray e_ba =
+            amrex::convert(dummy_ba, location_index_type(e.location));
         while ((int)e.mf->size() < max_nlevs)
-            e.mf->emplace_back(dummy_ba, dummy_dm, e.ncomp, 0);
+            e.mf->emplace_back(e_ba, dummy_dm, e.ncomp, 0);
     }
 
     // Build non-owning pointer vectors sized to max_nlevs, not old_nlevs: ErrorEst
@@ -1036,7 +1043,7 @@ void grid_amrex::fill_registered_mf_level(int lev)
         if (fine_mf.nComp() > 0)
             old_mf = std::move(fine_mf);
 
-        fine_mf.define(amrex_box_array[lev],
+        fine_mf.define(ba_for(e.location, lev),
                             amrex_distribution_mapping[lev],
                             e.ncomp, margin);
 
@@ -1058,7 +1065,7 @@ void grid_amrex::fill_registered_mf_level(int lev)
             }
         amrex::PhysBCFunctNoOp null_bc;
 
-        if (e.location >= 1 && e.location <= 3)
+        if (e.location >= DataLocation::FACE_X && e.location <= DataLocation::FACE_Z)
         {
             // Face-centred field (location 1/2/3 = FACE_X/Y/Z). The staggered velocity is held
             // in a cell-centred MultiFab with vel(cell i) == the high face == face(i+e), so a
@@ -1066,7 +1073,7 @@ void grid_amrex::fill_registered_mf_level(int lev)
             // Convert to a face-typed temporary, prolong with face_linear_interp (the staggered,
             // divergence-aware interpolation), then copy back to cell-centred storage.
             // Assumes every component of this MF shares the same face direction.
-            const int dir = e.location - 1;
+            const int dir = static_cast<int>(e.location) - 1;
             const amrex::IntVect ev = amrex::IntVect::TheDimensionVector(dir);
 
             amrex::MultiFab cface(amrex::convert(coarse_mf.boxArray(), ev),
@@ -1104,12 +1111,21 @@ void grid_amrex::fill_registered_mf_level(int lev)
         }
         else
         {
+            // NODE_Z is genuinely nodal storage, so it prolongs with the nodal
+            // interpolater; cell_cons_interp on a nodal BoxArray would both
+            // mis-place the plane and disagree with the index type the MF was
+            // just defined on.
+            amrex::Interpolater* mapper =
+                (e.location == DataLocation::NODE_Z)
+                ? static_cast<amrex::Interpolater*>(&amrex::node_bilinear_interp)
+                : static_cast<amrex::Interpolater*>(&amrex::cell_cons_interp);
+
             amrex::InterpFromCoarseLevel(
                 fine_mf, 0.0,
                 coarse_mf, 0, 0, e.ncomp,
                 amrex_geometry[lev-1], amrex_geometry[lev],
                 null_bc, 0, null_bc, 0,
-                ref_vec, &amrex::cell_cons_interp,
+                ref_vec, mapper,
                 bcrecs, 0);
         }
 
@@ -1126,6 +1142,14 @@ void grid_amrex::fill_registered_mf_level(int lev)
             fine_mf.ParallelCopy(old_mf, 0, 0, e.ncomp,
                                       amrex::IntVect::TheZeroVector(),
                                       amrex::IntVect::TheZeroVector());
+            // NODE_Z valid regions OVERLAP on z-split box seams -- the shared
+            // plane is valid in both neighbours, and ParallelCopy's duplicate
+            // resolution is last-writer-wins. OverrideSync picks the canonical
+            // owner and broadcasts it, which is what gcx_parax7co does for the
+            // legacy flat arrays. Must precede FillBoundary so the ghosts are
+            // filled from already-agreed valid data.
+            if (e.location == DataLocation::NODE_Z)
+                fine_mf.OverrideSync(amrex_geometry[lev].periodicity());
             fine_mf.FillBoundary(amrex_geometry[lev].periodicity());
         }
     }
@@ -1142,7 +1166,7 @@ void grid_amrex::fill_registered_mf_level(int lev)
         if (fine_imf.nComp() > 0)
             old_imf = std::move(fine_imf);
 
-        fine_imf.define(amrex_box_array[lev],
+        fine_imf.define(ba_for(e.location, lev),
                             amrex_distribution_mapping[lev],
                             e.ncomp, margin);
 
@@ -1203,6 +1227,9 @@ void grid_amrex::fill_registered_mf_level(int lev)
             fine_imf.ParallelCopy(old_imf, 0, 0, icomp,
                                   amrex::IntVect::TheZeroVector(),
                                   amrex::IntVect::TheZeroVector());
+            // Shared z-seam nodes: see the MF path above.
+            if (e.location == DataLocation::NODE_Z)
+                fine_imf.OverrideSync(amrex_geometry[lev].periodicity());
             fine_imf.FillBoundary(amrex_geometry[lev].periodicity());
         }
     }

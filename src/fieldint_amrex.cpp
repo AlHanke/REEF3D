@@ -31,9 +31,15 @@ Author: Alexander Hanke
 #include <AMReX_DistributionMapping.H>
 
 fieldint_amrex::fieldint_amrex(lexer* p)
+    : fieldint_amrex(p, DataLocation::CELL_CENTERED)
+{
+}
+
+fieldint_amrex::fieldint_amrex(lexer* p, DataLocation location)
 {
     fieldint_amrex::p = p;
-    mf = make_imf(p, p->ncomp, &mf);
+    data_location = location;
+    mf = make_imf(p, p->ncomp, &mf, location);
 }
 
 fieldint_amrex::~fieldint_amrex()
@@ -54,6 +60,14 @@ void fieldint_amrex::FillBoundary()
 {
     LEVEL_LOOP
     {
+        // NODE_Z valid regions overlap on z-split box seams -- the shared plane
+        // is valid in both neighbours, and FillBoundary only fills ghosts, it
+        // does not arbitrate between two valid copies. OverrideSync picks the
+        // canonical owner first, matching ArrayWrapper3D::fillBoundary and what
+        // gcx_parax7co does for the legacy flat arrays.
+        if (data_location == DataLocation::NODE_Z)
+            mf[p->level].OverrideSync(p->amrex_geometry[p->level].periodicity());
+
         mf[p->level].FillBoundary(p->amrex_geometry[p->level].periodicity());
     }
 }
