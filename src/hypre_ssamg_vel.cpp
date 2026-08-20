@@ -71,14 +71,25 @@ void hypre_ssamg::start_solver123(lexer *p, fdm *a, ghostcell *pgc, field &f, in
     }
     #endif
 
+    // Rebuild the solver for every solve. The matrix values change every step, so solve() has
+    // to run HYPRE_SStructGMRESSetup/SSAMGSetup each time -- and hypre's SStruct setup allocates
+    // a complete new hierarchy on every call (SSAMGSetup -> ComputeRAP / MatvecSetup ->
+    // hypre_StructMatrixResize) without releasing the one from the previous call. There is no
+    // "unsetup", only Destroy, so a solver object kept across steps leaks one full multigrid
+    // hierarchy per solve (measured ~25 MB/step at 240x2x240 with 3 RK3 pressure solves, >5 GB
+    // after ~200 steps). Create/Destroy are trivial next to the Setup that has to run anyway.
+    bool rebuild_solver = true;
+
     #if USE_AMREX
-    // grid_rebuilt: the solver/preconditioner is bound to the operator it was set up against.
-    // make_grid_7p destroys A/b/x, so a solver kept across a rebuild (BoomerAMG's hierarchy in
-    // particular) still points at freed matrix data -> segfault in hypre_BoomerAMGCycle.
-    if(!solver_created || created_nlevs != p->nlevs || grid_rebuilt)
-    #else
-    if(!solver_created)
+    // nlevs>1 takes the ParCSR GMRES + BoomerAMG path, which does NOT leak: hypre_BoomerAMGSetup
+    // frees its own previous hierarchy. There the rebuild only has to follow the operator's
+    // identity -- grid_rebuilt (make_grid_7p destroyed A/b/x, and a solver kept across that still
+    // points at freed matrix data -> segfault in hypre_BoomerAMGCycle) or a change in level count.
+    if(p->nlevs > 1)
+        rebuild_solver = (!solver_created || created_nlevs != p->nlevs || grid_rebuilt);
     #endif
+
+    if(rebuild_solver)
     {
         delete_solver();
         create_solver(p, pgc);
