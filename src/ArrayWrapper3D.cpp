@@ -44,10 +44,29 @@ ArrayWrapper3D::~ArrayWrapper3D()
     #endif
 }
 
+int ArrayWrapper3D::kz() const noexcept
+{
+    return data_location == DataLocation::NODE_Z ? p->kmaxF : p->kmax;
+}
+
+
 void ArrayWrapper3D::resize(int default_value)
 {
     #if USE_AMREX
     if (m_shared) return; // view mode: shared MultiFab is resized by the owner
+    // NODE_Z wants amrex::convert(amrex_box_array[lev], IntVect(0,0,1)) — a
+    // z-nodal BoxArray shares box count, ordering and DistributionMap with the
+    // cell-centred one, so it works with the existing MFIter and TileCtx
+    // unchanged. What is missing is the rest of the port: the imf_registry
+    // loops in grid_amrex.cpp redefine every registered iMultiFab on the
+    // cell-centred BoxArray and would silently flatten it back on the first
+    // regrid, and the shared nodes on z-split box seams need an OverrideSync
+    // (the AMReX counterpart of gcx_parax7co). Abort rather than hand back
+    // storage of the wrong geometry.
+    if (data_location == DataLocation::NODE_Z)
+        amrex::Abort("ArrayWrapper3D: data_location NODE_Z has no AMReX backing yet "
+                     "(needs a z-nodal BoxArray plus NODE_Z dispatch in the "
+                     "grid_amrex.cpp imf_registry loops).");
     if (data.empty())
         p->register_imf(&data, 1);
     data.resize(p->nlevs);
@@ -58,9 +77,17 @@ void ArrayWrapper3D::resize(int default_value)
     }
     #else
     // Single level: one flat array, sized from the same lexer metrics the IJK
-    // macro reads. grid::assign_margin sets imax/jmax/kmax and imin/jmin/kmin
-    // together, so both are final by the time resize runs.
-    data.resize(static_cast<std::size_t>(p->imax)*p->jmax*p->kmax, default_value);
+    // (or, for NODE_Z, FIJK) macro reads. grid::assign_margin sets
+    // imax/jmax/kmax/kmaxF and imin/jmin/kmin together, so all are final by the
+    // time resize runs.
+    //
+    // The NODE_Z slack plane matches the imax*jmax*(kmax+2) allocation this
+    // replaced in driver_makegrid_sigma.cpp: the stride is kmaxF = kmax+1, and
+    // the forward-stencil macros (FIJKp3/p4) reach past the last in-stride slot
+    // in the final column. See field7 for the same reasoning.
+    const std::size_t plane = static_cast<std::size_t>(p->imax)*p->jmax;
+    const std::size_t slack = (data_location == DataLocation::NODE_Z) ? plane : 0;
+    data.resize(plane*kz() + slack, default_value);
     cache_addressing();
     #endif
 }
@@ -77,6 +104,16 @@ void ArrayWrapper3D::setVal(int val, bool includeGhost)
     if(includeGhost)
     {
         std::fill(data.begin(), data.end(), val);
+    }
+    else if(data_location == DataLocation::NODE_Z)
+    {
+        // FBASELOOP, not LOOP: LOOP stops at KMAX_LOOP and would leave the top
+        // node plane untouched, and its PCHECK reads the IJK-strided flag4.
+        int i,j,k;
+        FBASELOOP
+        {
+            operator()(i,j,k) = val;
+        }
     }
     else
     {
@@ -218,8 +255,8 @@ void ArrayWrapper3D::fillHigherLevels()
 */
 void ArrayWrapper3D::cache_addressing() noexcept
 {
-    m_ks   = p->kmax;
-    m_js   = static_cast<long>(p->jmax) * p->kmax;
+    m_ks   = kz();
+    m_js   = static_cast<long>(p->jmax) * kz();
     m_base = data.data() - p->imin*m_js - p->jmin*m_ks - p->kmin;
 }
 #endif
