@@ -847,6 +847,17 @@ double amrex_solver::solve(lexer *p)
         reef_set_fpe_trap(true);
     }
 
+    // Zero the initial guess. The operator is all-Neumann, so a spatially constant phi is
+    // in its null space: MLMG converges the non-constant part but has no reason to remove a
+    // constant carried in by the initial guess. pcorr was never reset between solves, so that
+    // null-space component compounded solve after solve until phi was a pure constant
+    // (probe: phi[267,267], min==max) and press = phi/(alpha*dt) tracked it to ~1e7, moving
+    // only with the RK stage's iadt. pjm_corr::rhs does the same thing (pcorr.setVal(0.0)).
+    // REEF_MLMG_WARMSTART restores the old carry-over for comparison.
+    if(!std::getenv("REEF_MLMG_WARMSTART"))
+    for(int lev=0; lev<p->nlevs; ++lev)
+    pcorr[lev].setVal(0.0);
+
     const double finres = mlmg->solve(GetVecOfPtrs(pcorr), GetVecOfConstPtrs(rhs), p->N44, 0.0);
 
     if(fpe_trap)
@@ -1036,6 +1047,15 @@ void amrex_solver::pressure_update(lexer *p, fdm *a, ghostcell *pgc, double alph
             });
         }
     }
+
+    // REEF_PRESS_PROBE: per-stage phi and the recovered press, per level. Shows whether
+    // the projection is returning a pressure-scale phi and how press evolves stage to stage.
+    if(std::getenv("REEF_PRESS_PROBE"))
+    for(int lev=0; lev<p->nlevs; ++lev)
+    amrex::Print()<<"  [pressprobe] lev "<<lev<<" alpha "<<alpha<<" iadt "<<iadt
+        <<"  phi["<<pcorr[lev].min(0)<<","<<pcorr[lev].max(0)<<"]"
+        <<"  press["<<a->press.GetMultiFab(lev).min(0)<<","<<a->press.GetMultiFab(lev).max(0)<<"]"
+        <<std::endl;
 
     pgc->start4(p,a->press,gcval_press);
 }
