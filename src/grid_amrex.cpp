@@ -532,19 +532,20 @@ void grid_amrex::output_amrex_level_info()
 {
     if (amrex::ParallelDescriptor::MyProc() == 0)
     {
-        std::cout<<"Number of AMR levels: "<<nlevs<<std::endl;
-    }
+        std::vector<amrex::Long> level_cells(nlevs, 0);
+        for (int lev = 0; lev < nlevs; ++lev)
+            level_cells[lev] = amrex_box_array[lev].numPts();
 
-    for (int lev = 0; lev < nlevs; ++lev)
-    {
-        if (amrex::ParallelDescriptor::MyProc() == 0)
+        int factor = ref_vec[0] * ref_vec[1] * ref_vec[2];
+        amrex::Long total_cells = level_cells[nlevs-1];
+        for (int lev = nlevs-2; lev >= 0; --lev)
         {
-            std::cout << "AMReX level " << lev << " cells: " << amrex_box_array[lev].numPts() << std::endl;
-            // #ifndef NDEBUG
-            // std::cout << "BoxArray: " << amrex_box_array[lev] << std::endl;
-            // std::cout << "DistributionMapping: " << amrex_distribution_mapping[lev] << std::endl;
-            // #endif
+            total_cells += level_cells[lev] - level_cells[lev+1] / factor;
         }
+
+        std::cout << "Number of AMR levels: " << nlevs << "\nTotal number of non-covered cells: " << total_cells << std::endl;
+        for (int lev = 0; lev < nlevs; ++lev)
+            std::cout <<"  Level " << lev << " cells: " << level_cells[lev] << std::endl;
     }
 }
 
