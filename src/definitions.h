@@ -45,9 +45,12 @@ inline constexpr double EE = 2.71828182846;
 /// lexer::mf_registry / imf_registry entries (field_amrex passes
 /// static_cast<int>(DataLocation)).
 ///
-/// CELL_CENTERED and FACE_X/Y/Z all live in a cell-centred data structure — the
-/// staggered ones by index convention, re-staggered only at interpolation
-/// time.
+/// CELL_CENTERED and FACE_X/Y/Z all live in a cell-centred data structure -
+/// the staggered ones by index convention, re-staggered only at interpolation
+/// time. NODE_Z is the one location with a different index type:
+/// nodal in z, i.e. one z-plane more than there are cells.
+/// It is the sigma-grid vertical-node layout that FKLOOP walks
+/// (k = 0..KMAX_LOOP+1) and the legacy FIJK/kmaxF arrays hold.
 enum class DataLocation : unsigned int { CELL_CENTERED = 0, FACE_X = 1, FACE_Y = 2, FACE_Z = 3, NODE_Z = 7 };
 
 #endif

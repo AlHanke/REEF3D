@@ -35,8 +35,10 @@ public:
 #endif
     virtual ~fieldint() = default;
 
+#if not USE_AMREX
 protected:
     fieldint(lexer* p, int kz, std::size_t slack) : field_base<int>(p, kz, slack) {}
+#endif
 };
 
 #endif

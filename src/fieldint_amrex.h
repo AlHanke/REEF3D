@@ -24,23 +24,33 @@ Author: Alexander Hanke
 #ifndef FIELDINT_AMREX_H_
 #define FIELDINT_AMREX_H_
 
+#include "definitions.h"   // DataLocation
 #include "fieldint.h"
 #include "lexer.h"
 #include <AMReX_iMultiFab.H>
 #include <AMReX_Vector.H>
 
+/// @p location is registered as well as used here: grid_amrex::ba_for must give
+/// the container the same index type on every regrid redefine, so registering as
+/// cell-centred would let the first regrid silently flatten a NODE_Z field back.
 static amrex::Vector<amrex::iMultiFab> make_imf(lexer* p, int ncomp,
-                                                 amrex::Vector<amrex::iMultiFab>* dest)
+                                                 amrex::Vector<amrex::iMultiFab>* dest,
+                                                 DataLocation location = DataLocation::CELL_CENTERED)
 {
+    if(location == DataLocation::NODE_Z && ncomp != 1)
+    {
+        amrex::Abort("make_imf: NODE_Z location is only valid 1 component fieldints");
+    }
+
     amrex::Vector<amrex::iMultiFab> result(p->nlevs);
     for (int lev = 0; lev < p->nlevs; ++lev)
     {
-        result[lev].define(p->amrex_box_array[lev],
+        result[lev].define(p->ba_for(location, lev),
                            p->amrex_distribution_mapping[lev],
                            ncomp, p->margin);
         result[lev].setVal(0, 0, ncomp, p->margin);
     }
-    p->register_imf(dest, ncomp);
+    p->register_imf(dest, ncomp, location);
     return result;
 }
 
@@ -85,7 +95,16 @@ public:
 protected:
     fieldint_amrex(lexer* p);
 
+    /// @p location selects the storage layout. NODE_Z is the sigma-grid
+    /// vertical-node layout -- one z-plane more than there are cells -- and is
+    /// the only location here with a non-cell-centred index type. Unlike
+    /// fields_amrex.h's field7 this carries no boundary-condition machinery:
+    /// the int fields only need the internal exchange, which FillBoundary
+    /// (plus the NODE_Z OverrideSync) provides.
+    fieldint_amrex(lexer *p, DataLocation location);
+
     lexer *p = nullptr;
+    DataLocation data_location = DataLocation::CELL_CENTERED;
     amrex::Vector<amrex::iMultiFab> mf = {};
 
 private:

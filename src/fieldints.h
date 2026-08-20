@@ -54,5 +54,19 @@ public:
     virtual ~fieldint4() = default;
 };
 
+/*!
+ * @brief Integer counterpart of field7.
+ *
+ * Sigma-grid vertical-node layout, stride p->kmaxF, addressed with the FIJK
+ * family. See fields.h::field7 for what the slack plane is for.
+ */
+class fieldint7 : public fieldint
+{
+public:
+    fieldint7(lexer* p) : fieldint(p, p->kmaxF,
+                                   static_cast<std::size_t>(p->imax)*p->jmax) {};
+    virtual ~fieldint7() = default;
+};
+
 #endif
 #endif

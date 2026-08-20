@@ -46,16 +46,18 @@ Author: Alexander Hanke
 #if USE_AMREX
 // Create and zero-initialise a MultiFab vector, then register it for AMR regrid.
 // location encodes the staggering (DataLocation cast to int:
-// 0=cell, 1=FACE_X, 2=FACE_Y, 3=FACE_Z) so the regrid interpolation/average_down
-// can be stagger-correct for the velocity fields.
+// 0=cell, 1=FACE_X, 2=FACE_Y, 3=FACE_Z, 7=NODE_Z) so the regrid interpolation/
+// average_down can be stagger-correct for the velocity fields. NODE_Z is the
+// only location that changes the BoxArray's index type -- grid_amrex::ba_for
+// converts to z-nodal for it and returns the cell-centred array for the rest.
 static amrex::Vector<amrex::MultiFab> make_mf(lexer* p, int ncomp,
                                                amrex::Vector<amrex::MultiFab>* dest,
-                                               int location = 0)
+                                               DataLocation location = DataLocation::CELL_CENTERED)
 {
     amrex::Vector<amrex::MultiFab> result(p->nlevs);
     for (int lev = 0; lev < p->nlevs; ++lev)
     {
-        result[lev].define(p->amrex_box_array[lev],
+        result[lev].define(p->ba_for(location, lev),
                            p->amrex_distribution_mapping[lev],
                            ncomp, p->margin);
         result[lev].setVal(0, 0, ncomp, p->margin);
@@ -639,7 +641,13 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<BCDecision>>> fphysbcf(
                 p->amrex_geometry[p->level], BCRecs[p->level], bf);
 
-            amrex::Interpolater* mapper = &amrex::cell_cons_interp;
+            // NODE_Z storage is genuinely nodal, so it prolongs with the nodal
+            // interpolater. The FACE_* fields deliberately stay on cell_cons_interp
+            // and are corrected afterwards by FillCoarseFineNormalGhost.
+            amrex::Interpolater* mapper =
+                (const_params.data_location == DataLocation::NODE_Z)
+                ? static_cast<amrex::Interpolater*>(&amrex::node_bilinear_interp)
+                : static_cast<amrex::Interpolater*>(&amrex::cell_cons_interp);
             const amrex::IntVect ref_vec = p->ref_vec;
 
             amrex::FillPatchTwoLevels(mf_lev, amrex::Real(p->simtime),
@@ -761,7 +769,12 @@ inline void field_amrex::FillDomainBoundaryBatch(
             amrex::PhysBCFunct<amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<PhantomDecision>>> fphysbcf(
                 p->amrex_geometry[p->level], combined, fbf);
 
-            amrex::Interpolater* mapper = &amrex::cell_cons_interp;
+            // See the single-field path. A batch shares one MultiFab, so every
+            // member has the same index type and const_params is representative.
+            amrex::Interpolater* mapper =
+                (const_params.data_location == DataLocation::NODE_Z)
+                ? static_cast<amrex::Interpolater*>(&amrex::node_bilinear_interp)
+                : static_cast<amrex::Interpolater*>(&amrex::cell_cons_interp);
             const amrex::IntVect ref_vec = p->ref_vec;
 
             amrex::FillPatchTwoLevels(shared_mf[p->level], amrex::Real(p->simtime),

@@ -54,5 +54,24 @@ public:
     virtual ~fieldint4() = default;
 };
 
+/*!
+ * @brief Integer counterpart of field7: sigma-grid vertical-node layout.
+ *
+ * NODE_Z storage -- z-nodal BoxArray, one plane more than there are cells --
+ * so this addresses the same index space as fields_amrex.h's field7 and as the
+ * FIJK family does on the flat side.
+ *
+ * Unlike field7 this carries NO boundary-condition machinery: no
+ * FillDomainBoundary, no UpdateBCRecs, no BcDecision. The internal exchange is
+ * all these ints need, and fieldint_amrex::FillBoundary OverrideSyncs the
+ * shared z-seam plane before filling ghosts.
+ */
+class fieldint7 : public fieldint_amrex
+{
+public:
+    fieldint7(lexer *p) : fieldint_amrex(p, DataLocation::NODE_Z) {};
+    virtual ~fieldint7() = default;
+};
+
 #endif
 #endif
