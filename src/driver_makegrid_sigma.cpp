@@ -31,11 +31,12 @@ void driver::makegrid_sigma(lexer *p, ghostcell *pgc)
     int q;
     
 // flag7
-    p->Iarray(p->flag7,p->imax*p->jmax*(p->kmax+2));
-    
-    for(i=0;i<p->imax*p->jmax*(p->kmax+2);++i)
-    p->flag7[i]=-10;
-    
+    // NODE_Z: without AMReX this is imax*jmax*kmaxF plus one slack plane, the
+    // same allocation the Iarray call this replaced made (kmaxF = kmax+1); with
+    // AMReX it is a z-nodal iMultiFab per level. Every p->flag7[FIJK] below is
+    // unchanged either way.
+    p->flag7.resize(-10);
+
     // flag4
     BASELOOP
     p->flag7[FIJK]=p->flag4[IJK];

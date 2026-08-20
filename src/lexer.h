@@ -103,10 +103,13 @@ public:
     int cellnumtot;
     int N4,N4_row;
     int N7,N7_row;
-    int *flag7;
 
     std::unique_ptr<int[]> flag4_grid;
     ArrayWrapper3D flag1,flag2,flag3,flag4,flag5;
+    /// Sigma-grid vertical-node flag: stride p->kmaxF, addressed with the FIJK
+    /// family. Integer counterpart of field7. Backed by a flat array without
+    /// AMReX and by a z-nodal iMultiFab with it (DataLoc::NODE_Z).
+    ArrayWrapper3D flag7;
     ArrayWrapper3D DF;
 #if USE_AMREX
     /// Shared 3-component iMultiFab backing DF1 (comp 0), DF2 (comp 1), DF3 (comp 2).
