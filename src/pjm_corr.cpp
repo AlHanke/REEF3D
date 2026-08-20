@@ -108,14 +108,21 @@ static void cf_average_down_velocity(lexer* p, field& u, field& v, field& w)
     }
 }
 
-// REEF_COVERED_PRESS_RECON: overwrite covered coarse press with the fine average (fine is
-// authoritative). The per-column hydrostatic build (ini_hydrostatic) leaves each coarse column a
-// slightly different constant offset -- invisible to wpgrad (vertical) but a spurious HORIZONTAL
-// gradient upgrad/vpgrad turn into the geyser. Averaging the fine solution onto covered coarse
-// cells enforces horizontal consistency AND feeds a clean fine C-F press ghost. Re-enables what
-// start4(...,false) disables; average_down writes ONLY covered cells (uncovered have no fine
-// coverage), so the uncovered coarse column is untouched. Call BEFORE start4 so the C-F ghost fill
-// picks up the corrected covered values.
+// Overwrite covered coarse press with the fine average (fine is authoritative). ON by default;
+// REEF_NO_COVERED_PRESS_RECON restores the old skip for the hydrostatic well-balancing study.
+//
+// Covered coarse cells are emitted as identity rows (x=b=0) by the composite solvers
+// (hypre_ssamg::fill_matrix4), and fillbackvec4 writes that 0 straight back into pcorr, so
+// presscorr's `press += pcorr` is a no-op there: the coarse press under a fine patch FREEZES at
+// whatever it held when the patch first covered it, and upgrad/vpgrad keep reading it. That is the
+// stationary block of wrong coarse pressure seen on the 2-level dam break.
+// It also fixes the geyser mechanism: the per-column hydrostatic build (ini_hydrostatic) leaves
+// each coarse column a slightly different constant offset -- invisible to wpgrad (vertical) but a
+// spurious HORIZONTAL gradient upgrad/vpgrad turn into a jet. Averaging the fine solution onto
+// covered coarse cells enforces horizontal consistency AND feeds a clean fine C-F press ghost.
+// Re-enables what start4(...,false) disables; average_down writes ONLY covered cells (uncovered
+// have no fine coverage), so the uncovered coarse column is untouched. Call BEFORE start4 so the
+// C-F ghost fill picks up the corrected covered values.
 #if USE_AMREX
 static void covered_press_avgdown(lexer* p, field& press)
 {
@@ -309,7 +316,7 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
     presscorr(p,a);
     reference_start(p,a,pgc);
     #if USE_AMREX
-    if(std::getenv("REEF_COVERED_PRESS_RECON")) covered_press_avgdown(p,a->press);
+    if(!std::getenv("REEF_NO_COVERED_PRESS_RECON")) covered_press_avgdown(p,a->press);
     #endif
     pgc->start4(p,a->press,gcval_press_pred,false);   // no average_down: keep coarse press self-consistent
                                                       // (avg-down breaks the hydrostatic grad at surface)
@@ -1128,6 +1135,11 @@ void pjm_corr::rebalance(lexer*p, fdm* a, ghostcell *pgc, poisson* ppois, solver
 
         presscorr(p,a);                      // press += pcorr  (NO velcorr)
         reference_start(p,a,pgc);
+        #if USE_AMREX
+        // Same covered-cell gap as start(): pcorr is 0 on covered coarse cells, so press += pcorr
+        // leaves them frozen. Restore them from the fine average before the ghost fill.
+        if(!std::getenv("REEF_NO_COVERED_PRESS_RECON")) covered_press_avgdown(p,a->press);
+        #endif
         pgc->start4(p,a->press,gcval_press,false);
     }
 
