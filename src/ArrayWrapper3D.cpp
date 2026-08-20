@@ -34,12 +34,25 @@ ArrayWrapper3D::~ArrayWrapper3D()
     // out-of-line: the USE_AMREX path gives this a body (deregister_imf)
 }
 
+int ArrayWrapper3D::kz() const noexcept
+{
+    return data_location == 7 ? p->kmaxF : p->kmax;
+}
+
 void ArrayWrapper3D::resize(int default_value)
 {
     // Single level: one flat array, sized from the same lexer metrics the IJK
-    // macro reads. grid::assign_margin sets imax/jmax/kmax and imin/jmin/kmin
-    // together, so both are final by the time resize runs.
-    data.resize(static_cast<std::size_t>(p->imax)*p->jmax*p->kmax, default_value);
+    // (or, for the vertical-node layout, FIJK) macro reads.
+    // grid::assign_margin sets imax/jmax/kmax/kmaxF and imin/jmin/kmin
+    // together, so all are final by the time resize runs.
+    //
+    // The slack plane matches the imax*jmax*(kmax+2) allocation this replaces
+    // in driver_makegrid_sigma.cpp: the stride is kmaxF = kmax+1, and the
+    // forward-stencil macros (FIJKp3/p4) reach past the last in-stride slot in
+    // the final column. See field7 for the same reasoning.
+    const std::size_t plane = static_cast<std::size_t>(p->imax)*p->jmax;
+    const std::size_t slack = (data_location == 7) ? plane : 0;
+    data.resize(plane*kz() + slack, default_value);
     cache_addressing();
 }
 
@@ -48,6 +61,16 @@ void ArrayWrapper3D::setVal(int val, bool includeGhost)
     if(includeGhost)
     {
         std::fill(data.begin(), data.end(), val);
+    }
+    else if(data_location == 7)
+    {
+        // FBASELOOP, not LOOP: LOOP stops at KMAX_LOOP and would leave the top
+        // node plane untouched, and its PCHECK reads the IJK-strided flag4.
+        int i,j,k;
+        FBASELOOP
+        {
+            operator()(i,j,k) = val;
+        }
     }
     else
     {
@@ -88,7 +111,7 @@ ArrayWrapper3D::operator int *()
 */
 void ArrayWrapper3D::cache_addressing() noexcept
 {
-    m_ks   = p->kmax;
-    m_js   = static_cast<long>(p->jmax) * p->kmax;
+    m_ks   = kz();
+    m_js   = static_cast<long>(p->jmax) * kz();
     m_base = data.data() - p->imin*m_js - p->jmin*m_ks - p->kmin;
 }
