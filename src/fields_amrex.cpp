@@ -138,7 +138,11 @@ void field3::UpdateBCRecs(int gcv)
 // field4
 // ===========================================================================
 
-void field4::init_params(lexer* p)
+// Shared by field4 and field7: Field7BcDecision aliases Field4BcDecision, so
+// both fill the same Field4Params. Factored out rather than duplicated so the
+// two cannot drift apart.
+static void init_field4_params(lexer* p,
+                               amrex_bc_func::Field4BcDecision::Field4Params& params)
 {
     params.B77  = p->B77;
     params.H61  = p->H61;
@@ -152,6 +156,11 @@ void field4::init_params(lexer* p)
     params.awa_label = field_amrex_detail::compute_awa_label(p);
     params.gclabel_lsm_in_neumann  = !(p->I230 > 0 || p->B98 >= 3 || p->B60 > 0);
     params.gclabel_press_in_neumann = (p->B76 != 2 && p->B76 != 3);
+}
+
+void field4::init_params(lexer* p)
+{
+    init_field4_params(p, params);
 }
 
 field4::field4(lexer* p) : field_amrex(p, DataLocation::CELL_CENTERED)
@@ -173,5 +182,35 @@ void field4::FillDomainBoundary(int gcv)
 void field4::UpdateBCRecs(int gcv)
 {
     UpdateBCRecsImpl(gcv, amrex_bc_func::Field4BcDecision(params));
+}
+
+// ===========================================================================
+// field7 — sigma-grid vertical nodes (z-nodal MultiFab)
+// ===========================================================================
+
+void field7::init_params(lexer* p)
+{
+    init_field4_params(p, params);
+}
+
+field7::field7(lexer* p) : field_amrex(p, DataLocation::NODE_Z)
+{
+    init_params(p);
+}
+
+field7::field7(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp)
+    : field_amrex(p, shared_mf, comp, DataLocation::NODE_Z)
+{
+    init_params(p);
+}
+
+void field7::FillDomainBoundary(int gcv)
+{
+    FillDomainBoundaryImpl(gcv, amrex_bc_func::Field7BcDecision(params));
+}
+
+void field7::UpdateBCRecs(int gcv)
+{
+    UpdateBCRecsImpl(gcv, amrex_bc_func::Field7BcDecision(params));
 }
 #endif

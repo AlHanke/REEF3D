@@ -554,6 +554,18 @@ public:
         Field4Params m_params{};
     };
 
+    /*!
+     * @brief Domain-boundary rules for the sigma-grid vertical-node fields.
+     *
+     * These are scalars living on a sigma grid, so at a domain side their
+     * boundary treatment is field4's — what makes them different is the
+     * vertical extent, and that is carried by the BoxArray's index type, not by
+     * the BC decision. Aliased rather than copied so the two cannot drift; kept
+     * as a distinct name so a genuinely different rule (a free-surface-specific
+     * z-high case, say) can be introduced later without touching any call site.
+     */
+    using Field7BcDecision = Field4BcDecision;
+
     struct ConstMyExtBCFillFieldParams {
         AMREX_GPU_HOST_DEVICE
         ConstMyExtBCFillFieldParams() noexcept = default;
