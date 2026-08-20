@@ -54,24 +54,25 @@ void ArrayWrapper3D::resize(int default_value)
 {
     #if USE_AMREX
     if (m_shared) return; // view mode: shared MultiFab is resized by the owner
+    // NODE_Z registers with its own location so grid_amrex::ba_for gives it the
+    // z-nodal BoxArray here AND on every regrid redefine — registering as
+    // cell-centred would let the first regrid silently flatten it back.
+    // FACE_X/Y/Z are folded to CELL_CENTERED here on purpose: unlike field_amrex,
+    // this class always stores its ints in a cell-centred container (staggering
+    // is by index convention only), so registering the true FACE_* location would
+    // route flag1/flag2/flag3 through fill_registered_mf_level's staggered
+    // face_linear_interp branch instead of the plain cell-centred one.
+    const DataLocation reg_location = (data_location == DataLocation::NODE_Z)
+        ? DataLocation::NODE_Z
+        : DataLocation::CELL_CENTERED;
+
     if (data.empty())
-        p->register_imf(&data, 1);
-    // NODE_Z needs a z-nodal BoxArray: one z-plane more
-    // than there are cells. amrex::convert shares the underlying box list, so
-    // box count, ordering and the DistributionMap are preserved and the
-    // existing MFIter walks it unchanged.
-    //
-    // register_imf carries no data location yet, so the registry would redefine
-    // this on the cell-centred BoxArray at the first regrid. Nothing addresses
-    // location 7 under AMReX until that registration becomes location-aware.
+        p->register_imf(&data, 1, reg_location);
     data.resize(p->nlevs);
     LEVEL_LOOP
     {
-        const amrex::BoxArray ba = (data_location == DataLocation::NODE_Z)
-            ? amrex::convert(p->amrex_box_array[p->level], amrex::IntVect(AMREX_D_DECL(0,0,1)))
-            : p->amrex_box_array[p->level];
-
-        data[p->level].define(ba, p->amrex_distribution_mapping[p->level], 1, p->margin);
+        data[p->level].define(p->ba_for(reg_location, p->level),
+                              p->amrex_distribution_mapping[p->level], 1, p->margin);
         data[p->level].setVal(default_value);
     }
     #else
@@ -139,11 +140,10 @@ void ArrayWrapper3D::fillBoundary()
 {
     LEVEL_LOOP
     {
-        // NODE_Z valid regions overlap on z-split box seams
-        // — the shared plane is valid in both neighbours and FillBoundary only
-        // fills ghosts, it does not arbitrate between two valid copies.
-        // OverrideSync picks the canonical owner first; this is what
-        // gcx_parax7co does for the legacy flat arrays.
+        // NODE_Z valid regions overlap on z-split box seams — the shared plane is
+        // valid in both neighbours and FillBoundary only fills ghosts, it does not
+        // arbitrate between two valid copies. OverrideSync picks the canonical
+        // owner first; this is what gcx_parax7co does for the legacy flat arrays.
         if (data_location == DataLocation::NODE_Z)
             GetMultiFab(p->level).OverrideSync(m_comp, 1, p->amrex_geometry[p->level].periodicity());
 
