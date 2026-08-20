@@ -24,6 +24,7 @@ Author: Alexander Hanke
 #ifndef GRID_AMREX_H_
 #define GRID_AMREX_H_
 
+#include "definitions.h"
 #include "grid.h"
 #include "tile_ctx.h"
 
@@ -68,13 +69,41 @@ public:
 
     // Registry for all owning MultiFab/iMultiFab vectors so they can be
     // resized collectively during AMR regrid.
-    struct MFEntry  { amrex::Vector<amrex::MultiFab>*  mf; int ncomp; int location; };
-    struct IMFEntry { amrex::Vector<amrex::iMultiFab>* mf; int ncomp; int location; };
+    struct MFEntry  { amrex::Vector<amrex::MultiFab>*  mf; int ncomp; DataLocation location; };
+    struct IMFEntry { amrex::Vector<amrex::iMultiFab>* mf; int ncomp; DataLocation location; };
     std::vector<MFEntry>  mf_registry;
     std::vector<IMFEntry> imf_registry;
 
-    void register_mf (amrex::Vector<amrex::MultiFab>*  mf, int ncomp, int location=0) { mf_registry .push_back({mf, ncomp, location}); }
-    void register_imf(amrex::Vector<amrex::iMultiFab>* mf, int ncomp, int location=0) { imf_registry.push_back({mf, ncomp, location});}
+    /// Index type implied by a registry `location` (DataLocation
+    /// cast to int). Only NODE_Z (7) is non-cell: z-nodal, one plane more than
+    /// there are cells. The FACE_* locations keep cell-centred storage and are
+    /// re-staggered at interpolation time, so they are cell-typed here.
+    static amrex::IntVect location_index_type(DataLocation location) noexcept
+    {
+        return location == DataLocation::NODE_Z
+             ? amrex::IntVect(AMREX_D_DECL(0,0,1))
+             : amrex::IntVect::TheZeroVector();
+    }
+
+    /// BoxArray a registered container with @p location must be defined on at
+    /// @p lev. amrex::convert shares the underlying box-list reference and
+    /// preserves box count and ordering, so a NODE_Z container keeps the same
+    /// DistributionMap and the same MFIter LocalIndex as every cell-centred one
+    /// — TileCtx and TILE_LOOP need no knowledge of it. Converting by the zero
+    /// vector is a no-op that returns the cell-centred array unchanged.
+    amrex::BoxArray ba_for(DataLocation location, int lev) const
+    {
+        return amrex::convert(amrex_box_array[lev], location_index_type(location));
+    }
+
+    void register_mf (amrex::Vector<amrex::MultiFab>*  mf, int ncomp, DataLocation location=DataLocation::CELL_CENTERED)
+    {
+        mf_registry .push_back({mf, ncomp, location});
+    }
+    void register_imf(amrex::Vector<amrex::iMultiFab>* mf, int ncomp, DataLocation location=DataLocation::CELL_CENTERED)
+    {
+        imf_registry.push_back({mf, ncomp, location});
+    }
 
     void deregister_mf(amrex::Vector<amrex::MultiFab>* mf)
     {
