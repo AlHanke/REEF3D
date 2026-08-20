@@ -60,11 +60,14 @@ inline int &ArrayWrapper3D::operator[] (int index) noexcept
            && "ArrayWrapper3D::operator[] should only be used at level 0 when AMReX is enabled");
     refresh_cache_if_needed();
 
-    const int jk_max = p->jmax * p->kmax;
+    // kz() is p->kmaxF for NODE_Z and p->kmax otherwise, matching the stride the
+    // caller's flat index was built with (FIJK vs IJK).
+    const int k_max = kz();
+    const int jk_max = p->jmax * k_max;
     const int ii_encoded = index / jk_max;
     const int rem = index - ii_encoded * jk_max;
-    const int jj_encoded = rem / p->kmax;
-    const int kk_encoded = rem - jj_encoded * p->kmax;
+    const int jj_encoded = rem / k_max;
+    const int kk_encoded = rem - jj_encoded * k_max;
 
     return m_cached_arr4(m_cached_ox + ii_encoded + p->imin,
                             m_cached_oy + jj_encoded + p->jmin,
@@ -81,11 +84,14 @@ inline const int &ArrayWrapper3D::operator[] (int index) const noexcept
            && "ArrayWrapper3D::operator[] should only be used at level 0 when AMReX is enabled");
     refresh_cache_if_needed();
 
-    const int jk_max = p->jmax * p->kmax;
+    // kz() is p->kmaxF for NODE_Z and p->kmax otherwise, matching the stride the
+    // caller's flat index was built with (FIJK vs IJK).
+    const int k_max = kz();
+    const int jk_max = p->jmax * k_max;
     const int ii_encoded = index / jk_max;
     const int rem = index - ii_encoded * jk_max;
-    const int jj_encoded = rem / p->kmax;
-    const int kk_encoded = rem - jj_encoded * p->kmax;
+    const int jj_encoded = rem / k_max;
+    const int kk_encoded = rem - jj_encoded * k_max;
 
     return m_cached_arr4(m_cached_ox + ii_encoded + p->imin,
                             m_cached_oy + jj_encoded + p->jmin,
