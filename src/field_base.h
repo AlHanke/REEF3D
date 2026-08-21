@@ -24,34 +24,33 @@ Author: Alexander Hanke
 #define FIELD_BASE_H_
 
 #include "lexer.h"
+#include <vector>
 
 template<typename T>
 class field_base
 {
 public:
-    field_base(lexer *p) : imin(p->imin), jmin(p->jmin), jkmax(p->jmax*p->kmax), kmin(p->kmin), kmax(p->kmax)
-    {
-        V = new T[p->imax*jkmax] {};
-    }
+    field_base(lexer *p) :
+        V(static_cast<std::size_t>(p->imax)*p->jmax*p->kmax, T{}),
+        imin(p->imin), jmin(p->jmin),
+        kmin(p->kmin), kmax(p->kmax),
+        jkmax(p->jmax*p->kmax)
+    {};
 
     field_base(const field_base&) = delete;
     field_base& operator=(const field_base&) = delete;
     field_base(field_base&&) = delete;
     field_base& operator=(field_base&&) = delete;
 
-    virtual ~field_base()
-    {
-        delete [] V;
-        V = nullptr;
-    }
+    virtual ~field_base() = default;
 
     inline T& operator()(int ii, int jj, int kk) noexcept {return V[(ii-imin)*jkmax + (jj-jmin)*kmax + kk-kmin];};
 
 protected:
-	T *V;
+    std::vector<T> V;
 
 private:
-    const int imin,jkmax,jmin,kmin,kmax;
+    const int imin,jmin,kmin,kmax,jkmax;
 };
 
 #endif
