@@ -26,28 +26,22 @@ Author: Alexander Hanke
 #include "lexer.h"
 
 #include <cstddef>
+#include <vector>
 
 template<typename T>
 class field_base
 {
 public:
-    field_base(lexer *p) : field_base(p, p->kmax, 0) {}
+    field_base(lexer *p) : field_base(p, p->kmax, 0) {};
 
     field_base(const field_base&) = delete;
     field_base& operator=(const field_base&) = delete;
     field_base(field_base&&) = delete;
     field_base& operator=(field_base&&) = delete;
 
-    virtual ~field_base()
-    {
-        delete [] V;
-        V = nullptr;
-    }
+    virtual ~field_base() = default;
 
     inline T& operator()(int ii, int jj, int kk) noexcept {return V[(ii-imin)*jkmax + (jj-jmin)*kmax + kk-kmin];};
-
-protected:
-	T *V;
 
 protected:
     // Vertical-extent-parameterised constructor. operator() folds kz into both
@@ -55,14 +49,17 @@ protected:
     // nothing but a different kz: passing p->kmaxF reproduces the FIJK addressing
     // in iterators3D.h exactly. slack is extra trailing elements, for layouts
     // whose forward-stencil macros reach past the last in-stride slot. See field7.
-    field_base(lexer* p, int kz, std::size_t slack) :
-        imin(p->imin), jkmax(p->jmax*kz), jmin(p->jmin), kmin(p->kmin), kmax(kz)
-    {
-        V = new T[static_cast<std::size_t>(p->imax)*jkmax + slack] {};
-    }
+    field_base(lexer *p, int kz, std::size_t slack) :
+        V(static_cast<std::size_t>(p->imax)*p->jmax*kz + slack, T{}),
+        imin(p->imin), jmin(p->jmin),
+        kmin(p->kmin), kmax(kz),
+        jkmax(p->jmax*kz)
+    {};
+
+    std::vector<T> V;
 
 private:
-    const int imin,jkmax,jmin,kmin,kmax;
+    const int imin,jmin,kmin,kmax,jkmax;
 };
 
 #endif
