@@ -27,8 +27,8 @@ Author: Hans Bihs
 
 void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
 {
-// count gcbs
-    for(qn=0;qn<p->B440;++qn)
+    // count gcbs
+    for(int qn=0;qn<p->B440;++qn)
     {
             int count=0;
         
@@ -56,10 +56,9 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
         if(patch[qq]->ID==p->B440_ID[qn])
         patch[qq]->gcb_count += count;
         }
-    
     }
-    
-    for(qn=0;qn<p->B441;++qn)
+
+    for(int qn=0;qn<p->B441;++qn)
     {
             int count=0;
         
@@ -88,8 +87,8 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
         
         for(qq=0;qq<obj_count;++qq)
         {
-        if(patch[qq]->ID==p->B441_ID[qn])
-        patch[qq]->gcb_count += count;
+            if(patch[qq]->ID==p->B441_ID[qn])
+                patch[qq]->gcb_count += count;
         }
     
     }
@@ -97,53 +96,43 @@ void patchBC::patchBC_gcb_count(lexer *p, ghostcell *pgc)
     
     // circle
     double r;
-    for(qn=0;qn<p->B442;++qn)
+    for(int qn=0;qn<p->B442;++qn)
     {
-            int count=0;
-          
-            
-            for(n=0;n<p->gcb4_count;++n)
-            {
+        int count=0;
+        for(n=0;n<p->gcb4_count;++n)
+        {
             i=p->gcb4[n][0];
             j=p->gcb4[n][1];
             k=p->gcb4[n][2];
-            
-                // x-dir
-                if(p->B442_face[qn]==1 || p->B442_face[qn]==4)
-                {
-                    r = sqrt(pow(p->YP[JP]-p->B442_ym[qn],2.0)+pow(p->ZP[KP]-p->B442_zm[qn],2.0));
-                
-                    if(r<=p->B442_r[qn] && p->pos_x()>p->B442_xm[qn]-p->DXP[IP] && p->pos_x()<=p->B442_xm[qn]+p->DXP[IP] && p->gcb4[n][3]==p->B442_face[qn] && (p->gcb4[n][4]==21||p->gcb4[n][4]==22))
-                    {
+
+            // x-dir
+            if(p->B442_face[qn]==1 || p->B442_face[qn]==4)
+            {
+                r = sqrt(pow(p->YP[JP]-p->B442_ym[qn],2.0)+pow(p->ZP[KP]-p->B442_zm[qn],2.0));
+
+                if(r<=p->B442_r[qn] && p->pos_x()>p->B442_xm[qn]-p->DXP[IP] && p->pos_x()<=p->B442_xm[qn]+p->DXP[IP] && p->gcb4[n][3]==p->B442_face[qn] && (p->gcb4[n][4]==21||p->gcb4[n][4]==22))
                     ++count;
-                    }
-                }
-                
-                // y-dir
-                if(p->B442_face[qn]==2 || p->B442_face[qn]==3)
-                {
-                    r = sqrt(pow(p->XP[IP]-p->B442_xm[qn],2.0)+pow(p->ZP[KP]-p->B442_zm[qn],2.0));
-                
-                    if(r<=p->B442_r[qn] && p->pos_y()>p->B442_ym[qn]-p->DYP[JP] && p->pos_y()<=p->B442_ym[qn]+p->DYP[JP] && p->gcb4[n][3]==p->B442_face[qn] && (p->gcb4[n][4]==21||p->gcb4[n][4]==22))
-                    {
-                    ++count;
-                    }
-                }
-                
-                // z-dir
-                if(p->B442_face[qn]==5 || p->B442_face[qn]==6)
-                {
-                    r = sqrt(pow(p->XP[IP]-p->B442_xm[qn],2.0)+pow(p->YP[JP]-p->B442_ym[qn],2.0));
-                
-                    if(r<=p->B442_r[qn] && p->pos_z()>p->B442_zm[qn]-p->DZP[KP] && p->pos_z()<=p->B442_zm[qn]+p->DZP[KP] && p->gcb4[n][3]==p->B442_face[qn] && (p->gcb4[n][4]==21||p->gcb4[n][4]==22))
-                    {
-                    ++count;
-                    }
-                }
             }
 
-        
-        
+            // y-dir
+            if(p->B442_face[qn]==2 || p->B442_face[qn]==3)
+            {
+                r = sqrt(pow(p->XP[IP]-p->B442_xm[qn],2.0)+pow(p->ZP[KP]-p->B442_zm[qn],2.0));
+
+                if(r<=p->B442_r[qn] && p->pos_y()>p->B442_ym[qn]-p->DYP[JP] && p->pos_y()<=p->B442_ym[qn]+p->DYP[JP] && p->gcb4[n][3]==p->B442_face[qn] && (p->gcb4[n][4]==21||p->gcb4[n][4]==22))
+                    ++count;
+            }
+
+            // z-dir
+            if(p->B442_face[qn]==5 || p->B442_face[qn]==6)
+            {
+                r = sqrt(pow(p->XP[IP]-p->B442_xm[qn],2.0)+pow(p->YP[JP]-p->B442_ym[qn],2.0));
+
+                if(r<=p->B442_r[qn] && p->pos_z()>p->B442_zm[qn]-p->DZP[KP] && p->pos_z()<=p->B442_zm[qn]+p->DZP[KP] && p->gcb4[n][3]==p->B442_face[qn] && (p->gcb4[n][4]==21||p->gcb4[n][4]==22))
+                    ++count;
+            }
+        }
+
         for(qq=0;qq<obj_count;++qq)
         {
         if(patch[qq]->ID==p->B442_ID[qn])

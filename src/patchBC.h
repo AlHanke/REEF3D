@@ -30,18 +30,18 @@ using namespace std;
 class patchBC final : public patchBC_interface, public increment
 {
 public:
-	patchBC(lexer*,ghostcell*);
-	virtual ~patchBC();
-    
+    patchBC(lexer*,ghostcell*);
+    virtual ~patchBC();
+
     void patchBC_ini(lexer *p, ghostcell *pgc) override final;
-    
+
     // BC update ::CFD
     void patchBC_ioflow(lexer*, fdm*, ghostcell*, field&,field&,field&) override final;
     void patchBC_rkioflow(lexer*, fdm*, ghostcell*, field&,field&,field&) override final;
     void patchBC_discharge(lexer*, fdm*, ghostcell*) override final;
     void patchBC_pressure(lexer*, fdm*, ghostcell*, field&) override final;
     void patchBC_waterlevel(lexer*, fdm*, ghostcell*, field&) override final;
-    
+
     // BC update ::SFLOW
     void patchBC_ioflow2D(lexer*, ghostcell*, slice&, slice&, slice&, slice&) override final;
     void patchBC_rkioflow2D(lexer*, ghostcell*, slice&, slice&, slice&, slice&) override final;
@@ -52,30 +52,24 @@ public:
     void patchBC_waterlevel2D(lexer*, fdm2D*, ghostcell*, slice&) override final;
 
     void patchBC_loop2D(lexer*, fdm2D*, int&, int&, int&, int&) override final;
-        
+
 private:
-     // ini
+    // ini
     void patchBC_gcb_count(lexer *p, ghostcell *pgc);
     void patchBC_gcb_convert(lexer *p, ghostcell *pgc);
     void patchBC_IDcount(lexer *p, ghostcell *pgc);
     void patchBC_fillobj(lexer *p, ghostcell *pgc);
-    
+
     void patchBC_hydrograph_Q_read(lexer *p, ghostcell *pgc,int,int);
     double patchBC_hydrograph_Q_ipol(lexer *p, ghostcell *pgc,int,int);
-    
+
     void patchBC_hydrograph_FSF_read(lexer *p, ghostcell *pgc,int,int);
     double patchBC_hydrograph_FSF_ipol(lexer *p, ghostcell *pgc,int,int);
-    
-    
-    int q,n,qn,qq,count,ID_count;
+
+    int q,n,qq;
     int istart,iend,jstart,jend,kstart,kend;
-    
-    int *inflow_ID;
-    int *outflow_ID;
-    
-    int geo_count;
+
     int *ID_array;
-    
 };
 
 #endif
