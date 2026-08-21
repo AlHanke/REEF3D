@@ -24,31 +24,29 @@ Author: Alexander Hanke
 #define SLICE_BASE_H_
 
 #include "lexer.h"
+#include <vector>
 
 template<typename T>
 class slice_base
 {
 public:
-    slice_base(lexer *p) : imin(p->imin), jmin(p->jmin), jmax(p->jmax)
-    {
-        V = new T[p->imax*jmax] {};
-    }
+    slice_base(lexer *p) :
+        V(static_cast<std::size_t>(p->imax)*p->jmax, T{}),
+        imin(p->imin), jmin(p->jmin),
+        jmax(p->jmax)
+    {};
 
     slice_base(const slice_base&) = delete;
     slice_base& operator=(const slice_base&) = delete;
     slice_base(slice_base&&) = delete;
     slice_base& operator=(slice_base&&) = delete;
 
-    virtual ~slice_base()
-    {
-        delete [] V;
-        V = nullptr;
-    }
+    virtual ~slice_base() = default;
 
     inline T& operator()(int ii, int jj) noexcept {return V[(ii-imin)*jmax + (jj-jmin)];};
 
 protected:
-    T *V;
+    std::vector<T> V;
 
 private:
     const int imin,jmin,jmax;
