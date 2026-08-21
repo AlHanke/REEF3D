@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs, Alexander Hanke
+Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
 #ifndef FIELD_BASE_H_
@@ -29,14 +29,9 @@ template<typename T>
 class field_base
 {
 public:
-    field_base(lexer* p) : imin(p->imin), imax(p->imax), jmin(p->jmin), jkmax(p->jmax*p->kmax), kmin(p->kmin), kmax(p->kmax)
+    field_base(lexer *p) : imin(p->imin), jmin(p->jmin), jkmax(p->jmax*p->kmax), kmin(p->kmin), kmax(p->kmax)
     {
-        V = new T[imax*jkmax] {};
-    }
-    virtual ~field_base()
-    {
-        delete [] V;
-        V = nullptr;
+        V = new T[p->imax*jkmax] {};
     }
 
     field_base(const field_base&) = delete;
@@ -44,13 +39,19 @@ public:
     field_base(field_base&&) = delete;
     field_base& operator=(field_base&&) = delete;
 
+    virtual ~field_base()
+    {
+        delete [] V;
+        V = nullptr;
+    }
+
     inline T& operator()(int ii, int jj, int kk) noexcept {return V[(ii-imin)*jkmax + (jj-jmin)*kmax + kk-kmin];};
     inline T& operator[](int n) noexcept {return V[n];};
 
 	T *V;
 
 private:
-    const int imin,imax,jkmax,jmin,kmin,kmax;
+    const int imin,jkmax,jmin,kmin,kmax;
 };
 
 #endif
