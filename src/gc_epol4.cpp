@@ -316,48 +316,32 @@ int ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
 	return 0;
 }
 
-
-void ghostcell::gcdistro4(lexer *p, field &f, int ii, int jj, int kk, int nn, double dist,  int gcv, int bc, int cs)
+void ghostcell::gcdistro4(lexer *p, field &f, int ii, int jj, int kk, int nn, double dist, int gcv, int bc, int cs)
 {
     i=ii;
-	j=jj;
-	k=kk;
-	n=nn;
+    j=jj;
+    k=kk;
 
-	bc_label=gceval4(p,gcv,bc,cs);
-    
-	if(bc_label==3)
-	extend(f,cs);
+    bc_label=gceval4(p,gcv,bc,cs);
 
-	if(bc_label==4)
-	neumann(f,cs);
-    
-    if(bc_label==5)
-	noslip(f,cs);
-
-	if(bc_label==6)
-	extend(f,cs);
-
-	if(bc_label==7)
-	potentialbc(f,cs);
-
-	if(bc_label==10)
-	gravity_press(f,cs);
-    
-    if(bc_label==11)
-    nhpress(f,cs);
-
-	if(bc_label==21)
-	atmosphere(f);
-
-    if(bc_label==22)
-	lsm(f,cs);
-    
-    if(bc_label==61)
-	heatbc(f,cs);
-    
-    if(bc_label==99)
-	gcb_debug(f,cs);
+    if(bc_label==3 || bc_label==6)
+        extend(f,cs);
+    else if(bc_label==4)
+        neumann(f,cs);
+    else if(bc_label==5)
+        noslip(f,cs);
+    else if(bc_label==7)
+        potentialbc(f,cs);
+    else if(bc_label==10)
+        gravity_press(f,cs);
+    else if(bc_label==11)
+        nhpress(f,cs);
+    else if(bc_label==21)
+        atmosphere(f);
+    else if(bc_label==22)
+        lsm(f,cs);
+    else if(bc_label==61)
+        heatbc(f,cs);
+    else if(bc_label==99)
+        gcb_debug(f,cs);
 }
-
-
