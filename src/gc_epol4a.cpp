@@ -17,6 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
+Author: Hans Bihs
 --------------------------------------------------------------------*/
 
 #include"ghostcell.h"
@@ -95,23 +96,18 @@ int ghostcell::gceval4a(lexer *p, int gcv, int bc, int cs)
 	return 0;
 }
 
-void ghostcell::gcdistro4a(lexer *p,field& f, int ii, int jj, int kk, int nn, double dist,  int gcv, int bc, int cs)
+void ghostcell::gcdistro4a(lexer *p, field &f, int ii, int jj, int kk, int nn, double dist, int gcv, int bc, int cs)
 {
     i=ii;
-	j=jj;
-	k=kk;
-	n=nn;
-	
-	cs = fabs(cs);
-    
+    j=jj;
+    k=kk;
 
-	bc_label=gceval4a(p,gcv,bc,cs);
+    cs = fabs(cs);
 
-	if(bc_label==74 || bc_label==75)
-	neumann(f,cs);
-    
-    if(bc_label==79)
-    extend(f,cs);
+    bc_label=gceval4a(p,gcv,bc,cs);
+
+    if(bc_label==74 || bc_label==75)
+        neumann(f,cs);
+    else if(bc_label==79)
+        extend(f,cs);
 }
-
-
