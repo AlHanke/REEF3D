@@ -178,42 +178,35 @@ int ghostcell::gcsleval4(lexer *p, int gcv, int bc, int cs)
 void ghostcell::gcsldistro4(lexer *p, slice &f, int ii, int jj, int nn, int gcv, int bc, int cs)
 {
     i=ii;
-	j=jj;
-	n=nn;
-	
-	bc_label=gcsleval4(p,gcv,bc,cs);
+    j=jj;
+    n=nn;
 
-	if(bc_label==4)
-	gcsl_neumann(f,cs);
-    
-    if(bc_label==14)
-	gcsl_neumann_x(f,cs);
-    
-    if(bc_label==5)
-	gcsl_noslip(f,cs);
-    
-    if(bc_label==7)
-	gcsl_potentialbc(f,cs);
-    
-    if(bc_label==8)
-	gcsl_sommerfeld(f,cs);
+    bc_label=gcsleval4(p,gcv,bc,cs);
+
+    if(bc_label==4)
+        gcsl_neumann(f,cs);
+    else if(bc_label==14)
+        gcsl_neumann_x(f,cs);
+    else if(bc_label==5)
+        gcsl_noslip(f,cs);
+    else if(bc_label==7)
+        gcsl_potentialbc(f,cs);
+    else if(bc_label==8)
+        gcsl_sommerfeld(f,cs);
 }
-
 
 void ghostcell::gcsldistro4int(lexer *p, sliceint &f, int ii, int jj, int nn, int gcv, int bc, int cs)
 {
     i=ii;
-	j=jj;
-	n=nn;
+    j=jj;
 
-	gcsl_neumann_int(f,cs);    
+    gcsl_neumann_int(f,cs);
 }
 
 void ghostcell::gcsldistro4Vint(lexer *p, int *f, int ii, int jj, int nn, int gcv, int bc, int cs)
 {
     i=ii;
-	j=jj;
-	n=nn;
+    j=jj;
 
-	gcsl_neumann_V_int(f,cs);    
+    gcsl_neumann_V_int(f,cs);
 }
