@@ -101,13 +101,3 @@ void ghostcell::gcx_ini(lexer* p)
 	rtag[4] = 6;
 	rtag[5] = 5;
 }
-
-void ghostcell::final(bool error)
-{
-    if(cart_comm != MPI_COMM_NULL)
-        MPI_Comm_free(&cart_comm);
-    if(mpi_comm != MPI_COMM_NULL)
-        MPI_Comm_free(&mpi_comm);
-    MPI_Finalize();
-    exit(error);
-}
