@@ -17,7 +17,7 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Authors: Hans Bihs, Alexander Hanke
 --------------------------------------------------------------------*/
 
 #include"ghostcell.h"
@@ -25,6 +25,7 @@ Author: Hans Bihs
 #include"fdm.h"
 #include"fdm_fnpf.h"
 #include"fdm_nhf.h"
+#include <HYPRE_utilities.h>
 #include<sstream>
 
 ghostcell::ghostcell(int& argc, char **argv, lexer *p) : margin(p->margin)
@@ -35,12 +36,13 @@ ghostcell::ghostcell(int& argc, char **argv, lexer *p) : margin(p->margin)
     MPI_Comm_rank(mpi_comm,&p->mpirank);
     MPI_Comm_size(mpi_comm,&p->mpi_size);
 
+    HYPRE_Initialize();
+
     ghostcell::p=p;
 
     if(p->mpi_size==1)
     do_comms = false;
 }
-
 
 void ghostcell::gc_ini(lexer* p)
 {
@@ -221,3 +223,13 @@ void ghostcell::fdm_update(fdm *aa)
     a=aa;
 }
 
+void ghostcell::final(bool error)
+{
+    HYPRE_Finalize();
+    if(cart_comm != MPI_COMM_NULL)
+        MPI_Comm_free(&cart_comm);
+    if(mpi_comm != MPI_COMM_NULL)
+        MPI_Comm_free(&mpi_comm);
+    MPI_Finalize();
+    exit(error);
+}
