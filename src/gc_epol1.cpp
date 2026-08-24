@@ -42,7 +42,7 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Orthogonal
-    else if(bc==21 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==10)
+    else if((bc==3 || bc==21) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==10)
         return gclabel_u_orth;
 
     else if(bc==21 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==7)
@@ -57,7 +57,7 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Outflow
-    else if(bc==2 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==10 && gclabel_outflow)
+    else if(((bc==2 && gclabel_outflow) || bc==3) && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==10)
         return bc_labels::NEUMANN;
 
     else if(bc==2 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==10 && gclabel_outflow)
@@ -65,13 +65,6 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
 
     else if(bc==7 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==10 && gclabel_outflow && p->I10==1)
         return bc_labels::NEUMANN;
-
-    // Free Surface
-    else if(bc==3 && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==10)
-        return bc_labels::NEUMANN;
-
-    else if(bc==3 && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==10)
-        return gclabel_u_orth;
 
     else
         return bc_labels::NONE;
