@@ -86,21 +86,12 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
     else if((bc==2 || bc==3) && gcv==30)
         return bc_labels::NEUMANN;
 
-    else if(bc==1 && gcv==30)
+    else if(bc==1 && (gcv==30 || gcv==72 || gcv==74))
         return bc_labels::NEUMANN;
 
     // Turbulence eddyv
-    else if(bc==21 && gcv==24)
+    else if((bc==1 || bc==2 || bc==3 ||bc==21) && gcv==24)
         return bc_labels::NEUMANN;
-
-    else if((bc==1 || bc==2 || bc==3) && gcv==24)
-        return bc_labels::NEUMANN;
-
-    else if(bc==1 && gcv==24)
-        return bc_labels::NOSLIP;
-
-    else if(bc==3 && cs==dir_labels::Z_POS && gcv==24)
-        return bc_labels::NOSLIP;
 
     else if((bc!=3 || cs!=dir_labels::Z_POS) && gcv==24)
         return bc_labels::NEUMANN;
@@ -110,9 +101,6 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
 
     // VOF
     else if((bc==3 || bc==6 || bc==7 || bc==21) && (gcv==71 || gcv==72 || gcv==73 || gcv==74))
-        return bc_labels::NEUMANN;
-
-    else if(bc==1 && (gcv==72 || gcv==74))
         return bc_labels::NEUMANN;
 
     else if(bc==2 && (gcv==71 || gcv==74))
@@ -156,14 +144,11 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Potential Ini
-    else if(bc==21 && gcv==49)
+    else if((bc==21 || bc==3) && gcv==49)
         return bc_labels::NEUMANN;
 
     else if((bc==1 || bc==2 || bc==6 || bc==7) && gcv==49)
         return bc_labels::POTENTIAL;
-
-    else if(bc==3 && gcv==49)
-        return bc_labels::NEUMANN;
 
     // Potential Waves
     else if((bc==7 || bc==21) && cs!=dir_labels::Z_NEG && gcv==250)
