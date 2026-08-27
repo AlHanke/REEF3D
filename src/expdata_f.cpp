@@ -45,6 +45,8 @@ void expdata_f::start(lexer* p, fdm* a, ghostcell* pgc)
 	if(p->P151==2)
 	LOOP
 	data(i,j,k)=-p->data[IJ]+p->pos_z();
+
+    p->data.reset();
 	
 	if(p->P152==1)
 	pgc->start4(p,data,101);
