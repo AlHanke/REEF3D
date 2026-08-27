@@ -57,7 +57,6 @@ void sflow_eta::wetdry_nb(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice 
         
     SLICELOOP4
     {
-    p->wet_n[IJ] = p->wet[IJ];
     temp[IJ] = p->wet[IJ];
     }
     
