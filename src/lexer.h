@@ -89,7 +89,7 @@ public:
 	int *flag1,*flag2,*flag3,*flag4,*flag5,*flag7;
 
     // flag
-    double *flag_solid,*flag_topo;
+    std::unique_ptr<int[]> flag_solid, flag_topo;
     double *data;
 	double *topobed,*solidbed,*bed,*WL;
     int *wet;
