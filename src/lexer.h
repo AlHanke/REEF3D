@@ -92,7 +92,7 @@ public:
     double *flag_solid,*flag_topo;
     double *data;
 	double *topobed,*solidbed,*bed,*depth,*WL;
-    int *wet,*wet_n;
+    int *wet;
     int *deep;
     int gcbextra;
     int solidread,toporead,porousread,topoforcing;
