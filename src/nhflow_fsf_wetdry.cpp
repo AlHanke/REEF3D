@@ -49,7 +49,6 @@ void nhflow_fsf_f::wetdry(lexer* p, fdm_nhf* d, ghostcell* pgc, double *UH, doub
     
     SLICELOOP4
     {
-    p->wet_n[IJ] = p->wet[IJ];
     temp[IJ] = p->wet[IJ];
     }
     
