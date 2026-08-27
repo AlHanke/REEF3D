@@ -314,8 +314,8 @@ void lexer::read_grid()
     //if(toporead==1)
     flag_topo = std::make_unique<int[]>(imax*jmax*kmax);
 
-    Darray(solidbed,imax*jmax);
-    Darray(topobed,imax*jmax);
+    solidbed = std::make_unique<double[]>(imax*jmax);
+    topobed = std::make_unique<double[]>(imax*jmax);
     Darray(bed,imax*jmax);
     Iarray(wet,imax*jmax);
     Iarray(deep,imax*jmax);
