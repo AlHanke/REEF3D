@@ -100,10 +100,13 @@ void sflow_f::ini(lexer *p, fdm2D* b, ghostcell* pgc)
     JLOOP
 	b->solidbed(i,j) = p->solidbed[IJ];
 
+    p->solidbed.reset();
+
     ILOOP
     JLOOP
 	b->topobed(i,j) = p->topobed[IJ];
 
+    p->topobed.reset();
 
     pgc->gcsl_start4(p,b->bed,50);
     pgc->gcsl_start4(p,b->solidbed,50);

@@ -91,7 +91,8 @@ public:
     // flag
     std::unique_ptr<int[]> flag_solid, flag_topo;
     std::unique_ptr<double[]> data;
-	double *topobed,*solidbed,*bed,*WL;
+    std::unique_ptr<double[]> topobed, solidbed;
+    double *bed,*WL;
     int *wet;
     int *deep;
     int gcbextra;

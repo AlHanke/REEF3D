@@ -120,9 +120,13 @@ void nhflow_f::ini(lexer *p, fdm_nhf *d, ghostcell *pgc, ioflow *pflow)
     JLOOP
 	d->solidbed(i,j) = p->solidbed[IJ];
 
+    p->solidbed.reset();
+
     ILOOP
     JLOOP
 	d->topobed(i,j) = p->topobed[IJ];
+
+    p->topobed.reset();
     
     pgc->gcsl_start4(p,d->solidbed,50);
     pgc->gcsl_start4(p,d->topobed,50);
