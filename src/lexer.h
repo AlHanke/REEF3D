@@ -90,7 +90,7 @@ public:
 
     // flag
     std::unique_ptr<double[]> grid_solid, grid_topo;
-    double *data;
+    std::unique_ptr<double[]> data;
 	double *topobed,*solidbed,*bed,*WL;
     int *wet;
     int *deep;
