@@ -51,6 +51,6 @@ void solid::solid_topo(lexer* p, fdm* a, ghostcell* pgc)
     a->solid(i,j,k) = p->flag_solid[IJK];
     }
     
-    p->del_Darray(p->flag_solid,p->imax*p->jmax*p->kmax);
+    p->flag_solid.reset();
 }
 
