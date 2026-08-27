@@ -48,9 +48,9 @@ void solid::solid_topo(lexer* p, fdm* a, ghostcell* pgc)
 {
     BASELOOP
     {
-    a->solid(i,j,k) = p->flag_solid[IJK];
+    a->solid(i,j,k) = p->grid_solid[IJK];
     }
     
-    p->del_Darray(p->flag_solid,p->imax*p->jmax*p->kmax);
+    p->grid_solid.reset();
 }
 

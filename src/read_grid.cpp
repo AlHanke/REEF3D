@@ -308,10 +308,10 @@ void lexer::read_grid()
     Iarray(flag4,imax*jmax*kmax);
 
     //if(solidread==1)
-    Darray(flag_solid,imax*jmax*kmax);
+    grid_solid = std::make_unique<double[]>(imax*jmax*kmax);
 
     //if(toporead==1)
-    Darray(flag_topo,imax*jmax*kmax);
+    grid_topo = std::make_unique<double[]>(imax*jmax*kmax);
 
     Darray(solidbed,imax*jmax);
     Darray(topobed,imax*jmax);
@@ -326,9 +326,6 @@ void lexer::read_grid()
 
     for(i=0;i<imax*jmax*kmax;++i)
     flag4[i]=-1;
-
-    for(i=0;i<imax*jmax*kmax;++i)
-    flag_solid[i]=0.0;
 
     for(i=0;i<imax*jmax;++i)
     {
@@ -419,7 +416,7 @@ void lexer::read_grid()
     for(k=0; k<knoz; ++k)
     {
         grid.read((char*)&ddn, sizeof (double));
-        flag_solid[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]=ddn;
+        grid_solid[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]=ddn;
     }
 
     //  Topo
@@ -429,7 +426,7 @@ void lexer::read_grid()
     for(k=0; k<knoz; ++k)
     {
         grid.read((char*)&ddn, sizeof (double));
-        flag_topo[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]=ddn;
+        grid_topo[(i-imin)*jmax*kmax + (j-jmin)*kmax + k-kmin]=ddn;
     }
 
     //  GC Surfaces
