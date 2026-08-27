@@ -29,7 +29,7 @@ void geotopo::dat(lexer* p, fdm* a, ghostcell* pgc)
 {
     if(p->toporead>0)
     BASELOOP
-    a->topo(i,j,k) = p->flag_topo[IJK];
+    a->topo(i,j,k) = p->grid_topo[IJK];
     
     if(p->S57>-1.0e20)
     LOOP
@@ -37,7 +37,7 @@ void geotopo::dat(lexer* p, fdm* a, ghostcell* pgc)
     
     pgc->start4(p,a->topo,150);
     
-    p->del_Darray(p->flag_topo,p->imax*p->jmax*p->kmax);
+    p->grid_topo.reset();
     
 }
 
