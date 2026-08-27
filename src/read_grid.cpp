@@ -320,7 +320,7 @@ void lexer::read_grid()
     Iarray(wet,imax*jmax);
     Iarray(deep,imax*jmax);
     Darray(WL,imax*jmax);
-    Darray(data,imax*jmax);
+    data = std::make_unique<double[]>(imax*jmax*kmax);
     Iarray(flagslice1,imax*jmax);
     Iarray(flagslice2,imax*jmax);
     Iarray(flagslice4,imax*jmax);
