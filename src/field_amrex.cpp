@@ -38,7 +38,7 @@ Author: Alexander Hanke
 // ---------------------------------------------------------------------------
 // Owning constructor
 // ---------------------------------------------------------------------------
-field_amrex::field_amrex(lexer* p, amrex_bc_func::DataLocation data_location)
+field_amrex::field_amrex(lexer* p, DataLocation data_location)
     : const_params({p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
                    {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T},
                    p->j_dir, data_location, p->Y11==1),
@@ -114,7 +114,7 @@ void field_amrex::rebuild_alias_level(int lev)
 // View constructor — non-owning view into shared_mf at component comp
 // ---------------------------------------------------------------------------
 field_amrex::field_amrex(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp,
-                         amrex_bc_func::DataLocation data_location)
+                         DataLocation data_location)
     : const_params{{p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
                    {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T},
                    bool(p->j_dir), data_location, p->Y11==1},
@@ -224,13 +224,13 @@ void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
 // ShiftBigBoundaryFaceInward (static)
 // ---------------------------------------------------------------------------
 void field_amrex::ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in,
-                                              amrex_bc_func::DataLocation data_location,
+                                              DataLocation data_location,
                                               const amrex::Geometry& geom)
 {
     int dir = -1;
-    if      (data_location == amrex_bc_func::DataLocation::FACE_X) dir = 0;
-    else if (data_location == amrex_bc_func::DataLocation::FACE_Y) dir = 1;
-    else if (data_location == amrex_bc_func::DataLocation::FACE_Z) dir = 2;
+    if      (data_location == DataLocation::FACE_X) dir = 0;
+    else if (data_location == DataLocation::FACE_Y) dir = 1;
+    else if (data_location == DataLocation::FACE_Z) dir = 2;
 
     if (dir == -1) return;
 
@@ -297,9 +297,9 @@ void field_amrex::ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in,
 void field_amrex::FillCoarseFineNormalGhost()
 {
     int dir = -1;
-    if      (const_params.data_location == amrex_bc_func::DataLocation::FACE_X) dir = 0;
-    else if (const_params.data_location == amrex_bc_func::DataLocation::FACE_Y) dir = 1;
-    else if (const_params.data_location == amrex_bc_func::DataLocation::FACE_Z) dir = 2;
+    if      (const_params.data_location == DataLocation::FACE_X) dir = 0;
+    else if (const_params.data_location == DataLocation::FACE_Y) dir = 1;
+    else if (const_params.data_location == DataLocation::FACE_Z) dir = 2;
     else return;                       // cell-centred field
     if (p->nlevs <= 1) return;
 
@@ -394,7 +394,7 @@ void field_amrex::FillCoarseFineCellGhost(bool transverse)
     // value at the fine ghost's TRANSVERSE sub-position instead of using the raw coarse cell,
     // so a field varying transverse to the C-F face keeps its correct normal gradient. Never
     // used for pcorr (would desync from the matrix flux); see FillCoarseFineCellGhost doc.
-    if (const_params.data_location != amrex_bc_func::DataLocation::CELL_CENTERED) return;
+    if (const_params.data_location != DataLocation::CELL_CENTERED) return;
     if (p->nlevs <= 1) return;
 
     const amrex::IntVect rv = p->ref_vec;
@@ -552,16 +552,16 @@ void field_amrex::average_down_level(lexer* p, int lev)
     const int flev = lev + 1;
     const int clev = lev;
 
-    if (const_params.data_location == amrex_bc_func::DataLocation::CELL_CENTERED)
+    if (const_params.data_location == DataLocation::CELL_CENTERED)
     {
         amrex::average_down(GetMultiFab(flev), GetMultiFab(clev), 0, 1, p->ref_vec);
         return;
     }
 
     int dir = -1;
-    if      (const_params.data_location == amrex_bc_func::DataLocation::FACE_X) dir = 0;
-    else if (const_params.data_location == amrex_bc_func::DataLocation::FACE_Y) dir = 1;
-    else if (const_params.data_location == amrex_bc_func::DataLocation::FACE_Z) dir = 2;
+    if      (const_params.data_location == DataLocation::FACE_X) dir = 0;
+    else if (const_params.data_location == DataLocation::FACE_Y) dir = 1;
+    else if (const_params.data_location == DataLocation::FACE_Z) dir = 2;
     else return;
 
     if (dir == 1 && p->j_dir != 1) return;   // degenerate y (2D x-z run): FACE_Y unused
