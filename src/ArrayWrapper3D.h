@@ -23,6 +23,8 @@ Author: Alexander Hanke
 #ifndef ARRAYWRAPPER3D_H_
 #define ARRAYWRAPPER3D_H_
 
+#include "definitions.h"
+
 #if USE_AMREX
 #include <AMReX_iMultiFab.H>
 #include <AMReX_Vector.H>
@@ -35,12 +37,12 @@ class lexer;
 /*!
     * @brief Values for the data_location constructor argument.
     *
-    * 1/2/3 select the staggered direction for the boundary shift; 4 is
-    * cell-centred, the default. 7 is the sigma-grid vertical-node layout:
-    * vertical stride p->kmaxF instead of p->kmax, one plane more than there
-    * are cells, which reproduces the FIJK addressing in iterators3D.h. It is
-    * the integer counterpart of field7 and the "7" in flag7 / gcx_flagx7 /
-    * gcx_parax7co.
+    * 1/2/3 mirror DataLocation::FACE_X/Y/Z and select the
+    * staggered direction for the boundary shift; 4 is cell-centred, the
+    * default. 7 is the sigma-grid vertical-node layout: vertical stride
+    * p->kmaxF instead of p->kmax, one plane more than there are cells, which
+    * reproduces the FIJK addressing in iterators3D.h. It is the integer
+    * counterpart of field7 and the "7" in flag7 / gcx_flagx7 / gcx_parax7co.
     *
     * The extent is a constructor argument rather than a distinct type on
     * purpose: this class is final and its accessors are hot (see
@@ -51,7 +53,7 @@ class lexer;
 class ArrayWrapper3D final
 {
 public:
-    explicit ArrayWrapper3D(lexer *pp, unsigned int _data_location = 4);
+    explicit ArrayWrapper3D(lexer *pp, DataLocation _data_location = DataLocation::CELL_CENTERED);
 
     ArrayWrapper3D(const ArrayWrapper3D&)            = delete;
     ArrayWrapper3D &operator=(const ArrayWrapper3D&) = delete;
@@ -78,12 +80,11 @@ public:
     #endif
 
 private:
-    /// Vertical extent for this wrapper's data location: p->kmaxF for the
-    /// vertical-node layout (7), p->kmax otherwise. Resolved on demand rather
-    /// than cached at construction — grid::assign_margin sets kmax and kmaxF
-    /// together and both are final by the time resize() runs, but not
-    /// necessarily by the time the ctor does (lexer builds its own wrappers in
-    /// its initialiser list).
+    /// Vertical extent for this wrapper's data location: p->kmaxF for NODE_Z,
+    /// p->kmax otherwise. Resolved on demand rather than cached at construction
+    /// — grid::assign_margin sets kmax and kmaxF together and both are final by
+    /// the time resize() runs, but not necessarily by the time the ctor does
+    /// (lexer builds its own wrappers in its initialiser list).
     int kz() const noexcept;
 
     #if not USE_AMREX
@@ -94,7 +95,7 @@ private:
 
     lexer *p = nullptr;
 
-    unsigned int data_location = 0;
+    DataLocation data_location = DataLocation::CELL_CENTERED;
 
     #if USE_AMREX
     amrex::Vector<amrex::iMultiFab> data;
