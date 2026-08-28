@@ -25,7 +25,7 @@ Author: Alexander Hanke
 #include "lexer.h"
 #include <algorithm>
 
-ArrayWrapper3D::ArrayWrapper3D(lexer *pp, unsigned int _data_location) : p(pp), data_location(_data_location)
+ArrayWrapper3D::ArrayWrapper3D(lexer *pp, DataLocation _data_location) : p(pp), data_location(_data_location)
 {
 }
 
@@ -99,9 +99,9 @@ void ArrayWrapper3D::fillHigherLevels()
     const int ratio_z = ratio[2];
 
     int dir = -1;
-    if (data_location == 1) dir = 0;
-    else if (data_location == 2) dir = 1;
-    else if (data_location == 3) dir = 2;
+    if (data_location == DataLocation::FACE_X) dir = 0;
+    else if (data_location == DataLocation::FACE_Y) dir = 1;
+    else if (data_location == DataLocation::FACE_Z) dir = 2;
 
     for (int lev = 1; lev < p->nlevs; ++lev)
     {

@@ -23,6 +23,8 @@ Author: Alexander Hanke
 #ifndef ARRAYWRAPPER3D_H_
 #define ARRAYWRAPPER3D_H_
 
+#include "definitions.h"
+
 #if USE_AMREX
 #include <AMReX_iMultiFab.H>
 #include <AMReX_Vector.H>
@@ -35,7 +37,7 @@ class lexer;
 class ArrayWrapper3D final
 {
 public:
-    explicit ArrayWrapper3D(lexer *pp, unsigned int _data_location = 4);
+    explicit ArrayWrapper3D(lexer *pp, DataLocation _data_location = DataLocation::CELL_CENTERED);
 
     ArrayWrapper3D(const ArrayWrapper3D&)            = delete;
     ArrayWrapper3D &operator=(const ArrayWrapper3D&) = delete;
@@ -70,7 +72,7 @@ private:
 
     lexer *p = nullptr;
 
-    unsigned int data_location = 0;
+    DataLocation data_location = DataLocation::CELL_CENTERED;
 
     #if USE_AMREX
     amrex::Vector<amrex::iMultiFab> data;
