@@ -1,5 +1,5 @@
 #if USE_AMREX
-    #include "sliceints.h"
+    #include "sliceints_amrex.h"
 #else
     #include "sliceints.h"
 #endif

@@ -20,6 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
+#if not USE_AMREX
 #ifndef SLICES_H_
 #define SLICES_H_
 
@@ -46,4 +47,5 @@ public:
     virtual ~slice4() = default;
 };
 
+#endif
 #endif
