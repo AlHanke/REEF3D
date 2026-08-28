@@ -1142,6 +1142,7 @@
           <File Name="slice1.h"/>
           <File Name="slice2.h"/>
           <File Name="slice4.h"/>
+          <File Name="slices.h"/>
           <File Name="ArrayWrapper2D.h"/>
           <File Name="ArrayWrapper2D_imp.h"/>
         </VirtualDirectory>
