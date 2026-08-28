@@ -37,7 +37,7 @@ Author: Alexander Hanke
 class slice_amrex : public slice_amrex_prim
 {
 public:
-    slice_amrex(lexer *pp, amrex_bc_func2D::DataLocation data_location)
+    slice_amrex(lexer *pp, DataLocation data_location)
         : const_params({pp->bcside1, pp->bcside4, pp->bcside3, pp->bcside2},
                        pp->j_dir, data_location, sqrt(pp->W20*pp->W20+pp->W21*pp->W21+pp->W22*pp->W22))
     {

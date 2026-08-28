@@ -29,7 +29,7 @@ Author: Alexander Hanke
 class slice1_amrex : public slice_amrex
 {
 public:
-    slice1_amrex(lexer *pp) : slice_amrex(pp, amrex_bc_func2D::DataLocation::FACE_X) {};
+    slice1_amrex(lexer *pp) : slice_amrex(pp, DataLocation::FACE_X) {};
     virtual ~slice1_amrex() = default;
 
     void FillDomainBoundary(int gcv) override final
@@ -53,7 +53,7 @@ private:
 class slice2_amrex : public slice_amrex
 {
 public:
-    slice2_amrex(lexer *pp) : slice_amrex(pp, amrex_bc_func2D::DataLocation::FACE_Y) {};
+    slice2_amrex(lexer *pp) : slice_amrex(pp, DataLocation::FACE_Y) {};
     virtual ~slice2_amrex() = default;
 
     void FillDomainBoundary(int gcv) override final
@@ -76,7 +76,7 @@ private:
 class slice4_amrex : public slice_amrex
 {
 public:
-    slice4_amrex(lexer *pp) : slice_amrex(pp, amrex_bc_func2D::DataLocation::CELL_CENTERED) {};
+    slice4_amrex(lexer *pp) : slice_amrex(pp, DataLocation::CELL_CENTERED) {};
     virtual ~slice4_amrex() = default;
 
     void FillDomainBoundary(int gcv) override final
