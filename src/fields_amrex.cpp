@@ -41,13 +41,13 @@ void field1::init_params(lexer* p)
     params.i10_enabled  = field_amrex_detail::compute_i10_enabled(p);
 }
 
-field1::field1(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_X)
+field1::field1(lexer* p) : field_amrex(p, DataLocation::FACE_X)
 {
     init_params(p);
 }
 
 field1::field1(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp)
-    : field_amrex(p, shared_mf, comp, amrex_bc_func::DataLocation::FACE_X)
+    : field_amrex(p, shared_mf, comp, DataLocation::FACE_X)
 {
     init_params(p);
 }
@@ -77,13 +77,13 @@ void field2::init_params(lexer* p)
     params.gclabel_outflow = field_amrex_detail::compute_gclabel_outflow(p);
 }
 
-field2::field2(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Y)
+field2::field2(lexer* p) : field_amrex(p, DataLocation::FACE_Y)
 {
     init_params(p);
 }
 
 field2::field2(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp)
-    : field_amrex(p, shared_mf, comp, amrex_bc_func::DataLocation::FACE_Y)
+    : field_amrex(p, shared_mf, comp, DataLocation::FACE_Y)
 {
     init_params(p);
 }
@@ -113,13 +113,13 @@ void field3::init_params(lexer* p)
     params.A10 = p->A10;
 }
 
-field3::field3(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::FACE_Z)
+field3::field3(lexer* p) : field_amrex(p, DataLocation::FACE_Z)
 {
     init_params(p);
 }
 
 field3::field3(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp)
-    : field_amrex(p, shared_mf, comp, amrex_bc_func::DataLocation::FACE_Z)
+    : field_amrex(p, shared_mf, comp, DataLocation::FACE_Z)
 {
     init_params(p);
 }
@@ -154,13 +154,13 @@ void field4::init_params(lexer* p)
     params.gclabel_press_in_neumann = (p->B76 != 2 && p->B76 != 3);
 }
 
-field4::field4(lexer* p) : field_amrex(p, amrex_bc_func::DataLocation::CELL_CENTERED)
+field4::field4(lexer* p) : field_amrex(p, DataLocation::CELL_CENTERED)
 {
     init_params(p);
 }
 
 field4::field4(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp)
-    : field_amrex(p, shared_mf, comp, amrex_bc_func::DataLocation::CELL_CENTERED)
+    : field_amrex(p, shared_mf, comp, DataLocation::CELL_CENTERED)
 {
     init_params(p);
 }
