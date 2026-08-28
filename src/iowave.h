@@ -32,7 +32,6 @@ Author: Hans Bihs
 #include"slice2.h"
 #include"slice4.h"
 #include"sliceint4.h"
-#include"slices_amrex.h"
 
 class fdm_fnpf;
 class patchBC_interface;
@@ -220,7 +219,7 @@ private:
 
     void timeseries(lexer*,ghostcell*);
 
-    slice4_amrex eta;
+    slice4 eta;
     // Depth-dependent: wave_u/v/w and the level-set distance all take z,
     // so these are 3D fields staggered like the velocity they relax.
     field1 uval_amrex;
@@ -228,9 +227,9 @@ private:
     field3 wval_amrex;
     field4 lsval_amrex;
 
-    slice1_amrex relax1_wg, relax1_nb;
-    slice2_amrex relax2_wg, relax2_nb;
-    slice4_amrex relax4_wg, relax4_nb;
+    slice1 relax1_wg, relax1_nb;
+    slice2 relax2_wg, relax2_nb;
+    slice4 relax4_wg, relax4_nb;
     sliceint4 wgflag;
 
     double rb1(lexer*,double);

@@ -201,12 +201,6 @@ public:
     void gcsl_start4(lexer*,slice&,int);
     void gcsl_start4a(lexer*,slice&,int);
 
-    #if USE_AMREX
-    void gcsl_start1(lexer*,slice_amrex &s, int gcv) {s.FillDomainBoundary(gcv);};
-    void gcsl_start2(lexer*,slice_amrex &s, int gcv) {s.FillDomainBoundary(gcv);};
-    void gcsl_start4(lexer*,slice_amrex &s, int gcv) {s.FillDomainBoundary(gcv);};
-    #endif
-
     void gcsl_start1int(lexer*,sliceint&,int);
     void gcsl_start2int(lexer*,sliceint&,int);
     void gcsl_start4int(lexer*,sliceint&,int);

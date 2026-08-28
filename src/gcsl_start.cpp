@@ -26,6 +26,9 @@ Author: Hans Bihs
 
 void ghostcell::gcsl_start1(lexer *p, slice &f, int gcv)
 {
+    #if USE_AMREX
+    f.FillDomainBoundary(gcv);
+    #else
     starttime=timer();
 
     QQGCSL1LOOP
@@ -46,10 +49,14 @@ void ghostcell::gcsl_start1(lexer *p, slice &f, int gcv)
 
     if(p->Y40==1 || p->Y40==3)
         dgcslpol1(p,f);
+    #endif
 }
 
 void ghostcell::gcsl_start2(lexer *p, slice &f, int gcv)
 {
+    #if USE_AMREX
+    f.FillDomainBoundary(gcv);
+    #else
     starttime=timer();
 
     QQGCSL2LOOP
@@ -70,10 +77,14 @@ void ghostcell::gcsl_start2(lexer *p, slice &f, int gcv)
 
     if(p->Y40==1  || p->Y40==3)
         dgcslpol2(p,f);
+    #endif
 }
 
 void ghostcell::gcsl_start4(lexer *p, slice &f, int gcv)
 {
+    #if USE_AMREX
+    f.FillDomainBoundary(gcv);
+    #else
     starttime=timer();
     QQGCSL4LOOP
         gcsldistro4(p,f,p->gcbsl4[p->level][qq].i,p->gcbsl4[p->level][qq].j, gcv, p->gcbsl4[p->level][qq].bc, p->gcbsl4[p->level][qq].cs);
@@ -94,6 +105,7 @@ void ghostcell::gcsl_start4(lexer *p, slice &f, int gcv)
 
     if(p->Y40==1  || p->Y40==3)
         dgcslpol4(p,f);
+    #endif
 }
 
 void ghostcell::gcsl_start1int(lexer *p, sliceint &f, int gcv)
@@ -189,6 +201,9 @@ void ghostcell::gcsl_start4Vint(lexer *p, int *f, int gcv)
 
 void ghostcell::gcsl_start4a(lexer *p, slice &f, int gcv)
 {
+    #if USE_AMREX
+    f.FillDomainBoundary(gcv);
+    #else
     starttime=timer();
     QQGCSL4LOOP
         gcsldistro4a(p,f,p->gcbsl4[p->level][qq].i, p->gcbsl4[p->level][qq].j, gcv, p->gcbsl4[p->level][qq].bc, p->gcbsl4[p->level][qq].cs);
@@ -204,4 +219,5 @@ void ghostcell::gcsl_start4a(lexer *p, slice &f, int gcv)
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
+    #endif
 }

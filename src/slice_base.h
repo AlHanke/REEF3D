@@ -30,11 +30,15 @@ template<typename T>
 class slice_base
 {
 public:
+    #if USE_AMREX
+    slice_base() = default;
+    #else
     slice_base(lexer *p) :
         V(static_cast<std::size_t>(p->imax)*p->jmax, T{}),
         imin(p->imin), jmin(p->jmin),
         jmax(p->jmax)
     {cache_addressing();};
+    #endif
 
     slice_base(const slice_base&) = delete;
     slice_base& operator=(const slice_base&) = delete;
@@ -43,6 +47,10 @@ public:
 
     virtual ~slice_base() = default;
 
+    #if USE_AMREX
+    virtual T& operator()(int ii, int jj) noexcept = 0;
+    virtual const T& operator()(int ii, int jj) const noexcept = 0;
+    #else
     /// Width of the cached stride. Long for every payload — see
     /// field_base::stride_t for the measured rationale (chiefly: every
     /// container a loop body touches must agree on the width, or their index
@@ -103,6 +111,7 @@ private:
     stride_t m_js   = 0;       ///< i-stride (jmax); long for every payload, see stride_t
 
     const int imin,jmin,jmax;
+    #endif
 };
 
 #endif
