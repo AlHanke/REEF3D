@@ -37,4 +37,13 @@ enum {
 inline constexpr double PI = 3.14159265359;
 inline constexpr double EE = 2.71828182846;
 
+/// Storage layout of a field, and the `location` value carried by
+/// lexer::mf_registry / imf_registry entries (field_amrex passes
+/// static_cast<int>(DataLocation)).
+///
+/// CELL_CENTERED and FACE_X/Y/Z all live in a cell-centred data structure — the
+/// staggered ones by index convention, re-staggered only at interpolation
+/// time.
+enum class DataLocation : unsigned int { CELL_CENTERED = 0, FACE_X = 1, FACE_Y = 2, FACE_Z = 3, NODE_Z = 7 };
+
 #endif
