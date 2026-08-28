@@ -27,7 +27,7 @@ Authors: Hans Bihs, Tobias Martin
 #include"field_header.h"
 #include"fieldint4.h"
 #include"slice4.h"
-#include"sliceint5.h"
+#include"sliceint4.h"
 #include"vtp3D.h"
 #include<fstream>
 #include<iostream>
@@ -276,7 +276,7 @@ private:
     void time_preproc_2D(lexer*);
     
     slice4 press,lrk1,lrk2,K,dts,fs,Ls,Bs,Rxmin,Rxmax,Rymin,Rymax,draft;
-    sliceint5 cl,cr,fsio;
+    sliceint4 cl,cr,fsio;
 
     // Force NHFLOW
     void forces_nhflow(lexer*, fdm_nhf*, ghostcell*);
