@@ -29,11 +29,9 @@ Author: Hans Bihs
 #include "slice1.h"
 #include "slice2.h"
 #include "slice4.h"
-#include "slice5.h"
 #include "sliceint1.h"
 #include "sliceint2.h"
 #include "sliceint4.h"
-#include "sliceint5.h"
 #include "vec2D.h"
 
 #include <iostream>
@@ -103,8 +101,8 @@ public:
 
     slice4 bed,bed0,depth;
     slice4 solidbed,topobed;
-    slice5 bednode;
-    sliceint5 nodeval;
+    slice4 bednode;
+    sliceint4 nodeval;
     sliceint4 breaking; 
     slice4 breaking_print;
 
