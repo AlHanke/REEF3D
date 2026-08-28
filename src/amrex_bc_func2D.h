@@ -24,6 +24,8 @@ Author: Alexander Hanke
 #ifndef AMREX_BC_FUNC2D_H_
 #define AMREX_BC_FUNC2D_H_
 
+#include "definitions.h"
+
 #include <AMReX_BCRec.H>
 #include <AMReX_Array.H>
 #include <AMReX_Array4.H>
@@ -41,7 +43,6 @@ public:
 
     enum class BoundaryConditionTypeLabel : int { NONE = 0, NEUMANN = 4, NOSLIP = 5, OUTFLOWBC = 6, SOMMERFELD = 7,
                                         POTENTIAL = 8, NEUMANN_X = 14, NEUMANN_HX = 41, NEUMANN_HY = 42};
-    enum class DataLocation : unsigned int { CELL_CENTERED = 0, FACE_X = 1, FACE_Y = 2};
     enum Gbc : int { INFLOW = 1, OUTFLOW = 2, SYMMETRY = 3, WAVEGEN = 6, NUMBEACH = 7, WALL = 21 };
 private:
     enum Dir : int { X_NEG = 1, X_POS = 4, Y_NEG = 3, Y_POS = 2};
@@ -298,7 +299,7 @@ public:
         AMREX_GPU_HOST_DEVICE
         ConstMyExtBCFillSliceParams() noexcept = default;
         ConstMyExtBCFillSliceParams(const amrex::Array<int,4>& bc_values_in,
-                                    bool y_dimension_exists_in, amrex_bc_func2D::DataLocation data_location_in, double gravity_in) noexcept
+                                    bool y_dimension_exists_in, DataLocation data_location_in, double gravity_in) noexcept
             : bc_values(bc_values_in),
               y_dimension_exists(y_dimension_exists_in), data_location(data_location_in), gravity(gravity_in) {}
 

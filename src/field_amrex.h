@@ -45,7 +45,7 @@ Author: Alexander Hanke
 
 #if USE_AMREX
 // Create and zero-initialise a MultiFab vector, then register it for AMR regrid.
-// location encodes the staggering (amrex_bc_func::DataLocation cast to int:
+// location encodes the staggering (DataLocation cast to int:
 // 0=cell, 1=FACE_X, 2=FACE_Y, 3=FACE_Z) so the regrid interpolation/average_down
 // can be stagger-correct for the velocity fields.
 static amrex::Vector<amrex::MultiFab> make_mf(lexer* p, int ncomp,
@@ -134,7 +134,7 @@ public:
     void rebuild_alias_level(int lev);
 
     /// Returns the stagger type of this field.
-    amrex_bc_func::DataLocation dataLocation() const
+    DataLocation dataLocation() const
     { return const_params.data_location; }
 
     /// Stagger-correct coarse-fine normal-velocity ghost fill for FACE_* fields. Overwrites
@@ -201,12 +201,12 @@ public:
 
 protected:
     /// Owning constructor: the field allocates and owns its own MultiFab storage.
-    field_amrex(lexer* p, amrex_bc_func::DataLocation data_location);
+    field_amrex(lexer* p, DataLocation data_location);
 
     /// View constructor: the field is a non-owning view into @p shared_mf at
     /// component @p comp.  The caller must ensure @p shared_mf outlives this object.
     field_amrex(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, int comp,
-                amrex_bc_func::DataLocation data_location);
+                DataLocation data_location);
 
     lexer *p = nullptr;
     amrex::Vector<amrex::MultiFab> mf = {};          ///< owned storage (empty in view mode)
@@ -310,7 +310,7 @@ private:
 
     /// Shifts face data inward at the high-end boundary for face-staggered fields.
     static void ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in,
-                                           amrex_bc_func::DataLocation data_location,
+                                           DataLocation data_location,
                                            const amrex::Geometry& geom);
 
     /// Fills ghost-cell slabs on all 6 domain faces via direct ParallelFor calls.
@@ -710,7 +710,7 @@ inline void field_amrex::FillDomainBoundaryBatch(
     amrex_bc_func::ConstMyExtBCFillFieldParams const_params{
         {p->bcside1, p->bcside4, p->bcside3, p->bcside2, p->bcside5, p->bcside6},
         {p->H61_T, p->H64_T, p->H63_T, p->H62_T, p->H65_T, p->H66_T},
-        bool(p->j_dir), amrex_bc_func::DataLocation::CELL_CENTERED, p->Y11==1};
+        bool(p->j_dir), DataLocation::CELL_CENTERED, p->Y11==1};
 
     amrex_bc_func::MyExtBCFillFieldParams params;
     params.Ui = p->Ui;
