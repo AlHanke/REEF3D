@@ -28,8 +28,16 @@ Author: Hans Bihs
 class slice : public slice_base<double>
 {
 public:
+    #if USE_AMREX
+    slice() = default;
+    #else
     slice(lexer* p) : slice_base<double>(p) {};
+    #endif
     virtual ~slice() = default;
+
+#if USE_AMREX
+    virtual void FillDomainBoundary(int gcv) = 0;
+#endif
 protected:
     enum {X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2};
 };
