@@ -25,7 +25,7 @@ Author: Alexander Hanke
 #include "lexer.h"
 #include <algorithm>
 
-ArrayWrapper3D::ArrayWrapper3D(lexer *pp, unsigned int _data_location) : p(pp), data_location(_data_location)
+ArrayWrapper3D::ArrayWrapper3D(lexer *pp, DataLocation _data_location) : p(pp), data_location(_data_location)
 {
 }
 
@@ -36,20 +36,21 @@ ArrayWrapper3D::~ArrayWrapper3D()
 
 int ArrayWrapper3D::kz() const noexcept
 {
-    return data_location == 7 ? p->kmaxF : p->kmax;
+    return data_location == DataLocation::NODE_Z ? p->kmaxF : p->kmax;
 }
+
 
 void ArrayWrapper3D::resize(int default_value)
 {
     #if USE_AMREX
-    // The vertical-node layout (7) needs a z-nodal BoxArray: one z-plane more
+    // NODE_Z needs a z-nodal BoxArray: one z-plane more
     // than there are cells. amrex::convert shares the underlying box list, so
     // box count, ordering and the DistributionMap are preserved and the
     // existing MFIter walks it unchanged.
     data.resize(p->nlevs);
     LEVEL_LOOP
     {
-        const amrex::BoxArray ba = (data_location == 7)
+        const amrex::BoxArray ba = (data_location == DataLocation::NODE_Z)
             ? amrex::convert(p->amrex_box_array[p->level], amrex::IntVect(AMREX_D_DECL(0,0,1)))
             : p->amrex_box_array[p->level];
 
@@ -58,16 +59,16 @@ void ArrayWrapper3D::resize(int default_value)
     }
     #else
     // Single level: one flat array, sized from the same lexer metrics the IJK
-    // (or, for the vertical-node layout, FIJK) macro reads.
-    // grid::assign_margin sets imax/jmax/kmax/kmaxF and imin/jmin/kmin
-    // together, so all are final by the time resize runs.
+    // (or, for NODE_Z, FIJK) macro reads. grid::assign_margin sets
+    // imax/jmax/kmax/kmaxF and imin/jmin/kmin together, so all are final by the
+    // time resize runs.
     //
-    // The slack plane matches the imax*jmax*(kmax+2) allocation this replaces
-    // in driver_makegrid_sigma.cpp: the stride is kmaxF = kmax+1, and the
-    // forward-stencil macros (FIJKp3/p4) reach past the last in-stride slot in
-    // the final column. See field7 for the same reasoning.
+    // The NODE_Z slack plane matches the imax*jmax*(kmax+2) allocation this
+    // replaced in driver_makegrid_sigma.cpp: the stride is kmaxF = kmax+1, and
+    // the forward-stencil macros (FIJKp3/p4) reach past the last in-stride slot
+    // in the final column. See field7 for the same reasoning.
     const std::size_t plane = static_cast<std::size_t>(p->imax)*p->jmax;
-    const std::size_t slack = (data_location == 7) ? plane : 0;
+    const std::size_t slack = (data_location == DataLocation::NODE_Z) ? plane : 0;
     data.resize(plane*kz() + slack, default_value);
     cache_addressing();
     #endif
@@ -85,7 +86,7 @@ void ArrayWrapper3D::setVal(int val, bool includeGhost)
     {
         std::fill(data.begin(), data.end(), val);
     }
-    else if(data_location == 7)
+    else if(data_location == DataLocation::NODE_Z)
     {
         // FBASELOOP, not LOOP: LOOP stops at KMAX_LOOP and would leave the top
         // node plane untouched, and its PCHECK reads the IJK-strided flag4.
@@ -120,12 +121,12 @@ void ArrayWrapper3D::fillBoundary()
 {
     LEVEL_LOOP
     {
-        // The vertical-node layout's valid regions overlap on z-split box seams
+        // NODE_Z valid regions overlap on z-split box seams
         // — the shared plane is valid in both neighbours and FillBoundary only
         // fills ghosts, it does not arbitrate between two valid copies.
         // OverrideSync picks the canonical owner first; this is what
         // gcx_parax7co does for the legacy flat arrays.
-        if (data_location == 7)
+        if (data_location == DataLocation::NODE_Z)
             data[p->level].OverrideSync(p->amrex_geometry[p->level].periodicity());
 
         data[p->level].FillBoundary();
@@ -140,9 +141,9 @@ void ArrayWrapper3D::fillHigherLevels()
     const int ratio_z = ratio[2];
 
     int dir = -1;
-    if (data_location == 1) dir = 0;
-    else if (data_location == 2) dir = 1;
-    else if (data_location == 3) dir = 2;
+    if (data_location == DataLocation::FACE_X) dir = 0;
+    else if (data_location == DataLocation::FACE_Y) dir = 1;
+    else if (data_location == DataLocation::FACE_Z) dir = 2;
 
     for (int lev = 1; lev < p->nlevs; ++lev)
     {
