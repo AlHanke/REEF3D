@@ -17,23 +17,35 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------
-Author: Hans Bihs
+Author: Alexander Hanke
 --------------------------------------------------------------------*/
 
-#ifndef SLICEINT_H_
-#define SLICEINT_H_
+#if not USE_AMREX
+#ifndef SLICEINTS_H_
+#define SLICEINTS_H_
 
-#include "slice_base.h"
+#include"sliceint.h"
 
-class sliceint : public slice_base<int>
+class sliceint1 final : public sliceint
 {
 public:
-    #if USE_AMREX
-    sliceint() = default;
-    #else
-    sliceint(lexer* p) : slice_base<int>(p) {};
-    #endif
-    virtual ~sliceint() = default;
+    sliceint1(lexer *p) : sliceint(p) {};
+    virtual ~sliceint1() = default;
 };
 
+class sliceint2 final : public sliceint
+{
+public:
+    sliceint2(lexer *p) : sliceint(p) {};
+    virtual ~sliceint2() = default;
+};
+
+class sliceint4 final : public sliceint
+{
+public:
+    sliceint4(lexer *p) : sliceint(p) {};
+    virtual ~sliceint4() = default;
+};
+
+#endif
 #endif

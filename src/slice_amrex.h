@@ -24,6 +24,7 @@ Author: Alexander Hanke
 #ifndef SLICE_AMREX_H_
 #define SLICE_AMREX_H_
 
+#include "slice.h"
 #include "slice_amrex_prim.h"
 #include "lexer.h"
 #include "amrex_bc_func2D.h"
@@ -34,7 +35,7 @@ Author: Alexander Hanke
 #include <AMReX_PhysBCFunct.H>
 #include <AMReX_Interpolater.H>
 
-class slice_amrex : public slice_amrex_prim
+class slice_amrex : public slice_amrex_prim, public slice
 {
 public:
     slice_amrex(lexer *pp, DataLocation data_location)

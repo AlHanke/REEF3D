@@ -26,11 +26,11 @@ Author: Alexander Hanke
 
 #include "slice_amrex.h"
 
-class slice1_amrex : public slice_amrex
+class slice1 : public slice_amrex
 {
 public:
-    slice1_amrex(lexer *pp) : slice_amrex(pp, DataLocation::FACE_X) {};
-    virtual ~slice1_amrex() = default;
+    slice1(lexer *pp) : slice_amrex(pp, DataLocation::FACE_X) {};
+    virtual ~slice1() = default;
 
     void FillDomainBoundary(int gcv) override final
     {
@@ -50,11 +50,11 @@ private:
     amrex_bc_func2D::Slice1BcDecision::Slice1Params params{};
 };
 
-class slice2_amrex : public slice_amrex
+class slice2 : public slice_amrex
 {
 public:
-    slice2_amrex(lexer *pp) : slice_amrex(pp, DataLocation::FACE_Y) {};
-    virtual ~slice2_amrex() = default;
+    slice2(lexer *pp) : slice_amrex(pp, DataLocation::FACE_Y) {};
+    virtual ~slice2() = default;
 
     void FillDomainBoundary(int gcv) override final
     {
@@ -73,11 +73,11 @@ private:
     amrex_bc_func2D::Slice2BcDecision::Slice2Params params{};
 };
 
-class slice4_amrex : public slice_amrex
+class slice4 : public slice_amrex
 {
 public:
-    slice4_amrex(lexer *pp) : slice_amrex(pp, DataLocation::CELL_CENTERED) {};
-    virtual ~slice4_amrex() = default;
+    slice4(lexer *pp) : slice_amrex(pp, DataLocation::CELL_CENTERED) {};
+    virtual ~slice4() = default;
 
     void FillDomainBoundary(int gcv) override final
     {

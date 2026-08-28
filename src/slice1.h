@@ -1,5 +1,5 @@
 #if USE_AMREX
-    #include "slices.h"
+    #include "slices_amrex.h"
 #else
     #include "slices.h"
 #endif
