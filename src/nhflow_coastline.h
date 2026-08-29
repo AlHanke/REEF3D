@@ -38,7 +38,7 @@ public:
     nhflow_coastline(lexer*);
 	virtual ~nhflow_coastline();
 
-   void start(lexer*,ghostcell*,slice&,int*,sliceint&);
+   void start(lexer*,ghostcell*,slice&,int*);
    
 private:
    void reini(lexer*,ghostcell*,slice&);
@@ -47,7 +47,7 @@ private:
    void step(lexer*);
    void time_preproc(lexer*);
    
-   slice4 frk1,frk2,L,dt,wet_n;
+   slice4 frk1,frk2,L,dt;
    
    
    int reiniter,change;
