@@ -26,7 +26,7 @@ Author: Hans Bihs
 #include"slice.h"
 #include"sliceint.h"
 
-nhflow_coastline::nhflow_coastline(lexer* p) :  ddweno_f_nug(p), frk1(p),frk2(p),L(p),dt(p),wet_n(p)
+nhflow_coastline::nhflow_coastline(lexer* p) :  ddweno_f_nug(p), frk1(p),frk2(p),L(p),dt(p)
 {
     time_preproc(p); 
 }
@@ -35,7 +35,7 @@ nhflow_coastline::~nhflow_coastline()
 {
 }
 
-void nhflow_coastline::start(lexer *p, ghostcell *pgc, slice &coastline, int *wet, sliceint &wet_n)
+void nhflow_coastline::start(lexer *p, ghostcell *pgc, slice &coastline, int *wet)
 {
     if(p->count==0)
     {

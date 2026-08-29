@@ -27,7 +27,7 @@ Author: Hans Bihs
 #include"slice.h"
 #include"sliceint.h"
 
-fnpf_coastline::fnpf_coastline(lexer* p) :  ddweno_f_nug(p), frk1(p),frk2(p),L(p),dt(p),wet_n(p)
+fnpf_coastline::fnpf_coastline(lexer* p) :  ddweno_f_nug(p), frk1(p),frk2(p),L(p),dt(p)
 {
     time_preproc(p); 
 }
@@ -36,7 +36,7 @@ fnpf_coastline::~fnpf_coastline()
 {
 }
 
-void fnpf_coastline::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &coastline, int *wet, sliceint &wet_n)
+void fnpf_coastline::start(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &coastline, int *wet)
 {
     if(p->count==0)
     {

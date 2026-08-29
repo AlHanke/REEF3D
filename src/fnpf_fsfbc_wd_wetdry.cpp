@@ -131,7 +131,7 @@ void fnpf_fsfbc_wd::wetdry(lexer *p, fdm_fnpf *c, ghostcell *pgc, slice &eta, sl
       
       if(coastline_count==0)
       {
-      pcoast->start(p,c,pgc,c->coastline,p->wet,c->wet_n);
+      pcoast->start(p,c,pgc,c->coastline,p->wet);
       ++coastline_count;
       }
           
