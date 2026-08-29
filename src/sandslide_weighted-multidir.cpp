@@ -77,7 +77,7 @@ void sandslide_weighted_multidir::start(lexer *p, ghostcell *pgc, sediment_fdm *
        compute_fh(p,pgc,s);
 
         
-        pgc->gcslparax_fh(p,fh,4);
+        pgc->gcslparax_fh(p,fh);
         
         // fill back
         SEDSLICELOOP

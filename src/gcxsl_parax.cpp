@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"slice.h"
 
-void ghostcell::gcslparax(lexer* p, slice& f, int gcv)
+void ghostcell::gcslparax(lexer *p, slice &f)
 {
     paramargin=margin;
 
@@ -109,7 +109,6 @@ void ghostcell::gcslparax(lexer* p, slice& f, int gcv)
             ++count;
         }
     }
-
 
     count=0;
     for(q=0;q<p->gcslpara4_count;++q)

@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"sliceint.h"
 
-void ghostcell::gcslparacox_int(lexer* p, sliceint& f,int gcv)
+void ghostcell::gcslparacox_int(lexer *p, sliceint &f)
 {
     //  FILL SEND
     for(q=0;q<p->gcslparaco1_count;++q)
@@ -87,7 +87,7 @@ void ghostcell::gcslparacox_int(lexer* p, sliceint& f,int gcv)
     }
 }
 
-void ghostcell::gcslparacoxV_int(lexer* p, int *f, int gcv)
+void ghostcell::gcslparacoxV_int(lexer *p, int *f)
 {
     //  FILL SEND
     for(q=0;q<p->gcslparaco1_count;++q)
