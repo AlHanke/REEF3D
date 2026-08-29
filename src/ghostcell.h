@@ -25,6 +25,7 @@ Author: Hans Bihs
 
 #include "increment.h"
 #include <mpi.h>
+#include <vector>
 
 class convection;
 class fdm;
@@ -98,10 +99,10 @@ public:
     void gcpartx(int[6],int[6],double*[6],double*[6]);
 
     //  Update
-    void facenbx(lexer*,fieldint&,int*);
+    void facenbx(lexer*,fieldint&,std::vector<int>&);
     void flagx(lexer*,int*);
     void flagx7(lexer*,int*);
-    void rangex(lexer*,int*,int);
+    void rangex(lexer*,std::vector<int>&,int);
     void gcxupdate(lexer*);
 
     void rownum4_update(lexer*,fieldint&);

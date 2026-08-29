@@ -23,8 +23,9 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"lexer.h"
 #include"fieldint.h"
+#include<vector>
 
-void ghostcell::facenbx(lexer* p, fieldint& cv, int* range)
+void ghostcell::facenbx(lexer* p, fieldint& cv, std::vector<int> &range)
 {
     count=0;
     for(n=0;n<p->gcpara1_count;++n)
