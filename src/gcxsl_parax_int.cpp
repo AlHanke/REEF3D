@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"sliceint.h"
 
-void ghostcell::gcslparax_int(lexer* p, sliceint& f, int gcv)
+void ghostcell::gcslparax_int(lexer *p, sliceint &f)
 {
     paramargin=margin;
 
@@ -137,7 +137,7 @@ void ghostcell::gcslparax_int(lexer* p, sliceint& f, int gcv)
     }
 }
 
-void ghostcell::gcslparaxV_int(lexer* p, int *f,int gcv)
+void ghostcell::gcslparaxV_int(lexer *p, int *f)
 {
     paramargin=margin;
 

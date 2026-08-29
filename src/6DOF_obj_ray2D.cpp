@@ -51,7 +51,7 @@ void sixdof_obj::ray_cast_2D(lexer *p, ghostcell *pgc)
     
         if(rayiter==1)
         {
-            pgc->gcslparax_int(p,fsio,1);
+            pgc->gcslparax_int(p,fsio);
             
             ray_cast_2D_x(p,pgc,0,tricount);
             ray_cast_2D_y(p,pgc,0,tricount);

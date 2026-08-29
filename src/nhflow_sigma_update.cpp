@@ -266,7 +266,7 @@ void nhflow_sigma::sigma_update(lexer *p, fdm_nhf *d, ghostcell *pgc, slice &WL)
     pgc->start7S(p,p->sigt,1);
     pgc->start7S(p,p->ZSN,1);
     pgc->start5V(p,p->ZSP,1);
-    pgc->gcslparaxijk(p, p->sigz, 1);
+    pgc->gcslparaxijk(p, p->sigz);
     
     
     SLICELOOP4

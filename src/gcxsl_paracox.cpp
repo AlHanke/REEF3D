@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"slice.h"
 
-void ghostcell::gcslparacox(lexer* p, slice& f, int gcv)
+void ghostcell::gcslparacox(lexer *p, slice &f)
 {
     //  FILL SEND
     for(q=0;q<p->gcslparaco1_count;++q)

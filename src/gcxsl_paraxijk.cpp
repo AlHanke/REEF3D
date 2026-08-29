@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 
-void ghostcell::gcslparaxijk(lexer* p, double *f, int gcv)
+void ghostcell::gcslparaxijk(lexer *p, double *f)
 {
     starttime=timer();
 
