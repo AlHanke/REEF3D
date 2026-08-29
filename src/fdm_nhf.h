@@ -50,7 +50,7 @@ public:
     slice4 bed,depth;
     slice4 solidbed,topobed;
     slice4 K;
-    sliceint4 etaloc,wet_n,breaking,breaklog,bc,nodeval2D;
+    sliceint4 etaloc,breaking,breaklog,bc,nodeval2D;
     
     slice4 Ex,Ey;
     slice4 Exx,Eyy;
