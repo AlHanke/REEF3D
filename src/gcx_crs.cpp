@@ -22,8 +22,9 @@ Author: Hans Bihs
 
 #include"ghostcell.h"
 #include"lexer.h"
+#include<vector>
 
-void ghostcell::rangex(lexer* p, int* range, int cellcount)
+void ghostcell::rangex(lexer* p, std::vector<int> &range, int cellcount)
 {
     int *colnum;
 
