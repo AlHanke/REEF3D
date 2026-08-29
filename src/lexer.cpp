@@ -33,7 +33,7 @@ lexer::lexer() : coordinates(this), interpolation(this), position(this),
                  #else
                  DF1(this), DF2(this), DF3(this),
                  #endif
-                 IO(this), IOSL(this), wet(this), flagslice1(this), flagslice2(this), flagslice4(this),
+                 IO(this), IOSL(this), wet(this), deep(this), flagslice1(this), flagslice2(this), flagslice4(this),
                  mpirank(0)
 {
     control::ini_default();

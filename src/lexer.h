@@ -127,7 +127,7 @@ public:
     std::unique_ptr<double[]> topobed, solidbed;
     double *bed,*WL;
     ArrayWrapper2D wet;
-    int *deep;
+    ArrayWrapper2D deep;
     int gcbextra;
     int solidread,toporead,topoforcing;
     int cms_flag;

@@ -75,4 +75,5 @@ void lexer::sliceflagini()
     #endif
 
     wet.resize();
+    deep.resize();
 }
