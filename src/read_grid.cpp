@@ -310,7 +310,6 @@ void lexer::read_grid()
     solidbed = std::make_unique<double[]>(imax*jmax);
     topobed = std::make_unique<double[]>(imax*jmax);
     Darray(bed,imax*jmax);
-    Iarray(wet,imax*jmax);
     Iarray(deep,imax*jmax);
     Darray(WL,imax*jmax);
     data = std::make_unique<double[]>(imax*jmax*kmax);

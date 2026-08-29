@@ -73,4 +73,6 @@ void lexer::sliceflagini()
     flagslice2.fillHigherLevels();
     flagslice4.fillHigherLevels();
     #endif
+
+    wet.resize();
 }
