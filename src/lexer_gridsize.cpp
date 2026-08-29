@@ -35,10 +35,10 @@ void lexer::gridsize()
         ++cellnum;
     // --------
 
-    Iarray(range_row4, M10+5);
-    Iarray(range_col4, M10+5);
-    Iarray(range_row7, M10+5);
-    Iarray(range_col7, M10+5);
+    range_row4.resize(M10+5);
+    range_col4.resize(M10+5);
+    range_row7.resize(M10+5);
+    range_col7.resize(M10+5);
 }
 
 void lexer::vellast()

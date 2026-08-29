@@ -154,7 +154,7 @@ public:
     int ulast,vlast,wlast,flast;
 
     // Solver
-    int *range_col4,*range_row4,*range_col7,*range_row7;
+    std::vector<int> range_col4, range_row4, range_col7, range_row7;
     int sizeM4[2] = {0,0};
 
     // SMO
