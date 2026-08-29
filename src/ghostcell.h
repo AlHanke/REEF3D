@@ -197,21 +197,13 @@ public:
     void dgcslini2(lexer*);
     void dgcslini4(lexer*);
 
-    void dgcslpol1(lexer*, slice&);
-    void dgcslpol2(lexer*, slice&);
-    void dgcslpol4(lexer*, slice&);
-
     // parallel
-    void gcslparax(lexer*, slice&, int);
-    void gcslparax_fh(lexer*, slice&, int);
-    void gcslparax_int(lexer*, sliceint&, int);
-    void gcslparaxV_int(lexer*, int*, int);
-    void gcslparacox(lexer*, slice&, int);
-    void gcslparacox_int(lexer*, sliceint&, int);
-    void gcslparacoxV_int(lexer*, int*, int);
+    void gcslparax_fh(lexer*, slice&);
+    void gcslparax_int(lexer*, sliceint&);
+
     void gcslflagx(lexer*, int*);
-    void gcslparaxijk(lexer*, double*, int);
-    void gcslparaxijk_single(lexer*, double*, int);
+    void gcslparaxijk(lexer*, double*);
+    void gcslparaxijk_single(lexer*, double*);
 
     void fivec(lexer*,double*,sliceint&);
     void fivec2D(lexer*,double*,sliceint&);
@@ -225,6 +217,17 @@ public:
     void dirichlet_ortho(field&,double,int);
 
 private:
+    void dgcslpol1(lexer*, slice&);
+    void dgcslpol2(lexer*, slice&);
+    void dgcslpol4(lexer*, slice&);
+
+    void gcslparax(lexer*, slice&);
+    void gcslparaxV_int(lexer*, int*);
+
+    void gcslparacox(lexer*, slice&);
+    void gcslparacoxV_int(lexer*, int*);
+    void gcslparacox_int(lexer*, sliceint&);
+
     void Sendrecv_double(int,int,int,int,int,int);
     void Sendrecv_int(int,int,int,int,int,int);
     void Sendrecv_1D(const void*[6],int[6],void*[6],int[6],MPI_Datatype);

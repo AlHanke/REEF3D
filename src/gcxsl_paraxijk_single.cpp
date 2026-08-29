@@ -23,7 +23,7 @@ Author: Hans Bihs
 #include"ghostcell.h"
 #include"lexer.h"
 
-void ghostcell::gcslparaxijk_single(lexer* p, double *f, int gcv)
+void ghostcell::gcslparaxijk_single(lexer *p, double *f)
 {
     starttime=timer();
 

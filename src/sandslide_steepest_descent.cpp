@@ -70,7 +70,7 @@ void sandslide_steepest_descent::start(lexer *p, ghostcell *pgc, sediment_fdm *s
        slide(p,pgc,s);
 
         
-        pgc->gcslparax_fh(p,fh,4);
+        pgc->gcslparax_fh(p,fh);
         
         // fill back
         SEDSLICELOOP

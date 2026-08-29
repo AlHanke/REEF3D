@@ -38,8 +38,8 @@ void ghostcell::gcsl_start1(lexer *p, slice &f, int gcv)
     if(do_comms)
     {
         starttime=timer();
-        gcslparax(p,f,1);
-        gcslparacox(p,f,gcv);
+        gcslparax(p,f);
+        gcslparacox(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -62,8 +62,8 @@ void ghostcell::gcsl_start2(lexer *p, slice &f, int gcv)
     if(do_comms)
     {
         starttime=timer();
-        gcslparax(p,f,2);
-        gcslparacox(p,f,gcv);
+        gcslparax(p,f);
+        gcslparacox(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -86,8 +86,8 @@ void ghostcell::gcsl_start4(lexer *p, slice &f, int gcv)
     if(do_comms)
     {
         starttime=timer();
-        gcslparax(p,f,4);
-        gcslparacox(p,f,gcv);
+        gcslparax(p,f);
+        gcslparacox(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -108,8 +108,8 @@ void ghostcell::gcsl_start1int(lexer *p, sliceint &f, int gcv)
     if(do_comms)
     {
         starttime=timer();
-        gcslparax_int(p,f,1);
-        gcslparacox_int(p,f,gcv);
+        gcslparax_int(p,f);
+        gcslparacox_int(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -127,8 +127,8 @@ void ghostcell::gcsl_start2int(lexer *p, sliceint &f, int gcv)
     if(do_comms)
     {
         starttime=timer();
-        gcslparax_int(p,f,1);
-        gcslparacox_int(p,f,gcv);
+        gcslparax_int(p,f);
+        gcslparacox_int(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -146,8 +146,8 @@ void ghostcell::gcsl_start4int(lexer *p, sliceint &f, int gcv)
     if(do_comms)
     {
         starttime=timer();
-        gcslparax_int(p,f,4);
-        gcslparacox_int(p,f,gcv);
+        gcslparax_int(p,f);
+        gcslparacox_int(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -180,8 +180,8 @@ void ghostcell::gcsl_start4Vint(lexer *p, int *f, int gcv)
     if(do_comms)
     {
         starttime=timer();
-        gcslparaxV_int(p,f,4);
-        gcslparacoxV_int(p,f,gcv);
+        gcslparaxV_int(p,f);
+        gcslparacoxV_int(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
@@ -199,8 +199,8 @@ void ghostcell::gcsl_start4a(lexer *p, slice &f, int gcv)
     if(do_comms)
     {
         starttime=timer();
-        gcslparax(p,f,4);
-        gcslparacox(p,f,gcv);
+        gcslparax(p,f);
+        gcslparacox(p,f);
         endtime=timer();
         p->xtime+=endtime-starttime;
     }
