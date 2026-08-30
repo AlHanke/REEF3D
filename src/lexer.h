@@ -263,7 +263,7 @@ public:
     double wts,wte;
 
     // free surface
-    double psi,psi0;
+    double psi;
     int pressval;
 
 // PARALELL
