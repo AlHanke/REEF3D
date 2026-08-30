@@ -88,7 +88,6 @@ public:
     int cellnumtot;
     int N4,N4_row,N4_col;
     int N7,N7_row,N7_col;
-    int surf_tot;
     int *flag1,*flag2,*flag3,*flag4,*flag5,*flag7;
 
     // flag
