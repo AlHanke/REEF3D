@@ -84,7 +84,6 @@ public:
     //REEF3D
 
     int pointnum,cellnum,tpcellnum;
-    int cellnum1,cellnum2,cellnum3;
     int cellnumtot;
     int N4,N4_row;
     int N7,N7_row;
@@ -98,7 +97,7 @@ public:
     int *wet;
     int *deep;
     int gcbextra;
-    int solidread,toporead,porousread,topoforcing;
+    int solidread,toporead,topoforcing;
     int cms_flag;
 
     //GHOSTCELL
@@ -190,7 +189,7 @@ public:
 
     // flow parameters
     static constexpr double cmu = 0.09;
-    double deltax,Ui,Ua,Uo;
+    double Ui,Ua,Uo;
     double Ho,Hi;
 
     // 6DOF
@@ -214,13 +213,12 @@ public:
     double dt,dt_old,simtime,viscmax;
     double mindt,maxdt;
     double umax,vmax,wmax,epsmax,kinmax,pressmin,pressmax,omegamax;
-    double presstime,veltime,reinitime,turbtime,plstime,itertime;
+    double presstime,reinitime,itertime;
     double wavecalctime;
     double meantime,totaltime;
     double gcmeantime,gctotaltime;
     double Xmeantime,Xtotaltime;
-    double maxbed, minbed;
-    double susptime,maxtopovel;
+    double susptime;
     double gctime, xtime;
     double volume1,volume2,volume3;
     double Qi,Qo;
@@ -248,8 +246,6 @@ public:
     double printouttime;
     double phimean,phiout,phiin;
     double fsfin,fsfout;
-    double pcnorm,ucnorm,vcnorm,wcnorm;
-    double alpha;
     double pressgage;
 
     // wave coefficients
@@ -260,14 +256,9 @@ public:
 
     // free surface
     double psi;
-    int pressval;
 
 // PARALELL
     int mpirank;
-    int gcx_1range1[7],gcx_3range1[7];
-    int gcx_1range2[7],gcx_3range2[7];
-    int gcx_1range3[7],gcx_3range3[7];
-    int gcx_1range4[7],gcx_3range4[7];
 
     weno_nug_func *wenofunc;
 
