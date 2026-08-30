@@ -228,7 +228,7 @@ public:
     double Qi,Qo;
     double dtsed,sedtime,slidecells;
     double field4time;
-    double printtime, sedprinttime,fsfprinttime,fsfsedprinttime,probeprinttime,stateprinttime,exportprinttime;
+    double printtime, sedprinttime,fsfprinttime,fsfsedprinttime,probeprinttime,stateprinttime;
     double wavetime;
 
     // solver watch
