@@ -47,7 +47,7 @@ public:
 	double IIs,IIq,IV,V;
 	double rep;
 	double b1,b3,b4,b6,b9;
-	double P1,P2,N,Q,cmu;
+	double P1,P2,N,Q;
 	double phi1,phi2,D;
 	double T1_11, T1_12, T1_13, T1_22, T1_23, T1_33;
 	double T3_11, T3_12, T3_13, T3_22, T3_23, T3_33;
