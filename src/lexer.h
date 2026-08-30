@@ -190,7 +190,7 @@ public:
     std::vector<std::array<int,2>> gcslparaco4;
 
     // flow parameters
-    const double cmu;
+    static constexpr double cmu = 0.09;
     double deltax,sigT,Ui,Ua,Uo;
     double Ho,Hi;
 
