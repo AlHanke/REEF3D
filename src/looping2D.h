@@ -98,11 +98,11 @@ Author: Hans Bihs
 
 
 #define GCSLDFETA4 for(n=0;n<p->gcsldfeta4_count;++n)
-#define GCSLDFETA4CHECK if(p->gcsldfeta4[n][3]>0)
+#define GCSLDFETA4CHECK if(p->gcsldfeta4[n][2]>0)
 #define GCSLDFETA4LOOP GCSLDFETA4 GCSLDFETA4CHECK
 
 #define GCSLDFBED4 for(n=0;n<p->gcsldfbed4_count;++n)
-#define GCSLDFBED4CHECK if(p->gcsldfbed4[n][3]>0)
+#define GCSLDFBED4CHECK if(p->gcsldfbed4[n][2]>0)
 #define GCSLDFBED4LOOP GCSLDFBED4 GCSLDFBED4CHECK
 
 #endif
