@@ -249,7 +249,6 @@ public:
     double printouttime;
     double phimean,phiout,phiin;
     double fsfin,fsfout;
-    double fsfinval,fsfoutval;
     double pcnorm,ucnorm,vcnorm,wcnorm;
     double alpha;
     double pressgage;
