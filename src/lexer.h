@@ -124,19 +124,19 @@ public:
     int dgc1_count,dgc2_count,dgc3_count,dgc4_count;
 
     // PARALLEL
-    int** gcpara1;
-    int** gcpara2;
-    int** gcpara3;
-    int** gcpara4;
-    int** gcpara5;
-    int** gcpara6;
+    std::vector<std::array<int,7>> gcpara1;
+    std::vector<std::array<int,7>> gcpara2;
+    std::vector<std::array<int,7>> gcpara3;
+    std::vector<std::array<int,7>> gcpara4;
+    std::vector<std::array<int,7>> gcpara5;
+    std::vector<std::array<int,7>> gcpara6;
 
-    int** gcparaco1;
-    int** gcparaco2;
-    int** gcparaco3;
-    int** gcparaco4;
-    int** gcparaco5;
-    int** gcparaco6;
+    std::vector<std::array<int,3>> gcparaco1;
+    std::vector<std::array<int,3>> gcparaco2;
+    std::vector<std::array<int,3>> gcparaco3;
+    std::vector<std::array<int,3>> gcparaco4;
+    std::vector<std::array<int,3>> gcparaco5;
+    std::vector<std::array<int,3>> gcparaco6;
 
     std::array<std::vector<std::array<int,3>>, 4> gcx7;
     std::array<int, 4> gcx7_count;
@@ -179,15 +179,15 @@ public:
     int dgcsl1_count,dgcsl2_count,dgcsl4_count;
 
     // SLICE parallel
-    int** gcslpara1;
-    int** gcslpara2;
-    int** gcslpara3;
-    int** gcslpara4;
+    std::vector<std::array<int,2>> gcslpara1;
+    std::vector<std::array<int,2>> gcslpara2;
+    std::vector<std::array<int,2>> gcslpara3;
+    std::vector<std::array<int,2>> gcslpara4;
 
-    int** gcslparaco1;
-    int** gcslparaco2;
-    int** gcslparaco3;
-    int** gcslparaco4;
+    std::vector<std::array<int,2>> gcslparaco1;
+    std::vector<std::array<int,2>> gcslparaco2;
+    std::vector<std::array<int,2>> gcslparaco3;
+    std::vector<std::array<int,2>> gcslparaco4;
 
     // flow parameters
     const double cmu;
