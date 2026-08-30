@@ -228,7 +228,6 @@ public:
     double tank_vol;
     double Qi,Qo;
     double dtsed,sedtime,slidecells;
-    double bedmax,bedmin;
     double field4time;
     double printtime, sedprinttime,fsfprinttime,fsfsedprinttime,probeprinttime,stateprinttime,exportprinttime;
     double wavetime;
