@@ -109,7 +109,7 @@ public:
     std::vector<std::array<int, 4>> gcdf1, gcdf2, gcdf3;
     std::vector<std::array<int, 5>> gcdf4;
     int gcsldfeta4_count,gcsldfbed4_count;
-    int **gcsldfeta4,**gcsldfbed4;
+    std::vector<std::array<int,3>> gcsldfeta4, gcsldfbed4;
 
     int gcb1_count,gcb2_count,gcb3_count,gcb4_count;
     int gcpara_sum;
