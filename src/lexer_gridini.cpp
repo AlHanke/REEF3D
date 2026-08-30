@@ -87,7 +87,7 @@ void lexer::flagini()
     // gcsldf
     gcsldfeta4_count=1;
 
-    Iarray(gcsldfeta4,gcsldfeta4_count,6);
+    gcsldfeta4.resize(gcsldfeta4_count);
 }
 
 int lexer::conv(double a)
