@@ -190,7 +190,8 @@ public:
     // flow parameters
     static constexpr double cmu = 0.09;
     double Ui,Ua,Uo;
-    double Ho,Hi;
+    double Hi,Ho;
+    double Qi,Qo;
 
     // 6DOF
     double ufb,vfb,wfb;
@@ -221,9 +222,8 @@ public:
     double susptime;
     double gctime, xtime;
     double volume1,volume2,volume3;
-    double Qi,Qo;
     double dtsed,sedtime,slidecells;
-    double printtime, sedprinttime,fsfprinttime,fsfsedprinttime,probeprinttime,stateprinttime;
+    double printtime,sedprinttime,fsfprinttime,fsfsedprinttime,probeprinttime,stateprinttime;
     double wavetime;
 
     // solver watch
