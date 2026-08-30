@@ -39,9 +39,6 @@ density_vof::density_vof(lexer* p) : epsi(p->F45*p->DXM), eps(2.1*p->DXM)
         
     if(p->j_dir==1)
     p->psi = p->F45*(1.0/3.0)*(p->DXM+p->DYM+p->DZM);
-    
-    
-    p->psi0=p->psi;
 }
 
 density_vof::~density_vof()

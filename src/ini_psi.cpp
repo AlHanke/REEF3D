@@ -56,8 +56,6 @@ void initialize::inipsi(lexer* p, fdm *a, ghostcell* pgc)
 
     }
     
-    p->psi0=p->psi;
-    
     //cout<<p->mpirank<<" PSI0: "<<p->psi0<<" PSI: "<<p->psi<<" DTM: "<<p->DZM<<endl;
     
 }
