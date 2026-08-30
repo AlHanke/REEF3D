@@ -343,19 +343,19 @@ void lexer::read_grid()
         Iarray(gcb4, gcb4_count,6);
     }
 
-    Iarray(gcpara1, gcpara1_count,7);
-    Iarray(gcpara2, gcpara2_count,7);
-    Iarray(gcpara3, gcpara3_count,7);
-    Iarray(gcpara4, gcpara4_count,7);
-    Iarray(gcpara5, gcpara5_count,7);
-    Iarray(gcpara6, gcpara6_count,7);
+    gcpara1.resize(gcpara1_count);
+    gcpara2.resize(gcpara2_count);
+    gcpara3.resize(gcpara3_count);
+    gcpara4.resize(gcpara4_count);
+    gcpara5.resize(gcpara5_count);
+    gcpara6.resize(gcpara6_count);
 
-    Iarray(gcparaco1, gcparaco1_count,3);
-    Iarray(gcparaco2, gcparaco2_count,3);
-    Iarray(gcparaco3, gcparaco3_count,3);
-    Iarray(gcparaco4, gcparaco4_count,3);
-    Iarray(gcparaco5, gcparaco5_count,3);
-    Iarray(gcparaco6, gcparaco6_count,3);
+    gcparaco1.resize(gcparaco1_count);
+    gcparaco2.resize(gcparaco2_count);
+    gcparaco3.resize(gcparaco3_count);
+    gcparaco4.resize(gcparaco4_count);
+    gcparaco5.resize(gcparaco5_count);
+    gcparaco6.resize(gcparaco6_count);
 
     // Slice allocation
     gcbsl1_count=gcbsl2_count=gcbsl4_count=1;
@@ -364,15 +364,15 @@ void lexer::read_grid()
     Iarray(gcbsl2, gcbsl2_count,5);
     Iarray(gcbsl4, gcbsl4_count,5);
 
-    Iarray(gcslpara1, gcslpara1_count,2);
-    Iarray(gcslpara2, gcslpara2_count,2);
-    Iarray(gcslpara3, gcslpara3_count,2);
-    Iarray(gcslpara4, gcslpara4_count,2);
+    gcslpara1.resize(gcslpara1_count);
+    gcslpara2.resize(gcslpara2_count);
+    gcslpara3.resize(gcslpara3_count);
+    gcslpara4.resize(gcslpara4_count);
 
-    Iarray(gcslparaco1, gcslparaco1_count,4);
-    Iarray(gcslparaco2, gcslparaco2_count,4);
-    Iarray(gcslparaco3, gcslparaco3_count,4);
-    Iarray(gcslparaco4, gcslparaco4_count,4);
+    gcslparaco1.resize(gcslparaco1_count);
+    gcslparaco2.resize(gcslparaco2_count);
+    gcslparaco3.resize(gcslparaco3_count);
+    gcslparaco4.resize(gcslparaco4_count);
 
     Darray(XN,knox+1+2*marge);
     Darray(YN,knoy+1+2*marge);
