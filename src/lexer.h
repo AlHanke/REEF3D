@@ -243,7 +243,7 @@ public:
     double poissontime, laplacetime, matrixtime, ptime;
     double sftime,fbtime;
     double fbdt,fbmax;
-    double sfdt,sfmax;
+    double sfmax;
     double lsmtime,concentrationtime;
     double printouttime;
     double phimean,phiout,phiin;
