@@ -23,6 +23,8 @@ Author: Hans Bihs
 #include "matrix_diag.h"
 #include "lexer.h"
 
+#include <algorithm>
+
 matrix_diag::matrix_diag(lexer *pp)
 {
     resize(pp->veclength);

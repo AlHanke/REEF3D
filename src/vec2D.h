@@ -23,6 +23,7 @@ Author: Hans Bihs
 #ifndef VEC2D_H_
 #define VEC2D_H_
 
+#include <algorithm>
 #include <vector>
 
 class lexer;
