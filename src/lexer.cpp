@@ -31,9 +31,7 @@ lexer::lexer() : coordinates(this), interpolation(this), position(this),
 
     simtime=0.0;
     poissontime=0.0;
-    pressval=0;
-    alpha=0.0;
-    solidread=toporead=porousread=0;
+    solidread=toporead=0;
     net_count=0;
     mooring_count=0;
 }

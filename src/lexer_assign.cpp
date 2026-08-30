@@ -28,7 +28,7 @@ void lexer::control_calc()
 	simtime=I50;
 	sedtime=0.0;
 	dtsed=0.0;
-	presstime=veltime=lsmtime=reinitime=reinitime=turbtime=0.0;
+	presstime=lsmtime=reinitime=reinitime=0.0;
     fbtime=0.0;
     fbdt=fbmax=0.0;
 	printouttime=0.0;
