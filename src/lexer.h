@@ -191,7 +191,7 @@ public:
 
     // flow parameters
     static constexpr double cmu = 0.09;
-    double deltax,sigT,Ui,Ua,Uo;
+    double deltax,Ui,Ua,Uo;
     double Ho,Hi;
 
     // 6DOF
