@@ -47,7 +47,6 @@ void driver::driver_ini_ptf()
 p->count=0;
 
 p->cellnumtot=pgc->globalisum(p->cellnum);
-p->pointnumtot=pgc->globalisum(p->pointnum);
 
 
 
