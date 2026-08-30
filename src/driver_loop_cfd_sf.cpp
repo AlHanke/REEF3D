@@ -146,7 +146,6 @@ void driver::loop_cfd_sf(fdm* a)
     p->xtime=0.0;
 	p->reinitime=0.0;
 	p->wavecalctime=0.0;
-	p->field4time=0.0;
     p->sftime=0.0;
 
     stop(p,a,pgc);
