@@ -51,7 +51,6 @@ void lexer::read_grid()
     gcparaco4_count=0;
     gcparaco5_count=0;
     gcparaco6_count=0;
-    surf_tot=0;
 
     const int padding = 6;
     sprintf(name,"DIVEMesh_Grid/grid-%0*i.dat",padding,mpirank+1);
