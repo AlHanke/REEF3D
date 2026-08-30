@@ -86,8 +86,8 @@ public:
     int pointnum,cellnum,tpcellnum;
     int cellnum1,cellnum2,cellnum3;
     int cellnumtot;
-    int N4,N4_row,N4_col;
-    int N7,N7_row,N7_col;
+    int N4,N4_row;
+    int N7,N7_row;
     int *flag1,*flag2,*flag3,*flag4,*flag5,*flag7;
 
     // flag
