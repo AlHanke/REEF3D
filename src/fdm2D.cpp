@@ -78,9 +78,6 @@ fdm2D::fdm2D(lexer *p)
             nodeval(p),
             ks(p)
 {
-
-	inverse=1.0/p->DXM;
-
 	maxF=0.0;
 	maxG=0.0; 
 	maxK=0.0;
