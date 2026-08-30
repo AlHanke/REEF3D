@@ -145,7 +145,6 @@ void driver::loop_cfd_df(fdm* a)
     p->xtime=0.0;
 	p->reinitime=0.0;
 	p->wavecalctime=0.0;
-    p->fsitime=0.0;
     p->fbtime=0.0;
 
     stop(p,a,pgc);
