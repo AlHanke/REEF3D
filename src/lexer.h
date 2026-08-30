@@ -175,7 +175,7 @@ public:
     int **gcslin, **gcslout;
     int **gcslawa1, **gcslawa2;
 
-    int **dgcsl1,**dgcsl2,**dgcsl4;
+    std::vector<std::array<int,3>> dgcsl1, dgcsl2, dgcsl4;
     int dgcsl1_count,dgcsl2_count,dgcsl4_count;
 
     // SLICE parallel
