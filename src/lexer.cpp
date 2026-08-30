@@ -23,7 +23,7 @@ Author: Hans Bihs
 #include "lexer.h"
 
 lexer::lexer() : coordinates(this), interpolation(this), position(this),
-                 cmu(0.09), sigT(0.9), mpirank(0)
+                 sigT(0.9), mpirank(0)
 {
     control::ini_default();
 
