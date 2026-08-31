@@ -36,6 +36,8 @@ using namespace std;
 class ptf
 {
 public:
+    virtual ~ptf() = default;
+
 	virtual void start(lexer*, fdm*, ghostcell*, solver*, convection*, ioflow*, reini*)=0;
     virtual void ini(lexer*, fdm*, ghostcell*, ioflow*, reini*)=0;
     virtual void inidisc(lexer*, fdm*, ghostcell*)=0;

@@ -31,6 +31,8 @@ class turbulence;
 class timestep
 {
 public:
+    virtual ~timestep() = default;
+
     virtual void start(fdm*,lexer*,ghostcell*,turbulence*)=0;
     virtual void ini(fdm*,lexer*,ghostcell*)=0;
 };
