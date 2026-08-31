@@ -33,7 +33,8 @@ using namespace std;
 class wave_lib
 {
 public:
-    
+    virtual ~wave_lib() = default;
+
     virtual double wave_u(lexer*,double,double,double)=0;
     virtual double wave_u_space_sin(lexer*,double,double,double,int)=0;
     virtual double wave_u_space_cos(lexer*,double,double,double,int)=0;

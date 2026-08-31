@@ -33,6 +33,7 @@ class sflow_flux_build
 {
 
 public:
+    virtual ~sflow_flux_build() = default;
 
     virtual void start_E(lexer*, fdm2D*, ghostcell*)=0;
     virtual void start_U(lexer*, fdm2D*, ghostcell*)=0;

@@ -33,6 +33,7 @@ using namespace std;
 class fnpf_etadisc
 {
 public:
+    virtual ~fnpf_etadisc() = default;
 
     virtual double sx(lexer*, slice&, slice&)=0;
 	virtual double sy(lexer*, slice&, slice&)=0;

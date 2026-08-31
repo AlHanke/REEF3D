@@ -33,6 +33,7 @@ using namespace std;
 class fnpf_ddx
 {
 public:
+    virtual ~fnpf_ddx() = default;
 
     virtual double sxx(lexer*, slice&)=0;
 	virtual double syy(lexer*, slice&)=0;
