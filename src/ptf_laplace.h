@@ -35,6 +35,7 @@ using namespace std;
 class ptf_laplace
 {
 public:
+    virtual ~ptf_laplace() = default;
 
     virtual void start(lexer *,fdm*,ghostcell*,solver*,field&,slice&)=0;
 

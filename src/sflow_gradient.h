@@ -33,6 +33,7 @@ using namespace std;
 class sflow_gradient
 {
 public:
+    virtual ~sflow_gradient() = default;
 
 virtual double ddx(lexer*,fdm2D*,slice&,int,double)=0;
 virtual double ddy(lexer*,fdm2D*,slice&,int,double)=0;
