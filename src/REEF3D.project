@@ -54,6 +54,9 @@
         <File Name="hypre_aij.h"/>
         <File Name="hypre_ssamg.h"/>
       </VirtualDirectory>
+      <VirtualDirectory Name="AMReX solver">
+        <File Name="amrex_solver.h"/>
+      </VirtualDirectory>
       <VirtualDirectory Name="CG">
         <File Name="bicgstab_ijk_2D.h"/>
         <File Name="bicgstab_ijk.h"/>
@@ -1129,6 +1132,8 @@
         <VirtualDirectory Name="Increment">
           <File Name="increment.h"/>
           <File Name="definitions.h"/>
+          <File Name="definitions_amrex.h"/>
+          <File Name="global_index.h"/>
           <File Name="looping2D.h"/>
           <File Name="looping.h"/>
           <File Name="iterators1D.h"/>
@@ -1163,13 +1168,20 @@
         <File Name="slice_amrex_prim.h"/>
         <VirtualDirectory Name="Sliceint">
           <File Name="sliceint.h"/>
+          <File Name="sliceints.h"/>
+          <File Name="sliceint_amrex.h"/>
+          <File Name="sliceints_amrex.h"/>
           <File Name="sliceint1.h"/>
           <File Name="sliceint2.h"/>
           <File Name="sliceint4.h"/>
         </VirtualDirectory>
+        <File Name="tile_ctx.h"/>
+        <File Name="array_view.h"/>
+        <File Name="gcb_sl_list.h"/>
       </VirtualDirectory>
       <File Name="lexer.h"/>
       <File Name="driver.h"/>
+      <File Name="bvh.h"/>
       <VirtualDirectory Name="Control">
         <File Name="control.h"/>
       </VirtualDirectory>
@@ -1289,11 +1301,16 @@
         <File Name="hypre_aij.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Hypre SSAMG">
-        <File Name="hypre_ssamg_createsolves.cpp"/>
+        <File Name="hypre_ssamg_createsolvers.cpp"/>
         <File Name="hypre_ssamg_fill.cpp"/>
         <File Name="hypre_ssamg_grid.cpp"/>
         <File Name="hypre_ssamg_solve.cpp"/>
         <File Name="hypre_ssamg.cpp"/>
+        <File Name="hypre_ssamg_vel.cpp"/>
+        <File Name="hypre_ssamg_validate.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="AMReX solver">
+        <File Name="amrex_solver.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="CG">
         <File Name="bicgstab_ijk_2D.cpp"/>
@@ -1339,6 +1356,9 @@
           <VirtualDirectory Name="Printer CFD">
             <File Name="printer_CFD_parallel.cpp"/>
             <File Name="printer_CFD.cpp"/>
+            <File Name="printer_CFD_plt2D.cpp"/>
+            <File Name="printer_CFD_vtm.cpp"/>
+            <File Name="printer_CFD_vtpc.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="Porous Geometry">
             <File Name="print_porous_vtp.cpp"/>
@@ -1573,6 +1593,7 @@
             <File Name="density_f.cpp"/>
             <File Name="density_conc.cpp"/>
             <File Name="density_comp.cpp"/>
+            <File Name="density.cpp"/>
           </VirtualDirectory>
         </VirtualDirectory>
         <VirtualDirectory Name="Momentum">
@@ -2800,6 +2821,7 @@
         <File Name="gc_buildflag.cpp"/>
         <File Name="gc_flagbase.cpp"/>
         <File Name="gc_flagfield.cpp"/>
+        <File Name="gc_gcb4_generate.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Parallel">
         <File Name="gcx_ini_cart_topology.cpp"/>
