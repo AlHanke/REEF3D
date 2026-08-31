@@ -36,6 +36,7 @@ using namespace std;
 class sflow_pressure
 {
 public:
+    virtual ~sflow_pressure() = default;
 
 	virtual void start(lexer*, fdm2D*, ghostcell*, solver2D*, ioflow*, slice&, slice&, slice&, slice&, slice&, slice&, double)=0;
 	virtual void upgrad(lexer*, fdm2D*, slice&, slice&)=0;
