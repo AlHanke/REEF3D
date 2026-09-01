@@ -155,9 +155,18 @@ set_target_properties(REEF3D PROPERTIES
 
 # ── Compile definitions ───────────────────────────────────────────────────────
 
+# VERSION/BRANCH are deliberately NOT target-wide: GIT_VERSION changes whenever
+# the tree goes dirty or a commit lands, and a differing command-line macro set
+# invalidates the precompiled header. Only driver.cpp and driver_log.cpp read
+# them, so they are scoped to those two files (which also skip the PCH).
+set_source_files_properties(
+  "${PROJECT_SOURCE_DIR}/src/driver.cpp"
+  "${PROJECT_SOURCE_DIR}/src/driver_log.cpp"
+  PROPERTIES
+    COMPILE_DEFINITIONS "VERSION=\"${GIT_VERSION}\";BRANCH=\"${GIT_BRANCH}\""
+    SKIP_PRECOMPILE_HEADERS ON)
+
 target_compile_definitions(REEF3D PRIVATE
-  VERSION="${GIT_VERSION}"
-  BRANCH="${GIT_BRANCH}"
   $<$<CONFIG:Release>:NDEBUG;EIGEN_NO_DEBUG;BUILD="release">
   $<$<CONFIG:Debug>:BUILD="debug">
   $<$<CONFIG:Dev>:BUILD="dev">
@@ -184,4 +193,28 @@ target_link_libraries(REEF3D PRIVATE
 if(USE_AMREX)
   target_compile_definitions(REEF3D PRIVATE USE_AMREX=1)
   target_link_libraries(REEF3D PRIVATE AMReX::amrex)
+endif()
+
+# ── Precompiled header ────────────────────────────────────────────────────────
+# ~56% of this project's compile CPU is parsing third-party headers that are
+# identical in ~1300 of the 1334 TUs. src/pch.h holds that set and deliberately
+# contains no REEF3D header, so editing lexer.h or grid_amrex.h does not
+# invalidate it. CMake builds one PCH per configuration automatically.
+option(REEF3D_USE_PCH "Use a precompiled header for third-party headers" ON)
+if(REEF3D_USE_PCH)
+  target_precompile_headers(REEF3D PRIVATE "${PROJECT_SOURCE_DIR}/src/pch.h")
+endif()
+
+# ── ccache ────────────────────────────────────────────────────────────────────
+# Off by default. ccache must be told a PCH is in play or every lookup misses.
+option(REEF3D_USE_CCACHE "Route compiles through ccache if available" OFF)
+if(REEF3D_USE_CCACHE)
+  find_program(CCACHE_PROGRAM ccache)
+  if(CCACHE_PROGRAM)
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    set(ENV{CCACHE_SLOPPINESS} "pch_defines,time_macros")
+    message(STATUS "ccache: ${CCACHE_PROGRAM}")
+  else()
+    message(WARNING "REEF3D_USE_CCACHE=ON but ccache was not found")
+  endif()
 endif()
