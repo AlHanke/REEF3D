@@ -37,6 +37,7 @@ void ietimestep::start(fdm *a, lexer *p, ghostcell *pgc, turbulence *pturb)
     p->umax=p->vmax=p->wmax=p->viscmax=0.0;
     p->epsmax=p->kinmax=p->pressmax=0.0;
     p->pressmin=1.0e9;
+    p->dt_old=p->dt;
 
     p->umax=std::max(p->W11_u,p->umax);
     p->umax=std::max(p->W12_u,p->umax);
