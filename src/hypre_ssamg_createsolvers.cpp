@@ -124,9 +124,27 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
     // Scaled with the problem so the handoff point stays at the same relative depth; the
     // bounds keep tiny grids from skipping SSAMG entirely (hypre faults with no coarsening
     // at all) and cap the size of the problem BoomerAMG is handed.
-    const int coarse_size = (p->cellnumtot > 0)
-                          ? std::min(std::max(p->cellnumtot / 20, 500), 20000)
-                          : 500;
+    int coarse_size = 500;
+
+    if(p->cellnumtot > 0)
+        coarse_size = std::min(std::max(p->cellnumtot / 20, 500), 20000);
+
+    #if USE_AMREX
+    // On a multi-part (AMR) grid the handoff has to come much sooner. The C-F couplings live
+    // in the graph, not the stencil, so SSAMG's structured coarsening cannot see them and the
+    // coarse operators it builds represent the interface badly -- every structured level past
+    // the first costs a Galerkin RAP and a full cycle sweep while barely reducing iterations.
+    // Handing over after roughly one coarsening (~half the unknowns; cellnumtot counts level 0
+    // only) measured 17.3 -> 13.0 GMRES iterations and 52.7s -> 46.0s of pressure-solve time
+    // on the 2-level dam break. Note this path is only reachable when the ParCSR branch above
+    // is disabled: with it enabled, nlevs>1 never reaches SSAMG, and the ParCSR route is much
+    // the faster of the two anyway (8.6 iterations, 29.2s on the same case and build).
+    // (nlevs comes from grid_amrex, which only replaces grid in lexer under USE_AMREX; a
+    // non-AMReX build is always single level and keeps the rule above.)
+    if(p->cellnumtot > 0 && p->nlevs > 1)
+        coarse_size = std::min(std::max(p->cellnumtot * 7 / 10, 500), 200000);
+    #endif
+
     HYPRE_SStructSSAMGSetMaxCoarseSize(ssamg, coarse_size);
 
     // Galerkin RAP works for both single-level and multi-level grids.
