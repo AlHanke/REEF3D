@@ -35,7 +35,7 @@ fixtimestep::fixtimestep(lexer*)
 
 void fixtimestep::start(fdm* a, lexer* p, ghostcell* pgc, turbulence *pturb)
 {
-    p->dt=p->N49;
+    p->dt=p->dt_old=p->N49;
     p->umax=p->vmax=p->wmax=p->viscmax=0.0;
     p->epsmax=p->kinmax=p->pressmax=0.0;
     p->pressmin=1.0e9;
@@ -131,5 +131,5 @@ void fixtimestep::start(fdm* a, lexer* p, ghostcell* pgc, turbulence *pturb)
 
 void fixtimestep::ini(fdm*, lexer* p, ghostcell*)
 {
-    p->dt=p->N49;
+    p->dt=p->dt_old=p->N49;
 }
