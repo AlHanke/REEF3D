@@ -130,6 +130,25 @@ private:
     HYPRE_Solver          par_solver = nullptr;
     HYPRE_Solver          par_precond = nullptr;
 
+    // Lagged BoomerAMG setup (multi-level path only; see solve()). The matrix values change
+    // every solve but its sparsity does not, so the AMG hierarchy built from an earlier set of
+    // values stays a perfectly good preconditioner -- preconditioner quality only affects the
+    // iteration count, never the solution GMRES converges to. Rebuilding it every solve cost
+    // more than the Krylov iterations it accelerated. par_setup_count counts solves since the
+    // last hierarchy build; par_fresh_iters is the iteration count on the solve immediately
+    // after that build, and par_last_iters the most recent one, so a hierarchy that has gone
+    // stale can be detected and rebuilt early.
+    int par_setup_count = 0;
+    int par_fresh_iters = 0;
+    int par_last_iters  = 0;
+
+    // Rebuild the hierarchy at least this often, and early if the iteration count has crept
+    // this far above the just-rebuilt count. Both are deliberately loose: on the 2D dam break
+    // the hierarchy stays sharp for far longer than 50 solves, and the degradation trigger is
+    // what protects cases where the operator moves faster than it does here.
+    static constexpr int par_setup_period  = 50;
+    static constexpr int par_setup_degrade = 2;
+
     bool solver_created = false;
     bool gmres_created = false;
     int created_nlevs = -1;
