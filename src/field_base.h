@@ -141,7 +141,7 @@ public:
      */
     struct View
     {
-        T* base;        ///< already origin-folded, see cache_addressing()
+        T* __restrict base;        ///< already origin-folded, see cache_addressing()
         stride_t js, ks;
         inline T& operator()(int ii, int jj, int kk) const noexcept
         { return base[ii*js + jj*ks + kk]; }
@@ -149,7 +149,7 @@ public:
 
     struct ConstView
     {
-        const T* base;
+        const T* __restrict base;
         stride_t js, ks;
         inline const T& operator()(int ii, int jj, int kk) const noexcept
         { return base[ii*js + jj*ks + kk]; }
