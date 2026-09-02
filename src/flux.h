@@ -27,6 +27,12 @@ class fdm;
 class field;
 struct LocalArr4Const;
 
+#if not USE_AMREX
+// Needed for field::ConstView below -- a nested type name requires a complete
+// type, so the forward declaration above isn't enough on this path.
+#include "field.h"
+#endif
+
 class flux
 {
 public:
@@ -40,6 +46,10 @@ public:
     virtual void u_flux(fdm*,int,const LocalArr4Const&,double&,double&) = 0;
     virtual void v_flux(fdm*,int,const LocalArr4Const&,double&,double&) = 0;
     virtual void w_flux(fdm*,int,const LocalArr4Const&,double&,double&) = 0;
+    #else
+    virtual void u_flux(fdm*,int,const field::ConstView&,double&,double&) = 0;
+    virtual void v_flux(fdm*,int,const field::ConstView&,double&,double&) = 0;
+    virtual void w_flux(fdm*,int,const field::ConstView&,double&,double&) = 0;
     #endif
 };
 
