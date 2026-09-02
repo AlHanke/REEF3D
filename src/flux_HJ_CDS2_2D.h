@@ -52,6 +52,15 @@ public:
 
     void w_flux(fdm*, int ipol, const LocalArr4Const& wvel, double &wflux1, double&) override final
     { w_flux_impl(ipol, wvel, wflux1); };
+    #else
+    void u_flux(fdm*, int ipol, const field::ConstView& uvel, double &uflux1, double&) override final
+    { u_flux_impl(ipol, uvel, uflux1); };
+
+    void v_flux(fdm*, int ipol, const field::ConstView& vvel, double &vflux1, double&) override final
+    { vflux1 = 0.0; };
+
+    void w_flux(fdm*, int ipol, const field::ConstView& wvel, double &wflux1, double&) override final
+    { w_flux_impl(ipol, wvel, wflux1); };
     #endif
 
 private:
