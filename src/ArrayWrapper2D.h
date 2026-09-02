@@ -110,6 +110,22 @@ public:
 
     operator int *();
 
+    #if not USE_AMREX
+    /// Lightweight, capture-by-value view — mirrors field_base::View/ConstView
+    /// (see field_base.h for the rationale: base pointer + strides read once
+    /// instead of through operator()'s `this->m_base/m_js/m_ks` on every call,
+    /// so a hoisted flag check survives opaque calls inside the loop body).
+    struct ConstView
+    {
+        const int* __restrict base;
+        long js;
+        inline const int& operator()(int i, int j) const noexcept
+        { return base[i*js + j]; }
+    };
+
+    inline ConstView const_view() const noexcept { return ConstView{m_base, m_js}; }
+    #endif
+
     #if USE_AMREX
     void fillBoundary();
     void fillHigherLevels();
