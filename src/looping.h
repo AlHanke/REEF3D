@@ -254,22 +254,45 @@ Authors: Hans Bihs, Alexander Hanke
 #else
     // Non-AMReX FIELDLOOP: simple fields are used directly from the body.
     // ptr->member fields get a local alias so a_member(i,j,k) works in both modes.
-    #define FIELD_CONST(name)
-    #define FIELD_CONST_MEMBER(ptr, member)           auto& member_##member = (ptr)->member;
-    #define FIELD_MUT(name)
-    #define FIELD_MUT_MEMBER(ptr, member)             auto& member_##member = (ptr)->member;
+    #define FIELD_CONST(name) \
+        const auto _fc_view_##name = (name).const_view(); \
+        const auto &name = _fc_view_##name;
+    #define FIELD_CONST_MEMBER(ptr, member) \
+        const auto _fc_view_a_##member = (ptr)->member.const_view(); \
+        const auto &member_##member = _fc_view_a_##member;
+    #define FIELD_MUT(name) \
+        auto _fc_view_##name = (name).view(); \
+        auto &name = _fc_view_##name;
+    #define FIELD_MUT_MEMBER(ptr, member) \
+        auto _fc_view_a_##member = (ptr)->member.view(); \
+        auto &member_##member = _fc_view_a_##member;
     #define FIELD_MUT_AVGDOWN(name)
     #define FIELD_MUT_MEMBER_AVGDOWN(ptr, member)
-    #define FIELDLOOP(mut, const_decls, body)         { const_decls; PLAINLOOP PCHECK {body} }
+    #define _FIELDLOOP_IMPL(mut_expr, mut_name, const_decls, body) \
+        { \
+            auto _fl_mut_view_##mut_name = (mut_expr).view(); \
+            auto& mut_name = _fl_mut_view_##mut_name; \
+            const_decls \
+            const int _fl_imax = IMAX_LOOP; \
+            const int _fl_jmax = JMAX_LOOP; \
+            const int _fl_kmax = KMAX_LOOP; \
+            const auto _fl_flag4 = p->flag4.const_view(); \
+            int i,j,k; \
+            for (i = 0; i <= _fl_imax; ++i) \
+            for (j = 0; j <= _fl_jmax; ++j) \
+            for (k = 0; k <= _fl_kmax; ++k) \
+            if (_fl_flag4(i,j,k) > 0) \
+            {body} \
+        }
+    #define FIELDLOOP(mut, const_decls, body) \
+        _FIELDLOOP_IMPL(mut, mut, const_decls, body)
     #define FIELDLOOP_MEMBER(ptr, member, const_decls, body) \
-        { auto& member = (ptr)->member; const_decls; PLAINLOOP PCHECK {body} }
-    #define FIELDLOOP_EXT(mut, const_decls, avgdown_decls, body) \
-        { const_decls; PLAINLOOP PCHECK body }
-    #define FIELDLOOP_MEMBER_EXT(ptr, member, const_decls, avgdown_decls, body) \
-        { auto& member = (ptr)->member; const_decls; PLAINLOOP PCHECK {body} }
+        _FIELDLOOP_IMPL((ptr)->member, member, const_decls, body)
+    #define FIELDLOOP_EXT(mut, const_decls, avgdown_decls, body)                FIELDLOOP(mut, const_decls, body)
+    #define FIELDLOOP_MEMBER_EXT(ptr, member, const_decls, avgdown_decls, body) FIELDLOOP_MEMBER(ptr, member, const_decls, body)
 
-    #define FIELD_CONST_INC(name)
-    #define FIELD_CONST_MEMBER_INC(ptr, member)       auto& member_##member = (ptr)->member;
+    #define FIELD_CONST_INC(name) FIELD_CONST(name)
+    #define FIELD_CONST_MEMBER_INC(ptr, member) FIELD_CONST_MEMBER(ptr, member)
     #define _FIELDLOOP_INC_IMPL(const_decls, body) \
         { const_decls; const int ox = 0; const int oy = 0; const int oz = 0; PLAINLOOP PCHECK {body} }
     #define FIELDLOOP_INC(mut, const_decls, body)     { _FIELDLOOP_INC_IMPL(const_decls, body) }
