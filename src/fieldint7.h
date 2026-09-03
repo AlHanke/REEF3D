@@ -25,13 +25,17 @@ Author: Alexander Hanke
 
 #include"fieldint.h"
 
-// Integer counterpart of field7: sigma-grid vertical-node layout, stride
-// p->kmaxF, addressed with the FIJK family. See field7.h for the slack plane.
+/*!
+ * @brief Integer counterpart of field7.
+ *
+ * Sigma-grid vertical-node layout, stride p->kmaxF, addressed with the FIJK
+ * family. See field7.h for what the slack plane is for.
+ */
 class fieldint7 final : public fieldint
 {
 public:
     fieldint7(lexer* p) : fieldint(p, p->kmaxF,
-                                   static_cast<std::size_t>(p->imax)*p->jmax) {}
+                                   static_cast<std::size_t>(p->imax)*p->jmax) {};
     virtual ~fieldint7() = default;
 };
 
