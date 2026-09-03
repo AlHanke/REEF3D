@@ -117,11 +117,20 @@ public:
     inline ConstView const_view() const noexcept { return ConstView{m_base, m_js, m_ks}; }
 
 protected:
-    // Vertical-extent-parameterised constructor. operator() folds kz into both
-    // the j- and k-strides, so a field with a different number of z-planes needs
-    // nothing but a different kz: passing p->kmaxF reproduces the FIJK addressing
-    // in iterators3D.h exactly. slack is extra trailing elements, for layouts
-    // whose forward-stencil macros reach past the last in-stride slot. See field7.
+    /*!
+     * @brief Vertical-extent-parameterised constructor.
+     *
+     * The whole class is agnostic about the vertical stride — cache_addressing()
+     * folds whatever @p kz is into m_ks/m_js — so a field with a different number
+     * of z-planes needs nothing but a different kz. field7 passes p->kmaxF to get
+     * the sigma-grid vertical-node layout (one plane more than p->kmax), which
+     * reproduces the FIJK addressing in iterators3D.h exactly:
+     *
+     *   V[(i-imin)*jmax*kmaxF + (j-jmin)*kmaxF + k-kmin] == m_base[i*m_js + j*m_ks + k]
+     *
+     * @p slack is extra trailing elements, for layouts whose forward-stencil
+     * macros reach past the last in-stride slot. See field7.
+     */
     field_base(lexer *p, int kz, std::size_t slack) :
         V(static_cast<std::size_t>(p->imax)*p->jmax*kz + slack, T{}),
         imin(p->imin), jmin(p->jmin),
@@ -154,9 +163,10 @@ protected:
 
     std::vector<T> V;
 
+    lexer *p;
+
 private:
     const int imin,jmin,kmin,kmax,jkmax;
-    lexer *p;
 
     T*       m_base = nullptr;
     stride_t m_js   = 0;
