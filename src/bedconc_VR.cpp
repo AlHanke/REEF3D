@@ -25,28 +25,28 @@ Author: Hans Bihs
 #include "ghostcell.h"
 #include "sediment_fdm.h"
 
-bedconc_VR::bedconc_VR(lexer *p)
-{
-    rhosed=p->S22;
-    rhowat=p->W1;
-    g=9.81;
-    d50=p->S20;
-    shields=p->S30;
-    visc=p->W2;
-    kappa=0.4;
-    adist=3.0*d50;
-    deltab=3.0*d50;
-    Rstar=(rhosed-rhowat)/rhowat;
-}
+#include <algorithm>
 
-bedconc_VR::~bedconc_VR()
+bedconc_VR::bedconc_VR(lexer *p) : d50(p->S20)
 {
+    const double rhosed = p->S22;
+    const double rhowat = p->W1;
+    const double g = std::sqrt(p->W20*p->W20+p->W21*p->W21+p->W22*p->W22);
+    const double visc = p->W2;
+    const double Rstar = (rhosed-rhowat)/rhowat;
+
+    double Ds = d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
+
+    Ds = Ds>1.0e-10?Ds:1.0e10;
+
+    powDs = pow(Ds,0.3);
 }
 
 void bedconc_VR::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double Ts,Tb;
     double ca,h,z1,P,R;
+    double Ti,adist;
 
     SLICELOOP4
     s->cbn(i,j) = s->cbe(i,j);
@@ -58,10 +58,7 @@ void bedconc_VR::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
         Ts = s->tau_crit(i,j);
         Tb = s->tau_i(i,j);                 // skin friction, not tau_eff
 
-        Ti = MAX((Tb-Ts)/Ts, 0.0);
-
-        Ds = d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
-        Ds = Ds>1.0e-10?Ds:1.0e10;
+        Ti = std::max((Tb-Ts)/(Ts),0.0);
 
         h = MAX(s->waterlevel(i,j), 1.0e-6);
 
@@ -72,10 +69,10 @@ void bedconc_VR::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
         adist = MIN(adist, 0.5*h);
 
         // reference concentration at z = a
-        ca = MIN( (0.015*d50*pow(Ti,1.5))/(pow(Ds,0.3)*adist), 0.05); // c_max = 0.05
+        ca = MIN( (0.015*d50*pow(Ti,1.5))/(powDs*adist), 0.05); // c_max = 0.05
 
         // height of the first cell centre above the bed
-        else if(p->A10==5)               // NHFLOW: ZP is sigma in [0,1]
+        if(p->A10==5)               // NHFLOW: ZP is sigma in [0,1]
         {
             k  = 0;
             z1 = p->ZP[KP]*h;

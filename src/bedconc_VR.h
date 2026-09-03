@@ -32,16 +32,11 @@ class bedconc_VR : public bedconc, public increment
 {
 public:
     bedconc_VR(lexer*);
-    virtual ~bedconc_VR();
+    virtual ~bedconc_VR() = default;
     void start(lexer*,ghostcell*,sediment_fdm*);
 
 private:
-    int ii,jj,kk;
-
-    double d50,shields,kappa;
-    double Rstar, g, visc;
-    double rhosed,rhowat;
-    double Ti,Ds;
-    double adist,zdist,deltab;
+    double powDs;
+    const double d50;
 };
 #endif

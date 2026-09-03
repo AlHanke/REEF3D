@@ -36,7 +36,8 @@ public:
 
 	virtual void start(lexer*,ghostcell*,sediment_fdm*)=0;
 
-
+protected:
+    static constexpr double kappa = 0.4;
 };
 #endif
 
