@@ -23,34 +23,30 @@ Author: Hans Bihs
 #ifndef REINITOPO_RK3_H_
 #define REINITOPO_RK3_H_
 
-#include"reinitopo.h"
-#include"field4.h"
-#include"increment.h"
+#include "field4.h"
+#include "increment.h"
+#include "reinitopo.h"
 
 class reinidisc;
-class picard;
 
 using namespace std;
 
 class reinitopo_RK3 final : public reinitopo, public increment
 {
 public:
-	reinitopo_RK3(lexer* p);
-	virtual ~reinitopo_RK3();
-	void start(lexer*,fdm*,ghostcell*,field&) override final;
-
-	field4 f,frk1,frk2,L,dt;
+    reinitopo_RK3(lexer*);
+    virtual ~reinitopo_RK3();
+    void start(lexer*,fdm*,ghostcell*,field&) override final;
 
 private:
-	reinidisc *prdisc;
-
-	void step(lexer*, fdm*);
     void time_preproc(lexer*);
-	
-	double starttime,endtime;
 
-	int gcval,gcval_topo,gcval_initopo,reiniter,n;
-	const double epsi;
+    field4 frk1,frk2,L,dt;
+    reinidisc *prdisc;
+
+    double starttime,endtime;
+
+    int gcval,gcval_topo,gcval_initopo,reiniter,n;
 };
 
 #endif
