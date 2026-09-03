@@ -25,27 +25,27 @@ Author: Hans Bihs
 #include "ghostcell.h"
 #include "sediment_fdm.h"
 
-bedconc_VR::bedconc_VR(lexer *p)
-{
-    rhosed=p->S22;
-    rhowat=p->W1;
-    g=9.81;
-    d50=p->S20;
-    shields=p->S30;
-    visc=p->W2;
-    kappa=0.4;
-    adist=3.0*d50;
-    deltab=3.0*d50;
-    Rstar=(rhosed-rhowat)/rhowat;
-}
+#include <algorithm>
 
-bedconc_VR::~bedconc_VR()
+bedconc_VR::bedconc_VR(lexer *p) : d50(p->S20)
 {
+    const double rhosed = p->S22;
+    const double rhowat = p->W1;
+    const double g = std::sqrt(p->W20*p->W20+p->W21*p->W21+p->W22*p->W22);
+    const double visc = p->W2;
+    const double Rstar = (rhosed-rhowat)/rhowat;
+
+    double Ds = d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
+
+    Ds = Ds>1.0e-10?Ds:1.0e10;
+
+    powDs = pow(Ds,0.3);
 }
 
 void bedconc_VR::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double Ts,Tb;
+    double Ti,adist;
 
     SLICELOOP4
     s->cbn(i,j) = s->cbe(i,j);
@@ -57,11 +57,7 @@ void bedconc_VR::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
         Ts = s->tau_crit(i,j);
         Tb = s->tau_eff(i,j);
 
-        Ti = MAX((Tb-Ts)/(Ts),0.0);
-
-        Ds = d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
-
-        Ds = Ds>1.0e-10?Ds:1.0e10;
+        Ti = std::max((Tb-Ts)/(Ts),0.0);
 
         if(p->S61==1)
         {
@@ -80,8 +76,13 @@ void bedconc_VR::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
         {
             adist = 2.0*d50;
         }
+        else
+        {
+            adist = 3.0*d50;
+        }
 
-        s->cbe(i,j) = MIN((0.015*d50*pow(Ti,1.5))/(pow(Ds,0.3)*adist), 0.1);
+        // powDs = pow(d50*pow((Rstar*g)/(visc*visc),1.0/3.0), 0.3);
+        s->cbe(i,j) = std::min((0.015*d50*pow(Ti,1.5))/(powDs*adist), 0.1);
     }
 
     pgc->gcsl_start4(p,s->cbe,1);
