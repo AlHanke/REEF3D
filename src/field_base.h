@@ -25,14 +25,13 @@ Author: Hans Bihs, Alexander Hanke
 
 #include "lexer.h"
 
+#include <cstddef>
+
 template<typename T>
 class field_base
 {
 public:
-    field_base(lexer* p) : imin(p->imin), imax(p->imax), jmin(p->jmin), jkmax(p->jmax*p->kmax), kmin(p->kmin), kmax(p->kmax)
-    {
-        V = new T[imax*jkmax] {};
-    }
+    field_base(lexer* p) : field_base(p, p->kmax, 0) {}
     virtual ~field_base()
     {
         delete [] V;
@@ -48,6 +47,18 @@ public:
     inline T& operator[](int n) noexcept {return V[n];};
 
 	T *V;
+
+protected:
+    // Vertical-extent-parameterised constructor. operator() folds kz into both
+    // the j- and k-strides, so a field with a different number of z-planes needs
+    // nothing but a different kz: passing p->kmaxF reproduces the FIJK addressing
+    // in iterators3D.h exactly. slack is extra trailing elements, for layouts
+    // whose forward-stencil macros reach past the last in-stride slot. See field7.
+    field_base(lexer* p, int kz, std::size_t slack) :
+        imin(p->imin), imax(p->imax), jkmax(p->jmax*kz), jmin(p->jmin), kmin(p->kmin), kmax(kz)
+    {
+        V = new T[static_cast<std::size_t>(imax)*jkmax + slack] {};
+    }
 
 private:
     const int imin,imax,jkmax,jmin,kmin,kmax;
