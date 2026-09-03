@@ -23,21 +23,18 @@ Author: Hans Bihs
 #ifndef BEDLOAD_VOID_H_
 #define BEDLOAD_VOID_H_
 
-#include"bedload.h"
+#include "bedload.h"
 
 using namespace std;
 
 class bedload_void final : public bedload
 {
 public:
+    void start(lexer*, ghostcell*, sediment_fdm*) override final;
 
-	void start(lexer*, ghostcell*, sediment_fdm*) override final;
-	
-	bedload_void();
+    bedload_void();
     virtual ~bedload_void();
 
 };
 
 #endif
-
-

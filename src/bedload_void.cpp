@@ -20,9 +20,9 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"bedload_void.h"
-#include"lexer.h"
-#include"ghostcell.h"
+#include "bedload_void.h"
+#include "lexer.h"
+#include "ghostcell.h"
 
 bedload_void::bedload_void()
 {
@@ -35,4 +35,3 @@ bedload_void::~bedload_void()
 void bedload_void::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
 }
-
