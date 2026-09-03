@@ -47,9 +47,6 @@ void bedconc_VR::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
     double Ts,Tb;
     double Ti,adist;
 
-    SLICELOOP4
-    s->cbn(i,j) = s->cbe(i,j);
-
     // cb* van Rijn
     k=0;
     SEDSLICELOOP
