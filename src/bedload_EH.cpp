@@ -20,33 +20,33 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"bedload_EH.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
-#include"sediment_fdm.h"
+#include "bedload_EH.h"
+#include "lexer.h"
+#include "fdm.h"
+#include "ghostcell.h"
+#include "sediment_fdm.h"
 
 bedload_EH::bedload_EH(lexer *p)
 {
-    rhosed=p->S22;
-    rhowat=p->W1;
-    g=9.81;
-    d50=p->S20;
-    fh= 1.0e-8;
+    rhosed = p->S22;
+    rhowat = p->W1;
+    g = 9.81;
+    d50 = p->S20;
+    fh = 1.0e-8;
 }
 
 bedload_EH::~bedload_EH()
 {
 }
 
-void bedload_EH::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
+void bedload_EH::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
-	double qb,qbx,qby,Ts,Tb;
-	
-	SEDSLICELOOP
+    double qb,qbx,qby,Ts,Tb;
+
+    SEDSLICELOOP
     {
         rhowat = s->ro(i,j);
-        
+
         Ts = s->shields_crit(i,j);
         Tb = s->shields_eff(i,j);
 
@@ -54,11 +54,11 @@ void bedload_EH::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
         qb = (0.1/fh)*pow((s->tau_eff(i,j)*rhowat)/(g*d50*(rhosed-rhowat)),2.5);
 
         if(s->active(i,j)==0 || Tb<Ts)
-        qb=0.0;
-	
+        qb = 0.0;
+
         s->qbe(i,j) = qb;
-	}
-    
+    }
+
     pgc->gcsl_start4(p,s->qbe,1);
-    
+
 }

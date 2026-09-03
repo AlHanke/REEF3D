@@ -20,50 +20,48 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"bedload_VR.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
-#include"sediment_fdm.h"
+#include "bedload_VR.h"
+#include "lexer.h"
+#include "fdm.h"
+#include "ghostcell.h"
+#include "sediment_fdm.h"
 
 bedload_VR::bedload_VR(lexer *p)
 {
-    rhosed=p->S22;
-    g=9.81;
-    d50=p->S20;
-    visc=p->W2;
+    rhosed = p->S22;
+    g = 9.81;
+    d50 = p->S20;
+    visc = p->W2;
 }
 
 bedload_VR::~bedload_VR()
 {
 }
 
-void bedload_VR::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
+void bedload_VR::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double Ti,r,f,Ts,Tb;
-	double qb;
-	
-	SEDSLICELOOP
+    double qb;
+
+    SEDSLICELOOP
     {
         Ts = s->shields_crit(i,j);
-	    Tb = s->shields_eff(i,j);
-        
-        rhowat = s->ro(i,j);
-        Rstar=(rhosed-rhowat)/rhowat;
-        Ds= d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
+        Tb = s->shields_eff(i,j);
 
-        Ti=MAX((Tb-Ts)/(Ts),0.0);
-        
+        rhowat = s->ro(i,j);
+        Rstar = (rhosed-rhowat)/rhowat;
+        Ds = d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
+
+        Ti = MAX((Tb-Ts)/(Ts),0.0);
+
         if(s->active(i,j)==1 && Tb>=Ts)
         qb = (0.053*pow(d50,1.5)*sqrt(g*Rstar)*pow(Ti,2.1))/pow(Ds,0.3);
 
-
         if(s->active(i,j)==0 || Tb<Ts)
-        qb=0.0;
-		
-		s->qbe(i,j) = qb;
-	}
-    
-    pgc->gcsl_start4a(p,s->qbe,1);    
-    
+        qb = 0.0;
+
+        s->qbe(i,j) = qb;
+    }
+
+    pgc->gcsl_start4a(p,s->qbe,1);
 }

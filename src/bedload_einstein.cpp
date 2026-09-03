@@ -20,36 +20,36 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"bedload_einstein.h"
-#include"lexer.h"
-#include"ghostcell.h"
-#include"sediment_fdm.h"
+#include "bedload_einstein.h"
+#include "lexer.h"
+#include "ghostcell.h"
+#include "sediment_fdm.h"
 
-bedload_einstein::bedload_einstein(lexer* p)
+bedload_einstein::bedload_einstein(lexer *p)
 {
-    rhosed=p->S22;
-    g=9.81;
-    d50=p->S20;
+    rhosed = p->S22;
+    g = 9.81;
+    d50 = p->S20;
 }
 
 bedload_einstein::~bedload_einstein()
 {
 }
 
-void bedload_einstein::start(lexer* p, ghostcell* pgc, sediment_fdm *s)
+void bedload_einstein::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double qb;
 
-	SLICELOOP4
+    SLICELOOP4
     {
         rhowat = s->ro(i,j);
-        
-        sval=rhosed/rhowat;
+
+        sval = rhosed/rhowat;
 
         qb = 2.15*exp((-3.91*rhowat*(sval-1.0)*g*d50)/(fabs(s->tau_eff(i,j))>1.0e-20?s->tau_eff(i,j):1.0e20))*sqrt(((p->S22-p->W1)/p->W1)*g*pow(p->S20,3.0));
 
         s->qbe(i,j) = qb;
-	}
-    
+    }
+
     pgc->gcsl_start4(p,s->qbe,1);
 }
