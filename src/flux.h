@@ -38,18 +38,18 @@ class flux
 public:
     virtual ~flux() = default;
 
-    virtual void u_flux(fdm*,int,const field&,double&,double&) = 0;
-    virtual void v_flux(fdm*,int,const field&,double&,double&) = 0;
-    virtual void w_flux(fdm*,int,const field&,double&,double&) = 0;
+    virtual void u_flux(fdm*,int,const field&,double&,double&) const = 0;
+    virtual void v_flux(fdm*,int,const field&,double&,double&) const = 0;
+    virtual void w_flux(fdm*,int,const field&,double&,double&) const = 0;
 
     #if USE_AMREX
-    virtual void u_flux(fdm*,int,const LocalArr4Const&,double&,double&) = 0;
-    virtual void v_flux(fdm*,int,const LocalArr4Const&,double&,double&) = 0;
-    virtual void w_flux(fdm*,int,const LocalArr4Const&,double&,double&) = 0;
+    virtual void u_flux(fdm*,int,const LocalArr4Const&,double&,double&) const = 0;
+    virtual void v_flux(fdm*,int,const LocalArr4Const&,double&,double&) const = 0;
+    virtual void w_flux(fdm*,int,const LocalArr4Const&,double&,double&) const = 0;
     #else
-    virtual void u_flux(fdm*,int,const field::ConstView&,double&,double&) = 0;
-    virtual void v_flux(fdm*,int,const field::ConstView&,double&,double&) = 0;
-    virtual void w_flux(fdm*,int,const field::ConstView&,double&,double&) = 0;
+    virtual void u_flux(fdm*,int,const field::ConstView&,double&,double&) const = 0;
+    virtual void v_flux(fdm*,int,const field::ConstView&,double&,double&) const = 0;
+    virtual void w_flux(fdm*,int,const field::ConstView&,double&,double&) const = 0;
     #endif
 };
 

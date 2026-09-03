@@ -26,7 +26,16 @@ Author: Hans Bihs
 #include"increment.h"
 #include"convection.h"
 
-class flux;
+#include"flux_face_CDS2.h"
+#include"flux_face_CDS2_vrans.h"
+#include"flux_face_FOU.h"
+#include"flux_face_FOU_vrans.h"
+#include"flux_face_CDS2_2D.h"
+#include"flux_face_CDS2_vrans_2D.h"
+#include"flux_face_FOU_2D.h"
+#include"flux_face_FOU_vrans_2D.h"
+
+#include<variant>
 
 class fou final : public convection, public increment
 {
@@ -37,10 +46,18 @@ public:
     void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    template<typename GenericField>
-    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
+    template<typename FluxT, typename GenericField>
+    inline double aij(FluxT&, lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
 
-    flux *pflux;
+    // Concrete flux-face type is fixed at construction (from j_dir/B200/S10/D11)
+    // and never changes afterwards. A variant lets aij() call u_flux/v_flux/w_flux
+    // on the concrete (final) type directly -- no vtable indirection per grid cell --
+    // instead of through a `flux*` base pointer. The runtime choice is paid for once
+    // per start() call via std::visit, not once per cell.
+    std::variant<flux_face_CDS2, flux_face_FOU,
+                 flux_face_CDS2_vrans, flux_face_FOU_vrans,
+                 flux_face_CDS2_2D, flux_face_FOU_2D,
+                 flux_face_CDS2_vrans_2D, flux_face_FOU_vrans_2D> pflux;
 };
 
 #endif

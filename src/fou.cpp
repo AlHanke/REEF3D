@@ -23,14 +23,6 @@ Author: Hans Bihs
 #include"fou.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"flux_face_CDS2.h"
-#include"flux_face_CDS2_vrans.h"
-#include"flux_face_FOU.h"
-#include"flux_face_FOU_vrans.h"
-#include"flux_face_CDS2_2D.h"
-#include"flux_face_CDS2_vrans_2D.h"
-#include"flux_face_FOU_2D.h"
-#include"flux_face_FOU_vrans_2D.h"
 
 fou::fou(lexer *p)
 {
@@ -39,18 +31,18 @@ fou::fou(lexer *p)
         if(p->B200>=1 || p->S10==2)
         {
             if(p->D11==1)
-            pflux = new flux_face_FOU_vrans_2D(p);
+            pflux.emplace<flux_face_FOU_vrans_2D>(p);
 
             else if(p->D11==2)
-            pflux = new flux_face_CDS2_vrans_2D;
+            pflux.emplace<flux_face_CDS2_vrans_2D>();
         }
         else
         {
             if(p->D11==1)
-            pflux = new flux_face_FOU_2D(p);
+            pflux.emplace<flux_face_FOU_2D>(p);
 
             else if(p->D11==2)
-            pflux = new flux_face_CDS2_2D;
+            pflux.emplace<flux_face_CDS2_2D>();
         }
     }
 
@@ -59,62 +51,65 @@ fou::fou(lexer *p)
         if(p->B200>=1 || p->S10==2)
         {
             if(p->D11==1)
-            pflux = new flux_face_FOU_vrans(p);
+            pflux.emplace<flux_face_FOU_vrans>(p);
 
             else if(p->D11==2)
-            pflux = new flux_face_CDS2_vrans;
+            pflux.emplace<flux_face_CDS2_vrans>();
         }
         else
         {
             if(p->D11==1)
-            pflux = new flux_face_FOU(p);
+            pflux.emplace<flux_face_FOU>(p);
 
             else if(p->D11==2)
-            pflux = new flux_face_CDS2;
+            pflux.emplace<flux_face_CDS2>();
         }
     }
 }
 
 void fou::start(lexer* p, fdm* a, field& b, int ipol, field& uvel, field& vvel, field& wvel)
 {
-    if(ipol==1)
+    std::visit([&](auto& flux)
     {
-        FIELDLOOP_INC_MEMBER(a,F,
-            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-            F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data());
-        )
-    }
-    else if(ipol==2 && p->j_dir==1)
-    {
-        FIELDLOOP_INC_MEMBER(a,G,
-            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-            G(i,j,k)+=aij(p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data());
-        )
-    }
-    else if(ipol==3)
-    {
-        FIELDLOOP_INC_MEMBER(a,H,
-            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-            H(i,j,k)+=aij(p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data());
-        )
-    }
-    else if(ipol==4)
-    {
-        FIELDLOOP_INC_MEMBER(a,L,
-            FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-            L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data());
-        )
-    }
+        if(ipol==1)
+        {
+            FIELDLOOP_INC_MEMBER(a,F,
+                FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+                F(i,j,k)+=aij(flux,p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data());
+            )
+        }
+        else if(ipol==2 && p->j_dir==1)
+        {
+            FIELDLOOP_INC_MEMBER(a,G,
+                FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+                G(i,j,k)+=aij(flux,p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data());
+            )
+        }
+        else if(ipol==3)
+        {
+            FIELDLOOP_INC_MEMBER(a,H,
+                FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+                H(i,j,k)+=aij(flux,p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data());
+            )
+        }
+        else if(ipol==4)
+        {
+            FIELDLOOP_INC_MEMBER(a,L,
+                FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
+                L(i,j,k)+=aij(flux,p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data());
+            )
+        }
+    }, pflux);
 }
 
-template<typename GenericField>
-double fou::aij(lexer* p, fdm* a, const GenericField& f,int ipol, const GenericField& uvel, const GenericField& vvel, const GenericField& wvel, double *DX,double *DY, double *DZ)
+template<typename FluxT, typename GenericField>
+double fou::aij(FluxT &pflux, lexer *p, fdm *a, const GenericField &f, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel, double *DX, double *DY, double *DZ)
 {
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 
-    pflux->u_flux(a,ipol,uvel,ivel1,ivel2);
-    pflux->v_flux(a,ipol,vvel,jvel1,jvel2);
-    pflux->w_flux(a,ipol,wvel,kvel1,kvel2);
+    pflux.u_flux(a,ipol,uvel,ivel1,ivel2);
+    pflux.v_flux(a,ipol,vvel,jvel1,jvel2);
+    pflux.w_flux(a,ipol,wvel,kvel1,kvel2);
 
     // x-dir
     const double udir = 0.5*(ivel1+ivel2)>=0.0 ? 1.0 : 0.0;

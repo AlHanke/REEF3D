@@ -35,38 +35,38 @@ public:
     flux_HJ_CDS2_vrans() = default;
     virtual ~flux_HJ_CDS2_vrans() = default;
 
-    inline void u_flux(fdm* a, int ipol, const field& uvel, double &uflux1, double&) override final
+    inline void u_flux(fdm* a, int ipol, const field &uvel, double &uflux1, double&) const override final
     { u_flux_impl(a, ipol, uvel, uflux1); }
 
-    inline void v_flux(fdm* a, int ipol, const field& vvel, double &vflux1, double&) override final
+    inline void v_flux(fdm* a, int ipol, const field &vvel, double &vflux1, double&) const override final
     { v_flux_impl(a, ipol, vvel, vflux1); }
 
-    inline void w_flux(fdm* a, int ipol, const field& wvel, double &wflux1, double&) override final
+    inline void w_flux(fdm* a, int ipol, const field &wvel, double &wflux1, double&) const override final
     { w_flux_impl(a, ipol, wvel, wflux1); }
 
     #if USE_AMREX
-    inline void u_flux(fdm* a, int ipol, const LocalArr4Const& uvel, double &uflux1, double&) override final
+    inline void u_flux(fdm* a, int ipol, const LocalArr4Const &uvel, double &uflux1, double&) const override final
     { u_flux_impl(a, ipol, uvel, uflux1); }
 
-    inline void v_flux(fdm* a, int ipol, const LocalArr4Const& vvel, double &vflux1, double&) override final
+    inline void v_flux(fdm* a, int ipol, const LocalArr4Const &vvel, double &vflux1, double&) const override final
     { v_flux_impl(a, ipol, vvel, vflux1); }
 
-    inline void w_flux(fdm* a, int ipol, const LocalArr4Const& wvel, double &wflux1, double&) override final
+    inline void w_flux(fdm* a, int ipol, const LocalArr4Const &wvel, double &wflux1, double&) const override final
     { w_flux_impl(a, ipol, wvel, wflux1); }
     #else
-    inline void u_flux(fdm* a, int ipol, const field::ConstView& uvel, double &uflux1, double&) override final
+    inline void u_flux(fdm* a, int ipol, const field::ConstView &uvel, double &uflux1, double&) const override final
     { u_flux_impl(a, ipol, uvel, uflux1); }
 
-    inline void v_flux(fdm* a, int ipol, const field::ConstView& vvel, double &vflux1, double&) override final
+    inline void v_flux(fdm* a, int ipol, const field::ConstView &vvel, double &vflux1, double&) const override final
     { v_flux_impl(a, ipol, vvel, vflux1); }
 
-    inline void w_flux(fdm* a, int ipol, const field::ConstView& wvel, double &wflux1, double&) override final
+    inline void w_flux(fdm* a, int ipol, const field::ConstView &wvel, double &wflux1, double&) const override final
     { w_flux_impl(a, ipol, wvel, wflux1); }
     #endif
 
 private:
     template<typename GenericField>
-    inline void u_flux_impl(fdm* a, int ipol, GenericField& uvel, double &uflux1)
+    inline void u_flux_impl(fdm* a, int ipol, const const GenericField &uvel, double &uflux1) const
     {
         if(ipol==1)
         {
@@ -87,7 +87,7 @@ private:
     }
 
     template<typename GenericField>
-    inline void v_flux_impl(fdm* a, int ipol, GenericField& vvel, double &vflux1)
+    inline void v_flux_impl(fdm *a, int ipol, const GenericField &vvel, double &vflux1) const
     {
         if(ipol==1)
         {
@@ -108,7 +108,7 @@ private:
     }
 
     template<typename GenericField>
-    inline void w_flux_impl(fdm* a, int ipol, GenericField& wvel, double &wflux1)
+    inline void w_flux_impl(fdm *a, int ipol, const GenericField &wvel, double &wflux1) const
     {
         if(ipol==1)
         {
