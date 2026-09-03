@@ -20,10 +20,10 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"bedconc_VR.h"
-#include"lexer.h"
-#include"ghostcell.h"
-#include"sediment_fdm.h"
+#include "bedconc_VR.h"
+#include "lexer.h"
+#include "ghostcell.h"
+#include "sediment_fdm.h"
 
 bedconc_VR::bedconc_VR(lexer *p)
 {
@@ -43,51 +43,45 @@ bedconc_VR::~bedconc_VR()
 {
 }
 
-void bedconc_VR::start(lexer* p, ghostcell *pgc, sediment_fdm *s)
+void bedconc_VR::start(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
     double Ts,Tb;
-    
+
     SLICELOOP4
     s->cbn(i,j) = s->cbe(i,j);
-    
+
     // cb* van Rijn
     SEDSLICELOOP
     {
-    Ts = s->tau_crit(i,j);
-    Tb = s->tau_eff(i,j);
-    
-    Ti=MAX((Tb-Ts)/(Ts),0.0);
-        
-    Ds = d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
-    
-    Ds = Ds>1.0e-10?Ds:1.0e10;
-    
-    if(p->S61==1)
-    {
-        if(p->A10==5)
+        Ts = s->tau_crit(i,j);
+        Tb = s->tau_eff(i,j);
+
+        Ti = MAX((Tb-Ts)/(Ts),0.0);
+
+        Ds = d50*pow((Rstar*g)/(visc*visc),1.0/3.0);
+
+        Ds = Ds>1.0e-10?Ds:1.0e10;
+
+        if(p->S61==1)
         {
-        k=0;
-        adist = 0.5*p->DZN[KP]*p->WL[IJ];
+            if(p->A10==5)
+            {
+                k=0;
+                adist = 0.5*p->DZN[KP]*p->WL[IJ];
+            }
+            else if(p->A10==6)
+            {
+                k=s->bedk(i,j);
+                adist = 0.5*p->DZN[KP];
+            }
         }
-        
-        if(p->A10==6)
+        else if(p->S61==2)
         {
-        k=s->bedk(i,j);
-        adist = 0.5*p->DZN[KP];
+            adist = 2.0*d50;
         }
+
+        s->cbe(i,j) = MIN((0.015*d50*pow(Ti,1.5))/(pow(Ds,0.3)*adist), 0.1);
     }
-    
-    if(p->S61==2)
-    {
-        adist = 2.0*d50;
-    }
-    
-    s->cbe(i,j) =  MIN((0.015*d50*pow(Ti,1.5))/(pow(Ds,0.3)*adist), 0.1);
-    }
-    
+
     pgc->gcsl_start4(p,s->qbe,1);
 }
-
-
-
-
