@@ -30,6 +30,9 @@ class field : public field_base<double>
 public:
     field(lexer* p) : field_base<double>(p) {}
     virtual ~field() = default;
+
+protected:
+    field(lexer* p, int kz, std::size_t slack) : field_base<double>(p, kz, slack) {}
 };
 
 #endif
