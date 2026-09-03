@@ -57,7 +57,7 @@ public:
     slice4 slide_fh;
     
     slice4 qb,qbe,qbs;
-    slice4 cbe,cb,cbn,conc;
+    slice4 cbe,cb,conc;
     
     slice4 waterlevel;
     slice4 guard;
