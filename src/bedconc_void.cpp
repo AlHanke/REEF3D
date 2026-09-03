@@ -20,20 +20,12 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"bedconc_void.h"
+#include "bedconc_void.h"
 
-bedconc_void::bedconc_void(lexer *p)
+bedconc_void::bedconc_void(lexer *)
 {
 }
 
-bedconc_void::~bedconc_void()
+void bedconc_void::start(lexer *, ghostcell *, sediment_fdm *)
 {
 }
-
-void bedconc_void::start(lexer* p, ghostcell *pgc, sediment_fdm *s)
-{
-}
-
-
-
-

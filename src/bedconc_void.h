@@ -23,21 +23,14 @@ Author: Hans Bihs
 #ifndef BEDCONC_VOID_H_
 #define BEDCONC_VOID_H_
 
-#include"bedconc.h"
-#include"increment.h"
-
-using namespace std;
+#include "bedconc.h"
+#include "increment.h"
 
 class bedconc_void : public bedconc, public increment
 {
 public:
-	bedconc_void(lexer*);
-	virtual ~bedconc_void();
-	void start(lexer*,ghostcell*,sediment_fdm*);
-
-
+    bedconc_void(lexer*);
+    virtual ~bedconc_void() = default;
+    void start(lexer*,ghostcell*,sediment_fdm*);
 };
 #endif
-
-
-
