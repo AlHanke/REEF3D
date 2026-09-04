@@ -23,10 +23,19 @@ Author: Hans Bihs
 #ifndef WENO_FLUX_H_
 #define WENO_FLUX_H_
 
-#include"convection.h"
-#include"increment.h"
+#include "convection.h"
+#include "increment.h"
 
-class flux;
+#include "flux_face_CDS2.h"
+#include "flux_face_CDS2_vrans.h"
+#include "flux_face_FOU.h"
+#include "flux_face_FOU_vrans.h"
+#include "flux_face_CDS2_2D.h"
+#include "flux_face_CDS2_vrans_2D.h"
+#include "flux_face_FOU_2D.h"
+#include "flux_face_FOU_vrans_2D.h"
+
+#include <variant>
 
 class weno_flux final : public convection, public increment
 {
@@ -37,8 +46,8 @@ public:
     void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    template<typename GenericField>
-    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&);
+    template<typename FluxT, typename GenericField>
+    inline double aij(FluxT&, lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&);
 
     template<typename GenericField>
     inline double fx(lexer*, const GenericField&, const GenericField&, int, double, int di=0);
@@ -51,7 +60,10 @@ private:
     static constexpr double sixten = 0.6, treten = 0.3;
     static constexpr double epsilon = 0.000001;
 
-    flux *pflux;
+    std::variant<flux_face_CDS2, flux_face_FOU,
+                 flux_face_CDS2_vrans, flux_face_FOU_vrans,
+                 flux_face_CDS2_2D, flux_face_FOU_2D,
+                 flux_face_CDS2_vrans_2D, flux_face_FOU_vrans_2D> pflux;
 };
 
 #endif

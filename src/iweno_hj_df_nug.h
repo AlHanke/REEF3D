@@ -25,8 +25,11 @@ Author: Hans Bihs
 
 #include"convection.h"
 #include"weno_nug_func.h"
-
-class flux;
+#include"flux_HJ_CDS2.h"
+#include"flux_HJ_CDS2_vrans.h"
+#include"flux_HJ_CDS2_2D.h"
+#include"flux_HJ_CDS2_vrans_2D.h"
+#include<variant>
 
 class iweno_hj_df_nug final : public convection, public weno_nug_func
 {
@@ -87,7 +90,8 @@ private:
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
     double iadvec,jadvec,kadvec;
 
-    flux *pflux;
+    std::variant<flux_HJ_CDS2, flux_HJ_CDS2_vrans,
+                 flux_HJ_CDS2_2D, flux_HJ_CDS2_vrans_2D> pflux;
 
     double *DX,*DY,*DZ;
 

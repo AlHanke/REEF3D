@@ -25,8 +25,11 @@ Author: Hans Bihs
 
 #include"convection.h"
 #include"weno_nug_func.h"
-
-class flux;
+#include"flux_HJ_CDS2.h"
+#include"flux_HJ_CDS2_vrans.h"
+#include"flux_HJ_CDS2_2D.h"
+#include"flux_HJ_CDS2_vrans_2D.h"
+#include<variant>
 
 class weno_hj_nug final : public convection, public weno_nug_func
 {
@@ -37,8 +40,8 @@ public:
     void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    template<typename GenericField>
-    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
+    template<typename FluxT, typename GenericField>
+    inline double aij(FluxT&, lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
 
     template<typename GenericField>
     double fx(lexer*, fdm*, const GenericField&, const double*, double);
@@ -47,7 +50,8 @@ private:
     template<typename GenericField>
     double fz(lexer*, fdm*, const GenericField&, const double*, double);
 
-    flux *pflux;
+    std::variant<flux_HJ_CDS2, flux_HJ_CDS2_vrans,
+                 flux_HJ_CDS2_2D, flux_HJ_CDS2_vrans_2D> pflux;
 };
 
 #endif

@@ -23,10 +23,6 @@ Author: Hans Bihs
 #include"iweno_hj_df_nug.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"flux_HJ_CDS2.h"
-#include"flux_HJ_CDS2_vrans.h"
-#include"flux_HJ_CDS2_2D.h"
-#include"flux_HJ_CDS2_vrans_2D.h"
 
 iweno_hj_df_nug::iweno_hj_df_nug(lexer *p)
             :weno_nug_func(p), tttw(13.0/12.0),fourth(1.0/4.0),third(1.0/3.0),
@@ -36,16 +32,16 @@ iweno_hj_df_nug::iweno_hj_df_nug(lexer *p)
     if(p->j_dir==0)
     {
         if(p->B200>=1 || p->S10==2)
-        pflux = new flux_HJ_CDS2_vrans_2D;
+        pflux.emplace<flux_HJ_CDS2_vrans_2D>();
         else
-        pflux = new flux_HJ_CDS2_2D;
+        pflux.emplace<flux_HJ_CDS2_2D>();
     }
     else if(p->j_dir==1)
     {
         if(p->B200>=1 || p->S10==2)
-        pflux = new flux_HJ_CDS2_vrans;
+        pflux.emplace<flux_HJ_CDS2_vrans>();
         else
-        pflux = new flux_HJ_CDS2;
+        pflux.emplace<flux_HJ_CDS2>();
     }
 }
 
@@ -76,12 +72,14 @@ void iweno_hj_df_nug::wenoloop1(lexer *p, fdm *a, const GenericField& f, int ipo
     uf=1;
     count=0;
 
+    std::visit([&](auto& flux)
+    {
     FIELDLOOP_INC_MEMBER(a, F,
         FIELD_CONST_INC(f); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
         {
-            pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
-            pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
-            pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
+            flux.u_flux(a,ipol,uvel,iadvec,ivel2);
+            flux.v_flux(a,ipol,vvel,jadvec,jvel2);
+            flux.w_flux(a,ipol,wvel,kadvec,kvel2);
 
             if(iadvec>=0.0) { iqmin(p,a,f); is_min_x(); weight_min_x(); aij_south(p,a,f,F); }
             if(iadvec<0.0)  { iqmax(p,a,f); is_max_x(); weight_max_x(); aij_north(p,a,f,F); }
@@ -94,6 +92,7 @@ void iweno_hj_df_nug::wenoloop1(lexer *p, fdm *a, const GenericField& f, int ipo
             ++count;
         }
     )
+    }, pflux);
 }
 
 template<typename GenericField>
@@ -106,12 +105,14 @@ void iweno_hj_df_nug::wenoloop2(lexer *p, fdm *a, const GenericField& f, int ipo
     vf=1;
     count=0;
 
+    std::visit([&](auto& flux)
+    {
     FIELDLOOP_INC_MEMBER(a, G,
         FIELD_CONST_INC(f); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
         {
-            pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
-            pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
-            pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
+            flux.u_flux(a,ipol,uvel,iadvec,ivel2);
+            flux.v_flux(a,ipol,vvel,jadvec,jvel2);
+            flux.w_flux(a,ipol,wvel,kadvec,kvel2);
 
             if(iadvec>=0.0) { iqmin(p,a,f); is_min_x(); weight_min_x(); aij_south(p,a,f,G); }
             if(iadvec<0.0)  { iqmax(p,a,f); is_max_x(); weight_max_x(); aij_north(p,a,f,G); }
@@ -124,6 +125,7 @@ void iweno_hj_df_nug::wenoloop2(lexer *p, fdm *a, const GenericField& f, int ipo
             ++count;
         }
     )
+    }, pflux);
 }
 
 template<typename GenericField>
@@ -136,12 +138,14 @@ void iweno_hj_df_nug::wenoloop3(lexer *p, fdm *a, const GenericField& f, int ipo
     wf=1;
     count=0;
 
+    std::visit([&](auto& flux)
+    {
     FIELDLOOP_INC_MEMBER(a, H,
         FIELD_CONST_INC(f); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
         {
-            pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
-            pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
-            pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
+            flux.u_flux(a,ipol,uvel,iadvec,ivel2);
+            flux.v_flux(a,ipol,vvel,jadvec,jvel2);
+            flux.w_flux(a,ipol,wvel,kadvec,kvel2);
 
             if(iadvec>=0.0) { iqmin(p,a,f); is_min_x(); weight_min_x(); aij_south(p,a,f,H); }
             if(iadvec<0.0)  { iqmax(p,a,f); is_max_x(); weight_max_x(); aij_north(p,a,f,H); }
@@ -154,6 +158,7 @@ void iweno_hj_df_nug::wenoloop3(lexer *p, fdm *a, const GenericField& f, int ipo
             ++count;
         }
     )
+    }, pflux);
 }
 
 template<typename GenericField>
@@ -166,12 +171,14 @@ void iweno_hj_df_nug::wenoloop4(lexer *p, fdm *a, const GenericField& f, int ipo
     uf=vf=wf=0;
     count=0;
 
+    std::visit([&](auto& flux)
+    {
     FIELDLOOP_INC_MEMBER(a, L,
         FIELD_CONST_INC(f); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
         {
-            pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
-            pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
-            pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
+            flux.u_flux(a,ipol,uvel,iadvec,ivel2);
+            flux.v_flux(a,ipol,vvel,jadvec,jvel2);
+            flux.w_flux(a,ipol,wvel,kadvec,kvel2);
 
             if(iadvec>=0.0) { iqmin(p,a,f); is_min_x(); weight_min_x(); aij_south(p,a,f,L); }
             if(iadvec<0.0)  { iqmax(p,a,f); is_max_x(); weight_max_x(); aij_north(p,a,f,L); }
@@ -184,6 +191,7 @@ void iweno_hj_df_nug::wenoloop4(lexer *p, fdm *a, const GenericField& f, int ipo
             ++count;
         }
     )
+    }, pflux);
 }
 
 template<typename CF, typename MF>
