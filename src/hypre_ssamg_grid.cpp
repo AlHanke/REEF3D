@@ -416,6 +416,7 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
             }
         }
     }
+    cf_links.shrink_to_fit();
     #endif
 
     HYPRE_SStructGraphAssemble(graph);
