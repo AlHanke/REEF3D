@@ -25,8 +25,15 @@ Author: Hans Bihs
 
 #include"convection.h"
 #include"increment.h"
-
-class flux;
+#include"flux_face_CDS2.h"
+#include"flux_face_CDS2_vrans.h"
+#include"flux_face_FOU.h"
+#include"flux_face_FOU_vrans.h"
+#include"flux_face_CDS2_2D.h"
+#include"flux_face_CDS2_vrans_2D.h"
+#include"flux_face_FOU_2D.h"
+#include"flux_face_FOU_vrans_2D.h"
+#include<variant>
 
 class cicsam final : public convection, public increment
 {
@@ -37,13 +44,16 @@ public:
     void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    template<typename GenericField>
-    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&);
+    template<typename FluxT, typename GenericField>
+    inline double aij(FluxT&, lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&);
 
     template<typename GenericField>
     double cface(lexer*,fdm*,const GenericField&,int,int,double);
 
-    flux *pflux;
+    std::variant<flux_face_CDS2, flux_face_FOU,
+                 flux_face_CDS2_vrans, flux_face_FOU_vrans,
+                 flux_face_CDS2_2D, flux_face_FOU_2D,
+                 flux_face_CDS2_vrans_2D, flux_face_FOU_vrans_2D> pflux;
 };
 
 #endif

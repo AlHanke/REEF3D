@@ -23,10 +23,6 @@ Author: Hans Bihs
 #include"iweno_hj.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"flux_HJ_CDS2.h"
-#include"flux_HJ_CDS2_vrans.h"
-#include"flux_HJ_CDS2_2D.h"
-#include"flux_HJ_CDS2_vrans_2D.h"
 
 iweno_hj::iweno_hj(lexer *p)
 			:tttw(13.0/12.0),fourth(1.0/4.0),third(1.0/3.0),
@@ -36,19 +32,19 @@ iweno_hj::iweno_hj(lexer *p)
     if(p->j_dir==0)
     {
     if(p->B200==0 && p->S10!=2)
-    pflux = new flux_HJ_CDS2_2D;
-    
+    pflux.emplace<flux_HJ_CDS2_2D>();
+
     if(p->B200>=1 || p->S10==2)
-    pflux = new flux_HJ_CDS2_vrans_2D;
+    pflux.emplace<flux_HJ_CDS2_vrans_2D>();
     }
-    
+
     if(p->j_dir==1)
     {
     if(p->B200==0 && p->S10!=2)
-    pflux = new flux_HJ_CDS2;
-    
+    pflux.emplace<flux_HJ_CDS2>();
+
     if(p->B200>=1 || p->S10==2)
-    pflux = new flux_HJ_CDS2_vrans;
+    pflux.emplace<flux_HJ_CDS2_vrans>();
     }
 }
 
@@ -76,11 +72,13 @@ void iweno_hj::wenoloop1(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
 {
 	count=0;
     
+	std::visit([&](auto& flux)
+	{
 	ULOOP
 	{
-        pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
-        pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
-        pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
+        flux.u_flux(a,ipol,uvel,iadvec,ivel2);
+        flux.v_flux(a,ipol,vvel,jadvec,jvel2);
+        flux.w_flux(a,ipol,wvel,kadvec,kvel2);
     
 
 			if(iadvec>=0.0)
@@ -136,17 +134,20 @@ void iweno_hj::wenoloop1(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
 			}
 		 ++count;
 	}
+	}, pflux);
 }
 
 void iweno_hj::wenoloop2(lexer *p, fdm *a, field& f, int ipol, field& uvel, field& vvel, field& wvel)
 {
 	count=0;
 
+	std::visit([&](auto& flux)
+	{
 	VLOOP
 	{
-        pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
-        pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
-        pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
+        flux.u_flux(a,ipol,uvel,iadvec,ivel2);
+        flux.v_flux(a,ipol,vvel,jadvec,jvel2);
+        flux.w_flux(a,ipol,wvel,kadvec,kvel2);
 
 
 			if(iadvec>=0.0)
@@ -203,18 +204,21 @@ void iweno_hj::wenoloop2(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
 
 		 ++count;
 	}
+	}, pflux);
 }
 
 void iweno_hj::wenoloop3(lexer *p, fdm *a, field& f, int ipol, field& uvel, field& vvel, field& wvel)
 {
 	count=0;
 
+	std::visit([&](auto& flux)
+	{
 	WLOOP
 	{
 	
-		pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
-        pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
-        pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
+		flux.u_flux(a,ipol,uvel,iadvec,ivel2);
+        flux.v_flux(a,ipol,vvel,jadvec,jvel2);
+        flux.w_flux(a,ipol,wvel,kadvec,kvel2);
                 
 			if(iadvec>=0.0)
 			{
@@ -270,18 +274,21 @@ void iweno_hj::wenoloop3(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
 			
 		 ++count;
 	}
+	}, pflux);
 }
 
 void iweno_hj::wenoloop4(lexer *p, fdm *a, field& f, int ipol, field& uvel, field& vvel, field& wvel)
 {
 	count=0;
 
+	std::visit([&](auto& flux)
+	{
 	LOOP
 	{
 		
-        pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
-        pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
-        pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
+        flux.u_flux(a,ipol,uvel,iadvec,ivel2);
+        flux.v_flux(a,ipol,vvel,jadvec,jvel2);
+        flux.w_flux(a,ipol,wvel,kadvec,kvel2);
 			
 			if(iadvec>=0.0)
 			{
@@ -335,6 +342,7 @@ void iweno_hj::wenoloop4(lexer *p, fdm *a, field& f, int ipol, field& uvel, fiel
             
      ++count;
 	}
+	}, pflux);
 }
 
 void iweno_hj::aij_south(lexer* p, fdm* a, field &f, field &F)

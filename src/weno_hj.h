@@ -25,8 +25,11 @@ Author: Hans Bihs
 
 #include"convection.h"
 #include"increment.h"
-
-class flux;
+#include"flux_HJ_CDS2.h"
+#include"flux_HJ_CDS2_vrans.h"
+#include"flux_HJ_CDS2_2D.h"
+#include"flux_HJ_CDS2_vrans_2D.h"
+#include<variant>
 
 class weno_hj final : public convection, public increment
 {
@@ -37,8 +40,8 @@ public:
     void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    template<typename GenericField>
-    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&);
+    template<typename FluxT, typename GenericField>
+    inline double aij(FluxT&, lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&);
 
     template<typename GenericField>
     inline double ddx(lexer*, fdm*, const GenericField&, double);
@@ -51,7 +54,8 @@ private:
     static constexpr double sixten=6.0/10.0, treten=3.0/10.0;
     static constexpr double epsilon=0.000001;
 
-    flux *pflux;
+    std::variant<flux_HJ_CDS2, flux_HJ_CDS2_vrans,
+                 flux_HJ_CDS2_2D, flux_HJ_CDS2_vrans_2D> pflux;
 };
 
 #endif

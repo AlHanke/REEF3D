@@ -23,71 +23,70 @@ Author: Hans Bihs
 #include"weno_hj.h"
 #include"lexer.h"
 #include"fdm.h"
-#include"flux_HJ_CDS2.h"
-#include"flux_HJ_CDS2_vrans.h"
-#include"flux_HJ_CDS2_2D.h"
-#include"flux_HJ_CDS2_vrans_2D.h"
 
 weno_hj::weno_hj(lexer *p)
 {
     if(p->j_dir==0)
     {
         if(p->B200>=1 || p->S10==2)
-        pflux = new flux_HJ_CDS2_vrans_2D;
+        pflux.emplace<flux_HJ_CDS2_vrans_2D>();
 
         else
-        pflux = new flux_HJ_CDS2_2D;
+        pflux.emplace<flux_HJ_CDS2_2D>();
     }
     else if(p->j_dir==1)
     {
         if(p->B200>=1 || p->S10==2)
-        pflux = new flux_HJ_CDS2_vrans;
+        pflux.emplace<flux_HJ_CDS2_vrans>();
 
         else
-        pflux = new flux_HJ_CDS2;
+        pflux.emplace<flux_HJ_CDS2>();
     }
 }
 
 void weno_hj::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &vvel, field &wvel)
 {
+    std::visit([&](auto& flux)
+    {
     if(ipol==1)
     {
         FIELDLOOP_INC_MEMBER(a,F,
             FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-            F(i,j,k)+=aij(p,a,b,1,uvel,vvel,wvel); ++n;
+            F(i,j,k)+=aij(flux,p,a,b,1,uvel,vvel,wvel); ++n;
         )
     }
     else if(ipol==2 && p->j_dir==1)
     {
         FIELDLOOP_INC_MEMBER(a,G,
             FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-            G(i,j,k)+=aij(p,a,b,2,uvel,vvel,wvel); ++n;
+            G(i,j,k)+=aij(flux,p,a,b,2,uvel,vvel,wvel); ++n;
         )
     }
     else if(ipol==3)
     {
         FIELDLOOP_INC_MEMBER(a,H,
             FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-            H(i,j,k)+=aij(p,a,b,3,uvel,vvel,wvel); ++n;
+            H(i,j,k)+=aij(flux,p,a,b,3,uvel,vvel,wvel); ++n;
         )
     }
     else if(ipol==4)
     {
         FIELDLOOP_INC_MEMBER(a,L,
             FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-            L(i,j,k)+=aij(p,a,b,4,uvel,vvel,wvel); ++n;
+            L(i,j,k)+=aij(flux,p,a,b,4,uvel,vvel,wvel); ++n;
         )
     }
+    }, pflux);
 }
 
-template<typename GenericField>
-double weno_hj::aij(lexer *p, fdm *a, const GenericField &b, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel)
+template<typename FluxT, typename GenericField>
+double weno_hj::aij(FluxT &pflux, lexer *p, fdm *a, const GenericField &b, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel)
 {
     double iadvec, ivel2, jadvec, jvel2, kadvec, kvel2;
 
-    pflux->u_flux(a,ipol,uvel,iadvec,ivel2);
-    pflux->v_flux(a,ipol,vvel,jadvec,jvel2);
-    pflux->w_flux(a,ipol,wvel,kadvec,kvel2);
+    pflux.u_flux(a,ipol,uvel,iadvec,ivel2);
+    pflux.v_flux(a,ipol,vvel,jadvec,jvel2);
+    pflux.w_flux(a,ipol,wvel,kadvec,kvel2);
 
     return - iadvec*ddx(p,a,b,iadvec)
            - jadvec*ddy(p,a,b,jadvec)

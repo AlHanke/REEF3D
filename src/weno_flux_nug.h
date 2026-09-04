@@ -24,6 +24,14 @@ Author: Hans Bihs
 #define WENO_FLUX_NUG_H_
 
 #include"convection.h"
+#include"flux_face_CDS2.h"
+#include"flux_face_CDS2_vrans.h"
+#include"flux_face_FOU.h"
+#include"flux_face_FOU_vrans.h"
+#include"flux_face_CDS2_2D.h"
+#include"flux_face_CDS2_vrans_2D.h"
+#include"flux_face_FOU_2D.h"
+#include"flux_face_FOU_vrans_2D.h"
 #include"weno_nug_func.h"
 
 // Defined after the includes: weno_nug_func.h #undef's FORCE_INLINE at its end,
@@ -36,8 +44,6 @@ Author: Hans Bihs
     #define FORCE_INLINE inline
 #endif
 
-class flux;
-
 class weno_flux_nug final : public convection, public weno_nug_func
 {
 public:
@@ -47,8 +53,8 @@ public:
     void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    template<typename GenericField>
-    inline double aij(lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
+    template<typename FluxT, typename GenericField>
+    inline double aij(FluxT&, lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
 
     template<typename GenericField>
     FORCE_INLINE double fx(lexer*, fdm*, const GenericField&, const GenericField&, double, int di=0);
@@ -57,7 +63,10 @@ private:
     template<typename GenericField>
     FORCE_INLINE double fz(lexer*, fdm*, const GenericField&, const GenericField&, double, int dk=0);
 
-    flux *pflux;
+    std::variant<flux_face_CDS2, flux_face_FOU,
+                 flux_face_CDS2_vrans, flux_face_FOU_vrans,
+                 flux_face_CDS2_2D, flux_face_FOU_2D,
+                 flux_face_CDS2_vrans_2D, flux_face_FOU_vrans_2D> pflux;
 };
 
 #undef FORCE_INLINE

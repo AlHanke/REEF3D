@@ -25,9 +25,23 @@ Author: Hans Bihs
 
 #include"convection.h"
 #include"increment.h"
-
-class flux;
-class fluxlim;
+#include"flux_face_CDS2.h"
+#include"flux_face_CDS2_vrans.h"
+#include"flux_face_FOU.h"
+#include"flux_face_FOU_vrans.h"
+#include"flux_face_CDS2_2D.h"
+#include"flux_face_CDS2_vrans_2D.h"
+#include"flux_face_FOU_2D.h"
+#include"flux_face_FOU_vrans_2D.h"
+#include"minmod.h"
+#include"vanleer.h"
+#include"umist.h"
+#include"vanalbada.h"
+#include"superbee.h"
+#include"smart.h"
+#include"limo3.h"
+#include"tvdvof.h"
+#include<variant>
 
 class hires final : public convection, public increment
 {
@@ -38,12 +52,15 @@ public:
     void start(lexer*,fdm*,field&,int,field&,field&,field&) override final;
 
 private:
-    template<typename GenericField>
-    inline double aij(lexer*,fdm*,const GenericField&,int,const GenericField&,const GenericField&,const GenericField&,double*,double*,double*);
+    template<typename FluxT, typename LimT, typename GenericField>
+    inline double aij(FluxT&,LimT&,lexer*,fdm*,const GenericField&,int,const GenericField&,const GenericField&,const GenericField&,double*,double*,double*);
 
-    fluxlim *plim;
+    std::variant<minmod, vanleer, umist, vanalbada, superbee, smart, limo3, tvdvof> plim;
 
-    flux *pflux;
+    std::variant<flux_face_CDS2, flux_face_FOU,
+                 flux_face_CDS2_vrans, flux_face_FOU_vrans,
+                 flux_face_CDS2_2D, flux_face_FOU_2D,
+                 flux_face_CDS2_vrans_2D, flux_face_FOU_vrans_2D> pflux;
 };
 
 #endif
