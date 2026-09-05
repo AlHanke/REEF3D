@@ -35,7 +35,7 @@ public:
     virtual ~tvdvof() = default;
 
 protected:
-    inline double phi_impl(double vn1, double, double, double, double vcell) override final
+    inline double phi_impl(double vn1, double, double, double, double vcell) const override final
     {
         const double rp = vcell;
         const double rn = vn1;
