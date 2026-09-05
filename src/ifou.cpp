@@ -121,17 +121,19 @@ void ifou::aij(FluxT &pflux, lexer *p, fdm *a, const GenericField &b, int ipol, 
     if(0.5*(kvel1+kvel2)>=0.0)
     wdir=1.0;
 
-    a->M.p[count] =    udir*ivel2/DX[IM1] - (1.0-udir)*ivel1/DX[IP]
-                  + (p->j_dir?(vdir*jvel2/DY[JM1] - (1.0-vdir)*jvel1/DY[JP]):0.0)
-                  +  wdir*kvel2/DZ[KM1] - (1.0-wdir)*kvel1/DZ[KP];
+    const double invDXM1=1.0/DX[IM1], invDXP=1.0/DX[IP], invDYM1=1.0/DY[JM1], invDYP=1.0/DY[JP], invDZM1=1.0/DZ[KM1], invDZP=1.0/DZ[KP];
 
-    a->M.s[count] = -udir*ivel1/DX[IM1];
-    a->M.n[count] =  (1.0-udir)*ivel2/DX[IP];
+    a->M.p[count] =    udir*ivel2*invDXM1 - (1.0-udir)*ivel1*invDXP
+                  + (p->j_dir?(vdir*jvel2*invDYM1 - (1.0-vdir)*jvel1*invDYP):0.0)
+                  +  wdir*kvel2*invDZM1 - (1.0-wdir)*kvel1*invDZP;
+
+    a->M.s[count] = -udir*ivel1*invDXM1;
+    a->M.n[count] =  (1.0-udir)*ivel2*invDXP;
 
     if(p->j_dir)
     {
-        a->M.e[count] = -vdir*jvel1/DY[JM1];
-        a->M.w[count] = (1.0-vdir)*jvel2/DY[JP];
+        a->M.e[count] = -vdir*jvel1*invDYM1;
+        a->M.w[count] = (1.0-vdir)*jvel2*invDYP;
     }
     else
     {
@@ -139,8 +141,8 @@ void ifou::aij(FluxT &pflux, lexer *p, fdm *a, const GenericField &b, int ipol, 
         a->M.w[count] = 0.0;
     }
 
-    a->M.b[count] = -wdir*kvel1/DZ[KM1];
-    a->M.t[count] =  (1.0-wdir)*kvel2/DZ[KP];
+    a->M.b[count] = -wdir*kvel1*invDZM1;
+    a->M.t[count] =  (1.0-wdir)*kvel2*invDZP;
 
     ++count;
 }

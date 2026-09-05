@@ -74,35 +74,35 @@ void hcds6::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &vvel
         {
             FIELDLOOP_INC_MEMBER(a,F,
                 FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-                F(i,j,k)+=aij(flux,p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data(),p->DXN.data(),p->DYP.data(),p->DZP.data());
+                F(i,j,k)+=aij(flux,p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data());
             )
         }
         else if(ipol==2 && p->j_dir==1)
         {
             FIELDLOOP_INC_MEMBER(a,G,
                 FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-                G(i,j,k)+=aij(flux,p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data(),p->DXP.data(),p->DYN.data(),p->DZP.data());
+                G(i,j,k)+=aij(flux,p,a,b,2,uvel,vvel,wvel,p->DXN.data(),p->DYP.data(),p->DZN.data());
             )
         }
         else if(ipol==3)
         {
             FIELDLOOP_INC_MEMBER(a,H,
                 FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-                H(i,j,k)+=aij(flux,p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data(),p->DXP.data(),p->DYP.data(),p->DZN.data());
+                H(i,j,k)+=aij(flux,p,a,b,3,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZP.data());
             )
         }
         else if(ipol==4)
         {
             FIELDLOOP_INC_MEMBER(a,L,
                 FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),
-                L(i,j,k)+=aij(flux,p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data(),p->DXP.data(),p->DYP.data(),p->DZP.data());
+                L(i,j,k)+=aij(flux,p,a,b,4,uvel,vvel,wvel,p->DXN.data(),p->DYN.data(),p->DZN.data());
             )
         }
     }, pflux);
 }
 
 template<typename FluxT, typename GenericField>
-double hcds6::aij(FluxT &pflux, lexer *p, fdm *a, const GenericField &b, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel, double *DX, double *DY, double *DZ, double *DXX, double *DYY, double *DZZ)
+double hcds6::aij(FluxT &pflux, lexer *p, fdm *a, const GenericField &b, int ipol, const GenericField &uvel, const GenericField &vvel, const GenericField &wvel, double *DX, double *DY, double *DZ)
 {
     double ivel1,ivel2,jvel1,jvel2,kvel1,kvel2;
 

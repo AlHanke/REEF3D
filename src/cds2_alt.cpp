@@ -44,7 +44,7 @@ void cds2_alt::start(lexer *p, fdm *a, field &b, int ipol, field &uvel, field &v
                 F(i,j,k)+=aij(flux,p,a,b,1,uvel,vvel,wvel,p->DXP.data(),p->DYN.data(),p->DZN.data());
             )
         }
-        else if(ipol==2)
+        else if(ipol==2 && p->j_dir==1)
         {
             FIELDLOOP_INC_MEMBER(a,G,
                 FIELD_CONST_INC(b); FIELD_CONST_INC(uvel); FIELD_CONST_INC(vvel); FIELD_CONST_INC(wvel),

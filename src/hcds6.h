@@ -45,7 +45,7 @@ public:
 
 private:
     template<typename FluxT, typename GenericField>
-    inline double aij(FluxT&, lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*, double*, double*, double*);
+    inline double aij(FluxT&, lexer*, fdm*, const GenericField&, int, const GenericField&, const GenericField&, const GenericField&, double*, double*, double*);
 
     std::variant<flux_face_CDS2, flux_face_FOU,
                  flux_face_CDS2_vrans, flux_face_FOU_vrans,
