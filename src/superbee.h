@@ -33,7 +33,7 @@ public:
     virtual ~superbee() = default;
 
 protected:
-    inline double phi_impl(double vn1, double vn2, double vq1, double vq2, double) override final
+    inline double phi_impl(double vn1, double vn2, double vq1, double vq2, double) const override final
     {
         double denom = vq1 - vq2;
         double r = (vn1 - vn2) / (fabs(denom)>1.0e-10 ? denom : 1.0e20);

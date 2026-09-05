@@ -34,7 +34,7 @@ public:
     virtual ~limo3() = default;
 
 protected:
-    inline double phi_impl(double vn1, double vn2, double vq1, double vq2, double) override final
+    inline double phi_impl(double vn1, double vn2, double vq1, double vq2, double) const override final
     {
         double d1 = vn1 - vn2;
         double d2 = vq1 - vq2;
@@ -49,7 +49,7 @@ protected:
     };
 
 private:
-    inline double max(double val1, double val2, double val3)
+    inline double max(double val1, double val2, double val3) const
     {
         double maxi;
 
@@ -66,7 +66,7 @@ private:
 
         return maxi;
     };
-    inline double max(double val1, double val2)
+    inline double max(double val1, double val2) const
     {
         double maxi;
 
@@ -80,7 +80,7 @@ private:
 
         return maxi;
     };
-    inline double min(double val1, double val2, double val3)
+    inline double min(double val1, double val2, double val3) const
     {
         double mini;
 
@@ -97,7 +97,7 @@ private:
 
         return mini;
     };
-    inline double min(double val1,double val2)
+    inline double min(double val1,double val2) const
     {
         double mini;
 
