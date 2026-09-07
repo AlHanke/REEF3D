@@ -260,6 +260,26 @@ public:
     double Xmeantime,Xtotaltime;
     double susptime;
     double gctime, xtime;
+
+    #if USE_AMREX
+    // ---- AMReX ghost-fill phase breakdown (enabled by env REEF_gctiming) ----
+    // Accumulated inside field_amrex::FillDomainBoundary* and reset each step
+    // alongside gctime.  Together these account for the whole of gctime plus the
+    // average_down that start4 currently leaves outside its timed region.
+    double gct_fb0     = 0.0;   ///< level-0 same-level FillBoundary (MPI halo)
+    double gct_slab    = 0.0;   ///< level-0 domain-BC slab ParallelFors
+    double gct_fp2l    = 0.0;   ///< level>0 FillPatchTwoLevels (MPI + C-F interp)
+    double gct_shift   = 0.0;   ///< ShiftBigBoundaryFaceInward
+    double gct_cfnorm  = 0.0;   ///< FillCoarseFineNormalGhost (FACE_* fields)
+    double gct_cfcell  = 0.0;   ///< FillCoarseFineCellGhost   (gcv 41/42, phi)
+    double gct_avgdown = 0.0;   ///< start4 average_down_level
+    // Cell counts touched by the slab / FillPatch phases, split into the
+    // y-direction part.  For a pseudo-2D run (j_dir==0) the y part is pure waste.
+    long   gcc_slab_all = 0, gcc_slab_y = 0;
+    long   gcc_fp2l_all = 0, gcc_fp2l_y = 0;
+    long   gcn_calls    = 0;    ///< FillDomainBoundary* invocations this step
+    #endif
+
     double volume1,volume2,volume3;
     double dtsed,sedtime,slidecells;
     double printtime,sedprinttime,fsfprinttime,fsfsedprinttime,probeprinttime,stateprinttime;

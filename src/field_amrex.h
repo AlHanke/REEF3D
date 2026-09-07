@@ -38,10 +38,67 @@ Author: Alexander Hanke
 #include <AMReX_FillPatchUtil.H>
 #include <AMReX_PhysBCFunct.H>
 #include <AMReX_Interpolater.H>
+#include <AMReX_Utility.H>
 #include <initializer_list>
 #include <utility>
 #include <vector>
 #include <cstdlib>
+
+// =========================================================================
+// Phase-resolved timing of the AMReX ghost fill (env REEF_gctiming).
+//
+// ghostcell::start1/2/3/4 charge the whole of FillDomainBoundary to one
+// counter (p->gctime), which cannot distinguish the level-0 domain-BC slab
+// fill from the level>0 FillPatchTwoLevels or from the two coarse-fine
+// helpers.  These accumulators split it.  The gate is read once, so with the
+// variable unset no clock call is made at all.
+// =========================================================================
+namespace field_amrex_detail
+{
+    inline bool gct_on()
+    {
+        static const bool on = (std::getenv("REEF_gctiming") != nullptr);
+        return on;
+    }
+
+    /// RAII phase timer.  Adds its lifetime to @p acc; inert when the gate is off.
+    struct GcPhase
+    {
+        double* acc;
+        double  t0;
+
+        explicit GcPhase(double& a) noexcept
+            : acc(gct_on() ? &a : nullptr), t0(acc ? amrex::second() : 0.0) {}
+
+        ~GcPhase() { if (acc) { *acc += amrex::second() - t0; } }
+
+        GcPhase(const GcPhase&) = delete;
+        GcPhase& operator=(const GcPhase&) = delete;
+    };
+
+    /// Ghost cells of @p mf, split into the part that lies in the y ghost slabs.
+    /// For a pseudo-2D run (knoy==1, margin==3 in y as well) the y part carries no
+    /// information, so this is the direct measure of the wasted fill volume.
+    inline void count_ghost_cells(const amrex::MultiFab& mf, long& all, long& ypart)
+    {
+        const amrex::IntVect ng = mf.nGrowVect();
+        const amrex::BoxArray& ba = mf.boxArray();
+        const amrex::DistributionMapping& dm = mf.DistributionMap();
+        const int myproc = amrex::ParallelDescriptor::MyProc();
+
+        for (int i = 0, n = static_cast<int>(ba.size()); i < n; ++i)
+        {
+            if (dm[i] != myproc) { continue; }
+            const amrex::Box vbx = ba[i];
+            amrex::Box gbx = vbx; gbx.grow(ng);
+            all += gbx.numPts() - vbx.numPts();
+
+            // y ghost slabs span the full grown x/z extent
+            amrex::Box ybx = gbx; ybx.setSmall(1, vbx.smallEnd(1)); ybx.setBig(1, vbx.bigEnd(1));
+            ypart += gbx.numPts() - ybx.numPts();
+        }
+    }
+}
 
 #if USE_AMREX
 // Create and zero-initialise a MultiFab vector, then register it for AMR regrid.
@@ -318,8 +375,10 @@ private:
     /// Fills ghost-cell slabs on all 6 domain faces via direct ParallelFor calls.
     /// Shared by FillDomainBoundaryImpl (single-component, scomp=0) and
     /// FillDomainBoundaryBatch (multi-component, scomp=batch offset).
+    /// @p p is used only to accumulate the REEF_gctiming slab cell counts.
     template<typename BCDecision>
     static void fill_boundary_slabs(
+        lexer* p,
         amrex::MultiFab& mf_lev,
         int scomp,
         int ncomp,
@@ -477,6 +536,7 @@ void field_amrex::UpdateBCRecsImpl(int gcv, const BCDecision& bc_decision)
 // =========================================================================
 template<typename BCDecision>
 void field_amrex::fill_boundary_slabs(
+    lexer* p,
     amrex::MultiFab& mf_lev,
     int scomp,
     int ncomp,
@@ -485,6 +545,13 @@ void field_amrex::fill_boundary_slabs(
     const amrex::GeometryData& geom_data,
     const amrex::Box& dom)
 {
+    // REEF_gctiming: count the cells each slab writes, split into the y slabs.
+    // The y slabs exist only because margin is applied in y as well; in a
+    // pseudo-2D run every cell in them takes the y_dimension_exists early-out
+    // in MyExtBCFillField and is written as a zero.
+    const bool count = field_amrex_detail::gct_on();
+    long n_all = 0, n_y = 0;
+
     for (amrex::MFIter mfi(mf_lev); mfi.isValid(); ++mfi)
     {
         const amrex::Box& fabbox = mfi.fabbox();
@@ -497,6 +564,7 @@ void field_amrex::fill_boundary_slabs(
         {
             const amrex::Box slab(fabbox.smallEnd(),
                 amrex::IntVect(dom.smallEnd(0)-1, fabbox.bigEnd(1), fabbox.bigEnd(2)));
+            if (count) { n_all += slab.numPts(); }
             amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
                 fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
                      amrex::Real(0), bcrec_d, 0, 0);
@@ -508,6 +576,7 @@ void field_amrex::fill_boundary_slabs(
             const amrex::Box slab(
                 amrex::IntVect(dom.bigEnd(0)+1, fabbox.smallEnd(1), fabbox.smallEnd(2)),
                 fabbox.bigEnd());
+            if (count) { n_all += slab.numPts(); }
             amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
                 fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
                      amrex::Real(0), bcrec_d, 0, 0);
@@ -519,6 +588,7 @@ void field_amrex::fill_boundary_slabs(
             const amrex::Box slab(
                 amrex::IntVect(fabbox.smallEnd(0), fabbox.smallEnd(1), fabbox.smallEnd(2)),
                 amrex::IntVect(fabbox.bigEnd(0), dom.smallEnd(1)-1, fabbox.bigEnd(2)));
+            if (count) { n_all += slab.numPts(); n_y += slab.numPts(); }
             amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
                 fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
                      amrex::Real(0), bcrec_d, 0, 0);
@@ -530,6 +600,7 @@ void field_amrex::fill_boundary_slabs(
             const amrex::Box slab(
                 amrex::IntVect(fabbox.smallEnd(0), dom.bigEnd(1)+1, fabbox.smallEnd(2)),
                 amrex::IntVect(fabbox.bigEnd(0), fabbox.bigEnd(1), fabbox.bigEnd(2)));
+            if (count) { n_all += slab.numPts(); n_y += slab.numPts(); }
             amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
                 fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
                      amrex::Real(0), bcrec_d, 0, 0);
@@ -541,6 +612,7 @@ void field_amrex::fill_boundary_slabs(
             const amrex::Box slab(
                 amrex::IntVect(fabbox.smallEnd(0), fabbox.smallEnd(1), fabbox.smallEnd(2)),
                 amrex::IntVect(fabbox.bigEnd(0), fabbox.bigEnd(1), dom.smallEnd(2)-1));
+            if (count) { n_all += slab.numPts(); }
             amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
                 fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
                      amrex::Real(0), bcrec_d, 0, 0);
@@ -552,12 +624,15 @@ void field_amrex::fill_boundary_slabs(
             const amrex::Box slab(
                 amrex::IntVect(fabbox.smallEnd(0), fabbox.smallEnd(1), dom.bigEnd(2)+1),
                 fabbox.bigEnd());
+            if (count) { n_all += slab.numPts(); }
             amrex::ParallelFor(slab, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept {
                 fill(amrex::IntVect(i,j,k), arr, scomp, ncomp, geom_data,
                      amrex::Real(0), bcrec_d, 0, 0);
             });
         }
     }
+
+    if (count) { p->gcc_slab_all += n_all; p->gcc_slab_y += n_y; }
 }
 
 // =========================================================================
@@ -610,12 +685,17 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
     // For single-level runs it is never used, so construction is deferred into the
     // else branch below to avoid the overhead on every start1/2/3/4 call.
 
+    if (field_amrex_detail::gct_on()) { ++p->gcn_calls; }
+
     LEVEL_LOOP
     {
         auto& mf_lev = get_mf(p->level);
         if(p->level==0)
         {
-            mf_lev.FillBoundary(0, 1, p->amrex_geometry[p->level].periodicity());
+            {
+                field_amrex_detail::GcPhase _t(p->gct_fb0);
+                mf_lev.FillBoundary(0, 1, p->amrex_geometry[p->level].periodicity());
+            }
 
             // Direct slab ParallelFor — bypasses PhysBCFunct/GpuBndryFuncFab dispatch.
             // For each FAB that touches a domain boundary, launch one ParallelFor per
@@ -625,11 +705,18 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
             const amrex::GeometryData geom_data = p->amrex_geometry[p->level].data();
             const amrex::Box          dom       = p->amrex_geometry[p->level].Domain();
 
-            fill_boundary_slabs(mf_lev, 0, mf_lev.nComp(), m_d_bcrec_lev0.data(),
+            field_amrex_detail::GcPhase _t(p->gct_slab);
+            fill_boundary_slabs(p, mf_lev, 0, mf_lev.nComp(), m_d_bcrec_lev0.data(),
                                 fill, geom_data, dom);
         }
         else
         {
+            // Counted before the timer starts so the instrumentation does not
+            // charge itself to the phase it measures.
+            if (field_amrex_detail::gct_on())
+                field_amrex_detail::count_ghost_cells(mf_lev, p->gcc_fp2l_all, p->gcc_fp2l_y);
+            field_amrex_detail::GcPhase _t(p->gct_fp2l);
+
             auto& mf_coarse = get_mf(p->level-1);
             // Multi-level: FillPatchTwoLevels handles MPI exchange and
             // coarse-to-fine interpolation; keep the existing PhysBCFunct path.
@@ -661,14 +748,20 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
                                         BCRecs[p->level], 0);
         }
 
-        ShiftBigBoundaryFaceInward(mf_lev, const_params.data_location, p->amrex_geometry[p->level]);
+        {
+            field_amrex_detail::GcPhase _t(p->gct_shift);
+            ShiftBigBoundaryFaceInward(mf_lev, const_params.data_location, p->amrex_geometry[p->level]);
+        }
     }
 
     // For staggered (face) fields, FillPatchTwoLevels above used cell_cons_interp, which is
     // stagger-blind at coarse-fine interfaces: it mis-places the normal velocity by ~half a
     // fine cell and pulls in the covered coarse face. Overwrite the C-F normal-velocity
     // ghosts with a stagger-correct (face-linear) interpolation of the coarse face velocity.
-    FillCoarseFineNormalGhost();
+    {
+        field_amrex_detail::GcPhase _t(p->gct_cfnorm);
+        FillCoarseFineNormalGhost();
+    }
 
     // REEF_CF_PROJECTION_GROUP member (4) — gcv 41 gates the matrix-consistent C-F cell
     // ghost fill. The 41->40 domain-BC translation above must stay paired with this call;
@@ -688,7 +781,10 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
     // reads it -- same lateral C-F inconsistency as press for variable density); else fall back to
     // the plain d_cf ghost when REEF_PHI_CF_DCF is set. press/pcorr: gcv 41 (d_cf), gcv 42 (transverse).
     if (gcv == 41 || gcv == 42 || (const_params.ghost_transverse && phi_gcv))
+    {
+        field_amrex_detail::GcPhase _t(p->gct_cfcell);
         FillCoarseFineCellGhost(gcv == 42 || (const_params.ghost_transverse && phi_gcv));
+    }
 }
 
 // =========================================================================
@@ -728,6 +824,8 @@ inline void field_amrex::FillDomainBoundaryBatch(
     // Step 3 — one FillPatch call per level covering [scomp, scomp+ncomp)
     using PhantomDecision = amrex_bc_func::Field4BcDecision;
 
+    if (field_amrex_detail::gct_on()) { ++p->gcn_calls; }
+
     LEVEL_LOOP
     {
         // Build combined BCRecs (ncomp entries) from each field's pre-populated BCRecs
@@ -750,11 +848,19 @@ inline void field_amrex::FillDomainBoundaryBatch(
             const amrex::BCRec* bcrec_d = d_bcrec_cache.data();
 
             auto& mf_lev = shared_mf[p->level];
-            fill_boundary_slabs(mf_lev, scomp, ncomp, bcrec_d, fill, geom_data, dom);
+            field_amrex_detail::GcPhase _t(p->gct_slab);
+            fill_boundary_slabs(p, mf_lev, scomp, ncomp, bcrec_d, fill, geom_data, dom);
             amrex::Gpu::streamSynchronize();
         }
         else
         {
+            // Counted before the timer starts so the instrumentation does not
+            // charge itself to the phase it measures.
+            if (field_amrex_detail::gct_on())
+                field_amrex_detail::count_ghost_cells(shared_mf[p->level],
+                                                      p->gcc_fp2l_all, p->gcc_fp2l_y);
+            field_amrex_detail::GcPhase _t(p->gct_fp2l);
+
             auto combined_prev = make_combined_bcrecs(p->level - 1, fields_and_gcvs);
 
             amrex::GpuBndryFuncFab<amrex_bc_func::MyExtBCFillField<PhantomDecision>> cbf(
@@ -790,6 +896,7 @@ inline void field_amrex::FillDomainBoundaryBatch(
 
         // Shift face data at the high-end boundary per-field using each
         // field's own stagger type and its 1-component alias.
+        field_amrex_detail::GcPhase _tshift(p->gct_shift);
         for (auto& [f, gcv] : fields_and_gcvs)
             ShiftBigBoundaryFaceInward(f->GetMultiFab(),
                                        f->dataLocation(),
