@@ -203,6 +203,52 @@ void driver::loop_cfd(fdm* a)
                     cout<<"save time: "<<setprecision(precision)<<t5<<":"<<t5/iter_time_woutprint*100<<endl;
                     cout<<"print time: "<<setprecision(precision)<<t6<<endl;
                 }
+
+                #if USE_AMREX
+                // REEF_gctiming — phase breakdown of the AMReX ghost fill.
+                // Rank-0 values; the decomposition is symmetric so they are
+                // representative, but they are NOT a global reduction.
+                if(std::getenv("REEF_gctiming"))
+                {
+                    const int precision = 4;
+                    const double gsum = p->gct_fb0 + p->gct_slab + p->gct_fp2l
+                                      + p->gct_shift + p->gct_cfnorm + p->gct_cfcell
+                                      + p->gct_avgdown;
+                    const double norm = (p->gctime>0.0 ? p->gctime : 1.0);
+
+                    auto row = [&](const char* name, double t)
+                    {
+                        cout<<"  "<<setw(22)<<left<<name<<right
+                            <<setprecision(precision)<<t<<" s   "
+                            <<setprecision(3)<<(t/norm*100.0)<<"% of gctime"<<endl;
+                    };
+
+                    cout<<"--- ghost-fill breakdown ("<<p->gcn_calls<<" fills, gctime "
+                        <<setprecision(precision)<<p->gctime<<" s) ---"<<endl;
+                    row("lev0 FillBoundary",   p->gct_fb0);
+                    row("lev0 domain slabs",   p->gct_slab);
+                    row("lev>0 FillPatch2Lev", p->gct_fp2l);
+                    row("ShiftBigBoundary",    p->gct_shift);
+                    row("C-F normal ghost",    p->gct_cfnorm);
+                    row("C-F cell ghost",      p->gct_cfcell);
+                    row("average_down",        p->gct_avgdown);
+                    row("accounted",           gsum);
+
+                    // Ghost-cell volume touched, split into the y part. margin is
+                    // applied in y as well, so for a pseudo-2D run (knoy==1) the y
+                    // share is filled but carries no information.
+                    const double slab_pct = p->gcc_slab_all>0
+                        ? 100.0*double(p->gcc_slab_y)/double(p->gcc_slab_all) : 0.0;
+                    const double fp2l_pct = p->gcc_fp2l_all>0
+                        ? 100.0*double(p->gcc_fp2l_y)/double(p->gcc_fp2l_all) : 0.0;
+                    cout<<"  slab cells:     "<<p->gcc_slab_all
+                        <<"  y-part: "<<p->gcc_slab_y
+                        <<" ("<<setprecision(3)<<slab_pct<<"%)"<<endl;
+                    cout<<"  fillpatch cells:"<<p->gcc_fp2l_all
+                        <<"  y-part: "<<p->gcc_fp2l_y
+                        <<" ("<<setprecision(3)<<fp2l_pct<<"%)"<<endl;
+                }
+                #endif
             }
 
             // Write log files
@@ -215,6 +261,13 @@ void driver::loop_cfd(fdm* a)
         p->xtime=0.0;
         p->reinitime=0.0;
         p->wavecalctime=0.0;
+
+        #if USE_AMREX
+        p->gct_fb0=p->gct_slab=p->gct_fp2l=p->gct_shift=0.0;
+        p->gct_cfnorm=p->gct_cfcell=p->gct_avgdown=0.0;
+        p->gcc_slab_all=p->gcc_slab_y=p->gcc_fp2l_all=p->gcc_fp2l_y=0;
+        p->gcn_calls=0;
+        #endif
 
         #if USE_AMREX
         a->press.FillBoundary();

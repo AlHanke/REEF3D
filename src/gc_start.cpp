@@ -176,16 +176,25 @@ void ghostcell::start4(lexer *p, field& f, int gcv, bool do_avgdown)
     f.FillDomainBoundary(gcv);
     endtime=timer();
     p->xtime+=endtime-starttime;
+    p->gctime+=endtime-starttime;
     // average_down overwrites covered coarse cells with the fine average. For the hydrostatic
     // pressure this mixes the fine roface/dz basis into the coarse column, breaking the coarse
     // grad(press) at the covered/non-covered surface boundary (the well-balancing seed). Callers
     // that need the coarse field kept self-consistent (press/press0) pass do_avgdown=false.
     if(do_avgdown)
-    for(int lev=p->nlevs-2; lev>=0; --lev)
     {
-        f.average_down_level(p, lev);
+        const double avgstart=timer();
+        for(int lev=p->nlevs-2; lev>=0; --lev)
+        {
+            f.average_down_level(p, lev);
+        }
+        // Previously this loop ran between endtime and the gctime accumulation, so its
+        // cost was charged to neither counter. Both now include it.
+        const double avgdt=timer()-avgstart;
+        p->xtime+=avgdt;
+        p->gctime+=avgdt;
+        p->gct_avgdown+=avgdt;
     }
-    p->gctime+=endtime-starttime;
     #else
     if(do_comms)
     {

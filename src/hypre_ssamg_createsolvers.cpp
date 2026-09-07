@@ -24,8 +24,6 @@ Author: Alexander Hanke
 #include "lexer.h"
 #include "ghostcell.h"
 
-#include <algorithm>
-
 void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
 {
     // ---- Multi-level: ParCSR GMRES + BoomerAMG -----------------------------------
@@ -99,9 +97,23 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
     // structured-only interpolation within parts (fastest for block-structured grids)
     HYPRE_SStructSSAMGSetInterpType(ssamg, -1);
 
-    // weighted Jacobi — symmetric, required when used as PCG preconditioner
-    HYPRE_SStructSSAMGSetRelaxType(ssamg, 1);
-    HYPRE_SStructSSAMGSetRelaxWeight(ssamg, 0.7);
+    // Smoother: weighted L1-Jacobi with relaxation factor 3/2 -- the SSAMG-opt setting of
+    // Magri, Falgout & Yang, "A New Semistructured Algebraic Multigrid Method",
+    // SIAM J. Sci. Comput. 45(3), S439-S460 (2023), sec. 5. Relax type 2 is L1-Jacobi
+    // (ssamg_relax.c builds z from hypre_SStructMatrixComputeL1Norms instead of the plain
+    // diagonal). L1-Jacobi guarantees rho(I - M^-1 A) < 1 for SPD A, and the paper notes a
+    // user weight in (1, 2/lambda_max(M^-1 A)) -- of which 3/2 is their choice -- recovers
+    // the convergence L1-Jacobi otherwise gives up against weighted Jacobi. Still a diagonal
+    // smoother, so it stays symmetric and remains valid as a PCG preconditioner.
+    //
+    // Caveat worth knowing: calling SetRelaxWeight at all sets usr_set_rweight, which makes
+    // ssamg_setup.c:869 skip hypre's automatic per-level/per-part weight
+    // omega_p = 2/(3 - beta_p/alpha_p) (the paper's eq. 4.2, which adapts the weight to the
+    // anisotropy of each part) and pin this single value on every level and part instead.
+    // That is what the paper does for its L1-Jacobi variants; the adaptive formula targets
+    // plain weighted Jacobi, where it yields values below one.
+    HYPRE_SStructSSAMGSetRelaxType(ssamg, 2);
+    HYPRE_SStructSSAMGSetRelaxWeight(ssamg, 1.5);
 
     // V(1,1) cycle
     HYPRE_SStructSSAMGSetNumPreRelax(ssamg, 1);
@@ -114,38 +126,33 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
     // BoomerAMG closes the coarse-level problem
     HYPRE_SStructSSAMGSetCoarseSolverType(ssamg, 1);
 
-    // Hand off to that BoomerAMG coarse solver early instead of driving SSAMG's own
-    // structured coarsening to hypre's (much smaller) default. Each extra structured level
-    // costs a Galerkin RAP in setup and a relax+restrict+interpolate in every cycle, and on
-    // this operator it buys almost no iteration reduction -- BoomerAMG absorbs the same work
-    // more cheaply. Measured pressure-solve time on the 2D dam break, iteration count flat:
-    //   14.4k cells:  27.1s -> 19.9s   (coarse size 1000)
-    //   115.2k cells: 74.0s -> 63.4s   (coarse size 4000)
-    // Scaled with the problem so the handoff point stays at the same relative depth; the
-    // bounds keep tiny grids from skipping SSAMG entirely (hypre faults with no coarsening
-    // at all) and cap the size of the problem BoomerAMG is handed.
-    int coarse_size = 500;
+    // "Hybrid" handoff to that BoomerAMG coarse solver, at the depth the paper calls
+    // SSAMG-opt: transition at the 7th level, i.e. six pure SSAMG coarsening levels and a
+    // 64x reduction in DOFs before BoomerAMG takes over. SSAMG semicoarsens one direction
+    // per level, so six levels is two full coarsenings of a 3D grid (three of a 2D one).
+    // SSAMG-opt differs from the paper's SSAMG-hybrid in this number alone -- hybrid hands
+    // off at the 10th level (512x) -- and it was the fastest of their four variants.
+    //
+    // hypre exposes no transition-level setter, so the level cap is the mechanism:
+    // ssamg_setup.c stops coarsening at l == max_levels-1 and ssamg_csolver.c then converts
+    // that coarsest SStructMatrix to ParCSR and hands it to BoomerAMG. Level 7 is only an
+    // upper bound -- the loop still exits early once no part has a coarsenable direction
+    // left, so small or thin (pseudo-2D) grids simply get fewer levels.
+    HYPRE_SStructSSAMGSetMaxLevels(ssamg, 7);
 
-    if(p->cellnumtot > 0)
-        coarse_size = std::min(std::max(p->cellnumtot / 20, 500), 20000);
-
-    #if USE_AMREX
-    // On a multi-part (AMR) grid the handoff has to come much sooner. The C-F couplings live
-    // in the graph, not the stencil, so SSAMG's structured coarsening cannot see them and the
-    // coarse operators it builds represent the interface badly -- every structured level past
-    // the first costs a Galerkin RAP and a full cycle sweep while barely reducing iterations.
-    // Handing over after roughly one coarsening (~half the unknowns; cellnumtot counts level 0
-    // only) measured 17.3 -> 13.0 GMRES iterations and 52.7s -> 46.0s of pressure-solve time
-    // on the 2-level dam break. Note this path is only reachable when the ParCSR branch above
-    // is disabled: with it enabled, nlevs>1 never reaches SSAMG, and the ParCSR route is much
-    // the faster of the two anyway (8.6 iterations, 29.2s on the same case and build).
-    // (nlevs comes from grid_amrex, which only replaces grid in lexer under USE_AMREX; a
-    // non-AMReX build is always single level and keeps the rule above.)
-    if(p->cellnumtot > 0 && p->nlevs > 1)
-        coarse_size = std::min(std::max(p->cellnumtot * 7 / 10, 500), 200000);
-    #endif
-
-    HYPRE_SStructSSAMGSetMaxCoarseSize(ssamg, coarse_size);
+    // Disable the size-based cutoff so the level cap above is the sole transition criterion,
+    // as in the paper. This replaces a locally tuned heuristic (coarse size cellnumtot/20,
+    // clamped to [500, 20000], and cellnumtot*7/10 clamped to [500, 200000] for nlevs>1)
+    // that handed off far earlier -- ~5x DOF reduction rather than 64x. That heuristic was
+    // measured faster on the 2D dam break at the time (14.4k cells 27.1s -> 19.9s, 115.2k
+    // cells 74.0s -> 63.4s, iteration count flat), so it is entirely possible SSAMG-opt's
+    // deeper structured hierarchy is slower on this operator than what it replaces; the two
+    // want to be benchmarked against each other rather than assumed.
+    //
+    // Note the coarsest grid still ends up at most 9 rows as the paper describes, because
+    // ssamg_csolver.c leaves BoomerAMG's own MaxCoarseSize at hypre's default of 9 and does
+    // not expose it.
+    HYPRE_SStructSSAMGSetMaxCoarseSize(ssamg, 0);
 
     // Galerkin RAP works for both single-level and multi-level grids.
     // Non-Galerkin RAP keeps a compact stencil on coarse levels but crashes
@@ -188,6 +195,48 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
 
         gmres_created = true;
     }
+    // N10==42: PCG outer solver with SSAMG preconditioner -- the setup every result in the
+    // SSAMG paper is measured with. SSAMG is never run standalone there; §5 states the
+    // preconditioner "is applied to the residual vector via a single V(1,1)-cycle", which is
+    // exactly the MaxIter(1)/Tol(0)/ZeroGuess configuration below, and the paper's stopping
+    // criterion is ||r||_2 < 1e-6 ||b||_2 from a zero initial guess.
+    //
+    // WARNING -- read before selecting this. PCG requires BOTH the operator and the
+    // preconditioner to be SPD, and neither is guaranteed here:
+    //   * The paper's test problem is a Poisson system with Dirichlet data on the k=0 face,
+    //     so it is nonsingular and SPD. REEF3D's pressure Poisson is all-Neumann and singular
+    //     (constant nullspace) whenever no free surface pins it, and near-singular on a thin
+    //     interface band. PCG has no defence against that: the multi-level path above uses
+    //     GMRES precisely because PCG+BoomerAMG diverged there (press ~1e10).
+    //   * SSAMG stays symmetric only because the smoother is diagonal (L1-Jacobi) and the
+    //     cycle is V(1,1) -- so do not switch the smoother to red/black Gauss-Seidel
+    //     (relax type 10) on this path without symmetrising the cycle.
+    // N10==41 (GMRES) is the safe default for this solver; 42 exists to reproduce the paper's
+    // configuration on problems that are actually SPD, and to A/B the SSAMG-opt parameters
+    // under the Krylov method they were tuned for.
+    else if (p->N10 == 42)
+    {
+        HYPRE_SStructSSAMGSetMaxIter(ssamg, 1);
+        HYPRE_SStructSSAMGSetTol(ssamg, 0.0);
+        HYPRE_SStructSSAMGSetZeroGuess(ssamg);
+
+        HYPRE_SStructPCGCreate(pgc->mpi_comm, &pcg_solver);
+        HYPRE_SStructPCGSetMaxIter(pcg_solver, p->N46);
+        HYPRE_SStructPCGSetTol(pcg_solver, p->N44);
+        // Stop on the true residual 2-norm, matching the paper's ||r||_2 < tol*||b||_2
+        // rather than PCG's default preconditioned norm.
+        HYPRE_SStructPCGSetTwoNorm(pcg_solver, 1);
+        HYPRE_SStructPCGSetRelChange(pcg_solver, 0);
+        HYPRE_SStructPCGSetPrintLevel(pcg_solver, 0);
+        HYPRE_SStructPCGSetLogging(pcg_solver, 1);
+
+        HYPRE_SStructPCGSetPrecond(pcg_solver,
+            HYPRE_SStructSSAMGSolve,
+            HYPRE_SStructSSAMGSetup,
+            ssamg);
+
+        pcg_created = true;
+    }
 
     solver_created = true;
     #if USE_AMREX
@@ -208,7 +257,16 @@ void hypre_ssamg::delete_solver()
     #endif
 
     if (gmres_created)
+    {
         HYPRE_SStructGMRESDestroy(gmres_solver);
+        gmres_created = false;
+    }
+
+    if (pcg_created)
+    {
+        HYPRE_SStructPCGDestroy(pcg_solver);
+        pcg_created = false;
+    }
 
     HYPRE_SStructSSAMGDestroy(ssamg);
 }

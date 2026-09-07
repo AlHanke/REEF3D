@@ -72,6 +72,16 @@ void hypre_ssamg::solve(lexer *p)
         HYPRE_SStructSSAMGGetNumIterations(ssamg, &iters);
         HYPRE_SStructSSAMGGetFinalRelativeResidualNorm(ssamg, &relres);
     }
+    // N10==42: PCG + SSAMG preconditioner (the SSAMG paper's setup; SPD operators only --
+    // see the warning in create_solver)
+    else if (p->N10 == 42)
+    {
+        HYPRE_SStructPCGSetup(pcg_solver, A, b, x);
+        HYPRE_SStructPCGSolve(pcg_solver, A, b, x);
+
+        HYPRE_SStructPCGGetNumIterations(pcg_solver, &iters);
+        HYPRE_SStructPCGGetFinalRelativeResidualNorm(pcg_solver, &relres);
+    }
     // N10==41: GMRES + SSAMG preconditioner
     else
     {
