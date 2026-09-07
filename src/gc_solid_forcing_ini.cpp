@@ -67,7 +67,7 @@ void ghostcell::solid_forcing_ini(lexer *p, fdm *a)
 }
 
 template<typename GenericFieldConst>
-inline double ghostcell::Hsolidface(lexer *p, GenericFieldConst& solid, GenericFieldConst& topo, int aa, int bb, int cc)
+double ghostcell::Hsolidface(lexer *p, GenericFieldConst& solid, GenericFieldConst& topo, int aa, int bb, int cc)
 {
     if(p->topoforcing==0 && p->solidread==0)
     return 0.0;

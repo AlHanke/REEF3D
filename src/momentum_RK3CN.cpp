@@ -306,7 +306,7 @@ void momentum_RK3CN::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixd
     pupdate->start(p,a,pgc,a->u,a->v,a->w);
 }
 
-inline void momentum_RK3CN::irhs(lexer *p, fdm *a)
+void momentum_RK3CN::irhs(lexer *p, fdm *a)
 {
     double dens;
     n = 0;
@@ -326,7 +326,7 @@ inline void momentum_RK3CN::irhs(lexer *p, fdm *a)
     }
 }
 
-inline void momentum_RK3CN::addirhs(lexer *p, fdm *a, double alpha)
+void momentum_RK3CN::addirhs(lexer *p, fdm *a, double alpha)
 {
     n = 0;
     ULOOP
@@ -337,7 +337,7 @@ inline void momentum_RK3CN::addirhs(lexer *p, fdm *a, double alpha)
     }
 }
 
-inline void momentum_RK3CN::jrhs(lexer *p, fdm *a)
+void momentum_RK3CN::jrhs(lexer *p, fdm *a)
 {
     double dens;
     n = 0;
@@ -357,7 +357,7 @@ inline void momentum_RK3CN::jrhs(lexer *p, fdm *a)
     }
 }
 
-inline void momentum_RK3CN::addjrhs(lexer *p, fdm *a, double alpha)
+void momentum_RK3CN::addjrhs(lexer *p, fdm *a, double alpha)
 {
     n = 0;
     VLOOP
@@ -368,7 +368,7 @@ inline void momentum_RK3CN::addjrhs(lexer *p, fdm *a, double alpha)
     }
 }
 
-inline void momentum_RK3CN::krhs(lexer *p, fdm *a)
+void momentum_RK3CN::krhs(lexer *p, fdm *a)
 {
     double dens;
     n = 0;
@@ -388,7 +388,7 @@ inline void momentum_RK3CN::krhs(lexer *p, fdm *a)
     }
 }
 
-inline void momentum_RK3CN::addkrhs(lexer *p, fdm *a, double alpha)
+void momentum_RK3CN::addkrhs(lexer *p, fdm *a, double alpha)
 {
     n = 0;
     WLOOP
