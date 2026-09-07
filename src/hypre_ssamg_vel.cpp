@@ -80,14 +80,15 @@ void hypre_ssamg::start_solver123(lexer *p, fdm *a, ghostcell *pgc, field &f, in
     // after ~200 steps). Create/Destroy are trivial next to the Setup that has to run anyway.
     bool rebuild_solver = true;
 
-    #if USE_AMREX
-    // nlevs>1 takes the ParCSR GMRES + BoomerAMG path, which does NOT leak: hypre_BoomerAMGSetup
-    // frees its own previous hierarchy. There the rebuild only has to follow the operator's
-    // identity -- grid_rebuilt (make_grid_7p destroyed A/b/x, and a solver kept across that still
-    // points at freed matrix data -> segfault in hypre_BoomerAMGCycle) or a change in level count.
-    if(p->nlevs > 1)
-        rebuild_solver = (!solver_created || created_nlevs != p->nlevs || grid_rebuilt);
-    #endif
+    // NOTE: this used to be relaxed for nlevs>1, because multi-level took the ParCSR GMRES +
+    // BoomerAMG path, which does NOT leak (hypre_BoomerAMGSetup frees its own previous
+    // hierarchy) and so only had to follow the operator's identity:
+    //     if(p->nlevs > 1)
+    //         rebuild_solver = (!solver_created || created_nlevs != p->nlevs || grid_rebuilt);
+    // That path is currently commented out in create_solver()/solve(), so nlevs>1 now runs the
+    // SStruct PCG/GMRES + SSAMG solver too -- i.e. the leaking one -- while the relaxed guard
+    // kept the solver object alive across steps and leaked a hierarchy per SSAMGSetup. Keep the
+    // rebuild unconditional until the ParCSR path is restored (restore the guard with it).
 
     if(rebuild_solver)
     {

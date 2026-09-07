@@ -145,11 +145,11 @@ void hypre_ssamg::make_grid_7p(lexer *p, fdm *a, ghostcell *pgc)
     // Single level -> SSAMG (native SStruct). Multi level -> assemble as ParCSR so the
     // graph-coupled multi-part operator can be solved with PCG+BoomerAMG (SSAMG
     // setup truncates on multi-part grids).
-    #if USE_AMREX
-    object_type = (p->nlevs > 1) ? HYPRE_PARCSR : HYPRE_SSTRUCT;
-    #else
+    // #if USE_AMREX
+    // object_type = (p->nlevs > 1) ? HYPRE_PARCSR : HYPRE_SSTRUCT;
+    // #else
     object_type = HYPRE_SSTRUCT;
-    #endif
+    // #endif
 
     HYPRE_SStructGraphCreate(pgc->mpi_comm, grid, &graph);
     HYPRE_SStructGraphSetObjectType(graph, object_type);

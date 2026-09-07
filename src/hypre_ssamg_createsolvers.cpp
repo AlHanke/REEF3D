@@ -43,52 +43,52 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
     //     the V-cycle well behaved.
     // par_A/par_b/par_x are extracted after assembly in fill_matrix4; the solver/precond
     // are set up against them in solve().
-    #if USE_AMREX
-    if (p->nlevs > 1)
-    {
-        HYPRE_BoomerAMGCreate(&par_precond);
-        HYPRE_BoomerAMGSetPrintLevel(par_precond, 0);
-        HYPRE_BoomerAMGSetCoarsenType(par_precond, 22);
-        HYPRE_BoomerAMGSetRelaxType(par_precond, 6);     // symmetric hybrid GS
-        HYPRE_BoomerAMGSetNumSweeps(par_precond, 1);
-        // Coarsen all the way down (9 rows) rather than stopping at 200. Stopping early was
-        // only needed to keep BoomerAMG's default Gaussian-elimination coarse solver off a
-        // singular grid -- but CycleRelaxType(...,3) below already replaces GE with relaxation,
-        // so the early stop bought nothing and left a 200-row coarse problem that one relax
-        // sweep cannot solve. Measured on the 2D dam break (2 levels, 18k unknowns): 14.7 -> 8.0
-        // GMRES iterations per solve.
-        HYPRE_BoomerAMGSetMaxCoarseSize(par_precond, 9);
-        HYPRE_BoomerAMGSetCycleRelaxType(par_precond, 6, 3); // relax (not GE) on the coarsest level
-        HYPRE_BoomerAMGSetTol(par_precond, 0.0);
-        HYPRE_BoomerAMGSetMaxIter(par_precond, 1);
+    // #if USE_AMREX
+    // if (p->nlevs > 1)
+    // {
+    //     HYPRE_BoomerAMGCreate(&par_precond);
+    //     HYPRE_BoomerAMGSetPrintLevel(par_precond, 0);
+    //     HYPRE_BoomerAMGSetCoarsenType(par_precond, 22);
+    //     HYPRE_BoomerAMGSetRelaxType(par_precond, 6);     // symmetric hybrid GS
+    //     HYPRE_BoomerAMGSetNumSweeps(par_precond, 1);
+    //     // Coarsen all the way down (9 rows) rather than stopping at 200. Stopping early was
+    //     // only needed to keep BoomerAMG's default Gaussian-elimination coarse solver off a
+    //     // singular grid -- but CycleRelaxType(...,3) below already replaces GE with relaxation,
+    //     // so the early stop bought nothing and left a 200-row coarse problem that one relax
+    //     // sweep cannot solve. Measured on the 2D dam break (2 levels, 18k unknowns): 14.7 -> 8.0
+    //     // GMRES iterations per solve.
+    //     HYPRE_BoomerAMGSetMaxCoarseSize(par_precond, 9);
+    //     HYPRE_BoomerAMGSetCycleRelaxType(par_precond, 6, 3); // relax (not GE) on the coarsest level
+    //     HYPRE_BoomerAMGSetTol(par_precond, 0.0);
+    //     HYPRE_BoomerAMGSetMaxIter(par_precond, 1);
 
-        HYPRE_ParCSRGMRESCreate(pgc->mpi_comm, &par_solver);
-        HYPRE_GMRESSetMaxIter(par_solver, p->N46);
-        HYPRE_GMRESSetKDim(par_solver, 30);              // restart dimension
-        HYPRE_GMRESSetTol(par_solver, p->N44);
-        HYPRE_GMRESSetAbsoluteTol(par_solver, 1e-12);
-        HYPRE_GMRESSetPrintLevel(par_solver, 0);
-        HYPRE_GMRESSetLogging(par_solver, 1);
-        HYPRE_GMRESSetPrecond(par_solver,
-            (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSolve,
-            (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSetup,
-            par_precond);
+    //     HYPRE_ParCSRGMRESCreate(pgc->mpi_comm, &par_solver);
+    //     HYPRE_GMRESSetMaxIter(par_solver, p->N46);
+    //     HYPRE_GMRESSetKDim(par_solver, 30);              // restart dimension
+    //     HYPRE_GMRESSetTol(par_solver, p->N44);
+    //     HYPRE_GMRESSetAbsoluteTol(par_solver, 1e-12);
+    //     HYPRE_GMRESSetPrintLevel(par_solver, 0);
+    //     HYPRE_GMRESSetLogging(par_solver, 1);
+    //     HYPRE_GMRESSetPrecond(par_solver,
+    //         (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSolve,
+    //         (HYPRE_PtrToSolverFcn) HYPRE_BoomerAMGSetup,
+    //         par_precond);
 
-        // Record the creation state on the multi-level path too. Without this the early
-        // return leaves created_nlevs at its stale value (-1) and solver_created false, so
-        // solve() takes the created_nlevs<=1 branch and calls HYPRE_SStructGMRESSetup on the
-        // never-created single-level gmres_solver (nullptr) -> segfault. delete_solver() also
-        // keys off created_nlevs>1 to free the right objects.
-        solver_created = true;
-        created_nlevs  = p->nlevs;
-        grid_rebuilt   = false;
+    //     // Record the creation state on the multi-level path too. Without this the early
+    //     // return leaves created_nlevs at its stale value (-1) and solver_created false, so
+    //     // solve() takes the created_nlevs<=1 branch and calls HYPRE_SStructGMRESSetup on the
+    //     // never-created single-level gmres_solver (nullptr) -> segfault. delete_solver() also
+    //     // keys off created_nlevs>1 to free the right objects.
+    //     solver_created = true;
+    //     created_nlevs  = p->nlevs;
+    //     grid_rebuilt   = false;
 
-        // This solver has no hierarchy yet, so the next solve must build one before it can
-        // start lagging the setup again.
-        par_setup_count = 0;
-        return;
-    }
-    #endif
+    //     // This solver has no hierarchy yet, so the next solve must build one before it can
+    //     // start lagging the setup again.
+    //     par_setup_count = 0;
+    //     return;
+    // }
+    // #endif
 
     // ---- Single level: SSAMG (native SStruct) -----------------------------------
     // SSAMG preconditioner / standalone solver
@@ -247,14 +247,14 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
 
 void hypre_ssamg::delete_solver()
 {
-    #if USE_AMREX
-    if (created_nlevs > 1)
-    {
-        HYPRE_ParCSRGMRESDestroy(par_solver);
-        HYPRE_BoomerAMGDestroy(par_precond);
-        return;
-    }
-    #endif
+    // #if USE_AMREX
+    // if (created_nlevs > 1)
+    // {
+    //     HYPRE_ParCSRGMRESDestroy(par_solver);
+    //     HYPRE_BoomerAMGDestroy(par_precond);
+    //     return;
+    // }
+    // #endif
 
     if (gmres_created)
     {
