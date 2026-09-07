@@ -31,7 +31,7 @@ void hypre_ssamg::solve(lexer *p)
     // Multi-level: GMRES + BoomerAMG on the assembled ParCSR operator (SSAMG cannot set up
     // on multi-part grids; the near-singular all-Neumann operator needs GMRES, not PCG).
     // Single level keeps SSAMG.
-    if (created_nlevs > 1)
+    /*if (created_nlevs > 1)
     {
         // Only rebuild the BoomerAMG hierarchy periodically (see par_setup_count in the
         // header): on a fresh solver, on a fixed period, or as soon as the iteration count
@@ -64,7 +64,7 @@ void hypre_ssamg::solve(lexer *p)
         HYPRE_SStructVectorGather(x);
     }
     // N10==40: standalone SSAMG
-    else if (p->N10 == 40)
+    else*/ if (p->N10 == 40)
     {
         HYPRE_SStructSSAMGSetup(ssamg, A, b, x);
         HYPRE_SStructSSAMGSolve(ssamg, A, b, x);
