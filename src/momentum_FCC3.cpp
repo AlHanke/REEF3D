@@ -1110,7 +1110,7 @@ void momentum_FCC3::face_density(lexer *p, fdm *a, ghostcell *pgc, field1 &rox, 
 }
 
 template<typename GenericField>
-inline double momentum_FCC3::vel_limiter(lexer *p, const GenericField &vel, const GenericField &M, const GenericField &_ro, const GenericField &ro_n)
+double momentum_FCC3::vel_limiter(lexer *p, const GenericField &vel, const GenericField &M, const GenericField &_ro, const GenericField &ro_n)
 {
     auto ro_filter = [] (lexer* p, double ro)
     {

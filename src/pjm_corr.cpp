@@ -169,7 +169,7 @@ static void covered_press_avgdown(lexer* p, field& press)
 // True if the cell (tile-local i,j,k on p->level) is COVERED by the next finer level -- its
 // refined footprint intersects level+1's grids. Covered coarse cells are fine-authoritative,
 // so their predictor pressure-gradient force is spurious (option REEF_SKIP_COVERED_PGRAD).
-static inline bool cell_is_covered(lexer* p, int ci, int cj, int ck)
+static bool cell_is_covered(lexer* p, int ci, int cj, int ck)
 {
     if(p->level >= p->nlevs-1) return false;
     const int gi=ci+p->amr_tile_lo.x, gj=cj+p->amr_tile_lo.y, gk=ck+p->amr_tile_lo.z;
