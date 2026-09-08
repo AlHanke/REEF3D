@@ -34,6 +34,7 @@ Author: Alexander Hanke
 #include <AMReX_GpuContainers.H>
 #include <AMReX_PhysBCFunct.H>
 #include <AMReX_Interpolater.H>
+#include "definitions_amrex.h"
 
 class slice_amrex : public slice_amrex_prim, public slice
 {
@@ -559,12 +560,21 @@ private:
             m_cached_mfi_idx = cur_idx;
             m_cached_level   = cur_lev;
             m_cached_til_idx = cur_tile_index;
+            // Pseudo-2D: fold every j onto the one valid plane. Cold path only — the
+            // accessor stays unchanged for a 3D run. See definitions_amrex.h.
+            if (!p->j_dir)
+            {
+                collapse_y_stride(m_cached_arr4, p->margin);
+                m_cached_oy = 0;
+            }
         }
         else if(cur_tile_index != m_cached_til_idx)
         {
             m_cached_ox      = p->amr_tile_lo.x;
             m_cached_oy      = p->amr_tile_lo.y;
             m_cached_til_idx = cur_tile_index;
+            // Array4 untouched here; only the tile offset needs re-neutralising.
+            if (!p->j_dir) m_cached_oy = 0;
         }
     }
 

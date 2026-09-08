@@ -26,6 +26,7 @@ Author: Alexander Hanke
 #include "ArrayWrapper3D.h"
 #if USE_AMREX
 #include "lexer.h"
+#include "definitions_amrex.h"
 #include <cassert>
 #endif
 
@@ -131,6 +132,15 @@ AMREX_FORCE_INLINE void ArrayWrapper3D::refresh_cache_if_needed() const noexcept
         m_cached_mfi_idx = cur_idx;
         m_cached_level   = cur_lev;
         m_cached_til_idx = cur_tile_index;
+        // Pseudo-2D: fold every j onto the one valid plane. Cold path only — the
+        // accessors stay unchanged for a 3D run. operator[] especially depends on
+        // this: it decodes a flat index over the full p->jmax extent, so it emits
+        // j values the narrowed y ghost no longer covers. See definitions_amrex.h.
+        if (!p->j_dir)
+        {
+            collapse_y_stride(m_cached_arr4, p->margin);
+            m_cached_oy = 0;
+        }
     }
     if (cur_tile_index != m_cached_til_idx)
     {
@@ -138,6 +148,9 @@ AMREX_FORCE_INLINE void ArrayWrapper3D::refresh_cache_if_needed() const noexcept
         m_cached_oy      = p->amr_tile_lo.y;
         m_cached_oz      = p->amr_tile_lo.z;
         m_cached_til_idx = cur_tile_index;
+        // The Array4 is untouched here, so its y stride is still 0; only the tile
+        // offset needs re-neutralising.
+        if (!p->j_dir) m_cached_oy = 0;
     }
 }
 #endif
