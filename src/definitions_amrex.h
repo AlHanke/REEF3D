@@ -74,7 +74,7 @@ Author: Alexander Hanke
 //
 // A 3D run is unaffected: j_dir==1 returns the isotropic margin unchanged.
 // =====================================================================
-inline constexpr int PSEUDO2D_YGHOST = 1;
+inline constexpr int PSEUDO2D_YGHOST = 0;
 
 /// Ghost width for 3D field storage — full margin in x/z, narrowed in y for a
 /// pseudo-2D run. Every field_amrex / fieldint_amrex allocation goes through this.
