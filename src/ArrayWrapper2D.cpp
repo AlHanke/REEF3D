@@ -22,6 +22,7 @@ Author: Alexander Hanke
 
 #include "ArrayWrapper2D.h"
 #include "ArrayWrapper2D_imp.h"
+#include "definitions_amrex.h"
 #include "lexer.h"
 #include <algorithm>
 
@@ -44,7 +45,7 @@ void ArrayWrapper2D::resize(int default_value)
     #if USE_AMREX
     m_default = default_value;
     nlevs   = p->nlevs;
-    m_ghost = amrex::IntVect(AMREX_D_DECL(p->margin, p->margin, 0));
+    m_ghost = slice_ghost(p->margin, p->j_dir);
 
     m_view.resize(nlevs);
     m_unique.resize(nlevs);

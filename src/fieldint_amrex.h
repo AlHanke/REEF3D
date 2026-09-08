@@ -46,10 +46,11 @@ static amrex::Vector<amrex::iMultiFab> make_imf(lexer* p, int ncomp,
     amrex::Vector<amrex::iMultiFab> result(p->nlevs);
     for (int lev = 0; lev < p->nlevs; ++lev)
     {
+        const auto ng = field_ghost(p->margin, p->j_dir);
         result[lev].define(p->ba_for(location, lev),
                            p->amrex_distribution_mapping[lev],
-                           ncomp, p->margin);
-        result[lev].setVal(0, 0, ncomp, p->margin);
+                           ncomp, ng);
+        result[lev].setVal(0, 0, ncomp, ng);
     }
     p->register_imf(dest, ncomp, location);
     return result;

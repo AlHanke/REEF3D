@@ -115,10 +115,11 @@ static amrex::Vector<amrex::MultiFab> make_mf(lexer* p, int ncomp,
     amrex::Vector<amrex::MultiFab> result(p->nlevs);
     for (int lev = 0; lev < p->nlevs; ++lev)
     {
+        const auto ng = field_ghost(p->margin, p->j_dir);
         result[lev].define(p->ba_for(location, lev),
                            p->amrex_distribution_mapping[lev],
-                           ncomp, p->margin);
-        result[lev].setVal(0, 0, ncomp, p->margin);
+                           ncomp, ng);
+        result[lev].setVal(0, 0, ncomp, ng);
     }
     p->register_mf(dest, ncomp, location);
     return result;
