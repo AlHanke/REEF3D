@@ -330,7 +330,7 @@ Authors: Hans Bihs, Alexander Hanke
 #define KBLOOP for(k = -1; k <= KMAX_LOOP+1; ++k)
 
 #define IMALOOP for(i = -MARGIN_I; i <= IMAX_LOOP + MARGIN_I; ++i)
-#define JMALOOP for(j = -MARGIN_J; j <= JMAX_LOOP + MARGIN_J; ++j)
+#define JMALOOP for(j = (p->j_dir ? -MARGIN_J : 0); j <= (p->j_dir ? JMAX_LOOP + MARGIN_J : 0); ++j)
 #define KMALOOP for(k = -MARGIN_K; k <= KMAX_LOOP + MARGIN_K; ++k)
 
 // ulast/vlast/wlast select the staggered direction of the active solve; with

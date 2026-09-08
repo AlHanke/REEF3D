@@ -753,7 +753,7 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
                 amrex::LoopOnCpu(vbx, [&] (int ii, int jj, int kk)
                 {
                     const double s = bx_(ii,jj,kk)+bx_(ii+1,jj,kk)
-                                   + by_(ii,jj,kk)+by_(ii,jj+1,kk)
+                                   + (p->j_dir ? (by_(ii,jj,kk)+by_(ii,jj+1,kk)) : 0.0)
                                    + bz_(ii,jj,kk)+bz_(ii,jj,kk+1);
                     if(s==0.0) ++nzero;
                 });
@@ -824,7 +824,7 @@ void amrex_solver::fill_rhs(lexer *p)
             amrex::ParallelFor(tbx, [=] AMREX_GPU_DEVICE (int ii, int jj, int kk) noexcept
             {
                 r(ii,jj,kk) = -( (uf(ii+1,jj,kk)-uf(ii,jj,kk))*dxi
-                               + (vf(ii,jj+1,kk)-vf(ii,jj,kk))*dyi
+                               + (p->j_dir ? ((vf(ii,jj+1,kk)-vf(ii,jj,kk))*dyi) : 0.0)
                                + (wf(ii,jj,kk+1)-wf(ii,jj,kk))*dzi );
             });
         }

@@ -248,7 +248,7 @@ void ghostcell::startBatch(lexer* p,
                                    static_cast<int>(fields_and_gcvs.size()));
     p->xtime+=timer()-starttime;
     starttime=timer();
-    field_amrex::FillDomainBoundaryBatch(p, shared_mf, scomp, fields_and_gcvs, m_d_bcrec_batch);
+    field_amrex::FillDomainBoundaryBatch(p, shared_mf, scomp, fields_and_gcvs, m_d_bcrec_batch, !p->j_dir);
     p->gctime+=timer()-starttime;
 }
 #endif
