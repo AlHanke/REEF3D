@@ -110,9 +110,9 @@ void iowave::gcio_update_impl(lexer *p)
                 p->IO[Im1JK] = 1;
                 else if(p->gcb4[p->level][n].cs==X_POS)
                 p->IO[Ip1JK] = 1;
-                else if(p->gcb4[p->level][n].cs==Y_NEG)
+                else if(p->j_dir && p->gcb4[p->level][n].cs==Y_NEG)
                 p->IO[IJm1K] = 1;
-                else if(p->gcb4[p->level][n].cs==Y_POS)
+                else if(p->j_dir && p->gcb4[p->level][n].cs==Y_POS)
                 p->IO[IJp1K] = 1;
                 else if(p->gcb4[p->level][n].cs==Z_NEG)
                 p->IO[IJKm1] = 1;
@@ -133,9 +133,9 @@ void iowave::gcio_update_impl(lexer *p)
                 p->IO[Im1JK] = 2;
                 else if(p->gcb4[p->level][n].cs==X_POS)
                 p->IO[Ip1JK] = 2;
-                else if(p->gcb4[p->level][n].cs==Y_NEG)
+                else if(p->j_dir && p->gcb4[p->level][n].cs==Y_NEG)
                 p->IO[IJm1K] = 2;
-                else if(p->gcb4[p->level][n].cs==Y_POS)
+                else if(p->j_dir && p->gcb4[p->level][n].cs==Y_POS)
                 p->IO[IJp1K] = 2;
                 else if(p->gcb4[p->level][n].cs==Z_NEG)
                 p->IO[IJKm1] = 2;
@@ -153,9 +153,9 @@ void iowave::gcio_update_impl(lexer *p)
         p->IO[Im1JK] = 1;
         else if(pBC->patch[qq]->gcb[n][3]==4)
         p->IO[Ip1JK] = 1;
-        else if(pBC->patch[qq]->gcb[n][3]==3)
+        else if(p->j_dir && pBC->patch[qq]->gcb[n][3]==3)
         p->IO[IJm1K] = 1;
-        else if(pBC->patch[qq]->gcb[n][3]==2)
+        else if(p->j_dir && pBC->patch[qq]->gcb[n][3]==2)
         p->IO[IJp1K] = 1;
         else if(pBC->patch[qq]->gcb[n][3]==5)
         p->IO[IJKm1] = 1;

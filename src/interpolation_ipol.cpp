@@ -135,6 +135,8 @@ double interpolation::ipol1(field& b)
 
 double interpolation::ipol2( field& b)
 {
+    if(!p->j_dir) return 0.0;
+
     v1=v2=v3=v4=v5=v6=v7=v8=0.0;
 
     if(p->flag2[IJK]>0)
@@ -369,7 +371,7 @@ double interpolation::ipol4press( field& b)
     denom+=1.0;
     }
     
-    if(p->flag4[IJp1K]>0)
+    if(p->j_dir && p->flag4[IJp1K]>0)
     {
     v4=b(i,j+1,k);
     denom+=1.0;
@@ -393,7 +395,7 @@ double interpolation::ipol4press( field& b)
     denom+=1.0;
     }
     
-    if(p->flag4[IJp1Kp1]>0)
+    if(p->j_dir && p->flag4[IJp1Kp1]>0)
     {
     v8=b(i,j+1,k+1);
     denom+=1.0;
@@ -415,7 +417,7 @@ double interpolation::ipol4ro(fdm *a, field& b)
 
     if(p->flag4[IJK]>0)
     v1=a->phi(i,j,k);
-    if(p->flag4[IJp1K]>0)
+    if(p->j_dir && p->flag4[IJp1K]>0)
     v2=a->phi(i,j+1,k);
     if(p->flag4[Ip1JK]>0)
     v3=a->phi(i+1,j,k);
@@ -423,7 +425,7 @@ double interpolation::ipol4ro(fdm *a, field& b)
     v4=a->phi(i+1,j+1,k);
     if(p->flag4[IJKp1]>0)
     v5=a->phi(i,j,k+1);
-    if(p->flag4[IJp1Kp1]>0)
+    if(p->j_dir && p->flag4[IJp1Kp1]>0)
     v6=a->phi(i,j+1,k+1);
     if(p->flag4[Ip1JKp1]>0)
     v7=a->phi(i+1,j,k+1);
@@ -463,7 +465,7 @@ double interpolation::ipol4phi(fdm *a, field& b)
     denom+=1.0;
     }
     
-    if(p->flag4[IJp1K]>0)
+    if(p->j_dir && p->flag4[IJp1K]>0)
     {
     v4=b(i,j+1,k);
     denom+=1.0;
@@ -487,7 +489,7 @@ double interpolation::ipol4phi(fdm *a, field& b)
     denom+=1.0;
     }
     
-    if(p->flag4[IJp1Kp1]>0)
+    if(p->j_dir && p->flag4[IJp1Kp1]>0)
     {
     v8=b(i,j+1,k+1);
     denom+=1.0;

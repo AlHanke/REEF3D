@@ -58,6 +58,10 @@ Author: Alexander Hanke
 // ghost from the wrapped interior, so the neighbour reads > 0 and no entry is
 // produced.
 //
+// Pseudo-2D runs (p->j_dir==0, only j=0 valid) skip the y-faces (cs 2/3)
+// entirely: there is no real y-boundary to apply a BC to, and generating one
+// would just waste ghost-cell work on the replicated y-slab.
+//
 // Ordering note — this must run after flag4's -1 -> OBJ_FLAG conversion and its
 // FillBoundary (so the domain-exterior ghost ring reads OBJ_FLAG), and before
 // flagfield's GC4LOOP tagging of flag1/2/3, which consumes what this produces.
@@ -106,8 +110,11 @@ void ghostcell::gcb4_generate(lexer *p)
         {
             if(p->flag4(i-1,j,k)<0) ++count;
             if(p->flag4(i+1,j,k)<0) ++count;
-            if(p->flag4(i,j-1,k)<0) ++count;
-            if(p->flag4(i,j+1,k)<0) ++count;
+            if(p->j_dir)
+            {
+                if(p->flag4(i,j-1,k)<0) ++count;
+                if(p->flag4(i,j+1,k)<0) ++count;
+            }
             if(p->flag4(i,j,k-1)<0) ++count;
             if(p->flag4(i,j,k+1)<0) ++count;
         }
@@ -133,7 +140,10 @@ void ghostcell::gcb4_generate(lexer *p)
                 const int gj = GLOBAL_J;
                 const int gk = GLOBAL_K;
 
-                // cs, neighbour flag, and whether that neighbour is outside the domain
+                // cs, neighbour flag, and whether that neighbour is outside the domain.
+                // Faces 2/3 are the y-neighbours (j-1/j+1) and are skipped below for a
+                // pseudo-2D run (j_dir==0), where j=0 is the only valid plane and the
+                // y-faces carry no real boundary.
                 const int  cs_list[6]  = {1, 4, 3, 2, 5, 6};
                 const int  nb_flag[6]  = {p->flag4(i-1,j,k), p->flag4(i+1,j,k),
                                         p->flag4(i,j-1,k), p->flag4(i,j+1,k),
@@ -144,6 +154,9 @@ void ghostcell::gcb4_generate(lexer *p)
 
                 for(int d=0; d<6; ++d)
                 {
+                    if((d==2 || d==3) && p->j_dir==0)
+                        continue;
+
                     if(nb_flag[d] >= 0)
                         continue;
 

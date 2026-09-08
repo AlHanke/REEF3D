@@ -89,7 +89,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
             if(p->flag4[IJK]>0 && p->flag4[Ip1JK]<0)
                 p->flag1[IJK]=-10;
 
-            if(p->flag4[IJK]>0 && p->flag4[IJp1K]<0)
+            if(p->flag4[IJK]>0 && ((p->j_dir && p->flag4[IJp1K]<0) || !p->j_dir))
                 p->flag2[IJK]=-10;
 
             if(p->flag4[IJK]>0 && p->flag4[IJKp1]<0)

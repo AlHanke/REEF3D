@@ -126,13 +126,13 @@ void suspended_IM1::bcsusp_start(lexer* p, fdm* a,ghostcell *pgc, sediment_fdm *
             a->M.n[n] = 0.0;
             }
             
-            if((p->flag4[IJm1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j-1,k)<0)) && p->j_dir==1)
+            if(p->j_dir && (p->flag4[IJm1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j-1,k)<0)))
             {
             a->rhsvec.V[n] -= a->M.e[n]*conc(i,j-1,k);
             a->M.e[n] = 0.0;
             }
             
-            if((p->flag4[IJp1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j+1,k)<0)) && p->j_dir==1)
+            if(p->j_dir && (p->flag4[IJp1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j+1,k)<0)))
             {
             a->rhsvec.V[n] -= a->M.w[n]*conc(i,j+1,k);
             a->M.w[n] = 0.0;

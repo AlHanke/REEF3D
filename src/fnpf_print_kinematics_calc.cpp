@@ -103,7 +103,10 @@ double fnpf_print_kinematics::dudxi(lexer *p, fdm_fnpf *c, ghostcell *pgc) 	// g
 
 double fnpf_print_kinematics::dvdxi(lexer *p, fdm_fnpf *c, ghostcell *pgc) 	// getting dvdxi
 {
-    return (c->V[FIJp1K] - c->V[FIJm1K])/(p->DYN[JP1] + p->DYN[JM1]); 
+    if(!p->j_dir)
+        return 0.0;
+    else
+        return (c->V[FIJp1K] - c->V[FIJm1K])/(p->DYN[JP1] + p->DYN[JM1]);
 }
 
 

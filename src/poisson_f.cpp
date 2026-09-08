@@ -144,16 +144,19 @@ void poisson_f::start(lexer* p, fdm *a, field &press)
             a->M.n[n] = 0.0;
         }
 
-        if(p->flag4[IJm1K]<0 && (j+p->origin_j>0 || p->periodic2==0))
+        if(p->j_dir)
         {
-            a->rhsvec.V[n] -= a->M.e[n]*press(i,j-1,k);
-            a->M.e[n] = 0.0;
-        }
+            if(p->flag4[IJm1K]<0 && (j+p->origin_j>0 || p->periodic2==0))
+            {
+                a->rhsvec.V[n] -= a->M.e[n]*press(i,j-1,k);
+                a->M.e[n] = 0.0;
+            }
 
-        if(p->flag4[IJp1K]<0 && (j+p->origin_j<p->gknoy-1 || p->periodic2==0))
-        {
-            a->rhsvec.V[n] -= a->M.w[n]*press(i,j+1,k);
-            a->M.w[n] = 0.0;
+            if(p->flag4[IJp1K]<0 && (j+p->origin_j<p->gknoy-1 || p->periodic2==0))
+            {
+                a->rhsvec.V[n] -= a->M.w[n]*press(i,j+1,k);
+                a->M.w[n] = 0.0;
+            }
         }
 
         if(p->flag4[IJKm1]<0 && (k+p->origin_k>0 || p->periodic3==0))

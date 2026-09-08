@@ -51,13 +51,16 @@ void hypre_aij::fill_matrix_F_7p(lexer* p, ghostcell* pgc, matrix_diag &M, doubl
         col[count] = rownum7[Ip1JK];
         ++count;
 
-        val[count] = M.e[n];
-        col[count] = rownum7[IJm1K];
-        ++count;
+        if(p->j_dir)
+        {
+            val[count] = M.e[n];
+            col[count] = rownum7[IJm1K];
+            ++count;
 
-        val[count] = M.w[n];
-        col[count] = rownum7[IJp1K];
-        ++count;
+            val[count] = M.w[n];
+            col[count] = rownum7[IJp1K];
+            ++count;
+        }
 
         val[count] = M.b[n];
         col[count] = rownum7[IJKm1];
