@@ -46,7 +46,7 @@ public:
         p = pp;
         p->register_slice(this);
         nlevs = p->nlevs;
-        m_ghost = amrex::IntVect(AMREX_D_DECL(p->margin, p->margin, 0));
+        m_ghost = slice_ghost(p->margin, p->j_dir);
 
         m_view.resize(nlevs);
         m_unique.resize(nlevs);

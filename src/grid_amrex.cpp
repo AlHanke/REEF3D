@@ -406,10 +406,11 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
 
     for (int lev = 0; lev < nlevs; lev++)
     {
-        amr_cell_mf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1, p->margin);
+        amr_cell_mf[lev].define(amrex_box_array[lev], amrex_distribution_mapping[lev], 1,
+                                field_ghost(p->margin, p->j_dir));
     }
 
-    const auto ghost_vec = amrex::IntVect(p->margin, p->margin, p->margin);
+    const auto ghost_vec = field_ghost(p->margin, p->j_dir);
     for (int lev = nlevs-1; lev >= 0; lev--)
     {
         if(lev == nlevs-1)
@@ -852,7 +853,7 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
     // regrid does not call -- so an unconditional rebuild leaves fresh, unfilled
     // ghost bands that the next predictor/rebalance reads as garbage.
     // Level 0 is always fixed; only levels 1..min(old,new)-1 can change.
-    const auto ghost_vec = amrex::IntVect(p->margin, p->margin, p->margin);
+    const auto ghost_vec = field_ghost(p->margin, p->j_dir);
     const int rebuild_hi = std::min(old_nlevs, new_nlevs) - 1;
     if(p->mpirank==0 && changed)
         std::cout << "Rebuilding registered MultiFabs and field aliases for levels 1.." << rebuild_hi << std::endl;
@@ -862,7 +863,8 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         redefine_registered_mf_level(lev);
         rebuild_registered_field_aliases_level(lev);
         amr_cell_mf[lev].define(amrex_box_array[lev],
-                                amrex_distribution_mapping[lev], 1, p->margin);
+                                amrex_distribution_mapping[lev], 1,
+                                field_ghost(p->margin, p->j_dir));
     }
 
     // Add new levels when the level count increased.
@@ -874,7 +876,8 @@ void grid_amrex::regrid_amrex_box_array_and_distribution_mapping(lexer* p, fdm* 
         amr_cell_mf.resize(new_nlevs);
         for (int lev = old_nlevs; lev < new_nlevs; ++lev)
             amr_cell_mf[lev].define(amrex_box_array[lev],
-                                    amrex_distribution_mapping[lev], 1, p->margin);
+                                    amrex_distribution_mapping[lev], 1,
+                                    field_ghost(p->margin, p->j_dir));
     }
 
     // Recompute fine-mask for all active levels whenever box arrays changed.
@@ -1045,7 +1048,7 @@ void grid_amrex::fill_registered_mf_level(int lev)
 
         fine_mf.define(ba_for(e.location, lev),
                             amrex_distribution_mapping[lev],
-                            e.ncomp, margin);
+                            e.ncomp, field_ghost(margin, j_dir));
 
         // AMReX define()s Fabs to signalling NaN. InterpFromCoarseLevel/ParallelCopy
         // below fill only the valid region, and the trailing FillBoundary fills only
@@ -1168,7 +1171,7 @@ void grid_amrex::fill_registered_mf_level(int lev)
 
         fine_imf.define(ba_for(e.location, lev),
                             amrex_distribution_mapping[lev],
-                            e.ncomp, margin);
+                            e.ncomp, field_ghost(margin, j_dir));
 
         // Zero all cells first (see the MF path): the injection + ParallelCopy below
         // fill only the valid region, so an unfilled ghost would otherwise carry an

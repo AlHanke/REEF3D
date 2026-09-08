@@ -72,7 +72,8 @@ void ArrayWrapper3D::resize(int default_value)
     LEVEL_LOOP
     {
         data[p->level].define(p->ba_for(reg_location, p->level),
-                              p->amrex_distribution_mapping[p->level], 1, p->margin);
+                              p->amrex_distribution_mapping[p->level], 1,
+                              field_ghost(p->margin, p->j_dir));
         data[p->level].setVal(default_value);
     }
     #else
