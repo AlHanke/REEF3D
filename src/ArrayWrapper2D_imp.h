@@ -30,6 +30,7 @@ Author: Alexander Hanke
 #include "ArrayWrapper2D.h"
 #if USE_AMREX
 #include "lexer.h"
+#include "definitions_amrex.h"
 #include <cassert>
 #endif
 
@@ -118,12 +119,21 @@ AMREX_FORCE_INLINE void ArrayWrapper2D::refresh_cache_if_needed() const noexcept
         m_cached_mfi_idx = cur_idx;
         m_cached_level   = cur_lev;
         m_cached_til_idx = cur_tile;
+        // Pseudo-2D: fold every j onto the one valid plane. Cold path only — the
+            // accessor stays unchanged for a 3D run. See definitions_amrex.h.
+        if (!p->j_dir)
+        {
+            collapse_y_stride(m_cached_arr4, p->margin);
+            m_cached_oy = 0;
+        }
     }
     else if(cur_tile != m_cached_til_idx)
     {
         m_cached_ox      = p->amr_tile_lo.x;
         m_cached_oy      = p->amr_tile_lo.y;
         m_cached_til_idx = cur_tile;
+        // Array4 untouched here; only the tile offset needs re-neutralising.
+        if (!p->j_dir) m_cached_oy = 0;
     }
 }
 

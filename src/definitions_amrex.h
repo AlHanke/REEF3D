@@ -25,6 +25,45 @@ Author: Alexander Hanke
 
 #if USE_AMREX
 #include <AMReX_MFIter.H>
+#include <AMReX_Array4.H>
+
+// =====================================================================
+// collapse_y_stride — pseudo-2D (knoy==1, j_dir==0) y-index collapse.
+//
+// The ~2400 legacy stencil sites in src/ index fields as f(i,j+-1..margin,k),
+// and every one of them reaches the data through field_amrex / fieldint_amrex
+// operator().  In a pseudo-2D run there is only one valid y plane, and the
+// physical-BC fillers deliberately skip every y ghost cell (amrex_bc_func.h
+// and amrex_bc_func2D.h: "if(!y_dimension_exists && iv[1]!=0)"), so those
+// offsets currently resolve to halo memory that nothing ever fills.
+//
+// Zeroing the Array4's y stride makes every j resolve to the single valid
+// plane.  "j*stride.a[0]" is already a runtime multiply in AMReX's addressing
+// (AMReX_Array4.H, ptr(i,j,k)), so this costs NOTHING per access — no extra
+// instruction, no branch, no clamp.  The whole adjustment lives in the
+// cache-refresh cold path, which runs once per FAB/tile change, so a genuine
+// 3D run pays one well-predicted not-taken branch per tile and its accessor
+// code generation is byte-for-byte unchanged.
+//
+// Idempotent: once stride.a[0] is 0 the pointer re-anchor is a no-op, so this
+// is safe to call from every cache-refresh branch.
+// =====================================================================
+template <typename T>
+AMREX_FORCE_INLINE void collapse_y_stride(amrex::Array4<T>& arr, int margin) noexcept
+{
+    // Re-anchor the base pointer onto y == 0 BEFORE dropping the stride: "p" is
+    // anchored at "begin", so with a zero y stride every access would otherwise
+    // land on the lowest ghost plane (y == -margin) instead of the valid one.
+    arr.p -= arr.begin.vect[1] * arr.stride.a[0];
+    arr.stride.a[0] = 0;
+
+    // With the y stride at 0 the y term drops out of both addressing paths in
+    // AMReX_Array4.H (release "idx1-idx0" and debug "(j-begin)*stride"), so
+    // begin/end in y now only feed AMREX_ARRAY4_INDEX_ASSERT.  Widen them to the
+    // halo range the legacy stencils actually reach so debug builds stay quiet.
+    arr.begin.vect[1] = -margin;
+    arr.end.vect[1]   =  margin + 1;
+}
 
 // =====================================================================
 // MFIter_TILING — the single knob for MFIter tiling. Every tile loop in the
