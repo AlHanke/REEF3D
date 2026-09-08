@@ -62,14 +62,14 @@ void ghostcell::fivec(lexer *p, double *f, sliceint &bc)
         }
         
 
-        if(p->flag7[FIJm1K]<0)
+        if(p->j_dir && p->flag7[FIJm1K]<0)
         {
             f[FIJm1K] = f[FIJK];
             f[FIJm2K] = f[FIJK];
             f[FIJm3K] = f[FIJK];
         }
 
-        if(p->flag7[FIJp1K]<0)
+        if(p->j_dir && p->flag7[FIJp1K]<0)
         {
             f[FIJp1K] = f[FIJK];
             f[FIJp2K] = f[FIJK];
@@ -135,14 +135,14 @@ void ghostcell::fivec_vel(lexer *p, double *f, sliceint &bc)
             f[FIp3JK] = f[FIJK];
         }
 
-        if(p->flag7[FIJm1K]<0)
+        if(p->j_dir && p->flag7[FIJm1K]<0)
         {
             f[FIJm1K] = f[FIJK];
             f[FIJm2K] = f[FIJK];
             f[FIJm3K] = f[FIJK];
         }
 
-        if(p->flag7[FIJp1K]<0)
+        if(p->j_dir && p->flag7[FIJp1K]<0)
         {
             f[FIJp1K] = f[FIJK];
             f[FIJp2K] = f[FIJK];

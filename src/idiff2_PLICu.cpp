@@ -154,13 +154,13 @@ void idiff2_PLIC::diff_u(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field 
 		a->M.n[n] = 0.0;
 		}
 		
-		if(p->flag1[IJm1K]<0)
+		if(p->j_dir && p->flag1[IJm1K]<0)
 		{
 		a->rhsvec.V[n] -= a->M.e[n]*u(i,j-1,k);
 		a->M.e[n] = 0.0;
 		}
 		
-		if(p->flag1[IJp1K]<0)
+		if(p->j_dir && p->flag1[IJp1K]<0)
 		{
 		a->rhsvec.V[n] -= a->M.w[n]*u(i,j+1,k);
 		a->M.w[n] = 0.0;

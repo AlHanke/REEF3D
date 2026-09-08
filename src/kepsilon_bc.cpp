@@ -131,13 +131,13 @@ void kepsilon_bc::bckin_matrix(lexer *p, fdm *a, field &kin)
             a->M.n[n] = 0.0;
         }
 
-        if(p->flag4[IJm1K]<0 && p->j_dir==1)
+        if(p->j_dir && p->flag4[IJm1K]<0)
         {
             a->rhsvec.V[n] -= a->M.e[n]*kin(i,j-1,k);
             a->M.e[n] = 0.0;
         }
 
-        if(p->flag4[IJp1K]<0 && p->j_dir==1)
+        if(p->j_dir && p->flag4[IJp1K]<0)
         {
             a->rhsvec.V[n] -= a->M.w[n]*kin(i,j+1,k);
             a->M.w[n] = 0.0;
@@ -176,13 +176,13 @@ void kepsilon_bc::bcepsilon_matrix(lexer *p, fdm *a, field &eps)
             a->M.n[n] = 0.0;
         }
 
-        if(p->flag4[IJm1K]<0 && p->j_dir==1)
+        if(p->j_dir && p->flag4[IJm1K]<0)
         {
             a->rhsvec.V[n] -= a->M.e[n]*eps(i,j-1,k);
             a->M.e[n] = 0.0;
         }
 
-        if(p->flag4[IJp1K]<0 && p->j_dir==1)
+        if(p->j_dir && p->flag4[IJp1K]<0)
         {
             a->rhsvec.V[n] -= a->M.w[n]*eps(i,j+1,k);
             a->M.w[n] = 0.0;

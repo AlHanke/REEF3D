@@ -158,13 +158,13 @@ void komega_bc::bckin_matrix(fdm *a, lexer *p, field &kin, field &/*eps*/)
             a->M.n[n] = 0.0;
         }
 
-        if((p->flag4[IJm1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j-1,k)<0)) && p->j_dir==1 && p->IO[IJm1K]==0)
+        if(p->j_dir && (p->flag4[IJm1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j-1,k)<0)) && p->IO[IJm1K]==0)
         {
             a->rhsvec.V[n] -= a->M.e[n]*kin(i,j,k);
             a->M.e[n] = 0.0;
         }
 
-        if((p->flag4[IJp1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j+1,k)<0)) && p->j_dir==1 && p->IO[IJp1K]==0)
+        if(p->j_dir && (p->flag4[IJp1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j+1,k)<0)) && p->IO[IJp1K]==0)
         {
             a->rhsvec.V[n] -= a->M.w[n]*kin(i,j,k);
             a->M.w[n] = 0.0;
@@ -228,13 +228,13 @@ void komega_bc::bcomega_matrix(fdm *a, lexer *p, field &kin, field &eps)
             a->M.n[n] = 0.0;
         }
 
-        if((p->flag4[IJm1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j-1,k)<0)) && p->j_dir==1 && p->IO[IJm1K]==0)
+        if(p->j_dir && (p->flag4[IJm1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j-1,k)<0)) && p->IO[IJm1K]==0)
         {
             a->rhsvec.V[n] -= a->M.e[n]*eps(i,j,k);
             a->M.e[n] = 0.0;
         }
 
-        if((p->flag4[IJp1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j+1,k)<0)) && p->j_dir==1 && p->IO[IJp1K]==0)
+        if(p->j_dir && (p->flag4[IJp1K]<0 || (p->DF(i,j,k)>0 && p->DF(i,j+1,k)<0)) && p->IO[IJp1K]==0)
         {
             a->rhsvec.V[n] -= a->M.w[n]*eps(i,j,k);
             a->M.w[n] = 0.0;

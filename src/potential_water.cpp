@@ -199,17 +199,20 @@ void potential_water::laplace(lexer *p, fdm *a, field &phi)
 		a->M.n[n] = 0.0;
 		}
 		
-		if(p->flag4[IJm1K]<0 || a->phi(i,j-1,k)<eps)
-		{
-		a->M.p[n] += a->M.e[n];
-		a->M.e[n] = 0.0;
-		}
-		
-		if(p->flag4[IJp1K]<0 || a->phi(i,j+1,k)<eps)
-		{
-		a->M.p[n] += a->M.w[n];
-		a->M.w[n] = 0.0;
-		}
+        if(p->j_dir)
+        {
+            if(p->flag4[IJm1K]<0 || a->phi(i,j-1,k)<eps)
+            {
+            a->M.p[n] += a->M.e[n];
+            a->M.e[n] = 0.0;
+            }
+
+            if(p->flag4[IJp1K]<0 || a->phi(i,j+1,k)<eps)
+            {
+            a->M.p[n] += a->M.w[n];
+            a->M.w[n] = 0.0;
+            }
+        }
 		
 		if(p->flag4[IJKm1]<0 || a->phi(i,j,k-1)<eps)
 		{
@@ -239,11 +242,14 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
 		if(p->flag4[Ip1JK]<0)
 		bc(i+1,j,k)=0;
 		
-		if(p->flag4[IJm1K]<0)
-		bc(i,j-1,k)=0;
-		
-		if(p->flag4[IJp1K]<0)
-		bc(i,j+1,k)=0;
+        if(p->j_dir)
+        {
+            if(p->flag4[IJm1K]<0)
+            bc(i,j-1,k)=0;
+
+            if(p->flag4[IJp1K]<0)
+            bc(i,j+1,k)=0;
+        }
 		
 		if(p->flag4[IJKm1]<0)
 		bc(i,j,k-1)=0;

@@ -92,13 +92,13 @@ void idiff2_CN::diff_scalar(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, fie
 		a->M.n[n] = 0.0;
 		}
 		
-		if(p->flag4[IJm1K]<0)
+		if(p->j_dir && p->flag4[IJm1K]<0)
 		{
 		a->rhsvec.V[n] -= a->M.e[n]*b(i,j-1,k);
 		a->M.e[n] = 0.0;
 		}
 		
-		if(p->flag4[IJp1K]<0)
+		if(p->j_dir && p->flag4[IJp1K]<0)
 		{
 		a->rhsvec.V[n] -= a->M.w[n]*b(i,j+1,k);
 		a->M.w[n] = 0.0;
@@ -188,13 +188,13 @@ void idiff2_CN::diff_scalar(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, fie
 		a->M.n[n] = 0.0;
 		}
 		
-		if(p->flag4[IJm1K]<0)
+		if(p->j_dir && p->flag4[IJm1K]<0)
 		{
 		a->rhsvec.V[n] -= a->M.e[n]*b(i,j-1,k);
 		a->M.e[n] = 0.0;
 		}
 		
-		if(p->flag4[IJp1K]<0)
+		if(p->j_dir && p->flag4[IJp1K]<0)
 		{
 		a->rhsvec.V[n] -= a->M.w[n]*b(i,j+1,k);
 		a->M.w[n] = 0.0;

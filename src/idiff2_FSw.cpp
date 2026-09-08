@@ -127,13 +127,13 @@ void idiff2_FS::diff_w(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &d
 		a->M.n[n] = 0.0;
 		}
 		
-		if(p->flag3[IJm1K]<0 || p->DF3[IJm1K]<0)
+		if(p->j_dir && (p->flag3[IJm1K]<0 || p->DF3[IJm1K]<0))
 		{
 		a->rhsvec.V[n] -= a->M.e[n]*w(i,j,k);
 		a->M.e[n] = 0.0;
 		}
 		
-		if(p->flag3[IJp1K]<0 || p->DF3[IJp1K]<0)
+		if(p->j_dir && (p->flag3[IJp1K]<0 || p->DF3[IJp1K]<0))
 		{
 		a->rhsvec.V[n] -= a->M.w[n]*w(i,j,k);
 		a->M.w[n] = 0.0;
@@ -176,13 +176,13 @@ void idiff2_FS::diff_w(lexer* p, fdm* a, ghostcell *pgc, solver *psolv, field &d
 		a->M.n[n] = 0.0;
 		}
 		
-		if(p->flag3[IJm1K]<0)
+		if(p->j_dir && p->flag3[IJm1K]<0)
 		{
 		a->rhsvec.V[n] -= a->M.e[n]*w(i,j-1,k);
 		a->M.e[n] = 0.0;
 		}
 		
-		if(p->flag3[IJp1K]<0)
+		if(p->j_dir && p->flag3[IJp1K]<0)
 		{
 		a->rhsvec.V[n] -= a->M.w[n]*w(i,j+1,k);
 		a->M.w[n] = 0.0;

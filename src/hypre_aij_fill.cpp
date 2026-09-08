@@ -57,14 +57,14 @@ void hypre_aij::fill_matrix_7p(lexer* p,fdm* a, ghostcell* pgc, field &f)
             ++count;
         }
 
-        if(p->flag4[IJm1K]>0)
+        if(p->j_dir && p->flag4[IJm1K]>0)
         {
             val[count] = a->M.e[n];
             col[count] = rownum4(i,j-1,k);
             ++count;
         }
 
-        if(p->flag4[IJp1K]>0)
+        if(p->j_dir && p->flag4[IJp1K]>0)
         {
             val[count] = a->M.w[n];
             col[count] = rownum4(i,j+1,k);

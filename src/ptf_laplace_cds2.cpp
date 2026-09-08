@@ -147,18 +147,21 @@ void ptf_laplace_cds2::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
                 a->M.n[n] = 0.0;
             }
 
-            // east
-            if(p->flag4[IJm1K]<AIR_FLAG)
+            if(p->j_dir)
             {
-                a->M.p[n] += a->M.e[n];
-                a->M.e[n] = 0.0;
-            }
+                // east
+                if(p->flag4[IJm1K]<AIR_FLAG)
+                {
+                    a->M.p[n] += a->M.e[n];
+                    a->M.e[n] = 0.0;
+                }
 
-            // west
-            if(p->flag4[IJp1K]<AIR_FLAG)
-            {
-                a->M.p[n] += a->M.w[n];
-                a->M.w[n] = 0.0;
+                // west
+                if(p->flag4[IJp1K]<AIR_FLAG)
+                {
+                    a->M.p[n] += a->M.w[n];
+                    a->M.w[n] = 0.0;
+                }
             }
 
         // FSFBC
@@ -310,18 +313,21 @@ void ptf_laplace_cds2::start(lexer* p, fdm *a, ghostcell *pgc, solver *psolv, fi
                 }
             }
 
-            // east
-            if(p->flag4[IJm1K]==AIR_FLAG)
+            if(p->j_dir)
             {
-                a->rhsvec.V[n] -= a->M.e[n]*f(i,j-1,k);
-                a->M.e[n] = 0.0;
-            }
+                // east
+                if(p->flag4[IJm1K]==AIR_FLAG)
+                {
+                    a->rhsvec.V[n] -= a->M.e[n]*f(i,j-1,k);
+                    a->M.e[n] = 0.0;
+                }
 
-            // west
-            if(p->flag4[IJp1K]==AIR_FLAG)
-            {
-                a->rhsvec.V[n] -= a->M.w[n]*f(i,j+1,k);
-                a->M.w[n] = 0.0;
+                // west
+                if(p->flag4[IJp1K]==AIR_FLAG)
+                {
+                    a->rhsvec.V[n] -= a->M.w[n]*f(i,j+1,k);
+                    a->M.w[n] = 0.0;
+                }
             }
 
             // Free Surface BC

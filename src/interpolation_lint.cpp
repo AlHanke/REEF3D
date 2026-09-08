@@ -283,7 +283,7 @@ double interpolation::lint4c(double *f, int& i,int& j, int& k, double wa, double
 
     if(p->flag4[IJK]>OBJ_FLAG)
     v1=f[IJK];
-    if(p->flag4[IJp1K]>OBJ_FLAG)
+    if(p->j_dir && p->flag4[IJp1K]>OBJ_FLAG)
     v2=f[IJp1K];
     if(p->flag4[Ip1JK]>OBJ_FLAG)
     v3=f[Ip1JK];
@@ -291,7 +291,7 @@ double interpolation::lint4c(double *f, int& i,int& j, int& k, double wa, double
     v4=f[Ip1Jp1K];
     if(p->flag4[IJKp1]>OBJ_FLAG)
     v5=f[IJKp1];
-    if(p->flag4[IJp1Kp1]>OBJ_FLAG)
+    if(p->j_dir && p->flag4[IJp1Kp1]>OBJ_FLAG)
     v6=f[IJp1Kp1];
     if(p->flag4[Ip1JKp1]>OBJ_FLAG)
     v7=f[Ip1JKp1];
