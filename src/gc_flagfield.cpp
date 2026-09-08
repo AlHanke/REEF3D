@@ -104,13 +104,15 @@ void ghostcell::flagfield(lexer *p)
     const bool zlo_c = closed_bc(p->bcside5) && p->periodic3==0;
     const bool zhi_c = closed_bc(p->bcside6) && p->periodic3==0;
 
+    const bool is3D = p->j_dir;
+
     LEVEL_LOOP
     {
         const bool fine = (p->level > 0);
         LEVEL_DOMAIN_DECL(dom)
         TILE_LOOP
         for (i = -margin; i <= (p->amr_tile_hi.x - p->amr_tile_lo.x)+margin; ++i)
-        for (j = -margin; j <= (p->amr_tile_hi.y - p->amr_tile_lo.y)+margin; ++j)
+        for (j = (is3D ? -margin : 0); j <= (is3D ? ((p->amr_tile_hi.y - p->amr_tile_lo.y)+margin) : 0); ++j)
         for (k = -margin; k <= (p->amr_tile_hi.z - p->amr_tile_lo.z)+margin; ++k)
         {
             const int f = p->flag4(i,j,k);

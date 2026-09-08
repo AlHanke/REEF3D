@@ -237,7 +237,8 @@ void field_amrex::FillDomainBoundaryValue(double value, int dir, bool high)
 // ---------------------------------------------------------------------------
 void field_amrex::ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in,
                                               DataLocation data_location,
-                                              const amrex::Geometry& geom)
+                                              const amrex::Geometry& geom,
+                                              bool is2D)
 {
     int dir = -1;
     if      (data_location == DataLocation::FACE_X) dir = 0;
@@ -245,6 +246,7 @@ void field_amrex::ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in,
     else if (data_location == DataLocation::FACE_Z) dir = 2;
 
     if (dir == -1) return;
+    if (is2D && dir == 1) return;
 
     const int domain_hi = geom.Domain().bigEnd(dir);
 

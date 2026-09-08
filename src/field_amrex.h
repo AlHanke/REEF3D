@@ -254,7 +254,8 @@ public:
                                         amrex::Vector<amrex::MultiFab>& shared_mf,
                                         int scomp,
                                         std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs,
-                                        amrex::Gpu::DeviceVector<amrex::BCRec>& d_bcrec_cache);
+                                        amrex::Gpu::DeviceVector<amrex::BCRec>& d_bcrec_cache,
+                                        const bool is2D = false);
 
     void CopyFrom(const field& src) override;
 
@@ -370,7 +371,7 @@ private:
     /// Shifts face data inward at the high-end boundary for face-staggered fields.
     static void ShiftBigBoundaryFaceInward(amrex::MultiFab& mf_in,
                                            DataLocation data_location,
-                                           const amrex::Geometry& geom);
+                                           const amrex::Geometry& geom, bool is2D);
 
     /// Fills ghost-cell slabs on all 6 domain faces via direct ParallelFor calls.
     /// Shared by FillDomainBoundaryImpl (single-component, scomp=0) and
@@ -750,7 +751,7 @@ void field_amrex::FillDomainBoundaryImpl(int gcv, const BCDecision& bc_decision)
 
         {
             field_amrex_detail::GcPhase _t(p->gct_shift);
-            ShiftBigBoundaryFaceInward(mf_lev, const_params.data_location, p->amrex_geometry[p->level]);
+            ShiftBigBoundaryFaceInward(mf_lev, const_params.data_location, p->amrex_geometry[p->level], !const_params.y_dimension_exists);
         }
     }
 
@@ -799,7 +800,8 @@ inline void field_amrex::FillDomainBoundaryBatch(
     amrex::Vector<amrex::MultiFab>& shared_mf,
     int scomp,
     std::initializer_list<std::pair<field_amrex*, int>> fields_and_gcvs,
-    amrex::Gpu::DeviceVector<amrex::BCRec>& d_bcrec_cache)
+    amrex::Gpu::DeviceVector<amrex::BCRec>& d_bcrec_cache,
+    const bool is2D)
 {
     // Step 1 — populate each field's BCRecs on the host using its own gcv
     for (auto& [f, gcv] : fields_and_gcvs)
@@ -900,7 +902,7 @@ inline void field_amrex::FillDomainBoundaryBatch(
         for (auto& [f, gcv] : fields_and_gcvs)
             ShiftBigBoundaryFaceInward(f->GetMultiFab(),
                                        f->dataLocation(),
-                                       p->amrex_geometry[p->level]);
+                                       p->amrex_geometry[p->level], is2D);
     }
 }
 

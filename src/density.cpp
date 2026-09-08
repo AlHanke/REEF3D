@@ -158,9 +158,10 @@ void density::update_faces(lexer* p, fdm* a)
     // construction. A Neumann fill would in fact be WRONG at the domain-boundary low faces: it
     // would replace roface(phi(-1),phi(0)) with roface(phi(0),phi(1)), and that value multiplies
     // the Dirichlet pressure move in poisson_pcorr.
+    const bool is3D = p->j_dir;
     MultiGridLOOP
     for(i = -1; i <= IMAX_LOOP; ++i)
-    for(j = -1; j <= JMAX_LOOP; ++j)
+    for(j = (is3D ? -1 : 0); j <= (is3D ? JMAX_LOOP : 0); ++j)
     for(k = -1; k <= KMAX_LOOP; ++k)
     {
         a->rofx(i,j,k) = roface(p,a, 1,0,0);
