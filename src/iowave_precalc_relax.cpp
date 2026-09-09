@@ -31,215 +31,220 @@ void iowave::wavegen_precalc_relax(lexer *p, ghostcell *pgc)
     p->wavetime = p->simtime;
 
     // pre-calc every iteration
-    count=0;
-    SLICELOOP4
+    if(p->B98==2)
     {
-        xg = xgen(p);
-        yg = ygen(p);
-        dg = distgen(p);
-
-        // Wave Generation
-        if(p->B98==2 && h_switch)
-        {
-            // Zone 1
-            if(dg<1.0e20)
-            eta(i,j) = wave_eta(p,pgc,xg,yg);
-        }
-    }
-    pgc->gcsl_start4(p,eta,50);
-
-    ULOOP
-    {
-        xg = xgen1(p);
-        yg = ygen1(p);
-        dg = distgen(p);
-
-        zloc1 = p->pos1_z();
-        fsfloc = 0.5*(eta(i,j)+eta(i+1,j)) + p->phimean;
-
-        if(zloc1<=fsfloc)
-            z = zloc1-p->phimean;
-        else
-            z = 0.5*(eta(i,j)+eta(i+1,j));
-
-        // Wave Generation
-        if(p->B98==2 && u_switch)
-        {
-            // Zone 1
-            if(dg<1.0e20)
-            {
-                if(zloc1<=fsfloc+epsi)
-                    uval_amrex(i,j,k) = wave_u(p,pgc,xg,yg,z) + p->Ui;
-                else
-                    uval_amrex(i,j,k) = 0.0;
-            }
-            else
-                uval_amrex(i,j,k) = 0.0;
-        }
-    }
-
-    VLOOP
-    {
-        xg = xgen2(p);
-        yg = ygen2(p);
-        dg = distgen(p);
-
-        zloc2 = p->pos2_z();
-        fsfloc = 0.5*(eta(i,j)+eta(i,j+1)) + p->phimean;
-
-
-        if(zloc2<=fsfloc)
-            z = zloc2-p->phimean;
-        else
-            z = 0.5*(eta(i,j)+eta(i,j+1));
-
-        // Wave Generation
-        if(p->B98==2 && v_switch)
-        {
-            // Zone 1
-            if(dg<1.0e20)
-            {
-                if(zloc2<=fsfloc+epsi)
-                    vval_amrex(i,j,k) = wave_v(p,pgc,xg,yg,z);
-                else
-                    vval_amrex(i,j,k) = 0.0;
-            }
-            else
-                vval_amrex(i,j,k) = 0.0;
-        }
-    }
-
-    WLOOP
-    {
-        xg = xgen(p);
-        yg = ygen(p);
-        dg = distgen(p);
-
-        zloc3 = p->pos3_z();
-        fsfloc = eta(i,j) + p->phimean;
-
-        if(zloc3<=fsfloc)
-            z = zloc3-p->phimean;
-        else
-            z = eta(i,j);
-
-        // Wave Generation
-        if(p->B98==2 && w_switch)
-        {
-            // Zone 1
-            if(dg<1.0e20)
-            {
-                if(zloc3<=fsfloc+epsi)
-                    wval_amrex(i,j,k) = wave_w(p,pgc,xg,yg,z);
-                else
-                    wval_amrex(i,j,k) = 0.0;
-            }
-            else
-                wval_amrex(i,j,k) = 0.0;
-        }
-    }
-
-    LOOP
-    {
-        xg = xgen(p);
-        yg = ygen(p);
-        dg = distgen(p);
-
-        // Wave Generation
-        if(p->B98==2 && h_switch)
-        {
-            // Zone 1
-            if(dg<1.0e20)
-                lsval_amrex(i,j,k) = eta(i,j)+p->phimean-p->pos_z();
-            else
-                lsval_amrex(i,j,k) = 0.0;
-        }
-    }
-
-    if(p->A10==3)
-    {
-        count=0;
-        FLOOP
-        {
-            xg = xgen(p);
-            yg = ygen(p);
-            dg = distgen(p);
-
-            zloc4 = p->pos_z();
-            fsfloc = eta(i,j) + p->phimean;
-
-            z=p->ZSN[FIJK]-p->phimean;
-
-            // Wave Generation
-            if(p->B98==2 && f_switch)
-            {
-                // Zone 1
-                if(dg<1.0e20)
-                {
-                    Fival[count] = wave_fi(p,pgc,xg,yg,z);
-                    ++count;
-                }
-            }
-        }
-
-        count=0;
-        LOOP
-        {
-            xg = xgen(p);
-            yg = ygen(p);
-            dg = distgen(p);
-
-            zloc4 = p->pos_z();
-            fsfloc = eta(i,j) + p->phimean;
-
-            if(zloc4<=fsfloc)
-            {
-                if(zloc4<=p->phimean)
-                    z=-(fabs(p->phimean-zloc4));
-                else
-                    z=(fabs(p->phimean-zloc4));
-
-                if(zloc4>fsfloc)
-                z = eta(i,j);
-            }
-
-            // Wave Generation
-            if(p->B98==2 && f_switch)
-            {
-                // Zone 1
-                if(dg<1.0e20)
-                {
-                    if(zloc4<=fsfloc+epsi)
-                        Fival[count] = wave_fi(p,pgc,xg,yg,z);
-                    else
-                        Fival[count] = 0.0;
-
-                    ++count;
-                }
-            }
-        }
-
-        count=0;
         SLICELOOP4
         {
             xg = xgen(p);
             yg = ygen(p);
             dg = distgen(p);
 
-            z = eta(i,j);
+            // Wave Generation
+            if(h_switch)
+            {
+                // Zone 1
+                if(dg<1.0e20)
+                eta(i,j) = wave_eta(p,pgc,xg,yg);
+            }
+        }
+    }
+    pgc->gcsl_start4(p,eta,50);
+
+    if(p->B98==2)
+    {
+        if(u_switch)
+        ULOOP
+        {
+            xg = xgen1(p);
+            yg = ygen1(p);
+            dg = distgen(p);
+
+            zloc1 = p->pos1_z();
+            fsfloc = 0.5*(eta(i,j)+eta(i+1,j)) + p->phimean;
+
+            if(zloc1<=fsfloc)
+                z = zloc1-p->phimean;
+            else
+                z = 0.5*(eta(i,j)+eta(i+1,j));
 
             // Wave Generation
-            if(p->B98==2 && f_switch)
             {
                 // Zone 1
                 if(dg<1.0e20)
                 {
-                    if(zloc4<=fsfloc+epsi)
-                        Fifsfval[count] = wave_fi(p,pgc,xg,yg,z);
+                    if(zloc1<=fsfloc+epsi)
+                        uval_amrex(i,j,k) = wave_u(p,pgc,xg,yg,z) + p->Ui;
                     else
-                        Fifsfval[count] = 0.0;
+                        uval_amrex(i,j,k) = 0.0;
+                }
+                else
+                    uval_amrex(i,j,k) = 0.0;
+            }
+        }
 
-                    ++count;
+        if(v_switch)
+        VLOOP
+        {
+            xg = xgen2(p);
+            yg = ygen2(p);
+            dg = distgen(p);
+
+            zloc2 = p->pos2_z();
+            fsfloc = 0.5*(eta(i,j)+eta(i,j+1)) + p->phimean;
+
+
+            if(zloc2<=fsfloc)
+                z = zloc2-p->phimean;
+            else
+                z = 0.5*(eta(i,j)+eta(i,j+1));
+
+            // Wave Generation
+            {
+                // Zone 1
+                if(dg<1.0e20)
+                {
+                    if(zloc2<=fsfloc+epsi)
+                        vval_amrex(i,j,k) = wave_v(p,pgc,xg,yg,z);
+                    else
+                        vval_amrex(i,j,k) = 0.0;
+                }
+                else
+                    vval_amrex(i,j,k) = 0.0;
+            }
+        }
+
+        if(w_switch)
+        WLOOP
+        {
+            xg = xgen(p);
+            yg = ygen(p);
+            dg = distgen(p);
+
+            zloc3 = p->pos3_z();
+            fsfloc = eta(i,j) + p->phimean;
+
+            if(zloc3<=fsfloc)
+                z = zloc3-p->phimean;
+            else
+                z = eta(i,j);
+
+            // Wave Generation
+            {
+                // Zone 1
+                if(dg<1.0e20)
+                {
+                    if(zloc3<=fsfloc+epsi)
+                        wval_amrex(i,j,k) = wave_w(p,pgc,xg,yg,z);
+                    else
+                        wval_amrex(i,j,k) = 0.0;
+                }
+                else
+                    wval_amrex(i,j,k) = 0.0;
+            }
+        }
+
+        if(h_switch)
+        LOOP
+        {
+            xg = xgen(p);
+            yg = ygen(p);
+            dg = distgen(p);
+
+            // Wave Generation
+            {
+                // Zone 1
+                if(dg<1.0e20)
+                    lsval_amrex(i,j,k) = eta(i,j)+p->phimean-p->pos_z();
+                else
+                    lsval_amrex(i,j,k) = 0.0;
+            }
+        }
+
+        if(p->A10==3)
+        {
+            count=0;
+            if(f_switch)
+            FLOOP
+            {
+                xg = xgen(p);
+                yg = ygen(p);
+                dg = distgen(p);
+
+                zloc4 = p->pos_z();
+                fsfloc = eta(i,j) + p->phimean;
+
+                z=p->ZSN[FIJK]-p->phimean;
+
+                // Wave Generation
+                {
+                    // Zone 1
+                    if(dg<1.0e20)
+                    {
+                        Fival[count] = wave_fi(p,pgc,xg,yg,z);
+                        ++count;
+                    }
+                }
+            }
+
+            count=0;
+            if(f_switch)
+            LOOP
+            {
+                xg = xgen(p);
+                yg = ygen(p);
+                dg = distgen(p);
+
+                zloc4 = p->pos_z();
+                fsfloc = eta(i,j) + p->phimean;
+
+                if(zloc4<=fsfloc)
+                {
+                    if(zloc4<=p->phimean)
+                        z=-(fabs(p->phimean-zloc4));
+                    else
+                        z=(fabs(p->phimean-zloc4));
+
+                    if(zloc4>fsfloc)
+                    z = eta(i,j);
+                }
+
+                // Wave Generation
+                {
+                    // Zone 1
+                    if(dg<1.0e20)
+                    {
+                        if(zloc4<=fsfloc+epsi)
+                            Fival[count] = wave_fi(p,pgc,xg,yg,z);
+                        else
+                            Fival[count] = 0.0;
+
+                        ++count;
+                    }
+                }
+            }
+
+            count=0;
+            if(f_switch)
+            SLICELOOP4
+            {
+                xg = xgen(p);
+                yg = ygen(p);
+                dg = distgen(p);
+
+                z = eta(i,j);
+
+                // Wave Generation
+                {
+                    // Zone 1
+                    if(dg<1.0e20)
+                    {
+                        if(zloc4<=fsfloc+epsi)
+                            Fifsfval[count] = wave_fi(p,pgc,xg,yg,z);
+                        else
+                            Fifsfval[count] = 0.0;
+
+                        ++count;
+                    }
                 }
             }
         }
