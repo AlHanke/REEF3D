@@ -20,35 +20,27 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#ifndef DIFF2XP_H_
-#define DIFF2XP_H_
+#ifndef EDIFF2_H_
+#define EDIFF2_H_
 
-#include"gradient.h"
-#include"diffusion.h"
-
-using namespace std;
+#include "diffusion.h"
+#include "gradient.h"
 
 class ediff2 final : public diffusion, public gradient
 {
-
 public:
+    ediff2(lexer*);
+    virtual ~ediff2() = default;
 
-	ediff2(lexer*);
-	virtual ~ediff2();
-
-	void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, double, double) override final;
-	void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, double, double) override final;
+    void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, double, double) override final;
+    void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, double, double) override final;
     void idiff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, double, double) override final;
-    
+
     void diff_u(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double) override final;
-	void diff_v(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double) override final;
-	void diff_w(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double) override final;
+    void diff_v(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double) override final;
+    void diff_w(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, field&, field&, double) override final;
 
 private:
-    
-	int gcval_u,gcval_v,gcval_w,gcval_scalar;
-	double D;
-	double ga;
-	double u_ijk,v_ijk,w_ijk,ev_ijk,visc_ijk;
+    static constexpr int gcval_u = 10, gcval_v = 11, gcval_w = 12;
 };
 #endif
