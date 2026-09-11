@@ -86,7 +86,7 @@ double interpolation::ccipol4V(double *f, slice &WL, slice &bed, double xp, doub
     k = MIN(k,p->knoz-1);
     */
     
-    wc = MAX(wc,0);
+    wc = MAX(wc,0.0);
     wc = MIN(wc,1.0);
 
     if(p->j_dir==0)
