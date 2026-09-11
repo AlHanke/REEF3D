@@ -304,7 +304,7 @@ void sflow_vtp_fsf::print2D(lexer *p, fdm2D* b, ghostcell* pgc, sflow_turbulence
         {
             ffn=p->sl_ipol4eta(p->wet,b->eta,b->bed) + p->wd;
             if(p->wet[IJ]==1 && p->wet[Ip1J]==1 && p->wet[IJp1]==1 && p->wet[Ip1Jp1]==1)
-                ffn = MAX(ffn,b->bednode(i,j)+p->A244);
+                ffn = MAX(ffn,float(b->bednode(i,j)+p->A244));
         }
         else if(p->P73==1)
             ffn=0.5*(b->hx(i,j)+b->hx(i,j+1)) + p->sl_ipol4(b->bed);
