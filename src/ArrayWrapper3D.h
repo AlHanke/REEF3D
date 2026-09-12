@@ -107,8 +107,8 @@ public:
     inline amrex::iMultiFab& GetMultiFab();
     inline const amrex::iMultiFab& GetMultiFab() const;
 
-    inline amrex::iMultiFab& GetMultiFab(int level) {return m_shared ? (*m_shared)[level] : data[level];};
-    inline const amrex::iMultiFab& GetMultiFab(int level) const {return m_shared ? (*m_shared)[level] : data[level];};
+    inline amrex::iMultiFab& GetMultiFab(int level) {return m_shared ? (*m_shared)[static_cast<size_t>(level)] : data[static_cast<size_t>(level)];};
+    inline const amrex::iMultiFab& GetMultiFab(int level) const {return m_shared ? (*m_shared)[static_cast<size_t>(level)] : data[static_cast<size_t>(level)];};
     #endif
 
 private:
