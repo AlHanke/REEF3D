@@ -45,7 +45,7 @@ void sflow_HLL::precalc(lexer* p, fdm2D *b, int ipolL, slice &eta)
 {
 }
 
-void sflow_HLL::start(lexer *&p, fdm2D *&b, int ipol, slice &eta)
+void sflow_HLL::start(lexer *p, fdm2D *b, slice&, int ipol, slice &eta, slice&)
 {
     if(ipol==1)
     aij_U(p,b,1);
