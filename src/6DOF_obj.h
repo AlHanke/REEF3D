@@ -51,7 +51,7 @@ class sixdof_obj : public ddweno_f_nug, private vtp3D
 {
 public:
     
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	
     sixdof_obj(lexer*, ghostcell*, int);
 	virtual ~sixdof_obj();
