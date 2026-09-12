@@ -44,18 +44,17 @@ public:
     enum class DataLocation : unsigned int { CELL_CENTERED = 0, FACE_X = 1, FACE_Y = 2};
     enum Gbc : int { INFLOW = 1, OUTFLOW = 2, SYMMETRY = 3, WAVEGEN = 6, NUMBEACH = 7, WALL = 21 };
 private:
-    enum Dir : int { X_NEG = 1, X_POS = 4, Y_NEG = 3, Y_POS = 2};
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     static bool is_cs_x(int cs)
     {
-        return cs == Dir::X_NEG || cs == Dir::X_POS;
+        return cs == X_NEG || cs == X_POS;
     }
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     static bool is_cs_y(int cs)
     {
-        return cs == Dir::Y_NEG || cs == Dir::Y_POS;
+        return cs == Y_NEG || cs == Y_POS;
     }
 public:
     struct Slice1BcDecision {
@@ -388,10 +387,10 @@ public:
                 // Pure face cell.  Encode face as an index matching face_labels:
                 //   0=X_NEG  1=X_POS  2=Y_NEG  3=Y_POS
                 int face_idx, cs;
-                if      (out_x == -1) { face_idx = 0; cs = Dir::X_NEG; }
-                else if (out_x ==  1) { face_idx = 1; cs = Dir::X_POS; }
-                else if (out_y == -1) { face_idx = 2; cs = Dir::Y_NEG; }
-                else                  { face_idx = 3; cs = Dir::Y_POS; }
+                if      (out_x == -1) { face_idx = 0; cs = X_NEG; }
+                else if (out_x ==  1) { face_idx = 1; cs = X_POS; }
+                else if (out_y == -1) { face_idx = 2; cs = Y_NEG; }
+                else                  { face_idx = 3; cs = Y_POS; }
 
                 // Path B: single-component fields (the common case) read their
                 // label from the inline face_labels array stored in the functor,
@@ -470,35 +469,35 @@ public:
                     dest(iv, comp) = amrex::Real(0);
                     break;
                 case BoundaryConditionTypeLabel::OUTFLOWBC: // only possible for x-dir
-                    if(cs==Dir::X_POS)
+                    if(cs==X_POS)
                         dest(iv, comp) = std::max(amrex::Real(0), dest(interior, comp));
                     else
                         dest(iv, comp) = dest(interior, comp);
                     break;
                 case BoundaryConditionTypeLabel::POTENTIAL:
-                    if(cs==Dir::X_NEG)
+                    if(cs==X_NEG)
                         dest(iv, comp) = dest(interior, comp) - m_params.Ui * geom.CellSize(0);
-                    else if(cs==Dir::X_POS)
+                    else if(cs==X_POS)
                         dest(iv, comp) = dest(interior, comp) + m_params.Uo * geom.CellSize(0);
                     break;
 
                 case BoundaryConditionTypeLabel::SOMMERFELD:
-                    if(cs==Dir::X_NEG)
+                    if(cs==X_NEG)
                     {
                         const double interior_value = dest(interior, comp);
                         dest(iv, comp) = interior_value - m_params.dt * sqrt(m_const_params.gravity * (m_params.wd + interior_value)) * (dest(interior+amrex::IntVect(1,0,0), comp) - interior_value)/geom.CellSize(0);
                     }
-                    else if(cs==Dir::X_POS)
+                    else if(cs==X_POS)
                     {
                         const double interior_value = dest(interior, comp);
                         dest(iv, comp) = interior_value - m_params.dt * sqrt(m_const_params.gravity * (m_params.wd + interior_value)) * (dest(interior+amrex::IntVect(-1,0,0), comp) - interior_value)/geom.CellSize(0);
                     }
-                    else if(cs==Dir::Y_NEG)
+                    else if(cs==Y_NEG)
                     {
                         const double interior_value = dest(interior, comp);
                         dest(iv, comp) = interior_value - m_params.dt * sqrt(m_const_params.gravity * (m_params.wd + interior_value)) * (dest(interior+amrex::IntVect(0,1,0), comp) - interior_value)/geom.CellSize(0);
                     }
-                    else if(cs==Dir::Y_POS)
+                    else if(cs==Y_POS)
                     {
                         const double interior_value = dest(interior, comp);
                         dest(iv, comp) = interior_value - m_params.dt * sqrt(m_const_params.gravity * (m_params.wd + interior_value)) * (dest(interior+amrex::IntVect(0,-1,0), comp) - interior_value)/geom.CellSize(0);

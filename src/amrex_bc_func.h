@@ -45,24 +45,23 @@ public:
     enum class DataLocation : unsigned int { CELL_CENTERED = 0, FACE_X = 1, FACE_Y = 2, FACE_Z = 3 };
     enum Gbc : int { INFLOW = 1, OUTFLOW = 2, SYMMETRY = 3, WAVEGEN = 6, NUMBEACH = 7, WALL = 21 };
 private:
-    enum Dir : int { X_NEG = 1, X_POS = 4, Y_NEG = 3, Y_POS = 2, Z_NEG = 5, Z_POS = 6 };
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     static bool is_cs_x(int cs)
     {
-        return cs == Dir::X_NEG || cs == Dir::X_POS;
+        return cs == X_NEG || cs == X_POS;
     }
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     static bool is_cs_y(int cs)
     {
-        return cs == Dir::Y_POS || cs == Dir::Y_NEG;
+        return cs == Y_POS || cs == Y_NEG;
     }
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     static bool is_cs_z(int cs)
     {
-        return cs == Dir::Z_NEG || cs == Dir::Z_POS;
+        return cs == Z_NEG || cs == Z_POS;
     }
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -299,8 +298,8 @@ public:
             if (is_parallel_wall && is_cs_z(cs) && gcv == 9)
                 return BoundaryConditionTypeLabel::NOSLIP;
 
-            if (is_parallel_wall && matches_gcv(gcv, {12}) && (cs == Dir::Z_POS
-                || (cs == Dir::Z_NEG && m_params.A10 == 6)))
+            if (is_parallel_wall && matches_gcv(gcv, {12}) && (cs == Z_POS
+                || (cs == Z_NEG && m_params.A10 == 6)))
                 return m_params.orth_label;
 
             if (bc == Gbc::WAVEGEN && matches_gcv(gcv, {9, 12}))
@@ -381,7 +380,7 @@ public:
 
             if (gcv == 2)
             {
-                if (bc != Gbc::WALL && cs != Dir::Z_NEG)
+                if (bc != Gbc::WALL && cs != Z_NEG)
                     return BoundaryConditionTypeLabel::NEUMANN;
                 return BoundaryConditionTypeLabel::NONE;
             }
@@ -437,7 +436,7 @@ public:
             switch (gcv)
             {
                 case 20:
-                    if (is_symm && cs == Dir::Z_POS)
+                    if (is_symm && cs == Z_POS)
                         return BoundaryConditionTypeLabel::NOSLIP;
                     if (is_wavegen || is_numbeach)
                         return BoundaryConditionTypeLabel::NOSLIP;
@@ -463,11 +462,11 @@ public:
                         return BoundaryConditionTypeLabel::POTENTIAL;
                     return BoundaryConditionTypeLabel::NONE;
                 case 250:
-                    if ((is_numbeach || is_wall) && cs != Dir::Z_NEG)
+                    if ((is_numbeach || is_wall) && cs != Z_NEG)
                         return BoundaryConditionTypeLabel::NEUMANN;
                     if (is_inflow || is_outflow || is_wavegen || is_numbeach)
                         return BoundaryConditionTypeLabel::NEUMANN;
-                    if (is_symm && cs != Dir::Z_POS)
+                    if (is_symm && cs != Z_POS)
                         return BoundaryConditionTypeLabel::NEUMANN;
                     return BoundaryConditionTypeLabel::NONE;
                 case 101:
@@ -535,17 +534,17 @@ public:
         AMREX_GPU_DEVICE AMREX_FORCE_INLINE
         bool heat_match(int cs) const
         {
-            if (m_params.H61 == 1 && cs == Dir::X_NEG)
+            if (m_params.H61 == 1 && cs == X_NEG)
                 return true;
-            if (m_params.H62 == 1 && cs == Dir::Y_POS)
+            if (m_params.H62 == 1 && cs == Y_POS)
                 return true;
-            if (m_params.H63 == 1 && cs == Dir::Y_NEG)
+            if (m_params.H63 == 1 && cs == Y_NEG)
                 return true;
-            if (m_params.H64 == 1 && cs == Dir::X_POS)
+            if (m_params.H64 == 1 && cs == X_POS)
                 return true;
-            if (m_params.H65 == 1 && cs == Dir::Z_NEG)
+            if (m_params.H65 == 1 && cs == Z_NEG)
                 return true;
-            if (m_params.H66 == 1 && cs == Dir::Z_POS)
+            if (m_params.H66 == 1 && cs == Z_POS)
                 return true;
             return false;
         }
@@ -642,12 +641,12 @@ public:
                 // Pure face cell.  Encode face as an index matching face_labels:
                 //   0=Z_NEG  1=Z_POS  2=X_NEG  3=X_POS  4=Y_NEG  5=Y_POS
                 int face_idx, cs;
-                if      (out_z == -1) { face_idx = 0; cs = Dir::Z_NEG; }
-                else if (out_z ==  1) { face_idx = 1; cs = Dir::Z_POS; }
-                else if (out_x == -1) { face_idx = 2; cs = Dir::X_NEG; }
-                else if (out_x ==  1) { face_idx = 3; cs = Dir::X_POS; }
-                else if (out_y == -1) { face_idx = 4; cs = Dir::Y_NEG; }
-                else                  { face_idx = 5; cs = Dir::Y_POS; }
+                if      (out_z == -1) { face_idx = 0; cs = Z_NEG; }
+                else if (out_z ==  1) { face_idx = 1; cs = Z_POS; }
+                else if (out_x == -1) { face_idx = 2; cs = X_NEG; }
+                else if (out_x ==  1) { face_idx = 3; cs = X_POS; }
+                else if (out_y == -1) { face_idx = 4; cs = Y_NEG; }
+                else                  { face_idx = 5; cs = Y_POS; }
 
                 // Path B: single-component fields (the common case) read their
                 // label from the inline face_labels array stored in the functor,
@@ -695,7 +694,7 @@ public:
 
                 if (is_xz_edge && is_face_xz)
                 {
-                    const int z_side_idx = (out_z == -1) ? Dir::Z_NEG-1 : Dir::Z_POS-1; // 4=Z_NEG, 5=Z_POS
+                    const int z_side_idx = (out_z == -1) ? Z_NEG-1 : Z_POS-1; // 4=Z_NEG, 5=Z_POS
                     if (out_x == -1) // X_NEG + Z edges
                     {
                         if ((m_const_params.bc_values[0] == Gbc::WAVEGEN
@@ -747,37 +746,37 @@ public:
                     dest(iv, comp) = amrex::Real(0);
                     break;
                 case BoundaryConditionTypeLabel::OUTFLOWBC:
-                    if(cs==Dir::X_NEG)
+                    if(cs==X_NEG)
                         dest(iv, comp) = dest(interior, comp) - (m_params.dt/geom.CellSize(0))*m_params.Uo*(dest(interior+amrex::IntVect(1,0,0), comp)-dest(interior, comp));
-                    else if(cs==Dir::X_POS)
+                    else if(cs==X_POS)
                         dest(iv, comp) = std::max(amrex::Real(0), dest(interior, comp) - (m_params.dt/geom.CellSize(0))*m_params.Uo*(dest(interior, comp)-dest(interior+amrex::IntVect(-1,0,0), comp)));
-                    else if(cs==Dir::Y_NEG)
+                    else if(cs==Y_NEG)
                         dest(iv, comp) = dest(interior, comp) - (m_params.dt/geom.CellSize(1))*m_params.Uo*(dest(interior+amrex::IntVect(0,1,0), comp)-dest(interior, comp));
-                    else if(cs==Dir::Y_POS)
+                    else if(cs==Y_POS)
                         dest(iv, comp) = dest(interior, comp) - (m_params.dt/geom.CellSize(1))*m_params.Uo*(dest(interior, comp)-dest(interior+amrex::IntVect(0,0,-1), comp));
-                    else if(cs==Dir::Z_NEG)
+                    else if(cs==Z_NEG)
                         dest(iv, comp) = dest(interior, comp) - (m_params.dt/geom.CellSize(2))*m_params.Uo*(dest(interior+amrex::IntVect(0,0,1), comp)-dest(interior, comp));
-                    else if(cs==Dir::Z_POS)
+                    else if(cs==Z_POS)
                         dest(iv, comp) = dest(interior, comp) - (m_params.dt/geom.CellSize(2))*m_params.Uo*(dest(interior, comp)-dest(interior+amrex::IntVect(0,0,-1), comp));
                     break;
                 case BoundaryConditionTypeLabel::POTENTIAL:
-                    if(cs==Dir::X_NEG)
+                    if(cs==X_NEG)
                         dest(iv, comp) = m_params.Ui * geom.CellSize(0) + dest(interior, comp);
-                    else if(cs==Dir::X_POS)
+                    else if(cs==X_POS)
                         dest(iv, comp) = m_params.Uo * geom.CellSize(0) + dest(interior, comp);
                     break;
                 case BoundaryConditionTypeLabel::HEATBC:
-                    if(cs==Dir::X_NEG)
+                    if(cs==X_NEG)
                         dest(iv, comp) = m_const_params.heat_values[0];
-                    else if(cs==Dir::X_POS)
+                    else if(cs==X_POS)
                         dest(iv, comp) = m_const_params.heat_values[1];
-                    else if(cs==Dir::Y_NEG)
+                    else if(cs==Y_NEG)
                         dest(iv, comp) = m_const_params.heat_values[2];
-                    else if(cs==Dir::Y_POS)
+                    else if(cs==Y_POS)
                         dest(iv, comp) = m_const_params.heat_values[3];
-                    else if(cs==Dir::Z_NEG)
+                    else if(cs==Z_NEG)
                         dest(iv, comp) = m_const_params.heat_values[4];
-                    else if(cs==Dir::Z_POS)
+                    else if(cs==Z_POS)
                         dest(iv, comp) = m_const_params.heat_values[5];
                     break;
             }
