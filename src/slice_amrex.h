@@ -104,13 +104,13 @@ public:
     slice_amrex(slice_amrex&&) = delete;
     slice_amrex& operator=(slice_amrex&&) = delete;
 
-    inline double& operator()(int ii, int jj) noexcept
+    inline double& operator()(int ii, int jj) noexcept override final
     {
         refresh_cache_if_needed();
         return m_cached_arr4(ii + m_cached_ox, jj + m_cached_oy, 0, 0);
     };
 
-    inline const double& operator()(int ii, int jj) const noexcept
+    inline const double& operator()(int ii, int jj) const noexcept  override final
     {
         refresh_cache_if_needed();
         return m_cached_arr4(ii + m_cached_ox, jj + m_cached_oy, 0, 0);
@@ -209,7 +209,6 @@ public:
     // Must be overridden by the concrete slice types to supply their BCDecision.
     // -----------------------------------------------------------------
     virtual void UpdateBCRecs(int gcv) = 0;
-    virtual void FillDomainBoundary(int gcv) = 0;
 
 protected:
     const amrex_bc_func2D::ConstMyExtBCFillSliceParams const_params = {};
