@@ -104,7 +104,7 @@ Authors: Hans Bihs, Alexander Hanke
                 const auto& _covered_array = _covered_mf.const_array(_fl_mfi); \
                 const_decls; \
                 amrex::ParallelFor(_fl_bx, \
-                    [=] AMREX_GPU_DEVICE (int i, int j, int k) { \
+                    [=, this] AMREX_GPU_DEVICE (int i, int j, int k) { \
                         { \
                         body \
                 }}); \
@@ -194,7 +194,7 @@ Authors: Hans Bihs, Alexander Hanke
                 const auto& _covered_array = _covered_mf.const_array(_fl_mfi); \
                 const_decls; \
                 amrex::ParallelFor(_fl_bx, \
-                    [=] AMREX_GPU_DEVICE (int i, int j, int k) { \
+                    [=, this] AMREX_GPU_DEVICE (int i, int j, int k) { \
                         { \
                         increment::i = i - ox; \
                         increment::j = j - oy; \
