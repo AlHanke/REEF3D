@@ -31,20 +31,20 @@ ghostcell::bc_labels ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
 
     // Parallel
     // Wall
-    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Y_POS) && (gcv==12 || gcv==116))
+    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==X_NEG || cs==X_POS || cs==Y_NEG || cs==Y_POS) && (gcv==12 || gcv==116))
         return gclabel_w;
 
-    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Y_POS) && gcv==112)
+    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==X_NEG || cs==X_POS || cs==Y_NEG || cs==Y_POS) && gcv==112)
         return bc_labels::NOSLIP;
 
     else if(bc==gbc_labels::WALL && gcv==16)
         return bc_labels::NEUMANN;
 
     // Othogonal
-    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==dir_labels::Z_POS || (cs==dir_labels::Z_NEG && p->A10==6)) && gcv==12)
+    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==Z_POS || (cs==Z_NEG && p->A10==6)) && gcv==12)
         return gclabel_w_orth;
 
-    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==9)
+    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==Z_NEG || cs==Z_POS) && gcv==9)
         return bc_labels::NOSLIP;
 
     // Inflow
@@ -52,10 +52,10 @@ ghostcell::bc_labels ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
         return gclabel_w_in;
 
     // Outflow
-    else if((bc==gbc_labels::OUTFLOW && gclabel_outflow) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Y_POS) && gcv==12)
+    else if((bc==gbc_labels::OUTFLOW && gclabel_outflow) && (cs==X_NEG || cs==X_POS || cs==Y_NEG || cs==Y_POS) && gcv==12)
         return bc_labels::NEUMANN;
 
-    else if((bc==gbc_labels::OUTFLOW && gclabel_outflow) && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==12)
+    else if((bc==gbc_labels::OUTFLOW && gclabel_outflow) && (cs==Z_NEG || cs==Z_POS) && gcv==12)
         return gclabel_w_out;
 
     // Patch
@@ -63,13 +63,13 @@ ghostcell::bc_labels ghostcell::gceval3(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     //Free Surface
-    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Y_POS) && gcv==12)
+    else if(bc==gbc_labels::SYMMETRY && (cs==X_NEG || cs==X_POS || cs==Y_NEG || cs==Y_POS) && gcv==12)
         return bc_labels::NEUMANN;
 
-    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==12 && p->A10!=3)
+    else if(bc==gbc_labels::SYMMETRY && (cs==Z_NEG || cs==Z_POS) && gcv==12 && p->A10!=3)
         return bc_labels::NOSLIP;
 
-    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==12 && p->A10==3)
+    else if(bc==gbc_labels::SYMMETRY && (cs==Z_NEG || cs==Z_POS) && gcv==12 && p->A10==3)
         return bc_labels::NEUMANN;
 
     else

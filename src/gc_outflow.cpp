@@ -29,17 +29,17 @@ void ghostcell::outflow(field &f, int cs)
 	// normal flow
     for(q=0; q<margin; ++q)
     {
-        if(cs==dir_labels::X_NEG)
+        if(cs==X_NEG)
             f(i-q-1,j,k)=f(i,j,k) - (p->dt/p->DXM)*p->Uo*(f(i+1,j,k)-f(i,j,k));
-        else if(cs==dir_labels::X_POS)
+        else if(cs==X_POS)
             f(i+q+1,j,k)=MAX(0.0, f(i,j,k) - (p->dt/p->DXM)*p->Uo*(f(i,j,k)-f(i-1,j,k)));
-        else if(cs==dir_labels::Y_NEG)
+        else if(cs==Y_NEG)
             f(i,j-q-1,k)=f(i,j,k) - (p->dt/p->DXM)*p->Uo*(f(i,j+1,k)-f(i,j,k));
-        else if(cs==dir_labels::Y_POS)
+        else if(cs==Y_POS)
             f(i,j+q+1,k)=f(i,j,k) - (p->dt/p->DXM)*p->Uo*(f(i,j,k)-f(i,j-1,k));
-        else if(cs==dir_labels::Z_NEG)
+        else if(cs==Z_NEG)
             f(i,j,k-q-1)=f(i,j,k) - (p->dt/p->DXM)*p->Uo*(f(i,j,k+1)-f(i,j,k));
-        else if(cs==dir_labels::Z_POS)
+        else if(cs==Z_POS)
             f(i,j,k+q+1)=f(i,j,k) - (p->dt/p->DXM)*p->Uo*(f(i,j,k)-f(i,j,k-1));
     }
 }
