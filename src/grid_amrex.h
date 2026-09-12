@@ -452,7 +452,7 @@ public:
     int nlevs = 1; // Number of AMR levels
     amrex::IntVect ref_vec;
     static constexpr int ref_ratio = 2;
-    const int ncomp = 1;
+    const int m_ncomp = 1;
     int bc_type[6] = {0,0,0,0,0,0};
 
     bool changed = false;

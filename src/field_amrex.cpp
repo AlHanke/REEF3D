@@ -45,11 +45,11 @@ field_amrex::field_amrex(lexer* p, DataLocation data_location)
       m_shared_mf(nullptr)
 {
     field_amrex::p = p;
-    mf = make_mf(p, p->ncomp, &mf, data_location);
+    mf = make_mf(p, p->m_ncomp, &mf, data_location);
 
     BCRecs.resize(p->nlevs);
     for (auto& bc_rec : BCRecs)
-        bc_rec.resize(p->ncomp);
+        bc_rec.resize(p->m_ncomp);
 
     p->register_field(this);
 }
@@ -71,7 +71,7 @@ void field_amrex::extend_levels(int new_nlevs)
     // Extend BCRecs with new empty vectors
     BCRecs.resize(new_nlevs);
     for (int lev = old_nlevs; lev < new_nlevs; ++lev)
-        BCRecs[lev].resize(p->ncomp);
+        BCRecs[lev].resize(p->m_ncomp);
 
     // Extend m_alias (view mode only)
     if (m_shared_mf)
@@ -126,7 +126,7 @@ field_amrex::field_amrex(lexer* p, amrex::Vector<amrex::MultiFab>* shared_mf, in
 
     BCRecs.resize(p->nlevs);
     for (auto& bc_rec : BCRecs)
-        bc_rec.resize(p->ncomp);
+        bc_rec.resize(p->m_ncomp);
 
     // Build 1-component aliases for GetMultiFab() and get_alias()
     m_alias.resize(p->nlevs);

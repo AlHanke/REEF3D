@@ -39,7 +39,7 @@ fieldint_amrex::fieldint_amrex(lexer* p, DataLocation location)
 {
     fieldint_amrex::p = p;
     data_location = location;
-    mf = make_imf(p, p->ncomp, &mf, location);
+    mf = make_imf(p, p->m_ncomp, &mf, location);
 }
 
 fieldint_amrex::~fieldint_amrex()
