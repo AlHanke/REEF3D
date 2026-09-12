@@ -28,7 +28,7 @@ Author: Hans Bihs
 
 void CPM::wallbc(lexer *p, ghostcell *pgc, sediment_fdm *s)
 {
-    for(size_t n=0;n<P.index;n++)
+    for(n=0;n<P.index;n++)
     if(P.Flag[n]==ACTIVE)
     {
         i=p->posc_i(P.X[n]);

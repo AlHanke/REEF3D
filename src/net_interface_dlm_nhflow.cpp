@@ -48,7 +48,7 @@ void net_interface::dlm_nhflow(lexer *p, fdm_nhf *d, ghostcell *pgc, int nNet)
     kernel_z(i,j,k) = 0.0;
     
 
-    for (int pI = 0; pI < lagrangePoints.size(); pI++)
+    for (size_t pI = 0; pI < lagrangePoints.size(); pI++)
     {
         const Eigen::Vector3d& forcesI = lagrangeForces[pI];
         

@@ -35,7 +35,7 @@ void CPM::volfrac_update(lexer *p, ghostcell *pgc, sediment_fdm *s, double *PX, 
 
     double Sx,Sy,Sz;
 
-    for(size_t n=0;n<P.index;n++)
+    for(n=0;n<P.index;n++)
     if(P.Flag[n]>=ACTIVE)
     {
         i = p->posf_i(PX[n]) - 1;
