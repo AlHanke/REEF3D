@@ -206,7 +206,7 @@ void ArrayWrapper3D::fillHigherLevels()
             auto const& fine_arr = fine_mf.array(mfi);
             auto const& crse_arr = coarse_on_fine_layout.const_array(mfi);
 
-            amrex::ParallelFor(fill_box, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
+            amrex::ParallelFor(fill_box, [=, this] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
             {
                 if (!fine_domain.contains(amrex::IntVect(i, j, k))) return;
                 const int ic = amrex::coarsen(i, ratio_x);
@@ -227,7 +227,7 @@ void ArrayWrapper3D::fillHigherLevels()
                     if(dir==0) ii = -1;
                     else if(dir==1) jj = -1;
                     else if(dir==2) kk = -1;
-                    amrex::ParallelFor(end_box, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
+                    amrex::ParallelFor(end_box, [=, this] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
                     {
                         fine_arr(i, j, k, m_comp) = fine_arr(i+ii, j+jj, k+kk, m_comp);
                     });
