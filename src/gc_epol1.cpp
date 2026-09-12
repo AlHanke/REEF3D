@@ -31,10 +31,10 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
 
     // Parallel
     // Wall
-    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && (gcv==10 || gcv==114))
+    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && (gcv==10 || gcv==114))
         return gclabel_u;
 
-    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==110)
+    else if(((bc==gbc_labels::NUMBEACH && !awa_label) || bc==gbc_labels::WALL) && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && gcv==110)
         return bc_labels::NOSLIP;
 
     // Topo
@@ -42,14 +42,14 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Orthogonal
-    else if((bc==gbc_labels::SYMMETRY || bc==gbc_labels::WALL) && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==10)
+    else if((bc==gbc_labels::SYMMETRY || bc==gbc_labels::WALL) && (cs==X_NEG || cs==X_POS) && gcv==10)
         return gclabel_u_orth;
 
-    else if(bc==gbc_labels::WALL && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==7)
+    else if(bc==gbc_labels::WALL && (cs==X_NEG || cs==X_POS) && gcv==7)
         return bc_labels::NOSLIP;
 
     // Inflow
-    else if(bc==gbc_labels::WAVEGEN && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && (gcv==7 || gcv==10))
+    else if(bc==gbc_labels::WAVEGEN && (cs==X_NEG || cs==X_POS) && (gcv==7 || gcv==10))
         return gclabel_u_in;
 
     // Patch
@@ -57,13 +57,13 @@ ghostcell::bc_labels ghostcell::gceval1(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Outflow
-    else if(((bc==gbc_labels::OUTFLOW && gclabel_outflow) || bc==gbc_labels::SYMMETRY) && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==10)
+    else if(((bc==gbc_labels::OUTFLOW && gclabel_outflow) || bc==gbc_labels::SYMMETRY) && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && gcv==10)
         return bc_labels::NEUMANN;
 
-    else if(bc==gbc_labels::OUTFLOW && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==10 && gclabel_outflow)
+    else if(bc==gbc_labels::OUTFLOW && (cs==X_NEG || cs==X_POS) && gcv==10 && gclabel_outflow)
         return gclabel_u_out;
 
-    else if(bc==gbc_labels::NUMBEACH && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==10 && gclabel_outflow && p->I10==1)
+    else if(bc==gbc_labels::NUMBEACH && (cs==X_NEG || cs==X_POS) && gcv==10 && gclabel_outflow && p->I10==1)
         return bc_labels::NEUMANN;
 
     else

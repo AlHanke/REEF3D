@@ -278,8 +278,6 @@ private:
          DIRICHLET_ORTH_REFLECT=11, DIRICHLET_PARA_REFLECT=12, NEUMANN_X=14, NEUMANN_HX=41, NEUMANN_HY=42,
          HEATBC=61};
 
-    enum dir_labels { X_NEG=1, X_POS=4, Y_NEG=3, Y_POS=2, Z_NEG=5, Z_POS=6 };
-
     enum gbc_labels { INFLOW=1, OUTFLOW, SYMMETRY, WAVEGEN=6, NUMBEACH, WALL=21};
 
     // 3D BC decision

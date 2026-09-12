@@ -50,10 +50,10 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return gclabel_press_in;
 
     // Turbulence kin
-    else if((bc==gbc_labels::OUTFLOW || (bc==gbc_labels::SYMMETRY && cs!=dir_labels::Z_POS) || bc==gbc_labels::WALL) && gcv==20)
+    else if((bc==gbc_labels::OUTFLOW || (bc==gbc_labels::SYMMETRY && cs!=Z_POS) || bc==gbc_labels::WALL) && gcv==20)
         return bc_labels::NEUMANN;
 
-    else if(((bc==gbc_labels::SYMMETRY && cs==dir_labels::Z_POS) || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==20)
+    else if(((bc==gbc_labels::SYMMETRY && cs==Z_POS) || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==20)
         return bc_labels::NOSLIP;
 
     else if((bc==gbc_labels::INFLOW || bc==gbc_labels::OUTFLOW || bc==gbc_labels::SYMMETRY || bc==gbc_labels::WALL) && gcv==24)
@@ -81,29 +81,29 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::NEUMANN;
 
     // Free Surface Uvel
-    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==101)
+    else if(bc==gbc_labels::SYMMETRY && (cs==Y_POS || cs==Y_NEG || cs==Z_NEG || cs==Z_POS) && gcv==101)
         return bc_labels::NEUMANN;
 
-    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS) && gcv==101)
+    else if(bc==gbc_labels::SYMMETRY && (cs==X_NEG || cs==X_POS) && gcv==101)
         return bc_labels::NOSLIP;
 
     // Free Surface Vvel
-    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::X_NEG || cs==dir_labels::X_POS || cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==102)
+    else if(bc==gbc_labels::SYMMETRY && (cs==X_NEG || cs==X_POS || cs==Z_NEG || cs==Z_POS) && gcv==102)
         return bc_labels::NEUMANN;
 
-    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG) && gcv==102)
+    else if(bc==gbc_labels::SYMMETRY && (cs==Y_POS || cs==Y_NEG) && gcv==102)
         return bc_labels::NOSLIP;
 
     // Free Surface Wvel
-    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::X_NEG || cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG || cs==dir_labels::X_POS) && gcv==103)
+    else if(bc==gbc_labels::SYMMETRY && (cs==X_NEG || cs==Y_POS || cs==Y_NEG || cs==X_POS) && gcv==103)
         return bc_labels::NEUMANN;
 
-    else if(bc==gbc_labels::SYMMETRY && (cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS) && gcv==103)
+    else if(bc==gbc_labels::SYMMETRY && (cs==Z_NEG || cs==Z_POS) && gcv==103)
         return bc_labels::NOSLIP;
 
     // Heat
-    else if(((p->H61==1 && cs==dir_labels::X_NEG) || (p->H62==1 && cs==dir_labels::Y_POS) || (p->H63==1 && cs==dir_labels::Y_NEG) ||
-             (p->H64==1 && cs==dir_labels::X_POS) || (p->H65==1 && cs==dir_labels::Z_NEG) || (p->H66==1 && cs==dir_labels::Z_POS)) && gcv==80)
+    else if(((p->H61==1 && cs==X_NEG) || (p->H62==1 && cs==Y_POS) || (p->H63==1 && cs==Y_NEG) ||
+             (p->H64==1 && cs==X_POS) || (p->H65==1 && cs==Z_NEG) || (p->H66==1 && cs==Z_POS)) && gcv==80)
         return bc_labels::HEATBC;
 
     else if(gcv==80)
@@ -117,13 +117,13 @@ ghostcell::bc_labels ghostcell::gceval4(lexer *p, int gcv, int bc, int cs)
         return bc_labels::POTENTIAL;
 
     // Potential Waves
-    else if((bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL) && cs!=dir_labels::Z_NEG && gcv==250)
+    else if((bc==gbc_labels::NUMBEACH || bc==gbc_labels::WALL) && cs!=Z_NEG && gcv==250)
         return bc_labels::NEUMANN;
 
     else if((bc==gbc_labels::INFLOW || bc==gbc_labels::OUTFLOW || bc==gbc_labels::WAVEGEN || bc==gbc_labels::NUMBEACH) && gcv==250)
         return bc_labels::NEUMANN;
 
-    else if(bc==gbc_labels::SYMMETRY && cs!=dir_labels::Z_POS && gcv==250)
+    else if(bc==gbc_labels::SYMMETRY && cs!=Z_POS && gcv==250)
         return bc_labels::NEUMANN;
 
     else

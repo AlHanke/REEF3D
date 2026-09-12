@@ -27,28 +27,28 @@ Author: Hans Bihs
 void ghostcell::dirichlet_ortho(field &f, double dist, int cs)
 {
     double dx;
-    if(cs==dir_labels::X_NEG || cs==dir_labels::X_POS)
+    if(cs==X_NEG || cs==X_POS)
         dx = p->DXP[IP];
-    else if(cs==dir_labels::Y_POS || cs==dir_labels::Y_NEG)
+    else if(cs==Y_POS || cs==Y_NEG)
         dx = p->DYP[JP];
-    else if(cs==dir_labels::Z_NEG || cs==dir_labels::Z_POS)
+    else if(cs==Z_NEG || cs==Z_POS)
         dx = p->DZP[KP];
 
     //fill y[]
     double y[15] = {0.0};
     for(m=0; m<=orderdir-2; m++)
     {
-        if(cs==dir_labels::X_NEG )
+        if(cs==X_NEG )
             y[m] = f(i+orderdir-m-2,j,k);
-        else if(cs==dir_labels::X_POS)
+        else if(cs==X_POS)
             y[m] = f(i-orderdir+m+2,j,k);
-        else if(cs==dir_labels::Y_NEG)
+        else if(cs==Y_NEG)
             y[m] = f(i,j+orderdir-m-2,k);
-        else if(cs==dir_labels::Y_POS)
+        else if(cs==Y_POS)
             y[m] = f(i,j-orderdir+m+2,k);
-        else if(cs==dir_labels::Z_NEG)
+        else if(cs==Z_NEG)
             y[m] = f(i,j,k+orderdir-m-2);
-        else if(cs==dir_labels::Z_POS)
+        else if(cs==Z_POS)
             y[m] = f(i,j,k-orderdir+m+2);
     }
 
@@ -60,17 +60,17 @@ void ghostcell::dirichlet_ortho(field &f, double dist, int cs)
     if(ys==1 && dist<gamma*dx)
     {
         double y1 = 0.0;
-        if(cs==dir_labels::X_NEG)
+        if(cs==X_NEG)
             y1=f(i+1,j,k);
-        else if(cs==dir_labels::X_POS)
+        else if(cs==X_POS)
             y1=f(i-1,j,k);
-        else if(cs==dir_labels::Y_NEG)
+        else if(cs==Y_NEG)
             y1=f(i,j+1,k);
-        else if(cs==dir_labels::Y_POS)
+        else if(cs==Y_POS)
             y1=f(i,j-1,k);
-        else if(cs==dir_labels::Z_NEG)
+        else if(cs==Z_NEG)
             y1=f(i,j,k+1);
-        else if(cs==dir_labels::Z_POS)
+        else if(cs==Z_POS)
             y1=f(i,j,k-1);
 
         y[orderdir-2] = (1.0-gamma)*f(i,j,k) + gamma*y1;
@@ -83,7 +83,7 @@ void ghostcell::dirichlet_ortho(field &f, double dist, int cs)
     pos[orderdir-2] = (ys==1 && dist<gamma*dx)? -(gamma*dx) : 0.0;
     pos[orderdir-1] = dist;
 
-    double x[margin];
+    std::vector<double> x(margin);
     for(m=0; m<margin; m++)
         x[m]=dx*double(m+2-ys);
 
@@ -106,17 +106,17 @@ void ghostcell::dirichlet_ortho(field &f, double dist, int cs)
     // write extrapolated ghost cell values into f()
     for(q=0; q<margin; ++q)
     {
-        if(cs==dir_labels::X_NEG)
+        if(cs==X_NEG)
             f(i-q-1,j,k) = y[orderdir+q-1+ys];
-        else if(cs==dir_labels::X_POS)
+        else if(cs==X_POS)
             f(i+q+1,j,k) = y[orderdir+q-1+ys];
-        else if(cs==dir_labels::Y_NEG)
+        else if(cs==Y_NEG)
             f(i,j-q-1,k) = y[orderdir+q-1+ys];
-        else if(cs==dir_labels::Y_POS)
+        else if(cs==Y_POS)
             f(i,j+q+1,k) = y[orderdir+q-1+ys];
-        else if(cs==dir_labels::Z_NEG)
+        else if(cs==Z_NEG)
             f(i,j,k-q-1) = y[orderdir+q-1+ys];
-        else if(cs==dir_labels::Z_POS)
+        else if(cs==Z_POS)
             f(i,j,k+q+1) = y[orderdir+q-1+ys];
     }
 }
