@@ -158,7 +158,7 @@ int iowave::intriangle(lexer *p, double Ax, double Ay, double Bx, double By, dou
     if(u==0.0 && v==0.0 && w==0.0)
     check = 0;
 
-    if((u>=0.0 && v>=0.0 && w>=0.0) || (u<0.0 && v<0.0 && w<0.0) && check==1)
+    if(((u>=0.0 && v>=0.0 && w>=0.0) || (u<0.0 && v<0.0 && w<0.0)) && check==1)
     return 1;
     else
     return 0;
