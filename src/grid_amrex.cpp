@@ -374,8 +374,8 @@ void grid_amrex::setup_amrex_geometry(lexer* p, ghostcell* pgc)
             // Gather global box information from all ranks to construct BoxArray and DistributionMapping
             int local_data[6] = {p->origin_i, p->origin_j, p->origin_k, p->origin_i + p->knox - 1, p->origin_j + p->knoy - 1, p->origin_k + p->knoz - 1};
 
-            int all_data[p->M10][6];
-            MPI_Allgather(local_data, 6, MPI_INT, all_data, 6, MPI_INT, pgc->mpi_comm);
+            std::vector<std::array<int, 6>> all_data(p->M10);
+            MPI_Allgather(local_data, 6, MPI_INT, all_data.data(), 6, MPI_INT, pgc->mpi_comm);
 
             amrex::Vector<Box> all_boxes(p->M10);
             Vector<int> pmap(p->M10);
