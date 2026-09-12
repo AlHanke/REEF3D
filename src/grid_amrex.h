@@ -96,9 +96,9 @@ public:
         return amrex::convert(amrex_box_array[static_cast<size_t>(lev)], location_index_type(location));
     }
 
-    void register_mf (amrex::Vector<amrex::MultiFab>*  mf, int ncomp, DataLocation location=DataLocation::CELL_CENTERED)
+    void register_mf(amrex::Vector<amrex::MultiFab>*  mf, int ncomp, DataLocation location=DataLocation::CELL_CENTERED)
     {
-        mf_registry .push_back({mf, ncomp, location});
+        mf_registry.push_back({mf, ncomp, location});
     }
     void register_imf(amrex::Vector<amrex::iMultiFab>* mf, int ncomp, DataLocation location=DataLocation::CELL_CENTERED)
     {
