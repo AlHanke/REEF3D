@@ -93,7 +93,7 @@ public:
     /// vector is a no-op that returns the cell-centred array unchanged.
     amrex::BoxArray ba_for(DataLocation location, int lev) const
     {
-        return amrex::convert(amrex_box_array[lev], location_index_type(location));
+        return amrex::convert(amrex_box_array[static_cast<size_t>(lev)], location_index_type(location));
     }
 
     void register_mf (amrex::Vector<amrex::MultiFab>*  mf, int ncomp, DataLocation location=DataLocation::CELL_CENTERED)
@@ -206,7 +206,7 @@ public:
     const amrex::BoxArray& slice_view_boxarray(int lev) const
     {
         AMREX_ASSERT(lev >= 0 && lev < int(slice_view_ba.size()));
-        return slice_view_ba[lev];
+        return slice_view_ba[static_cast<size_t>(lev)];
     }
 
     /// 1 on the one view cell per column that counts, 0 on the duplicates.
@@ -214,7 +214,7 @@ public:
     {
         AMREX_ASSERT(lev >= 0 && lev < int(slice_owner_mf.size()));
         AMREX_ASSERT(slice_owner_mf[lev].ok() && "build_slice_owner not run for this grid");
-        return slice_owner_mf[lev];
+        return slice_owner_mf[static_cast<size_t>(lev)];
     }
 
     // Looping structures

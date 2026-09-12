@@ -133,8 +133,8 @@ public:
 
     inline amrex::iMultiFab& GetMultiFab();
     inline const amrex::iMultiFab& GetMultiFab() const;
-    inline amrex::iMultiFab& GetMultiFab(int level) noexcept { return m_view[level]; };
-    inline const amrex::iMultiFab& GetMultiFab(int level) const noexcept { return m_view[level]; };
+    inline amrex::iMultiFab& GetMultiFab(int level) noexcept { return m_view[static_cast<size_t>(level)]; };
+    inline const amrex::iMultiFab& GetMultiFab(int level) const noexcept { return m_view[static_cast<size_t>(level)]; };
     #endif
 
 private:
