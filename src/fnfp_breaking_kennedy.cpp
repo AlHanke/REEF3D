@@ -79,7 +79,7 @@ void fnpf_breaking::breaking_kennedy(lexer *p, fdm_fnpf *c, ghostcell *pgc, slic
         }
         
         // Check for breaking cessation
-        if(c->breaking(i,j) == 2 && (fabs(c->Ex(i,j)) < p->A356*p->A355 && (fabs(c->Ey(i,j)) < p->A356*p->A355) || p->j_dir==0))
+        if(c->breaking(i,j) == 2 && ((fabs(c->Ex(i,j)) < p->A356*p->A355 && (fabs(c->Ey(i,j)) < p->A356*p->A355)) || p->j_dir==0))
         {
             c->breaking(i,j) = 0;
             B_coeff(i,j)  = 0.0;

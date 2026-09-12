@@ -288,7 +288,7 @@ void sixdof_obj::triangle_switch_ray(lexer *p, ghostcell *pgc)
                 if(fabs(u)<1.0e-15 && fabs(v)<1.0e-15 && fabs(w)<1.0e-15)
                 check = 0;
                 
-                    if((u>=0.0 && v>=0.0 && w>=0.0) || (u<0.0 && v<0.0 && w<0.0) && check==1)
+                    if(((u>=0.0 && v>=0.0 && w>=0.0) || (u<0.0 && v<0.0 && w<0.0)) && check==1)
                     {
                     denom = 1.0/(u+v+w);
                     u *= denom;
