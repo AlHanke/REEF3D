@@ -31,7 +31,7 @@ class rheology;
 
 using namespace std;
 
-class ioflow_v final : public ioflow, public increment, private flowfile_in
+class ioflow_v final : public ioflow, private flowfile_in
 {
 public:
     ioflow_v(lexer*,ghostcell*,patchBC_interface*);
