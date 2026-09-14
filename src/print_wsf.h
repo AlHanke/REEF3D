@@ -23,9 +23,10 @@ Author: Hans Bihs
 #ifndef PRINT_WSF_H_
 #define PRINT_WSF_H_
 
-#include"boundarycheck.h"
-#include<iostream>
-#include<fstream>
+#include "boundarycheck.h"
+#include <fstream>
+#include <iostream>
+#include <vector>
 
 class lexer;
 class fdm;
@@ -38,24 +39,23 @@ class print_wsf : public boundarycheck
 {
 public:
     print_wsf(lexer*,fdm*,ghostcell*,int);
-	virtual ~print_wsf();
+    virtual ~print_wsf();
 
-	void height_gauge(lexer*, fdm*, ghostcell*,field&);
-
+    void height_gauge(lexer*, fdm*, ghostcell*, field&);
 
 private:
-    void ini_location(lexer*, fdm*, ghostcell*);
-    void write(lexer*, fdm*, ghostcell*);
-	
-	double *x,*y;
-	int gauge_num;
+    void ini_location(lexer*);
 
-    int *iloc,*jloc,*flag;
-    double *wsf;
+    double *x, *y; // pointers so input location arrays
+    int gauge_num;
+
+    std::vector<int> iloc, jloc, flag;
+    std::vector<double> wsf;
     int n;
-    ofstream wsfout;
-    const int fileFlushMaxCount;
+    std::ofstream wsfout;
 
+    static constexpr int fileFlushMaxCount = 100; // Maximum number of gauges to write before flushing the output file
+    static constexpr int precision = 9; // Precision for outputting floating-point numbers
 };
 
 #endif
