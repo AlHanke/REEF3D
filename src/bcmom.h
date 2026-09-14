@@ -23,16 +23,16 @@ Author: Hans Bihs
 #ifndef BCMOM_H_
 #define BCMOM_H_
 
-#include"surftens.h"
-#include"roughness.h"
+#include "surftens.h"
+#include "roughness.h"
+
 class lexer;
 class fdm;
 class ghostcell;
 class field;
 class turbulence;
 class VOF_PLIC;
-
-using namespace std;
+struct gcb_field_cs_bc_row;
 
 class bcmom : public surftens, virtual public roughness
 {
@@ -44,11 +44,13 @@ public:
 
 private:
     void wall_laws(lexer*,fdm*,field&,int);
-    void wall_law_u(lexer*,fdm*,field&,int,int,int,int,int);
-    void wall_law_v(lexer*,fdm*,field&,int,int,int,int,int);
-    void wall_law_w(lexer*,fdm*,field&,int,int,int,int,int);
+    template<typename gcb_entry_t>
+    void wall_law_u(lexer*,fdm*,field&,gcb_entry_t&,int);
+    template<typename gcb_entry_t>
+    void wall_law_v(lexer*,fdm*,field&,gcb_entry_t&,int);
+    template<typename gcb_entry_t>
+    void wall_law_w(lexer*,fdm*,field&,gcb_entry_t&,int);
 
-    const double kappa;
     double uplus,ks,deltaZ,z0;
 };
 #endif
