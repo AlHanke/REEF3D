@@ -154,7 +154,7 @@ void ioflow_f::pressure_wall(lexer *p, fdm *a, ghostcell *pgc)
     double pval=0.0;
 
     GC4LOOP
-    if(p->gcb4[p->level][n].cs!=5 && p->gcb4[p->level][n].cs!=6 && (p->gcb4[p->level][n].bc ==3 || p->gcb4[p->level][n].bc ==21 || p->gcb4[p->level][n].bc ==22))
+    if(p->gcb4[p->level][n].cs!=Z_NEG && p->gcb4[p->level][n].cs!=Z_POS && (p->gcb4[p->level][n].bc ==3 || p->gcb4[p->level][n].bc ==21 || p->gcb4[p->level][n].bc ==22))
     {
         GCB4_TILE(n);
 
