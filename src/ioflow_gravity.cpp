@@ -63,9 +63,9 @@ void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
         k = p->gcb4[p->level][n].k;
         cs = p->gcb4[p->level][n].cs;
 
-        if(p->gcb4[p->level][n].bc==1)
+        if(p->gcb4[p->level][n].bc==BT_INFLOW)
         p->gcin[p->level].push_back({i, j, k, cs});
-        else if(p->gcb4[p->level][n].bc==2)
+        else if(p->gcb4[p->level][n].bc==BT_OUTFLOW)
         p->gcout[p->level].push_back({i, j, k, cs});
     }
     GC_TILE_RESET;

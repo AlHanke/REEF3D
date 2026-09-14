@@ -51,7 +51,7 @@ ghostcell::bc_labels ghostcell::gcsleval4(int gcv, int bc, int cs)
     else if(bc==OUTFLOW && (gcv==51 || gcv==54))
         return bc_labels::NEUMANN;
 
-    else if((bc==SYMMETRY || (bc==NUMBEACH && p->B99==3) || bc==21) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
+    else if((bc==SYMMETRY || (bc==NUMBEACH && p->B99==3) || bc==BT_WALL) && (gcv==51 || gcv==52 || gcv==53 || gcv==54))
         return bc_labels::NEUMANN;
 
     // Potential Ini

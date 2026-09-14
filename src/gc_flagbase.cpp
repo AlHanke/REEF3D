@@ -38,17 +38,17 @@ void ghostcell::flagbase(lexer *p)
         j=p->gcb4[p->level][n].j;
         k=p->gcb4[p->level][n].k;
 
-        if(p->gcb4[p->level][n].bc==1)
+        if(p->gcb4[p->level][n].bc==BT_INFLOW)
         bc=1;
-        else if(p->gcb4[p->level][n].bc==2)
+        else if(p->gcb4[p->level][n].bc==BT_OUTFLOW)
         bc=2;
-        else if(p->gcb4[p->level][n].bc==3)
+        else if(p->gcb4[p->level][n].bc==BT_SYMMETRY)
         bc=3;
-        else if(p->gcb4[p->level][n].bc==6)
+        else if(p->gcb4[p->level][n].bc==BT_WAVEGEN)
         bc=6;
-        else if(p->gcb4[p->level][n].bc==7)
+        else if(p->gcb4[p->level][n].bc==BT_NUMBEACH)
         bc=7;
-        else if(p->gcb4[p->level][n].bc==21)
+        else if(p->gcb4[p->level][n].bc==BT_WALL)
         bc=21;
 
         for(q=0;q<p->margin;++q)

@@ -236,7 +236,7 @@ void sflow_potential_f::ini_bc(lexer *p, fdm2D *b, ghostcell *pgc)
     GCSL4LOOP
     {
     
-        if(p->gcbsl4[p->level][n].bc==1)
+        if(p->gcbsl4[p->level][n].bc==BT_INFLOW)
         {
             i = p->gcbsl4[p->level][n].i;
             j = p->gcbsl4[p->level][n].j;
@@ -255,7 +255,7 @@ void sflow_potential_f::ini_bc(lexer *p, fdm2D *b, ghostcell *pgc)
             
         }
         
-        if(p->gcbsl4[p->level][n].bc==2)
+        if(p->gcbsl4[p->level][n].bc==BT_OUTFLOW)
         {
             i=p->gcbsl4[p->level][n].i;
             j=p->gcbsl4[p->level][n].j;

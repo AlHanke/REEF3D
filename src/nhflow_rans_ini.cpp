@@ -223,7 +223,7 @@ void nhflow_rans_io::plain_wallfunc(lexer* p, fdm_nhf *d, ghostcell* pgc)
 	}
 
 	GC4LOOP
-	if(p->gcb4[p->level][n].bc==21)
+	if(p->gcb4[p->level][n].bc==BT_WALL)
 	{
 	    GCB4_TILE(n);
 

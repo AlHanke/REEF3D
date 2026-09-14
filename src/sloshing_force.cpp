@@ -66,7 +66,7 @@ void sloshing_force::force(lexer *p, fdm *a, ghostcell *pgc)
     Fx_l=Fx_r=Fz=M=0.0;
     
     GC4LOOP
-    if(p->gcb4[p->level][n].bc==21)
+    if(p->gcb4[p->level][n].bc==BT_WALL)
     {
         GCB4_TILE(n);
 

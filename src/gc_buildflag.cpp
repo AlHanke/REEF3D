@@ -51,7 +51,7 @@ void ghostcell::gcb_velflagio(lexer *p)
 
     GC2LOOP
     {
-        if(p->gcb2[p->level][n].bc==1)
+        if(p->gcb2[p->level][n].bc==BT_INFLOW)
         {
             i=p->gcb2[p->level][n].i;
             j=p->gcb2[p->level][n].j;
@@ -61,7 +61,7 @@ void ghostcell::gcb_velflagio(lexer *p)
             p->flag2[Im2JK] = INFLOW_FLAG;
             p->flag2[Im3JK] = INFLOW_FLAG;
         }
-        else if(p->gcb2[p->level][n].bc==2)
+        else if(p->gcb2[p->level][n].bc==BT_OUTFLOW)
         {
             i=p->gcb2[p->level][n].i;
             j=p->gcb2[p->level][n].j;
@@ -75,7 +75,7 @@ void ghostcell::gcb_velflagio(lexer *p)
 
     GC3LOOP
     {
-        if(p->gcb3[p->level][n].bc==1)
+        if(p->gcb3[p->level][n].bc==BT_INFLOW)
         {
             i=p->gcb3[p->level][n].i;
             j=p->gcb3[p->level][n].j;
@@ -85,7 +85,7 @@ void ghostcell::gcb_velflagio(lexer *p)
             p->flag3[Im2JK] = INFLOW_FLAG;
             p->flag3[Im3JK] = INFLOW_FLAG;
         }
-        else if(p->gcb3[p->level][n].bc==2)
+        else if(p->gcb3[p->level][n].bc==BT_OUTFLOW)
         {
             i=p->gcb3[p->level][n].i;
             j=p->gcb3[p->level][n].j;

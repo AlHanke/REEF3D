@@ -215,7 +215,7 @@ void sflow_turb_ke_IM1::ustar_update(lexer* p, fdm2D *b, ghostcell *pgc)
 	wallf(i,j)=0;
 
 	GCSL4LOOP
-	if(p->gcbsl4[p->level][n].bc==21)
+	if(p->gcbsl4[p->level][n].bc==BT_WALL)
 	{
 	i = p->gcbsl4[p->level][n].i;
 	j = p->gcbsl4[p->level][n].j;

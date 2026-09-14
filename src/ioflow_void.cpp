@@ -393,7 +393,7 @@ void ioflow_v::pressure_io(lexer *p, fdm *a, ghostcell* pgc)
     double pval=0.0;
 
     GC4LOOP
-    if(p->gcb4[p->level][n].bc==2)
+    if(p->gcb4[p->level][n].bc==BT_OUTFLOW)
     {
         GCB4_TILE(n);
 
