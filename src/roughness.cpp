@@ -24,7 +24,7 @@ Author: Hans Bihs
 #include "lexer.h"
 #include "fdm.h"
 
-double roughness::ks_val(lexer *p, fdm *a, int cs, int bc)
+double roughness::ks_val(lexer *p, fdm *a, int i, int j, int k, int cs)
 {
     double ks=p->B50;
     if(ks<=0.0) ks=0.0001;

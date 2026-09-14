@@ -85,7 +85,7 @@ void bcmom::wall_law_u(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int c
 
     z0 = 0.5*deltaZ;
 
-    ks = ks_val(p,a,cs,bc);
+    ks = ks_val(p,a,i,j,k,cs);
 
     if(30.0*z0<ks)
         z0 = ks/30.0;
@@ -108,7 +108,7 @@ void bcmom::wall_law_v(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int c
 
     z0 = 0.5*deltaZ;
 
-    ks = ks_val(p,a,cs,bc);
+    ks = ks_val(p,a,i,j,k,cs);
 
     if(30.0*z0<ks)
         z0=ks/30.0;
@@ -131,7 +131,7 @@ void bcmom::wall_law_w(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int c
 
     z0 = 0.5*deltaZ;
 
-    ks = ks_val(p,a,cs,bc);
+    ks = ks_val(p,a,i,j,k,cs);
 
     if(30.0*z0<ks)
         z0 = ks/30.0;
