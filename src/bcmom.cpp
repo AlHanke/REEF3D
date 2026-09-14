@@ -78,9 +78,9 @@ void bcmom::wall_law_u(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int c
     j = jj;
     k = kk;
 
-    if(cs==2 || cs==3)
+    if(cs==Y_POS || cs==Y_NEG)
         deltaZ = p->DYN[JP];
-    else if(cs==5 || cs==6)
+    else if(cs==Z_NEG || cs==Z_POS)
         deltaZ = p->DZN[KP];
 
     z0 = 0.5*deltaZ;
@@ -101,9 +101,9 @@ void bcmom::wall_law_v(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int c
     j = jj;
     k = kk;
 
-    if(cs==1 || cs==4)
+    if(cs==X_NEG || cs==X_POS)
         deltaZ = p->DXN[IP];
-    else if(cs==5 || cs==6)
+    else if(cs==Z_NEG || cs==Z_POS)
         deltaZ = p->DZN[KP];
 
     z0 = 0.5*deltaZ;
@@ -124,9 +124,9 @@ void bcmom::wall_law_w(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int c
     j = jj;
     k = kk;
 
-    if(cs==1 || cs==4)
+    if(cs==X_NEG || cs==X_POS)
         deltaZ = p->DXN[IP];
-    else if(cs==2 || cs==3)
+    else if(cs==Y_POS || cs==Y_NEG)
         deltaZ = p->DYN[JP];
 
     z0 = 0.5*deltaZ;

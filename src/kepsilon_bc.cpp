@@ -50,7 +50,7 @@ void kepsilon_bc::bckeps_start(fdm* a,lexer* p, field& kin,field& eps,int gcval)
         {
             GCB4_TILE(q);
 
-            if(p->gcb4[p->level][q].bc==21 || (p->gcb4[p->level][q].bc==3 && p->gcb4[p->level][q].cs==6))
+            if(p->gcb4[p->level][q].bc==21 || (p->gcb4[p->level][q].bc==3 && p->gcb4[p->level][q].cs==Z_POS))
                 wall_law_eps(p,a,kin,eps,p->gcb4[p->level][q].i, p->gcb4[p->level][q].j, p->gcb4[p->level][q].k, p->gcb4[p->level][q].cs, p->gcb4[p->level][q].bc, p->gcb4[p->level][q].row);
         }
         GC_TILE_RESET;
@@ -69,11 +69,11 @@ void kepsilon_bc::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii,
     k=kk;
 
     double dist = 0.0;
-    if(cs==1 || cs==4)
+    if(cs==X_NEG || cs==X_POS)
         dist = 0.5*p->DXN[IP];
-    else if(cs==2 || cs==3)
+    else if(cs==Y_POS || cs==Y_NEG)
         dist = 0.5*p->DYN[JP];
-    else if(cs==5 || cs==6)
+    else if(cs==Z_NEG || cs==Z_POS)
         dist = 0.5*p->DZN[KP];
 
     double ks = ks_val(p,a,i,j,k,cs);
@@ -102,11 +102,11 @@ void kepsilon_bc::wall_law_eps(lexer* p, fdm* a, field& kin, field& eps, int ii,
     k=kk;
 
     double dist = 0.0;
-    if(cs==1 || cs==4)
+    if(cs==X_NEG || cs==X_POS)
         dist = 0.5*p->DXN[IP];
-    else if(cs==2 || cs==3)
+    else if(cs==Y_POS || cs==Y_NEG)
         dist = 0.5*p->DYN[JP];
-    else if(cs==5 || cs==6)
+    else if(cs==Z_NEG || cs==Z_POS)
         dist = 0.5*p->DZN[KP];
 
     double eps_star = (pow(p->cmu, 0.75)*pow((kin(i,j,k)>(0.0)?(kin(i,j,k)):(0.0)),1.5)) / (0.4*dist);

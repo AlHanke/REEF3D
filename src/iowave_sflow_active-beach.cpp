@@ -111,15 +111,15 @@ void iowave::active_beach2D(lexer *p, fdm2D* b, ghostcell* pgc, slice &P, slice 
     dfy3 = (P(i,j+1)-P(i,j))/p->DXM;
 
      /*       
-	if(cs==1)
+	if(cs==X_NEG)
 	for(q=0;q<margin;++q)
 	P(i-q-1,j) = P(i,j) - p->dt*sqrt(9.81*p->wd)*dfx1;
 
-	if(cs==2)
+	if(cs==Y_POS)
 	for(q=0;q<margin;++q)
 	P(i,j+q+1) = P(i,j) - p->dt*sqrt(9.81*p->wd)*dfy2;
 
-	if(cs==3)
+	if(cs==Y_NEG)
 	for(q=0;q<margin;++q)
 	P(i,j-q-1) = P(i,j) - p->dt*sqrt(9.81*p->wd)*dfy3;
 */
