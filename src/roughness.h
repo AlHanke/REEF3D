@@ -23,18 +23,16 @@ Author: Hans Bihs
 #ifndef ROUGHNESS_H_
 #define ROUGHNESS_H_
 
-#include "increment.h"
-
 class lexer;
 class fdm;
 
-class roughness : virtual public increment
+class roughness
 {
 public:
     roughness() = default;
     virtual ~roughness() = default;
 
-    double ks_val(lexer*, fdm*, int, int);
+    double ks_val(lexer *p, fdm *a, int i, int j, int k, int cs);
 protected:
     static constexpr double kappa = 0.4;
 };

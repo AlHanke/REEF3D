@@ -30,7 +30,7 @@ class lexer;
 
 using namespace std;
 
-class nhflow_komega_bc : public roughness
+class nhflow_komega_bc : public roughness, virtual public increment
 {
 public:
 	nhflow_komega_bc(lexer*);

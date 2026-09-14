@@ -34,7 +34,7 @@ class VOF_PLIC;
 
 using namespace std;
 
-class bcmom : public surftens, public roughness
+class bcmom : public surftens, virtual public roughness
 {
 public:
     bcmom(lexer*);

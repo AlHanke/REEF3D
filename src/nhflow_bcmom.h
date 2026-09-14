@@ -32,7 +32,7 @@ class turbulence;
 
 using namespace std;
 
-class nhflow_bcmom : public roughness
+class nhflow_bcmom : public roughness, virtual public increment
 {
 public:
 	nhflow_bcmom(lexer*);

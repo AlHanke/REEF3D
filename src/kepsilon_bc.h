@@ -30,7 +30,7 @@ class lexer;
 class fdm;
 class field;
 
-class kepsilon_bc : public roughness
+class kepsilon_bc : public roughness, virtual public increment
 {
 public:
     kepsilon_bc(lexer*);

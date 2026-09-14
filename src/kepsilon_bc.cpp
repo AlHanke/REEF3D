@@ -76,7 +76,7 @@ void kepsilon_bc::wall_law_kin(lexer* p, fdm* a, field& kin, field& eps, int ii,
     else if(cs==5 || cs==6)
         dist = 0.5*p->DZN[KP];
 
-    double ks = ks_val(p,a,cs,bc);
+    double ks = ks_val(p,a,i,j,k,cs);
 
     double uvel=0.5*(a->u(i,j,k)+a->u(i-1,j,k));
     double vvel=0.5*(a->v(i,j,k)+a->v(i,j-1,k));

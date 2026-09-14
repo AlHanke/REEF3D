@@ -30,7 +30,7 @@ class lexer;
 class fdm;
 class field;
 
-class komega_bc : public roughness
+class komega_bc : public roughness, virtual public increment
 {
 public:
     komega_bc(lexer*);

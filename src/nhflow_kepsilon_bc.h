@@ -30,7 +30,7 @@ class lexer;
 
 using namespace std;
 
-class nhflow_kepsilon_bc : public roughness
+class nhflow_kepsilon_bc : public roughness, virtual public increment
 {
 public:
 	nhflow_kepsilon_bc(lexer*);
