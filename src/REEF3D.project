@@ -2844,7 +2844,6 @@
         <File Name="gcsl_epol1.cpp"/>
         <File Name="gcsl_epol2.cpp"/>
         <File Name="gcsl_epol4.cpp"/>
-        <File Name="gcsl_epol4a.cpp"/>
         <File Name="gcxsl_flagx.cpp"/>
         <File Name="gcsl_noslip.cpp"/>
         <File Name="gcsl_setbc.cpp"/>
