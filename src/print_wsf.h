@@ -23,7 +23,7 @@ Author: Hans Bihs
 #ifndef PRINT_WSF_H_
 #define PRINT_WSF_H_
 
-#include "boundarycheck.h"
+#include "increment.h"
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -35,7 +35,7 @@ class field;
 
 using namespace std;
 
-class print_wsf : public boundarycheck
+class print_wsf : public increment
 {
 public:
     print_wsf(lexer*,fdm*,ghostcell*,int);
@@ -44,12 +44,32 @@ public:
     void height_gauge(lexer*, fdm*, ghostcell*, field&);
 
 private:
-    void ini_location(lexer*);
+    /// Cell containing coordinate `s` in the 1D nodal array `N`, searched over
+    /// the [org, org+imax+1] node window; -1 when `s` falls outside it. The
+    /// window is handed in as ORIGIN_* / *MAX_LOOP by the caller, which is what
+    /// makes this work unchanged in both builds: legacy that window is the
+    /// rank's subdomain, under AMReX it is the installed tile at the installed
+    /// level, with the level stride already folded into ORIGIN_*.
+    static int locate_1d(const std::vector<double>&, int org, int imax, double s);
+
+    /// Resolve a gauge to indices valid in the CURRENTLY installed context.
+    /// Under AMReX that is the tile installed by TILE_LOOP, so the result is
+    /// TILE-LOCAL and must be consumed before the loop advances — no index is
+    /// ever stored across iterations, which is why no TileCtx is needed and why
+    /// a regrid cannot invalidate anything. False when the gauge is outside.
+    bool locate(lexer*, int gauge, int& ii, int& jj) const;
+
+    /// Keep `value` if it comes from a finer level than what this gauge already
+    /// holds. The selection key is "produced a surface", not "covers the
+    /// column": a fine patch can cover a gauge horizontally while the surface
+    /// sits outside its z-extent, and picking on coverage would then report the
+    /// sentinel instead of the coarse level's valid answer.
+    void record(int gauge, double value);
 
     double *x, *y; // pointers so input location arrays
     int gauge_num;
 
-    std::vector<int> iloc, jloc, flag;
+    std::vector<int> lev;   // finest level that produced a value, -1 if none
     std::vector<double> wsf;
     int n;
     std::ofstream wsfout;

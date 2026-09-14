@@ -86,12 +86,8 @@ print_wsf::print_wsf(lexer *p, fdm* a, ghostcell *pgc, int num)
         wsfout<<"\n\n"<<std::flush;
     }
 
-    iloc.resize(gauge_num);
-    jloc.resize(gauge_num);
-    flag.resize(gauge_num);
+    lev.resize(gauge_num);
     wsf.resize(gauge_num);
-
-    ini_location(p);
 }
 
 print_wsf::~print_wsf()
@@ -102,52 +98,60 @@ print_wsf::~print_wsf()
 void print_wsf::height_gauge(lexer *p, fdm *a, ghostcell *pgc, field &f)
 {
     std::fill(wsf.begin(), wsf.end(), -1.0e20);
+    std::fill(lev.begin(), lev.end(), -1);
 
-    if(p->A10==6 && p->F80!=4)
+    // Gauge locations are resolved here, not at construction: printer_CFD is
+    // built in logic_cfd(), which runs before driver_ini_cfd()'s regrid loop,
+    // so a location fixed at construction only ever saw a single-level grid.
+    // Re-resolving every call also tracks a surface that moves between levels
+    // as the hierarchy is re-tagged during the run.
+    LEVEL_LOOP
+    TILE_LOOP
     {
         for(n=0;n<gauge_num;++n)
-        if(flag[n]>0)
         {
-            i=iloc[n];
-            j=jloc[n];
-            KLOOP
-            PCHECK
+            if(!locate(p,n,i,j))
+            continue;
+
+            if(p->A10==6 && p->F80!=4)
             {
-                if(f(i,j,k)>=0.0 && f(i,j,k+1)<0.0)
-                wsf[n]=MAX(wsf[n],-(f(i,j,k)*p->DZP[KP])/(f(i,j,k+1)-f(i,j,k)) + p->pos_z());
+                KLOOP
+                PCHECK
+                {
+                    if(f(i,j,k)>=0.0 && f(i,j,k+1)<0.0)
+                    record(n,-(f(i,j,k)*p->DZP[KP])/(f(i,j,k+1)-f(i,j,k)) + p->pos_z());
+                }
             }
-        }
-    }
-    else if(p->A10==6 && p->F80==4)
-    {
-        for(n=0;n<gauge_num;++n)
-        if(flag[n]>0)
-        {
-            i=iloc[n];
-            j=jloc[n];
-            KLOOP
+            else if(p->A10==6 && p->F80==4)
             {
-                if(f(i,j,k)>p->F94 && f(i,j,k+1)<p->F93)
-                wsf[n]=MAX(wsf[n],p->pos_z()+0.5*p->DZN[KP]);
+                KLOOP
+                {
+                    if(f(i,j,k)>p->F94 && f(i,j,k+1)<p->F93)
+                    record(n,p->pos_z()+0.5*p->DZN[KP]);
 
-                else if(f(i,j,k)<=p->F94 && f(i,j,k)>=p->F93)
-                wsf[n]=MAX(wsf[n],(p->pos_z()-0.5*p->DZN[KP])+f(i,j,k)*p->DZN[KP]);
+                    else if(f(i,j,k)<=p->F94 && f(i,j,k)>=p->F93)
+                    record(n,(p->pos_z()-0.5*p->DZN[KP])+f(i,j,k)*p->DZN[KP]);
+                }
             }
-        }
-    }
-    else if(p->A10==4)
-    {
-        for(n=0;n<gauge_num;++n)
-        if(flag[n]>0)
-        {
-            i = iloc[n];
-            j = jloc[n];
-            wsf[n] = a->eta(i,j);
+            else if(p->A10==4)
+            record(n,a->eta(i,j));
         }
     }
 
+    // Two reductions per gauge: agree on the finest level that produced a
+    // surface anywhere, then drop every contribution from a coarser one so the
+    // value reduction cannot pick a coarse answer over a fine one. With no
+    // contribution at all levmax stays -1, nothing is dropped, and the gauge
+    // reports the sentinel as before.
     for(n=0;n<gauge_num;++n)
-    wsf[n]=pgc->globalmax(wsf[n]);
+    {
+        const int levmax = pgc->globalimax(lev[n]);
+
+        if(lev[n]!=levmax)
+        wsf[n] = -1.0e20;
+
+        wsf[n] = pgc->globalmax(wsf[n]);
+    }
 
     // write to file
     if(p->mpirank==0)
@@ -164,14 +168,59 @@ void print_wsf::height_gauge(lexer *p, fdm *a, ghostcell *pgc, field &f)
     }
 }
 
-void print_wsf::ini_location(lexer *p)
+void print_wsf::record(int gauge, double value)
 {
-    for(n=0;n<gauge_num;++n)
+    if(level>lev[gauge])
     {
-        iloc[n] = p->posc_i(x[n]);
-        jloc[n] = (p->j_dir ? p->posc_j(y[n]) : 0);
-
-        if(1==ij_boundcheck(p,iloc[n],jloc[n],0))
-        flag[n] = 1;
+        lev[gauge] = level;
+        wsf[gauge] = value;
     }
+
+    else if(level==lev[gauge])
+    wsf[gauge] = MAX(wsf[gauge],value);
+}
+
+int print_wsf::locate_1d(const std::vector<double>& N, int org, int imax, double s)
+{
+    if(imax<0)
+    return -1;
+
+    if(s<N[org] || s>=N[org+imax+1])
+    return -1;
+
+    int lo=0, hi=imax;
+
+    while(lo<hi)
+    {
+        const int mid = lo + (hi-lo+1)/2;
+
+        if(s>=N[org+mid])
+        lo = mid;
+
+        else
+        hi = mid-1;
+    }
+
+    return lo;
+}
+
+bool print_wsf::locate(lexer *p, int gauge, int& ii, int& jj) const
+{
+    ii = locate_1d(p->XN,ORIGIN_I,IMAX_LOOP,x[gauge]);
+
+    if(ii<0)
+    return false;
+
+    if(p->j_dir)
+    {
+        jj = locate_1d(p->YN,ORIGIN_J,JMAX_LOOP,y[gauge]);
+
+        if(jj<0)
+        return false;
+    }
+
+    else
+    jj = 0;
+
+    return true;
 }
