@@ -32,7 +32,7 @@ bcmom::bcmom(lexer* p): surftens(p), roughness(), kappa(0.4)
 void bcmom::bcmom_start(fdm* a, lexer* p, ghostcell *pgc, turbulence *pturb, field& b, int gcval)
 {
     wall_laws(p,a,b,gcval);
-    surface_tension(a,p,a->phi,gcval);
+    surftens::surface_tension(p,a,a->phi,gcval);
 }
 
 void bcmom::wall_laws(lexer* p, fdm* a, field& b, int gcval)
