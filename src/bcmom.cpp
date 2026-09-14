@@ -20,12 +20,13 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"bcmom.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
+#include "bcmom.h"
+#include "lexer.h"
+#include "fdm.h"
+#include "ghostcell.h"
+#include "gcb_sl_list.h"
 
-bcmom::bcmom(lexer* p): surftens(p), roughness(), kappa(0.4)
+bcmom::bcmom(lexer* p): surftens(p), roughness()
 {
 }
 
@@ -44,39 +45,53 @@ void bcmom::wall_laws(lexer* p, fdm* a, field& b, int gcval)
         if(gcval==10)
         {
             QGC1LOOP
-            if(p->gcb1[p->level][q].bc==21 && p->gcb1[p->level][q].cs!=1 && p->gcb1[p->level][q].cs!=4)
-                wall_law_u(p,a,b,p->gcb1[p->level][q].i, p->gcb1[p->level][q].j, p->gcb1[p->level][q].k, p->gcb1[p->level][q].cs, p->gcb1[p->level][q].bc);
+            {
+                auto &gcb_entry = p->gcb1[p->level][q];
+                if(gcb_entry.bc==21 && gcb_entry.cs!=1 && gcb_entry.cs!=4)
+                    wall_law_u(p,a,b,gcb_entry,p->level);
+            }
 
             QGCDF1LOOP
-                wall_law_u(p,a,b,p->gcdf1[p->level][q].i, p->gcdf1[p->level][q].j, p->gcdf1[p->level][q].k, p->gcdf1[p->level][q].cs, 48);
+                wall_law_u(p,a,b,p->gcdf1[p->level][q],p->level);
         }
         else if(gcval==11 && p->j_dir==1)
         {
             QGC2LOOP
-            if(p->gcb2[p->level][q].bc==21 && p->gcb2[p->level][q].cs!=2 && p->gcb2[p->level][q].cs!=3)
-                wall_law_v(p,a,b,p->gcb2[p->level][q].i, p->gcb2[p->level][q].j, p->gcb2[p->level][q].k, p->gcb2[p->level][q].cs, p->gcb2[p->level][q].bc);
+            {
+                auto &gcb_entry = p->gcb2[p->level][q];
+                if(gcb_entry.bc==21 && gcb_entry.cs!=2 && gcb_entry.cs!=3)
+                    wall_law_v(p,a,b,gcb_entry,p->level);
+            }
 
             QGCDF2LOOP
-                wall_law_v(p,a,b,p->gcdf2[p->level][q].i, p->gcdf2[p->level][q].j, p->gcdf2[p->level][q].k, p->gcdf2[p->level][q].cs, 48);
+                wall_law_v(p,a,b,p->gcdf2[p->level][q],p->level);
         }
         else if(gcval==12)
         {
             QGC3LOOP
-            if(p->gcb3[p->level][q].bc==21 && p->gcb3[p->level][q].cs!=5 && p->gcb3[p->level][q].cs!=6)
-                wall_law_w(p,a,b,p->gcb3[p->level][q].i, p->gcb3[p->level][q].j, p->gcb3[p->level][q].k, p->gcb3[p->level][q].cs, p->gcb3[p->level][q].bc);
+            {
+                auto &gcb_entry = p->gcb3[p->level][q];
+                if(gcb_entry.bc==21 && gcb_entry.cs!=5 && gcb_entry.cs!=6)
+                    wall_law_w(p,a,b,gcb_entry,p->level);
+            }
 
             QGCDF3LOOP
-                wall_law_w(p,a,b,p->gcdf3[p->level][q].i, p->gcdf3[p->level][q].j, p->gcdf3[p->level][q].k, p->gcdf3[p->level][q].cs, 48);
+                wall_law_w(p,a,b,p->gcdf3[p->level][q],p->level);
 
         }
     }
 }
 
-void bcmom::wall_law_u(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int cs, int bc)
+template<typename gcb_entry_t>
+void bcmom::wall_law_u(lexer* p, fdm* a, field& b, gcb_entry_t &gcb_entry, int lev)
 {
-    i = ii;
-    j = jj;
-    k = kk;
+    int i = gcb_entry.i;
+    int j = gcb_entry.j;
+    int k = gcb_entry.k;
+
+    GCB_TILE(gcb_entry, lev);
+
+    int cs = gcb_entry.cs;
 
     if(cs==Y_POS || cs==Y_NEG)
         deltaZ = p->DYN[JP];
@@ -95,11 +110,16 @@ void bcmom::wall_law_u(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int c
     a->F(i,j,k) -= ((fabs(a->u(i,j,k))*a->u(i,j,k))/(uplus*uplus*deltaZ));
 }
 
-void bcmom::wall_law_v(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int cs, int bc)
+template<typename gcb_entry_t>
+void bcmom::wall_law_v(lexer* p, fdm* a, field& b, gcb_entry_t &gcb_entry, int lev)
 {
-    i = ii;
-    j = jj;
-    k = kk;
+    int i = gcb_entry.i;
+    int j = gcb_entry.j;
+    int k = gcb_entry.k;
+
+    GCB_TILE(gcb_entry, lev);
+
+    int cs = gcb_entry.cs;
 
     if(cs==X_NEG || cs==X_POS)
         deltaZ = p->DXN[IP];
@@ -118,11 +138,16 @@ void bcmom::wall_law_v(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int c
     a->G(i,j,k) -= ((fabs(a->v(i,j,k))*a->v(i,j,k))/(uplus*uplus*deltaZ));
 }
 
-void bcmom::wall_law_w(lexer* p, fdm* a, field& b, int ii, int jj, int kk, int cs, int bc)
+template<typename gcb_entry_t>
+void bcmom::wall_law_w(lexer* p, fdm* a, field& b, gcb_entry_t &gcb_entry, int lev)
 {
-    i = ii;
-    j = jj;
-    k = kk;
+    int i = gcb_entry.i;
+    int j = gcb_entry.j;
+    int k = gcb_entry.k;
+
+    GCB_TILE(gcb_entry, lev);
+
+    int cs = gcb_entry.cs;
 
     if(cs==X_NEG || cs==X_POS)
         deltaZ = p->DXN[IP];
