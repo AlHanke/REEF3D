@@ -45,7 +45,7 @@ void patchBC_2D::patchBC_gcb_count(lexer *p, ghostcell *pgc)
             i=p->gcbsl4[p->level][n].i;
             j=p->gcbsl4[p->level][n].j;
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[p->level][n].cs==p->B440_face[qn] && p->gcbsl4[p->level][n].bc==21)
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[p->level][n].cs==p->B440_face[qn] && p->gcbsl4[p->level][n].bc==BT_WALL)
                 ++count;
         }
 

@@ -50,7 +50,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
         jj=p->gcb4[p->level][n].j;
         kk=p->gcb4[p->level][n].k;
 
-        if( p->gcb4[p->level][n].bc==21)
+        if( p->gcb4[p->level][n].bc==BT_WALL)
         {
             if(p->gcb4[p->level][n].cs==X_NEG)
             {
@@ -160,7 +160,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
     {
         GCB4_TILE(n);
 
-        if(p->gcb4[p->level][n].bc==21)
+        if(p->gcb4[p->level][n].bc==BT_WALL)
         {
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;
@@ -179,7 +179,7 @@ void ghostcell::walldistance(lexer *p, fdm *a, convection *pdisc, reini *preini,
             else if(p->gcb4[p->level][n].cs==Z_POS)
                 walldist(i,j,k+1)=-0.5*p->DZN[KP];
         }
-        else if(p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==3)
+        else if(p->gcb4[p->level][n].bc==BT_INFLOW || p->gcb4[p->level][n].bc==BT_OUTFLOW || p->gcb4[p->level][n].bc==BT_SYMMETRY)
         {
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;

@@ -107,7 +107,7 @@ void komega_func::eddyvisc(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans)
 
         int n;
         GC4LOOP
-        if(p->gcb4[p->level][n].bc==21)
+        if(p->gcb4[p->level][n].bc==BT_WALL)
         {
             GCB4_TILE(n);
 

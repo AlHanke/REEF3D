@@ -47,7 +47,7 @@ void bcmom::wall_laws(lexer* p, fdm* a, field& b, int gcval)
             QGC1LOOP
             {
                 auto &gcb_entry = p->gcb1[p->level][q];
-                if(gcb_entry.bc==21 && gcb_entry.cs!=X_NEG && gcb_entry.cs!=X_POS)
+                if(gcb_entry.bc==BT_WALL && gcb_entry.cs!=X_NEG && gcb_entry.cs!=X_POS)
                     wall_law_u(p,a,b,gcb_entry,p->level);
             }
 
@@ -59,7 +59,7 @@ void bcmom::wall_laws(lexer* p, fdm* a, field& b, int gcval)
             QGC2LOOP
             {
                 auto &gcb_entry = p->gcb2[p->level][q];
-                if(gcb_entry.bc==21 && gcb_entry.cs!=Y_POS && gcb_entry.cs!=Y_NEG)
+                if(gcb_entry.bc==BT_WALL && gcb_entry.cs!=Y_POS && gcb_entry.cs!=Y_NEG)
                     wall_law_v(p,a,b,gcb_entry,p->level);
             }
 
@@ -71,7 +71,7 @@ void bcmom::wall_laws(lexer* p, fdm* a, field& b, int gcval)
             QGC3LOOP
             {
                 auto &gcb_entry = p->gcb3[p->level][q];
-                if(gcb_entry.bc==21 && gcb_entry.cs!=Z_NEG && gcb_entry.cs!=Z_POS)
+                if(gcb_entry.bc==BT_WALL && gcb_entry.cs!=Z_NEG && gcb_entry.cs!=Z_POS)
                     wall_law_w(p,a,b,gcb_entry,p->level);
             }
 

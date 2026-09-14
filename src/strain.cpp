@@ -37,7 +37,7 @@ void strain::wallf_update(lexer *p, fdm *a, ghostcell *pgc, fieldint &wallf)
     wallf.setVal(0);
     
     GC4LOOP
-    if((p->gcb4[p->level][n].bc==21 || p->gcb4[p->level][n].bc==6 || p->gcb4[p->level][n].bc==7))
+    if((p->gcb4[p->level][n].bc==BT_WALL || p->gcb4[p->level][n].bc==BT_WAVEGEN || p->gcb4[p->level][n].bc==BT_NUMBEACH))
     {
         GCB4_TILE(n);
 

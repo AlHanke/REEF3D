@@ -263,7 +263,7 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
     {
         GCB4_TILE(n);
 
-        if(p->gcb4[p->level][n].bc==1)
+        if(p->gcb4[p->level][n].bc==BT_INFLOW)
         {
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;
@@ -283,7 +283,7 @@ void potential_water::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
  
         }
         
-        if(p->gcb4[p->level][n].bc==2)
+        if(p->gcb4[p->level][n].bc==BT_OUTFLOW)
         {
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;

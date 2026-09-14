@@ -79,9 +79,9 @@ void iowave::gcio_update_impl(lexer *p)
         k = p->gcb4[p->level][n].k;
         cs = p->gcb4[p->level][n].cs;
 
-        if((p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6) && p->DF(i,j,k)>0)
+        if((p->gcb4[p->level][n].bc==BT_INFLOW || p->gcb4[p->level][n].bc==BT_WAVEGEN) && p->DF(i,j,k)>0)
         p->gcin[p->level].push_back({i, j, k, cs});
-        else if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7) && p->DF(i,j,k)>0)
+        else if((p->gcb4[p->level][n].bc==BT_OUTFLOW || p->gcb4[p->level][n].bc==BT_NUMBEACH) && p->DF(i,j,k)>0)
         p->gcout[p->level].push_back({i, j, k, cs});
     }
     GC_TILE_RESET;
@@ -97,7 +97,7 @@ void iowave::gcio_update_impl(lexer *p)
     {
         GCB4_TILE(n);
 
-        if(p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6)
+        if(p->gcb4[p->level][n].bc==BT_INFLOW || p->gcb4[p->level][n].bc==BT_WAVEGEN)
         {
             i = p->gcb4[p->level][n].i;
             j = p->gcb4[p->level][n].j;
@@ -120,7 +120,7 @@ void iowave::gcio_update_impl(lexer *p)
                 p->IO[IJKp1] = 1;
             }
         }
-        else if((p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7))
+        else if((p->gcb4[p->level][n].bc==BT_OUTFLOW || p->gcb4[p->level][n].bc==BT_NUMBEACH))
         {
             i = p->gcb4[p->level][n].i;
             j = p->gcb4[p->level][n].j;
@@ -173,7 +173,7 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
     count=0;
     GCB4
     {
-        if(p->gcb4[p->level][n].bc==1||p->gcb4[p->level][n].bc==6)
+        if(p->gcb4[p->level][n].bc==BT_INFLOW||p->gcb4[p->level][n].bc==BT_WAVEGEN)
         ++count;
     }
 
@@ -190,7 +190,7 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
     count1=0;
     GCB1
     {
-        if(p->gcb1[p->level][n].bc==1||p->gcb1[p->level][n].bc==6)
+        if(p->gcb1[p->level][n].bc==BT_INFLOW||p->gcb1[p->level][n].bc==BT_WAVEGEN)
         {
             flag=true;
             for(q=0;q<count1;++q)
@@ -211,7 +211,7 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
     count2=0;
     GCB2
     {
-        if(p->gcb2[p->level][n].bc==1||p->gcb2[p->level][n].bc==6)
+        if(p->gcb2[p->level][n].bc==BT_INFLOW||p->gcb2[p->level][n].bc==BT_WAVEGEN)
         {
             flag=true;
             for(q=0;q<count2;++q)
@@ -232,7 +232,7 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
     count3=0;
     GCB3
     {
-        if(p->gcb3[p->level][n].bc==1||p->gcb3[p->level][n].bc==6)
+        if(p->gcb3[p->level][n].bc==BT_INFLOW||p->gcb3[p->level][n].bc==BT_WAVEGEN)
         {
             flag=true;
             for(q=0;q<count3;++q)
@@ -255,7 +255,7 @@ void iowave::gen_ini(lexer *p, fdm *a, ghostcell *pgc)
     {
         GCB4_TILE(n);
 
-        if(p->gcb4[p->level][n].bc==1||p->gcb4[p->level][n].bc==6)
+        if(p->gcb4[p->level][n].bc==BT_INFLOW||p->gcb4[p->level][n].bc==BT_WAVEGEN)
         {
             flag=true;
             for(q=0;q<count4;++q)

@@ -221,7 +221,7 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
             i=p->gcbsl4[p->level][n].i;
             j=p->gcbsl4[p->level][n].j;
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[p->level][n].cs==p->B440_face[qn] && p->gcbsl4[p->level][n].bc==21)
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[p->level][n].cs==p->B440_face[qn] && p->gcbsl4[p->level][n].bc==BT_WALL)
             {
                 for(qq=0;qq<obj_count;++qq)
                 if(patch[qq]->ID==p->B440_ID[qn])
@@ -244,7 +244,7 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
             i=p->gcbsl1[p->level][n].i;
             j=p->gcbsl1[p->level][n].j;
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl1[p->level][n].cs==p->B440_face[qn] && p->gcbsl1[p->level][n].bc==21)
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl1[p->level][n].cs==p->B440_face[qn] && p->gcbsl1[p->level][n].bc==BT_WALL)
             {
                 for(qq=0;qq<obj_count;++qq)
                 if(patch[qq]->ID==p->B440_ID[qn])
@@ -262,7 +262,7 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
             i=p->gcbsl2[p->level][n].i;
             j=p->gcbsl2[p->level][n].j;
 
-            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl2[p->level][n].cs==p->B440_face[qn] && p->gcbsl2[p->level][n].bc==21)
+            if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl2[p->level][n].cs==p->B440_face[qn] && p->gcbsl2[p->level][n].bc==BT_WALL)
             {
                 for(qq=0;qq<obj_count;++qq)
                 if(patch[qq]->ID==p->B440_ID[qn])

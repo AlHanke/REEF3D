@@ -62,9 +62,9 @@ void ioflow_f::gcio_update_impl(lexer *p)
         k = p->gcb4[p->level][n].k;
         cs = p->gcb4[p->level][n].cs;
 
-        if((p->gcb4[p->level][n].bc==1) && p->DF(i,j,k)>0)
+        if((p->gcb4[p->level][n].bc==BT_INFLOW) && p->DF(i,j,k)>0)
         p->gcin[p->level].push_back({i, j, k, cs});
-        else if((p->gcb4[p->level][n].bc==2) && p->DF(i,j,k)>0)
+        else if((p->gcb4[p->level][n].bc==BT_OUTFLOW) && p->DF(i,j,k)>0)
         p->gcout[p->level].push_back({i, j, k, cs});
     }
     GC_TILE_RESET;
@@ -80,7 +80,7 @@ void ioflow_f::gcio_update_impl(lexer *p)
     {
         GCB4_TILE(n);
 
-        if(p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6)
+        if(p->gcb4[p->level][n].bc==BT_INFLOW || p->gcb4[p->level][n].bc==BT_WAVEGEN)
         {
             i = p->gcb4[p->level][n].i;
             j = p->gcb4[p->level][n].j;
@@ -103,7 +103,7 @@ void ioflow_f::gcio_update_impl(lexer *p)
                 p->IO[IJKp1] = 1;
             }
         }
-        else if(p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7)
+        else if(p->gcb4[p->level][n].bc==BT_OUTFLOW || p->gcb4[p->level][n].bc==BT_NUMBEACH)
         {
             i = p->gcb4[p->level][n].i;
             j = p->gcb4[p->level][n].j;

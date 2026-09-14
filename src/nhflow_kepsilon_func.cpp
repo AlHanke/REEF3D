@@ -96,7 +96,7 @@ void nhflow_kepsilon_func::eddyvisc(lexer* p, fdm_nhf *d, ghostcell* pgc, vrans*
 
 		if(p->A564==1)
 		GC4LOOP
-		if(p->gcb4[p->level][n].bc==21)
+		if(p->gcb4[p->level][n].bc==BT_WALL)
 		{
 		    GCB4_TILE(n);
 

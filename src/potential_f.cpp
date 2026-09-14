@@ -334,7 +334,7 @@ void potential_f::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
     {
         GCB4_TILE(n);
 
-        if(p->gcb4[p->level][n].bc==1 || p->gcb4[p->level][n].bc==6)
+        if(p->gcb4[p->level][n].bc==BT_INFLOW || p->gcb4[p->level][n].bc==BT_WAVEGEN)
         {
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;
@@ -358,7 +358,7 @@ void potential_f::ini_bc(lexer *p, fdm *a, ghostcell *pgc)
 
         }
 
-        if(p->gcb4[p->level][n].bc==2 || p->gcb4[p->level][n].bc==7)
+        if(p->gcb4[p->level][n].bc==BT_OUTFLOW || p->gcb4[p->level][n].bc==BT_NUMBEACH)
         {
             i=p->gcb4[p->level][n].i;
             j=p->gcb4[p->level][n].j;

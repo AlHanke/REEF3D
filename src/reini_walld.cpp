@@ -44,7 +44,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
 
     int qq;
     QQGC4LOOP
-    if(p->gcb4[p->level][qq].bc==21)
+    if(p->gcb4[p->level][qq].bc==BT_WALL)
     {
         GCB4_TILE(qq);
 
@@ -92,7 +92,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
     GC_TILE_RESET;
 
     QQGC4LOOP
-    if(p->gcb4[p->level][qq].bc==1|| p->gcb4[p->level][qq].bc==2|| p->gcb4[p->level][qq].bc==3)
+    if(p->gcb4[p->level][qq].bc==BT_INFLOW|| p->gcb4[p->level][qq].bc==BT_OUTFLOW|| p->gcb4[p->level][qq].bc==BT_SYMMETRY)
     {
         GCB4_TILE(qq);
 
@@ -178,7 +178,7 @@ void reini_walld::start(fdm* a,lexer* p, field &f, ghostcell* pgc,ioflow* pflow)
         }
 
         QQGC4LOOP
-        if(p->gcb4[p->level][qq].bc==21)
+        if(p->gcb4[p->level][qq].bc==BT_WALL)
         {
             GCB4_TILE(qq);
 

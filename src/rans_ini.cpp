@@ -97,7 +97,7 @@ void rans_io::plain_wallfunc(lexer* p, fdm*a, ghostcell* pgc)
 	}
 
 	GC4LOOP
-	if(p->gcb4[p->level][n].bc==21)
+	if(p->gcb4[p->level][n].bc==BT_WALL)
 	{
 	    GCB4_TILE(n);
 
@@ -136,7 +136,7 @@ void rans_io::plain_wallfunc(lexer* p, fdm*a, ghostcell* pgc)
 void rans_io::inflow(lexer* p, fdm*a, ghostcell* pgc)
 {
         GC4LOOP
-        if(p->gcb4[p->level][n].bc==1)
+        if(p->gcb4[p->level][n].bc==BT_INFLOW)
         {
             GCB4_TILE(n);
 
@@ -155,7 +155,7 @@ void rans_io::inflow(lexer* p, fdm*a, ghostcell* pgc)
         GC_TILE_RESET;
         
         GC4LOOP
-        if(p->gcb4[p->level][n].bc==2)
+        if(p->gcb4[p->level][n].bc==BT_OUTFLOW)
         {
             GCB4_TILE(n);
 
