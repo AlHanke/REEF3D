@@ -33,31 +33,31 @@ void hypre_ssamg::solve(lexer *p)
     // Single level keeps SSAMG.
     /*if (created_nlevs > 1)
     {
-        // Only rebuild the BoomerAMG hierarchy periodically (see par_setup_count in the
+        // Only rebuild the BoomerAMG hierarchy periodically (see setup_count in the
         // header): on a fresh solver, on a fixed period, or as soon as the iteration count
         // shows the lagged hierarchy going stale. GMRES always applies the current par_A, so
         // reusing an older hierarchy changes only how fast it converges, not what it converges
         // to -- the dam break solutions are bit-identical to rebuilding every solve. Setup fell
         // from 13.5s to ~1.0s over 1476 solves for +0.6 iterations each.
-        const bool do_setup = (par_setup_count == 0)
-                           || (par_setup_count >= par_setup_period)
-                           || (par_last_iters > par_fresh_iters + par_setup_degrade);
+        const bool par_do_setup = (setup_count == 0)
+                           || (setup_count >= setup_period)
+                           || (last_iters > fresh_iters + setup_degrade);
 
-        if(do_setup)
+        if(par_do_setup)
         {
             HYPRE_ParCSRGMRESSetup(par_solver, par_A, par_b, par_x);
-            par_setup_count = 0;
+            setup_count = 0;
         }
-        ++par_setup_count;
+        ++setup_count;
 
         HYPRE_ParCSRGMRESSolve(par_solver, par_A, par_b, par_x);
 
         HYPRE_GMRESGetNumIterations(par_solver, &iters);
         HYPRE_GMRESGetFinalRelativeResidualNorm(par_solver, &relres);
 
-        par_last_iters = int(iters);
-        if(do_setup)
-            par_fresh_iters = int(iters);
+        last_iters = int(iters);
+        if(par_do_setup)
+            fresh_iters = int(iters);
 
         // object_type==HYPRE_PARCSR: refresh the SStruct vector's structured data from
         // the solved ParVector so fillbackvec4's GetBoxValues sees the solution.
@@ -66,7 +66,8 @@ void hypre_ssamg::solve(lexer *p)
     // N10==40: standalone SSAMG
     else*/ if (p->N10 == 40)
     {
-        HYPRE_SStructSSAMGSetup(ssamg, A, b, x);
+        if(do_setup)
+            HYPRE_SStructSSAMGSetup(ssamg, A, b, x);
         HYPRE_SStructSSAMGSolve(ssamg, A, b, x);
 
         HYPRE_SStructSSAMGGetNumIterations(ssamg, &iters);
@@ -76,7 +77,8 @@ void hypre_ssamg::solve(lexer *p)
     // see the warning in create_solver)
     else if (p->N10 == 42)
     {
-        HYPRE_SStructPCGSetup(pcg_solver, A, b, x);
+        if(do_setup)
+            HYPRE_SStructPCGSetup(pcg_solver, A, b, x);
         HYPRE_SStructPCGSolve(pcg_solver, A, b, x);
 
         HYPRE_SStructPCGGetNumIterations(pcg_solver, &iters);
@@ -85,7 +87,8 @@ void hypre_ssamg::solve(lexer *p)
     // N10==41: GMRES + SSAMG preconditioner
     else
     {
-        HYPRE_SStructGMRESSetup(gmres_solver, A, b, x);
+        if(do_setup)
+            HYPRE_SStructGMRESSetup(gmres_solver, A, b, x);
         HYPRE_SStructGMRESSolve(gmres_solver, A, b, x);
 
         HYPRE_SStructGMRESGetNumIterations(gmres_solver, &iters);
@@ -94,4 +97,11 @@ void hypre_ssamg::solve(lexer *p)
 
     p->solveriter = int(iters);
     p->final_res  = double(relres);
+
+    // Feed the lag's staleness trigger (see start_solver45): fresh_iters is the cost of a
+    // just-rebuilt hierarchy, last_iters the cost now. When the gap opens past setup_degrade
+    // the hierarchy has drifted far enough from the operator to be worth rebuilding early.
+    last_iters = int(iters);
+    if(do_setup)
+        fresh_iters = int(iters);
 }

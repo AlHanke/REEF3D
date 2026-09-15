@@ -133,24 +133,34 @@ private:
     HYPRE_Solver          par_solver = nullptr;
     HYPRE_Solver          par_precond = nullptr;
 
-    // Lagged BoomerAMG setup (multi-level path only; see solve()). The matrix values change
-    // every solve but its sparsity does not, so the AMG hierarchy built from an earlier set of
-    // values stays a perfectly good preconditioner -- preconditioner quality only affects the
-    // iteration count, never the solution GMRES converges to. Rebuilding it every solve cost
-    // more than the Krylov iterations it accelerated. par_setup_count counts solves since the
-    // last hierarchy build; par_fresh_iters is the iteration count on the solve immediately
-    // after that build, and par_last_iters the most recent one, so a hierarchy that has gone
-    // stale can be detected and rebuilt early.
-    int par_setup_count = 0;
-    int par_fresh_iters = 0;
-    int par_last_iters  = 0;
+    // Lagged solver setup (both the SStruct SSAMG and the ParCSR BoomerAMG path; see
+    // solve()). The matrix values change every solve but its sparsity does not, so the
+    // hierarchy built from an earlier set of values stays a perfectly good preconditioner --
+    // preconditioner quality only affects the iteration count, never the solution the Krylov
+    // method converges to. Rebuilding it every solve cost more than the iterations it
+    // accelerated. On the SSAMG path this is doubly true: hypre refs the finest-level operator
+    // (ssamg_setup.c: hypre_SStructMatrixRef(A, &A_l[0]), likewise b and x), so level 0 always
+    // smooths against the CURRENT matrix and right-hand side -- only the coarse levels go
+    // stale. setup_count counts solves since the last hierarchy build; fresh_iters is the
+    // iteration count on the solve immediately after that build, and last_iters the most
+    // recent one, so a hierarchy that has gone stale can be detected and rebuilt early.
+    int setup_count = 0;
+    int fresh_iters = 0;
+    int last_iters  = 0;
+
+    // Set by start_solver45 and read by solve(): whether this solve rebuilt the solver and so
+    // still has to run the matching HYPRE ...Setup. Skipping Setup is the whole point of the
+    // lag -- it is where the hierarchy is actually built.
+    bool do_setup = true;
 
     // Rebuild the hierarchy at least this often, and early if the iteration count has crept
-    // this far above the just-rebuilt count. Both are deliberately loose: on the 2D dam break
-    // the hierarchy stays sharp for far longer than 50 solves, and the degradation trigger is
-    // what protects cases where the operator moves faster than it does here.
-    static constexpr int par_setup_period  = 50;
-    static constexpr int par_setup_degrade = 2;
+    // this far above the just-rebuilt count. Both are deliberately loose: the operator moves
+    // slowly between pressure solves, and the degradation trigger is what protects cases where
+    // it does not. The period is far past the point where it stops mattering -- sweeping it
+    // over 25/50/100/300 on the wave-over-bar case moved the total by less than the run-to-run
+    // spread, because by 25 the setup cost is already negligible against the solves.
+    static constexpr int setup_period  = 50;
+    static constexpr int setup_degrade = 2;
 
     bool solver_created = false;
     bool gmres_created = false;

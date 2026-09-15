@@ -23,7 +23,7 @@ Author: Alexander Hanke
 #include "hypre_ssamg.h"
 #include "lexer.h"
 #include "ghostcell.h"
-
+#include <algorithm>
 void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
 {
     // ---- Multi-level: ParCSR GMRES + BoomerAMG -----------------------------------
@@ -85,7 +85,7 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
 
     //     // This solver has no hierarchy yet, so the next solve must build one before it can
     //     // start lagging the setup again.
-    //     par_setup_count = 0;
+    //     setup_count = 0;
     //     return;
     // }
     // #endif
@@ -112,16 +112,49 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
     // anisotropy of each part) and pin this single value on every level and part instead.
     // That is what the paper does for its L1-Jacobi variants; the adaptive formula targets
     // plain weighted Jacobi, where it yields values below one.
+    //
+    // Swept on the wave-over-bar case and this pair won, so the paper's choice carries over to
+    // this operator. L1-Jacobi at w = 1.0 / 1.25 / 1.5 / 1.75 gave 20.7 / 19.8 / 19.1 / 19.3 s,
+    // and letting hypre pick the weight automatically (by not calling SetRelaxWeight) gave
+    // 20.6 s. Plain weighted Jacobi (relax type 1) was never better -- 19.5 s at w = 0.7,
+    // 19.1 s at w = 0.85 -- and at w = 1.0 it DIVERGES: 60 iterations per solve against a
+    // 250 cap, a final residual of 2.7, and a visibly wrong free surface. Weighted Jacobi has
+    // no damping margin left at w = 1 on this operator, which is exactly the failure L1-Jacobi
+    // is chosen to avoid.
     HYPRE_SStructSSAMGSetRelaxType(ssamg, 2);
     HYPRE_SStructSSAMGSetRelaxWeight(ssamg, 1.5);
 
-    // V(1,1) cycle
+    // V(1,1) cycle. Swept: (1,1) 19.1s, (2,2) 19.4s, (2,1) 20.5s, (1,2) 20.9s. The heavier
+    // cycles do cut iterations -- (2,2) reaches 8.3 against (1,1)'s 10.3 -- but not by enough
+    // to pay for the extra sweeps, and the asymmetric pairs lose on both counts.
     HYPRE_SStructSSAMGSetNumPreRelax(ssamg, 1);
     HYPRE_SStructSSAMGSetNumPostRelax(ssamg, 1);
-    HYPRE_SStructSSAMGSetNumCoarseRelax(ssamg, 2);
 
-    // skip redundant relaxation sweeps on isotropic problems
-    HYPRE_SStructSSAMGSetSkipRelax(ssamg, 1);
+    // One sweep on the coarsest structured level, not two. With BoomerAMG closing the coarse
+    // problem below it (CoarseSolverType 1), a second sweep here is redundant work on the
+    // level BoomerAMG is about to solve properly: 1 sweep 18.3s, 2 sweeps 19.1s, 4 sweeps
+    // 21.6s, 8 sweeps 26.2s, while the iteration count barely moves (11.3 / 10.2 / 10.2).
+    HYPRE_SStructSSAMGSetNumCoarseRelax(ssamg, 1);
+
+    // SkipRelax is hypre's isotropy shortcut: ssamg_setup.c marks a level INACTIVE unless its
+    // coarsening direction has already been coarsened once before, so relaxation happens about
+    // once per full sweep of all directions instead of after every semicoarsening step. How
+    // much that actually skips depends on how many directions coarsen -- one level in two on a
+    // pseudo-2D grid, two in three on a full 3D one -- so it is not worth the same thing in the
+    // two cases, and the sign of the effect genuinely flips. Hence the key on j_dir, the same
+    // pseudo-2D discriminator make_grid_7p uses.
+    //
+    // Measured both ways on both geometries, min of 3, everything else at the values set here:
+    //   pseudo-2D wave-over-bar (1200x1x40, 2 lev):  skip 0 = 18.1s / 7.7 it
+    //                                                skip 1 = 19.1s / 10.3 it   -> skip costs 5%
+    //   3D wave-over-bar        (600x10x20, 2 lev):  skip 0 = 75.6s / 10.1 it
+    //                                                skip 1 = 74.9s / 12.6 it   -> skip gains 1.3%
+    // Skipping always raises the iteration count; the question is only whether the sweeps it
+    // saves are worth more. In pseudo-2D just x and z coarsen, so skipping halves the smoothing
+    // on a grid whose free-surface density jump already makes the smoother work hard, and it
+    // does not pay. In 3D the third direction leaves enough smoothing per cycle that it does.
+    // Both deltas are small but reproduced across three independent measurements each.
+    HYPRE_SStructSSAMGSetSkipRelax(ssamg, p->j_dir ? 1 : 0);
 
     // BoomerAMG closes the coarse-level problem
     HYPRE_SStructSSAMGSetCoarseSolverType(ssamg, 1);
@@ -138,21 +171,60 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
     // that coarsest SStructMatrix to ParCSR and hands it to BoomerAMG. Level 7 is only an
     // upper bound -- the loop still exits early once no part has a coarsenable direction
     // left, so small or thin (pseudo-2D) grids simply get fewer levels.
+    //
+    // With the size cutoff below restored, that cutoff nearly always bites first and this cap
+    // is inert: sweeping it over 3/4/5/7/10 at coarse size 20000 moved the total by less than
+    // the run-to-run spread (19.1 / 19.07 / 18.94 / 18.95 / 19.08 s) and did not change the
+    // iteration count at all above 3. Kept at the paper's value as a backstop.
     HYPRE_SStructSSAMGSetMaxLevels(ssamg, 7);
 
-    // Disable the size-based cutoff so the level cap above is the sole transition criterion,
-    // as in the paper. This replaces a locally tuned heuristic (coarse size cellnumtot/20,
-    // clamped to [500, 20000], and cellnumtot*7/10 clamped to [500, 200000] for nlevs>1)
-    // that handed off far earlier -- ~5x DOF reduction rather than 64x. That heuristic was
-    // measured faster on the 2D dam break at the time (14.4k cells 27.1s -> 19.9s, 115.2k
-    // cells 74.0s -> 63.4s, iteration count flat), so it is entirely possible SSAMG-opt's
-    // deeper structured hierarchy is slower on this operator than what it replaces; the two
-    // want to be benchmarked against each other rather than assumed.
+    // Hand off to the BoomerAMG coarse solver before SSAMG's own structured coarsening reaches
+    // hypre's default. Each extra structured level costs a Galerkin RAP in setup and a
+    // relax+restrict+interpolate in every cycle, and past a point that buys fewer iterations
+    // than it costs. This restores (and re-tunes) the size-based cutoff that the SSAMG-opt
+    // configuration of Magri, Falgout & Yang had disabled with MaxCoarseSize(0); the level cap
+    // below is then only a backstop.
     //
-    // Note the coarsest grid still ends up at most 9 rows as the paper describes, because
-    // ssamg_csolver.c leaves BoomerAMG's own MaxCoarseSize at hypre's default of 9 and does
-    // not expose it.
-    HYPRE_SStructSSAMGSetMaxCoarseSize(ssamg, 0);
+    // Measured on two geometries, min of 3, with the setup lag in place. Total wall time and
+    // mean PCG iterations against coarse size:
+    //   pseudo-2D (48k level-0 cells + 77k on level 1, 100 steps, 4 ranks)
+    //        0 (off) 22.8s/15.1   2000 18.8s/10.2   5000 18.2s/9.5
+    //       10000    18.5s/10.2  20000 17.8s/8.9   40000 18.5s/9.3
+    //   3D (120k level-0 cells, 30 steps, 6 ranks)
+    //        0 (off) 73.4s/13.7   1000 73.3s/13.7   3000 73.4s/13.7   6000 73.3s/13.7
+    //       24000    73.4s/13.1  48000 74.9s/12.6
+    // The two disagree about what the cutoff is worth -- it is a 22% win in pseudo-2D and a
+    // wash in 3D, where the curve is flat until it starts costing around 48k -- but they agree
+    // on where to put it: ~20k is at the pseudo-2D optimum and still inside the 3D flat region.
+    //
+    // Hence a fraction of the grid with a hard absolute cap, and the CAP is the part that
+    // carries most of the generality. BoomerAMG's cost scales with the absolute size of the
+    // problem handed to it, not with what fraction of the original grid that is, so "coarsen
+    // until at most ~20k rows remain" is the meaningful rule; the fraction only stops small
+    // grids from handing over a problem that is most of the grid. An earlier version of this
+    // used the fraction alone (cellnumtot*2/5, no cap), which is fine at 48k but picks 48000 on
+    // the 3D case -- precisely the value measured to be the worst of the six tested there.
+    //
+    // The lower clamp keeps tiny grids from skipping SSAMG altogether (hypre faults when
+    // nothing coarsens at all). The upper clamp is not cosmetic either: a MaxCoarseSize at or
+    // above the whole grid segfaults in the coarse solve (observed at 200000 on the 48k case,
+    // SIGSEGV on rank 2), so it has to stay well clear of the grid size.
+    int coarse_size = 500;
+
+    if(p->cellnumtot > 0)
+        coarse_size = std::min(std::max(p->cellnumtot * 2 / 5, 500), 20000);
+
+    #if USE_AMREX
+    // Single-part grids were tuned separately and earlier, on the 2D dam break, where a much
+    // earlier handoff (cellnumtot/20) measured best: 14.4k cells 27.1s -> 19.9s, 115.2k cells
+    // 74.0s -> 63.4s. Nothing in this round re-measured the single-level case -- every run was
+    // 2-level -- so leave that result standing rather than overwriting it with a number tuned
+    // on a different operator.
+    if(p->cellnumtot > 0 && p->nlevs == 1)
+        coarse_size = std::min(std::max(p->cellnumtot / 20, 500), 20000);
+    #endif
+
+    HYPRE_SStructSSAMGSetMaxCoarseSize(ssamg, coarse_size);
 
     // Galerkin RAP works for both single-level and multi-level grids.
     // Non-Galerkin RAP keeps a compact stencil on coarse levels but crashes
@@ -239,9 +311,11 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
     }
 
     solver_created = true;
+    // Cleared unconditionally: a non-AMReX build still sets grid_rebuilt in make_grid_7p, and
+    // leaving it set would force a rebuild on every solve and defeat the lag.
+    grid_rebuilt = false;
     #if USE_AMREX
     created_nlevs = p->nlevs;
-    grid_rebuilt  = false;
     #endif
 }
 
