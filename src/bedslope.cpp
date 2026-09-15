@@ -31,8 +31,6 @@ bedslope::bedslope(lexer *p) : norm_vec(p),nhflow_gradient(p)
 {
     midphi=p->S81*(PI/180.0);
     delta=p->S82*(PI/180.0);
-    
-    pdx = new ddweno_f_nug(p);
 }
 
 bedslope::~bedslope()
@@ -451,9 +449,9 @@ void bedslope::slope_weno_topo(lexer *p, ghostcell *pgc, sediment_fdm *s, field 
     
 	nz0 = (topo(i,j,k+1)-topo(i,j,k-1))/(p->DZP[KP]+p->DZP[KM1]);
     
-    nx1 = -pdx->ddwenox(topo, nx0);
-    ny1 = -pdx->ddwenoy(topo, ny0);
-    nz1 =  pdx->ddwenoz(topo, nz0);
+    nx1 = -ddwenox(topo, nx0);
+    ny1 = -ddwenoy(topo, ny0);
+    nz1 =  ddwenoz(topo, nz0);
     
 
 	norm=sqrt(nx1*nx1 + ny1*ny1 + nz1*nz1);

@@ -29,12 +29,11 @@ Author: Hans Bihs
 class lexer;
 class field;
 class ghostcell;
-class ddweno_f_nug;
 class sediment_fdm;
 
 using namespace std;
 
-class bedslope :  public norm_vec, nhflow_gradient
+class bedslope : public norm_vec, nhflow_gradient
 {
 public:
     bedslope(lexer*);
@@ -52,8 +51,6 @@ private:
     double uvel, vvel;
     double midphi,delta,beta;
     double alpha0, teta0;
-    
-    ddweno_f_nug *pdx;
 };
 
 #endif
