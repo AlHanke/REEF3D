@@ -36,7 +36,7 @@ using namespace std;
 class bedload_direction : public increment
 {
 public:
-
+    virtual ~bedload_direction() = default;
 	virtual void start(lexer*, ghostcell*, sediment_fdm*)=0;
 
 
