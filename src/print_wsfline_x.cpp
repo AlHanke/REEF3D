@@ -20,25 +20,24 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include<iomanip>
-#include"print_wsfline_x.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
-#include"wsf_locate.h"
-#include"ioflow.h"
-#include"wave_interface.h"
-#include<sys/stat.h>
-#include<sys/types.h>
-#include<algorithm>
+#include "print_wsfline_x.h"
+#include "lexer.h"
+#include "fdm.h"
+#include "ghostcell.h"
+#include "ioflow.h"
+#include "wsf_locate.h"
+#include <algorithm>
+#include <iomanip>
+#include <sys/stat.h>
+#include <sys/types.h>
 
-print_wsfline_x::print_wsfline_x(lexer *p, fdm* a, ghostcell *pgc)
+print_wsfline_x::print_wsfline_x(lexer *p, fdm* a, ghostcell *pgc) : num_lines(p->P52), theory(p->P53==1)
 {
-    xloc.resize(p->P52);
-    wsf.resize(p->P52);
-    xloc_all.resize(p->P52);
-    wsf_all.resize(p->P52);
-    wsfpoints.resize(p->P52,0);
+    xloc.resize(num_lines);
+    wsf.resize(num_lines);
+    xloc_all.resize(num_lines);
+    wsf_all.resize(num_lines);
+    wsfpoints.resize(num_lines,0);
 
     recvcount.resize(p->mpi_size);
     recvdispl.resize(p->mpi_size);
@@ -55,46 +54,46 @@ print_wsfline_x::~print_wsfline_x()
 
 void print_wsfline_x::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 {
-    char name[250];
-    int num;
-
-    num = p->count;
-
     if(p->mpirank==0)
     {
-		// open file
-		sprintf(name,"./REEF3D_CFD_WSFLINE/REEF3D-CFD-wsfline-%08i.dat",num);
-        
-		wsfout.open(name);
+        // open file
+        char name[250];
+        int num = p->count;
+        sprintf(name,"./REEF3D_CFD_WSFLINE/REEF3D-CFD-wsfline-%08i.dat",num);
 
-		wsfout<<"simtime:  "<<p->simtime<<endl;
-		wsfout<<"number of wsf-lines:  "<<p->P52<<endl<<endl;
-		wsfout<<"line_No     y_coord"<<endl;
-		for(q=0;q<p->P52;++q)
-		wsfout<<q+1<<"\t "<<p->P52_y[q]<<endl;
+        wsfout.open(name);
 
-		if(p->P53==1)
-		wsfout<<q+1<<"\t "<<" Wave Theory "<<endl;
+        wsfout<<"simtime: "<<p->simtime<<"\n";
+        wsfout<<"number of wsf-lines: "<<num_lines<<"\n\n";
+        wsfout<<"line_No\ty_coord\n";
+        for(q=0;q<num_lines;++q)
+        {
+            wsfout<<q+1<<"\t"<<p->P52_y[q]<<"\n";
 
-		wsfout<<endl<<endl;
+            if(theory)
+            wsfout<<q+1<<"\t"<<"Wave Theory\n";
+        }
 
-		
-		for(q=0;q<p->P52;++q)
-		{
-		wsfout<<"X "<<q+1;
-		wsfout<<"\t P "<<q+1<<" \t \t ";
-		if(p->P53==1)
-		wsfout<<"\t \t W "<<q+1;
-		}
+        wsfout<<"\n\n";
 
-		wsfout<<endl<<endl;
+
+        for(q=0;q<num_lines;++q)
+        {
+            if(q>0)
+            wsfout<<"\t";
+            wsfout<<"X "<<q+1<<"\tP "<<q+1;
+            if(theory)
+            wsfout<<"\tW "<<q+1;
+        }
+
+        wsfout<<"\n\n"<<std::flush;
     }
 
     //-------------------
 
     collect(p,a,pgc);
 
-    for(q=0;q<p->P52;++q)
+    for(q=0;q<num_lines;++q)
     assemble(p,pgc,q);
 
     // write to file
@@ -107,42 +106,43 @@ void print_wsfline_x::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
         // point now, so there is nothing to test for emptiness.
         int maxpoints=0;
 
-        for(q=0;q<p->P52;++q)
-        maxpoints = MAX(maxpoints,wsfpoints[q]);
+        for(q=0;q<num_lines;++q)
+        maxpoints = std::max(maxpoints,wsfpoints[q]);
 
         for(n=0;n<maxpoints;++n)
         {
-		    for(q=0;q<p->P52;++q)
-			{
-				if(n<wsfpoints[q])
-				{
-				wsfout<<setprecision(5)<<xloc_all[q][n]<<" \t ";
-				wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
+            for(q=0;q<num_lines;++q)
+            {
+                if(q>0)
+                wsfout<<"\t";
 
-					if(p->P53==1)
-					wsfout<<pflow->wave_fsf(p,pgc,xloc_all[q][n])<<" \t  ";
-				}
+                if(n<wsfpoints[q])
+                {
+                    wsfout<<setprecision(precision)<<xloc_all[q][n]<<"\t";
+                    wsfout<<setprecision(precision)<<wsf_all[q][n];
 
-				else
-				{
-				wsfout<<setprecision(5)<<" \t ";
-				wsfout<<setprecision(5)<<" \t ";
+                    if(theory)
+                    wsfout<<"\t"<<setprecision(precision)<<pflow->wave_fsf(p,pgc,xloc_all[q][n]);
+                }
+                else
+                {
+                    wsfout<<"\t";
 
-					if(p->P53==1)
-					wsfout<<" \t  ";
-				}
-			}
+                    if(theory)
+                    wsfout<<"\t";
+                }
+            }
 
             wsfout<<endl;
         }
 
-    wsfout.close();
+        wsfout.close();
     }
 }
 
 void print_wsfline_x::collect(lexer *p, fdm *a, ghostcell *pgc)
 {
-    for(q=0;q<p->P52;++q)
+    for(q=0;q<num_lines;++q)
     {
         xloc[q].clear();
         wsf[q].clear();
@@ -150,7 +150,7 @@ void print_wsfline_x::collect(lexer *p, fdm *a, ghostcell *pgc)
 
     LEVEL_LOOP TILE_LOOP
     {
-        for(q=0;q<p->P52;++q)
+        for(q=0;q<num_lines;++q)
         {
             if(!locate_j(p,q,j))
             continue;
@@ -172,7 +172,7 @@ void print_wsfline_x::collect(lexer *p, fdm *a, ghostcell *pgc)
                         if(!wsf_locate::uncovered(p,i,j,k))
                         continue;
 
-                        zval=MAX(zval,-(a->phi(i,j,k)*p->DZP[KP])/(a->phi(i,j,k+1)-a->phi(i,j,k)) + p->pos_z());
+                        zval=std::max(zval,-(a->phi(i,j,k)*p->DZP[KP])/(a->phi(i,j,k+1)-a->phi(i,j,k)) + p->pos_z());
                     }
                 }
 
@@ -290,7 +290,7 @@ void print_wsfline_x::remove_multientry(lexer *p, double* b, double* c, int& num
     for(n=0;n<oldnum;++n)
     {
         if(xval<=b[n]+0.001*p->DXM && xval>=b[n]-0.001*p->DXM && count>0)
-        g[count-1]=MAX(g[count-1],c[n]);
+        g[count-1]=std::max(g[count-1],c[n]);
 
         if(xval>b[n]+0.001*p->DXM || xval<b[n]-0.001*p->DXM)
         {
@@ -308,5 +308,5 @@ void print_wsfline_x::remove_multientry(lexer *p, double* b, double* c, int& num
     c[n]=g[n];
     }
 
-	num=count;
+    num=count;
 }
