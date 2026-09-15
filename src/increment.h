@@ -27,10 +27,11 @@ Author: Hans Bihs
 
 struct increment
 {
-public:
+protected:
     increment() = default;
-    virtual ~increment() = default;
+    ~increment() = default;
 
+public:
     static inline int i = 0;
     static inline int j = 0;
     static inline int k = 0;
