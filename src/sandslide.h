@@ -34,6 +34,11 @@ using namespace std;
 class sandslide  
 {
 public:
+    sandslide() = default;
+    sandslide(const sandslide&) = delete;
+    sandslide& operator=(const sandslide&) = delete;
+    sandslide(sandslide&&) = delete;
+    sandslide& operator=(sandslide&&) = delete;
     virtual ~sandslide() = default;
 
 	virtual void start(lexer*,ghostcell*,sediment_fdm*)=0;

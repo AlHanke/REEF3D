@@ -45,6 +45,11 @@ using namespace std;
 class momentum
 {
 public:
+    momentum() = default;
+    momentum(const momentum&) = delete;
+    momentum& operator=(const momentum&) = delete;
+    momentum(momentum&&) = delete;
+    momentum& operator=(momentum&&) = delete;
     virtual ~momentum() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, vrans*, sixdof*)=0;

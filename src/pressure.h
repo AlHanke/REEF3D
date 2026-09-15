@@ -35,6 +35,11 @@ class slice;
 class pressure
 {
 public:
+    pressure() = default;
+    pressure(const pressure&) = delete;
+    pressure& operator=(const pressure&) = delete;
+    pressure(pressure&&) = delete;
+    pressure& operator=(pressure&&) = delete;
     virtual ~pressure() = default;
 
 	virtual void start(fdm*,lexer*,poisson*,solver*,ghostcell*,ioflow*,field&,field&,field&,double)=0;

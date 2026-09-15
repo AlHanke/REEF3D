@@ -30,6 +30,11 @@ class lexer;
 class fluxlim
 {
 public:
+    fluxlim() = default;
+    fluxlim(const fluxlim&) = delete;
+    fluxlim& operator=(const fluxlim&) = delete;
+    fluxlim(fluxlim&&) = delete;
+    fluxlim& operator=(fluxlim&&) = delete;
     virtual ~fluxlim() = default;
 
     template<typename GernericField>

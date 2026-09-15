@@ -40,8 +40,12 @@ using namespace std;
 
 class solver
 {
-
 public:
+    solver() = default;
+    solver(const solver&) = delete;
+    solver& operator=(const solver&) = delete;
+    solver(solver&&) = delete;
+    solver& operator=(solver&&) = delete;
     virtual ~solver() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, field&, vec&, int)=0;

@@ -30,6 +30,11 @@ class field;
 class poisson
 {
 public:
+    poisson() = default;
+    poisson(const poisson&) = delete;
+    poisson& operator=(const poisson&) = delete;
+    poisson(poisson&&) = delete;
+    poisson& operator=(poisson&&) = delete;
     virtual ~poisson() = default;
 
     virtual void start(lexer*, fdm*, field&)=0;

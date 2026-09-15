@@ -31,6 +31,11 @@ class turbulence;
 class timestep
 {
 public:
+    timestep() = default;
+    timestep(const timestep&) = delete;
+    timestep& operator=(const timestep&) = delete;
+    timestep(timestep&&) = delete;
+    timestep& operator=(timestep&&) = delete;
     virtual ~timestep() = default;
 
     virtual void start(fdm*,lexer*,ghostcell*,turbulence*)=0;
