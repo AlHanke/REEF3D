@@ -69,30 +69,44 @@ void hypre_ssamg::start_solver45(lexer *p, fdm *a, ghostcell *pgc, field &f, int
     }
     #endif
 
-    // Rebuild the solver for every solve. The matrix values change every step, so solve() has
-    // to run HYPRE_SStructGMRESSetup/SSAMGSetup each time -- and hypre's SStruct setup allocates
-    // a complete new hierarchy on every call (SSAMGSetup -> ComputeRAP / MatvecSetup ->
-    // hypre_StructMatrixResize) without releasing the one from the previous call. There is no
-    // "unsetup", only Destroy, so a solver object kept across steps leaks one full multigrid
-    // hierarchy per solve (measured ~25 MB/step at 240x2x240 with 3 RK3 pressure solves, >5 GB
-    // after ~200 steps). Create/Destroy are trivial next to the Setup that has to run anyway.
-    bool rebuild_solver = true;
+    // Lagged solver setup. The hierarchy is rebuilt periodically instead of on every solve;
+    // between rebuilds solve() skips HYPRE_SStruct...Setup entirely and reuses the existing
+    // one as a preconditioner. That is safe because the Krylov method always applies the
+    // CURRENT operator for its matvecs, so a stale hierarchy changes how fast it converges,
+    // never what it converges to -- and hypre refs A/b/x into level 0 of the hierarchy
+    // (ssamg_setup.c:150), so the finest level is not stale at all.
+    //
+    // Rebuild means Destroy + Create, not a second Setup on the live solver: hypre's SStruct
+    // setup allocates a complete new hierarchy on every call (SSAMGSetup -> ComputeRAP /
+    // MatvecSetup -> hypre_StructMatrixResize) without releasing the one from the previous
+    // call, and there is no "unsetup", only Destroy. Re-Setup-ing a live solver therefore
+    // leaks one full multigrid hierarchy per call (measured ~25 MB/step at 240x2x240 with 3
+    // RK3 pressure solves, >5 GB after ~200 steps). Destroying first keeps exactly one
+    // hierarchy alive; Create/Destroy are trivial next to the Setup they bracket.
+    //
+    // grid_rebuilt is not an optimisation term: a regrid destroys A/b/x, so a hierarchy set up
+    // against the old operator points at freed memory and must be torn down with it.
+    const bool stale = (last_iters > fresh_iters + setup_degrade);
 
-    // NOTE: this used to be relaxed for nlevs>1, because multi-level took the ParCSR GMRES +
-    // BoomerAMG path, which does NOT leak (hypre_BoomerAMGSetup frees its own previous
-    // hierarchy) and so only had to follow the operator's identity:
-    //     if(p->nlevs > 1)
-    //         rebuild_solver = (!solver_created || created_nlevs != p->nlevs || grid_rebuilt);
-    // That path is currently commented out in create_solver()/solve(), so nlevs>1 now runs the
-    // SStruct PCG/GMRES + SSAMG solver too -- i.e. the leaking one -- while the relaxed guard
-    // kept the solver object alive across steps and leaked a hierarchy per SSAMGSetup. Keep the
-    // rebuild unconditional until the ParCSR path is restored (restore the guard with it).
+    bool rebuild_solver = !solver_created
+                       || grid_rebuilt
+                       || setup_count >= setup_period
+                       || stale;
+
+    #if USE_AMREX
+    rebuild_solver = rebuild_solver || (created_nlevs != p->nlevs);
+    #endif
 
     if(rebuild_solver)
     {
         delete_solver();
         create_solver(p, pgc);
+        setup_count = 0;
     }
+    ++setup_count;
+
+    // solve() runs the matching HYPRE ...Setup only on a rebuild solve.
+    do_setup = rebuild_solver;
 
     fill_matrix4(p, a, pgc, f);
 
