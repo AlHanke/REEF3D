@@ -24,6 +24,7 @@ Author: Hans Bihs
 #include "lexer.h"
 #include "fdm.h"
 #include "ghostcell.h"
+#include "wsf_locate.h"
 #include <algorithm>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -87,6 +88,7 @@ print_wsf::print_wsf(lexer *p, fdm* a, ghostcell *pgc, int num)
     }
 
     lev.resize(gauge_num);
+    levmax.resize(gauge_num);
     wsf.resize(gauge_num);
 }
 
@@ -138,20 +140,21 @@ void print_wsf::height_gauge(lexer *p, fdm *a, ghostcell *pgc, field &f)
         }
     }
 
-    // Two reductions per gauge: agree on the finest level that produced a
-    // surface anywhere, then drop every contribution from a coarser one so the
-    // value reduction cannot pick a coarse answer over a fine one. With no
-    // contribution at all levmax stays -1, nothing is dropped, and the gauge
-    // reports the sentinel as before.
+    // Two collectives total, not two per gauge: agree elementwise on the finest
+    // level that produced a surface anywhere, then blank every contribution from
+    // a coarser one so the value reduction cannot pick a coarse answer over a
+    // fine one. levmax is a copy because the reduction is in place and the local
+    // level is still needed to test against the reduced one. Where no rank
+    // contributed, levmax stays -1, nothing is blanked, and the gauge reports the
+    // sentinel as before.
+    levmax = lev;
+    pgc->globalimax(levmax.data(),gauge_num);
+
     for(n=0;n<gauge_num;++n)
-    {
-        const int levmax = pgc->globalimax(lev[n]);
+    if(lev[n]!=levmax[n])
+    wsf[n] = -1.0e20;
 
-        if(lev[n]!=levmax)
-        wsf[n] = -1.0e20;
-
-        wsf[n] = pgc->globalmax(wsf[n]);
-    }
+    pgc->globalmax(wsf.data(),gauge_num);
 
     // write to file
     if(p->mpirank==0)
@@ -180,40 +183,16 @@ void print_wsf::record(int gauge, double value)
     wsf[gauge] = MAX(wsf[gauge],value);
 }
 
-int print_wsf::locate_1d(const std::vector<double>& N, int org, int imax, double s)
-{
-    if(imax<0)
-    return -1;
-
-    if(s<N[org] || s>=N[org+imax+1])
-    return -1;
-
-    int lo=0, hi=imax;
-
-    while(lo<hi)
-    {
-        const int mid = lo + (hi-lo+1)/2;
-
-        if(s>=N[org+mid])
-        lo = mid;
-
-        else
-        hi = mid-1;
-    }
-
-    return lo;
-}
-
 bool print_wsf::locate(lexer *p, int gauge, int& ii, int& jj) const
 {
-    ii = locate_1d(p->XN,ORIGIN_I,IMAX_LOOP,x[gauge]);
+    ii = wsf_locate::cell_1d(p->XN,ORIGIN_I,IMAX_LOOP,x[gauge]);
 
     if(ii<0)
     return false;
 
     if(p->j_dir)
     {
-        jj = locate_1d(p->YN,ORIGIN_J,JMAX_LOOP,y[gauge]);
+        jj = wsf_locate::cell_1d(p->YN,ORIGIN_J,JMAX_LOOP,y[gauge]);
 
         if(jj<0)
         return false;

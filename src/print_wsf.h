@@ -44,19 +44,12 @@ public:
     void height_gauge(lexer*, fdm*, ghostcell*, field&);
 
 private:
-    /// Cell containing coordinate `s` in the 1D nodal array `N`, searched over
-    /// the [org, org+imax+1] node window; -1 when `s` falls outside it. The
-    /// window is handed in as ORIGIN_* / *MAX_LOOP by the caller, which is what
-    /// makes this work unchanged in both builds: legacy that window is the
-    /// rank's subdomain, under AMReX it is the installed tile at the installed
-    /// level, with the level stride already folded into ORIGIN_*.
-    static int locate_1d(const std::vector<double>&, int org, int imax, double s);
-
     /// Resolve a gauge to indices valid in the CURRENTLY installed context.
     /// Under AMReX that is the tile installed by TILE_LOOP, so the result is
     /// TILE-LOCAL and must be consumed before the loop advances — no index is
     /// ever stored across iterations, which is why no TileCtx is needed and why
     /// a regrid cannot invalidate anything. False when the gauge is outside.
+    /// See wsf_locate.h for why this is not position::posc_i.
     bool locate(lexer*, int gauge, int& ii, int& jj) const;
 
     /// Keep `value` if it comes from a finer level than what this gauge already
@@ -69,7 +62,8 @@ private:
     double *x, *y; // pointers so input location arrays
     int gauge_num;
 
-    std::vector<int> lev;   // finest level that produced a value, -1 if none
+    std::vector<int> lev;      // finest level that produced a value, -1 if none
+    std::vector<int> levmax;   // scratch: lev reduced across ranks
     std::vector<double> wsf;
     int n;
     std::ofstream wsfout;
