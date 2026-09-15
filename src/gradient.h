@@ -34,12 +34,11 @@ using namespace std;
 
 class gradient : virtual public increment
 {
-public:
-
+protected:
 	gradient(lexer*);
-	 ~gradient();
+    ~gradient() = default;
 
-
+public:
 
 	//x
 	 double xdx(fdm*, field&);
