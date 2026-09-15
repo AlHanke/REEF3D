@@ -40,7 +40,7 @@ print_wsf_theory::print_wsf_theory(lexer *p, fdm*, ghostcell *pgc, int num)
     else
     {
         if(p->mpirank==0)
-        std::cerr<<"Error: Impropper height gauge defined!"<<std::endl;
+        std::cerr<<"Error: Impropper theory wave gauge defined!"<<std::endl;
 
         pgc->final(EXIT_FAILURE);
     }
