@@ -23,9 +23,7 @@ Author: Hans Bihs
 #ifndef PRINT_WSF_THEORY_H_
 #define PRINT_WSF_THEORY_H_
 
-#include"boundarycheck.h"
-#include<iostream>
-#include<fstream>
+#include <fstream>
 
 class lexer;
 class fdm;
@@ -33,27 +31,19 @@ class ghostcell;
 class field;
 class ioflow;
 
-using namespace std;
-
-class print_wsf_theory : public boundarycheck
+class print_wsf_theory
 {
 public:
     print_wsf_theory(lexer*,fdm*,ghostcell*,int);
-	virtual ~print_wsf_theory();
+    ~print_wsf_theory();
 
-	void height_gauge(lexer*, fdm*, ghostcell*,ioflow*,field&);
-
+    void height_gauge(lexer*,fdm*,ghostcell*,ioflow*,field&);
 
 private:
-	
-	double *x,*y;
-	int gauge_num;
+    double *x,*y;
+    int gauge_num;
 
-    int *iloc,*jloc,*flag;
-    double *wsf;
-    int n;
-    ofstream wsfout;
-
+    std::ofstream wsfout;
 };
 
 #endif
