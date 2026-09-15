@@ -98,6 +98,7 @@
             <File Name="print_wsfline_x.h"/>
             <File Name="print_wsf_theory.h"/>
             <File Name="print_wsf.h"/>
+            <File Name="wsf_locate.h"/>
           </VirtualDirectory>
           <VirtualDirectory Name="Porous Geometry">
             <File Name="print_porous.h"/>
@@ -1324,6 +1325,7 @@
             <File Name="print_wsfline_x.cpp"/>
             <File Name="print_wsf_theory.cpp"/>
             <File Name="print_wsf.cpp"/>
+            <File Name="wsf_locate.cpp"/>
           </VirtualDirectory>
           <VirtualDirectory Name="Vorticity">
             <File Name="vorticity_void.cpp"/>
