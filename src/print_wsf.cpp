@@ -52,7 +52,7 @@ print_wsf::print_wsf(lexer *p, fdm* a, ghostcell *pgc, int num)
     else
     {
         if(p->mpirank==0)
-        std::cerr<<"Error: Impropper height gauge defined!"<<std::endl;
+        std::cerr<<"Error: Impropper wave gauge defined!"<<std::endl;
 
         pgc->final(EXIT_FAILURE);
     }
