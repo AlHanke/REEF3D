@@ -36,11 +36,6 @@ struct LocalArr4Const;
 class flux
 {
 public:
-    flux() = default;
-    flux(const flux&) = delete;
-    flux& operator=(const flux&) = delete;
-    flux(flux&&) = delete;
-    flux& operator=(flux&&) = delete;
     virtual ~flux() = default;
 
     virtual void u_flux(fdm*,int,const field&,double&,double&) const = 0;
