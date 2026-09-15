@@ -184,6 +184,7 @@ public:
     // (the release target) removes it entirely. std::vector::at() would not
     // optimize away at -O3 — the compiler cannot prove lev is in range, so
     // the compare and the throw path survive.
+    #if USE_AMREX
     level_type& operator[](int lev) noexcept
     {
         assert(lev >= 0 && lev < static_cast<int>(m_lev.size())
@@ -197,21 +198,47 @@ public:
                && "gcb_list_t: level out of range");
         return m_lev[static_cast<size_t>(lev)];
     }
+    #else
+    level_type& operator[](int) noexcept
+    {
+        return m_lev0;
+    }
+
+    const level_type& operator[](int) const noexcept
+    {
+        return m_lev0;
+    }
+    #endif
 
     // Number of entries on a level, as int — the loop macros compare against
     // an int counter, and the dev target builds with -Wsign-conversion.
+    #if USE_AMREX
     int ssize(int lev) const noexcept
     {
         return static_cast<int>((*this)[lev].size());
     }
+    #else
+    int ssize(int) const noexcept
+    {
+        return static_cast<int>(m_lev0.size());
+    }
+    #endif
 
+    #if USE_AMREX
     void resize_levels(int nlevs)
     {
         assert(nlevs > 0 && "gcb_list_t: need at least one level");
         m_lev.resize(static_cast<size_t>(nlevs));
     }
+    #else
+    void resize_levels(int) noexcept {}
+    #endif
 
-    int nlevels() const noexcept { return static_cast<int>(m_lev.size()); }
+    #if USE_AMREX
+    int nlevels() const noexcept {return static_cast<int>(m_lev.size());}
+    #else
+    constexpr int nlevels() const noexcept {return 1;}
+    #endif
 
 private:
     // Born with one empty level. A list can be legitimately empty and still be
@@ -219,7 +246,17 @@ private:
     // still runs GCSL1LOOP/GCSL2LOOP over gcbsl1/gcbsl2 — which correctly find
     // nothing. This is the invariant the old Iarray(gcbsl1,1,5) in read_grid
     // provided; without it those loops index level 0 of an empty container.
+    //
+    // Without AMReX there is exactly one level, so it is a plain member rather
+    // than a one-element vector: operator[] then resolves to a fixed offset
+    // from the list instead of a load of the outer vector's heap buffer
+    // followed by the inner one's, and the invariant above holds by
+    // construction rather than by the initializer.
+    #if USE_AMREX
     std::vector<level_type> m_lev = std::vector<level_type>(1);
+    #else
+    level_type m_lev0;
+    #endif
 };
 
 using gcb_sl_cs_bc_list = gcb_list_t<gcb_sl_cs_bc>;   ///< 2D: gcbsl1/2/4
@@ -227,7 +264,7 @@ using gcb_list    = gcb_list_t<gcb_field_cs_bc_row>;  ///< 3D: gcb1/2/3/4
 using gcb_cs_row_list = gcb_list_t<gcb_field_cs_row>;
 using gcb_cs_list = gcb_list_t<gcb_field_cs>;
 
-using gcb_sl_list = gcb_list_t<gcb_sl>;      ///< 2D: gcbslin
+using gcb_sl_list = gcb_list_t<gcb_sl>;        ///< 2D: gcbslin
 using gcb_sl_cs_list = gcb_list_t<gcb_sl_cs>;  ///< 2D: gcbslout
 
 #endif
