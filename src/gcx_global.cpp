@@ -60,6 +60,34 @@ int ghostcell::globalimax(int sendimax)
     return recvimax;
 }
 
+// Elementwise array reductions. A per-entry scalar reduction costs one
+// Allreduce per entry -- latency-bound and O(count) round trips for something
+// MPI does in one. count==0 is a no-op rather than a zero-length collective,
+// so a rank with nothing to reduce must still call in: these are collective.
+void ghostcell::globalmax(double *val, int count)
+{
+    if(count>0)
+    MPI_Allreduce(MPI_IN_PLACE,val,count,MPI_DOUBLE,MPI_MAX,mpi_comm);
+}
+
+void ghostcell::globalmin(double *val, int count)
+{
+    if(count>0)
+    MPI_Allreduce(MPI_IN_PLACE,val,count,MPI_DOUBLE,MPI_MIN,mpi_comm);
+}
+
+void ghostcell::globalimax(int *val, int count)
+{
+    if(count>0)
+    MPI_Allreduce(MPI_IN_PLACE,val,count,MPI_INT,MPI_MAX,mpi_comm);
+}
+
+void ghostcell::globalimin(int *val, int count)
+{
+    if(count>0)
+    MPI_Allreduce(MPI_IN_PLACE,val,count,MPI_INT,MPI_MIN,mpi_comm);
+}
+
 double ghostcell::timesync(double t)
 {
     // AMR requires a global minimum time step across all ranks, not just rank 0.
