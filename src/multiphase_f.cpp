@@ -40,7 +40,9 @@ multiphase_f::multiphase_f(lexer* p, fdm *a, ghostcell* pgc) : ls1(p), ls2(p)
 {
 	logic(p,a,pgc);
 	
+    if(p->P351>0)
 	pwsf1=new print_wsf(p,a,pgc,1);
+    if(p->P352>0)
 	pwsf2=new print_wsf(p,a,pgc,2);
 }
 

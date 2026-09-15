@@ -107,8 +107,10 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc)
     for(int qn=0; qn<p->P185; ++qn)
     printfsftime_wT[qn] = p->P185_ts[qn];
 
-    pwsf = new print_wsf(p,a,pgc,0);
+    if(p->P50>0)
     pwsf_theory = new print_wsf_theory(p,a,pgc,0);
+    if(p->P51>0)
+    pwsf = new print_wsf(p,a,pgc,0);
     pwsfline_x = new print_wsfline_x(p,a,pgc);
     pwsfline_y = new print_wsfline_y(p,a,pgc);
     pprobe = new probe_point(p,a,pgc);
