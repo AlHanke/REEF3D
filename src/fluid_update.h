@@ -32,6 +32,7 @@ class fluid_update
 {
 public:
     virtual ~fluid_update() = default;
+
     virtual void start(lexer*, fdm*, ghostcell*, field&, field&, field&)=0;
 };
 
