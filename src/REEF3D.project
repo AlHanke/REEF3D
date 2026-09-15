@@ -61,7 +61,6 @@
         <File Name="bicgstab_ijk_2D.h"/>
         <File Name="bicgstab_ijk.h"/>
       </VirtualDirectory>
-      <File Name="solver_fnpf.h"/>
       <File Name="solver.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="Ghostcell">
