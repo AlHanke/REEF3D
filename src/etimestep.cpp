@@ -261,4 +261,8 @@ void etimestep::ini(fdm* a, lexer* p,ghostcell* pgc)
     p->dt=p->N47*cu*0.25;
     p->dt=pgc->timesync(p->dt);
     p->dt_old=p->dt;
+
+    a->maxF = fabs(a->gi);
+    a->maxG = fabs(a->gj);
+    a->maxH = fabs(a->gk);
 }
