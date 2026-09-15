@@ -20,51 +20,50 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Author: Hans Bihs
 --------------------------------------------------------------------*/
 
-#include"print_wsf_theory.h"
-#include"lexer.h"
-#include"fdm.h"
-#include"ghostcell.h"
-#include"ioflow.h"
-#include<sys/stat.h>
-#include<sys/types.h>
+#include "print_wsf_theory.h"
+#include "lexer.h"
+#include "ghostcell.h"
+#include "ioflow.h"
 
-print_wsf_theory::print_wsf_theory(lexer *p, fdm* a, ghostcell *pgc, int num)
+#include <iostream>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+print_wsf_theory::print_wsf_theory(lexer *p, fdm*, ghostcell *pgc, int num)
 {
-	gauge_num = p->P50;
-	x = p->P50_x;
-	y = p->P50_y;
-	
     if(p->P50>0 && num==0)
-	{
-	gauge_num = p->P50;
-	x = p->P50_x;
-	y = p->P50_y;
-	}
-	
-	// Create Folder
-	if(p->mpirank==0)
-	mkdir("./REEF3D_CFD_WSF",0777);
-	
+    {
+        gauge_num = p->P50;
+        x = p->P50_x;
+        y = p->P50_y;
+    }
+    else
+    {
+        if(p->mpirank==0)
+        std::cerr<<"Error: Impropper height gauge defined!"<<std::endl;
+
+        pgc->final(EXIT_FAILURE);
+    }
+
     if(p->mpirank==0 && p->P50>0 && num==0)
     {
-    // open file
-	wsfout.open("./REEF3D_CFD_WSF/REEF3D-CFD-WSF-HG-THEORY.dat");
+        // Create Folder
+        mkdir("./REEF3D_CFD_WSF",0777);
 
-    wsfout<<"number of gauges:  "<<gauge_num<<endl<<endl;
-    wsfout<<"x_coord     y_coord"<<endl;
-    for(n=0;n<gauge_num;++n)
-    wsfout<<n+1<<"\t "<<x[n]<<"\t "<<y[n]<<endl;
+        // open file
+        wsfout.open("./REEF3D_CFD_WSF/REEF3D-CFD-WSF-HG-THEORY.dat");
 
-    wsfout<<endl<<endl;
+        wsfout<<"number of gauges:  "<<gauge_num<<"\n\n";
+        wsfout<<"x_coord     y_coord\n";
+        for(int n=0; n<gauge_num; ++n)
+        wsfout<<n+1<<"\t "<<x[n]<<"\t "<<y[n]<<"\n\n\n";
 
-    wsfout<<"time";
-    for(n=0;n<gauge_num;++n)
-    wsfout<<"\t P"<<n+1;
+        wsfout<<"time";
+        for(int n=0; n<gauge_num; ++n)
+        wsfout<<"\t P"<<n+1;
 
-    wsfout<<endl<<endl;
+        wsfout<<"\n\n"<<std::flush;
     }
-	
-	
 }
 
 print_wsf_theory::~print_wsf_theory()
@@ -72,19 +71,18 @@ print_wsf_theory::~print_wsf_theory()
     wsfout.close();
 }
 
-void print_wsf_theory::height_gauge(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow, field &f)
+void print_wsf_theory::height_gauge(lexer *p, fdm*, ghostcell *pgc, ioflow *pflow, field&)
 {
-	
     // write to file
     if(p->mpirank==0)
     {
-    wsfout<<setprecision(9)<<p->simtime<<"\t";
-    for(n=0;n<gauge_num;++n)
-    wsfout<<setprecision(9)<<pflow->wave_fsf(p,pgc,x[n])<<"  \t  ";
-    wsfout<<endl;
+        wsfout<<std::setprecision(9)<<p->simtime<<"\t";
+        for(int n=0; n<gauge_num; ++n)
+        {
+            wsfout<<std::setprecision(9)<<pflow->wave_fsf(p,pgc,x[n]);
+            if(n != gauge_num-1)
+            wsfout<<"\t";
+        }
+        wsfout<<std::endl;
     }
 }
-
-
-
-
