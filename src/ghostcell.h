@@ -189,6 +189,13 @@ public:
     double globalmin(double);
     int globalimax(int);
     int globalimin(int);
+    // Elementwise in-place variants: one collective for a whole array instead of
+    // one per entry. The caller's values are overwritten by the reduced ones, so
+    // a caller that still needs its own contribution must copy first.
+    void globalmax(double*, int);
+    void globalmin(double*, int);
+    void globalimax(int*, int);
+    void globalimin(int*, int);
     double timesync(double);
     void globalctrl(lexer*);
     //Utilities
