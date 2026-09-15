@@ -37,6 +37,11 @@ using namespace std;
 class suspended
 {
 public:
+    suspended() = default;
+    suspended(const suspended&) = delete;
+    suspended& operator=(const suspended&) = delete;
+    suspended(suspended&&) = delete;
+    suspended& operator=(suspended&&) = delete;
     virtual ~suspended() = default;
 
 	virtual void start(fdm*, lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, sediment_fdm*)=0;

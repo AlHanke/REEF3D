@@ -50,6 +50,11 @@ using namespace std;
 class sediment
 {
 public:
+    sediment() = default;
+    sediment(const sediment&) = delete;
+    sediment& operator=(const sediment&) = delete;
+    sediment(sediment&&) = delete;
+    sediment& operator=(sediment&&) = delete;
     virtual ~sediment() = default;
 
 	virtual void start_cfd(lexer*, fdm*, ghostcell*, ioflow*, reinitopo*, solver*)=0;

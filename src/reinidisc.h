@@ -31,6 +31,11 @@ class field;
 class reinidisc
 {
 public:
+    reinidisc() = default;
+    reinidisc(const reinidisc&) = delete;
+    reinidisc& operator=(const reinidisc&) = delete;
+    reinidisc(reinidisc&&) = delete;
+    reinidisc& operator=(reinidisc&&) = delete;
     virtual ~reinidisc() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, field&, field&, int)=0;

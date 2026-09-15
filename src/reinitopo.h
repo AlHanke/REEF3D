@@ -33,6 +33,11 @@ using namespace std;
 class reinitopo
 {
 public:
+    reinitopo() = default;
+    reinitopo(const reinitopo&) = delete;
+    reinitopo& operator=(const reinitopo&) = delete;
+    reinitopo(reinitopo&&) = delete;
+    reinitopo& operator=(reinitopo&&) = delete;
     virtual ~reinitopo() = default;
 
 	virtual void start(lexer*,fdm*,ghostcell*,field&)=0;

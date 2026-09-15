@@ -32,7 +32,12 @@ using namespace std;
 
 class LES_filter 
 {
-public:    
+public:
+    LES_filter() = default;
+    LES_filter(const LES_filter&) = delete;
+    LES_filter& operator=(const LES_filter&) = delete;
+    LES_filter(LES_filter&&) = delete;
+    LES_filter& operator=(LES_filter&&) = delete;
     virtual ~LES_filter() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*,field&,field&,field&,int)=0;

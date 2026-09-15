@@ -31,6 +31,11 @@ class field;
 class fluid_update
 {
 public:
+    fluid_update() = default;
+    fluid_update(const fluid_update&) = delete;
+    fluid_update& operator=(const fluid_update&) = delete;
+    fluid_update(fluid_update&&) = delete;
+    fluid_update& operator=(fluid_update&&) = delete;
     virtual ~fluid_update() = default;
 
     virtual void start(lexer*, fdm*, ghostcell*, field&, field&, field&)=0;

@@ -32,6 +32,11 @@ using namespace std;
 class bedconc 
 {
 public:
+    bedconc() = default;
+    bedconc(const bedconc&) = delete;
+    bedconc& operator=(const bedconc&) = delete;
+    bedconc(bedconc&&) = delete;
+    bedconc& operator=(bedconc&&) = delete;
     virtual ~bedconc() = default;
 
 	virtual void start(lexer*,ghostcell*,sediment_fdm*)=0;

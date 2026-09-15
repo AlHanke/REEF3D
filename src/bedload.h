@@ -34,6 +34,11 @@ using namespace std;
 class bedload
 {
 public:
+    bedload() = default;
+    bedload(const bedload&) = delete;
+    bedload& operator=(const bedload&) = delete;
+    bedload(bedload&&) = delete;
+    bedload& operator=(bedload&&) = delete;
     virtual ~bedload() = default;
 
     virtual void start(lexer*, ghostcell*, sediment_fdm*)=0;

@@ -33,6 +33,11 @@ using namespace std;
 class bedshear_reduction
 {
 public:
+    bedshear_reduction() = default;
+    bedshear_reduction(const bedshear_reduction&) = delete;
+    bedshear_reduction& operator=(const bedshear_reduction&) = delete;
+    bedshear_reduction(bedshear_reduction&&) = delete;
+    bedshear_reduction& operator=(bedshear_reduction&&) = delete;
     virtual ~bedshear_reduction() = default;
 
 	virtual void start(lexer*,ghostcell*,sediment_fdm*)=0;

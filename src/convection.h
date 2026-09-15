@@ -30,6 +30,11 @@ class field;
 class convection
 {
 public:
+    convection() = default;
+    convection(const convection&) = delete;
+    convection& operator=(const convection&) = delete;
+    convection(convection&&) = delete;
+    convection& operator=(convection&&) = delete;
     virtual ~convection() = default;
 
     virtual void start(lexer*,fdm*,field&,int,field&,field&,field&)=0;

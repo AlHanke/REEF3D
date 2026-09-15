@@ -34,8 +34,12 @@ using namespace std;
 
 class diffusion
 {
-
 public:
+    diffusion() = default;
+    diffusion(const diffusion&) = delete;
+    diffusion& operator=(const diffusion&) = delete;
+    diffusion(diffusion&&) = delete;
+    diffusion& operator=(diffusion&&) = delete;
     virtual ~diffusion() = default;
 
 	virtual void diff_scalar(lexer*, fdm*, ghostcell*, solver*, field&, field&, field&, double, double)=0;

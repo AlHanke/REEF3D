@@ -33,6 +33,11 @@ using namespace std;
 class picard
 {
 public:
+    picard() = default;
+    picard(const picard&) = delete;
+    picard& operator=(const picard&) = delete;
+    picard(picard&&) = delete;
+    picard& operator=(picard&&) = delete;
     virtual ~picard() = default;
 
     virtual void volcalc(lexer*, fdm*, ghostcell*, field&)=0;

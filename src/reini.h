@@ -34,6 +34,11 @@ using namespace std;
 class reini
 {
 public:
+    reini() = default;
+    reini(const reini&) = delete;
+    reini& operator=(const reini&) = delete;
+    reini(reini&&) = delete;
+    reini& operator=(reini&&) = delete;
     virtual ~reini() = default;
 
 	virtual void start(fdm*,lexer*,field&,ghostcell*,ioflow*)=0;

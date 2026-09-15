@@ -37,6 +37,10 @@ class bedslope : public norm_vec, public nhflow_gradient
 {
 public:
     bedslope(lexer*);
+    bedslope(const bedslope&) = delete;
+    bedslope& operator=(const bedslope&) = delete;
+    bedslope(bedslope&&) = delete;
+    bedslope& operator=(bedslope&&) = delete;
     virtual ~bedslope();
     
     void slope_analytical(lexer*,ghostcell*,sediment_fdm*);

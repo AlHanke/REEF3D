@@ -33,6 +33,11 @@ class fdm;
 class density : virtual public increment
 {
 public:
+    density() = default;
+    density(const density&) = delete;
+    density& operator=(const density&) = delete;
+    density(density&&) = delete;
+    density& operator=(density&&) = delete;
     virtual ~density() = default;
 
     virtual double roface(lexer*,fdm*,int,int,int)=0;

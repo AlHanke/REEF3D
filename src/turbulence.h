@@ -40,8 +40,12 @@ using namespace std;
 
 class turbulence
 {
-
 public:
+    turbulence() = default;
+    turbulence(const turbulence&) = delete;
+    turbulence& operator=(const turbulence&) = delete;
+    turbulence(turbulence&&) = delete;
+    turbulence& operator=(turbulence&&) = delete;
     virtual ~turbulence() = default;
 
 	virtual void start(fdm*,lexer*, convection*, diffusion*, solver*, ghostcell*, ioflow*, vrans*)=0;

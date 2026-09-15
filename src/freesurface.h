@@ -37,6 +37,11 @@ using namespace std;
 class freesurface
 {
 public:
+    freesurface() = default;
+    freesurface(const freesurface&) = delete;
+    freesurface& operator=(const freesurface&) = delete;
+    freesurface(freesurface&&) = delete;
+    freesurface& operator=(freesurface&&) = delete;
     virtual ~freesurface() = default;
 
 	virtual void start(fdm*,lexer*, convection*, solver*, ghostcell*,ioflow*, reini*,field&)=0;
