@@ -33,11 +33,11 @@ using namespace std;
 
 class nhflow_gradient : virtual public increment
 {
-public:
-
+protected:
 	nhflow_gradient(lexer*);
-	 ~nhflow_gradient();
+    ~nhflow_gradient() = default;
 
+public:
     double sx(slice&);
     double sy(slice&);
     double limiter(double, double);
