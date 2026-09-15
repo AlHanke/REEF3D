@@ -188,7 +188,7 @@ void driver::driver_ini_cfd()
     }
     // ppress->rebalance(p,a,pgc,ppois,psolv,pflow);
     #endif
-    ptstep->start(a,p,pgc,pturb);
+    ptstep->ini(a,p,pgc);
 
     pini->iniphi_io(a,p,pgc);
     pflow->discharge(p,a,pgc);
