@@ -39,7 +39,7 @@ class amrex_bc_func
 {
 public:
     amrex_bc_func() = default;
-    virtual ~amrex_bc_func() = default;
+    ~amrex_bc_func() = default;
 
     enum class BoundaryConditionTypeLabel : int { NONE = 0, DIRICHLET_ORTH = 1, NEUMANN = 4, NOSLIP = 5, OUTFLOWBC = 6, SOMMERFELD = 7,
                                         POTENTIAL = 8, DIRICHLET_ORTH_REFLECT = 11, DIRICHLET_PARA_REFLECT = 12,
