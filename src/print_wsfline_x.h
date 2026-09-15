@@ -23,28 +23,28 @@ Author: Hans Bihs
 #ifndef PRINT_WSFLINE_X_H_
 #define PRINT_WSFLINE_X_H_
 
-#include"increment.h"
-#include<iostream>
-#include<fstream>
-#include<vector>
+#include "increment.h"
+#include <fstream>
+#include <iostream>
+#include <vector>
 
 class lexer;
 class fdm;
 class ghostcell;
 class field;
 class ioflow;
-class wave_theory;
-
-using namespace std;
 
 class print_wsfline_x : public increment
 {
 public:
     print_wsfline_x(lexer*,fdm*,ghostcell*);
-	virtual ~print_wsfline_x();
+    print_wsfline_x(const print_wsfline_x&) = delete;
+    print_wsfline_x& operator=(const print_wsfline_x&) = delete;
+    print_wsfline_x(print_wsfline_x&&) = delete;
+    print_wsfline_x& operator=(print_wsfline_x&&) = delete;
+    ~print_wsfline_x();
 
-	void wsfline(lexer*, fdm*, ghostcell*,ioflow*);
-
+    void wsfline(lexer*, fdm*, ghostcell*,ioflow*);
 
 private:
     /// Tile-local j of line q's y-coordinate in the CURRENTLY installed context,
@@ -71,12 +71,13 @@ private:
     std::vector<int> wsfpoints;          // assembled point count per line
     std::vector<int> recvcount, recvdispl;
 
-    int n,q;
-    ofstream wsfout;
+    std::ofstream wsfout;
 
-    double xcoor;
-	
-	wave_theory *pwave;
+    int n,q;
+
+    const int num_lines = 0;
+    const bool theory = false;
+    static constexpr int precision = 5;
 };
 
 #endif

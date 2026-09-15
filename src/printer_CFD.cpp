@@ -111,6 +111,7 @@ printer_CFD::printer_CFD(lexer* p, fdm *a, ghostcell *pgc)
     pwsf_theory = new print_wsf_theory(p,a,pgc,0);
     if(p->P51>0)
     pwsf = new print_wsf(p,a,pgc,0);
+    if(p->P52>0)
     pwsfline_x = new print_wsfline_x(p,a,pgc);
     pwsfline_y = new print_wsfline_y(p,a,pgc);
     pprobe = new probe_point(p,a,pgc);
