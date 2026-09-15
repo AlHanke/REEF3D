@@ -25,50 +25,27 @@ Author: Hans Bihs
 #include"lexer.h"
 #include"fdm.h"
 #include"ghostcell.h"
+#include"wsf_locate.h"
 #include"ioflow.h"
 #include"wave_interface.h"
 #include<sys/stat.h>
 #include<sys/types.h>
+#include<algorithm>
 
 print_wsfline_x::print_wsfline_x(lexer *p, fdm* a, ghostcell *pgc)
-{	
-	p->Iarray(jloc,p->P52);
+{
+    xloc.resize(p->P52);
+    wsf.resize(p->P52);
+    xloc_all.resize(p->P52);
+    wsf_all.resize(p->P52);
+    wsfpoints.resize(p->P52,0);
 
-    maxknox=pgc->globalimax(p->knox);
-    sumknox=pgc->globalisum(maxknox);
-	
-    p->Darray(xloc,p->P52+1,maxknox);
-    p->Darray(wsf,p->P52+1,maxknox);
-    p->Iarray(flag,p->P52+1,maxknox);
-	p->Iarray(wsfpoints,p->P52+1);
-	
+    recvcount.resize(p->mpi_size);
+    recvdispl.resize(p->mpi_size);
 
-    p->Darray(xloc_all,p->P52+1,sumknox);
-    p->Darray(wsf_all,p->P52+1,sumknox);
-	p->Iarray(flag_all,p->P52+1,sumknox);
-	p->Iarray(rowflag,sumknox);
-
-    for(q=0;q<p->P52;++q)
-    for(n=0;n<maxknox;++n)
-    {
-    xloc[q][n]=0.0;
-    wsf[q][n]=0.0;
-    }
-
-    for(q=0;q<p->P52;++q)
-    for(n=0;n<sumknox;++n)
-    {
-    xloc_all[q][n]=0.0;
-    wsf_all[q][n]=0.0;
-	flag_all[q][n]=0;
-	rowflag[n]=0;
-    }
-
-    ini_location(p,a,pgc);
-	
-	// Create Folder
-	if(p->mpirank==0)
-	mkdir("./REEF3D_CFD_WSFLINE",0777);
+    // Create Folder
+    if(p->mpirank==0)
+    mkdir("./REEF3D_CFD_WSFLINE",0777);
 }
 
 print_wsfline_x::~print_wsfline_x()
@@ -78,11 +55,9 @@ print_wsfline_x::~print_wsfline_x()
 
 void print_wsfline_x::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 {
-	
     char name[250];
-    double zval=0.0;
-    int num,check;
-	
+    int num;
+
     num = p->count;
 
     if(p->mpirank==0)
@@ -117,98 +92,47 @@ void print_wsfline_x::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
 
     //-------------------
 
-    for(q=0;q<p->P52;++q)
-    for(n=0;n<maxknox;++n)
-    {
-    xloc[q][n]=1.0e20;
-    wsf[q][n]=-1.0e20;
-    }
+    collect(p,a,pgc);
 
     for(q=0;q<p->P52;++q)
-    {
-        ILOOP
-        if(flag[q][i]>0)
-        {
-        j=jloc[q];
+    assemble(p,pgc,q);
 
-            KLOOP
-            PCHECK
-            {
-                if(a->phi(i,j,k)>=0.0 && a->phi(i,j,k+1)<0.0)
-                {
-                wsf[q][i]=MAX(wsf[q][i],-(a->phi(i,j,k)*p->DZP[KP])/(a->phi(i,j,k+1)-a->phi(i,j,k)) + p->pos_z());
-                xloc[q][i]=p->pos_x();
-				
-				
-                }
-            }
-        }
-    }
-	
-	
-	for(q=0;q<p->P52;++q)
-    wsfpoints[q]=sumknox;
-	
-    // gather
-    for(q=0;q<p->P52;++q)
-    {
-    pgc->gather_double(xloc[q],maxknox,xloc_all[q],maxknox);
-    pgc->gather_double(wsf[q],maxknox,wsf_all[q],maxknox);
-	pgc->gather_int(flag[q],maxknox,flag_all[q],maxknox);
-
-		
-        if(p->mpirank==0)
-        {
-        sort(xloc_all[q], wsf_all[q], flag_all[q], 0, wsfpoints[q]-1);
-        remove_multientry(p,xloc_all[q], wsf_all[q], flag_all[q], wsfpoints[q]); 
-        }
-		
-    }
-	
     // write to file
     if(p->mpirank==0)
     {
-		for(n=0;n<sumknox;++n)
-		rowflag[n]=0;
-		
-		for(n=0;n<sumknox;++n)
-        {
-			check=0;
-		    for(q=0;q<p->P52;++q)
-			if(flag_all[q][n]>0 && xloc_all[q][n]<1.0e20)
-			check=1;
-			
-			if(check==1)
-			rowflag[n]=1;
-		}
+        // Lines no longer share a point count -- a line crossing a refined patch
+        // carries more points than one that does not -- so the row count is the
+        // longest line and shorter lines are padded. The old rowflag pass is gone
+        // with the fixed-width layout it policed: every gathered record is a real
+        // point now, so there is nothing to test for emptiness.
+        int maxpoints=0;
 
-        for(n=0;n<sumknox;++n)
+        for(q=0;q<p->P52;++q)
+        maxpoints = MAX(maxpoints,wsfpoints[q]);
+
+        for(n=0;n<maxpoints;++n)
         {
-			check=0;
 		    for(q=0;q<p->P52;++q)
 			{
-				if(flag_all[q][n]>0 && xloc_all[q][n]<1.0e20)
+				if(n<wsfpoints[q])
 				{
 				wsfout<<setprecision(5)<<xloc_all[q][n]<<" \t ";
 				wsfout<<setprecision(5)<<wsf_all[q][n]<<" \t  ";
-				
-				
+
 					if(p->P53==1)
 					wsfout<<pflow->wave_fsf(p,pgc,xloc_all[q][n])<<" \t  ";
-					
-				check=1;
 				}
-				
-				if((flag_all[q][n]<0 || xloc_all[q][n]>=1.0e20) && rowflag[n]==1)
+
+				else
 				{
-					wsfout<<setprecision(5)<<" \t ";
-					wsfout<<setprecision(5)<<" \t ";
-					
+				wsfout<<setprecision(5)<<" \t ";
+				wsfout<<setprecision(5)<<" \t ";
+
+					if(p->P53==1)
+					wsfout<<" \t  ";
 				}
 			}
 
-            
-			if(check==1)
             wsfout<<endl;
         }
 
@@ -216,32 +140,105 @@ void print_wsfline_x::wsfline(lexer *p, fdm *a, ghostcell *pgc, ioflow *pflow)
     }
 }
 
-void print_wsfline_x::ini_location(lexer *p, fdm *a, ghostcell *pgc)
+void print_wsfline_x::collect(lexer *p, fdm *a, ghostcell *pgc)
 {
-    int check,count;
-
     for(q=0;q<p->P52;++q)
     {
-        count=0;
-        ILOOP
+        xloc[q].clear();
+        wsf[q].clear();
+    }
+
+    LEVEL_LOOP TILE_LOOP
+    {
+        for(q=0;q<p->P52;++q)
         {
-        if(p->j_dir==0)
-        jloc[q]=0;
-        
-        if(p->j_dir==1)
-        jloc[q]=p->posc_j(p->P52_y[q]);
+            if(!locate_j(p,q,j))
+            continue;
 
-        check=ij_boundcheck(p,i,jloc[q],0);
+            ILOOP
+            {
+                double zval=-1.0e20;
 
-        if(check==1)
-        flag[q][count]=1;
+                KLOOP
+                PCHECK
+                {
+                    if(a->phi(i,j,k)>=0.0 && a->phi(i,j,k+1)<0.0)
+                    {
+                        // Drop the crossing when a finer level overlays this
+                        // cell: the coarse centre does not coincide with any
+                        // fine centre, so it would survive the dedupe below and
+                        // interleave with the fine points instead of being
+                        // replaced by them.
+                        if(!wsf_locate::uncovered(p,i,j,k))
+                        continue;
 
-        ++count;
+                        zval=MAX(zval,-(a->phi(i,j,k)*p->DZP[KP])/(a->phi(i,j,k+1)-a->phi(i,j,k)) + p->pos_z());
+                    }
+                }
+
+                if(zval>-1.0e20)
+                {
+                    xloc[q].push_back(p->pos_x());
+                    wsf[q].push_back(zval);
+                }
+            }
         }
     }
 }
 
- void print_wsfline_x::sort(double *a, double *b, int *c, int left, int right)
+void print_wsfline_x::assemble(lexer *p, ghostcell *pgc, int line)
+{
+    // Every rank contributes a different number of points, and the number
+    // changes with every regrid, so the counts are exchanged each call and the
+    // gather is a gatherv. allgather rather than gather: the displacements cost
+    // nothing to compute everywhere and the alternative is a second collective.
+    int sendcount = int(xloc[line].size());
+
+    pgc->allgather_int(&sendcount,1,recvcount.data(),1);
+
+    int total=0;
+
+    for(int r=0;r<p->mpi_size;++r)
+    {
+        recvdispl[r]=total;
+        total+=recvcount[r];
+    }
+
+    if(p->mpirank==0)
+    {
+        xloc_all[line].assign(size_t(total),0.0);
+        wsf_all[line].assign(size_t(total),0.0);
+    }
+
+    pgc->gatherv_double(xloc[line].data(),sendcount,xloc_all[line].data(),recvcount.data(),recvdispl.data());
+    pgc->gatherv_double(wsf[line].data(),sendcount,wsf_all[line].data(),recvcount.data(),recvdispl.data());
+
+    wsfpoints[line]=total;
+
+    if(p->mpirank==0 && total>0)
+    {
+        sort(xloc_all[line].data(), wsf_all[line].data(), 0, total-1);
+        remove_multientry(p,xloc_all[line].data(), wsf_all[line].data(), wsfpoints[line]);
+    }
+
+    if(p->mpirank!=0)
+    wsfpoints[line]=0;
+}
+
+bool print_wsfline_x::locate_j(lexer *p, int line, int& jj) const
+{
+    if(p->j_dir==0)
+    {
+        jj=0;
+        return true;
+    }
+
+    jj = wsf_locate::cell_1d(p->YN,ORIGIN_J,JMAX_LOOP,p->P52_y[line]);
+
+    return jj>=0;
+}
+
+ void print_wsfline_x::sort(double *a, double *b, int left, int right)
  {
 
   if (left < right)
@@ -259,45 +256,37 @@ void print_wsfline_x::ini_location(lexer *p, fdm *a, ghostcell *pgc)
       if (l <= r) {
           double swap = a[l];
           double swapd = b[l];
-		  int swapc = c[l];
 
           a[l] = a[r];
           a[r] = swap;
 
           b[l] = b[r];
           b[r] = swapd;
-		  
-		  c[l] = c[r];
-          c[r] = swapc;
 
           l++;
           r--;
       }
     } while (l <= r);
 
-    sort(a,b,c, left, r);
-    sort(a,b,c, l, right);
+    sort(a,b, left, r);
+    sort(a,b, l, right);
   }
 }
 
-void print_wsfline_x::remove_multientry(lexer *p, double* b, double* c, int *d, int& num)
+void print_wsfline_x::remove_multientry(lexer *p, double* b, double* c, int& num)
 {
     int oldnum=num;
     double xval=-1.12e23;
 
     int count=0;
 
-    double *f,*g;
-	int *h;
-	
-	p->Darray(f,num);
-	p->Darray(g,num);
-	p->Iarray(h,num);
+    std::vector<double> f(size_t(num),0.0);
+    std::vector<double> g(size_t(num),-1.12e22);
 
-    for(n=0;n<num;++n)
-    g[n]=-1.12e22;
-
-
+    // The merge tolerance is a fraction of the COARSE spacing, so it still only
+    // ever merges genuine duplicates (the same column reported by two ranks
+    // sharing a halo) and never two distinct fine cells, whose centres are
+    // DXM/(2*ref_ratio^lev) apart.
     for(n=0;n<oldnum;++n)
     {
         if(xval<=b[n]+0.001*p->DXM && xval>=b[n]-0.001*p->DXM && count>0)
@@ -307,7 +296,6 @@ void print_wsfline_x::remove_multientry(lexer *p, double* b, double* c, int *d, 
         {
         f[count]=b[n];
         g[count]=c[n];
-		h[count]=d[n];
         ++count;
         }
 
@@ -318,15 +306,7 @@ void print_wsfline_x::remove_multientry(lexer *p, double* b, double* c, int *d, 
     {
     b[n]=f[n];
     c[n]=g[n];
-	d[n]=h[n];
     }
 
-    
-    p->del_Darray(f,num);
-	p->del_Darray(g,num);
-	p->del_Iarray(h,num);
-	
 	num=count;
-
 }
-

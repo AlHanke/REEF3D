@@ -23,9 +23,10 @@ Author: Hans Bihs
 #ifndef PRINT_WSFLINE_X_H_
 #define PRINT_WSFLINE_X_H_
 
-#include"boundarycheck.h"
+#include"increment.h"
 #include<iostream>
 #include<fstream>
+#include<vector>
 
 class lexer;
 class fdm;
@@ -36,7 +37,7 @@ class wave_theory;
 
 using namespace std;
 
-class print_wsfline_x : public boundarycheck
+class print_wsfline_x : public increment
 {
 public:
     print_wsfline_x(lexer*,fdm*,ghostcell*);
@@ -46,23 +47,36 @@ public:
 
 
 private:
-    void ini_location(lexer*, fdm*, ghostcell*);
-    void sort(double*, double*, int*, int,int);
-    void remove_multientry(lexer*,double*, double*, int*, int&);
+    /// Tile-local j of line q's y-coordinate in the CURRENTLY installed context,
+    /// or false when the line does not pass through this tile. Resolved per call,
+    /// never cached -- see wsf_locate.h.
+    bool locate_j(lexer*, int line, int& jj) const;
 
-    int *jloc,**flag,**flag_all,*rowflag,*wsfpoints;
-    double **wsf,**wsf_all;
-    double **xloc, **xloc_all;
-    double *yloc;
+    /// Collect this rank's (x, wsf) records for every line, over all levels and
+    /// tiles. Replaces the old "one slot per local i" layout, which cannot hold
+    /// an AMR hierarchy: under AMReX i is tile-local, so slots collide between
+    /// tiles and between levels, and the total point count is no longer knox.
+    void collect(lexer*, fdm*, ghostcell*);
+
+    /// Gather every rank's records for line q onto rank 0, then sort by x and
+    /// merge duplicates. Counts differ per rank and per step, hence gatherv.
+    void assemble(lexer*, ghostcell*, int line);
+
+    void sort(double*, double*, int, int);
+    void remove_multientry(lexer*, double*, double*, int&);
+
+    // Per line: this rank's contributions, then rank 0's assembled line.
+    std::vector<std::vector<double>> xloc, wsf;
+    std::vector<std::vector<double>> xloc_all, wsf_all;
+    std::vector<int> wsfpoints;          // assembled point count per line
+    std::vector<int> recvcount, recvdispl;
+
     int n,q;
     ofstream wsfout;
 
     double xcoor;
 	
 	wave_theory *pwave;
-
-    int maxknox,sumknox;
-
 };
 
 #endif
