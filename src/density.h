@@ -34,6 +34,7 @@ class density : virtual public increment
 {
 public:
     virtual ~density() = default;
+
     virtual double roface(lexer*,fdm*,int,int,int)=0;
 
     /// Materialise roface() into a->rofx/rofy/rofz and, with AMR levels, make the
