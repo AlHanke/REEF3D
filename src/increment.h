@@ -39,7 +39,11 @@ public:
     static inline int max_i = 0;
     static inline int max_j = 0;
     static inline int max_k = 0;
+#if USE_AMREX
     static inline int level = 0;
+#else
+    static constexpr int level = 0;
+#endif
 
     static constexpr int marge = 5;
 };

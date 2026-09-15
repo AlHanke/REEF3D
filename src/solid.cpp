@@ -27,7 +27,6 @@ Author: Hans Bihs
 
 void solid::start(lexer* p, fdm* a, ghostcell* pgc, reinitopo* preso)
 {
-    p->level = 0;
     GC_TILE_RESET;
     IJKLOOP
     PBASECHECK

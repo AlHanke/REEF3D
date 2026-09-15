@@ -45,26 +45,27 @@ void ghostcell::flagfield(lexer *p)
     flagx(p,p->flag4);
     #endif
 
-    p->level = 0;
     if(p->Y60==1)
-    // TILE_LOOP
-    IJKLOOP
-    PCHECK
     {
-        if(p->i_dir==1)
-        if(p->flag4[Im1JK]<0
-        && p->flag4[Ip1JK]<0)
-            p->flag4[IJK]=OBJ_FLAG;
+        GC_TILE_RESET;
+        IJKLOOP
+        PCHECK
+        {
+            if(p->i_dir==1)
+            if(p->flag4[Im1JK]<0
+            && p->flag4[Ip1JK]<0)
+                p->flag4[IJK]=OBJ_FLAG;
 
-        if(p->j_dir==1)
-        if(p->flag4[IJm1K]<0
-        && p->flag4[IJp1K]<0)
-            p->flag4[IJK]=OBJ_FLAG;
+            if(p->j_dir==1)
+            if(p->flag4[IJm1K]<0
+            && p->flag4[IJp1K]<0)
+                p->flag4[IJK]=OBJ_FLAG;
 
-        if(p->k_dir==1)
-        if(p->flag4[IJKm1]<0
-        && p->flag4[IJKp1]<0)
-            p->flag4[IJK]=OBJ_FLAG;
+            if(p->k_dir==1)
+            if(p->flag4[IJKm1]<0
+            && p->flag4[IJKp1]<0)
+                p->flag4[IJK]=OBJ_FLAG;
+        }
     }
 
     #if USE_AMREX

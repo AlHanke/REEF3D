@@ -53,7 +53,9 @@ void reinidisc_fsf::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, 
         n=0;
         for(int lev=max_level; lev>=0; --lev)
         {
+            #if USE_AMREX
             p->level = lev;
+            #endif
             TILE_LOOP
             IJKLOOP
             PCHECK
@@ -63,7 +65,7 @@ void reinidisc_fsf::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, 
             }
         }
 
-        p->level = 0;
+        GC_TILE_RESET;
     }
     else if(ipol==5)
     {
@@ -72,7 +74,9 @@ void reinidisc_fsf::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, 
         n=0;
         for(int lev=max_level; lev>=0; --lev)
         {
+            #if USE_AMREX
             p->level = lev;
+            #endif
             TILE_LOOP
             IJKLOOP
             PSOLIDCHECK
@@ -82,7 +86,7 @@ void reinidisc_fsf::start(lexer *p, fdm *a, ghostcell *pgc, field &f, field &L, 
             }
         }
 
-        p->level = 0;
+        GC_TILE_RESET;
     }
 }
 

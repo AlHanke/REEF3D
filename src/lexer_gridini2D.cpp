@@ -44,8 +44,7 @@ void lexer::sliceflagini()
 
     lexer *p = this;
 
-    p->level = 0;
-    // TILE_LOOP
+    GC_TILE_RESET;
     ILOOP
     JLOOP
     {
@@ -56,7 +55,7 @@ void lexer::sliceflagini()
     flagslice4_grid.reset(); // transported into flagslice4; not needed afterwards
 
     const bool is3D = p->j_dir;
-    p->level = 0;
+    GC_TILE_RESET;
     TILE_LOOP
     ILOOP
     JLOOP

@@ -54,7 +54,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
     if(p->G5==1)
     {
         double psi;
-        p->level = 0;
+        GC_TILE_RESET;
         TILE_LOOP
         IJKLOOP
         PBASECHECK
@@ -77,7 +77,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
         flagx(p,p->flag4);
         #endif
 
-        p->level = 0;
+        GC_TILE_RESET;
         TILE_LOOP
         IJKLOOP
         PBASECHECK
@@ -169,7 +169,7 @@ void ghostcell::gcdf_update(lexer *p, fdm *a)
 
     count=0;
 
-    p->level = 0;
+    GC_TILE_RESET;
     TILE_LOOP
     IJKLOOP
     PBASECHECK
@@ -209,7 +209,7 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, gcb_list &gcdf, int &g
     #if USE_AMREX
     const int nlevs = p->nlevs;
     #else
-    const int nlevs = 1;
+    constexpr int nlevs = 1;
     #endif
 
     // -----------------------
@@ -217,7 +217,7 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, gcb_list &gcdf, int &g
 
     count = 0;
 
-    p->level = 0;
+    GC_TILE_RESET;
     TILE_LOOP
     IJKLOOP
     PBASECHECK
@@ -261,7 +261,7 @@ void ghostcell::gcdf_update_impl(lexer *p, FlagT &flagsf, gcb_list &gcdf, int &g
     // loop; it is not, but the id records that faithfully either way.
     count=0;
 
-    p->level = 0;
+    GC_TILE_RESET;
     TILE_LOOP
     {
         #if USE_AMREX

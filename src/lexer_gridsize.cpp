@@ -29,7 +29,7 @@ void lexer::gridsize()
     // -------
     cellnum=0;
 
-    level=0;
+    GC_TILE_RESET;
     for(i=0; i<knox; ++i)
     for(j=0; j<knoy; ++j)
     for(k=0; k<knoz+flast; ++k)

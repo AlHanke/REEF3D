@@ -105,12 +105,12 @@ void initialize::nodecalc(lexer* p, fdm* a)
         a->nodeval(i,j,k)=count;
     }
 
-    p->level = 0;
+    GC_TILE_RESET;
     TILE_LOOP
     IJKLOOP
     ++p->cellnum;
 
-    p->level = 0;
+    GC_TILE_RESET;
     TILE_LOOP
     IJKLOOP
     ++p->tpcellnum;

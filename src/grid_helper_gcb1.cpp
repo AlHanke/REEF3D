@@ -29,7 +29,7 @@ void grid_helper::fillgcb1(lexer *p)
     #if USE_AMREX
     const int nlevs = p->nlevs;
     #else
-    const int nlevs = 1;
+    constexpr int nlevs = 1;
     #endif
 
     int q;

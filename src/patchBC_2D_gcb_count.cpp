@@ -39,11 +39,13 @@ void patchBC_2D::patchBC_gcb_count(lexer *p, ghostcell *pgc)
         jstart = p->posc_j(p->B440_ys[qn]);
         jend = p->posc_j(p->B440_ye[qn]);
 
-        p->level = 0;
+        GC_TILE_RESET;
         GCSLB4
         {
             i=p->gcbsl4[p->level][n].i;
             j=p->gcbsl4[p->level][n].j;
+
+            GCB_TILE(p->gcbsl2[p->level][n], p->level);
 
             if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[p->level][n].cs==p->B440_face[qn] && p->gcbsl4[p->level][n].bc==BT_WALL)
                 ++count;
