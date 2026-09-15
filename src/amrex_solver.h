@@ -53,7 +53,7 @@ class amrex_solver : public increment
 {
 public:
     amrex_solver(lexer *p);
-    virtual ~amrex_solver();
+    ~amrex_solver();
 
     /// Full projection step: setup + rhs + solve + velocity correction +
     /// pressure update. u/v/w and phi need current ghost cells on entry.
