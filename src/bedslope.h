@@ -33,7 +33,7 @@ class sediment_fdm;
 
 using namespace std;
 
-class bedslope : public norm_vec, nhflow_gradient
+class bedslope : public norm_vec, public nhflow_gradient
 {
 public:
     bedslope(lexer*);
