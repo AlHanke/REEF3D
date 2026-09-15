@@ -39,7 +39,7 @@ class amrex_bc_func2D
 {
 public:
     amrex_bc_func2D() = default;
-    virtual ~amrex_bc_func2D() = default;
+    ~amrex_bc_func2D() = default;
 
     enum class BoundaryConditionTypeLabel : int { NONE = 0, NEUMANN = 4, NOSLIP = 5, OUTFLOWBC = 6, SOMMERFELD = 7,
                                         POTENTIAL = 8, NEUMANN_X = 14, NEUMANN_HX = 41, NEUMANN_HY = 42};
