@@ -215,11 +215,13 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
         jend = p->posc_j(p->B440_ye[qn]);
 
         // 4
-        p->level = 0;
+        GC_TILE_RESET;
         GCSLB4
         {
             i=p->gcbsl4[p->level][n].i;
             j=p->gcbsl4[p->level][n].j;
+
+            GCB_TILE(p->gcbsl4[p->level][n], p->level);
 
             if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[p->level][n].cs==p->B440_face[qn] && p->gcbsl4[p->level][n].bc==BT_WALL)
             {
@@ -238,11 +240,13 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
         }
 
         // 1
-        p->level = 0;
+        GC_TILE_RESET;
         GCSLB1
         {
             i=p->gcbsl1[p->level][n].i;
             j=p->gcbsl1[p->level][n].j;
+
+            GCB_TILE(p->gcbsl1[p->level][n], p->level);
 
             if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl1[p->level][n].cs==p->B440_face[qn] && p->gcbsl1[p->level][n].bc==BT_WALL)
             {
@@ -256,11 +260,13 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
         }
 
         // 2
-        p->level = 0;
+        GC_TILE_RESET;
         GCSLB2
         {
             i=p->gcbsl2[p->level][n].i;
             j=p->gcbsl2[p->level][n].j;
+
+            GCB_TILE(p->gcbsl2[p->level][n], p->level);
 
             if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl2[p->level][n].cs==p->B440_face[qn] && p->gcbsl2[p->level][n].bc==BT_WALL)
             {

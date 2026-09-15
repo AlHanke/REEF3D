@@ -34,7 +34,7 @@ void mgcslice1::gcb_seed(lexer *p)
     #if USE_AMREX
     const int nlevs = p->nlevs;
     #else
-    const int nlevs = 1;
+    constexpr int nlevs = 1;
     #endif
 
     std::vector<int> count_vec(nlevs,0);

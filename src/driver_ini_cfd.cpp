@@ -92,7 +92,7 @@ void driver::driver_ini_cfd()
         gtopo.start(p,a,pgc,pflow,preto,pvrans);
     }
 
-    p->level=0;
+    GC_TILE_RESET;
 	ILOOP
     JLOOP
     PSLICECHECK4

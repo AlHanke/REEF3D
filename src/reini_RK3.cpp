@@ -209,7 +209,9 @@ void reini_RK3::time_preproc(lexer* p)
 
     for(int lev=max_level; lev>=min_level; --lev)
     {
+        #if USE_AMREX
         p->level = lev;
+        #endif
         TILE_LOOP
         IJKLOOP
         PCHECK
@@ -220,5 +222,5 @@ void reini_RK3::time_preproc(lexer* p)
                 dt(i,j,k) = p->F43*MIN3(p->DXP[IP],p->DYP[JP],p->DZP[KP]);
         }
     }
-    p->level = 0;
+    GC_TILE_RESET;
 }

@@ -31,7 +31,6 @@ void geotopo::start(lexer* p, fdm* a, ghostcell* pgc, ioflow *pflow, reinitopo* 
 {
     if(p->toporead>0)
     {
-        p->level = 0;
         GC_TILE_RESET;
         IJKLOOP
         PBASECHECK

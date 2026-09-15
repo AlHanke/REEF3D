@@ -46,7 +46,7 @@ void ioflow_gravity::gcio_update(lexer *p, fdm *a, ghostcell *pgc)
     #if USE_AMREX
     const int nlevs = p->nlevs;
     #else
-    const int nlevs = 1;
+    constexpr int nlevs = 1;
     #endif
 
     p->gcin.resize_levels(nlevs);

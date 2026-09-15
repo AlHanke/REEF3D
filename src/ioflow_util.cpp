@@ -45,7 +45,7 @@ void ioflow_f::gcio_update_impl(lexer *p)
     #if USE_AMREX
     const int nlevs = p->nlevs;
     #else
-    const int nlevs = 1;
+    constexpr int nlevs = 1;
     #endif
 
     p->gcin.resize_levels(nlevs);

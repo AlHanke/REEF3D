@@ -96,7 +96,7 @@ void ghostcell::gcb4_generate(lexer *p)
     #if USE_AMREX
     const int nlevels = p->nlevs;
     #else
-    const int nlevels = 1;
+    constexpr int nlevels = 1;
     #endif
 
     p->gcb4.resize_levels(nlevels);
