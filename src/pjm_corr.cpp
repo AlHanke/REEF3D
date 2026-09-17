@@ -266,6 +266,37 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
 
     ppois->start(p,a,pcorr);
 
+    // TEST (env REEF_POISSON_MMS): replace the divergence RHS with an analytic function of
+    // position, so the AMReX and non-AMReX builds solve *the same continuous problem* with
+    // the flow frozen. Any remaining difference is then purely operator + solve, free of the
+    // trajectory separation that makes a transient comparison meaningless after a few steps.
+    //
+    // The matrix, flags and density are left exactly as poisson_pcorr built them -- only the
+    // right-hand side is substituted. Row index comes from a->Mrow (poisson_pcorr's single
+    // source of truth), NOT a sequential counter, so this stays correct across AMR levels
+    // where rhsvec is one contiguous all-levels vector.
+    //
+    //   1 : f scaled by the uniform reference density W1  (run with W 3 == W 1)
+    //   2 : f scaled by the local two-phase density       (density-activated variant)
+    //
+    // The initial guess is already zeroed by rhs() above, so no warm-start constant leaks in.
+    if(const char *mms = std::getenv("REEF_POISSON_MMS"))
+    {
+        const int    id  = std::atoi(mms);
+        const double rho = p->W1;
+
+        LOOP
+        {
+            const int n = a->Mrow(i,j,k);
+            if(n < 0 || n >= p->veclength) continue;
+
+            const double fx = 3.0*PI*PI
+                            * cos(PI*p->pos_x()) * cos(PI*p->pos_y()) * cos(PI*p->pos_z());
+
+            a->rhsvec.V[n] = (id == 1) ? fx/rho : fx/a->ro(i,j,k);
+        }
+    }
+
     psolv->start(p,a,pgc,pcorr,a->rhsvec,5);
 
     // Clear the pressure divergence RHS out of the shared a->rhsvec buffer now that the solve
