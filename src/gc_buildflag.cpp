@@ -27,6 +27,7 @@ void ghostcell::gcb_velflagio(lexer *p)
 {
     GC1LOOP
     {
+        GCB_TILE(p->gcb1[p->level][n],p->level);
         if(p->gcb1[p->level][n].bc==INFLOW)
         {
             i=p->gcb1[p->level][n].i;
@@ -51,6 +52,7 @@ void ghostcell::gcb_velflagio(lexer *p)
 
     GC2LOOP
     {
+        GCB_TILE(p->gcb2[p->level][n],p->level);
         if(p->gcb2[p->level][n].bc==BT_INFLOW)
         {
             i=p->gcb2[p->level][n].i;
@@ -75,6 +77,7 @@ void ghostcell::gcb_velflagio(lexer *p)
 
     GC3LOOP
     {
+        GCB_TILE(p->gcb3[p->level][n],p->level);
         if(p->gcb3[p->level][n].bc==BT_INFLOW)
         {
             i=p->gcb3[p->level][n].i;
@@ -96,4 +99,5 @@ void ghostcell::gcb_velflagio(lexer *p)
             p->flag3[Ip3JK] = OUTFLOW_FLAG;
         }
     }
+    GC_TILE_RESET;
 }

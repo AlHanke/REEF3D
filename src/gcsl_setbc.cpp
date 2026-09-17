@@ -29,6 +29,7 @@ void ghostcell::gcsl_setbc1(lexer *p)
 
     GCSL1LOOP
     {
+        GCB_TILE(p->gcbsl1[p->level][n],p->level);
         i = p->gcbsl1[p->level][n].i;
         j = p->gcbsl1[p->level][n].j;
         cs = p->gcbsl1[p->level][n].cs;
@@ -46,6 +47,7 @@ void ghostcell::gcsl_setbc1(lexer *p)
                 p->gcbsl1[p->level][n].bc=p->bcside2;
         }
     }
+    GC_TILE_RESET;
 }
 
 void ghostcell::gcsl_setbc2(lexer *p)
@@ -54,6 +56,7 @@ void ghostcell::gcsl_setbc2(lexer *p)
 
     GCSL2LOOP
     {
+        GCB_TILE(p->gcbsl2[p->level][n],p->level);
         i = p->gcbsl2[p->level][n].i;
         j = p->gcbsl2[p->level][n].j;
         cs = p->gcbsl2[p->level][n].cs;
@@ -71,6 +74,7 @@ void ghostcell::gcsl_setbc2(lexer *p)
                 p->gcbsl2[p->level][n].bc=p->bcside2;
         }
     }
+    GC_TILE_RESET;
 }
 
 void ghostcell::gcsl_setbc4(lexer *p)
@@ -79,6 +83,7 @@ void ghostcell::gcsl_setbc4(lexer *p)
 
     GCSL4LOOP
     {
+        GCB_TILE(p->gcbsl4[p->level][n],p->level);
         i = p->gcbsl4[p->level][n].i;
         j = p->gcbsl4[p->level][n].j;
         cs = p->gcbsl4[p->level][n].cs;
@@ -96,6 +101,7 @@ void ghostcell::gcsl_setbc4(lexer *p)
                 p->gcbsl4[p->level][n].bc=p->bcside2;
         }
     }
+    GC_TILE_RESET;
 }
 
 void ghostcell::gcsl_setbcio(lexer *p)
@@ -118,6 +124,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
 
     GCSL4LOOP
     {
+        GCB_TILE(p->gcbsl4[p->level][n], p->level);
         i = p->gcbsl4[p->level][n].i;
         j = p->gcbsl4[p->level][n].j;
         cs = p->gcbsl4[p->level][n].cs;
@@ -134,10 +141,12 @@ void ghostcell::gcsl_setbcio(lexer *p)
             GCB_COPY_TILE(e, p->gcbsl4[p->level][n]);
         }
     }
+    GC_TILE_RESET;
 
     p->gcslawa1[p->level].clear();
     GCSL1LOOP
     {
+        GCB_TILE(p->gcbsl1[p->level][n], p->level);
         i = p->gcbsl1[p->level][n].i;
         j = p->gcbsl1[p->level][n].j;
         cs = p->gcbsl1[p->level][n].cs;
@@ -149,10 +158,12 @@ void ghostcell::gcsl_setbcio(lexer *p)
             GCB_COPY_TILE(e, p->gcbsl1[p->level][n]);
         }
     }
+    GC_TILE_RESET;
 
     p->gcslawa2[p->level].clear();
     GCSL2LOOP
     {
+        GCB_TILE(p->gcbsl2[p->level][n], p->level);
         i = p->gcbsl2[p->level][n].i;
         j = p->gcbsl2[p->level][n].j;
         cs = p->gcbsl2[p->level][n].cs;
@@ -164,6 +175,7 @@ void ghostcell::gcsl_setbcio(lexer *p)
             GCB_COPY_TILE(e, p->gcbsl2[p->level][n]);
         }
     }
+    GC_TILE_RESET;
 
     // IOSL
     p->IOSL.setVal(0, true);

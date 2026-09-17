@@ -50,6 +50,7 @@ void patchBC_2D::patchBC_gcb_count(lexer *p, ghostcell *pgc)
             if(i>=istart && i<iend && j>=jstart && j<jend && p->gcbsl4[p->level][n].cs==p->B440_face[qn] && p->gcbsl4[p->level][n].bc==BT_WALL)
                 ++count;
         }
+        GC_TILE_RESET;
 
         for(qq=0;qq<obj_count;++qq)
         if(patch[qq]->ID==p->B440_ID[qn])

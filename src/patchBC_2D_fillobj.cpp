@@ -278,5 +278,6 @@ void patchBC_2D::patchBC_fillobj(lexer *p, ghostcell *pgc)
                 }
             }
         }
+        GC_TILE_RESET;
     }
 }
