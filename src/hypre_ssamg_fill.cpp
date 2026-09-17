@@ -460,6 +460,16 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
 #else
     values.resize(p->knox * p->knoy * p->knoz * 7);
 
+    // TEST (env REEF_VOL_SCALE): reproduce the AMReX branch's cell-volume row scaling, which
+    // multiplies every stencil row and the matching RHS entry by V while leaving the
+    // non-solved identity rows at 1.0. A single constant (not a per-cell volume) so the
+    // operator stays symmetric on a stretched grid, matching the per-level CellSize the
+    // AMReX branch uses. Isolates whether that scaling is what buys the AMReX build its
+    // convergence on the density-jump operator.
+    const double V_lev = (std::getenv("REEF_VOL_SCALE") != nullptr)
+                       ? p->dx * (p->j_dir ? p->dx : 1.0) * p->dx
+                       : 1.0;
+
     // fill matrix coefficients
     count = 0;
     KJILOOP
@@ -468,13 +478,13 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
         {
             n = cval4(i, j, k);
 
-            values[count] = a->M.p[n]; ++count;
-            values[count] = a->M.s[n]; ++count;
-            values[count] = a->M.n[n]; ++count;
-            values[count] = a->M.e[n]; ++count;
-            values[count] = a->M.w[n]; ++count;
-            values[count] = a->M.b[n]; ++count;
-            values[count] = a->M.t[n]; ++count;
+            values[count] = a->M.p[n] * V_lev; ++count;
+            values[count] = a->M.s[n] * V_lev; ++count;
+            values[count] = a->M.n[n] * V_lev; ++count;
+            values[count] = a->M.e[n] * V_lev; ++count;
+            values[count] = a->M.w[n] * V_lev; ++count;
+            values[count] = a->M.b[n] * V_lev; ++count;
+            values[count] = a->M.t[n] * V_lev; ++count;
         }
         SFLUIDCHECK
         {
@@ -513,7 +523,7 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
         PFLUIDCHECK
         {
             n = cval4(i, j, k);
-            values[count] = a->rhsvec.V[n];
+            values[count] = a->rhsvec.V[n] * V_lev;
         }
         SFLUIDCHECK
         values[count] = 0.0;
