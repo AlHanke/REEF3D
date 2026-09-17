@@ -176,6 +176,7 @@
           <File Name="pjm_hydrostatic.h"/>
           <File Name="pjm_corr.h"/>
           <File Name="pjm.h"/>
+          <File Name="poisson_dump.h"/>
           <VirtualDirectory Name="Reference">
             <File Name="pressure_reference.h"/>
           </VirtualDirectory>
@@ -1575,6 +1576,7 @@
           <File Name="pjm_hydrostatic.cpp"/>
           <File Name="pjm_corr.cpp"/>
           <File Name="pjm.cpp"/>
+          <File Name="poisson_dump.cpp"/>
           <VirtualDirectory Name="Reference">
             <File Name="pressure_reference_ini.cpp"/>
             <File Name="pressure_reference_gage.cpp"/>

@@ -38,6 +38,7 @@ Author: Hans Bihs
 #include"density_vof.h"
 #include"density_rheo.h"
 #include"density_pst.h"
+#include"poisson_dump.h"
 #include<algorithm>
 #include<cmath>
 #include<cstddef>
@@ -298,6 +299,11 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
     }
 
     psolv->start(p,a,pgc,pcorr,a->rhsvec,5);
+
+    // Per-cell dump of this solve for the AMReX-vs-non-AMReX comparison (env
+    // REEF_POISSON_DUMP). Placed here so rhsvec is still the divergence RHS the solve
+    // actually consumed -- the buffer is cleared a few lines below.
+    poisson_dump::start(p,a,pgc,pcorr,alpha);
 
     // Clear the pressure divergence RHS out of the shared a->rhsvec buffer now that the solve
     // has consumed it. a->rhsvec is filled here by LOOP order (rhs(): -div(u)/(alpha*dt)) but is
