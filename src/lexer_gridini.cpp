@@ -29,6 +29,7 @@ Authors: Hans Bihs, Alexander Hanke
 #include "6DOF.h"
 #include "fdm.h"
 #include "ioflow.h"
+#include <cstdlib>
 #endif
 
 void lexer::gridini(ghostcell *pgc)
@@ -124,6 +125,7 @@ void lexer::regrid(fdm* a, reini* preini, sixdof* p6dof, ghostcell* pgc, ioflow*
     // DIAGNOSTIC (Step 1 of plan fluffy-oasis): gate regrid to every 10 steps
     // to isolate per-step BoxArray churn + pc_interp dissipation. Revert when done.
     // if (count % 10000000 == 0 && count > 0)
+    if(!std::getenv("REEF_no_regrid"))
     {
         // Localisation probe: max|field| over valid cells per level at each sub-step of
         // regrid, so a blow-up can be traced to the exact stage that injects it (rebuild
