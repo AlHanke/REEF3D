@@ -55,6 +55,8 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         i=p->gcslawa1[p->level][n].i;
         j=p->gcslawa1[p->level][n].j;
 
+        GCB_TILE(p->gcslawa1[p->level][n],p->level);
+
         ii=0;
         if(p->gcslawa1[p->level][n].cs==X_POS)
         ii=1;
@@ -192,6 +194,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
             u(i+3*aa,j+3*bb,k) = u(i,j,k);
         }
     }
+    GC_TILE_RESET;
 //-----------------------------------------------
     // VVEL
 
@@ -199,6 +202,8 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
     {
         i=p->gcslawa2[p->level][n].i;
         j=p->gcslawa2[p->level][n].j;
+
+        GCB_TILE(p->gcslawa2[p->level][n],p->level);
 
 
         jj=0;
@@ -301,6 +306,7 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
             v(i+3*aa,j+3*bb,k)=0.0;
         }
     }
+    GC_TILE_RESET;
 
     //-----------------------------------------------
     // PRESSURE
@@ -308,6 +314,8 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
     {
         i=p->gcslout[p->level][n].i;
         j=p->gcslout[p->level][n].j;
+
+        GCB_TILE(p->gcslout[p->level][n],p->level);
 
         aa=bb=0;
 
@@ -363,4 +371,5 @@ void iowave::active_beach(lexer *p, fdm* a, ghostcell* pgc, field &u, field &v, 
         }
 
     }
+    GC_TILE_RESET;
 }

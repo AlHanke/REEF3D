@@ -36,6 +36,8 @@ void iowave::wavegen_precalc_dirichlet(lexer *p, ghostcell *pgc)
         i=p->gcslin[p->level][n].i;
         j=p->gcslin[p->level][n].j;
 
+        GCB_TILE(p->gcslin[p->level][n],p->level);
+
         xg=xgen(p);
         yg=ygen(p);
         x1=xgen1(p);
@@ -43,6 +45,7 @@ void iowave::wavegen_precalc_dirichlet(lexer *p, ghostcell *pgc)
 
         eta(i,j) = wave_eta(p,pgc,xg,yg);
     }
+    GC_TILE_RESET;
 
     count=0;
     // LEVEL_LOOP

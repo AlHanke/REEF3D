@@ -35,21 +35,31 @@ ptf_laplace_cds2::ptf_laplace_cds2(lexer *p, fdm *a, ghostcell *pgc) : bc(p)
     pgc->gcsl_start4int(p,bc,50);
 
     if(p->B98>=3)
-    GCSLIN
     {
-    i=p->gcslin[p->level][n].i;
-    j=p->gcslin[p->level][n].j;
+        GCSLIN
+        {
+            GCB_TILE(p->gcslin[p->level][n],p->level);
 
-    bc(i-1,j) = 1;
+            i=p->gcslin[p->level][n].i;
+            j=p->gcslin[p->level][n].j;
+
+            bc(i-1,j) = 1;
+        }
+        GC_TILE_RESET;
     }
 
     if(p->B99>=3)
-    GCSLOUT
     {
-    i=p->gcslout[p->level][n].i;
-    j=p->gcslout[p->level][n].j;
+        GCSLOUT
+        {
+            GCB_TILE(p->gcslout[p->level][n],p->level);
 
-    bc(i+1,j) = 2;
+            i=p->gcslout[p->level][n].i;
+            j=p->gcslout[p->level][n].j;
+
+            bc(i+1,j) = 2;
+        }
+        GC_TILE_RESET;
     }
 }
 

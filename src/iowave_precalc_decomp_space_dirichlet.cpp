@@ -35,6 +35,8 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
         i=p->gcslin[p->level][n].i;
         j=p->gcslin[p->level][n].j;
 
+        GCB_TILE(p->gcslin[p->level][n],p->level);
+
         xg = xgen(p);
         yg = ygen(p);
         dg = distgen(p);
@@ -55,6 +57,7 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
             }
         }
     }
+    GC_TILE_RESET;
     pgc->gcsl_start4(p,eta,50);
 
     count=0;
@@ -62,6 +65,8 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
     {
         i=p->gcslin[p->level][n].i;
         j=p->gcslin[p->level][n].j;
+
+        GCB_TILE(p->gcslin[p->level][n],p->level);
 
         xg = xgen1(p);
         yg = ygen1(p);
@@ -91,13 +96,15 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
             }
         }
     }
-
+    GC_TILE_RESET;
 
     count=0;
     GCSLIN
     {
         i=p->gcslin[p->level][n].i;
         j=p->gcslin[p->level][n].j;
+
+        GCB_TILE(p->gcslin[p->level][n],p->level);
 
         xg = xgen2(p);
         yg = ygen2(p);
@@ -127,12 +134,15 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
             }
         }
     }
+    GC_TILE_RESET;
 
     count=0;
     GCSLIN
     {
         i=p->gcslin[p->level][n].i;
         j=p->gcslin[p->level][n].j;
+
+        GCB_TILE(p->gcslin[p->level][n],p->level);
 
         xg = xgen(p);
         yg = ygen(p);
@@ -162,6 +172,7 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
             }
         }
     }
+    GC_TILE_RESET;
 
     count=0;
     if(f_switch)
@@ -169,6 +180,8 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
     {
         i=p->gcslin[p->level][n].i;
         j=p->gcslin[p->level][n].j;
+
+        GCB_TILE(p->gcslin[p->level][n],p->level);
 
         xg = xgen1(p);
         yg = ygen1(p);
@@ -201,5 +214,5 @@ void iowave::wavegen_precalc_space_dirichlet(lexer *p, ghostcell *pgc)
             }
         }
     }
-
+    GC_TILE_RESET;
 }

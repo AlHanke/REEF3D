@@ -132,6 +132,7 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
             // 1
             GCB1
             {
+                GCB_TILE(p->gcb1[p->level][n],p->level);
                 i=p->gcb1[p->level][n].i;
                 j=p->gcb1[p->level][n].j;
                 k=p->gcb1[p->level][n].k;
@@ -150,6 +151,8 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
             // 2
             GCB2
             {
+                GCB_TILE(p->gcb2[p->level][n],p->level);
+
                 i=p->gcb2[p->level][n].i;
                 j=p->gcb2[p->level][n].j;
                 k=p->gcb2[p->level][n].k;
@@ -168,6 +171,8 @@ void patchBC::patchBC_gcb_convert(lexer *p, ghostcell *pgc)
             // 3
             GCB3
             {
+                GCB_TILE(p->gcb1[p->level][n],p->level);
+
                 i=p->gcb3[p->level][n].i;
                 j=p->gcb3[p->level][n].j;
                 k=p->gcb3[p->level][n].k;
