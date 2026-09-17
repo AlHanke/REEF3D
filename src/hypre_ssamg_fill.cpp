@@ -217,7 +217,13 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
     // constant carried in the previous-step initial guess from drifting over a long run and
     // keeps PCG's residual meaningful. Diagnostic printed under REEF_RHS_CHECK.
     const bool rhs_check = (std::getenv("REEF_RHS_CHECK") != nullptr);
-    const bool project   = (p->nlevs > 1);
+    // Project at EVERY level count, not just nlevs>1. The operator is all-Neumann on a closed
+    // domain whether or not it is refined, and SSAMG-preconditioned Krylov can inject a large
+    // null-space (constant) component into the solution: a single-level MMS solve returned a
+    // pcorr mean of 5.6e7 on an O(1) field and floored its residual at 5.8e-5. Where b is
+    // already compatible this is a no-op to roundoff, so single-level production runs are
+    // unchanged. REEF_NO_RHS_PROJECT restores the old behaviour.
+    const bool project   = (std::getenv("REEF_NO_RHS_PROJECT") == nullptr);
     double proj_mean = 0.0;
     if (project || rhs_check)
     {
@@ -516,6 +522,34 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
     HYPRE_SStructVectorSetBoxValues(x, 0, ilower, iupper, variable, values.data());
     HYPRE_SStructVectorAssemble(x);
 
+    // RHS null-space projection -- the counterpart of the AMReX branch above, which this
+    // path never had. Same reasoning: all-Neumann operator, constant in the null space,
+    // and the preconditioner can drive a large constant into the solution. A no-op to
+    // roundoff when b is already compatible.
+    const bool rhs_check = (std::getenv("REEF_RHS_CHECK") != nullptr);
+    const bool project   = (std::getenv("REEF_NO_RHS_PROJECT") == nullptr);
+    double proj_mean = 0.0;
+    {
+        double s = 0.0, sabs = 0.0;
+        long   nn = 0;
+        KJILOOP
+        {
+            PFLUIDCHECK
+            {
+                const double bval = a->rhsvec.V[cval4(i, j, k)] * V_lev;
+                s += bval; sabs += std::fabs(bval); ++nn;
+            }
+        }
+        const double g_sum = pgc->globalsum(s);
+        const double g_abs = pgc->globalsum(sabs);
+        const double g_n   = pgc->globalsum(double(nn));
+        proj_mean = (project && g_n > 0.0) ? g_sum/g_n : 0.0;
+        if (rhs_check && p->mpirank == 0)
+            std::cout << "\n  [rhscheck] 1.b = " << g_sum
+                      << "  (rel " << (g_abs > 0.0 ? std::fabs(g_sum)/g_abs : 0.0)
+                      << ",  mean/DOF " << (g_n > 0.0 ? g_sum/g_n : 0.0) << ")" << std::endl;
+    }
+
     // RHS vector b
     count = 0;
     KJILOOP
@@ -523,7 +557,7 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
         PFLUIDCHECK
         {
             n = cval4(i, j, k);
-            values[count] = a->rhsvec.V[n] * V_lev;
+            values[count] = a->rhsvec.V[n] * V_lev - proj_mean;
         }
         SFLUIDCHECK
         values[count] = 0.0;
