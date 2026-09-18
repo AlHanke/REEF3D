@@ -84,6 +84,18 @@ void hypre_ssamg::solve(lexer *p)
         HYPRE_SStructPCGGetNumIterations(pcg_solver, &iters);
         HYPRE_SStructPCGGetFinalRelativeResidualNorm(pcg_solver, &relres);
     }
+    // N10==43: BiCGSTAB + SSAMG preconditioner (no symmetry requirement, short recurrence --
+    // see create_solver; note each iteration applies the preconditioner twice, so this count
+    // is not directly comparable with 41's)
+    else if (p->N10 == 43)
+    {
+        if(do_setup)
+            HYPRE_SStructBiCGSTABSetup(bicgstab_solver, A, b, x);
+        HYPRE_SStructBiCGSTABSolve(bicgstab_solver, A, b, x);
+
+        HYPRE_SStructBiCGSTABGetNumIterations(bicgstab_solver, &iters);
+        HYPRE_SStructBiCGSTABGetFinalRelativeResidualNorm(bicgstab_solver, &relres);
+    }
     // N10==41: GMRES + SSAMG preconditioner
     else
     {

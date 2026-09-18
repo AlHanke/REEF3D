@@ -309,6 +309,72 @@ void hypre_ssamg::create_solver(lexer *p, ghostcell *pgc)
 
         pcg_created = true;
     }
+    // N10==43: BiCGSTAB outer solver with SSAMG preconditioner. The middle ground between 41
+    // and 42: like GMRES it makes no symmetry or definiteness demand on either the operator or
+    // the preconditioner, so it is safe on the all-Neumann (singular) and near-singular
+    // pressure operator where 42 is not, but it keeps a fixed three-term recurrence instead of
+    // GMRES's growing Krylov basis -- constant work and storage per iteration, no restart
+    // parameter to pick. The trade is that its residual is not monotone (it can spike between
+    // iterations) and each iteration applies the preconditioner TWICE, so an iteration count
+    // here is worth roughly two of 41's V-cycles and the two counts are not comparable
+    // directly. Breakdown (rho or omega going to zero) is possible in principle; hypre returns
+    // the last iterate rather than failing.
+    else if (p->N10 == 43)
+    {
+        // One V-cycle per preconditioner application, as on 41 and 42. BiCGSTAB applies the
+        // preconditioner twice per iteration, so a second V-cycle per application is four
+        // cycles an iteration; on the pressure test case that bought 5.88 iterations against
+        // 8.17 and cost 15.4 s against 11.9 s of solve time. The extra smoothing is real and
+        // still not worth paying for twice over.
+        HYPRE_SStructSSAMGSetMaxIter(ssamg, 1);
+        HYPRE_SStructSSAMGSetTol(ssamg, 0.0);
+        HYPRE_SStructSSAMGSetZeroGuess(ssamg);
+
+        HYPRE_SStructBiCGSTABCreate(pgc->mpi_comm, &bicgstab_solver);
+        HYPRE_SStructBiCGSTABSetMaxIter(bicgstab_solver, p->N46);
+        HYPRE_SStructBiCGSTABSetTol(bicgstab_solver, p->N44);
+
+        // No absolute floor. This carried a 1e-12 floor, copied from the ParCSR GMRES path on
+        // the reasoning that a purely relative target chases round-off once ||b|| gets small.
+        // That reasoning is right in kind and wrong in size: hypre stops on
+        // ||r|| < max(N44*||b||, a_tol), so the floor is a RELATIVE tolerance of a_tol/||b||,
+        // and on a quiescent free surface ||b|| is itself ~1e-7 -- which turns a 1e-12 floor
+        // into a stopping criterion of ~1e-5 and silently overrides the control file.
+        //
+        // Measured on the pressure test case (20x20x20, 2 AMR levels, 6 ranks, 100 steps,
+        // 300 solves, N44 = 1e-8). With the 1e-12 floor, 299 of the 300 solves never reach
+        // N44: the final relative residuals run 1e-6 to 1e-3 and the iteration count sits at
+        // 4.69. The floor was not a safety net on this operator, it was the criterion.
+        // Removing it converges every solve (worst final residual 9.9e-09) for 8.17
+        // iterations and 11.9 s of solve time against 4.69 and 9.0 s -- i.e. the 24% the
+        // floor "saved" was 24% of a solve that was not being finished.
+        //
+        // Sweeping the floor shows there is no useful value for it, only a dial for how much
+        // of the solve to skip: 1e-14 gives 6.67 iterations at a worst residual of 2.3e-05,
+        // and at 1e-10 and above the residual reaches 1.0 -- the solve returns having done
+        // nothing. That it is invisible in the physics here (umax holds at 1.04e-07 for every
+        // one of these) is a property of a test case that starts and stays at rest, not
+        // evidence that under-solving is free.
+        HYPRE_SStructBiCGSTABSetAbsoluteTol(bicgstab_solver, 0.0);
+
+        // StopCrit and the convergence-factor tolerance are both left at their hypre defaults,
+        // measured on the same case. StopCrit(1) switches to an absolute criterion of N44
+        // itself, which ||r|| ~1e-7 all but meets on arrival: 0.97 iterations, residual 1.0,
+        // no solve at all. A convergence-factor tolerance (reachable only by casting to the
+        // generic krylov interface, which the SStruct wrapper does not forward) is meant to
+        // catch the stagnation BiCGSTAB is prone to, but at 0.9 it fired never -- the
+        // iteration count was unchanged at 8.17 -- so it buys an early-exit risk for nothing
+        // here. Worth revisiting on a case where BiCGSTAB actually stalls.
+        HYPRE_SStructBiCGSTABSetPrintLevel(bicgstab_solver, 0);
+        HYPRE_SStructBiCGSTABSetLogging(bicgstab_solver, 1);
+
+        HYPRE_SStructBiCGSTABSetPrecond(bicgstab_solver,
+            HYPRE_SStructSSAMGSolve,
+            HYPRE_SStructSSAMGSetup,
+            ssamg);
+
+        bicgstab_created = true;
+    }
 
     solver_created = true;
     // Cleared unconditionally: a non-AMReX build still sets grid_rebuilt in make_grid_7p, and
@@ -340,6 +406,12 @@ void hypre_ssamg::delete_solver()
     {
         HYPRE_SStructPCGDestroy(pcg_solver);
         pcg_created = false;
+    }
+
+    if (bicgstab_created)
+    {
+        HYPRE_SStructBiCGSTABDestroy(bicgstab_solver);
+        bicgstab_created = false;
     }
 
     HYPRE_SStructSSAMGDestroy(ssamg);
