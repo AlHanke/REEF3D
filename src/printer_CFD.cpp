@@ -1181,22 +1181,25 @@ void printer_CFD::print3D(lexer* p, fdm* a, ghostcell* pgc, turbulence *pturb, h
             }
 
             // 4. Use AMReX utility to write the hierarchical data
-            amrex::WriteMultiLevelPlotfile(plotfilename, p->nlevs, GetVecOfConstPtrs(plot_mfs_data), varnames,
-                                        geoms, p->simtime,
-                                        level_steps, ref_ratio);
+            // amrex::WriteMultiLevelPlotfile(plotfilename, p->nlevs, GetVecOfConstPtrs(plot_mfs_data), varnames,
+            //                             geoms, p->simtime,
+            //                             level_steps, ref_ratio);
 
             // 5. Point-interpolated output with per-level structure, plus the 2D-plane
             //    variants for pseudo-2D runs. Two formats: .vtpc (vtkPartitionedDataSet-
             //    Collection, VTK's successor to multiblock) and .vtm (legacy multiblock,
             //    whose ParaView reader still supports read-time array selection).
             //    TODO: replace with a user-selectable toggle
-            // print_interp_amrex(p, a, plot_mfs_data, varnames, num, false);
-            // print_interp_amrex_vtm(p, a, plot_mfs_data, varnames, num, false);
             if (!p->j_dir)
             {
                 // print2D_plotfile_amrex(p, plot_mfs_data, varnames, num);
                 // print_interp_amrex(p, a, plot_mfs_data, varnames, num, true);
                 print_interp_amrex_vtm(p, a, plot_mfs_data, varnames, num, true);
+            }
+            else
+            {
+                // print_interp_amrex(p, a, plot_mfs_data, varnames, num, false);
+                print_interp_amrex_vtm(p, a, plot_mfs_data, varnames, num, false);
             }
         }
         #endif
