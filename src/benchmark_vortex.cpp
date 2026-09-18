@@ -35,6 +35,11 @@ benchmark_vortex::benchmark_vortex(lexer *p, fdm *a, ghostcell* pgc)
         pgc->final(true);
     }
 
+    ini(p,a,pgc);
+}
+
+void benchmark_vortex::ini(lexer* p, fdm *a, ghostcell *pgc)
+{
     const double xc = 0.5;
     const double zc = 0.75;
     const double radius = 0.15;
@@ -58,7 +63,7 @@ benchmark_vortex::benchmark_vortex(lexer *p, fdm *a, ghostcell* pgc)
     }
 }
 
-void benchmark_vortex::start(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec )
+void benchmark_vortex::start(lexer* p, fdm *a, ghostcell *pgc, convection *pconvec)
 {
     if(p->simtime >= 6.0)
     {

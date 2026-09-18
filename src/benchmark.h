@@ -37,6 +37,7 @@ public:
     virtual ~benchmark() = default;
 
 	virtual void start(lexer*, fdm*, ghostcell*, convection*)=0;
+    virtual void ini(lexer*, fdm*, ghostcell*) {};
 
 };
 
