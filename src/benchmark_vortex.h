@@ -38,6 +38,7 @@ public:
 	virtual ~benchmark_vortex() = default;
 
 	void start(lexer*, fdm*, ghostcell*, convection*) override final;
+	void ini(lexer*, fdm*, ghostcell*) override final;
 };
 
 #endif
