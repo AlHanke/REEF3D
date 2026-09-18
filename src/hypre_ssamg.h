@@ -120,6 +120,12 @@ private:
     // N10==42 only: PCG outer solver, the Krylov method every result in the SSAMG paper is
     // measured with. Valid only while the operator is SPD -- see create_solver.
     HYPRE_SStructSolver   pcg_solver = nullptr;
+    // N10==43 only: BiCGSTAB outer solver with the same SSAMG preconditioner. Unlike PCG it
+    // needs neither the operator nor the preconditioner to be SPD, so it is usable where 42
+    // is not; unlike GMRES it has a fixed short recurrence (no Krylov basis to store or
+    // restart), at the price of a non-monotone residual and two preconditioner applications
+    // per iteration.
+    HYPRE_SStructSolver   bicgstab_solver = nullptr;
     HYPRE_SStructSolver   ssamg = nullptr;
     HYPRE_SStructVariable vartypes[1];
 
@@ -165,6 +171,7 @@ private:
     bool solver_created = false;
     bool gmres_created = false;
     bool pcg_created = false;
+    bool bicgstab_created = false;
     int created_nlevs = -1;
     // Set by make_grid_7p; cleared by create_solver. A regrid destroys A/b/x and builds a new
     // graph, so any solver already set up against the old operator must be torn down too --

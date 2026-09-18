@@ -578,14 +578,14 @@ void driver::logic_cfd()
     // Solver
     if(p->j_dir)
     {
-        if(p->N10==40 || p->N10==41 || p->N10==42)
+        if(p->N10==40 || p->N10==41 || p->N10==42 || p->N10==43)
         psolv = new hypre_ssamg(p,a,pgc);
         else
         psolv = new bicgstab_ijk(p,a,pgc);
     }
     else
     {
-        if(p->N10==40 || p->N10==41 || p->N10==42)
+        if(p->N10==40 || p->N10==41 || p->N10==42 || p->N10==43)
         psolv = new hypre_ssamg(p,a,pgc);
         else
         psolv = new bicgstab_ijk_2D(p,a,pgc);
@@ -612,7 +612,7 @@ void driver::logic_cfd()
     case 30: case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38: case 39:
         ppoissonsolv = new hypre_sstruct(p,a,pgc);
         break;
-    case 40: case 41: case 42:
+    case 40: case 41: case 42: case 43:
         ppoissonsolv = new hypre_ssamg(p,a,pgc);
         break;
     default:
