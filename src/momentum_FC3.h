@@ -77,7 +77,7 @@ private:
     field4 ls,frk1,frk2;
 
     #if USE_AMREX
-    amrex_solver *amrex_solve;
+    amrex_solver *amrex_solve = nullptr;
     #endif
     convection *pconvec;
     convection *pfsfdisc;
@@ -96,6 +96,8 @@ private:
 
     static constexpr int gcval_u=10, gcval_v=11, gcval_w=12;
     int gcval_phi;
+
+    bool REEF_MLMG = false;
 };
 
 #endif
