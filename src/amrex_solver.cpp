@@ -231,8 +231,21 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
 {
     // Prerequisites: u/v/w and the level set must have current ghost cells
     // (pgc->start1/2/3/4 before calling) -- the staging below reads one ghost
-    // layer for the low faces of each box, and roface reads the level set
-    // through a->phi (the phi parameter documents the dependency).
+    // layer for the low faces of each box, and the face density derives from
+    // a->phi (the phi parameter documents the dependency).
+
+    // Materialise rho_face into a->rofx/rofy/rofz. The beta staging below reads
+    // THOSE arrays rather than calling pd->roface() per face, so that the
+    // operator's face density is the same number the predictor (pjm_corr
+    // u/v/wpgrad) and hypre_ssamg's velocity corrector use -- see the
+    // REEF_CF_PROJECTION_GROUP contract in hypre_ssamg_fill.cpp, item 7.
+    // density::update_faces is also where AMR levels get their C-F faces made
+    // single-valued (amrex::average_down_faces on beta), so the value handed to
+    // setBCoeffs is already C-F consistent before MLABecLaplacian does its own
+    // averageDownCoeffsToCoarseAmrLevel on top of it.
+    // TODO: hoist to a single per-RK-stage call shared with poisson_pcorr (see
+    // the matching TODO in poisson_pcorr.cpp) now that every consumer agrees.
+    pd->update_faces(p,a);
 
     const int nlev = p->nlevs;
 
@@ -405,7 +418,11 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
     // ---- stage face density and MAC velocity ----
     // REEF3D stores u/v/w cell-centred with the value living on the cell's
     // HIGH face; AMReX face index f is the LOW face of cell f, so face f in x
-    // holds u(f-1). Every cell writes its three low faces; the last cell of a
+    // holds u(f-1). a->rofx/rofy/rofz follow the same cell-stores-its-HIGH-face
+    // convention (density::update_faces), so AMReX face I in x reads
+    // a->rofx(i-1,j,k) -- the identical mapping cf_sync_faces uses when it
+    // stages those arrays into face MultiFabs. Every cell writes its three low
+    // faces; the last cell of a
     // tile row also writes its high face so the overlapping face planes of
     // adjacent boxes are filled in both FABs. The duplicate writes are
     // consistent because both evaluate the same exchanged cell data.
@@ -442,7 +459,7 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
             }
             else
             {
-                bx(I,J,K) = 1.0/pd->roface(p,a,-1,0,0);
+                bx(I,J,K) = 1.0/a->rofx(i-1,j,k);
                 uf(I,J,K) = u(i-1,j,k);
             }
 
@@ -451,7 +468,13 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
                 // pseudo-2D: the solver planes are identical copies, so give
                 // the y-faces the real cell density (the plane-to-plane
                 // coupling lets the smoother damp plane-antisymmetric modes)
-                // and zero transverse velocity
+                // and zero transverse velocity.
+                // This is the only beta that stays on pd->roface(): the
+                // replicated y-faces are a numerical device, not a physical
+                // coupling (vf is identically 0 and the planes carry no real
+                // y-gradient), and offsets (0,0,0) make it the CELL density,
+                // which has no a->rof* entry. Nothing in the predictor reads
+                // it, so it is outside the consistency contract.
                 by(I,J,K) = sc ? 0.0 : 1.0/pd->roface(p,a,0,0,0);
                 vf(I,J,K) = 0.0;
             }
@@ -462,7 +485,7 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
             }
             else
             {
-                by(I,J,K) = 1.0/pd->roface(p,a,0,-1,0);
+                by(I,J,K) = 1.0/a->rofy(i,j-1,k);
                 vf(I,J,K) = v(i,j-1,k);
             }
 
@@ -473,7 +496,7 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
             }
             else
             {
-                bz(I,J,K) = 1.0/pd->roface(p,a,0,0,-1);
+                bz(I,J,K) = 1.0/a->rofz(i,j,k-1);
                 wf(I,J,K) = w(i,j,k-1);
             }
 
@@ -487,7 +510,7 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
                 }
                 else
                 {
-                    bx(I+1,J,K) = 1.0/pd->roface(p,a,1,0,0);
+                    bx(I+1,J,K) = 1.0/a->rofx(i,j,k);
                     uf(I+1,J,K) = u(i,j,k);
                 }
             }
@@ -506,7 +529,7 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
                 }
                 else
                 {
-                    by(I,J+1,K) = 1.0/pd->roface(p,a,0,1,0);
+                    by(I,J+1,K) = 1.0/a->rofy(i,j,k);
                     vf(I,J+1,K) = v(i,j,k);
                 }
             }
@@ -520,7 +543,7 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
                 }
                 else
                 {
-                    bz(I,J,K+1) = 1.0/pd->roface(p,a,0,0,1);
+                    bz(I,J,K+1) = 1.0/a->rofz(i,j,k);
                     wf(I,J,K+1) = w(i,j,k);
                 }
             }

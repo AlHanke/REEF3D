@@ -590,7 +590,10 @@ void hypre_ssamg::amr_cf_coefficients(lexer* p, fdm* a, ghostcell* pgc, fieldint
     //     array is C-F-synced via amrex::average_down_faces, so the coarse and fine sides of a
     //     C-F face carry one number even when the smoothed Heaviside band straddles it. This
     //     mirrors MLABecLaplacian::averageDownCoeffsToCoarseAmrLevel, which is why amrex_solver
-    //     never had the two-valued-density problem.
+    //     never had the two-valued-density problem while it owned both sides of its own
+    //     operator. That stopped being sufficient once the predictor started reading a->rof*
+    //     too, so amrex_solver::setup now stages beta from a->rof* as well -- one array, one
+    //     C-F averaging, for the matrix AND the predictor on both solver paths.
     //   * conservative volume weighting  (M_cf*V_c == M_fc*V_f, i.e. coeff_cf = coeff_fc/volratio)
     // Change any one of these conventions and you MUST change the others in lockstep, or the
     // fine block floats off its gauge -> spurious velocity / wrong pressure level.
