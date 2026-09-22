@@ -113,6 +113,49 @@ amrex_solver::~amrex_solver()
     delete pd;
 }
 
+// Slave each coarse face covered by a fine patch -- the C-F interface faces
+// included -- to the average of the fine faces over it, so the coarse and fine
+// levels agree on the flux through every shared face.
+//
+// fill_rhs builds rhs[lev] = -div(umac[lev]) from each level's own staged faces.
+// Without this the two levels disagree at the interface and that disagreement is
+// a divergence source no pressure field can cancel (see reef_cf_flux_check):
+// measured on the dam break, the mismatch reached 28% of max|coarse| by stage 3
+// of the FIRST step, and the composite solution carried an O(1) spurious
+// velocity (umax 1.38 vs 0.37 single-level at t=0.0099).
+//
+// This is the amrex_solver counterpart of pjm_corr's cf_average_down_velocity,
+// which is why hypre_ssamg never showed the defect. It is cheaper here: umac is
+// already face-centred, so no staggered->face conversion is needed. Operates on
+// the SOLVER-side hierarchy (sgrids/rr), which with y-doubling is not the REEF3D
+// one. Fine to coarse, so a 3+ level hierarchy propagates all the way down.
+static void reef_cf_sync_umac(int nlev,
+                              const Vector<BoxArray>& sgrids,
+                              const Vector<DistributionMapping>& dmaps,
+                              Vector<Array<MultiFab,AMREX_SPACEDIM>>& umac,
+                              const IntVect& rr)
+{
+    for(int lev=nlev-1; lev>=1; --lev)
+    {
+        const BoxArray cba = amrex::coarsen(sgrids[lev], rr);
+
+        Array<MultiFab,AMREX_SPACEDIM> favg;
+        for(int d=0; d<AMREX_SPACEDIM; ++d)
+        favg[d].define(amrex::convert(cba, IntVect::TheDimensionVector(d)), dmaps[lev], 1, 0);
+
+        const Array<const MultiFab*,AMREX_SPACEDIM> fptr
+            {AMREX_D_DECL(&umac[lev][0], &umac[lev][1], &umac[lev][2])};
+        const Array<MultiFab*,AMREX_SPACEDIM> cptr
+            {AMREX_D_DECL(&favg[0], &favg[1], &favg[2])};
+        amrex::average_down_faces(fptr, cptr, rr, 0);
+
+        // favg lives on the coarsened-fine layout, so this writes exactly the
+        // covered coarse faces and leaves every uncovered one untouched.
+        for(int d=0; d<AMREX_SPACEDIM; ++d)
+        umac[lev-1][d].ParallelCopy(favg[d], 0, 0, 1);
+    }
+}
+
 // REEF_CF_FLUX: coarse/fine face-flux consistency probe.
 //
 // The composite projection is solvable only if the coarse face flux at every
@@ -583,9 +626,14 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
         });
     }
 
+    // ---- make the C-F face fluxes single-valued before the divergence ----
+    if(nlev > 1)
+    reef_cf_sync_umac(nlev, sgrids, p->amrex_distribution_mapping, umac, rr);
+
     // REEF_CF_FLUX=1: does the coarse face flux match the average of the fine
     // faces at every C-F interface? A mismatch makes the composite rhs
-    // unsolvable -- see reef_cf_flux_check.
+    // unsolvable -- see reef_cf_flux_check. With the sync above it is the
+    // invariant check: this must now report ~1e-16 at every stage.
     if(nlev > 1 && std::getenv("REEF_CF_FLUX"))
     reef_cf_flux_check(nlev, sgrids, sgeom, p->amrex_distribution_mapping, umac, rr);
 
