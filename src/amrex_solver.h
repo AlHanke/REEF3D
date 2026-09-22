@@ -92,10 +92,10 @@ private:
     /// (divergent composite cycles), so for pseudo-2D runs the solver builds
     /// its own hierarchy in which fine level L has 2^L identical y-planes and
     /// isotropic (2,2,2) refinement -- only standard, well-tested AMReX code
-    /// paths are exercised. Level 0 stays ny=1 (its MG chain degenerates to a
-    /// pure bottom solve, which is the configuration proven in single-level
-    /// runs). Data is staged into plane 0 and replicated; results are read
-    /// back from plane 0.
+    /// paths are exercised. The base level is y-doubled as well (an ny=1 box is
+    /// un-coarsenable in every direction, so the MG chain would collapse to a
+    /// pure bottom solve and stall), at nlev==1 no less than above it. Data is
+    /// staged into plane 0 and replicated; results are read back from plane 0.
     bool ydouble = false;
     amrex::Vector<amrex::Geometry> sgeom;  ///< solver-side geometry per level
     amrex::Vector<amrex::BoxArray> sgrids; ///< solver-side (y-doubled) grids

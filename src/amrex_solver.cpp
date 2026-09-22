@@ -250,13 +250,26 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
     const int nlev = p->nlevs;
 
     // ---- solver-side hierarchy (see header: pseudo-2D y-doubling) ----
-    // REEF_MLMG_NOYDOUBLE: A/B knob for the hidden-direction-at-nlev>1 path.
+    // REEF_MLMG_NOYDOUBLE: A/B knob for the hidden-direction path.
     // It does NOT currently work: the composite solve stalls (see the semi-
     // coarsening/hidden-direction comment in the LPInfo block below), so the
     // knob exists to re-test it after that is fixed, not as a production
     // setting. Forcing ydouble=false at nlev>1 aborts with
     // "MLMG: Failed to converge after 250 iterations, resid/resid0 = 3.4e-3".
-    ydouble = (p->j_dir == 0) && nlev > 1;
+    //
+    // This applies at nlev==1 too. The condition used to be `nlev > 1` on the
+    // grounds that a single level degenerates to a pure bottom solve and that
+    // was "the configuration proven in single-level runs" -- but those runs
+    // predate the projection carrying gravity, so every RHS was zero and the
+    // bottom solve was never asked to do anything. With a real hydrostatic RHS
+    // an ny=1 base stalls at resid/bnorm ~1e-2 after 250 iterations and aborts,
+    // for the reason spelled out below: Box::coarsenable tests ALL directions,
+    // so a 1-cell y makes the box un-coarsenable in x and z as well and the
+    // hierarchy stops at a single MG level. Measured on the dam break at
+    // nlev==1: ny=1 fails (0.027 with the density jump, 0.014 with uniform
+    // density -- i.e. not a conditioning problem); y-doubled converges in 4-5
+    // iterations and matches the hypre_ssamg reference to the printed digits.
+    ydouble = (p->j_dir == 0);
     if(std::getenv("REEF_MLMG_NOYDOUBLE"))
     ydouble = false;
 
