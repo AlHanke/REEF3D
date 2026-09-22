@@ -823,12 +823,16 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
 
 void amrex_solver::fill_rhs(lexer *p)
 {
-    // The solve variable is the projection potential phi = alpha*dt*p, which
+    // The solve variable is the projection potential phi = alpha*dt*dp, which
     // satisfies -div(beta grad phi) = -div(umac). Keeping alpha*dt out of the
-    // RHS (and out of the solution) makes phi independent of the RK stage, so
-    // the carried-over pcorr is a genuine warm start and bnorm no longer swings
-    // with alpha. The alpha*dt factor is restored in pressure_update. Solid
-    // cells get rhs = 0 automatically because all their faces were zeroed.
+    // RHS (and out of the solution) keeps bnorm from swinging with the RK
+    // stage; the factor is restored in pressure_update. (It also used to make
+    // a carried-over pcorr a genuine warm start -- that rationale is gone now
+    // that solve() zeroes the initial guess to kill the null-space constant.)
+    // umac is the predictor velocity, which already carries
+    // -alpha*dt*grad(press^n)/rho_face, so -div(umac) is the divergence ERROR
+    // of the incremental scheme, not the full hydrostatic balance. Solid cells
+    // get rhs = 0 automatically because all their faces were zeroed.
     for(int lev=0; lev<p->nlevs; ++lev)
     {
         const auto dxinv = p->amrex_geometry[lev].InvCellSizeArray();
@@ -1049,12 +1053,19 @@ void amrex_solver::ucorr(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v,
 
 void amrex_solver::pressure_update(lexer *p, fdm *a, ghostcell *pgc, double alpha)
 {
-    // non-incremental solve: pcorr is the potential phi = alpha*dt*p, so the
-    // physical pressure is phi/(alpha*dt) (all-Neumann solves are pinned to
-    // zero mean inside MLMG; add a reference-pressure shift here if a
-    // pressure_reference-style gauge is needed). press lives on the REEF3D
-    // grids; with y-doubling active its box is the j=0 plane of the solver
-    // box, so an index-wise copy reads back exactly that plane.
+    // Incremental solve, matching pjm_corr's `a->press += pcorr`: the predictor
+    // (momentum_FC3 u/v/wpgrad) already carries -grad(press^n)/rho_face, so the
+    // solved potential phi = alpha*dt*dp is a pressure CORRECTION, and the
+    // physical increment phi/(alpha*dt) accumulates into press rather than
+    // replacing it. This keeps the RHS at the size of the divergence error
+    // instead of the full hydrostatic balance, which is what a non-incremental
+    // solve had to re-derive across the density jump on every RK stage.
+    // The all-Neumann solve is pinned to zero mean inside MLMG and the initial
+    // guess is zeroed in solve(), so each increment is itself zero-mean and no
+    // null-space constant compounds into press.
+    // press lives on the REEF3D grids; with y-doubling active its box is the
+    // j=0 plane of the solver box, so an index-wise copy reads back exactly
+    // that plane.
     const double iadt = 1.0/(alpha*p->dt);
     for(int lev=0; lev<p->nlevs; ++lev)
     {
@@ -1066,7 +1077,7 @@ void amrex_solver::pressure_update(lexer *p, fdm *a, ghostcell *pgc, double alph
             auto const& src = pcorr[lev].const_array(mfi);
             amrex::LoopOnCpu(vbx, [&] (int ii, int jj, int kk)
             {
-                dst(ii,jj,kk) = iadt*src(ii,jj,kk);
+                dst(ii,jj,kk) += iadt*src(ii,jj,kk);
             });
         }
     }
@@ -1080,7 +1091,24 @@ void amrex_solver::pressure_update(lexer *p, fdm *a, ghostcell *pgc, double alph
         <<"  press["<<a->press.GetMultiFab(lev).min(0)<<","<<a->press.GetMultiFab(lev).max(0)<<"]"
         <<std::endl;
 
-    pgc->start4(p,a->press,gcval_press);
+    // Predictor press ghost. Now that the solve is incremental, momentum_FC3's
+    // u/v/wpgrad reads a->press back -- including its C-F ghost ring -- so the
+    // fill has to be C-F aware, as pjm_corr's predictor fill is: gcv 41 =
+    // matrix-consistent C-F ghost at nlevs>1, gcv 40 single level. The member
+    // gcval_press stays 40 because it is fixed at construction, before p->nlevs
+    // is final. average_down is off for the same reason as pjm_corr: keep the
+    // coarse press self-consistent.
+    //
+    // NOT gcv 42, the transverse-linear variant pjm_corr selects under Y11:
+    // that fill is tuned to SSAMG's C-F stencil, which is not
+    // MLABecLaplacian's, and on the 2-level dam break it injects an O(1)
+    // interface velocity frozen in at step 1 and never removed (umax/wmax
+    // 1.35/1.58 against a 0.38/0.19 reference). Measured over t=0.009..0.039,
+    // gcv 40 and 41 both track hypre_ssamg to the printed digits with identical
+    // iteration counts; 41 is preferred because it fills the C-F ghost rather
+    // than leaving it to a Neumann extrapolation.
+    const int gcval_press_pred = (p->nlevs > 1) ? 41 : gcval_press;
+    pgc->start4(p,a->press,gcval_press_pred,false);
 }
 
 void amrex_solver::start(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v, field3 &w, const field4 &phi, double alpha)

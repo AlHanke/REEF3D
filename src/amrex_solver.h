@@ -74,8 +74,9 @@ private:
     void ucorr(lexer *p, fdm *a, ghostcell *pgc, field1 &u, field2 &v, field3 &w);
 
     /// Divides the solved potential phi by alpha*dt to recover the physical
-    /// pressure into a->press on all levels (the solve is non-incremental,
-    /// matching pjm) and refreshes the pressure ghosts.
+    /// pressure increment and ACCUMULATES it into a->press on all levels (the
+    /// solve is incremental, matching pjm_corr's `press += pcorr`), then
+    /// refreshes the pressure ghosts.
     void pressure_update(lexer *p, fdm *a, ghostcell *pgc, double alpha);
 
 private:
@@ -106,7 +107,7 @@ private:
     amrex::Vector<amrex::Array<amrex::MultiFab,AMREX_SPACEDIM>> beta; ///< 1/ro on faces, 0 on solid faces
     amrex::Vector<amrex::Array<amrex::MultiFab,AMREX_SPACEDIM>> flux; ///< -(1/ro)grad(pcorr) from getFluxes
     amrex::Vector<amrex::MultiFab> rhs;    ///< cell-centred divergence source
-    amrex::Vector<amrex::MultiFab> pcorr;  ///< cell-centred solution, 1 ghost (warm start)
+    amrex::Vector<amrex::MultiFab> pcorr;  ///< cell-centred solution, 1 ghost (guess zeroed in solve())
 
     std::unique_ptr<amrex::MLABecLaplacian> linop;
     std::unique_ptr<amrex::MLMG> mlmg;

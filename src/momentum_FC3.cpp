@@ -324,7 +324,6 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     rk3_step1_u_bcmom_time = pgc->timer() - block_start;
 
     block_start = pgc->timer();
-    if(!REEF_MLMG)
     ppress->upgrad(p,a,a->eta,a->eta_n);
     rk3_step1_u_pgrad_time = pgc->timer() - block_start;
 
@@ -363,7 +362,6 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
         rk3_step1_v_bcmom_time = pgc->timer() - block_start;
 
         block_start = pgc->timer();
-        if(!REEF_MLMG)
         ppress->vpgrad(p,a,a->eta,a->eta_n);
         rk3_step1_v_pgrad_time = pgc->timer() - block_start;
 
@@ -401,7 +399,6 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     rk3_step1_w_bcmom_time = pgc->timer() - block_start;
 
     block_start = pgc->timer();
-    if(!REEF_MLMG)
     ppress->wpgrad(p,a,a->eta,a->eta_n);
     rk3_step1_w_pgrad_time = pgc->timer() - block_start;
 
@@ -529,7 +526,6 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     rk3_step2_u_bcmom_time = pgc->timer() - block_start;
 
     block_start = pgc->timer();
-    if(!REEF_MLMG)
     ppress->upgrad(p,a,a->eta,a->eta_n);
     rk3_step2_u_pgrad_time = pgc->timer() - block_start;
 
@@ -568,7 +564,6 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
         rk3_step2_v_bcmom_time = pgc->timer() - block_start;
 
         block_start = pgc->timer();
-        if(!REEF_MLMG)
         ppress->vpgrad(p,a,a->eta,a->eta_n);
         rk3_step2_v_pgrad_time = pgc->timer() - block_start;
 
@@ -606,7 +601,6 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     rk3_step2_w_bcmom_time = pgc->timer() - block_start;
 
     block_start = pgc->timer();
-    if(!REEF_MLMG)
     ppress->wpgrad(p,a,a->eta,a->eta_n);
     rk3_step2_w_pgrad_time = pgc->timer() - block_start;
 
@@ -723,7 +717,6 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     rk3_step3_u_bcmom_time = pgc->timer() - block_start;
 
     block_start = pgc->timer();
-    if(!REEF_MLMG)
     ppress->upgrad(p,a,a->eta,a->eta_n);
     rk3_step3_u_pgrad_time = pgc->timer() - block_start;
 
@@ -762,7 +755,6 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
         rk3_step3_v_bcmom_time = pgc->timer() - block_start;
 
         block_start = pgc->timer();
-        if(!REEF_MLMG)
         ppress->vpgrad(p,a,a->eta,a->eta_n);
         rk3_step3_v_pgrad_time = pgc->timer() - block_start;
 
@@ -800,7 +792,6 @@ void momentum_FC3::start(lexer *p, fdm *a, ghostcell *pgc, vrans *pvrans, sixdof
     rk3_step3_w_bcmom_time = pgc->timer() - block_start;
 
     block_start = pgc->timer();
-    if(!REEF_MLMG)
     ppress->wpgrad(p,a,a->eta,a->eta_n);
     rk3_step3_w_pgrad_time = pgc->timer() - block_start;
 
