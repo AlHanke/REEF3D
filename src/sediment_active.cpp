@@ -61,9 +61,6 @@ void sediment_f::active_cfd(lexer *p, fdm *a, ghostcell *pgc)
     if(p->DF(i,j,k)<0)
     s->DFBED[IJ]=-1;
     }
-    
-    LOOP
-    a->test(i,j,k) = s->DFBED[IJ];
 }
 
 void sediment_f::active_ini_cfd(lexer *p, fdm *a,ghostcell *pgc)

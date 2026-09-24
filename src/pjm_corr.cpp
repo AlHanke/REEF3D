@@ -396,24 +396,6 @@ void pjm_corr::start(fdm* a, lexer* p, poisson* ppois, solver* psolv, ghostcell*
     const int gcval_press_pred = gcval_press;
     #endif
     pgc->start4(p,pcorr,gcval_press,false);
-    #if USE_AMREX
-    LEVEL_LOOP
-    {
-        auto const& test_mf = a->test.GetMultiFab();
-        for (amrex::MFIter mfi(a->test.GetMultiFab()); mfi.isValid(); ++mfi)
-        {
-            const amrex::Box& bx = mfi.tilebox();
-            auto const& cc_arr = a->test.GetMultiFab().array(mfi);
-            auto const& p_fc = pcorr.GetMultiFab().const_array(mfi);
-
-            amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
-            {
-                cc_arr(i,j,k,0) += p_fc(i,j,k);
-            });
-        }
-    }
-    #endif
-    // amrex::MultiFab::Copy(a->test.GetMultiFab(), pcorr.GetMultiFab(), 0, 0, 1, 0);
     presscorr(p,a);
     reference_start(p,a,pgc);
     #if USE_AMREX

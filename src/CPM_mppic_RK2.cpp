@@ -101,9 +101,6 @@ void CPM::mppic_RK2(lexer *p, fdm *a, ghostcell *pgc, sediment_fdm *s, turbulenc
     volfrac_update(p,pgc,s,P.XRK1,P.YRK1,P.ZRK1);
     stress_snider(p,pgc,s);
     stress_gradient(p,a,pgc,s);
-    
-    LOOP
-    a->test(i,j,k) = Tau(i,j,k);
 
     for(n=0;n<P.index;++n)
     if(P.Flag[n]==ACTIVE)
