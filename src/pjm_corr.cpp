@@ -144,6 +144,67 @@ static bool cell_is_covered(lexer* p, int ci, int cj, int ck)
     foot.refine(p->ref_vec);
     return p->amrex_box_array[p->level+1].intersects(foot);
 }
+
+// Coarse faces between a covered and an uncovered cell (the C-F faces the fine level is slaved
+// to via cf_velocity_fill_from_coarse) must not difference the covered press: that is the fine
+// average (covered_press_avgdown), whose hydrostatic profile in the density band differs from
+// the coarse column's (different psi / face densities per level), so -dp/(dx*rho_c) + g is not
+// zero at rest (0.03 Pa in air -> circulation -> phi deformation -> reinit volume loss;
+// REEF_SKIP_COVERED_PGRAD gave 1.8e-14). Instead take the fine level's own net acceleration
+//   A = -(p(f+e)-p(f))/(dx_f*rof_f(f)) + g_n
+// on the fine faces through the centre of the covered cell (valid fine data, no C-F ghost),
+// area-averaged over the transverse sub-faces. Zero at rest because every fine column is
+// balanced; under motion it carries the dynamic gradient half a coarse cell inside the patch.
+// Written only into covered coarse cells (ParallelCopy from the coarsened fine layout).
+void pjm_corr::cf_fine_accel(lexer* p, fdm* a, int dir, field& out)
+{
+    if(p->nlevs <= 1) return;
+
+    field* rof = (dir==0) ? static_cast<field*>(&a->rofx)
+               : (dir==1) ? static_cast<field*>(&a->rofy) : static_cast<field*>(&a->rofz);
+    const double gd = p->Y9 ? ((dir==0) ? p->W20 : (dir==1) ? p->W21 : p->W22) : 0.0;
+    const amrex::IntVect rv = p->ref_vec;
+    const amrex::IntVect e  = amrex::IntVect::TheDimensionVector(dir);
+
+    for(int lev = 1; lev < p->nlevs; ++lev)
+    {
+        const amrex::MultiFab& pmf = a->press.GetMultiFab(lev);
+        const amrex::MultiFab& rmf = rof->GetMultiFab(lev);
+        const double dxf = p->amrex_geometry[lev].CellSize(dir);
+
+        amrex::MultiFab cacc(amrex::coarsen(pmf.boxArray(), rv), pmf.DistributionMap(), 1, 0);
+
+        for(amrex::MFIter mfi(cacc); mfi.isValid(); ++mfi)
+        {
+            const amrex::Box& cbx = mfi.validbox();
+            const auto pa = pmf.const_array(mfi);
+            const auto ra = rmf.const_array(mfi);
+            auto       ca = cacc.array(mfi);
+            amrex::LoopOnCpu(cbx, [&] (int I, int J, int K) noexcept
+            {
+                // fine footprint of the coarse cell; the centre face along dir is the high face
+                // of sub-cell rv[dir]/2-1 (the face between sub-cells 0 and 1 at 2:1)
+                amrex::IntVect lo(I*rv[0], J*rv[1], K*rv[2]);
+                lo[dir] += rv[dir]/2 - 1;
+                amrex::IntVect n = rv; n[dir] = 1;
+                double sum = 0.0;
+                for(int kk=0; kk<n[2]; ++kk)
+                for(int jj=0; jj<n[1]; ++jj)
+                for(int ii=0; ii<n[0]; ++ii)
+                {
+                    const amrex::IntVect f = lo + amrex::IntVect(ii,jj,kk);
+                    sum += -(pa(f+e) - pa(f))/(dxf*ra(f)) + gd;
+                }
+                ca(I,J,K) = sum/double(n[0]*n[1]*n[2]);
+            });
+        }
+
+        auto& omf = out.GetMultiFab(lev-1);
+        omf.ParallelCopy(cacc, 0, 0, 1, amrex::IntVect(0), amrex::IntVect(0),
+                         p->amrex_geometry[lev-1].periodicity());
+        omf.FillBoundary(p->amrex_geometry[lev-1].periodicity());
+    }
+}
 #endif
 
 // Bug #2 probe helper (env REEF_PREDDIV): per-level max|D.u*| of the (predictor) velocity, tagged
@@ -209,6 +270,9 @@ static void preddiv_probe(lexer* p, fdm* a, ghostcell* pgc,
 }
 
 pjm_corr::pjm_corr(lexer* p, fdm *a, ghostcell *pgc, heat *&pheat, concentration *&pconc) : pcorr(p), pressure_reference(p)
+#if USE_AMREX
+    , cfacc_x(p), cfacc_y(p), cfacc_z(p)
+#endif
 {
     if(p->F80==0 && p->F300==0 && p->W90==0)
     {
@@ -881,6 +945,13 @@ void pjm_corr::upgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
     double hp_prs=0,hp_prn=0; int hp_cs=0,hp_cn=0;   // press(self,i+1) + covered flags
     double hp_deep=0.0; int hp_dl=-1, hp_di[3]={-1,-1,-1};
 
+    #if USE_AMREX
+    // REEF_NO_CF_FINE_ACCEL: fall back to differencing the covered press on C-F faces.
+    static const bool cf_acc_off = (std::getenv("REEF_NO_CF_FINE_ACCEL") != nullptr);
+    const bool cf_acc = !cf_acc_off && p->nlevs > 1;
+    if(cf_acc) cf_fine_accel(p,a,0,cfacc_x);
+    #endif
+
     ULOOP
     {
         #if USE_AMREX
@@ -888,6 +959,11 @@ void pjm_corr::upgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
         // faces are C-F/fine-authoritative and overwritten by reflux, and the covered press is
         // horizontally inconsistent (per-column hydrostatic offset). Neighbour term added 2026-07-06.
         if(skip_covered && (cell_is_covered(p,i,j,k) || cell_is_covered(p,i+1,j,k))) continue;
+        if(cf_acc)
+        {
+            const bool cs = cell_is_covered(p,i,j,k), cn = cell_is_covered(p,i+1,j,k);
+            if(cs != cn) { a->F(i,j,k) += PORVAL1*cfacc_x(cs ? i : i+1, j, k); continue; }
+        }
         #endif
         dp = a->press(i+1,j,k)-a->press(i,j,k);
         a->F(i,j,k) -= PORVAL1*dp/(p->DXP[IP]*a->rofx(i,j,k));
@@ -946,10 +1022,21 @@ void pjm_corr::vpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
         double hp_w=0.0; int hp_l=-1, hp_i[3]={-1,-1,-1}; double hp_rof=0,hp_pg=0,hp_gg=0,hp_ps=0,hp_pn=0;
         double hp_deep=0.0; int hp_dl=-1, hp_di[3]={-1,-1,-1};
 
+        #if USE_AMREX
+        static const bool cf_acc_off = (std::getenv("REEF_NO_CF_FINE_ACCEL") != nullptr);
+        const bool cf_acc = !cf_acc_off && p->nlevs > 1;
+        if(cf_acc) cf_fine_accel(p,a,1,cfacc_y);
+        #endif
+
         VLOOP
         {
             #if USE_AMREX
             if(skip_covered && (cell_is_covered(p,i,j,k) || cell_is_covered(p,i,j+1,k))) continue;
+            if(cf_acc)
+            {
+                const bool cs = cell_is_covered(p,i,j,k), cn = cell_is_covered(p,i,j+1,k);
+                if(cs != cn) { a->G(i,j,k) += PORVAL2*cfacc_y(i, cs ? j : j+1, k); continue; }
+            }
             #endif
             dp = a->press(i,j+1,k)-a->press(i,j,k);
             a->G(i,j,k) -= PORVAL2*dp/(p->DYP[JP]*a->rofy(i,j,k));
@@ -1005,10 +1092,21 @@ void pjm_corr::wpgrad(lexer*p, fdm* a, slice &eta, slice &eta_n)
     double hp_w=0.0; int hp_l=-1, hp_i[3]={-1,-1,-1}; double hp_rof=0,hp_pg=0,hp_gg=0,hp_ps=0,hp_pn=0;
     double hp_deep=0.0; int hp_dl=-1, hp_di[3]={-1,-1,-1};
 
+    #if USE_AMREX
+    static const bool cf_acc_off = (std::getenv("REEF_NO_CF_FINE_ACCEL") != nullptr);
+    const bool cf_acc = !cf_acc_off && p->nlevs > 1;
+    if(cf_acc) cf_fine_accel(p,a,2,cfacc_z);
+    #endif
+
     WLOOP
     {
         #if USE_AMREX
         if(skip_covered && (cell_is_covered(p,i,j,k) || cell_is_covered(p,i,j,k+1))) continue;
+        if(cf_acc)
+        {
+            const bool cs = cell_is_covered(p,i,j,k), cn = cell_is_covered(p,i,j,k+1);
+            if(cs != cn) { a->H(i,j,k) += PORVAL3*cfacc_z(i, j, cs ? k : k+1); continue; }
+        }
         #endif
         dp = a->press(i,j,k+1)-a->press(i,j,k);
         a->H(i,j,k) -= PORVAL3*dp/(p->DZP[KP]*a->rofz(i,j,k));
