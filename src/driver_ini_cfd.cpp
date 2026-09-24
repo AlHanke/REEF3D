@@ -38,6 +38,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "turbulence_header.h"
 #include "waves_header.h"
 #include "6DOF_header.h"
+#include "heaviside_ls.h"
+#include "density_f.h"
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -231,6 +233,54 @@ void driver::driver_ini_cfd()
 
     if(p->I12>=1)
     pini->hydrostatic(p,a,pgc);
+
+    auto dens = density_f(p);
+
+    // Column-by-column hydrostatic build. Each (i,j) column is anchored at its tile-bottom
+    // cell with the analytic absolute value, then integrated UPWARD using the SAME face
+    // density momentum/wpgrad use (dens.roface, field phi). That makes grad(press) == W22*roface
+    // at every face, so the predictor hydrostatic force is zero -- including the surface band.
+    // (The previous version built press from a per-cell analytic unit-gradient extrapolation,
+    // whose face density disagreed with roface where the reinitialised phi is not exactly
+    // unit-gradient -> a ~0.18 surface seed the multi-level coupling then amplified.)
+    LEVEL_LOOP
+    TILE_LOOP
+    ILOOP
+    JLOOP
+    {
+        const double dz  = p->amrex_geometry[p->level].CellSize(2);
+        const double zlo = p->amrex_geometry[p->level].ProbLo(2);
+
+        // --- absolute anchor for the tile-bottom cell (k=0 local) --------------------------
+        // Integrate from the global column bottom with analytic unit-gradient phi (no off-tile
+        // field reads -> order-independent). Exact in deep water; any small extrapolation error
+        // near the surface only shifts the column's constant offset, which wpgrad never sees.
+        k = 0;
+        {
+            const int    gk   = k + p->amr_tile_lo.z;    // GLOBAL k on this level
+            const double zc   = p->pos_z();              // tile-bottom cell centre z
+            const double phic = a->phi(i,j,k);
+            const double zc0  = zlo + 0.5*dz;
+            const double phi0 = phic + (zc - zc0);       // phi at global bottom, unit gradient
+            double press = phi0*p->W1*fabs(p->W22) + p->I55;
+            for(int m=0; m<gk; ++m)
+            {
+                const double zf  = zlo + double(m+1)*dz;
+                const double phif= phic + (zc - zf);
+                const double H   = heaviside_ls(phif,p->psi);   // p->psi is per level (lexer::level_psi)
+                const double rof = p->W1*H + p->W3*(1.0-H);
+                press += p->W22*dz*rof;                  // W22 < 0
+            }
+            a->test(i,j,k) = press;
+        }
+
+        // --- field-consistent upward integration (matches wpgrad's roface exactly) ---------
+        for(k=0; k<KMAX_LOOP; ++k)
+        {
+            const double rof = dens.roface(p,a, 0,0,1);//a->rofz(i,j,k);   // face between cells k and k+1
+            a->test(i,j,k+1) = a->test(i,j,k) + p->W22*p->DZP[KP]*rof;
+        }
+    }
 
     pprint->start(p,a,pgc,pturb,pheat,pflow,pdata,pconc,pmp,psed);
 
