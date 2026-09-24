@@ -44,6 +44,7 @@ Author: Hans Bihs
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <cmath>
 #include <math.h>
 #include <memory>
 #include <vector>
@@ -314,7 +315,24 @@ public:
     double wts,wte;
 
     // free surface
-    double psi;
+    // Interface half-width per AMR level. Reading p->psi returns the value for the current
+    // increment::level, so heaviside_ls(phi, p->psi) inside any level loop gets that level's
+    // width with no change at the call site. Assignment sets the level-0 value; ini_psi sets
+    // `ratio` to the per-level cell-size ratio (1 = same psi on every level, the old behaviour).
+    // A single global psi makes the fine level resolve the smoothed density over more faces
+    // than the coarse one, so the two levels' hydrostatic columns differ in the band (25 Pa at
+    // 2:1) and covered_press_avgdown pushes that into the coarse C-F faces.
+    struct level_psi
+    {
+        double base  = 0.0;
+        double ratio = 1.0;
+
+        double at(int lev) const { return base * std::pow(ratio, lev); }
+        operator double() const { return at(increment::level); }
+        level_psi& operator=(double v) { base = v; return *this; }
+        level_psi& operator*=(double f) { base *= f; return *this; }
+    };
+    level_psi psi;
 
 // PARALELL
     int mpirank;

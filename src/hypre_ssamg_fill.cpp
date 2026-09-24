@@ -59,9 +59,9 @@ void hypre_ssamg::fill_matrix4(lexer* p, fdm* a, ghostcell* pgc, field& f)
     // patch, the regrid lagged the interface, or the band is too narrow.
     if (std::getenv("REEF_CONTAINMENT_CHECK") && p->nlevs > 1)
     {
-        const double psi = p->psi;
         for (int lev = 0; lev < p->nlevs - 1; ++lev)
         {
+            const double psi = p->psi.at(lev);
             const auto& cover = p->amr_cell_mf[lev];
             const auto& phimf = a->phi.GetMultiFab(lev);
             const auto& fmf   = p->flag4.GetMultiFab(lev);

@@ -62,7 +62,6 @@ void initialize::hydrostatic(lexer *p, fdm *a, ghostcell *pgc)
     else if(p->I12==4 && p->Y9==1)
     {
         #if USE_AMREX
-        const double psi = p->psi;
         auto dens = density_f(p);
 
         // The whole point of this branch is that the column integration uses the SAME face
@@ -101,7 +100,7 @@ void initialize::hydrostatic(lexer *p, fdm *a, ghostcell *pgc)
                 {
                     const double zf  = zlo + double(m+1)*dz;
                     const double phif= phic + (zc - zf);
-                    const double H   = heaviside_ls(phif,psi);
+                    const double H   = heaviside_ls(phif,p->psi);   // p->psi is per level (lexer::level_psi)
                     const double rof = p->W1*H + p->W3*(1.0-H);
                     press += p->W22*dz*rof;                  // W22 < 0
                 }

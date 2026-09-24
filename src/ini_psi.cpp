@@ -63,13 +63,14 @@ void initialize::inipsi(lexer* p, fdm *a, ghostcell* pgc)
     // scale it down per level by that level's cell-size ratio. Level 0 (and single-level runs)
     // keep the exact original value.
     #if USE_AMREX
-    // double ratio;
-    // if(p->j_dir==0)
-    //     ratio=0.5*(1.0/double(p->ref_vec[0]) + 1.0/double(p->ref_vec[2]))/1.0;
-    // else
-    //     ratio=(1.0/double(p->ref_vec[0]) + 1.0/double(p->ref_vec[1]) + 1.0/double(p->ref_vec[2]))/3.0;
-    // double f=1.0; for(int n=0;n<p->nlevs-1;++n) f*=ratio;
-    // p->psi *= f; // scale down the level-0 psi to match the finest level's cell size
+    // p->psi reads as base*ratio^level (lexer::level_psi), so each level keeps the same number
+    // of cells in its band. REEF_GLOBAL_PSI restores one level-0 psi on every level.
+    if(std::getenv("REEF_GLOBAL_PSI"))
+        p->psi.ratio = 1.0;
+    else if(p->j_dir==0)
+        p->psi.ratio = 0.5*(1.0/double(p->ref_vec[0]) + 1.0/double(p->ref_vec[2]));
+    else
+        p->psi.ratio = (1.0/double(p->ref_vec[0]) + 1.0/double(p->ref_vec[1]) + 1.0/double(p->ref_vec[2]))/3.0;
 
     p->psi *= 0.5; // temp
     #endif
