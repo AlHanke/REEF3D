@@ -26,7 +26,6 @@ Author: Hans Bihs
 
 increment::increment()
 {
-    marge=5;
 }
 
 increment::~increment()
@@ -34,7 +33,6 @@ increment::~increment()
 }
 
 int increment::i,increment::j,increment::k,increment::n,increment::h,increment::innercounter;
-int increment::marge;
 fdm* increment::aa;
 fdm2D* increment::bb;
 
