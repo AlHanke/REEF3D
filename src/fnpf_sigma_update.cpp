@@ -42,6 +42,8 @@ void fnpf_sigma::sigma_update(lexer *p, fdm_fnpf *c, ghostcell *pgc, fnpf_fsf *p
     double *const __restrict sigxx = p->sigxx;
     double *const __restrict ZSN   = p->ZSN;
     double *const __restrict ZSP   = p->ZSP;
+    double *const __restrict ZN   = p->ZN;
+    double *const __restrict ZP   = p->ZP;
     const int knoz = p->knoz;
     
     ILOOP
@@ -117,11 +119,11 @@ void fnpf_sigma::sigma_update(lexer *p, fdm_fnpf *c, ghostcell *pgc, fnpf_fsf *p
         {
             // FLOOP already implies flag7>0, so the old FSCHECK branch was dead
             if(p->flag7[FIJK]>0)
-            ZSN[FIJK] = p->ZN[KP]*wl + bd;
+            ZSN[FIJK] = ZN[KP]*wl + bd;
         }
         
         for(k=0; k<knoz; ++k)
-        if(p->flag4[IJK]>0)
-        ZSP[IJK]  = p->ZP[KP]*wl + bd;
+        // if(p->flag4[IJK]>0)
+        ZSP[IJK]  = ZP[KP]*wl + bd;
     }
 }
