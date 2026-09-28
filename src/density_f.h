@@ -37,6 +37,7 @@ public:
     virtual ~density_f() = default;
 
     double roface(lexer*,fdm*,int,int,int) override final;
+    bool roface_segment(lexer*, double, double, double&) override final;
 };
 
 #endif

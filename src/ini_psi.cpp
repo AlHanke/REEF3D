@@ -63,9 +63,13 @@ void initialize::inipsi(lexer* p, fdm *a, ghostcell* pgc)
     // scale it down per level by that level's cell-size ratio. Level 0 (and single-level runs)
     // keep the exact original value.
     #if USE_AMREX
-    // p->psi reads as base*ratio^level (lexer::level_psi), so each level keeps the same number
-    // of cells in its band. REEF_GLOBAL_PSI restores one level-0 psi on every level.
-    if(std::getenv("REEF_GLOBAL_PSI"))
+    // One psi on every level (ratio 1) is the default: with the face density an exact segment
+    // mean of H (heaviside_ls_avg), every level then integrates the SAME continuous rho(z), so the
+    // coarse and fine hydrostatic columns agree to roundoff and the C-F projection stencil is
+    // balanced at rest. A per-level psi gives each level a different rho(z) inside the band and
+    // breaks that (static box: 0.47 m/s vs 6e-14). REEF_LEVEL_PSI restores base*ratio^level
+    // (lexer::level_psi), which only helped while roface was a grid-dependent midpoint value.
+    if(!std::getenv("REEF_LEVEL_PSI"))
         p->psi.ratio = 1.0;
     else if(p->j_dir==0)
         p->psi.ratio = 0.5*(1.0/double(p->ref_vec[0]) + 1.0/double(p->ref_vec[2]));

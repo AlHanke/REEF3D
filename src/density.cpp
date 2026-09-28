@@ -170,6 +170,77 @@ void density::update_faces(lexer* p, fdm* a)
     }
 
 #if USE_AMREX
+    cf_face_density(p,a);
     cf_sync_faces(p,a);
+#endif
+}
+
+// Fine side of every coarse-fine face: the matrix (amr_cf_coefficients), the corrector
+// (cf_velocity_correction) and the predictor (pjm_corr::cf_fine_accel) all couple the fine cell
+// to the real coarse cell over d_cf = 0.5*(dx_f+dx_c), so the face density must be the mean over
+// THAT segment -- fine centre to coarse centre -- not over the segment to the interpolated fine
+// ghost that the loop above used. With roface() an exact segment mean (heaviside_ls_avg) this
+// makes (p_c - p_f)/d_cf == rho_cf*g hold exactly at rest across the C-F face, the same as on
+// every intra-level face. Written into the fine rof* before cf_sync_faces, so the coarse C-F face
+// becomes the harmonic mean of these and every consumer reads one number.
+void density::cf_face_density(lexer* p, fdm* a)
+{
+#if USE_AMREX
+    if(p->nlevs <= 1) return;
+    double probe;
+    if(!roface_segment(p, 0.0, 0.0, probe)) return;
+    if(std::getenv("REEF_NO_CF_SEGMENT_DENSITY")) return;
+
+    field* rof[AMREX_SPACEDIM] = {&a->rofx, &a->rofy, &a->rofz};
+    const int save_level = level;
+
+    for(int lev = 1; lev < p->nlevs; ++lev)
+    {
+        level = lev;   // p->psi of the fine level: the matrix entry is the fine-side one
+
+        const amrex::BoxArray& fba  = p->amrex_box_array[lev];
+        const amrex::Box&      fdom = p->amrex_geometry[lev].Domain();
+        const amrex::MultiFab& phimf = a->phi.GetMultiFab(lev);
+
+        // coarse phi on the coarsened fine layout, one ghost: the coarse cell across each C-F face
+        amrex::MultiFab cphi(amrex::coarsen(phimf.boxArray(), p->ref_vec), phimf.DistributionMap(), 1, 1);
+        cphi.setVal(0.0);
+        cphi.ParallelCopy(a->phi.GetMultiFab(lev-1), 0, 0, 1, amrex::IntVect(0), amrex::IntVect(1),
+                          p->amrex_geometry[lev-1].periodicity());
+
+        for(int dir = 0; dir < AMREX_SPACEDIM; ++dir)
+        {
+            if(dir==1 && p->j_dir!=1) continue;
+            const amrex::IntVect e = amrex::IntVect::TheDimensionVector(dir);
+            amrex::MultiFab& rmf = rof[dir]->GetMultiFab(lev);
+
+            for(amrex::MFIter mfi(phimf); mfi.isValid(); ++mfi)
+            {
+                const amrex::Box& bx = mfi.validbox();
+                const auto ph = phimf.const_array(mfi);
+                const auto cp = cphi.const_array(mfi);
+                auto       rr = rmf.array(mfi);
+
+                for(int side = 0; side < 2; ++side)
+                {
+                    amrex::Box slab = bx;
+                    if(side==0) slab.setBig(dir, bx.smallEnd(dir));
+                    else        slab.setSmall(dir, bx.bigEnd(dir));
+
+                    amrex::LoopOnCpu(slab, [&] (int ii, int jj, int kk) noexcept
+                    {
+                        const amrex::IntVect f(ii,jj,kk);
+                        const amrex::IntVect n = (side==0) ? f-e : f+e;
+                        if(!fdom.contains(n) || fba.contains(n)) return;   // wall or fine-fine seam
+                        double rho;
+                        roface_segment(p, ph(f), cp(amrex::coarsen(n, p->ref_vec)), rho);
+                        rr(side==0 ? n : f) = rho;   // face stored on its low cell
+                    });
+                }
+            }
+        }
+    }
+
+    level = save_level;
 #endif
 }

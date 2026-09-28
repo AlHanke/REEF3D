@@ -93,9 +93,9 @@ void initialize::hydrostatic(lexer *p, fdm *a, ghostcell *pgc)
                 double press = phi0*p->W1*fabs(p->W22) + p->I55;
                 for(int m=0; m<gk; ++m)
                 {
-                    const double zf  = zlo + double(m+1)*dz;
-                    const double phif= phic + (zc - zf);
-                    const double H   = heaviside_ls(phif,p->psi);   // p->psi is per level (lexer::level_psi)
+                    // exact mean of H between cell centres m and m+1 (the face roface integrates)
+                    const double zm   = zlo + (double(m)+0.5)*dz;
+                    const double H    = heaviside_ls_avg(phic + (zc - zm), phic + (zc - zm - dz), p->psi);
                     const double rof = p->W1*H + p->W3*(1.0-H);
                     press += p->W22*dz*rof;                  // W22 < 0
                 }

@@ -46,6 +46,15 @@ public:
     /// value single-valued across every coarse-fine face. Non-virtual: it drives the
     /// subclass roface(), so all eight density models inherit it unchanged.
     void update_faces(lexer*, fdm*);
+
+    /// Face density from the level-set values at the two ends of an arbitrary segment. Used for
+    /// the fine side of a coarse-fine face, whose segment runs from the fine cell centre to the
+    /// coarse cell centre (d_cf), not to the interpolated fine ghost. Returns false for models
+    /// without such a form; update_faces then keeps roface() there.
+    virtual bool roface_segment(lexer*, double, double, double&) { return false; }
+
+private:
+    void cf_face_density(lexer*, fdm*);
 };
 
 #endif

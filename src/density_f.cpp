@@ -31,10 +31,15 @@ density_f::density_f(lexer* p)
 
 double density_f::roface(lexer *p, fdm *a, int aa, int bb, int cc)
 {
-    const double phival = 0.5*(a->phi(i,j,k) + a->phi(i+aa,j+bb,k+cc));
-    const double psi = p->psi;
-
-    double H = heaviside_ls(phival, psi);
+    // exact mean of H over the segment between the two cell centres (see heaviside_ls_avg)
+    const double H = heaviside_ls_avg(a->phi(i,j,k), a->phi(i+aa,j+bb,k+cc), p->psi);
 
     return p->W1*H + p->W3*(1.0-H);
+}
+
+bool density_f::roface_segment(lexer *p, double phi_a, double phi_b, double &rho)
+{
+    const double H = heaviside_ls_avg(phi_a, phi_b, p->psi);
+    rho = p->W1*H + p->W3*(1.0-H);
+    return true;
 }

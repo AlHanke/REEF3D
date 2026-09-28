@@ -72,12 +72,11 @@ private:
     density *pd;
 
 #if USE_AMREX
-    // Fine net face acceleration -(1/rho)dp/dn + g_n, area-averaged onto COVERED coarse cells
-    // (one per direction). Coarse faces between a covered and an uncovered cell take their force
-    // from here instead of from the covered press (= fine average, hydrostatically inconsistent
-    // with the coarse face density). See cf_fine_accel.
-    void cf_fine_accel(lexer*, fdm*, int dir, field& out);
-    field4 cfacc_x, cfacc_y, cfacc_z;
+    // Net acceleration on coarse C-F faces with the projection's C-F stencil (fine cell vs
+    // uncovered coarse cell over d_cf, fine face density), area-averaged over the fine sub-faces,
+    // stored in the covered coarse cell for its LOW/HIGH face. Reused per direction. See cf_fine_accel.
+    void cf_fine_accel(lexer*, fdm*, int dir, field& out_lo, field& out_hi);
+    field4 cfacc_lo, cfacc_hi;
 #endif
 };
 
