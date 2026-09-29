@@ -195,9 +195,9 @@ void idiff2_FS::diff_u(lexer *p, fdm *a, ghostcell *pgc, solver *psolv, field &d
                 a->rhsvec.V[n] -= a->M.t[n]*u(i,j,k+1);
                 a->M.t[n] = 0.0;
             }
-        }
 
-        ++n;
+            ++n;
+        }
     }
 
     psolv->start(p,a,pgc,diff,a->rhsvec,1);
