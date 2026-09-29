@@ -736,7 +736,13 @@ void amrex_solver::setup(lexer *p, fdm *a, ghostcell *pgc, const field1 &u, cons
         // domain's -- exactly the anisotropy an algebraic coarsening handles and
         // a geometric one does not. Set before the env block so REEF_MLMG_BOTTOM
         // can still override it for bisection.
-        mlmg->setBottomSolver(MLMG::BottomSolver::hypre);
+        //
+        // Pseudo-2D (y-doubled) only. In 3D the IJ BoomerAMG bottom DIVERGES on the singular
+        // all-Neumann matrix (600x100x40 wave case, first solve: bottom rel. residual 1e37,
+        // MLMG resid/bnorm 3e114 after one iteration -- at nlev==1 as well, so not a C-F
+        // issue), while bicgstab converges in 14 MLMG iterations / 1.9 s.
+        // hypre.adjust_singular_matrix=1 also cures it but costs 68 iterations / 14.4 s.
+        mlmg->setBottomSolver(ydouble ? MLMG::BottomSolver::hypre : MLMG::BottomSolver::bicgstab);
         mlmg->setBottomTolerance(1.e-3);   // inside a V-cycle; AMReX default 1e-4
         mlmg->setBottomMaxIter(100);
 
