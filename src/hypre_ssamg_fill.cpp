@@ -655,7 +655,16 @@ void hypre_ssamg::amr_cf_coefficients(lexer* p, fdm* a, ghostcell* pgc, fieldint
                 const int  axis = L.axis;
                 const bool high = L.high;
 
+                // Un-numbered from-cell (cval -1): an identity row in the velocity solves (flag<=0
+                // or the trimmed last face). Never index a->M with it -- slot(-1) reads before the
+                // array, which faults when the allocation is page-aligned -- and zero the coeff so
+                // the replay does not write the previous (pressure) solve's value into that row.
                 const int n = cval_arr(fiv);
+                if (n < 0)
+                {
+                    cf_links[id].coeff = 0.0;
+                    continue;
+                }
                 info[id] = {n, axis, high, is_fine, slot(n, axis, high)};
             }
         }
