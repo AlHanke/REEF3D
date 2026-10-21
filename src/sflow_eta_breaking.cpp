@@ -27,7 +27,8 @@ Author: Hans Bihs
 #include"sflow_breaking_kb.h"
 
 void sflow_eta::breaking(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &eta_n, double alpha)
-{    
+{
+    const double gravity = sqrt(p->W20*p->W20+p->W21*p->W21+p->W22*p->W22);
     // A 246 4: crest tracking and the eddy viscosity of NHFLOW A 550 4 (b->vb); b->breaking is not set, it would
     // switch the non-hydrostatic pressure off
     if(pkb!=nullptr)
@@ -36,7 +37,7 @@ void sflow_eta::breaking(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta, slice &
     if(p->A246>=1 && p->A246!=4)
     SLICELOOP4
     {
-            if( (eta(i,j)-eta_n(i,j))/(alpha*p->dt) > p->A247*sqrt(9.81*b->hp(i,j)))
+            if( (eta(i,j)-eta_n(i,j))/(alpha*p->dt) > p->A247*sqrt(gravity*b->hp(i,j)))
             b->breaking(i,j)=1;
             
             if(p->A246==2)
@@ -191,6 +192,8 @@ void sflow_eta::breaking_persist(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta,
     
     SLICELOOP4
     b->breaking_print(i,j)=double(b->breaking(i,j));
+
+    const double gravity = sqrt(p->W20*p->W20+p->W21*p->W21+p->W22*p->W22);
     
     SLICELOOP4
     {
@@ -198,10 +201,10 @@ void sflow_eta::breaking_persist(lexer* p, fdm2D* b, ghostcell* pgc, slice &eta,
         {
             if(b->breaking(i,j)>=1)
             {
-            if( (eta(i,j)-eta_n(i,j))/(alpha*p->dt) > p->A249*sqrt(9.81*b->hp(i,j)))
+            if( (eta(i,j)-eta_n(i,j))/(alpha*p->dt) > p->A249*sqrt(gravity*b->hp(i,j)))
             b->breaking(i,j)=1;
             
-            if( (eta(i,j)-eta_n(i,j))/(alpha*p->dt) <= p->A249*sqrt(9.81*b->hp(i,j)))
+            if( (eta(i,j)-eta_n(i,j))/(alpha*p->dt) <= p->A249*sqrt(gravity*b->hp(i,j)))
             b->breaking(i,j)=0;
             }
         }

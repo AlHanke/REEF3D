@@ -2880,7 +2880,7 @@ void sflow_amr::print(lexer *p, fdm2D *b, ghostcell *pgc)
     if(!doprint)
     return;
 
-    // P 18: the grids in the LAGOON store; P 18 1: instead of the .vtr and .vtm files
+    // P 18: the grids in the LAGOON store; P 18 1: instead of the .vts and .vtm files
     bool stored = false;
     if(p->P18>0)
     stored = print_lagoon(p,b,pgc);
@@ -2891,10 +2891,16 @@ void sflow_amr::print(lexer *p, fdm2D *b, ghostcell *pgc)
         return;
     }
 
-    write_vtr0(p,b);
+    char name[256];
+    snprintf(name,sizeof(name),"./REEF3D_SFLOW_AMR/REEF3D-SFLOW-AMR-L0-%08i-%04i.vts",printcount_amr,p->mpirank+1);
+    write_grid(p,p,b,0,p->knox,p->knoy,0,O0i,O0j,name);
 
     for(int n=0; n<(int)P.size(); ++n)
-    write_vtr(p,*SP(n),n);
+    {
+        sflow_amr_patch *c = SP(n);
+        snprintf(name,sizeof(name),"./REEF3D_SFLOW_AMR/REEF3D-SFLOW-AMR-%08i-%04i-%04i.vts",printcount_amr,p->mpirank+1,n+1);
+        write_grid(p,c->pp,c->b,EXT,c->nx,c->ny,c->lev,c->I0,c->J0,name);
+    }
 
     // multiblock index: level 0 of every rank + all patches
     int np = (int)P.size();
@@ -2903,24 +2909,39 @@ void sflow_amr::print(lexer *p, fdm2D *b, ghostcell *pgc)
 
     if(p->mpirank==0)
     {
-        char name[256];
         snprintf(name,sizeof(name),"./REEF3D_SFLOW_AMR/REEF3D-SFLOW-AMR-%08i.vtm",printcount_amr);
         ofstream out(name);
         out<<"<?xml version=\"1.0\"?>\n<VTKFile type=\"vtkMultiBlockDataSet\" version=\"1.0\">\n<vtkMultiBlockDataSet>\n";
         out<<"<Block index=\"0\" name=\"level 0\">\n";
         for(int r=0; r<p->mpi_size; ++r)
-        out<<"<DataSet index=\""<<r<<"\" file=\"REEF3D-SFLOW-AMR-L0-"<<setw(8)<<setfill('0')<<printcount_amr<<"-"<<setw(4)<<r+1<<(p->geo_curv==1?".vts":".vtr")<<"\"/>\n";
+        out<<"<DataSet index=\""<<r<<"\" file=\"REEF3D-SFLOW-AMR-L0-"<<setw(8)<<setfill('0')<<printcount_amr<<"-"<<setw(4)<<r+1<<".vts\"/>\n";
         out<<setfill(' ')<<"</Block>\n<Block index=\"1\" name=\"patches\">\n";
         int idx=0;
         for(int r=0; r<p->mpi_size; ++r)
         for(int q=0; q<all[r]; ++q)
         {
-        out<<"<DataSet index=\""<<idx<<"\" file=\"REEF3D-SFLOW-AMR-"<<setw(8)<<setfill('0')<<printcount_amr<<"-"<<setw(4)<<r+1<<"-"<<setw(4)<<q+1<<(p->geo_curv==1?".vts":".vtr")<<"\"/>\n";
+        out<<"<DataSet index=\""<<idx<<"\" file=\"REEF3D-SFLOW-AMR-"<<setw(8)<<setfill('0')<<printcount_amr<<"-"<<setw(4)<<r+1<<"-"<<setw(4)<<q+1<<".vts\"/>\n";
         out<<setfill(' ');
         ++idx;
         }
         out<<"</Block>\n</vtkMultiBlockDataSet>\n</VTKFile>\n";
         out.close();
+
+        // the time of every .vtm for ParaView (it reads no FieldData of a .vtm)
+        printtimes_amr.resize(printcount_amr+1,-1.0);
+        printtimes_amr[printcount_amr] = p->simtime;
+        ofstream ser("./REEF3D_SFLOW_AMR/REEF3D-SFLOW-AMR.vtm.series");
+        ser<<"{\n  \"file-series-version\" : \"1.0\",\n  \"files\" : [\n";
+        bool first = true;
+        for(int k=0; k<(int)printtimes_amr.size(); ++k)
+        if(printtimes_amr[k]>=0.0)
+        {
+            snprintf(name,sizeof(name),"REEF3D-SFLOW-AMR-%08i.vtm",k);
+            ser<<(first?"":",\n")<<"    { \"name\" : \""<<name<<"\", \"time\" : "<<setprecision(15)<<printtimes_amr[k]<<" }";
+            first = false;
+        }
+        ser<<"\n  ]\n}\n";
+        ser.close();
     }
 
     ++printcount_amr;
@@ -3021,141 +3042,132 @@ void sflow_amr::gauges(lexer *p, fdm2D *b, ghostcell *pgc)
     }
 }
 
-// level 0 of this rank, cell centred, same layout as the patches
-void sflow_amr::write_vtr0(lexer *p, fdm2D *b)
+// one grid of this rank as a VTK structured grid (level 0: q = p, o = 0; a patch: its lexer,
+// o = EXT, in y EY): the cell data of its own cells, the nodes on the free surface as in the FSF printout
+// (P 73), and the cells covered by a finer patch (and the ring of a multi-block level 0) hidden
+// (vtkGhostType), so that the leaf cells of all grids show one refined surface.  I0, J0: global
+// index of the first own cell on level lv
+void sflow_amr::write_grid(lexer *p, lexer *q, fdm2D *f, int o, int nx, int ny, int lv, int I0, int J0, const char *name)
 {
-    char name[256];
-    // curvilinear grid (G 50): structured grids (.vts) on the physical nodes
     const bool cv = (p->geo_curv==1);
-    snprintf(name,sizeof(name),"./REEF3D_SFLOW_AMR/REEF3D-SFLOW-AMR-L0-%08i-%04i.%s",printcount_amr,p->mpirank+1,cv?"vts":"vtr");
+    const int m = marge;
+    const int oy = sy*o;    // (2D grid: a patch has no extra cells in y, EY = 0)
 
-    const int nx=p->knox, ny=p->knoy, m=marge;
+    // free surface at the node (a,d) of the own box: from the cells i0, i0+1 and j0..j1 (one row
+    // without j_dir), with the wet-dry treatment of interpolation::sl_ipol4eta
+    auto zs = [&](int a, int d)
+    {
+        const int i0 = o+a-1;
+        const int j0 = (q->j_dir==1) ? oy+d-1 : oy;
+        const int j1 = (q->j_dir==1) ? j0+1 : j0;
+
+        double e=0.0, h=0.0, bd=0.0;
+        int nc=0;
+        bool allwet=true, alldry=true, solid=false;
+        for(int ii=i0; ii<=i0+1; ++ii)
+        for(int jj=j0; jj<=j1; ++jj)
+        {
+            const int w = q->wet[lij(q,ii,jj)];
+            const double eta = f->eta(ii,jj), bed = f->bed(ii,jj);
+            e  += (w==1) ? eta : MIN(eta,bed-p->wd-q->DXM);
+            h  += eta;
+            bd += bed;
+            allwet = allwet && w==1;
+            alldry = alldry && w==0;
+            solid  = solid || q->flagslice4[lij(q,ii,jj)]<0;
+            ++nc;
+        }
+        e/=nc; h/=nc; bd/=nc;
+
+        if(p->P73==1)
+        return 0.5*(f->hx(i0,j0)+f->hx(i0,j1)) + bd;
+        if(p->P73==2)
+        return 0.5*(f->hy(i0,j0)+f->hy(i0+1,j0)) + bd;
+        if(p->P73==3)
+        return h + p->wd;
+        if(p->P73!=0)
+        return 0.0;
+
+        if(alldry && !solid)
+        e = MIN(e,bd-p->wd-q->DXM-p->A544);
+        if(solid)
+        {
+            e = h;
+            if(e+p->wd>bd && e+p->wd-bd<p->A244)
+            e -= p->A244;
+        }
+
+        double z = e + p->wd;
+        if(allwet)
+        z = MAX(z,bd+p->A244);
+        return z;
+    };
+
     ofstream out(name);
     out<<"<?xml version=\"1.0\"?>\n";
-    out<<"<VTKFile type=\""<<(cv?"StructuredGrid":"RectilinearGrid")<<"\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
-    out<<"<"<<(cv?"StructuredGrid":"RectilinearGrid")<<" WholeExtent=\"0 "<<nx<<" 0 "<<ny<<" 0 0\">\n";
-    out<<"<FieldData><DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\">"<<p->simtime<<"</DataArray>";
-    out<<"<DataArray type=\"Int32\" Name=\"level\" NumberOfTuples=\"1\">0</DataArray></FieldData>\n";
+    out<<"<VTKFile type=\"StructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
+    out<<"<StructuredGrid WholeExtent=\"0 "<<nx<<" 0 "<<ny<<" 0 0\">\n";
+    out<<"<FieldData><DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\">"<<std::setprecision(15)<<p->simtime<<"</DataArray>";
+    out<<"<DataArray type=\"Int32\" Name=\"level\" NumberOfTuples=\"1\">"<<lv<<"</DataArray></FieldData>\n";
     out<<"<Piece Extent=\"0 "<<nx<<" 0 "<<ny<<" 0 0\">\n<CellData Scalars=\"eta\">\n";
 
-    auto field = [&](const char *nm, slice &f, double shift)
+    auto field = [&](const char *nm, slice &s, double shift)
     {
         out<<"<DataArray type=\"Float64\" Name=\""<<nm<<"\" format=\"ascii\">\n";
-        for(int jj=0; jj<ny; ++jj)
+        for(int jj=oy; jj<oy+ny; ++jj)
         {
-            for(int ii=0; ii<nx; ++ii)
-            out<<setprecision(17)<<f(ii,jj)+shift<<" ";
+            for(int ii=o; ii<o+nx; ++ii)
+            out<<setprecision(17)<<s(ii,jj)+shift<<" ";
             out<<"\n";
         }
         out<<"</DataArray>\n";
     };
-    field("eta",b->eta,0.0);
-    field("elevation",b->eta,p->wd);
-    field("WL",b->WL,0.0);
-    field("u",b->U,0.0);
-    field("v",b->V,0.0);
-    field("bed",b->bed,0.0);
-    field("press",b->press,0.0);
-    field("w",b->W,0.0);
+    field("eta",f->eta,0.0);
+    field("elevation",f->eta,p->wd);
+    field("WL",f->WL,0.0);
+    field("u",f->U,0.0);
+    field("v",f->V,0.0);
+    field("bed",f->bed,0.0);
+    field("press",f->press,0.0);
+    field("w",f->W,0.0);
 
     out<<"<DataArray type=\"Int32\" Name=\"wetdry\" format=\"ascii\">\n";
-    for(int jj=0; jj<ny; ++jj)
+    for(int jj=oy; jj<oy+ny; ++jj)
     {
-        for(int ii=0; ii<nx; ++ii)
-        out<<p->wet[lij(p,ii,jj)]<<" ";
-        out<<"\n";
-    }
-    if(cv)
-    {
-    out<<"</DataArray>\n</CellData>\n<Points>\n<DataArray type=\"Float64\" NumberOfComponents=\"3\" format=\"ascii\">\n";
-    for(int jj=0; jj<=ny; ++jj)
-    for(int ii=0; ii<=nx; ++ii)
-    out<<setprecision(12)<<p->XN2D[p->nij(ii,jj)]<<" "<<p->YN2D[p->nij(ii,jj)]<<" 0\n";
-    out<<"</DataArray>\n</Points>\n</Piece>\n</StructuredGrid>\n</VTKFile>\n";
-    out.close();
-    return;
-    }
-    out<<"</DataArray>\n</CellData>\n<Coordinates>\n";
-    out<<"<DataArray type=\"Float64\" Name=\"x\" format=\"ascii\">";
-    for(int ii=0; ii<=nx; ++ii) out<<setprecision(12)<<p->XN[ii+m]<<" ";
-    out<<"</DataArray>\n<DataArray type=\"Float64\" Name=\"y\" format=\"ascii\">";
-    for(int jj=0; jj<=ny; ++jj) out<<setprecision(12)<<p->YN[jj+m]<<" ";
-    out<<"</DataArray>\n<DataArray type=\"Float64\" Name=\"z\" format=\"ascii\">0</DataArray>\n";
-    out<<"</Coordinates>\n</Piece>\n</RectilinearGrid>\n</VTKFile>\n";
-    out.close();
-}
-
-void sflow_amr::write_vtr(lexer *p, sflow_amr_patch &c, int id)
-{
-    lexer *pp = c.pp;
-    fdm2D *pb = c.b;
-    char name[256];
-    const bool cv = (p->geo_curv==1);
-    snprintf(name,sizeof(name),"./REEF3D_SFLOW_AMR/REEF3D-SFLOW-AMR-%08i-%04i-%04i.%s",printcount_amr,p->mpirank+1,id+1,cv?"vts":"vtr");
-
-    ofstream out(name);
-    out<<"<?xml version=\"1.0\"?>\n";
-    out<<"<VTKFile type=\""<<(cv?"StructuredGrid":"RectilinearGrid")<<"\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
-    out<<"<"<<(cv?"StructuredGrid":"RectilinearGrid")<<" WholeExtent=\"0 "<<c.nx<<" 0 "<<c.ny<<" 0 0\">\n";
-    out<<"<FieldData><DataArray type=\"Float64\" Name=\"TimeValue\" NumberOfTuples=\"1\">"<<p->simtime<<"</DataArray>";
-    out<<"<DataArray type=\"Int32\" Name=\"level\" NumberOfTuples=\"1\">"<<c.lev<<"</DataArray></FieldData>\n";
-    out<<"<Piece Extent=\"0 "<<c.nx<<" 0 "<<c.ny<<" 0 0\">\n";
-    out<<"<CellData Scalars=\"eta\">\n";
-
-    auto field = [&](const char *nm, slice &f, double shift)
-    {
-        out<<"<DataArray type=\"Float64\" Name=\""<<nm<<"\" format=\"ascii\">\n";
-        for(int jj=EY; jj<EY+c.ny; ++jj)
-        {
-            for(int ii=EXT; ii<EXT+c.nx; ++ii)
-            out<<setprecision(17)<<f(ii,jj)+shift<<" ";
-            out<<"\n";
-        }
-        out<<"</DataArray>\n";
-    };
-    field("eta",pb->eta,0.0);
-    field("elevation",pb->eta,p->wd);
-    field("WL",pb->WL,0.0);
-    field("u",pb->U,0.0);
-    field("v",pb->V,0.0);
-    field("bed",pb->bed,0.0);
-    field("press",pb->press,0.0);
-    field("w",pb->W,0.0);
-
-    out<<"<DataArray type=\"Int32\" Name=\"wetdry\" format=\"ascii\">\n";
-    for(int jj=EY; jj<EY+c.ny; ++jj)
-    {
-        for(int ii=EXT; ii<EXT+c.nx; ++ii)
-        out<<pp->wet[lij(pp,ii,jj)]<<" ";
+        for(int ii=o; ii<o+nx; ++ii)
+        out<<q->wet[lij(q,ii,jj)]<<" ";
         out<<"\n";
     }
     out<<"</DataArray>\n";
 
-    if(cv)
+    // 32: vtkDataSetAttributes::HIDDENCELL
+    out<<"<DataArray type=\"UInt8\" Name=\"vtkGhostType\" format=\"ascii\">\n";
+    for(int jj=oy; jj<oy+ny; ++jj)
     {
-    out<<"</CellData>\n<Points>\n<DataArray type=\"Float64\" NumberOfComponents=\"3\" format=\"ascii\">\n";
-    for(int jj=EY; jj<=EY+c.ny; ++jj)
-    for(int ii=EXT; ii<=EXT+c.nx; ++ii)
-    out<<setprecision(12)<<pp->XN2D[pp->nij(ii,jj)]<<" "<<pp->YN2D[pp->nij(ii,jj)]<<" 0\n";
-    out<<"</DataArray>\n</Points>\n</Piece>\n</StructuredGrid>\n</VTKFile>\n";
-    out.close();
-    return;
+        for(int ii=o; ii<o+nx; ++ii)
+        {
+            const bool hide = (q==p && nblk>0 && nring[lij(q,ii,jj)]==1)
+                           || (lv<maxlev && covered(lv+1,2*(ii-o+I0),ychild(jj-oy+J0)));
+            out<<(hide?32:0)<<" ";
+        }
+        out<<"\n";
     }
+    out<<"</DataArray>\n</CellData>\n";
 
-    out<<"</CellData>\n<Coordinates>\n";
-
-    const int m = marge;
-    out<<"<DataArray type=\"Float64\" Name=\"x\" format=\"ascii\">";
-    for(int ii=EXT; ii<=EXT+c.nx; ++ii) out<<setprecision(12)<<pp->XN[ii+m]<<" ";
-    out<<"</DataArray>\n<DataArray type=\"Float64\" Name=\"y\" format=\"ascii\">";
-    for(int jj=EY; jj<=EY+c.ny; ++jj) out<<setprecision(12)<<pp->YN[jj+m]<<" ";
-    out<<"</DataArray>\n<DataArray type=\"Float64\" Name=\"z\" format=\"ascii\">0</DataArray>\n";
-    out<<"</Coordinates>\n</Piece>\n</RectilinearGrid>\n</VTKFile>\n";
+    out<<"<Points>\n<DataArray type=\"Float64\" NumberOfComponents=\"3\" format=\"ascii\">\n";
+    for(int d=0; d<=ny; ++d)
+    for(int a=0; a<=nx; ++a)
+    {
+        const double x = cv ? q->XN2D[q->nij(o+a,oy+d)] : q->XN[o+a+m];
+        const double y = cv ? q->YN2D[q->nij(o+a,oy+d)] : q->YN[oy+d+m];
+        out<<setprecision(12)<<x<<" "<<y<<" "<<zs(a,d)<<"\n";
+    }
+    out<<"</DataArray>\n</Points>\n</Piece>\n</StructuredGrid>\n</VTKFile>\n";
     out.close();
 }
 
-// P 18: this rank's grids as its .vtr files have them (the fields of write_vtr0 and
-// write_vtr, wetdry as int32), gathered into the LAGOON store; true when the output is there
+// P 18: this rank's grids as its .vts files have them (the cell fields of write_grid,
+// wetdry as int32), gathered into the LAGOON store; true when the output is there
 bool sflow_amr::print_lagoon(lexer *p, fdm2D *b, ghostcell *pgc)
 {
     // curvilinear grid: the LAGOON grids are rectilinear (x and y lines); the .vts files instead

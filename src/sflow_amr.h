@@ -538,8 +538,7 @@ private:
     void nh_store_end(int);
 
     double mass(lexer*, fdm2D*, ghostcell*);
-    void write_vtr(lexer*, sflow_amr_patch&, int);
-    void write_vtr0(lexer*, fdm2D*);
+    void write_grid(lexer*, lexer*, fdm2D*, int, int, int, int, int, int, const char*);
     bool print_lagoon(lexer*, fdm2D*, ghostcell*);
     void gauges(lexer*, fdm2D*, ghostcell*);
     ofstream gaugeout;
@@ -564,6 +563,7 @@ private:
     double m0, printtime_amr;
     double tm[10];
     int printcount_amr;
+    vector<double> printtimes_amr;          // simtime of each .vtm, for the .vtm.series file
     ofstream logout;
     const double eps;
     static const int NVMAX = 16;
