@@ -2891,6 +2891,10 @@ void sflow_amr::print(lexer *p, fdm2D *b, ghostcell *pgc)
         return;
     }
 
+    // the nodes on the edges of a patch take its ghost cells: these hold the input of the last stage
+    // (filled at stage_begin) unless the step regridded, so the edges of neighbouring grids disagree
+    regrid_prepare(pgc);
+
     char name[256];
     snprintf(name,sizeof(name),"./REEF3D_SFLOW_AMR/REEF3D-SFLOW-AMR-L0-%08i-%04i.vts",printcount_amr,p->mpirank+1);
     write_grid(p,p,b,0,p->knox,p->knoy,0,O0i,O0j,name);
@@ -3054,7 +3058,9 @@ void sflow_amr::write_grid(lexer *p, lexer *q, fdm2D *f, int o, int nx, int ny, 
     const int oy = sy*o;    // (2D grid: a patch has no extra cells in y, EY = 0)
 
     // free surface at the node (a,d) of the own box: from the cells i0, i0+1 and j0..j1 (one row
-    // without j_dir), with the wet-dry treatment of interpolation::sl_ipol4eta
+    // without j_dir), with the wet-dry treatment of interpolation::sl_ipol4eta; the dry surface lowered
+    // by the spacing of level 0 on all levels (with that of the grid it steps at every interface)
+    const double dxd = p->DXM;
     auto zs = [&](int a, int d)
     {
         const int i0 = o+a-1;
@@ -3069,7 +3075,7 @@ void sflow_amr::write_grid(lexer *p, lexer *q, fdm2D *f, int o, int nx, int ny, 
         {
             const int w = q->wet[lij(q,ii,jj)];
             const double eta = f->eta(ii,jj), bed = f->bed(ii,jj);
-            e  += (w==1) ? eta : MIN(eta,bed-p->wd-q->DXM);
+            e  += (w==1) ? eta : MIN(eta,bed-p->wd-dxd);
             h  += eta;
             bd += bed;
             allwet = allwet && w==1;
@@ -3089,7 +3095,7 @@ void sflow_amr::write_grid(lexer *p, lexer *q, fdm2D *f, int o, int nx, int ny, 
         return 0.0;
 
         if(alldry && !solid)
-        e = MIN(e,bd-p->wd-q->DXM-p->A544);
+        e = MIN(e,bd-p->wd-dxd-p->A544);
         if(solid)
         {
             e = h;
